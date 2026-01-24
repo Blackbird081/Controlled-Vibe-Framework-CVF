@@ -1,4 +1,4 @@
-# DECISIONS — CVF v1.1 FINAL
+# DECISIONS — CVF v1.1
 
 > **Version:** 1.1 | **Status:** STABLE  
 > **Purpose:** Ghi lại các quyết định thiết kế quan trọng của v1.1
@@ -31,14 +31,14 @@
 
 ---
 
-### DC-003: Consolidate các biến thể v1.1 thành FINAL
+### DC-003: Consolidate các biến thể v1.1 thành bản chính thức
 | Field | Value |
 |-------|-------|
 | **ID** | DC-003 |
 | **Date** | 2026-01-20 |
-| **Decision** | Merge EGL, EIL, EL thành một bản v1.1 FINAL duy nhất. |
+| **Decision** | Merge EGL, EIL, EL thành một bản v1.1 duy nhất. |
 | **Rationale** | Nhiều biến thể gây confusion. User không biết dùng bản nào. Cần single source of truth. |
-| **Impact** | Các folder EGL, EIL, EL không còn được maintain. Chỉ v1.1 FINAL được support. |
+| **Impact** | Các folder EGL, EIL, EL không còn được maintain. Chỉ v1.1 được support. |
 | **Status** | ✅ Approved |
 | **Source** | EGL (Governance) + EIL (Interface) + EL (Execution) |
 

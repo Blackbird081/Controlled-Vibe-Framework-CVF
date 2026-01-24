@@ -1,4 +1,4 @@
-# INPUT_SPEC — CVF v1.1 FINAL
+# INPUT_SPEC — CVF v1.1
 Version: 1.1 | Status: STABLE | Layer: Governance | Compatible: v1.0 baseline (additive)
 
 ## Mục đích

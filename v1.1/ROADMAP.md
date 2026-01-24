@@ -1,4 +1,4 @@
-# CVF v1.1 FINAL — Roadmap Hợp Nhất
+# CVF v1.1 — Roadmap Hợp Nhất
 
 ## Mục tiêu tổng
 Hoàn thiện bản v1.1 chuẩn bằng cách hợp nhất các biến thể, bổ sung artefact ràng buộc Input/Output, Preset, và luồng Command → Execution, đồng thời giữ v1.0 làm baseline.
@@ -41,5 +41,5 @@ Hoàn thiện bản v1.1 chuẩn bằng cách hợp nhất các biến thể, b�
 - Sau khi hoàn tất, đổi Status các file chính sang STABLE và freeze.
 
 ## Trạng thái hiện tại
-- Folder v1.1 FINAL mới tạo, chứa skeleton file.
+- Folder v1.1 mới tạo, chứa skeleton file.
 - Chưa điền chi tiết spec/preset/command mapping.

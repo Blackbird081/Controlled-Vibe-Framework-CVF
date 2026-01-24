@@ -46,7 +46,7 @@ your-project/
 ```
 
 ### Bước 3: Copy file v1.1 cần dùng
-Tùy nhu cầu, copy từ v1.1 FINAL:
+Tùy nhu cầu, copy từ v1.1:
 
 **Nếu cần INPUT/OUTPUT spec:**
 - governance/INPUT_SPEC.md

@@ -1,4 +1,4 @@
-# CVF_AGENT_LIFECYCLE — v1.1 FINAL
+# CVF_AGENT_LIFECYCLE — v1.1
 Version: 1.1 | Status: STABLE | Layer: Agents | Compatible: v1.0 baseline (additive)
 
 6 trạng thái bắt buộc: Invocation → Binding → Activation → Execution → Transition → Termination.

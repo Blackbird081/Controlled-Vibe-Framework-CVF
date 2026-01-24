@@ -1,7 +1,7 @@
-# CHANGELOG — CVF v1.1 FINAL
+# CHANGELOG — CVF v1.1
 
 ## 2026-01-24 (Initial)
-- Khởi tạo folder v1.1 FINAL (consolidation).
+- Khởi tạo folder v1.1 (consolidation).
 - Thêm skeleton: README, ROADMAP, RELEASE_NOTES, governance specs, preset library, execution/interface/agent stubs.
 
 ## 2026-01-24 (Content)
@@ -18,7 +18,7 @@
 - Thêm mẫu: INPUT_SPEC.sample, OUTPUT_SPEC.sample, AU_trace.sample.
 - Thêm PUBLISH_CHECKLIST.
 
-## 2026-01-24 (Final)
+## 2026-01-24 (Stable)
 - Thêm QUICK_START.md — hướng dẫn 5 phút.
 - Thêm MIGRATION_GUIDE.md — nâng cấp từ v1.0.
 - Thêm templates/EXAMPLE_PROJECT.md — ví dụ project hoàn chỉnh.
@@ -26,5 +26,5 @@
 - Cập nhật templates/README với danh sách mẫu đầy đủ.
 
 ## Status
-- v1.1 FINAL đã freeze.
+- v1.1 đã freeze.
 - Thay đổi tiếp theo sẽ là v1.2.

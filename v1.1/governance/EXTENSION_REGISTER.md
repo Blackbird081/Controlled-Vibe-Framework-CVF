@@ -1,4 +1,4 @@
-# EXTENSION_REGISTER — CVF v1.1 FINAL
+# EXTENSION_REGISTER — CVF v1.1
 Version: 1.1 | Status: STABLE | Layer: Governance | Compatible: v1.0 baseline (additive)
 
 Mục đích: Danh mục extension hợp lệ (Input/Process/Output). Không phải log sử dụng.

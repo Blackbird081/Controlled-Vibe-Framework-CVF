@@ -1,4 +1,4 @@
-# PROJECT_INIT_CHECKLIST — CVF v1.1 FINAL
+# PROJECT_INIT_CHECKLIST — CVF v1.1
 
 > **Version:** 1.1 | **Status:** STABLE  
 > **Purpose:** Checklist khởi tạo project mới với CVF v1.1

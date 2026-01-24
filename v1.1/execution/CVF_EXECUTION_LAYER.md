@@ -1,4 +1,4 @@
-# CVF_EXECUTION_LAYER — v1.1 FINAL
+# CVF_EXECUTION_LAYER — v1.1
 Version: 1.1 | Status: STABLE | Layer: Execution | Compatible: v1.0 baseline (additive)
 
 Purpose: Chuẩn hóa thực thi dưới CVF với Execution Spine có truy vết.

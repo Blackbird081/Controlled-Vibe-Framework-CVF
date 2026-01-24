@@ -1,4 +1,4 @@
-# PUBLISH_CHECKLIST — CVF v1.1 FINAL
+# PUBLISH_CHECKLIST — CVF v1.1
 Version: 1.1 | Status: STABLE
 
 ## Trước khi tag
@@ -8,12 +8,12 @@ Version: 1.1 | Status: STABLE
 - [ ] README nêu compatibility note v1.0 baseline, v1.1 mở rộng.
 
 ## Tạo gói phát hành
-- [ ] Đóng gói thư mục `Controlled-Vibe-Framework-CVF v1.1 FINAL/` thành zip/tar nếu cần đính kèm.
+- [ ] Đóng gói thư mục `Controlled-Vibe-Framework-CVF v1.1/` thành zip/tar nếu cần đính kèm.
 - [ ] Kiểm tra có đủ mẫu: templates/INPUT_SPEC.sample.md, OUTPUT_SPEC.sample.md, AU_trace.sample.md.
 
 ## Tag & Release (gợi ý)
 - Tag đề xuất: `v1.1.0`
-- Release title: `CVF v1.1 FINAL`
+- Release title: `CVF v1.1`
 - Release notes tóm tắt:
   - Thêm hợp đồng INPUT/OUTPUT, FAST_TRACK.
   - Preset chi tiết per archetype; binding Command → Archetype → Preset → AU.

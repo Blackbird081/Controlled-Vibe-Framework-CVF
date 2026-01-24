@@ -1,4 +1,4 @@
-# RELEASE NOTES — CVF v1.1 FINAL (STABLE)
+# RELEASE NOTES — CVF v1.1 (STABLE)
 
 ## Tại sao v1.1?
 

@@ -1,4 +1,4 @@
-# Controlled Vibe Framework (CVF) — v1.1 FINAL
+# Controlled Vibe Framework (CVF) — v1.1
 
 **Framework quản lý dự án theo tinh thần *vibe coding có kiểm soát*.**
 
@@ -33,7 +33,7 @@ v1.1 mở rộng từ v1.0 với các ràng buộc kiểm soát chi tiết hơn:
 ## Cấu trúc thư mục
 
 ```
-v1.1 FINAL/
+v1.1/
 ├── architecture/     # Bootstrap, overview kiến trúc
 ├── governance/       # INPUT/OUTPUT spec, Preset, Fast Track
 ├── agents/           # Archetype, Lifecycle
@@ -90,7 +90,7 @@ v1.1 FINAL/
 
 ## Trạng thái
 
-- **Version:** 1.1 FINAL
+- **Version:** 1.1
 - **Status:** STABLE / FREEZE
 - **Thay đổi tiếp theo:** v1.2
 

@@ -1,4 +1,4 @@
-# PHASE_STATUS — CVF v1.1 FINAL
+# PHASE_STATUS — CVF v1.1
 
 > **Version:** 1.1 | **Status:** STABLE
 

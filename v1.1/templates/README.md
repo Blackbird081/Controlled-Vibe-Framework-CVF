@@ -1,4 +1,4 @@
-# Templates — CVF v1.1 FINAL
+# Templates — CVF v1.1
 Version: 1.1 | Status: STABLE
 
 ## Mẫu có sẵn

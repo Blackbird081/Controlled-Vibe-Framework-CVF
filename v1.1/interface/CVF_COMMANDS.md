@@ -1,4 +1,4 @@
-# CVF_COMMANDS — v1.1 FINAL
+# CVF_COMMANDS — v1.1
 Version: 1.1 | Status: STABLE | Layer: Interface | Compatible: v1.0 baseline (additive)
 
 Purpose: Intent chuẩn hóa cho hành động; mỗi command yêu cầu artifact bắt buộc và binding tới Archetype/Preset/AU.

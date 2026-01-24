@@ -1,4 +1,4 @@
-# USAGE — CVF v1.1 FINAL
+# USAGE — CVF v1.1
 
 > **Version:** 1.1 | **Status:** STABLE  
 > **Compatible:** v1.0 baseline (additive)

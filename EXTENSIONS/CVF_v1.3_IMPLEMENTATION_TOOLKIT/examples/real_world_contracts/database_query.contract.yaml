@@ -1,0 +1,84 @@
+# Database Query Capability
+# Domain: data
+# Risk: R2 (Elevated - reads from production data)
+
+capability_id: "DATABASE_QUERY_v1"
+domain: "data"
+description: "Execute read-only SQL queries against configured databases. Returns structured results with metadata."
+risk_level: "R2"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Analysis"
+    - "Execution"
+  allowed_phases:
+    - "C"
+    - "D"
+  required_decisions:
+    - "DATA_ACCESS_APPROVED"  # Required for R2
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "query"
+    type: "string"
+    required: true
+    validation_rule: "sql_read_only"
+  - name: "database"
+    type: "string"
+    required: true
+  - name: "timeout_seconds"
+    type: "integer"
+    required: false
+    default: 30
+  - name: "max_rows"
+    type: "integer"
+    required: false
+    default: 1000
+
+output_spec:
+  - name: "rows"
+    type: "array"
+    success_criteria: "Array of row objects"
+  - name: "columns"
+    type: "array"
+    success_criteria: "Column names and types"
+  - name: "row_count"
+    type: "integer"
+    success_criteria: "Number of rows returned"
+  - name: "execution_time_ms"
+    type: "integer"
+    success_criteria: "Query execution time"
+  - name: "truncated"
+    type: "boolean"
+    success_criteria: "Whether results were truncated by max_rows"
+
+execution:
+  side_effects: false  # Read-only
+  rollback_possible: true
+  idempotent: true
+  expected_duration: "1-30 seconds"
+  execution_type: "EXECUTABLE"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "inputs"
+    - "outputs"
+    - "database"
+    - "query_hash"
+    - "row_count"
+
+failure_info:
+  known_failure_modes:
+    - "Connection timeout"
+    - "Query timeout"
+    - "Insufficient permissions"
+    - "Invalid SQL syntax"
+  worst_case_impact: "Query fails, no data returned"
+  human_intervention_required: false
+
+dependencies:
+  - "DATABASE_CONNECTION_v1"

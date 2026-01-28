@@ -15,25 +15,29 @@
 | Cần audit, trace đầy đủ | **v1.1** | [v1.1/](./v1.1/) |
 | Skill/Capability governance | **v1.2** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/) |
 | Agent-agnostic skill registry | **v1.2** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/) |
+| **SDK & CLI tools** | **v1.3** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
+| **Agent adapters (Claude/GPT)** | **v1.3** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
+| **CI/CD integration** | **v1.3** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
+
 
 ---
 
 ## So sánh nhanh
 
-| Tính năng | v1.0 | v1.1 | v1.2 (Extension) |
-|-----------|:----:|:----:|:----------------:|
-| Triết lý core (Outcome > Code) | ✅ | ✅ | ✅ |
-| Phase-based (A→D) | ✅ | ✅ | ✅ |
-| Governance cơ bản | ✅ | ✅ | ✅ |
-| INPUT/OUTPUT spec | ❌ | ✅ | ✅ |
-| Agent Archetype + Lifecycle | ❌ | ✅ | ✅ |
-| Command taxonomy | ❌ | ✅ | ✅ |
-| Execution Spine + AU trace | ❌ | ✅ | ✅ |
-| **Skill Contract Spec** | ❌ | ❌ | ✅ |
-| **Skill Registry Model** | ❌ | ❌ | ✅ |
-| **Capability Risk Model (R0-R3)** | ❌ | ❌ | ✅ |
-| **Agent Adapter Boundary** | ❌ | ❌ | ✅ |
-| **External Skill Ingestion** | ❌ | ❌ | ✅ |
+| Tính năng | v1.0 | v1.1 | v1.2 | v1.3 |
+|-----------|:----:|:----:|:----:|:----:|
+| Triết lý core (Outcome > Code) | ✅ | ✅ | ✅ | ✅ |
+| Phase-based (A→D) | ✅ | ✅ | ✅ | ✅ |
+| Governance cơ bản | ✅ | ✅ | ✅ | ✅ |
+| INPUT/OUTPUT spec | ❌ | ✅ | ✅ | ✅ |
+| Agent Archetype + Lifecycle | ❌ | ✅ | ✅ | ✅ |
+| Skill Contract Spec | ❌ | ❌ | ✅ | ✅ |
+| Skill Registry Model | ❌ | ❌ | ✅ | ✅ |
+| Capability Risk Model (R0-R3) | ❌ | ❌ | ✅ | ✅ |
+| **Python SDK** | ❌ | ❌ | ❌ | ✅ |
+| **CLI Tool (`cvf-validate`)** | ❌ | ❌ | ❌ | ✅ |
+| **Agent Adapters (Claude/GPT)** | ❌ | ❌ | ❌ | ✅ |
+| **CI/CD Templates** | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -120,14 +124,16 @@ Controlled-Vibe-Framework-CVF/
 - ✅ External Skill Ingestion Rules
 - ✅ Backward Compatibility Policy
 
-### v1.3 — Implementation & Tooling (Đang phát triển)
+### v1.3 — Implementation Toolkit ✅ (Hoàn thành)
 > *Dựa trên [CVF Expert Review v1.2](./docs/CVF_EXPERT_REVIEW_v1.2.md)*
 
-- 🔲 Reference Implementation (Python/TypeScript SDK)
-- 🔲 CLI Tool (`cvf-validate`)
-- 🔲 End-to-End Examples
-- 🔲 Agent Adapters (Claude, GPT, local LLM)
-- 🔲 CI/CD Integration Templates
+- ✅ Python SDK (SkillContract, SkillRegistry, Validators)
+- ✅ CLI Tool (`cvf-validate` với validate/lint/check-registry)
+- ✅ End-to-End Examples (Complete Lifecycle Demo)
+- ✅ Agent Adapters (Claude, OpenAI GPT, Generic/Ollama)
+- ✅ CI/CD Templates (GitHub Actions, Pre-commit hooks)
+
+**Xem:** [CVF v1.3 Implementation Toolkit](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/)
 
 ---
 

@@ -1,0 +1,79 @@
+# File Operations Capability
+# Domain: devops
+# Risk: R3 (Critical - modifies filesystem)
+
+capability_id: "FILE_WRITE_v1"
+domain: "devops"
+description: "Write content to files in designated directories. Supports create, update, and append operations."
+risk_level: "R3"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "C"  # Only during active development
+  required_decisions:
+    - "FILE_WRITE_APPROVED"
+    - "TARGET_DIRECTORY_APPROVED"
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "path"
+    type: "string"
+    required: true
+    validation_rule: "path_in_allowed_directories"
+  - name: "content"
+    type: "string"
+    required: true
+  - name: "operation"
+    type: "string"
+    required: false
+    default: "create"
+    validation_rule: "one_of:create,update,append"
+  - name: "backup"
+    type: "boolean"
+    required: false
+    default: true
+
+output_spec:
+  - name: "success"
+    type: "boolean"
+    success_criteria: "Operation completed successfully"
+  - name: "path"
+    type: "string"
+    success_criteria: "Absolute path of written file"
+  - name: "bytes_written"
+    type: "integer"
+    success_criteria: "Number of bytes written"
+  - name: "backup_path"
+    type: "string"
+    success_criteria: "Path to backup file if created"
+
+execution:
+  side_effects: true
+  rollback_possible: true
+  idempotent: false
+  expected_duration: "1-5 seconds"
+  execution_type: "EXECUTABLE"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "inputs"
+    - "outputs"
+    - "path"
+    - "operation"
+    - "content_hash"
+    - "backup_path"
+
+failure_info:
+  known_failure_modes:
+    - "Permission denied"
+    - "Disk full"
+    - "Path outside allowed directories"
+    - "File locked by another process"
+  worst_case_impact: "File corrupted, rollback from backup required"
+  human_intervention_required: true

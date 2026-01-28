@@ -1,0 +1,46 @@
+# Pre-commit configuration for CVF projects
+# See https://pre-commit.com for more information
+
+repos:
+  # Standard hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: ['--unsafe']  # Allow custom tags
+      - id: check-json
+      - id: check-added-large-files
+
+  # YAML linting
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.33.0
+    hooks:
+      - id: yamllint
+        args: ['-d', '{extends: relaxed, rules: {line-length: {max: 120}}}']
+        files: '\.contract\.ya?ml$'
+
+  # CVF Contract validation (local hook)
+  - repo: local
+    hooks:
+      - id: cvf-validate
+        name: Validate CVF Contracts
+        entry: python EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/cli/cvf_validate.py validate
+        language: python
+        files: '\.contract\.ya?ml$'
+        additional_dependencies: ['pyyaml']
+        pass_filenames: true
+
+      - id: cvf-lint
+        name: Lint CVF Contracts
+        entry: python EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/cli/cvf_validate.py lint
+        language: python
+        files: '\.contract\.ya?ml$'
+        additional_dependencies: ['pyyaml']
+        pass_filenames: false
+        args: ['EXTENSIONS/examples/']
+
+# Configuration
+default_language_version:
+  python: python3.11

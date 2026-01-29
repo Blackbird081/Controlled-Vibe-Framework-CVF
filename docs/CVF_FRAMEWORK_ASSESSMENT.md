@@ -124,10 +124,9 @@ Skills bên ngoài phải trải qua:
 - ✅ CI/CD Templates (GitHub Actions, Pre-commit)
 - ✅ Agent Adapters (Claude, GPT, Generic)
 
-**Đề xuất phát triển tiếp:**
-- Certification Program ("CVF-Compliant")
-- Multi-tenant Enterprise Governance (v1.4)
-- Training Materials (Video courses, workshops)
+**Trạng thái: ✅ FROZEN (29/01/2026)**
+
+> Framework đã hoàn thiện và được freeze. Các cập nhật trong tương lai sẽ tập trung vào việc bổ sung thêm **Application Skills** (ví dụ: tạo app, automation workflows, etc.) trong `community-registry/`.
 
 ---
 

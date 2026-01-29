@@ -71,7 +71,7 @@
 
 | Document | Purpose | Read Time | Best For |
 |----------|---------|-----------|----------|
-| [CVF_EXPERT_REVIEW_v1.2.md](CVF_EXPERT_REVIEW_v1.2.md) | Technical deep dive | 30 min | Architecture understanding |
+| [CVF_FRAMEWORK_ASSESSMENT.md](CVF_FRAMEWORK_ASSESSMENT.md) | Technical deep dive | 30 min | Architecture understanding |
 | [DOCUMENTATION_STYLE_GUIDE.md](DOCUMENTATION_STYLE_GUIDE.md) | How to write docs | 15 min | Contributors |
 
 ### For Reference (Check as Needed)
@@ -264,11 +264,11 @@ docs/
 ├── VERSION_COMPARISON.md
 ├── VERSIONING.md
 ├── HOW_TO_APPLY_CVF.md
-├── CVF_EXPERT_REVIEW_v1.2.md
+├── CVF_FRAMEWORK_ASSESSMENT.md ← EVALUATION
 ├── CVF_ARCHITECTURE_DIAGRAMS.md
 ├── DOCUMENTATION_STYLE_GUIDE.md
 ├── case-studies/              (5 case studies)
-└── _archive_phase_reports/    (archived development reports)
+└── _archive_phase_reports/    (archived)
 ```
 
 ---

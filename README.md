@@ -135,7 +135,7 @@ Controlled-Vibe-Framework-CVF/
 │       └── external_skill_rewrite/
 └── docs/
     ├── VERSION_COMPARISON.md
-    ├── CVF_EXPERT_REVIEW_v1.2.md   ← Đánh giá & Roadmap v1.3
+    ├── CVF_FRAMEWORK_ASSESSMENT.md   ← Framework Assessment
     └── ...
 ```
 
@@ -157,7 +157,7 @@ Controlled-Vibe-Framework-CVF/
 - ✅ Backward Compatibility Policy
 
 ### v1.3 — Implementation Toolkit ✅ (Hoàn thành)
-> *Dựa trên [CVF Expert Review v1.2](./docs/CVF_EXPERT_REVIEW_v1.2.md)*
+> *Xem: [CVF Framework Assessment](./docs/CVF_FRAMEWORK_ASSESSMENT.md)*
 
 - ✅ Python SDK (SkillContract, SkillRegistry, Validators)
 - ✅ CLI Tool (`cvf-validate` với validate/lint/check-registry)

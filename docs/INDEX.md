@@ -71,17 +71,16 @@
 
 | Document | Purpose | Read Time | Best For |
 |----------|---------|-----------|----------|
-| [EXPERT_ASSESSMENT_ROADMAP_29012026.md](EXPERT_ASSESSMENT_ROADMAP_29012026.md) | Technical deep dive | 30 min | Architecture understanding |
+| [CVF_EXPERT_REVIEW_v1.2.md](CVF_EXPERT_REVIEW_v1.2.md) | Technical deep dive | 30 min | Architecture understanding |
 | [DOCUMENTATION_STYLE_GUIDE.md](DOCUMENTATION_STYLE_GUIDE.md) | How to write docs | 15 min | Contributors |
-| [PHASE_4_ECOSYSTEM_README.md](PHASE_4_ECOSYSTEM_README.md) | Advanced features | 20 min | Power users |
 
 ### For Reference (Check as Needed)
 
 | Document | Purpose | Reference |
 |----------|---------|-----------|
-| [REMAINING_WORK.md](REMAINING_WORK.md) | What's not done yet | Planning |
-| [CVF_COMPLETE_IMPROVEMENT_REPORT.md](CVF_COMPLETE_IMPROVEMENT_REPORT.md) | Full project history | Context |
-| [PHASE_4_COMPLETION_REPORT.md](PHASE_4_COMPLETION_REPORT.md) | Phase 4 details | Context |
+| [CVF_ARCHITECTURE_DIAGRAMS.md](CVF_ARCHITECTURE_DIAGRAMS.md) | Architecture overview | Design |
+| [HOW_TO_APPLY_CVF.md](HOW_TO_APPLY_CVF.md) | Integration guide | Implementation |
+| [VERSION_COMPARISON.md](VERSION_COMPARISON.md) | Version differences | Comparison |
 
 ---
 
@@ -257,16 +256,19 @@
 
 ```
 docs/
-├── README.md (top level)
+├── INDEX.md ← START HERE
 ├── CHEAT_SHEET.md ← DAILY USE
-├── INTERNAL_USER_GUIDE.md ← START HERE
-├── QUICK_START_INTERNAL.md ← DETAILED
+├── INTERNAL_USER_GUIDE.md ← NEW USERS
+├── QUICK_START_INTERNAL.md ← DETAILED GUIDE
 ├── VERSION_GUIDE_INTERNAL.md
+├── VERSION_COMPARISON.md
+├── VERSIONING.md
+├── HOW_TO_APPLY_CVF.md
+├── CVF_EXPERT_REVIEW_v1.2.md
+├── CVF_ARCHITECTURE_DIAGRAMS.md
 ├── DOCUMENTATION_STYLE_GUIDE.md
-├── INDEX.md (this file)
-├── EXPERT_ASSESSMENT_ROADMAP_29012026.md
-├── REMAINING_WORK.md
-└── (other files for reference)
+├── case-studies/              (5 case studies)
+└── _archive_phase_reports/    (archived development reports)
 ```
 
 ---

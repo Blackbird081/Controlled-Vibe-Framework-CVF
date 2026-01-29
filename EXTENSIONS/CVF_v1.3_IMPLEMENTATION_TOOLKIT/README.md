@@ -15,12 +15,13 @@ while maintaining CVF's governance-first principles.
 | Component | Description | Status |
 |-----------|-------------|:------:|
 | **Python SDK** | Programmatic access to Skill Registry & Contracts | ✅ |
+| **TypeScript SDK** | Same features for Node.js/JavaScript | ✅ NEW |
 | **CLI Tool** | `cvf-validate` for contract validation | ✅ |
 | **Agent Adapters** | Claude, GPT, Generic LLM adapters | ✅ |
 | **CI/CD Templates** | GitHub Actions, pre-commit hooks | ✅ |
 | **VS Code Extension** | Syntax highlighting, validation, snippets | ✅ |
 | **Dashboard** | Web UI for capability lifecycle monitoring | ✅ |
-| **Community Registry** | Central repository for sharing contracts | ✅ NEW |
+| **Community Registry** | Central repository for sharing contracts | ✅ |
 | **End-to-End Examples** | Complete lifecycle demonstrations | ✅ |
 
 ---
@@ -34,6 +35,17 @@ while maintaining CVF's governance-first principles.
 pip install -e ./sdk
 
 # Or copy sdk/ folder to your project
+```
+
+### TypeScript SDK
+
+```bash
+cd typescript-sdk
+npm install
+npm run build
+
+# Or in your project:
+npm install @cvf/sdk
 ```
 
 ### CLI Tool
@@ -95,6 +107,10 @@ CVF_v1.3_IMPLEMENTATION_TOOLKIT/
 │   ├── registry/             # Skill Registry
 │   ├── adapters/             # Agent adapters
 │   └── audit/                # Audit logging
+├── typescript-sdk/           # TypeScript SDK
+│   ├── package.json
+│   ├── src/                  # Source files
+│   └── dist/                 # Built output
 ├── cli/                      # CLI tools
 │   ├── cvf_validate.py       # Main CLI
 │   ├── commands/             # CLI commands

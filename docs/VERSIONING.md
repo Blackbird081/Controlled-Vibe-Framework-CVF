@@ -21,11 +21,21 @@ MAJOR.MINOR
 ```
 
 Ví dụ:
-- `v1.0`
-- `v1.1`
-- `v1.2`
+- `v1.0` — Foundation
+- `v1.1` — Governance Refinement
+- `v1.2` — Capability Extension
+- `v1.3` — Implementation Toolkit
 
 Không sử dụng PATCH version cho framework core.
+
+### Current Status
+
+| Version | Name | Status | Date |
+|---------|------|--------|------|
+| v1.0 | Foundation | FROZEN | 2025 |
+| v1.1 | Governance Refinement | FROZEN | 2025 |
+| v1.2 | Capability Extension | STABLE | 01/2026 |
+| v1.3 | Implementation Toolkit | ✅ NEW | 29/01/2026 |
 
 ---
 
@@ -140,6 +150,7 @@ Ví dụ:
 - CVF v1.0 – Foundation
 - CVF v1.1 – Governance Refinement
 - CVF v1.2 – Capability Extension
+- CVF v1.3 – Implementation Toolkit
 
 ---
 

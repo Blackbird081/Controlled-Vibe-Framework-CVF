@@ -1,0 +1,69 @@
+# Code Analysis Capability
+# Domain: development
+# Risk: R0 (Read-only, no side effects)
+
+capability_id: "CODE_ANALYSIS_v1"
+domain: "development"
+description: "Static analysis of code to extract metrics, complexity, and structure without modifications"
+risk_level: "R0"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Analysis"
+  allowed_phases:
+    - "B"
+    - "C"
+    - "D"
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "code"
+    type: "string"
+    required: true
+    description: "Source code to analyze"
+  - name: "language"
+    type: "string"
+    required: false
+    default: "auto"
+    description: "Programming language (auto-detect if not specified)"
+  - name: "metrics"
+    type: "array"
+    required: false
+    default: ["complexity", "loc", "functions"]
+    description: "Which metrics to calculate"
+
+output_spec:
+  - name: "language_detected"
+    type: "string"
+    description: "Detected or specified language"
+  - name: "lines_of_code"
+    type: "integer"
+    description: "Total lines of code"
+  - name: "complexity"
+    type: "object"
+    description: "Cyclomatic complexity metrics"
+  - name: "functions"
+    type: "array"
+    description: "List of functions/methods found"
+  - name: "classes"
+    type: "array"
+    description: "List of classes found"
+  - name: "imports"
+    type: "array"
+    description: "List of imports/dependencies"
+
+execution:
+  side_effects: false
+  rollback_possible: true
+  idempotent: true
+  execution_type: "EXECUTABLE"
+  expected_duration: "1-5 seconds"
+
+audit:
+  trace_level: "Minimal"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "language_detected"

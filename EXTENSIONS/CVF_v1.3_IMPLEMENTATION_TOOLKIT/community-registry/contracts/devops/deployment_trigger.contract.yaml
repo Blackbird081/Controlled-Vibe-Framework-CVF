@@ -1,0 +1,83 @@
+# Deployment Trigger Capability
+# Domain: devops
+# Risk: R2 (Triggers external system, requires approval)
+
+capability_id: "DEPLOYMENT_TRIGGER_v1"
+domain: "devops"
+description: "Trigger deployment pipelines for configured environments"
+risk_level: "R2"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "D"
+  required_decisions:
+    - "DEPLOYMENT_APPROVAL"
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "environment"
+    type: "string"
+    required: true
+    description: "Target environment (dev, staging, prod)"
+    enum: ["dev", "staging", "prod"]
+  - name: "service"
+    type: "string"
+    required: true
+    description: "Service/application to deploy"
+  - name: "version"
+    type: "string"
+    required: true
+    description: "Version tag or commit hash"
+  - name: "dry_run"
+    type: "boolean"
+    required: false
+    default: false
+    description: "Simulate deployment without executing"
+  - name: "notify_channel"
+    type: "string"
+    required: false
+    description: "Slack channel for notifications"
+
+output_spec:
+  - name: "deployment_id"
+    type: "string"
+    description: "Unique deployment identifier"
+  - name: "status"
+    type: "string"
+    description: "Deployment status"
+    enum: ["triggered", "in_progress", "completed", "failed"]
+  - name: "pipeline_url"
+    type: "string"
+    description: "URL to deployment pipeline"
+  - name: "estimated_duration"
+    type: "integer"
+    description: "Estimated completion time in seconds"
+
+execution:
+  side_effects: true
+  rollback_possible: true
+  idempotent: false
+  execution_type: "EXECUTABLE"
+  expected_duration: "5-30 seconds"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "environment"
+    - "service"
+    - "version"
+    - "deployment_id"
+    - "approver"
+
+failure_info:
+  known_failure_modes:
+    - "Pipeline already running"
+    - "Invalid version tag"
+    - "Environment not available"
+  worst_case_impact: "Failed deployment to production"
+  human_intervention_required: false

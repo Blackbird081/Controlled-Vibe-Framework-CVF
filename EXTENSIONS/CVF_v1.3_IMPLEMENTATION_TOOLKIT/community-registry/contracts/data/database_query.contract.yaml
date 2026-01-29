@@ -1,0 +1,80 @@
+# Database Query Capability
+# Domain: data
+# Risk: R2 (Accesses external database)
+
+capability_id: "DATABASE_QUERY_v1"
+domain: "data"
+description: "Execute read-only SQL queries against configured databases"
+risk_level: "R2"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "C"
+    - "D"
+  required_decisions:
+    - "DATABASE_ACCESS_APPROVED"
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "query"
+    type: "string"
+    required: true
+    description: "SQL query to execute (SELECT only)"
+  - name: "database"
+    type: "string"
+    required: true
+    description: "Target database name"
+    enum: ["dev", "staging", "prod"]
+  - name: "max_rows"
+    type: "integer"
+    required: false
+    default: 1000
+    description: "Maximum rows to return"
+  - name: "timeout"
+    type: "integer"
+    required: false
+    default: 30
+    description: "Query timeout in seconds"
+
+output_spec:
+  - name: "rows"
+    type: "array"
+    description: "Query result rows"
+  - name: "row_count"
+    type: "integer"
+    description: "Number of rows returned"
+  - name: "columns"
+    type: "array"
+    description: "Column names"
+  - name: "execution_time"
+    type: "number"
+    description: "Query execution time in seconds"
+
+execution:
+  side_effects: false
+  rollback_possible: true
+  idempotent: true
+  execution_type: "EXECUTABLE"
+  expected_duration: "1-60 seconds"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "database"
+    - "query_hash"
+    - "row_count"
+    - "approver"
+
+failure_info:
+  known_failure_modes:
+    - "Connection timeout"
+    - "Query syntax error"
+    - "Permission denied"
+    - "Row limit exceeded"
+  worst_case_impact: "Slow database performance due to heavy query"
+  human_intervention_required: false

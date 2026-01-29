@@ -18,8 +18,9 @@ while maintaining CVF's governance-first principles.
 | **CLI Tool** | `cvf-validate` for contract validation | ✅ |
 | **Agent Adapters** | Claude, GPT, Generic LLM adapters | ✅ |
 | **CI/CD Templates** | GitHub Actions, pre-commit hooks | ✅ |
-| **VS Code Extension** | Syntax highlighting, validation, snippets | ✅ NEW |
-| **Dashboard** | Web UI for capability lifecycle monitoring | ✅ NEW |
+| **VS Code Extension** | Syntax highlighting, validation, snippets | ✅ |
+| **Dashboard** | Web UI for capability lifecycle monitoring | ✅ |
+| **Community Registry** | Central repository for sharing contracts | ✅ NEW |
 | **End-to-End Examples** | Complete lifecycle demonstrations | ✅ |
 
 ---
@@ -110,6 +111,10 @@ CVF_v1.3_IMPLEMENTATION_TOOLKIT/
 │   ├── index.html
 │   ├── css/
 │   └── js/
+├── community-registry/       # Shared Contracts
+│   ├── REGISTRY_INDEX.json
+│   ├── contracts/            # Organized by domain
+│   └── scripts/              # Search, add, validate
 └── examples/                 # Usage examples
     ├── complete_lifecycle/
     ├── real_world_contracts/

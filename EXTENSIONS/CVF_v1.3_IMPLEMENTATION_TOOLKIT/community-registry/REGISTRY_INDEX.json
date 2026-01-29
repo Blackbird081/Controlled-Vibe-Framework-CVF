@@ -1,0 +1,355 @@
+{
+    "version": "1.0",
+    "last_updated": "2026-01-29T12:40:00Z",
+    "total_contracts": 13,
+    "contracts": [
+        {
+            "capability_id": "CODE_REVIEW_v1",
+            "domain": "development",
+            "description": "Review code for quality, security, and best practices",
+            "risk_level": "R1",
+            "version": "1.0",
+            "path": "contracts/development/code_review.contract.yaml",
+            "tags": [
+                "code",
+                "review",
+                "quality",
+                "security"
+            ],
+            "archetypes": [
+                "Analysis",
+                "Execution"
+            ],
+            "phases": [
+                "C",
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "CODE_ANALYSIS_v1",
+            "domain": "development",
+            "description": "Static analysis of code without modifications",
+            "risk_level": "R0",
+            "version": "1.0",
+            "path": "contracts/development/code_analysis.contract.yaml",
+            "tags": [
+                "code",
+                "analysis",
+                "static",
+                "metrics"
+            ],
+            "archetypes": [
+                "Analysis"
+            ],
+            "phases": [
+                "B",
+                "C",
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "UNIT_TEST_GENERATE_v1",
+            "domain": "development",
+            "description": "Generate unit tests for given code",
+            "risk_level": "R1",
+            "version": "1.0",
+            "path": "contracts/development/unit_test_generate.contract.yaml",
+            "tags": [
+                "testing",
+                "unit-test",
+                "code",
+                "generation"
+            ],
+            "archetypes": [
+                "Execution"
+            ],
+            "phases": [
+                "C"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "DATABASE_QUERY_v1",
+            "domain": "data",
+            "description": "Execute read-only SQL queries against configured databases",
+            "risk_level": "R2",
+            "version": "1.0",
+            "path": "contracts/data/database_query.contract.yaml",
+            "tags": [
+                "database",
+                "sql",
+                "query",
+                "read"
+            ],
+            "archetypes": [
+                "Execution"
+            ],
+            "phases": [
+                "C",
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "DATA_TRANSFORM_v1",
+            "domain": "data",
+            "description": "Transform data between formats (JSON, CSV, XML)",
+            "risk_level": "R1",
+            "version": "1.0",
+            "path": "contracts/data/data_transform.contract.yaml",
+            "tags": [
+                "data",
+                "transform",
+                "json",
+                "csv",
+                "convert"
+            ],
+            "archetypes": [
+                "Execution"
+            ],
+            "phases": [
+                "C"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "FILE_WRITE_v1",
+            "domain": "devops",
+            "description": "Write content to files in designated directories",
+            "risk_level": "R3",
+            "version": "1.0",
+            "path": "contracts/devops/file_write.contract.yaml",
+            "tags": [
+                "file",
+                "write",
+                "filesystem",
+                "output"
+            ],
+            "archetypes": [
+                "Execution"
+            ],
+            "phases": [
+                "C",
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "DEPLOYMENT_TRIGGER_v1",
+            "domain": "devops",
+            "description": "Trigger deployment pipelines",
+            "risk_level": "R2",
+            "version": "1.0",
+            "path": "contracts/devops/deployment_trigger.contract.yaml",
+            "tags": [
+                "deployment",
+                "ci-cd",
+                "pipeline",
+                "release"
+            ],
+            "archetypes": [
+                "Execution"
+            ],
+            "phases": [
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "VULN_SCAN_v1",
+            "domain": "security",
+            "description": "Scan code or dependencies for vulnerabilities",
+            "risk_level": "R0",
+            "version": "1.0",
+            "path": "contracts/security/vuln_scan.contract.yaml",
+            "tags": [
+                "security",
+                "vulnerability",
+                "scan",
+                "audit"
+            ],
+            "archetypes": [
+                "Analysis"
+            ],
+            "phases": [
+                "C",
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "SLACK_MESSAGE_v1",
+            "domain": "communication",
+            "description": "Send messages to Slack channels",
+            "risk_level": "R2",
+            "version": "1.0",
+            "path": "contracts/communication/slack_message.contract.yaml",
+            "tags": [
+                "slack",
+                "message",
+                "notification",
+                "chat"
+            ],
+            "archetypes": [
+                "Execution"
+            ],
+            "phases": [
+                "C",
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "TEXT_ANALYSIS_v1",
+            "domain": "ai-ml",
+            "description": "Analyze text for sentiment and key phrases",
+            "risk_level": "R0",
+            "version": "1.0",
+            "path": "contracts/ai-ml/text_analysis.contract.yaml",
+            "tags": [
+                "nlp",
+                "sentiment",
+                "text",
+                "analysis"
+            ],
+            "archetypes": [
+                "Analysis"
+            ],
+            "phases": [
+                "B",
+                "C",
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "EMBEDDING_GENERATE_v1",
+            "domain": "ai-ml",
+            "description": "Generate vector embeddings for text",
+            "risk_level": "R0",
+            "version": "1.0",
+            "path": "contracts/ai-ml/embedding_generate.contract.yaml",
+            "tags": [
+                "embedding",
+                "vector",
+                "nlp",
+                "ml"
+            ],
+            "archetypes": [
+                "Execution"
+            ],
+            "phases": [
+                "C"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "CACHE_MANAGER_v1",
+            "domain": "general",
+            "description": "Manage in-memory cache operations",
+            "risk_level": "R1",
+            "version": "1.0",
+            "path": "contracts/general/cache_manager.contract.yaml",
+            "tags": [
+                "cache",
+                "memory",
+                "performance",
+                "utility"
+            ],
+            "archetypes": [
+                "Execution"
+            ],
+            "phases": [
+                "C",
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        },
+        {
+            "capability_id": "VULN_REMEDIATE_v1",
+            "domain": "security",
+            "description": "Automatically remediate known vulnerabilities by patching code or dependencies",
+            "risk_level": "R3",
+            "version": "1.0",
+            "path": "contracts/security/vuln_remediate.contract.yaml",
+            "tags": [
+                "security",
+                "vulnerability",
+                "remediation",
+                "patch"
+            ],
+            "archetypes": [
+                "Execution"
+            ],
+            "phases": [
+                "D"
+            ],
+            "added": "2026-01-29",
+            "downloads": 0
+        }
+    ],
+    "domains": {
+        "development": {
+            "name": "Development",
+            "description": "Code-related operations",
+            "icon": "💻",
+            "count": 3
+        },
+        "data": {
+            "name": "Data",
+            "description": "Data processing and storage",
+            "icon": "📊",
+            "count": 2
+        },
+        "devops": {
+            "name": "DevOps",
+            "description": "Infrastructure and deployment",
+            "icon": "🚀",
+            "count": 2
+        },
+        "security": {
+            "name": "Security",
+            "description": "Security and vulnerability",
+            "icon": "🔒",
+            "count": 2
+        },
+        "communication": {
+            "name": "Communication",
+            "description": "Messaging and notifications",
+            "icon": "💬",
+            "count": 1
+        },
+        "ai-ml": {
+            "name": "AI/ML",
+            "description": "Machine learning operations",
+            "icon": "🤖",
+            "count": 2
+        },
+        "general": {
+            "name": "General",
+            "description": "Utility operations",
+            "icon": "🔧",
+            "count": 1
+        }
+    },
+    "risk_counts": {
+        "R0": 3,
+        "R1": 4,
+        "R2": 3,
+        "R3": 2
+    }
+}

@@ -1,0 +1,119 @@
+name: Documentation & Testing
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - '**.md'
+      - 'sdk/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  markdown-lint:
+    name: Markdown Linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install markdownlint
+        run: npm install -g markdownlint-cli
+      
+      - name: Lint all markdown files
+        run: |
+          markdownlint --config .markdownlintrc '**/*.md' \
+            --ignore node_modules \
+            --ignore .git
+        continue-on-error: false
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+          pip install -e ./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk
+      
+      - name: Run unit tests
+        run: |
+          pytest EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk/tests/unit \
+            -v \
+            --cov=EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk \
+            --cov-report=xml \
+            --cov-report=html
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
+          verbose: true
+
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          pip install -e ./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk
+      
+      - name: Run integration tests
+        run: |
+          pytest EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk/tests/integration \
+            -v \
+            --tb=short
+
+  documentation-build:
+    name: Documentation Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Validate documentation structure
+        run: |
+          echo "Checking for required documentation files..."
+          test -f docs/DOCUMENTATION_STYLE_GUIDE.md || exit 1
+          test -f docs/EXPERT_ASSESSMENT_ROADMAP_29012026.md || exit 1
+          test -f .markdownlintrc || exit 1
+          echo "✓ All required documentation files present"
+
+  status-check:
+    name: Status Check
+    runs-on: ubuntu-latest
+    needs: [markdown-lint, test, integration-test, documentation-build]
+    if: always()
+    
+    steps:
+      - name: Check status
+        run: |
+          echo "All checks completed"
+          echo "Markdown lint: ${{ needs.markdown-lint.result }}"
+          echo "Unit tests: ${{ needs.test.result }}"
+          echo "Integration tests: ${{ needs.integration-test.result }}"
+          echo "Documentation: ${{ needs.documentation-build.result }}"

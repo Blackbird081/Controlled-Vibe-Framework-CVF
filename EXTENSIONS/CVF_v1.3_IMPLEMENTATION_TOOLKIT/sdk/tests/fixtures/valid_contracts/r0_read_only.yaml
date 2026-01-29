@@ -1,0 +1,49 @@
+name: Read Only Skill
+version: "1.0.0"
+metadata:
+  description: "R0 - Read-only skill with no side effects"
+  author: "test-suite"
+  created_at: "2026-01-29"
+
+risk_level: R0
+human_required: false
+
+input_schema:
+  type: object
+  properties:
+    query:
+      type: string
+      description: "Search query"
+    limit:
+      type: integer
+      description: "Maximum results"
+      default: 10
+  required: ["query"]
+
+output_schema:
+  type: object
+  properties:
+    results:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          title:
+            type: string
+          score:
+            type: number
+    total_count:
+      type: integer
+
+execution:
+  handler: "query_handler"
+  timeout_seconds: 30
+  retry_policy:
+    max_retries: 3
+    backoff_multiplier: 2
+
+audit:
+  log_level: "INFO"
+  fields: ["query", "limit", "total_count"]

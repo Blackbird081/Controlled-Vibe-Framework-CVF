@@ -1,0 +1,33 @@
+{
+  "default": true,
+  "MD003": {
+    "style": "consistent"
+  },
+  "MD004": {
+    "style": "consistent"
+  },
+  "MD007": {
+    "indent": 2,
+    "start_indented": false
+  },
+  "MD009": {
+    "br_spaces": 2,
+    "list_item_empty_lines": false,
+    "strict": false
+  },
+  "MD012": {
+    "maximum": 1
+  },
+  "MD013": false,
+  "MD030": {
+    "ul_single": 1,
+    "ol_single": 1,
+    "ul_multi": 1,
+    "ol_multi": 1
+  },
+  "MD033": false,
+  "MD040": false,
+  "MD041": {
+    "level": 1
+  }
+}

@@ -20,7 +20,8 @@
 ## 2. Workflow chuẩn (5 bước)
 
 ### Bước 1: Khởi tạo Project
-```
+
+```markdown
 □ Xác định scope và mục tiêu
 □ Chọn modules v1.1 cần bật (hoặc chỉ dùng v1.0)
 □ Điền PROJECT_INIT_CHECKLIST.md
@@ -28,7 +29,8 @@
 ```
 
 ### Bước 2: Lập Spec
-```
+
+```markdown
 □ Viết INPUT_SPEC.md — định nghĩa yêu cầu, constraints
 □ Viết OUTPUT_SPEC.md — định nghĩa deliverables, acceptance criteria
 □ Review specs với stakeholders
@@ -36,7 +38,8 @@
 ```
 
 ### Bước 3: Gán Command + Archetype + Preset
-```
+
+```markdown
 □ Chọn Command phù hợp: /create, /modify, /review, /debug...
 □ Map tới Archetype: Builder, Reviewer, Debugger...
 □ Apply Preset từ EGL_PRESET_LIBRARY.md
@@ -44,7 +47,8 @@
 ```
 
 ### Bước 4: Thực thi Action Units
-```
+
+```markdown
 □ Chia task thành Action Units nhỏ (1 AU = 1 việc cụ thể)
 □ Thực thi trong sandbox/isolation
 □ Ghi trace cho mỗi AU: input → action → output → status

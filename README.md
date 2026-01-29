@@ -2,9 +2,41 @@
 
 **Framework quản lý dự án theo tinh thần *vibe coding có kiểm soát*.**
 
+> **🏢 INTERNAL USE ONLY - v1.0-internal**  
+> This is an internal tool for your company's AI project governance.  
+> See [QUICK_START_INTERNAL.md](docs/QUICK_START_INTERNAL.md) for quick start guide.  
+> Latest Assessment: **9.40/10** ✅ (As of Jan 29, 2026)
+
+## 🚀 Bắt Đầu (5 Phút)
+
+**👉 Đọc trước:** [QUICK_START_INTERNAL.md](docs/QUICK_START_INTERNAL.md) ← Start here!
+
+### Nhanh gọn:
+
+```python
+from cvf import Skill, SkillContract, RiskLevel
+
+# Define what you want
+contract = SkillContract(
+    id="email-classifier-v1",
+    name="Email Classifier",
+    description="Classify emails as spam/legit",
+    risk_level=RiskLevel.R1,  # R0=auto, R1=auto+check, R2=review, R3=info
+    input_spec={"email": str},
+    output_spec={"category": str, "confidence": float}
+)
+
+# Use it
+skill = Skill(contract)
+result = skill.execute({"email": "Buy now!!!"})
+# → {"category": "spam", "confidence": 0.95, "approved": true}
+```
+
+✅ Done! CVF automatically handles input validation, output checking, and audit trail.
+
 ---
 
-## Chọn phiên bản
+## 📚 Chọn Phiên Bản (Nếu Muốn Tìm Hiểu Sâu)
 
 | Bạn cần gì? | Phiên bản | Thư mục |
 |-------------|-----------|---------|

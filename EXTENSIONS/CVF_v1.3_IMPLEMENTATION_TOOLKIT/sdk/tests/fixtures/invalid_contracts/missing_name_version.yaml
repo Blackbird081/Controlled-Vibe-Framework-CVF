@@ -1,0 +1,21 @@
+name: Broken Contract - Missing Name
+# version is missing too!
+
+risk_level: R0
+
+input_schema:
+  type: object
+  properties:
+    data:
+      type: string
+  required: ["data"]
+
+output_schema:
+  type: object
+  properties:
+    result:
+      type: string
+
+execution:
+  handler: "test_handler"
+  timeout_seconds: 30

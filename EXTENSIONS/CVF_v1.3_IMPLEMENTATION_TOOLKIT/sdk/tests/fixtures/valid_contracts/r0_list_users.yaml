@@ -1,0 +1,64 @@
+name: List Users
+version: "1.0.0"
+metadata:
+  description: "R0 - List all users with pagination"
+  author: "test-suite"
+  created_at: "2026-01-29"
+
+risk_level: R0
+human_required: false
+
+input_schema:
+  type: object
+  properties:
+    page:
+      type: integer
+      minimum: 1
+      default: 1
+    page_size:
+      type: integer
+      minimum: 1
+      maximum: 100
+      default: 20
+    filter:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["active", "inactive", "suspended"]
+
+output_schema:
+  type: object
+  properties:
+    users:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          username:
+            type: string
+          email:
+            type: string
+          created_at:
+            type: string
+    pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        total_pages:
+          type: integer
+        total_count:
+          type: integer
+
+execution:
+  handler: "list_users_handler"
+  timeout_seconds: 10
+  cache_policy:
+    ttl_seconds: 300
+
+audit:
+  log_level: "INFO"
+  fields: ["page", "page_size", "total_count"]

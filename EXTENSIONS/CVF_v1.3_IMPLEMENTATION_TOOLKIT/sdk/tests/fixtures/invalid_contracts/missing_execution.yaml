@@ -1,0 +1,22 @@
+name: Broken Contract - Missing Execution
+version: "1.0.0"
+
+risk_level: R0
+
+input_schema:
+  type: object
+  properties:
+    data:
+      type: string
+  required: ["data"]
+
+output_schema:
+  type: object
+  properties:
+    result:
+      type: string
+
+# Missing execution block - REQUIRED!
+
+audit:
+  log_level: "INFO"

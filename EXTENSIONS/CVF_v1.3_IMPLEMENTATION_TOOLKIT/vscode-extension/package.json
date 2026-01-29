@@ -1,0 +1,106 @@
+{
+  "name": "cvf-contracts",
+  "displayName": "CVF Skill Contracts",
+  "description": "Syntax highlighting, validation, and snippets for CVF Skill Contract files",
+  "version": "1.0.0",
+  "publisher": "cvf-framework",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Linters"
+  ],
+  "keywords": [
+    "cvf",
+    "skill-contract",
+    "ai-governance",
+    "yaml"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF"
+  },
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:cvf-contract",
+    "workspaceContains:**/*.contract.yaml",
+    "workspaceContains:**/*.contract.yml"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "cvf-contract",
+        "aliases": ["CVF Contract", "cvf-contract"],
+        "extensions": [".contract.yaml", ".contract.yml"],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/cvf-light.png",
+          "dark": "./icons/cvf-dark.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cvf-contract",
+        "scopeName": "source.cvf-contract",
+        "path": "./syntaxes/cvf-contract.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "cvf-contract",
+        "path": "./snippets/cvf-contract.json"
+      }
+    ],
+    "configuration": {
+      "title": "CVF Contracts",
+      "properties": {
+        "cvf.validateOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate contracts on save"
+        },
+        "cvf.showRiskLevelWarnings": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show warnings for high risk levels (R2, R3)"
+        },
+        "cvf.pythonPath": {
+          "type": "string",
+          "default": "python",
+          "description": "Path to Python interpreter for cvf-validate"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "cvf.validate",
+        "title": "CVF: Validate Contract"
+      },
+      {
+        "command": "cvf.lint",
+        "title": "CVF: Lint Contract"
+      },
+      {
+        "command": "cvf.createContract",
+        "title": "CVF: Create New Contract"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "yaml": "^2.3.0"
+  }
+}

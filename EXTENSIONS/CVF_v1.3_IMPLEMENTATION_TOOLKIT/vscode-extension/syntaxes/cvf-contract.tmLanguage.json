@@ -1,0 +1,131 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "CVF Contract",
+    "scopeName": "source.cvf-contract",
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#capability-id"
+        },
+        {
+            "include": "#risk-level"
+        },
+        {
+            "include": "#lifecycle-state"
+        },
+        {
+            "include": "#governance-keywords"
+        },
+        {
+            "include": "#section-keywords"
+        },
+        {
+            "include": "#archetypes"
+        },
+        {
+            "include": "#phases"
+        },
+        {
+            "include": "#booleans"
+        },
+        {
+            "include": "#numbers"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#keys"
+        }
+    ],
+    "repository": {
+        "comments": {
+            "name": "comment.line.number-sign.cvf-contract",
+            "match": "#.*$"
+        },
+        "capability-id": {
+            "name": "entity.name.class.capability-id.cvf-contract",
+            "match": "(?<=capability_id:\\s*[\"'])([A-Z_]+_v\\d+)(?=[\"'])"
+        },
+        "risk-level": {
+            "patterns": [
+                {
+                    "name": "constant.other.risk-level.r0.cvf-contract",
+                    "match": "(?<=[\"'])R0(?=[\"'])"
+                },
+                {
+                    "name": "constant.other.risk-level.r1.cvf-contract",
+                    "match": "(?<=[\"'])R1(?=[\"'])"
+                },
+                {
+                    "name": "keyword.warning.risk-level.r2.cvf-contract",
+                    "match": "(?<=[\"'])R2(?=[\"'])"
+                },
+                {
+                    "name": "keyword.critical.risk-level.r3.cvf-contract",
+                    "match": "(?<=[\"'])R3(?=[\"'])"
+                }
+            ]
+        },
+        "lifecycle-state": {
+            "name": "constant.language.lifecycle.cvf-contract",
+            "match": "\\b(PROPOSED|APPROVED|ACTIVE|DEPRECATED|RETIRED)\\b"
+        },
+        "governance-keywords": {
+            "name": "keyword.control.governance.cvf-contract",
+            "match": "\\b(allowed_archetypes|allowed_phases|required_decisions|required_status|required_controls)\\b"
+        },
+        "section-keywords": {
+            "name": "storage.type.section.cvf-contract",
+            "match": "^(capability_id|domain|description|risk_level|version|governance|input_spec|output_spec|execution|audit|failure_info|dependencies):"
+        },
+        "archetypes": {
+            "name": "entity.name.type.archetype.cvf-contract",
+            "match": "(?<=[\"'])(Analysis|Decision|Planning|Execution|Supervisor|Exploration)(?=[\"'])"
+        },
+        "phases": {
+            "name": "constant.character.phase.cvf-contract",
+            "match": "(?<=[\"'])[A-D](?=[\"'])"
+        },
+        "booleans": {
+            "name": "constant.language.boolean.cvf-contract",
+            "match": "\\b(true|false)\\b"
+        },
+        "numbers": {
+            "name": "constant.numeric.cvf-contract",
+            "match": "\\b\\d+(\\.\\d+)?\\b"
+        },
+        "strings": {
+            "patterns": [
+                {
+                    "name": "string.quoted.double.cvf-contract",
+                    "begin": "\"",
+                    "end": "\"",
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape.cvf-contract",
+                            "match": "\\\\."
+                        }
+                    ]
+                },
+                {
+                    "name": "string.quoted.single.cvf-contract",
+                    "begin": "'",
+                    "end": "'",
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape.cvf-contract",
+                            "match": "\\\\."
+                        }
+                    ]
+                }
+            ]
+        },
+        "keys": {
+            "name": "variable.other.key.cvf-contract",
+            "match": "^\\s*([a-z_]+)(?=:)"
+        }
+    }
+}

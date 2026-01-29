@@ -18,6 +18,8 @@ while maintaining CVF's governance-first principles.
 | **CLI Tool** | `cvf-validate` for contract validation | ✅ |
 | **Agent Adapters** | Claude, GPT, Generic LLM adapters | ✅ |
 | **CI/CD Templates** | GitHub Actions, pre-commit hooks | ✅ |
+| **VS Code Extension** | Syntax highlighting, validation, snippets | ✅ NEW |
+| **Dashboard** | Web UI for capability lifecycle monitoring | ✅ NEW |
 | **End-to-End Examples** | Complete lifecycle demonstrations | ✅ |
 
 ---
@@ -99,6 +101,15 @@ CVF_v1.3_IMPLEMENTATION_TOOLKIT/
 ├── ci_cd/                    # CI/CD templates
 │   ├── github_actions/
 │   └── pre_commit/
+├── vscode-extension/         # VS Code Extension
+│   ├── package.json
+│   ├── syntaxes/             # Syntax highlighting
+│   ├── snippets/             # Code snippets
+│   └── src/                  # Extension source
+├── dashboard/                # Web Dashboard
+│   ├── index.html
+│   ├── css/
+│   └── js/
 └── examples/                 # Usage examples
     ├── complete_lifecycle/
     ├── real_world_contracts/

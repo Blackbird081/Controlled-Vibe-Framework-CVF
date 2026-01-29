@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVF Dashboard — Capability Lifecycle Monitor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">CVF Dashboard</span>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-item active" data-tab="overview">
+                    <span class="nav-icon">📊</span>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="capabilities">
+                    <span class="nav-icon">🎯</span>
+                    <span>Capabilities</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="audit">
+                    <span class="nav-icon">📋</span>
+                    <span>Audit Logs</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="risks">
+                    <span class="nav-icon">⚠️</span>
+                    <span>Risk Analysis</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="version">CVF v1.3</div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-title">
+                    <h1 id="page-title">Overview</h1>
+                    <span class="header-subtitle">Capability Lifecycle Dashboard</span>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="refreshData()">
+                        🔄 Refresh
+                    </button>
+                    <button class="btn btn-primary" onclick="showAddCapabilityModal()">
+                        + Add Capability
+                    </button>
+                </div>
+            </header>
+
+            <!-- Overview Tab -->
+            <section id="tab-overview" class="tab-content active">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card stat-active">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-active">0</div>
+                            <div class="stat-label">Active</div>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-proposed">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-proposed">0</div>
+                            <div class="stat-label">Proposed</div>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-deprecated">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-deprecated">0</div>
+                            <div class="stat-label">Deprecated</div>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-retired">
+                        <div class="stat-icon">🚫</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-retired">0</div>
+                            <div class="stat-label">Retired</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Risk Distribution</h3>
+                        </div>
+                        <div class="chart-body">
+                            <div class="risk-bars">
+                                <div class="risk-bar">
+                                    <span class="risk-label">R0</span>
+                                    <div class="risk-progress">
+                                        <div class="risk-fill r0" id="risk-r0" style="width: 0%"></div>
+                                    </div>
+                                    <span class="risk-count" id="risk-r0-count">0</span>
+                                </div>
+                                <div class="risk-bar">
+                                    <span class="risk-label">R1</span>
+                                    <div class="risk-progress">
+                                        <div class="risk-fill r1" id="risk-r1" style="width: 0%"></div>
+                                    </div>
+                                    <span class="risk-count" id="risk-r1-count">0</span>
+                                </div>
+                                <div class="risk-bar">
+                                    <span class="risk-label">R2</span>
+                                    <div class="risk-progress">
+                                        <div class="risk-fill r2" id="risk-r2" style="width: 0%"></div>
+                                    </div>
+                                    <span class="risk-count" id="risk-r2-count">0</span>
+                                </div>
+                                <div class="risk-bar">
+                                    <span class="risk-label">R3</span>
+                                    <div class="risk-progress">
+                                        <div class="risk-fill r3" id="risk-r3" style="width: 0%"></div>
+                                    </div>
+                                    <span class="risk-count" id="risk-r3-count">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Execution Stats</h3>
+                        </div>
+                        <div class="chart-body">
+                            <div class="exec-stats">
+                                <div class="exec-stat">
+                                    <div class="exec-stat-value" id="exec-success-rate">0%</div>
+                                    <div class="exec-stat-label">Success Rate</div>
+                                </div>
+                                <div class="exec-stat">
+                                    <div class="exec-stat-value" id="exec-avg-duration">0ms</div>
+                                    <div class="exec-stat-label">Avg Duration</div>
+                                </div>
+                                <div class="exec-stat">
+                                    <div class="exec-stat-value" id="exec-total">0</div>
+                                    <div class="exec-stat-label">Total Executions</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-card">
+                    <div class="card-header">
+                        <h3>Recent Activity</h3>
+                        <a href="#" class="view-all" data-tab="audit">View All →</a>
+                    </div>
+                    <div class="activity-list" id="recent-activity">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Capabilities Tab -->
+            <section id="tab-capabilities" class="tab-content">
+                <div class="filter-bar">
+                    <input type="text" class="search-input" placeholder="Search capabilities..." id="capability-search">
+                    <select class="filter-select" id="state-filter">
+                        <option value="">All States</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="PROPOSED">Proposed</option>
+                        <option value="APPROVED">Approved</option>
+                        <option value="DEPRECATED">Deprecated</option>
+                        <option value="RETIRED">Retired</option>
+                    </select>
+                    <select class="filter-select" id="risk-filter">
+                        <option value="">All Risk Levels</option>
+                        <option value="R0">R0 - Passive</option>
+                        <option value="R1">R1 - Controlled</option>
+                        <option value="R2">R2 - Elevated</option>
+                        <option value="R3">R3 - Critical</option>
+                    </select>
+                </div>
+                <div class="capabilities-table-container">
+                    <table class="capabilities-table">
+                        <thead>
+                            <tr>
+                                <th>Capability ID</th>
+                                <th>Domain</th>
+                                <th>Risk</th>
+                                <th>State</th>
+                                <th>Owner</th>
+                                <th>Last Audit</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="capabilities-tbody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Audit Tab -->
+            <section id="tab-audit" class="tab-content">
+                <div class="filter-bar">
+                    <input type="text" class="search-input" placeholder="Search audit logs..." id="audit-search">
+                    <select class="filter-select" id="audit-capability-filter">
+                        <option value="">All Capabilities</option>
+                    </select>
+                    <select class="filter-select" id="audit-status-filter">
+                        <option value="">All Status</option>
+                        <option value="SUCCESS">Success</option>
+                        <option value="FAILED">Failed</option>
+                    </select>
+                    <input type="date" class="date-input" id="audit-date-from">
+                    <span>to</span>
+                    <input type="date" class="date-input" id="audit-date-to">
+                </div>
+                <div class="audit-table-container">
+                    <table class="audit-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Capability</th>
+                                <th>Actor</th>
+                                <th>Status</th>
+                                <th>Duration</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audit-tbody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Risk Analysis Tab -->
+            <section id="tab-risks" class="tab-content">
+                <div class="risk-analysis">
+                    <div class="risk-level-card r0-card">
+                        <div class="risk-level-header">
+                            <span class="risk-badge r0">R0</span>
+                            <h3>Passive</h3>
+                        </div>
+                        <p>No side effects. Safe for unrestricted use.</p>
+                        <div class="risk-controls">
+                            <strong>Required Controls:</strong>
+                            <ul><li>Logging</li></ul>
+                        </div>
+                        <div class="risk-capabilities" id="r0-capabilities"></div>
+                    </div>
+                    <div class="risk-level-card r1-card">
+                        <div class="risk-level-header">
+                            <span class="risk-badge r1">R1</span>
+                            <h3>Controlled</h3>
+                        </div>
+                        <p>Small, bounded side effects.</p>
+                        <div class="risk-controls">
+                            <strong>Required Controls:</strong>
+                            <ul><li>Logging</li><li>Scope Guard</li></ul>
+                        </div>
+                        <div class="risk-capabilities" id="r1-capabilities"></div>
+                    </div>
+                    <div class="risk-level-card r2-card">
+                        <div class="risk-level-header">
+                            <span class="risk-badge r2">R2</span>
+                            <h3>Elevated</h3>
+                        </div>
+                        <p>Has authority, may chain with other capabilities.</p>
+                        <div class="risk-controls">
+                            <strong>Required Controls:</strong>
+                            <ul><li>Logging</li><li>Scope Guard</li><li>Explicit Approval</li><li>Audit</li></ul>
+                        </div>
+                        <div class="risk-capabilities" id="r2-capabilities"></div>
+                    </div>
+                    <div class="risk-level-card r3-card">
+                        <div class="risk-level-header">
+                            <span class="risk-badge r3">R3</span>
+                            <h3>Critical</h3>
+                        </div>
+                        <p>System changes, external impact. Human approval required.</p>
+                        <div class="risk-controls">
+                            <strong>Required Controls:</strong>
+                            <ul><li>All above</li><li>Hard Gate</li><li>Human-in-the-loop</li></ul>
+                        </div>
+                        <div class="risk-capabilities" id="r3-capabilities"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Tab -->
+            <section id="tab-settings" class="tab-content">
+                <div class="settings-card">
+                    <h3>Data Source</h3>
+                    <div class="setting-item">
+                        <label>Registry JSON Path:</label>
+                        <input type="text" id="registry-path" value="data/registry.json">
+                    </div>
+                    <div class="setting-item">
+                        <label>Audit Logs Path:</label>
+                        <input type="text" id="audit-path" value="data/audit_logs.json">
+                    </div>
+                    <button class="btn btn-primary" onclick="loadDataFromPaths()">Load Data</button>
+                </div>
+                <div class="settings-card">
+                    <h3>Display Options</h3>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="auto-refresh" checked>
+                            Auto-refresh every 30 seconds
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="show-retired" checked>
+                            Show retired capabilities
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-card">
+                    <h3>Import/Export</h3>
+                    <div class="setting-item">
+                        <button class="btn btn-secondary" onclick="exportData()">Export Dashboard Data</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">Import Data</button>
+                        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Modal Title</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,72 +1,85 @@
-CVF v1.4 – Usage Layer
+# 📋 CHANGELOG — CVF v1.4 Usage Layer
 
-Status: Frozen after audit
+**Status: ✅ FROZEN (01/02/2026)**
 
-Tổng quan
+---
+
+## [v1.4.0] — 2026-02-01
+
+### 🎯 Mục tiêu
 
 CVF v1.4 là lớp Usage/UX đặt trên CVF v1.3.1 (CORE – Frozen). Phiên bản này không thay đổi bất kỳ rule nào của core, chỉ bổ sung khả năng sử dụng cho end-user và nhóm nhỏ.
 
-Thêm mới (Added)
-User Layer
+---
 
-10_USER_LAYER/user_intent_templates.md: Chuẩn hóa cách người dùng khai báo intent.
+### ✨ Thêm mới (Added)
 
-10_USER_LAYER/do_and_dont_for_users.md: Hướng dẫn hành vi đúng/sai khi sử dụng CVF.
+#### 10_USER_LAYER/
+| File | Mục đích |
+|------|----------|
+| `user_intent_templates.md` | Chuẩn hóa cách khai báo intent |
+| `do_and_dont_for_users.md` | Hướng dẫn hành vi đúng/sai |
+| `expectation_management.md` | Quản lý kỳ vọng về AI |
 
-10_USER_LAYER/expectation_management.md: Quản lý kỳ vọng, chống hiểu lầm về AI.
+#### 11_PRESET_USE_CASES/
+| File | Mục đích |
+|------|----------|
+| `analysis_mode.md` | 📊 Preset phân tích với intent templates, output format, ví dụ |
+| `decision_support.md` | 🎯 Preset hỗ trợ quyết định với comparison tables |
+| `content_generation.md` | ✍️ Preset tạo nội dung với content types |
+| `technical_review.md` | 🔍 Preset review kỹ thuật với severity levels |
 
-Preset Use Cases
+#### 12_TOOLING/
+| File | Mục đích |
+|------|----------|
+| `cvf_cli_user_mode.md` | CLI user mode với full commands và flow diagram |
+| `web_ui_concept.md` | Web UI concept với wireframes và components |
+| `api_wrapper_contract.md` | REST API contract với SDK examples |
 
-11_PRESET_USE_CASES/analysis_mode.md
+#### 13_FAILURE_UX/
+| File | Mục đích |
+|------|----------|
+| `user_facing_error_messages.md` | Error messages thân thiện |
+| `retry_vs_reject_policy.md` | Policy retry/reject |
+| `explain_failure_without_trace.md` | Giải thích lỗi không lộ trace |
 
-11_PRESET_USE_CASES/decision_support.md
+#### 14_LIGHT_GOVERNANCE/
+| File | Mục đích |
+|------|----------|
+| `role_matrix.md` | Ma trận vai trò User/Operator/Maintainer |
+| `escalation_flow.md` | Luồng escalation |
+| `freeze_and_upgrade_policy.md` | Policy freeze và upgrade |
 
-11_PRESET_USE_CASES/content_generation.md
+---
 
-11_PRESET_USE_CASES/technical_review.md
+### 🔒 Không thay đổi (Unchanged)
 
-Tooling (Wrapper Layer)
+- CVF Core v1.3.1: Scope, Input/Output Contract, Execution Rules, Audit & Trace
+- Không mở quyền can thiệp execution cho user
+- Không lộ trace hoặc reasoning nội bộ
 
-12_TOOLING/cvf_cli_user_mode.md: CLI cho user, intent + preset.
+---
 
-12_TOOLING/web_ui_concept.md: Khái niệm UI tối giản.
+### 📊 Thống kê
 
-12_TOOLING/api_wrapper_contract.md: Contract wrapper API.
+| Metric | Value |
+|--------|:-----:|
+| Folders | 5 |
+| Files | 16 |
+| Total Lines | ~1,700 |
+| Score | 9.5/10 |
 
-Failure UX
+---
 
-13_FAILURE_UX/user_facing_error_messages.md
+### ✅ Kết luận Audit
 
-13_FAILURE_UX/retry_vs_reject_policy.md
+- Không phát hiện drift so với CVF v1.3.1
+- Treeview đầy đủ, nhất quán
+- Preset use cases có depth tốt
+- Tooling specs đầy đủ
 
-13_FAILURE_UX/explain_failure_without_trace.md
+**Phiên bản CVF v1.4 – Usage Layer được FREEZE ngày 01/02/2026.**
 
-Light Governance
+---
 
-14_LIGHT_GOVERNANCE/role_matrix.md
-
-14_LIGHT_GOVERNANCE/escalation_flow.md
-
-14_LIGHT_GOVERNANCE/freeze_and_upgrade_policy.md
-
-Không thay đổi (Unchanged)
-
-CVF Core v1.3.1: Scope, Input/Output Contract, Execution Rules, Audit & Trace.
-
-Không mở quyền can thiệp execution cho user.
-
-Nguyên tắc bất biến
-
-Usage Layer không override core rules.
-
-Không lộ trace hoặc reasoning nội bộ.
-
-Người dùng chỉ chịu trách nhiệm về intent, không về execution.
-
-Kết luận audit
-
-Không phát hiện drift so với CVF v1.3.1.
-
-Treeview đầy đủ, nhất quán.
-
-Phiên bản CVF v1.4 – Usage Layer được freeze.
+*Powered by CVF v1.3.1 Core (Frozen)*

@@ -51,27 +51,29 @@ result = skill.execute({"email": "Buy now!!!"})
 | **Agent adapters (Claude/GPT)** | **v1.3** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
 | **CI/CD integration** | **v1.3** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
 | **👤 Operator Manual** | **v1.3.1** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) |
+| **🎯 End-user UX Layer** | **v1.4** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.4_USAGE_LAYER/) |
 
 
 ---
 
 ## So sánh nhanh
 
-| Tính năng | v1.0 | v1.1 | v1.2 | v1.3 | v1.3.1 |
-|-----------|:----:|:----:|:----:|:----:|:------:|
-| Triết lý core (Outcome > Code) | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Phase-based (A→D) | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Governance cơ bản | ✅ | ✅ | ✅ | ✅ | ✅ |
-| INPUT/OUTPUT spec | ❌ | ✅ | ✅ | ✅ | ✅ |
-| Agent Archetype + Lifecycle | ❌ | ✅ | ✅ | ✅ | ✅ |
-| Skill Contract Spec | ❌ | ❌ | ✅ | ✅ | ✅ |
-| Skill Registry Model | ❌ | ❌ | ✅ | ✅ | ✅ |
-| Capability Risk Model (R0-R3) | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Python SDK** | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **CLI Tool (`cvf-validate`)** | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Agent Adapters (Claude/GPT)** | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **CI/CD Templates** | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **👤 Operator Manual** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Tính năng | v1.0 | v1.1 | v1.2 | v1.3 | v1.3.1 | v1.4 |
+|-----------|:----:|:----:|:----:|:----:|:------:|:----:|
+| Triết lý core (Outcome > Code) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Phase-based (A→D) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Governance cơ bản | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| INPUT/OUTPUT spec | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Agent Archetype + Lifecycle | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Skill Contract Spec | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Skill Registry Model | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Capability Risk Model (R0-R3) | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Python SDK** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **CLI Tool (`cvf-validate`)** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Agent Adapters (Claude/GPT)** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **CI/CD Templates** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **👤 Operator Manual** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **🎯 End-user UX Layer** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 

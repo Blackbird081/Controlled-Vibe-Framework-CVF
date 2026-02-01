@@ -1,0 +1,66 @@
+# 📋 CHANGELOG — CVF v1.5 UX PLATFORM
+
+**Status:** 🔄 IN PROGRESS
+
+---
+
+## [v1.5.0] — 2026-02-01
+
+### Phase 1: Foundation ✅
+
+#### Added
+- **README.md** — Main entry point
+- **ROADMAP.md** — Complete roadmap với treeview
+- **21_TEMPLATE_LIBRARY/README.md** — Template usage guide
+
+#### Templates Created (18 total)
+
+**BUSINESS/ (5)**
+- `strategy_analysis.md` — Business strategy analysis
+- `risk_assessment.md` — Risk evaluation với mitigation
+- `competitor_review.md` — Competitive analysis
+- `market_research.md` — Market size & segments
+- `business_proposal.md` — Professional proposals
+
+**TECHNICAL/ (5)**
+- `code_review.md` — Code quality review
+- `architecture_review.md` — System design review
+- `security_audit.md` — Security assessment
+- `performance_review.md` — Performance optimization
+- `api_design_review.md` — API contract review
+
+**CONTENT/ (5)**
+- `documentation.md` — Technical docs
+- `report_writing.md` — Business reports
+- `email_templates.md` — Professional emails
+- `blog_writing.md` — Blog posts
+- `presentation.md` — Slide content
+
+**RESEARCH/ (3)**
+- `literature_review.md` — Academic synthesis
+- `data_analysis.md` — Data insights
+- `survey_analysis.md` — Survey results
+
+---
+
+### Phase 2: Web Interface Specs (Pending)
+- [ ] 20_WEB_INTERFACE/README.md
+- [ ] UI Principles & Wireframes
+- [ ] Form Builder Spec
+- [ ] Result Display Spec
+
+### Phase 3: Analytics Design (Pending)
+- [ ] 22_ANALYTICS/README.md
+- [ ] Accept/Reject Tracking
+- [ ] Quality Scoring
+
+---
+
+### Compatibility
+- CVF v1.4.x: ✅ Compatible
+- CVF v1.3.x: ✅ Compatible
+- No breaking changes
+
+---
+
+*CVF v1.5 UX Platform — Making CVF accessible to everyone*

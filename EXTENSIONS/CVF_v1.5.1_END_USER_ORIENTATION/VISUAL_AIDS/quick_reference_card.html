@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVF - Quick Reference Card</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .do-box,
+        .dont-box {
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .do-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .dont-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+
+        .do-box h4 {
+            color: #2e7d32;
+        }
+
+        .dont-box h4 {
+            color: #c62828;
+        }
+
+        .do-box ul,
+        .dont-box ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .do-box li::before {
+            content: "✓ ";
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .dont-box li::before {
+            content: "✗ ";
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .do-box li,
+        .dont-box li {
+            padding: 4px 0;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .steps-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .step-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .step-chip .num {
+            background: rgba(255, 255, 255, 0.3);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .response-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .response-card {
+            text-align: center;
+            padding: 14px;
+            border-radius: 10px;
+            border: 2px solid #eee;
+        }
+
+        .response-card.accept {
+            border-color: #4CAF50;
+            background: #f1f8e9;
+        }
+
+        .response-card.revise {
+            border-color: #FF9800;
+            background: #fff8e1;
+        }
+
+        .response-card.reject {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .response-icon {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        .response-label {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .response-desc {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .key-principle {
+            background: linear-gradient(135deg, #667eea10, #764ba210);
+            border: 1px solid #667eea40;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .key-principle .quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .key-principle .author {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .card {
+                box-shadow: none;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="header">
+            <h1>🎯 CVF Quick Reference</h1>
+            <p class="subtitle">Thẻ tham khảo nhanh cho End User</p>
+        </div>
+
+        <!-- 5 Steps -->
+        <div class="section">
+            <div class="section-title">📋 Quy trình 5 bước</div>
+            <div class="steps-row">
+                <div class="step-chip"><span class="num">1</span> Xác định mục tiêu</div>
+                <div class="step-chip"><span class="num">2</span> Chọn template</div>
+                <div class="step-chip"><span class="num">3</span> Điền form</div>
+                <div class="step-chip"><span class="num">4</span> CVF xử lý</div>
+                <div class="step-chip"><span class="num">5</span> Đánh giá output</div>
+            </div>
+        </div>
+
+        <!-- Do / Don't -->
+        <div class="section">
+            <div class="section-title">✅ Nên làm / ❌ Không nên làm</div>
+            <div class="grid-2">
+                <div class="do-box">
+                    <h4>✅ NÊN LÀM</h4>
+                    <ul>
+                        <li>Mô tả rõ mục tiêu cần đạt</li>
+                        <li>Nêu ràng buộc và giới hạn</li>
+                        <li>Đánh giá output, không process</li>
+                        <li>Chấp nhận escalation khi cần</li>
+                    </ul>
+                </div>
+                <div class="dont-box">
+                    <h4>❌ KHÔNG NÊN</h4>
+                    <ul>
+                        <li>Dẫn dắt kết quả mong muốn</li>
+                        <li>Chỉ định cách AI làm việc</li>
+                        <li>Ép tiếp tục khi bị từ chối</li>
+                        <li>Bỏ qua cảnh báo rủi ro</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Response Types -->
+        <div class="section">
+            <div class="section-title">🎯 Cách đánh giá kết quả</div>
+            <div class="response-grid">
+                <div class="response-card accept">
+                    <div class="response-icon">✅</div>
+                    <div class="response-label">ACCEPT</div>
+                    <div class="response-desc">Kết quả dùng được ngay</div>
+                </div>
+                <div class="response-card revise">
+                    <div class="response-icon">🔄</div>
+                    <div class="response-label">REVISE</div>
+                    <div class="response-desc">Cần chỉnh sửa nhỏ</div>
+                </div>
+                <div class="response-card reject">
+                    <div class="response-icon">❌</div>
+                    <div class="response-label">REJECT</div>
+                    <div class="response-desc">Không đạt, làm lại</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Principle -->
+        <div class="section">
+            <div class="key-principle">
+                <div class="quote">"CVF không giúp bạn tránh quyết định khó.<br>CVF giúp bạn tránh những quyết định tệ."
+                </div>
+                <div class="author">— CVF Philosophy</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            CVF v1.5.1 End User Orientation — In ra và dán lên bàn làm việc!
+        </div>
+    </div>
+</body>
+
+</html>

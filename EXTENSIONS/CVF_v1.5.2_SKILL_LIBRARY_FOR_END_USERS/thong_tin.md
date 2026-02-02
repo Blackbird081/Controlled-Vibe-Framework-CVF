@@ -1,5 +1,5 @@
 repo: https://github.com/sickn33/antigravity-awesome-skills
-hứa hàng trăm “skills” định nghĩa kiến thức/kỹ năng chuyên môn rõ ràng, và chúng hoàn toàn có thể trích ra để làm ví dụ/thư viện học tập theo phong cách CVF cho người dùng cuối (không phải operator) — miễn là chúng được biên dịch lại thành các bài học/skill patterns, không chỉ đơn thuần là code.
+chứa hàng trăm “skills” định nghĩa kiến thức/kỹ năng chuyên môn rõ ràng, và chúng hoàn toàn có thể trích ra để làm ví dụ/thư viện học tập theo phong cách CVF cho người dùng cuối (không phải operator) — miễn là chúng được biên dịch lại thành các bài học/skill patterns, không chỉ đơn thuần là code.
 
 Dưới đây là cách bạn có thể khai thác repo này theo tinh thần CVF và end-user orientation:
 

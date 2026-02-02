@@ -20,6 +20,31 @@
 └─────────────────────────────────────────────────────────────┘
 ```
 
+### 🎯 Deployment Strategy
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│   GIAI ĐOẠN 1: INTERNAL PILOT (Hiện tại)                    │
+│   ├── Target: End-user không biết code                      │
+│   ├── Scope: Nhóm nhỏ nội bộ                                │
+│   ├── Goal: Làm quen + đánh giá hiệu quả                    │
+│   └── Output: Documented specs + MVP UI                     │
+│                                                             │
+│   ────────────────── ↓ Khi thành thạo ↓ ──────────────────   │
+│                                                             │
+│   GIAI ĐOẠN 2: COMMUNITY RELEASE (Tương lai)                │
+│   ├── Target: Cộng đồng rộng rãi                            │
+│   ├── Scope: Public deployment                              │
+│   ├── Goal: Sản phẩm hoàn chỉnh                             │
+│   └── Requires: Backend, Auth, Production infrastructure    │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+> **Hiện tại:** Tập trung Giai đoạn 1 — Specs + Documentation + MVP UI  
+> **Chưa cần:** Backend phức tạp, Auth, CI/CD (dành cho Giai đoạn 2)
+
 ---
 
 ## 2. Architecture Overview
@@ -183,7 +208,29 @@ CVF_v1.5_UX_PLATFORM/
 
 ---
 
-### Phase 5: Backend Integration 🔲 PENDING
+## 🏁 GIAI ĐOẠN 1: INTERNAL PILOT — COMPLETE
+
+> **Phases 1-4 đã hoàn thành.**  
+> Đây là tất cả những gì cần cho việc sử dụng nội bộ nhóm nhỏ.  
+> **Tiếp theo:** Sử dụng, đánh giá, cải tiến dựa trên feedback thực tế.
+
+### Checklist trước khi Giai đoạn 2:
+- [ ] Nhóm nội bộ đã sử dụng CVF ít nhất 2 tuần
+- [ ] Đã thu thập feedback từ ít nhất 3-5 end users
+- [ ] Operator đã thành thạo quy trình
+- [ ] Đánh giá hiệu quả: Accept rate > 70%
+- [ ] Quyết định: Có tiếp tục phát triển cho cộng đồng không?
+
+---
+
+## ⏸️ GIAI ĐOẠN 2: COMMUNITY RELEASE — FUTURE
+
+> **Chỉ thực hiện SAU KHI Giai đoạn 1 thành công.**  
+> Các phases dưới đây là roadmap cho phiên bản công khai.
+
+---
+
+### Phase 5: Backend Integration 🔲 FUTURE
 ```
 [ ] API Backend (FastAPI or Express.js)
     ├── POST /api/execute — Submit intent to AI
@@ -207,6 +254,7 @@ CVF_v1.5_UX_PLATFORM/
     ├── OAuth (Google, GitHub)
     └── Session management
 ```
+**When:** Sau khi Giai đoạn 1 được đánh giá thành công
 **Estimated:** 5-7 days
 
 ---

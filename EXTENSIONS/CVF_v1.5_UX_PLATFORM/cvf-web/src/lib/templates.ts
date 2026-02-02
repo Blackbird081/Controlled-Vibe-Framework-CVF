@@ -258,3 +258,82 @@ export function generateIntent(template: Template, values: Record<string, string
 
     return intent;
 }
+
+/**
+ * Generate a complete CVF specification document
+ * Ready for copy/paste into any AI (ChatGPT, Claude, Gemini, etc.)
+ */
+export function generateCompleteSpec(
+    template: Template,
+    values: Record<string, string>,
+    userIntent?: string
+): string {
+    const date = new Date().toISOString().split('T')[0];
+    const intent = generateIntent(template, values);
+
+    // Build user input section
+    const userInputLines = Object.entries(values)
+        .filter(([, value]) => value && value.trim())
+        .map(([key, value]) => {
+            const field = template.fields.find(f => f.id === key);
+            const label = field?.label || key;
+            return `- **${label}:** ${value}`;
+        })
+        .join('\n');
+
+    // Build expected output section
+    const expectedOutput = template.outputExpected
+        ?.map(item => `- ${item}`)
+        .join('\n') || '- Comprehensive analysis\n- Actionable recommendations';
+
+    const spec = `---
+# CVF Task Specification
+**Generated:** ${date}
+**Template:** ${template.name}
+**Category:** ${template.category}
+---
+
+## 📋 Context
+
+**Template:** ${template.icon} ${template.name}
+
+${template.description}
+
+---
+
+## 📝 User Input
+
+${userInputLines || '(No input provided)'}
+
+---
+
+## 🎯 Task
+
+${intent}
+
+---
+
+## 📤 Expected Output Format
+
+${expectedOutput}
+
+---
+
+## 💡 Instructions for AI
+
+Please analyze the information provided above and generate a comprehensive response that:
+1. Addresses all the success criteria listed in the Task section
+2. Follows the Expected Output Format structure
+3. Provides actionable insights and recommendations
+4. Uses clear, professional language
+5. Includes specific examples where applicable
+
+---
+
+> **CVF v1.5 UX Platform**
+> Copy this entire specification and paste into your preferred AI assistant (ChatGPT, Claude, Gemini, etc.)
+`;
+
+    return spec;
+}
+

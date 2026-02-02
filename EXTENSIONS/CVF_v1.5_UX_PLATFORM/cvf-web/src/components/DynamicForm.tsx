@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Template, TemplateField } from '@/types';
 import { generateIntent } from '@/lib/templates';
+import { SpecExport } from './SpecExport';
 
 interface DynamicFormProps {
     template: Template;
@@ -68,6 +69,7 @@ function FormField({ field, register, errors }: {
 export function DynamicForm({ template, onSubmit, onBack }: DynamicFormProps) {
     const [showAdvanced, setShowAdvanced] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
+    const [showSpecExport, setShowSpecExport] = useState(false);
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
@@ -169,19 +171,47 @@ export function DynamicForm({ template, onSubmit, onBack }: DynamicFormProps) {
                     )}
                 </div>
 
-                {/* Submit Button */}
-                <button
-                    type="submit"
-                    className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 
-                     text-white font-semibold rounded-lg
-                     shadow-lg hover:shadow-xl
-                     transition-all duration-200
-                     flex items-center justify-center gap-2"
-                >
-                    <span>Submit</span>
-                    <span>🚀</span>
-                </button>
+                {/* Action Buttons */}
+                <div className="flex gap-3">
+                    {/* Export Spec Button */}
+                    <button
+                        type="button"
+                        onClick={() => setShowSpecExport(!showSpecExport)}
+                        className="flex-1 py-4 px-6 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 
+                         text-gray-700 dark:text-gray-300 font-semibold rounded-lg
+                         transition-all duration-200
+                         flex items-center justify-center gap-2"
+                    >
+                        <span>📋</span>
+                        <span>Export Spec</span>
+                    </button>
+
+                    {/* Submit Button */}
+                    <button
+                        type="submit"
+                        className="flex-1 py-4 px-6 bg-blue-600 hover:bg-blue-700 
+                         text-white font-semibold rounded-lg
+                         shadow-lg hover:shadow-xl
+                         transition-all duration-200
+                         flex items-center justify-center gap-2"
+                    >
+                        <span>Submit</span>
+                        <span>🚀</span>
+                    </button>
+                </div>
             </form>
+
+            {/* Spec Export Panel */}
+            {showSpecExport && (
+                <div className="mt-6">
+                    <SpecExport
+                        template={template}
+                        values={formValues}
+                        onClose={() => setShowSpecExport(false)}
+                    />
+                </div>
+            )}
         </div>
     );
 }
+

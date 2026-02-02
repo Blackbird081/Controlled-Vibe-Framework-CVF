@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable dark mode via class selector (Tailwind v4) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Custom styles for CVF v1.5 UX Platform */
 
 :root {
@@ -30,7 +33,8 @@
   @apply mb-4 leading-relaxed;
 }
 
-.prose ul, .prose ol {
+.prose ul,
+.prose ol {
   @apply mb-4 pl-6;
 }
 
@@ -50,7 +54,8 @@
   @apply w-full border-collapse mb-4;
 }
 
-.prose th, .prose td {
+.prose th,
+.prose td {
   @apply border border-gray-300 dark:border-gray-600 px-4 py-2 text-left;
 }
 
@@ -91,33 +96,83 @@
   @apply text-gray-200;
 }
 
-.dark .prose h1, .dark .prose h2, .dark .prose h3 {
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3 {
   @apply text-white;
 }
 
 /* Category colors */
-.bg-blue-100 { background-color: #dbeafe; }
-.text-blue-700 { color: #1d4ed8; }
-.bg-purple-100 { background-color: #f3e8ff; }
-.text-purple-700 { color: #7c3aed; }
-.bg-green-100 { background-color: #dcfce7; }
-.text-green-700 { color: #15803d; }
-.bg-orange-100 { background-color: #ffedd5; }
-.text-orange-700 { color: #c2410c; }
+.bg-blue-100 {
+  background-color: #dbeafe;
+}
+
+.text-blue-700 {
+  color: #1d4ed8;
+}
+
+.bg-purple-100 {
+  background-color: #f3e8ff;
+}
+
+.text-purple-700 {
+  color: #7c3aed;
+}
+
+.bg-green-100 {
+  background-color: #dcfce7;
+}
+
+.text-green-700 {
+  color: #15803d;
+}
+
+.bg-orange-100 {
+  background-color: #ffedd5;
+}
+
+.text-orange-700 {
+  color: #c2410c;
+}
 
 /* Dark mode category colors */
-.dark .bg-blue-900 { background-color: #1e3a5f; }
-.dark .text-blue-300 { color: #93c5fd; }
-.dark .bg-purple-900 { background-color: #4c1d95; }
-.dark .text-purple-300 { color: #c4b5fd; }
-.dark .bg-green-900 { background-color: #14532d; }
-.dark .text-green-300 { color: #86efac; }
-.dark .bg-orange-900 { background-color: #7c2d12; }
-.dark .text-orange-300 { color: #fdba74; }
+.dark .bg-blue-900 {
+  background-color: #1e3a5f;
+}
+
+.dark .text-blue-300 {
+  color: #93c5fd;
+}
+
+.dark .bg-purple-900 {
+  background-color: #4c1d95;
+}
+
+.dark .text-purple-300 {
+  color: #c4b5fd;
+}
+
+.dark .bg-green-900 {
+  background-color: #14532d;
+}
+
+.dark .text-green-300 {
+  color: #86efac;
+}
+
+.dark .bg-orange-900 {
+  background-color: #7c2d12;
+}
+
+.dark .text-orange-300 {
+  color: #fdba74;
+}
 
 /* Animations */
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-spin {

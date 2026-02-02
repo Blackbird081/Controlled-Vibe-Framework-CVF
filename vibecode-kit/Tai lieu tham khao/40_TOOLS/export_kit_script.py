@@ -1,0 +1,1 @@
+# Script này chính là file bạn đang chạy :)

@@ -15,6 +15,7 @@ import {
   QuickReference,
   OnboardingWizard,
 } from '@/components';
+import { ThemeToggle } from '@/lib/theme';
 
 type AppState = 'home' | 'form' | 'processing' | 'result' | 'history';
 
@@ -145,6 +146,12 @@ export default function Home() {
 
             <nav className="flex items-center gap-4">
               <Link
+                href="/skills"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                📚 Skills
+              </Link>
+              <Link
                 href="/help"
                 className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
@@ -159,6 +166,7 @@ export default function Home() {
               >
                 📜 History ({executions.length})
               </button>
+              <ThemeToggle />
             </nav>
           </div>
         </div>

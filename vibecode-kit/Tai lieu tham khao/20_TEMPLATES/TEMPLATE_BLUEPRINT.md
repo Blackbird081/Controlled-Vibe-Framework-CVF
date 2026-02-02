@@ -1,0 +1,29 @@
+# BLUEPRINT - Bản vẽ kiến trúc
+
+**Trạng thái:** DRAFT / FINAL
+
+## 1. Tổng quan hệ thống
+(Mô tả ngắn gọn cách hệ thống hoạt động)
+
+## 2. Tech Stack (Quyết định kỹ thuật)
+- Frontend: ...
+- Backend: ...
+- Database: ...
+- AI Model: ...
+
+## 3. Cấu trúc thư mục (File Structure)
+```text
+project_root/
+├── src/
+├── data/
+└── ...
+```
+
+## 4. Modules & Luồng dữ liệu (Flows)
+- **Module A:** Nhiệm vụ...
+- **Module B:** Nhiệm vụ...
+- **User Flow chính:** Bước 1 -> Bước 2 -> Bước 3.
+
+## 5. Cấu trúc dữ liệu (Schema)
+- Table Users: ...
+- Table Posts: ...

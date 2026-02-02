@@ -1,0 +1,250 @@
+# Presentation
+
+> **Domain:** Content Creation  
+> **Difficulty:** ⭐ Easy  
+> **CVF Version:** v1.5.2
+
+---
+
+## 🎯 Mục đích
+
+**Khi nào dùng skill này:**
+- Pitch deck cho investors
+- Internal business presentations
+- Conference talks
+- Training materials
+- Sales presentations
+
+**Không phù hợp khi:**
+- Written reports → Report Writing
+- Detailed docs → Documentation
+- Website content → Web Development skills
+
+---
+
+## 📋 Form Input
+
+| Field | Mô tả | Bắt buộc | Ví dụ |
+|-------|-------|:--------:|-------|
+| **Presentation type** | Loại presentation | ✅ | "Startup pitch deck" |
+| **Audience** | Ai sẽ xem? | ✅ | "VCs và Angel investors" |
+| **Goal** | Muốn đạt được gì? | ✅ | "Raise $500K seed round" |
+| **Time limit** | Bao lâu? | ✅ | "10 minutes pitch" |
+| **Key message** | Core message | ✅ | "AI-powered HR automation" |
+| **Main points** | Nội dung chính | ❌ | "Problem, Solution, Traction, Ask" |
+
+---
+
+## ✅ Expected Output
+
+**Kết quả:**
+- Slide outline với content suggestions
+- Key points per slide
+- Speaker notes
+- Visual suggestions
+
+**Cấu trúc output (Pitch Deck example):**
+```
+PITCH DECK OUTLINE | [Company Name]
+
+SLIDE 1: TITLE
+• Company name + tagline
+• Visual: Logo/product shot
+
+SLIDE 2: PROBLEM
+• Pain point (1 sentence)
+• Who has this problem
+• Why it matters (stats)
+• Speaker note: Tell story here
+
+SLIDE 3: SOLUTION
+• Your solution (1 sentence)
+• How it works (3 bullets)
+• Visual: Product demo/screenshot
+
+SLIDE 4: MARKET
+• TAM / SAM / SOM
+• Growth rate
+• Visual: Market size chart
+
+SLIDE 5: TRACTION
+• Key metrics
+• Growth chart
+• Customer logos
+
+SLIDE 6: BUSINESS MODEL
+• How you make money
+• Pricing
+• Unit economics
+
+SLIDE 7: TEAM
+• Founders + key hires
+• Relevant experience
+• Advisors (if notable)
+
+SLIDE 8: FINANCIALS
+• Revenue (if any)
+• Projections
+• Key assumptions
+
+SLIDE 9: ASK
+• Amount raising
+• Use of funds
+• Timeline
+
+SLIDE 10: CLOSING
+• Contact info
+• CTA
+```
+
+---
+
+## 🔍 Cách đánh giá
+
+**Checklist Accept/Reject:**
+
+- [ ] Logical flow từ problem → solution → ask
+- [ ] 1 main idea per slide
+- [ ] Text minimal (bullets, not paragraphs)
+- [ ] Fits time limit
+- [ ] Has clear CTA
+- [ ] Visual suggestions included
+
+**Red flags (cần Reject):**
+- ⚠️ Too many words per slide
+- ⚠️ No logical flow
+- ⚠️ Missing key sections
+- ⚠️ No call to action
+
+---
+
+## ⚠️ Common Failures
+
+| Lỗi thường gặp | Cách phòng tránh |
+|----------------|------------------|
+| Too many slides | Specify time limit |
+| Text heavy | Request "bullets only, max 6 words" |
+| No story arc | Ensure Problem → Solution → Ask flow |
+| Weak closing | Always end with clear CTA |
+
+---
+
+## 💡 Tips
+
+1. **1 slide = 1 idea** — No exceptions
+2. **6x6 rule** — Max 6 bullets, 6 words each
+3. **Start with why** — Problem before solution
+4. **End with ask** — What do you want?
+5. **Practice timing** — 1 slide ≈ 1 minute
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Presentation type: Investor pitch deck
+Audience: VCs (early stage)
+Goal: Raise $1M seed round
+Time limit: 10 minutes
+Key message: CVF helps non-technical users control AI outputs
+Main points: Problem (AI unpredictable), Solution (CVF framework), 
+             Traction (1000 users), Ask ($1M for 18 months runway)
+```
+
+### Output mẫu:
+```
+CVF PITCH DECK | 10 Slides for 10 Minutes
+
+SLIDE 1: TITLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CVF - Controlled Vibe Framework
+"Making AI outputs predictable"
+[Logo]
+
+SLIDE 2: PROBLEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 70% of AI outputs require revision
+• Non-technical users can't evaluate quality
+• $50B wasted on AI projects that fail
+[Visual: Stat graphic]
+
+🎤 Speaker note: "Have you ever asked ChatGPT 
+for something and got completely wrong answer?"
+
+SLIDE 3: SOLUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CVF = Simple framework for AI control
+• Templates with built-in guardrails
+• Evaluation criteria for every output
+• Works with any AI tool
+[Visual: Before/After comparison]
+
+SLIDE 4: DEMO
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Live demo or video - 2 minutes]
+Show: Template → Input → Structured Output
+
+SLIDE 5: MARKET
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+• TAM: $50B (AI productivity tools)
+• SAM: $5B (AI governance tools)
+• SOM: $50M (SMB focus)
+• Growing 40% CAGR
+[Visual: Market chart]
+
+SLIDE 6: TRACTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 1,000+ users in 3 months
+• 50 enterprise pilots
+• 85% weekly active rate
+• 4.8/5 user satisfaction
+[Visual: Growth chart]
+
+SLIDE 7: BUSINESS MODEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Freemium + Enterprise
+• Free: 10 templates
+• Pro: $29/month (unlimited)
+• Enterprise: Custom pricing
+LTV/CAC: 3x
+
+SLIDE 8: TEAM
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Founder photos]
+• CEO: 10 years enterprise software
+• CTO: Ex-Google AI team
+• Advisor: [Notable name]
+
+SLIDE 9: ASK
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Raising: $1M Seed
+
+Use of funds:
+• 60% Engineering (AI + platform)
+• 30% Sales (enterprise pilots → paid)
+• 10% Operations
+
+18 months runway
+
+SLIDE 10: CLOSING
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+"Let's make AI work for everyone"
+
+[Contact info]
+[QR code to demo]
+
+Thank you!
+```
+
+### Đánh giá:
+- ✅ 10 slides = 10 minutes
+- ✅ Clear flow: Problem → Solution → Traction → Ask
+- ✅ Minimal text per slide
+- ✅ Speaker notes included
+- ✅ Strong CTA
+- **Kết quả: ACCEPT**
+
+---
+
+*Presentation Skill — CVF v1.5.2 Skill Library*

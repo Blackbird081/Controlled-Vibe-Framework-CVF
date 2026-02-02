@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+/* Custom styles for CVF v1.5 UX Platform */
+
+:root {
+  --color-primary: #2563eb;
+  --color-success: #16a34a;
+  --color-error: #dc2626;
+  --color-warning: #ca8a04;
+}
+
+/* Prose styles for markdown rendering */
+.prose {
+  max-width: 100%;
+}
+
+.prose h1 {
+  @apply text-2xl font-bold mb-4 mt-6;
+}
+
+.prose h2 {
+  @apply text-xl font-semibold mb-3 mt-5;
+}
+
+.prose h3 {
+  @apply text-lg font-medium mb-2 mt-4;
+}
+
+.prose p {
+  @apply mb-4 leading-relaxed;
+}
+
+.prose ul, .prose ol {
+  @apply mb-4 pl-6;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose ul {
+  @apply list-disc;
+}
+
+.prose ol {
+  @apply list-decimal;
+}
+
+.prose table {
+  @apply w-full border-collapse mb-4;
+}
+
+.prose th, .prose td {
+  @apply border border-gray-300 dark:border-gray-600 px-4 py-2 text-left;
+}
+
+.prose th {
+  @apply bg-gray-100 dark:bg-gray-700 font-semibold;
+}
+
+.prose tr:nth-child(even) {
+  @apply bg-gray-50 dark:bg-gray-800/50;
+}
+
+.prose pre {
+  @apply bg-gray-900 dark:bg-black rounded-lg p-4 overflow-x-auto mb-4;
+}
+
+.prose code {
+  @apply bg-gray-100 dark:bg-gray-800 rounded px-1.5 py-0.5 text-sm font-mono;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-blue-500 pl-4 italic text-gray-600 dark:text-gray-400 mb-4;
+}
+
+.prose hr {
+  @apply border-gray-200 dark:border-gray-700 my-6;
+}
+
+.prose a {
+  @apply text-blue-600 dark:text-blue-400 underline hover:no-underline;
+}
+
+/* Dark mode prose */
+.dark .prose {
+  @apply text-gray-200;
+}
+
+.dark .prose h1, .dark .prose h2, .dark .prose h3 {
+  @apply text-white;
+}
+
+/* Category colors */
+.bg-blue-100 { background-color: #dbeafe; }
+.text-blue-700 { color: #1d4ed8; }
+.bg-purple-100 { background-color: #f3e8ff; }
+.text-purple-700 { color: #7c3aed; }
+.bg-green-100 { background-color: #dcfce7; }
+.text-green-700 { color: #15803d; }
+.bg-orange-100 { background-color: #ffedd5; }
+.text-orange-700 { color: #c2410c; }
+
+/* Dark mode category colors */
+.dark .bg-blue-900 { background-color: #1e3a5f; }
+.dark .text-blue-300 { color: #93c5fd; }
+.dark .bg-purple-900 { background-color: #4c1d95; }
+.dark .text-purple-300 { color: #c4b5fd; }
+.dark .bg-green-900 { background-color: #14532d; }
+.dark .text-green-300 { color: #86efac; }
+.dark .bg-orange-900 { background-color: #7c2d12; }
+.dark .text-orange-300 { color: #fdba74; }
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Line clamp */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}

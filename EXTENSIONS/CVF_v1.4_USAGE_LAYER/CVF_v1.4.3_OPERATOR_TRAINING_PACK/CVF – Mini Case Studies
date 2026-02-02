@@ -1,0 +1,161 @@
+CVF – Mini Case Studies (Adoption-Oriented)
+
+Mục tiêu của 2 mini case này:
+ • Không phô diễn kỹ thuật
+ • Không ca ngợi AI
+ • Chỉ chứng minh CVF giúp tránh sai lầm như thế nào
+
+Các case được viết theo góc nhìn operator + tổ chức, không phải end user.
+
+⸻
+
+Mini Case 01 – Ngăn hợp thức hóa quyết định đã có
+
+Bối cảnh
+ • Tổ chức: Nhóm chiến lược nội bộ (5 người)
+ • Use case: Đánh giá phương án mở rộng kinh doanh
+ • End user: Quản lý cấp trung
+ • Operator: 1 người, mới dùng CVF ~2 tuần
+
+End user đưa yêu cầu:
+
+“So sánh 3 phương án, nhưng tập trung chứng minh phương án A là tốt nhất.”
+
+⸻
+
+Nếu KHÔNG dùng CVF
+ • AI được dùng như công cụ phân tích thuần
+ • Output:
+ • Có bảng so sánh
+ • Có lập luận nghiêng về A
+ • Quyết định được thông qua nhanh
+
+Vấn đề:
+ • AI chỉ đang “trang điểm” cho quyết định đã có
+ • Rủi ro bị che giấu
+ • Không ai chịu trách nhiệm nếu sai
+
+⸻
+
+Khi dùng CVF
+
+Bước 1 – Operator check input
+ • Phát hiện:
+ • Mục tiêu bị dẫn dắt
+ • Không trung lập
+
+Theo CVF:
+ • Input vi phạm expectation boundary
+
+Bước 2 – Operator phản hồi
+Operator từ chối yêu cầu ban đầu và yêu cầu:
+ • Viết lại mục tiêu trung lập
+ • Chấp nhận so sánh đầy đủ rủi ro
+
+Bước 3 – Escalation (nhẹ)
+ • Operator ghi nhận rủi ro: decision pre-commitment
+ • Escalate lên quản lý trực tiếp
+
+⸻
+
+Kết quả
+ • Phương án A không bị loại, nhưng:
+ • Các rủi ro lớn được lộ ra
+ • Phương án B được xem xét nghiêm túc
+ • Quyết định cuối cùng vẫn do quản lý đưa ra
+
+👉 CVF không đổi quyết định, nhưng đổi chất lượng quyết định.
+
+⸻
+
+Bài học rút ra
+ • CVF bảo vệ operator khỏi bị ép hướng
+ • CVF làm lộ bias sớm
+ • Escalation giúp giữ tính liêm chính của quá trình
+
+⸻
+
+Mini Case 02 – Dừng đúng lúc để tránh sai lớn
+
+Bối cảnh
+ • Tổ chức: Nhóm vận hành
+ • Use case: Dự báo nhu cầu & lập kế hoạch nguồn lực
+ • Dữ liệu:
+ • Phân mảnh
+ • Không đồng nhất
+ • Áp lực:
+ • Deadline gấp
+
+End user nói:
+
+“Dữ liệu thiếu cũng được, cứ ước lượng cho kịp.”
+
+⸻
+
+Nếu KHÔNG dùng CVF
+ • AI bị yêu cầu “fill the gap”
+ • Output:
+ • Có số liệu
+ • Có biểu đồ
+ • Kế hoạch được triển khai
+
+Hệ quả:
+ • Dự báo lệch lớn
+ • Chi phí phát sinh
+ • Không truy được nguồn sai
+
+⸻
+
+Khi dùng CVF
+
+Bước 1 – Input checklist
+ • Operator phát hiện:
+ • Thiếu dữ liệu lịch sử
+ • Giả định không được xác nhận
+
+Theo CVF:
+ • Task vượt ngưỡng an toàn
+
+Bước 2 – Operator dừng execution
+
+• Không chạy AI tiếp
+ • Ghi rõ lý do dừng:
+ • “Data integrity insufficient”
+
+Bước 3 – Escalation chính thức
+ • Báo cáo lên cấp quản lý
+ • Đề xuất 2 phương án:
+ • Thu thập bổ sung
+ • Thu hẹp scope
+
+⸻
+
+Kết quả
+ • Deadline bị lùi
+ • Nhưng:
+ • Tránh được quyết định sai quy mô lớn
+ • Tránh đổ lỗi cho AI / operator
+
+Quản lý ghi nhận:
+
+“Chậm, nhưng tôi biết mình đang quyết định dựa trên cái gì.”
+
+⸻
+
+Bài học rút ra
+ • CVF trao quyền dừng hợp pháp cho operator
+ • Không output ≠ thất bại
+ • Sai nhỏ được chặn trước khi thành sai lớn
+
+⸻
+
+Tổng kết chung
+
+Hai case cho thấy:
+ • CVF không làm quyết định tốt hơn một cách thần kỳ
+ • CVF làm cho:
+ • Sai lệch bị lộ sớm
+ • Trách nhiệm không bị đẩy cho AI
+ • Quy trình đủ sạch để audit
+
+Giá trị thật của CVF là những quyết định TỆ đã không xảy ra.

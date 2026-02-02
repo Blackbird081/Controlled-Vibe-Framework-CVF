@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { templates } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
@@ -12,6 +12,8 @@ import {
   ProcessingScreen,
   ResultViewer,
   HistoryList,
+  QuickReference,
+  OnboardingWizard,
 } from '@/components';
 
 type AppState = 'home' | 'form' | 'processing' | 'result' | 'history';
@@ -22,8 +24,22 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentOutput, setCurrentOutput] = useState('');
   const [currentInput, setCurrentInput] = useState<Record<string, string>>({});
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const { executions, addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
+
+  // Check if first visit
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('cvf_onboarding_complete');
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('cvf_onboarding_complete', 'true');
+    setShowOnboarding(false);
+  };
 
   const filteredTemplates = selectedCategory === 'all'
     ? templates
@@ -108,6 +124,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Onboarding Wizard */}
+      {showOnboarding && (
+        <OnboardingWizard
+          onComplete={handleOnboardingComplete}
+          onSkip={handleOnboardingComplete}
+        />
+      )}
+
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -120,6 +144,12 @@ export default function Home() {
             </Link>
 
             <nav className="flex items-center gap-4">
+              <Link
+                href="/help"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                📖 Hướng dẫn
+              </Link>
               <button
                 onClick={() => setAppState('history')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
@@ -225,6 +255,9 @@ export default function Home() {
           CVF v1.5 UX Platform — User không cần biết CVF để dùng CVF
         </div>
       </footer>
+
+      {/* Floating Quick Reference Button */}
+      <QuickReference />
     </div>
   );
 }

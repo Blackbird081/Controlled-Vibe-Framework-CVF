@@ -1,18 +1,39 @@
 # CVF Skill Library v1.5.2
 
 > **Controlled Vibe Framework - Skill Library for End Users**  
-> Bộ sưu tập các CVF skills cho marketing, product, SEO, security và compliance.
+> Bộ sưu tập các CVF skills cho marketing, product, SEO, security, compliance và **app development**.
 
 ## 📊 Thống kê
 
 | Metric | Value |
 |--------|-------|
-| **Tổng Skills** | **37 skills** |
-| **Domains** | 4 domains |
+| **Tổng Skills** | **45 skills** |
+| **Domains** | 5 domains |
 | **Legacy (skills/)** | 14 skills |
-| **New (Phase 1-3)** | 23 skills |
+| **New (Phase 1-4)** | 31 skills |
 
 ## 🗂️ Domains
+
+### 🚀 [App Development](app_development/) (Phase 4) ⭐ NEW!
+8 skills cho việc tạo spec để **AI Agent build local apps**
+
+| Skill | Mục đích | Difficulty |
+|-------|----------|------------|
+| App Requirements Spec | Thu thập requirements | Easy |
+| Tech Stack Selection | Chọn công nghệ | Medium |
+| Architecture Design | Thiết kế hệ thống | Hard |
+| Database Schema Design | Data modeling | Medium |
+| API Design Spec | Thiết kế API | Medium |
+| Desktop App Spec | Windows, menus, shortcuts | Medium |
+| CLI Tool Spec | Commands, arguments | Medium |
+| Local Deployment | Packaging, distribution | Medium |
+
+**Workflow đề xuất:**
+```
+Requirements → Tech Stack → Architecture → Database/API → App Spec → Deployment
+```
+
+---
 
 ### 📈 [Marketing & SEO](marketing_seo/) (Phase 1)
 9 skills cho SEO, copywriting, content, ads, và brand
@@ -68,18 +89,19 @@
 
 ## 🎯 Cách sử dụng
 
-### Option 1: CVF Web UI
-1. Mở CVF Web UI (`cvf-web`)
-2. Chọn template từ Skill Library
-3. Điền form → Generate spec
-4. Copy và paste vào AI
+### Option 1: CVF Web UI (Recommended) ⭐
+1. Mở CVF Web UI (`npm run dev` trong `cvf-web`)
+2. Chọn template từ category **App Development**
+3. Điền form → Chọn **CVF Full Mode** → Export
+4. Copy và paste vào AI Agent (Claude, Cursor, Copilot)
+5. AI Agent build app theo CVF process!
 
-### Option 2: Trực tiếp
+### Option 2: Trực tiếp từ Skill Files
 1. Mở skill file (`.skill.md`)
-2. Đọc **Form Input** để biết cần gì
-3. Dùng **Checklist** để tự đánh giá
-4. Paste spec vào ChatGPT/Claude/Gemini
-5. Nhận phân tích chi tiết
+2. Đọc **Form Input** để biết cần điền gì
+3. Tự tay tạo spec theo format
+4. Paste vào ChatGPT/Claude/Gemini
+5. Nhận output theo Expected Output
 
 ## 📝 CVF Skill Format
 
@@ -89,10 +111,11 @@
 
 ## 🎯 Mục đích
 ## 📋 Form Input
-## ✅ Checklist Đánh giá
-## ⚠️ Lỗi Thường Gặp
-## 💡 Tips & Examples
-## 📤 Expected Output từ AI
+## ✅ Expected Output
+## 🔍 Cách đánh giá
+## ⚠️ Common Failures
+## 💡 Tips
+## 📊 Ví dụ thực tế
 ```
 
 ## 🔗 Links
@@ -105,3 +128,4 @@
 ---
 
 *CVF Skill Library v1.5.2 | Last Updated: 2026-02-03*
+

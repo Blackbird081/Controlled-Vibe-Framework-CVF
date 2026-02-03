@@ -865,6 +865,329 @@ SUCCESS CRITERIA:
 - Regional compliance`,
         outputExpected: ['ToS Score', 'Coverage Analysis', 'Fairness Review', 'Improvement Suggestions'],
     },
+
+    // ========================================
+    // APP DEVELOPMENT TEMPLATES (8)
+    // ========================================
+
+    {
+        id: 'app_requirements_spec',
+        name: 'App Requirements Spec',
+        icon: '📋',
+        description: 'Thu thập requirements cho app mới, định nghĩa scope và success criteria',
+        category: 'development',
+        fields: [
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'VD: TaskFlow - Quản lý công việc', required: true, section: 'required' },
+            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop', 'CLI Tool', 'Mobile', 'Web App', 'API Service'], required: true, section: 'required' },
+            { id: 'problem', type: 'textarea', label: 'Problem Statement', placeholder: 'Vấn đề cần giải quyết là gì?', required: true, rows: 3, section: 'required' },
+            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'Ai sẽ dùng app này?', required: true, section: 'required' },
+            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3-5)', placeholder: '1. Feature 1\n2. Feature 2\n3. Feature 3', required: true, rows: 4, section: 'required' },
+            { id: 'outOfScope', type: 'textarea', label: 'Out of Scope', placeholder: 'Những gì KHÔNG làm trong phiên bản này', required: true, rows: 3, section: 'required' },
+            { id: 'successCriteria', type: 'textarea', label: 'Success Criteria', placeholder: 'Khi nào app được coi là done?', required: true, rows: 2, section: 'required' },
+            { id: 'platform', type: 'text', label: 'Platform', placeholder: 'Windows, macOS, Linux...', required: false, section: 'advanced' },
+            { id: 'dataStorage', type: 'select', label: 'Data Storage', options: ['None', 'Local File', 'Local Database (SQLite)', 'Cloud'], required: false, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+Tôi muốn tạo App Requirements Specification cho [appName].
+
+APP INFO:
+- Type: [appType]
+- Target Users: [targetUsers]
+- Platform: [platform]
+- Data Storage: [dataStorage]
+
+PROBLEM STATEMENT:
+[problem]
+
+CORE FEATURES:
+[coreFeatures]
+
+OUT OF SCOPE:
+[outOfScope]
+
+SUCCESS CRITERIA:
+[successCriteria]
+
+OUTPUT REQUIREMENTS:
+- Problem statement rõ ràng
+- Core features có priority
+- Out of scope được định nghĩa
+- Success criteria có thể measure được`,
+        outputExpected: ['Requirements Document', 'Feature List with Priority', 'Scope Definition', 'Success Metrics'],
+    },
+    {
+        id: 'tech_stack_selection',
+        name: 'Tech Stack Selection',
+        icon: '🔧',
+        description: 'Chọn công nghệ phù hợp cho app dựa trên requirements',
+        category: 'development',
+        fields: [
+            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Cross-platform)', 'CLI Tool', 'Mobile (Cross-platform)', 'Web SPA', 'API Backend'], required: true, section: 'required' },
+            { id: 'performancePriority', type: 'select', label: 'Performance Priority', options: ['Low', 'Medium', 'High', 'Critical'], required: true, section: 'required' },
+            { id: 'devSpeed', type: 'select', label: 'Development Speed Priority', options: ['Low', 'Medium', 'High'], required: true, section: 'required' },
+            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux...', required: true, section: 'required' },
+            { id: 'dataNeeds', type: 'select', label: 'Data Storage Needs', options: ['None', 'Local Only', 'Cloud Only', 'Both'], required: true, section: 'required' },
+            { id: 'offlineRequired', type: 'select', label: 'Offline Required?', options: ['Yes', 'No', 'Partial'], required: true, section: 'required' },
+            { id: 'teamExp', type: 'text', label: 'Team Experience', placeholder: 'VD: Python, JavaScript', required: false, section: 'advanced' },
+            { id: 'langPreference', type: 'text', label: 'Language Preference', placeholder: 'Ngôn ngữ ưu tiên (nếu có)', required: false, section: 'advanced' },
+            { id: 'bundleSize', type: 'text', label: 'Bundle Size Constraint', placeholder: 'VD: < 50MB', required: false, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+So sánh và recommend tech stack cho [appType].
+
+REQUIREMENTS:
+- Performance Priority: [performancePriority]
+- Development Speed: [devSpeed]
+- Target Platforms: [platforms]
+- Data Storage: [dataNeeds]
+- Offline Required: [offlineRequired]
+- Bundle Size: [bundleSize]
+
+TEAM CONTEXT:
+- Experience: [teamExp]
+- Language Preference: [langPreference]
+
+OUTPUT REQUIREMENTS:
+- Compare at least 2 options per layer
+- Clear reasoning for each choice
+- Trade-offs acknowledged
+- Final stack consistent with requirements`,
+        outputExpected: ['Options Comparison Tables', 'Recommended Stack', 'Trade-offs Analysis', 'Setup Commands'],
+    },
+    {
+        id: 'architecture_design',
+        name: 'Architecture Design',
+        icon: '🏗️',
+        description: 'Thiết kế kiến trúc hệ thống với component diagram',
+        category: 'development',
+        fields: [
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
+            { id: 'techStack', type: 'text', label: 'Tech Stack', placeholder: 'VD: Tauri + Vue 3 + SQLite', required: true, section: 'required' },
+            { id: 'coreFeatures', type: 'textarea', label: 'Core Features', placeholder: 'Các tính năng chính', required: true, rows: 3, section: 'required' },
+            { id: 'appType', type: 'select', label: 'Architecture Type', options: ['Desktop App', 'CLI Tool', 'Web SPA', 'API Backend', 'Full-stack'], required: true, section: 'required' },
+            { id: 'dataFlow', type: 'textarea', label: 'Data Flow', placeholder: 'VD: User → UI → Backend → DB → UI', required: true, rows: 2, section: 'required' },
+            { id: 'integrations', type: 'text', label: 'External Integrations', placeholder: 'VD: REST API, File system (hoặc None)', required: false, section: 'advanced' },
+            { id: 'stateComplexity', type: 'select', label: 'State Complexity', options: ['Simple', 'Medium', 'Complex'], required: false, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+Thiết kế architecture cho [appName].
+
+TECH STACK: [techStack]
+APP TYPE: [appType]
+
+CORE FEATURES:
+[coreFeatures]
+
+DATA FLOW:
+[dataFlow]
+
+EXTERNAL INTEGRATIONS: [integrations]
+STATE COMPLEXITY: [stateComplexity]
+
+OUTPUT REQUIREMENTS:
+- System diagram (ASCII art)
+- Component breakdown với responsibilities
+- Directory structure
+- Data flow documentation
+- Key design decisions`,
+        outputExpected: ['System Diagram', 'Component Breakdown', 'Directory Structure', 'Data Flow', 'Design Decisions'],
+    },
+    {
+        id: 'database_schema',
+        name: 'Database Schema Design',
+        icon: '🗄️',
+        description: 'Thiết kế database schema với ERD và SQL',
+        category: 'development',
+        fields: [
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
+            { id: 'dbType', type: 'select', label: 'Database Type', options: ['SQLite', 'PostgreSQL', 'MySQL', 'MongoDB'], required: true, section: 'required' },
+            { id: 'entities', type: 'textarea', label: 'Main Entities', placeholder: 'VD: User, Task, Category, Tag', required: true, rows: 2, section: 'required' },
+            { id: 'relationships', type: 'textarea', label: 'Relationships', placeholder: 'VD: User has many Tasks, Task belongs to Category', required: true, rows: 3, section: 'required' },
+            { id: 'keyFields', type: 'textarea', label: 'Key Fields per Entity', placeholder: 'VD: Task: title, description, due_date, status', required: true, rows: 3, section: 'required' },
+            { id: 'queryNeeds', type: 'textarea', label: 'Common Queries', placeholder: 'VD: Search by title, filter by status', required: false, rows: 2, section: 'advanced' },
+            { id: 'audit', type: 'select', label: 'Audit Requirements', options: ['None', 'Created/Updated timestamps', 'Full audit trail'], required: false, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+Thiết kế database schema cho [appName].
+
+DATABASE: [dbType]
+
+ENTITIES:
+[entities]
+
+RELATIONSHIPS:
+[relationships]
+
+KEY FIELDS:
+[keyFields]
+
+COMMON QUERIES:
+[queryNeeds]
+
+AUDIT: [audit]
+
+OUTPUT REQUIREMENTS:
+- ERD diagram (ASCII art)
+- Table definitions với data types
+- SQL CREATE statements
+- Index recommendations
+- Sample queries`,
+        outputExpected: ['ERD Diagram', 'Table Definitions', 'SQL Schema', 'Indexes', 'Sample Queries'],
+    },
+    {
+        id: 'api_design',
+        name: 'API Design Spec',
+        icon: '🔌',
+        description: 'Thiết kế REST API với endpoints và request/response format',
+        category: 'development',
+        fields: [
+            { id: 'appName', type: 'text', label: 'App/Service Name', placeholder: 'Tên API', required: true, section: 'required' },
+            { id: 'apiStyle', type: 'select', label: 'API Style', options: ['REST', 'GraphQL', 'IPC (Desktop)'], required: true, section: 'required' },
+            { id: 'resources', type: 'textarea', label: 'Resources/Entities', placeholder: 'VD: User, Task, Category', required: true, rows: 2, section: 'required' },
+            { id: 'operations', type: 'textarea', label: 'Operations per Resource', placeholder: 'VD: Task: CRUD + complete, archive', required: true, rows: 3, section: 'required' },
+            { id: 'auth', type: 'select', label: 'Authentication', options: ['None', 'JWT Bearer', 'API Key', 'OAuth2'], required: true, section: 'required' },
+            { id: 'pagination', type: 'select', label: 'Pagination', options: ['Not needed', 'Offset/Limit', 'Cursor-based'], required: false, section: 'advanced' },
+            { id: 'responseFormat', type: 'select', label: 'Response Format', options: ['JSON', 'XML', 'Both'], default: 'JSON', required: false, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+Thiết kế API specification cho [appName].
+
+API STYLE: [apiStyle]
+AUTH: [auth]
+RESPONSE FORMAT: [responseFormat]
+PAGINATION: [pagination]
+
+RESOURCES:
+[resources]
+
+OPERATIONS:
+[operations]
+
+OUTPUT REQUIREMENTS:
+- All endpoints documented
+- Request/Response format with examples
+- Error codes and messages
+- Authentication details
+- Pagination for list endpoints`,
+        outputExpected: ['API Overview', 'Endpoint Documentation', 'Request/Response Examples', 'Error Codes', 'Auth Details'],
+    },
+    {
+        id: 'desktop_app_spec',
+        name: 'Desktop App Spec',
+        icon: '🖥️',
+        description: 'Spec cho desktop app: windows, menus, shortcuts, tray',
+        category: 'development',
+        fields: [
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
+            { id: 'framework', type: 'select', label: 'Framework', options: ['Tauri', 'Electron', 'PyQt/PySide', 'Wails', 'Native'], required: true, section: 'required' },
+            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux', required: true, section: 'required' },
+            { id: 'windowType', type: 'select', label: 'Window Type', options: ['Single Window', 'Multi-Window', 'Frameless'], required: true, section: 'required' },
+            { id: 'defaultSize', type: 'text', label: 'Default Size', placeholder: 'VD: 1024x768', required: true, section: 'required' },
+            { id: 'menuBar', type: 'textarea', label: 'Menu Bar', placeholder: 'VD: File (New, Save, Exit), Edit, Help', required: true, rows: 2, section: 'required' },
+            { id: 'tray', type: 'select', label: 'System Tray', options: ['No', 'Yes - Basic', 'Yes - With Quick Actions'], required: false, section: 'advanced' },
+            { id: 'shortcuts', type: 'textarea', label: 'Keyboard Shortcuts', placeholder: 'VD: Ctrl+N new, Ctrl+S save', required: false, rows: 2, section: 'advanced' },
+            { id: 'nativeFeatures', type: 'text', label: 'Native Features', placeholder: 'VD: Notifications, File dialogs', required: false, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+Tạo Desktop App Specification cho [appName].
+
+FRAMEWORK: [framework]
+PLATFORMS: [platforms]
+WINDOW: [windowType], [defaultSize]
+
+MENU BAR:
+[menuBar]
+
+SYSTEM TRAY: [tray]
+
+KEYBOARD SHORTCUTS:
+[shortcuts]
+
+NATIVE FEATURES: [nativeFeatures]
+
+OUTPUT REQUIREMENTS:
+- Window configuration complete
+- Menu structure với shortcuts
+- System tray behavior
+- Platform-specific notes
+- Lifecycle behavior (startup, close)`,
+        outputExpected: ['Window Config', 'Menu Structure', 'Shortcuts Table', 'Tray Behavior', 'Platform Notes'],
+    },
+    {
+        id: 'cli_tool_spec',
+        name: 'CLI Tool Spec',
+        icon: '⌨️',
+        description: 'Spec cho command-line tool: commands, arguments, options',
+        category: 'development',
+        fields: [
+            { id: 'toolName', type: 'text', label: 'Tool Name', placeholder: 'VD: taskflow hoặc tf', required: true, section: 'required' },
+            { id: 'purpose', type: 'textarea', label: 'Purpose', placeholder: 'Tool này làm gì?', required: true, rows: 2, section: 'required' },
+            { id: 'commands', type: 'textarea', label: 'Commands', placeholder: 'VD: add, list, done, delete, search, config', required: true, rows: 2, section: 'required' },
+            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'Ai sẽ dùng?', required: true, section: 'required' },
+            { id: 'language', type: 'select', label: 'Language', options: ['Python (Click)', 'Rust (Clap)', 'Go (Cobra)', 'Node.js (Commander)', 'Other'], required: true, section: 'required' },
+            { id: 'configLocation', type: 'text', label: 'Config Location', placeholder: 'VD: ~/.toolname/config.yaml', required: false, section: 'advanced' },
+            { id: 'dataStorage', type: 'text', label: 'Data Storage', placeholder: 'VD: ~/.toolname/data.json', required: false, section: 'advanced' },
+            { id: 'outputFormats', type: 'text', label: 'Output Formats', placeholder: 'VD: text, json, table', required: false, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+Tạo CLI Tool Specification cho [toolName].
+
+PURPOSE:
+[purpose]
+
+TARGET USERS: [targetUsers]
+LANGUAGE: [language]
+
+COMMANDS:
+[commands]
+
+CONFIG: [configLocation]
+DATA: [dataStorage]
+OUTPUT FORMATS: [outputFormats]
+
+OUTPUT REQUIREMENTS:
+- All commands documented
+- Arguments và options clear
+- Exit codes defined
+- Config file format
+- Examples cho mỗi command`,
+        outputExpected: ['Command Documentation', 'Arguments/Options', 'Exit Codes', 'Config Format', 'Usage Examples'],
+    },
+    {
+        id: 'local_deployment',
+        name: 'Local Deployment Spec',
+        icon: '📦',
+        description: 'Packaging và distribution spec cho local apps',
+        category: 'development',
+        fields: [
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
+            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Tauri)', 'Desktop (Electron)', 'CLI Tool', 'Service'], required: true, section: 'required' },
+            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux', required: true, section: 'required' },
+            { id: 'distribution', type: 'select', label: 'Distribution Method', options: ['GitHub Releases', 'Website Download', 'Package Manager (npm/pip)', 'Internal Only'], required: true, section: 'required' },
+            { id: 'autoUpdate', type: 'select', label: 'Auto-Update', options: ['No', 'Yes - Prompt User', 'Yes - Silent'], required: false, section: 'advanced' },
+            { id: 'signing', type: 'select', label: 'Code Signing', options: ['No', 'Windows Only', 'macOS Only', 'Both'], required: false, section: 'advanced' },
+            { id: 'dependencies', type: 'text', label: 'Runtime Dependencies', placeholder: 'VD: None, .NET, Python', required: false, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+Tạo Deployment Specification cho [appName].
+
+APP TYPE: [appType]
+PLATFORMS: [platforms]
+DISTRIBUTION: [distribution]
+
+AUTO-UPDATE: [autoUpdate]
+CODE SIGNING: [signing]
+DEPENDENCIES: [dependencies]
+
+OUTPUT REQUIREMENTS:
+- Build artifacts for all platforms
+- Build commands
+- Installer configuration
+- Distribution process
+- Code signing steps (if applicable)
+- Testing checklist`,
+        outputExpected: ['Build Artifacts', 'Build Commands', 'Installer Config', 'CI/CD Config', 'Distribution Process'],
+    },
 ];
 
 export function getTemplateById(id: string): Template | undefined {

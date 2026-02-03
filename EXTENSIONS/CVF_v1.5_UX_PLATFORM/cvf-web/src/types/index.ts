@@ -18,7 +18,7 @@ export interface Template {
     name: string;
     icon: string;
     description: string;
-    category: 'business' | 'technical' | 'content' | 'research' | 'marketing' | 'product' | 'security';
+    category: 'business' | 'technical' | 'content' | 'research' | 'marketing' | 'product' | 'security' | 'development';
     fields: TemplateField[];
     intentPattern: string;
     outputExpected: string[];
@@ -46,7 +46,7 @@ export interface QualityScore {
     actionability: number;
 }
 
-export type Category = 'business' | 'technical' | 'content' | 'research' | 'marketing' | 'product' | 'security';
+export type Category = 'business' | 'technical' | 'content' | 'research' | 'marketing' | 'product' | 'security' | 'development';
 
 export const CATEGORY_INFO: Record<Category, { name: string; icon: string; color: string }> = {
     business: { name: 'Business', icon: '📈', color: 'blue' },
@@ -56,4 +56,6 @@ export const CATEGORY_INFO: Record<Category, { name: string; icon: string; color
     marketing: { name: 'Marketing & SEO', icon: '📣', color: 'pink' },
     product: { name: 'Product & UX', icon: '🎨', color: 'cyan' },
     security: { name: 'Security & Compliance', icon: '🔐', color: 'red' },
+    development: { name: 'App Development', icon: '🚀', color: 'indigo' },
 };
+

@@ -2,64 +2,81 @@
 
 **Framework quản lý dự án theo tinh thần *vibe coding có kiểm soát*.**
 
-> **🏢 INTERNAL USE ONLY - v1.0-internal**  
-> This is an internal tool for your company's AI project governance.  
-> See [QUICK_START_INTERNAL.md](docs/QUICK_START_INTERNAL.md) for quick start guide.  
-> Latest Assessment: **9.40/10** ✅ (As of Jan 29, 2026)
+> **Current Version:** v1.5.2 | **Latest:** CVF Web UI + Skill Library  
+> **Assessment:** 9.40/10 ✅ (Jan 29, 2026)  
+> **Last Updated:** Feb 03, 2026
 
-## 🚀 Bắt Đầu (5 Phút)
+---
 
-**👉 Đọc trước:** [QUICK_START_INTERNAL.md](docs/QUICK_START_INTERNAL.md) ← Start here!
+## 🚀 Quick Start (3 Options)
 
-### Nhanh gọn:
+### Option 1: Web UI (Easiest) ⭐ RECOMMENDED
+
+```bash
+cd EXTENSIONS/CVF_v1.5_UX_PLATFORM/cvf-web
+npm install
+npm run dev
+# → http://localhost:3000
+```
+
+**Features:**
+- 📋 31 templates across 7 categories
+- 📝 Form-based input (không cần viết prompt)
+- 🚦 3 Export Modes: Simple, With Rules, CVF Full Mode
+- 🌐 Bilingual: Vietnamese/English
+
+### Option 2: SDK (Developers)
 
 ```python
 from cvf import Skill, SkillContract, RiskLevel
 
-# Define what you want
 contract = SkillContract(
     id="email-classifier-v1",
     name="Email Classifier",
-    description="Classify emails as spam/legit",
-    risk_level=RiskLevel.R1,  # R0=auto, R1=auto+check, R2=review, R3=info
+    risk_level=RiskLevel.R1,
     input_spec={"email": str},
     output_spec={"category": str, "confidence": float}
 )
 
-# Use it
 skill = Skill(contract)
 result = skill.execute({"email": "Buy now!!!"})
-# → {"category": "spam", "confidence": 0.95, "approved": true}
 ```
 
-✅ Done! CVF automatically handles input validation, output checking, and audit trail.
+### Option 3: Manual (Core Docs)
+
+1. Đọc [v1.0/README.md](./v1.0/README.md)
+2. Follow 4-phase process: A → B → C → D
+3. Use governance checklists
 
 ---
 
-## 📚 Chọn Phiên Bản (Nếu Muốn Tìm Hiểu Sâu)
+## 📚 Chọn Phiên Bản
+
+### Bảng Tham Chiếu Nhanh
 
 | Bạn cần gì? | Phiên bản | Thư mục |
-|-------------|-----------|---------|
+|-------------|:---------:|---------|
 | Project nhỏ, nhanh, đơn giản | **v1.0** | [v1.0/](./v1.0/) |
 | Người mới bắt đầu vibe coding | **v1.0** | [v1.0/](./v1.0/) |
 | Kiểm soát input/output rõ ràng | **v1.1** | [v1.1/](./v1.1/) |
 | Multi-agent, phân vai AI | **v1.1** | [v1.1/](./v1.1/) |
 | Cần audit, trace đầy đủ | **v1.1** | [v1.1/](./v1.1/) |
-| Skill/Capability governance | **v1.2** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/) |
-| Agent-agnostic skill registry | **v1.2** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/) |
-| **SDK & CLI tools** | **v1.3** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
-| **Agent adapters (Claude/GPT)** | **v1.3** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
-| **CI/CD integration** | **v1.3** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
-| **👤 Operator Manual** | **v1.3.1** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) |
-| **🎯 End-user UX Layer** | **v1.4** | [EXTENSIONS/](./EXTENSIONS/CVF_v1.4_USAGE_LAYER/) |
-
+| Skill/Capability governance | **v1.2** | [EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/](./EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/) |
+| Agent-agnostic skill registry | **v1.2** | [EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/](./EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/) |
+| SDK & CLI tools | **v1.3** | [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
+| Agent adapters (Claude/GPT) | **v1.3** | [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
+| CI/CD integration | **v1.3** | [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
+| 👤 Operator Manual | **v1.3.1** | [EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/](./EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) |
+| 🎨 End-user UX Layer | **v1.4** | [EXTENSIONS/CVF_v1.4_USAGE_LAYER/](./EXTENSIONS/CVF_v1.4_USAGE_LAYER/) |
+| 🌐 **Web UI Platform** | **v1.5** | [EXTENSIONS/CVF_v1.5_UX_PLATFORM/](./EXTENSIONS/CVF_v1.5_UX_PLATFORM/) |
+| 📋 **Skill Library (37 skills)** | **v1.5.2** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
 
 ---
 
-## So sánh nhanh
+## 📊 So Sánh Phiên Bản
 
-| Tính năng | v1.0 | v1.1 | v1.2 | v1.3 | v1.3.1 | v1.4 |
-|-----------|:----:|:----:|:----:|:----:|:------:|:----:|
+| Tính năng | v1.0 | v1.1 | v1.2 | v1.3 | v1.5 | v1.5.2 |
+|-----------|:----:|:----:|:----:|:----:|:----:|:------:|
 | Triết lý core (Outcome > Code) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Phase-based (A→D) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Governance cơ bản | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -68,131 +85,210 @@ result = skill.execute({"email": "Buy now!!!"})
 | Skill Contract Spec | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
 | Skill Registry Model | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
 | Capability Risk Model (R0-R3) | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
-| **Python SDK** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **CLI Tool (`cvf-validate`)** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Agent Adapters (Claude/GPT)** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **CI/CD Templates** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **👤 Operator Manual** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **🎯 End-user UX Layer** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Python SDK | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| CLI Tool (`cvf-validate`) | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Agent Adapters (Claude/GPT) | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| CI/CD Templates | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **🌐 Web UI** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **📋 Form-based Templates** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **🚦 3 Export Modes** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **📚 37 Skills Library** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
-## Nguyên tắc
+## 🚦 CVF Export Modes (v1.5.2 NEW!)
+
+Web UI hỗ trợ 3 chế độ xuất prompt:
+
+| Mode | CVF Power | Mô tả |
+|------|:---------:|-------|
+| 📝 **Simple** | ~15% | Quick prompts, không có governance rules |
+| ⚠️ **With Rules** | ~35% | +Stop conditions, guardrails |
+| 🚦 **CVF Full Mode** | ~80% | 4-Phase protocol đầy đủ (Discovery → Design → Build → Review) |
+
+**CVF Full Mode includes:**
+- ✅ 4-Phase Process (A→B→C→D)
+- ✅ Phase Gates (điều kiện chuyển phase)
+- ✅ AI Role Constraints (Executor, Decision Maker, Quality Owner)
+- ✅ Forbidden/Required Actions
+- ✅ Scope Control
+
+---
+
+## 📋 Skill Library (v1.5.2)
+
+**37 skills** across **4 domains**:
+
+| Domain | Skills | Description |
+|--------|:------:|-------------|
+| 📣 Marketing & SEO | 9 | SEO Audit, Copywriting, CRO, Pricing... |
+| 🎨 Product & UX | 8 | A/B Test, Accessibility, User Flow, Personas... |
+| 🔐 Security & Compliance | 6 | API Security, GDPR, Privacy Policy, Incident Response... |
+| 📁 Legacy (General) | 14 | Business Analysis, Technical Review, Content... |
+
+[→ Xem chi tiết Skill Library](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
+
+---
+
+## 📁 Cấu Trúc Repository
+
+```
+Controlled-Vibe-Framework-CVF/
+│
+├── README.md                  ← Bạn đang ở đây
+│
+├── v1.0/                      ← Core Baseline (FROZEN)
+│   ├── CVF_MANIFESTO.md
+│   ├── phases/                ← 4-Phase Process (A→D)
+│   ├── governance/            ← Checklists, Gates
+│   └── ai/                    ← AI Role Spec
+│
+├── v1.1/                      ← Extended Control (FROZEN)
+│   ├── QUICK_START.md
+│   ├── architecture/
+│   ├── agents/
+│   └── execution/
+│
+├── EXTENSIONS/                ← All Extensions (v1.2+)
+│   │
+│   ├── CVF_v1.2_CAPABILITY_EXTENSION/
+│   │   └── Skill Registry, Risk Model
+│   │
+│   ├── CVF_v1.3_IMPLEMENTATION_TOOLKIT/
+│   │   └── SDK, CLI, Adapters, CI/CD
+│   │
+│   ├── CVF_v1.3.1_OPERATOR_EDITION/
+│   │   └── Operator Manual
+│   │
+│   ├── CVF_v1.4_USAGE_LAYER/
+│   │   └── Usage Layer Spec
+│   │
+│   ├── CVF_v1.5_UX_PLATFORM/            ⭐ NEW
+│   │   ├── cvf-web/           ← Next.js Web App
+│   │   ├── 20_WEB_INTERFACE/
+│   │   ├── 21_TEMPLATE_LIBRARY/
+│   │   └── 22_ANALYTICS/
+│   │
+│   └── CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/  ⭐ NEW
+│       ├── marketing_seo/     ← 9 skills
+│       ├── product_ux/        ← 8 skills
+│       ├── security_compliance/ ← 6 skills
+│       └── legacy/            ← 14 skills
+│
+└── docs/
+    ├── QUICK_START_INTERNAL.md
+    ├── CVF_FRAMEWORK_ASSESSMENT.md
+    └── VERSION_COMPARISON.md
+```
+
+---
+
+## 📖 Nguyên Tắc
 
 - **v1.0 là baseline**, luôn hợp lệ, không thay đổi (FROZEN)
 - **v1.1 là mở rộng opt-in**, không phá core v1.0 (FROZEN)
 - **v1.2+ là EXTENSIONS**, mở rộng capability layer, agent-agnostic
-- Chọn phiên bản theo mức độ phức tạp của project
-- Có thể bắt đầu với v1.0, bật module v1.1/v1.2 khi cần
+- **Chọn phiên bản theo mức độ phức tạp** của project
+- **Có thể bắt đầu với v1.0**, bật module v1.1/v1.2+ khi cần
 
 ---
 
-## Bắt đầu
+## 🧭 Hướng Dẫn Theo Từng Phiên Bản
 
-### Với v1.0 (đơn giản)
-1. Vào thư mục [v1.0/](./v1.0/)
-2. Đọc [README.md](./v1.0/README.md)
-3. Làm theo [PROJECT_INIT_CHECKLIST](./v1.0/governance/PROJECT_INIT_CHECKLIST.md)
-4. Bắt đầu Phase A — Discovery
-
-### Với v1.1 (kiểm soát chi tiết)
-1. Vào thư mục [v1.1/](./v1.1/)
-2. Đọc [QUICK_START.md](./v1.1/QUICK_START.md) — 5 phút
-3. Nếu đang dùng v1.0, xem [MIGRATION_GUIDE.md](./v1.1/MIGRATION_GUIDE.md)
-4. Xem [EXAMPLE_PROJECT](./v1.1/templates/EXAMPLE_PROJECT.md) để hiểu luồng
-
-### Với v1.2 Extension (Capability Layer)
-1. Vào thư mục [EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/](./EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/)
-2. Đọc [README.md](./EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/README.md)
-3. Xem [SKILL_CONTRACT_SPEC.md](./EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/SKILL_CONTRACT_SPEC.md) để hiểu chuẩn skill
-4. Tham khảo [examples/](./EXTENSIONS/examples/) cho các mẫu thực tế
-
----
-
-## Cấu trúc repo
+### v1.0 — Core (Đơn giản, Nhanh)
 
 ```
-Controlled-Vibe-Framework-CVF/
-├── README.md              ← Bạn đang ở đây
-├── v1.0/                  ← Core Baseline (FROZEN)
-│   ├── CVF_MANIFESTO.md
-│   ├── phases/
-│   ├── governance/
-│   └── ...
-├── v1.1/                  ← Extended Control (FROZEN)  
-│   ├── architecture/
-│   ├── agents/
-│   ├── execution/
-│   └── ...
-├── EXTENSIONS/            ← Capability Extensions (v1.2+)
-│   ├── CVF_v1.2_CAPABILITY_EXTENSION/
-│   │   ├── README.md
-│   │   ├── ARCHITECTURE_OVERVIEW.md
-│   │   ├── SKILL_CONTRACT_SPEC.md
-│   │   ├── SKILL_REGISTRY_MODEL.md
-│   │   ├── CAPABILITY_RISK_MODEL.md
-│   │   ├── CAPABILITY_LIFECYCLE.md
-│   │   └── ...
-│   └── examples/
-│       ├── canonical_skill_contracts/
-│       ├── skill_registry_examples/
-│       └── external_skill_rewrite/
-└── docs/
-    ├── VERSION_COMPARISON.md
-    ├── CVF_FRAMEWORK_ASSESSMENT.md   ← Framework Assessment
-    └── ...
+📂 v1.0/
+├── README.md              ← Bắt đầu từ đây
+├── CVF_MANIFESTO.md       ← Triết lý CVF
+├── USAGE.md               ← Cách sử dụng
+├── phases/
+│   ├── PHASE_A_DISCOVERY.md
+│   ├── PHASE_B_DESIGN.md
+│   ├── PHASE_C_BUILD.md
+│   └── PHASE_D_REVIEW.md
+└── governance/
+    ├── PROJECT_INIT_CHECKLIST.md
+    └── PHASE_C_GATE.md
 ```
 
-### Giải thích cấu trúc:
-- **`v1.0/`, `v1.1/`**: Core versions, đã FROZEN, không thay đổi
-- **`EXTENSIONS/`**: Chứa các capability extensions (v1.2, v1.3...), opt-in, không phá core
-- **`docs/`**: Tài liệu tổng hợp, so sánh versions, roadmap
+**Best for:** Project nhỏ, người mới bắt đầu, team không cần automation
+
+### v1.1 — Extended Control
+
+```
+📂 v1.1/
+├── QUICK_START.md         ← 5 phút để hiểu
+├── MIGRATION_GUIDE.md     ← Từ v1.0 → v1.1
+├── architecture/          ← Kiến trúc chi tiết
+├── agents/                ← Agent archetypes
+└── execution/             ← Execution spine
+```
+
+**Best for:** Multi-agent projects, cần audit/trace, production systems
+
+### v1.5+ — Web UI & Skills
+
+```
+📂 EXTENSIONS/CVF_v1.5_UX_PLATFORM/cvf-web/
+└── Run: npm install && npm run dev
+
+📂 EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/
+└── 37 skill files (.skill.md)
+```
+
+**Best for:** End users không biết code, teams cần template library
 
 ---
 
-## 🚀 Roadmap
+## 🎯 Triết Lý Cốt Lõi
 
-### v1.2 — Capability Extension (Hiện tại)
-- ✅ Skill Contract Specification
-- ✅ Skill Registry Model
-- ✅ Capability Risk Model (R0-R3)
-- ✅ Agent Adapter Boundary
-- ✅ External Skill Ingestion Rules
-- ✅ Backward Compatibility Policy
-
-### v1.3 — Implementation Toolkit ✅ (Hoàn thành)
-> *Xem: [CVF Framework Assessment](./docs/CVF_FRAMEWORK_ASSESSMENT.md)*
-
-- ✅ Python SDK (SkillContract, SkillRegistry, Validators)
-- ✅ CLI Tool (`cvf-validate` với validate/lint/check-registry)
-- ✅ End-to-End Examples (Complete Lifecycle Demo)
-- ✅ Agent Adapters (Claude, OpenAI GPT, Generic/Ollama)
-- ✅ CI/CD Templates (GitHub Actions, Pre-commit hooks)
-
-**Xem:** [CVF v1.3 Implementation Toolkit](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/)
+| Nguyên tắc | Giải thích |
+|------------|------------|
+| **Outcome > Code** | Quan trọng là sản phẩm làm được gì |
+| **Control without micromanagement** | Kiểm soát bằng cấu trúc, không can thiệp từng bước |
+| **Decisions are first-class citizens** | Mọi quyết định phải được ghi lại |
+| **AI là executor, không phải decision maker** | AI làm việc, user đánh giá |
+| **Skills được thuần hóa, không được tự do** | AI phải follow rules (v1.2+) |
 
 ---
 
-## Triết lý cốt lõi
+## 📈 What's New in v1.5.2
 
-- **Outcome > Code**: quan trọng là sản phẩm làm được gì
-- **Control without micromanagement**: kiểm soát bằng cấu trúc
-- **Decisions are first-class citizens**: quyết định phải được ghi lại
-- **AI là executor, không phải decision maker**
-- **Skills được thuần hóa, không được tự do** *(v1.2+)*
+### 🌐 Web UI Features
+- ✅ 31 form-based templates
+- ✅ 7 categories (Business, Technical, Content, Research, Marketing, Product, Security)
+- ✅ 3 export modes (Simple, With Rules, CVF Full Mode)
+- ✅ Bilingual support (Vietnamese/English)
+- ✅ AI quick links (ChatGPT, Claude, Gemini)
+
+### 📚 Skill Library Additions
+- ✅ Marketing & SEO (9 skills)
+- ✅ Product & UX (8 skills)
+- ✅ Security & Compliance (6 skills)
+
+### 🚦 CVF Full Mode
+- ✅ Complete 4-phase protocol in exported prompts
+- ✅ AI Role Constraints embedded
+- ✅ Phase gates and checklists
 
 ---
 
-## License
+## 📄 License
 
 MIT License
 
 ---
 
-## Đóng góp
+## 🤝 Đóng Góp
 
 Xem [CONTRIBUTING.md](./v1.0/CONTRIBUTING.md) để biết cách đóng góp.
 
 ---
 
 **CVF không giúp bạn đi nhanh hơn. CVF giúp bạn không đi sai.**
+
+---
+
+*Last Updated: 2026-02-03*  
+*CVF v1.5.2 — [GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)*

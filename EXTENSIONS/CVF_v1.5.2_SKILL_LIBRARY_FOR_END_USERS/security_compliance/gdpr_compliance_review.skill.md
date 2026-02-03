@@ -1,0 +1,199 @@
+# GDPR Compliance Review
+
+> **Domain:** Security & Compliance  
+> **Difficulty:** Advanced  
+> **CVF Version:** v1.5.2  
+> **Inspired by:** antigravity-awesome-skills/gdpr
+
+## 🎯 Mục đích
+
+Đánh giá website/app về GDPR compliance. Đảm bảo xử lý personal data đúng quy định của European Union.
+
+**Khi nào nên dùng:**
+- Launch sản phẩm có EU users
+- Annual compliance audit
+- Sau data breach
+- Before fundraising/acquisition
+
+---
+
+## 📋 Form Input
+
+| Field | Bắt buộc | Mô tả |
+|-------|----------|-------|
+| **Website/App** | ✅ | URL hoặc app name |
+| **Data Collected** | ✅ | Types of personal data |
+| **Processing Purpose** | ✅ | Why data is collected |
+| **Third Parties** | ✅ | Analytics, payment, ads, etc. |
+| **User Geography** | ❌ | EU users? |
+| **Current Measures** | ❌ | Existing compliance efforts |
+
+---
+
+## ✅ Checklist - GDPR Principles
+
+### Lawfulness, Fairness, Transparency (Art. 5)
+- [ ] Có legal basis cho mỗi processing activity?
+- [ ] Privacy policy có clear và accessible?
+- [ ] Users được inform về data processing?
+- [ ] Language có understandable (không legal jargon)?
+
+### Purpose Limitation (Art. 5)
+- [ ] Data chỉ dùng cho stated purposes?
+- [ ] Có inform nếu purpose changes?
+- [ ] No secondary use without consent?
+
+### Data Minimization (Art. 5)
+- [ ] Chỉ collect data cần thiết?
+- [ ] Không collect "just in case"?
+- [ ] Form fields có minimal?
+
+### Accuracy (Art. 5)
+- [ ] Users có thể update their data?
+- [ ] Có process để keep data accurate?
+- [ ] Incorrect data được rectify/delete?
+
+### Storage Limitation (Art. 5)
+- [ ] Retention periods defined?
+- [ ] Data deleted when no longer needed?
+- [ ] Có data deletion procedures?
+
+### Integrity & Confidentiality (Art. 5)
+- [ ] Appropriate security measures?
+- [ ] Encryption for sensitive data?
+- [ ] Access controls implemented?
+- [ ] Breach notification plan?
+
+---
+
+## ✅ Checklist - User Rights
+
+### Right to Access (Art. 15)
+- [ ] Users có thể request their data?
+- [ ] Process to fulfill requests trong 30 days?
+- [ ] Data provided in readable format?
+
+### Right to Rectification (Art. 16)
+- [ ] Users có thể correct their data?
+- [ ] Easy process to update info?
+
+### Right to Erasure (Art. 17)
+- [ ] Users có thể delete their data?
+- [ ] "Delete account" option available?
+- [ ] Data deleted from backups too?
+
+### Right to Data Portability (Art. 20)
+- [ ] Users có thể export their data?
+- [ ] Export trong machine-readable format (JSON/CSV)?
+
+### Right to Object (Art. 21)
+- [ ] Users có thể opt-out of marketing?
+- [ ] Easy unsubscribe process?
+
+---
+
+## ✅ Checklist - Consent
+
+### Valid Consent (Art. 7)
+- [ ] Consent là freely given?
+- [ ] Consent là specific và informed?
+- [ ] Clear affirmative action (no pre-ticked)?
+- [ ] Có thể withdraw consent easily?
+- [ ] Consent recorded và auditable?
+
+### Cookie Consent
+- [ ] Cookie banner trước khi set cookies?
+- [ ] Option to accept/reject?
+- [ ] Granular choices (essential/analytics/marketing)?
+- [ ] Easy to change preferences?
+- [ ] No cookie walls blocking content?
+
+---
+
+## ⚠️ Lỗi Thường Gặp
+
+| Lỗi | Fine Risk | Fix |
+|-----|-----------|-----|
+| **No consent banner** | €20M or 4% | Add cookie consent |
+| **Pre-ticked boxes** | High | Require active opt-in |
+| **No privacy policy** | High | Create comprehensive policy |
+| **No data deletion** | High | Implement right to erasure |
+| **Ignoring DSR** | High | Process within 30 days |
+| **Sharing without consent** | Very High | Get explicit consent |
+| **Breach not reported** | €10M or 2% | 72-hour notification |
+
+---
+
+## 💡 Tips & Examples
+
+### Legal Bases for Processing:
+| Basis | Example |
+|-------|---------|
+| **Consent** | Marketing emails |
+| **Contract** | Order fulfillment |
+| **Legal Obligation** | Tax records |
+| **Vital Interests** | Emergency contact |
+| **Public Task** | Government services |
+| **Legitimate Interest** | Fraud prevention |
+
+### Privacy Policy Must-Haves:
+```markdown
+1. Identity of data controller
+2. Contact details (DPO if applicable)
+3. What data is collected
+4. Why data is collected (purposes)
+5. Legal basis for processing
+6. Data retention periods
+7. Third parties who receive data
+8. User rights explained
+9. How to exercise rights
+10. Right to lodge complaint with supervisory authority
+```
+
+### Cookie Categories:
+| Category | Consent Required | Example |
+|----------|-----------------|---------|
+| Essential | No | Session, security |
+| Functional | Yes | Language, preferences |
+| Analytics | Yes | Google Analytics |
+| Marketing | Yes | Facebook Pixel, ads |
+
+### Data Subject Request Response:
+```markdown
+## DSR Response Template
+
+Dear [Name],
+
+We confirm receipt of your data access request dated [date].
+
+**Data we hold about you:**
+- Account info: [details]
+- Transaction history: [details]
+- Marketing preferences: [details]
+
+**Data sources:** Direct collection via website
+
+**Third parties:** [list]
+
+You may request rectification or erasure by contacting us.
+
+[Signature, DPO name, contact]
+```
+
+---
+
+## 📤 Expected Output từ AI
+
+Khi paste spec này vào AI, bạn sẽ nhận được:
+
+1. **Compliance Score** - Overall GDPR readiness
+2. **Gap Analysis** - Missing requirements
+3. **Risk Assessment** - Potential fine exposure
+4. **Privacy Policy Review** - What's missing
+5. **Cookie Audit** - Compliance status
+6. **Remediation Plan** - Prioritized fixes
+7. **Template Documents** - DSAR, policies
+
+---
+
+*CVF Skill Library v1.5.2 | Security & Compliance Domain*

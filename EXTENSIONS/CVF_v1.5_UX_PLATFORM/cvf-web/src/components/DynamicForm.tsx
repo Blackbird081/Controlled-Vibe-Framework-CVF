@@ -171,6 +171,35 @@ export function DynamicForm({ template, onSubmit, onBack }: DynamicFormProps) {
                     )}
                 </div>
 
+                {/* AI Quick Links */}
+                <div className="flex flex-wrap items-center gap-2 py-3">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Paste vào AI:</span>
+                    <a
+                        href="https://chat.openai.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs px-3 py-1.5 bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 rounded-full hover:bg-green-200 dark:hover:bg-green-800 transition-colors"
+                    >
+                        <span>🤖</span> ChatGPT
+                    </a>
+                    <a
+                        href="https://claude.ai/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs px-3 py-1.5 bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 rounded-full hover:bg-orange-200 dark:hover:bg-orange-800 transition-colors"
+                    >
+                        <span>🧠</span> Claude
+                    </a>
+                    <a
+                        href="https://gemini.google.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs px-3 py-1.5 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+                    >
+                        <span>✨</span> Gemini
+                    </a>
+                </div>
+
                 {/* Action Buttons */}
                 <div className="flex gap-3">
                     {/* Export Spec Button */}

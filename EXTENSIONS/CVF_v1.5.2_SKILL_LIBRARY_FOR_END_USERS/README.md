@@ -1,83 +1,107 @@
-# CVF v1.5.2 — Skill Library for End Users
+# CVF Skill Library v1.5.2
 
-> **Mục tiêu:** Cung cấp thư viện kỹ năng theo chuẩn CVF giúp End User làm việc với AI hiệu quả trong các domain cụ thể.
+> **Controlled Vibe Framework - Skill Library for End Users**  
+> Bộ sưu tập các CVF skills cho marketing, product, SEO, security và compliance.
+
+## 📊 Thống kê
+
+| Metric | Value |
+|--------|-------|
+| **Tổng Skills** | **37 skills** |
+| **Domains** | 4 domains |
+| **Legacy (skills/)** | 14 skills |
+| **New (Phase 1-3)** | 23 skills |
+
+## 🗂️ Domains
+
+### 📈 [Marketing & SEO](marketing_seo/) (Phase 1)
+9 skills cho SEO, copywriting, content, ads, và brand
+
+| Skill | Difficulty |
+|-------|-----------|
+| SEO Audit | Medium |
+| Copywriting Evaluation | Easy |
+| Landing Page CRO | Medium |
+| Pricing Strategy Review | Advanced |
+| Content Quality Checklist | Easy |
+| Competitor Analysis | Medium |
+| Email Campaign Review | Easy |
+| Social Media Ad Review | Medium |
+| Brand Voice Consistency | Medium |
 
 ---
 
-## 🎯 Skill Library là gì?
+### 🎨 [Product & UX](product_ux/) (Phase 2)
+8 skills cho A/B testing, accessibility, flows, và onboarding
 
-Skill Library là tập hợp các **kỹ năng chuyên môn** được chuẩn hóa theo CVF:
-- Mỗi skill = 1 domain expertise cụ thể
-- Focus vào **quyết định** và **đánh giá kết quả**, không phải code
-- Có form mẫu, tiêu chí đánh giá, và ví dụ thực tế
+| Skill | Difficulty |
+|-------|-----------|
+| A/B Test Review | Medium |
+| Accessibility Audit | Medium |
+| User Flow Analysis | Medium |
+| UX Heuristic Evaluation | Medium |
+| Feature Prioritization | Advanced |
+| User Persona Development | Easy |
+| Error Handling UX | Easy |
+| Onboarding Experience Review | Medium |
 
 ---
 
-## 📁 Cấu trúc thư viện
+### 🔐 [Security & Compliance](security_compliance/) (Phase 3)
+6 skills cho API security, GDPR, privacy, và incidents
 
+| Skill | Difficulty |
+|-------|-----------|
+| API Security Checklist | Medium |
+| GDPR Compliance Review | Advanced |
+| Privacy Policy Audit | Easy |
+| Incident Response Plan | Advanced |
+| Data Handling Review | Medium |
+| Terms of Service Review | Easy |
+
+---
+
+### 📚 [Legacy Skills](skills/) (Original)
+14 skills từ version gốc - general business và coding
+
+---
+
+## 🎯 Cách sử dụng
+
+### Option 1: CVF Web UI
+1. Mở CVF Web UI (`cvf-web`)
+2. Chọn template từ Skill Library
+3. Điền form → Generate spec
+4. Copy và paste vào AI
+
+### Option 2: Trực tiếp
+1. Mở skill file (`.skill.md`)
+2. Đọc **Form Input** để biết cần gì
+3. Dùng **Checklist** để tự đánh giá
+4. Paste spec vào ChatGPT/Claude/Gemini
+5. Nhận phân tích chi tiết
+
+## 📝 CVF Skill Format
+
+```markdown
+# Skill Name
+> Metadata (Domain, Difficulty, Version)
+
+## 🎯 Mục đích
+## 📋 Form Input
+## ✅ Checklist Đánh giá
+## ⚠️ Lỗi Thường Gặp
+## 💡 Tips & Examples
+## 📤 Expected Output từ AI
 ```
-CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/
-├── README.md                  ← Bạn đang đây
-├── SKILL_TEMPLATE.md          ← Template tạo skill mới
-│
-├── web_development/           ← Domain: Web Development
-│   ├── 01_landing_page.skill.md
-│   ├── 02_saas_app.skill.md
-│   ├── 03_dashboard.skill.md
-│   ├── 04_blog_docs.skill.md
-│   └── 05_portfolio.skill.md
-│
-├── business_analysis/         ← Domain: Business (future)
-├── content_creation/          ← Domain: Content (future)
-└── technical_review/          ← Domain: Technical (future)
-```
+
+## 🔗 Links
+
+- **GitHub:** [Blackbird081/Controlled-Vibe-Framework-CVF](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)
+- **CVF Web UI:** `EXTENSIONS/CVF_v1.5_UX_PLATFORM/cvf-web`
+- **ROADMAP:** [ROADMAP.md](ROADMAP.md)
+- **CREDITS:** [CREDITS.md](CREDITS.md)
 
 ---
 
-## 🚀 Cách sử dụng
-
-### Bước 1: Chọn Domain
-Tìm domain phù hợp với công việc (ví dụ: `web_development/`)
-
-### Bước 2: Chọn Skill
-Đọc skill file phù hợp (ví dụ: `landing_page.skill.md`)
-
-### Bước 3: Điền theo Form
-Mỗi skill có form mẫu → điền thông tin → paste vào CVF
-
-### Bước 4: Đánh giá Output
-Dùng tiêu chí trong skill để đánh giá kết quả
-
----
-
-## 📊 Domains hiện có
-
-| Domain | Số Skills | Mô tả |
-|--------|-----------|-------|
-| **Web Development** | 5 | Landing page, SaaS, Dashboard, Blog, Portfolio |
-| **Business Analysis** | 3 | Strategy, Risk, Market Research |
-| **Content Creation** | 3 | Docs, Reports, Presentations |
-| **Technical Review** | 3 | Code, Architecture, Security |
-
-**Tổng cộng: 14 Skills**
-
----
-
-## 💡 Nguyên tắc CVF trong Skill Library
-
-1. **Focus kết quả, không process** — Bạn không cần biết AI làm gì
-2. **Có tiêu chí rõ ràng** — Mỗi skill có checklist đánh giá
-3. **Biết giới hạn** — Common failures giúp tránh sai lầm
-4. **Human quyết định cuối** — AI đề xuất, bạn accept/reject
-
----
-
-## 🔗 Nguồn tham khảo
-
-- **Vibecode Kit v4.0** — Domain patterns cho Web Development
-- **Antigravity Skills** — Reference patterns
-- **CVF v1.5** — Governance framework
-
----
-
-*CVF v1.5.2 Skill Library — Making AI expertise accessible to everyone*
+*CVF Skill Library v1.5.2 | Last Updated: 2026-02-03*

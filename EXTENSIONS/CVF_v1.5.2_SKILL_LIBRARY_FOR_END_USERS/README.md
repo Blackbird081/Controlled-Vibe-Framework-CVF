@@ -107,8 +107,9 @@ Requirements → Tech Stack → Architecture → Database/API → App Spec → D
 
 ```markdown
 # Skill Name
-> Metadata (Domain, Difficulty, Version)
+> Metadata (Domain, Difficulty, Version, Skill Version, Last Updated)
 
+## 📌 Prerequisites    ← NEW!
 ## 🎯 Mục đích
 ## 📋 Form Input
 ## ✅ Expected Output
@@ -116,16 +117,17 @@ Requirements → Tech Stack → Architecture → Database/API → App Spec → D
 ## ⚠️ Common Failures
 ## 💡 Tips
 ## 📊 Ví dụ thực tế
+## 🔗 Next Step        ← NEW!
 ```
 
 ## 🔗 Links
 
 - **GitHub:** [Blackbird081/Controlled-Vibe-Framework-CVF](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)
 - **CVF Web UI:** `EXTENSIONS/CVF_v1.5_UX_PLATFORM/cvf-web`
+- **DIFFICULTY_GUIDE:** [DIFFICULTY_GUIDE.md](DIFFICULTY_GUIDE.md) ← NEW!
 - **ROADMAP:** [ROADMAP.md](ROADMAP.md)
 - **CREDITS:** [CREDITS.md](CREDITS.md)
 
 ---
 
-*CVF Skill Library v1.5.2 | Last Updated: 2026-02-03*
-
+*CVF Skill Library v1.5.2 | Last Updated: 2026-02-04*

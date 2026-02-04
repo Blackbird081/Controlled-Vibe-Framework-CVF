@@ -1,9 +1,18 @@
 # Local Deployment Spec
 
 > **Domain:** App Development  
-> **Difficulty:** ⭐⭐ Medium  
+> **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Phase:** Review (Phase D)
+> **Skill Version:** 1.1.0  
+> **Last Updated:** 2026-02-04
+
+---
+
+## 📌 Prerequisites
+
+> Hoàn thành app development workflow trước khi dùng skill này:
+> - App đã build và test xong
+> - [Desktop App Spec](./06_desktop_app_spec.skill.md) hoặc [CLI Tool Spec](./07_cli_tool_spec.skill.md)
 
 ---
 

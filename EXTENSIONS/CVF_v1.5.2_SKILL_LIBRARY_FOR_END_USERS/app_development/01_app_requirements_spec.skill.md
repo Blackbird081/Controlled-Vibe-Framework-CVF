@@ -1,9 +1,16 @@
 # App Requirements Spec
 
 > **Domain:** App Development  
-> **Difficulty:** ⭐ Easy  
+> **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Phase:** Discovery (Phase A)
+> **Skill Version:** 1.1.0  
+> **Last Updated:** 2026-02-04
+
+---
+
+## 📌 Prerequisites
+
+> Không yêu cầu — Đây là skill đầu tiên trong App Development workflow.
 
 ---
 

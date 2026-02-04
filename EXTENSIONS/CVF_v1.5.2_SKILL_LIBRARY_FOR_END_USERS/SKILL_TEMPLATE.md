@@ -6,16 +6,30 @@
 
 ## Cấu trúc file
 
-Tên file: `[tên_skill].skill.md`
+Tên file: `[số thứ tự]_[tên_skill].skill.md`  
+Ví dụ: `01_app_requirements_spec.skill.md`
 
 ---
+
+## 📄 Template
 
 ```markdown
 # [Tên Skill]
 
 > **Domain:** [Domain name]  
-> **Difficulty:** [Easy/Medium/Advanced]  
-> **CVF Version:** v1.5.2
+> **Difficulty:** [⭐ Easy / ⭐⭐ Medium / ⭐⭐⭐ Advanced] — [Xem criteria](./DIFFICULTY_GUIDE.md)  
+> **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.0  
+> **Last Updated:** YYYY-MM-DD
+
+---
+
+## 📌 Prerequisites
+
+> Hoàn thành các skills sau trước khi dùng skill này:
+> - [Tên Skill](./path_to_skill.md) — Lý do cần
+> 
+> *Nếu không có prerequisites, ghi: "Không yêu cầu"*
 
 ---
 
@@ -103,17 +117,56 @@ Ràng buộc: [...]
 
 ---
 
-*Skill created for CVF v1.5.2 Skill Library*
+## 🔗 Next Step
+
+> Sau khi hoàn thành skill này → [Tên Skill Tiếp Theo](./path_to_next.md)
+
+---
+
+*[Tên Skill] — CVF v1.5.2 Skill Library*
 ```
 
 ---
 
-## Checklist khi tạo skill mới
+## ✅ Checklist khi tạo skill mới
 
+### Metadata
 - [ ] Tên skill rõ ràng, dễ hiểu
+- [ ] Difficulty phù hợp (xem [DIFFICULTY_GUIDE.md](./DIFFICULTY_GUIDE.md))
+- [ ] Skill Version bắt đầu từ 1.0.0
+- [ ] Last Updated là ngày tạo/cập nhật
+
+### Prerequisites
+- [ ] Liệt kê skills cần hoàn thành trước (nếu có)
+- [ ] Link đúng path đến skill đó
+
+### Content
 - [ ] Mục đích cụ thể (khi nào dùng / không dùng)
 - [ ] Form input đầy đủ với ví dụ
 - [ ] Tiêu chí đánh giá rõ ràng
 - [ ] Common failures có cách phòng tránh
-- [ ] Có ví dụ thực tế
-- [ ] Ngôn ngữ phù hợp end user (không technical)
+- [ ] Có ví dụ thực tế (input + output + evaluation)
+
+### Language
+- [ ] Ngôn ngữ: **Tiếng Việt** là chính
+- [ ] Technical terms: English trong `backticks`
+- [ ] Code examples: English
+
+### Navigation
+- [ ] Có Next Step link (nếu là part of workflow)
+- [ ] File name có số thứ tự đúng
+
+---
+
+## 📝 Versioning Guide
+
+| Version | Khi nào tăng |
+|---------|--------------|
+| 1.0.0 | Initial release |
+| 1.0.x | Bug fixes, typos, minor clarifications |
+| 1.x.0 | New sections, examples, or content additions |
+| x.0.0 | Major restructure hoặc breaking changes |
+
+---
+
+*CVF Skill Template v1.1 | Last Updated: 2026-02-04*

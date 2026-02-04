@@ -1,9 +1,18 @@
 # Architecture Design
 
 > **Domain:** App Development  
-> **Difficulty:** ⭐⭐⭐ Hard  
+> **Difficulty:** ⭐⭐⭐ Advanced — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Phase:** Design (Phase B)
+> **Skill Version:** 1.1.0  
+> **Last Updated:** 2026-02-04
+
+---
+
+## 📌 Prerequisites
+
+> Hoàn thành các skills sau trước khi dùng skill này:
+> - [App Requirements Spec](./01_app_requirements_spec.skill.md) — Cần requirements rõ ràng
+> - [Tech Stack Selection](./02_tech_stack_selection.skill.md) — Cần biết tech stack sẽ dùng
 
 ---
 

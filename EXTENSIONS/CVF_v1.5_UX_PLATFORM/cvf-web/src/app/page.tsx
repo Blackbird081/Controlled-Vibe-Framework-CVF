@@ -23,10 +23,11 @@ import {
   SystemDesignWizard,
   ContentStrategyWizard,
   DataAnalysisWizard,
+  SkillLibrary,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 
-type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard';
+type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills';
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -220,12 +221,15 @@ export default function Home() {
             </Link>
 
             <nav className="flex items-center gap-4">
-              <Link
-                href="/skills"
-                className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              <button
+                onClick={() => setAppState('skills')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                           ${appState === 'skills'
+                    ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
                 📚 Skills
-              </Link>
+              </button>
               <Link
                 href="/help"
                 className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -367,6 +371,11 @@ export default function Home() {
             onRetry={handleRetry}
             onBack={handleBack}
           />
+        )}
+
+        {/* SKILL LIBRARY STATE */}
+        {appState === 'skills' && (
+          <SkillLibrary />
         )}
 
         {/* HISTORY STATE */}

@@ -1,9 +1,17 @@
 # Tech Stack Selection
 
 > **Domain:** App Development  
-> **Difficulty:** ⭐⭐ Medium  
+> **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Phase:** Design (Phase B)
+> **Skill Version:** 1.1.0  
+> **Last Updated:** 2026-02-04
+
+---
+
+## 📌 Prerequisites
+
+> Hoàn thành skill sau trước khi dùng skill này:
+> - [App Requirements Spec](./01_app_requirements_spec.skill.md) — Cần có requirements rõ ràng
 
 ---
 

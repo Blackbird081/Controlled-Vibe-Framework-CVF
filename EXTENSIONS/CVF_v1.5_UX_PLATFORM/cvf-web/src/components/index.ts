@@ -8,3 +8,6 @@ export { QuickReference } from './QuickReference';
 export { OnboardingWizard } from './OnboardingWizard';
 export { SpecExport } from './SpecExport';
 export { AppBuilderWizard } from './AppBuilderWizard';
+export { ProductDesignWizard } from './ProductDesignWizard';
+export { MarketingCampaignWizard } from './MarketingCampaignWizard';
+export { BusinessStrategyWizard } from './BusinessStrategyWizard';

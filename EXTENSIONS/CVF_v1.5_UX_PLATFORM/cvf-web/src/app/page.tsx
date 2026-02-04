@@ -15,10 +15,13 @@ import {
   QuickReference,
   OnboardingWizard,
   AppBuilderWizard,
+  ProductDesignWizard,
+  MarketingCampaignWizard,
+  BusinessStrategyWizard,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 
-type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard';
+type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard';
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -69,9 +72,24 @@ export default function Home() {
       setCurrentFolder(template.id);
       return;
     }
-    // Check if this is the wizard template
+    // Check if this is the app builder wizard template
     if (template.id === 'app_builder_wizard') {
       setAppState('wizard');
+      return;
+    }
+    // Check if this is the product design wizard template
+    if (template.id === 'product_design_wizard') {
+      setAppState('product-wizard');
+      return;
+    }
+    // Check if this is the marketing campaign wizard template
+    if (template.id === 'marketing_campaign_wizard') {
+      setAppState('marketing-wizard');
+      return;
+    }
+    // Check if this is the business strategy wizard template
+    if (template.id === 'business_strategy_wizard') {
+      setAppState('business-wizard');
       return;
     }
     setSelectedTemplate(template);
@@ -258,6 +276,21 @@ export default function Home() {
         {/* WIZARD STATE */}
         {appState === 'wizard' && (
           <AppBuilderWizard onBack={handleBack} />
+        )}
+
+        {/* PRODUCT DESIGN WIZARD STATE */}
+        {appState === 'product-wizard' && (
+          <ProductDesignWizard onBack={handleBack} />
+        )}
+
+        {/* MARKETING CAMPAIGN WIZARD STATE */}
+        {appState === 'marketing-wizard' && (
+          <MarketingCampaignWizard onBack={handleBack} />
+        )}
+
+        {/* BUSINESS STRATEGY WIZARD STATE */}
+        {appState === 'business-wizard' && (
+          <BusinessStrategyWizard onBack={handleBack} />
         )}
 
         {/* PROCESSING STATE */}

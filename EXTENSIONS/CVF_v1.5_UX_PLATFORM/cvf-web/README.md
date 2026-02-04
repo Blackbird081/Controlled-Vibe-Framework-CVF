@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧙 CVF Web - Controlled Vibe Framework UI
 
-## Getting Started
+> Next.js web interface for CVF prompt templates and multi-step wizards.
 
-First, run the development server:
+## 🚀 Quick Start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Features
 
-## Learn More
+### 📋 40+ Prompt Templates
+Categorized templates for various use cases:
+- Business, Marketing, Product, Technical
+- Research, Content, Security, DevOps
 
-To learn more about Next.js, take a look at the following resources:
+### 🧙 9 Multi-Step Wizards
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Interactive wizards that guide you through complex tasks:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Wizard | Category | Steps | Description |
+|--------|----------|-------|-------------|
+| 🛠️ **App Builder** | App Dev | 8 | Complete app specification |
+| 🎨 **Product Design** | Product | 6 | Product design document |
+| 📣 **Marketing Campaign** | Marketing | 5 | Campaign brief & strategy |
+| 📈 **Business Strategy** | Business | 4 | Strategic decision document |
+| 🔐 **Security Assessment** | Security | 5 | Security assessment report |
+| 🔬 **Research Project** | Research | 4 | Research proposal |
+| 🔧 **System Design** | Technical | 5 | System design document |
+| ✍️ **Content Strategy** | Content | 5 | Content strategy plan |
+| 📊 **Data Analysis** | Research | 5 | Data analysis plan |
 
-## Deploy on Vercel
+**Wizard Features:**
+- ✅ Click-to-jump step navigation
+- ✅ Auto-save drafts (localStorage)
+- ✅ Field tips and guidance
+- ✅ Progress bar
+- ✅ Export to clipboard / download .md
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📁 Project Structure
+
+```
+src/
+├── app/
+│   └── page.tsx          # Main app with routing
+├── components/
+│   ├── AppBuilderWizard.tsx
+│   ├── ProductDesignWizard.tsx
+│   ├── MarketingCampaignWizard.tsx
+│   ├── BusinessStrategyWizard.tsx
+│   ├── SecurityAssessmentWizard.tsx
+│   ├── ResearchProjectWizard.tsx
+│   ├── SystemDesignWizard.tsx
+│   ├── ContentStrategyWizard.tsx
+│   ├── DataAnalysisWizard.tsx
+│   └── ... other components
+├── lib/
+│   ├── templates.ts      # All templates
+│   ├── cvf-engine.ts     # CVF processing
+│   └── theme.ts          # Theme toggle
+└── types/
+    └── index.ts          # TypeScript types
+```
+
+---
+
+## 🎯 How to Use
+
+### Templates
+1. Browse categories (Business, Technical, etc.)
+2. Select a template
+3. Fill in the fields
+4. Generate your prompt
+
+### Wizards
+1. Navigate to category
+2. Click the wizard (marked with icon like 🛠️ 🎨 📣)
+3. Complete steps sequentially
+4. Review and export
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15
+- **Styling**: Tailwind CSS
+- **State**: React useState/useCallback
+- **Storage**: localStorage (drafts)
+- **Language**: TypeScript
+
+---
+
+## 📝 License
+
+MIT License - Part of Controlled Vibe Framework (CVF)

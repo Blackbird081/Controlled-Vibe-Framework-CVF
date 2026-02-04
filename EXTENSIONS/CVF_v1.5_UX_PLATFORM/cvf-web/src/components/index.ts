@@ -7,4 +7,4 @@ export { HistoryList } from './HistoryList';
 export { QuickReference } from './QuickReference';
 export { OnboardingWizard } from './OnboardingWizard';
 export { SpecExport } from './SpecExport';
-
+export { AppBuilderWizard } from './AppBuilderWizard';

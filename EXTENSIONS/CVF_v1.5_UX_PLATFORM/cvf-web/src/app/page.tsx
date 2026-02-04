@@ -14,10 +14,11 @@ import {
   HistoryList,
   QuickReference,
   OnboardingWizard,
+  AppBuilderWizard,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 
-type AppState = 'home' | 'form' | 'processing' | 'result' | 'history';
+type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard';
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -47,6 +48,11 @@ export default function Home() {
     : templates.filter(t => t.category === selectedCategory);
 
   const handleSelectTemplate = useCallback((template: Template) => {
+    // Check if this is the wizard template
+    if (template.id === 'app_builder_wizard') {
+      setAppState('wizard');
+      return;
+    }
     setSelectedTemplate(template);
     setAppState('form');
   }, []);
@@ -211,6 +217,11 @@ export default function Home() {
             onSubmit={handleFormSubmit}
             onBack={handleBack}
           />
+        )}
+
+        {/* WIZARD STATE */}
+        {appState === 'wizard' && (
+          <AppBuilderWizard onBack={handleBack} />
         )}
 
         {/* PROCESSING STATE */}

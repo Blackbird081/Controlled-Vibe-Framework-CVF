@@ -4,7 +4,7 @@
 
 > **Current Version:** v1.5.2 | **Latest:** CVF Web UI + Skill Library  
 > **Assessment:** 9.40/10 ✅ (Jan 29, 2026)  
-> **Last Updated:** Feb 03, 2026
+> **Last Updated:** Feb 04, 2026
 
 ---
 
@@ -69,7 +69,7 @@ result = skill.execute({"email": "Buy now!!!"})
 | 👤 Operator Manual | **v1.3.1** | [EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/](./EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) |
 | 🎨 End-user UX Layer | **v1.4** | [EXTENSIONS/CVF_v1.4_USAGE_LAYER/](./EXTENSIONS/CVF_v1.4_USAGE_LAYER/) |
 | 🌐 **Web UI Platform** | **v1.5** | [EXTENSIONS/CVF_v1.5_UX_PLATFORM/](./EXTENSIONS/CVF_v1.5_UX_PLATFORM/) |
-| 📋 **Skill Library (37 skills)** | **v1.5.2** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| 📋 **Skill Library (45 skills)** | **v1.5.2** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
 
 ---
 
@@ -117,14 +117,20 @@ Web UI hỗ trợ 3 chế độ xuất prompt:
 
 ## 📋 Skill Library (v1.5.2)
 
-**37 skills** across **4 domains**:
+**45 skills** across **5 domains**:
 
 | Domain | Skills | Description |
 |--------|:------:|-------------|
+| 💻 App Development | 8 | Requirements, Tech Stack, Architecture, Database, API... | 
 | 📣 Marketing & SEO | 9 | SEO Audit, Copywriting, CRO, Pricing... |
 | 🎨 Product & UX | 8 | A/B Test, Accessibility, User Flow, Personas... |
 | 🔐 Security & Compliance | 6 | API Security, GDPR, Privacy Policy, Incident Response... |
 | 📁 Legacy (General) | 14 | Business Analysis, Technical Review, Content... |
+
+**New in v1.5.2:**
+- ✅ Skill Versioning (1.x.x per skill)
+- ✅ Prerequisites system with workflow links
+- ✅ Difficulty Guide (Easy/Medium/Advanced criteria)
 
 [→ Xem chi tiết Skill Library](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
 
@@ -169,11 +175,13 @@ Controlled-Vibe-Framework-CVF/
 │   │   ├── 21_TEMPLATE_LIBRARY/
 │   │   └── 22_ANALYTICS/
 │   │
-│   └── CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/  ⭐ NEW
+│   └── CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/  ⭐ UPDATED
+│       ├── app_development/   ← 8 skills (NEW!)
 │       ├── marketing_seo/     ← 9 skills
 │       ├── product_ux/        ← 8 skills
 │       ├── security_compliance/ ← 6 skills
-│       └── legacy/            ← 14 skills
+│       ├── legacy/            ← 14 skills
+│       └── DIFFICULTY_GUIDE.md ← NEW!
 │
 └── docs/
     ├── QUICK_START_INTERNAL.md
@@ -261,11 +269,16 @@ Controlled-Vibe-Framework-CVF/
 - ✅ 3 export modes (Simple, With Rules, CVF Full Mode)
 - ✅ Bilingual support (Vietnamese/English)
 - ✅ AI quick links (ChatGPT, Claude, Gemini)
+- ✅ **NEW!** 3 Guided Wizards (Product Design, Technical Spec, Content Strategy)
+- ✅ **NEW!** Skill Library Viewer in Web UI
 
 ### 📚 Skill Library Additions
+- ✅ **NEW!** App Development (8 skills with workflow)
 - ✅ Marketing & SEO (9 skills)
 - ✅ Product & UX (8 skills)
 - ✅ Security & Compliance (6 skills)
+- ✅ **NEW!** Skill Versioning & Prerequisites
+- ✅ **NEW!** Difficulty Guide
 
 ### 🚦 CVF Full Mode
 - ✅ Complete 4-phase protocol in exported prompts
@@ -290,5 +303,5 @@ Xem [CONTRIBUTING.md](./v1.0/CONTRIBUTING.md) để biết cách đóng góp.
 
 ---
 
-*Last Updated: 2026-02-03*  
+*Last Updated: 2026-02-04*  
 *CVF v1.5.2 — [GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)*

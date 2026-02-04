@@ -867,8 +867,146 @@ SUCCESS CRITERIA:
     },
 
     // ========================================
-    // APP DEVELOPMENT TEMPLATES (8)
+    // APP DEVELOPMENT TEMPLATES
     // ========================================
+
+    // OPTION 1: BUILD MY APP (Simple - for non-coders)
+    {
+        id: 'build_my_app',
+        name: '🚀 Build My App',
+        icon: '🚀',
+        description: 'Mô tả ý tưởng app → AI tự quyết định mọi thứ và build cho bạn. Dành cho người không biết code.',
+        category: 'development',
+        fields: [
+            { id: 'appIdea', type: 'textarea', label: 'Ý tưởng App', placeholder: 'VD: "Tôi muốn app quản lý công việc cá nhân, có thể thêm task, đặt deadline, nhắc nhở..."', required: true, rows: 4, section: 'required' },
+            { id: 'appType', type: 'select', label: 'Loại App', options: ['Desktop App (cài trên máy)', 'CLI Tool (dòng lệnh)', 'Web App', 'Mobile App'], required: true, section: 'required' },
+            { id: 'targetUser', type: 'text', label: 'Ai sẽ dùng?', placeholder: 'VD: Tôi dùng cá nhân, Team nhỏ 5 người, Khách hàng...', required: true, section: 'required' },
+            { id: 'platform', type: 'select', label: 'Chạy trên', options: ['Windows', 'macOS', 'Linux', 'Cả 3 hệ điều hành', 'Web Browser'], required: true, section: 'required' },
+            { id: 'preferences', type: 'textarea', label: 'Yêu cầu thêm (optional)', placeholder: 'VD: Giao diện tối, đơn giản, offline được...', required: false, rows: 2, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+Tôi muốn AI build cho tôi một [appType].
+
+Ý TƯỞNG:
+[appIdea]
+
+THÔNG TIN:
+- Người dùng: [targetUser]
+- Platform: [platform]
+- Yêu cầu thêm: [preferences]
+
+QUAN TRỌNG - YÊU CẦU CHO AI:
+Đây là Vibe Coding - User chỉ mô tả ý tưởng, AI chịu trách nhiệm 100% về:
+1. Phân tích requirements
+2. Chọn tech stack phù hợp
+3. Thiết kế architecture
+4. Thiết kế database (nếu cần)
+5. Build toàn bộ app
+6. Test và packaging
+
+User chỉ đánh giá kết quả cuối cùng.`,
+        outputExpected: ['Complete Working App', 'Setup Instructions', 'User Guide'],
+    },
+
+    // OPTION 2: APP BUILDER COMPLETE (Advanced - comprehensive spec)
+    {
+        id: 'app_builder_complete',
+        name: '📦 App Builder Complete',
+        icon: '📦',
+        description: 'Tạo spec hoàn chỉnh với đầy đủ thông tin kỹ thuật. Dành cho người hiểu quy trình CVF.',
+        category: 'development',
+        fields: [
+            // Section 1: Requirements
+            { id: 'appName', type: 'text', label: '1. Tên App', placeholder: 'VD: TaskFlow', required: true, section: 'required' },
+            { id: 'appType', type: 'select', label: '2. Loại App', options: ['Desktop (Cross-platform)', 'CLI Tool', 'Desktop + CLI', 'Web SPA', 'Mobile'], required: true, section: 'required' },
+            { id: 'problem', type: 'textarea', label: '3. Vấn đề cần giải quyết', placeholder: 'Mô tả vấn đề user đang gặp phải', required: true, rows: 3, section: 'required' },
+            { id: 'targetUsers', type: 'text', label: '4. Target Users', placeholder: 'VD: Developer cá nhân, Team nhỏ', required: true, section: 'required' },
+            { id: 'coreFeatures', type: 'textarea', label: '5. Core Features (3-5)', placeholder: '1. Feature A\n2. Feature B\n3. Feature C', required: true, rows: 4, section: 'required' },
+
+            // Section 2: Technical Preferences
+            { id: 'platforms', type: 'text', label: '6. Target Platforms', placeholder: 'Windows, macOS, Linux...', required: true, section: 'required' },
+            { id: 'techPreference', type: 'text', label: '7. Tech Preference (optional)', placeholder: 'VD: Tauri, Electron, Python...', required: false, section: 'advanced' },
+            { id: 'dataStorage', type: 'select', label: '8. Data Storage', options: ['None', 'Local Files (JSON/YAML)', 'Local Database (SQLite)', 'Cloud Database'], required: false, section: 'advanced' },
+            { id: 'offlineRequired', type: 'select', label: '9. Offline Mode', options: ['Required', 'Nice to have', 'Not needed'], required: false, section: 'advanced' },
+
+            // Section 3: App-specific
+            { id: 'uiStyle', type: 'select', label: '10. UI Style', options: ['Modern Dark', 'Clean Light', 'Minimal', 'No UI (CLI only)'], required: false, section: 'advanced' },
+            { id: 'specialFeatures', type: 'textarea', label: '11. Special Features', placeholder: 'VD: System tray, Keyboard shortcuts, Notifications...', required: false, rows: 2, section: 'advanced' },
+
+            // Section 4: Constraints
+            { id: 'outOfScope', type: 'textarea', label: '12. Out of Scope', placeholder: 'Những gì KHÔNG làm trong v1', required: false, rows: 2, section: 'advanced' },
+            { id: 'constraints', type: 'text', label: '13. Constraints', placeholder: 'VD: Bundle < 50MB, No internet required', required: false, section: 'advanced' },
+        ],
+        intentPattern: `INTENT:
+Tạo Complete App Specification cho [appName] - một [appType].
+
+═══════════════════════════════════════════════════
+SECTION 1: REQUIREMENTS
+═══════════════════════════════════════════════════
+
+**Problem Statement:**
+[problem]
+
+**Target Users:** [targetUsers]
+
+**Core Features:**
+[coreFeatures]
+
+**Out of Scope:**
+[outOfScope]
+
+═══════════════════════════════════════════════════
+SECTION 2: TECHNICAL REQUIREMENTS
+═══════════════════════════════════════════════════
+
+**Platforms:** [platforms]
+**Tech Preference:** [techPreference]
+**Data Storage:** [dataStorage]
+**Offline Mode:** [offlineRequired]
+**Constraints:** [constraints]
+
+═══════════════════════════════════════════════════
+SECTION 3: UI/UX REQUIREMENTS
+═══════════════════════════════════════════════════
+
+**UI Style:** [uiStyle]
+**Special Features:** [specialFeatures]
+
+═══════════════════════════════════════════════════
+AI INSTRUCTIONS
+═══════════════════════════════════════════════════
+
+Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
+
+**Phase A - Discovery:** Xác nhận bạn hiểu đúng requirements.
+
+**Phase B - Design:** 
+- Chọn tech stack (KHÔNG hỏi user chọn)
+- Thiết kế architecture
+- Thiết kế database schema (nếu cần)
+- Thiết kế API/commands (nếu cần)
+
+**Phase C - Build:**
+- Build từng component
+- Tạo full source code
+- Tạo config files
+
+**Phase D - Review:**
+- Tóm tắt những gì đã build
+- Hướng dẫn setup và chạy
+- Hướng dẫn packaging/distribution`,
+        outputExpected: [
+            'Tech Stack Decision',
+            'Architecture Diagram',
+            'Database Schema (if needed)',
+            'Complete Source Code',
+            'Setup & Run Instructions',
+            'Packaging Guide'
+        ],
+    },
+
+    // ========================================
+    // INDIVIDUAL SKILL TEMPLATES (8)
 
     {
         id: 'app_requirements_spec',

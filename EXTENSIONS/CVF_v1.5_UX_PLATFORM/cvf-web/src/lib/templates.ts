@@ -1018,7 +1018,21 @@ Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
     },
 
     // ========================================
-    // INDIVIDUAL SKILL TEMPLATES (8)
+    // INDIVIDUAL SKILL TEMPLATES (8) - Hidden in folder
+    // ========================================
+
+    // Folder template that groups the 8 individual skills
+    {
+        id: 'individual_skills_folder',
+        name: '📂 Skill Templates (8)',
+        icon: '📂',
+        description: '8 templates riêng lẻ cho từng khâu: Requirements, Tech Stack, Architecture, Database, API, Desktop/CLI, Deployment.',
+        category: 'development',
+        fields: [],
+        intentPattern: '',
+        outputExpected: [],
+        isFolder: true, // This is a folder, not a template
+    },
 
     {
         id: 'app_requirements_spec',
@@ -1026,6 +1040,7 @@ Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
         icon: '📋',
         description: 'Thu thập requirements cho app mới, định nghĩa scope và success criteria',
         category: 'development',
+        parentFolder: 'individual_skills_folder',
         fields: [
             { id: 'appName', type: 'text', label: 'App Name', placeholder: 'VD: TaskFlow - Quản lý công việc', required: true, section: 'required' },
             { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop', 'CLI Tool', 'Mobile', 'Web App', 'API Service'], required: true, section: 'required' },
@@ -1071,6 +1086,7 @@ OUTPUT REQUIREMENTS:
         icon: '🔧',
         description: 'Chọn công nghệ phù hợp cho app dựa trên requirements',
         category: 'development',
+        parentFolder: 'individual_skills_folder',
         fields: [
             { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Cross-platform)', 'CLI Tool', 'Mobile (Cross-platform)', 'Web SPA', 'API Backend'], required: true, section: 'required' },
             { id: 'performancePriority', type: 'select', label: 'Performance Priority', options: ['Low', 'Medium', 'High', 'Critical'], required: true, section: 'required' },
@@ -1110,6 +1126,7 @@ OUTPUT REQUIREMENTS:
         icon: '🏗️',
         description: 'Thiết kế kiến trúc hệ thống với component diagram',
         category: 'development',
+        parentFolder: 'individual_skills_folder',
         fields: [
             { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
             { id: 'techStack', type: 'text', label: 'Tech Stack', placeholder: 'VD: Tauri + Vue 3 + SQLite', required: true, section: 'required' },
@@ -1148,6 +1165,7 @@ OUTPUT REQUIREMENTS:
         icon: '🗄️',
         description: 'Thiết kế database schema với ERD và SQL',
         category: 'development',
+        parentFolder: 'individual_skills_folder',
         fields: [
             { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
             { id: 'dbType', type: 'select', label: 'Database Type', options: ['SQLite', 'PostgreSQL', 'MySQL', 'MongoDB'], required: true, section: 'required' },
@@ -1190,6 +1208,7 @@ OUTPUT REQUIREMENTS:
         icon: '🔌',
         description: 'Thiết kế REST API với endpoints và request/response format',
         category: 'development',
+        parentFolder: 'individual_skills_folder',
         fields: [
             { id: 'appName', type: 'text', label: 'App/Service Name', placeholder: 'Tên API', required: true, section: 'required' },
             { id: 'apiStyle', type: 'select', label: 'API Style', options: ['REST', 'GraphQL', 'IPC (Desktop)'], required: true, section: 'required' },
@@ -1227,6 +1246,7 @@ OUTPUT REQUIREMENTS:
         icon: '🖥️',
         description: 'Spec cho desktop app: windows, menus, shortcuts, tray',
         category: 'development',
+        parentFolder: 'individual_skills_folder',
         fields: [
             { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
             { id: 'framework', type: 'select', label: 'Framework', options: ['Tauri', 'Electron', 'PyQt/PySide', 'Wails', 'Native'], required: true, section: 'required' },
@@ -1269,6 +1289,7 @@ OUTPUT REQUIREMENTS:
         icon: '⌨️',
         description: 'Spec cho command-line tool: commands, arguments, options',
         category: 'development',
+        parentFolder: 'individual_skills_folder',
         fields: [
             { id: 'toolName', type: 'text', label: 'Tool Name', placeholder: 'VD: taskflow hoặc tf', required: true, section: 'required' },
             { id: 'purpose', type: 'textarea', label: 'Purpose', placeholder: 'Tool này làm gì?', required: true, rows: 2, section: 'required' },
@@ -1309,6 +1330,7 @@ OUTPUT REQUIREMENTS:
         icon: '📦',
         description: 'Packaging và distribution spec cho local apps',
         category: 'development',
+        parentFolder: 'individual_skills_folder',
         fields: [
             { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
             { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Tauri)', 'Desktop (Electron)', 'CLI Tool', 'Service'], required: true, section: 'required' },

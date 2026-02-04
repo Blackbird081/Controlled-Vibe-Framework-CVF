@@ -43,11 +43,32 @@ export default function Home() {
     setShowOnboarding(false);
   };
 
-  const filteredTemplates = selectedCategory === 'all'
-    ? templates
-    : templates.filter(t => t.category === selectedCategory);
+  // State for folder navigation
+  const [currentFolder, setCurrentFolder] = useState<string | null>(null);
+
+  // Filter templates - hide those in folders unless viewing that folder
+  const filteredTemplates = (() => {
+    let result = selectedCategory === 'all'
+      ? templates
+      : templates.filter(t => t.category === selectedCategory);
+
+    if (currentFolder) {
+      // Show only templates in the current folder
+      result = result.filter(t => t.parentFolder === currentFolder);
+    } else {
+      // Hide templates that are inside folders
+      result = result.filter(t => !t.parentFolder);
+    }
+
+    return result;
+  })();
 
   const handleSelectTemplate = useCallback((template: Template) => {
+    // Check if this is a folder
+    if (template.isFolder) {
+      setCurrentFolder(template.id);
+      return;
+    }
     // Check if this is the wizard template
     if (template.id === 'app_builder_wizard') {
       setAppState('wizard');
@@ -185,18 +206,33 @@ export default function Home() {
           <>
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                Chọn template để bắt đầu
+                {currentFolder
+                  ? `📂 ${templates.find(t => t.id === currentFolder)?.name || 'Folder'}`
+                  : 'Chọn template để bắt đầu'
+                }
               </h2>
               <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                CVF v1.5 giúp bạn sử dụng AI mà không cần viết prompt.
-                Chỉ cần chọn template, điền form, và nhận kết quả.
+                {currentFolder
+                  ? templates.find(t => t.id === currentFolder)?.description
+                  : 'CVF v1.5 giúp bạn sử dụng AI mà không cần viết prompt. Chỉ cần chọn template, điền form, và nhận kết quả.'
+                }
               </p>
+              {currentFolder && (
+                <button
+                  onClick={() => setCurrentFolder(null)}
+                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                >
+                  ← Quay lại
+                </button>
+              )}
             </div>
 
-            <CategoryTabs
-              activeCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
-            />
+            {!currentFolder && (
+              <CategoryTabs
+                activeCategory={selectedCategory}
+                onCategoryChange={setSelectedCategory}
+              />
+            )}
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredTemplates.map((template) => (

@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SpecExport } from './SpecExport';
 import { Template } from '@/types';
+
+// Local storage key for draft
+const DRAFT_STORAGE_KEY = 'cvf_wizard_draft';
 
 // Field type for wizard steps
 interface WizardField {
@@ -14,6 +17,7 @@ interface WizardField {
     rows?: number;
     options?: string[];
     showFor?: string[]; // Only show for specific appType values
+    tip?: string; // Helpful tip for the field
 }
 
 // Step type
@@ -39,12 +43,12 @@ const WIZARD_STEPS: WizardStep[] = [
         description: 'Định nghĩa yêu cầu và scope của app',
         required: true,
         fields: [
-            { id: 'appName', type: 'text', label: 'Tên App', placeholder: 'VD: TaskFlow', required: true },
-            { id: 'appType', type: 'select', label: 'Loại App', options: ['Desktop App', 'CLI Tool', 'Web App', 'Mobile App', 'API Service'], required: true },
-            { id: 'problem', type: 'textarea', label: 'Vấn đề cần giải quyết', placeholder: 'Mô tả vấn đề user đang gặp phải...', required: true, rows: 3 },
-            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'Ai sẽ dùng app này?', required: true },
-            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3-5)', placeholder: '1. Feature A\n2. Feature B\n3. Feature C', required: true, rows: 4 },
-            { id: 'outOfScope', type: 'textarea', label: 'Out of Scope (Không làm)', placeholder: 'Những gì KHÔNG làm trong v1', required: false, rows: 2 },
+            { id: 'appName', type: 'text', label: 'Tên App', placeholder: 'VD: TaskFlow', required: true, tip: '💡 Tên ngắn gọn, dễ nhớ' },
+            { id: 'appType', type: 'select', label: 'Loại App', options: ['Desktop App', 'CLI Tool', 'Web App', 'Mobile App', 'API Service'], required: true, tip: '💡 Desktop nếu cần GUI, CLI nếu dùng terminal' },
+            { id: 'problem', type: 'textarea', label: 'Vấn đề cần giải quyết', placeholder: 'Mô tả vấn đề user đang gặp phải...', required: true, rows: 3, tip: '💡 Mô tả rõ PAIN POINT của người dùng' },
+            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'Ai sẽ dùng app này?', required: true, tip: '💡 Cụ thể hơn = tốt hơn' },
+            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3-5)', placeholder: '1. Feature A\n2. Feature B\n3. Feature C', required: true, rows: 4, tip: '💡 Chỉ 3-5 features QUAN TRỌNG NHẤT' },
+            { id: 'outOfScope', type: 'textarea', label: 'Out of Scope (Không làm)', placeholder: 'Những gì KHÔNG làm trong v1', required: false, rows: 2, tip: '💡 Giúp AI hiểu ranh giới dự án' },
         ]
     },
     {
@@ -310,6 +314,56 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
+    const [hasDraft, setHasDraft] = useState(false);
+
+    // Load draft from localStorage on mount
+    useEffect(() => {
+        const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+        if (savedDraft) {
+            try {
+                const parsed = JSON.parse(savedDraft);
+                if (parsed.data && Object.keys(parsed.data).length > 0) {
+                    setHasDraft(true);
+                }
+            } catch (e) {
+                // Invalid draft, ignore
+            }
+        }
+    }, []);
+
+    // Save draft to localStorage whenever data changes
+    useEffect(() => {
+        if (Object.keys(wizardData).length > 0) {
+            localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({
+                data: wizardData,
+                step: currentStep,
+                savedAt: new Date().toISOString()
+            }));
+        }
+    }, [wizardData, currentStep]);
+
+    // Load saved draft
+    const loadDraft = () => {
+        const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+        if (savedDraft) {
+            try {
+                const parsed = JSON.parse(savedDraft);
+                setWizardData(parsed.data || {});
+                setCurrentStep(parsed.step || 1);
+                setHasDraft(false);
+            } catch (e) {
+                // Invalid draft
+            }
+        }
+    };
+
+    // Clear draft
+    const clearDraft = () => {
+        localStorage.removeItem(DRAFT_STORAGE_KEY);
+        setWizardData({});
+        setCurrentStep(1);
+        setHasDraft(false);
+    };
 
     const currentStepConfig = WIZARD_STEPS.find(s => s.id === currentStep)!;
 
@@ -317,6 +371,29 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
     const shouldSkipStep = (step: typeof WIZARD_STEPS[0]) => {
         if (!step.skipCondition) return false;
         return wizardData[step.skipCondition] === step.skipValue;
+    };
+
+    // Check if can jump to a specific step (only if previous steps are complete)
+    const canJumpToStep = (targetStep: number): boolean => {
+        if (targetStep <= currentStep) return true; // Can always go back
+        // Check if all previous required steps are complete
+        for (let i = 1; i < targetStep; i++) {
+            const step = WIZARD_STEPS.find(s => s.id === i);
+            if (!step) continue;
+            if (shouldSkipStep(step)) continue;
+            // Check required fields
+            const requiredFields = step.fields.filter(f => f.required);
+            const allFilled = requiredFields.every(f => wizardData[f.id]?.trim());
+            if (!allFilled) return false;
+        }
+        return true;
+    };
+
+    // Handle step click (jump to step)
+    const handleStepClick = (stepId: number) => {
+        if (canJumpToStep(stepId) && !shouldSkipStep(WIZARD_STEPS.find(s => s.id === stepId)!)) {
+            setCurrentStep(stepId);
+        }
     };
 
     // Get next valid step
@@ -408,6 +485,33 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                 </div>
             </div>
 
+            {/* Draft Banner */}
+            {hasDraft && (
+                <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <span className="text-2xl">📝</span>
+                        <div>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">Bạn có bản nháp chưa hoàn thành</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">Tiếp tục từ lần trước hoặc bắt đầu mới</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={loadDraft}
+                            className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors font-medium"
+                        >
+                            Tiếp tục
+                        </button>
+                        <button
+                            onClick={clearDraft}
+                            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                        >
+                            Bắt đầu mới
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Progress Bar */}
             <div className="mb-8">
                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
@@ -422,24 +526,30 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                 </div>
             </div>
 
-            {/* Step Indicators */}
+            {/* Step Indicators - Clickable */}
             <div className="flex justify-between mb-8 overflow-x-auto pb-2">
                 {WIZARD_STEPS.map(step => {
                     const isSkipped = shouldSkipStep(step);
                     const isActive = step.id === currentStep;
                     const isCompleted = step.id < currentStep;
+                    const canJump = canJumpToStep(step.id) && !isSkipped;
 
                     return (
-                        <div
+                        <button
                             key={step.id}
-                            className={`flex flex-col items-center min-w-[60px] ${isSkipped ? 'opacity-30' : ''}`}
+                            onClick={() => handleStepClick(step.id)}
+                            disabled={!canJump}
+                            title={isSkipped ? 'Step bị bỏ qua' : canJump ? `Nhấn để đến ${step.name}` : 'Hoàn thành các step trước để mở khóa'}
+                            className={`flex flex-col items-center min-w-[60px] transition-all ${isSkipped ? 'opacity-30 cursor-not-allowed' : canJump ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed'}`}
                         >
                             <div
                                 className={`w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all ${isActive
                                     ? 'bg-blue-500 text-white ring-4 ring-blue-200 dark:ring-blue-800'
                                     : isCompleted
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500'
+                                        ? 'bg-green-500 text-white hover:bg-green-600'
+                                        : canJump
+                                            ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                            : 'bg-gray-200 dark:bg-gray-700 text-gray-400'
                                     }`}
                             >
                                 {isCompleted ? '✓' : step.icon}
@@ -447,7 +557,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                             <span className={`text-xs mt-1 text-center ${isActive ? 'font-bold text-blue-600' : 'text-gray-500'}`}>
                                 {step.name}
                             </span>
-                        </div>
+                        </button>
                     );
                 })}
             </div>
@@ -521,6 +631,13 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                                             <option key={opt} value={opt}>{opt}</option>
                                         ))}
                                     </select>
+                                )}
+
+                                {/* Field Tip */}
+                                {field.tip && (
+                                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 italic">
+                                        {field.tip}
+                                    </p>
                                 )}
                             </div>
                         ))}

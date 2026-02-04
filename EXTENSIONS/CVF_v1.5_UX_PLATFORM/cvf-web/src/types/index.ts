@@ -22,6 +22,10 @@ export interface Template {
     fields: TemplateField[];
     intentPattern: string;
     outputExpected: string[];
+    // Folder support
+    isFolder?: boolean;        // This template is a folder containing child templates
+    parentFolder?: string;     // ID of parent folder template (for child templates)
+    folderName?: string;       // Display name when inside folder
 }
 
 export interface Execution {

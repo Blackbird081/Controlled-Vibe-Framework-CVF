@@ -21,10 +21,12 @@ import {
   SecurityAssessmentWizard,
   ResearchProjectWizard,
   SystemDesignWizard,
+  ContentStrategyWizard,
+  DataAnalysisWizard,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 
-type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard';
+type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard';
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -108,6 +110,16 @@ export default function Home() {
     // Check if this is the system design wizard template
     if (template.id === 'system_design_wizard') {
       setAppState('system-wizard');
+      return;
+    }
+    // Check if this is the content strategy wizard template
+    if (template.id === 'content_strategy_wizard') {
+      setAppState('content-wizard');
+      return;
+    }
+    // Check if this is the data analysis wizard template
+    if (template.id === 'data_analysis_wizard') {
+      setAppState('data-wizard');
       return;
     }
     setSelectedTemplate(template);
@@ -324,6 +336,16 @@ export default function Home() {
         {/* SYSTEM DESIGN WIZARD STATE */}
         {appState === 'system-wizard' && (
           <SystemDesignWizard onBack={handleBack} />
+        )}
+
+        {/* CONTENT STRATEGY WIZARD STATE */}
+        {appState === 'content-wizard' && (
+          <ContentStrategyWizard onBack={handleBack} />
+        )}
+
+        {/* DATA ANALYSIS WIZARD STATE */}
+        {appState === 'data-wizard' && (
+          <DataAnalysisWizard onBack={handleBack} />
         )}
 
         {/* PROCESSING STATE */}

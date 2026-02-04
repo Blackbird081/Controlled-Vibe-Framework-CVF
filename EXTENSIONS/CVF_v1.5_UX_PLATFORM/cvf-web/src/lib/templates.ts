@@ -177,6 +177,17 @@ SUCCESS CRITERIA:
     },
 
     // CONTENT TEMPLATES
+    // Content Strategy Wizard - Multi-step
+    {
+        id: 'content_strategy_wizard',
+        name: '✍️ Content Strategy Wizard',
+        icon: '✍️',
+        description: 'Multi-step wizard tạo Content Strategy qua 5 bước. Brand → Audience → Pillars → Channels → Review',
+        category: 'content',
+        fields: [],
+        intentPattern: '',
+        outputExpected: ['Content Strategy', 'Editorial Calendar', 'Content Pillars', 'Channel Plan'],
+    },
     {
         id: 'documentation',
         name: 'Documentation',
@@ -243,6 +254,17 @@ SUCCESS CRITERIA:
         fields: [],
         intentPattern: '',
         outputExpected: ['Research Proposal', 'Methodology', 'Literature Review Outline', 'Timeline'],
+    },
+    // Data Analysis Wizard - Multi-step
+    {
+        id: 'data_analysis_wizard',
+        name: '📊 Data Analysis Wizard',
+        icon: '📊',
+        description: 'Multi-step wizard tạo Data Analysis Plan qua 5 bước. Problem → Understanding → Methodology → Deliverables → Review',
+        category: 'research',
+        fields: [],
+        intentPattern: '',
+        outputExpected: ['Analysis Plan', 'Data Profile', 'Methodology', 'Deliverables'],
     },
     {
         id: 'data_analysis',

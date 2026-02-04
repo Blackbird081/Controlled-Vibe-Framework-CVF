@@ -14,3 +14,5 @@ export { BusinessStrategyWizard } from './BusinessStrategyWizard';
 export { SecurityAssessmentWizard } from './SecurityAssessmentWizard';
 export { ResearchProjectWizard } from './ResearchProjectWizard';
 export { SystemDesignWizard } from './SystemDesignWizard';
+export { ContentStrategyWizard } from './ContentStrategyWizard';
+export { DataAnalysisWizard } from './DataAnalysisWizard';

@@ -190,6 +190,21 @@ export default function Home() {
       setCurrentOutput('');
     } else if (appState === 'history') {
       setAppState('home');
+    } else if (appState === 'skills') {
+      setAppState('home');
+    } else if (
+      appState === 'wizard' ||
+      appState === 'product-wizard' ||
+      appState === 'marketing-wizard' ||
+      appState === 'business-wizard' ||
+      appState === 'security-wizard' ||
+      appState === 'research-wizard' ||
+      appState === 'system-wizard' ||
+      appState === 'content-wizard' ||
+      appState === 'data-wizard'
+    ) {
+      // Return to home from any wizard
+      setAppState('home');
     }
   }, [appState]);
 

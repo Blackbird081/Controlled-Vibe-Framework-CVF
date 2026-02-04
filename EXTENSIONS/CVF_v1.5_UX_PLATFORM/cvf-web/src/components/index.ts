@@ -11,3 +11,6 @@ export { AppBuilderWizard } from './AppBuilderWizard';
 export { ProductDesignWizard } from './ProductDesignWizard';
 export { MarketingCampaignWizard } from './MarketingCampaignWizard';
 export { BusinessStrategyWizard } from './BusinessStrategyWizard';
+export { SecurityAssessmentWizard } from './SecurityAssessmentWizard';
+export { ResearchProjectWizard } from './ResearchProjectWizard';
+export { SystemDesignWizard } from './SystemDesignWizard';

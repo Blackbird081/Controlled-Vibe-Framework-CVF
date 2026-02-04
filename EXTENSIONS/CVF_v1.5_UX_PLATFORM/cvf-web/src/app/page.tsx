@@ -18,10 +18,13 @@ import {
   ProductDesignWizard,
   MarketingCampaignWizard,
   BusinessStrategyWizard,
+  SecurityAssessmentWizard,
+  ResearchProjectWizard,
+  SystemDesignWizard,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 
-type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard';
+type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard';
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -90,6 +93,21 @@ export default function Home() {
     // Check if this is the business strategy wizard template
     if (template.id === 'business_strategy_wizard') {
       setAppState('business-wizard');
+      return;
+    }
+    // Check if this is the security assessment wizard template
+    if (template.id === 'security_assessment_wizard') {
+      setAppState('security-wizard');
+      return;
+    }
+    // Check if this is the research project wizard template
+    if (template.id === 'research_project_wizard') {
+      setAppState('research-wizard');
+      return;
+    }
+    // Check if this is the system design wizard template
+    if (template.id === 'system_design_wizard') {
+      setAppState('system-wizard');
       return;
     }
     setSelectedTemplate(template);
@@ -291,6 +309,21 @@ export default function Home() {
         {/* BUSINESS STRATEGY WIZARD STATE */}
         {appState === 'business-wizard' && (
           <BusinessStrategyWizard onBack={handleBack} />
+        )}
+
+        {/* SECURITY ASSESSMENT WIZARD STATE */}
+        {appState === 'security-wizard' && (
+          <SecurityAssessmentWizard onBack={handleBack} />
+        )}
+
+        {/* RESEARCH PROJECT WIZARD STATE */}
+        {appState === 'research-wizard' && (
+          <ResearchProjectWizard onBack={handleBack} />
+        )}
+
+        {/* SYSTEM DESIGN WIZARD STATE */}
+        {appState === 'system-wizard' && (
+          <SystemDesignWizard onBack={handleBack} />
         )}
 
         {/* PROCESSING STATE */}

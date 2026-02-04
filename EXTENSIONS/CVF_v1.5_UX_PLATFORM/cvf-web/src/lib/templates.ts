@@ -106,6 +106,17 @@ SUCCESS CRITERIA:
     },
 
     // TECHNICAL TEMPLATES
+    // System Design Wizard - Multi-step
+    {
+        id: 'system_design_wizard',
+        name: '🔧 System Design Wizard',
+        icon: '🔧',
+        description: 'Multi-step wizard tạo System Design Document qua 5 bước. Requirements → Estimations → Design → Deep Dive → Review',
+        category: 'technical',
+        fields: [],
+        intentPattern: '',
+        outputExpected: ['System Design Doc', 'Architecture Diagram', 'API Design', 'Scaling Strategy'],
+    },
     {
         id: 'code_review',
         name: 'Code Review',
@@ -222,6 +233,17 @@ SUCCESS CRITERIA:
     },
 
     // RESEARCH TEMPLATES
+    // Research Project Wizard - Multi-step
+    {
+        id: 'research_project_wizard',
+        name: '🔬 Research Project Wizard',
+        icon: '🔬',
+        description: 'Multi-step wizard tạo Research Proposal qua 4 bước. Question → Methodology → Resources → Review',
+        category: 'research',
+        fields: [],
+        intentPattern: '',
+        outputExpected: ['Research Proposal', 'Methodology', 'Literature Review Outline', 'Timeline'],
+    },
     {
         id: 'data_analysis',
         name: 'Data Analysis',
@@ -729,6 +751,17 @@ SUCCESS CRITERIA:
     },
 
     // SECURITY & COMPLIANCE TEMPLATES (Phase 3)
+    // Security Assessment Wizard - Multi-step
+    {
+        id: 'security_assessment_wizard',
+        name: '🔐 Security Assessment Wizard',
+        icon: '🔐',
+        description: 'Multi-step wizard tạo Security Assessment Report qua 5 bước. Scope → Threats → Vulns → Risk → Review',
+        category: 'security',
+        fields: [],
+        intentPattern: '',
+        outputExpected: ['Security Assessment', 'Threat Model', 'Risk Matrix', 'Remediation Plan'],
+    },
     {
         id: 'api_security',
         name: 'API Security Checklist',

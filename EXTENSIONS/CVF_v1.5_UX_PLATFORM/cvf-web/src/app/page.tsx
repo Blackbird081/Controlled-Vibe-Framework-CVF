@@ -35,6 +35,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentOutput, setCurrentOutput] = useState('');
   const [currentInput, setCurrentInput] = useState<Record<string, string>>({});
+  const [currentIntent, setCurrentIntent] = useState('');
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   const { executions, addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
@@ -129,6 +130,7 @@ export default function Home() {
 
   const handleFormSubmit = useCallback((values: Record<string, string>, intent: string) => {
     setCurrentInput(values);
+    setCurrentIntent(intent);
 
     // Create new execution
     const execution: Execution = {
@@ -371,6 +373,9 @@ export default function Home() {
         {appState === 'processing' && selectedTemplate && (
           <ProcessingScreen
             templateName={selectedTemplate.name}
+            templateId={selectedTemplate.id}
+            inputs={currentInput}
+            intent={currentIntent}
             onComplete={handleProcessingComplete}
             onCancel={handleBack}
           />

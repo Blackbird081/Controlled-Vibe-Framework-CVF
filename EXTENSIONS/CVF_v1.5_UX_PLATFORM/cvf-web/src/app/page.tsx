@@ -26,10 +26,12 @@ import {
   SkillLibrary,
   TemplatePreviewModal,
   AnalyticsDashboard,
+  TemplateMarketplace,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
+import { LanguageSwitcher } from '@/lib/i18n';
 
-type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills';
+type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'marketplace' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills';
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -205,6 +207,8 @@ export default function Home() {
       setAppState('home');
     } else if (appState === 'analytics') {
       setAppState('home');
+    } else if (appState === 'marketplace') {
+      setAppState('home');
     } else if (
       appState === 'wizard' ||
       appState === 'product-wizard' ||
@@ -282,11 +286,22 @@ export default function Home() {
               >
                 📊 Analytics
               </button>
+              <button
+                onClick={() => setAppState('marketplace')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                           ${appState === 'marketplace'
+                    ? 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+              >
+                🏪 Marketplace
+              </button>
+              <LanguageSwitcher />
               <ThemeToggle />
             </nav>
 
             {/* Mobile Menu Button */}
             <div className="flex md:hidden items-center gap-2">
+              <LanguageSwitcher />
               <ThemeToggle />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -341,6 +356,15 @@ export default function Home() {
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
                 📊 Analytics
+              </button>
+              <button
+                onClick={() => { setAppState('marketplace'); setMobileMenuOpen(false); }}
+                className={`w-full px-4 py-3 rounded-lg text-left font-medium transition-colors
+                           ${appState === 'marketplace'
+                    ? 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+              >
+                🏪 Marketplace
               </button>
             </nav>
           )}
@@ -516,6 +540,11 @@ export default function Home() {
             </div>
             <AnalyticsDashboard />
           </div>
+        )}
+
+        {/* MARKETPLACE STATE */}
+        {appState === 'marketplace' && (
+          <TemplateMarketplace onBack={handleBack} />
         )}
       </main>
 

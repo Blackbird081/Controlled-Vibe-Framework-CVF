@@ -1,7 +1,7 @@
 # CVF Skill Library - Roadmap
 
 > **CVF Skill Library v1.5.2**  
-> **Last Updated:** 2026-02-03
+> **Last Updated:** 2026-02-04
 
 ---
 
@@ -12,8 +12,11 @@
 | Phase 1 | Marketing & SEO | 9 | ✅ **DONE** |
 | Phase 2 | Product & UX | 8 | ✅ **DONE** |
 | Phase 3 | Security & Compliance | 6 | ✅ **DONE** |
+| Phase 3.5 | App Development | 8 | ✅ **DONE** |
+| Phase 4 | Finance & Analytics | 8 | ✅ **DONE** |
 | Legacy | General Skills | 14 | ✅ Có sẵn |
-| **TỔNG** | **4 Domains** | **37** | **Phase 1-3 Complete** |
+| **TỔNG** | **6 Domains** | **53** | **Phase 1-4 Complete** |
+
 
 ---
 
@@ -73,26 +76,37 @@
 
 ---
 
-## 🔮 Phase 4+: Future Expansion
+## ✅ Phase 4: Finance & Analytics — COMPLETE
+
+**Location:** `finance_analytics/`
+
+| Skill | Description |
+|-------|-------------|
+| Budget Analysis | Variance analysis, allocation review |
+| Financial Statement Review | Balance sheet, P&L, ratios |
+| ROI Calculator Review | Investment return calculations |
+| KPI Dashboard Audit | Metric selection, visualization |
+| Cash Flow Analysis | Working capital, runway projection |
+| Investment Due Diligence | Pre-investment checklist |
+| Financial Risk Assessment | Risk identification & mitigation |
+| Revenue Forecast Review | Projection methodology |
+
+**Commit:** `TBD` (2026-02-04)
+
+---
+
+## 🔮 Phase 5+: Future Expansion
 
 ### Potential Domains:
 
 | Domain | Skills | Priority |
 |--------|:------:|----------|
-| **Finance & Analytics** | 6-8 | Medium |
 | **HR & Operations** | 5-6 | Low |
 | **Legal & Contracts** | 4-5 | Low |
 | **AI/ML Evaluation** | 5-6 | Medium |
 
-### Finance & Analytics Ideas:
-- Financial Statement Review
-- Budget Analysis
-- ROI Calculator Review
-- KPI Dashboard Audit
-- Cash Flow Analysis
-- Investment Due Diligence
+> **Note:** Phase 5+ sẽ dựa trên user feedback và nhu cầu thực tế.
 
-> **Note:** Phase 4+ sẽ dựa trên user feedback và nhu cầu thực tế.
 
 ---
 

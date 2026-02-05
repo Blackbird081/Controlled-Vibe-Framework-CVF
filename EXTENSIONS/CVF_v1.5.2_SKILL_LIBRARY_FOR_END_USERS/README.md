@@ -7,10 +7,10 @@
 
 | Metric | Value |
 |--------|-------|
-| **Tổng Skills** | **45 skills** |
-| **Domains** | 5 domains |
+| **Tổng Skills** | **53 skills** |
+| **Domains** | 6 domains |
 | **Legacy (skills/)** | 14 skills |
-| **New (Phase 1-4)** | 31 skills |
+| **New (Phase 1-4)** | 39 skills |
 
 ## 🗂️ Domains
 
@@ -82,10 +82,24 @@ Requirements → Tech Stack → Architecture → Database/API → App Spec → D
 
 ---
 
-### 📚 [Legacy Skills](skills/) (Original)
-14 skills từ version gốc - general business và coding
+### 💰 [Finance & Analytics](finance_analytics/) (Phase 4) ⭐ NEW!
+8 skills cho financial analysis, budgeting, và forecasting
+
+| Skill | Difficulty |
+|-------|------------|
+| Budget Analysis | Easy |
+| Financial Statement Review | Medium |
+| ROI Calculator Review | Easy |
+| KPI Dashboard Audit | Medium |
+| Cash Flow Analysis | Medium |
+| Investment Due Diligence | Advanced |
+| Financial Risk Assessment | Medium |
+| Revenue Forecast Review | Medium |
 
 ---
+
+### 📚 [Legacy Skills](skills/) (Original)
+14 skills từ version gốc - general business và coding
 
 ## 🎯 Cách sử dụng
 

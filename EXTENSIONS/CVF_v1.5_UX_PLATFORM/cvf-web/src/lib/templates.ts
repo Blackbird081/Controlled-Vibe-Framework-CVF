@@ -45,6 +45,25 @@ SUCCESS CRITERIA:
 - Xác định rủi ro chính  
 - Đưa ra khuyến nghị có căn cứ`,
         outputExpected: ['Executive Summary', 'SWOT Analysis', 'Options Comparison', 'Risk Assessment', 'Recommendations'],
+        sampleOutput: `# Strategy Analysis: Market Expansion
+
+## Executive Summary
+Strategic analysis suggests that expanding into the Central region is a viable growth path (Score: 8.5/10), provided that logistics challenges can be mitigated.
+
+## ROI Analysis
+- **Estimated Cost:** $500,000
+- **Projected Revenue (Year 1):** $1,200,000
+- **Break-even Point:** Month 9
+
+## Strategic Options
+| Option | Pros | Cons |
+|--------|------|------|
+| **Direct Expansion** | High control, higher margins | High capex, slow rollout |
+| **Partnership** | Fast market entry, low risk | Lower margins, brand dilution risk |
+
+## Recommendation
+Proceed with **Partnership** model for the first 12 months to test market demand before committing significant Capex.
+`,
     },
     {
         id: 'risk_assessment',

@@ -22,6 +22,7 @@ export interface Template {
     fields: TemplateField[];
     intentPattern: string;
     outputExpected: string[];
+    sampleOutput?: string; // Markdown content for preview
     // Folder support
     isFolder?: boolean;        // This template is a folder containing child templates
     parentFolder?: string;     // ID of parent folder template (for child templates)

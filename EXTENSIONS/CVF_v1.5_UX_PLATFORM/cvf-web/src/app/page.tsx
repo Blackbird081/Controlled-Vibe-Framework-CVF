@@ -24,6 +24,7 @@ import {
   ContentStrategyWizard,
   DataAnalysisWizard,
   SkillLibrary,
+  TemplatePreviewModal,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 
@@ -32,6 +33,7 @@ type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard'
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentOutput, setCurrentOutput] = useState('');
   const [currentInput, setCurrentInput] = useState<Record<string, string>>({});
@@ -74,7 +76,7 @@ export default function Home() {
   })();
 
   const handleSelectTemplate = useCallback((template: Template) => {
-    // Check if this is a folder
+    // If it's a folder, enter it
     if (template.isFolder) {
       setCurrentFolder(template.id);
       return;
@@ -126,6 +128,11 @@ export default function Home() {
     }
     setSelectedTemplate(template);
     setAppState('form');
+  }, []);
+
+  const handlePreviewTemplate = useCallback((e: React.MouseEvent, template: Template) => {
+    e.stopPropagation();
+    setPreviewTemplate(template);
   }, []);
 
   const handleFormSubmit = useCallback((values: Record<string, string>, intent: string) => {
@@ -309,6 +316,7 @@ export default function Home() {
                   key={template.id}
                   template={template}
                   onClick={() => handleSelectTemplate(template)}
+                  onPreview={(e) => handlePreviewTemplate(e, template)}
                 />
               ))}
             </div>
@@ -430,6 +438,14 @@ export default function Home() {
 
       {/* Floating Quick Reference Button */}
       <QuickReference />
+
+      {/* Preview Modal */}
+      <TemplatePreviewModal
+        isOpen={!!previewTemplate}
+        onClose={() => setPreviewTemplate(null)}
+        templateName={previewTemplate?.name || ''}
+        sampleOutput={previewTemplate?.sampleOutput}
+      />
     </div>
   );
 }

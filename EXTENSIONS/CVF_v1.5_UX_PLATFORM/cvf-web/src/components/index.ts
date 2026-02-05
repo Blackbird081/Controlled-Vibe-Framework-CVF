@@ -1,3 +1,4 @@
+export * from './AnalyticsDashboard';
 export * from './AppBuilderWizard';
 export * from './BusinessStrategyWizard';
 export * from './CategoryTabs';

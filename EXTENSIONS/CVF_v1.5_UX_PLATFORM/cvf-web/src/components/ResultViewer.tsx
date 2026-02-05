@@ -202,8 +202,8 @@ ${cleanOutput}
                                         <button
                                             onClick={() => setExportLang('vi')}
                                             className={`px-3 py-1 text-xs rounded ${exportLang === 'vi'
-                                                    ? 'bg-blue-600 text-white'
-                                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                                                ? 'bg-blue-600 text-white'
+                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                                                 }`}
                                         >
                                             🇻🇳 Tiếng Việt
@@ -211,8 +211,8 @@ ${cleanOutput}
                                         <button
                                             onClick={() => setExportLang('en')}
                                             className={`px-3 py-1 text-xs rounded ${exportLang === 'en'
-                                                    ? 'bg-blue-600 text-white'
-                                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                                                ? 'bg-blue-600 text-white'
+                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                                                 }`}
                                         >
                                             🇺🇸 English
@@ -269,11 +269,11 @@ ${cleanOutput}
             </div>
 
             {/* Action Buttons */}
-            <div className="mt-8 flex items-center justify-center gap-4">
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <button
                     onClick={onAccept}
-                    className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg
-                     shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                    className="w-full sm:w-auto px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg
+                     shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
                 >
                     <span>✅</span>
                     <span>Accept</span>
@@ -281,8 +281,8 @@ ${cleanOutput}
 
                 <button
                     onClick={onReject}
-                    className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg
-                     shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                    className="w-full sm:w-auto px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg
+                     shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
                 >
                     <span>❌</span>
                     <span>Reject</span>
@@ -290,9 +290,9 @@ ${cleanOutput}
 
                 <button
                     onClick={onRetry}
-                    className="px-8 py-3 border border-gray-300 dark:border-gray-600 
+                    className="w-full sm:w-auto px-8 py-3 border border-gray-300 dark:border-gray-600 
                      hover:bg-gray-100 dark:hover:bg-gray-800
-                     font-semibold rounded-lg transition-all duration-200 flex items-center gap-2"
+                     font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
                 >
                     <span>↻</span>
                     <span>Retry</span>

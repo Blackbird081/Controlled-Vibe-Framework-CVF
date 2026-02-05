@@ -25,10 +25,11 @@ import {
   DataAnalysisWizard,
   SkillLibrary,
   TemplatePreviewModal,
+  AnalyticsDashboard,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 
-type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills';
+type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills';
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -39,6 +40,7 @@ export default function Home() {
   const [currentInput, setCurrentInput] = useState<Record<string, string>>({});
   const [currentIntent, setCurrentIntent] = useState('');
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { executions, addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
 
@@ -201,6 +203,8 @@ export default function Home() {
       setAppState('home');
     } else if (appState === 'skills') {
       setAppState('home');
+    } else if (appState === 'analytics') {
+      setAppState('home');
     } else if (
       appState === 'wizard' ||
       appState === 'product-wizard' ||
@@ -236,14 +240,15 @@ export default function Home() {
       <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" onClick={() => { setAppState('home'); setSelectedTemplate(null); }}>
+            <Link href="/" onClick={() => { setAppState('home'); setSelectedTemplate(null); setMobileMenuOpen(false); }}>
               <h1 className="text-xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
                 <span>🎯</span>
                 <span>CVF v1.5</span>
               </h1>
             </Link>
 
-            <nav className="flex items-center gap-4">
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-4">
               <button
                 onClick={() => setAppState('skills')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
@@ -268,9 +273,77 @@ export default function Home() {
               >
                 📜 History ({executions.length})
               </button>
+              <button
+                onClick={() => setAppState('analytics')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                           ${appState === 'analytics'
+                    ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+              >
+                📊 Analytics
+              </button>
               <ThemeToggle />
             </nav>
+
+            {/* Mobile Menu Button */}
+            <div className="flex md:hidden items-center gap-2">
+              <ThemeToggle />
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                {mobileMenuOpen ? (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {mobileMenuOpen && (
+            <nav className="md:hidden mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex flex-col gap-2">
+              <button
+                onClick={() => { setAppState('skills'); setMobileMenuOpen(false); }}
+                className={`w-full px-4 py-3 rounded-lg text-left font-medium transition-colors
+                           ${appState === 'skills'
+                    ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+              >
+                📚 Skills
+              </button>
+              <Link
+                href="/help"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full px-4 py-3 rounded-lg text-left font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                📖 Hướng dẫn
+              </Link>
+              <button
+                onClick={() => { setAppState('history'); setMobileMenuOpen(false); }}
+                className={`w-full px-4 py-3 rounded-lg text-left font-medium transition-colors
+                           ${appState === 'history'
+                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+              >
+                📜 History ({executions.length})
+              </button>
+              <button
+                onClick={() => { setAppState('analytics'); setMobileMenuOpen(false); }}
+                className={`w-full px-4 py-3 rounded-lg text-left font-medium transition-colors
+                           ${appState === 'analytics'
+                    ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+              >
+                📊 Analytics
+              </button>
+            </nav>
+          )}
         </div>
       </header>
 
@@ -424,6 +497,24 @@ export default function Home() {
               executions={executions}
               onSelect={handleHistorySelect}
             />
+          </div>
+        )}
+
+        {/* ANALYTICS STATE */}
+        {appState === 'analytics' && (
+          <div>
+            <div className="flex items-center gap-4 mb-8">
+              <button
+                onClick={handleBack}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <h2 className="text-2xl font-bold">📊 Analytics</h2>
+            </div>
+            <AnalyticsDashboard />
           </div>
         )}
       </main>

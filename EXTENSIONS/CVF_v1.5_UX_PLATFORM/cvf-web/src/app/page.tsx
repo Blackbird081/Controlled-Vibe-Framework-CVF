@@ -229,7 +229,6 @@ export default function Home() {
       {showOnboarding && (
         <OnboardingWizard
           onComplete={handleOnboardingComplete}
-          onSkip={handleOnboardingComplete}
         />
       )}
 

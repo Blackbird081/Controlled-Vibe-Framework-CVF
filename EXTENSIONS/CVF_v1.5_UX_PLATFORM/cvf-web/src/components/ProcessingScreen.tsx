@@ -1,18 +1,91 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 interface ProcessingScreenProps {
     templateName: string;
+    templateId?: string;
+    inputs?: Record<string, string>;
+    intent?: string;
     onComplete: (output: string) => void;
     onCancel: () => void;
 }
 
-export function ProcessingScreen({ templateName, onComplete, onCancel }: ProcessingScreenProps) {
+export function ProcessingScreen({
+    templateName,
+    templateId,
+    inputs,
+    intent,
+    onComplete,
+    onCancel
+}: ProcessingScreenProps) {
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState('Initializing...');
+    const [error, setError] = useState<string | null>(null);
+    const [isRealExecution, setIsRealExecution] = useState(false);
+
+    // Real API execution
+    const executeReal = useCallback(async () => {
+        if (!inputs || !intent) return false;
+
+        try {
+            setStatus('Connecting to AI provider...');
+            setProgress(10);
+
+            const response = await fetch('/api/execute', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    templateId: templateId || templateName,
+                    templateName,
+                    inputs,
+                    intent,
+                }),
+            });
+
+            setProgress(50);
+            setStatus('Processing response...');
+
+            const data = await response.json();
+
+            setProgress(90);
+            setStatus('Finalizing...');
+
+            if (data.success && data.output) {
+                setProgress(100);
+                setTimeout(() => {
+                    onComplete(data.output);
+                }, 300);
+                return true;
+            } else {
+                // If real execution fails, show error but fall back to mock
+                setError(data.error || 'API execution failed');
+                return false;
+            }
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Network error');
+            return false;
+        }
+    }, [templateId, templateName, inputs, intent, onComplete]);
 
     useEffect(() => {
+        // Try real execution first if we have the required data
+        if (inputs && intent && Object.keys(inputs).length > 0) {
+            setIsRealExecution(true);
+            executeReal().then(success => {
+                if (!success) {
+                    // Fall back to mock on failure
+                    setIsRealExecution(false);
+                    runMockExecution();
+                }
+            });
+        } else {
+            // No inputs provided, use mock
+            runMockExecution();
+        }
+    }, [inputs, intent, executeReal]);
+
+    const runMockExecution = () => {
         const statuses = [
             'Initializing...',
             'Parsing intent...',
@@ -25,13 +98,11 @@ export function ProcessingScreen({ templateName, onComplete, onCancel }: Process
             setProgress((prev) => {
                 const next = prev + Math.random() * 15;
 
-                // Update status based on progress
                 const statusIndex = Math.min(Math.floor(next / 25), statuses.length - 1);
                 setStatus(statuses[statusIndex]);
 
                 if (next >= 100) {
                     clearInterval(interval);
-                    // Simulate completion with mock output
                     setTimeout(() => {
                         onComplete(generateMockOutput(templateName));
                     }, 500);
@@ -42,7 +113,7 @@ export function ProcessingScreen({ templateName, onComplete, onCancel }: Process
         }, 300);
 
         return () => clearInterval(interval);
-    }, [templateName, onComplete]);
+    };
 
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center">
@@ -54,23 +125,38 @@ export function ProcessingScreen({ templateName, onComplete, onCancel }: Process
                         className="absolute inset-0 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"
                     />
                     <div className="absolute inset-0 flex items-center justify-center text-3xl">
-                        ⏳
+                        {isRealExecution ? '🤖' : '⏳'}
                     </div>
                 </div>
 
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    Processing...
+                    {isRealExecution ? 'AI Processing...' : 'Processing...'}
                 </h2>
 
-                <p className="text-gray-600 dark:text-gray-400 mb-8">
+                <p className="text-gray-600 dark:text-gray-400 mb-2">
                     {status}
                 </p>
+
+                {isRealExecution && (
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 mb-4">
+                        🔗 Connected to AI Provider
+                    </p>
+                )}
+
+                {error && (
+                    <p className="text-sm text-amber-600 dark:text-amber-400 mb-4">
+                        ⚠️ {error} — Using demo mode
+                    </p>
+                )}
 
                 {/* Progress bar */}
                 <div className="w-80 mx-auto">
                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div
-                            className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-300"
+                            className={`h-full rounded-full transition-all duration-300 ${isRealExecution
+                                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600'
+                                    : 'bg-gradient-to-r from-blue-500 to-blue-600'
+                                }`}
                             style={{ width: `${progress}%` }}
                         />
                     </div>
@@ -79,9 +165,11 @@ export function ProcessingScreen({ templateName, onComplete, onCancel }: Process
                     </p>
                 </div>
 
-                <p className="mt-4 text-sm text-gray-500">
-                    Estimated: {Math.max(1, Math.round((100 - progress) / 10))} seconds
-                </p>
+                {!isRealExecution && (
+                    <p className="mt-4 text-sm text-gray-500">
+                        Estimated: {Math.max(1, Math.round((100 - progress) / 10))} seconds
+                    </p>
+                )}
 
                 <button
                     onClick={onCancel}

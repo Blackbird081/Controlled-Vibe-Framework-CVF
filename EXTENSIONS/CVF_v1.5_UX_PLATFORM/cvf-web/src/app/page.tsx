@@ -27,6 +27,7 @@ import {
   TemplatePreviewModal,
   AnalyticsDashboard,
   TemplateMarketplace,
+  TourGuide,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 import { LanguageSwitcher } from '@/lib/i18n';
@@ -254,6 +255,7 @@ export default function Home() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-4">
               <button
+                id="tour-nav-skills"
                 onClick={() => setAppState('skills')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
                            ${appState === 'skills'
@@ -278,6 +280,7 @@ export default function Home() {
                 📜 History ({executions.length})
               </button>
               <button
+                id="tour-nav-analytics"
                 onClick={() => setAppState('analytics')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
                            ${appState === 'analytics'
@@ -287,6 +290,7 @@ export default function Home() {
                 📊 Analytics
               </button>
               <button
+                id="tour-nav-marketplace"
                 onClick={() => setAppState('marketplace')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
                            ${appState === 'marketplace'
@@ -295,7 +299,9 @@ export default function Home() {
               >
                 🏪 Marketplace
               </button>
-              <LanguageSwitcher />
+              <div id="tour-lang-switch">
+                <LanguageSwitcher />
+              </div>
               <ThemeToggle />
             </nav>
 
@@ -376,16 +382,18 @@ export default function Home() {
         {/* HOME STATE */}
         {appState === 'home' && (
           <>
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                {currentFolder
-                  ? `📂 ${templates.find(t => t.id === currentFolder)?.name || 'Folder'}`
-                  : 'Chọn template để bắt đầu'
-                }
+            {/* Welcome Section */}
+            <div id="tour-welcome" className="text-center mb-12">
+              <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">
+                  User không cần biết CVF
+                </span>
+                <br />
+                để dùng CVF
               </h2>
               <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 {currentFolder
-                  ? templates.find(t => t.id === currentFolder)?.description
+                  ? `📂 ${templates.find(t => t.id === currentFolder)?.name || 'Folder'}`
                   : 'CVF v1.5 giúp bạn sử dụng AI mà không cần viết prompt. Chỉ cần chọn template, điền form, và nhận kết quả.'
                 }
               </p>
@@ -400,20 +408,23 @@ export default function Home() {
             </div>
 
             {!currentFolder && (
-              <CategoryTabs
-                activeCategory={selectedCategory}
-                onCategoryChange={setSelectedCategory}
-              />
+              <div id="tour-category-tabs">
+                <CategoryTabs
+                  activeCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
+                />
+              </div>
             )}
 
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredTemplates.map((template) => (
-                <TemplateCard
-                  key={template.id}
-                  template={template}
-                  onClick={() => handleSelectTemplate(template)}
-                  onPreview={(e) => handlePreviewTemplate(e, template)}
-                />
+            <div id="tour-template-grid" className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredTemplates.map((template, index) => (
+                <div key={template.id} id={index === 0 ? "tour-template-card" : undefined}>
+                  <TemplateCard
+                    template={template}
+                    onClick={() => handleSelectTemplate(template)}
+                    onPreview={(e) => handlePreviewTemplate(e, template)}
+                  />
+                </div>
               ))}
             </div>
           </>
@@ -557,6 +568,9 @@ export default function Home() {
 
       {/* Floating Quick Reference Button */}
       <QuickReference />
+
+      {/* Guided Tour */}
+      <TourGuide />
 
       {/* Preview Modal */}
       <TemplatePreviewModal

@@ -2,6 +2,7 @@ export * from './AnalyticsDashboard';
 export * from './AppBuilderWizard';
 export * from './BusinessStrategyWizard';
 export * from './TemplateMarketplace';
+export * from './TourGuide';
 export * from './CategoryTabs';
 export * from './ContentStrategyWizard';
 export * from './DataAnalysisWizard';

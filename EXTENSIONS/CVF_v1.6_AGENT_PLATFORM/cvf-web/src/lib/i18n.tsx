@@ -228,10 +228,15 @@ export function LanguageToggle() {
     return (
         <button
             onClick={toggleLanguage}
-            className="px-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-1"
+            className="px-3 py-1.5 text-sm font-bold rounded-lg transition-all
+                      bg-gray-100 dark:bg-gray-700 
+                      text-gray-700 dark:text-gray-200
+                      hover:bg-blue-100 dark:hover:bg-blue-900 
+                      hover:text-blue-600 dark:hover:text-blue-400
+                      border border-gray-200 dark:border-gray-600"
             title={t('lang.current')}
         >
-            {t('lang.switch')}
+            {language === 'vi' ? '🌐 EN' : '🌐 VI'}
         </button>
     );
 }

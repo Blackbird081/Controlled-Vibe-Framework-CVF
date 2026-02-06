@@ -2,30 +2,32 @@
 
 **Framework quản lý dự án theo tinh thần *vibe coding có kiểm soát*.**
 
-> **Current Version:** v1.5.2 | **Latest:** CVF Web UI + Skill Library  
+> **Current Version:** v1.6.0 | **Latest:** CVF Agent Platform 🤖  
 > **Assessment:** 9.40/10 ✅ (Jan 29, 2026)  
-> **Last Updated:** Feb 04, 2026
+> **Last Updated:** Feb 06, 2026
 
 ---
 
-## 🚀 Quick Start (3 Options)
+## 🚀 Quick Start (4 Options)
 
-### Option 1: Web UI (Easiest) ⭐ RECOMMENDED
+### Option 1: Agent Platform (Newest) 🤖 RECOMMENDED
 
 ```bash
-cd EXTENSIONS/CVF_v1.5_UX_PLATFORM/cvf-web
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
 npm install
 npm run dev
 # → http://localhost:3000
 ```
 
-**Features:**
-- 📋 31 templates across 7 categories
-- 📝 Form-based input (không cần viết prompt)
-- 🚦 3 Export Modes: Simple, With Rules, CVF Full Mode
-- 🌐 Bilingual: Vietnamese/English
+**Features v1.6:**
+- 🤖 **AI Agent Chat** - Gemini, OpenAI, Anthropic
+- 🎯 **Multi-Agent Workflow** - Orchestrator, Architect, Builder, Reviewer
+- 🛠️ **8 Agent Tools** - Web search, Code execute, Calculator, etc.
+- 💾 **Chat History** - Persistent conversations
+- 🌐 **Bilingual** - Vietnamese/English
+- 🌙 **Dark Mode** - System-aware theme
 
-### Option 2: SDK (Developers)
+### Option 2: Web UI (Standard)
 
 ```python
 from cvf import Skill, SkillContract, RiskLevel
@@ -68,14 +70,15 @@ result = skill.execute({"email": "Buy now!!!"})
 | CI/CD integration | **v1.3** | [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
 | 👤 Operator Manual | **v1.3.1** | [EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/](./EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) |
 | 🎨 End-user UX Layer | **v1.4** | [EXTENSIONS/CVF_v1.4_USAGE_LAYER/](./EXTENSIONS/CVF_v1.4_USAGE_LAYER/) |
-| 🌐 **Web UI Platform** | **v1.5** | [EXTENSIONS/CVF_v1.5_UX_PLATFORM/](./EXTENSIONS/CVF_v1.5_UX_PLATFORM/) |
-| 📋 **Skill Library (45 skills)** | **v1.5.2** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| 🌐 Web UI Platform | **v1.5** | [EXTENSIONS/CVF_v1.5_UX_PLATFORM/](./EXTENSIONS/CVF_v1.5_UX_PLATFORM/) |
+| 📋 Skill Library (45 skills) | **v1.5.2** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| 🤖 **AI Agent Platform** | **v1.6** ⭐ | [EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/](./EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
 
 ---
 
 ## 📊 So Sánh Phiên Bản
 
-| Tính năng | v1.0 | v1.1 | v1.2 | v1.3 | v1.5 | v1.5.2 |
+| Tính năng | v1.0 | v1.1 | v1.2 | v1.3 | v1.5 | v1.6 ⭐ |
 |-----------|:----:|:----:|:----:|:----:|:----:|:------:|
 | Triết lý core (Outcome > Code) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Phase-based (A→D) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -86,13 +89,15 @@ result = skill.execute({"email": "Buy now!!!"})
 | Skill Registry Model | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
 | Capability Risk Model (R0-R3) | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
 | Python SDK | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| CLI Tool (`cvf-validate`) | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
 | Agent Adapters (Claude/GPT) | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
 | CI/CD Templates | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **🌐 Web UI** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **📋 Form-based Templates** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **🚦 3 Export Modes** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **📚 37 Skills Library** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| 🌐 Web UI | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| 📋 Form-based Templates | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| 🚦 3 Export Modes | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **🤖 AI Agent Chat** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **🎯 Multi-Agent Workflow** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **🛠️ Agent Tools (8)** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **💾 Chat History** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -169,19 +174,22 @@ Controlled-Vibe-Framework-CVF/
 │   ├── CVF_v1.4_USAGE_LAYER/
 │   │   └── Usage Layer Spec
 │   │
-│   ├── CVF_v1.5_UX_PLATFORM/            ⭐ NEW
+│   ├── CVF_v1.5_UX_PLATFORM/
 │   │   ├── cvf-web/           ← Next.js Web App
-│   │   ├── 20_WEB_INTERFACE/
-│   │   ├── 21_TEMPLATE_LIBRARY/
-│   │   └── 22_ANALYTICS/
+│   │   └── 20_WEB_INTERFACE/
 │   │
-│   └── CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/  ⭐ UPDATED
-│       ├── app_development/   ← 8 skills (NEW!)
-│       ├── marketing_seo/     ← 9 skills
-│       ├── product_ux/        ← 8 skills
-│       ├── security_compliance/ ← 6 skills
-│       ├── legacy/            ← 14 skills
-│       └── DIFFICULTY_GUIDE.md ← NEW!
+│   ├── CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/
+│   │   ├── app_development/   ← 8 skills
+│   │   ├── marketing_seo/     ← 9 skills
+│   │   └── ...
+│   │
+│   └── CVF_v1.6_AGENT_PLATFORM/       ⭐ NEW!
+│       ├── cvf-web/           ← AI Agent Web App
+│       │   ├── AgentChat      ← AI Chat Interface
+│       │   ├── MultiAgent     ← 4-Agent Workflow
+│       │   ├── Tools          ← 8 Agent Tools
+│       │   └── i18n           ← VI/EN Support
+│       └── ROADMAP.md         ← Development Plan
 │
 └── docs/
     ├── QUICK_START_INTERNAL.md
@@ -261,29 +269,26 @@ Controlled-Vibe-Framework-CVF/
 
 ---
 
-## 📈 What's New in v1.5.2
+## 📈 What's New in v1.6.0 ⭐
 
-### 🌐 Web UI Features
+### 🤖 AI Agent Platform
+- ✅ **AI Agent Chat** - Chat với Gemini, OpenAI, Anthropic
+- ✅ **Multi-Agent Workflow** - 4 agents: Orchestrator, Architect, Builder, Reviewer
+- ✅ **8 Agent Tools** - Web Search, Code Execute, Calculator, DateTime, JSON Parse, URL Fetch, File R/W
+- ✅ **Chat History** - Lưu trữ persistent conversations
+- ✅ **Provider Switching** - Chuyển đổi AI providers seamlessly
+
+### 🔧 Technical Improvements
+- ✅ **i18n Complete** - 160+ translation keys (Vietnamese/English)
+- ✅ **Error Handling** - ErrorBoundary, Toast notifications, Retry logic
+- ✅ **Performance** - Lazy loading, Dynamic imports
+- ✅ **Security** - Input validation, Sandboxed execution, Rate limiting
+- ✅ **Mobile UI** - Responsive components, Swipe gestures
+
+### 📚 Previous (v1.5.2)
 - ✅ 31 form-based templates
-- ✅ 7 categories (Business, Technical, Content, Research, Marketing, Product, Security)
+- ✅ 45 skills across 5 domains
 - ✅ 3 export modes (Simple, With Rules, CVF Full Mode)
-- ✅ Bilingual support (Vietnamese/English)
-- ✅ AI quick links (ChatGPT, Claude, Gemini)
-- ✅ **NEW!** 3 Guided Wizards (Product Design, Technical Spec, Content Strategy)
-- ✅ **NEW!** Skill Library Viewer in Web UI
-
-### 📚 Skill Library Additions
-- ✅ **NEW!** App Development (8 skills with workflow)
-- ✅ Marketing & SEO (9 skills)
-- ✅ Product & UX (8 skills)
-- ✅ Security & Compliance (6 skills)
-- ✅ **NEW!** Skill Versioning & Prerequisites
-- ✅ **NEW!** Difficulty Guide
-
-### 🚦 CVF Full Mode
-- ✅ Complete 4-phase protocol in exported prompts
-- ✅ AI Role Constraints embedded
-- ✅ Phase gates and checklists
 
 ---
 

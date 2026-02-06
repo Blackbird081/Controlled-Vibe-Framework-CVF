@@ -30,6 +30,8 @@ import {
   TourGuide,
   UserContextForm,
   UserContextBadge,
+  SettingsButton,
+  SettingsPage,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 import { LanguageToggle } from '@/lib/i18n';
@@ -47,6 +49,7 @@ export default function Home() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showUserContext, setShowUserContext] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const { executions, addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
 
@@ -303,6 +306,7 @@ export default function Home() {
                 🏪 Marketplace
               </button>
               <UserContextBadge onClick={() => setShowUserContext(true)} />
+              <SettingsButton onClick={() => setShowSettings(true)} />
               <div id="tour-lang-switch">
                 <LanguageToggle />
               </div>
@@ -589,6 +593,15 @@ export default function Home() {
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="max-w-2xl w-full">
             <UserContextForm onClose={() => setShowUserContext(false)} />
+          </div>
+        </div>
+      )}
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <SettingsPage onClose={() => setShowSettings(false)} />
           </div>
         </div>
       )}

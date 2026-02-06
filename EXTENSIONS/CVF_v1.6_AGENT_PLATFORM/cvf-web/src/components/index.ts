@@ -23,3 +23,4 @@ export * from './TemplateCard';
 export * from './TemplatePreviewModal';
 export * from './UserContext';
 export * from './WorkflowVisualizer';
+export * from './Settings';

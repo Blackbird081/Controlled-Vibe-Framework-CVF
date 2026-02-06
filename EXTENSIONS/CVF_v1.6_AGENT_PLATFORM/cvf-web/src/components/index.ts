@@ -26,3 +26,4 @@ export * from './WorkflowVisualizer';
 export * from './Settings';
 export * from './AgentChat';
 export * from './ExecutionProgress';
+export * from './ExecuteWithAI';

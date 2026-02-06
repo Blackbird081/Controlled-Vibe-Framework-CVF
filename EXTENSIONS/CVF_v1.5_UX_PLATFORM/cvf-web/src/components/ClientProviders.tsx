@@ -1,15 +1,15 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { I18nProvider } from '@/lib/i18n';
+import { LanguageProvider } from '@/lib/i18n';
 import { ThemeProvider } from '@/lib/theme';
 
 export function ClientProviders({ children }: { children: ReactNode }) {
     return (
         <ThemeProvider>
-            <I18nProvider>
+            <LanguageProvider>
                 {children}
-            </I18nProvider>
+            </LanguageProvider>
         </ThemeProvider>
     );
 }

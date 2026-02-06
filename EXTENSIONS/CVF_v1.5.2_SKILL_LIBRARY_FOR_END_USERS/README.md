@@ -1,21 +1,73 @@
 # CVF Skill Library v1.5.2
 
 > **Controlled Vibe Framework - Skill Library for End Users**  
-> Bộ sưu tập các CVF skills cho marketing, product, SEO, security, compliance và **app development**.
+> Bộ sưu tập các CVF skills cho marketing, product, SEO, security, compliance, **HR**, **Legal**, và **AI/ML**.
 
 ## 📊 Thống kê
 
 | Metric | Value |
 |--------|-------|
-| **Tổng Skills** | **53 skills** |
-| **Domains** | 6 domains |
-| **Legacy (skills/)** | 14 skills |
-| **New (Phase 1-4)** | 39 skills |
+| **Tổng Skills** | **69 skills** |
+| **Domains** | 12 domains |
+| **Phase 5 (NEW)** | 16 skills |
+
+## 🚀 Bắt đầu nhanh
+
+### Cách sử dụng Skill Library
+
+**Bước 1:** Chọn domain phù hợp với nhu cầu
+**Bước 2:** Mở file `.skill.md` trong domain đó
+**Bước 3:** Đọc **Form Input** để biết cần điền gì
+**Bước 4:** Copy template và điền thông tin
+**Bước 5:** Paste vào AI (ChatGPT, Claude, Gemini)
+**Bước 6:** Đánh giá output theo **Checklist**
+
+---
 
 ## 🗂️ Domains
 
-### 🚀 [App Development](app_development/) (Phase 4) ⭐ NEW!
-8 skills cho việc tạo spec để **AI Agent build local apps**
+### 👔 [HR & Operations](hr_operations/) (Phase 5) ⭐ NEW!
+5 skills cho quản lý nhân sự và vận hành
+
+| Skill | Mục đích | Difficulty |
+|-------|----------|------------|
+| Job Description | Tạo JD chuẩn | Easy |
+| Interview Evaluation | Đánh giá ứng viên | Medium |
+| Performance Review | Đánh giá hiệu suất | Medium |
+| Onboarding Checklist | Checklist nhân viên mới | Easy |
+| Policy Documentation | Viết chính sách nội bộ | Medium |
+
+---
+
+### ⚖️ [Legal & Contracts](legal_contracts/) (Phase 5) ⭐ NEW!
+5 skills cho hợp đồng và pháp lý
+
+| Skill | Mục đích | Difficulty |
+|-------|----------|------------|
+| Contract Review | Review hợp đồng | Medium |
+| NDA Template | Tạo NDA | Medium |
+| Terms of Service | Viết ToS | Advanced |
+| Compliance Checklist | Checklist tuân thủ | Medium |
+| IP Protection | Bảo vệ sở hữu trí tuệ | Medium |
+
+---
+
+### 🤖 [AI/ML Evaluation](ai_ml_evaluation/) (Phase 5) ⭐ NEW!
+6 skills cho đánh giá và tối ưu AI
+
+| Skill | Mục đích | Difficulty |
+|-------|----------|------------|
+| Model Selection | Chọn model phù hợp | Medium |
+| Prompt Evaluation | Đánh giá prompt | Medium |
+| Output Quality Check | Kiểm tra output | Easy |
+| Bias Detection | Phát hiện bias | Advanced |
+| Cost Optimization | Tối ưu chi phí | Medium |
+| AI Use Case Fit | Đánh giá AI có fit không | Medium |
+
+---
+
+### 🚀 [App Development](app_development/) (Phase 4)
+8 skills cho việc tạo spec để AI Agent build local apps
 
 | Skill | Mục đích | Difficulty |
 |-------|----------|------------|
@@ -28,120 +80,76 @@
 | CLI Tool Spec | Commands, arguments | Medium |
 | Local Deployment | Packaging, distribution | Medium |
 
-**Workflow đề xuất:**
-```
-Requirements → Tech Stack → Architecture → Database/API → App Spec → Deployment
-```
-
 ---
 
 ### 📈 [Marketing & SEO](marketing_seo/) (Phase 1)
 9 skills cho SEO, copywriting, content, ads, và brand
-
-| Skill | Difficulty |
-|-------|-----------|
-| SEO Audit | Medium |
-| Copywriting Evaluation | Easy |
-| Landing Page CRO | Medium |
-| Pricing Strategy Review | Advanced |
-| Content Quality Checklist | Easy |
-| Competitor Analysis | Medium |
-| Email Campaign Review | Easy |
-| Social Media Ad Review | Medium |
-| Brand Voice Consistency | Medium |
 
 ---
 
 ### 🎨 [Product & UX](product_ux/) (Phase 2)
 8 skills cho A/B testing, accessibility, flows, và onboarding
 
-| Skill | Difficulty |
-|-------|-----------|
-| A/B Test Review | Medium |
-| Accessibility Audit | Medium |
-| User Flow Analysis | Medium |
-| UX Heuristic Evaluation | Medium |
-| Feature Prioritization | Advanced |
-| User Persona Development | Easy |
-| Error Handling UX | Easy |
-| Onboarding Experience Review | Medium |
-
 ---
 
 ### 🔐 [Security & Compliance](security_compliance/) (Phase 3)
 6 skills cho API security, GDPR, privacy, và incidents
 
-| Skill | Difficulty |
-|-------|-----------|
-| API Security Checklist | Medium |
-| GDPR Compliance Review | Advanced |
-| Privacy Policy Audit | Easy |
-| Incident Response Plan | Advanced |
-| Data Handling Review | Medium |
-| Terms of Service Review | Easy |
-
 ---
 
-### 💰 [Finance & Analytics](finance_analytics/) (Phase 4) ⭐ NEW!
+### 💰 [Finance & Analytics](finance_analytics/) (Phase 4)
 8 skills cho financial analysis, budgeting, và forecasting
 
-| Skill | Difficulty |
-|-------|------------|
-| Budget Analysis | Easy |
-| Financial Statement Review | Medium |
-| ROI Calculator Review | Easy |
-| KPI Dashboard Audit | Medium |
-| Cash Flow Analysis | Medium |
-| Investment Due Diligence | Advanced |
-| Financial Risk Assessment | Medium |
-| Revenue Forecast Review | Medium |
+---
+
+### Các Domains khác
+- [Web Development](web_development/) - 6 skills
+- [Business Analysis](business_analysis/) - 3 skills
+- [Content Creation](content_creation/) - 3 skills
+- [Technical Review](technical_review/) - 3 skills
 
 ---
 
-### 📚 [Legacy Skills](skills/) (Original)
-14 skills từ version gốc - general business và coding
+## 📝 Hướng dẫn sử dụng chi tiết
 
-## 🎯 Cách sử dụng
-
-### Option 1: CVF Web UI (Recommended) ⭐
-1. Mở CVF Web UI (`npm run dev` trong `cvf-web`)
-2. Chọn template từ category **App Development**
-3. Điền form → Chọn **CVF Full Mode** → Export
-4. Copy và paste vào AI Agent (Claude, Cursor, Copilot)
-5. AI Agent build app theo CVF process!
-
-### Option 2: Trực tiếp từ Skill Files
-1. Mở skill file (`.skill.md`)
-2. Đọc **Form Input** để biết cần điền gì
-3. Tự tay tạo spec theo format
-4. Paste vào ChatGPT/Claude/Gemini
-5. Nhận output theo Expected Output
-
-## 📝 CVF Skill Format
+### Cấu trúc skill file
 
 ```markdown
 # Skill Name
-> Metadata (Domain, Difficulty, Version, Skill Version, Last Updated)
+> Metadata (Domain, Difficulty, Version)
 
-## 📌 Prerequisites    ← NEW!
-## 🎯 Mục đích
-## 📋 Form Input
-## ✅ Expected Output
-## 🔍 Cách đánh giá
-## ⚠️ Common Failures
-## 💡 Tips
-## 📊 Ví dụ thực tế
-## 🔗 Next Step        ← NEW!
+## 🎯 Mục đích        ← Khi nào dùng skill này
+## 📋 Form Input      ← Điền gì vào đây
+## ✅ Expected Output ← Kết quả mong đợi
+## 🔍 Cách đánh giá   ← Checklist Accept/Reject
+## ⚠️ Common Failures ← Lỗi cần tránh
+## 💡 Tips            ← Mẹo sử dụng
 ```
+
+### Ví dụ sử dụng
+
+**Tình huống:** Cần tạo JD cho vị trí mới
+
+1. Mở `hr_operations/01_job_description.skill.md`
+2. Đọc phần **Form Input**:
+   - Vị trí: Senior Developer
+   - Level: 5+ năm
+   - Department: Engineering
+   - Responsibilities: [...]
+3. Paste thông tin vào AI
+4. Nhận JD draft
+5. Check theo **Checklist đánh giá**
+6. Accept nếu pass, Reject nếu fail
+
+---
 
 ## 🔗 Links
 
 - **GitHub:** [Blackbird081/Controlled-Vibe-Framework-CVF](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)
 - **CVF Web UI:** `EXTENSIONS/CVF_v1.5_UX_PLATFORM/cvf-web`
-- **DIFFICULTY_GUIDE:** [DIFFICULTY_GUIDE.md](DIFFICULTY_GUIDE.md) ← NEW!
-- **ROADMAP:** [ROADMAP.md](ROADMAP.md)
-- **CREDITS:** [CREDITS.md](CREDITS.md)
+- **DIFFICULTY_GUIDE:** [DIFFICULTY_GUIDE.md](DIFFICULTY_GUIDE.md)
+- **SKILL_TEMPLATE:** [SKILL_TEMPLATE.md](SKILL_TEMPLATE.md)
 
 ---
 
-*CVF Skill Library v1.5.2 | Last Updated: 2026-02-04*
+*CVF Skill Library v1.5.2 | Last Updated: 2026-02-06*

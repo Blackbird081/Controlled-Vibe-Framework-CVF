@@ -30,7 +30,7 @@ import {
   TourGuide,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
-import { LanguageSwitcher } from '@/lib/i18n';
+import { LanguageToggle } from '@/lib/i18n';
 
 type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'marketplace' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills';
 
@@ -300,14 +300,14 @@ export default function Home() {
                 🏪 Marketplace
               </button>
               <div id="tour-lang-switch">
-                <LanguageSwitcher />
+                <LanguageToggle />
               </div>
               <ThemeToggle />
             </nav>
 
             {/* Mobile Menu Button */}
             <div className="flex md:hidden items-center gap-2">
-              <LanguageSwitcher />
+              <LanguageToggle />
               <ThemeToggle />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

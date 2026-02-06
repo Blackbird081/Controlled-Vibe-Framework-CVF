@@ -17,6 +17,11 @@ const vi: Record<string, string> = {
     'nav.help': '📖 Hướng dẫn',
     'nav.templates': 'Templates',
     'nav.history': '📜 Lịch sử',
+    'nav.analytics': '📊 Analytics',
+    'nav.marketplace': '🏪 Marketplace',
+    'nav.aiAgent': '🤖 AI Agent',
+    'nav.multiAgent': '🎯 Multi-Agent',
+    'nav.tools': '🛠️ Tools',
 
     // Skills page
     'skills.title': '📚 Thư viện Kỹ năng',
@@ -75,6 +80,7 @@ const vi: Record<string, string> = {
     'main.back': 'Quay lại',
     'main.copy': 'Sao chép',
     'main.copied': 'Đã sao chép!',
+    'main.close': 'Đóng',
 
     // Language
     'lang.switch': '🌐 EN',
@@ -92,6 +98,90 @@ const vi: Record<string, string> = {
     'userContext.save': 'Lưu Context',
     'userContext.saved': 'Đã lưu!',
     'userContext.clear': 'Xóa tất cả',
+
+    // Settings
+    'settings.title': '⚙️ Cài đặt',
+    'settings.apiKeys': 'API Keys',
+    'settings.providers': 'AI Providers',
+    'settings.defaultProvider': 'Provider mặc định',
+    'settings.save': 'Lưu cài đặt',
+    'settings.saved': 'Đã lưu!',
+    'settings.enterApiKey': 'Nhập API Key...',
+    'settings.preferences': 'Tùy chọn',
+
+    // Agent Chat
+    'agent.title': '🤖 AI Agent Chat',
+    'agent.placeholder': 'Nhập tin nhắn của bạn...',
+    'agent.send': 'Gửi',
+    'agent.thinking': 'Đang suy nghĩ...',
+    'agent.newChat': '➕ Cuộc trò chuyện mới',
+    'agent.history': 'Lịch sử chat',
+    'agent.clearHistory': '🗑️ Xóa tất cả',
+    'agent.noHistory': 'Chưa có lịch sử chat',
+    'agent.today': 'Hôm nay',
+    'agent.yesterday': 'Hôm qua',
+    'agent.daysAgo': 'ngày trước',
+    'agent.messages': 'tin nhắn',
+    'agent.delete': 'Xóa',
+    'agent.confirmClear': 'Xác nhận xóa?',
+    'agent.cancel': 'Hủy',
+    'agent.confirm': 'Xác nhận',
+
+    // Multi-Agent
+    'multiAgent.title': '🎯 Multi-Agent Workflow',
+    'multiAgent.description': 'Phối hợp nhiều AI agents để hoàn thành task',
+    'multiAgent.selectWorkflow': 'Chọn Workflow',
+    'multiAgent.enterRequest': '📝 Nhập yêu cầu của bạn',
+    'multiAgent.placeholder': 'Ví dụ: Xây dựng API REST cho quản lý sản phẩm với CRUD operations...',
+    'multiAgent.availableAgents': 'Agents có sẵn',
+    'multiAgent.outputs': '📤 Kết quả từ Agents',
+    'multiAgent.processing': 'Đang xử lý với agent hiện tại...',
+    'multiAgent.startNew': '🔄 Bắt đầu mới',
+    'multiAgent.done': '✓ Hoàn thành',
+    'multiAgent.orchestrator': 'Điều phối viên',
+    'multiAgent.architect': 'Kiến trúc sư',
+    'multiAgent.builder': 'Lập trình viên',
+    'multiAgent.reviewer': 'Đánh giá viên',
+    'multiAgent.fullCycle': 'Full Development Cycle',
+    'multiAgent.designOnly': 'Chỉ thiết kế kiến trúc',
+    'multiAgent.buildReview': 'Build & Review',
+    'multiAgent.quickBuild': 'Quick Build',
+
+    // Tools
+    'tools.title': '🛠️ Agent Tools',
+    'tools.description': 'Các công cụ hỗ trợ cho AI Agent',
+    'tools.clearHistory': '🗑️ Xóa lịch sử',
+    'tools.latestResult': '📤 Kết quả mới nhất',
+    'tools.success': '✓ Thành công',
+    'tools.failed': '✗ Thất bại',
+    'tools.executionTime': '⏱️ Thời gian thực thi',
+    'tools.documentation': '📚 Hướng dẫn Tools',
+    'tools.parameters': 'Tham số',
+    'tools.execute': '▶️ Thực thi',
+    'tools.executing': '⏳ Đang thực thi...',
+    'tools.recentCalls': 'Lệnh gần đây',
+    'tools.webSearch': 'Tìm kiếm Web',
+    'tools.codeExecute': 'Chạy Code',
+    'tools.calculator': 'Máy tính',
+    'tools.datetime': 'Ngày giờ',
+    'tools.jsonParse': 'Parse JSON',
+    'tools.urlFetch': 'Fetch URL',
+    'tools.fileRead': 'Đọc File',
+    'tools.fileWrite': 'Ghi File',
+
+    // Errors
+    'error.noApiKey': 'Chưa cấu hình API key. Vui lòng vào Settings.',
+    'error.apiError': 'Lỗi API, vui lòng thử lại.',
+    'error.networkError': 'Lỗi mạng, kiểm tra kết nối internet.',
+    'error.timeout': 'Quá thời gian chờ, vui lòng thử lại.',
+    'error.invalidInput': 'Dữ liệu nhập không hợp lệ.',
+
+    // Common
+    'common.loading': 'Đang tải...',
+    'common.search': 'Tìm kiếm...',
+    'common.noData': 'Không có dữ liệu',
+    'common.viewMore': 'Xem thêm',
+    'common.collapse': 'Thu gọn',
 };
 
 // English translations
@@ -101,6 +191,11 @@ const en: Record<string, string> = {
     'nav.help': '📖 Help',
     'nav.templates': 'Templates',
     'nav.history': '📜 History',
+    'nav.analytics': '📊 Analytics',
+    'nav.marketplace': '🏪 Marketplace',
+    'nav.aiAgent': '🤖 AI Agent',
+    'nav.multiAgent': '🎯 Multi-Agent',
+    'nav.tools': '🛠️ Tools',
 
     // Skills page
     'skills.title': '📚 Skill Library',
@@ -159,6 +254,7 @@ const en: Record<string, string> = {
     'main.back': 'Back',
     'main.copy': 'Copy',
     'main.copied': 'Copied!',
+    'main.close': 'Close',
 
     // Language
     'lang.switch': '🌐 VI',
@@ -176,6 +272,90 @@ const en: Record<string, string> = {
     'userContext.save': 'Save Context',
     'userContext.saved': 'Saved!',
     'userContext.clear': 'Clear All',
+
+    // Settings
+    'settings.title': '⚙️ Settings',
+    'settings.apiKeys': 'API Keys',
+    'settings.providers': 'AI Providers',
+    'settings.defaultProvider': 'Default Provider',
+    'settings.save': 'Save Settings',
+    'settings.saved': 'Saved!',
+    'settings.enterApiKey': 'Enter API Key...',
+    'settings.preferences': 'Preferences',
+
+    // Agent Chat
+    'agent.title': '🤖 AI Agent Chat',
+    'agent.placeholder': 'Type your message...',
+    'agent.send': 'Send',
+    'agent.thinking': 'Thinking...',
+    'agent.newChat': '➕ New Chat',
+    'agent.history': 'Chat History',
+    'agent.clearHistory': '🗑️ Clear All',
+    'agent.noHistory': 'No chat history yet',
+    'agent.today': 'Today',
+    'agent.yesterday': 'Yesterday',
+    'agent.daysAgo': 'days ago',
+    'agent.messages': 'messages',
+    'agent.delete': 'Delete',
+    'agent.confirmClear': 'Confirm clear?',
+    'agent.cancel': 'Cancel',
+    'agent.confirm': 'Confirm',
+
+    // Multi-Agent
+    'multiAgent.title': '🎯 Multi-Agent Workflow',
+    'multiAgent.description': 'Coordinate multiple AI agents to complete tasks',
+    'multiAgent.selectWorkflow': 'Select Workflow',
+    'multiAgent.enterRequest': '📝 Enter your request',
+    'multiAgent.placeholder': 'Example: Build a REST API for product management with CRUD operations...',
+    'multiAgent.availableAgents': 'Available Agents',
+    'multiAgent.outputs': '📤 Agent Outputs',
+    'multiAgent.processing': 'Processing with current agent...',
+    'multiAgent.startNew': '🔄 Start New',
+    'multiAgent.done': '✓ Done',
+    'multiAgent.orchestrator': 'Orchestrator',
+    'multiAgent.architect': 'Architect',
+    'multiAgent.builder': 'Builder',
+    'multiAgent.reviewer': 'Reviewer',
+    'multiAgent.fullCycle': 'Full Development Cycle',
+    'multiAgent.designOnly': 'Architecture Design Only',
+    'multiAgent.buildReview': 'Build & Review',
+    'multiAgent.quickBuild': 'Quick Build',
+
+    // Tools
+    'tools.title': '🛠️ Agent Tools',
+    'tools.description': 'Tools to support AI Agent',
+    'tools.clearHistory': '🗑️ Clear History',
+    'tools.latestResult': '📤 Latest Result',
+    'tools.success': '✓ Success',
+    'tools.failed': '✗ Failed',
+    'tools.executionTime': '⏱️ Execution time',
+    'tools.documentation': '📚 Tools Documentation',
+    'tools.parameters': 'Parameters',
+    'tools.execute': '▶️ Execute',
+    'tools.executing': '⏳ Executing...',
+    'tools.recentCalls': 'Recent Calls',
+    'tools.webSearch': 'Web Search',
+    'tools.codeExecute': 'Code Execute',
+    'tools.calculator': 'Calculator',
+    'tools.datetime': 'Date & Time',
+    'tools.jsonParse': 'JSON Parse',
+    'tools.urlFetch': 'URL Fetch',
+    'tools.fileRead': 'File Read',
+    'tools.fileWrite': 'File Write',
+
+    // Errors
+    'error.noApiKey': 'API key not configured. Please go to Settings.',
+    'error.apiError': 'API error, please try again.',
+    'error.networkError': 'Network error, check your internet connection.',
+    'error.timeout': 'Request timed out, please try again.',
+    'error.invalidInput': 'Invalid input data.',
+
+    // Common
+    'common.loading': 'Loading...',
+    'common.search': 'Search...',
+    'common.noData': 'No data',
+    'common.viewMore': 'View more',
+    'common.collapse': 'Collapse',
 };
 
 const translations: Record<Language, Record<string, string>> = { vi, en };

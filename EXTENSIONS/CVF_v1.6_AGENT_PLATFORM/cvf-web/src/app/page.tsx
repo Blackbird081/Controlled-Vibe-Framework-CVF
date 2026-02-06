@@ -32,11 +32,13 @@ import {
   UserContextBadge,
   SettingsButton,
   SettingsPage,
+  AgentChat,
+  AgentChatButton,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 import { LanguageToggle } from '@/lib/i18n';
 
-type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'marketplace' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills';
+type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'marketplace' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills' | 'agent';
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -50,6 +52,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showUserContext, setShowUserContext] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
 
   const { executions, addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
 
@@ -604,6 +607,24 @@ export default function Home() {
             <SettingsPage onClose={() => setShowSettings(false)} />
           </div>
         </div>
+      )}
+
+      {/* Agent Chat Modal */}
+      {appState === 'agent' && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="w-full max-w-3xl h-[80vh] rounded-xl overflow-hidden shadow-2xl">
+            <AgentChat
+              initialPrompt={agentPrompt}
+              onClose={() => { setAppState('home'); setAgentPrompt(undefined); }}
+              onComplete={() => { setAppState('home'); setAgentPrompt(undefined); }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Floating Agent Button */}
+      {appState !== 'agent' && (
+        <AgentChatButton onClick={() => setAppState('agent')} />
       )}
     </div>
   );

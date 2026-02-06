@@ -1,0 +1,471 @@
+'use client';
+
+import { useState, useRef, useEffect, useCallback } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { useLanguage } from '@/lib/i18n';
+import { useSettings } from './Settings';
+
+// Types
+export interface ChatMessage {
+    id: string;
+    role: 'user' | 'assistant' | 'system';
+    content: string;
+    timestamp: Date;
+    status?: 'sending' | 'streaming' | 'complete' | 'error';
+    metadata?: {
+        tokens?: number;
+        model?: string;
+        phase?: string;
+    };
+}
+
+export interface AgentChatProps {
+    initialPrompt?: string;
+    onClose?: () => void;
+    onComplete?: (messages: ChatMessage[]) => void;
+}
+
+// Message Bubble Component
+function MessageBubble({ message }: { message: ChatMessage }) {
+    const isUser = message.role === 'user';
+    const isSystem = message.role === 'system';
+
+    if (isSystem) {
+        return (
+            <div className="flex justify-center my-4">
+                <div className="px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-full text-xs text-gray-500">
+                    {message.content}
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
+            {!isUser && (
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 
+                               flex items-center justify-center text-white text-sm flex-shrink-0">
+                    🤖
+                </div>
+            )}
+
+            <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${isUser
+                    ? 'bg-blue-600 text-white rounded-br-md'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md'
+                }`}>
+                {isUser ? (
+                    <p className="whitespace-pre-wrap">{message.content}</p>
+                ) : (
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
+                        <ReactMarkdown
+                            components={{
+                                // Custom code block styling
+                                code: ({ className, children, ...props }) => {
+                                    const isInline = !className;
+                                    if (isInline) {
+                                        return (
+                                            <code className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-sm" {...props}>
+                                                {children}
+                                            </code>
+                                        );
+                                    }
+                                    return (
+                                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-2">
+                                            <code className={className} {...props}>{children}</code>
+                                        </pre>
+                                    );
+                                },
+                                // Custom link styling
+                                a: ({ href, children }) => (
+                                    <a href={href} target="_blank" rel="noopener noreferrer"
+                                        className="text-blue-500 hover:underline">
+                                        {children}
+                                    </a>
+                                ),
+                            }}
+                        >
+                            {message.content}
+                        </ReactMarkdown>
+                    </div>
+                )}
+
+                {/* Streaming indicator */}
+                {message.status === 'streaming' && (
+                    <span className="inline-flex ml-1">
+                        <span className="animate-pulse">▊</span>
+                    </span>
+                )}
+
+                {/* Metadata */}
+                {message.metadata && message.status === 'complete' && (
+                    <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700 
+                                   text-xs text-gray-500 flex items-center gap-2">
+                        {message.metadata.model && (
+                            <span>🤖 {message.metadata.model}</span>
+                        )}
+                        {message.metadata.tokens && (
+                            <span>📊 {message.metadata.tokens} tokens</span>
+                        )}
+                        {message.metadata.phase && (
+                            <span className="px-2 py-0.5 bg-purple-100 dark:bg-purple-900 
+                                           text-purple-700 dark:text-purple-300 rounded-full">
+                                {message.metadata.phase}
+                            </span>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {isUser && (
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-teal-600 
+                               flex items-center justify-center text-white text-sm flex-shrink-0">
+                    👤
+                </div>
+            )}
+        </div>
+    );
+}
+
+// Typing Indicator
+function TypingIndicator() {
+    return (
+        <div className="flex gap-3 mb-4">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 
+                           flex items-center justify-center text-white text-sm flex-shrink-0">
+                🤖
+            </div>
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-bl-md px-4 py-3">
+                <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// Main Agent Chat Component
+export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps) {
+    const { language } = useLanguage();
+    const { settings } = useSettings();
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [input, setInput] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isStreaming, setIsStreaming] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+
+    // Labels
+    const labels = {
+        vi: {
+            placeholder: 'Nhập tin nhắn...',
+            send: 'Gửi',
+            cancel: 'Hủy',
+            complete: 'Hoàn thành',
+            noApiKey: 'Chưa cấu hình API key. Vui lòng vào Settings để thêm.',
+            connectionError: 'Lỗi kết nối. Vui lòng thử lại.',
+            modelLabel: 'Model',
+        },
+        en: {
+            placeholder: 'Type a message...',
+            send: 'Send',
+            cancel: 'Cancel',
+            complete: 'Complete',
+            noApiKey: 'No API key configured. Please add one in Settings.',
+            connectionError: 'Connection error. Please try again.',
+            modelLabel: 'Model',
+        },
+    };
+    const l = labels[language];
+
+    // Scroll to bottom
+    const scrollToBottom = useCallback(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, []);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, scrollToBottom]);
+
+    // Handle initial prompt
+    useEffect(() => {
+        if (initialPrompt && messages.length === 0) {
+            const systemMessage: ChatMessage = {
+                id: `msg_${Date.now()}`,
+                role: 'system',
+                content: language === 'vi' ? '🚀 CVF Agent Mode bắt đầu' : '🚀 CVF Agent Mode started',
+                timestamp: new Date(),
+            };
+            setMessages([systemMessage]);
+
+            // Auto-send initial prompt
+            setTimeout(() => {
+                handleSendMessage(initialPrompt);
+            }, 500);
+        }
+    }, [initialPrompt]);
+
+    // Send message
+    const handleSendMessage = async (messageContent?: string) => {
+        const content = messageContent || input.trim();
+        if (!content || isLoading) return;
+
+        // Check API key
+        const provider = settings.preferences.defaultProvider;
+        const apiKey = settings.providers[provider]?.apiKey;
+
+        if (!apiKey) {
+            const errorMsg: ChatMessage = {
+                id: `msg_${Date.now()}`,
+                role: 'system',
+                content: `⚠️ ${l.noApiKey}`,
+                timestamp: new Date(),
+            };
+            setMessages(prev => [...prev, errorMsg]);
+            return;
+        }
+
+        // Add user message
+        const userMessage: ChatMessage = {
+            id: `msg_${Date.now()}`,
+            role: 'user',
+            content,
+            timestamp: new Date(),
+            status: 'complete',
+        };
+
+        setMessages(prev => [...prev, userMessage]);
+        setInput('');
+        setIsLoading(true);
+
+        // Create placeholder for assistant message
+        const assistantId = `msg_${Date.now() + 1}`;
+        const assistantMessage: ChatMessage = {
+            id: assistantId,
+            role: 'assistant',
+            content: '',
+            timestamp: new Date(),
+            status: 'streaming',
+            metadata: {
+                model: provider === 'gemini' ? 'gemini-2.0-flash' : provider === 'openai' ? 'gpt-4o' : 'claude-3.5-sonnet',
+            },
+        };
+
+        setMessages(prev => [...prev, assistantMessage]);
+        setIsStreaming(true);
+
+        try {
+            // Call AI API (simulated for now - will implement in Phase 3)
+            await simulateStreaming(assistantId, content, provider);
+        } catch (error) {
+            setMessages(prev => prev.map(m =>
+                m.id === assistantId
+                    ? { ...m, content: `❌ ${l.connectionError}`, status: 'error' }
+                    : m
+            ));
+        } finally {
+            setIsLoading(false);
+            setIsStreaming(false);
+        }
+    };
+
+    // Simulate streaming response (placeholder for Phase 3 AI integration)
+    const simulateStreaming = async (messageId: string, userContent: string, provider: string) => {
+        const responses = {
+            vi: `## 🔍 PHASE A: Tóm tắt Khám phá
+
+### 1. Hiểu biết của tôi
+Tôi hiểu bạn muốn: **${userContent.substring(0, 100)}${userContent.length > 100 ? '...' : ''}**
+
+### 2. Giả định tôi đang đưa ra
+- Đây là một yêu cầu mới
+- Bạn cần output hoàn chỉnh và sử dụng được
+- Không có ràng buộc đặc biệt về thời gian
+
+### 3. Định nghĩa Scope
+✅ **TRONG PHẠM VI:**
+- Phân tích yêu cầu
+- Đề xuất giải pháp
+
+❌ **NGOÀI PHẠM VI:**
+- Triển khai production
+- Hỗ trợ dài hạn
+
+---
+⏸️ **CHECKPOINT A**: Bạn xác nhận tôi hiểu đúng chưa?`,
+            en: `## 🔍 PHASE A: Discovery Summary
+
+### 1. My Understanding
+I understand you want: **${userContent.substring(0, 100)}${userContent.length > 100 ? '...' : ''}**
+
+### 2. Assumptions I'm Making
+- This is a new request
+- You need complete, usable output
+- No special time constraints
+
+### 3. Scope Definition
+✅ **IN SCOPE:**
+- Requirements analysis
+- Solution proposal
+
+❌ **OUT OF SCOPE:**
+- Production deployment
+- Long-term support
+
+---
+⏸️ **CHECKPOINT A**: Do you confirm I understand correctly?`,
+        };
+
+        const fullResponse = responses[language];
+        const words = fullResponse.split(' ');
+
+        // Simulate streaming word by word
+        for (let i = 0; i < words.length; i++) {
+            await new Promise(resolve => setTimeout(resolve, 30));
+
+            setMessages(prev => prev.map(m =>
+                m.id === messageId
+                    ? { ...m, content: words.slice(0, i + 1).join(' ') }
+                    : m
+            ));
+        }
+
+        // Mark as complete
+        setMessages(prev => prev.map(m =>
+            m.id === messageId
+                ? {
+                    ...m,
+                    status: 'complete',
+                    metadata: {
+                        ...m.metadata,
+                        tokens: Math.floor(fullResponse.length / 4),
+                        phase: 'Discovery',
+                    }
+                }
+                : m
+        ));
+    };
+
+    // Handle key press
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
+    };
+
+    // Handle complete
+    const handleComplete = () => {
+        onComplete?.(messages);
+        onClose?.();
+    };
+
+    return (
+        <div className="flex flex-col h-full bg-white dark:bg-gray-900 rounded-xl overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700
+                           bg-gradient-to-r from-blue-600 to-purple-600">
+                <div className="flex items-center gap-3">
+                    <span className="text-2xl">🤖</span>
+                    <div>
+                        <h3 className="font-bold text-white">CVF Agent</h3>
+                        <p className="text-xs text-blue-100">
+                            {settings.preferences.defaultProvider === 'gemini' && '✨ Gemini'}
+                            {settings.preferences.defaultProvider === 'openai' && '🤖 GPT-4'}
+                            {settings.preferences.defaultProvider === 'anthropic' && '🧠 Claude'}
+                        </p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2">
+                    {isStreaming && (
+                        <span className="px-2 py-1 bg-white/20 rounded-full text-xs text-white animate-pulse">
+                            Streaming...
+                        </span>
+                    )}
+                    {onClose && (
+                        <button
+                            onClick={onClose}
+                            className="p-2 rounded-lg hover:bg-white/20 text-white transition-colors"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                {messages.map(message => (
+                    <MessageBubble key={message.id} message={message} />
+                ))}
+
+                {isLoading && !isStreaming && <TypingIndicator />}
+
+                <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input */}
+            <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+                <div className="flex gap-2">
+                    <textarea
+                        ref={inputRef}
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={handleKeyPress}
+                        placeholder={l.placeholder}
+                        disabled={isLoading}
+                        rows={1}
+                        className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
+                                  bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white
+                                  focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none
+                                  disabled:opacity-50 disabled:cursor-not-allowed"
+                    />
+                    <button
+                        onClick={() => handleSendMessage()}
+                        disabled={!input.trim() || isLoading}
+                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 
+                                  disabled:cursor-not-allowed text-white rounded-xl font-medium
+                                  transition-colors flex items-center gap-2"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                        {l.send}
+                    </button>
+                </div>
+
+                {/* Action buttons */}
+                {messages.length > 0 && (
+                    <div className="flex justify-end gap-2 mt-3">
+                        <button
+                            onClick={handleComplete}
+                            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white 
+                                      rounded-lg text-sm font-medium transition-colors"
+                        >
+                            ✓ {l.complete}
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+// Compact chat trigger button
+export function AgentChatButton({ onClick }: { onClick: () => void }) {
+    return (
+        <button
+            onClick={onClick}
+            className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600
+                      rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105
+                      flex items-center justify-center text-white text-2xl z-40"
+            title="Open CVF Agent"
+        >
+            🤖
+        </button>
+    );
+}

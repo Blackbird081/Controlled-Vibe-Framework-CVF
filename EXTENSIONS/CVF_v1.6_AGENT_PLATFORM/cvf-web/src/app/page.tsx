@@ -308,6 +308,16 @@ export default function Home() {
               >
                 🏪 Marketplace
               </button>
+              {/* AI Agent Button in Header */}
+              <button
+                onClick={() => setAppState('agent')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2
+                           ${appState === 'agent'
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                    : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:shadow-md hover:scale-105'}`}
+              >
+                🤖 AI Agent
+              </button>
               <UserContextBadge onClick={() => setShowUserContext(true)} />
               <SettingsButton onClick={() => setShowSettings(true)} />
               <div id="tour-lang-switch">
@@ -622,10 +632,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Floating Agent Button */}
-      {appState !== 'agent' && (
-        <AgentChatButton onClick={() => setAppState('agent')} />
-      )}
+      {/* Floating Agent Button - Removed, now in header */}
     </div>
   );
 }

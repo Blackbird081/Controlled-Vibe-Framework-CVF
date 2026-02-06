@@ -1,103 +1,131 @@
-# 🧙 CVF Web - Controlled Vibe Framework UI
+# CVF v1.6 Agent Platform - Web Application
 
-> Next.js web interface for CVF prompt templates and multi-step wizards.
+> **AI expertise for everyone** — User-friendly AI-powered prompt engineering platform
 
-## 🚀 Quick Start
+## 🚀 Features
 
-```bash
-npm install
-npm run dev
-```
+### Core Features
+- **Template Library** - Pre-built prompts for various use cases
+- **Category Filtering** - Browse by Product, Marketing, Business, etc.
+- **Quick Reference** - Access common prompts fast
+- **Execution History** - Track and revisit past generations
 
-Open [http://localhost:3000](http://localhost:3000)
+### AI Agent Features (v1.6+)
+- **🤖 AI Agent Chat** - Chat with AI using Gemini, OpenAI, or Anthropic
+- **🎯 Multi-Agent Workflow** - Orchestrate multiple agents (Architect, Builder, Reviewer)
+- **🛠️ Agent Tools** - 8 built-in tools (Web Search, Code Execute, Calculator, etc.)
+- **💾 Chat History** - Persistent conversation storage
+- **🔄 Provider Switching** - Switch between AI providers seamlessly
+
+### Technical Features
+- **🌐 i18n** - Vietnamese and English language support
+- **🌙 Dark Mode** - System-aware theme switching
+- **📱 Responsive** - Mobile-optimized UI
+- **⚡ Performance** - Lazy loading, code splitting
+- **🔒 Security** - Input validation, sandboxed execution
 
 ---
 
-## ✨ Features
+## 📦 Installation
 
-### 📋 40+ Prompt Templates
-Categorized templates for various use cases:
-- Business, Marketing, Product, Technical
-- Research, Content, Security, DevOps
+```bash
+# Navigate to cvf-web directory
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
 
-### 🧙 9 Multi-Step Wizards
+# Install dependencies
+npm install
 
-Interactive wizards that guide you through complex tasks:
+# Run development server
+npm run dev
 
-| Wizard | Category | Steps | Description |
-|--------|----------|-------|-------------|
-| 🛠️ **App Builder** | App Dev | 8 | Complete app specification |
-| 🎨 **Product Design** | Product | 6 | Product design document |
-| 📣 **Marketing Campaign** | Marketing | 5 | Campaign brief & strategy |
-| 📈 **Business Strategy** | Business | 4 | Strategic decision document |
-| 🔐 **Security Assessment** | Security | 5 | Security assessment report |
-| 🔬 **Research Project** | Research | 4 | Research proposal |
-| 🔧 **System Design** | Technical | 5 | System design document |
-| ✍️ **Content Strategy** | Content | 5 | Content strategy plan |
-| 📊 **Data Analysis** | Research | 5 | Data analysis plan |
+# Build for production
+npm run build
+```
 
-**Wizard Features:**
-- ✅ Click-to-jump step navigation
-- ✅ Auto-save drafts (localStorage)
-- ✅ Field tips and guidance
-- ✅ Progress bar
-- ✅ Export to clipboard / download .md
+---
+
+## ⚙️ Configuration
+
+### API Keys
+Go to **Settings** (⚙️ icon) to configure your AI provider API keys:
+
+| Provider | Key Format | Get Key |
+|----------|------------|---------|
+| Gemini | `AI...` | [Google AI Studio](https://aistudio.google.com) |
+| OpenAI | `sk-...` | [OpenAI Platform](https://platform.openai.com) |
+| Anthropic | `sk-ant-...` | [Anthropic Console](https://console.anthropic.com) |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-src/
-├── app/
-│   └── page.tsx          # Main app with routing
-├── components/
-│   ├── AppBuilderWizard.tsx
-│   ├── ProductDesignWizard.tsx
-│   ├── MarketingCampaignWizard.tsx
-│   ├── BusinessStrategyWizard.tsx
-│   ├── SecurityAssessmentWizard.tsx
-│   ├── ResearchProjectWizard.tsx
-│   ├── SystemDesignWizard.tsx
-│   ├── ContentStrategyWizard.tsx
-│   ├── DataAnalysisWizard.tsx
-│   └── ... other components
-├── lib/
-│   ├── templates.ts      # All templates
-│   ├── cvf-engine.ts     # CVF processing
-│   └── theme.ts          # Theme toggle
-└── types/
-    └── index.ts          # TypeScript types
+cvf-web/
+├── src/
+│   ├── app/              # Next.js pages
+│   │   ├── layout.tsx    # Root layout with providers
+│   │   └── page.tsx      # Main app page
+│   ├── components/       # React components
+│   │   ├── AgentChat.tsx         # AI chat interface
+│   │   ├── MultiAgentPanel.tsx   # Multi-agent workflow
+│   │   ├── ToolsPage.tsx         # Agent tools UI
+│   │   ├── MobileComponents.tsx  # Mobile UI
+│   │   └── ...
+│   ├── lib/              # Utilities & hooks
+│   │   ├── ai-providers.ts   # AI provider integrations
+│   │   ├── chat-history.tsx  # Chat persistence
+│   │   ├── multi-agent.tsx   # Multi-agent logic
+│   │   ├── agent-tools.tsx   # Tool definitions
+│   │   ├── security.ts       # Security utilities
+│   │   ├── error-handling.tsx # Error handling
+│   │   ├── i18n.tsx          # Internationalization
+│   │   └── theme.tsx         # Dark mode
+│   └── types/            # TypeScript types
+└── public/               # Static assets
 ```
 
 ---
 
-## 🎯 How to Use
+## 🔧 Available Scripts
 
-### Templates
-1. Browse categories (Business, Technical, etc.)
-2. Select a template
-3. Fill in the fields
-4. Generate your prompt
-
-### Wizards
-1. Navigate to category
-2. Click the wizard (marked with icon like 🛠️ 🎨 📣)
-3. Complete steps sequentially
-4. Review and export
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
 
 ---
 
-## 🛠️ Tech Stack
+## 🎨 Tech Stack
 
-- **Framework**: Next.js 15
-- **Styling**: Tailwind CSS
-- **State**: React useState/useCallback
-- **Storage**: localStorage (drafts)
-- **Language**: TypeScript
+- **Framework:** Next.js 16
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **State:** React Hooks + Zustand
+- **AI:** Gemini, OpenAI, Anthropic APIs
 
 ---
 
-## 📝 License
+## 📝 Changelog
 
-MIT License - Part of Controlled Vibe Framework (CVF)
+### v1.6.0 (2026-02-06)
+- ✅ Phase 1: User Context & Settings
+- ✅ Phase 2: Agent Chat Interface  
+- ✅ Phase 3: AI Provider Integration
+- ✅ Phase 4: Memory, Multi-Agent, Tools
+- ✅ Phase 5: Complete i18n (160+ keys)
+- ✅ Phase 6: Error Handling
+- ✅ Phase 8: Performance (Lazy loading)
+- ✅ Phase 9: Security
+- ✅ Phase 10: Mobile UI
+
+---
+
+## 📄 License
+
+MIT License - See [LICENSE](../../../LICENSE) for details.
+
+---
+
+**Made with ❤️ by the CVF Team**

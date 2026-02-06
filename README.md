@@ -308,5 +308,5 @@ Xem [CONTRIBUTING.md](./v1.0/CONTRIBUTING.md) để biết cách đóng góp.
 
 ---
 
-*Last Updated: 2026-02-04*  
-*CVF v1.5.2 — [GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)*
+*Last Updated: 2026-02-06*  
+*CVF v1.6.0 — [GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)*

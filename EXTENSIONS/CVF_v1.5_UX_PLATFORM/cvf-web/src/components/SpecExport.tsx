@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Template } from '@/types';
+import { useUserContext } from './UserContext';
 
 interface SpecExportProps {
     template: Template;
@@ -596,7 +597,8 @@ function generateSpec(
     template: Template,
     values: Record<string, string>,
     lang: ExportLanguage,
-    mode: ExportMode
+    mode: ExportMode,
+    userContext?: string
 ): string {
     const date = new Date().toISOString().split('T')[0];
 
@@ -690,6 +692,12 @@ ${template.description}
 ## 📝 ${labels.userInput}
 
 ${userInputLines || labels.noInput}
+${userContext ? `
+---
+
+## 👤 User Context
+
+${userContext}` : ''}
 
 ---
 
@@ -735,10 +743,12 @@ export function SpecExport({ template, values, onClose }: SpecExportProps) {
     const [showPreview, setShowPreview] = useState(false);
     const [exportLang, setExportLang] = useState<ExportLanguage>('vi');
     const [exportMode, setExportMode] = useState<ExportMode>('simple');
+    const { getContextPrompt } = useUserContext();
 
     const labels = specLabels[exportLang];
     const modes = modeLabels[exportLang];
-    const spec = generateSpec(template, values, exportLang, exportMode);
+    const userContextStr = getContextPrompt();
+    const spec = generateSpec(template, values, exportLang, exportMode, userContextStr);
 
     const handleCopyToClipboard = async () => {
         try {

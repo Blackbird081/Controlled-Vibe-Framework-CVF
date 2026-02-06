@@ -79,6 +79,19 @@ const vi: Record<string, string> = {
     // Language
     'lang.switch': '🌐 EN',
     'lang.current': 'Tiếng Việt',
+
+    // User Context
+    'userContext.title': 'User Context',
+    'userContext.description': 'Thông tin của bạn sẽ được tự động thêm vào prompts để AI hiểu context tốt hơn.',
+    'userContext.name': 'Tên',
+    'userContext.role': 'Vai trò',
+    'userContext.company': 'Công ty',
+    'userContext.industry': 'Ngành',
+    'userContext.preferences': 'Preferences',
+    'userContext.customContext': 'Custom Context',
+    'userContext.save': 'Lưu Context',
+    'userContext.saved': 'Đã lưu!',
+    'userContext.clear': 'Xóa tất cả',
 };
 
 // English translations
@@ -150,6 +163,19 @@ const en: Record<string, string> = {
     // Language
     'lang.switch': '🌐 VI',
     'lang.current': 'English',
+
+    // User Context
+    'userContext.title': 'User Context',
+    'userContext.description': 'Your info will be auto-added to prompts for better AI understanding.',
+    'userContext.name': 'Name',
+    'userContext.role': 'Role',
+    'userContext.company': 'Company',
+    'userContext.industry': 'Industry',
+    'userContext.preferences': 'Preferences',
+    'userContext.customContext': 'Custom Context',
+    'userContext.save': 'Save Context',
+    'userContext.saved': 'Saved!',
+    'userContext.clear': 'Clear All',
 };
 
 const translations: Record<Language, Record<string, string>> = { vi, en };

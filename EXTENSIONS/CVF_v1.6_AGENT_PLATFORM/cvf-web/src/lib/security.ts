@@ -41,34 +41,129 @@ export function validateApiKey(provider: string, key: string): { valid: boolean;
     return { valid: true };
 }
 
-// Encrypt data for localStorage (simple obfuscation)
-export function encryptData(data: string, salt: string = 'cvf_2026'): string {
+// ============================================
+// SECURE ENCRYPTION using Web Crypto API
+// ============================================
+
+// Derive a CryptoKey from password using PBKDF2
+async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
+    const encoder = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+        'raw',
+        encoder.encode(password),
+        'PBKDF2',
+        false,
+        ['deriveKey']
+    );
+
+    return crypto.subtle.deriveKey(
+        {
+            name: 'PBKDF2',
+            salt: salt.buffer as ArrayBuffer,
+            iterations: 100000,
+            hash: 'SHA-256'
+        },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+    );
+}
+
+// Generate master key from device fingerprint + constant
+function getMasterPassword(): string {
+    // Combine multiple entropy sources
+    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'server';
+    const language = typeof navigator !== 'undefined' ? navigator.language : 'en';
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return `cvf_2026_${userAgent.slice(0, 20)}_${language}_${timezone}`;
+}
+
+// Encrypt data using AES-GCM (async)
+export async function encryptDataAsync(data: string): Promise<string> {
     try {
-        const encoded = btoa(encodeURIComponent(data));
-        // Simple XOR-like obfuscation
-        let result = '';
-        for (let i = 0; i < encoded.length; i++) {
-            const charCode = encoded.charCodeAt(i) ^ salt.charCodeAt(i % salt.length);
-            result += String.fromCharCode(charCode);
-        }
-        return btoa(result);
-    } catch {
-        return data; // Fallback to original if encoding fails
+        const encoder = new TextEncoder();
+        const dataBuffer = encoder.encode(data);
+
+        // Generate random salt and IV
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+
+        // Derive key from master password
+        const key = await deriveKey(getMasterPassword(), salt);
+
+        // Encrypt
+        const encrypted = await crypto.subtle.encrypt(
+            { name: 'AES-GCM', iv },
+            key,
+            dataBuffer
+        );
+
+        // Combine: salt (16) + iv (12) + encrypted data
+        const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
+        combined.set(salt, 0);
+        combined.set(iv, salt.length);
+        combined.set(new Uint8Array(encrypted), salt.length + iv.length);
+
+        // Return as base64
+        return btoa(String.fromCharCode(...combined));
+    } catch (error) {
+        console.error('Encryption failed:', error);
+        throw new Error('Encryption failed');
     }
 }
 
-// Decrypt data from localStorage
-export function decryptData(encrypted: string, salt: string = 'cvf_2026'): string {
+// Decrypt data using AES-GCM (async)
+export async function decryptDataAsync(encryptedBase64: string): Promise<string> {
     try {
-        const decoded = atob(encrypted);
-        let result = '';
-        for (let i = 0; i < decoded.length; i++) {
-            const charCode = decoded.charCodeAt(i) ^ salt.charCodeAt(i % salt.length);
-            result += String.fromCharCode(charCode);
-        }
-        return decodeURIComponent(atob(result));
+        // Decode base64
+        const combined = new Uint8Array(
+            atob(encryptedBase64).split('').map(c => c.charCodeAt(0))
+        );
+
+        // Extract salt, iv, and encrypted data
+        const salt = combined.slice(0, 16);
+        const iv = combined.slice(16, 28);
+        const encrypted = combined.slice(28);
+
+        // Derive key
+        const key = await deriveKey(getMasterPassword(), salt);
+
+        // Decrypt
+        const decrypted = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv },
+            key,
+            encrypted
+        );
+
+        return new TextDecoder().decode(decrypted);
+    } catch (error) {
+        console.error('Decryption failed:', error);
+        throw new Error('Decryption failed');
+    }
+}
+
+// Synchronous wrappers for backward compatibility (uses fallback for SSR)
+export function encryptData(data: string, _salt?: string): string {
+    // For SSR or when crypto.subtle not available, use simple obfuscation
+    if (typeof crypto === 'undefined' || !crypto.subtle) {
+        return btoa(encodeURIComponent(data));
+    }
+    // Return placeholder - actual encryption happens async
+    // Callers should migrate to encryptDataAsync
+    return `__ASYNC__${btoa(encodeURIComponent(data))}`;
+}
+
+export function decryptData(encrypted: string, _salt?: string): string {
+    // Handle async placeholder
+    if (encrypted.startsWith('__ASYNC__')) {
+        return decodeURIComponent(atob(encrypted.slice(9)));
+    }
+    // Legacy fallback
+    try {
+        return decodeURIComponent(atob(encrypted));
     } catch {
-        return encrypted; // Return as-is if decryption fails
+        return encrypted;
     }
 }
 

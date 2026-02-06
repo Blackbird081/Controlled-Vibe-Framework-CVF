@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useLanguage } from '@/lib/i18n';
 import { useSettings } from './Settings';
+import { createAIProvider, AIMessage } from '@/lib/ai-providers';
 
 // Types
 export interface ChatMessage {
@@ -50,8 +51,8 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             )}
 
             <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${isUser
-                    ? 'bg-blue-600 text-white rounded-br-md'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md'
+                ? 'bg-blue-600 text-white rounded-br-md'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md'
                 }`}>
                 {isUser ? (
                     <p className="whitespace-pre-wrap">{message.content}</p>
@@ -256,8 +257,8 @@ export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps
         setIsStreaming(true);
 
         try {
-            // Call AI API (simulated for now - will implement in Phase 3)
-            await simulateStreaming(assistantId, content, provider);
+            // Call real AI API
+            await callRealAI(assistantId, content, provider as 'gemini' | 'openai' | 'anthropic', apiKey);
         } catch (error) {
             setMessages(prev => prev.map(m =>
                 m.id === assistantId
@@ -270,81 +271,59 @@ export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps
         }
     };
 
-    // Simulate streaming response (placeholder for Phase 3 AI integration)
-    const simulateStreaming = async (messageId: string, userContent: string, provider: string) => {
-        const responses = {
-            vi: `## 🔍 PHASE A: Tóm tắt Khám phá
+    // Real AI API call with streaming
+    const callRealAI = async (
+        messageId: string,
+        userContent: string,
+        provider: 'gemini' | 'openai' | 'anthropic',
+        apiKey: string
+    ) => {
+        // Build message history for context
+        const aiMessages: AIMessage[] = messages
+            .filter(m => m.role !== 'system')
+            .map(m => ({ role: m.role, content: m.content }));
+        aiMessages.push({ role: 'user', content: userContent });
 
-### 1. Hiểu biết của tôi
-Tôi hiểu bạn muốn: **${userContent.substring(0, 100)}${userContent.length > 100 ? '...' : ''}**
+        const aiProvider = createAIProvider(provider, { apiKey });
+        let fullText = '';
 
-### 2. Giả định tôi đang đưa ra
-- Đây là một yêu cầu mới
-- Bạn cần output hoàn chỉnh và sử dụng được
-- Không có ràng buộc đặc biệt về thời gian
+        const response = await aiProvider.chat(aiMessages, (chunk) => {
+            if (!chunk.isComplete && chunk.text) {
+                fullText += chunk.text;
+                setMessages(prev =>
+                    prev.map(m =>
+                        m.id === messageId
+                            ? { ...m, content: fullText }
+                            : m
+                    )
+                );
+            }
+        });
 
-### 3. Định nghĩa Scope
-✅ **TRONG PHẠM VI:**
-- Phân tích yêu cầu
-- Đề xuất giải pháp
-
-❌ **NGOÀI PHẠM VI:**
-- Triển khai production
-- Hỗ trợ dài hạn
-
----
-⏸️ **CHECKPOINT A**: Bạn xác nhận tôi hiểu đúng chưa?`,
-            en: `## 🔍 PHASE A: Discovery Summary
-
-### 1. My Understanding
-I understand you want: **${userContent.substring(0, 100)}${userContent.length > 100 ? '...' : ''}**
-
-### 2. Assumptions I'm Making
-- This is a new request
-- You need complete, usable output
-- No special time constraints
-
-### 3. Scope Definition
-✅ **IN SCOPE:**
-- Requirements analysis
-- Solution proposal
-
-❌ **OUT OF SCOPE:**
-- Production deployment
-- Long-term support
-
----
-⏸️ **CHECKPOINT A**: Do you confirm I understand correctly?`,
-        };
-
-        const fullResponse = responses[language];
-        const words = fullResponse.split(' ');
-
-        // Simulate streaming word by word
-        for (let i = 0; i < words.length; i++) {
-            await new Promise(resolve => setTimeout(resolve, 30));
-
-            setMessages(prev => prev.map(m =>
-                m.id === messageId
-                    ? { ...m, content: words.slice(0, i + 1).join(' ') }
-                    : m
-            ));
-        }
+        // Detect phase from response
+        let phase = 'Processing';
+        if (response.text.includes('PHASE A') || response.text.includes('Discovery')) phase = 'Discovery';
+        else if (response.text.includes('PHASE B') || response.text.includes('Design')) phase = 'Design';
+        else if (response.text.includes('PHASE C') || response.text.includes('Build')) phase = 'Build';
+        else if (response.text.includes('PHASE D') || response.text.includes('Review')) phase = 'Review';
 
         // Mark as complete
-        setMessages(prev => prev.map(m =>
-            m.id === messageId
-                ? {
-                    ...m,
-                    status: 'complete',
-                    metadata: {
-                        ...m.metadata,
-                        tokens: Math.floor(fullResponse.length / 4),
-                        phase: 'Discovery',
+        setMessages(prev =>
+            prev.map(m =>
+                m.id === messageId
+                    ? {
+                        ...m,
+                        content: response.text || fullText,
+                        status: 'complete',
+                        metadata: {
+                            ...m.metadata,
+                            tokens: response.usage?.totalTokens || Math.floor(fullText.length / 4),
+                            phase,
+                        }
                     }
-                }
-                : m
-        ));
+                    : m
+            )
+        );
     };
 
     // Handle key press

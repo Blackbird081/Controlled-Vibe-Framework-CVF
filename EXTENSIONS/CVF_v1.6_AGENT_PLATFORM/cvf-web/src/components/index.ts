@@ -25,3 +25,4 @@ export * from './UserContext';
 export * from './WorkflowVisualizer';
 export * from './Settings';
 export * from './AgentChat';
+export * from './ExecutionProgress';

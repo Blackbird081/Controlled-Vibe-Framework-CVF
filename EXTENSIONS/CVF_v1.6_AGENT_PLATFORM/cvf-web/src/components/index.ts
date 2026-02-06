@@ -30,3 +30,4 @@ export * from './ExecutionProgress';
 export * from './ExecuteWithAI';
 export * from './ProviderSwitcher';
 export * from './MultiAgentPanel';
+export * from './ToolsPage';

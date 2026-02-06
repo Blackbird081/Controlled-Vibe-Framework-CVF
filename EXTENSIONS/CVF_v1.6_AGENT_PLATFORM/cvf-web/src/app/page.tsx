@@ -36,11 +36,13 @@ import {
   AgentChatButton,
   MultiAgentPanel,
   MultiAgentButton,
+  ToolsPage,
+  ToolsButton,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 import { LanguageToggle } from '@/lib/i18n';
 
-type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'marketplace' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills' | 'agent' | 'multi-agent';
+type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'marketplace' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills' | 'agent' | 'multi-agent' | 'tools';
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -329,6 +331,16 @@ export default function Home() {
                     : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-md hover:scale-105'}`}
               >
                 🎯 Multi-Agent
+              </button>
+              {/* Tools Button */}
+              <button
+                onClick={() => setAppState('tools')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2
+                           ${appState === 'tools'
+                    ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg'
+                    : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:shadow-md hover:scale-105'}`}
+              >
+                🛠️ Tools
               </button>
               <UserContextBadge onClick={() => setShowUserContext(true)} />
               <SettingsButton onClick={() => setShowSettings(true)} />
@@ -652,6 +664,15 @@ export default function Home() {
               onClose={() => setAppState('home')}
               onComplete={() => setAppState('home')}
             />
+          </div>
+        </div>
+      )}
+
+      {/* Tools Modal */}
+      {appState === 'tools' && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="w-full max-w-5xl h-[85vh] rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900">
+            <ToolsPage onClose={() => setAppState('home')} />
           </div>
         </div>
       )}

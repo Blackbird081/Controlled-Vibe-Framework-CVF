@@ -9,6 +9,7 @@ interface SpecExportProps {
     template: Template;
     values: Record<string, string>;
     onClose?: () => void;
+    onSendToAgent?: (spec: string) => void;
 }
 
 type ExportLanguage = 'en' | 'vi';
@@ -739,7 +740,7 @@ ${labels.instructionList.map((item, i) => `${i + 1}. ${item}`).join('\n')}
     return spec;
 }
 
-export function SpecExport({ template, values, onClose }: SpecExportProps) {
+export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExportProps) {
     const [copied, setCopied] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [exportLang, setExportLang] = useState<ExportLanguage>('vi');
@@ -931,6 +932,20 @@ export function SpecExport({ template, values, onClose }: SpecExportProps) {
                     <span>{showPreview ? '🙈' : '👁️'}</span>
                     {showPreview ? labels.hidePreviewBtn : labels.previewBtn}
                 </button>
+
+                {/* Send to Agent Button */}
+                {onSendToAgent && (
+                    <button
+                        onClick={() => {
+                            onSendToAgent(spec);
+                            onClose?.();
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 transition-all shadow-md"
+                    >
+                        <span>🤖</span>
+                        {exportLang === 'vi' ? 'Gửi đến Agent' : 'Send to Agent'}
+                    </button>
+                )}
             </div>
 
             {/* Quick Copy for Specific AIs */}

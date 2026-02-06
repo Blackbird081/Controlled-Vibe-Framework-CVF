@@ -321,6 +321,15 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                         >
                                             {showApiKey[provider.id] ? l.hide : l.show}
                                         </button>
+                                        {settings.providers[provider.id].apiKey && (
+                                            <button
+                                                onClick={() => handleApiKeyChange(provider.id, '')}
+                                                className="px-3 py-2 text-xs bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200"
+                                                title="Clear API Key"
+                                            >
+                                                ✕
+                                            </button>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -388,7 +397,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 <button
                                     onClick={() => updatePreferences({ autoSaveHistory: !settings.preferences.autoSaveHistory })}
                                     className={`w-12 h-6 rounded-full transition-colors ${settings.preferences.autoSaveHistory
-                                            ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                                        ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
                                         }`}
                                 >
                                     <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.preferences.autoSaveHistory ? 'translate-x-6' : 'translate-x-0.5'
@@ -401,7 +410,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 <button
                                     onClick={() => updatePreferences({ showWelcomeTour: !settings.preferences.showWelcomeTour })}
                                     className={`w-12 h-6 rounded-full transition-colors ${settings.preferences.showWelcomeTour
-                                            ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                                        ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
                                         }`}
                                 >
                                     <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.preferences.showWelcomeTour ? 'translate-x-6' : 'translate-x-0.5'

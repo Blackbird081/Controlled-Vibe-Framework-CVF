@@ -10,6 +10,7 @@ interface DynamicFormProps {
     template: Template;
     onSubmit: (values: Record<string, string>, intent: string) => void;
     onBack: () => void;
+    onSendToAgent?: (spec: string) => void;
 }
 
 function FormField({ field, register, errors }: {
@@ -66,7 +67,7 @@ function FormField({ field, register, errors }: {
     }
 }
 
-export function DynamicForm({ template, onSubmit, onBack }: DynamicFormProps) {
+export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: DynamicFormProps) {
     const [showAdvanced, setShowAdvanced] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [showSpecExport, setShowSpecExport] = useState(false);
@@ -237,6 +238,7 @@ export function DynamicForm({ template, onSubmit, onBack }: DynamicFormProps) {
                         template={template}
                         values={formValues}
                         onClose={() => setShowSpecExport(false)}
+                        onSendToAgent={onSendToAgent}
                     />
                 </div>
             )}

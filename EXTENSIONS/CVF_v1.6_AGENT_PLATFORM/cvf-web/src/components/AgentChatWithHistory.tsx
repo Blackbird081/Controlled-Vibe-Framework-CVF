@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { AgentChat, ChatMessage } from './AgentChat';
 import { useChatHistory, ChatHistorySidebar, ChatSession } from '@/lib/chat-history';
 import { useSettings } from './Settings';
@@ -8,10 +8,11 @@ import { useSettings } from './Settings';
 interface AgentChatWithHistoryProps {
     initialPrompt?: string;
     onClose?: () => void;
+    onMinimize?: () => void;
     onComplete?: (messages: ChatMessage[]) => void;
 }
 
-export function AgentChatWithHistory({ initialPrompt, onClose, onComplete }: AgentChatWithHistoryProps) {
+export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onComplete }: AgentChatWithHistoryProps) {
     const { settings } = useSettings();
     const {
         sessions,
@@ -25,6 +26,8 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onComplete }: Age
 
     const [showSidebar, setShowSidebar] = useState(true);
     const [currentMessages, setCurrentMessages] = useState<ChatMessage[]>([]);
+    const [isMaximized, setIsMaximized] = useState(false);
+    const hasHandledInitialMount = useRef(false);
 
     // Sync messages to history
     const handleMessagesUpdate = useCallback((messages: ChatMessage[]) => {
@@ -58,20 +61,40 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onComplete }: Age
         }
     }, [isLoaded, sessions, activeSessionId, handleNewChat, setActiveSession]);
 
-    // Handle initial prompt
+    // Sync currentMessages when activeSession changes
     useEffect(() => {
-        if (initialPrompt && isLoaded && currentMessages.length === 0) {
+        if (activeSession) {
+            setCurrentMessages(activeSession.messages);
+        }
+    }, [activeSession]);
+
+    // Handle initial prompt - only on first mount with initialPrompt
+    useEffect(() => {
+        if (initialPrompt && isLoaded && !hasHandledInitialMount.current) {
+            hasHandledInitialMount.current = true;
             // Create new session for initial prompt
             handleNewChat();
         }
-    }, [initialPrompt, isLoaded]);
+    }, [initialPrompt, isLoaded, handleNewChat]);
+
+    // Listen for maximize event from AgentChat header
+    useEffect(() => {
+        const handleMaximize = () => setIsMaximized(!isMaximized);
+        window.addEventListener('cvf-chat-maximize', handleMaximize);
+        return () => window.removeEventListener('cvf-chat-maximize', handleMaximize);
+    }, [isMaximized]);
 
     return (
-        <div className="flex h-full bg-white dark:bg-gray-900 rounded-xl overflow-hidden">
+        <div className={`flex bg-white dark:bg-gray-900 rounded-xl overflow-hidden transition-all duration-300
+                        ${isMaximized
+                ? 'fixed inset-4 z-50 shadow-2xl'
+                : 'h-full'
+            }`}>
+
             {/* Sidebar Toggle for Mobile */}
             <button
                 onClick={() => setShowSidebar(!showSidebar)}
-                className="md:hidden absolute top-4 left-4 z-10 p-2 bg-gray-100 dark:bg-gray-800 
+                className="md:hidden absolute top-4 left-4 z-10 p-2 bg-gray-100 dark:bg-gray-800
                           rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             >
                 {showSidebar ? '◀️' : '▶️'}
@@ -111,10 +134,21 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onComplete }: Age
                         key={activeSessionId || 'new'}
                         initialPrompt={initialPrompt}
                         onClose={onClose}
+                        onMinimize={onMinimize}
                         onComplete={onComplete}
+                        onMessagesChange={handleMessagesUpdate}
+                        existingMessages={currentMessages}
                     />
                 </div>
             </div>
+
+            {/* Maximized backdrop */}
+            {isMaximized && (
+                <div
+                    className="fixed inset-0 bg-black/30 -z-10"
+                    onClick={() => setIsMaximized(false)}
+                />
+            )}
         </div>
     );
 }

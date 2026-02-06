@@ -118,7 +118,10 @@ export function useChatHistory() {
                     ? {
                         ...s,
                         messages,
-                        title: s.messages.length === 0 ? generateTitle(messages) : s.title,
+                        // Generate title only if current title is default and we have user messages
+                        title: (s.title === 'New Chat' || s.title.startsWith('Chat ')) && messages.some(m => m.role === 'user')
+                            ? generateTitle(messages)
+                            : s.title,
                         updatedAt: new Date(),
                         metadata: { ...s.metadata, messageCount: messages.length },
                     }

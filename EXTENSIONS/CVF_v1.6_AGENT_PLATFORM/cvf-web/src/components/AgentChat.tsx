@@ -23,7 +23,10 @@ export interface ChatMessage {
 export interface AgentChatProps {
     initialPrompt?: string;
     onClose?: () => void;
+    onMinimize?: () => void;
     onComplete?: (messages: ChatMessage[]) => void;
+    onMessagesChange?: (messages: ChatMessage[]) => void;
+    existingMessages?: ChatMessage[];
 }
 
 // Message Bubble Component
@@ -147,15 +150,17 @@ function TypingIndicator() {
 }
 
 // Main Agent Chat Component
-export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps) {
+export function AgentChat({ initialPrompt, onClose, onMinimize, onComplete, onMessagesChange, existingMessages }: AgentChatProps) {
     const { language } = useLanguage();
     const { settings } = useSettings();
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>(existingMessages || []);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
+    const [attachedFile, setAttachedFile] = useState<{ name: string; content: string } | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Labels
     const labels = {
@@ -188,6 +193,13 @@ export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps
     useEffect(() => {
         scrollToBottom();
     }, [messages, scrollToBottom]);
+
+    // Sync messages to parent (for history persistence)
+    useEffect(() => {
+        if (onMessagesChange && messages.length > 0) {
+            onMessagesChange(messages);
+        }
+    }, [messages, onMessagesChange]);
 
     // Handle initial prompt
     useEffect(() => {
@@ -227,17 +239,32 @@ export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps
             return;
         }
 
+        // Build message content including file attachment if present
+        let finalContent = content;
+        if (attachedFile) {
+            finalContent = `${content}
+
+---
+
+📎 **File: ${attachedFile.name}**
+
+\`\`\`
+${attachedFile.content}
+\`\`\``;
+        }
+
         // Add user message
         const userMessage: ChatMessage = {
             id: `msg_${Date.now()}`,
             role: 'user',
-            content,
+            content: finalContent,
             timestamp: new Date(),
             status: 'complete',
         };
 
         setMessages(prev => [...prev, userMessage]);
         setInput('');
+        setAttachedFile(null);
         setIsLoading(true);
 
         // Create placeholder for assistant message
@@ -340,6 +367,44 @@ export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps
         onClose?.();
     };
 
+    // Handle file upload
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Limit file types
+        const allowedTypes = ['.txt', '.md', '.json', '.js', '.ts', '.tsx', '.css', '.html', '.py', '.yaml', '.yml'];
+        const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+        if (!allowedTypes.includes(ext)) {
+            alert(language === 'vi'
+                ? `Chỉ hỗ trợ các định dạng: ${allowedTypes.join(', ')}`
+                : `Only these formats are supported: ${allowedTypes.join(', ')}`
+            );
+            return;
+        }
+
+        // Limit file size (100KB)
+        if (file.size > 100 * 1024) {
+            alert(language === 'vi'
+                ? 'File quá lớn (tối đa 100KB)'
+                : 'File too large (max 100KB)'
+            );
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const content = event.target?.result as string;
+            setAttachedFile({ name: file.name, content });
+        };
+        reader.readAsText(file);
+
+        // Reset file input
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
     return (
         <div className="flex flex-col h-full bg-white dark:bg-gray-900 rounded-xl overflow-hidden">
             {/* Header */}
@@ -362,16 +427,43 @@ export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps
                             Streaming...
                         </span>
                     )}
-                    {onClose && (
+                    {/* Window controls - like Windows titlebar */}
+                    <div className="flex items-center gap-1">
+                        {/* Minimize */}
                         <button
-                            onClick={onClose}
-                            className="p-2 rounded-lg hover:bg-white/20 text-white transition-colors"
+                            onClick={onMinimize || onClose}
+                            className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/20 text-white/80 hover:text-white transition-all"
+                            title="Thu nhỏ"
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                <path d="M5 12h14" />
                             </svg>
                         </button>
-                    )}
+                        {/* Maximize */}
+                        <button
+                            onClick={() => {
+                                window.dispatchEvent(new CustomEvent('cvf-chat-maximize'));
+                            }}
+                            className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/20 text-white/80 hover:text-white transition-all"
+                            title="Phóng to"
+                        >
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                <rect x="4" y="4" width="16" height="16" rx="1" />
+                            </svg>
+                        </button>
+                        {/* Close */}
+                        {onClose && (
+                            <button
+                                onClick={onClose}
+                                className="w-8 h-8 flex items-center justify-center rounded hover:bg-red-500 text-white/80 hover:text-white transition-all"
+                                title="Đóng"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                    <path d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -388,13 +480,50 @@ export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps
 
             {/* Input */}
             <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+                {/* Attached file indicator */}
+                {attachedFile && (
+                    <div className="mb-2 flex items-center gap-2 px-3 py-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-sm">
+                        <span>📎</span>
+                        <span className="flex-1 truncate text-blue-700 dark:text-blue-300">{attachedFile.name}</span>
+                        <button
+                            onClick={() => setAttachedFile(null)}
+                            className="text-red-500 hover:text-red-700"
+                            title={language === 'vi' ? 'Xóa file' : 'Remove file'}
+                        >
+                            ✕
+                        </button>
+                    </div>
+                )}
+
                 <div className="flex gap-2">
+                    {/* Hidden file input */}
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".txt,.md,.json,.js,.ts,.tsx,.css,.html,.py,.yaml,.yml"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                    />
+
+                    {/* File upload button */}
+                    <button
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isLoading}
+                        className="p-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800
+                                  hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors"
+                        title={language === 'vi' ? 'Đính kèm file' : 'Attach file'}
+                    >
+                        📎
+                    </button>
+
                     <textarea
                         ref={inputRef}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={handleKeyPress}
-                        placeholder={l.placeholder}
+                        placeholder={attachedFile
+                            ? (language === 'vi' ? `Nhập tin nhắn về ${attachedFile.name}...` : `Type about ${attachedFile.name}...`)
+                            : l.placeholder}
                         disabled={isLoading}
                         rows={1}
                         className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
@@ -404,7 +533,7 @@ export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps
                     />
                     <button
                         onClick={() => handleSendMessage()}
-                        disabled={!input.trim() || isLoading}
+                        disabled={(!input.trim() && !attachedFile) || isLoading}
                         className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 
                                   disabled:cursor-not-allowed text-white rounded-xl font-medium
                                   transition-colors flex items-center gap-2"

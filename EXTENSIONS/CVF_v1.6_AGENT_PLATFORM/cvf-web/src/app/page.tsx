@@ -41,6 +41,7 @@ import {
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 import { LanguageToggle } from '@/lib/i18n';
+import { useSettings } from '@/components/Settings';
 
 type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'marketplace' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills' | 'agent' | 'multi-agent' | 'tools';
 
@@ -57,8 +58,10 @@ export default function Home() {
   const [showUserContext, setShowUserContext] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
+  const [isAgentMinimized, setIsAgentMinimized] = useState(false);
 
   const { executions, addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
+  const { settings } = useSettings();
 
   // Check if first visit
   useEffect(() => {
@@ -245,6 +248,24 @@ export default function Home() {
     setAppState('result');
   }, [setCurrentExecution]);
 
+  // Helper to open Agent with API key check
+  const handleOpenAgent = useCallback((prompt?: string) => {
+    // Check if API key is configured
+    const provider = settings.preferences.defaultProvider;
+    const apiKey = settings.providers[provider]?.apiKey;
+
+    if (!apiKey) {
+      // No API key - open Settings modal first
+      setShowSettings(true);
+      return;
+    }
+
+    // API key exists - open agent normally
+    setAgentPrompt(prompt);
+    setAppState('agent');
+    setIsAgentMinimized(false);
+  }, [settings]);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Onboarding Wizard */}
@@ -314,7 +335,7 @@ export default function Home() {
               </button>
               {/* AI Agent Button in Header */}
               <button
-                onClick={() => setAppState('agent')}
+                onClick={() => handleOpenAgent()}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2
                            ${appState === 'agent'
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
@@ -481,6 +502,7 @@ export default function Home() {
             template={selectedTemplate}
             onSubmit={handleFormSubmit}
             onBack={handleBack}
+            onSendToAgent={(spec) => handleOpenAgent(spec)}
           />
         )}
 
@@ -550,6 +572,7 @@ export default function Home() {
             onReject={handleReject}
             onRetry={handleRetry}
             onBack={handleBack}
+            onSendToAgent={(content) => handleOpenAgent(content)}
           />
         )}
 
@@ -644,15 +667,31 @@ export default function Home() {
       )}
 
       {/* Agent Chat Modal */}
-      {appState === 'agent' && (
+      {appState === 'agent' && !isAgentMinimized && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="w-full max-w-5xl h-[85vh] rounded-xl overflow-hidden shadow-2xl">
             <AgentChatWithHistory
               initialPrompt={agentPrompt}
-              onClose={() => { setAppState('home'); setAgentPrompt(undefined); }}
-              onComplete={() => { setAppState('home'); setAgentPrompt(undefined); }}
+              onClose={() => { setAppState('home'); setAgentPrompt(undefined); setIsAgentMinimized(false); }}
+              onComplete={() => { setAppState('home'); setAgentPrompt(undefined); setIsAgentMinimized(false); }}
+              onMinimize={() => setIsAgentMinimized(true)}
             />
           </div>
+        </div>
+      )}
+
+      {/* Minimized Agent Floating Bar */}
+      {appState === 'agent' && isAgentMinimized && (
+        <div
+          className="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-purple-600 to-blue-600 
+                     text-white px-5 py-3 rounded-xl shadow-2xl cursor-pointer
+                     hover:from-purple-700 hover:to-blue-700 transition-all
+                     flex items-center gap-3 animate-pulse"
+          onClick={() => setIsAgentMinimized(false)}
+        >
+          <span className="text-xl">🤖</span>
+          <span className="font-medium">CVF Agent</span>
+          <span className="text-xs bg-white/20 px-2 py-0.5 rounded">Click để mở lại</span>
         </div>
       )}
 

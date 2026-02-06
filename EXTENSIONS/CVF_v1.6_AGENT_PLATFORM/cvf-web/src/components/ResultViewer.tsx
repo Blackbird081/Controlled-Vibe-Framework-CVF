@@ -11,6 +11,7 @@ interface ResultViewerProps {
     onReject: () => void;
     onRetry: () => void;
     onBack: () => void;
+    onSendToAgent?: (content: string) => void;
 }
 
 function QualityBadge({ score }: { score: number }) {
@@ -91,7 +92,7 @@ const exportLabels = {
     },
 };
 
-export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack }: ResultViewerProps) {
+export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack, onSendToAgent }: ResultViewerProps) {
     const [showDetails, setShowDetails] = useState(false);
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -297,6 +298,18 @@ ${cleanOutput}
                     <span>↻</span>
                     <span>Retry</span>
                 </button>
+
+                {onSendToAgent && (
+                    <button
+                        onClick={() => onSendToAgent(generateExportContent())}
+                        className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 
+                         hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg
+                         shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                    >
+                        <span>🤖</span>
+                        <span>Send to Agent</span>
+                    </button>
+                )}
             </div>
 
             {/* Metadata */}

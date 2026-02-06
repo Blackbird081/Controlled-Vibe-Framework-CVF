@@ -63,7 +63,7 @@ export class GeminiProvider {
 
     constructor(config: AIProviderConfig) {
         this.apiKey = config.apiKey;
-        this.model = config.model || 'gemini-2.0-flash';
+        this.model = config.model || 'gemini-3-flash-preview';
     }
 
     async chat(messages: AIMessage[], onStream?: (chunk: AIStreamChunk) => void): Promise<AIResponse> {

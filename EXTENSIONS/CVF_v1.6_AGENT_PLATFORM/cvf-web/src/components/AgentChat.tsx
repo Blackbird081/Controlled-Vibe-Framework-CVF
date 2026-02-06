@@ -434,17 +434,28 @@ export function AgentChat({ initialPrompt, onClose, onComplete }: AgentChatProps
     );
 }
 
-// Compact chat trigger button
+// Prominent floating Agent button with label
 export function AgentChatButton({ onClick }: { onClick: () => void }) {
     return (
         <button
             onClick={onClick}
-            className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600
-                      rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105
-                      flex items-center justify-center text-white text-2xl z-40"
+            className="fixed bottom-6 right-6 flex items-center gap-3 px-5 py-4
+                      bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500
+                      rounded-2xl shadow-2xl hover:shadow-purple-500/50 
+                      transition-all duration-300 hover:scale-105
+                      text-white font-bold z-50
+                      animate-pulse hover:animate-none
+                      border-2 border-white/20"
             title="Open CVF Agent"
         >
-            🤖
+            <span className="text-3xl">🤖</span>
+            <div className="flex flex-col items-start">
+                <span className="text-lg font-bold">AI Agent</span>
+                <span className="text-xs opacity-80">Chat with CVF</span>
+            </div>
+            <svg className="w-5 h-5 ml-2 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
         </button>
     );
 }

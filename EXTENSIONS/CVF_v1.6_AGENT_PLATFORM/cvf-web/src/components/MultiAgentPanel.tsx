@@ -73,7 +73,7 @@ export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgen
                     return;
                 }
 
-                const aiProvider = createAIProvider(provider, apiKey);
+                const aiProvider = createAIProvider(provider, { apiKey });
 
                 // Build messages with system prompt
                 const messages = [
@@ -83,9 +83,10 @@ export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgen
 
                 // Get response
                 let response = '';
-                for await (const chunk of aiProvider.streamChat(messages)) {
-                    response += chunk;
-                }
+                const result = await aiProvider.chat(messages, (chunk) => {
+                    response += chunk.text;
+                });
+                response = result.text;
 
                 // Update task and output
                 updateTaskStatus(task.id, 'completed', response);

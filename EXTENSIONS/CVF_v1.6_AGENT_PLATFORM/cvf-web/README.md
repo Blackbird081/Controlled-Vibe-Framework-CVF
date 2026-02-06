@@ -1,131 +1,141 @@
-# CVF v1.6 Agent Platform - Web Application
+<div align="center">
 
-> **AI expertise for everyone** — User-friendly AI-powered prompt engineering platform
+# 🤖 CVF Agent Platform
 
-## 🚀 Features
+**AI-powered Prompt Engineering with Governance**
 
-### Core Features
-- **Template Library** - Pre-built prompts for various use cases
-- **Category Filtering** - Browse by Product, Marketing, Business, etc.
-- **Quick Reference** - Access common prompts fast
-- **Execution History** - Track and revisit past generations
+[![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](./ROADMAP.md)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](../../../LICENSE)
+[![Tests](https://img.shields.io/badge/tests-34%20passing-brightgreen.svg)](./src/lib)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
 
-### AI Agent Features (v1.6+)
-- **🤖 AI Agent Chat** - Chat with AI using Gemini, OpenAI, or Anthropic
-- **🎯 Multi-Agent Workflow** - Orchestrate multiple agents (Architect, Builder, Reviewer)
-- **🛠️ Agent Tools** - 8 built-in tools (Web Search, Code Execute, Calculator, etc.)
-- **💾 Chat History** - Persistent conversation storage
-- **🔄 Provider Switching** - Switch between AI providers seamlessly
+[Features](#-features) • [Quick Start](#-quick-start) • [CVF Governance](#-cvf-governance) • [Architecture](#-architecture)
 
-### Technical Features
-- **🌐 i18n** - Vietnamese and English language support
-- **🌙 Dark Mode** - System-aware theme switching
-- **📱 Responsive** - Mobile-optimized UI
-- **⚡ Performance** - Lazy loading, code splitting
-- **🔒 Security** - Input validation, sandboxed execution
+</div>
 
 ---
 
-## 📦 Installation
+## ✨ Features
+
+### 🎯 Core
+| Feature | Description |
+|---------|-------------|
+| **Template Library** | Pre-built prompts for Product, Marketing, Business |
+| **AI Agent Chat** | Multi-provider: Gemini, OpenAI, Anthropic |
+| **Spec Export** | Export specs with governance rules |
+| **Usage Tracking** | Token & cost monitoring per provider |
+
+### 🚦 CVF Governance (NEW!)
+| Mode | Features |
+|------|----------|
+| **Đơn giản** | Basic phase indicator |
+| **Có Quy tắc** | + Quality Score (0-100) + Accept/Reject |
+| **CVF Full** | + Phase Gates + Checklists + Compliance |
+
+### 🛠️ Technical
+- 🌐 **i18n** - Vietnamese & English
+- 🌙 **Dark Mode** - System-aware themes
+- 📱 **Responsive** - Mobile-optimized
+- ⚡ **Fast** - Lazy loading, streaming responses
+- ✅ **Tested** - 34 unit tests passing
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-# Navigate to cvf-web directory
+# Install
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-
-# Install dependencies
 npm install
 
-# Run development server
+# Run
 npm run dev
+# Open http://localhost:3000
 
-# Build for production
-npm run build
+# Test
+npm run test:run
 ```
 
----
+### ⚙️ Configure API Keys
+Go to **Settings** (⚙️) and add your keys:
 
-## ⚙️ Configuration
-
-### API Keys
-Go to **Settings** (⚙️ icon) to configure your AI provider API keys:
-
-| Provider | Key Format | Get Key |
-|----------|------------|---------|
+| Provider | Format | Get Key |
+|----------|--------|---------|
 | Gemini | `AI...` | [Google AI Studio](https://aistudio.google.com) |
 | OpenAI | `sk-...` | [OpenAI Platform](https://platform.openai.com) |
 | Anthropic | `sk-ant-...` | [Anthropic Console](https://console.anthropic.com) |
 
 ---
 
-## 📁 Project Structure
+## 🚦 CVF Governance
+
+The platform implements **Controlled Vibe Framework** governance rules:
+
+### 4-Phase Process
+```
+┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+│  🔍 Phase A │ → │  ✏️ Phase B │ → │  🔨 Phase C │ → │  ✅ Phase D │
+│  Discovery  │   │   Design    │   │    Build    │   │   Review    │
+└─────────────┘   └─────────────┘   └─────────────┘   └─────────────┘
+```
+
+### Governance Features
+- **Mode Detection** - Auto-detect from spec content
+- **Quality Scoring** - AI response rated 0-100
+- **Accept/Reject/Retry** - User controls AI output
+- **Phase Gates** - Checklist before proceeding
+- **Compliance Check** - Verify required items
+
+---
+
+## 📁 Architecture
 
 ```
-cvf-web/
-├── src/
-│   ├── app/              # Next.js pages
-│   │   ├── layout.tsx    # Root layout with providers
-│   │   └── page.tsx      # Main app page
-│   ├── components/       # React components
-│   │   ├── AgentChat.tsx         # AI chat interface
-│   │   ├── MultiAgentPanel.tsx   # Multi-agent workflow
-│   │   ├── ToolsPage.tsx         # Agent tools UI
-│   │   ├── MobileComponents.tsx  # Mobile UI
-│   │   └── ...
-│   ├── lib/              # Utilities & hooks
-│   │   ├── ai-providers.ts   # AI provider integrations
-│   │   ├── chat-history.tsx  # Chat persistence
-│   │   ├── multi-agent.tsx   # Multi-agent logic
-│   │   ├── agent-tools.tsx   # Tool definitions
-│   │   ├── security.ts       # Security utilities
-│   │   ├── error-handling.tsx # Error handling
-│   │   ├── i18n.tsx          # Internationalization
-│   │   └── theme.tsx         # Dark mode
-│   └── types/            # TypeScript types
-└── public/               # Static assets
+src/
+├── app/                    # Next.js pages
+├── components/
+│   ├── AgentChat.tsx       # Main chat interface
+│   ├── PhaseGateModal.tsx  # Phase gate UI (CVF)
+│   ├── SpecExport.tsx      # Spec export with modes
+│   └── ...
+├── lib/
+│   ├── ai-providers.ts     # Gemini, OpenAI, Anthropic
+│   ├── governance.ts       # Quality scoring
+│   ├── cvf-checklists.ts   # Phase checklists
+│   ├── quota-manager.ts    # Usage tracking
+│   └── *.test.ts           # Unit tests
+└── types/                  # TypeScript types
 ```
 
 ---
 
-## 🔧 Available Scripts
+## 📊 Scripts
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-
----
-
-## 🎨 Tech Stack
-
-- **Framework:** Next.js 16
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **State:** React Hooks + Zustand
-- **AI:** Gemini, OpenAI, Anthropic APIs
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run test` | Watch mode tests |
+| `npm run test:run` | Single run tests |
 
 ---
 
 ## 📝 Changelog
 
-### v1.6.0 (2026-02-06)
-- ✅ Phase 1: User Context & Settings
-- ✅ Phase 2: Agent Chat Interface  
-- ✅ Phase 3: AI Provider Integration
-- ✅ Phase 4: Memory, Multi-Agent, Tools
-- ✅ Phase 5: Complete i18n (160+ keys)
-- ✅ Phase 6: Error Handling
-- ✅ Phase 8: Performance (Lazy loading)
-- ✅ Phase 9: Security
-- ✅ Phase 10: Mobile UI
+### v1.6.0 (2026-02-07)
+- ✅ **CVF Governance Integration**
+  - Phase 1: Mode Detection & Badge
+  - Phase 2: Quality Scoring + Accept/Reject
+  - Phase 3: Phase Gates + Checklists
+- ✅ **Unit Tests** - 34 tests passing
+- ✅ **Usage Tracking** - Token & cost per provider
 
 ---
 
-## 📄 License
+<div align="center">
 
-MIT License - See [LICENSE](../../../LICENSE) for details.
+**Made with ❤️ using the Controlled Vibe Framework**
 
----
+[CVF Documentation](../../../docs) • [Report Issue](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
 
-**Made with ❤️ by the CVF Team**
+</div>

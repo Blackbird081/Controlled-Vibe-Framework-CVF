@@ -25,6 +25,8 @@ export * from './UserContext';
 export * from './WorkflowVisualizer';
 export * from './Settings';
 export * from './AgentChat';
+export * from './AgentChatWithHistory';
 export * from './ExecutionProgress';
 export * from './ExecuteWithAI';
 export * from './ProviderSwitcher';
+export * from './MultiAgentPanel';

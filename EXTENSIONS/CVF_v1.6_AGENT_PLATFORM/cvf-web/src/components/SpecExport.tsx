@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Template } from '@/types';
 import { useUserContext } from './UserContext';
+import { WorkflowVisualizer } from './WorkflowVisualizer';
 
 interface SpecExportProps {
     template: Template;
@@ -838,6 +839,11 @@ export function SpecExport({ template, values, onClose }: SpecExportProps) {
                             {modes.fullDesc}
                         </div>
                     </button>
+                </div>
+
+                {/* Workflow Visualizer */}
+                <div className="mt-4">
+                    <WorkflowVisualizer mode={exportMode} compact />
                 </div>
             </div>
 

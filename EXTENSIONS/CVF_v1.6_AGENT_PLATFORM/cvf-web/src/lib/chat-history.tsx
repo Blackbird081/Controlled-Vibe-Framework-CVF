@@ -93,7 +93,7 @@ export function useChatHistory() {
 
     const createSession = useCallback((provider: 'gemini' | 'openai' | 'anthropic'): string => {
         const newSession: ChatSession = {
-            id: `session_${Date.now()}`,
+            id: `session_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
             title: 'New Chat',
             messages: [],
             createdAt: new Date(),

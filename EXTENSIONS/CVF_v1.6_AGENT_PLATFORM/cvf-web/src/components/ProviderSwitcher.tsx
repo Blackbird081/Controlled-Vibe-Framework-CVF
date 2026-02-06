@@ -14,9 +14,9 @@ interface ProviderOption {
 }
 
 const PROVIDERS: ProviderOption[] = [
-    { id: 'gemini', name: 'Gemini', icon: '✨', color: 'from-blue-500 to-cyan-500', model: 'gemini-2.0-flash' },
-    { id: 'openai', name: 'GPT-4', icon: '🤖', color: 'from-green-500 to-emerald-500', model: 'gpt-4o' },
-    { id: 'anthropic', name: 'Claude', icon: '🧠', color: 'from-purple-500 to-pink-500', model: 'claude-3.5-sonnet' },
+    { id: 'gemini', name: 'Gemini', icon: '✨', color: 'from-blue-500 to-cyan-500', model: 'gemini-2.5-flash' },
+    { id: 'openai', name: 'GPT-4o', icon: '🤖', color: 'from-green-500 to-emerald-500', model: 'gpt-4o' },
+    { id: 'anthropic', name: 'Claude', icon: '🧠', color: 'from-purple-500 to-pink-500', model: 'claude-sonnet-4-20250514' },
 ];
 
 interface ProviderSwitcherProps {

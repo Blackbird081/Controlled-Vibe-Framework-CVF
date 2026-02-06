@@ -33,3 +33,4 @@ export * from './MultiAgentPanel';
 export * from './ToolsPage';
 export * from './LazyComponents';
 export * from './MobileComponents';
+export * from './AIUsagePanel';

@@ -1,15 +1,15 @@
-# VERSION COMPARISON — CVF v1.0 → v1.1 → v1.2 → v1.3
+# VERSION COMPARISON — CVF v1.0 → v1.1 → v1.2 → v1.3 → v1.6
 
-> **Updated:** 29/01/2026
+> **Updated:** 06/02/2026
 
 ## Tổng quan
 
-| Tiêu chí | v1.0 | v1.1 | v1.2 | v1.3 |
-|----------|:----:|:----:|:----:|:----:|
-| **Type** | Core | Core | Extension | Toolkit |
-| **Mục đích** | Baseline | Kiểm soát chi tiết | Skill Governance | Implementation |
-| **Đối tượng** | Người mới | Project phức tạp | Enterprise | DevOps |
-| **Trạng thái** | FROZEN | FROZEN | STABLE | ✅ NEW |
+| Tiêu chí | v1.0 | v1.1 | v1.2 | v1.3 | v1.6 |
+|----------|:----:|:----:|:----:|:----:|:----:|
+| **Type** | Core | Core | Extension | Toolkit | Web App |
+| **Mục đích** | Baseline | Kiểm soát | Skill Gov | Implementation | End-User |
+| **Đối tượng** | Mới học | Project phức tạp | Enterprise | DevOps | ALL users |
+| **Trạng thái** | FROZEN | FROZEN | FROZEN | FROZEN | ✅ ACTIVE |
 
 ---
 

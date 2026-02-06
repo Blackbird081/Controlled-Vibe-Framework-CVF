@@ -63,7 +63,11 @@ export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgen
                 updateTaskStatus(task.id, 'running');
 
                 // Call AI with agent's system prompt
-                const provider = settings.preferences.defaultProvider;
+                // Select provider based on multi-agent mode
+                const provider = settings.preferences.multiAgentMode === 'multi' && settings.preferences.agentProviders
+                    ? settings.preferences.agentProviders[agent.role as keyof typeof settings.preferences.agentProviders]
+                    : settings.preferences.defaultProvider;
+
                 const apiKey = settings.providers[provider]?.apiKey;
 
                 if (!apiKey) {
@@ -126,9 +130,18 @@ export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgen
             {/* Header */}
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                        🤖 Multi-Agent Workflow
-                    </h2>
+                    <div className="flex items-center gap-2">
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                            🤖 Multi-Agent Workflow
+                        </h2>
+                        {/* Mode Indicator */}
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${settings.preferences.multiAgentMode === 'single'
+                            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                            : 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                            }`}>
+                            {settings.preferences.multiAgentMode === 'single' ? '🎯 Single AI' : '🤖 Multi AI'}
+                        </span>
+                    </div>
                     <p className="text-sm text-gray-500">
                         Phối hợp nhiều AI agents để hoàn thành task
                     </p>

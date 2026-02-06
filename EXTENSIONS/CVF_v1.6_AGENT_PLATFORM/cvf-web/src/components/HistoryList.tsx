@@ -1,14 +1,14 @@
 'use client';
 
-import Link from 'next/link';
 import { Execution } from '@/types';
 
 interface HistoryListProps {
     executions: Execution[];
     onSelect: (execution: Execution) => void;
+    onBrowse?: () => void;
 }
 
-export function HistoryList({ executions, onSelect }: HistoryListProps) {
+export function HistoryList({ executions, onSelect, onBrowse }: HistoryListProps) {
     if (executions.length === 0) {
         return (
             <div className="text-center py-12">
@@ -19,16 +19,15 @@ export function HistoryList({ executions, onSelect }: HistoryListProps) {
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
                     Start by selecting a template and submitting your first request.
                 </p>
-                <Link
-                    href="/"
+                <button
+                    onClick={onBrowse}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 
-                     text-white font-medium rounded-lg transition-colors"
-                >
+                     text-white font-medium rounded-lg transition-colors">
                     <span>Browse Templates</span>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                </Link>
+                </button>
             </div>
         );
     }

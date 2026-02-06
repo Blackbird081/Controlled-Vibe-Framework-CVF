@@ -126,7 +126,58 @@ Skills bên ngoài phải trải qua:
 
 **Trạng thái: ✅ FROZEN (29/01/2026)**
 
-> Framework đã hoàn thiện và được freeze. Các cập nhật trong tương lai sẽ tập trung vào việc bổ sung thêm **Application Skills** (ví dụ: tạo app, automation workflows, etc.) trong `community-registry/`.
+> Framework v1.0-v1.3 đã hoàn thiện và được freeze. Các cập nhật trong tương lai sẽ tập trung vào việc bổ sung thêm **Application Skills** trong `community-registry/`.
+
+---
+
+## VII. CVF v1.6 Agent Platform (Feb 2026)
+
+**Phiên bản:** v1.6 Web Application  
+**Trạng thái:** ✅ Production Ready (06/02/2026)  
+
+### Điểm khác biệt
+
+| Aspect | v1.0-v1.3 | v1.6 |
+|--------|-----------|------|
+| **Target Users** | Developers | Everyone |
+| **Interface** | SDK/CLI | Web UI |
+| **Governance** | Skill Contracts | Templates |
+| **Execution** | Code integration | Click \u0026 Chat |
+| **Learning Curve** | 30min+ | 2min |
+
+### Core Innovation
+
+v1.6 là **first end-user application** của CVF, đưa governance principles vào web interface:
+
+**Templates = Governance in Action**
+- Pre-structured workflows embodying CVF phases (A→D)
+- Enforce intent-driven approach
+- Built-in quality checks (Phase D)
+
+**Agent System = Controlled AI Interaction**
+- **Single mode**: Conversational AI with CVF system prompt
+- **Multi-mode**: 4 specialized agents (Orchestrator, Architect, Builder, Reviewer)
+- Checkpoints, quality scoring, audit trail
+
+### Features
+
+- ✅ 6 built-in templates
+- ✅ Agent Chat with streaming
+- ✅ Multi-Agent workflows with role specialization
+- ✅ Single AI / Multi AI modes
+- ✅ Multi-provider support (Gemini, GPT, Claude)
+- ✅ Internationalization (vi/en)
+- ✅ Mobile responsive + PWA
+
+### Relationship to v1.3
+
+v1.6 **không thay thế** v1.3:
+- **v1.3 SDK**: For advanced governance, contract-based systems
+- **v1.6 Web**: For rapid prototyping, accessibility
+
+**Together:** Prototype with v1.6 → Implement contracts with v1.3
+
+**Documentation:** [CVF v1.6 Guide](./CVF_v16_AGENT_PLATFORM.md)
 
 ---
 

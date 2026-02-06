@@ -71,9 +71,12 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
     // Handle initial prompt - only on first mount with initialPrompt
     useEffect(() => {
         if (initialPrompt && isLoaded && !hasHandledInitialMount.current) {
+            console.log('[AgentChatWithHistory] Creating NEW session for initialPrompt');
             hasHandledInitialMount.current = true;
             // Create new session for initial prompt
             handleNewChat();
+            // Force clear messages to ensure clean slate
+            setCurrentMessages([]);
         }
     }, [initialPrompt, isLoaded, handleNewChat]);
 

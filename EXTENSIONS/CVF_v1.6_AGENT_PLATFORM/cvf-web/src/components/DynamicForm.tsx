@@ -203,7 +203,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
 
                 {/* Action Buttons */}
                 <div className="flex gap-3">
-                    {/* Export Spec Button */}
+                    {/* Export/Copy Spec Button */}
                     <button
                         type="button"
                         onClick={() => setShowSpecExport(!showSpecExport)}
@@ -216,9 +216,10 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                         <span>Export Spec</span>
                     </button>
 
-                    {/* Submit Button */}
+                    {/* Submit Button - Opens SpecExport to choose mode first */}
                     <button
-                        type="submit"
+                        type="button"
+                        onClick={() => setShowSpecExport(true)}
                         className="flex-1 py-4 px-6 bg-blue-600 hover:bg-blue-700 
                          text-white font-semibold rounded-lg
                          shadow-lg hover:shadow-xl

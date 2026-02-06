@@ -38,6 +38,8 @@ import {
   MultiAgentButton,
   ToolsPage,
   ToolsButton,
+  AIUsagePanel,
+  AIUsageBadge,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 import { LanguageToggle } from '@/lib/i18n';
@@ -57,6 +59,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showUserContext, setShowUserContext] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showAIUsage, setShowAIUsage] = useState(false);
   const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
   const [isAgentMinimized, setIsAgentMinimized] = useState(false);
 
@@ -250,21 +253,11 @@ export default function Home() {
 
   // Helper to open Agent with API key check
   const handleOpenAgent = useCallback((prompt?: string) => {
-    // Check if API key is configured
-    const provider = settings.preferences.defaultProvider;
-    const apiKey = settings.providers[provider]?.apiKey;
-
-    if (!apiKey) {
-      // No API key - open Settings modal first
-      setShowSettings(true);
-      return;
-    }
-
-    // API key exists - open agent normally
+    // ALWAYS set the prompt first (even if no API key)
     setAgentPrompt(prompt);
     setAppState('agent');
     setIsAgentMinimized(false);
-  }, [settings]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -364,6 +357,7 @@ export default function Home() {
                 🛠️ Tools
               </button>
               <UserContextBadge onClick={() => setShowUserContext(true)} />
+              <AIUsageBadge onClick={() => setShowAIUsage(true)} />
               <SettingsButton onClick={() => setShowSettings(true)} />
               <div id="tour-lang-switch">
                 <LanguageToggle />
@@ -599,6 +593,7 @@ export default function Home() {
             <HistoryList
               executions={executions}
               onSelect={handleHistorySelect}
+              onBrowse={handleBack}
             />
           </div>
         )}
@@ -663,6 +658,13 @@ export default function Home() {
           <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <SettingsPage onClose={() => setShowSettings(false)} />
           </div>
+        </div>
+      )}
+
+      {/* AI Usage Modal */}
+      {showAIUsage && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <AIUsagePanel onClose={() => setShowAIUsage(false)} />
         </div>
       )}
 

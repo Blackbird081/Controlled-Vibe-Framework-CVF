@@ -4,10 +4,34 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
 
 // Types
+type ProviderKey = 'gemini' | 'openai' | 'anthropic';
+
+// Available models for each provider
+export const AVAILABLE_MODELS: Record<ProviderKey, { id: string; name: string; recommended?: boolean }[]> = {
+    gemini: [
+        { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', recommended: true },
+        { id: 'gemini-3-flash', name: 'Gemini 3 Flash' },
+        { id: 'gemini-2.5-flash-lite', name: 'Gemini 2.5 Flash Lite' },
+        { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro' },
+        { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash' },
+    ],
+    openai: [
+        { id: 'gpt-4o', name: 'GPT-4o', recommended: true },
+        { id: 'gpt-4o-mini', name: 'GPT-4o Mini' },
+        { id: 'gpt-4-turbo', name: 'GPT-4 Turbo' },
+        { id: 'o1', name: 'o1 (Reasoning)' },
+    ],
+    anthropic: [
+        { id: 'claude-sonnet-4-20250514', name: 'Claude Sonnet 4', recommended: true },
+        { id: 'claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet' },
+        { id: 'claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku' },
+    ],
+};
+
 interface AIProviderSettings {
-    gemini: { apiKey: string; enabled: boolean };
-    openai: { apiKey: string; enabled: boolean };
-    anthropic: { apiKey: string; enabled: boolean };
+    gemini: { apiKey: string; enabled: boolean; selectedModel: string };
+    openai: { apiKey: string; enabled: boolean; selectedModel: string };
+    anthropic: { apiKey: string; enabled: boolean; selectedModel: string };
 }
 
 interface UserPreferences {
@@ -27,9 +51,9 @@ const STORAGE_KEY = 'cvf_settings';
 
 const defaultSettings: SettingsData = {
     providers: {
-        gemini: { apiKey: '', enabled: true },
-        openai: { apiKey: '', enabled: false },
-        anthropic: { apiKey: '', enabled: false },
+        gemini: { apiKey: '', enabled: true, selectedModel: 'gemini-2.5-flash' },
+        openai: { apiKey: '', enabled: false, selectedModel: 'gpt-4o' },
+        anthropic: { apiKey: '', enabled: false, selectedModel: 'claude-sonnet-4-20250514' },
     },
     preferences: {
         defaultProvider: 'gemini',
@@ -305,32 +329,54 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 </div>
 
                                 {settings.providers[provider.id].enabled && (
-                                    <div className="flex gap-2">
-                                        <input
-                                            type={showApiKey[provider.id] ? 'text' : 'password'}
-                                            value={settings.providers[provider.id].apiKey}
-                                            onChange={(e) => handleApiKeyChange(provider.id, e.target.value)}
-                                            placeholder={`${provider.name} ${l.apiKey}...`}
-                                            className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 
-                                                       dark:border-gray-600 bg-white dark:bg-gray-700 
-                                                       text-gray-900 dark:text-white"
-                                        />
-                                        <button
-                                            onClick={() => setShowApiKey({ ...showApiKey, [provider.id]: !showApiKey[provider.id] })}
-                                            className="px-3 py-2 text-xs bg-gray-100 dark:bg-gray-600 rounded-lg"
-                                        >
-                                            {showApiKey[provider.id] ? l.hide : l.show}
-                                        </button>
-                                        {settings.providers[provider.id].apiKey && (
+                                    <>
+                                        <div className="flex gap-2">
+                                            <input
+                                                type={showApiKey[provider.id] ? 'text' : 'password'}
+                                                value={settings.providers[provider.id].apiKey}
+                                                onChange={(e) => handleApiKeyChange(provider.id, e.target.value)}
+                                                placeholder={`${provider.name} ${l.apiKey}...`}
+                                                className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 
+                                                           dark:border-gray-600 bg-white dark:bg-gray-700 
+                                                           text-gray-900 dark:text-white"
+                                            />
                                             <button
-                                                onClick={() => handleApiKeyChange(provider.id, '')}
-                                                className="px-3 py-2 text-xs bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200"
-                                                title="Clear API Key"
+                                                onClick={() => setShowApiKey({ ...showApiKey, [provider.id]: !showApiKey[provider.id] })}
+                                                className="px-3 py-2 text-xs bg-gray-100 dark:bg-gray-600 rounded-lg"
                                             >
-                                                ✕
+                                                {showApiKey[provider.id] ? l.hide : l.show}
                                             </button>
-                                        )}
-                                    </div>
+                                            {settings.providers[provider.id].apiKey && (
+                                                <button
+                                                    onClick={() => handleApiKeyChange(provider.id, '')}
+                                                    className="px-3 py-2 text-xs bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200"
+                                                    title="Clear API Key"
+                                                >
+                                                    ✕
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        {/* Model Selector */}
+                                        <div className="mt-3">
+                                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                                {language === 'vi' ? 'Model' : 'Model'}
+                                            </label>
+                                            <select
+                                                value={settings.providers[provider.id].selectedModel || AVAILABLE_MODELS[provider.id][0].id}
+                                                onChange={(e) => updateProvider(provider.id, { selectedModel: e.target.value })}
+                                                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 
+                                                           dark:border-gray-600 bg-white dark:bg-gray-700 
+                                                           text-gray-900 dark:text-white"
+                                            >
+                                                {AVAILABLE_MODELS[provider.id].map((model) => (
+                                                    <option key={model.id} value={model.id}>
+                                                        {model.name} {model.recommended ? '⭐' : ''}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </>
                                 )}
                             </div>
                         ))}

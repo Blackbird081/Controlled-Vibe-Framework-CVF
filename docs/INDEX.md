@@ -58,7 +58,14 @@
 
 ## 📚 Complete Documentation
 
-### For Using CVF (Start Here!)
+### For v1.6 Web App Users (No Coding Required!) ✨
+
+| Document | Purpose | Read Time | Best For |
+|----------|---------|-----------|----------|
+| [CVF_v16_AGENT_PLATFORM.md](CVF_v16_AGENT_PLATFORM.md) | v1.6 Complete Guide | 20 min | New web app users |
+| [CHEAT_SHEET.md](CHEAT_SHEET.md) | Quick reference | 5 min | Daily use |
+
+### For v1.3 SDK Users (Developers)
 
 | Document | Purpose | Read Time | Best For |
 |----------|---------|-----------|----------|

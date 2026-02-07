@@ -3,7 +3,15 @@
 > **Domain:** Marketing & SEO  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/competitive-landscape
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -134,6 +142,65 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Gap Analysis** - Opportunities they miss
 6. **Differentiation Strategy** - How to stand out
 7. **Action Items** - Specific recommendations
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Sản phẩm: StockFlow (SaaS quản lý tồn kho cho chuỗi cửa hàng)
+Thị trường: VN/SEA, SMB retail
+Đối thủ chính: KiotViet, Sapo, Odoo
+Kênh tăng trưởng: SEO + Facebook Ads
+Mục tiêu: Xác định điểm khác biệt trong 90 ngày
+```
+
+### Output mẫu:
+```markdown
+# Competitor Snapshot
+
+| Competitor | Giá/Tháng | Điểm mạnh | Điểm yếu |
+|---|---|---|---|
+| KiotViet | $25-80 | POS + kho phổ biến | Offline yếu, báo cáo kho chậm |
+| Sapo | $20-70 | Nhiều template ngành | Quy trình kho phức tạp |
+| Odoo | $30-120 | Mạnh ERP | Setup nặng, cần kỹ thuật |
+
+## Gaps & Opportunities
+- Offline-first cho kho lớn chưa được nhấn mạnh
+- Quy trình nhập/xuất barcode dưới 15s
+- Onboarding < 30 phút cho nhân viên kho
+
+## Positioning Draft
+“StockFlow giúp quản lý kho đa chi nhánh offline-first, đồng bộ nhanh khi có mạng.”
+
+## Next Actions (30 ngày)
+1. Làm landing page so sánh tính năng
+2. Tạo case study kho 2 chi nhánh
+3. Viết bài SEO “phần mềm quản lý kho offline”
+```
+
+### Đánh giá:
+- ✅ So sánh rõ ràng, có khoảng trống thị trường
+- ✅ Positioning có khác biệt
+- ✅ Hành động cụ thể theo thời gian
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Brand Voice Consistency](./brand_voice_consistency.skill.md)
+- [Pricing Strategy Review](./pricing_strategy_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Competitor Analysis**, tiếp tục với:
+→ [Brand Voice Consistency](./brand_voice_consistency.skill.md)
 
 ---
 

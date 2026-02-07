@@ -3,7 +3,15 @@
 > **Domain:** Web Development  
 > **Difficulty:** ⭐ Easy  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.0  
+> **Last Updated:** 2026-02-07
 > **Source:** Vibecode Kit v4.0
+
+---
+
+## 📌 Prerequisites
+
+Không yêu cầu.
 
 ---
 
@@ -176,4 +184,24 @@ Portfolio với:
 
 ---
 
-*Portfolio Skill — CVF v1.5.2 Skill Library*
+---
+
+## 🔗 Related Skills
+- [Blog / Documentation](./04_blog_docs.skill.md)
+- [Landing Page](./01_landing_page.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Portfolio**, quay lại vòng web core:
+→ [Landing Page](./01_landing_page.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Web Development Domain*

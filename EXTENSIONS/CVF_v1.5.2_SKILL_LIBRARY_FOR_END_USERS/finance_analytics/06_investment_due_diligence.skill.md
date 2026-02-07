@@ -3,8 +3,8 @@
 > **Domain:** Finance & Analytics  
 > **Difficulty:** ⭐⭐⭐ Advanced — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.0.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -178,6 +178,18 @@ Risks:
 
 **Expected Analysis:**
 ```markdown
+
+### Input mẫu:
+```
+Mục tiêu: Hoàn thành Investment Due Diligence
+Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
+Ràng buộc: Deadline 2 tuần
+```
+
+### Output mẫu:
+```
+Tóm tắt kết quả: Investment Due Diligence với khuyến nghị/ưu tiên rõ ràng.
+```
 ## Investment Due Diligence: TechCorp
 
 ### Executive Summary
@@ -222,7 +234,24 @@ expansion in [sector]. Key risks: customer concentration and team stability.
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [Cash Flow Analysis](./05_cash_flow_analysis.skill.md)
+- [Financial Risk Assessment](./07_financial_risk_assessment.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
 Sau khi hoàn thành Investment Due Diligence, tiếp tục với:
 → [Financial Risk Assessment](./07_financial_risk_assessment.skill.md) — Đánh giá rủi ro tài chính tổng thể
+
+---
+
+*CVF Skill Library v1.5.2 | Finance & Analytics Domain*

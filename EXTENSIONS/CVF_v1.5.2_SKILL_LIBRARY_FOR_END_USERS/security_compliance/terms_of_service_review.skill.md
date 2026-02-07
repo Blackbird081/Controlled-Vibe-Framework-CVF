@@ -3,7 +3,15 @@
 > **Domain:** Security & Compliance  
 > **Difficulty:** Easy  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/terms-of-service
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -199,6 +207,66 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Fairness Review** - Balance of rights
 6. **Improvement Suggestions** - Section rewrites
 7. **Regional Compliance** - Market-specific gaps
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Terms of Service Review**, tiếp tục với:
+→ [Data Handling Review](./data_handling_review.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Product: StockFlow (B2B SaaS)
+Plans: monthly/annual
+SLA: 99.5%
+Billing: auto-renew
+```
+
+### Output mẫu:
+```markdown
+# ToS Review
+
+## Missing/Weak Clauses
+- Limitation of liability chưa có cap
+- Termination & data export không rõ
+- Acceptable use chưa cấm scraping
+
+## Recommendations
+- Add liability cap = 12 months fees
+- Clarify data export within 30 ngày sau khi hủy
+- Add AUP section: no scraping, no abuse
+```
+
+### Đánh giá:
+- ✅ Bám đúng rủi ro pháp lý
+- ✅ Khuyến nghị cụ thể
+- ✅ Dễ cập nhật vào ToS
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [GDPR Compliance Review](./gdpr_compliance_review.skill.md)
+- [Incident Response Plan](./incident_response_plan.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Terms of Service Review**, tiếp tục với:
+→ [Incident Response Plan](./incident_response_plan.skill.md)
 
 ---
 

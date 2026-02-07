@@ -3,7 +3,15 @@
 > **Domain:** Security & Compliance  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/data-handling
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -202,6 +210,71 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Policy Templates** - Data handling policies
 6. **Retention Schedule** - Recommended periods
 7. **Implementation Roadmap** - Priority improvements
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Data Handling Review**, tiếp tục với:
+→ [Incident Response Plan](./incident_response_plan.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Data types: user profile, inventory logs, audit logs, invoices
+Storage: Postgres (core), S3 (exports), Redis cache
+Retention: chưa định nghĩa
+Third-party: SendGrid, Sentry, Google Analytics
+```
+
+### Output mẫu:
+```markdown
+# Data Handling Summary
+
+## Data Map
+- PII: name, email, phone (Postgres)
+- Ops: stock_movements, audit_logs (Postgres)
+- Files: export CSV (S3, 30 ngày)
+
+## Gaps
+- Không có retention policy cho audit_logs
+- S3 exports chưa bật default encryption
+- GA thu thập URL có chứa SKU
+
+## Actions
+- Define retention: audit_logs 12 tháng
+- Enable S3 SSE-S3 + lifecycle 30 ngày
+- Strip SKU khỏi URL tracking
+```
+
+### Đánh giá:
+- ✅ Có data map rõ ràng
+- ✅ Chỉ ra lỗ hổng compliance
+- ✅ Action cụ thể theo hệ thống
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [API Security Checklist](./api_security_checklist.skill.md)
+- [Privacy Policy Audit](./privacy_policy_audit.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Data Handling Review**, tiếp tục với:
+→ [Privacy Policy Audit](./privacy_policy_audit.skill.md)
 
 ---
 

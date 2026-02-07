@@ -3,7 +3,15 @@
 > **Domain:** Security & Compliance  
 > **Difficulty:** Easy  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/privacy-policy
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -209,6 +217,70 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Regional Gaps** - Market-specific issues
 6. **Rewrite Suggestions** - Improved sections
 7. **Implementation Checklist** - Next steps
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Privacy Policy Audit**, tiếp tục với:
+→ [GDPR Compliance Review](./gdpr_compliance_review.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Site: stockflow.vn
+Policy version: 2023-01
+Data collected: email, phone, device ID, usage logs
+Vendors: GA, SendGrid, Stripe
+```
+
+### Output mẫu:
+```markdown
+# Privacy Policy Findings
+
+## Missing Sections
+- Legal basis cho xử lý dữ liệu
+- Cookie/analytics disclosure
+- Data retention & deletion
+
+## Required Updates
+- Add "Purpose + Legal basis" table
+- Disclose third-party processors (GA/Stripe)
+- Provide contact for data requests
+
+## Priority
+P0: Legal basis + cookie disclosure
+P1: Retention & deletion timeline
+```
+
+### Đánh giá:
+- ✅ Chỉ ra thiếu sót cụ thể
+- ✅ Có ưu tiên rõ ràng
+- ✅ Phù hợp dữ liệu thực tế
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Data Handling Review](./data_handling_review.skill.md)
+- [GDPR Compliance Review](./gdpr_compliance_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Privacy Policy Audit**, tiếp tục với:
+→ [GDPR Compliance Review](./gdpr_compliance_review.skill.md)
 
 ---
 

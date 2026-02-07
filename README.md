@@ -3,8 +3,8 @@
 **Framework quản lý dự án theo tinh thần *vibe coding có kiểm soát*.**
 
 > **Current Version:** v1.6.0 | **Latest:** CVF Agent Platform 🤖  
-> **Assessment:** 9.40/10 ✅ (Jan 29, 2026)  
-> **Last Updated:** Feb 06, 2026
+> **Assessment:** 9.5/10 ✅ (Feb 07, 2026) — [View Full Report](./docs/CVF_COMPREHENSIVE_ASSESSMENT_2026-02-07.md)  
+> **Last Updated:** Feb 07, 2026
 
 ---
 
@@ -71,7 +71,7 @@ result = skill.execute({"email": "Buy now!!!"})
 | 👤 Operator Manual | **v1.3.1** | [EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/](./EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) |
 | 🎨 End-user UX Layer | **v1.4** | [EXTENSIONS/CVF_v1.4_USAGE_LAYER/](./EXTENSIONS/CVF_v1.4_USAGE_LAYER/) |
 | 🌐 Web UI Platform | **v1.5** | [EXTENSIONS/CVF_v1.5_UX_PLATFORM/](./EXTENSIONS/CVF_v1.5_UX_PLATFORM/) |
-| 📋 Skill Library (45 skills) | **v1.5.2** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| 📋 Skill Library (69 skills) | **v1.5.2** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
 | 🤖 **AI Agent Platform** | **v1.6** ⭐ | [EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/](./EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
 
 ---
@@ -122,20 +122,31 @@ Web UI hỗ trợ 3 chế độ xuất prompt:
 
 ## 📋 Skill Library (v1.5.2)
 
-**45 skills** across **5 domains**:
+**69 skills** across **12 domains**:
 
 | Domain | Skills | Description |
 |--------|:------:|-------------|
-| 💻 App Development | 8 | Requirements, Tech Stack, Architecture, Database, API... | 
 | 📣 Marketing & SEO | 9 | SEO Audit, Copywriting, CRO, Pricing... |
 | 🎨 Product & UX | 8 | A/B Test, Accessibility, User Flow, Personas... |
 | 🔐 Security & Compliance | 6 | API Security, GDPR, Privacy Policy, Incident Response... |
-| 📁 Legacy (General) | 14 | Business Analysis, Technical Review, Content... |
+| 💻 App Development | 8 | Requirements, Tech Stack, Architecture, Database, API... |
+| 💹 Finance & Analytics | 8 | Pricing, unit economics, dashboards... |
+| 🧑‍💼 HR & Operations | 5 | Hiring, onboarding, SOP... |
+| ⚖️ Legal & Contracts | 5 | Contract review, compliance... |
+| 🧪 AI/ML Evaluation | 6 | Bias, robustness, evaluation... |
+| 🌐 Web Development | 5 | Landing, SaaS, Dashboard, Blog, Portfolio |
+| 📊 Business Analysis | 3 | Strategy, market analysis... |
+| ✍️ Content Creation | 3 | Editorial, brand voice... |
+| 🧰 Technical Review | 3 | Code review, architecture... |
 
 **New in v1.5.2:**
 - ✅ Skill Versioning (1.x.x per skill)
 - ✅ Prerequisites system with workflow links
 - ✅ Difficulty Guide (Easy/Medium/Advanced criteria)
+- ✅ Domain Refinement (Quality Pass 2) complete (12 domains)
+- ✅ Validation: 69 skills pass validate_skills.py (0 issues/warnings)
+- ✅ **NEW:** Ví dụ thực tế added to Advanced skills
+- ✅ **NEW:** Cross-references (Next Step) added
 
 [→ Xem chi tiết Skill Library](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
 
@@ -190,6 +201,9 @@ Controlled-Vibe-Framework-CVF/
 │       │   ├── Tools          ← 8 Agent Tools
 │       │   └── i18n           ← VI/EN Support
 │       └── ROADMAP.md         ← Development Plan
+│
+├── tools/
+│   └── skill-validation/      ← Shared validation tools
 │
 └── docs/
     ├── QUICK_START_INTERNAL.md
@@ -250,7 +264,7 @@ Controlled-Vibe-Framework-CVF/
 └── Run: npm install && npm run dev
 
 📂 EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/
-└── 37 skill files (.skill.md)
+└── 69 skill files (.skill.md)
 ```
 
 **Best for:** End users không biết code, teams cần template library
@@ -277,18 +291,41 @@ Controlled-Vibe-Framework-CVF/
 - ✅ **8 Agent Tools** - Web Search, Code Execute, Calculator, DateTime, JSON Parse, URL Fetch, File R/W
 - ✅ **Chat History** - Lưu trữ persistent conversations
 - ✅ **Provider Switching** - Chuyển đổi AI providers seamlessly
+- ✅ **Quality Scoring** - 0-100 score with 4 dimensions
+- ✅ **Phase Gates** - CVF phase checklist modals
+- ✅ **Decision Log** - Audit sidebar for governance tracking
+
+### 🔒 Security Hardening (NEW!)
+- ✅ **AES-GCM Encryption** - Web Crypto API with PBKDF2 key derivation
+- ✅ **Input Validation** - All form inputs sanitized
+- ✅ **Sandboxed Execution** - Safe code evaluation
+- ✅ **Rate Limiting** - API protection built-in
+
+### 🧪 Test Coverage (NEW!)
+```
+✅ 13 test files | 111 tests | 0 failures
+Key modules: security.ts (28), governance.ts (13), ai-providers.ts (13)
+```
 
 ### 🔧 Technical Improvements
+- ✅ **AgentChat Refactored** - 1042 lines → 216 lines (-79%)
+- ✅ **ErrorBoundary** - Graceful error handling with retry
+- ✅ **Analytics** - Event tracking for executions, retries, templates
 - ✅ **i18n Complete** - 160+ translation keys (Vietnamese/English)
-- ✅ **Error Handling** - ErrorBoundary, Toast notifications, Retry logic
-- ✅ **Performance** - Lazy loading, Dynamic imports
-- ✅ **Security** - Input validation, Sandboxed execution, Rate limiting
-- ✅ **Mobile UI** - Responsive components, Swipe gestures
+- ✅ **Mobile UI** - Responsive components, History/Result/Analytics tweaks
+- ✅ **Shared Tools** - skill validation in `tools/skill-validation`
 
 ### 📚 Previous (v1.5.2)
 - ✅ 31 form-based templates
-- ✅ 45 skills across 5 domains
+- ✅ 69 skills across 12 domains
 - ✅ 3 export modes (Simple, With Rules, CVF Full Mode)
+- ✅ Domain Refinement (Quality Pass 2) complete
+
+---
+
+## 📋 Changelog
+
+- Xem lịch sử thay đổi tại [CHANGELOG.md](./CHANGELOG.md)
 
 ---
 

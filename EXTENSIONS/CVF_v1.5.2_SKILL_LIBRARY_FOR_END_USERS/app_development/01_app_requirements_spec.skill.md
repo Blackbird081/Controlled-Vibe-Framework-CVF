@@ -3,8 +3,8 @@
 > **Domain:** App Development  
 > **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.1.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.1.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -137,77 +137,67 @@
 
 ### Input mẫu:
 ```
-App Name: QuickNote CLI
-App Type: CLI Tool
-Problem: Ghi chú nhanh từ terminal mà không cần mở app khác
-Target Users: Developers làm việc trong terminal
+App Name: StockFlow
+App Type: Web app + Desktop app cho kho
+Problem: Theo dõi tồn kho 2 chi nhánh, kho cần offline khi mất mạng
+Target Users: Store managers, warehouse staff
 Core Features:
-  1. Add note với 1 command
-  2. List notes theo category
-  3. Search notes
-Out of Scope: GUI, sync cloud, share notes
-Success Criteria: Add note trong < 2 seconds
-Platform: macOS, Linux
-Data Storage: Local JSON file
+  1. Product catalog + barcode
+  2. Stock in/out + lịch sử movement
+  3. Purchase orders + supplier
+  4. Low-stock alerts + weekly report
+  5. Role-based access
+Out of Scope: Kế toán, thanh toán nhà cung cấp
+Success Criteria: Độ chính xác tồn kho > 98%, thao tác nhập kho < 30s
+Platform: Web (manager), Desktop (warehouse)
+Data Storage: PostgreSQL + local SQLite sync
 ```
 
 ### Output mẫu:
 ```markdown
-# QuickNote CLI - Requirements Spec
+# StockFlow - Requirements Spec
 
-## Overview
-- **Name:** QuickNote CLI
-- **Type:** Command-line tool
-- **Platform:** macOS, Linux
-
-## Problem Statement
-Developers cần ghi chú nhanh trong khi làm việc trên terminal,
-nhưng phải alt-tab sang app khác làm gián đoạn workflow.
-
-## Target Users
-- Primary: Developers làm việc chủ yếu trong terminal
-- Context: Trong lúc code, debug, hoặc research
+## Users
+- Manager: xem báo cáo, cấu hình sản phẩm
+- Warehouse: nhập/xuất, kiểm kho
 
 ## Functional Requirements
+- Tạo/sửa sản phẩm với SKU, barcode, đơn vị
+- Ghi nhận nhập/xuất, lưu người thao tác + thời gian
+- Tạo PO, trạng thái: draft/approved/received
+- Cảnh báo khi tồn kho < ngưỡng
+- Phân quyền theo role
 
-### Core Features
-1. **Quick Add** - `qn add "note content" -c category`
-2. **List Notes** - `qn list` hoặc `qn list -c work`
-3. **Search** - `qn search "keyword"`
+## Non-Functional
+- Offline mode tại kho, sync khi có mạng
+- Thời gian phản hồi < 200ms cho tra cứu
+- Audit log giữ 12 tháng
 
-### Out of Scope
-- Graphical user interface
-- Cloud sync/backup
-- Note sharing
-- Rich text/markdown formatting
-
-## Non-Functional Requirements
-- **Performance:** Add note < 100ms
-- **Storage:** Local ~/.quicknote/notes.json
-- **Install:** Single binary, no dependencies
-
-## Success Criteria
-- [ ] Add note với 1 command trong < 2 seconds
-- [ ] Search 1000 notes trong < 500ms
-- [ ] Zero configuration required
-
-## Constraints
-- No external dependencies
-- Must work offline
+## Acceptance Criteria
+- 95% tác vụ nhập/xuất hoàn thành < 30s
+- Báo cáo tồn kho tải < 10s
 ```
 
 ### Đánh giá:
-- ✅ Problem rõ ràng
-- ✅ 3 core features cụ thể
-- ✅ Out of scope defined
-- ✅ Success criteria measurable
-- **Kết quả: ACCEPT ✅**
+- ✅ Mục tiêu rõ, có đo lường
+- ✅ Tách user role và phạm vi
+- ✅ Nêu rõ offline + sync
+- **Kết quả: ACCEPT**
 
----
+## 🔗 Related Skills
+- [Tech Stack Selection](./02_tech_stack_selection.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.1.1 | 2026-02-07 | Domain refinement: metadata + flow alignment |
+| 1.1.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
 ## 🔗 Next Step
 
 Sau khi có Requirements Spec → [Tech Stack Selection](./02_tech_stack_selection.skill.md)
+
 
 ---
 

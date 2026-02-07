@@ -3,7 +3,15 @@
 > **Domain:** Product & UX  
 > **Difficulty:** Easy  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/user-personas
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -171,6 +179,64 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Differentiation** - What makes each unique
 6. **Prioritization** - Primary vs secondary
 7. **Usage Scenarios** - Practical applications
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **User Persona Development**, tiếp tục với:
+→ [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Product & UX Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Sản phẩm: StockFlow (SaaS quản lý kho)
+Thị trường: SMB retail
+Nguồn dữ liệu: 6 phỏng vấn + 120 survey + log 30 ngày
+Mục tiêu: tăng activation tuần 1 từ 32% lên 45%
+```
+
+### Output mẫu:
+```markdown
+# Persona 1: Mai — Store Manager
+Goals: giảm thất thoát, báo cáo nhanh
+Pains: dữ liệu sai, thiếu thời gian training
+Behaviors: dùng web dashboard mỗi sáng, kiểm mobile cuối ngày
+
+# Persona 2: Anh — Warehouse Staff
+Goals: nhập/xuất nhanh, ít lỗi
+Pains: mạng yếu, barcode chậm
+JTBD: "Khi nhận hàng, tôi cần nhập trong 30s để không trễ giao ca."
+```
+
+### Đánh giá:
+- ✅ Persona dựa trên dữ liệu thật
+- ✅ Goals/Pains rõ ràng, đo được
+- ✅ Có JTBD áp dụng cho thiết kế
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [User Flow Analysis](./user_flow_analysis.skill.md)
+- [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **User Persona Development**, tiếp tục với:
+→ [User Flow Analysis](./user_flow_analysis.skill.md)
 
 ---
 

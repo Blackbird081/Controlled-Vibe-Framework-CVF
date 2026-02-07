@@ -163,10 +163,24 @@ Send your CV to careers@company.com
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [Policy Documentation](./05_policy_documentation.skill.md)
+- [Interview Evaluation](./02_interview_evaluation.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
-> Sau khi có JD → [Interview Evaluation](./02_interview_evaluation.skill.md)
+Sau khi có **Job Description**, tiếp tục với:
+→ [Interview Evaluation](./02_interview_evaluation.skill.md)
 
 ---
 
-*Job Description Skill — CVF v1.5.2 Skill Library*
+*CVF Skill Library v1.5.2 | HR & Operations Domain*

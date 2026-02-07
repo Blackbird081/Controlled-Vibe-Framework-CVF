@@ -3,7 +3,15 @@
 > **Domain:** Marketing & SEO  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/social-ads
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -153,6 +161,58 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Predicted Performance** - CTR/CPC estimates
 6. **A/B Test Ideas** - Variations to test
 7. **Rewritten Ad** - Optimized version
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Platform: Facebook
+3 creatives, CTR 0.6%, CPC $1.2, CPA $28
+Audience: chủ shop bán lẻ, 25-45
+Offer: "Dùng thử miễn phí"
+```
+
+### Output mẫu:
+```markdown
+# Ad Review
+
+## Issues
+- Hook chung chung, thiếu pain point
+- Creative không có kho/barcode
+- CTA giống nhau giữa các ad
+
+## New Hook Ideas
+1. "Sai số kho 5%? Kiểm lại trong 30s"
+2. "Mất mạng vẫn nhập hàng được"
+
+## Creative Brief
+- Video 15s: scan barcode → tồn kho cập nhật
+- Caption nhấn offline + đồng bộ
+```
+
+### Đánh giá:
+- ✅ Chỉ ra vấn đề cụ thể
+- ✅ Có hook mới để test
+- ✅ Brief rõ ràng cho designer
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Content Quality Checklist](./content_quality_checklist.skill.md)
+- [Email Campaign Review](./email_campaign_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Social Media Ad Review**, tiếp tục với:
+→ [Email Campaign Review](./email_campaign_review.skill.md)
 
 ---
 

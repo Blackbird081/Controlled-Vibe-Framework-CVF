@@ -111,160 +111,45 @@ NDA DOCUMENT
 
 ### Input mẫu:
 ```
-Disclosing Party: TechStart Vietnam JSC
-Receiving Party: Global Ventures Ltd
-Purpose: Potential investment evaluation
-Type: One-way (TechStart discloses to investor)
-Duration: 2 years
-Jurisdiction: Vietnam
-Special terms: Include non-solicitation clause
+Type: Mutual NDA
+Scope: chia sẻ tài liệu kỹ thuật + pricing
+Term: 2 năm
+Jurisdiction: Việt Nam
 ```
 
 ### Output mẫu:
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-NON-DISCLOSURE AGREEMENT (NDA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```markdown
+# NDA Key Clauses
 
-This Non-Disclosure Agreement ("Agreement") is entered 
-into as of [DATE] ("Effective Date"):
-
-BETWEEN:
-TechStart Vietnam JSC, a company organized under the 
-laws of Vietnam ("Disclosing Party")
-
-AND:
-Global Ventures Ltd, a company organized under the 
-laws of [Country] ("Receiving Party")
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. PURPOSE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-The Disclosing Party wishes to share certain 
-confidential information with the Receiving Party 
-for the purpose of evaluating a potential investment 
-opportunity (the "Purpose").
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-2. CONFIDENTIAL INFORMATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-"Confidential Information" means any non-public 
-information disclosed by the Disclosing Party, 
-including but not limited to:
-
-(a) Business plans, strategies, and projections
-(b) Financial information and records
-(c) Customer and supplier lists
-(d) Technical data, source code, and algorithms
-(e) Trade secrets and intellectual property
-(f) Employee and organizational information
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-3. OBLIGATIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-The Receiving Party agrees to:
-
-(a) Hold Confidential Information in strict confidence
-(b) Use information only for the Purpose
-(c) Limit access to employees/advisors with need-to-know
-(d) Not copy, reproduce, or distribute without consent
-(e) Protect information with reasonable care
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-4. EXCLUSIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-This Agreement does not apply to information that:
-
-(a) Is or becomes publicly available
-(b) Was known to Receiving Party before disclosure
-(c) Is independently developed by Receiving Party
-(d) Is disclosed by a third party without breach
-(e) Is required to be disclosed by law
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-5. TERM
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-This Agreement shall remain in effect for a period 
-of two (2) years from the Effective Date.
-
-Obligations regarding trade secrets shall survive 
-termination indefinitely or until such information 
-becomes publicly available.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-6. RETURN OF INFORMATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Upon request or termination, Receiving Party shall:
-
-(a) Return all physical copies of Confidential Information
-(b) Delete all electronic copies
-(c) Certify in writing that above has been completed
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-7. NON-SOLICITATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-During the term and for one (1) year thereafter, 
-the Receiving Party shall not directly or indirectly 
-solicit, hire, or engage any employee of the 
-Disclosing Party.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-8. REMEDIES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-The parties acknowledge that breach of this Agreement 
-may cause irreparable harm. The Disclosing Party 
-shall be entitled to seek injunctive relief in 
-addition to any other remedies available at law.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-9. GOVERNING LAW
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-This Agreement shall be governed by and construed 
-in accordance with the laws of Vietnam.
-
-Any disputes shall be resolved by arbitration in 
-Ho Chi Minh City, Vietnam.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SIGNATURES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-DISCLOSING PARTY:
-TechStart Vietnam JSC
-
-By: _________________________
-Name:
-Title:
-Date:
-
-
-RECEIVING PARTY:
-Global Ventures Ltd
-
-By: _________________________
-Name:
-Title:
-Date:
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-⚠️ DISCLAIMER: This is a template for reference only.
-   Have a qualified attorney review before signing.
+- Confidential Info: tài liệu kỹ thuật, kế hoạch giá, dữ liệu khách hàng
+- Exclusions: public info, info có trước
+- Term: 2 năm, survival 3 năm
+- Disclosure: chỉ cho nhân viên cần biết
+- Remedies: injunctive relief
 ```
 
 ### Đánh giá:
-- ✅ All standard sections included
-- ✅ Definition comprehensive
-- ✅ Exclusions appropriate
-- ✅ Non-solicitation added as requested
+- ✅ Đầy đủ điều khoản chuẩn
+- ✅ Phạm vi bảo mật rõ
+- ✅ Thời hạn hợp lý
 - **Kết quả: ACCEPT**
 
----
+## 🔗 Related Skills
+- [Contract Review](./01_contract_review.skill.md)
+- [Terms of Service](./03_terms_of_service.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
 ## 🔗 Next Step
 
-> Launch product → [Terms of Service](./03_terms_of_service.skill.md)
+Sau khi hoàn thành **NDA Template**, tiếp tục với:
+→ [Terms of Service](./03_terms_of_service.skill.md)
 
 ---
 
-*NDA Template Skill — CVF v1.5.2 Skill Library*
+*CVF Skill Library v1.5.2 | Legal & Contracts Domain*

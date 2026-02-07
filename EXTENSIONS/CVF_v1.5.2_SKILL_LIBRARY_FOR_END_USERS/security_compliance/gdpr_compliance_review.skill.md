@@ -3,7 +3,15 @@
 > **Domain:** Security & Compliance  
 > **Difficulty:** Advanced  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/gdpr
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -193,6 +201,66 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Cookie Audit** - Compliance status
 6. **Remediation Plan** - Prioritized fixes
 7. **Template Documents** - DSAR, policies
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **GDPR Compliance Review**, tiếp tục với:
+→ [API Security Checklist](./api_security_checklist.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+EU users: ~12%
+Legal basis: contract + consent
+Vendors: AWS (EU), Stripe (US)
+DSAR process: chưa có
+```
+
+### Output mẫu:
+```markdown
+# GDPR Review
+
+## Gaps
+- Chưa có DSAR workflow (30 ngày)
+- Không có DPA với Stripe
+- Không có ROPA (record of processing)
+
+## Remediation
+- Create DSAR SOP + request form
+- Sign DPA + SCC với vendor US
+- Maintain processing register (data type, purpose, retention)
+```
+
+### Đánh giá:
+- ✅ Xác định gaps cốt lõi
+- ✅ Có biện pháp phù hợp GDPR
+- ✅ Ưu tiên theo rủi ro
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Privacy Policy Audit](./privacy_policy_audit.skill.md)
+- [Terms of Service Review](./terms_of_service_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **GDPR Compliance Review**, tiếp tục với:
+→ [Terms of Service Review](./terms_of_service_review.skill.md)
 
 ---
 

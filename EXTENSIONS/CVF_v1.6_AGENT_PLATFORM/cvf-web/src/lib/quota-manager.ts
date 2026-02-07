@@ -1,5 +1,7 @@
 'use client';
 
+import { DEFAULT_MODEL_PRICING, ModelPricing } from '@/lib/model-pricing';
+
 // ==================== TYPES ====================
 export type ProviderKey = 'gemini' | 'openai' | 'anthropic';
 
@@ -30,26 +32,20 @@ export interface UsageStats {
 }
 
 // ==================== MODEL PRICING ====================
+export type { ModelPricing };
+
 // Prices per 1M tokens (USD)
-export const MODEL_PRICING: Record<string, { input: number; output: number }> = {
-    // Gemini
-    'gemini-2.5-flash': { input: 0.075, output: 0.30 },
-    'gemini-3-flash': { input: 0.10, output: 0.40 },
-    'gemini-2.5-flash-lite': { input: 0.02, output: 0.08 },
-    'gemini-2.5-pro': { input: 1.25, output: 5.00 },
-    'gemini-2.0-flash': { input: 0.10, output: 0.40 },
-    // OpenAI
-    'gpt-4o': { input: 2.50, output: 10.00 },
-    'gpt-4o-mini': { input: 0.15, output: 0.60 },
-    'gpt-4.5-preview': { input: 75.00, output: 150.00 },
-    'o1': { input: 15.00, output: 60.00 },
-    'o3-mini': { input: 1.10, output: 4.40 },
-    // Anthropic
-    'claude-sonnet-4-20250514': { input: 3.00, output: 15.00 },
-    'claude-3.5-haiku': { input: 0.80, output: 4.00 },
-    'claude-3.5-sonnet': { input: 3.00, output: 15.00 },
-    'claude-3-opus': { input: 15.00, output: 75.00 },
-};
+export const MODEL_PRICING: ModelPricing = DEFAULT_MODEL_PRICING;
+
+let currentModelPricing: ModelPricing = { ...MODEL_PRICING };
+
+export function getModelPricing(): ModelPricing {
+    return currentModelPricing;
+}
+
+export function setModelPricing(pricing: ModelPricing) {
+    currentModelPricing = { ...MODEL_PRICING, ...pricing };
+}
 
 // Default pricing for unknown models
 const DEFAULT_PRICING = { input: 1.00, output: 4.00 };
@@ -148,7 +144,7 @@ export class QuotaManager {
 
     // ==================== COST CALCULATION ====================
     calculateCost(model: string, inputTokens: number, outputTokens: number): number {
-        const pricing = MODEL_PRICING[model] || DEFAULT_PRICING;
+        const pricing = getModelPricing()[model] || DEFAULT_PRICING;
         const inputCost = (inputTokens / 1_000_000) * pricing.input;
         const outputCost = (outputTokens / 1_000_000) * pricing.output;
         return inputCost + outputCost;

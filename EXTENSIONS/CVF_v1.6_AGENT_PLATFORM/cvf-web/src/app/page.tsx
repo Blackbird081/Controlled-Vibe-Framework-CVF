@@ -44,8 +44,42 @@ import {
 import { ThemeToggle } from '@/lib/theme';
 import { LanguageToggle } from '@/lib/i18n';
 import { useSettings } from '@/components/Settings';
+import { trackEvent } from '@/lib/analytics';
 
 type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'marketplace' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills' | 'agent' | 'multi-agent' | 'tools';
+
+const ROLE_PERMISSIONS = {
+  admin: {
+    canUseAgent: true,
+    canUseMultiAgent: true,
+    canUseTools: true,
+    canUseSettings: true,
+    canUseAIUsage: true,
+    canUseContext: true,
+  },
+  editor: {
+    canUseAgent: true,
+    canUseMultiAgent: true,
+    canUseTools: true,
+    canUseSettings: false,
+    canUseAIUsage: false,
+    canUseContext: true,
+  },
+  viewer: {
+    canUseAgent: false,
+    canUseMultiAgent: false,
+    canUseTools: false,
+    canUseSettings: false,
+    canUseAIUsage: false,
+    canUseContext: false,
+  },
+} as const;
+
+const ROLE_BADGE_STYLES = {
+  admin: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-200',
+  editor: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200',
+  viewer: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200',
+} as const;
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>('home');
@@ -62,6 +96,7 @@ export default function Home() {
   const [showAIUsage, setShowAIUsage] = useState(false);
   const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
   const [isAgentMinimized, setIsAgentMinimized] = useState(false);
+  const [userRole, setUserRole] = useState('admin');
 
   const { executions, addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
   const { settings } = useSettings();
@@ -105,6 +140,12 @@ export default function Home() {
       setCurrentFolder(template.id);
       return;
     }
+
+    trackEvent('template_selected', {
+      templateId: template.id,
+      templateName: template.name,
+      category: template.category,
+    });
     // Check if this is the app builder wizard template
     if (template.id === 'app_builder_wizard') {
       setAppState('wizard');
@@ -210,8 +251,15 @@ export default function Home() {
   }, [currentExecution, updateExecution]);
 
   const handleRetry = useCallback(() => {
+    if (currentExecution) {
+      trackEvent('execution_retry', {
+        executionId: currentExecution.id,
+        templateId: currentExecution.templateId,
+        templateName: currentExecution.templateName,
+      });
+    }
     setAppState('form');
-  }, []);
+  }, [currentExecution]);
 
   const handleBack = useCallback(() => {
     if (appState === 'form') {
@@ -257,7 +305,55 @@ export default function Home() {
     setAgentPrompt(prompt);
     setAppState('agent');
     setIsAgentMinimized(false);
+    trackEvent('agent_opened');
   }, []);
+
+  const handleLogout = useCallback(() => {
+    document.cookie = 'cvf_auth=; Path=/; Max-Age=0';
+    document.cookie = 'cvf_role=; Path=/; Max-Age=0';
+    window.location.href = '/login';
+  }, []);
+
+  useEffect(() => {
+    if (appState === 'analytics') {
+      trackEvent('analytics_opened');
+    }
+    if (appState === 'multi-agent') {
+      trackEvent('multi_agent_opened');
+    }
+    if (appState === 'tools') {
+      trackEvent('tools_opened');
+    }
+  }, [appState]);
+
+  useEffect(() => {
+    const roleCookie = document.cookie
+      .split(';')
+      .map(cookie => cookie.trim())
+      .find(cookie => cookie.startsWith('cvf_role='));
+    if (roleCookie) {
+      const role = roleCookie.split('=')[1];
+      if (role) {
+        setUserRole(role);
+      }
+    }
+  }, []);
+
+  const roleKey = (userRole in ROLE_PERMISSIONS ? userRole : 'admin') as keyof typeof ROLE_PERMISSIONS;
+  const permissions = ROLE_PERMISSIONS[roleKey];
+  const roleBadgeStyle = ROLE_BADGE_STYLES[roleKey];
+
+  useEffect(() => {
+    if (!permissions.canUseSettings && showSettings) {
+      setShowSettings(false);
+    }
+    if (!permissions.canUseAIUsage && showAIUsage) {
+      setShowAIUsage(false);
+    }
+    if (!permissions.canUseContext && showUserContext) {
+      setShowUserContext(false);
+    }
+  }, [permissions.canUseSettings, permissions.canUseAIUsage, permissions.canUseContext, showSettings, showAIUsage, showUserContext]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -327,38 +423,59 @@ export default function Home() {
                 🏪 Marketplace
               </button>
               {/* AI Agent Button in Header */}
-              <button
-                onClick={() => handleOpenAgent()}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2
+              {permissions.canUseAgent && (
+                <button
+                  onClick={() => handleOpenAgent()}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2
                            ${appState === 'agent'
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                    : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:shadow-md hover:scale-105'}`}
-              >
-                🤖 AI Agent
-              </button>
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                      : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:shadow-md hover:scale-105'}`}
+                >
+                  🤖 AI Agent
+                </button>
+              )}
               {/* Multi-Agent Button */}
-              <button
-                onClick={() => setAppState('multi-agent')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2
+              {permissions.canUseMultiAgent && (
+                <button
+                  onClick={() => setAppState('multi-agent')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2
                            ${appState === 'multi-agent'
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
-                    : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-md hover:scale-105'}`}
-              >
-                🎯 Multi-Agent
-              </button>
+                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
+                      : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-md hover:scale-105'}`}
+                >
+                  🎯 Multi-Agent
+                </button>
+              )}
               {/* Tools Button */}
-              <button
-                onClick={() => setAppState('tools')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2
+              {permissions.canUseTools && (
+                <button
+                  onClick={() => setAppState('tools')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2
                            ${appState === 'tools'
-                    ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg'
-                    : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:shadow-md hover:scale-105'}`}
+                      ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg'
+                      : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:shadow-md hover:scale-105'}`}
+                >
+                  🛠️ Tools
+                </button>
+              )}
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${roleBadgeStyle}`}>
+                {roleKey.toUpperCase()}
+              </span>
+              {permissions.canUseContext && (
+                <UserContextBadge onClick={() => setShowUserContext(true)} />
+              )}
+              {permissions.canUseAIUsage && (
+                <AIUsageBadge onClick={() => setShowAIUsage(true)} />
+              )}
+              {permissions.canUseSettings && (
+                <SettingsButton onClick={() => setShowSettings(true)} />
+              )}
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-900/30 transition-colors"
               >
-                🛠️ Tools
+                ⏻ Đăng xuất
               </button>
-              <UserContextBadge onClick={() => setShowUserContext(true)} />
-              <AIUsageBadge onClick={() => setShowAIUsage(true)} />
-              <SettingsButton onClick={() => setShowSettings(true)} />
               <div id="tour-lang-switch">
                 <LanguageToggle />
               </div>
@@ -431,6 +548,12 @@ export default function Home() {
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
                 🏪 Marketplace
+              </button>
+              <button
+                onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
+                className="w-full px-4 py-3 rounded-lg text-left font-medium text-red-600 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-900/30 transition-colors"
+              >
+                ⏻ Đăng xuất
               </button>
             </nav>
           )}

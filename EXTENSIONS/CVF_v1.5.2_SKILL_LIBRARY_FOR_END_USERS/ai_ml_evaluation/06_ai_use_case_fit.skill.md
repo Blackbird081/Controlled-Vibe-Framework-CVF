@@ -3,6 +3,14 @@
 > **Domain:** AI/ML Evaluation  
 > **Difficulty:** ⭐⭐ Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
+
+---
+
+## 📌 Prerequisites
+
+Không yêu cầu.
 
 ---
 
@@ -54,6 +62,15 @@
 
 ---
 
+## ⚠️ Common Failures
+
+| Lỗi thường gặp | Cách phòng tránh |
+|---|---|
+| Thiếu dữ liệu đầu vào quan trọng | Bổ sung đầy đủ thông tin theo Form Input |
+| Kết luận chung chung | Yêu cầu nêu rõ tiêu chí và hành động cụ thể |
+
+---
+
 ## 💡 Tips
 
 1. **Start with problem** — Not technology
@@ -63,4 +80,66 @@
 
 ---
 
+## 🔗 Next Step
+
+Sau khi hoàn thành **AI Use Case Fit**, tiếp tục với:
+→ [Cost Optimization](./05_cost_optimization.skill.md)
+
+---
+
 *AI Use Case Fit Skill — CVF v1.5.2*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Use case: Tự động phân loại ticket hỗ trợ (Billing/Inventory/Tech)
+Volume: 800 tickets/tuần, SLA 4h
+Data: 2 năm ticket + tag chuẩn
+Rủi ro: sai routing gây trễ xử lý
+```
+
+### Output mẫu:
+```markdown
+# AI Use Case Fit Assessment
+
+Suitability: HIGH
+Reason: text classification rõ ràng, có dữ liệu label lịch sử
+
+Proposed Approach
+- AI gợi ý tag + confidence
+- Auto-route nếu confidence > 0.85
+- Human review nếu < 0.85
+
+Success Metrics
+- Top-1 accuracy >= 90%
+- SLA giảm từ 4h xuống 2h
+```
+
+### Đánh giá:
+- ✅ Use case phù hợp AI, rủi ro kiểm soát được
+- ✅ Có human-in-the-loop rõ ràng
+- ✅ Có metrics đo hiệu quả
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Model Selection](./01_model_selection.skill.md)
+- [Cost Optimization](./05_cost_optimization.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **AI Use Case Fit**, tiếp tục với:
+→ [Model Selection](./01_model_selection.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | AI/ML Evaluation Domain*

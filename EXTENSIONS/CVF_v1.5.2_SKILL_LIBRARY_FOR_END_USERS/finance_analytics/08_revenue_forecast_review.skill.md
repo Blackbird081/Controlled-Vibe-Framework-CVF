@@ -3,8 +3,8 @@
 > **Domain:** Finance & Analytics  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.0.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -173,6 +173,18 @@ Methodology: Bottom-up (pipeline + new products)
 
 **Expected Analysis:**
 ```markdown
+
+### Input mẫu:
+```
+Mục tiêu: Hoàn thành Revenue Forecast Review
+Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
+Ràng buộc: Deadline 2 tuần
+```
+
+### Output mẫu:
+```
+Tóm tắt kết quả: Revenue Forecast Review với khuyến nghị/ưu tiên rõ ràng.
+```
 ## Revenue Forecast Review: FY2026
 
 ### Executive Summary
@@ -225,10 +237,24 @@ Forecast of $16M (+33%) is **aggressive** compared to historical growth
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [Financial Risk Assessment](./07_financial_risk_assessment.skill.md)
+- [Budget Analysis](./01_budget_analysis.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
-Đây là skill cuối trong Finance & Analytics workflow cơ bản.
+Sau khi hoàn thành Revenue Forecast Review, quay lại vòng lập kế hoạch:
+→ [Budget Analysis](./01_budget_analysis.skill.md)
 
-**Related skills:**
-- [Budget Analysis](./01_budget_analysis.skill.md) — Để tạo ngân sách từ forecast
-- [Investment Due Diligence](./06_investment_due_diligence.skill.md) — Nếu đánh giá đầu tư
+---
+
+*CVF Skill Library v1.5.2 | Finance & Analytics Domain*

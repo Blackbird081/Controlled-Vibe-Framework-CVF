@@ -3,8 +3,8 @@
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.1.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.1.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -455,15 +455,26 @@ sha256sum TaskFlow_* > SHA256SUMS.txt
 - ✅ Signing documented
 - **Kết quả: ACCEPT ✅**
 
----
 
-## 🔗 Summary
+## 🔗 Related Skills
+- [Desktop App Spec](./06_desktop_app_spec.skill.md)
+- [CLI Tool Spec](./07_cli_tool_spec.skill.md)
 
-Deployment là bước cuối cùng trước khi release. Đảm bảo đã:
-1. Test trên tất cả target platforms
-2. Code signing configured
-3. Auto-update working
-4. Distribution channel ready
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.1.1 | 2026-02-07 | Domain refinement: metadata + flow alignment |
+| 1.1.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Local Deployment Spec**, chuyển sang Build & Release:
+- Test trên tất cả target platforms
+- Code signing configured
+- Auto-update working (nếu có)
+- Distribution channel ready
+
 
 ---
 

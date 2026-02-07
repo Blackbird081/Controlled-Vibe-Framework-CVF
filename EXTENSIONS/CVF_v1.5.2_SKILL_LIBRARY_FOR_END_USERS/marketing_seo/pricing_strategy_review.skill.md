@@ -3,7 +3,15 @@
 > **Domain:** Marketing & SEO  
 > **Difficulty:** Advanced  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/pricing-strategy
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -125,6 +133,61 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 4. **Optimization Opportunities** - Cơ hội tăng revenue
 5. **Recommended Pricing Structure** - Proposed tiers & prices
 6. **Implementation Plan** - Cách roll out changes
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Current plans:
+- Basic $29 (1 user, 1 kho)
+- Pro $79 (5 users, 3 kho)
+- Enterprise custom
+ARPU $45, churn 6%/mo
+Competitors: KiotViet $25-80, Sapo $20-70
+```
+
+### Output mẫu:
+```markdown
+# Pricing Recommendation
+
+## Issues
+- Gap giữa Basic và Pro quá lớn
+- Thiếu add-on theo kho
+
+## New Tiers
+- Starter $25 (1 user, 1 kho)
+- Growth $49 (5 users, 3 kho)
+- Scale $99 (10 users, 10 kho)
+Add-on: $8/kho thêm
+
+## Experiments
+- Test annual -15%
+- Test trial 14 ngày vs 7 ngày
+```
+
+### Đánh giá:
+- ✅ Tiers logic theo quy mô
+- ✅ Có add-on linh hoạt
+- ✅ Có kế hoạch thử nghiệm
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Landing Page CRO](./landing_page_cro.skill.md)
+- [SEO Audit](./seo_audit.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Pricing Strategy Review**, tiếp tục với:
+→ [SEO Audit](./seo_audit.skill.md)
 
 ---
 

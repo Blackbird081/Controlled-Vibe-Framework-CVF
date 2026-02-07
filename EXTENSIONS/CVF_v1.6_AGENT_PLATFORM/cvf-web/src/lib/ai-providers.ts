@@ -5,6 +5,8 @@
  * Supports Gemini, OpenAI, and Anthropic APIs with streaming
  */
 
+import { detectSpecMode } from '@/lib/agent-chat';
+
 // Types
 export type AIProvider = 'gemini' | 'openai' | 'anthropic';
 
@@ -37,6 +39,153 @@ export interface AIProviderConfig {
     maxTokens?: number;
     systemPrompt?: string;
     language?: 'vi' | 'en';
+}
+
+const MOCK_AI_ENABLED = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
+
+class MockProvider {
+    private model: string;
+    private language: 'vi' | 'en';
+
+    constructor(config: AIProviderConfig) {
+        this.model = config.model || 'mock-ai';
+        this.language = config.language || 'vi';
+    }
+
+    async chat(messages: AIMessage[], onStream?: (chunk: AIStreamChunk) => void): Promise<AIResponse> {
+        const lastMessage = messages[messages.length - 1]?.content || '';
+        const mode = detectSpecMode(lastMessage);
+
+        const text = this.language === 'vi'
+            ? this.buildVietnameseResponse(mode)
+            : this.buildEnglishResponse(mode);
+
+        if (onStream) {
+            onStream({ text, isComplete: false });
+            onStream({ text: '', isComplete: true });
+        }
+
+        const totalTokens = Math.max(1, Math.ceil(text.length / 4));
+
+        return {
+            text,
+            model: this.model,
+            usage: {
+                promptTokens: Math.max(1, Math.ceil(lastMessage.length / 4)),
+                completionTokens: totalTokens,
+                totalTokens: totalTokens + Math.max(1, Math.ceil(lastMessage.length / 4)),
+            },
+            finishReason: 'stop',
+        };
+    }
+
+    private buildVietnameseResponse(mode: 'simple' | 'governance' | 'full'): string {
+        if (mode === 'full') {
+            return `MOCK_FULL_RESPONSE
+
+## PHASE A: Discovery Summary
+
+### Hiểu biết của tôi
+Mục tiêu là tạo kết quả có cấu trúc, rõ ràng và dùng được ngay.
+
+### Giả định
+- Giả định 1: Phạm vi tập trung vào deliverables chính.
+- Giả định 2: Ưu tiên tính rõ ràng hơn độ chi tiết.
+
+### Định nghĩa Scope
+IN SCOPE:
+- Phân tích và tóm tắt yêu cầu chính
+- Đưa ra cấu trúc kết quả
+
+OUT OF SCOPE:
+- Tối ưu hóa triển khai chi tiết
+
+### Ràng buộc
+- Ràng buộc thời gian: triển khai nhanh
+
+### Câu hỏi làm rõ
+- Không có
+`;
+        }
+
+        if (mode === 'governance') {
+            return `MOCK_GOVERNANCE_RESPONSE
+
+## Governance Response
+
+### Tóm tắt
+- Kết quả có cấu trúc rõ ràng
+- Có checklist hành động
+
+### Action Items
+1. Xác nhận scope
+2. Thực thi deliverables
+3. Review kết quả
+`;
+        }
+
+        return `MOCK_SIMPLE_RESPONSE
+
+## Simple Response
+
+- Kết quả gọn, dễ hiểu
+- Có thể dùng ngay cho bước tiếp theo
+`;
+    }
+
+    private buildEnglishResponse(mode: 'simple' | 'governance' | 'full'): string {
+        if (mode === 'full') {
+            return `MOCK_FULL_RESPONSE
+
+## PHASE A: Discovery Summary
+
+### My Understanding
+The goal is to deliver structured, actionable output.
+
+### Assumptions
+- Assumption 1: Focus on primary deliverables.
+- Assumption 2: Clarity is prioritized over depth.
+
+### Scope Definition
+IN SCOPE:
+- Summarize the core request
+- Produce a structured output
+
+OUT OF SCOPE:
+- Detailed implementation optimization
+
+### Constraints
+- Constraint: Fast turnaround
+
+### Clarification Questions
+- None
+`;
+        }
+
+        if (mode === 'governance') {
+            return `MOCK_GOVERNANCE_RESPONSE
+
+## Governance Response
+
+### Summary
+- Structured output with guardrails
+- Action checklist included
+
+### Action Items
+1. Confirm scope
+2. Execute deliverables
+3. Review outcome
+`;
+        }
+
+        return `MOCK_SIMPLE_RESPONSE
+
+## Simple Response
+
+- Clear, concise output
+- Ready for next step
+`;
+    }
 }
 
 // CVF System Prompt - Dynamic based on language
@@ -528,6 +677,9 @@ export class AnthropicProvider {
 
 // ==================== UNIFIED PROVIDER ====================
 export function createAIProvider(provider: AIProvider, config: AIProviderConfig) {
+    if (MOCK_AI_ENABLED) {
+        return new MockProvider(config);
+    }
     switch (provider) {
         case 'gemini':
             return new GeminiProvider(config);

@@ -184,10 +184,24 @@ GOALS FOR H2 2026:
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [Onboarding Checklist](./04_onboarding_checklist.skill.md)
+- [Policy Documentation](./05_policy_documentation.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
-> Cần tài liệu chính sách → [Policy Documentation](./05_policy_documentation.skill.md)
+Sau khi hoàn thành **Performance Review**, cập nhật chính sách nếu cần:
+→ [Policy Documentation](./05_policy_documentation.skill.md)
 
 ---
 
-*Performance Review Skill — CVF v1.5.2 Skill Library*
+*CVF Skill Library v1.5.2 | HR & Operations Domain*

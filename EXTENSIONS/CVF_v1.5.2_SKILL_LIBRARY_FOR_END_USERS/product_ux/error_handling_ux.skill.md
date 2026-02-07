@@ -3,7 +3,15 @@
 > **Domain:** Product & UX  
 > **Difficulty:** Easy  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/error-handling
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -158,6 +166,66 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Prevention Recommendations** - Proactive measures
 6. **Empty State Suggestions** - Designs
 7. **Testing Checklist** - Edge cases to cover
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Error Handling UX**, tiếp tục với:
+→ [User Persona Development](./user_persona_development.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Product & UX Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Error cases: duplicate SKU, sync conflict (offline), upload timeout
+User type: Warehouse staff
+```
+
+### Output mẫu:
+```markdown
+# Error UX Spec
+
+## Duplicate SKU
+Message: "SKU đã tồn tại. Bạn muốn cập nhật hay tạo SKU mới?"
+Actions: [Update] [Create new]
+
+## Sync Conflict
+Message: "Có thay đổi mới trên server. Chọn bản bạn muốn giữ."
+Actions: [Giữ bản của tôi] [Dùng bản server]
+
+## Upload Timeout
+Message: "Kết nối yếu. Thử lại trong 30s?"
+Actions: [Retry] [Save draft]
+```
+
+### Đánh giá:
+- ✅ Rõ nguyên nhân + hướng xử lý
+- ✅ Có hành động phục hồi
+- ✅ Ngôn ngữ thân thiện
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Accessibility Audit (WCAG)](./accessibility_audit.skill.md)
+- [Onboarding Experience Review](./onboarding_experience_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Error Handling UX**, tiếp tục với:
+→ [Onboarding Experience Review](./onboarding_experience_review.skill.md)
 
 ---
 

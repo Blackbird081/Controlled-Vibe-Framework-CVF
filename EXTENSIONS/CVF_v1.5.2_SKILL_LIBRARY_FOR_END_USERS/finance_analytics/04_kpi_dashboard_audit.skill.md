@@ -3,8 +3,8 @@
 > **Domain:** Finance & Analytics  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.0.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -162,6 +162,18 @@ Visualization: 8 KPI cards + 4 charts
 
 **Expected Audit:**
 ```markdown
+
+### Input mẫu:
+```
+Mục tiêu: Hoàn thành KPI Dashboard Audit
+Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
+Ràng buộc: Deadline 2 tuần
+```
+
+### Output mẫu:
+```
+Tóm tắt kết quả: KPI Dashboard Audit với khuyến nghị/ưu tiên rõ ràng.
+```
 ## Dashboard Audit: Sales Performance
 
 ### KPI Scoring
@@ -196,7 +208,24 @@ Visualization: 8 KPI cards + 4 charts
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [ROI Calculator Review](./03_roi_calculator_review.skill.md)
+- [Cash Flow Analysis](./05_cash_flow_analysis.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
 Sau khi hoàn thành KPI Dashboard Audit, tiếp tục với:
 → [Cash Flow Analysis](./05_cash_flow_analysis.skill.md) — Phân tích dòng tiền
+
+---
+
+*CVF Skill Library v1.5.2 | Finance & Analytics Domain*

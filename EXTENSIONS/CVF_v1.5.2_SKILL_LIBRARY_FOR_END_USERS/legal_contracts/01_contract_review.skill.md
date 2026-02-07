@@ -110,96 +110,54 @@ CONTRACT REVIEW
 
 ### Input mẫu:
 ```
-Loại hợp đồng: SaaS Service Agreement
-Nội dung: 
-  "Agreement for 12 months, auto-renew...
-   Payment: Annual upfront...
-   Termination: 90-day notice required...
-   Liability: Limited to fees paid...
-   Data: Provider may use aggregated data..."
-Vai trò: Buyer (khách hàng)
-Mục đích: Identify risks trước khi ký
+Loại hợp đồng: SaaS B2B
+Term: 12 tháng, auto-renew
+SLA: 99.5%
+Liability cap: không nêu
+Governing law: Singapore
 ```
 
 ### Output mẫu:
-```
-CONTRACT REVIEW: SAAS SERVICE AGREEMENT
+```markdown
+# Contract Review Summary
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. CONTRACT SUMMARY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-12-month SaaS subscription, auto-renewing
-Annual payment upfront
-Standard enterprise terms with some concerns
+## Red Flags
+- Không có liability cap
+- Termination chỉ cho bên cung cấp
+- SLA có nhưng không có service credit
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-2. KEY TERMS ANALYSIS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## Recommendations
+1. Thêm liability cap = 12 tháng phí
+2. Mutual termination với notice 30 ngày
+3. Add service credit 5-10% nếu SLA fail
 
-Payment Terms:
-• Annual upfront payment
-• No refunds mentioned
-⚠️ Risk: Locked in full year even if service poor
-
-Term & Termination:
-• 12-month initial term
-• Auto-renewal 🔴
-• 90-day notice to cancel
-⚠️ Risk: Miss window = another year commitment
-
-Liability:
-• Capped at "fees paid"
-• No consequential damages
-⚡ Standard for SaaS, acceptable
-
-Data Usage:
-• Provider can use "aggregated data"
-🔴 Risk: Vague definition, could include your data
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-3. RISK ASSESSMENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┌────────────────────┬──────────┬───────────────┐
-│ Issue              │ Severity │ Likelihood    │
-├────────────────────┼──────────┼───────────────┤
-│ Auto-renewal trap  │ HIGH     │ Medium        │
-│ No refund policy   │ MEDIUM   │ Low           │
-│ Data usage vague   │ HIGH     │ High          │
-│ 90-day notice      │ MEDIUM   │ Medium        │
-└────────────────────┴──────────┴───────────────┘
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-4. RECOMMENDED CHANGES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. Auto-renewal: Request 30-day notice instead of 90
-2. Refund: Add pro-rata refund if terminated for cause
-3. Data: Clarify "aggregated" = anonymized, no PII
-4. Add: Right to terminate if SLA not met
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-5. QUESTIONS FOR COUNTERPARTY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• What exactly is included in "aggregated data"?
-• Can we negotiate shorter notice period?
-• Is there a trial period or pilot option?
-
-⚠️ DISCLAIMER: This is not legal advice. 
-   Consult with qualified attorney before signing.
+## Questions
+- Dữ liệu khách hàng lưu ở đâu?
+- Có quyền audit bảo mật không?
 ```
 
 ### Đánh giá:
-- ✅ Identifies key terms clearly
-- ✅ Risk assessment với severity
-- ✅ Practical recommendations
-- ✅ Questions for negotiation
+- ✅ Nhận diện điều khoản rủi ro
+- ✅ Khuyến nghị cụ thể để đàm phán
+- ✅ Có câu hỏi làm rõ
 - **Kết quả: ACCEPT**
 
----
+## 🔗 Related Skills
+- [NDA Template](./02_nda_template.skill.md)
+- [Terms of Service](./03_terms_of_service.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
 ## 🔗 Next Step
 
-> Cần bảo mật thông tin → [NDA Template](./02_nda_template.skill.md)
+Sau khi hoàn thành **Contract Review**, tiếp tục với:
+→ [NDA Template](./02_nda_template.skill.md)
 
 ---
 
-*Contract Review Skill — CVF v1.5.2 Skill Library*
+*CVF Skill Library v1.5.2 | Legal & Contracts Domain*

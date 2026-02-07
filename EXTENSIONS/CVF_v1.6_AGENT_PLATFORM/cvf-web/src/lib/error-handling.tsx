@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Component, ReactNode } from 'react';
+import { captureError } from '@/lib/monitoring';
 
 interface ErrorBoundaryProps {
     children: ReactNode;
@@ -27,6 +28,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
     componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
         console.error('ErrorBoundary caught an error:', error, errorInfo);
+        captureError(error, { componentStack: errorInfo.componentStack });
         this.setState({ errorInfo });
         this.props.onError?.(error, errorInfo);
     }

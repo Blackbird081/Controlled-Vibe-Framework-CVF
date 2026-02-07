@@ -116,7 +116,7 @@
 
 ```markdown
 # Skill Name
-> Metadata (Domain, Difficulty, Version)
+> Metadata (Domain, Difficulty, CVF Version, Skill Version, Last Updated)
 
 ## 🎯 Mục đích        ← Khi nào dùng skill này
 ## 📋 Form Input      ← Điền gì vào đây
@@ -124,6 +124,9 @@
 ## 🔍 Cách đánh giá   ← Checklist Accept/Reject
 ## ⚠️ Common Failures ← Lỗi cần tránh
 ## 💡 Tips            ← Mẹo sử dụng
+## 📊 Ví dụ thực tế   ← Input/Output mẫu
+## 🔗 Related Skills  ← Skills liên quan
+## 📜 Version History ← Lịch sử phiên bản
 ```
 
 ### Ví dụ sử dụng
@@ -149,6 +152,23 @@
 - **CVF Web UI:** `EXTENSIONS/CVF_v1.5_UX_PLATFORM/cvf-web`
 - **DIFFICULTY_GUIDE:** [DIFFICULTY_GUIDE.md](DIFFICULTY_GUIDE.md)
 - **SKILL_TEMPLATE:** [SKILL_TEMPLATE.md](SKILL_TEMPLATE.md)
+
+---
+
+## 🧪 Automated Validation
+
+Chạy script để kiểm tra metadata + section bắt buộc trong tất cả `.skill.md`:
+
+```bash
+cd EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS
+python scripts/validate_skills.py
+```
+
+Xuất report JSON (tuỳ chọn):
+
+```bash
+python scripts/validate_skills.py --json reports/skill_validation.json
+```
 
 ---
 

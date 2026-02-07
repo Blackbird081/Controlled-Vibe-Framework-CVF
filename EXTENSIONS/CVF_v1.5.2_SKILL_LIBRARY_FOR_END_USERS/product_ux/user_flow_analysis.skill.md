@@ -3,7 +3,15 @@
 > **Domain:** Product & UX  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/user-flows
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -150,6 +158,68 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Quick Wins** - Easy fixes for immediate impact
 6. **Redesign Suggestions** - Optimized flow proposal
 7. **Metrics to Track** - KPIs for improvement
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **User Flow Analysis**, tiếp tục với:
+→ [Accessibility Audit (WCAG)](./accessibility_audit.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Product & UX Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Flow: Tạo phiếu nhập hàng từ PO
+Steps: 7 bước
+Drop-off: 35% tại bước chọn nhà cung cấp
+Time to complete: 4.5 phút
+```
+
+### Output mẫu:
+```markdown
+# User Flow Findings
+
+## Flow
+Home → PO List → PO Detail → "Receive" → Select Supplier → Scan Items → Confirm
+
+## Friction Points
+- Bước "Select Supplier" không auto-fill → +25s
+- Scan Items không hỗ trợ nhập tay → lỗi 12%
+
+## Recommendations
+- Auto-select supplier từ PO
+- Thêm fallback nhập SKU thủ công
+- Hiển thị progress (3/7)
+```
+
+### Đánh giá:
+- ✅ Chỉ ra điểm rơi rõ ràng
+- ✅ Có nguyên nhân + giải pháp
+- ✅ Dễ chuyển thành backlog UX
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [User Persona Development](./user_persona_development.skill.md)
+- [UX Heuristic Evaluation](./ux_heuristic_evaluation.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **User Flow Analysis**, tiếp tục với:
+→ [UX Heuristic Evaluation](./ux_heuristic_evaluation.skill.md)
 
 ---
 

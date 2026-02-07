@@ -3,8 +3,8 @@
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐⭐ Advanced — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.1.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.1.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -240,131 +240,58 @@ project/
 
 ### Input mẫu:
 ```
-App Name: QuickNote CLI
-Tech Stack: Python + Click + SQLite
-Core Features: Add note, List notes, Search notes
-App Type: CLI Tool
-Data Flow: User command → Parser → Handler → DB → Output
-External: None
-State: Simple (no complex state)
+System: StockFlow
+Modules: Auth, Inventory, Purchase Orders, Reporting, Sync
+Integrations: Barcode scanner, Email alerts
+Constraint: Kho cần offline, sync khi có mạng
+Users: 50-80 concurrent
 ```
 
 ### Output mẫu:
 ```markdown
-# QuickNote CLI - Architecture
+# Architecture Overview
 
-## Overview
-Simple 4-layer CLI architecture with clear separation.
+## Components
+- Web Client (Manager)
+- Desktop Client (Warehouse)
+- API Gateway (NestJS)
+- Inventory Service
+- Reporting Service
+- Sync Service (queue)
+- PostgreSQL + Redis
 
-## System Diagram
+## Data Flow
+1. Desktop ghi movement -> local SQLite
+2. Sync service đẩy batch lên API
+3. Inventory service cập nhật stock + audit log
 
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                      QuickNote CLI                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│   ┌─────────────────────────────────────────────────────┐   │
-│   │                   CLI Layer                          │   │
-│   │              (cli.py - Click)                        │   │
-│   └─────────────────────────┬───────────────────────────┘   │
-│                             │                                │
-│   ┌─────────────────────────▼───────────────────────────┐   │
-│   │                Commands Layer                        │   │
-│   │    (commands/add.py, list.py, search.py)            │   │
-│   └─────────────────────────┬───────────────────────────┘   │
-│                             │                                │
-│   ┌─────────────────────────▼───────────────────────────┐   │
-│   │                 Core Layer                           │   │
-│   │              (core/notes.py)                         │   │
-│   └─────────────────────────┬───────────────────────────┘   │
-│                             │                                │
-│   ┌─────────────────────────▼───────────────────────────┐   │
-│   │                Storage Layer                         │   │
-│   │              (storage/db.py)                         │   │
-│   └─────────────────────────────────────────────────────┘   │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
-
-## Component Breakdown
-
-### 1. CLI Layer (cli.py)
-- **Responsibility:** Parse arguments, route to commands
-- **Interface:** Click decorators
-- **Dependencies:** Commands layer
-
-### 2. Commands Layer (commands/)
-- **Responsibility:** Handle specific commands
-- **Interface:** Functions called by CLI
-- **Dependencies:** Core layer
-
-### 3. Core Layer (core/notes.py)
-- **Responsibility:** Business logic for notes
-- **Interface:** NoteService class
-- **Dependencies:** Storage layer
-
-### 4. Storage Layer (storage/db.py)
-- **Responsibility:** SQLite operations
-- **Interface:** NoteRepository class
-- **Dependencies:** None
-
-## Directory Structure
-
-\`\`\`
-quicknote/
-├── cli.py                 # Entry point + Click setup
-├── commands/
-│   ├── __init__.py
-│   ├── add.py            # qn add command
-│   ├── list.py           # qn list command
-│   └── search.py         # qn search command
-├── core/
-│   ├── __init__.py
-│   └── notes.py          # NoteService
-├── storage/
-│   ├── __init__.py
-│   └── db.py             # NoteRepository + SQLite
-├── tests/
-│   ├── test_commands.py
-│   └── test_core.py
-└── setup.py
-\`\`\`
-
-## Data Flow: Add Note
-
-1. User runs: `qn add "Buy milk" -c personal`
-2. CLI Layer: Click parses args → calls add command
-3. Commands Layer: AddCommand validates → calls NoteService
-4. Core Layer: NoteService creates Note object → calls Repository
-5. Storage Layer: Repository saves to SQLite
-6. Output: "Note added ✓" displayed
-
-## Key Design Decisions
-
-| Decision | Choice | Reasoning |
-|----------|--------|-----------|
-| DB | SQLite | Simple, no setup, offline-first |
-| Layers | 4 layers | Clear separation, easy testing |
-| ORM | None (raw SQL) | Keep it simple for < 10 queries |
-
-## Error Handling
-- CLI Layer: Catch all exceptions, show user-friendly message
-- Storage: Raise custom DBError
-- Core: Validate input, raise ValidationError
-\`\`\`
+## Key Decisions
+- CQRS nhẹ cho reporting (read replica)
+- Idempotent sync để tránh double count
+```
 
 ### Đánh giá:
-- ✅ Clear diagram
-- ✅ Each component defined
-- ✅ Directory structure logical
-- ✅ Data flow documented
-- **Kết quả: ACCEPT ✅**
+- ✅ Tách component rõ ràng
+- ✅ Có chiến lược offline/sync
+- ✅ Có xử lý reporting
+- **Kết quả: ACCEPT**
 
----
+## 🔗 Related Skills
+- [Tech Stack Selection](./02_tech_stack_selection.skill.md)
+- [Database Schema Design](./04_database_schema_design.skill.md)
+- [API Design Spec](./05_api_design_spec.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.1.1 | 2026-02-07 | Domain refinement: metadata + flow alignment |
+| 1.1.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
 ## 🔗 Next Step
 
-Sau khi có Architecture → [Database Schema Design](./04_database_schema_design.skill.md) (nếu cần DB)
+Sau khi có Architecture → [Database Schema Design](./04_database_schema_design.skill.md) (nếu cần DB) hoặc → [API Design Spec](./05_api_design_spec.skill.md)
+
 
 ---
 

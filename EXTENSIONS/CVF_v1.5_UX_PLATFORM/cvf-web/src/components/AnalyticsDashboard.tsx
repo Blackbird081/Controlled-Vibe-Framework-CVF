@@ -3,9 +3,22 @@
 import { useMemo } from 'react';
 import { useExecutionStore } from '@/lib/store';
 import { CATEGORY_INFO, Category } from '@/types';
+import { useAnalyticsEvents, type AnalyticsEventType } from '@/lib/analytics';
 
 export function AnalyticsDashboard() {
     const { executions } = useExecutionStore();
+    const { events, clearEvents } = useAnalyticsEvents();
+    const recentEvents = events.slice(0, 8);
+
+    const eventLabels: Record<AnalyticsEventType, string> = {
+        template_selected: 'Template selected',
+        execution_created: 'Execution created',
+        execution_completed: 'Execution completed',
+        execution_accepted: 'Execution accepted',
+        execution_rejected: 'Execution rejected',
+        execution_retry: 'Execution retried',
+        analytics_opened: 'Analytics opened',
+    };
 
     const stats = useMemo(() => {
         const total = executions.length;
@@ -66,7 +79,7 @@ export function AnalyticsDashboard() {
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
                     <div className="text-3xl font-bold text-blue-600">{stats.total}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Tổng số lần chạy</div>
@@ -158,6 +171,41 @@ export function AnalyticsDashboard() {
                     <span>Accepted: {stats.accepted}</span>
                     <span>Rejected: {stats.rejected}</span>
                 </div>
+            </div>
+
+            {/* Tracking Events */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">🧭 Tracking Events</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Local analytics log (no PII)
+                        </p>
+                    </div>
+                    <button
+                        onClick={clearEvents}
+                        className="px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    >
+                        Clear log
+                    </button>
+                </div>
+
+                {recentEvents.length > 0 ? (
+                    <div className="space-y-3">
+                        {recentEvents.map(event => (
+                            <div key={event.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm">
+                                <span className="text-gray-700 dark:text-gray-300 font-medium">
+                                    {eventLabels[event.type]}
+                                </span>
+                                <span className="text-gray-500">
+                                    {new Date(event.timestamp).toLocaleString()}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-sm text-gray-500">Chưa có event nào được ghi nhận.</p>
+                )}
             </div>
         </div>
     );

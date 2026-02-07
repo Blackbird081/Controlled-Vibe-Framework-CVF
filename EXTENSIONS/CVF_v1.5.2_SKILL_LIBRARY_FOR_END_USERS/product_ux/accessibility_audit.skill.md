@@ -3,7 +3,15 @@
 > **Domain:** Product & UX  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/accessibility
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -141,6 +149,65 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Priority Matrix** - What to fix first
 6. **Testing Checklist** - How to verify fixes
 7. **Remediation Timeline** - Estimated effort
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Accessibility Audit (WCAG)**, tiếp tục với:
+→ [A/B Test Review](./ab_test_review.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Product & UX Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Trang: Dashboard StockFlow
+Scope: Sidebar + table + filter modal
+Tools: Lighthouse + axe
+```
+
+### Output mẫu:
+```markdown
+# Accessibility Findings
+
+## Violations
+- WCAG 1.4.3 Contrast: text xám trên nền #F5F5F5 (ratio 2.8:1)
+- WCAG 2.1.1 Keyboard: filter modal không focus trap
+- WCAG 4.1.2 Labels: input search thiếu aria-label
+
+## Fixes
+- Đổi text thành #333, nâng contrast > 4.5:1
+- Thêm focus trap + ESC close
+- Bổ sung aria-label="Search SKU"
+```
+
+### Đánh giá:
+- ✅ Map đúng WCAG
+- ✅ Fix cụ thể, khả thi
+- ✅ Có tool kiểm chứng
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [UX Heuristic Evaluation](./ux_heuristic_evaluation.skill.md)
+- [Error Handling UX](./error_handling_ux.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Accessibility Audit (WCAG)**, tiếp tục với:
+→ [Error Handling UX](./error_handling_ux.skill.md)
 
 ---
 

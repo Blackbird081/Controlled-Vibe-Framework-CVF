@@ -3,7 +3,15 @@
 > **Domain:** Marketing & SEO  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/seo-fundamentals
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -109,6 +117,57 @@ Khi paste spec này vào AI (ChatGPT/Claude/Gemini), bạn sẽ nhận được:
 3. **Content Quality Score** - Điểm E-E-A-T
 4. **Priority Issues** - Vấn đề cần fix ngay
 5. **Action Plan** - Các bước cải thiện cụ thể
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+URL: https://stockflow.vn
+Target keywords: "phần mềm quản lý kho", "barcode inventory"
+GSC CTR: 1.2%, Avg pos: 11
+CWV: LCP 4.2s, CLS 0.18
+```
+
+### Output mẫu:
+```markdown
+# SEO Audit Summary
+
+## P0 Fixes (2 tuần)
+- Nén ảnh hero, preload font
+- Thêm sitemap.xml + robots.txt chuẩn
+- Sửa 12 title trùng lặp
+
+## P1 Fixes (1 tháng)
+- Schema: Product, FAQ
+- Internal links cho 10 bài blog chính
+- Tạo landing "quản lý kho offline"
+
+Expected impact: +20-30% CTR
+```
+
+### Đánh giá:
+- ✅ Ưu tiên rõ P0/P1
+- ✅ Hành động cụ thể, khả thi
+- ✅ Kỳ vọng impact hợp lý
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Landing Page CRO](./landing_page_cro.skill.md)
+- [Content Quality Checklist](./content_quality_checklist.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **SEO Audit**, tiếp tục với:
+→ [Content Quality Checklist](./content_quality_checklist.skill.md)
 
 ---
 

@@ -3,8 +3,8 @@
 > **Domain:** Finance & Analytics  
 > **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.0.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -136,6 +136,18 @@ Context: Launched unexpected Black Friday campaign
 
 **Expected Analysis:**
 ```markdown
+
+### Input mẫu:
+```
+Mục tiêu: Hoàn thành Budget Analysis
+Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
+Ràng buộc: Deadline 2 tuần
+```
+
+### Output mẫu:
+```
+Tóm tắt kết quả: Budget Analysis với khuyến nghị/ưu tiên rõ ràng.
+```
 ## Variance Summary
 - Total Budget: $240K
 - Total Actual: $238K
@@ -160,7 +172,24 @@ Context: Launched unexpected Black Friday campaign
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [Financial Statement Review](./02_financial_statement_review.skill.md)
+- [Revenue Forecast Review](./08_revenue_forecast_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
 Sau khi hoàn thành Budget Analysis, tiếp tục với:
 → [Financial Statement Review](./02_financial_statement_review.skill.md) — Phân tích báo cáo tài chính
+
+---
+
+*CVF Skill Library v1.5.2 | Finance & Analytics Domain*

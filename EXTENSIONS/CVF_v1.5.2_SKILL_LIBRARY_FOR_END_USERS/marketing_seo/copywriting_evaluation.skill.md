@@ -3,7 +3,15 @@
 > **Domain:** Marketing & SEO  
 > **Difficulty:** Easy  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/copywriting
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -126,6 +134,61 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 3. **Issues** - Vấn đề cần fix
 4. **Rewritten Version** - Phiên bản đã cải thiện
 5. **A/B Test Ideas** - Các variations để test
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Trang: Landing "StockFlow"
+Hero: "Quản lý kho dễ dàng cho mọi doanh nghiệp"
+Sub: "Tối ưu tồn kho, giảm thất thoát"
+CTA: "Book demo"
+Metrics: Bounce 68%, CTR CTA 1.4%
+```
+
+### Output mẫu:
+```markdown
+# Copy Review
+
+## Issues
+- Claim chung chung, thiếu số liệu
+- CTA rào cản cao với SMB
+- Chưa nhấn offline + barcode
+
+## Rewrite
+Hero: "Kiểm kho đa chi nhánh trong 30s, kể cả khi mất mạng"
+Sub: "Barcode + đồng bộ tự động giúp giảm sai số xuống <2%"
+CTA A: "Dùng thử 14 ngày"
+CTA B: "Xem video 2 phút"
+
+## Score
+Clarity 6/10 → 8/10
+Proof 3/10 → 7/10
+```
+
+### Đánh giá:
+- ✅ Nêu rõ pain + proof
+- ✅ Có phương án CTA thay thế
+- ✅ Dễ test A/B
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Brand Voice Consistency](./brand_voice_consistency.skill.md)
+- [Landing Page CRO](./landing_page_cro.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Copywriting Evaluation**, tiếp tục với:
+→ [Landing Page CRO](./landing_page_cro.skill.md)
 
 ---
 

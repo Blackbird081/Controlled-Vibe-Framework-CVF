@@ -3,7 +3,15 @@
 > **Domain:** Marketing & SEO  
 > **Difficulty:** Easy  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/seo-content-auditor
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -147,6 +155,56 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 4. **E-E-A-T Assessment** - Trust signals evaluation
 5. **Gap Analysis** - What's missing vs competitors
 6. **Improvement Recommendations** - Priority actions
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Bài: "Cách quản lý tồn kho cho cửa hàng tạp hóa"
+Word count: 900
+Nguồn dữ liệu: chưa có
+Tác giả: không có bio
+```
+
+### Output mẫu:
+```markdown
+# Content Quality Review
+
+## Checklist
+- E-E-A-T: 2/5 (thiếu tác giả + nguồn)
+- Readability: 4/5
+- Search intent: 3/5 (thiếu checklist thực hành)
+
+## Actions
+- Thêm case study cửa hàng 2 chi nhánh
+- Chèn số liệu thất thoát trung bình ngành
+- Thêm CTA tải template kiểm kho
+Result: Revise before publish
+```
+
+### Đánh giá:
+- ✅ Chỉ ra điểm yếu E-E-A-T
+- ✅ Có hành động cải thiện cụ thể
+- ✅ Quyết định rõ (revise)
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [SEO Audit](./seo_audit.skill.md)
+- [Social Media Ad Review](./social_media_ad_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Content Quality Checklist**, tiếp tục với:
+→ [Social Media Ad Review](./social_media_ad_review.skill.md)
 
 ---
 

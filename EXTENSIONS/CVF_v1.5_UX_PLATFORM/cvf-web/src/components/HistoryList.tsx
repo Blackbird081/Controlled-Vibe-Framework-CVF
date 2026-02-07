@@ -40,11 +40,11 @@ export function HistoryList({ executions, onSelect }: HistoryListProps) {
         <div>
             {/* Stats */}
             <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm">
                     <span className="text-gray-600 dark:text-gray-400">
                         📊 Stats: {executions.length} total
                     </span>
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-4">
                         <span className="text-green-600 dark:text-green-400">
                             ✅ {acceptedCount} accepted
                         </span>
@@ -66,8 +66,8 @@ export function HistoryList({ executions, onSelect }: HistoryListProps) {
                        hover:border-blue-500 hover:shadow-md
                        cursor-pointer transition-all duration-200"
                     >
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <div className="flex items-start sm:items-center gap-3">
                                 <span className={execution.result === 'accepted' ? 'text-green-500' : 'text-red-500'}>
                                     {execution.result === 'accepted' ? '✅' : '❌'}
                                 </span>
@@ -81,7 +81,7 @@ export function HistoryList({ executions, onSelect }: HistoryListProps) {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4 text-sm text-gray-500">
+                            <div className="flex flex-wrap items-center justify-end gap-3 text-sm text-gray-500">
                                 <span>
                                     {new Date(execution.createdAt).toLocaleDateString()}
                                 </span>

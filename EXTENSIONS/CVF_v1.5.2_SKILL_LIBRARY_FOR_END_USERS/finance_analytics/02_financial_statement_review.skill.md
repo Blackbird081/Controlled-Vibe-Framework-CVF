@@ -3,8 +3,8 @@
 > **Domain:** Finance & Analytics  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.0.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -160,6 +160,18 @@ Net Income: $520,000
 
 **Expected Analysis:**
 ```markdown
+
+### Input mẫu:
+```
+Mục tiêu: Hoàn thành Financial Statement Review
+Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
+Ràng buộc: Deadline 2 tuần
+```
+
+### Output mẫu:
+```
+Tóm tắt kết quả: Financial Statement Review với khuyến nghị/ưu tiên rõ ràng.
+```
 ## Key Ratios
 | Metric | FY2025 | FY2024 | Change |
 |--------|--------|--------|--------|
@@ -188,7 +200,24 @@ Net Income: $520,000
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [Budget Analysis](./01_budget_analysis.skill.md)
+- [ROI Calculator Review](./03_roi_calculator_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
 Sau khi hoàn thành Financial Statement Review, tiếp tục với:
 → [ROI Calculator Review](./03_roi_calculator_review.skill.md) — Đánh giá hiệu quả đầu tư
+
+---
+
+*CVF Skill Library v1.5.2 | Finance & Analytics Domain*

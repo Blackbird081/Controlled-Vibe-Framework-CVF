@@ -3,7 +3,15 @@
 > **Domain:** Product & UX  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/ux-heuristics
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -170,6 +178,65 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Fix Recommendations** - How to address each
 6. **Best Practices** - What they're doing right
 7. **Action Plan** - Prioritized improvements
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **UX Heuristic Evaluation**, tiếp tục với:
+→ [User Flow Analysis](./user_flow_analysis.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Product & UX Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Màn hình: Inventory List (web)
+Nhiệm vụ chính: tìm SKU + lọc theo kho
+```
+
+### Output mẫu:
+```markdown
+# Heuristic Review
+
+| Heuristic | Issue | Severity |
+|---|---|---|
+| Visibility | Không có loading state khi filter | Medium |
+| Consistency | "Kho" vs "Chi nhánh" dùng lẫn | Low |
+| Error Prevention | Xóa item không có confirm | High |
+
+## Quick Fixes
+- Thêm skeleton loader
+- Chuẩn hóa label "Kho"
+- Confirm modal + undo 5s
+```
+
+### Đánh giá:
+- ✅ Phân loại severity rõ ràng
+- ✅ Có action nhanh để fix
+- ✅ Mapping đúng heuristic
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [User Flow Analysis](./user_flow_analysis.skill.md)
+- [Accessibility Audit (WCAG)](./accessibility_audit.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **UX Heuristic Evaluation**, tiếp tục với:
+→ [Accessibility Audit (WCAG)](./accessibility_audit.skill.md)
 
 ---
 

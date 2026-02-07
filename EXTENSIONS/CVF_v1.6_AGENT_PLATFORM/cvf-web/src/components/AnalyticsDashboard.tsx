@@ -2,10 +2,12 @@
 
 import { useMemo } from 'react';
 import { useExecutionStore } from '@/lib/store';
+import { useAnalyticsEvents } from '@/lib/analytics';
 import { CATEGORY_INFO, Category } from '@/types';
 
 export function AnalyticsDashboard() {
     const { executions } = useExecutionStore();
+    const { events, clearEvents } = useAnalyticsEvents();
 
     const stats = useMemo(() => {
         const total = executions.length;
@@ -55,6 +57,31 @@ export function AnalyticsDashboard() {
         };
     }, [executions]);
 
+    const eventStats = useMemo(() => {
+        const totalEvents = events.length;
+        const now = Date.now();
+        const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+        const last7Days = events.filter(e => e.timestamp >= sevenDaysAgo).length;
+
+        const byType: Record<string, number> = {};
+        events.forEach(e => {
+            byType[e.type] = (byType[e.type] || 0) + 1;
+        });
+
+        const topTypes = Object.entries(byType)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 4);
+
+        const recentEvents = events.slice(0, 6);
+
+        return {
+            totalEvents,
+            last7Days,
+            topTypes,
+            recentEvents,
+        };
+    }, [events]);
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -66,7 +93,7 @@ export function AnalyticsDashboard() {
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
                     <div className="text-3xl font-bold text-blue-600">{stats.total}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Tổng số lần chạy</div>
@@ -158,6 +185,53 @@ export function AnalyticsDashboard() {
                     <span>Accepted: {stats.accepted}</span>
                     <span>Rejected: {stats.rejected}</span>
                 </div>
+            </div>
+
+            {/* Event Tracking */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">🧭 Event Tracking</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Local analytics log (no PII)</p>
+                    </div>
+                    <button
+                        onClick={clearEvents}
+                        className="px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    >
+                        Clear log
+                    </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                        <div className="text-xs text-gray-500">Total events</div>
+                        <div className="text-lg font-semibold text-gray-900 dark:text-white">{eventStats.totalEvents}</div>
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                        <div className="text-xs text-gray-500">Last 7 days</div>
+                        <div className="text-lg font-semibold text-gray-900 dark:text-white">{eventStats.last7Days}</div>
+                    </div>
+                    {eventStats.topTypes.map(([type, count]) => (
+                        <div key={type} className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                            <div className="text-xs text-gray-500">{type}</div>
+                            <div className="text-lg font-semibold text-gray-900 dark:text-white">{count}</div>
+                        </div>
+                    ))}
+                </div>
+                {eventStats.recentEvents.length > 0 ? (
+                    <div className="space-y-2">
+                        {eventStats.recentEvents.map(event => (
+                            <div
+                                key={event.id}
+                                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-xs text-gray-600 dark:text-gray-400"
+                            >
+                                <span>{event.type}</span>
+                                <span>{new Date(event.timestamp).toLocaleString()}</span>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-sm text-gray-400">No events tracked yet.</p>
+                )}
             </div>
         </div>
     );

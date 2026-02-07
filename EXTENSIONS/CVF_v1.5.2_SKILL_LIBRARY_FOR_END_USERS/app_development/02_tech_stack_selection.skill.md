@@ -3,8 +3,8 @@
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.1.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.1.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -188,14 +188,15 @@
 
 ### Input mẫu:
 ```
-App Type: Desktop app
-Performance Priority: Medium
-Development Speed: High
-Team Experience: Python, JavaScript
-Platform: Windows, macOS
-Data Storage: Local database
+App Name: StockFlow
+App Type: Web + Desktop (kho)
+Performance Priority: High
+Development Speed: Medium
+Team Experience: TypeScript, React, Node.js
+Platform: Windows, macOS, Web
+Data Storage: Central DB + local cache
 Offline Required: Yes
-Bundle Size: < 100MB preferred
+Budget: Moderate
 ```
 
 ### Output mẫu:
@@ -203,70 +204,43 @@ Bundle Size: < 100MB preferred
 # Tech Stack Recommendation
 
 ## Summary
-**Recommended Stack:** Tauri + Vue 3 + SQLite
+- Backend: Node.js + NestJS
+- Database: PostgreSQL
+- Web UI: Next.js + Tailwind
+- Desktop: Tauri + React
+- Sync: Background job (BullMQ + Redis)
 
-## Language/Runtime
-| Option | Pros | Cons | Fit Score |
-|--------|------|------|:---------:|
-| Tauri (Rust+JS) | Small bundle, fast, cross-platform | Learning curve | ⭐⭐⭐⭐⭐ |
-| Electron (JS) | Easy dev, rich ecosystem | Large bundle (~150MB) | ⭐⭐⭐⭐ |
-| PyQt (Python) | Python familiar | Bundle size, packaging | ⭐⭐⭐ |
+## Rationale
+- TS stack đồng nhất → giảm learning curve
+- PostgreSQL mạnh cho báo cáo tồn kho
+- Tauri nhẹ, chạy ổn cho desktop kho
 
-**Recommendation:** Tauri — Team knows JS, bundle size matters
-
-## UI Framework
-| Option | Pros | Cons | Fit Score |
-|--------|------|------|:---------:|
-| Vue 3 | Simple, fast to learn | Smaller ecosystem | ⭐⭐⭐⭐⭐ |
-| React | Large ecosystem | More complex | ⭐⭐⭐⭐ |
-| Svelte | Minimal bundle | Less resources | ⭐⭐⭐⭐ |
-
-**Recommendation:** Vue 3 — Simple, team can learn fast
-
-## Database
-| Option | Pros | Cons | Fit Score |
-|--------|------|------|:---------:|
-| SQLite | Robust, SQL, zero config | Embedded only | ⭐⭐⭐⭐⭐ |
-| IndexedDB | Browser-native | Limited queries | ⭐⭐⭐ |
-
-**Recommendation:** SQLite — Robust, offline-first
-
-## Final Stack
-
-| Layer | Technology | Version |
-|-------|------------|---------|
-| Runtime | Tauri | v2.0 |
-| Backend | Rust | 1.75 |
-| Frontend | Vue 3 | 3.4 |
-| Styling | Tailwind | 3.4 |
-| Database | SQLite | 3.45 |
-| Build | Vite | 5.0 |
-
-## Trade-offs
-- Learning curve for Rust (mitigated: minimal Rust needed)
-- Vue smaller ecosystem vs React (acceptable for this scope)
-
-## Setup Commands
-\`\`\`bash
-npm create tauri-app@latest my-app -- --template vue
-cd my-app
-npm install
-npm run tauri dev
-\`\`\`
+## Alternatives
+- Electron: dễ dev hơn nhưng bundle lớn
+- Django: team không quen Python
 ```
 
 ### Đánh giá:
-- ✅ Multiple options compared
-- ✅ Clear reasoning
-- ✅ Trade-offs acknowledged
-- ✅ Matches requirements
-- **Kết quả: ACCEPT ✅**
+- ✅ Cân bằng performance và tốc độ dev
+- ✅ Có lý do chọn/loại
+- ✅ Phù hợp offline + cross-platform
+- **Kết quả: ACCEPT**
 
----
+## 🔗 Related Skills
+- [App Requirements Spec](./01_app_requirements_spec.skill.md)
+- [Architecture Design](./03_architecture_design.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.1.1 | 2026-02-07 | Domain refinement: metadata + flow alignment |
+| 1.1.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
 ## 🔗 Next Step
 
 Sau khi có Tech Stack → [Architecture Design](./03_architecture_design.skill.md)
+
 
 ---
 

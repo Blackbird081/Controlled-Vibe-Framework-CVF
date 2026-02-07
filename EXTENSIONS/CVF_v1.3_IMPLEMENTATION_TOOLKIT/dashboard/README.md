@@ -20,6 +20,7 @@ Modern web dashboard for monitoring CVF capabilities, audit logs, and risk distr
 - **Complete History** — All capability executions
 - **Filter by** — Capability, status (SUCCESS/FAILED), date range
 - **Detail View** — Full inputs, outputs, context, error messages
+- **Dashboard Access Audit** — Local access/actions shown in Audit tab (UI-only)
 
 ### ⚠️ Risk Analysis
 - **Risk Level Cards** — R0/R1/R2/R3 with descriptions

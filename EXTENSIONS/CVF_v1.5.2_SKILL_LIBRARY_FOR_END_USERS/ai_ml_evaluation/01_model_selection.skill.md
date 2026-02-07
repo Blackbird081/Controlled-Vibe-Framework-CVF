@@ -3,6 +3,14 @@
 > **Domain:** AI/ML Evaluation  
 > **Difficulty:** ⭐⭐ Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
+
+---
+
+## 📌 Prerequisites
+
+Không yêu cầu.
 
 ---
 
@@ -54,6 +62,15 @@
 
 ---
 
+## ⚠️ Common Failures
+
+| Lỗi thường gặp | Cách phòng tránh |
+|---|---|
+| Thiếu dữ liệu đầu vào quan trọng | Bổ sung đầy đủ thông tin theo Form Input |
+| Kết luận chung chung | Yêu cầu nêu rõ tiêu chí và hành động cụ thể |
+
+---
+
 ## 💡 Tips
 
 1. **Start with use case** — Not model hype
@@ -63,4 +80,67 @@
 
 ---
 
+## 🔗 Next Step
+
+Sau khi hoàn thành **Model Selection**, tiếp tục với:
+→ [Prompt Evaluation](./02_prompt_evaluation.skill.md)
+
+---
+
 *Model Selection Skill — CVF v1.5.2*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Task: Viết draft trả lời ticket hỗ trợ bằng tiếng Việt
+Constraints: latency < 2s, cost < $300/tháng
+Volume: 50k requests/tháng
+Quality: không được hallucinate giá/khuyến mãi
+```
+
+### Output mẫu:
+```markdown
+# Model Selection
+
+Recommendation: Hybrid
+- Model A (small) cho routing + FAQ match
+- Model B (medium) cho draft trả lời
+
+Reasoning
+- Draft cần ngữ cảnh tốt → model B
+- Routing số lượng lớn → model A tiết kiệm
+
+Estimated Cost
+- Model A: $60/mo
+- Model B: $180/mo
+Total: ~$240/mo
+```
+
+### Đánh giá:
+- ✅ Đáp ứng latency + cost
+- ✅ Quality control bằng hybrid
+- ✅ Tính toán chi phí rõ
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [AI Use Case Fit](./06_ai_use_case_fit.skill.md)
+- [Prompt Evaluation](./02_prompt_evaluation.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Model Selection**, tiếp tục với:
+→ [Prompt Evaluation](./02_prompt_evaluation.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | AI/ML Evaluation Domain*

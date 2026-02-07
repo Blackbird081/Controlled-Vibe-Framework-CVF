@@ -3,7 +3,15 @@
 > **Domain:** Security & Compliance  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/api-security
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -165,6 +173,72 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Implementation Guide** - How to fix each issue
 6. **Testing Checklist** - How to verify fixes
 7. **Compliance Notes** - Regulatory considerations
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **API Security Checklist**, tiếp tục với:
+→ [GDPR Compliance Review](./gdpr_compliance_review.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+API: StockFlow v1
+Auth: JWT + refresh token
+Endpoints: /auth/login, /inventory, /stock-movements, /reports/low-stock
+Data sensitivity: PII + inventory
+Current controls: HTTPS only, rate limit 60 rpm
+Known issues: 429 spikes khi import hàng loạt
+```
+
+### Output mẫu:
+```markdown
+# API Security Findings
+
+## High
+- /auth/login không có rate limit theo IP → brute force risk
+- /reports/low-stock thiếu RBAC (staff vẫn truy cập)
+
+## Medium
+- Error response trả stack trace khi DB timeout
+- Không có audit log cho admin actions
+
+## Fix Plan
+- Add rate limit 5 req/min/IP cho /auth/login
+- Enforce role=manager cho /reports/*
+- Replace error 500 with generic message + trace ID
+- Log admin actions to audit table
+```
+
+### Đánh giá:
+- ✅ Chỉ ra lỗ hổng rõ ràng, có mức độ ưu tiên
+- ✅ Đề xuất fix cụ thể, khả thi
+- ✅ Có focus vào auth và RBAC
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Data Handling Review](./data_handling_review.skill.md)
+- [Incident Response Plan](./incident_response_plan.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **API Security Checklist**, tiếp tục với:
+→ [Data Handling Review](./data_handling_review.skill.md)
 
 ---
 

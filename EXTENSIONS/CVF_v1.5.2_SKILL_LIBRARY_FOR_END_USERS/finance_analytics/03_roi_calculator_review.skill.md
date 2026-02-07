@@ -3,8 +3,8 @@
 > **Domain:** Finance & Analytics  
 > **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.0.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -147,6 +147,18 @@ Time Horizon: 3 years
 
 **Expected Analysis:**
 ```markdown
+
+### Input mẫu:
+```
+Mục tiêu: Hoàn thành ROI Calculator Review
+Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
+Ràng buộc: Deadline 2 tuần
+```
+
+### Output mẫu:
+```
+Tóm tắt kết quả: ROI Calculator Review với khuyến nghị/ưu tiên rõ ràng.
+```
 ## ROI Analysis: CRM Implementation
 
 ### Cost Breakdown (3 years)
@@ -177,7 +189,24 @@ Time Horizon: 3 years
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [Financial Statement Review](./02_financial_statement_review.skill.md)
+- [KPI Dashboard Audit](./04_kpi_dashboard_audit.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
 Sau khi hoàn thành ROI Calculator Review, tiếp tục với:
 → [KPI Dashboard Audit](./04_kpi_dashboard_audit.skill.md) — Đánh giá dashboard metrics
+
+---
+
+*CVF Skill Library v1.5.2 | Finance & Analytics Domain*

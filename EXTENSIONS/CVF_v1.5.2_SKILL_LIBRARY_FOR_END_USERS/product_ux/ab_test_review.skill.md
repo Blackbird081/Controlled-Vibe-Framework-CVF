@@ -3,7 +3,15 @@
 > **Domain:** Product & UX  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/ab-testing
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -73,10 +81,6 @@
 - [ ] No novelty effect (stable over time)?
 - [ ] Guardrail metrics không bị ảnh hưởng xấu?
 
-### Next Steps
-- [ ] Có clear recommendation (ship/iterate/kill)?
-- [ ] Learnings được documented?
-- [ ] Follow-up tests được plan?
 
 ---
 
@@ -157,6 +161,58 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Segment Analysis** - Breakdown by user types
 6. **Recommendation** - Ship / Iterate / Kill
 7. **Next Steps** - Follow-up experiments
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Test: CTA "Dùng thử 14 ngày" vs "Book demo"
+Baseline conversion: 3.2%
+Sample: Control 8,400 / Variant 8,350
+Duration: 21 ngày
+Result: Variant 3.8% (+18.7%), p=0.03
+Guardrail: Bounce +1% (ns)
+```
+
+### Output mẫu:
+```markdown
+# A/B Test Review
+
+## Verdict
+Winner: Variant (CTA "Dùng thử 14 ngày")
+
+## Stats
+- Uplift: +18.7%
+- p-value: 0.03
+- Power: 82%
+
+## Recommendation
+Ship 100% và test lại headline trong 2 tuần.
+```
+
+### Đánh giá:
+- ✅ Có đủ sample và p-value
+- ✅ Guardrail không bị ảnh hưởng
+- ✅ Recommendation rõ ràng
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
+- [User Persona Development](./user_persona_development.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **A/B Test Review**, cập nhật roadmap theo dữ liệu:
+→ [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
 
 ---
 

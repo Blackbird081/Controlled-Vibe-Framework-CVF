@@ -3,10 +3,16 @@
 // State
 let capabilities = [];
 let auditLogs = [];
+let baseAuditLogs = [];
+let dashboardAuditLogs = [];
+
+const DASHBOARD_AUDIT_STORAGE_KEY = 'cvf_dashboard_audit_logs';
+const DASHBOARD_ACTOR = 'dashboard_ui';
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
+    addDashboardAuditLog('dashboard_open', { tab: 'overview' });
     setupEventListeners();
     setupAutoRefresh();
 });
@@ -15,8 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadData() {
     if (window.cvfData) {
         capabilities = window.cvfData.capabilities;
-        auditLogs = window.cvfData.auditLogs;
+        baseAuditLogs = window.cvfData.auditLogs;
     }
+    dashboardAuditLogs = loadDashboardAuditLogs();
+    auditLogs = mergeAuditLogs(baseAuditLogs, dashboardAuditLogs);
     renderAll();
 }
 
@@ -56,6 +64,55 @@ function setupAutoRefresh() {
     }
 }
 
+function loadDashboardAuditLogs() {
+    if (typeof localStorage === 'undefined') return [];
+    try {
+        const raw = localStorage.getItem(DASHBOARD_AUDIT_STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveDashboardAuditLogs(logs) {
+    if (typeof localStorage === 'undefined') return;
+    const trimmed = logs.slice(-500);
+    localStorage.setItem(DASHBOARD_AUDIT_STORAGE_KEY, JSON.stringify(trimmed));
+}
+
+function mergeAuditLogs(baseLogs, dashboardLogs) {
+    const merged = [...(baseLogs || []), ...(dashboardLogs || [])];
+    return merged.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+}
+
+function addDashboardAuditLog(action, details = {}, capabilityId = 'DASHBOARD_ACCESS') {
+    const entry = {
+        id: `dashboard-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        timestamp: new Date().toISOString(),
+        capability_id: capabilityId,
+        version: 'ui',
+        actor: DASHBOARD_ACTOR,
+        inputs: { action, ...details },
+        outputs: null,
+        success: true,
+        duration_ms: 0,
+        context: { category: 'dashboard', action }
+    };
+
+    dashboardAuditLogs.push(entry);
+    saveDashboardAuditLogs(dashboardAuditLogs);
+    auditLogs = mergeAuditLogs(baseAuditLogs, dashboardAuditLogs);
+
+    renderAuditTable();
+    populateFilters();
+}
+
+function getExecutionLogs() {
+    return auditLogs.filter(log => log.context?.category !== 'dashboard');
+}
+
 // Switch tab
 function switchTab(tabId) {
     // Update nav
@@ -82,6 +139,7 @@ function switchTab(tabId) {
 // Refresh data
 function refreshData() {
     loadData();
+    addDashboardAuditLog('refresh');
     showNotification('Data refreshed');
 }
 
@@ -132,23 +190,24 @@ function renderRiskDistribution() {
 
 // Render execution stats
 function renderExecutionStats() {
-    const successful = auditLogs.filter(l => l.success).length;
-    const total = auditLogs.length || 1;
+    const executionLogs = getExecutionLogs();
+    const successful = executionLogs.filter(l => l.success).length;
+    const total = executionLogs.length || 1;
     const successRate = ((successful / total) * 100).toFixed(1);
 
-    const avgDuration = auditLogs.length > 0
-        ? (auditLogs.reduce((sum, l) => sum + l.duration_ms, 0) / auditLogs.length).toFixed(0)
+    const avgDuration = executionLogs.length > 0
+        ? (executionLogs.reduce((sum, l) => sum + l.duration_ms, 0) / executionLogs.length).toFixed(0)
         : 0;
 
     document.getElementById('exec-success-rate').textContent = `${successRate}%`;
     document.getElementById('exec-avg-duration').textContent = `${avgDuration}ms`;
-    document.getElementById('exec-total').textContent = auditLogs.length;
+    document.getElementById('exec-total').textContent = executionLogs.length;
 }
 
 // Render recent activity
 function renderRecentActivity() {
     const container = document.getElementById('recent-activity');
-    const recent = auditLogs.slice(0, 5);
+    const recent = getExecutionLogs().slice(0, 5);
 
     container.innerHTML = recent.map(log => `
         <div class="activity-item">
@@ -429,6 +488,7 @@ function showAddCapabilityModal() {
             transitions: []
         };
         capabilities.push(newCap);
+        addDashboardAuditLog('capability_created', { state: 'PROPOSED' }, newCap.capability_id);
         renderAll();
         closeModal();
         showNotification('Capability created in PROPOSED state');
@@ -449,6 +509,7 @@ function exportData() {
     a.download = `cvf-dashboard-export-${formatDateForFile(new Date())}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    addDashboardAuditLog('export_data', { count: auditLogs.length });
 }
 
 // Import data
@@ -461,8 +522,10 @@ function importData(event) {
         try {
             const data = JSON.parse(e.target.result);
             if (data.capabilities) capabilities = data.capabilities;
-            if (data.auditLogs) auditLogs = data.auditLogs;
+            if (data.auditLogs) baseAuditLogs = data.auditLogs;
+            auditLogs = mergeAuditLogs(baseAuditLogs, dashboardAuditLogs);
             renderAll();
+            addDashboardAuditLog('import_data', { count: auditLogs.length });
             showNotification('Data imported successfully');
         } catch (err) {
             showNotification('Failed to import data: ' + err.message, 'error');

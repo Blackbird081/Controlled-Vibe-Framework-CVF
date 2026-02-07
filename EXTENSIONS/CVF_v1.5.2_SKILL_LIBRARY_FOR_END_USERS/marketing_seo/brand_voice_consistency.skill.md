@@ -3,7 +3,15 @@
 > **Domain:** Marketing & SEO  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/brand-voice
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -157,6 +165,59 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Language Guidelines** - Use/avoid word lists
 6. **Examples** - Do/Don't for each attribute
 7. **Action Plan** - Steps to improve consistency
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Brand: StockFlow
+Audience: chủ shop + quản lý kho
+Giá trị cốt lõi: nhanh, chính xác, dễ triển khai
+Kênh: Website, app UI, email onboarding, social
+```
+
+### Output mẫu:
+```
+# Brand Voice Guide (v0.1)
+
+## Voice Attributes
+- Thực dụng (practical)
+- Đáng tin cậy (trustworthy)
+- Rõ ràng, không màu mè
+
+## Do / Don't
+Do: "Kiểm kho trong 30 giây"
+Don't: "Giải pháp đột phá số 1 vũ trụ"
+
+## Sample
+Tagline: "Kiểm kho nhanh, sai số thấp."
+CTA: "Dùng thử 14 ngày"
+UI microcopy: "Đã lưu phiếu nhập • 2s"
+```
+
+### Đánh giá:
+- ✅ Voice rõ, phù hợp SMB
+- ✅ Có ví dụ đa kênh
+- ✅ Dễ áp dụng cho copy
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Competitor Analysis](./competitor_analysis.skill.md)
+- [Copywriting Evaluation](./copywriting_evaluation.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Brand Voice Consistency**, tiếp tục với:
+→ [Copywriting Evaluation](./copywriting_evaluation.skill.md)
 
 ---
 

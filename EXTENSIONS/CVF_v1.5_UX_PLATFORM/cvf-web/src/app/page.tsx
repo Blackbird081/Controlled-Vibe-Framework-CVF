@@ -33,6 +33,7 @@ import {
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 import { LanguageToggle } from '@/lib/i18n';
+import { trackEvent } from '@/lib/analytics';
 
 type AppState = 'home' | 'form' | 'processing' | 'result' | 'history' | 'analytics' | 'marketplace' | 'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' | 'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard' | 'skills';
 
@@ -89,6 +90,11 @@ export default function Home() {
       setCurrentFolder(template.id);
       return;
     }
+    trackEvent('template_selected', {
+      templateId: template.id,
+      templateName: template.name,
+      category: template.category,
+    });
     // Check if this is the app builder wizard template
     if (template.id === 'app_builder_wizard') {
       setAppState('wizard');
@@ -159,6 +165,11 @@ export default function Home() {
     };
 
     addExecution(execution);
+    trackEvent('execution_created', {
+      executionId: execution.id,
+      templateId: execution.templateId,
+      templateName: execution.templateName,
+    });
     setAppState('processing');
   }, [selectedTemplate, addExecution]);
 
@@ -172,6 +183,12 @@ export default function Home() {
         qualityScore: 8.2,
         completedAt: new Date(),
       });
+      trackEvent('execution_completed', {
+        executionId: currentExecution.id,
+        templateId: currentExecution.templateId,
+        templateName: currentExecution.templateName,
+        durationMs: Date.now() - new Date(currentExecution.createdAt).getTime(),
+      });
     }
 
     setAppState('result');
@@ -180,6 +197,15 @@ export default function Home() {
   const handleAccept = useCallback(() => {
     if (currentExecution) {
       updateExecution(currentExecution.id, { result: 'accepted' });
+      const completedAt = currentExecution.completedAt
+        ? new Date(currentExecution.completedAt).getTime()
+        : new Date(currentExecution.createdAt).getTime();
+      trackEvent('execution_accepted', {
+        executionId: currentExecution.id,
+        templateId: currentExecution.templateId,
+        templateName: currentExecution.templateName,
+        timeToDecisionMs: Date.now() - completedAt,
+      });
     }
     setAppState('home');
     setSelectedTemplate(null);
@@ -189,13 +215,29 @@ export default function Home() {
   const handleReject = useCallback(() => {
     if (currentExecution) {
       updateExecution(currentExecution.id, { result: 'rejected' });
+      const completedAt = currentExecution.completedAt
+        ? new Date(currentExecution.completedAt).getTime()
+        : new Date(currentExecution.createdAt).getTime();
+      trackEvent('execution_rejected', {
+        executionId: currentExecution.id,
+        templateId: currentExecution.templateId,
+        templateName: currentExecution.templateName,
+        timeToDecisionMs: Date.now() - completedAt,
+      });
     }
     setAppState('form'); // Go back to form to retry
   }, [currentExecution, updateExecution]);
 
   const handleRetry = useCallback(() => {
+    if (currentExecution) {
+      trackEvent('execution_retry', {
+        executionId: currentExecution.id,
+        templateId: currentExecution.templateId,
+        templateName: currentExecution.templateName,
+      });
+    }
     setAppState('form');
-  }, []);
+  }, [currentExecution]);
 
   const handleBack = useCallback(() => {
     if (appState === 'form') {
@@ -234,6 +276,12 @@ export default function Home() {
     setCurrentOutput(execution.output || '');
     setAppState('result');
   }, [setCurrentExecution]);
+
+  useEffect(() => {
+    if (appState === 'analytics') {
+      trackEvent('analytics_opened');
+    }
+  }, [appState]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

@@ -3,8 +3,8 @@
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.1.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.1.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -182,196 +182,55 @@
 
 ### Input mẫu:
 ```
-App Name: TaskFlow Desktop
-Framework: Tauri
-Platforms: Windows, macOS
-Window: Single, 1024x768, resizable
-Menu: File (New, Save, Exit), Edit (standard), Help (About)
-Tray: Yes - quick add task
-Shortcuts: Ctrl+N new, Ctrl+S save, Ctrl+Q quit
-Native: Notifications, File dialog
-Startup: No auto-start
+App Name: StockFlow Warehouse
+Platforms: Windows 10+, macOS
+Primary Users: Warehouse staff
+Offline Required: Yes
+Devices: USB barcode scanner
 ```
 
 ### Output mẫu:
 ```markdown
-# TaskFlow Desktop Specification
+# Desktop App Spec
 
-## App Identity
-- **Name:** TaskFlow
-- **Bundle ID:** com.taskflow.desktop
-- **Version:** 1.0.0
-- **Framework:** Tauri 2.0
+## Core Screens
+- Login
+- Scan In/Out
+- Inventory Lookup
+- Sync Status
 
-## Window Configuration
+## UX Flow
+- Mặc định focus ô scan
+- Khi offline: lưu local, hiển thị banner
+- Sync tự động mỗi 5 phút
 
-### Main Window
-| Property | Value |
-|----------|-------|
-| Default Size | 1024 x 768 |
-| Min Size | 800 x 600 |
-| Max Size | None (unlimited) |
-| Resizable | Yes |
-| Title Bar | Native |
-| Always on Top | No (optional in settings) |
-
-### Window State Persistence
-- Remember last position and size
-- Save on close, restore on launch
-
-## Menu Structure
-
-\`\`\`
-┌─ File ──────────────────────────────┐
-│  📝 New Task              Ctrl+N    │
-│  ─────────────────────────────      │
-│  💾 Save                  Ctrl+S    │
-│  📤 Export...             Ctrl+E    │
-│  ─────────────────────────────      │
-│  ⚙️  Settings...          Ctrl+,    │
-│  ─────────────────────────────      │
-│  🚪 Exit                  Ctrl+Q    │
-└─────────────────────────────────────┘
-
-┌─ Edit ──────────────────────────────┐
-│  ↩️  Undo                 Ctrl+Z    │
-│  ↪️  Redo                 Ctrl+Y    │
-│  ─────────────────────────────      │
-│  ✂️  Cut                  Ctrl+X    │
-│  📋 Copy                  Ctrl+C    │
-│  📥 Paste                 Ctrl+V    │
-│  ─────────────────────────────      │
-│  🔍 Find                  Ctrl+F    │
-└─────────────────────────────────────┘
-
-┌─ View ──────────────────────────────┐
-│  📋 All Tasks                       │
-│  ⏳ Pending                         │
-│  ✅ Completed                       │
-│  ─────────────────────────────      │
-│  🔄 Refresh               F5        │
-│  ─────────────────────────────      │
-│  🌙 Dark Mode             Ctrl+D    │
-└─────────────────────────────────────┘
-
-┌─ Help ──────────────────────────────┐
-│  📚 Documentation         F1        │
-│  🐛 Report Bug                      │
-│  ─────────────────────────────      │
-│  ℹ️  About TaskFlow                 │
-└─────────────────────────────────────┘
-\`\`\`
-
-## System Tray
-
-| Property | Value |
-|----------|-------|
-| Icon | TaskFlow logo (16x16, 32x32) |
-| Tooltip | "TaskFlow - X pending tasks" |
-
-**Context Menu:**
-\`\`\`
-┌────────────────────────────────┐
-│  ➕ Quick Add Task              │
-│  ─────────────────────────      │
-│  📋 Show TaskFlow               │
-│  🙈 Hide TaskFlow               │
-│  ─────────────────────────      │
-│  🚪 Quit                        │
-└────────────────────────────────┘
-\`\`\`
-
-**Tray Click Behavior:**
-- Left click: Show/focus window
-- Right click: Context menu
-
-## Keyboard Shortcuts
-
-| Action | Windows/Linux | macOS |
-|--------|---------------|-------|
-| New Task | Ctrl+N | Cmd+N |
-| Save | Ctrl+S | Cmd+S |
-| Find | Ctrl+F | Cmd+F |
-| Settings | Ctrl+, | Cmd+, |
-| Quit | Ctrl+Q | Cmd+Q |
-| Toggle Dark Mode | Ctrl+D | Cmd+D |
-| Refresh | F5 | Cmd+R |
-
-**Global Hotkey:**
-- Ctrl+Shift+T: Quick add task from anywhere
-
-## Native Features
-
-### Notifications
-- Task due reminders
-- Permission: Request on first task with due date
-
-### File Dialogs
-- Export tasks (JSON, CSV)
-- Native save dialog
-
-### Clipboard
-- Copy task title/details
-- Paste content into task
-
-### Auto-Update
-- Check on launch (silent)
-- Prompt before install
-- Background download
-
-## Platform-Specific
-
-### Windows
-| Property | Value |
-|----------|-------|
-| Installer | NSIS |
-| Install Location | %LOCALAPPDATA%/TaskFlow |
-| Data Location | %APPDATA%/TaskFlow |
-| Registry | HKCU\Software\TaskFlow |
-| Autostart | Registry entry (optional) |
-
-### macOS
-| Property | Value |
-|----------|-------|
-| Format | .dmg with .app |
-| Install Location | /Applications |
-| Data Location | ~/Library/Application Support/TaskFlow |
-| Autostart | Login Items (optional) |
-
-## Application Lifecycle
-
-### First Launch
-1. Show onboarding (3 slides)
-2. Request notification permission
-3. Create default category
-
-### Normal Launch
-1. Check for updates (background)
-2. Load data from local DB
-3. Restore window state
-4. Ready
-
-### Close Behavior
-- X button: Minimize to tray
-- Ctrl+Q / Quit: Actually quit
-
-### Data Persistence
-- Auto-save on every change
-- Backup to .bak every 24h
+## Non-Functional
+- Launch < 3s
+- Hoạt động ổn định với 5.000 sản phẩm
 ```
 
 ### Đánh giá:
-- ✅ Window config complete
-- ✅ Menu structure detailed
-- ✅ Shortcuts with Mac variants
-- ✅ Platform behavior defined
-- **Kết quả: ACCEPT ✅**
+- ✅ Flow rõ cho warehouse
+- ✅ Có offline + sync
+- ✅ Nêu performance mục tiêu
+- **Kết quả: ACCEPT**
 
----
+## 🔗 Related Skills
+- [API Design Spec](./05_api_design_spec.skill.md)
+- [CLI Tool Spec](./07_cli_tool_spec.skill.md)
+- [Local Deployment Spec](./08_local_deployment.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.1.1 | 2026-02-07 | Domain refinement: metadata + flow alignment |
+| 1.1.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
 ## 🔗 Next Step
 
-Sau khi có Desktop Spec → Build Phase (Phase C)
+Sau khi có Desktop Spec → [Local Deployment Spec](./08_local_deployment.skill.md) (nếu cần đóng gói) hoặc → Build Phase (Phase C)
+
 
 ---
 

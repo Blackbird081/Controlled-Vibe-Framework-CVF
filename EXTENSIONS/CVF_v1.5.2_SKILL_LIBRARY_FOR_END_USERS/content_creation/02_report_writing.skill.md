@@ -3,6 +3,14 @@
 > **Domain:** Content Creation  
 > **Difficulty:** ⭐⭐ Medium  
 > **CVF Version:** v1.5.2
+> **Skill Version:** 1.0.0  
+> **Last Updated:** 2026-02-07
+
+---
+
+## 📌 Prerequisites
+
+Không yêu cầu.
 
 ---
 
@@ -188,4 +196,24 @@ Next Review: Feb 5, 2024
 
 ---
 
-*Report Writing Skill — CVF v1.5.2 Skill Library*
+---
+
+## 🔗 Related Skills
+- [Documentation](./01_documentation.skill.md)
+- [Presentation](./03_presentation.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Report Writing**, tiếp tục với:
+→ [Presentation](./03_presentation.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Content Creation Domain*

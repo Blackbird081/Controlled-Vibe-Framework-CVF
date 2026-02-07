@@ -94,6 +94,41 @@ result = adapter.execute(contract, inputs={"query": "..."})
 print(result.trace)
 ```
 
+### 4. TypeScript SDK Example (Registry + Audit)
+
+```typescript
+import { SkillRegistry, AuditTracer, validateContract } from '@cvf/sdk';
+
+const registry = new SkillRegistry();
+const contract = {
+  capability_id: 'CODE_REVIEW_v1',
+  domain: 'development',
+  description: 'Review code for issues',
+  risk_level: 'R1',
+  version: '1.0',
+  governance: { allowed_archetypes: ['Execution'], allowed_phases: ['C'], required_status: 'ACTIVE' },
+  input_spec: [{ name: 'code', type: 'string', required: true }],
+  output_spec: [{ name: 'issues', type: 'array' }],
+  execution: { side_effects: false, rollback_possible: true, idempotent: true },
+  audit: { trace_level: 'Standard', required_fields: ['code'] },
+};
+
+const validation = validateContract(contract);
+if (!validation.valid) throw new Error(validation.errors.join(', '));
+
+registry.register(contract, 'dev-team');
+
+const tracer = new AuditTracer();
+tracer.log(contract, 'gpt_adapter', { code: 'print(1)' }, {
+  success: true,
+  outputs: { issues: [] },
+  audit_id: 'a1',
+  duration_ms: 120,
+});
+
+console.log(tracer.getStats());
+```
+
 ---
 
 ## Directory Structure

@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
-import { useQuotaManager, MODEL_PRICING, ProviderKey } from '@/lib/quota-manager';
+import { useQuotaManager, ProviderKey } from '@/lib/quota-manager';
+import { useModelPricing } from '@/lib/hooks/useModelPricing';
 
 interface AIUsagePanelProps {
     onClose: () => void;
@@ -11,6 +12,7 @@ interface AIUsagePanelProps {
 export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
     const { language } = useLanguage();
     const { settings, stats, updateSettings, checkBudget, clearUsage } = useQuotaManager();
+    const { pricing, status: pricingStatus, updatedAt } = useModelPricing();
     const [activeTab, setActiveTab] = useState<'overview' | 'settings' | 'pricing'>('overview');
 
     const budgetStatus = checkBudget();
@@ -21,6 +23,8 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
             overview: 'Tổng quan',
             settingsTab: 'Cài đặt',
             pricing: 'Bảng giá',
+            pricingStatus: 'Cập nhật giá',
+            pricingFallback: 'Đang dùng giá mặc định',
             today: 'Hôm nay',
             thisMonth: 'Tháng này',
             tokens: 'tokens',
@@ -50,6 +54,8 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
             overview: 'Overview',
             settingsTab: 'Settings',
             pricing: 'Pricing',
+            pricingStatus: 'Pricing updated',
+            pricingFallback: 'Using default pricing',
             today: 'Today',
             thisMonth: 'This Month',
             tokens: 'tokens',
@@ -341,7 +347,14 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
 
                 {/* Pricing Tab */}
                 {activeTab === 'pricing' && (
-                    <div>
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between text-xs text-gray-500">
+                            <span>
+                                {pricingStatus === 'ready' && updatedAt && `${l.pricingStatus}: ${new Date(updatedAt).toLocaleString()}`}
+                                {pricingStatus === 'loading' && `${l.pricingStatus}: ...`}
+                                {pricingStatus === 'error' && l.pricingFallback}
+                            </span>
+                        </div>
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
@@ -351,7 +364,7 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                                {Object.entries(MODEL_PRICING).map(([model, prices]) => (
+                                {Object.entries(pricing).map(([model, prices]) => (
                                     <tr key={model} className="text-gray-700 dark:text-gray-300">
                                         <td className="py-2 font-mono text-xs">{model}</td>
                                         <td className="py-2 text-right">${prices.input.toFixed(2)}</td>
@@ -360,7 +373,7 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
                                 ))}
                             </tbody>
                         </table>
-                        <p className="text-xs text-gray-500 mt-4 text-center">{l.perMillion}</p>
+                        <p className="text-xs text-gray-500 mt-2 text-center">{l.perMillion}</p>
                     </div>
                 )}
             </div>

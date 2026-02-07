@@ -3,6 +3,14 @@
 > **Domain:** Business Analysis  
 > **Difficulty:** ⭐⭐ Medium  
 > **CVF Version:** v1.5.2
+> **Skill Version:** 1.0.0  
+> **Last Updated:** 2026-02-07
+
+---
+
+## 📌 Prerequisites
+
+Không yêu cầu.
 
 ---
 
@@ -201,4 +209,24 @@ MARKET RESEARCH: EDTECH VIETNAM
 
 ---
 
-*Market Research Skill — CVF v1.5.2 Skill Library*
+---
+
+## 🔗 Related Skills
+- [Strategy Analysis](./01_strategy_analysis.skill.md)
+- [Risk Assessment](./02_risk_assessment.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Market Research**, tiếp tục với:
+→ [Strategy Analysis](./01_strategy_analysis.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Business Analysis Domain*

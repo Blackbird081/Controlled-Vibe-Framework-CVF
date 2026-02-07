@@ -3,6 +3,14 @@
 > **Domain:** Business Analysis  
 > **Difficulty:** ⭐⭐⭐ Advanced  
 > **CVF Version:** v1.5.2
+> **Skill Version:** 1.0.0  
+> **Last Updated:** 2026-02-07
+
+---
+
+## 📌 Prerequisites
+
+Không yêu cầu.
 
 ---
 
@@ -209,4 +217,24 @@ RISK ASSESSMENT: AI CHATBOT LAUNCH
 
 ---
 
-*Risk Assessment Skill — CVF v1.5.2 Skill Library*
+---
+
+## 🔗 Related Skills
+- [Strategy Analysis](./01_strategy_analysis.skill.md)
+- [Market Research](./03_market_research.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Risk Assessment**, quay lại cập nhật dữ liệu thị trường:
+→ [Market Research](./03_market_research.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Business Analysis Domain*

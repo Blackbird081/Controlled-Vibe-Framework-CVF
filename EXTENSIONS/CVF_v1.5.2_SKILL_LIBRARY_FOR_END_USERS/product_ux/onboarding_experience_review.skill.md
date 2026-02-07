@@ -3,7 +3,15 @@
 > **Domain:** Product & UX  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/onboarding
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -162,6 +170,68 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Redesign Suggestions** - Flow optimization
 6. **Email Sequence** - Nurture recommendations
 7. **Metrics to Track** - KPIs for improvement
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Onboarding Experience Review**, tiếp tục với:
+→ [Error Handling UX](./error_handling_ux.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Product & UX Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Onboarding: 5 bước, yêu cầu import CSV
+Drop-off: 48% tại bước 3 (import)
+Time-to-Value: 18 phút
+```
+
+### Output mẫu:
+```markdown
+# Onboarding Improvements
+
+## Issues
+- Import CSV quá sớm, user chưa hiểu value
+- Không có mẫu file
+
+## Changes
+- Chuyển import sang step 4
+- Thêm "Use sample data" 1 click
+- Thêm video 60s ở step 1
+
+## Target
+Time-to-Value < 8 phút
+Drop-off step 3 < 20%
+```
+
+### Đánh giá:
+- ✅ Dựa trên số liệu drop-off
+- ✅ Thay đổi cụ thể, có mục tiêu
+- ✅ Dễ A/B test
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Error Handling UX](./error_handling_ux.skill.md)
+- [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Onboarding Experience Review**, tiếp tục với:
+→ [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
 
 ---
 

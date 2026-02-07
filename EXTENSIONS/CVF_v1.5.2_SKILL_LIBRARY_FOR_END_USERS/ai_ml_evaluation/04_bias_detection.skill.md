@@ -3,6 +3,14 @@
 > **Domain:** AI/ML Evaluation  
 > **Difficulty:** ⭐⭐⭐ Advanced  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
+
+---
+
+## 📌 Prerequisites
+
+Không yêu cầu.
 
 ---
 
@@ -53,6 +61,15 @@
 
 ---
 
+## ⚠️ Common Failures
+
+| Lỗi thường gặp | Cách phòng tránh |
+|---|---|
+| Thiếu dữ liệu đầu vào quan trọng | Bổ sung đầy đủ thông tin theo Form Input |
+| Kết luận chung chung | Yêu cầu nêu rõ tiêu chí và hành động cụ thể |
+
+---
+
 ## 💡 Tips
 
 1. **Diverse test cases** — Cover edge cases
@@ -62,4 +79,61 @@
 
 ---
 
+## 🔗 Next Step
+
+Sau khi hoàn thành **Bias Detection**, tiếp tục với:
+→ [Output Quality Check](./03_output_quality_check.skill.md)
+
+---
+
 *Bias Detection Skill — CVF v1.5.2*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Use case: AI đề xuất mức chiết khấu cho đại lý
+Sample outputs:
+- Đại lý nhỏ (doanh thu 50M) → đề xuất 2%
+- Đại lý lớn (doanh thu 500M) → đề xuất 10%
+Protected class: quy mô kinh doanh
+Decision impact: chiết khấu ảnh hưởng lợi nhuận
+```
+
+### Output mẫu:
+```
+Potential bias: ưu tiên chiết khấu cho đại lý lớn, thiếu tiêu chí minh bạch.
+Evidence: cùng tỷ lệ tăng trưởng nhưng đề xuất khác biệt lớn.
+Severity: Medium (tác động công bằng phân phối lợi ích).
+Mitigations:
+- Chuẩn hóa rubric theo doanh thu + độ trung thành.
+- Review ngẫu nhiên 10% quyết định mỗi tháng.
+```
+
+### Đánh giá:
+- ✅ Có evidence rõ
+- ✅ Severity hợp lý
+- ✅ Mitigation khả thi
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Output Quality Check](./03_output_quality_check.skill.md)
+- [Cost Optimization](./05_cost_optimization.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Bias Detection**, tiếp tục với:
+→ [Cost Optimization](./05_cost_optimization.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | AI/ML Evaluation Domain*

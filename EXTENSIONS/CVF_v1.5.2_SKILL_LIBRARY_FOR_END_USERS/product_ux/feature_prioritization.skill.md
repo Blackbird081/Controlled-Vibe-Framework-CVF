@@ -3,7 +3,15 @@
 > **Domain:** Product & UX  
 > **Difficulty:** Advanced  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/feature-prioritization
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -164,6 +172,66 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Resource Allocation** - Suggested distribution
 6. **Roadmap Suggestion** - Timeline proposal
 7. **Risk Assessment** - What could go wrong
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Feature Prioritization (RICE/ICE)**, tiếp tục với:
+→ [UX Heuristic Evaluation](./ux_heuristic_evaluation.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Product & UX Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Features: offline sync, barcode batch import, low-stock alert, role permissions
+Reach (Q): 1200 / 600 / 900 / 400
+Impact: 3 / 2 / 2 / 1
+Confidence: 0.7 / 0.6 / 0.8 / 0.5
+Effort (person-weeks): 6 / 3 / 2 / 4
+```
+
+### Output mẫu:
+```markdown
+# RICE Scoring
+
+| Feature | R | I | C | E | Score |
+|---|---:|---:|---:|---:|---:|
+| Low-stock alert | 900 | 2 | 0.8 | 2 | 720 |
+| Barcode batch import | 600 | 2 | 0.6 | 3 | 240 |
+| Offline sync | 1200 | 3 | 0.7 | 6 | 420 |
+| Role permissions | 400 | 1 | 0.5 | 4 | 50 |
+
+Top 2: Low-stock alert, Offline sync
+```
+
+### Đánh giá:
+- ✅ Score minh bạch, dễ audit
+- ✅ Ưu tiên dựa trên data
+- ✅ Dễ chuyển roadmap
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Onboarding Experience Review](./onboarding_experience_review.skill.md)
+- [A/B Test Review](./ab_test_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Feature Prioritization (RICE/ICE)**, tiếp tục với:
+→ [A/B Test Review](./ab_test_review.skill.md)
 
 ---
 

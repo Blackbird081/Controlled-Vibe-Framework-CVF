@@ -123,6 +123,7 @@ CVF_v1.5_UX_PLATFORM/
 | 2026-02-03 | Added AI Quick Links to form page |
 | 2026-02-02 | Bilingual export (VI/EN) |
 | 2026-02-02 | Skill Library integration |
+| 2026-02-07 | Analytics tracking (local) + mobile responsive tweaks |
 
 ---
 

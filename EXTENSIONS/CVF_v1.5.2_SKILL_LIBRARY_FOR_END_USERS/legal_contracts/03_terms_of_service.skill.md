@@ -114,190 +114,45 @@ TERMS OF SERVICE
 
 ### Input mẫu:
 ```
-Company: ProjectFlow Inc.
-Product: Cloud project management tool
-Target users: Small businesses, teams 5-50 people
-Key features: 
-  - Task and project management
-  - File storage (10GB/user)
-  - Team chat
-  - Integrations with Slack, Google
-Pricing: $10/user/month, annual plans available
-Data: Stored on AWS Singapore, daily backups
-Jurisdictions: Southeast Asia
+Product: StockFlow SaaS
+Pricing: monthly + annual
+Trial: 14 ngày
+Data retention: 12 tháng sau hủy
 ```
 
 ### Output mẫu:
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PROJECTFLOW TERMS OF SERVICE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Last Updated: February 6, 2026
-Effective Date: February 6, 2026
+```markdown
+# ToS Highlights
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-KEY POINTS SUMMARY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• You must be 18+ to use our service
-• Monthly subscription, cancel anytime
-• Your data is stored securely on AWS Singapore
-• We don't sell your personal information
-• You own your content, we just host it
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. INTRODUCTION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Welcome to ProjectFlow! These Terms of Service 
-("Terms") govern your use of ProjectFlow's project 
-management platform (the "Service").
-
-By accessing or using our Service, you agree to 
-these Terms. If you disagree, please don't use 
-our Service.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-2. SERVICE DESCRIPTION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ProjectFlow provides cloud-based project management 
-tools including:
-• Task and project management
-• File storage (10GB per user)
-• Team communication
-• Third-party integrations
-
-We may update features from time to time.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-3. ACCOUNT TERMS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-3.1 Eligibility
-• You must be 18 years or older
-• Must provide accurate registration information
-• One person or legal entity per account
-
-3.2 Account Security
-• You're responsible for your password
-• Notify us immediately of unauthorized access
-• Don't share accounts between individuals
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-4. USER RESPONSIBILITIES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-You agree NOT to:
-• Violate any laws or regulations
-• Infringe on others' intellectual property
-• Upload malicious content or malware
-• Attempt to access other users' accounts
-• Use the Service for illegal activities
-• Resell the Service without permission
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-5. PAYMENT TERMS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-5.1 Pricing
-• $10 per user per month
-• Annual plans available with discount
-• Prices may change with 30-day notice
-
-5.2 Billing
-• Billed monthly or annually in advance
-• Payments processed via secure third-party
-• No refunds for partial months
-
-5.3 Free Trial
-• 14-day free trial, no credit card required
-• Converts to paid at trial end if upgraded
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-6. INTELLECTUAL PROPERTY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-6.1 Your Content
-• You retain ownership of your content
-• You grant us license to host and display it
-• We won't use your content for other purposes
-
-6.2 Our Property
-• ProjectFlow name, logo, and features are ours
-• Don't copy or modify our software
-• Feedback you provide may be used by us
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-7. PRIVACY & DATA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Your data is stored on AWS Singapore
-• Daily backups maintained
-• See our Privacy Policy for full details
-• We comply with PDPA and applicable laws
-• We don't sell your personal data
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-8. DISCLAIMERS & LIMITATIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-8.1 Service Provided "As Is"
-We provide the Service without warranties of any 
-kind, express or implied.
-
-8.2 Limitation of Liability
-Our total liability shall not exceed the amount 
-you paid us in the past 12 months.
-
-We are not liable for:
-• Data loss (always maintain backups)
-• Business interruption
-• Indirect or consequential damages
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-9. TERMINATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-9.1 By You
-• Cancel anytime from account settings
-• Data exportable for 30 days after cancel
-
-9.2 By Us
-• We may terminate for Terms violations
-• We'll provide notice except for serious breaches
-• Refunds at our discretion
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-10. DISPUTE RESOLUTION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Governed by laws of Singapore
-• Disputes resolved by arbitration in Singapore
-• Class actions are waived
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-11. CHANGES TO TERMS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• We may modify these Terms
-• Material changes notified 30 days in advance
-• Continued use = acceptance of new Terms
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-12. CONTACT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ProjectFlow Inc.
-Email: legal@projectflow.com
-Address: [Address]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-⚠️ DISCLAIMER: This is a template for reference.
-   Have a qualified attorney review before use.
+- Billing: auto-renew, invoice + VAT
+- Termination: user có thể hủy bất kỳ lúc nào
+- Data retention: 12 tháng, export trong 30 ngày
+- Liability: cap = 12 tháng phí
+- Acceptable use: no scraping, no abuse
 ```
 
 ### Đánh giá:
-- ✅ All standard sections covered
-- ✅ Product-specific details included
-- ✅ Plain language with summary
-- ✅ Reasonable liability limits
+- ✅ Điều khoản phù hợp SaaS
+- ✅ Retention rõ ràng
+- ✅ Liability hợp lý
 - **Kết quả: ACCEPT**
 
----
+## 🔗 Related Skills
+- [NDA Template](./02_nda_template.skill.md)
+- [Compliance Checklist](./04_compliance_checklist.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
 ## 🔗 Next Step
 
-> Cần compliance → [Compliance Checklist](./04_compliance_checklist.skill.md)
+Sau khi hoàn thành **Terms of Service**, tiếp tục với:
+→ [Compliance Checklist](./04_compliance_checklist.skill.md)
 
 ---
 
-*Terms of Service Skill — CVF v1.5.2 Skill Library*
+*CVF Skill Library v1.5.2 | Legal & Contracts Domain*

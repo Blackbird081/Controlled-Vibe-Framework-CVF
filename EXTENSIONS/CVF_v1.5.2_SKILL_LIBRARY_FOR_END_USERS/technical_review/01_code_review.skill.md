@@ -3,6 +3,14 @@
 > **Domain:** Technical Review  
 > **Difficulty:** ⭐⭐ Medium  
 > **CVF Version:** v1.5.2
+> **Skill Version:** 1.0.0  
+> **Last Updated:** 2026-02-07
+
+---
+
+## 📌 Prerequisites
+
+Không yêu cầu.
 
 ---
 
@@ -194,4 +202,24 @@ CODE REVIEW: Login Function
 
 ---
 
-*Code Review Skill — CVF v1.5.2 Skill Library*
+---
+
+## 🔗 Related Skills
+- [Architecture Review](./02_architecture_review.skill.md)
+- [Security Audit](./03_security_audit.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Code Review**, tiếp tục với:
+→ [Architecture Review](./02_architecture_review.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Technical Review Domain*

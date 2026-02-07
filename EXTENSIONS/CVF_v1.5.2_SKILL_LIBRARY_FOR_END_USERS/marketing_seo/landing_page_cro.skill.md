@@ -3,7 +3,15 @@
 > **Domain:** Marketing & SEO  
 > **Difficulty:** Medium  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/page-cro
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -143,6 +151,59 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 4. **Quick Wins** - Easy fixes for immediate impact
 5. **Priority Recommendations** - Ranked by impact
 6. **A/B Test Suggestions** - Test ideas
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Traffic: 20k visits/mo
+Conversion: 1.1% → trial
+CTA: "Book demo"
+Form: 9 fields
+Heatmap: 65% drop ở pricing section
+```
+
+### Output mẫu:
+```markdown
+# CRO Plan
+
+## Hypotheses
+H1: Giảm form còn 4 fields tăng CVR 20%
+H2: Đưa pricing xuống dưới testimonials giảm drop 10%
+H3: Sticky CTA "Dùng thử 14 ngày" tăng CTR 15%
+
+## A/B Tests
+- Variant A: form 4 fields, CTA trial
+- Variant B: thêm proof (logos + case)
+
+## KPI
+Primary: Trial conversion
+Secondary: CTA CTR, form completion
+```
+
+### Đánh giá:
+- ✅ Có giả thuyết đo được
+- ✅ Test plan rõ ràng
+- ✅ KPI phù hợp
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Copywriting Evaluation](./copywriting_evaluation.skill.md)
+- [Pricing Strategy Review](./pricing_strategy_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Landing Page CRO**, tiếp tục với:
+→ [Pricing Strategy Review](./pricing_strategy_review.skill.md)
 
 ---
 

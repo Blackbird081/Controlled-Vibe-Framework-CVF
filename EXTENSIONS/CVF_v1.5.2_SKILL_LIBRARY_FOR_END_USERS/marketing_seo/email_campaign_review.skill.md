@@ -3,7 +3,15 @@
 > **Domain:** Marketing & SEO  
 > **Difficulty:** Easy  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/email-marketing
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -137,6 +145,56 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Mobile Preview** - How it looks on mobile
 6. **Recommendations** - Specific improvements
 7. **Rewritten Version** - Optimized email
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Sequence: 3 email onboarding (Day 0/2/5)
+Open rate 22%, Click 1.8%
+Goal: kích hoạt trial trong 7 ngày
+```
+
+### Output mẫu:
+```markdown
+# Email Review
+
+## Issues
+- Không cá nhân hóa theo ngành
+- Thiếu hướng dẫn 1 bước hành động
+
+## Revised Sequence
+Day 0: "3 bước setup kho trong 10 phút"
+Day 2: "Mẫu file nhập kho + video 2 phút"
+Day 5: "Case study giảm sai số xuống 2%"
+
+## Targets
+Open > 30%, Click > 4%, Activation > 15%
+```
+
+### Đánh giá:
+- ✅ Insight rõ về funnel
+- ✅ Sequence thực tế, dễ triển khai
+- ✅ Target đo được
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [Social Media Ad Review](./social_media_ad_review.skill.md)
+- [Competitor Analysis](./competitor_analysis.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Email Campaign Review**, quay lại đánh giá thị trường theo quý:
+→ [Competitor Analysis](./competitor_analysis.skill.md)
 
 ---
 

@@ -174,10 +174,24 @@ NEXT STEPS:
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [Job Description](./01_job_description.skill.md)
+- [Onboarding Checklist](./04_onboarding_checklist.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
-> Sau khi hire → [Onboarding Checklist](./04_onboarding_checklist.skill.md)
+Sau khi hoàn thành **Interview Evaluation**, tiếp tục với:
+→ [Onboarding Checklist](./04_onboarding_checklist.skill.md)
 
 ---
 
-*Interview Evaluation Skill — CVF v1.5.2 Skill Library*
+*CVF Skill Library v1.5.2 | HR & Operations Domain*

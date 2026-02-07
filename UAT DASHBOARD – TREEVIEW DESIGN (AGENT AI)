@@ -1,0 +1,96 @@
+
+# 📊 UAT DASHBOARD – TREEVIEW DESIGN (AGENT AI)
+
+Dưới đây là **treeview logic** để build dashboard giống UAT hệ thống truyền thống, nhưng **chuẩn cho Agent AI**.
+
+---
+
+## 🌳 AGENT AI – UAT DASHBOARD TREEVIEW
+
+Agent AI UAT Dashboard
+│
+├── Agent Registry
+│ ├── Agent Name
+│ │ ├── Metadata
+│ │ │ ├── Agent Type (RAG / Tool / Action)
+│ │ │ ├── Version
+│ │ │ ├── Model
+│ │ │ ├── Owner
+│ │ │ └── Environment
+│ │ │
+│ │ ├── Risk Profile
+│ │ │ ├── Allowed Scope
+│ │ │ ├── Forbidden Scope
+│ │ │ ├── Data Sensitivity
+│ │ │ └── Authority Level
+│ │ │
+│ │ ├── CVF Ruleset
+│ │ │ ├── Capability Rules
+│ │ │ ├── Validation Rules
+│ │ │ └── Failure Rules
+│ │ │
+│ │ ├── UAT Test Suites
+│ │ │ ├── Happy Path
+│ │ │ │ ├── UAT-AI-HP-001
+│ │ │ │ └── UAT-AI-HP-002
+│ │ │ │
+│ │ │ ├── Boundary Tests
+│ │ │ │ ├── Scope Boundary
+│ │ │ │ └── Authority Boundary
+│ │ │ │
+│ │ │ ├── Hallucination Control
+│ │ │ │ ├── No-data Questions
+│ │ │ │ └── Ambiguous Prompts
+│ │ │ │
+│ │ │ ├── RAG Integrity
+│ │ │ │ ├── Source Accuracy
+│ │ │ │ ├── Conflict Handling
+│ │ │ │ └── Outdated Knowledge
+│ │ │ │
+│ │ │ ├── Degradation Mode
+│ │ │ │ ├── Vector DB Down
+│ │ │ │ ├── Tool Timeout
+│ │ │ │ └── Partial Data
+│ │ │ │
+│ │ │ └── Security
+│ │ │ ├── Prompt Injection
+│ │ │ ├── Data Leakage
+│ │ │ └── Role Escalation
+│ │ │
+│ │ ├── CVF Evaluation Summary
+│ │ │ ├── Capability Risk (R_)
+│ │ │ ├── Validation Risk (R_)
+│ │ │ ├── Failure Risk (R_)
+│ │ │ └── Final Risk Level
+│ │ │
+│ │ ├── Authority Decision
+│ │ │ ├── Agent Mode (Auto / HITL / Suggest)
+│ │ │ ├── Allowed Actions
+│ │ │ └── Human Override Policy
+│ │ │
+│ │ ├── Evidence & Logs
+│ │ │ ├── Output Snapshots
+│ │ │ ├── References Used
+│ │ │ └── Trace / Audit Logs
+│ │ │
+│ │ └── Sign-off
+│ │ ├── Product Owner
+│ │ ├── Business Owner
+│ │ ├── QA / Risk
+│ │ └── Go-live Status
+│ │
+│ └── Archived Agents
+│
+└── Global Views
+├── Risk Heatmap (Agents vs Risk Level)
+├── Go-live Readiness
+├── Agents in HITL
+├── Blocked Agents
+└── CVF Rule Change History
+
+
+---
+
+## 🧠 Câu chốt chiến lược
+> **Dashboard này không để “test AI”, mà để “quản trị quyền lực của AI”.**
+

@@ -3,7 +3,15 @@
 > **Domain:** Security & Compliance  
 > **Difficulty:** Advanced  
 > **CVF Version:** v1.5.2  
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 > **Inspired by:** antigravity-awesome-skills/incident-response
+
+## 📌 Prerequisites
+
+Không yêu cầu.
+
+---
 
 ## 🎯 Mục đích
 
@@ -216,6 +224,71 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 5. **Communication Templates** - Internal/external
 6. **Training Recommendations** - Drills and exercises
 7. **Metrics to Track** - Response time KPIs
+
+---
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Incident Response Plan**, tiếp tục với:
+→ [Privacy Policy Audit](./privacy_policy_audit.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+---
+
+## 📊 Ví dụ thực tế
+
+### Input mẫu:
+```
+Team: 8 người
+Tools: Sentry, Cloudflare, AWS, Slack
+Rủi ro chính: lộ token API, rò rỉ dữ liệu PII
+```
+
+### Output mẫu:
+```markdown
+# Incident Response Plan (v1)
+
+## Severity Levels
+- Sev1: data breach, auth bypass
+- Sev2: service outage > 30 phút
+- Sev3: minor bug, no data impact
+
+## Response Flow
+Detect → Triage (15m) → Contain (1h) → Eradicate → Recover → Postmortem
+
+## Roles
+- Incident Lead: CTO
+- Comms: CEO
+- Forensics: Security Eng
+
+## Comms Template
+"We detected an incident at [time]. Impact: [scope]. Next update in 60 minutes."
+```
+
+### Đánh giá:
+- ✅ Có mức độ sự cố rõ ràng
+- ✅ Flow và role cụ thể
+- ✅ Có mẫu thông báo
+- **Kết quả: ACCEPT**
+
+## 🔗 Related Skills
+- [API Security Checklist](./api_security_checklist.skill.md)
+- [Data Handling Review](./data_handling_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Incident Response Plan**, định kỳ diễn tập và rà soát lại:
+→ [API Security Checklist](./api_security_checklist.skill.md)
 
 ---
 

@@ -117,7 +117,12 @@ describe('security.ts', () => {
         });
 
         it('throws on invalid input', async () => {
-            await expect(decryptDataAsync('invalid-base64!!!')).rejects.toThrow();
+            const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+            try {
+                await expect(decryptDataAsync('invalid-base64!!!')).rejects.toThrow();
+            } finally {
+                spy.mockRestore();
+            }
         });
     });
 

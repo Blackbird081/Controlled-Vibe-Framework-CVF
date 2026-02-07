@@ -3,8 +3,8 @@
 > **Domain:** Finance & Analytics  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.0.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -178,6 +178,18 @@ Known Risks:
 
 **Expected Analysis:**
 ```markdown
+
+### Input mẫu:
+```
+Mục tiêu: Hoàn thành Financial Risk Assessment
+Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
+Ràng buộc: Deadline 2 tuần
+```
+
+### Output mẫu:
+```
+Tóm tắt kết quả: Financial Risk Assessment với khuyến nghị/ưu tiên rõ ràng.
+```
 ## Financial Risk Assessment: E-commerce Platform
 
 ### Risk Heat Map
@@ -232,7 +244,24 @@ Known Risks:
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [Investment Due Diligence](./06_investment_due_diligence.skill.md)
+- [Revenue Forecast Review](./08_revenue_forecast_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
 Sau khi hoàn thành Financial Risk Assessment, tiếp tục với:
 → [Revenue Forecast Review](./08_revenue_forecast_review.skill.md) — Đánh giá dự báo doanh thu
+
+---
+
+*CVF Skill Library v1.5.2 | Finance & Analytics Domain*

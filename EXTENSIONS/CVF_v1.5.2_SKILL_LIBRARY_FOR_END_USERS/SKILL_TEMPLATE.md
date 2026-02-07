@@ -117,6 +117,20 @@ Ràng buộc: [...]
 
 ---
 
+## 🔗 Related Skills
+
+- [Tên Skill](./path_to_skill.md) — Vì sao liên quan
+
+---
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | YYYY-MM-DD | Initial release |
+
+---
+
 ## 🔗 Next Step
 
 > Sau khi hoàn thành skill này → [Tên Skill Tiếp Theo](./path_to_next.md)
@@ -155,6 +169,7 @@ Ràng buộc: [...]
 ### Navigation
 - [ ] Có Next Step link (nếu là part of workflow)
 - [ ] File name có số thứ tự đúng
+- [ ] Có Related Skills section (nếu liên quan)
 
 ---
 

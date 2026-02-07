@@ -3,6 +3,14 @@
 > **Domain:** Technical Review  
 > **Difficulty:** ⭐⭐⭐ Advanced  
 > **CVF Version:** v1.5.2
+> **Skill Version:** 1.0.0  
+> **Last Updated:** 2026-02-07
+
+---
+
+## 📌 Prerequisites
+
+Không yêu cầu.
 
 ---
 
@@ -256,4 +264,24 @@ Top Risks:
 
 ---
 
-*Security Audit Skill — CVF v1.5.2 Skill Library*
+---
+
+## 🔗 Related Skills
+- [Architecture Review](./02_architecture_review.skill.md)
+- [Code Review](./01_code_review.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
+## 🔗 Next Step
+
+Sau khi hoàn thành **Security Audit**, quay lại kiểm tra code:
+→ [Code Review](./01_code_review.skill.md)
+
+---
+
+*CVF Skill Library v1.5.2 | Technical Review Domain*

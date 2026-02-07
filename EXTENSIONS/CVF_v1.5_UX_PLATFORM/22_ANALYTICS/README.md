@@ -100,4 +100,12 @@ Suggestions Generated
 
 ---
 
+## Implementation Notes (v1.5)
+
+- **Local tracking** via browser storage (no PII, opt-out by clearing storage).
+- Events captured: template selection, execution created/completed, accept/reject, retry.
+- Analytics dashboard shows recent tracking events.
+
+---
+
 *Analytics Module — CVF v1.5 UX Platform*

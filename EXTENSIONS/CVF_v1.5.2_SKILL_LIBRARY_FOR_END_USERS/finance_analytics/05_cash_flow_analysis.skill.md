@@ -3,8 +3,8 @@
 > **Domain:** Finance & Analytics  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
 > **CVF Version:** v1.5.2  
-> **Skill Version:** 1.0.0  
-> **Last Updated:** 2026-02-04
+> **Skill Version:** 1.0.1  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -166,6 +166,18 @@ Ending Cash: $1,050,000
 
 **Expected Analysis:**
 ```markdown
+
+### Input mẫu:
+```
+Mục tiêu: Hoàn thành Cash Flow Analysis
+Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
+Ràng buộc: Deadline 2 tuần
+```
+
+### Output mẫu:
+```
+Tóm tắt kết quả: Cash Flow Analysis với khuyến nghị/ưu tiên rõ ràng.
+```
 ## Cash Flow Analysis: Q4 2025
 
 ### Summary
@@ -202,7 +214,24 @@ Ending Cash: $1,050,000
 
 ---
 
+---
+
+## 🔗 Related Skills
+- [KPI Dashboard Audit](./04_kpi_dashboard_audit.skill.md)
+- [Investment Due Diligence](./06_investment_due_diligence.skill.md)
+
+## 📜 Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.0.1 | 2026-02-07 | Domain refinement: flow alignment + metadata |
+| 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
+
 ## 🔗 Next Step
 
 Sau khi hoàn thành Cash Flow Analysis, tiếp tục với:
 → [Investment Due Diligence](./06_investment_due_diligence.skill.md) — Đánh giá đầu tư chuyên sâu
+
+---
+
+*CVF Skill Library v1.5.2 | Finance & Analytics Domain*

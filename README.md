@@ -54,6 +54,8 @@ result = skill.execute({"email": "Buy now!!!"})
 
 ## 📚 Chọn Phiên Bản
 
+**Ghi chú trạng thái:** v1.5 UX Platform **đóng băng** (maintenance-only). Các cải tiến tiếp theo tập trung ở **v1.6**, còn **v1.5.2 Skill Library** tiếp tục được mở rộng và được **v1.6 thừa hưởng**.
+
 ### Bảng Tham Chiếu Nhanh
 
 | Bạn cần gì? | Phiên bản | Thư mục |
@@ -70,8 +72,9 @@ result = skill.execute({"email": "Buy now!!!"})
 | CI/CD integration | **v1.3** | [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/](./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) |
 | 👤 Operator Manual | **v1.3.1** | [EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/](./EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) |
 | 🎨 End-user UX Layer | **v1.4** | [EXTENSIONS/CVF_v1.4_USAGE_LAYER/](./EXTENSIONS/CVF_v1.4_USAGE_LAYER/) |
-| 🌐 Web UI Platform | **v1.5** | [EXTENSIONS/CVF_v1.5_UX_PLATFORM/](./EXTENSIONS/CVF_v1.5_UX_PLATFORM/) |
-| 📋 Skill Library (69 skills) | **v1.5.2** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| 🌐 Web UI Platform | **v1.5 (FROZEN)** | [EXTENSIONS/CVF_v1.5_UX_PLATFORM/](./EXTENSIONS/CVF_v1.5_UX_PLATFORM/) |
+| 📋 Skill Library (69 skills) | **v1.5.2 (ACTIVE)** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| 🔐 **Skill Governance Registry** | **governance** | [governance/skill-library/](./governance/skill-library/) |
 | 🤖 **AI Agent Platform** | **v1.6** ⭐ | [EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/](./EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
 
 ---
@@ -202,8 +205,19 @@ Controlled-Vibe-Framework-CVF/
 │       │   └── i18n           ← VI/EN Support
 │       └── ROADMAP.md         ← Development Plan
 │
+├── governance/                        🔐 GOVERNANCE LAYER
+│   └── skill-library/         ← Skill Governance Registry
+│       ├── specs/             ← 8 governance specs
+│       ├── registry/
+│       │   ├── user-skills/   ← 69 user skill records
+│       │   └── agent-skills/  ← 8 agent tool records
+│       └── uat/               ← UAT binding templates
+│
 ├── tools/
 │   └── skill-validation/      ← Shared validation tools
+│
+├── governance/
+│   └── skill-library/          ← Skill Governance Registry (UAT, Risk, Authority)
 │
 └── docs/
     ├── QUICK_START_INTERNAL.md
@@ -267,7 +281,8 @@ Controlled-Vibe-Framework-CVF/
 └── 69 skill files (.skill.md)
 ```
 
-**Best for:** End users không biết code, teams cần template library
+**Best for:** End users không biết code, teams cần template library  
+**Status note:** v1.5 UX Platform đóng băng; cải tiến mới tập trung ở v1.6, còn v1.5.2 Skill Library tiếp tục mở rộng và được v1.6 dùng chung.
 
 ---
 
@@ -301,10 +316,11 @@ Controlled-Vibe-Framework-CVF/
 - ✅ **Sandboxed Execution** - Safe code evaluation
 - ✅ **Rate Limiting** - API protection built-in
 
-### 🧪 Test Coverage (NEW!)
+### 🧪 Test Coverage (UPDATED)
 ```
-✅ 13 test files | 111 tests | 0 failures
-Key modules: security.ts (28), governance.ts (13), ai-providers.ts (13)
+✅ 23 test files | 176 tests | 0 failures
+Coverage: 94.11% statements / 85.04% branches / 91.64% functions / 95.51% lines
+Key modules: security.ts (28), governance.ts (13), ai-providers.ts (21), quota-manager.ts (21)
 ```
 
 ### 🔧 Technical Improvements

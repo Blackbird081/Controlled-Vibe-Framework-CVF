@@ -1,6 +1,30 @@
 # ✅ AGENT AI – USER ACCEPTANCE TESTING (UAT)  
 ## with CVF Control (Capability – Validation – Failure)
 
+> **Version:** 1.0.1  
+> **Status:** Active  
+> **Binding:** See [SKILL_MAPPING_UAT_BINDING](./SKILL_MAPPING_UAT_BINDING.md) for skill-UAT linkage
+
+---
+
+## Registry References
+
+Before executing UAT, identify the governing skill record from:
+
+| Registry | Path | Description |
+|----------|------|-------------|
+| **User Skills** | `../registry/user-skills/` | 69 skills from v1.5.2 SKILL_LIBRARY |
+| **Agent Skills** | `../registry/agent-skills/` | 8 agent tools from v1.6 AGENT_PLATFORM |
+
+Each `.gov.md` file contains:
+- Risk Level (R0-R4)
+- Allowed Roles/Phases
+- UAT Binding criteria (PASS/FAIL)
+
+📋 **Index Files:**
+- [User Skills Index](../registry/user-skills/INDEX.md)
+- [Agent Skills Index](../registry/agent-skills/INDEX.md)
+
 ---
 
 ## 0. General Information

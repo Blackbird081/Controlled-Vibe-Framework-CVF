@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { getSkillCategories } from '../actions/skills';
 import { Skill, SkillCategory } from '../types/skill';
+import { trackEvent } from '@/lib/analytics';
 
 export function SkillLibrary() {
     const [categories, setCategories] = useState<SkillCategory[]>([]);
@@ -42,9 +43,9 @@ export function SkillLibrary() {
     }
 
     return (
-        <div className="flex h-[calc(100vh-140px)] gap-6">
+        <div className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-140px)] gap-6">
             {/* Sidebar - Skill Navigator */}
-            <div className="w-1/3 flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div className="w-full md:w-1/3 flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[40vh] md:max-h-none">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                     <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-3">📚 Skill Library</h2>
                     <div className="relative">
@@ -72,7 +73,15 @@ export function SkillLibrary() {
                                     {category.skills.map(skill => (
                                         <button
                                             key={skill.id}
-                                            onClick={() => setSelectedSkill(skill)}
+                                            onClick={() => {
+                                                setSelectedSkill(skill);
+                                                trackEvent('skill_viewed', {
+                                                    skillId: skill.id,
+                                                    skillTitle: skill.title,
+                                                    domain: skill.domain,
+                                                    difficulty: skill.difficulty,
+                                                });
+                                            }}
                                             className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between ${selectedSkill?.id === skill.id
                                                     ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-medium'
                                                     : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
@@ -92,7 +101,7 @@ export function SkillLibrary() {
             </div>
 
             {/* Main Content - Skill Viewer */}
-            <div className="w-2/3 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
+            <div className="w-full md:w-2/3 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col min-h-[40vh] md:min-h-0">
                 {selectedSkill ? (
                     <>
                         <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex justify-between items-start">
@@ -107,6 +116,11 @@ export function SkillLibrary() {
                             <button
                                 onClick={() => {
                                     navigator.clipboard.writeText(selectedSkill.content || '');
+                                    trackEvent('skill_copied', {
+                                        skillId: selectedSkill.id,
+                                        skillTitle: selectedSkill.title,
+                                        domain: selectedSkill.domain,
+                                    });
                                     alert('Copied raw markdown!');
                                 }}
                                 className="px-3 py-1.5 text-xs font-medium bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
@@ -114,7 +128,7 @@ export function SkillLibrary() {
                                 📋 Copy Raw
                             </button>
                         </div>
-                        <div className="flex-1 overflow-y-auto p-8 prose dark:prose-invert max-w-none">
+                        <div className="flex-1 overflow-y-auto p-4 md:p-8 prose dark:prose-invert max-w-none">
                             <ReactMarkdown>{selectedSkill.content || ''}</ReactMarkdown>
                         </div>
                     </>

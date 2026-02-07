@@ -3,6 +3,8 @@
 > **Controlled Vibe Framework - Skill Library for End Users**  
 > Bộ sưu tập các CVF skills cho marketing, product, SEO, security, compliance, **HR**, **Legal**, và **AI/ML**.
 
+**Policy Note:** v1.5 UX Platform đã **FROZEN** (maintenance-only). Skill Library v1.5.2 **tiếp tục mở rộng** và được **v1.6 thừa hưởng** để dùng chung.
+
 ## 📊 Thống kê
 
 | Metric | Value |

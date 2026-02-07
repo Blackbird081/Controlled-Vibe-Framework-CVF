@@ -40,6 +40,31 @@ describe('ai-providers', () => {
         expect(createAIProvider('anthropic', { apiKey: 'k' })).toBeInstanceOf(AnthropicProvider);
     });
 
+    it('throws on unknown provider', () => {
+        expect(() => createAIProvider('unknown' as unknown as 'gemini', { apiKey: 'k' })).toThrow('Unknown provider');
+    });
+
+    it('uses mock provider when env flag is enabled', async () => {
+        const original = process.env.NEXT_PUBLIC_CVF_MOCK_AI;
+        process.env.NEXT_PUBLIC_CVF_MOCK_AI = '1';
+        vi.resetModules();
+
+        const mod = await import('./ai-providers');
+        const enProvider = mod.createAIProvider('openai', { apiKey: 'k', language: 'en' });
+        const viProvider = mod.createAIProvider('openai', { apiKey: 'k', language: 'vi' });
+
+        const simple = await enProvider.chat([{ role: 'user', content: 'Hello' }]);
+        const governance = await enProvider.chat([{ role: 'user', content: 'CVF GOVERNANCE RULES' }]);
+        const full = await viProvider.chat([{ role: 'user', content: 'CVF FULL MODE PROTOCOL' }]);
+
+        expect(simple.text).toContain('MOCK_SIMPLE_RESPONSE');
+        expect(governance.text).toContain('MOCK_GOVERNANCE_RESPONSE');
+        expect(full.text).toContain('MOCK_FULL_RESPONSE');
+
+        process.env.NEXT_PUBLIC_CVF_MOCK_AI = original;
+        vi.resetModules();
+    });
+
     it('returns localized CVF system prompt', () => {
         expect(getCVFSystemPrompt('vi')).toContain('CVF Agent');
         expect(getCVFSystemPrompt('en')).toContain('Controlled-Vibe Framework');
@@ -63,6 +88,23 @@ describe('ai-providers', () => {
         expect(response.usage?.totalTokens).toBe(3);
     });
 
+    it('GeminiProvider handles empty messages without prefixing system prompt', async () => {
+        const fetchMock = vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                candidates: [{ content: { parts: [{ text: 'hi' }] }, finishReason: 'stop' }],
+                usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 2, totalTokenCount: 3 },
+            }),
+        });
+        vi.stubGlobal('fetch', fetchMock);
+
+        const provider = new GeminiProvider({ apiKey: 'key', model: 'gemini-2.5-flash', language: 'en' });
+        await provider.chat([]);
+
+        const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+        expect(body.contents.length).toBe(0);
+    });
+
     it('GeminiProvider prefixes system prompt into the first message', async () => {
         const fetchMock = vi.fn().mockResolvedValue({
             ok: true,
@@ -84,6 +126,7 @@ describe('ai-providers', () => {
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
             start(controller) {
+                controller.enqueue(encoder.encode('data: {invalid json}\n'));
                 controller.enqueue(encoder.encode('data: {"candidates":[{"content":{"parts":[{"text":"Hi"}]}}]}\n'));
                 controller.enqueue(encoder.encode('data: {"candidates":[{"content":{"parts":[{"text":" there"}]}}]}\n'));
                 controller.close();
@@ -113,6 +156,14 @@ describe('ai-providers', () => {
         await expect(provider.chat([{ role: 'user', content: 'Hello' }])).rejects.toThrow('Gemini API Error');
     });
 
+    it('GeminiProvider throws when streaming response has no body', async () => {
+        const response = new Response(null, { status: 200 });
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response));
+
+        const provider = new GeminiProvider({ apiKey: 'key' });
+        await expect(provider.chat([{ role: 'user', content: 'Hello' }], () => {})).rejects.toThrow('Gemini API Error');
+    });
+
     it('OpenAIProvider parses standard response', async () => {
         const fetchMock = vi.fn().mockResolvedValue({
             ok: true,
@@ -135,6 +186,7 @@ describe('ai-providers', () => {
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
             start(controller) {
+                controller.enqueue(encoder.encode('data: {not-json}\n'));
                 controller.enqueue(encoder.encode('data: {"choices":[{"delta":{"content":"He"}}]}\n'));
                 controller.enqueue(encoder.encode('data: {"choices":[{"delta":{"content":"llo"}}]}\n'));
                 controller.enqueue(encoder.encode('data: [DONE]\n'));
@@ -163,6 +215,14 @@ describe('ai-providers', () => {
 
         const provider = new OpenAIProvider({ apiKey: 'key' });
         await expect(provider.chat([{ role: 'user', content: 'Hello' }])).rejects.toThrow('OpenAI API Error');
+    });
+
+    it('OpenAIProvider throws when streaming response has no body', async () => {
+        const response = new Response(null, { status: 200 });
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response));
+
+        const provider = new OpenAIProvider({ apiKey: 'key' });
+        await expect(provider.chat([{ role: 'user', content: 'Hello' }], () => {})).rejects.toThrow('OpenAI API Error');
     });
 
     it('AnthropicProvider parses standard response', async () => {
@@ -195,6 +255,38 @@ describe('ai-providers', () => {
         await expect(provider.chat([{ role: 'user', content: 'Hello' }])).rejects.toThrow('Anthropic API Error');
     });
 
+    it('AnthropicProvider streams content blocks and ignores non-delta events', async () => {
+        const encoder = new TextEncoder();
+        const stream = new ReadableStream({
+            start(controller) {
+                controller.enqueue(encoder.encode('data: {"type":"ping"}\n'));
+                controller.enqueue(encoder.encode('data: {invalid}\n'));
+                controller.enqueue(encoder.encode('data: {"type":"content_block_delta","delta":{"text":"Hi"}}\n'));
+                controller.enqueue(encoder.encode('data: {"type":"content_block_delta","delta":{"text":" there"}}\n'));
+                controller.close();
+            }
+        });
+        const response = new Response(stream, { status: 200 });
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response));
+
+        const provider = new AnthropicProvider({ apiKey: 'key' });
+        const chunks: string[] = [];
+        const result = await provider.chat([{ role: 'user', content: 'Hello' }], (chunk) => {
+            if (!chunk.isComplete) chunks.push(chunk.text);
+        });
+
+        expect(chunks.join('')).toBe('Hi there');
+        expect(result.text).toBe('Hi there');
+    });
+
+    it('AnthropicProvider throws when streaming response has no body', async () => {
+        const response = new Response(null, { status: 200 });
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response));
+
+        const provider = new AnthropicProvider({ apiKey: 'key' });
+        await expect(provider.chat([{ role: 'user', content: 'Hello' }], () => {})).rejects.toThrow('Anthropic API Error');
+    });
+
     it('useAI returns error when API key is missing', async () => {
         settings = {
             preferences: { defaultProvider: 'openai' },
@@ -210,6 +302,20 @@ describe('ai-providers', () => {
 
         expect(response).toBeNull();
         expect(result.current.error).toBe('No API key configured');
+    });
+
+    it('useAI stores error when provider throws', async () => {
+        const fetchMock = vi.fn().mockResolvedValue({
+            ok: false,
+            json: async () => ({ error: { message: 'boom' } }),
+        });
+        vi.stubGlobal('fetch', fetchMock);
+
+        const { result } = renderHook(() => useAI());
+        const response = await act(async () => result.current.sendMessage([{ role: 'user', content: 'Hi' }]));
+
+        expect(response).toBeNull();
+        expect(result.current.error).toContain('OpenAI API Error');
     });
 
     it('useAI sends message with provider', async () => {

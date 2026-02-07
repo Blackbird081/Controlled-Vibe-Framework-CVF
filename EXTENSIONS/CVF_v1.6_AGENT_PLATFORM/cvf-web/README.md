@@ -6,7 +6,7 @@
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](./ROADMAP.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](../../../LICENSE)
-[![Tests](https://img.shields.io/badge/tests-34%20passing-brightgreen.svg)](./src/lib)
+[![Tests](https://img.shields.io/badge/tests-176%20passing-brightgreen.svg)](./src/lib)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
 
 [Features](#-features) • [Quick Start](#-quick-start) • [CVF Governance](#-cvf-governance) • [Architecture](#-architecture)
@@ -37,7 +37,7 @@
 - 🌙 **Dark Mode** - System-aware themes
 - 📱 **Responsive** - Mobile-optimized
 - ⚡ **Fast** - Lazy loading, streaming responses
-- ✅ **Tested** - 34 unit tests passing
+- ✅ **Tested** - 176 unit tests passing (23 files)
 
 ---
 
@@ -127,7 +127,7 @@ src/
   - Phase 1: Mode Detection & Badge
   - Phase 2: Quality Scoring + Accept/Reject
   - Phase 3: Phase Gates + Checklists
-- ✅ **Unit Tests** - 34 tests passing
+- ✅ **Unit Tests** - 176 tests passing (23 files)
 - ✅ **Usage Tracking** - Token & cost per provider
 
 ---
@@ -136,6 +136,6 @@ src/
 
 **Made with ❤️ using the Controlled Vibe Framework**
 
-[CVF Documentation](../../../docs) • [Report Issue](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
+[CVF Documentation](../../../docs) • [Skill Governance](../../../governance/skill-library/) • [Report Issue](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
 
 </div>

@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import {
     ErrorBoundary,
     withRetry,
@@ -12,6 +12,7 @@ import {
     handleAPIError,
     LoadingSpinner,
     EmptyState,
+    ToastContainer,
 } from './error-handling';
 
 describe('ErrorBoundary', () => {
@@ -41,6 +42,44 @@ describe('ErrorBoundary', () => {
         consoleSpy.mockRestore();
     }, 10000);
 
+    it('renders custom fallback when provided', () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+
+        function Boom() {
+            throw new Error('boom');
+        }
+
+        render(
+            <ErrorBoundary fallback={<div>Custom fallback</div>}>
+                <Boom />
+            </ErrorBoundary>
+        );
+
+        expect(screen.getByText('Custom fallback')).toBeTruthy();
+        consoleSpy.mockRestore();
+    });
+
+    it('shows stack trace in development mode', () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+        const originalEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = 'development';
+
+        function Boom() {
+            throw new Error('dev boom');
+        }
+
+        render(
+            <ErrorBoundary>
+                <Boom />
+            </ErrorBoundary>
+        );
+
+        expect(screen.getByText(/Stack Trace/i)).toBeTruthy();
+
+        process.env.NODE_ENV = originalEnv;
+        consoleSpy.mockRestore();
+    });
+
     it('retries async operations and eventually succeeds', async () => {
         vi.useFakeTimers();
         const fn = vi.fn()
@@ -54,6 +93,12 @@ describe('ErrorBoundary', () => {
         await expect(promise).resolves.toBe('ok');
         expect(onRetry).toHaveBeenCalledTimes(1);
         vi.useRealTimers();
+    });
+
+    it('returns immediately when no retries are needed', async () => {
+        const fn = vi.fn().mockResolvedValue('ok');
+        await expect(withRetry(fn)).resolves.toBe('ok');
+        expect(fn).toHaveBeenCalledTimes(1);
     });
 
     it('throws after exhausting retries', async () => {
@@ -72,7 +117,9 @@ describe('ErrorBoundary', () => {
         expect(handleAPIError(new Error('Timeout'))).toMatch(/timed out/i);
         expect(handleAPIError(new Error('429 rate limit'))).toMatch(/Too many requests/i);
         expect(handleAPIError(new Error('401 unauthorized'))).toMatch(/Authentication failed/i);
+        expect(handleAPIError(new Error('API key invalid'))).toMatch(/Authentication failed/i);
         expect(handleAPIError(new Error('API server down'))).toMatch(/API error/i);
+        expect(handleAPIError(new Error('random error'))).toBe('random error');
         expect(handleAPIError('unknown')).toMatch(/unexpected/i);
     });
 
@@ -100,5 +147,31 @@ describe('ErrorBoundary', () => {
         render(<EmptyState title="No data" description="Nothing here" />);
         expect(screen.getByText('No data')).toBeTruthy();
         expect(screen.getByText('Nothing here')).toBeTruthy();
+    });
+
+    it('renders toast variants', async () => {
+        render(<ToastContainer />);
+
+        await act(async () => {});
+        const nowSpy = vi.spyOn(Date, 'now');
+        nowSpy
+            .mockReturnValueOnce(1)
+            .mockReturnValueOnce(2)
+            .mockReturnValueOnce(3)
+            .mockReturnValueOnce(4);
+
+        act(() => {
+            addToast({ type: 'success', message: 'Saved', duration: 100000 });
+            addToast({ type: 'error', message: 'Failed', duration: 100000 });
+            addToast({ type: 'warning', message: 'Warn', duration: 100000 });
+            addToast({ type: 'info', message: 'Info', duration: 100000 });
+        });
+
+        await waitFor(() => expect(screen.getByText('Saved')).toBeTruthy());
+        expect(screen.getByText('Failed')).toBeTruthy();
+        expect(screen.getByText('Warn')).toBeTruthy();
+        expect(screen.getByText('Info')).toBeTruthy();
+
+        nowSpy.mockRestore();
     });
 });

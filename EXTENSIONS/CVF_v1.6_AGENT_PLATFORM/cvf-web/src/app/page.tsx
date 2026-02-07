@@ -209,6 +209,7 @@ export default function Home() {
       id: `exec_${Date.now()}`,
       templateId: selectedTemplate!.id,
       templateName: selectedTemplate!.name,
+      category: selectedTemplate!.category,
       input: values,
       intent,
       status: 'processing',
@@ -561,7 +562,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 py-6 md:py-8">
         {/* HOME STATE */}
         {appState === 'home' && (
           <>
@@ -768,8 +769,8 @@ export default function Home() {
 
       {/* User Context Modal */}
       {showUserContext && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="max-w-2xl w-full">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-3 md:p-4">
+          <div className="w-full h-full md:h-auto md:max-w-2xl overflow-y-auto safe-area-pt safe-area-pb">
             <UserContextForm onClose={() => setShowUserContext(false)} />
           </div>
         </div>
@@ -777,8 +778,8 @@ export default function Home() {
 
       {/* Settings Modal */}
       {showSettings && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-3 md:p-4">
+          <div className="w-full h-full md:h-auto md:max-w-2xl max-h-[90vh] overflow-y-auto safe-area-pt safe-area-pb">
             <SettingsPage onClose={() => setShowSettings(false)} />
           </div>
         </div>
@@ -786,15 +787,17 @@ export default function Home() {
 
       {/* AI Usage Modal */}
       {showAIUsage && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <AIUsagePanel onClose={() => setShowAIUsage(false)} />
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-3 md:p-4">
+          <div className="w-full h-full md:h-auto md:max-w-3xl overflow-y-auto safe-area-pt safe-area-pb">
+            <AIUsagePanel onClose={() => setShowAIUsage(false)} />
+          </div>
         </div>
       )}
 
       {/* Agent Chat Modal */}
       {appState === 'agent' && !isAgentMinimized && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="w-full max-w-5xl h-[85vh] rounded-xl overflow-hidden shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-0 md:p-4">
+          <div className="w-full h-full md:h-[85vh] md:max-w-5xl rounded-none md:rounded-xl overflow-hidden shadow-2xl">
             <AgentChatWithHistory
               initialPrompt={agentPrompt}
               onClose={() => { setAppState('home'); setAgentPrompt(undefined); setIsAgentMinimized(false); }}
@@ -822,8 +825,8 @@ export default function Home() {
 
       {/* Multi-Agent Modal */}
       {appState === 'multi-agent' && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="w-full max-w-5xl h-[85vh] rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-0 md:p-4">
+          <div className="w-full h-full md:h-[85vh] md:max-w-5xl rounded-none md:rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900">
             <MultiAgentPanel
               onClose={() => setAppState('home')}
               onComplete={() => setAppState('home')}
@@ -834,8 +837,8 @@ export default function Home() {
 
       {/* Tools Modal */}
       {appState === 'tools' && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="w-full max-w-5xl h-[85vh] rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-0 md:p-4">
+          <div className="w-full h-full md:h-[85vh] md:max-w-5xl rounded-none md:rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900">
             <ToolsPage onClose={() => setAppState('home')} />
           </div>
         </div>

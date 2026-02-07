@@ -5,6 +5,9 @@ on:
     branches: [ main, develop ]
     paths:
       - '**.md'
+      - 'governance/skill-library/registry/**.py'
+      - 'governance/skill-library/registry/**.md'
+      - 'EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/**.skill.md'
       - 'sdk/**'
       - '.github/workflows/**'
   pull_request:
@@ -103,10 +106,26 @@ jobs:
           test -f .markdownlintrc || exit 1
           echo "✓ All required documentation files present"
 
+  registry-validate:
+    name: Governance Registry Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Validate governance registry
+        run: |
+          python governance/skill-library/registry/validate_registry.py
+
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [markdown-lint, test, integration-test, documentation-build]
+    needs: [markdown-lint, test, integration-test, documentation-build, registry-validate]
     if: always()
     
     steps:
@@ -117,3 +136,4 @@ jobs:
           echo "Unit tests: ${{ needs.test.result }}"
           echo "Integration tests: ${{ needs.integration-test.result }}"
           echo "Documentation: ${{ needs.documentation-build.result }}"
+          echo "Registry validation: ${{ needs.registry-validate.result }}"

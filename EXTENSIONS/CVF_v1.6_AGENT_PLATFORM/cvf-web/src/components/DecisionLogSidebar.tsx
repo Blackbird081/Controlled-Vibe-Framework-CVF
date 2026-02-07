@@ -46,7 +46,9 @@ export function DecisionLogSidebar({
     };
 
     return (
-        <aside className="w-80 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex flex-col">
+        <div className="fixed inset-0 z-40 md:static md:z-auto">
+            <div className="absolute inset-0 bg-black/40 md:hidden" onClick={onClose} />
+            <aside className="absolute right-0 top-0 h-full w-full md:static md:h-auto md:w-80 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex flex-col">
             <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <h4 className="font-semibold text-gray-900 dark:text-white">{l.title}</h4>
                 <button
@@ -89,5 +91,6 @@ export function DecisionLogSidebar({
                 </button>
             </div>
         </aside>
+        </div>
     );
 }

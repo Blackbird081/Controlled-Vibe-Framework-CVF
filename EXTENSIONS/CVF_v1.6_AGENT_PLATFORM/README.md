@@ -1,37 +1,43 @@
 # CVF v1.6 Agent Platform
 
 > **Controlled Vibe Framework - Agent Mode with AI Integration**  
-> Chat trực tiếp với AI agents trong CVF workflow.
+> **Version:** 1.6.0 | **Status:** ✅ Complete | **Tests:** 176 passing  
+> **Last Updated:** Feb 07, 2026
 
-## 🚀 What's New in v1.6
+## 🚀 Features
 
-| Feature | Description |
-|---------|-------------|
-| **Agent Mode** | Chat trực tiếp với AI (Gemini, OpenAI, Claude) |
-| **User Context** | Tự động inject context cá nhân vào prompts |
-| **Real-time Streaming** | Xem response từ AI real-time |
-| **Multi-Provider** | Hỗ trợ nhiều AI providers |
+| Feature | Status | Description |
+|---------|:------:|-------------|
+| **AI Agent Chat** | ✅ | Multi-provider: Gemini, OpenAI, Anthropic |
+| **CVF Governance** | ✅ | 3 modes: Simple, Rules, Full CVF |
+| **Quality Scoring** | ✅ | AI response rated 0-100 |
+| **Phase Gates** | ✅ | Checklists & compliance checks |
+| **Usage Tracking** | ✅ | Token & cost per provider |
+| **i18n** | ✅ | Vietnamese & English |
+| **Dark Mode** | ✅ | System-aware themes |
 
-## 📋 Roadmap
+## 📋 Completion Status
 
 ### Phase 1: Foundation ✅
 - [x] User Context Section
-- [ ] Architect/Builder Workflow UI
-- [ ] Settings Page
+- [x] Settings Page
+- [x] Dark Mode
 
-### Phase 2: Agent UI
-- [ ] Agent Chat Interface
-- [ ] Execution Progress
-- [ ] CVF → Agent Flow
+### Phase 2: Agent UI ✅
+- [x] Agent Chat Interface
+- [x] CVF Mode Detection
+- [x] Response Streaming
 
-### Phase 3: AI Connection
-- [ ] Gemini Integration (Priority)
-- [ ] OpenAI Integration
-- [ ] Anthropic Integration
+### Phase 3: AI Integration ✅
+- [x] Gemini Integration
+- [x] OpenAI Integration
+- [x] Anthropic Integration
 
-### Phase 4: Advanced
-- [ ] Memory/Persistence
-- [ ] Multi-Agent Workflow
+### Phase 4: Governance ✅
+- [x] Quality Scoring (0-100)
+- [x] Accept/Reject/Retry
+- [x] Phase Gates + Checklists
+- [x] Unit Tests (176 tests, 23 files)
 
 ## 🏃 Quick Start
 
@@ -39,30 +45,36 @@
 cd cvf-web
 npm install
 npm run dev
+# Open http://localhost:3000
 ```
-
-Open http://localhost:3000
 
 ## 📁 Structure
 
 ```
 CVF_v1.6_AGENT_PLATFORM/
-├── cvf-web/                 # Next.js app
+├── cvf-web/                 # Next.js app (main)
 │   ├── src/
 │   │   ├── app/            # Pages
 │   │   ├── components/     # UI components
-│   │   └── lib/
-│   │       ├── ai/         # AI providers (NEW)
-│   │       └── ...
-│   └── ...
-└── README.md
+│   │   └── lib/            # Core libraries
+│   │       ├── ai-providers.ts
+│   │       ├── governance.ts
+│   │       ├── cvf-checklists.ts
+│   │       └── *.test.ts
+│   └── README.md           # Detailed docs
+├── docs/                   # Documentation
+├── scripts/                # Build scripts
+└── ROADMAP.md              # Development roadmap
 ```
 
 ## 🔗 Related
 
-- **v1.5 UX Platform:** ../CVF_v1.5_UX_PLATFORM (stable)
-- **Skill Library:** ../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS
+| Link | Description |
+|------|-------------|
+| [Skill Library](../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS) | 69 skills, 12 domains |
+| [Governance Layer](../../governance/skill-library/) | Skill governance registry |
+| [CVF Documentation](../../docs/) | Framework docs |
 
 ---
 
-*CVF v1.6 Agent Platform — Built with Next.js + AI*
+*CVF v1.6 Agent Platform — Built with Next.js 16 + AI*

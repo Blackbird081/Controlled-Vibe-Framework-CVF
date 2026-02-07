@@ -23,6 +23,7 @@ export const useExecutionStore = create<ExecutionStore>()(
                 trackEvent('execution_created', {
                     templateId: execution.templateId,
                     templateName: execution.templateName,
+                    category: execution.category,
                 });
                 return set((state) => ({
                     executions: [execution, ...state.executions],
@@ -31,14 +32,26 @@ export const useExecutionStore = create<ExecutionStore>()(
             },
 
             updateExecution: (id, updates) => {
+                const existing = get().executions.find((e) => e.id === id);
+                const context = existing
+                    ? {
+                        templateId: existing.templateId,
+                        templateName: existing.templateName,
+                        category: existing.category,
+                    }
+                    : {};
                 if (updates.status === 'completed') {
-                    trackEvent('execution_completed', { id });
+                    trackEvent('execution_completed', {
+                        id,
+                        qualityScore: updates.qualityScore,
+                        ...context,
+                    });
                 }
                 if (updates.result === 'accepted') {
-                    trackEvent('execution_accepted', { id });
+                    trackEvent('execution_accepted', { id, ...context });
                 }
                 if (updates.result === 'rejected') {
-                    trackEvent('execution_rejected', { id });
+                    trackEvent('execution_rejected', { id, ...context });
                 }
 
                 return set((state) => ({

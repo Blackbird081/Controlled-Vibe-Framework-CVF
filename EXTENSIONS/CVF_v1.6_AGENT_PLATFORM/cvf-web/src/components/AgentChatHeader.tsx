@@ -34,9 +34,9 @@ export function AgentChatHeader({
     onToggleDecisionLog,
 }: AgentChatHeaderProps) {
     return (
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700
                        bg-gradient-to-r from-blue-600 to-purple-600">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
                 <span className="text-2xl">🤖</span>
                 <div>
                     <h3 className="font-bold text-white">CVF Agent</h3>
@@ -52,7 +52,7 @@ export function AgentChatHeader({
                     </span>
                 )}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 justify-start sm:justify-end">
                 {isStreaming && (
                     <span className="px-2 py-1 bg-white/20 rounded-full text-xs text-white flex items-center gap-1">
                         <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>

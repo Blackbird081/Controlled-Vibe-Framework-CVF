@@ -2,12 +2,11 @@
 
 import { useMemo } from 'react';
 import { useExecutionStore } from '@/lib/store';
-import { useAnalyticsEvents } from '@/lib/analytics';
-import { CATEGORY_INFO, Category } from '@/types';
+import { exportAnalyticsEvents, useAnalyticsEvents } from '@/lib/analytics';
 
 export function AnalyticsDashboard() {
     const { executions } = useExecutionStore();
-    const { events, clearEvents } = useAnalyticsEvents();
+    const { events, clearEvents, enabled } = useAnalyticsEvents();
 
     const stats = useMemo(() => {
         const total = executions.length;
@@ -82,6 +81,41 @@ export function AnalyticsDashboard() {
         };
     }, [events]);
 
+    const skillStats = useMemo(() => {
+        const skillEvents = events.filter(e => e.type === 'skill_viewed');
+        const bySkill: Record<string, { title: string; count: number; domain?: string }> = {};
+        const byDomain: Record<string, number> = {};
+
+        skillEvents.forEach((event) => {
+            const data = event.data || {};
+            const skillId = String(data.skillId || data.skillTitle || 'unknown');
+            const title = String(data.skillTitle || data.skillId || 'Unknown Skill');
+            const domain = typeof data.domain === 'string' ? data.domain : undefined;
+            bySkill[skillId] = {
+                title,
+                domain,
+                count: (bySkill[skillId]?.count || 0) + 1,
+            };
+            if (domain) {
+                byDomain[domain] = (byDomain[domain] || 0) + 1;
+            }
+        });
+
+        const topSkills = Object.values(bySkill)
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 5);
+
+        const topDomains = Object.entries(byDomain)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+
+        return {
+            totalSkillViews: skillEvents.length,
+            topSkills,
+            topDomains,
+        };
+    }, [events]);
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -91,6 +125,12 @@ export function AnalyticsDashboard() {
                     <p className="text-gray-500 dark:text-gray-400">Thống kê sử dụng và chất lượng</p>
                 </div>
             </div>
+
+            {!enabled && (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                    Analytics đang tắt trong Settings. Bật lại để ghi nhận dữ liệu mới.
+                </div>
+            )}
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -155,6 +195,47 @@ export function AnalyticsDashboard() {
                 </div>
             </div>
 
+            {/* Skill Usage */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">📚 Top Skills</h3>
+                    {skillStats.topSkills.length > 0 ? (
+                        <div className="space-y-3">
+                            {skillStats.topSkills.map((skill, idx) => (
+                                <div key={`${skill.title}-${idx}`} className="flex items-center gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-600 dark:text-emerald-300 text-xs font-bold flex items-center justify-center">
+                                        {idx + 1}
+                                    </span>
+                                    <span className="flex-1 text-sm text-gray-700 dark:text-gray-300 truncate">
+                                        {skill.title}
+                                        {skill.domain ? <span className="text-xs text-gray-400 ml-2">({skill.domain})</span> : null}
+                                    </span>
+                                    <span className="text-sm font-medium text-gray-500">{skill.count}x</span>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-gray-400 text-sm">Chưa có dữ liệu skill. Hãy mở Skill Library!</p>
+                    )}
+                </div>
+
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">🏷️ Domain Usage</h3>
+                    {skillStats.topDomains.length > 0 ? (
+                        <div className="space-y-3">
+                            {skillStats.topDomains.map(([domain, count]) => (
+                                <div key={domain} className="flex items-center gap-3">
+                                    <span className="text-sm text-gray-700 dark:text-gray-300 flex-1 truncate">{domain}</span>
+                                    <span className="text-sm font-medium text-gray-500">{count}x</span>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-gray-400 text-sm">Chưa có dữ liệu domain. Hãy mở một vài skills!</p>
+                    )}
+                </div>
+            </div>
+
             {/* Result Distribution */}
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-4">📊 Phân bố kết quả</h3>
@@ -194,12 +275,26 @@ export function AnalyticsDashboard() {
                         <h3 className="font-semibold text-gray-900 dark:text-white">🧭 Event Tracking</h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400">Local analytics log (no PII)</p>
                     </div>
-                    <button
-                        onClick={clearEvents}
-                        className="px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                    >
-                        Clear log
-                    </button>
+                    <div className="flex flex-wrap gap-2">
+                        <button
+                            onClick={() => exportAnalyticsEvents('json')}
+                            className="px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        >
+                            Export JSON
+                        </button>
+                        <button
+                            onClick={() => exportAnalyticsEvents('csv')}
+                            className="px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        >
+                            Export CSV
+                        </button>
+                        <button
+                            onClick={clearEvents}
+                            className="px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        >
+                            Clear log
+                        </button>
+                    </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">

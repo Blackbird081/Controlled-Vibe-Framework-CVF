@@ -33,6 +33,7 @@ export interface Execution {
     id: string;
     templateId: string;
     templateName: string;
+    category?: Category;
     input: Record<string, string>;
     intent: string;
     output?: string;

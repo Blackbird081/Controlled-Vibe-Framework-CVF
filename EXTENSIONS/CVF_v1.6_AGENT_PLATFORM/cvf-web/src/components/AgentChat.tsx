@@ -112,8 +112,8 @@ export function AgentChat({
                 />
             )}
 
-            <div className="flex h-full bg-white dark:bg-gray-900 rounded-xl overflow-hidden">
-                <div className="flex flex-col h-full flex-1 overflow-hidden">
+            <div className="relative flex h-full bg-white dark:bg-gray-900 rounded-xl overflow-hidden">
+                <div className="flex flex-col h-full flex-1 overflow-hidden min-h-0">
                     <AgentChatHeader
                         currentMode={currentMode}
                         language={language}
@@ -147,7 +147,8 @@ export function AgentChat({
                         <div ref={messagesEndRef} />
                     </div>
 
-                    <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+                    <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-900
+                                    sticky bottom-0 sm:static safe-area-pb">
                         <ChatInput
                             input={input}
                             onInputChange={setInput}

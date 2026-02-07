@@ -1,5 +1,10 @@
 # 🔐 CVF → Risk Level → Agent Authority Mapping
 
+> **Version:** 1.0.1  
+> **Status:** Active  
+> **Related:** [v1.2 CAPABILITY_RISK_MODEL](../../../EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/CAPABILITY_RISK_MODEL.md)  
+> ⚠️ **Note:** Governance layer extends v1.2 risk model (R0–R3) to include **R4 – Critical** for severe/irreversible scenarios.
+
 ---
 
 ## 1. Core Principle
@@ -94,22 +99,45 @@ If **any dimension reaches R3**, the Agent is considered **High Risk**.
 
 ## 7. UAT Integration Snippet
 
-```md
+Use this template when evaluating agent behavior in UAT:
+
+```markdown
 ### CVF Risk Evaluation
 
-| Dimension | Result | Risk |
-|---|---|---|
-| Capability | | |
-| Validation | | |
-| Failure | | |
+| Dimension | Result | Risk Level |
+|-----------|--------|------------|
+| Capability | [Pass/Fail] | R_ |
+| Validation | [Pass/Fail] | R_ |
+| Failure Handling | [Pass/Fail] | R_ |
 
-**Final Risk Level:** R_
+**Final Risk Level:** R_ (highest of above)
 
-**Authorized Agent Mode:** Auto / HITL / Suggest-only / Blocked
+**Authorized Agent Mode:** 
+- R0: Auto
+- R1: Auto + Audit  
+- R2: Human-in-the-loop
+- R3: Suggest-only
+- R4: Blocked
+```
 
-8. Governance Statement
+---
 
-This mapping defines the maximum authority an AI Agent may receive
+## 8. Governance Statement
+
+This mapping defines the **maximum authority** an AI Agent may receive
 after successful UAT and CVF validation.
 
-Any change requires re-UAT and re-signoff.
+Any change to risk level or authority requires:
+- Re-UAT execution
+- Re-signoff from governance owner
+
+---
+
+## 9. Relationship to CVF
+
+This document is the **canonical risk-authority reference** for:
+- `CVF_SKILL_RISK_AUTHORITY_LINK.md` - Skill binding
+- `SKILL_MAPPING_RECORD.md` - Per-skill documentation
+- `AGENT_AI_UAT_CVF_TEMPLATE.md` - Testing framework
+
+See also: `v1.2/CAPABILITY_EXTENSION/CAPABILITY_RISK_MODEL.md` for technical details.

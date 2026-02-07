@@ -61,7 +61,7 @@ export function ChatInput({
                 </div>
             )}
 
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
                 <input
                     ref={fileInputRef}
                     type="file"
@@ -75,7 +75,7 @@ export function ChatInput({
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isLoading}
                     className="p-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800
-                              hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors"
+                              hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors sm:w-auto w-full"
                     title={language === 'vi' ? 'Đính kèm file' : 'Attach file'}
                 >
                     📎
@@ -92,7 +92,7 @@ export function ChatInput({
                     rows={1}
                     className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
                               bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white
-                              focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none
+                              focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none min-h-[44px]
                               disabled:opacity-50 disabled:cursor-not-allowed"
                     aria-label={language === 'vi' ? 'Nhập tin nhắn' : 'Message input'}
                 />
@@ -101,7 +101,7 @@ export function ChatInput({
                     disabled={!hasContent || isLoading}
                     className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 
                               disabled:cursor-not-allowed text-white rounded-xl font-medium
-                              transition-colors flex items-center gap-2"
+                              transition-colors flex items-center justify-center gap-2 sm:w-auto w-full"
                 >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}

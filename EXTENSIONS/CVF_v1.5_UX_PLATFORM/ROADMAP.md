@@ -1,7 +1,7 @@
 # CVF v1.5 UX Platform - Roadmap
 
-> **Status:** Phase 4 Complete, Production Ready  
-> **Last Updated:** 2026-02-03
+> **Status:** ✅ FROZEN (maintenance-only; new improvements move to v1.6)  
+> **Last Updated:** 2026-02-07
 
 ---
 
@@ -13,8 +13,8 @@
 | Phase 2 | Web Interface Specs | ✅ **DONE** |
 | Phase 3 | Analytics Design | ✅ **DONE** |
 | Phase 4 | Frontend MVP | ✅ **DONE** |
-| Phase 5 | Backend Integration | 🔲 Future |
-| Phase 6 | Production Deploy | 🔲 Future |
+| Phase 5 | Backend Integration | ⏸ Deferred (Frozen) |
+| Phase 6 | Production Deploy | ⏸ Deferred (Frozen) |
 
 ---
 
@@ -57,7 +57,7 @@ npm run dev
 
 ---
 
-## 🔮 Phase 5+: Future Improvements
+## 🔮 Phase 5+: Deferred Improvements (Frozen)
 
 ### Phase 5: Backend Integration (Optional)
 - [ ] API Backend (FastAPI/Express)
@@ -71,7 +71,8 @@ npm run dev
 - [ ] Vercel/Railway deployment
 - [ ] Custom domain
 
-> **Note:** Phases 5-6 chỉ cần thiết khi muốn deploy public. Hiện tại ứng dụng đã hoạt động hoàn chỉnh cho internal use.
+> **Note:** Phases 5-6 chỉ cần thiết khi muốn deploy public. Hiện tại ứng dụng đã hoạt động hoàn chỉnh cho internal use.  
+> **Freeze policy:** v1.5 không mở rộng thêm tính năng mới; tiếp tục phát triển ở v1.6. Skill Library v1.5.2 vẫn được cập nhật và dùng chung.
 
 ---
 
@@ -124,6 +125,8 @@ CVF_v1.5_UX_PLATFORM/
 | 2026-02-02 | Bilingual export (VI/EN) |
 | 2026-02-02 | Skill Library integration |
 | 2026-02-07 | Analytics tracking (local) + mobile responsive tweaks |
+| 2026-02-07 | Added Vitest smoke/unit tests for core modules |
+| 2026-02-07 | Project status set to FROZEN (maintenance-only) |
 
 ---
 

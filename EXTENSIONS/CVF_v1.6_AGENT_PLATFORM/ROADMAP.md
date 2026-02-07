@@ -94,21 +94,25 @@ Hoàn thiện Agent Platform với CVF Governance để production-ready.
 ```
 Current → Target (Production)
 
-governance.ts       ✅ has tests → 85%
-cvf-checklists.ts   ✅ has tests → 85%
-security.ts         ✅ tests added → 90% (coverage chưa đo)
-AgentChat.tsx       ✅ tests added → 80% (coverage chưa đo)
-ai-providers.ts     ✅ tests added → 70% (coverage chưa đo)
-PhaseGateModal.tsx  ✅ tests added → 80% (coverage chưa đo)
-quota-manager.ts    ❌ no tests → 80%
+governance.ts       ✅ tests → 91% (branches ~90%)
+cvf-checklists.ts   ✅ tests → 85% (branches ~83%)
+security.ts         ✅ tests → 92% (branches ~89%)
+AgentChat.tsx       ✅ tests → 80% (branches ~90%)
+ai-providers.ts     ✅ tests → 95% (branches ~74%)
+PhaseGateModal.tsx  ✅ tests → 88% (branches ~90%)
+quota-manager.ts    ✅ tests → 96% (branches ~81%)
+analytics.ts        ✅ tests → 98% (branches ~96%)
+Settings.tsx        ✅ tests → 95% (branches ~92%)
+SkillLibrary.tsx    ✅ tests → 100% (branches ~90%)
 ```
 
 ---
 
-## ✅ Coverage Baseline (2026-02-07)
+## ✅ Coverage Snapshot (2026-02-07)
 
-**Overall:** 78.8% statements / 68.9% branches / 71.9% functions / 80.4% lines  
-**Gaps lớn nhất:** `AgentChatMessageBubble.tsx`, `ChatInput.tsx`, `AgentChatHeader.tsx`, `useAgentChat.ts`, `quota-manager.ts`, `usePhaseDetection.ts`
+**Overall:** 94.11% statements / 85.04% branches / 91.64% functions / 95.51% lines  
+**Tests:** 23 files / 176 tests / 0 failures  
+**Gaps lớn nhất:** `useAgentChat.ts`, `ai-providers.ts` (branch-heavy paths)
 
 ---
 
@@ -137,7 +141,7 @@ quota-manager.ts    ❌ no tests → 80%
   - ✅ Add integration tests cho full chat flow
   - ✅ Phase gate approve/reject -> decision log updates
 
-**Exit Criteria:** Overall ≥70% + không còn file 0% ở component critical.
+**Exit Criteria:** Overall ≥85% branches + không còn file 0% ở component critical. ✅
 
 ---
 
@@ -148,7 +152,7 @@ quota-manager.ts    ❌ no tests → 80%
 | Core functionality | ✅ |
 | CVF Governance | ✅ |
 | Security hardened | ✅ Sprint 1 |
-| Test coverage ≥70% | ✅ (78.8% statements) |
+| Test coverage ≥85% branches | ✅ (85.04% branches) |
 | Refactored components | ✅ Sprint 3 |
 | Error tracking | ✅ Sprint 4 |
 
@@ -174,7 +178,7 @@ quota-manager.ts    ❌ no tests → 80%
 - ✅ Shared tools: `tools/skill-validation` (used by v1.5.2 + v1.6)
 - ✅ Analytics audit event tracking + retry event logging
 - ✅ UI responsive tweaks (History/Result/Analytics)
-- ✅ Vitest full run clean (13 files / 111 tests)
+- ✅ Vitest full run clean (23 files / 176 tests, 85%+ branches)
 
 ### Items ngoài phạm vi v1.6 (từ Assessment)
 - v1.3: Dashboard audit log (UI-only) → ✅ done (2026-02-07)
@@ -220,6 +224,30 @@ quota-manager.ts    ❌ no tests → 80%
 
 ### v1.6 — Agent Platform
 - [x] E2E flows (Simple/Governance/Full) — Playwright tests added (mock AI) + E2E run passed (3/3)
+
+---
+
+## 🔭 Long-term Focus (2026) — Telemetry + Mobile Experience
+
+### Track 1: Telemetry/Analytics for Skill Usage Patterns
+**Status:** In Progress
+
+- [x] Baseline analytics events in v1.6 (`analytics.ts`)
+- [x] Define privacy/data-minimization rules (no prompt/PII capture) — `docs/telemetry/TELEMETRY_POLICY.md`
+- [x] Metrics schema: skill usage, domain trends, accept/reject rate, quality score — `docs/telemetry/TELEMETRY_SCHEMA.md`
+- [x] Storage strategy: local-only + export format (CSV/JSON)
+- [ ] Aggregation jobs: daily/weekly summaries
+- [x] Dashboard widgets: Top skills + domain usage + event stats
+- [x] Governance review: opt-out + retention policy (Settings + retention window)
+
+### Track 2: Mobile Experience (Web-first, no native app)
+**Status:** In Progress (baseline responsive done)
+
+- [x] Baseline responsive tweaks (History/Result/Analytics)
+- [x] Mobile UX audit checklist across Simple/Governance/Full flows — `docs/mobile/MOBILE_UX_AUDIT.md`
+- [x] Mobile spec doc (layouts, touch targets, keyboard behavior, safe areas) — `docs/mobile/MOBILE_SPEC.md`
+- [x] Implementation pass: chat input, sidebars, forms, modals (mobile layouts)
+- [x] Device QA report (emulation checklist + pending physical) — `docs/mobile/DEVICE_QA_REPORT.md`
 
 ---
 

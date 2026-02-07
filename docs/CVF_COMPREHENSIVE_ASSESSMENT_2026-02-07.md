@@ -18,7 +18,7 @@
 | **v1.3** | Implementation toolkit | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ✅ STABLE |
 | **v1.3.1** | Operator edition | ⭐⭐⭐⭐⭐ | N/A (docs) | ✅ FROZEN |
 | **v1.4** | Usage layer | ⭐⭐⭐⭐⭐ | N/A (docs) | ✅ FROZEN |
-| **v1.5** | UX Platform | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ✅ 95% |
+| **v1.5** | UX Platform | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ✅ FROZEN |
 | **v1.5.1** | End user orientation | ⭐⭐⭐⭐⭐ | N/A (docs) | ✅ COMPLETE |
 | **v1.5.2** | Skill Library | ⭐⭐⭐⭐⭐ | N/A (docs) | ✅ COMPLETE |
 | **v1.6** | Agent Platform | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ✅ **PRODUCTION READY** |
@@ -262,8 +262,8 @@ PROPOSED → APPROVED → ACTIVE → DEPRECATED → RETIRED
 
 ### 🌐 v1.5 — UX Platform
 
-**Status:** ⚠️ 80% Complete  
-**Rating:** 8.0/10
+**Status:** ✅ FROZEN (maintenance-only; new improvements move to v1.6)  
+**Rating:** 9.0/10
 
 **What's New:**
 - Web Interface (Next.js)
@@ -282,6 +282,8 @@ PROPOSED → APPROVED → ACTIVE → DEPRECATED → RETIRED
 | Web UI không có unit tests | Medium | `cvf-web/` | ✅ Added Vitest smoke tests (2026-02-07) |
 | Analytics chưa implement tracking | Low | `22_ANALYTICS/` | ✅ Implemented (2026-02-07) |
 | Mobile responsive chưa tối ưu | Low | CSS | ✅ Reviewed (2026-02-07) |
+
+**Note:** v1.5 không phát triển thêm tính năng mới; v1.5.2 Skill Library vẫn được mở rộng và dùng chung trong v1.6.
 
 ---
 
@@ -608,11 +610,31 @@ Các điểm trọng yếu đã xử lý xong:
 **Không còn action bắt buộc** (v1.3 auth out of scope).
 
 ### Long-term Suggestions (Optional)
-1. Add telemetry/analytics for skill usage patterns
-2. Consider skill marketplace/sharing feature
-3. Mobile app version of Agent Platform
-4. CLI tool for power users
-5. Internationalization for more languages
+1. Add telemetry/analytics for skill usage patterns  
+   - **Necessity:** Medium  
+   - **Value:** Prioritize roadmap by real usage, reduce guesswork  
+   - **Risks:** Privacy/compliance if tracking input/output  
+   - **Recommendation:** Implement lightweight, aggregated metrics first
+2. Mobile app version of Agent Platform  
+   - **Necessity:** Low  
+   - **Value:** Only if mobile usage dominates or offline/push required  
+   - **Risks:** High cost/maintenance, split focus from core web  
+   - **Recommendation:** Defer; improve responsive/PWA first
+3. Consider skill marketplace/sharing feature  
+   - **Necessity:** Low  
+   - **Value:** Ecosystem growth, community contributions  
+   - **Risks:** Curation overhead, quality control, IP/licensing risk  
+   - **Recommendation:** Defer until governance + moderation pipeline is ready
+4. Internationalization for more languages  
+   - **Necessity:** Low  
+   - **Value:** Global reach, adoption in non-VI/EN markets  
+   - **Risks:** Translation QA cost, UI maintenance overhead  
+   - **Recommendation:** Defer; prioritize when ≥20% users non-VI/EN
+5. CLI tool for power users  
+   - **Necessity:** Medium  
+   - **Value:** Automation, batch generation, CI/CD workflows  
+   - **Risks:** Versioning/support overhead  
+   - **Recommendation:** MVP CLI when ≥3 internal automation use cases
 
 ---
 

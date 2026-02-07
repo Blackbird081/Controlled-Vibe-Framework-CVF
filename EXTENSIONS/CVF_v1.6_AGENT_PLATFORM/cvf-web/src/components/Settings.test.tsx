@@ -103,6 +103,93 @@ describe('SettingsPage', () => {
 
         createSpy.mockRestore();
     });
+
+    it('shows and hides API key and clears it', async () => {
+        renderSettingsPage();
+        await waitFor(() => expect(screen.getByText('⚙️ Cài đặt')).toBeTruthy());
+
+        const apiInput = screen.getByPlaceholderText(/Google Gemini API Key/i) as HTMLInputElement;
+        fireEvent.change(apiInput, { target: { value: 'secret' } });
+        expect(apiInput.value).toBe('secret');
+
+        const showButton = screen.getByRole('button', { name: /Hiện|Ẩn/i });
+        fireEvent.click(showButton);
+        expect(apiInput.getAttribute('type')).toBe('text');
+
+        fireEvent.click(showButton);
+        expect(apiInput.getAttribute('type')).toBe('password');
+
+        const clearButton = screen.getByTitle('Clear API Key');
+        fireEvent.click(clearButton);
+        expect(apiInput.value).toBe('');
+    });
+
+    it('updates preferences toggles and switches model', async () => {
+        renderSettingsPage();
+        await waitFor(() => expect(screen.getByText('⚙️ Cài đặt')).toBeTruthy());
+
+        const modelSelect = screen.getByRole('combobox') as HTMLSelectElement;
+        fireEvent.change(modelSelect, { target: { value: 'gemini-2.5-pro' } });
+        expect(modelSelect.value).toBe('gemini-2.5-pro');
+
+        fireEvent.click(screen.getByText('🎨 Preferences'));
+
+        const analyticsLabel = screen.getByText('Bật analytics (local-only)').closest('label');
+        const analyticsButton = analyticsLabel?.querySelector('button');
+        if (analyticsButton) {
+            fireEvent.click(analyticsButton);
+        }
+
+        const tourLabel = screen.getByText('Hiện welcome tour').closest('label');
+        const tourButton = tourLabel?.querySelector('button');
+        if (tourButton) {
+            fireEvent.click(tourButton);
+        }
+
+        const saved = localStorage.getItem('cvf_settings') || '';
+        expect(saved).toContain('analyticsEnabled');
+        expect(saved).toContain('showWelcomeTour');
+    });
+
+    it('does not reset when confirmation is cancelled', async () => {
+        localStorage.setItem('cvf_settings', JSON.stringify({ preferences: { defaultProvider: 'openai' } }));
+        const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+
+        renderSettingsPage();
+        await waitFor(() => expect(screen.getByText('⚙️ Cài đặt')).toBeTruthy());
+        fireEvent.click(screen.getByText('💾 Data'));
+        fireEvent.click(screen.getByRole('button', { name: /Reset tất cả/i }));
+
+        expect(localStorage.getItem('cvf_settings')).toContain('openai');
+        confirmSpy.mockRestore();
+    });
+
+    it('handles invalid stored settings and import errors', async () => {
+        localStorage.setItem('cvf_settings', 'not-json');
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        renderSettingsPage();
+        await waitFor(() => expect(screen.getByText('⚙️ Cài đặt')).toBeTruthy());
+        fireEvent.click(screen.getByText('💾 Data'));
+
+        const fileInput = screen.getByLabelText(/Nhập Settings/i) as HTMLInputElement;
+        const file = new File(['bad-json'], 'settings.json', { type: 'application/json' });
+
+        class MockFileReader {
+            onload: null | ((e: { target: { result: string } }) => void) = null;
+            readAsText(_file: File) {
+                if (this.onload) {
+                    this.onload({ target: { result: 'bad-json' } });
+                }
+            }
+        }
+        vi.stubGlobal('FileReader', MockFileReader as unknown as typeof FileReader);
+
+        fireEvent.change(fileInput, { target: { files: [file] } });
+        expect(consoleSpy).toHaveBeenCalled();
+
+        consoleSpy.mockRestore();
+    });
 });
 
 describe('SettingsButton', () => {

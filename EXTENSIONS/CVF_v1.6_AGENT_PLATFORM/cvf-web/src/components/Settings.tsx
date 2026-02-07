@@ -40,6 +40,7 @@ interface UserPreferences {
     defaultLanguage: 'vi' | 'en';
     autoSaveHistory: boolean;
     showWelcomeTour: boolean;
+    analyticsEnabled: boolean;
 }
 
 interface SettingsData {
@@ -61,6 +62,7 @@ const defaultSettings: SettingsData = {
         defaultLanguage: 'vi',
         autoSaveHistory: true,
         showWelcomeTour: true,
+        analyticsEnabled: true,
     },
 };
 
@@ -74,7 +76,12 @@ export function useSettings() {
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                setSettings({ ...defaultSettings, ...parsed });
+                setSettings({
+                    ...defaultSettings,
+                    ...parsed,
+                    providers: { ...defaultSettings.providers, ...parsed.providers },
+                    preferences: { ...defaultSettings.preferences, ...parsed.preferences },
+                });
             } catch {
                 setSettings(defaultSettings);
             }
@@ -206,6 +213,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             defaultLang: 'Ngôn ngữ mặc định',
             autoSave: 'Tự động lưu history',
             showTour: 'Hiện welcome tour',
+            analytics: 'Bật analytics (local-only)',
             export: 'Xuất Settings',
             import: 'Nhập Settings',
             reset: 'Reset tất cả',
@@ -231,6 +239,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             defaultLang: 'Default Language',
             autoSave: 'Auto-save history',
             showTour: 'Show welcome tour',
+            analytics: 'Enable analytics (local-only)',
             export: 'Export Settings',
             import: 'Import Settings',
             reset: 'Reset All',
@@ -460,6 +469,19 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                         }`}
                                 >
                                     <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.preferences.showWelcomeTour ? 'translate-x-6' : 'translate-x-0.5'
+                                        }`} />
+                                </button>
+                            </label>
+
+                            <label className="flex items-center justify-between cursor-pointer">
+                                <span className="text-sm text-gray-700 dark:text-gray-300">{l.analytics}</span>
+                                <button
+                                    onClick={() => updatePreferences({ analyticsEnabled: !settings.preferences.analyticsEnabled })}
+                                    className={`w-12 h-6 rounded-full transition-colors ${settings.preferences.analyticsEnabled
+                                        ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                                        }`}
+                                >
+                                    <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.preferences.analyticsEnabled ? 'translate-x-6' : 'translate-x-0.5'
                                         }`} />
                                 </button>
                             </label>

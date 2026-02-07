@@ -1,6 +1,6 @@
 # 📋 CHANGELOG — CVF v1.5 UX PLATFORM
 
-**Status:** 🔄 IN PROGRESS
+**Status:** ✅ FROZEN (maintenance-only)
 
 ---
 
@@ -93,6 +93,17 @@
 - CVF v1.4.x: ✅ Compatible
 - CVF v1.3.x: ✅ Compatible
 - No breaking changes
+
+---
+
+## [v1.5.1] — 2026-02-07
+
+### Added
+- Vitest smoke/unit tests for core modules (`analytics`, `store`, `TemplateCard`)
+
+### Changed
+- Project status set to **FROZEN** (maintenance-only); new feature work moves to v1.6
+- v1.5.2 Skill Library continues to expand and is shared with v1.6
 
 ---
 

@@ -98,16 +98,18 @@ CVF_v1.5_UX_PLATFORM/
 |-------|:-------:|:------:|
 | CVF Core | v1.3.x | ✅ FROZEN |
 | Usage Layer | v1.4.x | ✅ FROZEN |
-| UX Platform | v1.5 | 🔄 ACTIVE |
+| UX Platform | v1.5 | ✅ FROZEN |
 
 ---
 
 ## Status
 
-- **ROADMAP.md** — ✅ Complete
-- **21_TEMPLATE_LIBRARY** — 🔄 In Progress
-- **20_WEB_INTERFACE** — ⏳ Pending
-- **22_ANALYTICS** — ⏳ Pending
+**Policy:** v1.5 đóng băng (maintenance-only). Các cải tiến mới chuyển sang v1.6, trong khi v1.5.2 Skill Library tiếp tục mở rộng để v1.6 thừa hưởng.
+
+- **ROADMAP.md** — ✅ Complete (Frozen)
+- **21_TEMPLATE_LIBRARY** — ✅ Complete (Frozen)
+- **20_WEB_INTERFACE** — ✅ Complete (Frozen)
+- **22_ANALYTICS** — ✅ Complete (Frozen)
 
 ---
 

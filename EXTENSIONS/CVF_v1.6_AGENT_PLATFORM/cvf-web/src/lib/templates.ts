@@ -44,7 +44,49 @@ SUCCESS CRITERIA:
 - Phân tích rõ ưu/nhược điểm
 - Xác định rủi ro chính  
 - Đưa ra khuyến nghị có căn cứ`,
-        outputExpected: ['Executive Summary', 'SWOT Analysis', 'Options Comparison', 'Risk Assessment', 'Recommendations'],
+        outputExpected: ['Executive Summary', 'Assumptions & Missing Data', 'SWOT Analysis', 'Options Comparison', 'Risk Assessment', 'Recommendations', 'Success Criteria Check', 'Next Actions'],
+        outputTemplate: `# Strategy Analysis Output
+
+## Executive Summary
+- Goal:
+- Primary recommendation:
+- Rationale:
+
+## Assumptions & Missing Data
+- Missing inputs:
+- Assumptions used:
+
+## SWOT Analysis
+| Strengths | Weaknesses | Opportunities | Threats |
+| --- | --- | --- | --- |
+| ... | ... | ... | ... |
+
+## Options Comparison
+| Option | Pros | Cons | Cost/Impact | Risks | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Option A |  |  |  |  |  |
+| Option B |  |  |  |  |  |
+
+## Risk Assessment
+- Top risks (ranked):
+1. ...
+2. ...
+- Mitigations:
+- ...
+
+## Recommendations
+- Recommendation 1:
+- Recommendation 2 (if needed):
+
+## Success Criteria Check
+- [ ] Phân tích rõ ưu/nhược điểm
+- [ ] Xác định rủi ro chính
+- [ ] Đưa ra khuyến nghị có căn cứ
+
+## Next Actions
+- Questions for user:
+- Data to confirm:
+`,
         sampleOutput: `# Strategy Analysis: Market Expansion
 
 ## Executive Summary
@@ -1513,6 +1555,38 @@ export function generateCompleteSpec(
     const expectedOutput = template.outputExpected
         ?.map(item => `- ${item}`)
         .join('\n') || '- Comprehensive analysis\n- Actionable recommendations';
+    const outputTemplate = template.outputTemplate || (template.outputExpected?.length
+        ? template.outputExpected.map(section => `## ${section}\n- ...`).join('\n\n')
+        : '');
+
+    const requiredFields = template.fields.filter(field => field.required);
+    const missingRequired = requiredFields.filter(field => {
+        const value = values[field.id];
+        return !value || !value.trim() || value.trim().toLowerCase() === 'n/a';
+    });
+    const inputCoverage = requiredFields.length
+        ? [
+            '| Field | Provided |',
+            '| --- | --- |',
+            ...requiredFields.map(field => {
+                const value = values[field.id];
+                const provided = value && value.trim() && value.trim().toLowerCase() !== 'n/a';
+                return `| ${field.label} | ${provided ? '✅' : '❌'} |`;
+            })
+        ].join('\n')
+        : '(No required inputs)';
+
+    const executionConstraints = `## ⛔ Execution Constraints
+- Do not invent missing inputs. If required inputs are missing, stop and ask for clarification.
+- Follow the Output Template headings exactly (no reordering).
+- Stay within the scope defined by the Task section.
+- If data is unavailable, state it explicitly as "Unknown".`;
+
+    const validationHooks = `## ✅ Validation Hooks
+- Check required inputs against the Input Coverage table.
+- Ensure every Expected Output section is present.
+- Include a Success Criteria Check.
+- If any item is missing, mark the result as "Not Ready" and list what's missing.`;
 
     const spec = `---
 # CVF Task Specification
@@ -1535,6 +1609,13 @@ ${userInputLines || '(No input provided)'}
 
 ---
 
+## ✅ Input Coverage
+
+${inputCoverage}
+${missingRequired.length ? `\n\n**Missing Required Inputs:** ${missingRequired.map(field => field.label).join(', ')}` : ''}
+
+---
+
 ## 🎯 Task
 
 ${intent}
@@ -1544,6 +1625,16 @@ ${intent}
 ## 📤 Expected Output Format
 
 ${expectedOutput}
+
+${outputTemplate ? `\n---\n\n## 📐 Output Template\n\n\`\`\`markdown\n${outputTemplate}\n\`\`\`\n` : ''}
+
+---
+
+${executionConstraints}
+
+---
+
+${validationHooks}
 
 ---
 

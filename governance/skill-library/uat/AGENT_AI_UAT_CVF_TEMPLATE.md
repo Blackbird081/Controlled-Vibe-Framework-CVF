@@ -13,7 +13,7 @@ Before executing UAT, identify the governing skill record from:
 
 | Registry | Path | Description |
 |----------|------|-------------|
-| **User Skills** | `../registry/user-skills/` | 69 skills from v1.5.2 SKILL_LIBRARY |
+| **User Skills** | `../registry/user-skills/` | 114 skills from v1.5.2 SKILL_LIBRARY |
 | **Agent Skills** | `../registry/agent-skills/` | 8 agent tools from v1.6 AGENT_PLATFORM |
 
 Each `.gov.md` file contains:

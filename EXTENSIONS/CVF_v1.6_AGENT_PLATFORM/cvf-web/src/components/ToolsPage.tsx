@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ToolsPanel, AVAILABLE_TOOLS, useTools, ToolResult, ToolType } from '@/lib/agent-tools';
+import { AVAILABLE_TOOLS, useTools, ToolResult, ToolType } from '@/lib/agent-tools';
 
 interface ToolsPageProps {
     onClose?: () => void;
@@ -50,8 +50,18 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
             {/* Main Content */}
             <div className="flex-1 overflow-auto p-6">
                 <div className="max-w-4xl mx-auto">
-                    {/* Tools Panel */}
-                    <ToolsPanel onToolResult={handleToolResult} />
+                    {/* Coming soon banner */}
+                    <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
+                        <div className="flex items-start gap-3">
+                            <span className="text-xl">🚧</span>
+                            <div>
+                                <h3 className="font-bold">Tools - Coming Soon</h3>
+                                <p className="text-sm">
+                                    Agent Tools hiện đang ở chế độ xem trước. Tính năng thực thi sẽ được mở sau khi backend được tích hợp.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Last Result Display */}
                     {lastResult && (

@@ -73,7 +73,7 @@ result = skill.execute({"email": "Buy now!!!"})
 | 👤 Operator Manual | **v1.3.1** | [EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/](./EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) |
 | 🎨 End-user UX Layer | **v1.4** | [EXTENSIONS/CVF_v1.4_USAGE_LAYER/](./EXTENSIONS/CVF_v1.4_USAGE_LAYER/) |
 | 🌐 Web UI Platform | **v1.5 (FROZEN)** | [EXTENSIONS/CVF_v1.5_UX_PLATFORM/](./EXTENSIONS/CVF_v1.5_UX_PLATFORM/) |
-| 📋 Skill Library (69 skills) | **v1.5.2 (ACTIVE)** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| 📋 Skill Library (114 skills) | **v1.5.2 (ACTIVE)** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
 | 🔐 **Skill Governance Registry** | **governance** | [governance/skill-library/](./governance/skill-library/) |
 | 🤖 **AI Agent Platform** | **v1.6** ⭐ | [EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/](./EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
 
@@ -125,7 +125,7 @@ Web UI hỗ trợ 3 chế độ xuất prompt:
 
 ## 📋 Skill Library (v1.5.2)
 
-**69 skills** across **12 domains**:
+**114 skills** across **12 domains**:
 
 | Domain | Skills | Description |
 |--------|:------:|-------------|
@@ -147,7 +147,7 @@ Web UI hỗ trợ 3 chế độ xuất prompt:
 - ✅ Prerequisites system with workflow links
 - ✅ Difficulty Guide (Easy/Medium/Advanced criteria)
 - ✅ Domain Refinement (Quality Pass 2) complete (12 domains)
-- ✅ Validation: 69 skills pass validate_skills.py (0 issues/warnings)
+- ✅ Validation: 114 skills pass validate_skills.py (0 issues/warnings)
 - ✅ **NEW:** Ví dụ thực tế added to Advanced skills
 - ✅ **NEW:** Cross-references (Next Step) added
 
@@ -333,7 +333,7 @@ Key modules: security.ts (28), governance.ts (13), ai-providers.ts (21), quota-m
 
 ### 📚 Previous (v1.5.2)
 - ✅ 31 form-based templates
-- ✅ 69 skills across 12 domains
+- ✅ 114 skills across 12 domains
 - ✅ 3 export modes (Simple, With Rules, CVF Full Mode)
 - ✅ Domain Refinement (Quality Pass 2) complete
 

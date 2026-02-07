@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Template } from '@/types';
 import { useUserContext } from './UserContext';
 import { WorkflowVisualizer } from './WorkflowVisualizer';
+import { useSettings } from './Settings';
 
 interface SpecExportProps {
     template: Template;
@@ -104,6 +105,40 @@ const governanceRules = {
 - **GIẢI THÍCH** logic trước khi đưa ra kết luận
 - **THỪA NHẬN** những giới hạn và điều không chắc chắn
 - **CUNG CẤP** nguồn hoặc tham chiếu khi có thể
+`
+};
+
+const executionConstraints = {
+    en: `
+## ⛔ Execution Constraints
+- Do not invent missing inputs. If required inputs are missing, stop and ask for clarification.
+- Follow the Output Template headings exactly (no reordering).
+- Stay within the scope defined by the Task section.
+- If data is unavailable, state it explicitly as "Unknown" instead of guessing.
+`,
+    vi: `
+## ⛔ Ràng buộc thực thi
+- Không tự bịa thông tin thiếu. Nếu thiếu input bắt buộc, phải dừng và hỏi lại.
+- Tuân theo đúng thứ tự heading trong Output Template (không đảo thứ tự).
+- Chỉ làm trong phạm vi Task đã khai báo.
+- Nếu không có dữ liệu, ghi rõ "Chưa có dữ liệu" thay vì đoán.
+`
+};
+
+const validationHooks = {
+    en: `
+## ✅ Validation Hooks
+- Check required inputs against the Input Coverage table.
+- Ensure every Expected Output section is present.
+- Include a Success Criteria Check.
+- If any item is missing, mark the result as "Not Ready" and list what's missing.
+`,
+    vi: `
+## ✅ Validation Hooks
+- Đối chiếu input bắt buộc theo bảng Input Coverage.
+- Bảo đảm đủ mọi mục trong Expected Output.
+- Có mục Success Criteria Check.
+- Nếu thiếu mục nào, đánh dấu "Not Ready" và liệt kê phần thiếu.
 `
 };
 
@@ -618,6 +653,9 @@ function generateSpec(
     const expectedOutput = template.outputExpected
         ?.map(item => `- ${item}`)
         .join('\n') || '- Comprehensive analysis\n- Actionable recommendations';
+    const outputTemplate = template.outputTemplate || (template.outputExpected?.length
+        ? template.outputExpected.map(section => `## ${section}\n- ...`).join('\n\n')
+        : '');
 
     const labels = lang === 'vi' ? {
         specTitle: mode === 'full' ? 'Đặc Tả Nhiệm Vụ CVF (FULL MODE)' : mode === 'governance' ? 'Đặc Tả Nhiệm Vụ CVF (Có Quy Tắc)' : 'Đặc Tả Nhiệm Vụ CVF',
@@ -627,17 +665,21 @@ function generateSpec(
         mode: 'Chế độ',
         context: 'Bối cảnh',
         userInput: 'Thông tin đầu vào',
+        inputCoverage: 'Độ đầy đủ đầu vào',
         task: 'Nhiệm vụ',
         expectedOutput: 'Định dạng kết quả mong muốn',
+        outputTemplate: 'Template đầu ra',
         instructions: 'Hướng dẫn cho AI',
         instructionList: [
             'Giải quyết tất cả các tiêu chí thành công',
             'Tuân theo cấu trúc định dạng kết quả',
             'Đưa ra insights và khuyến nghị cụ thể',
             'Sử dụng ngôn ngữ chuyên nghiệp, rõ ràng',
+            'Không tự bịa thông tin thiếu; hỏi lại khi cần',
         ],
         footer: 'CVF v1.6 Agent Platform - Sao chép spec này và paste vào AI yêu thích của bạn',
         noInput: '(Chưa có thông tin)',
+        noRequired: '(Không có input bắt buộc)',
         modeSimple: 'Đơn giản',
         modeGovernance: 'Có Quy Tắc',
         modeFull: 'Full Mode (4-Phase)',
@@ -649,17 +691,21 @@ function generateSpec(
         mode: 'Mode',
         context: 'Context',
         userInput: 'User Input',
+        inputCoverage: 'Input Coverage',
         task: 'Task',
         expectedOutput: 'Expected Output Format',
+        outputTemplate: 'Output Template',
         instructions: 'Instructions for AI',
         instructionList: [
             'Addresses all the success criteria listed in the Task section',
             'Follows the Expected Output Format structure',
             'Provides actionable insights and recommendations',
             'Uses clear, professional language',
+            'Do not invent missing inputs; ask for clarification when needed',
         ],
         footer: 'CVF v1.6 Agent Platform - Copy this spec and paste into your preferred AI',
         noInput: '(No input provided)',
+        noRequired: '(No required inputs)',
         modeSimple: 'Simple',
         modeGovernance: 'With Rules',
         modeFull: 'Full Mode (4-Phase)',
@@ -673,6 +719,23 @@ function generateSpec(
 
     // Get mode label
     const modeLabel = mode === 'full' ? labels.modeFull : mode === 'governance' ? labels.modeGovernance : labels.modeSimple;
+
+    const requiredFields = template.fields.filter(field => field.required);
+    const missingRequired = requiredFields.filter(field => {
+        const value = values[field.id];
+        return !value || !value.trim() || value.trim().toLowerCase() === 'n/a';
+    });
+    const inputCoverage = requiredFields.length
+        ? [
+            '| Field | Provided |',
+            '| --- | --- |',
+            ...requiredFields.map(field => {
+                const value = values[field.id];
+                const provided = value && value.trim() && value.trim().toLowerCase() !== 'n/a';
+                return `| ${field.label} | ${provided ? '✅' : '❌'} |`;
+            })
+        ].join('\n')
+        : labels.noRequired;
 
     // Base spec
     let spec = `---
@@ -703,6 +766,13 @@ ${userContext}` : ''}
 
 ---
 
+## ✅ ${labels.inputCoverage}
+
+${inputCoverage}
+${missingRequired.length ? `\n\n**${exportLang === 'vi' ? 'Thiếu input bắt buộc' : 'Missing Required Inputs'}:** ${missingRequired.map(field => field.label).join(', ')}` : ''}
+
+---
+
 ## 🎯 ${labels.task}
 
 ${intent}
@@ -712,6 +782,18 @@ ${intent}
 ## 📤 ${labels.expectedOutput}
 
 ${expectedOutput}
+
+${outputTemplate ? `\n---\n\n## 📐 ${labels.outputTemplate}\n\n\`\`\`markdown\n${outputTemplate}\n\`\`\`\n` : ''}
+`;
+
+    spec += `
+---
+
+${executionConstraints[lang]}
+
+---
+
+${validationHooks[lang]}
 `;
 
     // Add governance rules for mode 2
@@ -741,11 +823,18 @@ ${labels.instructionList.map((item, i) => `${i + 1}. ${item}`).join('\n')}
 }
 
 export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExportProps) {
+    const { settings, isLoaded } = useSettings();
     const [copied, setCopied] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [exportLang, setExportLang] = useState<ExportLanguage>('vi');
-    const [exportMode, setExportMode] = useState<ExportMode>('simple');
+    const [exportMode, setExportMode] = useState<ExportMode>('governance');
     const { getContextPrompt } = useUserContext();
+
+    useEffect(() => {
+        if (!isLoaded) return;
+        setExportMode(settings.preferences.defaultExportMode);
+        setExportLang(settings.preferences.defaultLanguage);
+    }, [isLoaded, settings.preferences.defaultExportMode, settings.preferences.defaultLanguage]);
 
     const labels = specLabels[exportLang];
     const modes = modeLabels[exportLang];

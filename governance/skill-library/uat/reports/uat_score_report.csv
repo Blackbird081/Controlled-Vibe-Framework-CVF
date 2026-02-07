@@ -1,0 +1,115 @@
+skill_id,title,domain,risk_level,status,decision_score,completeness_score,scenario_score,final_score,quality
+01_app_requirements_spec,UAT RECORD — App Requirements Spec,App Development,R1,Not Run,0,0,0,0,Not Ready
+01_budget_analysis,UAT RECORD — Budget Analysis,Finance & Analytics,R1,Not Run,0,0,0,0,Not Ready
+01_code_review,UAT RECORD — Code Review,Technical Review,R1,Not Run,0,0,0,0,Not Ready
+01_contract_review,UAT RECORD — Contract Review,Legal & Contracts,R1,Not Run,0,0,0,0,Not Ready
+01_documentation,UAT RECORD — Documentation,Content Creation,R1,Not Run,0,0,0,0,Not Ready
+01_job_description,UAT RECORD — Job Description,HR & Operations,R1,Not Run,0,0,0,0,Not Ready
+01_landing_page,UAT RECORD — Landing Page,Web Development,R1,Not Run,0,0,0,0,Not Ready
+01_model_selection,UAT RECORD — Model Selection,AI/ML Evaluation,R1,Not Run,0,0,0,0,Not Ready
+01_strategy_analysis,UAT RECORD — Strategy Analysis,Business Analysis,R1,Not Run,0,0,0,0,Not Ready
+02_architecture_review,UAT RECORD — Architecture Review,Technical Review,R1,Not Run,0,0,0,0,Not Ready
+02_financial_statement_review,UAT RECORD — Financial Statement Review,Finance & Analytics,R1,Not Run,0,0,0,0,Not Ready
+02_interview_evaluation,UAT RECORD — Interview Evaluation,HR & Operations,R1,Not Run,0,0,0,0,Not Ready
+02_nda_template,UAT RECORD — NDA Template,Legal & Contracts,R1,Not Run,0,0,0,0,Not Ready
+02_prompt_evaluation,UAT RECORD — Prompt Evaluation,AI/ML Evaluation,R1,Not Run,0,0,0,0,Not Ready
+02_report_writing,UAT RECORD — Report Writing,Content Creation,R1,Not Run,0,0,0,0,Not Ready
+02_risk_assessment,UAT RECORD — Risk Assessment,Business Analysis,R1,Not Run,0,0,0,0,Not Ready
+02_saas_app,UAT RECORD — SaaS App,Web Development,R1,Not Run,0,0,0,0,Not Ready
+02_tech_stack_selection,UAT RECORD — Tech Stack Selection,App Development,R1,Not Run,0,0,0,0,Not Ready
+03_architecture_design,UAT RECORD — Architecture Design,App Development,R1,Not Run,0,0,0,0,Not Ready
+03_dashboard,UAT RECORD — Dashboard,Web Development,R1,Not Run,0,0,0,0,Not Ready
+03_market_research,UAT RECORD — Market Research,Business Analysis,R1,Not Run,0,0,0,0,Not Ready
+03_output_quality_check,UAT RECORD — Output Quality Check,AI/ML Evaluation,R1,Not Run,0,0,0,0,Not Ready
+03_performance_review,UAT RECORD — Performance Review,HR & Operations,R1,Not Run,0,0,0,0,Not Ready
+03_presentation,UAT RECORD — Presentation,Content Creation,R1,Not Run,0,0,0,0,Not Ready
+03_roi_calculator_review,UAT RECORD — ROI Calculator Review,Finance & Analytics,R1,Not Run,0,0,0,0,Not Ready
+03_security_audit,UAT RECORD — Security Audit,Technical Review,R1,Not Run,0,0,0,0,Not Ready
+03_terms_of_service,UAT RECORD — Terms of Service,Legal & Contracts,R1,Not Run,0,0,0,0,Not Ready
+04_bias_detection,UAT RECORD — Bias Detection,AI/ML Evaluation,R1,Not Run,0,0,0,0,Not Ready
+04_blog_docs,UAT RECORD — Blog / Documentation,Web Development,R1,Not Run,0,0,0,0,Not Ready
+04_compliance_checklist,UAT RECORD — Compliance Checklist,Legal & Contracts,R1,Not Run,0,0,0,0,Not Ready
+04_database_schema_design,UAT RECORD — Database Schema Design,App Development,R1,Not Run,0,0,0,0,Not Ready
+04_kpi_dashboard_audit,UAT RECORD — KPI Dashboard Audit,Finance & Analytics,R1,Not Run,0,0,0,0,Not Ready
+04_onboarding_checklist,UAT RECORD — Onboarding Checklist,HR & Operations,R1,Not Run,0,0,0,0,Not Ready
+05_api_design_spec,UAT RECORD — API Design Spec,App Development,R1,Not Run,0,0,0,0,Not Ready
+05_cash_flow_analysis,UAT RECORD — Cash Flow Analysis,Finance & Analytics,R1,Not Run,0,0,0,0,Not Ready
+05_cost_optimization,UAT RECORD — Cost Optimization,AI/ML Evaluation,R1,Not Run,0,0,0,0,Not Ready
+05_ip_protection,UAT RECORD — IP Protection,Legal & Contracts,R1,Not Run,0,0,0,0,Not Ready
+05_policy_documentation,UAT RECORD — Policy Documentation,HR & Operations,R1,Not Run,0,0,0,0,Not Ready
+05_portfolio,UAT RECORD — Portfolio,Web Development,R1,Not Run,0,0,0,0,Not Ready
+06_ai_use_case_fit,UAT RECORD — AI Use Case Fit,AI/ML Evaluation,R1,Not Run,0,0,0,0,Not Ready
+06_desktop_app_spec,UAT RECORD — Desktop App Spec,App Development,R1,Not Run,0,0,0,0,Not Ready
+06_investment_due_diligence,UAT RECORD — Investment Due Diligence,Finance & Analytics,R1,Not Run,0,0,0,0,Not Ready
+07_cli_tool_spec,UAT RECORD — CLI Tool Spec,App Development,R1,Not Run,0,0,0,0,Not Ready
+07_financial_risk_assessment,UAT RECORD — Financial Risk Assessment,Finance & Analytics,R1,Not Run,0,0,0,0,Not Ready
+08_local_deployment,UAT RECORD — Local Deployment Spec,App Development,R1,Not Run,0,0,0,0,Not Ready
+08_revenue_forecast_review,UAT RECORD — Revenue Forecast Review,Finance & Analytics,R1,Not Run,0,0,0,0,Not Ready
+ab_test_review,UAT RECORD — A/B Test Review,Product & UX,R1,Not Run,0,0,0,0,Not Ready
+accessibility_audit,UAT RECORD — Accessibility Audit (WCAG),Product & UX,R1,Not Run,0,0,0,0,Not Ready
+api_security_checklist,UAT RECORD — API Security Checklist,Security & Compliance,R1,Not Run,0,0,0,0,Not Ready
+audit_prep_assistant,UAT RECORD — Audit Prep A I Tant,Security Compliance,R1,Not Run,0,0,0,0,Not Ready
+bocha_search,UAT RECORD — Bocha Earch,Product Ux,R1,Not Run,0,0,0,0,Not Ready
+brand_voice_consistency,UAT RECORD — Brand Voice Consistency,Marketing & SEO,R1,Not Run,0,0,0,0,Not Ready
+browser_use,UAT RECORD — Brow Er U E,App Development,R1,Not Run,0,0,0,0,Not Ready
+ccxt_php,UAT RECORD — Ccxt Php,App Development,R1,Not Run,0,0,0,0,Not Ready
+checking_changes,UAT RECORD — Checking Change,App Development,R1,Not Run,0,0,0,0,Not Ready
+ci_monitor,UAT RECORD — Ci Monitor,App Development,R1,Not Run,0,0,0,0,Not Ready
+clojure_review,UAT RECORD — Clojure Review,App Development,R1,Not Run,0,0,0,0,Not Ready
+cn_check,UAT RECORD — Cn Check,App Development,R1,Not Run,0,0,0,0,Not Ready
+code_review,UAT RECORD — Code Review,Security Compliance,R1,Not Run,0,0,0,0,Not Ready
+code_reviewer,UAT RECORD — Code Reviewer,App Development,R1,Not Run,0,0,0,0,Not Ready
+competitor_alternatives,UAT RECORD — Competitor Alternative,Product Ux,R1,Not Run,0,0,0,0,Not Ready
+competitor_analysis,UAT RECORD — Competitor Analysis,Marketing & SEO,R1,Not Run,0,0,0,0,Not Ready
+component_refactoring,UAT RECORD — Component Refactoring,App Development,R1,Not Run,0,0,0,0,Not Ready
+content_quality_checklist,UAT RECORD — Content Quality Checklist,Marketing & SEO,R1,Not Run,0,0,0,0,Not Ready
+content_research_writer,UAT RECORD — Content Re Earch Writer,Content Creation,R1,Not Run,0,0,0,0,Not Ready
+copywriting_evaluation,UAT RECORD — Copywriting Evaluation,Marketing & SEO,R1,Not Run,0,0,0,0,Not Ready
+create_database_migration,UAT RECORD — Create Databa E Migration,App Development,R1,Not Run,0,0,0,0,Not Ready
+creating_financial_models,UAT RECORD — Creating Financial Model,App Development,R1,Not Run,0,0,0,0,Not Ready
+data_handling_review,UAT RECORD — Data Handling Review,Security & Compliance,R1,Not Run,0,0,0,0,Not Ready
+dev_browser,UAT RECORD — Dev Brow Er,App Development,R1,Not Run,0,0,0,0,Not Ready
+doc_coauthoring,UAT RECORD — Doc Coauthoring,Content Creation,R1,Not Run,0,0,0,0,Not Ready
+docs_writer_reference,UAT RECORD — Doc Writer Reference,Content Creation,R1,Not Run,0,0,0,0,Not Ready
+email_campaign_review,UAT RECORD — Email Campaign Review,Marketing & SEO,R1,Not Run,0,0,0,0,Not Ready
+error_handling_ux,UAT RECORD — Error Handling UX,Product & UX,R1,Not Run,0,0,0,0,Not Ready
+evals_context,UAT RECORD — Eval Context,App Development,R1,Not Run,0,0,0,0,Not Ready
+fastapi,UAT RECORD — Fa Tapi,App Development,R1,Not Run,0,0,0,0,Not Ready
+feature_prioritization,UAT RECORD — Feature Prioritization (RICE/ICE),Product & UX,R1,Not Run,0,0,0,0,Not Ready
+fetch_diff,UAT RECORD — Fetch Diff,App Development,R1,Not Run,0,0,0,0,Not Ready
+frontend_design,UAT RECORD — Frontend De Ign,App Development,R1,Not Run,0,0,0,0,Not Ready
+gdpr_compliance_review,UAT RECORD — GDPR Compliance Review,Security & Compliance,R1,Not Run,0,0,0,0,Not Ready
+golang_testing,UAT RECORD — Golang Te Ting,App Development,R1,Not Run,0,0,0,0,Not Ready
+healthcheck,UAT RECORD — Healthcheck,Security Compliance,R1,Not Run,0,0,0,0,Not Ready
+hugging_face_model_trainer,UAT RECORD — Hugging Face Model Trainer,App Development,R1,Not Run,0,0,0,0,Not Ready
+incident_response_plan,UAT RECORD — Incident Response Plan,Security & Compliance,R1,Not Run,0,0,0,0,Not Ready
+jazz_permissions_security,UAT RECORD — Jazz Permi Ion Ecurity,Security Compliance,R1,Not Run,0,0,0,0,Not Ready
+landing_page_cro,UAT RECORD — Landing Page CRO,Marketing & SEO,R1,Not Run,0,0,0,0,Not Ready
+last30days,UAT RECORD — La T30day,Product Ux,R1,Not Run,0,0,0,0,Not Ready
+multi_reviewer_patterns,UAT RECORD — Multi Reviewer Pattern,App Development,R1,Not Run,0,0,0,0,Not Ready
+native_dependency_update,UAT RECORD — Native Dependency Update,Security Compliance,R1,Not Run,0,0,0,0,Not Ready
+onboarding_experience_review,UAT RECORD — Onboarding Experience Review,Product & UX,R1,Not Run,0,0,0,0,Not Ready
+playwright_cli,UAT RECORD — Playwright Cli,App Development,R1,Not Run,0,0,0,0,Not Ready
+pr_finalize,UAT RECORD — Pr Finalize,App Development,R1,Not Run,0,0,0,0,Not Ready
+pricing_strategy_review,UAT RECORD — Pricing Strategy Review,Marketing & SEO,R1,Not Run,0,0,0,0,Not Ready
+privacy_policy_audit,UAT RECORD — Privacy Policy Audit,Security & Compliance,R1,Not Run,0,0,0,0,Not Ready
+python_expert,UAT RECORD — Python Expert,App Development,R1,Not Run,0,0,0,0,Not Ready
+receiving_code_review,UAT RECORD — Receiving Code Review,App Development,R1,Not Run,0,0,0,0,Not Ready
+release,UAT RECORD — Relea E,Security Compliance,R1,Not Run,0,0,0,0,Not Ready
+research,UAT RECORD — Re Earch,Product Ux,R1,Not Run,0,0,0,0,Not Ready
+seo_audit,UAT RECORD — SEO Audit,Marketing & SEO,R1,Not Run,0,0,0,0,Not Ready
+setup_web_tests,UAT RECORD — Etup Web Te T,App Development,R1,Not Run,0,0,0,0,Not Ready
+social_media_ad_review,UAT RECORD — Social Media Ad Review,Marketing & SEO,R1,Not Run,0,0,0,0,Not Ready
+solidity_security,UAT RECORD — Olidity Ecurity,Security Compliance,R1,Not Run,0,0,0,0,Not Ready
+technical_articles,UAT RECORD — Technical Article,Content Creation,R1,Not Run,0,0,0,0,Not Ready
+terms_of_service_review,UAT RECORD — Terms of Service Review,Security & Compliance,R1,Not Run,0,0,0,0,Not Ready
+testing_python,UAT RECORD — Te Ting Python,App Development,R1,Not Run,0,0,0,0,Not Ready
+tidb_test_guidelines,UAT RECORD — Tidb Te T Guideline,App Development,R1,Not Run,0,0,0,0,Not Ready
+ui_ux_pro_max,UAT RECORD — Ui Ux Pro Max,App Development,R1,Not Run,0,0,0,0,Not Ready
+update_docs,UAT RECORD — Update Doc,App Development,R1,Not Run,0,0,0,0,Not Ready
+user_flow_analysis,UAT RECORD — User Flow Analysis,Product & UX,R1,Not Run,0,0,0,0,Not Ready
+user_persona_development,UAT RECORD — User Persona Development,Product & UX,R1,Not Run,0,0,0,0,Not Ready
+ux_heuristic_evaluation,UAT RECORD — UX Heuristic Evaluation,Product & UX,R1,Not Run,0,0,0,0,Not Ready
+vercel_react_best_practices,UAT RECORD — Vercel React Be T Practice,App Development,R1,Not Run,0,0,0,0,Not Ready
+write_release_notes,UAT RECORD — Write Relea E Note,Content Creation,R1,Not Run,0,0,0,0,Not Ready
+writing_docs,UAT RECORD — Writing Doc,Content Creation,R1,Not Run,0,0,0,0,Not Ready

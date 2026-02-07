@@ -41,6 +41,13 @@ interface UserPreferences {
     autoSaveHistory: boolean;
     showWelcomeTour: boolean;
     analyticsEnabled: boolean;
+    multiAgentMode: 'single' | 'multi';
+    agentProviders: {
+        orchestrator: ProviderKey;
+        architect: ProviderKey;
+        builder: ProviderKey;
+        reviewer: ProviderKey;
+    };
 }
 
 interface SettingsData {
@@ -49,6 +56,7 @@ interface SettingsData {
 }
 
 const STORAGE_KEY = 'cvf_settings';
+const MIGRATION_KEY = 'cvf_settings_migrated_governance';
 
 const defaultSettings: SettingsData = {
     providers: {
@@ -58,11 +66,18 @@ const defaultSettings: SettingsData = {
     },
     preferences: {
         defaultProvider: 'gemini',
-        defaultExportMode: 'simple',
+        defaultExportMode: 'governance',
         defaultLanguage: 'vi',
         autoSaveHistory: true,
         showWelcomeTour: true,
         analyticsEnabled: true,
+        multiAgentMode: 'single',
+        agentProviders: {
+            orchestrator: 'gemini',
+            architect: 'gemini',
+            builder: 'gemini',
+            reviewer: 'gemini',
+        },
     },
 };
 
@@ -76,15 +91,27 @@ export function useSettings() {
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                setSettings({
+                const merged: SettingsData = {
                     ...defaultSettings,
                     ...parsed,
                     providers: { ...defaultSettings.providers, ...parsed.providers },
                     preferences: { ...defaultSettings.preferences, ...parsed.preferences },
-                });
+                };
+
+                const migrated = localStorage.getItem(MIGRATION_KEY) === '1';
+                if (!migrated) {
+                    merged.preferences.defaultExportMode = 'governance';
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+                    localStorage.setItem(MIGRATION_KEY, '1');
+                }
+
+                setSettings(merged);
             } catch {
                 setSettings(defaultSettings);
             }
+        }
+        if (!saved) {
+            localStorage.setItem(MIGRATION_KEY, '1');
         }
         setIsLoaded(true);
     }, []);
@@ -214,6 +241,14 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             autoSave: 'Tự động lưu history',
             showTour: 'Hiện welcome tour',
             analytics: 'Bật analytics (local-only)',
+            multiAgentMode: 'Chế độ Multi-Agent',
+            multiAgentSingle: 'Single AI (1 AI nhiều vai)',
+            multiAgentMulti: 'Multi AI (mỗi vai 1 AI)',
+            agentProviders: 'Gán Provider theo vai trò',
+            roleOrchestrator: 'Orchestrator',
+            roleArchitect: 'Architect',
+            roleBuilder: 'Builder',
+            roleReviewer: 'Reviewer',
             export: 'Xuất Settings',
             import: 'Nhập Settings',
             reset: 'Reset tất cả',
@@ -240,6 +275,14 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             autoSave: 'Auto-save history',
             showTour: 'Show welcome tour',
             analytics: 'Enable analytics (local-only)',
+            multiAgentMode: 'Multi-Agent Mode',
+            multiAgentSingle: 'Single AI (one AI, many roles)',
+            multiAgentMulti: 'Multi AI (one AI per role)',
+            agentProviders: 'Assign Provider per Role',
+            roleOrchestrator: 'Orchestrator',
+            roleArchitect: 'Architect',
+            roleBuilder: 'Builder',
+            roleReviewer: 'Reviewer',
             export: 'Export Settings',
             import: 'Import Settings',
             reset: 'Reset All',
@@ -395,6 +438,56 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                 {/* Preferences Tab */}
                 {activeTab === 'preferences' && (
                     <div className="space-y-6">
+                        {/* Multi-Agent Mode */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                {l.multiAgentMode}
+                            </label>
+                            <select
+                                value={settings.preferences.multiAgentMode}
+                                onChange={(e) => updatePreferences({ multiAgentMode: e.target.value as any })}
+                                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600
+                                           bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            >
+                                <option value="single">🎯 {l.multiAgentSingle}</option>
+                                <option value="multi">🤖 {l.multiAgentMulti}</option>
+                            </select>
+                        </div>
+
+                        {/* Multi-Agent Providers */}
+                        {settings.preferences.multiAgentMode === 'multi' && (
+                            <div className="space-y-3">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    {l.agentProviders}
+                                </label>
+                                {([
+                                    { key: 'orchestrator', label: l.roleOrchestrator },
+                                    { key: 'architect', label: l.roleArchitect },
+                                    { key: 'builder', label: l.roleBuilder },
+                                    { key: 'reviewer', label: l.roleReviewer },
+                                ] as const).map((role) => (
+                                    <div key={role.key} className="flex items-center gap-3">
+                                        <span className="w-32 text-sm text-gray-600 dark:text-gray-300">{role.label}</span>
+                                        <select
+                                            value={settings.preferences.agentProviders[role.key]}
+                                            onChange={(e) => updatePreferences({
+                                                agentProviders: {
+                                                    ...settings.preferences.agentProviders,
+                                                    [role.key]: e.target.value as ProviderKey,
+                                                },
+                                            })}
+                                            className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600
+                                                       bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                                        >
+                                            <option value="gemini">✨ Google Gemini</option>
+                                            <option value="openai">🤖 OpenAI</option>
+                                            <option value="anthropic">🧠 Anthropic</option>
+                                        </select>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
                         {/* Default Provider */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

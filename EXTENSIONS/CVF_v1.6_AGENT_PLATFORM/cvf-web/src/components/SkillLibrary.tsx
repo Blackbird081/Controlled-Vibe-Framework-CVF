@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { getSkillCategories } from '../actions/skills';
+import remarkGfm from 'remark-gfm';
+import { getSkillCategories, saveUatContent } from '../actions/skills';
 import { Skill, SkillCategory } from '../types/skill';
 import { trackEvent } from '@/lib/analytics';
 
@@ -11,6 +12,9 @@ export function SkillLibrary() {
     const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [viewMode, setViewMode] = useState<'skill' | 'uat'>('skill');
+    const [uatEditMode, setUatEditMode] = useState(false);
+    const [uatDraft, setUatDraft] = useState('');
 
     useEffect(() => {
         async function fetchSkills() {
@@ -26,13 +30,39 @@ export function SkillLibrary() {
         fetchSkills();
     }, []);
 
-    const filteredCategories = categories.map(cat => ({
-        ...cat,
-        skills: cat.skills.filter(s =>
+    useEffect(() => {
+        if (viewMode === 'uat') {
+            setUatDraft(selectedSkill?.uatContent || '');
+        } else {
+            setUatEditMode(false);
+        }
+    }, [viewMode, selectedSkill]);
+
+    const filteredCategories = categories.map(cat => {
+        const filteredSkills = cat.skills.filter(s =>
             s.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             s.id.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    })).filter(cat => cat.skills.length > 0);
+        );
+        return {
+            ...cat,
+            skills: filteredSkills,
+            totalCount: cat.skills.length,
+            visibleCount: filteredSkills.length
+        };
+    }).filter(cat => cat.skills.length > 0);
+
+    const uatBadgeClasses = (status?: string) => {
+        switch ((status || '').toUpperCase()) {
+            case 'PASS':
+                return 'bg-emerald-100 text-emerald-800';
+            case 'SOFT FAIL':
+                return 'bg-amber-100 text-amber-800';
+            case 'FAIL':
+                return 'bg-rose-100 text-rose-800';
+            default:
+                return 'bg-gray-100 text-gray-700';
+        }
+    };
 
     if (loading) {
         return (
@@ -68,13 +98,19 @@ export function SkillLibrary() {
                     ) : (
                         filteredCategories.map(category => (
                             <div key={category.id} className="mb-4">
-                                <h3 className="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider">{category.name}</h3>
+                                <div className="px-3 py-2 flex items-center justify-between">
+                                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">{category.name}</h3>
+                                    <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                                        {searchTerm ? `${category.visibleCount}/${category.totalCount}` : category.totalCount}
+                                    </span>
+                                </div>
                                 <div className="space-y-1">
                                     {category.skills.map(skill => (
                                         <button
                                             key={skill.id}
                                             onClick={() => {
                                                 setSelectedSkill(skill);
+                                                setViewMode('skill');
                                                 trackEvent('skill_viewed', {
                                                     skillId: skill.id,
                                                     skillTitle: skill.title,
@@ -88,9 +124,14 @@ export function SkillLibrary() {
                                                 }`}
                                         >
                                             <span className="truncate">{skill.title}</span>
-                                            {skill.difficulty === 'Easy' && <span className="text-[10px] bg-green-100 text-green-800 px-1.5 py-0.5 rounded">Easy</span>}
-                                            {skill.difficulty === 'Medium' && <span className="text-[10px] bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded">Med</span>}
-                                            {skill.difficulty === 'Advanced' && <span className="text-[10px] bg-red-100 text-red-800 px-1.5 py-0.5 rounded">Adv</span>}
+                                            <span className="flex items-center gap-1">
+                                                {skill.difficulty === 'Easy' && <span className="text-[10px] bg-green-100 text-green-800 px-1.5 py-0.5 rounded">Easy</span>}
+                                                {skill.difficulty === 'Medium' && <span className="text-[10px] bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded">Med</span>}
+                                                {skill.difficulty === 'Advanced' && <span className="text-[10px] bg-red-100 text-red-800 px-1.5 py-0.5 rounded">Adv</span>}
+                                                <span className={`text-[10px] px-1.5 py-0.5 rounded ${uatBadgeClasses(skill.uatStatus)}`}>
+                                                    {skill.uatStatus || 'Not Run'}
+                                                </span>
+                                            </span>
                                         </button>
                                     ))}
                                 </div>
@@ -112,24 +153,184 @@ export function SkillLibrary() {
                                     <span className="text-xs text-gray-500 font-mono">{selectedSkill.id}.skill.md</span>
                                 </div>
                                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedSkill.title}</h1>
+                                {(selectedSkill.riskLevel || selectedSkill.autonomy || selectedSkill.allowedRoles) && (
+                                    <div className="mt-3 flex flex-wrap gap-2">
+                                        {selectedSkill.riskLevel && (
+                                            <span className="px-2 py-1 text-[11px] font-semibold bg-rose-100 text-rose-800 rounded-full">
+                                                Risk: {selectedSkill.riskLevel}
+                                            </span>
+                                        )}
+                                        {selectedSkill.autonomy && (
+                                            <span className="px-2 py-1 text-[11px] font-semibold bg-amber-100 text-amber-800 rounded-full">
+                                                Autonomy: {selectedSkill.autonomy}
+                                            </span>
+                                        )}
+                                        {selectedSkill.allowedRoles && (
+                                            <span className="px-2 py-1 text-[11px] font-semibold bg-sky-100 text-sky-800 rounded-full">
+                                                Roles: {selectedSkill.allowedRoles}
+                                            </span>
+                                        )}
+                                        {selectedSkill.allowedPhases && (
+                                            <span className="px-2 py-1 text-[11px] font-semibold bg-emerald-100 text-emerald-800 rounded-full">
+                                                Phases: {selectedSkill.allowedPhases}
+                                            </span>
+                                        )}
+                                        {selectedSkill.authorityScope && (
+                                            <span className="px-2 py-1 text-[11px] font-semibold bg-indigo-100 text-indigo-800 rounded-full">
+                                                Scope: {selectedSkill.authorityScope}
+                                            </span>
+                                        )}
+                                        {selectedSkill.uatStatus && (
+                                            <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${uatBadgeClasses(selectedSkill.uatStatus)}`}>
+                                                UAT: {selectedSkill.uatStatus}
+                                            </span>
+                                        )}
+                                        {typeof selectedSkill.uatScore === 'number' && (
+                                            <span className="px-2 py-1 text-[11px] font-semibold bg-gray-100 text-gray-700 rounded-full">
+                                                Score: {selectedSkill.uatScore}%
+                                            </span>
+                                        )}
+                                        {selectedSkill.uatQuality && (
+                                            <span className="px-2 py-1 text-[11px] font-semibold bg-slate-100 text-slate-700 rounded-full">
+                                                Quality: {selectedSkill.uatQuality}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                            <button
-                                onClick={() => {
-                                    navigator.clipboard.writeText(selectedSkill.content || '');
-                                    trackEvent('skill_copied', {
-                                        skillId: selectedSkill.id,
-                                        skillTitle: selectedSkill.title,
-                                        domain: selectedSkill.domain,
-                                    });
-                                    alert('Copied raw markdown!');
-                                }}
-                                className="px-3 py-1.5 text-xs font-medium bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
-                            >
-                                📋 Copy Raw
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <div className="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-700 p-1 shadow-inner">
+                                    <button
+                                        onClick={() => setViewMode('skill')}
+                                        className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-colors ${viewMode === 'skill'
+                                            ? 'bg-white text-emerald-700 shadow-sm'
+                                            : 'text-gray-500 dark:text-gray-200'
+                                            }`}
+                                    >
+                                        Skill
+                                    </button>
+                                    <button
+                                        onClick={() => setViewMode('uat')}
+                                        className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-colors ${viewMode === 'uat'
+                                            ? 'bg-white text-emerald-700 shadow-sm'
+                                            : 'text-gray-500 dark:text-gray-200'
+                                            }`}
+                                    >
+                                        UAT
+                                    </button>
+                                </div>
+                                {viewMode === 'uat' && (
+                                    <div className="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-700 p-1 shadow-inner">
+                                        <button
+                                            onClick={() => setUatEditMode(false)}
+                                            className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-colors ${!uatEditMode
+                                                ? 'bg-white text-emerald-700 shadow-sm'
+                                                : 'text-gray-500 dark:text-gray-200'
+                                                }`}
+                                        >
+                                            View
+                                        </button>
+                                        <button
+                                            onClick={() => setUatEditMode(true)}
+                                            className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-colors ${uatEditMode
+                                                ? 'bg-white text-emerald-700 shadow-sm'
+                                                : 'text-gray-500 dark:text-gray-200'
+                                                }`}
+                                        >
+                                            Edit
+                                        </button>
+                                    </div>
+                                )}
+                                <button
+                                    onClick={() => {
+                                        const raw = viewMode === 'uat' ? (selectedSkill.uatContent || '') : (selectedSkill.content || '');
+                                        navigator.clipboard.writeText(raw);
+                                        trackEvent('skill_copied', {
+                                            skillId: selectedSkill.id,
+                                            skillTitle: selectedSkill.title,
+                                            domain: selectedSkill.domain,
+                                        });
+                                        alert('Copied raw markdown!');
+                                    }}
+                                    className="px-3 py-1.5 text-xs font-medium bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                                >
+                                    📋 Copy Raw
+                                </button>
+                            </div>
                         </div>
                         <div className="flex-1 overflow-y-auto p-4 md:p-8 prose dark:prose-invert max-w-none">
-                            <ReactMarkdown>{selectedSkill.content || ''}</ReactMarkdown>
+                            {viewMode === 'uat' ? (
+                                selectedSkill.uatContent ? (
+                                    (() => {
+                                        if (uatEditMode) {
+                                            return (
+                                                <div className="space-y-3 not-prose">
+                                                    <textarea
+                                                        value={uatDraft}
+                                                        onChange={(e) => setUatDraft(e.target.value)}
+                                                        className="w-full min-h-[420px] p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm font-mono"
+                                                        placeholder="Edit UAT markdown..."
+                                                    />
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={async () => {
+                                                                if (!selectedSkill) return;
+                                                                const result = await saveUatContent(selectedSkill.id, uatDraft);
+                                                                if (!result) return;
+                                                                setSelectedSkill(prev => prev ? {
+                                                                    ...prev,
+                                                                    uatContent: result.content,
+                                                                    uatStatus: result.status,
+                                                                    uatScore: result.score,
+                                                                    uatQuality: result.quality,
+                                                                } : prev);
+                                                                setCategories(prev => prev.map(cat => ({
+                                                                    ...cat,
+                                                                    skills: cat.skills.map(skill => skill.id === selectedSkill.id ? {
+                                                                        ...skill,
+                                                                        uatContent: result.content,
+                                                                        uatStatus: result.status,
+                                                                        uatScore: result.score,
+                                                                        uatQuality: result.quality,
+                                                                    } : skill),
+                                                                })));
+                                                                setUatEditMode(false);
+                                                            }}
+                                                            className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700"
+                                                        >
+                                                            Save UAT
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                setUatDraft(selectedSkill?.uatContent || '');
+                                                                setUatEditMode(false);
+                                                            }}
+                                                            className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                    <p className="text-xs text-gray-500">
+                                                        UAT editor lưu trực tiếp vào file `.md`. Dùng markdown chuẩn.
+                                                    </p>
+                                                </div>
+                                            );
+                                        }
+
+                                        return (
+                                            <ReactMarkdown
+                                                remarkPlugins={[remarkGfm]}
+                                            >
+                                                {selectedSkill.uatContent}
+                                            </ReactMarkdown>
+                                        );
+                                    })()
+                                ) : (
+                                    <div className="text-sm text-gray-500">No UAT record found for this skill.</div>
+                                )
+                            ) : (
+                                <ReactMarkdown>{selectedSkill.content || ''}</ReactMarkdown>
+                            )}
                         </div>
                     </>
                 ) : (

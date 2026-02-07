@@ -1,7 +1,7 @@
 # CVF SKILL SPECIFICATION
 Canonical Definition of a CVF Skill
 
-> **Version:** 1.0.0  
+> **Version:** 1.1.0  
 > **Status:** Active  
 > **Related:** [v1.2 SKILL_CONTRACT_SPEC](../../../EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/SKILL_CONTRACT_SPEC.md)
 
@@ -52,6 +52,14 @@ it cannot exist as a CVF skill.
 - Decision references
 - Output validation hooks
 
+### 2.7 Autonomous Extension (Required for Autonomous Skills)
+- Governance Summary block
+- Execution Constraints
+- Validation Hooks
+- UAT Binding
+
+See [CVF_AUTONOMOUS_EXTENSION](./CVF_AUTONOMOUS_EXTENSION.md).
+
 ---
 
 ## 3. Skill Classification
@@ -92,3 +100,4 @@ is considered a **governance failure**, not a technical error.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-02-07 | Initial specification |
+| 1.1.0 | 2026-02-07 | Add autonomous extension requirement |

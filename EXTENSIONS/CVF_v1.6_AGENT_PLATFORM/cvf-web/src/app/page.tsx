@@ -97,6 +97,7 @@ export default function Home() {
   const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
   const [isAgentMinimized, setIsAgentMinimized] = useState(false);
   const [userRole, setUserRole] = useState('admin');
+  const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
 
   const { executions, addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
   const { settings } = useSettings();
@@ -375,6 +376,11 @@ export default function Home() {
                 <span>CVF v1.6</span>
               </h1>
             </Link>
+            {mockAiEnabled && (
+              <span className="ml-3 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide rounded-full bg-amber-100 text-amber-700 border border-amber-200">
+                Demo Mode
+              </span>
+            )}
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-4">

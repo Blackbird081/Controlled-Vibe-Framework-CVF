@@ -9,7 +9,7 @@
 ## 🎯 Objective
 
 Tích hợp `CVF_SKILL_LIBRARY` như **Governance Layer** để kiểm soát:
-1. **User Skills** (v1.5.2 SKILL_LIBRARY_FOR_END_USERS - 69 skills)
+1. **User Skills** (v1.5.2 SKILL_LIBRARY_FOR_END_USERS - 114 skills)
 2. **Agent Skills** (v1.6 AGENT_PLATFORM - 8 tools)
 3. **Agent Output Quality** (UAT framework)
 
@@ -30,10 +30,10 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 │   └── GOVERNANCE_DASHBOARD_DESIGN.md
 │
 ├── registry/                      ← NEW: Skill governance records
-│   ├── user-skills/               → References v1.5.2 (69 files)
+│   ├── user-skills/               → References v1.5.2 (114 files)
 │   │   ├── USR-001_code_review.gov.md
 │   │   ├── USR-002_architecture_review.gov.md
-│   │   └── ... (69 total)
+│   │   └── ... (114 total)
 │   │
 │   └── agent-skills/              → References v1.6 tools (8 files)
 │       ├── AGT-001_web_search.gov.md
@@ -43,7 +43,10 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 ├── uat/                           ← UAT framework
 │   ├── AGENT_AI_UAT_CVF_TEMPLATE.md
 │   ├── SKILL_MAPPING_UAT_BINDING.md
-│   └── results/
+│   ├── generate_uat_records.py
+│   ├── score_uat.py
+│   ├── results/
+│   └── reports/
 │
 └── examples/
     └── SK-001_CODE_REVIEW_ASSISTANT.md
@@ -69,7 +72,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
       │    ↓                     ↓        │
       │  v1.5.2              v1.6         │
       │  SKILL_LIBRARY       AGENT        │
-      │  (69 skills)         PLATFORM     │
+      │  (114 skills)        PLATFORM     │
       │  [Content]           (8 tools)    │
       │                      [Execution]  │
       │                                   │
@@ -94,12 +97,12 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | 1.5 | Create `uat/` folder structure | 5 min | ⬜ |
 | 1.6 | Update README.md with new structure | 15 min | ⬜ |
 
-### Phase 2: User Skills Registry (69 skills)
+### Phase 2: User Skills Registry (114 skills)
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 2.1 | Create `.gov.md` template | 10 min | ⬜ |
 | 2.2 | Create Python script to generate registry files | 30 min | ⬜ |
-| 2.3 | Run script to generate 69 .gov.md files | 5 min | ⬜ |
+| 2.3 | Run script to generate 114 .gov.md files | 5 min | ⬜ |
 | 2.4 | Manually assign Risk Levels (batch by domain) | 1 hour | ⬜ |
 | 2.5 | Validate all registry files | 15 min | ⬜ |
 
@@ -118,6 +121,8 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | 4.2 | Create UAT binding for user skills | 30 min | ⬜ |
 | 4.3 | Create UAT binding for agent skills | 30 min | ⬜ |
 | 4.4 | Create sample UAT results | 20 min | ⬜ |
+| 4.5 | Seed UAT cases by domain | 20 min | ⬜ |
+| 4.6 | Auto-score UAT + export report | 20 min | ⬜ |
 
 ### Phase 5: Documentation & Links
 | # | Task | Est. | Status |
@@ -190,7 +195,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 
 ## 🎯 Success Criteria
 
-- [ ] All 69 user skills have .gov.md files
+- [ ] All 114 user skills have .gov.md files
 - [ ] All 8 agent tools have .gov.md files
 - [ ] Risk Levels assigned to all skills
 - [ ] UAT templates linked to registry

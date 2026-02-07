@@ -6,6 +6,15 @@ export interface Skill {
     summary: string;
     path: string;
     content?: string;
+    riskLevel?: string;
+    allowedRoles?: string;
+    allowedPhases?: string;
+    authorityScope?: string;
+    autonomy?: string;
+    uatStatus?: string;
+    uatContent?: string;
+    uatScore?: number;
+    uatQuality?: string;
 }
 
 export interface SkillCategory {

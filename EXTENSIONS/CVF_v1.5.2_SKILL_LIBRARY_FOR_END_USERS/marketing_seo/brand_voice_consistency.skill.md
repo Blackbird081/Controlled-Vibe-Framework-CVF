@@ -26,6 +26,43 @@ Không yêu cầu.
 
 ---
 
+## 🛡️ Governance Summary (CVF Autonomous)
+
+| Field | Value |
+|-------|-------|
+| Risk Level | R1 |
+| Allowed Roles | User, Reviewer |
+| Allowed Phases | Discovery, Design |
+| Authority Scope | Tactical |
+| Autonomy | Auto + Audit |
+| Audit Hooks | Input completeness, Output structure, Scope guard |
+
+---
+
+## ⛔ Execution Constraints
+
+- Không thực thi ngoài phạm vi được khai báo
+- Tự động dừng nếu thiếu input bắt buộc
+- Với rủi ro R1: auto + audit
+- Không ghi/đổi dữ liệu hệ thống nếu chưa được xác nhận
+
+---
+
+## ✅ Validation Hooks
+
+- Check đủ input bắt buộc trước khi bắt đầu
+- Check output đúng format đã định nghĩa
+- Check không vượt scope và không tạo hành động ngoài yêu cầu
+- Check output có bước tiếp theo cụ thể
+
+---
+
+## 🧪 UAT Binding
+
+- UAT Record: [brand_voice_consistency](../../../governance/skill-library/uat/results/UAT-brand_voice_consistency.md)
+- UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
+
+---
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |

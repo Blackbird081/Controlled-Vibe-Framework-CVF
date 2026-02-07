@@ -189,6 +189,37 @@ export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgen
                             <WorkflowSelector onSelect={handleStartWorkflow} />
                         </div>
 
+                        {/* Multi-Agent Mode Summary */}
+                        <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800">
+                            <div className="flex items-center justify-between mb-2">
+                                <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                                    🧩 Multi-Agent Mode
+                                </h3>
+                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${settings.preferences.multiAgentMode === 'single'
+                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                                    : 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                                    }`}>
+                                    {settings.preferences.multiAgentMode === 'single' ? 'Single AI' : 'Multi AI'}
+                                </span>
+                            </div>
+                            <p className="text-xs text-gray-500 mb-3">
+                                Cấu hình trong Settings → Preferences.
+                            </p>
+                            {settings.preferences.multiAgentMode === 'multi' && (
+                                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-300">
+                                    <div>Orchestrator: {settings.preferences.agentProviders.orchestrator}</div>
+                                    <div>Architect: {settings.preferences.agentProviders.architect}</div>
+                                    <div>Builder: {settings.preferences.agentProviders.builder}</div>
+                                    <div>Reviewer: {settings.preferences.agentProviders.reviewer}</div>
+                                </div>
+                            )}
+                            {settings.preferences.multiAgentMode === 'single' && (
+                                <div className="text-xs text-gray-600 dark:text-gray-300">
+                                    Dùng 1 provider cho tất cả vai trò: {settings.preferences.defaultProvider}
+                                </div>
+                            )}
+                        </div>
+
                         {/* Available Agents */}
                         <div className="mt-8">
                             <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">

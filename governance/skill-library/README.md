@@ -1,6 +1,6 @@
 # CVF Skill Library - Governance Layer
 
-> **Version:** 1.2.0  
+> **Version:** 1.4.0  
 > **Status:** Active  
 > **Location:** `governance/skill-library/`  
 > **Last Updated:** Feb 07, 2026
@@ -11,7 +11,7 @@
 
 CVF Skill Governance là lớp kiểm soát hoàn chỉnh cho việc quản lý **Skill/Capability** trong hệ thống AI Agent. Module này:
 
-- **Kiểm soát User Skills** (v1.5.2 SKILL_LIBRARY - 69 skills)
+- **Kiểm soát User Skills** (v1.5.2 SKILL_LIBRARY - 114 skills)
 - **Kiểm soát Agent Skills** (v1.6 AGENT_PLATFORM - 8 tools)
 - **Đánh giá rủi ro** (Risk Assessment) cho mỗi skill
 - **Gán quyền hạn** (Authority Mapping) cho agent
@@ -34,10 +34,11 @@ governance/skill-library/
 ├── README.md                              # This file
 ├── INTEGRATION_ROADMAP.md                 # Implementation plan
 │
-├── specs/                                 # Governance specifications (8 files)
+├── specs/                                 # Governance specifications (9 files)
 │   ├── CVF_SKILL_SPEC.md                  # Skill format specification
 │   ├── CVF_RISK_AUTHORITY_MAPPING.md      # Risk Level → Agent Authority
 │   ├── CVF_SKILL_RISK_AUTHORITY_LINK.md   # Skill ↔ Risk ↔ Authority binding
+│   ├── CVF_AUTONOMOUS_EXTENSION.md        # Autonomous governance block
 │   ├── SKILL_MAPPING_RECORD.md            # Template for skill records
 │   ├── EXTERNAL_SKILL_INTAKE.md           # External skill import process
 │   ├── SKILL_ADAPTATION_GUIDE.md          # CVF compliance adaptation
@@ -47,19 +48,40 @@ governance/skill-library/
 ├── registry/                              # Skill governance records
 │   ├── generate_user_skills.py            # 🔧 Script: generate .gov.md files
 │   ├── validate_registry.py               # 🔧 Script: CI/CD validation
-│   ├── user-skills/                       # → v1.5.2 skills (69 .gov.md + INDEX)
+│   ├── import_skillsmp.py                 # 🔧 Script: import SkillsMP shortlist
+│   ├── convert_shortlist_to_cvf.py        # 🔧 Script: shortlist → CVF skills
+│   ├── inject_autonomous_extension.py     # 🔧 Script: add governance block
+│   ├── generate_mapping_records.py        # 🔧 Script: mapping records
+│   ├── run_external_intake.py             # 🔧 Script: end-to-end intake
+│   ├── user-skills/                       # → v1.5.2 skills (114 .gov.md + INDEX)
 │   │   ├── INDEX.md
 │   │   ├── USR-001_*.gov.md
 │   │   └── ...
-│   └── agent-skills/                      # → v1.6 tools (8 .gov.md + INDEX)
+│   ├── agent-skills/                      # → v1.6 tools (8 .gov.md + INDEX)
 │       ├── INDEX.md
 │       ├── AGT-001_web_search.gov.md
 │       └── ...
+│   ├── mapping-records/                   # Skill mapping records (per-skill)
+│   │   ├── SKILL-<skill_id>.md
+│   │   └── ...
+│   └── external-sources/                  # External intake (shortlists)
+│       └── skillsmp/                      # SkillsMP shortlist outputs
+│           ├── skillsmp_shortlist.json
+│           ├── skillsmp_shortlist.csv
+│           └── skillsmp_shortlist.md
 │
 ├── uat/                                   # UAT framework
 │   ├── AGENT_AI_UAT_CVF_TEMPLATE.md       # UAT template
 │   ├── SKILL_MAPPING_UAT_BINDING.md       # UAT ↔ Skill binding
+│   ├── generate_uat_records.py            # 🔧 Script: per-skill UAT records
+│   ├── score_uat.py                        # 🔧 Script: UAT scoring + reports
 │   └── results/                           # UAT test results
+│       ├── UAT-<skill_id>.md
+│       └── ...
+│   └── reports/                           # UAT score reports
+│       ├── uat_score_report.json
+│       ├── uat_score_report.csv
+│       └── uat_score_report.md
 │
 └── examples/
     └── SK-001_CODE_REVIEW_ASSISTANT.md    # Complete example
@@ -144,7 +166,7 @@ CVF v1.5.2 Skill Library (Content)
 ## 🚀 Status
 
 - [x] Structure setup completed
-- [x] User Skills registry (69 skills)
+- [x] User Skills registry (114 skills)
 - [x] Agent Skills registry (8 tools)
 - [x] UAT templates integrated
 - [x] CI/CD auto-run registry validation
@@ -163,12 +185,116 @@ python registry/generate_user_skills.py
 ```
 
 Script tự động:
-- Scan v1.5.2 SKILL_LIBRARY (69 skills, 12 domains)
+- Scan v1.5.2 SKILL_LIBRARY (114 skills, 12 domains)
 - Generate `.gov.md` files với metadata chuẩn
 - Assign Risk Level mặc định theo domain
 - Tạo INDEX.md
 
 **Output:** `registry/user-skills/USR-*.gov.md`
+
+---
+
+### Import Skills from SkillsMP (External Intake)
+
+```bash
+cd governance/skill-library
+SKILLSMP_API_KEY="***" python registry/import_skillsmp.py --limit 50
+```
+
+Script tự động:
+- Pull skills từ SkillsMP theo ưu tiên **App Development**
+- Lọc theo các domain đã có trong CVF
+- Chọn shortlist 50 skills và map về CVF domain
+
+**Output:**
+- `registry/external-sources/skillsmp/skillsmp_shortlist.json`
+- `registry/external-sources/skillsmp/skillsmp_shortlist.csv`
+- `registry/external-sources/skillsmp/skillsmp_shortlist.md`
+
+---
+
+### Run External Intake (End-to-End)
+
+```bash
+cd governance/skill-library
+SKILLSMP_API_KEY="***" python registry/run_external_intake.py --limit 50 --per-category 50
+```
+
+Script tự động:
+- Import shortlist → Convert → Inject Autonomous
+- Generate mapping records + UAT records
+- Validate skills + regenerate governance registry
+
+---
+
+### Convert SkillsMP Shortlist → CVF Skills
+
+```bash
+cd governance/skill-library
+python registry/convert_shortlist_to_cvf.py --limit 50
+```
+
+Script tự động:
+- Dedupe theo repo (ưu tiên mô tả tốt hơn)
+- Tạo `.skill.md` chuẩn CVF theo domain
+- Ghi mapping tại `skillsmp_to_cvf_map.md`
+
+**Output:**
+- `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/<domain>/*.skill.md`
+- `registry/external-sources/skillsmp/skillsmp_to_cvf_map.md`
+
+---
+
+### Inject CVF Autonomous Extension (All Skills)
+
+```bash
+cd governance/skill-library
+python registry/inject_autonomous_extension.py
+```
+
+Script tự động:
+- Thêm Governance Summary + Constraints + Validation + UAT Binding
+- Bảo đảm skill sẵn sàng cho autonomous execution
+
+---
+
+### Generate Skill Mapping Records
+
+```bash
+cd governance/skill-library
+python registry/generate_mapping_records.py
+```
+
+Script tự động:
+- Tạo mapping record cho từng skill
+- Đồng bộ risk/authority từ governance block
+
+---
+
+### Generate UAT Records (Per Skill)
+
+```bash
+cd governance/skill-library
+python uat/generate_uat_records.py
+```
+
+Script tự động:
+- Tạo file UAT cho từng skill
+- Seed test case theo domain
+- Liên kết mapping record + risk level
+
+---
+
+### Score UAT & Export Reports
+
+```bash
+cd governance/skill-library
+python uat/score_uat.py
+```
+
+Script tự động:
+- Tự chấm điểm UAT theo rule
+- Xuất report `.json/.csv/.md` để hiển thị trên UI
 
 ---
 
@@ -203,13 +329,24 @@ Registry validation tự chạy trong CI khi có thay đổi:
 ### Registry Index
 | Registry | Count | Link |
 |----------|-------|------|
-| User Skills | 69 | [INDEX.md](./registry/user-skills/INDEX.md) |
+| User Skills | 114 | [INDEX.md](./registry/user-skills/INDEX.md) |
 | Agent Skills | 8 | [INDEX.md](./registry/agent-skills/INDEX.md) |
+
+### Mapping Records
+| Type | Link |
+|------|------|
+| Skill Mapping Records | [mapping-records](./registry/mapping-records/) |
+
+### UAT Records
+| Type | Link |
+|------|------|
+| Per-skill UAT Results | [results](./uat/results/) |
 
 ### Specifications
 | Document | Purpose |
 |----------|---------|
 | [CVF_SKILL_SPEC](./specs/CVF_SKILL_SPEC.md) | Define a valid skill |
+| [CVF_AUTONOMOUS_EXTENSION](./specs/CVF_AUTONOMOUS_EXTENSION.md) | Mandatory governance block |
 | [SKILL_MAPPING_RECORD](./specs/SKILL_MAPPING_RECORD.md) | Document a specific skill |
 | [CVF_RISK_AUTHORITY_MAPPING](./specs/CVF_RISK_AUTHORITY_MAPPING.md) | Understand risk → authority |
 

@@ -28,6 +28,43 @@
 
 ---
 
+## 🛡️ Governance Summary (CVF Autonomous)
+
+| Field | Value |
+|-------|-------|
+| Risk Level | R2 |
+| Allowed Roles | User, Reviewer |
+| Allowed Phases | Discovery, Review |
+| Authority Scope | Tactical |
+| Autonomy | Human confirmation required |
+| Audit Hooks | Input completeness, Output structure, Scope guard |
+
+---
+
+## ⛔ Execution Constraints
+
+- Không thực thi ngoài phạm vi được khai báo
+- Tự động dừng nếu thiếu input bắt buộc
+- Với rủi ro R2: human confirmation required
+- Không ghi/đổi dữ liệu hệ thống nếu chưa được xác nhận
+
+---
+
+## ✅ Validation Hooks
+
+- Check đủ input bắt buộc trước khi bắt đầu
+- Check output đúng format đã định nghĩa
+- Check không vượt scope và không tạo hành động ngoài yêu cầu
+- Check output có bước tiếp theo cụ thể
+
+---
+
+## 🧪 UAT Binding
+
+- UAT Record: [03_roi_calculator_review](../../../governance/skill-library/uat/results/UAT-03_roi_calculator_review.md)
+- UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
+
+---
 ## 📋 Form Input
 
 ### 1. Investment/Project Name

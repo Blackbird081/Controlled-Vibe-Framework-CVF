@@ -179,6 +179,12 @@ SkillLibrary.tsx    ✅ tests → 100% (branches ~90%)
 - ✅ Analytics audit event tracking + retry event logging
 - ✅ UI responsive tweaks (History/Result/Analytics)
 - ✅ Vitest full run clean (23 files / 176 tests, 85%+ branches)
+- ✅ Skill Library UAT editor (View/Edit + save markdown)
+- ✅ Demo Mode badge when `NEXT_PUBLIC_CVF_MOCK_AI=1`
+- ✅ Tools modal marked as “Coming Soon” (avoid cost confusion)
+- ✅ Spec export 강화: Input Coverage + Execution Constraints + Validation Hooks
+- ✅ Output Template auto-injected for Strategy Analysis + fallback template for all
+- ✅ Default export mode = Governance + migrate existing settings
 
 ### Items ngoài phạm vi v1.6 (từ Assessment)
 - v1.3: Dashboard audit log (UI-only) → ✅ done (2026-02-07)
@@ -251,9 +257,31 @@ SkillLibrary.tsx    ✅ tests → 100% (branches ~90%)
 
 ---
 
+## 🧪 Independent Review Improvements (2026-02-07)
+
+**Mục tiêu:** Ghi nhận các điểm cần hoàn thiện sau đánh giá độc lập.
+
+### Critical
+- [ ] Chuyển AI provider calls sang backend proxy (không gọi trực tiếp từ browser)
+- [ ] Remove/lock `anthropic-dangerous-direct-browser-access` usage trong client
+
+### High
+- [ ] Auth thật (server-side session + hash password + rate limit), thay vì UI-only + default creds
+- [ ] Tool execution backend (sandbox + permission model) trước khi mở “execute”
+
+### Medium
+- [x] UAT editor riêng (markdown View/Edit + save)
+- [ ] Analytics storage server-side (đa user) + audit log (nếu rollout team rộng)
+
+### Low
+- [x] Badge “Mock/Demo” khi bật `NEXT_PUBLIC_CVF_MOCK_AI=1`
+- [ ] Cảnh báo cost/rate-limit trong UI khi bật AI providers
+
+---
+
 ## 🌐 Domain Refinement (v1.5.2) — Completed ✅
 
-**Trạng thái:** Hoàn tất Quality Pass 2 cho 12 domains / 69 skills.  
+**Trạng thái:** Hoàn tất Quality Pass 2 cho 12 domains / 114 skills.  
 **Nguồn theo dõi:** `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ROADMAP.md`
 
 ---

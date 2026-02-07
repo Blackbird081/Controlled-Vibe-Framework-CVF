@@ -11,7 +11,7 @@ All skills must have a governance record before UAT:
 
 | Registry | Location | Count |
 |----------|----------|-------|
-| **User Skills** | `../registry/user-skills/` | 69 skills |
+| **User Skills** | `../registry/user-skills/` | 114 skills |
 | **Agent Skills** | `../registry/agent-skills/` | 8 tools |
 
 **Quick Links:**

@@ -21,6 +21,7 @@ Thumbs.db
 
 # Reference materials (not part of CVF)
 vibecode-kit/
+public/
 
 # Logs
 *.log

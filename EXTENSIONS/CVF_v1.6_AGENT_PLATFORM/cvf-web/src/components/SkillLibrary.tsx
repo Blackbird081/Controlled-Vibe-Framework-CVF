@@ -279,13 +279,13 @@ export function SkillLibrary() {
                                 </span>
                             )}
                         </div>
-                        <div className="mt-4 flex flex-wrap gap-3 text-xs text-gray-600 items-center">
-                            <label className="flex items-center gap-2">
-                                Sort:
+                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs text-gray-600 items-end relative z-10">
+                            <label className="flex flex-col gap-1">
+                                <span>Sort</span>
                                 <select
                                     value={reportSort}
                                     onChange={(e) => setReportSort(e.target.value as typeof reportSort)}
-                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                    className="w-full border border-gray-200 rounded-md px-3 py-2 bg-white dark:bg-gray-800 text-sm"
                                 >
                                     <option value="count">Count</option>
                                     <option value="coverage">Coverage</option>
@@ -293,18 +293,21 @@ export function SkillLibrary() {
                                     <option value="name">Name</option>
                                 </select>
                             </label>
-                            <button
-                                onClick={() => setReportSortDir(prev => prev === 'desc' ? 'asc' : 'desc')}
-                                className="px-2 py-1 rounded-md border border-gray-200 bg-white dark:bg-gray-800 text-xs"
-                            >
-                                {reportSortDir === 'desc' ? 'Desc' : 'Asc'}
-                            </button>
-                            <label className="flex items-center gap-2">
-                                Min Count
+                            <div className="flex flex-col gap-1">
+                                <span>Sort Dir</span>
+                                <button
+                                    onClick={() => setReportSortDir(prev => prev === 'desc' ? 'asc' : 'desc')}
+                                    className="w-full px-3 py-2 rounded-md border border-gray-200 bg-white dark:bg-gray-800 text-sm"
+                                >
+                                    {reportSortDir === 'desc' ? 'Desc' : 'Asc'}
+                                </button>
+                            </div>
+                            <label className="flex flex-col gap-1">
+                                <span>Min Count</span>
                                 <select
                                     value={minCount}
                                     onChange={(e) => setMinCount(Number(e.target.value))}
-                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                    className="w-full border border-gray-200 rounded-md px-3 py-2 bg-white dark:bg-gray-800 text-sm"
                                 >
                                     <option value={0}>0</option>
                                     <option value={5}>5</option>
@@ -312,12 +315,12 @@ export function SkillLibrary() {
                                     <option value={20}>20</option>
                                 </select>
                             </label>
-                            <label className="flex items-center gap-2">
-                                Min Coverage
+                            <label className="flex flex-col gap-1">
+                                <span>Min Coverage</span>
                                 <select
                                     value={minCoverage}
                                     onChange={(e) => setMinCoverage(Number(e.target.value))}
-                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                    className="w-full border border-gray-200 rounded-md px-3 py-2 bg-white dark:bg-gray-800 text-sm"
                                 >
                                     <option value={0}>0%</option>
                                     <option value={20}>20%</option>
@@ -325,12 +328,12 @@ export function SkillLibrary() {
                                     <option value={80}>80%</option>
                                 </select>
                             </label>
-                            <label className="flex items-center gap-2">
-                                Min Spec Score
+                            <label className="flex flex-col gap-1">
+                                <span>Min Spec Score</span>
                                 <select
                                     value={minSpecScore}
                                     onChange={(e) => setMinSpecScore(Number(e.target.value))}
-                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                    className="w-full border border-gray-200 rounded-md px-3 py-2 bg-white dark:bg-gray-800 text-sm"
                                 >
                                     <option value={0}>0</option>
                                     <option value={50}>50</option>
@@ -338,20 +341,21 @@ export function SkillLibrary() {
                                     <option value={85}>85</option>
                                 </select>
                             </label>
-                            <label className="flex items-center gap-2">
+                            <label className="flex items-center gap-2 mt-2 sm:mt-6">
                                 <input
                                     type="checkbox"
                                     checked={onlyWithUat}
                                     onChange={(e) => setOnlyWithUat(e.target.checked)}
+                                    className="h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                                 />
-                                Only domains with Output UAT
+                                <span>Only domains with Output UAT</span>
                             </label>
                         </div>
-                        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-gray-600">
+                        <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-gray-600 relative z-10">
                             <span>
                                 Showing {reportRangeStart}-{reportRangeEnd} of {filteredReports.length}
                             </span>
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                                 <span>Rows:</span>
                                 <select
                                     value={reportPageSize}
@@ -359,7 +363,7 @@ export function SkillLibrary() {
                                         setReportPageSize(Number(e.target.value));
                                         setReportPage(1);
                                     }}
-                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                    className="border border-gray-200 rounded-md px-3 py-2 bg-white dark:bg-gray-800 text-sm"
                                 >
                                     <option value={5}>5</option>
                                     <option value={10}>10</option>
@@ -369,7 +373,7 @@ export function SkillLibrary() {
                                 <button
                                     onClick={() => setReportPage(prev => Math.max(1, prev - 1))}
                                     disabled={safeReportPage === 1}
-                                    className={`px-2 py-1 rounded-md border ${safeReportPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}`}
+                                    className={`px-3 py-2 rounded-md border text-sm ${safeReportPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}`}
                                 >
                                     Prev
                                 </button>
@@ -379,7 +383,7 @@ export function SkillLibrary() {
                                 <button
                                     onClick={() => setReportPage(prev => Math.min(totalReportPages, prev + 1))}
                                     disabled={safeReportPage >= totalReportPages}
-                                    className={`px-2 py-1 rounded-md border ${safeReportPage >= totalReportPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}`}
+                                    className={`px-3 py-2 rounded-md border text-sm ${safeReportPage >= totalReportPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}`}
                                 >
                                     Next
                                 </button>
@@ -387,51 +391,94 @@ export function SkillLibrary() {
                         </div>
                     </div>
                     <div className="p-4 overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead>
-                                <tr className="text-left text-xs uppercase text-gray-500">
-                                    <th className="py-2">Domain</th>
-                                    <th className="py-2 text-right">Count</th>
-                                    <th className="py-2 text-right">Spec Avg</th>
-                                    <th className="py-2">Output UAT Coverage</th>
-                                    <th className="py-2">Spec Quality</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {paginatedReports.map(report => (
-                                    <tr key={report.id} className="border-t border-gray-100 dark:border-gray-700/60">
-                                        <td className="py-3 font-medium text-gray-800 dark:text-gray-200">{report.name}</td>
-                                        <td className="py-3 text-right text-gray-700 dark:text-gray-300">{report.total}</td>
-                                        <td className="py-3 text-right text-gray-700 dark:text-gray-300">
-                                            {report.specAvg !== null ? `${report.specAvg}%` : '—'}
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="flex items-center gap-2">
-                                                <div className="flex-1 h-2 rounded-full bg-gray-100 dark:bg-gray-700">
-                                                    <div
-                                                        className="h-2 rounded-full bg-emerald-500"
-                                                        style={{ width: `${report.coverage}%` }}
-                                                    />
-                                                </div>
-                                                <span className="text-xs text-gray-500 w-10 text-right">{report.coverage}%</span>
+                        {/* Mobile card layout */}
+                        <div className="space-y-3 md:hidden">
+                            {paginatedReports.map(report => (
+                                <div key={report.id} className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/60 p-3">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div className="font-semibold text-gray-800 dark:text-gray-100">{report.name}</div>
+                                        <div className="text-xs text-gray-500">Count: {report.total}</div>
+                                    </div>
+                                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                                        <div className="rounded-lg bg-gray-50 dark:bg-gray-900/50 p-2">
+                                            <div className="text-gray-500">Spec Avg</div>
+                                            <div className="font-semibold text-gray-800 dark:text-gray-100">
+                                                {report.specAvg !== null ? `${report.specAvg}%` : '—'}
                                             </div>
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="flex flex-wrap gap-1.5">
-                                                {Object.entries(report.qualityCounts).map(([quality, count]) => (
-                                                    <span
-                                                        key={quality}
-                                                        className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${qualityBadges[quality] || 'bg-gray-100 text-gray-700'}`}
-                                                    >
-                                                        {quality}: {count}
-                                                    </span>
-                                                ))}
+                                        </div>
+                                        <div className="rounded-lg bg-gray-50 dark:bg-gray-900/50 p-2">
+                                            <div className="text-gray-500">Output UAT</div>
+                                            <div className="font-semibold text-gray-800 dark:text-gray-100">{report.coverage}%</div>
+                                            <div className="mt-2 h-2 rounded-full bg-gray-100 dark:bg-gray-700">
+                                                <div
+                                                    className="h-2 rounded-full bg-emerald-500"
+                                                    style={{ width: `${report.coverage}%` }}
+                                                />
                                             </div>
-                                        </td>
+                                        </div>
+                                    </div>
+                                    <div className="mt-3 flex flex-wrap gap-1.5">
+                                        {Object.entries(report.qualityCounts).map(([quality, count]) => (
+                                            <span
+                                                key={quality}
+                                                className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${qualityBadges[quality] || 'bg-gray-100 text-gray-700'}`}
+                                            >
+                                                {quality}: {count}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop table layout */}
+                        <div className="hidden md:block">
+                            <table className="w-full text-sm min-w-[640px]">
+                                <thead>
+                                    <tr className="text-left text-xs uppercase text-gray-500">
+                                        <th className="py-2">Domain</th>
+                                        <th className="py-2 text-right">Count</th>
+                                        <th className="py-2 text-right">Spec Avg</th>
+                                        <th className="py-2">Output UAT Coverage</th>
+                                        <th className="py-2">Spec Quality</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {paginatedReports.map(report => (
+                                        <tr key={report.id} className="border-t border-gray-100 dark:border-gray-700/60">
+                                            <td className="py-3 font-medium text-gray-800 dark:text-gray-200">{report.name}</td>
+                                            <td className="py-3 text-right text-gray-700 dark:text-gray-300">{report.total}</td>
+                                            <td className="py-3 text-right text-gray-700 dark:text-gray-300">
+                                                {report.specAvg !== null ? `${report.specAvg}%` : '—'}
+                                            </td>
+                                            <td className="py-3">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="flex-1 h-2 rounded-full bg-gray-100 dark:bg-gray-700">
+                                                        <div
+                                                            className="h-2 rounded-full bg-emerald-500"
+                                                            style={{ width: `${report.coverage}%` }}
+                                                        />
+                                                    </div>
+                                                    <span className="text-xs text-gray-500 w-10 text-right">{report.coverage}%</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-3">
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {Object.entries(report.qualityCounts).map(([quality, count]) => (
+                                                        <span
+                                                            key={quality}
+                                                            className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${qualityBadges[quality] || 'bg-gray-100 text-gray-700'}`}
+                                                        >
+                                                            {quality}: {count}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 

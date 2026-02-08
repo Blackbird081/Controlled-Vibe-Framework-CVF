@@ -237,8 +237,6 @@ export function SkillLibrary() {
                                                     difficulty: skill.difficulty,
                                                 });
                                             }}
-                                            onDoubleClick={() => openSkillDetail(category.id, skill.id)}
-                                            title="Double click to open full page"
                                             className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between ${selectedSkill?.id === skill.id
                                                     ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-medium'
                                                     : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
@@ -246,6 +244,17 @@ export function SkillLibrary() {
                                         >
                                             <span className="truncate">{skill.title}</span>
                                             <span className="flex items-center gap-1">
+                                                <button
+                                                    type="button"
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        openSkillDetail(category.id, skill.id);
+                                                    }}
+                                                    className="ml-1 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] bg-blue-100 text-blue-700 hover:bg-blue-200"
+                                                    title="Open full page"
+                                                >
+                                                    ↗ Open
+                                                </button>
                                                 {skill.difficulty === 'Easy' && <span className="text-[10px] bg-green-100 text-green-800 px-1.5 py-0.5 rounded">Easy</span>}
                                                 {skill.difficulty === 'Medium' && <span className="text-[10px] bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded">Med</span>}
                                                 {skill.difficulty === 'Advanced' && <span className="text-[10px] bg-red-100 text-red-800 px-1.5 py-0.5 rounded">Adv</span>}

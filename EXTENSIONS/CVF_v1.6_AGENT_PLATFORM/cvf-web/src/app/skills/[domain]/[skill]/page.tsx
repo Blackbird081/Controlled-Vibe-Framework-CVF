@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { getSkillDetail } from '@/actions/skills';
 import { SkillDetailView } from '@/components/SkillDetailView';
 
+export const dynamic = 'force-dynamic';
+
 type PageProps = {
     params: {
         domain: string;

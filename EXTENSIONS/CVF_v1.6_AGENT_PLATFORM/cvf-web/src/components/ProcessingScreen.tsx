@@ -79,7 +79,9 @@ export function ProcessingScreen({
             }
 
             if (enforcement?.status === 'CLARIFY') {
-                const missing = enforcement.specGate?.missing?.map(field => field.label).join(', ');
+                const missing = enforcement.specGate?.missing
+                    ?.map((field: { label?: string }) => field.label || 'field')
+                    .join(', ');
                 setError(missing
                     ? `Thiếu input bắt buộc: ${missing}`
                     : 'Spec cần bổ sung thông tin trước khi chạy.');

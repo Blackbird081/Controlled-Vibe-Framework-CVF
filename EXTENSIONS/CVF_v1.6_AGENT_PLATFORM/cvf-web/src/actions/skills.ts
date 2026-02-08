@@ -47,6 +47,39 @@ const RISK_AUTONOMY: Record<string, string> = {
     R4: 'Blocked',
 };
 
+function deriveTitleFromFilename(baseName: string): string {
+    return baseName
+        .split(/[_-]+/)
+        .filter(Boolean)
+        .map((word) => {
+            const lower = word.toLowerCase();
+            if (lower.length <= 2) return lower.toUpperCase();
+            return lower.charAt(0).toUpperCase() + lower.slice(1);
+        })
+        .join(' ');
+}
+
+function isTitleTrustworthy(title: string, baseName: string): boolean {
+    const cleanedTitle = title.trim();
+    if (!cleanedTitle) return false;
+
+    const baseTokens = baseName.split(/[_-]+/).filter((token) => token.length >= 3);
+    if (baseTokens.length === 0) return true;
+
+    const titleLower = cleanedTitle.toLowerCase();
+    const matched = baseTokens.filter((token) => titleLower.includes(token)).length;
+    const ratio = matched / baseTokens.length;
+
+    const titleTokens = cleanedTitle.split(/\s+/).filter(Boolean);
+    const shortTokens = titleTokens.filter((token) => token.length === 1);
+
+    if (shortTokens.length >= Math.max(2, Math.floor(titleTokens.length / 3))) {
+        return false;
+    }
+
+    return ratio >= 0.6;
+}
+
 function parseUatStatus(content?: string): string {
     if (!content) return 'Not Run';
     const lines = content.split(/\r?\n/);
@@ -416,6 +449,7 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
                         const uatPath = path.join(UAT_ROOT, `UAT-${file.replace('.skill.md', '')}.md`);
                         const uatContent = fs.existsSync(uatPath) ? fs.readFileSync(uatPath, 'utf-8') : '';
                         const skillId = file.replace('.skill.md', '');
+                        const fallbackTitle = deriveTitleFromFilename(skillId);
                         const uatReport = uatReportMap[skillId];
                         const statusFromFile = parseUatStatus(uatContent);
                         const uatStatus = statusFromFile !== 'Not Run' ? statusFromFile : (uatReport?.status || statusFromFile);
@@ -444,9 +478,12 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
                         const fallbackAutonomy = RISK_AUTONOMY[fallbackRisk] || 'Human confirmation required';
                         const fallbackScope = fallbackRisk === 'R0' ? 'Informational' : (fallbackRisk === 'R3' || fallbackRisk === 'R4') ? 'Strategic' : 'Tactical';
 
+                        const titleCandidate = titleMatch ? titleMatch[1].trim() : '';
+                        const finalTitle = isTitleTrustworthy(titleCandidate, skillId) ? titleCandidate : fallbackTitle;
+
                         skills.push({
                             id: skillId,
-                            title: titleMatch ? titleMatch[1].trim() : file,
+                            title: finalTitle,
                             domain: domainValue,
                             difficulty: difficultyMatch ? difficultyMatch[1].trim() : 'Unknown',
                             summary: '', // Could extract first paragraph

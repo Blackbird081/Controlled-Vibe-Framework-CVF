@@ -32,8 +32,9 @@
 - [ ] Community launch (demo video + blog + repo onboarding)
 - [ ] Third-party integrations (Slack/Jira/GitHub App)
 
-**VS Code guide:** [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md)
-**VS Code playbook:** [CVF_VSCODE_PLAYBOOK.md](./docs/CVF_VSCODE_PLAYBOOK.md)
+**VS Code resources (EN/VI):**
+- [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md)
+- [CVF_VSCODE_PLAYBOOK.md](./docs/CVF_VSCODE_PLAYBOOK.md)
 
 ---
 
@@ -41,8 +42,8 @@
 
 > **Note:** These guides are agent-agnostic. VS Code is just the reference workflow.
 
-- **Detailed guide:** [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md) (agent-agnostic)
-- **Playbook (checklists):** [CVF_VSCODE_PLAYBOOK.md](./docs/CVF_VSCODE_PLAYBOOK.md) (agent-agnostic)
+- **Detailed guide:** [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md) (EN/VI, agent-agnostic)
+- **Playbook (checklists):** [CVF_VSCODE_PLAYBOOK.md](./docs/CVF_VSCODE_PLAYBOOK.md) (EN/VI, agent-agnostic)
 
 ---
 

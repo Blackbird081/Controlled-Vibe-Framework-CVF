@@ -478,3 +478,453 @@ Constraints:
 - Ensure data integrity and idempotency.
 - Provide validation queries/checks.
 ```
+
+---
+
+# PHIEN BAN TIENG VIET (Bilingual)
+
+> Muc dich: Huong dan chi tiet cach dung CVF cho agent. VS Code chi la boi canh tham chieu.
+
+---
+
+## 1) Chon dung version (Bang quyet dinh)
+
+| Nhu cau | Version goi y | Ly do |
+|---|---|---|
+| Lam viec trong VS Code, khong can UI | v1.1 + governance tools | 4-phase ro rang + risk model |
+| Can templates va spec export | v1.5.2 (skills) + v1.1 core | Day du spec, giam moi phai tu viet |
+| Can UI + multi-agent | v1.6 Agent Platform | UI day du, tools va workflow |
+
+**Quy tac nhanh:**
+- Dung **v1.0/v1.1** neu muon governance-first trong VS Code.
+- Dung **v1.6** khi can UI + tools + multi-agent.
+
+### Chon nhanh (VS Code)
+
+```text
+Can UI? (co)  -> v1.6 Agent Platform
+Can templates? (co) -> v1.5.2 + v1.1
+Chi can governance + execution? -> v1.1
+```
+
+---
+
+## 1.1) Thiet lap Workspace (khuyen nghi)
+
+### A) Toi thieu (Governance-first)
+1. Mo repo trong VS Code.
+2. Doc [START_HERE.md](../START_HERE.md).
+3. Dung docs: [v1.0/](../v1.0/) va [v1.1/](../v1.1/).
+
+### B) Co templates va skills
+1. Mo repo trong VS Code.
+2. Chon skill: [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/).
+3. Dung spec cua skill lam prompt cho agent.
+
+### C) Full UI
+1. Mo repo trong VS Code.
+2. Chay v1.6 UI:
+
+```bash
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+npm install
+npm run dev
+```
+
+---
+
+## 1.2) VS Code Extension (tuy chon)
+
+Neu muon syntax highlight/validation cho CVF contracts:
+
+Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md)
+
+---
+
+## 2) Quy trinh core (4 phase)
+
+### Phase A: Kham pha
+- Dien giai lai yeu cau
+- Liet ke gia dinh
+- Dinh nghia scope
+- Hoi cau hoi neu can
+
+### Phase B: Thiet ke
+- De xuat huong tiep can
+- Tu quyet dinh ky thuat
+- Dinh nghia buoc lam + deliverables
+
+### Phase C: Thuc thi
+- Lam theo plan da duyet
+- Tao output hoan chinh
+
+### Phase D: Review
+- Kiem tra success criteria
+- Neu sai lech, neu ro
+- Xin acceptance
+
+---
+
+## 3) Cau hinh agent (Prompt mau)
+
+```text
+Ban dang van hanh theo CVF (Controlled Vibe Framework).
+Mode: FULL (4-phase).
+Rules:
+- Follow Phase A -> B -> C -> D theo thu tu.
+- Dung lai de xin xac nhan truoc khi tu A->B va B->C.
+- Khong viet code o Phase A/B.
+- Neu thieu input bat buoc, dung lai va hoi.
+- Phase C tao deliverables, Phase D tu review.
+
+Bat dau Phase A ngay.
+```
+
+---
+
+## 3.1) Profile mau (copy/paste)
+
+**Full Mode (mac dinh cho viec phuc tap)**
+```text
+CVF MODE: FULL
+PHASE FLOW: A -> B -> C -> D
+STOP CONDITIONS:
+- Thieu input bat buoc
+- Tieu chi chap nhan chua ro
+- Can credentials hoac truy cap ben ngoai
+
+GUARDRAILS:
+- Khong chay lenh destructive neu chua duyet
+- Khong ghi ngoai scope repo
+- Liet ke gia dinh ro rang
+
+Bat dau Phase A thoi.
+```
+
+**Governance Mode (da so cong viec)**
+```text
+CVF MODE: GOVERNANCE
+RULES:
+- Hoi neu requirements chua du
+- Output co cau truc
+- Khong gia dinh ngam
+```
+
+**Simple Mode (rui ro thap)**
+```text
+CVF MODE: SIMPLE
+RULES:
+- Output ngan gon
+- Neu mo ho, hoi truoc khi lam
+```
+
+---
+
+## 4) Vi du tung buoc trong VS Code
+
+### Buoc 1: Phase A
+```text
+Task: Viet CLI Node.js format JSON.
+Constraints: Cross-platform, khong dung binary ngoai.
+Output: Code + usage + tests.
+Mode: FULL.
+Bat dau Phase A.
+```
+
+### Buoc 2: Duyet Phase B
+Xac nhan ke hoach hoac yeu cau dieu chinh.
+
+### Buoc 3: Phase C
+Agent viet code + huong dan chay.
+
+### Buoc 4: Phase D
+Agent tu review va hoi acceptance.
+
+---
+
+## 5) Rang buoc governance (dung trong VS Code)
+
+### Toi thieu
+```text
+Stop conditions:
+- Thieu input bat buoc
+- Scope mo ho
+
+Guardrails:
+- Khong tu tao du lieu
+- Hoi truoc khi chay lenh destructive
+```
+
+### Chat (khuyen nghi)
+```text
+Stop conditions:
+- Thieu input bat buoc
+- Tieu chi chap nhan chua ro
+- Can credentials hoac external access
+
+Guardrails:
+- Khong thay doi production neu chua duyet
+- Khong ghi ngoai scope repo
+- Luon liet ke gia dinh
+```
+
+### Checklist enforcement (truoc Phase C)
+- [ ] Du input bat buoc
+- [ ] Scope IN/OUT ro rang
+- [ ] Tieu chi chap nhan ro
+- [ ] Xac dinh risk level (R0-R3)
+- [ ] External access da duyet
+
+---
+
+## 6) Chon Mode nao?
+
+| Mode | Khi nao dung | Hanh vi |
+|---|---|---|
+| Simple | Viec nho, nhanh | Governance toi thieu |
+| Governance | Phan lon cong viec | Stop conditions + guardrails |
+| Full | Viec phuc tap/rui ro | 4-phase + checkpoints |
+
+---
+
+## 7) Tips theo version
+
+### v1.0 / v1.1 (Core + Execution)
+- Dung docs: [v1.0/](../v1.0/) va [v1.1/](../v1.1/)
+- Luon chay 4-phase
+- Dung checklist trong v1.0/governance hoac v1.1/execution
+
+### v1.5.2 (Skill Library)
+- Chon 1 skill -> lay spec -> paste vao prompt
+
+### v1.6 (Agent Platform)
+- Dung UI neu can tools
+- Neu chi VS Code, dung prompt tu guide nay
+
+---
+
+## 8) Template toi thieu (VS Code)
+
+```text
+CVF MODE: Governance
+Phase: A (Discovery)
+Task:
+- [Mo ta muc tieu]
+Constraints:
+- [Rang buoc]
+Success Criteria:
+- [Tieu chi do duoc]
+Stop Conditions:
+- Thieu input bat buoc
+- Scope mo ho
+
+Bat dau Phase A thoi.
+```
+
+---
+
+## 8.1) Prompt chi tiet (khuyen nghi)
+
+```text
+CVF VERSION: v1.1
+CVF MODE: FULL
+
+PHASE A REQUIREMENTS:
+- Dien giai lai muc tieu
+- Liet ke gia dinh
+- Dinh nghia scope IN/OUT
+- Hoi neu can
+
+TASK:
+- [Mo ta task]
+
+CONSTRAINTS:
+- [Rang buoc]
+
+SUCCESS CRITERIA:
+- [Tieu chi do duoc]
+
+STOP CONDITIONS:
+- Thieu input bat buoc
+- Tieu chi chap nhan chua ro
+
+Bat dau Phase A thoi. Khong de xuat giai phap o Phase A.
+```
+
+---
+
+## 9) Loi thuong gap (va cach sua)
+
+| Loi | Cach sua |
+|---|---|
+| Agent nhay vao code som | Noi ro: "Khong viet code o Phase A/B" |
+| Thieu gia dinh | Bat buoc liet ke gia dinh |
+| Output qua tu tin | Yeu cau tu review Phase D |
+| Scope lech | Dinh nghia IN/OUT tu Phase A |
+
+---
+
+## 10) Thu tu doc khuyen nghi
+
+1. [START_HERE.md](../START_HERE.md)
+2. [docs/CVF_LITE.md](./CVF_LITE.md)
+3. [v1.1/QUICK_START.md](../v1.1/QUICK_START.md)
+4. [docs/HOW_TO_APPLY_CVF.md](./HOW_TO_APPLY_CVF.md)
+5. [CVF_VSCODE_PLAYBOOK.md](./CVF_VSCODE_PLAYBOOK.md)
+
+---
+
+## 11) FAQ nhanh
+
+**Q: Chi dung VS Code thi co can v1.6 khong?**
+A: Khong. v1.1 + governance tools la du cho da so team.
+
+**Q: Khi nao dung Full Mode?**
+A: Viec phuc tap, mo ho, hoac rui ro cao.
+
+**Q: Bao agent follow version nao?**
+A: Neu dung VS Code, noi "follow CVF v1.1 (Full Mode)".
+
+---
+
+## 12) Mau prompt theo task (copy/paste)
+
+Xem checklist nhanh: [CVF_VSCODE_PLAYBOOK.md](./CVF_VSCODE_PLAYBOOK.md)
+
+### A) Review code (Full)
+```text
+Ban dang van hanh theo CVF.
+Mode: FULL.
+Scope: chi review, khong sua code.
+Rules:
+- Phase A: muc tieu, gia dinh, rui ro.
+- Phase B: tieu chi review + muc do uu tien.
+- Phase C: findings co file/line.
+- Phase D: tong ket rui ro + next steps.
+
+Task:
+Review [module] cho bugs/security/regressions.
+Constraints:
+- Khong neu loi neu khong co bang chung.
+- Danh muc do anh huong.
+
+Bat dau Phase A.
+```
+
+### B) Refactor (Governance)
+```text
+Ban dang van hanh theo CVF.
+Mode: GOVERNANCE.
+Rules:
+- Hoi neu yeu cau chua du.
+- Khong doi behavior neu chua duyet.
+- Neu summary truoc/sau + tests bi anh huong.
+
+Task:
+Refactor [file] de de doc, khong doi behavior.
+Constraints:
+- Giu API contract.
+- Hieu nang khong giam.
+```
+
+### C) Security Audit (Full)
+```text
+Ban dang van hanh theo CVF.
+Mode: FULL.
+Rules:
+- Phase A: threat model + scope.
+- Phase B: ke hoach audit.
+- Phase C: findings co bang chung.
+- Phase D: roadmap khac phuc.
+
+Task:
+Audit bao mat cho [system/module].
+Constraints:
+- Tap trung injection/auth/data leakage/unsafe defaults.
+- Co muc nguy hiem va trung binh.
+
+Bat dau Phase A.
+```
+
+### D) Migration (Full)
+```text
+Ban dang van hanh theo CVF.
+Mode: FULL.
+Rules:
+- Phase A: hien trang vs muc tieu.
+- Phase B: strategy + rollback.
+- Phase C: tung buoc thuc thi.
+- Phase D: checklist verify.
+
+Task:
+Migrate tu [old] sang [new].
+Constraints:
+- Low downtime.
+- Bao toan du lieu.
+
+Bat dau Phase A.
+```
+
+### E) Debugging (Governance)
+```text
+Ban dang van hanh theo CVF.
+Mode: GOVERNANCE.
+Rules:
+- Hoi repro neu chua co.
+- Xac dinh root cause truoc khi sua.
+- Dua ra fix rui ro thap truoc.
+
+Task:
+Debug [issue].
+Constraints:
+- Khong doi behavior ngoai scope.
+- Co checklist verify.
+```
+
+### F) Performance (Full)
+```text
+Ban dang van hanh theo CVF.
+Mode: FULL.
+Rules:
+- Phase A: baseline + metrics.
+- Phase B: ke hoach do va toi uu.
+- Phase C: implement.
+- Phase D: bao cao gains/regressions.
+
+Task:
+Toi uu [module] cho [metric].
+Constraints:
+- Khong co regression ve functional.
+- Neu co so lieu truoc/sau.
+```
+
+### G) Post-mortem (Governance)
+```text
+Ban dang van hanh theo CVF.
+Mode: GOVERNANCE.
+Rules:
+- Tap trung timeline, root cause, prevention.
+- Khong blame.
+
+Task:
+Viet post-mortem cho [incident].
+Constraints:
+- Co impact, detection, response, action items.
+```
+
+### H) Data Migration (Full)
+```text
+Ban dang van hanh theo CVF.
+Mode: FULL.
+Rules:
+- Phase A: xac nhan source/target schema.
+- Phase B: migration + rollback.
+- Phase C: step-by-step.
+- Phase D: validation queries/checks.
+
+Task:
+Migrate data tu [source] sang [target].
+Constraints:
+- Dam bao integrity va idempotency.
+- Dua ra validation queries/checks.
+```

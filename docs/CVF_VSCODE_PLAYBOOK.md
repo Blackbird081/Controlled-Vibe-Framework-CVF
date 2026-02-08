@@ -182,3 +182,189 @@ Task: Build [feature].
 Constraints: Provide tests and usage example.
 Start Phase A only.
 ```
+
+---
+
+# PHIEN BAN TIENG VIET
+
+> Muc dich: Checklist nhanh (copy/paste). Ap dung cho moi agent environment.
+
+---
+
+## 0) Checklist chung
+
+- [ ] Chon version (v1.1 core / v1.5.2 skills / v1.6 UI)
+- [ ] Chon mode (Simple / Governance / Full)
+- [ ] Dinh nghia scope IN/OUT
+- [ ] Liet ke gia dinh
+- [ ] Dinh nghia success criteria
+- [ ] Xac nhan stop conditions
+- [ ] Chi chay Phase A dau tien
+
+---
+
+## 1) Review code
+
+**Mode:** Full
+
+- [ ] Phase A: Muc tieu + gia dinh
+- [ ] Phase B: Tieu chi review + muc do
+- [ ] Phase C: Findings co file/line
+- [ ] Phase D: Tong ket rui ro + next steps
+
+**Prompt:**
+```text
+CVF MODE: FULL
+Task: Review [module] cho bugs/security/regressions.
+Constraints: Khong neu loi neu khong co bang chung.
+Bat dau Phase A.
+```
+
+---
+
+## 2) Refactor (khong doi behavior)
+
+**Mode:** Governance
+
+- [ ] Lam ro requirements
+- [ ] Xac dinh pham vi duoc doi
+- [ ] Giu API va behavior
+- [ ] Summary truoc/sau
+
+**Prompt:**
+```text
+CVF MODE: GOVERNANCE
+Task: Refactor [file] de de doc, khong doi behavior.
+Constraints: Giu API va hieu nang.
+```
+
+---
+
+## 3) Security Audit
+
+**Mode:** Full
+
+- [ ] Phase A: Threat model + scope
+- [ ] Phase B: Ke hoach audit
+- [ ] Phase C: Findings co bang chung
+- [ ] Phase D: Roadmap khac phuc
+
+**Prompt:**
+```text
+CVF MODE: FULL
+Task: Audit bao mat [system/module].
+Constraints: Tap trung injection/auth/data leakage.
+Bat dau Phase A.
+```
+
+---
+
+## 4) Migration (App)
+
+**Mode:** Full
+
+- [ ] Phase A: Hien trang vs muc tieu
+- [ ] Phase B: Strategy + rollback
+- [ ] Phase C: Tung buoc thuc thi
+- [ ] Phase D: Checklist verify
+
+**Prompt:**
+```text
+CVF MODE: FULL
+Task: Migrate [old] -> [new].
+Constraints: Low downtime, bao toan du lieu.
+Bat dau Phase A.
+```
+
+---
+
+## 5) Debugging
+
+**Mode:** Governance
+
+- [ ] Hoi repro steps + logs
+- [ ] Tim root cause truoc
+- [ ] Dua ra fix rui ro thap
+- [ ] Checklist verify
+
+**Prompt:**
+```text
+CVF MODE: GOVERNANCE
+Task: Debug [issue].
+Constraints: Khong doi behavior ngoai scope.
+```
+
+---
+
+## 6) Performance Tuning
+
+**Mode:** Full
+
+- [ ] Phase A: Baseline + metrics
+- [ ] Phase B: Ke hoach do va toi uu
+- [ ] Phase C: Implement changes
+- [ ] Phase D: Bao cao gains/regressions
+
+**Prompt:**
+```text
+CVF MODE: FULL
+Task: Toi uu [module] cho [metric].
+Constraints: Khong co regression functional.
+Bat dau Phase A.
+```
+
+---
+
+## 7) Incident Post-Mortem
+
+**Mode:** Governance
+
+- [ ] Timeline
+- [ ] Impact + detection
+- [ ] Root cause
+- [ ] Prevention actions
+
+**Prompt:**
+```text
+CVF MODE: GOVERNANCE
+Task: Viet post-mortem cho [incident].
+Constraints: Khong blame.
+```
+
+---
+
+## 8) Data Migration
+
+**Mode:** Full
+
+- [ ] Phase A: Xac nhan source/target schema
+- [ ] Phase B: Migration + rollback
+- [ ] Phase C: Step-by-step
+- [ ] Phase D: Validation queries/checks
+
+**Prompt:**
+```text
+CVF MODE: FULL
+Task: Migrate data tu [source] sang [target].
+Constraints: Idempotent steps + validation.
+Bat dau Phase A.
+```
+
+---
+
+## 9) Feature Build (Standard)
+
+**Mode:** Full
+
+- [ ] Phase A: Muc tieu + gia dinh + scope
+- [ ] Phase B: Kien truc + decisions
+- [ ] Phase C: Implement + tests
+- [ ] Phase D: Review + acceptance
+
+**Prompt:**
+```text
+CVF MODE: FULL
+Task: Build [feature].
+Constraints: Co tests + usage.
+Bat dau Phase A.
+```

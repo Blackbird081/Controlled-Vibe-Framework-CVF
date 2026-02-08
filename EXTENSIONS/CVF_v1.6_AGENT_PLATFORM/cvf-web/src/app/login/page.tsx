@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const AUTH_COOKIE = 'cvf_auth';
@@ -23,7 +23,7 @@ function setRoleCookie(role: string) {
     document.cookie = `${ROLE_COOKIE}=${role}; Path=/; Max-Age=${maxAge}`;
 }
 
-export default function LoginPage() {
+function LoginPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const from = searchParams.get('from') || '/';
@@ -176,5 +176,13 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-gray-50 dark:bg-gray-900" />}>
+            <LoginPageContent />
+        </Suspense>
     );
 }

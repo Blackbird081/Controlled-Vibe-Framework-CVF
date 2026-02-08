@@ -64,7 +64,12 @@ function execute(code: string): { result?: unknown; error?: string } {
     }
 }
 
-const workerScope = self as DedicatedWorkerGlobalScope;
+type WorkerScope = {
+    postMessage: (message: SandboxResponse) => void;
+    onmessage: ((event: MessageEvent<SandboxRequest>) => void) | null;
+};
+
+const workerScope = self as unknown as WorkerScope;
 
 workerScope.onmessage = (event: MessageEvent<SandboxRequest>) => {
     const payload = event.data;

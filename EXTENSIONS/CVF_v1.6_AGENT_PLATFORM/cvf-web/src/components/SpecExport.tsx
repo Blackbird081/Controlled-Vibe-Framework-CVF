@@ -770,7 +770,7 @@ ${userContext}` : ''}
 ## ✅ ${labels.inputCoverage}
 
 ${inputCoverage}
-${missingRequired.length ? `\n\n**${exportLang === 'vi' ? 'Thiếu input bắt buộc' : 'Missing Required Inputs'}:** ${missingRequired.map(field => field.label).join(', ')}` : ''}
+${missingRequired.length ? `\n\n**${lang === 'vi' ? 'Thiếu input bắt buộc' : 'Missing Required Inputs'}:** ${missingRequired.map((field: { label: string }) => field.label).join(', ')}` : ''}
 
 ---
 

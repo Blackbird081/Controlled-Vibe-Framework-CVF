@@ -32,6 +32,8 @@
 - [ ] Community launch (demo video + blog + repo onboarding)
 - [ ] Third-party integrations (Slack/Jira/GitHub App)
 
+**VS Code guide:** [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md)
+
 ---
 
 ## 🚀 Quick Start (4 Options)

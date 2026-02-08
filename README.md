@@ -39,6 +39,8 @@
 
 ## 🧩 Agent Usage Resources (VS Code reference)
 
+> **Note:** These guides are agent-agnostic. VS Code is just the reference workflow.
+
 - **Detailed guide:** [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md) (agent-agnostic)
 - **Playbook (checklists):** [CVF_VSCODE_PLAYBOOK.md](./docs/CVF_VSCODE_PLAYBOOK.md) (agent-agnostic)
 

@@ -1,4 +1,4 @@
-# Numerai Re Earch
+# Numerai Research
 
 > **Domain:** Product Ux  
 > **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  
@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > End-to-end Numerai research workflow for trying a new idea: design experiments, implement new model types if needed, run scout→scale experiments, write a full experiment.md report with standard plots, and optionally package/upload a Numerai pickle. Use when a user asks to “try/test a new idea”, “run an experiment”, “sweep configs”, “compare model variants”, or otherwise do new Numerai research.
 
 **Khi nào dùng skill này:**
-- Cần Numerai Re Earch với tiêu chí rõ ràng
+- Cần Numerai Research với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -72,7 +72,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Numerai Re Earch cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Numerai Research cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -85,7 +85,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Numerai Re Earch Output
+# Numerai Research Output
 
 ## Summary
 - Goal: [Objective]
@@ -147,7 +147,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 **Input mẫu:**
 ```text
-Objective: Numerai Re Earch cho ứng dụng quản lý công việc
+Objective: Numerai Research cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
 Constraints: Không đổi stack, ưu tiên tốc độ triển khai
 Output Format: Checklist + đề xuất
@@ -155,10 +155,10 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Numerai Re Earch Output
+# Numerai Research Output
 
 ## Summary
-- Goal: Numerai Re Earch cho ứng dụng quản lý công việc
+- Goal: Numerai Research cho ứng dụng quản lý công việc
 - Context: Startup 5 người, go-live 3 tuần
 - Constraints: Giữ nguyên stack, ưu tiên tốc độ
 

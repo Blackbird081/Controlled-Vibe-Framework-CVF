@@ -1,4 +1,4 @@
-# Lazyllm Kill
+# Lazyllm Skill
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > LazyLLM framework for building multi-agent AI applications. Use when task mentioned LazyLLM or AI program for: (1) Flow orchestration - linear, branching, parallel, loop workflows for complex data pipelines, (2) Model fine-tuning and acceleration - finetuning LLMs with LLaMA-Factory/Alpaca-LoRA/Collie and acceleration with vLLM/LMDeploy/LightLLM. Includes comprehensive code examples for all components, (3) RAG systems - knowledge-based QA with document retrieval, vectorization, and generation, (4) Agent development - single/multi-agent systems with tools, memory, planning, and web interfaces.
 
 **Khi nào dùng skill này:**
-- Cần Lazyllm Kill với tiêu chí rõ ràng
+- Cần Lazyllm Skill với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -72,7 +72,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Lazyllm Kill cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Lazyllm Skill cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -85,7 +85,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Lazyllm Kill Output
+# Lazyllm Skill Output
 
 ## Summary
 - Goal: [Objective]
@@ -156,7 +156,7 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Lazyllm Kill Output
+# Lazyllm Skill Output
 
 ## Summary
 - Goal: Thiết kế API cho ứng dụng quản lý dự án

@@ -1,4 +1,4 @@
-# Competitor Alternative
+# Competitor Alternatives
 
 > **Domain:** Product Ux  
 > **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  
@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > When the user wants to create competitor comparison or alternative pages for SEO and sales enablement. Also use when the user mentions 'alternative page,' 'vs page,' 'competitor comparison,' 'comparison page,' '[Product] vs [Product],' '[Product] alternative,' or 'competitive landing pages.' Covers four formats: singular alternative, plural alternatives, you vs competitor, and competitor vs competitor. Emphasizes deep research, modular content architecture, and varied section types beyond feature tables.
 
 **Khi nào dùng skill này:**
-- Cần Competitor Alternative với tiêu chí rõ ràng
+- Cần Competitor Alternatives với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -72,7 +72,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Competitor Alternative cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Competitor Alternatives cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -85,7 +85,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Competitor Alternative Output
+# Competitor Alternatives Output
 
 ## Summary
 - Goal: [Objective]
@@ -156,7 +156,7 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Competitor Alternative Output
+# Competitor Alternatives Output
 
 ## Summary
 - Goal: Thiết kế flow onboarding cho mobile app

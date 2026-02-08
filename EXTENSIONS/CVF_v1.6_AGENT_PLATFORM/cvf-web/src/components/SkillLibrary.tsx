@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getSkillCategories, saveUatContent } from '../actions/skills';
@@ -8,6 +9,7 @@ import { Skill, SkillCategory } from '../types/skill';
 import { trackEvent } from '@/lib/analytics';
 
 export function SkillLibrary() {
+    const router = useRouter();
     const [categories, setCategories] = useState<SkillCategory[]>([]);
     const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
     const [loading, setLoading] = useState(true);
@@ -61,6 +63,10 @@ export function SkillLibrary() {
             visibleCount: filteredSkills.length
         };
     }).filter(cat => cat.skills.length > 0);
+
+    const openSkillDetail = (domainId: string, skillId: string) => {
+        router.push(`/skills/${domainId}/${skillId}`);
+    };
 
     const uatBadgeClasses = (status?: string) => {
         switch ((status || '').toUpperCase()) {
@@ -231,6 +237,8 @@ export function SkillLibrary() {
                                                     difficulty: skill.difficulty,
                                                 });
                                             }}
+                                            onDoubleClick={() => openSkillDetail(category.id, skill.id)}
+                                            title="Double click to open full page"
                                             className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between ${selectedSkill?.id === skill.id
                                                     ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-medium'
                                                     : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'

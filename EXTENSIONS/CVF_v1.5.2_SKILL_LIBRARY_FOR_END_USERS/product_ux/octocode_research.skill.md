@@ -1,4 +1,4 @@
-# Octocode Re Earch
+# Octocode Research
 
 > **Domain:** Product Ux  
 > **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  
@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > This skill should be used when the user asks to "research code", "how does X work", "where is Y defined", "who calls Z", "trace code flow", "find usages", "review a PR", "explore this library", "understand the codebase", or needs deep code exploration. Handles both local codebase analysis (with LSP semantic navigation) and external GitHub/npm research using Octocode tools.
 
 **Khi nào dùng skill này:**
-- Cần Octocode Re Earch với tiêu chí rõ ràng
+- Cần Octocode Research với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -72,7 +72,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Octocode Re Earch cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Octocode Research cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -85,7 +85,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Octocode Re Earch Output
+# Octocode Research Output
 
 ## Summary
 - Goal: [Objective]
@@ -147,7 +147,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 **Input mẫu:**
 ```text
-Objective: Octocode Re Earch cho ứng dụng quản lý công việc
+Objective: Octocode Research cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
 Constraints: Không đổi stack, ưu tiên tốc độ triển khai
 Output Format: Checklist + đề xuất
@@ -155,10 +155,10 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Octocode Re Earch Output
+# Octocode Research Output
 
 ## Summary
-- Goal: Octocode Re Earch cho ứng dụng quản lý công việc
+- Goal: Octocode Research cho ứng dụng quản lý công việc
 - Context: Startup 5 người, go-live 3 tuần
 - Constraints: Giữ nguyên stack, ưu tiên tốc độ
 

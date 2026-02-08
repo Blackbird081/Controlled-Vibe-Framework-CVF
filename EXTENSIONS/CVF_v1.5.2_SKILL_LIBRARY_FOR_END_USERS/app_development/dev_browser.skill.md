@@ -1,4 +1,4 @@
-# Dev Brow Er
+# Dev Browser
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Browser automation with persistent page state. Use when users ask to navigate websites, fill forms, take screenshots, extract web data, test web apps, or automate browser workflows. Trigger phrases include "go to [url]", "click on", "fill out the form", "take a screenshot", "scrape", "automate", "test the website", "log into", or any browser interaction request.
 
 **Khi nào dùng skill này:**
-- Cần Dev Brow Er với tiêu chí rõ ràng
+- Cần Dev Browser với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -72,7 +72,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Dev Brow Er cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Dev Browser cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -85,7 +85,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Dev Brow Er Output
+# Dev Browser Output
 
 ## Summary
 - Goal: [Objective]
@@ -156,7 +156,7 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Dev Brow Er Output
+# Dev Browser Output
 
 ## Summary
 - Goal: Thiết kế API cho ứng dụng quản lý dự án

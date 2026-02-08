@@ -1,4 +1,4 @@
-# Update Doc
+# Update Docs
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > This skill should be used when the user asks to "update documentation for my changes", "check docs for this PR", "what docs need updating", "sync docs with code", "scaffold docs for this feature", "document this feature", "review docs completeness", "add docs for this change", "what documentation is affected", "docs impact", or mentions "docs/", "docs/01-app", "docs/02-pages", "MDX", "documentation update", "API reference", ".mdx files". Provides guided workflow for updating Next.js documentation based on code changes.
 
 **Khi nào dùng skill này:**
-- Cần Update Doc với tiêu chí rõ ràng
+- Cần Update Docs với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -71,7 +71,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Update Doc cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Update Docs cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -84,7 +84,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Update Doc Output
+# Update Docs Output
 
 ## Summary
 - Goal: [Objective]
@@ -146,7 +146,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 **Input mẫu:**
 ```text
-Objective: Update Doc cho ứng dụng quản lý công việc
+Objective: Update Docs cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
 Constraints: Không đổi stack, ưu tiên tốc độ triển khai
 Output Format: Checklist + đề xuất
@@ -154,10 +154,10 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Update Doc Output
+# Update Docs Output
 
 ## Summary
-- Goal: Update Doc cho ứng dụng quản lý công việc
+- Goal: Update Docs cho ứng dụng quản lý công việc
 - Context: Startup 5 người, go-live 3 tuần
 - Constraints: Giữ nguyên stack, ưu tiên tốc độ
 

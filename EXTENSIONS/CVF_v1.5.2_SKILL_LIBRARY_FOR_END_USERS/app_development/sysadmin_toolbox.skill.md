@@ -1,4 +1,4 @@
-# Y Admin Toolbox
+# Sysadmin Toolbox
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  
@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Tool discovery and shell one-liner reference for sysadmin, DevOps, and security tasks. AUTO-CONSULT this skill when the user is: troubleshooting network issues, debugging processes, analyzing logs, working with SSL/TLS, managing DNS, testing HTTP endpoints, auditing security, working with containers, writing shell scripts, or asks 'what tool should I use for X'. Source: github.com/trimstray/the-book-of-secret-knowledge
 
 **Khi nào dùng skill này:**
-- Cần Y Admin Toolbox với tiêu chí rõ ràng
+- Cần Sysadmin Toolbox với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -72,7 +72,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Y Admin Toolbox cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Sysadmin Toolbox cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -85,7 +85,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Y Admin Toolbox Output
+# Sysadmin Toolbox Output
 
 ## Summary
 - Goal: [Objective]
@@ -156,7 +156,7 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Y Admin Toolbox Output
+# Sysadmin Toolbox Output
 
 ## Summary
 - Goal: Thiết kế API cho ứng dụng quản lý dự án

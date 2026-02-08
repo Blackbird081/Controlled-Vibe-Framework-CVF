@@ -524,3 +524,74 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
 
     return categories;
 }
+
+export async function getSkillDetail(domain: string, skillId: string): Promise<Skill | null> {
+    try {
+        const categoryPath = path.join(SKILLS_ROOT, domain);
+        const filePath = path.join(categoryPath, `${skillId}.skill.md`);
+        if (!fs.existsSync(filePath)) {
+            return null;
+        }
+
+        const uatReportMap = loadUatReportMap();
+        const specReportMap = loadSpecReportMap();
+        const content = fs.readFileSync(filePath, 'utf-8');
+        const uatPath = path.join(UAT_ROOT, `UAT-${skillId}.md`);
+        const uatContent = fs.existsSync(uatPath) ? fs.readFileSync(uatPath, 'utf-8') : '';
+        const uatReport = uatReportMap[skillId];
+        const statusFromFile = parseUatStatus(uatContent);
+        const uatStatus = statusFromFile !== 'Not Run' ? statusFromFile : (uatReport?.status || statusFromFile);
+        const computed = computeUatScore(uatContent);
+        const uatScore = typeof uatReport?.final_score === 'number' ? uatReport.final_score : computed.score;
+        const uatQuality = uatReport?.quality || computed.quality;
+        const specReport = specReportMap[skillId];
+        const specComputed = computeSpecScore(content);
+        const specScore = typeof specReport?.spec_score === 'number' ? specReport.spec_score : specComputed.score;
+        const specQuality = specReport?.spec_quality || specComputed.quality;
+        const specGate = (specReport?.spec_gate as 'PASS' | 'CLARIFY' | 'FAIL') || specComputed.gate;
+
+        const titleMatch = content.match(/^#\s+(.+)$/m);
+        const domainMatch = content.match(/>\s*\*\*Domain:\*\*\s*(.+)$/m);
+        const difficultyMatch = content.match(/>\s*\*\*Difficulty:\*\*\s*(.+)$/m);
+        const riskMatch = content.match(/\|\s*Risk Level\s*\|\s*([^|]+)\|/m);
+        const rolesMatch = content.match(/\|\s*Allowed Roles\s*\|\s*([^|]+)\|/m);
+        const phasesMatch = content.match(/\|\s*Allowed Phases\s*\|\s*([^|]+)\|/m);
+        const scopeMatch = content.match(/\|\s*Authority Scope\s*\|\s*([^|]+)\|/m);
+        const autonomyMatch = content.match(/\|\s*Autonomy\s*\|\s*([^|]+)\|/m);
+
+        const domainValue = domainMatch ? domainMatch[1].trim() : domain;
+        const fallbackRisk = DOMAIN_RISK_MAP[domain] || DOMAIN_RISK_MAP[domainValue.toLowerCase().replace(/ /g, '_')] || 'R1';
+        const fallbackPhases = DOMAIN_PHASES_MAP[domain] || DOMAIN_PHASES_MAP[domainValue.toLowerCase().replace(/ /g, '_')] || 'Discovery, Design';
+        const fallbackAutonomy = RISK_AUTONOMY[fallbackRisk] || 'Human confirmation required';
+        const fallbackScope = fallbackRisk === 'R0' ? 'Informational' : (fallbackRisk === 'R3' || fallbackRisk === 'R4') ? 'Strategic' : 'Tactical';
+
+        const titleCandidate = titleMatch ? titleMatch[1].trim() : '';
+        const fallbackTitle = deriveTitleFromFilename(skillId);
+        const finalTitle = isTitleTrustworthy(titleCandidate, skillId) ? titleCandidate : fallbackTitle;
+
+        return {
+            id: skillId,
+            title: finalTitle,
+            domain: domainValue,
+            difficulty: difficultyMatch ? difficultyMatch[1].trim() : 'Unknown',
+            summary: '',
+            path: path.relative(process.cwd(), filePath),
+            content,
+            riskLevel: riskMatch ? riskMatch[1].trim() : fallbackRisk,
+            allowedRoles: rolesMatch ? rolesMatch[1].trim() : 'User, Reviewer',
+            allowedPhases: phasesMatch ? phasesMatch[1].trim() : fallbackPhases,
+            authorityScope: scopeMatch ? scopeMatch[1].trim() : fallbackScope,
+            autonomy: autonomyMatch ? autonomyMatch[1].trim() : fallbackAutonomy,
+            uatStatus,
+            uatContent,
+            uatScore,
+            uatQuality,
+            specScore,
+            specQuality,
+            specGate,
+        };
+    } catch (error) {
+        console.error('Error reading skill detail:', error);
+        return null;
+    }
+}

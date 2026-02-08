@@ -225,7 +225,7 @@ export function SkillLibrary() {
                                 </div>
                                 <div className="space-y-1">
                                     {category.skills.map(skill => (
-                                        <button
+                                        <div
                                             key={skill.id}
                                             onClick={() => {
                                                 setSelectedSkill(skill);
@@ -237,10 +237,25 @@ export function SkillLibrary() {
                                                     difficulty: skill.difficulty,
                                                 });
                                             }}
+                                            onKeyDown={(event) => {
+                                                if (event.key === 'Enter' || event.key === ' ') {
+                                                    event.preventDefault();
+                                                    setSelectedSkill(skill);
+                                                    setViewMode('skill');
+                                                    trackEvent('skill_viewed', {
+                                                        skillId: skill.id,
+                                                        skillTitle: skill.title,
+                                                        domain: skill.domain,
+                                                        difficulty: skill.difficulty,
+                                                    });
+                                                }
+                                            }}
                                             className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between ${selectedSkill?.id === skill.id
                                                     ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-medium'
                                                     : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-                                                }`}
+                                                } cursor-pointer`}
+                                            role="button"
+                                            tabIndex={0}
                                         >
                                             <span className="truncate">{skill.title}</span>
                                             <span className="flex items-center gap-1">
@@ -262,7 +277,7 @@ export function SkillLibrary() {
                                                     {skill.uatStatus || 'Not Run'}
                                                 </span>
                                             </span>
-                                        </button>
+                                        </div>
                                     ))}
                                 </div>
                             </div>

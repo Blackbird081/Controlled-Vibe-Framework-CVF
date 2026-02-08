@@ -1,4 +1,4 @@
-# Etup Time Caledb Hypertable
+# Setup Timescaledb Hypertables
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  

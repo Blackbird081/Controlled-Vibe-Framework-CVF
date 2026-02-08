@@ -1,4 +1,4 @@
-# Mart Doc
+# Smart Docs
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  

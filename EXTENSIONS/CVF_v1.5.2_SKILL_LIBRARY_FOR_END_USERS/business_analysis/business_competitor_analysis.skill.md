@@ -1,4 +1,4 @@
-# Bu Ine Competitor Analy I
+# Business Competitor Analysis
 
 > **Domain:** Business Analysis  
 > **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  

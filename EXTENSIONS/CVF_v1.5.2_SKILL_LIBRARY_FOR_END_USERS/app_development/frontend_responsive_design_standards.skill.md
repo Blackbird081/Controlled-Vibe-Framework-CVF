@@ -1,4 +1,4 @@
-# Frontend Re Pon Ive De Ign Tandard
+# Frontend Responsive Design Standards
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  

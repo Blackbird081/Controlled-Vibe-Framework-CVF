@@ -1,4 +1,4 @@
-# Re Earch
+# Research
 
 > **Domain:** Product Ux  
 > **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  

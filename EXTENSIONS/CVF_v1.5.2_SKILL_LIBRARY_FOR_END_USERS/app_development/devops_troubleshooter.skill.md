@@ -1,4 +1,4 @@
-# Devop Trouble Hooter
+# Devops Troubleshooter
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  

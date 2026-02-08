@@ -1,4 +1,4 @@
-# Tidb Te T Guideline
+# Tidb Test Guidelines
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  

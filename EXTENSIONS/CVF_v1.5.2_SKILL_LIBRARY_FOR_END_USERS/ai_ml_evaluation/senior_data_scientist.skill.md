@@ -1,4 +1,4 @@
-# Enior Data Cienti T
+# Senior Data Scientist
 
 > **Domain:** Ai Ml Evaluation  
 > **Difficulty:** ⭐ Easy — [Xem criteria](../DIFFICULTY_GUIDE.md)  

@@ -1,4 +1,4 @@
-# Lite Tream
+# Litestream
 
 > **Domain:** App Development  
 > **Difficulty:** ⭐⭐ Medium — [Xem criteria](../DIFFICULTY_GUIDE.md)  

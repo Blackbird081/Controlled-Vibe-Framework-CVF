@@ -6,14 +6,15 @@ import { SkillDetailView } from '@/components/SkillDetailView';
 export const dynamic = 'force-dynamic';
 
 type PageProps = {
-    params: {
+    params: Promise<{
         domain: string;
         skill: string;
-    };
+    }>;
 };
 
 export default async function SkillDetailPage({ params }: PageProps) {
-    const skill = await getSkillDetail(params.domain, params.skill);
+    const { domain, skill: skillId } = await params;
+    const skill = await getSkillDetail(domain, skillId);
     if (!skill) {
         notFound();
     }

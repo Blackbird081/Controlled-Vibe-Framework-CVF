@@ -37,6 +37,13 @@
 
 ---
 
+## 🧩 VS Code Resources
+
+- **Detailed guide:** [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md)
+- **Playbook (checklists):** [CVF_VSCODE_PLAYBOOK.md](./docs/CVF_VSCODE_PLAYBOOK.md)
+
+---
+
 ## 🚀 Quick Start (4 Options)
 
 ### Option 1: Agent Platform (Newest) 🤖 RECOMMENDED

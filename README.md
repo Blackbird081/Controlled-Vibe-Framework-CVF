@@ -25,6 +25,13 @@
 
 ➡️ These remaining items are tracked in **Phase 6** of the roadmap: [CVF_REMAINING_ROADMAP_2026-02-08.md](./docs/CVF_REMAINING_ROADMAP_2026-02-08.md)
 
+**Phase 6 checklist (public validation):**
+- [ ] Pilot program (2-3 real projects + metrics)
+- [ ] Real AI provider tests (OpenAI/Gemini/Claude with CI secrets)
+- [ ] Publish SDK to npm/PyPI
+- [ ] Community launch (demo video + blog + repo onboarding)
+- [ ] Third-party integrations (Slack/Jira/GitHub App)
+
 ---
 
 ## 🚀 Quick Start (4 Options)

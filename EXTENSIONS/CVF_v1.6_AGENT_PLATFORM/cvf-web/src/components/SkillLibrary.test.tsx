@@ -9,6 +9,7 @@ const trackEventMock = vi.fn();
 const getSkillCategoriesMock = vi.fn();
 const saveUatContentMock = vi.fn();
 const routerPushMock = vi.fn();
+const fetchMock = vi.fn();
 
 vi.mock('@/lib/analytics', () => ({
     trackEvent: (...args: unknown[]) => trackEventMock(...args),
@@ -35,6 +36,10 @@ describe('SkillLibrary', () => {
         trackEventMock.mockClear();
         getSkillCategoriesMock.mockReset();
         saveUatContentMock.mockReset();
+        fetchMock.mockReset();
+        fetchMock.mockRejectedValue(new Error('fetch failed'));
+        // @ts-expect-error - assign test fetch
+        global.fetch = fetchMock;
     });
 
     it('tracks skill view and copy actions', async () => {

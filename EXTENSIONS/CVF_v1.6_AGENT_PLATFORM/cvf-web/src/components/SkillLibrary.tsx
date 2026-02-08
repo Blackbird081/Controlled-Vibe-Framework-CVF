@@ -29,7 +29,25 @@ export function SkillLibrary() {
     useEffect(() => {
         async function fetchSkills() {
             try {
-                const data = await getSkillCategories();
+                let data: SkillCategory[] | null = null;
+                if (typeof window !== 'undefined' && typeof fetch === 'function') {
+                    try {
+                        const response = await fetch('/data/skills-index.json', { cache: 'no-store' });
+                        if (response.ok) {
+                            const payload = await response.json();
+                            if (Array.isArray(payload)) {
+                                data = payload;
+                            } else if (payload && Array.isArray(payload.categories)) {
+                                data = payload.categories;
+                            }
+                        }
+                    } catch (error) {
+                        console.warn('Failed to load skills index from public data', error);
+                    }
+                }
+                if (!data) {
+                    data = await getSkillCategories();
+                }
                 setCategories(data);
             } catch (error) {
                 console.error('Failed to load skills', error);

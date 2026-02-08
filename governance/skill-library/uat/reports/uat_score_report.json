@@ -1,6 +1,6 @@
 {
   "generated": "2026-02-07",
-  "total": 114,
+  "total": 124,
   "skills": [
     {
       "skill_id": "01_app_requirements_spec",
@@ -579,6 +579,30 @@
       "quality": "Not Ready"
     },
     {
+      "skill_id": "adaptyv",
+      "title": "UAT RECORD — Adaptyv",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "andrew_kane_gem_writer",
+      "title": "UAT RECORD — Andrew Kane Gem Writer",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
       "skill_id": "api_security_checklist",
       "title": "UAT RECORD — API Security Checklist",
       "domain": "Security & Compliance",
@@ -591,9 +615,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "audit_prep_assistant",
-      "title": "UAT RECORD — Audit Prep A I Tant",
-      "domain": "Security Compliance",
+      "skill_id": "architecture_paradigm_microservices",
+      "title": "UAT RECORD — Architecture Paradigm Micro Ervice",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -603,9 +627,21 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "bocha_search",
-      "title": "UAT RECORD — Bocha Earch",
-      "domain": "Product Ux",
+      "skill_id": "backend_dev_guidelines",
+      "title": "UAT RECORD — Backend Dev Guideline",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "backend_development",
+      "title": "UAT RECORD — Backend Development",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -627,9 +663,33 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "browser_use",
-      "title": "UAT RECORD — Brow Er U E",
-      "domain": "App Development",
+      "skill_id": "building_with_google_adk",
+      "title": "UAT RECORD — Building With Google Adk",
+      "domain": "Ai Ml Evaluation",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "business_competitor_analysis",
+      "title": "UAT RECORD — Bu Ine Competitor Analy I",
+      "domain": "Business Analysis",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "business_plan",
+      "title": "UAT RECORD — Bu Ine Plan",
+      "domain": "Business Analysis",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -641,78 +701,6 @@
     {
       "skill_id": "ccxt_php",
       "title": "UAT RECORD — Ccxt Php",
-      "domain": "App Development",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "checking_changes",
-      "title": "UAT RECORD — Checking Change",
-      "domain": "App Development",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "ci_monitor",
-      "title": "UAT RECORD — Ci Monitor",
-      "domain": "App Development",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "clojure_review",
-      "title": "UAT RECORD — Clojure Review",
-      "domain": "App Development",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "cn_check",
-      "title": "UAT RECORD — Cn Check",
-      "domain": "App Development",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "code_review",
-      "title": "UAT RECORD — Code Review",
-      "domain": "Security Compliance",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "code_reviewer",
-      "title": "UAT RECORD — Code Reviewer",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
@@ -759,9 +747,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "content_quality_checklist",
-      "title": "UAT RECORD — Content Quality Checklist",
-      "domain": "Marketing & SEO",
+      "skill_id": "content_creator",
+      "title": "UAT RECORD — Content Creator",
+      "domain": "Marketing Seo",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -771,9 +759,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "content_research_writer",
-      "title": "UAT RECORD — Content Re Earch Writer",
-      "domain": "Content Creation",
+      "skill_id": "content_quality_checklist",
+      "title": "UAT RECORD — Content Quality Checklist",
+      "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -807,8 +795,8 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "creating_financial_models",
-      "title": "UAT RECORD — Creating Financial Model",
+      "skill_id": "data_context_extractor",
+      "title": "UAT RECORD — Data Context Extractor",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
@@ -843,6 +831,18 @@
       "quality": "Not Ready"
     },
     {
+      "skill_id": "devops_troubleshooter",
+      "title": "UAT RECORD — Devop Trouble Hooter",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
       "skill_id": "doc_coauthoring",
       "title": "UAT RECORD — Doc Coauthoring",
       "domain": "Content Creation",
@@ -855,9 +855,21 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "docs_writer_reference",
-      "title": "UAT RECORD — Doc Writer Reference",
-      "domain": "Content Creation",
+      "skill_id": "dyadmulti_pr_review",
+      "title": "UAT RECORD — Dyadmulti Pr Review",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "dynamic",
+      "title": "UAT RECORD — Dynamic",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -891,21 +903,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "evals_context",
-      "title": "UAT RECORD — Eval Context",
-      "domain": "App Development",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "fastapi",
-      "title": "UAT RECORD — Fa Tapi",
-      "domain": "App Development",
+      "skill_id": "excel_report_generator",
+      "title": "UAT RECORD — Excel Report Generator",
+      "domain": "Business Analysis",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -927,9 +927,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "fetch_diff",
-      "title": "UAT RECORD — Fetch Diff",
-      "domain": "App Development",
+      "skill_id": "finance_manager",
+      "title": "UAT RECORD — Finance Manager",
+      "domain": "Finance Analytics",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -941,6 +941,18 @@
     {
       "skill_id": "frontend_design",
       "title": "UAT RECORD — Frontend De Ign",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "frontend_responsive_design_standards",
+      "title": "UAT RECORD — Frontend Re Pon Ive De Ign Tandard",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
@@ -963,9 +975,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "golang_testing",
-      "title": "UAT RECORD — Golang Te Ting",
-      "domain": "App Development",
+      "skill_id": "healthcheck",
+      "title": "UAT RECORD — Healthcheck",
+      "domain": "Security Compliance",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -975,9 +987,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "healthcheck",
-      "title": "UAT RECORD — Healthcheck",
-      "domain": "Security Compliance",
+      "skill_id": "hooked_ux",
+      "title": "UAT RECORD — Hooked Ux",
+      "domain": "Product Ux",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -1011,18 +1023,6 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "jazz_permissions_security",
-      "title": "UAT RECORD — Jazz Permi Ion Ecurity",
-      "domain": "Security Compliance",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
       "skill_id": "landing_page_cro",
       "title": "UAT RECORD — Landing Page CRO",
       "domain": "Marketing & SEO",
@@ -1035,9 +1035,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "last30days",
-      "title": "UAT RECORD — La T30day",
-      "domain": "Product Ux",
+      "skill_id": "lazyllm_skill",
+      "title": "UAT RECORD — Lazyllm Kill",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -1047,9 +1047,81 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "multi_reviewer_patterns",
-      "title": "UAT RECORD — Multi Reviewer Pattern",
+      "skill_id": "legal_simulation_patrick_munro",
+      "title": "UAT RECORD — Legal Imulation Patrick Munro",
+      "domain": "Legal Contracts",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "litestream",
+      "title": "UAT RECORD — Lite Tream",
       "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "marketing_demand_acquisition",
+      "title": "UAT RECORD — Marketing Demand Acqui Ition",
+      "domain": "Marketing Seo",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "mermaid_diagrams",
+      "title": "UAT RECORD — Mermaid Diagram",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "ml_paper_writing",
+      "title": "UAT RECORD — Ml Paper Writing",
+      "domain": "Ai Ml Evaluation",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "moai_domain_backend",
+      "title": "UAT RECORD — Moai Domain Backend",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "montecarlo",
+      "title": "UAT RECORD — Montecarlo",
+      "domain": "Finance Analytics",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -1071,6 +1143,30 @@
       "quality": "Not Ready"
     },
     {
+      "skill_id": "numerai_research",
+      "title": "UAT RECORD — Numerai Re Earch",
+      "domain": "Product Ux",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "octocode_research",
+      "title": "UAT RECORD — Octocode Re Earch",
+      "domain": "Product Ux",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
       "skill_id": "onboarding_experience_review",
       "title": "UAT RECORD — Onboarding Experience Review",
       "domain": "Product & UX",
@@ -1083,8 +1179,8 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "playwright_cli",
-      "title": "UAT RECORD — Playwright Cli",
+      "skill_id": "onchainkit",
+      "title": "UAT RECORD — Onchainkit",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
@@ -1095,8 +1191,44 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "pr_finalize",
-      "title": "UAT RECORD — Pr Finalize",
+      "skill_id": "penpot_uiux_design",
+      "title": "UAT RECORD — Penpot Uiux De Ign",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "perf_optimizer",
+      "title": "UAT RECORD — Perf Optimizer",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "performance_optimization",
+      "title": "UAT RECORD — Performance Optimization",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "playwriter",
+      "title": "UAT RECORD — Playwriter",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
@@ -1131,8 +1263,20 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "python_expert",
-      "title": "UAT RECORD — Python Expert",
+      "skill_id": "promptfoo_evaluation",
+      "title": "UAT RECORD — Promptfoo Evaluation",
+      "domain": "Ai Ml Evaluation",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "prototype_prompt_generator",
+      "title": "UAT RECORD — Prototype Prompt Generator",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
@@ -1143,21 +1287,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "receiving_code_review",
-      "title": "UAT RECORD — Receiving Code Review",
+      "skill_id": "refly",
+      "title": "UAT RECORD — Refly",
       "domain": "App Development",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "release",
-      "title": "UAT RECORD — Relea E",
-      "domain": "Security Compliance",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -1179,6 +1311,18 @@
       "quality": "Not Ready"
     },
     {
+      "skill_id": "senior_data_scientist",
+      "title": "UAT RECORD — Enior Data Cienti T",
+      "domain": "Ai Ml Evaluation",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
       "skill_id": "seo_audit",
       "title": "UAT RECORD — SEO Audit",
       "domain": "Marketing & SEO",
@@ -1191,8 +1335,20 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "setup_web_tests",
-      "title": "UAT RECORD — Etup Web Te T",
+      "skill_id": "setup_timescaledb_hypertables",
+      "title": "UAT RECORD — Etup Time Caledb Hypertable",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready"
+    },
+    {
+      "skill_id": "smart_docs",
+      "title": "UAT RECORD — Mart Doc",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
@@ -1215,21 +1371,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "solidity_security",
-      "title": "UAT RECORD — Olidity Ecurity",
-      "domain": "Security Compliance",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "technical_articles",
-      "title": "UAT RECORD — Technical Article",
-      "domain": "Content Creation",
+      "skill_id": "sysadmin_toolbox",
+      "title": "UAT RECORD — Y Admin Toolbox",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -1242,18 +1386,6 @@
       "skill_id": "terms_of_service_review",
       "title": "UAT RECORD — Terms of Service Review",
       "domain": "Security & Compliance",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "testing_python",
-      "title": "UAT RECORD — Te Ting Python",
-      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -1335,9 +1467,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "vercel_react_best_practices",
-      "title": "UAT RECORD — Vercel React Be T Practice",
-      "domain": "App Development",
+      "skill_id": "ux_writing",
+      "title": "UAT RECORD — Ux Writing",
+      "domain": "Product Ux",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,
@@ -1347,21 +1479,9 @@
       "quality": "Not Ready"
     },
     {
-      "skill_id": "write_release_notes",
-      "title": "UAT RECORD — Write Relea E Note",
-      "domain": "Content Creation",
-      "risk_level": "R1",
-      "status": "Not Run",
-      "decision_score": 0,
-      "completeness_score": 0,
-      "scenario_score": 0,
-      "final_score": 0,
-      "quality": "Not Ready"
-    },
-    {
-      "skill_id": "writing_docs",
-      "title": "UAT RECORD — Writing Doc",
-      "domain": "Content Creation",
+      "skill_id": "word",
+      "title": "UAT RECORD — Word",
+      "domain": "Legal Contracts",
       "risk_level": "R1",
       "status": "Not Run",
       "decision_score": 0,

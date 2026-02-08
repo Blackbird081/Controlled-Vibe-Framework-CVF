@@ -197,6 +197,20 @@ export function getQualityLabel(score: number, language: 'vi' | 'en' = 'vi'): st
     }
 }
 
+/**
+ * ⚠️ QUALITY SCORE DISCLAIMER
+ * Quality scoring evaluates FORMAT and STRUCTURE only (headings, lists, code blocks, length).
+ * It does NOT evaluate factual accuracy or detect hallucinations.
+ * A well-formatted but factually incorrect response can still score high.
+ * Users should always verify critical information independently.
+ */
+export function getQualityDisclaimer(language: 'vi' | 'en' = 'vi'): string {
+    if (language === 'vi') {
+        return '⚠️ Điểm chất lượng đánh giá cấu trúc và format, KHÔNG đánh giá tính chính xác nội dung. Hãy luôn kiểm chứng thông tin quan trọng.';
+    }
+    return '⚠️ Quality score evaluates structure and format only, NOT factual accuracy. Always verify critical information independently.';
+}
+
 // ==================== ACCEPTANCE HELPERS ====================
 
 export function shouldRequireAcceptance(mode: 'simple' | 'governance' | 'full'): boolean {

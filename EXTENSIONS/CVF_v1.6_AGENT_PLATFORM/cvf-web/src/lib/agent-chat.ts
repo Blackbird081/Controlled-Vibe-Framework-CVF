@@ -16,6 +16,10 @@ export interface ChatMessage {
         phase?: string;
         qualityScore?: QualityScore;
         acceptanceStatus?: AcceptanceStatus;
+        preUatStatus?: 'PASS' | 'FAIL';
+        preUatScore?: number;
+        factualScore?: number;
+        factualRisk?: 'low' | 'medium' | 'high';
     };
 }
 
@@ -51,22 +55,36 @@ export const MODE_CONFIG: Record<CVFMode, { color: string; icon: string; label: 
 export function detectSpecMode(content: string): CVFMode {
     if (!content) return 'simple';
 
+    const lower = content.toLowerCase();
+
+    // Full mode detection — flexible matching (case-insensitive, partial matches)
     if (
         content.includes('CVF FULL MODE PROTOCOL') ||
         content.includes('MANDATORY 4-PHASE PROCESS') ||
         content.includes('QUY TRÌNH 4-PHASE BẮT BUỘC') ||
-        content.includes('Full Mode (4-Phase)')
+        content.includes('Full Mode (4-Phase)') ||
+        lower.includes('cvf full mode') ||
+        lower.includes('full cvf mode') ||
+        lower.includes('4-phase process') ||
+        lower.includes('4 phase bắt buộc') ||
+        /full\s*mode/i.test(content)
     ) {
         return 'full';
     }
 
+    // Governance mode detection — flexible matching
     if (
         content.includes('CVF GOVERNANCE RULES') ||
         content.includes('QUY TẮC CVF GOVERNANCE') ||
         content.includes('Stop Conditions') ||
         content.includes('Điều kiện dừng') ||
         content.includes('With Rules') ||
-        content.includes('Có Quy Tắc)')
+        content.includes('Có Quy Tắc)') ||
+        lower.includes('governance mode') ||
+        lower.includes('governance rules') ||
+        lower.includes('có quy tắc') ||
+        lower.includes('with rules') ||
+        /governance/i.test(content)
     ) {
         return 'governance';
     }

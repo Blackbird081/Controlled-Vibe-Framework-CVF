@@ -15,6 +15,9 @@ export interface Skill {
     uatContent?: string;
     uatScore?: number;
     uatQuality?: string;
+    specScore?: number;
+    specQuality?: string;
+    specGate?: string;
 }
 
 export interface SkillCategory {

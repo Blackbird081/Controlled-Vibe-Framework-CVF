@@ -158,6 +158,19 @@ describe('security.ts', () => {
             expect(result.result).toBeNull();
             expect(result.error).toContain('Blocked keyword');
         });
+
+        it('executes safe code with executeAsync', async () => {
+            const sandbox = createSandbox();
+            const result = await sandbox.executeAsync('2 + 3');
+            expect(result.result).toBe(5);
+        });
+
+        it('rejects unsafe code with executeAsync', async () => {
+            const sandbox = createSandbox();
+            const result = await sandbox.executeAsync('eval("1+1")');
+            expect(result.result).toBeNull();
+            expect(result.error).toContain('Blocked keyword');
+        });
     });
 
     describe('checkRateLimit', () => {

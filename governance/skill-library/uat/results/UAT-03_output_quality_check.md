@@ -84,14 +84,14 @@ This UAT session is bound to the following Skill Mapping Record:
 
 ### E.2 Verification Tests
 - [ ] Capability narrowing confirmed
-- [x] Sandbox enforced
+- [ ] Sandbox enforced
 - [ ] Audit hooks active
 
 ---
 
 ## F. Misuse & Drift Detection
 
-- [x] Không tạo output ngoài scope
+- [ ] Không tạo output ngoài scope
 - [ ] Không hành động vượt quyền
 
 ---
@@ -100,7 +100,7 @@ This UAT session is bound to the following Skill Mapping Record:
 
 - [ ] PASS  
 - [ ] SOFT FAIL (Human review required)  
-- [x] FAIL (Block usage / redesign required)
+- [ ] FAIL (Block usage / redesign required)
 
 ---
 

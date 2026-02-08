@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { useSettings } from './Settings';
+import { logEnforcementDecision } from '@/lib/enforcement-log';
 
 interface ProcessingScreenProps {
     templateName: string;
@@ -19,6 +21,7 @@ export function ProcessingScreen({
     onComplete,
     onCancel
 }: ProcessingScreenProps) {
+    const { settings } = useSettings();
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState('Initializing...');
     const [error, setError] = useState<string | null>(null);
@@ -31,6 +34,7 @@ export function ProcessingScreen({
         try {
             setStatus('Connecting to AI provider...');
             setProgress(10);
+            const mode = settings.preferences.defaultExportMode || 'governance';
 
             const response = await fetch('/api/execute', {
                 method: 'POST',
@@ -40,6 +44,7 @@ export function ProcessingScreen({
                     templateName,
                     inputs,
                     intent,
+                    mode,
                 }),
             });
 
@@ -47,6 +52,20 @@ export function ProcessingScreen({
             setStatus('Processing response...');
 
             const data = await response.json();
+            const enforcement = data.enforcement;
+            if (enforcement) {
+                logEnforcementDecision({
+                    source: 'api_execute',
+                    mode,
+                    enforcement,
+                    context: {
+                        templateId: templateId || templateName,
+                        templateName,
+                        provider: data.provider,
+                        model: data.model,
+                    },
+                });
+            }
 
             setProgress(90);
             setStatus('Finalizing...');
@@ -57,16 +76,34 @@ export function ProcessingScreen({
                     onComplete(data.output);
                 }, 300);
                 return true;
-            } else {
-                // If real execution fails, show error but fall back to mock
-                setError(data.error || 'API execution failed');
-                return false;
             }
+
+            if (enforcement?.status === 'CLARIFY') {
+                const missing = enforcement.specGate?.missing?.map(field => field.label).join(', ');
+                setError(missing
+                    ? `Thiếu input bắt buộc: ${missing}`
+                    : 'Spec cần bổ sung thông tin trước khi chạy.');
+                return true;
+            }
+
+            if (enforcement?.status === 'BLOCK') {
+                setError(data.error || 'Bị chặn bởi CVF enforcement.');
+                return true;
+            }
+
+            if (enforcement?.status === 'NEEDS_APPROVAL') {
+                setError(data.error || 'Yêu cầu xác nhận trước khi chạy.');
+                return true;
+            }
+
+            // If real execution fails, show error but fall back to mock
+            setError(data.error || 'API execution failed');
+            return false;
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Network error');
             return false;
         }
-    }, [templateId, templateName, inputs, intent, onComplete]);
+    }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode]);
 
     useEffect(() => {
         // Try real execution first if we have the required data

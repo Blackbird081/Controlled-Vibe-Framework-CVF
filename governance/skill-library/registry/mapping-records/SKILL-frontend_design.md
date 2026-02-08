@@ -12,7 +12,7 @@
 - Skill Name: Frontend De Ign
 - Version: 1.0.0
 - Source:
-  - URL / Repository: https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design/skills/frontend-design
+  - URL / Repository: https://github.com/Mayandev/notion-avatar/tree/main/.claude/skills/frontend-design
   - Original Author: External / Unknown
 - Intake Date: 2026-02-07
 - Intake Owner: CVF Governance

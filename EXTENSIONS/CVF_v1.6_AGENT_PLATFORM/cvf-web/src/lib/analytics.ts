@@ -15,7 +15,9 @@ export type AnalyticsEventType =
     | 'agent_opened'
     | 'agent_closed'
     | 'multi_agent_opened'
-    | 'tools_opened';
+    | 'tools_opened'
+    | 'enforcement_decision'
+    | 'pre_uat_failed';
 
 export interface AnalyticsEvent {
     id: string;

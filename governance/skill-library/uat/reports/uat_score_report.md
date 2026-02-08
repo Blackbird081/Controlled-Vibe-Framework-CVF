@@ -1,23 +1,27 @@
 # UAT Score Report
 
 > **Generated:** 2026-02-07
-> **Total Skills:** 114
+> **Total Skills:** 124
 
 ## Domain Coverage
 | Domain | Skills |
 |---|---|
 | AI/ML Evaluation | 6 |
-| App Development | 36 |
-| Business Analysis | 3 |
-| Content Creation | 9 |
+| Ai Ml Evaluation | 4 |
+| App Development | 41 |
+| Business Analysis | 6 |
+| Content Creation | 4 |
 | Finance & Analytics | 8 |
+| Finance Analytics | 2 |
 | HR & Operations | 5 |
 | Legal & Contracts | 5 |
+| Legal Contracts | 2 |
 | Marketing & SEO | 9 |
+| Marketing Seo | 2 |
 | Product & UX | 8 |
-| Product Ux | 4 |
+| Product Ux | 6 |
 | Security & Compliance | 6 |
-| Security Compliance | 7 |
+| Security Compliance | 2 |
 | Technical Review | 3 |
 | Web Development | 5 |
 
@@ -72,69 +76,79 @@
 | 08_revenue_forecast_review | Finance & Analytics | Not Run | 0 | Not Ready |
 | ab_test_review | Product & UX | Not Run | 0 | Not Ready |
 | accessibility_audit | Product & UX | Not Run | 0 | Not Ready |
+| adaptyv | App Development | Not Run | 0 | Not Ready |
+| andrew_kane_gem_writer | App Development | Not Run | 0 | Not Ready |
 | api_security_checklist | Security & Compliance | Not Run | 0 | Not Ready |
-| audit_prep_assistant | Security Compliance | Not Run | 0 | Not Ready |
-| bocha_search | Product Ux | Not Run | 0 | Not Ready |
+| architecture_paradigm_microservices | App Development | Not Run | 0 | Not Ready |
+| backend_dev_guidelines | App Development | Not Run | 0 | Not Ready |
+| backend_development | App Development | Not Run | 0 | Not Ready |
 | brand_voice_consistency | Marketing & SEO | Not Run | 0 | Not Ready |
-| browser_use | App Development | Not Run | 0 | Not Ready |
+| building_with_google_adk | Ai Ml Evaluation | Not Run | 0 | Not Ready |
+| business_competitor_analysis | Business Analysis | Not Run | 0 | Not Ready |
+| business_plan | Business Analysis | Not Run | 0 | Not Ready |
 | ccxt_php | App Development | Not Run | 0 | Not Ready |
-| checking_changes | App Development | Not Run | 0 | Not Ready |
-| ci_monitor | App Development | Not Run | 0 | Not Ready |
-| clojure_review | App Development | Not Run | 0 | Not Ready |
-| cn_check | App Development | Not Run | 0 | Not Ready |
-| code_review | Security Compliance | Not Run | 0 | Not Ready |
-| code_reviewer | App Development | Not Run | 0 | Not Ready |
 | competitor_alternatives | Product Ux | Not Run | 0 | Not Ready |
 | competitor_analysis | Marketing & SEO | Not Run | 0 | Not Ready |
 | component_refactoring | App Development | Not Run | 0 | Not Ready |
+| content_creator | Marketing Seo | Not Run | 0 | Not Ready |
 | content_quality_checklist | Marketing & SEO | Not Run | 0 | Not Ready |
-| content_research_writer | Content Creation | Not Run | 0 | Not Ready |
 | copywriting_evaluation | Marketing & SEO | Not Run | 0 | Not Ready |
 | create_database_migration | App Development | Not Run | 0 | Not Ready |
-| creating_financial_models | App Development | Not Run | 0 | Not Ready |
+| data_context_extractor | App Development | Not Run | 0 | Not Ready |
 | data_handling_review | Security & Compliance | Not Run | 0 | Not Ready |
 | dev_browser | App Development | Not Run | 0 | Not Ready |
+| devops_troubleshooter | App Development | Not Run | 0 | Not Ready |
 | doc_coauthoring | Content Creation | Not Run | 0 | Not Ready |
-| docs_writer_reference | Content Creation | Not Run | 0 | Not Ready |
+| dyadmulti_pr_review | App Development | Not Run | 0 | Not Ready |
+| dynamic | App Development | Not Run | 0 | Not Ready |
 | email_campaign_review | Marketing & SEO | Not Run | 0 | Not Ready |
 | error_handling_ux | Product & UX | Not Run | 0 | Not Ready |
-| evals_context | App Development | Not Run | 0 | Not Ready |
-| fastapi | App Development | Not Run | 0 | Not Ready |
+| excel_report_generator | Business Analysis | Not Run | 0 | Not Ready |
 | feature_prioritization | Product & UX | Not Run | 0 | Not Ready |
-| fetch_diff | App Development | Not Run | 0 | Not Ready |
+| finance_manager | Finance Analytics | Not Run | 0 | Not Ready |
 | frontend_design | App Development | Not Run | 0 | Not Ready |
+| frontend_responsive_design_standards | App Development | Not Run | 0 | Not Ready |
 | gdpr_compliance_review | Security & Compliance | Not Run | 0 | Not Ready |
-| golang_testing | App Development | Not Run | 0 | Not Ready |
 | healthcheck | Security Compliance | Not Run | 0 | Not Ready |
+| hooked_ux | Product Ux | Not Run | 0 | Not Ready |
 | hugging_face_model_trainer | App Development | Not Run | 0 | Not Ready |
 | incident_response_plan | Security & Compliance | Not Run | 0 | Not Ready |
-| jazz_permissions_security | Security Compliance | Not Run | 0 | Not Ready |
 | landing_page_cro | Marketing & SEO | Not Run | 0 | Not Ready |
-| last30days | Product Ux | Not Run | 0 | Not Ready |
-| multi_reviewer_patterns | App Development | Not Run | 0 | Not Ready |
+| lazyllm_skill | App Development | Not Run | 0 | Not Ready |
+| legal_simulation_patrick_munro | Legal Contracts | Not Run | 0 | Not Ready |
+| litestream | App Development | Not Run | 0 | Not Ready |
+| marketing_demand_acquisition | Marketing Seo | Not Run | 0 | Not Ready |
+| mermaid_diagrams | App Development | Not Run | 0 | Not Ready |
+| ml_paper_writing | Ai Ml Evaluation | Not Run | 0 | Not Ready |
+| moai_domain_backend | App Development | Not Run | 0 | Not Ready |
+| montecarlo | Finance Analytics | Not Run | 0 | Not Ready |
 | native_dependency_update | Security Compliance | Not Run | 0 | Not Ready |
+| numerai_research | Product Ux | Not Run | 0 | Not Ready |
+| octocode_research | Product Ux | Not Run | 0 | Not Ready |
 | onboarding_experience_review | Product & UX | Not Run | 0 | Not Ready |
-| playwright_cli | App Development | Not Run | 0 | Not Ready |
-| pr_finalize | App Development | Not Run | 0 | Not Ready |
+| onchainkit | App Development | Not Run | 0 | Not Ready |
+| penpot_uiux_design | App Development | Not Run | 0 | Not Ready |
+| perf_optimizer | App Development | Not Run | 0 | Not Ready |
+| performance_optimization | App Development | Not Run | 0 | Not Ready |
+| playwriter | App Development | Not Run | 0 | Not Ready |
 | pricing_strategy_review | Marketing & SEO | Not Run | 0 | Not Ready |
 | privacy_policy_audit | Security & Compliance | Not Run | 0 | Not Ready |
-| python_expert | App Development | Not Run | 0 | Not Ready |
-| receiving_code_review | App Development | Not Run | 0 | Not Ready |
-| release | Security Compliance | Not Run | 0 | Not Ready |
+| promptfoo_evaluation | Ai Ml Evaluation | Not Run | 0 | Not Ready |
+| prototype_prompt_generator | App Development | Not Run | 0 | Not Ready |
+| refly | App Development | Not Run | 0 | Not Ready |
 | research | Product Ux | Not Run | 0 | Not Ready |
+| senior_data_scientist | Ai Ml Evaluation | Not Run | 0 | Not Ready |
 | seo_audit | Marketing & SEO | Not Run | 0 | Not Ready |
-| setup_web_tests | App Development | Not Run | 0 | Not Ready |
+| setup_timescaledb_hypertables | App Development | Not Run | 0 | Not Ready |
+| smart_docs | App Development | Not Run | 0 | Not Ready |
 | social_media_ad_review | Marketing & SEO | Not Run | 0 | Not Ready |
-| solidity_security | Security Compliance | Not Run | 0 | Not Ready |
-| technical_articles | Content Creation | Not Run | 0 | Not Ready |
+| sysadmin_toolbox | App Development | Not Run | 0 | Not Ready |
 | terms_of_service_review | Security & Compliance | Not Run | 0 | Not Ready |
-| testing_python | App Development | Not Run | 0 | Not Ready |
 | tidb_test_guidelines | App Development | Not Run | 0 | Not Ready |
 | ui_ux_pro_max | App Development | Not Run | 0 | Not Ready |
 | update_docs | App Development | Not Run | 0 | Not Ready |
 | user_flow_analysis | Product & UX | Not Run | 0 | Not Ready |
 | user_persona_development | Product & UX | Not Run | 0 | Not Ready |
 | ux_heuristic_evaluation | Product & UX | Not Run | 0 | Not Ready |
-| vercel_react_best_practices | App Development | Not Run | 0 | Not Ready |
-| write_release_notes | Content Creation | Not Run | 0 | Not Ready |
-| writing_docs | Content Creation | Not Run | 0 | Not Ready |
+| ux_writing | Product Ux | Not Run | 0 | Not Ready |
+| word | Legal Contracts | Not Run | 0 | Not Ready |

@@ -2,6 +2,39 @@
 
 ---
 
+## [2026-02-08] — Quality Calibration & Governance Overhaul
+
+### Added
+- **Independent Expert Review** (`docs/CVF_INDEPENDENT_EXPERT_REVIEW_2026-02-08.md`) — 8.5/10 calibrated score
+- **Combined Assessment Roadmap** (`docs/CVF_COMBINED_ASSESSMENT_ROADMAP_2026-02-08.md`) — 15 findings, 4 sprints
+- **Scoring Methodology** (`docs/CVF_SCORING_METHODOLOGY.md`) — Self vs Independent rating process
+- **CVF Lite** (`CVF_LITE.md`) — 5-minute quick start guide
+- **CVF Positioning** (`docs/CVF_POSITIONING.md`) — Clear identity definition (3-layer architecture)
+- **Quality Dimensions Spec** (`specs/QUALITY_DIMENSIONS.md`) — Separates Spec/UAT/Satisfaction scoring
+- **UAT Status Spec** (`specs/UAT_STATUS_SPEC.md`) — 4-state badge system (NOT_RUN/NEEDS_UAT/VALIDATED/FAILED)
+- **Deduplication Policy** (`specs/SKILL_DEDUPLICATION_POLICY.md`) — Similarity thresholds and process
+- **Data Lineage Spec** (`specs/DATA_LINEAGE.md`) — Origin tracking (CURATED/IMPORTED/ADAPTED)
+- **Version Lock Spec** (`specs/ARTIFACT_VERSION_LOCK.md`) — Skill-governance sync system
+- `check_version_sync.py` — Version lock checker + fixer (124 files synced)
+- `inject_spec_scores.py` — Spec score block injector for `.gov.md` files
+- `inject_lineage.py` — Data lineage tag injector for `.gov.md` files
+
+### Changed
+- **`report_spec_metrics.py`** — Complete rewrite with calibrated v2 scoring (content depth, concrete examples, input constraints, output schema, placeholder penalty). Scores dropped from 92-100 → 84-94 range.
+- **`score_uat.py`** — Added badge field to `ScoreResult`, badge summary in reports
+- **README.md** — Assessment updated to 8.5/10 (calibrated), added 3-tier architecture diagram, skill count corrected to 124
+- **124 `.gov.md` files** — Injected `## Spec Score` blocks with per-section breakdown
+- **124 `.gov.md` files** — Injected `## Version Lock` blocks (all SYNCED)
+- **124 `.gov.md` files** — Injected Origin/Origin Source lineage tags in Governance table
+
+### Status
+- Sprint 1 (Trust Calibration): ✅ COMPLETED
+- Sprint 2 (Data Integrity): ✅ COMPLETED
+- Sprint 3 (Validation + Adoption): 🟡 Partially complete (CVF Lite, Positioning, Version Consolidation done; Pilot remains)
+- Sprint 4 (Ecosystem): ⏸️ DEFERRED
+
+---
+
 ## [2026-02-07] — Quality Pass 2 + Platform Updates
 
 ### Added

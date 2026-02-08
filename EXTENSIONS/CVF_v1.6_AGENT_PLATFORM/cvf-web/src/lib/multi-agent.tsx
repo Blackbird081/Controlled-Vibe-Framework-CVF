@@ -210,6 +210,10 @@ export function useMultiAgentWorkflow() {
         });
     }, []);
 
+    const setWorkflowStatus = useCallback((status: Workflow['status']) => {
+        setWorkflow(prev => (prev ? { ...prev, status } : null));
+    }, []);
+
     const getCurrentAgent = useCallback((): Agent | null => {
         if (!workflow) return null;
         return workflow.agents[workflow.currentAgentIndex] || null;
@@ -229,6 +233,7 @@ export function useMultiAgentWorkflow() {
         updateTaskStatus,
         moveToNextAgent,
         getCurrentAgent,
+        setWorkflowStatus,
         reset,
     };
 }

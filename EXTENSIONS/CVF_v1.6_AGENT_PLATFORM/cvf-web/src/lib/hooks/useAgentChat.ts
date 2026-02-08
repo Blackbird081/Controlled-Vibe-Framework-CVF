@@ -13,8 +13,13 @@ import {
     CVFPhase,
     detectCurrentPhase,
     DecisionLogEntry,
+    autoCheckItems,
+    calculatePhaseCompliance,
 } from '@/lib/cvf-checklists';
 import { ChatMessage, CVFMode, MODE_CONFIG, detectSpecMode } from '@/lib/agent-chat';
+import { evaluateEnforcement } from '@/lib/enforcement';
+import { calculateFactualScore } from '@/lib/factual-scoring';
+import { logEnforcementDecision, logPreUatFailure } from '@/lib/enforcement-log';
 import { usePhaseDetection } from './usePhaseDetection';
 
 interface AgentChatSettings {
@@ -56,7 +61,7 @@ export function useAgentChat({
     onClose,
     onMessagesChange,
 }: UseAgentChatOptions) {
-    const { trackUsage } = useQuotaManager();
+    const { trackUsage, checkBudget } = useQuotaManager();
     const { detectPhase } = usePhaseDetection();
 
     const [messages, setMessages] = useState<ChatMessage[]>(existingMessages || []);
@@ -138,6 +143,17 @@ export function useAgentChat({
             ? calculateQualityScore(response.text || fullText, effectiveMode)
             : undefined;
 
+        const factual = calculateFactualScore(response.text || fullText, userContent);
+        let preUatStatus: 'PASS' | 'FAIL' | undefined;
+        let preUatScore: number | undefined;
+        if (shouldRequireAcceptance(effectiveMode) && qualityScore) {
+            const complianceScore = detectedPhase
+                ? calculatePhaseCompliance(detectedPhase as CVFPhase, autoCheckItems(detectedPhase as CVFPhase, response.text || fullText)).score
+                : qualityScore.compliance;
+            preUatScore = Math.round((qualityScore.overall + complianceScore + factual.score) / 3);
+            preUatStatus = preUatScore >= 70 && factual.score >= 50 ? 'PASS' : 'FAIL';
+        }
+
         const acceptanceStatus: AcceptanceStatus | undefined = shouldRequireAcceptance(effectiveMode)
             ? 'pending'
             : undefined;
@@ -155,6 +171,10 @@ export function useAgentChat({
                             phase: phaseLabel,
                             qualityScore,
                             acceptanceStatus,
+                            preUatStatus,
+                            preUatScore,
+                            factualScore: factual.score,
+                            factualRisk: factual.risk,
                         }
                     }
                     : m
@@ -171,6 +191,23 @@ export function useAgentChat({
                 phase: detectedPhase,
                 response: response.text || fullText,
             });
+        }
+
+        if (preUatStatus === 'FAIL') {
+            logPreUatFailure({
+                phase: detectedPhase,
+                factualScore: factual.score,
+                preUatScore,
+            });
+            const warnMessage: ChatMessage = {
+                id: `msg_${Date.now() + 2}`,
+                role: 'system',
+                content: language === 'vi'
+                    ? '⚠️ Pre-UAT (Agent self-check) chưa đạt. Nên yêu cầu chỉnh sửa trước khi user đánh giá.'
+                    : '⚠️ Pre-UAT (Agent self-check) failed. Request revisions before user evaluation.',
+                timestamp: new Date(),
+            };
+            setMessages(prev => [...prev, warnMessage]);
         }
     }, [messages, language, currentMode, detectPhase, trackUsage]);
 
@@ -226,6 +263,96 @@ ${attachedFile.content}
         };
 
         setMessages(prev => [...prev, userMessage]);
+
+        const budgetStatus = checkBudget();
+        const enforcement = evaluateEnforcement({
+            mode: currentModeRef.current,
+            content: finalContent,
+            budgetOk: budgetStatus.ok,
+        });
+        logEnforcementDecision({
+            source: 'agent_chat',
+            mode: currentModeRef.current,
+            enforcement,
+            context: {
+                hasFile: Boolean(attachedFile),
+                provider,
+            },
+        });
+
+        if (enforcement.status === 'BLOCK') {
+            if (!budgetStatus.ok) {
+                const budgetMessage: ChatMessage = {
+                    id: `msg_${Date.now() + 1}`,
+                    role: 'system',
+                    content: language === 'vi'
+                        ? '🚫 Đã vượt budget. Vui lòng tăng budget hoặc chờ reset trước khi tiếp tục.'
+                        : '🚫 Budget exceeded. Please increase budget or wait for reset before continuing.',
+                    timestamp: new Date(),
+                };
+                setMessages(prev => [...prev, budgetMessage]);
+            } else if (enforcement.riskGate?.status === 'BLOCK') {
+                const blockMessage: ChatMessage = {
+                    id: `msg_${Date.now() + 1}`,
+                    role: 'system',
+                    content: language === 'vi'
+                        ? `⛔ Yêu cầu bị chặn do rủi ro ${enforcement.riskGate.riskLevel}. Vui lòng chuyển sang Governance/Full mode hoặc giảm rủi ro.`
+                        : `⛔ Request blocked due to risk ${enforcement.riskGate.riskLevel}. Switch to Governance/Full mode or reduce risk.`,
+                    timestamp: new Date(),
+                };
+                setMessages(prev => [...prev, blockMessage]);
+            } else {
+                const blockMessage: ChatMessage = {
+                    id: `msg_${Date.now() + 1}`,
+                    role: 'system',
+                    content: language === 'vi'
+                        ? '⛔ Spec chưa đạt yêu cầu tối thiểu. Vui lòng bổ sung thông tin còn thiếu.'
+                        : '⛔ Spec is incomplete. Please provide missing information before continuing.',
+                    timestamp: new Date(),
+                };
+                setMessages(prev => [...prev, blockMessage]);
+            }
+            setInput('');
+            setAttachedFile(null);
+            return;
+        }
+
+        if (enforcement.status === 'CLARIFY') {
+            const clarifyMessage: ChatMessage = {
+                id: `msg_${Date.now() + 1}`,
+                role: 'system',
+                content: language === 'vi'
+                    ? '❓ Spec còn thiếu thông tin quan trọng. Vui lòng làm rõ trước khi tiếp tục.'
+                    : '❓ Spec is missing key details. Please clarify before continuing.',
+                timestamp: new Date(),
+            };
+            setMessages(prev => [...prev, clarifyMessage]);
+            setInput('');
+            setAttachedFile(null);
+            return;
+        }
+
+        if (enforcement.status === 'NEEDS_APPROVAL' && enforcement.riskGate) {
+            const prompt = language === 'vi'
+                ? `Rủi ro ${enforcement.riskGate.riskLevel} yêu cầu xác nhận của con người trước khi chạy. Bạn có muốn tiếp tục?`
+                : `Risk ${enforcement.riskGate.riskLevel} requires human approval before execution. Continue?`;
+            const approved = typeof window === 'undefined' ? true : window.confirm(prompt);
+            if (!approved) {
+                const approvalMessage: ChatMessage = {
+                    id: `msg_${Date.now() + 2}`,
+                    role: 'system',
+                    content: language === 'vi'
+                        ? `⏸️ Đã dừng. Chưa có xác nhận cho rủi ro ${enforcement.riskGate.riskLevel}.`
+                        : `⏸️ Execution halted. No approval for risk ${enforcement.riskGate.riskLevel}.`,
+                    timestamp: new Date(),
+                };
+                setMessages(prev => [...prev, approvalMessage]);
+                setInput('');
+                setAttachedFile(null);
+                return;
+            }
+        }
+
         setInput('');
         setAttachedFile(null);
         setIsLoading(true);

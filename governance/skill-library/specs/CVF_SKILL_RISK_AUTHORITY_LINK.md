@@ -118,7 +118,26 @@ Undefined = Forbidden by default.
 
 ---
 
-## 6. Risk ↔ Authority Constraints
+## 6. Spec Gate + UAT Hooks (Mandatory)
+
+Every skill MUST declare:
+- **Spec Gate Requirements**
+  - Required inputs (Form Input must define required fields)
+  - Constraints + validation hooks
+  - Minimum spec score threshold (per domain or global)
+- **UAT Binding**
+  - Link to UAT record file
+  - Pre-UAT checklist (agent self-check)
+  - Evidence required (snapshots, logs, references)
+
+> Spec Gate = đánh giá đầu vào (Input/Spec)  
+> UAT = đánh giá đầu ra (Output)
+
+If Spec Gate fails, **execution is blocked** regardless of risk level.
+
+---
+
+## 7. Risk ↔ Authority Constraints
 
 Risk level enforces hard limits:
 
@@ -145,7 +164,7 @@ Risk level enforces hard limits:
 
 ---
 
-## 7. Enforcement Rule
+## 8. Enforcement Rule
 
 If a skill invocation violates this linkage:
 - The system MUST block execution
@@ -157,7 +176,7 @@ It is a framework breach.
 
 ---
 
-## 8. Design Intent
+## 9. Design Intent
 
 This linkage exists to ensure:
 - Skills never outgrow governance

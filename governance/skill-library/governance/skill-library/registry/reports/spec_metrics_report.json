@@ -1,0 +1,1302 @@
+{
+  "summary": {
+    "total_skills": 124,
+    "missing_sections": {
+      "form_input_table": 8
+    },
+    "domain_quality": {
+      "Ai Ml Evaluation": {
+        "Excellent": 10
+      },
+      "App Development": {
+        "Excellent": 41
+      },
+      "Business Analysis": {
+        "Excellent": 6
+      },
+      "Content Creation": {
+        "Excellent": 4
+      },
+      "Finance Analytics": {
+        "Excellent": 10
+      },
+      "Hr Operations": {
+        "Excellent": 5
+      },
+      "Legal Contracts": {
+        "Excellent": 7
+      },
+      "Marketing Seo": {
+        "Excellent": 11
+      },
+      "Product Ux": {
+        "Excellent": 14
+      },
+      "Security Compliance": {
+        "Excellent": 8
+      },
+      "Technical Review": {
+        "Excellent": 3
+      },
+      "Web Development": {
+        "Excellent": 5
+      }
+    },
+    "domain_avg_score": {
+      "Ai Ml Evaluation": 100.0,
+      "App Development": 100.0,
+      "Business Analysis": 100.0,
+      "Content Creation": 100.0,
+      "Finance Analytics": 92.0,
+      "Hr Operations": 100.0,
+      "Legal Contracts": 100.0,
+      "Marketing Seo": 100.0,
+      "Product Ux": 100.0,
+      "Security Compliance": 100.0,
+      "Technical Review": 100.0,
+      "Web Development": 100.0
+    }
+  },
+  "skills": [
+    {
+      "skill_id": "01_model_selection.skill",
+      "title": "Model Selection",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\01_model_selection.skill.md"
+    },
+    {
+      "skill_id": "02_prompt_evaluation.skill",
+      "title": "Prompt Evaluation",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\02_prompt_evaluation.skill.md"
+    },
+    {
+      "skill_id": "03_output_quality_check.skill",
+      "title": "Output Quality Check",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\03_output_quality_check.skill.md"
+    },
+    {
+      "skill_id": "04_bias_detection.skill",
+      "title": "Bias Detection",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\04_bias_detection.skill.md"
+    },
+    {
+      "skill_id": "05_cost_optimization.skill",
+      "title": "Cost Optimization",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\05_cost_optimization.skill.md"
+    },
+    {
+      "skill_id": "06_ai_use_case_fit.skill",
+      "title": "AI Use Case Fit",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\06_ai_use_case_fit.skill.md"
+    },
+    {
+      "skill_id": "building_with_google_adk.skill",
+      "title": "Building With Google Adk",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\building_with_google_adk.skill.md"
+    },
+    {
+      "skill_id": "ml_paper_writing.skill",
+      "title": "Ml Paper Writing",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\ml_paper_writing.skill.md"
+    },
+    {
+      "skill_id": "promptfoo_evaluation.skill",
+      "title": "Promptfoo Evaluation",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\promptfoo_evaluation.skill.md"
+    },
+    {
+      "skill_id": "senior_data_scientist.skill",
+      "title": "Enior Data Cienti T",
+      "domain": "Ai Ml Evaluation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\ai_ml_evaluation\\senior_data_scientist.skill.md"
+    },
+    {
+      "skill_id": "01_app_requirements_spec.skill",
+      "title": "App Requirements Spec",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\01_app_requirements_spec.skill.md"
+    },
+    {
+      "skill_id": "02_tech_stack_selection.skill",
+      "title": "Tech Stack Selection",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\02_tech_stack_selection.skill.md"
+    },
+    {
+      "skill_id": "03_architecture_design.skill",
+      "title": "Architecture Design",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\03_architecture_design.skill.md"
+    },
+    {
+      "skill_id": "04_database_schema_design.skill",
+      "title": "Database Schema Design",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\04_database_schema_design.skill.md"
+    },
+    {
+      "skill_id": "05_api_design_spec.skill",
+      "title": "API Design Spec",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\05_api_design_spec.skill.md"
+    },
+    {
+      "skill_id": "06_desktop_app_spec.skill",
+      "title": "Desktop App Spec",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\06_desktop_app_spec.skill.md"
+    },
+    {
+      "skill_id": "07_cli_tool_spec.skill",
+      "title": "CLI Tool Spec",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\07_cli_tool_spec.skill.md"
+    },
+    {
+      "skill_id": "08_local_deployment.skill",
+      "title": "Local Deployment Spec",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\08_local_deployment.skill.md"
+    },
+    {
+      "skill_id": "adaptyv.skill",
+      "title": "Adaptyv",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\adaptyv.skill.md"
+    },
+    {
+      "skill_id": "andrew_kane_gem_writer.skill",
+      "title": "Andrew Kane Gem Writer",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\andrew_kane_gem_writer.skill.md"
+    },
+    {
+      "skill_id": "architecture_paradigm_microservices.skill",
+      "title": "Architecture Paradigm Micro Ervice",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\architecture_paradigm_microservices.skill.md"
+    },
+    {
+      "skill_id": "backend_dev_guidelines.skill",
+      "title": "Backend Dev Guideline",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\backend_dev_guidelines.skill.md"
+    },
+    {
+      "skill_id": "backend_development.skill",
+      "title": "Backend Development",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\backend_development.skill.md"
+    },
+    {
+      "skill_id": "ccxt_php.skill",
+      "title": "Ccxt Php",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\ccxt_php.skill.md"
+    },
+    {
+      "skill_id": "component_refactoring.skill",
+      "title": "Component Refactoring",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\component_refactoring.skill.md"
+    },
+    {
+      "skill_id": "create_database_migration.skill",
+      "title": "Create Databa E Migration",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\create_database_migration.skill.md"
+    },
+    {
+      "skill_id": "data_context_extractor.skill",
+      "title": "Data Context Extractor",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\data_context_extractor.skill.md"
+    },
+    {
+      "skill_id": "dev_browser.skill",
+      "title": "Dev Brow Er",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\dev_browser.skill.md"
+    },
+    {
+      "skill_id": "devops_troubleshooter.skill",
+      "title": "Devop Trouble Hooter",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\devops_troubleshooter.skill.md"
+    },
+    {
+      "skill_id": "dyadmulti_pr_review.skill",
+      "title": "Dyadmulti Pr Review",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\dyadmulti_pr_review.skill.md"
+    },
+    {
+      "skill_id": "dynamic.skill",
+      "title": "Dynamic",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\dynamic.skill.md"
+    },
+    {
+      "skill_id": "frontend_design.skill",
+      "title": "Frontend De Ign",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\frontend_design.skill.md"
+    },
+    {
+      "skill_id": "frontend_responsive_design_standards.skill",
+      "title": "Frontend Re Pon Ive De Ign Tandard",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\frontend_responsive_design_standards.skill.md"
+    },
+    {
+      "skill_id": "hugging_face_model_trainer.skill",
+      "title": "Hugging Face Model Trainer",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\hugging_face_model_trainer.skill.md"
+    },
+    {
+      "skill_id": "lazyllm_skill.skill",
+      "title": "Lazyllm Kill",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\lazyllm_skill.skill.md"
+    },
+    {
+      "skill_id": "litestream.skill",
+      "title": "Lite Tream",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\litestream.skill.md"
+    },
+    {
+      "skill_id": "mermaid_diagrams.skill",
+      "title": "Mermaid Diagram",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\mermaid_diagrams.skill.md"
+    },
+    {
+      "skill_id": "moai_domain_backend.skill",
+      "title": "Moai Domain Backend",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\moai_domain_backend.skill.md"
+    },
+    {
+      "skill_id": "onchainkit.skill",
+      "title": "Onchainkit",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\onchainkit.skill.md"
+    },
+    {
+      "skill_id": "penpot_uiux_design.skill",
+      "title": "Penpot Uiux De Ign",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\penpot_uiux_design.skill.md"
+    },
+    {
+      "skill_id": "perf_optimizer.skill",
+      "title": "Perf Optimizer",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\perf_optimizer.skill.md"
+    },
+    {
+      "skill_id": "performance_optimization.skill",
+      "title": "Performance Optimization",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\performance_optimization.skill.md"
+    },
+    {
+      "skill_id": "playwriter.skill",
+      "title": "Playwriter",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\playwriter.skill.md"
+    },
+    {
+      "skill_id": "prototype_prompt_generator.skill",
+      "title": "Prototype Prompt Generator",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\prototype_prompt_generator.skill.md"
+    },
+    {
+      "skill_id": "refly.skill",
+      "title": "Refly",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\refly.skill.md"
+    },
+    {
+      "skill_id": "setup_timescaledb_hypertables.skill",
+      "title": "Etup Time Caledb Hypertable",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\setup_timescaledb_hypertables.skill.md"
+    },
+    {
+      "skill_id": "smart_docs.skill",
+      "title": "Mart Doc",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\smart_docs.skill.md"
+    },
+    {
+      "skill_id": "sysadmin_toolbox.skill",
+      "title": "Y Admin Toolbox",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\sysadmin_toolbox.skill.md"
+    },
+    {
+      "skill_id": "tidb_test_guidelines.skill",
+      "title": "Tidb Te T Guideline",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\tidb_test_guidelines.skill.md"
+    },
+    {
+      "skill_id": "ui_ux_pro_max.skill",
+      "title": "Ui Ux Pro Max",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\ui_ux_pro_max.skill.md"
+    },
+    {
+      "skill_id": "update_docs.skill",
+      "title": "Update Doc",
+      "domain": "App Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\app_development\\update_docs.skill.md"
+    },
+    {
+      "skill_id": "01_strategy_analysis.skill",
+      "title": "Strategy Analysis",
+      "domain": "Business Analysis",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\business_analysis\\01_strategy_analysis.skill.md"
+    },
+    {
+      "skill_id": "02_risk_assessment.skill",
+      "title": "Risk Assessment",
+      "domain": "Business Analysis",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\business_analysis\\02_risk_assessment.skill.md"
+    },
+    {
+      "skill_id": "03_market_research.skill",
+      "title": "Market Research",
+      "domain": "Business Analysis",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\business_analysis\\03_market_research.skill.md"
+    },
+    {
+      "skill_id": "business_competitor_analysis.skill",
+      "title": "Bu Ine Competitor Analy I",
+      "domain": "Business Analysis",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\business_analysis\\business_competitor_analysis.skill.md"
+    },
+    {
+      "skill_id": "business_plan.skill",
+      "title": "Bu Ine Plan",
+      "domain": "Business Analysis",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\business_analysis\\business_plan.skill.md"
+    },
+    {
+      "skill_id": "excel_report_generator.skill",
+      "title": "Excel Report Generator",
+      "domain": "Business Analysis",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\business_analysis\\excel_report_generator.skill.md"
+    },
+    {
+      "skill_id": "01_documentation.skill",
+      "title": "Documentation",
+      "domain": "Content Creation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\content_creation\\01_documentation.skill.md"
+    },
+    {
+      "skill_id": "02_report_writing.skill",
+      "title": "Report Writing",
+      "domain": "Content Creation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\content_creation\\02_report_writing.skill.md"
+    },
+    {
+      "skill_id": "03_presentation.skill",
+      "title": "Presentation",
+      "domain": "Content Creation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\content_creation\\03_presentation.skill.md"
+    },
+    {
+      "skill_id": "doc_coauthoring.skill",
+      "title": "Doc Coauthoring",
+      "domain": "Content Creation",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\content_creation\\doc_coauthoring.skill.md"
+    },
+    {
+      "skill_id": "01_budget_analysis.skill",
+      "title": "Budget Analysis",
+      "domain": "Finance Analytics",
+      "spec_score": 90,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "form_input_table",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\01_budget_analysis.skill.md"
+    },
+    {
+      "skill_id": "02_financial_statement_review.skill",
+      "title": "Financial Statement Review",
+      "domain": "Finance Analytics",
+      "spec_score": 90,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "form_input_table",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\02_financial_statement_review.skill.md"
+    },
+    {
+      "skill_id": "03_roi_calculator_review.skill",
+      "title": "ROI Calculator Review",
+      "domain": "Finance Analytics",
+      "spec_score": 90,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "form_input_table",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\03_roi_calculator_review.skill.md"
+    },
+    {
+      "skill_id": "04_kpi_dashboard_audit.skill",
+      "title": "KPI Dashboard Audit",
+      "domain": "Finance Analytics",
+      "spec_score": 90,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "form_input_table",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\04_kpi_dashboard_audit.skill.md"
+    },
+    {
+      "skill_id": "05_cash_flow_analysis.skill",
+      "title": "Cash Flow Analysis",
+      "domain": "Finance Analytics",
+      "spec_score": 90,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "form_input_table",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\05_cash_flow_analysis.skill.md"
+    },
+    {
+      "skill_id": "06_investment_due_diligence.skill",
+      "title": "Investment Due Diligence",
+      "domain": "Finance Analytics",
+      "spec_score": 90,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "form_input_table",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\06_investment_due_diligence.skill.md"
+    },
+    {
+      "skill_id": "07_financial_risk_assessment.skill",
+      "title": "Financial Risk Assessment",
+      "domain": "Finance Analytics",
+      "spec_score": 90,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "form_input_table",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\07_financial_risk_assessment.skill.md"
+    },
+    {
+      "skill_id": "08_revenue_forecast_review.skill",
+      "title": "Revenue Forecast Review",
+      "domain": "Finance Analytics",
+      "spec_score": 90,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "form_input_table",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\08_revenue_forecast_review.skill.md"
+    },
+    {
+      "skill_id": "finance_manager.skill",
+      "title": "Finance Manager",
+      "domain": "Finance Analytics",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\finance_manager.skill.md"
+    },
+    {
+      "skill_id": "montecarlo.skill",
+      "title": "Montecarlo",
+      "domain": "Finance Analytics",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\finance_analytics\\montecarlo.skill.md"
+    },
+    {
+      "skill_id": "01_job_description.skill",
+      "title": "Job Description",
+      "domain": "Hr Operations",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\hr_operations\\01_job_description.skill.md"
+    },
+    {
+      "skill_id": "02_interview_evaluation.skill",
+      "title": "Interview Evaluation",
+      "domain": "Hr Operations",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\hr_operations\\02_interview_evaluation.skill.md"
+    },
+    {
+      "skill_id": "03_performance_review.skill",
+      "title": "Performance Review",
+      "domain": "Hr Operations",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\hr_operations\\03_performance_review.skill.md"
+    },
+    {
+      "skill_id": "04_onboarding_checklist.skill",
+      "title": "Onboarding Checklist",
+      "domain": "Hr Operations",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\hr_operations\\04_onboarding_checklist.skill.md"
+    },
+    {
+      "skill_id": "05_policy_documentation.skill",
+      "title": "Policy Documentation",
+      "domain": "Hr Operations",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\hr_operations\\05_policy_documentation.skill.md"
+    },
+    {
+      "skill_id": "01_contract_review.skill",
+      "title": "Contract Review",
+      "domain": "Legal Contracts",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\legal_contracts\\01_contract_review.skill.md"
+    },
+    {
+      "skill_id": "02_nda_template.skill",
+      "title": "NDA Template",
+      "domain": "Legal Contracts",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\legal_contracts\\02_nda_template.skill.md"
+    },
+    {
+      "skill_id": "03_terms_of_service.skill",
+      "title": "Terms of Service",
+      "domain": "Legal Contracts",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\legal_contracts\\03_terms_of_service.skill.md"
+    },
+    {
+      "skill_id": "04_compliance_checklist.skill",
+      "title": "Compliance Checklist",
+      "domain": "Legal Contracts",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\legal_contracts\\04_compliance_checklist.skill.md"
+    },
+    {
+      "skill_id": "05_ip_protection.skill",
+      "title": "IP Protection",
+      "domain": "Legal Contracts",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\legal_contracts\\05_ip_protection.skill.md"
+    },
+    {
+      "skill_id": "legal_simulation_patrick_munro.skill",
+      "title": "Legal Imulation Patrick Munro",
+      "domain": "Legal Contracts",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\legal_contracts\\legal_simulation_patrick_munro.skill.md"
+    },
+    {
+      "skill_id": "word.skill",
+      "title": "Word",
+      "domain": "Legal Contracts",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\legal_contracts\\word.skill.md"
+    },
+    {
+      "skill_id": "brand_voice_consistency.skill",
+      "title": "Brand Voice Consistency",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\brand_voice_consistency.skill.md"
+    },
+    {
+      "skill_id": "competitor_analysis.skill",
+      "title": "Competitor Analysis",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\competitor_analysis.skill.md"
+    },
+    {
+      "skill_id": "content_creator.skill",
+      "title": "Content Creator",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\content_creator.skill.md"
+    },
+    {
+      "skill_id": "content_quality_checklist.skill",
+      "title": "Content Quality Checklist",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\content_quality_checklist.skill.md"
+    },
+    {
+      "skill_id": "copywriting_evaluation.skill",
+      "title": "Copywriting Evaluation",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\copywriting_evaluation.skill.md"
+    },
+    {
+      "skill_id": "email_campaign_review.skill",
+      "title": "Email Campaign Review",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\email_campaign_review.skill.md"
+    },
+    {
+      "skill_id": "landing_page_cro.skill",
+      "title": "Landing Page CRO",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\landing_page_cro.skill.md"
+    },
+    {
+      "skill_id": "marketing_demand_acquisition.skill",
+      "title": "Marketing Demand Acqui Ition",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\marketing_demand_acquisition.skill.md"
+    },
+    {
+      "skill_id": "pricing_strategy_review.skill",
+      "title": "Pricing Strategy Review",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\pricing_strategy_review.skill.md"
+    },
+    {
+      "skill_id": "seo_audit.skill",
+      "title": "SEO Audit",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\seo_audit.skill.md"
+    },
+    {
+      "skill_id": "social_media_ad_review.skill",
+      "title": "Social Media Ad Review",
+      "domain": "Marketing Seo",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\marketing_seo\\social_media_ad_review.skill.md"
+    },
+    {
+      "skill_id": "ab_test_review.skill",
+      "title": "A/B Test Review",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\ab_test_review.skill.md"
+    },
+    {
+      "skill_id": "accessibility_audit.skill",
+      "title": "Accessibility Audit (WCAG)",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\accessibility_audit.skill.md"
+    },
+    {
+      "skill_id": "competitor_alternatives.skill",
+      "title": "Competitor Alternative",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\competitor_alternatives.skill.md"
+    },
+    {
+      "skill_id": "error_handling_ux.skill",
+      "title": "Error Handling UX",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\error_handling_ux.skill.md"
+    },
+    {
+      "skill_id": "feature_prioritization.skill",
+      "title": "Feature Prioritization (RICE/ICE)",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\feature_prioritization.skill.md"
+    },
+    {
+      "skill_id": "hooked_ux.skill",
+      "title": "Hooked Ux",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\hooked_ux.skill.md"
+    },
+    {
+      "skill_id": "numerai_research.skill",
+      "title": "Numerai Re Earch",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\numerai_research.skill.md"
+    },
+    {
+      "skill_id": "octocode_research.skill",
+      "title": "Octocode Re Earch",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\octocode_research.skill.md"
+    },
+    {
+      "skill_id": "onboarding_experience_review.skill",
+      "title": "Onboarding Experience Review",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\onboarding_experience_review.skill.md"
+    },
+    {
+      "skill_id": "research.skill",
+      "title": "Re Earch",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\research.skill.md"
+    },
+    {
+      "skill_id": "user_flow_analysis.skill",
+      "title": "User Flow Analysis",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\user_flow_analysis.skill.md"
+    },
+    {
+      "skill_id": "user_persona_development.skill",
+      "title": "User Persona Development",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\user_persona_development.skill.md"
+    },
+    {
+      "skill_id": "ux_heuristic_evaluation.skill",
+      "title": "UX Heuristic Evaluation",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\ux_heuristic_evaluation.skill.md"
+    },
+    {
+      "skill_id": "ux_writing.skill",
+      "title": "Ux Writing",
+      "domain": "Product Ux",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\product_ux\\ux_writing.skill.md"
+    },
+    {
+      "skill_id": "api_security_checklist.skill",
+      "title": "API Security Checklist",
+      "domain": "Security Compliance",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\security_compliance\\api_security_checklist.skill.md"
+    },
+    {
+      "skill_id": "data_handling_review.skill",
+      "title": "Data Handling Review",
+      "domain": "Security Compliance",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\security_compliance\\data_handling_review.skill.md"
+    },
+    {
+      "skill_id": "gdpr_compliance_review.skill",
+      "title": "GDPR Compliance Review",
+      "domain": "Security Compliance",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\security_compliance\\gdpr_compliance_review.skill.md"
+    },
+    {
+      "skill_id": "healthcheck.skill",
+      "title": "Healthcheck",
+      "domain": "Security Compliance",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\security_compliance\\healthcheck.skill.md"
+    },
+    {
+      "skill_id": "incident_response_plan.skill",
+      "title": "Incident Response Plan",
+      "domain": "Security Compliance",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\security_compliance\\incident_response_plan.skill.md"
+    },
+    {
+      "skill_id": "native_dependency_update.skill",
+      "title": "Native Dependency Update",
+      "domain": "Security Compliance",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\security_compliance\\native_dependency_update.skill.md"
+    },
+    {
+      "skill_id": "privacy_policy_audit.skill",
+      "title": "Privacy Policy Audit",
+      "domain": "Security Compliance",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\security_compliance\\privacy_policy_audit.skill.md"
+    },
+    {
+      "skill_id": "terms_of_service_review.skill",
+      "title": "Terms of Service Review",
+      "domain": "Security Compliance",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\security_compliance\\terms_of_service_review.skill.md"
+    },
+    {
+      "skill_id": "01_code_review.skill",
+      "title": "Code Review",
+      "domain": "Technical Review",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\technical_review\\01_code_review.skill.md"
+    },
+    {
+      "skill_id": "02_architecture_review.skill",
+      "title": "Architecture Review",
+      "domain": "Technical Review",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\technical_review\\02_architecture_review.skill.md"
+    },
+    {
+      "skill_id": "03_security_audit.skill",
+      "title": "Security Audit",
+      "domain": "Technical Review",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\technical_review\\03_security_audit.skill.md"
+    },
+    {
+      "skill_id": "01_landing_page.skill",
+      "title": "Landing Page",
+      "domain": "Web Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\web_development\\01_landing_page.skill.md"
+    },
+    {
+      "skill_id": "02_saas_app.skill",
+      "title": "SaaS App",
+      "domain": "Web Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\web_development\\02_saas_app.skill.md"
+    },
+    {
+      "skill_id": "03_dashboard.skill",
+      "title": "Dashboard",
+      "domain": "Web Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\web_development\\03_dashboard.skill.md"
+    },
+    {
+      "skill_id": "04_blog_docs.skill",
+      "title": "Blog / Documentation",
+      "domain": "Web Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\web_development\\04_blog_docs.skill.md"
+    },
+    {
+      "skill_id": "05_portfolio.skill",
+      "title": "Portfolio",
+      "domain": "Web Development",
+      "spec_score": 100,
+      "spec_quality": "Excellent",
+      "spec_gate": "PASS",
+      "missing_sections": "",
+      "path": "..\\..\\EXTENSIONS\\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\\web_development\\05_portfolio.skill.md"
+    }
+  ]
+}

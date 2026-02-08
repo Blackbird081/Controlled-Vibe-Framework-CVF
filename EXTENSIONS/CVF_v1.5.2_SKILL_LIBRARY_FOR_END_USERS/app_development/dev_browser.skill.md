@@ -62,6 +62,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 ## 🧪 UAT Binding
 
+- Template: [AGENT_AI_UAT_CVF_TEMPLATE](../../../governance/skill-library/uat/AGENT_AI_UAT_CVF_TEMPLATE.md)
 - UAT Record: [dev_browser](../../../governance/skill-library/uat/results/UAT-dev_browser.md)
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
@@ -138,7 +139,8 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Ưu tiên bối cảnh ngắn, rõ, có ràng buộc
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
-- Nguồn tham khảo: https://github.com/code-yeongyu/oh-my-opencode/tree/dev/src/features/builtin-skills/dev-browser
+- Keyword focus: web app
+- Nguồn tham khảo: https://github.com/MemTensor/MemOS/tree/main/openwork-memos-integration/apps/desktop/skills/dev-browser
 
 ---
 
@@ -146,9 +148,9 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 **Input mẫu:**
 ```text
-Objective: Dev Brow Er cho ứng dụng quản lý công việc
-Context: Startup 5 người, cần go-live 3 tuần
-Constraints: Không đổi stack, ưu tiên tốc độ triển khai
+Objective: Thiết kế API cho ứng dụng quản lý dự án
+Context: Team 4 dev, cần MVP trong 6 tuần
+Constraints: Giữ stack Node/React, ưu tiên scale
 Output Format: Checklist + đề xuất
 ```
 
@@ -157,14 +159,14 @@ Output Format: Checklist + đề xuất
 # Dev Brow Er Output
 
 ## Summary
-- Goal: Dev Brow Er cho ứng dụng quản lý công việc
-- Context: Startup 5 người, go-live 3 tuần
-- Constraints: Giữ nguyên stack, ưu tiên tốc độ
+- Goal: Thiết kế API cho ứng dụng quản lý dự án
+- Context: Team 4 dev, cần MVP trong 6 tuần
+- Constraints: Giữ stack Node/React, ưu tiên scale
 
 ## Key Findings
-1. Quy trình hiện thiếu bước review rủi ro
-2. Chưa có tiêu chí đo lường thành công
-3. Thiếu checklist QA tối thiểu
+1. Thiếu tiêu chí phân ranh quyền truy cập
+2. Luồng dữ liệu chưa có chuẩn versioning
+3. Thiếu quy ước error handling thống nhất
 
 ## Recommendations
 - Chuẩn hóa checklist triển khai

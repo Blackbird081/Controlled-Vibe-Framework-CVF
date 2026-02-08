@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
 
 // Types
-type ProviderKey = 'gemini' | 'openai' | 'anthropic';
+export type ProviderKey = 'gemini' | 'openai' | 'anthropic';
 
 // Available models for each provider
 export const AVAILABLE_MODELS: Record<ProviderKey, { id: string; name: string; recommended?: boolean }[]> = {
@@ -28,13 +28,13 @@ export const AVAILABLE_MODELS: Record<ProviderKey, { id: string; name: string; r
     ],
 };
 
-interface AIProviderSettings {
+export interface AIProviderSettings {
     gemini: { apiKey: string; enabled: boolean; selectedModel: string };
     openai: { apiKey: string; enabled: boolean; selectedModel: string };
     anthropic: { apiKey: string; enabled: boolean; selectedModel: string };
 }
 
-interface UserPreferences {
+export interface UserPreferences {
     defaultProvider: 'gemini' | 'openai' | 'anthropic';
     defaultExportMode: 'simple' | 'governance' | 'full';
     defaultLanguage: 'vi' | 'en';
@@ -50,7 +50,7 @@ interface UserPreferences {
     };
 }
 
-interface SettingsData {
+export interface SettingsData {
     providers: AIProviderSettings;
     preferences: UserPreferences;
 }

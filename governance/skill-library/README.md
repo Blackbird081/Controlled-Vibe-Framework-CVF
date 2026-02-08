@@ -298,6 +298,20 @@ Script tự động:
 
 ---
 
+### Report Spec Metrics (Input Quality)
+
+```bash
+cd governance/skill-library
+python registry/report_spec_metrics.py
+```
+
+Script tự động:
+- Tính Spec Score/Quality cho toàn bộ `.skill.md`
+- Xuất report `.json/.csv/.md` để dùng cho Domain Report (Spec Avg)
+- Không chỉnh sửa nội dung skill gốc
+
+---
+
 ### Validate Registry (CI/CD)
 
 ```bash

@@ -50,11 +50,21 @@ CVF
 │   │   │   └── Autonomy
 │   │   │       └── Conditional
 │   │   │
+│   │   ├── Spec Quality Gate
+│   │   │   ├── Spec Score (0–100)
+│   │   │   ├── Input Coverage (required fields)
+│   │   │   ├── Constraints + Validation Hooks
+│   │   │   └── Status: PASS / CLARIFY / FAIL
+│   │   │
 │   │   ├── UAT Status
-│   │   │   ├── Last UAT
+│   │   │   ├── Pre-UAT (Agent)
 │   │   │   │   ├── Date
 │   │   │   │   ├── Result: PASS / FAIL
-│   │   │   │   └── Tested By
+│   │   │   │   └── Evidence Snapshot
+│   │   │   ├── Final UAT (User)
+│   │   │   │   ├── Date
+│   │   │   │   ├── Result: PASS / FAIL
+│   │   │   │   └── Feedback
 │   │   │   ├── Violations
 │   │   │   └── Drift Flags
 │   │   │
@@ -170,6 +180,21 @@ Reviewer
 
 ---
 
+### 🔹 3.6 Spec Quality & Readiness View
+
+> "Spec hiện có đủ rõ để Agent chạy không?"
+
+| Status | Count | Action Required |
+|--------|-------|-----------------|
+| ✅ Spec Pass |  | Ready for execution |
+| 🟡 Clarify |  | Ask user for missing inputs |
+| ❌ Fail |  | Block execution |
+
+Spec Gate là **đánh giá đầu vào** (Input/Spec).  
+UAT là **đánh giá đầu ra** (Output). Hai khái niệm tách biệt.
+
+---
+
 ## 4️⃣ Skill States (UI)
 
 | State | Icon | Meaning |
@@ -198,11 +223,19 @@ Dashboard KHÔNG được phép:
 ## 6️⃣ Data Flow
 
 ```
-Skill Mapping Record
+User Request + Template + Skill
         ↓
-Agent AI UAT (test compliance)
+Spec Draft (auto-generated)
         ↓
-UAT Result (PASS/FAIL/CONDITIONAL)
+Spec Quality Gate (auto score + clarify)
+        ↓
+Spec Final (ready for execution)
+        ↓
+Agent Execution
+        ↓
+Pre-UAT (Agent self-check)
+        ↓
+Final UAT (User checklist)
         ↓
 Dashboard State (reflects reality)
 ```

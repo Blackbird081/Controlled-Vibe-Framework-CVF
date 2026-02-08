@@ -81,6 +81,38 @@ export function AnalyticsDashboard() {
         };
     }, [events]);
 
+    const enforcementStats = useMemo(() => {
+        const enforcementEvents = events.filter(e => e.type === 'enforcement_decision');
+        const preUatFails = events.filter(e => e.type === 'pre_uat_failed').length;
+
+        const byStatus: Record<string, number> = {};
+        const bySource: Record<string, number> = {};
+
+        enforcementEvents.forEach((event) => {
+            const data = event.data || {};
+            const status = String(data.status || 'unknown');
+            const source = String(data.source || 'unknown');
+            byStatus[status] = (byStatus[status] || 0) + 1;
+            bySource[source] = (bySource[source] || 0) + 1;
+        });
+
+        const topStatuses = Object.entries(byStatus)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 4);
+        const topSources = Object.entries(bySource)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 4);
+        const recent = enforcementEvents.slice(0, 5);
+
+        return {
+            total: enforcementEvents.length,
+            preUatFails,
+            topStatuses,
+            topSources,
+            recent,
+        };
+    }, [events]);
+
     const skillStats = useMemo(() => {
         const skillEvents = events.filter(e => e.type === 'skill_viewed');
         const bySkill: Record<string, { title: string; count: number; domain?: string }> = {};
@@ -266,6 +298,74 @@ export function AnalyticsDashboard() {
                     <span>Accepted: {stats.accepted}</span>
                     <span>Rejected: {stats.rejected}</span>
                 </div>
+            </div>
+
+            {/* Enforcement Tracking */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">🛡️ Enforcement</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Theo dõi các quyết định chặn/clarify</p>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                        <div className="text-xs text-gray-500">Decisions logged</div>
+                        <div className="text-lg font-semibold text-gray-900 dark:text-white">{enforcementStats.total}</div>
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                        <div className="text-xs text-gray-500">Pre-UAT fails</div>
+                        <div className="text-lg font-semibold text-gray-900 dark:text-white">{enforcementStats.preUatFails}</div>
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                        <div className="text-xs text-gray-500">Top status</div>
+                        <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                            {enforcementStats.topStatuses[0]?.[0] || 'N/A'}
+                        </div>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                        <div className="text-xs text-gray-500 mb-2">Status breakdown</div>
+                        {enforcementStats.topStatuses.length > 0 ? (
+                            <div className="space-y-2">
+                                {enforcementStats.topStatuses.map(([status, count]) => (
+                                    <div key={status} className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300">
+                                        <span>{status}</span>
+                                        <span className="font-medium">{count}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-gray-400">Chưa có enforcement events.</p>
+                        )}
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                        <div className="text-xs text-gray-500 mb-2">Top sources</div>
+                        {enforcementStats.topSources.length > 0 ? (
+                            <div className="space-y-2">
+                                {enforcementStats.topSources.map(([source, count]) => (
+                                    <div key={source} className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300">
+                                        <span>{source}</span>
+                                        <span className="font-medium">{count}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-gray-400">Chưa có nguồn enforcement.</p>
+                        )}
+                    </div>
+                </div>
+                {enforcementStats.recent.length > 0 && (
+                    <div className="mt-4 space-y-2 text-xs text-gray-600 dark:text-gray-400">
+                        {enforcementStats.recent.map(event => (
+                            <div key={event.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                <span>{event.data?.source || 'unknown'} → {event.data?.status || 'unknown'}</span>
+                                <span>{new Date(event.timestamp).toLocaleString()}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Event Tracking */}

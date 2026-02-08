@@ -90,6 +90,13 @@ Chỉ có:
 
 > **Human sets the law → AI executes → Human audits**
 
+**Lưu ý quan trọng (reconcile với interactive chat):**
+
+- Quy tắc này **chỉ áp dụng trong “execution window”** (khi AI đã bắt đầu chạy và đang tạo output).  
+- **Trước khi execute**, Operator **được phép** trả lời câu hỏi làm rõ (clarifying questions) để hoàn thiện input/spec.  
+- Với **interactive chat (v1.6)**, việc hỏi–đáp để làm rõ **được chấp nhận** ở Phase A/B.  
+- Khi đã chuyển sang Phase C/D (execution), Operator **không được can thiệp** vào logic thực thi.
+
 ---
 
 ## 6. Dấu hiệu sử dụng CVF sai vai

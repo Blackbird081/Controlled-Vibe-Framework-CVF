@@ -15,6 +15,14 @@ export function SkillLibrary() {
     const [viewMode, setViewMode] = useState<'skill' | 'uat'>('skill');
     const [uatEditMode, setUatEditMode] = useState(false);
     const [uatDraft, setUatDraft] = useState('');
+    const [reportSort, setReportSort] = useState<'count' | 'coverage' | 'name' | 'specAvg'>('count');
+    const [reportSortDir, setReportSortDir] = useState<'desc' | 'asc'>('desc');
+    const [minCoverage, setMinCoverage] = useState(0);
+    const [minCount, setMinCount] = useState(0);
+    const [onlyWithUat, setOnlyWithUat] = useState(false);
+    const [minSpecScore, setMinSpecScore] = useState(0);
+    const [reportPage, setReportPage] = useState(1);
+    const [reportPageSize, setReportPageSize] = useState(10);
 
     useEffect(() => {
         async function fetchSkills() {
@@ -33,6 +41,9 @@ export function SkillLibrary() {
     useEffect(() => {
         if (viewMode === 'uat') {
             setUatDraft(selectedSkill?.uatContent || '');
+            if (selectedSkill?.specGate === 'FAIL') {
+                setUatEditMode(false);
+            }
         } else {
             setUatEditMode(false);
         }
@@ -63,6 +74,108 @@ export function SkillLibrary() {
                 return 'bg-gray-100 text-gray-700';
         }
     };
+
+    const specGateBadgeClasses = (status?: string) => {
+        switch ((status || '').toUpperCase()) {
+            case 'PASS':
+                return 'bg-emerald-100 text-emerald-800';
+            case 'CLARIFY':
+                return 'bg-amber-100 text-amber-800';
+            case 'FAIL':
+                return 'bg-rose-100 text-rose-800';
+            default:
+                return 'bg-gray-100 text-gray-700';
+        }
+    };
+
+    const qualityBadges: Record<string, string> = {
+        'Excellent': 'bg-emerald-100 text-emerald-800',
+        'Good': 'bg-sky-100 text-sky-800',
+        'Needs Review': 'bg-amber-100 text-amber-800',
+        'Not Ready': 'bg-gray-100 text-gray-700',
+    };
+
+    const domainReports = categories.map(category => {
+        const total = category.skills.length;
+        const scores = category.skills
+            .map(skill => skill.uatScore)
+            .filter(score => typeof score === 'number') as number[];
+        const scored = scores.filter(score => score > 0);
+        const uatCompleted = category.skills.filter(skill => (skill.uatStatus && skill.uatStatus !== 'Not Run') || (typeof skill.uatScore === 'number' && skill.uatScore > 0)).length;
+        const avgScore = scores.length > 0
+            ? Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length)
+            : null;
+        const coverage = total > 0 ? Math.round((uatCompleted / total) * 100) : 0;
+        const specScores = category.skills
+            .map(skill => skill.specScore)
+            .filter(score => typeof score === 'number') as number[];
+        const specAvg = specScores.length > 0
+            ? Math.round(specScores.reduce((sum, score) => sum + score, 0) / specScores.length)
+            : null;
+        const qualityCounts: Record<string, number> = {
+            'Excellent': 0,
+            'Good': 0,
+            'Needs Review': 0,
+            'Not Ready': 0,
+        };
+        category.skills.forEach(skill => {
+            const quality = skill.specQuality || 'Not Ready';
+            if (!qualityCounts[quality]) {
+                qualityCounts[quality] = 0;
+            }
+            qualityCounts[quality] += 1;
+        });
+        return {
+            id: category.id,
+            name: category.name,
+            total,
+            avgScore,
+            coverage,
+            uatCompleted,
+            specAvg,
+            qualityCounts,
+        };
+    });
+
+    const overallSkillCount = domainReports.reduce((sum, report) => sum + report.total, 0);
+    const overallUatCount = domainReports.reduce((sum, report) => sum + report.uatCompleted, 0);
+    const overallCoverage = overallSkillCount > 0 ? Math.round((overallUatCount / overallSkillCount) * 100) : 0;
+    const overallSpecScores = domainReports.map(report => report.specAvg).filter(score => typeof score === 'number') as number[];
+    const overallSpecAvg = overallSpecScores.length > 0
+        ? Math.round(overallSpecScores.reduce((sum, score) => sum + score, 0) / overallSpecScores.length)
+        : null;
+
+    const filteredReports = domainReports.filter(report => {
+        if (report.total < minCount) return false;
+        if (report.coverage < minCoverage) return false;
+        if (onlyWithUat && report.uatCompleted === 0) return false;
+        if (minSpecScore > 0 && (report.specAvg === null || report.specAvg < minSpecScore)) return false;
+        return true;
+    }).sort((a, b) => {
+        const dir = reportSortDir === 'desc' ? -1 : 1;
+        if (reportSort === 'name') {
+            return a.name.localeCompare(b.name) * dir;
+        }
+        if (reportSort === 'coverage') {
+            return (b.coverage - a.coverage) * dir;
+        }
+        if (reportSort === 'specAvg') {
+            return ((b.specAvg ?? -1) - (a.specAvg ?? -1)) * dir;
+        }
+        return (b.total - a.total) * dir;
+    });
+
+    useEffect(() => {
+        setReportPage(1);
+    }, [reportSort, reportSortDir, minCoverage, minCount, onlyWithUat, minSpecScore, categories.length]);
+
+    const totalReportPages = Math.max(1, Math.ceil(filteredReports.length / reportPageSize));
+    const safeReportPage = Math.min(reportPage, totalReportPages);
+    const reportStart = (safeReportPage - 1) * reportPageSize;
+    const reportEnd = reportStart + reportPageSize;
+    const reportRangeStart = filteredReports.length === 0 ? 0 : reportStart + 1;
+    const reportRangeEnd = Math.min(reportEnd, filteredReports.length);
+    const paginatedReports = filteredReports.slice(reportStart, reportEnd);
 
     if (loading) {
         return (
@@ -141,9 +254,189 @@ export function SkillLibrary() {
                 </div>
             </div>
 
-            {/* Main Content - Skill Viewer */}
-            <div className="w-full md:w-2/3 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col min-h-[40vh] md:min-h-0">
-                {selectedSkill ? (
+            {/* Main Content - Report + Skill Viewer */}
+            <div className="w-full md:w-2/3 flex flex-col gap-4 min-h-[40vh] md:min-h-0">
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div className="p-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">📊 Domain Report</h3>
+                        <p className="text-xs text-gray-500 mt-1">Số lượng + chất lượng input theo domain (Spec score/quality) + Output UAT coverage.</p>
+                        <div className="mt-3 flex flex-wrap gap-3 text-xs text-gray-600">
+                            <span className="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700">
+                                Total skills: {overallSkillCount}
+                            </span>
+                            <span className="px-2 py-1 rounded-full bg-sky-50 text-sky-700">
+                                Output UAT coverage: {overallCoverage}%
+                            </span>
+                            <span className="px-2 py-1 rounded-full bg-amber-50 text-amber-700">
+                                Output UAT completed: {overallUatCount}
+                            </span>
+                            <span className="px-2 py-1 rounded-full bg-indigo-50 text-indigo-700">
+                                Spec avg: {overallSpecAvg !== null ? `${overallSpecAvg}%` : '—'}
+                            </span>
+                            {overallUatCount === 0 && (
+                                <span className="px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+                                    UAT chưa chạy → Output UAT score = 0
+                                </span>
+                            )}
+                        </div>
+                        <div className="mt-4 flex flex-wrap gap-3 text-xs text-gray-600 items-center">
+                            <label className="flex items-center gap-2">
+                                Sort:
+                                <select
+                                    value={reportSort}
+                                    onChange={(e) => setReportSort(e.target.value as typeof reportSort)}
+                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                >
+                                    <option value="count">Count</option>
+                                    <option value="coverage">Coverage</option>
+                                    <option value="specAvg">Spec Avg</option>
+                                    <option value="name">Name</option>
+                                </select>
+                            </label>
+                            <button
+                                onClick={() => setReportSortDir(prev => prev === 'desc' ? 'asc' : 'desc')}
+                                className="px-2 py-1 rounded-md border border-gray-200 bg-white dark:bg-gray-800 text-xs"
+                            >
+                                {reportSortDir === 'desc' ? 'Desc' : 'Asc'}
+                            </button>
+                            <label className="flex items-center gap-2">
+                                Min Count
+                                <select
+                                    value={minCount}
+                                    onChange={(e) => setMinCount(Number(e.target.value))}
+                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                >
+                                    <option value={0}>0</option>
+                                    <option value={5}>5</option>
+                                    <option value={10}>10</option>
+                                    <option value={20}>20</option>
+                                </select>
+                            </label>
+                            <label className="flex items-center gap-2">
+                                Min Coverage
+                                <select
+                                    value={minCoverage}
+                                    onChange={(e) => setMinCoverage(Number(e.target.value))}
+                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                >
+                                    <option value={0}>0%</option>
+                                    <option value={20}>20%</option>
+                                    <option value={50}>50%</option>
+                                    <option value={80}>80%</option>
+                                </select>
+                            </label>
+                            <label className="flex items-center gap-2">
+                                Min Spec Score
+                                <select
+                                    value={minSpecScore}
+                                    onChange={(e) => setMinSpecScore(Number(e.target.value))}
+                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                >
+                                    <option value={0}>0</option>
+                                    <option value={50}>50</option>
+                                    <option value={70}>70</option>
+                                    <option value={85}>85</option>
+                                </select>
+                            </label>
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    checked={onlyWithUat}
+                                    onChange={(e) => setOnlyWithUat(e.target.checked)}
+                                />
+                                Only domains with Output UAT
+                            </label>
+                        </div>
+                        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-gray-600">
+                            <span>
+                                Showing {reportRangeStart}-{reportRangeEnd} of {filteredReports.length}
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <span>Rows:</span>
+                                <select
+                                    value={reportPageSize}
+                                    onChange={(e) => {
+                                        setReportPageSize(Number(e.target.value));
+                                        setReportPage(1);
+                                    }}
+                                    className="border border-gray-200 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-xs"
+                                >
+                                    <option value={5}>5</option>
+                                    <option value={10}>10</option>
+                                    <option value={20}>20</option>
+                                    <option value={50}>50</option>
+                                </select>
+                                <button
+                                    onClick={() => setReportPage(prev => Math.max(1, prev - 1))}
+                                    disabled={safeReportPage === 1}
+                                    className={`px-2 py-1 rounded-md border ${safeReportPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}`}
+                                >
+                                    Prev
+                                </button>
+                                <span>
+                                    Page {safeReportPage} / {totalReportPages}
+                                </span>
+                                <button
+                                    onClick={() => setReportPage(prev => Math.min(totalReportPages, prev + 1))}
+                                    disabled={safeReportPage >= totalReportPages}
+                                    className={`px-2 py-1 rounded-md border ${safeReportPage >= totalReportPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}`}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="p-4 overflow-x-auto">
+                        <table className="w-full text-sm">
+                            <thead>
+                                <tr className="text-left text-xs uppercase text-gray-500">
+                                    <th className="py-2">Domain</th>
+                                    <th className="py-2 text-right">Count</th>
+                                    <th className="py-2 text-right">Spec Avg</th>
+                                    <th className="py-2">Output UAT Coverage</th>
+                                    <th className="py-2">Spec Quality</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {paginatedReports.map(report => (
+                                    <tr key={report.id} className="border-t border-gray-100 dark:border-gray-700/60">
+                                        <td className="py-3 font-medium text-gray-800 dark:text-gray-200">{report.name}</td>
+                                        <td className="py-3 text-right text-gray-700 dark:text-gray-300">{report.total}</td>
+                                        <td className="py-3 text-right text-gray-700 dark:text-gray-300">
+                                            {report.specAvg !== null ? `${report.specAvg}%` : '—'}
+                                        </td>
+                                        <td className="py-3">
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex-1 h-2 rounded-full bg-gray-100 dark:bg-gray-700">
+                                                    <div
+                                                        className="h-2 rounded-full bg-emerald-500"
+                                                        style={{ width: `${report.coverage}%` }}
+                                                    />
+                                                </div>
+                                                <span className="text-xs text-gray-500 w-10 text-right">{report.coverage}%</span>
+                                            </div>
+                                        </td>
+                                        <td className="py-3">
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {Object.entries(report.qualityCounts).map(([quality, count]) => (
+                                                    <span
+                                                        key={quality}
+                                                        className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${qualityBadges[quality] || 'bg-gray-100 text-gray-700'}`}
+                                                    >
+                                                        {quality}: {count}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col min-h-[40vh] md:min-h-0">
+                    {selectedSkill ? (
                     <>
                         <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex justify-between items-start">
                             <div>
@@ -180,9 +473,14 @@ export function SkillLibrary() {
                                                 Scope: {selectedSkill.authorityScope}
                                             </span>
                                         )}
+                                        {selectedSkill.specGate && (
+                                            <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${specGateBadgeClasses(selectedSkill.specGate)}`}>
+                                                Spec Gate: {selectedSkill.specGate}
+                                            </span>
+                                        )}
                                         {selectedSkill.uatStatus && (
                                             <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${uatBadgeClasses(selectedSkill.uatStatus)}`}>
-                                                UAT: {selectedSkill.uatStatus}
+                                                Output UAT: {selectedSkill.uatStatus}
                                             </span>
                                         )}
                                         {typeof selectedSkill.uatScore === 'number' && (
@@ -192,7 +490,17 @@ export function SkillLibrary() {
                                         )}
                                         {selectedSkill.uatQuality && (
                                             <span className="px-2 py-1 text-[11px] font-semibold bg-slate-100 text-slate-700 rounded-full">
-                                                Quality: {selectedSkill.uatQuality}
+                                                Output Quality: {selectedSkill.uatQuality}
+                                            </span>
+                                        )}
+                                        {typeof selectedSkill.specScore === 'number' && (
+                                            <span className="px-2 py-1 text-[11px] font-semibold bg-indigo-100 text-indigo-800 rounded-full">
+                                                Spec: {selectedSkill.specScore}%
+                                            </span>
+                                        )}
+                                        {selectedSkill.specQuality && (
+                                            <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${qualityBadges[selectedSkill.specQuality] || 'bg-gray-100 text-gray-700'}`}>
+                                                Spec Quality: {selectedSkill.specQuality}
                                             </span>
                                         )}
                                     </div>
@@ -232,10 +540,11 @@ export function SkillLibrary() {
                                         </button>
                                         <button
                                             onClick={() => setUatEditMode(true)}
+                                            disabled={selectedSkill?.specGate === 'FAIL'}
                                             className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-colors ${uatEditMode
                                                 ? 'bg-white text-emerald-700 shadow-sm'
                                                 : 'text-gray-500 dark:text-gray-200'
-                                                }`}
+                                                } ${selectedSkill?.specGate === 'FAIL' ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         >
                                             Edit
                                         </button>
@@ -262,9 +571,17 @@ export function SkillLibrary() {
                             {viewMode === 'uat' ? (
                                 selectedSkill.uatContent ? (
                                     (() => {
+                                        const specGateWarning = selectedSkill.specGate === 'FAIL'
+                                            ? (
+                                                <div className="not-prose bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-lg text-sm mb-4">
+                                                    Spec Gate = FAIL. UAT chỉ được chỉnh sửa khi Spec đạt chuẩn.
+                                                </div>
+                                            )
+                                            : null;
                                         if (uatEditMode) {
                                             return (
                                                 <div className="space-y-3 not-prose">
+                                                    {specGateWarning}
                                                     <textarea
                                                         value={uatDraft}
                                                         onChange={(e) => setUatDraft(e.target.value)}
@@ -297,6 +614,7 @@ export function SkillLibrary() {
                                                                 setUatEditMode(false);
                                                             }}
                                                             className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700"
+                                                            disabled={selectedSkill.specGate === 'FAIL'}
                                                         >
                                                             Save UAT
                                                         </button>
@@ -318,11 +636,14 @@ export function SkillLibrary() {
                                         }
 
                                         return (
-                                            <ReactMarkdown
-                                                remarkPlugins={[remarkGfm]}
-                                            >
-                                                {selectedSkill.uatContent}
-                                            </ReactMarkdown>
+                                            <>
+                                                {specGateWarning}
+                                                <ReactMarkdown
+                                                    remarkPlugins={[remarkGfm]}
+                                                >
+                                                    {selectedSkill.uatContent}
+                                                </ReactMarkdown>
+                                            </>
                                         );
                                     })()
                                 ) : (
@@ -340,6 +661,7 @@ export function SkillLibrary() {
                         <p className="max-w-xs text-sm">Browse the library on the left to view detailed skill documentation, inputs, and expected outputs.</p>
                     </div>
                 )}
+            </div>
             </div>
         </div>
     );

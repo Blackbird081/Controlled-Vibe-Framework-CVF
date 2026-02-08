@@ -12,7 +12,7 @@
 - Skill Name: Dev Brow Er
 - Version: 1.0.0
 - Source:
-  - URL / Repository: https://github.com/code-yeongyu/oh-my-opencode/tree/dev/src/features/builtin-skills/dev-browser
+  - URL / Repository: https://github.com/MemTensor/MemOS/tree/main/openwork-memos-integration/apps/desktop/skills/dev-browser
   - Original Author: External / Unknown
 - Intake Date: 2026-02-07
 - Intake Owner: CVF Governance

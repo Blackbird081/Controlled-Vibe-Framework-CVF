@@ -20,3 +20,18 @@ export const DEFAULT_MODEL_PRICING: ModelPricing = {
     'claude-3.5-sonnet': { input: 3.00, output: 15.00 },
     'claude-3-opus': { input: 15.00, output: 75.00 },
 };
+
+export const DEFAULT_FALLBACK_PRICING = { input: 1.00, output: 4.00 };
+
+export function calculateTokenCost(
+    model: string,
+    inputTokens: number,
+    outputTokens: number,
+    pricing: ModelPricing = DEFAULT_MODEL_PRICING,
+    fallback = DEFAULT_FALLBACK_PRICING
+): number {
+    const selected = pricing[model] || fallback;
+    const inputCost = (inputTokens / 1_000_000) * selected.input;
+    const outputCost = (outputTokens / 1_000_000) * selected.output;
+    return inputCost + outputCost;
+}

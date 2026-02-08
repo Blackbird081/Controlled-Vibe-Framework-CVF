@@ -185,6 +185,18 @@ SkillLibrary.tsx    ✅ tests → 100% (branches ~90%)
 - ✅ Spec export 강화: Input Coverage + Execution Constraints + Validation Hooks
 - ✅ Output Template auto-injected for Strategy Analysis + fallback template for all
 - ✅ Default export mode = Governance + migrate existing settings
+- ✅ External intake pipeline v2 (SkillsMP): raw + normalized snapshot archive (`external-sources/skillsmp/raw/`)
+- ✅ External intake pipeline v2 (SkillsMP): external index for cross-source dedupe (`external-sources/index.json`)
+- ✅ External intake pipeline v2 (SkillsMP): quality gates (min stars + min description + require source default)
+- ✅ External intake pipeline v2 (SkillsMP): skip existing CVF skills during search (name + source repo key)
+- ✅ External intake pipeline v2 (SkillsMP): description fingerprint dedupe (cross-source content-level)
+- ✅ External intake pipeline v2 (SkillsMP): similarity threshold (Jaccard) to drop near-duplicate descriptions
+- ✅ External intake pipeline v2 (SkillsMP): CLI support `--api-key`, `--allow-missing-source`, `--refresh-template`
+- ✅ External intake pipeline v2 (SkillsMP): refreshable template rendering to reduce “same example” look
+- ✅ External intake pipeline v2 (SkillsMP): domain-specific example library for diverse Input/Output samples
+- ✅ Skill Library domain report: count + avg UAT score + quality distribution per domain
+- ✅ Skill Library domain report: filter/sort + spec quality scoring (auto)
+- ✅ Spec Quality Gate vs Output UAT separation (docs + workflow): Spec Gate (input) + Pre-UAT (agent) + Final UAT (user)
 
 ### Items ngoài phạm vi v1.6 (từ Assessment)
 - v1.3: Dashboard audit log (UI-only) → ✅ done (2026-02-07)

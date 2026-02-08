@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { executeAI, AIProvider, ExecutionRequest } from '@/lib/ai';
+import { evaluateEnforcement } from '@/lib/enforcement';
+import { getTemplateById } from '@/lib/templates';
 
 export async function POST(request: NextRequest) {
     try {
@@ -41,10 +43,61 @@ export async function POST(request: NextRequest) {
         // Build the prompt from template inputs
         const userPrompt = buildPromptFromInputs(body);
 
+        const mode = body.mode || 'simple';
+        const template = body.templateId ? getTemplateById(body.templateId) : undefined;
+        const specFields = template?.fields || [];
+        const enforcement = evaluateEnforcement({
+            mode,
+            content: userPrompt,
+            budgetOk: true,
+            specFields: specFields.length ? specFields : undefined,
+            specValues: body.inputs,
+        });
+
+        if (enforcement.status === 'BLOCK') {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.',
+                    provider,
+                    model: 'blocked',
+                    enforcement,
+                },
+                { status: 400 }
+            );
+        }
+
+        if (enforcement.status === 'CLARIFY') {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Spec needs clarification before execution.',
+                    missing: enforcement.specGate?.missing?.map(field => field.label) || [],
+                    provider,
+                    model: 'clarify',
+                    enforcement,
+                },
+                { status: 422 }
+            );
+        }
+
+        if (enforcement.status === 'NEEDS_APPROVAL') {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: enforcement.reasons.join(' | ') || 'Human approval required before execution.',
+                    provider,
+                    model: 'approval-required',
+                    enforcement,
+                },
+                { status: 409 }
+            );
+        }
+
         // Execute AI request
         const result = await executeAI(provider, apiKey, userPrompt);
 
-        return NextResponse.json(result);
+        return NextResponse.json({ ...result, enforcement });
 
     } catch (error) {
         console.error('Execute API error:', error);

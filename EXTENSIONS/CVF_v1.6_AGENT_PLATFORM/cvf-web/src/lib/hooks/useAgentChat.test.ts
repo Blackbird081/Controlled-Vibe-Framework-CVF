@@ -15,7 +15,10 @@ vi.mock('@/lib/ai-providers', () => ({
 }));
 
 vi.mock('@/lib/quota-manager', () => ({
-    useQuotaManager: () => ({ trackUsage: trackUsageMock }),
+    useQuotaManager: () => ({
+        trackUsage: trackUsageMock,
+        checkBudget: () => ({ ok: true, warning: false, remaining: { daily: Infinity, monthly: Infinity } }),
+    }),
 }));
 
 vi.mock('@/lib/governance', () => ({
@@ -38,6 +41,8 @@ vi.mock('@/lib/cvf-checklists', () => ({
         details,
     }),
     detectCurrentPhase: () => 'Design',
+    autoCheckItems: () => ({}),
+    calculatePhaseCompliance: () => ({ score: 85, missing: [] }),
 }));
 
 vi.mock('./usePhaseDetection', () => ({

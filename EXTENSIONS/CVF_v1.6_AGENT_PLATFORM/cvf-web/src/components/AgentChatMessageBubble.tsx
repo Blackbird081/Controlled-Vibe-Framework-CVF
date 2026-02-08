@@ -100,8 +100,22 @@ export function AgentChatMessageBubble({
 
     const qualityScore = message.metadata?.qualityScore;
     const acceptanceStatus = message.metadata?.acceptanceStatus;
+    const preUatStatus = message.metadata?.preUatStatus;
+    const preUatScore = message.metadata?.preUatScore;
+    const factualScore = message.metadata?.factualScore;
+    const factualRisk = message.metadata?.factualRisk;
     const phaseKey = message.metadata?.phase;
     const isKnownPhase = phaseKey && ['Discovery', 'Design', 'Build', 'Review'].includes(phaseKey);
+    const preUatBadgeClass = preUatStatus === 'PASS'
+        ? 'bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300'
+        : 'bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-300';
+    const factualBadgeClass = factualScore !== undefined
+        ? factualScore >= 75
+            ? 'bg-sky-100 dark:bg-sky-900 text-sky-700 dark:text-sky-300'
+            : factualScore >= 50
+                ? 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300'
+                : 'bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-300'
+        : '';
 
     return (
         <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
@@ -179,6 +193,26 @@ export function AgentChatMessageBubble({
 
                             {qualityScore && (
                                 <QualityScoreBadge score={qualityScore} language={language} />
+                            )}
+
+                            {typeof factualScore === 'number' && (
+                                <span className={`px-2 py-0.5 rounded-full flex items-center gap-1 ${factualBadgeClass}`}>
+                                    <span>📎</span>
+                                    <span>
+                                        {language === 'vi' ? 'Factual' : 'Factual'}: {factualScore}%
+                                        {factualRisk ? ` (${factualRisk})` : ''}
+                                    </span>
+                                </span>
+                            )}
+
+                            {preUatStatus && (
+                                <span className={`px-2 py-0.5 rounded-full flex items-center gap-1 ${preUatBadgeClass}`}>
+                                    <span>🧪</span>
+                                    <span>
+                                        {language === 'vi' ? 'Pre-UAT' : 'Pre-UAT'}: {preUatStatus}
+                                        {typeof preUatScore === 'number' && ` ${preUatScore}%`}
+                                    </span>
+                                </span>
                             )}
 
                             {message.metadata.model && (

@@ -1,6 +1,6 @@
 'use client';
 
-import { DEFAULT_MODEL_PRICING, ModelPricing } from '@/lib/model-pricing';
+import { DEFAULT_MODEL_PRICING, ModelPricing, calculateTokenCost } from '@/lib/model-pricing';
 
 // ==================== TYPES ====================
 export type ProviderKey = 'gemini' | 'openai' | 'anthropic';
@@ -46,9 +46,6 @@ export function getModelPricing(): ModelPricing {
 export function setModelPricing(pricing: ModelPricing) {
     currentModelPricing = { ...MODEL_PRICING, ...pricing };
 }
-
-// Default pricing for unknown models
-const DEFAULT_PRICING = { input: 1.00, output: 4.00 };
 
 // ==================== STORAGE KEYS ====================
 const STORAGE_KEYS = {
@@ -144,10 +141,7 @@ export class QuotaManager {
 
     // ==================== COST CALCULATION ====================
     calculateCost(model: string, inputTokens: number, outputTokens: number): number {
-        const pricing = getModelPricing()[model] || DEFAULT_PRICING;
-        const inputCost = (inputTokens / 1_000_000) * pricing.input;
-        const outputCost = (outputTokens / 1_000_000) * pricing.output;
-        return inputCost + outputCost;
+        return calculateTokenCost(model, inputTokens, outputTokens, getModelPricing());
     }
 
     // ==================== TRACK USAGE ====================

@@ -35,7 +35,10 @@ vi.mock('@/lib/quota-manager', async () => {
     const actual = await vi.importActual<typeof import('@/lib/quota-manager')>('@/lib/quota-manager');
     return {
         ...actual,
-        useQuotaManager: () => ({ trackUsage: vi.fn() }),
+        useQuotaManager: () => ({
+            trackUsage: vi.fn(),
+            checkBudget: () => ({ ok: true, warning: false, remaining: { daily: Infinity, monthly: Infinity } }),
+        }),
     };
 });
 

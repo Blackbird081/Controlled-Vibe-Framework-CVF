@@ -98,7 +98,7 @@ This UAT session is bound to the following Skill Mapping Record:
 
 ## Go-live Decision
 
-- [x] PASS  
+- [ ] PASS  
 - [ ] SOFT FAIL (Human review required)  
 - [ ] FAIL (Block usage / redesign required)
 

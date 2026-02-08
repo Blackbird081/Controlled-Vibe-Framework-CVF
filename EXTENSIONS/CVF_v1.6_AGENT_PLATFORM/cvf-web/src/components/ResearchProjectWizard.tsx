@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { evaluateSpecGate } from '@/lib/spec-gate';
 
 const DRAFT_STORAGE_KEY = 'cvf_research_project_wizard_draft';
 
@@ -243,6 +244,18 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
 
     const progress = Math.round((currentStep / WIZARD_STEPS.length) * 100);
     const generatedSpec = generateConsolidatedSpec(wizardData);
+    const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
+    const canExport = specGate.status === 'PASS';
+    const specGateLabel = specGate.status === 'PASS'
+        ? 'Spec Gate: PASS — Đủ input để xuất'
+        : specGate.status === 'CLARIFY'
+            ? 'Spec Gate: CLARIFY — Thiếu input bắt buộc'
+            : 'Spec Gate: FAIL — Không đủ dữ liệu để tạo spec';
+    const specGateClass = specGate.status === 'PASS'
+        ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+        : specGate.status === 'CLARIFY'
+            ? 'bg-amber-50 border-amber-200 text-amber-700'
+            : 'bg-rose-50 border-rose-200 text-rose-700';
 
     if (showExport) {
         return (
@@ -255,16 +268,31 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                     <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 max-h-[60vh] overflow-y-auto mb-4">
                         <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">{generatedSpec}</pre>
                     </div>
+                    <div className={`mb-4 p-3 rounded-lg border text-sm ${specGateClass}`}>
+                        <div className="font-semibold">{specGateLabel}</div>
+                        {specGate.missing.length > 0 && (
+                            <div className="text-xs mt-1">
+                                Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                            </div>
+                        )}
+                    </div>
                     <div className="flex gap-3">
                         <button onClick={() => { navigator.clipboard.writeText(generatedSpec); alert('Đã copy vào clipboard!'); }}
-                            className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-violet-700">📋 Copy to Clipboard</button>
+                            disabled={!canExport}
+                            className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
+                                ? 'bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700'
+                                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            }`}>📋 Copy to Clipboard</button>
                         <button onClick={() => {
                             const blob = new Blob([generatedSpec], { type: 'text/markdown' });
                             const a = document.createElement('a');
                             a.href = URL.createObjectURL(blob);
                             a.download = `research-proposal-${wizardData.researchTopic || 'project'}.md`;
                             a.click();
-                        }} className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600">💾 Download .md</button>
+                        }} disabled={!canExport} className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
+                            ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                            : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        }`}>💾 Download .md</button>
                     </div>
                 </div>
             </div>
@@ -343,7 +371,18 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 max-h-96 overflow-y-auto">
                             <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">{generatedSpec}</pre>
                         </div>
-                        <button onClick={() => setShowExport(true)} className="w-full py-3 bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-violet-700">
+                        <div className={`p-3 rounded-lg border text-sm ${specGateClass}`}>
+                            <div className="font-semibold">{specGateLabel}</div>
+                            {specGate.missing.length > 0 && (
+                                <div className="text-xs mt-1">
+                                    Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                </div>
+                            )}
+                        </div>
+                        <button onClick={() => setShowExport(true)} disabled={!canExport} className={`w-full py-3 rounded-lg font-medium transition-all ${canExport
+                            ? 'bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700'
+                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        }`}>
                             🔬 Xuất Research Proposal
                         </button>
                     </div>

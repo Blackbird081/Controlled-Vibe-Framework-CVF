@@ -6,7 +6,7 @@
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](./ROADMAP.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](../../../LICENSE)
-[![Tests](https://img.shields.io/badge/tests-176%20passing-brightgreen.svg)](./src/lib)
+[![Tests](https://img.shields.io/badge/tests-270%20passing-brightgreen.svg)](./src/lib)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
 
 [Features](#-features) • [Quick Start](#-quick-start) • [CVF Governance](#-cvf-governance) • [Architecture](#-architecture)
@@ -37,7 +37,7 @@
 - 🌙 **Dark Mode** - System-aware themes
 - 📱 **Responsive** - Mobile-optimized
 - ⚡ **Fast** - Lazy loading, streaming responses
-- ✅ **Tested** - 176 unit tests passing (23 files)
+- ✅ **Tested** - 270 unit tests passing (37 files)
 
 ---
 
@@ -64,6 +64,17 @@ Go to **Settings** (⚙️) and add your keys:
 | Gemini | `AI...` | [Google AI Studio](https://aistudio.google.com) |
 | OpenAI | `sk-...` | [OpenAI Platform](https://platform.openai.com) |
 | Anthropic | `sk-ant-...` | [Anthropic Console](https://console.anthropic.com) |
+
+### 🧭 API Key Wizard (NEW)
+Nếu chưa có API key, vào Home sẽ thấy banner **“API key chưa được cấu hình”**.  
+Nhấn **API Key Wizard** để cấu hình nhanh.
+
+---
+
+## ☁️ Hosted Deployment
+
+Tài liệu deploy lên Vercel/Netlify:  
+`docs/CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md`
 
 ---
 

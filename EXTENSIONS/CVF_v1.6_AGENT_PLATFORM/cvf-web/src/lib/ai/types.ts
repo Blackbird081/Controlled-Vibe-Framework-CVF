@@ -1,3 +1,5 @@
+import type { EnforcementResult } from '@/lib/enforcement';
+
 // AI Provider Types and Interfaces
 export type AIProvider = 'openai' | 'claude' | 'gemini';
 
@@ -15,6 +17,7 @@ export interface ExecutionRequest {
     inputs: Record<string, string>;
     intent: string;
     provider?: AIProvider;
+    mode?: 'simple' | 'governance' | 'full';
 }
 
 export interface ExecutionResponse {
@@ -25,6 +28,7 @@ export interface ExecutionResponse {
     model: string;
     tokensUsed?: number;
     executionTime?: number;
+    enforcement?: EnforcementResult;
 }
 
 export interface ProviderStatus {

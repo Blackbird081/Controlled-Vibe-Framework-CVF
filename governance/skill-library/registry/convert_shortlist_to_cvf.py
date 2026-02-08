@@ -16,7 +16,7 @@ import json
 import re
 from collections import defaultdict
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from urllib.parse import urlparse
@@ -26,6 +26,7 @@ ROOT_DIR = Path(__file__).resolve().parents[3]
 SHORTLIST_PATH = ROOT_DIR / "governance" / "skill-library" / "registry" / "external-sources" / "skillsmp" / "skillsmp_shortlist.json"
 SKILL_ROOT = ROOT_DIR / "EXTENSIONS" / "CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS"
 MAP_OUTPUT = ROOT_DIR / "governance" / "skill-library" / "registry" / "external-sources" / "skillsmp" / "skillsmp_to_cvf_map.md"
+EXTERNAL_INDEX_PATH = ROOT_DIR / "governance" / "skill-library" / "registry" / "external-sources" / "index.json"
 
 TODAY = date(2026, 2, 7)
 
@@ -57,6 +58,129 @@ DOMAIN_PHASES_MAP = {
     "security_compliance": "Design, Review",
     "technical_review": "Build, Review",
     "web_development": "Design, Build",
+}
+
+DOMAIN_EXAMPLES: Dict[str, Dict[str, object]] = {
+    "app_development": {
+        "objective": "Thiết kế API cho ứng dụng quản lý dự án",
+        "context": "Team 4 dev, cần MVP trong 6 tuần",
+        "constraints": "Giữ stack Node/React, ưu tiên scale",
+        "findings": [
+            "Thiếu tiêu chí phân ranh quyền truy cập",
+            "Luồng dữ liệu chưa có chuẩn versioning",
+            "Thiếu quy ước error handling thống nhất",
+        ],
+    },
+    "web_development": {
+        "objective": "Thiết kế kiến trúc web app cho hệ thống báo cáo",
+        "context": "User 5k/ngày, dashboard cập nhật theo giờ",
+        "constraints": "Ưu tiên tốc độ tải và cache",
+        "findings": [
+            "Thiếu phân tách layer dữ liệu và UI",
+            "Chưa có chiến lược caching rõ ràng",
+            "Thiếu kiểm soát performance trên mobile",
+        ],
+    },
+    "ai_ml_evaluation": {
+        "objective": "Đánh giá prompt cho chatbot CSKH",
+        "context": "Dữ liệu hội thoại đa ngành, cần đo độ chính xác",
+        "constraints": "Không lưu dữ liệu nhạy cảm",
+        "findings": [
+            "Thiếu tiêu chí đánh giá nhất quán",
+            "Chưa có benchmark mẫu theo domain",
+            "Output chưa gắn với KPI chất lượng",
+        ],
+    },
+    "business_analysis": {
+        "objective": "Phân tích chiến lược mở rộng thị trường",
+        "context": "SME Việt, ngân sách 50k USD",
+        "constraints": "Dữ liệu thị trường hạn chế",
+        "findings": [
+            "Giả định thị trường chưa được xác thực",
+            "Thiếu so sánh rủi ro theo kịch bản",
+            "Chưa có KPI đo hiệu quả triển khai",
+        ],
+    },
+    "content_creation": {
+        "objective": "Xây dựng series blog onboarding cho SaaS",
+        "context": "Sản phẩm B2B, tập trung chuyển đổi trial",
+        "constraints": "Giữ brand voice hiện có",
+        "findings": [
+            "Thông điệp giá trị chưa nhất quán",
+            "Thiếu call-to-action theo từng bài",
+            "Chưa có guideline tone/format thống nhất",
+        ],
+    },
+    "marketing_seo": {
+        "objective": "Audit SEO cho landing page sản phẩm",
+        "context": "Traffic 30k/tháng, conversion thấp",
+        "constraints": "Không đổi domain, chỉ tối ưu on-page",
+        "findings": [
+            "Thiếu cấu trúc heading logic",
+            "Meta description chưa bám keyword",
+            "Tốc độ tải trang chưa đạt chuẩn",
+        ],
+    },
+    "product_ux": {
+        "objective": "Thiết kế flow onboarding cho mobile app",
+        "context": "Người dùng mới rơi nhiều ở bước 2",
+        "constraints": "Giữ nguyên core feature",
+        "findings": [
+            "Thiếu bước giải thích giá trị trước khi đăng ký",
+            "Luồng hiện quá dài, chưa có skip option",
+            "Chưa có thử nghiệm A/B cho bản mới",
+        ],
+    },
+    "finance_analytics": {
+        "objective": "Phân tích cash flow 6 tháng",
+        "context": "Startup SaaS đang đốt tiền cao",
+        "constraints": "Dữ liệu kế toán chưa chuẩn hóa",
+        "findings": [
+            "Chi phí vận hành tăng nhanh theo quý",
+            "Chưa có dự báo dòng tiền theo kịch bản",
+            "Thiếu kiểm soát churn ảnh hưởng doanh thu",
+        ],
+    },
+    "legal_contracts": {
+        "objective": "Review NDA cho hợp tác đối tác",
+        "context": "Đối tác quốc tế, thời hạn 12 tháng",
+        "constraints": "Không thay đổi điều khoản core",
+        "findings": [
+            "Phạm vi bảo mật chưa rõ ràng",
+            "Thiếu điều khoản xử lý vi phạm",
+            "Không nêu rõ quyền sở hữu IP",
+        ],
+    },
+    "hr_operations": {
+        "objective": "Viết JD cho vị trí Product Manager",
+        "context": "Công ty scale nhanh, team 10 người",
+        "constraints": "Ưu tiên ứng viên có background SaaS",
+        "findings": [
+            "Tiêu chí đầu vào chưa đo lường được",
+            "Thiếu mô tả trách nhiệm theo KPI",
+            "Chưa nêu rõ lộ trình phát triển",
+        ],
+    },
+    "security_compliance": {
+        "objective": "Audit bảo mật cho API gateway",
+        "context": "Hệ thống nhiều microservices",
+        "constraints": "Không downtime",
+        "findings": [
+            "Thiếu kiểm soát rate-limit theo tenant",
+            "Chưa có log/trace đầy đủ cho audit",
+            "Chính sách token rotation chưa rõ",
+        ],
+    },
+    "technical_review": {
+        "objective": "Review PR cho flow xác thực",
+        "context": "Repo lớn, nhiều contributor",
+        "constraints": "Không đổi logic cốt lõi",
+        "findings": [
+            "Thiếu test cho edge cases",
+            "Chưa có logging cho lỗi auth",
+            "Không có guideline rollback",
+        ],
+    },
 }
 
 RISK_AUTONOMY = {
@@ -103,6 +227,16 @@ def repo_key_from_source(source: str) -> str:
     if match:
         return f"{match.group(1).lower()}/{match.group(2).lower()}"
     return source.split("?")[0].lower()
+
+
+def external_key_for_skill(source: str, name: str) -> str:
+    repo_key = repo_key_from_source(source)
+    if repo_key:
+        return repo_key
+    name_key = normalize_name(name)
+    if name_key:
+        return f"name:{name_key}"
+    return ""
 
 
 def choose_best(candidates: List[SkillCandidate]) -> SkillCandidate:
@@ -164,6 +298,34 @@ def slugify(name: str) -> str:
     return slug or "skill"
 
 
+def base_slug_from_filename(filename: str) -> str:
+    stem = filename.replace(".skill.md", "").replace(".skill", "")
+    stem = re.sub(r"^\d+_", "", stem)
+    stem = re.sub(r"_\d+$", "", stem)
+    return stem
+
+
+def description_score(text: str) -> int:
+    match = re.search(r"##\s+🎯\s+Mục đích([\s\S]*?)(?=##\s+)", text)
+    if match:
+        return len(match.group(0))
+    return len(text)
+
+
+def pick_best_existing(paths: List[Path]) -> Path:
+    def sort_key(path: Path) -> Tuple[int, int, int, str]:
+        content = path.read_text(encoding="utf-8", errors="ignore")
+        score = description_score(content)
+        stem = path.stem.replace(".skill", "")
+        suffix_match = re.search(r"_(\d+)$", stem)
+        suffix = int(suffix_match.group(1)) if suffix_match else 0
+        index_match = re.match(r"^(\d+)_", path.name)
+        index = int(index_match.group(1)) if index_match else 999
+        return (-score, suffix, index, path.name)
+
+    return sorted(paths, key=sort_key)[0]
+
+
 def pick_related_skills(domain_path: Path, exclude: str, limit: int = 2) -> List[Tuple[str, str]]:
     options = []
     for file in sorted(domain_path.glob("*.skill.md")):
@@ -188,11 +350,45 @@ def format_title(name: str) -> str:
     return " ".join([w.capitalize() for w in words if w])
 
 
+def normalize_text(text: str) -> str:
+    return re.sub(r"\\s+", " ", text or "").strip()
+
+
+def description_snippet(text: str, limit: int = 140) -> str:
+    text = normalize_text(text)
+    if not text:
+        return ""
+    for sep in [". ", "; ", " - ", " — "]:
+        if sep in text:
+            text = text.split(sep, 1)[0].strip()
+            break
+    if len(text) > limit:
+        text = text[:limit].rsplit(" ", 1)[0].strip() + "..."
+    return text
+
+
+def matched_query_hint(query: str) -> str:
+    query = (query or "").strip()
+    if not query:
+        return ""
+    return f"- Keyword focus: {query}"
+
+
 def render_skill_content(candidate: SkillCandidate, filename: str, related: List[Tuple[str, str]]) -> str:
     difficulty_label, difficulty_stars = parse_difficulty(candidate.cvf_domain)
     title = format_title(candidate.name)
     description = candidate.description.strip() or f"Skill hỗ trợ {title} theo chuẩn CVF."
     description = description.replace("\n", " ").strip()
+    snippet = description_snippet(candidate.description)
+    query_hint = matched_query_hint(candidate.matched_query)
+    domain_example = DOMAIN_EXAMPLES.get(candidate.cvf_domain, {})
+    example_objective = domain_example.get("objective") or f"{title} cho ứng dụng quản lý công việc"
+    example_context = domain_example.get("context") or snippet or f"Startup 5 người, cần triển khai {title.lower()} trong 3 tuần"
+    example_constraints = domain_example.get("constraints") or "Không đổi stack, ưu tiên tốc độ triển khai"
+    findings = domain_example.get("findings") or []
+    finding_1 = findings[0] if len(findings) > 0 else (snippet or "Quy trình hiện thiếu bước review rủi ro")
+    finding_2 = findings[1] if len(findings) > 1 else f"Chưa có tiêu chí đo lường thành công cho {title.lower()}"
+    finding_3 = findings[2] if len(findings) > 2 else "Thiếu checklist QA tối thiểu"
 
     related_lines = "\n".join([f"- [{title}](./{fname})" for title, fname in related]) or "- [App Requirements Spec](./01_app_requirements_spec.skill.md)"
     source_line = f"- Nguồn tham khảo: {candidate.source}" if candidate.source else "- Nguồn tham khảo: SkillsMP"
@@ -343,6 +539,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Ưu tiên bối cảnh ngắn, rõ, có ràng buộc
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
+{query_hint}
 {source_line}
 
 ---
@@ -351,9 +548,9 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 **Input mẫu:**
 ```text
-Objective: {title} cho ứng dụng quản lý công việc
-Context: Startup 5 người, cần go-live 3 tuần
-Constraints: Không đổi stack, ưu tiên tốc độ triển khai
+Objective: {example_objective}
+Context: {example_context}
+Constraints: {example_constraints}
 Output Format: Checklist + đề xuất
 ```
 
@@ -362,14 +559,14 @@ Output Format: Checklist + đề xuất
 # {title} Output
 
 ## Summary
-- Goal: {title} cho ứng dụng quản lý công việc
-- Context: Startup 5 người, go-live 3 tuần
-- Constraints: Giữ nguyên stack, ưu tiên tốc độ
+- Goal: {example_objective}
+- Context: {example_context}
+- Constraints: {example_constraints}
 
 ## Key Findings
-1. Quy trình hiện thiếu bước review rủi ro
-2. Chưa có tiêu chí đo lường thành công
-3. Thiếu checklist QA tối thiểu
+1. {finding_1}
+2. {finding_2}
+3. {finding_3}
 
 ## Recommendations
 - Chuẩn hóa checklist triển khai
@@ -416,7 +613,7 @@ def build_candidates(raw_skills: List[Dict[str, object]]) -> List[SkillCandidate
         cvf_domain = str(entry.get("cvf_domain") or "app_development").strip()
         score = float(entry.get("score") or 0)
         matched_query = str(entry.get("matched_query") or "")
-        repo_key = repo_key_from_source(source)
+        repo_key = str(entry.get("repo_key") or "") or repo_key_from_source(source)
         candidates.append(
             SkillCandidate(
                 name=name,
@@ -432,10 +629,67 @@ def build_candidates(raw_skills: List[Dict[str, object]]) -> List[SkillCandidate
     return candidates
 
 
+def load_external_index() -> Dict[str, object]:
+    if not EXTERNAL_INDEX_PATH.exists():
+        return {"repos": {}}
+    try:
+        payload = json.loads(EXTERNAL_INDEX_PATH.read_text(encoding="utf-8"))
+        if isinstance(payload, dict) and isinstance(payload.get("repos"), dict):
+            return payload
+    except json.JSONDecodeError:
+        pass
+    return {"repos": {}}
+
+
+def update_external_imports(created: List[Tuple[SkillCandidate, str, str]]) -> None:
+    index = load_external_index()
+    repos = index.setdefault("repos", {})
+    now = datetime.now(timezone.utc).isoformat()
+    for cand, domain, filename in created:
+        repo_key = cand.repo_key or external_key_for_skill(cand.source, cand.name)
+        if not repo_key:
+            continue
+        entry = repos.get(repo_key) or {
+            "sources": [],
+            "names": [],
+            "skillsmp_ids": [],
+            "first_seen": now,
+            "last_seen": now,
+            "imported": False,
+            "cvf_files": [],
+            "source_types": ["skillsmp"],
+            "best_score": 0,
+            "best_desc_len": 0,
+        }
+        entry["imported"] = True
+        entry["last_seen"] = now
+        entry["last_imported"] = now
+        if cand.source and cand.source not in entry["sources"]:
+            entry["sources"].append(cand.source)
+        if cand.name and cand.name not in entry["names"]:
+            entry["names"].append(cand.name)
+        if cand.raw.get("id") and cand.raw.get("id") not in entry["skillsmp_ids"]:
+            entry["skillsmp_ids"].append(cand.raw.get("id"))
+        cvf_file = f"{domain}/{filename}"
+        if cvf_file not in entry["cvf_files"]:
+            entry["cvf_files"].append(cvf_file)
+        score = float(cand.score or 0)
+        desc_len = len((cand.description or "").strip())
+        if score > float(entry.get("best_score") or 0):
+            entry["best_score"] = round(score, 2)
+        if desc_len > int(entry.get("best_desc_len") or 0):
+            entry["best_desc_len"] = desc_len
+        repos[repo_key] = entry
+
+    EXTERNAL_INDEX_PATH.parent.mkdir(parents=True, exist_ok=True)
+    EXTERNAL_INDEX_PATH.write_text(json.dumps(index, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Convert SkillsMP shortlist to CVF skills.")
     parser.add_argument("--limit", type=int, default=50, help="Max skills to import.")
     parser.add_argument("--dry-run", action="store_true", help="Do not write files.")
+    parser.add_argument("--refresh-template", action="store_true", help="Re-render existing files using the current template.")
     args = parser.parse_args()
 
     if not SHORTLIST_PATH.exists():
@@ -448,8 +702,31 @@ def main() -> int:
     selected = deduped[: args.limit]
 
     created = []
+    existing_by_domain: Dict[Path, Dict[str, List[Path]]] = {}
     for cand in selected:
         domain_path = ensure_domain_dir(cand.cvf_domain)
+        if domain_path not in existing_by_domain:
+            existing_map: Dict[str, List[Path]] = defaultdict(list)
+            for file in domain_path.glob("*.skill.md"):
+                existing_map[base_slug_from_filename(file.name)].append(file)
+            existing_by_domain[domain_path] = existing_map
+        else:
+            existing_map = existing_by_domain[domain_path]
+
+        base_slug = slugify(cand.name)
+        existing_matches = existing_map.get(base_slug, [])
+        if existing_matches:
+            best_existing = pick_best_existing(existing_matches)
+            best_content = best_existing.read_text(encoding="utf-8", errors="ignore")
+            should_update = args.refresh_template or len(cand.description or "") > description_score(best_content)
+            if should_update:
+                related = pick_related_skills(domain_path, best_existing.name)
+                content = render_skill_content(cand, best_existing.name, related)
+                if not args.dry_run:
+                    write_skill(domain_path, best_existing.name, content)
+            created.append((cand, domain_path.name, best_existing.name))
+            continue
+
         use_numbers = domain_uses_numbers(domain_path)
         if use_numbers:
             index = next_domain_index(domain_path)
@@ -457,15 +734,7 @@ def main() -> int:
         else:
             filename_base = f"{slugify(cand.name)}.skill.md"
 
-        existing = {f.name for f in domain_path.glob("*.skill.md")}
         filename = filename_base
-        counter = 2
-        while filename in existing:
-            if use_numbers:
-                filename = f"{index:02d}_{slugify(cand.name)}_{counter}.skill.md"
-            else:
-                filename = f"{slugify(cand.name)}_{counter}.skill.md"
-            counter += 1
 
         related = pick_related_skills(domain_path, filename)
         content = render_skill_content(cand, filename, related)
@@ -474,6 +743,7 @@ def main() -> int:
             write_skill(domain_path, filename, content)
 
         created.append((cand, domain_path.name, filename))
+        existing_map.setdefault(base_slug, []).append(domain_path / filename)
 
     map_lines = [
         "# SkillsMP → CVF Skill Import Map",
@@ -493,6 +763,7 @@ def main() -> int:
 
     if not args.dry_run:
         MAP_OUTPUT.write_text("\n".join(map_lines) + "\n", encoding="utf-8")
+        update_external_imports(created)
 
     print(f"Selected: {len(selected)}")
     print(f"Written: {len(created)}")

@@ -5,6 +5,9 @@ import { Template } from '@/types';
 import { useUserContext } from './UserContext';
 import { WorkflowVisualizer } from './WorkflowVisualizer';
 import { useSettings } from './Settings';
+import { evaluateSpecGate } from '@/lib/spec-gate';
+import { evaluateEnforcement } from '@/lib/enforcement';
+import { logEnforcementDecision } from '@/lib/enforcement-log';
 
 interface SpecExportProps {
     template: Template;
@@ -721,10 +724,8 @@ function generateSpec(
     const modeLabel = mode === 'full' ? labels.modeFull : mode === 'governance' ? labels.modeGovernance : labels.modeSimple;
 
     const requiredFields = template.fields.filter(field => field.required);
-    const missingRequired = requiredFields.filter(field => {
-        const value = values[field.id];
-        return !value || !value.trim() || value.trim().toLowerCase() === 'n/a';
-    });
+    const specGate = evaluateSpecGate(requiredFields, values);
+    const missingRequired = specGate.missing;
     const inputCoverage = requiredFields.length
         ? [
             '| Field | Provided |',
@@ -828,6 +829,7 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
     const [showPreview, setShowPreview] = useState(false);
     const [exportLang, setExportLang] = useState<ExportLanguage>('vi');
     const [exportMode, setExportMode] = useState<ExportMode>('governance');
+    const [specGateError, setSpecGateError] = useState(false);
     const { getContextPrompt } = useUserContext();
 
     useEffect(() => {
@@ -840,6 +842,33 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
     const modes = modeLabels[exportLang];
     const userContextStr = getContextPrompt();
     const spec = generateSpec(template, values, exportLang, exportMode, userContextStr);
+
+    const requiredFields = template.fields.filter(field => field.required);
+    const enforcement = evaluateEnforcement({
+        mode: exportMode,
+        content: spec,
+        budgetOk: true,
+        specFields: requiredFields,
+        specValues: values,
+    });
+    const specGate = enforcement.specGate || evaluateSpecGate(requiredFields, values);
+    const missingRequired = specGate.missing;
+    const specGateStatus: 'PASS' | 'CLARIFY' | 'FAIL' = specGate.status;
+    const canSendToAgent = specGateStatus === 'PASS';
+
+    const specGateLabels = exportLang === 'vi'
+        ? {
+            pass: 'Spec Gate: PASS — Đủ input để thực thi',
+            clarify: 'Spec Gate: CLARIFY — Thiếu input bắt buộc, cần bổ sung',
+            fail: 'Spec Gate: FAIL — Không đủ dữ liệu để tạo spec',
+            missing: 'Thiếu input bắt buộc',
+        }
+        : {
+            pass: 'Spec Gate: PASS — Ready to execute',
+            clarify: 'Spec Gate: CLARIFY — Missing required inputs',
+            fail: 'Spec Gate: FAIL — Not enough data to generate spec',
+            missing: 'Missing required inputs',
+        };
 
     const handleCopyToClipboard = async () => {
         try {
@@ -1026,14 +1055,57 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 {onSendToAgent && (
                     <button
                         onClick={() => {
+                            logEnforcementDecision({
+                                source: 'spec_export',
+                                mode: exportMode,
+                                enforcement,
+                                context: {
+                                    templateId: template.id,
+                                    templateName: template.name,
+                                },
+                            });
+                            if (!canSendToAgent) {
+                                setSpecGateError(true);
+                                return;
+                            }
                             onSendToAgent(spec);
                             onClose?.();
                         }}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 transition-all shadow-md"
+                        disabled={!canSendToAgent}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all shadow-md ${canSendToAgent
+                                ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600'
+                                : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                            }`}
                     >
                         <span>🤖</span>
                         {exportLang === 'vi' ? 'Gửi đến Agent' : 'Send to Agent'}
                     </button>
+                )}
+            </div>
+
+            <div className={`mb-4 p-3 rounded-lg border ${specGateStatus === 'PASS'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                    : specGateStatus === 'CLARIFY'
+                        ? 'bg-amber-50 border-amber-200 text-amber-700'
+                        : 'bg-rose-50 border-rose-200 text-rose-700'
+                }`}
+            >
+                <div className="text-xs font-semibold">
+                    {specGateStatus === 'PASS' && specGateLabels.pass}
+                    {specGateStatus === 'CLARIFY' && specGateLabels.clarify}
+                    {specGateStatus === 'FAIL' && specGateLabels.fail}
+                </div>
+                {missingRequired.length > 0 && (
+                    <div className="text-xs mt-1">
+                        {specGateLabels.missing}: {missingRequired.map(field => field.label).join(', ')}
+                    </div>
+                )}
+                {specGateError && !canSendToAgent && (
+                    <div className="text-xs mt-1 font-semibold">
+                        {exportLang === 'vi'
+                            ? 'Không thể gửi đến Agent khi Spec chưa đạt.'
+                            : 'Cannot send to Agent until Spec passes.'}
+                    </div>
                 )}
             </div>
 

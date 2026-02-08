@@ -7,6 +7,7 @@ import { Skill, SkillCategory } from '../types/skill';
 const SKILLS_ROOT = path.resolve(process.cwd(), '../../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS');
 const UAT_ROOT = path.resolve(process.cwd(), '../../../governance/skill-library/uat/results');
 const UAT_REPORT_PATH = path.resolve(process.cwd(), '../../../governance/skill-library/uat/reports/uat_score_report.json');
+const SPEC_REPORT_PATH = path.resolve(process.cwd(), '../../../governance/skill-library/registry/reports/spec_metrics_report.json');
 
 const DOMAIN_RISK_MAP: Record<string, string> = {
     ai_ml_evaluation: 'R1',
@@ -100,6 +101,80 @@ function computeUatScore(content?: string): { score: number; quality: string } {
     const score = Math.round(0.5 * decisionScore + 0.3 * completenessScore + 0.2 * scenarioScore);
     const quality = score >= 85 ? 'Excellent' : score >= 70 ? 'Good' : score >= 40 ? 'Needs Review' : 'Not Ready';
     return { score, quality };
+}
+
+const SPEC_SECTION_CHECKS: Array<{ label: string; weight: number; pattern: RegExp }> = [
+    { label: 'purpose', weight: 20, pattern: /##\s+.*Mục đích/i },
+    { label: 'formInput', weight: 15, pattern: /##\s+.*Form Input/i },
+    { label: 'expectedOutput', weight: 15, pattern: /##\s+.*Expected Output/i },
+    { label: 'validationHooks', weight: 10, pattern: /##\s+.*Validation Hooks/i },
+    { label: 'executionConstraints', weight: 10, pattern: /##\s+.*Execution Constraints/i },
+    { label: 'governanceSummary', weight: 10, pattern: /##\s+.*Governance Summary/i },
+    { label: 'uatBinding', weight: 5, pattern: /##\s+.*UAT Binding/i },
+    { label: 'examples', weight: 5, pattern: /##\s+.*Ví dụ thực tế/i },
+];
+
+function extractSectionByHeader(text: string, header: string): string {
+    const pattern = new RegExp(`##\\s+${header}[\\s\\S]*?(?=##\\s+|$)`, 'i');
+    const match = text.match(pattern);
+    return match ? match[0] : '';
+}
+
+function countTableRows(section: string): number {
+    const rows = section.split(/\r?\n/).filter(line => line.trim().startsWith('|'));
+    if (rows.length <= 2) return 0;
+    const dataRows = rows.slice(2);
+    return dataRows.filter(row => row.split('|').map(part => part.trim()).filter(Boolean).length >= 2).length;
+}
+
+function countBullets(section: string): number {
+    return section.split(/\r?\n/).filter(line => /^\s*[-*]\s+/.test(line)).length;
+}
+
+function hasCodeFence(section: string): boolean {
+    return /```/.test(section);
+}
+
+function computeSpecGate(score: number): 'PASS' | 'CLARIFY' | 'FAIL' {
+    if (score >= 85) return 'PASS';
+    if (score >= 60) return 'CLARIFY';
+    return 'FAIL';
+}
+
+function computeSpecScore(content?: string): { score: number; quality: string; gate: 'PASS' | 'CLARIFY' | 'FAIL' } {
+    if (!content) {
+        return { score: 0, quality: 'Not Ready', gate: 'FAIL' };
+    }
+
+    let score = 0;
+    for (const check of SPEC_SECTION_CHECKS) {
+        if (check.pattern.test(content)) {
+            score += check.weight;
+        }
+    }
+
+    const formSection = extractSectionByHeader(content, '📋\\s*Form Input');
+    const expectedSection = extractSectionByHeader(content, '✅\\s*Expected Output');
+    const validationSection = extractSectionByHeader(content, '✅\\s*Validation Hooks');
+    const executionSection = extractSectionByHeader(content, '⛔\\s*Execution Constraints');
+
+    if (formSection) {
+        const rows = countTableRows(formSection);
+        if (rows >= 4) score += 10;
+    }
+    if (expectedSection && hasCodeFence(expectedSection)) {
+        score += 5;
+    }
+    if (validationSection && countBullets(validationSection) >= 3) {
+        score += 5;
+    }
+    if (executionSection && countBullets(executionSection) >= 3) {
+        score += 5;
+    }
+
+    score = Math.min(100, score);
+    const quality = score >= 85 ? 'Excellent' : score >= 70 ? 'Good' : score >= 50 ? 'Needs Review' : 'Not Ready';
+    return { score, quality, gate: computeSpecGate(score) };
 }
 
 function isCheckboxLine(line: string): boolean {
@@ -287,11 +362,38 @@ function loadUatReportMap(): Record<string, { status?: string; final_score?: num
     }
 }
 
+function loadSpecReportMap(): Record<string, { spec_score?: number; spec_quality?: string; spec_gate?: string }> {
+    try {
+        if (!fs.existsSync(SPEC_REPORT_PATH)) {
+            return {};
+        }
+        const raw = fs.readFileSync(SPEC_REPORT_PATH, 'utf-8');
+        const data = JSON.parse(raw);
+        if (!data || !Array.isArray(data.skills)) {
+            return {};
+        }
+        const map: Record<string, { spec_score?: number; spec_quality?: string; spec_gate?: string }> = {};
+        for (const entry of data.skills) {
+            if (!entry || !entry.skill_id) continue;
+            map[entry.skill_id] = {
+                spec_score: entry.spec_score,
+                spec_quality: entry.spec_quality,
+                spec_gate: entry.spec_gate,
+            };
+        }
+        return map;
+    } catch (error) {
+        console.error('Failed to load Spec metrics report', error);
+        return {};
+    }
+}
+
 export async function getSkillCategories(): Promise<SkillCategory[]> {
     const categories: SkillCategory[] = [];
 
     try {
         const uatReportMap = loadUatReportMap();
+        const specReportMap = loadSpecReportMap();
         const entries = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true });
 
         for (const entry of entries) {
@@ -316,6 +418,13 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
                         const statusFromFile = parseUatStatus(uatContent);
                         const uatStatus = statusFromFile !== 'Not Run' ? statusFromFile : (uatReport?.status || statusFromFile);
                         const computed = computeUatScore(uatContent);
+                        const uatScore = typeof uatReport?.final_score === 'number' ? uatReport.final_score : computed.score;
+                        const uatQuality = uatReport?.quality || computed.quality;
+                        const specReport = specReportMap[skillId];
+                        const specComputed = computeSpecScore(content);
+                        const specScore = typeof specReport?.spec_score === 'number' ? specReport.spec_score : specComputed.score;
+                        const specQuality = specReport?.spec_quality || specComputed.quality;
+                        const specGate = (specReport?.spec_gate as 'PASS' | 'CLARIFY' | 'FAIL') || specComputed.gate;
 
                         // Basic parsing of metadata
                         const titleMatch = content.match(/^#\s+(.+)$/m);
@@ -348,8 +457,11 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
                             autonomy: autonomyMatch ? autonomyMatch[1].trim() : fallbackAutonomy,
                             uatStatus,
                             uatContent,
-                            uatScore: computed.score,
-                            uatQuality: computed.quality,
+                            uatScore,
+                            uatQuality,
+                            specScore,
+                            specQuality,
+                            specGate,
                         });
                     }
                 }

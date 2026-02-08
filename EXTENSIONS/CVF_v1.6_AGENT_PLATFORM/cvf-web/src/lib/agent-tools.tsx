@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { createSandbox, validateUrl } from './security';
 
 // Tool Types
 export type ToolType = 'web_search' | 'code_execute' | 'file_read' | 'file_write' | 'calculator' | 'datetime' | 'json_parse' | 'url_fetch';
@@ -53,16 +54,21 @@ const webSearchTool: Tool = {
     execute: async (params) => {
         const startTime = Date.now();
         try {
-            // Simulated web search - in production, would call actual search API
+            // ⚠️ MOCK — In production, integrate a real search API (e.g., Bing/Google Custom Search)
             const query = params.query as string;
             const mockResults = [
-                { title: `Result 1 for "${query}"`, url: 'https://example.com/1', snippet: 'This is a sample search result...' },
-                { title: `Result 2 for "${query}"`, url: 'https://example.com/2', snippet: 'Another relevant result...' },
-                { title: `Result 3 for "${query}"`, url: 'https://example.com/3', snippet: 'More information about your query...' },
+                { title: `[MOCK] Result 1 for "${query}"`, url: 'https://example.com/1', snippet: 'This is a sample search result...' },
+                { title: `[MOCK] Result 2 for "${query}"`, url: 'https://example.com/2', snippet: 'Another relevant result...' },
+                { title: `[MOCK] Result 3 for "${query}"`, url: 'https://example.com/3', snippet: 'More information about your query...' },
             ];
             return {
                 success: true,
-                data: { results: mockResults, query, totalResults: 3 },
+                data: {
+                    results: mockResults,
+                    query,
+                    totalResults: 3,
+                    disclaimer: '⚠️ [MOCK DATA] Kết quả mô phỏng, không phải tìm kiếm thật. / Simulated results, not a real web search.',
+                },
                 executionTime: Date.now() - startTime,
             };
         } catch (error) {
@@ -85,9 +91,15 @@ const codeExecuteTool: Tool = {
         const startTime = Date.now();
         try {
             const code = params.code as string;
-            // Safe execution using Function constructor (limited scope)
-            const safeEval = new Function('return (' + code + ')');
-            const result = safeEval();
+            const timeout = (params.timeout as number) || 5000;
+            // Use CVF sandbox for safe execution (keyword blocklist + limited globals)
+            const sandbox = createSandbox();
+            const { result, error } = sandbox.executeAsync
+                ? await sandbox.executeAsync(code, timeout)
+                : sandbox.execute(code, timeout);
+            if (error) {
+                return { success: false, error, executionTime: Date.now() - startTime };
+            }
             return {
                 success: true,
                 data: { result: JSON.stringify(result, null, 2), type: typeof result },
@@ -213,6 +225,20 @@ const urlFetchTool: Tool = {
         try {
             const url = params.url as string;
             const method = (params.method as string) || 'GET';
+
+            // Security: validate URL and block private/internal addresses
+            if (!validateUrl(url)) {
+                return { success: false, error: 'Invalid URL: must be http or https', executionTime: Date.now() - startTime };
+            }
+            const BLOCKED_PATTERNS = [
+                /^https?:\/\/(localhost|127\.|0\.0\.0\.0)/i,
+                /^https?:\/\/(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01]))/,
+                /^https?:\/\/\[::1\]/,
+                /^https?:\/\/169\.254\./,  // link-local
+            ];
+            if (BLOCKED_PATTERNS.some(p => p.test(url))) {
+                return { success: false, error: 'Blocked: cannot fetch internal/private network URLs', executionTime: Date.now() - startTime };
+            }
 
             const response = await fetch(url, { method });
             const contentType = response.headers.get('content-type') || '';

@@ -168,6 +168,8 @@ export function decryptData(encrypted: string, _salt?: string): string {
 }
 
 // Safe code execution sandbox
+type SandboxExecutionResult = { result: unknown; error?: string };
+
 export function createSandbox() {
     const BLOCKED_KEYWORDS = [
         'eval', 'Function', 'constructor',
@@ -176,6 +178,9 @@ export function createSandbox() {
         'import', 'require', 'module', 'exports',
         '__proto__', 'prototype',
         'process', 'global', 'globalThis',
+        'self', 'postMessage', 'importScripts',
+        'setTimeout', 'setInterval', 'clearTimeout', 'clearInterval',
+        'navigator', 'location',
     ];
 
     const ALLOWED_GLOBALS = {
@@ -214,7 +219,7 @@ export function createSandbox() {
             return { safe: true };
         },
 
-        execute(code: string, timeout: number = 1000): { result: unknown; error?: string } {
+        execute(code: string, timeout: number = 1000): SandboxExecutionResult {
             const validation = this.validate(code);
             if (!validation.safe) {
                 return { result: null, error: validation.reason };
@@ -239,6 +244,49 @@ export function createSandbox() {
             } catch (error) {
                 return { result: null, error: String(error) };
             }
+        },
+        async executeAsync(code: string, timeout: number = 1000): Promise<SandboxExecutionResult> {
+            const validation = this.validate(code);
+            if (!validation.safe) {
+                return { result: null, error: validation.reason };
+            }
+
+            if (typeof window === 'undefined' || typeof Worker === 'undefined') {
+                return this.execute(code, timeout);
+            }
+
+            return new Promise((resolve) => {
+                const callId = `sandbox_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+                const worker = new Worker(new URL('./sandbox-worker.ts', import.meta.url), { type: 'module' });
+
+                const cleanup = () => {
+                    worker.terminate();
+                };
+
+                const timer = window.setTimeout(() => {
+                    cleanup();
+                    resolve({ result: null, error: 'Execution timeout' });
+                }, timeout);
+
+                worker.onmessage = (event: MessageEvent<{ id: string; result?: unknown; error?: string }>) => {
+                    if (!event.data || event.data.id !== callId) return;
+                    window.clearTimeout(timer);
+                    cleanup();
+                    if (event.data.error) {
+                        resolve({ result: null, error: event.data.error });
+                        return;
+                    }
+                    resolve({ result: event.data.result });
+                };
+
+                worker.onerror = (event) => {
+                    window.clearTimeout(timer);
+                    cleanup();
+                    resolve({ result: null, error: event?.message || 'Worker execution failed' });
+                };
+
+                worker.postMessage({ id: callId, code });
+            });
         },
     };
 }

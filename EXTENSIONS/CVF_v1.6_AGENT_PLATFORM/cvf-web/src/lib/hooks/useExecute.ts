@@ -18,7 +18,8 @@ export function useExecute(options?: UseExecuteOptions) {
         templateName: string,
         inputs: Record<string, string>,
         intent: string,
-        provider?: AIProvider
+        provider?: AIProvider,
+        mode?: 'simple' | 'governance' | 'full'
     ) => {
         setIsLoading(true);
         setError(null);
@@ -34,6 +35,7 @@ export function useExecute(options?: UseExecuteOptions) {
                     inputs,
                     intent,
                     provider,
+                    mode,
                 }),
             });
 

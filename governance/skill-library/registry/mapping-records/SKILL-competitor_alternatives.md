@@ -12,7 +12,7 @@
 - Skill Name: Competitor Alternative
 - Version: 1.0.0
 - Source:
-  - URL / Repository: https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/business-marketing/competitor-alternatives
+  - URL / Repository: https://github.com/coreyhaines31/marketingskills/tree/main/skills/competitor-alternatives
   - Original Author: External / Unknown
 - Intake Date: 2026-02-07
 - Intake Owner: CVF Governance

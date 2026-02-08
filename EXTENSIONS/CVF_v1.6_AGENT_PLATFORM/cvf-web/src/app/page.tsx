@@ -40,6 +40,7 @@ import {
   ToolsButton,
   AIUsagePanel,
   AIUsageBadge,
+  ApiKeyWizard,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
 import { LanguageToggle } from '@/lib/i18n';
@@ -94,13 +95,15 @@ export default function Home() {
   const [showUserContext, setShowUserContext] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showAIUsage, setShowAIUsage] = useState(false);
+  const [showApiKeyWizard, setShowApiKeyWizard] = useState(false);
   const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
   const [isAgentMinimized, setIsAgentMinimized] = useState(false);
   const [userRole, setUserRole] = useState('admin');
   const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
 
   const { executions, addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
-  const { settings } = useSettings();
+  const { settings, updateProvider, updatePreferences } = useSettings();
+  const hasAnyApiKey = Object.values(settings.providers).some(p => p.apiKey && p.apiKey.trim().length > 0);
 
   // Check if first visit
   useEffect(() => {
@@ -597,6 +600,23 @@ export default function Home() {
               )}
             </div>
 
+            {!mockAiEnabled && !hasAnyApiKey && (
+              <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                  <div className="font-semibold text-lg">API key chưa được cấu hình</div>
+                  <div className="text-sm text-amber-700">
+                    Thiết lập API key để dùng AI Agent và các workflow có AI.
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowApiKeyWizard(true)}
+                  className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700"
+                >
+                  Mở API Key Wizard
+                </button>
+              </div>
+            )}
+
             {!currentFolder && (
               <div id="tour-category-tabs">
                 <CategoryTabs
@@ -796,6 +816,21 @@ export default function Home() {
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-3 md:p-4">
           <div className="w-full h-full md:h-auto md:max-w-3xl overflow-y-auto safe-area-pt safe-area-pb">
             <AIUsagePanel onClose={() => setShowAIUsage(false)} />
+          </div>
+        </div>
+      )}
+
+      {/* API Key Wizard Modal */}
+      {showApiKeyWizard && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-3 md:p-4">
+          <div className="w-full md:max-w-3xl max-h-[90vh] overflow-y-auto safe-area-pt safe-area-pb">
+            <ApiKeyWizard
+              onComplete={() => setShowApiKeyWizard(false)}
+              onClose={() => setShowApiKeyWizard(false)}
+              settings={settings}
+              updateProvider={updateProvider}
+              updatePreferences={updatePreferences}
+            />
           </div>
         </div>
       )}

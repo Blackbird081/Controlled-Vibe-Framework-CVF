@@ -3,8 +3,9 @@
 **Framework quản lý dự án theo tinh thần *vibe coding có kiểm soát*.**
 
 > **Current Version:** v1.6.0 | **Latest:** CVF Agent Platform 🤖  
-> **Assessment:** 9.5/10 ✅ (Feb 07, 2026) — [View Full Report](./docs/CVF_COMPREHENSIVE_ASSESSMENT_2026-02-07.md)  
-> **Last Updated:** Feb 07, 2026
+> **Assessment:** 8.5/10 (Calibrated) | 9.5/10 (Self) — [Independent Review](./docs/CVF_INDEPENDENT_EXPERT_REVIEW_2026-02-08.md) | [Self-Assessment](./docs/CVF_COMPREHENSIVE_ASSESSMENT_2026-02-07.md)  
+> **Remediation:** [Combined Roadmap](./docs/CVF_COMBINED_ASSESSMENT_ROADMAP_2026-02-08.md)  
+> **Last Updated:** Feb 08, 2026
 
 ---
 
@@ -52,7 +53,37 @@ result = skill.execute({"email": "Buy now!!!"})
 
 ---
 
-## 📚 Chọn Phiên Bản
+## 📚 Architecture — 3 Tiers
+
+CVF có 3 lớp. Chọn đúng lớp bạn cần:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  PLATFORM (Layer 3)    — Web UI, Agent Chat, Dashboard  │
+│  v1.5, v1.6            — Reference implementation       │
+│  → Dùng khi cần UI/demo                                │
+├─────────────────────────────────────────────────────────┤
+│  TOOLS (Layer 2)       — Scoring, UAT, Validation       │
+│  v1.3, governance/     — Python scripts, CI/CD          │
+│  → Dùng khi cần automation                              │
+├─────────────────────────────────────────────────────────┤
+│  CORE (Layer 1)        — Principles, Phases, Skills     │
+│  v1.0, v1.1, v1.2      — Quy tắc + Skill Library       │
+│  → LUÔN cần. Bắt đầu từ đây.                           │
+└─────────────────────────────────────────────────────────┘
+```
+
+| Bạn là ai? | Cần Tier nào? | Bắt đầu từ |
+|------------|:------------:|-------------|
+| 1 dev cá nhân | **Core only** | [CVF_LITE.md](./CVF_LITE.md) |
+| Team nhỏ (2-5) | Core + Tools | [v1.1/QUICK_START.md](./v1.1/QUICK_START.md) |
+| Muốn Web UI | Core + Tools + Platform | [v1.6 Agent Platform](#option-1-agent-platform-newest--recommended) |
+
+> 📖 Chi tiết phân lớp: [CVF_POSITIONING.md](./docs/CVF_POSITIONING.md)
+
+---
+
+## 📚 Chọn Phiên Bản (Chi Tiết)
 
 **Ghi chú trạng thái:** v1.5 UX Platform **đóng băng** (maintenance-only). Các cải tiến tiếp theo tập trung ở **v1.6**, còn **v1.5.2 Skill Library** tiếp tục được mở rộng và được **v1.6 thừa hưởng**.
 
@@ -73,7 +104,7 @@ result = skill.execute({"email": "Buy now!!!"})
 | 👤 Operator Manual | **v1.3.1** | [EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/](./EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) |
 | 🎨 End-user UX Layer | **v1.4** | [EXTENSIONS/CVF_v1.4_USAGE_LAYER/](./EXTENSIONS/CVF_v1.4_USAGE_LAYER/) |
 | 🌐 Web UI Platform | **v1.5 (FROZEN)** | [EXTENSIONS/CVF_v1.5_UX_PLATFORM/](./EXTENSIONS/CVF_v1.5_UX_PLATFORM/) |
-| 📋 Skill Library (114 skills) | **v1.5.2 (ACTIVE)** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| 📋 Skill Library (124 skills) | **v1.5.2 (ACTIVE)** | [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](./EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
 | 🔐 **Skill Governance Registry** | **governance** | [governance/skill-library/](./governance/skill-library/) |
 | 🤖 **AI Agent Platform** | **v1.6** ⭐ | [EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/](./EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
 
@@ -125,7 +156,7 @@ Web UI hỗ trợ 3 chế độ xuất prompt:
 
 ## 📋 Skill Library (v1.5.2)
 
-**114 skills** across **12 domains**:
+**124 skills** across **12 domains**:
 
 | Domain | Skills | Description |
 |--------|:------:|-------------|

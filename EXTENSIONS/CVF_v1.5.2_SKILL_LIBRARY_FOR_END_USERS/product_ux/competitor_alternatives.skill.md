@@ -62,6 +62,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 ## 🧪 UAT Binding
 
+- Template: [AGENT_AI_UAT_CVF_TEMPLATE](../../../governance/skill-library/uat/AGENT_AI_UAT_CVF_TEMPLATE.md)
 - UAT Record: [competitor_alternatives](../../../governance/skill-library/uat/results/UAT-competitor_alternatives.md)
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
@@ -138,7 +139,8 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Ưu tiên bối cảnh ngắn, rõ, có ràng buộc
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
-- Nguồn tham khảo: https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/business-marketing/competitor-alternatives
+- Keyword focus: user research
+- Nguồn tham khảo: https://github.com/coreyhaines31/marketingskills/tree/main/skills/competitor-alternatives
 
 ---
 
@@ -146,9 +148,9 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 **Input mẫu:**
 ```text
-Objective: Competitor Alternative cho ứng dụng quản lý công việc
-Context: Startup 5 người, cần go-live 3 tuần
-Constraints: Không đổi stack, ưu tiên tốc độ triển khai
+Objective: Thiết kế flow onboarding cho mobile app
+Context: Người dùng mới rơi nhiều ở bước 2
+Constraints: Giữ nguyên core feature
 Output Format: Checklist + đề xuất
 ```
 
@@ -157,14 +159,14 @@ Output Format: Checklist + đề xuất
 # Competitor Alternative Output
 
 ## Summary
-- Goal: Competitor Alternative cho ứng dụng quản lý công việc
-- Context: Startup 5 người, go-live 3 tuần
-- Constraints: Giữ nguyên stack, ưu tiên tốc độ
+- Goal: Thiết kế flow onboarding cho mobile app
+- Context: Người dùng mới rơi nhiều ở bước 2
+- Constraints: Giữ nguyên core feature
 
 ## Key Findings
-1. Quy trình hiện thiếu bước review rủi ro
-2. Chưa có tiêu chí đo lường thành công
-3. Thiếu checklist QA tối thiểu
+1. Thiếu bước giải thích giá trị trước khi đăng ký
+2. Luồng hiện quá dài, chưa có skip option
+3. Chưa có thử nghiệm A/B cho bản mới
 
 ## Recommendations
 - Chuẩn hóa checklist triển khai

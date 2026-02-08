@@ -29,11 +29,14 @@ class ScoreResult:
     domain: str
     risk_level: str
     status: str
+    badge: str  # NOT_RUN, NEEDS_UAT, VALIDATED, FAILED
     decision_score: int
     completeness_score: int
     scenario_score: int
     final_score: int
     quality: str
+    uat_skill_version: str
+    uat_date: str
 
 
 def parse_meta(text: str) -> Tuple[str, str]:
@@ -138,17 +141,35 @@ def compute_score(text: str, skill_id: str, title: str, domain: str) -> ScoreRes
     scenario = int(round((scenario_done / scenario_total) * 100)) if scenario_total else 0
     final_score = int(round(0.5 * decision + 0.3 * completeness + 0.2 * scenario))
     risk = parse_risk_level(text)
+
+    # Extract UAT metadata for badge assignment
+    uat_skill_ver = match(text, r"\|\s*Skill Version\s*\|\s*([^|]+)\|") or ""
+    uat_date_str = match(text, r"\|\s*UAT Date\s*\|\s*([^|]+)\|") or TODAY.isoformat()
+
+    # Badge assignment per UAT_STATUS_SPEC
+    if status == "Not Run":
+        badge = "NOT_RUN"
+    elif status == "PASS":
+        badge = "VALIDATED"
+    elif status in ("FAIL", "SOFT FAIL"):
+        badge = "FAILED"
+    else:
+        badge = "NOT_RUN"
+
     return ScoreResult(
         skill_id=skill_id,
         title=title or skill_id,
         domain=domain or "unknown",
         risk_level=risk,
         status=status,
+        badge=badge,
         decision_score=decision,
         completeness_score=completeness,
         scenario_score=scenario,
         final_score=final_score,
         quality=quality_label(final_score),
+        uat_skill_version=uat_skill_ver.strip(),
+        uat_date=uat_date_str.strip(),
     )
 
 
@@ -196,11 +217,14 @@ def main() -> int:
             "domain",
             "risk_level",
             "status",
+            "badge",
             "decision_score",
             "completeness_score",
             "scenario_score",
             "final_score",
             "quality",
+            "uat_skill_version",
+            "uat_date",
         ])
         for result in results:
             writer.writerow([
@@ -209,12 +233,20 @@ def main() -> int:
                 result.domain,
                 result.risk_level,
                 result.status,
+                result.badge,
                 result.decision_score,
                 result.completeness_score,
                 result.scenario_score,
                 result.final_score,
                 result.quality,
+                result.uat_skill_version,
+                result.uat_date,
             ])
+
+    # Badge summary
+    badge_counts = {"VALIDATED": 0, "FAILED": 0, "NOT_RUN": 0, "NEEDS_UAT": 0}
+    for result in results:
+        badge_counts[result.badge] = badge_counts.get(result.badge, 0) + 1
 
     domain_counts: Dict[str, int] = {}
     for result in results:
@@ -226,6 +258,15 @@ def main() -> int:
         f"> **Generated:** {TODAY.isoformat()}",
         f"> **Total Skills:** {len(results)}",
         "",
+        "## Badge Summary",
+        "",
+        "| Badge | Count | Meaning |",
+        "|---|---:|---|",
+        f"| ✅ VALIDATED | {badge_counts['VALIDATED']} | UAT passed, version synced |",
+        f"| ❌ FAILED | {badge_counts['FAILED']} | UAT explicitly failed |",
+        f"| ⚠️ NEEDS_UAT | {badge_counts['NEEDS_UAT']} | Spec changed, UAT stale |",
+        f"| 🔘 NOT_RUN | {badge_counts['NOT_RUN']} | UAT not yet executed |",
+        "",
         "## Domain Coverage",
         "| Domain | Skills |",
         "|---|---|",
@@ -236,12 +277,13 @@ def main() -> int:
     lines += [
         "",
         "## Skill Scores",
-        "| Skill ID | Domain | Status | Score | Quality |",
-        "|---|---|---|---|---|",
+        "| Skill ID | Domain | Status | Badge | Score | Quality |",
+        "|---|---|---|---|---|---|",
     ]
     for result in results:
+        badge_icon = {"VALIDATED": "✅", "FAILED": "❌", "NEEDS_UAT": "⚠️", "NOT_RUN": "🔘"}.get(result.badge, "🔘")
         lines.append(
-            f"| {result.skill_id} | {result.domain} | {result.status} | {result.final_score} | {result.quality} |"
+            f"| {result.skill_id} | {result.domain} | {result.status} | {badge_icon} {result.badge} | {result.final_score} | {result.quality} |"
         )
 
     (REPORT_DIR / "uat_score_report.md").write_text("\n".join(lines), encoding="utf-8")

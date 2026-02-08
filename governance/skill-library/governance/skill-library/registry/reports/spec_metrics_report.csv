@@ -1,0 +1,125 @@
+skill_id,title,domain,spec_score,spec_quality,spec_gate,missing_sections,path
+01_model_selection.skill,Model Selection,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\01_model_selection.skill.md
+02_prompt_evaluation.skill,Prompt Evaluation,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\02_prompt_evaluation.skill.md
+03_output_quality_check.skill,Output Quality Check,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\03_output_quality_check.skill.md
+04_bias_detection.skill,Bias Detection,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\04_bias_detection.skill.md
+05_cost_optimization.skill,Cost Optimization,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\05_cost_optimization.skill.md
+06_ai_use_case_fit.skill,AI Use Case Fit,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\06_ai_use_case_fit.skill.md
+building_with_google_adk.skill,Building With Google Adk,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\building_with_google_adk.skill.md
+ml_paper_writing.skill,Ml Paper Writing,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\ml_paper_writing.skill.md
+promptfoo_evaluation.skill,Promptfoo Evaluation,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\promptfoo_evaluation.skill.md
+senior_data_scientist.skill,Enior Data Cienti T,Ai Ml Evaluation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\ai_ml_evaluation\senior_data_scientist.skill.md
+01_app_requirements_spec.skill,App Requirements Spec,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\01_app_requirements_spec.skill.md
+02_tech_stack_selection.skill,Tech Stack Selection,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\02_tech_stack_selection.skill.md
+03_architecture_design.skill,Architecture Design,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\03_architecture_design.skill.md
+04_database_schema_design.skill,Database Schema Design,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\04_database_schema_design.skill.md
+05_api_design_spec.skill,API Design Spec,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\05_api_design_spec.skill.md
+06_desktop_app_spec.skill,Desktop App Spec,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\06_desktop_app_spec.skill.md
+07_cli_tool_spec.skill,CLI Tool Spec,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\07_cli_tool_spec.skill.md
+08_local_deployment.skill,Local Deployment Spec,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\08_local_deployment.skill.md
+adaptyv.skill,Adaptyv,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\adaptyv.skill.md
+andrew_kane_gem_writer.skill,Andrew Kane Gem Writer,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\andrew_kane_gem_writer.skill.md
+architecture_paradigm_microservices.skill,Architecture Paradigm Micro Ervice,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\architecture_paradigm_microservices.skill.md
+backend_dev_guidelines.skill,Backend Dev Guideline,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\backend_dev_guidelines.skill.md
+backend_development.skill,Backend Development,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\backend_development.skill.md
+ccxt_php.skill,Ccxt Php,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\ccxt_php.skill.md
+component_refactoring.skill,Component Refactoring,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\component_refactoring.skill.md
+create_database_migration.skill,Create Databa E Migration,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\create_database_migration.skill.md
+data_context_extractor.skill,Data Context Extractor,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\data_context_extractor.skill.md
+dev_browser.skill,Dev Brow Er,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\dev_browser.skill.md
+devops_troubleshooter.skill,Devop Trouble Hooter,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\devops_troubleshooter.skill.md
+dyadmulti_pr_review.skill,Dyadmulti Pr Review,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\dyadmulti_pr_review.skill.md
+dynamic.skill,Dynamic,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\dynamic.skill.md
+frontend_design.skill,Frontend De Ign,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\frontend_design.skill.md
+frontend_responsive_design_standards.skill,Frontend Re Pon Ive De Ign Tandard,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\frontend_responsive_design_standards.skill.md
+hugging_face_model_trainer.skill,Hugging Face Model Trainer,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\hugging_face_model_trainer.skill.md
+lazyllm_skill.skill,Lazyllm Kill,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\lazyllm_skill.skill.md
+litestream.skill,Lite Tream,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\litestream.skill.md
+mermaid_diagrams.skill,Mermaid Diagram,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\mermaid_diagrams.skill.md
+moai_domain_backend.skill,Moai Domain Backend,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\moai_domain_backend.skill.md
+onchainkit.skill,Onchainkit,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\onchainkit.skill.md
+penpot_uiux_design.skill,Penpot Uiux De Ign,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\penpot_uiux_design.skill.md
+perf_optimizer.skill,Perf Optimizer,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\perf_optimizer.skill.md
+performance_optimization.skill,Performance Optimization,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\performance_optimization.skill.md
+playwriter.skill,Playwriter,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\playwriter.skill.md
+prototype_prompt_generator.skill,Prototype Prompt Generator,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\prototype_prompt_generator.skill.md
+refly.skill,Refly,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\refly.skill.md
+setup_timescaledb_hypertables.skill,Etup Time Caledb Hypertable,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\setup_timescaledb_hypertables.skill.md
+smart_docs.skill,Mart Doc,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\smart_docs.skill.md
+sysadmin_toolbox.skill,Y Admin Toolbox,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\sysadmin_toolbox.skill.md
+tidb_test_guidelines.skill,Tidb Te T Guideline,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\tidb_test_guidelines.skill.md
+ui_ux_pro_max.skill,Ui Ux Pro Max,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\ui_ux_pro_max.skill.md
+update_docs.skill,Update Doc,App Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\app_development\update_docs.skill.md
+01_strategy_analysis.skill,Strategy Analysis,Business Analysis,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\business_analysis\01_strategy_analysis.skill.md
+02_risk_assessment.skill,Risk Assessment,Business Analysis,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\business_analysis\02_risk_assessment.skill.md
+03_market_research.skill,Market Research,Business Analysis,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\business_analysis\03_market_research.skill.md
+business_competitor_analysis.skill,Bu Ine Competitor Analy I,Business Analysis,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\business_analysis\business_competitor_analysis.skill.md
+business_plan.skill,Bu Ine Plan,Business Analysis,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\business_analysis\business_plan.skill.md
+excel_report_generator.skill,Excel Report Generator,Business Analysis,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\business_analysis\excel_report_generator.skill.md
+01_documentation.skill,Documentation,Content Creation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\content_creation\01_documentation.skill.md
+02_report_writing.skill,Report Writing,Content Creation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\content_creation\02_report_writing.skill.md
+03_presentation.skill,Presentation,Content Creation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\content_creation\03_presentation.skill.md
+doc_coauthoring.skill,Doc Coauthoring,Content Creation,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\content_creation\doc_coauthoring.skill.md
+01_budget_analysis.skill,Budget Analysis,Finance Analytics,90,Excellent,PASS,form_input_table,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\01_budget_analysis.skill.md
+02_financial_statement_review.skill,Financial Statement Review,Finance Analytics,90,Excellent,PASS,form_input_table,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\02_financial_statement_review.skill.md
+03_roi_calculator_review.skill,ROI Calculator Review,Finance Analytics,90,Excellent,PASS,form_input_table,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\03_roi_calculator_review.skill.md
+04_kpi_dashboard_audit.skill,KPI Dashboard Audit,Finance Analytics,90,Excellent,PASS,form_input_table,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\04_kpi_dashboard_audit.skill.md
+05_cash_flow_analysis.skill,Cash Flow Analysis,Finance Analytics,90,Excellent,PASS,form_input_table,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\05_cash_flow_analysis.skill.md
+06_investment_due_diligence.skill,Investment Due Diligence,Finance Analytics,90,Excellent,PASS,form_input_table,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\06_investment_due_diligence.skill.md
+07_financial_risk_assessment.skill,Financial Risk Assessment,Finance Analytics,90,Excellent,PASS,form_input_table,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\07_financial_risk_assessment.skill.md
+08_revenue_forecast_review.skill,Revenue Forecast Review,Finance Analytics,90,Excellent,PASS,form_input_table,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\08_revenue_forecast_review.skill.md
+finance_manager.skill,Finance Manager,Finance Analytics,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\finance_manager.skill.md
+montecarlo.skill,Montecarlo,Finance Analytics,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\finance_analytics\montecarlo.skill.md
+01_job_description.skill,Job Description,Hr Operations,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\hr_operations\01_job_description.skill.md
+02_interview_evaluation.skill,Interview Evaluation,Hr Operations,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\hr_operations\02_interview_evaluation.skill.md
+03_performance_review.skill,Performance Review,Hr Operations,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\hr_operations\03_performance_review.skill.md
+04_onboarding_checklist.skill,Onboarding Checklist,Hr Operations,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\hr_operations\04_onboarding_checklist.skill.md
+05_policy_documentation.skill,Policy Documentation,Hr Operations,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\hr_operations\05_policy_documentation.skill.md
+01_contract_review.skill,Contract Review,Legal Contracts,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\legal_contracts\01_contract_review.skill.md
+02_nda_template.skill,NDA Template,Legal Contracts,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\legal_contracts\02_nda_template.skill.md
+03_terms_of_service.skill,Terms of Service,Legal Contracts,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\legal_contracts\03_terms_of_service.skill.md
+04_compliance_checklist.skill,Compliance Checklist,Legal Contracts,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\legal_contracts\04_compliance_checklist.skill.md
+05_ip_protection.skill,IP Protection,Legal Contracts,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\legal_contracts\05_ip_protection.skill.md
+legal_simulation_patrick_munro.skill,Legal Imulation Patrick Munro,Legal Contracts,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\legal_contracts\legal_simulation_patrick_munro.skill.md
+word.skill,Word,Legal Contracts,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\legal_contracts\word.skill.md
+brand_voice_consistency.skill,Brand Voice Consistency,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\brand_voice_consistency.skill.md
+competitor_analysis.skill,Competitor Analysis,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\competitor_analysis.skill.md
+content_creator.skill,Content Creator,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\content_creator.skill.md
+content_quality_checklist.skill,Content Quality Checklist,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\content_quality_checklist.skill.md
+copywriting_evaluation.skill,Copywriting Evaluation,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\copywriting_evaluation.skill.md
+email_campaign_review.skill,Email Campaign Review,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\email_campaign_review.skill.md
+landing_page_cro.skill,Landing Page CRO,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\landing_page_cro.skill.md
+marketing_demand_acquisition.skill,Marketing Demand Acqui Ition,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\marketing_demand_acquisition.skill.md
+pricing_strategy_review.skill,Pricing Strategy Review,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\pricing_strategy_review.skill.md
+seo_audit.skill,SEO Audit,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\seo_audit.skill.md
+social_media_ad_review.skill,Social Media Ad Review,Marketing Seo,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\marketing_seo\social_media_ad_review.skill.md
+ab_test_review.skill,A/B Test Review,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\ab_test_review.skill.md
+accessibility_audit.skill,Accessibility Audit (WCAG),Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\accessibility_audit.skill.md
+competitor_alternatives.skill,Competitor Alternative,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\competitor_alternatives.skill.md
+error_handling_ux.skill,Error Handling UX,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\error_handling_ux.skill.md
+feature_prioritization.skill,Feature Prioritization (RICE/ICE),Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\feature_prioritization.skill.md
+hooked_ux.skill,Hooked Ux,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\hooked_ux.skill.md
+numerai_research.skill,Numerai Re Earch,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\numerai_research.skill.md
+octocode_research.skill,Octocode Re Earch,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\octocode_research.skill.md
+onboarding_experience_review.skill,Onboarding Experience Review,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\onboarding_experience_review.skill.md
+research.skill,Re Earch,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\research.skill.md
+user_flow_analysis.skill,User Flow Analysis,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\user_flow_analysis.skill.md
+user_persona_development.skill,User Persona Development,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\user_persona_development.skill.md
+ux_heuristic_evaluation.skill,UX Heuristic Evaluation,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\ux_heuristic_evaluation.skill.md
+ux_writing.skill,Ux Writing,Product Ux,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\product_ux\ux_writing.skill.md
+api_security_checklist.skill,API Security Checklist,Security Compliance,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\security_compliance\api_security_checklist.skill.md
+data_handling_review.skill,Data Handling Review,Security Compliance,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\security_compliance\data_handling_review.skill.md
+gdpr_compliance_review.skill,GDPR Compliance Review,Security Compliance,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\security_compliance\gdpr_compliance_review.skill.md
+healthcheck.skill,Healthcheck,Security Compliance,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\security_compliance\healthcheck.skill.md
+incident_response_plan.skill,Incident Response Plan,Security Compliance,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\security_compliance\incident_response_plan.skill.md
+native_dependency_update.skill,Native Dependency Update,Security Compliance,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\security_compliance\native_dependency_update.skill.md
+privacy_policy_audit.skill,Privacy Policy Audit,Security Compliance,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\security_compliance\privacy_policy_audit.skill.md
+terms_of_service_review.skill,Terms of Service Review,Security Compliance,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\security_compliance\terms_of_service_review.skill.md
+01_code_review.skill,Code Review,Technical Review,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\technical_review\01_code_review.skill.md
+02_architecture_review.skill,Architecture Review,Technical Review,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\technical_review\02_architecture_review.skill.md
+03_security_audit.skill,Security Audit,Technical Review,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\technical_review\03_security_audit.skill.md
+01_landing_page.skill,Landing Page,Web Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\web_development\01_landing_page.skill.md
+02_saas_app.skill,SaaS App,Web Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\web_development\02_saas_app.skill.md
+03_dashboard.skill,Dashboard,Web Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\web_development\03_dashboard.skill.md
+04_blog_docs.skill,Blog / Documentation,Web Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\web_development\04_blog_docs.skill.md
+05_portfolio.skill,Portfolio,Web Development,100,Excellent,PASS,,..\..\EXTENSIONS\CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS\web_development\05_portfolio.skill.md

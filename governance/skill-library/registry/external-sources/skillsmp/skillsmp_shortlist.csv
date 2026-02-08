@@ -1,51 +1,101 @@
 rank,name,owner,repo,stars,updatedAt,categories,matched_query,cvf_domain,source,score
-1,healthcheck,openclaw,,169850,2026-02-03T15:21:34+00:00,,security audit,security_compliance,https://github.com/openclaw/openclaw/tree/main/skills/healthcheck,169899.59
-2,update-docs,vercel,,137547,2026-01-22T08:11:27+00:00,,code review,app_development,https://github.com/vercel/next.js/tree/canary/.claude/skills/update-docs,158234.03
-3,component-refactoring,langgenius,,128890,2026-01-29T09:58:10+00:00,,frontend,app_development,https://github.com/langgenius/dify/tree/main/.agents/skills/component-refactoring,148279.58
-4,code-reviewer,google-gemini,,93770,2026-01-21T07:28:36+00:00,,code review,app_development,https://github.com/google-gemini/gemini-cli/tree/main/.gemini/skills/code-reviewer,107890.32
-5,python-expert,Shubhamsaboo,,92364,2026-02-04T01:10:37+00:00,,code review,app_development,https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/awesome_agent_skills/python-expert,106275.63
-6,playwright-cli,microsoft,,82231,2026-02-06T00:44:24+00:00,,testing,app_development,https://github.com/microsoft/playwright/tree/main/packages/playwright/src/skill,94622.99
-7,browser-use,browser-use,,77898,2026-02-02T18:47:30+00:00,,testing,app_development,https://github.com/browser-use/browser-use/tree/main/skills/browser-use,89639.57
-8,vercel-react-best-practices,lobehub,,72008,2026-01-23T14:30:18+00:00,,code review,app_development,https://github.com/lobehub/lobehub/tree/main/.agents/skills/vercel-react-best-practices,82864.49
-9,frontend-design,anthropics,,64702,2025-11-12T01:31:51+00:00,,frontend,app_development,https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design/skills/frontend-design,74451.09
-10,doc-coauthoring,anthropics,,64467,2026-02-04T02:20:55+00:00,,content writing,content_creation,https://github.com/anthropics/skills/tree/main/skills/doc-coauthoring,64516.59
-11,create-database-migration,TryGhost,,51753,2025-12-02T21:21:13+00:00,,database schema,app_development,https://github.com/TryGhost/Ghost/tree/main/.claude/skills/create-database-migration,59563.05
-12,clojure-review,metabase,,45852,2026-01-23T11:13:30+00:00,,code review,app_development,https://github.com/metabase/metabase/tree/master/.claude/skills/clojure-review,52784.94
-13,receiving-code-review,obra,,45854,2025-12-24T07:03:19+00:00,,code review,app_development,https://github.com/obra/superpowers/tree/main/skills/receiving-code-review,52782.51
-14,checking-changes,streamlit,,43369,2026-02-03T02:09:08+00:00,,backend,app_development,https://github.com/streamlit/streamlit/tree/develop/.claude/skills/checking-changes,49931.22
-15,golang-testing,affaan-m,,41052,2026-02-05T13:57:54+00:00,,testing,app_development,https://github.com/affaan-m/everything-claude-code/tree/main/docs/zh-CN/skills/golang-testing,47267.14
-16,ccxt-php,ccxt,,40834,2026-02-02T10:27:57+00:00,,web app,app_development,https://github.com/ccxt/ccxt/tree/master/.claude/skills/ccxt-php,47015.81
-17,vercel-react-best-practices,calcom,,40059,2026-02-03T13:14:41+00:00,,code review,app_development,https://github.com/calcom/cal.com/tree/main/agents/skills/vercel-react-best-practices,46124.72
-18,tidb-test-guidelines,pingcap,,39699,2026-02-03T13:27:52+00:00,,code review,app_development,https://github.com/pingcap/tidb/tree/master/.github/skills/tidb-test-guidelines,45710.88
-19,write-release-notes,tldraw,,45079,2026-01-31T18:42:10+00:00,,content writing,content_creation,https://github.com/tldraw/tldraw/tree/main/.claude/skills/write-release-notes,45128.18
-20,code-review,agno-agi,,37607,2026-01-19T12:31:37+00:00,,code review,app_development,https://github.com/agno-agi/agno/tree/main/cookbook/02_agents/skills/sample_skills/code-review,43302.56
-21,bocha-search,zhayujie,,41110,2026-02-01T11:21:12+00:00,,user research,product_ux,https://github.com/zhayujie/chatgpt-on-wechat/tree/master/skills/bocha-search,41159.18
-22,creating-financial-models,anthropics,,32508,2025-11-28T06:44:59+00:00,,testing,app_development,https://github.com/anthropics/claude-cookbooks/tree/main/skills/custom_skills/creating-financial-models,37430.52
-23,cn-check,continuedev,,31266,2026-02-02T09:56:19+00:00,,code review,app_development,https://github.com/continuedev/continue/tree/main/skills/cn-check,36012.61
-24,setup-web-tests,PostHog,,31126,2026-02-06T09:17:01+00:00,,backend,app_development,https://github.com/PostHog/posthog/tree/master/.claude/skills/setup-web-tests,35852.24
-25,writing-docs,remotion-dev,,35269,2026-01-31T12:23:22+00:00,,content writing,content_creation,https://github.com/remotion-dev/remotion/tree/main/.claude/skills/writing-docs,35318.04
-26,dev-browser,code-yeongyu,,28775,2026-01-25T06:34:07+00:00,,web app,app_development,https://github.com/code-yeongyu/oh-my-opencode/tree/dev/src/features/builtin-skills/dev-browser,33146.7
-27,ui-ux-pro-max,nextlevelbuilder,,28474,2026-01-19T13:22:23+00:00,,mobile app,app_development,https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/ui-ux-pro-max,32799.76
-28,ci-monitor,nrwl,,28083,2026-01-27T18:50:42+00:00,,cloud,app_development,https://github.com/nrwl/nx/tree/master/.cursor/skills/ci-monitor,32351.37
-29,hugging-face-model-trainer,patchy631,,27980,2026-01-30T10:40:58+00:00,,cloud,app_development,https://github.com/patchy631/ai-engineering-hub/tree/main/hugging-face-skills/skills/hugging-face-model-trainer,32233.24
-30,multi-reviewer-patterns,wshobson,,27924,2026-02-05T22:42:30+00:00,,code review,app_development,https://github.com/wshobson/agents/tree/main/plugins/agent-teams/skills/multi-reviewer-patterns,32169.94
-31,content-research-writer,ComposioHQ,,31075,2025-10-17T09:09:35+00:00,,content writing,content_creation,https://github.com/ComposioHQ/awesome-claude-skills/tree/master/content-research-writer,31109.52
-32,fastapi,srbhr,,25896,2026-01-26T07:17:13+00:00,,database schema,app_development,https://github.com/srbhr/Resume-Matcher/tree/main/.agent/skills/fastapi,29836.01
-33,fetch-diff,mlflow,,24009,2026-01-16T13:37:55+00:00,,code review,app_development,https://github.com/mlflow/mlflow/tree/master/.claude/skills/fetch-diff,27664.54
-34,pr-finalize,dotnet,,23161,2026-02-04T22:08:37+00:00,,code review,app_development,https://github.com/dotnet/maui/tree/main/.github/skills/pr-finalize,26692.33
-35,testing-python,jlowin,,22640,2026-01-12T16:24:39+00:00,,testing,app_development,https://github.com/jlowin/fastmcp/tree/main/.claude/skills/python-tests,26089.56
-36,evals-context,RooCodeInc,,22129,2026-01-07T15:00:34+00:00,,web app,app_development,https://github.com/RooCodeInc/Roo-Code/tree/main/.roo/skills/evals-context,25501.12
-37,competitor-alternatives,davila7,,19575,2026-01-25T15:01:14+00:00,,user research,product_ux,https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/business-marketing/competitor-alternatives,19623.36
-38,code-review,shareAI-lab,,16590,2026-01-20T12:50:23+00:00,,security audit,security_compliance,https://github.com/shareAI-lab/learn-claude-code/tree/main/skills/code-review,16637.53
-39,docs-writer-reference,reactjs,,11665,2026-01-30T19:54:45+00:00,,content writing,content_creation,https://github.com/reactjs/react.dev/tree/main/.claude/skills/docs-writer-reference,11714.04
-40,research,danielmiessler,,6245,2026-01-31T08:18:19+00:00,,user research,product_ux,https://github.com/danielmiessler/Personal_AI_Infrastructure/tree/main/Releases/v2.5/.claude/skills/Research,6294.04
-41,competitor-alternatives,coreyhaines31,,6055,2026-02-04T01:42:39+00:00,,user research,product_ux,https://github.com/coreyhaines31/marketingskills/tree/main/skills/competitor-alternatives,6104.59
-42,native-dependency-update,mono,,5258,2026-02-03T02:34:39+00:00,,security audit,security_compliance,https://github.com/mono/SkiaSharp/tree/main/.github/skills/native-dependency-update,5307.45
-43,technical-articles,EpicenterHQ,,4026,2026-02-05T20:04:29+00:00,,content writing,content_creation,https://github.com/EpicenterHQ/epicenter/tree/main/.agents/skills/technical-articles,4075.86
-44,release,parcadei,,3484,2026-01-15T11:42:39+00:00,,security audit,security_compliance,https://github.com/parcadei/Continuous-Claude-v3/tree/main/.claude/skills/release,3530.85
-45,doc-coauthoring,callstack,,3315,2026-01-15T17:37:43+00:00,,content writing,content_creation,https://github.com/callstack/react-native-testing-library/tree/main/.claude/skills/doc-coauthoring,3361.99
-46,audit-prep-assistant,trailofbits,,2412,2026-01-29T19:37:24+00:00,,security audit,security_compliance,https://github.com/trailofbits/skills/tree/main/plugins/building-secure-contracts/skills/audit-prep-assistant,2460.9
-47,jazz-permissions-security,garden-co,,2411,2026-01-23T21:33:34+00:00,,security audit,security_compliance,https://github.com/garden-co/jazz/tree/main/.cursor/skills/jazz-permissions-security,2459.08
-48,content-research-writer,davepoon,,2378,2026-01-12T10:19:01+00:00,,content writing,content_creation,https://github.com/davepoon/buildwithclaude/tree/main/plugins/all-skills/skills/content-research-writer,2424.44
-49,last30days,mvanhorn,,2208,2026-01-25T21:33:49+00:00,,user research,product_ux,https://github.com/mvanhorn/last30days-skill,2256.36
-50,solidity-security,scaffold-eth,,1970,2026-01-29T11:48:11+00:00,,security audit,security_compliance,https://github.com/scaffold-eth/scaffold-eth-2/tree/main/.agents/skills/solidity-security,2018.77
+1,vercel-react-best-practices,calcom,,40059,2026-02-03T13:14:41+00:00,,code review,app_development,https://github.com/calcom/cal.com/tree/main/agents/skills/vercel-react-best-practices,46124.72
+2,agent-browser,baptisteArno,,9668,2026-01-28T21:53:27+00:00,,web app,app_development,https://github.com/baptisteArno/typebot.io/tree/main/.agents/skills/agent-browser,11174.28
+3,backend-dev-guidelines,diet103,,8814,2025-10-31T01:41:31+00:00,,backend,app_development,https://github.com/diet103/claude-code-infrastructure-showcase/tree/main/.claude/skills/backend-dev-guidelines,10178.0
+4,vercel-composition-patterns,openstatusHQ,,8298,2026-01-31T10:43:58+00:00,,api design,app_development,https://github.com/openstatusHQ/openstatus/tree/main/.agents/skills/vercel-composition-patterns,9599.1
+5,frontend-style-guide,lightdash,,5529,2026-02-04T11:19:16+00:00,,frontend,app_development,https://github.com/lightdash/lightdash/tree/main/.claude/skills/frontend-style-guide,6415.38
+6,web-e2e,Uniswap,,5471,2025-12-02T20:21:11+00:00,,web app,app_development,https://github.com/Uniswap/interface/tree/main/.claude/skills/web-e2e,6338.75
+7,competitor-alternatives,coreyhaines31,,6055,2026-02-04T01:42:39+00:00,,user research,product_ux,https://github.com/coreyhaines31/marketingskills/tree/main/skills/competitor-alternatives,6104.59
+8,data-context-extractor,anthropics,,4994,2026-01-29T22:36:17+00:00,,database schema,app_development,https://github.com/anthropics/knowledge-work-plugins/tree/main/data/skills/data-context-extractor,5799.34
+9,dev-browser,MemTensor,,4953,2026-01-20T12:10:27+00:00,,web app,app_development,https://github.com/MemTensor/MemOS/tree/main/openwork-memos-integration/apps/desktop/skills/dev-browser,5750.61
+10,playwright-app-testing,Expensify,,4701,2026-01-15T23:59:33+00:00,,frontend,app_development,https://github.com/Expensify/App/tree/main/.claude/skills/playwright-app-testing,5460.18
+11,whodb,clidey,,4535,2025-12-28T18:44:03+00:00,,database schema,app_development,https://github.com/clidey/whodb/tree/main/cli/external-plugin/whodb/skills/whodb,5266.45
+12,baoyu-danger-gemini-web,JimLiu,,3778,2026-01-23T22:10:04+00:00,,backend,app_development,https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-danger-gemini-web,4399.99
+13,lazyllm-skill,LazyAGI,,3715,2026-02-04T01:27:46+00:00,,web app,app_development,https://github.com/LazyAGI/LazyLLM/tree/main/docs/lazyllm-skill,4329.28
+14,dev-browser,SawyerHood,,3456,2026-01-05T22:53:11+00:00,,web app,app_development,https://github.com/SawyerHood/dev-browser/tree/main/skills/dev-browser,4026.86
+15,test-with-postgres,storj,,3223,2026-01-30T14:25:01+00:00,,backend,app_development,https://github.com/storj/storj/tree/main/.claude/skills/test-with-postgres,3762.69
+16,frontend-design,Mayandev,,3181,2026-01-09T14:21:46+00:00,,web app,app_development,https://github.com/Mayandev/notion-avatar/tree/main/.claude/skills/frontend-design,3711.08
+17,playwriter,remorses,,2736,2026-01-31T17:48:44+00:00,,web app,app_development,https://github.com/remorses/playwriter/tree/main/skills/playwriter,3202.8
+18,agent-browser,m1heng,,2638,2026-02-01T18:00:26+00:00,,web app,app_development,https://github.com/m1heng/clawdbot-feishu/tree/main/.agents/skills/agent-browser,3090.25
+19,n8n-workflow-patterns,czlonkowski,,2506,2026-01-08T14:38:07+00:00,,api design,app_development,https://github.com/czlonkowski/n8n-skills/tree/main/skills/n8n-workflow-patterns,2934.67
+20,webf-quickstart,openwebf,,2309,2026-01-05T17:18:00+00:00,,app development,app_development,https://github.com/openwebf/webf/tree/main/skills/webf-quickstart,2707.65
+21,perf-optimizer,OneKeyHQ,,2285,2026-01-31T00:52:10+00:00,,mobile app,app_development,https://github.com/OneKeyHQ/app-monorepo/tree/x/.claude/skills/perf-optimizer,2684.15
+22,prototype-prompt-generator,cexll,,2192,2025-12-13T04:33:02+00:00,,mobile app,app_development,https://github.com/cexll/myclaude/tree/master/skills/prototype-prompt-generator,2569.48
+23,content-research-writer,davepoon,,2378,2026-01-12T10:19:01+00:00,,content writing,content_creation,https://github.com/davepoon/buildwithclaude/tree/main/plugins/all-skills/skills/content-research-writer,2424.44
+24,swiftui-liquid-glass,Dimillian,,1702,2026-01-28T06:10:59+00:00,,api design,app_development,https://github.com/Dimillian/Skills/tree/main/swiftui-liquid-glass,2013.22
+25,swiftui-liquid-glass,steipete,,1695,2025-12-31T21:20:20+00:00,,api design,app_development,https://github.com/steipete/agent-scripts/tree/main/skills/swiftui-liquid-glass,2000.92
+26,backend-development,mrgoonie,,1666,2025-11-15T08:42:42+00:00,,devops,app_development,https://github.com/mrgoonie/claudekit-skills/tree/main/.claude/skills/backend-development,1960.17
+27,create-migration,owid,,1513,2026-01-16T10:20:58+00:00,,database schema,app_development,https://github.com/owid/owid-grapher/tree/master/.claude/skills/create-migration,1793.98
+28,setup-timescaledb-hypertables,timescale,,1504,2026-02-03T14:18:56+00:00,,database schema,app_development,https://github.com/timescale/pg-aiguide/tree/main/skills/setup-timescaledb-hypertables,1786.47
+29,content-research-writer,sonofmagic,,1741,2025-12-29T15:33:29+00:00,,content writing,content_creation,https://github.com/sonofmagic/weapp-tailwindcss/tree/main/.codex/skills/content-research-writer,1785.52
+30,convex-backend,CloudAI-X,,1235,2026-01-16T23:30:21+00:00,,database schema,app_development,https://github.com/CloudAI-X/claude-workflow-v2/tree/main/skills/convex-backend,1474.44
+31,supabase-postgres-best-practices,supabase,,1105,2026-01-27T21:38:29+00:00,,database schema,app_development,https://github.com/supabase/agent-skills/tree/main/skills/supabase-postgres-best-practices,1326.67
+32,performance-optimization,FarhanAliRaza,,1041,2025-12-26T19:49:57+00:00,,api design,app_development,https://github.com/FarhanAliRaza/django-bolt/tree/master/.claude/performance-optimization,1248.03
+33,dynamodb,itsmostafa,,989,2026-01-19T09:09:06+00:00,,database schema,app_development,https://github.com/itsmostafa/aws-agent-skills/tree/main/skills/dynamodb,1191.86
+34,spec-workflow,TencentCloudBase,,949,2026-01-15T07:35:58+00:00,,software architecture,app_development,https://github.com/TencentCloudBase/CloudBase-MCP/tree/main/config/.claude/skills/spec-workflow,1145.23
+35,vercel-react-native-skills,databuddy-analytics,,910,2026-01-29T16:14:04+00:00,,mobile app,app_development,https://github.com/databuddy-analytics/Databuddy/tree/main/.agents/skills/vercel-react-native-skills,1102.58
+36,vercel-composition-patterns,inkeep,,905,2026-02-06T10:25:38+00:00,,api design,app_development,https://github.com/inkeep/agents/tree/main/.agents/skills/vercel-composition-patterns,1098.09
+37,validate-with-database,pgschema,,754,2026-01-15T03:51:42+00:00,,database schema,app_development,https://github.com/pgschema/pgschema/tree/main/.claude/skills/validate_db,920.98
+38,database-design,skillcreatorai,,744,2026-01-16T04:11:19+00:00,,database schema,app_development,https://github.com/skillcreatorai/Ai-Agent-Skills/tree/main/skills/database-design,909.63
+39,smart-docs,sopaco,,712,2025-11-12T03:41:37+00:00,,software architecture,app_development,https://github.com/sopaco/deepwiki-rs/tree/main/skills/smart-docs,862.59
+40,content-research-writer,Prat011,,810,2025-12-25T12:51:50+00:00,,content writing,content_creation,https://github.com/Prat011/awesome-llm-skills/tree/master/content-research-writer,853.97
+41,jwt-auth,dadbodgeoff,,670,2026-01-22T22:37:28+00:00,,mobile app,app_development,https://github.com/dadbodgeoff/drift/tree/main/skills/jwt-auth,825.64
+42,moai-domain-backend,modu-ai,,659,2026-02-02T06:03:19+00:00,,api design,app_development,https://github.com/modu-ai/moai-adk/tree/main/.claude/skills/moai-domain-backend,814.56
+43,chief-architect,ananddtyagi,,637,2026-01-18T17:50:15+00:00,,app development,app_development,https://github.com/ananddtyagi/cc-marketplace/tree/main/plugins/claude-dev-infrastructure/skills/chief-architect,786.9
+44,testing,LedgerHQ,,567,2026-01-28T13:57:08+00:00,,mobile app,app_development,https://github.com/LedgerHQ/ledger-live/tree/develop/.cursor/skills/testing,707.97
+45,business-plan,openclaw,,652,2026-02-06T10:33:26+00:00,,business analysis,business_analysis,https://github.com/openclaw/skills/tree/main/skills/jk-0001/business-plan,701.86
+46,design-doc-interviewer,liveloveapp,,598,2026-01-26T01:37:06+00:00,,product ux,product_ux,https://github.com/liveloveapp/hashbrown/tree/main/.codex/skills/design-doc-interviewer,646.36
+47,it-role-expert,krafton-ai,,585,2026-01-14T05:56:52+00:00,,hr operations,hr_operations,https://github.com/krafton-ai/KIRA/tree/main/.claude/skills/it-role-expert,631.71
+48,mermaid-diagrams,softaworks,,475,2026-02-01T11:28:11+00:00,,software architecture,app_development,https://github.com/softaworks/agent-toolkit/tree/main/dist/plugins/mermaid-diagrams/skills/mermaid-diagrams,602.8
+49,promptfoo-evaluation,daymade,,554,2026-01-15T15:36:18+00:00,,prompt evaluation,ai_ml_evaluation,https://github.com/daymade/claude-code-skills/tree/main/promptfoo-evaluation,600.85
+50,standards-responsive,maxritter,,438,2026-02-06T03:32:33+00:00,,mobile app,app_development,https://github.com/maxritter/claude-pilot/tree/main/pilot/skills/standards-responsive,561.04
+51,onchainkit,BankrBot,,428,2026-01-29T05:16:15+00:00,,app development,app_development,https://github.com/BankrBot/openclaw-skills/tree/main/onchainkit,548.28
+52,agent-device,callstackincubator,,421,2026-02-06T11:44:26+00:00,,mobile app,app_development,https://github.com/callstackincubator/agent-device/tree/main/skills/agent-device,541.49
+53,software-architecture,NeoLabHQ,,399,2026-01-08T15:04:03+00:00,,software architecture,app_development,https://github.com/NeoLabHQ/context-engineering-kit/tree/master/plugins/ddd/skills/software-architecture,511.62
+54,slash-command-factory,alirezarezvani,,468,2025-11-12T15:30:27+00:00,,business analysis,business_analysis,https://github.com/alirezarezvani/claude-code-skill-factory/tree/dev/generated-skills/slash-command-factory,506.08
+55,spec-workflow,TencentCloudBase,,340,2025-12-08T13:05:43+00:00,,software architecture,app_development,https://github.com/TencentCloudBase/awesome-cloudbase-examples/tree/master/miniprogram/cloudbase-ai-video/.codebuddy/skills/spec-workflow,438.89
+56,frontend-responsive-design-standards,am-will,,328,2026-01-16T22:41:25+00:00,,mobile app,app_development,https://github.com/am-will/codex-skills/tree/main/skills/frontend-responsive-ui,431.39
+57,azure-devops-rest-api,Tiberriver256,,325,2025-11-19T01:11:07+00:00,,devops,app_development,https://github.com/Tiberriver256/mcp-server-azure-devops/tree/main/.github/skills/azure-devops-rest-api,418.65
+58,solid,ramziddin,,312,2026-01-22T17:28:50+00:00,,software architecture,app_development,https://github.com/ramziddin/solid-skills/tree/main/skills/solid,413.78
+59,screenshot-analyzer,notedit,,298,2026-01-25T12:43:49+00:00,,app development,app_development,https://github.com/notedit/happy-skills/tree/main/skills/screenshot-analyzer,398.15
+60,free-tool-strategy,TheCraigHewitt,,325,2026-02-02T19:21:54+00:00,,marketing seo,marketing_seo,https://github.com/TheCraigHewitt/seomachine/tree/main/.claude/skills/free-tool-strategy,374.45
+61,prompt-engineer,Jeffallan,,306,2026-02-02T15:25:32+00:00,,prompt evaluation,ai_ml_evaluation,https://github.com/Jeffallan/claude-skills/tree/main/skills/prompt-engineer,355.32
+62,senior-data-scientist,benchflow-ai,,303,2026-01-27T06:24:43+00:00,,ai evaluation,ai_ml_evaluation,https://github.com/benchflow-ai/skillsbench/tree/main/tasks-no-skills/powerlifting-coef-calc/environment/skills/senior-data-scientist,351.49
+63,devops-troubleshooter,rmyndharis,,243,2026-01-18T08:15:11+00:00,,devops,app_development,https://github.com/rmyndharis/antigravity-skills/tree/main/skills/devops-troubleshooter,333.8
+64,finance-manager,ailabs-393,,294,2025-11-11T07:22:14+00:00,,finance analysis,finance_analytics,https://github.com/ailabs-393/ai-labs-claude-skills/tree/main/dist/skills/finance-manager,331.95
+65,playwright-ci-caching,Aaronontheweb,,231,2026-02-05T17:33:26+00:00,,devops,app_development,https://github.com/Aaronontheweb/dotnet-skills/tree/master/skills/playwright-ci-caching,322.83
+66,montecarlo,AojdevStudio,,269,2026-01-16T15:11:12+00:00,,finance analysis,finance_analytics,https://github.com/AojdevStudio/Finance-Guru/tree/main/.claude/skills/MonteCarlo,315.99
+67,business-analyst,aj-geddes,,236,2026-01-01T14:04:13+00:00,,business analysis,business_analysis,https://github.com/aj-geddes/claude-code-bmad-skills/tree/main/bmad-skills/business-analyst,280.93
+68,engineering-standards,groupzer0,,180,2026-01-15T11:18:00+00:00,,software architecture,app_development,https://github.com/groupzer0/vs-code-agents/tree/main/vs-code-agents/skills/engineering-standards,260.88
+69,risk-analysis,Prorise-cool,,206,2026-01-19T01:20:42+00:00,,business analysis,business_analysis,https://github.com/Prorise-cool/Claude-Code-Multi-Agent/tree/master/.claude/skills/business-analysis/risk-analysis,253.4
+70,architecture-paradigm-microservices,athola,,166,2026-02-01T17:41:11+00:00,,devops,app_development,https://github.com/athola/claude-night-market/tree/master/plugins/archetypes/skills/architecture-paradigm-microservices,247.45
+71,dynamic,popup-studio-ai,,165,2026-02-06T08:03:11+00:00,,app development,app_development,https://github.com/popup-studio-ai/bkit-claude-code/tree/main/skills/dynamic,247.09
+72,sysadmin-toolbox,jdrhyne,,165,2026-01-26T00:10:32+00:00,,devops,app_development,https://github.com/jdrhyne/agent-skills/tree/main/skills/sysadmin-toolbox,245.36
+73,setup-tools,Chachamaru127,,163,2026-02-04T13:56:11+00:00,,app development,app_development,https://github.com/Chachamaru127/claude-code-harness/tree/main/codex/.codex/skills/setup-tools,244.48
+74,software-design-review,atilladeniz,,158,2026-01-27T19:39:37+00:00,,software architecture,app_development,https://github.com/atilladeniz/Kubeli/tree/main/.claude/skills/software-design-review,237.62
+75,designing-architecture,CloudAI-X,,154,2026-01-10T13:51:18+00:00,,software architecture,app_development,https://github.com/CloudAI-X/opencode-workflow/tree/main/skills/designing-architecture,230.19
+76,analyzing-data,astronomer,,180,2026-01-29T19:13:39+00:00,,business analysis,business_analysis,https://github.com/astronomer/agents/tree/main/skills/analyzing-data,228.9
+77,knowledge-capture,rsmdt,,178,2026-01-10T19:37:37+00:00,,business analysis,business_analysis,https://github.com/rsmdt/the-startup/tree/main/plugins/start/skills/knowledge-capture,224.3
+78,free-tool-strategy,first-fluke,,172,2026-02-04T01:53:25+00:00,,marketing seo,marketing_seo,https://github.com/first-fluke/fullstack-starter/tree/main/.agents/skills/free-tool-strategy,221.59
+79,gitlab,refly-ai,,143,2026-02-01T04:14:54+00:00,,devops,app_development,https://github.com/refly-ai/refly-skills/tree/main/skills/gitlab,221.0
+80,ai-product-patterns,menkesu,,141,2026-01-29T09:41:07+00:00,,product ux,product_ux,https://github.com/menkesu/awesome-pm-skills/tree/main/ai-product-patterns,189.77
+81,ml-paper-writing,Galaxy-Dawn,,125,2026-01-27T11:27:39+00:00,,ai evaluation,ai_ml_evaluation,https://github.com/Galaxy-Dawn/claude-scholar/tree/main/skills/ml-paper-writing,173.49
+82,building-with-google-adk,panaversity,,120,2026-01-15T21:48:29+00:00,,ai evaluation,ai_ml_evaluation,https://github.com/panaversity/agentfactory/tree/main/docs/_skills_archive/rare/building-with-google-adk,166.99
+83,pest-analysis,flpbalada,,117,2026-01-28T21:09:58+00:00,,business analysis,business_analysis,https://github.com/flpbalada/my-opencode-config/tree/main/skills/pest-analysis,165.77
+84,marketing-demand-acquisition,ynulihao,,115,2026-01-25T17:40:14+00:00,,marketing seo,marketing_seo,https://github.com/ynulihao/AgentSkillOS/tree/main/data/skill_seeds/marketing-demand-acquisition,163.22
+85,behavioral-product-design,RefoundAI,,100,2026-01-31T02:13:03+00:00,,product ux,product_ux,https://github.com/RefoundAI/lenny-skills/tree/main/skills/behavioral-product-design,149.04
+86,using-finance-team,LerianStudio,,93,2026-01-14T06:10:38+00:00,,finance analysis,finance_analytics,https://github.com/LerianStudio/ring/tree/main/.archive/finance-team/skills/using-finance-team,139.71
+87,business-competitor-analysis,kenneth-liao,,88,2026-01-09T01:29:00+00:00,,business analysis,business_analysis,https://github.com/kenneth-liao/ai-launchpad-marketplace/tree/main/research/skills/business-competitor-analysis,134.03
+88,aws-strands-agents-agentcore,sammcj,,81,2026-02-05T04:39:16+00:00,,ai evaluation,ai_ml_evaluation,https://github.com/sammcj/agentic-coding/tree/main/Skills/aws-strands-agents-agentcore,130.73
+89,karen-repo-reviewer,pr-pm,,86,2025-11-23T19:27:03+00:00,,ai evaluation,ai_ml_evaluation,https://github.com/pr-pm/prpm/tree/main/.claude/skills/karen-repo-reviewer,125.73
+90,strategy-writer,rileyhilliard,,76,2026-02-05T05:51:16+00:00,,business analysis,business_analysis,https://github.com/rileyhilliard/claude-essentials/tree/main/plugins/ce/skills/strategy-writer,125.73
+91,word,IgorWarzocha,,76,2026-01-25T14:18:36+00:00,,legal contract,legal_contracts,https://github.com/IgorWarzocha/Opencode-Workflows/tree/master/cowork/.opencode/skill/word,124.22
+92,service-analysis,WenJunDuan,,70,2026-01-30T03:16:21+00:00,,business analysis,business_analysis,https://github.com/WenJunDuan/Rlues/tree/main/vibeCoding/codex/config-agent_v7.8-codex/.codex/skills/service-analysis,118.9
+93,excel-report-generator,wwwzhouhui,,75,2025-11-12T09:50:46+00:00,,business analysis,business_analysis,https://github.com/wwwzhouhui/skills_collection/tree/main/excel-report-generator,113.08
+94,hooked-ux,wondelai,,61,2026-02-02T12:44:15+00:00,,product ux,product_ux,https://github.com/wondelai/skills/tree/main/hooked-ux,110.32
+95,data-analysis,JinFanZheng,,53,2026-01-17T12:43:40+00:00,,business analysis,business_analysis,https://github.com/JinFanZheng/kode-sdk-csharp/tree/main/examples/Kode.Agent.WebApiAssistant/skills/data-analysis,100.12
+96,learning-assessor,partme-ai,,51,2026-01-26T13:56:17+00:00,,ai evaluation,ai_ml_evaluation,https://github.com/partme-ai/full-stack-skills/tree/main/skills/learning-assessor,99.36
+97,legal-simulation-patrick-munro,lawvable,,50,2026-01-30T10:29:58+00:00,,legal contract,legal_contracts,https://github.com/lawvable/awesome-legal-skills/tree/main/🌐/legal-simulation-patrick-munro,98.9
+98,ux-writing,content-designer,,52,2026-01-08T11:41:43+00:00,,product ux,product_ux,https://github.com/content-designer/ux-writing-skill,97.89
+99,ai-tool-designer,nityeshaga,,49,2026-01-14T22:15:09+00:00,,ai evaluation,ai_ml_evaluation,https://github.com/nityeshaga/claude-code-essentials/tree/main/plugins/basics/skills/ai-tool-designer,95.85
+100,llm-evaluation,applied-artificial-intelligence,,36,2026-01-14T12:36:10+00:00,,prompt evaluation,ai_ml_evaluation,https://github.com/applied-artificial-intelligence/claude-code-toolkit/tree/main/skills/llm-evaluation,82.71

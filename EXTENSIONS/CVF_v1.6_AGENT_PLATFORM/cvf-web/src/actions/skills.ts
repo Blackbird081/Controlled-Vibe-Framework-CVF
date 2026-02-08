@@ -375,7 +375,9 @@ function loadSpecReportMap(): Record<string, { spec_score?: number; spec_quality
         const map: Record<string, { spec_score?: number; spec_quality?: string; spec_gate?: string }> = {};
         for (const entry of data.skills) {
             if (!entry || !entry.skill_id) continue;
-            map[entry.skill_id] = {
+            const rawId = String(entry.skill_id);
+            const normalizedId = rawId.replace(/\.skill(\.md)?$/i, '');
+            map[normalizedId] = {
                 spec_score: entry.spec_score,
                 spec_quality: entry.spec_quality,
                 spec_gate: entry.spec_gate,

@@ -8,6 +8,18 @@ export function AnalyticsDashboard() {
     const { executions } = useExecutionStore();
     const { events, clearEvents, enabled } = useAnalyticsEvents();
 
+    const formatEventValue = (value: unknown) => {
+        if (value == null) return '';
+        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+            return String(value);
+        }
+        try {
+            return JSON.stringify(value);
+        } catch {
+            return String(value);
+        }
+    };
+
     const stats = useMemo(() => {
         const total = executions.length;
         const completed = executions.filter(e => e.status === 'completed').length;
@@ -360,7 +372,9 @@ export function AnalyticsDashboard() {
                     <div className="mt-4 space-y-2 text-xs text-gray-600 dark:text-gray-400">
                         {enforcementStats.recent.map(event => (
                             <div key={event.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                                <span>{event.data?.source || 'unknown'} → {event.data?.status || 'unknown'}</span>
+                                <span>
+                                    {formatEventValue(event.data?.source || 'unknown')} → {formatEventValue(event.data?.status || 'unknown')}
+                                </span>
                                 <span>{new Date(event.timestamp).toLocaleString()}</span>
                             </div>
                         ))}

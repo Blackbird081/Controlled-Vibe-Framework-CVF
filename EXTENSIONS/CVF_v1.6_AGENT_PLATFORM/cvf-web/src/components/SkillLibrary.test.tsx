@@ -8,9 +8,21 @@ import { SkillLibrary } from './SkillLibrary';
 const trackEventMock = vi.fn();
 const getSkillCategoriesMock = vi.fn();
 const saveUatContentMock = vi.fn();
+const routerPushMock = vi.fn();
 
 vi.mock('@/lib/analytics', () => ({
     trackEvent: (...args: unknown[]) => trackEventMock(...args),
+}));
+
+vi.mock('next/navigation', () => ({
+    useRouter: () => ({
+        push: routerPushMock,
+        replace: vi.fn(),
+        prefetch: vi.fn(),
+        refresh: vi.fn(),
+        back: vi.fn(),
+        forward: vi.fn(),
+    }),
 }));
 
 vi.mock('../actions/skills', () => ({

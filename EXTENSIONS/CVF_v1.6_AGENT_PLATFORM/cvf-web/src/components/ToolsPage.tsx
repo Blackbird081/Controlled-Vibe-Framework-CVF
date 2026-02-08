@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { AVAILABLE_TOOLS, useTools, ToolResult, ToolType } from '@/lib/agent-tools';
+import { useLanguage } from '@/lib/i18n';
 
 interface ToolsPageProps {
     onClose?: () => void;
@@ -10,32 +11,47 @@ interface ToolsPageProps {
 export function ToolsPage({ onClose }: ToolsPageProps) {
     const { toolCalls, clearHistory } = useTools();
     const [lastResult, setLastResult] = useState<{ toolId: ToolType; result: ToolResult } | null>(null);
+    const { t } = useLanguage();
+
+    const resolveI18n = (key: string, fallback: string) => {
+        const value = t(key);
+        return value === key ? fallback : value;
+    };
+
+    const getToolName = (toolId: ToolType, fallback: string) =>
+        resolveI18n(`tools.catalog.${toolId}.name`, fallback);
+
+    const getToolDescription = (toolId: ToolType, fallback: string) =>
+        resolveI18n(`tools.catalog.${toolId}.description`, fallback);
+
+    const getParamDescription = (toolId: ToolType, paramName: string, fallback: string) =>
+        resolveI18n(`tools.catalog.${toolId}.param.${paramName}`, fallback);
 
     const handleToolResult = (toolId: ToolType, result: ToolResult) => {
         setLastResult({ toolId, result });
     };
 
     return (
-        <div className="h-full flex flex-col bg-white dark:bg-gray-900">
-            {/* Header */}
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                        🛠️ Agent Tools
-                    </h2>
-                    <p className="text-sm text-gray-500">
-                        Các công cụ hỗ trợ cho AI Agent
-                    </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    {toolCalls.length > 0 && (
-                        <button
-                            onClick={clearHistory}
-                            className="px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
-                        >
-                            🗑️ Clear History
-                        </button>
-                    )}
+            <div className="h-full flex flex-col bg-white dark:bg-gray-900">
+                {/* Header */}
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                    <div>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            {t('tools.title')}
+                        </h2>
+                        <p className="text-sm text-gray-500">
+                            {t('tools.description')}
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        {toolCalls.length > 0 && (
+                            <button
+                                onClick={clearHistory}
+                                className="px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                            >
+                                {t('tools.clearHistory')}
+                            </button>
+                        )}
                     {onClose && (
                         <button
                             onClick={onClose}
@@ -55,9 +71,9 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
                         <div className="flex items-start gap-3">
                             <span className="text-xl">🚧</span>
                             <div>
-                                <h3 className="font-bold">Tools - Coming Soon</h3>
+                                <h3 className="font-bold">{t('tools.comingSoonTitle')}</h3>
                                 <p className="text-sm">
-                                    Agent Tools hiện đang ở chế độ xem trước. Tính năng thực thi sẽ được mở sau khi backend được tích hợp.
+                                    {t('tools.comingSoonDesc')}
                                 </p>
                             </div>
                         </div>
@@ -68,22 +84,22 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
                         <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
                             <div className="flex items-center justify-between mb-3">
                                 <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                    📤 Latest Result
+                                    {t('tools.latestResult')}
                                     <span className="text-sm font-normal text-gray-500">
-                                        {AVAILABLE_TOOLS[lastResult.toolId]?.name}
+                                        {getToolName(lastResult.toolId, AVAILABLE_TOOLS[lastResult.toolId]?.name || '')}
                                     </span>
                                 </h3>
                                 <span className={`text-sm px-2 py-1 rounded ${lastResult.result.success
                                         ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300'
                                         : 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300'
                                     }`}>
-                                    {lastResult.result.success ? '✓ Success' : '✗ Failed'}
+                                    {lastResult.result.success ? t('tools.success') : t('tools.failed')}
                                 </span>
                             </div>
 
                             {lastResult.result.executionTime && (
                                 <p className="text-xs text-gray-500 mb-2">
-                                    ⏱️ Execution time: {lastResult.result.executionTime}ms
+                                    ⏱️ {t('tools.executionTime')}: {lastResult.result.executionTime}ms
                                 </p>
                             )}
 
@@ -96,7 +112,7 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
                     {/* Tools Documentation */}
                     <div className="mt-8">
                         <h3 className="font-bold text-gray-900 dark:text-white mb-4">
-                            📚 Tools Documentation
+                            {t('tools.documentation')}
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {Object.values(AVAILABLE_TOOLS).map(tool => (
@@ -106,18 +122,20 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
                                 >
                                     <div className="flex items-center gap-2 mb-2">
                                         <span className="text-xl">{tool.icon}</span>
-                                        <h4 className="font-bold text-gray-900 dark:text-white">{tool.name}</h4>
+                                        <h4 className="font-bold text-gray-900 dark:text-white">
+                                            {getToolName(tool.id, tool.name)}
+                                        </h4>
                                     </div>
                                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                                        {tool.description}
+                                        {getToolDescription(tool.id, tool.description)}
                                     </p>
                                     <div className="space-y-1">
-                                        <p className="text-xs font-medium text-gray-500">Parameters:</p>
+                                        <p className="text-xs font-medium text-gray-500">{t('tools.parameters')}:</p>
                                         {tool.parameters.map(param => (
                                             <div key={param.name} className="text-xs text-gray-600 dark:text-gray-400 pl-2">
                                                 • <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{param.name}</code>
                                                 {param.required && <span className="text-red-500">*</span>}
-                                                : {param.description}
+                                                : {getParamDescription(tool.id, param.name, param.description)}
                                             </div>
                                         ))}
                                     </div>
@@ -133,6 +151,7 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
 
 // Export button component
 export function ToolsButton({ onClick }: { onClick: () => void }) {
+    const { t } = useLanguage();
     return (
         <button
             onClick={onClick}
@@ -140,7 +159,7 @@ export function ToolsButton({ onClick }: { onClick: () => void }) {
                       rounded-lg font-medium flex items-center gap-2 hover:opacity-90 transition-opacity"
         >
             <span>🛠️</span>
-            <span>Tools</span>
+            <span>{t('tools.button')}</span>
         </button>
     );
 }

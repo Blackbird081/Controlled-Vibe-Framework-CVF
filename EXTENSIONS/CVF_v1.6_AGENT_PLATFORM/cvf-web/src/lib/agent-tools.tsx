@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { createSandbox, validateUrl } from './security';
+import { useLanguage } from './i18n';
 
 // Tool Types
 export type ToolType = 'web_search' | 'code_execute' | 'file_read' | 'file_write' | 'calculator' | 'datetime' | 'json_parse' | 'url_fetch';
@@ -399,6 +400,16 @@ export function ToolCard({
         file: 'from-amber-500 to-orange-500',
         utility: 'from-purple-500 to-pink-500',
     };
+    const { t } = useLanguage();
+
+    const resolveI18n = (key: string, fallback: string) => {
+        const value = t(key);
+        return value === key ? fallback : value;
+    };
+
+    const toolName = resolveI18n(`tools.catalog.${tool.id}.name`, tool.name);
+    const toolDescription = resolveI18n(`tools.catalog.${tool.id}.description`, tool.description);
+    const categoryLabel = resolveI18n(`tools.category.${tool.category}`, tool.category);
 
     return (
         <button
@@ -414,11 +425,11 @@ export function ToolCard({
                            flex items-center justify-center text-xl mb-2`}>
                 {tool.icon}
             </div>
-            <h3 className="font-bold text-gray-900 dark:text-white">{tool.name}</h3>
-            <p className="text-xs text-gray-500 mt-1">{tool.description}</p>
+            <h3 className="font-bold text-gray-900 dark:text-white">{toolName}</h3>
+            <p className="text-xs text-gray-500 mt-1">{toolDescription}</p>
             <div className="mt-2">
                 <span className={`text-xs px-2 py-0.5 rounded-full bg-gradient-to-r ${categoryColors[tool.category]} text-white`}>
-                    {tool.category}
+                    {categoryLabel}
                 </span>
             </div>
         </button>
@@ -434,6 +445,21 @@ export function ToolsPanel({
     const { tools, toolCalls, isExecuting, executeTool } = useTools();
     const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
     const [params, setParams] = useState<Record<string, string>>({});
+    const { t } = useLanguage();
+
+    const resolveI18n = (key: string, fallback: string) => {
+        const value = t(key);
+        return value === key ? fallback : value;
+    };
+
+    const getToolName = (toolId: ToolType, fallback: string) =>
+        resolveI18n(`tools.catalog.${toolId}.name`, fallback);
+
+    const getParamDescription = (toolId: ToolType, paramName: string, fallback: string) =>
+        resolveI18n(`tools.catalog.${toolId}.param.${paramName}`, fallback);
+
+    const getStatusLabel = (status: ToolCall['status']) =>
+        resolveI18n(`tools.status.${status}`, status);
 
     const handleExecute = async () => {
         if (!selectedTool) return;
@@ -445,7 +471,7 @@ export function ToolsPanel({
     return (
         <div className="bg-white dark:bg-gray-900 rounded-xl p-4">
             <h3 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                🛠️ Agent Tools
+                {t('tools.title')}
             </h3>
 
             {/* Tool Grid */}
@@ -464,7 +490,7 @@ export function ToolsPanel({
             {selectedTool && (
                 <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                     <h4 className="font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                        {selectedTool.icon} {selectedTool.name}
+                        {selectedTool.icon} {getToolName(selectedTool.id, selectedTool.name)}
                     </h4>
 
                     <div className="space-y-3">
@@ -477,7 +503,7 @@ export function ToolsPanel({
                                     type={param.type === 'number' ? 'number' : 'text'}
                                     value={params[param.name] || ''}
                                     onChange={(e) => setParams(prev => ({ ...prev, [param.name]: e.target.value }))}
-                                    placeholder={param.description}
+                                    placeholder={getParamDescription(selectedTool.id, param.name, param.description)}
                                     className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 
                                               rounded-lg bg-white dark:bg-gray-900 text-sm"
                                 />
@@ -491,7 +517,7 @@ export function ToolsPanel({
                         className="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white 
                                   rounded-lg font-medium disabled:opacity-50 transition-colors"
                     >
-                        {isExecuting ? '⏳ Executing...' : '▶️ Execute'}
+                        {isExecuting ? t('tools.executing') : t('tools.execute')}
                     </button>
                 </div>
             )}
@@ -499,7 +525,7 @@ export function ToolsPanel({
             {/* Recent Tool Calls */}
             {toolCalls.length > 0 && (
                 <div className="mt-4">
-                    <h4 className="text-sm font-medium text-gray-500 mb-2">Recent Calls</h4>
+                    <h4 className="text-sm font-medium text-gray-500 mb-2">{t('tools.recentCalls')}</h4>
                     <div className="space-y-2 max-h-48 overflow-auto">
                         {toolCalls.slice(-5).reverse().map(call => (
                             <div
@@ -513,11 +539,13 @@ export function ToolsPanel({
                             >
                                 <div className="flex items-center gap-2">
                                     <span>{tools[call.toolId]?.icon}</span>
-                                    <span className="font-medium">{tools[call.toolId]?.name}</span>
+                                    <span className="font-medium">
+                                        {getToolName(call.toolId, tools[call.toolId]?.name || '')}
+                                    </span>
                                     <span className={`ml-auto ${call.status === 'completed' ? 'text-green-600' :
                                             call.status === 'failed' ? 'text-red-600' : 'text-gray-500'
                                         }`}>
-                                        {call.status}
+                                        {getStatusLabel(call.status)}
                                     </span>
                                 </div>
                                 {call.result && (

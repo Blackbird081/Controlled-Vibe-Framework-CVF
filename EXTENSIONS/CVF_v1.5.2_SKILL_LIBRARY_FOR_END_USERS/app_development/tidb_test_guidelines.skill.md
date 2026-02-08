@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Decide where to place TiDB tests and how to write them (basic structure, naming, testdata usage). Use when asked about test locations, writing conventions, shard_count limits, casetest categorization, or when reviewing test changes in code review.
 
 **Khi nào dùng skill này:**
-- Cần Tidb Te T Guideline với tiêu chí rõ ràng
+- Cần Tidb Test Guidelines với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -71,7 +71,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Tidb Te T Guideline cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Tidb Test Guidelines cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -84,7 +84,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Tidb Te T Guideline Output
+# Tidb Test Guidelines Output
 
 ## Summary
 - Goal: [Objective]
@@ -146,7 +146,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 **Input mẫu:**
 ```text
-Objective: Tidb Te T Guideline cho ứng dụng quản lý công việc
+Objective: Tidb Test Guidelines cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
 Constraints: Không đổi stack, ưu tiên tốc độ triển khai
 Output Format: Checklist + đề xuất
@@ -154,10 +154,10 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Tidb Te T Guideline Output
+# Tidb Test Guidelines Output
 
 ## Summary
-- Goal: Tidb Te T Guideline cho ứng dụng quản lý công việc
+- Goal: Tidb Test Guidelines cho ứng dụng quản lý công việc
 - Context: Startup 5 người, go-live 3 tuần
 - Constraints: Giữ nguyên stack, ưu tiên tốc độ
 

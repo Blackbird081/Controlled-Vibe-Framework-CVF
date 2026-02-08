@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Comprehensive research, analysis, and content extraction system. USE WHEN user says 'research' (ANY form - this is the MANDATORY trigger), 'do research', 'extensive research', 'quick research', 'minor research', 'research this', 'find information', 'investigate', 'extract wisdom', 'extract alpha', 'analyze content', 'can't get this content', 'use fabric', OR requests any web/content research. Supports three research modes (quick/standard/extensive), deep content analysis, intelligent retrieval, and 242+ Fabric patterns. NOTE: For due diligence, OSINT, or background checks, use OSINT skill instead.
 
 **Khi nào dùng skill này:**
-- Cần Re Earch với tiêu chí rõ ràng
+- Cần Research với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -71,7 +71,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Re Earch cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Research cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -84,7 +84,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Re Earch Output
+# Research Output
 
 ## Summary
 - Goal: [Objective]
@@ -146,7 +146,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 **Input mẫu:**
 ```text
-Objective: Re Earch cho ứng dụng quản lý công việc
+Objective: Research cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
 Constraints: Không đổi stack, ưu tiên tốc độ triển khai
 Output Format: Checklist + đề xuất
@@ -154,10 +154,10 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Re Earch Output
+# Research Output
 
 ## Summary
-- Goal: Re Earch cho ứng dụng quản lý công việc
+- Goal: Research cho ứng dụng quản lý công việc
 - Context: Startup 5 người, go-live 3 tuần
 - Constraints: Giữ nguyên stack, ưu tiên tốc độ
 

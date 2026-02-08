@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Expert knowledge for contributing to Litestream, a standalone disaster recovery tool for SQLite. Provides architectural understanding, code patterns, critical rules, and debugging procedures for WAL monitoring, LTX replication format, storage backend implementation, multi-level compaction, and SQLite page management. Use when working with Litestream source code, writing storage backends, debugging replication issues, implementing compaction logic, or handling SQLite WAL operations.
 
 **Khi nào dùng skill này:**
-- Cần Lite Tream với tiêu chí rõ ràng
+- Cần Litestream với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -72,7 +72,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Lite Tream cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Litestream cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -85,7 +85,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Lite Tream Output
+# Litestream Output
 
 ## Summary
 - Goal: [Objective]
@@ -147,7 +147,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 **Input mẫu:**
 ```text
-Objective: Lite Tream cho ứng dụng quản lý công việc
+Objective: Litestream cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
 Constraints: Không đổi stack, ưu tiên tốc độ triển khai
 Output Format: Checklist + đề xuất
@@ -155,10 +155,10 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Lite Tream Output
+# Litestream Output
 
 ## Summary
-- Goal: Lite Tream cho ứng dụng quản lý công việc
+- Goal: Litestream cho ứng dụng quản lý công việc
 - Context: Startup 5 người, go-live 3 tuần
 - Constraints: Giữ nguyên stack, ưu tiên tốc độ
 

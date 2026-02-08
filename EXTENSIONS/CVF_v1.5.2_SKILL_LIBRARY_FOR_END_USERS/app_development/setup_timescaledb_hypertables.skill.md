@@ -19,7 +19,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Use this skill when creating database schemas or tables for Timescale, TimescaleDB, TigerData, or Tiger Cloud, especially for time-series, IoT, metrics, events, or log data. Use this to improve the performance of any insert-heavy table.  **Trigger when user asks to:** - Create or design SQL schemas/tables AND Timescale/TimescaleDB/TigerData/Tiger Cloud is available - Set up hypertables, compression, retention policies, or continuous aggregates - Configure partition columns, segment_by, order_by, or chunk intervals - Optimize time-series database performance or storage - Create tables for sensors, metrics, telemetry, events, or transaction logs  **Keywords:** CREATE TABLE, hypertable, Timescale, TimescaleDB, time-series, IoT, metrics, sensor data, compression policy, continuous aggregates, columnstore, retention policy, chunk interval, segment_by, order_by  Step-by-step instructions for hypertable creation, column selection, compression policies, retention, continuous aggregates, and indexes.
 
 **Khi nào dùng skill này:**
-- Cần Etup Time Caledb Hypertable với tiêu chí rõ ràng
+- Cần Setup Timescaledb Hypertables với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
@@ -72,7 +72,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
 |-------|-------|:--------:|-------|
-| **Objective** | Mục tiêu chính | ✅ | "Etup Time Caledb Hypertable cho sản phẩm SaaS nhỏ" |
+| **Objective** | Mục tiêu chính | ✅ | "Setup Timescaledb Hypertables cho sản phẩm SaaS nhỏ" |
 | **Context** | Bối cảnh dự án | ✅ | "Team 3 người, deadline 2 tuần" |
 | **Constraints** | Ràng buộc kỹ thuật | ✅ | "Chỉ dùng stack hiện có" |
 | **Input Data** | Dữ liệu liên quan | ❌ | "Repo hiện tại, tài liệu liên quan" |
@@ -85,7 +85,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 **Kết quả bạn sẽ nhận được:**
 
 ```markdown
-# Etup Time Caledb Hypertable Output
+# Setup Timescaledb Hypertables Output
 
 ## Summary
 - Goal: [Objective]
@@ -156,7 +156,7 @@ Output Format: Checklist + đề xuất
 
 **Output mẫu:**
 ```markdown
-# Etup Time Caledb Hypertable Output
+# Setup Timescaledb Hypertables Output
 
 ## Summary
 - Goal: Thiết kế API cho ứng dụng quản lý dự án

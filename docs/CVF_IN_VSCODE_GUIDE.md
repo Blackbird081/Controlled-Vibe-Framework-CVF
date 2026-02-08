@@ -1,7 +1,7 @@
-# CVF in VS Code (Detailed Guide)
+# CVF for Agents in VS Code (Detailed Guide)
 
 > **Version:** v1.0-v1.6
-> **Purpose:** Practical, step-by-step guidance to run CVF in VS Code with or without the UI.
+> **Purpose:** Practical, step-by-step guidance to run CVF with any agent environment. VS Code is the reference workflow, but the rules apply everywhere.
 
 ---
 

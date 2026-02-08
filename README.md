@@ -37,10 +37,10 @@
 
 ---
 
-## 🧩 VS Code Resources
+## 🧩 Agent Usage Resources (VS Code reference)
 
-- **Detailed guide:** [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md)
-- **Playbook (checklists):** [CVF_VSCODE_PLAYBOOK.md](./docs/CVF_VSCODE_PLAYBOOK.md)
+- **Detailed guide:** [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md) (agent-agnostic)
+- **Playbook (checklists):** [CVF_VSCODE_PLAYBOOK.md](./docs/CVF_VSCODE_PLAYBOOK.md) (agent-agnostic)
 
 ---
 

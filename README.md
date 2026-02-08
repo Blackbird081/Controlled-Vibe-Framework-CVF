@@ -9,6 +9,24 @@
 
 ---
 
+## ✅ Independent Verdict (Expert Lens)
+
+**Current status:** CVF is mature in **architecture, governance, and code quality**, but **not yet empirically proven** for enterprise claims.
+
+**What is already solid:**
+- Layered architecture and governance model (Core/Tools/Platform)
+- Risk model R0-R3 and capability lifecycle
+- v1.6 agent platform with real AI integration and strong test coverage
+
+**What still blocks 9.0+/10:**
+- **Real-world validation** (pilot projects with measurable impact)
+- **Real provider tests** (live API keys + CI secrets)
+- **Community/Ecosystem** (npm/PyPI publish, Slack/Jira/GitHub App, public adoption)
+
+➡️ These remaining items are tracked in **Phase 6** of the roadmap: [CVF_REMAINING_ROADMAP_2026-02-08.md](./docs/CVF_REMAINING_ROADMAP_2026-02-08.md)
+
+---
+
 ## 🚀 Quick Start (4 Options)
 
 ### Option 1: Agent Platform (Newest) 🤖 RECOMMENDED

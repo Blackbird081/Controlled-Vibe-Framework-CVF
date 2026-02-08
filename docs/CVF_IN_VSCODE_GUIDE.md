@@ -17,6 +17,46 @@
 - Use **v1.0/v1.1** for governance-first execution in VS Code.
 - Use **v1.6** only if you want built-in UI + tools + multi-agent.
 
+### Quick version selector (VS Code)
+
+```text
+Need UI? (yes)  -> v1.6 Agent Platform
+Need templates? (yes) -> v1.5.2 + v1.1
+Only governance + execution? -> v1.1
+```
+
+---
+
+## 1.1) VS Code Workspace Setup (Recommended)
+
+### Option A: Minimal (Governance-first)
+1. Open repo in VS Code.
+2. Read [START_HERE.md](../START_HERE.md).
+3. Use core docs in [v1.0/](../v1.0/) and [v1.1/](../v1.1/).
+
+### Option B: With templates and skills
+1. Open repo in VS Code.
+2. Browse skills in [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/).
+3. Use a skill spec as input to your prompt.
+
+### Option C: Full UI
+1. Open repo in VS Code.
+2. Start v1.6 UI:
+
+```bash
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+npm install
+npm run dev
+```
+
+---
+
+## 1.2) VS Code Extension (Optional)
+
+If you want syntax highlighting or validation for CVF contracts, use the VS Code extension:
+
+See: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md)
+
 ---
 
 ## 2) CVF Core Workflow (Applies to All Versions)
@@ -67,6 +107,42 @@ Start with Phase A now.
 - It avoids rushing into coding.
 - It creates a clear audit trail.
 
+### Agent instruction profiles (copy/paste)
+
+**Profile: Full Mode (default for complex work)**
+```text
+CVF MODE: FULL
+PHASE FLOW: A -> B -> C -> D
+STOP CONDITIONS:
+- Missing required inputs
+- Unclear acceptance criteria
+- Requires external credentials or access
+
+GUARDRAILS:
+- No destructive commands without approval
+- No writing outside repo scope
+- List assumptions explicitly
+
+Start Phase A only.
+```
+
+**Profile: Governance Mode (most tasks)**
+```text
+CVF MODE: GOVERNANCE
+RULES:
+- Ask if requirements are incomplete
+- Provide structured output
+- No hidden assumptions
+```
+
+**Profile: Simple Mode (low risk)**
+```text
+CVF MODE: SIMPLE
+RULES:
+- Keep output concise
+- If anything is ambiguous, ask before proceeding
+```
+
 ---
 
 ## 4) VS Code + CVF (Step-by-Step Example)
@@ -90,6 +166,18 @@ Agent writes the code and explains how to run it.
 
 ### Step 4: Phase D review
 Agent checks success criteria and asks for acceptance.
+
+---
+
+## 4.1) End-to-End Workflow (Practical)
+
+### Example: Feature build
+1. **Phase A**: Restate goal, scope, assumptions
+2. **Phase B**: Design plan + decisions + checklist
+3. **Phase C**: Implement code + tests
+4. **Phase D**: Review, list risks, ask for acceptance
+
+**Tip:** Use the same format for every task. The consistency is the governance.
 
 ---
 
@@ -118,6 +206,13 @@ Guardrails:
 - No writes outside project scope
 - Always cite assumptions
 ```
+
+### Enforcement checklist (use before Phase C)
+- [ ] All required inputs captured
+- [ ] Scope defined (IN/OUT)
+- [ ] Acceptance criteria are explicit
+- [ ] Risk level identified (R0-R3)
+- [ ] Any external access is approved
 
 ---
 
@@ -164,6 +259,36 @@ Stop Conditions:
 - Ambiguous scope
 
 Now run Phase A only.
+```
+
+---
+
+## 8.1) Detailed Starter Prompt (Recommended)
+
+```text
+CVF VERSION: v1.1
+CVF MODE: FULL
+
+PHASE A REQUIREMENTS:
+- Restate the goal
+- List assumptions
+- Define scope IN/OUT
+- Ask clarifying questions if needed
+
+TASK:
+- [Describe the task]
+
+CONSTRAINTS:
+- [List constraints]
+
+SUCCESS CRITERIA:
+- [Measurable checks]
+
+STOP CONDITIONS:
+- Missing required inputs
+- Unclear acceptance criteria
+
+Begin Phase A only. Do not propose solutions in Phase A.
 ```
 
 ---
@@ -281,4 +406,72 @@ Constraints:
 - Preserve data integrity.
 
 Start Phase A now.
+```
+
+### E) Debugging (CVF Governance Mode)
+
+```text
+You are operating under CVF (Controlled Vibe Framework).
+Mode: GOVERNANCE.
+Rules:
+- Ask for repro steps if missing.
+- Isolate root cause before proposing fixes.
+- Provide minimal-risk fix first.
+
+Task:
+Debug [issue].
+Constraints:
+- Do not change behavior outside scope.
+- Provide a short verification checklist.
+```
+
+### F) Performance Tuning (CVF Full Mode)
+
+```text
+You are operating under CVF (Controlled Vibe Framework).
+Mode: FULL.
+Rules:
+- Phase A: define baseline and metrics.
+- Phase B: plan measurement and optimization steps.
+- Phase C: implement changes.
+- Phase D: report gains and regressions.
+
+Task:
+Optimize [system/module] for [metric].
+Constraints:
+- No functional regressions.
+- Provide before/after numbers if available.
+```
+
+### G) Incident Post-Mortem (CVF Governance Mode)
+
+```text
+You are operating under CVF (Controlled Vibe Framework).
+Mode: GOVERNANCE.
+Rules:
+- Focus on timeline, root cause, and prevention.
+- No blame language.
+
+Task:
+Write a post-mortem for [incident].
+Constraints:
+- Include impact, detection, response, and action items.
+```
+
+### H) Data Migration (CVF Full Mode)
+
+```text
+You are operating under CVF (Controlled Vibe Framework).
+Mode: FULL.
+Rules:
+- Phase A: confirm data sources and target schema.
+- Phase B: migration and rollback plan.
+- Phase C: step-by-step tasks.
+- Phase D: validation checklist.
+
+Task:
+Migrate data from [source] to [target].
+Constraints:
+- Ensure data integrity and idempotency.
+- Provide validation queries/checks.
 ```

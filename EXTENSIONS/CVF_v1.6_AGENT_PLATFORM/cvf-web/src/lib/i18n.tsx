@@ -65,7 +65,8 @@ const vi: Record<string, string> = {
     'domain.technical_review': 'Review Kỹ thuật',
 
     // Footer
-    'footer.tagline': 'CVF v1.6 Agent Platform — Chuyên môn AI cho mọi người',
+    'footer.tagline': 'CVF v1.6 UX Platform — User không cần biết CVF để dùng CVF',
+    'footer.author': 'Tien-Tan Thuan Port @2026',
 
     // Help page
     'help.title': 'Hướng dẫn sử dụng',
@@ -81,10 +82,22 @@ const vi: Record<string, string> = {
     'main.copy': 'Sao chép',
     'main.copied': 'Đã sao chép!',
     'main.close': 'Đóng',
+    'main.heroLine1': 'User không cần biết CVF',
+    'main.heroLine2': 'để dùng CVF',
+    'main.heroDesc': 'CVF v1.6 giúp bạn sử dụng AI mà không cần viết prompt. Chỉ cần chọn template, điền form, và nhận kết quả.',
+    'main.backToAll': '← Quay lại',
+    'main.apiKeyTitle': 'API key chưa được cấu hình',
+    'main.apiKeyDesc': 'Thiết lập API key để dùng AI Agent và các workflow có AI.',
+    'main.apiKeyCta': 'Mở API Key Wizard',
+    'main.historyTitle': '📜 Lịch sử',
+    'main.analyticsTitle': '📊 Analytics',
 
     // Language
     'lang.switch': '🌐 EN',
     'lang.current': 'Tiếng Việt',
+
+    // Auth
+    'auth.logout': '⏻ Đăng xuất',
 
     // User Context
     'userContext.title': 'User Context',
@@ -126,6 +139,7 @@ const vi: Record<string, string> = {
     'agent.confirmClear': 'Xác nhận xóa?',
     'agent.cancel': 'Hủy',
     'agent.confirm': 'Xác nhận',
+    'agent.restoreHint': 'Click để mở lại',
 
     // Multi-Agent
     'multiAgent.title': '🎯 Multi-Agent Workflow',
@@ -239,7 +253,8 @@ const en: Record<string, string> = {
     'domain.technical_review': 'Technical Review',
 
     // Footer
-    'footer.tagline': 'CVF v1.6 Agent Platform — AI expertise for everyone',
+    'footer.tagline': 'CVF v1.6 UX Platform — Users don’t need CVF to use CVF',
+    'footer.author': 'Tien-Tan Thuan Port @2026',
 
     // Help page
     'help.title': 'User Guide',
@@ -255,10 +270,22 @@ const en: Record<string, string> = {
     'main.copy': 'Copy',
     'main.copied': 'Copied!',
     'main.close': 'Close',
+    'main.heroLine1': 'Users don’t need to know CVF',
+    'main.heroLine2': 'to use CVF',
+    'main.heroDesc': 'CVF v1.6 helps you use AI without writing prompts. Just pick a template, fill the form, and get results.',
+    'main.backToAll': '← Back',
+    'main.apiKeyTitle': 'API key not configured',
+    'main.apiKeyDesc': 'Set up API keys to use AI Agent and AI workflows.',
+    'main.apiKeyCta': 'Open API Key Wizard',
+    'main.historyTitle': '📜 History',
+    'main.analyticsTitle': '📊 Analytics',
 
     // Language
     'lang.switch': '🌐 VI',
     'lang.current': 'English',
+
+    // Auth
+    'auth.logout': '⏻ Logout',
 
     // User Context
     'userContext.title': 'User Context',
@@ -300,6 +327,7 @@ const en: Record<string, string> = {
     'agent.confirmClear': 'Confirm clear?',
     'agent.cancel': 'Cancel',
     'agent.confirm': 'Confirm',
+    'agent.restoreHint': 'Click to restore',
 
     // Multi-Agent
     'multiAgent.title': '🎯 Multi-Agent Workflow',

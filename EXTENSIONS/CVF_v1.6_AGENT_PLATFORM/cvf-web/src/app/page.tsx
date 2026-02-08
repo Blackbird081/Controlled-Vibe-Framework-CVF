@@ -43,7 +43,7 @@ import {
   ApiKeyWizard,
 } from '@/components';
 import { ThemeToggle } from '@/lib/theme';
-import { LanguageToggle } from '@/lib/i18n';
+import { LanguageToggle, useLanguage } from '@/lib/i18n';
 import { useSettings } from '@/components/Settings';
 import { trackEvent } from '@/lib/analytics';
 
@@ -83,6 +83,7 @@ const ROLE_BADGE_STYLES = {
 } as const;
 
 export default function Home() {
+  const { t } = useLanguage();
   const [appState, setAppState] = useState<AppState>('home');
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
@@ -395,13 +396,13 @@ export default function Home() {
                     ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
-                📚 Skills
+                {t('nav.skills')}
               </button>
               <Link
                 href="/help"
                 className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
-                📖 Hướng dẫn
+                {t('nav.help')}
               </Link>
               <button
                 onClick={() => setAppState('history')}
@@ -410,7 +411,7 @@ export default function Home() {
                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
-                📜 History ({executions.length})
+                {t('nav.history')} ({executions.length})
               </button>
               <button
                 id="tour-nav-analytics"
@@ -420,7 +421,7 @@ export default function Home() {
                     ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
-                📊 Analytics
+                {t('nav.analytics')}
               </button>
               <button
                 id="tour-nav-marketplace"
@@ -430,7 +431,7 @@ export default function Home() {
                     ? 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
-                🏪 Marketplace
+                {t('nav.marketplace')}
               </button>
               {/* AI Agent Button in Header */}
               {permissions.canUseAgent && (
@@ -441,7 +442,7 @@ export default function Home() {
                       ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
                       : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:shadow-md hover:scale-105'}`}
                 >
-                  🤖 AI Agent
+                  {t('nav.aiAgent')}
                 </button>
               )}
               {/* Multi-Agent Button */}
@@ -453,7 +454,7 @@ export default function Home() {
                       ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
                       : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-md hover:scale-105'}`}
                 >
-                  🎯 Multi-Agent
+                  {t('nav.multiAgent')}
                 </button>
               )}
               {/* Tools Button */}
@@ -465,7 +466,7 @@ export default function Home() {
                       ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg'
                       : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:shadow-md hover:scale-105'}`}
                 >
-                  🛠️ Tools
+                  {t('nav.tools')}
                 </button>
               )}
               <span className={`px-3 py-1 rounded-full text-xs font-semibold ${roleBadgeStyle}`}>
@@ -484,7 +485,7 @@ export default function Home() {
                 onClick={handleLogout}
                 className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-900/30 transition-colors"
               >
-                ⏻ Đăng xuất
+                {t('auth.logout')}
               </button>
               <div id="tour-lang-switch">
                 <LanguageToggle />
@@ -523,14 +524,14 @@ export default function Home() {
                     ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
-                📚 Skills
+                {t('nav.skills')}
               </button>
               <Link
                 href="/help"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full px-4 py-3 rounded-lg text-left font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
-                📖 Hướng dẫn
+                {t('nav.help')}
               </Link>
               <button
                 onClick={() => { setAppState('history'); setMobileMenuOpen(false); }}
@@ -539,7 +540,7 @@ export default function Home() {
                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
-                📜 History ({executions.length})
+                {t('nav.history')} ({executions.length})
               </button>
               <button
                 onClick={() => { setAppState('analytics'); setMobileMenuOpen(false); }}
@@ -548,7 +549,7 @@ export default function Home() {
                     ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
-                📊 Analytics
+                {t('nav.analytics')}
               </button>
               <button
                 onClick={() => { setAppState('marketplace'); setMobileMenuOpen(false); }}
@@ -557,13 +558,13 @@ export default function Home() {
                     ? 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               >
-                🏪 Marketplace
+                {t('nav.marketplace')}
               </button>
               <button
                 onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
                 className="w-full px-4 py-3 rounded-lg text-left font-medium text-red-600 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-900/30 transition-colors"
               >
-                ⏻ Đăng xuất
+                {t('auth.logout')}
               </button>
             </nav>
           )}
@@ -579,15 +580,15 @@ export default function Home() {
             <div id="tour-welcome" className="text-center mb-12">
               <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">
-                  User không cần biết CVF
+                  {t('main.heroLine1')}
                 </span>
                 <br />
-                để dùng CVF
+                {t('main.heroLine2')}
               </h2>
               <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 {currentFolder
                   ? `📂 ${templates.find(t => t.id === currentFolder)?.name || 'Folder'}`
-                  : 'CVF v1.6 giúp bạn sử dụng AI mà không cần viết prompt. Chỉ cần chọn template, điền form, và nhận kết quả.'
+                  : t('main.heroDesc')
                 }
               </p>
               {currentFolder && (
@@ -595,7 +596,7 @@ export default function Home() {
                   onClick={() => setCurrentFolder(null)}
                   className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                 >
-                  ← Quay lại
+                  {t('main.backToAll')}
                 </button>
               )}
             </div>
@@ -603,16 +604,16 @@ export default function Home() {
             {!mockAiEnabled && !hasAnyApiKey && (
               <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                  <div className="font-semibold text-lg">API key chưa được cấu hình</div>
+                  <div className="font-semibold text-lg">{t('main.apiKeyTitle')}</div>
                   <div className="text-sm text-amber-700">
-                    Thiết lập API key để dùng AI Agent và các workflow có AI.
+                    {t('main.apiKeyDesc')}
                   </div>
                 </div>
                 <button
                   onClick={() => setShowApiKeyWizard(true)}
                   className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700"
                 >
-                  Mở API Key Wizard
+                  {t('main.apiKeyCta')}
                 </button>
               </div>
             )}
@@ -737,7 +738,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              <h2 className="text-2xl font-bold">📜 History</h2>
+              <h2 className="text-2xl font-bold">{t('main.historyTitle')}</h2>
             </div>
 
             <HistoryList
@@ -760,7 +761,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              <h2 className="text-2xl font-bold">📊 Analytics</h2>
+              <h2 className="text-2xl font-bold">{t('main.analyticsTitle')}</h2>
             </div>
             <AnalyticsDashboard />
           </div>
@@ -775,7 +776,10 @@ export default function Home() {
       {/* Footer */}
       <footer className="mt-16 py-8 border-t border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
-          CVF v1.6 UX Platform — User không cần biết CVF để dùng CVF
+          <div className="space-y-1">
+            <div>{t('footer.tagline')}</div>
+            <div className="text-xs text-gray-400">{t('footer.author')}</div>
+          </div>
         </div>
       </footer>
 
@@ -860,7 +864,7 @@ export default function Home() {
         >
           <span className="text-xl">🤖</span>
           <span className="font-medium">CVF Agent</span>
-          <span className="text-xs bg-white/20 px-2 py-0.5 rounded">Click để mở lại</span>
+          <span className="text-xs bg-white/20 px-2 py-0.5 rounded">{t('agent.restoreHint')}</span>
         </div>
       )}
 

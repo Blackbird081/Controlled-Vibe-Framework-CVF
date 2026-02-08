@@ -33,6 +33,7 @@
 - [ ] Third-party integrations (Slack/Jira/GitHub App)
 
 **VS Code guide:** [CVF_IN_VSCODE_GUIDE.md](./docs/CVF_IN_VSCODE_GUIDE.md)
+**VS Code playbook:** [CVF_VSCODE_PLAYBOOK.md](./docs/CVF_VSCODE_PLAYBOOK.md)
 
 ---
 

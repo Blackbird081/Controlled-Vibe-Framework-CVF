@@ -310,6 +310,7 @@ Begin Phase A only. Do not propose solutions in Phase A.
 2. [docs/CVF_LITE.md](./CVF_LITE.md)
 3. [v1.1/QUICK_START.md](../v1.1/QUICK_START.md)
 4. [docs/HOW_TO_APPLY_CVF.md](./HOW_TO_APPLY_CVF.md)
+5. [CVF_VSCODE_PLAYBOOK.md](./CVF_VSCODE_PLAYBOOK.md)
 
 ---
 
@@ -327,6 +328,8 @@ A: For VS Code, say "follow CVF v1.1 (Full Mode)". Use v1.6 only when you run th
 ---
 
 ## 12) Task Templates (Copy/Paste)
+
+For quick checklists, see: [CVF_VSCODE_PLAYBOOK.md](./CVF_VSCODE_PLAYBOOK.md)
 
 ### A) Code Review (CVF Full Mode)
 

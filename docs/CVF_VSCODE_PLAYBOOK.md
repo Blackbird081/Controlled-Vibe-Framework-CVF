@@ -1,6 +1,7 @@
 # CVF VS Code Playbook (Checklist)
 
 > Purpose: Fast, copy/paste checklists for common tasks in VS Code.
+> Note: This playbook is agent-agnostic. The same CVF rules apply in any agent environment.
 
 ---
 

@@ -118,6 +118,17 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                         {errors[field.id] && (
                             <p className="mt-1 text-sm text-red-500">This field is required</p>
                         )}
+                        {field.hint && (
+                            <p className="mt-1.5 text-xs text-amber-600 dark:text-amber-400 flex items-start gap-1">
+                                <span>💡</span>
+                                <span>{field.hint}</span>
+                            </p>
+                        )}
+                        {field.example && (
+                            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500 italic">
+                                VD: {field.example}
+                            </p>
+                        )}
                     </div>
                 ))}
 
@@ -146,6 +157,17 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                                             {field.label}
                                         </label>
                                         <FormField field={field} register={register} errors={errors} />
+                                        {field.hint && (
+                                            <p className="mt-1.5 text-xs text-amber-600 dark:text-amber-400 flex items-start gap-1">
+                                                <span>💡</span>
+                                                <span>{field.hint}</span>
+                                            </p>
+                                        )}
+                                        {field.example && (
+                                            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500 italic">
+                                                VD: {field.example}
+                                            </p>
+                                        )}
                                     </div>
                                 ))}
                             </div>

@@ -3,7 +3,7 @@
  */
 
 /** Risk levels for capabilities */
-export type RiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
+export type RiskLevel = 'R0' | 'R1' | 'R2' | 'R3' | 'R4';
 
 /** Lifecycle states for capabilities */
 export type CapabilityState =

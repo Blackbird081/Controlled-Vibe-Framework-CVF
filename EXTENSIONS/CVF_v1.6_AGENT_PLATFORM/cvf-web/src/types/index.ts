@@ -5,6 +5,8 @@ export interface TemplateField {
     type: 'text' | 'textarea' | 'select' | 'multiselect';
     label: string;
     placeholder?: string;
+    hint?: string;       // Guidance text shown below the input
+    example?: string;    // Concrete example shown as sub-hint (italic)
     required: boolean;
     options?: string[];
     default?: string;

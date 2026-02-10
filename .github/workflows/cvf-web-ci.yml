@@ -1,0 +1,36 @@
+name: CVF v1.6 Web CI
+
+on:
+  push:
+    paths:
+      - "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/**"
+      - ".github/workflows/cvf-web-ci.yml"
+  pull_request:
+    paths:
+      - "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/**"
+      - ".github/workflows/cvf-web-ci.yml"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: npm run lint -- --max-warnings=0
+      - name: Unit tests
+        run: npm run test -- --runInBand
+      - name: Playwright install deps
+        run: npx playwright install --with-deps
+      - name: Playwright smoke
+        run: npm run test:e2e -- --config playwright.config.ts --project chromium --grep "@smoke"

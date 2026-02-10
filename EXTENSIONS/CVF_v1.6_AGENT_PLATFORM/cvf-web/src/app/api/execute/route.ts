@@ -2,10 +2,44 @@ import { NextRequest, NextResponse } from 'next/server';
 import { executeAI, AIProvider, ExecutionRequest } from '@/lib/ai';
 import { evaluateEnforcement } from '@/lib/enforcement';
 import { getTemplateById } from '@/lib/templates';
+import { verifySessionCookie } from '@/lib/middleware-auth';
+import { applySafetyFilters } from '@/lib/safety';
+import { getRateLimiter } from '@/lib/rate-limit';
+import { checkBudget } from '@/lib/budget';
 
 export async function POST(request: NextRequest) {
     try {
-        const body: ExecutionRequest = await request.json();
+        // AuthN: allow either session cookie or service token
+        const session = verifySessionCookie(request);
+        const serviceToken = request.headers.get('x-cvf-service-token');
+        const configuredServiceToken = process.env.CVF_SERVICE_TOKEN;
+        const isServiceAllowed = configuredServiceToken && serviceToken === configuredServiceToken;
+        if (!session && !isServiceAllowed) {
+            return NextResponse.json(
+                { success: false, error: 'Unauthorized: please login.' },
+                { status: 401 }
+            );
+        }
+
+        const rawBody = await request.json();
+        if (!rawBody || typeof rawBody !== 'object') {
+            return NextResponse.json({ success: false, error: 'Invalid input payload.' }, { status: 400 });
+        }
+
+        const body = rawBody as Partial<ExecutionRequest>;
+        body.inputs = Object.fromEntries(
+            Object.entries(body.inputs || {}).map(([k, v]) => [k, String(v ?? '').trim()])
+        );
+
+        // Rate limit by session + IP (after provider known)
+        const limiter = getRateLimiter();
+        const limitResult = limiter.consume(request, session?.user || 'service', body.provider);
+        if (!limitResult.allowed) {
+            return NextResponse.json(
+                { success: false, error: 'Too many requests. Please slow down.' },
+                { status: 429, retryAfter: limitResult.retryAfterSeconds }
+            );
+        }
 
         // Validate required fields
         if (!body.templateName || !body.inputs || !body.intent) {
@@ -43,13 +77,28 @@ export async function POST(request: NextRequest) {
         // Build the prompt from template inputs
         const userPrompt = buildPromptFromInputs(body);
 
+        // Safety filters
+        const safety = applySafetyFilters(userPrompt);
+        if (safety.blocked) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: safety.reason || 'Request blocked by safety filters.',
+                    details: safety.details,
+                    provider,
+                    model: 'blocked',
+                },
+                { status: 400 }
+            );
+        }
+
         const mode = body.mode || 'simple';
         const template = body.templateId ? getTemplateById(body.templateId) : undefined;
         const specFields = template?.fields || [];
         const enforcement = evaluateEnforcement({
             mode,
             content: userPrompt,
-            budgetOk: true,
+            budgetOk: checkBudget(userPrompt),
             specFields: specFields.length ? specFields : undefined,
             specValues: body.inputs,
         });

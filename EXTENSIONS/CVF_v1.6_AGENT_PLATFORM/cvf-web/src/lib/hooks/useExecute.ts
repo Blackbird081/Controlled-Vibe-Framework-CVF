@@ -39,6 +39,11 @@ export function useExecute(options?: UseExecuteOptions) {
                 }),
             });
 
+            if (response.status === 401) {
+                window.location.href = `/login?from=${encodeURIComponent(window.location.pathname)}`;
+                return null;
+            }
+
             const data: ExecutionResponse = await response.json();
 
             setResult(data);

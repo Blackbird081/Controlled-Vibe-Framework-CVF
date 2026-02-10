@@ -9,7 +9,7 @@ import type {
     FieldSpec
 } from './types';
 
-const VALID_RISK_LEVELS: RiskLevel[] = ['R0', 'R1', 'R2', 'R3'];
+const VALID_RISK_LEVELS: RiskLevel[] = ['R0', 'R1', 'R2', 'R3', 'R4'];
 const VALID_ARCHETYPES = ['Analysis', 'Execution', 'Orchestration'];
 const VALID_PHASES = ['A', 'B', 'C', 'D'];
 const VALID_STATES = ['PROPOSED', 'APPROVED', 'ACTIVE', 'DEPRECATED', 'RETIRED'];
@@ -135,15 +135,15 @@ export function validateContract(contract: Partial<SkillContract>): ValidationRe
     }
 
     // Risk-specific validations
-    if (contract.risk_level === 'R2' || contract.risk_level === 'R3') {
+    if (contract.risk_level === 'R2' || contract.risk_level === 'R3' || contract.risk_level === 'R4') {
         if (!contract.failure_info) {
             warnings.push(`${contract.risk_level} contracts should have failure_info section`);
         }
     }
 
-    if (contract.risk_level === 'R3') {
+    if (contract.risk_level === 'R3' || contract.risk_level === 'R4') {
         if (!contract.governance?.required_decisions || contract.governance.required_decisions.length === 0) {
-            warnings.push('R3 contracts should have required_decisions');
+            warnings.push(`${contract.risk_level} contracts should have required_decisions`);
         }
     }
 

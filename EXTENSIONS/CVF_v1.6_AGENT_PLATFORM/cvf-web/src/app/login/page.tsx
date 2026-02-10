@@ -3,26 +3,6 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const AUTH_COOKIE = 'cvf_auth';
-const DEFAULT_USERNAME = 'admin';
-const DEFAULT_PASSWORD = 'admin123';
-const ROLE_COOKIE = 'cvf_role';
-const LOGIN_STORAGE_KEY = 'cvf_login_saved';
-
-function hasAuthCookie() {
-    return document.cookie.split(';').some((cookie) => cookie.trim().startsWith(`${AUTH_COOKIE}=`));
-}
-
-function setAuthCookie() {
-    const maxAge = 60 * 60 * 24 * 7;
-    document.cookie = `${AUTH_COOKIE}=1; Path=/; Max-Age=${maxAge}`;
-}
-
-function setRoleCookie(role: string) {
-    const maxAge = 60 * 60 * 24 * 7;
-    document.cookie = `${ROLE_COOKIE}=${role}; Path=/; Max-Age=${maxAge}`;
-}
-
 function LoginPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -31,54 +11,58 @@ function LoginPageContent() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('admin');
-    const [rememberLogin, setRememberLogin] = useState(false);
+    const [rememberUsername, setRememberUsername] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        if (hasAuthCookie()) {
-            router.replace(from);
-        }
+        // If session already exists, middleware will redirect after first render
     }, [from, router]);
 
     useEffect(() => {
         try {
-            const saved = localStorage.getItem(LOGIN_STORAGE_KEY);
+            const saved = localStorage.getItem('cvf_login_username');
             if (saved) {
-                const parsed = JSON.parse(saved) as { username?: string; password?: string; role?: string };
-                if (parsed.username) {
-                    setUsername(parsed.username);
-                }
-                if (parsed.password) {
-                    setPassword(parsed.password);
-                }
-                if (parsed.role) {
-                    setRole(parsed.role);
-                }
-                setRememberLogin(true);
+                setUsername(saved);
+                setRememberUsername(true);
             }
         } catch {
             // ignore invalid storage
         }
     }, []);
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setError('');
+        setIsSubmitting(true);
 
-        if (username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD) {
-            setAuthCookie();
-            setRoleCookie(role);
-            if (rememberLogin) {
-                localStorage.setItem(LOGIN_STORAGE_KEY, JSON.stringify({ username, password, role }));
-            } else {
-                localStorage.removeItem(LOGIN_STORAGE_KEY);
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, role }),
+            });
+
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                setError(data.error || 'Đăng nhập thất bại.');
+                setIsSubmitting(false);
+                return;
             }
-            router.replace(from);
-            return;
-        }
 
-        setError('Sai tài khoản hoặc mật khẩu.');
+            if (rememberUsername) {
+                localStorage.setItem('cvf_login_username', username);
+            } else {
+                localStorage.removeItem('cvf_login_username');
+            }
+
+            router.replace(from);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Network error');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -121,8 +105,8 @@ function LoginPageContent() {
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
                                 type="checkbox"
-                                checked={rememberLogin}
-                                onChange={(e) => setRememberLogin(e.target.checked)}
+                            checked={rememberUsername}
+                            onChange={(e) => setRememberUsername(e.target.checked)}
                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
                             Lưu tài khoản/mật khẩu
@@ -137,9 +121,9 @@ function LoginPageContent() {
                             Hiện mật khẩu
                         </label>
                     </div>
-                    {rememberLogin && (
+                    {rememberUsername && (
                         <div className="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 rounded-lg">
-                            Lưu ý: Mật khẩu sẽ được lưu trên máy này.
+                            Lưu ý: Chỉ lưu username, không lưu mật khẩu.
                         </div>
                     )}
                     <div>
@@ -165,14 +149,15 @@ function LoginPageContent() {
 
                     <button
                         type="submit"
-                        className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
+                        disabled={isSubmitting}
+                        className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium transition-colors"
                     >
-                        Đăng nhập
+                        {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
                     </button>
                 </form>
 
                 <div className="mt-6 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/60 rounded-lg px-3 py-2">
-                    Tài khoản mặc định: <span className="font-semibold">admin / admin123</span>
+                    Thiết lập mật khẩu bằng biến môi trường `CVF_ADMIN_PASS`. Mặc định sẽ không cho đăng nhập nếu chưa cấu hình.
                 </div>
             </div>
         </div>

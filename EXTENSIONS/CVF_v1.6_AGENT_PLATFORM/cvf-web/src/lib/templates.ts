@@ -20,11 +20,11 @@ export const templates: Template[] = [
         description: 'Phân tích chiến lược kinh doanh, so sánh các phương án',
         category: 'business',
         fields: [
-            { id: 'topic', type: 'text', label: 'Chủ đề chiến lược', placeholder: 'VD: Mở rộng thị trường miền Trung', required: true, section: 'required' },
-            { id: 'context', type: 'textarea', label: 'Bối cảnh', placeholder: 'Mô tả ngành, quy mô, thị trường...', required: true, rows: 4, section: 'required' },
-            { id: 'options', type: 'textarea', label: 'Các phương án (nếu có)', placeholder: 'Liệt kê các options đang cân nhắc', required: false, rows: 3, section: 'advanced' },
-            { id: 'constraints', type: 'text', label: 'Ràng buộc', placeholder: 'Budget, timeline, resources...', required: false, section: 'advanced' },
-            { id: 'priority', type: 'select', label: 'Ưu tiên', options: ['Growth', 'Stability', 'Cost Optimization'], default: 'Growth', required: false, section: 'advanced' },
+            { id: 'topic', type: 'text', label: 'Chủ đề chiến lược', placeholder: 'VD: Mở rộng thị trường miền Trung', required: true, section: 'required', hint: 'Nêu rõ quyết định hoặc hướng đi chiến lược cần phân tích', example: 'Mở rộng thị trường miền Trung cho dòng sản phẩm FMCG' },
+            { id: 'context', type: 'textarea', label: 'Bối cảnh', placeholder: 'Mô tả ngành, quy mô, thị trường...', required: true, rows: 4, section: 'required', hint: 'Cung cấp càng nhiều bối cảnh càng tốt: ngành, quy mô công ty, thị phần, xu hướng', example: 'Công ty SaaS B2B, 200 nhân viên, doanh thu $5M/năm. Thị trường đang tăng trưởng 15%/năm.' },
+            { id: 'options', type: 'textarea', label: 'Các phương án (nếu có)', placeholder: 'Liệt kê các options đang cân nhắc', required: false, rows: 3, section: 'advanced', hint: 'Mỗi phương án 1 dòng, AI sẽ phân tích ưu/nhược điểm', example: '1. Mở chi nhánh trực tiếp\n2. Hợp tác với đối tác địa phương\n3. Bán hàng online' },
+            { id: 'constraints', type: 'text', label: 'Ràng buộc', placeholder: 'Budget, timeline, resources...', required: false, section: 'advanced', hint: 'Giới hạn ngân sách, thời gian, nhân lực', example: 'Budget tối đa $500K, phải hoàn thành trong Q3 2026' },
+            { id: 'priority', type: 'select', label: 'Ưu tiên', options: ['Growth', 'Stability', 'Cost Optimization'], default: 'Growth', required: false, section: 'advanced', hint: 'Chọn mục tiêu ưu tiên hàng đầu cho chiến lược' },
         ],
         intentPattern: `INTENT:
 Tôi muốn phân tích chiến lược [topic].
@@ -114,11 +114,11 @@ Proceed with **Partnership** model for the first 12 months to test market demand
         description: 'Đánh giá rủi ro với kế hoạch giảm thiểu',
         category: 'business',
         fields: [
-            { id: 'subject', type: 'text', label: 'Chủ đề đánh giá', placeholder: 'VD: Dự án cloud migration', required: true, section: 'required' },
-            { id: 'description', type: 'textarea', label: 'Mô tả chi tiết', placeholder: 'Mô tả dự án/quyết định cần đánh giá', required: true, rows: 4, section: 'required' },
-            { id: 'stakeholders', type: 'text', label: 'Stakeholders', placeholder: 'Ai bị ảnh hưởng?', required: false, section: 'advanced' },
-            { id: 'timeline', type: 'text', label: 'Timeline', placeholder: 'Thời gian thực hiện', required: false, section: 'advanced' },
-            { id: 'tolerance', type: 'select', label: 'Risk Tolerance', options: ['Low', 'Medium', 'High'], default: 'Medium', required: false, section: 'advanced' },
+            { id: 'subject', type: 'text', label: 'Chủ đề đánh giá', placeholder: 'VD: Dự án cloud migration', required: true, section: 'required', hint: 'Dự án, quyết định, hoặc thay đổi cần đánh giá rủi ro', example: 'Migration hệ thống ERP từ on-premise lên AWS' },
+            { id: 'description', type: 'textarea', label: 'Mô tả chi tiết', placeholder: 'Mô tả dự án/quyết định cần đánh giá', required: true, rows: 4, section: 'required', hint: 'Mô tả scope, mục tiêu, và những gì đang lo ngại', example: 'Chuyển đổi hệ thống ERP SAP sang cloud. Hiện có 500 users, 10TB data. Lo ngại về downtime và bảo mật.' },
+            { id: 'stakeholders', type: 'text', label: 'Stakeholders', placeholder: 'Ai bị ảnh hưởng?', required: false, section: 'advanced', hint: 'Liệt kê các bên liên quan chịu ảnh hưởng', example: 'CTO, team DevOps, khách hàng doanh nghiệp, bộ phận kế toán' },
+            { id: 'timeline', type: 'text', label: 'Timeline', placeholder: 'Thời gian thực hiện', required: false, section: 'advanced', hint: 'Thời gian dự kiến triển khai', example: '6 tháng, bắt đầu từ Q2 2026' },
+            { id: 'tolerance', type: 'select', label: 'Risk Tolerance', options: ['Low', 'Medium', 'High'], default: 'Medium', required: false, section: 'advanced', hint: 'Mức độ chấp nhận rủi ro: Low = rất thận trọng, High = chấp nhận rủi ro cao' },
         ],
         intentPattern: `INTENT:
 Tôi muốn đánh giá rủi ro của [subject].
@@ -143,10 +143,10 @@ SUCCESS CRITERIA:
         description: 'Phân tích đối thủ cạnh tranh',
         category: 'business',
         fields: [
-            { id: 'company', type: 'text', label: 'Công ty của bạn', placeholder: 'Tên và mô tả ngắn', required: true, section: 'required' },
-            { id: 'competitors', type: 'textarea', label: 'Đối thủ chính', placeholder: 'Liệt kê các đối thủ cần phân tích', required: true, rows: 3, section: 'required' },
-            { id: 'industry', type: 'text', label: 'Ngành', placeholder: 'VD: E-commerce, Fintech...', required: true, section: 'required' },
-            { id: 'criteria', type: 'textarea', label: 'Tiêu chí so sánh', placeholder: 'Giá, chất lượng, marketing, tech...', required: false, rows: 2, section: 'advanced' },
+            { id: 'company', type: 'text', label: 'Công ty của bạn', placeholder: 'Tên và mô tả ngắn', required: true, section: 'required', hint: 'Tên công ty và lĩnh vực hoạt động chính', example: 'ShopX — sàn thương mại điện tử cho hàng thủ công Việt Nam' },
+            { id: 'competitors', type: 'textarea', label: 'Đối thủ chính', placeholder: 'Liệt kê các đối thủ cần phân tích', required: true, rows: 3, section: 'required', hint: 'Mỗi đối thủ 1 dòng, có thể kèm URL hoặc mô tả ngắn', example: '1. Shopee — sàn TMĐT lớn nhất ĐNA\n2. Tiki — sàn TMĐT Việt Nam\n3. Etsy — sàn hàng thủ công quốc tế' },
+            { id: 'industry', type: 'text', label: 'Ngành', placeholder: 'VD: E-commerce, Fintech...', required: true, section: 'required', hint: 'Ngành hoạt động chung của bạn và đối thủ', example: 'E-commerce hàng thủ công / handmade' },
+            { id: 'criteria', type: 'textarea', label: 'Tiêu chí so sánh', placeholder: 'Giá, chất lượng, marketing, tech...', required: false, rows: 2, section: 'advanced', hint: 'Các khía cạnh bạn muốn so sánh giữa các đối thủ', example: 'Giá cả, trải nghiệm người dùng, chính sách ship hàng, hỗ trợ seller' },
         ],
         intentPattern: `INTENT:
 Tôi muốn phân tích đối thủ cạnh tranh trong ngành [industry].
@@ -185,10 +185,10 @@ SUCCESS CRITERIA:
         description: 'Review code về chất lượng, security, performance',
         category: 'technical',
         fields: [
-            { id: 'code', type: 'textarea', label: 'Code cần review', placeholder: 'Paste code vào đây...', required: true, rows: 10, section: 'required' },
-            { id: 'language', type: 'text', label: 'Ngôn ngữ', placeholder: 'VD: Python, TypeScript...', required: true, section: 'required' },
-            { id: 'context', type: 'textarea', label: 'Context', placeholder: 'Code này làm gì? Thuộc module nào?', required: false, rows: 2, section: 'advanced' },
-            { id: 'focus', type: 'multiselect', label: 'Focus areas', options: ['Security', 'Performance', 'Readability', 'Best Practices'], required: false, section: 'advanced' },
+            { id: 'code', type: 'textarea', label: 'Code cần review', placeholder: 'Paste code vào đây...', required: true, rows: 10, section: 'required', hint: 'Paste đoạn code cần review. Nên bao gồm cả import và context xung quanh', example: 'function processPayment(amount, currency) {\n  // ... your code here\n}' },
+            { id: 'language', type: 'text', label: 'Ngôn ngữ', placeholder: 'VD: Python, TypeScript...', required: true, section: 'required', hint: 'Ngôn ngữ lập trình của đoạn code', example: 'TypeScript' },
+            { id: 'context', type: 'textarea', label: 'Context', placeholder: 'Code này làm gì? Thuộc module nào?', required: false, rows: 2, section: 'advanced', hint: 'Nơi code được sử dụng, mục đích của nó trong hệ thống', example: 'Function xử lý thanh toán trong module Billing, gọi bởi PaymentController' },
+            { id: 'focus', type: 'multiselect', label: 'Focus areas', options: ['Security', 'Performance', 'Readability', 'Best Practices'], required: false, section: 'advanced', hint: 'Chọn các khía cạnh bạn muốn AI tập trung review' },
         ],
         intentPattern: `INTENT:
 Tôi muốn review code [language].
@@ -214,10 +214,10 @@ SUCCESS CRITERIA:
         description: 'Review kiến trúc hệ thống',
         category: 'technical',
         fields: [
-            { id: 'system', type: 'text', label: 'Tên hệ thống', placeholder: 'VD: Payment Service', required: true, section: 'required' },
-            { id: 'description', type: 'textarea', label: 'Mô tả kiến trúc', placeholder: 'Các components, data flow, integrations...', required: true, rows: 6, section: 'required' },
-            { id: 'requirements', type: 'textarea', label: 'Requirements', placeholder: 'NFRs: scalability, availability...', required: false, rows: 3, section: 'advanced' },
-            { id: 'concerns', type: 'text', label: 'Điểm lo ngại', placeholder: 'Có gì cần focus?', required: false, section: 'advanced' },
+            { id: 'system', type: 'text', label: 'Tên hệ thống', placeholder: 'VD: Payment Service', required: true, section: 'required', hint: 'Tên hệ thống hoặc service cần review kiến trúc', example: 'Order Management Service' },
+            { id: 'description', type: 'textarea', label: 'Mô tả kiến trúc', placeholder: 'Các components, data flow, integrations...', required: true, rows: 6, section: 'required', hint: 'Mô tả các thành phần, luồng dữ liệu, và các hệ thống liên quan', example: 'Microservice architecture: API Gateway → Order Service → Payment Service → Notification. Dùng PostgreSQL + Redis cache.' },
+            { id: 'requirements', type: 'textarea', label: 'Requirements', placeholder: 'NFRs: scalability, availability...', required: false, rows: 3, section: 'advanced', hint: 'Yêu cầu phi chức năng: hiệu năng, khả dụng, bảo mật', example: '99.9% uptime, <200ms response time, hỗ trợ 10K concurrent users' },
+            { id: 'concerns', type: 'text', label: 'Điểm lo ngại', placeholder: 'Có gì cần focus?', required: false, section: 'advanced', hint: 'Những điểm bạn đang lo lắng về kiến trúc hiện tại', example: 'Database có thể là bottleneck khi scale lên 100K users' },
         ],
         intentPattern: `INTENT:
 Tôi muốn review kiến trúc của [system].
@@ -256,10 +256,10 @@ SUCCESS CRITERIA:
         description: 'Tạo technical documentation',
         category: 'content',
         fields: [
-            { id: 'subject', type: 'text', label: 'Chủ đề', placeholder: 'VD: API Authentication Guide', required: true, section: 'required' },
-            { id: 'content', type: 'textarea', label: 'Nội dung cần document', placeholder: 'Mô tả feature/API/process...', required: true, rows: 6, section: 'required' },
-            { id: 'audience', type: 'select', label: 'Đối tượng', options: ['Developers', 'End Users', 'Admins', 'All'], default: 'Developers', required: false, section: 'advanced' },
-            { id: 'format', type: 'select', label: 'Format', options: ['Tutorial', 'Reference', 'How-to', 'Explanation'], default: 'Reference', required: false, section: 'advanced' },
+            { id: 'subject', type: 'text', label: 'Chủ đề', placeholder: 'VD: API Authentication Guide', required: true, section: 'required', hint: 'Tên feature, API, hoặc process cần viết tài liệu', example: 'OAuth2 Authentication Flow cho Mobile App' },
+            { id: 'content', type: 'textarea', label: 'Nội dung cần document', placeholder: 'Mô tả feature/API/process...', required: true, rows: 6, section: 'required', hint: 'Mô tả chi tiết chức năng, các endpoints, hoặc quy trình cần document', example: 'POST /auth/login: nhận email + password, trả về JWT token và refresh token. Token expire sau 1h.' },
+            { id: 'audience', type: 'select', label: 'Đối tượng', options: ['Developers', 'End Users', 'Admins', 'All'], default: 'Developers', required: false, section: 'advanced', hint: 'Ai sẽ đọc tài liệu này?' },
+            { id: 'format', type: 'select', label: 'Format', options: ['Tutorial', 'Reference', 'How-to', 'Explanation'], default: 'Reference', required: false, section: 'advanced', hint: 'Tutorial = hướng dẫn từng bước, Reference = tra cứu, How-to = giải quyết vấn đề cụ thể' },
         ],
         intentPattern: `INTENT:
 Tôi muốn tạo documentation cho [subject].
@@ -283,10 +283,10 @@ SUCCESS CRITERIA:
         description: 'Tạo email chuyên nghiệp',
         category: 'content',
         fields: [
-            { id: 'purpose', type: 'text', label: 'Mục đích email', placeholder: 'VD: Follow-up sau meeting', required: true, section: 'required' },
-            { id: 'context', type: 'textarea', label: 'Context', placeholder: 'Tình huống cụ thể...', required: true, rows: 4, section: 'required' },
-            { id: 'recipient', type: 'text', label: 'Người nhận', placeholder: 'VD: Khách hàng, đồng nghiệp...', required: false, section: 'advanced' },
-            { id: 'tone', type: 'select', label: 'Tone', options: ['Formal', 'Professional', 'Friendly', 'Urgent'], default: 'Professional', required: false, section: 'advanced' },
+            { id: 'purpose', type: 'text', label: 'Mục đích email', placeholder: 'VD: Follow-up sau meeting', required: true, section: 'required', hint: 'Tóm tắt mục đích chính của email', example: 'Follow-up sau cuộc họs với khách hàng về dự án mới' },
+            { id: 'context', type: 'textarea', label: 'Context', placeholder: 'Tình huống cụ thể...', required: true, rows: 4, section: 'required', hint: 'Mô tả tình huống, mối quan hệ, và những gì cần nhắc đến trong email', example: 'Đã họs với Giám đốc công ty ABC về giải pháp CRM. Họ quan tâm gói Enterprise, cần báo giá chi tiết.' },
+            { id: 'recipient', type: 'text', label: 'Người nhận', placeholder: 'VD: Khách hàng, đồng nghiệp...', required: false, section: 'advanced', hint: 'Vai trò / chức danh của người nhận', example: 'Giám đốc CNTT công ty ABC' },
+            { id: 'tone', type: 'select', label: 'Tone', options: ['Formal', 'Professional', 'Friendly', 'Urgent'], default: 'Professional', required: false, section: 'advanced', hint: 'Formal = rất trang trọng, Professional = chuyên nghiệp, Friendly = thân thiện' },
         ],
         intentPattern: `INTENT:
 Tôi muốn soạn email [purpose].
@@ -320,7 +320,7 @@ SUCCESS CRITERIA:
     {
         id: 'data_analysis_wizard',
         name: '📊 Data Analysis Wizard',
-        icon: '📊',
+        icon: '📉',
         description: 'Multi-step wizard tạo Data Analysis Plan qua 5 bước. Problem → Understanding → Methodology → Deliverables → Review',
         category: 'research',
         fields: [],
@@ -330,13 +330,13 @@ SUCCESS CRITERIA:
     {
         id: 'data_analysis',
         name: 'Data Analysis',
-        icon: '📊',
+        icon: '📈',
         description: 'Phân tích dữ liệu và rút insights',
         category: 'research',
         fields: [
-            { id: 'dataset', type: 'textarea', label: 'Mô tả dataset', placeholder: 'Loại data, sources, format...', required: true, rows: 4, section: 'required' },
-            { id: 'questions', type: 'textarea', label: 'Câu hỏi nghiên cứu', placeholder: 'Bạn muốn tìm hiểu điều gì?', required: true, rows: 3, section: 'required' },
-            { id: 'methods', type: 'text', label: 'Phương pháp', placeholder: 'VD: Regression, clustering...', required: false, section: 'advanced' },
+            { id: 'dataset', type: 'textarea', label: 'Mô tả dataset', placeholder: 'Loại data, sources, format...', required: true, rows: 4, section: 'required', hint: 'Mô tả nguồn dữ liệu, định dạng, và quy mô', example: 'CSV file 50K rows từ Google Analytics: sessions, bounce rate, conversion theo ngày. Từ 01/2025 đến 12/2025.' },
+            { id: 'questions', type: 'textarea', label: 'Câu hỏi nghiên cứu', placeholder: 'Bạn muốn tìm hiểu điều gì?', required: true, rows: 3, section: 'required', hint: 'Đặt câu hỏi cụ thể, tránh câu hỏi quá chung chung', example: '1. Các yếu tố nào ảnh hưởng lớn nhất đến conversion?\n2. Seasonal patterns ra sao?\n3. Segment nào có ROI cao nhất?' },
+            { id: 'methods', type: 'text', label: 'Phương pháp', placeholder: 'VD: Regression, clustering...', required: false, section: 'advanced', hint: 'Để trống nếu muốn AI tự đề xuất phương pháp phù hợp', example: 'Correlation analysis, time series decomposition' },
         ],
         intentPattern: `INTENT:
 Tôi muốn phân tích dữ liệu.
@@ -371,14 +371,14 @@ SUCCESS CRITERIA:
     {
         id: 'seo_audit',
         name: 'SEO Audit',
-        icon: '🔍',
+        icon: '🔎',
         description: 'Đánh giá website về Technical SEO, On-page, Off-page',
         category: 'marketing',
         fields: [
-            { id: 'url', type: 'text', label: 'URL Website', placeholder: 'https://example.com', required: true, section: 'required' },
-            { id: 'industry', type: 'text', label: 'Ngành/Lĩnh vực', placeholder: 'VD: E-commerce, SaaS, Blog...', required: true, section: 'required' },
-            { id: 'keywords', type: 'textarea', label: 'Target Keywords', placeholder: 'Các từ khóa đang target', required: false, rows: 2, section: 'advanced' },
-            { id: 'competitors', type: 'text', label: 'Đối thủ chính', placeholder: '2-3 website đối thủ', required: false, section: 'advanced' },
+            { id: 'url', type: 'text', label: 'URL Website', placeholder: 'https://example.com', required: true, section: 'required', hint: 'URL trang chủ hoặc trang quan trọng nhất', example: 'https://shopx.vn' },
+            { id: 'industry', type: 'text', label: 'Ngành/Lĩnh vực', placeholder: 'VD: E-commerce, SaaS, Blog...', required: true, section: 'required', hint: 'Ngành kinh doanh để AI đánh giá đúng bối cảnh', example: 'SaaS B2B — quản lý dự án' },
+            { id: 'keywords', type: 'textarea', label: 'Target Keywords', placeholder: 'Các từ khóa đang target', required: false, rows: 2, section: 'advanced', hint: 'Mỗi từ khóa một dòng, kèm search volume nếu có', example: 'quản lý dự án online (2.4K)\nproject management tool (18K)' },
+            { id: 'competitors', type: 'text', label: 'Đối thủ chính', placeholder: '2-3 website đối thủ', required: false, section: 'advanced', hint: 'URL của 2-3 đối thủ cạnh tranh trực tiếp', example: 'asana.com, monday.com' },
         ],
         intentPattern: `INTENT:
 Tôi muốn audit SEO cho website [url].
@@ -397,15 +397,15 @@ SUCCESS CRITERIA:
     {
         id: 'copywriting_evaluation',
         name: 'Copywriting Evaluation',
-        icon: '✍️',
+        icon: '✏️',
         description: 'Đánh giá và cải thiện marketing copy',
         category: 'marketing',
         fields: [
-            { id: 'copy', type: 'textarea', label: 'Copy Text', placeholder: 'Paste đoạn copy cần đánh giá...', required: true, rows: 6, section: 'required' },
-            { id: 'type', type: 'select', label: 'Loại Copy', options: ['Headline', 'Ad', 'Email', 'Landing Page', 'Product Description'], default: 'Headline', required: true, section: 'required' },
-            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Đối tượng mục tiêu', required: true, section: 'required' },
-            { id: 'cta', type: 'text', label: 'Mục tiêu CTA', placeholder: 'Mua hàng, đăng ký, tải app...', required: true, section: 'required' },
-            { id: 'tone', type: 'select', label: 'Tone of Voice', options: ['Professional', 'Casual', 'Urgent', 'Friendly', 'Premium'], default: 'Professional', required: false, section: 'advanced' },
+            { id: 'copy', type: 'textarea', label: 'Copy Text', placeholder: 'Paste đoạn copy cần đánh giá...', required: true, rows: 6, section: 'required', hint: 'Paste toàn bộ đoạn copy cần đánh giá, bao gồm cả headline và body', example: 'Tăng doanh thu 300% với giải pháp AI quản lý bán hàng thông minh. Đăng ký dùng thử miễn phí!' },
+            { id: 'type', type: 'select', label: 'Loại Copy', options: ['Headline', 'Ad', 'Email', 'Landing Page', 'Product Description'], default: 'Headline', required: true, section: 'required', hint: 'Loại copy sẽ quyết định tiêu chí đánh giá khác nhau' },
+            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Đối tượng mục tiêu', required: true, section: 'required', hint: 'Mô tả cụ thể: tuổi, nghề, nhu cầu', example: 'Chủ shop online, 25-40 tuổi, bán hàng trên Shopee/Lazada' },
+            { id: 'cta', type: 'text', label: 'Mục tiêu CTA', placeholder: 'Mua hàng, đăng ký, tải app...', required: true, section: 'required', hint: 'Hành động bạn muốn người đọc thực hiện', example: 'Đăng ký dùng thử 14 ngày miễn phí' },
+            { id: 'tone', type: 'select', label: 'Tone of Voice', options: ['Professional', 'Casual', 'Urgent', 'Friendly', 'Premium'], default: 'Professional', required: false, section: 'advanced', hint: 'Phong cách ngôn ngữ phù hợp với brand' },
         ],
         intentPattern: `INTENT:
 Tôi muốn đánh giá [type] copy.
@@ -431,11 +431,11 @@ SUCCESS CRITERIA:
         description: 'Tối ưu conversion rate cho landing pages',
         category: 'marketing',
         fields: [
-            { id: 'url', type: 'text', label: 'Landing Page URL', placeholder: 'https://example.com/landing', required: true, section: 'required' },
-            { id: 'goal', type: 'select', label: 'Mục tiêu conversion', options: ['Sign up', 'Purchase', 'Download', 'Contact', 'Free Trial'], default: 'Sign up', required: true, section: 'required' },
-            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Đối tượng mục tiêu', required: true, section: 'required' },
-            { id: 'traffic', type: 'select', label: 'Traffic Source', options: ['Paid Ads', 'Organic', 'Email', 'Social', 'Mixed'], default: 'Mixed', required: false, section: 'advanced' },
-            { id: 'currentCR', type: 'text', label: 'Current Conversion Rate', placeholder: 'VD: 2.5%', required: false, section: 'advanced' },
+            { id: 'url', type: 'text', label: 'Landing Page URL', placeholder: 'https://example.com/landing', required: true, section: 'required', hint: 'URL landing page cần tối ưu', example: 'https://shopx.vn/pricing' },
+            { id: 'goal', type: 'select', label: 'Mục tiêu conversion', options: ['Sign up', 'Purchase', 'Download', 'Contact', 'Free Trial'], default: 'Sign up', required: true, section: 'required', hint: 'Hành động chính bạn muốn visitor thực hiện' },
+            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Đối tượng mục tiêu', required: true, section: 'required', hint: 'ai sẽ vào landing page này?', example: 'SMB founders đang tìm project management tool' },
+            { id: 'traffic', type: 'select', label: 'Traffic Source', options: ['Paid Ads', 'Organic', 'Email', 'Social', 'Mixed'], default: 'Mixed', required: false, section: 'advanced', hint: 'Nguồn traffic chính đến landing page' },
+            { id: 'currentCR', type: 'text', label: 'Current Conversion Rate', placeholder: 'VD: 2.5%', required: false, section: 'advanced', hint: 'Tỷ lệ conversion hiện tại (để trống nếu chưa có)', example: '2.3% (từ 10K visitors/tháng)' },
         ],
         intentPattern: `INTENT:
 Tôi muốn tối ưu conversion rate cho landing page [url].
@@ -459,11 +459,11 @@ SUCCESS CRITERIA:
         description: 'Đánh giá và tối ưu pricing strategy',
         category: 'marketing',
         fields: [
-            { id: 'product', type: 'text', label: 'Sản phẩm/Dịch vụ', placeholder: 'Mô tả offering', required: true, section: 'required' },
-            { id: 'currentPrice', type: 'text', label: 'Giá hiện tại', placeholder: 'Pricing structure hiện tại', required: true, section: 'required' },
-            { id: 'model', type: 'select', label: 'Pricing Model', options: ['One-time', 'Subscription', 'Tiered', 'Freemium', 'Usage-based'], default: 'Subscription', required: true, section: 'required' },
-            { id: 'target', type: 'select', label: 'Target Customer', options: ['B2B Enterprise', 'B2B SMB', 'B2C Premium', 'B2C Mass'], default: 'B2B SMB', required: true, section: 'required' },
-            { id: 'competitors', type: 'text', label: 'Giá đối thủ', placeholder: 'Pricing của competitors', required: false, section: 'advanced' },
+            { id: 'product', type: 'text', label: 'Sản phẩm/Dịch vụ', placeholder: 'Mô tả offering', required: true, section: 'required', hint: 'Tên và mô tả ngắn về sản phẩm/dịch vụ', example: 'TaskFlow — SaaS quản lý dự án cho team nhỏ' },
+            { id: 'currentPrice', type: 'text', label: 'Giá hiện tại', placeholder: 'Pricing structure hiện tại', required: true, section: 'required', hint: 'Mô tả các mức giá hiện tại', example: 'Free: 3 projects, Pro: $15/user/tháng, Enterprise: tùy chỉnh' },
+            { id: 'model', type: 'select', label: 'Pricing Model', options: ['One-time', 'Subscription', 'Tiered', 'Freemium', 'Usage-based'], default: 'Subscription', required: true, section: 'required', hint: 'Mô hình tính giá chính đang dùng' },
+            { id: 'target', type: 'select', label: 'Target Customer', options: ['B2B Enterprise', 'B2B SMB', 'B2C Premium', 'B2C Mass'], default: 'B2B SMB', required: true, section: 'required', hint: 'Phân khúc khách hàng chính' },
+            { id: 'competitors', type: 'text', label: 'Giá đối thủ', placeholder: 'Pricing của competitors', required: false, section: 'advanced', hint: 'Mức giá của 2-3 đối thủ cạnh tranh trực tiếp', example: 'Asana: $10.99/user, Monday: $9/user, Trello: Free/Premium $5' },
         ],
         intentPattern: `INTENT:
 Tôi muốn đánh giá pricing strategy cho [product].
@@ -487,10 +487,10 @@ SUCCESS CRITERIA:
         description: 'Đánh giá chất lượng content với E-E-A-T',
         category: 'marketing',
         fields: [
-            { id: 'content', type: 'textarea', label: 'Content URL/Text', placeholder: 'Link hoặc paste nội dung', required: true, rows: 4, section: 'required' },
-            { id: 'type', type: 'select', label: 'Content Type', options: ['Blog', 'Guide', 'Landing page', 'Product page', 'How-to'], default: 'Blog', required: true, section: 'required' },
-            { id: 'keyword', type: 'text', label: 'Target Keyword', placeholder: 'Từ khóa chính muốn rank', required: true, section: 'required' },
-            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Đối tượng đọc content', required: true, section: 'required' },
+            { id: 'content', type: 'textarea', label: 'Content URL/Text', placeholder: 'Link hoặc paste nội dung', required: true, rows: 4, section: 'required', hint: 'Dán URL bài viết hoặc paste nội dung trực tiếp', example: 'https://blog.shopx.vn/huong-dan-ban-hang-online-2026' },
+            { id: 'type', type: 'select', label: 'Content Type', options: ['Blog', 'Guide', 'Landing page', 'Product page', 'How-to'], default: 'Blog', required: true, section: 'required', hint: 'Loại content sẽ quyết định tiêu chuẩn đánh giá' },
+            { id: 'keyword', type: 'text', label: 'Target Keyword', placeholder: 'Từ khóa chính muốn rank', required: true, section: 'required', hint: 'Từ khóa chính mà bài viết nhắm đến', example: 'cách bán hàng online hiệu quả' },
+            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Đối tượng đọc content', required: true, section: 'required', hint: 'Ai sẽ đọc và cần nội dung này?', example: 'Người mới bắt đầu kinh doanh online, chưa có kinh nghiệm' },
         ],
         intentPattern: `INTENT:
 Tôi muốn đánh giá chất lượng [type] content.
@@ -511,14 +511,14 @@ SUCCESS CRITERIA:
     {
         id: 'email_campaign',
         name: 'Email Campaign Review',
-        icon: '📧',
+        icon: '📨',
         description: 'Đánh giá email marketing campaigns',
         category: 'marketing',
         fields: [
-            { id: 'email', type: 'textarea', label: 'Email Content', placeholder: 'Paste full email (subject + body)', required: true, rows: 8, section: 'required' },
-            { id: 'type', type: 'select', label: 'Email Type', options: ['Newsletter', 'Promotional', 'Transactional', 'Nurture', 'Re-engagement'], default: 'Promotional', required: true, section: 'required' },
-            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Segment này là ai?', required: true, section: 'required' },
-            { id: 'goal', type: 'select', label: 'Campaign Goal', options: ['CTR', 'Sales', 'Engagement', 'Re-engagement'], default: 'CTR', required: true, section: 'required' },
+            { id: 'email', type: 'textarea', label: 'Email Content', placeholder: 'Paste full email (subject + body)', required: true, rows: 8, section: 'required', hint: 'Dán toàn bộ email bao gồm subject line và body', example: 'Subject: Đừng bỏ lỡ! Giảm 50% cho hội viên mới\n\nXin chào [Tên], Chúng tôi có ưu đãi đặc biệt dành riêng cho bạn...' },
+            { id: 'type', type: 'select', label: 'Email Type', options: ['Newsletter', 'Promotional', 'Transactional', 'Nurture', 'Re-engagement'], default: 'Promotional', required: true, section: 'required', hint: 'Loại email sẽ quyết định tiêu chí đánh giá' },
+            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Segment này là ai?', required: true, section: 'required', hint: 'Mô tả segment người nhận email', example: 'Users đã đăng ký free trial nhưng chưa upgrade sau 7 ngày' },
+            { id: 'goal', type: 'select', label: 'Campaign Goal', options: ['CTR', 'Sales', 'Engagement', 'Re-engagement'], default: 'CTR', required: true, section: 'required', hint: 'Mục tiêu chính của email campaign' },
         ],
         intentPattern: `INTENT:
 Tôi muốn review [type] email campaign.
@@ -543,11 +543,11 @@ SUCCESS CRITERIA:
         description: 'Tối ưu ads trên Facebook, Instagram, TikTok',
         category: 'marketing',
         fields: [
-            { id: 'creative', type: 'textarea', label: 'Ad Creative', placeholder: 'Mô tả image/video hoặc link', required: true, rows: 3, section: 'required' },
-            { id: 'copy', type: 'textarea', label: 'Ad Copy', placeholder: 'Headline + Primary text + CTA', required: true, rows: 4, section: 'required' },
-            { id: 'platform', type: 'select', label: 'Platform', options: ['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'YouTube'], default: 'Facebook', required: true, section: 'required' },
-            { id: 'objective', type: 'select', label: 'Campaign Objective', options: ['Traffic', 'Conversions', 'Leads', 'Awareness', 'Engagement'], default: 'Conversions', required: true, section: 'required' },
-            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Demographics, interests, behaviors', required: true, section: 'required' },
+            { id: 'creative', type: 'textarea', label: 'Ad Creative', placeholder: 'Mô tả image/video hoặc link', required: true, rows: 3, section: 'required', hint: 'Mô tả hình ảnh/video quảng cáo hoặc dán link', example: 'Image: nền gradient xanh, chữ trắng "Tăng doanh thu 3X", logo góc trên phải' },
+            { id: 'copy', type: 'textarea', label: 'Ad Copy', placeholder: 'Headline + Primary text + CTA', required: true, rows: 4, section: 'required', hint: 'Bao gồm headline, primary text, và nút CTA', example: 'Headline: Quản lý team hiệu quả hơn 3X\nPrimary: Gần 10,000 teams đã dùng TaskFlow...\nCTA: Dùng thử miễn phí' },
+            { id: 'platform', type: 'select', label: 'Platform', options: ['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'YouTube'], default: 'Facebook', required: true, section: 'required', hint: 'Mỗi platform có best practices và format riêng' },
+            { id: 'objective', type: 'select', label: 'Campaign Objective', options: ['Traffic', 'Conversions', 'Leads', 'Awareness', 'Engagement'], default: 'Conversions', required: true, section: 'required', hint: 'Mục tiêu chính của chiến dịch quảng cáo' },
+            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Demographics, interests, behaviors', required: true, section: 'required', hint: 'Mô tả đối tượng mục tiêu chi tiết', example: 'Nam/Nữ 25-45, quản lý/founders, quan tâm productivity & project management' },
         ],
         intentPattern: `INTENT:
 Tôi muốn review [platform] ad cho mục tiêu [objective].
@@ -574,11 +574,11 @@ SUCCESS CRITERIA:
         description: 'Đảm bảo brand voice nhất quán',
         category: 'marketing',
         fields: [
-            { id: 'brand', type: 'text', label: 'Brand Name', placeholder: 'Tên thương hiệu', required: true, section: 'required' },
-            { id: 'industry', type: 'text', label: 'Industry', placeholder: 'Ngành nghề', required: true, section: 'required' },
-            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Customer persona chính', required: true, section: 'required' },
-            { id: 'samples', type: 'textarea', label: 'Sample Content', placeholder: '3-5 samples từ các channels khác nhau', required: true, rows: 6, section: 'required' },
-            { id: 'values', type: 'text', label: 'Brand Values', placeholder: 'Core values của brand', required: false, section: 'advanced' },
+            { id: 'brand', type: 'text', label: 'Brand Name', placeholder: 'Tên thương hiệu', required: true, section: 'required', hint: 'Tên thương hiệu cần đánh giá voice consistency', example: 'TaskFlow' },
+            { id: 'industry', type: 'text', label: 'Industry', placeholder: 'Ngành nghề', required: true, section: 'required', hint: 'Ngành kinh doanh của thương hiệu', example: 'SaaS / Productivity Tools' },
+            { id: 'audience', type: 'text', label: 'Target Audience', placeholder: 'Customer persona chính', required: true, section: 'required', hint: 'Khách hàng mục tiêu chính của brand', example: 'SMB founders và team leaders, 28-45 tuổi' },
+            { id: 'samples', type: 'textarea', label: 'Sample Content', placeholder: '3-5 samples từ các channels khác nhau', required: true, rows: 6, section: 'required', hint: 'Dán 3-5 đoạn content từ các kênh khác nhau (web, email, social)', example: 'Website: "Streamline your workflow..."\nEmail: "Hey team! Check out..."\nSocial: "🚀 Big news!..."' },
+            { id: 'values', type: 'text', label: 'Brand Values', placeholder: 'Core values của brand', required: false, section: 'advanced', hint: 'Giá trị cốt lõi của thương hiệu', example: 'Simple, Reliable, Human-friendly' },
         ],
         intentPattern: `INTENT:
 Tôi muốn đánh giá brand voice consistency cho [brand].
@@ -617,11 +617,11 @@ SUCCESS CRITERIA:
         description: 'Đánh giá A/B test design và results',
         category: 'product',
         fields: [
-            { id: 'hypothesis', type: 'textarea', label: 'Hypothesis', placeholder: 'Giả thuyết: Nếu... thì...', required: true, rows: 2, section: 'required' },
-            { id: 'metric', type: 'text', label: 'Primary Metric', placeholder: 'VD: Conversion rate, CTR...', required: true, section: 'required' },
-            { id: 'variants', type: 'textarea', label: 'Variants', placeholder: 'Control vs Treatment descriptions', required: true, rows: 3, section: 'required' },
-            { id: 'sampleSize', type: 'text', label: 'Sample Size', placeholder: 'Số users mỗi variant', required: false, section: 'advanced' },
-            { id: 'results', type: 'textarea', label: 'Results (nếu có)', placeholder: 'Kết quả từ tool', required: false, rows: 3, section: 'advanced' },
+            { id: 'hypothesis', type: 'textarea', label: 'Hypothesis', placeholder: 'Giả thuyết: Nếu... thì...', required: true, rows: 2, section: 'required', hint: 'Viết theo format: "Nếu [thay đổi X] thì [metric Y] sẽ [tăng/giảm]"', example: 'Nếu đổi CTA từ "Sign up" sang "Start free trial" thì conversion rate sẽ tăng 15%' },
+            { id: 'metric', type: 'text', label: 'Primary Metric', placeholder: 'VD: Conversion rate, CTR...', required: true, section: 'required', hint: 'Metric chính dùng để đo lường kết quả', example: 'Sign-up conversion rate' },
+            { id: 'variants', type: 'textarea', label: 'Variants', placeholder: 'Control vs Treatment descriptions', required: true, rows: 3, section: 'required', hint: 'Mô tả rõ sự khác biệt giữa Control và Treatment', example: 'Control: Nút xanh "Sign up", text nhỏ\nTreatment: Nút cam "Start free trial", text lớn hơn + testimonial' },
+            { id: 'sampleSize', type: 'text', label: 'Sample Size', placeholder: 'Số users mỗi variant', required: false, section: 'advanced', hint: 'Để trống nếu muốn AI tính sample size cần thiết', example: '5,000 users mỗi variant (từ Google Optimize)' },
+            { id: 'results', type: 'textarea', label: 'Results (nếu có)', placeholder: 'Kết quả từ tool', required: false, rows: 3, section: 'advanced', hint: 'Dán kết quả từ A/B testing tool nếu đã chạy xong', example: 'Control: 2.1% CR, Treatment: 2.8% CR, p-value: 0.03, 14 ngày' },
         ],
         intentPattern: `INTENT:
 Tôi muốn review A/B test.
@@ -646,10 +646,10 @@ SUCCESS CRITERIA:
         description: 'Kiểm tra WCAG compliance',
         category: 'product',
         fields: [
-            { id: 'url', type: 'text', label: 'Page URL', placeholder: 'https://example.com/page', required: true, section: 'required' },
-            { id: 'level', type: 'select', label: 'WCAG Level', options: ['A', 'AA', 'AAA'], default: 'AA', required: true, section: 'required' },
-            { id: 'audience', type: 'text', label: 'Target Users', placeholder: 'Đối tượng sử dụng có disability nào?', required: false, section: 'advanced' },
-            { id: 'issues', type: 'textarea', label: 'Known Issues', placeholder: 'Các issues đã biết', required: false, rows: 3, section: 'advanced' },
+            { id: 'url', type: 'text', label: 'Page URL', placeholder: 'https://example.com/page', required: true, section: 'required', hint: 'URL trang cần kiểm tra accessibility', example: 'https://shopx.vn/checkout' },
+            { id: 'level', type: 'select', label: 'WCAG Level', options: ['A', 'AA', 'AAA'], default: 'AA', required: true, section: 'required', hint: 'AA là mức tiêu chuẩn phổ biến nhất, AAA là cao nhất' },
+            { id: 'audience', type: 'text', label: 'Target Users', placeholder: 'Đối tượng sử dụng có disability nào?', required: false, section: 'advanced', hint: 'Loại disability cần ưu tiên hỗ trợ', example: 'Người khiếm thị sử dụng screen reader, người cao tuổi' },
+            { id: 'issues', type: 'textarea', label: 'Known Issues', placeholder: 'Các issues đã biết', required: false, rows: 3, section: 'advanced', hint: 'Liệt kê issues accessibility đã biết (nếu có)', example: 'Form checkout không navigate được bằng keyboard, contrast thấp ở footer' },
         ],
         intentPattern: `INTENT:
 Tôi muốn audit accessibility cho page [url].
@@ -672,10 +672,10 @@ SUCCESS CRITERIA:
         description: 'Phân tích và tối ưu user journeys',
         category: 'product',
         fields: [
-            { id: 'flow', type: 'textarea', label: 'User Flow', placeholder: 'Mô tả các steps từ entry đến goal', required: true, rows: 6, section: 'required' },
-            { id: 'goal', type: 'text', label: 'Conversion Goal', placeholder: 'VD: Complete purchase', required: true, section: 'required' },
-            { id: 'dropoff', type: 'textarea', label: 'Drop-off Points', placeholder: 'Các điểm users rời khỏi flow', required: false, rows: 3, section: 'advanced' },
-            { id: 'metrics', type: 'text', label: 'Current Metrics', placeholder: 'Conversion rates at each step', required: false, section: 'advanced' },
+            { id: 'flow', type: 'textarea', label: 'User Flow', placeholder: 'Mô tả các steps từ entry đến goal', required: true, rows: 6, section: 'required', hint: 'Mô tả từng bước user đi qua, từ lúc vào trang đến khi hoàn thành', example: '1. Landing page → 2. Click "Xem giá" → 3. Pricing page → 4. Chọn gói → 5. Form đăng ký → 6. Thanh toán → 7. Confirmation' },
+            { id: 'goal', type: 'text', label: 'Conversion Goal', placeholder: 'VD: Complete purchase', required: true, section: 'required', hint: 'Hành động cuối cùng mà user cần thực hiện', example: 'Hoàn thành thanh toán và nhận mã đơn hàng' },
+            { id: 'dropoff', type: 'textarea', label: 'Drop-off Points', placeholder: 'Các điểm users rời khỏi flow', required: false, rows: 3, section: 'advanced', hint: 'Các bước mà users thường bỏ dở', example: 'Bước 5 (form đăng ký): 45% drop-off\nBước 6 (thanh toán): 20% drop-off' },
+            { id: 'metrics', type: 'text', label: 'Current Metrics', placeholder: 'Conversion rates at each step', required: false, section: 'advanced', hint: 'Tỷ lệ conversion tại mỗi bước (nếu có)', example: 'Overall CR: 1.8%, Step 3→4: 65%, Step 5→6: 55%' },
         ],
         intentPattern: `INTENT:
 Tôi muốn phân tích user flow.
@@ -701,10 +701,10 @@ SUCCESS CRITERIA:
         description: 'Đánh giá UX theo Nielsen\'s 10 Heuristics',
         category: 'product',
         fields: [
-            { id: 'product', type: 'text', label: 'Product/Feature', placeholder: 'Tên sản phẩm hoặc feature', required: true, section: 'required' },
-            { id: 'description', type: 'textarea', label: 'Description', placeholder: 'Mô tả product/feature', required: true, rows: 4, section: 'required' },
-            { id: 'url', type: 'text', label: 'URL (nếu có)', placeholder: 'Link đến product', required: false, section: 'advanced' },
-            { id: 'focus', type: 'text', label: 'Focus Areas', placeholder: 'Các areas cần focus', required: false, section: 'advanced' },
+            { id: 'product', type: 'text', label: 'Product/Feature', placeholder: 'Tên sản phẩm hoặc feature', required: true, section: 'required', hint: 'Tên sản phẩm hoặc feature cần đánh giá UX', example: 'TaskFlow — Dashboard quản lý dự án' },
+            { id: 'description', type: 'textarea', label: 'Description', placeholder: 'Mô tả product/feature', required: true, rows: 4, section: 'required', hint: 'Mô tả chức năng chính và cách user tương tác', example: 'Dashboard hiển thị tất cả projects, tasks, và deadlines. Có drag-and-drop, filter, và search.' },
+            { id: 'url', type: 'text', label: 'URL (nếu có)', placeholder: 'Link đến product', required: false, section: 'advanced', hint: 'URL để AI có thể tham khảo giao diện' },
+            { id: 'focus', type: 'text', label: 'Focus Areas', placeholder: 'Các areas cần focus', required: false, section: 'advanced', hint: 'Tập trung vào những heuristic nào?', example: 'Error prevention, User control, Consistency' },
         ],
         intentPattern: `INTENT:
 Tôi muốn đánh giá UX heuristics cho [product].
@@ -723,14 +723,14 @@ SUCCESS CRITERIA:
     {
         id: 'feature_prioritization',
         name: 'Feature Prioritization',
-        icon: '🎯',
+        icon: '⚖️',
         description: 'RICE/ICE framework cho feature prioritization',
         category: 'product',
         fields: [
-            { id: 'features', type: 'textarea', label: 'Feature List', placeholder: 'Danh sách features cần prioritize', required: true, rows: 6, section: 'required' },
-            { id: 'goal', type: 'text', label: 'Product Goal', placeholder: 'Mục tiêu product hiện tại', required: true, section: 'required' },
-            { id: 'constraints', type: 'text', label: 'Constraints', placeholder: 'Budget, timeline, resources...', required: false, section: 'advanced' },
-            { id: 'framework', type: 'select', label: 'Framework', options: ['RICE', 'ICE', 'MoSCoW', 'Kano'], default: 'RICE', required: false, section: 'advanced' },
+            { id: 'features', type: 'textarea', label: 'Feature List', placeholder: 'Danh sách features cần prioritize', required: true, rows: 6, section: 'required', hint: 'Mỗi feature 1 dòng, kèm mô tả ngắn', example: '1. Real-time collaboration\n2. Mobile app\n3. Gantt chart view\n4. Custom fields\n5. Automations' },
+            { id: 'goal', type: 'text', label: 'Product Goal', placeholder: 'Mục tiêu product hiện tại', required: true, section: 'required', hint: 'Mục tiêu chính của product trong quý này', example: 'Tăng DAU từ 5K lên 15K và giảm churn xuống dưới 5%' },
+            { id: 'constraints', type: 'text', label: 'Constraints', placeholder: 'Budget, timeline, resources...', required: false, section: 'advanced', hint: 'Giới hạn về nguồn lực và thời gian', example: '2 engineers, 1 designer, deadline Q2 2026' },
+            { id: 'framework', type: 'select', label: 'Framework', options: ['RICE', 'ICE', 'MoSCoW', 'Kano'], default: 'RICE', required: false, section: 'advanced', hint: 'RICE = Reach, Impact, Confidence, Effort. ICE = Impact, Confidence, Ease' },
         ],
         intentPattern: `INTENT:
 Tôi muốn prioritize features bằng [framework] framework.
@@ -755,10 +755,10 @@ SUCCESS CRITERIA:
         description: 'Tạo user personas dựa trên data',
         category: 'product',
         fields: [
-            { id: 'product', type: 'text', label: 'Product/Service', placeholder: 'Tên sản phẩm/dịch vụ', required: true, section: 'required' },
-            { id: 'data', type: 'textarea', label: 'User Data', placeholder: 'Demographics, behaviors, interviews...', required: true, rows: 6, section: 'required' },
-            { id: 'segments', type: 'text', label: 'User Segments', placeholder: 'Các segments đã biết', required: false, section: 'advanced' },
-            { id: 'goals', type: 'text', label: 'Business Goals', placeholder: 'Mục tiêu kinh doanh', required: false, section: 'advanced' },
+            { id: 'product', type: 'text', label: 'Product/Service', placeholder: 'Tên sản phẩm/dịch vụ', required: true, section: 'required', hint: 'Sản phẩm/dịch vụ cần tạo persona', example: 'TaskFlow — ứng dụng quản lý dự án' },
+            { id: 'data', type: 'textarea', label: 'User Data', placeholder: 'Demographics, behaviors, interviews...', required: true, rows: 6, section: 'required', hint: 'Dữ liệu về users: từ survey, analytics, phỏng vấn...', example: '70% users là PM/team lead, 60% dùng mobile, pain point chính: track deadlines và assign tasks' },
+            { id: 'segments', type: 'text', label: 'User Segments', placeholder: 'Các segments đã biết', required: false, section: 'advanced', hint: 'Các nhóm users đã xác định (nếu có)', example: 'Freelancers, Small teams (2-10), Mid-size teams (10-50)' },
+            { id: 'goals', type: 'text', label: 'Business Goals', placeholder: 'Mục tiêu kinh doanh', required: false, section: 'advanced', hint: 'Mục tiêu kinh doanh liên quan đến personas', example: 'Tăng adoption từ small teams, giảm churn segment freelancer' },
         ],
         intentPattern: `INTENT:
 Tôi muốn tạo user personas cho [product].
@@ -779,14 +779,14 @@ SUCCESS CRITERIA:
     {
         id: 'error_handling_ux',
         name: 'Error Handling UX',
-        icon: '⚠️',
+        icon: '🛑',
         description: 'Cải thiện cách handle errors',
         category: 'product',
         fields: [
-            { id: 'errors', type: 'textarea', label: 'Current Error Messages', placeholder: 'Paste các error messages hiện tại', required: true, rows: 6, section: 'required' },
-            { id: 'context', type: 'text', label: 'Error Context', placeholder: 'Form, checkout, login, etc.', required: true, section: 'required' },
-            { id: 'audience', type: 'text', label: 'User Type', placeholder: 'Technical users hay end users?', required: false, section: 'advanced' },
-            { id: 'tone', type: 'select', label: 'Brand Tone', options: ['Friendly', 'Professional', 'Technical', 'Playful'], default: 'Friendly', required: false, section: 'advanced' },
+            { id: 'errors', type: 'textarea', label: 'Current Error Messages', placeholder: 'Paste các error messages hiện tại', required: true, rows: 6, section: 'required', hint: 'Dán các error messages người dùng đang thấy', example: '"Error 500: Internal Server Error"\n"Something went wrong. Try again later."\n"Invalid input"' },
+            { id: 'context', type: 'text', label: 'Error Context', placeholder: 'Form, checkout, login, etc.', required: true, section: 'required', hint: 'Màn hình/chức năng nơi error xuất hiện', example: 'Form checkout và trang tạo tài khoản' },
+            { id: 'audience', type: 'text', label: 'User Type', placeholder: 'Technical users hay end users?', required: false, section: 'advanced', hint: 'Mức độ kỹ thuật của người dùng', example: 'End users không có kiến thức kỹ thuật' },
+            { id: 'tone', type: 'select', label: 'Brand Tone', options: ['Friendly', 'Professional', 'Technical', 'Playful'], default: 'Friendly', required: false, section: 'advanced', hint: 'Phong cách ngôn ngữ phù hợp với brand' },
         ],
         intentPattern: `INTENT:
 Tôi muốn cải thiện error handling UX cho context [context].
@@ -807,14 +807,14 @@ SUCCESS CRITERIA:
     {
         id: 'onboarding_review',
         name: 'Onboarding Experience Review',
-        icon: '🚀',
+        icon: '🎓',
         description: 'Tối ưu first-time user experience',
         category: 'product',
         fields: [
-            { id: 'product', type: 'text', label: 'Product', placeholder: 'Tên sản phẩm', required: true, section: 'required' },
-            { id: 'flow', type: 'textarea', label: 'Current Onboarding Flow', placeholder: 'Mô tả các steps hiện tại', required: true, rows: 6, section: 'required' },
-            { id: 'ttv', type: 'text', label: 'Time to Value', placeholder: 'Hiện tại bao lâu để user thấy value?', required: false, section: 'advanced' },
-            { id: 'dropoff', type: 'text', label: 'Drop-off Rate', placeholder: '% users drop-off during onboarding', required: false, section: 'advanced' },
+            { id: 'product', type: 'text', label: 'Product', placeholder: 'Tên sản phẩm', required: true, section: 'required', hint: 'Tên sản phẩm cần đánh giá onboarding', example: 'TaskFlow' },
+            { id: 'flow', type: 'textarea', label: 'Current Onboarding Flow', placeholder: 'Mô tả các steps hiện tại', required: true, rows: 6, section: 'required', hint: 'Liệt kê từng bước onboarding từ lúc đăng ký đến khi user thấy giá trị', example: '1. Sign up form (email + password)\n2. Email verification\n3. Chọn workspace name\n4. Invite team members\n5. Tạo project đầu tiên\n6. Tour hướng dẫn' },
+            { id: 'ttv', type: 'text', label: 'Time to Value', placeholder: 'Hiện tại bao lâu để user thấy value?', required: false, section: 'advanced', hint: 'Thời gian trung bình từ đăng ký đến "aha moment"', example: '~15 phút, aha moment = tạo task đầu tiên và assign cho team' },
+            { id: 'dropoff', type: 'text', label: 'Drop-off Rate', placeholder: '% users drop-off during onboarding', required: false, section: 'advanced', hint: 'Tỷ lệ users bỏ cuộc giữa chừng onboarding', example: '40% drop-off ở bước 4 (invite team)' },
         ],
         intentPattern: `INTENT:
 Tôi muốn review onboarding experience cho [product].
@@ -852,10 +852,10 @@ SUCCESS CRITERIA:
         description: 'OWASP Top 10 API security audit',
         category: 'security',
         fields: [
-            { id: 'endpoints', type: 'textarea', label: 'API Endpoints', placeholder: 'List các endpoints cần audit', required: true, rows: 4, section: 'required' },
-            { id: 'authType', type: 'select', label: 'Authentication', options: ['JWT', 'OAuth', 'API Key', 'Session', 'None'], default: 'JWT', required: true, section: 'required' },
-            { id: 'apiType', type: 'select', label: 'API Type', options: ['REST', 'GraphQL', 'gRPC', 'WebSocket'], default: 'REST', required: true, section: 'required' },
-            { id: 'dataSensitivity', type: 'select', label: 'Data Sensitivity', options: ['Public', 'Internal', 'Confidential', 'PII', 'PCI'], default: 'Internal', required: true, section: 'required' },
+            { id: 'endpoints', type: 'textarea', label: 'API Endpoints', placeholder: 'List các endpoints cần audit', required: true, rows: 4, section: 'required', hint: 'Liệt kê các endpoints với method và mô tả ngắn', example: 'POST /api/auth/login\nGET /api/users/:id\nPUT /api/users/:id\nDELETE /api/users/:id' },
+            { id: 'authType', type: 'select', label: 'Authentication', options: ['JWT', 'OAuth', 'API Key', 'Session', 'None'], default: 'JWT', required: true, section: 'required', hint: 'Phương thức xác thực hiện tại của API' },
+            { id: 'apiType', type: 'select', label: 'API Type', options: ['REST', 'GraphQL', 'gRPC', 'WebSocket'], default: 'REST', required: true, section: 'required', hint: 'Loại API đang sử dụng' },
+            { id: 'dataSensitivity', type: 'select', label: 'Data Sensitivity', options: ['Public', 'Internal', 'Confidential', 'PII', 'PCI'], default: 'Internal', required: true, section: 'required', hint: 'Mức độ nhạy cảm của dữ liệu qua API: PII = thông tin cá nhân, PCI = thanh toán' },
         ],
         intentPattern: `INTENT:
 Tôi muốn audit API security.
@@ -881,10 +881,10 @@ SUCCESS CRITERIA:
         description: 'EU data protection compliance check',
         category: 'security',
         fields: [
-            { id: 'product', type: 'text', label: 'Website/App', placeholder: 'URL hoặc tên app', required: true, section: 'required' },
-            { id: 'dataCollected', type: 'textarea', label: 'Data Collected', placeholder: 'Types of personal data', required: true, rows: 3, section: 'required' },
-            { id: 'purpose', type: 'textarea', label: 'Processing Purpose', placeholder: 'Why data is collected', required: true, rows: 2, section: 'required' },
-            { id: 'thirdParties', type: 'text', label: 'Third Parties', placeholder: 'Analytics, payment, ads...', required: false, section: 'advanced' },
+            { id: 'product', type: 'text', label: 'Website/App', placeholder: 'URL hoặc tên app', required: true, section: 'required', hint: 'URL hoặc tên ứng dụng cần kiểm tra GDPR', example: 'https://shopx.vn hoặc ShopX Mobile App' },
+            { id: 'dataCollected', type: 'textarea', label: 'Data Collected', placeholder: 'Types of personal data', required: true, rows: 3, section: 'required', hint: 'Liệt kê các loại dữ liệu cá nhân thu thập', example: 'Email, tên, số điện thoại, địa chỉ giao hàng, lịch sử mua hàng, cookie định danh' },
+            { id: 'purpose', type: 'textarea', label: 'Processing Purpose', placeholder: 'Why data is collected', required: true, rows: 2, section: 'required', hint: 'Mục đích thu thập từng loại dữ liệu', example: 'Email: gửi hóa đơn và newsletter. Địa chỉ: giao hàng. Cookie: analytics và retargeting' },
+            { id: 'thirdParties', type: 'text', label: 'Third Parties', placeholder: 'Analytics, payment, ads...', required: false, section: 'advanced', hint: 'Các dịch vụ bên thứ 3 được chia sẻ dữ liệu', example: 'Google Analytics, Stripe, Facebook Pixel, Mailchimp' },
         ],
         intentPattern: `INTENT:
 Tôi muốn review GDPR compliance cho [product].
@@ -909,10 +909,10 @@ SUCCESS CRITERIA:
         description: 'Privacy policy review và cải thiện',
         category: 'security',
         fields: [
-            { id: 'policy', type: 'textarea', label: 'Policy URL/Text', placeholder: 'Link hoặc paste policy', required: true, rows: 6, section: 'required' },
-            { id: 'businessType', type: 'select', label: 'Business Type', options: ['E-commerce', 'SaaS', 'Mobile App', 'Website', 'Marketplace'], default: 'SaaS', required: true, section: 'required' },
-            { id: 'markets', type: 'text', label: 'Target Markets', placeholder: 'US, EU, APAC, Global...', required: true, section: 'required' },
-            { id: 'dataTypes', type: 'text', label: 'Data Types', placeholder: 'Types of personal data collected', required: false, section: 'advanced' },
+            { id: 'policy', type: 'textarea', label: 'Policy URL/Text', placeholder: 'Link hoặc paste policy', required: true, rows: 6, section: 'required', hint: 'Dán URL hoặc nội dung privacy policy cần audit', example: 'https://shopx.vn/privacy-policy' },
+            { id: 'businessType', type: 'select', label: 'Business Type', options: ['E-commerce', 'SaaS', 'Mobile App', 'Website', 'Marketplace'], default: 'SaaS', required: true, section: 'required', hint: 'Loại hình kinh doanh sẽ quyết định yêu cầu compliance khác nhau' },
+            { id: 'markets', type: 'text', label: 'Target Markets', placeholder: 'US, EU, APAC, Global...', required: true, section: 'required', hint: 'Thị trường hoạt động quyết định luật áp dụng (GDPR, CCPA...)', example: 'EU + US + Việt Nam' },
+            { id: 'dataTypes', type: 'text', label: 'Data Types', placeholder: 'Types of personal data collected', required: false, section: 'advanced', hint: 'Các loại dữ liệu cá nhân đang thu thập', example: 'PII (email, tên), payment data, location, browsing history' },
         ],
         intentPattern: `INTENT:
 Tôi muốn audit privacy policy.
@@ -938,10 +938,10 @@ SUCCESS CRITERIA:
         description: 'Security incident response planning',
         category: 'security',
         fields: [
-            { id: 'companySize', type: 'select', label: 'Company Size', options: ['Startup', 'SMB', 'Enterprise'], default: 'SMB', required: true, section: 'required' },
-            { id: 'industry', type: 'text', label: 'Industry', placeholder: 'Tech, Finance, Healthcare...', required: true, section: 'required' },
-            { id: 'criticalSystems', type: 'textarea', label: 'Critical Systems', placeholder: 'Most important systems/data', required: true, rows: 3, section: 'required' },
-            { id: 'currentPlan', type: 'textarea', label: 'Current Plan (nếu có)', placeholder: 'Existing IRP', required: false, rows: 3, section: 'advanced' },
+            { id: 'companySize', type: 'select', label: 'Company Size', options: ['Startup', 'SMB', 'Enterprise'], default: 'SMB', required: true, section: 'required', hint: 'Quy mô công ty quyết định mức độ chi tiết của plan' },
+            { id: 'industry', type: 'text', label: 'Industry', placeholder: 'Tech, Finance, Healthcare...', required: true, section: 'required', hint: 'Ngành kinh doanh — một số ngành có compliance riêng', example: 'Fintech — xử lý thanh toán online' },
+            { id: 'criticalSystems', type: 'textarea', label: 'Critical Systems', placeholder: 'Most important systems/data', required: true, rows: 3, section: 'required', hint: 'Hệ thống và dữ liệu quan trọng nhất cần bảo vệ', example: 'Payment gateway, customer database (500K users), internal admin panel' },
+            { id: 'currentPlan', type: 'textarea', label: 'Current Plan (nếu có)', placeholder: 'Existing IRP', required: false, rows: 3, section: 'advanced', hint: 'Dán IRP hiện tại nếu đã có, AI sẽ review và cải thiện' },
         ],
         intentPattern: `INTENT:
 Tôi muốn xây dựng/review incident response plan.
@@ -961,14 +961,14 @@ SUCCESS CRITERIA:
     {
         id: 'data_handling',
         name: 'Data Handling Review',
-        icon: '📊',
+        icon: '🗃️',
         description: 'Data lifecycle management review',
         category: 'security',
         fields: [
-            { id: 'dataTypes', type: 'textarea', label: 'Data Types', placeholder: 'PII, PCI, PHI, Business data...', required: true, rows: 3, section: 'required' },
-            { id: 'sources', type: 'text', label: 'Data Sources', placeholder: 'Where data comes from', required: true, section: 'required' },
-            { id: 'storage', type: 'text', label: 'Storage Systems', placeholder: 'Databases, cloud, files...', required: true, section: 'required' },
-            { id: 'regulations', type: 'text', label: 'Regulations', placeholder: 'GDPR, HIPAA, PCI-DSS...', required: false, section: 'advanced' },
+            { id: 'dataTypes', type: 'textarea', label: 'Data Types', placeholder: 'PII, PCI, PHI, Business data...', required: true, rows: 3, section: 'required', hint: 'Liệt kê các loại dữ liệu đang xử lý', example: 'PII (tên, email, SĐT), PCI (thẻ tín dụng), business data (báo cáo doanh thu)' },
+            { id: 'sources', type: 'text', label: 'Data Sources', placeholder: 'Where data comes from', required: true, section: 'required', hint: 'Nguồn dữ liệu đầu vào', example: 'Web forms, mobile app, API partners, manual import' },
+            { id: 'storage', type: 'text', label: 'Storage Systems', placeholder: 'Databases, cloud, files...', required: true, section: 'required', hint: 'Hệ thống lưu trữ dữ liệu', example: 'PostgreSQL on AWS RDS, S3 buckets, Redis cache' },
+            { id: 'regulations', type: 'text', label: 'Regulations', placeholder: 'GDPR, HIPAA, PCI-DSS...', required: false, section: 'advanced', hint: 'Các quy định compliance áp dụng', example: 'GDPR (EU users), PCI-DSS (thanh toán thẻ)' },
         ],
         intentPattern: `INTENT:
 Tôi muốn review data handling practices.
@@ -988,14 +988,14 @@ SUCCESS CRITERIA:
     {
         id: 'tos_review',
         name: 'Terms of Service Review',
-        icon: '📋',
+        icon: '📃',
         description: 'Terms of Service coverage và fairness',
         category: 'security',
         fields: [
-            { id: 'tos', type: 'textarea', label: 'ToS URL/Text', placeholder: 'Link hoặc paste ToS', required: true, rows: 6, section: 'required' },
-            { id: 'serviceType', type: 'select', label: 'Service Type', options: ['SaaS', 'Marketplace', 'Mobile App', 'Website', 'API'], default: 'SaaS', required: true, section: 'required' },
-            { id: 'model', type: 'select', label: 'Business Model', options: ['Subscription', 'Free', 'Freemium', 'One-time', 'Usage-based'], default: 'Subscription', required: true, section: 'required' },
-            { id: 'markets', type: 'text', label: 'Target Markets', placeholder: 'US, EU, Global...', required: true, section: 'required' },
+            { id: 'tos', type: 'textarea', label: 'ToS URL/Text', placeholder: 'Link hoặc paste ToS', required: true, rows: 6, section: 'required', hint: 'Dán URL hoặc nội dung Terms of Service cần review', example: 'https://shopx.vn/terms' },
+            { id: 'serviceType', type: 'select', label: 'Service Type', options: ['SaaS', 'Marketplace', 'Mobile App', 'Website', 'API'], default: 'SaaS', required: true, section: 'required', hint: 'Loại dịch vụ quyết định các điều khoản cần thiết' },
+            { id: 'model', type: 'select', label: 'Business Model', options: ['Subscription', 'Free', 'Freemium', 'One-time', 'Usage-based'], default: 'Subscription', required: true, section: 'required', hint: 'Mô hình kinh doanh ảnh hưởng đến chính sách hoàn tiền, hủy dịch vụ' },
+            { id: 'markets', type: 'text', label: 'Target Markets', placeholder: 'US, EU, Global...', required: true, section: 'required', hint: 'Thị trường hoạt động', example: 'Global, chú ý EU và US' },
         ],
         intentPattern: `INTENT:
 Tôi muốn review Terms of Service.
@@ -1039,11 +1039,11 @@ SUCCESS CRITERIA:
         description: 'Mô tả ý tưởng app → AI tự quyết định mọi thứ và build cho bạn. Dành cho người không biết code.',
         category: 'development',
         fields: [
-            { id: 'appIdea', type: 'textarea', label: 'Ý tưởng App', placeholder: 'VD: "Tôi muốn app quản lý công việc cá nhân, có thể thêm task, đặt deadline, nhắc nhở..."', required: true, rows: 4, section: 'required' },
-            { id: 'appType', type: 'select', label: 'Loại App', options: ['Desktop App (cài trên máy)', 'CLI Tool (dòng lệnh)', 'Web App', 'Mobile App'], required: true, section: 'required' },
-            { id: 'targetUser', type: 'text', label: 'Ai sẽ dùng?', placeholder: 'VD: Tôi dùng cá nhân, Team nhỏ 5 người, Khách hàng...', required: true, section: 'required' },
-            { id: 'platform', type: 'select', label: 'Chạy trên', options: ['Windows', 'macOS', 'Linux', 'Cả 3 hệ điều hành', 'Web Browser'], required: true, section: 'required' },
-            { id: 'preferences', type: 'textarea', label: 'Yêu cầu thêm (optional)', placeholder: 'VD: Giao diện tối, đơn giản, offline được...', required: false, rows: 2, section: 'advanced' },
+            { id: 'appIdea', type: 'textarea', label: 'Ý tưởng App', placeholder: 'VD: "Tôi muốn app quản lý công việc cá nhân, có thể thêm task, đặt deadline, nhắc nhở..."', required: true, rows: 4, section: 'required', hint: 'Mô tả bằng ngôn ngữ tự nhiên, AI sẽ tự xác định requirements', example: 'App quản lý chi tiêu cá nhân: thêm giao dịch, phân loại, xem biểu đồ, nhắc nhở khi vượt ngân sách' },
+            { id: 'appType', type: 'select', label: 'Loại App', options: ['Desktop App (cài trên máy)', 'CLI Tool (dòng lệnh)', 'Web App', 'Mobile App'], required: true, section: 'required', hint: 'Chọn nền tảng chính của ứng dụng' },
+            { id: 'targetUser', type: 'text', label: 'Ai sẽ dùng?', placeholder: 'VD: Tôi dùng cá nhân, Team nhỏ 5 người, Khách hàng...', required: true, section: 'required', hint: 'Ai là người dùng chính của app?', example: 'Tôi dùng cá nhân để quản lý chi tiêu hàng ngày' },
+            { id: 'platform', type: 'select', label: 'Chạy trên', options: ['Windows', 'macOS', 'Linux', 'Cả 3 hệ điều hành', 'Web Browser'], required: true, section: 'required', hint: 'Nền tảng mà app cần chạy được' },
+            { id: 'preferences', type: 'textarea', label: 'Yêu cầu thêm (optional)', placeholder: 'VD: Giao diện tối, đơn giản, offline được...', required: false, rows: 2, section: 'advanced', hint: 'Yêu cầu đặc biệt về giao diện, offline, ngôn ngữ...', example: 'Dark mode, hoạt động offline, tiếng Việt' },
         ],
         intentPattern: `INTENT:
 Tôi muốn AI build cho tôi một [appType].
@@ -1078,25 +1078,25 @@ User chỉ đánh giá kết quả cuối cùng.`,
         category: 'development',
         fields: [
             // Section 1: Requirements
-            { id: 'appName', type: 'text', label: '1. Tên App', placeholder: 'VD: TaskFlow', required: true, section: 'required' },
-            { id: 'appType', type: 'select', label: '2. Loại App', options: ['Desktop (Cross-platform)', 'CLI Tool', 'Desktop + CLI', 'Web SPA', 'Mobile'], required: true, section: 'required' },
-            { id: 'problem', type: 'textarea', label: '3. Vấn đề cần giải quyết', placeholder: 'Mô tả vấn đề user đang gặp phải', required: true, rows: 3, section: 'required' },
-            { id: 'targetUsers', type: 'text', label: '4. Target Users', placeholder: 'VD: Developer cá nhân, Team nhỏ', required: true, section: 'required' },
-            { id: 'coreFeatures', type: 'textarea', label: '5. Core Features (3-5)', placeholder: '1. Feature A\n2. Feature B\n3. Feature C', required: true, rows: 4, section: 'required' },
+            { id: 'appName', type: 'text', label: '1. Tên App', placeholder: 'VD: TaskFlow', required: true, section: 'required', hint: 'Tên ngắn gọn, dễ nhớ', example: 'TaskFlow' },
+            { id: 'appType', type: 'select', label: '2. Loại App', options: ['Desktop (Cross-platform)', 'CLI Tool', 'Desktop + CLI', 'Web SPA', 'Mobile'], required: true, section: 'required', hint: 'Chọn loại app phù hợp với nhu cầu' },
+            { id: 'problem', type: 'textarea', label: '3. Vấn đề cần giải quyết', placeholder: 'Mô tả vấn đề user đang gặp phải', required: true, rows: 3, section: 'required', hint: 'Vấn đề cụ thể mà app giải quyết', example: 'Developer cần track tasks nhưng Jira quá phức tạp, cần tool nhẹ, chạy local' },
+            { id: 'targetUsers', type: 'text', label: '4. Target Users', placeholder: 'VD: Developer cá nhân, Team nhỏ', required: true, section: 'required', hint: 'Nhóm người dùng chính', example: 'Developer cá nhân và team nhỏ (2-5 người)' },
+            { id: 'coreFeatures', type: 'textarea', label: '5. Core Features (3-5)', placeholder: '1. Feature A\n2. Feature B\n3. Feature C', required: true, rows: 4, section: 'required', hint: 'Liệt kê 3-5 tính năng quan trọng nhất', example: '1. CRUD tasks với title, description, status\n2. Kanban board view\n3. Filter/search tasks\n4. Keyboard shortcuts' },
 
             // Section 2: Technical Preferences
-            { id: 'platforms', type: 'text', label: '6. Target Platforms', placeholder: 'Windows, macOS, Linux...', required: true, section: 'required' },
-            { id: 'techPreference', type: 'text', label: '7. Tech Preference (optional)', placeholder: 'VD: Tauri, Electron, Python...', required: false, section: 'advanced' },
-            { id: 'dataStorage', type: 'select', label: '8. Data Storage', options: ['None', 'Local Files (JSON/YAML)', 'Local Database (SQLite)', 'Cloud Database'], required: false, section: 'advanced' },
-            { id: 'offlineRequired', type: 'select', label: '9. Offline Mode', options: ['Required', 'Nice to have', 'Not needed'], required: false, section: 'advanced' },
+            { id: 'platforms', type: 'text', label: '6. Target Platforms', placeholder: 'Windows, macOS, Linux...', required: true, section: 'required', hint: 'Hệ điều hành cần hỗ trợ', example: 'Windows + macOS' },
+            { id: 'techPreference', type: 'text', label: '7. Tech Preference (optional)', placeholder: 'VD: Tauri, Electron, Python...', required: false, section: 'advanced', hint: 'Để trống nếu muốn AI tự chọn', example: 'Tauri + React' },
+            { id: 'dataStorage', type: 'select', label: '8. Data Storage', options: ['None', 'Local Files (JSON/YAML)', 'Local Database (SQLite)', 'Cloud Database'], required: false, section: 'advanced', hint: 'Cách lưu trữ dữ liệu của app' },
+            { id: 'offlineRequired', type: 'select', label: '9. Offline Mode', options: ['Required', 'Nice to have', 'Not needed'], required: false, section: 'advanced', hint: 'App có cần hoạt động khi không có internet?' },
 
             // Section 3: App-specific
-            { id: 'uiStyle', type: 'select', label: '10. UI Style', options: ['Modern Dark', 'Clean Light', 'Minimal', 'No UI (CLI only)'], required: false, section: 'advanced' },
-            { id: 'specialFeatures', type: 'textarea', label: '11. Special Features', placeholder: 'VD: System tray, Keyboard shortcuts, Notifications...', required: false, rows: 2, section: 'advanced' },
+            { id: 'uiStyle', type: 'select', label: '10. UI Style', options: ['Modern Dark', 'Clean Light', 'Minimal', 'No UI (CLI only)'], required: false, section: 'advanced', hint: 'Phong cách giao diện' },
+            { id: 'specialFeatures', type: 'textarea', label: '11. Special Features', placeholder: 'VD: System tray, Keyboard shortcuts, Notifications...', required: false, rows: 2, section: 'advanced', hint: 'Tính năng đặc biệt của desktop/CLI', example: 'System tray icon, global hotkey Ctrl+Shift+T, desktop notifications' },
 
             // Section 4: Constraints
-            { id: 'outOfScope', type: 'textarea', label: '12. Out of Scope', placeholder: 'Những gì KHÔNG làm trong v1', required: false, rows: 2, section: 'advanced' },
-            { id: 'constraints', type: 'text', label: '13. Constraints', placeholder: 'VD: Bundle < 50MB, No internet required', required: false, section: 'advanced' },
+            { id: 'outOfScope', type: 'textarea', label: '12. Out of Scope', placeholder: 'Những gì KHÔNG làm trong v1', required: false, rows: 2, section: 'advanced', hint: 'Giới hạn scope để AI không over-engineer', example: 'Không cần multi-user, không cần mobile, không cần cloud sync' },
+            { id: 'constraints', type: 'text', label: '13. Constraints', placeholder: 'VD: Bundle < 50MB, No internet required', required: false, section: 'advanced', hint: 'Giới hạn kỹ thuật', example: 'Bundle < 30MB, startup < 2s' },
         ],
         intentPattern: `INTENT:
 Tạo Complete App Specification cho [appName] - một [appType].
@@ -1186,20 +1186,20 @@ Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
     {
         id: 'app_requirements_spec',
         name: 'App Requirements Spec',
-        icon: '📋',
+        icon: '📑',
         description: 'Thu thập requirements cho app mới, định nghĩa scope và success criteria',
         category: 'development',
         parentFolder: 'individual_skills_folder',
         fields: [
-            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'VD: TaskFlow - Quản lý công việc', required: true, section: 'required' },
-            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop', 'CLI Tool', 'Mobile', 'Web App', 'API Service'], required: true, section: 'required' },
-            { id: 'problem', type: 'textarea', label: 'Problem Statement', placeholder: 'Vấn đề cần giải quyết là gì?', required: true, rows: 3, section: 'required' },
-            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'Ai sẽ dùng app này?', required: true, section: 'required' },
-            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3-5)', placeholder: '1. Feature 1\n2. Feature 2\n3. Feature 3', required: true, rows: 4, section: 'required' },
-            { id: 'outOfScope', type: 'textarea', label: 'Out of Scope', placeholder: 'Những gì KHÔNG làm trong phiên bản này', required: true, rows: 3, section: 'required' },
-            { id: 'successCriteria', type: 'textarea', label: 'Success Criteria', placeholder: 'Khi nào app được coi là done?', required: true, rows: 2, section: 'required' },
-            { id: 'platform', type: 'text', label: 'Platform', placeholder: 'Windows, macOS, Linux...', required: false, section: 'advanced' },
-            { id: 'dataStorage', type: 'select', label: 'Data Storage', options: ['None', 'Local File', 'Local Database (SQLite)', 'Cloud'], required: false, section: 'advanced' },
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'VD: TaskFlow - Quản lý công việc', required: true, section: 'required', hint: 'Tên app kèm mô tả ngắn', example: 'TaskFlow — Quản lý công việc cá nhân' },
+            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop', 'CLI Tool', 'Mobile', 'Web App', 'API Service'], required: true, section: 'required', hint: 'Loại ứng dụng cần build' },
+            { id: 'problem', type: 'textarea', label: 'Problem Statement', placeholder: 'Vấn đề cần giải quyết là gì?', required: true, rows: 3, section: 'required', hint: 'Mô tả vấn đề thực tế mà app giải quyết', example: 'Developer cần tool nhẹ, chạy local để track tasks hàng ngày mà không cần Jira' },
+            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'Ai sẽ dùng app này?', required: true, section: 'required', hint: 'Mô tả người dùng chính', example: 'Developer cá nhân, thích terminal-based tools' },
+            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3-5)', placeholder: '1. Feature 1\n2. Feature 2\n3. Feature 3', required: true, rows: 4, section: 'required', hint: 'Liệt kê 3-5 tính năng quan trọng nhất cho v1', example: '1. CRUD tasks\n2. Priority levels\n3. Due date + reminder\n4. Search/filter\n5. Export to Markdown' },
+            { id: 'outOfScope', type: 'textarea', label: 'Out of Scope', placeholder: 'Những gì KHÔNG làm trong phiên bản này', required: true, rows: 3, section: 'required', hint: 'Định nghĩa rõ những gì không làm để kiểm soát scope', example: 'Không cần multi-user, không cần mobile app, không cần cloud sync' },
+            { id: 'successCriteria', type: 'textarea', label: 'Success Criteria', placeholder: 'Khi nào app được coi là done?', required: true, rows: 2, section: 'required', hint: 'Tiêu chí cụ thể, đo lường được', example: 'User có thể CRUD tasks, filter theo status, và app chạy stable trên Windows/macOS' },
+            { id: 'platform', type: 'text', label: 'Platform', placeholder: 'Windows, macOS, Linux...', required: false, section: 'advanced', hint: 'Hệ điều hành cần hỗ trợ', example: 'Windows + macOS' },
+            { id: 'dataStorage', type: 'select', label: 'Data Storage', options: ['None', 'Local File', 'Local Database (SQLite)', 'Cloud'], required: false, section: 'advanced', hint: 'Cách lưu trữ dữ liệu của app' },
         ],
         intentPattern: `INTENT:
 Tôi muốn tạo App Requirements Specification cho [appName].
@@ -1232,20 +1232,20 @@ OUTPUT REQUIREMENTS:
     {
         id: 'tech_stack_selection',
         name: 'Tech Stack Selection',
-        icon: '🔧',
+        icon: '⚙️',
         description: 'Chọn công nghệ phù hợp cho app dựa trên requirements',
         category: 'development',
         parentFolder: 'individual_skills_folder',
         fields: [
-            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Cross-platform)', 'CLI Tool', 'Mobile (Cross-platform)', 'Web SPA', 'API Backend'], required: true, section: 'required' },
-            { id: 'performancePriority', type: 'select', label: 'Performance Priority', options: ['Low', 'Medium', 'High', 'Critical'], required: true, section: 'required' },
-            { id: 'devSpeed', type: 'select', label: 'Development Speed Priority', options: ['Low', 'Medium', 'High'], required: true, section: 'required' },
-            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux...', required: true, section: 'required' },
-            { id: 'dataNeeds', type: 'select', label: 'Data Storage Needs', options: ['None', 'Local Only', 'Cloud Only', 'Both'], required: true, section: 'required' },
-            { id: 'offlineRequired', type: 'select', label: 'Offline Required?', options: ['Yes', 'No', 'Partial'], required: true, section: 'required' },
-            { id: 'teamExp', type: 'text', label: 'Team Experience', placeholder: 'VD: Python, JavaScript', required: false, section: 'advanced' },
-            { id: 'langPreference', type: 'text', label: 'Language Preference', placeholder: 'Ngôn ngữ ưu tiên (nếu có)', required: false, section: 'advanced' },
-            { id: 'bundleSize', type: 'text', label: 'Bundle Size Constraint', placeholder: 'VD: < 50MB', required: false, section: 'advanced' },
+            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Cross-platform)', 'CLI Tool', 'Mobile (Cross-platform)', 'Web SPA', 'API Backend'], required: true, section: 'required', hint: 'Loại app quyết định các lựa chọn tech khác nhau' },
+            { id: 'performancePriority', type: 'select', label: 'Performance Priority', options: ['Low', 'Medium', 'High', 'Critical'], required: true, section: 'required', hint: 'Mức ưu tiên về hiệu năng: Critical = latency-sensitive, real-time' },
+            { id: 'devSpeed', type: 'select', label: 'Development Speed Priority', options: ['Low', 'Medium', 'High'], required: true, section: 'required', hint: 'Ưu tiên tốc độ phát triển: High = cần ship nhanh' },
+            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux...', required: true, section: 'required', hint: 'Các platform cần hỗ trợ', example: 'Windows + macOS + Linux' },
+            { id: 'dataNeeds', type: 'select', label: 'Data Storage Needs', options: ['None', 'Local Only', 'Cloud Only', 'Both'], required: true, section: 'required', hint: 'Nơi lưu trữ dữ liệu của ứng dụng' },
+            { id: 'offlineRequired', type: 'select', label: 'Offline Required?', options: ['Yes', 'No', 'Partial'], required: true, section: 'required', hint: 'App có cần hoạt động khi mất mạng?' },
+            { id: 'teamExp', type: 'text', label: 'Team Experience', placeholder: 'VD: Python, JavaScript', required: false, section: 'advanced', hint: 'Ngôn ngữ/framework team đã quen', example: 'TypeScript, React, Python' },
+            { id: 'langPreference', type: 'text', label: 'Language Preference', placeholder: 'Ngôn ngữ ưu tiên (nếu có)', required: false, section: 'advanced', hint: 'Để trống để AI tự đề xuất', example: 'Rust hoặc TypeScript' },
+            { id: 'bundleSize', type: 'text', label: 'Bundle Size Constraint', placeholder: 'VD: < 50MB', required: false, section: 'advanced', hint: 'Giới hạn kích thước file cài đặt', example: '< 30MB' },
         ],
         intentPattern: `INTENT:
 So sánh và recommend tech stack cho [appType].
@@ -1272,18 +1272,18 @@ OUTPUT REQUIREMENTS:
     {
         id: 'architecture_design',
         name: 'Architecture Design',
-        icon: '🏗️',
+        icon: '🧱',
         description: 'Thiết kế kiến trúc hệ thống với component diagram',
         category: 'development',
         parentFolder: 'individual_skills_folder',
         fields: [
-            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
-            { id: 'techStack', type: 'text', label: 'Tech Stack', placeholder: 'VD: Tauri + Vue 3 + SQLite', required: true, section: 'required' },
-            { id: 'coreFeatures', type: 'textarea', label: 'Core Features', placeholder: 'Các tính năng chính', required: true, rows: 3, section: 'required' },
-            { id: 'appType', type: 'select', label: 'Architecture Type', options: ['Desktop App', 'CLI Tool', 'Web SPA', 'API Backend', 'Full-stack'], required: true, section: 'required' },
-            { id: 'dataFlow', type: 'textarea', label: 'Data Flow', placeholder: 'VD: User → UI → Backend → DB → UI', required: true, rows: 2, section: 'required' },
-            { id: 'integrations', type: 'text', label: 'External Integrations', placeholder: 'VD: REST API, File system (hoặc None)', required: false, section: 'advanced' },
-            { id: 'stateComplexity', type: 'select', label: 'State Complexity', options: ['Simple', 'Medium', 'Complex'], required: false, section: 'advanced' },
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required', hint: 'Tên app cần thiết kế kiến trúc', example: 'TaskFlow' },
+            { id: 'techStack', type: 'text', label: 'Tech Stack', placeholder: 'VD: Tauri + Vue 3 + SQLite', required: true, section: 'required', hint: 'Tech stack đã chọn cho app', example: 'Tauri + React + SQLite' },
+            { id: 'coreFeatures', type: 'textarea', label: 'Core Features', placeholder: 'Các tính năng chính', required: true, rows: 3, section: 'required', hint: 'Danh sách features để AI thiết kế components phù hợp', example: '1. Task CRUD\n2. Kanban board\n3. Search & filter\n4. Keyboard shortcuts' },
+            { id: 'appType', type: 'select', label: 'Architecture Type', options: ['Desktop App', 'CLI Tool', 'Web SPA', 'API Backend', 'Full-stack'], required: true, section: 'required', hint: 'Loại kiến trúc quyết định các layers và patterns' },
+            { id: 'dataFlow', type: 'textarea', label: 'Data Flow', placeholder: 'VD: User → UI → Backend → DB → UI', required: true, rows: 2, section: 'required', hint: 'Luồng dữ liệu chính của app', example: 'User → React UI → Tauri commands → SQLite → React UI' },
+            { id: 'integrations', type: 'text', label: 'External Integrations', placeholder: 'VD: REST API, File system (hoặc None)', required: false, section: 'advanced', hint: 'Hệ thống bên ngoài cần kết nối', example: 'File system (export Markdown), GitHub API (import issues)' },
+            { id: 'stateComplexity', type: 'select', label: 'State Complexity', options: ['Simple', 'Medium', 'Complex'], required: false, section: 'advanced', hint: 'Simple = useState, Medium = Zustand, Complex = Redux/MobX' },
         ],
         intentPattern: `INTENT:
 Thiết kế architecture cho [appName].
@@ -1316,13 +1316,13 @@ OUTPUT REQUIREMENTS:
         category: 'development',
         parentFolder: 'individual_skills_folder',
         fields: [
-            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
-            { id: 'dbType', type: 'select', label: 'Database Type', options: ['SQLite', 'PostgreSQL', 'MySQL', 'MongoDB'], required: true, section: 'required' },
-            { id: 'entities', type: 'textarea', label: 'Main Entities', placeholder: 'VD: User, Task, Category, Tag', required: true, rows: 2, section: 'required' },
-            { id: 'relationships', type: 'textarea', label: 'Relationships', placeholder: 'VD: User has many Tasks, Task belongs to Category', required: true, rows: 3, section: 'required' },
-            { id: 'keyFields', type: 'textarea', label: 'Key Fields per Entity', placeholder: 'VD: Task: title, description, due_date, status', required: true, rows: 3, section: 'required' },
-            { id: 'queryNeeds', type: 'textarea', label: 'Common Queries', placeholder: 'VD: Search by title, filter by status', required: false, rows: 2, section: 'advanced' },
-            { id: 'audit', type: 'select', label: 'Audit Requirements', options: ['None', 'Created/Updated timestamps', 'Full audit trail'], required: false, section: 'advanced' },
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required', hint: 'Tên app cần thiết kế database', example: 'TaskFlow' },
+            { id: 'dbType', type: 'select', label: 'Database Type', options: ['SQLite', 'PostgreSQL', 'MySQL', 'MongoDB'], required: true, section: 'required', hint: 'Loại database: SQLite cho local app, PostgreSQL cho server' },
+            { id: 'entities', type: 'textarea', label: 'Main Entities', placeholder: 'VD: User, Task, Category, Tag', required: true, rows: 2, section: 'required', hint: 'Các entity/bảng chính của hệ thống', example: 'User, Project, Task, Category, Tag' },
+            { id: 'relationships', type: 'textarea', label: 'Relationships', placeholder: 'VD: User has many Tasks, Task belongs to Category', required: true, rows: 3, section: 'required', hint: 'Mối quan hệ giữa các entity', example: 'User has many Projects\nProject has many Tasks\nTask belongs to Category\nTask has many Tags (M:N)' },
+            { id: 'keyFields', type: 'textarea', label: 'Key Fields per Entity', placeholder: 'VD: Task: title, description, due_date, status', required: true, rows: 3, section: 'required', hint: 'Các trường quan trọng của mỗi entity', example: 'Task: title, description, status (todo/doing/done), priority, due_date\nUser: email, name, avatar' },
+            { id: 'queryNeeds', type: 'textarea', label: 'Common Queries', placeholder: 'VD: Search by title, filter by status', required: false, rows: 2, section: 'advanced', hint: 'Các query thường dùng để AI tối ưu index', example: 'Tasks by status, tasks by due_date range, full-text search title' },
+            { id: 'audit', type: 'select', label: 'Audit Requirements', options: ['None', 'Created/Updated timestamps', 'Full audit trail'], required: false, section: 'advanced', hint: 'Có cần lưu lịch sử thay đổi?' },
         ],
         intentPattern: `INTENT:
 Thiết kế database schema cho [appName].
@@ -1359,13 +1359,13 @@ OUTPUT REQUIREMENTS:
         category: 'development',
         parentFolder: 'individual_skills_folder',
         fields: [
-            { id: 'appName', type: 'text', label: 'App/Service Name', placeholder: 'Tên API', required: true, section: 'required' },
-            { id: 'apiStyle', type: 'select', label: 'API Style', options: ['REST', 'GraphQL', 'IPC (Desktop)'], required: true, section: 'required' },
-            { id: 'resources', type: 'textarea', label: 'Resources/Entities', placeholder: 'VD: User, Task, Category', required: true, rows: 2, section: 'required' },
-            { id: 'operations', type: 'textarea', label: 'Operations per Resource', placeholder: 'VD: Task: CRUD + complete, archive', required: true, rows: 3, section: 'required' },
-            { id: 'auth', type: 'select', label: 'Authentication', options: ['None', 'JWT Bearer', 'API Key', 'OAuth2'], required: true, section: 'required' },
-            { id: 'pagination', type: 'select', label: 'Pagination', options: ['Not needed', 'Offset/Limit', 'Cursor-based'], required: false, section: 'advanced' },
-            { id: 'responseFormat', type: 'select', label: 'Response Format', options: ['JSON', 'XML', 'Both'], default: 'JSON', required: false, section: 'advanced' },
+            { id: 'appName', type: 'text', label: 'App/Service Name', placeholder: 'Tên API', required: true, section: 'required', hint: 'Tên app hoặc service cần thiết kế API', example: 'TaskFlow API' },
+            { id: 'apiStyle', type: 'select', label: 'API Style', options: ['REST', 'GraphQL', 'IPC (Desktop)'], required: true, section: 'required', hint: 'REST cho web, IPC cho desktop app (Tauri/Electron)' },
+            { id: 'resources', type: 'textarea', label: 'Resources/Entities', placeholder: 'VD: User, Task, Category', required: true, rows: 2, section: 'required', hint: 'Các resource/entity chính của API', example: 'User, Project, Task, Category, Tag' },
+            { id: 'operations', type: 'textarea', label: 'Operations per Resource', placeholder: 'VD: Task: CRUD + complete, archive', required: true, rows: 3, section: 'required', hint: 'Các thao tác cho mỗi resource', example: 'Task: CRUD + complete + archive + assign\nProject: CRUD + add member\nUser: register + login + update profile' },
+            { id: 'auth', type: 'select', label: 'Authentication', options: ['None', 'JWT Bearer', 'API Key', 'OAuth2'], required: true, section: 'required', hint: 'Phương thức xác thực cho API' },
+            { id: 'pagination', type: 'select', label: 'Pagination', options: ['Not needed', 'Offset/Limit', 'Cursor-based'], required: false, section: 'advanced', hint: 'Offset/Limit dễ implement, Cursor-based hiệu quả hơn với data lớn' },
+            { id: 'responseFormat', type: 'select', label: 'Response Format', options: ['JSON', 'XML', 'Both'], default: 'JSON', required: false, section: 'advanced', hint: 'Định dạng response trả về' },
         ],
         intentPattern: `INTENT:
 Thiết kế API specification cho [appName].
@@ -1397,15 +1397,15 @@ OUTPUT REQUIREMENTS:
         category: 'development',
         parentFolder: 'individual_skills_folder',
         fields: [
-            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
-            { id: 'framework', type: 'select', label: 'Framework', options: ['Tauri', 'Electron', 'PyQt/PySide', 'Wails', 'Native'], required: true, section: 'required' },
-            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux', required: true, section: 'required' },
-            { id: 'windowType', type: 'select', label: 'Window Type', options: ['Single Window', 'Multi-Window', 'Frameless'], required: true, section: 'required' },
-            { id: 'defaultSize', type: 'text', label: 'Default Size', placeholder: 'VD: 1024x768', required: true, section: 'required' },
-            { id: 'menuBar', type: 'textarea', label: 'Menu Bar', placeholder: 'VD: File (New, Save, Exit), Edit, Help', required: true, rows: 2, section: 'required' },
-            { id: 'tray', type: 'select', label: 'System Tray', options: ['No', 'Yes - Basic', 'Yes - With Quick Actions'], required: false, section: 'advanced' },
-            { id: 'shortcuts', type: 'textarea', label: 'Keyboard Shortcuts', placeholder: 'VD: Ctrl+N new, Ctrl+S save', required: false, rows: 2, section: 'advanced' },
-            { id: 'nativeFeatures', type: 'text', label: 'Native Features', placeholder: 'VD: Notifications, File dialogs', required: false, section: 'advanced' },
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required', hint: 'Tên app desktop cần tạo spec', example: 'TaskFlow' },
+            { id: 'framework', type: 'select', label: 'Framework', options: ['Tauri', 'Electron', 'PyQt/PySide', 'Wails', 'Native'], required: true, section: 'required', hint: 'Tauri = nhẹ + Rust, Electron = Node.js + Chrome, PyQt = Python' },
+            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux', required: true, section: 'required', hint: 'Hệ điều hành cần hỗ trợ', example: 'Windows + macOS' },
+            { id: 'windowType', type: 'select', label: 'Window Type', options: ['Single Window', 'Multi-Window', 'Frameless'], required: true, section: 'required', hint: 'Single = 1 cửa sổ, Frameless = custom title bar' },
+            { id: 'defaultSize', type: 'text', label: 'Default Size', placeholder: 'VD: 1024x768', required: true, section: 'required', hint: 'Kích thước cửa sổ mặc định', example: '1200x800' },
+            { id: 'menuBar', type: 'textarea', label: 'Menu Bar', placeholder: 'VD: File (New, Save, Exit), Edit, Help', required: true, rows: 2, section: 'required', hint: 'Cấu trúc menu bar của app', example: 'File (New Project, Save, Export, Exit)\nEdit (Undo, Redo, Preferences)\nHelp (About, Docs)' },
+            { id: 'tray', type: 'select', label: 'System Tray', options: ['No', 'Yes - Basic', 'Yes - With Quick Actions'], required: false, section: 'advanced', hint: 'Icon ở system tray khi minimize' },
+            { id: 'shortcuts', type: 'textarea', label: 'Keyboard Shortcuts', placeholder: 'VD: Ctrl+N new, Ctrl+S save', required: false, rows: 2, section: 'advanced', hint: 'Phím tắt cho các thao tác thường dùng', example: 'Ctrl+N: New task\nCtrl+S: Save\nCtrl+F: Search\nCtrl+Q: Quit' },
+            { id: 'nativeFeatures', type: 'text', label: 'Native Features', placeholder: 'VD: Notifications, File dialogs', required: false, section: 'advanced', hint: 'Tính năng native OS cần dùng', example: 'Desktop notifications, native file dialogs, auto-start' },
         ],
         intentPattern: `INTENT:
 Tạo Desktop App Specification cho [appName].
@@ -1440,14 +1440,14 @@ OUTPUT REQUIREMENTS:
         category: 'development',
         parentFolder: 'individual_skills_folder',
         fields: [
-            { id: 'toolName', type: 'text', label: 'Tool Name', placeholder: 'VD: taskflow hoặc tf', required: true, section: 'required' },
-            { id: 'purpose', type: 'textarea', label: 'Purpose', placeholder: 'Tool này làm gì?', required: true, rows: 2, section: 'required' },
-            { id: 'commands', type: 'textarea', label: 'Commands', placeholder: 'VD: add, list, done, delete, search, config', required: true, rows: 2, section: 'required' },
-            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'Ai sẽ dùng?', required: true, section: 'required' },
-            { id: 'language', type: 'select', label: 'Language', options: ['Python (Click)', 'Rust (Clap)', 'Go (Cobra)', 'Node.js (Commander)', 'Other'], required: true, section: 'required' },
-            { id: 'configLocation', type: 'text', label: 'Config Location', placeholder: 'VD: ~/.toolname/config.yaml', required: false, section: 'advanced' },
-            { id: 'dataStorage', type: 'text', label: 'Data Storage', placeholder: 'VD: ~/.toolname/data.json', required: false, section: 'advanced' },
-            { id: 'outputFormats', type: 'text', label: 'Output Formats', placeholder: 'VD: text, json, table', required: false, section: 'advanced' },
+            { id: 'toolName', type: 'text', label: 'Tool Name', placeholder: 'VD: taskflow hoặc tf', required: true, section: 'required', hint: 'Tên lệnh ngắn gọn, dễ gõ', example: 'tf (TaskFlow CLI)' },
+            { id: 'purpose', type: 'textarea', label: 'Purpose', placeholder: 'Tool này làm gì?', required: true, rows: 2, section: 'required', hint: 'Mô tả ngắn về mục đích của CLI tool', example: 'Quản lý tasks từ terminal: thêm, xem, hoàn thành, xóa tasks nhanh chóng' },
+            { id: 'commands', type: 'textarea', label: 'Commands', placeholder: 'VD: add, list, done, delete, search, config', required: true, rows: 2, section: 'required', hint: 'Danh sách commands chính', example: 'add, list, done, delete, search, config, export' },
+            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'Ai sẽ dùng?', required: true, section: 'required', hint: 'Ai là người dùng chính?', example: 'Developer thích làm việc từ terminal' },
+            { id: 'language', type: 'select', label: 'Language', options: ['Python (Click)', 'Rust (Clap)', 'Go (Cobra)', 'Node.js (Commander)', 'Other'], required: true, section: 'required', hint: 'Ngôn ngữ và CLI framework' },
+            { id: 'configLocation', type: 'text', label: 'Config Location', placeholder: 'VD: ~/.toolname/config.yaml', required: false, section: 'advanced', hint: 'Nơi lưu file cấu hình', example: '~/.tf/config.yaml' },
+            { id: 'dataStorage', type: 'text', label: 'Data Storage', placeholder: 'VD: ~/.toolname/data.json', required: false, section: 'advanced', hint: 'Nơi lưu dữ liệu của tool', example: '~/.tf/tasks.db (SQLite)' },
+            { id: 'outputFormats', type: 'text', label: 'Output Formats', placeholder: 'VD: text, json, table', required: false, section: 'advanced', hint: 'Định dạng output hỗ trợ', example: 'text (default), json, table, csv' },
         ],
         intentPattern: `INTENT:
 Tạo CLI Tool Specification cho [toolName].
@@ -1476,18 +1476,18 @@ OUTPUT REQUIREMENTS:
     {
         id: 'local_deployment',
         name: 'Local Deployment Spec',
-        icon: '📦',
+        icon: '💿',
         description: 'Packaging và distribution spec cho local apps',
         category: 'development',
         parentFolder: 'individual_skills_folder',
         fields: [
-            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required' },
-            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Tauri)', 'Desktop (Electron)', 'CLI Tool', 'Service'], required: true, section: 'required' },
-            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux', required: true, section: 'required' },
-            { id: 'distribution', type: 'select', label: 'Distribution Method', options: ['GitHub Releases', 'Website Download', 'Package Manager (npm/pip)', 'Internal Only'], required: true, section: 'required' },
-            { id: 'autoUpdate', type: 'select', label: 'Auto-Update', options: ['No', 'Yes - Prompt User', 'Yes - Silent'], required: false, section: 'advanced' },
-            { id: 'signing', type: 'select', label: 'Code Signing', options: ['No', 'Windows Only', 'macOS Only', 'Both'], required: false, section: 'advanced' },
-            { id: 'dependencies', type: 'text', label: 'Runtime Dependencies', placeholder: 'VD: None, .NET, Python', required: false, section: 'advanced' },
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required', hint: 'Tên app cần tạo deployment spec', example: 'TaskFlow' },
+            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Tauri)', 'Desktop (Electron)', 'CLI Tool', 'Service'], required: true, section: 'required', hint: 'Loại app quyết định cách packaging' },
+            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux', required: true, section: 'required', hint: 'Các platform cần build installer', example: 'Windows (.msi) + macOS (.dmg)' },
+            { id: 'distribution', type: 'select', label: 'Distribution Method', options: ['GitHub Releases', 'Website Download', 'Package Manager (npm/pip)', 'Internal Only'], required: true, section: 'required', hint: 'Kênh phân phối app đến users' },
+            { id: 'autoUpdate', type: 'select', label: 'Auto-Update', options: ['No', 'Yes - Prompt User', 'Yes - Silent'], required: false, section: 'advanced', hint: 'Auto-update giúp users luôn dùng version mới nhất' },
+            { id: 'signing', type: 'select', label: 'Code Signing', options: ['No', 'Windows Only', 'macOS Only', 'Both'], required: false, section: 'advanced', hint: 'Code signing giúp tránh cảnh báo SmartScreen/Gatekeeper' },
+            { id: 'dependencies', type: 'text', label: 'Runtime Dependencies', placeholder: 'VD: None, .NET, Python', required: false, section: 'advanced', hint: 'Phần mềm cần cài trước khi chạy app', example: 'None (standalone binary)' },
         ],
         intentPattern: `INTENT:
 Tạo Deployment Specification cho [appName].

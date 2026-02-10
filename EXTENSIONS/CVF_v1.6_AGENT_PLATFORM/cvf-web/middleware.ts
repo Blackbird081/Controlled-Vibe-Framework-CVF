@@ -1,31 +1,32 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { verifySessionCookie } from '@/lib/middleware-auth';
 
-const AUTH_COOKIE = 'cvf_auth';
 const LOGIN_PATH = '/login';
 
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname === '/favicon.ico') {
+    const isPublicAsset = pathname.startsWith('/_next') || pathname === '/favicon.ico' || pathname.startsWith('/public');
+    const isLogin = pathname === LOGIN_PATH;
+    const isAuthApi = pathname.startsWith('/api/auth');
+
+    if (isPublicAsset || isLogin || isAuthApi) {
         return NextResponse.next();
     }
 
-    if (pathname === LOGIN_PATH) {
-        return NextResponse.next();
+    const session = verifySessionCookie(request);
+
+    if (!session) {
+        const loginUrl = request.nextUrl.clone();
+        loginUrl.pathname = LOGIN_PATH;
+        loginUrl.searchParams.set('from', pathname);
+        return NextResponse.redirect(loginUrl);
     }
 
-    const authCookie = request.cookies.get(AUTH_COOKIE);
-    if (authCookie?.value === '1') {
-        return NextResponse.next();
-    }
-
-    const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = LOGIN_PATH;
-    loginUrl.searchParams.set('from', pathname);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/((?!_next/|api/|favicon.ico).*)'],
+    matcher: ['/((?!_next/|favicon.ico).*)'],
 };

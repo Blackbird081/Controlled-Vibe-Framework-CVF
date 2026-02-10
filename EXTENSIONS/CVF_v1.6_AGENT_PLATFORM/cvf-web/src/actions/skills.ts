@@ -3,9 +3,12 @@
 import fs from 'fs';
 import path from 'path';
 import { Skill, SkillCategory } from '../types/skill';
+import { loadUat, saveUat } from '@/lib/uat-store';
 
 const SKILLS_ROOT = path.resolve(process.cwd(), '../../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS');
-const UAT_ROOT = path.resolve(process.cwd(), '../../../governance/skill-library/uat/results');
+const UAT_ROOT = process.env.CVF_UAT_ROOT
+    ? path.resolve(process.env.CVF_UAT_ROOT)
+    : path.resolve(process.cwd(), '../../../governance/skill-library/uat/results');
 const UAT_REPORT_PATH = path.resolve(process.cwd(), '../../../governance/skill-library/uat/reports/uat_score_report.json');
 const SPEC_REPORT_PATH = path.resolve(process.cwd(), '../../../governance/skill-library/registry/reports/spec_metrics_report.json');
 
@@ -46,6 +49,26 @@ const RISK_AUTONOMY: Record<string, string> = {
     R3: 'Suggest-only',
     R4: 'Blocked',
 };
+
+function safeWriteFile(targetPath: string, content: string) {
+    try {
+        fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+        fs.writeFileSync(targetPath, content, 'utf-8');
+        return targetPath;
+    } catch (err) {
+        // Fallback to tmp to avoid crash on read-only FS
+        try {
+            const fallbackDir = path.resolve(process.cwd(), '.tmp-uat');
+            fs.mkdirSync(fallbackDir, { recursive: true });
+            const fallbackPath = path.join(fallbackDir, path.basename(targetPath));
+            fs.writeFileSync(fallbackPath, content, 'utf-8');
+            return fallbackPath;
+        } catch (inner) {
+            console.error('Failed to persist UAT content', inner);
+            throw err;
+        }
+    }
+}
 
 function deriveTitleFromFilename(baseName: string): string {
     return baseName
@@ -260,11 +283,8 @@ function uncheckLine(line: string): string {
 
 export async function toggleUatCheckboxByIndex(skillId: string, checkboxIndex: number) {
     try {
-        const uatPath = path.join(UAT_ROOT, `UAT-${skillId}.md`);
-        if (!fs.existsSync(uatPath)) {
-            return null;
-        }
-        const content = fs.readFileSync(uatPath, 'utf-8');
+        const content = await loadUat(skillId);
+        if (!content) return null;
         const lines = content.split(/\r?\n/);
         let targetLine = -1;
         let counter = -1;
@@ -300,8 +320,8 @@ export async function toggleUatCheckboxByIndex(skillId: string, checkboxIndex: n
             }
         }
         const updated = lines.join('\n');
-        fs.writeFileSync(uatPath, updated, 'utf-8');
-        return { content: updated, status: parseUatStatus(updated) };
+        const persistedPath = await saveUat(skillId, updated);
+        return { content: updated, status: parseUatStatus(updated), path: persistedPath };
     } catch (error) {
         console.error('Failed to toggle UAT checkbox', error);
         return null;
@@ -310,14 +330,10 @@ export async function toggleUatCheckboxByIndex(skillId: string, checkboxIndex: n
 
 export async function saveUatContent(skillId: string, content: string) {
     try {
-        const uatPath = path.join(UAT_ROOT, `UAT-${skillId}.md`);
-        if (!fs.existsSync(uatPath)) {
-            return null;
-        }
-        fs.writeFileSync(uatPath, content, 'utf-8');
+        const pathSaved = await saveUat(skillId, content);
         const status = parseUatStatus(content);
         const score = computeUatScore(content);
-        return { content, status, score: score.score, quality: score.quality };
+        return { content, status, score: score.score, quality: score.quality, path: pathSaved };
     } catch (error) {
         console.error('Failed to save UAT content', error);
         return null;
@@ -326,11 +342,8 @@ export async function saveUatContent(skillId: string, content: string) {
 
 export async function toggleUatCheckboxByLine(skillId: string, lineNumber: number) {
     try {
-        const uatPath = path.join(UAT_ROOT, `UAT-${skillId}.md`);
-        if (!fs.existsSync(uatPath)) {
-            return null;
-        }
-        const content = fs.readFileSync(uatPath, 'utf-8');
+        const content = await loadUat(skillId);
+        if (!content) return null;
         const lines = content.split(/\r?\n/);
         const idx = Math.max(0, lineNumber - 1);
         if (!lines[idx]) {
@@ -361,8 +374,8 @@ export async function toggleUatCheckboxByLine(skillId: string, lineNumber: numbe
         }
 
         const updated = lines.join('\n');
-        fs.writeFileSync(uatPath, updated, 'utf-8');
-        return { content: updated, status: parseUatStatus(updated) };
+        const persistedPath = await saveUat(skillId, updated);
+        return { content: updated, status: parseUatStatus(updated), path: persistedPath };
     } catch (error) {
         console.error('Failed to toggle UAT checkbox', error);
         return null;
@@ -446,8 +459,7 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
                     if (file.endsWith('.skill.md')) {
                         const filePath = path.join(categoryPath, file);
                         const content = fs.readFileSync(filePath, 'utf-8');
-                        const uatPath = path.join(UAT_ROOT, `UAT-${file.replace('.skill.md', '')}.md`);
-                        const uatContent = fs.existsSync(uatPath) ? fs.readFileSync(uatPath, 'utf-8') : '';
+                        const uatContent = await loadUat(file.replace('.skill.md', ''));
                         const skillId = file.replace('.skill.md', '');
                         const fallbackTitle = deriveTitleFromFilename(skillId);
                         const uatReport = uatReportMap[skillId];
@@ -536,8 +548,7 @@ export async function getSkillDetail(domain: string, skillId: string): Promise<S
         const uatReportMap = loadUatReportMap();
         const specReportMap = loadSpecReportMap();
         const content = fs.readFileSync(filePath, 'utf-8');
-        const uatPath = path.join(UAT_ROOT, `UAT-${skillId}.md`);
-        const uatContent = fs.existsSync(uatPath) ? fs.readFileSync(uatPath, 'utf-8') : '';
+        const uatContent = await loadUat(skillId);
         const uatReport = uatReportMap[skillId];
         const statusFromFile = parseUatStatus(uatContent);
         const uatStatus = statusFromFile !== 'Not Run' ? statusFromFile : (uatReport?.status || statusFromFile);

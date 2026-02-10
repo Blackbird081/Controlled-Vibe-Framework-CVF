@@ -225,6 +225,28 @@ SkillLibrary.tsx    ✅ tests → 100% (branches ~90%)
 
 ---
 
+## 🛡️ Sprint 5: Post-Review Hardening (09/02/2026)
+**Duration:** 5-7 days — Blocking for production
+
+| Task | Owner | Priority | Status |
+|------|-------|:-------:|:------:|
+| Server-side auth (session/JWT, HttpOnly cookie), remove hardcoded creds, enforce auth on `/api/*` | Platform | 🔴 | ✅ |
+| Rate-limit + service token guard for `/api/execute`; budget meter + per-provider quotas | Platform | 🔴 | ✅ (quota per-provider TBD) |
+| Move UAT state to writable store (KV/DB/S3) with atomic writes; disable FS writes on immutable targets | Platform | 🔴 | ⏳ fallback `.tmp-uat`, need real store |
+| Runtime validation for `ExecutionRequest`; coerce/sanitize inputs before prompt build | Platform | 🟠 | ✅ |
+| Align risk model to R0–R4 in SDK validator + governance docs; add tests for R4 block | SDK/Gov | 🟠 | ✅ |
+| Pre-flight safety filters (prompt-injection/PII/content) before provider call; block/flag high risk | Platform | 🟠 | ✅ |
+| CI wiring: lint + vitest + Playwright smoke for `cvf-web`; gate on PR | DevEx | 🟢 | ✅ (workflow added) |
+
+**Exit Criteria**
+- All APIs require authenticated session; no default creds; middleware protects `/api/*`.
+- Public abuse vector closed: service token + rate-limit + quota enforced; budget check not hardcoded.
+- UAT edits persist on production infra (no FS writes); graceful fallback on read-only.
+- Schema validation prevents non-string payload crashes; risk model consistent (R4 blocked).
+- Safety filters in place; CI green (lint/unit/e2e) before deploy.
+
+---
+
 ## ✅ Checklist Còn Lại (từ Assessment 07/02/2026)
 
 ### v1.3 — Implementation Toolkit

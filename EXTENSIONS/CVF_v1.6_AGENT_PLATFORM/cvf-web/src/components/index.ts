@@ -44,3 +44,5 @@ export * from './LazyComponents';
 export * from './MobileComponents';
 export * from './AIUsagePanel';
 export * from './ApiKeyWizard';
+export { default as Sidebar } from './Sidebar';
+export { default as SidebarToggle } from './SidebarToggle';

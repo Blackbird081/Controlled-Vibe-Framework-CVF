@@ -31,6 +31,22 @@ describe('validateContract', () => {
         const result = validateContract(contract);
         expect(result.warnings.some(warn => warn.includes('capability_id'))).toBe(true);
     });
+
+    it('handles R4 contracts with required decisions and failure info', () => {
+        const contract = makeContract({
+            risk_level: 'R4',
+            governance: {
+                allowed_archetypes: ['Analysis'],
+                allowed_phases: ['A'],
+                required_decisions: ['CISO approve'],
+                required_status: 'APPROVED',
+            },
+            failure_info: { summary: 'High risk' },
+        });
+        const result = validateContract(contract);
+        expect(result.valid).toBe(true);
+        expect(result.warnings.length).toBe(0);
+    });
 });
 
 describe('validateInputs', () => {

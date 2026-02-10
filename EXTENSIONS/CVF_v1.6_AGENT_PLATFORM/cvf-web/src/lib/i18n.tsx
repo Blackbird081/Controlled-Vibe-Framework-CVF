@@ -22,6 +22,16 @@ const vi: Record<string, string> = {
     'nav.aiAgent': '🤖 AI Agent',
     'nav.multiAgent': '🎯 Multi-Agent',
     'nav.tools': '🛠️ Tools',
+    'nav.home': '🏠 Trang chủ',
+    'nav.context': '👤 Context',
+    'nav.settings': '⚙️ Cài đặt',
+    'nav.aiUsage': '💰 Sử dụng AI',
+
+    // Sidebar groups
+    'sidebar.browse': 'Duyệt',
+    'sidebar.ai': 'AI Features',
+    'sidebar.data': 'Dữ liệu',
+    'sidebar.user': 'Người dùng',
 
     // Skills page
     'skills.title': '📚 Thư viện Kỹ năng',
@@ -250,6 +260,16 @@ const en: Record<string, string> = {
     'nav.aiAgent': '🤖 AI Agent',
     'nav.multiAgent': '🎯 Multi-Agent',
     'nav.tools': '🛠️ Tools',
+    'nav.home': '🏠 Home',
+    'nav.context': '👤 Context',
+    'nav.settings': '⚙️ Settings',
+    'nav.aiUsage': '💰 AI Usage',
+
+    // Sidebar groups
+    'sidebar.browse': 'Browse',
+    'sidebar.ai': 'AI Features',
+    'sidebar.data': 'Data',
+    'sidebar.user': 'User',
 
     // Skills page
     'skills.title': '📚 Skill Library',

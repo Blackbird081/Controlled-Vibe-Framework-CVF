@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 const COOKIE_NAME = 'cvf_session';
 
 function getSecret(): string {
-    return process.env.CVF_SESSION_SECRET || 'cvf-dev-secret-change-me';
+    return process.env.CVF_SESSION_SECRET || 'cvf-default-session-secret-2026-change-me';
 }
 
 export type SessionCookie = {

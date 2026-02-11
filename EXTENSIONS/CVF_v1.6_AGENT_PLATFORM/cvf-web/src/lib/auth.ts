@@ -4,16 +4,12 @@ import { cookies, headers } from 'next/headers';
 const COOKIE_NAME = 'cvf_session';
 const DEFAULT_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
-// Random per-process dev fallback — sessions will NOT survive restarts
-const DEV_FALLBACK = crypto.randomBytes(32).toString('hex');
+// Deterministic fallback secret for when CVF_SESSION_SECRET is not set.
+// In production, set CVF_SESSION_SECRET env var for proper security.
+const FALLBACK_SECRET = 'cvf-default-session-secret-2026-change-me';
 
 function getSecret(): string {
-    const secret = process.env.CVF_SESSION_SECRET;
-    if (!secret) {
-        console.warn('[CVF Auth] ⚠️ CVF_SESSION_SECRET not set — using fallback secret (set CVF_SESSION_SECRET for production)');
-        return DEV_FALLBACK;
-    }
-    return secret;
+    return process.env.CVF_SESSION_SECRET || FALLBACK_SECRET;
 }
 
 export type SessionPayload = {

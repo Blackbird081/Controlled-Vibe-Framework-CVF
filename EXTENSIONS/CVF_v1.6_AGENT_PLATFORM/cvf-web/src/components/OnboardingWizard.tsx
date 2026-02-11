@@ -11,7 +11,7 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
 
     const steps = [
         {
-            title: 'Welcome to CVF v1.6 Agent Platform',
+            title: 'Chào mừng đến CVF v1.6 Agent Platform',
             description: 'Nền tảng giúp bạn sử dụng AI an toàn, hiệu quả mà không cần kỹ năng kỹ thuật.',
             icon: '👋',
         },
@@ -27,12 +27,12 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
         },
         {
             title: 'Q: Làm sao để bắt đầu?',
-            description: 'Chọn một Template phù hợp (Kinh doanh, Kỹ thuật, Nội dung...), điền thông tin và bấm Submit. AI sẽ làm phần còn lại.',
+            description: 'Chọn một Template phù hợp (Kinh doanh, Kỹ thuật, Nội dung...), điền thông tin và bấm Gửi. AI sẽ làm phần còn lại.',
             icon: '🚀',
         },
         // NEW STEP: Quick Start Video / Tutorial
         {
-            title: 'Quick Start Tutorial',
+            title: 'Hướng dẫn nhanh',
             description: 'Xem video ngắn (30s) để hiểu cách tạo Business Strategy đầu tiên của bạn.',
             icon: '📺',
             content: (
@@ -43,7 +43,7 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
                                 <path d="M8 5v14l11-7z" />
                             </svg>
                         </div>
-                        <p className="text-sm text-gray-500">Video Tutorial Placeholder</p>
+                        <p className="text-sm text-gray-500">Video hướng dẫn (sắp có)</p>
                     </div>
                 </div>
             )

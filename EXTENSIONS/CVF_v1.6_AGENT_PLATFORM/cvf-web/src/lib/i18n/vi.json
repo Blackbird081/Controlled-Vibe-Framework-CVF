@@ -1,9 +1,9 @@
 {
     "common": {
-        "appName": "CVF v1.5",
+        "appName": "CVF v1.6",
         "tagline": "User không cần biết CVF để dùng CVF",
         "loading": "Đang tải...",
-        "submit": "Gửi",
+        "submit": "Gửi đi",
         "cancel": "Hủy",
         "back": "Quay lại",
         "next": "Tiếp theo",
@@ -17,17 +17,42 @@
         "copy": "Sao chép",
         "copied": "Đã sao chép!"
     },
+    "sidebar": {
+        "browse": "DUYỆT",
+        "ai": "TÍNH NĂNG AI",
+        "data": "DỮ LIỆU",
+        "user": "NGƯỜI DÙNG"
+    },
     "nav": {
         "home": "Trang chủ",
-        "skills": "📚 Skills",
+        "skills": "📚 Kỹ năng",
         "help": "📖 Hướng dẫn",
         "history": "📜 Lịch sử",
-        "analytics": "📊 Thống kê"
+        "analytics": "📊 Thống kê",
+        "aiAgent": "💬 AI Agent",
+        "multiAgent": "👥 Đa Agent",
+        "tools": "🛠️ Công cụ",
+        "marketplace": "🛒 Kho Template",
+        "context": "👤 Ngữ cảnh",
+        "settings": "⚙️ Cài đặt",
+        "aiUsage": "💰 Sử dụng AI"
+    },
+    "auth": {
+        "logout": "🚪 Đăng xuất"
+    },
+    "main": {
+        "heroLine1": "Chọn Template",
+        "heroLine2": "để bắt đầu 🚀",
+        "heroDesc": "CVF v1.6 giúp bạn sử dụng AI mà không cần viết prompt. Chọn template, điền form, và nhận kết quả.",
+        "backToAll": "← Quay lại tất cả",
+        "apiKeyTitle": "⚠️ Chưa cấu hình API Key",
+        "apiKeyDesc": "Thêm API Key để sử dụng AI xử lý yêu cầu thực tế.",
+        "apiKeyCta": "Cấu hình API Key"
     },
     "home": {
         "title": "Chọn template để bắt đầu",
-        "subtitle": "CVF v1.5 giúp bạn sử dụng AI mà không cần viết prompt. Chỉ cần chọn template, điền form, và nhận kết quả.",
-        "useTemplate": "Sử dụng template",
+        "subtitle": "CVF v1.6 giúp bạn sử dụng AI mà không cần viết prompt. Chỉ cần chọn template, điền form, và nhận kết quả.",
+        "useTemplate": "Sử dụng",
         "allCategories": "Tất cả"
     },
     "processing": {
@@ -48,24 +73,24 @@
         "title": "Thống kê",
         "subtitle": "Thống kê sử dụng và chất lượng",
         "totalRuns": "Tổng số lần chạy",
-        "accepted": "Kết quả Accept",
+        "accepted": "Kết quả chấp nhận",
         "avgQuality": "Điểm TB chất lượng",
-        "acceptRate": "Accept Rate",
+        "acceptRate": "Tỷ lệ chấp nhận",
         "weeklyActivity": "Hoạt động tuần này",
         "topTemplates": "Top Templates",
         "resultDistribution": "Phân bố kết quả",
         "noData": "Chưa có dữ liệu"
     },
     "onboarding": {
-        "welcome": "Chào mừng đến với CVF v1.5",
+        "welcome": "Chào mừng đến với CVF v1.6",
         "welcomeDesc": "Nền tảng giúp bạn sử dụng AI an toàn, hiệu quả mà không cần kỹ năng kỹ thuật.",
         "whatIsCvf": "CVF là gì?",
         "whatIsCvfDesc": "Là \"người gác cổng\" thông minh. Bạn cho biết ý định (Intent), CVF sẽ lo phần thực thi (Execution) để đảm bảo kết quả chuẩn xác.",
         "noPrompt": "Tôi không biết prompt?",
         "noPromptDesc": "Không vấn đề! CVF không dùng prompt. Bạn chỉ cần chọn Template và điền form giống như khai báo y tế.",
         "howToStart": "Làm sao để bắt đầu?",
-        "howToStartDesc": "Chọn một Template phù hợp (Kinh doanh, Kỹ thuật, Nội dung...), điền thông tin và bấm Submit. AI sẽ làm phần còn lại.",
-        "quickStart": "Quick Start Tutorial",
+        "howToStartDesc": "Chọn một Template phù hợp (Kinh doanh, Kỹ thuật, Nội dung...), điền thông tin và bấm Gửi. AI sẽ làm phần còn lại.",
+        "quickStart": "Hướng dẫn nhanh",
         "quickStartDesc": "Xem video ngắn (30s) để hiểu cách tạo Business Strategy đầu tiên của bạn.",
         "continue": "Tiếp tục →",
         "startNow": "Bắt đầu ngay 🚀",

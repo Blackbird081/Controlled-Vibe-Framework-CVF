@@ -1,6 +1,6 @@
 {
     "common": {
-        "appName": "CVF v1.5",
+        "appName": "CVF v1.6",
         "tagline": "Use CVF without knowing CVF",
         "loading": "Loading...",
         "submit": "Submit",
@@ -17,16 +17,41 @@
         "copy": "Copy",
         "copied": "Copied!"
     },
+    "sidebar": {
+        "browse": "BROWSE",
+        "ai": "AI FEATURES",
+        "data": "DATA",
+        "user": "USER"
+    },
     "nav": {
         "home": "Home",
         "skills": "📚 Skills",
         "help": "📖 Help",
         "history": "📜 History",
-        "analytics": "📊 Analytics"
+        "analytics": "📊 Analytics",
+        "aiAgent": "💬 AI Agent",
+        "multiAgent": "👥 Multi-Agent",
+        "tools": "🛠️ Tools",
+        "marketplace": "🛒 Marketplace",
+        "context": "👤 Context",
+        "settings": "⚙️ Settings",
+        "aiUsage": "💰 AI Usage"
+    },
+    "auth": {
+        "logout": "🚪 Logout"
+    },
+    "main": {
+        "heroLine1": "Choose a Template",
+        "heroLine2": "to get started 🚀",
+        "heroDesc": "CVF v1.6 helps you use AI without writing prompts. Pick a template, fill the form, and get results.",
+        "backToAll": "← Back to all",
+        "apiKeyTitle": "⚠️ No API Key configured",
+        "apiKeyDesc": "Add an API Key to use AI for real processing.",
+        "apiKeyCta": "Configure API Key"
     },
     "home": {
         "title": "Choose a template to get started",
-        "subtitle": "CVF v1.5 helps you use AI without writing prompts. Just pick a template, fill the form, and get results.",
+        "subtitle": "CVF v1.6 helps you use AI without writing prompts. Just pick a template, fill the form, and get results.",
         "useTemplate": "Use Template",
         "allCategories": "All"
     },
@@ -57,7 +82,7 @@
         "noData": "No data yet"
     },
     "onboarding": {
-        "welcome": "Welcome to CVF v1.5",
+        "welcome": "Welcome to CVF v1.6",
         "welcomeDesc": "A platform that helps you use AI safely and effectively without technical skills.",
         "whatIsCvf": "What is CVF?",
         "whatIsCvfDesc": "It's a smart \"gatekeeper\". You express your intent, CVF handles the execution to ensure accurate results.",

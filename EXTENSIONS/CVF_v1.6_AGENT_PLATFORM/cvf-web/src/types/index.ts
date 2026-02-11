@@ -58,13 +58,13 @@ export interface QualityScore {
 export type Category = 'business' | 'technical' | 'content' | 'research' | 'marketing' | 'product' | 'security' | 'development';
 
 export const CATEGORY_INFO: Record<Category, { name: string; icon: string; color: string }> = {
-    business: { name: 'Business', icon: '📈', color: 'blue' },
-    technical: { name: 'Technical', icon: '🔧', color: 'purple' },
-    content: { name: 'Content', icon: '✍️', color: 'green' },
-    research: { name: 'Research', icon: '🔬', color: 'orange' },
+    business: { name: 'Kinh doanh', icon: '📈', color: 'blue' },
+    technical: { name: 'Kỹ thuật', icon: '🔧', color: 'purple' },
+    content: { name: 'Nội dung', icon: '✍️', color: 'green' },
+    research: { name: 'Nghiên cứu', icon: '🔬', color: 'orange' },
     marketing: { name: 'Marketing & SEO', icon: '📣', color: 'pink' },
-    product: { name: 'Product & UX', icon: '🎨', color: 'cyan' },
-    security: { name: 'Security & Compliance', icon: '🔐', color: 'red' },
-    development: { name: 'App Development', icon: '🚀', color: 'indigo' },
+    product: { name: 'Sản phẩm & UX', icon: '🎨', color: 'cyan' },
+    security: { name: 'Bảo mật & Tuân thủ', icon: '🔐', color: 'red' },
+    development: { name: 'Phát triển ứng dụng', icon: '🚀', color: 'indigo' },
 };
 

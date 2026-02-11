@@ -146,7 +146,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                             </svg>
-                            {showAdvanced ? 'Hide' : 'Show'} Advanced Options ({advancedFields.length})
+                            {showAdvanced ? 'Ẩn' : 'Hiện'} Tùy chọn nâng cao ({advancedFields.length})
                         </button>
 
                         {showAdvanced && (
@@ -182,7 +182,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                         onClick={() => setShowPreview(!showPreview)}
                         className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                     >
-                        {showPreview ? '🔽 Hide Preview' : '👁️ Preview Intent'}
+                        {showPreview ? '🔽 Ẩn xem trước' : '👁️ Xem trước Prompt'}
                     </button>
 
                     {showPreview && (
@@ -235,7 +235,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                          flex items-center justify-center gap-2"
                     >
                         <span>📋</span>
-                        <span>Export Spec</span>
+                        <span>Xuất Prompt</span>
                     </button>
 
                     {/* Submit Button - Opens SpecExport to choose mode first */}
@@ -248,7 +248,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                          transition-all duration-200
                          flex items-center justify-center gap-2"
                     >
-                        <span>Submit</span>
+                        <span>Gửi đi</span>
                         <span>🚀</span>
                     </button>
                 </div>

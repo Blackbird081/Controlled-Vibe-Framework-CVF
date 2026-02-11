@@ -15,7 +15,7 @@ export function CategoryTabs({ activeCategory, onCategoryChange }: CategoryTabsP
             {categories.map((cat) => {
                 const isActive = activeCategory === cat;
                 const info = cat === 'all'
-                    ? { name: 'All Templates', icon: '🎯', color: 'gray' }
+                    ? { name: 'Tất cả', icon: '🎯', color: 'gray' }
                     : CATEGORY_INFO[cat as Category];
 
                 return (

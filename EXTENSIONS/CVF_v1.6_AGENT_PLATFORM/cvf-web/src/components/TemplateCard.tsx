@@ -39,7 +39,7 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
 
             <div className="mt-4 flex items-center justify-between">
                 <div className="flex items-center text-blue-600 dark:text-blue-400 text-sm font-medium">
-                    Use Template
+                    Sử dụng
                     <svg className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -50,7 +50,7 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
                     <button
                         onClick={onPreview}
                         className="p-1.5 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                        title="Preview output"
+                        title="Xem trước kết quả"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

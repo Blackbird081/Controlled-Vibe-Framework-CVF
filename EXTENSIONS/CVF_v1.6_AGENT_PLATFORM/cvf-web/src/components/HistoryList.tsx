@@ -14,16 +14,16 @@ export function HistoryList({ executions, onSelect, onBrowse }: HistoryListProps
             <div className="text-center py-12">
                 <div className="text-6xl mb-4">📭</div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    No executions yet
+                    Chưa có lịch sử thực thi
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    Start by selecting a template and submitting your first request.
+                    Chọn một mẫu template và gửi yêu cầu đầu tiên.
                 </p>
                 <button
                     onClick={onBrowse}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 
                      text-white font-medium rounded-lg transition-colors">
-                    <span>Browse Templates</span>
+                    <span>Duyệt Templates</span>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -41,14 +41,14 @@ export function HistoryList({ executions, onSelect, onBrowse }: HistoryListProps
             <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm">
                     <span className="text-gray-600 dark:text-gray-400">
-                        📊 Stats: {executions.length} total
+                        📊 Thống kê: {executions.length} tổng cộng
                     </span>
                     <div className="flex flex-wrap items-center gap-4">
                         <span className="text-green-600 dark:text-green-400">
-                            ✅ {acceptedCount} accepted
+                            ✅ {acceptedCount} chấp nhận
                         </span>
                         <span className="text-red-600 dark:text-red-400">
-                            ❌ {rejectedCount} rejected
+                            ❌ {rejectedCount} từ chối
                         </span>
                     </div>
                 </div>

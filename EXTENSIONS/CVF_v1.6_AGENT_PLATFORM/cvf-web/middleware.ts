@@ -4,7 +4,7 @@ import { verifySessionCookie } from '@/lib/middleware-auth';
 
 const LOGIN_PATH = '/login';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const isPublicAsset = pathname.startsWith('/_next') || pathname === '/favicon.ico' || pathname.startsWith('/public');
@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const session = verifySessionCookie(request);
+    const session = await verifySessionCookie(request);
 
     if (!session) {
         const loginUrl = request.nextUrl.clone();

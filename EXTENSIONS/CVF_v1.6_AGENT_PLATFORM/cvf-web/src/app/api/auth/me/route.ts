@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { verifySessionCookie } from '@/lib/middleware-auth';
 
 export async function GET(request: Request) {
-    const session = verifySessionCookie(request as any);
+    const session = await verifySessionCookie(request as any);
     if (!session) {
         return NextResponse.json({ authenticated: false }, { status: 401 });
     }

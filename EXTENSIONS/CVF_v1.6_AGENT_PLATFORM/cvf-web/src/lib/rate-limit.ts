@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-import { getClientIdentifier } from './auth';
 
 type Bucket = { count: number; resetAt: number };
 const WINDOW_MS = 60 * 1000;
@@ -25,23 +24,31 @@ function consumeBucket(map: Map<string, Bucket>, key: string, limit: number) {
     map.set(key, bucket);
     if (bucket.count > limit) {
         const retryAfterSeconds = Math.max(1, Math.ceil((bucket.resetAt - now) / 1000));
-        return { allowed: false, retryAfterSeconds };
+        return { allowed: false as const, retryAfterSeconds };
     }
-    return { allowed: true, retryAfterSeconds: 0 };
+    return { allowed: true as const, retryAfterSeconds: 0 };
+}
+
+function getClientIp(headers: Headers): string {
+    const forwarded = headers.get('x-forwarded-for') || headers.get('x-real-ip');
+    if (forwarded) {
+        return forwarded.split(',')[0].trim();
+    }
+    return headers.get('cf-connecting-ip') || 'unknown';
 }
 
 export function getRateLimiter() {
     return {
         consume(request: NextRequest, userId?: string, provider?: string) {
             const { maxRequests, providerQuota } = limits();
-            const key = userId || getClientIdentifier(request.headers);
+            const key = userId || getClientIp(request.headers);
             const res1 = consumeBucket(buckets, key, maxRequests);
             if (!res1.allowed) return res1;
             if (provider) {
                 const res2 = consumeBucket(providerBuckets, `${key}:${provider}`, providerQuota);
                 if (!res2.allowed) return res2;
             }
-            return { allowed: true, retryAfterSeconds: 0 };
+            return { allowed: true as const, retryAfterSeconds: 0 };
         }
     };
 }

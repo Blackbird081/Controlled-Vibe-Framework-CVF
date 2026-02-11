@@ -14,6 +14,6 @@ export function checkBudget(prompt: string): boolean {
 export function estimateCost(model: string, prompt: string): number {
     const pricing = DEFAULT_MODEL_PRICING[model] || DEFAULT_MODEL_PRICING['gpt-4o-mini'];
     const tokens = estimateTokens(prompt);
-    const inputRate = pricing?.input?.per1k || 0;
-    return (tokens / 1000) * inputRate;
+    const inputRate = pricing?.input || 0;
+    return (tokens / 1_000_000) * inputRate;
 }

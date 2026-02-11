@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-import crypto from 'crypto';
 
 const COOKIE_NAME = 'cvf_session';
 
@@ -31,14 +30,47 @@ function parseCookieFromHeader(request: NextRequest | Request): string | undefin
     return undefined;
 }
 
-export function verifySessionCookie(request: NextRequest | Request): SessionCookie | null {
+// Web Crypto helpers (Edge-compatible, no Node.js crypto needed)
+async function hmacSha256Hex(secret: string, message: string): Promise<string> {
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+        'raw',
+        enc.encode(secret),
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['sign']
+    );
+    const sig = await crypto.subtle.sign('HMAC', key, enc.encode(message));
+    return Array.from(new Uint8Array(sig))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+
+function base64urlDecode(str: string): string {
+    // Pad the base64url string
+    const padded = str + '='.repeat((4 - (str.length % 4)) % 4);
+    const base64 = padded.replace(/-/g, '+').replace(/_/g, '/');
+    const binary = atob(base64);
+    return binary;
+}
+
+function timingSafeEqual(a: string, b: string): boolean {
+    if (a.length !== b.length) return false;
+    let result = 0;
+    for (let i = 0; i < a.length; i++) {
+        result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    }
+    return result === 0;
+}
+
+export async function verifySessionCookie(request: NextRequest | Request): Promise<SessionCookie | null> {
     const token = parseCookieFromHeader(request);
     if (!token) return null;
     const [base, sig] = token.split('.');
     if (!base || !sig) return null;
-    const json = Buffer.from(base, 'base64url').toString();
-    const expected = crypto.createHmac('sha256', getSecret()).update(json).digest('hex');
-    if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+    const json = base64urlDecode(base);
+    const expected = await hmacSha256Hex(getSecret(), json);
+    if (!timingSafeEqual(sig, expected)) return null;
     try {
         const payload = JSON.parse(json) as SessionCookie;
         if (payload.expiresAt < Date.now()) return null;

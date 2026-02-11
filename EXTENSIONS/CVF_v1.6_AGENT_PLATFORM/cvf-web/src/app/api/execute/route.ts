@@ -10,7 +10,7 @@ import { checkBudget } from '@/lib/budget';
 export async function POST(request: NextRequest) {
     try {
         // AuthN: allow either session cookie or service token
-        const session = verifySessionCookie(request);
+        const session = await verifySessionCookie(request);
         const serviceToken = request.headers.get('x-cvf-service-token');
         const configuredServiceToken = process.env.CVF_SERVICE_TOKEN;
         const isServiceAllowed = configuredServiceToken && serviceToken === configuredServiceToken;
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         if (!limitResult.allowed) {
             return NextResponse.json(
                 { success: false, error: 'Too many requests. Please slow down.' },
-                { status: 429, retryAfter: limitResult.retryAfterSeconds }
+                { status: 429, headers: { 'Retry-After': String(limitResult.retryAfterSeconds) } }
             );
         }
 
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Build the prompt from template inputs
-        const userPrompt = buildPromptFromInputs(body);
+        const userPrompt = buildPromptFromInputs(body as ExecutionRequest);
 
         // Safety filters
         const safety = applySafetyFilters(userPrompt);

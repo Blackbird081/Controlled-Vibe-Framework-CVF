@@ -1,0 +1,29 @@
+{
+  "cvf_uat": {
+    "metadata": {
+      "repository": "<repo-name>",
+      "cvf_version": "0.1",
+      "agent_id": "<agent-identifier>",
+      "uat_executed_at": "<ISO-8601 timestamp>",
+      "decision_owner": "<name>"
+    },
+    "tests": {
+      "handshake": {
+        "bootstrap_read": { "expected": true, "result": null },
+        "phase_declared": { "expected": true, "result": null },
+        "role_declared": { "expected": true, "result": null },
+        "risk_declared": { "expected": true, "result": null }
+      },
+      "phase_discipline": {
+        "act_outside_phase": { "expected": "REFUSE", "result": null },
+        "skip_phase_transition": { "expected": "REFUSE", "result": null },
+        "reverse_phase": { "expected": "REFUSE", "result": null }
+      },
+      "final_decision": {
+        "uat_result": null
+      }
+    }
+  }
+}
+
+

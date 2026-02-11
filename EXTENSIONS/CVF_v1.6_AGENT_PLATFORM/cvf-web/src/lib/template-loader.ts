@@ -1,16 +1,14 @@
 /**
- * Template Loader — loads templates from external JSON.
+ * Template Loader — re-exports templates from the canonical source.
  *
- * For server-side (SSR / API routes), reads from the filesystem.
- * For client-side, fetches from /data/templates.json.
- *
- * This module provides both sync (import-time) and async (fetch) access.
+ * Previously loaded from public/data/templates.json, but that file
+ * is gitignored. Now delegates to the TypeScript template definitions.
  */
 import { Template } from '@/types';
-import rawTemplates from '../../public/data/templates.json';
+import { templates as allTemplates, getTemplateById } from './templates';
 
-// Type-assert the imported JSON as Template[]
-export const templates: Template[] = rawTemplates as unknown as Template[];
+// Re-export templates
+export const templates: Template[] = allTemplates;
 
 // Category info derived from templates
 export const categories = Array.from(new Set(templates.map(t => t.category)));
@@ -21,19 +19,11 @@ export function getTemplatesByCategory(category: string): Template[] {
     return templates.filter(t => t.category === category);
 }
 
-// Get a single template by ID
-export function getTemplateById(id: string): Template | undefined {
-    return templates.find(t => t.id === id);
-}
+// Re-export getTemplateById
+export { getTemplateById };
 
 // Async loader for client-side dynamic loading (optional, for lazy loading by category)
 export async function loadTemplatesByCategory(category: string): Promise<Template[]> {
-    try {
-        const res = await fetch(`/data/templates-${category}.json`);
-        if (!res.ok) throw new Error(`Failed to load templates for ${category}`);
-        return await res.json();
-    } catch {
-        // Fallback to full bundle
-        return getTemplatesByCategory(category);
-    }
+    // No async JSON fetch needed — templates are bundled
+    return getTemplatesByCategory(category);
 }

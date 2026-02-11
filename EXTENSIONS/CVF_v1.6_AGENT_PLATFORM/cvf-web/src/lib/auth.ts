@@ -10,13 +10,7 @@ const DEV_FALLBACK = crypto.randomBytes(32).toString('hex');
 function getSecret(): string {
     const secret = process.env.CVF_SESSION_SECRET;
     if (!secret) {
-        if (process.env.NODE_ENV === 'production') {
-            throw new Error(
-                'CVF_SESSION_SECRET is required in production. ' +
-                'Generate one with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"'
-            );
-        }
-        console.warn('[CVF Auth] ⚠️ CVF_SESSION_SECRET not set — using random dev secret (sessions reset on restart)');
+        console.warn('[CVF Auth] ⚠️ CVF_SESSION_SECRET not set — using fallback secret (set CVF_SESSION_SECRET for production)');
         return DEV_FALLBACK;
     }
     return secret;

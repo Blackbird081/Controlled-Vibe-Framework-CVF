@@ -105,8 +105,8 @@ function LoginPageContent() {
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
                                 type="checkbox"
-                            checked={rememberUsername}
-                            onChange={(e) => setRememberUsername(e.target.checked)}
+                                checked={rememberUsername}
+                                onChange={(e) => setRememberUsername(e.target.checked)}
                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
                             Lưu tài khoản/mật khẩu
@@ -157,7 +157,7 @@ function LoginPageContent() {
                 </form>
 
                 <div className="mt-6 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/60 rounded-lg px-3 py-2">
-                    Thiết lập mật khẩu bằng biến môi trường `CVF_ADMIN_PASS`. Mặc định sẽ không cho đăng nhập nếu chưa cấu hình.
+                    Tài khoản mặc định: <strong>admin</strong> / <strong>admin123</strong>. Có thể thay đổi qua biến môi trường <code>CVF_ADMIN_USER</code> và <code>CVF_ADMIN_PASS</code>.
                 </div>
             </div>
         </div>

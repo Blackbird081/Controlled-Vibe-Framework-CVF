@@ -33,3 +33,6 @@ npm-debug.log*
 # Cache
 .cache/
 *.tsbuildinfo
+
+# Internal (draft, chưa audit)
+CVF_INTERNAL_LITE/

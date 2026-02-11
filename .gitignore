@@ -23,6 +23,9 @@ Thumbs.db
 vibecode-kit/
 public/
 
+# Work in progress (not ready for publish)
+HOW TO USE CVF FOR/
+
 # Logs
 *.log
 npm-debug.log*

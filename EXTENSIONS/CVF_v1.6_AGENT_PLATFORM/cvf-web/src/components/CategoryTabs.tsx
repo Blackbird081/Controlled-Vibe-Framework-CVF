@@ -1,6 +1,7 @@
 'use client';
 
 import { CATEGORY_INFO, Category } from '@/types';
+import { useLanguage } from '@/lib/i18n';
 
 interface CategoryTabsProps {
     activeCategory: string;
@@ -8,6 +9,7 @@ interface CategoryTabsProps {
 }
 
 export function CategoryTabs({ activeCategory, onCategoryChange }: CategoryTabsProps) {
+    const { language } = useLanguage();
     const categories = ['all', ...Object.keys(CATEGORY_INFO)] as const;
 
     return (
@@ -15,8 +17,10 @@ export function CategoryTabs({ activeCategory, onCategoryChange }: CategoryTabsP
             {categories.map((cat) => {
                 const isActive = activeCategory === cat;
                 const info = cat === 'all'
-                    ? { name: 'Tất cả', icon: '🎯', color: 'gray' }
+                    ? { name: language === 'en' ? 'All' : 'Tất cả', nameEn: 'All', icon: '🎯', color: 'gray' }
                     : CATEGORY_INFO[cat as Category];
+
+                const displayName = language === 'en' ? info.nameEn : info.name;
 
                 return (
                     <button
@@ -32,7 +36,7 @@ export function CategoryTabs({ activeCategory, onCategoryChange }: CategoryTabsP
             `}
                     >
                         <span>{info.icon}</span>
-                        <span>{info.name}</span>
+                        <span>{displayName}</span>
                     </button>
                 );
             })}

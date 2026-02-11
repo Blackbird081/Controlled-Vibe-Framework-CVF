@@ -1,6 +1,8 @@
 'use client';
 
 import { Template, CATEGORY_INFO, Category } from '@/types';
+import { useLanguage } from '@/lib/i18n';
+import { getTemplateName, getTemplateDescription } from '@/lib/template-i18n';
 
 interface TemplateCardProps {
     template: Template;
@@ -9,7 +11,11 @@ interface TemplateCardProps {
 }
 
 export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps) {
+    const { language } = useLanguage();
     const categoryInfo = CATEGORY_INFO[template.category as Category];
+    const categoryDisplayName = language === 'en' ? categoryInfo.nameEn : categoryInfo.name;
+    const templateDisplayName = getTemplateName(template.id, template.name, language);
+    const templateDisplayDesc = getTemplateDescription(template.id, template.description, language);
 
     return (
         <div
@@ -24,22 +30,22 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
                 <span className={`text-xs px-2 py-1 rounded-full 
                          bg-${categoryInfo.color}-100 text-${categoryInfo.color}-700
                          dark:bg-${categoryInfo.color}-900 dark:text-${categoryInfo.color}-300`}>
-                    {categoryInfo.name}
+                    {categoryDisplayName}
                 </span>
             </div>
 
             <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white
                      group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                {template.name}
+                {templateDisplayName}
             </h3>
 
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                {template.description}
+                {templateDisplayDesc}
             </p>
 
             <div className="mt-4 flex items-center justify-between">
                 <div className="flex items-center text-blue-600 dark:text-blue-400 text-sm font-medium">
-                    Sử dụng
+                    {language === 'en' ? 'Use Template' : 'Sử dụng'}
                     <svg className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -50,7 +56,7 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
                     <button
                         onClick={onPreview}
                         className="p-1.5 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                        title="Xem trước kết quả"
+                        title={language === 'en' ? 'Preview output' : 'Xem trước kết quả'}
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

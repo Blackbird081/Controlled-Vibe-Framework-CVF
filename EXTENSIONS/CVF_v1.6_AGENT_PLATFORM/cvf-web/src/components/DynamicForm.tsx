@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Template, TemplateField } from '@/types';
 import { generateIntent } from '@/lib/templates';
 import { SpecExport } from './SpecExport';
+import { useLanguage } from '@/lib/i18n';
 
 interface DynamicFormProps {
     template: Template;
@@ -68,6 +69,7 @@ function FormField({ field, register, errors }: {
 }
 
 export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: DynamicFormProps) {
+    const { language } = useLanguage();
     const [showAdvanced, setShowAdvanced] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [showSpecExport, setShowSpecExport] = useState(false);
@@ -146,7 +148,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                             </svg>
-                            {showAdvanced ? 'Ẩn' : 'Hiện'} Tùy chọn nâng cao ({advancedFields.length})
+                            {showAdvanced ? (language === 'en' ? 'Hide' : 'Ẩn') : (language === 'en' ? 'Show' : 'Hiện')} {language === 'en' ? 'Advanced Options' : 'Tùy chọn nâng cao'} ({advancedFields.length})
                         </button>
 
                         {showAdvanced && (
@@ -182,7 +184,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                         onClick={() => setShowPreview(!showPreview)}
                         className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                     >
-                        {showPreview ? '🔽 Ẩn xem trước' : '👁️ Xem trước Prompt'}
+                        {showPreview ? (language === 'en' ? '🔽 Hide Preview' : '🔽 Ẩn xem trước') : (language === 'en' ? '👁️ Preview Prompt' : '👁️ Xem trước Prompt')}
                     </button>
 
                     {showPreview && (
@@ -196,7 +198,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
 
                 {/* AI Quick Links */}
                 <div className="flex flex-wrap items-center gap-2 py-3">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">Paste vào AI:</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{language === 'en' ? 'Paste to AI:' : 'Paste vào AI:'}</span>
                     <a
                         href="https://chat.openai.com/"
                         target="_blank"
@@ -235,7 +237,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                          flex items-center justify-center gap-2"
                     >
                         <span>📋</span>
-                        <span>Xuất Prompt</span>
+                        <span>{language === 'en' ? 'Export Prompt' : 'Xuất Prompt'}</span>
                     </button>
 
                     {/* Submit Button - Opens SpecExport to choose mode first */}
@@ -248,7 +250,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                          transition-all duration-200
                          flex items-center justify-center gap-2"
                     >
-                        <span>Gửi đi</span>
+                        <span>{language === 'en' ? 'Submit' : 'Gửi đi'}</span>
                         <span>🚀</span>
                     </button>
                 </div>

@@ -57,14 +57,14 @@ export interface QualityScore {
 
 export type Category = 'business' | 'technical' | 'content' | 'research' | 'marketing' | 'product' | 'security' | 'development';
 
-export const CATEGORY_INFO: Record<Category, { name: string; icon: string; color: string }> = {
-    business: { name: 'Kinh doanh', icon: '📈', color: 'blue' },
-    technical: { name: 'Kỹ thuật', icon: '🔧', color: 'purple' },
-    content: { name: 'Nội dung', icon: '✍️', color: 'green' },
-    research: { name: 'Nghiên cứu', icon: '🔬', color: 'orange' },
-    marketing: { name: 'Marketing & SEO', icon: '📣', color: 'pink' },
-    product: { name: 'Sản phẩm & UX', icon: '🎨', color: 'cyan' },
-    security: { name: 'Bảo mật & Tuân thủ', icon: '🔐', color: 'red' },
-    development: { name: 'Phát triển ứng dụng', icon: '🚀', color: 'indigo' },
+export const CATEGORY_INFO: Record<Category, { name: string; nameEn: string; icon: string; color: string }> = {
+    business: { name: 'Kinh doanh', nameEn: 'Business', icon: '📈', color: 'blue' },
+    technical: { name: 'Kỹ thuật', nameEn: 'Technical', icon: '🔧', color: 'purple' },
+    content: { name: 'Nội dung', nameEn: 'Content', icon: '✍️', color: 'green' },
+    research: { name: 'Nghiên cứu', nameEn: 'Research', icon: '🔬', color: 'orange' },
+    marketing: { name: 'Marketing & SEO', nameEn: 'Marketing & SEO', icon: '📣', color: 'pink' },
+    product: { name: 'Sản phẩm & UX', nameEn: 'Product & UX', icon: '🎨', color: 'cyan' },
+    security: { name: 'Bảo mật & Tuân thủ', nameEn: 'Security & Compliance', icon: '🔐', color: 'red' },
+    development: { name: 'Phát triển ứng dụng', nameEn: 'App Development', icon: '🚀', color: 'indigo' },
 };
 

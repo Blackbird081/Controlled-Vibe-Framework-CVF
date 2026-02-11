@@ -9,6 +9,9 @@ const DEFAULT_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
 const FALLBACK_SECRET = 'cvf-default-session-secret-2026-change-me';
 
 function getSecret(): string {
+    if (!process.env.CVF_SESSION_SECRET && process.env.NODE_ENV === 'production') {
+        console.warn('⚠️ CVF_SESSION_SECRET not set! Using insecure fallback. Set this env var in production.');
+    }
     return process.env.CVF_SESSION_SECRET || FALLBACK_SECRET;
 }
 

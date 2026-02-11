@@ -1,3 +1,6 @@
+> [!WARNING]
+> **v1.5 UX Platform đã FROZEN (maintenance-only).** Vui lòng sử dụng **v1.6 Agent Platform** tại [`EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/`](../CVF_v1.6_AGENT_PLATFORM/cvf-web/) — bao gồm tất cả tính năng v1.5 + AI Agent Chat, Multi-Agent Workflow, và nhiều hơn nữa.
+
 # CVF v1.5 — USER EXPERIENCE PLATFORM
 
 > **User không cần biết CVF để dùng CVF**

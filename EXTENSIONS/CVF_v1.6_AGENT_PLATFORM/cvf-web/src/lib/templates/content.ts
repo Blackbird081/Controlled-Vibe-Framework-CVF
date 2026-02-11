@@ -1,0 +1,68 @@
+import { Template } from '@/types';
+
+export const contentTemplates: Template[] = [
+    {
+        id: 'content_strategy_wizard',
+        name: '✍️ Chiến lược Nội dung',
+        icon: '✍️',
+        description: 'Multi-step wizard tạo Content Strategy qua 5 bước. Brand → Audience → Pillars → Channels → Review',
+        category: 'content',
+        fields: [],
+        intentPattern: '',
+        outputExpected: ['Content Strategy', 'Editorial Calendar', 'Content Pillars', 'Channel Plan'],
+    },
+    {
+        id: 'documentation',
+        name: 'Tài liệu Kỹ thuật',
+        icon: '📝',
+        description: 'Tạo technical documentation',
+        category: 'content',
+        fields: [
+            { id: 'subject', type: 'text', label: 'Chủ đề', placeholder: 'VD: API Authentication Guide', required: true, section: 'required', hint: 'Tên feature, API, hoặc process cần viết tài liệu', example: 'OAuth2 Authentication Flow cho Mobile App' },
+            { id: 'content', type: 'textarea', label: 'Nội dung cần document', placeholder: 'Mô tả feature/API/process...', required: true, rows: 6, section: 'required', hint: 'Mô tả chi tiết chức năng, các endpoints, hoặc quy trình cần document', example: 'POST /auth/login: nhận email + password, trả về JWT token và refresh token. Token expire sau 1h.' },
+            { id: 'audience', type: 'select', label: 'Đối tượng', options: ['Developers', 'End Users', 'Admins', 'All'], default: 'Developers', required: false, section: 'advanced', hint: 'Ai sẽ đọc tài liệu này?' },
+            { id: 'format', type: 'select', label: 'Format', options: ['Tutorial', 'Reference', 'How-to', 'Explanation'], default: 'Reference', required: false, section: 'advanced', hint: 'Tutorial = hướng dẫn từng bước, Reference = tra cứu, How-to = giải quyết vấn đề cụ thể' },
+        ],
+        intentPattern: `INTENT:
+Tôi muốn tạo documentation cho [subject].
+
+CONTENT:
+[content]
+
+AUDIENCE: [audience]
+FORMAT: [format]
+
+SUCCESS CRITERIA:
+- Cấu trúc rõ ràng
+- Có examples
+- Dễ follow`,
+        outputExpected: ['Overview', 'Prerequisites', 'Step-by-step Guide', 'Examples', 'Troubleshooting', 'FAQ'],
+    },
+    {
+        id: 'email_template',
+        name: 'Mẫu Email',
+        icon: '📧',
+        description: 'Tạo email chuyên nghiệp',
+        category: 'content',
+        fields: [
+            { id: 'purpose', type: 'text', label: 'Mục đích email', placeholder: 'VD: Follow-up sau meeting', required: true, section: 'required', hint: 'Tóm tắt mục đích chính của email', example: 'Follow-up sau cuộc họs với khách hàng về dự án mới' },
+            { id: 'context', type: 'textarea', label: 'Context', placeholder: 'Tình huống cụ thể...', required: true, rows: 4, section: 'required', hint: 'Mô tả tình huống, mối quan hệ, và những gì cần nhắc đến trong email', example: 'Đã họs với Giám đốc công ty ABC về giải pháp CRM. Họ quan tâm gói Enterprise, cần báo giá chi tiết.' },
+            { id: 'recipient', type: 'text', label: 'Người nhận', placeholder: 'VD: Khách hàng, đồng nghiệp...', required: false, section: 'advanced', hint: 'Vai trò / chức danh của người nhận', example: 'Giám đốc CNTT công ty ABC' },
+            { id: 'tone', type: 'select', label: 'Tone', options: ['Formal', 'Professional', 'Friendly', 'Urgent'], default: 'Professional', required: false, section: 'advanced', hint: 'Formal = rất trang trọng, Professional = chuyên nghiệp, Friendly = thân thiện' },
+        ],
+        intentPattern: `INTENT:
+Tôi muốn soạn email [purpose].
+
+CONTEXT:
+[context]
+
+RECIPIENT: [recipient]
+TONE: [tone]
+
+SUCCESS CRITERIA:
+- Chuyên nghiệp
+- Rõ ràng call-to-action
+- Phù hợp context`,
+        outputExpected: ['Subject Line', 'Opening', 'Body', 'Call to Action', 'Closing'],
+    },
+];

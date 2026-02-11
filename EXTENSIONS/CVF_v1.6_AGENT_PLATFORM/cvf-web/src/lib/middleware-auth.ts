@@ -3,6 +3,9 @@ import { NextRequest } from 'next/server';
 const COOKIE_NAME = 'cvf_session';
 
 function getSecret(): string {
+    if (!process.env.CVF_SESSION_SECRET && process.env.NODE_ENV === 'production') {
+        console.warn('⚠️ CVF_SESSION_SECRET not set! Using insecure fallback. Set this env var in production.');
+    }
     return process.env.CVF_SESSION_SECRET || 'cvf-default-session-secret-2026-change-me';
 }
 

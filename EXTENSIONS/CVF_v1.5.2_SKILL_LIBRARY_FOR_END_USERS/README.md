@@ -174,4 +174,4 @@ python scripts/validate_skills.py --json reports/skill_validation.json
 
 ---
 
-*CVF Skill Library v1.5.2 | Last Updated: 2026-02-07*
+*CVF Skill Library v1.5.2 | Last Updated: 2026-02-11*

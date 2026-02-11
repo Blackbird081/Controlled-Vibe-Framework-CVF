@@ -3,7 +3,7 @@
 > **Version:** 1.4.0  
 > **Status:** Active  
 > **Location:** `governance/skill-library/`  
-> **Last Updated:** Feb 07, 2026
+> **Last Updated:** Feb 11, 2026
 
 ---
 

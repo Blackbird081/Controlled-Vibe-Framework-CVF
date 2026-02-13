@@ -108,7 +108,7 @@ const HELP_CONTENT: Record<Lang, {
                 icon: '🤖',
                 title: 'Agent Chat',
                 desc: 'Chat trực tiếp với AI (Gemini/OpenAI/Claude) ngay trên web, có governance tự động inject.',
-                link: '/',
+                link: '/?open=agent',
                 linkText: 'Mở Agent Chat',
             },
             {
@@ -239,7 +239,7 @@ const HELP_CONTENT: Record<Lang, {
                 icon: '🤖',
                 title: 'Agent Chat',
                 desc: 'Chat directly with AI (Gemini/OpenAI/Claude) on web, with governance auto-injected.',
-                link: '/',
+                link: '/?open=agent',
                 linkText: 'Open Agent Chat',
             },
             {

@@ -272,64 +272,64 @@ function AuthorityMatrixTab({ lang }: { lang: Lang }) {
                 </p>
 
                 {/* INTAKE */}
-                <h4 className="text-lg font-semibold text-blue-400 mt-6 mb-2">📥 INTAKE</h4>
+                <h4 className="text-lg font-semibold text-blue-400 mt-6 mb-2">📥 INTAKE {isVi ? '— Thu thập' : '— Gather'}</h4>
                 <InfoTable
                     headers={['Role', isVi ? 'Hành động được phép' : 'Allowed Actions']}
                     rows={[
-                        ['🔍 ANALYST', 'read context, ask clarification, analyze inputs, summarize scope'],
-                        ['🛠️ BUILDER', 'read context'],
-                        ['👁️ OBSERVER', 'read context, ask clarification'],
-                        ['📋 REVIEWER', 'read context, ask clarification'],
-                        ['🏛️ GOVERNOR', 'read context, set constraints, define scope'],
+                        ['🔍 ANALYST', isVi ? 'đọc context, hỏi, phân tích input, tóm tắt scope' : 'read context, ask clarification, analyze inputs, summarize scope'],
+                        ['🛠️ BUILDER', isVi ? 'đọc context' : 'read context'],
+                        ['👁️ OBSERVER', isVi ? 'đọc context, hỏi' : 'read context, ask clarification'],
+                        ['📋 REVIEWER', isVi ? 'đọc context, hỏi' : 'read context, ask clarification'],
+                        ['🏛️ GOVERNOR', isVi ? 'đọc context, đặt ràng buộc, xác định scope' : 'read context, set constraints, define scope'],
                     ]}
                 />
 
                 {/* DESIGN */}
-                <h4 className="text-lg font-semibold text-purple-400 mt-6 mb-2">✏️ DESIGN</h4>
+                <h4 className="text-lg font-semibold text-purple-400 mt-6 mb-2">✏️ DESIGN {isVi ? '— Thiết kế' : '— Design'}</h4>
                 <InfoTable
                     headers={['Role', isVi ? 'Hành động được phép' : 'Allowed Actions']}
                     rows={[
-                        ['🔍 ANALYST', 'propose solutions, compare trade-offs, create diagrams'],
-                        ['🛠️ BUILDER', 'propose solutions, estimate effort'],
-                        ['👁️ OBSERVER', 'read proposals'],
-                        ['📋 REVIEWER', 'critique proposals, suggest improvements'],
-                        ['🏛️ GOVERNOR', 'approve design, set constraints'],
+                        ['🔍 ANALYST', isVi ? 'đề xuất giải pháp, so sánh trade-offs, tạo sơ đồ' : 'propose solutions, compare trade-offs, create diagrams'],
+                        ['🛠️ BUILDER', isVi ? 'đề xuất giải pháp, ước lượng effort' : 'propose solutions, estimate effort'],
+                        ['👁️ OBSERVER', isVi ? 'đọc đề xuất' : 'read proposals'],
+                        ['📋 REVIEWER', isVi ? 'phê bình đề xuất, đề nghị cải tiến' : 'critique proposals, suggest improvements'],
+                        ['🏛️ GOVERNOR', isVi ? 'phê duyệt thiết kế, đặt ràng buộc' : 'approve design, set constraints'],
                     ]}
                 />
 
                 {/* BUILD */}
-                <h4 className="text-lg font-semibold text-green-400 mt-6 mb-2">🔨 BUILD</h4>
+                <h4 className="text-lg font-semibold text-green-400 mt-6 mb-2">🔨 BUILD {isVi ? '— Thực thi' : '— Build'}</h4>
                 <InfoTable
                     headers={['Role', isVi ? 'Hành động được phép' : 'Allowed Actions']}
                     rows={[
-                        ['🛠️ BUILDER', 'write code, create files, modify files, run tests, fix bugs'],
-                        ['🔍 ANALYST', 'read code, analyze patterns'],
-                        ['👁️ OBSERVER', 'read code'],
-                        ['📋 REVIEWER', 'read code'],
-                        ['🏛️ GOVERNOR', 'read code'],
+                        ['🛠️ BUILDER', isVi ? 'viết code, tạo file, sửa file, chạy test, sửa bug' : 'write code, create files, modify files, run tests, fix bugs'],
+                        ['🔍 ANALYST', isVi ? 'đọc code, phân tích patterns' : 'read code, analyze patterns'],
+                        ['👁️ OBSERVER', isVi ? 'đọc code' : 'read code'],
+                        ['📋 REVIEWER', isVi ? 'đọc code' : 'read code'],
+                        ['🏛️ GOVERNOR', isVi ? 'đọc code' : 'read code'],
                     ]}
                 />
 
                 {/* REVIEW */}
-                <h4 className="text-lg font-semibold text-orange-400 mt-6 mb-2">✅ REVIEW</h4>
+                <h4 className="text-lg font-semibold text-orange-400 mt-6 mb-2">✅ REVIEW {isVi ? '— Đánh giá' : '— Review'}</h4>
                 <InfoTable
                     headers={['Role', isVi ? 'Hành động được phép' : 'Allowed Actions']}
                     rows={[
-                        ['📋 REVIEWER', 'critique code, run tests, approve/reject, request changes'],
-                        ['🛠️ BUILDER', 'fix issues from review'],
-                        ['🔍 ANALYST', 'analyze quality, run tests'],
-                        ['👁️ OBSERVER', 'read review'],
-                        ['🏛️ GOVERNOR', 'final approval, set conditions'],
+                        ['📋 REVIEWER', isVi ? 'phê bình code, chạy test, duyệt/từ chối, yêu cầu sửa' : 'critique code, run tests, approve/reject, request changes'],
+                        ['🛠️ BUILDER', isVi ? 'sửa lỗi từ review' : 'fix issues from review'],
+                        ['🔍 ANALYST', isVi ? 'phân tích chất lượng, chạy test' : 'analyze quality, run tests'],
+                        ['👁️ OBSERVER', isVi ? 'đọc review' : 'read review'],
+                        ['🏛️ GOVERNOR', isVi ? 'duyệt cuối, đặt điều kiện' : 'final approval, set conditions'],
                     ]}
                 />
 
                 {/* FREEZE */}
-                <h4 className="text-lg font-semibold text-red-400 mt-6 mb-2">🔒 FREEZE</h4>
+                <h4 className="text-lg font-semibold text-red-400 mt-6 mb-2">🔒 FREEZE {isVi ? '— Khóa' : '— Lock'}</h4>
                 <InfoTable
                     headers={['Role', isVi ? 'Hành động được phép' : 'Allowed Actions']}
                     rows={[
-                        ['🏛️ GOVERNOR', isVi ? 'unlock nếu cần, emergency changes only' : 'unlock if needed, emergency changes only'],
-                        [isVi ? 'Tất cả role khác' : 'All other roles', 'read only'],
+                        ['🏛️ GOVERNOR', isVi ? 'mở khóa nếu cần, chỉ thay đổi khẩn cấp' : 'unlock if needed, emergency changes only'],
+                        [isVi ? 'Tất cả role khác' : 'All other roles', isVi ? 'chỉ đọc' : 'read only'],
                     ]}
                 />
             </SectionCard>
@@ -597,8 +597,8 @@ export default function ToolkitGuidePage() {
                             key={key}
                             onClick={() => setActiveTab(key)}
                             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${activeTab === key
-                                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30'
-                                    : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10'
+                                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30'
+                                : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10'
                                 }`}
                         >
                             {TAB_LABELS[key][language]}

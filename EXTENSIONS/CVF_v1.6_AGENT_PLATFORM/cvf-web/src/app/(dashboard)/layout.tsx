@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useModals } from '@/lib/hooks/useModals';
 import { useExecutionStore } from '@/lib/store';
@@ -23,12 +23,12 @@ import CompactHeader from '@/components/CompactHeader';
 import { useLanguage } from '@/lib/i18n';
 
 /**
- * Shared layout for all dashboard pages (home, history, analytics, marketplace).
- * Provides Sidebar, CompactHeader, modals, and floating overlays.
+ * Inner layout component — uses useSearchParams which requires Suspense.
  */
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { t } = useLanguage();
     const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
 
@@ -41,6 +41,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
     const [isAgentMinimized, setIsAgentMinimized] = useState(false);
     const [activeModal, setActiveModal] = useState<'agent' | 'multi-agent' | 'tools' | null>(null);
+
+    // Auto-open modal from URL param: ?open=agent | ?open=multi-agent
+    useEffect(() => {
+        const openParam = searchParams.get('open');
+        if (openParam === 'agent') {
+            setActiveModal('agent');
+            setIsAgentMinimized(false);
+        } else if (openParam === 'multi-agent') {
+            setActiveModal('multi-agent');
+        }
+    }, [searchParams]);
 
     // Map pathname to Sidebar's expected appState string
     const pathnameToAppState = (p: string): string => {
@@ -211,5 +222,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
             )}
         </div>
+    );
+}
+
+/**
+ * Shared layout for all dashboard pages.
+ * Wrapped in Suspense to support useSearchParams in static generation.
+ */
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+    return (
+        <Suspense>
+            <DashboardLayoutInner>{children}</DashboardLayoutInner>
+        </Suspense>
     );
 }

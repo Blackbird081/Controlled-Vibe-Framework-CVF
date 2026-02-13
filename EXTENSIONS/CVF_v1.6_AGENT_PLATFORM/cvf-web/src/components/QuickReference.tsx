@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/i18n';
+
+type Lang = 'vi' | 'en';
 
 interface QuickTip {
     icon: string;
@@ -9,39 +12,59 @@ interface QuickTip {
     content: string;
 }
 
-const quickTips: QuickTip[] = [
-    {
-        icon: '🎯',
-        title: 'Mục tiêu rõ ràng',
-        content: 'Mô tả bạn cần gì, không phải AI làm gì'
-    },
-    {
-        icon: '📋',
-        title: 'Dùng Template',
-        content: 'Chọn template → Điền form → Nhận kết quả'
-    },
-    {
-        icon: '✅',
-        title: 'Đánh giá Output',
-        content: 'Accept / Revise / Reject dựa trên tiêu chí'
-    },
-    {
-        icon: '⚠️',
-        title: 'Chấp nhận Escalation',
-        content: 'CVF từ chối = CVF đang bảo vệ bạn'
-    }
-];
+interface StepItem {
+    num: number;
+    label: string;
+}
 
-const steps = [
-    { num: 1, label: 'Xác định mục tiêu' },
-    { num: 2, label: 'Chọn template' },
-    { num: 3, label: 'Điền form' },
-    { num: 4, label: 'CVF xử lý' },
-    { num: 5, label: 'Đánh giá output' }
-];
+const QUICK_TIPS: Record<Lang, QuickTip[]> = {
+    vi: [
+        { icon: '🎯', title: 'Mục tiêu rõ ràng', content: 'Mô tả bạn cần gì, không phải AI làm gì' },
+        { icon: '📋', title: 'Dùng Template', content: 'Chọn template → Điền form → Xuất spec (3 modes)' },
+        { icon: '🔐', title: 'Governance Toolkit', content: 'GovernanceBar tự inject Phase/Role/Risk cho AI' },
+        { icon: '📚', title: 'Skills ↔ Templates', content: '124 skills liên kết 2 chiều với 50 templates' },
+        { icon: '🧪', title: 'Self-UAT', content: 'Kiểm tra AI compliance bằng 1 nút bấm' },
+        { icon: '⚠️', title: 'Chấp nhận Escalation', content: 'CVF từ chối = CVF đang bảo vệ bạn' },
+    ],
+    en: [
+        { icon: '🎯', title: 'Clear Goal', content: 'Describe what you need, not what the AI should do' },
+        { icon: '📋', title: 'Use Templates', content: 'Pick template → Fill form → Export spec (3 modes)' },
+        { icon: '🔐', title: 'Governance Toolkit', content: 'GovernanceBar auto-injects Phase/Role/Risk for AI' },
+        { icon: '📚', title: 'Skills ↔ Templates', content: '124 skills linked bi-directionally with 50 templates' },
+        { icon: '🧪', title: 'Self-UAT', content: 'Check AI compliance with one click' },
+        { icon: '⚠️', title: 'Accept Escalation', content: 'CVF refusal = CVF is protecting you' },
+    ],
+};
+
+const STEPS: Record<Lang, StepItem[]> = {
+    vi: [
+        { num: 1, label: 'Xác định mục tiêu' },
+        { num: 2, label: 'Chọn template' },
+        { num: 3, label: 'Điền form' },
+        { num: 4, label: 'Xuất spec (3 modes)' },
+        { num: 5, label: 'Đánh giá output' },
+    ],
+    en: [
+        { num: 1, label: 'Define goal' },
+        { num: 2, label: 'Pick template' },
+        { num: 3, label: 'Fill form' },
+        { num: 4, label: 'Export spec (3 modes)' },
+        { num: 5, label: 'Evaluate output' },
+    ],
+};
+
+const LABELS: Record<Lang, { title: string; stepsLabel: string; evalLabel: string; fullGuide: string; btnLabel: string }> = {
+    vi: { title: '🎯 Trợ giúp nhanh', stepsLabel: 'Quy trình 5 bước', evalLabel: 'Đánh giá kết quả', fullGuide: 'Xem hướng dẫn đầy đủ →', btnLabel: 'Trợ giúp' },
+    en: { title: '🎯 Quick Reference', stepsLabel: '5-Step Workflow', evalLabel: 'Evaluate Results', fullGuide: 'View full guide →', btnLabel: 'Help' },
+};
 
 export function QuickReference() {
     const [isExpanded, setIsExpanded] = useState(false);
+    const { language } = useLanguage();
+
+    const tips = QUICK_TIPS[language];
+    const steps = STEPS[language];
+    const labels = LABELS[language];
 
     return (
         <div className="fixed bottom-4 right-4 z-50">
@@ -51,7 +74,7 @@ export function QuickReference() {
                 className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
             >
                 <span className="text-xl">❓</span>
-                {!isExpanded && <span className="hidden md:inline">Trợ giúp</span>}
+                {!isExpanded && <span className="hidden md:inline">{labels.btnLabel}</span>}
             </button>
 
             {/* Expanded Card */}
@@ -59,7 +82,7 @@ export function QuickReference() {
                 <div className="absolute bottom-16 right-0 w-80 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5">
                     <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4">
                         <div className="flex items-center justify-between">
-                            <h3 className="font-bold text-lg">🎯 Quick Reference</h3>
+                            <h3 className="font-bold text-lg">{labels.title}</h3>
                             <button
                                 onClick={() => setIsExpanded(false)}
                                 className="text-white/80 hover:text-white"
@@ -72,7 +95,7 @@ export function QuickReference() {
                     <div className="p-4 space-y-4">
                         {/* 5 Steps Mini */}
                         <div>
-                            <div className="text-xs text-gray-400 uppercase mb-2">Quy trình 5 bước</div>
+                            <div className="text-xs text-gray-400 uppercase mb-2">{labels.stepsLabel}</div>
                             <div className="flex flex-wrap gap-1">
                                 {steps.map(step => (
                                     <span
@@ -90,7 +113,7 @@ export function QuickReference() {
 
                         {/* Quick Tips */}
                         <div className="space-y-2">
-                            {quickTips.map(tip => (
+                            {tips.map(tip => (
                                 <div key={tip.title} className="flex items-start gap-2 p-2 bg-slate-700/50 rounded-lg">
                                     <span className="text-lg">{tip.icon}</span>
                                     <div>
@@ -103,7 +126,7 @@ export function QuickReference() {
 
                         {/* Response Types */}
                         <div>
-                            <div className="text-xs text-gray-400 uppercase mb-2">Đánh giá kết quả</div>
+                            <div className="text-xs text-gray-400 uppercase mb-2">{labels.evalLabel}</div>
                             <div className="grid grid-cols-3 gap-2 text-center text-xs">
                                 <div className="p-2 bg-green-500/20 rounded-lg border border-green-500/30">
                                     <div className="text-lg">✅</div>
@@ -125,7 +148,7 @@ export function QuickReference() {
                             href="/help"
                             className="block text-center p-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors text-sm"
                         >
-                            Xem hướng dẫn đầy đủ →
+                            {labels.fullGuide}
                         </Link>
                     </div>
                 </div>

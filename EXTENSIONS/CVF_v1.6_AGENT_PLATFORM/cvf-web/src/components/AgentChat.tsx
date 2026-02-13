@@ -219,7 +219,24 @@ export function AgentChat({
             {governanceState && (
                 <GovernancePanel
                     governanceState={governanceState}
-                    onRunSelfUAT={(prompt) => handleSendMessage(prompt)}
+                    onRunSelfUAT={async (prompt: string) => {
+                        const provider = settings.preferences.defaultProvider;
+                        const providerConfig = settings.providers[provider];
+                        if (!providerConfig?.apiKey) {
+                            throw new Error(language === 'vi' ? 'Chưa cấu hình API key' : 'No API key configured');
+                        }
+                        const { createAIProvider } = await import('@/lib/ai-providers');
+                        const { buildGovernanceSystemPrompt } = await import('@/lib/governance-context');
+                        const aiProvider = createAIProvider(provider, { apiKey: providerConfig.apiKey });
+                        const systemPrompt = buildGovernanceSystemPrompt(governanceState, language);
+                        const msgs = [
+                            { role: 'system' as const, content: systemPrompt },
+                            { role: 'user' as const, content: prompt },
+                        ];
+                        let response = '';
+                        const result = await aiProvider.chat(msgs, (chunk) => { response += chunk.text; });
+                        return result.text || response;
+                    }}
                     isOpen={showGovernancePanel}
                     onClose={() => setShowGovernancePanel(false)}
                 />

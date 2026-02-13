@@ -17,10 +17,12 @@ import { evaluateEnforcement } from '@/lib/enforcement';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
 import { useLanguage } from '@/lib/i18n';
 import { GovernanceBar } from './GovernanceBar';
+import { GovernancePanel } from './GovernancePanel';
 import {
     GovernanceState,
     DEFAULT_GOVERNANCE_STATE,
     buildGovernanceSystemPrompt,
+    buildSelfUATPrompt,
 } from '@/lib/governance-context';
 
 type Lang = 'vi' | 'en';
@@ -121,6 +123,7 @@ export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgen
 
     // Governance state — managed locally for multi-agent
     const [govState, setGovState] = useState<GovernanceState>(DEFAULT_GOVERNANCE_STATE);
+    const [showGovernancePanel, setShowGovernancePanel] = useState(false);
 
     const roleGuidelines: Record<Agent['role'], { goal: string; output: string; handoff: string }> = {
         orchestrator: {
@@ -385,6 +388,32 @@ ${directive.handoff}
         setInput(initialInput || '');
     };
 
+    // Self-UAT: call AI with governance + UAT prompt, return raw response
+    const handleRunSelfUAT = async (prompt: string): Promise<string> => {
+        const provider = settings.preferences.defaultProvider;
+        const apiKey = settings.providers[provider]?.apiKey;
+
+        if (!apiKey) {
+            throw new Error(language === 'vi' ? 'Chưa cấu hình API key' : 'No API key configured');
+        }
+
+        const aiProvider = createAIProvider(provider, { apiKey });
+
+        // Build system prompt with governance context
+        const systemPrompt = buildGovernanceSystemPrompt(govState, language);
+
+        const messages = [
+            { role: 'system' as const, content: systemPrompt },
+            { role: 'user' as const, content: prompt },
+        ];
+
+        let response = '';
+        const result = await aiProvider.chat(messages, (chunk) => {
+            response += chunk.text;
+        });
+        return result.text || response;
+    };
+
     return (
         <div className="h-full flex flex-col bg-white dark:bg-gray-900">
             {/* Header */}
@@ -406,14 +435,27 @@ ${directive.handoff}
                         {ui.subtitle}
                     </p>
                 </div>
-                {onClose && (
+                <div className="flex items-center gap-2">
+                    {/* Governance Panel Toggle */}
                     <button
-                        onClick={onClose}
-                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                        onClick={() => setShowGovernancePanel(prev => !prev)}
+                        className={`p-2 rounded-lg transition-colors ${showGovernancePanel
+                                ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300'
+                                : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500'
+                            }`}
+                        title={language === 'vi' ? 'Governance Panel' : 'Governance Panel'}
                     >
-                        ✕
+                        🛡️
                     </button>
-                )}
+                    {onClose && (
+                        <button
+                            onClick={onClose}
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                        >
+                            ✕
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Main Content */}
@@ -589,6 +631,14 @@ ${directive.handoff}
                     </div>
                 )}
             </div>
+
+            {/* Governance Panel Slide-over */}
+            <GovernancePanel
+                governanceState={govState}
+                onRunSelfUAT={handleRunSelfUAT}
+                isOpen={showGovernancePanel}
+                onClose={() => setShowGovernancePanel(false)}
+            />
         </div>
     );
 }

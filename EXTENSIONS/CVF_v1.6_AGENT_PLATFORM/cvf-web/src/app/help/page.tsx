@@ -29,6 +29,13 @@ const HELP_CONTENT: Record<Lang, {
         steps?: string[];
         responses?: Array<{ icon: string; label: string; desc: string }>;
     }>;
+    features: Array<{
+        icon: string;
+        title: string;
+        desc: string;
+        link?: string;
+        linkText?: string;
+    }>;
     tips: string[];
     doList: string[];
     dontList: string[];
@@ -40,7 +47,7 @@ const HELP_CONTENT: Record<Lang, {
     vi: {
         header: {
             title: '🎯 Hướng dẫn sử dụng CVF',
-            subtitle: 'Quy trình 5 bước để sử dụng CVF hiệu quả',
+            subtitle: 'Quy trình 5 bước + các tính năng nâng cao để sử dụng CVF hiệu quả',
             cta: 'Bắt đầu sử dụng CVF →',
         },
         roleLabels: {
@@ -62,8 +69,8 @@ const HELP_CONTENT: Record<Lang, {
                 number: 2,
                 title: '📋 Chọn Template',
                 role: 'user',
-                content: 'Chọn template phù hợp từ thư viện:',
-                categories: ['📊 Business', '💻 Technical', '📝 Content', '🔬 Research'],
+                content: 'Chọn template phù hợp từ thư viện 50 templates trong 8 danh mục:',
+                categories: ['📊 Business', '💻 Technical', '📝 Content', '🔬 Research', '📣 Marketing', '🎨 Product', '🔐 Security', '💻 Development'],
             },
             {
                 number: 3,
@@ -74,10 +81,15 @@ const HELP_CONTENT: Record<Lang, {
             },
             {
                 number: 4,
-                title: '⚙️ CVF Xử lý',
+                title: '⚙️ CVF Xử lý & Xuất Spec',
                 role: 'system',
-                content: 'CVF tự động:',
-                steps: ['Chuyển form → Intent chuẩn', 'Kiểm tra ràng buộc', 'Thực thi với AI', 'Kiểm tra output'],
+                content: 'CVF tự động xử lý và cho phép bạn chọn 1 trong 3 chế độ xuất:',
+                steps: [
+                    '📝 Simple — Prompt nhanh, không có governance',
+                    '⚠️ With Rules — Thêm stop conditions & guardrails',
+                    '🚦 CVF Full Mode — Quy trình 4-Phase đầy đủ + governance metadata',
+                    '→ Copy & paste vào AI bất kỳ HOẶC nhấn "🤖 Send to Agent" để gửi trực tiếp',
+                ],
             },
             {
                 number: 5,
@@ -91,23 +103,65 @@ const HELP_CONTENT: Record<Lang, {
                 ],
             },
         ],
+        features: [
+            {
+                icon: '🤖',
+                title: 'Agent Chat',
+                desc: 'Chat trực tiếp với AI (Gemini/OpenAI/Claude) ngay trên web, có governance tự động inject.',
+                link: '/',
+                linkText: 'Mở Agent Chat',
+            },
+            {
+                icon: '🔐',
+                title: 'Governance Toolkit',
+                desc: 'GovernanceBar điều khiển Phase/Role/Risk (Auto hoặc Manual). AI biết rules trước khi trả lời.',
+            },
+            {
+                icon: '🧪',
+                title: 'Self-UAT (1-click)',
+                desc: 'Kiểm tra AI compliance bằng 1 nút bấm. 6 tiêu chí: Awareness, Phase, Role, Risk, Skill, Refusal.',
+            },
+            {
+                icon: '📚',
+                title: 'Skill Library (124 skills)',
+                desc: '12 domains × 124 skills. Xem skill → nhấn 📝 Dùng Template để chuyển sang template tương ứng.',
+                link: '/skills',
+                linkText: 'Xem Skill Library',
+            },
+            {
+                icon: '🔗',
+                title: 'Skills ↔ Templates',
+                desc: 'Liên kết hai chiều: Template → 📚 Xem Skill | Skill → 📝 Dùng Template.',
+            },
+            {
+                icon: '🎯',
+                title: 'Multi-Agent Workflow',
+                desc: '4 agents: Orchestrator → Architect → Builder → Reviewer. Phối hợp tự động.',
+            },
+        ],
         tips: [
             'Mục tiêu càng rõ → Kết quả càng tốt',
             'Không can thiệp vào cách AI làm việc',
             'Chỉ đánh giá output cuối cùng',
             'Nếu CVF từ chối → Đọc lý do và điều chỉnh',
+            'Bật Governance Toolkit để AI tuân thủ rules tự động',
+            'Dùng CVF Full Mode cho các dự án quan trọng',
         ],
         doList: [
             'Mô tả rõ mục tiêu cần đạt',
             'Nêu ràng buộc và giới hạn',
             'Đánh giá output, không process',
             'Chấp nhận escalation khi cần',
+            'Dùng GovernanceBar để chọn Phase/Role/Risk',
+            'Chạy Self-UAT trước khi dùng cho production',
         ],
         dontList: [
             'Dẫn dắt kết quả mong muốn',
             'Chỉ định cách AI làm việc',
             'Ép tiếp tục khi bị từ chối',
             'Bỏ qua cảnh báo rủi ro',
+            'Bỏ qua governance khi task quan trọng',
+            'Dùng Simple mode cho task có risk cao',
         ],
         quote: {
             text: '"CVF không giúp bạn tránh quyết định khó.\nCVF giúp bạn tránh những quyết định tệ."',
@@ -117,7 +171,7 @@ const HELP_CONTENT: Record<Lang, {
     en: {
         header: {
             title: '🎯 CVF User Guide',
-            subtitle: 'A 5-step workflow to use CVF effectively',
+            subtitle: 'A 5-step workflow + advanced features to use CVF effectively',
             cta: 'Start using CVF →',
         },
         roleLabels: {
@@ -139,8 +193,8 @@ const HELP_CONTENT: Record<Lang, {
                 number: 2,
                 title: '📋 Choose a Template',
                 role: 'user',
-                content: 'Pick a suitable template from the library:',
-                categories: ['📊 Business', '💻 Technical', '📝 Content', '🔬 Research'],
+                content: 'Pick a suitable template from 50 templates in 8 categories:',
+                categories: ['📊 Business', '💻 Technical', '📝 Content', '🔬 Research', '📣 Marketing', '🎨 Product', '🔐 Security', '💻 Development'],
             },
             {
                 number: 3,
@@ -151,10 +205,15 @@ const HELP_CONTENT: Record<Lang, {
             },
             {
                 number: 4,
-                title: '⚙️ CVF Processing',
+                title: '⚙️ CVF Processing & Spec Export',
                 role: 'system',
-                content: 'CVF automatically:',
-                steps: ['Convert form → standardized intent', 'Check constraints', 'Execute with AI', 'Verify output'],
+                content: 'CVF processes the input and lets you choose 1 of 3 export modes:',
+                steps: [
+                    '📝 Simple — Quick prompt, no governance',
+                    '⚠️ With Rules — Add stop conditions & guardrails',
+                    '🚦 CVF Full Mode — Full 4-Phase protocol + governance metadata',
+                    '→ Copy & paste into any AI OR click "🤖 Send to Agent" to send directly',
+                ],
             },
             {
                 number: 5,
@@ -168,26 +227,68 @@ const HELP_CONTENT: Record<Lang, {
                 ],
             },
         ],
+        features: [
+            {
+                icon: '🤖',
+                title: 'Agent Chat',
+                desc: 'Chat directly with AI (Gemini/OpenAI/Claude) on web, with governance auto-injected.',
+                link: '/',
+                linkText: 'Open Agent Chat',
+            },
+            {
+                icon: '🔐',
+                title: 'Governance Toolkit',
+                desc: 'GovernanceBar controls Phase/Role/Risk (Auto or Manual). AI knows the rules before responding.',
+            },
+            {
+                icon: '🧪',
+                title: 'Self-UAT (1-click)',
+                desc: 'Check AI compliance with one button. 6 criteria: Awareness, Phase, Role, Risk, Skill, Refusal.',
+            },
+            {
+                icon: '📚',
+                title: 'Skill Library (124 skills)',
+                desc: '12 domains × 124 skills. View a skill → click 📝 Use Template to jump to the matching template.',
+                link: '/skills',
+                linkText: 'View Skill Library',
+            },
+            {
+                icon: '🔗',
+                title: 'Skills ↔ Templates',
+                desc: 'Bi-directional linking: Template → 📚 View Skill | Skill → 📝 Use Template.',
+            },
+            {
+                icon: '🎯',
+                title: 'Multi-Agent Workflow',
+                desc: '4 agents: Orchestrator → Architect → Builder → Reviewer. Automatic coordination.',
+            },
+        ],
         tips: [
             'The clearer the goal → the better the result',
             'Do not interfere with how the AI works',
             'Evaluate the final output only',
             'If CVF refuses → Read the reason and adjust',
+            'Enable Governance Toolkit for auto rule compliance',
+            'Use CVF Full Mode for important projects',
         ],
         doList: [
             'Describe the desired outcome clearly',
             'State constraints and limits',
             'Evaluate output, not process',
             'Accept escalation when needed',
+            'Use GovernanceBar to select Phase/Role/Risk',
+            'Run Self-UAT before production use',
         ],
         dontList: [
             'Lead the output to a preferred answer',
             'Tell the AI how to do the work',
             'Force continuation after refusal',
             'Ignore risk warnings',
+            'Skip governance for important tasks',
+            'Use Simple mode for high-risk tasks',
         ],
         quote: {
-            text: '"CVF doesn’t help you avoid hard decisions.\nCVF helps you avoid bad decisions."',
+            text: '"CVF doesn\'t help you avoid hard decisions.\nCVF helps you avoid bad decisions."',
             author: '— CVF Philosophy',
         },
     },
@@ -297,6 +398,34 @@ export default function HelpPage() {
                     ))}
                 </div>
 
+                {/* New Features Section */}
+                <div className="mb-12">
+                    <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                        🚀 {language === 'vi' ? 'Tính năng nâng cao' : 'Advanced Features'}
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        {content.features.map(f => (
+                            <div key={f.title} className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-emerald-500/50 transition-all">
+                                <div className="flex items-start gap-3">
+                                    <span className="text-2xl">{f.icon}</span>
+                                    <div className="flex-1">
+                                        <h4 className="font-semibold text-base mb-1">{f.title}</h4>
+                                        <p className="text-gray-400 text-sm">{f.desc}</p>
+                                        {f.link && (
+                                            <Link
+                                                href={f.link}
+                                                className="inline-block mt-2 text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
+                                            >
+                                                {f.linkText} →
+                                            </Link>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Do / Don't */}
                 <div className="grid md:grid-cols-2 gap-6 mb-12">
                     <div className="bg-green-500/10 border border-green-500/30 rounded-2xl p-6">
@@ -312,7 +441,7 @@ export default function HelpPage() {
                     </div>
 
                     <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-6">
-                        <h3 className="text-xl font-semibold text-red-400 mb-4">❌ {language === 'vi' ? 'KHÔNG NÊN' : 'DON’T'}</h3>
+                        <h3 className="text-xl font-semibold text-red-400 mb-4">❌ {language === 'vi' ? 'KHÔNG NÊN' : 'DON\'T'}</h3>
                         <ul className="space-y-2">
                             {content.dontList.map(item => (
                                 <li key={item} className="flex items-start gap-2">

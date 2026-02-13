@@ -28,8 +28,8 @@ const TAB_LABELS: Record<TabKey, Record<Lang, string>> = {
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
     return (
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6">
-            <h3 className="text-xl font-semibold mb-4 text-purple-300">{title}</h3>
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6">
+            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-purple-300">{title}</h3>
             {children}
         </div>
     );
@@ -39,7 +39,7 @@ function CodeBlock({ children, label }: { children: string; label?: string }) {
     return (
         <div className="my-3">
             {label && <div className="text-xs text-gray-500 mb-1 font-mono">{label}</div>}
-            <pre className="bg-black/40 border border-white/10 rounded-lg p-4 text-sm text-green-300 font-mono overflow-x-auto whitespace-pre-wrap">
+            <pre className="bg-black/40 border border-white/10 rounded-lg p-3 sm:p-4 text-xs sm:text-sm text-green-300 font-mono overflow-x-auto whitespace-pre">
                 {children}
             </pre>
         </div>
@@ -48,12 +48,12 @@ function CodeBlock({ children, label }: { children: string; label?: string }) {
 
 function InfoTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
     return (
-        <div className="overflow-x-auto my-3">
-            <table className="w-full text-sm border-collapse">
+        <div className="overflow-x-auto my-3 -mx-2 px-2">
+            <table className="w-full text-xs sm:text-sm border-collapse min-w-[320px]">
                 <thead>
                     <tr>
                         {headers.map(h => (
-                            <th key={h} className="text-left py-2 px-3 border-b border-white/20 text-purple-300 font-medium">{h}</th>
+                            <th key={h} className="text-left py-2 px-2 sm:px-3 border-b border-white/20 text-purple-300 font-medium whitespace-nowrap">{h}</th>
                         ))}
                     </tr>
                 </thead>
@@ -61,7 +61,7 @@ function InfoTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
                     {rows.map((row, i) => (
                         <tr key={i} className="hover:bg-white/5 transition-colors">
                             {row.map((cell, j) => (
-                                <td key={j} className="py-2 px-3 border-b border-white/10 text-gray-300">{cell}</td>
+                                <td key={j} className="py-2 px-2 sm:px-3 border-b border-white/10 text-gray-300">{cell}</td>
                             ))}
                         </tr>
                     ))}
@@ -170,7 +170,7 @@ function GovernanceBarTab({ lang }: { lang: Lang }) {
                     <div className="bg-black/30 rounded-lg p-4">
                         <p className="text-gray-400 text-sm mb-2">{isVi ? 'Bạn gõ:' : 'You type:'}</p>
                         <p className="text-white font-medium">&quot;{isVi ? 'Viết code cho feature X' : 'Write code for feature X'}&quot;</p>
-                        <div className="mt-2 flex gap-3 text-sm">
+                        <div className="mt-2 flex flex-wrap gap-2 text-xs sm:text-sm">
                             <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded">Phase: BUILD</span>
                             <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded">Role: BUILDER</span>
                             <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded">Risk: R2</span>
@@ -179,7 +179,7 @@ function GovernanceBarTab({ lang }: { lang: Lang }) {
                     <div className="bg-black/30 rounded-lg p-4">
                         <p className="text-gray-400 text-sm mb-2">{isVi ? 'Bạn gõ:' : 'You type:'}</p>
                         <p className="text-white font-medium">&quot;{isVi ? 'Review lại code' : 'Review the code'}&quot;</p>
-                        <div className="mt-2 flex gap-3 text-sm">
+                        <div className="mt-2 flex flex-wrap gap-2 text-xs sm:text-sm">
                             <span className="px-2 py-1 bg-orange-500/20 text-orange-400 rounded">Phase: REVIEW</span>
                             <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded">Role: REVIEWER</span>
                             <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded">Risk: R1</span>
@@ -188,7 +188,7 @@ function GovernanceBarTab({ lang }: { lang: Lang }) {
                     <div className="bg-black/30 rounded-lg p-4">
                         <p className="text-gray-400 text-sm mb-2">{isVi ? 'Bạn gõ:' : 'You type:'}</p>
                         <p className="text-white font-medium">&quot;{isVi ? 'Phân tích yêu cầu' : 'Analyze requirements'}&quot;</p>
-                        <div className="mt-2 flex gap-3 text-sm">
+                        <div className="mt-2 flex flex-wrap gap-2 text-xs sm:text-sm">
                             <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded">Phase: INTAKE</span>
                             <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded">Role: ANALYST</span>
                             <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded">Risk: R1</span>
@@ -571,7 +571,7 @@ export default function ToolkitGuidePage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
-            <div className="max-w-5xl mx-auto px-6 py-12">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
                 {/* Header */}
                 <div className="text-center mb-10">
                     <Link
@@ -580,7 +580,7 @@ export default function ToolkitGuidePage() {
                     >
                         ← {isVi ? 'Quay lại Hướng dẫn chung' : 'Back to General Guide'}
                     </Link>
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-3">
+                    <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-3">
                         🛡️ {isVi ? 'Hướng dẫn chi tiết CVF Toolkit' : 'CVF Toolkit Detailed Guide'}
                     </h1>
                     <p className="text-gray-400 max-w-2xl mx-auto">
@@ -591,12 +591,12 @@ export default function ToolkitGuidePage() {
                 </div>
 
                 {/* Tabs */}
-                <div className="flex flex-wrap gap-2 mb-8 justify-center">
+                <div className="flex overflow-x-auto gap-2 mb-6 sm:mb-8 pb-2 sm:pb-0 sm:flex-wrap sm:justify-center scrollbar-hide">
                     {TAB_KEYS.map(key => (
                         <button
                             key={key}
                             onClick={() => setActiveTab(key)}
-                            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${activeTab === key
+                            className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${activeTab === key
                                 ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30'
                                 : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10'
                                 }`}
@@ -617,16 +617,16 @@ export default function ToolkitGuidePage() {
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="text-center mt-12 space-x-4">
+                <div className="text-center mt-8 sm:mt-12 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
                     <Link
                         href="/"
-                        className="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-semibold hover:opacity-90 transition-opacity"
+                        className="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-semibold hover:opacity-90 transition-opacity w-full sm:w-auto text-center"
                     >
                         {isVi ? '🚀 Bắt đầu sử dụng CVF' : '🚀 Start using CVF'}
                     </Link>
                     <Link
                         href="/help"
-                        className="inline-block px-6 py-3 bg-white/10 border border-white/20 rounded-xl font-semibold hover:bg-white/20 transition-colors"
+                        className="inline-block px-6 py-3 bg-white/10 border border-white/20 rounded-xl font-semibold hover:bg-white/20 transition-colors w-full sm:w-auto text-center"
                     >
                         {isVi ? '📖 Hướng dẫn chung' : '📖 General Guide'}
                     </Link>

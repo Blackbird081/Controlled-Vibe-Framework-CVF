@@ -386,7 +386,7 @@ export default function HelpPage() {
                                     )}
 
                                     {step.responses && (
-                                        <div className="grid grid-cols-3 gap-3">
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                             {step.responses.map(r => (
                                                 <div key={r.label} className={`text-center p-3 rounded-lg border ${r.label === 'ACCEPT' ? 'border-green-500/50 bg-green-500/10' :
                                                     r.label === 'REVISE' ? 'border-yellow-500/50 bg-yellow-500/10' :

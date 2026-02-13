@@ -178,3 +178,12 @@ body {
 .text-balance {
   text-wrap: balance;
 }
+
+/* Hide scrollbar for horizontal scroll areas (tabs etc.) */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

@@ -15,6 +15,80 @@ import { useSettings } from './Settings';
 import { useQuotaManager } from '@/lib/quota-manager';
 import { evaluateEnforcement } from '@/lib/enforcement';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
+import { useLanguage } from '@/lib/i18n';
+import { GovernanceBar } from './GovernanceBar';
+import {
+    GovernanceState,
+    DEFAULT_GOVERNANCE_STATE,
+    buildGovernanceSystemPrompt,
+} from '@/lib/governance-context';
+
+type Lang = 'vi' | 'en';
+
+const UI: Record<Lang, {
+    title: string;
+    subtitle: string;
+    inputLabel: string;
+    inputPlaceholder: string;
+    chooseWorkflow: string;
+    modeSummary: string;
+    configInSettings: string;
+    singleAiAll: string;
+    availableAgents: string;
+    agentOutputs: string;
+    startNew: string;
+    done: string;
+    processing: string;
+    governanceBar: string;
+    errorNoInput: string;
+    errorNoApiKey: string;
+    errorClarify: string;
+    errorRiskStopped: string;
+    riskPrompt: string;
+}> = {
+    vi: {
+        title: '🤖 Multi-Agent Workflow',
+        subtitle: 'Phối hợp nhiều AI agents để hoàn thành task',
+        inputLabel: '📝 Nhập yêu cầu của bạn',
+        inputPlaceholder: 'Ví dụ: Xây dựng API REST cho quản lý sản phẩm với CRUD operations...',
+        chooseWorkflow: '🎯 Chọn Workflow',
+        modeSummary: '🧩 Multi-Agent Mode',
+        configInSettings: 'Cấu hình trong Settings → Preferences.',
+        singleAiAll: 'Dùng 1 provider cho tất cả vai trò',
+        availableAgents: 'Agents có sẵn',
+        agentOutputs: '📤 Kết quả từ Agents',
+        startNew: '🔄 Bắt đầu mới',
+        done: '✓ Xong',
+        processing: 'Đang xử lý với agent hiện tại...',
+        governanceBar: '🔐 Governance',
+        errorNoInput: 'Vui lòng nhập yêu cầu của bạn',
+        errorNoApiKey: 'Chưa cấu hình API key. Vui lòng vào Settings.',
+        errorClarify: 'Thiếu thông tin quan trọng. Vui lòng bổ sung để tiếp tục.',
+        errorRiskStopped: 'Đã dừng do chưa có xác nhận rủi ro.',
+        riskPrompt: 'Rủi ro yêu cầu xác nhận. Tiếp tục?',
+    },
+    en: {
+        title: '🤖 Multi-Agent Workflow',
+        subtitle: 'Coordinate multiple AI agents to complete tasks',
+        inputLabel: '📝 Enter your request',
+        inputPlaceholder: 'Example: Build a REST API for product management with CRUD operations...',
+        chooseWorkflow: '🎯 Choose Workflow',
+        modeSummary: '🧩 Multi-Agent Mode',
+        configInSettings: 'Configure in Settings → Preferences.',
+        singleAiAll: 'Using 1 provider for all roles',
+        availableAgents: 'Available Agents',
+        agentOutputs: '📤 Agent Outputs',
+        startNew: '🔄 Start New',
+        done: '✓ Done',
+        processing: 'Processing with current agent...',
+        governanceBar: '🔐 Governance',
+        errorNoInput: 'Please enter your request',
+        errorNoApiKey: 'No API key configured. Please go to Settings.',
+        errorClarify: 'Missing critical information. Please add details to continue.',
+        errorRiskStopped: 'Stopped — risk has not been confirmed.',
+        riskPrompt: 'Risk detected, confirmation required. Continue?',
+    },
+};
 
 interface MultiAgentPanelProps {
     initialInput?: string;
@@ -25,6 +99,8 @@ interface MultiAgentPanelProps {
 export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgentPanelProps) {
     const { settings } = useSettings();
     const { checkBudget } = useQuotaManager();
+    const { language } = useLanguage();
+    const ui = UI[language];
     const {
         workflow,
         isRunning,
@@ -42,6 +118,9 @@ export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgen
     const [outputs, setOutputs] = useState<Record<string, string>>({});
     const [outputLog, setOutputLog] = useState<{ agentId: string; content: string }[]>([]);
     const [error, setError] = useState<string | null>(null);
+
+    // Governance state — managed locally for multi-agent
+    const [govState, setGovState] = useState<GovernanceState>(DEFAULT_GOVERNANCE_STATE);
 
     const roleGuidelines: Record<Agent['role'], { goal: string; output: string; handoff: string }> = {
         orchestrator: {
@@ -136,9 +215,14 @@ export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgen
 
         const directive = roleGuidelines[agent.role];
 
+        // Build governance context if toolkit is enabled
+        const governanceBlock = govState.toolkitEnabled
+            ? `\n## CVF Governance Context\n${buildGovernanceSystemPrompt(govState, language)}\n`
+            : '';
+
         return `# CVF Multi-Agent Context
 Mode: ${mode}
-
+${governanceBlock}
 ## User Request
 ${userRequest}
 
@@ -159,7 +243,7 @@ ${directive.handoff}
     // Start workflow execution
     const handleStartWorkflow = async (templateKey: keyof typeof WORKFLOW_TEMPLATES) => {
         if (!input.trim()) {
-            setError('Vui lòng nhập yêu cầu của bạn');
+            setError(ui.errorNoInput);
             return;
         }
 
@@ -192,6 +276,11 @@ ${directive.handoff}
                     context: {
                         agent: agent.role,
                         workflow: wf.id,
+                        governance: govState.toolkitEnabled ? {
+                            phase: govState.phase,
+                            role: govState.role,
+                            riskLevel: govState.riskLevel,
+                        } : undefined,
                     },
                 });
 
@@ -203,17 +292,17 @@ ${directive.handoff}
                 }
 
                 if (enforcement.status === 'CLARIFY') {
-                    setError('Thiếu thông tin quan trọng. Vui lòng bổ sung để tiếp tục.');
+                    setError(ui.errorClarify);
                     setWorkflowStatus('failed');
                     setIsRunning(false);
                     return;
                 }
 
                 if (enforcement.status === 'NEEDS_APPROVAL') {
-                    const prompt = `Rủi ro ${enforcement.riskGate?.riskLevel || ''} yêu cầu xác nhận trước khi chạy. Tiếp tục?`;
+                    const prompt = `${ui.riskPrompt} (${enforcement.riskGate?.riskLevel || ''})`;
                     const approved = typeof window === 'undefined' ? true : window.confirm(prompt);
                     if (!approved) {
-                        setError('Đã dừng do chưa có xác nhận rủi ro.');
+                        setError(ui.errorRiskStopped);
                         setWorkflowStatus('failed');
                         setIsRunning(false);
                         return;
@@ -237,15 +326,18 @@ ${directive.handoff}
 
                 if (!apiKey) {
                     updateTaskStatus(task.id, 'failed', undefined, 'No API key configured');
-                    setError('Chưa cấu hình API key. Vui lòng vào Settings.');
+                    setError(ui.errorNoApiKey);
                     setIsRunning(false);
                     return;
                 }
 
                 const aiProvider = createAIProvider(provider, { apiKey });
 
-                // Build messages with system prompt
-                const systemPrompt = `${agent.systemPrompt}\n\n${modeGuidance(mode)}`;
+                // Build messages with system prompt + governance
+                let systemPrompt = `${agent.systemPrompt}\n\n${modeGuidance(mode)}`;
+                if (govState.toolkitEnabled) {
+                    systemPrompt += `\n\n${buildGovernanceSystemPrompt(govState, language)}`;
+                }
                 const messages = [
                     { role: 'system' as const, content: systemPrompt },
                     { role: 'user' as const, content: agentPrompt },
@@ -300,7 +392,7 @@ ${directive.handoff}
                 <div>
                     <div className="flex items-center gap-2">
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                            🤖 Multi-Agent Workflow
+                            {ui.title}
                         </h2>
                         {/* Mode Indicator */}
                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${settings.preferences.multiAgentMode === 'single'
@@ -311,7 +403,7 @@ ${directive.handoff}
                         </span>
                     </div>
                     <p className="text-sm text-gray-500">
-                        Phối hợp nhiều AI agents để hoàn thành task
+                        {ui.subtitle}
                     </p>
                 </div>
                 {onClose && (
@@ -331,12 +423,12 @@ ${directive.handoff}
                     <div className="max-w-3xl mx-auto space-y-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                📝 Nhập yêu cầu của bạn
+                                {ui.inputLabel}
                             </label>
                             <textarea
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                placeholder="Ví dụ: Xây dựng API REST cho quản lý sản phẩm với CRUD operations..."
+                                placeholder={ui.inputPlaceholder}
                                 className="w-full h-32 p-4 border border-gray-200 dark:border-gray-700 
                                           rounded-xl bg-white dark:bg-gray-800 
                                           text-gray-900 dark:text-white resize-none
@@ -350,18 +442,29 @@ ${directive.handoff}
                             </div>
                         )}
 
+                        {/* GovernanceBar — CVF control mechanism */}
+                        <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800">
+                            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                                {ui.governanceBar}
+                            </h3>
+                            <GovernanceBar
+                                onStateChange={setGovState}
+                                compact={true}
+                            />
+                        </div>
+
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                🎯 Chọn Workflow
+                                {ui.chooseWorkflow}
                             </label>
-                            <WorkflowSelector onSelect={handleStartWorkflow} />
+                            <WorkflowSelector onSelect={handleStartWorkflow} language={language} />
                         </div>
 
                         {/* Multi-Agent Mode Summary */}
                         <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800">
                             <div className="flex items-center justify-between mb-2">
                                 <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                                    🧩 Multi-Agent Mode
+                                    {ui.modeSummary}
                                 </h3>
                                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${settings.preferences.multiAgentMode === 'single'
                                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
@@ -371,7 +474,7 @@ ${directive.handoff}
                                 </span>
                             </div>
                             <p className="text-xs text-gray-500 mb-3">
-                                Cấu hình trong Settings → Preferences.
+                                {ui.configInSettings}
                             </p>
                             {settings.preferences.multiAgentMode === 'multi' && (
                                 <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-300">
@@ -383,7 +486,7 @@ ${directive.handoff}
                             )}
                             {settings.preferences.multiAgentMode === 'single' && (
                                 <div className="text-xs text-gray-600 dark:text-gray-300">
-                                    Dùng 1 provider cho tất cả vai trò: {settings.preferences.defaultProvider}
+                                    {ui.singleAiAll}: {settings.preferences.defaultProvider}
                                 </div>
                             )}
                         </div>
@@ -391,7 +494,7 @@ ${directive.handoff}
                         {/* Available Agents */}
                         <div className="mt-8">
                             <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                                Available Agents
+                                {ui.availableAgents}
                             </h3>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 {Object.values(AGENTS).map(agent => (
@@ -401,6 +504,9 @@ ${directive.handoff}
                                     >
                                         <span className="text-2xl">{agent.icon}</span>
                                         <div className="text-sm font-medium mt-1">{agent.name}</div>
+                                        <div className="text-xs text-gray-400 mt-0.5">
+                                            {language === 'vi' ? agent.descriptionVi : agent.description}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -409,13 +515,28 @@ ${directive.handoff}
                 ) : (
                     // Step 2: Workflow Execution
                     <div className="max-w-4xl mx-auto space-y-6">
-                        <WorkflowProgress workflow={workflow} />
+                        <WorkflowProgress workflow={workflow} language={language} />
+
+                        {/* Governance badge during execution */}
+                        {govState.toolkitEnabled && (
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs font-medium">
+                                    🔐 Phase: {govState.phase}
+                                </span>
+                                <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs font-medium">
+                                    👤 Role: {govState.role}
+                                </span>
+                                <span className="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-xs font-medium">
+                                    ⚠️ Risk: {govState.riskLevel}
+                                </span>
+                            </div>
+                        )}
 
                         {/* Agent Outputs */}
                         {Object.entries(outputs).length > 0 && (
                             <div className="space-y-4">
                                 <h3 className="font-bold text-gray-900 dark:text-white">
-                                    📤 Agent Outputs
+                                    {ui.agentOutputs}
                                 </h3>
                                 {Object.entries(outputs).map(([agentId, output]) => {
                                     const agent = AGENTS[agentId as keyof typeof AGENTS];
@@ -445,7 +566,7 @@ ${directive.handoff}
                                     className="px-6 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-medium
                                               hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                                 >
-                                    🔄 Start New
+                                    {ui.startNew}
                                 </button>
                                 {onClose && (
                                     <button
@@ -453,7 +574,7 @@ ${directive.handoff}
                                         className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium
                                                   hover:bg-blue-700 transition-colors"
                                     >
-                                        ✓ Done
+                                        {ui.done}
                                     </button>
                                 )}
                             </div>
@@ -462,7 +583,7 @@ ${directive.handoff}
                         {isRunning && (
                             <div className="flex items-center gap-3 text-blue-600">
                                 <div className="animate-spin">⏳</div>
-                                <span>Đang xử lý với agent hiện tại...</span>
+                                <span>{ui.processing}</span>
                             </div>
                         )}
                     </div>

@@ -2,6 +2,8 @@
 
 import { useState, useCallback } from 'react';
 
+type Lang = 'vi' | 'en';
+
 // Agent Types
 export type AgentRole = 'architect' | 'builder' | 'reviewer' | 'orchestrator';
 
@@ -11,6 +13,7 @@ export interface Agent {
     role: AgentRole;
     systemPrompt: string;
     description: string;
+    descriptionVi: string;
     icon: string;
     color: string;
 }
@@ -45,6 +48,7 @@ export const AGENTS: Record<AgentRole, Agent> = {
         icon: '🎯',
         color: 'purple',
         description: 'Coordinates workflow between agents and manages task flow',
+        descriptionVi: 'Điều phối workflow giữa các agents và quản lý luồng tác vụ',
         systemPrompt: `You are the Orchestrator Agent for CVF (Controlled Vibe Framework).
 Your role is to:
 1. Analyze user requirements and break them down into tasks
@@ -61,6 +65,7 @@ Always structure your response with clear task assignments and reasoning.`,
         icon: '📐',
         color: 'blue',
         description: 'Designs system architecture and creates specifications',
+        descriptionVi: 'Thiết kế kiến trúc hệ thống và tạo đặc tả',
         systemPrompt: `You are the Architect Agent for CVF (Controlled Vibe Framework).
 Your role is to:
 1. Design system architecture and data flow
@@ -77,6 +82,7 @@ Output structured specifications that the Builder agent can implement.`,
         icon: '🔨',
         color: 'green',
         description: 'Implements code based on specifications',
+        descriptionVi: 'Triển khai code dựa trên đặc tả',
         systemPrompt: `You are the Builder Agent for CVF (Controlled Vibe Framework).
 Your role is to:
 1. Implement code based on Architect specifications
@@ -93,6 +99,7 @@ Output working code with comments and usage examples.`,
         icon: '🔍',
         color: 'orange',
         description: 'Reviews code and provides feedback',
+        descriptionVi: 'Đánh giá code và phản hồi',
         systemPrompt: `You are the Reviewer Agent for CVF (Controlled Vibe Framework).
 Your role is to:
 1. Review code for bugs, security issues, and best practices
@@ -108,7 +115,9 @@ Provide detailed review with specific line-level feedback.`,
 export const WORKFLOW_TEMPLATES = {
     fullCycle: {
         name: 'Full Development Cycle',
+        nameVi: 'Chu trình phát triển đầy đủ',
         description: 'Orchestrator → Architect → Builder → Reviewer',
+        descriptionVi: 'Điều phối → Thiết kế → Xây dựng → Đánh giá',
         agents: [
             AGENTS.orchestrator,
             AGENTS.architect,
@@ -118,17 +127,23 @@ export const WORKFLOW_TEMPLATES = {
     },
     designOnly: {
         name: 'Architecture Design',
+        nameVi: 'Thiết kế kiến trúc',
         description: 'Architect only - for planning and design',
+        descriptionVi: 'Chỉ Architect — cho lập kế hoạch và thiết kế',
         agents: [AGENTS.architect],
     },
     buildReview: {
         name: 'Build & Review',
+        nameVi: 'Xây dựng & Đánh giá',
         description: 'Builder → Reviewer - for implementation with review',
+        descriptionVi: 'Builder → Reviewer — triển khai có đánh giá',
         agents: [AGENTS.builder, AGENTS.reviewer],
     },
     quickBuild: {
         name: 'Quick Build',
+        nameVi: 'Xây dựng nhanh',
         description: 'Builder only - for quick implementation',
+        descriptionVi: 'Chỉ Builder — triển khai nhanh',
         agents: [AGENTS.builder],
     },
 };
@@ -243,12 +258,14 @@ export function AgentCard({
     agent,
     isActive,
     isCompleted,
-    onClick
+    onClick,
+    language = 'en',
 }: {
     agent: Agent;
     isActive?: boolean;
     isCompleted?: boolean;
     onClick?: () => void;
+    language?: Lang;
 }) {
     const colorClasses: Record<string, string> = {
         purple: 'from-purple-500 to-purple-600 border-purple-400',
@@ -256,6 +273,8 @@ export function AgentCard({
         green: 'from-green-500 to-green-600 border-green-400',
         orange: 'from-orange-500 to-orange-600 border-orange-400',
     };
+
+    const desc = language === 'vi' ? agent.descriptionVi : agent.description;
 
     return (
         <div
@@ -282,7 +301,7 @@ export function AgentCard({
                         {agent.name}
                     </h3>
                     <p className={`text-sm ${isActive ? 'text-white/80' : 'text-gray-500'}`}>
-                        {agent.description}
+                        {desc}
                     </p>
                 </div>
             </div>
@@ -292,9 +311,11 @@ export function AgentCard({
 
 // Workflow Selector Component
 export function WorkflowSelector({
-    onSelect
+    onSelect,
+    language = 'en',
 }: {
     onSelect: (key: keyof typeof WORKFLOW_TEMPLATES) => void;
+    language?: Lang;
 }) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -312,9 +333,11 @@ export function WorkflowSelector({
                         ))}
                     </div>
                     <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-blue-500">
-                        {template.name}
+                        {language === 'vi' ? template.nameVi : template.name}
                     </h3>
-                    <p className="text-sm text-gray-500">{template.description}</p>
+                    <p className="text-sm text-gray-500">
+                        {language === 'vi' ? template.descriptionVi : template.description}
+                    </p>
                 </button>
             ))}
         </div>
@@ -322,17 +345,21 @@ export function WorkflowSelector({
 }
 
 // Workflow Progress Component
-export function WorkflowProgress({ workflow }: { workflow: Workflow }) {
+export function WorkflowProgress({ workflow, language = 'en' }: { workflow: Workflow; language?: Lang }) {
+    const STATUS_LABELS: Record<Lang, Record<string, string>> = {
+        vi: { idle: 'CHỜ', running: 'ĐANG CHẠY', completed: 'HOÀN THÀNH', failed: 'THẤT BẠI' },
+        en: { idle: 'IDLE', running: 'RUNNING', completed: 'COMPLETED', failed: 'FAILED' },
+    };
     return (
         <div className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-gray-900 dark:text-white">{workflow.name}</h3>
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${workflow.status === 'running' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' :
-                        workflow.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' :
-                            workflow.status === 'failed' ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' :
-                                'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+                    workflow.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' :
+                        workflow.status === 'failed' ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' :
+                            'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
                     }`}>
-                    {workflow.status.toUpperCase()}
+                    {STATUS_LABELS[language][workflow.status] || workflow.status.toUpperCase()}
                 </span>
             </div>
 
@@ -344,6 +371,7 @@ export function WorkflowProgress({ workflow }: { workflow: Workflow }) {
                             agent={agent}
                             isActive={index === workflow.currentAgentIndex && workflow.status === 'running'}
                             isCompleted={index < workflow.currentAgentIndex}
+                            language={language}
                         />
                         {index < workflow.agents.length - 1 && (
                             <div className="px-2 text-gray-400">→</div>
@@ -355,7 +383,7 @@ export function WorkflowProgress({ workflow }: { workflow: Workflow }) {
             {/* Tasks */}
             {workflow.tasks.length > 0 && (
                 <div className="mt-4 space-y-2">
-                    <h4 className="text-sm font-medium text-gray-500">Tasks</h4>
+                    <h4 className="text-sm font-medium text-gray-500">{language === 'vi' ? 'Tác vụ' : 'Tasks'}</h4>
                     {workflow.tasks.map(task => {
                         const agent = workflow.agents.find(a => a.id === task.agentId);
                         return (
@@ -367,9 +395,9 @@ export function WorkflowProgress({ workflow }: { workflow: Workflow }) {
                                     <span>{agent?.icon}</span>
                                     <span className="font-medium">{agent?.name}</span>
                                     <span className={`ml-auto px-2 py-0.5 rounded text-xs ${task.status === 'running' ? 'bg-blue-100 text-blue-700' :
-                                            task.status === 'completed' ? 'bg-green-100 text-green-700' :
-                                                task.status === 'failed' ? 'bg-red-100 text-red-700' :
-                                                    'bg-gray-100 text-gray-700'
+                                        task.status === 'completed' ? 'bg-green-100 text-green-700' :
+                                            task.status === 'failed' ? 'bg-red-100 text-red-700' :
+                                                'bg-gray-100 text-gray-700'
                                         }`}>
                                         {task.status}
                                     </span>

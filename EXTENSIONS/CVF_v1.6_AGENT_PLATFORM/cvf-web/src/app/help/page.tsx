@@ -138,6 +138,13 @@ const HELP_CONTENT: Record<Lang, {
                 title: 'Multi-Agent Workflow',
                 desc: '4 agents: Orchestrator → Architect → Builder → Reviewer. Phối hợp tự động.',
             },
+            {
+                icon: '📖',
+                title: 'Hướng dẫn chi tiết Toolkit',
+                desc: 'Authority Matrix, GovernanceBar, Self-UAT, SpecExport — giải thích từng bước.',
+                link: '/help/toolkit',
+                linkText: 'Xem hướng dẫn chi tiết',
+            },
         ],
         tips: [
             'Mục tiêu càng rõ → Kết quả càng tốt',
@@ -261,6 +268,13 @@ const HELP_CONTENT: Record<Lang, {
                 icon: '🎯',
                 title: 'Multi-Agent Workflow',
                 desc: '4 agents: Orchestrator → Architect → Builder → Reviewer. Automatic coordination.',
+            },
+            {
+                icon: '📖',
+                title: 'Detailed Toolkit Guide',
+                desc: 'Authority Matrix, GovernanceBar, Self-UAT, SpecExport — explained step by step.',
+                link: '/help/toolkit',
+                linkText: 'View detailed guide',
             },
         ],
         tips: [

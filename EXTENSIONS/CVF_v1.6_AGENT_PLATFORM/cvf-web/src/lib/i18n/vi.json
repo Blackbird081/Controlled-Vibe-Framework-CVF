@@ -195,5 +195,10 @@
     "common.search": "Tìm kiếm...",
     "common.noData": "Không có dữ liệu",
     "common.viewMore": "Xem thêm",
-    "common.collapse": "Thu gọn"
+    "common.collapse": "Thu gọn",
+    "skills.viewSkill": "📚 Xem Skill",
+    "skills.viewRelatedSkill": "Xem tài liệu skill liên quan",
+    "skills.useTemplate": "📝 Dùng Template",
+    "skills.useTemplateTitle": "Dùng template",
+    "skills.browseTemplates": "📝 Duyệt templates"
 }

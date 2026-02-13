@@ -6,6 +6,7 @@ import { Template, TemplateField } from '@/types';
 import { generateIntent } from '@/lib/templates';
 import { SpecExport } from './SpecExport';
 import { useLanguage } from '@/lib/i18n';
+import { getSkillForTemplate } from '@/lib/skill-template-map';
 
 interface DynamicFormProps {
     template: Template;
@@ -69,7 +70,7 @@ function FormField({ field, register, errors }: {
 }
 
 export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: DynamicFormProps) {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const [showAdvanced, setShowAdvanced] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [showSpecExport, setShowSpecExport] = useState(false);
@@ -104,7 +105,22 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                         <span>{template.icon}</span>
                         <span>{template.name}</span>
                     </h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">{template.description}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                        <p className="text-gray-600 dark:text-gray-400">{template.description}</p>
+                        {(() => {
+                            const skillRef = getSkillForTemplate(template.id);
+                            if (!skillRef) return null;
+                            return (
+                                <a
+                                    href={`/skills/${skillRef.domain}/${skillRef.skillId}`}
+                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-emerald-100 text-emerald-800 rounded-full hover:bg-emerald-200 transition-colors whitespace-nowrap"
+                                    title={t('skills.viewRelatedSkill')}
+                                >
+                                    {t('skills.viewSkill')}
+                                </a>
+                            );
+                        })()}
+                    </div>
                 </div>
             </div>
 

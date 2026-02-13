@@ -21,6 +21,12 @@ import { evaluateEnforcement } from '@/lib/enforcement';
 import { calculateFactualScore } from '@/lib/factual-scoring';
 import { logEnforcementDecision, logPreUatFailure } from '@/lib/enforcement-log';
 import { usePhaseDetection } from './usePhaseDetection';
+import {
+    GovernanceState,
+    DEFAULT_GOVERNANCE_STATE,
+    buildGovernanceSystemPrompt,
+    loadGovernanceState,
+} from '@/lib/governance-context';
 
 interface AgentChatSettings {
     preferences: { defaultProvider: ProviderKey };
@@ -46,6 +52,7 @@ interface UseAgentChatOptions {
     onComplete?: (messages: ChatMessage[]) => void;
     onClose?: () => void;
     onMessagesChange?: (messages: ChatMessage[]) => void;
+    governanceState?: GovernanceState;
 }
 
 const ALLOWED_FILE_TYPES = ['.txt', '.md', '.json', '.js', '.ts', '.tsx', '.css', '.html', '.py', '.yaml', '.yml'];
@@ -60,7 +67,22 @@ export function useAgentChat({
     onComplete,
     onClose,
     onMessagesChange,
+    governanceState: externalGovernanceState,
 }: UseAgentChatOptions) {
+    const [governanceState, setGovernanceState] = useState<GovernanceState>(
+        externalGovernanceState || DEFAULT_GOVERNANCE_STATE
+    );
+    const governanceStateRef = useRef<GovernanceState>(governanceState);
+
+    useEffect(() => {
+        governanceStateRef.current = governanceState;
+    }, [governanceState]);
+
+    useEffect(() => {
+        if (externalGovernanceState) {
+            setGovernanceState(externalGovernanceState);
+        }
+    }, [externalGovernanceState]);
     const { trackUsage, checkBudget } = useQuotaManager();
     const { detectPhase } = usePhaseDetection();
 
@@ -117,6 +139,16 @@ export function useAgentChat({
         const aiMessages: AIMessage[] = messages
             .filter(m => m.role !== 'system')
             .map(m => ({ role: m.role, content: m.content }));
+
+        // Inject CVF Governance Toolkit system prompt
+        const govState = governanceStateRef.current;
+        if (govState.toolkitEnabled) {
+            aiMessages.unshift({
+                role: 'system' as const,
+                content: buildGovernanceSystemPrompt(govState, language),
+            });
+        }
+
         aiMessages.push({ role: 'user', content: userContent });
 
         const aiProvider = createAIProvider(provider, { apiKey, language, model });
@@ -536,6 +568,8 @@ ${attachedFile.content}
         currentMode,
         phaseGate,
         decisionLog,
+        governanceState,
+        setGovernanceState,
         handleSendMessage,
         handleAccept,
         handleReject,

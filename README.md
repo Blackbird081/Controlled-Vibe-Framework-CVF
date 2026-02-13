@@ -2,9 +2,9 @@
 
 **Framework quản lý dự án theo tinh thần *vibe coding có kiểm soát*.**
 
-> **Current Version:** v1.6.0 | **Latest:** CVF Agent Platform 🤖  
-> **Assessment:** 9.1/10 — [Expert Review (Feb 11, 2026)](./docs/CVF_EXPERT_REVIEW_PHASE_COMPLETE_2026-02-11.md)  
-> **Last Updated:** Feb 11, 2026
+> **Current Version:** v1.6.0 | **Latest:** CVF Agent Platform + Governance Toolkit 🤖🔐  
+> **Assessment:** 9.2/10 — [Expert Review (Feb 13, 2026)](./docs/CVF_V16_COMPARATIVE_REVIEW_2026-02-13.md)  
+> **Last Updated:** Feb 13, 2026
 
 ---
 
@@ -61,6 +61,8 @@ npm run dev
 - 🤖 **AI Agent Chat** - Gemini, OpenAI, Anthropic
 - 🎯 **Multi-Agent Workflow** - Orchestrator, Architect, Builder, Reviewer
 - 🛠️ **8 Agent Tools** - Web search, Code execute, Calculator, etc.
+- 🔐 **Governance Toolkit** - Phase/Role/Risk control, system prompt injection, Self-UAT
+- 📝 **50 Templates** → 📚 **124 Skills** — bi-directional linking
 - 💾 **Chat History** - Persistent conversations
 - 🌐 **Bilingual** - Vietnamese/English
 - 🌙 **Dark Mode** - System-aware theme
@@ -169,6 +171,10 @@ CVF có 3 lớp. Chọn đúng lớp bạn cần:
 | **🎯 Multi-Agent Workflow** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **🛠️ Agent Tools (8)** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **💾 Chat History** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **🔐 Governance Toolkit** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **📊 GovernanceBar (Auto/Manual)** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **🧪 Self-UAT (1-click)** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **🔗 Skills ↔ Templates** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -274,20 +280,22 @@ Controlled-Vibe-Framework-CVF/
 │       └── ROADMAP.md         ← Development Plan
 │
 ├── governance/                        🔐 GOVERNANCE LAYER
-│   └── skill-library/         ← Skill Governance Registry
-│       ├── specs/             ← 8 governance specs
-│       ├── registry/
-│       │   ├── user-skills/   ← 69 user skill records
-│       │   └── agent-skills/  ← 8 agent tool records
-│       └── uat/               ← UAT binding templates
+│   ├── toolkit/               ← Governance Toolkit (7 modules)
+│   │   ├── 01_BOOTSTRAP/     ← Session initialization
+│   │   ├── 02_POLICY/        ← Master policy & rules
+│   │   ├── 03_CONTROL/       ← Agent control & registry
+│   │   ├── 04_TESTING/       ← Self-UAT & testing
+│   │   ├── 05_OPERATION/     ← Operations & monitoring
+│   │   ├── 06_EXAMPLES/      ← Case studies
+│   │   └── 07_QUICKSTART/    ← Quick reference
+│   └── skill-library/         ← Skill Governance Registry (UAT, Risk, Authority)
 │
 ├── tools/
 │   └── skill-validation/      ← Shared validation tools
 │
-├── governance/
-│   └── skill-library/          ← Skill Governance Registry (UAT, Risk, Authority)
-│
 └── docs/
+    ├── CVF_WEB_TOOLKIT_GUIDE.md   ← 🆕 Web Toolkit Usage Guide
+    ├── CVF_V16_COMPARATIVE_REVIEW_2026-02-13.md
     ├── QUICK_START_INTERNAL.md
     ├── CVF_FRAMEWORK_ASSESSMENT.md
     └── VERSION_COMPARISON.md
@@ -405,6 +413,31 @@ Key modules: security.ts (28), governance.ts (13), ai-providers.ts (21), quota-m
 - ✅ 3 export modes (Simple, With Rules, CVF Full Mode)
 - ✅ Domain Refinement (Quality Pass 2) complete
 
+### 🔐 Governance Toolkit (NEW! Feb 2026)
+
+> **Paradigm shift:** Trước toolkit = passive scoring (đánh giá sau khi AI trả lời).  Sau toolkit = **active governing** (inject rules trước khi AI trả lời).
+
+| Metric | v1.6 Trước Toolkit | v1.6 + Toolkit | Δ |
+|--------|:---:|:---:|:---:|
+| Governance Score | 7.0/10 | **9.2/10** | **+2.2** |
+| AI tuân thủ rules | Passive (post-hoc scoring) | **Active (pre-emptive inject)** | 🔄 Paradigm shift |
+| User effort | Copy-paste prompt từ docs | **1-click toggle** | ⬇️ ~90% giảm |
+| Authority Matrix | ❌ None (0 roles) | ✅ 5 Phases × 5 Roles (25 cells) | 🆕 |
+| System Prompt | ❌ None | ✅ Auto-generated, bilingual | 🆕 |
+| Self-UAT | Manual prompt | ✅ **1-click web UI** | 🆕 |
+| Skills ↔ Templates | ❌ Separate systems | ✅ **Bi-directional linking** | 🆕 |
+
+**Toolkit components on web:**
+- ✅ **GovernanceBar** — Auto/Manual Phase/Role/Risk control
+- ✅ **GovernancePanel** — Self-UAT sidebar with 1-click testing
+- ✅ **System Prompt Injection** — Authority matrix + refusal template auto-inject
+- ✅ **SpecExport + Governance** — Auto-detect Phase/Role/Risk per template
+- ✅ **Risk Validation** — Real-time warning if risk exceeds phase limit
+- ✅ **Skills ↔ Templates** — 50 templates mapped to 124 skills
+
+→ **Hướng dẫn chi tiết:** [CVF_WEB_TOOLKIT_GUIDE.md](./docs/CVF_WEB_TOOLKIT_GUIDE.md)  
+→ **So sánh chuyên sâu:** [CVF_V16_COMPARATIVE_REVIEW_2026-02-13.md](./docs/CVF_V16_COMPARATIVE_REVIEW_2026-02-13.md)
+
 ---
 
 ## 📋 Changelog
@@ -429,5 +462,5 @@ Xem [CONTRIBUTING.md](./v1.0/CONTRIBUTING.md) để biết cách đóng góp.
 
 ---
 
-*Last Updated: 2026-02-11*  
-*CVF v1.6.0 — [GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)*
+*Last Updated: 2026-02-13*  
+*CVF v1.6.0 + Governance Toolkit — [GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)*

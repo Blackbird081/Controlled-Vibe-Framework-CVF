@@ -195,5 +195,10 @@
     "common.search": "Search...",
     "common.noData": "No data",
     "common.viewMore": "View more",
-    "common.collapse": "Collapse"
+    "common.collapse": "Collapse",
+    "skills.viewSkill": "📚 View Skill",
+    "skills.viewRelatedSkill": "View related skill documentation",
+    "skills.useTemplate": "📝 Use Template",
+    "skills.useTemplateTitle": "Use template",
+    "skills.browseTemplates": "📝 Browse templates"
 }

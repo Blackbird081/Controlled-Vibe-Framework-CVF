@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useSettings } from './Settings';
 import { PhaseGateModal } from './PhaseGateModal';
@@ -9,9 +9,12 @@ import { AgentChatMessageBubble } from './AgentChatMessageBubble';
 import { ChatInput } from './ChatInput';
 import { TypingIndicator } from './TypingIndicator';
 import { DecisionLogSidebar } from './DecisionLogSidebar';
+import { GovernanceBar } from './GovernanceBar';
+import { GovernancePanel } from './GovernancePanel';
 import { useAgentChat } from '@/lib/hooks/useAgentChat';
 import { useModelPricing } from '@/lib/hooks/useModelPricing';
 import type { ChatMessage } from '@/lib/agent-chat';
+import type { GovernanceState } from '@/lib/governance-context';
 
 export interface AgentChatProps {
     initialPrompt?: string;
@@ -36,6 +39,12 @@ export function AgentChat({
 
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [showDecisionLog, setShowDecisionLog] = useState(false);
+    const [showGovernancePanel, setShowGovernancePanel] = useState(false);
+    const [governanceState, setGovernanceState] = useState<GovernanceState | undefined>(undefined);
+
+    const handleGovernanceStateChange = useCallback((state: GovernanceState) => {
+        setGovernanceState(state);
+    }, []);
 
     const labels = {
         vi: {
@@ -91,6 +100,7 @@ export function AgentChat({
         onComplete,
         onClose,
         onMessagesChange,
+        governanceState,
     });
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -149,6 +159,15 @@ export function AgentChat({
 
                     <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-900
                                     sticky bottom-0 sm:static safe-area-pb">
+                        {/* CVF Governance Toolbar */}
+                        <div className="mb-3">
+                            <GovernanceBar
+                                onStateChange={handleGovernanceStateChange}
+                                compact
+                                lastMessage={input}
+                            />
+                        </div>
+
                         <ChatInput
                             input={input}
                             onInputChange={setInput}
@@ -163,7 +182,17 @@ export function AgentChat({
                         />
 
                         {messages.length > 0 && (
-                            <div className="flex justify-end gap-2 mt-3">
+                            <div className="flex justify-between items-center mt-3">
+                                <button
+                                    onClick={() => setShowGovernancePanel(prev => !prev)}
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors
+                                        ${governanceState?.toolkitEnabled
+                                            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 hover:bg-blue-200'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200'
+                                        }`}
+                                >
+                                    🛡️ {language === 'vi' ? 'Governance' : 'Governance'}
+                                </button>
                                 <button
                                     onClick={handleComplete}
                                     className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white 
@@ -185,6 +214,16 @@ export function AgentChat({
                     />
                 )}
             </div>
+
+            {/* Governance Panel (Self-UAT sidebar) */}
+            {governanceState && (
+                <GovernancePanel
+                    governanceState={governanceState}
+                    onRunSelfUAT={(prompt) => handleSendMessage(prompt)}
+                    isOpen={showGovernancePanel}
+                    onClose={() => setShowGovernancePanel(false)}
+                />
+            )}
         </>
     );
 }

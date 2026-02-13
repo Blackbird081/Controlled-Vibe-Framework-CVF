@@ -1,0 +1,253 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import {
+    GovernanceState,
+    DEFAULT_GOVERNANCE_STATE,
+    PHASE_OPTIONS,
+    ROLE_OPTIONS,
+    RISK_OPTIONS,
+    CVFPhaseToolkit,
+    CVFRole,
+    CVFRiskLevel,
+    saveGovernanceState,
+    loadGovernanceState,
+    isRiskAllowed,
+    autoDetectGovernance,
+    type AutoDetectResult,
+} from '@/lib/governance-context';
+
+interface GovernanceBarProps {
+    onStateChange: (state: GovernanceState) => void;
+    compact?: boolean;
+    /** Optional: pass current chat message for auto-detection */
+    lastMessage?: string;
+}
+
+type DetectionMode = 'auto' | 'manual';
+
+export function GovernanceBar({ onStateChange, compact = false, lastMessage }: GovernanceBarProps) {
+    const { language } = useLanguage();
+    const [state, setState] = useState<GovernanceState>(DEFAULT_GOVERNANCE_STATE);
+    const [mounted, setMounted] = useState(false);
+    const [detectionMode, setDetectionMode] = useState<DetectionMode>('auto');
+    const [autoResult, setAutoResult] = useState<AutoDetectResult | null>(null);
+
+    useEffect(() => {
+        setState(loadGovernanceState());
+        setMounted(true);
+    }, []);
+
+    // Auto-detect from last message
+    useEffect(() => {
+        if (detectionMode === 'auto' && lastMessage && state.toolkitEnabled) {
+            const detected = autoDetectGovernance({ messageText: lastMessage });
+            setAutoResult(detected);
+            setState(prev => ({
+                ...prev,
+                phase: detected.phase,
+                role: detected.role,
+                riskLevel: detected.riskLevel,
+            }));
+        }
+    }, [lastMessage, detectionMode, state.toolkitEnabled]);
+
+    useEffect(() => {
+        if (mounted) {
+            saveGovernanceState(state);
+            onStateChange(state);
+        }
+    }, [state, onStateChange, mounted]);
+
+    const handleToggle = () => {
+        setState(prev => ({ ...prev, toolkitEnabled: !prev.toolkitEnabled }));
+    };
+
+    const handlePhaseChange = (phase: CVFPhaseToolkit) => {
+        setDetectionMode('manual');
+        setState(prev => ({ ...prev, phase }));
+    };
+
+    const handleRoleChange = (role: CVFRole) => {
+        setDetectionMode('manual');
+        setState(prev => ({ ...prev, role }));
+    };
+
+    const handleRiskChange = (riskLevel: CVFRiskLevel) => {
+        setDetectionMode('manual');
+        setState(prev => ({ ...prev, riskLevel }));
+    };
+
+    const switchToAuto = useCallback(() => {
+        setDetectionMode('auto');
+        if (lastMessage) {
+            const detected = autoDetectGovernance({ messageText: lastMessage });
+            setAutoResult(detected);
+            setState(prev => ({
+                ...prev,
+                phase: detected.phase,
+                role: detected.role,
+                riskLevel: detected.riskLevel,
+            }));
+        }
+    }, [lastMessage]);
+
+    const riskValid = isRiskAllowed(state.riskLevel, state.phase);
+    const isVi = language === 'vi';
+
+    if (!mounted) return null;
+
+    return (
+        <div className={`
+            border rounded-lg transition-all duration-300
+            ${state.toolkitEnabled
+                ? 'border-blue-500/50 bg-blue-50/50 dark:bg-blue-950/30'
+                : 'border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/30'
+            }
+            ${compact ? 'p-2' : 'p-3'}
+        `}>
+            {/* Header with toggle */}
+            <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">
+                        🛡️ CVF Toolkit
+                    </span>
+                    {state.toolkitEnabled && (
+                        <span className="text-xs px-1.5 py-0.5 rounded-full bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 font-medium">
+                            {isVi ? 'Đang hoạt động' : 'Active'}
+                        </span>
+                    )}
+                    {/* Auto/Manual toggle */}
+                    {state.toolkitEnabled && (
+                        <button
+                            onClick={() => detectionMode === 'auto' ? setDetectionMode('manual') : switchToAuto()}
+                            className={`text-xs px-1.5 py-0.5 rounded-full font-medium transition-colors
+                                ${detectionMode === 'auto'
+                                    ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300'
+                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                                }`}
+                            title={detectionMode === 'auto'
+                                ? (isVi ? 'Đang tự động nhận diện. Click để chuyển sang manual' : 'Auto-detecting. Click for manual')
+                                : (isVi ? 'Đang chọn thủ công. Click để bật auto' : 'Manual mode. Click for auto')
+                            }
+                        >
+                            {detectionMode === 'auto' ? '🤖 Auto' : '✋ Manual'}
+                        </button>
+                    )}
+                </div>
+                <button
+                    onClick={handleToggle}
+                    className={`
+                        relative w-11 h-6 rounded-full transition-colors duration-200
+                        ${state.toolkitEnabled
+                            ? 'bg-blue-500'
+                            : 'bg-gray-300 dark:bg-gray-600'
+                        }
+                    `}
+                    aria-label="Toggle CVF Toolkit"
+                >
+                    <span className={`
+                        absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full
+                        transition-transform duration-200 shadow-sm
+                        ${state.toolkitEnabled ? 'translate-x-5' : 'translate-x-0'}
+                    `} />
+                </button>
+            </div>
+
+            {/* Controls - only show when enabled */}
+            {state.toolkitEnabled && (
+                <div className={`
+                    grid gap-2 transition-all duration-300
+                    ${compact ? 'grid-cols-3' : 'grid-cols-1 sm:grid-cols-3'}
+                `}>
+                    {/* Phase selector */}
+                    <div>
+                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                            📋 Phase {detectionMode === 'auto' && autoResult && (
+                                <span className="text-purple-500 text-[10px]">
+                                    ({autoResult.confidence})
+                                </span>
+                            )}
+                        </label>
+                        <select
+                            value={state.phase}
+                            onChange={(e) => handlePhaseChange(e.target.value as CVFPhaseToolkit)}
+                            className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
+                                ${detectionMode === 'auto'
+                                    ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
+                                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                }`}
+                        >
+                            {PHASE_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>
+                                    {opt.icon} {isVi ? opt.label : opt.labelEn}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Role selector */}
+                    <div>
+                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                            👤 Role
+                        </label>
+                        <select
+                            value={state.role}
+                            onChange={(e) => handleRoleChange(e.target.value as CVFRole)}
+                            className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
+                                ${detectionMode === 'auto'
+                                    ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
+                                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                }`}
+                        >
+                            {ROLE_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>
+                                    {opt.icon} {isVi ? opt.label : opt.labelEn}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Risk selector */}
+                    <div>
+                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                            ⚠️ Risk
+                        </label>
+                        <select
+                            value={state.riskLevel}
+                            onChange={(e) => handleRiskChange(e.target.value as CVFRiskLevel)}
+                            className={`
+                                w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1
+                                ${!riskValid
+                                    ? 'border-red-500 bg-red-50 dark:bg-red-950 focus:ring-red-500 focus:border-red-500'
+                                    : detectionMode === 'auto'
+                                        ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30 focus:ring-blue-500 focus:border-blue-500'
+                                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500'
+                                }
+                            `}
+                        >
+                            {RISK_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>
+                                    {isVi ? opt.label : opt.labelEn} ({opt.value})
+                                </option>
+                            ))}
+                        </select>
+                        {!riskValid && (
+                            <p className="text-xs text-red-500 mt-0.5">
+                                {isVi ? '⚠️ Risk vượt quá cho phép' : '⚠️ Risk exceeds phase limit'}
+                            </p>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Auto-detect info line */}
+            {state.toolkitEnabled && detectionMode === 'auto' && autoResult && (
+                <p className="text-[10px] text-purple-500 dark:text-purple-400 mt-1.5 truncate">
+                    🤖 {isVi ? 'Tự nhận diện' : 'Auto-detected'}: {autoResult.reason}
+                </p>
+            )}
+        </div>
+    );
+}

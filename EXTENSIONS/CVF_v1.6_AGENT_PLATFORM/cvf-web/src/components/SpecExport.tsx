@@ -8,6 +8,13 @@ import { useSettings } from './Settings';
 import { evaluateSpecGate } from '@/lib/spec-gate';
 import { evaluateEnforcement } from '@/lib/enforcement';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
+import {
+    autoDetectGovernance,
+    buildGovernanceSpecBlock,
+    isRiskAllowed,
+    type GovernanceState,
+    type AutoDetectResult,
+} from '@/lib/governance-context';
 
 interface SpecExportProps {
     template: Template;
@@ -807,6 +814,22 @@ ${validationHooks[lang]}
         spec += fullModeProtocol[lang];
     }
 
+    // Auto-detect governance context and inject governance block
+    if (mode === 'governance' || mode === 'full') {
+        const detected = autoDetectGovernance({
+            templateCategory: template.category,
+            messageText: intent,
+            exportMode: mode,
+        });
+        const govState: GovernanceState = {
+            phase: detected.phase,
+            role: detected.role,
+            riskLevel: detected.riskLevel,
+            toolkitEnabled: true,
+        };
+        spec += buildGovernanceSpecBlock(govState, lang);
+    }
+
     // Add standard instructions for all modes
     spec += `
 ---
@@ -855,6 +878,15 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
     const missingRequired = specGate.missing;
     const specGateStatus: 'PASS' | 'CLARIFY' | 'FAIL' = specGate.status;
     const canSendToAgent = specGateStatus === 'PASS';
+
+    // Auto-detect governance for risk warning
+    const autoDetected: AutoDetectResult = autoDetectGovernance({
+        templateCategory: template.category,
+        messageText: Object.values(values).join(' '),
+        exportMode: exportMode,
+    });
+    const riskExceedsPhase = (exportMode === 'governance' || exportMode === 'full')
+        && !isRiskAllowed(autoDetected.riskLevel, autoDetected.phase);
 
     const specGateLabels = exportLang === 'vi'
         ? {
@@ -977,6 +1009,40 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                     </p>
                 </div>
             )}
+
+            {/* Governance Auto-Detect Info */}
+            {(exportMode === 'governance' || exportMode === 'full') && (
+                <div className={`mb-4 p-3 rounded-lg border ${riskExceedsPhase
+                    ? 'bg-red-50 dark:bg-red-900/30 border-red-300 dark:border-red-700'
+                    : 'bg-purple-50 dark:bg-purple-900/30 border-purple-200 dark:border-purple-800'
+                    }`}>
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
+                            🤖 {exportLang === 'vi' ? 'CVF Auto-Detect' : 'CVF Auto-Detect'}
+                        </span>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium
+                            ${autoDetected.confidence === 'high'
+                                ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
+                                : autoDetected.confidence === 'medium'
+                                    ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
+                                    : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+                            }`}>
+                            {autoDetected.confidence}
+                        </span>
+                    </div>
+                    <p className="text-xs text-purple-600 dark:text-purple-400">
+                        📋 Phase: <strong>{autoDetected.phase}</strong> | 👤 Role: <strong>{autoDetected.role}</strong> | ⚠️ Risk: <strong>{autoDetected.riskLevel}</strong>
+                    </p>
+                    {riskExceedsPhase && (
+                        <p className="text-xs text-red-600 dark:text-red-400 mt-1 font-medium">
+                            🚫 {exportLang === 'vi'
+                                ? `Risk ${autoDetected.riskLevel} vượt quá giới hạn cho phase ${autoDetected.phase}. AI sẽ được cảnh báo.`
+                                : `Risk ${autoDetected.riskLevel} exceeds limit for phase ${autoDetected.phase}. AI will be warned.`
+                            }
+                        </p>
+                    )}
+                </div>
+            )}
             {exportMode === 'governance' && (
                 <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg border border-yellow-200 dark:border-yellow-800">
                     <p className="text-xs text-yellow-700 dark:text-yellow-300">
@@ -1073,8 +1139,8 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                         }}
                         disabled={!canSendToAgent}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all shadow-md ${canSendToAgent
-                                ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600'
-                                : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                            ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600'
+                            : 'bg-gray-300 text-gray-600 cursor-not-allowed'
                             }`}
                     >
                         <span>🤖</span>
@@ -1084,10 +1150,10 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
             </div>
 
             <div className={`mb-4 p-3 rounded-lg border ${specGateStatus === 'PASS'
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
-                    : specGateStatus === 'CLARIFY'
-                        ? 'bg-amber-50 border-amber-200 text-amber-700'
-                        : 'bg-rose-50 border-rose-200 text-rose-700'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                : specGateStatus === 'CLARIFY'
+                    ? 'bg-amber-50 border-amber-200 text-amber-700'
+                    : 'bg-rose-50 border-rose-200 text-rose-700'
                 }`}
             >
                 <div className="text-xs font-semibold">

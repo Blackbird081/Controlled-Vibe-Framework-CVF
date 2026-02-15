@@ -16,7 +16,7 @@ interface DocItem {
     slug: string;
     title: Record<Lang, string>;
     desc: Record<Lang, string>;
-    tag?: string;
+    tag?: Record<Lang, string>;
 }
 
 interface DocCategory {
@@ -40,15 +40,15 @@ const DOCS: DocCategory[] = [
                     vi: 'Hướng dẫn toàn diện cho 3 persona: Solo Dev, Team Lead, Enterprise. Bắt đầu từ đây!',
                     en: 'Comprehensive guide for 3 personas: Solo Dev, Team Lead, Enterprise. Start here!',
                 },
-                tag: 'START HERE',
+                tag: { vi: 'BẮT ĐẦU', en: 'START HERE' },
             },
             {
                 icon: '⚡',
                 slug: 'cvf-lite',
-                title: { vi: 'CVF Lite (Tiếng Việt)', en: 'CVF Lite (Vietnamese)' },
+                title: { vi: 'CVF Lite — Bắt đầu nhanh', en: 'CVF Lite — Quick Start' },
                 desc: {
-                    vi: 'Phiên bản rút gọn bằng tiếng Việt — nắm ý tưởng chính trong 2 phút.',
-                    en: 'Condensed Vietnamese version — grasp the key ideas in 2 minutes.',
+                    vi: 'Phiên bản rút gọn — nắm ý tưởng chính của CVF trong 2 phút.',
+                    en: 'Condensed version — grasp the key ideas of CVF in 2 minutes.',
                 },
             },
         ],
@@ -347,7 +347,7 @@ export default function DocsPage() {
                                 >
                                     {item.tag && (
                                         <span className="absolute top-3 right-3 px-2 py-0.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full">
-                                            {item.tag}
+                                            {item.tag[language]}
                                         </span>
                                     )}
                                     <div className="text-3xl mb-3">{item.icon}</div>

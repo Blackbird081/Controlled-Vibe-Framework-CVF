@@ -28,7 +28,7 @@ const DOC_META: Record<string, DocMeta> = {
         categoryIcon: '🚀',
     },
     'cvf-lite': {
-        title: { vi: 'CVF Lite (Tiếng Việt)', en: 'CVF Lite (Vietnamese)' },
+        title: { vi: 'CVF Lite — Bắt đầu nhanh', en: 'CVF Lite — Quick Start' },
         category: { vi: 'Bắt Đầu', en: 'Getting Started' },
         categoryIcon: '🚀',
     },

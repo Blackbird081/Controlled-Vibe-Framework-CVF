@@ -106,7 +106,7 @@ CVF's discipline (phases, specs, checklists) creates space for creativity. Witho
 | Flexible (use what you need) | All-or-nothing |
 | For any AI tool (ChatGPT, Claude, Copilot) | Tied to one AI provider |
 | For anyone (devs, PMs, founders) | Only for developers |
-| MIT licensed, open source | Proprietary |
+| CC BY-NC-ND 4.0, open source | Proprietary |
 
 ---
 

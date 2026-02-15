@@ -167,7 +167,7 @@ contract = community.get("CODE_REVIEW_v1")
 
 ## 📜 License
 
-MIT License — All contracts are open source and free to use.
+CC BY-NC-ND 4.0 License — All contracts are open source for non-commercial use.
 
 ---
 

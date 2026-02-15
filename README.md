@@ -346,7 +346,7 @@ We welcome contributions!
 - ❌ Sử dụng thương mại — không được phép
 - ❌ Sửa đổi và phân phối lại — không được phép
 
-> v1.0 và v1.1 giữ MIT License gốc. Tất cả nội dung khác (v1.2+, EXTENSIONS/, docs/, governance/, tools/) theo CC BY-NC-ND 4.0.
+> Toàn bộ repository (bao gồm v1.0, v1.1, v1.2+, EXTENSIONS/, docs/, governance/, tools/) theo CC BY-NC-ND 4.0.
 
 ---
 

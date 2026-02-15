@@ -5,7 +5,7 @@
 **AI-powered Prompt Engineering with Governance**
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](./ROADMAP.md)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](../../../LICENSE)
+[![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](../../../LICENSE)
 [![Tests](https://img.shields.io/badge/tests-270%20passing-brightgreen.svg)](./src/lib)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
 

@@ -98,4 +98,4 @@ v1.1/
 
 ## License
 
-MIT License — xem [LICENSE](LICENSE)
+CC BY-NC-ND 4.0 License — xem [LICENSE](LICENSE)

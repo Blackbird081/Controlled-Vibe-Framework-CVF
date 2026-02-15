@@ -387,7 +387,7 @@ A: Make the CVF path the path of least resistance. If bypass is common, your gov
 A: Initial: 10–15% (learning curve). After 4 weeks: net positive (faster reviews, less rework). After 3 months: 20–30% time savings (skill reuse, fewer bugs).
 
 **Q: Can we customize CVF?**  
-A: Yes. CVF is MIT licensed. Customize policies, risk levels, phase gates, authority matrix. Fork the Governance Toolkit and adapt to your org.
+A: Yes. CVF is CC BY-NC-ND 4.0 licensed for non-commercial use. Customize policies, risk levels, phase gates, authority matrix. Fork the Governance Toolkit and adapt to your org.
 
 **Q: Does CVF replace our existing SDLC?**  
 A: No. CVF layers on top of your existing process. It specifically governs the AI-assisted portions of your workflow.
@@ -400,7 +400,7 @@ A: CVF v1.6 supports English and Vietnamese. Core specs (INPUT_SPEC, OUTPUT_SPEC
 ## Enterprise Support
 
 **Open Source (Free):**
-- CVF is MIT licensed
+- CVF is CC BY-NC-ND 4.0 licensed (non-commercial)
 - Community support via GitHub Issues
 - Full documentation in this repo
 

@@ -100,4 +100,4 @@ src/
 
 ## 📝 License
 
-MIT License - Part of Controlled Vibe Framework (CVF)
+CC BY-NC-ND 4.0 License - Part of Controlled Vibe Framework (CVF)

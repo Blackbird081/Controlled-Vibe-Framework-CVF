@@ -26,7 +26,5 @@ ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM THE USE OF THIS MATERIAL.
 
 ---
 
-Note: The sub-folders v1.0/ and v1.1/ retain their original MIT License for
-backward compatibility. All other content in this repository, including but
-not limited to v1.2+, EXTENSIONS/, docs/, governance/, and tools/, is
-governed by this CC BY-NC-ND 4.0 license.
+This license applies to the entire repository, including all versions
+(v1.0, v1.1, v1.2+), EXTENSIONS/, docs/, governance/, and tools/.

@@ -246,7 +246,7 @@ This toolkit is **CVF-compliant** and follows all governance rules:
 
 ## License
 
-MIT License — see [LICENSE](../../LICENSE)
+CC BY-NC-ND 4.0 License — see [LICENSE](../../LICENSE)
 
 ---
 

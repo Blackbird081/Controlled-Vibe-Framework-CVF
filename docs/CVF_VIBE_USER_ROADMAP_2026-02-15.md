@@ -329,42 +329,42 @@ Feb 22-26, 2026   Phase 3: POLISH (9 tasks)
 
 ## Tracking
 
-> **Cập nhật:** 16/02/2026 — Đối chiếu lại với [Đánh giá UX](CVF_VIBE_USER_UX_ASSESSMENT_2026-02-15.md), đánh dấu chính xác ✅ Done / ⚠️ Partial / ❌ Not Resolved.
+> **Cập nhật:** 16/02/2026 (lần 2) — Fix 7/9 gaps còn lại. Chỉ còn 2 Nice-to-have chưa xử lý.
 
-### Phase 1: UNBLOCK ⚠️ 3/6 DONE — 3 PARTIAL
+### Phase 1: UNBLOCK ✅ COMPLETED (6/6)
+
+| Task | Status | Details |
+|------|:------:|---------|
+| 1.1 Login i18n + LanguageToggle | ✅ Done | Bilingual 100%: title, Username/Password labels, description, buttons, hints. LanguageToggle added |
+| 1.2 Auto role + ẩn selector | ✅ Done | Role selector hidden, default = viewer |
+| 1.3 Chat welcome + prompts | ✅ Done | Welcome message + 6 bilingual chips + **auto-send** via `handleSendMessage()` |
+| 1.4 Wizard i18n (9 files) | ✅ Done | All 9 wizards + shared wizard-i18n.ts utility |
+| 1.5 Demo mode UI | ✅ Done | "Try Demo" button in API key banner |
+| 1.6 Public landing page | ✅ Done | `/landing` route + middleware redirects unauthenticated `/` → `/landing` |
+
+### Phase 2: ENHANCE ✅ COMPLETED (9/9)
+
+| Task | Status | Details |
+|------|:------:|---------|
+| 2.1 GovernanceBar toggle | ✅ Done | Simple/Advanced toggle + **persisted to localStorage** |
+| 2.2 Sidebar simplification | ✅ Done | Data/Analytics group hidden for viewer role |
+| 2.3 Template preview samples | ✅ Done | Rich placeholder preview instead of "No preview" |
+| 2.4 Quality score fix | ✅ Done | **Mock score removed entirely** — no fake `{ overall: 8.2 }`, Technical Details section deleted |
+| 2.5 UI tooltips | ✅ Done | Bilingual title attrs on Phase/Role/Risk labels |
+| 2.6 Error messages i18n | ✅ Done | ProcessingScreen fully bilingual |
+| 2.7 Hide raw prompt | ✅ Done | Collapsed by default, neutral card style, renamed label |
+| 2.8 Marketplace i18n + content | ✅ Done | **10 templates** (4 Official + 6 Community), all enabled with "View Details" button |
+| 2.9 Onboarding content | ✅ Done | 3-step visual guide replacing video placeholder |
+
+### Phase 3: POLISH ⚠️ 7/9 DONE — 2 REMAINING
 
 | Task | Status | Details | Tồn đọng |
 |------|:------:|---------|-----------|
-| 1.1 Login i18n + LanguageToggle | ⚠️ Partial | LanguageToggle added, checkbox/button/description bilingual, env var jargon removed | "Username", "Password", "CVF v1.6 Login" title vẫn hardcoded English — chưa qua `t()` |
-| 1.2 Auto role + ẩn selector | ✅ Done | Role selector hidden, default = viewer | — |
-| 1.3 Chat welcome + prompts | ⚠️ Partial | Welcome message + 6 bilingual suggested prompt chips | Click chip chỉ `setInput()` — **không tự gửi** (thiếu `handleSendMessage()`) |
-| 1.4 Wizard i18n (9 files) | ✅ Done | All 9 wizards + shared wizard-i18n.ts utility | — |
-| 1.5 Demo mode UI | ✅ Done | "Try Demo" button in API key banner | — |
-| 1.6 Public landing page | ⚠️ Partial | `/landing` route created, bilingual, hero + 3-step + CTA | Truy cập `/` vẫn redirect → `/login` thay vì → `/landing`. Middleware chưa xử lý root path cho unauthenticated user |
-
-### Phase 2: ENHANCE ⚠️ 6/9 DONE — 3 PARTIAL
-
-| Task | Status | Details | Tồn đọng |
-|------|:------:|---------|-----------|
-| 2.1 GovernanceBar toggle | ⚠️ Partial | Simple/Advanced mode toggle hoạt động, Simple ẩn Phase/Role/Risk | `advancedMode` chưa lưu vào localStorage — refresh page sẽ reset về Simple |
-| 2.2 Sidebar simplification | ✅ Done | Data/Analytics group hidden for viewer role | — |
-| 2.3 Template preview samples | ✅ Done | Rich placeholder preview instead of "No preview" | — |
-| 2.4 Quality score fix | ⚠️ Partial | Collapsed into "Technical Details" section, synced with global lang | Hardcoded mock score `{ overall: 8.2, structure: 9.0, ... }` vẫn còn trong code (L107-112) — nên xóa hoàn toàn hoặc ẩn section |
-| 2.5 UI tooltips | ✅ Done | Bilingual title attrs on Phase/Role/Risk labels | — |
-| 2.6 Error messages i18n | ✅ Done | ProcessingScreen fully bilingual | — |
-| 2.7 Hide raw prompt | ✅ Done | Collapsed by default, neutral card style, renamed label | — |
-| 2.8 Marketplace i18n | ⚠️ Partial | All marketplace strings bilingual via useLanguage() | Vẫn chỉ có 4 template "Coming Soon" đều disabled — marketplace trống, không có nội dung thực |
-| 2.9 Onboarding content | ✅ Done | 3-step visual guide replacing video placeholder | — |
-
-### Phase 3: POLISH ⚠️ 6/9 DONE — 3 PARTIAL
-
-| Task | Status | Details | Tồn đọng |
-|------|:------:|---------|-----------|
-| 3.1 Demo templates | ⚠️ Partial | 4 templates có sampleOutput markdown | Chưa có flow auto-run: user vẫn phải tự chọn template → điền form → submit. Chưa có "one-click" chạy demo ngay |
-| 3.2 Difficulty badges | ⚠️ Partial | Colored pills render trên TemplateCard (Easy/Medium/Advanced) | Chỉ 10/50 templates có `difficulty` field rõ ràng, 40 templates còn lại default "Medium" |
+| 3.1 Demo templates | ⚠️ Partial | 4 templates có sampleOutput markdown | Chưa có flow auto-run one-click |
+| 3.2 Difficulty badges | ✅ Done | **50/50 templates** có difficulty field (easy/medium/advanced). Colored pills render |
 | 3.3 Inline help tooltips | ✅ Done | title attrs on template cards, form submit, chat send | — |
 | 3.4 ARIA labels | ✅ Done | 26 ARIA labels across 11 files | — |
-| 3.5 PDF/Word export | ⚠️ Partial | Print/PDF button via `window.print()` in ResultViewer | Chỉ dùng `window.print()` — không có jsPDF hay docx package. Không xuất được Word, PDF phụ thuộc trình duyệt |
+| 3.5 PDF/Word export | ⚠️ Partial | Print/PDF button via `window.print()` | Chưa có jsPDF/docx — Nice-to-have |
 | 3.6 Template search | ✅ Done | Search input on home page filtering by name/description | — |
 | 3.7 Keyboard navigation | ✅ Done | Enter/Space on cards, Escape on modals, Enter on prompts | — |
 | 3.8 aria-live regions | ✅ Done | ProcessingScreen + AgentChat message areas | — |
@@ -372,34 +372,34 @@ Feb 22-26, 2026   Phase 3: POLISH (9 tasks)
 
 ---
 
-## Tồn Đọng / Remaining Gaps (16/02/2026)
+## Tồn Đọng / Remaining Gaps (16/02/2026 — cập nhật sau fix)
 
-> Đây là **9 vấn đề** còn lại khi đối chiếu assessment gốc vs. codebase thực tế.
+> Chỉ còn **2 Nice-to-have** chưa hoàn thiện. Tất cả Critical và Important đã resolve.
 
-| # | Mức độ | Vấn đề | File chính | Cần làm |
-|---|:------:|--------|-----------|---------|
-| 1 | ⭐ Critical | Login form labels hardcoded EN | `login/page.tsx` | Đưa "Username", "Password", "CVF v1.6 Login" qua `t()` |
-| 2 | ⭐ Critical | Chat chips không tự gửi | `AgentChat.tsx` L169 | Thêm `handleSendMessage()` sau `setInput()` |
-| 3 | ⭐ Critical | Root `/` → `/login` thay vì `/landing` | `middleware.ts` | Redirect unauthenticated `/` → `/landing` |
-| 4 | 🔶 Important | GovernanceBar pref không persist | `GovernanceBar.tsx` L37 | Lưu `advancedMode` vào localStorage, load on mount |
-| 5 | 🔶 Important | Quality score mock data còn lại | `ResultViewer.tsx` L107-112 | Xóa hardcoded `{ overall: 8.2 }` hoặc ẩn section hoàn toàn |
-| 6 | 🔶 Important | Marketplace trống | `TemplateMarketplace.tsx` | Ẩn nav item hoặc thêm 8-10 community templates |
-| 7 | 🟢 Nice | Demo chưa auto-run | `AgentChat.tsx`, home page | Thêm flow one-click: chọn template → tự điền → mock AI chạy |
-| 8 | 🟢 Nice | PDF/Word chỉ window.print() | `ResultViewer.tsx` | Install jsPDF + docx, thêm export buttons thực |
-| 9 | 🟢 Nice | Difficulty chỉ 10/50 templates | 5 template files | Gán `difficulty` cho 40 templates còn lại |
+| # | Mức độ | Vấn đề | Trạng thái |
+|---|:------:|--------|:----------:|
+| ~~1~~ | ~~⭐ Critical~~ | ~~Login form labels hardcoded EN~~ | ✅ Fixed — `isVi` cho title/labels |
+| ~~2~~ | ~~⭐ Critical~~ | ~~Chat chips không tự gửi~~ | ✅ Fixed — `handleSendMessage()` after `setInput()` |
+| ~~3~~ | ~~⭐ Critical~~ | ~~Root `/` → `/login`~~ | ✅ Fixed — middleware redirects to `/landing` |
+| ~~4~~ | ~~🔶 Important~~ | ~~GovernanceBar pref không persist~~ | ✅ Fixed — localStorage read/write |
+| ~~5~~ | ~~🔶 Important~~ | ~~Quality score mock data~~ | ✅ Fixed — section & data removed entirely |
+| ~~6~~ | ~~🔶 Important~~ | ~~Marketplace trống~~ | ✅ Fixed — 10 templates, enabled buttons |
+| ~~7~~ | ~~🟢 Nice~~ | ~~Difficulty chỉ 10/50~~ | ✅ Fixed — 50/50 templates have difficulty |
+| 8 | 🟢 Nice | Demo chưa auto-run one-click | ⚠️ Remaining — flow one-click chưa implement |
+| 9 | 🟢 Nice | PDF/Word chỉ window.print() | ⚠️ Remaining — jsPDF/docx chưa install |
 
 ### Tóm tắt tiến độ tổng
 
 ```
 Tổng tasks trong roadmap:     24
-✅ Hoàn thành đầy đủ:          15  (62.5%)
-⚠️ Đã làm nhưng còn gap:       9  (37.5%)
+✅ Hoàn thành đầy đủ:          22  (91.7%)
+⚠️ Còn gap nhỏ:                2  (8.3%)  — cả 2 đều Nice-to-have
 ❌ Chưa làm:                    0  (0%)
 
-Theo mức độ tồn đọng:
-  ⭐ Critical gaps:              3  (Login labels, Chat send, Root URL)
-  🔶 Important gaps:             3  (Persist pref, Mock score, Marketplace)
-  🟢 Nice-to-have gaps:          3  (Demo auto-run, Real PDF, Difficulty data)
+Theo mức độ:
+  ⭐ Critical:    7/7 ✅ (100%)
+  🔶 Important:   8/8 ✅ (100%)  
+  🟢 Nice-to-have: 7/9 ✅ (77.8%)  — 2 remaining: demo auto-run, real PDF export
 ```
 
 ---

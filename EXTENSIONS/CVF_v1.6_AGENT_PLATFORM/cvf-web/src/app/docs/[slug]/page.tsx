@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { useLanguage, LanguageToggle } from '@/lib/i18n';
 import { ThemeToggle } from '@/lib/theme';
 
@@ -154,7 +155,17 @@ export default function DocDetailPage() {
                 if (text.trimStart().startsWith('<!DOCTYPE') || text.trimStart().startsWith('<html')) {
                     throw new Error('Received HTML instead of markdown');
                 }
-                setContent(text);
+                // Clean up content for web context
+                let cleaned = text
+                    // Remove relative links that point to GitHub repo paths
+                    .replace(/\[([^\]]+)\]\((?:\.\.\/|\.\/|(?!https?:\/\/|#|mailto:))([^)]+)\)/g, '$1')
+                    // Remove "Star on GitHub" / "Full Docs" / "Join Discord" lines
+                    .replace(/^.*Star on GitHub.*$/gm, '')
+                    .replace(/^.*Full Docs.*$/gm, '')
+                    // Remove empty <div align="center"> wrappers
+                    .replace(/<div[^>]*align[^>]*>/gi, '')
+                    .replace(/<\/div>/gi, '');
+                setContent(cleaned);
                 setLoading(false);
             })
             .catch(() => {
@@ -246,7 +257,23 @@ export default function DocDetailPage() {
                         prose-strong:text-gray-900 dark:prose-strong:text-white
                         prose-img:rounded-xl prose-img:shadow-lg
                     ">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            rehypePlugins={[rehypeRaw]}
+                            components={{
+                                // Override links: internal anchor links work, external open in new tab
+                                a: ({ href, children, ...props }) => {
+                                    if (href?.startsWith('#')) {
+                                        return <a href={href} {...props}>{children}</a>;
+                                    }
+                                    if (href?.startsWith('http')) {
+                                        return <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>;
+                                    }
+                                    // Strip any remaining relative links — just render as text
+                                    return <span {...props}>{children}</span>;
+                                },
+                            }}
+                        >
                             {content}
                         </ReactMarkdown>
                     </article>

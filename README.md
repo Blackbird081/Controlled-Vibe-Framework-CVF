@@ -7,7 +7,7 @@
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-176%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
 [![Coverage](https://img.shields.io/badge/coverage-94%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
 
@@ -340,7 +340,13 @@ We welcome contributions!
 
 ## 📄 License
 
-MIT License - see [LICENSE](v1.0/LICENSE) file
+**CC BY-NC-ND 4.0** — [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0](LICENSE)
+
+- ✅ Đọc, chia sẻ (share) — được phép
+- ❌ Sử dụng thương mại — không được phép
+- ❌ Sửa đổi và phân phối lại — không được phép
+
+> v1.0 và v1.1 giữ MIT License gốc. Tất cả nội dung khác (v1.2+, EXTENSIONS/, docs/, governance/, tools/) theo CC BY-NC-ND 4.0.
 
 ---
 

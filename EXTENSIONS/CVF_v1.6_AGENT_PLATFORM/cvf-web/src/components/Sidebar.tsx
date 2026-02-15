@@ -186,6 +186,16 @@ export default function Sidebar({
                         >
                             <span className="flex-1 text-left">{t('nav.help') || '📖 Hướng dẫn'}</span>
                         </Link>
+                        <Link
+                            href="/docs"
+                            className={clsx(
+                                'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
+                                'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                            )}
+                            onClick={onClose}
+                        >
+                            <span className="flex-1 text-left">{t('nav.docs') || '📚 Tài liệu'}</span>
+                        </Link>
                     </NavGroup>
 
                     {/* AI Features Group */}

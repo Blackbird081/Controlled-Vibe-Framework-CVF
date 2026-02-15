@@ -27,6 +27,9 @@ export default function SkillsPage() {
                         <Link href="/help" className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                             {t('nav.help')}
                         </Link>
+                        <Link href="/docs" className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                            {t('nav.docs')}
+                        </Link>
                         <ThemeToggle />
                         <LanguageToggle />
                     </nav>

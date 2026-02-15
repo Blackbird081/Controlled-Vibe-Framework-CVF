@@ -135,6 +135,16 @@ export function SkillLibrary() {
         'Not Ready': 'bg-gray-100 text-gray-700',
     };
 
+    const qualityLabel = (key: string) => {
+        const map: Record<string, string> = {
+            'Excellent': t('skills.excellent'),
+            'Good': t('skills.good'),
+            'Needs Review': t('skills.needsReview'),
+            'Not Ready': t('skills.notReady'),
+        };
+        return map[key] || key;
+    };
+
     const domainReports = categories.map(category => {
         const total = category.skills.length;
         const scores = category.skills
@@ -230,11 +240,11 @@ export function SkillLibrary() {
             {/* Sidebar - Skill Navigator */}
             <div className="w-full md:w-1/3 flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[40vh] md:max-h-none">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                    <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-3">📚 Skill Library</h2>
+                    <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-3">{t('skills.library')}</h2>
                     <div className="relative">
                         <input
                             type="text"
-                            placeholder="Search skills..."
+                            placeholder={t('skills.searchPlaceholder')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-9 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border-none focus:ring-2 focus:ring-emerald-500 text-sm"
@@ -246,7 +256,7 @@ export function SkillLibrary() {
                 <div className="flex-1 overflow-y-auto p-2">
                     {filteredCategories.length === 0 ? (
                         <div className="text-center p-8 text-gray-500">
-                            <p>No skills found matching "{searchTerm}"</p>
+                            <p>{t('skills.noResults')} "{searchTerm}"</p>
                         </div>
                     ) : (
                         filteredCategories.map(category => (
@@ -302,13 +312,13 @@ export function SkillLibrary() {
                                                     className="ml-1 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] bg-blue-100 text-blue-700 hover:bg-blue-200"
                                                     title="Open full page"
                                                 >
-                                                    ↗ Open
+                                                    {t('skills.open')}
                                                 </button>
-                                                {skill.difficulty === 'Easy' && <span className="text-[10px] bg-green-100 text-green-800 px-1.5 py-0.5 rounded">Easy</span>}
-                                                {skill.difficulty === 'Medium' && <span className="text-[10px] bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded">Med</span>}
-                                                {skill.difficulty === 'Advanced' && <span className="text-[10px] bg-red-100 text-red-800 px-1.5 py-0.5 rounded">Adv</span>}
+                                                {skill.difficulty === 'Easy' && <span className="text-[10px] bg-green-100 text-green-800 px-1.5 py-0.5 rounded">{t('skills.easy')}</span>}
+                                                {skill.difficulty === 'Medium' && <span className="text-[10px] bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded">{t('skills.med')}</span>}
+                                                {skill.difficulty === 'Advanced' && <span className="text-[10px] bg-red-100 text-red-800 px-1.5 py-0.5 rounded">{t('skills.adv')}</span>}
                                                 <span className={`text-[10px] px-1.5 py-0.5 rounded ${uatBadgeClasses(skill.uatStatus)}`}>
-                                                    {skill.uatStatus || 'Not Run'}
+                                                    {skill.uatStatus || t('skills.notRun')}
                                                 </span>
                                             </span>
                                         </div>
@@ -324,52 +334,52 @@ export function SkillLibrary() {
             <div className="w-full md:w-2/3 flex flex-col gap-4 min-h-[40vh] md:min-h-0">
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                     <div className="p-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">📊 Domain Report</h3>
-                        <p className="text-xs text-gray-500 mt-1">Số lượng + chất lượng input theo domain (Spec score/quality) + Output UAT coverage.</p>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('skills.domainReport')}</h3>
+                        <p className="text-xs text-gray-500 mt-1">{t('skills.domainReportDesc')}</p>
                         <div className="mt-3 flex flex-wrap gap-3 text-xs text-gray-600">
                             <span className="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700">
-                                Total skills: {overallSkillCount}
+                                {t('skills.totalSkills')}: {overallSkillCount}
                             </span>
                             <span className="px-2 py-1 rounded-full bg-sky-50 text-sky-700">
-                                Output UAT coverage: {overallCoverage}%
+                                {t('skills.uatCoverage')}: {overallCoverage}%
                             </span>
                             <span className="px-2 py-1 rounded-full bg-amber-50 text-amber-700">
-                                Output UAT completed: {overallUatCount}
+                                {t('skills.uatCompleted')}: {overallUatCount}
                             </span>
                             <span className="px-2 py-1 rounded-full bg-indigo-50 text-indigo-700">
-                                Spec avg: {overallSpecAvg !== null ? `${overallSpecAvg}%` : '—'}
+                                {t('skills.specAvgLabel')}: {overallSpecAvg !== null ? `${overallSpecAvg}%` : '—'}
                             </span>
                             {overallUatCount === 0 && (
                                 <span className="px-2 py-1 rounded-full bg-gray-100 text-gray-600">
-                                    UAT chưa chạy → Output UAT score = 0
+                                    {t('skills.uatNotRunHint')}
                                 </span>
                             )}
                         </div>
                         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs text-gray-600 items-end relative z-10">
                             <label className="flex flex-col gap-1">
-                                <span>Sort</span>
+                                <span>{t('skills.sort')}</span>
                                 <select
                                     value={reportSort}
                                     onChange={(e) => setReportSort(e.target.value as typeof reportSort)}
                                     className="w-full border border-gray-200 rounded-md px-3 py-2 bg-white dark:bg-gray-800 text-sm"
                                 >
-                                    <option value="count">Count</option>
-                                    <option value="coverage">Coverage</option>
-                                    <option value="specAvg">Spec Avg</option>
-                                    <option value="name">Name</option>
+                                    <option value="count">{t('skills.countOption')}</option>
+                                    <option value="coverage">{t('skills.coverageOption')}</option>
+                                    <option value="specAvg">{t('skills.specAvgOption')}</option>
+                                    <option value="name">{t('skills.nameOption')}</option>
                                 </select>
                             </label>
                             <div className="flex flex-col gap-1">
-                                <span>Sort Dir</span>
+                                <span>{t('skills.sortDir')}</span>
                                 <button
                                     onClick={() => setReportSortDir(prev => prev === 'desc' ? 'asc' : 'desc')}
                                     className="w-full px-3 py-2 rounded-md border border-gray-200 bg-white dark:bg-gray-800 text-sm"
                                 >
-                                    {reportSortDir === 'desc' ? 'Desc' : 'Asc'}
+                                    {reportSortDir === 'desc' ? t('skills.desc') : t('skills.asc')}
                                 </button>
                             </div>
                             <label className="flex flex-col gap-1">
-                                <span>Min Count</span>
+                                <span>{t('skills.minCount')}</span>
                                 <select
                                     value={minCount}
                                     onChange={(e) => setMinCount(Number(e.target.value))}
@@ -382,7 +392,7 @@ export function SkillLibrary() {
                                 </select>
                             </label>
                             <label className="flex flex-col gap-1">
-                                <span>Min Coverage</span>
+                                <span>{t('skills.minCoverage')}</span>
                                 <select
                                     value={minCoverage}
                                     onChange={(e) => setMinCoverage(Number(e.target.value))}
@@ -395,7 +405,7 @@ export function SkillLibrary() {
                                 </select>
                             </label>
                             <label className="flex flex-col gap-1">
-                                <span>Min Spec Score</span>
+                                <span>{t('skills.minSpecScore')}</span>
                                 <select
                                     value={minSpecScore}
                                     onChange={(e) => setMinSpecScore(Number(e.target.value))}
@@ -414,15 +424,15 @@ export function SkillLibrary() {
                                     onChange={(e) => setOnlyWithUat(e.target.checked)}
                                     className="h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                                 />
-                                <span>Only domains with Output UAT</span>
+                                <span>{t('skills.onlyWithUat')}</span>
                             </label>
                         </div>
                         <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-gray-600 relative z-10">
                             <span>
-                                Showing {reportRangeStart}-{reportRangeEnd} of {filteredReports.length}
+                                {t('skills.showing')} {reportRangeStart}-{reportRangeEnd} / {filteredReports.length}
                             </span>
                             <div className="flex flex-wrap items-center gap-2">
-                                <span>Rows:</span>
+                                <span>{t('skills.rows')}:</span>
                                 <select
                                     value={reportPageSize}
                                     onChange={(e) => {
@@ -441,17 +451,17 @@ export function SkillLibrary() {
                                     disabled={safeReportPage === 1}
                                     className={`px-3 py-2 rounded-md border text-sm ${safeReportPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}`}
                                 >
-                                    Prev
+                                    {t('skills.prev')}
                                 </button>
                                 <span>
-                                    Page {safeReportPage} / {totalReportPages}
+                                    {t('skills.page')} {safeReportPage} / {totalReportPages}
                                 </span>
                                 <button
                                     onClick={() => setReportPage(prev => Math.min(totalReportPages, prev + 1))}
                                     disabled={safeReportPage >= totalReportPages}
                                     className={`px-3 py-2 rounded-md border text-sm ${safeReportPage >= totalReportPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}`}
                                 >
-                                    Next
+                                    {t('skills.next')}
                                 </button>
                             </div>
                         </div>
@@ -463,17 +473,17 @@ export function SkillLibrary() {
                                 <div key={report.id} className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/60 p-3">
                                     <div className="flex items-center justify-between gap-2">
                                         <div className="font-semibold text-gray-800 dark:text-gray-100">{report.name}</div>
-                                        <div className="text-xs text-gray-500">Count: {report.total}</div>
+                                        <div className="text-xs text-gray-500">{t('skills.countOption')}: {report.total}</div>
                                     </div>
                                     <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
                                         <div className="rounded-lg bg-gray-50 dark:bg-gray-900/50 p-2">
-                                            <div className="text-gray-500">Spec Avg</div>
+                                            <div className="text-gray-500">{t('skills.specAvgOption')}</div>
                                             <div className="font-semibold text-gray-800 dark:text-gray-100">
                                                 {report.specAvg !== null ? `${report.specAvg}%` : '—'}
                                             </div>
                                         </div>
                                         <div className="rounded-lg bg-gray-50 dark:bg-gray-900/50 p-2">
-                                            <div className="text-gray-500">Output UAT</div>
+                                            <div className="text-gray-500">{t('skills.outputUat')}</div>
                                             <div className="font-semibold text-gray-800 dark:text-gray-100">{report.coverage}%</div>
                                             <div className="mt-2 h-2 rounded-full bg-gray-100 dark:bg-gray-700">
                                                 <div
@@ -489,7 +499,7 @@ export function SkillLibrary() {
                                                 key={quality}
                                                 className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${qualityBadges[quality] || 'bg-gray-100 text-gray-700'}`}
                                             >
-                                                {quality}: {count}
+                                                {qualityLabel(quality)}: {count}
                                             </span>
                                         ))}
                                     </div>
@@ -502,11 +512,11 @@ export function SkillLibrary() {
                             <table className="w-full text-sm min-w-[640px]">
                                 <thead>
                                     <tr className="text-left text-xs uppercase text-gray-500">
-                                        <th className="py-2">Domain</th>
-                                        <th className="py-2 text-right">Count</th>
-                                        <th className="py-2 text-right">Spec Avg</th>
-                                        <th className="py-2">Output UAT Coverage</th>
-                                        <th className="py-2">Spec Quality</th>
+                                        <th className="py-2">{t('skills.domain')}</th>
+                                        <th className="py-2 text-right">{t('skills.countOption')}</th>
+                                        <th className="py-2 text-right">{t('skills.specAvgOption')}</th>
+                                        <th className="py-2">{t('skills.uatCoverageCol')}</th>
+                                        <th className="py-2">{t('skills.specQualityCol')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -535,7 +545,7 @@ export function SkillLibrary() {
                                                             key={quality}
                                                             className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${qualityBadges[quality] || 'bg-gray-100 text-gray-700'}`}
                                                         >
-                                                            {quality}: {count}
+                                                            {qualityLabel(quality)}: {count}
                                                         </span>
                                                     ))}
                                                 </div>
@@ -563,57 +573,57 @@ export function SkillLibrary() {
                                         <div className="mt-3 flex flex-wrap gap-2">
                                             {selectedSkill.riskLevel && (
                                                 <span className="px-2 py-1 text-[11px] font-semibold bg-rose-100 text-rose-800 rounded-full">
-                                                    Risk: {selectedSkill.riskLevel}
+                                                    {t('skills.risk')}: {selectedSkill.riskLevel}
                                                 </span>
                                             )}
                                             {selectedSkill.autonomy && (
                                                 <span className="px-2 py-1 text-[11px] font-semibold bg-amber-100 text-amber-800 rounded-full">
-                                                    Autonomy: {selectedSkill.autonomy}
+                                                    {t('skills.autonomy')}: {selectedSkill.autonomy}
                                                 </span>
                                             )}
                                             {selectedSkill.allowedRoles && (
                                                 <span className="px-2 py-1 text-[11px] font-semibold bg-sky-100 text-sky-800 rounded-full">
-                                                    Roles: {selectedSkill.allowedRoles}
+                                                    {t('skills.roles')}: {selectedSkill.allowedRoles}
                                                 </span>
                                             )}
                                             {selectedSkill.allowedPhases && (
                                                 <span className="px-2 py-1 text-[11px] font-semibold bg-emerald-100 text-emerald-800 rounded-full">
-                                                    Phases: {selectedSkill.allowedPhases}
+                                                    {t('skills.phases')}: {selectedSkill.allowedPhases}
                                                 </span>
                                             )}
                                             {selectedSkill.authorityScope && (
                                                 <span className="px-2 py-1 text-[11px] font-semibold bg-indigo-100 text-indigo-800 rounded-full">
-                                                    Scope: {selectedSkill.authorityScope}
+                                                    {t('skills.scope')}: {selectedSkill.authorityScope}
                                                 </span>
                                             )}
                                             {selectedSkill.specGate && (
                                                 <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${specGateBadgeClasses(selectedSkill.specGate)}`}>
-                                                    Spec Gate: {selectedSkill.specGate}
+                                                    {t('skills.specGate')}: {selectedSkill.specGate}
                                                 </span>
                                             )}
                                             {selectedSkill.uatStatus && (
                                                 <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${uatBadgeClasses(selectedSkill.uatStatus)}`}>
-                                                    Output UAT: {selectedSkill.uatStatus}
+                                                    {t('skills.outputUatLabel')}: {selectedSkill.uatStatus}
                                                 </span>
                                             )}
                                             {typeof selectedSkill.uatScore === 'number' && (
                                                 <span className="px-2 py-1 text-[11px] font-semibold bg-gray-100 text-gray-700 rounded-full">
-                                                    Score: {selectedSkill.uatScore}%
+                                                    {t('skills.scoreLabel')}: {selectedSkill.uatScore}%
                                                 </span>
                                             )}
                                             {selectedSkill.uatQuality && (
                                                 <span className="px-2 py-1 text-[11px] font-semibold bg-slate-100 text-slate-700 rounded-full">
-                                                    Output Quality: {selectedSkill.uatQuality}
+                                                    {t('skills.outputQuality')}: {selectedSkill.uatQuality}
                                                 </span>
                                             )}
                                             {typeof selectedSkill.specScore === 'number' && (
                                                 <span className="px-2 py-1 text-[11px] font-semibold bg-indigo-100 text-indigo-800 rounded-full">
-                                                    Spec: {selectedSkill.specScore}%
+                                                    {t('skills.specLabel')}: {selectedSkill.specScore}%
                                                 </span>
                                             )}
                                             {selectedSkill.specQuality && (
                                                 <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${qualityBadges[selectedSkill.specQuality] || 'bg-gray-100 text-gray-700'}`}>
-                                                    Spec Quality: {selectedSkill.specQuality}
+                                                    {t('skills.specQualityLabel')}: {selectedSkill.specQuality}
                                                 </span>
                                             )}
                                         </div>
@@ -652,7 +662,7 @@ export function SkillLibrary() {
                                                 : 'text-gray-500 dark:text-gray-200'
                                                 }`}
                                         >
-                                            Skill
+                                            {t('skills.skillTab')}
                                         </button>
                                         <button
                                             onClick={() => setViewMode('uat')}
@@ -661,7 +671,7 @@ export function SkillLibrary() {
                                                 : 'text-gray-500 dark:text-gray-200'
                                                 }`}
                                         >
-                                            UAT
+                                            {t('skills.uatTab')}
                                         </button>
                                     </div>
                                     {viewMode === 'uat' && (
@@ -673,7 +683,7 @@ export function SkillLibrary() {
                                                     : 'text-gray-500 dark:text-gray-200'
                                                     }`}
                                             >
-                                                View
+                                                {t('skills.viewTab')}
                                             </button>
                                             <button
                                                 onClick={() => setUatEditMode(true)}
@@ -683,7 +693,7 @@ export function SkillLibrary() {
                                                     : 'text-gray-500 dark:text-gray-200'
                                                     } ${selectedSkill?.specGate === 'FAIL' ? 'opacity-50 cursor-not-allowed' : ''}`}
                                             >
-                                                Edit
+                                                {t('skills.editTab')}
                                             </button>
                                         </div>
                                     )}
@@ -696,11 +706,11 @@ export function SkillLibrary() {
                                                 skillTitle: selectedSkill.title,
                                                 domain: selectedSkill.domain,
                                             });
-                                            alert('Copied raw markdown!');
+                                            alert(t('skills.copied'));
                                         }}
                                         className="px-3 py-1.5 text-xs font-medium bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                                     >
-                                        📋 Copy Raw
+                                        {t('skills.copyRaw')}
                                     </button>
                                 </div>
                             </div>
@@ -711,7 +721,7 @@ export function SkillLibrary() {
                                             const specGateWarning = selectedSkill.specGate === 'FAIL'
                                                 ? (
                                                     <div className="not-prose bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-lg text-sm mb-4">
-                                                        Spec Gate = FAIL. UAT chỉ được chỉnh sửa khi Spec đạt chuẩn.
+                                                        {t('skills.specGateWarning')}
                                                     </div>
                                                 )
                                                 : null;
@@ -723,7 +733,7 @@ export function SkillLibrary() {
                                                             value={uatDraft}
                                                             onChange={(e) => setUatDraft(e.target.value)}
                                                             className="w-full min-h-[420px] p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm font-mono"
-                                                            placeholder="Edit UAT markdown..."
+                                                            placeholder={t('skills.editPlaceholder')}
                                                         />
                                                         <div className="flex items-center gap-2">
                                                             <button
@@ -753,7 +763,7 @@ export function SkillLibrary() {
                                                                 className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700"
                                                                 disabled={selectedSkill.specGate === 'FAIL'}
                                                             >
-                                                                Save UAT
+                                                                {t('skills.saveUat')}
                                                             </button>
                                                             <button
                                                                 onClick={() => {
@@ -762,11 +772,11 @@ export function SkillLibrary() {
                                                                 }}
                                                                 className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium"
                                                             >
-                                                                Cancel
+                                                                {t('skills.cancel')}
                                                             </button>
                                                         </div>
                                                         <p className="text-xs text-gray-500">
-                                                            UAT editor lưu trực tiếp vào file `.md`. Dùng markdown chuẩn.
+                                                            {t('skills.editorHint')}
                                                         </p>
                                                     </div>
                                                 );
@@ -784,7 +794,7 @@ export function SkillLibrary() {
                                             );
                                         })()
                                     ) : (
-                                        <div className="text-sm text-gray-500">No UAT record found for this skill.</div>
+                                        <div className="text-sm text-gray-500">{t('skills.noUat')}</div>
                                     )
                                 ) : (
                                     <ReactMarkdown>{selectedSkill.content || ''}</ReactMarkdown>
@@ -794,8 +804,8 @@ export function SkillLibrary() {
                     ) : (
                         <div className="flex-1 flex flex-col items-center justify-center text-gray-400 p-8 text-center">
                             <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 text-3xl">👈</div>
-                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Select a skill to view</h3>
-                            <p className="max-w-xs text-sm">Browse the library on the left to view detailed skill documentation, inputs, and expected outputs.</p>
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">{t('skills.selectSkill')}</h3>
+                            <p className="max-w-xs text-sm">{t('skills.selectSkillDesc')}</p>
                         </div>
                     )}
                 </div>

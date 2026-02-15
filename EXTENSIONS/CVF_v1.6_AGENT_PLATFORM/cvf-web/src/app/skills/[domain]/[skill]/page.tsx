@@ -5,11 +5,13 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SkillDetailView } from '@/components/SkillDetailView';
 import { Skill, SkillCategory } from '@/types/skill';
+import { useLanguage } from '@/lib/i18n';
 
 type SkillIndexPayload = SkillCategory[] | { categories?: SkillCategory[] };
 
 export default function SkillDetailPage() {
     const params = useParams();
+    const { t } = useLanguage();
     const domain = (params?.domain as string | undefined) ?? '';
     const skillId = (params?.skill as string | undefined) ?? '';
     const [skill, setSkill] = useState<Skill | null>(null);
@@ -69,13 +71,13 @@ export default function SkillDetailPage() {
                 <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
                     <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
                         <Link href="/" className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600">
-                            ← Back to CVF
+                            {t('skills.backToCvf')}
                         </Link>
                     </div>
                 </header>
                 <main className="max-w-5xl mx-auto px-4 py-20 text-center text-gray-500">
-                    <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">Skill not found</h1>
-                    <p className="text-sm">The skill you are looking for is not available in the current build.</p>
+                    <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">{t('skills.notFound')}</h1>
+                    <p className="text-sm">{t('skills.notFoundDesc')}</p>
                 </main>
             </div>
         );
@@ -86,7 +88,7 @@ export default function SkillDetailPage() {
             <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
                 <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
                     <Link href="/" className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600">
-                        ← Back to CVF
+                        {t('skills.backToCvf')}
                     </Link>
                 </div>
             </header>

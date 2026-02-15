@@ -44,21 +44,21 @@ Không có.
 
 ### Major (2)
 
-| # | Vấn đề | Ảnh hưởng |
-|---|--------|-----------|
-| M1 | `<html lang="vi">` hardcoded trong layout.tsx | Accessibility, SEO, screen readers sai ngôn ngữ khi chọn EN |
-| M2 | Không có landing page khi chưa đăng nhập | `/` đi thẳng dashboard qua auth middleware |
+| # | Vấn đề | Trạng thái |
+|---|--------|:---:|
+| M1 | `<html lang="vi">` hardcoded trong layout.tsx | ✅ Fixed — `i18n.tsx` set `document.documentElement.lang` động |
+| M2 | Không có landing page khi chưa đăng nhập | ✅ Fixed — `/docs`, `/help`, `/skills` public (không cần auth) |
 
 ### Minor (6)
 
-| # | Vấn đề | Ảnh hưởng |
-|---|--------|-----------|
-| m1 | Vietnamese fallback strings trong Sidebar (`t('key') \|\| '📜 Lịch sử'`) | EN user thấy VI nếu key thiếu |
-| m2 | File backup `README.md.backup_*` trong root | Không cần thiết trong repo |
-| m3 | Metadata description nửa VI nửa EN | SEO không nhất quán |
-| m4 | `@aws-sdk/client-s3` trong package.json nhưng không dùng | ~5MB thừa |
-| m5 | Wizard placeholder gắn cứng tiếng Việt | UI inconsistency |
-| m6 | Doc pages fetch markdown client-side | Chưa tận dụng SSG cho SEO |
+| # | Vấn đề | Trạng thái |
+|---|--------|:---:|
+| m1 | Vietnamese fallback strings trong Sidebar | ✅ Fixed — 22 strings → English defaults |
+| m2 | File backup `README.md.backup_*` trong root | ✅ Fixed — đã xóa |
+| m3 | Metadata description nửa VI nửa EN | ✅ Fixed — pure English |
+| m4 | `@aws-sdk/client-s3` trong package.json nhưng không dùng | ✅ Fixed — đã remove |
+| m5 | Wizard placeholder gắn cứng tiếng Việt | ✅ Fixed — English placeholders |
+| m6 | Doc pages fetch markdown client-side | ⏳ Deferred — cần restructure i18n routing |
 
 ---
 
@@ -73,10 +73,10 @@ Không có.
 
 ## 5. Điểm Yếu Cần Cải Thiện
 
-1. `lang` attribute cần dynamic theo ngôn ngữ đang chọn
-2. Fallback strings cần đồng nhất ngôn ngữ
-3. Content pages nên dùng SSG thay vì client-side fetch
-4. Một số component quá lớn — nên tách data ra file riêng
+1. ~~`lang` attribute cần dynamic theo ngôn ngữ đang chọn~~ → ✅ Fixed
+2. ~~Fallback strings cần đồng nhất ngôn ngữ~~ → ✅ Fixed
+3. Content pages nên dùng SSG thay vì client-side fetch (cần locale routing)
+4. ~~Một số component quá lớn — nên tách data ra file riêng~~ → ✅ Fixed (`src/data/`)
 
 ---
 

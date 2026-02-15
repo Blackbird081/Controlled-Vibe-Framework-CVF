@@ -4,14 +4,18 @@ import { verifySessionCookie } from '@/lib/middleware-auth';
 
 const LOGIN_PATH = '/login';
 
+// Routes accessible without authentication
+const PUBLIC_PATHS = ['/docs', '/help', '/skills'];
+
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const isPublicAsset = pathname.startsWith('/_next') || pathname === '/favicon.ico' || pathname.startsWith('/public');
     const isLogin = pathname === LOGIN_PATH;
     const isAuthApi = pathname.startsWith('/api/auth');
+    const isPublicPage = PUBLIC_PATHS.some(p => pathname === p || pathname.startsWith(p + '/'));
 
-    if (isPublicAsset || isLogin || isAuthApi) {
+    if (isPublicAsset || isLogin || isAuthApi || isPublicPage) {
         return NextResponse.next();
     }
 

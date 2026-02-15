@@ -36,7 +36,7 @@ This reduces confusion and makes onboarding faster.
 ✅ **docs/cheatsheets/** - Quick references  
 ✅ **scripts/quick-start.sh** - One-command setup
 
-See: [Implementation Roadmap](docs/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)
+See: [Get Started Guide](docs/GET_STARTED.md)
 
 ---
 
@@ -70,7 +70,7 @@ docs/
 
 The previous START_HERE content (Phase 1-4 reports) has been archived as it referenced outdated assessments with incorrect scores (9.1-9.4/10).
 
-**Current realistic assessment:** 7.5/10 ([Read why](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-15.md))
+**Current realistic assessment:** 7.5/10
 
 ---
 

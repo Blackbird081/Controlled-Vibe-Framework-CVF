@@ -37,7 +37,7 @@ Chúng tôi hợp nhất nhiều điểm vào (START_HERE, CVF_LITE, QUICK_START
 ✅ **docs/cheatsheets/** - Tham khảo nhanh  
 ✅ **scripts/quick-start.sh** - Cài đặt 1 lệnh
 
-Xem: [Roadmap Thực Hiện](docs/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)
+Xem: [Bắt Đầu](docs/GET_STARTED.md)
 
 ---
 
@@ -71,7 +71,7 @@ docs/
 
 Nội dung CVF_LITE trước đây (hướng dẫn 5 phút) đã được tích hợp vào docs/GET_STARTED.md với nội dung phong phú hơn.
 
-**Đánh giá thực tế hiện tại:** 7.5/10 ([Tại sao?](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-15.md))
+**Đánh giá thực tế hiện tại:** 7.5/10
 
 ---
 

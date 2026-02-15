@@ -44,7 +44,7 @@
 | **Python SDK** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
 | **CLI Tools** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
 | **CI/CD Templates** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Web UI** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Web UI** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **AI Agent Chat** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Multi-Agent** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Governance Toolkit** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |

@@ -217,7 +217,7 @@ v1.6  Agent Platform      ██████████████████
 | A developer wanting structure | **v1.1** (governance) | v1.3 (CLI tools) |
 | A team needing risk management | **v1.2** (risk model) | v1.6 (visual risk) |
 | An ops/DevOps engineer | **v1.3** (SDK, CI/CD) | v1.6 (web platform) |
-| A non-technical team member | **v1.5** (UX, end-user) | v1.6 (web UI) |
+| A non-technical team member | **v1.6** (web UI, end-user friendly) | — |
 | Everyone going forward | **v1.6** (current, all features) | — |
 
 ### Quick Recommendation

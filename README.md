@@ -203,7 +203,7 @@ CVF có 3 lớp - chọn đúng lớp bạn cần:
 - **v1.1** - Extended control (input/output specs, multi-agent)
 - **v1.2** - Skill governance (registry, risk model)
 - **v1.3** - SDK & Tooling (Python, CLI, CI/CD)
-- **v1.5** - Web UI (FROZEN, maintenance only)
+- **v1.5** - UX & End-User orientation (FROZEN)
 - **v1.5.2** - Skill Library (124 skills, ACTIVE)
 - **v1.6** ⭐ - Agent Platform (AI chat, multi-agent, governance)
 

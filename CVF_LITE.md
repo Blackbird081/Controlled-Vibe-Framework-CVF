@@ -1,52 +1,83 @@
-# CVF Lite — 5 Phút Bắt Đầu
+# CVF Lite — Bắt Đầu Nhanh
 
-> Hướng dẫn nhanh nhất để áp dụng CVF cho cá nhân hoặc team nhỏ.  
-> Không cần đọc toàn bộ framework. Chỉ cần trang này.
+> **Tài liệu này đã được thay thế bởi hướng dẫn toàn diện.**
 
----
-
-## Bước 1: Hiểu CVF Trong 30 Giây
-
-**CVF = bộ quy tắc để AI viết code theo ý bạn, không phải ngược lại.**
-
-```
-Bạn ra spec → AI thực hiện → CVF kiểm tra → Kết quả đúng ý
-```
-
-3 nguyên tắc cốt lõi:
-1. **Outcome > Code** — Kết quả quan trọng hơn cách viết
-2. **Spec-first** — Mô tả rõ muốn gì trước khi code
-3. **Risk-aware** — Biết rõ rủi ro trước khi quyết định
+**→ [📖 Đi tới Hướng Dẫn Bắt Đầu](docs/GET_STARTED.md)**
 
 ---
 
-## Bước 2: Chọn 1 Skill Để Thử (1 phút)
+## Liên Kết Nhanh
 
-Mở thư mục `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` và chọn **1 skill** phù hợp:
-
-| Bạn muốn... | Dùng skill |
-|-------------|------------|
-| Review code | `tech_review/01_code_review.skill.md` |
-| Viết API spec | `application_development/05_api_design_spec.skill.md` |
-| Phân tích tài chính | `financial_analysis/01_budget_analysis.skill.md` |
-| Viết content | `content_writing/01_documentation.skill.md` |
-| Thiết kế UI | `web_templates/01_landing_page.skill.md` |
-
-> 💡 Có 124 skills trong 12 domains. Browse và chọn cái gần nhất với task của bạn.
+| Bạn là ai? | Đi tới |
+|-----------|-------|
+| 🆕 **Mới dùng CVF?** | [CVF trong 5 phút](docs/GET_STARTED.md#cvf-in-5-minutes) |
+| 👤 **Developer cá nhân?** | [Solo Guide](docs/guides/README.md) (sắp có) |
+| 👥 **Team lead?** | [Team Setup](docs/guides/README.md) (sắp có) |
+| 🏢 **Enterprise?** | [Enterprise Guide](docs/guides/README.md) (sắp có) |
+| 📚 **124 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| 🚀 **Web UI** | [v1.6 Agent Platform](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
 
 ---
 
-## Bước 3: Đọc Skill File (1 phút)
+## Tại Sao Thay Đổi?
 
-Mỗi `.skill.md` có cấu trúc:
+Chúng tôi hợp nhất nhiều điểm vào (START_HERE, CVF_LITE, QUICK_START) thành một hướng dẫn toàn diện tại `docs/GET_STARTED.md`.
+
+**Trước đây:** 3+ entry points → rối, overlap  
+**Bây giờ:** 1 entry point → rõ ràng
+
+Điều này giảm confusion và giúp onboarding nhanh hơn.
+
+### Có Gì Mới (15/02/2026)
+
+✅ **docs/GET_STARTED.md** - Hướng dẫn toàn diện  
+✅ **docs/guides/** - Hướng dẫn theo vai trò (đang viết)  
+✅ **docs/tutorials/** - Hướng dẫn từng bước (đang viết)  
+✅ **docs/concepts/** - Giải thích chuyên sâu (đang viết)  
+✅ **docs/cheatsheets/** - Tham khảo nhanh  
+✅ **scripts/quick-start.sh** - Cài đặt 1 lệnh
+
+Xem: [Roadmap Thực Hiện](files/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)
+
+---
+
+## Cấu Trúc Tài Liệu Mới
 
 ```
-📌 Prerequisites      ← Cần gì trước?
-🎯 Mục đích           ← Khi nào dùng?
-📥 Form Input         ← Bạn cung cấp gì?
-📤 Expected Output    ← AI trả về gì?
-✅ Evaluation          ← Kiểm tra bằng cách nào?
+docs/
+├── GET_STARTED.md          ← ⭐ BẮT ĐẦU Ở ĐÂY
+├── guides/                 ← Hướng dẫn theo vai trò
+│   ├── solo-developer.md
+│   ├── team-setup.md
+│   └── enterprise.md
+├── tutorials/              ← Từng bước
+│   ├── first-project.md
+│   ├── web-ui-setup.md
+│   ├── agent-platform.md
+│   └── custom-skills.md
+├── concepts/               ← Chuyên sâu
+│   ├── core-philosophy.md
+│   ├── 4-phase-process.md
+│   ├── governance-model.md
+│   └── ...
+└── cheatsheets/            ← Tham khảo
+    ├── version-picker.md
+    └── troubleshooting.md
 ```
+
+---
+
+## Nội Dung Cũ (Đã Archive)
+
+Nội dung CVF_LITE trước đây (hướng dẫn 5 phút) đã được tích hợp vào docs/GET_STARTED.md với nội dung phong phú hơn.
+
+**Đánh giá thực tế hiện tại:** 7.5/10 ([Tại sao?](files/CVF_INDEPENDENT_ASSESSMENT_2026-02-15.md))
+
+---
+
+*Cập nhật: 15/02/2026*
+
+**➡️ [Đi tới GET_STARTED.md ngay](docs/GET_STARTED.md)**
 
 **Chỉ cần đọc 📥 Form Input và 📤 Expected Output** là đủ để bắt đầu.
 

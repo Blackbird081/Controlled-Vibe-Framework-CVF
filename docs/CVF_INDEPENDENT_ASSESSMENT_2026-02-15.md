@@ -58,7 +58,7 @@ Không có.
 | m3 | Metadata description nửa VI nửa EN | ✅ Fixed — pure English |
 | m4 | `@aws-sdk/client-s3` trong package.json nhưng không dùng | ✅ Fixed — đã remove |
 | m5 | Wizard placeholder gắn cứng tiếng Việt | ✅ Fixed — English placeholders |
-| m6 | Doc pages fetch markdown client-side | ⏳ Deferred — cần restructure i18n routing |
+| m6 | Doc pages fetch markdown client-side | ✅ Fixed — SSG với `generateStaticParams()` + `fs.readFile` tại build time |
 
 ---
 
@@ -75,7 +75,7 @@ Không có.
 
 1. ~~`lang` attribute cần dynamic theo ngôn ngữ đang chọn~~ → ✅ Fixed
 2. ~~Fallback strings cần đồng nhất ngôn ngữ~~ → ✅ Fixed
-3. Content pages nên dùng SSG thay vì client-side fetch (cần locale routing)
+3. ~~Content pages nên dùng SSG thay vì client-side fetch~~ → ✅ Fixed — Server Component + `generateStaticParams` + cả 2 ngôn ngữ được đọc tại build time
 4. ~~Một số component quá lớn — nên tách data ra file riêng~~ → ✅ Fixed (`src/data/`)
 
 ---
@@ -100,6 +100,7 @@ Không có.
 
 CVF là một framework **production-quality** với documentation và bilingual support vượt trội. Đợt cập nhật 15/02/2026 giải quyết hầu hết điểm yếu từ đánh giá trước. Điểm số tăng từ 7.0-7.5 lên 8.5/10 — phản ánh đúng chất lượng thực tế, không thổi phồng.
 
-2 items đáng fix nhất để đạt 9.0+:
-1. Dynamic `<html lang>` attribute (Major)
-2. Vietnamese fallback strings → English defaults (Minor)
+2 items đã được fix hoàn toàn (8/8 issues resolved):
+1. ~~Dynamic `<html lang>` attribute (Major)~~ → ✅ Fixed
+2. ~~Vietnamese fallback strings → English defaults (Minor)~~ → ✅ Fixed
+3. ~~Doc pages SSG (Minor)~~ → ✅ Fixed — Server Component + `generateStaticParams`

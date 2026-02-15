@@ -1,20 +1,27 @@
 # CVF Guides
 
-**Coming soon:** Detailed guides for different user personas.
+Detailed guides for different user personas and team sizes.
 
-## Planned Content
+## Available Guides
 
-- **solo-developer.md** - CVF for individual developers (ETA: Week 1)
-- **team-setup.md** - CVF for small teams 2-10 people (ETA: Week 1)  
-- **enterprise.md** - CVF for enterprise organizations (ETA: Week 1)
+| Guide | Who It's For | Time |
+|-------|-------------|------|
+| [Solo Developer](solo-developer.md) | Individual developers using AI | 15 min |
+| [Team Setup](team-setup.md) | Small teams (2-10 people) | 20 min |
+| [Enterprise](enterprise.md) | Organizations (10+ developers) | 30 min |
 
-## In the Meantime
+## Where to Start
 
-See:
-- [GET_STARTED.md](../GET_STARTED.md) - Main entry point
-- [CVF_LITE.md](../../CVF_LITE.md) - 5-minute quick start
-- [v1.6 Agent Platform](../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) - Web UI
+- **New to CVF?** → [Solo Developer](solo-developer.md)
+- **Setting up a team?** → [Team Setup](team-setup.md)
+- **Rolling out org-wide?** → [Enterprise](enterprise.md)
+
+## See Also
+
+- [GET_STARTED.md](../GET_STARTED.md) — Main entry point
+- [Tutorials](../tutorials/) — Hands-on walkthroughs
+- [Concepts](../concepts/) — Deep dives into CVF principles
 
 ---
 
-*Status: 📝 Content creation in progress (see roadmap: docs/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)*
+*Last updated: February 15, 2026 | CVF v1.6*

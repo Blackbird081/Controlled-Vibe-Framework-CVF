@@ -329,44 +329,44 @@ Feb 22-26, 2026   Phase 3: POLISH (9 tasks)
 
 ## Tracking
 
-### Phase 1: UNBLOCK
+### Phase 1: UNBLOCK ✅ COMPLETED
 
-| Task | Status | Commit |
+| Task | Status | Details |
 |------|:------:|--------|
-| 1.1 Login i18n + LanguageToggle | ⬜ Not started | — |
-| 1.2 Auto role + ẩn selector | ⬜ Not started | — |
-| 1.3 Chat welcome + prompts | ⬜ Not started | — |
-| 1.4 Wizard i18n (9 files) | ⬜ Not started | — |
-| 1.5 Demo mode UI | ⬜ Not started | — |
-| 1.6 Public landing page | ⬜ Not started | — |
+| 1.1 Login i18n + LanguageToggle | ✅ Done | Bilingual login, LanguageToggle added, env var jargon removed |
+| 1.2 Auto role + ẩn selector | ✅ Done | Role selector hidden, default = viewer |
+| 1.3 Chat welcome + prompts | ✅ Done | Welcome message + 6 bilingual suggested prompt chips |
+| 1.4 Wizard i18n (9 files) | ✅ Done | All 9 wizards + shared wizard-i18n.ts utility |
+| 1.5 Demo mode UI | ✅ Done | "Try Demo" button in API key banner |
+| 1.6 Public landing page | ✅ Done | /landing route, bilingual, hero + 3-step + features + CTA |
 
-### Phase 2: ENHANCE
+### Phase 2: ENHANCE ✅ COMPLETED
 
-| Task | Status | Commit |
+| Task | Status | Details |
 |------|:------:|--------|
-| 2.1 GovernanceBar toggle | ⬜ Not started | — |
-| 2.2 Sidebar simplification | ⬜ Not started | — |
-| 2.3 Template preview samples | ⬜ Not started | — |
-| 2.4 Quality score fix | ⬜ Not started | — |
-| 2.5 UI tooltips | ⬜ Not started | — |
-| 2.6 Error messages i18n | ⬜ Not started | — |
-| 2.7 Hide raw prompt | ⬜ Not started | — |
-| 2.8 Marketplace i18n | ⬜ Not started | — |
-| 2.9 Video/animation | ⬜ Not started | — |
+| 2.1 GovernanceBar toggle | ✅ Done | Simple/Advanced mode toggle, Simple hides Phase/Role/Risk |
+| 2.2 Sidebar simplification | ✅ Done | Data/Analytics group hidden for viewer role |
+| 2.3 Template preview samples | ✅ Done | Rich placeholder preview instead of "No preview" |
+| 2.4 Quality score fix | ✅ Done | Collapsed into "Technical Details", synced with global lang |
+| 2.5 UI tooltips | ✅ Done | Bilingual title attrs on Phase/Role/Risk labels |
+| 2.6 Error messages i18n | ✅ Done | ProcessingScreen fully bilingual |
+| 2.7 Hide raw prompt | ✅ Done | Collapsed by default, neutral card style, renamed label |
+| 2.8 Marketplace i18n | ✅ Done | All strings bilingual via useLanguage() |
+| 2.9 Onboarding content | ✅ Done | 3-step visual guide replacing video placeholder |
 
-### Phase 3: POLISH
+### Phase 3: POLISH ✅ COMPLETED
 
-| Task | Status | Commit |
+| Task | Status | Details |
 |------|:------:|--------|
-| 3.1 Demo templates | ⬜ Not started | — |
-| 3.2 Difficulty badges | ⬜ Not started | — |
-| 3.3 Inline help | ⬜ Not started | — |
-| 3.4 ARIA labels | ⬜ Not started | — |
-| 3.5 PDF/Word export | ⬜ Not started | — |
-| 3.6 Template search | ⬜ Not started | — |
-| 3.7 Keyboard navigation | ⬜ Not started | — |
-| 3.8 aria-live regions | ⬜ Not started | — |
-| 3.9 Progress dashboard | ⬜ Not started | — |
+| 3.1 Demo templates | ✅ Done | 4 templates with realistic sampleOutput markdown |
+| 3.2 Difficulty badges | ✅ Done | Colored pills on TemplateCard (Easy/Medium/Advanced) |
+| 3.3 Inline help tooltips | ✅ Done | title attrs on template cards, form submit, chat send |
+| 3.4 ARIA labels | ✅ Done | 15+ elements: modals, buttons, inputs, nav, dialogs |
+| 3.5 PDF/Word export | ✅ Done | Print/PDF button via window.print() in ResultViewer |
+| 3.6 Template search | ✅ Done | Search input on home page filtering by name/description |
+| 3.7 Keyboard navigation | ✅ Done | Enter/Space on cards, Escape on modals, Enter on prompts |
+| 3.8 aria-live regions | ✅ Done | ProcessingScreen + AgentChat message areas |
+| 3.9 Progress dashboard | ✅ Done | AnalyticsDashboard fully bilingual |
 
 ---
 

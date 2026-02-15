@@ -20,4 +20,4 @@ See:
 
 ---
 
-*Status: 📝 Content creation in progress (see roadmap: files/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)*
+*Status: 📝 Content creation in progress (see roadmap: docs/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)*

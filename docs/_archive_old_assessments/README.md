@@ -33,16 +33,16 @@ Các đánh giá này chỉ focus vào **technical layer** (code quality, archit
 
 **Cherry-picking:** Chỉ đo những gì được cải thiện (templates refactor, i18n consolidation, toolkit integration), không đo những gì chưa làm (GET_STARTED, tutorials, guides, quick-start script).
 
-**Ignoring improvement plan:** File `files/CVF_DOCUMENTATION_IMPROVEMENT_PLAN.md` (626 lines) xác định rõ các vấn đề documentation/usability, nhưng các đánh giá này **KHÔNG NHẮC ĐẾN** plan hoặc verify progress.
+**Ignoring improvement plan:** File `CVF_DOCUMENTATION_IMPROVEMENT_PLAN.md` (626 lines, now deleted - superseded by roadmap) xác định rõ các vấn đề documentation/usability, nhưng các đánh giá này **KHÔNG NHẮC ĐẾN** plan hoặc verify progress.
 
 ---
 
 ## Đánh Giá Chính Xác
 
 **File mới (accurate):**
-- `files/Danh_gia.md` (Original assessment: **7.0/10**)
-- `files/CVF_INDEPENDENT_ASSESSMENT_2026-02-15.md` (Independent: **7.0-7.5/10**)
-- `files/CVF_ASSESSMENT_COMPARISON_2026-02-15.md` (Comparison analysis)
+- `docs/_archive_old_assessments/Danh_gia_original_2026-02-15.md` (Original assessment: **7.0/10**)
+- `docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-15.md` (Independent: **7.0-7.5/10**)
+- `docs/CVF_ASSESSMENT_COMPARISON_2026-02-15.md` (Comparison analysis)
 
 **Kết luận:**
 - Technical layer: 9.3-9.5/10 ✅ (đúng như đánh giá cũ)
@@ -55,7 +55,7 @@ Các đánh giá này chỉ focus vào **technical layer** (code quality, archit
 
 Tất cả vấn đề đã được xác định và có roadmap fix:
 
-**File:** `files/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md`
+**File:** `docs/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md`
 
 **Timeline:** 2 tuần (60 giờ)  
 **Expected impact:** 7.0/10 → 8.5/10 (+1.5 điểm)

@@ -294,7 +294,7 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 
 **Target:** 8.5/10 (by end of Feb 2026 after doc improvements)
 
-[→ Read Assessment](files/CVF_INDEPENDENT_ASSESSMENT_2026-02-15.md) | [→ Implementation Roadmap](files/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)
+[→ Read Assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-15.md) | [→ Implementation Roadmap](docs/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)
 
 ---
 
@@ -361,4 +361,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 15, 2026 | Version 1.6.0 | [Documentation Update](files/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)*
+*Last updated: February 15, 2026 | Version 1.6.0 | [Documentation Update](docs/CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)*

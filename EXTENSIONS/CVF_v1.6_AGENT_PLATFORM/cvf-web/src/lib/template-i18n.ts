@@ -61,7 +61,7 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     app_builder_wizard: { name: '🧙 App Builder Wizard', description: 'Multi-step wizard to create spec in 8 steps. Recommended for complex apps!' },
     build_my_app: { name: '🚀 Build My App', description: 'Describe your app idea → AI decides everything and builds for you. For non-coders.' },
     app_builder_complete: { name: '📦 App Builder Complete', description: 'Create comprehensive spec with full technical details. For users who understand CVF workflow.' },
-    skill_templates_folder: { name: '📂 Skill Templates (8)' },
+    individual_skills_folder: { name: '📂 Skill Templates (8)', description: '8 individual templates for each step: Requirements, Tech Stack, Architecture, Database, API, Desktop/CLI, Deployment.' },
     app_requirements_spec: { name: 'App Requirements Spec', description: 'Gather requirements for new app, define scope and success criteria' },
     tech_stack_selection: { name: 'Tech Stack Selection', description: 'Choose suitable technology for app based on requirements' },
     architecture_design: { name: 'Architecture Design', description: 'Design system architecture with component diagram' },

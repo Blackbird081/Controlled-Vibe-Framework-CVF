@@ -147,7 +147,7 @@ Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
     },
     {
         id: 'individual_skills_folder',
-        name: '📂 Skill Templates (8)',
+        name: '📂 Bộ Skill Templates (8)',
         icon: '📂',
         description: '8 templates riêng lẻ cho từng khâu: Requirements, Tech Stack, Architecture, Database, API, Desktop/CLI, Deployment.',
         category: 'development',

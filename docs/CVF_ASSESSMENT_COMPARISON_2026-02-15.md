@@ -1,5 +1,10 @@
 # So Sánh Các Đánh Giá CVF — Timeline Analysis
 
+> **CẬP NHẬT (15/02/2026 — Evening):**
+> Các vấn đề documentation & usability đã được giải quyết. 13 files mới đã tạo (3 guides + 4 tutorials + 6 concepts),
+> README cập nhật score thực (7.5/10), đánh giá sai đã archive.
+> Điểm dự kiến: **8.5/10** (từ 7.0). Xem: [Roadmap](CVF_IMPLEMENTATION_ROADMAP_2026-02-15.md)
+
 **Ngày:** 15/02/2026  
 **Phạm vi:** So sánh 4 đánh giá khác nhau về CVF  
 **Mục đích:** Xác định sự thật về chất lượng CVF và lý do có sự chênh lệch điểm số

@@ -1245,13 +1245,13 @@ Add at top:
 
 | Phase | Tasks | Hours | Status |
 |-------|-------|:-----:|:------:|
-| **Phase 1** | Cleanup | 4h | 🟡 Ready |
-| **Phase 2** | Update entry points | 4h | 🟡 Ready |
-| **Phase 3** | Create guides | 12h | 🟡 Ready |
-| **Phase 4** | Create tutorials | 16h | 🟡 Ready |
-| **Phase 5** | Create concepts | 12h | 🟡 Ready |
-| **Phase 6** | Polish & test | 8h | 🟡 Ready |
-| **Phase 7** | Deploy & validate | 4h | 🟡 Ready |
+| **Phase 1** | Cleanup | 4h | ✅ Done |
+| **Phase 2** | Update entry points | 4h | ✅ Done |
+| **Phase 3** | Create guides | 12h | ✅ Done |
+| **Phase 4** | Create tutorials | 16h | ✅ Done |
+| **Phase 5** | Create concepts | 12h | ✅ Done |
+| **Phase 6** | Polish & test | 8h | ✅ Done (user testing: PENDING) |
+| **Phase 7** | Deploy & validate | 4h | ✅ Done (push: PENDING) |
 | **TOTAL** | | **60h** | |
 
 **Timeline:** 2 tuần (1.5 weeks với 2 người)
@@ -1323,7 +1323,7 @@ Add at top:
 - [x] quick-start.sh works
 - [x] README updated with realistic score
 - [x] All internal links work
-- [x] User tested with 3 personas
+- [ ] User tested with 3 personas *(PENDING — needs real users)*
 
 ### Should Have (Nice to Have)
 
@@ -1366,13 +1366,16 @@ This roadmap addresses **100% of issues** identified in both assessments:
 
 **Timeline:** 2 tuần (60 giờ)  
 **Expected impact:** +1.5 điểm (7.0 → 8.5)  
-**Status:** Ready to implement
+**Status:** ✅ Implementation Complete (15/02/2026)
 
-**Next step:** Start Phase 1 (Cleanup, 4 hours)
+**Pending items:**
+- User testing with 3 personas (needs real users)
+- git push to origin
+- Demo video, blog post, Discord announcement
 
 ---
 
 **Owner:** CVF Team  
 **Created:** 15/02/2026  
-**Status:** 🟡 Ready for Implementation  
-**Priority:** 🔴 HIGH (blocks user adoption)
+**Status:** ✅ Implemented  
+**Priority:** 🟢 Completed (pending: user testing, push)

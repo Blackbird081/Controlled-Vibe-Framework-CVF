@@ -1,5 +1,7 @@
 # Skill System
 
+[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
+
 Skills are CVF's mechanism for making AI interactions **repeatable, shareable, and quality-controlled**. Instead of writing prompts from scratch each time, you use a structured template.
 
 ---

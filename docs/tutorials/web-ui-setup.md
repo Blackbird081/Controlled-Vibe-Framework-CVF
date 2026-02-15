@@ -1,5 +1,7 @@
 # Tutorial: Setting Up the CVF Web UI (v1.6)
 
+[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
+
 **Time:** 15 minutes  
 **Level:** Beginner  
 **What you'll do:** Install, configure, and run the CVF v1.6 web application  

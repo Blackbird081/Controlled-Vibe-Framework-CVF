@@ -1,6 +1,10 @@
 # Controlled Vibe Framework (CVF)
 
 > **Vibe coding có kiểm soát - không đi nhanh hơn, mà đi đúng hơn.**
+>
+> *Controlled vibe coding — not faster, but smarter.*
+
+🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -147,7 +151,7 @@ Khi dùng AI để code mà không có framework:
 | 💻 **Solo developer** | [Web UI](docs/tutorials/web-ui-setup.md) → Pick template → Build project |
 | 👥 **Team lead** | [Team Setup](docs/guides/team-setup.md) → Governance → Collaboration |
 | 🏢 **Enterprise** | [Enterprise Guide](docs/guides/enterprise.md) → Pilot → Scale |
-| 🛠️ **Want to contribute** | [Developer Guide](docs/reference/developer-guide.md) → Pick issue → Submit PR |
+| 🛠️ **Want to contribute** | [Contributing Guide](v1.0/CONTRIBUTING.md) → Pick issue → Submit PR |
 
 **→ [📖 Comprehensive Getting Started Guide](docs/GET_STARTED.md)**
 
@@ -159,9 +163,9 @@ Khi dùng AI để code mà không có framework:
 |----------|-------|
 | **🎓 Learn** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance](docs/concepts/governance-model.md) |
 | **🚀 Build** | [First Project](docs/tutorials/first-project.md) · [Web UI](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
-| **📖 Reference** | [API](docs/reference/api/) · [CLI](docs/reference/cli/) · [Skill Spec](docs/reference/skill-spec.md) |
+| **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
 | **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills across 12 domains |
-| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [CI/CD](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd/) |
+| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) |
 
 **Full docs:** [cvf.io/docs](https://cvf.io/docs) (coming soon) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
 
@@ -321,7 +325,7 @@ We welcome contributions!
 
 ### Get Help
 
-- 🔍 **Search:** [Documentation](docs/GET_STARTED.md) | [FAQ](docs/faq.md)
+- 🔍 **Search:** [Documentation](docs/GET_STARTED.md) | [Troubleshooting](docs/cheatsheets/troubleshooting.md)
 - 💬 **Chat:** [Discord](https://discord.gg/cvf) - Fastest response
 - 🐛 **Issues:** [GitHub Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
 - 📧 **Email:** support@cvf.io (for sensitive topics)
@@ -336,7 +340,7 @@ We welcome contributions!
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file
+MIT License - see [LICENSE](v1.0/LICENSE) file
 
 ---
 

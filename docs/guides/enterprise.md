@@ -1,5 +1,7 @@
 # CVF for Enterprise
 
+[🇻🇳 Hướng dẫn tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
+
 **Target:** Organizations with 10+ developers and compliance requirements  
 **Reading time:** 20 minutes  
 **Recommended:** v1.1 + v1.2 + v1.3 + v1.6

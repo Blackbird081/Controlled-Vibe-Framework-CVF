@@ -1,5 +1,7 @@
 # Core Philosophy
 
+[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
+
 > *"Vibe is necessary — but must be controlled."*
 
 ---

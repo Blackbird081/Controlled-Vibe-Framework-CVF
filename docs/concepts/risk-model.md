@@ -1,5 +1,7 @@
 # Risk Model
 
+[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
+
 CVF's risk model classifies every AI interaction by its potential impact. Higher risk = more controls. This prevents "move fast and break things" from breaking the wrong things.
 
 ---

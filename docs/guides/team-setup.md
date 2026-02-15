@@ -1,5 +1,7 @@
 # CVF for Teams
 
+[🇻🇳 Hướng dẫn tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
+
 **Target:** Teams of 2–10 developers working with AI  
 **Reading time:** 15 minutes  
 **Recommended:** v1.1 (governance) + v1.3 (toolkit) + v1.6 (web UI)

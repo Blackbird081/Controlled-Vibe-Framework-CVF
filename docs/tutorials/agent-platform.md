@@ -1,5 +1,7 @@
 # Tutorial: Multi-Agent Workflows (v1.6 Agent Platform)
 
+[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
+
 **Time:** 20 minutes  
 **Level:** Intermediate  
 **Prerequisites:** [Web UI set up and running](web-ui-setup.md)  

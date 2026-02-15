@@ -1,5 +1,7 @@
 # CVF - Bắt Đầu Trong 5 Phút
 
+[🇬🇧 English guides](guides/) | 🇻🇳 Tiếng Việt
+
 > **🎯 Mục tiêu:** Giúp bạn hiểu và chạy được CVF project đầu tiên trong 5 phút
 
 ---
@@ -114,7 +116,7 @@ Sau khi chạy được ví dụ đầu tiên:
 - 📖 **Hiểu sâu hơn:** [Core Philosophy](concepts/core-philosophy.md)
 - 🎯 **Build project thật:** [Tutorial: Your First Project](tutorials/first-project.md)
 - 🧩 **Dùng Skills:** [Skill Library Guide](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md)
-- ❓ **Có câu hỏi:** [FAQ](faq.md) | [Troubleshooting](troubleshooting.md)
+- ❓ **Có câu hỏi:** [Troubleshooting](cheatsheets/troubleshooting.md)
 
 ---
 
@@ -180,7 +182,7 @@ npm run dev
 
 - 📋 [Team Collaboration Guide](guides/team-setup.md)
 - 🔐 [Governance Setup](concepts/governance-model.md)
-- 🔄 [CI/CD Integration](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd/)
+- 🔄 [CI/CD Integration](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/)
 - 📊 [Track Metrics](guides/team-setup.md#metrics)
 
 ---
@@ -284,8 +286,8 @@ git push origin feature/your-feature-name
 ### Contribution Guidelines
 
 - Read: [CONTRIBUTING.md](../v1.0/CONTRIBUTING.md)
-- Code style: [Developer Guide](reference/developer-guide.md)
-- Skill creation: [Skill Spec](reference/skill-spec.md)
+- Code style: [Contributing Guide](../v1.0/CONTRIBUTING.md)
+- Skill creation: [Custom Skills Tutorial](tutorials/custom-skills.md)
 
 ### Get Help
 
@@ -315,8 +317,8 @@ git push origin feature/your-feature-name
 
 - [Governance Toolkit](../governance/toolkit/) - Comprehensive
 - [Skill Library](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills
-- [Version History](versions/current.md) - Evolution
-- [API Reference](reference/api/) - Technical specs
+- [Version History](concepts/version-evolution.md) - Evolution
+- [Architecture](CVF_ARCHITECTURE_DIAGRAMS.md) - Technical specs
 
 ---
 
@@ -328,7 +330,7 @@ git push origin feature/your-feature-name
 → See: [Version Picker](cheatsheets/version-picker.md)
 
 **"Setup not working?"**
-→ See: [Troubleshooting](troubleshooting.md)
+→ See: [Troubleshooting](cheatsheets/troubleshooting.md)
 
 **"Don't understand governance?"**
 → See: [Governance 101](concepts/governance-model.md)
@@ -338,8 +340,8 @@ git push origin feature/your-feature-name
 
 ### Support Channels
 
-1. 🔍 [Search Documentation](https://cvf.io/search)
-2. 📚 [Check FAQ](faq.md)
+1. 🔍 [Search Documentation](GET_STARTED.md)
+2. 📚 [Troubleshooting](cheatsheets/troubleshooting.md)
 3. 🐛 [Browse Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
 4. 💬 [Ask on Discord](https://discord.gg/cvf)
 5. ✉️ [Email Support](mailto:support@cvf.io)
@@ -358,15 +360,14 @@ git push origin feature/your-feature-name
 | **Guides** | [Solo Dev](guides/solo-developer.md) · [Team](guides/team-setup.md) · [Enterprise](guides/enterprise.md) |
 | **Tutorials** | [First Project](tutorials/first-project.md) · [Web UI](tutorials/web-ui-setup.md) · [Agent](tutorials/agent-platform.md) |
 | **Concepts** | [Philosophy](concepts/core-philosophy.md) · [Phases](concepts/4-phase-process.md) · [Governance](concepts/governance-model.md) |
-| **Reference** | [API](reference/api/) · [CLI](reference/cli/) · [Skill Spec](reference/skill-spec.md) |
-| **Cheatsheets** | [Quick Ref](cheatsheets/quick-reference.md) · [Versions](cheatsheets/version-picker.md) · [Troubleshoot](troubleshooting.md) |
+| **Reference** | [Skills](concepts/skill-system.md) · [Risk Model](concepts/risk-model.md) · [Version History](concepts/version-evolution.md) |
+| **Cheatsheets** | [Versions](cheatsheets/version-picker.md) · [Troubleshoot](cheatsheets/troubleshooting.md) |
 
 ---
 
 ## 🌏 Languages
 
-- 🇬🇧 **English** - You are here
-- 🇻🇳 **Tiếng Việt** - [Xem bản tiếng Việt](GET_STARTED.vi.md)
+This guide is bilingual (🇬🇧/🇻🇳). Guides and tutorials are in English with Vietnamese navigation links.
 
 ---
 

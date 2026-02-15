@@ -144,12 +144,16 @@ export default function DocDetailPage() {
         setLoading(true);
         setError(false);
 
-        fetch(`/docs/${slug}.md`)
+        fetch(`/content/${slug}.md`)
             .then(res => {
                 if (!res.ok) throw new Error('Not found');
                 return res.text();
             })
             .then(text => {
+                // Safety: if we got HTML back instead of markdown, treat as error
+                if (text.trimStart().startsWith('<!DOCTYPE') || text.trimStart().startsWith('<html')) {
+                    throw new Error('Received HTML instead of markdown');
+                }
                 setContent(text);
                 setLoading(false);
             })

@@ -13,6 +13,7 @@ type Lang = 'vi' | 'en';
 
 interface DocItem {
     icon: string;
+    slug: string;
     title: Record<Lang, string>;
     desc: Record<Lang, string>;
     tag?: string;
@@ -33,6 +34,7 @@ const DOCS: DocCategory[] = [
         items: [
             {
                 icon: '⭐',
+                slug: 'getting-started',
                 title: { vi: 'Hướng dẫn Bắt đầu', en: 'Getting Started Guide' },
                 desc: {
                     vi: 'Hướng dẫn toàn diện cho 3 persona: Solo Dev, Team Lead, Enterprise. Bắt đầu từ đây!',
@@ -42,6 +44,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '⚡',
+                slug: 'cvf-lite',
                 title: { vi: 'CVF Lite (Tiếng Việt)', en: 'CVF Lite (Vietnamese)' },
                 desc: {
                     vi: 'Phiên bản rút gọn bằng tiếng Việt — nắm ý tưởng chính trong 2 phút.',
@@ -57,6 +60,7 @@ const DOCS: DocCategory[] = [
         items: [
             {
                 icon: '👤',
+                slug: 'solo-developer',
                 title: { vi: 'Solo Developer', en: 'Solo Developer' },
                 desc: {
                     vi: 'Làm việc một mình? Áp dụng CVF nhanh nhất — từ 0 đến productive trong 30 phút.',
@@ -65,6 +69,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '👥',
+                slug: 'team-setup',
                 title: { vi: 'Team Setup', en: 'Team Setup' },
                 desc: {
                     vi: 'Triển khai CVF cho nhóm 3-10 người, phân vai trò, thiết lập governance.',
@@ -73,6 +78,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '🏢',
+                slug: 'enterprise',
                 title: { vi: 'Enterprise', en: 'Enterprise' },
                 desc: {
                     vi: 'Tích hợp CVF vào tổ chức lớn: CI/CD, compliance, multi-team coordination.',
@@ -88,6 +94,7 @@ const DOCS: DocCategory[] = [
         items: [
             {
                 icon: '1️⃣',
+                slug: 'first-project',
                 title: { vi: 'Dự án đầu tiên', en: 'First Project' },
                 desc: {
                     vi: 'Tạo dự án CVF đầu tiên từ A-Z: init → 4 phases → review → hoàn thành.',
@@ -96,6 +103,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '🌐',
+                slug: 'web-ui-setup',
                 title: { vi: 'Cài đặt Web UI', en: 'Web UI Setup' },
                 desc: {
                     vi: 'Cài đặt v1.6 Web UI trên máy local: Node.js, npm install, npm run dev.',
@@ -104,6 +112,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '🤖',
+                slug: 'agent-platform',
                 title: { vi: 'Agent Platform', en: 'Agent Platform' },
                 desc: {
                     vi: 'Sử dụng AI Agent Chat, Multi-Agent, GovernanceBar, và Self-UAT.',
@@ -112,6 +121,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '🧩',
+                slug: 'custom-skills',
                 title: { vi: 'Custom Skills', en: 'Custom Skills' },
                 desc: {
                     vi: 'Tạo skill riêng theo chuẩn CVF: metadata, contract, validation, publish.',
@@ -127,6 +137,7 @@ const DOCS: DocCategory[] = [
         items: [
             {
                 icon: '🎯',
+                slug: 'core-philosophy',
                 title: { vi: 'Triết lý CVF', en: 'Core Philosophy' },
                 desc: {
                     vi: '"Không nhanh hơn, mà đúng hơn" — hiểu tại sao CVF tồn tại và khác biệt gì.',
@@ -135,6 +146,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '🔄',
+                slug: '4-phase-process',
                 title: { vi: 'Quy trình 4 Phase', en: '4-Phase Process' },
                 desc: {
                     vi: 'Discovery → Design → Build → Review — mỗi phase có role, gate, và rules riêng.',
@@ -143,6 +155,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '🏛️',
+                slug: 'governance-model',
                 title: { vi: 'Mô hình Governance', en: 'Governance Model' },
                 desc: {
                     vi: '3 modes (Minimal/Standard/Full), Authority Matrix, Phase Gates, Escalation.',
@@ -151,6 +164,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '📚',
+                slug: 'skill-system',
                 title: { vi: 'Hệ thống Skill', en: 'Skill System' },
                 desc: {
                     vi: '124 skills, 12 domains — cách tìm, dùng, và tạo skill mới.',
@@ -159,6 +173,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '⚠️',
+                slug: 'risk-model',
                 title: { vi: 'Mô hình Rủi ro', en: 'Risk Model' },
                 desc: {
                     vi: 'R0-R3 risk levels, escalation rules, và cách CVF tự bảo vệ bạn.',
@@ -167,6 +182,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '📈',
+                slug: 'version-evolution',
                 title: { vi: 'Lịch sử phiên bản', en: 'Version Evolution' },
                 desc: {
                     vi: 'Từ v1.0 (core) → v1.6 (agent platform): mỗi version thêm gì.',
@@ -182,6 +198,7 @@ const DOCS: DocCategory[] = [
         items: [
             {
                 icon: '🗺️',
+                slug: 'version-picker',
                 title: { vi: 'Chọn Version', en: 'Version Picker' },
                 desc: {
                     vi: 'Decision tree: bạn nên dùng version nào? So sánh tính năng.',
@@ -190,6 +207,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '🔧',
+                slug: 'troubleshooting',
                 title: { vi: 'Troubleshooting', en: 'Troubleshooting' },
                 desc: {
                     vi: 'Lỗi thường gặp + cách khắc phục. FAQ cho người mới.',
@@ -205,6 +223,7 @@ const DOCS: DocCategory[] = [
         items: [
             {
                 icon: '🏦',
+                slug: 'case-fintech',
                 title: { vi: 'Fintech: Hệ thống tín dụng', en: 'Fintech: Credit Approval' },
                 desc: {
                     vi: 'CVF áp dụng cho hệ thống phê duyệt tín dụng — risk management thực tế.',
@@ -213,6 +232,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '🏥',
+                slug: 'case-healthcare',
                 title: { vi: 'Healthcare: Quản lý bệnh nhân', en: 'Healthcare: Patient Management' },
                 desc: {
                     vi: 'CVF trong lĩnh vực y tế — compliance, data protection, governance.',
@@ -221,6 +241,7 @@ const DOCS: DocCategory[] = [
             },
             {
                 icon: '🛒',
+                slug: 'case-ecommerce',
                 title: { vi: 'E-commerce: MVP 2 tuần', en: 'E-commerce: 2-Week MVP' },
                 desc: {
                     vi: 'Xây dựng MVP e-commerce với CVF trong 2 tuần — timeline thực tế.',
@@ -319,9 +340,10 @@ export default function DocsPage() {
                         </h3>
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {category.items.map((item, idx) => (
-                                <div
+                                <Link
                                     key={idx}
-                                    className="group relative bg-white dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/50 rounded-xl p-6 hover:border-blue-400 dark:hover:border-blue-500/50 hover:shadow-lg transition-all duration-200"
+                                    href={`/docs/${item.slug}`}
+                                    className="group relative bg-white dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/50 rounded-xl p-6 hover:border-blue-400 dark:hover:border-blue-500/50 hover:shadow-lg transition-all duration-200 cursor-pointer no-underline"
                                 >
                                     {item.tag && (
                                         <span className="absolute top-3 right-3 px-2 py-0.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full">
@@ -335,7 +357,10 @@ export default function DocsPage() {
                                     <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                         {item.desc[language]}
                                     </p>
-                                </div>
+                                    <span className="mt-3 inline-flex items-center text-xs font-medium text-blue-600 dark:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        {language === 'vi' ? 'Đọc thêm →' : 'Read more →'}
+                                    </span>
+                                </Link>
                             ))}
                         </div>
                     </div>

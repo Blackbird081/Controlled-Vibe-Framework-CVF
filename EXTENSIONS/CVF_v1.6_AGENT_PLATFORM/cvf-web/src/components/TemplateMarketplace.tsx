@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 import { Category } from '@/types';
+import { useLanguage } from '@/lib/i18n';
 
 // Sample templates for demo
 interface SampleTemplate {
     id: string;
     name: string;
     description: string;
+    descriptionEn?: string;
     category: Category;
     icon: string;
     author: string;
@@ -19,6 +21,7 @@ const sampleTemplates: SampleTemplate[] = [
         id: 'sample_startup_pitch',
         name: 'Startup Pitch Deck',
         description: 'Tạo pitch deck chuẩn cho startup theo format của Y Combinator',
+        descriptionEn: 'Create a Y Combinator-style pitch deck for your startup',
         category: 'business',
         difficulty: 'intermediate',
         icon: '🚀',
@@ -28,6 +31,7 @@ const sampleTemplates: SampleTemplate[] = [
         id: 'sample_seo_audit',
         name: 'SEO Audit Checklist',
         description: 'Phân tích SEO toàn diện cho website theo chuẩn Google 2024',
+        descriptionEn: 'Comprehensive SEO analysis for websites following Google 2024 standards',
         category: 'marketing',
         difficulty: 'advanced',
         icon: '🔍',
@@ -37,6 +41,7 @@ const sampleTemplates: SampleTemplate[] = [
         id: 'sample_api_design',
         name: 'RESTful API Design',
         description: 'Thiết kế API chuẩn RESTful với OpenAPI specs',
+        descriptionEn: 'Design RESTful APIs with OpenAPI specs',
         category: 'technical',
         difficulty: 'advanced',
         icon: '⚡',
@@ -46,6 +51,7 @@ const sampleTemplates: SampleTemplate[] = [
         id: 'sample_social_calendar',
         name: 'Social Media Calendar',
         description: 'Lên lịch content 30 ngày cho các nền tảng social',
+        descriptionEn: 'Plan 30 days of content across social media platforms',
         category: 'marketing',
         difficulty: 'beginner',
         icon: '📅',
@@ -58,6 +64,8 @@ interface MarketplaceProps {
 }
 
 export function TemplateMarketplace({ onBack }: MarketplaceProps) {
+    const { language } = useLanguage();
+    const isVi = language === 'vi';
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<Category | 'all'>('all');
 
@@ -84,13 +92,13 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                         </button>
                     )}
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📦 Sample Templates</h2>
-                        <p className="text-gray-500 dark:text-gray-400">Xem trước các templates sắp ra mắt</p>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📦 {isVi ? 'Mẫu Templates' : 'Sample Templates'}</h2>
+                        <p className="text-gray-500 dark:text-gray-400">{isVi ? 'Xem trước các templates sắp ra mắt' : 'Preview upcoming templates'}</p>
                     </div>
                 </div>
                 <div className="px-4 py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 rounded-lg font-medium flex items-center gap-2">
                     <span>🚧</span>
-                    <span>Coming Soon</span>
+                    <span>{isVi ? 'Sắp ra mắt' : 'Coming Soon'}</span>
                 </div>
             </div>
 
@@ -101,16 +109,16 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                     <span className="text-4xl">🏪</span>
                     <div>
                         <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                            Template Marketplace - Coming Soon!
+                            {isVi ? 'Template Marketplace - Sắp ra mắt!' : 'Template Marketplace - Coming Soon!'}
                         </h3>
                         <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
-                            Chúng tôi đang phát triển marketplace để bạn có thể:
+                            {isVi ? 'Chúng tôi đang phát triển marketplace để bạn có thể:' : 'We are building a marketplace so you can:'}
                         </p>
                         <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                            <li>✨ Khám phá templates từ cộng đồng</li>
-                            <li>📤 Chia sẻ templates của bạn</li>
-                            <li>⭐ Đánh giá và review templates</li>
-                            <li>📥 Import trực tiếp vào thư viện</li>
+                            <li>✨ {isVi ? 'Khám phá templates từ cộng đồng' : 'Discover community templates'}</li>
+                            <li>📤 {isVi ? 'Chia sẻ templates của bạn' : 'Share your templates'}</li>
+                            <li>⭐ {isVi ? 'Đánh giá và review templates' : 'Rate and review templates'}</li>
+                            <li>📥 {isVi ? 'Import trực tiếp vào thư viện' : 'Import directly into your library'}</li>
                         </ul>
                     </div>
                 </div>
@@ -123,7 +131,7 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Tìm kiếm templates..."
+                        placeholder={isVi ? 'Tìm kiếm templates...' : 'Search templates...'}
                         className="w-full px-4 py-3 pl-10 rounded-lg border border-gray-200 dark:border-gray-700 
                      bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                      focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -138,9 +146,9 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                     className="px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 
                    bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 >
-                    <option value="all">Tất cả danh mục</option>
-                    <option value="business">💼 Kinh doanh</option>
-                    <option value="technical">⚙️ Kỹ thuật</option>
+                    <option value="all">{isVi ? 'Tất cả danh mục' : 'All categories'}</option>
+                    <option value="business">{isVi ? '💼 Kinh doanh' : '💼 Business'}</option>
+                    <option value="technical">{isVi ? '⚙️ Kỹ thuật' : '⚙️ Technical'}</option>
                     <option value="marketing">📣 Marketing</option>
                 </select>
             </div>
@@ -164,7 +172,7 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                         </div>
 
                         <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{template.name}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">{template.description}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">{isVi ? template.description : (template.descriptionEn || template.description)}</p>
 
                         <div className="flex items-center justify-between text-xs text-gray-400 mb-4">
                             <span>👤 {template.author}</span>
@@ -181,7 +189,7 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                             className="w-full py-2 rounded-lg bg-gray-100 dark:bg-gray-700 
                        text-gray-400 dark:text-gray-500 font-medium cursor-not-allowed"
                         >
-                            Coming Soon
+                            {isVi ? 'Sắp ra mắt' : 'Coming Soon'}
                         </button>
                     </div>
                 ))}
@@ -190,7 +198,7 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
             {filteredTemplates.length === 0 && (
                 <div className="text-center py-12 text-gray-500">
                     <span className="text-4xl mb-4 block">🔍</span>
-                    <p>Không tìm thấy template phù hợp.</p>
+                    <p>{isVi ? 'Không tìm thấy template phù hợp.' : 'No matching templates found.'}</p>
                 </div>
             )}
         </div>

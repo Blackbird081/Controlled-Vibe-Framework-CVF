@@ -193,19 +193,25 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                     </div>
                 )}
 
-                {/* Preview Toggle */}
+                {/* Technical Details Toggle — collapsed by default */}
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                     <button
                         type="button"
                         onClick={() => setShowPreview(!showPreview)}
-                        className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                        className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 font-medium transition-colors"
                     >
-                        {showPreview ? (language === 'en' ? '🔽 Hide Preview' : '🔽 Ẩn xem trước') : (language === 'en' ? '👁️ Preview Prompt' : '👁️ Xem trước Prompt')}
+                        <svg
+                            className={`w-4 h-4 transition-transform ${showPreview ? 'rotate-180' : ''}`}
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                        {language === 'en' ? 'View technical details' : 'Xem chi tiết kỹ thuật'}
                     </button>
 
                     {showPreview && (
-                        <div className="mt-4 p-4 bg-gray-900 dark:bg-black rounded-lg">
-                            <pre className="text-sm text-green-400 whitespace-pre-wrap font-mono">
+                        <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">
                                 {previewIntent}
                             </pre>
                         </div>
@@ -260,6 +266,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                     <button
                         type="button"
                         onClick={() => setShowSpecExport(true)}
+                        title={language === 'en' ? 'Submit this form to generate AI output' : 'Gửi form để AI tạo kết quả'}
                         className="flex-1 py-4 px-6 bg-blue-600 hover:bg-blue-700 
                          text-white font-semibold rounded-lg
                          shadow-lg hover:shadow-xl

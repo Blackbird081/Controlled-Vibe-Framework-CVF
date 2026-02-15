@@ -17,9 +17,31 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
     const templateDisplayName = getTemplateName(template.id, template.name, language);
     const templateDisplayDesc = getTemplateDescription(template.id, template.description, language);
 
+    // Difficulty badge config
+    const difficultyConfig = {
+        easy: {
+            label: language === 'en' ? 'Easy' : 'Dễ',
+            className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+        },
+        medium: {
+            label: language === 'en' ? 'Medium' : 'Trung bình',
+            className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+        },
+        advanced: {
+            label: language === 'en' ? 'Advanced' : 'Nâng cao',
+            className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
+        },
+    };
+    const difficulty = template.difficulty || 'medium';
+    const diffBadge = difficultyConfig[difficulty];
+
     return (
         <div
             onClick={onClick}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
+            role="button"
+            tabIndex={0}
+            title={language === 'en' ? 'Click to use this template' : 'Click để sử dụng template này'}
             className="group cursor-pointer bg-white dark:bg-gray-800 rounded-xl p-6 
                  border border-gray-200 dark:border-gray-700
                  hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10
@@ -27,11 +49,16 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
         >
             <div className="flex items-start justify-between">
                 <div className="text-3xl">{template.icon}</div>
-                <span className={`text-xs px-2 py-1 rounded-full 
+                <div className="flex items-center gap-1.5">
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${diffBadge.className}`}>
+                        {diffBadge.label}
+                    </span>
+                    <span className={`text-xs px-2 py-1 rounded-full 
                          bg-${categoryInfo.color}-100 text-${categoryInfo.color}-700
                          dark:bg-${categoryInfo.color}-900 dark:text-${categoryInfo.color}-300`}>
-                    {categoryDisplayName}
-                </span>
+                        {categoryDisplayName}
+                    </span>
+                </div>
             </div>
 
             <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white

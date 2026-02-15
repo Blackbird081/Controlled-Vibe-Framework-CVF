@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { SpecExport } from './SpecExport';
 import { Template } from '@/types';
 
@@ -35,75 +37,76 @@ interface WizardStep {
 }
 
 // Define the 8 steps for App Builder Wizard
-const WIZARD_STEPS: WizardStep[] = [
+function getWizardSteps(lang: Lang): WizardStep[] {
+    return [
     {
         id: 1,
         name: 'Requirements',
         icon: '📋',
-        description: 'Định nghĩa yêu cầu và scope của app',
+        description: lang === 'vi' ? 'Định nghĩa yêu cầu và scope của app' : 'Define requirements and scope of the app',
         required: true,
         fields: [
-            { id: 'appName', type: 'text', label: 'Tên App', placeholder: 'VD: TaskFlow', required: true, tip: '💡 Tên ngắn gọn, dễ nhớ' },
-            { id: 'appType', type: 'select', label: 'Loại App', options: ['Desktop App', 'CLI Tool', 'Web App', 'Mobile App', 'API Service'], required: true, tip: '💡 Desktop nếu cần GUI, CLI nếu dùng terminal' },
-            { id: 'problem', type: 'textarea', label: 'Vấn đề cần giải quyết', placeholder: 'Mô tả vấn đề user đang gặp phải...', required: true, rows: 3, tip: '💡 Mô tả rõ PAIN POINT của người dùng' },
-            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'Ai sẽ dùng app này?', required: true, tip: '💡 Cụ thể hơn = tốt hơn' },
-            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3-5)', placeholder: '1. Feature A\n2. Feature B\n3. Feature C', required: true, rows: 4, tip: '💡 Chỉ 3-5 features QUAN TRỌNG NHẤT' },
-            { id: 'outOfScope', type: 'textarea', label: 'Out of Scope (Không làm)', placeholder: 'Những gì KHÔNG làm trong v1', required: false, rows: 2, tip: '💡 Giúp AI hiểu ranh giới dự án' },
+            { id: 'appName', type: 'text', label: lang === 'vi' ? 'Tên App' : 'App Name', placeholder: lang === 'vi' ? 'VD: TaskFlow' : 'e.g. TaskFlow', required: true, tip: lang === 'vi' ? '💡 Tên ngắn gọn, dễ nhớ' : '💡 Short, memorable name' },
+            { id: 'appType', type: 'select', label: lang === 'vi' ? 'Loại App' : 'App Type', options: ['Desktop App', 'CLI Tool', 'Web App', 'Mobile App', 'API Service'], required: true, tip: lang === 'vi' ? '💡 Desktop nếu cần GUI, CLI nếu dùng terminal' : '💡 Desktop if GUI needed, CLI for terminal' },
+            { id: 'problem', type: 'textarea', label: lang === 'vi' ? 'Vấn đề cần giải quyết' : 'Problem Statement', placeholder: lang === 'vi' ? 'Mô tả vấn đề user đang gặp phải...' : 'Describe the problem users are facing...', required: true, rows: 3, tip: lang === 'vi' ? '💡 Mô tả rõ PAIN POINT của người dùng' : '💡 Clearly describe user PAIN POINTS' },
+            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: lang === 'vi' ? 'Ai sẽ dùng app này?' : 'Who will use this app?', required: true, tip: lang === 'vi' ? '💡 Cụ thể hơn = tốt hơn' : '💡 More specific = better' },
+            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3-5)', placeholder: '1. Feature A\n2. Feature B\n3. Feature C', required: true, rows: 4, tip: lang === 'vi' ? '💡 Chỉ 3-5 features QUAN TRỌNG NHẤT' : '💡 Only 3-5 MOST IMPORTANT features' },
+            { id: 'outOfScope', type: 'textarea', label: lang === 'vi' ? 'Out of Scope (Không làm)' : 'Out of Scope', placeholder: lang === 'vi' ? 'Những gì KHÔNG làm trong v1' : 'What will NOT be included in v1', required: false, rows: 2, tip: lang === 'vi' ? '💡 Giúp AI hiểu ranh giới dự án' : '💡 Helps AI understand project boundaries' },
         ]
     },
     {
         id: 2,
         name: 'Tech Stack',
         icon: '🔧',
-        description: 'Chọn công nghệ phù hợp',
+        description: lang === 'vi' ? 'Chọn công nghệ phù hợp' : 'Choose the right technology',
         required: true,
         fields: [
             { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux...', required: true },
             { id: 'performancePriority', type: 'select', label: 'Priority Performance', options: ['Low', 'Medium', 'High', 'Critical'], required: true },
-            { id: 'devSpeed', type: 'select', label: 'Tốc độ phát triển', options: ['Nhanh (1-2 tuần)', 'Trung bình (1 tháng)', 'Dài hạn'], required: false },
-            { id: 'techPreference', type: 'text', label: 'Tech Preference (nếu có)', placeholder: 'VD: Tauri, Electron, Python...', required: false },
+            { id: 'devSpeed', type: 'select', label: lang === 'vi' ? 'Tốc độ phát triển' : 'Development Speed', options: ['Nhanh (1-2 tuần)', 'Trung bình (1 tháng)', 'Dài hạn'], required: false },
+            { id: 'techPreference', type: 'text', label: lang === 'vi' ? 'Tech Preference (nếu có)' : 'Tech Preference (if any)', placeholder: lang === 'vi' ? 'VD: Tauri, Electron, Python...' : 'e.g. Tauri, Electron, Python...', required: false },
             { id: 'dataStorage', type: 'select', label: 'Data Storage', options: ['Không cần', 'Local Files (JSON/YAML)', 'Local Database (SQLite)', 'Cloud Database'], required: true },
-            { id: 'offlineRequired', type: 'select', label: 'Cần Offline?', options: ['Bắt buộc', 'Nice to have', 'Không cần'], required: false },
+            { id: 'offlineRequired', type: 'select', label: lang === 'vi' ? 'Cần Offline?' : 'Offline Required?', options: ['Bắt buộc', 'Nice to have', 'Không cần'], required: false },
         ]
     },
     {
         id: 3,
         name: 'Architecture',
         icon: '🏗️',
-        description: 'Thiết kế kiến trúc hệ thống',
+        description: lang === 'vi' ? 'Thiết kế kiến trúc hệ thống' : 'Design system architecture',
         required: true,
         fields: [
             { id: 'archType', type: 'select', label: 'Architecture Type', options: ['Monolithic', 'Layered (UI/Logic/Data)', 'Component-based', 'Event-driven'], required: true },
             { id: 'stateManagement', type: 'select', label: 'State Management', options: ['Simple (local state)', 'Medium (global state)', 'Complex (state machine)'], required: false },
-            { id: 'components', type: 'textarea', label: 'Main Components', placeholder: 'VD: UI Layer, Business Logic, Data Access...', required: false, rows: 3 },
-            { id: 'dataFlow', type: 'textarea', label: 'Data Flow', placeholder: 'VD: User → UI → Logic → DB → UI', required: false, rows: 2 },
+            { id: 'components', type: 'textarea', label: 'Main Components', placeholder: lang === 'vi' ? 'VD: UI Layer, Business Logic, Data Access...' : 'e.g. UI Layer, Business Logic, Data Access...', required: false, rows: 3 },
+            { id: 'dataFlow', type: 'textarea', label: 'Data Flow', placeholder: lang === 'vi' ? 'VD: User → UI → Logic → DB → UI' : 'e.g. User → UI → Logic → DB → UI', required: false, rows: 2 },
         ]
     },
     {
         id: 4,
         name: 'Database',
         icon: '🗄️',
-        description: 'Thiết kế database schema (nếu cần)',
+        description: lang === 'vi' ? 'Thiết kế database schema (nếu cần)' : 'Design database schema (if needed)',
         required: false,
         skipCondition: 'dataStorage',
         skipValue: 'Không cần',
         fields: [
             { id: 'dbType', type: 'select', label: 'Database Type', options: ['SQLite', 'PostgreSQL', 'MySQL', 'MongoDB', 'JSON Files'], required: true },
-            { id: 'entities', type: 'textarea', label: 'Main Entities', placeholder: 'VD: User, Task, Category, Tag', required: true, rows: 2 },
-            { id: 'relationships', type: 'textarea', label: 'Relationships', placeholder: 'VD: User has many Tasks\nTask belongs to Category', required: false, rows: 3 },
-            { id: 'keyFields', type: 'textarea', label: 'Key Fields per Entity', placeholder: 'VD: Task: title, description, due_date, status', required: false, rows: 3 },
+            { id: 'entities', type: 'textarea', label: 'Main Entities', placeholder: lang === 'vi' ? 'VD: User, Task, Category, Tag' : 'e.g. User, Task, Category, Tag', required: true, rows: 2 },
+            { id: 'relationships', type: 'textarea', label: 'Relationships', placeholder: lang === 'vi' ? 'VD: User has many Tasks\nTask belongs to Category' : 'e.g. User has many Tasks\nTask belongs to Category', required: false, rows: 3 },
+            { id: 'keyFields', type: 'textarea', label: 'Key Fields per Entity', placeholder: lang === 'vi' ? 'VD: Task: title, description, due_date, status' : 'e.g. Task: title, description, due_date, status', required: false, rows: 3 },
         ]
     },
     {
         id: 5,
         name: 'API Design',
         icon: '🔌',
-        description: 'Thiết kế API/Commands (nếu cần)',
+        description: lang === 'vi' ? 'Thiết kế API/Commands (nếu cần)' : 'Design API/Commands (if needed)',
         required: false,
         fields: [
             { id: 'apiStyle', type: 'select', label: 'API Style', options: ['REST API', 'GraphQL', 'IPC Commands (Desktop)', 'CLI Commands', 'None'], required: true },
-            { id: 'resources', type: 'textarea', label: 'Resources/Endpoints', placeholder: 'VD: /tasks, /users, /categories', required: false, rows: 2 },
-            { id: 'operations', type: 'textarea', label: 'Operations per Resource', placeholder: 'VD: Tasks: CRUD + complete, archive', required: false, rows: 3 },
+            { id: 'resources', type: 'textarea', label: 'Resources/Endpoints', placeholder: lang === 'vi' ? 'VD: /tasks, /users, /categories' : 'e.g. /tasks, /users, /categories', required: false, rows: 2 },
+            { id: 'operations', type: 'textarea', label: 'Operations per Resource', placeholder: lang === 'vi' ? 'VD: Tasks: CRUD + complete, archive' : 'e.g. Tasks: CRUD + complete, archive', required: false, rows: 3 },
             { id: 'auth', type: 'select', label: 'Authentication', options: ['None', 'JWT Bearer', 'API Key', 'OAuth2'], required: false },
         ]
     },
@@ -126,14 +129,14 @@ const WIZARD_STEPS: WizardStep[] = [
             { id: 'outputFormats', type: 'text', label: 'Output Formats', placeholder: 'VD: text, json, table', required: false, showFor: ['CLI Tool'] },
             // Common
             { id: 'uiStyle', type: 'select', label: 'UI Style', options: ['Modern Dark', 'Clean Light', 'Minimal', 'No UI (CLI only)'], required: false },
-            { id: 'nativeFeatures', type: 'text', label: 'Native Features', placeholder: 'VD: Notifications, File dialogs, Clipboard', required: false },
+            { id: 'nativeFeatures', type: 'text', label: 'Native Features', placeholder: lang === 'vi' ? 'VD: Notifications, File dialogs, Clipboard' : 'e.g. Notifications, File dialogs, Clipboard', required: false },
         ]
     },
     {
         id: 7,
         name: 'Deployment',
         icon: '📦',
-        description: 'Packaging và distribution',
+        description: lang === 'vi' ? 'Packaging và distribution' : 'Packaging and distribution',
         required: true,
         fields: [
             { id: 'distribution', type: 'select', label: 'Distribution Method', options: ['GitHub Releases', 'Website Download', 'Package Manager (npm/pip)', 'Internal Only'], required: true },
@@ -146,12 +149,12 @@ const WIZARD_STEPS: WizardStep[] = [
         id: 8,
         name: 'Review',
         icon: '✅',
-        description: 'Xem lại và xuất spec',
+        description: lang === 'vi' ? 'Xem lại và xuất spec' : 'Review and export spec',
         required: true,
         isReview: true,
         fields: [] // No fields, just review
     }
-];
+]; }
 
 interface WizardData {
     [key: string]: string;
@@ -311,6 +314,8 @@ Based on this complete specification, please:
 }
 
 export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
+    const { language } = useLanguage();
+    const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
@@ -586,7 +591,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                         </div>
                         <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
                             <p className="text-sm text-green-700 dark:text-green-300">
-                                ✅ Spec đã sẵn sàng! Nhấn "Xuất Spec" để copy và paste vào AI Agent.
+                                {language === 'vi' ? '✅ Spec đã sẵn sàng! Nhấn "Xuất Spec" để copy và paste vào AI Agent.' : '✅ Spec is ready! Click "Export Spec" to copy and paste into AI Agent.'}
                             </p>
                         </div>
                     </div>
@@ -626,7 +631,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                                         onChange={e => handleFieldChange(field.id, e.target.value)}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     >
-                                        <option value="">-- Chọn --</option>
+                                        <option value="">{wt(WIZARD_COMMON.select, language)}</option>
                                         {field.options.map(opt => (
                                             <option key={opt} value={opt}>{opt}</option>
                                         ))}
@@ -664,7 +669,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                             onClick={() => setShowExport(true)}
                             className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg"
                         >
-                            📤 Xuất Spec
+                            {wt(WIZARD_COMMON.exportSpec, language)}
                         </button>
                     ) : (
                         <button
@@ -684,7 +689,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
             {/* Skip Info */}
             {currentStepConfig.required === false && (
                 <p className="text-center text-sm text-gray-500 mt-3">
-                    Bước này không bắt buộc. Bạn có thể bỏ qua nếu không cần.
+                    {wt(WIZARD_COMMON.optionalStep, language)}
                 </p>
             )}
         </div>

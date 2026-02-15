@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { evaluateSpecGate } from '@/lib/spec-gate';
 
 const DRAFT_STORAGE_KEY = 'cvf_content_strategy_wizard_draft';
@@ -34,68 +36,70 @@ interface ContentStrategyWizardProps {
     onBack: () => void;
 }
 
-const WIZARD_STEPS: WizardStep[] = [
+function getWizardSteps(lang: Lang): WizardStep[] {
+    return [
     {
         id: 1,
         name: 'Brand & Goals',
         icon: '🎯',
-        description: 'Xác định brand voice và mục tiêu content',
+        description: lang === 'vi' ? 'Xác định brand voice và mục tiêu content' : 'Define brand voice and content goals',
         required: true,
         fields: [
-            { id: 'brandName', type: 'text', label: 'Tên Brand/Project', placeholder: 'VD: TechStartup Blog', required: true, tip: '💡 Brand hoặc project cần chiến lược nội dung' },
-            { id: 'brandVoice', type: 'textarea', label: 'Brand Voice', placeholder: 'VD:\n- Tone: Professional but friendly\n- Style: Educational, data-driven\n- Personality: Innovative, trustworthy', required: true, rows: 3, tip: '💡 Giọng điệu và phong cách của brand' },
-            { id: 'contentGoals', type: 'textarea', label: 'Content Goals', placeholder: 'VD:\n- Increase organic traffic 50%\n- Generate 200 leads/month\n- Establish thought leadership', required: true, rows: 3 },
-            { id: 'kpis', type: 'textarea', label: 'Content KPIs', placeholder: 'VD:\n- Pageviews: 100K/month\n- Average time on page: 3+ mins\n- Newsletter signups: 500/month', required: false, rows: 3 },
+            { id: 'brandName', type: 'text', label: lang === 'vi' ? 'Tên Brand/Project' : 'Brand/Project Name', placeholder: lang === 'vi' ? 'VD: TechStartup Blog' : 'e.g. TechStartup Blog', required: true, tip: lang === 'vi' ? '💡 Brand hoặc project cần chiến lược nội dung' : '💡 Brand or project needing content strategy' },
+            { id: 'brandVoice', type: 'textarea', label: 'Brand Voice', placeholder: lang === 'vi' ? 'VD:\n- Tone: Professional but friendly\n- Style: Educational, data-driven\n- Personality: Innovative, trustworthy' : 'e.g.:\n- Tone: Professional but friendly\n- Style: Educational, data-driven\n- Personality: Innovative, trustworthy', required: true, rows: 3, tip: lang === 'vi' ? '💡 Giọng điệu và phong cách của brand' : '💡 Tone and style of the brand' },
+            { id: 'contentGoals', type: 'textarea', label: 'Content Goals', placeholder: lang === 'vi' ? 'VD:\n- Increase organic traffic 50%\n- Generate 200 leads/month\n- Establish thought leadership' : 'e.g.:\n- Increase organic traffic 50%\n- Generate 200 leads/month\n- Establish thought leadership', required: true, rows: 3 },
+            { id: 'kpis', type: 'textarea', label: 'Content KPIs', placeholder: lang === 'vi' ? 'VD:\n- Pageviews: 100K/month\n- Average time on page: 3+ mins\n- Newsletter signups: 500/month' : 'e.g.:\n- Pageviews: 100K/month\n- Average time on page: 3+ mins\n- Newsletter signups: 500/month', required: false, rows: 3 },
         ]
     },
     {
         id: 2,
         name: 'Audience',
         icon: '👥',
-        description: 'Định nghĩa target audience',
+        description: lang === 'vi' ? 'Định nghĩa target audience' : 'Define target audience',
         required: true,
         fields: [
-            { id: 'primaryAudience', type: 'textarea', label: 'Primary Audience', placeholder: 'VD:\n- Tech professionals 25-45\n- Decision makers at SMBs\n- Early adopters interested in AI', required: true, rows: 3, tip: '💡 Đối tượng chính tiêu thụ nội dung' },
-            { id: 'audiencePains', type: 'textarea', label: 'Audience Pain Points', placeholder: 'VD:\n- Information overload\n- Lack of practical guides\n- Need for up-to-date trends', required: true, rows: 3 },
-            { id: 'contentPrefs', type: 'textarea', label: 'Content Preferences', placeholder: 'VD:\n- Long-form tutorials\n- Video walkthroughs\n- Quick tips and checklists', required: true, rows: 2 },
-            { id: 'consumptionHabits', type: 'text', label: 'Consumption Habits', placeholder: 'VD: Mobile-first, evening readers, prefer visual content', required: false },
+            { id: 'primaryAudience', type: 'textarea', label: 'Primary Audience', placeholder: lang === 'vi' ? 'VD:\n- Tech professionals 25-45\n- Decision makers at SMBs\n- Early adopters interested in AI' : 'e.g.:\n- Tech professionals 25-45\n- Decision makers at SMBs\n- Early adopters interested in AI', required: true, rows: 3, tip: lang === 'vi' ? '💡 Đối tượng chính tiêu thụ nội dung' : '💡 Primary audience consuming this content' },
+            { id: 'audiencePains', type: 'textarea', label: 'Audience Pain Points', placeholder: lang === 'vi' ? 'VD:\n- Information overload\n- Lack of practical guides\n- Need for up-to-date trends' : 'e.g.:\n- Information overload\n- Lack of practical guides\n- Need for up-to-date trends', required: true, rows: 3 },
+            { id: 'contentPrefs', type: 'textarea', label: 'Content Preferences', placeholder: lang === 'vi' ? 'VD:\n- Long-form tutorials\n- Video walkthroughs\n- Quick tips and checklists' : 'e.g.:\n- Long-form tutorials\n- Video walkthroughs\n- Quick tips and checklists', required: true, rows: 2 },
+            { id: 'consumptionHabits', type: 'text', label: 'Consumption Habits', placeholder: lang === 'vi' ? 'VD: Mobile-first, evening readers, prefer visual content' : 'e.g. Mobile-first, evening readers, prefer visual content', required: false },
         ]
     },
     {
         id: 3,
         name: 'Content Pillars',
         icon: '📚',
-        description: 'Xác định các chủ đề nội dung chính',
+        description: lang === 'vi' ? 'Xác định các chủ đề nội dung chính' : 'Define main content themes',
         required: true,
         fields: [
-            { id: 'pillars', type: 'textarea', label: 'Content Pillars (3-5)', placeholder: 'VD:\n1. AI & Machine Learning tutorials\n2. Startup growth strategies\n3. Tech career development\n4. Industry trends & analysis', required: true, rows: 4, tip: '💡 Các chủ đề chính tạo nền tảng content' },
-            { id: 'topicClusters', type: 'textarea', label: 'Topic Clusters', placeholder: 'Pillar 1:\n- Beginner ML guides\n- Python for AI\n- Real-world use cases\n\nPillar 2:\n- Funding strategies\n- GTM playbooks', required: true, rows: 5, tip: '💡 Chủ đề con thuộc mỗi pillar' },
-            { id: 'contentMix', type: 'textarea', label: 'Content Mix', placeholder: 'VD:\n- 40% Educational (how-to, guides)\n- 30% Thought leadership\n- 20% News/trends\n- 10% Entertainment', required: false, rows: 3 },
+            { id: 'pillars', type: 'textarea', label: 'Content Pillars (3-5)', placeholder: lang === 'vi' ? 'VD:\n1. AI & Machine Learning tutorials\n2. Startup growth strategies\n3. Tech career development\n4. Industry trends & analysis' : 'e.g.:\n1. AI & Machine Learning tutorials\n2. Startup growth strategies\n3. Tech career development\n4. Industry trends & analysis', required: true, rows: 4, tip: lang === 'vi' ? '💡 Các chủ đề chính tạo nền tảng content' : '💡 Main themes forming content foundation' },
+            { id: 'topicClusters', type: 'textarea', label: 'Topic Clusters', placeholder: 'Pillar 1:\n- Beginner ML guides\n- Python for AI\n- Real-world use cases\n\nPillar 2:\n- Funding strategies\n- GTM playbooks', required: true, rows: 5, tip: lang === 'vi' ? '💡 Chủ đề con thuộc mỗi pillar' : '💡 Sub-topics under each pillar' },
+            { id: 'contentMix', type: 'textarea', label: 'Content Mix', placeholder: lang === 'vi' ? 'VD:\n- 40% Educational (how-to, guides)\n- 30% Thought leadership\n- 20% News/trends\n- 10% Entertainment' : 'e.g.:\n- 40% Educational (how-to, guides)\n- 30% Thought leadership\n- 20% News/trends\n- 10% Entertainment', required: false, rows: 3 },
         ]
     },
     {
         id: 4,
         name: 'Channels & Calendar',
         icon: '📅',
-        description: 'Lên kế hoạch distribution',
+        description: lang === 'vi' ? 'Lên kế hoạch distribution' : 'Plan distribution strategy',
         required: true,
         fields: [
-            { id: 'channels', type: 'textarea', label: 'Distribution Channels', placeholder: 'VD:\n- Blog (primary)\n- LinkedIn\n- Twitter/X\n- YouTube\n- Newsletter', required: true, rows: 4, tip: '💡 Nơi phân phối nội dung' },
-            { id: 'frequency', type: 'textarea', label: 'Publishing Frequency', placeholder: 'VD:\n- Blog: 2x/week (Tue, Thu)\n- LinkedIn: Daily\n- Newsletter: Weekly (Fri)\n- YouTube: 1x/month', required: true, rows: 3 },
-            { id: 'contentTypes', type: 'textarea', label: 'Content Types', placeholder: 'VD:\n- Long-form articles (2000+ words)\n- Infographics\n- Short videos (5-10 mins)\n- Podcasts\n- Case studies', required: true, rows: 4 },
-            { id: 'repurposing', type: 'textarea', label: 'Repurposing Strategy', placeholder: 'VD:\n- Blog → LinkedIn carousel\n- Podcast → Blog post\n- Video → Short clips', required: false, rows: 2 },
+            { id: 'channels', type: 'textarea', label: 'Distribution Channels', placeholder: lang === 'vi' ? 'VD:\n- Blog (primary)\n- LinkedIn\n- Twitter/X\n- YouTube\n- Newsletter' : 'e.g.:\n- Blog (primary)\n- LinkedIn\n- Twitter/X\n- YouTube\n- Newsletter', required: true, rows: 4, tip: lang === 'vi' ? '💡 Nơi phân phối nội dung' : '💡 Where to distribute content' },
+            { id: 'frequency', type: 'textarea', label: 'Publishing Frequency', placeholder: lang === 'vi' ? 'VD:\n- Blog: 2x/week (Tue, Thu)\n- LinkedIn: Daily\n- Newsletter: Weekly (Fri)\n- YouTube: 1x/month' : 'e.g.:\n- Blog: 2x/week (Tue, Thu)\n- LinkedIn: Daily\n- Newsletter: Weekly (Fri)\n- YouTube: 1x/month', required: true, rows: 3 },
+            { id: 'contentTypes', type: 'textarea', label: 'Content Types', placeholder: lang === 'vi' ? 'VD:\n- Long-form articles (2000+ words)\n- Infographics\n- Short videos (5-10 mins)\n- Podcasts\n- Case studies' : 'e.g.:\n- Long-form articles (2000+ words)\n- Infographics\n- Short videos (5-10 mins)\n- Podcasts\n- Case studies', required: true, rows: 4 },
+            { id: 'repurposing', type: 'textarea', label: 'Repurposing Strategy', placeholder: lang === 'vi' ? 'VD:\n- Blog → LinkedIn carousel\n- Podcast → Blog post\n- Video → Short clips' : 'e.g.:\n- Blog → LinkedIn carousel\n- Podcast → Blog post\n- Video → Short clips', required: false, rows: 2 },
         ]
     },
     {
         id: 5,
         name: 'Review',
         icon: '✅',
-        description: 'Xem lại và xuất Content Strategy',
+        description: lang === 'vi' ? 'Xem lại và xuất Content Strategy' : 'Review and export Content Strategy',
         required: true,
         isReview: true,
         fields: []
     }
-];
+    ];
+}
 
 function generateConsolidatedSpec(data: WizardData): string {
     const spec = `
@@ -197,6 +201,8 @@ Based on this strategy, AI should generate:
 }
 
 export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
+    const { language } = useLanguage();
+    const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
@@ -258,10 +264,10 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
     const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
     const canExport = specGate.status === 'PASS';
     const specGateLabel = specGate.status === 'PASS'
-        ? 'Spec Gate: PASS — Đủ input để xuất'
+        ? wt(WIZARD_COMMON.specGatePass, language)
         : specGate.status === 'CLARIFY'
-            ? 'Spec Gate: CLARIFY — Thiếu input bắt buộc'
-            : 'Spec Gate: FAIL — Không đủ dữ liệu để tạo spec';
+            ? wt(WIZARD_COMMON.specGateClarify, language)
+            : wt(WIZARD_COMMON.specGateFail, language);
     const specGateClass = specGate.status === 'PASS'
         ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
         : specGate.status === 'CLARIFY'
@@ -283,12 +289,12 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
                         <div className="font-semibold">{specGateLabel}</div>
                         {specGate.missing.length > 0 && (
                             <div className="text-xs mt-1">
-                                Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                             </div>
                         )}
                     </div>
                     <div className="flex gap-3">
-                        <button onClick={() => { navigator.clipboard.writeText(generatedSpec); alert('Đã copy vào clipboard!'); }}
+                        <button onClick={() => { navigator.clipboard.writeText(generatedSpec); alert(wt(WIZARD_COMMON.copiedToClipboard, language)); }}
                             disabled={!canExport}
                             className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
                                 ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white hover:from-emerald-700 hover:to-green-700'
@@ -318,7 +324,7 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
                 </button>
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">✍️ Content Strategy Wizard</h1>
-                    <p className="text-gray-600 dark:text-gray-400">Tạo Content Strategy Document qua 5 bước</p>
+                    <p className="text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Tạo Content Strategy Document qua 5 bước' : 'Create Content Strategy Document in 5 steps'}</p>
                 </div>
             </div>
 
@@ -327,13 +333,13 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">📝</span>
                         <div>
-                            <p className="font-medium text-amber-800 dark:text-amber-200">Bạn có bản nháp chưa hoàn thành</p>
-                            <p className="text-sm text-amber-600 dark:text-amber-400">Tiếp tục từ lần trước hoặc bắt đầu mới</p>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">{wt(WIZARD_COMMON.draftFound, language)}</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">{wt(WIZARD_COMMON.draftResume, language)}</p>
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <button onClick={loadDraft} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium">Tiếp tục</button>
-                        <button onClick={clearDraft} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">Bắt đầu mới</button>
+                        <button onClick={loadDraft} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium">{wt(WIZARD_COMMON.continue, language)}</button>
+                        <button onClick={clearDraft} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">{wt(WIZARD_COMMON.startNew, language)}</button>
                     </div>
                 </div>
             )}
@@ -376,8 +382,8 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
                 {currentStepConfig.isReview ? (
                     <div className="space-y-4">
                         <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
-                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">🎉 Strategy sẵn sàng!</h3>
-                            <p className="text-green-700 dark:text-green-300 text-sm">Review strategy bên dưới và xuất khi sẵn sàng.</p>
+                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">🎉 Strategy {wt(WIZARD_COMMON.reviewReady, language)}</h3>
+                            <p className="text-green-700 dark:text-green-300 text-sm">{wt(WIZARD_COMMON.reviewDesc, language)}</p>
                         </div>
                         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 max-h-96 overflow-y-auto">
                             <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">{generatedSpec}</pre>
@@ -394,7 +400,7 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
                             ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white hover:from-emerald-700 hover:to-green-700'
                             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                         }`}>
-                            ✍️ Xuất Content Strategy
+                            {language === 'vi' ? '✍️ Xuất Content Strategy' : '✍️ Export Content Strategy'}
                         </button>
                     </div>
                 ) : (
@@ -415,7 +421,7 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
                                 {field.type === 'select' && field.options && (
                                     <select value={wizardData[field.id] || ''} onChange={e => handleFieldChange(field.id, e.target.value)}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500">
-                                        <option value="">-- Chọn --</option>
+                                        <option value="">{wt(WIZARD_COMMON.select, language)}</option>
                                         {field.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                     </select>
                                 )}
@@ -429,12 +435,12 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
             <div className="flex justify-between mt-6">
                 <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep === 1}
                     className={`px-6 py-3 rounded-lg font-medium ${currentStep === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}>
-                    ← Trước
+                    {wt(WIZARD_COMMON.previous, language)}
                 </button>
                 {currentStep < WIZARD_STEPS.length && (
                     <button onClick={() => setCurrentStep(currentStep + 1)} disabled={currentStepConfig.required && !isStepValid()}
                         className={`px-6 py-3 rounded-lg font-medium ${currentStepConfig.required && !isStepValid() ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>
-                        Tiếp tục →
+                        {wt(WIZARD_COMMON.next, language)}
                     </button>
                 )}
             </div>

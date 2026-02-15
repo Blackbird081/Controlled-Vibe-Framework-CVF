@@ -3,10 +3,46 @@
 import { useMemo } from 'react';
 import { useExecutionStore } from '@/lib/store';
 import { exportAnalyticsEvents, useAnalyticsEvents } from '@/lib/analytics';
+import { useLanguage } from '@/lib/i18n';
 
 export function AnalyticsDashboard() {
     const { executions } = useExecutionStore();
     const { events, clearEvents, enabled } = useAnalyticsEvents();
+    const { language } = useLanguage();
+    const isVi = language === 'vi';
+
+    const L = {
+        title: isVi ? '📊 Phân tích' : '📊 Analytics',
+        subtitle: isVi ? 'Thống kê sử dụng và chất lượng' : 'Usage statistics and quality metrics',
+        analyticsOff: isVi ? 'Analytics đang tắt trong Settings. Bật lại để ghi nhận dữ liệu mới.' : 'Analytics is disabled in Settings. Re-enable to track new data.',
+        totalRuns: isVi ? 'Tổng số lần chạy' : 'Total Runs',
+        accepted: isVi ? 'Kết quả Accept' : 'Accepted Results',
+        avgQuality: isVi ? 'Điểm TB chất lượng' : 'Avg Quality Score',
+        acceptRate: isVi ? 'Tỷ lệ chấp nhận' : 'Accept Rate',
+        weekActivity: isVi ? '📈 Hoạt động tuần này' : '📈 This Week\'s Activity',
+        topTemplates: isVi ? '🏆 Template phổ biến' : '🏆 Top Templates',
+        noTemplateData: isVi ? 'Chưa có dữ liệu. Hãy chạy một vài templates!' : 'No data yet. Run some templates!',
+        topSkills: isVi ? '📚 Skill phổ biến' : '📚 Top Skills',
+        noSkillData: isVi ? 'Chưa có dữ liệu skill. Hãy mở Skill Library!' : 'No skill data. Open the Skill Library!',
+        domainUsage: isVi ? '🏷️ Theo lĩnh vực' : '🏷️ Domain Usage',
+        noDomainData: isVi ? 'Chưa có dữ liệu domain. Hãy mở một vài skills!' : 'No domain data yet. Open some skills!',
+        resultDist: isVi ? '📊 Phân bố kết quả' : '📊 Result Distribution',
+        noResultData: isVi ? 'Chưa có dữ liệu' : 'No data yet',
+        enforcement: '🛡️ Enforcement',
+        enforcementDesc: isVi ? 'Theo dõi các quyết định chặn/clarify' : 'Track block/clarify decisions',
+        decisionsLogged: isVi ? 'Quyết định đã ghi' : 'Decisions logged',
+        preUatFails: isVi ? 'Pre-UAT thất bại' : 'Pre-UAT fails',
+        topStatus: isVi ? 'Trạng thái phổ biến' : 'Top status',
+        statusBreakdown: isVi ? 'Phân bố trạng thái' : 'Status breakdown',
+        topSources: isVi ? 'Nguồn phổ biến' : 'Top sources',
+        noEnforcement: isVi ? 'Chưa có enforcement events.' : 'No enforcement events yet.',
+        noEnforcementSrc: isVi ? 'Chưa có nguồn enforcement.' : 'No enforcement sources.',
+        eventTracking: '🧭 Event Tracking',
+        eventTrackingDesc: isVi ? 'Nhật ký analytics cục bộ (không có PII)' : 'Local analytics log (no PII)',
+        totalEvents: isVi ? 'Tổng events' : 'Total events',
+        last7Days: isVi ? '7 ngày gần đây' : 'Last 7 days',
+        noEvents: isVi ? 'Chưa có events.' : 'No events tracked yet.',
+    };
 
     const formatEventValue = (value: unknown) => {
         if (value == null) return '';
@@ -165,14 +201,14 @@ export function AnalyticsDashboard() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📊 Analytics</h2>
-                    <p className="text-gray-500 dark:text-gray-400">Thống kê sử dụng và chất lượng</p>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{L.title}</h2>
+                    <p className="text-gray-500 dark:text-gray-400">{L.subtitle}</p>
                 </div>
             </div>
 
             {!enabled && (
                 <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-                    Analytics đang tắt trong Settings. Bật lại để ghi nhận dữ liệu mới.
+                    {L.analyticsOff}
                 </div>
             )}
 
@@ -180,19 +216,19 @@ export function AnalyticsDashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
                     <div className="text-3xl font-bold text-blue-600">{stats.total}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Tổng số lần chạy</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{L.totalRuns}</div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
                     <div className="text-3xl font-bold text-green-600">{stats.accepted}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Kết quả Accept</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{L.accepted}</div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
                     <div className="text-3xl font-bold text-orange-600">{stats.avgQuality.toFixed(1)}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Điểm TB chất lượng</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{L.avgQuality}</div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
                     <div className="text-3xl font-bold text-purple-600">{stats.acceptRate.toFixed(0)}%</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Accept Rate</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{L.acceptRate}</div>
                 </div>
             </div>
 
@@ -200,7 +236,7 @@ export function AnalyticsDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Weekly Activity */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">📈 Hoạt động tuần này</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{L.weekActivity}</h3>
                     <div className="flex items-end justify-between h-32 gap-2">
                         {stats.weekActivity.map((count, idx) => {
                             const maxCount = Math.max(...stats.weekActivity, 1);
@@ -220,7 +256,7 @@ export function AnalyticsDashboard() {
 
                 {/* Top Templates */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">🏆 Top Templates</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{L.topTemplates}</h3>
                     {stats.topTemplates.length > 0 ? (
                         <div className="space-y-3">
                             {stats.topTemplates.map(([name, count], idx) => (
@@ -234,7 +270,7 @@ export function AnalyticsDashboard() {
                             ))}
                         </div>
                     ) : (
-                        <p className="text-gray-400 text-sm">Chưa có dữ liệu. Hãy chạy một vài templates!</p>
+                        <p className="text-gray-400 text-sm">{L.noTemplateData}</p>
                     )}
                 </div>
             </div>
@@ -242,7 +278,7 @@ export function AnalyticsDashboard() {
             {/* Skill Usage */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">📚 Top Skills</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{L.topSkills}</h3>
                     {skillStats.topSkills.length > 0 ? (
                         <div className="space-y-3">
                             {skillStats.topSkills.map((skill, idx) => (
@@ -259,12 +295,12 @@ export function AnalyticsDashboard() {
                             ))}
                         </div>
                     ) : (
-                        <p className="text-gray-400 text-sm">Chưa có dữ liệu skill. Hãy mở Skill Library!</p>
+                        <p className="text-gray-400 text-sm">{L.noSkillData}</p>
                     )}
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">🏷️ Domain Usage</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{L.domainUsage}</h3>
                     {skillStats.topDomains.length > 0 ? (
                         <div className="space-y-3">
                             {skillStats.topDomains.map(([domain, count]) => (
@@ -275,14 +311,14 @@ export function AnalyticsDashboard() {
                             ))}
                         </div>
                     ) : (
-                        <p className="text-gray-400 text-sm">Chưa có dữ liệu domain. Hãy mở một vài skills!</p>
+                        <p className="text-gray-400 text-sm">{L.noDomainData}</p>
                     )}
                 </div>
             </div>
 
             {/* Result Distribution */}
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">📊 Phân bố kết quả</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{L.resultDist}</h3>
                 <div className="flex h-8 rounded-lg overflow-hidden">
                     {stats.accepted > 0 && (
                         <div
@@ -302,7 +338,7 @@ export function AnalyticsDashboard() {
                     )}
                     {stats.completed === 0 && (
                         <div className="flex-1 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 text-xs">
-                            Chưa có dữ liệu
+                            {L.noResultData}
                         </div>
                     )}
                 </div>
@@ -316,21 +352,21 @@ export function AnalyticsDashboard() {
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                     <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white">🛡️ Enforcement</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Theo dõi các quyết định chặn/clarify</p>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">{L.enforcement}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{L.enforcementDesc}</p>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <div className="text-xs text-gray-500">Decisions logged</div>
+                        <div className="text-xs text-gray-500">{L.decisionsLogged}</div>
                         <div className="text-lg font-semibold text-gray-900 dark:text-white">{enforcementStats.total}</div>
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <div className="text-xs text-gray-500">Pre-UAT fails</div>
+                        <div className="text-xs text-gray-500">{L.preUatFails}</div>
                         <div className="text-lg font-semibold text-gray-900 dark:text-white">{enforcementStats.preUatFails}</div>
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <div className="text-xs text-gray-500">Top status</div>
+                        <div className="text-xs text-gray-500">{L.topStatus}</div>
                         <div className="text-sm font-semibold text-gray-900 dark:text-white">
                             {enforcementStats.topStatuses[0]?.[0] || 'N/A'}
                         </div>
@@ -338,7 +374,7 @@ export function AnalyticsDashboard() {
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <div className="text-xs text-gray-500 mb-2">Status breakdown</div>
+                        <div className="text-xs text-gray-500 mb-2">{L.statusBreakdown}</div>
                         {enforcementStats.topStatuses.length > 0 ? (
                             <div className="space-y-2">
                                 {enforcementStats.topStatuses.map(([status, count]) => (
@@ -349,11 +385,11 @@ export function AnalyticsDashboard() {
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-sm text-gray-400">Chưa có enforcement events.</p>
+                            <p className="text-sm text-gray-400">{L.noEnforcement}</p>
                         )}
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <div className="text-xs text-gray-500 mb-2">Top sources</div>
+                        <div className="text-xs text-gray-500 mb-2">{L.topSources}</div>
                         {enforcementStats.topSources.length > 0 ? (
                             <div className="space-y-2">
                                 {enforcementStats.topSources.map(([source, count]) => (
@@ -364,7 +400,7 @@ export function AnalyticsDashboard() {
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-sm text-gray-400">Chưa có nguồn enforcement.</p>
+                            <p className="text-sm text-gray-400">{L.noEnforcementSrc}</p>
                         )}
                     </div>
                 </div>
@@ -386,8 +422,8 @@ export function AnalyticsDashboard() {
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                     <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white">🧭 Event Tracking</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Local analytics log (no PII)</p>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">{L.eventTracking}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{L.eventTrackingDesc}</p>
                     </div>
                     <div className="flex flex-wrap gap-2">
                         <button
@@ -412,11 +448,11 @@ export function AnalyticsDashboard() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <div className="text-xs text-gray-500">Total events</div>
+                        <div className="text-xs text-gray-500">{L.totalEvents}</div>
                         <div className="text-lg font-semibold text-gray-900 dark:text-white">{eventStats.totalEvents}</div>
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <div className="text-xs text-gray-500">Last 7 days</div>
+                        <div className="text-xs text-gray-500">{L.last7Days}</div>
                         <div className="text-lg font-semibold text-gray-900 dark:text-white">{eventStats.last7Days}</div>
                     </div>
                     {eventStats.topTypes.map(([type, count]) => (
@@ -439,7 +475,7 @@ export function AnalyticsDashboard() {
                         ))}
                     </div>
                 ) : (
-                    <p className="text-sm text-gray-400">No events tracked yet.</p>
+                    <p className="text-sm text-gray-400">{L.noEvents}</p>
                 )}
             </div>
         </div>

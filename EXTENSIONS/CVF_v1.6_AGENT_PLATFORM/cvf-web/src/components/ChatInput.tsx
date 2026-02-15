@@ -99,6 +99,8 @@ export function ChatInput({
                 <button
                     onClick={onSend}
                     disabled={!hasContent || isLoading}
+                    title={language === 'vi' ? 'Gửi tin nhắn (Enter)' : 'Send message (Enter)'}
+                    aria-label={language === 'vi' ? 'Gửi tin nhắn' : 'Send message'}
                     className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 
                               disabled:cursor-not-allowed text-white rounded-xl font-medium
                               transition-colors flex items-center justify-center gap-2 sm:w-auto w-full"

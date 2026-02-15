@@ -388,6 +388,8 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                                 value={settings.providers[provider.id].apiKey}
                                                 onChange={(e) => handleApiKeyChange(provider.id, e.target.value)}
                                                 placeholder={`${provider.name} ${l.apiKey}...`}
+                                                title={`Enter your ${provider.name} API key`}
+                                                aria-label={`${provider.name} API key`}
                                                 className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 
                                                            dark:border-gray-600 bg-white dark:bg-gray-700 
                                                            text-gray-900 dark:text-white"
@@ -395,6 +397,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                             <button
                                                 onClick={() => setShowApiKey({ ...showApiKey, [provider.id]: !showApiKey[provider.id] })}
                                                 className="px-3 py-2 text-xs bg-gray-100 dark:bg-gray-600 rounded-lg"
+                                                aria-label={showApiKey[provider.id] ? `Hide ${provider.name} API key` : `Show ${provider.name} API key`}
                                             >
                                                 {showApiKey[provider.id] ? l.hide : l.show}
                                             </button>

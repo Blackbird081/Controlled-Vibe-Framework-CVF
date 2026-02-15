@@ -163,7 +163,7 @@ export default function Sidebar({
                 )}
 
                 {/* Navigation Groups */}
-                <nav className="flex-1 overflow-y-auto p-4 space-y-6">
+                <nav className="flex-1 overflow-y-auto p-4 space-y-6" aria-label="Main navigation">
                     {/* Browse Group */}
                     <NavGroup title={t('sidebar.browse') || 'Browse'} icon="📁">
                         <NavItem
@@ -183,6 +183,7 @@ export default function Sidebar({
                                 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
                             )}
                             onClick={onClose}
+                            aria-label={t('nav.help') || 'Help'}
                         >
                             <span className="flex-1 text-left">{t('nav.help') || '📖 Help'}</span>
                         </Link>
@@ -193,6 +194,7 @@ export default function Sidebar({
                                 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
                             )}
                             onClick={onClose}
+                            aria-label={t('nav.docs') || 'Docs'}
                         >
                             <span className="flex-1 text-left">{t('nav.docs') || '📚 Docs'}</span>
                         </Link>
@@ -226,7 +228,8 @@ export default function Sidebar({
                         )}
                     </NavGroup>
 
-                    {/* Data & Analytics Group */}
+                    {/* Data & Analytics Group — hidden for viewers */}
+                    {userRole !== 'viewer' && (
                     <NavGroup title={t('sidebar.data') || 'Data'} icon="📊">
                         <NavItem
                             label={t('nav.history') || '📜 History'}
@@ -245,6 +248,7 @@ export default function Sidebar({
                             onClick={() => handleNav('marketplace')}
                         />
                     </NavGroup>
+                    )}
 
                     {/* User & Settings Group */}
                     <NavGroup title={t('sidebar.user') || 'User'} icon="⚙️">

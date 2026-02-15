@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { evaluateSpecGate } from '@/lib/spec-gate';
 
 const DRAFT_STORAGE_KEY = 'cvf_business_strategy_wizard_draft';
@@ -34,44 +36,45 @@ interface BusinessStrategyWizardProps {
     onBack: () => void;
 }
 
-const WIZARD_STEPS: WizardStep[] = [
+function getWizardSteps(lang: Lang): WizardStep[] {
+    return [
     {
         id: 1,
         name: 'Context & Goals',
         icon: '🎯',
-        description: 'Xác định bối cảnh và mục tiêu chiến lược',
+        description: lang === 'vi' ? 'Xác định bối cảnh và mục tiêu chiến lược' : 'Define context and strategic goals',
         required: true,
         fields: [
-            { id: 'strategicQuestion', type: 'textarea', label: 'Câu hỏi chiến lược', placeholder: 'VD: Có nên mở rộng thị trường miền Trung?', required: true, rows: 2, tip: '💡 Một câu hỏi cụ thể cần quyết định' },
-            { id: 'businessContext', type: 'textarea', label: 'Business Context', placeholder: 'Mô tả về công ty, ngành, thị trường hiện tại...', required: true, rows: 3, tip: '💡 Background cần thiết để phân tích' },
-            { id: 'strategicGoals', type: 'textarea', label: 'Strategic Goals', placeholder: 'VD:\n- Tăng revenue 30% trong 2 năm\n- Đa dạng hóa nguồn thu', required: true, rows: 3 },
-            { id: 'constraints', type: 'textarea', label: 'Constraints', placeholder: 'VD:\n- Budget: $500K\n- Timeline: 18 months\n- No new hires', required: false, rows: 2 },
-            { id: 'stakeholders', type: 'text', label: 'Key Stakeholders', placeholder: 'VD: CEO, CFO, Sales Director, Board', required: false },
+            { id: 'strategicQuestion', type: 'textarea', label: lang === 'vi' ? 'Câu hỏi chiến lược' : 'Strategic Question', placeholder: lang === 'vi' ? 'VD: Có nên mở rộng thị trường miền Trung?' : 'e.g. Should we expand to the Central market?', required: true, rows: 2, tip: lang === 'vi' ? '💡 Một câu hỏi cụ thể cần quyết định' : '💡 A specific question that needs a decision' },
+            { id: 'businessContext', type: 'textarea', label: 'Business Context', placeholder: lang === 'vi' ? 'Mô tả về công ty, ngành, thị trường hiện tại...' : 'Describe your company, industry, current market...', required: true, rows: 3, tip: lang === 'vi' ? '💡 Background cần thiết để phân tích' : '💡 Background needed for analysis' },
+            { id: 'strategicGoals', type: 'textarea', label: 'Strategic Goals', placeholder: lang === 'vi' ? 'VD:\n- Tăng revenue 30% trong 2 năm\n- Đa dạng hóa nguồn thu' : 'e.g.:\n- Increase revenue 30% in 2 years\n- Diversify revenue streams', required: true, rows: 3 },
+            { id: 'constraints', type: 'textarea', label: 'Constraints', placeholder: lang === 'vi' ? 'VD:\n- Budget: $500K\n- Timeline: 18 months\n- No new hires' : 'e.g.:\n- Budget: $500K\n- Timeline: 18 months\n- No new hires', required: false, rows: 2 },
+            { id: 'stakeholders', type: 'text', label: 'Key Stakeholders', placeholder: lang === 'vi' ? 'VD: CEO, CFO, Sales Director, Board' : 'e.g. CEO, CFO, Sales Director, Board', required: false },
         ]
     },
     {
         id: 2,
         name: 'Options Analysis',
         icon: '📊',
-        description: 'Phân tích các phương án',
+        description: lang === 'vi' ? 'Phân tích các phương án' : 'Analyze strategic options',
         required: true,
         fields: [
-            { id: 'options', type: 'textarea', label: 'Strategic Options (3-5)', placeholder: 'Option A: ...\nOption B: ...\nOption C: ...\nOption D (Status quo): ...', required: true, rows: 5, tip: '💡 Liệt kê tất cả options khả thi, bao gồm "không làm gì"' },
-            { id: 'criteria', type: 'textarea', label: 'Evaluation Criteria', placeholder: 'VD:\n- ROI potential\n- Risk level\n- Time to implement\n- Resource requirements', required: true, rows: 3, tip: '💡 Tiêu chí để so sánh options' },
-            { id: 'priorities', type: 'textarea', label: 'Criteria Weights', placeholder: 'VD:\n- ROI: 40%\n- Risk: 25%\n- Time: 20%\n- Resources: 15%', required: false, rows: 3 },
+            { id: 'options', type: 'textarea', label: 'Strategic Options (3-5)', placeholder: 'Option A: ...\nOption B: ...\nOption C: ...\nOption D (Status quo): ...', required: true, rows: 5, tip: lang === 'vi' ? '💡 Liệt kê tất cả options khả thi, bao gồm "không làm gì"' : '💡 List all viable options, including "do nothing"' },
+            { id: 'criteria', type: 'textarea', label: 'Evaluation Criteria', placeholder: lang === 'vi' ? 'VD:\n- ROI potential\n- Risk level\n- Time to implement\n- Resource requirements' : 'e.g.:\n- ROI potential\n- Risk level\n- Time to implement\n- Resource requirements', required: true, rows: 3, tip: lang === 'vi' ? '💡 Tiêu chí để so sánh options' : '💡 Criteria to compare options' },
+            { id: 'priorities', type: 'textarea', label: 'Criteria Weights', placeholder: lang === 'vi' ? 'VD:\n- ROI: 40%\n- Risk: 25%\n- Time: 20%\n- Resources: 15%' : 'e.g.:\n- ROI: 40%\n- Risk: 25%\n- Time: 20%\n- Resources: 15%', required: false, rows: 3 },
         ]
     },
     {
         id: 3,
         name: 'SWOT & Risk',
         icon: '⚖️',
-        description: 'Phân tích SWOT và rủi ro',
+        description: lang === 'vi' ? 'Phân tích SWOT và rủi ro' : 'SWOT and risk analysis',
         required: true,
         fields: [
-            { id: 'strengths', type: 'textarea', label: 'Strengths', placeholder: 'VD:\n- Strong brand recognition\n- Experienced team\n- Healthy cash flow', required: true, rows: 3, tip: '💡 Điểm mạnh nội bộ có thể tận dụng' },
-            { id: 'weaknesses', type: 'textarea', label: 'Weaknesses', placeholder: 'VD:\n- Limited regional presence\n- Outdated tech stack', required: true, rows: 3, tip: '💡 Điểm yếu nội bộ cần khắc phục' },
-            { id: 'opportunities', type: 'textarea', label: 'Opportunities', placeholder: 'VD:\n- Growing market demand\n- Competitor exit\n- New regulations favoring our model', required: true, rows: 3, tip: '💡 Cơ hội bên ngoài có thể nắm bắt' },
-            { id: 'threats', type: 'textarea', label: 'Threats', placeholder: 'VD:\n- New entrants\n- Economic downturn\n- Supply chain disruption', required: true, rows: 3, tip: '💡 Mối đe dọa bên ngoài cần đề phòng' },
+            { id: 'strengths', type: 'textarea', label: 'Strengths', placeholder: lang === 'vi' ? 'VD:\n- Strong brand recognition\n- Experienced team\n- Healthy cash flow' : 'e.g.:\n- Strong brand recognition\n- Experienced team\n- Healthy cash flow', required: true, rows: 3, tip: lang === 'vi' ? '💡 Điểm mạnh nội bộ có thể tận dụng' : '💡 Internal strengths to leverage' },
+            { id: 'weaknesses', type: 'textarea', label: 'Weaknesses', placeholder: lang === 'vi' ? 'VD:\n- Limited regional presence\n- Outdated tech stack' : 'e.g.:\n- Limited regional presence\n- Outdated tech stack', required: true, rows: 3, tip: lang === 'vi' ? '💡 Điểm yếu nội bộ cần khắc phục' : '💡 Internal weaknesses to address' },
+            { id: 'opportunities', type: 'textarea', label: 'Opportunities', placeholder: lang === 'vi' ? 'VD:\n- Growing market demand\n- Competitor exit\n- New regulations favoring our model' : 'e.g.:\n- Growing market demand\n- Competitor exit\n- New regulations favoring our model', required: true, rows: 3, tip: lang === 'vi' ? '💡 Cơ hội bên ngoài có thể nắm bắt' : '💡 External opportunities to seize' },
+            { id: 'threats', type: 'textarea', label: 'Threats', placeholder: lang === 'vi' ? 'VD:\n- New entrants\n- Economic downturn\n- Supply chain disruption' : 'e.g.:\n- New entrants\n- Economic downturn\n- Supply chain disruption', required: true, rows: 3, tip: lang === 'vi' ? '💡 Mối đe dọa bên ngoài cần đề phòng' : '💡 External threats to guard against' },
             { id: 'risks', type: 'textarea', label: 'Key Risks per Option', placeholder: 'Option A risks:\n- ...\nOption B risks:\n- ...', required: false, rows: 4 },
         ]
     },
@@ -79,12 +82,13 @@ const WIZARD_STEPS: WizardStep[] = [
         id: 4,
         name: 'Review',
         icon: '✅',
-        description: 'Xem lại và xuất Strategy Doc',
+        description: lang === 'vi' ? 'Xem lại và xuất Strategy Doc' : 'Review and export Strategy Doc',
         required: true,
         isReview: true,
         fields: []
     }
-];
+    ];
+}
 
 function generateConsolidatedSpec(data: WizardData): string {
     const spec = `
@@ -183,6 +187,8 @@ Based on this document, AI should generate:
 }
 
 export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) {
+    const { language } = useLanguage();
+    const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
@@ -284,10 +290,10 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
     const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
     const canExport = specGate.status === 'PASS';
     const specGateLabel = specGate.status === 'PASS'
-        ? 'Spec Gate: PASS — Đủ input để xuất'
+        ? wt(WIZARD_COMMON.specGatePass, language)
         : specGate.status === 'CLARIFY'
-            ? 'Spec Gate: CLARIFY — Thiếu input bắt buộc'
-            : 'Spec Gate: FAIL — Không đủ dữ liệu để tạo spec';
+            ? wt(WIZARD_COMMON.specGateClarify, language)
+            : wt(WIZARD_COMMON.specGateFail, language);
     const specGateClass = specGate.status === 'PASS'
         ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
         : specGate.status === 'CLARIFY'
@@ -320,7 +326,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                         <div className="font-semibold">{specGateLabel}</div>
                         {specGate.missing.length > 0 && (
                             <div className="text-xs mt-1">
-                                Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                             </div>
                         )}
                     </div>
@@ -329,7 +335,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                         <button
                             onClick={() => {
                                 navigator.clipboard.writeText(generatedSpec);
-                                alert('Đã copy Strategy Document vào clipboard!');
+                                alert(wt(WIZARD_COMMON.copiedToClipboard, language));
                             }}
                             disabled={!canExport}
                             className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
@@ -369,7 +375,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                 <button
                     onClick={onBack}
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-gray-600 dark:text-gray-400"
-                    title="Quay lại trang chủ"
+                    title={wt(WIZARD_COMMON.backToHome, language)}
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -380,7 +386,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                         📈 Business Strategy Wizard
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400">
-                        Tạo Strategic Decision Document qua 4 bước
+                        {language === 'vi' ? 'Tạo Strategic Decision Document qua 4 bước' : 'Create Strategic Decision Document in 4 steps'}
                     </p>
                 </div>
             </div>
@@ -391,8 +397,8 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">📝</span>
                         <div>
-                            <p className="font-medium text-amber-800 dark:text-amber-200">Bạn có bản nháp chưa hoàn thành</p>
-                            <p className="text-sm text-amber-600 dark:text-amber-400">Tiếp tục từ lần trước hoặc bắt đầu mới</p>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">{wt(WIZARD_COMMON.draftFound, language)}</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">{wt(WIZARD_COMMON.draftResume, language)}</p>
                         </div>
                     </div>
                     <div className="flex gap-2">
@@ -400,13 +406,13 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                             onClick={loadDraft}
                             className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors font-medium"
                         >
-                            Tiếp tục
+                            {wt(WIZARD_COMMON.continue, language)}
                         </button>
                         <button
                             onClick={clearDraft}
                             className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
-                            Bắt đầu mới
+                            {wt(WIZARD_COMMON.startNew, language)}
                         </button>
                     </div>
                 </div>
@@ -438,7 +444,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                             key={step.id}
                             onClick={() => handleStepClick(step.id)}
                             disabled={!canJump}
-                            title={canJump ? `Nhấn để đến ${step.name}` : 'Hoàn thành các step trước để mở khóa'}
+                            title={canJump ? `${wt(WIZARD_COMMON.clickToGo, language)} ${step.name}` : wt(WIZARD_COMMON.completePrevious, language)}
                             className={`flex flex-col items-center min-w-[80px] transition-all ${canJump ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
                         >
                             <div
@@ -479,9 +485,9 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                 {currentStepConfig.isReview ? (
                     <div className="space-y-4">
                         <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
-                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">🎉 Strategy Document sẵn sàng!</h3>
+                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">🎉 Strategy Document {wt(WIZARD_COMMON.reviewReady, language)}</h3>
                             <p className="text-green-700 dark:text-green-300 text-sm">
-                                Review document bên dưới và xuất khi sẵn sàng.
+                                {wt(WIZARD_COMMON.reviewDesc, language)}
                             </p>
                         </div>
 
@@ -495,7 +501,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                             <div className="font-semibold">{specGateLabel}</div>
                             {specGate.missing.length > 0 && (
                                 <div className="text-xs mt-1">
-                                    Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                    {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                                 </div>
                             )}
                         </div>
@@ -508,7 +514,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                 }`}
                         >
-                            📈 Xuất Strategy Document
+                            {language === 'vi' ? '📈 Xuất Strategy Document' : '📈 Export Strategy Document'}
                         </button>
                     </div>
                 ) : (
@@ -547,7 +553,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                                         onChange={e => handleFieldChange(field.id, e.target.value)}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     >
-                                        <option value="">-- Chọn --</option>
+                                        <option value="">{wt(WIZARD_COMMON.select, language)}</option>
                                         {field.options.map(opt => (
                                             <option key={opt} value={opt}>{opt}</option>
                                         ))}
@@ -576,7 +582,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
-                    ← Trước
+                    {wt(WIZARD_COMMON.previous, language)}
                 </button>
 
                 {currentStep < WIZARD_STEPS.length ? (
@@ -588,7 +594,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                             : 'bg-blue-600 text-white hover:bg-blue-700'
                             }`}
                     >
-                        Tiếp tục →
+                        {wt(WIZARD_COMMON.next, language)}
                     </button>
                 ) : null}
             </div>

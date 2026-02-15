@@ -57,7 +57,12 @@ export function PhaseGateModal({
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+             role="dialog"
+             aria-modal="true"
+             aria-label={language === 'vi' ? 'Kiểm tra giai đoạn' : 'Phase gate check'}
+             onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
+        >
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
                 {/* Header */}
                 <div className={`px-6 py-4 bg-gradient-to-r ${colorClasses[checklist.color as keyof typeof colorClasses]} text-white`}>
@@ -174,6 +179,7 @@ export function PhaseGateModal({
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 text-white/80 hover:text-white"
+                    aria-label={language === 'vi' ? 'Đóng' : 'Close'}
                 >
                     ✕
                 </button>

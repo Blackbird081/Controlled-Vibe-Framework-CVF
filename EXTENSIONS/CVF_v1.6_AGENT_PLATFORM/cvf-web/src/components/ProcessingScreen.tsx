@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useSettings } from './Settings';
+import { useLanguage } from '@/lib/i18n';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
 
 interface ProcessingScreenProps {
@@ -22,8 +23,10 @@ export function ProcessingScreen({
     onCancel
 }: ProcessingScreenProps) {
     const { settings } = useSettings();
+    const { language } = useLanguage();
+    const isVi = language === 'vi';
     const [progress, setProgress] = useState(0);
-    const [status, setStatus] = useState('Initializing...');
+    const [status, setStatus] = useState(isVi ? 'Đang khởi tạo...' : 'Initializing...');
     const [error, setError] = useState<string | null>(null);
     const [isRealExecution, setIsRealExecution] = useState(false);
 
@@ -32,7 +35,7 @@ export function ProcessingScreen({
         if (!inputs || !intent) return false;
 
         try {
-            setStatus('Connecting to AI provider...');
+            setStatus(isVi ? 'Đang kết nối AI...' : 'Connecting to AI provider...');
             setProgress(10);
             const mode = settings.preferences.defaultExportMode || 'governance';
 
@@ -49,7 +52,7 @@ export function ProcessingScreen({
             });
 
             setProgress(50);
-            setStatus('Processing response...');
+            setStatus(isVi ? 'Đang xử lý phản hồi...' : 'Processing response...');
 
             const data = await response.json();
             const enforcement = data.enforcement;
@@ -68,7 +71,7 @@ export function ProcessingScreen({
             }
 
             setProgress(90);
-            setStatus('Finalizing...');
+            setStatus(isVi ? 'Đang hoàn tất...' : 'Finalizing...');
 
             if (data.success && data.output) {
                 setProgress(100);
@@ -83,23 +86,23 @@ export function ProcessingScreen({
                     ?.map((field: { label?: string }) => field.label || 'field')
                     .join(', ');
                 setError(missing
-                    ? `Missing required input: ${missing}`
-                    : 'Spec needs additional info before execution.');
+                    ? (isVi ? `Thiếu thông tin bắt buộc: ${missing}` : `Missing required input: ${missing}`)
+                    : (isVi ? 'Cần thêm thông tin trước khi thực thi.' : 'Spec needs additional info before execution.'));
                 return true;
             }
 
             if (enforcement?.status === 'BLOCK') {
-                setError(data.error || 'Blocked by CVF enforcement.');
+                setError(data.error || (isVi ? 'Bị chặn bởi CVF.' : 'Blocked by CVF enforcement.'));
                 return true;
             }
 
             if (enforcement?.status === 'NEEDS_APPROVAL') {
-                setError(data.error || 'Approval required before execution.');
+                setError(data.error || (isVi ? 'Cần phê duyệt trước khi thực thi.' : 'Approval required before execution.'));
                 return true;
             }
 
             // If real execution fails, show error but fall back to mock
-            setError(data.error || 'API execution failed');
+            setError(data.error || (isVi ? 'Thực thi API thất bại' : 'API execution failed'));
             return false;
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Network error');
@@ -125,13 +128,21 @@ export function ProcessingScreen({
     }, [inputs, intent, executeReal]);
 
     const runMockExecution = () => {
-        const statuses = [
-            'Initializing...',
-            'Parsing intent...',
-            'Generating response...',
-            'Applying quality checks...',
-            'Finalizing output...',
-        ];
+        const statuses = isVi
+            ? [
+                'Đang khởi tạo...',
+                'Đang phân tích ý định...',
+                'Đang tạo phản hồi...',
+                'Đang kiểm tra chất lượng...',
+                'Đang hoàn tất...',
+            ]
+            : [
+                'Initializing...',
+                'Parsing intent...',
+                'Generating response...',
+                'Applying quality checks...',
+                'Finalizing output...',
+            ];
 
         const interval = setInterval(() => {
             setProgress((prev) => {
@@ -169,22 +180,24 @@ export function ProcessingScreen({
                 </div>
 
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    {isRealExecution ? 'AI Processing...' : 'Processing...'}
+                    {isRealExecution
+                        ? (isVi ? 'AI Đang xử lý...' : 'AI Processing...')
+                        : (isVi ? 'Đang xử lý...' : 'Processing...')}
                 </h2>
 
-                <p className="text-gray-600 dark:text-gray-400 mb-2">
+                <p className="text-gray-600 dark:text-gray-400 mb-2" aria-live="polite">
                     {status}
                 </p>
 
                 {isRealExecution && (
                     <p className="text-xs text-emerald-600 dark:text-emerald-400 mb-4">
-                        🔗 Connected to AI Provider
+                        🔗 {isVi ? 'Đã kết nối AI' : 'Connected to AI Provider'}
                     </p>
                 )}
 
                 {error && (
-                    <p className="text-sm text-amber-600 dark:text-amber-400 mb-4">
-                        ⚠️ {error} — Using demo mode
+                    <p className="text-sm text-amber-600 dark:text-amber-400 mb-4" role="alert" aria-live="assertive">
+                        ⚠️ {error} — {isVi ? 'Đang dùng chế độ demo' : 'Using demo mode'}
                     </p>
                 )}
 
@@ -206,7 +219,7 @@ export function ProcessingScreen({
 
                 {!isRealExecution && (
                     <p className="mt-4 text-sm text-gray-500">
-                        Estimated: {Math.max(1, Math.round((100 - progress) / 10))} seconds
+                        {isVi ? 'Ước tính:' : 'Estimated:'} {Math.max(1, Math.round((100 - progress) / 10))} {isVi ? 'giây' : 'seconds'}
                     </p>
                 )}
 
@@ -216,7 +229,7 @@ export function ProcessingScreen({
                      border border-gray-300 dark:border-gray-600 rounded-lg
                      hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
-                    Cancel
+                    {isVi ? 'Hủy' : 'Cancel'}
                 </button>
             </div>
         </div>

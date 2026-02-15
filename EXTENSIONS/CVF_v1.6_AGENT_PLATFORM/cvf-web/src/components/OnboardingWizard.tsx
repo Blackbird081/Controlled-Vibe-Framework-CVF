@@ -14,6 +14,7 @@ interface StepData {
     description: Record<Lang, string>;
     icon: string;
     hasVideo?: boolean;
+    hasQuickGuide?: boolean;
 }
 
 const STEPS: StepData[] = [
@@ -62,22 +63,22 @@ const STEPS: StepData[] = [
         },
     },
     {
-        icon: '📺',
+        icon: '🎯',
         title: {
-            vi: 'Hướng dẫn nhanh',
-            en: 'Quick Tutorial',
+            vi: 'Hướng dẫn 3 bước',
+            en: '3-Step Guide',
         },
         description: {
-            vi: 'Xem video ngắn (30s) để hiểu cách tạo Business Strategy đầu tiên của bạn.',
-            en: 'Watch a short video (30s) to learn how to create your first Business Strategy.',
+            vi: 'Chỉ cần 3 bước đơn giản để có kết quả chuyên nghiệp từ AI.',
+            en: 'Just 3 simple steps to get professional AI-powered results.',
         },
-        hasVideo: true,
+        hasQuickGuide: true,
     },
 ];
 
-const LABELS: Record<Lang, { next: string; start: string; skip: string; videoPlaceholder: string }> = {
-    vi: { next: 'Tiếp tục →', start: 'Bắt đầu ngay 🚀', skip: 'Bỏ qua giới thiệu', videoPlaceholder: 'Video hướng dẫn (sắp có)' },
-    en: { next: 'Continue →', start: 'Get Started 🚀', skip: 'Skip intro', videoPlaceholder: 'Tutorial video (coming soon)' },
+const LABELS: Record<Lang, { next: string; start: string; skip: string }> = {
+    vi: { next: 'Tiếp tục →', start: 'Bắt đầu ngay 🚀', skip: 'Bỏ qua giới thiệu' },
+    en: { next: 'Continue →', start: 'Get Started 🚀', skip: 'Skip intro' },
 };
 
 export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
@@ -103,15 +104,25 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
                         {currentStep.description[language]}
                     </p>
 
-                    {currentStep.hasVideo && (
-                        <div className="mt-4 aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-700">
-                            <div className="text-center">
-                                <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white mx-auto mb-2 cursor-pointer hover:scale-110 transition-transform shadow-lg">
-                                    <svg className="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M8 5v14l11-7z" />
-                                    </svg>
-                                </div>
-                                <p className="text-sm text-gray-500">{labels.videoPlaceholder}</p>
+                    {currentStep.hasQuickGuide && (
+                        <div className="mt-4 grid grid-cols-3 gap-3">
+                            {/* Step 1: Pick Template */}
+                            <div className="flex flex-col items-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-blue-800">
+                                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center text-2xl mb-2">📋</div>
+                                <span className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">{language === 'vi' ? 'Bước 1' : 'Step 1'}</span>
+                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Chọn Template' : 'Pick Template'}</span>
+                            </div>
+                            {/* Step 2: Fill Form */}
+                            <div className="flex flex-col items-center p-3 bg-green-50 dark:bg-green-900/30 rounded-xl border border-green-200 dark:border-green-800">
+                                <div className="w-12 h-12 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center text-2xl mb-2">✏️</div>
+                                <span className="text-xs font-bold text-green-700 dark:text-green-300 mb-1">{language === 'vi' ? 'Bước 2' : 'Step 2'}</span>
+                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Điền Form' : 'Fill Form'}</span>
+                            </div>
+                            {/* Step 3: Get Result */}
+                            <div className="flex flex-col items-center p-3 bg-purple-50 dark:bg-purple-900/30 rounded-xl border border-purple-200 dark:border-purple-800">
+                                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center text-2xl mb-2">🎉</div>
+                                <span className="text-xs font-bold text-purple-700 dark:text-purple-300 mb-1">{language === 'vi' ? 'Bước 3' : 'Step 3'}</span>
+                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Nhận Kết quả' : 'Get Result'}</span>
                             </div>
                         </div>
                     )}

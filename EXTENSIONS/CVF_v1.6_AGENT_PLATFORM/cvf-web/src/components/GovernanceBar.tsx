@@ -33,6 +33,7 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage }: G
     const [mounted, setMounted] = useState(false);
     const [detectionMode, setDetectionMode] = useState<DetectionMode>('auto');
     const [autoResult, setAutoResult] = useState<AutoDetectResult | null>(null);
+    const [advancedMode, setAdvancedMode] = useState(false);
 
     useEffect(() => {
         setState(loadGovernanceState());
@@ -157,13 +158,33 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage }: G
 
             {/* Controls - only show when enabled */}
             {state.toolkitEnabled && (
+                <>
+                    {/* Simple/Advanced toggle */}
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                            {advancedMode
+                                ? (isVi ? 'Chế độ nâng cao' : 'Advanced mode')
+                                : (isVi ? 'Chế độ đơn giản — AI tự điều chỉnh' : 'Simple mode — AI auto-adjusts')}
+                        </span>
+                        <button
+                            onClick={() => setAdvancedMode(prev => !prev)}
+                            className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                        >
+                            {advancedMode ? (isVi ? 'Đơn giản' : 'Simple') : (isVi ? 'Nâng cao' : 'Advanced')}
+                        </button>
+                    </div>
+
+                    {advancedMode && (
                 <div className={`
                     grid gap-2 transition-all duration-300
                     ${compact ? 'grid-cols-3' : 'grid-cols-1 sm:grid-cols-3'}
                 `}>
                     {/* Phase selector */}
                     <div>
-                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                        <label
+                            className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                            title={isVi ? 'Bạn đang ở giai đoạn nào của dự án?' : 'What stage of the project are you in?'}
+                        >
                             📋 Phase {detectionMode === 'auto' && autoResult && (
                                 <span className="text-purple-500 text-[10px]">
                                     ({autoResult.confidence})
@@ -189,7 +210,10 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage }: G
 
                     {/* Role selector */}
                     <div>
-                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                        <label
+                            className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                            title={isVi ? 'Vai trò của bạn trong team' : 'Your role in the team'}
+                        >
                             👤 Role
                         </label>
                         <select
@@ -211,7 +235,10 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage }: G
 
                     {/* Risk selector */}
                     <div>
-                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                        <label
+                            className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                            title={isVi ? 'Mức độ rủi ro của task này?' : 'How risky is this task?'}
+                        >
                             ⚠️ Risk
                         </label>
                         <select
@@ -239,7 +266,9 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage }: G
                             </p>
                         )}
                     </div>
-                </div>
+                    </div>
+                )}
+                </>
             )}
 
             {/* Auto-detect info line */}

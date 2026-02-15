@@ -43,7 +43,7 @@ const WIZARD_MAP: Record<string, WorkflowState> = {
 };
 
 export default function HomePage() {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const router = useRouter();
     const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
     const { settings } = useSettings();
@@ -57,6 +57,7 @@ export default function HomePage() {
     const [currentInput, setCurrentInput] = useState<Record<string, string>>({});
     const [currentIntent, setCurrentIntent] = useState('');
     const [currentFolder, setCurrentFolder] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const { addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
 
@@ -70,8 +71,18 @@ export default function HomePage() {
         } else {
             result = result.filter(t => !t.parentFolder);
         }
+
+        // Search filter
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase();
+            result = result.filter(t =>
+                t.name.toLowerCase().includes(q) ||
+                t.description.toLowerCase().includes(q)
+            );
+        }
+
         return result;
-    }, [selectedCategory, currentFolder]);
+    }, [selectedCategory, currentFolder, searchQuery]);
 
     const handleSelectTemplate = useCallback((template: Template) => {
         if (template.isFolder) {
@@ -178,9 +189,21 @@ export default function HomePage() {
                                 <div className="font-semibold text-lg">{t('main.apiKeyTitle')}</div>
                                 <div className="text-sm text-amber-700">{t('main.apiKeyDesc')}</div>
                             </div>
-                            <button className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700">
-                                {t('main.apiKeyCta')}
-                            </button>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => {
+                                        // Enable demo mode by setting cookie
+                                        document.cookie = 'cvf_demo_mode=1;path=/;max-age=86400';
+                                        window.location.reload();
+                                    }}
+                                    className="px-4 py-2 rounded-lg border border-amber-400 text-amber-700 hover:bg-amber-100 font-medium transition-colors"
+                                >
+                                    🎮 {language === 'vi' ? 'Dùng thử Demo' : 'Try Demo'}
+                                </button>
+                                <button className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700">
+                                    {t('main.apiKeyCta')}
+                                </button>
+                            </div>
                         </div>
                     )}
 
@@ -192,6 +215,32 @@ export default function HomePage() {
                             />
                         </div>
                     )}
+
+                    {/* Template Search */}
+                    <div className="mt-6 max-w-md mx-auto">
+                        <div className="relative">
+                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder={language === 'en' ? 'Search templates...' : 'Tìm kiếm template...'}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
+                                aria-label={language === 'en' ? 'Search templates' : 'Tìm kiếm template'}
+                            />
+                            {searchQuery && (
+                                <button
+                                    onClick={() => setSearchQuery('')}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    aria-label={language === 'en' ? 'Clear search' : 'Xóa tìm kiếm'}
+                                >
+                                    ✕
+                                </button>
+                            )}
+                        </div>
+                    </div>
 
                     <div id="tour-template-grid" className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filteredTemplates.map((template, index) => (

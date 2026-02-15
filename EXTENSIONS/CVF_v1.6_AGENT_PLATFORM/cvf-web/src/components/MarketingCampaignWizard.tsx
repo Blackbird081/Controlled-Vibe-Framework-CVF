@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { evaluateSpecGate } from '@/lib/spec-gate';
 
 const DRAFT_STORAGE_KEY = 'cvf_marketing_campaign_wizard_draft';
@@ -34,31 +36,32 @@ interface MarketingCampaignWizardProps {
     onBack: () => void;
 }
 
-const WIZARD_STEPS: WizardStep[] = [
+function getWizardSteps(lang: Lang): WizardStep[] {
+    return [
     {
         id: 1,
         name: 'Campaign Goals',
         icon: '🎯',
-        description: 'Xác định mục tiêu và KPIs',
+        description: lang === 'vi' ? 'Xác định mục tiêu và KPIs' : 'Define objectives and KPIs',
         required: true,
         fields: [
-            { id: 'campaignName', type: 'text', label: 'Tên Campaign', placeholder: 'VD: Q1 Product Launch', required: true, tip: '💡 Tên ngắn gọn, dễ track' },
-            { id: 'campaignType', type: 'select', label: 'Loại Campaign', options: ['Brand Awareness', 'Lead Generation', 'Product Launch', 'Event Promotion', 'Sales Promotion', 'Content Marketing', 'Retention'], required: true, tip: '💡 Chọn loại phù hợp với mục tiêu' },
-            { id: 'objectives', type: 'textarea', label: 'Objectives (SMART)', placeholder: 'VD: Tăng 20% traffic trong 30 ngày, Generate 500 leads...', required: true, rows: 3, tip: '💡 Specific, Measurable, Achievable, Relevant, Time-bound' },
-            { id: 'kpis', type: 'textarea', label: 'KPIs', placeholder: 'VD:\n- Traffic: +20%\n- Leads: 500\n- Conversion: 3%', required: true, rows: 3 - 2 },
-            { id: 'timeline', type: 'text', label: 'Timeline', placeholder: 'VD: 01/02/2026 - 28/02/2026', required: true },
-            { id: 'budget', type: 'text', label: 'Budget', placeholder: 'VD: $5,000 hoặc 50M VND', required: false },
+            { id: 'campaignName', type: 'text', label: lang === 'vi' ? 'Tên Campaign' : 'Campaign Name', placeholder: lang === 'vi' ? 'VD: Q1 Product Launch' : 'e.g. Q1 Product Launch', required: true, tip: lang === 'vi' ? '💡 Tên ngắn gọn, dễ track' : '💡 Short, trackable name' },
+            { id: 'campaignType', type: 'select', label: lang === 'vi' ? 'Loại Campaign' : 'Campaign Type', options: ['Brand Awareness', 'Lead Generation', 'Product Launch', 'Event Promotion', 'Sales Promotion', 'Content Marketing', 'Retention'], required: true, tip: lang === 'vi' ? '💡 Chọn loại phù hợp với mục tiêu' : '💡 Choose type matching your goals' },
+            { id: 'objectives', type: 'textarea', label: 'Objectives (SMART)', placeholder: lang === 'vi' ? 'VD: Tăng 20% traffic trong 30 ngày, Generate 500 leads...' : 'e.g. Increase traffic 20% in 30 days, Generate 500 leads...', required: true, rows: 3, tip: '💡 Specific, Measurable, Achievable, Relevant, Time-bound' },
+            { id: 'kpis', type: 'textarea', label: 'KPIs', placeholder: lang === 'vi' ? 'VD:\n- Traffic: +20%\n- Leads: 500\n- Conversion: 3%' : 'e.g.:\n- Traffic: +20%\n- Leads: 500\n- Conversion: 3%', required: true, rows: 3 - 2 },
+            { id: 'timeline', type: 'text', label: 'Timeline', placeholder: lang === 'vi' ? 'VD: 01/02/2026 - 28/02/2026' : 'e.g. 01/02/2026 - 28/02/2026', required: true },
+            { id: 'budget', type: 'text', label: 'Budget', placeholder: lang === 'vi' ? 'VD: $5,000 hoặc 50M VND' : 'e.g. $5,000 or 50M VND', required: false },
         ]
     },
     {
         id: 2,
         name: 'Target Audience',
         icon: '👥',
-        description: 'Định nghĩa đối tượng mục tiêu',
+        description: lang === 'vi' ? 'Định nghĩa đối tượng mục tiêu' : 'Define target audience',
         required: true,
         fields: [
-            { id: 'demographics', type: 'textarea', label: 'Demographics', placeholder: 'Age, gender, location, income, education...', required: true, rows: 2, tip: '💡 Các đặc điểm nhân khẩu học' },
-            { id: 'psychographics', type: 'textarea', label: 'Psychographics', placeholder: 'Interests, values, lifestyle, pain points...', required: true, rows: 2, tip: '💡 Tâm lý, hành vi, sở thích' },
+            { id: 'demographics', type: 'textarea', label: 'Demographics', placeholder: 'Age, gender, location, income, education...', required: true, rows: 2, tip: lang === 'vi' ? '💡 Các đặc điểm nhân khẩu học' : '💡 Demographic characteristics' },
+            { id: 'psychographics', type: 'textarea', label: 'Psychographics', placeholder: 'Interests, values, lifestyle, pain points...', required: true, rows: 2, tip: lang === 'vi' ? '💡 Tâm lý, hành vi, sở thích' : '💡 Psychology, behavior, interests' },
             { id: 'segments', type: 'textarea', label: 'Audience Segments', placeholder: '1. Primary: ...\n2. Secondary: ...\n3. Lookalike: ...', required: true, rows: 3 },
             { id: 'customerJourney', type: 'textarea', label: 'Customer Journey Stage', placeholder: 'Awareness → Consideration → Decision → Loyalty', required: false, rows: 2 },
         ]
@@ -67,24 +70,24 @@ const WIZARD_STEPS: WizardStep[] = [
         id: 3,
         name: 'Channels & Tactics',
         icon: '📢',
-        description: 'Chọn kênh và chiến thuật',
+        description: lang === 'vi' ? 'Chọn kênh và chiến thuật' : 'Choose channels and tactics',
         required: true,
         fields: [
-            { id: 'channels', type: 'textarea', label: 'Marketing Channels', placeholder: 'VD:\n- Facebook/Instagram Ads\n- Google Ads\n- Email Marketing\n- Content/SEO', required: true, rows: 4, tip: '💡 Chọn channels phù hợp với audience' },
-            { id: 'tactics', type: 'textarea', label: 'Tactics per Channel', placeholder: 'Facebook: Video ads, Carousel\nGoogle: Search, Display\nEmail: Nurture sequence', required: true, rows: 4 },
-            { id: 'budgetAllocation', type: 'textarea', label: 'Budget Allocation', placeholder: 'VD:\n- Facebook: 40%\n- Google: 30%\n- Content: 20%\n- Email: 10%', required: false, rows: 3 },
+            { id: 'channels', type: 'textarea', label: 'Marketing Channels', placeholder: lang === 'vi' ? 'VD:\n- Facebook/Instagram Ads\n- Google Ads\n- Email Marketing\n- Content/SEO' : 'e.g.:\n- Facebook/Instagram Ads\n- Google Ads\n- Email Marketing\n- Content/SEO', required: true, rows: 4, tip: lang === 'vi' ? '💡 Chọn channels phù hợp với audience' : '💡 Choose channels matching your audience' },
+            { id: 'tactics', type: 'textarea', label: 'Tactics per Channel', placeholder: lang === 'vi' ? 'Facebook: Video ads, Carousel\nGoogle: Search, Display\nEmail: Nurture sequence' : 'Facebook: Video ads, Carousel\nGoogle: Search, Display\nEmail: Nurture sequence', required: true, rows: 4 },
+            { id: 'budgetAllocation', type: 'textarea', label: 'Budget Allocation', placeholder: lang === 'vi' ? 'VD:\n- Facebook: 40%\n- Google: 30%\n- Content: 20%\n- Email: 10%' : 'e.g.:\n- Facebook: 40%\n- Google: 30%\n- Content: 20%\n- Email: 10%', required: false, rows: 3 },
         ]
     },
     {
         id: 4,
         name: 'Content Plan',
         icon: '📝',
-        description: 'Lên kế hoạch nội dung',
+        description: lang === 'vi' ? 'Lên kế hoạch nội dung' : 'Plan content',
         required: true,
         fields: [
-            { id: 'messaging', type: 'textarea', label: 'Key Messages', placeholder: 'VD:\n- Headline: ...\n- Value prop: ...\n- CTA: ...', required: true, rows: 3, tip: '💡 Messages nhất quán across channels' },
-            { id: 'creativeDirection', type: 'textarea', label: 'Creative Direction', placeholder: 'Visual style, tone of voice, brand guidelines...', required: true, rows: 2 },
-            { id: 'contentTypes', type: 'textarea', label: 'Content Types', placeholder: 'VD:\n- 3 blog posts\n- 5 social posts\n- 1 landing page\n- 3 email templates', required: true, rows: 4 },
+            { id: 'messaging', type: 'textarea', label: 'Key Messages', placeholder: lang === 'vi' ? 'VD:\n- Headline: ...\n- Value prop: ...\n- CTA: ...' : 'e.g.:\n- Headline: ...\n- Value prop: ...\n- CTA: ...', required: true, rows: 3, tip: lang === 'vi' ? '💡 Messages nhất quán across channels' : '💡 Consistent messages across channels' },
+            { id: 'creativeDirection', type: 'textarea', label: 'Creative Direction', placeholder: lang === 'vi' ? 'Visual style, tone of voice, brand guidelines...' : 'Visual style, tone of voice, brand guidelines...', required: true, rows: 2 },
+            { id: 'contentTypes', type: 'textarea', label: 'Content Types', placeholder: lang === 'vi' ? 'VD:\n- 3 blog posts\n- 5 social posts\n- 1 landing page\n- 3 email templates' : 'e.g.:\n- 3 blog posts\n- 5 social posts\n- 1 landing page\n- 3 email templates', required: true, rows: 4 },
             { id: 'contentCalendar', type: 'textarea', label: 'Content Calendar Overview', placeholder: 'Week 1: Launch announcement\nWeek 2: Feature highlights\nWeek 3: Testimonials\nWeek 4: Last chance CTA', required: false, rows: 4 },
         ]
     },
@@ -92,12 +95,13 @@ const WIZARD_STEPS: WizardStep[] = [
         id: 5,
         name: 'Review',
         icon: '✅',
-        description: 'Xem lại và xuất Campaign Brief',
+        description: lang === 'vi' ? 'Xem lại và xuất Campaign Brief' : 'Review and export Campaign Brief',
         required: true,
         isReview: true,
         fields: []
     }
-];
+    ];
+}
 
 function generateConsolidatedSpec(data: WizardData): string {
     const spec = `
@@ -203,6 +207,8 @@ Based on this brief, AI should generate:
 }
 
 export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps) {
+    const { language } = useLanguage();
+    const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
@@ -304,10 +310,10 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
     const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
     const canExport = specGate.status === 'PASS';
     const specGateLabel = specGate.status === 'PASS'
-        ? 'Spec Gate: PASS — Đủ input để xuất'
+        ? wt(WIZARD_COMMON.specGatePass, language)
         : specGate.status === 'CLARIFY'
-            ? 'Spec Gate: CLARIFY — Thiếu input bắt buộc'
-            : 'Spec Gate: FAIL — Không đủ dữ liệu để tạo spec';
+            ? wt(WIZARD_COMMON.specGateClarify, language)
+            : wt(WIZARD_COMMON.specGateFail, language);
     const specGateClass = specGate.status === 'PASS'
         ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
         : specGate.status === 'CLARIFY'
@@ -339,7 +345,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                         <div className="font-semibold">{specGateLabel}</div>
                         {specGate.missing.length > 0 && (
                             <div className="text-xs mt-1">
-                                Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                             </div>
                         )}
                     </div>
@@ -348,7 +354,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                         <button
                             onClick={() => {
                                 navigator.clipboard.writeText(generatedSpec);
-                                alert('Đã copy Campaign Brief vào clipboard!');
+                                alert(wt(WIZARD_COMMON.copiedToClipboard, language));
                             }}
                             disabled={!canExport}
                             className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
@@ -388,7 +394,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                 <button
                     onClick={onBack}
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-gray-600 dark:text-gray-400"
-                    title="Quay lại trang chủ"
+                    title={language === 'vi' ? 'Quay lại trang chủ' : 'Back to home'}
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -399,7 +405,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                         📣 Marketing Campaign Wizard
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400">
-                        Tạo Campaign Brief qua 5 bước
+                        {language === 'vi' ? 'Tạo Campaign Brief qua 5 bước' : 'Create Campaign Brief in 5 steps'}
                     </p>
                 </div>
             </div>
@@ -410,8 +416,8 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">📝</span>
                         <div>
-                            <p className="font-medium text-amber-800 dark:text-amber-200">Bạn có bản nháp chưa hoàn thành</p>
-                            <p className="text-sm text-amber-600 dark:text-amber-400">Tiếp tục từ lần trước hoặc bắt đầu mới</p>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">{wt(WIZARD_COMMON.draftFound, language)}</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">{wt(WIZARD_COMMON.draftResume, language)}</p>
                         </div>
                     </div>
                     <div className="flex gap-2">
@@ -419,13 +425,13 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                             onClick={loadDraft}
                             className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors font-medium"
                         >
-                            Tiếp tục
+                            {wt(WIZARD_COMMON.continue, language)}
                         </button>
                         <button
                             onClick={clearDraft}
                             className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
-                            Bắt đầu mới
+                            {wt(WIZARD_COMMON.startNew, language)}
                         </button>
                     </div>
                 </div>
@@ -457,7 +463,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                             key={step.id}
                             onClick={() => handleStepClick(step.id)}
                             disabled={!canJump}
-                            title={canJump ? `Nhấn để đến ${step.name}` : 'Hoàn thành các step trước để mở khóa'}
+                            title={canJump ? (language === 'vi' ? `Nhấn để đến ${step.name}` : `Click to go to ${step.name}`) : (language === 'vi' ? 'Hoàn thành các step trước để mở khóa' : 'Complete previous steps to unlock')}
                             className={`flex flex-col items-center min-w-[70px] transition-all ${canJump ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
                         >
                             <div
@@ -498,9 +504,9 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                 {currentStepConfig.isReview ? (
                     <div className="space-y-4">
                         <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
-                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">🎉 Campaign Brief sẵn sàng!</h3>
+                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">{wt(WIZARD_COMMON.reviewReady, language)}</h3>
                             <p className="text-green-700 dark:text-green-300 text-sm">
-                                Review brief bên dưới và xuất khi sẵn sàng.
+                                {wt(WIZARD_COMMON.reviewDesc, language)}
                             </p>
                         </div>
 
@@ -513,7 +519,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                         <div className="font-semibold">{specGateLabel}</div>
                         {specGate.missing.length > 0 && (
                             <div className="text-xs mt-1">
-                                Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                             </div>
                         )}
                     </div>
@@ -526,7 +532,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                         }`}
                     >
-                        📣 Xuất Campaign Brief
+                        {language === 'vi' ? '📣 Xuất Campaign Brief' : '📣 Export Campaign Brief'}
                     </button>
                     </div>
                 ) : (
@@ -565,7 +571,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                                         onChange={e => handleFieldChange(field.id, e.target.value)}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                                     >
-                                        <option value="">-- Chọn --</option>
+                                        <option value="">{wt(WIZARD_COMMON.select, language)}</option>
                                         {field.options.map(opt => (
                                             <option key={opt} value={opt}>{opt}</option>
                                         ))}
@@ -594,7 +600,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
-                    ← Trước
+                    ← {wt(WIZARD_COMMON.previous, language)}
                 </button>
 
                 {currentStep < WIZARD_STEPS.length ? (
@@ -606,7 +612,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                             : 'bg-orange-500 text-white hover:bg-orange-600'
                             }`}
                     >
-                        Tiếp tục →
+                        {wt(WIZARD_COMMON.next, language)} →
                     </button>
                 ) : null}
             </div>

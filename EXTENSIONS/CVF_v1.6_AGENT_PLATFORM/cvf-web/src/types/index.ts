@@ -26,6 +26,7 @@ export interface Template {
     outputExpected: string[];
     outputTemplate?: string;
     sampleOutput?: string; // Markdown content for preview
+    difficulty?: 'easy' | 'medium' | 'advanced'; // Difficulty level for the template
     // Folder support
     isFolder?: boolean;        // This template is a folder containing child templates
     parentFolder?: string;     // ID of parent folder template (for child templates)

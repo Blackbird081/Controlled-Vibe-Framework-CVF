@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { evaluateSpecGate } from '@/lib/spec-gate';
 
 const DRAFT_STORAGE_KEY = 'cvf_research_project_wizard_draft';
@@ -34,58 +36,60 @@ interface ResearchProjectWizardProps {
     onBack: () => void;
 }
 
-const WIZARD_STEPS: WizardStep[] = [
+function getWizardSteps(lang: Lang): WizardStep[] {
+    return [
     {
         id: 1,
         name: 'Research Question',
         icon: '❓',
-        description: 'Định nghĩa câu hỏi nghiên cứu',
+        description: lang === 'vi' ? 'Định nghĩa câu hỏi nghiên cứu' : 'Define research question',
         required: true,
         fields: [
-            { id: 'researchTopic', type: 'text', label: 'Chủ đề nghiên cứu', placeholder: 'VD: Impact of AI on Software Development', required: true, tip: '💡 Chủ đề rộng của nghiên cứu' },
-            { id: 'researchQuestion', type: 'textarea', label: 'Research Question (RQ)', placeholder: 'RQ1: How does AI-assisted coding affect developer productivity?\nRQ2: What are the quality implications?', required: true, rows: 3, tip: '💡 Câu hỏi cụ thể, có thể đo lường' },
-            { id: 'researchType', type: 'select', label: 'Loại nghiên cứu', options: ['Literature Review', 'Empirical Study', 'Survey', 'Case Study', 'Experimental', 'Mixed Methods'], required: true },
-            { id: 'hypothesis', type: 'textarea', label: 'Hypothesis (nếu có)', placeholder: 'VD: AI-assisted coding increases productivity by at least 20% while maintaining code quality', required: false, rows: 2 },
-            { id: 'significance', type: 'textarea', label: 'Research Significance', placeholder: 'Why is this research important? What gap does it fill?', required: true, rows: 2, tip: '💡 Tầm quan trọng và đóng góp dự kiến' },
+            { id: 'researchTopic', type: 'text', label: lang === 'vi' ? 'Chủ đề nghiên cứu' : 'Research Topic', placeholder: lang === 'vi' ? 'VD: Impact of AI on Software Development' : 'e.g. Impact of AI on Software Development', required: true, tip: lang === 'vi' ? '💡 Chủ đề rộng của nghiên cứu' : '💡 Broad topic of the research' },
+            { id: 'researchQuestion', type: 'textarea', label: 'Research Question (RQ)', placeholder: lang === 'vi' ? 'RQ1: How does AI-assisted coding affect developer productivity?\nRQ2: What are the quality implications?' : 'RQ1: How does AI-assisted coding affect developer productivity?\nRQ2: What are the quality implications?', required: true, rows: 3, tip: lang === 'vi' ? '💡 Câu hỏi cụ thể, có thể đo lường' : '💡 Specific, measurable questions' },
+            { id: 'researchType', type: 'select', label: lang === 'vi' ? 'Loại nghiên cứu' : 'Research Type', options: ['Literature Review', 'Empirical Study', 'Survey', 'Case Study', 'Experimental', 'Mixed Methods'], required: true },
+            { id: 'hypothesis', type: 'textarea', label: lang === 'vi' ? 'Hypothesis (nếu có)' : 'Hypothesis (if any)', placeholder: lang === 'vi' ? 'VD: AI-assisted coding increases productivity by at least 20% while maintaining code quality' : 'e.g. AI-assisted coding increases productivity by at least 20% while maintaining code quality', required: false, rows: 2 },
+            { id: 'significance', type: 'textarea', label: 'Research Significance', placeholder: lang === 'vi' ? 'Why is this research important? What gap does it fill?' : 'Why is this research important? What gap does it fill?', required: true, rows: 2, tip: lang === 'vi' ? '💡 Tầm quan trọng và đóng góp dự kiến' : '💡 Importance and expected contribution' },
         ]
     },
     {
         id: 2,
         name: 'Methodology',
         icon: '🔬',
-        description: 'Phương pháp nghiên cứu',
+        description: lang === 'vi' ? 'Phương pháp nghiên cứu' : 'Research methodology',
         required: true,
         fields: [
-            { id: 'methodology', type: 'textarea', label: 'Research Methodology', placeholder: 'VD:\n1. Literature review (100+ papers)\n2. Survey (N=500 developers)\n3. Controlled experiment (50 participants)', required: true, rows: 4, tip: '💡 Chi tiết các bước thực hiện' },
-            { id: 'dataCollection', type: 'textarea', label: 'Data Collection Methods', placeholder: 'VD:\n- Online survey (Qualtrics)\n- Semi-structured interviews\n- Code repository analysis\n- Time tracking', required: true, rows: 3 },
-            { id: 'analysisMethod', type: 'textarea', label: 'Data Analysis', placeholder: 'VD:\n- Quantitative: Statistical analysis (t-test, regression)\n- Qualitative: Thematic analysis', required: true, rows: 3 },
-            { id: 'limitations', type: 'textarea', label: 'Expected Limitations', placeholder: 'VD:\n- Selection bias\n- Self-reported data\n- Limited sample size', required: false, rows: 2 },
+            { id: 'methodology', type: 'textarea', label: 'Research Methodology', placeholder: lang === 'vi' ? 'VD:\n1. Literature review (100+ papers)\n2. Survey (N=500 developers)\n3. Controlled experiment (50 participants)' : 'e.g.:\n1. Literature review (100+ papers)\n2. Survey (N=500 developers)\n3. Controlled experiment (50 participants)', required: true, rows: 4, tip: lang === 'vi' ? '💡 Chi tiết các bước thực hiện' : '💡 Detailed steps to implement' },
+            { id: 'dataCollection', type: 'textarea', label: 'Data Collection Methods', placeholder: lang === 'vi' ? 'VD:\n- Online survey (Qualtrics)\n- Semi-structured interviews\n- Code repository analysis\n- Time tracking' : 'e.g.:\n- Online survey (Qualtrics)\n- Semi-structured interviews\n- Code repository analysis\n- Time tracking', required: true, rows: 3 },
+            { id: 'analysisMethod', type: 'textarea', label: 'Data Analysis', placeholder: lang === 'vi' ? 'VD:\n- Quantitative: Statistical analysis (t-test, regression)\n- Qualitative: Thematic analysis' : 'e.g.:\n- Quantitative: Statistical analysis (t-test, regression)\n- Qualitative: Thematic analysis', required: true, rows: 3 },
+            { id: 'limitations', type: 'textarea', label: 'Expected Limitations', placeholder: lang === 'vi' ? 'VD:\n- Selection bias\n- Self-reported data\n- Limited sample size' : 'e.g.:\n- Selection bias\n- Self-reported data\n- Limited sample size', required: false, rows: 2 },
         ]
     },
     {
         id: 3,
         name: 'Resources & Timeline',
         icon: '📅',
-        description: 'Nguồn lực và timeline',
+        description: lang === 'vi' ? 'Nguồn lực và timeline' : 'Resources and timeline',
         required: true,
         fields: [
-            { id: 'timeline', type: 'textarea', label: 'Research Timeline', placeholder: 'VD:\n- Month 1-2: Literature review\n- Month 3-4: Data collection\n- Month 5: Analysis\n- Month 6: Writing', required: true, rows: 4, tip: '💡 Breakdown theo tháng hoặc phase' },
-            { id: 'resources', type: 'textarea', label: 'Required Resources', placeholder: 'VD:\n- Access to ACM Digital Library\n- Survey tool license\n- Computing resources for analysis', required: true, rows: 3 },
-            { id: 'budget', type: 'text', label: 'Estimated Budget', placeholder: 'VD: $2,000 for participant incentives', required: false },
-            { id: 'collaborators', type: 'text', label: 'Team/Collaborators', placeholder: 'VD: Prof. X (advisor), Y (co-researcher)', required: false },
-            { id: 'ethics', type: 'textarea', label: 'Ethical Considerations', placeholder: 'VD:\n- IRB approval required\n- Informed consent\n- Data anonymization', required: false, rows: 2 },
+            { id: 'timeline', type: 'textarea', label: 'Research Timeline', placeholder: lang === 'vi' ? 'VD:\n- Month 1-2: Literature review\n- Month 3-4: Data collection\n- Month 5: Analysis\n- Month 6: Writing' : 'e.g.:\n- Month 1-2: Literature review\n- Month 3-4: Data collection\n- Month 5: Analysis\n- Month 6: Writing', required: true, rows: 4, tip: lang === 'vi' ? '💡 Breakdown theo tháng hoặc phase' : '💡 Breakdown by month or phase' },
+            { id: 'resources', type: 'textarea', label: 'Required Resources', placeholder: lang === 'vi' ? 'VD:\n- Access to ACM Digital Library\n- Survey tool license\n- Computing resources for analysis' : 'e.g.:\n- Access to ACM Digital Library\n- Survey tool license\n- Computing resources for analysis', required: true, rows: 3 },
+            { id: 'budget', type: 'text', label: 'Estimated Budget', placeholder: lang === 'vi' ? 'VD: $2,000 for participant incentives' : 'e.g. $2,000 for participant incentives', required: false },
+            { id: 'collaborators', type: 'text', label: 'Team/Collaborators', placeholder: lang === 'vi' ? 'VD: Prof. X (advisor), Y (co-researcher)' : 'e.g. Prof. X (advisor), Y (co-researcher)', required: false },
+            { id: 'ethics', type: 'textarea', label: 'Ethical Considerations', placeholder: lang === 'vi' ? 'VD:\n- IRB approval required\n- Informed consent\n- Data anonymization' : 'e.g.:\n- IRB approval required\n- Informed consent\n- Data anonymization', required: false, rows: 2 },
         ]
     },
     {
         id: 4,
         name: 'Review',
         icon: '✅',
-        description: 'Xem lại và xuất Research Proposal',
+        description: lang === 'vi' ? 'Xem lại và xuất Research Proposal' : 'Review and export Research Proposal',
         required: true,
         isReview: true,
         fields: []
     }
-];
+    ];
+}
 
 function generateConsolidatedSpec(data: WizardData): string {
     const spec = `
@@ -186,6 +190,8 @@ Based on this proposal, AI should generate:
 }
 
 export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
+    const { language } = useLanguage();
+    const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
@@ -247,10 +253,10 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
     const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
     const canExport = specGate.status === 'PASS';
     const specGateLabel = specGate.status === 'PASS'
-        ? 'Spec Gate: PASS — Đủ input để xuất'
+        ? wt(WIZARD_COMMON.specGatePass, language)
         : specGate.status === 'CLARIFY'
-            ? 'Spec Gate: CLARIFY — Thiếu input bắt buộc'
-            : 'Spec Gate: FAIL — Không đủ dữ liệu để tạo spec';
+            ? wt(WIZARD_COMMON.specGateClarify, language)
+            : wt(WIZARD_COMMON.specGateFail, language);
     const specGateClass = specGate.status === 'PASS'
         ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
         : specGate.status === 'CLARIFY'
@@ -272,12 +278,12 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                         <div className="font-semibold">{specGateLabel}</div>
                         {specGate.missing.length > 0 && (
                             <div className="text-xs mt-1">
-                                Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                             </div>
                         )}
                     </div>
                     <div className="flex gap-3">
-                        <button onClick={() => { navigator.clipboard.writeText(generatedSpec); alert('Đã copy vào clipboard!'); }}
+                        <button onClick={() => { navigator.clipboard.writeText(generatedSpec); alert(wt(WIZARD_COMMON.copiedToClipboard, language)); }}
                             disabled={!canExport}
                             className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
                                 ? 'bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700'
@@ -307,7 +313,7 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                 </button>
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">🔬 Research Project Wizard</h1>
-                    <p className="text-gray-600 dark:text-gray-400">Tạo Research Proposal qua 4 bước</p>
+                    <p className="text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Tạo Research Proposal qua 4 bước' : 'Create Research Proposal in 4 steps'}</p>
                 </div>
             </div>
 
@@ -316,13 +322,13 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">📝</span>
                         <div>
-                            <p className="font-medium text-amber-800 dark:text-amber-200">Bạn có bản nháp chưa hoàn thành</p>
-                            <p className="text-sm text-amber-600 dark:text-amber-400">Tiếp tục từ lần trước hoặc bắt đầu mới</p>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">{wt(WIZARD_COMMON.draftFound, language)}</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">{wt(WIZARD_COMMON.draftResume, language)}</p>
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <button onClick={loadDraft} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium">Tiếp tục</button>
-                        <button onClick={clearDraft} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">Bắt đầu mới</button>
+                        <button onClick={loadDraft} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium">{wt(WIZARD_COMMON.continue, language)}</button>
+                        <button onClick={clearDraft} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">{wt(WIZARD_COMMON.startNew, language)}</button>
                     </div>
                 </div>
             )}
@@ -365,8 +371,8 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                 {currentStepConfig.isReview ? (
                     <div className="space-y-4">
                         <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
-                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">🎉 Proposal sẵn sàng!</h3>
-                            <p className="text-green-700 dark:text-green-300 text-sm">Review proposal bên dưới và xuất khi sẵn sàng.</p>
+                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">{wt(WIZARD_COMMON.reviewReady, language)}</h3>
+                            <p className="text-green-700 dark:text-green-300 text-sm">{wt(WIZARD_COMMON.reviewDesc, language)}</p>
                         </div>
                         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 max-h-96 overflow-y-auto">
                             <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">{generatedSpec}</pre>
@@ -375,7 +381,7 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                             <div className="font-semibold">{specGateLabel}</div>
                             {specGate.missing.length > 0 && (
                                 <div className="text-xs mt-1">
-                                    Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                    {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                                 </div>
                             )}
                         </div>
@@ -383,7 +389,7 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                             ? 'bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700'
                             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                         }`}>
-                            🔬 Xuất Research Proposal
+                            {language === 'vi' ? '🔬 Xuất Research Proposal' : '🔬 Export Research Proposal'}
                         </button>
                     </div>
                 ) : (
@@ -404,7 +410,7 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                                 {field.type === 'select' && field.options && (
                                     <select value={wizardData[field.id] || ''} onChange={e => handleFieldChange(field.id, e.target.value)}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500">
-                                        <option value="">-- Chọn --</option>
+                                        <option value="">{wt(WIZARD_COMMON.select, language)}</option>
                                         {field.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                     </select>
                                 )}
@@ -418,12 +424,12 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
             <div className="flex justify-between mt-6">
                 <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep === 1}
                     className={`px-6 py-3 rounded-lg font-medium ${currentStep === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}>
-                    ← Trước
+                    ← {wt(WIZARD_COMMON.previous, language)}
                 </button>
                 {currentStep < WIZARD_STEPS.length && (
                     <button onClick={() => setCurrentStep(currentStep + 1)} disabled={currentStepConfig.required && !isStepValid()}
                         className={`px-6 py-3 rounded-lg font-medium ${currentStepConfig.required && !isStepValid() ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-purple-600 text-white hover:bg-purple-700'}`}>
-                        Tiếp tục →
+                        {wt(WIZARD_COMMON.next, language)} →
                     </button>
                 )}
             </div>

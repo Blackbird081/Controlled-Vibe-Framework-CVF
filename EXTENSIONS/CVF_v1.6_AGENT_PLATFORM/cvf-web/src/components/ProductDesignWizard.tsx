@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { evaluateSpecGate } from '@/lib/spec-gate';
 
 const DRAFT_STORAGE_KEY = 'cvf_product_design_wizard_draft';
@@ -34,31 +36,32 @@ interface ProductDesignWizardProps {
     onBack: () => void;
 }
 
-const WIZARD_STEPS: WizardStep[] = [
+function getWizardSteps(lang: Lang): WizardStep[] {
+    return [
     {
         id: 1,
         name: 'Problem Definition',
         icon: '🎯',
-        description: 'Xác định vấn đề và context',
+        description: lang === 'vi' ? 'Xác định vấn đề và context' : 'Define problem and context',
         required: true,
         fields: [
-            { id: 'productName', type: 'text', label: 'Tên sản phẩm', placeholder: 'VD: TaskFlow Mobile', required: true, tip: '💡 Tên ngắn gọn, dễ nhớ' },
-            { id: 'productType', type: 'select', label: 'Loại sản phẩm', options: ['Mobile App', 'Web App', 'Desktop App', 'SaaS Platform', 'Physical Product', 'Service'], required: true, tip: '💡 Chọn loại phù hợp nhất' },
-            { id: 'problemStatement', type: 'textarea', label: 'Vấn đề cần giải quyết', placeholder: 'Người dùng gặp khó khăn gì? Tại sao existing solutions không đủ?', required: true, rows: 4, tip: '💡 Mô tả rõ PAIN POINT thực sự' },
-            { id: 'currentSolution', type: 'textarea', label: 'Giải pháp hiện tại', placeholder: 'Người dùng đang làm gì để giải quyết vấn đề này?', required: true, rows: 2, tip: '💡 Hiểu competitor/alternatives' },
-            { id: 'opportunity', type: 'textarea', label: 'Cơ hội', placeholder: 'Tại sao bây giờ là thời điểm tốt? Market gap là gì?', required: false, rows: 2 },
+            { id: 'productName', type: 'text', label: lang === 'vi' ? 'Tên sản phẩm' : 'Product Name', placeholder: lang === 'vi' ? 'VD: TaskFlow Mobile' : 'e.g. TaskFlow Mobile', required: true, tip: lang === 'vi' ? '💡 Tên ngắn gọn, dễ nhớ' : '💡 Short, memorable name' },
+            { id: 'productType', type: 'select', label: lang === 'vi' ? 'Loại sản phẩm' : 'Product Type', options: ['Mobile App', 'Web App', 'Desktop App', 'SaaS Platform', 'Physical Product', 'Service'], required: true, tip: lang === 'vi' ? '💡 Chọn loại phù hợp nhất' : '💡 Choose the most suitable type' },
+            { id: 'problemStatement', type: 'textarea', label: lang === 'vi' ? 'Vấn đề cần giải quyết' : 'Problem Statement', placeholder: lang === 'vi' ? 'Người dùng gặp khó khăn gì? Tại sao existing solutions không đủ?' : 'What difficulties do users face? Why are existing solutions insufficient?', required: true, rows: 4, tip: lang === 'vi' ? '💡 Mô tả rõ PAIN POINT thực sự' : '💡 Clearly describe the real PAIN POINT' },
+            { id: 'currentSolution', type: 'textarea', label: lang === 'vi' ? 'Giải pháp hiện tại' : 'Current Solution', placeholder: lang === 'vi' ? 'Người dùng đang làm gì để giải quyết vấn đề này?' : 'What are users doing now to solve this problem?', required: true, rows: 2, tip: lang === 'vi' ? '💡 Hiểu competitor/alternatives' : '💡 Understand competitor/alternatives' },
+            { id: 'opportunity', type: 'textarea', label: lang === 'vi' ? 'Cơ hội' : 'Opportunity', placeholder: lang === 'vi' ? 'Tại sao bây giờ là thời điểm tốt? Market gap là gì?' : 'Why is now the right time? What is the market gap?', required: false, rows: 2 },
         ]
     },
     {
         id: 2,
         name: 'User Research',
         icon: '👥',
-        description: 'Hiểu sâu về người dùng mục tiêu',
+        description: lang === 'vi' ? 'Hiểu sâu về người dùng mục tiêu' : 'Deep understanding of target users',
         required: true,
         fields: [
-            { id: 'targetUser', type: 'textarea', label: 'Target User', placeholder: 'VD: Marketing managers at SMBs, 25-40, tech-savvy...', required: true, rows: 2, tip: '💡 Cụ thể về demographics & psychographics' },
-            { id: 'userPersonas', type: 'textarea', label: 'User Personas (2-3)', placeholder: '1. Primary: ...\n2. Secondary: ...\n3. Edge case: ...', required: true, rows: 4, tip: '💡 Mô tả name, role, goals, frustrations' },
-            { id: 'userJourney', type: 'textarea', label: 'User Journey hiện tại', placeholder: 'Các bước user thực hiện để hoàn thành task (before your product)', required: true, rows: 3, tip: '💡 Identify pain points trong journey' },
+            { id: 'targetUser', type: 'textarea', label: 'Target User', placeholder: lang === 'vi' ? 'VD: Marketing managers at SMBs, 25-40, tech-savvy...' : 'e.g. Marketing managers at SMBs, 25-40, tech-savvy...', required: true, rows: 2, tip: lang === 'vi' ? '💡 Cụ thể về demographics & psychographics' : '💡 Be specific about demographics & psychographics' },
+            { id: 'userPersonas', type: 'textarea', label: 'User Personas (2-3)', placeholder: '1. Primary: ...\n2. Secondary: ...\n3. Edge case: ...', required: true, rows: 4, tip: lang === 'vi' ? '💡 Mô tả name, role, goals, frustrations' : '💡 Describe name, role, goals, frustrations' },
+            { id: 'userJourney', type: 'textarea', label: lang === 'vi' ? 'User Journey hiện tại' : 'Current User Journey', placeholder: lang === 'vi' ? 'Các bước user thực hiện để hoàn thành task (before your product)' : 'Steps users take to complete the task (before your product)', required: true, rows: 3, tip: lang === 'vi' ? '💡 Identify pain points trong journey' : '💡 Identify pain points in the journey' },
             { id: 'needsWants', type: 'textarea', label: 'Needs vs Wants', placeholder: 'NEEDS (must have): ...\nWANTS (nice to have): ...', required: true, rows: 3 },
         ]
     },
@@ -66,25 +69,25 @@ const WIZARD_STEPS: WizardStep[] = [
         id: 3,
         name: 'Solution Design',
         icon: '💡',
-        description: 'Thiết kế giải pháp',
+        description: lang === 'vi' ? 'Thiết kế giải pháp' : 'Design the solution',
         required: true,
         fields: [
-            { id: 'valueProposition', type: 'textarea', label: 'Value Proposition', placeholder: 'Sản phẩm giúp [target user] đạt được [goal] bằng cách [how]', required: true, rows: 2, tip: '💡 Một câu súc tích, memorable' },
-            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3-5)', placeholder: '1. Feature A: ...\n2. Feature B: ...\n3. Feature C: ...', required: true, rows: 4, tip: '💡 Chỉ những feature QUAN TRỌNG NHẤT' },
-            { id: 'differentiation', type: 'textarea', label: 'Differentiation', placeholder: 'Điều gì làm sản phẩm này khác biệt so với alternatives?', required: true, rows: 2, tip: '💡 Unique selling points' },
-            { id: 'outOfScope', type: 'textarea', label: 'Out of Scope (v1)', placeholder: 'Những gì KHÔNG làm trong phiên bản đầu', required: false, rows: 2 },
+            { id: 'valueProposition', type: 'textarea', label: 'Value Proposition', placeholder: lang === 'vi' ? 'Sản phẩm giúp [target user] đạt được [goal] bằng cách [how]' : 'Product helps [target user] achieve [goal] by [how]', required: true, rows: 2, tip: lang === 'vi' ? '💡 Một câu súc tích, memorable' : '💡 One concise, memorable sentence' },
+            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3-5)', placeholder: '1. Feature A: ...\n2. Feature B: ...\n3. Feature C: ...', required: true, rows: 4, tip: lang === 'vi' ? '💡 Chỉ những feature QUAN TRỌNG NHẤT' : '💡 Only the MOST IMPORTANT features' },
+            { id: 'differentiation', type: 'textarea', label: 'Differentiation', placeholder: lang === 'vi' ? 'Điều gì làm sản phẩm này khác biệt so với alternatives?' : 'What makes this product different from alternatives?', required: true, rows: 2, tip: lang === 'vi' ? '💡 Unique selling points' : '💡 Unique selling points' },
+            { id: 'outOfScope', type: 'textarea', label: 'Out of Scope (v1)', placeholder: lang === 'vi' ? 'Những gì KHÔNG làm trong phiên bản đầu' : 'What will NOT be done in the first version', required: false, rows: 2 },
         ]
     },
     {
         id: 4,
         name: 'UX Design',
         icon: '🎨',
-        description: 'Thiết kế trải nghiệm người dùng',
+        description: lang === 'vi' ? 'Thiết kế trải nghiệm người dùng' : 'User experience design',
         required: true,
         fields: [
-            { id: 'infoArchitecture', type: 'textarea', label: 'Information Architecture', placeholder: 'Main sections/screens:\n- Home\n- Feature A\n- Settings\n...', required: true, rows: 4, tip: '💡 Cấu trúc navigation chính' },
-            { id: 'keyFlows', type: 'textarea', label: 'Key User Flows (2-3)', placeholder: 'Flow 1: Onboarding\n  Step 1 → Step 2 → ...\n\nFlow 2: Core Action\n  ...', required: true, rows: 5, tip: '💡 Các flow quan trọng nhất' },
-            { id: 'interactions', type: 'textarea', label: 'Key Interactions', placeholder: 'VD: Swipe to delete, Long press to edit, Pull to refresh...', required: false, rows: 2 },
+            { id: 'infoArchitecture', type: 'textarea', label: 'Information Architecture', placeholder: 'Main sections/screens:\n- Home\n- Feature A\n- Settings\n...', required: true, rows: 4, tip: lang === 'vi' ? '💡 Cấu trúc navigation chính' : '💡 Main navigation structure' },
+            { id: 'keyFlows', type: 'textarea', label: 'Key User Flows (2-3)', placeholder: 'Flow 1: Onboarding\n  Step 1 → Step 2 → ...\n\nFlow 2: Core Action\n  ...', required: true, rows: 5, tip: lang === 'vi' ? '💡 Các flow quan trọng nhất' : '💡 Most important flows' },
+            { id: 'interactions', type: 'textarea', label: 'Key Interactions', placeholder: lang === 'vi' ? 'VD: Swipe to delete, Long press to edit, Pull to refresh...' : 'e.g. Swipe to delete, Long press to edit, Pull to refresh...', required: false, rows: 2 },
             { id: 'accessibility', type: 'select', label: 'Accessibility Level', options: ['Basic (contrast, font size)', 'WCAG AA', 'WCAG AAA'], required: false },
         ]
     },
@@ -92,12 +95,12 @@ const WIZARD_STEPS: WizardStep[] = [
         id: 5,
         name: 'Visual Design',
         icon: '🖼️',
-        description: 'Thiết kế giao diện (Optional)',
+        description: lang === 'vi' ? 'Thiết kế giao diện (Optional)' : 'Visual design (Optional)',
         required: false,
         fields: [
             { id: 'designStyle', type: 'select', label: 'Design Style', options: ['Modern Minimal', 'Bold & Colorful', 'Corporate Professional', 'Playful & Fun', 'Dark Mode First', 'Custom'], required: false },
-            { id: 'colorScheme', type: 'textarea', label: 'Color Scheme', placeholder: 'Primary: #...\nSecondary: #...\nAccent: #...', required: false, rows: 2, tip: '💡 Hoặc mô tả mood: warm, cool, vibrant...' },
-            { id: 'typography', type: 'text', label: 'Typography', placeholder: 'VD: Inter for body, Poppins for headings', required: false },
+            { id: 'colorScheme', type: 'textarea', label: 'Color Scheme', placeholder: 'Primary: #...\nSecondary: #...\nAccent: #...', required: false, rows: 2, tip: lang === 'vi' ? '💡 Hoặc mô tả mood: warm, cool, vibrant...' : '💡 Or describe mood: warm, cool, vibrant...' },
+            { id: 'typography', type: 'text', label: 'Typography', placeholder: lang === 'vi' ? 'VD: Inter for body, Poppins for headings' : 'e.g. Inter for body, Poppins for headings', required: false },
             { id: 'brandGuidelines', type: 'textarea', label: 'Brand Guidelines (if any)', placeholder: 'Logo usage, do/don\'t, existing brand assets...', required: false, rows: 2 },
         ]
     },
@@ -105,12 +108,13 @@ const WIZARD_STEPS: WizardStep[] = [
         id: 6,
         name: 'Review',
         icon: '✅',
-        description: 'Xem lại và xuất spec',
+        description: lang === 'vi' ? 'Xem lại và xuất spec' : 'Review and export spec',
         required: true,
         isReview: true,
         fields: []
     }
-];
+    ];
+}
 
 function generateConsolidatedSpec(data: WizardData): string {
     const spec = `
@@ -230,6 +234,8 @@ Based on this spec, AI should generate:
 }
 
 export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
+    const { language } = useLanguage();
+    const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
@@ -331,10 +337,10 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
     const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
     const canExport = specGate.status === 'PASS';
     const specGateLabel = specGate.status === 'PASS'
-        ? 'Spec Gate: PASS — Đủ input để xuất'
+        ? wt(WIZARD_COMMON.specGatePass, language)
         : specGate.status === 'CLARIFY'
-            ? 'Spec Gate: CLARIFY — Thiếu input bắt buộc'
-            : 'Spec Gate: FAIL — Không đủ dữ liệu để tạo spec';
+            ? wt(WIZARD_COMMON.specGateClarify, language)
+            : wt(WIZARD_COMMON.specGateFail, language);
     const specGateClass = specGate.status === 'PASS'
         ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
         : specGate.status === 'CLARIFY'
@@ -367,7 +373,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                         <div className="font-semibold">{specGateLabel}</div>
                         {specGate.missing.length > 0 && (
                             <div className="text-xs mt-1">
-                                Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                             </div>
                         )}
                     </div>
@@ -375,7 +381,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                         <button
                             onClick={() => {
                                 navigator.clipboard.writeText(generatedSpec);
-                                alert('Đã copy spec vào clipboard!');
+                                alert(wt(WIZARD_COMMON.copiedToClipboard, language));
                             }}
                             disabled={!canExport}
                             className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
@@ -415,7 +421,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                 <button
                     onClick={onBack}
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-gray-600 dark:text-gray-400"
-                    title="Quay lại trang chủ"
+                    title={language === 'vi' ? 'Quay lại trang chủ' : 'Back to home'}
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -426,7 +432,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                         🎨 Product Design Wizard
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400">
-                        Tạo Product Design Spec qua 6 bước
+                        {language === 'vi' ? 'Tạo Product Design Spec qua 6 bước' : 'Create Product Design Spec in 6 steps'}
                     </p>
                 </div>
             </div>
@@ -437,8 +443,8 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">📝</span>
                         <div>
-                            <p className="font-medium text-amber-800 dark:text-amber-200">Bạn có bản nháp chưa hoàn thành</p>
-                            <p className="text-sm text-amber-600 dark:text-amber-400">Tiếp tục từ lần trước hoặc bắt đầu mới</p>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">{wt(WIZARD_COMMON.draftFound, language)}</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">{wt(WIZARD_COMMON.draftResume, language)}</p>
                         </div>
                     </div>
                     <div className="flex gap-2">
@@ -446,13 +452,13 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                             onClick={loadDraft}
                             className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors font-medium"
                         >
-                            Tiếp tục
+                            {wt(WIZARD_COMMON.continue, language)}
                         </button>
                         <button
                             onClick={clearDraft}
                             className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
-                            Bắt đầu mới
+                            {wt(WIZARD_COMMON.startNew, language)}
                         </button>
                     </div>
                 </div>
@@ -484,7 +490,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                             key={step.id}
                             onClick={() => handleStepClick(step.id)}
                             disabled={!canJump}
-                            title={canJump ? `Nhấn để đến ${step.name}` : 'Hoàn thành các step trước để mở khóa'}
+                            title={canJump ? (language === 'vi' ? `Nhấn để đến ${step.name}` : `Click to go to ${step.name}`) : (language === 'vi' ? 'Hoàn thành các step trước để mở khóa' : 'Complete previous steps to unlock')}
                             className={`flex flex-col items-center min-w-[60px] transition-all ${canJump ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
                         >
                             <div
@@ -503,7 +509,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                                 {step.name}
                             </span>
                             {!step.required && (
-                                <span className="text-[10px] text-gray-400">(optional)</span>
+                                <span className="text-[10px] text-gray-400">({language === 'vi' ? 'optional' : 'optional'})</span>
                             )}
                         </button>
                     );
@@ -528,9 +534,9 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                 {currentStepConfig.isReview ? (
                     <div className="space-y-4">
                         <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
-                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">🎉 Đã hoàn thành tất cả steps!</h3>
+                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">{wt(WIZARD_COMMON.allStepsComplete, language)}</h3>
                             <p className="text-green-700 dark:text-green-300 text-sm">
-                                Review spec bên dưới và xuất khi sẵn sàng.
+                                {wt(WIZARD_COMMON.reviewDesc, language)}
                             </p>
                         </div>
 
@@ -543,7 +549,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                             <div className="font-semibold">{specGateLabel}</div>
                             {specGate.missing.length > 0 && (
                                 <div className="text-xs mt-1">
-                                    Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                    {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                                 </div>
                             )}
                         </div>
@@ -556,7 +562,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                             }`}
                         >
-                            🎨 Xuất Product Design Spec
+                            {language === 'vi' ? '🎨 Xuất Product Design Spec' : '🎨 Export Product Design Spec'}
                         </button>
                     </div>
                 ) : (
@@ -595,7 +601,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                                         onChange={e => handleFieldChange(field.id, e.target.value)}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                                     >
-                                        <option value="">-- Chọn --</option>
+                                        <option value="">{wt(WIZARD_COMMON.select, language)}</option>
                                         {field.options.map(opt => (
                                             <option key={opt} value={opt}>{opt}</option>
                                         ))}
@@ -624,7 +630,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
-                    ← Trước
+                    ← {wt(WIZARD_COMMON.previous, language)}
                 </button>
 
                 {currentStep < WIZARD_STEPS.length ? (
@@ -636,7 +642,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                             : 'bg-pink-500 text-white hover:bg-pink-600'
                             }`}
                     >
-                        {currentStepConfig.required ? 'Tiếp tục' : 'Bỏ qua / Tiếp tục'} →
+                        {currentStepConfig.required ? wt(WIZARD_COMMON.next, language) : wt(WIZARD_COMMON.skipContinue, language)} →
                     </button>
                 ) : null}
             </div>

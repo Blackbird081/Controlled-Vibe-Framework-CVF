@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { evaluateSpecGate } from '@/lib/spec-gate';
 
 const DRAFT_STORAGE_KEY = 'cvf_system_design_wizard_draft';
@@ -34,42 +36,43 @@ interface SystemDesignWizardProps {
     onBack: () => void;
 }
 
-const WIZARD_STEPS: WizardStep[] = [
+function getWizardSteps(lang: Lang): WizardStep[] {
+    return [
     {
         id: 1,
         name: 'Requirements',
         icon: '📋',
-        description: 'Functional và Non-functional Requirements',
+        description: lang === 'vi' ? 'Functional và Non-functional Requirements' : 'Functional and Non-functional Requirements',
         required: true,
         fields: [
-            { id: 'systemName', type: 'text', label: 'Tên hệ thống', placeholder: 'VD: URL Shortener Service', required: true, tip: '💡 Tên hệ thống cần thiết kế' },
-            { id: 'problemStatement', type: 'textarea', label: 'Problem Statement', placeholder: 'VD: Build a scalable URL shortening service like bit.ly', required: true, rows: 2 },
-            { id: 'functionalReqs', type: 'textarea', label: 'Functional Requirements', placeholder: 'VD:\n- Shorten URL\n- Redirect to original\n- Custom alias\n- Analytics', required: true, rows: 4, tip: '💡 Các chức năng hệ thống cần có' },
-            { id: 'nonFunctionalReqs', type: 'textarea', label: 'Non-Functional Requirements', placeholder: 'VD:\n- 99.99% availability\n- <100ms latency\n- 100M DAU\n- 1B URLs/month', required: true, rows: 4, tip: '💡 Performance, scalability, reliability...' },
+            { id: 'systemName', type: 'text', label: lang === 'vi' ? 'Tên hệ thống' : 'System Name', placeholder: lang === 'vi' ? 'VD: URL Shortener Service' : 'e.g. URL Shortener Service', required: true, tip: lang === 'vi' ? '💡 Tên hệ thống cần thiết kế' : '💡 Name of the system to design' },
+            { id: 'problemStatement', type: 'textarea', label: 'Problem Statement', placeholder: lang === 'vi' ? 'VD: Build a scalable URL shortening service like bit.ly' : 'e.g. Build a scalable URL shortening service like bit.ly', required: true, rows: 2 },
+            { id: 'functionalReqs', type: 'textarea', label: 'Functional Requirements', placeholder: lang === 'vi' ? 'VD:\n- Shorten URL\n- Redirect to original\n- Custom alias\n- Analytics' : 'e.g.:\n- Shorten URL\n- Redirect to original\n- Custom alias\n- Analytics', required: true, rows: 4, tip: lang === 'vi' ? '💡 Các chức năng hệ thống cần có' : '💡 System functionalities needed' },
+            { id: 'nonFunctionalReqs', type: 'textarea', label: 'Non-Functional Requirements', placeholder: lang === 'vi' ? 'VD:\n- 99.99% availability\n- <100ms latency\n- 100M DAU\n- 1B URLs/month' : 'e.g.:\n- 99.99% availability\n- <100ms latency\n- 100M DAU\n- 1B URLs/month', required: true, rows: 4, tip: lang === 'vi' ? '💡 Performance, scalability, reliability...' : '💡 Performance, scalability, reliability...' },
         ]
     },
     {
         id: 2,
         name: 'Estimations',
         icon: '🔢',
-        description: 'Capacity estimation và constraints',
+        description: lang === 'vi' ? 'Capacity estimation và constraints' : 'Capacity estimation and constraints',
         required: true,
         fields: [
-            { id: 'traffic', type: 'textarea', label: 'Traffic Estimation', placeholder: 'VD:\n- 100M DAU\n- Read/Write ratio: 100:1\n- 1B URLs/month → 400 writes/sec\n- 40K reads/sec', required: true, rows: 4, tip: '💡 Ước tính requests per second' },
-            { id: 'storage', type: 'textarea', label: 'Storage Estimation', placeholder: 'VD:\n- 1B URLs × 500 bytes = 500GB/month\n- 5 years: 30TB\n- Include metadata, logs', required: true, rows: 3 },
-            { id: 'bandwidth', type: 'text', label: 'Bandwidth', placeholder: 'VD: 40K × 500 bytes = 20 MB/s read', required: false },
-            { id: 'constraints', type: 'textarea', label: 'Key Constraints', placeholder: 'VD:\n- No duplicate short URLs\n- URL length: 7 chars\n- Expiration support', required: false, rows: 2 },
+            { id: 'traffic', type: 'textarea', label: 'Traffic Estimation', placeholder: lang === 'vi' ? 'VD:\n- 100M DAU\n- Read/Write ratio: 100:1\n- 1B URLs/month → 400 writes/sec\n- 40K reads/sec' : 'e.g.:\n- 100M DAU\n- Read/Write ratio: 100:1\n- 1B URLs/month → 400 writes/sec\n- 40K reads/sec', required: true, rows: 4, tip: lang === 'vi' ? '💡 Ước tính requests per second' : '💡 Estimate requests per second' },
+            { id: 'storage', type: 'textarea', label: 'Storage Estimation', placeholder: lang === 'vi' ? 'VD:\n- 1B URLs × 500 bytes = 500GB/month\n- 5 years: 30TB\n- Include metadata, logs' : 'e.g.:\n- 1B URLs × 500 bytes = 500GB/month\n- 5 years: 30TB\n- Include metadata, logs', required: true, rows: 3 },
+            { id: 'bandwidth', type: 'text', label: 'Bandwidth', placeholder: lang === 'vi' ? 'VD: 40K × 500 bytes = 20 MB/s read' : 'e.g. 40K × 500 bytes = 20 MB/s read', required: false },
+            { id: 'constraints', type: 'textarea', label: 'Key Constraints', placeholder: lang === 'vi' ? 'VD:\n- No duplicate short URLs\n- URL length: 7 chars\n- Expiration support' : 'e.g.:\n- No duplicate short URLs\n- URL length: 7 chars\n- Expiration support', required: false, rows: 2 },
         ]
     },
     {
         id: 3,
         name: 'High-Level Design',
         icon: '🏗️',
-        description: 'Architecture và components',
+        description: lang === 'vi' ? 'Architecture và components' : 'Architecture and components',
         required: true,
         fields: [
-            { id: 'components', type: 'textarea', label: 'Core Components', placeholder: 'VD:\n- API Gateway\n- URL Service\n- Database\n- Cache\n- Analytics Service', required: true, rows: 4, tip: '💡 Các service/component chính' },
-            { id: 'dataFlow', type: 'textarea', label: 'Data Flow', placeholder: 'Write: Client → API → URL Service → DB\nRead: Client → API → Cache (miss) → DB', required: true, rows: 3, tip: '💡 Mô tả flow cho các use cases chính' },
+            { id: 'components', type: 'textarea', label: 'Core Components', placeholder: lang === 'vi' ? 'VD:\n- API Gateway\n- URL Service\n- Database\n- Cache\n- Analytics Service' : 'e.g.:\n- API Gateway\n- URL Service\n- Database\n- Cache\n- Analytics Service', required: true, rows: 4, tip: lang === 'vi' ? '💡 Các service/component chính' : '💡 Main services/components' },
+            { id: 'dataFlow', type: 'textarea', label: 'Data Flow', placeholder: lang === 'vi' ? 'Write: Client → API → URL Service → DB\nRead: Client → API → Cache (miss) → DB' : 'Write: Client → API → URL Service → DB\nRead: Client → API → Cache (miss) → DB', required: true, rows: 3, tip: lang === 'vi' ? '💡 Mô tả flow cho các use cases chính' : '💡 Describe flow for main use cases' },
             { id: 'database', type: 'select', label: 'Database Choice', options: ['SQL (PostgreSQL/MySQL)', 'NoSQL (MongoDB)', 'Key-Value (Redis/DynamoDB)', 'Hybrid', 'Other'], required: true },
             { id: 'databaseReason', type: 'textarea', label: 'Database Justification', placeholder: 'Why this database? Consider: scale, query patterns, consistency...', required: true, rows: 2 },
         ]
@@ -78,25 +81,26 @@ const WIZARD_STEPS: WizardStep[] = [
         id: 4,
         name: 'Deep Dive',
         icon: '🔍',
-        description: 'Chi tiết các component quan trọng',
+        description: lang === 'vi' ? 'Chi tiết các component quan trọng' : 'Deep dive into key components',
         required: true,
         fields: [
-            { id: 'keyAlgorithm', type: 'textarea', label: 'Key Generation Algorithm', placeholder: 'VD:\n- Base62 encoding\n- Counter-based\n- Hash-based (MD5/SHA)\n- KGS (Key Generation Service)', required: true, rows: 3, tip: '💡 Thuật toán chính của hệ thống' },
-            { id: 'caching', type: 'textarea', label: 'Caching Strategy', placeholder: 'VD:\n- Redis for hot URLs\n- LRU eviction\n- 20% cache = 80% traffic\n- TTL: 24h', required: false, rows: 3 },
-            { id: 'scaling', type: 'textarea', label: 'Scaling Strategy', placeholder: 'VD:\n- Horizontal: Add more app servers\n- DB: Sharding by hash\n- CDN for static content', required: true, rows: 3, tip: '💡 Làm sao để scale?' },
-            { id: 'reliability', type: 'textarea', label: 'Reliability & Fault Tolerance', placeholder: 'VD:\n- DB replication (master-slave)\n- Load balancer failover\n- Rate limiting\n- Circuit breaker', required: false, rows: 3 },
+            { id: 'keyAlgorithm', type: 'textarea', label: lang === 'vi' ? 'Key Generation Algorithm' : 'Key Generation Algorithm', placeholder: lang === 'vi' ? 'VD:\n- Base62 encoding\n- Counter-based\n- Hash-based (MD5/SHA)\n- KGS (Key Generation Service)' : 'e.g.:\n- Base62 encoding\n- Counter-based\n- Hash-based (MD5/SHA)\n- KGS (Key Generation Service)', required: true, rows: 3, tip: lang === 'vi' ? '💡 Thuật toán chính của hệ thống' : '💡 Core algorithm of the system' },
+            { id: 'caching', type: 'textarea', label: 'Caching Strategy', placeholder: lang === 'vi' ? 'VD:\n- Redis for hot URLs\n- LRU eviction\n- 20% cache = 80% traffic\n- TTL: 24h' : 'e.g.:\n- Redis for hot URLs\n- LRU eviction\n- 20% cache = 80% traffic\n- TTL: 24h', required: false, rows: 3 },
+            { id: 'scaling', type: 'textarea', label: 'Scaling Strategy', placeholder: lang === 'vi' ? 'VD:\n- Horizontal: Add more app servers\n- DB: Sharding by hash\n- CDN for static content' : 'e.g.:\n- Horizontal: Add more app servers\n- DB: Sharding by hash\n- CDN for static content', required: true, rows: 3, tip: lang === 'vi' ? '💡 Làm sao để scale?' : '💡 How to scale?' },
+            { id: 'reliability', type: 'textarea', label: 'Reliability & Fault Tolerance', placeholder: lang === 'vi' ? 'VD:\n- DB replication (master-slave)\n- Load balancer failover\n- Rate limiting\n- Circuit breaker' : 'e.g.:\n- DB replication (master-slave)\n- Load balancer failover\n- Rate limiting\n- Circuit breaker', required: false, rows: 3 },
         ]
     },
     {
         id: 5,
         name: 'Review',
         icon: '✅',
-        description: 'Xem lại và xuất System Design Doc',
+        description: lang === 'vi' ? 'Xem lại và xuất System Design Doc' : 'Review and export System Design Doc',
         required: true,
         isReview: true,
         fields: []
     }
-];
+    ];
+}
 
 function generateConsolidatedSpec(data: WizardData): string {
     const spec = `
@@ -204,6 +208,8 @@ Based on this design, AI should generate:
 }
 
 export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
+    const { language } = useLanguage();
+    const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
@@ -265,10 +271,10 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
     const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
     const canExport = specGate.status === 'PASS';
     const specGateLabel = specGate.status === 'PASS'
-        ? 'Spec Gate: PASS — Đủ input để xuất'
+        ? wt(WIZARD_COMMON.specGatePass, language)
         : specGate.status === 'CLARIFY'
-            ? 'Spec Gate: CLARIFY — Thiếu input bắt buộc'
-            : 'Spec Gate: FAIL — Không đủ dữ liệu để tạo spec';
+            ? wt(WIZARD_COMMON.specGateClarify, language)
+            : wt(WIZARD_COMMON.specGateFail, language);
     const specGateClass = specGate.status === 'PASS'
         ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
         : specGate.status === 'CLARIFY'
@@ -290,12 +296,12 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                         <div className="font-semibold">{specGateLabel}</div>
                         {specGate.missing.length > 0 && (
                             <div className="text-xs mt-1">
-                                Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                             </div>
                         )}
                     </div>
                     <div className="flex gap-3">
-                        <button onClick={() => { navigator.clipboard.writeText(generatedSpec); alert('Đã copy vào clipboard!'); }}
+                        <button onClick={() => { navigator.clipboard.writeText(generatedSpec); alert(wt(WIZARD_COMMON.copiedToClipboard, language)); }}
                             disabled={!canExport}
                             className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
                                 ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:from-teal-700 hover:to-cyan-700'
@@ -325,7 +331,7 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                 </button>
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">🔧 System Design Wizard</h1>
-                    <p className="text-gray-600 dark:text-gray-400">Tạo System Design Document qua 5 bước</p>
+                    <p className="text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Tạo System Design Document qua 5 bước' : 'Create System Design Document in 5 steps'}</p>
                 </div>
             </div>
 
@@ -334,13 +340,13 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">📝</span>
                         <div>
-                            <p className="font-medium text-amber-800 dark:text-amber-200">Bạn có bản nháp chưa hoàn thành</p>
-                            <p className="text-sm text-amber-600 dark:text-amber-400">Tiếp tục từ lần trước hoặc bắt đầu mới</p>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">{wt(WIZARD_COMMON.draftFound, language)}</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">{wt(WIZARD_COMMON.draftResume, language)}</p>
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <button onClick={loadDraft} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium">Tiếp tục</button>
-                        <button onClick={clearDraft} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">Bắt đầu mới</button>
+                        <button onClick={loadDraft} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium">{wt(WIZARD_COMMON.continue, language)}</button>
+                        <button onClick={clearDraft} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">{wt(WIZARD_COMMON.startNew, language)}</button>
                     </div>
                 </div>
             )}
@@ -383,8 +389,8 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                 {currentStepConfig.isReview ? (
                     <div className="space-y-4">
                         <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
-                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">🎉 Design sẵn sàng!</h3>
-                            <p className="text-green-700 dark:text-green-300 text-sm">Review design bên dưới và xuất khi sẵn sàng.</p>
+                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">{wt(WIZARD_COMMON.reviewReady, language)}</h3>
+                            <p className="text-green-700 dark:text-green-300 text-sm">{wt(WIZARD_COMMON.reviewDesc, language)}</p>
                         </div>
                         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 max-h-96 overflow-y-auto">
                             <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">{generatedSpec}</pre>
@@ -393,7 +399,7 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                             <div className="font-semibold">{specGateLabel}</div>
                             {specGate.missing.length > 0 && (
                                 <div className="text-xs mt-1">
-                                    Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                    {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                                 </div>
                             )}
                         </div>
@@ -401,7 +407,7 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                             ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:from-teal-700 hover:to-cyan-700'
                             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                         }`}>
-                            🔧 Xuất System Design Document
+                            {language === 'vi' ? '🔧 Xuất System Design Document' : '🔧 Export System Design Document'}
                         </button>
                     </div>
                 ) : (
@@ -422,7 +428,7 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                                 {field.type === 'select' && field.options && (
                                     <select value={wizardData[field.id] || ''} onChange={e => handleFieldChange(field.id, e.target.value)}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500">
-                                        <option value="">-- Chọn --</option>
+                                        <option value="">{wt(WIZARD_COMMON.select, language)}</option>
                                         {field.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                     </select>
                                 )}
@@ -436,12 +442,12 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
             <div className="flex justify-between mt-6">
                 <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep === 1}
                     className={`px-6 py-3 rounded-lg font-medium ${currentStep === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}>
-                    ← Trước
+                    ← {wt(WIZARD_COMMON.previous, language)}
                 </button>
                 {currentStep < WIZARD_STEPS.length && (
                     <button onClick={() => setCurrentStep(currentStep + 1)} disabled={currentStepConfig.required && !isStepValid()}
                         className={`px-6 py-3 rounded-lg font-medium ${currentStepConfig.required && !isStepValid() ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-teal-600 text-white hover:bg-teal-700'}`}>
-                        Tiếp tục →
+                        {wt(WIZARD_COMMON.next, language)} →
                     </button>
                 )}
             </div>

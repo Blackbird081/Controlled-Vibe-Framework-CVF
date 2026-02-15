@@ -64,6 +64,7 @@ export function AgentChatHeader({
                     onClick={onToggleDecisionLog}
                     className={`relative w-8 h-8 flex items-center justify-center rounded hover:bg-white/20 text-white/80 hover:text-white transition-all ${decisionLogOpen ? 'bg-white/20' : ''}`}
                     title={language === 'vi' ? 'Decision log' : 'Decision log'}
+                    aria-label={language === 'vi' ? 'Mở nhật ký quyết định' : 'Toggle decision log'}
                 >
                     🧾
                     {decisionLogCount > 0 && (
@@ -78,6 +79,7 @@ export function AgentChatHeader({
                         onClick={onToggleExportMenu}
                         className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/20 text-white/80 hover:text-white transition-all"
                         title="Export chat"
+                        aria-label={language === 'vi' ? 'Xuất cuộc trò chuyện' : 'Export chat'}
                     >
                         📥
                     </button>
@@ -91,6 +93,7 @@ export function AgentChatHeader({
                         onClick={onMinimize || onClose}
                         className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/20 text-white/80 hover:text-white transition-all"
                         title="Thu nhỏ"
+                        aria-label={language === 'vi' ? 'Thu nhỏ' : 'Minimize'}
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                             <path d="M5 12h14" />
@@ -102,6 +105,7 @@ export function AgentChatHeader({
                         }}
                         className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/20 text-white/80 hover:text-white transition-all"
                         title="Phóng to"
+                        aria-label={language === 'vi' ? 'Phóng to' : 'Maximize'}
                     >
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                             <rect x="4" y="4" width="16" height="16" rx="1" />
@@ -112,6 +116,7 @@ export function AgentChatHeader({
                             onClick={onClose}
                             className="w-8 h-8 flex items-center justify-center rounded hover:bg-red-500 text-white/80 hover:text-white transition-all"
                             title="Đóng"
+                            aria-label={language === 'vi' ? 'Đóng chat' : 'Close chat'}
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                 <path d="M6 18L18 6M6 6l12 12" />

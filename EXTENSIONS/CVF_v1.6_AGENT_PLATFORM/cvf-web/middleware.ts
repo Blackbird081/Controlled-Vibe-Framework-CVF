@@ -5,7 +5,7 @@ import { verifySessionCookie } from '@/lib/middleware-auth';
 const LOGIN_PATH = '/login';
 
 // Routes accessible without authentication
-const PUBLIC_PATHS = ['/docs', '/help', '/skills'];
+const PUBLIC_PATHS = ['/docs', '/help', '/skills', '/landing'];
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;

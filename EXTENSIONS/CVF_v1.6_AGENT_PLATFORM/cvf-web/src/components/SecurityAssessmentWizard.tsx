@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { evaluateSpecGate } from '@/lib/spec-gate';
 
 const DRAFT_STORAGE_KEY = 'cvf_security_assessment_wizard_draft';
@@ -34,69 +36,71 @@ interface SecurityAssessmentWizardProps {
     onBack: () => void;
 }
 
-const WIZARD_STEPS: WizardStep[] = [
+function getWizardSteps(lang: Lang): WizardStep[] {
+    return [
     {
         id: 1,
         name: 'Scope & Assets',
         icon: '🎯',
-        description: 'Xác định phạm vi và tài sản cần bảo vệ',
+        description: lang === 'vi' ? 'Xác định phạm vi và tài sản cần bảo vệ' : 'Define scope and assets to protect',
         required: true,
         fields: [
-            { id: 'systemName', type: 'text', label: 'Tên hệ thống', placeholder: 'VD: Customer Portal v2.0', required: true, tip: '💡 Hệ thống hoặc application cần assess' },
-            { id: 'systemType', type: 'select', label: 'Loại hệ thống', options: ['Web Application', 'Mobile App', 'API Service', 'Infrastructure', 'Cloud Environment', 'Enterprise System'], required: true },
-            { id: 'assets', type: 'textarea', label: 'Critical Assets', placeholder: 'VD:\n- User database (PII)\n- Payment processing\n- Authentication system\n- Admin panel', required: true, rows: 4, tip: '💡 Liệt kê tài sản quan trọng cần bảo vệ' },
-            { id: 'boundaries', type: 'textarea', label: 'System Boundaries', placeholder: 'In scope: Web app, API, Database\nOut of scope: Third-party services, CDN', required: true, rows: 3 },
-            { id: 'regulations', type: 'text', label: 'Compliance Requirements', placeholder: 'VD: GDPR, PCI-DSS, SOC2, HIPAA', required: false },
+            { id: 'systemName', type: 'text', label: lang === 'vi' ? 'Tên hệ thống' : 'System Name', placeholder: lang === 'vi' ? 'VD: Customer Portal v2.0' : 'e.g. Customer Portal v2.0', required: true, tip: lang === 'vi' ? '💡 Hệ thống hoặc application cần assess' : '💡 System or application to assess' },
+            { id: 'systemType', type: 'select', label: lang === 'vi' ? 'Loại hệ thống' : 'System Type', options: ['Web Application', 'Mobile App', 'API Service', 'Infrastructure', 'Cloud Environment', 'Enterprise System'], required: true },
+            { id: 'assets', type: 'textarea', label: 'Critical Assets', placeholder: lang === 'vi' ? 'VD:\n- User database (PII)\n- Payment processing\n- Authentication system\n- Admin panel' : 'e.g.:\n- User database (PII)\n- Payment processing\n- Authentication system\n- Admin panel', required: true, rows: 4, tip: lang === 'vi' ? '💡 Liệt kê tài sản quan trọng cần bảo vệ' : '💡 List critical assets to protect' },
+            { id: 'boundaries', type: 'textarea', label: 'System Boundaries', placeholder: lang === 'vi' ? 'In scope: Web app, API, Database\nOut of scope: Third-party services, CDN' : 'In scope: Web app, API, Database\nOut of scope: Third-party services, CDN', required: true, rows: 3 },
+            { id: 'regulations', type: 'text', label: 'Compliance Requirements', placeholder: lang === 'vi' ? 'VD: GDPR, PCI-DSS, SOC2, HIPAA' : 'e.g. GDPR, PCI-DSS, SOC2, HIPAA', required: false },
         ]
     },
     {
         id: 2,
         name: 'Threat Modeling',
         icon: '⚠️',
-        description: 'Xác định các mối đe dọa tiềm ẩn',
+        description: lang === 'vi' ? 'Xác định các mối đe dọa tiềm ẩn' : 'Identify potential threats',
         required: true,
         fields: [
-            { id: 'threatActors', type: 'textarea', label: 'Threat Actors', placeholder: 'VD:\n- External hackers\n- Malicious insiders\n- Competitors\n- Script kiddies', required: true, rows: 3, tip: '💡 Ai có thể tấn công hệ thống?' },
-            { id: 'attackVectors', type: 'textarea', label: 'Attack Vectors', placeholder: 'VD:\n- SQL Injection\n- XSS\n- CSRF\n- Brute force\n- Social engineering', required: true, rows: 4, tip: '💡 Các phương thức tấn công có thể' },
-            { id: 'dataFlow', type: 'textarea', label: 'Data Flow Description', placeholder: 'User → Frontend → API → Database\nDescribe trust boundaries and data paths', required: true, rows: 3 },
-            { id: 'existingControls', type: 'textarea', label: 'Existing Security Controls', placeholder: 'VD:\n- WAF configured\n- MFA enabled\n- Encryption at rest', required: false, rows: 3 },
+            { id: 'threatActors', type: 'textarea', label: 'Threat Actors', placeholder: lang === 'vi' ? 'VD:\n- External hackers\n- Malicious insiders\n- Competitors\n- Script kiddies' : 'e.g.:\n- External hackers\n- Malicious insiders\n- Competitors\n- Script kiddies', required: true, rows: 3, tip: lang === 'vi' ? '💡 Ai có thể tấn công hệ thống?' : '💡 Who could attack the system?' },
+            { id: 'attackVectors', type: 'textarea', label: 'Attack Vectors', placeholder: lang === 'vi' ? 'VD:\n- SQL Injection\n- XSS\n- CSRF\n- Brute force\n- Social engineering' : 'e.g.:\n- SQL Injection\n- XSS\n- CSRF\n- Brute force\n- Social engineering', required: true, rows: 4, tip: lang === 'vi' ? '💡 Các phương thức tấn công có thể' : '💡 Possible attack methods' },
+            { id: 'dataFlow', type: 'textarea', label: 'Data Flow Description', placeholder: lang === 'vi' ? 'User → Frontend → API → Database\nDescribe trust boundaries and data paths' : 'User → Frontend → API → Database\nDescribe trust boundaries and data paths', required: true, rows: 3 },
+            { id: 'existingControls', type: 'textarea', label: 'Existing Security Controls', placeholder: lang === 'vi' ? 'VD:\n- WAF configured\n- MFA enabled\n- Encryption at rest' : 'e.g.:\n- WAF configured\n- MFA enabled\n- Encryption at rest', required: false, rows: 3 },
         ]
     },
     {
         id: 3,
         name: 'Vulnerability Assessment',
         icon: '🔍',
-        description: 'Đánh giá lỗ hổng bảo mật',
+        description: lang === 'vi' ? 'Đánh giá lỗ hổng bảo mật' : 'Assess security vulnerabilities',
         required: true,
         fields: [
-            { id: 'knownVulns', type: 'textarea', label: 'Known Vulnerabilities', placeholder: 'VD:\n- Outdated dependencies\n- Weak password policy\n- Missing rate limiting', required: true, rows: 4, tip: '💡 Lỗ hổng đã biết hoặc nghi ngờ' },
-            { id: 'techStack', type: 'textarea', label: 'Technology Stack', placeholder: 'VD:\n- Frontend: React 18\n- Backend: Node.js 18\n- Database: PostgreSQL 15\n- Cloud: AWS', required: true, rows: 3 },
+            { id: 'knownVulns', type: 'textarea', label: 'Known Vulnerabilities', placeholder: lang === 'vi' ? 'VD:\n- Outdated dependencies\n- Weak password policy\n- Missing rate limiting' : 'e.g.:\n- Outdated dependencies\n- Weak password policy\n- Missing rate limiting', required: true, rows: 4, tip: lang === 'vi' ? '💡 Lỗ hổng đã biết hoặc nghi ngờ' : '💡 Known or suspected vulnerabilities' },
+            { id: 'techStack', type: 'textarea', label: 'Technology Stack', placeholder: lang === 'vi' ? 'VD:\n- Frontend: React 18\n- Backend: Node.js 18\n- Database: PostgreSQL 15\n- Cloud: AWS' : 'e.g.:\n- Frontend: React 18\n- Backend: Node.js 18\n- Database: PostgreSQL 15\n- Cloud: AWS', required: true, rows: 3 },
             { id: 'authMechanism', type: 'select', label: 'Authentication', options: ['Username/Password', 'OAuth2/OIDC', 'SAML', 'API Keys', 'JWT', 'Multi-factor'], required: true },
-            { id: 'dataClassification', type: 'textarea', label: 'Data Classification', placeholder: 'VD:\n- Public: Product catalog\n- Internal: User emails\n- Confidential: Passwords, tokens\n- Restricted: Payment data', required: false, rows: 3 },
+            { id: 'dataClassification', type: 'textarea', label: 'Data Classification', placeholder: lang === 'vi' ? 'VD:\n- Public: Product catalog\n- Internal: User emails\n- Confidential: Passwords, tokens\n- Restricted: Payment data' : 'e.g.:\n- Public: Product catalog\n- Internal: User emails\n- Confidential: Passwords, tokens\n- Restricted: Payment data', required: false, rows: 3 },
         ]
     },
     {
         id: 4,
         name: 'Risk Analysis',
         icon: '📊',
-        description: 'Phân tích và đánh giá rủi ro',
+        description: lang === 'vi' ? 'Phân tích và đánh giá rủi ro' : 'Analyze and assess risks',
         required: true,
         fields: [
-            { id: 'riskMatrix', type: 'textarea', label: 'Risk Assessment', placeholder: 'Risk 1: SQL Injection\n  Impact: High, Likelihood: Medium\n\nRisk 2: Session hijacking\n  Impact: High, Likelihood: Low', required: true, rows: 5, tip: '💡 Đánh giá Impact × Likelihood cho mỗi risk' },
+            { id: 'riskMatrix', type: 'textarea', label: 'Risk Assessment', placeholder: lang === 'vi' ? 'Risk 1: SQL Injection\n  Impact: High, Likelihood: Medium\n\nRisk 2: Session hijacking\n  Impact: High, Likelihood: Low' : 'Risk 1: SQL Injection\n  Impact: High, Likelihood: Medium\n\nRisk 2: Session hijacking\n  Impact: High, Likelihood: Low', required: true, rows: 5, tip: lang === 'vi' ? '💡 Đánh giá Impact × Likelihood cho mỗi risk' : '💡 Assess Impact × Likelihood for each risk' },
             { id: 'riskAppetite', type: 'select', label: 'Risk Appetite', options: ['Conservative (minimize all risks)', 'Moderate (accept controlled risks)', 'Aggressive (focus on critical only)'], required: true },
-            { id: 'businessImpact', type: 'textarea', label: 'Business Impact Analysis', placeholder: 'VD:\n- Data breach: Revenue loss $X, reputation damage\n- Service outage: $Y/hour\n- Compliance violation: Fines up to $Z', required: true, rows: 3 },
+            { id: 'businessImpact', type: 'textarea', label: 'Business Impact Analysis', placeholder: lang === 'vi' ? 'VD:\n- Data breach: Revenue loss $X, reputation damage\n- Service outage: $Y/hour\n- Compliance violation: Fines up to $Z' : 'e.g.:\n- Data breach: Revenue loss $X, reputation damage\n- Service outage: $Y/hour\n- Compliance violation: Fines up to $Z', required: true, rows: 3 },
         ]
     },
     {
         id: 5,
         name: 'Review',
         icon: '✅',
-        description: 'Xem lại và xuất Security Assessment',
+        description: lang === 'vi' ? 'Xem lại và xuất Security Assessment' : 'Review and export Security Assessment',
         required: true,
         isReview: true,
         fields: []
     }
-];
+    ];
+}
 
 function generateConsolidatedSpec(data: WizardData): string {
     const spec = `
@@ -206,6 +210,8 @@ Based on this assessment, AI should generate:
 }
 
 export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardProps) {
+    const { language } = useLanguage();
+    const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
@@ -285,10 +291,10 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
     const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
     const canExport = specGate.status === 'PASS';
     const specGateLabel = specGate.status === 'PASS'
-        ? 'Spec Gate: PASS — Đủ input để xuất'
+        ? wt(WIZARD_COMMON.specGatePass, language)
         : specGate.status === 'CLARIFY'
-            ? 'Spec Gate: CLARIFY — Thiếu input bắt buộc'
-            : 'Spec Gate: FAIL — Không đủ dữ liệu để tạo spec';
+            ? wt(WIZARD_COMMON.specGateClarify, language)
+            : wt(WIZARD_COMMON.specGateFail, language);
     const specGateClass = specGate.status === 'PASS'
         ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
         : specGate.status === 'CLARIFY'
@@ -312,13 +318,13 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                         <div className="font-semibold">{specGateLabel}</div>
                         {specGate.missing.length > 0 && (
                             <div className="text-xs mt-1">
-                                Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                             </div>
                         )}
                     </div>
                     <div className="flex gap-3">
                         <button
-                            onClick={() => { navigator.clipboard.writeText(generatedSpec); alert('Đã copy vào clipboard!'); }}
+                            onClick={() => { navigator.clipboard.writeText(generatedSpec); alert(wt(WIZARD_COMMON.copiedToClipboard, language)); }}
                             disabled={!canExport}
                             className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
                                 ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white hover:from-red-700 hover:to-rose-700'
@@ -355,7 +361,7 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                 </button>
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">🔐 Security Assessment Wizard</h1>
-                    <p className="text-gray-600 dark:text-gray-400">Tạo Security Assessment Report qua 5 bước</p>
+                    <p className="text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Tạo Security Assessment Report qua 5 bước' : 'Create Security Assessment Report in 5 steps'}</p>
                 </div>
             </div>
 
@@ -364,13 +370,13 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">📝</span>
                         <div>
-                            <p className="font-medium text-amber-800 dark:text-amber-200">Bạn có bản nháp chưa hoàn thành</p>
-                            <p className="text-sm text-amber-600 dark:text-amber-400">Tiếp tục từ lần trước hoặc bắt đầu mới</p>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">{wt(WIZARD_COMMON.draftFound, language)}</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">{wt(WIZARD_COMMON.draftResume, language)}</p>
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <button onClick={loadDraft} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium">Tiếp tục</button>
-                        <button onClick={clearDraft} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">Bắt đầu mới</button>
+                        <button onClick={loadDraft} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium">{wt(WIZARD_COMMON.continue, language)}</button>
+                        <button onClick={clearDraft} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">{wt(WIZARD_COMMON.startNew, language)}</button>
                     </div>
                 </div>
             )}
@@ -414,8 +420,8 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                 {currentStepConfig.isReview ? (
                     <div className="space-y-4">
                         <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
-                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">🎉 Assessment sẵn sàng!</h3>
-                            <p className="text-green-700 dark:text-green-300 text-sm">Review report bên dưới và xuất khi sẵn sàng.</p>
+                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">{wt(WIZARD_COMMON.reviewReady, language)}</h3>
+                            <p className="text-green-700 dark:text-green-300 text-sm">{wt(WIZARD_COMMON.reviewDesc, language)}</p>
                         </div>
                         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 max-h-96 overflow-y-auto">
                             <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">{generatedSpec}</pre>
@@ -424,7 +430,7 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                             <div className="font-semibold">{specGateLabel}</div>
                             {specGate.missing.length > 0 && (
                                 <div className="text-xs mt-1">
-                                    Thiếu input bắt buộc: {specGate.missing.map(field => field.label).join(', ')}
+                                    {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
                                 </div>
                             )}
                         </div>
@@ -432,7 +438,7 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                             ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white hover:from-red-700 hover:to-rose-700'
                             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                         }`}>
-                            🔐 Xuất Security Assessment Report
+                            {language === 'vi' ? '🔐 Xuất Security Assessment Report' : '🔐 Export Security Assessment Report'}
                         </button>
                     </div>
                 ) : (
@@ -453,7 +459,7 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                                 {field.type === 'select' && field.options && (
                                     <select value={wizardData[field.id] || ''} onChange={e => handleFieldChange(field.id, e.target.value)}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500">
-                                        <option value="">-- Chọn --</option>
+                                        <option value="">{wt(WIZARD_COMMON.select, language)}</option>
                                         {field.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                     </select>
                                 )}
@@ -467,12 +473,12 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
             <div className="flex justify-between mt-6">
                 <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep === 1}
                     className={`px-6 py-3 rounded-lg font-medium ${currentStep === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}>
-                    ← Trước
+                    ← {wt(WIZARD_COMMON.previous, language)}
                 </button>
                 {currentStep < WIZARD_STEPS.length && (
                     <button onClick={() => setCurrentStep(currentStep + 1)} disabled={currentStepConfig.required && !isStepValid()}
                         className={`px-6 py-3 rounded-lg font-medium ${currentStepConfig.required && !isStepValid() ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-red-600 text-white hover:bg-red-700'}`}>
-                        Tiếp tục →
+                        {wt(WIZARD_COMMON.next, language)} →
                     </button>
                 )}
             </div>

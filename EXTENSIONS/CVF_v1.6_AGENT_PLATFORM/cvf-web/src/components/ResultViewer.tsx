@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Execution, QualityScore } from '@/types';
+import { useLanguage } from '@/lib/i18n';
 
 interface ResultViewerProps {
     execution: Execution;
@@ -93,12 +94,14 @@ const exportLabels = {
 };
 
 export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack, onSendToAgent }: ResultViewerProps) {
+    const { language } = useLanguage();
     const [showDetails, setShowDetails] = useState(false);
+    const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [copied, setCopied] = useState(false);
-    const [exportLang, setExportLang] = useState<ExportLanguage>('vi');
+    const [exportLang, setExportLang] = useState<ExportLanguage>(language as ExportLanguage);
 
-    // Mock quality score
+    // Mock quality score — hidden behind Technical Details
     const qualityScore: QualityScore = {
         overall: 8.2,
         structure: 9.0,
@@ -163,6 +166,7 @@ ${cleanOutput}
                     <button
                         onClick={onBack}
                         className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        aria-label={language === 'vi' ? 'Quay lại' : 'Go back'}
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -177,7 +181,15 @@ ${cleanOutput}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
-                    <QualityBadge score={qualityScore.overall} />
+                    {/* Print / Save as PDF */}
+                    <button
+                        onClick={() => window.print()}
+                        className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        title={language === 'vi' ? 'In hoặc lưu PDF' : 'Print or save as PDF'}
+                        aria-label={language === 'vi' ? 'In hoặc lưu PDF' : 'Print or save as PDF'}
+                    >
+                        🖨️ {language === 'vi' ? 'In / PDF' : 'Print / PDF'}
+                    </button>
 
                     {/* Export Dropdown */}
                     <div className="relative">
@@ -240,23 +252,31 @@ ${cleanOutput}
                 </div>
             </div>
 
-            {/* Quality Score Panel */}
+            {/* Technical Details — collapsed by default */}
             <div
                 className="mb-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl cursor-pointer"
-                onClick={() => setShowDetails(!showDetails)}
+                onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
             >
                 <div className="flex items-center justify-between">
-                    <h3 className="font-medium">Quality Score</h3>
+                    <h3 className="font-medium text-sm text-gray-500 dark:text-gray-400">
+                        {language === 'vi' ? '🔧 Chi tiết kỹ thuật' : '🔧 Technical Details'}
+                    </h3>
                     <svg
-                        className={`w-5 h-5 transition-transform ${showDetails ? 'rotate-180' : ''}`}
+                        className={`w-4 h-4 text-gray-400 transition-transform ${showTechnicalDetails ? 'rotate-180' : ''}`}
                         fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                 </div>
 
-                {showDetails && (
-                    <div className="mt-4">
+                {showTechnicalDetails && (
+                    <div className="mt-4 space-y-4">
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                                {language === 'vi' ? 'Điểm chất lượng' : 'Quality Score'}
+                            </span>
+                            <QualityBadge score={qualityScore.overall} />
+                        </div>
                         <QualityBreakdown score={qualityScore} />
                     </div>
                 )}

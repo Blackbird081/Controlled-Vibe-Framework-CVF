@@ -139,7 +139,50 @@ export function AgentChat({
                         onToggleDecisionLog={() => setShowDecisionLog(prev => !prev)}
                     />
 
-                    <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-2" aria-live="polite">
+                        {messages.length === 0 && !isLoading && (
+                            <div className="flex flex-col items-center justify-center h-full text-center px-4">
+                                <div className="text-5xl mb-4">🤖</div>
+                                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                    {language === 'vi' ? 'Chào mừng đến CVF Agent!' : 'Welcome to CVF Agent!'}
+                                </h2>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-md">
+                                    {language === 'vi'
+                                        ? 'Hãy hỏi bất cứ điều gì — tôi có thể giúp bạn lập kế hoạch, phân tích, viết nội dung và nhiều hơn nữa.'
+                                        : 'Ask me anything — I can help you plan, analyze, write content, and much more.'}
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-lg">
+                                    {(language === 'vi' ? [
+                                        '📝 Viết kế hoạch kinh doanh cho startup',
+                                        '🔍 Phân tích SWOT cho dự án mới',
+                                        '💡 Gợi ý chiến lược marketing',
+                                        '📊 Tạo báo cáo phân tích dữ liệu',
+                                        '🎨 Thiết kế giao diện ứng dụng',
+                                        '🛡️ Đánh giá bảo mật hệ thống',
+                                    ] : [
+                                        '📝 Write a business plan for a startup',
+                                        '🔍 SWOT analysis for a new project',
+                                        '💡 Suggest a marketing strategy',
+                                        '📊 Create a data analysis report',
+                                        '🎨 Design an application interface',
+                                        '🛡️ Security assessment for a system',
+                                    ]).map((prompt, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => { setInput(prompt.replace(/^[^\s]+\s/, '')); }}
+                                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); setInput(prompt.replace(/^[^\s]+\s/, '')); } }}
+                                            className="text-left text-sm px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 
+                                                       hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-300 dark:hover:border-blue-700
+                                                       text-gray-700 dark:text-gray-300 transition-colors"
+                                            title={language === 'vi' ? 'Nhấn Enter để chọn' : 'Press Enter to select'}
+                                        >
+                                            {prompt}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {messages.map(message => (
                             <AgentChatMessageBubble
                                 key={message.id}

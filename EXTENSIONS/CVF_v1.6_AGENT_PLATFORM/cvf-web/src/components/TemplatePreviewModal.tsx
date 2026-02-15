@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface TemplatePreviewModalProps {
@@ -10,10 +11,25 @@ interface TemplatePreviewModalProps {
 }
 
 export function TemplatePreviewModal({ isOpen, onClose, templateName, sampleOutput }: TemplatePreviewModalProps) {
+    // Escape key to close
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 bg-black/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 bg-black/50 backdrop-blur-sm"
+             role="dialog"
+             aria-modal="true"
+             aria-label={`Preview: ${templateName}`}
+             onClick={onClose}
+        >
             <div
                 className="bg-white dark:bg-gray-900 rounded-none md:rounded-xl shadow-2xl w-full h-full md:h-auto md:max-w-2xl md:max-h-[80vh] flex flex-col"
                 onClick={(e) => e.stopPropagation()}
@@ -29,6 +45,7 @@ export function TemplatePreviewModal({ isOpen, onClose, templateName, sampleOutp
                     <button
                         onClick={onClose}
                         className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                        aria-label="Close preview"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -43,11 +60,13 @@ export function TemplatePreviewModal({ isOpen, onClose, templateName, sampleOutp
                             <ReactMarkdown>{sampleOutput}</ReactMarkdown>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center h-40 text-gray-400">
-                            <svg className="w-12 h-12 mb-3 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            <p>No preview available for this template</p>
+                        <div className="space-y-4">
+                            <div className="text-center text-sm text-gray-400 mb-4">
+                                <p className="italic">Sample preview — actual output will vary based on your inputs</p>
+                            </div>
+                            <div className="prose dark:prose-invert max-w-none text-sm">
+                                <ReactMarkdown>{`# ${templateName} — Sample Output\n\n## Executive Summary\n\nThis is a **placeholder preview** showing the typical structure you can expect from this template.\n\n## Key Points\n\n- **Point 1:** Analysis based on your provided context\n- **Point 2:** Actionable recommendations tailored to your situation\n- **Point 3:** Risk assessment with mitigation strategies\n\n## Recommendations\n\n| Priority | Action | Timeline |\n|----------|--------|----------|\n| High | Review strategic options | 1-2 weeks |\n| Medium | Stakeholder alignment | 2-4 weeks |\n| Low | Documentation update | Ongoing |\n\n## Next Steps\n\n1. Fill in the template form with your specific details\n2. Submit to generate a customized analysis\n3. Review, iterate, and export\n\n---\n*This is a sample preview. Your actual output will be personalized.*`}</ReactMarkdown>
+                            </div>
                         </div>
                     )}
                 </div>

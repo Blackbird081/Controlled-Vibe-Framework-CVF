@@ -329,7 +329,7 @@ Feb 22-26, 2026   Phase 3: POLISH (9 tasks)
 
 ## Tracking
 
-> **Cập nhật:** 16/02/2026 (lần 2) — Fix 7/9 gaps còn lại. Chỉ còn 2 Nice-to-have chưa xử lý.
+> **Cập nhật:** 16/02/2026 (lần 3) — Hoàn thành 24/24 tasks. N1 (demo auto-run) + N6 (PDF/Word export) đã implement.
 
 ### Phase 1: UNBLOCK ✅ COMPLETED (6/6)
 
@@ -356,25 +356,25 @@ Feb 22-26, 2026   Phase 3: POLISH (9 tasks)
 | 2.8 Marketplace i18n + content | ✅ Done | **10 templates** (4 Official + 6 Community), all enabled with "View Details" button |
 | 2.9 Onboarding content | ✅ Done | 3-step visual guide replacing video placeholder |
 
-### Phase 3: POLISH ⚠️ 7/9 DONE — 2 REMAINING
+### Phase 3: POLISH ✅ COMPLETED (9/9)
 
-| Task | Status | Details | Tồn đọng |
-|------|:------:|---------|-----------|
-| 3.1 Demo templates | ⚠️ Partial | 4 templates có sampleOutput markdown | Chưa có flow auto-run one-click |
+| Task | Status | Details |
+|------|:------:|---------|--------|
+| 3.1 Demo templates | ✅ Done | **Auto-run one-click**: picks first template, fills `example` values, runs processing. URL `?demo=1` support |
 | 3.2 Difficulty badges | ✅ Done | **50/50 templates** có difficulty field (easy/medium/advanced). Colored pills render |
-| 3.3 Inline help tooltips | ✅ Done | title attrs on template cards, form submit, chat send | — |
-| 3.4 ARIA labels | ✅ Done | 26 ARIA labels across 11 files | — |
-| 3.5 PDF/Word export | ⚠️ Partial | Print/PDF button via `window.print()` | Chưa có jsPDF/docx — Nice-to-have |
-| 3.6 Template search | ✅ Done | Search input on home page filtering by name/description | — |
-| 3.7 Keyboard navigation | ✅ Done | Enter/Space on cards, Escape on modals, Enter on prompts | — |
-| 3.8 aria-live regions | ✅ Done | ProcessingScreen + AgentChat message areas | — |
-| 3.9 Progress dashboard | ✅ Done | AnalyticsDashboard fully bilingual | — |
+| 3.3 Inline help tooltips | ✅ Done | title attrs on template cards, form submit, chat send |
+| 3.4 ARIA labels | ✅ Done | 26 ARIA labels across 11 files |
+| 3.5 PDF/Word export | ✅ Done | **jsPDF** for PDF + **docx** lib for Word. 3 export options: .md, .pdf, .docx |
+| 3.6 Template search | ✅ Done | Search input on home page filtering by name/description |
+| 3.7 Keyboard navigation | ✅ Done | Enter/Space on cards, Escape on modals, Enter on prompts |
+| 3.8 aria-live regions | ✅ Done | ProcessingScreen + AgentChat message areas |
+| 3.9 Progress dashboard | ✅ Done | AnalyticsDashboard fully bilingual |
 
 ---
 
-## Tồn Đọng / Remaining Gaps (16/02/2026 — cập nhật sau fix)
+## Tồn Đọng / Remaining Gaps (16/02/2026 — cập nhật lần 3)
 
-> Chỉ còn **2 Nice-to-have** chưa hoàn thiện. Tất cả Critical và Important đã resolve.
+> **Hoàn thành 100%** — Tất cả 24 tasks đã resolve. Không còn gap nào.
 
 | # | Mức độ | Vấn đề | Trạng thái |
 |---|:------:|--------|:----------:|
@@ -385,21 +385,21 @@ Feb 22-26, 2026   Phase 3: POLISH (9 tasks)
 | ~~5~~ | ~~🔶 Important~~ | ~~Quality score mock data~~ | ✅ Fixed — section & data removed entirely |
 | ~~6~~ | ~~🔶 Important~~ | ~~Marketplace trống~~ | ✅ Fixed — 10 templates, enabled buttons |
 | ~~7~~ | ~~🟢 Nice~~ | ~~Difficulty chỉ 10/50~~ | ✅ Fixed — 50/50 templates have difficulty |
-| 8 | 🟢 Nice | Demo chưa auto-run one-click | ⚠️ Remaining — flow one-click chưa implement |
-| 9 | 🟢 Nice | PDF/Word chỉ window.print() | ⚠️ Remaining — jsPDF/docx chưa install |
+| ~~8~~ | ~~🟢 Nice~~ | ~~Demo chưa auto-run one-click~~ | ✅ Fixed — `handleDemoRun()` + `?demo=1` URL param |
+| ~~9~~ | ~~🟢 Nice~~ | ~~PDF/Word chỉ window.print()~~ | ✅ Fixed — jsPDF + docx lib, real PDF/Word export |
 
 ### Tóm tắt tiến độ tổng
 
 ```
 Tổng tasks trong roadmap:     24
-✅ Hoàn thành đầy đủ:          22  (91.7%)
-⚠️ Còn gap nhỏ:                2  (8.3%)  — cả 2 đều Nice-to-have
+✅ Hoàn thành đầy đủ:          24  (100%)
+⚠️ Còn gap nhỏ:                0  (0%)
 ❌ Chưa làm:                    0  (0%)
 
 Theo mức độ:
   ⭐ Critical:    7/7 ✅ (100%)
   🔶 Important:   8/8 ✅ (100%)  
-  🟢 Nice-to-have: 7/9 ✅ (77.8%)  — 2 remaining: demo auto-run, real PDF export
+  🟢 Nice-to-have: 9/9 ✅ (100%)
 ```
 
 ---

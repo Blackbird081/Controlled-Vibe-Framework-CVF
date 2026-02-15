@@ -29,7 +29,7 @@ CVF đã có **nền tảng tốt** cho non-coder:
 
 Tuy nhiên **còn 7 vấn đề Critical + 8 Important** chặn hoặc gây khó cho non-coder.
 
-> **📊 Trạng thái triển khai (16/02/2026):** Đã xử lý 24/24 tasks trong roadmap. Trong đó **15 hoàn thành đầy đủ**, **9 còn gap** cần fix tiếp (3 Critical, 3 Important, 3 Nice-to-have). Xem chi tiết ở mỗi bảng bên dưới.
+> **📊 Trạng thái triển khai (16/02/2026 — lần 3):** Đã hoàn thành **24/24 tasks** trong roadmap. Tất cả Critical (7/7), Important (8/8), Nice-to-have (9/9) đã resolve.
 
 ---
 
@@ -82,12 +82,12 @@ Tuy nhiên **còn 7 vấn đề Critical + 8 Important** chặn hoặc gây khó
 
 | # | Vấn đề | Chi tiết | Trạng thái (16/02) |
 |---|--------|--------|:------------------:|
-| **N1** | One-click demo templates | 3-5 template pre-filled chạy mock data, không cần API key | ⚠️ **Partial** — 4 templates có sampleOutput. Flow auto-run one-click chưa implement |
+| **N1** | One-click demo templates | 3-5 template pre-filled chạy mock data, không cần API key | ✅ **Done** — `handleDemoRun()` auto-fill + auto-run. URL `?demo=1` support |
 | **N2** | Progress dashboard | Theo dõi "3/10 analyses done", visual progress | ✅ **Done** — AnalyticsDashboard fully bilingual |
 | **N3** | Difficulty ratings | Beginner/Intermediate/Advanced badge trên template cards | ✅ **Done** — **50/50 templates** có difficulty field. Colored pills render |
 | **N4** | Inline contextual help | Interactive `?` tooltips bên cạnh mỗi field | ✅ **Done** — `title` attrs on template cards, form submit, chat send |
 | **N5** | ARIA labels (chỉ 6 hiện tại) | Thiếu cho template cards, modals, buttons, navigation | ✅ **Done** — 26 ARIA labels across 11 files |
-| **N6** | Export PDF/Word | Hiện chỉ Markdown + clipboard | ⚠️ **Partial** — Print/PDF button via `window.print()`. jsPDF/docx chưa install |
+| **N6** | Export PDF/Word | Hiện chỉ Markdown + clipboard | ✅ **Done** — jsPDF cho PDF + docx lib cho Word. 3 export options: .md, .pdf, .docx |
 | **N7** | Template search bar | Tìm kiếm keyword trên trang chính | ✅ **Done** — Search input filtering by name/description |
 | **N8** | Keyboard shortcuts | ESC close modal, Tab navigation chưa nhất quán | ✅ **Done** — Enter/Space on cards, Escape on modals, focus traps |
 | **N9** | `aria-live` regions | Chat messages, processing status không announce cho screen reader | ✅ **Done** — ProcessingScreen + AgentChat message areas |
@@ -125,28 +125,23 @@ Tuy nhiên **còn 7 vấn đề Critical + 8 Important** chặn hoặc gây khó
 | Quality score | Fake 8.2 | **Removed** ✅ | Real or hidden |
 | Public landing page | ❌ | **✅** (`/` → `/landing`) | ✅ |
 | GovernanceBar persist | ❌ | **✅** localStorage | ✅ |
-| PDF/Word export | ❌ | **⚠️** (window.print only) | jsPDF/docx |
+| PDF/Word export | ❌ | **✅** jsPDF + docx lib | ✅ Done |
 | Marketplace content | 0 real | **10 templates** ✅ | 20+ |
 
 ---
 
-## 6. Tổng Kết Triển Khai (16/02/2026 — cập nhật sau fix lần 2)
+## 6. Tổng Kết Triển Khai (16/02/2026 — cập nhật lần 3 — FINAL)
 
 ```
                         Tổng Issues     Đã Fix      Partial     Chưa Fix
   Critical (C1-C7):        7              7 ✅        0 ⚠️         0 ❌
   Important (I1-I8):       8              8 ✅        0 ⚠️         0 ❌
-  Nice-to-Have (N1-N9):    9              7 ✅        2 ⚠️         0 ❌
+  Nice-to-Have (N1-N9):    9              9 ✅        0 ⚠️         0 ❌
   ─────────────────────────────────────────────────────────────────────
-  TỔNG:                   24             22 ✅        2 ⚠️         0 ❌
+  TỔNG:                   24             24 ✅        0 ⚠️         0 ❌
 ```
 
-### 2 Items còn lại (Nice-to-have)
-
-| # | Gốc | Vấn đề | Mức |
-|---|------|---------|:---:|
-| 1 | N1 | Demo chưa có flow one-click auto-run | 🟢 Nice |
-| 2 | N6 | PDF/Word chỉ `window.print()`, chưa có jsPDF/docx | 🟢 Nice |
+✅ **Tất cả 24 issues đã được resolve hoàn toàn.** Không còn gap or remaining items.
 
 ---
 

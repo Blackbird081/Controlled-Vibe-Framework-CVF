@@ -34,10 +34,10 @@ export default function DocsPage() {
                         </h1>
                     </div>
                     <nav className="flex items-center gap-3">
-                        <Link href="/" className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                        <Link href="/" className="hidden sm:inline-flex px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                             {language === 'vi' ? '🏠 Trang chủ' : '🏠 Home'}
                         </Link>
-                        <Link href="/help" className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                        <Link href="/help" className="hidden sm:inline-flex px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                             {language === 'vi' ? '❓ Hướng dẫn' : '❓ Help'}
                         </Link>
                         <ThemeToggle />
@@ -48,7 +48,7 @@ export default function DocsPage() {
 
             {/* Hero */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
-                <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+                <h2 className="text-2xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
                     {language === 'vi' ? 'Tài liệu CVF' : 'CVF Documentation'}
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">

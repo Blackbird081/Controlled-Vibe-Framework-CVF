@@ -73,7 +73,7 @@ export default function DocDetailPage() {
                         )}
                     </div>
                     <nav className="flex items-center gap-3">
-                        <Link href="/docs" className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                        <Link href="/docs" className="hidden sm:inline-flex px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                             {language === 'vi' ? '← Tất cả tài liệu' : '← All Docs'}
                         </Link>
                         <ThemeToggle />
@@ -148,6 +148,12 @@ export default function DocDetailPage() {
                                     // Strip any remaining relative links — just render as text
                                     return <span {...props}>{children}</span>;
                                 },
+                                // Wrap tables for mobile horizontal scroll
+                                table: ({ children, ...props }) => (
+                                    <div className="overflow-x-auto -mx-4 sm:mx-0">
+                                        <table {...props}>{children}</table>
+                                    </div>
+                                ),
                             }}
                         >
                             {content}

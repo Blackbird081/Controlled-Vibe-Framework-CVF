@@ -469,7 +469,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                 <button
                     onClick={onBack}
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-gray-600 dark:text-gray-400"
-                    title="Quay lại trang chủ"
+                    title="Back to home"
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -480,19 +480,19 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                         🧙 App Builder Wizard
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400">
-                        Tạo spec hoàn chỉnh qua 8 bước
+                        Create a complete spec in 8 steps
                     </p>
                 </div>
             </div>
 
             {/* Draft Banner */}
             {hasDraft && (
-                <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg flex items-center justify-between">
+                <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">📝</span>
                         <div>
-                            <p className="font-medium text-amber-800 dark:text-amber-200">Bạn có bản nháp chưa hoàn thành</p>
-                            <p className="text-sm text-amber-600 dark:text-amber-400">Tiếp tục từ lần trước hoặc bắt đầu mới</p>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">You have an unfinished draft</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">Continue from where you left off or start fresh</p>
                         </div>
                     </div>
                     <div className="flex gap-2">
@@ -500,13 +500,13 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                             onClick={loadDraft}
                             className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors font-medium"
                         >
-                            Tiếp tục
+                            Continue
                         </button>
                         <button
                             onClick={clearDraft}
                             className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
-                            Bắt đầu mới
+                            Start New
                         </button>
                     </div>
                 </div>
@@ -539,7 +539,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                             key={step.id}
                             onClick={() => handleStepClick(step.id)}
                             disabled={!canJump}
-                            title={isSkipped ? 'Step bị bỏ qua' : canJump ? `Nhấn để đến ${step.name}` : 'Hoàn thành các step trước để mở khóa'}
+                            title={isSkipped ? 'Step skipped' : canJump ? `Go to ${step.name}` : 'Complete previous steps to unlock'}
                             className={`flex flex-col items-center min-w-[60px] transition-all ${isSkipped ? 'opacity-30 cursor-not-allowed' : canJump ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed'}`}
                         >
                             <div

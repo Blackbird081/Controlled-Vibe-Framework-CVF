@@ -47,7 +47,7 @@ function NavItem({ icon, label, isActive, onClick, badge, gradient }: NavItemPro
         <button
             onClick={onClick}
             className={clsx(
-                'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group',
+                'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 group',
                 isActive
                     ? gradient
                         ? `bg-gradient-to-r ${gradient} text-white shadow-md`
@@ -147,7 +147,7 @@ export default function Sidebar({
                     {/* Close button for mobile */}
                     <button
                         onClick={onClose}
-                        className="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="md:hidden p-3 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700"
                         aria-label="Close sidebar"
                     >
                         ✕
@@ -179,7 +179,7 @@ export default function Sidebar({
                         <Link
                             href="/help"
                             className={clsx(
-                                'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
+                                'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200',
                                 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
                             )}
                             onClick={onClose}
@@ -189,7 +189,7 @@ export default function Sidebar({
                         <Link
                             href="/docs"
                             className={clsx(
-                                'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
+                                'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200',
                                 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
                             )}
                             onClick={onClose}

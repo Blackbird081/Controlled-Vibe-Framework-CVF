@@ -1,8 +1,6 @@
 # Controlled Vibe Framework (CVF)
 
-> **Vibe coding có kiểm soát - không đi nhanh hơn, mà đi đúng hơn.**
->
-> *Controlled vibe coding — not faster, but smarter.*
+> **Controlled vibe coding — not faster, but smarter.**
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
@@ -13,25 +11,25 @@
 
 ---
 
-## 🎯 CVF Trong 30 Giây
+## 🎯 CVF In 30 Seconds
 
-CVF giúp bạn **kiểm soát AI coding** thông qua:
+CVF helps you **control AI coding** through:
 
 - ✅ **4-Phase Process** - Discovery → Design → Build → Review
 - ✅ **Governance Toolkit** - Phase gates, risk control, authority matrix
 - ✅ **124 Reusable Skills** - Across 12 domains
 - ✅ **Web UI + Agent Platform** - No-code interface, multi-agent workflows
 
-**Use CVF khi:**
-- Bạn dùng AI (ChatGPT/Claude/Copilot) để code
-- Bạn muốn AI code đúng hơn, an toàn hơn
-- Bạn cần governance cho team/enterprise
+**Use CVF when:**
+- You use AI (ChatGPT / Claude / Copilot) for coding
+- You want AI to code **correctly and safely**
+- You need governance for your team or enterprise
 
 ---
 
 ## 🚀 Quick Start
 
-### Option 1: Web UI (Recommended - 2 phút)
+### Option 1: Web UI (Recommended — 2 minutes)
 
 ```bash
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
@@ -41,29 +39,29 @@ npm install && npm run dev
 
 → Open http://localhost:3000
 
-### Option 2: Core CVF (5 phút)
+### Option 2: Core CVF (5 minutes)
 
-1. Đọc [Manifesto](v1.0/CVF_MANIFESTO.md)
-2. Follow [4-Phase Process](v1.0/phases/)
-3. Use [Governance Checklists](v1.0/governance/)
+1. Read the [Manifesto](v1.0/CVF_MANIFESTO.md)
+2. Follow the [4-Phase Process](v1.0/phases/)
+3. Use the [Governance Checklists](v1.0/governance/)
 
 **→ [📖 Full Getting Started Guide](docs/GET_STARTED.md)**
 
 ---
 
-## 💡 Vì Sao CVF?
+## 💡 Why CVF?
 
-### Vấn Đề: AI Coding Thiếu Kiểm Soát
+### The Problem: Uncontrolled AI Coding
 
-Khi dùng AI để code mà không có framework:
+When using AI to code without a framework:
 
-- ❌ Code bạn không hiểu ("black box")
+- ❌ Code you don't understand ("black box")
 - ❌ Security vulnerabilities
-- ❌ Technical debt tích tụ
-- ❌ Không có documentation
-- ❌ Team không consistent
+- ❌ Accumulated technical debt
+- ❌ No documentation
+- ❌ Inconsistent team output
 
-### Giải Pháp: CVF's 4-Phase Control
+### The Solution: CVF's 4-Phase Control
 
 ```
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
@@ -75,7 +73,7 @@ Khi dùng AI để code mà không có framework:
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
 ```
 
-**Outcome:** Code chất lượng, có kiểm soát, reusable
+**Outcome:** Quality code, controlled process, reusable artifacts
 
 ---
 
@@ -96,7 +94,7 @@ Khi dùng AI để code mà không có framework:
 
 | Feature | Description |
 |---------|-------------|
-| **4-Phase Process** | Structured workflow từ idea → production |
+| **4-Phase Process** | Structured workflow from idea to production |
 | **Governance Model** | Phase gates, risk levels (R0-R3), authority matrix |
 | **Skill Library** | 124 reusable skills across 12 domains |
 | **Web UI** | No-code template builder + agent chat |
@@ -113,7 +111,7 @@ Khi dùng AI để code mà không có framework:
 
 ### 👤 Solo Developers
 
-"CVF giúp tôi code với AI<br>mà không lo bị lạc hướng"
+"CVF helps me code with AI<br>without losing direction"
 
 [→ Solo Guide](docs/guides/solo-developer.md)
 
@@ -122,7 +120,7 @@ Khi dùng AI để code mà không có framework:
 
 ### 👥 Small Teams
 
-"Team mình consistent hơn,<br>reuse được nhiều skills"
+"Our team is more consistent<br>and we reuse many skills"
 
 [→ Team Setup](docs/guides/team-setup.md)
 
@@ -131,7 +129,7 @@ Khi dùng AI để code mà không có framework:
 
 ### 🏢 Enterprise
 
-"CVF cho governance đầy đủ<br>mà vẫn giữ được tốc độ"
+"CVF gives us full governance<br>while maintaining velocity"
 
 [→ Enterprise](docs/guides/enterprise.md)
 
@@ -143,11 +141,9 @@ Khi dùng AI để code mà không có framework:
 
 ## 🗺️ Choose Your Path
 
-### 🚦 Bắt đầu từ đâu?
-
-| Bạn là ai? | Recommended Path |
+| Who are you? | Recommended Path |
 |-----------|------------------|
-| 🆕 **Mới dùng AI coding** | [CVF Essentials](docs/GET_STARTED.md#-solo-developer---5-phút) → Hiểu 4 phases → Chạy 1 example |
+| 🆕 **New to AI coding** | [CVF Essentials](docs/GET_STARTED.md#-solo-developer---5-phút) → Learn 4 phases → Run 1 example |
 | 💻 **Solo developer** | [Web UI](docs/tutorials/web-ui-setup.md) → Pick template → Build project |
 | 👥 **Team lead** | [Team Setup](docs/guides/team-setup.md) → Governance → Collaboration |
 | 🏢 **Enterprise** | [Enterprise Guide](docs/guides/enterprise.md) → Pilot → Scale |
@@ -167,27 +163,27 @@ Khi dùng AI để code mà không có framework:
 | **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills across 12 domains |
 | **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) |
 
-**Full docs:** [cvf.io/docs](https://cvf.io/docs) (coming soon) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
+**Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
 
 ---
 
 ## 🏗️ Architecture
 
-CVF có 3 lớp - chọn đúng lớp bạn cần:
+CVF has 3 layers — choose the one you need:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  🌐 PLATFORM (Layer 3)  — Web UI, Agent Chat, Dashboard │
 │     v1.6                — Reference implementation      │
-│     → Use khi cần UI/demo                                │
+│     → Use when you need UI/demo                           │
 ├─────────────────────────────────────────────────────────┤
 │  🛠️ TOOLS (Layer 2)      — Scoring, UAT, Validation      │
 │     v1.3, governance/   — Python scripts, CI/CD         │
-│     → Use khi cần automation                             │
+│     → Use when you need automation                        │
 ├─────────────────────────────────────────────────────────┤
 │  📖 CORE (Layer 1)       — Principles, Phases, Skills    │
 │     v1.0, v1.1, v1.2    — Rules + Skill Library         │
-│     → LUÔN cần. Bắt đầu từ đây.                         │
+│     → Always needed. Start here.                          │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -290,13 +286,11 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 | **Active Development** | Yes - v1.6 + documentation improvements |
 | **Community** | Building - [Join us!](https://discord.gg/cvf) |
 
-**Current Status:** 7.5/10 (realistic assessment)
-- ✅ **Excellent:** Technical quality (9.3/10), Governance toolkit (9.5/10)
-- 🟡 **Good:** Core framework, Architecture, 124 skills
-- 🔧 **Improving:** Documentation (6.5→8.5), Usability (6.0→8.0)
+**Current Status:** 8.5/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-15.md))
+- ✅ **Excellent:** Technical quality (9/10), Governance toolkit (9/10), Bilingual (9/10)
+- ✅ **Good:** Core framework, Architecture, 124 skills
+- 🟡 **Improving:** Documentation, Usability
 - ⏳ **Pending:** Real-world validation, Community, npm/PyPI packages
-
-**Target:** 8.5/10 (by end of Feb 2026 after doc improvements)
 
 [→ Get Started](docs/GET_STARTED.md)
 
@@ -342,11 +336,11 @@ We welcome contributions!
 
 **CC BY-NC-ND 4.0** — [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0](LICENSE)
 
-- ✅ Đọc, chia sẻ (share) — được phép
-- ❌ Sử dụng thương mại — không được phép
-- ❌ Sửa đổi và phân phối lại — không được phép
+- ✅ Read, share — allowed
+- ❌ Commercial use — not allowed
+- ❌ Modify and redistribute — not allowed
 
-> Toàn bộ repository (bao gồm v1.0, v1.1, v1.2+, EXTENSIONS/, docs/, governance/, tools/) theo CC BY-NC-ND 4.0.
+> The entire repository (including v1.0, v1.1, v1.2+, EXTENSIONS/, docs/, governance/, tools/) is licensed under CC BY-NC-ND 4.0.
 
 ---
 
@@ -362,8 +356,8 @@ Inspired by real-world challenges in AI-assisted development.
 
 ### 🎯 Remember
 
-**CVF không giúp bạn đi nhanh hơn.**<br>
-**CVF giúp bạn không đi sai.**
+**CVF doesn't help you go faster.**<br>
+**CVF helps you avoid going wrong.**
 
 [⭐ Star on GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF) · [📖 Get Started](docs/GET_STARTED.md) · [💬 Join Community](https://discord.gg/cvf)
 

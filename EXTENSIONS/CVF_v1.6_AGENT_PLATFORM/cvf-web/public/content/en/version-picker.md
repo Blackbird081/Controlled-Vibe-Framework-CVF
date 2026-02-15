@@ -1,17 +1,18 @@
-# CVF Version Picker - Chọn Version Phù Hợp
+# CVF Version Picker — Choose the Right Version
 
-> **🎯 Mục tiêu:** Giúp bạn chọn đúng CVF version trong 2 phút
+> **🎯 Goal:** Help you choose the right CVF version in 2 minutes
 
 ---
 
 ## 🚦 Quick Decision Tree
 
 ```
-                    Bắt đầu ở đây
+                    Start here
                           │
                           ▼
               ┌───────────────────────┐
-              │ Bạn muốn gì với CVF?  │
+              │ What do you want from │
+              │        CVF?           │
               └───────────────────────┘
                           │
          ┌────────────────┼────────────────┐
@@ -54,20 +55,20 @@
 
 ## 🎯 Choose Based on Your Needs
 
-### Scenario 1: Solo Developer, Học Lần Đầu
+### Scenario 1: Solo Developer, First Time Learning
 
 **Your Profile:**
-- 👤 Làm việc 1 mình
-- 🆕 Mới dùng AI coding
-- 📚 Muốn hiểu concepts trước
+- 👤 Working alone
+- 🆕 New to AI coding
+- 📚 Want to understand concepts first
 
 **Recommended:** **v1.0 (Core)**
 
 **Why:**
-- ✅ Đơn giản nhất
-- ✅ Tập trung vào principles
-- ✅ Không cần setup gì
-- ✅ Đọc docs + follow checklist là được
+- ✅ Simplest version
+- ✅ Focuses on principles
+- ✅ No setup needed
+- ✅ Just read docs + follow checklist
 
 **Get Started:**
 ```bash
@@ -77,28 +78,28 @@ cat CVF_MANIFESTO.md
 ```
 
 **Next Steps:**
-1. Đọc [CVF_MANIFESTO.md](../v1.0/CVF_MANIFESTO.md)
-2. Follow [4-Phase Process](../v1.0/phases/)
-3. Use [Checklists](../v1.0/governance/)
+1. Read CVF_MANIFESTO.md
+2. Follow 4-Phase Process
+3. Use Checklists
 4. Build 1-2 small projects
-5. Sau đó upgrade lên v1.1 nếu cần
+5. Upgrade to v1.1 when needed
 
 ---
 
-### Scenario 2: Muốn Build Ngay, Có Web UI
+### Scenario 2: Want to Build Now, With Web UI
 
 **Your Profile:**
-- 🚀 Muốn build ngay, ít đọc docs
-- 🖥️ Prefer UI hơn CLI
-- 🤖 Muốn chat với AI trong CVF
-- 📋 Cần templates sẵn
+- 🚀 Want to build right away, less reading
+- 🖥️ Prefer UI over CLI
+- 🤖 Want to chat with AI within CVF
+- 📋 Need ready-made templates
 
 **Recommended:** **v1.6 (Agent Platform)**
 
 **Why:**
-- ✅ Web UI đầy đủ tính năng
-- ✅ 50 templates sẵn
-- ✅ Chat trực tiếp với AI
+- ✅ Full-featured Web UI
+- ✅ 50 ready-made templates
+- ✅ Chat directly with AI
 - ✅ Multi-agent workflow
 - ✅ Self-UAT testing
 - ✅ Governance toolkit
@@ -114,23 +115,23 @@ npm start
 **Ideal For:**
 - MVPs, prototypes
 - Learning by doing
-- Solo dev hoặc small teams (2-3)
+- Solo dev or small teams (2-3)
 - Non-technical users
 
 ---
 
-### Scenario 3: Team nhỏ (2-5 người)
+### Scenario 3: Small Team (2-5 people)
 
 **Your Profile:**
-- 👥 Team 2-5 người
-- 🔄 Cần collaboration
-- 📝 Cần audit trails
-- ✅ Cần approval workflows
+- 👥 Team of 2-5 people
+- 🔄 Need collaboration
+- 📝 Need audit trails
+- ✅ Need approval workflows
 
 **Recommended:** **v1.1 + v1.6**
 
 **Why:**
-- ✅ v1.1: Input/output contracts cho team
+- ✅ v1.1: Input/output contracts for team
 - ✅ v1.1: Agent archetypes (roles)
 - ✅ v1.1: Execution spine (audit)
 - ✅ v1.6: Web UI for collaboration
@@ -160,11 +161,11 @@ cat QUICK_START.md
 ### Scenario 4: Production/Enterprise
 
 **Your Profile:**
-- 🏢 Team >5 người hoặc enterprise
-- 🔐 Cần governance nghiêm ngặt
-- 🔄 Cần CI/CD integration
-- 📊 Cần metrics & reporting
-- ⚖️ Cần compliance (audit logs)
+- 🏢 Team >5 people or enterprise
+- 🔐 Need strict governance
+- 🔄 Need CI/CD integration
+- 📊 Need metrics & reporting
+- ⚖️ Need compliance (audit logs)
 
 **Recommended:** **v1.1 + v1.2 + v1.3 + v1.6**
 
@@ -208,12 +209,12 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 
 ---
 
-### Scenario 5: Advanced - Customize/Contribute
+### Scenario 5: Advanced — Customize/Contribute
 
 **Your Profile:**
-- 🛠️ Muốn extend CVF
+- 🛠️ Want to extend CVF
 - 🧩 Build custom skills
-- 🔌 Integrate với tools khác
+- 🔌 Integrate with other tools
 - 💻 Familiar with code
 
 **Recommended:** **Full Stack (all versions)**
@@ -226,10 +227,10 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 5. **v1.6** - Platform architecture
 
 **Resources:**
-- [Developer Guide](../docs/reference/developer-guide.md)
-- [Skill Spec](../docs/reference/skill-spec.md)
-- [API Reference](../docs/reference/api/)
-- [Contributing Guide](../v1.0/CONTRIBUTING.md)
+- Developer Guide
+- Skill Spec
+- API Reference
+- Contributing Guide
 
 ---
 
@@ -244,9 +245,9 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 
 **How:**
 1. Keep v1.0 process
-2. Add [contracts](../v1.1/architecture/CONTRACT_SPECIFICATION.md)
-3. Define [agent archetypes](../v1.1/agents/)
-4. Use [execution spine](../v1.1/execution/)
+2. Add contracts
+3. Define agent archetypes
+4. Use execution spine
 
 **Effort:** 2-4 hours
 
@@ -261,7 +262,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 
 **How:**
 1. Keep v1.1 architecture
-2. Add [v1.6 Web UI](../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/)
+2. Add v1.6 Web UI
 3. Map your workflows to templates
 4. Train team on UI
 
@@ -277,9 +278,9 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 - Need CI/CD
 
 **How:**
-1. Install [Python SDK](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk/)
+1. Install Python SDK
 2. Write automation scripts
-3. Add [CI/CD templates](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd/)
+3. Add CI/CD templates
 4. Integrate with existing tools
 
 **Effort:** 2-3 days
@@ -322,9 +323,9 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 
 ### v1.0 Learning Path (2-3 hours)
 
-1. Read [Manifesto](../v1.0/CVF_MANIFESTO.md) - 15 mins
-2. Understand [4 Phases](../v1.0/phases/) - 30 mins
-3. Study [Governance](../v1.0/governance/) - 30 mins
+1. Read Manifesto - 15 mins
+2. Understand 4 Phases - 30 mins
+3. Study Governance - 30 mins
 4. Practice with 1 small project - 60 mins
 
 **Output:** You understand CVF principles
@@ -334,10 +335,10 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### v1.1 Learning Path (4-6 hours)
 
 1. Review v1.0 first
-2. Read [QUICK_START](../v1.1/QUICK_START.md) - 20 mins
-3. Study [Architecture](../v1.1/architecture/) - 60 mins
-4. Learn [Agents](../v1.1/agents/) - 30 mins
-5. Practice [Execution Spine](../v1.1/execution/) - 90 mins
+2. Read QUICK_START - 20 mins
+3. Study Architecture - 60 mins
+4. Learn Agents - 30 mins
+5. Practice Execution Spine - 90 mins
 6. Build 1 team project - 120 mins
 
 **Output:** You can run controlled team projects
@@ -444,9 +445,9 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
    - No → v1.6
 
 **Still not sure?**
-- 💬 [Ask on Discord](https://discord.gg/cvf)
-- 📧 [Email us](mailto:support@cvf.io)
-- 🐛 [Open issue](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues/new?template=question.md)
+- 💬 Ask on Discord
+- 📧 Email us
+- 🐛 Open an issue on GitHub
 
 ---
 
@@ -454,12 +455,12 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 
 Before deciding, ask yourself:
 
-- [ ] Đã đọc [Core Philosophy](../docs/concepts/core-philosophy.md)?
-- [ ] Hiểu [4-Phase Process](../docs/concepts/4-phase-process.md)?
-- [ ] Biết team size & complexity của project?
-- [ ] Có time để setup không?
-- [ ] Cần governance không?
-- [ ] Có budget cho infrastructure không?
+- [ ] Have you read the Core Philosophy?
+- [ ] Do you understand the 4-Phase Process?
+- [ ] Do you know your team size & project complexity?
+- [ ] Do you have time for setup?
+- [ ] Do you need governance?
+- [ ] Do you have budget for infrastructure?
 
 **If all yes → Go Full Stack**
 
@@ -467,10 +468,4 @@ Before deciding, ask yourself:
 
 ---
 
-<div align="center">
-
-**Nhớ:** Bạn có thể bắt đầu đơn giản và upgrade sau!
-
-[⬅️ Back to Get Started](../docs/GET_STARTED.md)
-
-</div>
+**Remember:** You can start simple and upgrade later!

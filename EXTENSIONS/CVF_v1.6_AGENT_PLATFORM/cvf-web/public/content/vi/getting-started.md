@@ -1,7 +1,5 @@
 # CVF - Bắt Đầu Trong 5 Phút
 
-[🇬🇧 English guides](guides/) | 🇻🇳 Tiếng Việt
-
 > **🎯 Mục tiêu:** Giúp bạn hiểu và chạy được CVF project đầu tiên trong 5 phút
 
 ---
@@ -106,8 +104,8 @@ npm run dev
 #### Option B: Manual (Core CVF)
 
 Đọc file này và làm theo:
-- [v1.0/USAGE.md](../v1.0/USAGE.md) - Cách dùng CVF core
-- [v1.0/phases/](../v1.0/phases/) - Chi tiết từng phase
+- v1.0/USAGE.md - Cách dùng CVF core
+- v1.0/phases/ - Chi tiết từng phase
 
 ### Step 3: Chọn Bước Tiếp Theo
 
@@ -115,7 +113,7 @@ Sau khi chạy được ví dụ đầu tiên:
 
 - 📖 **Hiểu sâu hơn:** [Core Philosophy](concepts/core-philosophy.md)
 - 🎯 **Build project thật:** [Tutorial: Your First Project](tutorials/first-project.md)
-- 🧩 **Dùng Skills:** [Skill Library Guide](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md)
+- 🧩 **Dùng Skills:** Skill Library Guide
 - ❓ **Có câu hỏi:** [Troubleshooting](cheatsheets/troubleshooting.md)
 
 ---
@@ -176,13 +174,13 @@ npm run dev
 3. AI: Generate code using exported prompt
 4. Reviewer: Use CVF checklist to validate
 
-**Checklist location:** [governance/toolkit/](../governance/toolkit/)
+**Checklist location:** governance/toolkit/
 
 ### Next Steps for Teams
 
 - 📋 [Team Collaboration Guide](guides/team-setup.md)
 - 🔐 [Governance Setup](concepts/governance-model.md)
-- 🔄 [CI/CD Integration](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/)
+- 🔄 CI/CD Integration
 - 📊 [Track Metrics](guides/team-setup.md#metrics)
 
 ---
@@ -247,7 +245,7 @@ npm run dev
 
 - 🏢 [Enterprise Deployment](guides/enterprise.md#deployment)
 - 🔐 [Security & Compliance](guides/enterprise.md#security)
-- 📊 [Governance Dashboard](../governance/toolkit/)
+- 📊 Governance Dashboard
 - 🎓 [Training Materials](guides/enterprise.md#training)
 
 ---
@@ -285,8 +283,8 @@ git push origin feature/your-feature-name
 
 ### Contribution Guidelines
 
-- Read: [CONTRIBUTING.md](../v1.0/CONTRIBUTING.md)
-- Code style: [Contributing Guide](../v1.0/CONTRIBUTING.md)
+- Read: CONTRIBUTING.md
+- Code style: Contributing Guide
 - Skill creation: [Custom Skills Tutorial](tutorials/custom-skills.md)
 
 ### Get Help
@@ -315,8 +313,8 @@ git push origin feature/your-feature-name
 
 ### Path 3: Deep Dives (ongoing)
 
-- [Governance Toolkit](../governance/toolkit/) - Comprehensive
-- [Skill Library](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills
+- Governance Toolkit - Comprehensive
+- Skill Library - 124 skills
 - [Version History](concepts/version-evolution.md) - Evolution
 - [Architecture](CVF_ARCHITECTURE_DIAGRAMS.md) - Technical specs
 
@@ -336,7 +334,7 @@ git push origin feature/your-feature-name
 → See: [Governance 101](concepts/governance-model.md)
 
 **"Can't find the right skill?"**
-→ See: [Skill Browser](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
+→ See: Skill Browser
 
 ### Support Channels
 
@@ -386,17 +384,6 @@ After getting started, here are recommended next steps:
 
 **For Contributors:**
 → [Pick Your First Issue](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-
----
-
-<div align="center">
-
-**CVF không giúp bạn đi nhanh hơn.**<br>
-**CVF giúp bạn không đi sai.**
-
-[⭐ Star on GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF) · [📖 Full Docs](https://cvf.io/docs) · [💬 Join Discord](https://discord.gg/cvf)
-
-</div>
 
 ---
 

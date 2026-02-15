@@ -2,7 +2,7 @@
 
 > **Tài liệu này đã được thay thế bởi hướng dẫn toàn diện.**
 
-**→ [📖 Đi tới Hướng Dẫn Bắt Đầu](docs/GET_STARTED.md)**
+**→ 📖 Đi tới Hướng Dẫn Bắt Đầu**
 
 ---
 
@@ -10,12 +10,12 @@
 
 | Bạn là ai? | Đi tới |
 |-----------|-------|
-| 🆕 **Mới dùng CVF?** | [CVF trong 5 phút](docs/GET_STARTED.md#cvf-in-5-minutes) |
-| 👤 **Developer cá nhân?** | [Solo Guide](docs/guides/README.md) (sắp có) |
-| 👥 **Team lead?** | [Team Setup](docs/guides/README.md) (sắp có) |
-| 🏢 **Enterprise?** | [Enterprise Guide](docs/guides/README.md) (sắp có) |
-| 📚 **124 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
-| 🚀 **Web UI** | [v1.6 Agent Platform](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
+| 🆕 **Mới dùng CVF?** | CVF trong 5 phút |
+| 👤 **Developer cá nhân?** | Solo Guide (sắp có) |
+| 👥 **Team lead?** | Team Setup (sắp có) |
+| 🏢 **Enterprise?** | Enterprise Guide (sắp có) |
+| 📚 **124 Skills** | Skill Library |
+| 🚀 **Web UI** | v1.6 Agent Platform |
 
 ---
 
@@ -37,7 +37,7 @@ Chúng tôi hợp nhất nhiều điểm vào (START_HERE, CVF_LITE, QUICK_START
 ✅ **docs/cheatsheets/** - Tham khảo nhanh  
 ✅ **scripts/quick-start.sh** - Cài đặt 1 lệnh
 
-Xem: [Bắt Đầu](docs/GET_STARTED.md)
+Xem: Bắt Đầu
 
 ---
 
@@ -77,7 +77,7 @@ Nội dung CVF_LITE trước đây (hướng dẫn 5 phút) đã được tích 
 
 *Cập nhật: 15/02/2026*
 
-**➡️ [Đi tới GET_STARTED.md ngay](docs/GET_STARTED.md)**
+**➡️ Đi tới GET_STARTED.md ngay**
 
 **Chỉ cần đọc 📥 Form Input và 📤 Expected Output** là đủ để bắt đầu.
 

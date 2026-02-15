@@ -145,7 +145,7 @@ export default function DocDetailPage() {
         setLoading(true);
         setError(false);
 
-        fetch(`/content/${slug}.md`)
+        fetch(`/content/${language}/${slug}.md`)
             .then(res => {
                 if (!res.ok) throw new Error('Not found');
                 return res.text();
@@ -155,24 +155,14 @@ export default function DocDetailPage() {
                 if (text.trimStart().startsWith('<!DOCTYPE') || text.trimStart().startsWith('<html')) {
                     throw new Error('Received HTML instead of markdown');
                 }
-                // Clean up content for web context
-                let cleaned = text
-                    // Remove relative links that point to GitHub repo paths
-                    .replace(/\[([^\]]+)\]\((?:\.\.\/|\.\/|(?!https?:\/\/|#|mailto:))([^)]+)\)/g, '$1')
-                    // Remove "Star on GitHub" / "Full Docs" / "Join Discord" lines
-                    .replace(/^.*Star on GitHub.*$/gm, '')
-                    .replace(/^.*Full Docs.*$/gm, '')
-                    // Remove empty <div align="center"> wrappers
-                    .replace(/<div[^>]*align[^>]*>/gi, '')
-                    .replace(/<\/div>/gi, '');
-                setContent(cleaned);
+                setContent(text);
                 setLoading(false);
             })
             .catch(() => {
                 setError(true);
                 setLoading(false);
             });
-    }, [slug]);
+    }, [slug, language]);
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-gray-900 dark:text-white">

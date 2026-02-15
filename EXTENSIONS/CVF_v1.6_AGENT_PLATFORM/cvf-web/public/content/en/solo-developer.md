@@ -1,7 +1,5 @@
 # CVF for Solo Developers
 
-[🇻🇳 Hướng dẫn tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
-
 **Target:** Individual developers using AI to code  
 **Reading time:** 10 minutes  
 **CVF Version:** v1.0 (core) — optionally v1.6 (web UI)

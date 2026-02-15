@@ -1,7 +1,5 @@
 # Version Evolution
 
-[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
-
 CVF has evolved through 6 versions, each adding a layer of capability while preserving backward compatibility. All versions prior to v1.6 are **frozen** — meaning their specifications are final and will not change.
 
 ---

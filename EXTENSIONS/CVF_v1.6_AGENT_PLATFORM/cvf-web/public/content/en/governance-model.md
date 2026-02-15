@@ -1,7 +1,5 @@
 # Governance Model
 
-[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
-
 CVF's governance model defines **who** can do **what**, **when**, and **how** — especially when AI is involved. It scales from solo developers (lightweight) to enterprises (full compliance).
 
 ---

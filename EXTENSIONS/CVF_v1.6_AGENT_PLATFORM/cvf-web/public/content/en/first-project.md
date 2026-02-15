@@ -1,7 +1,5 @@
 # Tutorial: Your First CVF Project
 
-[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
-
 **Time:** 30 minutes  
 **Level:** Beginner  
 **What you'll build:** A CLI bookmark manager using Python  

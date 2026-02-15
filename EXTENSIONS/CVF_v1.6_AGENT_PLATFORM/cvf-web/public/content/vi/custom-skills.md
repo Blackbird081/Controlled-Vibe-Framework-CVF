@@ -1,57 +1,55 @@
-# Tutorial: Creating Custom Skills
+# Hướng dẫn: Tạo Custom Skill
 
-[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
-
-**Time:** 20 minutes  
-**Level:** Intermediate  
-**What you'll learn:** How to create, version, and share reusable CVF skills  
-**Prerequisites:** Understanding of [CVF 4-phase process](../concepts/4-phase-process.md)
+**Thời gian:** 20 phút  
+**Cấp độ:** Trung cấp  
+**Bạn sẽ học được:** Cách tạo, quản lý phiên bản và chia sẻ các skill CVF có thể tái sử dụng  
+**Yêu cầu trước:** Hiểu về quy trình 4 phase của CVF
 
 ---
 
-## What is a Skill?
+## Skill là gì?
 
-A **skill** in CVF is a pre-structured, form-based template that:
-- Guides users in providing the right inputs to AI
-- Defines expected outputs and quality criteria
-- Includes acceptance checklists and common failure patterns
+Một **skill** trong CVF là một template có cấu trúc, dựa trên biểu mẫu, giúp:
+- Hướng dẫn người dùng cung cấp đúng đầu vào cho AI
+- Xác định đầu ra mong đợi và tiêu chí chất lượng
+- Bao gồm checklist nghiệm thu và các mẫu lỗi thường gặp
 
-Skills are **NOT code** and **NOT prompts**. They are **governance artifacts** — structured forms that make AI interactions repeatable and quality-controlled.
+Skill **KHÔNG PHẢI code** và **KHÔNG PHẢI prompt**. Chúng là **các tài liệu governance** — biểu mẫu có cấu trúc giúp tương tác AI có thể lặp lại và kiểm soát chất lượng.
 
-### Why Create Custom Skills?
+### Tại sao nên tạo Custom Skill?
 
-| Without Skills | With Skills |
-|---------------|------------|
-| Write prompt from scratch each time | Fill out a proven form |
-| Forget important inputs | Checklist ensures completeness |
-| Inconsistent quality | Acceptance criteria define "done" |
-| Can't share knowledge | Skills are reusable by anyone |
-| No quality assurance | Built-in evaluation criteria |
-
----
-
-## Step 1: Choose a Use Case
-
-Think about a task you (or your team) do repeatedly with AI. Good candidates:
-
-| Good Skill Candidates | Why |
-|---------------------|-----|
-| API endpoint creation | Same pattern every time |
-| Code review | Standard checklist |
-| Bug report analysis | Structured input needed |
-| Database migration | Risk needs to be managed |
-| Test suite generation | Consistent quality bar |
-| Landing page copy | Same fields: audience, CTA, tone |
-
-**For this tutorial**, we'll create a skill for **"REST API Endpoint"**.
+| Không có Skill | Có Skill |
+|---------------|----------|
+| Viết prompt từ đầu mỗi lần | Điền vào biểu mẫu đã được chứng minh |
+| Quên các đầu vào quan trọng | Checklist đảm bảo đầy đủ |
+| Chất lượng không nhất quán | Tiêu chí nghiệm thu xác định "hoàn thành" |
+| Không thể chia sẻ kiến thức | Skill có thể tái sử dụng bởi bất kỳ ai |
+| Không đảm bảo chất lượng | Tiêu chí đánh giá tích hợp sẵn |
 
 ---
 
-## Step 2: Create the Skill File
+## Bước 1: Chọn trường hợp sử dụng
 
-Skills follow a naming convention: `[number]_[skill_name].skill.md`
+Nghĩ về một nhiệm vụ mà bạn (hoặc nhóm) thường xuyên làm với AI. Các ứng cử viên tốt:
 
-Create your file:
+| Ứng cử viên Skill tốt | Lý do |
+|------------------------|-------|
+| Tạo API endpoint | Cùng một mẫu mỗi lần |
+| Đánh giá code | Checklist tiêu chuẩn |
+| Phân tích báo cáo lỗi | Cần đầu vào có cấu trúc |
+| Di chuyển cơ sở dữ liệu | Rủi ro cần được quản lý |
+| Tạo bộ kiểm thử | Thanh chất lượng nhất quán |
+| Viết nội dung trang đích | Cùng các trường: đối tượng, CTA, giọng điệu |
+
+**Trong hướng dẫn này**, chúng ta sẽ tạo skill cho **"REST API Endpoint"**.
+
+---
+
+## Bước 2: Tạo file Skill
+
+Skill tuân theo quy ước đặt tên: `[số thứ tự]_[tên_skill].skill.md`
+
+Tạo file của bạn:
 
 ```bash
 # In your project or in the CVF skill library
@@ -60,9 +58,9 @@ touch skills/001_rest_api_endpoint.skill.md
 
 ---
 
-## Step 3: Write the Skill Template
+## Bước 3: Viết template Skill
 
-Here's the complete skill structure:
+Đây là cấu trúc skill hoàn chỉnh:
 
 ```markdown
 # Skill: REST API Endpoint
@@ -266,23 +264,23 @@ Verdict: ✅ ACCEPT
 
 ---
 
-## Step 4: Version Your Skills
+## Bước 4: Quản lý phiên bản Skill
 
-Use semantic versioning:
+Sử dụng semantic versioning:
 
-| Change Type | Version Bump | Example |
-|------------|-------------|---------|
-| Fix typo, clarify wording | 1.0.0 → 1.0.1 | Fix field description |
-| Add new section, examples | 1.0.0 → 1.1.0 | Add "Common Failures" section |
-| Major restructure, new form fields | 1.0.0 → 2.0.0 | Change input schema |
+| Loại thay đổi | Tăng phiên bản | Ví dụ |
+|---------------|----------------|-------|
+| Sửa lỗi chính tả, làm rõ diễn đạt | 1.0.0 → 1.0.1 | Sửa mô tả trường |
+| Thêm phần mới, ví dụ | 1.0.0 → 1.1.0 | Thêm phần "Lỗi thường gặp" |
+| Tái cấu trúc lớn, thêm trường đầu vào mới | 1.0.0 → 2.0.0 | Thay đổi schema đầu vào |
 
-Track changes in the Version History section.
+Theo dõi thay đổi trong phần Lịch sử phiên bản.
 
 ---
 
-## Step 5: Add Governance (v1.2+)
+## Bước 5: Thêm Governance (v1.2+)
 
-For teams and enterprise, each skill should have a governance record:
+Đối với nhóm và doanh nghiệp, mỗi skill nên có bản ghi governance:
 
 ```markdown
 # Governance: REST API Endpoint Skill
@@ -317,11 +315,11 @@ For teams and enterprise, each skill should have a governance record:
 
 ---
 
-## Step 6: Share Your Skills
+## Bước 6: Chia sẻ Skill của bạn
 
-### Option A: Add to CVF Skill Library
+### Tùy chọn A: Thêm vào Thư viện Skill CVF
 
-If your skill is generally useful, contribute it:
+Nếu skill của bạn hữu ích cho mọi người, hãy đóng góp:
 
 ```bash
 # Copy to the CVF skill library
@@ -333,9 +331,9 @@ cp skills/001_rest_api_endpoint.gov.md \
    governance/skill-library/
 ```
 
-### Option B: Team-Only Skills
+### Tùy chọn B: Skill chỉ dành cho nhóm
 
-Keep skills in your team's repo:
+Giữ skill trong repo của nhóm bạn:
 
 ```
 your-team-repo/
@@ -346,43 +344,41 @@ your-team-repo/
 └── ...
 ```
 
-### Option C: Use in Web UI (v1.6)
+### Tùy chọn C: Sử dụng trong Web UI (v1.6)
 
-The v1.6 web app can load skills as templates. Place skill files in the appropriate directory and they'll appear in the template picker.
-
----
-
-## Skill Domain Reference
-
-The CVF Skill Library organizes skills by domain:
-
-| Domain | Count | Example Skills |
-|--------|:-----:|---------|
-| Marketing & SEO | 9 | SEO audit, content strategy, A/B test plan |
-| Product & UX | 8 | User story, wireframe spec, UX audit |
-| Security & Compliance | 6 | Threat model, compliance check, pen test plan |
-| Finance & Analytics | 8 | Financial model, KPI dashboard, forecast |
-| App Development | 8 | REST API, database migration, test suite |
-| HR & Operations | 5 | Job description, onboarding plan, OKR |
-| Legal & Contracts | 5 | Contract review, NDA template, ToS draft |
-| AI/ML Evaluation | 6 | Model evaluation, bias audit, dataset review |
-| Web Development | 6 | Landing page, responsive layout, performance |
-| **Total** | **114** | |
-
-Browse all skills: [`EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/`](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
+Ứng dụng web v1.6 có thể tải skill dưới dạng template. Đặt file skill vào thư mục phù hợp và chúng sẽ xuất hiện trong bộ chọn template.
 
 ---
 
-## What's Next
+## Tham chiếu theo lĩnh vực Skill
 
-| I want to... | Go to... |
-|-------------|---------|
-| Understand the skill system deeper | [Skill System Concept](../concepts/skill-system.md) |
-| Learn about risk levels for skills | [Risk Model](../concepts/risk-model.md) |
-| Browse existing skills | [Skill Library](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
-| Set up team skill governance | [Team Guide](../guides/team-setup.md) |
-| Use skills in the Web UI | [Web UI Tutorial](web-ui-setup.md) |
+Thư viện Skill CVF tổ chức skill theo lĩnh vực:
+
+| Lĩnh vực | Số lượng | Skill ví dụ |
+|----------|:--------:|-------------|
+| Marketing & SEO | 9 | Đánh giá SEO, chiến lược nội dung, kế hoạch A/B test |
+| Sản phẩm & UX | 8 | User story, spec wireframe, đánh giá UX |
+| Bảo mật & Tuân thủ | 6 | Mô hình mối đe dọa, kiểm tra tuân thủ, kế hoạch pen test |
+| Tài chính & Phân tích | 8 | Mô hình tài chính, dashboard KPI, dự báo |
+| Phát triển ứng dụng | 8 | REST API, di chuyển database, bộ test |
+| HR & Vận hành | 5 | Mô tả công việc, kế hoạch onboarding, OKR |
+| Pháp lý & Hợp đồng | 5 | Đánh giá hợp đồng, template NDA, soạn thảo ToS |
+| Đánh giá AI/ML | 6 | Đánh giá mô hình, kiểm tra thiên lệch, đánh giá dataset |
+| Phát triển Web | 6 | Trang đích, bố cục responsive, hiệu suất |
+| **Tổng cộng** | **114** | |
 
 ---
 
-*Last updated: February 15, 2026 | CVF v1.6*
+## Tiếp theo
+
+| Tôi muốn... | Xem... |
+|-------------|--------|
+| Hiểu sâu hơn về hệ thống skill | Khái niệm Hệ thống Skill |
+| Tìm hiểu về mức rủi ro cho skill | Mô hình Rủi ro |
+| Duyệt các skill hiện có | Thư viện Skill |
+| Thiết lập governance skill cho nhóm | Hướng dẫn Nhóm |
+| Sử dụng skill trong Web UI | Hướng dẫn Web UI |
+
+---
+
+*Cập nhật lần cuối: 15 tháng 2 năm 2026 | CVF v1.6*

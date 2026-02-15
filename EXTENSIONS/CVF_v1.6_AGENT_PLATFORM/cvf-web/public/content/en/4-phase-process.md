@@ -1,7 +1,5 @@
 # The 4-Phase Process
 
-[🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
-
 CVF organizes every project into 4 sequential phases. Each phase has a specific purpose, clear inputs/outputs, and a gate before the next phase begins.
 
 ---

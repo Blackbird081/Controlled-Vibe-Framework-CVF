@@ -24,12 +24,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         const saved = localStorage.getItem('cvf_language') as Language;
         if (saved && (saved === 'vi' || saved === 'en')) {
             setLanguageState(saved);
+            document.documentElement.lang = saved;
         }
     }, []);
 
     const setLanguage = (lang: Language) => {
         setLanguageState(lang);
         localStorage.setItem('cvf_language', lang);
+        document.documentElement.lang = lang;
     };
 
     const t = (key: string): string => {

@@ -122,19 +122,19 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
             </div>
 
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                {t('userContext.description') || 'Thông tin của bạn sẽ được tự động thêm vào prompts để AI hiểu context tốt hơn.'}
+                {t('userContext.description') || 'Your info will be automatically added to prompts so AI understands your context better.'}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t('userContext.name') || 'Tên'}
+                        {t('userContext.name') || 'Name'}
                     </label>
                     <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
-                        placeholder="Nguyễn Văn A"
+                        placeholder="John Doe"
                         className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 
                                    bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                                    focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -143,7 +143,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t('userContext.role') || 'Vai trò'}
+                        {t('userContext.role') || 'Role'}
                     </label>
                     <input
                         type="text"
@@ -158,7 +158,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t('userContext.company') || 'Công ty'}
+                        {t('userContext.company') || 'Company'}
                     </label>
                     <input
                         type="text"
@@ -173,7 +173,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t('userContext.industry') || 'Ngành'}
+                        {t('userContext.industry') || 'Industry'}
                     </label>
                     <input
                         type="text"
@@ -195,7 +195,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                     type="text"
                     value={formData.preferences}
                     onChange={(e) => handleChange('preferences', e.target.value)}
-                    placeholder="Ngôn ngữ output, format, độ chi tiết..."
+                    placeholder="Output language, format, detail level..."
                     className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 
                                bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                                focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -209,7 +209,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                 <textarea
                     value={formData.customContext}
                     onChange={(e) => handleChange('customContext', e.target.value)}
-                    placeholder="Thông tin bổ sung khác mà AI nên biết..."
+                    placeholder="Additional info the AI should know..."
                     rows={3}
                     className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 
                                bg-white dark:bg-gray-700 text-gray-900 dark:text-white
@@ -223,7 +223,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                     className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-red-600 
                                dark:hover:text-red-400 transition-colors"
                 >
-                    {t('userContext.clear') || 'Xóa tất cả'}
+                    {t('userContext.clear') || 'Clear all'}
                 </button>
                 <div className="flex items-center gap-3">
                     {saved && (
@@ -231,7 +231,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
-                            {t('userContext.saved') || 'Đã lưu!'}
+                            {t('userContext.saved') || 'Saved!'}
                         </span>
                     )}
                     <button
@@ -239,7 +239,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                         className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
                                    font-medium transition-colors"
                     >
-                        {t('userContext.save') || 'Lưu Context'}
+                        {t('userContext.save') || 'Save Context'}
                     </button>
                 </div>
             </div>

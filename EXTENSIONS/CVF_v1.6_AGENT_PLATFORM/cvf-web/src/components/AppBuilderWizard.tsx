@@ -250,7 +250,7 @@ ${data.appType === 'Desktop App' ? `
 ### Desktop App Config
 **Window Type:** ${data.windowType || 'Single Window'}
 **Default Size:** ${data.defaultSize || '1200x800'}
-**System Tray:** ${data.trayIcon || 'Không'}
+**System Tray:** ${data.trayIcon || 'No'}
 
 ### Menu Bar
 ${data.menuBar || 'Standard menus'}
@@ -276,8 +276,8 @@ ${data.cliCommands || 'AI will design'}
 ## 7️⃣ DEPLOYMENT
 
 **Distribution:** ${data.distribution || 'N/A'}
-**Auto-Update:** ${data.autoUpdate || 'Không'}
-**Code Signing:** ${data.signing || 'Không'}
+**Auto-Update:** ${data.autoUpdate || 'No'}
+**Code Signing:** ${data.signing || 'No'}
 **Installer Type:** ${data.installer || 'Portable'}
 
 ---

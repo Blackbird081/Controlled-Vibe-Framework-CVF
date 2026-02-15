@@ -83,18 +83,18 @@ export function ProcessingScreen({
                     ?.map((field: { label?: string }) => field.label || 'field')
                     .join(', ');
                 setError(missing
-                    ? `Thiếu input bắt buộc: ${missing}`
-                    : 'Spec cần bổ sung thông tin trước khi chạy.');
+                    ? `Missing required input: ${missing}`
+                    : 'Spec needs additional info before execution.');
                 return true;
             }
 
             if (enforcement?.status === 'BLOCK') {
-                setError(data.error || 'Bị chặn bởi CVF enforcement.');
+                setError(data.error || 'Blocked by CVF enforcement.');
                 return true;
             }
 
             if (enforcement?.status === 'NEEDS_APPROVAL') {
-                setError(data.error || 'Yêu cầu xác nhận trước khi chạy.');
+                setError(data.error || 'Approval required before execution.');
                 return true;
             }
 

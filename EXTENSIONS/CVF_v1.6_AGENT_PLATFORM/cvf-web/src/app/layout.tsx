@@ -4,7 +4,7 @@ import { ClientProviders } from "@/components/ClientProviders";
 
 export const metadata: Metadata = {
   title: "CVF v1.6 Agent Platform",
-  description: "User không cần biết CVF để dùng CVF - AI without prompt engineering",
+  description: "Controlled Vibe Framework — AI-assisted coding with governance, not guesswork",
 };
 
 export default function RootLayout({

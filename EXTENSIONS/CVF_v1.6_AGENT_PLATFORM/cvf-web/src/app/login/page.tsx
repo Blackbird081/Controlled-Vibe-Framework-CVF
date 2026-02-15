@@ -46,7 +46,7 @@ function LoginPageContent() {
 
             const data = await response.json();
             if (!response.ok || !data.success) {
-                setError(data.error || 'Đăng nhập thất bại.');
+                setError(data.error || 'Login failed.');
                 setIsSubmitting(false);
                 return;
             }

@@ -167,12 +167,12 @@ export default function Sidebar({
                     {/* Browse Group */}
                     <NavGroup title={t('sidebar.browse') || 'Browse'} icon="📁">
                         <NavItem
-                            label={t('nav.home') || '🏠 Trang chủ'}
+                            label={t('nav.home') || '🏠 Home'}
                             isActive={appState === 'home'}
                             onClick={() => handleNav('home')}
                         />
                         <NavItem
-                            label={t('nav.skills') || '📚 Kỹ năng'}
+                            label={t('nav.skills') || '📚 Skills'}
                             isActive={appState === 'skills'}
                             onClick={() => handleNav('skills')}
                         />
@@ -184,7 +184,7 @@ export default function Sidebar({
                             )}
                             onClick={onClose}
                         >
-                            <span className="flex-1 text-left">{t('nav.help') || '📖 Hướng dẫn'}</span>
+                            <span className="flex-1 text-left">{t('nav.help') || '📖 Help'}</span>
                         </Link>
                         <Link
                             href="/docs"
@@ -194,7 +194,7 @@ export default function Sidebar({
                             )}
                             onClick={onClose}
                         >
-                            <span className="flex-1 text-left">{t('nav.docs') || '📚 Tài liệu'}</span>
+                            <span className="flex-1 text-left">{t('nav.docs') || '📚 Docs'}</span>
                         </Link>
                     </NavGroup>
 
@@ -229,7 +229,7 @@ export default function Sidebar({
                     {/* Data & Analytics Group */}
                     <NavGroup title={t('sidebar.data') || 'Data'} icon="📊">
                         <NavItem
-                            label={t('nav.history') || '📜 Lịch sử'}
+                            label={t('nav.history') || '📜 History'}
                             isActive={appState === 'history'}
                             onClick={() => handleNav('history')}
                             badge={executionsCount > 0 ? executionsCount : undefined}
@@ -257,20 +257,20 @@ export default function Sidebar({
                         )}
                         {permissions.canUseSettings && (
                             <NavItem
-                                label={t('nav.settings') || '⚙️ Cài đặt'}
+                                label={t('nav.settings') || '⚙️ Settings'}
                                 isActive={false}
                                 onClick={onShowSettings}
                             />
                         )}
                         {permissions.canUseAIUsage && (
                             <NavItem
-                                label={t('nav.aiUsage') || '💰 Sử dụng AI'}
+                                label={t('nav.aiUsage') || '💰 AI Usage'}
                                 isActive={false}
                                 onClick={onShowAIUsage}
                             />
                         )}
                         <NavItem
-                            label={t('auth.logout') || '🚪 Đăng xuất'}
+                            label={t('auth.logout') || '🚪 Logout'}
                             isActive={false}
                             onClick={onLogout}
                         />

@@ -22,6 +22,12 @@ export async function middleware(request: NextRequest) {
     const session = await verifySessionCookie(request);
 
     if (!session) {
+        // Unauthenticated root → landing page instead of login
+        if (pathname === '/') {
+            const landingUrl = request.nextUrl.clone();
+            landingUrl.pathname = '/landing';
+            return NextResponse.redirect(landingUrl);
+        }
         const loginUrl = request.nextUrl.clone();
         loginUrl.pathname = LOGIN_PATH;
         loginUrl.searchParams.set('from', pathname);

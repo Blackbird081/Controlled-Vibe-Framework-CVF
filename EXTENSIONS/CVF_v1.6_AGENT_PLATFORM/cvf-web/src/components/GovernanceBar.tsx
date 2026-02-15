@@ -33,12 +33,24 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage }: G
     const [mounted, setMounted] = useState(false);
     const [detectionMode, setDetectionMode] = useState<DetectionMode>('auto');
     const [autoResult, setAutoResult] = useState<AutoDetectResult | null>(null);
-    const [advancedMode, setAdvancedMode] = useState(false);
+    const [advancedMode, setAdvancedMode] = useState(() => {
+        if (typeof window !== 'undefined') {
+            try { return localStorage.getItem('cvf_governance_advanced') === 'true'; } catch { return false; }
+        }
+        return false;
+    });
 
     useEffect(() => {
         setState(loadGovernanceState());
         setMounted(true);
     }, []);
+
+    // Persist advancedMode to localStorage
+    useEffect(() => {
+        if (mounted) {
+            try { localStorage.setItem('cvf_governance_advanced', String(advancedMode)); } catch { /* ignore */ }
+        }
+    }, [advancedMode, mounted]);
 
     // Auto-detect from last message
     useEffect(() => {

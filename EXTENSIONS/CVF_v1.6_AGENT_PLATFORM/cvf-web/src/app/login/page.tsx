@@ -78,7 +78,7 @@ function LoginPageContent() {
 
                 <div className="text-center mb-6">
                     <div className="text-3xl">🔐</div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-2">CVF v1.6 Login</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-2">{isVi ? 'Đăng Nhập CVF v1.6' : 'CVF v1.6 Login'}</h1>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                         {isVi ? 'Đăng nhập để truy cập toàn bộ giao diện.' : 'Sign in to access the full interface.'}
                     </p>
@@ -87,7 +87,7 @@ function LoginPageContent() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Username
+                            {isVi ? 'Tên đăng nhập' : 'Username'}
                         </label>
                         <input
                             value={username}
@@ -99,7 +99,7 @@ function LoginPageContent() {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Password
+                            {isVi ? 'Mật khẩu' : 'Password'}
                         </label>
                         <input
                             value={password}

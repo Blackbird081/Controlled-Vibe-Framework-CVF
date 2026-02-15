@@ -7,6 +7,7 @@ export const contentTemplates: Template[] = [
         icon: '✍️',
         description: 'Multi-step wizard tạo Content Strategy qua 5 bước. Brand → Audience → Pillars → Channels → Review',
         category: 'content',
+        difficulty: 'medium',
         fields: [],
         intentPattern: '',
         outputExpected: ['Content Strategy', 'Editorial Calendar', 'Content Pillars', 'Channel Plan'],

@@ -169,8 +169,8 @@ export function AgentChat({
                                     ]).map((prompt, i) => (
                                         <button
                                             key={i}
-                                            onClick={() => { setInput(prompt.replace(/^[^\s]+\s/, '')); }}
-                                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); setInput(prompt.replace(/^[^\s]+\s/, '')); } }}
+                                            onClick={() => { const text = prompt.replace(/^[^\s]+\s/, ''); setInput(text); setTimeout(() => handleSendMessage(), 100); }}
+                                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); const text = prompt.replace(/^[^\s]+\s/, ''); setInput(text); setTimeout(() => handleSendMessage(), 100); } }}
                                             className="text-left text-sm px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 
                                                        hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-300 dark:hover:border-blue-700
                                                        text-gray-700 dark:text-gray-300 transition-colors"

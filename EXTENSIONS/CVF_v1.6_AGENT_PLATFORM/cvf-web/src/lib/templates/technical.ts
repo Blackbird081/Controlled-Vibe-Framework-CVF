@@ -7,6 +7,7 @@ export const technicalTemplates: Template[] = [
         icon: '🔧',
         description: 'Multi-step wizard tạo System Design Document qua 5 bước. Requirements → Estimations → Design → Deep Dive → Review',
         category: 'technical',
+        difficulty: 'advanced',
         fields: [],
         intentPattern: '',
         outputExpected: ['System Design Doc', 'Architecture Diagram', 'API Design', 'Scaling Strategy'],

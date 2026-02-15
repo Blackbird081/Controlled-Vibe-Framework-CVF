@@ -7,6 +7,7 @@ export const securityTemplates: Template[] = [
         icon: '🔐',
         description: 'Multi-step wizard tạo Security Assessment Report qua 5 bước. Scope → Threats → Vulns → Risk → Review',
         category: 'security',
+        difficulty: 'advanced',
         fields: [],
         intentPattern: '',
         outputExpected: ['Security Assessment', 'Threat Model', 'Risk Matrix', 'Remediation Plan'],
@@ -17,6 +18,7 @@ export const securityTemplates: Template[] = [
         icon: '🔒',
         description: 'OWASP Top 10 API security audit',
         category: 'security',
+        difficulty: 'advanced',
         fields: [
             { id: 'endpoints', type: 'textarea', label: 'API Endpoints', placeholder: 'List các endpoints cần audit', required: true, rows: 4, section: 'required', hint: 'Liệt kê các endpoints với method và mô tả ngắn', example: 'POST /api/auth/login\nGET /api/users/:id\nPUT /api/users/:id\nDELETE /api/users/:id' },
             { id: 'authType', type: 'select', label: 'Authentication', options: ['JWT', 'OAuth', 'API Key', 'Session', 'None'], default: 'JWT', required: true, section: 'required', hint: 'Phương thức xác thực hiện tại của API' },
@@ -46,6 +48,7 @@ SUCCESS CRITERIA:
         icon: '🇪🇺',
         description: 'EU data protection compliance check',
         category: 'security',
+        difficulty: 'advanced',
         fields: [
             { id: 'product', type: 'text', label: 'Website/App', placeholder: 'URL hoặc tên app', required: true, section: 'required', hint: 'URL hoặc tên ứng dụng cần kiểm tra GDPR', example: 'https://shopx.vn hoặc ShopX Mobile App' },
             { id: 'dataCollected', type: 'textarea', label: 'Data Collected', placeholder: 'Types of personal data', required: true, rows: 3, section: 'required', hint: 'Liệt kê các loại dữ liệu cá nhân thu thập', example: 'Email, tên, số điện thoại, địa chỉ giao hàng, lịch sử mua hàng, cookie định danh' },
@@ -74,6 +77,7 @@ SUCCESS CRITERIA:
         icon: '📜',
         description: 'Privacy policy review và cải thiện',
         category: 'security',
+        difficulty: 'medium',
         fields: [
             { id: 'policy', type: 'textarea', label: 'Policy URL/Text', placeholder: 'Link hoặc paste policy', required: true, rows: 6, section: 'required', hint: 'Dán URL hoặc nội dung privacy policy cần audit', example: 'https://shopx.vn/privacy-policy' },
             { id: 'businessType', type: 'select', label: 'Business Type', options: ['E-commerce', 'SaaS', 'Mobile App', 'Website', 'Marketplace'], default: 'SaaS', required: true, section: 'required', hint: 'Loại hình kinh doanh sẽ quyết định yêu cầu compliance khác nhau' },
@@ -103,6 +107,7 @@ SUCCESS CRITERIA:
         icon: '🚨',
         description: 'Security incident response planning',
         category: 'security',
+        difficulty: 'advanced',
         fields: [
             { id: 'companySize', type: 'select', label: 'Company Size', options: ['Startup', 'SMB', 'Enterprise'], default: 'SMB', required: true, section: 'required', hint: 'Quy mô công ty quyết định mức độ chi tiết của plan' },
             { id: 'industry', type: 'text', label: 'Industry', placeholder: 'Tech, Finance, Healthcare...', required: true, section: 'required', hint: 'Ngành kinh doanh — một số ngành có compliance riêng', example: 'Fintech — xử lý thanh toán online' },
@@ -130,6 +135,7 @@ SUCCESS CRITERIA:
         icon: '🗃️',
         description: 'Data lifecycle management review',
         category: 'security',
+        difficulty: 'advanced',
         fields: [
             { id: 'dataTypes', type: 'textarea', label: 'Data Types', placeholder: 'PII, PCI, PHI, Business data...', required: true, rows: 3, section: 'required', hint: 'Liệt kê các loại dữ liệu đang xử lý', example: 'PII (tên, email, SĐT), PCI (thẻ tín dụng), business data (báo cáo doanh thu)' },
             { id: 'sources', type: 'text', label: 'Data Sources', placeholder: 'Where data comes from', required: true, section: 'required', hint: 'Nguồn dữ liệu đầu vào', example: 'Web forms, mobile app, API partners, manual import' },
@@ -157,6 +163,7 @@ SUCCESS CRITERIA:
         icon: '📃',
         description: 'Terms of Service coverage và fairness',
         category: 'security',
+        difficulty: 'medium',
         fields: [
             { id: 'tos', type: 'textarea', label: 'ToS URL/Text', placeholder: 'Link hoặc paste ToS', required: true, rows: 6, section: 'required', hint: 'Dán URL hoặc nội dung Terms of Service cần review', example: 'https://shopx.vn/terms' },
             { id: 'serviceType', type: 'select', label: 'Service Type', options: ['SaaS', 'Marketplace', 'Mobile App', 'Website', 'API'], default: 'SaaS', required: true, section: 'required', hint: 'Loại dịch vụ quyết định các điều khoản cần thiết' },

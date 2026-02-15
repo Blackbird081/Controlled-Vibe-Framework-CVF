@@ -57,6 +57,66 @@ const sampleTemplates: SampleTemplate[] = [
         icon: '📅',
         author: 'CVF Team',
     },
+    {
+        id: 'sample_business_plan',
+        name: 'Business Plan Generator',
+        description: 'Tạo kế hoạch kinh doanh hoàn chỉnh với phân tích tài chính',
+        descriptionEn: 'Generate a complete business plan with financial analysis',
+        category: 'business',
+        difficulty: 'intermediate',
+        icon: '📋',
+        author: 'CVF Community',
+    },
+    {
+        id: 'sample_user_persona',
+        name: 'User Persona Builder',
+        description: 'Xây dựng chân dung khách hàng mục tiêu chi tiết',
+        descriptionEn: 'Build detailed target customer personas',
+        category: 'marketing',
+        difficulty: 'beginner',
+        icon: '👤',
+        author: 'CVF Community',
+    },
+    {
+        id: 'sample_db_schema',
+        name: 'Database Schema Design',
+        description: 'Thiết kế cấu trúc database tối ưu cho ứng dụng',
+        descriptionEn: 'Design optimized database schemas for applications',
+        category: 'technical',
+        difficulty: 'advanced',
+        icon: '🗄️',
+        author: 'CVF Community',
+    },
+    {
+        id: 'sample_email_sequence',
+        name: 'Email Drip Campaign',
+        description: 'Tạo chuỗi email marketing tự động theo hành trình khách hàng',
+        descriptionEn: 'Create automated email marketing sequences based on customer journey',
+        category: 'marketing',
+        difficulty: 'intermediate',
+        icon: '📧',
+        author: 'CVF Community',
+    },
+    {
+        id: 'sample_swot',
+        name: 'SWOT Analysis',
+        description: 'Phân tích điểm mạnh, yếu, cơ hội và thách thức',
+        descriptionEn: 'Analyze strengths, weaknesses, opportunities, and threats',
+        category: 'business',
+        difficulty: 'beginner',
+        icon: '📊',
+        author: 'CVF Community',
+    },
+    {
+        id: 'sample_code_review',
+        name: 'Code Review Checklist',
+        description: 'Danh sách kiểm tra code review theo best practices',
+        descriptionEn: 'Code review checklist following industry best practices',
+        category: 'technical',
+        difficulty: 'intermediate',
+        icon: '✅',
+        author: 'CVF Community',
+    },
 ];
 
 interface MarketplaceProps {
@@ -92,33 +152,33 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                         </button>
                     )}
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📦 {isVi ? 'Mẫu Templates' : 'Sample Templates'}</h2>
-                        <p className="text-gray-500 dark:text-gray-400">{isVi ? 'Xem trước các templates sắp ra mắt' : 'Preview upcoming templates'}</p>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📦 {isVi ? 'Template Marketplace' : 'Template Marketplace'}</h2>
+                        <p className="text-gray-500 dark:text-gray-400">{isVi ? 'Khám phá templates từ cộng đồng' : 'Discover community templates'}</p>
                     </div>
                 </div>
-                <div className="px-4 py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 rounded-lg font-medium flex items-center gap-2">
-                    <span>🚧</span>
-                    <span>{isVi ? 'Sắp ra mắt' : 'Coming Soon'}</span>
+                <div className="px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg font-medium flex items-center gap-2">
+                    <span>✨</span>
+                    <span>{isVi ? `${sampleTemplates.length} templates` : `${sampleTemplates.length} templates`}</span>
                 </div>
             </div>
 
-            {/* Coming Soon Banner */}
+            {/* Marketplace Info Banner */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 
                             border border-blue-200 dark:border-blue-800 rounded-xl p-6">
                 <div className="flex items-start gap-4">
                     <span className="text-4xl">🏪</span>
                     <div>
                         <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                            {isVi ? 'Template Marketplace - Sắp ra mắt!' : 'Template Marketplace - Coming Soon!'}
+                            {isVi ? 'Template Marketplace' : 'Template Marketplace'}
                         </h3>
                         <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
-                            {isVi ? 'Chúng tôi đang phát triển marketplace để bạn có thể:' : 'We are building a marketplace so you can:'}
+                            {isVi ? 'Các template được đóng góp bởi đội ngũ CVF và cộng đồng:' : 'Templates contributed by CVF team and community:'}
                         </p>
                         <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
                             <li>✨ {isVi ? 'Khám phá templates từ cộng đồng' : 'Discover community templates'}</li>
-                            <li>📤 {isVi ? 'Chia sẻ templates của bạn' : 'Share your templates'}</li>
+                            <li>📤 {isVi ? 'Chia sẻ templates của bạn (sắp ra mắt)' : 'Share your templates (coming soon)'}</li>
                             <li>⭐ {isVi ? 'Đánh giá và review templates' : 'Rate and review templates'}</li>
-                            <li>📥 {isVi ? 'Import trực tiếp vào thư viện' : 'Import directly into your library'}</li>
+                            <li>📥 {isVi ? 'Xem chi tiết và áp dụng vào workflow' : 'View details and apply to your workflow'}</li>
                         </ul>
                     </div>
                 </div>
@@ -159,12 +219,12 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                     <div
                         key={template.id}
                         className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 
-                     opacity-75 relative"
+                     hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md transition-all cursor-pointer relative"
                     >
-                        {/* Preview Badge */}
-                        <div className="absolute top-3 right-3 px-2 py-1 bg-gray-100 dark:bg-gray-700 
-                                        text-gray-500 dark:text-gray-400 text-xs rounded-full">
-                            Preview
+                        {/* Badge */}
+                        <div className="absolute top-3 right-3 px-2 py-1 bg-blue-100 dark:bg-blue-900/40 
+                                        text-blue-600 dark:text-blue-400 text-xs rounded-full font-medium">
+                            {template.author === 'CVF Team' ? (isVi ? 'Chính thức' : 'Official') : (isVi ? 'Cộng đồng' : 'Community')}
                         </div>
 
                         <div className="flex items-start mb-3">
@@ -185,11 +245,10 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                         </div>
 
                         <button
-                            disabled
-                            className="w-full py-2 rounded-lg bg-gray-100 dark:bg-gray-700 
-                       text-gray-400 dark:text-gray-500 font-medium cursor-not-allowed"
+                            className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700
+                       text-white font-medium transition-colors"
                         >
-                            {isVi ? 'Sắp ra mắt' : 'Coming Soon'}
+                            {isVi ? 'Xem chi tiết' : 'View Details'}
                         </button>
                     </div>
                 ))}

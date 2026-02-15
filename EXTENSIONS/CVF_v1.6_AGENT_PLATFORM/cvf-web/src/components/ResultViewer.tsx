@@ -96,19 +96,9 @@ const exportLabels = {
 export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack, onSendToAgent }: ResultViewerProps) {
     const { language } = useLanguage();
     const [showDetails, setShowDetails] = useState(false);
-    const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [copied, setCopied] = useState(false);
     const [exportLang, setExportLang] = useState<ExportLanguage>(language as ExportLanguage);
-
-    // Mock quality score — hidden behind Technical Details
-    const qualityScore: QualityScore = {
-        overall: 8.2,
-        structure: 9.0,
-        completeness: 8.5,
-        clarity: 8.0,
-        actionability: 7.5,
-    };
 
     const labels = exportLabels[exportLang];
 
@@ -122,7 +112,6 @@ export function ResultViewer({ execution, output, onAccept, onReject, onRetry, o
 # ${labels.title}
 **${labels.generated}:** ${date}
 **${labels.template}:** ${execution.templateName}
-**${labels.qualityScore}:** ${qualityScore.overall}/10
 ---
 
 ${cleanOutput}
@@ -250,36 +239,6 @@ ${cleanOutput}
                         )}
                     </div>
                 </div>
-            </div>
-
-            {/* Technical Details — collapsed by default */}
-            <div
-                className="mb-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl cursor-pointer"
-                onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-            >
-                <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-sm text-gray-500 dark:text-gray-400">
-                        {language === 'vi' ? '🔧 Chi tiết kỹ thuật' : '🔧 Technical Details'}
-                    </h3>
-                    <svg
-                        className={`w-4 h-4 text-gray-400 transition-transform ${showTechnicalDetails ? 'rotate-180' : ''}`}
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                </div>
-
-                {showTechnicalDetails && (
-                    <div className="mt-4 space-y-4">
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                                {language === 'vi' ? 'Điểm chất lượng' : 'Quality Score'}
-                            </span>
-                            <QualityBadge score={qualityScore.overall} />
-                        </div>
-                        <QualityBreakdown score={qualityScore} />
-                    </div>
-                )}
             </div>
 
             {/* Output Content */}

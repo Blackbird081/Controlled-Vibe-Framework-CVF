@@ -17,7 +17,8 @@ export type AnalyticsEventType =
     | 'multi_agent_opened'
     | 'tools_opened'
     | 'enforcement_decision'
-    | 'pre_uat_failed';
+    | 'pre_uat_failed'
+    | 'demo_auto_run';
 
 export interface AnalyticsEvent {
     id: string;

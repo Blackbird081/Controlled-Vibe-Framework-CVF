@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 
 type StorageMode = 'fs' | 's3';
 
@@ -8,11 +7,33 @@ const DEFAULT_FS_ROOT = path.resolve(process.cwd(), '../../../governance/skill-l
 const STORAGE_MODE: StorageMode = (process.env.CVF_UAT_STORAGE as StorageMode) || 'fs';
 const FS_ROOT = process.env.CVF_UAT_ROOT ? path.resolve(process.env.CVF_UAT_ROOT) : DEFAULT_FS_ROOT;
 
-const s3Client = STORAGE_MODE === 's3'
-    ? new S3Client({
+// S3 support: only works at runtime when @aws-sdk/client-s3 is installed
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _s3Mod: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _s3Client: any = null;
+
+async function requireS3() {
+    if (_s3Mod) return _s3Mod;
+    try {
+        // Use variable to prevent bundler from resolving at build time
+        const pkg = '@aws-sdk/' + 'client-s3';
+        _s3Mod = await (Function('p', 'return import(p)')(pkg));
+        return _s3Mod;
+    } catch {
+        return null;
+    }
+}
+
+async function getS3Client() {
+    if (_s3Client) return _s3Client;
+    const mod = await requireS3();
+    if (!mod) return null;
+    _s3Client = new mod.S3Client({
         region: process.env.AWS_REGION || process.env.CVF_UAT_S3_REGION || 'us-east-1',
-    })
-    : null;
+    });
+    return _s3Client;
+}
 
 const S3_BUCKET = process.env.CVF_UAT_S3_BUCKET || '';
 const S3_PREFIX = process.env.CVF_UAT_S3_PREFIX || '';
@@ -41,10 +62,12 @@ async function writeToFs(skillId: string, content: string): Promise<string> {
 }
 
 async function readFromS3(skillId: string): Promise<string> {
-    if (!s3Client) return '';
+    const client = await getS3Client();
+    if (!client) return '';
     try {
+        const mod = await requireS3();
         const key = buildS3Key(skillId);
-        const resp = await s3Client.send(new GetObjectCommand({
+        const resp = await client.send(new mod.GetObjectCommand({
             Bucket: S3_BUCKET,
             Key: key,
         }));
@@ -56,9 +79,11 @@ async function readFromS3(skillId: string): Promise<string> {
 }
 
 async function writeToS3(skillId: string, content: string): Promise<string> {
-    if (!s3Client) throw new Error('S3 client not configured');
+    const client = await getS3Client();
+    if (!client) throw new Error('S3 client not configured');
+    const mod = await requireS3();
     const key = buildS3Key(skillId);
-    await s3Client.send(new PutObjectCommand({
+    await client.send(new mod.PutObjectCommand({
         Bucket: S3_BUCKET,
         Key: key,
         Body: content,

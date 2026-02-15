@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { templates } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import { useSettings } from '@/components/Settings';
@@ -60,6 +60,56 @@ export default function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
 
     const { addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
+    const searchParams = useSearchParams();
+    const demoTriggered = useRef(false);
+
+    // Demo auto-run: select a template, fill demo data, run processing automatically
+    const handleDemoRun = useCallback(() => {
+        // Find first non-folder, non-wizard template with fields
+        const demoTemplate = templates.find(t => !t.isFolder && !WIZARD_MAP[t.id] && t.fields.length > 0);
+        if (!demoTemplate) return;
+
+        trackEvent('demo_auto_run', { templateId: demoTemplate.id });
+
+        // Auto-fill demo values for each field
+        const demoValues: Record<string, string> = {};
+        demoTemplate.fields.forEach(field => {
+            if (field.example) {
+                demoValues[field.id] = field.example;
+            } else if (field.default) {
+                demoValues[field.id] = field.default;
+            } else if (field.placeholder) {
+                demoValues[field.id] = field.placeholder.replace(/^VD:\s*/i, '').replace(/^E\.g\.\s*/i, '');
+            } else {
+                demoValues[field.id] = `Demo ${field.label}`;
+            }
+        });
+
+        setSelectedTemplate(demoTemplate);
+        setCurrentInput(demoValues);
+        setCurrentIntent(`[DEMO] Auto-generated intent for ${demoTemplate.name}`);
+
+        const execution: Execution = {
+            id: `exec_demo_${Date.now()}`,
+            templateId: demoTemplate.id,
+            templateName: demoTemplate.name,
+            category: demoTemplate.category,
+            input: demoValues,
+            intent: `[DEMO] Auto-generated intent for ${demoTemplate.name}`,
+            status: 'processing',
+            createdAt: new Date(),
+        };
+        addExecution(execution);
+        setWorkflowState('processing');
+    }, [addExecution]);
+
+    // Auto-trigger demo if URL has ?demo=1
+    useEffect(() => {
+        if (searchParams.get('demo') === '1' && !demoTriggered.current) {
+            demoTriggered.current = true;
+            handleDemoRun();
+        }
+    }, [searchParams, handleDemoRun]);
 
     const filteredTemplates = useMemo(() => {
         let result = selectedCategory === 'all'
@@ -191,14 +241,10 @@ export default function HomePage() {
                             </div>
                             <div className="flex items-center gap-3">
                                 <button
-                                    onClick={() => {
-                                        // Enable demo mode by setting cookie
-                                        document.cookie = 'cvf_demo_mode=1;path=/;max-age=86400';
-                                        window.location.reload();
-                                    }}
+                                    onClick={handleDemoRun}
                                     className="px-4 py-2 rounded-lg border border-amber-400 text-amber-700 hover:bg-amber-100 font-medium transition-colors"
                                 >
-                                    🎮 {language === 'vi' ? 'Dùng thử Demo' : 'Try Demo'}
+                                    🎮 {language === 'vi' ? 'Chạy Demo ngay' : 'Run Demo Now'}
                                 </button>
                                 <button className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700">
                                     {t('main.apiKeyCta')}

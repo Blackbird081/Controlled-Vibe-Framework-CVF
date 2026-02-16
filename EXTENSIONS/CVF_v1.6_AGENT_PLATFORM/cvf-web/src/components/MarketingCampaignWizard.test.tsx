@@ -5,6 +5,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MarketingCampaignWizard } from './MarketingCampaignWizard';
 
+vi.mock('@/lib/i18n', () => ({
+    useLanguage: () => ({ language: 'vi', t: (key: string) => key }),
+}));
+
 describe('MarketingCampaignWizard', () => {
     beforeEach(() => {
         localStorage.clear();

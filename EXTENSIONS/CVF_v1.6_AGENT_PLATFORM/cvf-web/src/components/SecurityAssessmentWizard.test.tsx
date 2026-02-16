@@ -5,6 +5,10 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { SecurityAssessmentWizard } from './SecurityAssessmentWizard';
 
+vi.mock('@/lib/i18n', () => ({
+    useLanguage: () => ({ language: 'vi', t: (key: string) => key }),
+}));
+
 describe('SecurityAssessmentWizard', () => {
     it('blocks next step when required fields are missing', () => {
         render(<SecurityAssessmentWizard onBack={vi.fn()} />);

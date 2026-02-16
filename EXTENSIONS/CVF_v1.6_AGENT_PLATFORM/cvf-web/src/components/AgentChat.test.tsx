@@ -70,7 +70,7 @@ describe('AgentChat', () => {
 
         const input = screen.getByPlaceholderText('Type a message...');
         fireEvent.change(input, { target: { value: 'Hello' } });
-        fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+        fireEvent.click(screen.getByRole('button', { name: /Send/i }));
 
         expect(await screen.findByText(/No API key configured/i)).toBeTruthy();
     });
@@ -91,7 +91,7 @@ describe('AgentChat', () => {
 
         const input = screen.getByPlaceholderText('Type a message...');
         fireEvent.change(input, { target: { value: 'Hi there' } });
-        fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+        fireEvent.click(screen.getByRole('button', { name: /Send/i }));
 
         await waitFor(() => expect(chatMock).toHaveBeenCalled());
         expect(await screen.findByText('Hello')).toBeTruthy();

@@ -25,6 +25,10 @@ let executionsState: Array<{
     createdAt: Date;
 }> = [];
 
+vi.mock('@/lib/i18n', () => ({
+    useLanguage: () => ({ language: 'vi', t: (key: string) => key }),
+}));
+
 vi.mock('@/lib/analytics', () => ({
     exportAnalyticsEvents: (format: 'json' | 'csv') => exportMock(format),
     useAnalyticsEvents: () => analyticsState,
@@ -77,10 +81,10 @@ describe('AnalyticsDashboard', () => {
     it('renders top skills and domain usage', () => {
         render(<AnalyticsDashboard />);
 
-        expect(screen.getByText('📚 Top Skills')).toBeTruthy();
+        expect(screen.getByText('📚 Skill phổ biến')).toBeTruthy();
         expect(screen.getByText('Skill One')).toBeTruthy();
         expect(screen.getByText('App Development')).toBeTruthy();
-        expect(screen.getByText('🏷️ Domain Usage')).toBeTruthy();
+        expect(screen.getByText('🏷️ Theo lĩnh vực')).toBeTruthy();
         expect(screen.getByText('Marketing')).toBeTruthy();
     });
 
@@ -112,7 +116,7 @@ describe('AnalyticsDashboard', () => {
         expect(screen.getByText(/Chưa có dữ liệu skill/i)).toBeTruthy();
         expect(screen.getByText(/Chưa có dữ liệu domain/i)).toBeTruthy();
         expect(screen.getByText('Chưa có dữ liệu')).toBeTruthy();
-        expect(screen.getByText(/No events tracked yet/i)).toBeTruthy();
+        expect(screen.getByText(/Chưa có events/i)).toBeTruthy();
     });
 
     it('renders rejected distribution and handles older activity', () => {

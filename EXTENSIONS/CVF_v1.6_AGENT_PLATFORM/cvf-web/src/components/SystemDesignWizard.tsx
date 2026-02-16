@@ -442,12 +442,12 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
             <div className="flex justify-between mt-6">
                 <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep === 1}
                     className={`px-6 py-3 rounded-lg font-medium ${currentStep === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}>
-                    ← {wt(WIZARD_COMMON.previous, language)}
+                    {wt(WIZARD_COMMON.previous, language)}
                 </button>
                 {currentStep < WIZARD_STEPS.length && (
                     <button onClick={() => setCurrentStep(currentStep + 1)} disabled={currentStepConfig.required && !isStepValid()}
                         className={`px-6 py-3 rounded-lg font-medium ${currentStepConfig.required && !isStepValid() ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-teal-600 text-white hover:bg-teal-700'}`}>
-                        {wt(WIZARD_COMMON.next, language)} →
+                        {wt(WIZARD_COMMON.next, language)}
                     </button>
                 )}
             </div>

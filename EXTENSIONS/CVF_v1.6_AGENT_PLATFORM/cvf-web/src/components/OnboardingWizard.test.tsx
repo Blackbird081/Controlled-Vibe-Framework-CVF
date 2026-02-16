@@ -5,6 +5,10 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { OnboardingWizard } from './OnboardingWizard';
 
+vi.mock('@/lib/i18n', () => ({
+    useLanguage: () => ({ language: 'vi', t: (key: string) => key }),
+}));
+
 describe('OnboardingWizard', () => {
     it('calls onComplete when skipping', () => {
         const onComplete = vi.fn();

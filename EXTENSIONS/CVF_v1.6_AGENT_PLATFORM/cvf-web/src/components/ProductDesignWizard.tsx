@@ -630,7 +630,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
-                    ← {wt(WIZARD_COMMON.previous, language)}
+                    {wt(WIZARD_COMMON.previous, language)}
                 </button>
 
                 {currentStep < WIZARD_STEPS.length ? (
@@ -642,7 +642,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                             : 'bg-pink-500 text-white hover:bg-pink-600'
                             }`}
                     >
-                        {currentStepConfig.required ? wt(WIZARD_COMMON.next, language) : wt(WIZARD_COMMON.skipContinue, language)} →
+                        {currentStepConfig.required ? wt(WIZARD_COMMON.next, language) : wt(WIZARD_COMMON.skipContinue, language)}
                     </button>
                 ) : null}
             </div>

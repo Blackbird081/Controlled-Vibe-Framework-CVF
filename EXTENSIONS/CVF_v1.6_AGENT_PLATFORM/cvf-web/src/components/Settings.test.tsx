@@ -112,7 +112,7 @@ describe('SettingsPage', () => {
         fireEvent.change(apiInput, { target: { value: 'secret' } });
         expect(apiInput.value).toBe('secret');
 
-        const showButton = screen.getByRole('button', { name: /Hiện|Ẩn/i });
+        const showButton = screen.getByRole('button', { name: /Show|Hide|Hiện|Ẩn/i });
         fireEvent.click(showButton);
         expect(apiInput.getAttribute('type')).toBe('text');
 

@@ -600,7 +600,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
-                    ← {wt(WIZARD_COMMON.previous, language)}
+                    {wt(WIZARD_COMMON.previous, language)}
                 </button>
 
                 {currentStep < WIZARD_STEPS.length ? (
@@ -612,7 +612,7 @@ export function MarketingCampaignWizard({ onBack }: MarketingCampaignWizardProps
                             : 'bg-orange-500 text-white hover:bg-orange-600'
                             }`}
                     >
-                        {wt(WIZARD_COMMON.next, language)} →
+                        {wt(WIZARD_COMMON.next, language)}
                     </button>
                 ) : null}
             </div>

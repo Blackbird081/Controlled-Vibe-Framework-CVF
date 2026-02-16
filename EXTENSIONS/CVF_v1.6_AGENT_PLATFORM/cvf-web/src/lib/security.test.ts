@@ -65,6 +65,11 @@ describe('security.ts', () => {
             });
             expect(validateApiKey('anthropic', 'sk-123').valid).toBe(false);
         });
+
+        it('accepts unknown provider with any key', () => {
+            const result = validateApiKey('unknown-provider', 'any-key-here');
+            expect(result.valid).toBe(true);
+        });
     });
 
     describe('encryptData / decryptData (sync)', () => {
@@ -85,6 +90,29 @@ describe('security.ts', () => {
             const legacy = btoa(encodeURIComponent('legacy-data'));
             const decrypted = decryptData(legacy);
             expect(decrypted).toBe('legacy-data');
+        });
+
+        it('returns input when base64 decode fails', () => {
+            const result = decryptData('not-valid-base64!!!');
+            expect(result).toBe('not-valid-base64!!!');
+        });
+
+        it('encrypts with SSR fallback when crypto.subtle is unavailable', () => {
+            const origSubtle = crypto.subtle;
+            Object.defineProperty(crypto, 'subtle', { value: undefined, configurable: true });
+            try {
+                const encrypted = encryptData('ssr-test');
+                expect(encrypted).toBe(btoa(encodeURIComponent('ssr-test')));
+                expect(encrypted.startsWith('__ASYNC__')).toBe(false);
+            } finally {
+                Object.defineProperty(crypto, 'subtle', { value: origSubtle, configurable: true });
+            }
+        });
+
+        it('handles unicode in encrypt/decrypt roundtrip', () => {
+            const encrypted = encryptData('Xin chào 🚀');
+            const decrypted = decryptData(encrypted);
+            expect(decrypted).toBe('Xin chào 🚀');
         });
     });
 
@@ -170,6 +198,118 @@ describe('security.ts', () => {
             const result = await sandbox.executeAsync('eval("1+1")');
             expect(result.result).toBeNull();
             expect(result.error).toContain('Blocked keyword');
+        });
+
+        it('blocks dynamic property access', () => {
+            const sandbox = createSandbox();
+            const result = sandbox.validate('obj. [key]');
+            expect(result.safe).toBe(false);
+            expect(result.reason).toContain('Dynamic property access');
+        });
+
+        it('blocks additional dangerous keywords', () => {
+            const sandbox = createSandbox();
+            expect(sandbox.validate('XMLHttpRequest').safe).toBe(false);
+            expect(sandbox.validate('WebSocket').safe).toBe(false);
+            expect(sandbox.validate('import("module")').safe).toBe(false);
+            expect(sandbox.validate('require("fs")').safe).toBe(false);
+            expect(sandbox.validate('globalThis.x').safe).toBe(false);
+            expect(sandbox.validate('__proto__').safe).toBe(false);
+            expect(sandbox.validate('prototype.x').safe).toBe(false);
+            expect(sandbox.validate('setTimeout(fn, 0)').safe).toBe(false);
+            expect(sandbox.validate('navigator.userAgent').safe).toBe(false);
+            expect(sandbox.validate('location.href').safe).toBe(false);
+        });
+
+        it('handles execute errors gracefully', () => {
+            const sandbox = createSandbox();
+            const result = sandbox.execute('throw new Error("test")');
+            expect(result.error).toBeDefined();
+        });
+
+        it('executes code using console.log in sandbox', () => {
+            const sandbox = createSandbox();
+            const result = sandbox.execute('console.log("hello", "world")');
+            expect(result.result).toBe('hello world');
+        });
+
+        it('executes Worker-based executeAsync with mock Worker', async () => {
+            // Mock Worker class so the Worker path is taken
+            const origWorker = globalThis.Worker;
+            let capturedOnMessage: ((e: MessageEvent) => void) | null = null;
+            let capturedPostMessage: { id: string; code: string } | null = null;
+
+            class MockWorker {
+                onmessage: ((e: MessageEvent) => void) | null = null;
+                onerror: ((e: ErrorEvent) => void) | null = null;
+                terminate = vi.fn();
+                postMessage = (data: { id: string; code: string }) => {
+                    capturedPostMessage = data;
+                    // Simulate worker responding with success
+                    setTimeout(() => {
+                        capturedOnMessage = this.onmessage;
+                        this.onmessage?.({
+                            data: { id: data.id, result: 42 }
+                        } as MessageEvent);
+                    }, 10);
+                };
+            }
+
+            globalThis.Worker = MockWorker as unknown as typeof Worker;
+            try {
+                const sandbox = createSandbox();
+                const result = await sandbox.executeAsync('21 * 2');
+                expect(result.result).toBe(42);
+                expect(capturedPostMessage).toBeTruthy();
+            } finally {
+                globalThis.Worker = origWorker;
+            }
+        });
+
+        it('handles Worker error response', async () => {
+            const origWorker = globalThis.Worker;
+            class MockWorker {
+                onmessage: ((e: MessageEvent) => void) | null = null;
+                onerror: ((e: ErrorEvent) => void) | null = null;
+                terminate = vi.fn();
+                postMessage = (data: { id: string; code: string }) => {
+                    setTimeout(() => {
+                        this.onmessage?.({
+                            data: { id: data.id, error: 'Worker error occurred' }
+                        } as MessageEvent);
+                    }, 10);
+                };
+            }
+            globalThis.Worker = MockWorker as unknown as typeof Worker;
+            try {
+                const sandbox = createSandbox();
+                const result = await sandbox.executeAsync('bad code');
+                expect(result.error).toBe('Worker error occurred');
+            } finally {
+                globalThis.Worker = origWorker;
+            }
+        });
+
+        it('handles Worker onerror event', async () => {
+            const origWorker = globalThis.Worker;
+            class MockWorker {
+                onmessage: ((e: MessageEvent) => void) | null = null;
+                onerror: ((e: ErrorEvent) => void) | null = null;
+                terminate = vi.fn();
+                postMessage = () => {
+                    setTimeout(() => {
+                        this.onerror?.({ message: 'Worker crashed' } as ErrorEvent);
+                    }, 10);
+                };
+            }
+            globalThis.Worker = MockWorker as unknown as typeof Worker;
+            try {
+                const sandbox = createSandbox();
+                const result = await sandbox.executeAsync('1+1');
+                expect(result.error).toBe('Worker crashed');
+            } finally {
+                globalThis.Worker = origWorker;
+            }
         });
     });
 

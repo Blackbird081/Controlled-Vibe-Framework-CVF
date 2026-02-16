@@ -2,9 +2,14 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import crypto from 'crypto';
 
 const executeAIMock = vi.hoisted(() => vi.fn());
+const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
     executeAI: executeAIMock,
+}));
+
+vi.mock('@/lib/enforcement', () => ({
+    evaluateEnforcement: evaluateEnforcementMock,
 }));
 
 import { POST } from './route';
@@ -28,6 +33,8 @@ describe('/api/execute', () => {
 
     beforeEach(() => {
         executeAIMock.mockReset();
+        evaluateEnforcementMock.mockReset();
+        evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
         process.env = { ...originalEnv };
         delete process.env.OPENAI_API_KEY;
         delete process.env.ANTHROPIC_API_KEY;
@@ -192,5 +199,100 @@ describe('/api/execute', () => {
         await POST(mkReq() as never);
         const res2 = await POST(mkReq() as never);
         expect(res2.status).toBe(429);
+    });
+
+    it('returns 401 when no session and no service token', async () => {
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Strategy',
+                intent: 'Analyze',
+                inputs: { goal: 'Test' },
+                provider: 'openai',
+            }),
+        });
+        const res = await POST(req as never);
+        const data = await res.json();
+        expect(res.status).toBe(401);
+        expect(data.success).toBe(false);
+        expect(data.error).toMatch(/Unauthorized/);
+    });
+
+    it('returns 422 when enforcement status is CLARIFY', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'CLARIFY',
+            reasons: ['Spec needs clarification'],
+            specGate: {
+                status: 'CLARIFY',
+                missing: [{ id: 'budget', label: 'Budget', required: true }],
+                requiredCount: 2,
+                providedCount: 1,
+            },
+        });
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Strategy',
+                intent: 'Plan',
+                inputs: { goal: 'Test' },
+                provider: 'openai',
+            }),
+            headers: { cookie: makeSessionCookie() },
+        });
+        const res = await POST(req as never);
+        const data = await res.json();
+        expect(res.status).toBe(422);
+        expect(data.success).toBe(false);
+        expect(data.error).toMatch(/clarification/i);
+        expect(data.missing).toContain('Budget');
+        expect(data.enforcement.status).toBe('CLARIFY');
+    });
+
+    it('returns 409 when enforcement status is NEEDS_APPROVAL', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'NEEDS_APPROVAL',
+            reasons: ['R3 requires explicit human approval before execution.'],
+            riskGate: { status: 'NEEDS_APPROVAL', riskLevel: 'R3', reason: 'R3 requires explicit human approval before execution.' },
+        });
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Strategy',
+                intent: 'Deploy',
+                inputs: { goal: 'Test' },
+                provider: 'openai',
+            }),
+            headers: { cookie: makeSessionCookie() },
+        });
+        const res = await POST(req as never);
+        const data = await res.json();
+        expect(res.status).toBe(409);
+        expect(data.success).toBe(false);
+        expect(data.error).toMatch(/approval/i);
+        expect(data.enforcement.status).toBe('NEEDS_APPROVAL');
+    });
+
+    it('returns enforcement BLOCK with 400', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'BLOCK',
+            reasons: ['Budget exceeded'],
+        });
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Strategy',
+                intent: 'Build',
+                inputs: { goal: 'Test' },
+                provider: 'openai',
+            }),
+            headers: { cookie: makeSessionCookie() },
+        });
+        const res = await POST(req as never);
+        const data = await res.json();
+        expect(res.status).toBe(400);
+        expect(data.enforcement.status).toBe('BLOCK');
     });
 });

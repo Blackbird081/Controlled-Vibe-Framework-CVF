@@ -176,4 +176,56 @@ describe('AnalyticsDashboard', () => {
         expect(screen.getAllByText('tools_opened').length).toBeGreaterThan(0);
         expect(screen.getByText('Skill Three')).toBeTruthy();
     });
+
+    it('renders enforcement stats with enforcement_decision events', () => {
+        analyticsState = {
+            events: [
+                {
+                    id: 'e1', type: 'enforcement_decision', timestamp: Date.now(),
+                    data: { status: 'BLOCKED', source: 'spec-gate' },
+                },
+                {
+                    id: 'e2', type: 'enforcement_decision', timestamp: Date.now() - 1000,
+                    data: { status: 'ALLOWED', source: 'manual' },
+                },
+                {
+                    id: 'e3', type: 'enforcement_decision', timestamp: Date.now() - 2000,
+                    data: { status: 'BLOCKED', source: 'spec-gate' },
+                },
+                {
+                    id: 'e4', type: 'pre_uat_failed', timestamp: Date.now(),
+                    data: {},
+                },
+            ],
+            clearEvents: clearMock,
+            enabled: true,
+        };
+
+        render(<AnalyticsDashboard />);
+
+        // Should show enforcement stats: 3 decisions logged, 1 pre-UAT fail
+        expect(document.body.textContent).toContain('3');
+        expect(document.body.textContent).toContain('1');
+        // Top status should be BLOCKED (2 occurrences)
+        expect(document.body.textContent).toContain('BLOCKED');
+        expect(document.body.textContent).toContain('ALLOWED');
+        // Sources
+        expect(document.body.textContent).toContain('spec-gate');
+        expect(document.body.textContent).toContain('manual');
+    });
+
+    it('renders enforcement empty states when no enforcement events exist', () => {
+        analyticsState = {
+            events: [
+                { id: 'e1', type: 'skill_viewed', timestamp: Date.now(), data: { skillId: 'x', skillTitle: 'X', domain: 'D' } },
+            ],
+            clearEvents: clearMock,
+            enabled: true,
+        };
+
+        render(<AnalyticsDashboard />);
+
+        // With no enforcement events, should show N/A for top status
+        expect(document.body.textContent).toContain('N/A');
+    });
 });

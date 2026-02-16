@@ -4,6 +4,8 @@ import {
     getQualityBadgeColor,
     getQualityLabel,
     shouldRequireAcceptance,
+    getQualityDisclaimer,
+    canProceedToNextPhase,
 } from './governance';
 
 describe('governance.ts', () => {
@@ -105,6 +107,80 @@ My understanding of the goal...
 
         it('returns true for full mode', () => {
             expect(shouldRequireAcceptance('full')).toBe(true);
+        });
+    });
+
+    describe('getQualityDisclaimer', () => {
+        it('returns Vietnamese disclaimer by default', () => {
+            const disclaimer = getQualityDisclaimer();
+            expect(disclaimer).toContain('⚠️');
+            expect(disclaimer).toContain('KHÔNG đánh giá');
+        });
+
+        it('returns Vietnamese disclaimer when language=vi', () => {
+            const disclaimer = getQualityDisclaimer('vi');
+            expect(disclaimer).toContain('cấu trúc');
+        });
+
+        it('returns English disclaimer when language=en', () => {
+            const disclaimer = getQualityDisclaimer('en');
+            expect(disclaimer).toContain('structure and format');
+            expect(disclaimer).toContain('NOT factual accuracy');
+        });
+    });
+
+    describe('canProceedToNextPhase', () => {
+        it('returns true when accepted', () => {
+            expect(canProceedToNextPhase('Discovery', 'accepted')).toBe(true);
+        });
+
+        it('returns false when pending', () => {
+            expect(canProceedToNextPhase('Discovery', 'pending')).toBe(false);
+        });
+
+        it('returns false when rejected', () => {
+            expect(canProceedToNextPhase('Build', 'rejected')).toBe(false);
+        });
+
+        it('returns false when retry', () => {
+            expect(canProceedToNextPhase('Design', 'retry')).toBe(false);
+        });
+    });
+
+    describe('calculateQualityScore — coverage extras', () => {
+        it('returns 100 compliance for simple mode', () => {
+            const score = calculateQualityScore('short text', 'simple');
+            expect(score.compliance).toBe(100);
+        });
+
+        it('handles governance mode scoring', () => {
+            const response = `## Solution\n- Step 1\n- Step 2\n\`\`\`code\`\`\``;
+            const score = calculateQualityScore(response, 'governance');
+            expect(score.overall).toBeGreaterThan(0);
+            expect(score.compliance).toBeGreaterThan(0);
+        });
+
+        it('handles very long structured response', () => {
+            const longResponse = '## Heading\n' + 'Content '.repeat(500) + '\n```code\n```\n- todo\n1. Step 1';
+            const score = calculateQualityScore(longResponse, 'full');
+            expect(score.completeness).toBeGreaterThan(70);
+        });
+
+        it('penalizes very short responses in clarity', () => {
+            const score = calculateQualityScore('OK', 'simple');
+            expect(score.clarity).toBeLessThan(60);
+        });
+
+        it('detects table format as structured', () => {
+            const response = '| Col1 | Col2 |\n|---|---|\n| a | b |';
+            const score = calculateQualityScore(response, 'simple');
+            expect(score.clarity).toBeGreaterThanOrEqual(60);
+        });
+
+        it('detects checklist items as actionable', () => {
+            const response = '- [x] Done\n- [ ] Todo';
+            const score = calculateQualityScore(response, 'simple');
+            expect(score.actionability).toBeGreaterThan(50);
         });
     });
 });

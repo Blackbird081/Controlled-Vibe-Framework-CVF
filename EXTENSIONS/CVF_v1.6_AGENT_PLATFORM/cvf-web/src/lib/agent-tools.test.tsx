@@ -1,4 +1,8 @@
+/**
+ * @vitest-environment jsdom
+ */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, act, render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 // Mock security module before importing agent-tools
 vi.mock('./security', () => {
@@ -42,8 +46,12 @@ vi.mock('./security', () => {
     };
 });
 
-import { AVAILABLE_TOOLS } from './agent-tools';
+import { AVAILABLE_TOOLS, useTools, ToolCard, ToolsPanel } from './agent-tools';
 import { createSandbox, validateUrl } from './security';
+
+vi.mock('./i18n', () => ({
+    useLanguage: () => ({ language: 'en', t: (key: string) => key }),
+}));
 
 describe('Agent Tools', () => {
     beforeEach(() => {
@@ -249,6 +257,231 @@ describe('Agent Tools', () => {
                 expect(tool.parameters).toBeDefined();
                 expect(typeof tool.execute).toBe('function');
             }
+        });
+    });
+
+    // ================================================
+    // file_read tool
+    // ================================================
+    describe('file_read', () => {
+        const tool = AVAILABLE_TOOLS.file_read;
+
+        beforeEach(() => {
+            localStorage.clear();
+        });
+
+        it('should read existing key from localStorage', async () => {
+            localStorage.setItem('test-key', 'test-value');
+            const result = await tool.execute({ key: 'test-key' });
+            expect(result.success).toBe(true);
+            const data = result.data as { key: string; content: string; exists: boolean };
+            expect(data.content).toBe('test-value');
+            expect(data.exists).toBe(true);
+        });
+
+        it('should return null for non-existing key', async () => {
+            const result = await tool.execute({ key: 'nonexistent' });
+            expect(result.success).toBe(true);
+            const data = result.data as { content: null; exists: boolean };
+            expect(data.content).toBeNull();
+            expect(data.exists).toBe(false);
+        });
+
+        it('should have executionTime', async () => {
+            const result = await tool.execute({ key: 'any-key' });
+            expect(result.executionTime).toBeGreaterThanOrEqual(0);
+        });
+    });
+
+    // ================================================
+    // file_write tool
+    // ================================================
+    describe('file_write', () => {
+        const tool = AVAILABLE_TOOLS.file_write;
+
+        beforeEach(() => {
+            localStorage.clear();
+        });
+
+        it('should write content to localStorage', async () => {
+            const result = await tool.execute({ key: 'write-key', content: 'hello world' });
+            expect(result.success).toBe(true);
+            const data = result.data as { key: string; bytesWritten: number };
+            expect(data.bytesWritten).toBe(11);
+            expect(localStorage.getItem('write-key')).toBe('hello world');
+        });
+
+        it('should overwrite existing key', async () => {
+            localStorage.setItem('write-key', 'old');
+            const result = await tool.execute({ key: 'write-key', content: 'new' });
+            expect(result.success).toBe(true);
+            expect(localStorage.getItem('write-key')).toBe('new');
+        });
+
+        it('should return error when localStorage.setItem throws', async () => {
+            const spy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+                throw new Error('QuotaExceededError');
+            });
+            const result = await tool.execute({ key: 'k', content: 'v' });
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('QuotaExceededError');
+            spy.mockRestore();
+        });
+    });
+
+    // ================================================
+    // useTools hook
+    // ================================================
+    describe('useTools', () => {
+        it('should initialize with all tools and empty call history', () => {
+            const { result } = renderHook(() => useTools());
+            expect(Object.keys(result.current.tools).length).toBe(8);
+            expect(result.current.toolCalls).toHaveLength(0);
+            expect(result.current.isExecuting).toBe(false);
+        });
+
+        it('should execute a tool and record the call', async () => {
+            const { result } = renderHook(() => useTools());
+            let toolResult: any;
+            await act(async () => {
+                toolResult = await result.current.executeTool('calculator', { expression: '1 + 1' });
+            });
+            expect(toolResult.success).toBe(true);
+            expect(result.current.toolCalls.length).toBe(1);
+            expect(result.current.toolCalls[0].status).toBe('completed');
+        });
+
+        it('should return error for unknown tool', async () => {
+            const { result } = renderHook(() => useTools());
+            let toolResult: any;
+            await act(async () => {
+                toolResult = await result.current.executeTool('nonexistent' as any, {});
+            });
+            expect(toolResult.success).toBe(false);
+            expect(toolResult.error).toContain('Tool not found');
+        });
+
+        it('should clear history', async () => {
+            const { result } = renderHook(() => useTools());
+            await act(async () => {
+                await result.current.executeTool('datetime', {});
+            });
+            expect(result.current.toolCalls.length).toBe(1);
+            act(() => {
+                result.current.clearHistory();
+            });
+            expect(result.current.toolCalls.length).toBe(0);
+        });
+
+        it('should mark failed tool call correctly', async () => {
+            const { result } = renderHook(() => useTools());
+            await act(async () => {
+                await result.current.executeTool('json_parse', { input: 'not valid json' });
+            });
+            expect(result.current.toolCalls[0].status).toBe('failed');
+        });
+
+        it('should handle tool execute throwing an exception', async () => {
+            // Temporarily make calculator.execute throw
+            const origExecute = AVAILABLE_TOOLS.calculator.execute;
+            AVAILABLE_TOOLS.calculator.execute = async () => { throw new Error('Unexpected crash'); };
+            const { result } = renderHook(() => useTools());
+            let toolResult: any;
+            await act(async () => {
+                toolResult = await result.current.executeTool('calculator', { expression: '1+1' });
+            });
+            expect(toolResult.success).toBe(false);
+            expect(toolResult.error).toContain('Unexpected crash');
+            expect(result.current.toolCalls[0].status).toBe('failed');
+            AVAILABLE_TOOLS.calculator.execute = origExecute;
+        });
+    });
+
+    // ================================================
+    // ToolCard Component
+    // ================================================
+    describe('ToolCard', () => {
+        const tool = AVAILABLE_TOOLS.web_search;
+
+        it('renders tool name and description', () => {
+            render(<ToolCard tool={tool} />);
+            // Uses i18n key fallback since t returns the key
+            expect(screen.getByText(tool.icon)).toBeTruthy();
+        });
+
+        it('calls onExecute when clicked', () => {
+            const onExecute = vi.fn();
+            render(<ToolCard tool={tool} onExecute={onExecute} />);
+            fireEvent.click(screen.getByRole('button'));
+            expect(onExecute).toHaveBeenCalledWith(tool);
+        });
+
+        it('renders active state', () => {
+            const { container } = render(<ToolCard tool={tool} isActive />);
+            expect(container.querySelector('.border-blue-500')).toBeTruthy();
+        });
+
+        it('renders inactive state', () => {
+            const { container } = render(<ToolCard tool={tool} />);
+            expect(container.querySelector('.border-gray-200')).toBeTruthy();
+        });
+    });
+
+    // ================================================
+    // ToolsPanel Component
+    // ================================================
+    describe('ToolsPanel', () => {
+        it('renders all tool cards', () => {
+            render(<ToolsPanel />);
+            // Should render 8 tool cards
+            const buttons = screen.getAllByRole('button');
+            expect(buttons.length).toBeGreaterThanOrEqual(8);
+        });
+
+        it('renders panel title via i18n key', () => {
+            render(<ToolsPanel />);
+            expect(screen.getByText('tools.title')).toBeTruthy();
+        });
+
+        it('shows parameters when a tool card is clicked', () => {
+            render(<ToolsPanel />);
+            // Click the calculator tool card
+            const calcButton = screen.getByText('Calculator');
+            fireEvent.click(calcButton.closest('button')!);
+            // Parameter input for "expression" should appear
+            expect(screen.getByRole('textbox')).toBeTruthy();
+            // Execute button should appear
+            expect(screen.getByText('tools.execute')).toBeTruthy();
+        });
+
+        it('executes a selected tool', async () => {
+            const onToolResult = vi.fn();
+            render(<ToolsPanel onToolResult={onToolResult} />);
+            // Select the calculator tool
+            const calcButton = screen.getByText('Calculator');
+            fireEvent.click(calcButton.closest('button')!);
+            // Fill in expression parameter
+            const input = screen.getByRole('textbox');
+            fireEvent.change(input, { target: { value: '2+3' } });
+            // Click execute
+            fireEvent.click(screen.getByText('tools.execute'));
+            // Tool result callback should fire
+            await waitFor(() => {
+                expect(onToolResult).toHaveBeenCalled();
+            });
+        });
+
+        it('shows recent tool calls after execution', async () => {
+            render(<ToolsPanel />);
+            // Select the datetime tool
+            const dtButton = screen.getByText('Date & Time');
+            fireEvent.click(dtButton.closest('button')!);
+            // Execute without params (datetime works with no params)
+            fireEvent.click(screen.getByText('tools.execute'));
+            // After execution, recent calls section should appear
+            await waitFor(() => {
+                expect(screen.getByText('tools.recentCalls')).toBeTruthy();
+            });
         });
     });
 });

@@ -100,6 +100,76 @@ I understand the goal...
             const checked = autoCheckItems('Discovery', response);
             expect(checked.length).toBeLessThan(3);
         });
+
+        it('auto-checks Design phase items', () => {
+            const response = `
+## Solution Approach
+Our approach is to build a React app.
+
+### Technical Decision
+We will use Next.js 15.
+
+### Implementation Plan
+Step 1: Setup project
+Step 2: Build components
+
+### Deliverables
+- Working app
+- Documentation
+
+### Risk
+- Timeline risk
+            `;
+            const checked = autoCheckItems('Design', response);
+            expect(checked).toContain('design-1'); // Solution approach
+            expect(checked).toContain('design-2'); // Technical decisions
+            expect(checked).toContain('design-3'); // Implementation plan
+            expect(checked).toContain('design-4'); // Deliverables
+            expect(checked).toContain('design-5'); // Risks
+        });
+
+        it('auto-checks Build phase items', () => {
+            const response = '```typescript\nconst x = 1;\n```\nNote: implementation details.';
+            const checked = autoCheckItems('Build', response);
+            expect(checked).toContain('build-2'); // Code blocks
+            expect(checked).toContain('build-4'); // Notes
+        });
+
+        it('auto-checks Review phase items', () => {
+            const response = `
+## Delivery Summary
+All features delivered.
+
+### Success Criteria
+All tests pass.
+
+### Limitation
+No mobile support yet.
+
+### FINAL CHECKPOINT
+Everything is ready.
+            `;
+            const checked = autoCheckItems('Review', response);
+            expect(checked).toContain('review-1'); // Delivery summary
+            expect(checked).toContain('review-2'); // Success criteria
+            expect(checked).toContain('review-3'); // Limitations
+            expect(checked).toContain('review-4'); // Final checkpoint
+        });
+
+        it('returns empty array for invalid phase', () => {
+            // @ts-expect-error testing invalid input
+            const checked = autoCheckItems('InvalidPhase', 'some response');
+            expect(checked).toEqual([]);
+        });
+
+        it('detects Vietnamese Discovery keywords', () => {
+            const response = 'Hiểu biết của tôi về vấn đề. Giả định: A. TRONG PHẠM VI: X. Ràng buộc: Y.';
+            const checked = autoCheckItems('Discovery', response);
+            expect(checked).toContain('disc-1');
+            expect(checked).toContain('disc-2');
+            expect(checked).toContain('disc-3');
+            expect(checked).toContain('disc-4');
+        });
     });
 
     describe('calculatePhaseCompliance', () => {

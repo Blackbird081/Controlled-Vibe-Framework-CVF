@@ -9,9 +9,23 @@ import { createAIProvider } from '@/lib/ai-providers';
 let apiKey = '';
 const chatMock = vi.fn();
 const trackUsageMock = vi.fn();
+const evaluateEnforcementMock = vi.fn();
 
 vi.mock('@/lib/ai-providers', () => ({
     createAIProvider: () => ({ chat: chatMock }),
+}));
+
+vi.mock('@/lib/enforcement', () => ({
+    evaluateEnforcement: (...args: unknown[]) => evaluateEnforcementMock(...args),
+}));
+
+vi.mock('@/lib/enforcement-log', () => ({
+    logEnforcementDecision: () => {},
+    logPreUatFailure: () => {},
+}));
+
+vi.mock('@/lib/factual-scoring', () => ({
+    calculateFactualScore: () => 0.9,
 }));
 
 vi.mock('@/lib/quota-manager', () => ({
@@ -75,6 +89,8 @@ describe('useAgentChat', () => {
         apiKey = '';
         chatMock.mockReset();
         trackUsageMock.mockReset();
+        evaluateEnforcementMock.mockReset();
+        evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
         localStorage.clear();
         vi.useRealTimers();
     });
@@ -243,5 +259,384 @@ describe('useAgentChat', () => {
 
         alertSpy.mockRestore();
         globalThis.FileReader = originalFileReader;
+    });
+
+    it('handlePhaseGateReject closes gate and sends revision message', async () => {
+        apiKey = 'test-key';
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey, selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        chatMock.mockImplementation(async () => ({
+            text: 'PHASE B: Design\nStep 1',
+            usage: { totalTokens: 10 },
+        }));
+
+        vi.useFakeTimers();
+        const { result } = renderHook(() => useAgentChat({
+            initialPrompt: 'CVF FULL MODE PROTOCOL',
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        await act(async () => { await vi.runAllTimersAsync(); });
+        expect(result.current.phaseGate.show).toBe(true);
+
+        act(() => {
+            result.current.handlePhaseGateReject();
+        });
+
+        expect(result.current.phaseGate.show).toBe(false);
+        expect(result.current.decisionLog.some(d => d.action === 'gate_rejected')).toBe(true);
+    });
+
+    it('handlePhaseGateClose dismisses gate without logging', async () => {
+        apiKey = 'test-key';
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey, selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        chatMock.mockImplementation(async () => ({
+            text: 'PHASE B: Design\nStep 1',
+            usage: { totalTokens: 10 },
+        }));
+
+        vi.useFakeTimers();
+        const { result } = renderHook(() => useAgentChat({
+            initialPrompt: 'CVF FULL MODE PROTOCOL',
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        await act(async () => { await vi.runAllTimersAsync(); });
+        expect(result.current.phaseGate.show).toBe(true);
+        const logLenBefore = result.current.decisionLog.length;
+
+        act(() => {
+            result.current.handlePhaseGateClose();
+        });
+
+        expect(result.current.phaseGate.show).toBe(false);
+        expect(result.current.phaseGate.phase).toBe(null);
+        // Close does NOT add a decision log entry
+        expect(result.current.decisionLog.length).toBe(logLenBefore);
+    });
+
+    it('clearDecisionLog empties the decision log', async () => {
+        apiKey = 'test-key';
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey, selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        chatMock.mockImplementation(async () => ({
+            text: 'PHASE B: Design\nStep 1',
+            usage: { totalTokens: 10 },
+        }));
+
+        vi.useFakeTimers();
+        const { result } = renderHook(() => useAgentChat({
+            initialPrompt: 'CVF FULL MODE PROTOCOL',
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        await act(async () => { await vi.runAllTimersAsync(); });
+
+        act(() => {
+            result.current.handlePhaseGateApprove();
+        });
+        expect(result.current.decisionLog.length).toBeGreaterThan(0);
+
+        act(() => {
+            result.current.clearDecisionLog();
+        });
+        expect(result.current.decisionLog.length).toBe(0);
+    });
+
+    it('handleRemoveAttachment clears attached file', () => {
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey: 'test-key', selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        const originalFileReader = globalThis.FileReader;
+        class MockFileReader {
+            onload: ((event: ProgressEvent<FileReader>) => void) | null = null;
+            readAsText() {
+                if (this.onload) {
+                    const event = { target: { result: 'content' } } as ProgressEvent<FileReader>;
+                    this.onload(event);
+                }
+            }
+        }
+        globalThis.FileReader = MockFileReader as unknown as typeof FileReader;
+
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        const validFile = new File([new Uint8Array([1, 2])], 'note.md');
+        act(() => result.current.handleFileSelected(validFile));
+        expect(result.current.attachedFile).not.toBeNull();
+
+        act(() => result.current.handleRemoveAttachment());
+        expect(result.current.attachedFile).toBeNull();
+
+        globalThis.FileReader = originalFileReader;
+    });
+
+    it('shows error message when AI call throws', async () => {
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey: 'test-key', selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        chatMock.mockRejectedValueOnce(new Error('Network error'));
+
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        act(() => {
+            result.current.setInput('Hello');
+        });
+
+        await act(async () => {
+            await result.current.handleSendMessage();
+        });
+
+        // The assistant message should contain the error
+        const errorMsg = result.current.messages.find(m =>
+            m.role === 'assistant' && m.content.includes('❌')
+        );
+        expect(errorMsg).toBeTruthy();
+        expect(errorMsg!.content).toContain('Connection error');
+    });
+
+    it('shows budget exceeded message when enforcement returns BLOCK with budget', async () => {
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey: 'test-key', selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'BLOCK',
+            reasons: ['Budget exceeded'],
+        });
+
+        // Also make checkBudget fail
+        vi.mocked(await import('@/lib/quota-manager')).useQuotaManager = (() => ({
+            trackUsage: trackUsageMock,
+            checkBudget: () => ({ ok: false, warning: true, remaining: { daily: 0, monthly: 0 } }),
+        })) as any;
+
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        act(() => result.current.setInput('Hello'));
+        await act(async () => { await result.current.handleSendMessage(); });
+
+        const blockMsg = result.current.messages.find(m => m.content.includes('🚫'));
+        expect(blockMsg).toBeTruthy();
+        expect(blockMsg!.content).toContain('Budget exceeded');
+        expect(chatMock).not.toHaveBeenCalled();
+
+        // Restore default
+        vi.mocked(await import('@/lib/quota-manager')).useQuotaManager = (() => ({
+            trackUsage: trackUsageMock,
+            checkBudget: () => ({ ok: true, warning: false, remaining: { daily: Infinity, monthly: Infinity } }),
+        })) as any;
+    });
+
+    it('shows risk-blocked message when enforcement returns BLOCK with riskGate', async () => {
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey: 'test-key', selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'BLOCK',
+            reasons: ['Risk too high'],
+            riskGate: { status: 'BLOCK', riskLevel: 'CRITICAL', reason: 'Risk too high' },
+        });
+
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        act(() => result.current.setInput('Do something dangerous'));
+        await act(async () => { await result.current.handleSendMessage(); });
+
+        const blockMsg = result.current.messages.find(m => m.content.includes('⛔'));
+        expect(blockMsg).toBeTruthy();
+        expect(blockMsg!.content).toContain('CRITICAL');
+        expect(chatMock).not.toHaveBeenCalled();
+    });
+
+    it('shows spec incomplete message when enforcement returns BLOCK without riskGate', async () => {
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey: 'test-key', selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'BLOCK',
+            reasons: ['Spec completeness failed'],
+        });
+
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        act(() => result.current.setInput('Build something'));
+        await act(async () => { await result.current.handleSendMessage(); });
+
+        const blockMsg = result.current.messages.find(m => m.content.includes('⛔'));
+        expect(blockMsg).toBeTruthy();
+        expect(blockMsg!.content).toContain('Spec is incomplete');
+        expect(chatMock).not.toHaveBeenCalled();
+    });
+
+    it('shows clarify message when enforcement returns CLARIFY', async () => {
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey: 'test-key', selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'CLARIFY',
+            reasons: ['Spec needs clarification'],
+        });
+
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        act(() => result.current.setInput('Build something'));
+        await act(async () => { await result.current.handleSendMessage(); });
+
+        const clarifyMsg = result.current.messages.find(m => m.content.includes('❓'));
+        expect(clarifyMsg).toBeTruthy();
+        expect(clarifyMsg!.content).toContain('Spec is missing key details');
+        expect(chatMock).not.toHaveBeenCalled();
+    });
+
+    it('shows halted message when enforcement returns NEEDS_APPROVAL and user rejects', async () => {
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey: 'test-key', selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'NEEDS_APPROVAL',
+            reasons: ['High risk'],
+            riskGate: { status: 'NEEDS_APPROVAL', riskLevel: 'HIGH', reason: 'High risk' },
+        });
+
+        const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        act(() => result.current.setInput('Deploy to production'));
+        await act(async () => { await result.current.handleSendMessage(); });
+
+        const haltMsg = result.current.messages.find(m => m.content.includes('⏸️'));
+        expect(haltMsg).toBeTruthy();
+        expect(haltMsg!.content).toContain('HIGH');
+        expect(chatMock).not.toHaveBeenCalled();
+
+        confirmSpy.mockRestore();
+    });
+
+    it('proceeds when enforcement returns NEEDS_APPROVAL and user approves', async () => {
+        const settings = {
+            ...baseSettings,
+            providers: {
+                ...baseSettings.providers,
+                gemini: { apiKey: 'test-key', selectedModel: 'gemini-2.5-flash' },
+            },
+        };
+
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'NEEDS_APPROVAL',
+            reasons: ['High risk'],
+            riskGate: { status: 'NEEDS_APPROVAL', riskLevel: 'HIGH', reason: 'High risk' },
+        });
+
+        chatMock.mockResolvedValueOnce({
+            text: 'Deployed successfully',
+            usage: { totalTokens: 10 },
+        });
+
+        const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings,
+            labels: baseLabels,
+        }));
+
+        act(() => result.current.setInput('Deploy to production'));
+        await act(async () => { await result.current.handleSendMessage(); });
+
+        // AI was called because user approved
+        expect(chatMock).toHaveBeenCalled();
+        const assistantMsg = result.current.messages.find(m => m.role === 'assistant');
+        expect(assistantMsg).toBeTruthy();
+
+        confirmSpy.mockRestore();
     });
 });

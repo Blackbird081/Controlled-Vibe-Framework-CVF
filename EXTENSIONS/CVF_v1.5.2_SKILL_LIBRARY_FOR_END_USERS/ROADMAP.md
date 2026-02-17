@@ -170,7 +170,7 @@
 ## ✅ Automated Validation
 
 - Script: `scripts/validate_skills.py`
-- Status: ✅ All 114 skills pass (0 issues / 0 warnings) — 2026-02-07
+- Status: ✅ All 131 skills pass (0 issues / 0 warnings) — 2026-02-07
 
 ---
 

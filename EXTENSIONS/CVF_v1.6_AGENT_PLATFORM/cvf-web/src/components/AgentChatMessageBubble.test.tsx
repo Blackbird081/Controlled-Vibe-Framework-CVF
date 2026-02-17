@@ -92,4 +92,22 @@ describe('AgentChatMessageBubble', () => {
         fireEvent.click(copyButton);
         expect(navigator.clipboard.writeText).toHaveBeenCalled();
     });
+
+    it('renders inline code and link markdown', () => {
+        const message: ChatMessage = {
+            id: 'a-4',
+            role: 'assistant',
+            content: 'Use `useState` hook. See [React docs](https://react.dev).',
+            status: 'complete',
+        };
+
+        render(<AgentChatMessageBubble message={message} language="en" />);
+        // Inline code should be rendered with <code> styling
+        const inlineCode = screen.getByText('useState');
+        expect(inlineCode.tagName).toBe('CODE');
+        // Link should be rendered with target="_blank"
+        const link = screen.getByText('React docs');
+        expect(link.getAttribute('target')).toBe('_blank');
+        expect(link.getAttribute('href')).toBe('https://react.dev');
+    });
 });

@@ -64,5 +64,10 @@ describe('template-i18n', () => {
             const result = getTemplateDescription('app_builder_wizard', 'Mô tả tiếng Việt', 'vi');
             expect(result).toBe('Mô tả tiếng Việt');
         });
+
+        it('returns default description for unknown template ID in EN (line 89)', () => {
+            const result = getTemplateDescription('totally_unknown_id', 'FallbackDesc', 'en');
+            expect(result).toBe('FallbackDesc');
+        });
     });
 });

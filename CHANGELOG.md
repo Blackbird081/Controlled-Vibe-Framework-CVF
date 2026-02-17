@@ -2,6 +2,29 @@
 
 ---
 
+## [2026-02-16] — Independent Assessment Fixes & Coverage Push
+
+### Added
+- **Security headers** in `next.config.ts` — 7 headers (HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, X-XSS-Protection, X-DNS-Prefetch-Control)
+- **CVF_SKILL_LIBRARY/README.md** — Redirect to canonical skill library location
+- **44 new tests** across 7 test files (i18n, Settings, ResultViewer, SkillLibrary, useAgentChat, AgentChatHeader, AgentChatMessageBubble, AnalyticsDashboard, auth/login)
+- **Independent Assessment Report** (`docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-16.md`)
+
+### Changed
+- **Test coverage** — 1068 tests passing (71 files), up from 1024 tests (70 files)
+- **Coverage metrics** — 95.57% Stmts | 79.40% Branch | 94.52% Funcs | 96.17% Lines
+- **Skill count** — Corrected from 114 → 131 across 15 documentation files
+- **README.md** — Updated badges, fixed broken URLs (Discord, support email)
+- **ResultViewer.tsx** — Removed dead code (`QualityBadge`, `QualityBreakdown`)
+- **useAgentChat.test.ts** — Refactored checkBudget mock (replaced dynamic imports with static mock pattern)
+
+### Fixed
+- Broken Discord URL → placeholder "Coming soon"
+- Broken support email → placeholder "Coming soon"
+- Incorrect skill count (114 → 131) in 15 files
+
+---
+
 ## [2026-02-08] — Quality Calibration & Governance Overhaul
 
 ### Added
@@ -38,7 +61,7 @@
 ## [2026-02-07] — Quality Pass 2 + Platform Updates
 
 ### Added
-- Domain Refinement (Quality Pass 2) completed for CVF v1.5.2 Skill Library (12 domains, 114 skills)
+- Domain Refinement (Quality Pass 2) completed for CVF v1.5.2 Skill Library (12 domains, 131 skills)
 - Real-world examples across Security/Compliance, AI/ML, Legal, Product & UX, Marketing, and other domains
 - Shared skill validation tools under `tools/skill-validation`
 - Playwright E2E tests for CVF v1.6 Agent Platform (Simple / With Rules / CVF Full flows)
@@ -60,6 +83,6 @@
 ### Fixed
 - Placeholder examples replaced with concrete scenarios
 - Inconsistent domain counts in README
-- Validation warnings eliminated (114 skills pass `validate_skills.py`)
+- Validation warnings eliminated (131 skills pass `validate_skills.py`)
 
 ---

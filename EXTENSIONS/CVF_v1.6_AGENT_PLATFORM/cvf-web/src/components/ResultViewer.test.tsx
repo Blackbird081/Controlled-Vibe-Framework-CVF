@@ -137,6 +137,17 @@ describe('ResultViewer', () => {
         expect(sendBtn).toBeTruthy();
     });
 
+    it('calls onSendToAgent with exported content when Send to Agent is clicked', () => {
+        const onSendToAgent = vi.fn();
+        render(<ResultViewer {...defaultProps} onSendToAgent={onSendToAgent} />);
+        const sendBtn = screen.getByText(/Send to Agent/i);
+        fireEvent.click(sendBtn);
+        expect(onSendToAgent).toHaveBeenCalledTimes(1);
+        // Should be called with a string containing the output content
+        expect(typeof onSendToAgent.mock.calls[0][0]).toBe('string');
+        expect(onSendToAgent.mock.calls[0][0]).toContain('Business Plan');
+    });
+
     it('does not render Send to Agent button when prop is absent', () => {
         render(<ResultViewer {...defaultProps} />);
         expect(screen.queryByText(/Send to Agent/i)).toBeNull();
@@ -315,6 +326,7 @@ describe('ResultViewer', () => {
 | Data1 | Data2 |
 
 - [x] Checked item
+- [X] Capital checked
 - [ ] Unchecked item
 
 Regular **bold** text`;
@@ -397,6 +409,7 @@ Regular **bold** text`;
 | Data1 | Data2 |
 
 - [x] Checked item
+- [X] Capital checked
 - [ ] Unchecked item
 
 Regular **bold** text`;
@@ -441,6 +454,21 @@ Regular **bold** text`;
             await waitFor(() => {
                 expect(mockSaveAs).toHaveBeenCalled();
             });
+        });
+
+        it('toggles export language back to English after switching to Vietnamese', async () => {
+            render(<ResultViewer {...defaultProps} />);
+            fireEvent.click(screen.getByText(/Export/i));
+
+            // Switch to Vietnamese
+            fireEvent.click(screen.getByText(/Tiếng Việt/i));
+            // Verify Vietnamese labels visible
+            expect(screen.getByText(/Tải Word/i)).toBeTruthy();
+
+            // Switch back to English
+            fireEvent.click(screen.getByText(/English/i));
+            // Verify English labels visible
+            expect(screen.getByText(/Download Word/i)).toBeTruthy();
         });
     });
 

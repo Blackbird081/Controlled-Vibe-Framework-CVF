@@ -4,12 +4,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useAgentChat } from './useAgentChat';
-import { createAIProvider } from '@/lib/ai-providers';
 
 let apiKey = '';
 const chatMock = vi.fn();
 const trackUsageMock = vi.fn();
 const evaluateEnforcementMock = vi.fn();
+const checkBudgetMock = vi.fn();
 
 vi.mock('@/lib/ai-providers', () => ({
     createAIProvider: () => ({ chat: chatMock }),
@@ -31,7 +31,7 @@ vi.mock('@/lib/factual-scoring', () => ({
 vi.mock('@/lib/quota-manager', () => ({
     useQuotaManager: () => ({
         trackUsage: trackUsageMock,
-        checkBudget: () => ({ ok: true, warning: false, remaining: { daily: Infinity, monthly: Infinity } }),
+        checkBudget: (...args: unknown[]) => checkBudgetMock(...args),
     }),
 }));
 
@@ -91,6 +91,8 @@ describe('useAgentChat', () => {
         trackUsageMock.mockReset();
         evaluateEnforcementMock.mockReset();
         evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
+        checkBudgetMock.mockReset();
+        checkBudgetMock.mockReturnValue({ ok: true, warning: false, remaining: { daily: Infinity, monthly: Infinity } });
         localStorage.clear();
         vi.useRealTimers();
     });
@@ -452,11 +454,8 @@ describe('useAgentChat', () => {
             reasons: ['Budget exceeded'],
         });
 
-        // Also make checkBudget fail
-        vi.mocked(await import('@/lib/quota-manager')).useQuotaManager = (() => ({
-            trackUsage: trackUsageMock,
-            checkBudget: () => ({ ok: false, warning: true, remaining: { daily: 0, monthly: 0 } }),
-        })) as any;
+        // Make checkBudget return failure
+        checkBudgetMock.mockReturnValue({ ok: false, warning: true, remaining: { daily: 0, monthly: 0 } });
 
         const { result } = renderHook(() => useAgentChat({
             language: 'en',
@@ -471,12 +470,6 @@ describe('useAgentChat', () => {
         expect(blockMsg).toBeTruthy();
         expect(blockMsg!.content).toContain('Budget exceeded');
         expect(chatMock).not.toHaveBeenCalled();
-
-        // Restore default
-        vi.mocked(await import('@/lib/quota-manager')).useQuotaManager = (() => ({
-            trackUsage: trackUsageMock,
-            checkBudget: () => ({ ok: true, warning: false, remaining: { daily: Infinity, monthly: Infinity } }),
-        })) as any;
     });
 
     it('shows risk-blocked message when enforcement returns BLOCK with riskGate', async () => {
@@ -638,5 +631,35 @@ describe('useAgentChat', () => {
         expect(assistantMsg).toBeTruthy();
 
         confirmSpy.mockRestore();
+    });
+
+    it('falls back to localStorage when settings apiKey is empty and handles invalid JSON gracefully', async () => {
+        localStorage.setItem('cvf_settings', '{INVALID_JSON');
+
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings: baseSettings,
+            labels: baseLabels,
+        }));
+
+        act(() => result.current.setInput('Hello'));
+        await act(async () => { await result.current.handleSendMessage(); });
+
+        const sysMsg = result.current.messages.find(m => m.role === 'system' && m.content.includes(baseLabels.noApiKey));
+        expect(sysMsg).toBeTruthy();
+    });
+
+    it('resolvePhaseForMessage returns null for non-existent message id', () => {
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings: baseSettings,
+            labels: baseLabels,
+        }));
+
+        const logBefore = result.current.decisionLog.length;
+        act(() => {
+            result.current.handleAccept('non_existent_id');
+        });
+        expect(result.current.decisionLog.length).toBe(logBefore);
     });
 });

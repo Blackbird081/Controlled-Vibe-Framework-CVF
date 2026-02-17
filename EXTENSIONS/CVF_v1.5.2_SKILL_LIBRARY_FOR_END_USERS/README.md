@@ -9,7 +9,7 @@
 
 | Metric | Value |
 |--------|-------|
-| **Tổng Skills** | **114 skills** |
+| **Tổng Skills** | **131 skills** |
 | **Domains** | 12 domains |
 | **Phase 5 (NEW)** | 16 skills |
 

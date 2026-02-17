@@ -38,4 +38,22 @@ describe('/api/auth/login', () => {
         expect(json.success).toBe(true);
         expect(json.user).toBe('admin');
     });
+
+    it('accepts editor role', async () => {
+        const res = await POST(buildRequest({ username: 'admin', password: 'secret', role: 'editor' }));
+        const json = await res.json();
+        expect(json.role).toBe('editor');
+    });
+
+    it('returns 500 on malformed request body', async () => {
+        const req = new Request('http://localhost/api/auth/login', {
+            method: 'POST',
+            body: 'not-json',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const res = await POST(req);
+        expect(res.status).toBe(500);
+        const json = await res.json();
+        expect(json.success).toBe(false);
+    });
 });

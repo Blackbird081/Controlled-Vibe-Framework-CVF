@@ -280,7 +280,7 @@ A: A prompt is one-shot. CVF gives you persistent context (specs), decision hist
 
 - 📖 [Understand the 4 Phases](../concepts/4-phase-process.md)
 - 🧪 [Try Your First CVF Project (Tutorial)](../tutorials/first-project.md)
-- 📚 [Browse 114 Skills](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
+- 📚 [Browse 131 skills](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
 - 🖥️ [Set Up Web UI](../tutorials/web-ui-setup.md)
 - 👥 [Ready for a team? → Team Guide](team-setup.md)
 

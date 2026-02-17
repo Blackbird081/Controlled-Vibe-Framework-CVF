@@ -161,7 +161,7 @@ describe('AnalyticsDashboard', () => {
                     id: 'evt3',
                     type: 'skill_viewed',
                     timestamp: Date.now(),
-                    data: { skillId: 'skill-3', skillTitle: 'Skill Three', domain: 123 },
+                    data: { skillId: 'skill-3', skillTitle: 'Skill Three', domain: 123, active: true, tags: ['a', 'b'] },
                 },
             ],
             clearEvents: clearMock,

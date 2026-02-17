@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Execution, QualityScore } from '@/types';
+import { Execution } from '@/types';
 import { useLanguage } from '@/lib/i18n';
 
 interface ResultViewerProps {
@@ -13,53 +13,6 @@ interface ResultViewerProps {
     onRetry: () => void;
     onBack: () => void;
     onSendToAgent?: (content: string) => void;
-}
-
-function QualityBadge({ score }: { score: number }) {
-    let color = 'bg-gray-100 text-gray-700';
-    let label = 'Pending';
-
-    if (score >= 8) {
-        color = 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
-        label = '⭐ Excellent';
-    } else if (score >= 6) {
-        color = 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300';
-        label = '✅ Good';
-    } else if (score >= 4) {
-        color = 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
-        label = '⚠️ Acceptable';
-    } else {
-        color = 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
-        label = '❌ Poor';
-    }
-
-    return (
-        <span className={`px-3 py-1 rounded-full text-sm font-medium ${color}`}>
-            {label} ({score.toFixed(1)}/10)
-        </span>
-    );
-}
-
-function QualityBreakdown({ score }: { score: QualityScore }) {
-    const metrics = [
-        { name: 'Structure', value: score.structure },
-        { name: 'Completeness', value: score.completeness },
-        { name: 'Clarity', value: score.clarity },
-        { name: 'Actionability', value: score.actionability },
-    ];
-
-    return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {metrics.map((m) => (
-                <div key={m.name} className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {m.value.toFixed(1)}
-                    </div>
-                    <div className="text-sm text-gray-500">{m.name}</div>
-                </div>
-            ))}
-        </div>
-    );
 }
 
 type ExportLanguage = 'en' | 'vi';

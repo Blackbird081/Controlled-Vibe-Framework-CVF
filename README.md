@@ -6,8 +6,8 @@
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-176%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![Coverage](https://img.shields.io/badge/coverage-94%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![Tests](https://img.shields.io/badge/tests-1068%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![Coverage](https://img.shields.io/badge/coverage-95.6%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
 
 ---
 
@@ -17,7 +17,7 @@ CVF helps you **control AI coding** through:
 
 - ✅ **4-Phase Process** - Discovery → Design → Build → Review
 - ✅ **Governance Toolkit** - Phase gates, risk control, authority matrix
-- ✅ **124 Reusable Skills** - Across 12 domains
+- ✅ **131 Reusable Skills** - Across 12 domains
 - ✅ **Web UI + Agent Platform** - No-code interface, multi-agent workflows
 
 **Use CVF when:**
@@ -281,14 +281,14 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 |--------|--------|
 | **Version** | 1.6.0 (Feb 2026) |
 | **Stability** | Beta - Production-ready architecture, docs improvements ongoing |
-| **Test Coverage** | 94% statements, 85% branches |
-| **Skills** | 124 across 12 domains |
+| **Test Coverage** | 94.25% statements, 78% branches, 93% functions |
+| **Skills** | 131 across 12 domains |
 | **Active Development** | Yes - v1.6 + documentation improvements |
-| **Community** | Building - [Join us!](https://discord.gg/cvf) |
+| **Community** | Building — Discord coming soon |
 
-**Current Status:** 8.5/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-15.md))
-- ✅ **Excellent:** Technical quality (9/10), Governance toolkit (9/10), Bilingual (9/10)
-- ✅ **Good:** Core framework, Architecture, 124 skills
+**Current Status:** 8.7/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-16.md))
+- ✅ **Excellent:** Technical quality (9/10), Governance toolkit (9/10), Bilingual (9/10), Testing (9/10)
+- ✅ **Good:** Core framework, Architecture, 131 skills
 - 🟡 **Improving:** Documentation, Usability
 - ⏳ **Pending:** Real-world validation, Community, npm/PyPI packages
 
@@ -311,7 +311,7 @@ We welcome contributions!
 **Get started:**
 1. Read [Contributing Guide](v1.0/CONTRIBUTING.md)
 2. Check [Good First Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-3. Join [Discord](https://discord.gg/cvf)
+3. Star this repo and watch for community updates
 
 ---
 
@@ -320,14 +320,14 @@ We welcome contributions!
 ### Get Help
 
 - 🔍 **Search:** [Documentation](docs/GET_STARTED.md) | [Troubleshooting](docs/cheatsheets/troubleshooting.md)
-- 💬 **Chat:** [Discord](https://discord.gg/cvf) - Fastest response
+- 💬 **Chat:** Discord (coming soon)
 - 🐛 **Issues:** [GitHub Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
-- 📧 **Email:** support@cvf.io (for sensitive topics)
+- 📧 **Email:** Coming soon
 
 ### Stay Updated
 
 - ⭐ **Star this repo** to get updates
-- 📰 **Follow:** [Blog](https://cvf.io/blog) | [Twitter](https://twitter.com/cvf_framework)
+- 📢 **Follow development** via [CHANGELOG.md](CHANGELOG.md)
 - 📢 **Changelog:** [CHANGELOG.md](CHANGELOG.md)
 
 ---

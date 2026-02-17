@@ -190,6 +190,61 @@ describe('SettingsPage', () => {
 
         consoleSpy.mockRestore();
     });
+
+    it('migrates defaultExportMode to governance on first load with existing settings', async () => {
+        // Set existing settings without migration flag
+        localStorage.setItem('cvf_settings', JSON.stringify({
+            preferences: { defaultExportMode: 'simple', defaultProvider: 'gemini' },
+            providers: { gemini: { apiKey: '', enabled: true, selectedModel: 'gemini-2.5-flash' } },
+        }));
+        // Ensure migration key is NOT set
+        localStorage.removeItem('cvf_settings_migrated_governance');
+
+        renderSettingsPage();
+        await waitFor(() => expect(screen.getByText('⚙️ Cài đặt')).toBeTruthy());
+
+        const saved = JSON.parse(localStorage.getItem('cvf_settings')!);
+        expect(saved.preferences.defaultExportMode).toBe('governance');
+        expect(localStorage.getItem('cvf_settings_migrated_governance')).toBe('1');
+    });
+
+    it('shows agent provider selectors in multi-agent mode', async () => {
+        renderSettingsPage();
+        await waitFor(() => expect(screen.getByText('⚙️ Cài đặt')).toBeTruthy());
+
+        // Switch to Preferences tab
+        fireEvent.click(screen.getByText('🎨 Preferences'));
+
+        // Find the multi-agent mode select and change to multi
+        const allSelects = screen.getAllByRole('combobox') as HTMLSelectElement[];
+        const multiAgentSelect = allSelects.find(s =>
+            s.querySelector('option[value="multi"]') !== null
+        );
+        expect(multiAgentSelect).toBeTruthy();
+
+        fireEvent.change(multiAgentSelect!, { target: { value: 'multi' } });
+
+        // After selecting multi mode, agent provider selects should appear
+        await waitFor(() => {
+            const saved = localStorage.getItem('cvf_settings') || '';
+            expect(saved).toContain('"multiAgentMode":"multi"');
+        });
+
+        // Verify agent role provider selectors are visible (4 roles: orchestrator, architect, builder, reviewer)
+        const updatedSelects = screen.getAllByRole('combobox') as HTMLSelectElement[];
+        // Should have more selects now (original selects + 4 agent provider selects)
+        expect(updatedSelects.length).toBeGreaterThan(allSelects.length);
+
+        // Change one agent provider
+        const agentProviderSelect = updatedSelects.find(s =>
+            !allSelects.includes(s) && s.querySelector('option[value="openai"]') !== null
+        );
+        if (agentProviderSelect) {
+            fireEvent.change(agentProviderSelect, { target: { value: 'openai' } });
+            const saved2 = localStorage.getItem('cvf_settings') || '';
+            expect(saved2).toContain('openai');
+        }
+    });
 });
 
 describe('SettingsButton', () => {

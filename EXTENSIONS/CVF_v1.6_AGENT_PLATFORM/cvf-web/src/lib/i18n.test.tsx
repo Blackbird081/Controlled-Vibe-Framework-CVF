@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent, waitFor, renderHook } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, renderHook, act } from '@testing-library/react';
 import { LanguageProvider, LanguageToggle, useLanguage } from './i18n';
 
 describe('i18n', () => {
@@ -32,5 +32,45 @@ describe('i18n', () => {
         );
         const { result } = renderHook(() => useLanguage(), { wrapper });
         expect(result.current.t('missing.key')).toBe('missing.key');
+    });
+
+    it('ignores invalid language in localStorage and defaults to vi', async () => {
+        localStorage.setItem('cvf_language', 'fr');
+
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <LanguageProvider>{children}</LanguageProvider>
+        );
+        const { result } = renderHook(() => useLanguage(), { wrapper });
+
+        // Default language should be 'vi', not 'fr'
+        expect(result.current.language).toBe('vi');
+        // Document lang should NOT be set to 'fr'
+        expect(document.documentElement.lang).not.toBe('fr');
+    });
+
+    it('ignores empty localStorage language value', async () => {
+        localStorage.removeItem('cvf_language');
+
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <LanguageProvider>{children}</LanguageProvider>
+        );
+        const { result } = renderHook(() => useLanguage(), { wrapper });
+
+        // Default language should be 'vi'
+        expect(result.current.language).toBe('vi');
+    });
+
+    it('sets document.documentElement.lang when changing language', () => {
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <LanguageProvider>{children}</LanguageProvider>
+        );
+        const { result } = renderHook(() => useLanguage(), { wrapper });
+
+        act(() => {
+            result.current.setLanguage('en');
+        });
+
+        expect(document.documentElement.lang).toBe('en');
+        expect(result.current.language).toBe('en');
     });
 });

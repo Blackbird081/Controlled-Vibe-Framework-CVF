@@ -84,4 +84,47 @@ describe('Execution store', () => {
         const found = useExecutionStore.getState().getExecutionById('exec_3');
         expect(found?.templateName).toBe('Template 3');
     });
+
+    it('updateExecution with non-existent id uses empty context (line 36)', () => {
+        // No executions exist → existing is undefined → context = {}
+        useExecutionStore.getState().updateExecution('non_existent_id', { status: 'completed', qualityScore: 50 });
+        expect(trackEventMock).toHaveBeenCalledWith('execution_completed', {
+            id: 'non_existent_id',
+            qualityScore: 50,
+        });
+    });
+
+    it('updateExecution does not overwrite currentExecution when id differs (lines 59-61)', () => {
+        const exec1 = {
+            id: 'exec_a',
+            templateId: 'tpl_a',
+            templateName: 'Template A',
+            category: 'business',
+            input: { goal: 'A' },
+            intent: 'Analyze',
+            status: 'pending' as const,
+            createdAt: new Date(),
+        };
+        const exec2 = {
+            id: 'exec_b',
+            templateId: 'tpl_b',
+            templateName: 'Template B',
+            category: 'technical',
+            input: { goal: 'B' },
+            intent: 'Analyze',
+            status: 'pending' as const,
+            createdAt: new Date(),
+        };
+
+        useExecutionStore.getState().addExecution(exec1);
+        useExecutionStore.getState().addExecution(exec2);
+        // currentExecution is now exec_b (last added)
+
+        // Update exec_a — currentExecution should remain exec_b
+        useExecutionStore.getState().updateExecution('exec_a', { status: 'completed', qualityScore: 90 });
+
+        const state = useExecutionStore.getState();
+        expect(state.currentExecution?.id).toBe('exec_b');
+        expect(state.executions.find(e => e.id === 'exec_a')?.status).toBe('completed');
+    });
 });

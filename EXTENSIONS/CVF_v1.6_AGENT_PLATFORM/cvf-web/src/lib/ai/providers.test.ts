@@ -132,6 +132,24 @@ describe('ai/providers', () => {
             expect(headers['x-api-key']).toBe('my-api-key');
             expect(headers['anthropic-version']).toBe('2023-06-01');
         });
+
+        it('uses custom model when provided', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    content: [{ text: 'custom model response' }],
+                    usage: { input_tokens: 10, output_tokens: 20 },
+                }),
+            });
+
+            const result = await executeAI('claude', 'sk-ant-test', 'Hello', {
+                model: 'claude-3-opus-20240229',
+            });
+            expect(result.success).toBe(true);
+            expect(result.model).toBe('claude-3-opus-20240229');
+            const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+            expect(body.model).toBe('claude-3-opus-20240229');
+        });
     });
 
     describe('executeAI — Gemini', () => {
@@ -180,6 +198,21 @@ describe('ai/providers', () => {
             const url = fetchMock.mock.calls[0][0];
             expect(url).toContain('key=my-gem-key');
         });
+
+        it('uses custom model when provided', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    candidates: [{ content: { parts: [{ text: 'custom' }] } }],
+                }),
+            });
+
+            const result = await executeAI('gemini', 'key-test', 'Hello', {
+                model: 'gemini-1.5-pro',
+            });
+            expect(result.success).toBe(true);
+            expect(result.model).toBe('gemini-1.5-pro');
+        });
     });
 
     describe('executeAI — unknown provider', () => {
@@ -197,6 +230,44 @@ describe('ai/providers', () => {
             const result = await executeAI('openai', 'sk-test', 'Hello');
             expect(result.success).toBe(false);
             expect(result.error).toBe('Unknown error');
+        });
+
+        it('handles non-Error thrown objects for Claude', async () => {
+            fetchMock.mockRejectedValueOnce('claude string error');
+
+            const result = await executeAI('claude', 'sk-test', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toBe('Unknown error');
+        });
+
+        it('handles non-Error thrown objects for Gemini', async () => {
+            fetchMock.mockRejectedValueOnce(42);
+
+            const result = await executeAI('gemini', 'key-test', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toBe('Unknown error');
+        });
+
+        it('handles Claude API error without message', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: false,
+                json: async () => ({}),
+            });
+
+            const result = await executeAI('claude', 'sk-test', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('Claude API error');
+        });
+
+        it('handles Gemini API error without message', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: false,
+                json: async () => ({}),
+            });
+
+            const result = await executeAI('gemini', 'key-test', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('Gemini API error');
         });
     });
 });

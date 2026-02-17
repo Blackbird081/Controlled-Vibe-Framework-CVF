@@ -11,7 +11,7 @@
 
 CVF Skill Governance là lớp kiểm soát hoàn chỉnh cho việc quản lý **Skill/Capability** trong hệ thống AI Agent. Module này:
 
-- **Kiểm soát User Skills** (v1.5.2 SKILL_LIBRARY - 114 skills)
+- **Kiểm soát User Skills** (v1.5.2 SKILL_LIBRARY - 131 skills)
 - **Kiểm soát Agent Skills** (v1.6 AGENT_PLATFORM - 8 tools)
 - **Đánh giá rủi ro** (Risk Assessment) cho mỗi skill
 - **Gán quyền hạn** (Authority Mapping) cho agent
@@ -166,7 +166,7 @@ CVF v1.5.2 Skill Library (Content)
 ## 🚀 Status
 
 - [x] Structure setup completed
-- [x] User Skills registry (114 skills)
+- [x] User Skills registry (131 skills)
 - [x] Agent Skills registry (8 tools)
 - [x] UAT templates integrated
 - [x] CI/CD auto-run registry validation
@@ -185,7 +185,7 @@ python registry/generate_user_skills.py
 ```
 
 Script tự động:
-- Scan v1.5.2 SKILL_LIBRARY (114 skills, 12 domains)
+- Scan v1.5.2 SKILL_LIBRARY (131 skills, 12 domains)
 - Generate `.gov.md` files với metadata chuẩn
 - Assign Risk Level mặc định theo domain
 - Tạo INDEX.md

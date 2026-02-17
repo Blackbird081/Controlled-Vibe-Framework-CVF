@@ -280,7 +280,7 @@ The v1.6 web app integrates skills as templates:
 - [Custom Skills Tutorial](../tutorials/custom-skills.md) — Create your own skill
 - [Risk Model](risk-model.md) — Risk levels for skills
 - [Governance Model](governance-model.md) — How skills fit in governance
-- [Skill Library](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) — Browse all 114 skills
+- [Skill Library](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) — Browse all 131 skills
 
 ---
 

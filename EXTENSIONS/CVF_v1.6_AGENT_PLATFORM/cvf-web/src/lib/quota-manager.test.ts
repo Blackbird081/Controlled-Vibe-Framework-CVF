@@ -216,6 +216,51 @@ describe('QuotaManager', () => {
         expect(stats.today.requests).toBe(0);
     });
 
+    it('getStats correctly excludes records from past days and past months', () => {
+        const now = Date.now();
+        const yesterday = new Date(now - 24 * 60 * 60 * 1000);
+        const lastMonth = new Date(now - 35 * 24 * 60 * 60 * 1000);
+
+        localStorage.setItem(USAGE_KEY, JSON.stringify([
+            {
+                id: 'yesterday_rec',
+                date: yesterday.toISOString().split('T')[0],
+                timestamp: yesterday.getTime(),
+                provider: 'openai',
+                model: 'gpt-4o',
+                inputTokens: 500,
+                outputTokens: 500,
+                cost: 0.01,
+            },
+            {
+                id: 'last_month_rec',
+                date: lastMonth.toISOString().split('T')[0],
+                timestamp: lastMonth.getTime(),
+                provider: 'gemini',
+                model: 'gemini-2.5-flash',
+                inputTokens: 300,
+                outputTokens: 300,
+                cost: 0.005,
+            },
+        ]));
+
+        const manager = new QuotaManager();
+        const stats = manager.getStats();
+
+        // Neither record is from today
+        expect(stats.today.requests).toBe(0);
+        expect(stats.today.tokens).toBe(0);
+
+        // Yesterday's record IS within this month (unless test runs on the 1st),
+        // but last month's record is NOT within this month
+        expect(stats.byProvider.openai.requests).toBe(1);
+        expect(stats.byProvider.gemini.requests).toBe(1);
+
+        // last_month_rec should NOT count toward this month's stats
+        // (it's 35 days ago, so it's in a previous month)
+        expect(stats.month.requests).toBeLessThanOrEqual(1);
+    });
+
     it('saves settings to storage', () => {
         const manager = new QuotaManager();
         manager.updateSettings({ dailyBudget: 2 });

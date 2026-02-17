@@ -304,6 +304,16 @@ describe('Multi-Agent Module', () => {
             expect(result.current.isRunning).toBe(false);
         });
 
+        // --- setWorkflowStatus when no workflow exists (line 229) ---
+        it('setWorkflowStatus is no-op when no workflow exists', () => {
+            const { result } = renderHook(() => useMultiAgentWorkflow());
+            // No workflow created — setWorkflowStatus should not throw
+            act(() => {
+                result.current.setWorkflowStatus('running');
+            });
+            expect(result.current.workflow).toBeNull();
+        });
+
         // --- Sequential Pipeline Integrity ---
         it('should maintain sequential pipeline order through full cycle', () => {
             const { result } = renderHook(() => useMultiAgentWorkflow());

@@ -139,7 +139,7 @@ v1.6  Agent Platform      ██████████████████
 
 **What it added:**
 - End-user orientation (v1.5.1): guides for non-developers
-- Skill Library for End Users (v1.5.2): 114 skills across 12 domains
+- Skill Library for End Users (v1.5.2): 131 skills across 12 domains
 - User-facing documentation and tutorials
 
 **Key files:**

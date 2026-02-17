@@ -9,7 +9,7 @@
 ## 🎯 Objective
 
 Tích hợp `CVF_SKILL_LIBRARY` như **Governance Layer** để kiểm soát:
-1. **User Skills** (v1.5.2 SKILL_LIBRARY_FOR_END_USERS - 114 skills)
+1. **User Skills** (v1.5.2 SKILL_LIBRARY_FOR_END_USERS - 131 skills)
 2. **Agent Skills** (v1.6 AGENT_PLATFORM - 8 tools)
 3. **Agent Output Quality** (UAT framework)
 
@@ -72,7 +72,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
       │    ↓                     ↓        │
       │  v1.5.2              v1.6         │
       │  SKILL_LIBRARY       AGENT        │
-      │  (114 skills)        PLATFORM     │
+      │  (131 skills)        PLATFORM     │
       │  [Content]           (8 tools)    │
       │                      [Execution]  │
       │                                   │
@@ -97,7 +97,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | 1.5 | Create `uat/` folder structure | 5 min | ⬜ |
 | 1.6 | Update README.md with new structure | 15 min | ⬜ |
 
-### Phase 2: User Skills Registry (114 skills)
+### Phase 2: User Skills Registry (131 skills)
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 2.1 | Create `.gov.md` template | 10 min | ⬜ |

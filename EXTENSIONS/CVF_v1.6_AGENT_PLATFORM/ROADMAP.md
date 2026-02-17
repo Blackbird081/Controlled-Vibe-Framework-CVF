@@ -315,7 +315,7 @@ SkillLibrary.tsx    ✅ tests → 100% (branches ~90%)
 
 ## 🌐 Domain Refinement (v1.5.2) — Completed ✅
 
-**Trạng thái:** Hoàn tất Quality Pass 2 cho 12 domains / 114 skills.  
+**Trạng thái:** Hoàn tất Quality Pass 2 cho 12 domains / 131 skills.  
 **Nguồn theo dõi:** `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ROADMAP.md`
 
 ---

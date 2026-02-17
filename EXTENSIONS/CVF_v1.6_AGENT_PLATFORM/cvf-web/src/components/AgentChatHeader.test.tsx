@@ -96,4 +96,28 @@ describe('AgentChatHeader', () => {
 
         expect(screen.getByText(/Claude/i)).toBeTruthy();
     });
+
+    it('renders close button with English aria-label', () => {
+        const onClose = vi.fn();
+        render(
+            <AgentChatHeader
+                currentMode="simple"
+                language="en"
+                defaultProvider="gemini"
+                isStreaming={false}
+                showExportMenu={false}
+                onToggleExportMenu={vi.fn()}
+                messages={[]}
+                onClose={onClose}
+                decisionLogCount={0}
+                decisionLogOpen={false}
+                onToggleDecisionLog={vi.fn()}
+            />
+        );
+
+        const closeBtn = screen.getByLabelText('Close chat');
+        expect(closeBtn).toBeTruthy();
+        fireEvent.click(closeBtn);
+        expect(onClose).toHaveBeenCalledTimes(1);
+    });
 });

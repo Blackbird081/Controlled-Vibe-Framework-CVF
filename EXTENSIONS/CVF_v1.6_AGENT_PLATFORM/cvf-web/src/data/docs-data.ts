@@ -258,6 +258,33 @@ export const DOCS: DocCategory[] = [
             },
         ],
     },
+    {
+        id: 'references',
+        icon: '📘',
+        label: { vi: 'Triển Khai Tham Khảo', en: 'Reference Implementations' },
+        items: [
+            {
+                icon: '🔧',
+                slug: 'toolkit-reference',
+                title: { vi: 'CVF Toolkit Reference', en: 'CVF Toolkit Reference' },
+                desc: {
+                    vi: 'Governance engine mẫu bằng TypeScript — risk classifier, phase controller, audit logger. 111 tests, 98% coverage.',
+                    en: 'Sample governance engine in TypeScript — risk classifier, phase controller, audit logger. 111 tests, 98% coverage.',
+                },
+                tag: { vi: 'THAM KHẢO', en: 'REFERENCE' },
+            },
+            {
+                icon: '🚀',
+                slug: 'starter-template-reference',
+                title: { vi: 'Starter Template Reference', en: 'Starter Template Reference' },
+                desc: {
+                    vi: 'Template server Express.js + TypeScript với AI chat, streaming, đa nhà cung cấp. Mẫu cấu trúc ứng dụng.',
+                    en: 'Express.js + TypeScript server template with AI chat, streaming, multi-provider. Application structure example.',
+                },
+                tag: { vi: 'THAM KHẢO', en: 'REFERENCE' },
+            },
+        ],
+    },
 ];
 
 /* ------------------------------------------------------------------ */

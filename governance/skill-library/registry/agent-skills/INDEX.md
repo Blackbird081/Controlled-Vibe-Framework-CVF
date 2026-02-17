@@ -2,7 +2,7 @@
 
 > Generated from v1.6 AGENT_PLATFORM
 >
-> Total Skills: 20
+> Total Skills: 24
 
 ---
 
@@ -14,9 +14,9 @@ This registry contains governance metadata for all agent skills (tools) defined 
 
 | Risk Level | Count | Skills |
 |------------|-------|--------|
-| **R0 – Minimal** | 4 | Calculator, DateTime, JSON Parse, Skill Progressive Loader |
-| **R1 – Low** | 6 | File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard |
-| **R2 – Medium** | 6 | Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook |
+| **R0 – Minimal** | 5 | Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router |
+| **R1 – Low** | 7 | File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer |
+| **R2 – Medium** | 8 | Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation |
 | **R3 – High** | 4 | Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator |
 | **R4 – Critical** | 0 | — |
 
@@ -46,6 +46,10 @@ This registry contains governance metadata for all agent skills (tools) defined 
 | [AGT-018](AGT-018_AGENT_TEAM_ORCHESTRATOR.gov.md) | Agent Team Orchestrator | R3 | Manual | Orchestrator |
 | [AGT-019](AGT-019_SKILL_PROGRESSIVE_LOADER.gov.md) | Skill Progressive Loader | R0 | Auto | All |
 | [AGT-020](AGT-020_ANALYTICS_DASHBOARD_GENERATOR.gov.md) | Analytics Dashboard Generator | R1 | Auto | Architect, Builder |
+| [AGT-021](AGT-021_CONTEXT_ENGINEERING_OPTIMIZER.gov.md) | Context Engineering Optimizer | R1 | Auto | All |
+| [AGT-022](AGT-022_PROBLEM_SOLVING_FRAMEWORK.gov.md) | Problem-Solving Framework Router | R0 | Auto | All |
+| [AGT-023](AGT-023_SYSTEMATIC_DEBUGGING_ENGINE.gov.md) | Systematic Debugging Engine | R2 | Supervised | Orchestrator, Builder |
+| [AGT-024](AGT-024_MCP_CONTEXT_ISOLATION.gov.md) | MCP Context Isolation Manager | R2 | Supervised | Orchestrator, Builder |
 
 ---
 
@@ -57,6 +61,7 @@ Auto-approved, all roles, all phases:
 - AGT-004: DateTime
 - AGT-005: JSON Parse
 - AGT-019: Skill Progressive Loader
+- AGT-022: Problem-Solving Framework Router
 
 ### Data Operations (R1)
 Auto-approved, read-only or output-only:
@@ -66,6 +71,7 @@ Auto-approved, read-only or output-only:
 - AGT-016: Scientific Research Assistant
 - AGT-017: Document Format Converter
 - AGT-020: Analytics Dashboard Generator
+- AGT-021: Context Engineering Optimizer
 
 ### Workspace Operations (R2)
 Requires supervision, restricted roles:
@@ -85,6 +91,11 @@ Requires supervision, data-aware:
 Requires supervision, hook management:
 - AGT-015: Workflow Automation Hook
 
+### Quality & Integration Operations (R2)
+Requires supervision, debugging & MCP isolation:
+- AGT-023: Systematic Debugging Engine
+- AGT-024: MCP Context Isolation Manager
+
 ### High-Risk Operations (R3)
 Requires explicit manual approval:
 - AGT-002: Code Execute (Builder only)
@@ -97,9 +108,9 @@ Requires explicit manual approval:
 ## Quick Reference
 
 ```
-R0 (Auto):       Calculator, DateTime, JSON Parse, Skill Progressive Loader
-R1 (Auto):       File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard
-R2 (Supervised): Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook
+R0 (Auto):       Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router
+R1 (Auto):       File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer
+R2 (Supervised): Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation
 R3 (Manual):     Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator
 ```
 
@@ -137,6 +148,21 @@ The following 6 skills were added based on analysis of claude-code-templates pat
 
 For full analysis: [Claude Code Templates Analysis Report](../../../../docs/CVF_CLAUDE_CODE_TEMPLATES_ANALYSIS_2026-02-18.md)
 For progressive disclosure guide: [Progressive Disclosure Guide](../../../../docs/CVF_PROGRESSIVE_DISCLOSURE_GUIDE.md)
+
+---
+
+## New Skills (v1.6.3)
+
+The following 4 skills were added based on analysis of claudekit-skills (mrgoonie/claudekit-skills) patterns:
+
+| ID | Inspired By | Key Pattern |
+|----|-------------|-------------|
+| AGT-021 | claudekit-skills/context-engineering | Context quality optimization, token management, degradation detection |
+| AGT-022 | claudekit-skills/problem-solving (6 techniques) | Stuck-type → technique dispatch router |
+| AGT-023 | claudekit-skills/debugging (4 sub-skills) | 4-phase systematic debugging with verification gates |
+| AGT-024 | claudekit-skills/mcp-management + subagent | MCP tool isolation via dedicated subagent |
+
+For full analysis: [ClaudeKit Skills Analysis Report](../../../../docs/CVF_CLAUDEKIT_SKILLS_ANALYSIS_2026-02-18.md)
 
 ---
 

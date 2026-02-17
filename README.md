@@ -19,7 +19,7 @@ CVF helps you **control AI coding** through:
 - ✅ **4-Phase Process** - Discovery → Design → Build → Review
 - ✅ **Governance Toolkit** - Phase gates, risk control, authority matrix
 - ✅ **124 Reusable Skills** - Across 12 domains
-- ✅ **14 Agent Tools** - RAG, Data Viz, Agentic Loop, Browser Auto, MCP & more
+- ✅ **20 Agent Tools** - RAG, Data Viz, Agentic Loop, Browser Auto, MCP, Workflow Hooks, Scientific Research, Agent Teams & more
 - ✅ **Web UI + Agent Platform** - No-code interface, multi-agent workflows
 
 **Use CVF when:**
@@ -85,7 +85,7 @@ When using AI to code without a framework:
 
 - 🤖 **AI Agent Chat** - Gemini, OpenAI, Anthropic
 - 🎯 **Multi-Agent Workflow** - Orchestrator, Architect, Builder, Reviewer
-- 🛠️ **14 Agent Tools** - Web search, code execute, RAG retrieval, data viz, doc parser, agentic loop, browser automation, MCP connector & more
+- 🛠️ **20 Agent Tools** - Web search, code execute, RAG retrieval, data viz, doc parser, agentic loop, browser automation, MCP connector, workflow hooks, scientific research, document converter, agent teams, progressive loader, analytics dashboard
 - 💾 **Chat History** - Persistent conversations
 - 🔐 **Governance Toolkit** - Phase/role/risk control (R0–R3)
 - 📝 **50 Templates** → 📚 **124 Skills** - Bi-directional linking
@@ -164,7 +164,7 @@ When using AI to code without a framework:
 | **🚀 Build** | [First Project](docs/tutorials/first-project.md) · [Web UI](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
 | **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
 | **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills across 12 domains |
-| **🤖 Agent Skills** | [14 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
+| **🤖 Agent Skills** | [20 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide v1](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Usage Guide v2](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-new-skills-v2.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
 | **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) |
 
 **Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
@@ -288,10 +288,10 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 
 | Metric | Status |
 |--------|--------|
-| **Version** | 1.6.0 (Feb 2026) |
+| **Version** | 1.6.2 (Feb 2026) |
 | **Stability** | Beta - Production-ready architecture, docs improvements ongoing |
 | **Test Coverage** | 95.6% statements, 1068+ tests passing |
-| **Skills** | 124 skills across 12 domains + 14 agent tools |
+| **Skills** | 124 skills across 12 domains + 20 agent tools |
 | **Active Development** | Yes - v1.6 + agentic skills + documentation |
 | **Community** | Building — Discord coming soon |
 
@@ -374,4 +374,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 17, 2026 | Version 1.6.0 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: February 18, 2026 | Version 1.6.2 | [Documentation](docs/GET_STARTED.md)*

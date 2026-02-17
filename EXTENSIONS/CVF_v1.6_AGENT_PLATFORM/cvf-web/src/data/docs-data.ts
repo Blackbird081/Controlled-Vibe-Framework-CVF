@@ -146,6 +146,16 @@ export const DOCS: DocCategory[] = [
                 },
                 tag: { vi: 'MỚI', en: 'NEW' },
             },
+            {
+                icon: '🚀',
+                slug: 'using-new-skills-v2',
+                title: { vi: 'Kỹ năng mới v1.6.2', en: 'New Skills v1.6.2' },
+                desc: {
+                    vi: 'Hướng dẫn 6 kỹ năng mới (AGT-015→020): Workflow Hook, Nghiên cứu KH, Chuyển đổi tài liệu, Nhóm Agent, Progressive Loader, Analytics.',
+                    en: 'Guide for 6 new skills (AGT-015→020): Workflow Hook, Scientific Research, Document Converter, Agent Teams, Progressive Loader, Analytics.',
+                },
+                tag: { vi: 'MỚI v1.6.2', en: 'NEW v1.6.2' },
+            },
         ],
     },
     {

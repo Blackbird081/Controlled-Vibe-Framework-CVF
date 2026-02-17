@@ -166,6 +166,16 @@ export const DOCS: DocCategory[] = [
                 },
                 tag: { vi: 'MỚI v1.6.3', en: 'NEW v1.6.3' },
             },
+            {
+                icon: '🏗️',
+                slug: 'app-dev-skills-v4',
+                title: { vi: 'Kỹ năng Phát triển Ứng dụng v1.6.4', en: 'App Development Skills v1.6.4' },
+                desc: {
+                    vi: 'Hướng dẫn 5 kỹ năng mới (AGT-025→029): API Architecture, Full-Stack Testing, Security & Auth, Database Schema, Frontend Components.',
+                    en: 'Guide for 5 new skills (AGT-025→029): API Architecture, Full-Stack Testing, Security & Auth, Database Schema, Frontend Components.',
+                },
+                tag: { vi: 'MỚI v1.6.4', en: 'NEW v1.6.4' },
+            },
         ],
     },
     {

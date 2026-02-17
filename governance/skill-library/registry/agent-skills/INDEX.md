@@ -2,7 +2,7 @@
 
 > Generated from v1.6 AGENT_PLATFORM
 >
-> Total Skills: 24
+> Total Skills: 29
 
 ---
 
@@ -15,8 +15,8 @@ This registry contains governance metadata for all agent skills (tools) defined 
 | Risk Level | Count | Skills |
 |------------|-------|--------|
 | **R0 – Minimal** | 5 | Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router |
-| **R1 – Low** | 7 | File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer |
-| **R2 – Medium** | 8 | Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation |
+| **R1 – Low** | 10 | File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer, API Architecture Designer, Database Schema Architect, Frontend Component Forge |
+| **R2 – Medium** | 10 | Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard |
 | **R3 – High** | 4 | Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator |
 | **R4 – Critical** | 0 | — |
 
@@ -50,6 +50,11 @@ This registry contains governance metadata for all agent skills (tools) defined 
 | [AGT-022](AGT-022_PROBLEM_SOLVING_FRAMEWORK.gov.md) | Problem-Solving Framework Router | R0 | Auto | All |
 | [AGT-023](AGT-023_SYSTEMATIC_DEBUGGING_ENGINE.gov.md) | Systematic Debugging Engine | R2 | Supervised | Orchestrator, Builder |
 | [AGT-024](AGT-024_MCP_CONTEXT_ISOLATION.gov.md) | MCP Context Isolation Manager | R2 | Supervised | Orchestrator, Builder |
+| [AGT-025](AGT-025_API_ARCHITECTURE_DESIGNER.gov.md) | API Architecture Designer | R1 | Auto | Orchestrator, Architect, Builder |
+| [AGT-026](AGT-026_FULLSTACK_TESTING_ENGINE.gov.md) | Full-Stack Testing Engine | R2 | Supervised | Orchestrator, Builder |
+| [AGT-027](AGT-027_SECURITY_AUTH_GUARD.gov.md) | Security & Auth Guard | R2 | Supervised | Orchestrator, Architect, Builder |
+| [AGT-028](AGT-028_DATABASE_SCHEMA_ARCHITECT.gov.md) | Database Schema Architect | R1 | Auto | Orchestrator, Architect, Builder |
+| [AGT-029](AGT-029_FRONTEND_COMPONENT_FORGE.gov.md) | Frontend Component Forge | R1 | Auto | Orchestrator, Architect, Builder |
 
 ---
 
@@ -96,6 +101,17 @@ Requires supervision, debugging & MCP isolation:
 - AGT-023: Systematic Debugging Engine
 - AGT-024: MCP Context Isolation Manager
 
+### App Development Operations — Design & Architecture (R1)
+Auto-approved, methodology & architecture guidance:
+- AGT-025: API Architecture Designer
+- AGT-028: Database Schema Architect
+- AGT-029: Frontend Component Forge
+
+### App Development Operations — Testing & Security (R2)
+Requires supervision, testing/security enforcement:
+- AGT-026: Full-Stack Testing Engine
+- AGT-027: Security & Auth Guard
+
 ### High-Risk Operations (R3)
 Requires explicit manual approval:
 - AGT-002: Code Execute (Builder only)
@@ -109,8 +125,8 @@ Requires explicit manual approval:
 
 ```
 R0 (Auto):       Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router
-R1 (Auto):       File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer
-R2 (Supervised): Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation
+R1 (Auto):       File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer, API Architecture Designer, Database Schema Architect, Frontend Component Forge
+R2 (Supervised): Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard
 R3 (Manual):     Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator
 ```
 
@@ -163,6 +179,20 @@ The following 4 skills were added based on analysis of claudekit-skills (mrgooni
 | AGT-024 | claudekit-skills/mcp-management + subagent | MCP tool isolation via dedicated subagent |
 
 For full analysis: [ClaudeKit Skills Analysis Report](../../../../docs/CVF_CLAUDEKIT_SKILLS_ANALYSIS_2026-02-18.md)
+
+---
+
+## New Skills (v1.6.4) — App Development Domain
+
+The following 5 skills were extracted from both claudekit-skills and claude-code-templates, focused on the **app development domain**:
+
+| ID | Inspired By | Key Pattern |
+|----|-------------|-------------|
+| AGT-025 | claudekit-skills/backend-development + claude-code-templates agents | API design methodology: REST/GraphQL/gRPC decision, microservices patterns |
+| AGT-026 | claudekit-skills/web-testing | Testing pyramid 70-20-10, CI gate system, flakiness mitigation |
+| AGT-027 | claudekit-skills/better-auth + backend-security | OWASP Top 10 defense, OAuth 2.1, auth method selection tree |
+| AGT-028 | claudekit-skills/databases | Schema design patterns, DB selection guide, migration/indexing strategy |
+| AGT-029 | claudekit-skills/frontend-development + ui-styling | Component architecture, Suspense patterns, feature organization |
 
 ---
 

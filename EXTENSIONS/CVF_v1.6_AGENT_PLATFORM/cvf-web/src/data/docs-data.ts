@@ -259,6 +259,23 @@ export const DOCS: DocCategory[] = [
         ],
     },
     {
+        id: 'patterns',
+        icon: '🧠',
+        label: { vi: 'Mẫu Agentic', en: 'Agentic Patterns' },
+        items: [
+            {
+                icon: '🤖',
+                slug: 'agentic-patterns',
+                title: { vi: 'Mẫu từ Claude Quickstarts', en: 'Patterns from Claude Quickstarts' },
+                desc: {
+                    vi: '6 mẫu agentic gốc từ Anthropic — RAG, Data Viz, Doc Parser, Agentic Loop, Browser Automation, MCP — ánh xạ vào CVF governance.',
+                    en: '6 agentic patterns from Anthropic — RAG, Data Viz, Doc Parser, Agentic Loop, Browser Automation, MCP — mapped to CVF governance.',
+                },
+                tag: { vi: 'MỚI', en: 'NEW' },
+            },
+        ],
+    },
+    {
         id: 'references',
         icon: '📘',
         label: { vi: 'Triển Khai Tham Khảo', en: 'Reference Implementations' },

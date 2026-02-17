@@ -415,6 +415,16 @@ Với mỗi task:
 - [Risk Model](../EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/CAPABILITY_RISK_MODEL.md) — R0-R3 levels
 - [v1.3 Toolkit README](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/README.md) — SDK & CLI
 
+### v1.5–v1.6 Agent Platform
+- [Agent Platform Tutorial](../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-platform.md) — Thiết lập Multi-Agent workflow
+- [**Sử dụng 14 Agentic Skills (AGT-001→014)**](../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) — Hướng dẫn chi tiết 6 kỹ năng mới: RAG, Data Viz, Doc Parser, Agentic Loop, Browser Auto, MCP
+- [Agentic Patterns Analysis](../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) — 6 mẫu từ Claude Quickstarts ánh xạ vào CVF
+- [Agent Skills Registry](../governance/skill-library/registry/agent-skills/INDEX.md) — Registry đầy đủ 14 agent skills với governance metadata
+
+### Reference Implementations
+- [CVF Toolkit Reference](../EXTENSIONS/CVF_TOOLKIT_REFERENCE/) — Governance engine mẫu TypeScript (111 tests, 98% coverage)
+- [Starter Template Reference](../EXTENSIONS/CVF_STARTER_TEMPLATE_REFERENCE/) — Express.js + AI chat server template
+
 ### Expert Analysis
 - [CVF Expert Review](./CVF_EXPERT_REVIEW_v1.2.md) — Đánh giá chuyên gia & Roadmap
 
@@ -441,4 +451,4 @@ Với mỗi task:
 
 > **Remember:** CVF không giúp bạn đi nhanh hơn. CVF giúp bạn không đi sai.
 
-*Cập nhật: 29/01/2026*
+*Cập nhật: 17/02/2026 — Bổ sung v1.5–v1.6 Agent Platform, 14 Agent Skills, Reference Implementations*

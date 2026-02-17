@@ -136,6 +136,16 @@ export const DOCS: DocCategory[] = [
                     en: 'Create custom skills following CVF standards: metadata, contract, validation, publish.',
                 },
             },
+            {
+                icon: '🛠️',
+                slug: 'using-agentic-skills',
+                title: { vi: 'Sử dụng Kỹ năng Agentic', en: 'Using Agentic Skills' },
+                desc: {
+                    vi: 'Hướng dẫn chi tiết 6 kỹ năng mới (AGT-009→014): RAG, Data Viz, Doc Parser, Agentic Loop, Browser Auto, MCP. Code + prompt examples.',
+                    en: 'Detailed guide for 6 new skills (AGT-009→014): RAG, Data Viz, Doc Parser, Agentic Loop, Browser Auto, MCP. Code + prompt examples.',
+                },
+                tag: { vi: 'MỚI', en: 'NEW' },
+            },
         ],
     },
     {

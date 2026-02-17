@@ -4,11 +4,11 @@
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
-[![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
+[![Version](https://img.shields.io/badge/version-1.6.2-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-1068%2B%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![Tests](https://img.shields.io/badge/tests-1111%2B%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
 [![Coverage](https://img.shields.io/badge/coverage-95.6%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![Agent Skills](https://img.shields.io/badge/agent%20skills-14-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
+[![Agent Skills](https://img.shields.io/badge/agent%20skills-20-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
 
 ---
 
@@ -290,14 +290,14 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 |--------|--------|
 | **Version** | 1.6.2 (Feb 2026) |
 | **Stability** | Beta - Production-ready architecture, docs improvements ongoing |
-| **Test Coverage** | 95.6% statements, 1068+ tests passing |
+| **Test Coverage** | 95.6% statements, 1111+ tests passing |
 | **Skills** | 124 skills across 12 domains + 20 agent tools |
 | **Active Development** | Yes - v1.6 + agentic skills + documentation |
 | **Community** | Building — Discord coming soon |
 
 **Current Status:** 8.7/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-16.md))
 - ✅ **Excellent:** Technical quality (9/10), Governance toolkit (9/10), Bilingual (9/10), Testing (9/10)
-- ✅ **Good:** Core framework, Architecture, 131 skills
+- ✅ **Good:** Core framework, Architecture, 124 skills + 20 agent tools
 - 🟡 **Improving:** Documentation, Usability
 - ⏳ **Pending:** Real-world validation, Community, npm/PyPI packages
 

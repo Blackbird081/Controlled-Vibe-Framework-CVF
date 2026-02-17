@@ -1,9 +1,9 @@
 # CVF Skill Library - Governance Layer
 
-> **Version:** 1.4.0  
+> **Version:** 1.6.2  
 > **Status:** Active  
 > **Location:** `governance/skill-library/`  
-> **Last Updated:** Feb 11, 2026
+> **Last Updated:** Feb 18, 2026
 
 ---
 
@@ -11,8 +11,8 @@
 
 CVF Skill Governance là lớp kiểm soát hoàn chỉnh cho việc quản lý **Skill/Capability** trong hệ thống AI Agent. Module này:
 
-- **Kiểm soát User Skills** (v1.5.2 SKILL_LIBRARY - 131 skills)
-- **Kiểm soát Agent Skills** (v1.6 AGENT_PLATFORM - 8 tools)
+- **Kiểm soát User Skills** (v1.5.2 SKILL_LIBRARY - 124 skills)
+- **Kiểm soát Agent Skills** (v1.6 AGENT_PLATFORM - 20 tools)
 - **Đánh giá rủi ro** (Risk Assessment) cho mỗi skill
 - **Gán quyền hạn** (Authority Mapping) cho agent
 - **Kiểm soát vòng đời** (Lifecycle Management)
@@ -53,14 +53,14 @@ governance/skill-library/
 │   ├── inject_autonomous_extension.py     # 🔧 Script: add governance block
 │   ├── generate_mapping_records.py        # 🔧 Script: mapping records
 │   ├── run_external_intake.py             # 🔧 Script: end-to-end intake
-│   ├── user-skills/                       # → v1.5.2 skills (114 .gov.md + INDEX)
+│   ├── user-skills/                       # → v1.5.2 skills (124 .gov.md + INDEX)
 │   │   ├── INDEX.md
 │   │   ├── USR-001_*.gov.md
 │   │   └── ...
-│   ├── agent-skills/                      # → v1.6 tools (8 .gov.md + INDEX)
+│   ├── agent-skills/                      # → v1.6 tools (20 .gov.md + INDEX)
 │       ├── INDEX.md
 │       ├── AGT-001_web_search.gov.md
-│       └── ...
+│       └── ... (AGT-001 to AGT-020)
 │   ├── mapping-records/                   # Skill mapping records (per-skill)
 │   │   ├── SKILL-<skill_id>.md
 │   │   └── ...
@@ -166,8 +166,8 @@ CVF v1.5.2 Skill Library (Content)
 ## 🚀 Status
 
 - [x] Structure setup completed
-- [x] User Skills registry (131 skills)
-- [x] Agent Skills registry (8 tools)
+- [x] User Skills registry (124 skills)
+- [x] Agent Skills registry (20 tools)
 - [x] UAT templates integrated
 - [x] CI/CD auto-run registry validation
 - [ ] Implement Dashboard in v1.3 Toolkit
@@ -185,7 +185,7 @@ python registry/generate_user_skills.py
 ```
 
 Script tự động:
-- Scan v1.5.2 SKILL_LIBRARY (131 skills, 12 domains)
+- Scan v1.5.2 SKILL_LIBRARY (124 skills, 12 domains)
 - Generate `.gov.md` files với metadata chuẩn
 - Assign Risk Level mặc định theo domain
 - Tạo INDEX.md
@@ -343,8 +343,8 @@ Registry validation tự chạy trong CI khi có thay đổi:
 ### Registry Index
 | Registry | Count | Link |
 |----------|-------|------|
-| User Skills | 114 | [INDEX.md](./registry/user-skills/INDEX.md) |
-| Agent Skills | 8 | [INDEX.md](./registry/agent-skills/INDEX.md) |
+| User Skills | 124 | [INDEX.md](./registry/user-skills/INDEX.md) |
+| Agent Skills | 20 | [INDEX.md](./registry/agent-skills/INDEX.md) |
 
 ### Mapping Records
 | Type | Link |

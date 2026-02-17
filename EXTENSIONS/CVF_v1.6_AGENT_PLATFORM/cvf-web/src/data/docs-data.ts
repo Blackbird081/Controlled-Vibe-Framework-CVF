@@ -156,6 +156,16 @@ export const DOCS: DocCategory[] = [
                 },
                 tag: { vi: 'MỚI v1.6.2', en: 'NEW v1.6.2' },
             },
+            {
+                icon: '🧠',
+                slug: 'intelligence-skills-v3',
+                title: { vi: 'Kỹ năng Thông minh v1.6.3', en: 'Intelligence Skills v1.6.3' },
+                desc: {
+                    vi: 'Hướng dẫn 4 kỹ năng mới (AGT-021→024): Context Engineering, Problem-Solving Router, Systematic Debugging, MCP Context Isolation.',
+                    en: 'Guide for 4 new skills (AGT-021→024): Context Engineering, Problem-Solving Router, Systematic Debugging, MCP Context Isolation.',
+                },
+                tag: { vi: 'MỚI v1.6.3', en: 'NEW v1.6.3' },
+            },
         ],
     },
     {

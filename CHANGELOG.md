@@ -2,6 +2,36 @@
 
 ---
 
+## [2026-02-17] — Reference Implementation Restructuring
+
+### Changed
+- **CVF Toolkit** → moved to `EXTENSIONS/CVF_TOOLKIT_REFERENCE/` as controlled extension
+- **cvf-starter-template** → moved to `EXTENSIONS/CVF_STARTER_TEMPLATE_REFERENCE/` as controlled extension
+- **Architecture Separation Diagram** → moved to `EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md`, fully rewritten to reflect actual system structure
+- Both READMEs rewritten to clearly state **reference implementation** status (not production runtime)
+- Root README updated — architecture section now mentions reference implementations
+
+### Fixed (CVF Toolkit Reference)
+- **Type deduplication** — All modules now import from `interfaces.ts` instead of re-declaring types locally (~30 duplicate type definitions removed)
+- **RiskLevel** — Added `R0` to align with CVF v1.2 spec (R0–R4)
+- **OperatorRole** — Added `VIEWER` role
+- **AuditEventType** — Added 4 missing event types from audit.logger
+- **Provider interface mismatch** — `provider.interface.ts` now imports from `interfaces.ts` (was incompatible 2-param vs 1-param)
+- **skill.registry.get() bug** — Fixed `!skill.active` → `skill.active === false` (skills without explicit `active: true` were inaccessible)
+- **tsconfig.json** — Added `00_CANONICAL_REFERENCE` and `06_VERSIONING_AND_FREEZE` to `include`
+- **5 test files fixed** — async/await for governance.guard, correct API calls in phase.controller, accurate assertions
+- **dependency.map.md** — Updated to reflect actual import relationships
+- **cvf.config.ts** — Added R0 entries to all risk mappings
+
+### Fixed (CVF Starter Template Reference)
+- **26 dead code files annotated** — `@reference-only` marker added to unused modules
+- **Phase type mismatch** — Mapping comment added between ExecutionState and ExecutionPhase
+- **Provider cost tracking** — TODO comments for hardcoded `costUSD: 0`
+- **Risk escalation** — Warning comment about overly aggressive HIGH risk blocking
+- Added `.gitignore` and `.dockerignore`
+
+---
+
 ## [2026-02-16] — Independent Assessment Fixes & Coverage Push
 
 ### Added

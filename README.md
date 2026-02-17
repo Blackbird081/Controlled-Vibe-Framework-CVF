@@ -169,12 +169,12 @@ When using AI to code without a framework:
 
 ## 🏗️ Architecture
 
-CVF has 3 layers — choose the one you need:
+CVF has 3 layers + reference implementations:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  🌐 PLATFORM (Layer 3)  — Web UI, Agent Chat, Dashboard │
-│     v1.6                — Reference implementation      │
+│     v1.6                — Production runtime             │
 │     → Use when you need UI/demo                           │
 ├─────────────────────────────────────────────────────────┤
 │  🛠️ TOOLS (Layer 2)      — Scoring, UAT, Validation      │
@@ -185,6 +185,11 @@ CVF has 3 layers — choose the one you need:
 │     v1.0, v1.1, v1.2    — Rules + Skill Library         │
 │     → Always needed. Start here.                          │
 └─────────────────────────────────────────────────────────┘
+
+📘 Reference Implementations (controlled extensions):
+  • CVF Toolkit Reference    — Governance engine example (TypeScript)
+  • CVF Starter Template     — Express server template example
+  → Use as learning resources when building new projects
 ```
 
 **Read more:** [CVF Positioning](docs/CVF_POSITIONING.md)

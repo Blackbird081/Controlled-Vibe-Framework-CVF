@@ -1,0 +1,42 @@
+# CVF CANONICAL LOCK FILE
+# This file defines the exact CVF version this Toolkit conforms to.
+# It must be updated only through formal migration protocol.
+
+cvf_repository:
+  name: Controlled-Vibe-Framework-CVF
+  owner: Blackbird081
+  url: https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF
+
+cvf_base_versions:
+  - v1.0
+  - v1.1
+
+cvf_extensions_in_scope:
+  - CVF_v1.2_CAPABILITY_EXTENSION
+  - CVF_v1.3_IMPLEMENTATION_TOOLKIT
+  - CVF_v1.3.1_OPERATOR_EDITION
+  - CVF_v1.4_USAGE_LAYER
+  - CVF_v1.5_UX_PLATFORM
+  - CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS
+  - CVF_v1.6_AGENT_PLATFORM
+
+lock_policy:
+  core_frozen: true
+  extensions_read_only: true
+  modification_allowed: false
+  mapping_only: true
+
+toolkit_policy:
+  toolkit_may_extend: true
+  toolkit_may_not_override_core_logic: true
+  toolkit_must_reference_canonical_source: true
+
+governance_alignment:
+  enforce_phase_model: true
+  enforce_risk_classification: true
+  enforce_change_control: true
+  enforce_operator_permission: true
+  enforce_uat_before_release: true
+
+freeze_timestamp: 2026-02-16
+toolkit_initial_version: 1.0.0

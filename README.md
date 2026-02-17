@@ -6,8 +6,9 @@
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-1068%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![Tests](https://img.shields.io/badge/tests-1068%2B%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
 [![Coverage](https://img.shields.io/badge/coverage-95.6%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![Agent Skills](https://img.shields.io/badge/agent%20skills-14-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
 
 ---
 
@@ -17,7 +18,8 @@ CVF helps you **control AI coding** through:
 
 - ✅ **4-Phase Process** - Discovery → Design → Build → Review
 - ✅ **Governance Toolkit** - Phase gates, risk control, authority matrix
-- ✅ **131 Reusable Skills** - Across 12 domains
+- ✅ **124 Reusable Skills** - Across 12 domains
+- ✅ **14 Agent Tools** - RAG, Data Viz, Agentic Loop, Browser Auto, MCP & more
 - ✅ **Web UI + Agent Platform** - No-code interface, multi-agent workflows
 
 **Use CVF when:**
@@ -83,12 +85,13 @@ When using AI to code without a framework:
 
 - 🤖 **AI Agent Chat** - Gemini, OpenAI, Anthropic
 - 🎯 **Multi-Agent Workflow** - Orchestrator, Architect, Builder, Reviewer
-- 🛠️ **8 Agent Tools** - Web search, code execute, calculator...
+- 🛠️ **14 Agent Tools** - Web search, code execute, RAG retrieval, data viz, doc parser, agentic loop, browser automation, MCP connector & more
 - 💾 **Chat History** - Persistent conversations
-- 🔐 **Governance Toolkit** - Phase/role/risk control
+- 🔐 **Governance Toolkit** - Phase/role/risk control (R0–R3)
 - 📝 **50 Templates** → 📚 **124 Skills** - Bi-directional linking
 - 🧪 **Self-UAT** - 1-click testing
 - 🌐 **Bilingual** - Vietnamese/English
+- 📱 **Mobile Responsive** - Touch-optimized UI with bottom nav & swipe gestures
 
 ### Core Features (All Versions)
 
@@ -161,6 +164,7 @@ When using AI to code without a framework:
 | **🚀 Build** | [First Project](docs/tutorials/first-project.md) · [Web UI](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
 | **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
 | **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills across 12 domains |
+| **🤖 Agent Skills** | [14 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
 | **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) |
 
 **Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
@@ -286,9 +290,9 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 |--------|--------|
 | **Version** | 1.6.0 (Feb 2026) |
 | **Stability** | Beta - Production-ready architecture, docs improvements ongoing |
-| **Test Coverage** | 94.25% statements, 78% branches, 93% functions |
-| **Skills** | 131 across 12 domains |
-| **Active Development** | Yes - v1.6 + documentation improvements |
+| **Test Coverage** | 95.6% statements, 1068+ tests passing |
+| **Skills** | 124 skills across 12 domains + 14 agent tools |
+| **Active Development** | Yes - v1.6 + agentic skills + documentation |
 | **Community** | Building — Discord coming soon |
 
 **Current Status:** 8.7/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-16.md))
@@ -370,4 +374,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 15, 2026 | Version 1.6.0 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: February 17, 2026 | Version 1.6.0 | [Documentation](docs/GET_STARTED.md)*

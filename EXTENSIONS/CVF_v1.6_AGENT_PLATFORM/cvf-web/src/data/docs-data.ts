@@ -282,7 +282,7 @@ export const DOCS: DocCategory[] = [
                     vi: '10 workflow kinh doanh có governance — Sales Pipeline, Prospecting, Ad Spend, Content, VoC, Product, Ops, Calendar, Finance, Competitive Intel.',
                     en: '10 governed business workflows — Sales Pipeline, Prospecting, Ad Spend, Content, VoC, Product, Ops, Calendar, Finance, Competitive Intel.',
                 },
-                tag: { vi: 'MỚI v1.6.6', en: 'NEW v1.6.6' },
+                tag: { vi: 'MỚI', en: 'NEW' },
             },
             {
                 icon: '🤖',

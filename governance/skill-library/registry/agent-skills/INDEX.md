@@ -157,7 +157,7 @@ R3 (Manual):     Code Execute, Agentic Loop, Browser Automation, Agent Team Orch
 
 ---
 
-## New Skills (v1.6.1)
+## Added 2026-02-17 — Agentic Patterns (AGT-009→014)
 
 The following 6 skills were added based on analysis of production agentic patterns:
 
@@ -174,7 +174,7 @@ For usage guide and examples, see: [Using Agentic Skills Tutorial](../../../../E
 
 ---
 
-## New Skills (v1.6.2)
+## Added 2026-02-17 — Claude Code Templates (AGT-015→020)
 
 The following 6 skills were added based on analysis of claude-code-templates patterns:
 
@@ -192,7 +192,7 @@ For progressive disclosure guide: [Progressive Disclosure Guide](../../../../doc
 
 ---
 
-## New Skills (v1.6.3)
+## Added 2026-02-17 — Intelligence Skills (AGT-021→024)
 
 The following 4 skills were added based on analysis of claudekit-skills (mrgoonie/claudekit-skills) patterns:
 
@@ -207,7 +207,7 @@ For full analysis: [ClaudeKit Skills Analysis Report](../../../../docs/CVF_CLAUD
 
 ---
 
-## New Skills (v1.6.4) — App Development Domain
+## Added 2026-02-17 — App Development (AGT-025→029)
 
 The following 5 skills were extracted from both claudekit-skills and claude-code-templates, focused on the **app development domain**:
 
@@ -221,7 +221,7 @@ The following 5 skills were extracted from both claudekit-skills and claude-code
 
 ---
 
-## New Skills (v1.6.5) — DevOps, Quality & AI Integration
+## Added 2026-02-18 — DevOps, Quality & AI (AGT-030→033)
 
 The following 4 skills complete the development lifecycle coverage:
 
@@ -234,7 +234,7 @@ The following 4 skills complete the development lifecycle coverage:
 
 ---
 
-## New Skills (v1.6.6) — Business Operations
+## Added 2026-02-18 — Business Operations (AGT-034)
 
 The following skill extends CVF beyond development into business operator workflows, inspired by "The Operator's Guide to Opus 4.6" (LeadPanther):
 

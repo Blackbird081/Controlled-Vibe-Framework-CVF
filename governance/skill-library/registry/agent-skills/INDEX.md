@@ -2,7 +2,7 @@
 
 > Generated from v1.6 AGENT_PLATFORM
 >
-> Total Skills: 29
+> Total Skills: 33
 
 ---
 
@@ -15,8 +15,8 @@ This registry contains governance metadata for all agent skills (tools) defined 
 | Risk Level | Count | Skills |
 |------------|-------|--------|
 | **R0 – Minimal** | 5 | Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router |
-| **R1 – Low** | 10 | File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer, API Architecture Designer, Database Schema Architect, Frontend Component Forge |
-| **R2 – Medium** | 10 | Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard |
+| **R1 – Low** | 11 | File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer, API Architecture Designer, Database Schema Architect, Frontend Component Forge, Code Review & Verification Gate |
+| **R2 – Medium** | 13 | Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard, Cloud Deployment Strategist, MCP Server Builder, AI Multimodal Processor |
 | **R3 – High** | 4 | Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator |
 | **R4 – Critical** | 0 | — |
 
@@ -55,6 +55,10 @@ This registry contains governance metadata for all agent skills (tools) defined 
 | [AGT-027](AGT-027_SECURITY_AUTH_GUARD.gov.md) | Security & Auth Guard | R2 | Supervised | Orchestrator, Architect, Builder |
 | [AGT-028](AGT-028_DATABASE_SCHEMA_ARCHITECT.gov.md) | Database Schema Architect | R1 | Auto | Orchestrator, Architect, Builder |
 | [AGT-029](AGT-029_FRONTEND_COMPONENT_FORGE.gov.md) | Frontend Component Forge | R1 | Auto | Orchestrator, Architect, Builder |
+| [AGT-030](AGT-030_CLOUD_DEPLOYMENT_STRATEGIST.gov.md) | Cloud Deployment Strategist | R2 | Supervised | Orchestrator, DevOps Builder |
+| [AGT-031](AGT-031_CODE_REVIEW_VERIFICATION_GATE.gov.md) | Code Review & Verification Gate | R1 | Auto | All |
+| [AGT-032](AGT-032_MCP_SERVER_BUILDER.gov.md) | MCP Server Builder | R2 | Supervised | Orchestrator, Builder |
+| [AGT-033](AGT-033_AI_MULTIMODAL_PROCESSOR.gov.md) | AI Multimodal Processor | R2 | Supervised | Orchestrator, Builder |
 
 ---
 
@@ -112,6 +116,22 @@ Requires supervision, testing/security enforcement:
 - AGT-026: Full-Stack Testing Engine
 - AGT-027: Security & Auth Guard
 
+### Infrastructure & Deployment (R2)
+Requires supervision, infrastructure changes:
+- AGT-030: Cloud Deployment Strategist
+
+### Code Quality & Review (R1)
+Auto-approved, review methodology:
+- AGT-031: Code Review & Verification Gate
+
+### MCP Tooling (R2)
+Requires supervision, server creation:
+- AGT-032: MCP Server Builder
+
+### AI & Multimodal Processing (R2)
+Requires supervision, external API + cost implications:
+- AGT-033: AI Multimodal Processor
+
 ### High-Risk Operations (R3)
 Requires explicit manual approval:
 - AGT-002: Code Execute (Builder only)
@@ -125,8 +145,8 @@ Requires explicit manual approval:
 
 ```
 R0 (Auto):       Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router
-R1 (Auto):       File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer, API Architecture Designer, Database Schema Architect, Frontend Component Forge
-R2 (Supervised): Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard
+R1 (Auto):       File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer, API Architecture Designer, Database Schema Architect, Frontend Component Forge, Code Review & Verification Gate
+R2 (Supervised): Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard, Cloud Deployment Strategist, MCP Server Builder, AI Multimodal Processor
 R3 (Manual):     Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator
 ```
 
@@ -193,6 +213,19 @@ The following 5 skills were extracted from both claudekit-skills and claude-code
 | AGT-027 | claudekit-skills/better-auth + backend-security | OWASP Top 10 defense, OAuth 2.1, auth method selection tree |
 | AGT-028 | claudekit-skills/databases | Schema design patterns, DB selection guide, migration/indexing strategy |
 | AGT-029 | claudekit-skills/frontend-development + ui-styling | Component architecture, Suspense patterns, feature organization |
+
+---
+
+## New Skills (v1.6.5) — DevOps, Quality & AI Integration
+
+The following 4 skills complete the development lifecycle coverage:
+
+| ID | Inspired By | Key Pattern |
+|----|-------------|-------------|
+| AGT-030 | claudekit-skills/devops (Cloudflare/Docker/GCP/K8s) | Platform selection decision tree, containerization strategy, GitOps workflows |
+| AGT-031 | claudekit-skills/code-review (3-practice methodology) | No performative agreement, verification gates, evidence-before-claims |
+| AGT-032 | claudekit-skills/mcp-builder (4-phase MCP dev) | Agent-centric MCP server design, evaluation harness, Python/TypeScript SDK |
+| AGT-033 | claudekit-skills/ai-multimodal (Gemini API) | Multimodal processing: audio/image/video/document, cost optimization |
 
 ---
 

@@ -176,6 +176,16 @@ export const DOCS: DocCategory[] = [
                 },
                 tag: { vi: 'MỚI v1.6.4', en: 'NEW v1.6.4' },
             },
+            {
+                icon: '🚀',
+                slug: 'devops-ai-skills-v5',
+                title: { vi: 'Kỹ năng DevOps & AI v1.6.5', en: 'DevOps & AI Skills v1.6.5' },
+                desc: {
+                    vi: 'Hướng dẫn 4 kỹ năng mới (AGT-030→033): Cloud Deployment, Code Review, MCP Builder, AI Multimodal.',
+                    en: 'Guide for 4 new skills (AGT-030→033): Cloud Deployment, Code Review, MCP Builder, AI Multimodal.',
+                },
+                tag: { vi: 'MỚI v1.6.5', en: 'NEW v1.6.5' },
+            },
         ],
     },
     {

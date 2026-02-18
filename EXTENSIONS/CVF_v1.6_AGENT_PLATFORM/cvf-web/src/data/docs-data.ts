@@ -136,56 +136,7 @@ export const DOCS: DocCategory[] = [
                     en: 'Create custom skills following CVF standards: metadata, contract, validation, publish.',
                 },
             },
-            {
-                icon: '🛠️',
-                slug: 'using-agentic-skills',
-                title: { vi: 'Sử dụng Kỹ năng Agentic', en: 'Using Agentic Skills' },
-                desc: {
-                    vi: 'Hướng dẫn chi tiết 6 kỹ năng mới (AGT-009→014): RAG, Data Viz, Doc Parser, Agentic Loop, Browser Auto, MCP. Code + prompt examples.',
-                    en: 'Detailed guide for 6 new skills (AGT-009→014): RAG, Data Viz, Doc Parser, Agentic Loop, Browser Auto, MCP. Code + prompt examples.',
-                },
-                tag: { vi: 'MỚI', en: 'NEW' },
-            },
-            {
-                icon: '🚀',
-                slug: 'using-new-skills-v2',
-                title: { vi: 'Kỹ năng mới v1.6.2', en: 'New Skills v1.6.2' },
-                desc: {
-                    vi: 'Hướng dẫn 6 kỹ năng mới (AGT-015→020): Workflow Hook, Nghiên cứu KH, Chuyển đổi tài liệu, Nhóm Agent, Progressive Loader, Analytics.',
-                    en: 'Guide for 6 new skills (AGT-015→020): Workflow Hook, Scientific Research, Document Converter, Agent Teams, Progressive Loader, Analytics.',
-                },
-                tag: { vi: 'MỚI v1.6.2', en: 'NEW v1.6.2' },
-            },
-            {
-                icon: '🧠',
-                slug: 'intelligence-skills-v3',
-                title: { vi: 'Kỹ năng Thông minh v1.6.3', en: 'Intelligence Skills v1.6.3' },
-                desc: {
-                    vi: 'Hướng dẫn 4 kỹ năng mới (AGT-021→024): Context Engineering, Problem-Solving Router, Systematic Debugging, MCP Context Isolation.',
-                    en: 'Guide for 4 new skills (AGT-021→024): Context Engineering, Problem-Solving Router, Systematic Debugging, MCP Context Isolation.',
-                },
-                tag: { vi: 'MỚI v1.6.3', en: 'NEW v1.6.3' },
-            },
-            {
-                icon: '🏗️',
-                slug: 'app-dev-skills-v4',
-                title: { vi: 'Kỹ năng Phát triển Ứng dụng v1.6.4', en: 'App Development Skills v1.6.4' },
-                desc: {
-                    vi: 'Hướng dẫn 5 kỹ năng mới (AGT-025→029): API Architecture, Full-Stack Testing, Security & Auth, Database Schema, Frontend Components.',
-                    en: 'Guide for 5 new skills (AGT-025→029): API Architecture, Full-Stack Testing, Security & Auth, Database Schema, Frontend Components.',
-                },
-                tag: { vi: 'MỚI v1.6.4', en: 'NEW v1.6.4' },
-            },
-            {
-                icon: '🚀',
-                slug: 'devops-ai-skills-v5',
-                title: { vi: 'Kỹ năng DevOps & AI v1.6.5', en: 'DevOps & AI Skills v1.6.5' },
-                desc: {
-                    vi: 'Hướng dẫn 4 kỹ năng mới (AGT-030→033): Cloud Deployment, Code Review, MCP Builder, AI Multimodal.',
-                    en: 'Guide for 4 new skills (AGT-030→033): Cloud Deployment, Code Review, MCP Builder, AI Multimodal.',
-                },
-                tag: { vi: 'MỚI v1.6.5', en: 'NEW v1.6.5' },
-            },
+
         ],
     },
     {
@@ -309,19 +260,28 @@ export const DOCS: DocCategory[] = [
         ],
     },
     {
-        id: 'patterns',
-        icon: '🧠',
-        label: { vi: 'Mẫu Agentic', en: 'Agentic Patterns' },
+        id: 'agent-skills',
+        icon: '🤖',
+        label: { vi: 'Kỹ năng Agent', en: 'Agent Skills' },
         items: [
+            {
+                icon: '🗂️',
+                slug: 'agent-skills-catalog',
+                title: { vi: 'Danh mục 33 Kỹ năng', en: '33 Skills Catalog' },
+                desc: {
+                    vi: 'Tổng hợp 33 kỹ năng theo 6 lĩnh vực — Foundation, Agentic, Workflow, Intelligence, Development, DevOps. Bản đồ quan hệ kỹ năng.',
+                    en: 'All 33 skills organized by 6 domains — Foundation, Agentic, Workflow, Intelligence, Development, DevOps. Skill relationship map.',
+                },
+                tag: { vi: 'TỔNG HỢP', en: 'CATALOG' },
+            },
             {
                 icon: '🤖',
                 slug: 'agentic-patterns',
                 title: { vi: 'Mẫu từ Claude Quickstarts', en: 'Patterns from Claude Quickstarts' },
                 desc: {
                     vi: '6 mẫu agentic gốc từ Anthropic — RAG, Data Viz, Doc Parser, Agentic Loop, Browser Automation, MCP — ánh xạ vào CVF governance.',
-                    en: '6 agentic patterns from Anthropic — RAG, Data Viz, Doc Parser, Agentic Loop, Browser Automation, MCP — mapped to CVF governance.',
+                    en: '6 agentic patterns from Anthropic — mapped to CVF governance.',
                 },
-                tag: { vi: 'MỚI', en: 'NEW' },
             },
         ],
     },

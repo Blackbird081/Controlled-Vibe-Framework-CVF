@@ -1,8 +1,8 @@
-# Danh mục Kỹ năng Agent — 33 Kỹ năng theo Lĩnh vực
+# Danh mục Kỹ năng Agent — 34 Kỹ năng theo Lĩnh vực
 
-**Tổng:** 33 kỹ năng | **Rủi ro:** R0(5) R1(11) R2(13) R3(4)
+**Tổng:** 34 kỹ năng | **Rủi ro:** R0(5) R1(11) R2(14) R3(4)
 
-Toàn bộ kỹ năng agent được tổ chức thành **6 lĩnh vực** theo chức năng, với bản đồ quan hệ giữa các kỹ năng.
+Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo chức năng, với bản đồ quan hệ giữa các kỹ năng.
 
 ---
 
@@ -152,6 +152,46 @@ Toàn bộ kỹ năng agent được tổ chức thành **6 lĩnh vực** theo c
 
 ---
 
+## Lĩnh vực 7: Kinh doanh & Vận hành
+
+> Workflow có governance cho Operator không kỹ thuật — Sales, Marketing, Product, Ops, Finance, Strategy. Lấy cảm hứng từ "The Operator's Guide to Opus 4.6".
+
+| # | Kỹ năng | Rủi ro | Chức năng |
+|---|---------|--------|----------|
+| AGT-034 | **Operator Workflow Orchestrator** | R2 | 10 workflow kinh doanh với verification gates |
+
+### 10 Mẫu Workflow
+
+| # | Workflow | Danh mục | Kết nối | Rủi ro |
+|---|---------|---------|--------|-------|
+| 1 | Quản lý Pipeline | Doanh thu | CRM (HubSpot/Salesforce) | R2 |
+| 2 | Tìm kiếm Prospect | Doanh thu | Agentic Search | R2 |
+| 3 | Giám sát Chi phí QC | Doanh thu | Google/Meta CSV | R2 |
+| 4 | Phân phối Nội dung | Doanh thu | Văn bản | R1 |
+| 5 | Tiếng nói Khách hàng | Sản phẩm & VH | Intercom/Zendesk | R2 |
+| 6 | Báo cáo Sản phẩm Hàng tuần | Sản phẩm & VH | Jira + Notion | R2 |
+| 7 | Phẫu thuật Quy trình | Sản phẩm & VH | Upload file (1M tokens) | R2 |
+| 8 | Tối ưu Lịch họ | Sản phẩm & VH | Google Calendar | R2 |
+| 9 | Phân tích Tài chính | Tài chính | SEC filings / uploads | R2 |
+| 10 | Tình báo Cạnh tranh | Chiến lược | Agentic Search (swarm) | R3 |
+
+**CVF Governance cho mọi workflow:**
+- Verification gates (kiểm chéo output AI với hệ thống nguồn)
+- Chấm điểm độ tin cậy (Xác minh / Suy luận / Suy đoán)
+- Con người trong vòng lặp cho mọi hành động ghi (không tự gửi email, không tự đặt lịch)
+- Quy tắc leo thang cho nội dung nhạy cảm (pháp lý, tài chính, enterprise)
+- Nhật ký kiểm toán cho tuân thủ
+
+**Quan hệ:**
+- AGT-034 ← dùng AGT-018 (Agent Teams) cho swarm workflows (#10)
+- AGT-034 ← dùng AGT-021 (Context Engineering) cho phân tích tài liệu lớn (#7)
+- AGT-034 ← dùng phương pháp verification của AGT-031 (Code Review) cho mọi output
+- AGT-034 ← dùng AGT-015 (Workflow Hook) cho automation trước/sau workflow
+
+> **Hướng dẫn chi tiết:** [Workflow cho Operator](operator-workflows)
+
+---
+
 ## Bản đồ Quan hệ Tổng thể
 
 ```
@@ -184,6 +224,14 @@ Toàn bộ kỹ năng agent được tổ chức thành **6 lĩnh vực** theo c
               │ AGT-030→033               │
               │ Deploy, Review, MCP Build, │
               │ Multimodal                │
+              └──────────────┬─────────────┘
+                             │
+                             ▼
+              ┌────────────────────────────┐
+              │ LV 7: Kinh doanh & VH     │
+              │ AGT-034                   │
+              │ 10 Operator Workflows     │
+              │ Sales/Mktg/Ops/Finance    │
               └────────────────────────────┘
 ```
 
@@ -197,8 +245,8 @@ Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Rout
 ### R1 — Tự động (11 kỹ năng)
 File Read, Data Viz, Doc Parser, Scientific Research, Doc Converter, Analytics Dashboard, Context Optimizer, API Architecture, Database Schema, Frontend Forge, Code Review Gate
 
-### R2 — Giám sát (13 kỹ năng)
-Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debug, MCP Isolation, Full-Stack Testing, Security Guard, Cloud Deploy, MCP Builder, AI Multimodal
+### R2 — Giám sát (14 kỹ năng)
+Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debug, MCP Isolation, Full-Stack Testing, Security Guard, Cloud Deploy, MCP Builder, AI Multimodal, Operator Workflow
 
 ### R3 — Thủ công (4 kỹ năng)
 Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator

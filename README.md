@@ -19,7 +19,7 @@ CVF helps you **control AI coding** through:
 - ✅ **4-Phase Process** - Discovery → Design → Build → Review
 - ✅ **Governance Toolkit** - Phase gates, risk control, authority matrix
 - ✅ **124 Reusable Skills** - Across 12 domains
-- ✅ **33 Agent Tools** - RAG, Data Viz, Agentic Loop, Browser Auto, MCP, Workflow Hooks, Scientific Research, Agent Teams, Context Engineering, Debugging, API Architecture, Testing, Security, Database, Frontend, Cloud Deployment, Code Review, MCP Builder, AI Multimodal & more
+- ✅ **34 Agent Tools** - RAG, Data Viz, Agentic Loop, Browser Auto, MCP, Workflow Hooks, Scientific Research, Agent Teams, Context Engineering, Debugging, API Architecture, Testing, Security, Database, Frontend, Cloud Deployment, Code Review, MCP Builder, AI Multimodal, Operator Workflow & more
 - ✅ **Web UI + Agent Platform** - No-code interface, multi-agent workflows
 
 **Use CVF when:**
@@ -85,7 +85,7 @@ When using AI to code without a framework:
 
 - 🤖 **AI Agent Chat** - Gemini, OpenAI, Anthropic
 - 🎯 **Multi-Agent Workflow** - Orchestrator, Architect, Builder, Reviewer
-- ✅ **33 Agent Tools** - Web search, code execute, RAG retrieval, data viz, doc parser, agentic loop, browser automation, MCP connector, workflow hooks, scientific research, document converter, agent teams, progressive loader, analytics dashboard, context engineering, problem-solving, systematic debugging, MCP isolation, API architecture, full-stack testing, security & auth, database schema, frontend components, cloud deployment, code review, MCP builder, AI multimodal
+- ✅ **34 Agent Tools** - Web search, code execute, RAG retrieval, data viz, doc parser, agentic loop, browser automation, MCP connector, workflow hooks, scientific research, document converter, agent teams, progressive loader, analytics dashboard, context engineering, problem-solving, systematic debugging, MCP isolation, API architecture, full-stack testing, security & auth, database schema, frontend components, cloud deployment, code review, MCP builder, AI multimodal, operator workflow orchestrator
 - 💾 **Chat History** - Persistent conversations
 - 🔐 **Governance Toolkit** - Phase/role/risk control (R0–R3)
 - 📝 **50 Templates** → 📚 **124 Skills** - Bi-directional linking
@@ -164,7 +164,7 @@ When using AI to code without a framework:
 | **🚀 Build** | [First Project](docs/tutorials/first-project.md) · [Web UI](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
 | **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
 | **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills across 12 domains |
-| **🤖 Agent Skills** | [33 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide v1](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Usage Guide v2](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-new-skills-v2.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
+| **🤖 Agent Skills** | [34 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide v1](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Usage Guide v2](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-new-skills-v2.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
 | **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) |
 
 **Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
@@ -291,13 +291,13 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 | **Version** | 1.6.3 (Feb 2026) |
 | **Stability** | Beta - Production-ready architecture, docs improvements ongoing |
 | **Test Coverage** | 95.6% statements, 1111+ tests passing |
-| **Skills** | 124 skills across 12 domains + 33 agent tools |
+| **Skills** | 124 skills across 12 domains + 34 agent tools |
 | **Active Development** | Yes - v1.6 + agentic skills + documentation |
 | **Community** | Building — Discord coming soon |
 
 **Current Status:** 8.7/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-16.md))
 - ✅ **Excellent:** Technical quality (9/10), Governance toolkit (9/10), Bilingual (9/10), Testing (9/10)
-- ✅ **Good:** Core framework, Architecture, 124 skills + 33 agent tools
+- ✅ **Good:** Core framework, Architecture, 124 skills + 34 agent tools
 - 🟡 **Improving:** Documentation, Usability
 - ⏳ **Pending:** Real-world validation, Community, npm/PyPI packages
 

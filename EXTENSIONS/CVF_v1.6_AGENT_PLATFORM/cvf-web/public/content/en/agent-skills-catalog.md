@@ -1,8 +1,8 @@
-# Agent Skills Catalog — 33 Skills by Domain
+# Agent Skills Catalog — 34 Skills by Domain
 
-**Total:** 33 skills | **Risk:** R0(5) R1(11) R2(13) R3(4)
+**Total:** 34 skills | **Risk:** R0(5) R1(11) R2(14) R3(4)
 
-All agent skills organized into **6 domains** by function, with relationship mapping between skills.
+All agent skills organized into **7 domains** by function, with relationship mapping between skills.
 
 ---
 
@@ -152,6 +152,46 @@ All agent skills organized into **6 domains** by function, with relationship map
 
 ---
 
+## Domain 7: Business Operations
+
+> Governed workflows for non-technical operators — Sales, Marketing, Product, Ops, Finance, Strategy. Inspired by "The Operator's Guide to Opus 4.6".
+
+| # | Skill | Risk | What It Does |
+|---|-------|------|-------------|
+| AGT-034 | **Operator Workflow Orchestrator** | R2 | 10 governed business workflows with verification gates |
+
+### 10 Workflow Templates
+
+| # | Workflow | Category | Connector | Risk |
+|---|---------|----------|-----------|------|
+| 1 | Pipeline Risk Manager | Revenue | CRM (HubSpot/Salesforce) | R2 |
+| 2 | Signal-Based Prospecting | Revenue | Agentic Search | R2 |
+| 3 | Ad Spend Watchdog | Revenue | Google/Meta CSV | R2 |
+| 4 | Content Distribution Engine | Revenue | Text input | R1 |
+| 5 | Voice of Customer Engine | Product & Ops | Intercom/Zendesk | R2 |
+| 6 | Product Manager's Weekly | Product & Ops | Jira + Notion | R2 |
+| 7 | Process Surgeon | Product & Ops | File upload (1M tokens) | R2 |
+| 8 | Meeting Optimizer | Product & Ops | Google Calendar | R2 |
+| 9 | Financial Analysis Protocol | Finance | SEC filings / uploads | R2 |
+| 10 | Competitive Intelligence Swarm | Strategy | Agentic Search (swarm) | R3 |
+
+**CVF Governance overlay on every workflow:**
+- Verification gates (cross-check AI output with source systems)
+- Confidence scoring (Verified / Inferred / Speculative)
+- Human-in-the-loop for all write actions (no auto-send emails, no auto-schedule)
+- Escalation rules for sensitive content (legal, financial, enterprise)
+- Audit trail for compliance
+
+**Relationships:**
+- AGT-034 ← uses AGT-018 (Agent Teams) for swarm workflows (#10)
+- AGT-034 ← uses AGT-021 (Context Engineering) for large document analysis (#7)
+- AGT-034 ← uses AGT-031 (Code Review) verification methodology for all outputs
+- AGT-034 ← uses AGT-015 (Workflow Hook) for pre/post-workflow automation
+
+> **Detailed tutorial:** [Operator Workflows](operator-workflows)
+
+---
+
 ## Complete Relationship Map
 
 ```
@@ -197,8 +237,8 @@ Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Rout
 ### R1 — Auto (11 skills)
 File Read, Data Viz, Doc Parser, Scientific Research, Doc Converter, Analytics Dashboard, Context Optimizer, API Architecture, Database Schema, Frontend Forge, Code Review Gate
 
-### R2 — Supervised (13 skills)
-Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debug, MCP Isolation, Full-Stack Testing, Security Guard, Cloud Deploy, MCP Builder, AI Multimodal
+### R2 — Supervised (14 skills)
+Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debug, MCP Isolation, Full-Stack Testing, Security Guard, Cloud Deploy, MCP Builder, AI Multimodal, Operator Workflow
 
 ### R3 — Manual (4 skills)
 Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator

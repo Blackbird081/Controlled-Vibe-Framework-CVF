@@ -2,7 +2,7 @@
 
 > Generated from v1.6 AGENT_PLATFORM
 >
-> Total Skills: 33
+> Total Skills: 34
 
 ---
 
@@ -16,7 +16,7 @@ This registry contains governance metadata for all agent skills (tools) defined 
 |------------|-------|--------|
 | **R0 – Minimal** | 5 | Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router |
 | **R1 – Low** | 11 | File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer, API Architecture Designer, Database Schema Architect, Frontend Component Forge, Code Review & Verification Gate |
-| **R2 – Medium** | 13 | Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard, Cloud Deployment Strategist, MCP Server Builder, AI Multimodal Processor |
+| **R2 – Medium** | 14 | Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard, Cloud Deployment Strategist, MCP Server Builder, AI Multimodal Processor, Operator Workflow Orchestrator |
 | **R3 – High** | 4 | Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator |
 | **R4 – Critical** | 0 | — |
 
@@ -59,6 +59,7 @@ This registry contains governance metadata for all agent skills (tools) defined 
 | [AGT-031](AGT-031_CODE_REVIEW_VERIFICATION_GATE.gov.md) | Code Review & Verification Gate | R1 | Auto | All |
 | [AGT-032](AGT-032_MCP_SERVER_BUILDER.gov.md) | MCP Server Builder | R2 | Supervised | Orchestrator, Builder |
 | [AGT-033](AGT-033_AI_MULTIMODAL_PROCESSOR.gov.md) | AI Multimodal Processor | R2 | Supervised | Orchestrator, Builder |
+| [AGT-034](AGT-034_OPERATOR_WORKFLOW_ORCHESTRATOR.gov.md) | Operator Workflow Orchestrator | R2 | Supervised | Orchestrator, Operator, Architect |
 
 ---
 
@@ -132,6 +133,10 @@ Requires supervision, server creation:
 Requires supervision, external API + cost implications:
 - AGT-033: AI Multimodal Processor
 
+### Business Operations (R2)
+Requires supervision, business system connectors + data synthesis:
+- AGT-034: Operator Workflow Orchestrator (10 governed business workflows: Sales, Marketing, Product, Ops, Finance, Strategy)
+
 ### High-Risk Operations (R3)
 Requires explicit manual approval:
 - AGT-002: Code Execute (Builder only)
@@ -146,7 +151,7 @@ Requires explicit manual approval:
 ```
 R0 (Auto):       Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router
 R1 (Auto):       File Read, Data Visualization, Document Parser, Scientific Research, Document Converter, Analytics Dashboard, Context Engineering Optimizer, API Architecture Designer, Database Schema Architect, Frontend Component Forge, Code Review & Verification Gate
-R2 (Supervised): Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard, Cloud Deployment Strategist, MCP Server Builder, AI Multimodal Processor
+R2 (Supervised): Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debugging, MCP Context Isolation, Full-Stack Testing Engine, Security & Auth Guard, Cloud Deployment Strategist, MCP Server Builder, AI Multimodal Processor, Operator Workflow Orchestrator
 R3 (Manual):     Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator
 ```
 
@@ -226,6 +231,16 @@ The following 4 skills complete the development lifecycle coverage:
 | AGT-031 | claudekit-skills/code-review (3-practice methodology) | No performative agreement, verification gates, evidence-before-claims |
 | AGT-032 | claudekit-skills/mcp-builder (4-phase MCP dev) | Agent-centric MCP server design, evaluation harness, Python/TypeScript SDK |
 | AGT-033 | claudekit-skills/ai-multimodal (Gemini API) | Multimodal processing: audio/image/video/document, cost optimization |
+
+---
+
+## New Skills (v1.6.6) — Business Operations
+
+The following skill extends CVF beyond development into business operator workflows, inspired by "The Operator's Guide to Opus 4.6" (LeadPanther):
+
+| ID | Inspired By | Key Pattern |
+|----|-------------|-------------|
+| AGT-034 | "The Operator's Guide to Opus 4.6" + CVF governance overlay | 10 governed business workflows (Sales Pipeline, Prospecting, Ad Spend, Content, VoC, Product, Ops, Calendar, Finance, Competitive Intel) with verification gates, confidence scoring, and human-in-the-loop |
 
 ---
 

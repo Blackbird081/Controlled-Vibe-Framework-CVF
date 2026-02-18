@@ -267,12 +267,22 @@ export const DOCS: DocCategory[] = [
             {
                 icon: '🗂️',
                 slug: 'agent-skills-catalog',
-                title: { vi: 'Danh mục 33 Kỹ năng', en: '33 Skills Catalog' },
+                title: { vi: 'Danh mục 34 Kỹ năng', en: '34 Skills Catalog' },
                 desc: {
-                    vi: 'Tổng hợp 33 kỹ năng theo 6 lĩnh vực — Foundation, Agentic, Workflow, Intelligence, Development, DevOps. Bản đồ quan hệ kỹ năng.',
-                    en: 'All 33 skills organized by 6 domains — Foundation, Agentic, Workflow, Intelligence, Development, DevOps. Skill relationship map.',
+                    vi: 'Tổng hợp 34 kỹ năng theo 7 lĩnh vực — Foundation, Agentic, Workflow, Intelligence, Development, DevOps, Business Ops. Bản đồ quan hệ kỹ năng.',
+                    en: 'All 34 skills organized by 7 domains — Foundation, Agentic, Workflow, Intelligence, Development, DevOps, Business Ops. Skill relationship map.',
                 },
                 tag: { vi: 'TỔNG HỢP', en: 'CATALOG' },
+            },
+            {
+                icon: '💼',
+                slug: 'operator-workflows',
+                title: { vi: 'Workflow cho Operator', en: 'Operator Workflows' },
+                desc: {
+                    vi: '10 workflow kinh doanh có governance — Sales Pipeline, Prospecting, Ad Spend, Content, VoC, Product, Ops, Calendar, Finance, Competitive Intel.',
+                    en: '10 governed business workflows — Sales Pipeline, Prospecting, Ad Spend, Content, VoC, Product, Ops, Calendar, Finance, Competitive Intel.',
+                },
+                tag: { vi: 'MỚI v1.6.6', en: 'NEW v1.6.6' },
             },
             {
                 icon: '🤖',

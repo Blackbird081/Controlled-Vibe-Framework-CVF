@@ -126,6 +126,14 @@ export function SkillPlanner({
     }
   }, [task, dataReady, onPlanGenerated]);
 
+  // Auto-generate when initialTask is provided
+  useEffect(() => {
+    if (initialTask && dataReady && !plan) {
+      generate();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataReady, initialTask]);
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') generate();

@@ -19,6 +19,7 @@ interface SkillSearchBarProps {
   onSelect?: (skill: SkillRecord) => void;
   onResults?: (results: SearchResult[]) => void;
   placeholder?: string;
+  initialQuery?: string;
   domainFilter?: string;
   riskFilter?: string;
   phaseFilter?: string;
@@ -46,17 +47,19 @@ export function SkillSearchBar({
   onSelect,
   onResults,
   placeholder = 'Search skills... (e.g. "landing page", "security audit")',
+  initialQuery = '',
   domainFilter,
   riskFilter,
   phaseFilter,
   difficultyFilter,
 }: SkillSearchBarProps) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(isLoaded());
   const [elapsed, setElapsed] = useState(0);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const initialSearchDone = useRef(false);
 
   // Load CSV data on mount
   useEffect(() => {
@@ -112,6 +115,14 @@ export function SkillSearchBar({
     },
     [dataLoaded, domainFilter, riskFilter, phaseFilter, difficultyFilter, onResults],
   );
+
+  // Auto-search on initialQuery after data loads
+  useEffect(() => {
+    if (dataLoaded && initialQuery && !initialSearchDone.current) {
+      initialSearchDone.current = true;
+      doSearch(initialQuery);
+    }
+  }, [dataLoaded, initialQuery, doSearch]);
 
   // Handle input change with debounce
   const handleChange = useCallback(

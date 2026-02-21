@@ -1,0 +1,84 @@
+{
+  "version": "1.0",
+  "ledger_id": "governance-ledger-main",
+  "created_at": "2026-02-21T10:00:00Z",
+  "events": [
+    {
+      "event_id": "evt-0001",
+      "timestamp": "2026-02-21T10:05:12Z",
+      "event_type": "REQUEST_CREATED",
+      "request_id": "req-12345",
+      "resource_id": "email-parser-agent",
+      "risk_level": "HIGH",
+      "status": "PENDING",
+      "actor": "system",
+      "metadata": {
+        "requested_by": "user_a"
+      },
+      "previous_hash": "GENESIS",
+      "hash": "c1a5298f939e87e8f962a5edfc206918"
+    },
+    {
+      "event_id": "evt-0002",
+      "timestamp": "2026-02-21T11:10:33Z",
+      "event_type": "STEP_APPROVED",
+      "request_id": "req-12345",
+      "resource_id": "email-parser-agent",
+      "risk_level": "HIGH",
+      "status": "PENDING",
+      "actor": "team_lead_01",
+      "metadata": {
+        "step_index": 0,
+        "comment": "Initial approval granted"
+      },
+      "previous_hash": "c1a5298f939e87e8f962a5edfc206918",
+      "hash": "b7f783baed8297f0db9d1e47a63f3d12"
+    },
+    {
+      "event_id": "evt-0003",
+      "timestamp": "2026-02-21T14:42:09Z",
+      "event_type": "REQUEST_APPROVED",
+      "request_id": "req-12345",
+      "resource_id": "email-parser-agent",
+      "risk_level": "HIGH",
+      "status": "APPROVED",
+      "actor": "security_officer_01",
+      "metadata": {
+        "step_index": 1,
+        "comment": "Security review passed"
+      },
+      "previous_hash": "b7f783baed8297f0db9d1e47a63f3d12",
+      "hash": "d48f3eec8c7b4c2cfa2f6dbbc12d91aa"
+    },
+    {
+      "event_id": "evt-0004",
+      "timestamp": "2026-02-21T16:00:01Z",
+      "event_type": "REQUEST_EXPIRED",
+      "request_id": "req-98765",
+      "resource_id": "manifest-parser",
+      "risk_level": "CRITICAL",
+      "status": "EXPIRED",
+      "actor": "system",
+      "metadata": {
+        "reason": "SLA timeout"
+      },
+      "previous_hash": "d48f3eec8c7b4c2cfa2f6dbbc12d91aa",
+      "hash": "f92c1c70d8a845e0e42a0df64a3bc9f0"
+    },
+    {
+      "event_id": "evt-0005",
+      "timestamp": "2026-02-21T16:30:44Z",
+      "event_type": "REQUEST_OVERRIDDEN",
+      "request_id": "req-98765",
+      "resource_id": "manifest-parser",
+      "risk_level": "CRITICAL",
+      "status": "OVERRIDDEN",
+      "actor": "cto_01",
+      "metadata": {
+        "comment": "Emergency business continuity override"
+      },
+      "previous_hash": "f92c1c70d8a845e0e42a0df64a3bc9f0",
+      "hash": "ab81c7e9df3b5a1aaf7e3f54db9b9112"
+    }
+  ]
+}

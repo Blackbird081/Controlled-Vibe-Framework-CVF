@@ -1,0 +1,22 @@
+{
+  "scenarios": [
+    {
+      "id": "S1",
+      "violations": ["PROMPT_INJECTION"],
+      "risk_score": 20,
+      "override_used": false
+    },
+    {
+      "id": "S2",
+      "violations": ["DATA_LEAK_RISK"],
+      "risk_score": 65,
+      "override_used": false
+    },
+    {
+      "id": "S3",
+      "violations": [],
+      "risk_score": 85,
+      "override_used": true
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "required_fields": [
+    "project",
+    "timestamp",
+    "compliance_score",
+    "brand_drift_score",
+    "override_used",
+    "final_status",
+    "risk_score"
+  ]
+}

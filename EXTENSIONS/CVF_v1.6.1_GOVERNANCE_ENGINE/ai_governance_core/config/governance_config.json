@@ -1,0 +1,5 @@
+{
+  "strict_mode": true,
+  "freeze_on_primary_color_change": true,
+  "manual_review_score_threshold": 80
+}

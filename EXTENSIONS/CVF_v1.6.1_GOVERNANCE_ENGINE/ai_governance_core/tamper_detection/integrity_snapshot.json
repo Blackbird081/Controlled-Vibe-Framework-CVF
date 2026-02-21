@@ -1,0 +1,45 @@
+{
+  "snapshot_metadata": {
+    "snapshot_id": "INT-SNAP-0001",
+    "created_at": "2026-02-21T00:00:00Z",
+    "engine_version": "1.0.0",
+    "snapshot_type": "GOVERNANCE_INTEGRITY_BASELINE"
+  },
+  "governance_components": {
+    "policy_layer": {
+      "policy_version": "1.0",
+      "policy_hash": "a8d19c5b3e2f91c71f45e02e7d8f90ab"
+    },
+    "decision_matrix": {
+      "matrix_version": "1.0",
+      "matrix_hash": "b92e04fa8a22e1c6b7f93c51d33ab4ef"
+    },
+    "severity_matrix": {
+      "matrix_version": "1.0",
+      "matrix_hash": "c77a1f9cdd901ef347bb66fa019e4421"
+    },
+    "approval_registry": {
+      "registry_version": "1.0",
+      "registry_hash": "d91f7ab0a9e2f3c44eab9c11f02ad772"
+    },
+    "design_registry": {
+      "registry_version": "1.0",
+      "registry_hash": "e12cc3f48ab9920a671f88b1c76d190a"
+    },
+    "ledger_chain": {
+      "chain_version": "1.0",
+      "latest_block_index": 0,
+      "latest_block_hash": "00000000000000000000000000000000"
+    }
+  },
+  "system_integrity": {
+    "baseline_hash": "f3b19aa0cc71eeb09e3d772a54a8a91e",
+    "component_count": 6,
+    "integrity_status": "BASELINE_ESTABLISHED"
+  },
+  "drift_tracking": {
+    "last_validation_at": "2026-02-21T00:00:00Z",
+    "drift_detected": false,
+    "drift_components": []
+  }
+}

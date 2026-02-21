@@ -37,6 +37,7 @@ Không sử dụng PATCH version cho framework core.
 | v1.2 | Capability Extension | FROZEN | 01/2026 |
 | v1.3 | Implementation Toolkit | FROZEN | 29/01/2026 |
 | v1.6 | Agent Platform (Web App) | ✅ ACTIVE | 06/02/2026 |
+| v1.6.1 | Governance Engine | ✅ ACTIVE | 21/02/2026 |
 
 ---
 

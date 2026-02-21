@@ -1,0 +1,115 @@
+{
+  "version": "1.0",
+  "registry_id": "design-registry-main",
+  "last_updated": "2026-02-21T18:40:00Z",
+  "design_artifacts": {
+    "component-button-primary": {
+      "artifact_id": "component-button-primary",
+      "type": "UI_COMPONENT",
+      "name": "Primary Button",
+      "owner": "design_team",
+      "current_version": "2.3.1",
+      "status": "APPROVED",
+      "governance_state": "ACTIVE",
+      "risk_level": "LOW",
+      "approval_required": false,
+      "last_approved_request_id": "req-11111",
+      "environments": {
+        "development": {
+          "version": "2.3.1",
+          "status": "DEPLOYED",
+          "deployed_at": "2026-02-20T09:10:00Z"
+        },
+        "staging": {
+          "version": "2.3.1",
+          "status": "DEPLOYED",
+          "deployed_at": "2026-02-20T10:30:00Z"
+        },
+        "production": {
+          "version": "2.3.0",
+          "status": "DEPLOYED",
+          "deployed_at": "2026-02-19T18:00:00Z"
+        }
+      },
+      "compliance_tags": [
+        "WCAG-AA",
+        "BRAND-COMPLIANT"
+      ],
+      "metadata": {
+        "design_system": "ui-core-v2",
+        "figma_reference": "https://figma.com/file/xyz",
+        "created_at": "2025-11-10T08:00:00Z",
+        "last_modified_at": "2026-02-20T08:45:00Z"
+      }
+    },
+    "page-checkout-flow": {
+      "artifact_id": "page-checkout-flow",
+      "type": "UI_PAGE",
+      "name": "Checkout Flow",
+      "owner": "product_team",
+      "current_version": "1.4.0",
+      "status": "PENDING_APPROVAL",
+      "governance_state": "UNDER_REVIEW",
+      "risk_level": "HIGH",
+      "approval_required": true,
+      "linked_request_id": "req-12345",
+      "environments": {
+        "development": {
+          "version": "1.4.0",
+          "status": "DEPLOYED",
+          "deployed_at": "2026-02-21T15:00:00Z"
+        },
+        "staging": {
+          "version": "1.3.2",
+          "status": "DEPLOYED",
+          "deployed_at": "2026-02-18T14:20:00Z"
+        },
+        "production": {
+          "version": "1.3.2",
+          "status": "DEPLOYED",
+          "deployed_at": "2026-02-18T16:00:00Z"
+        }
+      },
+      "compliance_tags": [
+        "PAYMENT-SENSITIVE",
+        "PII-HANDLING"
+      ],
+      "metadata": {
+        "design_system": "checkout-v1",
+        "risk_flags": [
+          "EXTERNAL_PAYMENT_GATEWAY",
+          "HIGH_TRANSACTION_VALUE"
+        ],
+        "created_at": "2026-01-05T10:00:00Z",
+        "last_modified_at": "2026-02-21T14:50:00Z"
+      }
+    }
+  },
+  "artifact_types": [
+    "UI_COMPONENT",
+    "UI_PAGE",
+    "DESIGN_TOKEN",
+    "THEME",
+    "LAYOUT",
+    "TEMPLATE"
+  ],
+  "status_definitions": {
+    "DRAFT": "Work in progress",
+    "PENDING_APPROVAL": "Awaiting governance approval",
+    "APPROVED": "Approved for use",
+    "REJECTED": "Rejected by governance",
+    "DEPRECATED": "Deprecated, not recommended for use"
+  },
+  "governance_states": [
+    "ACTIVE",
+    "UNDER_REVIEW",
+    "BLOCKED",
+    "FROZEN"
+  ],
+  "integrity": {
+    "hash_algorithm": "SHA256",
+    "checksum": "8d969eef6ecad3c29a3a629280e686cff8fabf9a3a3d5e3e4f6b7c8d9e0f1234",
+    "rebuildable_from_ledger": true,
+    "state_type": "SNAPSHOT"
+  }
+}

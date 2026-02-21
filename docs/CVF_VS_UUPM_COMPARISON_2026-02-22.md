@@ -69,18 +69,7 @@ UUPM: `npm i -g uipro-cli` → `uipro init --ai copilot` (15 platforms)
 
 → ✅ **CVF đã có:** `cvf-skills` CLI (`tools/cvf-skills-cli/`) — search, plan, list, init commands. Supports 6 AI platforms: Copilot, Cursor, Claude, ChatGPT, Gemini, Windsurf.
 
-### 2.5 Design System Pattern (Master + Overrides)
-
-```
-design-system/
-├── MASTER.md           # Global Source of Truth
-└── pages/
-    └── dashboard.md    # Page-specific overrides
-```
-
-→ **CVF cần:** Tương tự cho Skill Execution Plans — `project-skills/MASTER.md` + per-phase overrides.
-
-### 2.6 Pre-Delivery Checklist (Embedded in Skill)
+### 2.5 Pre-Delivery Checklist (Embedded in Skill)
 
 UUPM nhúng checklist trực tiếp trong skill:
 - No emojis as icons (dùng SVG)
@@ -174,7 +163,8 @@ UUPM nhúng checklist trực tiếp trong skill:
 | 7 | ✅ Cross-domain search (TypeScript + Web UI) | **MEDIUM** | **DONE** |
 | 8 | ✅ Build `cvf-skills` CLI package (6 AI platforms) | **LOW** | **DONE** |
 | 9 | ✅ Intent detection trong cvf-web UI | **LOW** | **DONE** |
-| 10 | Persist Skill Plans (Master + Overrides) | **LOW** | Future |
+
+> ✅ **10/10 roadmap items hoàn thành.** All gaps from UUPM comparison have been addressed.
 
 ---
 

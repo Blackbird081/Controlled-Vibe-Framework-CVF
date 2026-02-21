@@ -37,9 +37,14 @@ export default function SimulationPage() {
     const l = LABELS[language];
     const [baselinePolicy, setBaselinePolicy] = useState(DEFAULT_BASELINE);
     const [newPolicy, setNewPolicy] = useState('');
+    const [activeNewRules, setActiveNewRules] = useState<PolicyRule[]>([]);
 
     const baselineRules = parsePolicyDSL(baselinePolicy);
-    const newRules = parsePolicyDSL(newPolicy);
+
+    const handleRun = (policyText: string) => {
+        setNewPolicy(policyText);
+        setActiveNewRules(parsePolicyDSL(policyText));
+    };
 
     return (
         <div className="max-w-7xl mx-auto p-4 space-y-4">
@@ -52,9 +57,9 @@ export default function SimulationPage() {
                 {/* Left: Policy Editor */}
                 <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                     <PolicyEditor
-                        initialPolicy=""
+                        initialPolicy={DEFAULT_BASELINE}
                         onSave={setNewPolicy}
-                        onRun={(p) => setNewPolicy(p)}
+                        onRun={handleRun}
                     />
                 </div>
 
@@ -62,7 +67,7 @@ export default function SimulationPage() {
                 <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                     <SimulationRunner
                         baselineRules={baselineRules}
-                        newRules={newRules.length > 0 ? newRules : baselineRules}
+                        newRules={activeNewRules.length > 0 ? activeNewRules : baselineRules}
                     />
                 </div>
             </div>

@@ -189,9 +189,9 @@ export function LedgerExplorer({ language: _langProp }: LedgerExplorerProps) {
     return (
         <div className="space-y-4">
             {/* Header */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
                         📋 {l.title}
                     </h3>
                     {validation && (
@@ -212,21 +212,21 @@ export function LedgerExplorer({ language: _langProp }: LedgerExplorerProps) {
                 <div className="flex gap-2">
                     <button
                         onClick={fetchLedger}
-                        className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                        className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                     >
                         🔄 {l.refresh}
                     </button>
                     <button
                         onClick={exportJson}
-                        className="px-3 py-1.5 text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors"
+                        className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors"
                     >
-                        📦 {l.exportJson}
+                        📦 <span className="hidden sm:inline">{l.exportJson}</span><span className="sm:hidden">JSON</span>
                     </button>
                     <button
                         onClick={exportCsv}
-                        className="px-3 py-1.5 text-sm bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-800/40 transition-colors"
+                        className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-800/40 transition-colors"
                     >
-                        📊 {l.exportCsv}
+                        📊 <span className="hidden sm:inline">{l.exportCsv}</span><span className="sm:hidden">CSV</span>
                     </button>
                 </div>
             </div>

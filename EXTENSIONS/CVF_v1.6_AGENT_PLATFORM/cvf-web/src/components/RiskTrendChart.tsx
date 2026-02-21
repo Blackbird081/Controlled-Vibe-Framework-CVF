@@ -128,7 +128,7 @@ export function RiskTrendChart({ data: propData }: RiskTrendChartProps) {
 
     return (
         <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
                     {l.title}
                 </h3>

@@ -113,7 +113,7 @@ export function PolicyEditor({ initialPolicy = '', onSave, onRun }: PolicyEditor
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex flex-wrap items-center justify-between gap-2 p-3 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
                     {l.title}
                 </h3>

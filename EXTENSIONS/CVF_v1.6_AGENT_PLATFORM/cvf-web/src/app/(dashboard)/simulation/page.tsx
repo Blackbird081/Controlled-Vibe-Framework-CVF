@@ -53,7 +53,7 @@ export default function SimulationPage() {
                 <p className="text-sm text-gray-500 dark:text-gray-400">{l.subtitle}</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[calc(100vh-200px)]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:h-[calc(100vh-200px)]">
                 {/* Left: Policy Editor */}
                 <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                     <PolicyEditor

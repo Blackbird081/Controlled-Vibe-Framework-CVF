@@ -222,7 +222,8 @@ export function SimulationRunner({ baselineRules, newRules, onSimulate }: Simula
                         )}
 
                         {/* Results Table */}
-                        <table className="w-full text-xs">
+                        <div className="overflow-x-auto">
+                        <table className="w-full text-xs min-w-[360px]">
                             <thead>
                                 <tr className="text-gray-500 border-b border-gray-200 dark:border-gray-700">
                                     <th className="text-left py-2 px-1">#</th>
@@ -259,6 +260,7 @@ export function SimulationRunner({ baselineRules, newRules, onSimulate }: Simula
                                 ))}
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 )}
             </div>

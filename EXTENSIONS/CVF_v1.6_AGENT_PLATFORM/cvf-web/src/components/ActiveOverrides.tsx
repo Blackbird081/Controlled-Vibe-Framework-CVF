@@ -126,9 +126,9 @@ export function ActiveOverrides({ overrides: propOverrides, compact = false }: A
                                         ⏳ {time.text}
                                     </span>
                                 </div>
-                                <div className="flex gap-3 text-gray-500">
+                                <div className="flex flex-wrap gap-x-3 gap-y-1 text-gray-500">
                                     <span>{l.scope}: {override.scope}</span>
-                                    <span>{l.approvedBy}: {override.approvedBy}</span>
+                                    <span className="truncate">{l.approvedBy}: {override.approvedBy}</span>
                                 </div>
                                 {time.urgent && !time.expired && (
                                     <p className="text-amber-600 dark:text-amber-400 mt-1 font-medium">

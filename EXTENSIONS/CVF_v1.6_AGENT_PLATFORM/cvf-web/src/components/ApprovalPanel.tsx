@@ -161,7 +161,7 @@ export function ApprovalPanel({
     return (
         <div className="space-y-4 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                     📋 {l.title}
                 </h3>

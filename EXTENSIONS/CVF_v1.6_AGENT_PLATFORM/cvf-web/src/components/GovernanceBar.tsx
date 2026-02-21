@@ -142,8 +142,8 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
             ${compact ? 'p-2' : 'p-3'}
         `}>
             {/* Header with toggle */}
-            <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm font-medium">
                         🛡️ CVF Toolkit
                     </span>
@@ -226,7 +226,7 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                     {advancedMode && (
                 <div className={`
                     grid gap-2 transition-all duration-300
-                    ${compact ? 'grid-cols-3' : 'grid-cols-1 sm:grid-cols-3'}
+                    ${compact ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-3'}
                 `}>
                     {/* Phase selector */}
                     <div>

@@ -21,6 +21,7 @@ const LABELS = {
         keywords: 'Từ khóa: violation, risk_score, cvf_phase, cvf_risk_level, BLOCK, ALLOW, NEEDS_APPROVAL',
         saved: 'Đã lưu!',
         lineCount: 'dòng',
+        rulesCount: 'quy tắc',
     },
     en: {
         title: '📜 Policy Editor',
@@ -33,6 +34,7 @@ const LABELS = {
         keywords: 'Keywords: violation, risk_score, cvf_phase, cvf_risk_level, BLOCK, ALLOW, NEEDS_APPROVAL',
         saved: 'Saved!',
         lineCount: 'lines',
+        rulesCount: 'rules',
     },
 };
 
@@ -147,7 +149,7 @@ export function PolicyEditor({ initialPolicy = '', onSave, onRun }: PolicyEditor
                     style={{ tabSize: 2 }}
                 />
                 <div className="absolute bottom-2 right-2 text-xs text-gray-500">
-                    {lineCount} {l.lineCount} | {rules.length} rules
+                    {lineCount} {l.lineCount} | {rules.length} {l.rulesCount}
                 </div>
             </div>
 

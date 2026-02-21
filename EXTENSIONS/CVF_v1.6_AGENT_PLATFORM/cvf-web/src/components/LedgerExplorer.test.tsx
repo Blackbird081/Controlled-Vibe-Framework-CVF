@@ -1,15 +1,25 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { LedgerExplorer } from './LedgerExplorer';
+
+// Mock i18n — default to English, override per test via mockLanguage
+let mockLanguage: 'vi' | 'en' = 'en';
+vi.mock('@/lib/i18n', () => ({
+    useLanguage: () => ({ language: mockLanguage }),
+}));
 
 // Mock fetch
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 describe('LedgerExplorer', () => {
+    beforeEach(() => {
+        mockLanguage = 'en';
+    });
+
     it('shows loading state initially', () => {
         mockFetch.mockImplementation(() => new Promise(() => {})); // Never resolves
-        render(<LedgerExplorer language="en" />);
+        render(<LedgerExplorer />);
         expect(screen.getByText('Loading...')).toBeTruthy();
     });
 
@@ -21,7 +31,7 @@ describe('LedgerExplorer', () => {
             }),
         });
 
-        render(<LedgerExplorer language="en" />);
+        render(<LedgerExplorer />);
         await vi.waitFor(() => {
             expect(screen.getByText('No entries yet')).toBeTruthy();
         });
@@ -35,7 +45,7 @@ describe('LedgerExplorer', () => {
             }),
         });
 
-        render(<LedgerExplorer language="en" />);
+        render(<LedgerExplorer />);
         await vi.waitFor(() => {
             expect(screen.getByText('Governance Engine disconnected')).toBeTruthy();
         });
@@ -68,7 +78,7 @@ describe('LedgerExplorer', () => {
             }),
         });
 
-        render(<LedgerExplorer language="en" />);
+        render(<LedgerExplorer />);
         await vi.waitFor(() => {
             expect(screen.getByText('Total blocks: 2')).toBeTruthy();
             expect(screen.getByText(/Chain valid/)).toBeTruthy();
@@ -102,7 +112,7 @@ describe('LedgerExplorer', () => {
             }),
         });
 
-        render(<LedgerExplorer language="en" />);
+        render(<LedgerExplorer />);
         await vi.waitFor(() => {
             expect(screen.getAllByText(/Chain broken/).length).toBeGreaterThanOrEqual(1);
             expect(screen.getByText(/Tamper detected at block/)).toBeTruthy();
@@ -110,6 +120,7 @@ describe('LedgerExplorer', () => {
     });
 
     it('renders in Vietnamese', async () => {
+        mockLanguage = 'vi';
         mockFetch.mockResolvedValue({
             json: () => Promise.resolve({
                 success: true,
@@ -117,7 +128,7 @@ describe('LedgerExplorer', () => {
             }),
         });
 
-        render(<LedgerExplorer language="vi" />);
+        render(<LedgerExplorer />);
         await vi.waitFor(() => {
             expect(screen.getByText('Chưa có bản ghi nào')).toBeTruthy();
         });

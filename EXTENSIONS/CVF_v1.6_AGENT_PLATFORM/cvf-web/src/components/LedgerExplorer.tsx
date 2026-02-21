@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useLanguage } from '@/lib/i18n';
 import type { LedgerBlock } from '@/types/governance-engine';
 import { validateChain, type ChainValidationResult } from '@/lib/ledger-validator';
 
 interface LedgerExplorerProps {
-    language?: 'vi' | 'en';
+    language?: 'vi' | 'en'; // deprecated: uses useLanguage() now
 }
 
 const LABELS = {
@@ -34,6 +35,9 @@ const LABELS = {
         page: 'Trang',
         of: 'trên',
         disconnected: 'Governance Engine không kết nối',
+        tampered: 'ĐÃ BỊ SỬA ĐỔI',
+        prev: '← Trước',
+        next: 'Sau →',
     },
     en: {
         title: 'Audit Ledger',
@@ -60,12 +64,16 @@ const LABELS = {
         page: 'Page',
         of: 'of',
         disconnected: 'Governance Engine disconnected',
+        tampered: 'TAMPERED',
+        prev: '← Prev',
+        next: 'Next →',
     },
 };
 
 const PAGE_SIZE = 10;
 
-export function LedgerExplorer({ language = 'vi' }: LedgerExplorerProps) {
+export function LedgerExplorer({ language: _langProp }: LedgerExplorerProps) {
+    const { language } = useLanguage();
     const l = LABELS[language];
 
     const [entries, setEntries] = useState<LedgerBlock[]>([]);
@@ -299,7 +307,7 @@ export function LedgerExplorer({ language = 'vi' }: LedgerExplorerProps) {
                                         </span>
                                         {isBroken && (
                                             <span className="text-xs text-red-600 font-medium">
-                                                ⚠️ TAMPERED
+                                                ⚠️ {l.tampered}
                                             </span>
                                         )}
                                     </div>
@@ -361,7 +369,7 @@ export function LedgerExplorer({ language = 'vi' }: LedgerExplorerProps) {
                         disabled={page === 1}
                         className="px-3 py-1 text-sm rounded border border-gray-300 dark:border-gray-600 disabled:opacity-40"
                     >
-                        ← Prev
+                        {l.prev}
                     </button>
                     <span className="text-sm text-gray-500">
                         {l.page} {page} {l.of} {totalPages}
@@ -371,7 +379,7 @@ export function LedgerExplorer({ language = 'vi' }: LedgerExplorerProps) {
                         disabled={page === totalPages}
                         className="px-3 py-1 text-sm rounded border border-gray-300 dark:border-gray-600 disabled:opacity-40"
                     >
-                        Next →
+                        {l.next}
                     </button>
                 </div>
             )}

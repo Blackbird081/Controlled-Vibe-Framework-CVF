@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useLanguage } from '@/lib/i18n';
 import type { GovernanceApproveResult } from '@/types/governance-engine';
 
 interface ApprovalStep {
@@ -21,7 +22,7 @@ interface ApprovalPanelProps {
     escalationStatus?: string;
     onApprove?: (result: GovernanceApproveResult) => void;
     onReject?: (result: GovernanceApproveResult) => void;
-    language?: 'vi' | 'en';
+    language?: 'vi' | 'en'; // deprecated: uses useLanguage() now
 }
 
 const LABELS = {
@@ -99,8 +100,9 @@ export function ApprovalPanel({
     escalationStatus,
     onApprove,
     onReject,
-    language = 'vi',
+    language: _langProp,
 }: ApprovalPanelProps) {
+    const { language } = useLanguage();
     const l = LABELS[language];
     const [comment, setComment] = useState('');
     const [submitting, setSubmitting] = useState(false);

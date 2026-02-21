@@ -60,6 +60,8 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         if (p.startsWith('/analytics')) return 'analytics';
         if (p.startsWith('/marketplace')) return 'marketplace';
         if (p.startsWith('/skills')) return 'skills';
+        if (p.startsWith('/governance')) return 'governance';
+        if (p.startsWith('/simulation')) return 'simulation';
         return activeModal || 'home';
     };
 
@@ -73,6 +75,8 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             case 'analytics': router.push('/analytics'); setActiveModal(null); break;
             case 'marketplace': router.push('/marketplace'); setActiveModal(null); break;
             case 'skills': router.push('/skills'); setActiveModal(null); break;
+            case 'governance': router.push('/governance'); setActiveModal(null); break;
+            case 'simulation': router.push('/simulation'); setActiveModal(null); break;
             case 'agent':
                 setActiveModal('agent');
                 setIsAgentMinimized(false);

@@ -250,6 +250,23 @@ export default function Sidebar({
                     </NavGroup>
                     )}
 
+                    {/* Governance Group */}
+                    {userRole !== 'viewer' && (
+                    <NavGroup title={t('sidebar.governance') || 'Governance'} icon="🛡️">
+                        <NavItem
+                            label={t('nav.governance') || '🛡️ Governance'}
+                            isActive={appState === 'governance'}
+                            onClick={() => handleNav('governance')}
+                            gradient="from-emerald-500 to-teal-500"
+                        />
+                        <NavItem
+                            label={t('nav.simulation') || '🧪 Simulation'}
+                            isActive={appState === 'simulation'}
+                            onClick={() => handleNav('simulation')}
+                        />
+                    </NavGroup>
+                    )}
+
                     {/* User & Settings Group */}
                     <NavGroup title={t('sidebar.user') || 'User'} icon="⚙️">
                         {permissions.canUseContext && (

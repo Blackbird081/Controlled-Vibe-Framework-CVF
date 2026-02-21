@@ -155,9 +155,50 @@
 
 ---
 
+## ✅ Phase 6: UUPM Import — COMPLETE (2026-02-22)
+
+**17 new skills** imported from [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) (MIT), adapted to CVF format:
+
+| Domain | New Skills | Count |
+|--------|-----------|:-----:|
+| product_ux | UI Style Selection, Color Palette Generator, Typography Pairing, Design System Generator, Interaction Design Review, Dark/Light Mode Audit | +6 |
+| web_development | Chart Data Visualization, Landing Page Pattern, Web ARIA Keyboard Audit, CSS Animation Performance, React Performance Audit, Icon System Review | +6 |
+| app_development | Mobile Framework UI Guide, UI Pre-Delivery Checklist, Industry UI Reasoning | +3 |
+| marketing_seo | Conversion Landing Optimizer, Product Page Style Matcher | +2 |
+
+**Commit:** `6932546` (2026-02-22)
+
+---
+
+## ✅ Phase 7: Smart Tools — COMPLETE (2026-02-22)
+
+| Tool | Location | Description |
+|------|----------|-------------|
+| `skills_index.csv` | `data/skills_index.csv` | Structured metadata for all 141 skills |
+| `generate_index.py` | `tools/skill-index/` | Parse .skill.md → CSV index |
+| `search_skills.py` | `tools/skill-search/` | BM25 search engine (pure Python, < 10ms) |
+| `reason_skills.py` | `tools/skill-search/` | Industry reasoning engine (50 rules, 12 industries) |
+| `plan_skills.py` | `tools/skill-search/` | Skill Execution Plan generator |
+| `skill_reasoning.csv` | `data/skill_reasoning.csv` | 50 industry → skill chain mappings |
+
+### Usage:
+```bash
+# Search skills
+python tools/skill-search/search_skills.py "landing page conversion"
+
+# Get industry reasoning
+python tools/skill-search/reason_skills.py "fintech dashboard"
+
+# Generate execution plan
+python tools/skill-search/plan_skills.py --task "e-commerce mobile app" --format md
+```
+
+---
+
 ## 📝 Credits
 
-**Inspiration:** [antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills)
+**Inspiration:** [antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills)  
+**UUPM Import:** [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) (MIT License)
 
 **Transformation:** Skills được chuyển đổi sang CVF End User format với:
 - Form Input fields
@@ -170,7 +211,8 @@
 ## ✅ Automated Validation
 
 - Script: `scripts/validate_skills.py`
-- Status: ✅ All 131 skills pass (0 issues / 0 warnings) — 2026-02-07
+- Index: `tools/skill-index/generate_index.py --validate`
+- Status: ✅ All 141 skills pass (0 issues / 0 warnings) — 2026-02-22
 
 ---
 

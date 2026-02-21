@@ -36,3 +36,4 @@ npm-debug.log*
 
 # Internal (draft, chưa audit)
 CVF_INTERNAL_LITE/
+__pycache__/

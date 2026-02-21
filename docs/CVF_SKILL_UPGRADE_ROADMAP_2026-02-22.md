@@ -27,8 +27,8 @@ Nâng CVF Skill Library từ **static markdown collection** lên **intelligent s
 | Sprint 2 | `search_skills.py` — BM25 search engine | HIGH | ✅ DONE |
 | Sprint 3 | `skill_reasoning.csv` — 50 industry reasoning rules | MEDIUM | ✅ DONE |
 | Sprint 4 | `plan_skills.py` — AI Skill Planner | MEDIUM | ✅ DONE |
-| Sprint 5 | Cross-domain search + web UI integration | LOW | 🔲 TODO |
-| Sprint 6 | `cvf-cli` package + npm distribution | LOW | 🔲 FUTURE |
+| Sprint 5 | Cross-domain search + web UI integration | LOW | ✅ DONE |
+| Sprint 6 | `cvf-cli` package + npm distribution | LOW | ✅ DONE |
 
 ---
 
@@ -390,20 +390,27 @@ python plan_skills.py --task "Tạo e-commerce mobile app cho thời trang" --ou
 
 ---
 
-## 🔲 Sprint 5: Web UI Integration
+## ✅ Sprint 5: Web UI Integration — DONE
 
 **Goal:** Integrate search + reasoning vào cvf-web dashboard.
 
 **Location:** `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/`
 
-### Features
+### Deliverables
 
-| Feature | Component | Description |
-|---------|-----------|-------------|
-| Skill Search Bar | `SkillSearchBar.tsx` | BM25 search trên web UI |
-| Skill Planner Widget | `SkillPlanner.tsx` | Nhập task → hiển thị Skill Plan |
-| Cross-domain Explorer | `SkillGraph.tsx` | Visual graph of skill relationships |
-| Industry Filter | `IndustryFilter.tsx` | Filter skills by industry vertical |
+| Deliverable | Status |
+|-------------|--------|
+| `src/lib/skill-search.ts` — BM25 TypeScript port (~280 lines) | ✅ |
+| `src/lib/skill-planner.ts` — Reasoning + Planner engine (~260 lines) | ✅ |
+| `src/components/SkillSearchBar.tsx` — Search UI with debounce | ✅ |
+| `src/components/SkillPlanner.tsx` — Task → Skill Plan display | ✅ |
+| `src/components/IndustryFilter.tsx` — Domain/Industry filter pills | ✅ |
+| `src/components/SkillGraph.tsx` — Visual skill relationship graph | ✅ |
+| `src/app/skills/search/page.tsx` — Full search page route | ✅ |
+| `public/data/skills_index.csv` + `skill_reasoning.csv` | ✅ |
+| 16 lib tests (skill-search) + 14 lib tests (skill-planner) | ✅ |
+| 11 component tests (SkillSearch.test.tsx) | ✅ |
+| **Total: 1412 tests pass (was 1371)** | ✅ |
 
 ### Implementation Plan
 
@@ -426,16 +433,34 @@ python plan_skills.py --task "Tạo e-commerce mobile app cho thời trang" --ou
 
 ---
 
-## 🔲 Sprint 6: CLI Package (Future)
+## ✅ Sprint 6: CLI Package — DONE
 
 **Goal:** Package CVF Skill Library as npm CLI tool.
 
+**Location:** `tools/cvf-skills-cli/`
+
+### Deliverables
+
+| Deliverable | Status |
+|-------------|--------|
+| `bin/cvf-skills.js` — CLI entry point with arg parsing | ✅ |
+| `src/bm25.js` — BM25 engine for Node.js (ESM) | ✅ |
+| `src/data.js` — CSV parser + data loaders | ✅ |
+| `src/commands.js` — search/plan/list/init commands | ✅ |
+| `src/index.js` — Package exports | ✅ |
+| `data/skills_index.csv` + `skill_reasoning.csv` bundled | ✅ |
+| `src/commands.test.js` — 23 tests (node --test) | ✅ |
+| `README.md` — Full documentation | ✅ |
+| Vietnamese input normalization | ✅ |
+| 6 AI platform init templates (copilot/cursor/claude/chatgpt/gemini/windsurf) | ✅ |
+| Zero dependencies, Node >=18, ESM | ✅ |
+
 ```bash
-npm install -g cvf-skills
-cvf-skills search "landing page"
-cvf-skills plan "fintech dashboard" --output plan.md
-cvf-skills list --domain product_ux
-cvf-skills init --ai copilot    # Generate .cursorrules / .github/copilot-instructions.md
+# Usage examples
+cvf-skills search "landing page"          # BM25 search
+cvf-skills plan --task "fintech dashboard" # Skill Execution Plan
+cvf-skills list                            # Show all domains
+cvf-skills init copilot                    # Generate AI config
 ```
 
 ### Scope
@@ -507,7 +532,7 @@ Sprint 2: search_skills.py   Sprint 3: skill_reasoning.csv
          Sprint 5: Web UI Integration
                  │
                  ↓
-         Sprint 6: CLI Package (Future)
+         Sprint 6: CLI Package (DONE)
 ```
 
 **Critical Path:** Sprint 1 → Sprint 2 → Sprint 4  
@@ -523,8 +548,8 @@ Sprint 2: search_skills.py   Sprint 3: skill_reasoning.csv
 | Sprint 2 | 1.5 hours | Sprint 1 | **HIGH** |
 | Sprint 3 | 2 hours | Sprint 1 | **MEDIUM** (parallel with Sprint 2) |
 | Sprint 4 | 1.5 hours | Sprint 2 + 3 | **MEDIUM** |
-| Sprint 5 | 4 hours | Sprint 4 | **LOW** |
-| Sprint 6 | 6 hours | Sprint 4 | **FUTURE** |
+| Sprint 5 | 4 hours | Sprint 4 | ✅ DONE |
+| Sprint 6 | 6 hours | Sprint 4 | ✅ DONE |
 | **Total** | **~12 hours** | | |
 
 **Execution order:** 1 → (2 ∥ 3) → 4 → 5 → 6
@@ -547,9 +572,9 @@ Sprint 2: search_skills.py   Sprint 3: skill_reasoning.csv
 
 ### Stretch Goals (Sprint 5-6):
 
-- [ ] Web UI search integrated
-- [ ] CLI package on npm
-- [ ] AI platform init support (Copilot, Cursor, Claude)
+- [x] Web UI search integrated
+- [x] CLI package on npm
+- [x] AI platform init support (Copilot, Cursor, Claude)
 
 ---
 

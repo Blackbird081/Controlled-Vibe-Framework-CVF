@@ -36,6 +36,11 @@ CONDITION_PATTERN = re.compile(
 def _safe_parse_value(raw: str):
     """Parse a string/number value safely using ast.literal_eval."""
     raw = raw.strip().strip('"').strip("'")
+    # Handle lowercase booleans (DSL convention: true/false)
+    if raw.lower() == "true":
+        return True
+    if raw.lower() == "false":
+        return False
     try:
         return ast.literal_eval(raw)
     except (ValueError, SyntaxError):

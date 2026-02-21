@@ -13,6 +13,7 @@ class DomainRegistry:
             LLMOutputDomain(),
             DataExposureDomain()
         ]
+        self._registry = {}
 
     def evaluate_all(self, context):
 
@@ -22,3 +23,19 @@ class DomainRegistry:
             results.append(domain.evaluate(context))
 
         return results
+
+    def update(self, artifact_id: str, decision_result) -> dict:
+        """
+        Update internal registry with governance evaluation state.
+        Returns a snapshot dict.
+        """
+        self._registry[artifact_id] = {
+            "artifact_id": artifact_id,
+            "governance_state": (
+                decision_result.final_decision.value
+                if hasattr(decision_result, "final_decision")
+                else str(decision_result)
+            ),
+            "evaluated": True,
+        }
+        return self._registry[artifact_id]

@@ -1,4 +1,7 @@
 import json
+import threading
+
+_trend_lock = threading.Lock()
 
 
 class TrendTracker:
@@ -8,11 +11,12 @@ class TrendTracker:
 
     def calculate_trend(self, project):
 
-        try:
-            with open(self.history_path, "r") as f:
-                history = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return None
+        with _trend_lock:
+            try:
+                with open(self.history_path, "r") as f:
+                    history = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                return None
 
         project_records = [
             r for r in history if r["project"] == project

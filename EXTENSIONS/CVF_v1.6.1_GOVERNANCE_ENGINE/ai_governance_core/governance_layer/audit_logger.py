@@ -14,7 +14,10 @@ Author: Governance Engine
 
 import json
 import os
+import threading
 from datetime import datetime
+
+_audit_lock = threading.Lock()
 
 
 class AuditLogger:
@@ -24,7 +27,7 @@ class AuditLogger:
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
 
     def log(self, project: str, result: dict):
-        """Append a governance evaluation result to the audit log."""
+        """Append a governance evaluation result to the audit log (thread-safe)."""
 
         entry = {
             "project": project,
@@ -35,15 +38,16 @@ class AuditLogger:
             "brand_freeze": result.get("brand", {}).get("freeze", {}).get("freeze", False),
         }
 
-        try:
-            with open(self.log_path, "r") as f:
-                audit_log = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            audit_log = []
+        with _audit_lock:
+            try:
+                with open(self.log_path, "r") as f:
+                    audit_log = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                audit_log = []
 
-        audit_log.append(entry)
+            audit_log.append(entry)
 
-        with open(self.log_path, "w") as f:
-            json.dump(audit_log, f, indent=2)
+            with open(self.log_path, "w") as f:
+                json.dump(audit_log, f, indent=2)
 
         return entry

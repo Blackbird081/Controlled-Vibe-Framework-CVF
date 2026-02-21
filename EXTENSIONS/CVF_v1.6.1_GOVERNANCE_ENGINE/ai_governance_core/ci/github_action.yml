@@ -1,20 +1,27 @@
-name: UI Governance Check
+name: CVF Governance Gate
 
 on:
   pull_request:
+    branches: [ main, develop ]
+  push:
     branches: [ main ]
+
+env:
+  CVF_GOVERNANCE_STRICT: "true"
+  CVF_MIN_QUALITY_SCORE: "70"
+  PYTHON_VERSION: "3.11"
 
 jobs:
   governance-check:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install dependencies
         run: |
@@ -22,4 +29,22 @@ jobs:
 
       - name: Run Governance Gate
         run: |
+          cd EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core
           python main_ci.py
+        env:
+          CVF_PHASE: "D"
+          CVF_RISK_LEVEL: "R2"
+
+      - name: Run Tests
+        run: |
+          cd EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core
+          python -m pytest tests/ -v --tb=short
+
+      - name: Upload Governance Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: governance-report
+          path: |
+            EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core/data/
+            EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core/audit/

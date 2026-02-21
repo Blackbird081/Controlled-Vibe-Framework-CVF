@@ -1,6 +1,9 @@
 import json
+import threading
 from datetime import datetime
 from .risk_calculator import RiskCalculator
+
+_telemetry_lock = threading.Lock()
 
 
 class TelemetryExporter:
@@ -12,30 +15,31 @@ class TelemetryExporter:
     def export(self, project, result):
 
         risk_score = self.risk_calculator.calculate(
-            result["compliance"],
-            result["brand"],
-            result["override_used"]
+            result.get("compliance", {}),
+            result.get("brand", {}),
+            result.get("override_used", False)
         )
 
         record = {
             "project": project,
             "timestamp": datetime.utcnow().isoformat(),
-            "compliance_score": result["compliance"]["score"],
-            "brand_drift_score": result["brand"]["drift"]["drift_score"],
-            "override_used": result["override_used"],
-            "final_status": result["final_status"],
+            "compliance_score": result.get("compliance", {}).get("score", 0),
+            "brand_drift_score": result.get("brand", {}).get("drift", {}).get("drift_score", 0),
+            "override_used": result.get("override_used", False),
+            "final_status": result.get("final_status", "UNKNOWN"),
             "risk_score": risk_score
         }
 
-        try:
-            with open(self.history_path, "r") as f:
-                history = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            history = []
+        with _telemetry_lock:
+            try:
+                with open(self.history_path, "r") as f:
+                    history = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                history = []
 
-        history.append(record)
+            history.append(record)
 
-        with open(self.history_path, "w") as f:
-            json.dump(history, f, indent=2)
+            with open(self.history_path, "w") as f:
+                json.dump(history, f, indent=2)
 
         return record

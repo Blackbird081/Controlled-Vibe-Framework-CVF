@@ -136,3 +136,32 @@ class BasePolicy(ABC):
             "description": self.description,
             "version": self.version
         }
+
+
+# =========================
+# DEFAULT POLICY ENGINE
+# =========================
+
+class BasePolicyEngine(BasePolicy):
+    """
+    Default/pass-through policy engine.
+
+    Returns ALLOW for all contexts. Serves as the baseline
+    when no domain-specific policies are configured.
+    Used by CoreOrchestrator as the default policy_engine.
+    """
+
+    def __init__(self):
+        super().__init__(
+            policy_id="DEFAULT",
+            description="Default pass-through policy",
+            version="1.0"
+        )
+
+    def _evaluate(self, context: Dict[str, Any]):
+        return (
+            PolicyDecision.ALLOW,
+            PolicySeverity.LOW,
+            0.0,
+            "No policy violations detected"
+        )

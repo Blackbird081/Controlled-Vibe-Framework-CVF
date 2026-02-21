@@ -30,6 +30,9 @@ export default function SkillsPage() {
                         <Link href="/docs" className="hidden sm:inline-flex px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                             {t('nav.docs')}
                         </Link>
+                        <Link href="/skills/search" className="hidden sm:inline-flex px-3 py-2 text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all">
+                            🔍 Search & Plan
+                        </Link>
                         <ThemeToggle />
                         <LanguageToggle />
                     </nav>

@@ -177,6 +177,17 @@ export default function Sidebar({
                             onClick={() => handleNav('skills')}
                         />
                         <Link
+                            href="/skills/search"
+                            className={clsx(
+                                'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200',
+                                'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                            )}
+                            onClick={onClose}
+                            aria-label="Skill Search & Planner"
+                        >
+                            <span className="flex-1 text-left">🔍 Skill Search</span>
+                        </Link>
+                        <Link
                             href="/help"
                             className={clsx(
                                 'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200',

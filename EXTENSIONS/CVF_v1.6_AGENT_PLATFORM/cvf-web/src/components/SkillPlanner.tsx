@@ -178,13 +178,13 @@ export function SkillPlanner({
   return (
     <div className="w-full" data-testid="skill-planner">
       {/* Input */}
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <input
           type="text"
           value={task}
           onChange={(e) => setTask(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={dataReady ? 'Describe your task... (e.g. "fintech dashboard", "beauty spa app")' : 'Loading...'}
+          placeholder={dataReady ? 'Describe your task... (e.g. "fintech dashboard")' : 'Loading...'}
           disabled={!dataReady}
           className="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600
                      bg-white dark:bg-gray-800 text-gray-900 dark:text-white
@@ -199,7 +199,7 @@ export function SkillPlanner({
           disabled={!dataReady || !task.trim() || loading}
           className="px-5 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium
                      disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base
-                     whitespace-nowrap"
+                     whitespace-nowrap w-full sm:w-auto"
           data-testid="planner-generate-btn"
         >
           {loading ? '⏳' : '📋 Plan'}

@@ -24,6 +24,7 @@ export default function SkillSearchPage() {
   const [selectedSkill, setSelectedSkill] = useState<SkillRecord | null>(null);
   const [initialQuery, setInitialQuery] = useState('');
   const [initialTask, setInitialTask] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Read URL params on mount for deep linking
   useEffect(() => {
@@ -62,11 +63,12 @@ export default function SkillSearchPage() {
               CVF v1.6
             </Link>
             <span className="text-gray-400 dark:text-gray-500">|</span>
-            <h1 className="text-lg font-medium text-gray-700 dark:text-gray-300">
-              Skill Search & Planner
+            <h1 className="text-base sm:text-lg font-medium text-gray-700 dark:text-gray-300 truncate">
+              <span className="hidden sm:inline">Skill Search & Planner</span>
+              <span className="sm:hidden">Search</span>
             </h1>
           </div>
-          <nav className="flex items-center gap-3">
+          <nav className="flex items-center gap-2 sm:gap-3">
             <Link href="/skills" className="hidden sm:inline-flex px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
               {t('skills.title') || 'Skills'}
             </Link>
@@ -75,11 +77,38 @@ export default function SkillSearchPage() {
             </Link>
             <ThemeToggle />
             <LanguageToggle />
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="sm:hidden p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Menu"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileMenuOpen
+                  ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}
+              </svg>
+            </button>
           </nav>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className="sm:hidden border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 space-y-1">
+          <Link href="/skills" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+            {t('skills.title') || 'Skills'}
+          </Link>
+          <Link href="/docs" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+            {t('nav.docs') || 'Docs'}
+          </Link>
+          <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+            Home
+          </Link>
+        </div>
+      )}
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Tab Switcher */}
         <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 mb-6 w-fit" data-testid="tab-switcher">
           <button

@@ -51,6 +51,7 @@ export default function SkillsPage() {
     const { t, language } = useLanguage();
     const router = useRouter();
     const [quickSearch, setQuickSearch] = useState('');
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const isVi = language === 'vi';
 
     const handleQuickSearch = (e: React.FormEvent) => {
@@ -76,7 +77,7 @@ export default function SkillsPage() {
                         <span className="text-gray-400 dark:text-gray-500">|</span>
                         <h1 className="text-lg font-medium text-gray-700 dark:text-gray-300">{t('skills.title')}</h1>
                     </div>
-                    <nav className="flex items-center gap-3">
+                    <nav className="flex items-center gap-2 sm:gap-3">
                         <Link href="/" className="hidden sm:inline-flex px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                             {t('nav.templates')}
                         </Link>
@@ -91,33 +92,63 @@ export default function SkillsPage() {
                         </Link>
                         <ThemeToggle />
                         <LanguageToggle />
+                        {/* Mobile hamburger */}
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="sm:hidden p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                            aria-label="Menu"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                {mobileMenuOpen
+                                    ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}
+                            </svg>
+                        </button>
                     </nav>
                 </div>
             </header>
 
+            {/* Mobile Menu Dropdown */}
+            {mobileMenuOpen && (
+                <div className="sm:hidden border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 space-y-1">
+                    <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+                        {t('nav.templates')}
+                    </Link>
+                    <Link href="/help" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+                        {t('nav.help')}
+                    </Link>
+                    <Link href="/docs" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+                        {t('nav.docs')}
+                    </Link>
+                    <Link href="/skills/search" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-medium text-blue-600 dark:text-blue-400">
+                        🔍 Search & Plan
+                    </Link>
+                </div>
+            )}
+
             <main className="max-w-7xl mx-auto px-4 sm:px-6">
                 {/* Hero Section — Non-coder friendly */}
                 <section className="py-10 text-center">
-                    <h2 className="text-3xl sm:text-4xl font-bold mb-3">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">
                         <span className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                             {isVi ? '141 Skills · 12 Lĩnh vực' : '141 Skills · 12 Domains'}
                         </span>
                     </h2>
-                    <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto mb-8">
+                    <p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg max-w-2xl mx-auto mb-6 sm:mb-8 px-2">
                         {isVi
                             ? 'Tìm skill phù hợp, lập kế hoạch dự án, hoặc khám phá theo ngành — không cần code.'
                             : 'Find the right skill, plan your project, or explore by industry — no coding required.'}
                     </p>
 
                     {/* Quick Search Bar */}
-                    <form onSubmit={handleQuickSearch} className="max-w-xl mx-auto mb-10">
+                    <form onSubmit={handleQuickSearch} className="max-w-xl mx-auto mb-8 sm:mb-10 px-2 sm:px-0">
                         <div className="relative">
                             <input
                                 type="text"
                                 value={quickSearch}
                                 onChange={(e) => setQuickSearch(e.target.value)}
-                                placeholder={isVi ? 'Tìm skill... (vd: "landing page", "security audit", "color palette")' : 'Search skills... (e.g. "landing page", "security audit", "color palette")'}
-                                className="w-full pl-12 pr-24 py-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base transition-shadow hover:shadow-xl"
+                                placeholder={isVi ? 'Tìm skill... (vd: "landing page")' : 'Search skills... (e.g. "landing page")'}
+                                className="w-full pl-10 sm:pl-12 pr-20 sm:pr-24 py-3 sm:py-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-shadow hover:shadow-xl"
                             />
                             <svg className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -132,7 +163,7 @@ export default function SkillsPage() {
                     </form>
 
                     {/* Feature Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10">
                         {FEATURE_CARDS.map((card) => (
                             <Link
                                 key={card.title}

@@ -13,8 +13,8 @@ interface ApprovalStep {
 }
 
 interface ApprovalPanelProps {
-    requestId: string;
-    riskLevel: string;
+    requestId?: string;
+    riskLevel?: string;
     currentUserRole?: string;
     steps?: ApprovalStep[];
     slaDeadline?: string;
@@ -91,8 +91,8 @@ function formatTimeRemaining(deadline: string): { text: string; urgent: boolean;
 }
 
 export function ApprovalPanel({
-    requestId,
-    riskLevel,
+    requestId = '',
+    riskLevel = 'R0',
     currentUserRole,
     steps = [],
     slaDeadline,

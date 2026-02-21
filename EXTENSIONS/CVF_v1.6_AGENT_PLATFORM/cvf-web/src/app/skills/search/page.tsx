@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useLanguage, LanguageToggle } from '@/lib/i18n';
@@ -15,6 +15,14 @@ import type { SkillPlan } from '@/lib/skill-planner';
 type ActiveTab = 'search' | 'planner';
 
 export default function SkillSearchPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-500">Loading...</div>}>
+      <SkillSearchPageInner />
+    </Suspense>
+  );
+}
+
+function SkillSearchPageInner() {
   const { t } = useLanguage();
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<ActiveTab>('search');

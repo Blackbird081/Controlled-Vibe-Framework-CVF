@@ -9,7 +9,7 @@
 
 | Metric | Value |
 |--------|-------|
-| **Tổng Skills** | **131 skills** |
+| **Tổng Skills** | **141 skills** |
 | **Domains** | 12 domains |
 | **Phase 5 (NEW)** | 16 skills |
 
@@ -81,16 +81,33 @@
 | Desktop App Spec | Windows, menus, shortcuts | Medium |
 | CLI Tool Spec | Commands, arguments | Medium |
 | Local Deployment | Packaging, distribution | Medium |
+| Mobile Framework UI Guide | UI best practices theo framework (SwiftUI, RN, Flutter) | Medium | ⭐ NEW |
+| UI Pre-Delivery Checklist | Checklist cuối trước khi ship UI | Easy | ⭐ NEW |
+| Industry UI Reasoning | Design reasoning theo ngành + anti-patterns | Medium | ⭐ NEW |
 
 ---
 
 ### 📈 [Marketing & SEO](marketing_seo/) (Phase 1)
-9 skills cho SEO, copywriting, content, ads, và brand
+11 skills cho SEO, copywriting, content, ads, brand, **conversion optimization**, và **style matching**
+
+| Skill (NEW) | Mục đích | Difficulty |
+|-------------|----------|------------|
+| Conversion Landing Optimizer | Tối ưu landing page cho conversion | Medium | ⭐ NEW |
+| Product Page Style Matcher | Map product → visual style phù hợp | Easy | ⭐ NEW |
 
 ---
 
 ### 🎨 [Product & UX](product_ux/) (Phase 2)
-8 skills cho A/B testing, accessibility, flows, và onboarding
+14 skills cho A/B testing, accessibility, flows, onboarding, **design system**, **UI styles**, và **interaction review**
+
+| Skill (NEW) | Mục đích | Difficulty |
+|-------------|----------|------------|
+| UI Style Selection | Recommend UI style từ 67+ options | Medium | ⭐ NEW |
+| Color Palette Generator | Tạo color system + contrast ratios | Medium | ⭐ NEW |
+| Typography Pairing | Chọn heading/body font phù hợp | Medium | ⭐ NEW |
+| Design System Generator | Tạo complete design system | Advanced | ⭐ NEW |
+| Interaction Design Review | Audit touch targets, hover, focus | Medium | ⭐ NEW |
+| Dark/Light Mode Audit | Check dark/light mode implementation | Medium | ⭐ NEW |
 
 ---
 
@@ -105,7 +122,7 @@
 ---
 
 ### Các Domains khác
-- [Web Development](web_development/) - 6 skills
+- [Web Development](web_development/) - 11 skills (+6 NEW: chart visualization, landing patterns, ARIA audit, CSS animation, React perf, icon system)
 - [Business Analysis](business_analysis/) - 3 skills
 - [Content Creation](content_creation/) - 3 skills
 - [Technical Review](technical_review/) - 3 skills
@@ -174,4 +191,4 @@ python scripts/validate_skills.py --json reports/skill_validation.json
 
 ---
 
-*CVF Skill Library v1.5.2 | Last Updated: 2026-02-11*
+*CVF Skill Library v1.5.2 | Last Updated: 2026-02-22*

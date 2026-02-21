@@ -47,10 +47,10 @@ describe('governance-context', () => {
             expect(values).toEqual(['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR']);
         });
 
-        it('RISK_OPTIONS has R0-R3', () => {
-            expect(RISK_OPTIONS).toHaveLength(4);
+        it('RISK_OPTIONS has R0-R4', () => {
+            expect(RISK_OPTIONS).toHaveLength(5);
             const values = RISK_OPTIONS.map(r => r.value);
-            expect(values).toEqual(['R0', 'R1', 'R2', 'R3']);
+            expect(values).toEqual(['R0', 'R1', 'R2', 'R3', 'R4']);
         });
 
         it('all options have bilingual labels', () => {
@@ -96,9 +96,9 @@ describe('governance-context', () => {
             expect(isRiskAllowed('R3', 'REVIEW')).toBe(false);
         });
 
-        it('only allows R0 in FREEZE', () => {
+        it('allows up to R4 in FREEZE', () => {
             expect(isRiskAllowed('R0', 'FREEZE')).toBe(true);
-            expect(isRiskAllowed('R1', 'FREEZE')).toBe(false);
+            expect(isRiskAllowed('R4', 'FREEZE')).toBe(true);
         });
     });
 
@@ -421,7 +421,8 @@ describe('governance-context', () => {
         });
 
         it('shows warning for invalid risk', () => {
-            const highRisk: GovernanceState = { ...state, phase: 'FREEZE', riskLevel: 'R2' };
+            // R2 is now valid in FREEZE (max R4). Use a role with no actions to test.
+            const highRisk: GovernanceState = { ...state, phase: 'INTAKE', riskLevel: 'R3' };
             const block = buildGovernanceSpecBlock(highRisk, 'en');
             expect(block).toContain('❌ WARNING');
         });

@@ -30,13 +30,37 @@ export function inferRiskLevelFromText(text: string): RiskLevel | null {
     return (`R${explicit[1]}`) as RiskLevel;
 }
 
+/** Color mapping for risk severity indicators */
+export function getRiskSeverityColor(riskLevel: RiskLevel): string {
+    switch (riskLevel) {
+        case 'R0': return 'gray-400';
+        case 'R1': return 'green-500';
+        case 'R2': return 'yellow-500';
+        case 'R3': return 'red-500';
+        case 'R4': return 'red-900';
+    }
+}
+
+/**
+ * Phase-aware risk gate evaluation.
+ * R4 always BLOCK unless phase is FREEZE (which can handle R4).
+ */
 export function evaluateRiskGate(
     riskLevelInput: string | null | undefined,
-    mode: 'simple' | 'governance' | 'full'
+    mode: 'simple' | 'governance' | 'full',
+    phase?: string
 ): RiskGateResult {
     const riskLevel = normalizeRiskLevel(riskLevelInput);
 
     if (riskLevel === 'R4') {
+        // Only Phase FREEZE can handle R4
+        if (phase === 'FREEZE') {
+            return {
+                status: 'NEEDS_APPROVAL',
+                riskLevel,
+                reason: 'R4 in FREEZE phase requires executive approval.',
+            };
+        }
         return {
             status: 'BLOCK',
             riskLevel,

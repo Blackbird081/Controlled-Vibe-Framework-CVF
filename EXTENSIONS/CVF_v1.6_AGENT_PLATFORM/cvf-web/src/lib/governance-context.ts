@@ -10,7 +10,7 @@
 
 export type CVFPhaseToolkit = 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE';
 export type CVFRole = 'OBSERVER' | 'ANALYST' | 'BUILDER' | 'REVIEWER' | 'GOVERNOR';
-export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
+export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3' | 'R4';
 
 export interface GovernanceState {
     phase: CVFPhaseToolkit;
@@ -24,6 +24,22 @@ export const DEFAULT_GOVERNANCE_STATE: GovernanceState = {
     role: 'ANALYST',
     riskLevel: 'R1',
     toolkitEnabled: false,
+};
+
+// ==================== PHASE AUTHORITY ====================
+
+export interface PhaseAuthority {
+    can_approve: boolean;
+    can_override: boolean;
+    max_risk: CVFRiskLevel;
+}
+
+export const PHASE_AUTHORITY_MATRIX: Record<CVFPhaseToolkit, PhaseAuthority> = {
+    INTAKE: { can_approve: false, can_override: false, max_risk: 'R1' },
+    DESIGN: { can_approve: false, can_override: false, max_risk: 'R2' },
+    BUILD:  { can_approve: true,  can_override: false, max_risk: 'R3' },
+    REVIEW: { can_approve: true,  can_override: true,  max_risk: 'R3' },
+    FREEZE: { can_approve: true,  can_override: true,  max_risk: 'R4' },
 };
 
 // ==================== PHASE / ROLE / RISK CONFIGS ====================
@@ -49,6 +65,7 @@ export const RISK_OPTIONS: { value: CVFRiskLevel; label: string; labelEn: string
     { value: 'R1', label: 'Thấp', labelEn: 'Low', color: 'bg-green-500' },
     { value: 'R2', label: 'Trung bình', labelEn: 'Medium', color: 'bg-yellow-500' },
     { value: 'R3', label: 'Cao', labelEn: 'High', color: 'bg-red-500' },
+    { value: 'R4', label: 'Nghiêm trọng', labelEn: 'Critical', color: 'bg-red-900' },
 ];
 
 // ==================== AUTHORITY MATRIX ====================
@@ -96,7 +113,7 @@ const PHASE_MAX_RISK: Record<CVFPhaseToolkit, CVFRiskLevel> = {
     DESIGN: 'R2',
     BUILD: 'R3',
     REVIEW: 'R2',
-    FREEZE: 'R0',
+    FREEZE: 'R4',
 };
 
 // ==================== SYSTEM PROMPT BUILDER ====================

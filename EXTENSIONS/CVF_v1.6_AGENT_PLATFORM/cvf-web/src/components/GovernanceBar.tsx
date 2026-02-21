@@ -15,24 +15,30 @@ import {
     loadGovernanceState,
     isRiskAllowed,
     autoDetectGovernance,
+    PHASE_AUTHORITY_MATRIX,
     type AutoDetectResult,
 } from '@/lib/governance-context';
+import { getApprovalNotificationManager, type ApprovalNotification } from '@/lib/approval-notifications';
 
 interface GovernanceBarProps {
     onStateChange: (state: GovernanceState) => void;
     compact?: boolean;
     /** Optional: pass current chat message for auto-detection */
     lastMessage?: string;
+    /** Optional: callback when approval panel should open */
+    onOpenApprovalPanel?: () => void;
 }
 
 type DetectionMode = 'auto' | 'manual';
 
-export function GovernanceBar({ onStateChange, compact = false, lastMessage }: GovernanceBarProps) {
+export function GovernanceBar({ onStateChange, compact = false, lastMessage, onOpenApprovalPanel }: GovernanceBarProps) {
     const { language } = useLanguage();
     const [state, setState] = useState<GovernanceState>(DEFAULT_GOVERNANCE_STATE);
     const [mounted, setMounted] = useState(false);
     const [detectionMode, setDetectionMode] = useState<DetectionMode>('auto');
     const [autoResult, setAutoResult] = useState<AutoDetectResult | null>(null);
+    const [pendingApprovals, setPendingApprovals] = useState(0);
+    const [lastApprovalNotification, setLastApprovalNotification] = useState<ApprovalNotification | null>(null);
     const [advancedMode, setAdvancedMode] = useState(() => {
         if (typeof window !== 'undefined') {
             try { return localStorage.getItem('cvf_governance_advanced') === 'true'; } catch { return false; }
@@ -44,6 +50,21 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage }: G
         setState(loadGovernanceState());
         setMounted(true);
     }, []);
+
+    // Approval notification subscription
+    useEffect(() => {
+        if (!mounted) return;
+        const manager = getApprovalNotificationManager();
+        const unsubscribe = manager.subscribe((notification) => {
+            setLastApprovalNotification(notification);
+            if (notification.type === 'created') {
+                setPendingApprovals(prev => prev + 1);
+            } else if (notification.type === 'final_approved' || notification.type === 'final_rejected') {
+                setPendingApprovals(prev => Math.max(0, prev - 1));
+            }
+        });
+        return unsubscribe;
+    }, [mounted]);
 
     // Persist advancedMode to localStorage
     useEffect(() => {
@@ -146,6 +167,22 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage }: G
                             }
                         >
                             {detectionMode === 'auto' ? '🤖 Auto' : '✋ Manual'}
+                        </button>
+                    )}
+
+                    {/* Approval status indicator */}
+                    {state.toolkitEnabled && (pendingApprovals > 0 || lastApprovalNotification) && (
+                        <button
+                            onClick={onOpenApprovalPanel}
+                            className="relative text-xs px-1.5 py-0.5 rounded-full font-medium bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors"
+                            title={isVi ? `${pendingApprovals} yêu cầu chờ duyệt` : `${pendingApprovals} pending approval(s)`}
+                        >
+                            📋 {isVi ? 'Duyệt' : 'Approvals'}
+                            {pendingApprovals > 0 && (
+                                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 text-[10px] font-bold bg-red-500 text-white rounded-full flex items-center justify-center">
+                                    {pendingApprovals}
+                                </span>
+                            )}
                         </button>
                     )}
                 </div>
@@ -280,6 +317,35 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage }: G
                     </div>
                     </div>
                 )}
+
+                    {/* Phase Authority Indicators */}
+                    {advancedMode && (
+                        <div className="flex items-center gap-2 mt-1 text-[10px] text-gray-500 dark:text-gray-400">
+                            {(() => {
+                                const authority = PHASE_AUTHORITY_MATRIX[state.phase];
+                                return (
+                                    <>
+                                        <span title={isVi
+                                            ? `Phase ${state.phase}: max risk ${authority.max_risk}`
+                                            : `Phase ${state.phase}: max risk ${authority.max_risk}`
+                                        }>
+                                            {authority.can_approve ? '🔑' : '🔒'}{' '}
+                                            {isVi ? (authority.can_approve ? 'Có thể duyệt' : 'Không thể duyệt') : (authority.can_approve ? 'Can approve' : 'Cannot approve')}
+                                        </span>
+                                        <span>|</span>
+                                        <span>
+                                            {authority.can_override ? '⚡' : '🚫'}{' '}
+                                            {isVi ? (authority.can_override ? 'Có thể ghi đè' : 'Không ghi đè') : (authority.can_override ? 'Can override' : 'No override')}
+                                        </span>
+                                        <span>|</span>
+                                        <span>
+                                            Max: {authority.max_risk}
+                                        </span>
+                                    </>
+                                );
+                            })()}
+                        </div>
+                    )}
                 </>
             )}
 

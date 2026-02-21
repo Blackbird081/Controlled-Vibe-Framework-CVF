@@ -15,6 +15,20 @@ export interface QualityScore {
     compliance: number;      // Does it follow CVF rules?
 }
 
+/**
+ * Enhanced quality score combining client-side format analysis
+ * with server-side v1.6.1 4-dimension evaluation (when available).
+ */
+export interface EnhancedQualityScore extends QualityScore {
+    // New from v1.6.1 Governance Engine:
+    correctness?: number;   // 0-100
+    safety?: number;        // 0-100 (2x weight)
+    alignment?: number;     // 0-100
+    qualityDim?: number;    // 0-100
+    grade?: 'A' | 'B' | 'C' | 'D' | 'F';
+    source: 'client' | 'server';
+}
+
 export interface QualityCriteria {
     hasCodeBlocks: boolean;
     hasStructuredFormat: boolean;

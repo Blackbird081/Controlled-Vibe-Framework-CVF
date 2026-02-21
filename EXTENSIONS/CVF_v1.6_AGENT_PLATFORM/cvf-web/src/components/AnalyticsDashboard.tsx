@@ -1,15 +1,20 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useExecutionStore } from '@/lib/store';
 import { exportAnalyticsEvents, useAnalyticsEvents } from '@/lib/analytics';
 import { useLanguage } from '@/lib/i18n';
+import { GovernanceMetrics } from './GovernanceMetrics';
+import { RiskTrendChart } from './RiskTrendChart';
+
+type DashboardTab = 'analytics' | 'governance';
 
 export function AnalyticsDashboard() {
     const { executions } = useExecutionStore();
     const { events, clearEvents, enabled } = useAnalyticsEvents();
     const { language } = useLanguage();
     const isVi = language === 'vi';
+    const [activeTab, setActiveTab] = useState<DashboardTab>('analytics');
 
     const L = {
         title: isVi ? '📊 Phân tích' : '📊 Analytics',
@@ -204,7 +209,38 @@ export function AnalyticsDashboard() {
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{L.title}</h2>
                     <p className="text-gray-500 dark:text-gray-400">{L.subtitle}</p>
                 </div>
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => setActiveTab('analytics')}
+                        className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
+                            activeTab === 'analytics'
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                        }`}
+                    >
+                        📊 {isVi ? 'Phân tích' : 'Analytics'}
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('governance')}
+                        className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
+                            activeTab === 'governance'
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                        }`}
+                    >
+                        🛡️ {isVi ? 'Governance Health' : 'Governance Health'}
+                    </button>
+                </div>
             </div>
+
+            {activeTab === 'governance' && (
+                <div className="space-y-4">
+                    <GovernanceMetrics />
+                    <RiskTrendChart />
+                </div>
+            )}
+
+            {activeTab === 'analytics' && (<>
 
             {!enabled && (
                 <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
@@ -478,6 +514,8 @@ export function AnalyticsDashboard() {
                     <p className="text-sm text-gray-400">{L.noEvents}</p>
                 )}
             </div>
+
+            </>)}
         </div>
     );
 }

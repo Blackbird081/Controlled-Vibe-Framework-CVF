@@ -1,344 +1,362 @@
-AI Governance Control Plane
-1. Overview
+# CVF v1.6.1 — Governance Engine
 
-AI Governance Control Plane là nền tảng kiểm soát đầu ra AI ở cấp độ enterprise.
+> **Version:** 1.6.1  
+> **Status:** Production-ready  
+> **Assessment Score:** 8.2/10  
+> **Tests:** 143 passing  
+> **Location:** `EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core/`
 
-Hệ thống này cung cấp:
+Enterprise AI output governance control plane, fully integrated with the **Controlled Vibe Framework (CVF)**.
 
-Multi-domain AI output governance
+---
 
-Policy-as-Code DSL
+## 1. Overview
 
-CI/CD enforcement gate
+The Governance Engine provides **enterprise enforcement infrastructure** for AI output governance — complementing CVF's TypeScript runtime ("live guardrails") with a Python-based CI/CD enforcement, audit, and regulated-environment layer.
 
-Controlled override with expiry
+### What it adds to CVF
 
-RBAC + approval hierarchy
+| Capability | Module | Value |
+|------------|--------|-------|
+| Policy-as-Code DSL | `policy_dsl/` | Declarative `RULE/WHEN/THEN` — replaces hardcoded if-else |
+| Immutable Hash-Chain Ledger | `ledger_layer/` | Tamper-proof SHA256 audit trail |
+| Tamper Detection | `tamper_detection/` | Registry integrity validation |
+| RBAC + Identity | `identity_layer/` | User/role/permission management |
+| Multi-level Approval | `approval_layer/` | SLA expiry, escalation, override, frozen states |
+| Controlled Override | `override_layer/` | Project-scoped exceptions with expiry |
+| Risk Telemetry & Trends | `telemetry_layer/` | Per-project health scorecards |
+| Policy Simulation | `simulation_layer/` | Dry-run policy comparison |
+| CI/CD Gate | `ci/` | PR enforcement with exit codes |
+| Brand Drift Detection | `brand_control_layer/` | Design system compliance |
+| Multi-domain AI Output Gov | `domain_layer/` | Specialized evaluators |
+| Structured Reports | `reports/` | JSON, Markdown, audit compact |
+| **CVF Risk Adapter** | `adapters/` | R0-R4 ↔ LOW/MEDIUM/HIGH/CRITICAL mapping |
+| **CVF Quality Adapter** | `adapters/` | 4-dimension quality scoring with grades |
+| **CVF Enforcement Adapter** | `adapters/` | Decision → CVF enforcement actions + phase authority |
+| **CVF Role Mapper** | `identity_layer/` | CVF roles ↔ internal roles bidirectional mapping |
+| **REST API** | `api/` | FastAPI server: evaluate, approve, ledger, health |
 
-Immutable audit ledger
+---
 
-Tamper detection
+## 2. Quick Start
 
-Risk telemetry & trend tracking
+### Prerequisites
 
-Policy simulation sandbox
+```bash
+pip install -r requirements.txt
+```
 
-Được thiết kế để:
+### Run Tests
 
-Tích hợp vào multi-agent systems
+```bash
+python -m pytest tests/ -v
+# 143 tests, all passing
+```
 
-Hoạt động như enforcement layer
+### Start API Server
 
-Đáp ứng môi trường regulated industry
+```bash
+uvicorn api.server:app --reload --port 8000
+```
 
-Hỗ trợ kiểm toán nội bộ
+### CI/CD Execution
 
-2. Core Capabilities
-2.1 Multi-Domain Governance
+```bash
+python main_ci.py
+```
 
-Domains được hỗ trợ:
+| Exit Code | Meaning |
+|-----------|---------|
+| 0 | APPROVED |
+| 2 | MANUAL_REVIEW |
+| 3 | REJECTED |
+| 4 | FROZEN |
 
-UI Domain (Accessibility, Brand Drift)
+---
 
-Prompt Domain (Prompt Injection Detection)
+## 3. Architecture
 
-LLM Output Domain (Data Leak Risk)
+```
+                     ┌─────────────────────────────────────┐
+                     │          CoreOrchestrator            │
+                     │    (Unified 8-step DI pipeline)      │
+                     └─────────────┬───────────────────────┘
+                                   │
+     ┌─────────────────────────────┼─────────────────────────────┐
+     │                             │                             │
+     ▼                             ▼                             ▼
+┌──────────┐              ┌──────────────┐              ┌────────────┐
+│ Domain   │              │ Policy DSL   │              │ Enforcement│
+│ Layer    │              │ Engine       │              │ Engine     │
+│ (4 doms) │              │ RULE/WHEN/   │              │ Decision   │
+│          │              │ THEN         │              │ Matrix +   │
+└────┬─────┘              └──────┬───────┘              │ Action     │
+     │                           │                      │ Router     │
+     │                           │                      └─────┬──────┘
+     │                           │                            │
+     ▼                           ▼                            ▼
+┌──────────┐              ┌──────────────┐              ┌────────────┐
+│ RBAC +   │              │ Approval     │              │ Override   │
+│ Identity │              │ Workflow     │              │ Engine     │
+│ + CVF    │              │ (Enterprise) │              │ (Expiry)   │
+│ Role Map │              │ SLA/Escalate │              │            │
+└────┬─────┘              └──────┬───────┘              └─────┬──────┘
+     │                           │                            │
+     └───────────────────────────┼────────────────────────────┘
+                                 │
+     ┌───────────────────────────┼────────────────────────────┐
+     │                           │                            │
+     ▼                           ▼                            ▼
+┌──────────┐              ┌──────────────┐              ┌────────────┐
+│ Immutable│              │ Telemetry    │              │ Brand      │
+│ Ledger   │              │ Export +     │              │ Control    │
+│ (SHA256  │              │ Trend Track  │              │ Drift +    │
+│  chain)  │              │              │              │ Freeze     │
+└──────────┘              └──────────────┘              └────────────┘
+                                 │
+                   ┌─────────────┼───────────────────┐
+                   │             │                   │
+                   ▼             ▼                   ▼
+            ┌────────────┐ ┌──────────┐ ┌──────────────────┐
+            │ CVF Risk   │ │ CVF      │ │ CVF Enforcement  │
+            │ Adapter    │ │ Quality  │ │ Adapter          │
+            │ R0-R4      │ │ Adapter  │ │ Phase Authority  │
+            └────────────┘ └──────────┘ └──────────────────┘
+```
 
-Data Exposure Domain (PII Detection)
+### Pipeline Flow (8 steps)
 
-Mỗi domain hoạt động độc lập và trả về:
+1. **Domain evaluation** — 4 specialized domains analyze AI output
+2. **DSL policy engine** — Declarative rules determine actions
+3. **Decision matrix** — Priority-based rule evaluation with risk weighting
+4. **Action routing** — Route to EXECUTE/BLOCK/REQUIRE_APPROVAL/ESCALATE/SANDBOX/LOG_ONLY
+5. **RBAC check** — Role-based permission verification
+6. **Override/Approval** — Multi-level approval with SLA and escalation
+7. **Ledger append** — Immutable hash-chain record
+8. **Telemetry export** — Risk metrics + CVF adapter enrichment
 
-AI Governance Control Plane
-1. Overview
+---
 
-AI Governance Control Plane là nền tảng kiểm soát đầu ra AI ở cấp độ enterprise.
+## 4. CVF Integration
 
-Hệ thống này cung cấp:
+### Risk Model (R0-R4)
 
-Multi-domain AI output governance
+| CVF Level | Internal | Score Range | Description |
+|-----------|----------|-------------|-------------|
+| R0 | LOW | 0.0 – 0.2 | No risk — auto-approve |
+| R1 | LOW | 0.2 – 0.4 | Minimal risk |
+| R2 | MEDIUM | 0.4 – 0.6 | Moderate — review recommended |
+| R3 | HIGH | 0.6 – 0.8 | High — requires reviewer approval |
+| R4 | CRITICAL | 0.8 – 1.0 | Critical — blocked, escalation required |
 
-Policy-as-Code DSL
+### Quality Scoring (4 dimensions)
 
-CI/CD enforcement gate
+| Dimension | Weight | Source |
+|-----------|--------|--------|
+| Correctness | 1.0x | Compliance result |
+| Safety | 2.0x | Risk score (inverted) |
+| Alignment | 1.0x | Brand compliance |
+| Quality | 1.0x | Overall status |
 
-Controlled override with expiry
+Grades: **A** (≥0.9) → **B** (≥0.8) → **C** (≥0.7) → **D** (≥0.6) → **F** (<0.6)
 
-RBAC + approval hierarchy
+### Phase Authority Matrix
 
-Immutable audit ledger
+| Phase | Can Approve | Can Override | Max Risk |
+|-------|-------------|--------------|----------|
+| A (Discovery) | No | No | R1 |
+| B (Design) | No | No | R2 |
+| C (Development) | Yes | No | R3 |
+| D (Testing) | Yes | Yes | R3 |
+| E (Production) | Yes | Yes | R4 |
 
-Tamper detection
+### Role Mapping
 
-Risk telemetry & trend tracking
+| CVF Role | Internal Role | Hierarchy |
+|----------|---------------|-----------|
+| Observer | — | Level 0 |
+| Operator | DEVELOPER | Level 1 |
+| Lead | TEAM_LEAD | Level 2 |
+| Reviewer | SECURITY_OFFICER | Level 3 |
 
-Policy simulation sandbox
+---
 
-Được thiết kế để:
+## 5. API Reference
 
-Tích hợp vào multi-agent systems
+Base URL: `http://localhost:8000`
 
-Hoạt động như enforcement layer
+### `GET /health`
+Health check — returns `{"status": "ok", "timestamp": "..."}`
 
-Đáp ứng môi trường regulated industry
+### `POST /evaluate`
+Evaluate AI output through governance pipeline.
 
-Hỗ trợ kiểm toán nội bộ
+```json
+{
+  "artifact_type": "llm_output",
+  "content": "Generated text to evaluate",
+  "user_role": "DEVELOPER",
+  "project_id": "my-project",
+  "cvf_phase": "C",
+  "cvf_risk_level": "R2"
+}
+```
 
-2. Core Capabilities
-2.1 Multi-Domain Governance
+### `POST /approve`
+Submit approval for a pending decision.
 
-Domains được hỗ trợ:
+```json
+{
+  "request_id": "req-123",
+  "approver": "security_lead",
+  "decision": "APPROVED"
+}
+```
 
-UI Domain (Accessibility, Brand Drift)
+### `GET /ledger`
+Retrieve the full immutable audit ledger.
 
-Prompt Domain (Prompt Injection Detection)
+### `POST /risk-convert`
+Convert between CVF and internal risk levels.
 
-LLM Output Domain (Data Leak Risk)
+```json
+{
+  "level": "R3",
+  "direction": "to_internal"
+}
+```
 
-Data Exposure Domain (PII Detection)
+---
 
-Mỗi domain hoạt động độc lập và trả về:
+## 6. Policy DSL
 
-2.2 Policy-as-Code (DSL)
+Write governance rules as declarative code:
 
-Policy không hardcode.
-
-Ví dụ DSL:
-
+```dsl
 RULE RejectPromptInjection
 WHEN violation == "PROMPT_INJECTION"
 THEN action = "REJECT"
 
-RULE HighRiskScoreBlock
+RULE HighRiskBlock
 WHEN risk_score > 75
 THEN action = "REJECT"
 
-Policy được:
+RULE CVF_PhaseC_Authority
+WHEN cvf_phase == "C" AND cvf_risk_level == "R3"
+THEN action = "MANUAL_REVIEW"
+
+RULE CVF_R4_Block
+WHEN cvf_risk_level == "R4"
+THEN action = "REJECT"
+```
 
-Version-controlled
+Policies are version-controlled, reviewable, testable, and hashable.
 
-Reviewable
+---
 
-Testable
+## 7. Security
+
+| Feature | Implementation |
+|---------|----------------|
+| No `eval()` | AST-based safe parser with `operator` module |
+| Thread safety | `threading.Lock` in utils, ledger, telemetry, audit |
+| Immutable audit | SHA256 hash-chain, tamper detection before every evaluation |
+| Controlled override | Registry entry + expiry + approved_by + scope + hash |
+| RBAC enforcement | Permission matrix, role hierarchy, escalation |
+| Specific exceptions | No bare `except:` — all handlers specify exception types |
 
-Hashable
+---
 
-2.3 CI/CD Enforcement
+## 8. Testing
 
-PR sẽ bị:
+```
+143 tests across 11 files:
 
-APPROVED
+tests/test_approval.py               — 12 tests (create, approve, reject, multi-step, override)
+tests/test_cvf_enforcement_adapter.py — 15 tests (actions, phase authority, enrichment)
+tests/test_cvf_quality_adapter.py     — 10 tests (scoring, grades, from_governance_result)
+tests/test_cvf_risk_adapter.py        — 16 tests (bidirectional mapping, score thresholds)
+tests/test_dsl.py                     — 12 tests (value parsing, condition evaluation, edge cases)
+tests/test_enforcement.py            — 13 tests (DecisionMatrix, ActionRouter, enums)
+tests/test_integration.py            —  7 tests (end-to-end pipeline, CVF metadata in ledger)
+tests/test_ledger.py                 — 10 tests (HashEngine, BlockBuilder, ImmutableLedger)
+tests/test_role_mapper.py            — 12 tests (bidirectional mapping, authority, permissions)
+tests/test_utils.py                  — 11 tests (load, save, atomic writes, thread safety)
+tests/conftest.py                    — Shared fixtures
+```
 
-MANUAL_REVIEW
+---
 
-REJECTED
+## 9. Project Structure
 
-FROZEN
+See [TREEVIEW.md](TREEVIEW.md) for the complete file tree.
 
-CI exit codes được chuẩn hóa.
+Key directories:
 
-2.4 Controlled Override
+| Directory | Purpose |
+|-----------|---------|
+| `adapters/` | CVF integration adapters (risk, quality, enforcement) |
+| `api/` | FastAPI REST server |
+| `domain_layer/` | 4 domain evaluators |
+| `policy_dsl/` | Declarative RULE/WHEN/THEN engine |
+| `enforcement_layer/` | Decision matrix + action router |
+| `identity_layer/` | RBAC + CVF role mapper |
+| `approval_layer/` | Enterprise approval workflow |
+| `override_layer/` | Controlled override with expiry |
+| `ledger_layer/` | Immutable SHA256 hash-chain |
+| `telemetry_layer/` | Risk metrics + trend tracking |
+| `brand_control_layer/` | Brand drift + freeze detection |
+| `compliance_layer/` | HTML/CSS/contrast compliance |
+| `tamper_detection/` | Registry integrity validation |
+| `simulation_layer/` | Policy simulation sandbox |
+| `reports/` | JSON/Markdown/audit report builders |
+| `ci/` | GitHub Action + pre-commit hook |
+| `tests/` | 143 tests across 11 files |
+| `core/` | Shared utilities (thread-safe JSON I/O) |
 
-Override yêu cầu:
+---
 
-Registry entry
+## 10. CI/CD Integration
 
-Expiry date
+### GitHub Action
 
-Approved_by
+The included `ci/github_action.yml` runs on push/PR to `main` and `develop`:
 
-Scope
+1. Install Python 3.11 + dependencies
+2. Run `python -m pytest tests/ -v`
+3. Execute `python main_ci.py` with governance config
+4. Upload governance artifacts
 
-Hash validation
+### Pre-commit Hook
 
-Override hết hạn → tự động vô hiệu.
+`ci/pre_commit_hook.py` validates:
+- `governance_config.json` exists and is valid JSON
+- Freeze mode is not active
+- Ledger integrity is intact
 
-2.5 RBAC & Approval Hierarchy
+---
 
-Hỗ trợ role-based governance:
+## 11. Enterprise Readiness
 
-Roles:
+Suitable for:
 
-DEVELOPER
+- **Fintech** — Policy-as-Code compliance, immutable audit trail
+- **Healthcare** — Role-based access, multi-level approval workflow
+- **Logistics AI** — Risk telemetry, trend tracking, project scorecards
+- **Enterprise AI Copilots** — Domain-specific governance, controlled override
+- **Regulated Industries** — Tamper detection, hash-chain ledger, escalation
+- **Multi-agent Orchestration** — Thread-safe I/O, CI/CD gates, API server
 
-TEAM_LEAD
+---
 
-SECURITY_OFFICER
+## 12. Related Documents
 
-AI_GOVERNANCE_ADMIN
+| Document | Description |
+|----------|-------------|
+| [TREEVIEW.md](TREEVIEW.md) | Complete file tree |
+| [ASSESSMENT_2026-02-21.md](ASSESSMENT_2026-02-21.md) | Full assessment report (8.2/10) |
+| [CVF_INTEGRATION_PLAN.md](CVF_INTEGRATION_PLAN.md) | Integration roadmap (completed) |
 
-EXECUTIVE_APPROVER
+---
 
-Permission matrix kiểm soát:
-
-Override
-
-Escalation
-
-Manual approval
-
-Executive review
-
-2.6 Immutable Audit Ledger
-
-Mỗi decision được ghi vào hash-chain:
-
-Block chứa previous_hash
-
-SHA256 hashing
-
-Ledger validation trước mỗi evaluation
-
-Nếu chain bị sửa → tamper alert.
-
-2.7 Registry Tamper Detection
-
-Snapshot integrity của:
-
-override_registry.json
-
-approval_registry.json
-
-policy DSL
-
-Hash mismatch → raise alert.
-
-2.8 Risk Telemetry
-
-Mỗi evaluation sinh:
-
-compliance_score
-
-drift_score
-
-risk_score
-
-override_flag
-
-final_status
-
-Tự động ghi vào:
-
-data/governance_history.json
-
-Hỗ trợ:
-
-Trend tracking
-
-Risk average per project
-
-BI export
-
-2.9 Policy Simulation Sandbox
-
-Cho phép:
-
-So sánh baseline vs new policy
-
-Tính impact_ratio
-
-Detect decision changes
-
-Dry-run không ghi ledger
-
-3. Architecture Overview
-
-Domain Layer
-     ↓
-Policy DSL Layer
-     ↓
-Enforcement Engine
-     ↓
-RBAC / Override Layer
-     ↓
-Ledger & Tamper Detection
-     ↓
-Telemetry Export
-
-4. Execution Flow
-
-AI output được đưa vào context
-
-Domain layer evaluate
-
-DSL policy engine determine actions
-
-Enforcement decide final status
-
-RBAC check override / escalation
-
-Ledger append immutable block
-
-Telemetry export risk metrics
-
-CI exit code returned
-
-5. CI Integration
-
-GitHub Action example:
-
-python main_ci.py
-
-Exit Codes:
-
-| Code | Meaning       |
-| ---- | ------------- |
-| 0    | APPROVED      |
-| 2    | MANUAL_REVIEW |
-| 3    | REJECTED      |
-| 4    | FROZEN        |
-
-6. Security Guarantees
-
-Immutable hash-chain audit
-
-Registry integrity snapshot
-
-Tamper detection before evaluation
-
-Controlled override with expiry
-
-Role-based permission enforcement
-
-Escalation hierarchy
-
-7. Enterprise Readiness
-
-Phù hợp cho:
-
-Fintech
-
-Logistics AI systems
-
-Enterprise internal AI copilots
-
-Regulated industry workflows
-
-Multi-agent orchestration platforms
-
-8. Simulation Workflow
-
-python run_simulation.py \
-    --baseline policies_main.dsl \
-    --new policies_feature.dsl
-
-Kết quả:
-
-impact_ratio
-decision_changes
-total_cases
-
-Policy change lớn → block merge.
-
-9. Maturity Level
-
-AI Governance Control Plane đạt:
-
-Enforcement Infrastructure
-
-Policy-as-Code Engine
-
-Immutable Audit Layer
-
-Enterprise RBAC
-
-Regulated-Ready Architecture
+*CVF v1.6.1 — Governance Engine | Assessment: 8.2/10 | 143 tests passing | 2026-02-21*

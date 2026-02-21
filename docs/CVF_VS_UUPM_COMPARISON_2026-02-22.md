@@ -13,12 +13,12 @@
 |---|---|---|
 | **Mục đích** | Governance framework cho AI skills | Design intelligence cho AI code gen |
 | **Dạng sản phẩm** | Full-stack web app + markdown skills | CLI tool + skill files (prompt injection) |
-| **Tổng skills/rules** | **124 skills** (12 domains) | **67 styles + 96 palettes + 57 fonts + 100 rules + 99 UX guidelines** |
+| **Tổng skills/rules** | **141 skills** (12 domains) | **67 styles + 96 palettes + 57 fonts + 100 rules + 99 UX guidelines** |
 | **Ngôn ngữ** | TypeScript + Python | Python 80.6%, TypeScript 18% |
 | **Data format** | Markdown files (.skill.md) | CSV databases + Python search engine |
 | **Distribution** | Web UI (vibcode.netlify.app) | npm CLI (`uipro-cli`) + 15 AI platforms |
-| **Search** | ❌ Không có search engine | ✅ BM25 ranking + regex matching |
-| **Reasoning** | ❌ Manual skill selection | ✅ 100 industry reasoning rules |
+| **Search** | ✅ BM25 search engine (Python + TypeScript + CLI) | ✅ BM25 ranking + regex matching |
+| **Reasoning** | ✅ 50 reasoning rules + auto skill planning | ✅ 100 industry reasoning rules |
 | **Coverage** | 12 domains (business → AI/ML) | Chỉ UI/UX design |
 | **Governance** | ✅ Risk/Authority/Audit per skill | ❌ Không có governance layer |
 | **i18n** | ✅ Vietnamese + English | ❌ English only |
@@ -36,7 +36,7 @@ python3 search.py "fintech dashboard" --domain style    # Tìm UI style
 python3 search.py "beauty spa" --design-system           # Sinh complete design system
 ```
 
-→ **CVF cần:** `search_skills.py` — index 124+ skills, tìm kiếm bằng keyword, gợi ý cross-domain.
+→ ✅ **CVF đã có:** `search_skills.py` (Python BM25) + `skill-search.ts` (TypeScript web) + `cvf-skills search` (CLI) — index 141 skills, field-weighted search, Vietnamese normalization.
 
 ### 2.2 Reasoning Engine (Industry Rules)
 
@@ -46,28 +46,28 @@ UUPM có `ui-reasoning.csv` với 100 rules ánh xạ:
 Industry → Recommended Pattern + Style Priority + Color Mood + Typography + Effects + Anti-patterns
 ```
 
-→ **CVF cần:** `skill_reasoning.csv` — khi user mô tả task, engine tự gợi ý skill chain theo CVF phases (R0→R3).
+→ ✅ **CVF đã có:** `skill_reasoning.csv` (50 rules, 12 industries) + `reason_skills.py` + `skill-planner.ts` — auto-detect industry, suggest skill chain theo CVF phases.
 
 ### 2.3 CSV Data Layer
 
 | UUPM CSV Files | Records | CVF Equivalent |
 |---|---|---|
-| `styles.csv` | 68 styles | ❌ Không có |
-| `colors.csv` | 96 palettes | ❌ Không có |
-| `typography.csv` | 57 pairings | ❌ Không có |
-| `charts.csv` | 25 types | ❌ Không có |
-| `landing.csv` | 30 patterns | ❌ Không có |
-| `products.csv` | 96 product types | ❌ Không có |
-| `ui-reasoning.csv` | 100 rules | ❌ Không có |
-| `ux-guidelines.csv` | ~99 rules | ❌ Không có |
+| `styles.csv` | 68 styles | Covered by `ui_style_selection.skill.md` |
+| `colors.csv` | 96 palettes | Covered by `color_palette_generator.skill.md` |
+| `typography.csv` | 57 pairings | Covered by `typography_pairing.skill.md` |
+| `charts.csv` | 25 types | Covered by `chart_data_visualization.skill.md` |
+| `landing.csv` | 30 patterns | Covered by `landing_page_pattern.skill.md` |
+| `products.csv` | 96 product types | Covered by `product_page_style_matcher.skill.md` |
+| `ui-reasoning.csv` | 100 rules | ✅ `skill_reasoning.csv` (50 rules, 12 industries) |
+| `ux-guidelines.csv` | ~99 rules | Covered by multiple skill files |
 
-→ **CVF cần:** `skills_index.csv` metadata cho 124+ skills (ID, domain, risk_level, difficulty, keywords, phases).
+→ ✅ **CVF đã có:** `skills_index.csv` metadata cho 141 skills (ID, domain, risk_level, difficulty, keywords, phases, description, file_path).
 
 ### 2.4 CLI Distribution
 
 UUPM: `npm i -g uipro-cli` → `uipro init --ai copilot` (15 platforms)
 
-→ **CVF cần:** `cvf-cli` (tương lai) để install skill packs cho AI assistants.
+→ ✅ **CVF đã có:** `cvf-skills` CLI (`tools/cvf-skills-cli/`) — search, plan, list, init commands. Supports 6 AI platforms: Copilot, Cursor, Claude, ChatGPT, Gemini, Windsurf.
 
 ### 2.5 Design System Pattern (Master + Overrides)
 
@@ -167,13 +167,13 @@ UUPM nhúng checklist trực tiếp trong skill:
 |---|---|---|---|
 | 1 | ✅ Import 17 skills từ UUPM → CVF format | **HIGH** | **DONE** |
 | 2 | Fix README count 131→141 | **HIGH** | **DONE** |
-| 3 | Tạo `skills_index.csv` — metadata cho 141 skills | **HIGH** | Planned |
-| 4 | Viết `search_skills.py` — BM25 search engine | **HIGH** | Planned |
-| 5 | Tạo `skill_reasoning.csv` — auto skill chain | **MEDIUM** | Planned |
-| 6 | Viết `plan_skills.py --task "..."` → Skill Plan | **MEDIUM** | Planned |
-| 7 | Cross-domain search support | **MEDIUM** | Planned |
-| 8 | Build `cvf-cli` package | **LOW** | Future |
-| 9 | Intent detection trong cvf-web UI | **LOW** | Future |
+| 3 | ✅ Tạo `skills_index.csv` — metadata cho 141 skills | **HIGH** | **DONE** |
+| 4 | ✅ Viết `search_skills.py` — BM25 search engine | **HIGH** | **DONE** |
+| 5 | ✅ Tạo `skill_reasoning.csv` — 50 rules, 12 industries | **MEDIUM** | **DONE** |
+| 6 | ✅ Viết `plan_skills.py --task "..."` → Skill Plan | **MEDIUM** | **DONE** |
+| 7 | ✅ Cross-domain search (TypeScript + Web UI) | **MEDIUM** | **DONE** |
+| 8 | ✅ Build `cvf-skills` CLI package (6 AI platforms) | **LOW** | **DONE** |
+| 9 | ✅ Intent detection trong cvf-web UI | **LOW** | **DONE** |
 | 10 | Persist Skill Plans (Master + Overrides) | **LOW** | Future |
 
 ---

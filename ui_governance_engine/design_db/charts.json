@@ -1,0 +1,4 @@
+[
+  { "id": "bar", "use_case": ["comparison", "kpi"] },
+  { "id": "line", "use_case": ["trend", "time-series"] }
+]

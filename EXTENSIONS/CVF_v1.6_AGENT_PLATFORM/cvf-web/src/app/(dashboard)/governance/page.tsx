@@ -8,8 +8,9 @@ import { BrandDriftIndicator } from '@/components/BrandDriftIndicator';
 import { ActiveOverrides } from '@/components/ActiveOverrides';
 import { LedgerExplorer } from '@/components/LedgerExplorer';
 import { ApprovalPanel } from '@/components/ApprovalPanel';
+import { GovernanceGuide } from '@/components/GovernanceGuide';
 
-type GovTab = 'overview' | 'ledger' | 'approval' | 'brand';
+type GovTab = 'overview' | 'ledger' | 'approval' | 'brand' | 'guide';
 
 const LABELS = {
     vi: {
@@ -20,6 +21,7 @@ const LABELS = {
             ledger: '📒 Audit Ledger',
             approval: '✅ Phê duyệt',
             brand: '🎨 Brand & Override',
+            guide: '📖 Hướng dẫn',
         },
         health: 'Sức khỏe hệ thống',
         riskTrend: 'Xu hướng rủi ro',
@@ -36,6 +38,7 @@ const LABELS = {
             ledger: '📒 Audit Ledger',
             approval: '✅ Approval',
             brand: '🎨 Brand & Override',
+            guide: '📖 Guide',
         },
         health: 'System Health',
         riskTrend: 'Risk Trend',
@@ -56,6 +59,7 @@ export default function GovernancePage() {
         { key: 'ledger', label: l.tabs.ledger },
         { key: 'approval', label: l.tabs.approval },
         { key: 'brand', label: l.tabs.brand },
+        { key: 'guide', label: l.tabs.guide },
     ];
 
     return (
@@ -137,6 +141,10 @@ export default function GovernancePage() {
                     <BrandDriftIndicator />
                     <ActiveOverrides />
                 </div>
+            )}
+
+            {activeTab === 'guide' && (
+                <GovernanceGuide />
             )}
         </div>
     );

@@ -180,6 +180,11 @@ CVF has 3 layers + reference implementations:
 │  🌐 PLATFORM (Layer 3)  — Web UI, Agent Chat, Dashboard │
 │     v1.6                — Production runtime             │
 │     → Use when you need UI/demo                           │
+│                                                           │
+│  🔐 v1.6.1              — Enterprise Governance Engine    │
+│     Python/FastAPI       — CI/CD, Audit, Approval, RBAC  │
+│     143 tests            — Complements v1.6 web runtime   │
+│     → Use when you need enterprise enforcement            │
 ├─────────────────────────────────────────────────────────┤
 │  🛠️ TOOLS (Layer 2)      — Scoring, UAT, Validation      │
 │     v1.3, governance/   — Python scripts, CI/CD         │
@@ -211,6 +216,7 @@ CVF has 3 layers + reference implementations:
 - **v1.5** - UX & End-User orientation (FROZEN)
 - **v1.5.2** - Skill Library (124 skills, ACTIVE)
 - **v1.6** ⭐ - Agent Platform (AI chat, multi-agent, governance)
+- **v1.6.1** 🔐 - Governance Engine (enterprise enforcement, audit, CI/CD)
 
 **Which should you use?**
 
@@ -290,7 +296,7 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 |--------|--------|
 | **Version** | 1.6.3 (Feb 2026) |
 | **Stability** | Beta - Production-ready architecture, docs improvements ongoing |
-| **Test Coverage** | 95.6% statements, 1111+ tests passing |
+| **Test Coverage** | 95.6% statements, 1255 cvf-web tests + 143 governance tests |
 | **Skills** | 124 skills across 12 domains + 34 agent tools |
 | **Active Development** | Yes - v1.6 + agentic skills + documentation |
 | **Community** | Building — Discord coming soon |

@@ -355,7 +355,6 @@ Suitable for:
 |----------|-------------|
 | [TREEVIEW.md](TREEVIEW.md) | Complete file tree |
 | [ASSESSMENT_2026-02-21.md](ASSESSMENT_2026-02-21.md) | Full assessment report (8.2/10) |
-| [CVF_INTEGRATION_PLAN.md](CVF_INTEGRATION_PLAN.md) | Integration roadmap (completed) |
 
 ---
 

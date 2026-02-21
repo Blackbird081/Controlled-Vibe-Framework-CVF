@@ -136,7 +136,6 @@ ai_governance_core/
 ├── requirements.txt                   # ← NEW: Python dependencies
 ├── pytest.ini                         # ← NEW: Test configuration
 ├── ASSESSMENT_2026-02-21.md
-├── CVF_INTEGRATION_PLAN.md
 ├── TREEVIEW.md
 ├── README.md
 └── __init__.py

@@ -1,6 +1,6 @@
 # Architecture Separation Diagram
 
-> **Cập nhật 2026-02-17** — Phản ánh cấu trúc thực tế của hệ thống CVF
+> **Cập nhật 2026-02-21** — Phản ánh cấu trúc thực tế của hệ thống CVF (bao gồm v1.6.1 Governance Engine)
 
 ---
 
@@ -48,14 +48,72 @@
 │   ✦ i18n (English/Vietnamese), Dark Mode, Analytics                      │
 │                                                                            │
 │   📌 Đây là PRODUCTION RUNTIME chính thức của CVF                         │
-└────────────────────────────────────────────────────────────────────────────┘
+└──────────────────────────────────┬─────────────────────────────────────────┘
+                                   │
+                    ┌──────────────┴──────────────┐
+                    │ sub-layer                   │
+                    ▼                             ▼
+┌────────────────────────────────────┐  ┌─────────────────────────────────┐
+│  CVF v1.6.1 — GOVERNANCE ENGINE   │  │  📂 governance/                 │
+│  🔐 Enterprise Enforcement         │  │  Toolkit bootstrap (7 folders)  │
+│                                    │  │  Skill Library (131 skills)     │
+│  📂 ai_governance_core/ (Python)   │  │  Registry + Validation Scripts  │
+│  ✦ 143 tests | Score 8.2/10       │  └─────────────────────────────────┘
+│  ✦ Policy-as-Code DSL (RULE/WHEN/ │
+│    THEN)                           │
+│  ✦ Immutable Hash-Chain Ledger     │
+│  ✦ RBAC + Multi-level Approval     │
+│  ✦ CI/CD Gate (exit codes 0/2/3/4) │
+│  ✦ CVF Adapters (Risk R0-R4,      │
+│    Quality 4-dim, Enforcement)     │
+│  ✦ FastAPI REST Server             │
+│  ✦ Tamper Detection + Brand Drift  │
+│  ✦ Policy Simulation Sandbox       │
+│                                    │
+│  📌 Enterprise enforcement backend │
+│     Bổ sung cvf-web, không thay thế│
+└────────────────────────────────────┘
 
-                    ┌─────────────────────────────────┐
-                    │   📂 governance/                 │
-                    │   Toolkit bootstrap (7 folders)  │
-                    │   Skill Library (131 skills)     │
-                    │   Registry + Validation Scripts  │
-                    └─────────────────────────────────┘
+```
+
+---
+
+## v1.6 ↔ v1.6.1 — Mối Quan Hệ Bổ Sung
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                         CVF CORE (v1.0/v1.1)                            │
+│                    Supreme Authority — FROZEN                            │
+│            4-Phase Model • Risk R0-R4 • Phase Authority                  │
+└──────────────────────────────┬───────────────────────────────────────────┘
+                               │
+          ┌────────────────────┴────────────────────┐
+          ▼                                        ▼
+┌────────────────────────┐           ┌───────────────────────────────┐
+│  cvf-web (v1.6)        │           │ ai_governance_core (v1.6.1)   │
+│  "Live Guardrails"     │           │ "Enterprise Enforcement"      │
+│  TypeScript / Next.js  │           │ Python / FastAPI              │
+│                        │           │                               │
+│  • Browser runtime     │  ◄─API─► │  • CI/CD pipeline             │
+│  • Quality scoring     │           │  • Approval workflows         │
+│  • Safety filters      │           │  • Policy-as-Code DSL         │
+│  • Acceptance gate     │           │  • Immutable audit ledger     │
+│  • Risk check R0-R4    │           │  • RBAC + identity            │
+│  • Enforcement log     │           │  • Tamper detection           │
+│  • Monitoring/Sentry   │           │  • Simulation sandbox         │
+│  • 1255 tests          │           │  • 143 tests                  │
+└────────────────────────┘           └───────────────────────────────┘
+         │                                        │
+         │    Shared: CVF Risk R0-R4               │
+         │    Shared: CVF Quality 4-dim            │
+         │    Shared: CVF Phase Authority A-E      │
+         │    Shared: CVF Roles Operator/Lead/     │
+         │            Reviewer/Observer            │
+         └────────────────────────────────────────┘
+
+  ✦ cvf-web  = Real-time governance trong browser
+  ✦ v1.6.1   = Enterprise governance backend: audit, CI, approval
+  ✦ Không thay thế nhau — bổ sung ở hai tầng khác nhau
 ```
 
 ---
@@ -143,7 +201,8 @@ Project mới thêm domain logic, không sửa governance.
 |-------|---------|------|-------|
 | CVF Core (v1.0/v1.1) | Governance specs | 🔒 FROZEN | N/A (specs) |
 | CVF Extensions (v1.2–v1.5.2) | Capability + Skills | ✅ Production | Mixed |
-| CVF Web (v1.6/cvf-web) | Production platform | ✅ Production | 1068 tests |
+| CVF Web (v1.6/cvf-web) | Production platform | ✅ Production | 1255 tests |
+| **CVF Governance Engine (v1.6.1)** | **Enterprise enforcement** | **✅ Production** | **143 tests** |
 | v1.3 TypeScript SDK | Skill contract SDK | ✅ Production | Has tests |
 | governance/toolkit | Bootstrap + Library | ✅ Production | Scripts |
 | 📘 Toolkit Reference | Governance engine example | 📘 Reference | 5 test files |

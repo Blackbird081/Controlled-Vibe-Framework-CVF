@@ -13,7 +13,6 @@ function LoginPageContent() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [role] = useState('viewer');
     const [rememberUsername, setRememberUsername] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
@@ -44,7 +43,7 @@ function LoginPageContent() {
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password, role }),
+                body: JSON.stringify({ username, password }),
             });
 
             const data = await response.json();

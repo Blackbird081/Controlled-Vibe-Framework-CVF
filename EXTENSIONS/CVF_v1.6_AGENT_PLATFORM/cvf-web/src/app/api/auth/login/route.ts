@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createSession } from '@/lib/auth';
+import { createSession, SessionPayload } from '@/lib/auth';
 
 export async function POST(request: Request) {
     try {
-        const { username, password, role } = await request.json();
+        const { username, password } = await request.json();
 
         if (!username || !password) {
             return NextResponse.json({ success: false, error: 'Missing credentials' }, { status: 400 });
@@ -16,7 +16,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, error: 'Invalid credentials' }, { status: 401 });
         }
 
-        const roleValue = role === 'editor' || role === 'viewer' ? role : 'admin';
+        // Role is determined server-side, never trust client-sent role values
+        const roleValue = (username === expectedUser ? 'admin' : 'viewer') as SessionPayload['role'];
         await createSession(username, roleValue);
 
         return NextResponse.json({ success: true, user: username, role: roleValue });

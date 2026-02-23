@@ -42,24 +42,28 @@ export function useAuth() {
     const [userName, setUserName] = useState<string | undefined>();
 
     useEffect(() => {
-        // Fetch from session cookie via API
+        // Fetch from session cookie via API (source of truth)
         fetch('/api/auth/me')
             .then(res => res.ok ? res.json() : null)
             .then(data => {
-                if (data?.role) setUserRole(data.role);
+                if (data?.role) {
+                    setUserRole(data.role);
+                    // Clear legacy cookie to avoid it interfering in future renders
+                    document.cookie = 'cvf_role=; Path=/; Max-Age=0';
+                }
                 if (data?.user) setUserName(data.user);
             })
-            .catch(() => { /* ignore */ });
-
-        // Fallback: read legacy cookie
-        const roleCookie = document.cookie
-            .split(';')
-            .map(c => c.trim())
-            .find(c => c.startsWith('cvf_role='));
-        if (roleCookie) {
-            const role = roleCookie.split('=')[1];
-            if (role) setUserRole(role);
-        }
+            .catch(() => {
+                // Fallback: read legacy cookie ONLY when API fails
+                const roleCookie = document.cookie
+                    .split(';')
+                    .map(c => c.trim())
+                    .find(c => c.startsWith('cvf_role='));
+                if (roleCookie) {
+                    const role = roleCookie.split('=')[1];
+                    if (role) setUserRole(role);
+                }
+            });
     }, []);
 
     const handleLogout = useCallback(async () => {

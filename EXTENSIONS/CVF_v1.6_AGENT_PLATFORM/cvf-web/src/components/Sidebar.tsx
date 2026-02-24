@@ -3,6 +3,7 @@
 import { useLanguage } from '@/lib/i18n';
 import Link from 'next/link';
 import clsx from 'clsx';
+import { getSafetyStatus } from '@/lib/safety-status';
 
 interface SidebarProps {
     appState: string;
@@ -241,42 +242,52 @@ export default function Sidebar({
 
                     {/* Data & Analytics Group — hidden for viewers */}
                     {userRole !== 'viewer' && (
-                    <NavGroup title={t('sidebar.data') || 'Data'} icon="📊">
-                        <NavItem
-                            label={t('nav.history') || '📜 History'}
-                            isActive={appState === 'history'}
-                            onClick={() => handleNav('history')}
-                            badge={executionsCount > 0 ? executionsCount : undefined}
-                        />
-                        <NavItem
-                            label={t('nav.analytics') || '📈 Analytics'}
-                            isActive={appState === 'analytics'}
-                            onClick={() => handleNav('analytics')}
-                        />
-                        <NavItem
-                            label={t('nav.marketplace') || '🛒 Marketplace'}
-                            isActive={appState === 'marketplace'}
-                            onClick={() => handleNav('marketplace')}
-                        />
-                    </NavGroup>
+                        <NavGroup title={t('sidebar.data') || 'Data'} icon="📊">
+                            <NavItem
+                                label={t('nav.history') || '📜 History'}
+                                isActive={appState === 'history'}
+                                onClick={() => handleNav('history')}
+                                badge={executionsCount > 0 ? executionsCount : undefined}
+                            />
+                            <NavItem
+                                label={t('nav.analytics') || '📈 Analytics'}
+                                isActive={appState === 'analytics'}
+                                onClick={() => handleNav('analytics')}
+                            />
+                            <NavItem
+                                label={t('nav.marketplace') || '🛒 Marketplace'}
+                                isActive={appState === 'marketplace'}
+                                onClick={() => handleNav('marketplace')}
+                            />
+                        </NavGroup>
                     )}
 
                     {/* Governance Group */}
                     {userRole !== 'viewer' && (
-                    <NavGroup title={t('sidebar.governance') || 'Governance'} icon="🛡️">
+                        <NavGroup title={t('sidebar.governance') || 'Governance'} icon="🛡️">
+                            <NavItem
+                                label={t('nav.governance') || '🛡️ Governance'}
+                                isActive={appState === 'governance'}
+                                onClick={() => handleNav('governance')}
+                                gradient="from-emerald-500 to-teal-500"
+                            />
+                            <NavItem
+                                label={t('nav.simulation') || '🧪 Simulation'}
+                                isActive={appState === 'simulation'}
+                                onClick={() => handleNav('simulation')}
+                            />
+                        </NavGroup>
+                    )}
+
+                    {/* AI Safety — visible to ALL users */}
+                    <NavGroup title={t('sidebar.safety') || 'Safety'} icon="🔒">
                         <NavItem
-                            label={t('nav.governance') || '🛡️ Governance'}
-                            isActive={appState === 'governance'}
-                            onClick={() => handleNav('governance')}
-                            gradient="from-emerald-500 to-teal-500"
-                        />
-                        <NavItem
-                            label={t('nav.simulation') || '🧪 Simulation'}
-                            isActive={appState === 'simulation'}
-                            onClick={() => handleNav('simulation')}
+                            label={t('nav.safety') || '🛡️ AI Safety'}
+                            isActive={appState === 'safety'}
+                            onClick={() => handleNav('safety')}
+                            gradient="from-cyan-500 to-emerald-500"
                         />
                     </NavGroup>
-                    )}
 
                     {/* User & Settings Group */}
                     <NavGroup title={t('sidebar.user') || 'User'} icon="⚙️">

@@ -56,6 +56,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         if (p.startsWith('/skills')) return 'skills';
         if (p.startsWith('/governance')) return 'governance';
         if (p.startsWith('/simulation')) return 'simulation';
+        if (p.startsWith('/safety')) return 'safety';
         return activeModal || 'home';
     };
 
@@ -71,6 +72,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             case 'skills': router.push('/skills'); setActiveModal(null); break;
             case 'governance': router.push('/governance'); setActiveModal(null); break;
             case 'simulation': router.push('/simulation'); setActiveModal(null); break;
+            case 'safety': router.push('/safety'); setActiveModal(null); break;
             case 'agent':
                 setActiveModal('agent');
                 setIsAgentMinimized(false);
@@ -122,6 +124,10 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                         <div className="space-y-1">
                             <div>{t('footer.tagline')}</div>
                             <div className="text-xs text-gray-400">{t('footer.author')}</div>
+                            <div className="flex items-center justify-center gap-1.5 mt-2 text-xs text-emerald-600 dark:text-emerald-400">
+                                <span>🛡️</span>
+                                <span>{t('safety.badge') || 'AI đang được kiểm soát bởi CVF'}</span>
+                            </div>
                         </div>
                     </div>
                 </footer>

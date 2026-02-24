@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================ */
+/* CVF V2.0 — Dark Mode + Animations                           */
+/* ============================================================ */
+
+:root {
+  --bg-primary: #f9fafb;
+  --bg-card: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+}
+
+.dark {
+  --bg-primary: #0f172a;
+  --bg-card: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+}
+
+/* Dark mode overrides */
+.dark body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark .bg-gray-50 { background-color: var(--bg-primary); }
+.dark .bg-white { background-color: var(--bg-card); }
+.dark .text-gray-900 { color: var(--text-primary); }
+.dark .text-gray-800 { color: #e2e8f0; }
+.dark .text-gray-700 { color: #cbd5e1; }
+.dark .text-gray-600 { color: var(--text-secondary); }
+.dark .text-gray-500 { color: #94a3b8; }
+.dark .text-gray-400 { color: #64748b; }
+.dark .border-gray-200 { border-color: var(--border-color); }
+.dark .border-gray-300 { border-color: #475569; }
+.dark .bg-gray-100 { background-color: #1e293b; }
+.dark .bg-gray-200 { background-color: #334155; }
+.dark .hover\:bg-gray-300:hover { background-color: #475569; }
+.dark .bg-gray-100 { background-color: #1e293b; }
+
+/* ============================================================ */
+/* Micro-animations                                             */
+/* ============================================================ */
+
+/* Smooth button interactions */
+button {
+  transition: all 0.2s ease;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* Phase indicator pulse */
+@keyframes phase-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+}
+
+.phase-active {
+  animation: phase-pulse 2s ease-in-out infinite;
+}
+
+/* Risk badge pulse */
+@keyframes risk-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+}
+
+.risk-active {
+  animation: risk-pulse 2s ease-in-out infinite;
+}
+
+/* Timeline slide-in */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timeline-item {
+  animation: slide-in 0.3s ease-out;
+}
+
+/* Autonomy number counter */
+@keyframes count-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.autonomy-value {
+  transition: all 0.3s ease;
+}
+
+.autonomy-value:not(:empty) {
+  animation: count-pop 0.3s ease;
+}
+
+/* Status badge glow */
+@keyframes glow-green {
+  0%, 100% { box-shadow: 0 0 4px rgba(34, 197, 94, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(34, 197, 94, 0.5); }
+}
+
+@keyframes glow-red {
+  0%, 100% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.5); }
+}
+
+.status-active { animation: glow-green 3s ease-in-out infinite; }
+.status-frozen { animation: glow-red 3s ease-in-out infinite; }
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Smooth section transitions */
+section {
+  transition: opacity 0.3s ease;
+}

@@ -291,5 +291,9 @@
     "skills.selectSkillDesc": "Browse the library on the left to view detailed skill documentation, inputs, and expected outputs.",
     "skills.backToCvf": "← Back to CVF",
     "skills.notFound": "Skill not found",
-    "skills.notFoundDesc": "The skill you are looking for is not available in the current build."
+    "skills.notFoundDesc": "The skill you are looking for is not available in the current build.",
+    "sidebar.safety": "Safety",
+    "nav.safety": "🛡️ AI Safety",
+    "safety.badge": "AI is controlled by CVF",
+    "safety.title": "AI Safety"
 }

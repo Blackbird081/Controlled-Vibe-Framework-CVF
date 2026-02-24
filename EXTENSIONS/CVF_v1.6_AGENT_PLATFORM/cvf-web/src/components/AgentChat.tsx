@@ -13,6 +13,7 @@ import { GovernanceBar } from './GovernanceBar';
 import { GovernancePanel } from './GovernancePanel';
 import { useAgentChat } from '@/lib/hooks/useAgentChat';
 import { useModelPricing } from '@/lib/hooks/useModelPricing';
+import { sanitizePrompt, evaluatePolicy, riskLevelToScore, type SanitizationResult } from '@/lib/safety-status';
 import type { ChatMessage } from '@/lib/agent-chat';
 import type { GovernanceState } from '@/lib/governance-context';
 
@@ -41,6 +42,8 @@ export function AgentChat({
     const [showDecisionLog, setShowDecisionLog] = useState(false);
     const [showGovernancePanel, setShowGovernancePanel] = useState(false);
     const [governanceState, setGovernanceState] = useState<GovernanceState | undefined>(undefined);
+    const [lastSanitization, setLastSanitization] = useState<SanitizationResult | null>(null);
+    const [safetyBlocked, setSafetyBlocked] = useState(false);
 
     const handleGovernanceStateChange = useCallback((state: GovernanceState) => {
         setGovernanceState(state);
@@ -211,10 +214,48 @@ export function AgentChat({
                             />
                         </div>
 
+                        {/* Safety Status Indicator */}
+                        {lastSanitization && lastSanitization.threats.length > 0 && (
+                            <div className={`mb-2 px-3 py-1.5 rounded-lg text-xs flex items-center gap-2 ${safetyBlocked ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'}`}>
+                                <span>{safetyBlocked ? '🔴' : '🟡'}</span>
+                                <span>
+                                    {safetyBlocked
+                                        ? (language === 'vi' ? 'Prompt bị chặn — phát hiện mối đe dọa nghiêm trọng' : 'Prompt blocked — critical threat detected')
+                                        : (language === 'vi' ? `Phát hiện ${lastSanitization.threats.length} patterns cần chú ý` : `${lastSanitization.threats.length} suspicious pattern(s) detected`)}
+                                </span>
+                            </div>
+                        )}
+                        {lastSanitization && lastSanitization.threats.length === 0 && (
+                            <div className="mb-2 px-3 py-1.5 rounded-lg text-xs flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400">
+                                <span>🛡️</span>
+                                <span>{language === 'vi' ? 'Prompt đã được kiểm tra — An toàn' : 'Prompt checked — Safe'}</span>
+                            </div>
+                        )}
+
                         <ChatInput
                             input={input}
-                            onInputChange={setInput}
-                            onSend={() => handleSendMessage()}
+                            onInputChange={(val) => { setInput(val); setLastSanitization(null); setSafetyBlocked(false); }}
+                            onSend={() => {
+                                // Safety check before sending
+                                const result = sanitizePrompt(input);
+                                setLastSanitization(result);
+                                if (result.blocked) {
+                                    setSafetyBlocked(true);
+                                    return; // Don't send blocked prompts
+                                }
+                                // Also check governance policy
+                                if (governanceState) {
+                                    const safeRisk = (governanceState.riskLevel === 'R4' ? 'R3' : governanceState.riskLevel) as 'R0' | 'R1' | 'R2' | 'R3';
+                                    const score = riskLevelToScore(safeRisk);
+                                    const policy = evaluatePolicy(score);
+                                    if (policy.decision === 'BLOCK') {
+                                        setSafetyBlocked(true);
+                                        return;
+                                    }
+                                }
+                                setSafetyBlocked(false);
+                                handleSendMessage();
+                            }}
                             isLoading={isLoading}
                             attachedFile={attachedFile}
                             onRemoveAttachment={handleRemoveAttachment}

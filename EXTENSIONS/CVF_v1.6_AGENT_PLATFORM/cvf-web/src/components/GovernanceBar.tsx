@@ -18,6 +18,7 @@ import {
     type AutoDetectResult,
 } from '@/lib/governance-context';
 import { getApprovalNotificationManager, type ApprovalNotification } from '@/lib/approval-notifications';
+import { evaluatePolicy, riskLevelToScore, type SafetyRiskLevel } from '@/lib/safety-status';
 
 interface GovernanceBarProps {
     onStateChange: (state: GovernanceState) => void;
@@ -109,6 +110,13 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
 
     const riskValid = isRiskAllowed(effectiveState.riskLevel, effectiveState.phase);
     const isVi = language === 'vi';
+
+    // Policy engine evaluation — replaces simple if/else with proper ALLOW/ESCALATE/BLOCK
+    const policyDecision = useMemo(() => {
+        const safeRisk = (effectiveState.riskLevel === 'R4' ? 'R3' : effectiveState.riskLevel) as SafetyRiskLevel;
+        const score = riskLevelToScore(safeRisk);
+        return evaluatePolicy(score);
+    }, [effectiveState.riskLevel]);
 
     return (
         <div className={`
@@ -216,99 +224,107 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                     </div>
 
                     {advancedMode && (
-                <div className={`
+                        <div className={`
                     grid gap-2 transition-all duration-300
                     ${compact ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-3'}
                 `}>
-                    {/* Phase selector */}
-                    <div>
-                        <label
-                            className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
-                            title={isVi ? 'Bạn đang ở giai đoạn nào của dự án?' : 'What stage of the project are you in?'}
-                        >
-                            📋 Phase {detectionMode === 'auto' && autoResult && (
-                                <span className="text-purple-500 text-[10px]">
-                                    ({autoResult.confidence})
-                                </span>
-                            )}
-                        </label>
-                        <select
-                            value={effectiveState.phase}
-                            onChange={(e) => handlePhaseChange(e.target.value as CVFPhaseToolkit)}
-                            className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
+                            {/* Phase selector */}
+                            <div>
+                                <label
+                                    className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                                    title={isVi ? 'Bạn đang ở giai đoạn nào của dự án?' : 'What stage of the project are you in?'}
+                                >
+                                    📋 Phase {detectionMode === 'auto' && autoResult && (
+                                        <span className="text-purple-500 text-[10px]">
+                                            ({autoResult.confidence})
+                                        </span>
+                                    )}
+                                </label>
+                                <select
+                                    value={effectiveState.phase}
+                                    onChange={(e) => handlePhaseChange(e.target.value as CVFPhaseToolkit)}
+                                    className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
                                 ${detectionMode === 'auto'
-                                    ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
-                                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
-                                }`}
-                        >
-                            {PHASE_OPTIONS.map(opt => (
-                                <option key={opt.value} value={opt.value}>
-                                    {opt.icon} {isVi ? opt.label : opt.labelEn}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                                            ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
+                                            : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                        }`}
+                                >
+                                    {PHASE_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.icon} {isVi ? opt.label : opt.labelEn}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                    {/* Role selector */}
-                    <div>
-                        <label
-                            className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
-                            title={isVi ? 'Vai trò của bạn trong team' : 'Your role in the team'}
-                        >
-                            👤 Role
-                        </label>
-                        <select
-                            value={effectiveState.role}
-                            onChange={(e) => handleRoleChange(e.target.value as CVFRole)}
-                            className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
+                            {/* Role selector */}
+                            <div>
+                                <label
+                                    className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                                    title={isVi ? 'Vai trò của bạn trong team' : 'Your role in the team'}
+                                >
+                                    👤 Role
+                                </label>
+                                <select
+                                    value={effectiveState.role}
+                                    onChange={(e) => handleRoleChange(e.target.value as CVFRole)}
+                                    className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
                                 ${detectionMode === 'auto'
-                                    ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
-                                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
-                                }`}
-                        >
-                            {ROLE_OPTIONS.map(opt => (
-                                <option key={opt.value} value={opt.value}>
-                                    {opt.icon} {isVi ? opt.label : opt.labelEn}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                                            ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
+                                            : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                        }`}
+                                >
+                                    {ROLE_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.icon} {isVi ? opt.label : opt.labelEn}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                    {/* Risk selector */}
-                    <div>
-                        <label
-                            className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
-                            title={isVi ? 'Mức độ rủi ro của task này?' : 'How risky is this task?'}
-                        >
-                            ⚠️ Risk
-                        </label>
-                        <select
-                            value={effectiveState.riskLevel}
-                            onChange={(e) => handleRiskChange(e.target.value as CVFRiskLevel)}
-                            className={`
+                            {/* Risk selector */}
+                            <div>
+                                <label
+                                    className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                                    title={isVi ? 'Mức độ rủi ro của task này?' : 'How risky is this task?'}
+                                >
+                                    ⚠️ Risk
+                                </label>
+                                <select
+                                    value={effectiveState.riskLevel}
+                                    onChange={(e) => handleRiskChange(e.target.value as CVFRiskLevel)}
+                                    className={`
                                 w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1
                                 ${!riskValid
-                                    ? 'border-red-500 bg-red-50 dark:bg-red-950 focus:ring-red-500 focus:border-red-500'
-                                    : detectionMode === 'auto'
-                                        ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30 focus:ring-blue-500 focus:border-blue-500'
-                                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500'
-                                }
+                                            ? 'border-red-500 bg-red-50 dark:bg-red-950 focus:ring-red-500 focus:border-red-500'
+                                            : detectionMode === 'auto'
+                                                ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30 focus:ring-blue-500 focus:border-blue-500'
+                                                : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500'
+                                        }
                             `}
-                        >
-                            {RISK_OPTIONS.map(opt => (
-                                <option key={opt.value} value={opt.value}>
-                                    {isVi ? opt.label : opt.labelEn} ({opt.value})
-                                </option>
-                            ))}
-                        </select>
-                        {!riskValid && (
-                            <p className="text-xs text-red-500 mt-0.5">
-                                {isVi ? '⚠️ Risk vượt quá cho phép' : '⚠️ Risk exceeds phase limit'}
-                            </p>
-                        )}
-                    </div>
-                    </div>
-                )}
+                                >
+                                    {RISK_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {isVi ? opt.label : opt.labelEn} ({opt.value})
+                                        </option>
+                                    ))}
+                                </select>
+                                {!riskValid && (
+                                    <p className="text-xs text-red-500 mt-0.5">
+                                        {isVi ? '⚠️ Risk vượt quá cho phép' : '⚠️ Risk exceeds phase limit'}
+                                    </p>
+                                )}
+                                {/* Policy Decision Badge */}
+                                <div className={`mt-1 text-xs px-2 py-0.5 rounded-full inline-flex items-center gap-1 font-medium ${policyDecision.decision === 'ALLOW' ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' :
+                                        policyDecision.decision === 'ESCALATE' ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300' :
+                                            'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300'
+                                    }`}>
+                                    <span>{policyDecision.decision === 'ALLOW' ? '✅' : policyDecision.decision === 'ESCALATE' ? '⚠️' : '🛑'}</span>
+                                    <span>{policyDecision.decision}</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Phase Authority Indicators */}
                     {advancedMode && (

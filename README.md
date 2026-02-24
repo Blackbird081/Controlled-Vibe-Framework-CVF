@@ -188,7 +188,7 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 ┌─────────────────────────────────────────────────────────┐
 │  🛡️ SAFETY UI (Layer 4)    — Non-Coder Safety Dashboard │
 │     v1.7.2                  — Read-only risk view         │
-│     Risk: 🟢An toàn 🟡Chú ý 🟠Duyệt 🔴Nguy hiểm       │
+│     Risk: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous   │
 ├─────────────────────────────────────────────────────────┤
 │  🌐 PLATFORM (Layer 3)     — Web UI, Agent Chat          │
 │     v1.6 Agent Platform    — Production runtime           │

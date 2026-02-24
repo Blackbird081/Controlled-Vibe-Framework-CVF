@@ -10,12 +10,12 @@
 
 - Build: PASS
 - Lint: PASS (**0 errors**) *(đã xử lý trong WS1)*
-- Test: PASS (**1412/1415**, 3 skipped)
+- Test: PASS (**1480/1483**, 3 skipped)
 - Coverage:
-  - Statements: **93.93%**
-  - Branches: **81.22%**
-  - Functions: **92.21%**
-  - Lines: **95.01%**
+  - Statements: **93.05%**
+  - Branches: **80.46%**
+  - Functions: **91.48%**
+  - Lines: **94.18%**
 
 ---
 
@@ -215,10 +215,10 @@
 **Snapshot:** 2026-02-24 (latest local run)  
 **Latest independent reassessment:** `docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-24.md`  
 **Gate status mới nhất:**
-- Build: PASS (`npm run build`) *(đã cấu hình `turbopack.root` để bỏ warning multiple lockfiles)*
+- Build: PASS khi chạy elevated (`npm run build`) *(local run thường có thể gặp `EPERM` lock `.next`)*
 - Lint: PASS (`npx eslint .` = **0 errors, 0 warnings**)
-- Test: PASS (`npm run test:run`)
-- Coverage: PASS (`Statements 93.93%`, `Branches 81.22%`, `Functions 92.21%`, `Lines 95.01%`)
+- Test: PASS (`npm run test:run`, **1480/1483**, 0 fail)
+- Coverage: PASS (`Statements 93.05%`, `Branches 80.46%`, `Functions 91.48%`, `Lines 94.18%`)
 
 ### Trạng thái roadmap
 

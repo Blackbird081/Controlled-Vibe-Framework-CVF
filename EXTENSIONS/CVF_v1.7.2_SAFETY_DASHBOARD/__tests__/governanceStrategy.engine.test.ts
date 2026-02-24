@@ -137,10 +137,10 @@ describe("evaluateStrategy — Exploratory Profile", () => {
         expect(d.escalate).toBe(false); // autoEscalateAt=R3
     });
 
-    it("R3 — escalation, decay, but NO hardStop", () => {
+    it("R3 — escalation, decay, and hardStop", () => {
         const d = evaluate("R3", 70, S);
         expect(d.escalate).toBe(true); // autoEscalateAt=R3
-        expect(d.hardStop).toBe(false); // hardStopAtR3=false
+        expect(d.hardStop).toBe(true); // hardStopAtR3=true (CVF doctrine)
         expect(d.requireHuman).toBe(false); // requireHumanAt=undefined
         expect(d.critical).toBe(true); // criticalAt=R3
         // Decay: (3-3+1)*10=10 → 70-10=60

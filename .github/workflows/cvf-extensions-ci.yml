@@ -56,5 +56,5 @@ jobs:
         with:
           node-version: 20
       - run: npm install
-      - run: npx vitest run || true
-      - run: npm run build || true
+      - run: npx vitest run
+      - run: npm run build

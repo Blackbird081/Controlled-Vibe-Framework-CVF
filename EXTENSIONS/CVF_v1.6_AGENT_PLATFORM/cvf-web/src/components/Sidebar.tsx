@@ -3,7 +3,6 @@
 import { useLanguage } from '@/lib/i18n';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { getSafetyStatus } from '@/lib/safety-status';
 
 interface SidebarProps {
     appState: string;

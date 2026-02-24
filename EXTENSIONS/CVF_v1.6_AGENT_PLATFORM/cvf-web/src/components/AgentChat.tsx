@@ -254,7 +254,8 @@ export function AgentChat({
                                     }
                                 }
                                 setSafetyBlocked(false);
-                                handleSendMessage();
+                                // Send sanitized content to enforce strip/block policy
+                                handleSendMessage(result.sanitized);
                             }}
                             isLoading={isLoading}
                             attachedFile={attachedFile}

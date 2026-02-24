@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { type PolicyRule } from './PolicyEditor';
 
@@ -169,7 +169,7 @@ export function SimulationRunner({ baselineRules, newRules, onSimulate }: Simula
     const [running, setRunning] = useState(false);
     const [scenarios] = useState<SimulationScenario[]>(SAMPLE_SCENARIOS);
 
-    const handleRun = () => {
+    const handleRun = useCallback(() => {
         setRunning(true);
         // Simulate async processing
         setTimeout(() => {
@@ -178,16 +178,18 @@ export function SimulationRunner({ baselineRules, newRules, onSimulate }: Simula
             onSimulate?.(result);
             setRunning(false);
         }, 300);
-    };
+    }, [baselineRules, newRules, onSimulate, scenarios]);
 
     // Auto-run when newRules changes (triggered by the bottom "Chạy mô phỏng" button in PolicyEditor)
     const prevRulesRef = useRef(newRules);
     useEffect(() => {
         if (newRules !== prevRulesRef.current && newRules.length > 0) {
             prevRulesRef.current = newRules;
-            handleRun();
+            // Defer execution to avoid sync state updates inside the effect body.
+            const timer = setTimeout(() => handleRun(), 0);
+            return () => clearTimeout(timer);
         }
-    }, [newRules]);
+    }, [newRules, handleRun]);
 
     return (
         <div className="flex flex-col h-full">

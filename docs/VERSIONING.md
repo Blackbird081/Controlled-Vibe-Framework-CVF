@@ -1,176 +1,194 @@
 # CVF Versioning Policy
 
 ## Purpose
-Tài liệu này định nghĩa **chính sách versioning chính thức** của Controlled Vibe Framework (CVF).
+This document defines the **official versioning policy** for the Controlled Vibe Framework (CVF).
 
-Mục tiêu:
-- Cho phép CVF tiến hóa có kiểm soát
-- Tránh phá vỡ backward compatibility
-- Giữ CVF đủ ổn định để dùng lâu dài và audit được
+Goals:
+- Enable controlled evolution of CVF
+- Avoid breaking backward compatibility
+- Keep CVF stable enough for long-term use and auditability
 
 ---
 
 ## Versioning Scheme
 
-CVF sử dụng **Semantic Versioning**:
+CVF uses **Semantic Versioning**:
 
 ```
-
-MAJOR.MINOR
-
+MAJOR.MINOR[.PATCH]
 ```
 
-Ví dụ:
+Examples:
 - `v1.0` — Foundation
 - `v1.1` — Governance Refinement
 - `v1.2` — Capability Extension
 - `v1.3` — Implementation Toolkit
+- `v1.6` — Agent Platform
+- `v1.7.2` — Safety Dashboard
 
-Không sử dụng PATCH version cho framework core.
+PATCH versions are used for sub-extensions within a minor version (e.g., v1.7.1, v1.7.2).
 
 ### Current Status
 
 | Version | Name | Status | Date |
 |---------|------|--------|------|
-| v1.0 | Foundation | FROZEN | 2025 |
-| v1.1 | Governance Refinement | FROZEN | 2025 |
-| v1.2 | Capability Extension | FROZEN | 01/2026 |
-| v1.3 | Implementation Toolkit | FROZEN | 29/01/2026 |
-| v1.6 | Agent Platform (Web App) | ✅ ACTIVE | 06/02/2026 |
-| v1.6.1 | Governance Engine | ✅ ACTIVE | 21/02/2026 |
-| v1.7 | Controlled Intelligence | ✅ ACTIVE | 24/02/2026 |
-| v1.7.1 | Safety Runtime | ✅ ACTIVE | 24/02/2026 |
-| v1.7.2 | Safety Dashboard | ✅ ACTIVE | 24/02/2026 |
+| v1.0 | Foundation | 🔒 FROZEN | 2025 |
+| v1.1 | Governance Refinement | 🔒 FROZEN | 2025 |
+| v1.2 | Capability Extension | 🔒 FROZEN | Jan 2026 |
+| v1.3 | Implementation Toolkit | 🔒 FROZEN | Jan 29, 2026 |
+| v1.6 | Agent Platform (Web App) | ✅ ACTIVE | Feb 06, 2026 |
+| v1.6.1 | Governance Engine | ✅ ACTIVE | Feb 21, 2026 |
+| v1.7 | Controlled Intelligence | ✅ STABLE | Feb 24, 2026 |
+| v1.7.1 | Safety Runtime | ✅ STABLE | Feb 24, 2026 |
+| v1.7.2 | Safety Dashboard | ✅ STABLE | Feb 24, 2026 |
 
 ---
 
 ## Version Meaning
 
 ### MAJOR Version
-Thay đổi **MAJOR** xảy ra khi:
-- Thay đổi triết lý cốt lõi của CVF
-- Thay đổi core governance model
-- Phá backward compatibility
+A **MAJOR** change occurs when:
+- Core philosophy of CVF changes
+- Core governance model changes
+- Backward compatibility breaks
 
-Ví dụ:
-- Thay đổi định nghĩa Phase
-- Thay đổi Decision model
-- Thay đổi authority hierarchy
+Examples:
+- Redefining Phase structure
+- Changing Decision model
+- Changing authority hierarchy
 
-⛔ Những thay đổi này **rất hiếm**.
+⛔ These changes are **very rare**.
 
 ---
 
 ### MINOR Version
-Thay đổi **MINOR** xảy ra khi:
-- Bổ sung capability / extension mới
-- Làm rõ governance mà không phá core
-- Mở rộng CVF theo chiều sâu
+A **MINOR** change occurs when:
+- New capability or extension added
+- Governance clarified without breaking core
+- CVF expanded in depth
 
-Ví dụ:
-- CVF v1.2 – Capability Extension
-- Bổ sung Skill Contract, Registry, Lifecycle
+Examples:
+- CVF v1.2 — Capability Extension (Skill Contract, Registry, Lifecycle)
+- CVF v1.6 — Agent Platform (Web UI, AI Chat, 34 Tools)
+- CVF v1.7 — Controlled Intelligence (Reasoning gate, Entropy guard)
 
-✔ Không phá v1.x usage hiện có  
-✔ Không yêu cầu migrate bắt buộc
+✔ Does not break existing v1.x usage  
+✔ Does not require mandatory migration
+
+---
+
+### PATCH Version
+A **PATCH** change occurs when:
+- Sub-extension within a minor version
+- Incremental functionality added
+
+Examples:
+- CVF v1.6.1 — Governance Engine (extends v1.6)
+- CVF v1.7.1 — Safety Runtime (extends v1.7)
+- CVF v1.7.2 — Safety Dashboard (extends v1.7.1)
 
 ---
 
 ## Version Scope
 
-| Thành phần | Versioning |
-|----------|-----------|
-| CVF Core | Theo version CVF |
-| Extensions | Gắn với version CVF |
-| Skill Contract | Version riêng |
-| Capability | ID bất biến |
-| Registry | Theo CVF version |
+| Component | Versioning |
+|-----------|-----------|
+| CVF Core | Follows CVF version |
+| Extensions | Tied to CVF version |
+| Skill Contracts | Independent version |
+| Capabilities | Immutable ID |
+| Registry | Follows CVF version |
 
 ---
 
 ## Extension Versioning
 
-Extension **KHÔNG** có version độc lập.
+Extensions **DO NOT** have independent versions.
 
-Mỗi extension:
-- Thuộc về một CVF version cụ thể
-- Phải tuân thủ core của version đó
+Each extension:
+- Belongs to a specific CVF version
+- Must comply with the core of that version
 
-Ví dụ:
-- `CVF_v1.2_CAPABILITY_EXTENSION` chỉ hợp lệ trong CVF v1.2+
+Example:
+- `CVF_v1.2_CAPABILITY_EXTENSION` is only valid in CVF v1.2+
+- `CVF_v1.7_CONTROLLED_INTELLIGENCE` is only valid in CVF v1.7+
 
 ---
 
 ## Backward Compatibility Rules
 
-- CVF luôn ưu tiên backward compatibility
-- Minor version **không được phá** behavior cũ
-- Nếu cần phá:
-  - Phải nâng MAJOR
-  - Hoặc tạo extension mới
+- CVF always prioritizes backward compatibility
+- Minor versions **must not break** existing behavior
+- If breaking is needed:
+  - Must bump MAJOR
+  - Or create a new extension
 
 ---
 
 ## Deprecation Policy
 
-Một thành phần bị deprecated khi:
-- Có mô hình governance tốt hơn
-- Có rủi ro đã được xác định
-- Không còn phù hợp với triết lý CVF
+A component is deprecated when:
+- A better governance model exists
+- A risk has been identified
+- It no longer aligns with CVF philosophy
 
-Deprecated:
-- Không bị xóa ngay
-- Luôn có lý do rõ ràng
-- Luôn có hướng thay thế (nếu có)
+Deprecated components:
+- Are not removed immediately
+- Always have a clear reason
+- Always have a replacement path (if available)
 
 ---
 
 ## Freeze & Stability
 
-Một version được coi là **FROZEN** khi:
-- Architecture đã chốt
-- Governance đã đủ
-- Không còn mở rộng scope
+A version is considered **FROZEN** when:
+- Architecture is finalized
+- Governance is complete
+- Scope is no longer expanded
 
-Sau freeze:
-- Chỉ cho phép:
-  - Sửa typo
-  - Làm rõ documentation
-- Không cho phép:
-  - Thêm capability mới
-  - Thêm governance mới
-  - Thay đổi behavior
+After freeze:
+- Allowed:
+  - Fix typos
+  - Clarify documentation
+- Not allowed:
+  - Add new capabilities
+  - Add new governance rules
+  - Change behavior
 
 ---
 
 ## Release Naming Convention
 
 ```
-
-CVF vX.Y – <Short Descriptor>
-
+CVF vX.Y[.Z] – <Short Descriptor>
 ```
 
-Ví dụ:
+Examples:
 - CVF v1.0 – Foundation
 - CVF v1.1 – Governance Refinement
 - CVF v1.2 – Capability Extension
 - CVF v1.3 – Implementation Toolkit
+- CVF v1.6 – Agent Platform
+- CVF v1.6.1 – Governance Engine
+- CVF v1.7 – Controlled Intelligence
+- CVF v1.7.1 – Safety Runtime
+- CVF v1.7.2 – Safety Dashboard
 
 ---
 
 ## Authority
 
-- Quyết định version thuộc về **CVF Core Authority**
-- Agent, tool, hoặc external system **không có quyền** quyết định version
+- Version decisions belong to **CVF Core Authority**
+- Agents, tools, or external systems **have no authority** to decide versions
 
 ---
 
 ## Canonical Status
 
-Tài liệu này là **nguồn chân lý duy nhất** cho versioning của CVF.
+This document is the **single source of truth** for CVF versioning.
 
-Mọi diễn giải khác đều **không có hiệu lực**.
-```
+All other interpretations are **not valid**.
 
+---
 
+*Updated: February 25, 2026*

@@ -1,131 +1,157 @@
-# CVF Positioning — Bản Sắc & Định Vị
+# CVF Positioning — Identity & Definition
 
-> **Created:** Feb 08, 2026  
-> **Purpose:** Trả lời câu hỏi "CVF là gì?" một cách rõ ràng, tránh nhầm lẫn
+> **Created:** Feb 08, 2026 | **Updated:** Feb 25, 2026  
+> **Purpose:** Answer the question "What is CVF?" clearly, avoiding confusion
 
 ---
 
-## 1. CVF Là Gì?
+## 1. What is CVF?
 
-**CVF (Controlled Vibe Framework)** là một **governance framework** cho AI-assisted development.
+**CVF (Controlled Vibe Framework)** is a **governance framework** for AI-assisted development.
 
 ```
-CVF = Bộ quy tắc + Quy trình + Công cụ
-      để kiểm soát chất lượng khi làm việc với AI
+CVF = Rules + Process + Tools
+      to control quality when working with AI
 ```
 
-### Định nghĩa chính xác
+### Precise Definition
 
-| Aspect | CVF là | CVF KHÔNG là |
-|--------|--------|-------------|
+| Aspect | CVF IS | CVF IS NOT |
+|--------|--------|------------|
 | Type | Governance framework | AI model / AI tool |
-| Scope | Quy trình + chuẩn mực | Code library / SDK |
-| Target | Con người + AI cùng làm việc | Pure AI automation |
-| Output | Quy tắc, specs, checklists | App / Software product |
+| Scope | Process + standards | Code library / SDK |
+| Target | Human + AI collaboration | Pure AI automation |
+| Output | Rules, specs, checklists | App / Software product |
 | Dependency | Agent-agnostic | Tied to specific AI |
 
 ---
 
-## 2. Lớp Kiến Trúc
+## 2. Architecture Layers
 
-CVF có 3 lớp rõ ràng (không phải 1 monolith):
+CVF has 5 distinct layers (not a monolith):
 
 ```
-┌──────────────────────────────────────────────┐
-│           Layer 3: PLATFORM                  │
-│  Agent Platform (v1.6), Web UI, Dashboard    │
-│  → Reference implementation, KHÔNG bắt buộc  │
-├──────────────────────────────────────────────┤
-│           Layer 2: TOOLS                     │
-│  Scoring, UAT, Validation, Version Lock      │
-│  → Tiện ích hỗ trợ, dùng khi cần            │
-├──────────────────────────────────────────────┤
-│           Layer 1: CORE ← Đây là CVF        │
-│  Principles, Phases, Risk Model, Skills      │
-│  → Bộ quy tắc cốt lõi, LUÔN cần            │
-└──────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│  🛡️ SAFETY UI (Layer 5)    — Non-Coder Safety Dashboard │
+│     v1.7.2                  — Read-only risk view         │
+│     Risk: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous       │
+├─────────────────────────────────────────────────────────┤
+│  🌐 PLATFORM (Layer 4)     — Web UI, Agent Chat          │
+│     v1.6 Agent Platform    — Production runtime           │
+│  🔐 v1.6.1                 — Enterprise Governance Engine │
+├─────────────────────────────────────────────────────────┤
+│  ⚙️ SAFETY RUNTIME (Layer 3) — Policy Enforcement        │
+│     v1.7 Intelligence      — Reasoning gate, Entropy      │
+│     v1.7.1 Runtime         — Auth, Audit, DI              │
+├─────────────────────────────────────────────────────────┤
+│  🛠️ TOOLS (Layer 2)         — Scoring, UAT, Validation   │
+│     v1.3, governance/      — Python scripts, CI/CD       │
+├─────────────────────────────────────────────────────────┤
+│  📖 CORE (Layer 1) ← This IS CVF                        │
+│     v1.0, v1.1, v1.2       — Rules + 141 Skills          │
+│     → Always needed. Start here.                          │
+└─────────────────────────────────────────────────────────┘
 ```
 
-### Layer 1: Core (Bắt buộc)
+### Layer 1: Core (Required)
 - **Principles:** Outcome > Code, Spec-first, Risk-aware
 - **Phases:** Discovery → Design → Build → Review → Ship
 - **Risk Model:** R0 (Auto) → R1 (Audit) → R2 (Review) → R3 (Manual)
-- **Skill Library:** 124 skills với spec chuẩn
+- **Skill Library:** 141 skills across 12 domains
 
-### Layer 2: Tools (Tùy chọn)
-- `report_spec_metrics.py` — Chấm điểm spec quality
-- `score_uat.py` — Chấm điểm UAT
-- `check_version_sync.py` — Kiểm tra version drift
-- `inject_spec_scores.py` — Inject scores vào governance
-- `validate_registry.py` — Validate CI/CD
+### Layer 2: Tools (Optional)
+- `report_spec_metrics.py` — Spec quality scoring
+- `score_uat.py` — UAT scoring
+- `check_version_sync.py` — Version drift checking
+- `inject_spec_scores.py` — Inject scores into governance
+- `validate_registry.py` — CI/CD validation
 
-### Layer 3: Platform (Reference)
-- Web app (Next.js) — demo implementation
-- Agent adapters — integration examples
-- Dashboard — visualization
+### Layer 3: Safety Runtime (Optional)
+- **v1.7 Intelligence** — Reasoning gate, entropy guard, prompt sanitizer
+- **v1.7.1 Runtime** — Policy lifecycle engine, auth, DI container, audit trail
+- Anomaly detection, system prompt hardening
 
----
+### Layer 4: Platform (Reference Implementation)
+- Web app (Next.js) — production-grade UI
+- AI Agent Chat — Gemini, OpenAI, Anthropic
+- 34 Agent Tools — multi-agent workflows
+- Template Marketplace — community templates
 
-## 3. Use Cases Phù Hợp
-
-### ✅ Phù hợp
-| Scenario | Dùng CVF như thế nào |
-|----------|--------------------|
-| 1 dev dùng AI hàng ngày | Layer 1: Skills + Risk awareness |
-| Team 3-5 người | Layer 1 + 2: Skills + governance + scoring |
-| Code review với AI | Skill `tech_review/01_code_review.skill.md` |
-| Viết spec | Skill `application_development/05_api_design_spec.skill.md` |
-| Đánh giá AI output | UAT process + evaluation checklist |
-
-### ❌ Không phù hợp
-| Scenario | Lý do |
-|----------|-------|
-| Thay thế AI model | CVF không phải AI, chỉ quản lý quy trình |
-| Real-time API | CVF không có runtime component |
-| Customer-facing product | CVF là internal tool/process |
-| Enterprise compliance (SOC2, etc.) | Cần framework chuyên dụng |
+### Layer 5: Safety Dashboard (Non-Coder)
+- **v1.7.2** — Real-time risk visualization
+- Risk levels: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous
+- Read-only interface for managers and stakeholders
+- Policy simulation with what-if scenarios
 
 ---
 
-## 4. So Sánh Với Các Framework Khác
+## 3. Suitable Use Cases
+
+### ✅ Suitable
+| Scenario | How to use CVF |
+|----------|----------------|
+| Solo dev using AI daily | Layer 1: Skills + Risk awareness |
+| Team of 3-5 people | Layer 1 + 2: Skills + governance + scoring |
+| Code review with AI | Skill `tech_review/01_code_review.skill.md` |
+| Writing specifications | Skill `application_development/05_api_design_spec.skill.md` |
+| Evaluating AI output | UAT process + evaluation checklist |
+| AI safety for non-coders | Layer 5: Safety Dashboard |
+| Enterprise AI governance | Layer 1 + 3 + 4: Full stack governance |
+
+### ❌ Not Suitable
+| Scenario | Reason |
+|----------|--------|
+| Replacing AI models | CVF is not AI, only manages the process |
+| Real-time API | CVF is a framework, not a service |
+| Customer-facing product | CVF is an internal tool/process |
+| Compliance (SOC2, etc.) | Requires dedicated compliance framework |
+
+---
+
+## 4. Comparison with Other Frameworks
 
 | Feature | CVF | DORA | SAFe | Custom Prompts |
 |---------|-----|------|------|----------------|
 | AI governance | ✅ Core focus | ❌ | ❌ | ❌ |
 | Risk-based phases | ✅ R0-R3 | ❌ | ✅ | ❌ |
-| Skill library | ✅ 124 skills | ❌ | ❌ | Partial |
+| Skill library | ✅ 141 skills | ❌ | ❌ | Partial |
 | Agent-agnostic | ✅ | N/A | N/A | ❌ Usually locked |
 | Quality scoring | ✅ | ✅ Metrics | ✅ Metrics | ❌ |
+| AI Safety Runtime | ✅ v1.7.x | ❌ | ❌ | ❌ |
 | Lightweight | ✅ | ✅ | ❌ Heavy | ✅ |
 
 ---
 
 ## 5. Tagline Options
 
-Dùng một trong các tagline sau khi giới thiệu CVF:
+Use one of these taglines when introducing CVF:
 
-1. **"Governance framework for AI-assisted development"** ← Chính xác nhất
-2. **"Kiểm soát chất lượng khi làm việc với AI"** ← Tiếng Việt
-3. **"Rules, not code. Process, not product."** ← Phân biệt rõ
+1. **"Governance framework for AI-assisted development"** ← Most accurate
+2. **"Control quality when working with AI"** ← Simple
+3. **"Rules, not code. Process, not product."** ← Clear distinction
 4. **"Make AI work YOUR way"** ← Marketing-friendly
 
 ---
 
 ## 6. Elevator Pitch
 
-> CVF là bộ quy tắc giúp bạn kiểm soát AI khi phát triển phần mềm.  
-> Thay vì để AI tự do, CVF cung cấp 124 skill templates có sẵn,  
-> hệ thống risk levels (R0-R3), và quality scoring tự động.  
-> Dùng được với bất kỳ AI nào: Copilot, ChatGPT, Claude, Gemini.  
-> 5 phút để bắt đầu. Zero dependencies.
+> CVF is a governance framework that helps you control AI when developing software.  
+> Instead of letting AI run free, CVF provides 141 ready-made skill templates,  
+> a risk level system (R0-R3), automated quality scoring, and an AI Safety Runtime.  
+> Works with any AI: Copilot, ChatGPT, Claude, Gemini.  
+> 5 minutes to get started. Zero dependencies.
 
 ---
 
-## 7. Anti-Patterns (Tránh)
+## 7. Anti-Patterns (Avoid)
 
-| Nói | Thay vì | Vì sao |
-|-----|---------|--------|
-| "CVF platform" | "CVF framework" | CVF là quy tắc, không phải platform |
-| "CVF v1.6" | "CVF Core + Agent Platform v1.6" | v1.6 là platform layer, không phải core |
-| "Install CVF" | "Apply CVF" | CVF không install, copy skill files là đủ |
-| "CVF AI" | "CVF governance" | CVF quản lý AI, không phải là AI |
+| Say | Instead of | Because |
+|-----|-----------|---------|
+| "CVF platform" | "CVF framework" | CVF is rules, not a platform |
+| "CVF v1.6" | "CVF Core + Agent Platform v1.6" | v1.6 is the platform layer, not core |
+| "Install CVF" | "Apply CVF" | CVF is not installed, copy skill files |
+| "CVF AI" | "CVF governance" | CVF manages AI, it is not AI |
+
+---
+
+*Updated: February 25, 2026*

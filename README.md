@@ -86,7 +86,7 @@ When using AI to code without a framework:
 
 - 🛡️ **AI Safety Runtime** - Prompt sanitizer, entropy guard, anomaly detection, policy enforcement
 - 🧠 **Controlled Intelligence** - Agent behavior control with governance-first approach
-- 📊 **Safety Dashboard** - Real-time risk view: 🟢An toàn 🟡Chú ý 🟠Duyệt 🔴Nguy hiểm
+- 📊 **Safety Dashboard** - Real-time risk view: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous
 - 🔒 **System Prompt Hardening** - Anti-injection, anti-override, anti-bypass directives
 - 🧪 **Policy Simulation** - Test policy changes before applying with what-if scenarios
 

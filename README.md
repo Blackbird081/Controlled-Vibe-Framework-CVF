@@ -173,32 +173,31 @@ When using AI to code without a framework:
 
 ## 🏗️ Architecture
 
-CVF has 3 layers + reference implementations:
+CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  🌐 PLATFORM (Layer 3)  — Web UI, Agent Chat, Dashboard │
-│     v1.6                — Production runtime             │
-│     → Use when you need UI/demo                           │
-│                                                           │
-│  🔐 v1.6.1              — Enterprise Governance Engine    │
-│     Python/FastAPI       — CI/CD, Audit, Approval, RBAC  │
-│     143 tests            — Complements v1.6 web runtime   │
-│     → Use when you need enterprise enforcement            │
+│  🛡️ SAFETY UI (Layer 4)    — Non-Coder Safety Dashboard │
+│     v1.7.2                  — Read-only risk view         │
+│     Risk: 🟢An toàn 🟡Chú ý 🟠Duyệt 🔴Nguy hiểm       │
 ├─────────────────────────────────────────────────────────┤
-│  🛠️ TOOLS (Layer 2)      — Scoring, UAT, Validation      │
-│     v1.3, governance/   — Python scripts, CI/CD         │
-│     → Use when you need automation                        │
+│  🌐 PLATFORM (Layer 3)     — Web UI, Agent Chat          │
+│     v1.6 Agent Platform    — Production runtime           │
+│  🔐 v1.6.1                 — Enterprise Governance Engine │
 ├─────────────────────────────────────────────────────────┤
-│  📖 CORE (Layer 1)       — Principles, Phases, Skills    │
-│     v1.0, v1.1, v1.2    — Rules + Skill Library         │
+│  ⚙️ SAFETY RUNTIME (Layer 2.5) — Policy Enforcement      │
+│     v1.7.1                 — Auth, Audit, DI              │
+├─────────────────────────────────────────────────────────┤
+│  🧠 INTELLIGENCE (Layer 2)  — Agent Behavior Control     │
+│     v1.7                   — Reasoning gate, Entropy      │
+│                              guard, Prompt sanitizer      │
+│  🛠️ TOOLS                   — Scoring, UAT, Validation   │
+│     v1.3, governance/      — Python scripts, CI/CD       │
+├─────────────────────────────────────────────────────────┤
+│  📖 CORE (Layer 1)          — Principles, Phases, Skills │
+│     v1.0, v1.1, v1.2       — Rules + 141 Skills          │
 │     → Always needed. Start here.                          │
 └─────────────────────────────────────────────────────────┘
-
-📘 Reference Implementations (controlled extensions):
-  • CVF Toolkit Reference    — Governance engine example (TypeScript)
-  • CVF Starter Template     — Express server template example
-  → Use as learning resources when building new projects
 ```
 
 **Read more:** [CVF Positioning](docs/CVF_POSITIONING.md)
@@ -217,6 +216,9 @@ CVF has 3 layers + reference implementations:
 - **v1.5.2** - Skill Library (141 skills, ACTIVE)
 - **v1.6** ⭐ - Agent Platform (AI chat, multi-agent, governance)
 - **v1.6.1** 🔐 - Governance Engine (enterprise enforcement, audit, CI/CD)
+- **v1.7** 🧠 - Controlled Intelligence (agent behavior control, prompt sanitizer)
+- **v1.7.1** ⚙️ - Safety Runtime (policy enforcement engine)
+- **v1.7.2** 🛡️ - Safety Dashboard (non-coder risk view)
 
 **Which should you use?**
 
@@ -381,4 +383,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 22, 2026 | Version 1.6.3 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: February 24, 2026 | Version 1.7.1 | [Documentation](docs/GET_STARTED.md)*

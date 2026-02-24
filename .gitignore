@@ -4,6 +4,10 @@ node_modules/
 dist/
 build/
 
+# Database (local dev)
+dev.db
+*.db-journal
+
 # Environment
 .env
 .env.local
@@ -37,3 +41,6 @@ npm-debug.log*
 # Internal (draft, chưa audit)
 CVF_INTERNAL_LITE/
 __pycache__/
+
+# Large lock files in extension modules (regenerate via npm install)
+EXTENSIONS/**/package-lock.json

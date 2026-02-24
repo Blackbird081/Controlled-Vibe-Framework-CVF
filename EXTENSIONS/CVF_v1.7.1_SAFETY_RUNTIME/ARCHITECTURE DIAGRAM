@@ -1,0 +1,206 @@
+# CVF Architecture — v1.7.0
+
+## System Overview
+
+```mermaid
+graph TB
+    subgraph "User Input"
+        UI["Dashboard<br/>(Next.js)"]
+        Chat["OpenClaw Chat"]
+        API["REST API"]
+    end
+
+    subgraph "Security Layer"
+        VAL["Zod Validation<br/>(14 schemas)"]
+        AUTH["JWT Auth<br/>(HMAC-SHA256)"]
+        RBAC["RBAC<br/>(3 roles, 11 perms)"]
+        RL["Rate Limiter<br/>(sliding window)"]
+    end
+
+    subgraph "Core Engine"
+        LE["Lifecycle Engine<br/>(5-step pipeline)"]
+        DI["DI Container"]
+        EB["Event Bus<br/>(6 event types)"]
+        PS["Proposal Store"]
+        SS["State Store"]
+        XB["Execution Boundary"]
+    end
+
+    subgraph "Policy Engine"
+        PE["Policy Executor<br/>(default: pending)"]
+        PR["Policy Registry<br/>(immutable versions)"]
+        PH["Policy Hash<br/>(SHA-256)"]
+        SM["State Machine"]
+        EJ["Execution Journal"]
+        CG["Cost Guard<br/>(6 levels)"]
+        RE["Risk Engine<br/>(4 levels)"]
+    end
+
+    subgraph "AI Governance"
+        Gov["Governed Generate<br/>(policy→gen→track→audit)"]
+        PP["Provider Policy"]
+        AT["Audit Logger"]
+        UT["Usage Tracker"]
+    end
+
+    subgraph "Simulation"
+        SE["Simulation Engine"]
+        SN["Snapshot Store"]
+        PD["Policy Diff"]
+        RS["Replay Service"]
+    end
+
+    subgraph "Data Layer"
+        REPO["Repository Interfaces"]
+        PRISMA["Prisma ORM"]
+        DB[("SQLite")]
+    end
+
+    UI --> VAL
+    Chat --> VAL
+    API --> VAL
+    VAL --> AUTH
+    AUTH --> RBAC
+    RBAC --> RL
+    RL --> LE
+
+    LE --> PE
+    LE --> SM
+    LE --> EJ
+    LE --> EB
+    DI -.->|provides| LE
+    DI -.->|provides| PE
+    DI -.->|provides| EB
+
+    PE --> PR
+    PR --> PH
+    PE --> CG
+    PE --> RE
+
+    Gov --> PP
+    Gov --> AT
+    Gov --> UT
+
+    SE --> SN
+    SE --> PD
+    SE --> RS
+
+    LE --> REPO
+    EJ --> REPO
+    REPO --> PRISMA
+    PRISMA --> DB
+```
+
+---
+
+## Request Flow
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant V as Zod Validation
+    participant A as JWT Auth
+    participant R as Rate Limiter
+    participant L as Lifecycle Engine
+    participant P as Policy Engine
+    participant S as State Machine
+    participant D as Database
+
+    C->>V: POST /api/proposals
+    V->>V: Validate schema
+    V->>A: Verify JWT token
+    A->>A: Check RBAC permissions
+    A->>R: Check rate limit
+    R->>L: submit(proposal)
+    L->>P: executePolicy()
+    P->>P: Evaluate rules
+    P-->>L: decision (approved/rejected/pending)
+    L->>S: nextState()
+    L->>D: Save to DB
+    L-->>C: ProposalResponse
+```
+
+---
+
+## Security Architecture
+
+```mermaid
+graph LR
+    subgraph "Input Boundary"
+        Z["Zod Schemas<br/>(14 schemas)"]
+    end
+
+    subgraph "Authentication"
+        JWT["HMAC-SHA256 JWT"]
+        PW["PBKDF2 Password<br/>(100K iterations)"]
+        CK["Secure Cookies<br/>(httpOnly, secure, sameSite)"]
+    end
+
+    subgraph "Authorization"
+        R1["Admin<br/>(11 permissions)"]
+        R2["Operator<br/>(7 permissions)"]
+        R3["Viewer<br/>(3 permissions)"]
+    end
+
+    subgraph "Rate Limiting"
+        RL1["Default: 60 req/min"]
+        RL2["API: 30 req/min"]
+        RL3["AI: 10 req/min"]
+    end
+
+    Z --> JWT
+    JWT --> R1
+    JWT --> R2
+    JWT --> R3
+    R1 --> RL1
+    R2 --> RL2
+    R3 --> RL3
+```
+
+---
+
+## Event System
+
+| Event | Data | Emitted By |
+|-------|------|------------|
+| `proposal:submitted` | proposalId, source, action | Lifecycle Engine |
+| `proposal:decided` | proposalId, decision, policyVersion | Policy Executor |
+| `proposal:executed` | proposalId, result | Execution Boundary |
+| `policy:registered` | version, rulesCount, hash | Policy Registry |
+| `ai:usage` | provider, tokens, costUsd | AI Governance |
+| `error` | source, message, stack | Any module |
+
+---
+
+## Data Models (Prisma)
+
+| Model | Key Fields |
+|-------|------------|
+| **Proposal** | id, source, action, payload, state, decision, riskLevel, confidence |
+| **ExecutionJournal** | id, proposalId, policyVersion, decision, executedAt |
+| **PolicyVersion** | id, version, hash, rules, createdAt |
+| **AuditLog** | id, action, userId, metadata, createdAt |
+| **BudgetConfig** | id, scope, maxTokens, maxCostUsd |
+| **SimulationSnapshot** | id, proposalId, proposal, policyVersion, decision |
+
+---
+
+## Module Dependencies
+
+```mermaid
+graph TD
+    UI["cvf-ui"] --> SEC["security/"]
+    UI --> VAL["validation/"]
+    UI --> REPO["repositories/"]
+
+    SEC --> TYPES["types/"]
+    VAL --> TYPES
+
+    CORE["core/"] --> TYPES
+    POLICY["policy/"] --> TYPES
+    AI["ai/"] --> TYPES
+    SIM["simulation/"] --> CORE
+
+    REPO --> TYPES
+    CORE --> POLICY
+```

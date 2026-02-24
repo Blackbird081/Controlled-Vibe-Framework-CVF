@@ -1,0 +1,63 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ES2022",
+        "moduleResolution": "bundler",
+        "lib": [
+            "ES2022",
+            "DOM"
+        ],
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "jsx": "react-jsx",
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": ".",
+        "baseUrl": ".",
+        "paths": {
+            "@cvf/core/*": [
+                "./core/*"
+            ],
+            "@cvf/policy/*": [
+                "./policy/*"
+            ],
+            "@cvf/ai/*": [
+                "./ai/*"
+            ],
+            "@cvf/simulation/*": [
+                "./simulation/*"
+            ],
+            "@cvf/adapters/*": [
+                "./adapters/*"
+            ],
+            "@cvf/types": [
+                "./types/index.ts"
+            ],
+            "@/*": [
+                "./cvf-ui/*"
+            ]
+        }
+    },
+    "include": [
+        "core/**/*.ts",
+        "policy/**/*.ts",
+        "ai/**/*.ts",
+        "simulation/**/*.ts",
+        "adapters/**/*.ts",
+        "types/**/*.ts",
+        "cvf-ui/**/*.ts",
+        "cvf-ui/**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        ".next"
+    ]
+}

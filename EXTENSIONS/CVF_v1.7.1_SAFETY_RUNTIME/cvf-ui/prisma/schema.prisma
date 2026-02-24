@@ -1,0 +1,67 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./cvf.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(OPERATOR)
+  createdAt DateTime @default(now())
+}
+model RollbackSnapshot {
+  id          String   @id @default(uuid())
+  executionId String
+  projectId   String?
+  userId      String
+  filesChanged String
+  commitHash  String?
+  metadata    String?
+  createdAt   DateTime @default(now())
+}
+
+model Proposal {
+  id              String   @id @default(uuid())
+  instruction     String
+  riskScore       Int
+  estimatedCost   Float?
+  requiresApproval Boolean
+  status          String
+  createdAt       DateTime @default(now())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model Execution {
+  id         String   @id @default(uuid())
+  proposalId String
+  status     String
+  output     String?
+  createdAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String
+  model       String
+  totalTokens Int
+  createdAt   DateTime @default(now())
+  
+model BudgetConfig {
+  id        String @id @default(uuid())
+  scope     String
+  hardLimit Float
+  softLimit Float?
+}
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+  VIEWER
+}

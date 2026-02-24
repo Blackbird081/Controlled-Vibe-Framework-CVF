@@ -4,11 +4,12 @@
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
-[![Version](https://img.shields.io/badge/version-1.6.3-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
+[![Version](https://img.shields.io/badge/version-1.7.2-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-1412%2F1415%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![Coverage](https://img.shields.io/badge/coverage-89.77%25-yellowgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![Agent Skills](https://img.shields.io/badge/agent%20skills-24-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
+[![Tests](https://img.shields.io/badge/tests-1764%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![Coverage](https://img.shields.io/badge/coverage-93.05%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![AI Safety](https://img.shields.io/badge/AI%20Safety-Runtime%20Active-green.svg)](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md)
+[![Agent Skills](https://img.shields.io/badge/agent%20skills-34-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
 
 ---
 
@@ -81,7 +82,15 @@ When using AI to code without a framework:
 
 ## 🎨 Features
 
-### v1.6 Highlights ⭐
+### v1.7 Highlights ⭐ (AI Safety Runtime)
+
+- 🛡️ **AI Safety Runtime** - Prompt sanitizer, entropy guard, anomaly detection, policy enforcement
+- 🧠 **Controlled Intelligence** - Agent behavior control with governance-first approach
+- 📊 **Safety Dashboard** - Real-time risk view: 🟢An toàn 🟡Chú ý 🟠Duyệt 🔴Nguy hiểm
+- 🔒 **System Prompt Hardening** - Anti-injection, anti-override, anti-bypass directives
+- 🧪 **Policy Simulation** - Test policy changes before applying with what-if scenarios
+
+### v1.6 Features
 
 - 🤖 **AI Agent Chat** - Gemini, OpenAI, Anthropic
 - 🎯 **Multi-Agent Workflow** - Orchestrator, Architect, Builder, Reviewer
@@ -296,18 +305,19 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 
 | Metric | Status |
 |--------|--------|
-| **Version** | 1.6.3 (Feb 2026) |
-| **Stability** | Beta - Production-ready architecture, docs improvements ongoing |
-| **Quality Snapshot (2026-02-22 UTC)** | Lint: 0 errors / 95 warnings · Tests: 1412/1415 passing (3 skipped) |
-| **Coverage Snapshot (2026-02-22 UTC)** | Statements 89.77% · Branches 76.42% · Functions 89.54% · Lines 91.07% |
+| **Version** | 1.7.2 (Feb 2026) |
+| **Stability** | Production-ready — 6/6 integration sprints complete |
+| **Quality Snapshot (2026-02-25)** | Lint: 0 errors · Tests: 1764 passing (0 failed, 3 skipped) |
+| **Coverage Snapshot (2026-02-25)** | Statements 93.05% · Branches 80.46% · Functions 91.48% · Lines 94.18% |
 | **Skills** | 141 skills across 12 domains + 34 agent tools |
-| **Active Development** | Yes - v1.6 + agentic skills + documentation |
+| **AI Safety** | Runtime active — prompt sanitizer, entropy guard, policy engine |
+| **Active Development** | Yes — extensions + Web UI enhancements |
 | **Community** | Building — Discord coming soon |
 
-**Current Status:** 8.7/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-16.md))
-- ✅ **Excellent:** Technical quality (9/10), Governance toolkit (9/10), Bilingual (9/10), Testing (9/10)
-- ✅ **Good:** Core framework, Architecture, 141 skills + 34 agent tools
-- 🟡 **Improving:** Documentation, Usability
+**Current Status:** 9.4/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md) — cross-verified)
+- ✅ **Excellent:** Technical quality (9.3/10), AI Safety (9.4/10), Testing (9.5/10), Governance (9/10)
+- ✅ **Strong:** Core framework, 5-layer architecture, 141 skills + 34 agent tools
+- ✅ **Complete:** Sprint 1-6 integration, full test coverage, bilingual i18n
 - ⏳ **Pending:** Real-world validation, Community, npm/PyPI packages
 
 [→ Get Started](docs/GET_STARTED.md)
@@ -383,4 +393,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 24, 2026 | Version 1.7.1 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: February 25, 2026 | Version 1.7.2 | [Documentation](docs/GET_STARTED.md)*

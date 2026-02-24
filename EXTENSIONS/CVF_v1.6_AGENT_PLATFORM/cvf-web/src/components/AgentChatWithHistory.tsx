@@ -25,7 +25,6 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
     } = useChatHistory();
 
     const [showSidebar, setShowSidebar] = useState(true);
-    const [currentMessages, setCurrentMessages] = useState<ChatMessage[]>([]);
     const [isMaximized, setIsMaximized] = useState(false);
     const hasHandledInitialMount = useRef(false);
 
@@ -34,20 +33,17 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
         if (activeSessionId) {
             updateSession(activeSessionId, messages);
         }
-        setCurrentMessages(messages);
     }, [activeSessionId, updateSession]);
 
     // Start new chat
     const handleNewChat = useCallback(() => {
         const provider = settings.preferences.defaultProvider;
-        const newId = createSession(provider);
-        setCurrentMessages([]);
+        createSession(provider);
     }, [createSession, settings.preferences.defaultProvider]);
 
     // Select existing session
     const handleSelectSession = useCallback((session: ChatSession) => {
         setActiveSession(session.id);
-        setCurrentMessages(session.messages);
     }, [setActiveSession]);
 
     // Create session on first load if none exists
@@ -57,16 +53,8 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
         } else if (isLoaded && !activeSessionId && sessions.length > 0) {
             // Auto-select most recent session
             setActiveSession(sessions[0].id);
-            setCurrentMessages(sessions[0].messages);
         }
     }, [isLoaded, sessions, activeSessionId, handleNewChat, setActiveSession]);
-
-    // Sync currentMessages when activeSession changes
-    useEffect(() => {
-        if (activeSession) {
-            setCurrentMessages(activeSession.messages);
-        }
-    }, [activeSession]);
 
     // Handle initial prompt - only on first mount with initialPrompt
     useEffect(() => {
@@ -75,8 +63,6 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
             hasHandledInitialMount.current = true;
             // Create new session for initial prompt
             handleNewChat();
-            // Force clear messages to ensure clean slate
-            setCurrentMessages([]);
         }
     }, [initialPrompt, isLoaded, handleNewChat]);
 
@@ -140,7 +126,7 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
                         onMinimize={onMinimize}
                         onComplete={onComplete}
                         onMessagesChange={handleMessagesUpdate}
-                        existingMessages={currentMessages}
+                        existingMessages={activeSession?.messages ?? []}
                     />
                 </div>
             </div>

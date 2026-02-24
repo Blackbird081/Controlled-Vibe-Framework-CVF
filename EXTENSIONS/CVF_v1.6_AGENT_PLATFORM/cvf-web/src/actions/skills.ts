@@ -6,9 +6,6 @@ import { Skill, SkillCategory } from '../types/skill';
 import { loadUat, saveUat } from '@/lib/uat-store';
 
 const SKILLS_ROOT = path.resolve(process.cwd(), '../../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS');
-const UAT_ROOT = process.env.CVF_UAT_ROOT
-    ? path.resolve(process.env.CVF_UAT_ROOT)
-    : path.resolve(process.cwd(), '../../../governance/skill-library/uat/results');
 const UAT_REPORT_PATH = path.resolve(process.cwd(), '../../../governance/skill-library/uat/reports/uat_score_report.json');
 const SPEC_REPORT_PATH = path.resolve(process.cwd(), '../../../governance/skill-library/registry/reports/spec_metrics_report.json');
 
@@ -49,26 +46,6 @@ const RISK_AUTONOMY: Record<string, string> = {
     R3: 'Suggest-only',
     R4: 'Blocked',
 };
-
-function safeWriteFile(targetPath: string, content: string) {
-    try {
-        fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-        fs.writeFileSync(targetPath, content, 'utf-8');
-        return targetPath;
-    } catch (err) {
-        // Fallback to tmp to avoid crash on read-only FS
-        try {
-            const fallbackDir = path.resolve(process.cwd(), '.tmp-uat');
-            fs.mkdirSync(fallbackDir, { recursive: true });
-            const fallbackPath = path.join(fallbackDir, path.basename(targetPath));
-            fs.writeFileSync(fallbackPath, content, 'utf-8');
-            return fallbackPath;
-        } catch (inner) {
-            console.error('Failed to persist UAT content', inner);
-            throw err;
-        }
-    }
-}
 
 function deriveTitleFromFilename(baseName: string): string {
     return baseName
@@ -519,7 +496,7 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
 
                 if (skills.length > 0) {
                     // Check for potential category name in _index.md if it exists, otherwise simplify folder name
-                    let categoryName = folderName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    const categoryName = folderName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
                     categories.push({
                         id: folderName,

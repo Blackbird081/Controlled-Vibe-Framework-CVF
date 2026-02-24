@@ -28,9 +28,9 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint -- --max-warnings=0
+      - name: Build
+        run: npm run build
       - name: Unit tests
-        run: npm run test -- --runInBand
-      - name: Playwright install deps
-        run: npx playwright install --with-deps
-      - name: Playwright smoke
-        run: npm run test:e2e -- --config playwright.config.ts --project chromium --grep "@smoke"
+        run: npm run test:run
+      - name: Coverage (threshold gate)
+        run: npm run test:coverage

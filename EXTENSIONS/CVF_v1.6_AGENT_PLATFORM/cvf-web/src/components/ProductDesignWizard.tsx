@@ -250,7 +250,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                 if (parsed.data && Object.keys(parsed.data).length > 0) {
                     setHasDraft(true);
                 }
-            } catch (e) {
+            } catch {
                 // Invalid draft, ignore
             }
         }
@@ -276,7 +276,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                 setWizardData(parsed.data || {});
                 setCurrentStep(parsed.step || 1);
                 setHasDraft(false);
-            } catch (e) {
+            } catch {
                 // Invalid draft
             }
         }
@@ -649,3 +649,4 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
         </div>
     );
 }
+

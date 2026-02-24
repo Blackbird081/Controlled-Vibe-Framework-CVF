@@ -167,7 +167,7 @@ export function SimulationRunner({ baselineRules, newRules, onSimulate }: Simula
     const l = LABELS[language];
     const [summary, setSummary] = useState<SimulationSummary | null>(null);
     const [running, setRunning] = useState(false);
-    const [scenarios, setScenarios] = useState<SimulationScenario[]>(SAMPLE_SCENARIOS);
+    const [scenarios] = useState<SimulationScenario[]>(SAMPLE_SCENARIOS);
 
     const handleRun = () => {
         setRunning(true);

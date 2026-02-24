@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useMemo, useCallback } from 'react';
 import { templates } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import { useSettings } from '@/components/Settings';
@@ -44,7 +43,6 @@ const WIZARD_MAP: Record<string, WorkflowState> = {
 
 export default function HomePage() {
     const { t, language } = useLanguage();
-    const router = useRouter();
     const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
     const { settings } = useSettings();
     const hasAnyApiKey = Object.values(settings.providers).some(p => p.apiKey && p.apiKey.trim().length > 0);
@@ -59,9 +57,7 @@ export default function HomePage() {
     const [currentFolder, setCurrentFolder] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
 
-    const { addExecution, updateExecution, currentExecution, setCurrentExecution } = useExecutionStore();
-    const searchParams = useSearchParams();
-    const demoTriggered = useRef(false);
+    const { addExecution, updateExecution, currentExecution } = useExecutionStore();
 
     // Demo auto-run: select a template, fill demo data, run processing automatically
     const handleDemoRun = useCallback(() => {
@@ -102,14 +98,6 @@ export default function HomePage() {
         addExecution(execution);
         setWorkflowState('processing');
     }, [addExecution]);
-
-    // Auto-trigger demo if URL has ?demo=1
-    useEffect(() => {
-        if (searchParams.get('demo') === '1' && !demoTriggered.current) {
-            demoTriggered.current = true;
-            handleDemoRun();
-        }
-    }, [searchParams, handleDemoRun]);
 
     const filteredTemplates = useMemo(() => {
         let result = selectedCategory === 'all'

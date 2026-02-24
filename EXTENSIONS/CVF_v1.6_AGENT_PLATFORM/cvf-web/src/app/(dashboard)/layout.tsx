@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useModals } from '@/lib/hooks/useModals';
@@ -36,22 +36,16 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const { settings, updateProvider, updatePreferences } = useSettings();
     const modals = useModals(permissions);
     const { executions } = useExecutionStore();
+    const openParam = searchParams.get('open');
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
     const [isAgentMinimized, setIsAgentMinimized] = useState(false);
-    const [activeModal, setActiveModal] = useState<'agent' | 'multi-agent' | 'tools' | null>(null);
-
-    // Auto-open modal from URL param: ?open=agent | ?open=multi-agent
-    useEffect(() => {
-        const openParam = searchParams.get('open');
-        if (openParam === 'agent') {
-            setActiveModal('agent');
-            setIsAgentMinimized(false);
-        } else if (openParam === 'multi-agent') {
-            setActiveModal('multi-agent');
-        }
-    }, [searchParams]);
+    const [activeModal, setActiveModal] = useState<'agent' | 'multi-agent' | 'tools' | null>(() => {
+        if (openParam === 'agent') return 'agent';
+        if (openParam === 'multi-agent') return 'multi-agent';
+        return null;
+    });
 
     // Map pathname to Sidebar's expected appState string
     const pathnameToAppState = (p: string): string => {

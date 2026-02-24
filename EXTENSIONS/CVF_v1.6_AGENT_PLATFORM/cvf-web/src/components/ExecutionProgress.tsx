@@ -45,7 +45,6 @@ function PhaseProgressBar({ currentPhase }: { currentPhase: ExecutionPhase }) {
             {PHASES.slice(0, 4).map((phase, idx) => {
                 const isComplete = idx < currentIndex;
                 const isActive = idx === currentIndex;
-                const isPending = idx > currentIndex;
 
                 return (
                     <div key={phase.id} className="flex items-center flex-1">

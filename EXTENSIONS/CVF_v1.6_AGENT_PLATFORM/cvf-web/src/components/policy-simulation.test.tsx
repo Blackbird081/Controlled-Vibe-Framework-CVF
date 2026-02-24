@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { parsePolicyDSL, PolicyEditor } from './PolicyEditor';
 import { applyRules, runSimulation, SimulationRunner, type SimulationScenario } from './SimulationRunner';
 
@@ -93,6 +93,89 @@ describe('runSimulation', () => {
         expect(changed.length).toBe(1);
         expect(changed[0].before).toBe('BLOCK');
         expect(changed[0].after).toBe('NEEDS_APPROVAL');
+    });
+
+    it('returns zero impact ratio for empty scenarios', () => {
+        const summary = runSimulation(baselineRules, newRules, []);
+        expect(summary.totalScenarios).toBe(0);
+        expect(summary.changedCount).toBe(0);
+        expect(summary.impactRatio).toBe(0);
+    });
+});
+
+describe('applyRules - condition variants', () => {
+    const scenario: SimulationScenario = {
+        id: 9,
+        description: 'Condition checks',
+        cvf_risk_level: 'R2',
+        cvf_phase: 'BUILD',
+        risk_score: 45,
+        violation: true,
+    };
+
+    it('supports numeric operators', () => {
+        expect(applyRules([{ name: 'n1', condition: 'risk_score >= 45', action: 'BLOCK' }], scenario)).toBe('BLOCK');
+        expect(applyRules([{ name: 'n2', condition: 'risk_score <= 45', action: 'BLOCK' }], scenario)).toBe('BLOCK');
+        expect(applyRules([{ name: 'n3', condition: 'risk_score > 44', action: 'BLOCK' }], scenario)).toBe('BLOCK');
+        expect(applyRules([{ name: 'n4', condition: 'risk_score < 46', action: 'BLOCK' }], scenario)).toBe('BLOCK');
+        expect(applyRules([{ name: 'n5', condition: 'risk_score = 45', action: 'BLOCK' }], scenario)).toBe('BLOCK');
+    });
+
+    it('supports boolean and string equality', () => {
+        expect(applyRules([{ name: 'b1', condition: 'violation = true', action: 'BLOCK' }], scenario)).toBe('BLOCK');
+        expect(applyRules([{ name: 's1', condition: 'cvf_phase = BUILD', action: 'NEEDS_APPROVAL' }], scenario)).toBe('NEEDS_APPROVAL');
+    });
+
+    it('supports AND conditions and ignores invalid clauses', () => {
+        expect(
+            applyRules([{
+                name: 'and',
+                condition: 'cvf_phase = BUILD AND risk_score > 40',
+                action: 'BLOCK',
+            }], scenario)
+        ).toBe('BLOCK');
+
+        expect(
+            applyRules([{
+                name: 'invalid',
+                condition: 'unknown_field = x',
+                action: 'BLOCK',
+            }], scenario)
+        ).toBe('ALLOW');
+
+        expect(
+            applyRules([{
+                name: 'baddsl',
+                condition: 'this is not a valid condition',
+                action: 'BLOCK',
+            }], scenario)
+        ).toBe('ALLOW');
+    });
+});
+
+describe('SimulationRunner behavior', () => {
+    it('disables run button when newRules is empty', () => {
+        render(<SimulationRunner baselineRules={[]} newRules={[]} />);
+        const runButton = screen.getByRole('button', { name: /Run Simulation/i }) as HTMLButtonElement;
+        expect(runButton.disabled).toBe(true);
+    });
+
+    it('runs simulation and invokes onSimulate callback', async () => {
+        const onSimulate = vi.fn();
+        const baseline = [{ name: 'allowAll', condition: 'risk_score >= 0', action: 'ALLOW' }];
+        const next = [{ name: 'blockHigh', condition: 'risk_score > 40', action: 'BLOCK' }];
+
+        render(<SimulationRunner baselineRules={baseline} newRules={next} onSimulate={onSimulate} />);
+
+        fireEvent.click(screen.getByRole('button', { name: /Run Simulation/i }));
+        expect(screen.getByRole('button', { name: /Running/i })).toBeTruthy();
+
+        await waitFor(() => {
+            expect(onSimulate).toHaveBeenCalledTimes(1);
+        });
+
+        expect(screen.getByText('Impact')).toBeTruthy();
+        expect(screen.getByText(/Impact > 30%/i)).toBeTruthy();
     });
 });
 

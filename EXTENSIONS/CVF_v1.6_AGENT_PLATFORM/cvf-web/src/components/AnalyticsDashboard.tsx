@@ -111,7 +111,9 @@ export function AnalyticsDashboard() {
 
     const eventStats = useMemo(() => {
         const totalEvents = events.length;
-        const now = Date.now();
+        const now = events.length > 0
+            ? Math.max(...events.map(e => e.timestamp))
+            : 0;
         const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
         const last7Days = events.filter(e => e.timestamp >= sevenDaysAgo).length;
 

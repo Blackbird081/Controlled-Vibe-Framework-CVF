@@ -7,6 +7,7 @@ import { AnalyticsDashboard } from './AnalyticsDashboard';
 
 const exportMock = vi.fn();
 const clearMock = vi.fn();
+let currentLanguage: 'vi' | 'en' = 'vi';
 let analyticsState = {
     events: [] as Array<{ id: string; type: string; timestamp: number; data?: Record<string, unknown> }>,
     clearEvents: clearMock,
@@ -26,7 +27,7 @@ let executionsState: Array<{
 }> = [];
 
 vi.mock('@/lib/i18n', () => ({
-    useLanguage: () => ({ language: 'vi', t: (key: string) => key }),
+    useLanguage: () => ({ language: currentLanguage, t: (key: string) => key }),
 }));
 
 vi.mock('@/lib/analytics', () => ({
@@ -40,10 +41,19 @@ vi.mock('@/lib/store', () => ({
     }),
 }));
 
+vi.mock('./GovernanceMetrics', () => ({
+    GovernanceMetrics: () => <div>GovernanceMetricsStub</div>,
+}));
+
+vi.mock('./RiskTrendChart', () => ({
+    RiskTrendChart: () => <div>RiskTrendChartStub</div>,
+}));
+
 describe('AnalyticsDashboard', () => {
     beforeEach(() => {
         exportMock.mockClear();
         clearMock.mockClear();
+        currentLanguage = 'vi';
         executionsState = [
             {
                 id: 'exec1',
@@ -227,5 +237,35 @@ describe('AnalyticsDashboard', () => {
 
         // With no enforcement events, should show N/A for top status
         expect(document.body.textContent).toContain('N/A');
+    });
+
+    it('switches to governance tab and renders governance widgets', () => {
+        render(<AnalyticsDashboard />);
+
+        fireEvent.click(screen.getByText(/Governance Health/i));
+
+        expect(screen.getByText('GovernanceMetricsStub')).toBeTruthy();
+        expect(screen.getByText('RiskTrendChartStub')).toBeTruthy();
+        expect(screen.queryByText('📚 Skill phổ biến')).toBeNull();
+    });
+
+    it('renders english labels and empty states when language is en', () => {
+        currentLanguage = 'en';
+        executionsState = [];
+        analyticsState = {
+            events: [],
+            clearEvents: clearMock,
+            enabled: false,
+        };
+
+        render(<AnalyticsDashboard />);
+
+        expect(screen.getByRole('heading', { name: '📊 Analytics' })).toBeTruthy();
+        expect(screen.getByText('Usage statistics and quality metrics')).toBeTruthy();
+        expect(screen.getByText(/Analytics is disabled in Settings/i)).toBeTruthy();
+        expect(screen.getByText(/No data yet. Run some templates!/i)).toBeTruthy();
+        expect(screen.getByText(/No skill data. Open the Skill Library!/i)).toBeTruthy();
+        expect(screen.getByText(/No domain data yet. Open some skills!/i)).toBeTruthy();
+        expect(screen.getByText(/No events tracked yet./i)).toBeTruthy();
     });
 });

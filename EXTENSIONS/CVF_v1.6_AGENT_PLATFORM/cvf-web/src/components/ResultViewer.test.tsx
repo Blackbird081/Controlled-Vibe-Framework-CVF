@@ -169,7 +169,7 @@ describe('ResultViewer', () => {
 
         it('exports to markdown file', () => {
             // Render first, then mock download helpers
-            const { container } = render(<ResultViewer {...defaultProps} />);
+            render(<ResultViewer {...defaultProps} />);
 
             // Open export menu
             fireEvent.click(screen.getByText(/Export/i));

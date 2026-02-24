@@ -14,21 +14,12 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [theme, setThemeState] = useState<Theme>('dark'); // Default to dark
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-        // Load saved theme preference
-        const saved = localStorage.getItem('cvf_theme') as Theme;
-        if (saved && (saved === 'light' || saved === 'dark')) {
-            setThemeState(saved);
-            applyTheme(saved);
-        } else {
-            // Default to dark mode
-            applyTheme('dark');
-        }
-    }, []);
+    const [theme, setThemeState] = useState<Theme>(() => {
+        if (typeof window === 'undefined') return 'dark';
+        const saved = localStorage.getItem('cvf_theme');
+        return saved === 'light' || saved === 'dark' ? saved : 'dark';
+    });
+    const mounted = true;
 
     const applyTheme = (newTheme: Theme) => {
         if (typeof document !== 'undefined') {
@@ -39,6 +30,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             }
         }
     };
+
+    useEffect(() => {
+        applyTheme(theme);
+    }, [theme]);
 
     const setTheme = (newTheme: Theme) => {
         setThemeState(newTheme);

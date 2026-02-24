@@ -236,7 +236,6 @@ describe('security.ts', () => {
         it('executes Worker-based executeAsync with mock Worker', async () => {
             // Mock Worker class so the Worker path is taken
             const origWorker = globalThis.Worker;
-            let capturedOnMessage: ((e: MessageEvent) => void) | null = null;
             let capturedPostMessage: { id: string; code: string } | null = null;
 
             class MockWorker {
@@ -247,7 +246,6 @@ describe('security.ts', () => {
                     capturedPostMessage = data;
                     // Simulate worker responding with success
                     setTimeout(() => {
-                        capturedOnMessage = this.onmessage;
                         this.onmessage?.({
                             data: { id: data.id, result: 42 }
                         } as MessageEvent);

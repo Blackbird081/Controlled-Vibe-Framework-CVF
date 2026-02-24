@@ -217,7 +217,7 @@ describe('ai/providers', () => {
 
     describe('executeAI — unknown provider', () => {
         it('returns error for unknown provider', async () => {
-            const result = await executeAI('deepseek' as any, 'key', 'hello');
+            const result = await executeAI('deepseek' as unknown as Parameters<typeof executeAI>[0], 'key', 'hello');
             expect(result.success).toBe(false);
             expect(result.error).toContain('Unknown provider');
         });

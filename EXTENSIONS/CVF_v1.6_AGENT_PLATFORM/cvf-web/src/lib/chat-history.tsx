@@ -76,20 +76,12 @@ function generateTitle(messages: ChatMessage[]): string {
 
 // Hook for managing chat history
 export function useChatHistory() {
-    const [state, setState] = useState<ChatHistoryState>({ sessions: [], activeSessionId: null });
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [state, setState] = useState<ChatHistoryState>(() => loadHistory());
+    const [isLoaded] = useState(true);
 
     useEffect(() => {
-        const loaded = loadHistory();
-        setState(loaded);
-        setIsLoaded(true);
-    }, []);
-
-    useEffect(() => {
-        if (isLoaded) {
-            saveHistory(state);
-        }
-    }, [state, isLoaded]);
+        saveHistory(state);
+    }, [state]);
 
     const createSession = useCallback((provider: 'gemini' | 'openai' | 'anthropic'): string => {
         const newSession: ChatSession = {

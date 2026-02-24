@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act, render, screen, fireEvent } from '@testing-library/react';
 import {
     AGENTS,
@@ -8,7 +8,7 @@ import {
     WorkflowSelector,
     WorkflowProgress,
 } from './multi-agent';
-import type { AgentRole, Workflow, Agent } from './multi-agent';
+import type { AgentRole, Workflow } from './multi-agent';
 
 describe('Multi-Agent Module', () => {
     // ================================================

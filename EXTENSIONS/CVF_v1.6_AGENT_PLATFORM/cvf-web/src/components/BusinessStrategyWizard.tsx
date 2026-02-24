@@ -203,7 +203,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                 if (parsed.data && Object.keys(parsed.data).length > 0) {
                     setHasDraft(true);
                 }
-            } catch (e) {
+            } catch {
                 // Invalid draft, ignore
             }
         }
@@ -229,7 +229,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                 setWizardData(parsed.data || {});
                 setCurrentStep(parsed.step || 1);
                 setHasDraft(false);
-            } catch (e) {
+            } catch {
                 // Invalid draft
             }
         }
@@ -601,3 +601,4 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
         </div>
     );
 }
+

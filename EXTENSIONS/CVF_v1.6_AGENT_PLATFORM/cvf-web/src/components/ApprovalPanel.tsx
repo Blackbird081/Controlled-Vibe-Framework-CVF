@@ -100,9 +100,10 @@ export function ApprovalPanel({
     escalationStatus,
     onApprove,
     onReject,
-    language: _langProp,
+    language: langProp,
 }: ApprovalPanelProps) {
-    const { language } = useLanguage();
+    const { language: contextLanguage } = useLanguage();
+    const language = langProp || contextLanguage;
     const l = LABELS[language];
     const [comment, setComment] = useState('');
     const [submitting, setSubmitting] = useState(false);

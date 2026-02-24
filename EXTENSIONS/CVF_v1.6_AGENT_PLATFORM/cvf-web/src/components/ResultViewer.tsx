@@ -54,7 +54,6 @@ const exportLabels = {
 
 export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack, onSendToAgent }: ResultViewerProps) {
     const { language } = useLanguage();
-    const [showDetails, setShowDetails] = useState(false);
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [copied, setCopied] = useState(false);
     const [exportLang, setExportLang] = useState<ExportLanguage>(language as ExportLanguage);
@@ -276,7 +275,6 @@ ${cleanOutput}
                         indent: { left: 400 },
                     }));
                 } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-                    const text = trimmed.replace(/^[-*]\s*/, '').replace(/\*\*/g, '');
                     // Handle bold markers within text
                     const parts = trimmed.replace(/^[-*]\s*/, '').split(/\*\*/);
                     const runs = parts.map((part, i) => new TextRun({ text: part, bold: i % 2 === 1, size: 20 }));

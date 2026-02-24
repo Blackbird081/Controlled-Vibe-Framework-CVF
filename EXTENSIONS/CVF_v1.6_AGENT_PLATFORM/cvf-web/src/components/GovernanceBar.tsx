@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import {
     GovernanceState,
-    DEFAULT_GOVERNANCE_STATE,
     PHASE_OPTIONS,
     ROLE_OPTIONS,
     RISK_OPTIONS,
@@ -33,10 +32,8 @@ type DetectionMode = 'auto' | 'manual';
 
 export function GovernanceBar({ onStateChange, compact = false, lastMessage, onOpenApprovalPanel }: GovernanceBarProps) {
     const { language } = useLanguage();
-    const [state, setState] = useState<GovernanceState>(DEFAULT_GOVERNANCE_STATE);
-    const [mounted, setMounted] = useState(false);
+    const [state, setState] = useState<GovernanceState>(() => loadGovernanceState());
     const [detectionMode, setDetectionMode] = useState<DetectionMode>('auto');
-    const [autoResult, setAutoResult] = useState<AutoDetectResult | null>(null);
     const [pendingApprovals, setPendingApprovals] = useState(0);
     const [lastApprovalNotification, setLastApprovalNotification] = useState<ApprovalNotification | null>(null);
     const [advancedMode, setAdvancedMode] = useState(() => {
@@ -46,14 +43,25 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
         return false;
     });
 
-    useEffect(() => {
-        setState(loadGovernanceState());
-        setMounted(true);
-    }, []);
+    const autoResult = useMemo<AutoDetectResult | null>(() => {
+        if (detectionMode !== 'auto' || !lastMessage || !state.toolkitEnabled) return null;
+        return autoDetectGovernance({ messageText: lastMessage });
+    }, [detectionMode, lastMessage, state.toolkitEnabled]);
+
+    const effectiveState = useMemo<GovernanceState>(() => {
+        if (detectionMode === 'auto' && autoResult) {
+            return {
+                ...state,
+                phase: autoResult.phase,
+                role: autoResult.role,
+                riskLevel: autoResult.riskLevel,
+            };
+        }
+        return state;
+    }, [state, detectionMode, autoResult]);
 
     // Approval notification subscription
     useEffect(() => {
-        if (!mounted) return;
         const manager = getApprovalNotificationManager();
         const unsubscribe = manager.subscribe((notification) => {
             setLastApprovalNotification(notification);
@@ -64,35 +72,17 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
             }
         });
         return unsubscribe;
-    }, [mounted]);
+    }, []);
 
     // Persist advancedMode to localStorage
     useEffect(() => {
-        if (mounted) {
-            try { localStorage.setItem('cvf_governance_advanced', String(advancedMode)); } catch { /* ignore */ }
-        }
-    }, [advancedMode, mounted]);
-
-    // Auto-detect from last message
-    useEffect(() => {
-        if (detectionMode === 'auto' && lastMessage && state.toolkitEnabled) {
-            const detected = autoDetectGovernance({ messageText: lastMessage });
-            setAutoResult(detected);
-            setState(prev => ({
-                ...prev,
-                phase: detected.phase,
-                role: detected.role,
-                riskLevel: detected.riskLevel,
-            }));
-        }
-    }, [lastMessage, detectionMode, state.toolkitEnabled]);
+        try { localStorage.setItem('cvf_governance_advanced', String(advancedMode)); } catch { /* ignore */ }
+    }, [advancedMode]);
 
     useEffect(() => {
-        if (mounted) {
-            saveGovernanceState(state);
-            onStateChange(state);
-        }
-    }, [state, onStateChange, mounted]);
+        saveGovernanceState(effectiveState);
+        onStateChange(effectiveState);
+    }, [effectiveState, onStateChange]);
 
     const handleToggle = () => {
         setState(prev => ({ ...prev, toolkitEnabled: !prev.toolkitEnabled }));
@@ -115,22 +105,10 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
 
     const switchToAuto = useCallback(() => {
         setDetectionMode('auto');
-        if (lastMessage) {
-            const detected = autoDetectGovernance({ messageText: lastMessage });
-            setAutoResult(detected);
-            setState(prev => ({
-                ...prev,
-                phase: detected.phase,
-                role: detected.role,
-                riskLevel: detected.riskLevel,
-            }));
-        }
-    }, [lastMessage]);
+    }, []);
 
-    const riskValid = isRiskAllowed(state.riskLevel, state.phase);
+    const riskValid = isRiskAllowed(effectiveState.riskLevel, effectiveState.phase);
     const isVi = language === 'vi';
-
-    if (!mounted) return null;
 
     return (
         <div className={`
@@ -155,7 +133,21 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                     {/* Auto/Manual toggle */}
                     {state.toolkitEnabled && (
                         <button
-                            onClick={() => detectionMode === 'auto' ? setDetectionMode('manual') : switchToAuto()}
+                            onClick={() => {
+                                if (detectionMode === 'auto') {
+                                    if (autoResult) {
+                                        setState(prev => ({
+                                            ...prev,
+                                            phase: autoResult.phase,
+                                            role: autoResult.role,
+                                            riskLevel: autoResult.riskLevel,
+                                        }));
+                                    }
+                                    setDetectionMode('manual');
+                                    return;
+                                }
+                                switchToAuto();
+                            }}
                             className={`text-xs px-1.5 py-0.5 rounded-full font-medium transition-colors
                                 ${detectionMode === 'auto'
                                     ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300'
@@ -241,7 +233,7 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                             )}
                         </label>
                         <select
-                            value={state.phase}
+                            value={effectiveState.phase}
                             onChange={(e) => handlePhaseChange(e.target.value as CVFPhaseToolkit)}
                             className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
                                 ${detectionMode === 'auto'
@@ -266,7 +258,7 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                             👤 Role
                         </label>
                         <select
-                            value={state.role}
+                            value={effectiveState.role}
                             onChange={(e) => handleRoleChange(e.target.value as CVFRole)}
                             className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
                                 ${detectionMode === 'auto'
@@ -291,7 +283,7 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                             ⚠️ Risk
                         </label>
                         <select
-                            value={state.riskLevel}
+                            value={effectiveState.riskLevel}
                             onChange={(e) => handleRiskChange(e.target.value as CVFRiskLevel)}
                             className={`
                                 w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1
@@ -322,12 +314,12 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                     {advancedMode && (
                         <div className="flex items-center gap-2 mt-1 text-[10px] text-gray-500 dark:text-gray-400">
                             {(() => {
-                                const authority = PHASE_AUTHORITY_MATRIX[state.phase];
+                                const authority = PHASE_AUTHORITY_MATRIX[effectiveState.phase];
                                 return (
                                     <>
                                         <span title={isVi
-                                            ? `Phase ${state.phase}: max risk ${authority.max_risk}`
-                                            : `Phase ${state.phase}: max risk ${authority.max_risk}`
+                                            ? `Phase ${effectiveState.phase}: max risk ${authority.max_risk}`
+                                            : `Phase ${effectiveState.phase}: max risk ${authority.max_risk}`
                                         }>
                                             {authority.can_approve ? '🔑' : '🔒'}{' '}
                                             {isVi ? (authority.can_approve ? 'Có thể duyệt' : 'Không thể duyệt') : (authority.can_approve ? 'Can approve' : 'Cannot approve')}

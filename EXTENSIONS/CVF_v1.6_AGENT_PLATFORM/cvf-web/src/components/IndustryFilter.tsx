@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getDomains, DOMAIN_NAMES } from '@/lib/skill-search';
+import { useMemo } from 'react';
+import { getDomains } from '@/lib/skill-search';
 import {
   getAvailableIndustries,
   isReasoningLoaded,
-  type IndustryInfo,
 } from '@/lib/skill-planner';
 
 // ─── Props ───────────────────────────────────────────────────────────
@@ -57,31 +56,24 @@ export function IndustryFilter({
   onChange,
   showCounts = true,
 }: IndustryFilterProps) {
-  const [items, setItems] = useState<Array<{ id: string; label: string; icon: string; count: number }>>([]);
-
-  useEffect(() => {
+  const items = useMemo<Array<{ id: string; label: string; icon: string; count: number }>>(() => {
     if (mode === 'industry') {
-      if (!isReasoningLoaded()) return;
+      if (!isReasoningLoaded()) return [];
       const industries = getAvailableIndustries();
-      setItems(
-        industries.map((ind) => ({
-          id: ind.name,
-          label: ind.name,
-          icon: INDUSTRY_ICONS[ind.name] ?? '📋',
-          count: ind.ruleCount,
-        })),
-      );
-    } else {
-      const domains = getDomains();
-      setItems(
-        domains.map((d) => ({
-          id: d.id,
-          label: d.name,
-          icon: DOMAIN_ICONS[d.id] ?? '📂',
-          count: d.count,
-        })),
-      );
+      return industries.map((ind) => ({
+        id: ind.name,
+        label: ind.name,
+        icon: INDUSTRY_ICONS[ind.name] ?? '📋',
+        count: ind.ruleCount,
+      }));
     }
+    const domains = getDomains();
+    return domains.map((d) => ({
+      id: d.id,
+      label: d.name,
+      icon: DOMAIN_ICONS[d.id] ?? '📂',
+      count: d.count,
+    }));
   }, [mode]);
 
   return (

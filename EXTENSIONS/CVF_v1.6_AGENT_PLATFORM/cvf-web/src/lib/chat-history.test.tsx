@@ -118,12 +118,12 @@ describe('useChatHistory', () => {
 
     it('sets active session to specific session ID', () => {
         const { result } = renderHook(() => useChatHistory());
-        let s1 = '', s2 = '';
+        let s1 = '';
         act(() => {
             s1 = result.current.createSession('gemini');
         });
         act(() => {
-            s2 = result.current.createSession('openai');
+            result.current.createSession('openai');
         });
         act(() => {
             result.current.setActiveSession(s1);

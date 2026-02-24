@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
 
 interface UserContextData {
@@ -23,21 +23,20 @@ const defaultContext: UserContextData = {
 
 const STORAGE_KEY = 'cvf_user_context';
 
-export function useUserContext() {
-    const [context, setContext] = useState<UserContextData>(defaultContext);
-    const [isLoaded, setIsLoaded] = useState(false);
+function loadInitialContext(): UserContextData {
+    if (typeof window === 'undefined') return defaultContext;
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return defaultContext;
+    try {
+        return JSON.parse(saved);
+    } catch {
+        return defaultContext;
+    }
+}
 
-    useEffect(() => {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            try {
-                setContext(JSON.parse(saved));
-            } catch {
-                setContext(defaultContext);
-            }
-        }
-        setIsLoaded(true);
-    }, []);
+export function useUserContext() {
+    const [context, setContext] = useState<UserContextData>(() => loadInitialContext());
+    const [isLoaded] = useState(true);
 
     const saveContext = useCallback((newContext: UserContextData) => {
         setContext(newContext);
@@ -73,14 +72,8 @@ interface UserContextFormProps {
 export function UserContextForm({ onClose, compact = false }: UserContextFormProps) {
     const { t } = useLanguage();
     const { context, saveContext, clearContext, isLoaded } = useUserContext();
-    const [formData, setFormData] = useState<UserContextData>(defaultContext);
+    const [formData, setFormData] = useState<UserContextData>(() => context);
     const [saved, setSaved] = useState(false);
-
-    useEffect(() => {
-        if (isLoaded) {
-            setFormData(context);
-        }
-    }, [context, isLoaded]);
 
     const handleChange = (field: keyof UserContextData, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));

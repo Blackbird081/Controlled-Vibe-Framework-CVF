@@ -15,10 +15,17 @@ export type SessionCookie = {
     expiresAt: number;
 };
 
+type CookieStore = {
+    get: (name: string) => { value?: string } | undefined;
+};
+
+type CookieCapableRequest = {
+    cookies?: CookieStore;
+};
+
 function parseCookieFromHeader(request: NextRequest | Request): string | undefined {
     // NextRequest has cookies API; plain Request doesn't.
-    // @ts-ignore
-    const cookieStore = (request as any).cookies;
+    const cookieStore = (request as CookieCapableRequest).cookies;
     if (cookieStore && typeof cookieStore.get === 'function') {
         return cookieStore.get(COOKIE_NAME)?.value;
     }

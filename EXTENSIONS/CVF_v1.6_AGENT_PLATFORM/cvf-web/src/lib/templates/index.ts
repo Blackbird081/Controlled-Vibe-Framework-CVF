@@ -45,7 +45,7 @@ export function generateCompleteSpec(
     userIntent?: string
 ): string {
     const date = new Date().toISOString().split('T')[0];
-    const intent = generateIntent(template, values);
+    const intent = userIntent?.trim() || generateIntent(template, values);
 
     // Build user input section
     const userInputLines = Object.entries(values)

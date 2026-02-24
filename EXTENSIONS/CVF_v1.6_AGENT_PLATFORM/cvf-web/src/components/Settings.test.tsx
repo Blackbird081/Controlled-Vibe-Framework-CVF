@@ -90,7 +90,8 @@ describe('SettingsPage', () => {
 
         class MockFileReader {
             onload: null | ((e: { target: { result: string } }) => void) = null;
-            readAsText(_file: File) {
+            readAsText(file: File) {
+                void file;
                 if (this.onload) {
                     this.onload({ target: { result: JSON.stringify({ preferences: { defaultProvider: 'openai' } }) } });
                 }
@@ -177,7 +178,8 @@ describe('SettingsPage', () => {
 
         class MockFileReader {
             onload: null | ((e: { target: { result: string } }) => void) = null;
-            readAsText(_file: File) {
+            readAsText(file: File) {
+                void file;
                 if (this.onload) {
                     this.onload({ target: { result: 'bad-json' } });
                 }

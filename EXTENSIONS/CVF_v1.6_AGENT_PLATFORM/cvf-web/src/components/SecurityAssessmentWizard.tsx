@@ -225,7 +225,7 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                 if (parsed.data && Object.keys(parsed.data).length > 0) {
                     setHasDraft(true);
                 }
-            } catch (e) { /* ignore */ }
+            } catch { /* ignore */ }
         }
     }, []);
 
@@ -247,7 +247,7 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                 setWizardData(parsed.data || {});
                 setCurrentStep(parsed.step || 1);
                 setHasDraft(false);
-            } catch (e) { /* ignore */ }
+            } catch { /* ignore */ }
         }
     };
 
@@ -485,3 +485,4 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
         </div>
     );
 }
+

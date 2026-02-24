@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import {
     useMultiAgentWorkflow,
     WorkflowSelector,
     WorkflowProgress,
     WORKFLOW_TEMPLATES,
-    AgentCard,
     AGENTS,
     Agent
 } from '@/lib/multi-agent';
@@ -22,7 +21,6 @@ import {
     GovernanceState,
     DEFAULT_GOVERNANCE_STATE,
     buildGovernanceSystemPrompt,
-    buildSelfUATPrompt,
 } from '@/lib/governance-context';
 
 type Lang = 'vi' | 'en';
@@ -111,14 +109,13 @@ export function MultiAgentPanel({ initialInput, onComplete, onClose }: MultiAgen
         addTask,
         updateTaskStatus,
         moveToNextAgent,
-        getCurrentAgent,
         setWorkflowStatus,
         reset,
     } = useMultiAgentWorkflow();
 
     const [input, setInput] = useState(initialInput || '');
     const [outputs, setOutputs] = useState<Record<string, string>>({});
-    const [outputLog, setOutputLog] = useState<{ agentId: string; content: string }[]>([]);
+    const [, setOutputLog] = useState<{ agentId: string; content: string }[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     // Governance state — managed locally for multi-agent

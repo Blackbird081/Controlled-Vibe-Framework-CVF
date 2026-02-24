@@ -11,6 +11,7 @@ vi.mock('@/lib/analytics', () => ({
 
 import { trackEvent } from '@/lib/analytics';
 const trackEventMock = vi.mocked(trackEvent);
+const globalWithOptionalWindow = globalThis as typeof globalThis & { window?: Window & typeof globalThis };
 
 describe('enforcement-log', () => {
     beforeEach(() => {
@@ -98,7 +99,7 @@ describe('enforcement-log', () => {
         it('logEnforcementDecision skips tracking when window is undefined', () => {
             const origWindow = globalThis.window;
             // @ts-expect-error simulating server-side
-            delete (globalThis as any).window;
+            delete globalWithOptionalWindow.window;
             try {
                 logEnforcementDecision({
                     source: 'agent_chat',
@@ -107,19 +108,19 @@ describe('enforcement-log', () => {
                 });
                 expect(trackEventMock).not.toHaveBeenCalled();
             } finally {
-                (globalThis as any).window = origWindow;
+                globalWithOptionalWindow.window = origWindow;
             }
         });
 
         it('logPreUatFailure skips tracking when window is undefined', () => {
             const origWindow = globalThis.window;
             // @ts-expect-error simulating server-side
-            delete (globalThis as any).window;
+            delete globalWithOptionalWindow.window;
             try {
                 logPreUatFailure({ reason: 'test' });
                 expect(trackEventMock).not.toHaveBeenCalled();
             } finally {
-                (globalThis as any).window = origWindow;
+                globalWithOptionalWindow.window = origWindow;
             }
         });
     });

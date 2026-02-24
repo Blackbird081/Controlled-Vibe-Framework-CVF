@@ -330,7 +330,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                 if (parsed.data && Object.keys(parsed.data).length > 0) {
                     setHasDraft(true);
                 }
-            } catch (e) {
+            } catch {
                 // Invalid draft, ignore
             }
         }
@@ -356,7 +356,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                 setWizardData(parsed.data || {});
                 setCurrentStep(parsed.step || 1);
                 setHasDraft(false);
-            } catch (e) {
+            } catch {
                 // Invalid draft
             }
         }
@@ -695,3 +695,4 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
         </div>
     );
 }
+

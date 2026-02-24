@@ -4,7 +4,7 @@ import { governanceFetchDirect } from '@/lib/governance-engine';
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { baseline_dsl, new_dsl, scenarios } = body;
+        const { baseline_dsl, new_dsl } = body;
 
         if (!baseline_dsl || !new_dsl) {
             return NextResponse.json(

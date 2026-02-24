@@ -6,13 +6,9 @@ import {
   loadReasoning,
   parseReasoningCSV,
   isReasoningLoaded,
-  detectIndustry,
-  getAvailableIndustries,
   type SkillPlan,
-  type PlanPhase,
-  type ReasoningRule,
 } from '@/lib/skill-planner';
-import { parseCSV, isLoaded, loadSkills, type SkillRecord } from '@/lib/skill-search';
+import { parseCSV, isLoaded, loadSkills } from '@/lib/skill-search';
 
 // ─── Props ───────────────────────────────────────────────────────────
 

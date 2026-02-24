@@ -218,7 +218,7 @@ export function DataAnalysisWizard({ onBack }: DataAnalysisWizardProps) {
             try {
                 const parsed = JSON.parse(saved);
                 if (parsed.data && Object.keys(parsed.data).length > 0) setHasDraft(true);
-            } catch (e) { /* ignore */ }
+            } catch { /* ignore */ }
         }
     }, []);
 
@@ -236,7 +236,7 @@ export function DataAnalysisWizard({ onBack }: DataAnalysisWizardProps) {
                 setWizardData(p.data || {});
                 setCurrentStep(p.step || 1);
                 setHasDraft(false);
-            } catch (e) { /* ignore */ }
+            } catch { /* ignore */ }
         }
     };
 
@@ -451,3 +451,4 @@ export function DataAnalysisWizard({ onBack }: DataAnalysisWizardProps) {
         </div>
     );
 }
+

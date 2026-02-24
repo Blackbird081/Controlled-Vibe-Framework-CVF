@@ -1,6 +1,6 @@
 # CVF Technical Stabilization Roadmap | 22/02/2026
 
-**Baseline:** `docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-22.md`  
+**Baseline (updated):** `docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-24.md`  
 **Scope:** `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web`  
 **Mục tiêu:** Fix toàn bộ lỗi vừa phát hiện và đưa quality gate về trạng thái release-ready
 
@@ -213,6 +213,7 @@
 ## 8. Handoff Note (nếu tạm dừng)
 
 **Snapshot:** 2026-02-24 (latest local run)  
+**Latest independent reassessment:** `docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-24.md`  
 **Gate status mới nhất:**
 - Build: PASS (`npm run build`) *(đã cấu hình `turbopack.root` để bỏ warning multiple lockfiles)*
 - Lint: PASS (`npx eslint .` = **0 errors, 0 warnings**)

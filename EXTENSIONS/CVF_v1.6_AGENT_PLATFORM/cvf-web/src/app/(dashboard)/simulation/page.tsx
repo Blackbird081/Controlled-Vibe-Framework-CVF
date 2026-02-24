@@ -35,14 +35,11 @@ THEN ALLOW`;
 export default function SimulationPage() {
     const { language } = useLanguage();
     const l = LABELS[language];
-    const [baselinePolicy, setBaselinePolicy] = useState(DEFAULT_BASELINE);
-    const [newPolicy, setNewPolicy] = useState('');
     const [activeNewRules, setActiveNewRules] = useState<PolicyRule[]>([]);
 
-    const baselineRules = parsePolicyDSL(baselinePolicy);
+    const baselineRules = parsePolicyDSL(DEFAULT_BASELINE);
 
     const handleRun = (policyText: string) => {
-        setNewPolicy(policyText);
         setActiveNewRules(parsePolicyDSL(policyText));
     };
 
@@ -58,7 +55,6 @@ export default function SimulationPage() {
                 <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                     <PolicyEditor
                         initialPolicy={DEFAULT_BASELINE}
-                        onSave={setNewPolicy}
                         onRun={handleRun}
                     />
                 </div>

@@ -17,9 +17,6 @@ import {
     saveGovernanceState,
     loadGovernanceState,
     type GovernanceState,
-    type CVFPhaseToolkit,
-    type CVFRole,
-    type CVFRiskLevel,
 } from './governance-context';
 
 describe('governance-context', () => {

@@ -1,5 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ApprovalNotificationManager, type ApprovalNotification } from './approval-notifications';
+import {
+    ApprovalNotificationManager,
+    getApprovalNotificationManager,
+    type ApprovalNotification,
+} from './approval-notifications';
 
 describe('ApprovalNotificationManager', () => {
     let manager: ApprovalNotificationManager;
@@ -145,5 +149,132 @@ describe('ApprovalNotificationManager', () => {
         manager.dispose();
         expect(manager.isPolling()).toBe(false);
         expect(manager.trackedCount).toBe(0);
+    });
+
+    it('does not poll when there are no tracked requests', async () => {
+        vi.useRealTimers();
+        const fetchMock = vi.fn();
+        vi.stubGlobal('fetch', fetchMock);
+
+        await manager.poll();
+        expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('ignores non-ok responses without emitting notifications', async () => {
+        vi.useRealTimers();
+        const notifications: ApprovalNotification[] = [];
+        manager.subscribe(n => notifications.push(n));
+        manager.track('req-non-ok');
+
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }));
+        await manager.poll();
+
+        expect(notifications.length).toBe(0);
+    });
+
+    it('emits step_rejected and final_rejected then auto-untracks', async () => {
+        vi.useRealTimers();
+        const notifications: ApprovalNotification[] = [];
+        manager.subscribe(n => notifications.push(n));
+        manager.track('req-reject');
+
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({ data: { status: 'PENDING', current_step: 1, total_steps: 4 } }),
+        }));
+        await manager.poll();
+        notifications.length = 0;
+
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({ data: { status: 'STEP_REJECTED', current_step: 1, total_steps: 4 } }),
+        }));
+        await manager.poll();
+        expect(notifications.some(n => n.type === 'step_rejected')).toBe(true);
+
+        notifications.length = 0;
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({ status: 'REJECTED', data: { status: 'REJECTED', current_step: 1, total_steps: 4 } }),
+        }));
+        await manager.poll();
+        expect(notifications.some(n => n.type === 'final_rejected')).toBe(true);
+        expect(manager.trackedCount).toBe(0);
+    });
+
+    it('emits SLA warning only once when crossing threshold', async () => {
+        vi.setSystemTime(new Date('2026-02-24T00:00:00.000Z'));
+        const notifications: ApprovalNotification[] = [];
+        manager.subscribe(n => notifications.push(n));
+        manager.track('req-sla');
+
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({
+                data: {
+                    status: 'PENDING',
+                    current_step: 1,
+                    total_steps: 4,
+                    sla_deadline: '2026-02-24T03:00:00.000Z',
+                },
+            }),
+        }));
+        await manager.poll();
+        notifications.length = 0;
+
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({
+                data: {
+                    status: 'PENDING',
+                    current_step: 1,
+                    total_steps: 4,
+                    sla_deadline: '2026-02-24T00:30:00.000Z',
+                },
+            }),
+        }));
+        await manager.poll();
+        expect(notifications.some(n => n.type === 'sla_warning')).toBe(true);
+
+        notifications.length = 0;
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({
+                data: {
+                    status: 'PENDING',
+                    current_step: 1,
+                    total_steps: 4,
+                    sla_deadline: '2026-02-24T00:20:00.000Z',
+                },
+            }),
+        }));
+        await manager.poll();
+        expect(notifications.some(n => n.type === 'sla_warning')).toBe(false);
+    });
+
+    it('continues notifying when one callback throws', async () => {
+        vi.useRealTimers();
+        const cbOk = vi.fn();
+        manager.subscribe(() => {
+            throw new Error('callback failed');
+        });
+        manager.subscribe(cbOk);
+        manager.track('req-callback');
+
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({ data: { status: 'PENDING', current_step: 0, total_steps: 4 } }),
+        }));
+        await manager.poll();
+
+        expect(cbOk).toHaveBeenCalledTimes(1);
+    });
+
+    it('returns singleton instance via getApprovalNotificationManager', () => {
+        const instanceA = getApprovalNotificationManager();
+        const instanceB = getApprovalNotificationManager();
+
+        expect(instanceA).toBe(instanceB);
+        instanceA.dispose();
     });
 });

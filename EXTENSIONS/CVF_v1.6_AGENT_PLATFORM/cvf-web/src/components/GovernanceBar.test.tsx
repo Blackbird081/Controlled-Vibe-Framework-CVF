@@ -1,13 +1,35 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { GovernanceBar } from './GovernanceBar';
 import type { GovernanceState } from '@/lib/governance-context';
 
+type MockApprovalNotification = {
+    type: 'created' | 'step_approved' | 'step_rejected' | 'sla_warning' | 'escalated' | 'final_approved' | 'final_rejected';
+    requestId: string;
+    message: string;
+    timestamp: string;
+    role?: string;
+};
+
+let approvalSubscribers: Array<(notification: MockApprovalNotification) => void> = [];
+let language: 'en' | 'vi' = 'en';
+
 vi.mock('@/lib/i18n', () => ({
-    useLanguage: () => ({ language: 'en', t: (key: string) => key }),
+    useLanguage: () => ({ language, t: (key: string) => key }),
+}));
+
+vi.mock('@/lib/approval-notifications', () => ({
+    getApprovalNotificationManager: () => ({
+        subscribe: (callback: (notification: MockApprovalNotification) => void) => {
+            approvalSubscribers.push(callback);
+            return () => {
+                approvalSubscribers = approvalSubscribers.filter(cb => cb !== callback);
+            };
+        },
+    }),
 }));
 
 // We do NOT mock governance-context — we use the real module for integration-like tests
@@ -30,6 +52,8 @@ describe('GovernanceBar', () => {
     beforeEach(() => {
         localStorage.removeItem(GOV_STORAGE_KEY);
         localStorage.removeItem('cvf_governance_advanced');
+        approvalSubscribers = [];
+        language = 'en';
     });
 
     it('renders the CVF Toolkit label', async () => {
@@ -349,6 +373,122 @@ describe('GovernanceBar', () => {
 
         await waitFor(() => {
             expect(screen.getByText(/Simple mode/)).toBeTruthy();
+        });
+    });
+
+    it('shows approvals button, updates badge count, and opens approval panel', async () => {
+        localStorage.setItem(GOV_STORAGE_KEY, JSON.stringify({
+            toolkitEnabled: true,
+            phase: 'INTAKE',
+            role: 'ANALYST',
+            riskLevel: 'R1',
+        }));
+        const onOpenApprovalPanel = vi.fn();
+        render(
+            <GovernanceBar
+                onStateChange={vi.fn()}
+                onOpenApprovalPanel={onOpenApprovalPanel}
+            />
+        );
+
+        await waitFor(() => {
+            expect(screen.getByLabelText('Toggle CVF Toolkit')).toBeTruthy();
+        });
+
+        for (const notify of approvalSubscribers) {
+            notify({
+                type: 'created',
+                requestId: 'req-1',
+                message: 'created',
+                timestamp: new Date().toISOString(),
+            });
+            notify({
+                type: 'created',
+                requestId: 'req-2',
+                message: 'created',
+                timestamp: new Date().toISOString(),
+            });
+        }
+
+        await waitFor(() => {
+            expect(screen.getByText(/Approvals/)).toBeTruthy();
+            expect(screen.getByText('2')).toBeTruthy();
+        });
+
+        fireEvent.click(screen.getByText(/Approvals/));
+        expect(onOpenApprovalPanel).toHaveBeenCalledTimes(1);
+    });
+
+    it('decrements pending approvals on final status and never goes below zero', async () => {
+        localStorage.setItem(GOV_STORAGE_KEY, JSON.stringify({
+            toolkitEnabled: true,
+            phase: 'INTAKE',
+            role: 'ANALYST',
+            riskLevel: 'R1',
+        }));
+        renderBar();
+
+        await waitFor(() => {
+            expect(screen.getByLabelText('Toggle CVF Toolkit')).toBeTruthy();
+        });
+
+        for (const notify of approvalSubscribers) {
+            notify({
+                type: 'created',
+                requestId: 'req-3',
+                message: 'created',
+                timestamp: new Date().toISOString(),
+            });
+            notify({
+                type: 'final_approved',
+                requestId: 'req-3',
+                message: 'approved',
+                timestamp: new Date().toISOString(),
+            });
+            notify({
+                type: 'final_rejected',
+                requestId: 'req-3',
+                message: 'rejected',
+                timestamp: new Date().toISOString(),
+            });
+        }
+
+        await waitFor(() => {
+            expect(screen.getByText(/Approvals/)).toBeTruthy();
+        });
+        expect(screen.queryByText('1')).toBeNull();
+    });
+
+    it('renders Vietnamese labels in advanced mode and approval indicator', async () => {
+        language = 'vi';
+        localStorage.setItem(GOV_STORAGE_KEY, JSON.stringify({
+            toolkitEnabled: true,
+            phase: 'REVIEW',
+            role: 'GOVERNOR',
+            riskLevel: 'R3',
+        }));
+        localStorage.setItem('cvf_governance_advanced', 'true');
+        renderBar({ lastMessage: 'review and approve this change' });
+
+        await waitFor(() => {
+            expect(screen.getByText('Đang hoạt động')).toBeTruthy();
+            expect(screen.getByText('Chế độ nâng cao')).toBeTruthy();
+            expect(screen.getByText('Đơn giản')).toBeTruthy();
+            expect(screen.getByText((text) => text.includes('Có thể duyệt'))).toBeTruthy();
+            expect(screen.getByText((text) => text.includes('Có thể ghi đè'))).toBeTruthy();
+        });
+
+        for (const notify of approvalSubscribers) {
+            notify({
+                type: 'created',
+                requestId: 'req-vi',
+                message: 'tao moi',
+                timestamp: new Date().toISOString(),
+            });
+        }
+
+        await waitFor(() => {
+            expect(screen.getByText((text) => text.includes('Duyệt'))).toBeTruthy();
         });
     });
 });

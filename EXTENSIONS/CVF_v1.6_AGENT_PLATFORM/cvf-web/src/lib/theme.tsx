@@ -14,12 +14,8 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [theme, setThemeState] = useState<Theme>(() => {
-        if (typeof window === 'undefined') return 'dark';
-        const saved = localStorage.getItem('cvf_theme');
-        return saved === 'light' || saved === 'dark' ? saved : 'dark';
-    });
-    const mounted = true;
+    const [theme, setThemeState] = useState<Theme>('dark');
+    const [mounted, setMounted] = useState(false);
 
     const applyTheme = (newTheme: Theme) => {
         if (typeof document !== 'undefined') {
@@ -31,9 +27,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    // Read localStorage only on client after mount
     useEffect(() => {
-        applyTheme(theme);
-    }, [theme]);
+        const saved = localStorage.getItem('cvf_theme');
+        const initial = saved === 'light' || saved === 'dark' ? saved : 'dark';
+        setThemeState(initial);
+        applyTheme(initial);
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (mounted) applyTheme(theme);
+    }, [theme, mounted]);
 
     const setTheme = (newTheme: Theme) => {
         setThemeState(newTheme);

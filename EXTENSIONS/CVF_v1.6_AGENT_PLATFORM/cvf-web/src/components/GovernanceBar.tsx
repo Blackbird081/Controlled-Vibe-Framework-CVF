@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import {
     GovernanceState,
-    DEFAULT_GOVERNANCE_STATE,
     PHASE_OPTIONS,
     ROLE_OPTIONS,
     RISK_OPTIONS,
@@ -19,6 +18,7 @@ import {
     type AutoDetectResult,
 } from '@/lib/governance-context';
 import { getApprovalNotificationManager, type ApprovalNotification } from '@/lib/approval-notifications';
+import { evaluatePolicy, riskLevelToScore, type SafetyRiskLevel } from '@/lib/safety-status';
 
 interface GovernanceBarProps {
     onStateChange: (state: GovernanceState) => void;
@@ -33,10 +33,8 @@ type DetectionMode = 'auto' | 'manual';
 
 export function GovernanceBar({ onStateChange, compact = false, lastMessage, onOpenApprovalPanel }: GovernanceBarProps) {
     const { language } = useLanguage();
-    const [state, setState] = useState<GovernanceState>(DEFAULT_GOVERNANCE_STATE);
-    const [mounted, setMounted] = useState(false);
+    const [state, setState] = useState<GovernanceState>(() => loadGovernanceState());
     const [detectionMode, setDetectionMode] = useState<DetectionMode>('auto');
-    const [autoResult, setAutoResult] = useState<AutoDetectResult | null>(null);
     const [pendingApprovals, setPendingApprovals] = useState(0);
     const [lastApprovalNotification, setLastApprovalNotification] = useState<ApprovalNotification | null>(null);
     const [advancedMode, setAdvancedMode] = useState(() => {
@@ -46,14 +44,25 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
         return false;
     });
 
-    useEffect(() => {
-        setState(loadGovernanceState());
-        setMounted(true);
-    }, []);
+    const autoResult = useMemo<AutoDetectResult | null>(() => {
+        if (detectionMode !== 'auto' || !lastMessage || !state.toolkitEnabled) return null;
+        return autoDetectGovernance({ messageText: lastMessage });
+    }, [detectionMode, lastMessage, state.toolkitEnabled]);
+
+    const effectiveState = useMemo<GovernanceState>(() => {
+        if (detectionMode === 'auto' && autoResult) {
+            return {
+                ...state,
+                phase: autoResult.phase,
+                role: autoResult.role,
+                riskLevel: autoResult.riskLevel,
+            };
+        }
+        return state;
+    }, [state, detectionMode, autoResult]);
 
     // Approval notification subscription
     useEffect(() => {
-        if (!mounted) return;
         const manager = getApprovalNotificationManager();
         const unsubscribe = manager.subscribe((notification) => {
             setLastApprovalNotification(notification);
@@ -64,35 +73,17 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
             }
         });
         return unsubscribe;
-    }, [mounted]);
+    }, []);
 
     // Persist advancedMode to localStorage
     useEffect(() => {
-        if (mounted) {
-            try { localStorage.setItem('cvf_governance_advanced', String(advancedMode)); } catch { /* ignore */ }
-        }
-    }, [advancedMode, mounted]);
-
-    // Auto-detect from last message
-    useEffect(() => {
-        if (detectionMode === 'auto' && lastMessage && state.toolkitEnabled) {
-            const detected = autoDetectGovernance({ messageText: lastMessage });
-            setAutoResult(detected);
-            setState(prev => ({
-                ...prev,
-                phase: detected.phase,
-                role: detected.role,
-                riskLevel: detected.riskLevel,
-            }));
-        }
-    }, [lastMessage, detectionMode, state.toolkitEnabled]);
+        try { localStorage.setItem('cvf_governance_advanced', String(advancedMode)); } catch { /* ignore */ }
+    }, [advancedMode]);
 
     useEffect(() => {
-        if (mounted) {
-            saveGovernanceState(state);
-            onStateChange(state);
-        }
-    }, [state, onStateChange, mounted]);
+        saveGovernanceState(effectiveState);
+        onStateChange(effectiveState);
+    }, [effectiveState, onStateChange]);
 
     const handleToggle = () => {
         setState(prev => ({ ...prev, toolkitEnabled: !prev.toolkitEnabled }));
@@ -115,22 +106,17 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
 
     const switchToAuto = useCallback(() => {
         setDetectionMode('auto');
-        if (lastMessage) {
-            const detected = autoDetectGovernance({ messageText: lastMessage });
-            setAutoResult(detected);
-            setState(prev => ({
-                ...prev,
-                phase: detected.phase,
-                role: detected.role,
-                riskLevel: detected.riskLevel,
-            }));
-        }
-    }, [lastMessage]);
+    }, []);
 
-    const riskValid = isRiskAllowed(state.riskLevel, state.phase);
+    const riskValid = isRiskAllowed(effectiveState.riskLevel, effectiveState.phase);
     const isVi = language === 'vi';
 
-    if (!mounted) return null;
+    // Policy engine evaluation — replaces simple if/else with proper ALLOW/ESCALATE/BLOCK
+    const policyDecision = useMemo(() => {
+        const safeRisk = (effectiveState.riskLevel === 'R4' ? 'R3' : effectiveState.riskLevel) as SafetyRiskLevel;
+        const score = riskLevelToScore(safeRisk);
+        return evaluatePolicy(score);
+    }, [effectiveState.riskLevel]);
 
     return (
         <div className={`
@@ -155,7 +141,21 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                     {/* Auto/Manual toggle */}
                     {state.toolkitEnabled && (
                         <button
-                            onClick={() => detectionMode === 'auto' ? setDetectionMode('manual') : switchToAuto()}
+                            onClick={() => {
+                                if (detectionMode === 'auto') {
+                                    if (autoResult) {
+                                        setState(prev => ({
+                                            ...prev,
+                                            phase: autoResult.phase,
+                                            role: autoResult.role,
+                                            riskLevel: autoResult.riskLevel,
+                                        }));
+                                    }
+                                    setDetectionMode('manual');
+                                    return;
+                                }
+                                switchToAuto();
+                            }}
                             className={`text-xs px-1.5 py-0.5 rounded-full font-medium transition-colors
                                 ${detectionMode === 'auto'
                                     ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300'
@@ -224,110 +224,118 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                     </div>
 
                     {advancedMode && (
-                <div className={`
+                        <div className={`
                     grid gap-2 transition-all duration-300
                     ${compact ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-3'}
                 `}>
-                    {/* Phase selector */}
-                    <div>
-                        <label
-                            className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
-                            title={isVi ? 'Bạn đang ở giai đoạn nào của dự án?' : 'What stage of the project are you in?'}
-                        >
-                            📋 Phase {detectionMode === 'auto' && autoResult && (
-                                <span className="text-purple-500 text-[10px]">
-                                    ({autoResult.confidence})
-                                </span>
-                            )}
-                        </label>
-                        <select
-                            value={state.phase}
-                            onChange={(e) => handlePhaseChange(e.target.value as CVFPhaseToolkit)}
-                            className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
+                            {/* Phase selector */}
+                            <div>
+                                <label
+                                    className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                                    title={isVi ? 'Bạn đang ở giai đoạn nào của dự án?' : 'What stage of the project are you in?'}
+                                >
+                                    📋 Phase {detectionMode === 'auto' && autoResult && (
+                                        <span className="text-purple-500 text-[10px]">
+                                            ({autoResult.confidence})
+                                        </span>
+                                    )}
+                                </label>
+                                <select
+                                    value={effectiveState.phase}
+                                    onChange={(e) => handlePhaseChange(e.target.value as CVFPhaseToolkit)}
+                                    className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
                                 ${detectionMode === 'auto'
-                                    ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
-                                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
-                                }`}
-                        >
-                            {PHASE_OPTIONS.map(opt => (
-                                <option key={opt.value} value={opt.value}>
-                                    {opt.icon} {isVi ? opt.label : opt.labelEn}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                                            ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
+                                            : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                        }`}
+                                >
+                                    {PHASE_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.icon} {isVi ? opt.label : opt.labelEn}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                    {/* Role selector */}
-                    <div>
-                        <label
-                            className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
-                            title={isVi ? 'Vai trò của bạn trong team' : 'Your role in the team'}
-                        >
-                            👤 Role
-                        </label>
-                        <select
-                            value={state.role}
-                            onChange={(e) => handleRoleChange(e.target.value as CVFRole)}
-                            className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
+                            {/* Role selector */}
+                            <div>
+                                <label
+                                    className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                                    title={isVi ? 'Vai trò của bạn trong team' : 'Your role in the team'}
+                                >
+                                    👤 Role
+                                </label>
+                                <select
+                                    value={effectiveState.role}
+                                    onChange={(e) => handleRoleChange(e.target.value as CVFRole)}
+                                    className={`w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1 focus:ring-blue-500 focus:border-blue-500
                                 ${detectionMode === 'auto'
-                                    ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
-                                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
-                                }`}
-                        >
-                            {ROLE_OPTIONS.map(opt => (
-                                <option key={opt.value} value={opt.value}>
-                                    {opt.icon} {isVi ? opt.label : opt.labelEn}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                                            ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
+                                            : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                        }`}
+                                >
+                                    {ROLE_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.icon} {isVi ? opt.label : opt.labelEn}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                    {/* Risk selector */}
-                    <div>
-                        <label
-                            className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
-                            title={isVi ? 'Mức độ rủi ro của task này?' : 'How risky is this task?'}
-                        >
-                            ⚠️ Risk
-                        </label>
-                        <select
-                            value={state.riskLevel}
-                            onChange={(e) => handleRiskChange(e.target.value as CVFRiskLevel)}
-                            className={`
+                            {/* Risk selector */}
+                            <div>
+                                <label
+                                    className="block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                                    title={isVi ? 'Mức độ rủi ro của task này?' : 'How risky is this task?'}
+                                >
+                                    ⚠️ Risk
+                                </label>
+                                <select
+                                    value={effectiveState.riskLevel}
+                                    onChange={(e) => handleRiskChange(e.target.value as CVFRiskLevel)}
+                                    className={`
                                 w-full text-sm rounded-md border px-2 py-1.5 focus:ring-1
                                 ${!riskValid
-                                    ? 'border-red-500 bg-red-50 dark:bg-red-950 focus:ring-red-500 focus:border-red-500'
-                                    : detectionMode === 'auto'
-                                        ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30 focus:ring-blue-500 focus:border-blue-500'
-                                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500'
-                                }
+                                            ? 'border-red-500 bg-red-50 dark:bg-red-950 focus:ring-red-500 focus:border-red-500'
+                                            : detectionMode === 'auto'
+                                                ? 'border-purple-300 dark:border-purple-600 bg-purple-50/50 dark:bg-purple-950/30 focus:ring-blue-500 focus:border-blue-500'
+                                                : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500'
+                                        }
                             `}
-                        >
-                            {RISK_OPTIONS.map(opt => (
-                                <option key={opt.value} value={opt.value}>
-                                    {isVi ? opt.label : opt.labelEn} ({opt.value})
-                                </option>
-                            ))}
-                        </select>
-                        {!riskValid && (
-                            <p className="text-xs text-red-500 mt-0.5">
-                                {isVi ? '⚠️ Risk vượt quá cho phép' : '⚠️ Risk exceeds phase limit'}
-                            </p>
-                        )}
-                    </div>
-                    </div>
-                )}
+                                >
+                                    {RISK_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {isVi ? opt.label : opt.labelEn} ({opt.value})
+                                        </option>
+                                    ))}
+                                </select>
+                                {!riskValid && (
+                                    <p className="text-xs text-red-500 mt-0.5">
+                                        {isVi ? '⚠️ Risk vượt quá cho phép' : '⚠️ Risk exceeds phase limit'}
+                                    </p>
+                                )}
+                                {/* Policy Decision Badge */}
+                                <div className={`mt-1 text-xs px-2 py-0.5 rounded-full inline-flex items-center gap-1 font-medium ${policyDecision.decision === 'ALLOW' ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' :
+                                        policyDecision.decision === 'ESCALATE' ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300' :
+                                            'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300'
+                                    }`}>
+                                    <span>{policyDecision.decision === 'ALLOW' ? '✅' : policyDecision.decision === 'ESCALATE' ? '⚠️' : '🛑'}</span>
+                                    <span>{policyDecision.decision}</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Phase Authority Indicators */}
                     {advancedMode && (
                         <div className="flex items-center gap-2 mt-1 text-[10px] text-gray-500 dark:text-gray-400">
                             {(() => {
-                                const authority = PHASE_AUTHORITY_MATRIX[state.phase];
+                                const authority = PHASE_AUTHORITY_MATRIX[effectiveState.phase];
                                 return (
                                     <>
                                         <span title={isVi
-                                            ? `Phase ${state.phase}: max risk ${authority.max_risk}`
-                                            : `Phase ${state.phase}: max risk ${authority.max_risk}`
+                                            ? `Phase ${effectiveState.phase}: max risk ${authority.max_risk}`
+                                            : `Phase ${effectiveState.phase}: max risk ${authority.max_risk}`
                                         }>
                                             {authority.can_approve ? '🔑' : '🔒'}{' '}
                                             {isVi ? (authority.can_approve ? 'Có thể duyệt' : 'Không thể duyệt') : (authority.can_approve ? 'Can approve' : 'Cannot approve')}

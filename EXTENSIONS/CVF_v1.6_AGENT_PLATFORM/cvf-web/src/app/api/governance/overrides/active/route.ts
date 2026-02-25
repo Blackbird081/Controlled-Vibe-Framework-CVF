@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { governanceFetchDirect } from '@/lib/governance-engine';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const data = await governanceFetchDirect('/api/v1/overrides/active');
 
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
                 total: 0,
             },
         });
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { status: 'error', message: 'Failed to fetch active overrides' },
             { status: 500 }

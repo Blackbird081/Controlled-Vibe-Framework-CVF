@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
 
 // Types
@@ -81,44 +81,47 @@ const defaultSettings: SettingsData = {
     },
 };
 
-// Hook for settings
-export function useSettings() {
-    const [settings, setSettings] = useState<SettingsData>(defaultSettings);
-    const [isLoaded, setIsLoaded] = useState(false);
+function loadInitialSettings(): SettingsData {
+    if (typeof window === 'undefined') {
+        return defaultSettings;
+    }
 
-    useEffect(() => {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            try {
-                const parsed = JSON.parse(saved);
-                const merged: SettingsData = {
-                    ...defaultSettings,
-                    ...parsed,
-                    providers: { ...defaultSettings.providers, ...parsed.providers },
-                    preferences: { ...defaultSettings.preferences, ...parsed.preferences },
-                };
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) {
+        localStorage.setItem(MIGRATION_KEY, '1');
+        return defaultSettings;
+    }
 
-                const migrated = localStorage.getItem(MIGRATION_KEY) === '1';
-                if (!migrated) {
-                    merged.preferences.defaultExportMode = 'governance';
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-                    localStorage.setItem(MIGRATION_KEY, '1');
-                }
+    try {
+        const parsed = JSON.parse(saved);
+        const merged: SettingsData = {
+            ...defaultSettings,
+            ...parsed,
+            providers: { ...defaultSettings.providers, ...parsed.providers },
+            preferences: { ...defaultSettings.preferences, ...parsed.preferences },
+        };
 
-                setSettings(merged);
-            } catch {
-                setSettings(defaultSettings);
-            }
-        }
-        if (!saved) {
+        const migrated = localStorage.getItem(MIGRATION_KEY) === '1';
+        if (!migrated) {
+            merged.preferences.defaultExportMode = 'governance';
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
             localStorage.setItem(MIGRATION_KEY, '1');
         }
-        setIsLoaded(true);
-    }, []);
+        return merged;
+    } catch {
+        return defaultSettings;
+    }
+}
+
+// Hook for settings
+export function useSettings() {
+    const [settings, setSettings] = useState<SettingsData>(() => loadInitialSettings());
+    const [isLoaded] = useState(true);
 
     const saveSettings = useCallback((newSettings: SettingsData) => {
         setSettings(newSettings);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
+        localStorage.setItem(MIGRATION_KEY, '1');
     }, []);
 
     const updateProvider = useCallback((
@@ -190,7 +193,7 @@ interface SettingsPageProps {
 }
 
 export function SettingsPage({ onClose }: SettingsPageProps) {
-    const { language, t } = useLanguage();
+    const { language } = useLanguage();
     const {
         settings,
         isLoaded,
@@ -448,7 +451,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                             </label>
                             <select
                                 value={settings.preferences.multiAgentMode}
-                                onChange={(e) => updatePreferences({ multiAgentMode: e.target.value as any })}
+                                onChange={(e) => updatePreferences({ multiAgentMode: e.target.value as UserPreferences['multiAgentMode'] })}
                                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600
                                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             >
@@ -498,7 +501,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                             </label>
                             <select
                                 value={settings.preferences.defaultProvider}
-                                onChange={(e) => updatePreferences({ defaultProvider: e.target.value as any })}
+                                onChange={(e) => updatePreferences({ defaultProvider: e.target.value as UserPreferences['defaultProvider'] })}
                                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600
                                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             >
@@ -515,7 +518,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                             </label>
                             <select
                                 value={settings.preferences.defaultExportMode}
-                                onChange={(e) => updatePreferences({ defaultExportMode: e.target.value as any })}
+                                onChange={(e) => updatePreferences({ defaultExportMode: e.target.value as UserPreferences['defaultExportMode'] })}
                                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600
                                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             >
@@ -532,7 +535,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                             </label>
                             <select
                                 value={settings.preferences.defaultLanguage}
-                                onChange={(e) => updatePreferences({ defaultLanguage: e.target.value as any })}
+                                onChange={(e) => updatePreferences({ defaultLanguage: e.target.value as UserPreferences['defaultLanguage'] })}
                                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600
                                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             >

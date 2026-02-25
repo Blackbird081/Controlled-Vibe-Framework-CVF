@@ -221,7 +221,7 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
             try {
                 const parsed = JSON.parse(saved);
                 if (parsed.data && Object.keys(parsed.data).length > 0) setHasDraft(true);
-            } catch (e) { /* ignore */ }
+            } catch { /* ignore */ }
         }
     }, []);
 
@@ -239,7 +239,7 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                 setWizardData(p.data || {});
                 setCurrentStep(p.step || 1);
                 setHasDraft(false);
-            } catch (e) { /* ignore */ }
+            } catch { /* ignore */ }
         }
     };
 
@@ -454,3 +454,4 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
         </div>
     );
 }
+

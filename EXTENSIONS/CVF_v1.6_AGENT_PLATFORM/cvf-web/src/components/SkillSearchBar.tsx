@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   searchSkills,
   loadSkills,
   parseCSV,
   isLoaded,
-  getDomains,
   DOMAIN_NAMES,
   type SearchResult,
   type SkillRecord,
@@ -54,19 +53,15 @@ export function SkillSearchBar({
   difficultyFilter,
 }: SkillSearchBarProps) {
   const [query, setQuery] = useState(initialQuery);
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(isLoaded());
-  const [elapsed, setElapsed] = useState(0);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const initialSearchDone = useRef(false);
+  const [dataLoaded, setDataLoaded] = useState(() => isLoaded());
 
   // Load CSV data on mount
   useEffect(() => {
-    if (isLoaded()) {
-      setDataLoaded(true);
+    if (dataLoaded) {
       return;
     }
+
+    let cancelled = false;
 
     async function load() {
       try {
@@ -74,7 +69,7 @@ export function SkillSearchBar({
         if (!res.ok) return;
         const text = await res.text();
         const skills = parseCSV(text);
-        if (skills.length > 0) {
+        if (!cancelled && skills.length > 0) {
           loadSkills(skills);
           setDataLoaded(true);
         }
@@ -83,69 +78,31 @@ export function SkillSearchBar({
       }
     }
     load();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [dataLoaded]);
 
-  // Debounced search
-  const doSearch = useCallback(
-    (q: string) => {
-      if (!dataLoaded || !q.trim()) {
-        setResults([]);
-        onResults?.([]);
-        return;
-      }
-
-      setLoading(true);
-      const start = performance.now();
-
-      const opts: SearchOptions = {
-        topN: 10,
-        domain: domainFilter,
-        risk: riskFilter,
-        phase: phaseFilter,
-        difficulty: difficultyFilter,
-      };
-
-      const hits = searchSkills(q, opts);
-      const ms = performance.now() - start;
-
-      setResults(hits);
-      setElapsed(Math.round(ms * 10) / 10);
-      setLoading(false);
-      onResults?.(hits);
-    },
-    [dataLoaded, domainFilter, riskFilter, phaseFilter, difficultyFilter, onResults],
-  );
-
-  // Auto-search on initialQuery after data loads
-  useEffect(() => {
-    if (dataLoaded && initialQuery && !initialSearchDone.current) {
-      initialSearchDone.current = true;
-      doSearch(initialQuery);
+  const { results } = useMemo(() => {
+    if (!dataLoaded || !query.trim()) {
+      return { results: [] as SearchResult[], elapsed: 0 };
     }
-  }, [dataLoaded, initialQuery, doSearch]);
 
-  // Handle input change with debounce
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const val = e.target.value;
-      setQuery(val);
+    const opts: SearchOptions = {
+      topN: 10,
+      domain: domainFilter,
+      risk: riskFilter,
+      phase: phaseFilter,
+      difficulty: difficultyFilter,
+    };
 
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => doSearch(val), 300);
-    },
-    [doSearch],
-  );
+    const hits = searchSkills(query, opts);
+    return { results: hits, elapsed: 0 };
+  }, [dataLoaded, query, domainFilter, riskFilter, phaseFilter, difficultyFilter]);
 
-  // Handle key press — immediate search on Enter
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        if (debounceRef.current) clearTimeout(debounceRef.current);
-        doSearch(query);
-      }
-    },
-    [doSearch, query],
-  );
+  useEffect(() => {
+    onResults?.(results);
+  }, [results, onResults]);
 
   return (
     <div className="w-full" data-testid="skill-search-bar">
@@ -157,8 +114,7 @@ export function SkillSearchBar({
         <input
           type="text"
           value={query}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder={dataLoaded ? placeholder : 'Loading skills...'}
           disabled={!dataLoaded}
           className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600
@@ -169,7 +125,7 @@ export function SkillSearchBar({
           aria-label="Search skills"
           data-testid="skill-search-input"
         />
-        {loading && (
+        {!dataLoaded && (
           <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400">
             ⏳
           </span>
@@ -180,7 +136,7 @@ export function SkillSearchBar({
       {query.trim() && dataLoaded && (
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400" data-testid="skill-search-meta">
           {results.length > 0
-            ? `Found ${results.length} skills in ${elapsed}ms`
+            ? `Found ${results.length} skills`
             : 'No results — try broader keywords'}
         </p>
       )}

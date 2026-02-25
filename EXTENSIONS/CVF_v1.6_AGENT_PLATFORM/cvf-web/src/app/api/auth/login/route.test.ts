@@ -7,7 +7,7 @@ vi.mock('@/lib/auth', () => ({
 
 import { POST } from './route';
 
-const buildRequest = (body: any) =>
+const buildRequest = (body: unknown) =>
     new Request('http://localhost/api/auth/login', {
         method: 'POST',
         body: JSON.stringify(body),
@@ -39,10 +39,11 @@ describe('/api/auth/login', () => {
         expect(json.user).toBe('admin');
     });
 
-    it('accepts editor role', async () => {
+    it('ignores client-sent role — server determines role from username', async () => {
         const res = await POST(buildRequest({ username: 'admin', password: 'secret', role: 'editor' }));
         const json = await res.json();
-        expect(json.role).toBe('editor');
+        // fix: admin user always gets admin role server-side, client role is ignored
+        expect(json.role).toBe('admin');
     });
 
     it('returns 500 on malformed request body', async () => {

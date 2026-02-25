@@ -6,7 +6,8 @@
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](./ROADMAP.md)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](../../../LICENSE)
-[![Tests](https://img.shields.io/badge/tests-270%20passing-brightgreen.svg)](./src/lib)
+[![Tests](https://img.shields.io/badge/tests-1412%2F1415%20passing-brightgreen.svg)](./src/lib)
+[![Coverage](https://img.shields.io/badge/coverage-89.77%25-yellowgreen.svg)](./coverage/coverage-summary.json)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
 
 [Features](#-features) • [Quick Start](#-quick-start) • [CVF Governance](#-cvf-governance) • [Architecture](#-architecture)
@@ -37,7 +38,16 @@
 - 🌙 **Dark Mode** - System-aware themes
 - 📱 **Responsive** - Mobile-optimized
 - ⚡ **Fast** - Lazy loading, streaming responses
-- ✅ **Tested** - 270 unit tests passing (37 files)
+- ✅ **Tested** - 1412/1415 tests passing (3 skipped)
+
+## 📊 Quality Snapshot (2026-02-22 UTC)
+
+| Metric | Value |
+|--------|-------|
+| Lint | 0 errors, 95 warnings |
+| Tests | 1412/1415 passing (3 skipped) |
+| Coverage | Statements 89.77% · Branches 76.42% · Functions 89.54% · Lines 91.07% |
+| Source Artifacts | `eslint-report.json`, `test-results.json`, `coverage/coverage-summary.json` |
 
 ---
 
@@ -138,7 +148,7 @@ src/
   - Phase 1: Mode Detection & Badge
   - Phase 2: Quality Scoring + Accept/Reject
   - Phase 3: Phase Gates + Checklists
-- ✅ **Unit Tests** - 176 tests passing (23 files)
+- ✅ **Unit Tests** - Added comprehensive governance test suite
 - ✅ **Usage Tracking** - Token & cost per provider
 
 ---

@@ -51,10 +51,10 @@ export function calculateQualityScore(
     const criteria = analyzeResponse(response);
 
     // Base scores
-    let completeness = calculateCompleteness(criteria, response);
-    let clarity = calculateClarity(criteria);
-    let actionability = calculateActionability(criteria);
-    let compliance = calculateCompliance(criteria, mode);
+    const completeness = calculateCompleteness(criteria);
+    const clarity = calculateClarity(criteria);
+    const actionability = calculateActionability(criteria);
+    const compliance = calculateCompliance(criteria, mode);
 
     // Weight based on mode
     let overall: number;
@@ -128,7 +128,7 @@ function analyzeResponse(response: string): QualityCriteria {
     };
 }
 
-function calculateCompleteness(criteria: QualityCriteria, response: string): number {
+function calculateCompleteness(criteria: QualityCriteria): number {
     let score = 50; // Base score
 
     // Length contributes to completeness

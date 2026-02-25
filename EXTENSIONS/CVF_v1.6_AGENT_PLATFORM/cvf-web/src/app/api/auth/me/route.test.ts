@@ -34,7 +34,7 @@ describe('/api/auth/me', () => {
         const req = new Request('http://localhost/api/auth/me', {
             headers: { cookie: `cvf_session=${makeSessionCookie('alice', 'editor')}` },
         });
-        const res = await GET(req as any);
+        const res = await GET(req);
         expect(res.status).toBe(200);
         const data = await res.json();
         expect(data.user).toBe('alice');

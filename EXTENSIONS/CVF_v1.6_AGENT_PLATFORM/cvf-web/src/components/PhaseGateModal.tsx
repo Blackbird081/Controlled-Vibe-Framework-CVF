@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
     CVFPhase,
-    PhaseChecklist,
     getPhaseChecklist,
     autoCheckItems,
     calculatePhaseCompliance,
@@ -28,13 +27,7 @@ export function PhaseGateModal({
     onClose
 }: PhaseGateModalProps) {
     const checklist = getPhaseChecklist(phase);
-    const [checkedItems, setCheckedItems] = useState<string[]>([]);
-
-    // Auto-check items on mount
-    useEffect(() => {
-        const autoChecked = autoCheckItems(phase, response);
-        setCheckedItems(autoChecked);
-    }, [phase, response]);
+    const [checkedItems, setCheckedItems] = useState<string[]>(() => autoCheckItems(phase, response));
 
     if (!checklist) return null;
 

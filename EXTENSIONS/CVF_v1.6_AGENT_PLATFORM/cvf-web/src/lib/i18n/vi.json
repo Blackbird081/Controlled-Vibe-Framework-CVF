@@ -291,5 +291,9 @@
     "skills.selectSkillDesc": "Duyệt thư viện bên trái để xem tài liệu skill chi tiết, đầu vào và đầu ra mong đợi.",
     "skills.backToCvf": "← Về CVF",
     "skills.notFound": "Không tìm thấy Skill",
-    "skills.notFoundDesc": "Skill bạn đang tìm không có trong bản build hiện tại."
+    "skills.notFoundDesc": "Skill bạn đang tìm không có trong bản build hiện tại.",
+    "sidebar.safety": "An toàn",
+    "nav.safety": "🛡️ AI Safety",
+    "safety.badge": "AI đang được kiểm soát bởi CVF",
+    "safety.title": "An Toàn AI"
 }

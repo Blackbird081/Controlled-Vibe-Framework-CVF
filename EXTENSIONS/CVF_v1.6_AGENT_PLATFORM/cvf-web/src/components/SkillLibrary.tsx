@@ -150,7 +150,6 @@ export function SkillLibrary() {
         const scores = category.skills
             .map(skill => skill.uatScore)
             .filter(score => typeof score === 'number') as number[];
-        const scored = scores.filter(score => score > 0);
         const uatCompleted = category.skills.filter(skill => (skill.uatStatus && skill.uatStatus !== 'Not Run') || (typeof skill.uatScore === 'number' && skill.uatScore > 0)).length;
         const avgScore = scores.length > 0
             ? Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length)
@@ -256,7 +255,7 @@ export function SkillLibrary() {
                 <div className="flex-1 overflow-y-auto p-2">
                     {filteredCategories.length === 0 ? (
                         <div className="text-center p-8 text-gray-500">
-                            <p>{t('skills.noResults')} "{searchTerm}"</p>
+                            <p>{t('skills.noResults')} &quot;{searchTerm}&quot;</p>
                         </div>
                     ) : (
                         filteredCategories.map(category => (

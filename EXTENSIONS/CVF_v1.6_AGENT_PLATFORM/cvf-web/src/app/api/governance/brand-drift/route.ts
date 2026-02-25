@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { governanceFetchDirect } from '@/lib/governance-engine';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
         const result = await governanceFetchDirect('/api/v1/brand-drift');
 

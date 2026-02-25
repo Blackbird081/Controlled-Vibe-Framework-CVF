@@ -144,7 +144,8 @@ export async function decryptDataAsync(encryptedBase64: string): Promise<string>
 }
 
 // Synchronous wrappers for backward compatibility (uses fallback for SSR)
-export function encryptData(data: string, _salt?: string): string {
+export function encryptData(data: string, salt?: string): string {
+    void salt;
     // For SSR or when crypto.subtle not available, use simple obfuscation
     if (typeof crypto === 'undefined' || !crypto.subtle) {
         return btoa(encodeURIComponent(data));
@@ -154,7 +155,8 @@ export function encryptData(data: string, _salt?: string): string {
     return `__ASYNC__${btoa(encodeURIComponent(data))}`;
 }
 
-export function decryptData(encrypted: string, _salt?: string): string {
+export function decryptData(encrypted: string, salt?: string): string {
+    void salt;
     // Handle async placeholder
     if (encrypted.startsWith('__ASYNC__')) {
         return decodeURIComponent(atob(encrypted.slice(9)));

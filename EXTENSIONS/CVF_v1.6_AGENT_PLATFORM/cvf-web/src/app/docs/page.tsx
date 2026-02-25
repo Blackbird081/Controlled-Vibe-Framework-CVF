@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useLanguage, LanguageToggle } from '@/lib/i18n';
 import { ThemeToggle } from '@/lib/theme';
 import { DOCS } from '@/data/docs-data';
-import type { Lang } from '@/data/docs-data';
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */

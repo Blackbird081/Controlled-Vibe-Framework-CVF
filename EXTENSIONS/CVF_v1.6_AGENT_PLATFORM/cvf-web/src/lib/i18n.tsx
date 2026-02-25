@@ -17,16 +17,15 @@ const translations: Record<Language, Record<string, string>> = { vi, en };
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [language, setLanguageState] = useState<Language>('vi');
+    const [language, setLanguageState] = useState<Language>(() => {
+        if (typeof window === 'undefined') return 'vi';
+        const saved = localStorage.getItem('cvf_language');
+        return saved === 'vi' || saved === 'en' ? saved : 'vi';
+    });
 
     useEffect(() => {
-        // Load saved language preference
-        const saved = localStorage.getItem('cvf_language') as Language;
-        if (saved && (saved === 'vi' || saved === 'en')) {
-            setLanguageState(saved);
-            document.documentElement.lang = saved;
-        }
-    }, []);
+        document.documentElement.lang = language;
+    }, [language]);
 
     const setLanguage = (lang: Language) => {
         setLanguageState(lang);

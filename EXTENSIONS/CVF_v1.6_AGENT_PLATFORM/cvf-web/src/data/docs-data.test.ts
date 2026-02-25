@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { describe, it, expect } from 'vitest';
 import { DOCS, DOC_META } from './docs-data';
-import type { DocCategory, DocItem, DocMeta, Lang } from './docs-data';
+import type { DocCategory, DocItem } from './docs-data';
 
 /* ================================================================== */
 /*  DOCS — structure & shape                                           */
@@ -179,7 +179,7 @@ describe('DOC_META', () => {
     });
 
     it('each entry has title, category, categoryIcon', () => {
-        for (const [slug, meta] of Object.entries(DOC_META)) {
+        for (const [, meta] of Object.entries(DOC_META)) {
             expect(typeof meta.title.vi).toBe('string');
             expect(typeof meta.title.en).toBe('string');
             expect(typeof meta.category.vi).toBe('string');

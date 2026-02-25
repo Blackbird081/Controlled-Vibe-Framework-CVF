@@ -203,7 +203,7 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
             try {
                 const parsed = JSON.parse(savedDraft);
                 if (parsed.data && Object.keys(parsed.data).length > 0) setHasDraft(true);
-            } catch (e) { /* ignore */ }
+            } catch { /* ignore */ }
         }
     }, []);
 
@@ -221,7 +221,7 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                 setWizardData(parsed.data || {});
                 setCurrentStep(parsed.step || 1);
                 setHasDraft(false);
-            } catch (e) { /* ignore */ }
+            } catch { /* ignore */ }
         }
     };
 
@@ -436,3 +436,4 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
         </div>
     );
 }
+

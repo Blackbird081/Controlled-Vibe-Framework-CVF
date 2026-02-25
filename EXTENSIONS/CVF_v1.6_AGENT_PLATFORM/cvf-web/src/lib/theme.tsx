@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useSyncExternalStore, ReactNode } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -14,21 +14,16 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [theme, setThemeState] = useState<Theme>('dark'); // Default to dark
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-        // Load saved theme preference
-        const saved = localStorage.getItem('cvf_theme') as Theme;
-        if (saved && (saved === 'light' || saved === 'dark')) {
-            setThemeState(saved);
-            applyTheme(saved);
-        } else {
-            // Default to dark mode
-            applyTheme('dark');
-        }
-    }, []);
+    const [theme, setThemeState] = useState<Theme>(() => {
+        if (typeof window === 'undefined') return 'dark';
+        const saved = window.localStorage.getItem('cvf_theme');
+        return saved === 'light' || saved === 'dark' ? saved : 'dark';
+    });
+    const mounted = useSyncExternalStore(
+        () => () => { },
+        () => true,
+        () => false
+    );
 
     const applyTheme = (newTheme: Theme) => {
         if (typeof document !== 'undefined') {
@@ -40,10 +35,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    useEffect(() => {
+        applyTheme(theme);
+    }, [theme]);
+
     const setTheme = (newTheme: Theme) => {
         setThemeState(newTheme);
         localStorage.setItem('cvf_theme', newTheme);
-        applyTheme(newTheme);
     };
 
     const toggleTheme = () => {
@@ -92,4 +90,3 @@ export function ThemeToggle() {
         </button>
     );
 }
-

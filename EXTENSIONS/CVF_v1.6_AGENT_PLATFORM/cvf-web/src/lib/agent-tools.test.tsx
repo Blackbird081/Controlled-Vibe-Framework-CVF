@@ -14,7 +14,8 @@ vi.mock('./security', () => {
                 }
                 return { safe: true };
             }),
-            execute: vi.fn((code: string, _timeout?: number) => {
+            execute: vi.fn((code: string, timeout?: number) => {
+                void timeout;
                 if (code.includes('THROW_ERROR')) {
                     return { result: null, error: 'Sandbox error' };
                 }
@@ -47,7 +48,7 @@ vi.mock('./security', () => {
 });
 
 import { AVAILABLE_TOOLS, useTools, ToolCard, ToolsPanel } from './agent-tools';
-import { createSandbox, validateUrl } from './security';
+import { createSandbox } from './security';
 
 vi.mock('./i18n', () => ({
     useLanguage: () => ({ language: 'en', t: (key: string) => key }),
@@ -342,23 +343,23 @@ describe('Agent Tools', () => {
 
         it('should execute a tool and record the call', async () => {
             const { result } = renderHook(() => useTools());
-            let toolResult: any;
+            let toolResult: Awaited<ReturnType<typeof result.current.executeTool>> | undefined;
             await act(async () => {
                 toolResult = await result.current.executeTool('calculator', { expression: '1 + 1' });
             });
-            expect(toolResult.success).toBe(true);
+            expect(toolResult?.success).toBe(true);
             expect(result.current.toolCalls.length).toBe(1);
             expect(result.current.toolCalls[0].status).toBe('completed');
         });
 
         it('should return error for unknown tool', async () => {
             const { result } = renderHook(() => useTools());
-            let toolResult: any;
+            let toolResult: Awaited<ReturnType<typeof result.current.executeTool>> | undefined;
             await act(async () => {
-                toolResult = await result.current.executeTool('nonexistent' as any, {});
+                toolResult = await result.current.executeTool('nonexistent' as unknown as keyof typeof AVAILABLE_TOOLS, {});
             });
-            expect(toolResult.success).toBe(false);
-            expect(toolResult.error).toContain('Tool not found');
+            expect(toolResult?.success).toBe(false);
+            expect(toolResult?.error).toContain('Tool not found');
         });
 
         it('should clear history', async () => {
@@ -386,12 +387,12 @@ describe('Agent Tools', () => {
             const origExecute = AVAILABLE_TOOLS.calculator.execute;
             AVAILABLE_TOOLS.calculator.execute = async () => { throw new Error('Unexpected crash'); };
             const { result } = renderHook(() => useTools());
-            let toolResult: any;
+            let toolResult: Awaited<ReturnType<typeof result.current.executeTool>> | undefined;
             await act(async () => {
                 toolResult = await result.current.executeTool('calculator', { expression: '1+1' });
             });
-            expect(toolResult.success).toBe(false);
-            expect(toolResult.error).toContain('Unexpected crash');
+            expect(toolResult?.success).toBe(false);
+            expect(toolResult?.error).toContain('Unexpected crash');
             expect(result.current.toolCalls[0].status).toBe('failed');
             AVAILABLE_TOOLS.calculator.execute = origExecute;
         });

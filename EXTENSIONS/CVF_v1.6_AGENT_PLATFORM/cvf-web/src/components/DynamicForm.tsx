@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch, type FieldErrors, type UseFormRegister } from 'react-hook-form';
 import { Template, TemplateField } from '@/types';
 import { generateIntent } from '@/lib/templates';
 import { SpecExport } from './SpecExport';
@@ -17,8 +17,8 @@ interface DynamicFormProps {
 
 function FormField({ field, register, errors }: {
     field: TemplateField;
-    register: any;
-    errors: any;
+    register: UseFormRegister<Record<string, string>>;
+    errors: FieldErrors<Record<string, string>>;
 }) {
     const baseClasses = `
     w-full px-4 py-3 rounded-lg
@@ -75,9 +75,11 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
     const [showPreview, setShowPreview] = useState(false);
     const [showSpecExport, setShowSpecExport] = useState(false);
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-
-    const formValues = watch();
+    const { register, handleSubmit, control, formState: { errors } } = useForm<Record<string, string>>();
+    const watchedValues = useWatch({ control }) as Record<string, string | undefined> | undefined;
+    const formValues = Object.fromEntries(
+        Object.entries(watchedValues || {}).map(([key, value]) => [key, value || ''])
+    ) as Record<string, string>;
     const previewIntent = generateIntent(template, formValues);
 
     const requiredFields = template.fields.filter(f => f.section !== 'advanced');
@@ -293,4 +295,3 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
         </div>
     );
 }
-

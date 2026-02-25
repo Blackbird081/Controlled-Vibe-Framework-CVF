@@ -316,9 +316,6 @@ Hãy cho tôi biết bạn cần hỗ trợ ở Phase nào!
     return prompts[language];
 }
 
-// Legacy constant for backward compatibility (will be replaced by dynamic calls)
-const CVF_SYSTEM_PROMPT = getCVFSystemPrompt('vi');
-
 // ==================== GEMINI PROVIDER ====================
 export class GeminiProvider {
     private apiKey: string;

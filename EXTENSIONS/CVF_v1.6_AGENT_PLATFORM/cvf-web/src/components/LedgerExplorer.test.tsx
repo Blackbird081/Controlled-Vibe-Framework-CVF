@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { LedgerExplorer } from './LedgerExplorer';
 
 // Mock i18n — default to English, override per test via mockLanguage

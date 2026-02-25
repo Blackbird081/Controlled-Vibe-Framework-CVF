@@ -28,7 +28,7 @@ export function ProcessingScreen({
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState(isVi ? 'Đang khởi tạo...' : 'Initializing...');
     const [error, setError] = useState<string | null>(null);
-    const [isRealExecution, setIsRealExecution] = useState(false);
+    const [isRealExecution, setIsRealExecution] = useState(() => Boolean(inputs && intent && Object.keys(inputs).length > 0));
 
     // Real API execution
     const executeReal = useCallback(async () => {
@@ -108,26 +108,9 @@ export function ProcessingScreen({
             setError(err instanceof Error ? err.message : 'Network error');
             return false;
         }
-    }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode]);
+    }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode, isVi]);
 
-    useEffect(() => {
-        // Try real execution first if we have the required data
-        if (inputs && intent && Object.keys(inputs).length > 0) {
-            setIsRealExecution(true);
-            executeReal().then(success => {
-                if (!success) {
-                    // Fall back to mock on failure
-                    setIsRealExecution(false);
-                    runMockExecution();
-                }
-            });
-        } else {
-            // No inputs provided, use mock
-            runMockExecution();
-        }
-    }, [inputs, intent, executeReal]);
-
-    const runMockExecution = () => {
+    const runMockExecution = useCallback(() => {
         const statuses = isVi
             ? [
                 'Đang khởi tạo...',
@@ -163,7 +146,26 @@ export function ProcessingScreen({
         }, 300);
 
         return () => clearInterval(interval);
-    };
+    }, [isVi, onComplete, templateName]);
+
+    useEffect(() => {
+        // Try real execution first if we have the required data
+        if (inputs && intent && Object.keys(inputs).length > 0) {
+            const runId = setTimeout(() => {
+                executeReal().then(success => {
+                    if (!success) {
+                        // Fall back to mock on failure
+                        setIsRealExecution(false);
+                        runMockExecution();
+                    }
+                });
+            }, 0);
+            return () => clearTimeout(runId);
+        } else {
+            // No inputs provided, use mock
+            runMockExecution();
+        }
+    }, [inputs, intent, executeReal, runMockExecution]);
 
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center">

@@ -1,8 +1,8 @@
 # CVF v1.6 Agent Platform
 
 > **Controlled Vibe Framework - Agent Mode with AI Integration**  
-> **Version:** 1.6.0 | **Status:** ✅ Complete | **Tests:** 176 passing  
-> **Last Updated:** Feb 11, 2026
+> **Version:** 1.6.0 | **Status:** ✅ Complete | **Tests:** 1412/1415 passing (3 skipped)  
+> **Last Updated:** Feb 22, 2026
 
 ## 🚀 Features
 
@@ -37,7 +37,7 @@
 - [x] Quality Scoring (0-100)
 - [x] Accept/Reject/Retry
 - [x] Phase Gates + Checklists
-- [x] Unit Tests (176 tests, 23 files)
+- [x] Unit Tests (snapshot: 1415 total, 1412 passing, 3 skipped)
 
 ## 🏃 Quick Start
 
@@ -47,6 +47,16 @@ npm install
 npm run dev
 # Open http://localhost:3000
 ```
+
+## 📊 Quality Snapshot (2026-02-22 UTC)
+
+- Lint: 0 errors, 95 warnings
+- Tests: 1412/1415 passing (3 skipped)
+- Coverage: statements 89.77%, branches 76.42%, functions 89.54%, lines 91.07%
+- Source artifacts:
+  - `cvf-web/eslint-report.json`
+  - `cvf-web/test-results.json`
+  - `cvf-web/coverage/coverage-summary.json`
 
 ## 📁 Structure
 
@@ -71,7 +81,7 @@ CVF_v1.6_AGENT_PLATFORM/
 
 | Link | Description |
 |------|-------------|
-| [Skill Library](../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS) | 131 skills, 12 domains |
+| [Skill Library](../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS) | 141 skills, 12 domains |
 | [Governance Layer](../../governance/skill-library/) | Skill governance registry |
 | [CVF Documentation](../../docs/) | Framework docs |
 

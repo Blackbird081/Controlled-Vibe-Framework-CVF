@@ -15,7 +15,7 @@ export interface ExecuteWithAIProps {
 }
 
 // Execute With AI Button Component
-export function ExecuteWithAIButton({ template, values, spec, onExecute, disabled }: ExecuteWithAIProps) {
+export function ExecuteWithAIButton({ template, spec, onExecute, disabled }: ExecuteWithAIProps) {
     const { language } = useLanguage();
     const { settings } = useSettings();
     const [showPreview, setShowPreview] = useState(false);
@@ -182,8 +182,6 @@ export interface QuickActionsProps {
 }
 
 export function QuickActions({
-    template,
-    values,
     spec,
     onCopySpec,
     onExecuteWithAI,

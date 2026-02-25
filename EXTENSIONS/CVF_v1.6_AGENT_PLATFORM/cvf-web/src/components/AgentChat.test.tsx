@@ -342,4 +342,40 @@ describe('AgentChat', () => {
             expect(onClick).toHaveBeenCalledTimes(1);
         });
     });
+
+    describe('header controls', () => {
+        it('calls onMinimize when minimize button is clicked', () => {
+            const onMinimize = vi.fn();
+            render(<AgentChat onMinimize={onMinimize} />);
+
+            fireEvent.click(screen.getByLabelText('Minimize'));
+            expect(onMinimize).toHaveBeenCalledTimes(1);
+        });
+
+        it('falls back to onClose when minimize is clicked and onMinimize is missing', () => {
+            const onClose = vi.fn();
+            render(<AgentChat onClose={onClose} />);
+
+            fireEvent.click(screen.getByLabelText('Minimize'));
+            expect(onClose).toHaveBeenCalledTimes(1);
+        });
+
+        it('calls onClose from close button', () => {
+            const onClose = vi.fn();
+            render(<AgentChat onClose={onClose} />);
+
+            fireEvent.click(screen.getByLabelText('Close chat'));
+            expect(onClose).toHaveBeenCalledTimes(1);
+        });
+
+        it('dispatches maximize event from maximize button', () => {
+            const listener = vi.fn();
+            window.addEventListener('cvf-chat-maximize', listener);
+            render(<AgentChat />);
+
+            fireEvent.click(screen.getByLabelText('Maximize'));
+            expect(listener).toHaveBeenCalledTimes(1);
+            window.removeEventListener('cvf-chat-maximize', listener);
+        });
+    });
 });

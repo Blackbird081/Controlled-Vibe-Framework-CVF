@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Template } from '@/types';
 import { useUserContext } from './UserContext';
 import { WorkflowVisualizer } from './WorkflowVisualizer';
@@ -847,19 +847,13 @@ ${labels.instructionList.map((item, i) => `${i + 1}. ${item}`).join('\n')}
 }
 
 export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExportProps) {
-    const { settings, isLoaded } = useSettings();
+    const { settings } = useSettings();
     const [copied, setCopied] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
-    const [exportLang, setExportLang] = useState<ExportLanguage>('vi');
-    const [exportMode, setExportMode] = useState<ExportMode>('governance');
+    const [exportLang, setExportLang] = useState<ExportLanguage>(() => settings.preferences.defaultLanguage);
+    const [exportMode, setExportMode] = useState<ExportMode>(() => settings.preferences.defaultExportMode);
     const [specGateError, setSpecGateError] = useState(false);
     const { getContextPrompt } = useUserContext();
-
-    useEffect(() => {
-        if (!isLoaded) return;
-        setExportMode(settings.preferences.defaultExportMode);
-        setExportLang(settings.preferences.defaultLanguage);
-    }, [isLoaded, settings.preferences.defaultExportMode, settings.preferences.defaultLanguage]);
 
     const labels = specLabels[exportLang];
     const modes = modeLabels[exportLang];
@@ -917,7 +911,7 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `cvf-spec-${template.id}-${exportMode}-${Date.now()}.md`;
+        a.download = `cvf-spec-${template.id}-${exportMode}.md`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1229,5 +1223,5 @@ export function generateCompleteSpec(
     values: Record<string, string>,
     userIntent?: string
 ): string {
-    return generateSpec(template, values, 'vi', 'simple');
+    return generateSpec(template, values, 'vi', 'simple', userIntent);
 }

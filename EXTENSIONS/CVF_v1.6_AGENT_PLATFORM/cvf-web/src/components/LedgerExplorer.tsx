@@ -72,8 +72,9 @@ const LABELS = {
 
 const PAGE_SIZE = 10;
 
-export function LedgerExplorer({ language: _langProp }: LedgerExplorerProps) {
-    const { language } = useLanguage();
+export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
+    const { language: contextLanguage } = useLanguage();
+    const language = langProp || contextLanguage;
     const l = LABELS[language];
 
     const [entries, setEntries] = useState<LedgerBlock[]>([]);

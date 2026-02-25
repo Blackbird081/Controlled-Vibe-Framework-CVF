@@ -262,7 +262,7 @@ describe('SpecExport', () => {
     });
 
     it('does not render Send to Agent when prop is absent', () => {
-        const { onSendToAgent, ...propsWithout } = defaultProps;
+        const propsWithout = { ...defaultProps, onSendToAgent: undefined };
         render(<SpecExport {...propsWithout} onClose={vi.fn()} />);
         const allText = document.body.textContent || '';
         expect(allText).not.toMatch(/Send to Agent|Gửi đến Agent/);
@@ -285,7 +285,7 @@ describe('SpecExport', () => {
             },
             reasons: [],
             mode: 'governance',
-        } as any);
+        } as ReturnType<typeof evaluateEnforcement>);
 
         render(<SpecExport {...defaultProps} values={{}} />);
         const allText = document.body.textContent || '';

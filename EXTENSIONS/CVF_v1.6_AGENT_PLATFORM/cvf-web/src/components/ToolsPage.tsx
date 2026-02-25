@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { AVAILABLE_TOOLS, useTools, ToolResult, ToolType } from '@/lib/agent-tools';
+import { useMemo } from 'react';
+import { AVAILABLE_TOOLS, useTools, ToolType } from '@/lib/agent-tools';
 import { useLanguage } from '@/lib/i18n';
 
 interface ToolsPageProps {
@@ -10,8 +10,12 @@ interface ToolsPageProps {
 
 export function ToolsPage({ onClose }: ToolsPageProps) {
     const { toolCalls, clearHistory } = useTools();
-    const [lastResult, setLastResult] = useState<{ toolId: ToolType; result: ToolResult } | null>(null);
     const { t } = useLanguage();
+    const lastResult = useMemo(() => {
+        if (toolCalls.length === 0) return null;
+        const latest = [...toolCalls].reverse().find(call => call.result);
+        return latest?.result ? { toolId: latest.toolId, result: latest.result } : null;
+    }, [toolCalls]);
 
     const resolveI18n = (key: string, fallback: string) => {
         const value = t(key);
@@ -26,10 +30,6 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
 
     const getParamDescription = (toolId: ToolType, paramName: string, fallback: string) =>
         resolveI18n(`tools.catalog.${toolId}.param.${paramName}`, fallback);
-
-    const handleToolResult = (toolId: ToolType, result: ToolResult) => {
-        setLastResult({ toolId, result });
-    };
 
     return (
             <div className="h-full flex flex-col bg-white dark:bg-gray-900">

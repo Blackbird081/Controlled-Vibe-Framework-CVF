@@ -69,8 +69,8 @@ export function useAgentChat({
     onMessagesChange,
     governanceState: externalGovernanceState,
 }: UseAgentChatOptions) {
-    const [governanceState, setGovernanceState] = useState<GovernanceState>(
-        externalGovernanceState || DEFAULT_GOVERNANCE_STATE
+    const [governanceState, setGovernanceState] = useState<GovernanceState>(() =>
+        externalGovernanceState || loadGovernanceState() || DEFAULT_GOVERNANCE_STATE
     );
     const governanceStateRef = useRef<GovernanceState>(governanceState);
 
@@ -241,7 +241,7 @@ export function useAgentChat({
             };
             setMessages(prev => [...prev, warnMessage]);
         }
-    }, [messages, language, currentMode, detectPhase, trackUsage]);
+    }, [messages, language, detectPhase, trackUsage]);
 
     const handleSendMessage = useCallback(async (messageContent?: string) => {
         const content = messageContent || input.trim();
@@ -406,7 +406,7 @@ ${attachedFile.content}
 
         try {
             await callRealAI(assistantId, content, provider as 'gemini' | 'openai' | 'anthropic', apiKey, selectedModel);
-        } catch (error) {
+        } catch {
             setMessages(prev => prev.map(m =>
                 m.id === assistantId
                     ? { ...m, content: `❌ ${labels.connectionError}`, status: 'error' }
@@ -416,7 +416,7 @@ ${attachedFile.content}
             setIsLoading(false);
             setIsStreaming(false);
         }
-    }, [attachedFile, callRealAI, input, isLoading, labels, settings]);
+    }, [attachedFile, callRealAI, checkBudget, input, isLoading, labels, language, settings]);
 
     useEffect(() => {
         if (initialPrompt && handledPromptRef.current !== initialPrompt) {

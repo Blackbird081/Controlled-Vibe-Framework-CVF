@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { type PolicyRule } from './PolicyEditor';
 
@@ -102,9 +102,9 @@ function evaluateCondition(condition: string, scenario: SimulationScenario): boo
             switch (op) {
                 case '>=': return actualNum >= valNum;
                 case '<=': return actualNum <= valNum;
-                case '>':  return actualNum > valNum;
-                case '<':  return actualNum < valNum;
-                case '=':  return actualNum === valNum;
+                case '>': return actualNum > valNum;
+                case '<': return actualNum < valNum;
+                case '=': return actualNum === valNum;
             }
         }
 
@@ -114,9 +114,9 @@ function evaluateCondition(condition: string, scenario: SimulationScenario): boo
             switch (op) {
                 case '>=': return actual >= numVal;
                 case '<=': return actual <= numVal;
-                case '>':  return actual > numVal;
-                case '<':  return actual < numVal;
-                case '=':  return actual === numVal;
+                case '>': return actual > numVal;
+                case '<': return actual < numVal;
+                case '=': return actual === numVal;
             }
         }
 
@@ -167,9 +167,9 @@ export function SimulationRunner({ baselineRules, newRules, onSimulate }: Simula
     const l = LABELS[language];
     const [summary, setSummary] = useState<SimulationSummary | null>(null);
     const [running, setRunning] = useState(false);
-    const [scenarios, setScenarios] = useState<SimulationScenario[]>(SAMPLE_SCENARIOS);
+    const [scenarios] = useState<SimulationScenario[]>(SAMPLE_SCENARIOS);
 
-    const handleRun = () => {
+    const handleRun = useCallback(() => {
         setRunning(true);
         // Simulate async processing
         setTimeout(() => {
@@ -178,7 +178,18 @@ export function SimulationRunner({ baselineRules, newRules, onSimulate }: Simula
             onSimulate?.(result);
             setRunning(false);
         }, 300);
-    };
+    }, [baselineRules, newRules, onSimulate, scenarios]);
+
+    // Auto-run when newRules changes (triggered by the bottom "Chạy mô phỏng" button in PolicyEditor)
+    const prevRulesRef = useRef(newRules);
+    useEffect(() => {
+        if (newRules !== prevRulesRef.current && newRules.length > 0) {
+            prevRulesRef.current = newRules;
+            // Defer execution to avoid sync state updates inside the effect body.
+            const timer = setTimeout(() => handleRun(), 0);
+            return () => clearTimeout(timer);
+        }
+    }, [newRules, handleRun]);
 
     return (
         <div className="flex flex-col h-full">
@@ -203,9 +214,8 @@ export function SimulationRunner({ baselineRules, newRules, onSimulate }: Simula
                         {/* Impact Summary */}
                         <div className="flex items-center gap-4 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
                             <div className="text-center">
-                                <p className={`text-3xl font-bold ${
-                                    summary.impactRatio > 30 ? 'text-red-500' : summary.impactRatio > 0 ? 'text-yellow-500' : 'text-green-500'
-                                }`}>
+                                <p className={`text-3xl font-bold ${summary.impactRatio > 30 ? 'text-red-500' : summary.impactRatio > 0 ? 'text-yellow-500' : 'text-green-500'
+                                    }`}>
                                     {summary.impactRatio}%
                                 </p>
                                 <p className="text-xs text-gray-500">{l.impact}</p>
@@ -223,43 +233,41 @@ export function SimulationRunner({ baselineRules, newRules, onSimulate }: Simula
 
                         {/* Results Table */}
                         <div className="overflow-x-auto">
-                        <table className="w-full text-xs min-w-[360px]">
-                            <thead>
-                                <tr className="text-gray-500 border-b border-gray-200 dark:border-gray-700">
-                                    <th className="text-left py-2 px-1">#</th>
-                                    <th className="text-left py-2 px-1">{l.scenario}</th>
-                                    <th className="text-center py-2 px-1">{l.before}</th>
-                                    <th className="text-center py-2 px-1">{l.after}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {summary.results.map(r => (
-                                    <tr key={r.scenarioId} className={r.changed ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''}>
-                                        <td className="py-1.5 px-1">{r.scenarioId}</td>
-                                        <td className="py-1.5 px-1">{r.description}</td>
-                                        <td className="py-1.5 px-1 text-center">
-                                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${
-                                                r.before === 'BLOCK' ? 'bg-red-100 text-red-700' :
-                                                r.before === 'NEEDS_APPROVAL' ? 'bg-yellow-100 text-yellow-700' :
-                                                'bg-green-100 text-green-700'
-                                            }`}>
-                                                {r.before}
-                                            </span>
-                                        </td>
-                                        <td className="py-1.5 px-1 text-center">
-                                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${
-                                                r.after === 'BLOCK' ? 'bg-red-100 text-red-700' :
-                                                r.after === 'NEEDS_APPROVAL' ? 'bg-yellow-100 text-yellow-700' :
-                                                'bg-green-100 text-green-700'
-                                            }`}>
-                                                {r.after}
-                                            </span>
-                                            {r.changed && <span className="ml-1">🔀</span>}
-                                        </td>
+                            <table className="w-full text-xs min-w-[360px]">
+                                <thead>
+                                    <tr className="text-gray-500 border-b border-gray-200 dark:border-gray-700">
+                                        <th className="text-left py-2 px-1">#</th>
+                                        <th className="text-left py-2 px-1">{l.scenario}</th>
+                                        <th className="text-center py-2 px-1">{l.before}</th>
+                                        <th className="text-center py-2 px-1">{l.after}</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {summary.results.map(r => (
+                                        <tr key={r.scenarioId} className={r.changed ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''}>
+                                            <td className="py-1.5 px-1">{r.scenarioId}</td>
+                                            <td className="py-1.5 px-1">{r.description}</td>
+                                            <td className="py-1.5 px-1 text-center">
+                                                <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${r.before === 'BLOCK' ? 'bg-red-100 text-red-700' :
+                                                    r.before === 'NEEDS_APPROVAL' ? 'bg-yellow-100 text-yellow-700' :
+                                                        'bg-green-100 text-green-700'
+                                                    }`}>
+                                                    {r.before}
+                                                </span>
+                                            </td>
+                                            <td className="py-1.5 px-1 text-center">
+                                                <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${r.after === 'BLOCK' ? 'bg-red-100 text-red-700' :
+                                                    r.after === 'NEEDS_APPROVAL' ? 'bg-yellow-100 text-yellow-700' :
+                                                        'bg-green-100 text-green-700'
+                                                    }`}>
+                                                    {r.after}
+                                                </span>
+                                                {r.changed && <span className="ml-1">🔀</span>}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 )}

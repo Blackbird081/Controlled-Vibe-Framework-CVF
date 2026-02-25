@@ -1,52 +1,80 @@
-# CVF v1.3 Architecture Diagrams
+# CVF Architecture Diagrams
 
-Tài liệu này chứa các sơ đồ kiến trúc minh họa cho CVF v1.3 Implementation Toolkit.
+This document contains architecture diagrams illustrating the full CVF stack from v1.0 through v1.7.2.
 
 ---
 
-## 1. Tổng quan Kiến trúc CVF
+## 1. Full Architecture Overview (5 Layers)
 
 ```mermaid
 flowchart TB
-    subgraph "CVF Core (v1.0/v1.1)"
-        A[Phase A: Discovery]
-        B[Phase B: Blueprint]
-        C[Phase C: Construct]
-        D[Phase D: Deliver]
-        A --> B --> C --> D
+    subgraph "Layer 5: Safety Dashboard (v1.7.2)"
+        DASH["🛡️ Safety Dashboard"]
+        RISK["Risk View: 🟢🟡🟠🔴"]
+        SIM["Policy Simulation"]
     end
 
-    subgraph "CVF v1.2 Extension"
-        SC[Skill Contract Spec]
-        RM[Risk Model R0-R3]
-        CL[Capability Lifecycle]
-        SR[Skill Registry Model]
+    subgraph "Layer 4: Agent Platform (v1.6)"
+        WEB["🌐 Web UI (Next.js)"]
+        CHAT["AI Agent Chat"]
+        TOOLS["34 Agent Tools"]
+        GOV["🔐 Governance Engine (v1.6.1)"]
     end
 
-    subgraph "CVF v1.3 Toolkit"
-        SDK[Python SDK]
-        CLI[cvf-validate CLI]
-        ADP[Agent Adapters]
-        CICD[CI/CD Templates]
+    subgraph "Layer 3: AI Safety Runtime (v1.7/v1.7.1)"
+        INTEL["🧠 Controlled Intelligence (v1.7)"]
+        GATE["Reasoning Gate"]
+        ENTROPY["Entropy Guard"]
+        SANITIZE["Prompt Sanitizer"]
+        RUNTIME["⚙️ Safety Runtime (v1.7.1)"]
+        POLICY["Policy Lifecycle Engine"]
+        AUTH["Auth + DI Container"]
+        AUDIT["Audit Trail"]
     end
 
-    SC --> SDK
-    RM --> SDK
-    CL --> SDK
-    SR --> SDK
-    SDK --> CLI
-    SDK --> ADP
-    SDK --> CICD
+    subgraph "Layer 2: Tools (v1.3)"
+        SDK["Python SDK"]
+        CLI["cvf-validate CLI"]
+        ADP["Agent Adapters"]
+        CICD["CI/CD Templates"]
+    end
 
+    subgraph "Layer 1: Core (v1.0/v1.1/v1.2)"
+        PHASES["Phase A→D"]
+        SKILLS["141 Skills"]
+        RISKM["Risk Model R0-R3"]
+        REGISTRY["Skill Registry"]
+    end
+
+    DASH --> WEB
+    RISK --> RUNTIME
+    SIM --> POLICY
+    WEB --> INTEL
+    CHAT --> SANITIZE
+    GOV --> RUNTIME
+    INTEL --> GATE
+    INTEL --> ENTROPY
+    INTEL --> SANITIZE
+    RUNTIME --> POLICY
+    RUNTIME --> AUTH
+    RUNTIME --> AUDIT
+    SDK --> REGISTRY
+    CLI --> REGISTRY
+    PHASES --> SKILLS
+    SKILLS --> RISKM
+    RISKM --> REGISTRY
+
+    style DASH fill:#e74c3c,color:#fff
+    style WEB fill:#f39c12,color:#fff
+    style INTEL fill:#1abc9c,color:#fff
+    style RUNTIME fill:#1abc9c,color:#fff
     style SDK fill:#2ecc71,color:#fff
-    style CLI fill:#3498db,color:#fff
-    style ADP fill:#9b59b6,color:#fff
-    style CICD fill:#e74c3c,color:#fff
+    style PHASES fill:#3498db,color:#fff
 ```
 
 ---
 
-## 2. SDK Component Architecture
+## 2. CVF v1.3 SDK Component Architecture
 
 ```mermaid
 flowchart LR
@@ -54,7 +82,7 @@ flowchart LR
         subgraph "models/"
             SC2[SkillContract]
             CAP[Capability]
-            RISK[RiskLevel]
+            RISK2[RiskLevel]
         end
         
         subgraph "registry/"
@@ -76,7 +104,7 @@ flowchart LR
 
     SC2 --> REG
     CAP --> REG
-    RISK --> REG
+    RISK2 --> REG
     REG --> VAL
     REG --> BASE
     BASE --> CLAUDE
@@ -188,7 +216,60 @@ flowchart TD
 
 ---
 
-## 6. CI/CD Integration Flow
+## 6. AI Safety Runtime Architecture (v1.7.x)
+
+```mermaid
+flowchart TB
+    subgraph "Input"
+        USER_MSG["User Message"]
+    end
+
+    subgraph "v1.7 Intelligence Layer"
+        SANITIZE["Prompt Sanitizer"]
+        ENTROPY["Entropy Guard"]
+        ANOMALY["Anomaly Detector"]
+        GATE["Reasoning Gate"]
+    end
+
+    subgraph "v1.7.1 Runtime Layer"
+        POLICY["Policy Engine"]
+        AUTH2["Auth Module"]
+        DI["DI Container"]
+        AUDIT2["Audit Logger"]
+    end
+
+    subgraph "Decision"
+        ALLOW["🟢 Allow"]
+        STRIP["🟡 Strip & Allow"]
+        BLOCK["🔴 Block"]
+    end
+
+    USER_MSG --> SANITIZE
+    SANITIZE --> ENTROPY
+    ENTROPY --> ANOMALY
+    ANOMALY --> GATE
+    GATE --> POLICY
+    POLICY --> AUTH2
+    AUTH2 --> DI
+    
+    POLICY --> ALLOW
+    POLICY --> STRIP
+    POLICY --> BLOCK
+
+    ALLOW --> AUDIT2
+    STRIP --> AUDIT2
+    BLOCK --> AUDIT2
+
+    style SANITIZE fill:#1abc9c,color:#fff
+    style POLICY fill:#e74c3c,color:#fff
+    style ALLOW fill:#27ae60,color:#fff
+    style STRIP fill:#f39c12,color:#fff
+    style BLOCK fill:#e74c3c,color:#fff
+```
+
+---
+
+## 7. CI/CD Integration Flow
 
 ```mermaid
 flowchart LR
@@ -230,17 +311,30 @@ flowchart LR
 
 ---
 
-## 7. Full System Architecture
+## 8. Full System Architecture (v1.7.2)
 
 ```mermaid
 flowchart TB
     subgraph "User Layer"
-        DEV[Developer]
+        DEV2[Developer]
+        NONCODER[Non-Coder / Manager]
         CLI2[CLI Tool]
         CICD2[CI/CD Pipeline]
     end
 
-    subgraph "CVF v1.3 SDK"
+    subgraph "CVF Web Platform (v1.6)"
+        UI["Web UI (Next.js)"]
+        AGENT["AI Agent Chat"]
+        MARKET["Template Marketplace"]
+        SAFETY["Safety Dashboard (v1.7.2)"]
+    end
+
+    subgraph "AI Safety Runtime (v1.7.x)"
+        INTEL2["Intelligence (v1.7)"]
+        RUNTIME2["Runtime Engine (v1.7.1)"]
+    end
+
+    subgraph "CVF SDK (v1.3)"
         subgraph "Core"
             CONTRACT2[SkillContract]
             REG2[SkillRegistry]
@@ -254,7 +348,7 @@ flowchart TB
             AD3[Ollama]
         end
         
-        AUDIT2[AuditTracer]
+        AUDIT3[AuditTracer]
     end
 
     subgraph "AI Providers"
@@ -269,8 +363,16 @@ flowchart TB
         LOGS[Audit Logs]
     end
 
-    DEV --> CLI2
-    DEV --> CICD2
+    DEV2 --> UI
+    DEV2 --> CLI2
+    DEV2 --> CICD2
+    NONCODER --> SAFETY
+
+    UI --> AGENT
+    UI --> MARKET
+    AGENT --> INTEL2
+    INTEL2 --> RUNTIME2
+
     CLI2 --> VALS
     CICD2 --> VALS
     
@@ -283,28 +385,32 @@ flowchart TB
     AD2 --> OPENAI2
     AD3 --> LOCAL
     
-    AD1 --> AUDIT2
-    AD2 --> AUDIT2
-    AD3 --> AUDIT2
+    AD1 --> AUDIT3
+    AD2 --> AUDIT3
+    AD3 --> AUDIT3
     
     CONTRACT2 -.-> YAML
     REG2 -.-> JSON
-    AUDIT2 -.-> LOGS
+    AUDIT3 -.-> LOGS
 
+    style UI fill:#f39c12,color:#fff
+    style SAFETY fill:#e74c3c,color:#fff
+    style INTEL2 fill:#1abc9c,color:#fff
+    style RUNTIME2 fill:#1abc9c,color:#fff
     style REG2 fill:#2ecc71,color:#fff
-    style AUDIT2 fill:#9b59b6,color:#fff
+    style AUDIT3 fill:#9b59b6,color:#fff
 ```
 
 ---
 
-## Sử dụng Diagrams
+## Using These Diagrams
 
-Các diagrams này có thể được render bằng:
+These diagrams can be rendered using:
 
-1. **GitHub** - Tự động render Mermaid trong markdown files
-2. **VS Code** - Cài extension "Markdown Preview Mermaid Support"
-3. **Online** - Sử dụng [Mermaid Live Editor](https://mermaid.live)
+1. **GitHub** — Automatically renders Mermaid in markdown files
+2. **VS Code** — Install "Markdown Preview Mermaid Support" extension
+3. **Online** — Use [Mermaid Live Editor](https://mermaid.live)
 
 ---
 
-*Cập nhật: 29/01/2026*
+*Updated: February 25, 2026*

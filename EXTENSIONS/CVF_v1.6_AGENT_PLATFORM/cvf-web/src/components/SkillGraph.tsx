@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { DOMAIN_NAMES, type SkillRecord } from '@/lib/skill-search';
-import type { SkillPlan, PlanPhase } from '@/lib/skill-planner';
+import type { SkillPlan } from '@/lib/skill-planner';
 
 // ─── Props ───────────────────────────────────────────────────────────
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { validateApiKey } from '@/lib/security';
 import { AVAILABLE_MODELS, ProviderKey, SettingsData } from './Settings';
@@ -21,22 +21,24 @@ const PROVIDERS: Array<{ id: ProviderKey; name: string; icon: string; hint: stri
 
 export function ApiKeyWizard({ onComplete, onClose, settings, updateProvider, updatePreferences }: ApiKeyWizardProps) {
     const { language } = useLanguage();
+    const initialProvider: ProviderKey = 'gemini';
 
     const [step, setStep] = useState(0);
-    const [provider, setProvider] = useState<ProviderKey>('gemini');
-    const [apiKey, setApiKey] = useState('');
+    const [provider, setProvider] = useState<ProviderKey>(initialProvider);
+    const [apiKey, setApiKey] = useState(() => settings.providers[initialProvider].apiKey || '');
     const [showKey, setShowKey] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [defaultProvider, setDefaultProvider] = useState<ProviderKey>('gemini');
-    const [selectedModel, setSelectedModel] = useState<string>(AVAILABLE_MODELS.gemini[0].id);
+    const [defaultProvider, setDefaultProvider] = useState<ProviderKey>(() => settings.preferences.defaultProvider);
+    const [selectedModel, setSelectedModel] = useState<string>(() => settings.providers[initialProvider].selectedModel || AVAILABLE_MODELS[initialProvider][0].id);
 
-    useEffect(() => {
-        const existing = settings.providers[provider];
+    const handleProviderChange = (nextProvider: ProviderKey) => {
+        const existing = settings.providers[nextProvider];
+        setProvider(nextProvider);
         setApiKey(existing.apiKey || '');
-        setSelectedModel(existing.selectedModel || AVAILABLE_MODELS[provider][0].id);
-        setDefaultProvider(provider);
+        setSelectedModel(existing.selectedModel || AVAILABLE_MODELS[nextProvider][0].id);
+        setDefaultProvider(nextProvider);
         setError(null);
-    }, [provider, settings.providers]);
+    };
 
     const labels = useMemo(() => ({
         vi: {
@@ -135,7 +137,7 @@ export function ApiKeyWizard({ onComplete, onClose, settings, updateProvider, up
                             {PROVIDERS.map(p => (
                                 <button
                                     key={p.id}
-                                    onClick={() => setProvider(p.id)}
+                                    onClick={() => handleProviderChange(p.id)}
                                     className={`p-4 rounded-xl border-2 text-left transition-all
                                         ${provider === p.id
                                             ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'

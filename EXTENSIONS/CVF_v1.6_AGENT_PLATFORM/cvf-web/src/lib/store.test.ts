@@ -5,16 +5,37 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useExecutionStore } from './store';
 
 const trackEventMock = vi.hoisted(() => vi.fn());
+const validateChainMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/analytics', () => ({
     trackEvent: trackEventMock,
 }));
 
+vi.mock('@/lib/ledger-validator', () => ({
+    validateChain: validateChainMock,
+}));
+
 describe('Execution store', () => {
     beforeEach(() => {
-        useExecutionStore.setState({ executions: [], currentExecution: null });
+        useExecutionStore.setState({
+            executions: [],
+            currentExecution: null,
+            ledgerEntries: [],
+            ledgerValid: true,
+            ledgerValidation: null,
+            lastLedgerSync: null,
+            governanceConnectionStatus: 'disconnected',
+            governanceVersion: null,
+        });
         localStorage.clear();
         trackEventMock.mockReset();
+        validateChainMock.mockReset();
+        validateChainMock.mockResolvedValue({
+            valid: true,
+            totalBlocks: 0,
+            validatedBlocks: 0,
+        });
+        vi.unstubAllGlobals();
     });
 
     it('adds execution and sets current execution', () => {
@@ -126,5 +147,131 @@ describe('Execution store', () => {
         const state = useExecutionStore.getState();
         expect(state.currentExecution?.id).toBe('exec_b');
         expect(state.executions.find(e => e.id === 'exec_a')?.status).toBe('completed');
+    });
+
+    it('fetchLedger updates ledger state on success', async () => {
+        const entries = [
+            {
+                hash: 'h1',
+                previous_hash: '0',
+                event: { status: 'ok' },
+                timestamp: '2026-02-22T00:00:00Z',
+                block_index: 1,
+            },
+        ];
+        validateChainMock.mockResolvedValue({
+            valid: false,
+            totalBlocks: 1,
+            validatedBlocks: 0,
+            brokenAt: 1,
+            error: 'broken',
+        });
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                success: true,
+                data: { entries },
+            }),
+        }));
+
+        await useExecutionStore.getState().fetchLedger();
+        const state = useExecutionStore.getState();
+
+        expect(validateChainMock).toHaveBeenCalledWith(entries);
+        expect(state.ledgerEntries).toEqual(entries);
+        expect(state.ledgerValid).toBe(false);
+        expect(state.ledgerValidation?.error).toBe('broken');
+        expect(state.lastLedgerSync).toBeTruthy();
+    });
+
+    it('fetchLedger ignores unsuccessful response shape', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                success: false,
+                data: { entries: [{ hash: 'x' }] },
+            }),
+        }));
+
+        await useExecutionStore.getState().fetchLedger();
+        const state = useExecutionStore.getState();
+
+        expect(validateChainMock).not.toHaveBeenCalled();
+        expect(state.ledgerEntries).toEqual([]);
+        expect(state.lastLedgerSync).toBeNull();
+    });
+
+    it('validateLedger runs validation against current entries', async () => {
+        const entries = [
+            {
+                hash: 'h1',
+                previous_hash: '0',
+                event: { status: 'ok' },
+                timestamp: '2026-02-22T00:00:00Z',
+                block_index: 1,
+            },
+        ];
+        useExecutionStore.setState({ ledgerEntries: entries });
+        validateChainMock.mockResolvedValue({
+            valid: true,
+            totalBlocks: 1,
+            validatedBlocks: 1,
+        });
+
+        await useExecutionStore.getState().validateLedger();
+        const state = useExecutionStore.getState();
+
+        expect(validateChainMock).toHaveBeenCalledWith(entries);
+        expect(state.ledgerValid).toBe(true);
+        expect(state.ledgerValidation?.validatedBlocks).toBe(1);
+    });
+
+    it('checkGovernanceHealth sets connected status when API reports success', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({ success: true, version: 'v1.6.1' }),
+        }));
+
+        await useExecutionStore.getState().checkGovernanceHealth();
+        const state = useExecutionStore.getState();
+
+        expect(state.governanceConnectionStatus).toBe('connected');
+        expect(state.governanceVersion).toBe('v1.6.1');
+    });
+
+    it('checkGovernanceHealth sets null version when success payload has no version', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({ success: true }),
+        }));
+
+        await useExecutionStore.getState().checkGovernanceHealth();
+        const state = useExecutionStore.getState();
+
+        expect(state.governanceConnectionStatus).toBe('connected');
+        expect(state.governanceVersion).toBeNull();
+    });
+
+    it('checkGovernanceHealth falls back to disconnected on unsuccessful payload', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({ success: false }),
+        }));
+
+        await useExecutionStore.getState().checkGovernanceHealth();
+        const state = useExecutionStore.getState();
+
+        expect(state.governanceConnectionStatus).toBe('disconnected');
+        expect(state.governanceVersion).toBeNull();
+    });
+
+    it('checkGovernanceHealth falls back to disconnected on fetch error', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network')));
+
+        await useExecutionStore.getState().checkGovernanceHealth();
+        const state = useExecutionStore.getState();
+
+        expect(state.governanceConnectionStatus).toBe('disconnected');
+        expect(state.governanceVersion).toBeNull();
     });
 });

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
 export type ModalName = 'userContext' | 'settings' | 'aiUsage' | 'apiKeyWizard' | 'onboarding';
 
@@ -13,29 +13,19 @@ export function useModals(permissions?: {
     const [showSettings, setShowSettings] = useState(false);
     const [showAIUsage, setShowAIUsage] = useState(false);
     const [showApiKeyWizard, setShowApiKeyWizard] = useState(false);
-    const [showOnboarding, setShowOnboarding] = useState(false);
-
-    // Check first visit
-    useEffect(() => {
-        const hasSeenOnboarding = localStorage.getItem('cvf_onboarding_complete');
-        if (!hasSeenOnboarding) {
-            setShowOnboarding(true);
-        }
-    }, []);
+    const [showOnboarding, setShowOnboarding] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        return !localStorage.getItem('cvf_onboarding_complete');
+    });
 
     const handleOnboardingComplete = useCallback(() => {
         localStorage.setItem('cvf_onboarding_complete', 'true');
         setShowOnboarding(false);
     }, []);
 
-    // Close modals when permissions change
-    useEffect(() => {
-        if (permissions) {
-            if (!permissions.canUseSettings && showSettings) setShowSettings(false);
-            if (!permissions.canUseAIUsage && showAIUsage) setShowAIUsage(false);
-            if (!permissions.canUseContext && showUserContext) setShowUserContext(false);
-        }
-    }, [permissions, showSettings, showAIUsage, showUserContext]);
+    const canUseSettings = permissions?.canUseSettings ?? true;
+    const canUseAIUsage = permissions?.canUseAIUsage ?? true;
+    const canUseContext = permissions?.canUseContext ?? true;
 
     const openModal = useCallback((name: ModalName) => {
         switch (name) {
@@ -58,9 +48,9 @@ export function useModals(permissions?: {
     }, []);
 
     return {
-        showUserContext,
-        showSettings,
-        showAIUsage,
+        showUserContext: canUseContext && showUserContext,
+        showSettings: canUseSettings && showSettings,
+        showAIUsage: canUseAIUsage && showAIUsage,
         showApiKeyWizard,
         showOnboarding,
         openModal,

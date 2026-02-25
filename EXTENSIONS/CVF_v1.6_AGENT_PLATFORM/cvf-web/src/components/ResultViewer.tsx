@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Execution } from '@/types';
 import { useLanguage } from '@/lib/i18n';
+import { analyzeOutputSafety } from '@/lib/safety-status';
 
 interface ResultViewerProps {
     execution: Execution;
@@ -54,7 +55,6 @@ const exportLabels = {
 
 export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack, onSendToAgent }: ResultViewerProps) {
     const { language } = useLanguage();
-    const [showDetails, setShowDetails] = useState(false);
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [copied, setCopied] = useState(false);
     const [exportLang, setExportLang] = useState<ExportLanguage>(language as ExportLanguage);
@@ -276,7 +276,6 @@ ${cleanOutput}
                         indent: { left: 400 },
                     }));
                 } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-                    const text = trimmed.replace(/^[-*]\s*/, '').replace(/\*\*/g, '');
                     // Handle bold markers within text
                     const parts = trimmed.replace(/^[-*]\s*/, '').split(/\*\*/);
                     const runs = parts.map((part, i) => new TextRun({ text: part, bold: i % 2 === 1, size: 20 }));
@@ -439,6 +438,33 @@ ${cleanOutput}
                     </div>
                 </div>
             </div>
+
+            {/* Output Safety Badge */}
+            {(() => {
+                const safety = analyzeOutputSafety(output);
+                return (
+                    <div className={`mb-4 flex items-center gap-3 px-4 py-2.5 rounded-xl border ${safety.riskLevel === 'R0' ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800' :
+                            safety.riskLevel === 'R1' ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800' :
+                                safety.riskLevel === 'R2' ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800' :
+                                    'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                        }`}>
+                        <span className="text-lg">{safety.emoji}</span>
+                        <div>
+                            <div className="text-sm font-semibold">
+                                {language === 'vi' ? safety.label.vi : safety.label.en}
+                            </div>
+                            {safety.issues.length > 0 && (
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                    {safety.issues.join(', ')}
+                                </div>
+                            )}
+                        </div>
+                        <div className="ml-auto text-xs text-gray-400">
+                            {language === 'vi' ? 'Kiểm tra bởi CVF Safety' : 'Checked by CVF Safety'}
+                        </div>
+                    </div>
+                );
+            })()}
 
             {/* Output Content */}
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-8">

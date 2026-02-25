@@ -4,11 +4,12 @@
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
-[![Version](https://img.shields.io/badge/version-1.6.3-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
+[![Version](https://img.shields.io/badge/version-1.7.2-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-1111%2B%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![Coverage](https://img.shields.io/badge/coverage-95.6%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![Agent Skills](https://img.shields.io/badge/agent%20skills-24-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
+[![Tests](https://img.shields.io/badge/tests-1764%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![Coverage](https://img.shields.io/badge/coverage-93.05%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![AI Safety](https://img.shields.io/badge/AI%20Safety-Runtime%20Active-green.svg)](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md)
+[![Agent Skills](https://img.shields.io/badge/agent%20skills-34-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
 
 ---
 
@@ -18,7 +19,7 @@ CVF helps you **control AI coding** through:
 
 - ✅ **4-Phase Process** - Discovery → Design → Build → Review
 - ✅ **Governance Toolkit** - Phase gates, risk control, authority matrix
-- ✅ **124 Reusable Skills** - Across 12 domains
+- ✅ **141 Reusable Skills** - Across 12 domains
 - ✅ **34 Agent Tools** - RAG, Data Viz, Agentic Loop, Browser Auto, MCP, Workflow Hooks, Scientific Research, Agent Teams, Context Engineering, Debugging, API Architecture, Testing, Security, Database, Frontend, Cloud Deployment, Code Review, MCP Builder, AI Multimodal, Operator Workflow & more
 - ✅ **Web UI + Agent Platform** - No-code interface, multi-agent workflows
 
@@ -81,14 +82,22 @@ When using AI to code without a framework:
 
 ## 🎨 Features
 
-### v1.6 Highlights ⭐
+### v1.7 Highlights ⭐ (AI Safety Runtime)
+
+- 🛡️ **AI Safety Runtime** - Prompt sanitizer, entropy guard, anomaly detection, policy enforcement
+- 🧠 **Controlled Intelligence** - Agent behavior control with governance-first approach
+- 📊 **Safety Dashboard** - Real-time risk view: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous
+- 🔒 **System Prompt Hardening** - Anti-injection, anti-override, anti-bypass directives
+- 🧪 **Policy Simulation** - Test policy changes before applying with what-if scenarios
+
+### v1.6 Features
 
 - 🤖 **AI Agent Chat** - Gemini, OpenAI, Anthropic
 - 🎯 **Multi-Agent Workflow** - Orchestrator, Architect, Builder, Reviewer
 - ✅ **34 Agent Tools** - Web search, code execute, RAG retrieval, data viz, doc parser, agentic loop, browser automation, MCP connector, workflow hooks, scientific research, document converter, agent teams, progressive loader, analytics dashboard, context engineering, problem-solving, systematic debugging, MCP isolation, API architecture, full-stack testing, security & auth, database schema, frontend components, cloud deployment, code review, MCP builder, AI multimodal, operator workflow orchestrator
 - 💾 **Chat History** - Persistent conversations
 - 🔐 **Governance Toolkit** - Phase/role/risk control (R0–R3)
-- 📝 **50 Templates** → 📚 **124 Skills** - Bi-directional linking
+- 📝 **50 Templates** → 📚 **141 Skills** - Bi-directional linking
 - 🧪 **Self-UAT** - 1-click testing
 - 🌐 **Bilingual** - Vietnamese/English
 - 📱 **Mobile Responsive** - Touch-optimized UI with bottom nav & swipe gestures
@@ -99,7 +108,7 @@ When using AI to code without a framework:
 |---------|-------------|
 | **4-Phase Process** | Structured workflow from idea to production |
 | **Governance Model** | Phase gates, risk levels (R0-R3), authority matrix |
-| **Skill Library** | 124 reusable skills across 12 domains |
+| **Skill Library** | 141 reusable skills across 12 domains |
 | **Web UI** | No-code template builder + agent chat |
 | **Python SDK** | Programmatic access to CVF |
 | **CI/CD Templates** | GitHub Actions, GitLab CI |
@@ -163,7 +172,7 @@ When using AI to code without a framework:
 | **🎓 Learn** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance](docs/concepts/governance-model.md) |
 | **🚀 Build** | [First Project](docs/tutorials/first-project.md) · [Web UI](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
 | **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
-| **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills across 12 domains |
+| **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 141 skills across 12 domains |
 | **🤖 Agent Skills** | [34 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide v1](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Usage Guide v2](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-new-skills-v2.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
 | **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) |
 
@@ -173,32 +182,31 @@ When using AI to code without a framework:
 
 ## 🏗️ Architecture
 
-CVF has 3 layers + reference implementations:
+CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  🌐 PLATFORM (Layer 3)  — Web UI, Agent Chat, Dashboard │
-│     v1.6                — Production runtime             │
-│     → Use when you need UI/demo                           │
-│                                                           │
-│  🔐 v1.6.1              — Enterprise Governance Engine    │
-│     Python/FastAPI       — CI/CD, Audit, Approval, RBAC  │
-│     143 tests            — Complements v1.6 web runtime   │
-│     → Use when you need enterprise enforcement            │
+│  🛡️ SAFETY UI (Layer 4)    — Non-Coder Safety Dashboard │
+│     v1.7.2                  — Read-only risk view         │
+│     Risk: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous   │
 ├─────────────────────────────────────────────────────────┤
-│  🛠️ TOOLS (Layer 2)      — Scoring, UAT, Validation      │
-│     v1.3, governance/   — Python scripts, CI/CD         │
-│     → Use when you need automation                        │
+│  🌐 PLATFORM (Layer 3)     — Web UI, Agent Chat          │
+│     v1.6 Agent Platform    — Production runtime           │
+│  🔐 v1.6.1                 — Enterprise Governance Engine │
 ├─────────────────────────────────────────────────────────┤
-│  📖 CORE (Layer 1)       — Principles, Phases, Skills    │
-│     v1.0, v1.1, v1.2    — Rules + Skill Library         │
+│  ⚙️ SAFETY RUNTIME (Layer 2.5) — Policy Enforcement      │
+│     v1.7.1                 — Auth, Audit, DI              │
+├─────────────────────────────────────────────────────────┤
+│  🧠 INTELLIGENCE (Layer 2)  — Agent Behavior Control     │
+│     v1.7                   — Reasoning gate, Entropy      │
+│                              guard, Prompt sanitizer      │
+│  🛠️ TOOLS                   — Scoring, UAT, Validation   │
+│     v1.3, governance/      — Python scripts, CI/CD       │
+├─────────────────────────────────────────────────────────┤
+│  📖 CORE (Layer 1)          — Principles, Phases, Skills │
+│     v1.0, v1.1, v1.2       — Rules + 141 Skills          │
 │     → Always needed. Start here.                          │
 └─────────────────────────────────────────────────────────┘
-
-📘 Reference Implementations (controlled extensions):
-  • CVF Toolkit Reference    — Governance engine example (TypeScript)
-  • CVF Starter Template     — Express server template example
-  → Use as learning resources when building new projects
 ```
 
 **Read more:** [CVF Positioning](docs/CVF_POSITIONING.md)
@@ -214,9 +222,12 @@ CVF has 3 layers + reference implementations:
 - **v1.2** - Skill governance (registry, risk model)
 - **v1.3** - SDK & Tooling (Python, CLI, CI/CD)
 - **v1.5** - UX & End-User orientation (FROZEN)
-- **v1.5.2** - Skill Library (124 skills, ACTIVE)
+- **v1.5.2** - Skill Library (141 skills, ACTIVE)
 - **v1.6** ⭐ - Agent Platform (AI chat, multi-agent, governance)
 - **v1.6.1** 🔐 - Governance Engine (enterprise enforcement, audit, CI/CD)
+- **v1.7** 🧠 - Controlled Intelligence (agent behavior control, prompt sanitizer)
+- **v1.7.1** ⚙️ - Safety Runtime (policy enforcement engine)
+- **v1.7.2** 🛡️ - Safety Dashboard (non-coder risk view)
 
 **Which should you use?**
 
@@ -294,17 +305,19 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 
 | Metric | Status |
 |--------|--------|
-| **Version** | 1.6.3 (Feb 2026) |
-| **Stability** | Beta - Production-ready architecture, docs improvements ongoing |
-| **Test Coverage** | 95.6% statements, 1255 cvf-web tests + 143 governance tests |
-| **Skills** | 124 skills across 12 domains + 34 agent tools |
-| **Active Development** | Yes - v1.6 + agentic skills + documentation |
+| **Version** | 1.7.2 (Feb 2026) |
+| **Stability** | Production-ready — 6/6 integration sprints complete |
+| **Quality Snapshot (2026-02-25)** | Lint: 0 errors · Tests: 1764 passing (0 failed, 3 skipped) |
+| **Coverage Snapshot (2026-02-25)** | Statements 93.05% · Branches 80.46% · Functions 91.48% · Lines 94.18% |
+| **Skills** | 141 skills across 12 domains + 34 agent tools |
+| **AI Safety** | Runtime active — prompt sanitizer, entropy guard, policy engine |
+| **Active Development** | Yes — extensions + Web UI enhancements |
 | **Community** | Building — Discord coming soon |
 
-**Current Status:** 8.7/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-16.md))
-- ✅ **Excellent:** Technical quality (9/10), Governance toolkit (9/10), Bilingual (9/10), Testing (9/10)
-- ✅ **Good:** Core framework, Architecture, 124 skills + 34 agent tools
-- 🟡 **Improving:** Documentation, Usability
+**Current Status:** 9.4/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md) — cross-verified)
+- ✅ **Excellent:** Technical quality (9.3/10), AI Safety (9.4/10), Testing (9.5/10), Governance (9/10)
+- ✅ **Strong:** Core framework, 5-layer architecture, 141 skills + 34 agent tools
+- ✅ **Complete:** Sprint 1-6 integration, full test coverage, bilingual i18n
 - ⏳ **Pending:** Real-world validation, Community, npm/PyPI packages
 
 [→ Get Started](docs/GET_STARTED.md)
@@ -380,4 +393,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 18, 2026 | Version 1.6.3 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: February 25, 2026 | Version 1.7.2 | [Documentation](docs/GET_STARTED.md)*

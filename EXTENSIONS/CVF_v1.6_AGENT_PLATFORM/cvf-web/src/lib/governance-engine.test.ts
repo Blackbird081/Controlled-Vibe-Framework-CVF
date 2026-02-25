@@ -1,219 +1,254 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-
-// ─── Mock governance-engine module ───────────────────────────────────
-
-const mockGovernanceHealth = vi.fn();
-const mockGovernanceEvaluate = vi.fn();
-const mockGovernanceApprove = vi.fn();
-const mockGovernanceLedger = vi.fn();
-const mockGovernanceRiskConvert = vi.fn();
-const mockIsEnabled = vi.fn(() => true);
-
-vi.mock('@/lib/governance-engine', () => ({
-    governanceHealth: (...args: unknown[]) => mockGovernanceHealth(...args),
-    governanceEvaluate: (...args: unknown[]) => mockGovernanceEvaluate(...args),
-    governanceApprove: (...args: unknown[]) => mockGovernanceApprove(...args),
-    governanceLedger: (...args: unknown[]) => mockGovernanceLedger(...args),
-    governanceRiskConvert: (...args: unknown[]) => mockGovernanceRiskConvert(...args),
-    isGovernanceEngineEnabled: () => mockIsEnabled(),
-}));
-
-// ─── Import after mocks ─────────────────────────────────────────────
-
 import {
+    governanceApprove,
+    governanceEvaluate,
+    governanceFetchDirect,
+    governanceHealth,
+    governanceLedger,
+    governanceRiskConvert,
     isGovernanceEngineEnabled,
-} from '@/lib/governance-engine';
+} from './governance-engine';
 
-describe('governance-engine client', () => {
+function asResponse(input: {
+    ok: boolean;
+    status?: number;
+    json?: unknown;
+    text?: string;
+}): Response {
+    return {
+        ok: input.ok,
+        status: input.status ?? 200,
+        json: vi.fn().mockResolvedValue(input.json ?? {}),
+        text: vi.fn().mockResolvedValue(input.text ?? ''),
+    } as unknown as Response;
+}
+
+const ENV_SNAPSHOT = { ...process.env };
+
+describe('governance-engine', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.unstubAllGlobals();
+        process.env = { ...ENV_SNAPSHOT };
+        delete process.env.GOVERNANCE_ENGINE_ENABLED;
+        delete process.env.GOVERNANCE_ENGINE_URL;
+        delete process.env.GOVERNANCE_ENGINE_TIMEOUT;
     });
 
     afterEach(() => {
-        vi.restoreAllMocks();
+        vi.unstubAllGlobals();
+        process.env = { ...ENV_SNAPSHOT };
     });
 
-    // ── Health ────────────────────────────────────────────────────
+    it('respects GOVERNANCE_ENGINE_ENABLED flag', () => {
+        expect(isGovernanceEngineEnabled()).toBe(true);
+        process.env.GOVERNANCE_ENGINE_ENABLED = 'false';
+        expect(isGovernanceEngineEnabled()).toBe(false);
+    });
 
-    describe('governanceHealth', () => {
-        it('returns health status when server responds', async () => {
-            const health = {
+    it('returns null and does not call fetch when engine is disabled', async () => {
+        process.env.GOVERNANCE_ENGINE_ENABLED = 'false';
+        const fetchMock = vi.fn();
+        vi.stubGlobal('fetch', fetchMock);
+
+        await expect(governanceHealth()).resolves.toBeNull();
+        await expect(governanceEvaluate({ request_id: 'r1', artifact_id: 'a1', payload: {} })).resolves.toBeNull();
+        await expect(governanceApprove({ request_id: 'r1', approver_id: 'u1', decision: 'APPROVED' })).resolves.toBeNull();
+        await expect(governanceLedger()).resolves.toBeNull();
+        await expect(governanceRiskConvert('R2')).resolves.toBeNull();
+        await expect(governanceFetchDirect('/api/v1/health')).resolves.toBeNull();
+        expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('handles health endpoint direct object response', async () => {
+        const health = {
+            status: 'healthy',
+            service: 'CVF Governance Engine',
+            version: '1.6.1',
+            timestamp: '2026-02-22T00:00:00Z',
+        };
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(asResponse({ ok: true, json: health })));
+
+        await expect(governanceHealth()).resolves.toEqual(health);
+    });
+
+    it('handles health endpoint wrapped data response', async () => {
+        const wrapped = {
+            status: 'ok',
+            timestamp: '2026-02-22T00:00:00Z',
+            data: {
                 status: 'healthy',
                 service: 'CVF Governance Engine',
                 version: '1.6.1',
-                timestamp: '2026-02-21T00:00:00Z',
-            };
-            mockGovernanceHealth.mockResolvedValue(health);
+                timestamp: '2026-02-22T00:00:00Z',
+            },
+        };
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(asResponse({ ok: true, json: wrapped })));
 
-            const result = await mockGovernanceHealth();
-            expect(result).toEqual(health);
-            expect(result.status).toBe('healthy');
-        });
-
-        it('returns null when server is unreachable', async () => {
-            mockGovernanceHealth.mockResolvedValue(null);
-
-            const result = await mockGovernanceHealth();
-            expect(result).toBeNull();
-        });
+        const result = await governanceHealth();
+        expect(result?.service).toBe('CVF Governance Engine');
+        expect(result?.status).toBe('healthy');
     });
 
-    // ── Evaluate ─────────────────────────────────────────────────
+    it('returns null and logs on non-ok response', async () => {
+        const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(asResponse({ ok: false, status: 500, text: 'boom' })));
 
-    describe('governanceEvaluate', () => {
-        it('returns evaluation result for valid request', async () => {
-            const evalResult = {
-                report: {
-                    status: 'APPROVED',
-                    risk_score: 0.2,
-                    cvf_risk_level: 'R1',
-                    cvf_quality: {
-                        correctness: 0.9,
-                        safety: 0.85,
-                        alignment: 0.8,
-                        quality: 0.88,
-                        overall: 0.86,
-                        grade: 'B',
-                    },
-                    cvf_enforcement: {
-                        action: 'ALLOW',
-                        phase_authority: {
-                            phase: 'BUILD',
-                            can_approve: true,
-                            can_override: false,
-                            max_risk: 'R3',
-                        },
-                    },
-                },
-                execution_record: {
-                    request_id: 'test-1',
-                    artifact_id: 'art-1',
-                    risk_score: 0.2,
-                    status: 'completed',
-                },
-            };
-            mockGovernanceEvaluate.mockResolvedValue(evalResult);
-
-            const result = await mockGovernanceEvaluate({
-                request_id: 'test-1',
-                artifact_id: 'art-1',
-                payload: { content: 'test' },
-            });
-            expect(result).toEqual(evalResult);
-            expect(result.report.status).toBe('APPROVED');
-            expect(result.report.cvf_quality.grade).toBe('B');
-        });
-
-        it('returns null on server error', async () => {
-            mockGovernanceEvaluate.mockResolvedValue(null);
-
-            const result = await mockGovernanceEvaluate({
-                request_id: 'test-2',
-                artifact_id: 'art-2',
-                payload: {},
-            });
-            expect(result).toBeNull();
-        });
+        await expect(governanceHealth()).resolves.toBeNull();
+        expect(errorSpy).toHaveBeenCalled();
     });
 
-    // ── Approve ──────────────────────────────────────────────────
+    it('returns null and logs when response text cannot be read', async () => {
+        const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: false,
+            status: 500,
+            json: vi.fn(),
+            text: vi.fn().mockRejectedValue(new Error('unreadable')),
+        } as unknown as Response));
 
-    describe('governanceApprove', () => {
-        it('submits approval decision', async () => {
-            const approveResult = {
+        await expect(governanceHealth()).resolves.toBeNull();
+        expect(errorSpy).toHaveBeenCalled();
+    });
+
+    it('returns null and logs timeout for abort errors', async () => {
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        const abortError = Object.assign(new Error('aborted'), { name: 'AbortError' });
+        vi.stubGlobal('fetch', vi.fn().mockRejectedValue(abortError));
+
+        await expect(governanceHealth()).resolves.toBeNull();
+        expect(warnSpy).toHaveBeenCalled();
+    });
+
+    it('returns null and logs generic fetch failures', async () => {
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network down')));
+
+        await expect(governanceHealth()).resolves.toBeNull();
+        expect(warnSpy).toHaveBeenCalled();
+    });
+
+    it('returns evaluated data for governanceEvaluate', async () => {
+        const payload = {
+            request_id: 'req-1',
+            artifact_id: 'art-1',
+            payload: { content: 'hello' },
+        };
+        const wrapped = {
+            status: 'ok',
+            timestamp: '2026-02-22T00:00:00Z',
+            data: {
+                report: { status: 'APPROVED' },
+                execution_record: { request_id: 'req-1', artifact_id: 'art-1', risk_score: 0.2, status: 'done', timestamp: '2026-02-22T00:00:00Z' },
+            },
+        };
+        const fetchMock = vi.fn().mockResolvedValue(asResponse({ ok: true, json: wrapped }));
+        vi.stubGlobal('fetch', fetchMock);
+
+        const result = await governanceEvaluate(payload);
+        expect(result?.report.status).toBe('APPROVED');
+        expect(fetchMock).toHaveBeenCalledWith(
+            expect.stringContaining('/api/v1/evaluate'),
+            expect.objectContaining({
+                method: 'POST',
+                body: JSON.stringify(payload),
+            }),
+        );
+    });
+
+    it('returns approved data for governanceApprove', async () => {
+        const wrapped = {
+            status: 'ok',
+            timestamp: '2026-02-22T00:00:00Z',
+            data: {
                 request_id: 'req-1',
                 status: 'APPROVED',
                 current_step: 1,
                 total_decisions: 2,
-            };
-            mockGovernanceApprove.mockResolvedValue(approveResult);
+            },
+        };
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(asResponse({ ok: true, json: wrapped })));
 
-            const result = await mockGovernanceApprove({
-                request_id: 'req-1',
-                approver_id: 'user-1',
-                decision: 'APPROVED',
-            });
-            expect(result).toEqual(approveResult);
+        const result = await governanceApprove({
+            request_id: 'req-1',
+            approver_id: 'user-1',
+            decision: 'APPROVED',
         });
-
-        it('returns null when server unavailable', async () => {
-            mockGovernanceApprove.mockResolvedValue(null);
-
-            const result = await mockGovernanceApprove({
-                request_id: 'req-2',
-                approver_id: 'user-1',
-                decision: 'REJECTED',
-            });
-            expect(result).toBeNull();
-        });
+        expect(result?.status).toBe('APPROVED');
     });
 
-    // ── Ledger ───────────────────────────────────────────────────
+    it('returns ledger data with custom limit', async () => {
+        const wrapped = {
+            status: 'ok',
+            timestamp: '2026-02-22T00:00:00Z',
+            data: {
+                total_blocks: 1,
+                returned: 1,
+                entries: [],
+            },
+        };
+        const fetchMock = vi.fn().mockResolvedValue(asResponse({ ok: true, json: wrapped }));
+        vi.stubGlobal('fetch', fetchMock);
 
-    describe('governanceLedger', () => {
-        it('returns ledger entries', async () => {
-            const ledgerResult = {
-                total_blocks: 5,
-                returned: 5,
-                entries: [
-                    {
-                        hash: 'abc123',
-                        previous_hash: '000000',
-                        event: { type: 'evaluation' },
-                        timestamp: '2026-02-21T00:00:00Z',
-                        block_index: 0,
-                    },
-                ],
-            };
-            mockGovernanceLedger.mockResolvedValue(ledgerResult);
-
-            const result = await mockGovernanceLedger(50);
-            expect(result.total_blocks).toBe(5);
-            expect(result.entries).toHaveLength(1);
-        });
+        const result = await governanceLedger(25);
+        expect(result?.total_blocks).toBe(1);
+        expect(fetchMock).toHaveBeenCalledWith(
+            expect.stringContaining('/api/v1/ledger?limit=25'),
+            expect.any(Object),
+        );
     });
 
-    // ── Risk Convert ─────────────────────────────────────────────
-
-    describe('governanceRiskConvert', () => {
-        it('converts to CVF risk level', async () => {
-            const convertResult = {
-                input: '0.75',
-                cvf_level: 'R3',
-                direction: 'score → CVF',
-            };
-            mockGovernanceRiskConvert.mockResolvedValue(convertResult);
-
-            const result = await mockGovernanceRiskConvert('0.75', 'to_cvf');
-            expect(result.cvf_level).toBe('R3');
-        });
-
-        it('converts from CVF risk level', async () => {
-            const convertResult = {
+    it('sends direction and value for risk convert', async () => {
+        const wrapped = {
+            status: 'ok',
+            timestamp: '2026-02-22T00:00:00Z',
+            data: {
                 input: 'R2',
                 internal_level: 'MEDIUM',
                 numeric_score: 0.5,
                 direction: 'CVF → internal',
-            };
-            mockGovernanceRiskConvert.mockResolvedValue(convertResult);
+            },
+        };
+        const fetchMock = vi.fn().mockResolvedValue(asResponse({ ok: true, json: wrapped }));
+        vi.stubGlobal('fetch', fetchMock);
 
-            const result = await mockGovernanceRiskConvert('R2', 'from_cvf');
-            expect(result.internal_level).toBe('MEDIUM');
-            expect(result.numeric_score).toBe(0.5);
-        });
+        const result = await governanceRiskConvert('R2', 'from_cvf');
+        expect(result?.internal_level).toBe('MEDIUM');
+        expect(fetchMock).toHaveBeenCalledWith(
+            expect.stringContaining('/api/v1/risk-convert'),
+            expect.objectContaining({
+                method: 'POST',
+                body: JSON.stringify({ value: 'R2', direction: 'from_cvf' }),
+            }),
+        );
     });
 
-    // ── isGovernanceEngineEnabled ─────────────────────────────────
+    it('returns null when wrapped response has no data', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(asResponse({
+            ok: true,
+            json: { status: 'ok', timestamp: '2026-02-22T00:00:00Z' },
+        })));
 
-    describe('isGovernanceEngineEnabled', () => {
-        it('returns true when enabled', () => {
-            mockIsEnabled.mockReturnValue(true);
-            expect(isGovernanceEngineEnabled()).toBe(true);
-        });
+        await expect(governanceEvaluate({ request_id: 'r', artifact_id: 'a', payload: {} })).resolves.toBeNull();
+        await expect(governanceApprove({ request_id: 'r', approver_id: 'u', decision: 'REJECTED' })).resolves.toBeNull();
+        await expect(governanceLedger()).resolves.toBeNull();
+        await expect(governanceRiskConvert('R1')).resolves.toBeNull();
+    });
 
-        it('returns false when disabled', () => {
-            mockIsEnabled.mockReturnValue(false);
-            expect(isGovernanceEngineEnabled()).toBe(false);
-        });
+    it('governanceFetchDirect returns parsed JSON on success', async () => {
+        const payload = { ok: true, value: 1 };
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(asResponse({ ok: true, json: payload })));
+
+        await expect(governanceFetchDirect('/api/v1/health')).resolves.toEqual(payload);
+    });
+
+    it('governanceFetchDirect returns null on non-ok response', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(asResponse({ ok: false, status: 404 })));
+        await expect(governanceFetchDirect('/missing')).resolves.toBeNull();
+    });
+
+    it('governanceFetchDirect returns null on fetch exception', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
+        await expect(governanceFetchDirect('/api/v1/health')).resolves.toBeNull();
     });
 });

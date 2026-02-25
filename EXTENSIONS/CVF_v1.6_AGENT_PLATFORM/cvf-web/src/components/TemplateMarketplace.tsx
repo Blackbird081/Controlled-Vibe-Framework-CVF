@@ -128,6 +128,7 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
     const isVi = language === 'vi';
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<Category | 'all'>('all');
+    const [selectedTemplate, setSelectedTemplate] = useState<SampleTemplate | null>(null);
 
     const filteredTemplates = sampleTemplates.filter(t => {
         const matchesSearch = t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -135,6 +136,16 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
         const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory;
         return matchesSearch && matchesCategory;
     });
+
+    const difficultyLabel = (d: string) => {
+        if (!isVi) return d;
+        return d === 'beginner' ? 'Cơ bản' : d === 'intermediate' ? 'Trung bình' : 'Nâng cao';
+    };
+
+    const categoryLabel = (c: string) => {
+        if (!isVi) return c;
+        return c === 'business' ? 'Kinh doanh' : c === 'technical' ? 'Kỹ thuật' : 'Marketing';
+    };
 
     return (
         <div className="space-y-6">
@@ -237,14 +248,15 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                         <div className="flex items-center justify-between text-xs text-gray-400 mb-4">
                             <span>👤 {template.author}</span>
                             <span className={`px-2 py-0.5 rounded-full ${template.difficulty === 'beginner' ? 'bg-green-100 text-green-700' :
-                                    template.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
-                                        'bg-red-100 text-red-700'
+                                template.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-red-100 text-red-700'
                                 }`}>
                                 {template.difficulty}
                             </span>
                         </div>
 
                         <button
+                            onClick={() => setSelectedTemplate(template)}
                             className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700
                        text-white font-medium transition-colors"
                         >
@@ -258,6 +270,104 @@ export function TemplateMarketplace({ onBack }: MarketplaceProps) {
                 <div className="text-center py-12 text-gray-500">
                     <span className="text-4xl mb-4 block">🔍</span>
                     <p>{isVi ? 'Không tìm thấy template phù hợp.' : 'No matching templates found.'}</p>
+                </div>
+            )}
+
+            {/* Template Detail Modal */}
+            {selectedTemplate && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+                    onClick={() => setSelectedTemplate(null)}>
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}>
+                        {/* Modal Header */}
+                        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <div className="flex items-start justify-between">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-4xl">{selectedTemplate.icon}</span>
+                                    <div>
+                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">{selectedTemplate.name}</h3>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">👤 {selectedTemplate.author}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setSelectedTemplate(null)}
+                                    className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-500"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Modal Body */}
+                        <div className="p-6 space-y-4">
+                            <div>
+                                <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+                                    {isVi ? 'Mô tả' : 'Description'}
+                                </h4>
+                                <p className="text-gray-700 dark:text-gray-300">
+                                    {isVi ? selectedTemplate.description : (selectedTemplate.descriptionEn || selectedTemplate.description)}
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{isVi ? 'Danh mục' : 'Category'}</p>
+                                    <p className="font-medium text-gray-900 dark:text-white capitalize">{categoryLabel(selectedTemplate.category)}</p>
+                                </div>
+                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{isVi ? 'Độ khó' : 'Difficulty'}</p>
+                                    <p className={`font-medium capitalize ${selectedTemplate.difficulty === 'beginner' ? 'text-green-600' :
+                                        selectedTemplate.difficulty === 'intermediate' ? 'text-yellow-600' : 'text-red-600'
+                                        }`}>
+                                        {difficultyLabel(selectedTemplate.difficulty)}
+                                    </p>
+                                </div>
+                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{isVi ? 'Nguồn' : 'Source'}</p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                        {selectedTemplate.author === 'CVF Team' ? (isVi ? '✅ Chính thức' : '✅ Official') : (isVi ? '🌐 Cộng đồng' : '🌐 Community')}
+                                    </p>
+                                </div>
+                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{isVi ? 'Trạng thái' : 'Status'}</p>
+                                    <p className="font-medium text-green-600">✅ {isVi ? 'Sẵn sàng' : 'Ready'}</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                                <p className="text-sm text-blue-700 dark:text-blue-300">
+                                    💡 {isVi
+                                        ? 'Template này có thể áp dụng trực tiếp vào workflow CVF. Sử dụng AI Agent để bắt đầu với template này.'
+                                        : 'This template can be applied directly to your CVF workflow. Use AI Agent to get started with this template.'}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Modal Footer */}
+                        <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+                            <button
+                                onClick={() => setSelectedTemplate(null)}
+                                className="flex-1 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 
+                                           hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors"
+                            >
+                                {isVi ? 'Đóng' : 'Close'}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setSelectedTemplate(null);
+                                    // Could navigate to AI Agent with this template pre-loaded
+                                    alert(isVi
+                                        ? `Template "${selectedTemplate.name}" đã được chọn! Mở AI Agent để sử dụng.`
+                                        : `Template "${selectedTemplate.name}" selected! Open AI Agent to use it.`);
+                                }}
+                                className="flex-1 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
+                            >
+                                {isVi ? '🚀 Sử dụng template' : '🚀 Use Template'}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 const ROLE_PERMISSIONS = {
     admin: {
@@ -36,6 +36,7 @@ const ROLE_BADGE_STYLES = {
 } as const;
 
 export type RoleKey = keyof typeof ROLE_PERMISSIONS;
+
 
 export function useAuth() {
     const [userRole, setUserRole] = useState<string>('admin');

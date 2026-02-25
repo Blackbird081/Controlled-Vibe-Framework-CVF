@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { verifySessionCookie, type SessionCookie } from './middleware-auth';
 
 // helpers to create signed cookies
@@ -44,8 +44,14 @@ function fakeRequest(cookieValue?: string): Request {
     return new Request('http://localhost/', { headers });
 }
 
-function fakeRequestWithCookiesApi(cookieValue?: string): any {
-    const req = fakeRequest();
+type RequestWithCookiesApi = Request & {
+    cookies: {
+        get: (name: string) => { value: string } | undefined;
+    };
+};
+
+function fakeRequestWithCookiesApi(cookieValue?: string): RequestWithCookiesApi {
+    const req = fakeRequest() as RequestWithCookiesApi;
     req.cookies = {
         get: (name: string) => {
             if (name === 'cvf_session' && cookieValue) {

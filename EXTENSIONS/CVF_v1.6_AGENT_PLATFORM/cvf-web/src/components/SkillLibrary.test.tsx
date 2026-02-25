@@ -130,7 +130,6 @@ describe('SkillLibrary', () => {
         fetchMock.mockReset();
         fetchMock.mockRejectedValue(new Error('fetch failed'));
         getTemplatesForSkillMock.mockReset().mockReturnValue([]);
-        // @ts-expect-error - assign test fetch
         global.fetch = fetchMock;
     });
 
@@ -234,7 +233,7 @@ describe('SkillLibrary', () => {
     });
 
     it('handles failed skill loading gracefully', async () => {
-        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
         getSkillCategoriesMock.mockRejectedValue(new Error('fail'));
 
         render(<SkillLibrary />);
@@ -509,16 +508,20 @@ describe('SkillLibrary', () => {
 
     it('filters domain report by min count and min coverage', async () => {
         getSkillCategoriesMock.mockResolvedValue([
-            { id: 'app', name: 'App Development', skills: [
-                { id: 's1', title: 'S1', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's1', content: '#', uatStatus: 'PASS', uatScore: 80, specScore: 90 },
-                { id: 's2', title: 'S2', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's2', content: '#', uatStatus: 'PASS', uatScore: 70, specScore: 85 },
-                { id: 's3', title: 'S3', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's3', content: '#', uatStatus: 'PASS', uatScore: 60, specScore: 80 },
-                { id: 's4', title: 'S4', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's4', content: '#', uatStatus: 'PASS', uatScore: 50, specScore: 75 },
-                { id: 's5', title: 'S5', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's5', content: '#', uatStatus: 'PASS', uatScore: 40, specScore: 70 },
-            ]},
-            { id: 'web', name: 'Web Development', skills: [
-                { id: 's6', title: 'S6', domain: 'Web Development', difficulty: 'Easy', summary: 'S', path: 's6', content: '#', uatStatus: 'Not Run', uatScore: 0, specScore: 50 },
-            ]},
+            {
+                id: 'app', name: 'App Development', skills: [
+                    { id: 's1', title: 'S1', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's1', content: '#', uatStatus: 'PASS', uatScore: 80, specScore: 90 },
+                    { id: 's2', title: 'S2', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's2', content: '#', uatStatus: 'PASS', uatScore: 70, specScore: 85 },
+                    { id: 's3', title: 'S3', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's3', content: '#', uatStatus: 'PASS', uatScore: 60, specScore: 80 },
+                    { id: 's4', title: 'S4', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's4', content: '#', uatStatus: 'PASS', uatScore: 50, specScore: 75 },
+                    { id: 's5', title: 'S5', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's5', content: '#', uatStatus: 'PASS', uatScore: 40, specScore: 70 },
+                ]
+            },
+            {
+                id: 'web', name: 'Web Development', skills: [
+                    { id: 's6', title: 'S6', domain: 'Web Development', difficulty: 'Easy', summary: 'S', path: 's6', content: '#', uatStatus: 'Not Run', uatScore: 0, specScore: 50 },
+                ]
+            },
         ]);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getAllByText('App Development').length).toBeGreaterThan(0));
@@ -549,24 +552,28 @@ describe('SkillLibrary', () => {
         await waitFor(() => expect(screen.getAllByText('Grp A').length).toBeGreaterThan(0));
 
         // Check page indicator shows page 1 of 2
-        expect(screen.getByText(/Page 1 \/ 2/)).toBeTruthy();
+        await waitFor(() => expect(screen.getByText(/Page 1 \/ 2/)).toBeTruthy());
 
         // Click Next → page 2
         fireEvent.click(screen.getByText('Next'));
-        expect(screen.getByText(/Page 2 \/ 2/)).toBeTruthy();
+        await waitFor(() => expect(screen.getByText(/Page 2 \/ 2/)).toBeTruthy());
 
         // Click Prev → page 1
         fireEvent.click(screen.getByText('Prev'));
-        expect(screen.getByText(/Page 1 \/ 2/)).toBeTruthy();
+        await waitFor(() => expect(screen.getByText(/Page 1 \/ 2/)).toBeTruthy());
 
         // Change page size to 20 → all fit on 1 page
-        const allSelects = screen.getAllByRole('combobox');
-        const pageSizeSelect = allSelects.find(s => {
-            const opts = Array.from(s.querySelectorAll('option'));
-            return opts.some(opt => opt.getAttribute('value') === '50');
-        })!;
+        const pageSizeSelect = await waitFor(() => {
+            const allSelects = screen.getAllByRole('combobox');
+            const sel = allSelects.find(s => {
+                const opts = Array.from(s.querySelectorAll('option'));
+                return opts.some(opt => opt.getAttribute('value') === '50');
+            });
+            expect(sel).toBeTruthy();
+            return sel!;
+        });
         fireEvent.change(pageSizeSelect, { target: { value: '20' } });
-        expect(screen.getByText(/Page 1 \/ 1/)).toBeTruthy();
+        await waitFor(() => expect(screen.getByText(/Page 1 \/ 1/)).toBeTruthy());
     });
 
     it('selects a skill using Space key', async () => {

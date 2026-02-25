@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useModals } from '@/lib/hooks/useModals';
@@ -36,22 +36,16 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const { settings, updateProvider, updatePreferences } = useSettings();
     const modals = useModals(permissions);
     const { executions } = useExecutionStore();
+    const openParam = searchParams.get('open');
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
     const [isAgentMinimized, setIsAgentMinimized] = useState(false);
-    const [activeModal, setActiveModal] = useState<'agent' | 'multi-agent' | 'tools' | null>(null);
-
-    // Auto-open modal from URL param: ?open=agent | ?open=multi-agent
-    useEffect(() => {
-        const openParam = searchParams.get('open');
-        if (openParam === 'agent') {
-            setActiveModal('agent');
-            setIsAgentMinimized(false);
-        } else if (openParam === 'multi-agent') {
-            setActiveModal('multi-agent');
-        }
-    }, [searchParams]);
+    const [activeModal, setActiveModal] = useState<'agent' | 'multi-agent' | 'tools' | null>(() => {
+        if (openParam === 'agent') return 'agent';
+        if (openParam === 'multi-agent') return 'multi-agent';
+        return null;
+    });
 
     // Map pathname to Sidebar's expected appState string
     const pathnameToAppState = (p: string): string => {
@@ -62,6 +56,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         if (p.startsWith('/skills')) return 'skills';
         if (p.startsWith('/governance')) return 'governance';
         if (p.startsWith('/simulation')) return 'simulation';
+        if (p.startsWith('/safety')) return 'safety';
         return activeModal || 'home';
     };
 
@@ -77,6 +72,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             case 'skills': router.push('/skills'); setActiveModal(null); break;
             case 'governance': router.push('/governance'); setActiveModal(null); break;
             case 'simulation': router.push('/simulation'); setActiveModal(null); break;
+            case 'safety': router.push('/safety'); setActiveModal(null); break;
             case 'agent':
                 setActiveModal('agent');
                 setIsAgentMinimized(false);
@@ -128,6 +124,10 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                         <div className="space-y-1">
                             <div>{t('footer.tagline')}</div>
                             <div className="text-xs text-gray-400">{t('footer.author')}</div>
+                            <div className="flex items-center justify-center gap-1.5 mt-2 text-xs text-emerald-600 dark:text-emerald-400">
+                                <span>🛡️</span>
+                                <span>{t('safety.badge') || 'AI đang được kiểm soát bởi CVF'}</span>
+                            </div>
                         </div>
                     </div>
                 </footer>

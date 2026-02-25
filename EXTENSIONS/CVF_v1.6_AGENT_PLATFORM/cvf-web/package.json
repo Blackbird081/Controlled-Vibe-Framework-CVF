@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "predev": "node scripts/build-skill-index.js",
-    "prebuild": "node scripts/build-skill-index.js",
+    "prebuild": "node -e \"const fs=require('fs');try{fs.rmSync('.next',{recursive:true,force:true})}catch(e){}\" && node scripts/build-skill-index.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

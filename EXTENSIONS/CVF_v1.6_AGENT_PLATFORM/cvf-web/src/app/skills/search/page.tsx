@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect, Suspense } from 'react';
+import { useState, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useLanguage, LanguageToggle } from '@/lib/i18n';
@@ -25,24 +25,18 @@ export default function SkillSearchPage() {
 function SkillSearchPageInner() {
   const { t } = useLanguage();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<ActiveTab>('search');
+  const initialTabParam = searchParams.get('tab');
+  const initialQueryParam = searchParams.get('q') ?? '';
+  const initialTaskParam = searchParams.get('task') ?? '';
+
+  const [activeTab, setActiveTab] = useState<ActiveTab>(initialTabParam === 'planner' ? 'planner' : 'search');
   const [domainFilter, setDomainFilter] = useState('');
   const [plan, setPlan] = useState<SkillPlan | null>(null);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [selectedSkill, setSelectedSkill] = useState<SkillRecord | null>(null);
-  const [initialQuery, setInitialQuery] = useState('');
-  const [initialTask, setInitialTask] = useState('');
+  const [initialQuery] = useState(initialQueryParam);
+  const [initialTask] = useState(initialTaskParam);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Read URL params on mount for deep linking
-  useEffect(() => {
-    const tab = searchParams.get('tab');
-    const q = searchParams.get('q');
-    const task = searchParams.get('task');
-    if (tab === 'planner') setActiveTab('planner');
-    if (q) setInitialQuery(q);
-    if (task) setInitialTask(task);
-  }, [searchParams]);
 
   const handleSkillSelect = useCallback((skill: SkillRecord) => {
     setSelectedSkill(skill);
@@ -168,7 +162,7 @@ function SkillSearchPageInner() {
                 {/* Industry Filter */}
                 <IndustryFilter
                   mode="industry"
-                  onChange={(v) => {/* Used for display; planner detects industry from task */}}
+                  onChange={() => {/* Used for display; planner detects industry from task */}}
                 />
 
                 {/* Planner */}

@@ -99,7 +99,7 @@ function tokenize(text: string): string[] {
   if (!text) return [];
   const matches = text.toLowerCase().match(TOKEN_RE);
   if (!matches) return [];
-  return matches.filter(t => t.length >= 2);
+  return matches.filter(t => t.length >= 2 && !STOPWORDS.has(t));
 }
 
 function normalize(text: string): string {

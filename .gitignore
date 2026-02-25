@@ -40,6 +40,8 @@ npm-debug.log*
 
 # Internal (draft, chưa audit)
 CVF_INTERNAL_LITE/
+CVF Kernel Architecture/
+CVF – Controlled Intelligence Extension/
 __pycache__/
 
 # Large lock files in extension modules (regenerate via npm install)

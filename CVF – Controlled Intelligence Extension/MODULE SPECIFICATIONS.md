@@ -1,251 +1,197 @@
-1️⃣ Governance → Verification Engine
-verification.engine.ts
+# Module Specifications — CVF 1.7.0
 
-Inject vào phase exit
+> Spec reflects actual implementation after enterprise hardening.
 
-Enforce:
+---
 
-Test pass
+## 1️⃣ Governance → Policy Engine
 
-Diff size threshold
+### policy.engine.ts + policy.binding.ts
+- `evaluatePolicy({ riskScore })` → returns `{ allowed, reason }`
+- `bindPolicy({ sessionId, role, riskScore })` → wraps evaluatePolicy
+- `controlled.reasoning.ts` calls `bindPolicy()` directly — no trust of caller
 
-Risk compliance
+### governance.constants.ts
+- `GOVERNANCE_ESCALATION_THRESHOLD = 0.70` (R2 boundary)
+- `GOVERNANCE_HARD_RISK_THRESHOLD = 0.90` (R3 boundary)
 
-Logs clean
+### risk.mapping.ts
+- R0 (0.0–0.29), R1 (0.30–0.69), R2 (0.70–0.89), R3 (0.90–1.0)
 
-Proof artifact exists
+### role.mapping.ts
+- Phase A → RESEARCH, PLAN
+- Phase B → DESIGN
+- Phase C → BUILD, TEST, DEBUG
+- Phase D → REVIEW, RISK
 
-Không có proof → không Done.
+---
 
-phase.exit.criteria.ts
+## 2️⃣ Input Boundary (Hardening)
 
-Defines:
-interface PhaseExitCriteria {
-  requiredTestsPassed: boolean
-  diffWithinScope: boolean
-  riskValidated: boolean
-  logsClean: boolean
-  eleganceChecked: boolean
-}
-proof.of.correctness.ts
+### prompt.sanitizer.ts
+- Detects injection patterns: governance bypass, policy override, unrestricted mode
+- Actions: STRIP (remove), BLOCK (reject), LOG (monitor)
+- Runs BEFORE reasoning gate — reasoning receives sanitized input only
 
-Yêu cầu:
+---
 
-Test result
+## 3️⃣ Role Transition Guard
 
-Output sample
+### role.types.ts (source of truth)
+```ts
+enum AgentRole { PLAN, RESEARCH, DESIGN, BUILD, TEST, DEBUG, REVIEW, RISK }
+```
 
-Diff snapshot
-
-Risk assessment reference
-
-2️⃣ Elegance Policy Layer
-elegance.scorer.ts
-
-Heuristic:
-
-Cyclomatic complexity delta
-
-File count increase
-
-Dependency growth
-
-LOC delta ratio
-
-Score 0–100.
-
-Trigger refactor suggestion nếu:
-complexity_growth > 15%
-AND risk ≤ R2
-elegance.guard.ts
-
-Ngăn:
-
-Infinite refactor loop
-
-Refactor on trivial fix
-
-Refactor when risk ≥ R3
-
-3️⃣ Bug Fix Protocol
-bug.classifier.ts
-
-Phân loại:
-
-Syntax
-
-Failing test
-
-Runtime error
-
-Logic flaw
-
-Security
-
-Architectural
-
-autonomy.matrix.ts
-R0–R1 → auto-fix allowed
-R2 → limited auto-fix
-R3 → escalate mandatory
-
-fix.scope.guard.ts
-
-Không cho:
-
-Cross-module rewrite
-
-Architecture change
-
-Schema change
-
-4️⃣ Role Transition Guard (Single Agent)
-role.graph.ts
-
+### transition.validator.ts
 Allowed transitions:
+- PLAN → RESEARCH, DESIGN
+- BUILD → TEST, DEBUG
+- TEST → DEBUG
+- DEBUG → BUILD
+- REVIEW → PLAN
 
-PLAN → RESEARCH
-PLAN → DESIGN
-BUILD → TEST
-TEST → DEBUG
-DEBUG → BUILD
-REVIEW → RISK
+### recursion.guard.ts (Hardening)
+- Max transition depth per session: 20
+- Max same-role repetition: 3
+- Oscillation detection (A→B→A→B pattern)
+- Auto-locks session on violation
 
-Không được:
+---
 
-DEBUG → PLAN (unless restart)
-TEST → DESIGN
-loop.detector.ts
+## 4️⃣ Determinism Control
 
-Detect:
+### entropy.guard.ts
+- Self-calculates variance from `tokenProbabilities[]` when available
+- Falls back to caller `tokenVariance` (marked as "caller-provided")
+- Returns `{ entropyScore, unstable, source }`
 
-Same role repeated > N times
+### temperature.policy.ts
+- STRICT → 0.1, CONTROLLED → 0.4
 
-Oscillation pattern
+### reasoning.mode.ts
+- PLAN/REVIEW/RISK → STRICT
+- Others → CONTROLLED
 
-depth.limiter.ts
+### reproducibility.snapshot.ts
+- `promptHash` (djb2 algorithm)
+- `modelVersion` tracking
+- `snapshotId` = hash(session + role + prompt + temp + modelVersion)
 
-Max transition depth = 8 (configurable)
+---
 
-5️⃣ Context Segmentation
+## 5️⃣ Introspection
 
-Không spawn real agent.
+### self.check.ts
+- `runSelfCheck()` — validates sessionId, role, riskScore, entropyScore
 
-session.fork.ts:
+### reasoning.audit.ts
+- Calls `bindPolicy()` directly
+- Logs violations to governance audit log
 
-Fork reasoning branch
+### deviation.report.ts
+- Severity based on keyword matching (not count)
 
-Compress output
+### correction.plan.ts
+- `requiresGovernanceApproval`: LOW → no, MEDIUM/HIGH → yes
 
-Inject summary back
+---
 
-context.pruner.ts:
+## 6️⃣ Context Segmentation
 
-Trim history > threshold
+### context.segmenter.ts (main entry)
+- Wraps: pruner + forker + summary injector
 
-memory.boundary.ts:
+### context.types.ts
+- `ContextChunk`, `PhaseSummary`, `MemoryBoundary`, `ForkedSession`
 
-Separate temporary reasoning
+---
 
-Preserve core memory
+## 7️⃣ Learning Registry
 
-6️⃣ Lessons Registry
-
-lesson.schema.ts
-
+### lesson.schema.ts
+```ts
 interface Lesson {
   id: string
-  severity: 'low' | 'medium' | 'high'
+  version: string
   category: string
+  description: string
+  severity: 'low' | 'medium' | 'high'
   rootCause: string
   preventionRule: string
   riskLevel: string
-  version: string
   createdAt: Date
+  active: boolean
 }
+```
 
-lesson.injector.ts
+### lesson.store.ts
+- Persisted to `cvf_lessons.json`
+- Load on startup, save on mutation
 
-On session start → load relevant lessons
+### lesson.signing.ts (Hardening)
+- `signLesson()` → deterministic hash of all content fields
+- `verifyLesson()` → check signature matches
+- Detects tampering
 
-Match via keyword + category
+### conflict.detector.ts
+- Keyword similarity (Jaccard ≥ 40%) — not exact string match
+- Root cause conflict detection across categories
+- Supports Vietnamese stopwords
 
-conflict.detector.ts
+### lesson.injector.ts
+- Injects: description + rootCause + preventionRule
 
-Detect contradicting preventionRule
+---
 
-7️⃣ Telemetry
+## 8️⃣ Telemetry
 
-mistake_rate_tracker.ts
+All metrics persisted to `.jsonl` files with timestamps.
 
-Track corrections per task
+### mistake_rate_tracker.ts → `cvf_telemetry_mistakes.jsonl`
+- Time-windowed query: `getMistakeRateInWindow(ms)`
 
-elegance_score_tracker.ts
+### elegance_score_tracker.ts → `cvf_telemetry_elegance.jsonl`
+- Weighted scoring + trend analysis (recent vs overall)
 
-Track score trend
+### verification_metrics.ts → `cvf_telemetry_verification.jsonl`
+- Time-tracked + history for trend analysis
 
-verification_metrics.ts
+### governance_audit_log.ts → `cvf_audit.jsonl`
+- Append-only, queryable by event type
 
-Pass/fail per phase
+### anomaly.detector.ts (Hardening)
+- Monitors: mistake rate spikes, elegance degradation, verification drops
+- Triggers: NORMAL → STRICT → LOCKDOWN
+- Can only restrict, never grant more autonomy
 
-governance_audit_log.ts
+---
 
-Immutable log entries
+## 9️⃣ Rollback
 
-🔒 INTEGRATION STRATEGY
+### rollback.manager.ts → `cvf_rollback.jsonl`
+- Append snapshots, load on startup
+- `getAllSnapshots()` for full history
 
-Hook points:
+---
 
-Before Phase Exit → verification.engine
-On Role Switch → transition.policy
-On Bug Report → bug.classifier
-After Correction → lesson.store
-On Session Start → lesson.injector
+## 🔒 Reasoning Pipeline
 
-Zero bypass allowed.
+```
+Input → Sanitizer → Recursion Guard → Governance → Entropy → Prompt → Snapshot
+```
 
-🚦RISK ANALYSIS (Self Audit)
+Step 0: Sanitize input (BLOCK if injection detected)
+Step 0.5: Recursion guard (LOCK if oscillation/depth exceeded)
+Step 1: Governance check via `bindPolicy()` (BLOCK if R3)
+Step 2: Resolve reasoning mode + temperature
+Step 3: Entropy check (BLOCK if unstable + risk elevated)
+Step 4: Compose final prompt (sanitized)
+Step 5: Create reproducibility snapshot
 
-Potential risks:
+---
 
-Token overhead ↑
-Mitigation: context.pruner
+## 🔗 Integration with CVF Gốc
 
-Over-governance
-Mitigation: elegance guard threshold
-
-Infinite reasoning
-Mitigation: depth.limiter + loop.detector
-
-Lesson explosion
-Mitigation: severity filter + pruning
-
-🏷 VERSION DECLARATION
-## v1.7.0 – Controlled Intelligence Extension
-
-Added:
-- Continuous Verification Enforcement
-- Role Transition Governance
-- Controlled Autonomous Bug Fix Protocol
-- Structured Lessons Registry
-- Elegance Quality Guard
-- Governance Telemetry Metrics
-
-No changes to:
-- Core 4-phase workflow
-- Risk tier model
-- Authority matrix
-- Multi-agent architecture
-🎯 FINAL DECISION
-
-Đây là kiến trúc tối ưu nhất:
-
-Không phá CVF core
-
-Không mesh hóa uncontrolled
-
-Không biến thành creative chaos
-
-Gia cố governance
-
-Tăng autonomy nhưng có rào chắn
+- CVF gốc = absolute standard
+- Extension = agent runtime layer beneath human process layer
+- See [INTEGRATION.md](INTEGRATION.md) for full mapping

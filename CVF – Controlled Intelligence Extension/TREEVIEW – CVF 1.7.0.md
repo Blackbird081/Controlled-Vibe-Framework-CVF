@@ -4,8 +4,10 @@ Controlled-Vibe-Framework-CVF/
 │   ├── governance/
 │   │   ├── policy.binding.ts
 │   │   ├── policy.engine.ts
-│   │   ├── governance.constants.ts
-│   │   └── governance.types.ts
+│   │   ├── governance.constants.ts      ← aligned R2/R3 boundaries
+│   │   ├── governance.types.ts
+│   │   ├── risk.mapping.ts             ← R0-R3 ↔ riskScore 0.0-1.0
+│   │   └── role.mapping.ts             ← CVF phases A/B/C/D ↔ AgentRole
 │   │
 │   ├── risk/
 │   │   ├── risk.scorer.ts
@@ -14,66 +16,68 @@ Controlled-Vibe-Framework-CVF/
 │   │
 │   ├── rollback/
 │   │   ├── rollback.snapshot.ts
-│   │   └── rollback.manager.ts
+│   │   └── rollback.manager.ts          ← persisted cvf_rollback.jsonl
 │   │
 │   └── registry/
-│       ├── skill.registry.ts
-│       └── binding.registry.ts
+│       ├── skill.registry.ts            ← Map-based, lookup by name/phase/category
+│       └── binding.registry.ts          ← connects skills ↔ roles via CVF phases
 │
 ├── intelligence/
 │   ├── reasoning_gate/
-│   │   ├── controlled.reasoning.ts      ← calls bindPolicy(), uses constants
-│   │   └── reasoning.types.ts           ← removed policyCompliant field
+│   │   ├── controlled.reasoning.ts      ← sanitizer → recursion → governance → entropy → prompt → snapshot
+│   │   └── reasoning.types.ts
+│   │
+│   ├── input_boundary/                  ← NEW: hardening layer
+│   │   └── prompt.sanitizer.ts          ← injection detection + STRIP/BLOCK/LOG
 │   │
 │   ├── role_transition_guard/
 │   │   ├── role.types.ts                ← AgentRole enum (source of truth)
-│   │   ├── role.graph.ts                ← re-export shim only
-│   │   ├── transition.validator.ts      ← AllowedTransitions (source of truth)
+│   │   ├── role.graph.ts                ← re-export shim
+│   │   ├── transition.validator.ts      ← AllowedTransitions
+│   │   ├── recursion.guard.ts           ← NEW: max depth, oscillation, session lock
 │   │   ├── loop.detector.ts
 │   │   └── depth.limiter.ts
 │   │
 │   ├── context_segmentation/
-│   │   ├── context.types.ts             ← NEW: shared types
-│   │   ├── context.segmenter.ts         ← NEW: unified entry point
+│   │   ├── context.types.ts
+│   │   ├── context.segmenter.ts
 │   │   ├── context.pruner.ts
 │   │   ├── session.fork.ts
 │   │   ├── summary.injector.ts
 │   │   └── memory.boundary.ts
 │   │
 │   ├── determinism_control/
-│   │   ├── entropy.guard.ts
+│   │   ├── entropy.guard.ts             ← self-calculates variance
 │   │   ├── temperature.policy.ts
-│   │   ├── reasoning.mode.ts            ← import from role.types.ts
-│   │   └── reproducibility.snapshot.ts
+│   │   ├── reasoning.mode.ts
+│   │   └── reproducibility.snapshot.ts  ← promptHash + snapshotId + modelVersion
 │   │
 │   └── introspection/
-│       ├── self.check.ts                ← upgraded: session + reasoning check
-│       ├── reasoning.audit.ts           ← upgraded: calls bindPolicy directly
-│       ├── deviation.report.ts          ← upgraded: keyword-based severity
-│       └── correction.plan.ts           ← upgraded: severity-driven approval
+│       ├── self.check.ts
+│       ├── reasoning.audit.ts
+│       ├── deviation.report.ts          ← keyword-based severity
+│       └── correction.plan.ts           ← severity-driven approval
 │
 ├── learning/
 │   └── lessons_registry/
-│       ├── lesson.schema.ts             ← added: severity, rootCause, preventionRule, riskLevel
-│       ├── lesson.store.ts
+│       ├── lesson.schema.ts             ← severity, rootCause, preventionRule, riskLevel
+│       ├── lesson.store.ts              ← persisted cvf_lessons.json
+│       ├── lesson.signing.ts            ← NEW: integrity hash + verification
 │       ├── rule.versioning.ts
-│       ├── lesson.injector.ts           ← updated: injects rootCause + preventionRule
-│       └── conflict.detector.ts
+│       ├── lesson.injector.ts
+│       └── conflict.detector.ts         ← keyword similarity (Jaccard ≥ 40%) + rootCause
 │
 ├── telemetry/
-│   ├── mistake_rate_tracker.ts
-│   ├── elegance_score_tracker.ts
-│   ├── verification_metrics.ts
-│   └── governance_audit_log.ts
+│   ├── mistake_rate_tracker.ts          ← persisted + time-windowed
+│   ├── elegance_score_tracker.ts        ← weighted + trended + persisted
+│   ├── verification_metrics.ts          ← time-tracked + persisted
+│   ├── governance_audit_log.ts          ← append-only cvf_audit.jsonl
+│   └── anomaly.detector.ts             ← NEW: NORMAL → STRICT → LOCKDOWN triggers
 │
-├── FIX_ROADMAP_1.7.0.md
+├── INTEGRATION.md                       ← how extension relates to CVF gốc
 ├── CHANGELOG.md
 ├── GOVERNANCE_DOCTRINE.md
 ├── MODULE SPECIFICATIONS.md
-├── ENTERPRISE AUDIT SIMULATION.md
-└── README.md
-
-─────────────────────────────────────────
-NOTE: transition.policy.ts đã bị deprecated — không sử dụng.
-Có thể xóa an toàn khi cleanup.
-─────────────────────────────────────────
+├── README.md
+├── package.json
+└── tsconfig.json

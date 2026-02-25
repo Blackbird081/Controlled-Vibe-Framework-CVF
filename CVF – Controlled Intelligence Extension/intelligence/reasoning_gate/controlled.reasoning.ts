@@ -22,6 +22,10 @@ import {
 
 import { logGovernanceEvent } from "../../telemetry/governance_audit_log"
 
+// Hardening: input boundary + recursion guard
+import { sanitizePrompt } from "../input_boundary/prompt.sanitizer"
+import { checkTransition } from "../role_transition_guard/recursion.guard"
+
 /**
  * Central reasoning gate of CVF.
  * Governance check được thực hiện nội bộ — không trust caller.
@@ -38,6 +42,41 @@ export function controlledReasoning(
     riskScore,
     entropyScore = 0
   } = input
+
+  // 0️⃣ Input boundary — sanitize prompt BEFORE any processing
+  const sanitization = sanitizePrompt(basePrompt)
+  if (sanitization.blocked) {
+    logGovernanceEvent(
+      "INPUT_BLOCKED",
+      `[${sessionId}] Prompt injection detected: ${sanitization.threats.map(t => t.pattern).join(", ")}`
+    )
+    return {
+      decision: {
+        allowed: false,
+        reason: `Input blocked — threats: ${sanitization.threats.map(t => t.pattern).join(", ")}`,
+        temperature: 0,
+        mode: resolveReasoningMode(role)
+      }
+    }
+  }
+  const safePrompt = sanitization.sanitized
+
+  // 0.5️⃣ Recursion guard — check role transition limits
+  const recursionCheck = checkTransition(sessionId, role)
+  if (!recursionCheck.allowed) {
+    logGovernanceEvent(
+      recursionCheck.locked ? "SESSION_LOCKED" : "RECURSION_BLOCKED",
+      `[${sessionId}] ${recursionCheck.reason}`
+    )
+    return {
+      decision: {
+        allowed: false,
+        reason: recursionCheck.reason,
+        temperature: 0,
+        mode: resolveReasoningMode(role)
+      }
+    }
+  }
 
   // 1️⃣ Governance check (absolute priority) — gọi policy.engine trực tiếp
   const policyResult = bindPolicy({ sessionId, role, riskScore })
@@ -63,7 +102,7 @@ export function controlledReasoning(
   const temperature = resolveTemperature(mode)
 
   // 3️⃣ Entropy control — block nếu unstable + risk elevated
-  const entropyAssessment = assessEntropy(entropyScore)
+  const entropyAssessment = assessEntropy({ tokenVariance: entropyScore })
 
   if (entropyAssessment.unstable) {
     logGovernanceEvent(
@@ -96,15 +135,16 @@ MODE: ${mode}
 ${context}
 
 TASK:
-${basePrompt}
+${safePrompt}
 `
 
-  // 5️⃣ Snapshot for reproducibility
+  // 5️⃣ Snapshot for reproducibility (includes prompt hash)
   const snapshot = createSnapshot(
     sessionId,
     role,
     temperature,
-    entropyScore
+    entropyScore,
+    safePrompt   // ← sanitized prompt for reproducibility hash
   )
 
   return {

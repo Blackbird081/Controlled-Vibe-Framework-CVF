@@ -1,7 +1,8 @@
 // reasoning.types.ts
 
-import { AgentRole } from "../role_transition_guard/role.graph"
+import { AgentRole } from "../role_transition_guard/role.types"
 import { ReasoningMode } from "../determinism_control/temperature.policy"
+import { ReproducibilitySnapshot } from "../determinism_control/reproducibility.snapshot"
 
 export interface ReasoningInput {
   sessionId: string
@@ -29,11 +30,5 @@ export interface ReasoningDecision {
 
 export interface ReasoningResult {
   decision: ReasoningDecision
-  snapshot?: {
-    sessionId: string
-    role: AgentRole
-    temperature: number
-    entropyScore: number
-    timestamp: number
-  }
+  snapshot?: ReproducibilitySnapshot
 }

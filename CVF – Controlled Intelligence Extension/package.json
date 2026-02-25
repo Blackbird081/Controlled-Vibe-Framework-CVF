@@ -1,0 +1,13 @@
+{
+  "name": "cvf-controlled-intelligence-extension",
+  "version": "1.7.0",
+  "description": "CVF – Controlled Intelligence Extension. Agent runtime layer for the Controlled Vibe Framework.",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

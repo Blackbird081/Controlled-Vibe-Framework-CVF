@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
+import { useOpenClawConfig, OPENCLAW_MODE_INFO, type OpenClawMode } from '@/lib/openclaw-config';
 
 // Types
 export type ProviderKey = 'gemini' | 'openai' | 'anthropic';
@@ -41,6 +42,8 @@ export interface UserPreferences {
     autoSaveHistory: boolean;
     showWelcomeTour: boolean;
     analyticsEnabled: boolean;
+    openClawEnabled: boolean;
+    openClawMode: OpenClawMode;
     multiAgentMode: 'single' | 'multi';
     agentProviders: {
         orchestrator: ProviderKey;
@@ -71,6 +74,8 @@ const defaultSettings: SettingsData = {
         autoSaveHistory: true,
         showWelcomeTour: true,
         analyticsEnabled: true,
+        openClawEnabled: false,
+        openClawMode: 'disabled' as OpenClawMode,
         multiAgentMode: 'single',
         agentProviders: {
             orchestrator: 'gemini',
@@ -244,6 +249,10 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             autoSave: 'Tự động lưu history',
             showTour: 'Hiện welcome tour',
             analytics: 'Bật analytics (local-only)',
+            openClaw: '🐾 OpenClaw',
+            openClawEnabled: 'Bật OpenClaw Adapter',
+            openClawMode: 'Chế độ OpenClaw',
+            openClawDesc: 'AI có thể đề xuất. Chỉ CVF mới được thực thi.',
             multiAgentMode: 'Chế độ Multi-Agent',
             multiAgentSingle: 'Single AI (1 AI nhiều vai)',
             multiAgentMulti: 'Multi AI (mỗi vai 1 AI)',
@@ -278,6 +287,10 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             autoSave: 'Auto-save history',
             showTour: 'Show welcome tour',
             analytics: 'Enable analytics (local-only)',
+            openClaw: '🐾 OpenClaw',
+            openClawEnabled: 'Enable OpenClaw Adapter',
+            openClawMode: 'OpenClaw Mode',
+            openClawDesc: 'AI can propose. Only CVF can execute.',
             multiAgentMode: 'Multi-Agent Mode',
             multiAgentSingle: 'Single AI (one AI, many roles)',
             multiAgentMulti: 'Multi AI (one AI per role)',
@@ -444,6 +457,57 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                 {/* Preferences Tab */}
                 {activeTab === 'preferences' && (
                     <div className="space-y-6">
+                        {/* OpenClaw Adapter */}
+                        <div className={`p-4 rounded-xl border-2 transition-all ${settings.preferences.openClawEnabled
+                                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                                : 'border-gray-200 dark:border-gray-700'
+                            }`}>
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xl">🐾</span>
+                                    <div>
+                                        <span className="font-medium text-gray-900 dark:text-white">
+                                            {l.openClaw}
+                                        </span>
+                                        <p className="text-xs text-gray-500">{l.openClawDesc}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        const newEnabled = !settings.preferences.openClawEnabled;
+                                        updatePreferences({
+                                            openClawEnabled: newEnabled,
+                                            openClawMode: newEnabled ? 'proposal-only' : 'disabled',
+                                        });
+                                    }}
+                                    className={`w-12 h-6 rounded-full transition-colors ${settings.preferences.openClawEnabled
+                                        ? 'bg-emerald-600' : 'bg-gray-300 dark:bg-gray-600'
+                                        }`}
+                                >
+                                    <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.preferences.openClawEnabled ? 'translate-x-6' : 'translate-x-0.5'
+                                        }`} />
+                                </button>
+                            </div>
+
+                            {settings.preferences.openClawEnabled && (
+                                <div className="mt-3">
+                                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                        {l.openClawMode}
+                                    </label>
+                                    <select
+                                        value={settings.preferences.openClawMode}
+                                        onChange={(e) => updatePreferences({ openClawMode: e.target.value as OpenClawMode })}
+                                        className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200
+                                                   dark:border-gray-600 bg-white dark:bg-gray-700
+                                                   text-gray-900 dark:text-white"
+                                    >
+                                        <option value="proposal-only">📝 {language === 'vi' ? 'Chỉ đề xuất' : 'Proposal Only'}</option>
+                                        <option value="full">🚀 {language === 'vi' ? 'Đầy đủ' : 'Full'}</option>
+                                    </select>
+                                </div>
+                            )}
+                        </div>
+
                         {/* Multi-Agent Mode */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

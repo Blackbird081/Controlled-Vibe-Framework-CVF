@@ -1,0 +1,59 @@
+{
+  "manifestVersion": "1.0.0",
+  "baselineDate": "2026-02-25",
+  "baselineSource": "docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md",
+  "policy": {
+    "blockFrozenCoreEditsOnEnforce": true
+  },
+  "frozenCorePaths": [
+    "v1.0/**",
+    "v1.1/**",
+    "v1.2/**"
+  ],
+  "deepScanTriggers": [
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/safety-status.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governance-context.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governance.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governance-engine.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/enforcement.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/enforcement-log.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/security.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/layout.tsx",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/layout.tsx",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/vitest.config.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package.json",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/auth/**",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/governance/**",
+    "EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/**",
+    "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/**",
+    "EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/**"
+  ],
+  "focusedTestMap": [
+    {
+      "pattern": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/**",
+      "suggestedCommand": "cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run test:run -- src/components/<changed-file>.test.tsx"
+    },
+    {
+      "pattern": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/**",
+      "suggestedCommand": "cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run test:run -- src/lib/<changed-file>.test.ts"
+    },
+    {
+      "pattern": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/**",
+      "suggestedCommand": "cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run test:run -- src/app/<route-or-page>.test.tsx"
+    },
+    {
+      "pattern": "EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/**",
+      "suggestedCommand": "cd EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE && npx vitest run"
+    },
+    {
+      "pattern": "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/**",
+      "suggestedCommand": "cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx vitest run"
+    },
+    {
+      "pattern": "EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/**",
+      "suggestedCommand": "cd EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD && npx vitest run"
+    }
+  ]
+}

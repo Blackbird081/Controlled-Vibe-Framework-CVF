@@ -13,6 +13,22 @@
 
 ---
 
+## 🔔 Testing Standard Notice (Mandatory)
+
+Before running any tests, read:
+- [Incremental Test Log](docs/CVF_INCREMENTAL_TEST_LOG.md)
+- [Core Compatibility Baseline](docs/CVF_CORE_COMPAT_BASELINE.md)
+
+Run compatibility gate first:
+
+```bash
+python governance/compat/check_core_compat.py --base <BASE_REF> --head <HEAD_REF>
+```
+
+Only run full regression when gate/triggers require it.
+
+---
+
 ## 🎯 CVF In 30 Seconds
 
 CVF helps you **control AI coding** through:
@@ -174,7 +190,7 @@ When using AI to code without a framework:
 | **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
 | **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 141 skills across 12 domains |
 | **🤖 Agent Skills** | [34 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide v1](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Usage Guide v2](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-new-skills-v2.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
-| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) |
+| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) · [Core Compatibility Baseline](docs/CVF_CORE_COMPAT_BASELINE.md) |
 
 **Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
 

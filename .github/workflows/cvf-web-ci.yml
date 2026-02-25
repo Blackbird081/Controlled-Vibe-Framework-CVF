@@ -18,12 +18,21 @@ jobs:
         working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Use Node 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+      - name: Compatibility gate (impact report)
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python ../../../governance/compat/check_core_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --json --write-report ../../../governance/compat/last-report.json
+          python ../../../governance/compat/check_core_compat.py --base "$BASE_SHA" --head "$HEAD_SHA"
       - name: Install
         run: npm ci
       - name: Lint

@@ -133,8 +133,38 @@ export function useOpenClawConfig() {
     };
 }
 
-// ==================== SAMPLE DATA ====================
-// In production, these would come from the Safety Runtime API
+// ==================== API HELPERS ====================
+
+export async function submitToOpenClaw(
+    message: string,
+    providerSettings?: { provider: string; apiKey: string; model: string },
+): Promise<any> {
+    const res = await fetch('/api/openclaw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            message,
+            provider: providerSettings?.provider,
+            apiKey: providerSettings?.apiKey,
+            model: providerSettings?.model,
+        }),
+    });
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json();
+}
+
+export async function fetchProposals(): Promise<OpenClawProposal[]> {
+    try {
+        const res = await fetch('/api/openclaw');
+        if (!res.ok) return [];
+        const data = await res.json();
+        return data.proposals || [];
+    } catch {
+        return [];
+    }
+}
+
+// ==================== SAMPLE DATA (fallback) ====================
 
 export const SAMPLE_PROPOSALS: OpenClawProposal[] = [
     { id: 'p-001', action: 'Deploy auth system', source: 'api', riskLevel: 'low', state: 'approved', time: '2 min ago' },

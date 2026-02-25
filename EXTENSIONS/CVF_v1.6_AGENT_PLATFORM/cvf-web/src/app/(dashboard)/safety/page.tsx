@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useSettings } from '@/components/Settings';
 import {
@@ -14,6 +14,8 @@ import {
 import {
     OPENCLAW_MODE_INFO,
     SAMPLE_PROPOSALS,
+    submitToOpenClaw,
+    fetchProposals,
     type OpenClawMode,
     type OpenClawProposal,
 } from '@/lib/openclaw-config';
@@ -351,6 +353,99 @@ function ProposalsTable({ proposals, language }: {
     );
 }
 
+function OpenClawTestSection({ language, onSubmit, lastResult }: {
+    language: 'vi' | 'en';
+    onSubmit: (message: string) => void;
+    lastResult: any | null;
+}) {
+    const [input, setInput] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async () => {
+        if (!input.trim() || loading) return;
+        setLoading(true);
+        try {
+            await onSubmit(input.trim());
+            setInput('');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+            <div className="px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                    {language === 'vi' ? '🧪 Gửi yêu cầu qua OpenClaw' : '🧪 Send Request via OpenClaw'}
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {language === 'vi'
+                        ? 'Nhập một yêu cầu để OpenClaw phân tích, tạo proposal, và CVF quyết định.'
+                        : 'Enter a request for OpenClaw to analyze, create a proposal, and let CVF decide.'}
+                </p>
+            </div>
+            <div className="p-4 sm:p-6 space-y-4">
+                <div className="flex gap-2">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                        placeholder={language === 'vi' ? 'Ví dụ: Deploy auth system...' : 'e.g. Deploy auth system...'}
+                        className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600
+                                   bg-gray-50 dark:bg-gray-900 text-sm
+                                   focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    />
+                    <button
+                        onClick={handleSubmit}
+                        disabled={!input.trim() || loading}
+                        className="px-5 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700
+                                   disabled:opacity-50 disabled:cursor-not-allowed
+                                   transition-colors text-sm font-medium whitespace-nowrap"
+                    >
+                        {loading ? '⏳' : '🐾'} {language === 'vi' ? 'Gửi' : 'Send'}
+                    </button>
+                </div>
+
+                {lastResult && (
+                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-900 space-y-3">
+                        <div className="flex items-center gap-2">
+                            <span className="text-lg">
+                                {lastResult.decision?.status === 'approved' ? '✅' :
+                                    lastResult.decision?.status === 'pending' ? '⏳' : '🚫'}
+                            </span>
+                            <span className="font-semibold text-sm">{lastResult.response}</span>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                            <div className="p-2 rounded bg-white dark:bg-gray-800">
+                                <div className="text-gray-500">{language === 'vi' ? 'Hành động' : 'Action'}</div>
+                                <div className="font-mono font-medium mt-0.5">{lastResult.proposal?.action}</div>
+                            </div>
+                            <div className="p-2 rounded bg-white dark:bg-gray-800">
+                                <div className="text-gray-500">{language === 'vi' ? 'Độ tin cậy' : 'Confidence'}</div>
+                                <div className="font-mono font-medium mt-0.5">{(lastResult.proposal?.confidence * 100).toFixed(0)}%</div>
+                            </div>
+                            <div className="p-2 rounded bg-white dark:bg-gray-800">
+                                <div className="text-gray-500">{language === 'vi' ? 'Rủi ro' : 'Risk'}</div>
+                                <div className="font-mono font-medium mt-0.5">{lastResult.proposal?.riskLevel?.toUpperCase()}</div>
+                            </div>
+                            <div className="p-2 rounded bg-white dark:bg-gray-800">
+                                <div className="text-gray-500">Mode</div>
+                                <div className="font-mono font-medium mt-0.5">{lastResult.mode === 'real' ? '🤖 AI' : '📋 Mock'}</div>
+                            </div>
+                        </div>
+                        {lastResult.guard?.reason && (
+                            <div className="text-xs text-amber-600 dark:text-amber-400">
+                                ⚠️ Guard: {lastResult.guard.reason}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
 // ==================== MAIN PAGE ====================
 
 export default function SafetyPage() {
@@ -362,13 +457,42 @@ export default function SafetyPage() {
     const openClawEnabled = settings.preferences.openClawEnabled ?? false;
     const openClawMode = (settings.preferences.openClawMode ?? 'disabled') as OpenClawMode;
 
+    // Live proposals
+    const [proposals, setProposals] = useState<OpenClawProposal[]>(SAMPLE_PROPOSALS);
+    const [lastResult, setLastResult] = useState<any>(null);
+
     const proposalStats = useMemo(() => {
-        const total = SAMPLE_PROPOSALS.length;
-        const blocked = SAMPLE_PROPOSALS.filter(p => p.state === 'blocked' || p.state === 'rejected').length;
-        const pending = SAMPLE_PROPOSALS.filter(p => p.state === 'pending').length;
-        const openClawCount = SAMPLE_PROPOSALS.filter(p => p.source === 'openclaw').length;
+        const total = proposals.length;
+        const blocked = proposals.filter(p => p.state === 'blocked' || p.state === 'rejected').length;
+        const pending = proposals.filter(p => p.state === 'pending').length;
+        const openClawCount = proposals.filter(p => p.source === 'openclaw').length;
         return { total, blocked, pending, openClawCount };
+    }, [proposals]);
+
+    const loadProposals = useCallback(async () => {
+        const live = await fetchProposals();
+        if (live.length > 0) {
+            setProposals(live as OpenClawProposal[]);
+        }
     }, []);
+
+    useEffect(() => {
+        if (openClawEnabled) loadProposals();
+    }, [openClawEnabled, loadProposals]);
+
+    const handleTestSubmit = useCallback(async (message: string) => {
+        // Find first enabled provider with API key
+        const providerEntries = Object.entries(settings.providers) as [string, any][];
+        const activeProvider = providerEntries.find(([, v]) => v.enabled && v.apiKey);
+
+        const providerSettings = activeProvider
+            ? { provider: activeProvider[0], apiKey: activeProvider[1].apiKey, model: activeProvider[1].selectedModel }
+            : undefined;
+
+        const result = await submitToOpenClaw(message, providerSettings);
+        setLastResult(result);
+        await loadProposals();
+    }, [settings.providers, loadProposals]);
 
     const handleToggle = () => {
         const newEnabled = !openClawEnabled;
@@ -439,8 +563,17 @@ export default function SafetyPage() {
                 onModeChange={handleModeChange}
             />
 
+            {/* OpenClaw Test Section */}
+            {openClawEnabled && (
+                <OpenClawTestSection
+                    language={lang}
+                    onSubmit={handleTestSubmit}
+                    lastResult={lastResult}
+                />
+            )}
+
             {/* Proposals Table */}
-            <ProposalsTable proposals={SAMPLE_PROPOSALS} language={lang} />
+            <ProposalsTable proposals={proposals} language={lang} />
 
             {/* Risk Levels */}
             <div>

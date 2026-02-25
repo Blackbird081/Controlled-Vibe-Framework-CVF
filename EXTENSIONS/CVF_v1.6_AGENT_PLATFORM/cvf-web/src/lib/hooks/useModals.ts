@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 export type ModalName = 'userContext' | 'settings' | 'aiUsage' | 'apiKeyWizard' | 'onboarding';
 
@@ -13,10 +13,14 @@ export function useModals(permissions?: {
     const [showSettings, setShowSettings] = useState(false);
     const [showAIUsage, setShowAIUsage] = useState(false);
     const [showApiKeyWizard, setShowApiKeyWizard] = useState(false);
-    const [showOnboarding, setShowOnboarding] = useState(() => {
-        if (typeof window === 'undefined') return false;
-        return !localStorage.getItem('cvf_onboarding_complete');
-    });
+    const [showOnboarding, setShowOnboarding] = useState(false);
+
+    // Defer localStorage check to client-side only to prevent hydration mismatch
+    useEffect(() => {
+        if (!localStorage.getItem('cvf_onboarding_complete')) {
+            setShowOnboarding(true);
+        }
+    }, []);
 
     const handleOnboardingComplete = useCallback(() => {
         localStorage.setItem('cvf_onboarding_complete', 'true');

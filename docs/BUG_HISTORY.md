@@ -13,6 +13,8 @@
 - [How to Use This Document](#how-to-use-this-document)
 - [Bug Log](#bug-log)
   - [BUG-001: Next.js Hydration Error](#bug-001-nextjs-hydration-error)
+  - [BUG-008: API Key Wizard Button Missing onClick](#bug-008-api-key-wizard-button-missing-onclick)
+  - [BUG-009: Tools Page Static Cards No Interactivity](#bug-009-tools-page-static-cards-no-interactivity)
 - [Quick Reference: Common Error Patterns](#quick-reference-common-error-patterns)
 - [Prevention Checklist](#prevention-checklist)
 
@@ -122,6 +124,87 @@ This caused the `hasAnyApiKey` check in `page.tsx` to evaluate differently on se
 
 ---
 
+### BUG-008: API Key Wizard Button Missing onClick
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-02-26 |
+| **Severity** | 🟡 Medium |
+| **Component** | cvf-web (Dashboard Home Page) |
+| **File(s)** | `src/app/(dashboard)/page.tsx`, `src/app/(dashboard)/layout.tsx` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+No error thrown — button simply had no effect when clicked.
+```
+
+**Root Cause:**  
+The "Mở API Key Wizard" button on the home page banner (line 237) was rendered as `<button className="...">` without any `onClick` handler. The modal system (`useModals`) lives in `layout.tsx`, but `page.tsx` had no access to it — the two components don't share state directly.
+
+**Solution:**
+
+```diff
+// page.tsx — dispatch custom event
+- <button className="px-4 py-2 rounded-lg bg-amber-600 ...">
++ <button
++     onClick={() => window.dispatchEvent(new CustomEvent('cvf:openApiKeyWizard'))}
++     className="px-4 py-2 rounded-lg bg-amber-600 ..."
++ >
+
+// layout.tsx — listen for event
++ useEffect(() => {
++     const handler = () => modals.openModal('apiKeyWizard');
++     window.addEventListener('cvf:openApiKeyWizard', handler);
++     return () => window.removeEventListener('cvf:openApiKeyWizard', handler);
++ }, [modals]);
+```
+
+**Prevention:**
+- ✅ Always add `onClick` handler when creating `<button>` elements
+- ✅ Use custom events or React Context for cross-component communication between layout and pages
+- ❌ Never render a button without an action — at minimum add a TODO comment
+
+**Related Commits:** `67dc382`
+
+---
+
+### BUG-009: Tools Page Static Cards No Interactivity
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-02-26 |
+| **Severity** | 🟡 Medium |
+| **Component** | cvf-web (ToolsPage) |
+| **File(s)** | `src/components/ToolsPage.tsx` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+No error thrown — tool cards displayed as static documentation with no click response.
+Banner "Coming Soon" implied tools were not yet functional.
+```
+
+**Root Cause:**  
+`ToolsPage.tsx` rendered all tools using `<div>` elements (not `<button>`) with no `onClick` handlers. The tools were treated as read-only documentation cards. Meanwhile, the tools' `execute()` functions in `agent-tools.tsx` were fully functional — only the UI layer was missing interactivity.
+
+**Solution:**  
+Rewrote `ToolsPage.tsx`:
+1. Changed `<div>` cards to `<button>` elements with `onClick` handlers
+2. Added state management: `selectedToolId`, `params`, `lastExecResult`
+3. When a card is clicked, it expands to show input fields + "Execute" button
+4. Execute button calls `executeTool()` and displays result inline
+5. Removed the "Coming Soon" banner
+
+**Prevention:**
+- ✅ Always wire up UI to existing backend/tool logic
+- ✅ Use `<button>` for clickable elements, not `<div>`
+- ✅ Remove "Coming Soon" banners when features are implemented
+
+**Related Commits:** `67dc382`
+
+---
+
 ## Quick Reference: Common Error Patterns
 
 ### Next.js / React
@@ -133,6 +216,8 @@ This caused the `hasAnyApiKey` check in `page.tsx` to evaluate differently on se
 | `Invalid hook call` | Hook called outside component or conditionally | Check hook rules |
 | `Module not found` | Wrong import path or missing dependency | Check `tsconfig.json` paths, run `npm install` |
 | `ChunkLoadError` | Stale cached chunks after deployment | Clear `.next` cache, hard refresh |
+| Button has no effect | Missing `onClick` handler | Check JSX for `onClick` prop |
+| Card/div not clickable | Using `<div>` instead of `<button>` | Replace with `<button>` and add handler |
 
 ### TypeScript
 

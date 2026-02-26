@@ -2,7 +2,9 @@
 
 > **Purpose**: Document all bugs encountered during development, their root causes, solutions, and prevention strategies.  
 > **Last Updated**: 2026-02-26  
-> **Maintained by**: CVF Development Team
+> **Maintained by**: CVF Development Team  
+> **Governance Policy**: [`CVF_BUG_DOCUMENTATION_GUARD.md`](../governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md)  
+> **Compat Check**: `python governance/compat/check_bug_doc_compat.py --enforce`
 
 ---
 

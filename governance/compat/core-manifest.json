@@ -54,6 +54,14 @@
     {
       "pattern": "EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/**",
       "suggestedCommand": "cd EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD && npx vitest run"
+    },
+    {
+      "pattern": "docs/BUG_HISTORY.md",
+      "suggestedCommand": "python governance/compat/check_bug_doc_compat.py --base HEAD~5 --head HEAD"
+    },
+    {
+      "pattern": "governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md",
+      "suggestedCommand": "python governance/compat/check_bug_doc_compat.py --base HEAD~5 --head HEAD"
     }
   ]
 }

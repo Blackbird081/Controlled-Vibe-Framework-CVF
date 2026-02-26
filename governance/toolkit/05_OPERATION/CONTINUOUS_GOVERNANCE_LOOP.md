@@ -55,6 +55,7 @@ Self-UAT MUST re-run if:
 - Role authority modified
 - Agent shows inconsistent refusal
 - Operator explicitly requests re-validation
+- Bug fix pushed without BUG_HISTORY.md documentation (see CVF_BUG_DOCUMENTATION_GUARD.md)
 
 ---
 

@@ -110,6 +110,108 @@ Template:
 - Notes/Risks:
   - Keep `core-manifest.json` in sync when trigger files or architecture boundaries change.
 
+## [2026-02-25] Batch: CVF Kernel Architecture independent pre-fix assessment
+- Change reference:
+  - New folder under evaluation: `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/` (untracked prototype)
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**`
+  - `docs/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`
+- Tests/execution performed:
+  - Structural/code audit across all kernel layers
+  - Isolated type-check via local TypeScript binary -> FAIL (compile mismatches)
+- Result:
+  - Decision = **NO-GO** for integration at current state
+  - Baseline file created for fix tracking:
+    - `docs/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`
+- Skip scope:
+  - No full regression run (module not integrated, no package/test harness yet)
+- Notes/Risks:
+  - Must fix compile + invariant enforcement + CVF risk model compatibility before merge consideration.
+
+## [2026-02-25] Batch: CVF Kernel Architecture fix roadmap created
+- Change reference:
+  - Roadmap generated from pre-fix findings F1-F6.
+- Impacted scope:
+  - `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+- Result:
+  - Execution plan established (Phase 0 -> Phase 6) with gate criteria and milestones.
+- Skip scope:
+  - No code fix executed in this batch (planning only).
+- Notes/Risks:
+  - Publish remains blocked until post-fix reassessment passes.
+
+## [2026-02-25] Batch: Kernel tree split + roadmap alignment update
+- Change reference:
+  - Split architecture docs into target vs implemented views before code fix.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_TARGET.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW.md` (converted to index)
+  - `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md` (added Target vs Implemented table + core preservation principle)
+- Result:
+  - Documentation baseline now separates design intent from actual implementation.
+  - Roadmap explicitly enforces: CVF current architecture is root baseline; kernel changes are additive only.
+- Skip scope:
+  - No runtime/code fix yet in this batch (docs-first alignment only).
+- Notes/Risks:
+  - Keep both tree files updated during each fix phase to avoid drift.
+
+## [2026-02-25] Batch: CVF Kernel Phase 1 fix (compile and naming normalization)
+- Change reference:
+  - Phase 1 execution from `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/execution_orchestrator.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/01_domain_lock/domain_guard.ts` (renamed from `domain.guard`)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/01_domain_lock/domain.types.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/01_domain_lock/domain.registry.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/02_contract_runtime/contract.types.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/02_contract_runtime/contract_enforcer.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/risk.types.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/risk_scorer.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.router.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.risk.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tsconfig.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+- Tests/execution performed:
+  - `node EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/node_modules/typescript/bin/tsc --noEmit --target ES2020 --module commonjs --skipLibCheck --pretty false <all-ts-files-in-folder>` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run typecheck` -> PASS
+- Result:
+  - Previous compile blockers resolved.
+  - Module now has local typecheck gate.
+- Skip scope:
+  - Runtime behavior regression tests still pending (Phase 4 test suite not implemented yet).
+- Notes/Risks:
+  - Risk compatibility mapping to CVF levels added (`R0-R4`) but requires dedicated behavior tests before integration decision.
+
+## [2026-02-25] Batch: CVF Kernel Phase 2/4 progress (runtime hardening + behavior tests)
+- Change reference:
+  - Continued execution from kernel fix roadmap (Phase 2, 3, 4 in progress).
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/execution_orchestrator.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/risk.types.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/risk_scorer.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.router.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.risk.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/*.test.ts`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (12/12, 4 files)
+- Result:
+  - Runtime now enforces domain gate hard in orchestrator.
+  - Optional capability authorization integrated.
+  - IO contract runtime enforcement integrated.
+  - Risk scoring now emits CVF-compatible `cvfRiskLevel` (`R0-R4`) and refusal flow validated.
+  - Initial behavior suite established and passing.
+- Skip scope:
+  - Full integration tests against `cvf-web` governance stack not executed yet.
+  - Post-fix independent assessment not executed yet.
+- Notes/Risks:
+  - Module remains under kernel-fix track until Phase 6 reassessment gate.
+
 ## [2026-02-25] Batch: Web UI updates (OpenClaw + useModals)
 - Change reference:
   - `3424138` (hydration fix in `useModals`)
@@ -125,3 +227,225 @@ Template:
   - Unrelated components/libs: skipped because unchanged.
 - Notes/Risks:
   - Initial run had one assertion conflict (duplicate text match), fixed by using non-ambiguous assertion.
+
+## [2026-02-25] Batch: CVF Kernel architecture target-completion fix
+- Change reference:
+  - Final closure pass for pre-fix findings (F2/F3/F5/F6 partial items).
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/01_domain_lock/**` (added `domain_map.schema.ts`, strict preflight domain lock)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/02_contract_runtime/**` (registry/matrix/transformation/validator + runtime wiring)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/**` (assumption/lineage/propagation/drift/rollback)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/**` (policy/rewrite/clarification/alternative)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/05_creative_control/**` (creative permission + provenance tagging)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/**` (orchestrator no-bypass chain + telemetry trace)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/*.test.ts` (expanded suite + CVF policy parity test)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+  - `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+  - `docs/CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run typecheck` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (22/22, 7 files)
+- Result:
+  - Target modules are implemented and wired in module scope.
+  - CVF risk policy parity validated against `cvf-web` baseline risk gate behavior.
+  - Post-fix gate updated to **GO (module scope, local)**.
+- Skip scope:
+  - Full repo regression (`cvf-web` full suite): skipped because changes are isolated to ignored kernel module/docs and no active runtime integration in mainline path.
+- Notes/Risks:
+  - Folder remains ignored in git; CI integration requires explicit owner decision to unignore and wire pipeline.
+
+## [2026-02-25] Batch: Kernel canonical mapping + folder normalization
+- Change reference:
+  - Standardized module identity, naming, and folder placement per CVF convention.
+- Impacted scope:
+  - Folder renamed/moved:
+    - `CVF Kernel Architecture/` -> `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/`
+  - Canonical mapping notes added:
+    - `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+  - Path/script/reference updates:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/cvf_policy_parity.test.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW*.md`
+    - `docs/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`
+    - `docs/CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md`
+    - `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+    - `.gitignore` (removed stale ignore entry for old folder path)
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (22/22, 7 files)
+- Result:
+  - Module now follows CVF extension naming convention and sits under `EXTENSIONS/`.
+  - Team-facing docs now use one canonical module ID and layer/version mapping.
+- Skip scope:
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Repo-level CI integration for this extension remains a separate activation decision.
+
+## [2026-02-25] Batch: Kernel remap to Safety Runtime submodule
+- Change reference:
+  - Owner decision: keep Kernel Architecture as submodule under Safety Runtime (`v1.7.1`), not standalone extension version.
+- Impacted scope:
+  - Folder remap:
+    - `EXTENSIONS/CVF_v1.7.1_KERNEL_ARCHITECTURE/` -> `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/`
+  - Canonical mapping note update:
+    - `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+  - Runtime scripts/test runner isolation after move:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs` (new)
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/cvf_policy_parity.test.ts`
+  - Path updates in kernel assessment docs:
+    - `docs/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`
+    - `docs/CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md`
+    - `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (22/22, 7 files)
+- Result:
+  - Module is now placed exactly in Safety Runtime tree as a submodule.
+  - Canonical module path for team usage is finalized.
+- Skip scope:
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Repo-level CI wiring for this submodule remains pending.
+
+## [2026-02-25] Batch: Kernel advanced upgrade (Phase 7-9 baseline)
+- Change reference:
+  - Advanced hardening implementation from roadmap (entrypoint enforcement, policy versioning, forensic/CI baseline).
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/execution_orchestrator.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/kernel_runtime_entrypoint.ts` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/llm_adapter.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal_policy.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal_policy_registry.ts` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.router.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/internal_ledger/*.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/entrypoint_enforcement.test.ts` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/refusal_policy_golden.test.ts` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/golden/refusal-policy.v1.json` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/ROLLOUT_PLAN.md` (new)
+  - `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+  - `docs/CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run ci:gate` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (26/26, 9 files)
+- Result:
+  - Phase 7 baseline complete: mandatory entrypoint + anti-bypass controls.
+  - Phase 8 baseline complete: versioned refusal policy + golden regression dataset.
+  - Phase 9 baseline complete: forensic trace fields + module CI gate + rollout plan doc.
+- Skip scope:
+  - Parent `CVF_v1.7.1_SAFETY_RUNTIME` repo-level workflow integration not changed in this batch.
+- Notes/Risks:
+  - Next step for production promotion is wiring kernel gate into shared CI workflow.
+
+## [2026-02-25] Batch: Kernel coverage quality snapshot
+- Change reference:
+  - Coverage measurement for `kernel-architecture` after Phase 7-9 baseline.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/*.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/risk-check.ts`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && node ./node_modules/vitest/vitest.mjs run --config "D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF/EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs" --dir "D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF/EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" --coverage` -> PASS (26/26, 9 files)
+- Coverage result:
+  - Statements: **44.82%**
+  - Branches: **34.61%**
+  - Functions: **50.00%**
+  - Lines: **52.00%**
+  - Reported file: `risk-check.ts` (uncovered lines: `25-40,58,72`)
+- Quality assessment:
+  - **NOT PASS** for production-grade coverage gate (below common threshold 80%+).
+  - Functional correctness gate is PASS (`26/26`), but test breadth for untested paths is still limited.
+- Notes/Risks:
+  - Current coverage report scope is narrow; need explicit source include/threshold policy in `vitest.config.mjs` before using coverage as hard release gate.
+
+## [2026-02-25] Batch: Coverage standard enforcement (80 global / 90 core branches)
+- Change reference:
+  - Owner safety rule applied: all coverage metrics >= 80%, core safety branches >= 90%.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/domain_guard.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/risk_refusal.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/entrypoint_enforcement.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/execution_orchestrator.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (33/33, 9 files)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run ci:gate` -> PASS
+- Coverage result (enforced scope):
+  - Global: Statements `98.35%`, Branches `94.59%`, Functions `100%`, Lines `99.41%`
+  - Core branches:
+    - `runtime/execution_orchestrator.ts`: Statements `98.9%`, Branches `90.69%`, Functions `100%`, Lines `98.9%`
+    - `runtime/kernel_runtime_entrypoint.ts`: `100%` all metrics
+    - `runtime/llm_adapter.ts`: `100%` all metrics
+    - `kernel/01_domain_lock/domain_guard.ts`: `100%` all metrics
+    - `kernel/02_contract_runtime/contract_runtime_engine.ts`: `100%` all metrics
+    - `kernel/03_contamination_guard/risk_scorer.ts`: Statements `94.73%`, Branches `94.44%`, Functions `100%`, Lines `100%`
+    - `kernel/04_refusal_router/refusal.router.ts`: `100%` all metrics
+- Result:
+  - Coverage gate now enforced by config and CI script.
+  - Module meets owner-defined safety threshold (80 global / 90 core branches).
+- Skip scope:
+  - No GitHub push/merge actions executed (owner approval required).
+
+## [2026-02-25] Batch: Kernel docs cleanup + expanded coverage scope
+- Change reference:
+  - Owner request: clean/update kernel markdown docs first, then expand coverage.
+- Impacted scope:
+  - Markdown cleanup in module:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/Thong_tin.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_TARGET.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/ROLLOUT_PLAN.md`
+  - Coverage expansion + tests:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/kernel_expanded_coverage.test.ts` (new)
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (43/43, 10 files)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run ci:gate` -> PASS
+- Coverage result (expanded scope):
+  - Scope: `kernel/**/*.ts`, `runtime/**/*.ts`, `internal_ledger/**/*.ts` (with explicit exclusions for type/schema-only artifacts).
+  - Global: Statements `96.52%`, Branches `90.78%`, Functions `100%`, Lines `97.11%`
+  - Core branch thresholds (>=90) remain PASS.
+- Result:
+  - Kernel docs are synchronized with current module structure and gate policy.
+  - Coverage scope now reflects broader runtime/kernel logic, not only minimal core subset.
+- Skip scope:
+  - No GitHub push/merge actions executed (owner approval required).
+
+## [2026-02-26] Batch: Antigravity independent assessment baseline
+- Change reference:
+  - Independent evaluation by Antigravity (Gemini 2.5), separate from GPT-5 assessments.
+  - Assessment saved: `docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**` (code review + test verification)
+  - `docs/CVF_*_2026-02-25.md` (cross-validated claims vs actual code)
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (43/43, 10 files, 1.12s)
+  - Typecheck -> PASS
+- Verification findings:
+  - All F1-F6 closure claims confirmed in code
+  - Anti-bypass Symbol guard verified
+  - Forensic trace (`requestId`, `policyVersion`, `decisionCode`, `traceHash`) present in all ledger records
+  - Orchestrator 12-step non-bypass pipeline confirmed
+  - Test count: 43 (increased from 26 in post-fix doc)
+- Assessment scores:
+  - Kernel Architecture (code): **8.5/10**
+  - Docs / Assessment Pipeline: **9.0/10**
+  - Test Suite: **8.0/10**
+- Recommendations for next governance/compat batch:
+  1. Add error boundary in orchestrator pipeline
+  2. Add timeout guard for LLM call
+  3. Decouple dependency (install typescript/vitest locally instead of relative path to cvf-web)
+  4. Add integration test kernel ↔ cvf-web
+- Skip scope:
+  - `cvf-web` full regression: not re-verified (focus on kernel module only)
+  - No GitHub push/merge actions for kernel module
+- Notes/Risks:
+  - This assessment serves as independent baseline for future governance/compat work.
+  - Next step: address recommendations then run `ci:gate` to confirm regression.

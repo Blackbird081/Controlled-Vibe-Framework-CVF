@@ -96,26 +96,6 @@ function ensureSeeded() {
     };
 }
 
-export function addTrace(entry: TraceEntry) {
-    telemetryStore.traces.push(entry);
-    if (telemetryStore.traces.length > 100) telemetryStore.traces.shift();
-
-    telemetryStore.riskHistory.push({
-        level: entry.riskLevel,
-        timestamp: entry.timestamp,
-        score: { R0: 0.1, R1: 0.35, R2: 0.65, R3: 0.85, R4: 0.95 }[entry.riskLevel] || 0.1,
-    });
-
-    telemetryStore.stats.totalRequests++;
-    if (entry.decisionCode.startsWith('REFUSAL_')) telemetryStore.stats.refusalCount++;
-    telemetryStore.stats.currentRiskLevel = entry.riskLevel;
-    telemetryStore.stats.avgLatencyMs = +(
-        (telemetryStore.stats.avgLatencyMs * (telemetryStore.stats.totalRequests - 1) +
-            (entry.latencyMs || 0.5)) /
-        telemetryStore.stats.totalRequests
-    ).toFixed(2);
-}
-
 export async function GET() {
     ensureSeeded();
     return NextResponse.json(telemetryStore);

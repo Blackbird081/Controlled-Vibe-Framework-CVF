@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useOpenClawConfig, OPENCLAW_MODE_INFO, type OpenClawMode } from '@/lib/openclaw-config';
 
@@ -120,8 +120,15 @@ function loadInitialSettings(): SettingsData {
 
 // Hook for settings
 export function useSettings() {
-    const [settings, setSettings] = useState<SettingsData>(() => loadInitialSettings());
-    const [isLoaded] = useState(true);
+    const [settings, setSettings] = useState<SettingsData>(defaultSettings);
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    // Load settings from localStorage AFTER hydration, not during initial render
+    useEffect(() => {
+        const loaded = loadInitialSettings();
+        setSettings(loaded);
+        setIsLoaded(true);
+    }, []);
 
     const saveSettings = useCallback((newSettings: SettingsData) => {
         setSettings(newSettings);
@@ -133,25 +140,33 @@ export function useSettings() {
         provider: keyof AIProviderSettings,
         updates: Partial<AIProviderSettings[keyof AIProviderSettings]>
     ) => {
-        const newSettings = {
-            ...settings,
-            providers: {
-                ...settings.providers,
-                [provider]: { ...settings.providers[provider], ...updates },
-            },
-        };
-        saveSettings(newSettings);
-    }, [settings, saveSettings]);
+        setSettings(prev => {
+            const newSettings = {
+                ...prev,
+                providers: {
+                    ...prev.providers,
+                    [provider]: { ...prev.providers[provider], ...updates },
+                },
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
+            localStorage.setItem(MIGRATION_KEY, '1');
+            return newSettings;
+        });
+    }, []);
 
     const updatePreferences = useCallback((
         updates: Partial<UserPreferences>
     ) => {
-        const newSettings = {
-            ...settings,
-            preferences: { ...settings.preferences, ...updates },
-        };
-        saveSettings(newSettings);
-    }, [settings, saveSettings]);
+        setSettings(prev => {
+            const newSettings = {
+                ...prev,
+                preferences: { ...prev.preferences, ...updates },
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
+            localStorage.setItem(MIGRATION_KEY, '1');
+            return newSettings;
+        });
+    }, []);
 
     const resetSettings = useCallback(() => {
         setSettings(defaultSettings);
@@ -459,8 +474,8 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                     <div className="space-y-6">
                         {/* OpenClaw Adapter */}
                         <div className={`p-4 rounded-xl border-2 transition-all ${settings.preferences.openClawEnabled
-                                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
-                                : 'border-gray-200 dark:border-gray-700'
+                            ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                            : 'border-gray-200 dark:border-gray-700'
                             }`}>
                             <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center gap-2">

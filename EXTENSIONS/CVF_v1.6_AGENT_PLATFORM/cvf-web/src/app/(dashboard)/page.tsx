@@ -234,7 +234,10 @@ export default function HomePage() {
                                 >
                                     🎮 {language === 'vi' ? 'Chạy Demo ngay' : 'Run Demo Now'}
                                 </button>
-                                <button className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700">
+                                <button
+                                    onClick={() => window.dispatchEvent(new CustomEvent('cvf:openApiKeyWizard'))}
+                                    className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700"
+                                >
                                     {t('main.apiKeyCta')}
                                 </button>
                             </div>

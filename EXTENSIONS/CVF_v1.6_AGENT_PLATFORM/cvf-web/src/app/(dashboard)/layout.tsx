@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useModals } from '@/lib/hooks/useModals';
@@ -46,6 +46,13 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         if (openParam === 'multi-agent') return 'multi-agent';
         return null;
     });
+
+    // Listen for API Key Wizard open event from child pages
+    useEffect(() => {
+        const handler = () => modals.openModal('apiKeyWizard');
+        window.addEventListener('cvf:openApiKeyWizard', handler);
+        return () => window.removeEventListener('cvf:openApiKeyWizard', handler);
+    }, [modals]);
 
     // Map pathname to Sidebar's expected appState string
     const pathnameToAppState = (p: string): string => {

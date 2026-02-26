@@ -30,11 +30,16 @@ python governance/compat/check_core_compat.py --base <BASE_REF> --head <HEAD_REF
 
 # Bug documentation gate (enforced on fix: commits)
 python governance/compat/check_bug_doc_compat.py --enforce
+
+# Test documentation gate (enforced on test: commits)
+python governance/compat/check_test_doc_compat.py --enforce
 ```
 
 Only run full regression when gate/triggers require it.
 
 > 📋 **Bug Fix Rule:** Every `fix:` commit MUST have a corresponding entry in [`docs/BUG_HISTORY.md`](docs/BUG_HISTORY.md). See [Bug Documentation Guard](governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md).
+
+> 🧪 **Test Log Rule:** Every `test:` commit or test file change MUST have a batch entry in [`docs/CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md). See [Test Documentation Guard](governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md).
 
 ---
 

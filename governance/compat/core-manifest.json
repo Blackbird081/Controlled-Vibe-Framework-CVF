@@ -62,6 +62,14 @@
     {
       "pattern": "governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md",
       "suggestedCommand": "python governance/compat/check_bug_doc_compat.py --base HEAD~5 --head HEAD"
+    },
+    {
+      "pattern": "docs/CVF_INCREMENTAL_TEST_LOG.md",
+      "suggestedCommand": "python governance/compat/check_test_doc_compat.py --base HEAD~5 --head HEAD"
+    },
+    {
+      "pattern": "governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md",
+      "suggestedCommand": "python governance/compat/check_test_doc_compat.py --base HEAD~5 --head HEAD"
     }
   ]
 }

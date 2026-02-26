@@ -56,6 +56,7 @@ Self-UAT MUST re-run if:
 - Agent shows inconsistent refusal
 - Operator explicitly requests re-validation
 - Bug fix pushed without BUG_HISTORY.md documentation (see CVF_BUG_DOCUMENTATION_GUARD.md)
+- Test executed without CVF_INCREMENTAL_TEST_LOG.md entry (see CVF_TEST_DOCUMENTATION_GUARD.md)
 
 ---
 

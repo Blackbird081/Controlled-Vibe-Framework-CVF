@@ -8,6 +8,10 @@ Goal: avoid re-running full regression when unrelated areas did not change.
 Baseline reference:
 - `docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md`
 
+Governance policy:
+- [`CVF_TEST_DOCUMENTATION_GUARD.md`](../governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md)
+- Compat check: `python governance/compat/check_test_doc_compat.py --enforce`
+
 ---
 
 ## 2) Mandatory Rule (Effective from 2026-02-25)

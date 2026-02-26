@@ -588,7 +588,7 @@ function KernelHealthDashboard({ telemetry, lang }: { telemetry: KernelTelemetry
     return (
         <div>
             <h2 className="text-xl font-bold mb-4">
-                🧠 {lang === 'vi' ? 'Kernel Runtime Health' : 'Kernel Runtime Health'}
+                🧠 {lang === 'vi' ? 'Tình trạng Kernel' : 'Kernel Runtime Health'}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {cards.map(card => (
@@ -811,8 +811,8 @@ function KernelPolicySelector({ telemetry, lang }: { telemetry: KernelTelemetry;
                         key={p.id}
                         onClick={() => handleChange(p.id)}
                         className={`p-4 rounded-xl border-2 text-left transition-all ${selectedPolicy === p.id
-                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
-                                : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
+                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
+                            : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
                             }`}
                     >
                         <div className="flex items-center gap-2 mb-1">
@@ -847,10 +847,10 @@ function CreativeModeIndicator({ telemetry, lang }: { telemetry: KernelTelemetry
                 🎨 {lang === 'vi' ? 'Creative Mode' : 'Creative Mode Indicator'}
             </h2>
             <div className={`p-5 rounded-xl border-2 transition-all ${driftWarning
-                    ? 'border-red-400 bg-red-50 dark:bg-red-900/20'
-                    : creativeEnabled
-                        ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/20'
-                        : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
+                ? 'border-red-400 bg-red-50 dark:bg-red-900/20'
+                : creativeEnabled
+                    ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/20'
+                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
                 }`}>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -937,7 +937,7 @@ function DomainMapVisualization({ lang }: { lang: 'vi' | 'en' }) {
                 🗺️ {lang === 'vi' ? 'Bản đồ Domain' : 'Domain Map Visualization'}
             </h2>
             <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-x-auto">
-                <svg viewBox="0 0 750 200" className="w-full max-w-3xl mx-auto" style={{ minWidth: '500px' }}>
+                <svg viewBox="0 0 750 200" className="w-full max-w-3xl mx-auto" style={{ minWidth: '320px' }}>
                     {/* Connection lines */}
                     {connections.map((conn, i) => {
                         const from = getPos(conn.from);

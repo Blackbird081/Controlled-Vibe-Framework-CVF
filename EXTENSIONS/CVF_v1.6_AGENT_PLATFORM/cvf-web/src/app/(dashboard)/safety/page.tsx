@@ -782,6 +782,207 @@ function RiskEvolutionChart({ telemetry, lang }: { telemetry: KernelTelemetry; l
     );
 }
 
+function KernelPolicySelector({ telemetry, lang }: { telemetry: KernelTelemetry; lang: 'vi' | 'en' }) {
+    const [selectedPolicy, setSelectedPolicy] = useState(telemetry.stats.policyVersion);
+    const [saving, setSaving] = useState(false);
+
+    const policies = [
+        { id: 'v1', name: 'v1 — Standard Safety', nameVi: 'v1 — An toàn tiêu chuẩn', desc: 'Default refusal + risk gates', descVi: 'Từ chối + cổng rủi ro mặc định' },
+        { id: 'v2-strict', name: 'v2 — Strict Mode', nameVi: 'v2 — Chế độ nghiêm ngặt', desc: 'Block R2+ and all creative', descVi: 'Chặn R2+ và tất cả sáng tạo' },
+        { id: 'v2-permissive', name: 'v2 — Permissive', nameVi: 'v2 — Cho phép mở rộng', desc: 'Allow R2, escalate R3+', descVi: 'Cho phép R2, escalate R3+' },
+    ];
+
+    const handleChange = async (policyId: string) => {
+        setSelectedPolicy(policyId);
+        setSaving(true);
+        // Simulate saving to kernel config
+        await new Promise(r => setTimeout(r, 500));
+        setSaving(false);
+    };
+
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                📜 {lang === 'vi' ? 'Chọn Policy Version' : 'Kernel Policy Selector'}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {policies.map(p => (
+                    <button
+                        key={p.id}
+                        onClick={() => handleChange(p.id)}
+                        className={`p-4 rounded-xl border-2 text-left transition-all ${selectedPolicy === p.id
+                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
+                                : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
+                            }`}
+                    >
+                        <div className="flex items-center gap-2 mb-1">
+                            <div className={`w-3 h-3 rounded-full ${selectedPolicy === p.id ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'}`} />
+                            <span className="font-semibold text-sm">{lang === 'vi' ? p.nameVi : p.name}</span>
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 ml-5">
+                            {lang === 'vi' ? p.descVi : p.desc}
+                        </p>
+                        {selectedPolicy === p.id && saving && (
+                            <span className="text-xs text-blue-500 ml-5 mt-1 inline-block animate-pulse">
+                                {lang === 'vi' ? 'Đang lưu...' : 'Saving...'}
+                            </span>
+                        )}
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function CreativeModeIndicator({ telemetry, lang }: { telemetry: KernelTelemetry; lang: 'vi' | 'en' }) {
+    const [creativeEnabled, setCreativeEnabled] = useState(false);
+
+    const riskOrder = ['R0', 'R1', 'R2', 'R3', 'R4'];
+    const currentRiskIdx = riskOrder.indexOf(telemetry.stats.currentRiskLevel);
+    const driftWarning = creativeEnabled && currentRiskIdx >= 2;
+
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                🎨 {lang === 'vi' ? 'Creative Mode' : 'Creative Mode Indicator'}
+            </h2>
+            <div className={`p-5 rounded-xl border-2 transition-all ${driftWarning
+                    ? 'border-red-400 bg-red-50 dark:bg-red-900/20'
+                    : creativeEnabled
+                        ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/20'
+                        : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
+                }`}>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <span className="text-3xl">{creativeEnabled ? '🎨' : '🔒'}</span>
+                        <div>
+                            <div className="font-bold">
+                                {creativeEnabled
+                                    ? (lang === 'vi' ? 'Creative Mode: BẬT' : 'Creative Mode: ON')
+                                    : (lang === 'vi' ? 'Creative Mode: TẮT' : 'Creative Mode: OFF')}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                {creativeEnabled
+                                    ? (lang === 'vi' ? 'Domain scope mở rộng • Monitoring tăng cường' : 'Extended domain scope • Enhanced monitoring')
+                                    : (lang === 'vi' ? 'An toàn tuyệt đối • Domain scope khóa' : 'Safety absolute • Domain scope locked')}
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => setCreativeEnabled(!creativeEnabled)}
+                        className={`relative w-14 h-7 rounded-full transition-colors ${creativeEnabled ? 'bg-amber-500' : 'bg-gray-300 dark:bg-gray-600'
+                            }`}
+                    >
+                        <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${creativeEnabled ? 'translate-x-7' : 'translate-x-0.5'
+                            }`} />
+                    </button>
+                </div>
+
+                {driftWarning && (
+                    <div className="mt-3 p-3 rounded-lg bg-red-100 dark:bg-red-900/40 border border-red-300 dark:border-red-700 flex items-center gap-2">
+                        <span className="text-xl">⚠️</span>
+                        <div className="text-sm">
+                            <div className="font-bold text-red-700 dark:text-red-300">
+                                {lang === 'vi' ? 'Cảnh báo Domain Drift!' : 'Domain Drift Warning!'}
+                            </div>
+                            <div className="text-red-600 dark:text-red-400">
+                                {lang === 'vi'
+                                    ? `Risk level ${telemetry.stats.currentRiskLevel} — Creative mode có thể gây contamination. Kernel sẽ tự động revoke nếu drift tiếp tục.`
+                                    : `Risk level ${telemetry.stats.currentRiskLevel} — Creative mode may cause contamination. Kernel will auto-revoke if drift continues.`}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {creativeEnabled && !driftWarning && (
+                    <div className="mt-3 p-3 rounded-lg bg-amber-100 dark:bg-amber-900/40 border border-amber-300 dark:border-amber-700 flex items-center gap-2">
+                        <span className="text-lg">ℹ️</span>
+                        <span className="text-sm text-amber-700 dark:text-amber-300">
+                            {lang === 'vi'
+                                ? 'Creative provenance tag bật. Output giới hạn. Drift detector nghiêm ngặt.'
+                                : 'Creative provenance tagging active. Output restricted. Drift detector strict mode.'}
+                        </span>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+function DomainMapVisualization({ lang }: { lang: 'vi' | 'en' }) {
+    const domains = [
+        { id: 'content', label: 'Content', icon: '📝', x: 50, y: 30 },
+        { id: 'code', label: 'Code', icon: '💻', x: 250, y: 30 },
+        { id: 'analysis', label: 'Analysis', icon: '📊', x: 450, y: 30 },
+        { id: 'general', label: 'General', icon: '💬', x: 650, y: 30 },
+        { id: 'kernel', label: 'Kernel', icon: '🧠', x: 350, y: 140 },
+        { id: 'refusal', label: 'Refusal', icon: '🚫', x: 150, y: 140 },
+        { id: 'creative', label: 'Creative', icon: '🎨', x: 550, y: 140 },
+    ];
+
+    const connections = [
+        { from: 'content', to: 'kernel', label: 'validate' },
+        { from: 'code', to: 'kernel', label: 'validate' },
+        { from: 'analysis', to: 'kernel', label: 'validate' },
+        { from: 'general', to: 'kernel', label: 'validate' },
+        { from: 'kernel', to: 'refusal', label: 'risk gate' },
+        { from: 'kernel', to: 'creative', label: 'permission' },
+    ];
+
+    const getPos = (id: string) => domains.find(d => d.id === id);
+
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                🗺️ {lang === 'vi' ? 'Bản đồ Domain' : 'Domain Map Visualization'}
+            </h2>
+            <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-x-auto">
+                <svg viewBox="0 0 750 200" className="w-full max-w-3xl mx-auto" style={{ minWidth: '500px' }}>
+                    {/* Connection lines */}
+                    {connections.map((conn, i) => {
+                        const from = getPos(conn.from);
+                        const to = getPos(conn.to);
+                        if (!from || !to) return null;
+                        const x1 = from.x + 40, y1 = from.y + 25;
+                        const x2 = to.x + 40, y2 = to.y + 5;
+                        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+                        return (
+                            <g key={i}>
+                                <line x1={x1} y1={y1} x2={x2} y2={y2}
+                                    stroke="currentColor" strokeWidth="1.5" opacity="0.2"
+                                    strokeDasharray="4 3" />
+                                <text x={mx} y={my - 3} textAnchor="middle"
+                                    fontSize="8" fill="currentColor" opacity="0.4">
+                                    {conn.label}
+                                </text>
+                            </g>
+                        );
+                    })}
+                    {/* Domain nodes */}
+                    {domains.map(d => (
+                        <g key={d.id}>
+                            <rect x={d.x} y={d.y} width="80" height="35" rx="8"
+                                fill={d.id === 'kernel' ? '#3b82f6' : d.id === 'refusal' ? '#ef4444' : d.id === 'creative' ? '#f59e0b' : '#10b981'}
+                                opacity="0.15" stroke={d.id === 'kernel' ? '#3b82f6' : d.id === 'refusal' ? '#ef4444' : d.id === 'creative' ? '#f59e0b' : '#10b981'}
+                                strokeWidth="1.5" />
+                            <text x={d.x + 40} y={d.y + 15} textAnchor="middle" fontSize="14">{d.icon}</text>
+                            <text x={d.x + 40} y={d.y + 28} textAnchor="middle"
+                                fontSize="9" fontWeight="600" fill="currentColor" opacity="0.8">
+                                {d.label}
+                            </text>
+                        </g>
+                    ))}
+                </svg>
+                <div className="text-center text-xs text-gray-400 mt-2">
+                    {lang === 'vi'
+                        ? 'Mọi domain đều phải đi qua Kernel trước khi output'
+                        : 'All domains must pass through Kernel before output'}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 
 export default function SafetyPage() {
     const { language } = useLanguage();
@@ -917,6 +1118,9 @@ export default function SafetyPage() {
                     <KernelHealthDashboard telemetry={kernelTelemetry} lang={lang} />
                     <RequestTraceViewer telemetry={kernelTelemetry} lang={lang} />
                     <RiskEvolutionChart telemetry={kernelTelemetry} lang={lang} />
+                    <KernelPolicySelector telemetry={kernelTelemetry} lang={lang} />
+                    <CreativeModeIndicator telemetry={kernelTelemetry} lang={lang} />
+                    <DomainMapVisualization lang={lang} />
                 </>
             )}
 

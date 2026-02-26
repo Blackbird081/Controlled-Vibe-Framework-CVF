@@ -139,7 +139,7 @@ The AI Agent automatically enforces CVF governance through **3 layers**:
 | Layer | Mechanism | How |
 |-------|-----------|-----|
 | **System Prompt** | Rule 16 in governance context | AI is instructed to call `governance_check` tool when fixing bugs, running tests, or changing code |
-| **Post-Processing** | `governance-post-check.ts` | Automatically scans AI responses; injects ⚠️ warning if `BUG_HISTORY.md` or `CVF_INCREMENTAL_TEST_LOG.md` documentation is missing |
+| **Post-Processing** | `governance-post-check.ts` | Automatically scans AI responses; injects 🚨 **enforcement** message if `BUG_HISTORY.md` or `CVF_INCREMENTAL_TEST_LOG.md` documentation is missing |
 | **Governance Checker** | Tool on Safety page + Tools page | Interactive UI: select action (Bug Fix / Test Run / Code Change) → get compliance checklist |
 
 **Governance policies enforced:**

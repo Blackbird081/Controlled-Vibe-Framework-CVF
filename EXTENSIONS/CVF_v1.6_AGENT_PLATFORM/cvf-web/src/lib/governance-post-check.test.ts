@@ -83,7 +83,7 @@ describe('checkResponseGovernance', () => {
             const response = 'Đã fix lỗi hydration error trong Settings.tsx';
             const result = checkResponseGovernance(response, 'sửa lỗi settings', 'vi');
             expect(result.hasBugFixContext).toBe(true);
-            expect(result.violations[0].message).toContain('Governance Check');
+            expect(result.violations[0].message).toContain('Governance Enforcement');
             expect(result.violations[0].message).toContain('BUG_HISTORY.md');
         });
     });

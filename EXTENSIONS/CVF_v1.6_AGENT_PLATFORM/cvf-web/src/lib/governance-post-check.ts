@@ -5,7 +5,8 @@
  *
  * Scans AI Agent responses after generation to detect governance violations.
  * If the response involves bug fixes or test execution but doesn't mention
- * the required documentation files, a warning is injected.
+ * the required documentation files, an enforcement message is injected.
+ * This is NOT a soft warning — it's a mandatory compliance check.
  *
  * Policy references:
  * - governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md
@@ -16,7 +17,7 @@
 
 export interface GovernanceViolation {
     type: 'bug_doc_missing' | 'test_doc_missing' | 'compat_gate_missing';
-    severity: 'warning' | 'error';
+    severity: 'error' | 'warning';
     message: string;
 }
 
@@ -115,33 +116,33 @@ export function checkResponseGovernance(
     const hasTestContext = detectTestContext(responseText, userMessage);
     const hasCodeChangeContext = detectCodeChangeContext(responseText);
 
-    // Check 1: Bug fix without BUG_HISTORY mention
+    // Check 1: Bug fix without BUG_HISTORY mention → ENFORCEMENT
     if (hasBugFixContext && !mentionsBugHistory(responseText)) {
         violations.push({
             type: 'bug_doc_missing',
-            severity: 'warning',
+            severity: 'error',
             message: language === 'vi'
-                ? '📝 **Governance Check:** Phát hiện nội dung sửa bug nhưng chưa đề cập `docs/BUG_HISTORY.md`. Hãy thêm entry ghi nhận bug này.'
-                : '📝 **Governance Check:** Bug fix detected but `docs/BUG_HISTORY.md` not mentioned. Please add an entry to document this bug.',
+                ? '🚨 **[Governance Enforcement]** Phát hiện sửa bug nhưng CHƯA ghi nhận vào `docs/BUG_HISTORY.md`. Đây là yêu cầu bắt buộc theo CVF_BUG_DOCUMENTATION_GUARD. Vui lòng thêm entry trước khi hoàn tất.'
+                : '🚨 **[Governance Enforcement]** Bug fix detected but NOT documented in `docs/BUG_HISTORY.md`. This is REQUIRED by CVF_BUG_DOCUMENTATION_GUARD. Please add an entry before finalizing.',
         });
         suggestions.push(language === 'vi'
-            ? 'Chạy: `python governance/compat/check_bug_doc_compat.py --enforce`'
-            : 'Run: `python governance/compat/check_bug_doc_compat.py --enforce`'
+            ? '→ Chạy: `python governance/compat/check_bug_doc_compat.py --enforce`'
+            : '→ Run: `python governance/compat/check_bug_doc_compat.py --enforce`'
         );
     }
 
-    // Check 2: Test execution without TEST_LOG mention
+    // Check 2: Test execution without TEST_LOG mention → ENFORCEMENT
     if (hasTestContext && !mentionsTestLog(responseText)) {
         violations.push({
             type: 'test_doc_missing',
-            severity: 'warning',
+            severity: 'error',
             message: language === 'vi'
-                ? '🧪 **Governance Check:** Phát hiện nội dung test nhưng chưa đề cập `docs/CVF_INCREMENTAL_TEST_LOG.md`. Hãy thêm batch entry ghi nhận kết quả test.'
-                : '🧪 **Governance Check:** Test execution detected but `docs/CVF_INCREMENTAL_TEST_LOG.md` not mentioned. Please add a batch entry to log results.',
+                ? '🚨 **[Governance Enforcement]** Phát hiện chạy test nhưng CHƯA ghi nhận vào `docs/CVF_INCREMENTAL_TEST_LOG.md`. Đây là yêu cầu bắt buộc theo CVF_TEST_DOCUMENTATION_GUARD. Vui lòng thêm batch entry trước khi hoàn tất.'
+                : '🚨 **[Governance Enforcement]** Test execution detected but NOT logged in `docs/CVF_INCREMENTAL_TEST_LOG.md`. This is REQUIRED by CVF_TEST_DOCUMENTATION_GUARD. Please add a batch entry before finalizing.',
         });
         suggestions.push(language === 'vi'
-            ? 'Chạy: `python governance/compat/check_test_doc_compat.py --enforce`'
-            : 'Run: `python governance/compat/check_test_doc_compat.py --enforce`'
+            ? '→ Chạy: `python governance/compat/check_test_doc_compat.py --enforce`'
+            : '→ Run: `python governance/compat/check_test_doc_compat.py --enforce`'
         );
     }
 

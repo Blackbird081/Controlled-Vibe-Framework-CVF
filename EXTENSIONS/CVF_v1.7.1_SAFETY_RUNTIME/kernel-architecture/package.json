@@ -1,0 +1,20 @@
+{
+  "name": "cvf-v1-7-1-safety-runtime-kernel-architecture",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CVF v1.7.1 kernel architecture extension (non-coder safety runtime hardening).",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:run": "npm run typecheck && vitest run --config ./vitest.config.mjs --dir .",
+    "test:coverage": "vitest run --config ./vitest.config.mjs --dir . --coverage",
+    "test:golden": "vitest run --config ./vitest.config.mjs tests/refusal_policy_golden.test.ts tests/cvf_policy_parity.test.ts",
+    "test:e2e": "vitest run --config ./vitest.config.mjs tests/orchestrator_e2e.test.ts tests/cvf_web_integration.test.ts",
+    "bench:orchestrator": "vitest run --config ./vitest.config.mjs tests/orchestrator_benchmark.test.ts",
+    "ci:gate": "npm run test:run && npm run test:golden && npm run test:coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.18",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

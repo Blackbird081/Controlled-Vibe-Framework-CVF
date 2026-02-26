@@ -1,0 +1,45 @@
+[
+  {
+    "id": "r0_allow",
+    "policyVersion": "v1",
+    "riskLevel": "R0",
+    "expectedAction": "allow"
+  },
+  {
+    "id": "r2_allow_clean",
+    "policyVersion": "v1",
+    "riskLevel": "R2",
+    "expectedAction": "allow"
+  },
+  {
+    "id": "r2_clarify_on_drift",
+    "policyVersion": "v1",
+    "riskLevel": "R2",
+    "context": {
+      "driftDetected": true
+    },
+    "expectedAction": "clarify"
+  },
+  {
+    "id": "r3_needs_approval",
+    "policyVersion": "v1",
+    "riskLevel": "R3",
+    "expectedAction": "needs_approval"
+  },
+  {
+    "id": "r4_block",
+    "policyVersion": "v1",
+    "riskLevel": "R4",
+    "expectedAction": "block"
+  },
+  {
+    "id": "r4_freeze_needs_approval",
+    "policyVersion": "v1",
+    "riskLevel": "R4",
+    "context": {
+      "phase": "FREEZE"
+    },
+    "expectedAction": "needs_approval"
+  }
+]
+

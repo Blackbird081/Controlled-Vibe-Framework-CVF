@@ -447,12 +447,348 @@ function OpenClawTestSection({ language, onSubmit, lastResult }: {
 }
 
 // ==================== MAIN PAGE ====================
+// ==================== KERNEL TELEMETRY COMPONENTS ====================
+
+interface KernelTrace {
+    requestId: string;
+    domain: string;
+    riskLevel: string;
+    decisionCode: string;
+    traceHash: string;
+    policyVersion: string;
+    timestamp: number;
+    action?: string;
+    latencyMs?: number;
+}
+
+interface KernelTelemetry {
+    traces: KernelTrace[];
+    riskHistory: { level: string; timestamp: number; score: number }[];
+    stats: {
+        totalRequests: number;
+        refusalCount: number;
+        avgLatencyMs: number;
+        p95LatencyMs: number;
+        domainLockActive: boolean;
+        currentRiskLevel: string;
+        policyVersion: string;
+    };
+}
+
+function useKernelTelemetry() {
+    const [data, setData] = useState<KernelTelemetry | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    const refresh = useCallback(async () => {
+        try {
+            const res = await fetch('/api/kernel-telemetry');
+            if (res.ok) setData(await res.json());
+        } catch { /* silent */ }
+        setLoading(false);
+    }, []);
+
+    useEffect(() => {
+        refresh();
+        const interval = setInterval(refresh, 15000);
+        return () => clearInterval(interval);
+    }, [refresh]);
+
+    return { data, loading, refresh };
+}
+
+const RISK_COLORS: Record<string, string> = {
+    R0: 'bg-emerald-500',
+    R1: 'bg-blue-500',
+    R2: 'bg-amber-500',
+    R3: 'bg-orange-500',
+    R4: 'bg-red-500',
+};
+
+const RISK_TEXT_COLORS: Record<string, string> = {
+    R0: 'text-emerald-600 dark:text-emerald-400',
+    R1: 'text-blue-600 dark:text-blue-400',
+    R2: 'text-amber-600 dark:text-amber-400',
+    R3: 'text-orange-600 dark:text-orange-400',
+    R4: 'text-red-600 dark:text-red-400',
+};
+
+const DECISION_LABELS: Record<string, { icon: string; label: string; labelVi: string }> = {
+    ALLOW_RELEASED: { icon: '✅', label: 'Allowed', labelVi: 'Cho phép' },
+    REFUSAL_BLOCK: { icon: '🚫', label: 'Blocked', labelVi: 'Chặn' },
+    REFUSAL_APPROVAL: { icon: '⏳', label: 'Needs Approval', labelVi: 'Cần duyệt' },
+    REFUSAL_CLARIFY: { icon: '❓', label: 'Clarification', labelVi: 'Cần làm rõ' },
+    INPUT_ACCEPTED: { icon: '📥', label: 'Input OK', labelVi: 'Input OK' },
+    RISK_EVALUATED: { icon: '⚖️', label: 'Risk Checked', labelVi: 'Đã đánh giá' },
+    ROLLBACK_REQUIRED: { icon: '↩️', label: 'Rollback', labelVi: 'Rollback' },
+};
+
+function KernelHealthDashboard({ telemetry, lang }: { telemetry: KernelTelemetry; lang: 'vi' | 'en' }) {
+    const { stats } = telemetry;
+    const allowRate = stats.totalRequests > 0
+        ? ((stats.totalRequests - stats.refusalCount) / stats.totalRequests * 100).toFixed(1)
+        : '100.0';
+
+    const cards = [
+        {
+            icon: '🔒',
+            title: lang === 'vi' ? 'Domain Lock' : 'Domain Lock',
+            value: stats.domainLockActive
+                ? (lang === 'vi' ? 'Đang hoạt động' : 'Active')
+                : (lang === 'vi' ? 'Tắt' : 'Inactive'),
+            color: stats.domainLockActive
+                ? 'text-emerald-600 dark:text-emerald-400'
+                : 'text-red-600 dark:text-red-400',
+            badge: stats.domainLockActive
+                ? 'bg-emerald-100 dark:bg-emerald-900/40'
+                : 'bg-red-100 dark:bg-red-900/40',
+        },
+        {
+            icon: '⚡',
+            title: lang === 'vi' ? 'Mức rủi ro' : 'Risk Level',
+            value: stats.currentRiskLevel,
+            color: RISK_TEXT_COLORS[stats.currentRiskLevel] || 'text-gray-600',
+            badge: `${RISK_COLORS[stats.currentRiskLevel] || 'bg-gray-500'}/20`,
+        },
+        {
+            icon: '📊',
+            title: lang === 'vi' ? 'Tổng yêu cầu' : 'Total Requests',
+            value: `${stats.totalRequests}`,
+            color: 'text-blue-600 dark:text-blue-400',
+            badge: 'bg-blue-100 dark:bg-blue-900/40',
+            sub: `${allowRate}% ${lang === 'vi' ? 'cho phép' : 'allowed'}`,
+        },
+        {
+            icon: '🚫',
+            title: lang === 'vi' ? 'Từ chối' : 'Refusals',
+            value: `${stats.refusalCount}`,
+            color: stats.refusalCount > 0
+                ? 'text-amber-600 dark:text-amber-400'
+                : 'text-emerald-600 dark:text-emerald-400',
+            badge: stats.refusalCount > 0
+                ? 'bg-amber-100 dark:bg-amber-900/40'
+                : 'bg-emerald-100 dark:bg-emerald-900/40',
+        },
+        {
+            icon: '⏱️',
+            title: lang === 'vi' ? 'Độ trễ TB' : 'Avg Latency',
+            value: `${stats.avgLatencyMs}ms`,
+            color: 'text-purple-600 dark:text-purple-400',
+            badge: 'bg-purple-100 dark:bg-purple-900/40',
+            sub: `P95: ${stats.p95LatencyMs}ms`,
+        },
+        {
+            icon: '📜',
+            title: lang === 'vi' ? 'Policy' : 'Policy Version',
+            value: stats.policyVersion,
+            color: 'text-gray-600 dark:text-gray-400',
+            badge: 'bg-gray-100 dark:bg-gray-700',
+        },
+    ];
+
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                🧠 {lang === 'vi' ? 'Kernel Runtime Health' : 'Kernel Runtime Health'}
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                {cards.map(card => (
+                    <div key={card.title} className={`p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 ${card.badge}`}>
+                        <div className="text-2xl mb-2">{card.icon}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{card.title}</div>
+                        <div className={`text-lg font-bold ${card.color}`}>{card.value}</div>
+                        {card.sub && <div className="text-xs text-gray-400 mt-1">{card.sub}</div>}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function RequestTraceViewer({ telemetry, lang }: { telemetry: KernelTelemetry; lang: 'vi' | 'en' }) {
+    const [selectedTrace, setSelectedTrace] = useState<KernelTrace | null>(null);
+
+    const recentTraces = telemetry.traces.slice(-10).reverse();
+
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                🔍 {lang === 'vi' ? 'Forensic Trace Viewer' : 'Request Trace Viewer'}
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {/* Trace list */}
+                <div className="lg:col-span-2 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                        <span className="text-xs font-semibold text-gray-500 uppercase">
+                            {lang === 'vi' ? 'Yêu cầu gần đây' : 'Recent Requests'}
+                        </span>
+                    </div>
+                    <div className="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto">
+                        {recentTraces.map(trace => {
+                            const d = DECISION_LABELS[trace.decisionCode] || { icon: '❔', label: trace.decisionCode, labelVi: trace.decisionCode };
+                            const isSelected = selectedTrace?.requestId === trace.requestId;
+                            return (
+                                <button
+                                    key={trace.requestId}
+                                    onClick={() => setSelectedTrace(isSelected ? null : trace)}
+                                    className={`w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500' : ''}`}
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <span>{d.icon}</span>
+                                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                                {trace.action || trace.domain}
+                                            </span>
+                                            <span className={`px-1.5 py-0.5 rounded text-xs font-semibold ${RISK_COLORS[trace.riskLevel]}/20 ${RISK_TEXT_COLORS[trace.riskLevel]}`}>
+                                                {trace.riskLevel}
+                                            </span>
+                                        </div>
+                                        <span className="text-xs text-gray-400">
+                                            {new Date(trace.timestamp).toLocaleTimeString()}
+                                        </span>
+                                    </div>
+                                    <div className="text-xs text-gray-500 mt-1 font-mono truncate">
+                                        {trace.requestId}
+                                    </div>
+                                </button>
+                            );
+                        })}
+                        {recentTraces.length === 0 && (
+                            <div className="px-4 py-8 text-center text-gray-400 text-sm">
+                                {lang === 'vi' ? 'Chưa có yêu cầu nào' : 'No requests yet'}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Trace detail */}
+                <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+                    <div className="text-xs font-semibold text-gray-500 uppercase mb-3">
+                        {lang === 'vi' ? 'Chi tiết Trace' : 'Trace Detail'}
+                    </div>
+                    {selectedTrace ? (
+                        <div className="space-y-3 text-sm">
+                            {[
+                                { label: 'Request ID', value: selectedTrace.requestId, mono: true },
+                                { label: 'Domain', value: selectedTrace.domain },
+                                { label: lang === 'vi' ? 'Rủi ro' : 'Risk', value: selectedTrace.riskLevel, highlight: true },
+                                { label: lang === 'vi' ? 'Quyết định' : 'Decision', value: `${DECISION_LABELS[selectedTrace.decisionCode]?.icon || ''} ${lang === 'vi' ? (DECISION_LABELS[selectedTrace.decisionCode]?.labelVi || selectedTrace.decisionCode) : (DECISION_LABELS[selectedTrace.decisionCode]?.label || selectedTrace.decisionCode)}` },
+                                { label: 'Policy', value: selectedTrace.policyVersion },
+                                { label: lang === 'vi' ? 'Độ trễ' : 'Latency', value: selectedTrace.latencyMs ? `${selectedTrace.latencyMs}ms` : 'N/A' },
+                                { label: 'Trace Hash', value: selectedTrace.traceHash, mono: true },
+                                { label: lang === 'vi' ? 'Thời gian' : 'Timestamp', value: new Date(selectedTrace.timestamp).toLocaleString() },
+                            ].map(item => (
+                                <div key={item.label}>
+                                    <div className="text-xs text-gray-400 mb-0.5">{item.label}</div>
+                                    <div className={`${item.mono ? 'font-mono text-xs break-all' : ''} ${item.highlight ? `font-bold ${RISK_TEXT_COLORS[selectedTrace.riskLevel]}` : 'text-gray-900 dark:text-white'}`}>
+                                        {item.value}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center text-gray-400 py-8 text-sm">
+                            {lang === 'vi' ? '← Nhấn vào yêu cầu để xem chi tiết' : '← Click a request to view details'}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function RiskEvolutionChart({ telemetry, lang }: { telemetry: KernelTelemetry; lang: 'vi' | 'en' }) {
+    const history = telemetry.riskHistory.slice(-20);
+
+    const riskToHeight: Record<string, number> = { R0: 15, R1: 35, R2: 55, R3: 75, R4: 95 };
+
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                📈 {lang === 'vi' ? 'Diễn biến Rủi ro' : 'Risk Evolution'}
+            </h2>
+            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                {history.length > 0 ? (
+                    <>
+                        {/* Y-axis labels + bars */}
+                        <div className="flex items-end gap-1 h-40 mb-3">
+                            {/* Y-axis */}
+                            <div className="flex flex-col justify-between h-full text-xs text-gray-400 pr-2 py-1">
+                                <span>R4</span>
+                                <span>R3</span>
+                                <span>R2</span>
+                                <span>R1</span>
+                                <span>R0</span>
+                            </div>
+                            {/* Bars */}
+                            <div className="flex-1 flex items-end gap-1 h-full relative">
+                                {/* Grid lines */}
+                                <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                                    {[0, 1, 2, 3, 4].map(i => (
+                                        <div key={i} className="border-b border-gray-100 dark:border-gray-700/50" />
+                                    ))}
+                                </div>
+                                {/* Bar rendering */}
+                                {history.map((entry, i) => {
+                                    const height = riskToHeight[entry.level] || 15;
+                                    const barColor = RISK_COLORS[entry.level] || 'bg-gray-400';
+                                    return (
+                                        <div
+                                            key={`${entry.timestamp}-${i}`}
+                                            className="flex-1 flex flex-col justify-end items-center relative group"
+                                        >
+                                            <div
+                                                className={`w-full max-w-8 rounded-t ${barColor} transition-all duration-300 group-hover:opacity-80`}
+                                                style={{ height: `${height}%`, minHeight: '8px' }}
+                                            />
+                                            {/* Tooltip on hover */}
+                                            <div className="absolute bottom-full mb-2 hidden group-hover:block z-10">
+                                                <div className="bg-gray-900 text-white rounded px-2 py-1 text-xs whitespace-nowrap shadow-lg">
+                                                    {entry.level} — {(entry.score * 100).toFixed(0)}%
+                                                    <br />
+                                                    {new Date(entry.timestamp).toLocaleTimeString()}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                        {/* Legend */}
+                        <div className="flex flex-wrap gap-3 justify-center text-xs mt-2">
+                            {['R0', 'R1', 'R2', 'R3', 'R4'].map(level => (
+                                <div key={level} className="flex items-center gap-1.5">
+                                    <div className={`w-3 h-3 rounded ${RISK_COLORS[level]}`} />
+                                    <span className="text-gray-500 dark:text-gray-400">{level}</span>
+                                </div>
+                            ))}
+                        </div>
+                        {/* Stats summary */}
+                        <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-4 text-xs text-gray-500">
+                            <span>{lang === 'vi' ? 'Tổng mẫu' : 'Samples'}: {history.length}</span>
+                            <span>{lang === 'vi' ? 'Cao nhất' : 'Highest'}: {history.reduce((max, h) => {
+                                const order = ['R0', 'R1', 'R2', 'R3', 'R4'];
+                                return order.indexOf(h.level) > order.indexOf(max) ? h.level : max;
+                            }, 'R0')}</span>
+                            <span>{lang === 'vi' ? 'Gần nhất' : 'Latest'}: {history[history.length - 1]?.level || 'N/A'}</span>
+                        </div>
+                    </>
+                ) : (
+                    <div className="text-center text-gray-400 py-8 text-sm">
+                        {lang === 'vi' ? 'Chưa có dữ liệu rủi ro' : 'No risk data yet'}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
 
 export default function SafetyPage() {
     const { language } = useLanguage();
     const { settings, updatePreferences } = useSettings();
     const lang = language === 'vi' ? 'vi' : 'en';
     const levels = getAllRiskLevels();
+    const { data: kernelTelemetry } = useKernelTelemetry();
 
     const openClawEnabled = settings.preferences.openClawEnabled ?? false;
     const openClawMode = (settings.preferences.openClawMode ?? 'disabled') as OpenClawMode;
@@ -574,6 +910,15 @@ export default function SafetyPage() {
 
             {/* Proposals Table */}
             <ProposalsTable proposals={proposals} language={lang} />
+
+            {/* Kernel Telemetry Section */}
+            {kernelTelemetry && (
+                <>
+                    <KernelHealthDashboard telemetry={kernelTelemetry} lang={lang} />
+                    <RequestTraceViewer telemetry={kernelTelemetry} lang={lang} />
+                    <RiskEvolutionChart telemetry={kernelTelemetry} lang={lang} />
+                </>
+            )}
 
             {/* Risk Levels */}
             <div>

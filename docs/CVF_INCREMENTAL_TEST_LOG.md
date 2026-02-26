@@ -449,3 +449,130 @@ Template:
 - Notes/Risks:
   - This assessment serves as independent baseline for future governance/compat work.
   - Next step: address recommendations then run `ci:gate` to confirm regression.
+
+## [2026-02-26] Batch: Antigravity recommendation closure + Nice-to-have full run
+- Change reference:
+  - Closed 4 recommendations from `docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md`.
+  - Executed Nice-to-have verification (`E2E` + benchmark).
+- Impacted scope:
+  - Runtime hardening:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/execution_orchestrator.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/kernel_runtime_entrypoint.ts`
+  - Dependency decouple:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package-lock.json` (new)
+  - New tests:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/cvf_web_integration.test.ts` (new)
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/orchestrator_e2e.test.ts` (new)
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/orchestrator_benchmark.test.ts` (new)
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/execution_orchestrator.test.ts` (updated)
+  - Doc sync:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/ROLLOUT_PLAN.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm install` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (51/51, 13 files)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:e2e` -> PASS (5/5)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run bench:orchestrator` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run ci:gate` -> PASS
+- Result:
+  - Recommendation #1 closed: orchestrator now has fail-safe error boundary (safe withheld response on internal pipeline error).
+  - Recommendation #2 closed: LLM call now has timeout guard (`llmTimeoutMs`, default 5000 ms).
+  - Recommendation #3 closed: module no longer depends on `../../cvf-web/node_modules` for local test/typecheck scripts.
+  - Recommendation #4 closed: kernel↔cvf-web integration parity tests added and passing.
+  - Nice-to-have full run completed:
+    - E2E runtime path test PASS
+    - Benchmark PASS (`runs=40`, `avg_ms=0.15-0.28`, `p95_ms=1.00`)
+  - Coverage snapshot after upgrade:
+    - Statements `96.45%`, Branches `91.41%`, Functions `99.09%`, Lines `97.01%`
+- Skip scope:
+  - `cvf-web` full app regression suite not re-run in this batch (kernel-focused closure batch).
+  - No GitHub push/merge actions executed (owner approval required).
+
+## [2026-02-26] Batch: Post-closure re-validation (rule-compliant latest snapshot)
+- Change reference:
+  - Owner request: update latest test record under incremental testing rule after recommendation closure.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**` (verification-only retest, no additional code changes in this batch)
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (51/51, 13 files)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS
+    - Global coverage: Statements `96.45%`, Branches `91.41%`, Functions `99.09%`, Lines `97.01%`
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:e2e` -> PASS (5/5)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run bench:orchestrator` -> PASS
+    - Benchmark snapshot: `runs=40`, `avg_ms=0.15`, `p95_ms=1.00`
+- Result:
+  - Quality gate remains PASS with owner threshold (`>=80%` global, core branches `>=90%`).
+  - Prior 4 recommendations remain verified as closed; no regression detected in retest.
+- Skip scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/**`: skipped (no new changes from previous passing parity batch; kernel-only verification request).
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - This entry is the latest trusted snapshot for next incremental test decisions.
+
+## [2026-02-26] Batch: Kernel-architecture Web UI update coverage check
+- Change reference:
+  - Owner request: re-check coverage after latest kernel-architecture Web UI updates.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**` (coverage verification batch)
+- Tests/execution performed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS
+    - Decision: `FOCUSED TESTS ALLOWED`
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS (51/51, 13 files)
+- Coverage result:
+  - Global coverage: Statements `96.45%`, Branches `91.41%`, Functions `99.09%`, Lines `97.01%`
+  - Core runtime highlights:
+    - `runtime/execution_orchestrator.ts`: Statements `98.18%`, Branches `92.45%`, Functions `91.66%`, Lines `98.18%`
+    - `runtime/kernel_runtime_entrypoint.ts`: `100%` all metrics
+    - `runtime/llm_adapter.ts`: `100%` all metrics
+- Result:
+  - PASS owner threshold (`>=80%` global, main safety branches `>=90%`).
+  - No regression observed from latest snapshot.
+- Skip scope:
+  - Full `cvf-web` regression skipped (compat gate allowed focused run; no frozen-core trigger in this range).
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Initial non-escalated coverage run failed with sandbox `spawn EPERM`; rerun with escalation succeeded.
+
+## [2026-02-26] Batch: Web UI mobile-focused test check
+- Change reference:
+  - Owner question: verify whether mobile Web UI test has been executed for latest cycle.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/MobileComponents.test.tsx`
+- Tests/execution performed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS
+    - Decision: `FOCUSED TESTS ALLOWED`
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && npm run test:run -- src/components/MobileComponents.test.tsx` -> PASS (`43/43`, `1` file)
+- Result:
+  - Mobile Web UI focused suite is passing in current run.
+- Skip scope:
+  - Full `cvf-web` regression skipped (focused verification request only; no frozen-core trigger in gate).
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Initial non-escalated run failed with sandbox `spawn EPERM`; rerun with escalation succeeded.
+
+## [2026-02-26] Batch: /docs Web UI update (AI-Research-SKILLs section) focused validation
+- Change reference:
+  - Owner update: added section `Thư viện Skills Tham khảo` on `/docs` after cloning `AI-Research-SKILLs`.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/docs/page.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/docs/page.test.tsx` (new)
+- Tests/execution performed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS
+    - Decision: `FOCUSED TESTS ALLOWED`
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && npm run test:run -- src/app/docs/page.test.tsx` -> PASS (`3/3`, `1` file)
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && npm run test:coverage -- src/app/docs/page.test.tsx` -> PASS
+    - Focused coverage snapshot:
+      - Global (focused set): Statements `93.33%`, Branches `100%`, Functions `90%`, Lines `92.85%`
+      - `src/app/docs/page.tsx`: Statements `90.9%`, Branches `100%`, Functions `87.5%`, Lines `90.9%`
+- Result:
+  - New external skills section is now covered by page-level regression tests (VI/EN content + external links + category filter behavior).
+  - Focused coverage passes current cvf-web threshold for statements/branches.
+- Skip scope:
+  - Full `cvf-web` regression skipped (focused route-level update; compat gate has no frozen-core trigger).
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Non-escalated Vitest runs initially failed with sandbox `spawn EPERM`; reruns with escalation succeeded.

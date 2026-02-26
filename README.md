@@ -80,6 +80,12 @@ npm install && npm run dev
 
 **→ [📖 Full Getting Started Guide](docs/GET_STARTED.md)**
 
+### Real Project Case Study (Local)
+
+- [Mini Game CVF Project](Mini_Game/MINI_GAME_WEBAPP_CVF_PLAN_2026-02-26.md)
+- CVF docs bundle: [Mini_Game/CVF_DOCS](Mini_Game/CVF_DOCS/)
+- Archive bundle (bug/test/history/fig): [Mini_Game/PROJECT_ARCHIVE](Mini_Game/PROJECT_ARCHIVE/)
+
 ---
 
 ## 💡 Why CVF?
@@ -125,6 +131,23 @@ When using AI to code without a framework:
 - 🗺️ **Domain Map** - Interactive SVG visualization of domain relationships
 - 🔒 **Anti-Bypass Design** - Symbol guard, 12-step non-bypass pipeline, forensic tracing
 - 🧪 **51 Kernel Tests** - Golden dataset regression, E2E, benchmark, 96%+ coverage
+
+### 🛡️ Governance Integration for AI Agent (NEW)
+
+The AI Agent automatically enforces CVF governance through **3 layers**:
+
+| Layer | Mechanism | How |
+|-------|-----------|-----|
+| **System Prompt** | Rule 16 in governance context | AI is instructed to call `governance_check` tool when fixing bugs, running tests, or changing code |
+| **Post-Processing** | `governance-post-check.ts` | Automatically scans AI responses; injects ⚠️ warning if `BUG_HISTORY.md` or `CVF_INCREMENTAL_TEST_LOG.md` documentation is missing |
+| **Governance Checker** | Tool on Safety page + Tools page | Interactive UI: select action (Bug Fix / Test Run / Code Change) → get compliance checklist |
+
+**Governance policies enforced:**
+- 📋 [`CVF_BUG_DOCUMENTATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md) — Every bug fix must be logged
+- 📋 [`CVF_TEST_DOCUMENTATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md) — Every test run must be documented
+- 📋 [`BUG_HISTORY.md`](docs/BUG_HISTORY.md) — Troubleshooting knowledge base
+- 📋 [`CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md) — Test history log
+
 
 ### v1.6 Features
 

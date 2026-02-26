@@ -12,6 +12,7 @@ Audit Frequency: Every 6 months or upon incident.
 [ ] Last Self-UAT within 3 months
 [ ] Skills recorded
 [ ] No phase violation detected
+[ ] Coverage report available (with baseline + threshold evidence)
 [ ] Incident log reviewed
 
 ---

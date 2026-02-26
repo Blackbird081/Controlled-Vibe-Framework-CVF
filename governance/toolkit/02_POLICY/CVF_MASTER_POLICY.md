@@ -39,6 +39,10 @@ Personal AI usage unrelated to company work is excluded.
 3. Self-UAT is mandatory before operational use.
 4. No AI output may bypass human accountability.
 5. All incidents must be documented.
+6. Every software project must implement automated test coverage with:
+   - a runnable coverage command,
+   - a declared baseline report,
+   - enforced minimum threshold in CI/local gate.
 
 ---
 

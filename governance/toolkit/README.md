@@ -54,6 +54,8 @@ CVF Cores (v1.0, v1.1)        ← Framework gốc (FROZEN)
 | **SME/Team nhỏ** | 07 (QuickStart) + 06 (Examples) |
 | **Auditor** | 02 + 04 + 05 |
 
+Coverage policy reference: `04_TESTING/CVF_TEST_COVERAGE_POLICY.md`
+
 ---
 
 ## Agent Loading Protocol

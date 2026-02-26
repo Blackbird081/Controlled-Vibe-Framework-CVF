@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useSettings } from '@/components/Settings';
+import { AVAILABLE_TOOLS, useTools } from '@/lib/agent-tools';
 import {
     getAllRiskLevels,
     sanitizePrompt,
@@ -983,6 +984,95 @@ function DomainMapVisualization({ lang }: { lang: 'vi' | 'en' }) {
     );
 }
 
+// ==================== GOVERNANCE CHECKER SECTION ====================
+
+function GovernanceCheckerSection({ lang }: { lang: 'vi' | 'en' }) {
+    const { executeTool, isExecuting } = useTools();
+    const [action, setAction] = useState('bug_fix');
+    const [context, setContext] = useState('');
+    const [result, setResult] = useState<any>(null);
+
+    const handleCheck = useCallback(async () => {
+        const res = await executeTool('governance_check', { action, context });
+        setResult(res);
+    }, [action, context, executeTool]);
+
+    const actions = [
+        { id: 'bug_fix', icon: '🐛', label: lang === 'vi' ? 'Sửa Bug' : 'Bug Fix' },
+        { id: 'test_run', icon: '🧪', label: lang === 'vi' ? 'Chạy Test' : 'Test Run' },
+        { id: 'code_change', icon: '📝', label: lang === 'vi' ? 'Thay đổi Code' : 'Code Change' },
+    ];
+
+    return (
+        <div className="p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <h3 className="font-bold mb-1 flex items-center gap-2">
+                <span>🛡️</span>
+                {lang === 'vi' ? 'Governance Checker' : 'Governance Checker'}
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                {lang === 'vi'
+                    ? 'Kiểm tra tuân thủ governance cho bug, test, code changes'
+                    : 'Check governance compliance for bugs, tests, code changes'}
+            </p>
+
+            {/* Action selector */}
+            <div className="flex gap-2 mb-3">
+                {actions.map(a => (
+                    <button
+                        key={a.id}
+                        onClick={() => { setAction(a.id); setResult(null); }}
+                        className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${action === a.id
+                            ? 'bg-blue-600 text-white shadow-md'
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                            }`}
+                    >
+                        {a.icon} {a.label}
+                    </button>
+                ))}
+            </div>
+
+            {/* Context input */}
+            <input
+                type="text"
+                value={context}
+                onChange={(e) => setContext(e.target.value)}
+                placeholder={lang === 'vi' ? 'Mô tả ngữ cảnh (tùy chọn)...' : 'Describe context (optional)...'}
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-sm mb-3"
+            />
+
+            <button
+                onClick={handleCheck}
+                disabled={isExecuting}
+                className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium disabled:opacity-50 transition-colors"
+            >
+                {isExecuting ? '⏳...' : `🛡️ ${lang === 'vi' ? 'Kiểm tra Governance' : 'Run Governance Check'}`}
+            </button>
+
+            {/* Result */}
+            {result && result.success && (
+                <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg space-y-2">
+                    <div className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                        {lang === 'vi' ? 'Checklist' : 'Compliance Checklist'}
+                        <span className="ml-2 text-gray-400">
+                            {(result.data as any)?.summary}
+                        </span>
+                    </div>
+                    {((result.data as any)?.checklist || []).map((item: any, i: number) => (
+                        <div key={i} className="flex items-start gap-2 text-sm">
+                            <span className="flex-shrink-0 mt-0.5">
+                                {item.required ? '❌' : '📋'}
+                            </span>
+                            <div>
+                                <div className="font-medium text-gray-900 dark:text-white">{item.rule}</div>
+                                <div className="text-xs text-gray-500">{item.hint}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
 
 export default function SafetyPage() {
     const { language } = useLanguage();
@@ -1144,6 +1234,9 @@ export default function SafetyPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <PromptTestSection lang={lang} />
                     <OutputTestSection lang={lang} />
+                </div>
+                <div className="mt-6">
+                    <GovernanceCheckerSection lang={lang} />
                 </div>
             </div>
 

@@ -7,8 +7,10 @@
 [![Version](https://img.shields.io/badge/version-1.7.2-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-1764%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
+[![Kernel Tests](https://img.shields.io/badge/kernel%20tests-51%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
 [![Coverage](https://img.shields.io/badge/coverage-93.05%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![AI Safety](https://img.shields.io/badge/AI%20Safety-Runtime%20Active-green.svg)](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md)
+[![Kernel Coverage](https://img.shields.io/badge/kernel%20coverage-96.45%25-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
+[![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
 [![Agent Skills](https://img.shields.io/badge/agent%20skills-34-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
 
 ---
@@ -98,13 +100,19 @@ When using AI to code without a framework:
 
 ## 🎨 Features
 
-### v1.7 Highlights ⭐ (AI Safety Runtime)
+### v1.7 Highlights ⭐ (AI Safety Runtime + Kernel Architecture)
 
+- 🧠 **5-Layer Safety Kernel** - Domain Lock → Contract Runtime → Contamination Guard → Refusal Router → Creative Control
 - 🛡️ **AI Safety Runtime** - Prompt sanitizer, entropy guard, anomaly detection, policy enforcement
-- 🧠 **Controlled Intelligence** - Agent behavior control with governance-first approach
 - 📊 **Safety Dashboard** - Real-time risk view: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous
-- 🔒 **System Prompt Hardening** - Anti-injection, anti-override, anti-bypass directives
-- 🧪 **Policy Simulation** - Test policy changes before applying with what-if scenarios
+- 🔍 **Kernel Health Dashboard** - Domain lock status, risk level (R0-R4), refusal count, pipeline latency
+- 📈 **Risk Evolution Chart** - Historical risk trend visualization with hover tooltips
+- 🔎 **Request Trace Viewer** - Click-to-view forensic trace (requestId, traceHash, decision)
+- 📜 **Policy Selector** - Switch between Standard, Strict, and Permissive policy versions
+- 🎨 **Creative Mode Indicator** - Toggle with drift warning at R2+ threshold
+- 🗺️ **Domain Map** - Interactive SVG visualization of domain relationships
+- 🔒 **Anti-Bypass Design** - Symbol guard, 12-step non-bypass pipeline, forensic tracing
+- 🧪 **51 Kernel Tests** - Golden dataset regression, E2E, benchmark, 96%+ coverage
 
 ### v1.6 Features
 
@@ -205,13 +213,17 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 │  🛡️ SAFETY UI (Layer 4)    — Non-Coder Safety Dashboard │
 │     v1.7.2                  — Read-only risk view         │
 │     Risk: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous   │
+│     + Health Dashboard, Trace Viewer, Risk Chart         │
+│     + Policy Selector, Creative Mode, Domain Map         │
 ├─────────────────────────────────────────────────────────┤
 │  🌐 PLATFORM (Layer 3)     — Web UI, Agent Chat          │
 │     v1.6 Agent Platform    — Production runtime           │
 │  🔐 v1.6.1                 — Enterprise Governance Engine │
 ├─────────────────────────────────────────────────────────┤
-│  ⚙️ SAFETY RUNTIME (Layer 2.5) — Policy Enforcement      │
-│     v1.7.1                 — Auth, Audit, DI              │
+│  ⚙️ SAFETY RUNTIME (Layer 2.5) — Kernel Architecture     │
+│     v1.7.1                 — 5-Layer Safety Kernel        │
+│     Domain Lock → Contract → Contamination → Refusal     │
+│     → Creative Control | 51 tests | 96%+ coverage        │
 ├─────────────────────────────────────────────────────────┤
 │  🧠 INTELLIGENCE (Layer 2)  — Agent Behavior Control     │
 │     v1.7                   — Reasoning gate, Entropy      │
@@ -242,7 +254,7 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 - **v1.6** ⭐ - Agent Platform (AI chat, multi-agent, governance)
 - **v1.6.1** 🔐 - Governance Engine (enterprise enforcement, audit, CI/CD)
 - **v1.7** 🧠 - Controlled Intelligence (agent behavior control, prompt sanitizer)
-- **v1.7.1** ⚙️ - Safety Runtime (policy enforcement engine)
+- **v1.7.1** ⚙️ - Safety Runtime (5-layer kernel: domain lock, contract, contamination, refusal, creative)
 - **v1.7.2** 🛡️ - Safety Dashboard (non-coder risk view)
 
 **Which should you use?**
@@ -323,16 +335,16 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 |--------|--------|
 | **Version** | 1.7.2 (Feb 2026) |
 | **Stability** | Production-ready — 6/6 integration sprints complete |
-| **Quality Snapshot (2026-02-25)** | Lint: 0 errors · Tests: 1764 passing (0 failed, 3 skipped) |
-| **Coverage Snapshot (2026-02-25)** | Statements 93.05% · Branches 80.46% · Functions 91.48% · Lines 94.18% |
+| **Quality Snapshot (2026-02-26)** | Lint: 0 errors · Web Tests: 1764 passing · Kernel Tests: 51 passing |
+| **Coverage Snapshot (2026-02-26)** | Web: Stmts 93.05% · Kernel: Stmts 96.45% Br 91.41% Fn 99.09% Ln 97.01% |
 | **Skills** | 141 skills across 12 domains + 34 agent tools |
-| **AI Safety** | Runtime active — prompt sanitizer, entropy guard, policy engine |
+| **AI Safety** | Kernel active — 5-layer pipeline, anti-bypass, forensic tracing |
 | **Active Development** | Yes — extensions + Web UI enhancements |
 | **Community** | Building — Discord coming soon |
 
-**Current Status:** 9.4/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md) — cross-verified)
+**Current Status:** 9.4/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md)) | Kernel: 8.5/10 ([Antigravity assessment](docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md))
 - ✅ **Excellent:** Technical quality (9.3/10), AI Safety (9.4/10), Testing (9.5/10), Governance (9/10)
-- ✅ **Strong:** Core framework, 5-layer architecture, 141 skills + 34 agent tools
+- ✅ **Kernel:** 51 tests, 96%+ coverage, anti-bypass Symbol guard, 12-step pipeline
 - ✅ **Complete:** Sprint 1-6 integration, full test coverage, bilingual i18n
 - ⏳ **Pending:** Real-world validation, Community, npm/PyPI packages
 
@@ -409,4 +421,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 25, 2026 | Version 1.7.2 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: February 26, 2026 | Version 1.7.2 | [Documentation](docs/GET_STARTED.md)*

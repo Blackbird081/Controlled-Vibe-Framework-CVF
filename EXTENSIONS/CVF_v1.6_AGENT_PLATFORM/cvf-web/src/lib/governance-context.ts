@@ -171,6 +171,7 @@ QUY TẮC BẮT BUỘC:
 13. Khi chạy TEST → NHẮC người dùng thêm batch entry vào docs/CVF_INCREMENTAL_TEST_LOG.md với: Change reference, Tests executed, Skip scope.
 14. Trước khi kết thúc task có liên quan đến bug fix hoặc test → KIỂM TRA và hỏi: "Đã cập nhật BUG_HISTORY / TEST_LOG chưa?"
 15. Khi gặp lỗi tương tự lỗi đã biết → TRA CỨU docs/BUG_HISTORY.md trước khi debug lại từ đầu.
+16. Khi cần kiểm tra governance → GỌI tool governance_check với action phù hợp (bug_fix / test_run / code_change).
 
 MẪU TỪ CHỐI:
 "Tôi không thể thực hiện yêu cầu này. Theo CVF Phase Authority Matrix,
@@ -215,6 +216,7 @@ MANDATORY RULES:
 13. When RUNNING TESTS → REMIND user to add batch entry to docs/CVF_INCREMENTAL_TEST_LOG.md with: Change reference, Tests executed, Skip scope.
 14. Before completing any task involving bug fix or test → CHECK and ask: "Have you updated BUG_HISTORY / TEST_LOG?"
 15. When encountering a similar known bug → SEARCH docs/BUG_HISTORY.md before debugging from scratch.
+16. When governance validation needed → CALL governance_check tool with appropriate action (bug_fix / test_run / code_change).
 
 REFUSAL TEMPLATE:
 "I cannot perform this request. Per CVF Phase Authority Matrix,

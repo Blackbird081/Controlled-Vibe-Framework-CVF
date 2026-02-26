@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createAIProvider, AIMessage } from '@/lib/ai-providers';
 import { useQuotaManager, ProviderKey } from '@/lib/quota-manager';
+import { checkResponseGovernance } from '@/lib/governance-post-check';
 import {
     calculateQualityScore,
     shouldRequireAcceptance,
@@ -240,6 +241,24 @@ export function useAgentChat({
                 timestamp: new Date(),
             };
             setMessages(prev => [...prev, warnMessage]);
+        }
+
+        // Governance post-processing check
+        if (govState.toolkitEnabled) {
+            const govCheck = checkResponseGovernance(response.text || fullText, userContent, language);
+            if (govCheck.violations.length > 0 || govCheck.suggestions.length > 0) {
+                const parts: string[] = [
+                    ...govCheck.violations.map(v => v.message),
+                    ...govCheck.suggestions,
+                ];
+                const govMessage: ChatMessage = {
+                    id: `msg_${Date.now() + 4}`,
+                    role: 'system',
+                    content: parts.join('\n\n'),
+                    timestamp: new Date(),
+                };
+                setMessages(prev => [...prev, govMessage]);
+            }
         }
     }, [messages, language, detectPhase, trackUsage]);
 

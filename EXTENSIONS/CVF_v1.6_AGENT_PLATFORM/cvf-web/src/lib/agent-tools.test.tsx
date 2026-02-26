@@ -241,8 +241,8 @@ describe('Agent Tools', () => {
     // Tool registry completeness
     // ================================================
     describe('AVAILABLE_TOOLS registry', () => {
-        it('should have all 8 tools registered', () => {
-            const expectedTools = ['web_search', 'code_execute', 'calculator', 'datetime', 'json_parse', 'url_fetch', 'file_read', 'file_write'];
+        it('should have all 9 tools registered', () => {
+            const expectedTools = ['web_search', 'code_execute', 'calculator', 'datetime', 'json_parse', 'url_fetch', 'file_read', 'file_write', 'governance_check'];
             for (const toolId of expectedTools) {
                 expect(AVAILABLE_TOOLS[toolId as keyof typeof AVAILABLE_TOOLS]).toBeDefined();
             }
@@ -331,12 +331,49 @@ describe('Agent Tools', () => {
     });
 
     // ================================================
+    // governance_check tool
+    // ================================================
+    describe('governance_check', () => {
+        const tool = AVAILABLE_TOOLS.governance_check;
+
+        it('should return bug_fix checklist', async () => {
+            const result = await tool.execute({ action: 'bug_fix', context: 'Fixed hydration error' });
+            expect(result.success).toBe(true);
+            const data = result.data as { action: string; checklist: Array<{ rule: string }> };
+            expect(data.action).toBe('bug_fix');
+            expect(data.checklist.length).toBeGreaterThan(0);
+            expect(data.checklist[0].rule).toContain('BUG_HISTORY');
+        });
+
+        it('should return test_run checklist', async () => {
+            const result = await tool.execute({ action: 'test_run' });
+            expect(result.success).toBe(true);
+            const data = result.data as { action: string; checklist: Array<{ rule: string }> };
+            expect(data.action).toBe('test_run');
+            expect(data.checklist[0].rule).toContain('TEST_LOG');
+        });
+
+        it('should return code_change checklist', async () => {
+            const result = await tool.execute({ action: 'code_change' });
+            expect(result.success).toBe(true);
+            const data = result.data as { checklist: Array<{ rule: string }> };
+            expect(data.checklist[0].rule).toContain('compat gate');
+        });
+
+        it('should fail on unknown action', async () => {
+            const result = await tool.execute({ action: 'unknown_action' });
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('Unknown action');
+        });
+    });
+
+    // ================================================
     // useTools hook
     // ================================================
     describe('useTools', () => {
         it('should initialize with all tools and empty call history', () => {
             const { result } = renderHook(() => useTools());
-            expect(Object.keys(result.current.tools).length).toBe(8);
+            expect(Object.keys(result.current.tools).length).toBe(9);
             expect(result.current.toolCalls).toHaveLength(0);
             expect(result.current.isExecuting).toBe(false);
         });
@@ -434,9 +471,9 @@ describe('Agent Tools', () => {
     describe('ToolsPanel', () => {
         it('renders all tool cards', () => {
             render(<ToolsPanel />);
-            // Should render 8 tool cards
+            // Should render 9 tool cards
             const buttons = screen.getAllByRole('button');
-            expect(buttons.length).toBeGreaterThanOrEqual(8);
+            expect(buttons.length).toBeGreaterThanOrEqual(9);
         });
 
         it('renders panel title via i18n key', () => {

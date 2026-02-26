@@ -5,7 +5,7 @@ import { createSandbox, validateUrl } from './security';
 import { useLanguage } from './i18n';
 
 // Tool Types
-export type ToolType = 'web_search' | 'code_execute' | 'file_read' | 'file_write' | 'calculator' | 'datetime' | 'json_parse' | 'url_fetch';
+export type ToolType = 'web_search' | 'code_execute' | 'file_read' | 'file_write' | 'calculator' | 'datetime' | 'json_parse' | 'url_fetch' | 'governance_check';
 
 export interface Tool {
     id: ToolType;
@@ -320,6 +320,81 @@ export const AVAILABLE_TOOLS: Record<ToolType, Tool> = {
             }
         },
     },
+    governance_check: {
+        id: 'governance_check',
+        name: 'Governance Checker',
+        description: 'Validate CVF governance compliance for bug fixes, tests, and code changes',
+        icon: '🛡️',
+        category: 'utility',
+        parameters: [
+            { name: 'action', type: 'string', description: 'Action type: bug_fix | test_run | code_change', required: true },
+            { name: 'context', type: 'string', description: 'Description of what was done', required: false },
+        ],
+        execute: async (params) => {
+            const startTime = Date.now();
+            const action = (params.action as string || '').toLowerCase();
+            const context = params.context as string || '';
+
+            const checklists: Record<string, { items: { rule: string; required: boolean; hint: string }[]; policy: string }> = {
+                bug_fix: {
+                    policy: 'governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md',
+                    items: [
+                        { rule: 'Add entry to docs/BUG_HISTORY.md', required: true, hint: 'Include: Bug ID, Symptoms, Root Cause, Solution, Prevention' },
+                        { rule: 'Commit message starts with fix:', required: true, hint: 'e.g. fix: resolve hydration error in Settings' },
+                        { rule: 'Root cause identified', required: true, hint: 'Explain WHY the bug happened, not just WHAT was changed' },
+                        { rule: 'Prevention strategy documented', required: false, hint: 'How to prevent similar bugs in future' },
+                        { rule: 'Run compat gate after push', required: false, hint: 'python governance/compat/check_bug_doc_compat.py --enforce' },
+                    ],
+                },
+                test_run: {
+                    policy: 'governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md',
+                    items: [
+                        { rule: 'Add batch entry to docs/CVF_INCREMENTAL_TEST_LOG.md', required: true, hint: 'Use the standard batch template' },
+                        { rule: 'Log change reference (commit/range)', required: true, hint: 'What triggered this test run' },
+                        { rule: 'Log impacted scope', required: true, hint: 'Which files/modules were tested' },
+                        { rule: 'Log tests executed with PASS/FAIL', required: true, hint: 'Include exact commands and results' },
+                        { rule: 'Log skip scope with justification', required: true, hint: 'What was NOT tested and WHY' },
+                        { rule: 'Run compat gate after push', required: false, hint: 'python governance/compat/check_test_doc_compat.py --enforce' },
+                    ],
+                },
+                code_change: {
+                    policy: 'governance/compat/core-manifest.json',
+                    items: [
+                        { rule: 'Run core compat gate', required: true, hint: 'python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD' },
+                        { rule: 'Determine test scope (focused vs full)', required: true, hint: 'Gate output tells you: FOCUSED or FULL REGRESSION' },
+                        { rule: 'If fix: commit, also follow bug_fix checklist', required: false, hint: 'Run governance_check with action=bug_fix' },
+                        { rule: 'If test files changed, also follow test_run checklist', required: false, hint: 'Run governance_check with action=test_run' },
+                    ],
+                },
+            };
+
+            const checklist = checklists[action];
+            if (!checklist) {
+                return {
+                    success: false,
+                    error: `Unknown action: ${action}. Valid actions: bug_fix, test_run, code_change`,
+                    executionTime: Date.now() - startTime,
+                };
+            }
+
+            const result = {
+                action,
+                context: context || '(none provided)',
+                policy: checklist.policy,
+                checklist: checklist.items.map(item => ({
+                    ...item,
+                    status: item.required ? '❌ Required' : '📋 Recommended',
+                })),
+                summary: `${checklist.items.filter(i => i.required).length} required / ${checklist.items.length} total items`,
+            };
+
+            return {
+                success: true,
+                data: result,
+                executionTime: Date.now() - startTime,
+            };
+        },
+    },
 };
 
 // Hook for using tools
@@ -531,10 +606,10 @@ export function ToolsPanel({
                             <div
                                 key={call.id}
                                 className={`p-2 rounded text-xs ${call.status === 'completed'
-                                        ? 'bg-green-50 dark:bg-green-900/30'
-                                        : call.status === 'failed'
-                                            ? 'bg-red-50 dark:bg-red-900/30'
-                                            : 'bg-gray-50 dark:bg-gray-800'
+                                    ? 'bg-green-50 dark:bg-green-900/30'
+                                    : call.status === 'failed'
+                                        ? 'bg-red-50 dark:bg-red-900/30'
+                                        : 'bg-gray-50 dark:bg-gray-800'
                                     }`}
                             >
                                 <div className="flex items-center gap-2">
@@ -543,7 +618,7 @@ export function ToolsPanel({
                                         {getToolName(call.toolId, tools[call.toolId]?.name || '')}
                                     </span>
                                     <span className={`ml-auto ${call.status === 'completed' ? 'text-green-600' :
-                                            call.status === 'failed' ? 'text-red-600' : 'text-gray-500'
+                                        call.status === 'failed' ? 'text-red-600' : 'text-gray-500'
                                         }`}>
                                         {getStatusLabel(call.status)}
                                     </span>

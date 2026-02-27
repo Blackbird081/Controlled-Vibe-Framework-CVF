@@ -2,18 +2,27 @@ import { ColorRound } from "@/lib/game-core/types";
 
 type UiLanguage = "vi" | "en";
 
-interface ColorEntry {
+export interface ColorEntry {
   name: string;
   hex: string;
 }
 
-const COLORS: ColorEntry[] = [
+interface ColorGenerationOptions {
+  matchChance?: number;
+  palette?: ColorEntry[];
+  wordPool?: string[];
+}
+
+export const COLOR_LIBRARY: ColorEntry[] = [
   { name: "Xanh Duong", hex: "#1fb6ff" },
   { name: "Vang", hex: "#ffb703" },
   { name: "Do", hex: "#ff4d4f" },
   { name: "Xanh La", hex: "#52c41a" },
   { name: "Cam", hex: "#ff8c42" },
   { name: "Hong", hex: "#ff66a3" },
+  { name: "Tim", hex: "#8e6cff" },
+  { name: "Nau", hex: "#8b5e3c" },
+  { name: "Xanh Ngoc", hex: "#2ec4b6" },
 ];
 
 function shuffle<T>(items: T[]): T[] {
@@ -32,15 +41,40 @@ const COLOR_ENGLISH_MAP: Record<string, string> = {
   "Xanh La": "Green",
   Cam: "Orange",
   Hong: "Pink",
+  Tim: "Purple",
+  Nau: "Brown",
+  "Xanh Ngoc": "Teal",
 };
 
-export function generateColorRound(): ColorRound {
-  const entries = shuffle(COLORS);
-  const answerColor = entries[0];
-  const wordEntry = entries[1];
-  const allowMatch = Math.random() < 0.2;
+const COLOR_MARKER_MAP: Record<string, string> = {
+  "Xanh Duong": "●",
+  Vang: "■",
+  Do: "▲",
+  "Xanh La": "◆",
+  Cam: "★",
+  Hong: "♥",
+  Tim: "⬢",
+  Nau: "⬣",
+  "Xanh Ngoc": "⬟",
+};
 
-  const word = allowMatch ? answerColor.name : wordEntry.name;
+export function generateColorRound(options: ColorGenerationOptions = {}): ColorRound {
+  const rawPalette = Array.isArray(options.palette) ? options.palette : [];
+  const safePalette = rawPalette.length >= 4 ? rawPalette : COLOR_LIBRARY;
+  const entries = shuffle(safePalette);
+  const answerColor = entries[0];
+  const wordCandidates = Array.isArray(options.wordPool) && options.wordPool.length >= 2
+    ? [...new Set(options.wordPool)]
+    : safePalette.map((item) => item.name);
+  const nonAnswerWords = wordCandidates.filter((item) => item !== answerColor.name);
+  const fallbackWord = entries[1]?.name ?? answerColor.name;
+  const randomWord = nonAnswerWords.length > 0
+    ? nonAnswerWords[Math.floor(Math.random() * nonAnswerWords.length)]
+    : fallbackWord;
+  const safeMatchChance = Math.max(0, Math.min(1, options.matchChance ?? 0.2));
+  const allowMatch = Math.random() < safeMatchChance;
+
+  const word = allowMatch ? answerColor.name : randomWord;
   const choices = shuffle(entries.slice(0, 4).map((item) => item.name));
   if (!choices.includes(answerColor.name)) {
     choices[0] = answerColor.name;
@@ -62,10 +96,14 @@ export function getColorHint(answerColorName: string, language: UiLanguage = "vi
 }
 
 export function getColorHexByName(colorName: string): string {
-  const found = COLORS.find((item) => item.name === colorName);
+  const found = COLOR_LIBRARY.find((item) => item.name === colorName);
   return found?.hex ?? "#1fb6ff";
 }
 
 export function getColorEnglishName(colorName: string): string {
   return COLOR_ENGLISH_MAP[colorName] ?? colorName;
+}
+
+export function getColorMarker(colorName: string): string {
+  return COLOR_MARKER_MAP[colorName] ?? "●";
 }

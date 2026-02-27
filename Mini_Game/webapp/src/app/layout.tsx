@@ -21,6 +21,30 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
 };
 
+const devServiceWorkerResetScript = `(() => {
+  if (!("serviceWorker" in navigator)) return;
+  const flag = "cvf-dev-sw-reset";
+  navigator.serviceWorker
+    .getRegistrations()
+    .then(async (registrations) => {
+      if (!registrations.length) return;
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+      if ("caches" in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((key) => caches.delete(key)));
+      }
+      if (!sessionStorage.getItem(flag)) {
+        sessionStorage.setItem(flag, "1");
+        window.location.reload();
+      } else {
+        sessionStorage.removeItem(flag);
+      }
+    })
+    .catch(() => {
+      // Best effort cleanup for development.
+    });
+})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,6 +52,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {process.env.NODE_ENV !== "production" ? (
+          <script dangerouslySetInnerHTML={{ __html: devServiceWorkerResetScript }} />
+        ) : null}
+      </head>
       <body className={`${baloo.variable} ${nunito.variable} antialiased`}>
         <RegisterServiceWorker />
         {children}

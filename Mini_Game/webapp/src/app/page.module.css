@@ -39,6 +39,13 @@
   --game-deep: #7d1e46;
 }
 
+.page[data-game="logic"] {
+  --game-primary: #8b6bff;
+  --game-accent: #5be0b8;
+  --game-soft: #efe8ff;
+  --game-deep: #3b2b85;
+}
+
 .page[data-age="age_5_6"] {
   --age-bg:
     radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.88), transparent 28%),
@@ -135,6 +142,10 @@
   gap: 14px;
 }
 
+.heroSingle {
+  grid-template-columns: 1fr;
+}
+
 .heroCard {
   position: relative;
   overflow: hidden;
@@ -167,6 +178,20 @@
   margin: 12px 0 0;
   color: color-mix(in srgb, var(--game-deep) 85%, #18344f);
   font-size: 1.08rem;
+}
+
+.focusLine {
+  margin: 10px 0 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--game-deep) 90%, #1d4a6d);
+}
+
+.profileFocusLine {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--game-deep) 84%, #1c4d72);
 }
 
 .page[data-age="age_5_6"] .heroCard h1 {
@@ -202,6 +227,35 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 14px;
+}
+
+.viewTabs {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.viewTabButton {
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--game-primary) 55%, white);
+  background: rgba(255, 255, 255, 0.88);
+  color: color-mix(in srgb, var(--game-deep) 88%, #194263);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 8px 6px;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.viewTabButton:hover {
+  transform: translateY(-1px);
+}
+
+.viewTabButtonActive {
+  border-color: var(--game-accent);
+  background: linear-gradient(180deg, #fffdf4, #ffe8b5);
+  box-shadow: 0 8px 16px rgba(237, 166, 48, 0.28);
 }
 
 .chip {
@@ -933,6 +987,17 @@
   cursor: not-allowed;
 }
 
+.quickSwitchButton {
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--game-accent) 60%, white);
+  background: linear-gradient(180deg, #fffdf2, #ffeebf);
+  color: #704f12;
+  padding: 7px 10px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
 .hint {
   margin: 0;
   font-size: 0.9rem;
@@ -1145,6 +1210,23 @@
   gap: 12px;
 }
 
+.singlePanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.parentTabWrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.settingsPanel {
+  border-radius: 16px;
+  border: 2px solid color-mix(in srgb, var(--game-primary) 50%, white);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 14px;
+}
+
 .badgeShelf {
   border-radius: 16px;
   border: 2px solid color-mix(in srgb, var(--game-primary) 48%, white);
@@ -1322,6 +1404,101 @@
   color: #6b4b0f;
 }
 
+.rewardStrip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.rewardCard {
+  border-radius: 16px;
+  border: 2px solid color-mix(in srgb, var(--game-primary) 54%, white);
+  background:
+    radial-gradient(circle at 90% 18%, rgba(255, 255, 255, 0.35), transparent 32%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.96), color-mix(in srgb, var(--game-soft) 66%, white));
+  box-shadow: 0 10px 20px rgba(20, 84, 132, 0.13);
+  padding: 12px;
+}
+
+.rewardTitle {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--game-deep) 90%, #143753);
+}
+
+.rewardHint {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  color: #3f6482;
+}
+
+.rewardAction {
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--game-primary) 60%, white);
+  background: linear-gradient(180deg, #fffef5, #ffe7b5);
+  color: #6a4a08;
+  font-weight: 900;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.rewardAction:disabled {
+  opacity: 0.62;
+  cursor: not-allowed;
+}
+
+.rewardTrack {
+  margin-top: 9px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--game-primary) 54%, white);
+  background: rgba(255, 255, 255, 0.82);
+  overflow: hidden;
+}
+
+.rewardFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4cc9f0, #7bc950 56%, #ffd166);
+  transition: width 240ms ease;
+}
+
+.rewardValue {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #245b84;
+}
+
+.rewardSelectLabel {
+  margin-top: 8px;
+  display: grid;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: #376081;
+  font-weight: 800;
+}
+
+.rewardSelect {
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--game-primary) 56%, white);
+  background: #fff;
+  color: #1f577f;
+  padding: 7px 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.questionCardBoss {
+  border-color: #ffcc4d;
+  box-shadow: 0 0 0 2px rgba(255, 204, 77, 0.26), 0 20px 38px rgba(10, 60, 102, 0.2);
+}
+
 .onboardingBackdrop {
   position: fixed;
   inset: 0;
@@ -1482,6 +1659,14 @@
 
   .questStrip {
     grid-template-columns: 1fr;
+  }
+
+  .rewardStrip {
+    grid-template-columns: 1fr;
+  }
+
+  .viewTabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

@@ -8,6 +8,14 @@ interface ParentReport {
   correct: number;
   wrong: number;
   accuracy: number;
+  weeklyRounds?: number;
+  weeklyAccuracy?: number;
+  weeklyTrend?: "up" | "down" | "flat";
+  weakSpot?: string;
+  suggestion?: string;
+  skillScores?: Record<string, number>;
+  offlineActivity?: string;
+  teacherSummary?: string;
 }
 
 interface ParentModePanelProps {
@@ -23,6 +31,7 @@ interface ParentModePanelProps {
   onResetAll: () => void;
   onToggle: (enabled: boolean) => void;
   onLimitChange: (minutes: number) => void;
+  onSessionLimitChange: (minutes: number) => void;
 }
 
 export function ParentModePanel({
@@ -38,6 +47,7 @@ export function ParentModePanel({
   onResetAll,
   onToggle,
   onLimitChange,
+  onSessionLimitChange,
 }: ParentModePanelProps) {
   const hasPin = Boolean(settings.pinCode);
   const copy =
@@ -56,6 +66,7 @@ export function ParentModePanel({
           newPinHint: "PIN moi (4-6 so)",
           savePin: "Luu PIN",
           dailyLimit: "Gioi han choi moi ngay:",
+          sessionLimit: "Gioi han moi phien:",
           minutes: "phut",
           remaining: "Con lai hom nay:",
           freePlay: "Parent mode dang tat. Tre co the choi tu do.",
@@ -63,6 +74,13 @@ export function ParentModePanel({
           correct: "Dung",
           wrong: "Sai",
           accuracy: "Do chinh xac",
+          weeklySummary: "Bao cao 7 ngay",
+          trend: "Xu huong",
+          weakSpot: "Diem can ho tro",
+          suggestion: "Goi y",
+          skillProfile: "Ho so ky nang",
+          offlineActivity: "Hoat dong offline",
+          teacherSummary: "Teacher summary",
           resetAll: "Reset toan bo du lieu choi",
         }
       : {
@@ -79,6 +97,7 @@ export function ParentModePanel({
           newPinHint: "New PIN (4-6 digits)",
           savePin: "Save PIN",
           dailyLimit: "Daily play limit:",
+          sessionLimit: "Per-session limit:",
           minutes: "min",
           remaining: "Remaining today:",
           freePlay: "Parent mode is off. Child can play freely.",
@@ -86,6 +105,13 @@ export function ParentModePanel({
           correct: "Correct",
           wrong: "Wrong",
           accuracy: "Accuracy",
+          weeklySummary: "7-day summary",
+          trend: "Trend",
+          weakSpot: "Needs support",
+          suggestion: "Suggestion",
+          skillProfile: "Skill profile",
+          offlineActivity: "Offline activity",
+          teacherSummary: "Teacher summary",
           resetAll: "Reset all game data",
         };
 
@@ -183,6 +209,19 @@ export function ParentModePanel({
           onChange={(event) => onLimitChange(Number(event.target.value))}
           disabled={!settings.enabled || locked}
         />
+        <label htmlFor="session-limit">
+          {copy.sessionLimit} {settings.sessionLimitMinutes} {copy.minutes}
+        </label>
+        <input
+          id="session-limit"
+          type="range"
+          min={5}
+          max={90}
+          step={5}
+          value={settings.sessionLimitMinutes}
+          onChange={(event) => onSessionLimitChange(Number(event.target.value))}
+          disabled={!settings.enabled || locked}
+        />
       </div>
 
       <p className={styles.parentRemaining}>
@@ -201,6 +240,37 @@ export function ParentModePanel({
         <p>
           {copy.accuracy}: <strong>{report.accuracy}%</strong>
         </p>
+        <p>
+          {copy.weeklySummary}: <strong>{report.weeklyRounds ?? 0}</strong> rounds | <strong>{report.weeklyAccuracy ?? 0}%</strong>
+        </p>
+        <p>
+          {copy.trend}: <strong>{report.weeklyTrend ?? "flat"}</strong> | {copy.weakSpot}: <strong>{report.weakSpot ?? "-"}</strong>
+        </p>
+        {report.suggestion ? (
+          <p>
+            {copy.suggestion}: <strong>{report.suggestion}</strong>
+          </p>
+        ) : null}
+        {report.skillScores ? (
+          <p>
+            {copy.skillProfile}:{" "}
+            <strong>
+              {Object.entries(report.skillScores)
+                .map(([name, value]) => `${name} ${value}`)
+                .join(" | ")}
+            </strong>
+          </p>
+        ) : null}
+        {report.offlineActivity ? (
+          <p>
+            {copy.offlineActivity}: <strong>{report.offlineActivity}</strong>
+          </p>
+        ) : null}
+        {report.teacherSummary ? (
+          <p>
+            {copy.teacherSummary}: <strong>{report.teacherSummary}</strong>
+          </p>
+        ) : null}
       </div>
 
       <button type="button" className={styles.parentDangerButton} disabled={locked} onClick={onResetAll}>

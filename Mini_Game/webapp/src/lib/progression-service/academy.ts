@@ -25,6 +25,10 @@ export interface AcademyProgressState {
   activeZoneIndex: number;
   activeNodeIndex: number;
   totalRounds: number;
+  bossStats: {
+    wins: number;
+    fails: number;
+  };
 }
 
 export interface AcademyTelemetryEvent {
@@ -40,7 +44,7 @@ interface AcademyZoneBlueprint {
 }
 
 const ACADEMY_STORAGE_KEY = "cvf-mini-academy-progress-v1";
-const BOSS_ROUND_EVERY = 5;
+export const BOSS_ROUND_EVERY = 5;
 
 const ACADEMY_BLUEPRINT: AcademyZoneBlueprint[] = [
   {
@@ -108,6 +112,10 @@ export function getDefaultAcademyProgress(): AcademyProgressState {
     activeZoneIndex: 0,
     activeNodeIndex: 0,
     totalRounds: 0,
+    bossStats: {
+      wins: 0,
+      fails: 0,
+    },
   };
 }
 
@@ -127,7 +135,14 @@ export function loadAcademyProgress(): AcademyProgressState {
     if (!raw) return getDefaultAcademyProgress();
     const parsed = JSON.parse(raw) as unknown;
     if (!isValidProgress(parsed)) return getDefaultAcademyProgress();
-    return parsed;
+    const candidate = parsed as AcademyProgressState;
+    return {
+      ...candidate,
+      bossStats: {
+        wins: Math.max(0, Math.round(candidate.bossStats?.wins ?? 0)),
+        fails: Math.max(0, Math.round(candidate.bossStats?.fails ?? 0)),
+      },
+    };
   } catch {
     return getDefaultAcademyProgress();
   }
@@ -149,6 +164,15 @@ export function getRoundsUntilBoss(progress: AcademyProgressState, bossEvery: nu
   return normalizedEvery - mod;
 }
 
+export function isBossRound(progress: AcademyProgressState, bossEvery: number = BOSS_ROUND_EVERY): boolean {
+  return getRoundsUntilBoss(progress, bossEvery) === 1;
+}
+
+export function getBossRoundNumber(progress: AcademyProgressState, bossEvery: number = BOSS_ROUND_EVERY): number {
+  const normalizedEvery = Math.max(1, bossEvery);
+  return Math.floor(progress.totalRounds / normalizedEvery) + 1;
+}
+
 export function advanceAcademyProgress(
   current: AcademyProgressState,
   isCorrect: boolean,
@@ -158,7 +182,14 @@ export function advanceAcademyProgress(
 
   const zone = next.zones[next.activeZoneIndex];
   const node = zone.nodes[next.activeNodeIndex];
+  const bossRoundActive = isBossRound(current);
   next.totalRounds += 1;
+  if (bossRoundActive) {
+    next.bossStats = {
+      wins: next.bossStats.wins + (isCorrect ? 1 : 0),
+      fails: next.bossStats.fails + (isCorrect ? 0 : 1),
+    };
+  }
 
   if (!zone.unlocked) {
     zone.unlocked = true;

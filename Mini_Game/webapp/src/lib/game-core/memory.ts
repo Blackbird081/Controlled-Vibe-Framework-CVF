@@ -4,6 +4,14 @@ type UiLanguage = "vi" | "en";
 
 const SYMBOL_POOL = ["🚀", "🛰️", "🌟", "🪐", "🔭", "🧪", "🧠", "⚡", "🛸", "📡"];
 
+interface MemoryGenerationOptions {
+  symbolPool?: string[];
+  complexityOverride?: number;
+  revealSecondsOverride?: number;
+  minAnswerCount?: number;
+  maxAnswerCount?: number;
+}
+
 function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -17,22 +25,29 @@ function shuffle<T>(items: T[]): T[] {
   return arr;
 }
 
-function pickDistinctSymbols(count: number): string[] {
-  return shuffle(SYMBOL_POOL).slice(0, count);
+function pickDistinctSymbols(count: number, symbolPool: string[]): string[] {
+  return shuffle(symbolPool).slice(0, count);
 }
 
-export function generateMemoryRound(limit: number): MemoryRound {
-  const complexity = limit <= 20 ? 5 : limit <= 50 ? 6 : 7;
-  const revealSeconds = limit <= 20 ? 4 : limit <= 50 ? 3 : 2;
+export function generateMemoryRound(limit: number, options: MemoryGenerationOptions = {}): MemoryRound {
+  const defaultComplexity = limit <= 20 ? 5 : limit <= 50 ? 6 : 7;
+  const complexity = Math.max(4, options.complexityOverride ?? defaultComplexity);
+  const defaultReveal = limit <= 20 ? 4 : limit <= 50 ? 3 : 2;
+  const revealSeconds = Math.max(1, options.revealSecondsOverride ?? defaultReveal);
+  const usablePool = Array.isArray(options.symbolPool) && options.symbolPool.length >= 4
+    ? options.symbolPool
+    : SYMBOL_POOL;
 
-  const options = pickDistinctSymbols(4);
-  const answer = options[randomInt(0, options.length - 1)];
+  const choicesPool = pickDistinctSymbols(4, usablePool);
+  const answer = choicesPool[randomInt(0, choicesPool.length - 1)];
 
-  const answerCount = randomInt(2, Math.max(3, Math.floor(complexity / 2) + 1));
+  const minAnswerCount = Math.max(2, Math.min(complexity - 1, options.minAnswerCount ?? 2));
+  const maxAnswerCount = Math.max(minAnswerCount, Math.min(complexity - 1, options.maxAnswerCount ?? Math.max(3, Math.floor(complexity / 2) + 1)));
+  const answerCount = randomInt(minAnswerCount, maxAnswerCount);
   const sequence: string[] = Array(answerCount).fill(answer);
 
   while (sequence.length < complexity) {
-    const distractor = options[randomInt(0, options.length - 1)];
+    const distractor = choicesPool[randomInt(0, choicesPool.length - 1)];
     if (distractor !== answer) {
       sequence.push(distractor);
     }
@@ -40,7 +55,7 @@ export function generateMemoryRound(limit: number): MemoryRound {
 
   return {
     sequence: shuffle(sequence),
-    choices: shuffle(options),
+    choices: shuffle(choicesPool),
     answer,
     revealSeconds,
   };

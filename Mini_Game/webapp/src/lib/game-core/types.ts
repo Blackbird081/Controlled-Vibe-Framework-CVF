@@ -1,6 +1,6 @@
 export type LevelKey = "rookie" | "talent" | "master";
 export type MathOperator = "+" | "-";
-export type MiniGameKey = "math" | "memory" | "color";
+export type MiniGameKey = "math" | "memory" | "color" | "logic";
 
 export interface LevelConfig {
   key: LevelKey;
@@ -37,6 +37,12 @@ export interface ColorRound {
   wordColorHex: string;
   answerColorName: string;
   choices: string[];
+}
+
+export interface LogicRound {
+  sequence: number[];
+  answer: number;
+  choices: number[];
 }
 
 export interface MiniGameDefinition {
@@ -103,5 +109,10 @@ export const MINI_GAMES: MiniGameDefinition[] = [
     key: "color",
     title: "Phan Xa Mau",
     description: "Bo qua noi dung chu, chon mau chu dang hien thi.",
+  },
+  {
+    key: "logic",
+    title: "Logic Chuoi",
+    description: "Tim quy luat day so va chon dap an tiep theo.",
   },
 ];

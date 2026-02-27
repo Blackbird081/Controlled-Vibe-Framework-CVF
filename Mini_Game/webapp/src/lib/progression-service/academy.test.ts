@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   advanceAcademyProgress,
+  getBossRoundNumber,
   getDefaultAcademyProgress,
   getRoundsUntilBoss,
+  isBossRound,
 } from "@/lib/progression-service/academy";
 
 describe("academy progression service", () => {
@@ -13,6 +15,8 @@ describe("academy progression service", () => {
     expect(state.zones[0].unlocked).toBe(true);
     expect(state.zones[0].nodes[0].unlocked).toBe(true);
     expect(state.zones[1].unlocked).toBe(false);
+    expect(state.bossStats.wins).toBe(0);
+    expect(state.bossStats.fails).toBe(0);
   });
 
   it("completes node after enough correct answers", () => {
@@ -47,5 +51,29 @@ describe("academy progression service", () => {
       totalRounds: 3,
     };
     expect(getRoundsUntilBoss(progressed)).toBe(2);
+  });
+
+  it("detects boss round and boss index", () => {
+    const state = getDefaultAcademyProgress();
+    const justBeforeBoss = { ...state, totalRounds: 4 };
+    const afterBoss = { ...state, totalRounds: 5 };
+
+    expect(isBossRound(justBeforeBoss)).toBe(true);
+    expect(getBossRoundNumber(justBeforeBoss)).toBe(1);
+    expect(isBossRound(afterBoss)).toBe(false);
+    expect(getBossRoundNumber(afterBoss)).toBe(2);
+  });
+
+  it("tracks boss win and fail stats", () => {
+    const state = getDefaultAcademyProgress();
+    const justBeforeBoss = { ...state, totalRounds: 4 };
+    const afterWin = advanceAcademyProgress(justBeforeBoss, true).next;
+    expect(afterWin.bossStats.wins).toBe(1);
+    expect(afterWin.bossStats.fails).toBe(0);
+
+    const anotherBoss = { ...afterWin, totalRounds: 9 };
+    const afterFail = advanceAcademyProgress(anotherBoss, false).next;
+    expect(afterFail.bossStats.wins).toBe(1);
+    expect(afterFail.bossStats.fails).toBe(1);
   });
 });

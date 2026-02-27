@@ -1,4 +1,5 @@
 export * from "@/lib/game-core/color";
+export * from "@/lib/game-core/logic";
 export * from "@/lib/game-core/math";
 export * from "@/lib/game-core/memory";
 export * from "@/lib/game-core/sfx";

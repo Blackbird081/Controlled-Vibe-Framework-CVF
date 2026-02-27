@@ -15,4 +15,17 @@ describe("math game core", () => {
     expect(calculateEarnedScore(2, 10)).toBe(10);
     expect(calculateEarnedScore(3, 10)).toBe(30);
   });
+
+  it("supports age-profile generation options", () => {
+    const question = generateMathQuestion(100, {
+      operators: ["+"],
+      operandMax: 10,
+      answerMax: 20,
+    });
+
+    expect(question.operator).toBe("+");
+    expect(question.left).toBeLessThanOrEqual(10);
+    expect(question.right).toBeLessThanOrEqual(10);
+    expect(question.answer).toBeLessThanOrEqual(20);
+  });
 });

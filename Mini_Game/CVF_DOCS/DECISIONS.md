@@ -79,3 +79,18 @@
 - **Decision:** Nang threshold coverage len (Statements 80 / Branches 60 / Functions 80 / Lines 80) sau khi bo sung test boi rong.
 - **Reason:** Baseline moi da dat muc cao hon, can chot gate chat hon de tranh regression khi tiep tuc polish.
 - **Impact:** Coverage gate tro thanh quality control that su cho pre-release.
+
+## D-017 (2026-02-27)
+- **Decision:** Khoi dong roadmap "Full 8 proposals" theo 2 truc (learning value + engagement).
+- **Reason:** Bo de nghi moi yeu cau vuot qua scope 8-upgrades cu, can mot plan hop nhat va DoD ro rang.
+- **Impact:** Tao file `CVF_FULL_8_PROPOSALS_EXECUTION_ROADMAP_2026-02-27.md` va trien khai theo cum U1/U2/U3.
+
+## D-018 (2026-02-27)
+- **Decision:** Them Adaptive Difficulty Engine + Learning Path profile vao gameplay loop.
+- **Reason:** Can giu do kho "vua suc" theo 5-10 luot gan nhat va co de xuat bai tap trung vao diem yeu.
+- **Impact:** Round start duoc tune dong (pace/complexity), parent report co them ho so ky nang.
+
+## D-019 (2026-02-27)
+- **Decision:** Mo rong game loop voi mini-game Logic + bo sung detective tool unlock + baseline A/B telemetry.
+- **Reason:** Tang do moi gameplay va tao gia tri progression ro rang hon thay vi chi diem/combo.
+- **Impact:** `MiniGameKey` duoc mo rong, reward co tool equip, telemetry co event retention/drop-off/experiment exposure.

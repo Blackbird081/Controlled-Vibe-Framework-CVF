@@ -9,11 +9,10 @@ import { MiniGameTabs } from "@/components/ui-shell/MiniGameTabs";
 import { ParentModePanel } from "@/components/ui-shell/ParentModePanel";
 import {
   calculateEarnedScore,
-  generateColorRound,
-  generateMathQuestion,
   getColorEnglishName,
-  generateMemoryRound,
   getColorHint,
+  getColorMarker,
+  getLogicHint,
   getMathHint,
   getMemoryHint,
   LEVELS,
@@ -44,18 +43,74 @@ import {
 import {
   AcademyZoneState,
   advanceAcademyProgress,
+  getBossRoundNumber,
   getDefaultAcademyProgress,
   getRoundsUntilBoss,
+  isBossRound,
   loadAcademyProgress,
   saveAcademyProgress,
 } from "@/lib/progression-service";
+import {
+  ContentAdaptiveTuning,
+  ContentBankState,
+  getDefaultContentBankState,
+  getAgeGameCopy,
+  getNextColorRound,
+  getNextLogicRound,
+  getNextMathRound,
+  getNextMemoryRound,
+  getWeeklyThemeLabel,
+  loadContentBankState,
+  saveContentBankState,
+} from "@/lib/content-bank";
+import {
+  appendAdaptiveOutcome,
+  getAdaptiveGameTuning,
+  getDefaultAdaptiveEngineState,
+  loadAdaptiveEngineState,
+  saveAdaptiveEngineState,
+} from "@/lib/adaptive-engine";
+import {
+  getDefaultLearningPathState,
+  getLearningSuggestion,
+  LearningPathState,
+  loadLearningPathState,
+  saveLearningPathState,
+  updateLearningPathState,
+} from "@/lib/learning-path-service";
+import {
+  buildWeeklyReport,
+  getDefaultReportHistoryState,
+  getYesterdayEntry,
+  loadReportHistoryState,
+  saveReportHistoryState,
+  syncTodayMetrics,
+} from "@/lib/report-service";
+import {
+  RewardState,
+  equipAvatar,
+  equipPet,
+  equipTool,
+  getDefaultRewardState,
+  getSelfChallengeStatus,
+  getUnlockedAvatars,
+  getUnlockedPets,
+  getUnlockedTools,
+  loadRewardState,
+  markSelfChallengeWin,
+  openDailyChest,
+  saveRewardState,
+  syncStickersFromBadges,
+} from "@/lib/rewards-service";
 import { useGameStore } from "@/lib/store/game-store";
 import { trackEvent } from "@/lib/telemetry";
+import { ExperimentAssignment, getOrCreateExperimentAssignment } from "@/lib/experiment-service";
 import styles from "./page.module.css";
 
 type FeedbackTone = "success" | "error" | "info";
 type AgeGroupKey = "age_5_6" | "age_7_8" | "age_9_10";
 type UiLanguage = "vi" | "en";
+type DashboardView = "play" | "progress" | "parent" | "settings";
 
 interface AgeProfileConfig {
   key: AgeGroupKey;
@@ -120,6 +175,10 @@ const MINI_GAME_LABELS: Record<UiLanguage, Record<MiniGameKey, { title: string; 
       title: "Phan Xa Mau",
       description: "Bo qua noi dung chu, chon mau chu dang hien thi.",
     },
+    logic: {
+      title: "Logic Chuoi",
+      description: "Tim quy luat day so va chon so tiep theo.",
+    },
   },
   en: {
     math: {
@@ -133,6 +192,10 @@ const MINI_GAME_LABELS: Record<UiLanguage, Record<MiniGameKey, { title: string; 
     color: {
       title: "Color Reflex",
       description: "Ignore word meaning, pick the displayed text color.",
+    },
+    logic: {
+      title: "Logic Sequence",
+      description: "Find number pattern rules and pick the next value.",
     },
   },
 };
@@ -176,47 +239,89 @@ export default function Home() {
   const level = LEVELS[levelKey];
 
   const [activeGame, setActiveGame] = useState<MiniGameKey>("math");
-  const [mathQuestion, setMathQuestion] = useState(() => generateMathQuestion(level.limit));
-  const [memoryRound, setMemoryRound] = useState(() => generateMemoryRound(level.limit));
-  const [colorRound, setColorRound] = useState(() => generateColorRound());
+  const [contentBankState, setContentBankState] = useState<ContentBankState>(() => getDefaultContentBankState());
+  const [mathQuestion, setMathQuestion] = useState(() => getNextMathRound(level.limit, getDefaultContentBankState()).round);
+  const [memoryRound, setMemoryRound] = useState(() => getNextMemoryRound(level.limit, getDefaultContentBankState()).round);
+  const [colorRound, setColorRound] = useState(() => getNextColorRound(getDefaultContentBankState()).round);
+  const [logicRound, setLogicRound] = useState(() => getNextLogicRound(level.limit, getDefaultContentBankState()).round);
   const [memoryRevealLeft, setMemoryRevealLeft] = useState(0);
   const [wrongStreak, setWrongStreak] = useState(0);
   const [timeLeft, setTimeLeft] = useState(level.roundSeconds);
+  const [roundDurationSeconds, setRoundDurationSeconds] = useState(level.roundSeconds);
   const [ageGroup, setAgeGroup] = useState<AgeGroupKey>("age_7_8");
   const [language, setLanguage] = useState<UiLanguage>("vi");
+  const [activeView, setActiveView] = useState<DashboardView>("play");
   const [soundMuted, setSoundMuted] = useState(false);
   const [soundVolume, setSoundVolume] = useState(75);
   const [uiSfxEnabled, setUiSfxEnabled] = useState(true);
   const [ttsSupported, setTtsSupported] = useState(true);
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const [autoReadEnabled, setAutoReadEnabled] = useState(true);
+  const [colorAssistEnabled, setColorAssistEnabled] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationSeed, setCelebrationSeed] = useState(0);
+  const [experimentAssignment, setExperimentAssignment] = useState<ExperimentAssignment>({
+    layoutVariant: "compact",
+    rewardPromptVariant: "standard",
+  });
   const [parentUnlocked, setParentUnlocked] = useState(false);
   const [parentMessage, setParentMessage] = useState<string | null>(null);
   const [academyProgress, setAcademyProgress] = useState(() => getDefaultAcademyProgress());
+  const [rewardState, setRewardState] = useState<RewardState>(() => getDefaultRewardState());
+  const [reportHistory, setReportHistory] = useState(() => getDefaultReportHistoryState());
+  const [adaptiveState, setAdaptiveState] = useState(() => getDefaultAdaptiveEngineState());
+  const [learningPathState, setLearningPathState] = useState<LearningPathState>(() => getDefaultLearningPathState());
   const [feedback, setFeedback] = useState<{ tone: FeedbackTone; text: string }>({
     tone: "info",
     text: "Chon mini game va bat dau hanh trinh hoc ma choi!",
   });
   const previousAgeGroupRef = useRef<AgeGroupKey | null>(null);
+  const previousViewRef = useRef<DashboardView | null>(null);
   const spokenRoundRef = useRef<string | null>(null);
+  const selfChallengeCelebratedRef = useRef<string | null>(null);
+  const sessionStartedAtRef = useRef<number | null>(null);
+  const retentionPingSentRef = useRef(false);
 
-  const startRound = useCallback((game: MiniGameKey, limit: number, roundSeconds: number, memoryRevealBonus = 0) => {
-    if (game === "math") {
-      setMathQuestion(generateMathQuestion(limit));
+  const startRound = useCallback((
+    game: MiniGameKey,
+    limit: number,
+    roundSeconds: number,
+    memoryRevealBonus = 0,
+    targetAgeGroup: AgeGroupKey = ageGroup,
+    adaptiveTuning: ContentAdaptiveTuning = {},
+  ) => {
+    setContentBankState((previous) => {
+      if (game === "math") {
+        const nextRound = getNextMathRound(limit, previous, targetAgeGroup, adaptiveTuning);
+        setMathQuestion(nextRound.round);
+        setMemoryRevealLeft(0);
+        saveContentBankState(nextRound.nextState);
+        return nextRound.nextState;
+      }
+      if (game === "memory") {
+        const nextRound = getNextMemoryRound(limit, previous, targetAgeGroup, adaptiveTuning);
+        setMemoryRound(nextRound.round);
+        setMemoryRevealLeft(nextRound.round.revealSeconds + memoryRevealBonus);
+        saveContentBankState(nextRound.nextState);
+        return nextRound.nextState;
+      }
+      if (game === "logic") {
+        const nextRound = getNextLogicRound(limit, previous, targetAgeGroup, adaptiveTuning);
+        setLogicRound(nextRound.round);
+        setMemoryRevealLeft(0);
+        saveContentBankState(nextRound.nextState);
+        return nextRound.nextState;
+      }
+      const nextRound = getNextColorRound(previous, targetAgeGroup, adaptiveTuning);
+      setColorRound(nextRound.round);
       setMemoryRevealLeft(0);
-    } else if (game === "memory") {
-      const nextMemory = generateMemoryRound(limit);
-      setMemoryRound(nextMemory);
-      setMemoryRevealLeft(nextMemory.revealSeconds + memoryRevealBonus);
-    } else {
-      setColorRound(generateColorRound());
-      setMemoryRevealLeft(0);
-    }
+      saveContentBankState(nextRound.nextState);
+      return nextRound.nextState;
+    });
+    setRoundDurationSeconds(roundSeconds);
     setTimeLeft(roundSeconds);
-  }, []);
+  }, [ageGroup]);
 
   const getHintForCurrentGame = useCallback((): string => {
     if (activeGame === "math") {
@@ -225,21 +330,78 @@ export default function Home() {
     if (activeGame === "memory") {
       return getMemoryHint(memoryRound.answer, language);
     }
+    if (activeGame === "logic") {
+      return getLogicHint(logicRound, language);
+    }
     return getColorHint(colorRound.answerColorName, language);
-  }, [activeGame, colorRound.answerColorName, language, mathQuestion, memoryRound.answer]);
+  }, [activeGame, colorRound.answerColorName, language, logicRound, mathQuestion, memoryRound.answer]);
 
-  const miniGameLabels = useMemo(() => MINI_GAME_LABELS[language], [language]);
+  const miniGameLabels = useMemo(() => {
+    const base = MINI_GAME_LABELS[language];
+    return {
+      math: {
+        title: base.math.title,
+        description: getAgeGameCopy(ageGroup, "math", language).description,
+      },
+      memory: {
+        title: base.memory.title,
+        description: getAgeGameCopy(ageGroup, "memory", language).description,
+      },
+      color: {
+        title: base.color.title,
+        description: getAgeGameCopy(ageGroup, "color", language).description,
+      },
+      logic: {
+        title: base.logic.title,
+        description: getAgeGameCopy(ageGroup, "logic", language).description,
+      },
+    };
+  }, [ageGroup, language]);
   const levelLabels = useMemo(() => LEVEL_LABELS[language], [language]);
+  const dashboardViewLabels = useMemo(
+    () => ({
+      play: pickLanguageText(language, "Tro choi", "Play"),
+      progress: pickLanguageText(language, "Tien trinh", "Progress"),
+      parent: pickLanguageText(language, "Phu huynh", "Parent"),
+      settings: pickLanguageText(language, "Cai dat", "Settings"),
+    }),
+    [language],
+  );
   const gameTitle = useMemo(
     () => miniGameLabels[activeGame]?.title ?? pickLanguageText(language, "Mini Game", "Mini Game"),
     [activeGame, language, miniGameLabels],
+  );
+  const activeAdaptiveTuning = useMemo(
+    () => getAdaptiveGameTuning(adaptiveState, activeGame),
+    [activeGame, adaptiveState],
+  );
+  const learningSuggestion = useMemo(
+    () => getLearningSuggestion(learningPathState, activeGame),
+    [activeGame, learningPathState],
+  );
+  const adaptiveBandLabel = useMemo(() => {
+    if (activeAdaptiveTuning.band === "assist") {
+      return pickLanguageText(language, "Adaptive: ho tro", "Adaptive: assist");
+    }
+    if (activeAdaptiveTuning.band === "challenge") {
+      return pickLanguageText(language, "Adaptive: thu thach", "Adaptive: challenge");
+    }
+    return pickLanguageText(language, "Adaptive: can bang", "Adaptive: steady");
+  }, [activeAdaptiveTuning.band, language]);
+  const recommendedGameTitle = useMemo(
+    () => miniGameLabels[learningSuggestion.recommendedGame]?.title ?? learningSuggestion.recommendedGame,
+    [learningSuggestion.recommendedGame, miniGameLabels],
+  );
+  const activeAgeGameCopy = useMemo(
+    () => getAgeGameCopy(ageGroup, activeGame, language),
+    [activeGame, ageGroup, language],
   );
   const getRoundConfig = useCallback(
     (game: MiniGameKey, targetLevelKey: LevelKey = level.key, targetAgeGroup: AgeGroupKey = ageGroup) => {
       const targetLevel = LEVELS[targetLevelKey];
       const profile = AGE_PROFILES[targetAgeGroup];
       return {
-        limit: game === "math" ? Math.min(targetLevel.limit, profile.maxMathLimit) : targetLevel.limit,
+        limit: game === "math" || game === "logic" ? Math.min(targetLevel.limit, profile.maxMathLimit) : targetLevel.limit,
         roundSeconds: Math.max(12, targetLevel.roundSeconds + profile.roundBonusSeconds),
         memoryRevealBonusSeconds: profile.memoryRevealBonusSeconds,
       };
@@ -251,7 +413,52 @@ export default function Home() {
     [activeGame, ageGroup, getRoundConfig, level.key],
   );
   const ageProfileLabel = AGE_PROFILE_LABELS[language][ageGroup];
-  const timeRatio = Math.max(0, Math.min(1, timeLeft / activeRoundConfig.roundSeconds));
+  const timeRatio = Math.max(0, Math.min(1, timeLeft / Math.max(1, roundDurationSeconds)));
+  const getBossMetaByTotalRounds = useCallback((totalRounds: number) => {
+    const probe = {
+      ...academyProgress,
+      totalRounds,
+    };
+    return {
+      isBossRound: isBossRound(probe),
+      bossRoundNumber: getBossRoundNumber(probe),
+    };
+  }, [academyProgress]);
+  const currentBossRoundMeta = useMemo(
+    () => getBossMetaByTotalRounds(academyProgress.totalRounds),
+    [academyProgress.totalRounds, getBossMetaByTotalRounds],
+  );
+  const weeklyThemeLabel = useMemo(
+    () => getWeeklyThemeLabel(contentBankState.theme, language),
+    [contentBankState.theme, language],
+  );
+  const getRuntimeRoundConfig = useCallback(
+    (
+      config: { limit: number; roundSeconds: number; memoryRevealBonusSeconds: number },
+      totalRounds: number,
+    ) => {
+      const bossMeta = getBossMetaByTotalRounds(totalRounds);
+      if (!bossMeta.isBossRound) {
+        return {
+          ...config,
+          scoreMultiplier: 1,
+          bossRound: false,
+          bossRoundNumber: bossMeta.bossRoundNumber,
+        };
+      }
+      const bossRoundSeconds = Math.max(10, config.roundSeconds - (ageGroup === "age_5_6" ? 4 : 6));
+      const bossMemoryBonus = Math.max(0, config.memoryRevealBonusSeconds - 1);
+      return {
+        ...config,
+        roundSeconds: bossRoundSeconds,
+        memoryRevealBonusSeconds: bossMemoryBonus,
+        scoreMultiplier: 2,
+        bossRound: true,
+        bossRoundNumber: bossMeta.bossRoundNumber,
+      };
+    },
+    [ageGroup, getBossMetaByTotalRounds],
+  );
   const currentRoundKey = useMemo(() => {
     if (activeGame === "math") {
       return `math:${mathQuestion.left}:${mathQuestion.operator}:${mathQuestion.right}:${mathQuestion.answer}`;
@@ -259,8 +466,21 @@ export default function Home() {
     if (activeGame === "memory") {
       return `memory:${memoryRound.sequence.join("")}:${memoryRound.answer}`;
     }
+    if (activeGame === "logic") {
+      return `logic:${logicRound.sequence.join("-")}:${logicRound.answer}`;
+    }
     return `color:${colorRound.word}:${colorRound.wordColorHex}:${colorRound.answerColorName}`;
-  }, [activeGame, colorRound.answerColorName, colorRound.word, colorRound.wordColorHex, mathQuestion, memoryRound.answer, memoryRound.sequence]);
+  }, [
+    activeGame,
+    colorRound.answerColorName,
+    colorRound.word,
+    colorRound.wordColorHex,
+    logicRound.answer,
+    logicRound.sequence,
+    mathQuestion,
+    memoryRound.answer,
+    memoryRound.sequence,
+  ]);
   const currentSpeechText = useMemo(() => {
     if (activeGame === "math") {
       return language === "vi"
@@ -275,10 +495,25 @@ export default function Home() {
       }
       return pickLanguageText(language, "Chuoi da an. Ky hieu nao xuat hien nhieu nhat?", "Sequence hidden. Which symbol appeared the most?");
     }
+    if (activeGame === "logic") {
+      const seq = logicRound.sequence.join(", ");
+      return language === "vi"
+        ? `Logic chuoi: ${seq}. So tiep theo la so nao?`
+        : `Logic sequence: ${seq}. Which number comes next?`;
+    }
     return language === "vi"
       ? `Phan xa mau. Tu hien thi la ${colorRound.word}. Hay chon mau cua chu dang hien thi.`
       : `Color reflex. The shown word is ${getColorEnglishName(colorRound.word)}. Pick the color of the text.`;
-  }, [activeGame, colorRound.word, language, mathQuestion.left, mathQuestion.operator, mathQuestion.right, memoryRevealLeft]);
+  }, [
+    activeGame,
+    colorRound.word,
+    language,
+    logicRound.sequence,
+    mathQuestion.left,
+    mathQuestion.operator,
+    mathQuestion.right,
+    memoryRevealLeft,
+  ]);
   const englishLearningLine = useMemo(() => {
     if (activeGame === "math") {
       return `English: What is ${mathQuestion.left} ${mathQuestion.operator === "+" ? "plus" : "minus"} ${mathQuestion.right}?`;
@@ -288,12 +523,19 @@ export default function Home() {
         ? "English: Remember the symbols."
         : "English: Which symbol appears the most?";
     }
+    if (activeGame === "logic") {
+      return "English: Find the sequence rule and choose the next number.";
+    }
     return "English: Choose the COLOR of the word.";
   }, [activeGame, mathQuestion.left, mathQuestion.operator, mathQuestion.right, memoryRevealLeft]);
   const getColorChoiceDisplay = useCallback(
-    (choice: string) =>
-      language === "vi" ? `${choice} / ${getColorEnglishName(choice)}` : `${getColorEnglishName(choice)} / ${choice}`,
-    [language],
+    (choice: string) => {
+      const marker = colorAssistEnabled ? ` ${getColorMarker(choice)}` : "";
+      return language === "vi"
+        ? `${choice} / ${getColorEnglishName(choice)}${marker}`
+        : `${getColorEnglishName(choice)} / ${choice}${marker}`;
+    },
+    [colorAssistEnabled, language],
   );
   const triggerCelebration = useCallback(() => {
     setCelebrationSeed((value) => value + 1);
@@ -306,17 +548,51 @@ export default function Home() {
       config: { limit: number; roundSeconds: number; memoryRevealBonusSeconds: number },
       source: "answer_correct" | "answer_wrong" | "timeout" | "restart" | "switch_game" | "switch_level" | "age_profile" | "reset_all",
       telemetryLevel: LevelKey = level.key,
+      totalRoundsForRound: number = academyProgress.totalRounds,
     ) => {
-      startRound(game, config.limit, config.roundSeconds, config.memoryRevealBonusSeconds);
+      const runtime = getRuntimeRoundConfig(config, totalRoundsForRound);
+      const adaptive = getAdaptiveGameTuning(adaptiveState, game);
+      const tunedLimit = game === "math" || game === "logic" ? Math.max(10, runtime.limit + adaptive.mathLimitDelta) : runtime.limit;
+      const tunedRoundSeconds = Math.max(10, runtime.roundSeconds + adaptive.roundSecondsDelta);
+      const tunedMemoryBonus = Math.max(0, runtime.memoryRevealBonusSeconds + adaptive.memoryRevealDelta);
+      const contentAdaptive: ContentAdaptiveTuning = {
+        mathLimitDelta: adaptive.mathLimitDelta,
+        mathDeltaMode: adaptive.mathDeltaMode,
+        memoryComplexityDelta: adaptive.memoryComplexityDelta,
+        colorMatchDelta: adaptive.colorMatchDelta,
+      };
+      const suggestion = getLearningSuggestion(learningPathState, game);
+      startRound(game, tunedLimit, tunedRoundSeconds, tunedMemoryBonus, ageGroup, contentAdaptive);
       void trackEvent("round_start", {
         game,
         level: telemetryLevel,
         source,
         ageGroup,
-        roundSeconds: config.roundSeconds,
+        roundSeconds: tunedRoundSeconds,
+        bossRound: runtime.bossRound,
+        bossRoundNumber: runtime.bossRoundNumber,
+        weeklyTheme: contentBankState.theme,
+        adaptiveBand: adaptive.band,
+        recommendedGame: suggestion.recommendedGame,
       });
+      if (runtime.bossRound) {
+        void trackEvent("boss_round_start", {
+          game,
+          level: telemetryLevel,
+          bossRoundNumber: runtime.bossRoundNumber,
+        });
+      }
     },
-    [ageGroup, level.key, startRound],
+    [
+      academyProgress.totalRounds,
+      adaptiveState,
+      ageGroup,
+      contentBankState.theme,
+      getRuntimeRoundConfig,
+      learningPathState,
+      level.key,
+      startRound,
+    ],
   );
   const speakCurrentPrompt = useCallback(
     (source: "manual" | "auto") => {
@@ -343,6 +619,13 @@ export default function Home() {
 
   useEffect(() => {
     if (!hydrated) return;
+    if (sessionStartedAtRef.current === null) {
+      sessionStartedAtRef.current = Date.now();
+    }
+  }, [hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
     const timer = window.setTimeout(() => {
       const onboardingDone = window.localStorage.getItem("cvf-mini-onboarding-done");
       setShowOnboarding(onboardingDone !== "1");
@@ -353,6 +636,21 @@ export default function Home() {
   useEffect(() => {
     if (!hydrated) return;
     setAcademyProgress(loadAcademyProgress());
+  }, [hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    setContentBankState(loadContentBankState());
+    setRewardState(loadRewardState());
+    setReportHistory(loadReportHistoryState());
+    setAdaptiveState(loadAdaptiveEngineState());
+    setLearningPathState(loadLearningPathState());
+    const assignment = getOrCreateExperimentAssignment();
+    setExperimentAssignment(assignment);
+    void trackEvent("experiment_exposure", {
+      layoutVariant: assignment.layoutVariant,
+      rewardPromptVariant: assignment.rewardPromptVariant,
+    });
   }, [hydrated]);
 
   useEffect(() => {
@@ -380,6 +678,7 @@ export default function Home() {
           uiEnabled?: boolean;
           ttsEnabled?: boolean;
           autoReadEnabled?: boolean;
+          colorAssistEnabled?: boolean;
         };
         if (typeof parsed.muted === "boolean") {
           setSoundMuted(parsed.muted);
@@ -396,6 +695,9 @@ export default function Home() {
         if (typeof parsed.autoReadEnabled === "boolean") {
           setAutoReadEnabled(parsed.autoReadEnabled);
         }
+        if (typeof parsed.colorAssistEnabled === "boolean") {
+          setColorAssistEnabled(parsed.colorAssistEnabled);
+        }
       } catch {
         // Ignore malformed preference payload.
       }
@@ -406,6 +708,7 @@ export default function Home() {
       setUiSfxEnabled(defaults.uiEnabled);
       setTtsEnabled(true);
       setAutoReadEnabled(true);
+      setColorAssistEnabled(false);
     }
   }, [hydrated]);
 
@@ -425,9 +728,10 @@ export default function Home() {
         uiEnabled: uiSfxEnabled,
         ttsEnabled,
         autoReadEnabled,
+        colorAssistEnabled,
       }),
     );
-  }, [autoReadEnabled, hydrated, soundMuted, soundVolume, ttsEnabled, uiSfxEnabled]);
+  }, [autoReadEnabled, colorAssistEnabled, hydrated, soundMuted, soundVolume, ttsEnabled, uiSfxEnabled]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -466,6 +770,7 @@ export default function Home() {
   }, [activeGame, activeRoundConfig, ageGroup, beginRound, hydrated, language, level.key]);
 
   useEffect(() => {
+    if (activeView !== "play") return;
     if (!hydrated || !autoReadEnabled) return;
     if (spokenRoundRef.current === currentRoundKey) return;
     spokenRoundRef.current = currentRoundKey;
@@ -473,7 +778,7 @@ export default function Home() {
       speakCurrentPrompt("auto");
     }, 180);
     return () => window.clearTimeout(timer);
-  }, [autoReadEnabled, currentRoundKey, hydrated, speakCurrentPrompt]);
+  }, [activeView, autoReadEnabled, currentRoundKey, hydrated, speakCurrentPrompt]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !ttsSupported) return;
@@ -534,35 +839,207 @@ export default function Home() {
   }, [hydrated]);
 
   const remainingPlayMs = useMemo(() => getRemainingPlayMs(progress), [progress]);
+  const sessionRemainingMs = useMemo(() => {
+    if (!progress.parentMode.enabled) return Number.POSITIVE_INFINITY;
+    const sessionLimitMs = Math.max(5, progress.parentMode.sessionLimitMinutes) * 60 * 1000;
+    if (sessionStartedAtRef.current === null) return sessionLimitMs;
+    const elapsedWallMs = Date.now() - sessionStartedAtRef.current;
+    const elapsedMs = Math.max(elapsedWallMs, progress.usage.usedMs);
+    return Math.max(0, sessionLimitMs - elapsedMs);
+  }, [progress.parentMode.enabled, progress.parentMode.sessionLimitMinutes, progress.usage.usedMs]);
   const remainingMinutes = Number.isFinite(remainingPlayMs) ? Math.ceil(remainingPlayMs / (60 * 1000)) : null;
-  const playable = hydrated && canPlay(progress);
+  const remainingSessionMinutes = Number.isFinite(sessionRemainingMs) ? Math.ceil(sessionRemainingMs / (60 * 1000)) : null;
+  const playable = hydrated && canPlay(progress) && sessionRemainingMs > 0;
   const parentLocked = Boolean(progress.parentMode.pinCode) && !parentUnlocked;
-  const answerLocked = !playable || (activeGame === "memory" && memoryRevealLeft > 0);
+  const answerLocked = activeView !== "play" || !playable || (activeGame === "memory" && memoryRevealLeft > 0);
   const currentChoices = useMemo<(string | number)[]>(() => {
     if (activeGame === "math") return mathQuestion.choices;
     if (activeGame === "memory") return memoryRound.choices;
+    if (activeGame === "logic") return logicRound.choices;
     return colorRound.choices;
-  }, [activeGame, colorRound.choices, mathQuestion.choices, memoryRound.choices]);
+  }, [activeGame, colorRound.choices, logicRound.choices, mathQuestion.choices, memoryRound.choices]);
+  const todayMetrics = useMemo(
+    () => ({
+      date: progress.dailyStats.date,
+      rounds: progress.dailyStats.rounds,
+      correct: progress.dailyStats.correct,
+      wrong: progress.dailyStats.wrong,
+      accuracy: progress.dailyStats.rounds > 0 ? Math.round((progress.dailyStats.correct / progress.dailyStats.rounds) * 100) : 0,
+      usedMs: progress.usage.usedMs,
+      byGame: progress.dailyStats.byGame,
+    }),
+    [progress.dailyStats, progress.usage.usedMs],
+  );
+  const weeklyReport = useMemo(() => buildWeeklyReport(reportHistory), [reportHistory]);
+  const yesterdayMetrics = useMemo(() => getYesterdayEntry(reportHistory, todayMetrics.date), [reportHistory, todayMetrics.date]);
+  const selfChallengeStatus = useMemo(
+    () => getSelfChallengeStatus(rewardState, todayMetrics, yesterdayMetrics),
+    [rewardState, todayMetrics, yesterdayMetrics],
+  );
+  const unlockedAvatars = useMemo(() => getUnlockedAvatars(rewardState), [rewardState]);
+  const unlockedPets = useMemo(() => getUnlockedPets(rewardState), [rewardState]);
+  const unlockedTools = useMemo(() => getUnlockedTools(rewardState), [rewardState]);
 
   const parentReport = useMemo(() => {
     const rounds = progress.dailyStats.rounds;
     const accuracy = rounds > 0 ? Math.round((progress.dailyStats.correct / rounds) * 100) : 0;
+    const weakSpotMap: Record<MiniGameKey, string> = {
+      math: pickLanguageText(language, "Toan", "Math"),
+      memory: pickLanguageText(language, "Nho", "Memory"),
+      color: pickLanguageText(language, "Mau", "Color"),
+      logic: pickLanguageText(language, "Logic", "Logic"),
+    };
+    const skillScores = {
+      [pickLanguageText(language, "Toan", "Math")]: learningPathState.skills.math.score,
+      [pickLanguageText(language, "Nho", "Memory")]: learningPathState.skills.memory.score,
+      [pickLanguageText(language, "Mau", "Color")]: learningPathState.skills.color.score,
+      [pickLanguageText(language, "Logic", "Logic")]: learningPathState.skills.logic.score,
+    };
+    const offlineActivity = weeklyReport.weakGame === "math"
+      ? pickLanguageText(language, "Choi dominos/phep tinh do vat 5-10 phut.", "Try domino or object-counting math for 5-10 minutes.")
+      : weeklyReport.weakGame === "memory"
+        ? pickLanguageText(language, "Tro nho hinh voi 6-8 the bai giay.", "Use 6-8 paper cards for memory matching.")
+        : weeklyReport.weakGame === "logic"
+          ? pickLanguageText(language, "Sap xep day so bang que tinh theo quy luat.", "Build number patterns using sticks or blocks.")
+          : pickLanguageText(language, "Tro choi nhan mau do vat trong nha.", "Play household color spotting challenges.");
+    const teacherSummary = pickLanguageText(
+      language,
+      `Tap trung uu tien ${recommendedGameTitle} trong 2-3 ngay toi.`,
+      `Prioritize ${recommendedGameTitle} for the next 2-3 days.`,
+    );
     return {
       rounds,
       correct: progress.dailyStats.correct,
       wrong: progress.dailyStats.wrong,
       accuracy,
+      weeklyRounds: weeklyReport.totalRounds,
+      weeklyAccuracy: weeklyReport.averageAccuracy,
+      weeklyTrend: weeklyReport.trend,
+      weakSpot: weeklyReport.weakGame ? weakSpotMap[weeklyReport.weakGame] : pickLanguageText(language, "Can bang", "Balanced"),
+      suggestion: language === "vi" ? weeklyReport.suggestionVi : weeklyReport.suggestionEn,
+      skillScores,
+      offlineActivity,
+      teacherSummary,
     };
-  }, [progress.dailyStats]);
+  }, [language, learningPathState.skills, progress.dailyStats, recommendedGameTitle, weeklyReport]);
+  useEffect(() => {
+    if (!hydrated) return;
+    setReportHistory((previous) => {
+      const next = syncTodayMetrics(previous, todayMetrics);
+      if (next !== previous) {
+        saveReportHistoryState(next);
+      }
+      return next;
+    });
+  }, [hydrated, todayMetrics]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    setRewardState((previous) => {
+      const synced = syncStickersFromBadges(previous, progress.badges);
+      if (synced.unlocked.length > 0) {
+        synced.unlocked.forEach((sticker) => {
+          void trackEvent("sticker_unlock", {
+            source: "combo_badge",
+            sticker,
+            total: synced.nextState.stickers.length,
+          });
+        });
+      }
+      if (synced.nextState !== previous) {
+        saveRewardState(synced.nextState);
+      }
+      return synced.nextState;
+    });
+  }, [hydrated, progress.badges]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (!selfChallengeStatus.achieved || selfChallengeStatus.wonToday) return;
+    if (selfChallengeCelebratedRef.current === todayMetrics.date) return;
+    selfChallengeCelebratedRef.current = todayMetrics.date;
+    setRewardState((previous) => {
+      const next = markSelfChallengeWin(previous, todayMetrics.date);
+      saveRewardState(next);
+      return next;
+    });
+    triggerCelebration();
+    void trackEvent("self_challenge_win", {
+      date: todayMetrics.date,
+      rounds: selfChallengeStatus.progress.rounds,
+      accuracy: selfChallengeStatus.progress.accuracy,
+    });
+    setFeedback({
+      tone: "success",
+      text: pickLanguageText(
+        language,
+        "Da vuot moc Beat Your Yesterday! Tiep tuc giu phong do.",
+        "Beat Your Yesterday completed! Keep the momentum going.",
+      ),
+    });
+  }, [hydrated, language, selfChallengeStatus, todayMetrics.date, triggerCelebration]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (!parentUnlocked) return;
+    if (weeklyReport.days.length === 0) return;
+    void trackEvent("weekly_report_view", {
+      days: weeklyReport.days.length,
+      averageAccuracy: weeklyReport.averageAccuracy,
+      weakGame: weeklyReport.weakGame ?? "none",
+    });
+  }, [hydrated, parentUnlocked, weeklyReport.averageAccuracy, weeklyReport.days.length, weeklyReport.weakGame]);
+  useEffect(() => {
+    if (!hydrated) return;
+    if (retentionPingSentRef.current) return;
+    retentionPingSentRef.current = true;
+
+    const today = new Date();
+    const last = progress.lastPlayedDate ? new Date(`${progress.lastPlayedDate}T00:00:00`) : null;
+    const diffDays = last ? Math.max(0, Math.round((today.getTime() - last.getTime()) / 86400000)) : null;
+    const bucket =
+      diffDays === 1
+        ? "D1"
+        : diffDays === 7
+          ? "D7"
+          : diffDays === null
+            ? "first_seen"
+            : "other";
+    void trackEvent("retention_ping", {
+      bucket,
+      diffDays: diffDays ?? -1,
+      streak: progress.streak,
+    });
+  }, [hydrated, progress.lastPlayedDate, progress.streak]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (previousViewRef.current === null) {
+      previousViewRef.current = activeView;
+      return;
+    }
+    if (previousViewRef.current === activeView) return;
+    void trackEvent("drop_off_marker", {
+      fromView: previousViewRef.current,
+      toView: activeView,
+      score: progress.score,
+      combo: progress.combo,
+      remainingSeconds: timeLeft,
+      activeGame,
+    });
+    previousViewRef.current = activeView;
+  }, [activeGame, activeView, hydrated, progress.combo, progress.score, timeLeft]);
   const questProgress = useMemo(() => {
-    const dailyRoundsTarget = 12;
+    const dailyRoundsTarget = 14;
     const mathRoundsTarget = 4;
     const memoryRoundsTarget = 4;
-    const colorRoundsTarget = 4;
+    const colorRoundsTarget = 3;
+    const logicRoundsTarget = 3;
     const roundsProgress = Math.min(100, Math.round((progress.dailyStats.rounds / dailyRoundsTarget) * 100));
     const mathProgress = Math.min(100, Math.round((progress.dailyStats.byGame.math.rounds / mathRoundsTarget) * 100));
     const memoryProgress = Math.min(100, Math.round((progress.dailyStats.byGame.memory.rounds / memoryRoundsTarget) * 100));
     const colorProgress = Math.min(100, Math.round((progress.dailyStats.byGame.color.rounds / colorRoundsTarget) * 100));
+    const logicProgress = Math.min(100, Math.round((progress.dailyStats.byGame.logic.rounds / logicRoundsTarget) * 100));
     const todayAccuracy = progress.dailyStats.rounds > 0 ? Math.round((progress.dailyStats.correct / progress.dailyStats.rounds) * 100) : 0;
     const accuracyTarget = 70;
     const accuracyProgress = Math.min(100, Math.round((todayAccuracy / accuracyTarget) * 100));
@@ -572,6 +1049,7 @@ export default function Home() {
       mathProgress,
       memoryProgress,
       colorProgress,
+      logicProgress,
       accuracyProgress,
       todayAccuracy,
       roundsDone: progress.dailyStats.rounds >= dailyRoundsTarget,
@@ -579,7 +1057,8 @@ export default function Home() {
       balanceDone:
         progress.dailyStats.byGame.math.rounds > 0 &&
         progress.dailyStats.byGame.memory.rounds > 0 &&
-        progress.dailyStats.byGame.color.rounds > 0,
+        progress.dailyStats.byGame.color.rounds > 0 &&
+        progress.dailyStats.byGame.logic.rounds > 0,
     };
   }, [progress.dailyStats]);
   const comboStatus = useMemo(() => {
@@ -595,6 +1074,13 @@ export default function Home() {
   }, [progress.combo, progress.streak]);
   const coachTip = useMemo(() => {
     if (!playable) {
+      if (sessionRemainingMs <= 0) {
+        return pickLanguageText(
+          language,
+          "Da het gioi han cho phien hien tai. Nghia 5-10 phut roi quay lai nhe.",
+          "This session limit is reached. Take a 5-10 minute break and come back.",
+        );
+      }
       return pickLanguageText(
         language,
         "Hom nay da het quota choi. Nghia 1 chut roi quay lai vao ngay mai nhe.",
@@ -619,13 +1105,20 @@ export default function Home() {
           "Look at symbols in pairs. It is easier to remember.",
         );
       }
+      if (activeGame === "logic") {
+        return pickLanguageText(
+          language,
+          "So sanh khoang cach giua cac so de nhin ra quy luat.",
+          "Compare the gaps between numbers to spot the pattern.",
+        );
+      }
       return pickLanguageText(language, "Tap trung vao MAU chu, dung doc noi dung cua chu.", "Focus on the COLOR of the text, not the word meaning.");
     }
     if (timeLeft <= 6) {
       return pickLanguageText(language, "Sap het gio. Chon dap an nhanh va chinh xac!", "Time is almost over. Pick quickly and stay accurate!");
     }
     return pickLanguageText(language, "Nhan phim 1-4 de tra loi sieu nhanh, phim R de choi lai run.", "Use keys 1-4 to answer fast, and R to restart the run.");
-  }, [activeGame, feedback.tone, language, playable, timeLeft, wrongStreak]);
+  }, [activeGame, feedback.tone, language, playable, sessionRemainingMs, timeLeft, wrongStreak]);
   const roundsUntilBoss = useMemo(() => getRoundsUntilBoss(academyProgress), [academyProgress]);
   const activeZone = academyProgress.zones[academyProgress.activeZoneIndex];
   const activeNode = activeZone.nodes[academyProgress.activeNodeIndex];
@@ -643,16 +1136,45 @@ export default function Home() {
       return next;
     });
   }, []);
+  const captureRoundOutcome = useCallback(
+    (payload: { game: MiniGameKey; isCorrect: boolean; timedOut: boolean; responseMs: number; roundMs: number }) => {
+      setAdaptiveState((previous) => {
+        const next = appendAdaptiveOutcome(previous, payload);
+        saveAdaptiveEngineState(next);
+        return next;
+      });
+      setLearningPathState((previous) => {
+        const next = updateLearningPathState(previous, payload);
+        saveLearningPathState(next);
+        return next;
+      });
+    },
+    [],
+  );
 
   const handleWrong = useCallback(
     (reason: "answer_wrong" | "round_timeout") => {
       const nextWrongStreak = wrongStreak + 1;
       const shouldShowHint = nextWrongStreak >= 2;
+      const activeBossMeta = getBossMetaByTotalRounds(academyProgress.totalRounds);
+      const nextRoundTotalRounds = academyProgress.totalRounds + 1;
+      const roundMs = roundDurationSeconds * 1000;
+      const responseMs =
+        reason === "round_timeout"
+          ? roundMs
+          : Math.max(250, (roundDurationSeconds - timeLeft) * 1000);
 
       updateProgress((previous) => {
         const touched = touchSession(previous);
         const afterWrong = applyWrongAnswer(touched);
         return recordRoundResult(afterWrong, activeGame, false);
+      });
+      captureRoundOutcome({
+        game: activeGame,
+        isCorrect: false,
+        timedOut: reason === "round_timeout",
+        responseMs,
+        roundMs,
       });
       playErrorTone();
       setWrongStreak(nextWrongStreak);
@@ -661,6 +1183,13 @@ export default function Home() {
         reason === "round_timeout"
           ? pickLanguageText(language, "Het gio roi. Lam tiep cau moi nhe!", "Time is up. Keep going with the next round!")
           : pickLanguageText(language, "Chua dung. Binh tinh va thu lai!", "Not correct yet. Stay calm and try again!");
+      if (activeBossMeta.isBossRound) {
+        text = pickLanguageText(
+          language,
+          `Boss round ${activeBossMeta.bossRoundNumber} chua qua. Thu lai va tang toc nhe!`,
+          `Boss round ${activeBossMeta.bossRoundNumber} missed. Try again with faster focus!`,
+        );
+      }
       if (shouldShowHint) {
         text = `${text} ${getHintForCurrentGame()}`;
         void trackEvent("hint_shown", { game: activeGame, reason });
@@ -675,10 +1204,33 @@ export default function Home() {
       } else {
         void trackEvent("answer_wrong", { level: level.key, game: activeGame });
       }
+      if (activeBossMeta.isBossRound) {
+        void trackEvent("boss_round_fail", {
+          game: activeGame,
+          level: level.key,
+          bossRoundNumber: activeBossMeta.bossRoundNumber,
+          reason,
+        });
+      }
       applyAcademyRoundResult(false);
-      beginRound(activeGame, activeRoundConfig, reason === "round_timeout" ? "timeout" : "answer_wrong");
+      beginRound(activeGame, activeRoundConfig, reason === "round_timeout" ? "timeout" : "answer_wrong", level.key, nextRoundTotalRounds);
     },
-    [activeGame, activeRoundConfig, applyAcademyRoundResult, beginRound, getHintForCurrentGame, language, level.key, updateProgress, wrongStreak],
+    [
+      academyProgress.totalRounds,
+      activeGame,
+      activeRoundConfig,
+      applyAcademyRoundResult,
+      beginRound,
+      captureRoundOutcome,
+      getBossMetaByTotalRounds,
+      getHintForCurrentGame,
+      language,
+      level.key,
+      roundDurationSeconds,
+      timeLeft,
+      updateProgress,
+      wrongStreak,
+    ],
   );
 
   const handleAnswer = useCallback(
@@ -686,21 +1238,28 @@ export default function Home() {
       if (answerLocked) {
         return;
       }
+      const roundMs = roundDurationSeconds * 1000;
+      const responseMs = Math.max(250, (roundDurationSeconds - timeLeft) * 1000);
 
       const isCorrect =
         activeGame === "math"
           ? choice === mathQuestion.answer
           : activeGame === "memory"
             ? choice === memoryRound.answer
-            : choice === colorRound.answerColorName;
+            : activeGame === "logic"
+              ? choice === logicRound.answer
+              : choice === colorRound.answerColorName;
 
       if (!isCorrect) {
         handleWrong("answer_wrong");
         return;
       }
 
+      const activeBossMeta = getBossMetaByTotalRounds(academyProgress.totalRounds);
+      const runtimeRound = getRuntimeRoundConfig(activeRoundConfig, academyProgress.totalRounds);
+      const nextRoundTotalRounds = academyProgress.totalRounds + 1;
       const nextCombo = progress.combo + 1;
-      const points = calculateEarnedScore(nextCombo, level.baseScore);
+      const points = calculateEarnedScore(nextCombo, level.baseScore) * runtimeRound.scoreMultiplier;
       const isComboMilestone = nextCombo > 0 && nextCombo % 3 === 0;
       const isNewHighScore = progress.score + points > progress.highScores[level.key];
       updateProgress((previous) => {
@@ -712,51 +1271,80 @@ export default function Home() {
         }
         return withStats;
       });
+      captureRoundOutcome({
+        game: activeGame,
+        isCorrect: true,
+        timedOut: false,
+        responseMs,
+        roundMs,
+      });
 
       setWrongStreak(0);
       playSuccessTone();
-      if (isComboMilestone || isNewHighScore) {
+      if (isComboMilestone || isNewHighScore || activeBossMeta.isBossRound) {
         triggerCelebration();
         void trackEvent("celebration_burst", {
           level: level.key,
           game: activeGame,
           comboMilestone: isComboMilestone,
           highScore: isNewHighScore,
+          bossRound: activeBossMeta.isBossRound,
         });
       }
       setFeedback({
         tone: "success",
-        text:
-          language === "vi"
+        text: activeBossMeta.isBossRound
+          ? pickLanguageText(
+              language,
+              `Boss round ${activeBossMeta.bossRoundNumber} da vuot qua! +${points} diem thuong.`,
+              `Boss round ${activeBossMeta.bossRoundNumber} cleared! +${points} bonus points.`,
+            )
+          : language === "vi"
             ? `Chinh xac! +${points} diem. Combo x${nextCombo}.`
             : `Correct! +${points} points. Combo x${nextCombo}.`,
       });
-      void trackEvent("answer_correct", { level: level.key, game: activeGame, points });
+      void trackEvent("answer_correct", { level: level.key, game: activeGame, points, bossRound: activeBossMeta.isBossRound });
+      if (activeBossMeta.isBossRound) {
+        void trackEvent("boss_round_win", {
+          level: level.key,
+          game: activeGame,
+          bossRoundNumber: activeBossMeta.bossRoundNumber,
+          points,
+        });
+      }
       applyAcademyRoundResult(true);
-      beginRound(activeGame, activeRoundConfig, "answer_correct");
+      beginRound(activeGame, activeRoundConfig, "answer_correct", level.key, nextRoundTotalRounds);
     },
     [
+      academyProgress.totalRounds,
       activeGame,
       activeRoundConfig,
       answerLocked,
+      captureRoundOutcome,
       colorRound.answerColorName,
       handleWrong,
+      getBossMetaByTotalRounds,
+      getRuntimeRoundConfig,
       level.baseScore,
       level.key,
       mathQuestion.answer,
       memoryRound.answer,
       language,
+      logicRound.answer,
       applyAcademyRoundResult,
       progress.combo,
       progress.highScores,
       progress.score,
+      roundDurationSeconds,
       beginRound,
+      timeLeft,
       triggerCelebration,
       updateProgress,
     ],
   );
 
   useEffect(() => {
+    if (activeView !== "play") return;
     if (!playable) return;
     if (timeLeft <= 0) return;
 
@@ -770,9 +1358,10 @@ export default function Home() {
     }, 1000);
 
     return () => window.clearTimeout(timer);
-  }, [handleWrong, playable, timeLeft]);
+  }, [activeView, handleWrong, playable, timeLeft]);
 
   useEffect(() => {
+    if (activeView !== "play") return;
     if (!playable) return;
     if (activeGame !== "memory") return;
     if (memoryRevealLeft <= 0) return;
@@ -782,18 +1371,20 @@ export default function Home() {
     }, 1000);
 
     return () => window.clearTimeout(revealTimer);
-  }, [activeGame, memoryRevealLeft, playable]);
+  }, [activeGame, activeView, memoryRevealLeft, playable]);
 
   useEffect(() => {
+    if (activeView !== "play") return;
     if (!playable) return;
     const usageTicker = window.setInterval(() => {
       updateProgress((previous) => addPlayTime(previous, 1000));
     }, 1000);
     return () => window.clearInterval(usageTicker);
-  }, [playable, updateProgress]);
+  }, [activeView, playable, updateProgress]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (activeView !== "play") return;
       const target = event.target as HTMLElement | null;
       const tag = target?.tagName?.toLowerCase();
       if (tag === "input" || tag === "textarea") {
@@ -821,7 +1412,7 @@ export default function Home() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeGame, activeRoundConfig, beginRound, currentChoices, handleAnswer, language, resetRun]);
+  }, [activeGame, activeRoundConfig, activeView, beginRound, currentChoices, handleAnswer, language, resetRun]);
 
   if (!hydrated) {
     return (
@@ -886,13 +1477,44 @@ export default function Home() {
       );
     }
 
+    if (activeGame === "logic") {
+      return (
+        <>
+          <p className={styles.hint}>
+            {pickLanguageText(language, "Tim quy luat day so va chon so tiep theo.", "Find the sequence rule and choose the next number.")}
+          </p>
+          <p className={styles.questionValue}>{logicRound.sequence.join(" , ")} , ?</p>
+          <p className={styles.questionGloss}>{englishLearningLine}</p>
+          <div className={styles.answers}>
+            {logicRound.choices.map((choice) => (
+              <button
+                key={choice}
+                type="button"
+                className={styles.answerButton}
+                onClick={() => handleAnswer(choice)}
+                disabled={answerLocked}
+              >
+                {choice}
+              </button>
+            ))}
+          </div>
+        </>
+      );
+    }
+
     return (
       <>
         <p className={styles.hint}>
-          {pickLanguageText(language, "Chon MAU cua chu, khong phai noi dung cua chu.", "Pick the COLOR of the text, not the word meaning.")}
+          {colorAssistEnabled
+            ? pickLanguageText(
+                language,
+                "Chon MAU cua chu (co marker hinh dang), khong phai noi dung cua chu.",
+                "Pick the COLOR of the text (with shape marker), not the word meaning.",
+              )
+            : pickLanguageText(language, "Chon MAU cua chu, khong phai noi dung cua chu.", "Pick the COLOR of the text, not the word meaning.")}
         </p>
         <p className={styles.colorWord} style={{ color: colorRound.wordColorHex }}>
-          {language === "vi" ? colorRound.word : getColorEnglishName(colorRound.word)}
+          {language === "vi" ? colorRound.word : getColorEnglishName(colorRound.word)}{colorAssistEnabled ? ` ${getColorMarker(colorRound.answerColorName)}` : ""}
         </p>
         <p className={styles.questionGloss}>{englishLearningLine}</p>
         <div className={styles.answers}>
@@ -919,7 +1541,7 @@ export default function Home() {
           <section className={styles.onboardingCard}>
             <h2>{pickLanguageText(language, "Chao mung den CVF Mini Detective Academy", "Welcome to CVF Mini Detective Academy")}</h2>
             <ul className={styles.onboardingList}>
-              <li>{pickLanguageText(language, "Chon 1 trong 3 mini game o hang tab phia tren.", "Choose 1 of 3 mini games on the top tab row.")}</li>
+              <li>{pickLanguageText(language, "Chon 1 trong 4 mini game o hang tab phia tren.", "Choose 1 of 4 mini games on the top tab row.")}</li>
               <li>{pickLanguageText(language, "Nhan phim 1-4 de chon dap an nhanh, nhan R de choi lai run.", "Press keys 1-4 to answer quickly, and press R to restart the run.")}</li>
               <li>{pickLanguageText(language, "Parent Mode cho phep gioi han thoi gian choi moi ngay.", "Parent Mode can limit total daily play time.")}</li>
             </ul>
@@ -941,22 +1563,659 @@ export default function Home() {
       ) : null}
 
       <div className={styles.frame}>
-        <section className={styles.hero}>
+        <section className={`${styles.hero} ${activeView === "play" ? styles.heroSingle : ""}`}>
           <article className={styles.heroCard}>
             <h1>CVF Mini Detective Academy</h1>
-            <p>
-              {pickLanguageText(
-                language,
-                "Nhiem vu hom nay: giai ma mini game, giu combo that dai va tro thanh sieu tham tu cua hoc vien.",
-                "Today's mission: solve mini games, keep long combos, and become the academy's super detective.",
-              )}
-            </p>
+            {activeView === "play" ? (
+              <>
+                <p className={styles.focusLine}>
+                  {pickLanguageText(
+                    language,
+                    experimentAssignment.layoutVariant === "guide_first"
+                      ? "Huong dan nhanh: nhan phim 1-4 de tra loi, R de choi lai run."
+                      : "Che do choi nhanh: nhan phim 1-4 de tra loi, R de choi lai.",
+                    experimentAssignment.layoutVariant === "guide_first"
+                      ? "Quick guide: press keys 1-4 to answer and R to restart the run."
+                      : "Quick play mode: press keys 1-4 to answer and R to restart.",
+                  )}
+                </p>
+                <p className={styles.profileFocusLine}>
+                  {pickLanguageText(language, "Nhiem vu theo tuoi:", "Age mission:")} {activeAgeGameCopy.focus}
+                </p>
+              </>
+            ) : (
+              <p>
+                {pickLanguageText(
+                  language,
+                  "Nhiem vu hom nay: giai ma mini game, giu combo that dai va tro thanh sieu tham tu cua hoc vien.",
+                  "Today's mission: solve mini games, keep long combos, and become the academy's super detective.",
+                )}
+              </p>
+            )}
             <div className={styles.heroMeta}>
               <span className={styles.chip}>{pickLanguageText(language, "Dang choi", "Now playing")}: {gameTitle}</span>
               <span className={styles.chip}>{pickLanguageText(language, "Profile", "Profile")}: {ageProfileLabel}</span>
-              <span className={styles.chip}>{pickLanguageText(language, "Ngon ngu", "Language")}: {language.toUpperCase()}</span>
-              <span className={styles.chip}>{pickLanguageText(language, "Combo = Diem thuong", "Combo = Bonus points")}</span>
+              <span className={styles.chip}>{adaptiveBandLabel}</span>
+              <span className={styles.chip}>
+                {pickLanguageText(language, "Goi y luyen", "Practice next")}: {recommendedGameTitle}
+              </span>
+              {remainingSessionMinutes !== null ? (
+                <span className={styles.chip}>
+                  {pickLanguageText(language, "Con lai phien", "Session left")}: {remainingSessionMinutes}m
+                </span>
+              ) : null}
+              {activeView === "play" ? null : (
+                <>
+                  <span className={styles.chip}>{pickLanguageText(language, "Ngon ngu", "Language")}: {language.toUpperCase()}</span>
+                  <span className={styles.chip}>{pickLanguageText(language, "Combo = Diem thuong", "Combo = Bonus points")}</span>
+                </>
+              )}
             </div>
+            <div className={styles.viewTabs} role="tablist" aria-label={pickLanguageText(language, "Dieu huong man hinh", "Screen navigation")}>
+              {(Object.keys(dashboardViewLabels) as DashboardView[]).map((viewKey) => (
+                <button
+                  key={viewKey}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeView === viewKey}
+                  className={`${styles.viewTabButton} ${activeView === viewKey ? styles.viewTabButtonActive : ""}`}
+                  onClick={() => setActiveView(viewKey)}
+                >
+                  {dashboardViewLabels[viewKey]}
+                </button>
+              ))}
+            </div>
+            <div className={styles.heroActions}>
+              <button
+                type="button"
+                className={styles.primaryCta}
+                onClick={() => {
+                  setActiveView("play");
+                  window.setTimeout(() => {
+                    document.getElementById("mission-zone")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }, 0);
+                }}
+              >
+                {pickLanguageText(language, "Vao tran ngay", "Play Now")}
+              </button>
+              <button type="button" className={styles.secondaryCta} onClick={() => setActiveView("settings")}>
+                {pickLanguageText(language, "Mo cai dat", "Open Settings")}
+              </button>
+              <button type="button" className={styles.secondaryCta} onClick={() => setShowOnboarding(true)}>
+                {pickLanguageText(language, "Xem huong dan nhanh", "Quick Guide")}
+              </button>
+            </div>
+          </article>
+          {activeView === "play" ? null : (
+            <div className={styles.playgroundWrap}>
+              <PhaserPlayground className={styles.playground} />
+              <span className={styles.playgroundLabel}>{pickLanguageText(language, "Phaser playground live", "Phaser playground live")}</span>
+            </div>
+          )}
+        </section>
+
+        {activeView === "progress" ? (
+          <section className={styles.mapStrip} aria-label={pickLanguageText(language, "Ban do hoc vien", "Academy map")}>
+          <header className={styles.mapHeader}>
+            <h2>{pickLanguageText(language, "Ban do Hoc Vien", "Academy Map")}</h2>
+            <p>
+              {pickLanguageText(
+                language,
+                `Dang o ${getZoneTitle(activeZone)} - ${language === "vi" ? activeNode.labelVi : activeNode.labelEn} (${activeNode.correctCount}/${activeNode.requiredCorrect})`,
+                `Current zone ${getZoneTitle(activeZone)} - ${language === "vi" ? activeNode.labelVi : activeNode.labelEn} (${activeNode.correctCount}/${activeNode.requiredCorrect})`,
+              )}
+            </p>
+          </header>
+          <div className={styles.mapGrid}>
+            {academyProgress.zones.map((zone, zoneIdx) => {
+              const completedNodes = zone.nodes.filter((node) => node.completed).length;
+              const progressPercent = Math.round((completedNodes / zone.nodes.length) * 100);
+              const isActiveZone = zoneIdx === academyProgress.activeZoneIndex;
+              return (
+                <article
+                  key={zone.key}
+                  className={`${styles.mapZoneCard} ${zone.unlocked ? "" : styles.mapZoneLocked} ${isActiveZone ? styles.mapZoneActive : ""}`}
+                >
+                  <p className={styles.mapZoneTitle}>{getZoneTitle(zone)}</p>
+                  <p className={styles.mapZoneHint}>
+                    {zone.unlocked
+                      ? pickLanguageText(language, `${completedNodes}/${zone.nodes.length} node hoan thanh`, `${completedNodes}/${zone.nodes.length} nodes completed`)
+                      : pickLanguageText(language, "Khoa", "Locked")}
+                  </p>
+                  <div className={styles.mapTrack} role="presentation" aria-hidden>
+                    <span className={styles.mapFill} style={{ width: `${progressPercent}%` }} />
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+          <p className={styles.mapBossHint}>
+            {currentBossRoundMeta.isBossRound
+              ? pickLanguageText(
+                  language,
+                  `Boss round ${currentBossRoundMeta.bossRoundNumber} dang kich hoat! Theme tuan nay: ${weeklyThemeLabel}.`,
+                  `Boss round ${currentBossRoundMeta.bossRoundNumber} is live! Weekly theme: ${weeklyThemeLabel}.`,
+                )
+              : roundsUntilBoss === 5
+                ? pickLanguageText(
+                    language,
+                    `Boss round se bat dau o moc 5 vong. Theme tuan nay: ${weeklyThemeLabel}.`,
+                    `Boss round starts at the 5-round milestone. Weekly theme: ${weeklyThemeLabel}.`,
+                  )
+                : pickLanguageText(language, `Con ${roundsUntilBoss} vong nua den boss round.`, `${roundsUntilBoss} rounds until boss round.`)}
+          </p>
+          </section>
+        ) : null}
+
+        {activeView === "play" ? (
+          <>
+            <MiniGameTabs
+          activeKey={activeGame}
+          labels={miniGameLabels}
+          onSelect={(nextGame) => {
+            const nextRound = getRoundConfig(nextGame, level.key, ageGroup);
+            setActiveGame(nextGame);
+            setWrongStreak(0);
+            beginRound(nextGame, nextRound, "switch_game");
+            setFeedback({
+              tone: "info",
+              text:
+                language === "vi"
+                  ? `${miniGameLabels[nextGame].title} san sang!`
+                  : `${miniGameLabels[nextGame].title} is ready!`,
+            });
+            void trackEvent("game_switch", { game: nextGame, level: level.key });
+          }}
+        />
+
+        <LevelSelector
+          selected={levelKey}
+          labels={levelLabels}
+          onSelect={(nextLevelKey) => {
+            const nextRound = getRoundConfig(activeGame, nextLevelKey, ageGroup);
+            setLevelKey(nextLevelKey);
+            setWrongStreak(0);
+            beginRound(activeGame, nextRound, "switch_level", nextLevelKey);
+            setFeedback({
+              tone: "info",
+              text:
+                language === "vi"
+                  ? `${levelLabels[nextLevelKey].label} da kich hoat cho ${gameTitle}.`
+                  : `${levelLabels[nextLevelKey].label} is now active for ${gameTitle}.`,
+            });
+          }}
+        />
+
+            <GameHud
+          score={progress.score}
+          combo={progress.combo}
+          highScore={progress.highScores[level.key]}
+          streak={progress.streak}
+          timeLeft={timeLeft}
+          language={language}
+            />
+          </>
+        ) : null}
+
+        {activeView === "progress" ? (
+          <>
+            <section className={styles.questStrip} aria-label={pickLanguageText(language, "Nhiem vu hom nay", "Today missions")}>
+          <article className={styles.questCard}>
+            <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 1: Choi deu tay", "Mission 1: Keep Playing")}</p>
+            <p className={styles.questHint}>{pickLanguageText(language, "Hoan thanh 12 vong trong ngay.", "Finish 12 rounds today.")}</p>
+            <div className={styles.questTrack} role="presentation" aria-hidden>
+              <span className={styles.questFill} style={{ width: `${questProgress.roundsProgress}%` }} />
+            </div>
+            <p className={styles.questValue}>{progress.dailyStats.rounds}/12</p>
+          </article>
+          <article className={styles.questCard}>
+            <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 2: Chinh xac", "Mission 2: Accuracy")}</p>
+            <p className={styles.questHint}>{pickLanguageText(language, "Dat do chinh xac >= 70%.", "Reach accuracy >= 70%.")}</p>
+            <div className={styles.questTrack} role="presentation" aria-hidden>
+              <span className={styles.questFill} style={{ width: `${questProgress.accuracyProgress}%` }} />
+            </div>
+            <p className={styles.questValue}>{questProgress.todayAccuracy}%</p>
+          </article>
+          <article className={styles.questCard}>
+            <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 3: Da nang", "Mission 3: Variety")}</p>
+            <p className={styles.questHint}>{pickLanguageText(language, "Moi mini game choi it nhat 1 lan.", "Play each mini game at least once.")}</p>
+            <div className={styles.questMiniGrid}>
+              <span className={`${styles.questMiniPill} ${questProgress.mathProgress > 0 ? styles.questMiniDone : ""}`}>
+                {pickLanguageText(language, "Toan", "Math")}
+              </span>
+              <span className={`${styles.questMiniPill} ${questProgress.memoryProgress > 0 ? styles.questMiniDone : ""}`}>
+                {pickLanguageText(language, "Nho", "Memory")}
+              </span>
+              <span className={`${styles.questMiniPill} ${questProgress.colorProgress > 0 ? styles.questMiniDone : ""}`}>
+                {pickLanguageText(language, "Mau", "Color")}
+              </span>
+              <span className={`${styles.questMiniPill} ${questProgress.logicProgress > 0 ? styles.questMiniDone : ""}`}>
+                {pickLanguageText(language, "Logic", "Logic")}
+              </span>
+            </div>
+            <p className={styles.questValue}>{questProgress.balanceDone ? pickLanguageText(language, "Hoan thanh", "Done") : pickLanguageText(language, "Dang mo", "In progress")}</p>
+          </article>
+            </section>
+
+            <section className={styles.arcadeStrip} aria-label={pickLanguageText(language, "Bang trang thai tran dau", "Match status board")}>
+          <article className={styles.arcadeCard}>
+            <p className={styles.arcadeTitle}>Combo Reactor</p>
+            <p className={styles.arcadeHint}>
+              {pickLanguageText(
+                language,
+                `Con ${comboStatus.remainingForBadge} cau dung nua de no huy hieu.`,
+                `${comboStatus.remainingForBadge} more correct answers to ignite a badge.`,
+              )}
+            </p>
+            <div className={styles.arcadeTrack} role="presentation" aria-hidden>
+              <span className={styles.arcadeFill} style={{ width: `${comboStatus.progressToBadge}%` }} />
+            </div>
+            <p className={styles.arcadeValue}>x{progress.combo}</p>
+          </article>
+          <article className={styles.arcadeCard}>
+            <p className={styles.arcadeTitle}>{pickLanguageText(language, "Nang luong vong", "Round Energy")}</p>
+            <p className={styles.arcadeHint}>
+              {pickLanguageText(
+                language,
+                `Giu nhip trong ${roundDurationSeconds}s de dat diem cao.`,
+                `Keep your rhythm in ${roundDurationSeconds}s to maximize points.`,
+              )}
+            </p>
+            <div className={styles.arcadeTrack} role="presentation" aria-hidden>
+              <span className={styles.arcadeFillWarm} style={{ width: `${Math.round(timeRatio * 100)}%` }} />
+            </div>
+            <p className={styles.arcadeValue}>{Math.round(timeRatio * 100)}%</p>
+          </article>
+          <article className={styles.arcadeCard}>
+            <p className={styles.arcadeTitle}>Coach Bot</p>
+            <p className={styles.arcadeHint}>{coachTip}</p>
+            <div className={styles.arcadeTrack} role="presentation" aria-hidden>
+              <span className={styles.arcadeFillCool} style={{ width: `${comboStatus.streakProgress}%` }} />
+            </div>
+            <p className={styles.arcadeValue}>
+              {pickLanguageText(language, "Streak", "Streak")} {progress.streak}/7
+            </p>
+          </article>
+            </section>
+
+            <section className={styles.rewardStrip} aria-label={pickLanguageText(language, "Reward va challenge", "Rewards and challenge")}>
+          <article className={styles.rewardCard}>
+            <p className={styles.rewardTitle}>{pickLanguageText(language, "Daily chest", "Daily chest")}</p>
+            <p className={styles.rewardHint}>
+              {rewardState.chestLastOpenedDate === todayMetrics.date
+                ? pickLanguageText(language, "Hom nay da mo chest. Quay lai vao ngay mai nhe.", "Today's chest is opened. Come back tomorrow.")
+                : pickLanguageText(
+                    language,
+                    experimentAssignment.rewardPromptVariant === "coach"
+                      ? "Coach tip: mo chest sau moi cum 3 combo de tang tien do bo suu tap."
+                      : "Mo chest de nhan sticker va mo khoa avatar/pet/tool.",
+                    experimentAssignment.rewardPromptVariant === "coach"
+                      ? "Coach tip: open the chest after each 3-combo streak to speed up collection progress."
+                      : "Open the chest to earn stickers and unlock avatar/pet/tool.",
+                  )}
+            </p>
+            <button
+              type="button"
+              className={styles.rewardAction}
+              disabled={rewardState.chestLastOpenedDate === todayMetrics.date}
+              onClick={() => {
+                setRewardState((previous) => {
+                  const chest = openDailyChest(previous);
+                  if (chest.opened) {
+                    saveRewardState(chest.nextState);
+                    void trackEvent("daily_chest_open", {
+                      date: todayMetrics.date,
+                      totalOpened: chest.nextState.chestOpenCount,
+                    });
+                    if (chest.unlockedSticker) {
+                      void trackEvent("sticker_unlock", {
+                        source: "daily_chest",
+                        sticker: chest.unlockedSticker,
+                        total: chest.nextState.stickers.length,
+                      });
+                    }
+                    setFeedback({
+                      tone: "success",
+                      text: chest.unlockedSticker
+                        ? pickLanguageText(
+                            language,
+                            `Chest mo thanh cong! Sticker moi: ${chest.unlockedSticker}.`,
+                            `Chest opened! New sticker: ${chest.unlockedSticker}.`,
+                          )
+                        : pickLanguageText(language, "Chest mo thanh cong. Bo suu tap da day.", "Chest opened. Sticker album is complete."),
+                    });
+                  }
+                  return chest.nextState;
+                });
+              }}
+            >
+              {pickLanguageText(language, "Mo chest", "Open chest")}
+            </button>
+            <p className={styles.rewardValue}>{pickLanguageText(language, "Sticker", "Stickers")}: {rewardState.stickers.length}</p>
+          </article>
+
+          <article className={styles.rewardCard}>
+            <p className={styles.rewardTitle}>{pickLanguageText(language, "Avatar + pet + tool", "Avatar + pet + tool")}</p>
+            <p className={styles.rewardHint}>
+              {pickLanguageText(
+                language,
+                "Reward loop sau: mo khoa avatar, pet va cong cu tham tu an toan cho tre.",
+                "Deeper reward loop: unlock child-safe avatar, pet, and detective tool.",
+              )}
+            </p>
+            <label className={styles.rewardSelectLabel}>
+              {pickLanguageText(language, "Avatar", "Avatar")}
+              <select
+                className={styles.rewardSelect}
+                value={rewardState.equippedAvatar ?? ""}
+                onChange={(event) => {
+                  setRewardState((previous) => {
+                    const next = equipAvatar(previous, event.target.value);
+                    saveRewardState(next);
+                    return next;
+                  });
+                }}
+              >
+                {unlockedAvatars.map((avatar) => (
+                  <option key={avatar} value={avatar}>
+                    {avatar}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className={styles.rewardSelectLabel}>
+              {pickLanguageText(language, "Pet", "Pet")}
+              <select
+                className={styles.rewardSelect}
+                value={rewardState.equippedPet ?? ""}
+                onChange={(event) => {
+                  setRewardState((previous) => {
+                    const next = equipPet(previous, event.target.value);
+                    saveRewardState(next);
+                    return next;
+                  });
+                }}
+              >
+                {unlockedPets.map((pet) => (
+                  <option key={pet} value={pet}>
+                    {pet}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className={styles.rewardSelectLabel}>
+              {pickLanguageText(language, "Cong cu", "Tool")}
+              <select
+                className={styles.rewardSelect}
+                value={rewardState.equippedTool ?? ""}
+                onChange={(event) => {
+                  setRewardState((previous) => {
+                    const next = equipTool(previous, event.target.value);
+                    saveRewardState(next);
+                    return next;
+                  });
+                }}
+              >
+                {unlockedTools.map((tool) => (
+                  <option key={tool} value={tool}>
+                    {tool}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </article>
+
+          <article className={styles.rewardCard}>
+            <p className={styles.rewardTitle}>{pickLanguageText(language, "Beat your yesterday", "Beat your yesterday")}</p>
+            <p className={styles.rewardHint}>
+              {pickLanguageText(
+                language,
+                `Muc tieu: ${selfChallengeStatus.target.rounds} vong, ${selfChallengeStatus.target.correct} cau dung, do chinh xac ${selfChallengeStatus.target.accuracy}%`,
+                `Target: ${selfChallengeStatus.target.rounds} rounds, ${selfChallengeStatus.target.correct} correct, ${selfChallengeStatus.target.accuracy}% accuracy`,
+              )}
+            </p>
+            <div className={styles.rewardTrack} role="presentation" aria-hidden>
+              <span
+                className={styles.rewardFill}
+                style={{
+                  width: `${Math.min(
+                    100,
+                    Math.round(
+                      (
+                        selfChallengeStatus.progress.rounds / Math.max(1, selfChallengeStatus.target.rounds) +
+                        selfChallengeStatus.progress.correct / Math.max(1, selfChallengeStatus.target.correct) +
+                        selfChallengeStatus.progress.accuracy / Math.max(1, selfChallengeStatus.target.accuracy)
+                      ) * (100 / 3),
+                    ),
+                  )}%`,
+                }}
+              />
+            </div>
+            <p className={styles.rewardValue}>
+              {selfChallengeStatus.wonToday
+                ? pickLanguageText(language, "Da hoan thanh challenge hom nay!", "Challenge completed for today!")
+                : `${selfChallengeStatus.progress.rounds}/${selfChallengeStatus.target.rounds} | ${selfChallengeStatus.progress.correct}/${selfChallengeStatus.target.correct} | ${selfChallengeStatus.progress.accuracy}%`}
+            </p>
+          </article>
+            </section>
+          </>
+        ) : null}
+
+        {activeView === "play" ? (
+          <section
+          id="mission-zone"
+          className={`${styles.questionCard} ${timeLeft <= 6 ? styles.questionCardDanger : ""} ${
+            feedback.tone === "success" ? styles.questionCardBoost : ""
+          } ${currentBossRoundMeta.isBossRound ? styles.questionCardBoss : ""}`}
+        >
+          {showCelebration ? (
+            <div className={styles.confettiLayer} aria-hidden>
+              <span className={styles.confettiMessage}>{pickLanguageText(language, "Tuyet voi!", "Awesome!")}</span>
+              {Array.from({ length: 14 }, (_, idx) => (
+                <span key={`${celebrationSeed}-${idx}`} className={styles.confettiPiece} />
+              ))}
+            </div>
+          ) : null}
+          <header className={styles.questionHeader}>
+            <div>
+              <h2>{gameTitle}</h2>
+              <p className={styles.hint}>
+                {currentBossRoundMeta.isBossRound
+                  ? pickLanguageText(
+                      language,
+                      `Boss round ${currentBossRoundMeta.bossRoundNumber}: thoi gian ngan hon, diem x2.`,
+                      `Boss round ${currentBossRoundMeta.bossRoundNumber}: shorter timer, 2x score.`,
+                    )
+                  : activeGame === "memory" && memoryRevealLeft > 0
+                  ? pickLanguageText(
+                      language,
+                      `Nho ky chuoi trong ${memoryRevealLeft}s truoc khi bi an.`,
+                      `Memorize the sequence in ${memoryRevealLeft}s before it hides.`,
+                    )
+                  : pickLanguageText(language, "Dung lien tiep de tang combo va mo khoa huy hieu.", "Keep answering correctly to build combo and unlock badges.")}
+              </p>
+              {currentBossRoundMeta.isBossRound ? null : (
+                <p className={styles.profileFocusLine}>{activeAgeGameCopy.focus}</p>
+              )}
+              <p className={styles.profileFocusLine}>
+                {language === "vi" ? learningSuggestion.reasonVi : learningSuggestion.reasonEn}
+              </p>
+            </div>
+            <div className={styles.questionHeaderRight}>
+              <button
+                type="button"
+                className={styles.ttsButton}
+                disabled={!ttsEnabled || soundMuted || !ttsSupported}
+                onClick={() => speakCurrentPrompt("manual")}
+              >
+                {pickLanguageText(language, "Doc cau hoi", "Read question")}
+              </button>
+              {learningSuggestion.recommendedGame !== activeGame ? (
+                <button
+                  type="button"
+                  className={styles.quickSwitchButton}
+                  onClick={() => {
+                    const nextGame = learningSuggestion.recommendedGame;
+                    setActiveGame(nextGame);
+                    const nextRound = getRoundConfig(nextGame, level.key, ageGroup);
+                    beginRound(nextGame, nextRound, "switch_game");
+                  }}
+                >
+                  {pickLanguageText(language, "Luyen diem yeu", "Train weak skill")}
+                </button>
+              ) : null}
+              {!playable ? (
+                <p className={styles.blocked}>
+                  {sessionRemainingMs <= 0
+                    ? pickLanguageText(language, "Phien choi da het gio. Hay nghi nhe.", "Session limit reached. Time for a short break.")
+                    : pickLanguageText(language, "Da het gio choi hom nay.", "Today's play time is over.")}
+                </p>
+              ) : null}
+            </div>
+          </header>
+          <div className={styles.timerCluster}>
+            <p className={styles.timerLabel}>
+              {pickLanguageText(language, "Dong ho vong", "Round timer")}: {timeLeft}s / {roundDurationSeconds}s
+            </p>
+            <div className={styles.timerTrack} role="presentation" aria-hidden>
+              <span className={styles.timerFill} style={{ width: `${Math.round(timeRatio * 100)}%` }} />
+            </div>
+          </div>
+
+          {renderMainQuestion()}
+
+          <p className={`${styles.feedback} ${feedbackClass(feedback.tone)}`} aria-live="polite">
+            {feedback.text}
+          </p>
+
+          <button
+            type="button"
+            className={styles.restartButton}
+            onClick={() => {
+              resetRun();
+              setWrongStreak(0);
+              beginRound(activeGame, activeRoundConfig, "restart");
+              setFeedback({
+                tone: "info",
+                text: pickLanguageText(language, "Da reset run moi. Co gang pha ky luc nao!", "Run restarted. Let's break your high score!"),
+              });
+              void trackEvent("restart_run", { level: level.key, game: activeGame });
+            }}
+          >
+            {pickLanguageText(language, "Choi lai tu dau", "Restart Run")}
+          </button>
+          </section>
+        ) : null}
+
+        {activeView === "progress" ? (
+          <section className={styles.singlePanel}>
+            <BadgeShelf badges={progress.badges} language={language} />
+          </section>
+        ) : null}
+
+        {activeView === "parent" ? (
+          <section className={styles.parentTabWrap}>
+            <ParentModePanel
+            settings={progress.parentMode}
+            remainingMinutes={remainingMinutes}
+            report={parentReport}
+            language={language}
+            locked={parentLocked}
+            parentMessage={parentMessage}
+            onUnlock={(pin) => {
+              if (verifyParentPin(progress, pin)) {
+                setParentUnlocked(true);
+                setParentMessage(pickLanguageText(language, "Da mo khoa khu vuc phu huynh.", "Parent area unlocked."));
+                void trackEvent("parent_unlock", { success: true });
+              } else {
+                setParentMessage(pickLanguageText(language, "PIN khong dung. Vui long thu lai.", "Incorrect PIN. Please try again."));
+                void trackEvent("parent_unlock", { success: false });
+              }
+            }}
+            onSetPin={(pin) => {
+              const normalized = pin.trim();
+              const isValid = /^[0-9]{4,6}$/.test(normalized);
+              if (!isValid) {
+                setParentMessage(pickLanguageText(language, "PIN can 4-6 chu so.", "PIN must have 4-6 digits."));
+                return;
+              }
+              setParentPin(normalized);
+              setParentUnlocked(false);
+              setParentMessage(pickLanguageText(language, "Da luu PIN va khoa lai khu vuc phu huynh.", "PIN saved and parent area locked again."));
+              void trackEvent("parent_pin_update", { length: normalized.length });
+            }}
+            onLock={() => {
+              setParentUnlocked(false);
+              setParentMessage(pickLanguageText(language, "Da khoa khu vuc phu huynh.", "Parent area locked."));
+            }}
+            onResetAll={() => {
+              resetAllProgress();
+              const freshAcademy = getDefaultAcademyProgress();
+              const freshContentBank = getDefaultContentBankState();
+              const freshReward = getDefaultRewardState();
+              const freshReport = getDefaultReportHistoryState();
+              setAcademyProgress(freshAcademy);
+              setContentBankState(freshContentBank);
+              setRewardState(freshReward);
+              setReportHistory(freshReport);
+              saveAcademyProgress(freshAcademy);
+              saveContentBankState(freshContentBank);
+              saveRewardState(freshReward);
+              saveReportHistoryState(freshReport);
+              sessionStartedAtRef.current = Date.now();
+              setParentUnlocked(false);
+              setParentMessage(pickLanguageText(language, "Da reset toan bo du lieu choi.", "All game data has been reset."));
+              setWrongStreak(0);
+              beginRound(activeGame, activeRoundConfig, "reset_all");
+            }}
+            onToggle={(enabled) => {
+              if (parentLocked) {
+                setParentMessage(pickLanguageText(language, "Can mo khoa Parent Mode truoc khi thay doi.", "Please unlock Parent Mode before changing settings."));
+                return;
+              }
+              setParentMode(enabled, progress.parentMode.dailyLimitMinutes);
+              if (enabled) {
+                sessionStartedAtRef.current = Date.now();
+              }
+              void trackEvent("parent_mode_update", { enabled });
+              setParentMessage(pickLanguageText(language, "Da cap nhat Parent Mode.", "Parent Mode updated."));
+            }}
+            onLimitChange={(minutes) => {
+              if (parentLocked) {
+                setParentMessage(pickLanguageText(language, "Can mo khoa Parent Mode truoc khi thay doi.", "Please unlock Parent Mode before changing settings."));
+                return;
+              }
+              updateProgress((previous) => updateParentMode(previous, { dailyLimitMinutes: minutes }));
+              void trackEvent("parent_mode_update", { limit: minutes });
+              setParentMessage(
+                pickLanguageText(
+                  language,
+                  `Da cap nhat gioi han: ${minutes} phut/ngay.`,
+                  `Daily limit updated: ${minutes} min/day.`,
+                ),
+              );
+            }}
+            onSessionLimitChange={(minutes) => {
+              if (parentLocked) {
+                setParentMessage(pickLanguageText(language, "Can mo khoa Parent Mode truoc khi thay doi.", "Please unlock Parent Mode before changing settings."));
+                return;
+              }
+              updateProgress((previous) => updateParentMode(previous, { sessionLimitMinutes: minutes }));
+              void trackEvent("parent_mode_update", { sessionLimit: minutes });
+              setParentMessage(
+                pickLanguageText(
+                  language,
+                  `Da cap nhat gioi han moi phien: ${minutes} phut.`,
+                  `Session limit updated: ${minutes} min.`,
+                ),
+              );
+            }}
+            />
+          </section>
+        ) : null}
+
+        {activeView === "settings" ? (
+          <section className={styles.settingsPanel}>
             <div className={styles.heroControlGrid}>
               <section className={styles.heroControlCard}>
                 <p className={styles.controlTitle}>{pickLanguageText(language, "Do tuoi", "Age group")}</p>
@@ -1070,6 +2329,18 @@ export default function Home() {
                   />
                   <span>{pickLanguageText(language, "Tu dong doc cau moi", "Auto read new question")}</span>
                 </label>
+                <label className={styles.uiSfxToggle}>
+                  <input
+                    type="checkbox"
+                    checked={colorAssistEnabled}
+                    onChange={(event) => {
+                      const nextValue = event.target.checked;
+                      setColorAssistEnabled(nextValue);
+                      void trackEvent("audio_update", { colorAssistEnabled: nextValue });
+                    }}
+                  />
+                  <span>{pickLanguageText(language, "Ho tro mui mau (marker hinh dang)", "Color-blind assist (shape markers)")}</span>
+                </label>
                 {!ttsSupported ? (
                   <p className={styles.telemetryNote}>
                     {pickLanguageText(language, "Trinh duyet nay khong ho tro TTS.", "This browser does not support TTS.")}
@@ -1084,331 +2355,8 @@ export default function Home() {
                 "Telemetry only records anonymous events. No child personal data is collected.",
               )}
             </p>
-            <div className={styles.heroActions}>
-              <button
-                type="button"
-                className={styles.primaryCta}
-                onClick={() => {
-                  document.getElementById("mission-zone")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-              >
-                {pickLanguageText(language, "Vao tran ngay", "Play Now")}
-              </button>
-              <button type="button" className={styles.secondaryCta} onClick={() => setShowOnboarding(true)}>
-                {pickLanguageText(language, "Xem huong dan nhanh", "Quick Guide")}
-              </button>
-            </div>
-          </article>
-          <div className={styles.playgroundWrap}>
-            <PhaserPlayground className={styles.playground} />
-            <span className={styles.playgroundLabel}>{pickLanguageText(language, "Phaser playground live", "Phaser playground live")}</span>
-          </div>
-        </section>
-
-        <section className={styles.mapStrip} aria-label={pickLanguageText(language, "Ban do hoc vien", "Academy map")}>
-          <header className={styles.mapHeader}>
-            <h2>{pickLanguageText(language, "Ban do Hoc Vien", "Academy Map")}</h2>
-            <p>
-              {pickLanguageText(
-                language,
-                `Dang o ${getZoneTitle(activeZone)} - ${language === "vi" ? activeNode.labelVi : activeNode.labelEn} (${activeNode.correctCount}/${activeNode.requiredCorrect})`,
-                `Current zone ${getZoneTitle(activeZone)} - ${language === "vi" ? activeNode.labelVi : activeNode.labelEn} (${activeNode.correctCount}/${activeNode.requiredCorrect})`,
-              )}
-            </p>
-          </header>
-          <div className={styles.mapGrid}>
-            {academyProgress.zones.map((zone, zoneIdx) => {
-              const completedNodes = zone.nodes.filter((node) => node.completed).length;
-              const progressPercent = Math.round((completedNodes / zone.nodes.length) * 100);
-              const isActiveZone = zoneIdx === academyProgress.activeZoneIndex;
-              return (
-                <article
-                  key={zone.key}
-                  className={`${styles.mapZoneCard} ${zone.unlocked ? "" : styles.mapZoneLocked} ${isActiveZone ? styles.mapZoneActive : ""}`}
-                >
-                  <p className={styles.mapZoneTitle}>{getZoneTitle(zone)}</p>
-                  <p className={styles.mapZoneHint}>
-                    {zone.unlocked
-                      ? pickLanguageText(language, `${completedNodes}/${zone.nodes.length} node hoan thanh`, `${completedNodes}/${zone.nodes.length} nodes completed`)
-                      : pickLanguageText(language, "Khoa", "Locked")}
-                  </p>
-                  <div className={styles.mapTrack} role="presentation" aria-hidden>
-                    <span className={styles.mapFill} style={{ width: `${progressPercent}%` }} />
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-          <p className={styles.mapBossHint}>
-            {roundsUntilBoss === 5
-              ? pickLanguageText(language, "Boss round da san sang khi dat moc 5 vong.", "Boss round will trigger at the 5-round milestone.")
-              : pickLanguageText(language, `Con ${roundsUntilBoss} vong nua den boss round.`, `${roundsUntilBoss} rounds until boss round.`)}
-          </p>
-        </section>
-
-        <MiniGameTabs
-          activeKey={activeGame}
-          labels={miniGameLabels}
-          onSelect={(nextGame) => {
-            const nextRound = getRoundConfig(nextGame, level.key, ageGroup);
-            setActiveGame(nextGame);
-            setWrongStreak(0);
-            beginRound(nextGame, nextRound, "switch_game");
-            setFeedback({
-              tone: "info",
-              text:
-                language === "vi"
-                  ? `${miniGameLabels[nextGame].title} san sang!`
-                  : `${miniGameLabels[nextGame].title} is ready!`,
-            });
-            void trackEvent("game_switch", { game: nextGame, level: level.key });
-          }}
-        />
-
-        <LevelSelector
-          selected={levelKey}
-          labels={levelLabels}
-          onSelect={(nextLevelKey) => {
-            const nextRound = getRoundConfig(activeGame, nextLevelKey, ageGroup);
-            setLevelKey(nextLevelKey);
-            setWrongStreak(0);
-            beginRound(activeGame, nextRound, "switch_level", nextLevelKey);
-            setFeedback({
-              tone: "info",
-              text:
-                language === "vi"
-                  ? `${levelLabels[nextLevelKey].label} da kich hoat cho ${gameTitle}.`
-                  : `${levelLabels[nextLevelKey].label} is now active for ${gameTitle}.`,
-            });
-          }}
-        />
-
-        <GameHud
-          score={progress.score}
-          combo={progress.combo}
-          highScore={progress.highScores[level.key]}
-          streak={progress.streak}
-          timeLeft={timeLeft}
-          language={language}
-        />
-
-        <section className={styles.questStrip} aria-label={pickLanguageText(language, "Nhiem vu hom nay", "Today missions")}>
-          <article className={styles.questCard}>
-            <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 1: Choi deu tay", "Mission 1: Keep Playing")}</p>
-            <p className={styles.questHint}>{pickLanguageText(language, "Hoan thanh 12 vong trong ngay.", "Finish 12 rounds today.")}</p>
-            <div className={styles.questTrack} role="presentation" aria-hidden>
-              <span className={styles.questFill} style={{ width: `${questProgress.roundsProgress}%` }} />
-            </div>
-            <p className={styles.questValue}>{progress.dailyStats.rounds}/12</p>
-          </article>
-          <article className={styles.questCard}>
-            <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 2: Chinh xac", "Mission 2: Accuracy")}</p>
-            <p className={styles.questHint}>{pickLanguageText(language, "Dat do chinh xac >= 70%.", "Reach accuracy >= 70%.")}</p>
-            <div className={styles.questTrack} role="presentation" aria-hidden>
-              <span className={styles.questFill} style={{ width: `${questProgress.accuracyProgress}%` }} />
-            </div>
-            <p className={styles.questValue}>{questProgress.todayAccuracy}%</p>
-          </article>
-          <article className={styles.questCard}>
-            <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 3: Da nang", "Mission 3: Variety")}</p>
-            <p className={styles.questHint}>{pickLanguageText(language, "Moi mini game choi it nhat 1 lan.", "Play each mini game at least once.")}</p>
-            <div className={styles.questMiniGrid}>
-              <span className={`${styles.questMiniPill} ${questProgress.mathProgress > 0 ? styles.questMiniDone : ""}`}>
-                {pickLanguageText(language, "Toan", "Math")}
-              </span>
-              <span className={`${styles.questMiniPill} ${questProgress.memoryProgress > 0 ? styles.questMiniDone : ""}`}>
-                {pickLanguageText(language, "Nho", "Memory")}
-              </span>
-              <span className={`${styles.questMiniPill} ${questProgress.colorProgress > 0 ? styles.questMiniDone : ""}`}>
-                {pickLanguageText(language, "Mau", "Color")}
-              </span>
-            </div>
-            <p className={styles.questValue}>{questProgress.balanceDone ? pickLanguageText(language, "Hoan thanh", "Done") : pickLanguageText(language, "Dang mo", "In progress")}</p>
-          </article>
-        </section>
-
-        <section className={styles.arcadeStrip} aria-label={pickLanguageText(language, "Bang trang thai tran dau", "Match status board")}>
-          <article className={styles.arcadeCard}>
-            <p className={styles.arcadeTitle}>Combo Reactor</p>
-            <p className={styles.arcadeHint}>
-              {pickLanguageText(
-                language,
-                `Con ${comboStatus.remainingForBadge} cau dung nua de no huy hieu.`,
-                `${comboStatus.remainingForBadge} more correct answers to ignite a badge.`,
-              )}
-            </p>
-            <div className={styles.arcadeTrack} role="presentation" aria-hidden>
-              <span className={styles.arcadeFill} style={{ width: `${comboStatus.progressToBadge}%` }} />
-            </div>
-            <p className={styles.arcadeValue}>x{progress.combo}</p>
-          </article>
-          <article className={styles.arcadeCard}>
-            <p className={styles.arcadeTitle}>{pickLanguageText(language, "Nang luong vong", "Round Energy")}</p>
-            <p className={styles.arcadeHint}>
-              {pickLanguageText(
-                language,
-                `Giu nhip trong ${activeRoundConfig.roundSeconds}s de dat diem cao.`,
-                `Keep your rhythm in ${activeRoundConfig.roundSeconds}s to maximize points.`,
-              )}
-            </p>
-            <div className={styles.arcadeTrack} role="presentation" aria-hidden>
-              <span className={styles.arcadeFillWarm} style={{ width: `${Math.round(timeRatio * 100)}%` }} />
-            </div>
-            <p className={styles.arcadeValue}>{Math.round(timeRatio * 100)}%</p>
-          </article>
-          <article className={styles.arcadeCard}>
-            <p className={styles.arcadeTitle}>Coach Bot</p>
-            <p className={styles.arcadeHint}>{coachTip}</p>
-            <div className={styles.arcadeTrack} role="presentation" aria-hidden>
-              <span className={styles.arcadeFillCool} style={{ width: `${comboStatus.streakProgress}%` }} />
-            </div>
-            <p className={styles.arcadeValue}>
-              {pickLanguageText(language, "Streak", "Streak")} {progress.streak}/7
-            </p>
-          </article>
-        </section>
-
-        <section
-          id="mission-zone"
-          className={`${styles.questionCard} ${timeLeft <= 6 ? styles.questionCardDanger : ""} ${
-            feedback.tone === "success" ? styles.questionCardBoost : ""
-          }`}
-        >
-          {showCelebration ? (
-            <div className={styles.confettiLayer} aria-hidden>
-              <span className={styles.confettiMessage}>{pickLanguageText(language, "Tuyet voi!", "Awesome!")}</span>
-              {Array.from({ length: 14 }, (_, idx) => (
-                <span key={`${celebrationSeed}-${idx}`} className={styles.confettiPiece} />
-              ))}
-            </div>
-          ) : null}
-          <header className={styles.questionHeader}>
-            <div>
-              <h2>{gameTitle}</h2>
-              <p className={styles.hint}>
-                {activeGame === "memory" && memoryRevealLeft > 0
-                  ? pickLanguageText(
-                      language,
-                      `Nho ky chuoi trong ${memoryRevealLeft}s truoc khi bi an.`,
-                      `Memorize the sequence in ${memoryRevealLeft}s before it hides.`,
-                    )
-                  : pickLanguageText(language, "Dung lien tiep de tang combo va mo khoa huy hieu.", "Keep answering correctly to build combo and unlock badges.")}
-              </p>
-            </div>
-            <div className={styles.questionHeaderRight}>
-              <button
-                type="button"
-                className={styles.ttsButton}
-                disabled={!ttsEnabled || soundMuted || !ttsSupported}
-                onClick={() => speakCurrentPrompt("manual")}
-              >
-                {pickLanguageText(language, "Doc cau hoi", "Read question")}
-              </button>
-              {!playable ? <p className={styles.blocked}>{pickLanguageText(language, "Da het gio choi hom nay.", "Today's play time is over.")}</p> : null}
-            </div>
-          </header>
-          <div className={styles.timerCluster}>
-            <p className={styles.timerLabel}>{pickLanguageText(language, "Dong ho vong", "Round timer")}: {timeLeft}s</p>
-            <div className={styles.timerTrack} role="presentation" aria-hidden>
-              <span className={styles.timerFill} style={{ width: `${Math.round(timeRatio * 100)}%` }} />
-            </div>
-          </div>
-
-          {renderMainQuestion()}
-
-          <p className={`${styles.feedback} ${feedbackClass(feedback.tone)}`} aria-live="polite">
-            {feedback.text}
-          </p>
-
-          <button
-            type="button"
-            className={styles.restartButton}
-            onClick={() => {
-              resetRun();
-              setWrongStreak(0);
-              beginRound(activeGame, activeRoundConfig, "restart");
-              setFeedback({
-                tone: "info",
-                text: pickLanguageText(language, "Da reset run moi. Co gang pha ky luc nao!", "Run restarted. Let's break your high score!"),
-              });
-              void trackEvent("restart_run", { level: level.key, game: activeGame });
-            }}
-          >
-            {pickLanguageText(language, "Choi lai tu dau", "Restart Run")}
-          </button>
-        </section>
-
-        <section className={styles.metaRow}>
-          <BadgeShelf badges={progress.badges} language={language} />
-          <ParentModePanel
-            settings={progress.parentMode}
-            remainingMinutes={remainingMinutes}
-            report={parentReport}
-            language={language}
-            locked={parentLocked}
-            parentMessage={parentMessage}
-            onUnlock={(pin) => {
-              if (verifyParentPin(progress, pin)) {
-                setParentUnlocked(true);
-                setParentMessage(pickLanguageText(language, "Da mo khoa khu vuc phu huynh.", "Parent area unlocked."));
-                void trackEvent("parent_unlock", { success: true });
-              } else {
-                setParentMessage(pickLanguageText(language, "PIN khong dung. Vui long thu lai.", "Incorrect PIN. Please try again."));
-                void trackEvent("parent_unlock", { success: false });
-              }
-            }}
-            onSetPin={(pin) => {
-              const normalized = pin.trim();
-              const isValid = /^[0-9]{4,6}$/.test(normalized);
-              if (!isValid) {
-                setParentMessage(pickLanguageText(language, "PIN can 4-6 chu so.", "PIN must have 4-6 digits."));
-                return;
-              }
-              setParentPin(normalized);
-              setParentUnlocked(false);
-              setParentMessage(pickLanguageText(language, "Da luu PIN va khoa lai khu vuc phu huynh.", "PIN saved and parent area locked again."));
-              void trackEvent("parent_pin_update", { length: normalized.length });
-            }}
-            onLock={() => {
-              setParentUnlocked(false);
-              setParentMessage(pickLanguageText(language, "Da khoa khu vuc phu huynh.", "Parent area locked."));
-            }}
-            onResetAll={() => {
-              resetAllProgress();
-              const freshAcademy = getDefaultAcademyProgress();
-              setAcademyProgress(freshAcademy);
-              saveAcademyProgress(freshAcademy);
-              setParentUnlocked(false);
-              setParentMessage(pickLanguageText(language, "Da reset toan bo du lieu choi.", "All game data has been reset."));
-              setWrongStreak(0);
-              beginRound(activeGame, activeRoundConfig, "reset_all");
-            }}
-            onToggle={(enabled) => {
-              if (parentLocked) {
-                setParentMessage(pickLanguageText(language, "Can mo khoa Parent Mode truoc khi thay doi.", "Please unlock Parent Mode before changing settings."));
-                return;
-              }
-              setParentMode(enabled, progress.parentMode.dailyLimitMinutes);
-              void trackEvent("parent_mode_update", { enabled });
-              setParentMessage(pickLanguageText(language, "Da cap nhat Parent Mode.", "Parent Mode updated."));
-            }}
-            onLimitChange={(minutes) => {
-              if (parentLocked) {
-                setParentMessage(pickLanguageText(language, "Can mo khoa Parent Mode truoc khi thay doi.", "Please unlock Parent Mode before changing settings."));
-                return;
-              }
-              updateProgress((previous) => updateParentMode(previous, { dailyLimitMinutes: minutes }));
-              void trackEvent("parent_mode_update", { limit: minutes });
-              setParentMessage(
-                pickLanguageText(
-                  language,
-                  `Da cap nhat gioi han: ${minutes} phut/ngay.`,
-                  `Daily limit updated: ${minutes} min/day.`,
-                ),
-              );
-            }}
-          />
-        </section>
+          </section>
+        ) : null}
       </div>
     </main>
   );

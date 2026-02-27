@@ -3,6 +3,7 @@ import { BADGE_POOL, LEVEL_ORDER, LevelKey, MiniGameKey } from "@/lib/game-core/
 export interface ParentModeSettings {
   enabled: boolean;
   dailyLimitMinutes: number;
+  sessionLimitMinutes: number;
   pinCode: string | null;
 }
 
@@ -66,6 +67,7 @@ function getDefaultGameStats(): Record<MiniGameKey, GameStat> {
     math: { rounds: 0, correct: 0, wrong: 0 },
     memory: { rounds: 0, correct: 0, wrong: 0 },
     color: { rounds: 0, correct: 0, wrong: 0 },
+    logic: { rounds: 0, correct: 0, wrong: 0 },
   };
 }
 
@@ -81,6 +83,7 @@ export function getDefaultProgress(now: Date = new Date()): PlayerProgress {
     parentMode: {
       enabled: false,
       dailyLimitMinutes: 30,
+      sessionLimitMinutes: 20,
       pinCode: null,
     },
     usage: {
@@ -264,11 +267,13 @@ export function updateParentMode(
   payload: Partial<ParentModeSettings>,
 ): PlayerProgress {
   const minutes = payload.dailyLimitMinutes ?? progress.parentMode.dailyLimitMinutes;
+  const sessionMinutes = payload.sessionLimitMinutes ?? progress.parentMode.sessionLimitMinutes;
   return {
     ...progress,
     parentMode: {
       enabled: payload.enabled ?? progress.parentMode.enabled,
       dailyLimitMinutes: Math.min(180, Math.max(5, Math.round(minutes))),
+      sessionLimitMinutes: Math.min(90, Math.max(5, Math.round(sessionMinutes))),
       pinCode: payload.pinCode ?? progress.parentMode.pinCode,
     },
   };

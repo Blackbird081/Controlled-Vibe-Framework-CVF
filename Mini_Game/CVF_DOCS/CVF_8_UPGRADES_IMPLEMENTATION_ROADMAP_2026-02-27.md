@@ -14,6 +14,15 @@ Hoan tat day du 8 huong nang cap de game:
 - Co motivation loop manh hon (quay lai choi tiep).
 - Van giu an toan tre em, parent control, performance va test coverage theo CVF.
 
+## Current status update (2026-02-27)
+
+- Engineering implementation status:
+  - Upgrade #1 -> #8: **DONE**
+  - C1/C2/C3 technical gates: **DONE**
+- Remaining before public release:
+  - Real-user pilot UAT completion + KPI evidence
+  - Final sign-off (PO/QA/Safety)
+
 ---
 
 ## 2) Scope of 8 Upgrades

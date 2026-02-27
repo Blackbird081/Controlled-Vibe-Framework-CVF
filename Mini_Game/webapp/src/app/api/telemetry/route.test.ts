@@ -23,6 +23,25 @@ describe("telemetry route", () => {
     expect(typeof data.receivedAt).toBe("string");
   });
 
+  it("accepts newly added boss telemetry event", async () => {
+    const request = new Request("http://localhost/api/telemetry", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        event: "boss_round_start",
+        payload: { bossRoundNumber: 2 },
+        timestamp: Date.now(),
+      }),
+    });
+
+    const response = await POST(request);
+    const data = (await response.json()) as { ok: boolean };
+    expect(response.status).toBe(200);
+    expect(data.ok).toBe(true);
+  });
+
   it("rejects missing event", async () => {
     const request = new Request("http://localhost/api/telemetry", {
       method: "POST",

@@ -10,4 +10,16 @@ describe("memory game core", () => {
     expect(round.sequence.length).toBeGreaterThanOrEqual(5);
     expect(round.sequence.includes(round.answer)).toBe(true);
   });
+
+  it("supports age-profile memory options", () => {
+    const round = generateMemoryRound(100, {
+      complexityOverride: 7,
+      minAnswerCount: 3,
+      maxAnswerCount: 3,
+    });
+    const answerCount = round.sequence.filter((item) => item === round.answer).length;
+
+    expect(round.sequence).toHaveLength(7);
+    expect(answerCount).toBe(3);
+  });
 });

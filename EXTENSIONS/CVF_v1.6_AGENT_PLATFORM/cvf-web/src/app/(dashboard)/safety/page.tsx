@@ -20,6 +20,10 @@ import {
     type OpenClawMode,
     type OpenClawProposal,
 } from '@/lib/openclaw-config';
+import { explain, mapCvfRiskLevel, mapDecisionToAction, type IntentType } from '@/lib/explainability';
+import { parseNaturalPolicy, getDecisionColor, type ParsedPolicyRule } from '@/lib/natural-policy-parser';
+import { RUNTIME_ADAPTERS, CAPABILITY_LABELS, STATUS_STYLES } from '@/lib/runtime-adapters';
+import { RISK_MATRIX, DESTRUCTIVE_RULES, ESCALATION_THRESHOLDS, getCategoryColor, getCategoryBg, getScoreBar } from '@/lib/risk-models';
 
 // ==================== EXISTING COMPONENTS ====================
 
@@ -984,6 +988,247 @@ function DomainMapVisualization({ lang }: { lang: 'vi' | 'en' }) {
     );
 }
 
+// ==================== v1.7.3 INTEGRATION COMPONENTS ====================
+
+function RuntimeAdaptersPanel({ lang }: { lang: 'vi' | 'en' }) {
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                🔌 {lang === 'vi' ? 'Runtime Adapters (v1.7.3)' : 'Runtime Adapters (v1.7.3)'}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {RUNTIME_ADAPTERS.map(adapter => {
+                    const status = STATUS_STYLES[adapter.status];
+                    return (
+                        <div key={adapter.name} className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-2xl">{adapter.icon}</span>
+                                <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${status.color}`}>
+                                    {lang === 'vi' ? status.label.vi : status.label.en}
+                                </span>
+                            </div>
+                            <div className="font-bold text-sm mb-1">{adapter.displayName}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                                {lang === 'vi' ? adapter.description.vi : adapter.description.en}
+                            </div>
+                            <div className="flex flex-wrap gap-1 mb-2">
+                                {adapter.capabilities.map(cap => {
+                                    const capInfo = CAPABILITY_LABELS[cap];
+                                    return (
+                                        <span key={cap} className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                                            {capInfo.icon} {lang === 'vi' ? capInfo.vi : capInfo.en}
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                            <div className="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                                <span>🛡️</span>
+                                {lang === 'vi' ? adapter.safetyNotes.vi : adapter.safetyNotes.en}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+function ExplainabilityPanel({ lang }: { lang: 'vi' | 'en' }) {
+    const [selectedIntent, setSelectedIntent] = useState<IntentType>('FILE_READ');
+    const [selectedAction, setSelectedAction] = useState<'EXECUTE' | 'BLOCK' | 'ESCALATE'>('EXECUTE');
+
+    const intents: IntentType[] = ['FILE_READ', 'FILE_WRITE', 'FILE_DELETE', 'EMAIL_SEND', 'API_CALL', 'CODE_EXECUTION', 'DATA_EXPORT'];
+    const actions: Array<'EXECUTE' | 'BLOCK' | 'ESCALATE'> = ['EXECUTE', 'BLOCK', 'ESCALATE'];
+
+    const riskScore = selectedIntent === 'FILE_DELETE' || selectedIntent === 'CODE_EXECUTION' ? 80
+        : selectedIntent === 'EMAIL_SEND' || selectedIntent === 'DATA_EXPORT' ? 55
+            : selectedIntent === 'FILE_WRITE' || selectedIntent === 'API_CALL' ? 40 : 15;
+
+    const result = explain({
+        intentType: selectedIntent,
+        riskLevel: mapCvfRiskLevel(riskScore >= 80 ? 'R4' : riskScore >= 60 ? 'R3' : riskScore >= 30 ? 'R2' : 'R1'),
+        riskScore,
+        action: selectedAction,
+    }, lang);
+
+    const actionColors: Record<string, string> = {
+        EXECUTE: 'bg-emerald-600', BLOCK: 'bg-red-600', ESCALATE: 'bg-amber-600',
+    };
+
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                🗣️ {lang === 'vi' ? 'Giải thích Hành động (v1.7.3)' : 'Action Explainability (v1.7.3)'}
+            </h2>
+            <div className="p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                <div className="flex flex-wrap gap-2 mb-3">
+                    {intents.map(i => (
+                        <button key={i} onClick={() => setSelectedIntent(i)}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${selectedIntent === i ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200'}`}>
+                            {i.replace('_', ' ')}
+                        </button>
+                    ))}
+                </div>
+                <div className="flex gap-2 mb-4">
+                    {actions.map(a => (
+                        <button key={a} onClick={() => setSelectedAction(a)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all ${selectedAction === a ? actionColors[a] : 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-500'}`}>
+                            {a === 'EXECUTE' ? '✅' : a === 'BLOCK' ? '🚫' : '⏳'} {a}
+                        </button>
+                    ))}
+                </div>
+                <div className="space-y-2 p-4 rounded-lg bg-gray-50 dark:bg-gray-900">
+                    <div className="font-bold text-lg">{result.summary}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">{result.details}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{result.riskMessage}</div>
+                    {result.recommendation && (
+                        <div className="text-sm text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                            <span>💡</span> {result.recommendation}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function NaturalPolicyEditor({ lang }: { lang: 'vi' | 'en' }) {
+    const [input, setInput] = useState('');
+    const rules = useMemo(() => parseNaturalPolicy(input), [input]);
+
+    const placeholder = lang === 'vi'
+        ? 'Nhập policy bằng ngôn ngữ tự nhiên...\nVí dụ:\ncấm xóa tệp\ncho phép đọc dữ liệu\nxem xét gửi email'
+        : 'Type policies in natural language...\nExample:\ndeny file deletion\nallow reading files\nreview email sending';
+
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                📝 {lang === 'vi' ? 'Viết Policy Tự Nhiên (v1.7.3)' : 'Natural Language Policy (v1.7.3)'}
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                    <textarea
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder={placeholder}
+                        rows={6}
+                        className="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-mono resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <div className="text-xs text-gray-400 mt-1">
+                        {lang === 'vi' ? `${rules.length} quy tắc được nhận diện` : `${rules.length} rules detected`}
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    {rules.length === 0 ? (
+                        <div className="p-8 text-center text-gray-400 text-sm rounded-xl border border-dashed border-gray-300 dark:border-gray-600">
+                            {lang === 'vi' ? 'Nhập policy để xem kết quả phân tích' : 'Type policies to see parsed results'}
+                        </div>
+                    ) : (
+                        rules.map((rule, i) => (
+                            <div key={i} className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase ${getDecisionColor(rule.decision)}`}>
+                                        {rule.decision}
+                                    </span>
+                                    <span className="text-xs text-gray-400">
+                                        {rule.resource}/{rule.action}
+                                    </span>
+                                    <span className="ml-auto text-xs text-gray-400">
+                                        {Math.round(rule.confidence * 100)}%
+                                    </span>
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">
+                                    &quot;{rule.originalLine}&quot;
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function RiskMatrixPanel({ lang }: { lang: 'vi' | 'en' }) {
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-4">
+                🎯 {lang === 'vi' ? 'Ma trận Rủi ro (v1.7.3)' : 'Risk Matrix (v1.7.3)'}
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {/* Risk Matrix Table */}
+                <div className="lg:col-span-2 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                        <span className="text-xs font-semibold text-gray-500 uppercase">
+                            {lang === 'vi' ? 'Điểm rủi ro theo hành động' : 'Risk Score by Action'}
+                        </span>
+                    </div>
+                    <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                        {RISK_MATRIX.map(entry => (
+                            <div key={entry.intent} className="flex items-center px-4 py-2.5 gap-3">
+                                <div className="flex-1">
+                                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                        {lang === 'vi' ? entry.label.vi : entry.label.en}
+                                    </span>
+                                </div>
+                                <div className="w-32">
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex-1 h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                                            <div className={`h-full rounded-full ${getScoreBar(entry.baseScore)}`}
+                                                style={{ width: `${entry.baseScore}%` }} />
+                                        </div>
+                                        <span className={`text-xs font-bold min-w-[2rem] text-right ${getCategoryColor(entry.category)}`}>
+                                            {entry.baseScore}
+                                        </span>
+                                    </div>
+                                </div>
+                                <span className={`px-2 py-0.5 rounded text-xs font-semibold ${getCategoryBg(entry.category)} ${getCategoryColor(entry.category)}`}>
+                                    {entry.category}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Escalation Thresholds + Destructive Rules */}
+                <div className="space-y-4">
+                    <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+                        <div className="text-xs font-semibold text-gray-500 uppercase mb-3">
+                            {lang === 'vi' ? 'Ngưỡng Escalation' : 'Escalation Thresholds'}
+                        </div>
+                        <div className="space-y-2">
+                            {ESCALATION_THRESHOLDS.map(t => (
+                                <div key={t.level} className="flex items-center gap-2">
+                                    <div className={`w-3 h-3 rounded ${t.color}`} />
+                                    <span className="text-sm font-medium flex-1">{lang === 'vi' ? t.label.vi : t.label.en}</span>
+                                    <span className="text-xs text-gray-400">{t.minScore}–{t.maxScore}</span>
+                                    <span className="text-xs font-mono text-gray-500">{t.action}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+                        <div className="text-xs font-semibold text-gray-500 uppercase mb-3">
+                            {lang === 'vi' ? 'Mẫu Nguy hiểm' : 'Destructive Patterns'}
+                        </div>
+                        <div className="space-y-2">
+                            {DESTRUCTIVE_RULES.map(r => (
+                                <div key={r.pattern} className="flex items-center gap-2">
+                                    <span className="text-xs font-mono bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-1.5 py-0.5 rounded">
+                                        {r.pattern}
+                                    </span>
+                                    <span className="text-xs text-gray-500 flex-1">{lang === 'vi' ? r.label.vi : r.label.en}</span>
+                                    <span className="text-xs font-bold text-red-600">+{r.riskBoost}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // ==================== GOVERNANCE CHECKER SECTION ====================
 
 function GovernanceCheckerSection({ lang }: { lang: 'vi' | 'en' }) {
@@ -1213,6 +1458,18 @@ export default function SafetyPage() {
                     <DomainMapVisualization lang={lang} />
                 </>
             )}
+
+            {/* v1.7.3 Integration: Runtime Adapters */}
+            <RuntimeAdaptersPanel lang={lang} />
+
+            {/* v1.7.3 Integration: Explainability */}
+            <ExplainabilityPanel lang={lang} />
+
+            {/* v1.7.3 Integration: Natural Language Policy */}
+            <NaturalPolicyEditor lang={lang} />
+
+            {/* v1.7.3 Integration: Risk Matrix */}
+            <RiskMatrixPanel lang={lang} />
 
             {/* Risk Levels */}
             <div>

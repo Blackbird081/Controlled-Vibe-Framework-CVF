@@ -41,6 +41,14 @@ import {
   updateParentMode,
   verifyParentPin,
 } from "@/lib/progress-service";
+import {
+  AcademyZoneState,
+  advanceAcademyProgress,
+  getDefaultAcademyProgress,
+  getRoundsUntilBoss,
+  loadAcademyProgress,
+  saveAcademyProgress,
+} from "@/lib/progression-service";
 import { useGameStore } from "@/lib/store/game-store";
 import { trackEvent } from "@/lib/telemetry";
 import styles from "./page.module.css";
@@ -187,6 +195,7 @@ export default function Home() {
   const [celebrationSeed, setCelebrationSeed] = useState(0);
   const [parentUnlocked, setParentUnlocked] = useState(false);
   const [parentMessage, setParentMessage] = useState<string | null>(null);
+  const [academyProgress, setAcademyProgress] = useState(() => getDefaultAcademyProgress());
   const [feedback, setFeedback] = useState<{ tone: FeedbackTone; text: string }>({
     tone: "info",
     text: "Chon mini game va bat dau hanh trinh hoc ma choi!",
@@ -339,6 +348,11 @@ export default function Home() {
       setShowOnboarding(onboardingDone !== "1");
     }, 0);
     return () => window.clearTimeout(timer);
+  }, [hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    setAcademyProgress(loadAcademyProgress());
   }, [hydrated]);
 
   useEffect(() => {
@@ -612,6 +626,23 @@ export default function Home() {
     }
     return pickLanguageText(language, "Nhan phim 1-4 de tra loi sieu nhanh, phim R de choi lai run.", "Use keys 1-4 to answer fast, and R to restart the run.");
   }, [activeGame, feedback.tone, language, playable, timeLeft, wrongStreak]);
+  const roundsUntilBoss = useMemo(() => getRoundsUntilBoss(academyProgress), [academyProgress]);
+  const activeZone = academyProgress.zones[academyProgress.activeZoneIndex];
+  const activeNode = activeZone.nodes[academyProgress.activeNodeIndex];
+  const getZoneTitle = useCallback(
+    (zone: AcademyZoneState) => (language === "vi" ? zone.titleVi : zone.titleEn),
+    [language],
+  );
+  const applyAcademyRoundResult = useCallback((isCorrect: boolean) => {
+    setAcademyProgress((previous) => {
+      const { next, telemetry } = advanceAcademyProgress(previous, isCorrect);
+      saveAcademyProgress(next);
+      telemetry.forEach((entry) => {
+        void trackEvent(entry.event, entry.payload);
+      });
+      return next;
+    });
+  }, []);
 
   const handleWrong = useCallback(
     (reason: "answer_wrong" | "round_timeout") => {
@@ -644,9 +675,10 @@ export default function Home() {
       } else {
         void trackEvent("answer_wrong", { level: level.key, game: activeGame });
       }
+      applyAcademyRoundResult(false);
       beginRound(activeGame, activeRoundConfig, reason === "round_timeout" ? "timeout" : "answer_wrong");
     },
-    [activeGame, activeRoundConfig, beginRound, getHintForCurrentGame, language, level.key, updateProgress, wrongStreak],
+    [activeGame, activeRoundConfig, applyAcademyRoundResult, beginRound, getHintForCurrentGame, language, level.key, updateProgress, wrongStreak],
   );
 
   const handleAnswer = useCallback(
@@ -700,6 +732,7 @@ export default function Home() {
             : `Correct! +${points} points. Combo x${nextCombo}.`,
       });
       void trackEvent("answer_correct", { level: level.key, game: activeGame, points });
+      applyAcademyRoundResult(true);
       beginRound(activeGame, activeRoundConfig, "answer_correct");
     },
     [
@@ -713,6 +746,7 @@ export default function Home() {
       mathQuestion.answer,
       memoryRound.answer,
       language,
+      applyAcademyRoundResult,
       progress.combo,
       progress.highScores,
       progress.score,
@@ -1071,6 +1105,47 @@ export default function Home() {
           </div>
         </section>
 
+        <section className={styles.mapStrip} aria-label={pickLanguageText(language, "Ban do hoc vien", "Academy map")}>
+          <header className={styles.mapHeader}>
+            <h2>{pickLanguageText(language, "Ban do Hoc Vien", "Academy Map")}</h2>
+            <p>
+              {pickLanguageText(
+                language,
+                `Dang o ${getZoneTitle(activeZone)} - ${language === "vi" ? activeNode.labelVi : activeNode.labelEn} (${activeNode.correctCount}/${activeNode.requiredCorrect})`,
+                `Current zone ${getZoneTitle(activeZone)} - ${language === "vi" ? activeNode.labelVi : activeNode.labelEn} (${activeNode.correctCount}/${activeNode.requiredCorrect})`,
+              )}
+            </p>
+          </header>
+          <div className={styles.mapGrid}>
+            {academyProgress.zones.map((zone, zoneIdx) => {
+              const completedNodes = zone.nodes.filter((node) => node.completed).length;
+              const progressPercent = Math.round((completedNodes / zone.nodes.length) * 100);
+              const isActiveZone = zoneIdx === academyProgress.activeZoneIndex;
+              return (
+                <article
+                  key={zone.key}
+                  className={`${styles.mapZoneCard} ${zone.unlocked ? "" : styles.mapZoneLocked} ${isActiveZone ? styles.mapZoneActive : ""}`}
+                >
+                  <p className={styles.mapZoneTitle}>{getZoneTitle(zone)}</p>
+                  <p className={styles.mapZoneHint}>
+                    {zone.unlocked
+                      ? pickLanguageText(language, `${completedNodes}/${zone.nodes.length} node hoan thanh`, `${completedNodes}/${zone.nodes.length} nodes completed`)
+                      : pickLanguageText(language, "Khoa", "Locked")}
+                  </p>
+                  <div className={styles.mapTrack} role="presentation" aria-hidden>
+                    <span className={styles.mapFill} style={{ width: `${progressPercent}%` }} />
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+          <p className={styles.mapBossHint}>
+            {roundsUntilBoss === 5
+              ? pickLanguageText(language, "Boss round da san sang khi dat moc 5 vong.", "Boss round will trigger at the 5-round milestone.")
+              : pickLanguageText(language, `Con ${roundsUntilBoss} vong nua den boss round.`, `${roundsUntilBoss} rounds until boss round.`)}
+          </p>
+        </section>
+
         <MiniGameTabs
           activeKey={activeGame}
           labels={miniGameLabels}
@@ -1300,6 +1375,9 @@ export default function Home() {
             }}
             onResetAll={() => {
               resetAllProgress();
+              const freshAcademy = getDefaultAcademyProgress();
+              setAcademyProgress(freshAcademy);
+              saveAcademyProgress(freshAcademy);
               setParentUnlocked(false);
               setParentMessage(pickLanguageText(language, "Da reset toan bo du lieu choi.", "All game data has been reset."));
               setWrongStreak(0);

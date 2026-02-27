@@ -483,6 +483,90 @@
   gap: 10px;
 }
 
+.mapStrip {
+  border-radius: calc(var(--age-card-radius) - 4px);
+  border: 2px solid color-mix(in srgb, var(--game-primary) 56%, white);
+  background:
+    radial-gradient(circle at 90% 18%, rgba(255, 255, 255, 0.36), transparent 30%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.96), color-mix(in srgb, var(--game-soft) 66%, white));
+  padding: 12px;
+  box-shadow: 0 12px 22px rgba(22, 86, 136, 0.14);
+}
+
+.mapHeader h2 {
+  margin: 0;
+  color: color-mix(in srgb, var(--game-deep) 92%, #12314d);
+  font-size: 1.02rem;
+}
+
+.mapHeader p {
+  margin: 6px 0 0;
+  color: #386080;
+  font-size: 0.84rem;
+}
+
+.mapGrid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mapZoneCard {
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--game-primary) 54%, white);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 9px 10px;
+}
+
+.mapZoneLocked {
+  opacity: 0.58;
+  border-style: dashed;
+}
+
+.mapZoneActive {
+  border-width: 2px;
+  border-color: var(--game-accent);
+  box-shadow: 0 8px 16px rgba(31, 107, 168, 0.18);
+}
+
+.mapZoneTitle {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 900;
+  color: color-mix(in srgb, var(--game-deep) 90%, #153654);
+}
+
+.mapZoneHint {
+  margin: 4px 0 0;
+  color: #47708f;
+  font-size: 0.78rem;
+}
+
+.mapTrack {
+  margin-top: 7px;
+  height: 7px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--game-primary) 42%, white);
+  background: rgba(255, 255, 255, 0.88);
+  overflow: hidden;
+}
+
+.mapFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #38bdf8, #60d394, #facc15);
+  transition: width 240ms ease;
+}
+
+.mapBossHint {
+  margin: 10px 0 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #285b82;
+}
+
 .arcadeStrip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1385,6 +1469,10 @@
   }
 
   .tabsRow {
+    grid-template-columns: 1fr;
+  }
+
+  .mapGrid {
     grid-template-columns: 1fr;
   }
 

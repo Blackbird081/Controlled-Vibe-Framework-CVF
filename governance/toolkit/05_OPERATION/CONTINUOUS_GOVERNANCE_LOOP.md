@@ -57,6 +57,7 @@ Self-UAT MUST re-run if:
 - Operator explicitly requests re-validation
 - Bug fix pushed without BUG_HISTORY.md documentation (see CVF_BUG_DOCUMENTATION_GUARD.md)
 - Test executed without CVF_INCREMENTAL_TEST_LOG.md entry (see CVF_TEST_DOCUMENTATION_GUARD.md)
+- Architecture/strategy decision made WITHOUT a corresponding ADR entry (see CVF_ADR_GUARD.md)
 
 ---
 
@@ -106,6 +107,20 @@ Each governance cycle must produce:
 - Updated Self-UAT Decision Log entry
 - Updated operational scope declaration
 - Timestamp
+
+For architectural or strategic decisions specifically:
+
+- An ADR entry in `docs/CVF_ARCHITECTURE_DECISIONS.md` (see CVF_ADR_GUARD.md)
+- ADR covers: core value changes, domain strategy, governance policy additions, major refactors
+
+### Complete Traceability Coverage
+
+| Event type | Recorded in |
+|---|---|
+| Bug fixed | `docs/BUG_HISTORY.md` (Bug Guard) |
+| Tests executed | `docs/CVF_INCREMENTAL_TEST_LOG.md` (Test Guard) |
+| Skill added | `CVF_SKILL_INTAKE_RECORD.md` (Skill Intake) |
+| Architecture/strategy decision | `docs/CVF_ARCHITECTURE_DECISIONS.md` (ADR Guard) |
 
 ---
 

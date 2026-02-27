@@ -3,6 +3,7 @@ node_modules/
 .next/
 dist/
 build/
+coverage/
 
 # Database (local dev)
 dev.db
@@ -51,4 +52,4 @@ AI-Research-SKILLs/
 
 # Mini Game projects (local case study, publish later when completed)
 Mini Game/
-Mini_Game/
+Mini_Game/scores.db

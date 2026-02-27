@@ -1,12 +1,18 @@
 import { MINI_GAMES, MiniGameKey } from "@/lib/game-core";
 import styles from "@/app/page.module.css";
 
+interface MiniGameLabel {
+  title: string;
+  description: string;
+}
+
 interface MiniGameTabsProps {
   activeKey: MiniGameKey;
+  labels: Record<MiniGameKey, MiniGameLabel>;
   onSelect: (key: MiniGameKey) => void;
 }
 
-export function MiniGameTabs({ activeKey, onSelect }: MiniGameTabsProps) {
+export function MiniGameTabs({ activeKey, labels, onSelect }: MiniGameTabsProps) {
   return (
     <section className={styles.tabsRow}>
       {MINI_GAMES.map((tab) => (
@@ -16,8 +22,8 @@ export function MiniGameTabs({ activeKey, onSelect }: MiniGameTabsProps) {
           className={`${styles.tabCard} ${activeKey === tab.key ? styles.tabCardActive : ""}`}
           onClick={() => onSelect(tab.key)}
         >
-          <h3>{tab.title}</h3>
-          <p>{tab.description}</p>
+          <h3>{labels[tab.key].title}</h3>
+          <p>{labels[tab.key].description}</p>
         </button>
       ))}
     </section>

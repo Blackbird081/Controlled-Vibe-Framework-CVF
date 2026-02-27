@@ -1,5 +1,7 @@
 import { MemoryRound } from "@/lib/game-core/types";
 
+type UiLanguage = "vi" | "en";
+
 const SYMBOL_POOL = ["🚀", "🛰️", "🌟", "🪐", "🔭", "🧪", "🧠", "⚡", "🛸", "📡"];
 
 function randomInt(min: number, max: number): number {
@@ -44,6 +46,9 @@ export function generateMemoryRound(limit: number): MemoryRound {
   };
 }
 
-export function getMemoryHint(answer: string): string {
+export function getMemoryHint(answer: string, language: UiLanguage = "vi"): string {
+  if (language === "en") {
+    return `Hint: the correct symbol is ${answer}.`;
+  }
   return `Goi y: Ky hieu dung la ${answer}.`;
 }

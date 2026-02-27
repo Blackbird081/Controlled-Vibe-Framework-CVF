@@ -1,12 +1,18 @@
 import { LEVEL_ORDER, LEVELS, LevelKey } from "@/lib/game-core";
 import styles from "@/app/page.module.css";
 
+interface LevelLabel {
+  label: string;
+  subtitle: string;
+}
+
 interface LevelSelectorProps {
   selected: LevelKey;
+  labels: Record<LevelKey, LevelLabel>;
   onSelect: (level: LevelKey) => void;
 }
 
-export function LevelSelector({ selected, onSelect }: LevelSelectorProps) {
+export function LevelSelector({ selected, labels, onSelect }: LevelSelectorProps) {
   return (
     <section className={styles.levelSelector}>
       {LEVEL_ORDER.map((levelKey) => {
@@ -19,8 +25,8 @@ export function LevelSelector({ selected, onSelect }: LevelSelectorProps) {
             className={`${styles.levelButton} ${isActive ? styles.levelButtonActive : ""}`}
             onClick={() => onSelect(levelKey)}
           >
-            <span className={styles.levelTitle}>{level.label}</span>
-            <span className={styles.levelSubtitle}>{level.subtitle}</span>
+            <span className={styles.levelTitle}>{labels[levelKey].label}</span>
+            <span className={styles.levelSubtitle}>{labels[levelKey].subtitle}</span>
           </button>
         );
       })}

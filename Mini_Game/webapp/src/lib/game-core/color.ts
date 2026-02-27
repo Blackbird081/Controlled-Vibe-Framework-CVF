@@ -1,5 +1,7 @@
 import { ColorRound } from "@/lib/game-core/types";
 
+type UiLanguage = "vi" | "en";
+
 interface ColorEntry {
   name: string;
   hex: string;
@@ -23,6 +25,15 @@ function shuffle<T>(items: T[]): T[] {
   return arr;
 }
 
+const COLOR_ENGLISH_MAP: Record<string, string> = {
+  "Xanh Duong": "Blue",
+  Vang: "Yellow",
+  Do: "Red",
+  "Xanh La": "Green",
+  Cam: "Orange",
+  Hong: "Pink",
+};
+
 export function generateColorRound(): ColorRound {
   const entries = shuffle(COLORS);
   const answerColor = entries[0];
@@ -43,11 +54,18 @@ export function generateColorRound(): ColorRound {
   };
 }
 
-export function getColorHint(answerColorName: string): string {
+export function getColorHint(answerColorName: string, language: UiLanguage = "vi"): string {
+  if (language === "en") {
+    return `Hint: focus on the WORD COLOR, the answer is ${getColorEnglishName(answerColorName)}.`;
+  }
   return `Goi y: Tap trung vao MAU CHU, dap an la ${answerColorName}.`;
 }
 
 export function getColorHexByName(colorName: string): string {
   const found = COLORS.find((item) => item.name === colorName);
   return found?.hex ?? "#1fb6ff";
+}
+
+export function getColorEnglishName(colorName: string): string {
+  return COLOR_ENGLISH_MAP[colorName] ?? colorName;
 }

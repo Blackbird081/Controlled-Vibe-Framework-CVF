@@ -11,6 +11,7 @@ export type TelemetryEvent =
   | "audio_update"
   | "tts_update"
   | "tts_speak"
+  | "language_switch"
   | "parent_unlock"
   | "parent_pin_update"
   | "onboarding_complete"

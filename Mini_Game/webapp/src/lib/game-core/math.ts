@@ -1,5 +1,7 @@
 import { MathQuestion } from "@/lib/game-core/types";
 
+type UiLanguage = "vi" | "en";
+
 const DELTAS = [-12, -10, -6, -5, -3, -2, -1, 1, 2, 3, 5, 6, 10, 12];
 
 function randomInt(min: number, max: number): number {
@@ -54,7 +56,14 @@ export function calculateEarnedScore(nextCombo: number, baseScore: number): numb
   return baseScore;
 }
 
-export function getDetectiveRank(score: number): string {
+export function getDetectiveRank(score: number, language: UiLanguage = "vi"): string {
+  if (language === "en") {
+    if (score < 60) return "Junior Detective";
+    if (score < 140) return "Bronze Detective";
+    if (score < 260) return "Silver Detective";
+    if (score < 420) return "Gold Detective";
+    return "Super Detective";
+  }
   if (score < 60) return "Tham tu Tre";
   if (score < 140) return "Tham tu Dong";
   if (score < 260) return "Tham tu Bac";
@@ -62,7 +71,13 @@ export function getDetectiveRank(score: number): string {
   return "Sieu Tham tu";
 }
 
-export function getMathHint(question: MathQuestion): string {
+export function getMathHint(question: MathQuestion, language: UiLanguage = "vi"): string {
+  if (language === "en") {
+    if (question.operator === "+") {
+      return `Hint: ${question.left} + ${question.right} is greater than ${Math.max(question.left, question.right)}.`;
+    }
+    return `Hint: ${question.left} - ${question.right} is not negative.`;
+  }
   if (question.operator === "+") {
     return `Goi y: ${question.left} + ${question.right} lon hon ${Math.max(question.left, question.right)}.`;
   }

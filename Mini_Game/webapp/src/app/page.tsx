@@ -11,13 +11,13 @@ import {
   calculateEarnedScore,
   generateColorRound,
   generateMathQuestion,
+  getColorEnglishName,
   generateMemoryRound,
   getColorHint,
   getMathHint,
   getMemoryHint,
   LEVELS,
   LevelKey,
-  MINI_GAMES,
   MiniGameKey,
 } from "@/lib/game-core";
 import {
@@ -47,6 +47,7 @@ import styles from "./page.module.css";
 
 type FeedbackTone = "success" | "error" | "info";
 type AgeGroupKey = "age_5_6" | "age_7_8" | "age_9_10";
+type UiLanguage = "vi" | "en";
 
 interface AgeProfileConfig {
   key: AgeGroupKey;
@@ -82,6 +83,68 @@ const AGE_PROFILES: Record<AgeGroupKey, AgeProfileConfig> = {
 
 const AGE_PROFILE_STORAGE_KEY = "cvf-mini-age-group-v1";
 const AUDIO_PREF_STORAGE_KEY = "cvf-mini-audio-pref-v1";
+const LANGUAGE_STORAGE_KEY = "cvf-mini-language-v1";
+
+const AGE_PROFILE_LABELS: Record<UiLanguage, Record<AgeGroupKey, string>> = {
+  vi: {
+    age_5_6: "5-6 tuoi",
+    age_7_8: "7-8 tuoi",
+    age_9_10: "9-10 tuoi",
+  },
+  en: {
+    age_5_6: "5-6 years",
+    age_7_8: "7-8 years",
+    age_9_10: "9-10 years",
+  },
+};
+
+const MINI_GAME_LABELS: Record<UiLanguage, Record<MiniGameKey, { title: string; description: string }>> = {
+  vi: {
+    math: {
+      title: "Toan Nhanh",
+      description: "Tinh nhanh, chon dap an dung.",
+    },
+    memory: {
+      title: "Nho Hinh",
+      description: "Nho chuoi ky hieu roi chon ky hieu xuat hien nhieu nhat.",
+    },
+    color: {
+      title: "Phan Xa Mau",
+      description: "Bo qua noi dung chu, chon mau chu dang hien thi.",
+    },
+  },
+  en: {
+    math: {
+      title: "Math Sprint",
+      description: "Solve quickly and pick the correct answer.",
+    },
+    memory: {
+      title: "Memory Spark",
+      description: "Memorize symbols and pick the one that appears most.",
+    },
+    color: {
+      title: "Color Reflex",
+      description: "Ignore word meaning, pick the displayed text color.",
+    },
+  },
+};
+
+const LEVEL_LABELS: Record<UiLanguage, Record<LevelKey, { label: string; subtitle: string }>> = {
+  vi: {
+    rookie: { label: "Cua 1: Tap su", subtitle: "So nho den 20" },
+    talent: { label: "Cua 2: Tai nang", subtitle: "So vua den 50" },
+    master: { label: "Cua 3: Sieu tham tu", subtitle: "So lon den 100" },
+  },
+  en: {
+    rookie: { label: "Gate 1: Rookie", subtitle: "Numbers up to 20" },
+    talent: { label: "Gate 2: Talent", subtitle: "Numbers up to 50" },
+    master: { label: "Gate 3: Super Detective", subtitle: "Numbers up to 100" },
+  },
+};
+
+function pickLanguageText(language: UiLanguage, vi: string, en: string): string {
+  return language === "vi" ? vi : en;
+}
 
 function feedbackClass(tone: FeedbackTone): string {
   if (tone === "success") return styles.feedbackSuccess;
@@ -112,6 +175,7 @@ export default function Home() {
   const [wrongStreak, setWrongStreak] = useState(0);
   const [timeLeft, setTimeLeft] = useState(level.roundSeconds);
   const [ageGroup, setAgeGroup] = useState<AgeGroupKey>("age_7_8");
+  const [language, setLanguage] = useState<UiLanguage>("vi");
   const [soundMuted, setSoundMuted] = useState(false);
   const [soundVolume, setSoundVolume] = useState(75);
   const [uiSfxEnabled, setUiSfxEnabled] = useState(true);
@@ -147,18 +211,20 @@ export default function Home() {
 
   const getHintForCurrentGame = useCallback((): string => {
     if (activeGame === "math") {
-      return getMathHint(mathQuestion);
+      return getMathHint(mathQuestion, language);
     }
     if (activeGame === "memory") {
-      return getMemoryHint(memoryRound.answer);
+      return getMemoryHint(memoryRound.answer, language);
     }
-    return getColorHint(colorRound.answerColorName);
-  }, [activeGame, colorRound.answerColorName, mathQuestion, memoryRound.answer]);
+    return getColorHint(colorRound.answerColorName, language);
+  }, [activeGame, colorRound.answerColorName, language, mathQuestion, memoryRound.answer]);
 
-  const gameTitle = useMemo(() => {
-    const found = MINI_GAMES.find((item) => item.key === activeGame);
-    return found?.title ?? "Mini Game";
-  }, [activeGame]);
+  const miniGameLabels = useMemo(() => MINI_GAME_LABELS[language], [language]);
+  const levelLabels = useMemo(() => LEVEL_LABELS[language], [language]);
+  const gameTitle = useMemo(
+    () => miniGameLabels[activeGame]?.title ?? pickLanguageText(language, "Mini Game", "Mini Game"),
+    [activeGame, language, miniGameLabels],
+  );
   const getRoundConfig = useCallback(
     (game: MiniGameKey, targetLevelKey: LevelKey = level.key, targetAgeGroup: AgeGroupKey = ageGroup) => {
       const targetLevel = LEVELS[targetLevelKey];
@@ -175,7 +241,7 @@ export default function Home() {
     () => getRoundConfig(activeGame, level.key, ageGroup),
     [activeGame, ageGroup, getRoundConfig, level.key],
   );
-  const ageProfile = AGE_PROFILES[ageGroup];
+  const ageProfileLabel = AGE_PROFILE_LABELS[language][ageGroup];
   const timeRatio = Math.max(0, Math.min(1, timeLeft / activeRoundConfig.roundSeconds));
   const currentRoundKey = useMemo(() => {
     if (activeGame === "math") {
@@ -188,16 +254,38 @@ export default function Home() {
   }, [activeGame, colorRound.answerColorName, colorRound.word, colorRound.wordColorHex, mathQuestion, memoryRound.answer, memoryRound.sequence]);
   const currentSpeechText = useMemo(() => {
     if (activeGame === "math") {
-      return `Cau hoi toan: ${mathQuestion.left} ${mathQuestion.operator === "+" ? "cong" : "tru"} ${mathQuestion.right} bang bao nhieu?`;
+      return language === "vi"
+        ? `Cau hoi toan: ${mathQuestion.left} ${mathQuestion.operator === "+" ? "cong" : "tru"} ${mathQuestion.right} bang bao nhieu?`
+        : `Math question: what is ${mathQuestion.left} ${mathQuestion.operator === "+" ? "plus" : "minus"} ${mathQuestion.right}?`;
     }
     if (activeGame === "memory") {
       if (memoryRevealLeft > 0) {
-        return `Hay nho chuoi ky hieu trong ${memoryRevealLeft} giay.`;
+        return language === "vi"
+          ? `Hay nho chuoi ky hieu trong ${memoryRevealLeft} giay.`
+          : `Remember the symbol sequence in ${memoryRevealLeft} seconds.`;
       }
-      return "Chuoi da an. Ky hieu nao xuat hien nhieu nhat?";
+      return pickLanguageText(language, "Chuoi da an. Ky hieu nao xuat hien nhieu nhat?", "Sequence hidden. Which symbol appeared the most?");
     }
-    return `Phan xa mau. Tu hien thi la ${colorRound.word}. Hay chon mau cua chu dang hien thi.`;
-  }, [activeGame, colorRound.word, mathQuestion.left, mathQuestion.operator, mathQuestion.right, memoryRevealLeft]);
+    return language === "vi"
+      ? `Phan xa mau. Tu hien thi la ${colorRound.word}. Hay chon mau cua chu dang hien thi.`
+      : `Color reflex. The shown word is ${getColorEnglishName(colorRound.word)}. Pick the color of the text.`;
+  }, [activeGame, colorRound.word, language, mathQuestion.left, mathQuestion.operator, mathQuestion.right, memoryRevealLeft]);
+  const englishLearningLine = useMemo(() => {
+    if (activeGame === "math") {
+      return `English: What is ${mathQuestion.left} ${mathQuestion.operator === "+" ? "plus" : "minus"} ${mathQuestion.right}?`;
+    }
+    if (activeGame === "memory") {
+      return memoryRevealLeft > 0
+        ? "English: Remember the symbols."
+        : "English: Which symbol appears the most?";
+    }
+    return "English: Choose the COLOR of the word.";
+  }, [activeGame, mathQuestion.left, mathQuestion.operator, mathQuestion.right, memoryRevealLeft]);
+  const getColorChoiceDisplay = useCallback(
+    (choice: string) =>
+      language === "vi" ? `${choice} / ${getColorEnglishName(choice)}` : `${getColorEnglishName(choice)} / ${choice}`,
+    [language],
+  );
   const triggerCelebration = useCallback(() => {
     setCelebrationSeed((value) => value + 1);
     setShowCelebration(true);
@@ -229,14 +317,14 @@ export default function Home() {
       const speech = window.speechSynthesis;
       speech.cancel();
       const utterance = new SpeechSynthesisUtterance(currentSpeechText);
-      utterance.lang = "vi-VN";
+      utterance.lang = language === "vi" ? "vi-VN" : "en-US";
       utterance.rate = ageGroup === "age_5_6" ? 0.88 : 0.96;
       utterance.pitch = 1.03;
       utterance.volume = Math.max(0, Math.min(1, soundVolume / 100));
       speech.speak(utterance);
-      void trackEvent("tts_speak", { source, game: activeGame, ageGroup });
+      void trackEvent("tts_speak", { source, game: activeGame, ageGroup, language });
     },
-    [activeGame, ageGroup, currentSpeechText, soundMuted, soundVolume, ttsEnabled, ttsSupported],
+    [activeGame, ageGroup, currentSpeechText, language, soundMuted, soundVolume, ttsEnabled, ttsSupported],
   );
 
   useEffect(() => {
@@ -263,6 +351,10 @@ export default function Home() {
     const rawAgeGroup = window.localStorage.getItem(AGE_PROFILE_STORAGE_KEY);
     if (rawAgeGroup && rawAgeGroup in AGE_PROFILES) {
       setAgeGroup(rawAgeGroup as AgeGroupKey);
+    }
+    const rawLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    if (rawLanguage === "vi" || rawLanguage === "en") {
+      setLanguage(rawLanguage);
     }
 
     const rawAudioPref = window.localStorage.getItem(AUDIO_PREF_STORAGE_KEY);
@@ -330,6 +422,11 @@ export default function Home() {
 
   useEffect(() => {
     if (!hydrated) return;
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+  }, [hydrated, language]);
+
+  useEffect(() => {
+    if (!hydrated) return;
     if (previousAgeGroupRef.current === null) {
       previousAgeGroupRef.current = ageGroup;
       return;
@@ -341,14 +438,18 @@ export default function Home() {
     setWrongStreak(0);
     setFeedback({
       tone: "info",
-      text: `Da doi profile ${AGE_PROFILES[ageGroup].label}. Do kho duoc can chinh lai.`,
+      text: pickLanguageText(
+        language,
+        `Da doi profile ${AGE_PROFILE_LABELS.vi[ageGroup]}. Do kho duoc can chinh lai.`,
+        `Profile switched to ${AGE_PROFILE_LABELS.en[ageGroup]}. Difficulty was re-balanced.`,
+      ),
     });
     void trackEvent("age_profile_change", {
       ageGroup,
       game: activeGame,
       level: level.key,
     });
-  }, [activeGame, activeRoundConfig, ageGroup, beginRound, hydrated, level.key]);
+  }, [activeGame, activeRoundConfig, ageGroup, beginRound, hydrated, language, level.key]);
 
   useEffect(() => {
     if (!hydrated || !autoReadEnabled) return;
@@ -480,21 +581,37 @@ export default function Home() {
   }, [progress.combo, progress.streak]);
   const coachTip = useMemo(() => {
     if (!playable) {
-      return "Hom nay da het quota choi. Nghia 1 chut roi quay lai vao ngay mai nhe.";
+      return pickLanguageText(
+        language,
+        "Hom nay da het quota choi. Nghia 1 chut roi quay lai vao ngay mai nhe.",
+        "Today's play quota is over. Take a short break and come back tomorrow.",
+      );
     }
     if (feedback.tone === "success") {
-      return "Nhip rat tot. Giu combo de mo khoa them huy hieu!";
+      return pickLanguageText(language, "Nhip rat tot. Giu combo de mo khoa them huy hieu!", "Great rhythm. Keep your combo to unlock more badges!");
     }
     if (feedback.tone === "error" && wrongStreak >= 2) {
-      if (activeGame === "math") return "Thu tach phep tinh thanh so nho de tim dap an nhanh hon.";
-      if (activeGame === "memory") return "Nhin cum 2 ky hieu 1 lan de nho de hon.";
-      return "Tap trung vao MAU chu, dung doc noi dung cua chu.";
+      if (activeGame === "math") {
+        return pickLanguageText(
+          language,
+          "Thu tach phep tinh thanh so nho de tim dap an nhanh hon.",
+          "Try splitting the operation into smaller numbers for faster solving.",
+        );
+      }
+      if (activeGame === "memory") {
+        return pickLanguageText(
+          language,
+          "Nhin cum 2 ky hieu 1 lan de nho de hon.",
+          "Look at symbols in pairs. It is easier to remember.",
+        );
+      }
+      return pickLanguageText(language, "Tap trung vao MAU chu, dung doc noi dung cua chu.", "Focus on the COLOR of the text, not the word meaning.");
     }
     if (timeLeft <= 6) {
-      return "Sap het gio. Chon dap an nhanh va chinh xac!";
+      return pickLanguageText(language, "Sap het gio. Chon dap an nhanh va chinh xac!", "Time is almost over. Pick quickly and stay accurate!");
     }
-    return "Nhan phim 1-4 de tra loi sieu nhanh, phim R de choi lai run.";
-  }, [activeGame, feedback.tone, playable, timeLeft, wrongStreak]);
+    return pickLanguageText(language, "Nhan phim 1-4 de tra loi sieu nhanh, phim R de choi lai run.", "Use keys 1-4 to answer fast, and R to restart the run.");
+  }, [activeGame, feedback.tone, language, playable, timeLeft, wrongStreak]);
 
   const handleWrong = useCallback(
     (reason: "answer_wrong" | "round_timeout") => {
@@ -511,8 +628,8 @@ export default function Home() {
 
       let text =
         reason === "round_timeout"
-          ? "Het gio roi. Lam tiep cau moi nhe!"
-          : "Chua dung. Binh tinh va thu lai!";
+          ? pickLanguageText(language, "Het gio roi. Lam tiep cau moi nhe!", "Time is up. Keep going with the next round!")
+          : pickLanguageText(language, "Chua dung. Binh tinh va thu lai!", "Not correct yet. Stay calm and try again!");
       if (shouldShowHint) {
         text = `${text} ${getHintForCurrentGame()}`;
         void trackEvent("hint_shown", { game: activeGame, reason });
@@ -529,7 +646,7 @@ export default function Home() {
       }
       beginRound(activeGame, activeRoundConfig, reason === "round_timeout" ? "timeout" : "answer_wrong");
     },
-    [activeGame, activeRoundConfig, beginRound, getHintForCurrentGame, level.key, updateProgress, wrongStreak],
+    [activeGame, activeRoundConfig, beginRound, getHintForCurrentGame, language, level.key, updateProgress, wrongStreak],
   );
 
   const handleAnswer = useCallback(
@@ -577,7 +694,10 @@ export default function Home() {
       }
       setFeedback({
         tone: "success",
-        text: `Chinh xac! +${points} diem. Combo x${nextCombo}.`,
+        text:
+          language === "vi"
+            ? `Chinh xac! +${points} diem. Combo x${nextCombo}.`
+            : `Correct! +${points} points. Combo x${nextCombo}.`,
       });
       void trackEvent("answer_correct", { level: level.key, game: activeGame, points });
       beginRound(activeGame, activeRoundConfig, "answer_correct");
@@ -592,6 +712,7 @@ export default function Home() {
       level.key,
       mathQuestion.answer,
       memoryRound.answer,
+      language,
       progress.combo,
       progress.highScores,
       progress.score,
@@ -652,7 +773,7 @@ export default function Home() {
         beginRound(activeGame, activeRoundConfig, "restart");
         setFeedback({
           tone: "info",
-          text: "Da reset run moi (shortcut R).",
+          text: pickLanguageText(language, "Da reset run moi (shortcut R).", "Run restarted (shortcut R)."),
         });
         return;
       }
@@ -666,13 +787,13 @@ export default function Home() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeGame, activeRoundConfig, beginRound, currentChoices, handleAnswer, resetRun]);
+  }, [activeGame, activeRoundConfig, beginRound, currentChoices, handleAnswer, language, resetRun]);
 
   if (!hydrated) {
     return (
       <main id="cvf-game-root" className={styles.page} data-game="math">
         <div className={styles.frame}>
-          <section className={styles.heroCard}>Dang tai du lieu game...</section>
+          <section className={styles.heroCard}>{pickLanguageText(language, "Dang tai du lieu game...", "Loading game data...")}</section>
         </div>
       </main>
     );
@@ -685,6 +806,7 @@ export default function Home() {
           <p className={styles.questionValue}>
             {mathQuestion.left} {mathQuestion.operator} {mathQuestion.right} = ?
           </p>
+          <p className={styles.questionGloss}>{englishLearningLine}</p>
           <div className={styles.answers}>
             {mathQuestion.choices.map((choice) => (
               <button
@@ -708,8 +830,11 @@ export default function Home() {
           {memoryRevealLeft > 0 ? (
             <div className={styles.memorySequence}>{memoryRound.sequence.join(" ")}</div>
           ) : (
-            <div className={styles.memoryCover}>Chuoi da an. Ky hieu nao xuat hien nhieu nhat?</div>
+            <div className={styles.memoryCover}>
+              {pickLanguageText(language, "Chuoi da an. Ky hieu nao xuat hien nhieu nhat?", "Sequence hidden. Which symbol appears the most?")}
+            </div>
           )}
+          <p className={styles.questionGloss}>{englishLearningLine}</p>
           <div className={styles.answers}>
             {memoryRound.choices.map((choice) => (
               <button
@@ -729,10 +854,13 @@ export default function Home() {
 
     return (
       <>
-        <p className={styles.hint}>Chon MAU cua chu, khong phai noi dung cua chu.</p>
-        <p className={styles.colorWord} style={{ color: colorRound.wordColorHex }}>
-          {colorRound.word}
+        <p className={styles.hint}>
+          {pickLanguageText(language, "Chon MAU cua chu, khong phai noi dung cua chu.", "Pick the COLOR of the text, not the word meaning.")}
         </p>
+        <p className={styles.colorWord} style={{ color: colorRound.wordColorHex }}>
+          {language === "vi" ? colorRound.word : getColorEnglishName(colorRound.word)}
+        </p>
+        <p className={styles.questionGloss}>{englishLearningLine}</p>
         <div className={styles.answers}>
           {colorRound.choices.map((choice) => (
             <button
@@ -742,7 +870,7 @@ export default function Home() {
               onClick={() => handleAnswer(choice)}
               disabled={answerLocked}
             >
-              {choice}
+              {getColorChoiceDisplay(choice)}
             </button>
           ))}
         </div>
@@ -755,11 +883,11 @@ export default function Home() {
       {showOnboarding ? (
         <div className={styles.onboardingBackdrop} role="dialog" aria-modal="true">
           <section className={styles.onboardingCard}>
-            <h2>Chao mung den CVF Mini Detective Academy</h2>
+            <h2>{pickLanguageText(language, "Chao mung den CVF Mini Detective Academy", "Welcome to CVF Mini Detective Academy")}</h2>
             <ul className={styles.onboardingList}>
-              <li>Chon 1 trong 3 mini game o hang tab phia tren.</li>
-              <li>Nhan phim 1-4 de chon dap an nhanh, nhan R de choi lai run.</li>
-              <li>Parent Mode cho phep gioi han thoi gian choi moi ngay.</li>
+              <li>{pickLanguageText(language, "Chon 1 trong 3 mini game o hang tab phia tren.", "Choose 1 of 3 mini games on the top tab row.")}</li>
+              <li>{pickLanguageText(language, "Nhan phim 1-4 de chon dap an nhanh, nhan R de choi lai run.", "Press keys 1-4 to answer quickly, and press R to restart the run.")}</li>
+              <li>{pickLanguageText(language, "Parent Mode cho phep gioi han thoi gian choi moi ngay.", "Parent Mode can limit total daily play time.")}</li>
             </ul>
             <div className={styles.onboardingActions}>
               <button
@@ -771,7 +899,7 @@ export default function Home() {
                   void trackEvent("onboarding_complete", { source: "first_launch" });
                 }}
               >
-                Bat dau choi
+                {pickLanguageText(language, "Bat dau choi", "Start Playing")}
               </button>
             </div>
           </section>
@@ -783,16 +911,21 @@ export default function Home() {
           <article className={styles.heroCard}>
             <h1>CVF Mini Detective Academy</h1>
             <p>
-              Nhiem vu hom nay: giai ma mini game, giu combo that dai va tro thanh sieu tham tu cua hoc vien.
+              {pickLanguageText(
+                language,
+                "Nhiem vu hom nay: giai ma mini game, giu combo that dai va tro thanh sieu tham tu cua hoc vien.",
+                "Today's mission: solve mini games, keep long combos, and become the academy's super detective.",
+              )}
             </p>
             <div className={styles.heroMeta}>
-              <span className={styles.chip}>Dang choi: {gameTitle}</span>
-              <span className={styles.chip}>Profile: {ageProfile.label}</span>
-              <span className={styles.chip}>Combo = Diem thuong</span>
+              <span className={styles.chip}>{pickLanguageText(language, "Dang choi", "Now playing")}: {gameTitle}</span>
+              <span className={styles.chip}>{pickLanguageText(language, "Profile", "Profile")}: {ageProfileLabel}</span>
+              <span className={styles.chip}>{pickLanguageText(language, "Ngon ngu", "Language")}: {language.toUpperCase()}</span>
+              <span className={styles.chip}>{pickLanguageText(language, "Combo = Diem thuong", "Combo = Bonus points")}</span>
             </div>
             <div className={styles.heroControlGrid}>
               <section className={styles.heroControlCard}>
-                <p className={styles.controlTitle}>Do tuoi</p>
+                <p className={styles.controlTitle}>{pickLanguageText(language, "Do tuoi", "Age group")}</p>
                 <div className={styles.segmentedRow}>
                   {(Object.keys(AGE_PROFILES) as AgeGroupKey[]).map((key) => (
                     <button
@@ -801,13 +934,29 @@ export default function Home() {
                       className={`${styles.segmentedButton} ${ageGroup === key ? styles.segmentedButtonActive : ""}`}
                       onClick={() => setAgeGroup(key)}
                     >
-                      {AGE_PROFILES[key].label}
+                      {AGE_PROFILE_LABELS[language][key]}
+                    </button>
+                  ))}
+                </div>
+                <p className={styles.controlTitle}>{pickLanguageText(language, "Ngon ngu", "Language")}</p>
+                <div className={styles.segmentedRow}>
+                  {(["vi", "en"] as UiLanguage[]).map((langKey) => (
+                    <button
+                      key={langKey}
+                      type="button"
+                      className={`${styles.segmentedButton} ${language === langKey ? styles.segmentedButtonActive : ""}`}
+                      onClick={() => {
+                        setLanguage(langKey);
+                        void trackEvent("language_switch", { language: langKey });
+                      }}
+                    >
+                      {langKey === "vi" ? "Tieng Viet" : "English"}
                     </button>
                   ))}
                 </div>
               </section>
               <section className={styles.heroControlCard}>
-                <p className={styles.controlTitle}>Am thanh</p>
+                <p className={styles.controlTitle}>{pickLanguageText(language, "Am thanh", "Audio")}</p>
                 <div className={styles.audioRow}>
                   <button
                     type="button"
@@ -818,10 +967,12 @@ export default function Home() {
                       void trackEvent("audio_update", { muted: nextMuted, uiEnabled: uiSfxEnabled });
                     }}
                   >
-                    {soundMuted ? "Bat am thanh" : "Tat am thanh"}
+                    {soundMuted
+                      ? pickLanguageText(language, "Bat am thanh", "Unmute")
+                      : pickLanguageText(language, "Tat am thanh", "Mute")}
                   </button>
                   <label className={styles.audioLabel} htmlFor="sound-volume">
-                    Volume {soundVolume}%
+                    {pickLanguageText(language, "Am luong", "Volume")} {soundVolume}%
                   </label>
                 </div>
                 <input
@@ -848,7 +999,7 @@ export default function Home() {
                       void trackEvent("audio_update", { muted: soundMuted, volume: soundVolume / 100, uiEnabled: nextUiEnabled });
                     }}
                   />
-                  <span>Hieu ung click/hover</span>
+                  <span>{pickLanguageText(language, "Hieu ung click/hover", "Click/hover effects")}</span>
                 </label>
                 <label className={styles.uiSfxToggle}>
                   <input
@@ -867,7 +1018,7 @@ export default function Home() {
                       });
                     }}
                   />
-                  <span>Doc cau hoi (TTS)</span>
+                  <span>{pickLanguageText(language, "Doc cau hoi (TTS)", "Read question (TTS)")}</span>
                 </label>
                 <label className={styles.uiSfxToggle}>
                   <input
@@ -883,12 +1034,22 @@ export default function Home() {
                       });
                     }}
                   />
-                  <span>Tu dong doc cau moi</span>
+                  <span>{pickLanguageText(language, "Tu dong doc cau moi", "Auto read new question")}</span>
                 </label>
-                {!ttsSupported ? <p className={styles.telemetryNote}>Trinh duyet nay khong ho tro TTS.</p> : null}
+                {!ttsSupported ? (
+                  <p className={styles.telemetryNote}>
+                    {pickLanguageText(language, "Trinh duyet nay khong ho tro TTS.", "This browser does not support TTS.")}
+                  </p>
+                ) : null}
               </section>
             </div>
-            <p className={styles.telemetryNote}>Telemetry chi ghi event an danh, khong thu thap thong tin ca nhan cua tre.</p>
+            <p className={styles.telemetryNote}>
+              {pickLanguageText(
+                language,
+                "Telemetry chi ghi event an danh, khong thu thap thong tin ca nhan cua tre.",
+                "Telemetry only records anonymous events. No child personal data is collected.",
+              )}
+            </p>
             <div className={styles.heroActions}>
               <button
                 type="button"
@@ -897,21 +1058,22 @@ export default function Home() {
                   document.getElementById("mission-zone")?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
               >
-                Vao tran ngay
+                {pickLanguageText(language, "Vao tran ngay", "Play Now")}
               </button>
               <button type="button" className={styles.secondaryCta} onClick={() => setShowOnboarding(true)}>
-                Xem huong dan nhanh
+                {pickLanguageText(language, "Xem huong dan nhanh", "Quick Guide")}
               </button>
             </div>
           </article>
           <div className={styles.playgroundWrap}>
             <PhaserPlayground className={styles.playground} />
-            <span className={styles.playgroundLabel}>Phaser playground live</span>
+            <span className={styles.playgroundLabel}>{pickLanguageText(language, "Phaser playground live", "Phaser playground live")}</span>
           </div>
         </section>
 
         <MiniGameTabs
           activeKey={activeGame}
+          labels={miniGameLabels}
           onSelect={(nextGame) => {
             const nextRound = getRoundConfig(nextGame, level.key, ageGroup);
             setActiveGame(nextGame);
@@ -919,7 +1081,10 @@ export default function Home() {
             beginRound(nextGame, nextRound, "switch_game");
             setFeedback({
               tone: "info",
-              text: `${MINI_GAMES.find((item) => item.key === nextGame)?.title ?? "Mini game"} san sang!`,
+              text:
+                language === "vi"
+                  ? `${miniGameLabels[nextGame].title} san sang!`
+                  : `${miniGameLabels[nextGame].title} is ready!`,
             });
             void trackEvent("game_switch", { game: nextGame, level: level.key });
           }}
@@ -927,15 +1092,18 @@ export default function Home() {
 
         <LevelSelector
           selected={levelKey}
+          labels={levelLabels}
           onSelect={(nextLevelKey) => {
             const nextRound = getRoundConfig(activeGame, nextLevelKey, ageGroup);
             setLevelKey(nextLevelKey);
-            const nextLevel = LEVELS[nextLevelKey];
             setWrongStreak(0);
             beginRound(activeGame, nextRound, "switch_level", nextLevelKey);
             setFeedback({
               tone: "info",
-              text: `${nextLevel.label} da kich hoat cho ${gameTitle}.`,
+              text:
+                language === "vi"
+                  ? `${levelLabels[nextLevelKey].label} da kich hoat cho ${gameTitle}.`
+                  : `${levelLabels[nextLevelKey].label} is now active for ${gameTitle}.`,
             });
           }}
         />
@@ -946,49 +1114,68 @@ export default function Home() {
           highScore={progress.highScores[level.key]}
           streak={progress.streak}
           timeLeft={timeLeft}
+          language={language}
         />
 
-        <section className={styles.questStrip} aria-label="Nhiem vu hom nay">
+        <section className={styles.questStrip} aria-label={pickLanguageText(language, "Nhiem vu hom nay", "Today missions")}>
           <article className={styles.questCard}>
-            <p className={styles.questTitle}>Nhiem vu 1: Choi deu tay</p>
-            <p className={styles.questHint}>Hoan thanh 12 vong trong ngay.</p>
+            <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 1: Choi deu tay", "Mission 1: Keep Playing")}</p>
+            <p className={styles.questHint}>{pickLanguageText(language, "Hoan thanh 12 vong trong ngay.", "Finish 12 rounds today.")}</p>
             <div className={styles.questTrack} role="presentation" aria-hidden>
               <span className={styles.questFill} style={{ width: `${questProgress.roundsProgress}%` }} />
             </div>
             <p className={styles.questValue}>{progress.dailyStats.rounds}/12</p>
           </article>
           <article className={styles.questCard}>
-            <p className={styles.questTitle}>Nhiem vu 2: Chinh xac</p>
-            <p className={styles.questHint}>Dat do chinh xac {"\u003E="} 70%.</p>
+            <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 2: Chinh xac", "Mission 2: Accuracy")}</p>
+            <p className={styles.questHint}>{pickLanguageText(language, "Dat do chinh xac >= 70%.", "Reach accuracy >= 70%.")}</p>
             <div className={styles.questTrack} role="presentation" aria-hidden>
               <span className={styles.questFill} style={{ width: `${questProgress.accuracyProgress}%` }} />
             </div>
             <p className={styles.questValue}>{questProgress.todayAccuracy}%</p>
           </article>
           <article className={styles.questCard}>
-            <p className={styles.questTitle}>Nhiem vu 3: Da nang</p>
-            <p className={styles.questHint}>Moi mini game choi it nhat 1 lan.</p>
+            <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 3: Da nang", "Mission 3: Variety")}</p>
+            <p className={styles.questHint}>{pickLanguageText(language, "Moi mini game choi it nhat 1 lan.", "Play each mini game at least once.")}</p>
             <div className={styles.questMiniGrid}>
-              <span className={`${styles.questMiniPill} ${questProgress.mathProgress > 0 ? styles.questMiniDone : ""}`}>Toan</span>
-              <span className={`${styles.questMiniPill} ${questProgress.memoryProgress > 0 ? styles.questMiniDone : ""}`}>Nho</span>
-              <span className={`${styles.questMiniPill} ${questProgress.colorProgress > 0 ? styles.questMiniDone : ""}`}>Mau</span>
+              <span className={`${styles.questMiniPill} ${questProgress.mathProgress > 0 ? styles.questMiniDone : ""}`}>
+                {pickLanguageText(language, "Toan", "Math")}
+              </span>
+              <span className={`${styles.questMiniPill} ${questProgress.memoryProgress > 0 ? styles.questMiniDone : ""}`}>
+                {pickLanguageText(language, "Nho", "Memory")}
+              </span>
+              <span className={`${styles.questMiniPill} ${questProgress.colorProgress > 0 ? styles.questMiniDone : ""}`}>
+                {pickLanguageText(language, "Mau", "Color")}
+              </span>
             </div>
-            <p className={styles.questValue}>{questProgress.balanceDone ? "Hoan thanh" : "Dang mo"}</p>
+            <p className={styles.questValue}>{questProgress.balanceDone ? pickLanguageText(language, "Hoan thanh", "Done") : pickLanguageText(language, "Dang mo", "In progress")}</p>
           </article>
         </section>
 
-        <section className={styles.arcadeStrip} aria-label="Bang trang thai tran dau">
+        <section className={styles.arcadeStrip} aria-label={pickLanguageText(language, "Bang trang thai tran dau", "Match status board")}>
           <article className={styles.arcadeCard}>
             <p className={styles.arcadeTitle}>Combo Reactor</p>
-            <p className={styles.arcadeHint}>Con {comboStatus.remainingForBadge} cau dung nua de no huy hieu.</p>
+            <p className={styles.arcadeHint}>
+              {pickLanguageText(
+                language,
+                `Con ${comboStatus.remainingForBadge} cau dung nua de no huy hieu.`,
+                `${comboStatus.remainingForBadge} more correct answers to ignite a badge.`,
+              )}
+            </p>
             <div className={styles.arcadeTrack} role="presentation" aria-hidden>
               <span className={styles.arcadeFill} style={{ width: `${comboStatus.progressToBadge}%` }} />
             </div>
             <p className={styles.arcadeValue}>x{progress.combo}</p>
           </article>
           <article className={styles.arcadeCard}>
-            <p className={styles.arcadeTitle}>Nang luong vong</p>
-            <p className={styles.arcadeHint}>Giu nhip trong {activeRoundConfig.roundSeconds}s de dat diem cao.</p>
+            <p className={styles.arcadeTitle}>{pickLanguageText(language, "Nang luong vong", "Round Energy")}</p>
+            <p className={styles.arcadeHint}>
+              {pickLanguageText(
+                language,
+                `Giu nhip trong ${activeRoundConfig.roundSeconds}s de dat diem cao.`,
+                `Keep your rhythm in ${activeRoundConfig.roundSeconds}s to maximize points.`,
+              )}
+            </p>
             <div className={styles.arcadeTrack} role="presentation" aria-hidden>
               <span className={styles.arcadeFillWarm} style={{ width: `${Math.round(timeRatio * 100)}%` }} />
             </div>
@@ -1000,7 +1187,9 @@ export default function Home() {
             <div className={styles.arcadeTrack} role="presentation" aria-hidden>
               <span className={styles.arcadeFillCool} style={{ width: `${comboStatus.streakProgress}%` }} />
             </div>
-            <p className={styles.arcadeValue}>Streak {progress.streak}/7</p>
+            <p className={styles.arcadeValue}>
+              {pickLanguageText(language, "Streak", "Streak")} {progress.streak}/7
+            </p>
           </article>
         </section>
 
@@ -1012,7 +1201,7 @@ export default function Home() {
         >
           {showCelebration ? (
             <div className={styles.confettiLayer} aria-hidden>
-              <span className={styles.confettiMessage}>Tuyet voi!</span>
+              <span className={styles.confettiMessage}>{pickLanguageText(language, "Tuyet voi!", "Awesome!")}</span>
               {Array.from({ length: 14 }, (_, idx) => (
                 <span key={`${celebrationSeed}-${idx}`} className={styles.confettiPiece} />
               ))}
@@ -1023,8 +1212,12 @@ export default function Home() {
               <h2>{gameTitle}</h2>
               <p className={styles.hint}>
                 {activeGame === "memory" && memoryRevealLeft > 0
-                  ? `Nho ky chuoi trong ${memoryRevealLeft}s truoc khi bi an.`
-                  : "Dung lien tiep de tang combo va mo khoa huy hieu."}
+                  ? pickLanguageText(
+                      language,
+                      `Nho ky chuoi trong ${memoryRevealLeft}s truoc khi bi an.`,
+                      `Memorize the sequence in ${memoryRevealLeft}s before it hides.`,
+                    )
+                  : pickLanguageText(language, "Dung lien tiep de tang combo va mo khoa huy hieu.", "Keep answering correctly to build combo and unlock badges.")}
               </p>
             </div>
             <div className={styles.questionHeaderRight}>
@@ -1034,13 +1227,13 @@ export default function Home() {
                 disabled={!ttsEnabled || soundMuted || !ttsSupported}
                 onClick={() => speakCurrentPrompt("manual")}
               >
-                Doc cau hoi
+                {pickLanguageText(language, "Doc cau hoi", "Read question")}
               </button>
-              {!playable ? <p className={styles.blocked}>Da het gio choi hom nay.</p> : null}
+              {!playable ? <p className={styles.blocked}>{pickLanguageText(language, "Da het gio choi hom nay.", "Today's play time is over.")}</p> : null}
             </div>
           </header>
           <div className={styles.timerCluster}>
-            <p className={styles.timerLabel}>Round timer: {timeLeft}s</p>
+            <p className={styles.timerLabel}>{pickLanguageText(language, "Dong ho vong", "Round timer")}: {timeLeft}s</p>
             <div className={styles.timerTrack} role="presentation" aria-hidden>
               <span className={styles.timerFill} style={{ width: `${Math.round(timeRatio * 100)}%` }} />
             </div>
@@ -1061,30 +1254,31 @@ export default function Home() {
               beginRound(activeGame, activeRoundConfig, "restart");
               setFeedback({
                 tone: "info",
-                text: "Da reset run moi. Co gang pha ky luc nao!",
+                text: pickLanguageText(language, "Da reset run moi. Co gang pha ky luc nao!", "Run restarted. Let's break your high score!"),
               });
               void trackEvent("restart_run", { level: level.key, game: activeGame });
             }}
           >
-            Choi lai tu dau
+            {pickLanguageText(language, "Choi lai tu dau", "Restart Run")}
           </button>
         </section>
 
         <section className={styles.metaRow}>
-          <BadgeShelf badges={progress.badges} />
+          <BadgeShelf badges={progress.badges} language={language} />
           <ParentModePanel
             settings={progress.parentMode}
             remainingMinutes={remainingMinutes}
             report={parentReport}
+            language={language}
             locked={parentLocked}
             parentMessage={parentMessage}
             onUnlock={(pin) => {
               if (verifyParentPin(progress, pin)) {
                 setParentUnlocked(true);
-                setParentMessage("Da mo khoa khu vuc phu huynh.");
+                setParentMessage(pickLanguageText(language, "Da mo khoa khu vuc phu huynh.", "Parent area unlocked."));
                 void trackEvent("parent_unlock", { success: true });
               } else {
-                setParentMessage("PIN khong dung. Vui long thu lai.");
+                setParentMessage(pickLanguageText(language, "PIN khong dung. Vui long thu lai.", "Incorrect PIN. Please try again."));
                 void trackEvent("parent_unlock", { success: false });
               }
             }}
@@ -1092,42 +1286,48 @@ export default function Home() {
               const normalized = pin.trim();
               const isValid = /^[0-9]{4,6}$/.test(normalized);
               if (!isValid) {
-                setParentMessage("PIN can 4-6 chu so.");
+                setParentMessage(pickLanguageText(language, "PIN can 4-6 chu so.", "PIN must have 4-6 digits."));
                 return;
               }
               setParentPin(normalized);
               setParentUnlocked(false);
-              setParentMessage("Da luu PIN va khoa lai khu vuc phu huynh.");
+              setParentMessage(pickLanguageText(language, "Da luu PIN va khoa lai khu vuc phu huynh.", "PIN saved and parent area locked again."));
               void trackEvent("parent_pin_update", { length: normalized.length });
             }}
             onLock={() => {
               setParentUnlocked(false);
-              setParentMessage("Da khoa khu vuc phu huynh.");
+              setParentMessage(pickLanguageText(language, "Da khoa khu vuc phu huynh.", "Parent area locked."));
             }}
             onResetAll={() => {
               resetAllProgress();
               setParentUnlocked(false);
-              setParentMessage("Da reset toan bo du lieu choi.");
+              setParentMessage(pickLanguageText(language, "Da reset toan bo du lieu choi.", "All game data has been reset."));
               setWrongStreak(0);
               beginRound(activeGame, activeRoundConfig, "reset_all");
             }}
             onToggle={(enabled) => {
               if (parentLocked) {
-                setParentMessage("Can mo khoa Parent Mode truoc khi thay doi.");
+                setParentMessage(pickLanguageText(language, "Can mo khoa Parent Mode truoc khi thay doi.", "Please unlock Parent Mode before changing settings."));
                 return;
               }
               setParentMode(enabled, progress.parentMode.dailyLimitMinutes);
               void trackEvent("parent_mode_update", { enabled });
-              setParentMessage("Da cap nhat Parent Mode.");
+              setParentMessage(pickLanguageText(language, "Da cap nhat Parent Mode.", "Parent Mode updated."));
             }}
             onLimitChange={(minutes) => {
               if (parentLocked) {
-                setParentMessage("Can mo khoa Parent Mode truoc khi thay doi.");
+                setParentMessage(pickLanguageText(language, "Can mo khoa Parent Mode truoc khi thay doi.", "Please unlock Parent Mode before changing settings."));
                 return;
               }
               updateProgress((previous) => updateParentMode(previous, { dailyLimitMinutes: minutes }));
               void trackEvent("parent_mode_update", { limit: minutes });
-              setParentMessage(`Da cap nhat gioi han: ${minutes} phut/ngay.`);
+              setParentMessage(
+                pickLanguageText(
+                  language,
+                  `Da cap nhat gioi han: ${minutes} phut/ngay.`,
+                  `Daily limit updated: ${minutes} min/day.`,
+                ),
+              );
             }}
           />
         </section>

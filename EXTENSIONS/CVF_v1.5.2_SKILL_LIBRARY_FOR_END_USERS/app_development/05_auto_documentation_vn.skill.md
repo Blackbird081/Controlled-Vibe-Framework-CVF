@@ -1,30 +1,30 @@
-# Auto Documentation (Vietnamese)
+# Auto Documentation
 
 > **Domain:** App Development
 > **Difficulty:** ⭐ Easy
 > **CVF Version:** v1.5.2
-> **Skill Version:** 1.0.0
+> **Skill Version:** 1.1.0
 > **Last Updated:** 2026-02-27
 
 ---
 
 ## 📌 Prerequisites
 
-- [ ] App đã hoàn thành Phase D (Review) và sẵn sàng để ship
-- [ ] App có thể khởi động bằng ≤ 3 bước
+- [ ] App has completed Phase D (Review) and is ready to ship
+- [ ] App can be launched in ≤ 3 steps
 
 ---
 
-## 🎯 Mục đích
+## 🎯 Purpose
 
-**Khi nào dùng skill này:**
-- Cuối Phase D (Review), trước khi bàn giao app cho người dùng
-- Cần tạo file `HUONG_DAN.md` bằng tiếng Việt dễ hiểu
-- Muốn có sẵn danh sách lỗi thường gặp và cách xử lý nhanh
+**When to use this skill:**
+- End of Phase D (Review), before handing the app to users
+- Need to create a `USER_GUIDE.md` file in plain, readable language
+- Want a ready-made list of common errors and quick fixes
 
-**Không phù hợp khi:**
-- App dành cho developer (dùng README.md kỹ thuật thay thế)
-- App quá phức tạp cần tài liệu chuyên sâu (dùng AGT-016)
+**Not suitable when:**
+- App is intended for developers (use a technical README.md instead)
+- App is too complex and requires in-depth documentation (use AGT-016)
 
 ---
 
@@ -37,154 +37,156 @@
 | Allowed Phases | Review |
 | Authority Scope | Informational |
 | Autonomy | Auto |
-| Audit Hooks | Quick Start ≤ 3 phút, Common errors documented, Launch file verified |
+| Audit Hooks | Quick Start ≤ 3 minutes, Common errors documented, Launch file verified |
 
 ---
 
 ## ⛔ Execution Constraints
 
-- CẤM viết hướng dẫn cài đặt phức tạp (conda, virtualenv, Docker)
-- PHẢI tạo file `HUONG_DAN.md` bằng tiếng Việt
-- PHẢI có mục "3 phút để bắt đầu" (Quick Start)
-- PHẢI có file `.bat` (Windows) hoặc lệnh tắt để User click là chạy
+- MUST NOT write complex installation instructions (conda, virtualenv, Docker)
+- MUST create a `USER_GUIDE.md` file in plain English
+- MUST include a "3 Minutes to Start" (Quick Start) section
+- MUST provide a `.bat` (Windows) or shortcut command so Users can click-to-run
 
 ---
 
 ## ✅ Validation Hooks
 
-- Check Quick Start có ≤ 5 bước, mỗi bước ≤ 1 câu
-- Check có ít nhất 3 lỗi thường gặp với cách xử lý
-- Check có file khởi động hoặc lệnh copy-paste
-- Check toàn bộ tài liệu không có thuật ngữ kỹ thuật không giải thích
+- Check that Quick Start has ≤ 5 steps, each step ≤ 1 sentence
+- Check that at least 3 common errors are listed with solutions
+- Check that a launch file or copy-paste command is included
+- Check that no unexplained technical jargon appears in the documentation
 
 ---
 
 ## 🧪 UAT Binding
 
-- UAT Record: `governance/skill-library/uat/results/UAT-non_coder_workflow-05_auto_documentation_vn.md`
-- UAT Objective: Tài liệu phải đủ để người không biết code tự chạy app thành công trong 5 phút
+- UAT Record: `governance/skill-library/uat/results/UAT-app_development-05_auto_documentation.md`
+- UAT Objective: Documentation must be sufficient for a non-coder to successfully launch the app within 5 minutes
 
 ---
 
 ## 📋 Form Input
 
-| Field | Mô tả | Bắt buộc | Ví dụ |
-|-------|-------|:--------:|-------|
-| **Tên app** | Tên đầy đủ của app | ✅ | "FinanceTracker — Theo dõi chi tiêu gia đình" |
-| **Cách khởi động** | Lệnh hoặc file để chạy app | ✅ | "Bấm đúp vào START.bat" hoặc "streamlit run app.py" |
-| **Tính năng chính** | 3-5 tính năng người dùng hay dùng | ✅ | "1. Ghi chi tiêu 2. Xem báo cáo 3. Xuất Excel" |
-| **Hệ điều hành** | Windows / Mac / Linux | ✅ | "Windows 10/11" |
-| **Lỗi thường gặp** | Những lỗi thường xảy ra khi dùng | ❌ | "App không mở được, dữ liệu không lưu" |
+| Field | Description | Required | Example |
+|-------|-------------|:--------:|---------|
+| **App Name** | Full name of the app | ✅ | "FinanceTracker — Household Expense Manager" |
+| **How to Launch** | Command or file to run the app | ✅ | "Double-click START.bat" or "streamlit run app.py" |
+| **Core Features** | 3–5 features users use most often | ✅ | "1. Record expenses 2. View monthly report 3. Export to Excel" |
+| **Operating System** | Windows / Mac / Linux | ✅ | "Windows 10/11" |
+| **Common Errors** | Issues that often arise during use | ❌ | "App won't open, data not saving" |
 
 ---
 
 ## ✅ Expected Output
 
-**File `HUONG_DAN.md` được tạo tự động:**
+**Auto-generated `USER_GUIDE.md` file:**
 
 ```markdown
-# 📖 Hướng dẫn sử dụng — FinanceTracker
+# 📖 User Guide — FinanceTracker
 
-## ⚡ 3 phút để bắt đầu
+## ⚡ 3 Minutes to Start
 
-1. **Mở app:** Bấm đúp vào file `START.bat` trong thư mục
-2. **Đăng nhập:** Dùng tên đăng nhập mặc định: `admin` / mật khẩu: `1234`
-3. **Ghi chi tiêu:** Bấm nút "➕ Ghi chi tiêu" màu xanh, điền số tiền và bấm Lưu
+1. **Open the app:** Double-click `START.bat` in the folder
+2. **Log in:** Use default credentials: username `admin` / password `1234`
+3. **Record an expense:** Click the blue "➕ Record Expense" button, enter the amount, and click Save
 
-✅ Xong! App đã sẵn sàng.
-
----
-
-## 🗺️ Các tính năng chính
-
-### 1. Ghi chi tiêu
-Bấm nút "➕ Ghi chi tiêu" → chọn danh mục → nhập số tiền → Lưu
-
-### 2. Xem báo cáo tháng
-Bấm "📊 Báo cáo" → chọn tháng → biểu đồ hiện ra tự động
-
-### 3. Xuất ra Excel
-Bấm "📥 Xuất Excel" → chọn thư mục lưu → bấm OK
+✅ Done! The app is ready.
 
 ---
 
-## 🆘 Lỗi thường gặp và cách xử lý nhanh
+## 🗺️ Core Features
 
-| Hiện tượng | Nguyên nhân | Cách xử lý |
+### 1. Record Expense
+Click "➕ Record Expense" → select category → enter amount → Save
+
+### 2. View Monthly Report
+Click "📊 Report" → select month → chart appears automatically
+
+### 3. Export to Excel
+Click "📥 Export Excel" → choose save location → click OK
+
+---
+
+## 🆘 Common Issues and Quick Fixes
+
+| Symptom | Cause | Fix |
 |---|---|---|
-| App không mở được | Chưa cài Python | Chạy file `INSTALL.bat` trước |
-| Dữ liệu không hiện | File database bị di chuyển | Kéo file `data.db` vào thư mục `data/` |
-| Màn hình trắng | Trình duyệt cache cũ | Bấm Ctrl+Shift+R để tải lại |
+| App won't open | Python not installed | Run INSTALL.bat first |
+| Data not showing | Database file was moved | Drag data.db into the data/ folder |
+| Blank screen | Browser cache | Press Ctrl+Shift+R to hard reload |
 
 ---
 
-## 📞 Liên hệ hỗ trợ
-Nếu gặp vấn đề không có trong danh sách trên, chụp màn hình và liên hệ: [thông tin liên hệ]
+## 📞 Support
+If you encounter an issue not on this list, take a screenshot and contact: [contact info]
 ```
 
 ---
 
-## 🔍 Cách đánh giá
+## 🔍 Evaluation Criteria
 
-**Checklist Accept:**
-- [ ] Quick Start có ≤ 5 bước, đủ để khởi động app
-- [ ] Có ít nhất 3 lỗi thường gặp với hướng dẫn xử lý
-- [ ] Không có thuật ngữ kỹ thuật chưa được giải thích
-- [ ] File `HUONG_DAN.md` được tạo (không phải chỉ mô tả)
+**Accept Checklist:**
+- [ ] Quick Start has ≤ 5 steps sufficient to launch the app
+- [ ] At least 3 common errors with resolution steps
+- [ ] No unexplained technical jargon
+- [ ] `USER_GUIDE.md` file is actually created (not just described)
 
-**Red flags (Reject):**
-- ⚠️ Quick Start yêu cầu cài đặt conda/virtualenv/Docker
-- ⚠️ Dùng từ "terminal", "command line", "pip install" mà không giải thích
-- ⚠️ Không có hướng dẫn xử lý lỗi
+**Red Flags (Reject):**
+- ⚠️ Quick Start requires conda/virtualenv/Docker installation
+- ⚠️ Uses "terminal", "command line", "pip install" without explanation
+- ⚠️ No error-handling guidance included
 
 ---
 
 ## ⚠️ Common Failures
 
-| Lỗi thường gặp | Cách phòng tránh |
-|----------------|-----------------|
-| Quá kỹ thuật | Mỗi bước phải làm được mà không cần mở terminal |
-| Thiếu lỗi thường gặp | Hỏi User: "Điều gì hay làm họ bối rối khi dùng app?" |
-| Không có file khởi động | Luôn tạo `START.bat` (Windows) hoặc `start.sh` (Mac/Linux) |
+| Common Error | Prevention |
+|---|---|
+| Too technical | Every step must work without opening a terminal |
+| Missing common errors | Ask the User: "What most often confuses people using the app?" |
+| No launch file | Always create `START.bat` (Windows) or `start.sh` (Mac/Linux) |
 
 ---
 
 ## 💡 Tips
 
-1. **Test với người thật** — Nhờ 1 người không biết code đọc và thử theo hướng dẫn
-2. **Ảnh chụp màn hình** — Thêm screenshot vào Quick Start giúp 10x
-3. **Số điện thoại / email hỗ trợ** — Luôn có kênh liên hệ cuối tài liệu
-4. **Cập nhật định kỳ** — Khi thêm tính năng mới, cập nhật `HUONG_DAN.md` ngay
+1. **Test with a real person** — Ask someone who doesn't code to follow the guide
+2. **Screenshots help** — Add screenshots to Quick Start for 10x better comprehension
+3. **Support contact** — Always include a contact channel at the end of the guide
+4. **Update regularly** — When new features are added, update `USER_GUIDE.md` immediately
 
 ---
 
-## 📊 Ví dụ thực tế
+## 📊 Example
 
-### Input mẫu:
+### Sample Input:
 ```
-Tên app: "StockCheck — Kiểm kho siêu thị"
-Cách khởi động: "Bấm đúp START.bat"
-Tính năng chính: "1. Quét mã vạch 2. Xem tồn kho 3. Nhập hàng"
-Hệ điều hành: Windows 10
+App Name: "StockCheck — Supermarket Inventory"
+How to Launch: "Double-click START.bat"
+Core Features: "1. Scan barcode 2. View stock 3. Receive goods"
+Operating System: Windows 10
 ```
 
-### Output mẫu: tạo ra: File `HUONG_DAN.md` với đủ 4 section
-### Đánh giá:
-- ✅ Quick Start 3 bước không cần terminal
-- ✅ 3 lỗi thường gặp được ghi rõ
-- ✅ File thực sự được tạo ra
-- **Kết quả: ACCEPT**
+### Sample Output: Created `USER_GUIDE.md` with all 4 required sections
+### Evaluation:
+- ✅ Quick Start 3 steps, no terminal required
+- ✅ 3 common errors documented
+- ✅ File actually created
+- **Result: ACCEPT**
 
 ---
 
 ## 🔗 Next Step
 
-Sau khi có HUONG_DAN.md → [Portable Packaging](./06_portable_packaging.skill.md)
+After `USER_GUIDE.md` is ready → [Portable App Packaging](./06_portable_packaging.skill.md)
 
 ---
 
-## 🔗 Related Skills — Kiểm tra UX trước khi viết tài liệu
-- [Portable Packaging](./06_portable_packaging.skill.md) — Đóng gói app trước khi bàn giao
+## 🔗 Related Skills
+
+- [Grandma UX Test](../product_ux/04_grandma_ux_test.skill.md) — Verify UX before writing the guide
+- [Portable App Packaging](./06_portable_packaging.skill.md) — Package the app before delivery
 
 ---
 
@@ -192,8 +194,9 @@ Sau khi có HUONG_DAN.md → [Portable Packaging](./06_portable_packaging.skill.
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-02-27 | Khởi tạo từ CVF-Compatible Skills intake |
+| 1.1.0 | 2026-02-27 | Translated to English; renamed from auto_documentation_vn; UAT path updated |
+| 1.0.0 | 2026-02-27 | Initial creation from CVF-Compatible Skills intake |
 
 ---
 
-*Auto Documentation (Vietnamese) — CVF v1.5.2 Non-coder Workflow Skill Library*
+*Auto Documentation — CVF v1.5.2 App Development Skill Library*

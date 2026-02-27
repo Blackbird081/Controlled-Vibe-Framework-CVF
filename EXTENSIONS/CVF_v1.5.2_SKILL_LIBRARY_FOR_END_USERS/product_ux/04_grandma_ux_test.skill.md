@@ -3,27 +3,27 @@
 > **Domain:** Product UX
 > **Difficulty:** ⭐ Easy
 > **CVF Version:** v1.5.2
-> **Skill Version:** 1.0.0
+> **Skill Version:** 1.1.0
 > **Last Updated:** 2026-02-27
 
 ---
 
 ## 📌 Prerequisites
 
-- [ ] Có app hoặc UI prototype để đánh giá (Phase B Design hoặc Phase D Review)
+- [ ] An app or UI prototype is available for evaluation (Phase B Design or Phase D Review)
 
 ---
 
-## 🎯 Mục đích
+## 🎯 Purpose
 
-**Khi nào dùng skill này:**
-- Phase B (Design) — đánh giá độ thân thiện của thiết kế trước khi build
-- Phase D (Review) — kiểm tra UX lần cuối trước khi ship
-- Muốn đảm bảo app dùng được bởi người không quen công nghệ
+**When to use this skill:**
+- Phase B (Design) — evaluate design friendliness before building
+- Phase D (Review) — final UX check before shipping
+- Ensuring the app is usable by someone unfamiliar with technology
 
-**Không phù hợp khi:**
-- App dành riêng cho developer/chuyên gia kỹ thuật
-- Chỉ cần đánh giá code logic, không phải UX
+**Not suitable when:**
+- App is exclusively for developers or technical experts
+- Only code logic needs review, not UX
 
 ---
 
@@ -42,148 +42,150 @@
 
 ## ⛔ Execution Constraints
 
-- AI PHẢI liệt kê 3 bước đơn giản nhất để người mới bắt đầu dùng được app
-- Ngôn ngữ đánh giá KHÔNG được dùng: "Component", "Render", "State", "API"
-- Nút bấm phải to, rõ, màu chỉ dẫn (Xanh = Lưu, Đỏ = Hủy/Xóa)
-- Luôn có thông báo "Đang xử lý..." hoặc "Đã xong!" khi app làm việc
+- AI MUST list the 3 simplest steps for a first-time user to start using the app
+- Evaluation language MUST NOT use: "Component", "Render", "State", "API"
+- Buttons must be large, clear, and color-coded (Green = Save, Red = Cancel/Delete)
+- Always include a "Processing..." or "Done!" status message when the app performs an action
 
 ---
 
 ## ✅ Validation Hooks
 
-- Check có 3-step Quick Start cho người mới
-- Check có đánh giá từng quy tắc UX (nút, ngôn ngữ, trạng thái)
-- Check issues được phân loại: Phải sửa / Nên sửa / Tùy chọn
+- Check that a 3-step Quick Start for new users is present
+- Check that each UX rule is evaluated (buttons, language, states)
+- Check that issues are classified: Must Fix / Should Fix / Optional
 
 ---
 
 ## 🧪 UAT Binding
 
-- UAT Record: `governance/skill-library/uat/results/UAT-non_coder_workflow-04_grandma_ux_test.md`
-- UAT Objective: Output phải có 3-step guide và danh sách issues với mức độ ưu tiên rõ ràng
+- UAT Record: `governance/skill-library/uat/results/UAT-product_ux-04_grandma_ux_test.md`
+- UAT Objective: Output must include a 3-step guide and a prioritized issue list
 
 ---
 
 ## 📋 Form Input
 
-| Field | Mô tả | Bắt buộc | Ví dụ |
-|-------|-------|:--------:|-------|
-| **Mô tả app** | App làm gì, dành cho ai | ✅ | "App theo dõi chi tiêu gia đình, dành cho nội trợ" |
-| **Tính năng chính** | Các tác vụ người dùng hay làm nhất | ✅ | "Ghi chép chi tiêu, xem báo cáo tháng" |
-| **Screenshot/mô tả UI** | Giao diện hiện tại trông như thế nào | ❌ | "Có sidebar bên trái, bảng dữ liệu ở giữa" |
+| Field | Description | Required | Example |
+|-------|-------------|:--------:|---------|
+| **App Description** | What the app does and who it's for | ✅ | "Household expense tracker for homemakers" |
+| **Core Features** | The most common tasks users perform | ✅ | "Record expenses, view monthly report" |
+| **Screenshot / UI Description** | What the current interface looks like | ❌ | "Left sidebar, data table in the center" |
 
 ---
 
 ## ✅ Expected Output
 
-**Kết quả bạn nhận được:**
+**What you will receive:**
 
 ```markdown
 # Grandma UX Test Report
 
-## 3 bước để bắt đầu (Quick Start)
-1. Mở app → thấy màn hình chính với nút "Ghi chi tiêu" màu xanh lớn
-2. Bấm nút xanh → điền số tiền và chọn danh mục → bấm "Lưu"
-3. Bấm "Xem báo cáo" → thấy biểu đồ tháng này
+## Quick Start (3 steps to begin)
+1. Open app → see main screen with a large green "Record Expense" button
+2. Click the green button → enter amount and select category → click "Save"
+3. Click "View Report" → see this month's chart
 
-## Đánh giá UX
+## UX Evaluation
 
-### ✅ Đạt chuẩn
-- Nút "Lưu" màu xanh, nút "Xóa" màu đỏ — rõ ràng
-- Có thông báo "Đã lưu thành công!" sau khi lưu
+### ✅ Passed
+- "Save" button is green, "Delete" button is red — clear distinction
+- "Saved successfully!" message appears after saving
 
-### ⚠️ Cần cải thiện (Phải sửa)
-- Ô nhập "Số tiền" không có placeholder — User không biết nhập gì
-- Nút "Export" quá nhỏ, khó bấm trên điện thoại
+### ⚠️ Must Fix
+- "Amount" input has no placeholder — User doesn't know what to enter
+- "Export" button is too small, hard to tap on mobile
 
-### 💡 Nên xem xét (Tùy chọn)
-- Thêm nút "Hủy" ở form nhập liệu để User không bị kẹt
+### 💡 Optional
+- Add a "Cancel" button on the input form so User doesn't get stuck
 
-## Điểm UX
-🟢 Dễ dùng: 7/10 — Người không quen công nghệ có thể tự dùng sau 5 phút hướng dẫn
+## UX Score
+🟢 Ease of Use: 7/10 — A non-tech user can use it independently after 5 minutes of guidance
 ```
 
 ---
 
-## 🔍 Cách đánh giá
+## 🔍 Evaluation Criteria
 
-**Checklist Accept:**
-- [ ] Có đúng 3 bước Quick Start, mỗi bước ≤ 2 câu
-- [ ] Issues phân loại rõ: Phải sửa / Nên sửa / Tùy chọn
-- [ ] Không dùng thuật ngữ kỹ thuật trong report
-- [ ] Có điểm UX tổng thể
+**Accept Checklist:**
+- [ ] Exactly 3 Quick Start steps, each ≤ 2 sentences
+- [ ] Issues classified clearly: Must Fix / Should Fix / Optional
+- [ ] No technical jargon in report
+- [ ] Overall UX score provided
 
-**Red flags (Reject):**
-- ⚠️ Quick Start có hơn 5 bước
-- ⚠️ Report dùng từ "component", "state", "render"
-- ⚠️ Không phân biệt mức độ nghiêm trọng của issues
+**Red Flags (Reject):**
+- ⚠️ Quick Start has more than 5 steps
+- ⚠️ Report uses "component", "state", "render"
+- ⚠️ Issue severity not differentiated
 
 ---
 
 ## ⚠️ Common Failures
 
-| Lỗi thường gặp | Cách phòng tránh |
-|----------------|-----------------|
-| Quick Start quá chi tiết | Mỗi bước chỉ 1 hành động chính |
-| Đánh giá quá kỹ thuật | Hỏi: "Bà ngoại 60 tuổi có làm được không?" |
-| Bỏ qua mobile UX | Khi app chạy web, kiểm tra cả giao diện điện thoại |
+| Common Error | Prevention |
+|---|---|
+| Quick Start too detailed | Each step = one main action only |
+| Evaluation too technical | Ask: "Could a 60-year-old grandma do this?" |
+| Mobile UX overlooked | For web apps, always check mobile layout too |
 
 ---
 
 ## 💡 Tips
 
-1. **Câu hỏi vàng** — "Nếu không biết gì về app này, bước đầu tiên bạn làm là gì?"
-2. **Test màu sắc nút** — Xanh=Lưu/Tiếp, Đỏ=Xóa/Hủy, Xám=Phụ
-3. **Kiểm tra trạng thái** — Mọi hành động phải có phản hồi (loading, success, error)
-4. **Font size** — Chữ không được nhỏ hơn 14px (tương đương size M trên điện thoại)
+1. **The golden question** — "If you knew nothing about this app, what would you do first?"
+2. **Button color test** — Green = Save/Next, Red = Delete/Cancel, Gray = Secondary
+3. **Check state feedback** — Every action must have a response (loading, success, error)
+4. **Font size** — Text must be no smaller than 14px (equivalent to size M on mobile)
 
 ---
 
-## 📊 Ví dụ thực tế
+## 📊 Example
 
-### Input mẫu:
+### Sample Input:
 ```
-Mô tả app: "App theo dõi lịch uống thuốc cho người cao tuổi"
-Tính năng chính: "Đặt nhắc nhở, đánh dấu đã uống, xem lịch sử"
+App Description: "Medication reminder app for the elderly"
+Core Features: "Set reminders, mark as taken, view history"
 ```
 
-### Output mẫu:
+### Sample Output:
 ```markdown
-# Grandma UX Test — App Nhắc Uống Thuốc
+# Grandma UX Test — Medication Reminder App
 
-## 3 bước Quick Start
-1. Mở app → thấy danh sách thuốc cần uống hôm nay
-2. Bấm tên thuốc → bấm nút "Đã uống" màu xanh to
-3. Bấm "Lịch sử" để xem những ngày trước
+## Quick Start (3 steps)
+1. Open app → see today's medication list
+2. Tap the medication name → tap the large green "Taken" button
+3. Tap "History" to view previous days
 
-## Đánh giá
-### ✅ Đạt
-- Nút "Đã uống" đủ to, màu xanh rõ
-### ⚠️ Phải sửa
-- Font size quá nhỏ (12px) — người cao tuổi khó đọc
-- Không có nhắc nhở khi trễ giờ uống
-### 💡 Tùy chọn
-- Thêm chế độ chữ to
+## Evaluation
+### ✅ Passed
+- "Taken" button is large and green — clear
+### ⚠️ Must Fix
+- Font size too small (12px) — hard to read for elderly users
+- No alert when medication is overdue
+### 💡 Optional
+- Add a large-text mode
 
-## Điểm: 🟡 6/10 — Cần sửa font trước khi ship
+## Score: 🟡 6/10 — Fix font before shipping
 ```
 
-### Đánh giá:
-- ✅ 3 bước Quick Start rõ ràng
-- ✅ Issues có mức độ ưu tiên
-- ✅ Điểm UX cụ thể
-- **Kết quả: ACCEPT**
+### Evaluation:
+- ✅ 3-step Quick Start is clear
+- ✅ Issues have priority levels
+- ✅ Specific UX score
+- **Result: ACCEPT**
 
 ---
 
 ## 🔗 Next Step
 
-Sau khi pass UX Test → [Auto Documentation (VN)](./05_auto_documentation_vn.skill.md)
+After passing UX Test → [Auto Documentation](../app_development/05_auto_documentation_vn.skill.md)
 
 ---
 
-## 🔗 Related Skills — Áp dụng vibe trước khi test UX
-- [Auto Documentation (VN)](./05_auto_documentation_vn.skill.md) — Viết hướng dẫn sau khi pass UX test
+## 🔗 Related Skills
+
+- [Vibe Logic Mapping](../app_development/02_vibe_logic_mapping.skill.md) — Apply vibe before UX test
+- [Auto Documentation](../app_development/05_auto_documentation_vn.skill.md) — Write user guide after passing UX test
 
 ---
 
@@ -191,8 +193,9 @@ Sau khi pass UX Test → [Auto Documentation (VN)](./05_auto_documentation_vn.sk
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-02-27 | Khởi tạo từ CVF-Compatible Skills intake |
+| 1.1.0 | 2026-02-27 | Translated to English; domain corrected to Product UX |
+| 1.0.0 | 2026-02-27 | Initial creation from CVF-Compatible Skills intake |
 
 ---
 
-*Grandma UX Test — CVF v1.5.2 Non-coder Workflow Skill Library*
+*Grandma UX Test — CVF v1.5.2 Product UX Skill Library*

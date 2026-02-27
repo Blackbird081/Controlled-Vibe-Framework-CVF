@@ -1,30 +1,30 @@
-# Non-coder Debug
+# Non-Coder Debug
 
 > **Domain:** App Development
 > **Difficulty:** ⭐ Easy
 > **CVF Version:** v1.5.2
-> **Skill Version:** 1.0.0
+> **Skill Version:** 1.1.0
 > **Last Updated:** 2026-02-27
 
 ---
 
 ## 📌 Prerequisites
 
-> Không yêu cầu — Skill này kích hoạt khi app bị lỗi, bất kể ở phase nào.
+> No prerequisites — this skill activates when the app encounters an error, regardless of phase.
 
 ---
 
-## 🎯 Mục đích
+## 🎯 Purpose
 
-**Khi nào dùng skill này:**
-- App bị crash, không mở được, hiển thị màn hình trắng
-- Kết quả tính toán hoặc hiển thị sai
-- User thấy thông báo lỗi nhưng không hiểu nghĩa gì
-- Phase C (Build) hoặc Phase D (Review) — khi phát sinh lỗi
+**When to use this skill:**
+- App crashes, fails to open, or displays a blank white screen
+- Calculation or display results are incorrect
+- User sees an error message but does not understand what it means
+- Phase C (Build) or Phase D (Review) — when an error occurs
 
-**Không phù hợp khi:**
-- Cần debug lỗi performance phức tạp (dùng AGT-023 Systematic Debugging Engine)
-- Lỗi liên quan đến infrastructure/server
+**Not suitable when:**
+- Debugging complex performance issues (use AGT-023 Systematic Debugging Engine)
+- Error relates to infrastructure or server
 
 ---
 
@@ -43,141 +43,142 @@
 
 ## ⛔ Execution Constraints
 
-- AI KHÔNG ĐƯỢC ném mã lỗi kỹ thuật (Error Code, Stack Trace) cho User
-- AI KHÔNG ĐƯỢC đổ lỗi cho môi trường máy tính trước khi kiểm tra lại logic
-- AI PHẢI tự chạy test sau khi sửa để xác nhận lỗi đã biến mất
-- Giải thích bằng ngôn ngữ dễ hiểu: "Hiện tượng → Nguyên nhân → Cách tôi sửa"
+- AI MUST NOT expose raw technical error messages (Error Codes, Stack Traces) to the User
+- AI MUST NOT blame the computer environment before first checking the logic
+- AI MUST run a test after fixing to confirm the error is gone
+- Explain in plain language: "Symptom → Root Cause → How I Fixed It"
 
 ---
 
 ## ✅ Validation Hooks
 
-- Check đã mô tả hiện tượng lỗi trước khi giải thích nguyên nhân
-- Check giải thích nguyên nhân không dùng thuật ngữ kỹ thuật
-- Check có bước Test run sau khi sửa để xác nhận
-- Check output là ngôn ngữ thông thường, không phải code
+- Check that the error symptom is described before the root cause is explained
+- Check that the root cause explanation uses no technical jargon
+- Check that a test run is included after the fix
+- Check that the output is in plain language, not code
 
 ---
 
 ## 🧪 UAT Binding
 
-- UAT Record: `governance/skill-library/uat/results/UAT-non_coder_workflow-03_non_coder_debug.md`
-- UAT Objective: Skill phải giải thích lỗi không dùng thuật ngữ kỹ thuật và xác nhận lỗi đã được sửa bằng test run
+- UAT Record: `governance/skill-library/uat/results/UAT-app_development-03_non_coder_debug.md`
+- UAT Objective: Skill must explain errors without technical jargon and confirm the fix with a test run
 
 ---
 
 ## 📋 Form Input
 
-| Field | Mô tả | Bắt buộc | Ví dụ |
-|-------|-------|:--------:|-------|
-| **Mô tả hiện tượng** | User thấy gì khi lỗi xảy ra | ✅ | "Bấm nút Lưu thì app trắng màn hình" |
-| **Bước tái hiện** | Làm gì để lỗi xảy ra lại | ✅ | "Nhập số âm vào ô Thu nhập rồi bấm Lưu" |
-| **Lỗi xuất hiện lần đầu khi** | Hoàn cảnh phát sinh | ❌ | "Sau khi tôi thêm cột Ghi chú" |
+| Field | Description | Required | Example |
+|-------|-------------|:--------:|---------|
+| **Error Symptom** | What the User sees when the error occurs | ✅ | "Clicking Save makes the app go blank" |
+| **Steps to Reproduce** | What to do to trigger the error again | ✅ | "Enter a negative number in the Income field, then click Save" |
+| **When it First Appeared** | Context of when the issue started | ❌ | "After I added the Notes column" |
 
 ---
 
 ## ✅ Expected Output
 
-**Kết quả bạn nhận được — Báo cáo lỗi dễ hiểu:**
+**What you will receive — a plain-language Bug Report:**
 
 ```markdown
-# Báo cáo lỗi
+# Bug Report
 
-## Hiện tượng
-Khi bạn nhập số âm vào ô Thu nhập và bấm Lưu, app bị trắng màn hình.
+## Symptom
+When you enter a negative number in the Income field and click Save, the app goes blank.
 
-## Nguyên nhân (giải thích như đời thường)
-App của bạn chỉ biết xử lý số dương. Khi nhận được số âm, nó bị
-"bối rối" và dừng lại — giống như máy tính bỏ túi khi bạn chia cho 0.
+## Root Cause (in plain terms)
+Your app only knows how to handle positive numbers. When it receives a negative number,
+it gets "confused" and stops — just like a calculator when you divide by zero.
 
-## Tôi đã sửa như thế nào
-Tôi thêm một "bộ lọc" ở cửa vào: nếu bạn nhập số âm, app sẽ hiện
-thông báo "Vui lòng nhập số lớn hơn 0" thay vì bị trắng.
+## How I Fixed It
+I added a "filter" at the input gate: if you enter a negative number, the app will now
+show a message "Please enter a number greater than 0" instead of going blank.
 
-## Kết quả kiểm tra
-✅ Đã thử nhập -100 → App hiện thông báo, không còn trắng màn hình.
-✅ Đã thử nhập 0 → App cũng hiện thông báo hợp lệ.
-✅ Đã thử nhập 5000 → App lưu bình thường như trước.
+## Test Results
+✅ Tested with -100 → App shows message, no longer goes blank.
+✅ Tested with 0 → App also shows valid message.
+✅ Tested with 5000 → App saves normally as before.
 ```
 
 ---
 
-## 🔍 Cách đánh giá
+## 🔍 Evaluation Criteria
 
-**Checklist Accept:**
-- [ ] Giải thích hiện tượng đúng với những gì User mô tả
-- [ ] Nguyên nhân được giải thích không có code/thuật ngữ
-- [ ] Có kết quả Test run cụ thể (ít nhất 3 trường hợp)
-- [ ] Lỗi không xuất hiện lại sau khi sửa
+**Accept Checklist:**
+- [ ] Symptom description matches what the User reported
+- [ ] Root cause explained without code or jargon
+- [ ] Test run results included (at least 3 cases)
+- [ ] Error does not reappear after the fix
 
-**Red flags (Reject):**
-- ⚠️ Giải thích có "TypeError", "NullPointerException", "500 error"
-- ⚠️ Không có bước test sau khi sửa
-- ⚠️ Đổ lỗi cho "máy tính thiếu RAM" mà không kiểm tra code trước
+**Red Flags (Reject):**
+- ⚠️ Explanation contains "TypeError", "NullPointerException", "500 error"
+- ⚠️ No test step after fixing
+- ⚠️ Blame attributed to "low RAM" without checking code first
 
 ---
 
 ## ⚠️ Common Failures
 
-| Lỗi thường gặp | Cách phòng tránh |
-|----------------|-----------------|
-| Dùng stack trace trong giải thích | Dịch stack trace sang tiếng Việt thông thường |
-| Không test sau sửa | Luôn chạy test với cả truờng hợp đúng lẫn sai input |
-| Sửa được lỗi này tạo ra lỗi khác | Kiểm tra các trường hợp liên quan sau khi sửa |
+| Common Error | Prevention |
+|---|---|
+| Stack trace in explanation | Translate the stack trace into plain language |
+| No test after fixing | Always run tests with both valid and invalid inputs |
+| Fix creates another bug | Check related cases after fixing |
 
 ---
 
 ## 💡 Tips
 
-1. **Dùng ví dụ đời thực** — "Giống như chia cho 0 trên máy tính bỏ túi"
-2. **3 trường hợp test tối thiểu** — Input đúng / Input sai / Edge case
-3. **Hiện tượng trước, nguyên nhân sau** — User cần thấy bạn hiểu vấn đề trước khi giải thích
-4. **Khi không chắc nguyên nhân** — Nói "Tôi chưa chắc chắn, đây là những gì tôi đã thử"
+1. **Use real-world analogies** — "Like dividing by zero on a calculator"
+2. **Minimum 3 test cases** — Valid input / Invalid input / Edge case
+3. **Symptom first, cause second** — User needs to see that you understand the problem before the explanation
+4. **When unsure of root cause** — Say "I'm not certain, but here is what I tried"
 
 ---
 
-## 📊 Ví dụ thực tế
+## 📊 Example
 
-### Input mẫu:
+### Sample Input:
 ```
-Mô tả hiện tượng: "App hiện số lạ kiểu 1e+06 thay vì 1,000,000"
-Bước tái hiện: "Nhập số tiền lớn hơn 1 triệu rồi bấm Tính"
+Error Symptom: "App shows strange number like 1e+06 instead of 1,000,000"
+Steps to Reproduce: "Enter an amount larger than 1 million then click Calculate"
 ```
 
-### Output mẫu:
+### Sample Output:
 ```markdown
-## Hiện tượng
-Khi bạn nhập số tiền lớn hơn 1 triệu, app hiện "1e+06" thay vì "1.000.000".
+## Symptom
+When you enter an amount larger than 1 million, the app shows "1e+06" instead of "1,000,000".
 
-## Nguyên nhân
-Đây là cách máy tính viết tắt số lớn — gọi là "ký hiệu khoa học". Nó
-chính xác nhưng không thân thiện với người dùng. Giống như viết
-"1×10⁶" thay vì "một triệu".
+## Root Cause
+This is the computer's way of abbreviating large numbers — called "scientific notation".
+It is accurate but not user-friendly. Like writing "1×10⁶" instead of "one million".
 
-## Tôi đã sửa
-Tôi thêm định dạng "tự động thêm dấu chấm phẩy" vào kết quả hiển thị.
+## How I Fixed It
+I added automatic number formatting to the display results.
 
-## Kết quả test
-✅ 1,500,000 → hiện "1.500.000 đ"
-✅ 500 → hiện "500 đ" (số nhỏ không đổi)
-✅ 0 → hiện "0 đ"
+## Test Results
+✅ 1,500,000 → shows "1,500,000"
+✅ 500 → shows "500" (small numbers unchanged)
+✅ 0 → shows "0"
 ```
 
-### Đánh giá:
-- ✅ Không dùng thuật ngữ kỹ thuật
-- ✅ Ví dụ đời thực dễ hiểu
-- ✅ 3 test case đủ
-- **Kết quả: ACCEPT**
+### Evaluation:
+- ✅ No technical jargon used
+- ✅ Plain-language analogy
+- ✅ 3 test cases sufficient
+- **Result: ACCEPT**
 
 ---
 
 ## 🔗 Next Step
 
-Sau khi sửa lỗi → [Grandma UX Test](./04_grandma_ux_test.skill.md) để kiểm tra UX toàn diện
+After the fix → [Grandma UX Test](../product_ux/04_grandma_ux_test.skill.md) for full UX review
 
 ---
 
-## 🔗 Related Skills — Ngăn lỗi trước khi xảy ra
+## 🔗 Related Skills
+
+- [Grandma UX Test](../product_ux/04_grandma_ux_test.skill.md) — Confirm usability after bugfix
 
 ---
 
@@ -185,8 +186,9 @@ Sau khi sửa lỗi → [Grandma UX Test](./04_grandma_ux_test.skill.md) để k
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-02-27 | Khởi tạo từ CVF-Compatible Skills intake |
+| 1.1.0 | 2026-02-27 | Translated to English; domain corrected to App Development |
+| 1.0.0 | 2026-02-27 | Initial creation from CVF-Compatible Skills intake |
 
 ---
 
-*Non-coder Debug — CVF v1.5.2 Non-coder Workflow Skill Library*
+*Non-Coder Debug — CVF v1.5.2 App Development Skill Library*

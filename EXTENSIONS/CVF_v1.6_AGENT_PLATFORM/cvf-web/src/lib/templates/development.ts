@@ -491,4 +491,175 @@ OUTPUT REQUIREMENTS:
 - Testing checklist`,
         outputExpected: ['Build Artifacts', 'Build Commands', 'Installer Config', 'CI/CD Config', 'Distribution Process'],
     },
+
+    // === Vibe Workflow Templates (linked to new skills) ===
+    {
+        id: 'vibe_workflow_folder',
+        name: '🎨 Vibe Workflow (4)',
+        icon: '🎨',
+        description: 'Vibe-to-Spec, Logic Mapping, Debug, Packaging — tools for non-coders to go from idea to delivered app.',
+        category: 'development',
+        difficulty: 'easy',
+        fields: [],
+        intentPattern: '',
+        outputExpected: [],
+        isFolder: true,
+    },
+    {
+        id: 'vibe_to_spec',
+        name: 'Vibe-to-Spec Translator',
+        icon: '✨',
+        description: 'Convert vague vibe descriptions ("make it feel luxurious") into a concrete Vibe Mapping Table AI can use.',
+        category: 'development',
+        difficulty: 'easy',
+        parentFolder: 'vibe_workflow_folder',
+        fields: [
+            { id: 'vibeDescription', type: 'textarea', label: 'Vibe Description', placeholder: 'e.g. "I want it to look luxurious and professional like a banking app"', required: true, rows: 3, section: 'required', hint: 'Describe the feeling or style you want — in plain language', example: '"Clean and minimal like Notion, not too flashy"' },
+            { id: 'appType', type: 'select', label: 'App Type', options: ['Personal Finance Manager', 'Task Manager', 'Reporting Dashboard', 'Inventory Tracker', 'Other'], required: true, section: 'required', hint: 'What kind of app is this? Helps AI map the vibe to the right context' },
+            { id: 'targetUsers', type: 'text', label: 'Target Users', placeholder: 'e.g. Office workers, homemakers, students', required: false, section: 'advanced', hint: 'Who will use this app?', example: 'Non-technical office workers, age 25–45' },
+        ],
+        intentPattern: `INTENT:
+Apply CVF Skill: Vibe-to-Spec Translator
+
+APP TYPE: [appType]
+TARGET USERS: [targetUsers]
+
+VIBE DESCRIPTION:
+[vibeDescription]
+
+OUTPUT REQUIREMENTS:
+- Generate a Vibe Mapping Table with 3 columns: Your Keyword | I understand it as... | I will build...
+- NO technical jargon (no CSS, hex codes, padding) in the table
+- End with a confirmation question: "Do you approve this Vibe Mapping?"
+- Do NOT start designing or coding until User types "Approve Vibe"`,
+        outputExpected: ['Vibe Mapping Table (3 columns)', 'Plain-language descriptions', 'User confirmation step'],
+    },
+    {
+        id: 'vibe_logic_mapping',
+        name: 'Vibe Logic Mapping',
+        icon: '🗂️',
+        description: 'Convert an approved Vibe Mapping into a concrete technical spec (font, color, layout) ready for AI to build.',
+        category: 'development',
+        difficulty: 'easy',
+        parentFolder: 'vibe_workflow_folder',
+        fields: [
+            { id: 'approvedVibe', type: 'textarea', label: 'Approved Vibe Keywords', placeholder: 'e.g. "Professional, Minimal, Fast"', required: true, rows: 2, section: 'required', hint: 'Copy the approved vibe keywords from the Vibe-to-Spec step' },
+            { id: 'techStack', type: 'text', label: 'Tech Stack', placeholder: 'e.g. Streamlit, Next.js, HTML/CSS', required: true, section: 'required', hint: 'What technology is being used to build the app?', example: 'Streamlit (Python)' },
+            { id: 'appType', type: 'select', label: 'App Type', options: ['Dashboard', 'Form App', 'Report Viewer', 'Data Entry', 'Other'], required: false, section: 'advanced', hint: 'Type of app — helps AI suggest the right layout patterns' },
+        ],
+        intentPattern: `INTENT:
+Apply CVF Skill: Vibe Logic Mapping
+
+TECH STACK: [techStack]
+APP TYPE: [appType]
+
+APPROVED VIBE:
+[approvedVibe]
+
+OUTPUT REQUIREMENTS:
+- Generate a Technical Spec Table for each vibe keyword
+- Columns: Element | Parameter | Rationale
+- Every parameter must include a rationale: "Because you wanted [X], I chose [Y]"
+- Parameters must be directly actionable (specific enough to code)
+- No contradictions between different vibes`,
+        outputExpected: ['Technical Spec Table per vibe', 'Font / Color / Layout / Effect parameters', 'Rationale for each choice'],
+    },
+    {
+        id: 'project_init_checklist',
+        name: 'Project Init Checklist',
+        icon: '✅',
+        description: 'Run this before starting any new CVF project. Ensures all foundations are ready before AI begins working.',
+        category: 'development',
+        difficulty: 'easy',
+        parentFolder: 'vibe_workflow_folder',
+        fields: [
+            { id: 'projectName', type: 'text', label: 'Project Name', placeholder: 'e.g. FinanceTracker', required: true, section: 'required', hint: 'Short, memorable name for the project', example: 'FinanceTracker' },
+            { id: 'projectDescription', type: 'text', label: 'One-line Description', placeholder: 'e.g. Offline household expense tracker', required: true, section: 'required', hint: 'What the app does — in one sentence', example: 'Offline expense tracker for homemakers' },
+            { id: 'operatingSystem', type: 'select', label: 'Operating System', options: ['Windows 10/11', 'macOS', 'Linux', 'Multiple'], required: true, section: 'required', hint: 'Which OS is the user working on?' },
+            { id: 'pythonInstalled', type: 'select', label: 'Python Installed?', options: ['Yes', 'No', 'Not sure'], required: true, section: 'required', hint: 'Python is required for most CVF Streamlit projects' },
+        ],
+        intentPattern: `INTENT:
+Apply CVF Skill: Project Init Checklist
+
+PROJECT: [projectName]
+DESCRIPTION: [projectDescription]
+OS: [operatingSystem]
+PYTHON: [pythonInstalled]
+
+OUTPUT REQUIREMENTS:
+- Generate an 8-item checklist covering: Foundation, The Idea, CVF Compliance
+- Show current tally: "[X]/8 items ✅"
+- Ask User to confirm with "Checklist Pass" before proceeding
+- After confirmation: create governance/PROJECT_PROGRESS.md tracking file
+- Do NOT discuss project content until checklist passes ≥ 80%`,
+        outputExpected: ['8-item Init Checklist', 'Tally display', 'Confirmation prompt', 'PROJECT_PROGRESS.md'],
+    },
+    {
+        id: 'non_coder_debug',
+        name: 'Non-Coder Debug',
+        icon: '🔍',
+        description: 'App crashed or showing wrong results? Describe what you see — AI diagnoses and fixes in plain language.',
+        category: 'development',
+        difficulty: 'easy',
+        parentFolder: 'vibe_workflow_folder',
+        fields: [
+            { id: 'errorSymptom', type: 'textarea', label: 'What did you see?', placeholder: 'e.g. "Clicking Save makes the app go blank"', required: true, rows: 3, section: 'required', hint: 'Describe exactly what happened — no technical words needed', example: '"The app shows a strange number like 1e+06 instead of 1,000,000"' },
+            { id: 'stepsToReproduce', type: 'textarea', label: 'How to trigger it again', placeholder: 'e.g. "Enter a negative number then click Save"', required: true, rows: 2, section: 'required', hint: 'Step-by-step to make the error happen again', example: 'Enter an amount over 1 million then click Calculate' },
+            { id: 'whenItStarted', type: 'text', label: 'When did it start?', placeholder: 'e.g. "After I added the Notes column"', required: false, section: 'advanced', hint: 'Any recent change that might have caused this', example: 'After adding a new input field yesterday' },
+        ],
+        intentPattern: `INTENT:
+Apply CVF Skill: Non-Coder Debug
+
+STEPS TO REPRODUCE:
+[stepsToReproduce]
+
+WHEN IT STARTED: [whenItStarted]
+
+ERROR SYMPTOM:
+[errorSymptom]
+
+OUTPUT REQUIREMENTS:
+- Generate a plain-language Bug Report with sections: Symptom | Root Cause | How I Fixed It | Test Results
+- NO technical jargon, error codes, or stack traces visible to user
+- Root cause must use real-world analogies
+- Include at least 3 test cases in Test Results
+- Do NOT blame the hardware or environment before checking code logic`,
+        outputExpected: ['Plain-language Bug Report', 'Root cause in plain terms', 'At least 3 test case results'],
+    },
+    {
+        id: 'auto_documentation',
+        name: 'Auto Documentation',
+        icon: '📖',
+        description: 'Generate a USER_GUIDE.md for your app — plain-language Quick Start, feature list, and common error fixes.',
+        category: 'development',
+        difficulty: 'easy',
+        parentFolder: 'vibe_workflow_folder',
+        fields: [
+            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'e.g. FinanceTracker — Household Expense Manager', required: true, section: 'required', hint: 'Full name of the app for the document title', example: 'StockCheck — Supermarket Inventory' },
+            { id: 'howToLaunch', type: 'text', label: 'How to Launch', placeholder: 'e.g. Double-click START.bat / streamlit run app.py', required: true, section: 'required', hint: 'The exact command or file the user clicks to start the app', example: 'Double-click START.bat in the folder' },
+            { id: 'coreFeatures', type: 'textarea', label: 'Core Features (3–5)', placeholder: '1. Record expenses\n2. View monthly report\n3. Export to Excel', required: true, rows: 4, section: 'required', hint: 'The features users will use most often', example: '1. Scan barcode\n2. View stock levels\n3. Receive goods\n4. Generate report' },
+            { id: 'operatingSystem', type: 'select', label: 'Operating System', options: ['Windows 10/11', 'macOS', 'Linux', 'Cross-platform'], required: true, section: 'required', hint: 'The OS the app runs on — affects installation instructions' },
+            { id: 'commonErrors', type: 'textarea', label: 'Common Errors (optional)', placeholder: 'e.g. App won\'t open, data not saving', required: false, rows: 2, section: 'advanced', hint: 'Known issues users might encounter', example: 'Blank screen on first launch, export button not working' },
+        ],
+        intentPattern: `INTENT:
+Apply CVF Skill: Auto Documentation
+
+APP NAME: [appName]
+HOW TO LAUNCH: [howToLaunch]
+OPERATING SYSTEM: [operatingSystem]
+
+CORE FEATURES:
+[coreFeatures]
+
+KNOWN ERRORS:
+[commonErrors]
+
+OUTPUT REQUIREMENTS:
+- Create a complete USER_GUIDE.md file (not just describe it — actually generate the full content)
+- Sections: Quick Start (≤ 5 steps) | Core Features | Common Issues & Fixes | Support Contact
+- Quick Start must NOT require terminal, conda, virtualenv, or Docker
+- Include at least 3 common errors with plain-language fixes
+- No unexplained technical jargon`,
+        outputExpected: ['Full USER_GUIDE.md content', 'Quick Start ≤ 5 steps', '3+ Common Errors with fixes'],
+    },
 ];

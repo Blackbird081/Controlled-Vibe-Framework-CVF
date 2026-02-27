@@ -3,27 +3,27 @@
 > **Domain:** App Development
 > **Difficulty:** ⭐ Easy
 > **CVF Version:** v1.5.2
-> **Skill Version:** 1.0.0
+> **Skill Version:** 1.1.0
 > **Last Updated:** 2026-02-27
 
 ---
 
 ## 📌 Prerequisites
 
-- [ ] Đã chạy Skill [Vibe-to-Spec Translator](./01_vibe_to_spec.skill.md) và có "Vibe Mapping" được User duyệt
+- [ ] Completed Skill [Vibe-to-Spec Translator](./01_vibe_to_spec.skill.md) with an approved "Vibe Mapping"
 
 ---
 
-## 🎯 Mục đích
+## 🎯 Purpose
 
-**Khi nào dùng skill này:**
-- Phase B (Design) — sau khi đã có Vibe Mapping được duyệt
-- Cần chuyển "vibe" đã xác nhận thành thông số kỹ thuật cụ thể (font, màu, layout) để AI dùng khi build
-- Muốn đảm bảo UI/UX nhất quán xuyên suốt toàn bộ app
+**When to use this skill:**
+- Phase B (Design) — after the Vibe Mapping has been approved
+- Need to convert confirmed "vibes" into concrete technical parameters (font, color, layout) for AI to use during build
+- Ensures UI/UX consistency throughout the entire app
 
-**Không phù hợp khi:**
-- Chưa có Vibe Mapping được User xác nhận
-- App không có UI (CLI thuần, API backend)
+**Not suitable when:**
+- No User-confirmed Vibe Mapping exists yet
+- App has no UI (pure CLI, API backend)
 
 ---
 
@@ -42,147 +42,149 @@
 
 ## ⛔ Execution Constraints
 
-- AI PHẢI liệt kê rõ: "Vì bạn muốn [Vibe], tôi đã áp dụng [Thông số X, Y, Z]"
-- AI KHÔNG ĐƯỢC tự ý thay đổi vibe đã được User duyệt
-- Kết quả Build phải thể hiện đúng sự thay đổi về mặt thị giác (Visual changes)
+- AI MUST explicitly state: "Because you wanted [Vibe], I applied [Parameter X, Y, Z]"
+- AI MUST NOT unilaterally change a vibe that the User has already approved
+- Build output MUST visually reflect the mapping (visual changes are verifiable)
 
 ---
 
 ## ✅ Validation Hooks
 
-- Check Vibe source đã có từ Skill 01 (Vibe-to-Spec)
-- Check output có đủ mapping: Vibe keyword → Font → Màu → Layout → Hiệu ứng
-- Check mỗi thông số kỹ thuật có thể áp dụng ngay vào code (actionable)
+- Check that a Vibe source from Skill 01 (Vibe-to-Spec) is present
+- Check that the output contains full mapping: Vibe keyword → Font → Color → Layout → Effect
+- Check that every technical parameter is directly actionable in code
 
 ---
 
 ## 🧪 UAT Binding
 
-- UAT Record: `governance/skill-library/uat/results/UAT-non_coder_workflow-02_vibe_logic_mapping.md`
-- UAT Objective: Mapping phải nhất quán, mỗi vibe phải dẫn đến thông số kỹ thuật cụ thể có thể implement
+- UAT Record: `governance/skill-library/uat/results/UAT-app_development-02_vibe_logic_mapping.md`
+- UAT Objective: Mapping must be consistent; every vibe must lead to a specific, implementable technical parameter
 
 ---
 
 ## 📋 Form Input
 
-| Field | Mô tả | Bắt buộc | Ví dụ |
-|-------|-------|:--------:|-------|
-| **Vibe đã duyệt** | Vibe Mapping đã được User xác nhận từ Skill 01 | ✅ | "Chuyên nghiệp, Tối giản" |
-| **Tech Stack** | Công nghệ đang dùng để build | ✅ | "Streamlit", "Next.js", "HTML/CSS" |
-| **App Type** | Loại app | ❌ | "Dashboard", "Form app", "Report viewer" |
+| Field | Description | Required | Example |
+|-------|-------------|:--------:|---------|
+| **Approved Vibe** | The Vibe Mapping confirmed by the User from Skill 01 | ✅ | "Professional, Minimal" |
+| **Tech Stack** | Technology used to build the app | ✅ | "Streamlit", "Next.js", "HTML/CSS" |
+| **App Type** | Type of app | ❌ | "Dashboard", "Form app", "Report viewer" |
 
 ---
 
 ## ✅ Expected Output
 
-**Kết quả bạn nhận được — Bảng kỹ thuật theo Vibe:**
+**What you will receive — a Technical Spec Table by Vibe:**
 
 ```markdown
 # Vibe Technical Spec
 
-## Vibe: "Chuyên nghiệp" (Professional)
-| Thành phần | Thông số |
+## Vibe: "Professional"
+| Element | Parameter |
 |---|---|
-| Font chính | Inter (hoặc tương đương) |
-| Màu nền | Xám đậm / Trắng xanh nhạt |
-| Màu chữ | Trắng (nền tối) / Đen đậm (nền sáng) |
-| Layout | Cột đôi, khoảng cách rộng, căn lề nghiêm |
-| Biểu đồ | Donut chart, màu xanh đậm + xám |
-| Hiệu ứng | Tối thiểu — chỉ highlight khi hover |
+| Primary Font | Inter (or equivalent) |
+| Background | Dark gray / Light blue-white |
+| Text Color | White (dark bg) / Dark (light bg) |
+| Layout | Two-column, generous spacing, strict alignment |
+| Charts | Donut chart, deep blue + gray |
+| Effects | Minimal — highlight on hover only |
 
-## Vibe: "Chill / Nhẹ nhàng"
-| Thành phần | Thông số |
+## Vibe: "Chill / Relaxed"
+| Element | Parameter |
 |---|---|
-| Font chính | Rounded (Nunito hoặc tương đương) |
-| Màu nền | Trắng sữa / Pastel xanh nhạt |
-| Nút bấm | Bo góc lớn (rất tròn) |
-| Icon | Emoji-based hoặc outline mỏng |
-| Hiệu ứng | Fade-in nhẹ, không flash |
+| Primary Font | Rounded (Nunito or equivalent) |
+| Background | Cream white / Soft pastel blue |
+| Buttons | Large border-radius (very rounded) |
+| Icons | Emoji-based or thin outline |
+| Effects | Gentle fade-in, no flash |
 
-## Vibe: "Nhanh / Mạnh"
-| Thành phần | Thông số |
+## Vibe: "Fast / Powerful"
+| Element | Parameter |
 |---|---|
-| Menu | Sidebar thu gọn, chỉ icon |
-| Phím tắt | Ưu tiên keyboard shortcuts |
-| Loading | Skeleton loader thay thế spinner |
-| Màu accent | Đỏ cam hoặc xanh điện |
+| Navigation | Collapsible sidebar, icon-only mode |
+| Shortcuts | Keyboard shortcuts prioritized |
+| Loading | Skeleton loader instead of spinner |
+| Accent Color | Red-orange or electric blue |
 ```
 
 ---
 
-## 🔍 Cách đánh giá
+## 🔍 Evaluation Criteria
 
-**Checklist Accept:**
-- [ ] Mỗi vibe có ít nhất 4 thông số kỹ thuật
-- [ ] Thông số đủ cụ thể để implement ngay (không mơ hồ)
-- [ ] AI đã ghi rõ lý do: "Vì bạn muốn [X], tôi chọn [Y]"
-- [ ] Không mâu thuẫn giữa các vibe với nhau
+**Accept Checklist:**
+- [ ] Each vibe has at least 4 technical parameters
+- [ ] Parameters are specific enough to implement immediately (no vagueness)
+- [ ] AI clearly states rationale: "Because you wanted [X], I chose [Y]"
+- [ ] No contradictions between different vibes
 
-**Red flags (Reject):**
-- ⚠️ Thông số quá chung chung: "màu đẹp", "font dễ đọc"
-- ⚠️ Vibe khác nhau nhưng cho ra thông số giống nhau
-- ⚠️ Không có lý do cho từng lựa chọn
+**Red Flags (Reject):**
+- ⚠️ Parameters too vague: "nice color", "readable font"
+- ⚠️ Different vibes produce identical parameters
+- ⚠️ No rationale provided for each choice
 
 ---
 
 ## ⚠️ Common Failures
 
-| Lỗi thường gặp | Cách phòng tránh |
-|----------------|-----------------|
-| Thông số quá chung chung | Mỗi field phải có giá trị cụ thể đủ để code |
-| Thiếu loại biểu đồ | Luôn khai báo chart type nếu app có data viz |
-| Không ghi lý do | Dùng mẫu: "Vì [Vibe] → tôi chọn [Thông số]" |
+| Common Error | Prevention |
+|---|---|
+| Parameters too generic | Each field must have a specific value ready to code |
+| Missing chart type | Always declare chart type if app has data visualization |
+| No rationale given | Use template: "Because [Vibe] → I chose [Parameter]" |
 
 ---
 
 ## 💡 Tips
 
-1. **Ưu tiên 3 vibe phổ biến** — Professional, Chill, Fast là 3 preset tốt nhất cho Non-coder
-2. **Streamlit users** — Primary color `#FF4B4B`, dùng `st.columns` và `st.tabs`
-3. **Ghi rõ lý do** — User sẽ tin tưởng AI hơn khi thấy logic đằng sau mỗi lựa chọn
-4. **Giữ nhất quán** — Một app chỉ dùng 1-2 vibe, không mix nhiều vibe mâu thuẫn
+1. **Prioritize 3 common vibes** — Professional, Chill, Fast are the best presets for non-coders
+2. **Streamlit users** — Primary color `#FF4B4B`, use `st.columns` and `st.tabs`
+3. **State your rationale** — Users gain more trust in AI when they see the logic behind each choice
+4. **Stay consistent** — One app should use 1–2 vibes, not mix contradicting ones
 
 ---
 
-## 📊 Ví dụ thực tế
+## 📊 Example
 
-### Input mẫu:
+### Sample Input:
 ```
-Vibe đã duyệt: "Chuyên nghiệp + Tối giản"
+Approved Vibe: "Professional + Minimal"
 Tech Stack: Streamlit (Python)
-App Type: Dashboard quản lý chi tiêu
+App Type: Expense management dashboard
 ```
 
-### Output mẫu:
+### Sample Output:
 ```markdown
-# Vibe Technical Spec — "Chuyên nghiệp + Tối giản"
+# Vibe Technical Spec — "Professional + Minimal"
 
-| Thành phần | Thông số | Lý do |
+| Element | Parameter | Rationale |
 |---|---|---|
-| Font | Inter (via custom CSS) | Vì "Chuyên nghiệp" — font Business chuẩn |
-| Primary color | #262730 (xám Streamlit đậm) | Vì "Tối giản" — nền tối tập trung |
-| Layout | st.columns(2) + st.expander | Vì "Chuyên nghiệp" — bố cục có cấu trúc |
-| Biểu đồ | Donut chart (plotly) | Vì "Tối giản" — 1 chart đủ thông tin |
-| Màu accent | #00B4D8 (xanh) | Nhấn mạnh số quan trọng, không chói |
-| Hiệu ứng | st.spinner chỉ khi load | Vì "Tối giản" — không animation thừa |
+| Font | Inter (via custom CSS) | "Professional" — standard business font |
+| Primary Color | #262730 (dark Streamlit gray) | "Minimal" — dark background aids focus |
+| Layout | st.columns(2) + st.expander | "Professional" — structured layout |
+| Chart | Donut chart (plotly) | "Minimal" — one chart conveys all info |
+| Accent | #00B4D8 (blue) | Highlights key numbers without being harsh |
+| Effects | st.spinner only on load | "Minimal" — no unnecessary animations |
 ```
 
-### Đánh giá:
-- ✅ Mỗi thông số có lý do rõ ràng
-- ✅ Đủ cụ thể để implement ngay
-- ✅ Không có mâu thuẫn giữa 2 vibe
-- **Kết quả: ACCEPT**
+### Evaluation:
+- ✅ Every parameter has clear rationale
+- ✅ Specific enough to implement immediately
+- ✅ No contradiction between vibes
+- **Result: ACCEPT**
 
 ---
 
 ## 🔗 Next Step
 
-Sau khi có Technical Spec → [Grandma UX Test](./04_grandma_ux_test.skill.md)
+After obtaining Technical Spec → [Grandma UX Test](../product_ux/04_grandma_ux_test.skill.md)
 
 ---
 
-## 🔗 Related Skills — Bước trước (tạo Vibe Mapping)
-- [Grandma UX Test](./04_grandma_ux_test.skill.md) — Bước sau (kiểm tra UX)
+## 🔗 Related Skills
+
+- [Vibe-to-Spec Translator](./01_vibe_to_spec.skill.md) — Previous step (create Vibe Mapping)
+- [Grandma UX Test](../product_ux/04_grandma_ux_test.skill.md) — Next step (verify UX)
 
 ---
 
@@ -190,8 +192,9 @@ Sau khi có Technical Spec → [Grandma UX Test](./04_grandma_ux_test.skill.md)
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-02-27 | Khởi tạo từ CVF-Compatible Skills intake |
+| 1.1.0 | 2026-02-27 | Translated to English; domain corrected to App Development |
+| 1.0.0 | 2026-02-27 | Initial creation from CVF-Compatible Skills intake |
 
 ---
 
-*Vibe Logic Mapping — CVF v1.5.2 Non-coder Workflow Skill Library*
+*Vibe Logic Mapping — CVF v1.5.2 App Development Skill Library*

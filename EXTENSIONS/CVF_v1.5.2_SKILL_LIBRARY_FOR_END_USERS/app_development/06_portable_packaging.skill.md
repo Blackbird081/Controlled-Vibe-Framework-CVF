@@ -3,28 +3,28 @@
 > **Domain:** App Development
 > **Difficulty:** ⭐ Easy
 > **CVF Version:** v1.5.2
-> **Skill Version:** 1.0.0
+> **Skill Version:** 1.1.0
 > **Last Updated:** 2026-02-27
 
 ---
 
 ## 📌 Prerequisites
 
-- [ ] App đã pass Phase D (Review) và có `HUONG_DAN.md`
-- [ ] Tất cả dependencies được khai báo trong `requirements.txt` (Python) hoặc `package.json` (Node)
+- [ ] App has passed Phase D (Review) and has a `USER_GUIDE.md`
+- [ ] All dependencies are declared in `requirements.txt` (Python) or `package.json` (Node)
 
 ---
 
-## 🎯 Mục đích
+## 🎯 Purpose
 
-**Khi nào dùng skill này:**
-- Cuối Phase D, chuẩn bị bàn giao app cho người dùng khác
-- Muốn người nhận có thể mở app chỉ bằng 1 cú click, không cần setup
-- Muốn gửi app qua Zalo/email dưới dạng file ZIP
+**When to use this skill:**
+- End of Phase D, preparing to hand the app off to other users
+- Want recipients to open the app with a single click, no setup required
+- Want to send the app as a ZIP file via email or messaging
 
-**Không phù hợp khi:**
-- App web công khai (dùng AGT-030 Cloud Deployment thay thế)
-- App cần tài khoản cloud hoặc database server bên ngoài
+**Not suitable when:**
+- App is a public web service (use AGT-030 Cloud Deployment instead)
+- App requires cloud accounts or an external database server
 
 ---
 
@@ -43,144 +43,146 @@
 
 ## ⛔ Execution Constraints
 
-- Mọi thứ PHẢI nằm trong 1 folder duy nhất (không rải rác)
-- PHẢI có file khởi động: `START.bat` (Windows) hoặc `start.sh` (Mac/Linux)
-- File khởi động PHẢI tự kiểm tra và cài thư viện thiếu (`pip install -r requirements.txt`) lần đầu
-- KHÔNG bao gồm file database có dữ liệu cá nhân vào package — chỉ database trống
+- Everything MUST reside in a single folder (no scattered files)
+- MUST include a launch file: `START.bat` (Windows) or `start.sh` (Mac/Linux)
+- The launch file MUST self-check and install missing libraries (`pip install -r requirements.txt`) on first run
+- MUST NOT include a database with personal user data — only an empty schema database
 
 ---
 
 ## ✅ Validation Hooks
 
-- Check tất cả files cần thiết có trong folder
-- Check `START.bat` / `start.sh` chạy được trên máy sạch
-- Check `requirements.txt` khớp với thư viện thực sự dùng trong code
-- Check không có dữ liệu cá nhân trong database mẫu
+- Check that all required files are present in the folder
+- Check that `START.bat` / `start.sh` runs on a clean machine
+- Check that `requirements.txt` matches the libraries actually used in the code
+- Check that the sample database contains no personal data
 
 ---
 
 ## 🧪 UAT Binding
 
-- UAT Record: `governance/skill-library/uat/results/UAT-non_coder_workflow-06_portable_packaging.md`
-- UAT Objective: Người nhận có thể mở app thành công chỉ bằng 1 click vào `START.bat`, không cần hướng dẫn thêm
+- UAT Record: `governance/skill-library/uat/results/UAT-app_development-06_portable_packaging.md`
+- UAT Objective: Recipient can successfully open the app with a single click on `START.bat`, no additional instructions required
 
 ---
 
 ## 📋 Form Input
 
-| Field | Mô tả | Bắt buộc | Ví dụ |
-|-------|-------|:--------:|-------|
-| **Tên app** | Tên thư mục sẽ giao | ✅ | "FinanceTracker_v1.0" |
-| **Tech stack** | Python + Streamlit / Node.js / khác | ✅ | "Python 3.11 + Streamlit" |
-| **Hệ điều hành người nhận** | Windows / Mac / Linux | ✅ | "Windows 10/11" |
-| **Có database không** | App có lưu dữ liệu local không | ✅ | "Có — SQLite" |
+| Field | Description | Required | Example |
+|-------|-------------|:--------:|---------|
+| **App Name** | Name of the delivery folder | ✅ | "FinanceTracker_v1.0" |
+| **Tech Stack** | Python + Streamlit / Node.js / other | ✅ | "Python 3.11 + Streamlit" |
+| **Recipient OS** | Windows / Mac / Linux | ✅ | "Windows 10/11" |
+| **Has Database** | Does the app store local data? | ✅ | "Yes — SQLite" |
 
 ---
 
 ## ✅ Expected Output
 
-**Cấu trúc thư mục được tạo:**
+**Generated folder structure:**
 
 ```
 FinanceTracker_v1.0/
-├── START.bat              ← Click đúp để mở (Windows)
-├── start.sh               ← Cho Mac/Linux
-├── app.py                 ← Code chính
-├── requirements.txt       ← Danh sách thư viện
-├── HUONG_DAN.md           ← Hướng dẫn sử dụng
+├── START.bat              ← Double-click to open (Windows)
+├── start.sh               ← For Mac/Linux
+├── app.py                 ← Main code
+├── requirements.txt       ← Library list
+├── USER_GUIDE.md          ← User guide
 ├── data/
-│   └── finance.db         ← Database trống (không có data cá nhân)
+│   └── finance.db         ← Empty database (no personal data)
 └── assets/
-    └── logo.png           ← Logo/ảnh app (nếu có)
+    └── logo.png           ← App logo/image (if any)
 ```
 
-**Nội dung `START.bat`:**
+**Contents of `START.bat`:**
 
 ```batch
 @echo off
-echo === Khoi dong FinanceTracker ===
-echo Kiem tra thu vien...
+echo === Launching FinanceTracker ===
+echo Checking libraries...
 pip install -r requirements.txt --quiet
-echo Dang mo app...
+echo Opening app...
 streamlit run app.py
 pause
 ```
 
-**Hướng dẫn giao cho người dùng:**
+**Delivery instructions for user:**
 ```
-1. Nén thư mục "FinanceTracker_v1.0" thành file ZIP
-2. Gửi file ZIP
-3. Người nhận giải nén và bấm đúp vào START.bat
+1. Compress the "FinanceTracker_v1.0" folder into a ZIP file
+2. Send the ZIP file
+3. Recipient extracts and double-clicks START.bat
 ```
 
 ---
 
-## 🔍 Cách đánh giá
+## 🔍 Evaluation Criteria
 
-**Checklist Accept:**
-- [ ] Tất cả files trong 1 folder duy nhất
-- [ ] `START.bat` / `start.sh` tồn tại và chạy được
-- [ ] `requirements.txt` đúng và đủ
-- [ ] Database trống (không chứa dữ liệu cá nhân)
-- [ ] `HUONG_DAN.md` có trong package
+**Accept Checklist:**
+- [ ] All files in a single folder
+- [ ] `START.bat` / `start.sh` exists and runs successfully
+- [ ] `requirements.txt` is correct and complete
+- [ ] Database is empty (contains no personal data)
+- [ ] `USER_GUIDE.md` is included in the package
 
-**Red flags (Reject):**
-- ⚠️ App dùng đường dẫn tuyệt đối (`C:\Users\TenNguoiDung\...`) — sẽ lỗi ở máy khác
-- ⚠️ `requirements.txt` thiếu thư viện
-- ⚠️ Database có dữ liệu cá nhân của developer
+**Red Flags (Reject):**
+- ⚠️ App uses absolute paths (`C:\Users\Username\...`) — will break on another machine
+- ⚠️ `requirements.txt` is missing libraries
+- ⚠️ Database contains developer's personal test data
 
 ---
 
 ## ⚠️ Common Failures
 
-| Lỗi thường gặp | Cách phòng tránh |
-|----------------|-----------------|
-| Đường dẫn tuyệt đối trong code | Dùng `os.path.dirname(__file__)` thay vì hardcode path |
-| Thiếu thư viện trong requirements.txt | Chạy `pip freeze > requirements.txt` trước khi đóng gói |
-| Database có dữ liệu test | Tạo script `reset_db.py` để tạo database trống |
+| Common Error | Prevention |
+|---|---|
+| Absolute paths in code | Use `os.path.dirname(__file__)` instead of hardcoded path |
+| Missing libraries in requirements.txt | Run `pip freeze > requirements.txt` before packaging |
+| Database contains test data | Create a `reset_db.py` script to generate an empty schema database |
 
 ---
 
 ## 💡 Tips
 
-1. **Test trên máy khác** — Luôn thử mở package trên máy sạch trước khi giao
-2. **Version trong tên folder** — `AppName_v1.0` giúp người dùng biết phiên bản
-3. **README ngắn trong ZIP** — Thêm 1 file `ĐỌC_TRƯỚC.txt` cực ngắn ngay trong folder
-4. **Không nén node_modules** — Với Node.js, chạy `npm install` trong `START.bat`
+1. **Test on another machine** — Always test the package on a clean machine before delivery
+2. **Version in folder name** — `AppName_v1.0` helps users identify the version
+3. **Short README in ZIP** — Add a very brief `READ_ME_FIRST.txt` at the top level of the folder
+4. **Don't zip node_modules** — For Node.js, run `npm install` inside `START.bat`
 
 ---
 
-## 📊 Ví dụ thực tế
+## 📊 Example
 
-### Input mẫu:
+### Sample Input:
 ```
-Tên app: "SalesReport_v1.0"
-Tech stack: Python 3.11 + Streamlit + pandas + plotly
-Hệ điều hành: Windows 10/11
-Có database: SQLite
+App Name: "SalesReport_v1.0"
+Tech Stack: Python 3.11 + Streamlit + pandas + plotly
+Recipient OS: Windows 10/11
+Has Database: SQLite
 ```
 
-### Output mẫu: được tạo:
-- Folder `SalesReport_v1.0/` với cấu trúc chuẩn
-- `START.bat` tự cài `pip install -r requirements.txt` lần đầu
-- `data/sales.db` database trống với schema đúng
+### Sample Output:
+- Folder `SalesReport_v1.0/` with standard structure
+- `START.bat` auto-installs `pip install -r requirements.txt` on first run
+- `data/sales.db` empty database with correct schema
 
-### Đánh giá:
-- ✅ 1-click launch thành công
-- ✅ Không đường dẫn tuyệt đối
-- ✅ Database trống
-- **Kết quả: ACCEPT**
+### Evaluation:
+- ✅ 1-click launch successful
+- ✅ No absolute paths
+- ✅ Empty database
+- **Result: ACCEPT**
 
 ---
 
 ## 🔗 Next Step
 
-Sau khi đóng gói xong → Gửi file ZIP và `HUONG_DAN.md` cho người nhận
+After packaging → Send the ZIP file and `USER_GUIDE.md` to the recipient
 
 ---
 
-## 🔗 Related Skills — Cần có HUONG_DAN.md trước
-- [Cloud Deployment Strategist](../../app_development/08_local_deployment.skill.md) — Nếu muốn deploy lên web
+## 🔗 Related Skills
+
+- [Auto Documentation](./05_auto_documentation_vn.skill.md) — Required: USER_GUIDE.md must exist first
+- [Local Deployment Spec](./08_local_deployment.skill.md) — For cross-platform installer builds
 
 ---
 
@@ -188,8 +190,9 @@ Sau khi đóng gói xong → Gửi file ZIP và `HUONG_DAN.md` cho người nh�
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-02-27 | Khởi tạo từ CVF-Compatible Skills intake |
+| 1.1.0 | 2026-02-27 | Translated to English; UAT path updated |
+| 1.0.0 | 2026-02-27 | Initial creation from CVF-Compatible Skills intake |
 
 ---
 
-*Portable App Packaging — CVF v1.5.2 Non-coder Workflow Skill Library*
+*Portable App Packaging — CVF v1.5.2 App Development Skill Library*

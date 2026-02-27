@@ -1,29 +1,29 @@
-# Project Init Checklist (Non-coder)
+# Project Init Checklist
 
 > **Domain:** App Development
 > **Difficulty:** ⭐ Easy
 > **CVF Version:** v1.5.2
-> **Skill Version:** 1.0.0
+> **Skill Version:** 1.1.0
 > **Last Updated:** 2026-02-27
 
 ---
 
 ## 📌 Prerequisites
 
-> Đây là skill đầu tiên trong mọi dự án — không có prerequisite.
-> Chạy TRƯỚC Phase A (Discovery).
+> This is the very first skill in any project — no prerequisites.
+> Run BEFORE Phase A (Discovery).
 
 ---
 
-## 🎯 Mục đích
+## 🎯 Purpose
 
-**Khi nào dùng skill này:**
-- Bắt đầu bất kỳ dự án mới nào với AI
-- Muốn đảm bảo mọi thứ sẵn sàng trước khi AI bắt đầu làm việc
-- Dùng như "bài kiểm tra sức khỏe" trước khi khởi động dự án CVF
+**When to use this skill:**
+- Starting any new project with AI
+- Want to ensure everything is ready before AI begins working
+- Use as a "health check" before launching a CVF project
 
-**Không phù hợp khi:**
-- Dự án đã đang chạy giữa chừng (bỏ qua và dùng Skills phù hợp ở phase hiện tại)
+**Not suitable when:**
+- Project is already mid-way through (skip and use the appropriate Skill for the current phase)
 
 ---
 
@@ -42,135 +42,137 @@
 
 ## ⛔ Execution Constraints
 
-- AI KHÔNG ĐƯỢC bắt đầu thảo luận nội dung dự án nếu chưa vượt qua ≥ 80% checklist
-- AI KHÔNG ĐƯỢC tự ý tick vào các ô thay cho User
-- AI PHẢI khởi tạo file `governance/THEO_DOI_TIEN_DO.md` sau khi User xác nhận "Checklist Pass"
+- AI MUST NOT begin discussing project content if fewer than 80% of checklist items are confirmed
+- AI MUST NOT tick checklist boxes on behalf of the User
+- AI MUST create a `governance/PROJECT_PROGRESS.md` tracking file after the User confirms "Checklist Pass"
 
 ---
 
 ## ✅ Validation Hooks
 
-- Check ≥ 80% checklist items được tick trước khi tiếp tục
-- Check User đã gõ "Checklist Pass" hoặc "Bắt đầu"
-- Check file `governance/THEO_DOI_TIEN_DO.md` được tạo
+- Check that ≥ 80% of checklist items are ticked before proceeding
+- Check that the User has typed "Checklist Pass" or "Begin"
+- Check that the `governance/PROJECT_PROGRESS.md` file is created
 
 ---
 
 ## 🧪 UAT Binding
 
-- UAT Record: `governance/skill-library/uat/results/UAT-non_coder_workflow-07_project_init_checklist.md`
-- UAT Objective: AI không được bắt đầu dự án khi checklist pass < 80%; phải tạo tracking file sau confirmation
+- UAT Record: `governance/skill-library/uat/results/UAT-app_development-07_project_init_checklist.md`
+- UAT Objective: AI must not start the project when checklist pass rate < 80%; it must create the tracking file after confirmation
 
 ---
 
 ## 📋 Form Input
 
-| Field | Mô tả | Bắt buộc | Ví dụ |
-|-------|-------|:--------:|-------|
-| **Tên dự án** | Tên ngắn gọn | ✅ | "FinanceTracker" |
-| **Mô tả 1 câu** | App làm gì | ✅ | "Theo dõi chi tiêu gia đình offline" |
-| **Hệ điều hành** | Máy tính đang dùng | ✅ | "Windows 11" |
-| **Python đã cài chưa** | Có / Không | ✅ | "Có — Python 3.11" |
+| Field | Description | Required | Example |
+|-------|-------------|:--------:|---------|
+| **Project Name** | Short, concise name | ✅ | "FinanceTracker" |
+| **One-line Description** | What the app does | ✅ | "Offline household expense tracker" |
+| **Operating System** | User's current machine | ✅ | "Windows 11" |
+| **Python Installed** | Yes / No | ✅ | "Yes — Python 3.11" |
 
 ---
 
 ## ✅ Expected Output
 
-**Checklist AI xuất ra cho User tích:**
+**Checklist generated for User to confirm:**
 
 ```markdown
 # ✅ CVF Project Init Checklist — FinanceTracker
 
-## 1. Nền tảng (Foundation)
-- [ ] Thư mục dự án đã tạo trên máy tính?
-- [ ] Thư mục `governance/` đã có trong thư mục dự án?
-- [ ] Python đã cài sẵn trên máy? (Hoặc AI có quyền thực thi?)
+## 1. Foundation
+- [ ] Project folder created on the computer?
+- [ ] `governance/` folder exists inside the project folder?
+- [ ] Python installed? (Or does AI have execution access?)
 
-## 2. Ý tưởng (The Vibe)
-- [ ] Bạn đã nói rõ app sẽ làm gì chưa?
-- [ ] Đây là dự án offline/local (không cần server)? ✅ Phù hợp CVF
-- [ ] Có yêu cầu đặc biệt về hệ điều hành không? (VD: chỉ chạy Windows)
+## 2. The Idea (The Vibe)
+- [ ] Have you clearly described what the app will do?
+- [ ] Is this an offline/local project (no server needed)? ✅ CVF-compatible
+- [ ] Any OS-specific requirements? (e.g., Windows only)
 
-## 3. Quy tắc CVF (Compliance)
-- [ ] Bạn đồng ý làm theo 4 bước: Khám phá → Thiết kế → Build → Kiểm tra?
-- [ ] Tôi sẽ dùng 🟢🟡🟠🔴 để báo mức độ rủi ro — bạn đồng ý?
+## 3. CVF Compliance
+- [ ] Do you agree to follow the 4 steps: Discovery → Design → Build → Review?
+- [ ] I will use 🟢🟡🟠🔴 to indicate risk levels — do you agree?
 
 ---
-Kết quả: [X]/8 items ✅
+Result: [X]/8 items ✅
 
-Gõ **"Checklist Pass"** để bắt đầu, hoặc cho tôi biết item nào chưa sẵn sàng.
+Type **"Checklist Pass"** to begin, or let me know which item is not ready.
 ```
 
-**Sau khi User xác nhận — tạo file tracking:**
+**After User confirms — create tracking file:**
 ```markdown
-# THEO DÕI TIẾN ĐỘ — FinanceTracker
-Ngày bắt đầu: 2026-02-27
-Phase hiện tại: A — Discovery
-Trạng thái: 🟢 Đang làm
+# PROJECT PROGRESS — FinanceTracker
+Start date: 2026-02-27
+Current phase: A — Discovery
+Status: 🟢 In Progress
 ```
 
 ---
 
-## 🔍 Cách đánh giá
+## 🔍 Evaluation Criteria
 
-**Checklist Accept:**
-- [ ] 8 items checklist đủ và rõ ràng
-- [ ] Hiển thị số đã tick: "[X]/8 items"
-- [ ] Có hướng dẫn rõ cách xác nhận ("Gõ Checklist Pass")
-- [ ] File `THEO_DOI_TIEN_DO.md` được tạo sau xác nhận
+**Accept Checklist:**
+- [ ] All 8 checklist items present and clear
+- [ ] Current tally shown: "[X]/8 items"
+- [ ] Clear confirmation instruction ("Type Checklist Pass")
+- [ ] `PROJECT_PROGRESS.md` created after confirmation
 
-**Red flags (Reject):**
-- ⚠️ AI bắt đầu hỏi về spec khi checklist chưa pass
-- ⚠️ AI tự tick vào ô thay cho User
-- ⚠️ Không tạo tracking file sau confirmation
+**Red Flags (Reject):**
+- ⚠️ AI starts asking about spec while checklist has not passed
+- ⚠️ AI ticks boxes on behalf of the User
+- ⚠️ Tracking file not created after confirmation
 
 ---
 
 ## ⚠️ Common Failures
 
-| Lỗi thường gặp | Cách phòng tránh |
-|----------------|-----------------|
-| Bỏ qua checklist vì User vội | Nhắc nhẹ: "Chỉ tốn 2 phút, giúp tránh vấn đề sau này" |
-| User không biết tạo thư mục governance | Hướng dẫn từng bước: "Bấm chuột phải → New Folder → đặt tên governance" |
+| Common Error | Prevention |
+|---|---|
+| Skipping checklist because User is in a hurry | Gently remind: "This takes only 2 minutes and prevents problems later" |
+| User doesn't know how to create governance folder | Guide step by step: "Right-click → New Folder → name it governance" |
 
 ---
 
 ## 💡 Tips
 
-1. **Nhanh nhưng đúng** — Checklist chỉ mất 2 phút nhưng tránh được nhiều lỗi sau
-2. **Tracking file là bộ nhớ** — Luôn cập nhật `THEO_DOI_TIEN_DO.md` sau mỗi phase
-3. **Offline-first** — CVF hoạt động tốt nhất với dự án local, không cần server
-4. **≥ 80% là đủ** — Không cần 100% hoàn hảo để bắt đầu
+1. **Quick but correct** — The checklist takes only 2 minutes but prevents many downstream issues
+2. **Tracking file is memory** — Always update `PROJECT_PROGRESS.md` after each phase
+3. **Offline-first** — CVF works best with local projects, no server required
+4. **≥ 80% is enough** — No need for 100% perfection to begin
 
 ---
 
-## 📊 Ví dụ thực tế
+## 📊 Example
 
-### Input mẫu:
+### Sample Input:
 ```
-Tên dự án: "SalesTracker"
-Mô tả: "Theo dõi doanh số nhân viên bán hàng"
-Hệ điều hành: Windows 11
-Python: Đã cài Python 3.11
+Project Name: "SalesTracker"
+Description: "Track sales rep performance"
+Operating System: Windows 11
+Python: Python 3.11 installed
 ```
 
-### Output mẫu:
-- Checklist 8 items hiện ra
-- User tick 7/8 (bỏ qua "thư mục governance" chưa tạo)
-- AI hướng dẫn tạo thư mục governance (30 giây)
-- User gõ "Checklist Pass" → file `THEO_DOI_TIEN_DO.md` được tạo
-- **Kết quả: ACCEPT** — Bắt đầu Phase A
+### Sample Output:
+- 8-item checklist displayed
+- User ticks 7/8 (skipped: governance folder not yet created)
+- AI guides User to create folder (30 seconds)
+- User types "Checklist Pass" → `PROJECT_PROGRESS.md` created
+- **Result: ACCEPT** — Begin Phase A
 
 ---
 
 ## 🔗 Next Step
 
-Sau khi Checklist Pass → [Vibe-to-Spec Translator](./01_vibe_to_spec.skill.md) — bắt đầu Phase A
+After Checklist Pass → [Vibe-to-Spec Translator](./01_vibe_to_spec.skill.md) — begin Phase A
 
 ---
 
-## 🔗 Related Skills — Skill đầu tiên trong Phase A
-- [App Requirements Spec](../app_development/01_app_requirements_spec.skill.md) — Bước tiếp theo sau Init
+## 🔗 Related Skills
+
+- [Vibe-to-Spec Translator](./01_vibe_to_spec.skill.md) — First skill to use in Phase A
+- [App Requirements Spec](./01_app_requirements_spec.skill.md) — Next step after init
 
 ---
 
@@ -178,8 +180,9 @@ Sau khi Checklist Pass → [Vibe-to-Spec Translator](./01_vibe_to_spec.skill.md)
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-02-27 | Khởi tạo từ CVF-Compatible Skills intake |
+| 1.1.0 | 2026-02-27 | Translated to English; UAT path updated; tracking file renamed to PROJECT_PROGRESS.md |
+| 1.0.0 | 2026-02-27 | Initial creation from CVF-Compatible Skills intake |
 
 ---
 
-*Project Init Checklist — CVF v1.5.2 Non-coder Workflow Skill Library*
+*Project Init Checklist — CVF v1.5.2 App Development Skill Library*

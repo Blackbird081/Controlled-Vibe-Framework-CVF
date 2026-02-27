@@ -87,11 +87,17 @@ export const templateToSkillMap: Record<string, SkillRef> = {
     'data_analysis_wizard': { domain: 'finance_analytics', skillId: '01_budget_analysis' },
     'data_analysis': { domain: 'finance_analytics', skillId: '01_budget_analysis' },
 
-    // === New skills added to existing domains ===
-    // Financial Trend Predictor → linked from data_analysis template (new unique key)
-    'data_analysis_finance': { domain: 'finance_analytics', skillId: '09_financial_trend_predictor' },
-    // Grandma UX Test → linked from new unique key (existing ux_heuristic_evaluation kept as-is above)
+    // === New skills added v1.1.0 — 6 confirmed bridges ===
+    // Vibe workflow templates → app_development skills
+    'vibe_to_spec': { domain: 'app_development', skillId: '01_vibe_to_spec' },
+    'vibe_logic_mapping': { domain: 'app_development', skillId: '02_vibe_logic_mapping' },
+    'non_coder_debug': { domain: 'app_development', skillId: '03_non_coder_debug' },
+    'auto_documentation': { domain: 'app_development', skillId: '05_auto_documentation_vn' },
+    'project_init_checklist': { domain: 'app_development', skillId: '07_project_init_checklist' },
+    // Grandma UX Test → product_ux
     'grandma_ux_test': { domain: 'product_ux', skillId: '04_grandma_ux_test' },
+    // Financial Trend Predictor → finance_analytics (unique key)
+    'data_analysis_finance': { domain: 'finance_analytics', skillId: '09_financial_trend_predictor' },
 };
 
 /**

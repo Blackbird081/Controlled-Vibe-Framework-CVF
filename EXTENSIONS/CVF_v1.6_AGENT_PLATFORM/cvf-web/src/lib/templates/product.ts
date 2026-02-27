@@ -242,4 +242,34 @@ SUCCESS CRITERIA:
 - Personalization opportunities`,
         outputExpected: ['Onboarding Assessment', 'Friction Points', 'Optimization Recommendations', 'Metrics to Track'],
     },
+    {
+        id: 'grandma_ux_test',
+        name: 'Grandma UX Test',
+        icon: '👵',
+        description: 'Non-technical UX review — can a 60-year-old grandma use your app? Tests simplicity, clarity, and button design.',
+        category: 'product',
+        difficulty: 'easy',
+        fields: [
+            { id: 'appDescription', type: 'textarea', label: 'App Description', placeholder: 'e.g. "Household expense tracker for homemakers"', required: true, rows: 2, section: 'required', hint: 'What does the app do and who is it for?', example: 'Medication reminder app for elderly users — reminds them daily and tracks compliance' },
+            { id: 'coreFeatures', type: 'textarea', label: 'Core Features to Test', placeholder: 'e.g. "Record expense, view monthly report"', required: true, rows: 3, section: 'required', hint: 'The most common tasks users perform — these will be tested for clarity', example: 'Set a reminder, mark medication as taken, view history' },
+            { id: 'uiDescription', type: 'textarea', label: 'UI Description (optional)', placeholder: 'e.g. "Left sidebar, data table in center, big green button on top"', required: false, rows: 2, section: 'advanced', hint: 'Brief description of the current interface layout', example: 'Top navigation with icons, medication list below, large colored buttons for each action' },
+        ],
+        intentPattern: `INTENT:
+Apply CVF Skill: Grandma UX Test
+
+APP: [appDescription]
+UI: [uiDescription]
+
+CORE FEATURES TO TEST:
+[coreFeatures]
+
+OUTPUT REQUIREMENTS:
+- Generate a Grandma UX Test Report with exactly 3 Quick Start steps (each ≤ 2 sentences)
+- Evaluate each UX rule: button size/color, language clarity, status feedback
+- Classify issues as: Must Fix | Should Fix | Optional
+- Include an overall UX Score out of 10
+- NO technical jargon (no "component", "state", "render", "API")
+- Ask: "Could a 60-year-old grandma do this on her own?"`,
+        outputExpected: ['3-Step Quick Start', 'UX Evaluation by category', 'Prioritized Issue List', 'UX Score /10'],
+    },
 ];

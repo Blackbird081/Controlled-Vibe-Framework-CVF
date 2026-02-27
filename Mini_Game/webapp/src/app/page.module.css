@@ -3,6 +3,15 @@
   --game-accent: #ffb300;
   --game-soft: #dff1ff;
   --game-deep: #124f86;
+  --age-bg:
+    radial-gradient(circle at 14% 8%, rgba(255, 255, 255, 0.7), transparent 34%),
+    linear-gradient(160deg, #d5ecff 0%, #edf6ff 48%, #f8fbff 100%);
+  --age-orb-a: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(120, 204, 255, 0.22) 60%, transparent 100%);
+  --age-orb-b: radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.88), rgba(255, 190, 73, 0.24) 58%, transparent 100%);
+  --age-card-radius: 22px;
+  --age-answer-height: 66px;
+  --age-answer-font: 1.18rem;
+  background: var(--age-bg);
   position: relative;
   min-height: 100dvh;
   padding: 26px 18px 40px;
@@ -30,6 +39,40 @@
   --game-deep: #7d1e46;
 }
 
+.page[data-age="age_5_6"] {
+  --age-bg:
+    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.88), transparent 28%),
+    radial-gradient(circle at 86% 10%, rgba(255, 242, 190, 0.78), transparent 34%),
+    linear-gradient(165deg, #dff8ff 0%, #f8e8ff 54%, #fff6d8 100%);
+  --age-orb-a: radial-gradient(circle at 35% 26%, rgba(255, 255, 255, 0.95), rgba(255, 166, 215, 0.24) 58%, transparent 100%);
+  --age-orb-b: radial-gradient(circle at 68% 54%, rgba(255, 255, 255, 0.92), rgba(104, 194, 255, 0.26) 56%, transparent 100%);
+  --age-card-radius: 28px;
+  --age-answer-height: 76px;
+  --age-answer-font: 1.25rem;
+}
+
+.page[data-age="age_7_8"] {
+  --age-bg:
+    radial-gradient(circle at 14% 10%, rgba(255, 255, 255, 0.74), transparent 32%),
+    linear-gradient(155deg, #d4efff 0%, #e9f9ff 50%, #f4f8ff 100%);
+  --age-orb-a: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.92), rgba(120, 204, 255, 0.24) 60%, transparent 100%);
+  --age-orb-b: radial-gradient(circle at 70% 52%, rgba(255, 255, 255, 0.9), rgba(255, 190, 73, 0.2) 58%, transparent 100%);
+  --age-card-radius: 22px;
+  --age-answer-height: 68px;
+  --age-answer-font: 1.18rem;
+}
+
+.page[data-age="age_9_10"] {
+  --age-bg:
+    radial-gradient(circle at 15% 12%, rgba(255, 255, 255, 0.6), transparent 35%),
+    linear-gradient(150deg, #cde5ff 0%, #e7f1ff 45%, #f3f7ff 100%);
+  --age-orb-a: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.86), rgba(96, 153, 255, 0.26) 58%, transparent 100%);
+  --age-orb-b: radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.84), rgba(95, 235, 255, 0.2) 58%, transparent 100%);
+  --age-card-radius: 18px;
+  --age-answer-height: 62px;
+  --age-answer-font: 1.08rem;
+}
+
 .page::before,
 .page::after {
   content: "";
@@ -44,7 +87,7 @@
   height: 340px;
   top: -120px;
   left: -80px;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(120, 204, 255, 0.22) 60%, transparent 100%);
+  background: var(--age-orb-a);
   animation: floatBlob 7.5s ease-in-out infinite;
 }
 
@@ -53,7 +96,7 @@
   height: 300px;
   right: -90px;
   top: 160px;
-  background: radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.88), rgba(255, 190, 73, 0.24) 58%, transparent 100%);
+  background: var(--age-orb-b);
   animation: floatBlob 9s ease-in-out infinite reverse;
 }
 
@@ -96,7 +139,7 @@
   position: relative;
   overflow: hidden;
   border: 2px solid color-mix(in srgb, var(--game-primary) 62%, white);
-  border-radius: 22px;
+  border-radius: var(--age-card-radius);
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.98) 0%, color-mix(in srgb, var(--game-soft) 76%, white) 100%);
   box-shadow: 0 20px 42px rgba(14, 62, 106, 0.18);
   padding: 22px;
@@ -124,6 +167,34 @@
   margin: 12px 0 0;
   color: color-mix(in srgb, var(--game-deep) 85%, #18344f);
   font-size: 1.08rem;
+}
+
+.page[data-age="age_5_6"] .heroCard h1 {
+  letter-spacing: 0.01em;
+}
+
+.page[data-age="age_5_6"] .chip {
+  box-shadow: 0 8px 16px rgba(122, 180, 255, 0.2);
+}
+
+.page[data-age="age_5_6"] .questionCard,
+.page[data-age="age_5_6"] .arcadeCard,
+.page[data-age="age_5_6"] .questCard {
+  box-shadow: 0 16px 28px rgba(57, 120, 173, 0.16);
+}
+
+.page[data-age="age_9_10"] .heroCard,
+.page[data-age="age_9_10"] .playgroundWrap,
+.page[data-age="age_9_10"] .questionCard {
+  box-shadow: 0 16px 28px rgba(12, 52, 93, 0.2);
+}
+
+.page[data-age="age_9_10"] .tabCard {
+  border-style: solid;
+}
+
+.page[data-age="age_9_10"] .answerButton {
+  border-radius: 14px;
 }
 
 .heroMeta {
@@ -290,7 +361,7 @@
   position: relative;
   min-height: 204px;
   border: 2px solid color-mix(in srgb, var(--game-primary) 68%, #ffffff);
-  border-radius: 22px;
+  border-radius: var(--age-card-radius);
   overflow: hidden;
   background:
     radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.38), transparent 35%),
@@ -594,7 +665,7 @@
 .questionCard {
   position: relative;
   overflow: hidden;
-  border-radius: 20px;
+  border-radius: calc(var(--age-card-radius) - 2px);
   border: 2px solid color-mix(in srgb, var(--game-primary) 60%, white);
   background:
     radial-gradient(circle at 85% 12%, rgba(255, 255, 255, 0.35), transparent 32%),
@@ -878,8 +949,8 @@
   border: 2px solid color-mix(in srgb, var(--game-primary) 54%, white);
   background: linear-gradient(180deg, #ffffff, color-mix(in srgb, var(--game-soft) 62%, white));
   color: color-mix(in srgb, var(--game-deep) 88%, #113450);
-  min-height: 66px;
-  font-size: 1.18rem;
+  min-height: var(--age-answer-height);
+  font-size: var(--age-answer-font);
   font-weight: 900;
   cursor: pointer;
   padding: 0 14px;

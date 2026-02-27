@@ -791,7 +791,7 @@ export default function Home() {
 
   if (!hydrated) {
     return (
-      <main id="cvf-game-root" className={styles.page} data-game="math">
+      <main id="cvf-game-root" className={styles.page} data-game="math" data-age={ageGroup}>
         <div className={styles.frame}>
           <section className={styles.heroCard}>{pickLanguageText(language, "Dang tai du lieu game...", "Loading game data...")}</section>
         </div>
@@ -879,7 +879,7 @@ export default function Home() {
   };
 
   return (
-    <main id="cvf-game-root" className={styles.page} data-game={activeGame}>
+    <main id="cvf-game-root" className={styles.page} data-game={activeGame} data-age={ageGroup}>
       {showOnboarding ? (
         <div className={styles.onboardingBackdrop} role="dialog" aria-modal="true">
           <section className={styles.onboardingCard}>

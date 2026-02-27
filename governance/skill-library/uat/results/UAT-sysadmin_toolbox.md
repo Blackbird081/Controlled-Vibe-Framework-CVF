@@ -1,4 +1,4 @@
-# UAT RECORD — Y Admin Toolbox
+# UAT RECORD — Sysadmin Toolbox
 
 > **Skill ID:** sysadmin_toolbox  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | sysadmin_toolbox |
-| Skill Name | Y Admin Toolbox |
+| Skill Name | Sysadmin Toolbox |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-sysadmin_toolbox.md |
 | Risk Level (from record) | R1 |

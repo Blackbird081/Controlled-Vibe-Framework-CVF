@@ -1,4 +1,4 @@
-# UAT RECORD — Devop Trouble Hooter
+# UAT RECORD — Devops Troubleshooter
 
 > **Skill ID:** devops_troubleshooter  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | devops_troubleshooter |
-| Skill Name | Devop Trouble Hooter |
+| Skill Name | Devops Troubleshooter |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-devops_troubleshooter.md |
 | Risk Level (from record) | R1 |

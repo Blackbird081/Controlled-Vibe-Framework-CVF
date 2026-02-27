@@ -1,4 +1,4 @@
-# UAT RECORD — Octocode Re Earch
+# UAT RECORD — Octocode Research
 
 > **Skill ID:** octocode_research  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | octocode_research |
-| Skill Name | Octocode Re Earch |
+| Skill Name | Octocode Research |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-octocode_research.md |
 | Risk Level (from record) | R1 |

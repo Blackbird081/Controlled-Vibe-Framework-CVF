@@ -1,4 +1,4 @@
-# UAT RECORD — Tidb Te T Guideline
+# UAT RECORD — Tidb Test Guidelines
 
 > **Skill ID:** tidb_test_guidelines  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | tidb_test_guidelines |
-| Skill Name | Tidb Te T Guideline |
+| Skill Name | Tidb Test Guidelines |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-tidb_test_guidelines.md |
 | Risk Level (from record) | R1 |

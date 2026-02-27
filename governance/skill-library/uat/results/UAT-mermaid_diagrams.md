@@ -1,4 +1,4 @@
-# UAT RECORD — Mermaid Diagram
+# UAT RECORD — Mermaid Diagrams
 
 > **Skill ID:** mermaid_diagrams  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | mermaid_diagrams |
-| Skill Name | Mermaid Diagram |
+| Skill Name | Mermaid Diagrams |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-mermaid_diagrams.md |
 | Risk Level (from record) | R1 |

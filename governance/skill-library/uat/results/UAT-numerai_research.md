@@ -1,4 +1,4 @@
-# UAT RECORD — Numerai Re Earch
+# UAT RECORD — Numerai Research
 
 > **Skill ID:** numerai_research  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | numerai_research |
-| Skill Name | Numerai Re Earch |
+| Skill Name | Numerai Research |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-numerai_research.md |
 | Risk Level (from record) | R1 |

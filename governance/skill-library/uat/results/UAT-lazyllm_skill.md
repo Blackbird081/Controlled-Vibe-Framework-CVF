@@ -1,4 +1,4 @@
-# UAT RECORD — Lazyllm Kill
+# UAT RECORD — Lazyllm Skill
 
 > **Skill ID:** lazyllm_skill  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | lazyllm_skill |
-| Skill Name | Lazyllm Kill |
+| Skill Name | Lazyllm Skill |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-lazyllm_skill.md |
 | Risk Level (from record) | R1 |

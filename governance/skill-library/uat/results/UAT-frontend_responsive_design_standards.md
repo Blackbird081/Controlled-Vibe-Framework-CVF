@@ -1,4 +1,4 @@
-# UAT RECORD — Frontend Re Pon Ive De Ign Tandard
+# UAT RECORD — Frontend Responsive Design Standards
 
 > **Skill ID:** frontend_responsive_design_standards  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | frontend_responsive_design_standards |
-| Skill Name | Frontend Re Pon Ive De Ign Tandard |
+| Skill Name | Frontend Responsive Design Standards |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-frontend_responsive_design_standards.md |
 | Risk Level (from record) | R1 |

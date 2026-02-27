@@ -1,4 +1,4 @@
-# UAT RECORD — Lite Tream
+# UAT RECORD — Litestream
 
 > **Skill ID:** litestream  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | litestream |
-| Skill Name | Lite Tream |
+| Skill Name | Litestream |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-litestream.md |
 | Risk Level (from record) | R1 |

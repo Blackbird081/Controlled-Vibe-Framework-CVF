@@ -1,4 +1,4 @@
-# UAT RECORD — Frontend De Ign
+# UAT RECORD — Frontend Design
 
 > **Skill ID:** frontend_design  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | frontend_design |
-| Skill Name | Frontend De Ign |
+| Skill Name | Frontend Design |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-frontend_design.md |
 | Risk Level (from record) | R1 |

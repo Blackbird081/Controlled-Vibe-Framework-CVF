@@ -1,4 +1,4 @@
-# UAT RECORD — Update Doc
+# UAT RECORD — Update Docs
 
 > **Skill ID:** update_docs  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | update_docs |
-| Skill Name | Update Doc |
+| Skill Name | Update Docs |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-update_docs.md |
 | Risk Level (from record) | R1 |

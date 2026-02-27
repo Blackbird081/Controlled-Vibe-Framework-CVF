@@ -1,4 +1,4 @@
-# UAT RECORD — Etup Time Caledb Hypertable
+# UAT RECORD — Setup Timescaledb Hypertables
 
 > **Skill ID:** setup_timescaledb_hypertables  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | setup_timescaledb_hypertables |
-| Skill Name | Etup Time Caledb Hypertable |
+| Skill Name | Setup Timescaledb Hypertables |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-setup_timescaledb_hypertables.md |
 | Risk Level (from record) | R1 |

@@ -1,4 +1,4 @@
-# UAT RECORD — Bu Ine Competitor Analy I
+# UAT RECORD — Business Competitor Analysis
 
 > **Skill ID:** business_competitor_analysis  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | business_competitor_analysis |
-| Skill Name | Bu Ine Competitor Analy I |
+| Skill Name | Business Competitor Analysis |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-business_competitor_analysis.md |
 | Risk Level (from record) | R1 |

@@ -1,4 +1,4 @@
-# UAT RECORD — Bu Ine Plan
+# UAT RECORD — Business Plan
 
 > **Skill ID:** business_plan  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | business_plan |
-| Skill Name | Bu Ine Plan |
+| Skill Name | Business Plan |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-business_plan.md |
 | Risk Level (from record) | R1 |

@@ -1,4 +1,4 @@
-# UAT RECORD — Dev Brow Er
+# UAT RECORD — Dev Browser
 
 > **Skill ID:** dev_browser  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | dev_browser |
-| Skill Name | Dev Brow Er |
+| Skill Name | Dev Browser |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-dev_browser.md |
 | Risk Level (from record) | R1 |

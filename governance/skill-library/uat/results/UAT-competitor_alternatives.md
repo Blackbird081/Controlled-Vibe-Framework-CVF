@@ -1,4 +1,4 @@
-# UAT RECORD — Competitor Alternative
+# UAT RECORD — Competitor Alternatives
 
 > **Skill ID:** competitor_alternatives  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | competitor_alternatives |
-| Skill Name | Competitor Alternative |
+| Skill Name | Competitor Alternatives |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-competitor_alternatives.md |
 | Risk Level (from record) | R1 |

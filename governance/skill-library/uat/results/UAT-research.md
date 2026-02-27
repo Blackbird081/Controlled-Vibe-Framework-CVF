@@ -1,4 +1,4 @@
-# UAT RECORD — Re Earch
+# UAT RECORD — Research
 
 > **Skill ID:** research  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | research |
-| Skill Name | Re Earch |
+| Skill Name | Research |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-research.md |
 | Risk Level (from record) | R1 |

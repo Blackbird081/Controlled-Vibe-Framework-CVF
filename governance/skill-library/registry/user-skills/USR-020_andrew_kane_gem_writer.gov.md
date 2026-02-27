@@ -22,8 +22,6 @@
 | Allowed Phases | Discovery, Design |
 | Decision Scope | Tactical |
 | Autonomy | Auto + Audit |
-| Origin | 📥 IMPORTED |
-| Origin Source | awesome-cursorrules |
 
 ---
 
@@ -38,37 +36,3 @@
 - [ ] Actions outside authority
 - [ ] Missing required validation
 - [ ] Hallucinated information
-
----
-
-## Spec Score
-
-| Metric | Value |
-|--------|-------|
-| Score | 88/100 |
-| Quality | ✅ Excellent |
-| Gate | PASS |
-
-**Section Breakdown:**
-
-| Section | Points | Status |
-|---------|--------|--------|
-| constraints | 13.5/15 | ✅ PASS |
-| example | 8.5/10 | ✅ PASS |
-| expected_output | 14.0/20 | ⚠️ WEAK |
-| form_input | 25.0/25 | ✅ PASS |
-| purpose | 15.0/15 | ✅ PASS |
-| validation | 12.0/15 | ✅ PASS |
-
-**Improvements:** Too brief (13/30 words)
-
----
-
-## Version Lock
-
-| Field | Value |
-|-------|-------|
-| Skill Version | 1.0.0 |
-| Skill Hash | 668a1d |
-| Locked At | 2026-02-08 |
-| Lock Status | ✅ SYNCED |

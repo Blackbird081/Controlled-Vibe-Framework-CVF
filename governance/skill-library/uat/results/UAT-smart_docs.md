@@ -1,4 +1,4 @@
-# UAT RECORD — Mart Doc
+# UAT RECORD — Smart Docs
 
 > **Skill ID:** smart_docs  
 > **Skill Version:** 1.0.0  
@@ -14,7 +14,7 @@ This UAT session is bound to the following Skill Mapping Record:
 | Field | Value |
 |-------|-------|
 | Skill ID | smart_docs |
-| Skill Name | Mart Doc |
+| Skill Name | Smart Docs |
 | Skill Version | 1.0.0 |
 | Mapping Record Reference | ../../registry/mapping-records/SKILL-smart_docs.md |
 | Risk Level (from record) | R1 |

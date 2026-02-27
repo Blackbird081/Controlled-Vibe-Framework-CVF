@@ -1,6 +1,6 @@
 {
   "generated": "2026-02-07",
-  "total": 124,
+  "total": 149,
   "skills": [
     {
       "skill_id": "01_app_requirements_spec",
@@ -8,11 +8,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.1.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "01_budget_analysis",
@@ -20,11 +23,14 @@
       "domain": "Finance & Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "01_code_review",
@@ -32,11 +38,14 @@
       "domain": "Technical Review",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "01_contract_review",
@@ -44,11 +53,14 @@
       "domain": "Legal & Contracts",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "01_documentation",
@@ -56,11 +68,14 @@
       "domain": "Content Creation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "01_job_description",
@@ -68,11 +83,14 @@
       "domain": "HR & Operations",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "01_landing_page",
@@ -80,11 +98,14 @@
       "domain": "Web Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "01_model_selection",
@@ -92,11 +113,14 @@
       "domain": "AI/ML Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "01_strategy_analysis",
@@ -104,11 +128,29 @@
       "domain": "Business Analysis",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "01_vibe_to_spec",
+      "title": "UAT RECORD — Vibe-to-Spec Translator",
+      "domain": "Non-coder Workflow",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "02_architecture_review",
@@ -116,11 +158,14 @@
       "domain": "Technical Review",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "02_financial_statement_review",
@@ -128,11 +173,14 @@
       "domain": "Finance & Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "02_interview_evaluation",
@@ -140,11 +188,14 @@
       "domain": "HR & Operations",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "02_nda_template",
@@ -152,11 +203,14 @@
       "domain": "Legal & Contracts",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "02_prompt_evaluation",
@@ -164,11 +218,14 @@
       "domain": "AI/ML Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "02_report_writing",
@@ -176,11 +233,14 @@
       "domain": "Content Creation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "02_risk_assessment",
@@ -188,11 +248,14 @@
       "domain": "Business Analysis",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "02_saas_app",
@@ -200,11 +263,14 @@
       "domain": "Web Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "02_tech_stack_selection",
@@ -212,11 +278,29 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.1.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "02_vibe_logic_mapping",
+      "title": "UAT RECORD — Vibe Logic Mapping",
+      "domain": "Non-coder Workflow",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "03_architecture_design",
@@ -224,11 +308,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.1.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "03_dashboard",
@@ -236,11 +323,14 @@
       "domain": "Web Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "03_market_research",
@@ -248,11 +338,29 @@
       "domain": "Business Analysis",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "03_non_coder_debug",
+      "title": "UAT RECORD — Non-coder Debug",
+      "domain": "Non-coder Workflow",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "03_output_quality_check",
@@ -260,11 +368,14 @@
       "domain": "AI/ML Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "03_performance_review",
@@ -272,11 +383,14 @@
       "domain": "HR & Operations",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "03_presentation",
@@ -284,11 +398,14 @@
       "domain": "Content Creation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "03_roi_calculator_review",
@@ -296,11 +413,14 @@
       "domain": "Finance & Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "03_security_audit",
@@ -308,11 +428,14 @@
       "domain": "Technical Review",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "03_terms_of_service",
@@ -320,11 +443,14 @@
       "domain": "Legal & Contracts",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "04_bias_detection",
@@ -332,11 +458,14 @@
       "domain": "AI/ML Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "04_blog_docs",
@@ -344,11 +473,14 @@
       "domain": "Web Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "04_compliance_checklist",
@@ -356,11 +488,14 @@
       "domain": "Legal & Contracts",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "04_database_schema_design",
@@ -368,11 +503,29 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.1.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "04_grandma_ux_test",
+      "title": "UAT RECORD — Grandma UX Test",
+      "domain": "Non-coder Workflow",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "04_kpi_dashboard_audit",
@@ -380,11 +533,14 @@
       "domain": "Finance & Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "04_onboarding_checklist",
@@ -392,11 +548,14 @@
       "domain": "HR & Operations",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "05_api_design_spec",
@@ -404,11 +563,29 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.1.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "05_auto_documentation_vn",
+      "title": "UAT RECORD — Auto Documentation (Vietnamese)",
+      "domain": "Non-coder Workflow",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "05_cash_flow_analysis",
@@ -416,11 +593,14 @@
       "domain": "Finance & Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "05_cost_optimization",
@@ -428,11 +608,14 @@
       "domain": "AI/ML Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "05_ip_protection",
@@ -440,11 +623,14 @@
       "domain": "Legal & Contracts",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "05_policy_documentation",
@@ -452,11 +638,14 @@
       "domain": "HR & Operations",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "05_portfolio",
@@ -464,11 +653,14 @@
       "domain": "Web Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "06_ai_use_case_fit",
@@ -476,11 +668,29 @@
       "domain": "AI/ML Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "06_chart_data_visualization",
+      "title": "UAT RECORD — Chart & Data Visualization",
+      "domain": "Web Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "06_desktop_app_spec",
@@ -488,11 +698,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.1.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "06_investment_due_diligence",
@@ -500,11 +713,29 @@
       "domain": "Finance & Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "06_portable_packaging",
+      "title": "UAT RECORD — Portable App Packaging",
+      "domain": "Non-coder Workflow",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "07_cli_tool_spec",
@@ -512,11 +743,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.1.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "07_financial_risk_assessment",
@@ -524,11 +758,44 @@
       "domain": "Finance & Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "07_landing_page_pattern",
+      "title": "UAT RECORD — Landing Page Pattern",
+      "domain": "Web Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "07_project_init_checklist",
+      "title": "UAT RECORD — Project Init Checklist (Non-coder)",
+      "domain": "Non-coder Workflow",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "08_local_deployment",
@@ -536,11 +803,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.1.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "08_revenue_forecast_review",
@@ -548,11 +818,89 @@
       "domain": "Finance & Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "08_web_aria_keyboard_audit",
+      "title": "UAT RECORD — Web ARIA & Keyboard Audit",
+      "domain": "Web Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "09_css_animation_performance",
+      "title": "UAT RECORD — CSS Animation & Performance",
+      "domain": "Web Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "09_financial_trend_predictor",
+      "title": "UAT RECORD — Financial Trend Predictor",
+      "domain": "Finance & Analytics",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "10_react_performance_audit",
+      "title": "UAT RECORD — React Performance Audit",
+      "domain": "Web Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "11_icon_system_review",
+      "title": "UAT RECORD — Icon System Review",
+      "domain": "Web Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "ab_test_review",
@@ -560,11 +908,14 @@
       "domain": "Product & UX",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "accessibility_audit",
@@ -572,11 +923,14 @@
       "domain": "Product & UX",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "adaptyv",
@@ -584,11 +938,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "andrew_kane_gem_writer",
@@ -596,11 +953,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "api_security_checklist",
@@ -608,11 +968,14 @@
       "domain": "Security & Compliance",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "architecture_paradigm_microservices",
@@ -620,11 +983,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "backend_dev_guidelines",
@@ -632,11 +998,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "backend_development",
@@ -644,11 +1013,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "brand_voice_consistency",
@@ -656,11 +1028,14 @@
       "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "building_with_google_adk",
@@ -668,35 +1043,44 @@
       "domain": "Ai Ml Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "business_competitor_analysis",
-      "title": "UAT RECORD — Bu Ine Competitor Analy I",
+      "title": "UAT RECORD — Business Competitor Analysis",
       "domain": "Business Analysis",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "business_plan",
-      "title": "UAT RECORD — Bu Ine Plan",
+      "title": "UAT RECORD — Business Plan",
       "domain": "Business Analysis",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "ccxt_php",
@@ -704,23 +1088,44 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "color_palette_generator",
+      "title": "UAT RECORD — Color Palette Generator",
+      "domain": "Product & UX",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "competitor_alternatives",
-      "title": "UAT RECORD — Competitor Alternative",
+      "title": "UAT RECORD — Competitor Alternatives",
       "domain": "Product Ux",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "competitor_analysis",
@@ -728,11 +1133,14 @@
       "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "component_refactoring",
@@ -740,11 +1148,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "content_creator",
@@ -752,11 +1163,14 @@
       "domain": "Marketing Seo",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "content_quality_checklist",
@@ -764,11 +1178,29 @@
       "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "conversion_landing_optimizer",
+      "title": "UAT RECORD — Conversion Landing Optimizer",
+      "domain": "Marketing & SEO",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "copywriting_evaluation",
@@ -776,11 +1208,14 @@
       "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "create_database_migration",
@@ -788,11 +1223,29 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "dark_light_mode_audit",
+      "title": "UAT RECORD — Dark/Light Mode Audit",
+      "domain": "Product & UX",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "data_context_extractor",
@@ -800,11 +1253,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "data_handling_review",
@@ -812,35 +1268,59 @@
       "domain": "Security & Compliance",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "design_system_generator",
+      "title": "UAT RECORD — Design System Generator",
+      "domain": "Product & UX",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "dev_browser",
-      "title": "UAT RECORD — Dev Brow Er",
+      "title": "UAT RECORD — Dev Browser",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "devops_troubleshooter",
-      "title": "UAT RECORD — Devop Trouble Hooter",
+      "title": "UAT RECORD — Devops Troubleshooter",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "doc_coauthoring",
@@ -848,11 +1328,14 @@
       "domain": "Content Creation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "dyadmulti_pr_review",
@@ -860,11 +1343,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "dynamic",
@@ -872,11 +1358,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "email_campaign_review",
@@ -884,11 +1373,14 @@
       "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "error_handling_ux",
@@ -896,11 +1388,14 @@
       "domain": "Product & UX",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "excel_report_generator",
@@ -908,11 +1403,14 @@
       "domain": "Business Analysis",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "feature_prioritization",
@@ -920,11 +1418,14 @@
       "domain": "Product & UX",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "finance_manager",
@@ -932,35 +1433,44 @@
       "domain": "Finance Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "frontend_design",
-      "title": "UAT RECORD — Frontend De Ign",
+      "title": "UAT RECORD — Frontend Design",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "frontend_responsive_design_standards",
-      "title": "UAT RECORD — Frontend Re Pon Ive De Ign Tandard",
+      "title": "UAT RECORD — Frontend Responsive Design Standards",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "gdpr_compliance_review",
@@ -968,11 +1478,14 @@
       "domain": "Security & Compliance",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "healthcheck",
@@ -980,11 +1493,14 @@
       "domain": "Security Compliance",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "hooked_ux",
@@ -992,11 +1508,14 @@
       "domain": "Product Ux",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "hugging_face_model_trainer",
@@ -1004,11 +1523,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "incident_response_plan",
@@ -1016,11 +1538,44 @@
       "domain": "Security & Compliance",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "industry_ui_reasoning",
+      "title": "UAT RECORD — Industry UI Reasoning",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "interaction_design_review",
+      "title": "UAT RECORD — Interaction Design Review",
+      "domain": "Product & UX",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "landing_page_cro",
@@ -1028,23 +1583,29 @@
       "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "lazyllm_skill",
-      "title": "UAT RECORD — Lazyllm Kill",
+      "title": "UAT RECORD — Lazyllm Skill",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "legal_simulation_patrick_munro",
@@ -1052,23 +1613,29 @@
       "domain": "Legal Contracts",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "litestream",
-      "title": "UAT RECORD — Lite Tream",
+      "title": "UAT RECORD — Litestream",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "marketing_demand_acquisition",
@@ -1076,23 +1643,29 @@
       "domain": "Marketing Seo",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "mermaid_diagrams",
-      "title": "UAT RECORD — Mermaid Diagram",
+      "title": "UAT RECORD — Mermaid Diagrams",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "ml_paper_writing",
@@ -1100,11 +1673,14 @@
       "domain": "Ai Ml Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "moai_domain_backend",
@@ -1112,11 +1688,29 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "mobile_framework_ui_guide",
+      "title": "UAT RECORD — Mobile Framework UI Guide",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "montecarlo",
@@ -1124,11 +1718,14 @@
       "domain": "Finance Analytics",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "native_dependency_update",
@@ -1136,35 +1733,44 @@
       "domain": "Security Compliance",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "numerai_research",
-      "title": "UAT RECORD — Numerai Re Earch",
+      "title": "UAT RECORD — Numerai Research",
       "domain": "Product Ux",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "octocode_research",
-      "title": "UAT RECORD — Octocode Re Earch",
+      "title": "UAT RECORD — Octocode Research",
       "domain": "Product Ux",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "onboarding_experience_review",
@@ -1172,11 +1778,14 @@
       "domain": "Product & UX",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "onchainkit",
@@ -1184,11 +1793,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "penpot_uiux_design",
@@ -1196,11 +1808,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "perf_optimizer",
@@ -1208,11 +1823,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "performance_optimization",
@@ -1220,11 +1838,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "playwriter",
@@ -1232,11 +1853,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "pricing_strategy_review",
@@ -1244,11 +1868,14 @@
       "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "privacy_policy_audit",
@@ -1256,11 +1883,29 @@
       "domain": "Security & Compliance",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "product_page_style_matcher",
+      "title": "UAT RECORD — Product Page Style Matcher",
+      "domain": "Marketing & SEO",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "promptfoo_evaluation",
@@ -1268,11 +1913,14 @@
       "domain": "Ai Ml Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "prototype_prompt_generator",
@@ -1280,11 +1928,14 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "refly",
@@ -1292,35 +1943,44 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "research",
-      "title": "UAT RECORD — Re Earch",
+      "title": "UAT RECORD — Research",
       "domain": "Product Ux",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "senior_data_scientist",
-      "title": "UAT RECORD — Enior Data Cienti T",
+      "title": "UAT RECORD — Senior Data Scientist",
       "domain": "Ai Ml Evaluation",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "seo_audit",
@@ -1328,35 +1988,44 @@
       "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "setup_timescaledb_hypertables",
-      "title": "UAT RECORD — Etup Time Caledb Hypertable",
+      "title": "UAT RECORD — Setup Timescaledb Hypertables",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "smart_docs",
-      "title": "UAT RECORD — Mart Doc",
+      "title": "UAT RECORD — Smart Docs",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "social_media_ad_review",
@@ -1364,23 +2033,29 @@
       "domain": "Marketing & SEO",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "sysadmin_toolbox",
-      "title": "UAT RECORD — Y Admin Toolbox",
+      "title": "UAT RECORD — Sysadmin Toolbox",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "terms_of_service_review",
@@ -1388,23 +2063,74 @@
       "domain": "Security & Compliance",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "tidb_test_guidelines",
-      "title": "UAT RECORD — Tidb Te T Guideline",
+      "title": "UAT RECORD — Tidb Test Guidelines",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "typography_pairing",
+      "title": "UAT RECORD — Typography Pairing",
+      "domain": "Product & UX",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "ui_pre_delivery_checklist",
+      "title": "UAT RECORD — UI Pre-Delivery Checklist",
+      "domain": "App Development",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
+    },
+    {
+      "skill_id": "ui_style_selection",
+      "title": "UAT RECORD — UI Style Selection",
+      "domain": "Product & UX",
+      "risk_level": "R1",
+      "status": "Not Run",
+      "badge": "NOT_RUN",
+      "decision_score": 0,
+      "completeness_score": 0,
+      "scenario_score": 0,
+      "final_score": 0,
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "ui_ux_pro_max",
@@ -1412,23 +2138,29 @@
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "update_docs",
-      "title": "UAT RECORD — Update Doc",
+      "title": "UAT RECORD — Update Docs",
       "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "user_flow_analysis",
@@ -1436,11 +2168,14 @@
       "domain": "Product & UX",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "user_persona_development",
@@ -1448,11 +2183,14 @@
       "domain": "Product & UX",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "ux_heuristic_evaluation",
@@ -1460,11 +2198,14 @@
       "domain": "Product & UX",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.1",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "ux_writing",
@@ -1472,11 +2213,14 @@
       "domain": "Product Ux",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     },
     {
       "skill_id": "word",
@@ -1484,11 +2228,14 @@
       "domain": "Legal Contracts",
       "risk_level": "R1",
       "status": "Not Run",
+      "badge": "NOT_RUN",
       "decision_score": 0,
       "completeness_score": 0,
       "scenario_score": 0,
       "final_score": 0,
-      "quality": "Not Ready"
+      "quality": "Not Ready",
+      "uat_skill_version": "1.0.0",
+      "uat_date": "2026-02-07"
     }
   ]
 }

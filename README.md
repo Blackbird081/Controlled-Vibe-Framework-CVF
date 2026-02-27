@@ -41,6 +41,8 @@ Only run full regression when gate/triggers require it.
 
 > 🧪 **Test Log Rule:** Every `test:` commit or test file change MUST have a batch entry in [`docs/CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md). See [Test Documentation Guard](governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md).
 
+> 🏛️ **Architecture Decision Rule:** Every `feat(governance):`, `feat(domain):`, `feat(core-value):`, `refactor(arch):`, or `docs(policy):` commit MUST have an ADR entry in [`docs/CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md). See [ADR Guard](governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md).
+
 ---
 
 ## 🎯 CVF In 30 Seconds
@@ -145,8 +147,10 @@ The AI Agent automatically enforces CVF governance through **3 layers**:
 **Governance policies enforced:**
 - 📋 [`CVF_BUG_DOCUMENTATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md) — Every bug fix must be logged
 - 📋 [`CVF_TEST_DOCUMENTATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md) — Every test run must be documented
+- 📋 [`CVF_ADR_GUARD.md`](governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md) — Every architecture/strategy decision must have an ADR entry
 - 📋 [`BUG_HISTORY.md`](docs/BUG_HISTORY.md) — Troubleshooting knowledge base
 - 📋 [`CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md) — Test history log
+- 📋 [`CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md) — Architecture decision records (ADR-001 → ...)
 
 
 ### v1.6 Features
@@ -233,7 +237,7 @@ The AI Agent automatically enforces CVF governance through **3 layers**:
 | **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
 | **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 141 skills across 12 domains |
 | **🤖 Agent Skills** | [34 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide v1](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Usage Guide v2](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-new-skills-v2.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
-| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) · [Core Compatibility Baseline](docs/CVF_CORE_COMPAT_BASELINE.md) · [Bug History](docs/BUG_HISTORY.md) |
+| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) · [Core Compatibility Baseline](docs/CVF_CORE_COMPAT_BASELINE.md) · [Bug History](docs/BUG_HISTORY.md) · [Architecture Decisions](docs/CVF_ARCHITECTURE_DECISIONS.md) |
 
 **Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
 
@@ -456,4 +460,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 26, 2026 | Version 1.7.2 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: February 27, 2026 | Version 1.7.2 | [Documentation](docs/GET_STARTED.md)*

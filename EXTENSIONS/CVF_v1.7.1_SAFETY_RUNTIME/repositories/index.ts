@@ -4,12 +4,12 @@
 
 // Interfaces
 export type {
-    IProposalRepository,
-    IExecutionJournalRepository,
-    IPolicyRepository,
-    ISnapshotRepository,
-    IAuditRepository,
-    IUsageRepository,
+  IProposalRepository,
+  IExecutionJournalRepository,
+  IPolicyRepository,
+  ISnapshotRepository,
+  IAuditRepository,
+  IUsageRepository,
 } from "./interfaces"
 
 // Prisma implementations

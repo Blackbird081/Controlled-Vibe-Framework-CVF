@@ -14,4 +14,3 @@ export class AssumptionTracker {
     return assumptions
   }
 }
-

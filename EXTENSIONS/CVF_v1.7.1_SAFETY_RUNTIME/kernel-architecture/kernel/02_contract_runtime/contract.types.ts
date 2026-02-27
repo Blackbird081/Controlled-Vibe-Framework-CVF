@@ -1,17 +1,8 @@
 // contract.types.ts
 
-export type OutputFormat =
-  | "text"
-  | "json"
-  | "markdown"
-  | "structured"
-  | "structured_text"
+export type OutputFormat = "text" | "json" | "markdown" | "structured" | "structured_text"
 
-export type ContractConsumerRole =
-  | "user"
-  | "assistant"
-  | "system"
-  | "integration"
+export type ContractConsumerRole = "user" | "assistant" | "system" | "integration"
 
 export interface IOContract {
   contract_id: string

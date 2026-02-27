@@ -8,7 +8,6 @@ export interface DomainValidationResult {
 }
 
 export class DomainGuard {
-
   private registry = new DomainRegistry()
 
   /**
@@ -18,34 +17,32 @@ export class DomainGuard {
    * - Prevents cross-domain misuse
    */
   validate(input: any): DomainValidationResult {
-
     if (!input?.domain) {
       return {
         valid: false,
-        reason: "Missing domain declaration"
+        reason: "Missing domain declaration",
       }
     }
 
-    const domain: DomainDefinition | undefined =
-      this.registry.get(input.domain)
+    const domain: DomainDefinition | undefined = this.registry.get(input.domain)
 
     if (!domain) {
       return {
         valid: false,
-        reason: `Unknown domain: ${input.domain}`
+        reason: `Unknown domain: ${input.domain}`,
       }
     }
 
     if (!domain.allowedInputTypes.includes(input.type)) {
       return {
         valid: false,
-        reason: `Input type '${input.type}' not allowed in domain '${input.domain}'`
+        reason: `Input type '${input.type}' not allowed in domain '${input.domain}'`,
       }
     }
 
     return {
       valid: true,
-      domain: input.domain
+      domain: input.domain,
     }
   }
 
@@ -56,9 +53,7 @@ export class DomainGuard {
     const result = this.validate(input)
 
     if (!result.valid) {
-      throw new Error(
-        `Domain violation: ${result.reason}`
-      )
+      throw new Error(`Domain violation: ${result.reason}`)
     }
   }
 }

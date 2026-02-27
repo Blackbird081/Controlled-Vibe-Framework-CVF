@@ -14,14 +14,70 @@ interface AuditEntry {
 
 // Sample audit data — replace with API call in production
 const sampleAudit: AuditEntry[] = [
-  { id: "a-001", action: "proposal:create", userId: "admin", timestamp: "2026-02-24 20:15", details: "Created proposal p-001", level: "info" },
-  { id: "a-002", action: "policy:register", userId: "admin", timestamp: "2026-02-24 20:10", details: "Registered policy v2.1 (5 rules)", level: "info" },
-  { id: "a-003", action: "auth:login", userId: "operator", timestamp: "2026-02-24 19:55", details: "Login from 192.168.1.10", level: "info" },
-  { id: "a-004", action: "rate_limit:triggered", userId: "system", timestamp: "2026-02-24 19:40", details: "IP 10.0.0.5 exceeded 30 req/min", level: "warning" },
-  { id: "a-005", action: "proposal:rejected", userId: "system", timestamp: "2026-02-24 19:30", details: "High cost proposal p-003 rejected by policy", level: "danger" },
-  { id: "a-006", action: "ai:generate", userId: "operator", timestamp: "2026-02-24 19:15", details: "OpenAI gpt-4 — 2,500 tokens", level: "info" },
-  { id: "a-007", action: "auth:failed", userId: "unknown", timestamp: "2026-02-24 18:50", details: "Invalid credentials from 10.0.0.99", level: "danger" },
-  { id: "a-008", action: "proposal:approved", userId: "system", timestamp: "2026-02-24 18:30", details: "Low risk proposal p-005 auto-approved", level: "approved" },
+  {
+    id: "a-001",
+    action: "proposal:create",
+    userId: "admin",
+    timestamp: "2026-02-24 20:15",
+    details: "Created proposal p-001",
+    level: "info",
+  },
+  {
+    id: "a-002",
+    action: "policy:register",
+    userId: "admin",
+    timestamp: "2026-02-24 20:10",
+    details: "Registered policy v2.1 (5 rules)",
+    level: "info",
+  },
+  {
+    id: "a-003",
+    action: "auth:login",
+    userId: "operator",
+    timestamp: "2026-02-24 19:55",
+    details: "Login from 192.168.1.10",
+    level: "info",
+  },
+  {
+    id: "a-004",
+    action: "rate_limit:triggered",
+    userId: "system",
+    timestamp: "2026-02-24 19:40",
+    details: "IP 10.0.0.5 exceeded 30 req/min",
+    level: "warning",
+  },
+  {
+    id: "a-005",
+    action: "proposal:rejected",
+    userId: "system",
+    timestamp: "2026-02-24 19:30",
+    details: "High cost proposal p-003 rejected by policy",
+    level: "danger",
+  },
+  {
+    id: "a-006",
+    action: "ai:generate",
+    userId: "operator",
+    timestamp: "2026-02-24 19:15",
+    details: "OpenAI gpt-4 — 2,500 tokens",
+    level: "info",
+  },
+  {
+    id: "a-007",
+    action: "auth:failed",
+    userId: "unknown",
+    timestamp: "2026-02-24 18:50",
+    details: "Invalid credentials from 10.0.0.99",
+    level: "danger",
+  },
+  {
+    id: "a-008",
+    action: "proposal:approved",
+    userId: "system",
+    timestamp: "2026-02-24 18:30",
+    details: "Low risk proposal p-005 auto-approved",
+    level: "approved",
+  },
 ]
 
 const levelColors: Record<string, string> = {
@@ -93,20 +149,48 @@ export default function AuditPage() {
               <tr key={entry.id}>
                 <td>{entry.id}</td>
                 <td>
-                  <span style={{ color: levelColors[entry.level] ?? "var(--cvf-text-secondary)" }}>
+                  <span
+                    style={{
+                      color: levelColors[entry.level] ?? "var(--cvf-text-secondary)",
+                    }}
+                  >
                     {entry.action}
                   </span>
                 </td>
                 <td>{entry.userId}</td>
                 <td>{entry.details}</td>
-                <td><StatusBadge status={entry.level === "danger" ? "rejected" : entry.level === "approved" ? "approved" : entry.level} /></td>
-                <td style={{ color: "var(--cvf-text-muted)", fontSize: "12px", fontFamily: "var(--cvf-font-mono)" }}>{entry.timestamp}</td>
+                <td>
+                  <StatusBadge
+                    status={
+                      entry.level === "danger"
+                        ? "rejected"
+                        : entry.level === "approved"
+                          ? "approved"
+                          : entry.level
+                    }
+                  />
+                </td>
+                <td
+                  style={{
+                    color: "var(--cvf-text-muted)",
+                    fontSize: "12px",
+                    fontFamily: "var(--cvf-font-mono)",
+                  }}
+                >
+                  {entry.timestamp}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
         {filtered.length === 0 && (
-          <div style={{ padding: "40px", textAlign: "center", color: "var(--cvf-text-muted)" }}>
+          <div
+            style={{
+              padding: "40px",
+              textAlign: "center",
+              color: "var(--cvf-text-muted)",
+            }}
+          >
             No audit entries match your filter.
           </div>
         )}

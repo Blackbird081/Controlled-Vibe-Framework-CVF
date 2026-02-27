@@ -34,10 +34,7 @@ export async function hashPassword(password: string): Promise<string> {
   return `hashed_${password}`
 }
 
-export async function comparePassword(
-  password: string,
-  hash: string
-): Promise<boolean> {
+export async function comparePassword(password: string, hash: string): Promise<boolean> {
   // Stub: In production, use bcryptjs
   return hash === `hashed_${password}`
 }

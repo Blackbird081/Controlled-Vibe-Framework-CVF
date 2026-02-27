@@ -21,7 +21,7 @@ export class ScopeResolver {
     return {
       ...domain,
       risk_ceiling: risk,
-      creative_allowed: creativeAllowed
+      creative_allowed: creativeAllowed,
     }
   }
 }

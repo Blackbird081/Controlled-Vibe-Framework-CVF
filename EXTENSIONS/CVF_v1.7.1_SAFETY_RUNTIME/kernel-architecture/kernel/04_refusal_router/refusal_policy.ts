@@ -1,11 +1,7 @@
 import { CVFRiskLevel } from "../03_contamination_guard/risk.types"
 import { RefusalPolicyRegistry } from "./refusal_policy_registry"
 
-export type RefusalAction =
-  | "allow"
-  | "clarify"
-  | "needs_approval"
-  | "block"
+export type RefusalAction = "allow" | "clarify" | "needs_approval" | "block"
 
 export interface RefusalPolicyContext {
   driftDetected?: boolean
@@ -25,10 +21,7 @@ export class RefusalPolicy {
     return this.policyVersion
   }
 
-  decide(
-    cvfRiskLevel: CVFRiskLevel,
-    context?: RefusalPolicyContext
-  ): RefusalAction {
+  decide(cvfRiskLevel: CVFRiskLevel, context?: RefusalPolicyContext): RefusalAction {
     const profile = this.registry.get(this.policyVersion)
 
     if (cvfRiskLevel === "R4") {

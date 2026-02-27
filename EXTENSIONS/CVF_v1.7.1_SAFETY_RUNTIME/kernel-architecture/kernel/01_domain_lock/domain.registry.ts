@@ -1,7 +1,6 @@
 import { DomainDefinition } from "./domain.types"
 
 export class DomainRegistry {
-
   private domains: Map<string, DomainDefinition> = new Map()
 
   constructor() {
@@ -13,13 +12,12 @@ export class DomainRegistry {
    * Safety Absolute by Default
    */
   private bootstrap() {
-
     this.register({
       name: "informational",
       description: "General informational responses",
       allowedInputTypes: ["question", "clarification"],
       allowedOutputTypes: ["text"],
-      riskTolerance: "low"
+      riskTolerance: "low",
     })
 
     this.register({
@@ -27,7 +25,7 @@ export class DomainRegistry {
       description: "Analytical reasoning domain",
       allowedInputTypes: ["question", "data", "clarification"],
       allowedOutputTypes: ["text", "structured_text"],
-      riskTolerance: "medium"
+      riskTolerance: "medium",
     })
 
     this.register({
@@ -35,7 +33,7 @@ export class DomainRegistry {
       description: "Creative writing domain (controlled)",
       allowedInputTypes: ["prompt"],
       allowedOutputTypes: ["text"],
-      riskTolerance: "medium"
+      riskTolerance: "medium",
     })
 
     this.register({
@@ -43,7 +41,7 @@ export class DomainRegistry {
       description: "Procedural guidance domain",
       allowedInputTypes: ["instruction", "question"],
       allowedOutputTypes: ["text", "structured_text"],
-      riskTolerance: "low"
+      riskTolerance: "low",
     })
 
     this.register({
@@ -51,7 +49,7 @@ export class DomainRegistry {
       description: "Sensitive topic domain with strict guardrails",
       allowedInputTypes: ["question", "clarification"],
       allowedOutputTypes: ["text"],
-      riskTolerance: "high"
+      riskTolerance: "high",
     })
 
     this.register({
@@ -59,12 +57,11 @@ export class DomainRegistry {
       description: "Restricted domain (non-executable by default policy)",
       allowedInputTypes: [],
       allowedOutputTypes: [],
-      riskTolerance: "critical"
+      riskTolerance: "critical",
     })
   }
 
   register(domain: DomainDefinition) {
-
     if (this.domains.has(domain.name)) {
       throw new Error(`Domain already exists: ${domain.name}`)
     }

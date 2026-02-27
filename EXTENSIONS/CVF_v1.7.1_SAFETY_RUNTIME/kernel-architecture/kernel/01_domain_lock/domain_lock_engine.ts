@@ -48,7 +48,7 @@ export class DomainLockEngine {
       risk_ceiling: "low",
       boundary_conditions: [],
       refusal_policy_id: map.refusalPolicyId,
-      creative_allowed: false
+      creative_allowed: false,
     }
 
     context = this.resolver.resolve(context)

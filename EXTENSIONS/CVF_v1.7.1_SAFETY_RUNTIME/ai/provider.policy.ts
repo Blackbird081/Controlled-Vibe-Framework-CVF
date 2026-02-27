@@ -12,9 +12,7 @@ export function setProviderPolicy(policy: ProviderPolicy) {
   activePolicy = policy
 }
 
-export function enforceProviderPolicy(
-  request: AIGenerationRequest
-) {
+export function enforceProviderPolicy(request: AIGenerationRequest) {
   if (
     activePolicy.maxTokens &&
     request.maxTokens &&
@@ -23,22 +21,14 @@ export function enforceProviderPolicy(
     throw new Error("Token limit exceeds provider policy")
   }
 
-  if (
-    activePolicy.allowTemperature === false &&
-    request.temperature !== undefined
-  ) {
+  if (activePolicy.allowTemperature === false && request.temperature !== undefined) {
     throw new Error("Temperature override not allowed")
   }
 
-  if (
-    activePolicy.blockedKeywords &&
-    activePolicy.blockedKeywords.length > 0
-  ) {
+  if (activePolicy.blockedKeywords && activePolicy.blockedKeywords.length > 0) {
     for (const keyword of activePolicy.blockedKeywords) {
       if (request.userPrompt.includes(keyword)) {
-        throw new Error(
-          `Prompt contains blocked keyword: ${keyword}`
-        )
+        throw new Error(`Prompt contains blocked keyword: ${keyword}`)
       }
     }
   }

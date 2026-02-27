@@ -23,7 +23,6 @@ export function nextState(
   current: ApprovalState,
   decision: "approved" | "rejected" | "pending"
 ): ApprovalState {
-
   if (current === "proposed") {
     return "validated"
   }

@@ -1,7 +1,7 @@
 import {
   ExecutionOrchestrator,
   ExecutionOrchestratorOptions,
-  OrchestratorInput
+  OrchestratorInput,
 } from "./execution_orchestrator"
 import { LLMProvider } from "./llm_adapter"
 
@@ -22,7 +22,7 @@ export class KernelRuntimeEntrypoint {
     const orchestratorOptions: ExecutionOrchestratorOptions = {
       llmProvider: options.llmProvider,
       policyVersion: options.policyVersion,
-      llmTimeoutMs: options.llmTimeoutMs
+      llmTimeoutMs: options.llmTimeoutMs,
     }
     this.orchestrator = ExecutionOrchestrator.create(orchestratorOptions)
   }

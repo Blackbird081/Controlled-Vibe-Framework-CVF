@@ -5,11 +5,9 @@ export function executePolicy(
   proposal: ProposalPayload,
   policyVersion: string
 ): PolicyDecision {
-
   const policy = getPolicy(policyVersion)
 
   for (const rule of policy.rules) {
-
     const decision = rule.evaluate(proposal)
 
     if (decision) {

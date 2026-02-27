@@ -4,7 +4,6 @@ import { CreativePermissionPolicy } from "./creative_permission.policy"
 import { CreativeProvenanceTagger } from "./creative_provenance.tagger"
 
 export class CreativeController {
-
   private enabled = false
   private permission = new CreativePermissionPolicy()
   private provenance = new CreativeProvenanceTagger()
@@ -17,12 +16,7 @@ export class CreativeController {
     this.enabled = false
   }
 
-  adjust(
-    output: string,
-    context: DomainContextObject,
-    riskLevel: CVFRiskLevel
-  ): string {
-
+  adjust(output: string, context: DomainContextObject, riskLevel: CVFRiskLevel): string {
     if (!this.enabled) {
       return output
     }

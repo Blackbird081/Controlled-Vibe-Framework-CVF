@@ -1,4 +1,4 @@
-import { BudgetPolicy } from "./budget.types";
+import { BudgetPolicy } from "./budget.types"
 
 export const defaultBudgetPolicies: BudgetPolicy[] = [
   {
@@ -20,4 +20,4 @@ export const defaultBudgetPolicies: BudgetPolicy[] = [
     hardLimitUsd: 10,
     maxTokens: 400000,
   },
-];
+]

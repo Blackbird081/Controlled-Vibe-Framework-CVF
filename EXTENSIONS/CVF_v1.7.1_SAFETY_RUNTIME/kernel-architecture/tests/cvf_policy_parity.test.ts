@@ -11,7 +11,7 @@ describe("CVF policy parity", () => {
       allow: "ALLOW",
       clarify: "ALLOW",
       needs_approval: "NEEDS_APPROVAL",
-      block: "BLOCK"
+      block: "BLOCK",
     } as const
 
     for (const level of levels) {

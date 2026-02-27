@@ -5,14 +5,13 @@ export interface AuditEvent {
 }
 
 export class AuditLogger {
-
   private events: AuditEvent[] = []
 
   log(type: string, message: string) {
     this.events.push({
       type,
       message,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
   }
 

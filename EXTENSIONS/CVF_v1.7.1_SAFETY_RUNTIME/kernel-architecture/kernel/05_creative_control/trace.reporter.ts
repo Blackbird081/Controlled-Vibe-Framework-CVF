@@ -2,7 +2,6 @@ import { LineageStore } from "./lineage.store"
 import { AuditLogger } from "./audit.logger"
 
 export class TraceReporter {
-
   constructor(
     private lineage: LineageStore,
     private logger: AuditLogger
@@ -11,7 +10,7 @@ export class TraceReporter {
   generateReport() {
     return {
       lineage: this.lineage.getAll(),
-      events: this.logger.getEvents()
+      events: this.logger.getEvents(),
     }
   }
 }

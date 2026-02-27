@@ -9,45 +9,39 @@
  * Chỉ binding estimation + budget enforcement.
  */
 
-import { calculateUsdCost } from "@/governance/pricing/pricing.registry";
-import { enforceBudget } from "@/governance/budget";
-import type { BudgetCheckInput } from "@/governance/budget";
+import { calculateUsdCost } from "@/governance/pricing/pricing.registry"
+import { enforceBudget } from "@/governance/budget"
+import type { BudgetCheckInput } from "@/governance/budget"
 
 /**
  * Token usage contract (provider-agnostic)
  */
 export interface TokenUsage {
-  model: string;
-  inputTokens: number;
-  outputTokens: number;
+  model: string
+  inputTokens: number
+  outputTokens: number
 }
 
 /**
  * Cost evaluation result
  */
 export interface CostEvaluationResult {
-  estimatedUsd: number;
-  totalTokens: number;
+  estimatedUsd: number
+  totalTokens: number
 }
 
 /**
  * 1️⃣ Estimate USD cost using provider-aware pricing registry
  */
-export function estimateDevAutomationCost(
-  usage: TokenUsage
-): CostEvaluationResult {
-  const { model, inputTokens, outputTokens } = usage;
+export function estimateDevAutomationCost(usage: TokenUsage): CostEvaluationResult {
+  const { model, inputTokens, outputTokens } = usage
 
-  const estimatedUsd = calculateUsdCost(
-    model,
-    inputTokens,
-    outputTokens
-  );
+  const estimatedUsd = calculateUsdCost(model, inputTokens, outputTokens)
 
   return {
     estimatedUsd,
     totalTokens: inputTokens + outputTokens,
-  };
+  }
 }
 
 /**
@@ -62,15 +56,14 @@ export function estimateDevAutomationCost(
  * - Execution boundary
  */
 export async function enforceDevAutomationBudget(params: {
-  userId: string;
-  role: string;
-  usage: TokenUsage;
-  sessionId?: string;
+  userId: string
+  role: string
+  usage: TokenUsage
+  sessionId?: string
 }) {
-  const { userId, role, usage, sessionId } = params;
+  const { userId, role, usage, sessionId } = params
 
-  const { estimatedUsd, totalTokens } =
-    estimateDevAutomationCost(usage);
+  const { estimatedUsd, totalTokens } = estimateDevAutomationCost(usage)
 
   const budgetInput: BudgetCheckInput = {
     userId,
@@ -78,13 +71,13 @@ export async function enforceDevAutomationBudget(params: {
     estimatedCostUsd: estimatedUsd,
     estimatedTokens: totalTokens,
     sessionId,
-  };
+  }
 
-  await enforceBudget(budgetInput);
+  await enforceBudget(budgetInput)
 
   return {
     allowed: true,
     estimatedUsd,
     totalTokens,
-  };
+  }
 }

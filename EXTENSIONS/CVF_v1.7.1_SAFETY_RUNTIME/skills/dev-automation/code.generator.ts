@@ -1,15 +1,12 @@
-import { governedGenerate } from "../../ai/ai.governance";
-import { DevArtifact } from "./artifact.types";
+import { governedGenerate } from "../../ai/ai.governance"
+import { DevArtifact } from "./artifact.types"
 
-export async function generateCodeArtifact(
-  instruction: string
-): Promise<DevArtifact> {
-
+export async function generateCodeArtifact(instruction: string): Promise<DevArtifact> {
   const response = await governedGenerate({
     userPrompt: instruction,
     temperature: 0.2,
     maxTokens: 2000,
-  });
+  })
 
   return {
     id: crypto.randomUUID(),
@@ -20,5 +17,5 @@ export async function generateCodeArtifact(
       usage: response.usage,
     },
     createdAt: Date.now(),
-  };
+  }
 }

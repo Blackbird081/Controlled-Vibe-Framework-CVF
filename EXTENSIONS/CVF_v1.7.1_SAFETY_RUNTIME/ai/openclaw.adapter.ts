@@ -1,35 +1,32 @@
-
 import type {
   AIProviderAdapter,
   AIGenerationRequest,
   AIGenerationResponse,
-} from "../types/index";
+} from "../types/index"
 
 export interface OpenClawClient {
   generate(payload: {
-    system?: string;
-    prompt: string;
-    temperature?: number;
-    max_tokens?: number;
+    system?: string
+    prompt: string
+    temperature?: number
+    max_tokens?: number
   }): Promise<{
-    content: string;
-    usage?: any;
-    model?: string;
-  }>;
+    content: string
+    usage?: any
+    model?: string
+  }>
 }
 
-let openClawClient: OpenClawClient | null = null;
+let openClawClient: OpenClawClient | null = null
 
 export function registerOpenClawClient(client: OpenClawClient) {
-  openClawClient = client;
+  openClawClient = client
 }
 
 export class OpenClawAdapter implements AIProviderAdapter {
-  async generate(
-    request: AIGenerationRequest
-  ): Promise<AIGenerationResponse> {
+  async generate(request: AIGenerationRequest): Promise<AIGenerationResponse> {
     if (!openClawClient) {
-      throw new Error("OpenClaw client not registered");
+      throw new Error("OpenClaw client not registered")
     }
 
     const result = await openClawClient.generate({
@@ -37,12 +34,12 @@ export class OpenClawAdapter implements AIProviderAdapter {
       prompt: request.userPrompt,
       temperature: request.temperature,
       max_tokens: request.maxTokens,
-    });
+    })
 
     return {
       content: result.content,
       usage: result.usage,
       model: result.model,
-    };
+    }
   }
 }

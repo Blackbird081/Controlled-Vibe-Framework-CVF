@@ -6,10 +6,7 @@ export class LLMAdapter {
     private executionToken: symbol = Symbol("kernel_llm_execution_token")
   ) {}
 
-  async generate(
-    input: Record<string, unknown>,
-    token?: symbol
-  ): Promise<string> {
+  async generate(input: Record<string, unknown>, token?: symbol): Promise<string> {
     if (token !== this.executionToken) {
       throw new Error(
         "Direct LLM access blocked: use KernelRuntimeEntrypoint execution path."

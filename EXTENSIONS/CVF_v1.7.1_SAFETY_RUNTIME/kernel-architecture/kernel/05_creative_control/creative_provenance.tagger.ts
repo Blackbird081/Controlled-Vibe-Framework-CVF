@@ -3,4 +3,3 @@ export class CreativeProvenanceTagger {
     return `[creative:controlled]\n${output}`
   }
 }
-

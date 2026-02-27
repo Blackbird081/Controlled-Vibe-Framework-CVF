@@ -9,8 +9,7 @@ export class ContractEnforcer {
   validateInput(input: any, contract?: ContractDefinition): void {
     this.validator.validateDefinition(contract)
 
-    if (!contract)
-      return
+    if (!contract) return
 
     if (contract.requiredFields) {
       for (const field of contract.requiredFields) {
@@ -22,9 +21,7 @@ export class ContractEnforcer {
 
     if (contract.allowedTypes) {
       if (!contract.allowedTypes.includes(input.type)) {
-        throw new Error(
-          `Contract violation: type '${input.type}' not allowed`
-        )
+        throw new Error(`Contract violation: type '${input.type}' not allowed`)
       }
     }
 
@@ -40,13 +37,10 @@ export class ContractEnforcer {
   validateOutput(output: any, contract?: ContractDefinition): void {
     this.validator.validateDefinition(contract)
 
-    if (!contract)
-      return
+    if (!contract) return
 
     if (contract.outputType && output.type !== contract.outputType) {
-      throw new Error(
-        `Contract violation: output type '${output.type}' invalid`
-      )
+      throw new Error(`Contract violation: output type '${output.type}' invalid`)
     }
   }
 
@@ -54,7 +48,9 @@ export class ContractEnforcer {
     this.validator.validateIOContract(contract)
     const valid = this.outputValidator.validate(output, contract)
     if (!valid) {
-      throw new Error(`Contract violation: output failed IO contract '${contract.contract_id}'`)
+      throw new Error(
+        `Contract violation: output failed IO contract '${contract.contract_id}'`
+      )
     }
     return output
   }

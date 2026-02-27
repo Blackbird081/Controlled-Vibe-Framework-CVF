@@ -24,7 +24,7 @@ export class RefusalRouter {
   evaluate(risk: RiskAssessment): RefusalDecision {
     const action = this.policy.decide(risk.cvfRiskLevel, {
       driftDetected: risk.driftDetected,
-      needsClarification: Boolean(risk.assumptions && risk.assumptions.length > 0)
+      needsClarification: Boolean(risk.assumptions && risk.assumptions.length > 0),
     })
     const policyVersion = this.policy.getVersion()
 
@@ -36,8 +36,8 @@ export class RefusalRouter {
         response: {
           message: "Request blocked due to safety policy.",
           risk: risk.cvfRiskLevel,
-          alternative: this.alternative.suggest()
-        }
+          alternative: this.alternative.suggest(),
+        },
       }
     }
 
@@ -49,8 +49,8 @@ export class RefusalRouter {
         response: {
           message: "This request requires human approval before execution.",
           risk: risk.cvfRiskLevel,
-          rewrite: this.rewrite.rewrite("risk escalation path requested")
-        }
+          rewrite: this.rewrite.rewrite("risk escalation path requested"),
+        },
       }
     }
 
@@ -61,8 +61,8 @@ export class RefusalRouter {
         policyVersion,
         response: {
           message: this.clarification.generate(),
-          risk: risk.cvfRiskLevel
-        }
+          risk: risk.cvfRiskLevel,
+        },
       }
     }
 

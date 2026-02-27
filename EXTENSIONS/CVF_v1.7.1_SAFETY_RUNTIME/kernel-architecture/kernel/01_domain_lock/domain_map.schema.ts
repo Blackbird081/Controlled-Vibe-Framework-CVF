@@ -12,37 +12,36 @@ export const DefaultDomainMap: Record<DomainType, DomainMapSchema> = {
     domainType: "informational",
     allowedInputClasses: ["text", "instruction", "mixed"],
     allowedOutputTypes: ["text"],
-    refusalPolicyId: "default"
+    refusalPolicyId: "default",
   },
   analytical: {
     domainType: "analytical",
     allowedInputClasses: ["text", "numeric", "mixed"],
     allowedOutputTypes: ["text", "structured_text"],
-    refusalPolicyId: "default"
+    refusalPolicyId: "default",
   },
   creative: {
     domainType: "creative",
     allowedInputClasses: ["text", "instruction"],
     allowedOutputTypes: ["text"],
-    refusalPolicyId: "creative"
+    refusalPolicyId: "creative",
   },
   procedural: {
     domainType: "procedural",
     allowedInputClasses: ["instruction", "text", "mixed"],
     allowedOutputTypes: ["text", "structured_text"],
-    refusalPolicyId: "strict"
+    refusalPolicyId: "strict",
   },
   sensitive: {
     domainType: "sensitive",
     allowedInputClasses: ["text", "mixed"],
     allowedOutputTypes: ["text"],
-    refusalPolicyId: "strict"
+    refusalPolicyId: "strict",
   },
   restricted: {
     domainType: "restricted",
     allowedInputClasses: [],
     allowedOutputTypes: [],
-    refusalPolicyId: "block-all"
-  }
+    refusalPolicyId: "block-all",
+  },
 }
-

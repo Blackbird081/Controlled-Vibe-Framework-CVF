@@ -1,18 +1,15 @@
-"use client";
+"use client"
 
-import { Proposal } from "../types/proposal.types";
-import RiskBadge from "./RiskBadge";
-import CostEstimator from "./CostEstimator";
+import { Proposal } from "../types/proposal.types"
+import RiskBadge from "./RiskBadge"
+import CostEstimator from "./CostEstimator"
 
 interface Props {
-  proposal: Proposal;
-  onExecute?: () => void;
+  proposal: Proposal
+  onExecute?: () => void
 }
 
-export default function ProposalCard({
-  proposal,
-  onExecute,
-}: Props) {
+export default function ProposalCard({ proposal, onExecute }: Props) {
   return (
     <div
       style={{
@@ -35,13 +32,10 @@ export default function ProposalCard({
       <CostEstimator estimatedCost={proposal.estimatedCost} />
 
       {proposal.status === "APPROVED" && onExecute && (
-        <button
-          onClick={onExecute}
-          style={{ marginTop: "10px" }}
-        >
+        <button onClick={onExecute} style={{ marginTop: "10px" }}>
           Execute
         </button>
       )}
     </div>
-  );
+  )
 }

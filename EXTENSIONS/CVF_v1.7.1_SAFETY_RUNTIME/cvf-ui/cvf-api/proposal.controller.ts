@@ -1,18 +1,14 @@
+import { randomUUID } from "crypto"
+import { CreateProposalRequest, ProposalResponse } from "./api.types"
 
-import { randomUUID } from "crypto";
-import { CreateProposalRequest, ProposalResponse } from "./api.types";
+const proposalStore: Record<string, ProposalResponse> = {}
 
-const proposalStore: Record<string, ProposalResponse> = {};
+export function createProposal(request: CreateProposalRequest): ProposalResponse {
+  const id = randomUUID()
 
-export function createProposal(
-  request: CreateProposalRequest
-): ProposalResponse {
+  const riskScore = request.instruction.length > 500 ? 7 : 3
 
-  const id = randomUUID();
-
-  const riskScore = request.instruction.length > 500 ? 7 : 3;
-
-  const requiresApproval = riskScore > 5;
+  const requiresApproval = riskScore > 5
 
   const proposal: ProposalResponse = {
     id,
@@ -20,13 +16,13 @@ export function createProposal(
     riskScore,
     estimatedCost: request.instruction.length * 0.001,
     requiresApproval,
-  };
+  }
 
-  proposalStore[id] = proposal;
+  proposalStore[id] = proposal
 
-  return proposal;
+  return proposal
 }
 
 export function getProposal(id: string): ProposalResponse | null {
-  return proposalStore[id] || null;
+  return proposalStore[id] || null
 }

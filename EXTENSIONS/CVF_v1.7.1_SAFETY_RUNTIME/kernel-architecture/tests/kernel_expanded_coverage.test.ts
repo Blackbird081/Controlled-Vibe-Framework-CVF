@@ -28,7 +28,7 @@ describe("Domain layer extended coverage", () => {
         description: "dup",
         allowedInputTypes: ["question"],
         allowedOutputTypes: ["text"],
-        riskTolerance: "low"
+        riskTolerance: "low",
       })
     ).toThrow("Domain already exists")
   })
@@ -39,7 +39,7 @@ describe("Domain layer extended coverage", () => {
     expect(() =>
       engine.lock({
         message: "anything",
-        declaredDomain: "unknown"
+        declaredDomain: "unknown",
       })
     ).toThrow("Unknown declared domain")
 
@@ -48,7 +48,7 @@ describe("Domain layer extended coverage", () => {
     expect(() =>
       mismatchEngine.lock({
         message: "write a short story",
-        declaredDomain: "informational"
+        declaredDomain: "informational",
       })
     ).toThrow("mismatches classified domain")
 
@@ -57,7 +57,7 @@ describe("Domain layer extended coverage", () => {
       invalidClassEngine.lock({
         message: "what is cvf",
         declaredDomain: "informational",
-        inputClass: "numeric"
+        inputClass: "numeric",
       })
     ).toThrow("Input class 'numeric' not allowed")
 
@@ -66,7 +66,7 @@ describe("Domain layer extended coverage", () => {
       invalidBoundaryEngine.lock({
         message: " ",
         declaredDomain: "informational",
-        inputClass: "text"
+        inputClass: "text",
       })
     ).toThrow("Invalid or restricted input")
 
@@ -74,7 +74,7 @@ describe("Domain layer extended coverage", () => {
     const creative = creativeEngine.lock({
       message: "viết truyện ngắn an toàn",
       declaredDomain: "creative",
-      inputClass: "text"
+      inputClass: "text",
     })
     expect(creative.risk_ceiling).toBe("medium")
     expect(creative.creative_allowed).toBe(true)
@@ -95,7 +95,7 @@ describe("Contract layer extended coverage", () => {
           expected_output_format: "text",
           max_tokens: 32,
           allow_external_links: true,
-          allow_code_blocks: true
+          allow_code_blocks: true,
         },
         "informational"
       )
@@ -108,7 +108,7 @@ describe("Contract layer extended coverage", () => {
           expected_output_format: "text",
           max_tokens: 32,
           allow_external_links: true,
-          allow_code_blocks: true
+          allow_code_blocks: true,
         },
         "informational"
       )
@@ -125,13 +125,13 @@ describe("Contract layer extended coverage", () => {
       expected_output_format: "json" as const,
       max_tokens: 16,
       allow_external_links: false,
-      allow_code_blocks: false
+      allow_code_blocks: false,
     }
 
     expect(outputValidator.validate("", ioContract)).toBe(false)
     expect(outputValidator.validate("```code```", ioContract)).toBe(false)
     expect(outputValidator.validate("http://example.com", ioContract)).toBe(false)
-    expect(outputValidator.validate("{\"ok\":true}", ioContract)).toBe(true)
+    expect(outputValidator.validate('{"ok":true}', ioContract)).toBe(true)
     expect(outputValidator.validate("not-json", ioContract)).toBe(false)
     expect(outputValidator.validate("x".repeat(100), ioContract)).toBe(false)
 
@@ -150,7 +150,7 @@ describe("Contract layer extended coverage", () => {
         {
           domain: "informational",
           type: "question",
-          ioContract: { domain_id: "analytical" }
+          ioContract: { domain_id: "analytical" },
         },
         { requireDomainMatch: true }
       )
@@ -170,7 +170,7 @@ describe("Contamination and creative controls extended coverage", () => {
         level: "critical",
         cvfRiskLevel: "R4",
         score: 99,
-        reasons: ["self_harm"]
+        reasons: ["self_harm"],
       }).required
     ).toBe(true)
     expect(
@@ -179,7 +179,7 @@ describe("Contamination and creative controls extended coverage", () => {
         cvfRiskLevel: "R2",
         score: 60,
         reasons: ["drift_detected"],
-        driftDetected: true
+        driftDetected: true,
       }).reason
     ).toBe("drift_detected")
     expect(
@@ -187,7 +187,7 @@ describe("Contamination and creative controls extended coverage", () => {
         level: "low",
         cvfRiskLevel: "R0",
         score: 0,
-        reasons: []
+        reasons: [],
       }).required
     ).toBe(false)
 
@@ -200,19 +200,19 @@ describe("Contamination and creative controls extended coverage", () => {
     const permission = new CreativePermissionPolicy()
     const allowAtR1 = permission.allow(
       {
-        creative_allowed: true
+        creative_allowed: true,
       } as any,
       "R1"
     )
     const denyAtR2 = permission.allow(
       {
-        creative_allowed: true
+        creative_allowed: true,
       } as any,
       "R2"
     )
     const denyWhenOff = permission.allow(
       {
-        creative_allowed: false
+        creative_allowed: false,
       } as any,
       "R0"
     )
@@ -226,14 +226,14 @@ describe("Contamination and creative controls extended coverage", () => {
       type: "input",
       domain: "informational",
       parentIds: [],
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
     store.add({
       id: "b",
       type: "output",
       domain: "informational",
       parentIds: ["a"],
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
     expect(() => new InvariantChecker(store).validateNoCrossDomainReuse()).not.toThrow()
 
@@ -242,7 +242,7 @@ describe("Contamination and creative controls extended coverage", () => {
       type: "output",
       domain: "creative",
       parentIds: ["a"],
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
     expect(() => new InvariantChecker(store).validateNoCrossDomainReuse()).toThrow(
       "Cross-domain reuse detected"
@@ -269,7 +269,7 @@ describe("Risk gate and runtime utility extended coverage", () => {
   it("covers clarify branch in risk gate and runtime session getters", () => {
     const gate = new RiskGate()
     ;(gate as any).policy = {
-      decide: () => "clarify"
+      decide: () => "clarify",
     }
     const clarify = JSON.parse(gate.evaluate("any"))
     expect(clarify.answer).toMatch(/clarify/i)
@@ -291,7 +291,7 @@ describe("Risk gate and runtime utility extended coverage", () => {
       type: "input",
       domain: "informational",
       parentIds: [],
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
     audit.log("risk", "Risk assessed")
 

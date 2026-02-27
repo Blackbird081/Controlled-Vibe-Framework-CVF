@@ -5,5 +5,5 @@ export const DefaultRiskMatrix = {
   self_harm: 95,
   weapons: 95,
   chemical: 90,
-  misinformation: 60
+  misinformation: 60,
 }

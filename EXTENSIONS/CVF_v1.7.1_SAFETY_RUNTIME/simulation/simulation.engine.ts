@@ -1,4 +1,8 @@
-import type { SimulationContext, SimulationResult, CVFExecutionResult } from "../types/index"
+import type {
+  SimulationContext,
+  SimulationResult,
+  CVFExecutionResult,
+} from "../types/index"
 import { getSnapshot } from "./proposal.snapshot"
 
 export interface CVFPublicAPI {
@@ -6,11 +10,9 @@ export interface CVFPublicAPI {
 }
 
 export class SimulationEngine {
-
-  constructor(private cvf: CVFPublicAPI) { }
+  constructor(private cvf: CVFPublicAPI) {}
 
   async simulate(context: SimulationContext): Promise<SimulationResult> {
-
     const snapshot = getSnapshot(context.proposalId)
 
     if (!snapshot) {
@@ -24,14 +26,14 @@ export class SimulationEngine {
       payload: snapshot.proposal,
       createdAt: Date.now(),
       confidence: 1,
-      riskLevel: "low"
+      riskLevel: "low",
     })
 
     return {
       originalDecision: snapshot.decision,
       simulatedDecision: result.status,
       policyVersion: context.policyVersion,
-      changed: snapshot.decision !== result.status
+      changed: snapshot.decision !== result.status,
     }
   }
 }

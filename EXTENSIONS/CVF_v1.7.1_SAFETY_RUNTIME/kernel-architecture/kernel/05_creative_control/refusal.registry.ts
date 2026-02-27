@@ -5,14 +5,13 @@ export interface RefusalRecord {
 }
 
 export class RefusalRegistry {
-
   private refusals: RefusalRecord[] = []
 
   record(reason: string, domain: string) {
     this.refusals.push({
       reason,
       domain,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
   }
 

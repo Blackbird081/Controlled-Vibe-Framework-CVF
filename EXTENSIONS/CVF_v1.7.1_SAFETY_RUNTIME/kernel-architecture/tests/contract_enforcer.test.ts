@@ -23,9 +23,8 @@ describe("ContractEnforcer", () => {
         expected_output_format: "text",
         max_tokens: 256,
         allow_external_links: false,
-        allow_code_blocks: true
+        allow_code_blocks: true,
       })
     ).toThrow("output failed IO contract")
   })
 })
-

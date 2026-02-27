@@ -3,5 +3,5 @@ export const DefaultCapabilityProfile = {
   write: false,
   execute: false,
   network: false,
-  system: false
+  system: false,
 }

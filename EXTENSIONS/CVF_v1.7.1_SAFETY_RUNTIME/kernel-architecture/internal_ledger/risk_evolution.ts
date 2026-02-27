@@ -10,7 +10,6 @@ export interface RiskSnapshot {
 }
 
 export class RiskEvolution {
-
   private history: RiskSnapshot[] = []
 
   record(snapshot: RiskSnapshot) {

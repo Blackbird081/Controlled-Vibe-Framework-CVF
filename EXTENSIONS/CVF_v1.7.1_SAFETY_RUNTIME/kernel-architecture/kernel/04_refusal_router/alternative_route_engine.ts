@@ -3,4 +3,3 @@ export class AlternativeRouteEngine {
     return "Alternative route: request educational, preventive, or policy-compliant guidance without operational detail."
   }
 }
-

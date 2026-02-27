@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
 interface Props {
-  status: string;
+  status: string
 }
 
 export default function ExecutionStatus({ status }: Props) {
@@ -9,5 +9,5 @@ export default function ExecutionStatus({ status }: Props) {
     <div>
       <strong>Execution Status:</strong> {status}
     </div>
-  );
+  )
 }

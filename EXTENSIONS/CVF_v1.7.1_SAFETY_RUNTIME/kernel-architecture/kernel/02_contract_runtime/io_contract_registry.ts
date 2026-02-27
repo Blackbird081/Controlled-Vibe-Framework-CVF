@@ -18,4 +18,3 @@ export class IOContractRegistry {
     this.contracts.set(contract.contract_id, contract)
   }
 }
-

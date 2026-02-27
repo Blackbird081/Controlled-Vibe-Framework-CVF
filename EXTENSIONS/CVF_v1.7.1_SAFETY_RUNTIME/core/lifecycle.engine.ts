@@ -1,8 +1,4 @@
-import type {
-  LifecycleInput,
-  ExecutionResult,
-  PolicyDecision,
-} from "../types/index"
+import type { LifecycleInput, ExecutionResult, PolicyDecision } from "../types/index"
 import { executePolicy } from "../policy/policy.executor"
 import { recordExecution } from "../policy/execution.journal"
 import { getPolicy } from "../policy/policy.registry"
@@ -24,9 +20,7 @@ export class LifecycleEngine {
   }
 
   async submit(input: LifecycleInput): Promise<ExecutionResult> {
-
     return runWithinBoundary(async () => {
-
       const policy = getPolicy(input.policyVersion)
 
       // 1️⃣ Save proposal immutable
@@ -35,7 +29,7 @@ export class LifecycleEngine {
         payload: input.payload,
         policyVersion: policy.version,
         policyHash: policy.hash,
-        createdAt: Date.now()
+        createdAt: Date.now(),
       })
 
       // 2️⃣ Initialize state
@@ -53,10 +47,7 @@ export class LifecycleEngine {
       setState(input.id, validatedState)
 
       // 4️⃣ Execute policy
-      const decision: PolicyDecision = executePolicy(
-        input.payload,
-        input.policyVersion
-      )
+      const decision: PolicyDecision = executePolicy(input.payload, input.policyVersion)
 
       const newState = nextState(validatedState, decision)
       setState(input.id, newState)
@@ -70,12 +61,7 @@ export class LifecycleEngine {
 
       // 5️⃣ Record journal (production only)
       if (!input.simulateOnly) {
-        recordExecution(
-          input.id,
-          policy.version,
-          policy.hash,
-          decision
-        )
+        recordExecution(input.id, policy.version, policy.hash, decision)
 
         // 🔔 Emit: proposal executed
         this.eventBus?.emitTyped("proposal:executed", {
@@ -87,7 +73,7 @@ export class LifecycleEngine {
       return {
         status: decision,
         state: getState(input.id),
-        policyHash: policy.hash
+        policyHash: policy.hash,
       }
     })
   }

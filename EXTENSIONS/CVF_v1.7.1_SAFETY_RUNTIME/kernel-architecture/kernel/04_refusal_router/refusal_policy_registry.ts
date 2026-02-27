@@ -16,11 +16,11 @@ const REFUSAL_POLICY_VERSIONS: Record<string, RefusalPolicyVersion> = {
       R1: "allow",
       R2: "allow",
       R3: "needs_approval",
-      R4: "block"
+      R4: "block",
     },
     clarifyOnSignalsAtR2: true,
-    freezeR4Action: "needs_approval"
-  }
+    freezeR4Action: "needs_approval",
+  },
 }
 
 export class RefusalPolicyRegistry {

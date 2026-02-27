@@ -14,10 +14,10 @@ describe("ContractRuntimeEngine", () => {
           max_tokens: 128,
           allow_external_links: true,
           allow_code_blocks: true,
-          allowed_consumers: ["assistant"]
+          allowed_consumers: ["assistant"],
         },
         consumerRole: "user",
-        declaredDomain: "informational"
+        declaredDomain: "informational",
       })
     ).toThrow("consumer 'user' not allowed")
   })
@@ -34,10 +34,10 @@ describe("ContractRuntimeEngine", () => {
           max_tokens: 128,
           allow_external_links: true,
           allow_code_blocks: true,
-          allow_transform: false
+          allow_transform: false,
         },
         transformRequested: true,
-        declaredDomain: "informational"
+        declaredDomain: "informational",
       })
     ).toThrow("transformation is disabled")
   })
@@ -52,13 +52,12 @@ describe("ContractRuntimeEngine", () => {
         expected_output_format: "text",
         max_tokens: 128,
         allow_external_links: true,
-        allow_code_blocks: true
+        allow_code_blocks: true,
       },
       consumerRole: "assistant",
-      declaredDomain: "informational"
+      declaredDomain: "informational",
     })
 
     expect(output).toBe("safe output")
   })
 })
-

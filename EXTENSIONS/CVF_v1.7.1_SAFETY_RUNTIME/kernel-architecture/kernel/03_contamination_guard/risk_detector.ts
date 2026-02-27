@@ -1,5 +1,4 @@
 export class RiskDetector {
-
   detect(text: string): string[] {
     const flags: string[] = []
 
@@ -8,14 +7,12 @@ export class RiskDetector {
     if (lower.includes("suicide") || lower.includes("kill myself"))
       flags.push("self_harm")
 
-    if (lower.includes("lawsuit") || lower.includes("legal advice"))
-      flags.push("legal")
+    if (lower.includes("lawsuit") || lower.includes("legal advice")) flags.push("legal")
 
     if (lower.includes("invest") || lower.includes("trading strategy"))
       flags.push("financial")
 
-    if (lower.includes("medicine") || lower.includes("treatment"))
-      flags.push("medical")
+    if (lower.includes("medicine") || lower.includes("treatment")) flags.push("medical")
 
     return flags
   }

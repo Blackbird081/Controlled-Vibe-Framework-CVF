@@ -1,4 +1,8 @@
-import type { AIProviderAdapter, AIGenerationRequest, AIGenerationResponse } from "../types/index"
+import type {
+  AIProviderAdapter,
+  AIGenerationRequest,
+  AIGenerationResponse,
+} from "../types/index"
 import { enforceProviderPolicy } from "./provider.policy"
 import { recordUsage } from "./usage.tracker"
 import { logAIGeneration } from "./audit.logger"
@@ -19,7 +23,6 @@ export function getActiveProvider(): AIProviderAdapter {
 export async function governedGenerate(
   request: AIGenerationRequest
 ): Promise<AIGenerationResponse> {
-
   // 1. Enforce policy before call
   enforceProviderPolicy(request)
 

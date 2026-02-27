@@ -12,7 +12,7 @@ const RISK_ORDER: Record<CVFRiskLevel, number> = {
   R1: 1,
   R2: 2,
   R3: 3,
-  R4: 4
+  R4: 4,
 }
 
 export class DriftDetector {
@@ -33,8 +33,7 @@ export class DriftDetector {
 
     return {
       detected: reasons.length > 0,
-      reasons
+      reasons,
     }
   }
 }
-

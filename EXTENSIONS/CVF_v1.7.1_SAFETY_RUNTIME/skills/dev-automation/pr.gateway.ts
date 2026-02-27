@@ -1,37 +1,37 @@
-import { DevArtifact } from "./artifact.types";
+import { DevArtifact } from "./artifact.types"
 
 export interface PRCreationResult {
-  prId: string;
-  prUrl: string;
-  branchName: string;
+  prId: string
+  prUrl: string
+  branchName: string
 }
 
 export interface PRClient {
   createPullRequest(params: {
-    branchName: string;
-    title: string;
-    description: string;
+    branchName: string
+    title: string
+    description: string
     files: {
-      filePath: string;
-      content: string;
-    }[];
-  }): Promise<PRCreationResult>;
+      filePath: string
+      content: string
+    }[]
+  }): Promise<PRCreationResult>
 }
 
-let prClient: PRClient | null = null;
+let prClient: PRClient | null = null
 
 export function registerPRClient(client: PRClient) {
-  prClient = client;
+  prClient = client
 }
 
 export async function createPRFromArtifact(
   artifact: DevArtifact
 ): Promise<PRCreationResult> {
   if (!prClient) {
-    throw new Error("PR client not registered");
+    throw new Error("PR client not registered")
   }
 
-  const branchName = buildBranchName(artifact);
+  const branchName = buildBranchName(artifact)
 
   const result = await prClient.createPullRequest({
     branchName,
@@ -41,17 +41,17 @@ export async function createPRFromArtifact(
       filePath: f.filePath,
       content: f.content,
     })),
-  });
+  })
 
-  return result;
+  return result
 }
 
 function buildBranchName(artifact: DevArtifact): string {
-  return `cvf/${artifact.proposalId}`;
+  return `cvf/${artifact.proposalId}`
 }
 
 function buildPRTitle(artifact: DevArtifact): string {
-  return `CVF Proposal ${artifact.proposalId} - ${artifact.artifactType}`;
+  return `CVF Proposal ${artifact.proposalId} - ${artifact.artifactType}`
 }
 
 function buildPRDescription(artifact: DevArtifact): string {
@@ -68,5 +68,5 @@ Total Files: ${artifact.fileChanges.length}
 Tokens Used: ${artifact.metrics.tokensUsed}
 
 This PR requires review and approval before merge.
-`;
+`
 }

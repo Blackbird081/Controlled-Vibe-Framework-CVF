@@ -1,12 +1,11 @@
+import { AuditEntry } from "./api.types"
 
-import { AuditEntry } from "./api.types";
-
-const auditStore: AuditEntry[] = [];
+const auditStore: AuditEntry[] = []
 
 export function recordAudit(entry: AuditEntry) {
-  auditStore.push(entry);
+  auditStore.push(entry)
 }
 
 export function getAudit() {
-  return auditStore;
+  return auditStore
 }

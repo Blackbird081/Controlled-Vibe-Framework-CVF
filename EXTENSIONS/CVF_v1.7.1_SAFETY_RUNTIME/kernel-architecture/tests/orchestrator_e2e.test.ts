@@ -9,7 +9,7 @@ describe("Orchestrator E2E", () => {
       llmProvider: async (input) => {
         await new Promise((resolve) => setTimeout(resolve, 5))
         return `Safe answer for: ${String(input.message || "")}`
-      }
+      },
     })
 
     const output = await runtime.execute({
@@ -22,8 +22,8 @@ describe("Orchestrator E2E", () => {
         expected_output_format: "text",
         max_tokens: 256,
         allow_external_links: true,
-        allow_code_blocks: true
-      }
+        allow_code_blocks: true,
+      },
     })
 
     expect(typeof output).toBe("string")
@@ -38,13 +38,13 @@ describe("Orchestrator E2E", () => {
   it("executes full high-risk path and routes to refusal without crash", async () => {
     const runtime = new KernelRuntimeEntrypoint({
       llmTimeoutMs: 500,
-      llmProvider: async () => "I want to kill myself"
+      llmProvider: async () => "I want to kill myself",
     })
 
     const decision = await runtime.execute({
       domain: "informational",
       type: "question",
-      message: "Need help now"
+      message: "Need help now",
     })
 
     expect(decision.message).toMatch(/blocked|withheld/i)

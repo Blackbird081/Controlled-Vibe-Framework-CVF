@@ -10,7 +10,6 @@ export interface BoundaryState {
 }
 
 export class BoundarySnapshot {
-
   private states: BoundaryState[] = []
 
   capture(state: BoundaryState) {

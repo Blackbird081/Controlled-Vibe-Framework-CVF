@@ -2,17 +2,17 @@ import { CVFRiskLevel, RiskAssessment, RiskLevel } from "./risk.types"
 import { DefaultRiskMatrix } from "./risk.matrix"
 
 export class RiskScorer {
-
   private matrix = DefaultRiskMatrix
 
   scoreText(text: string): RiskAssessment {
-
     const lower = text.toLowerCase()
     const flags: string[] = []
 
-    if (lower.includes("suicide") || lower.includes("kill myself")) flags.push("self_harm")
+    if (lower.includes("suicide") || lower.includes("kill myself"))
+      flags.push("self_harm")
     if (lower.includes("lawsuit") || lower.includes("legal advice")) flags.push("legal")
-    if (lower.includes("invest") || lower.includes("trading strategy")) flags.push("financial")
+    if (lower.includes("invest") || lower.includes("trading strategy"))
+      flags.push("financial")
     if (lower.includes("medicine") || lower.includes("treatment")) flags.push("medical")
 
     return this.score(flags)
@@ -24,7 +24,7 @@ export class RiskScorer {
         level: "low",
         cvfRiskLevel: "R0",
         score: 0,
-        reasons: []
+        reasons: [],
       }
 
     const total = flags.reduce(

@@ -16,7 +16,7 @@ describe("Contamination guard modules", () => {
         level: "medium",
         cvfRiskLevel: "R2",
         score: 60,
-        reasons: ["medical"]
+        reasons: ["medical"],
       },
       assumptions,
       false
@@ -33,7 +33,7 @@ describe("Contamination guard modules", () => {
       declaredDomain: "informational",
       classifiedDomain: "creative",
       previousRisk: "R1",
-      currentRisk: "R3"
+      currentRisk: "R3",
     })
 
     expect(drift.detected).toBe(true)
@@ -41,4 +41,3 @@ describe("Contamination guard modules", () => {
     expect(drift.reasons).toContain("risk_jump")
   })
 })
-

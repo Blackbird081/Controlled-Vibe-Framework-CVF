@@ -12,13 +12,56 @@ interface SettingsSection {
 }
 
 const settingsConfig: SettingsSection[] = [
-  { label: "Default Provider", key: "defaultProvider", value: "OPENCLAW", type: "select", options: ["OPENCLAW", "DIRECT_LLM", "LOCAL"], description: "Primary AI provider for generation" },
-  { label: "Max Tokens / Day", key: "maxTokens", value: "100000", type: "number", description: "Daily token budget across all providers" },
-  { label: "Max Cost / Day (USD)", key: "maxCost", value: "50", type: "number", description: "Daily spending limit" },
-  { label: "Rate Limit (API)", key: "rateLimitApi", value: "30", type: "number", description: "Max API requests per minute" },
-  { label: "Rate Limit (AI)", key: "rateLimitAi", value: "10", type: "number", description: "Max AI generation requests per minute" },
-  { label: "JWT Expiry (seconds)", key: "jwtExpiry", value: "3600", type: "number", description: "Token expiration time" },
-  { label: "OpenAI API Key", key: "openaiKey", value: "sk-••••••••", type: "text", description: "OpenAI API key (stored securely)" },
+  {
+    label: "Default Provider",
+    key: "defaultProvider",
+    value: "OPENCLAW",
+    type: "select",
+    options: ["OPENCLAW", "DIRECT_LLM", "LOCAL"],
+    description: "Primary AI provider for generation",
+  },
+  {
+    label: "Max Tokens / Day",
+    key: "maxTokens",
+    value: "100000",
+    type: "number",
+    description: "Daily token budget across all providers",
+  },
+  {
+    label: "Max Cost / Day (USD)",
+    key: "maxCost",
+    value: "50",
+    type: "number",
+    description: "Daily spending limit",
+  },
+  {
+    label: "Rate Limit (API)",
+    key: "rateLimitApi",
+    value: "30",
+    type: "number",
+    description: "Max API requests per minute",
+  },
+  {
+    label: "Rate Limit (AI)",
+    key: "rateLimitAi",
+    value: "10",
+    type: "number",
+    description: "Max AI generation requests per minute",
+  },
+  {
+    label: "JWT Expiry (seconds)",
+    key: "jwtExpiry",
+    value: "3600",
+    type: "number",
+    description: "Token expiration time",
+  },
+  {
+    label: "OpenAI API Key",
+    key: "openaiKey",
+    value: "sk-••••••••",
+    type: "text",
+    description: "OpenAI API key (stored securely)",
+  },
 ]
 
 const inputStyle: React.CSSProperties = {
@@ -53,17 +96,35 @@ export default function SettingsPage() {
     <div className="cvf-animate-in">
       <div className="cvf-page-header">
         <h1 className="cvf-page-title">AI Settings</h1>
-        <p className="cvf-page-subtitle">Configure AI providers, rate limits, and security</p>
+        <p className="cvf-page-subtitle">
+          Configure AI providers, rate limits, and security
+        </p>
       </div>
 
       <div className="cvf-card" style={{ maxWidth: "700px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
           {settingsConfig.map((cfg) => (
             <div key={cfg.key}>
-              <label style={{ display: "block", fontSize: "14px", fontWeight: 600, color: "var(--cvf-text-primary)", marginBottom: "6px" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: "var(--cvf-text-primary)",
+                  marginBottom: "6px",
+                }}
+              >
                 {cfg.label}
               </label>
-              <p style={{ fontSize: "12px", color: "var(--cvf-text-muted)", marginBottom: "8px" }}>{cfg.description}</p>
+              <p
+                style={{
+                  fontSize: "12px",
+                  color: "var(--cvf-text-muted)",
+                  marginBottom: "8px",
+                }}
+              >
+                {cfg.description}
+              </p>
 
               {cfg.type === "select" ? (
                 <select
@@ -72,7 +133,13 @@ export default function SettingsPage() {
                   style={{ ...inputStyle, cursor: "pointer" }}
                 >
                   {cfg.options?.map((opt) => (
-                    <option key={opt} value={opt} style={{ background: "var(--cvf-bg-card)" }}>{opt}</option>
+                    <option
+                      key={opt}
+                      value={opt}
+                      style={{ background: "var(--cvf-bg-card)" }}
+                    >
+                      {opt}
+                    </option>
                   ))}
                 </select>
               ) : (
@@ -87,7 +154,14 @@ export default function SettingsPage() {
           ))}
         </div>
 
-        <div style={{ marginTop: "32px", display: "flex", alignItems: "center", gap: "16px" }}>
+        <div
+          style={{
+            marginTop: "32px",
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+          }}
+        >
           <button className="cvf-btn cvf-btn-primary" onClick={handleSave}>
             Save Settings
           </button>

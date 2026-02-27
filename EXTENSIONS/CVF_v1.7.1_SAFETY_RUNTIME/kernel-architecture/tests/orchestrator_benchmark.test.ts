@@ -15,7 +15,7 @@ describe("Orchestrator benchmark", () => {
   it("records average and p95 latency for full pipeline", async () => {
     const runtime = new KernelRuntimeEntrypoint({
       llmTimeoutMs: 500,
-      llmProvider: async () => "General informational answer"
+      llmProvider: async () => "General informational answer",
     })
 
     const runs = 40
@@ -26,7 +26,7 @@ describe("Orchestrator benchmark", () => {
       await runtime.execute({
         domain: "informational",
         type: "question",
-        message: `Benchmark request ${i + 1}`
+        message: `Benchmark request ${i + 1}`,
       })
       timings.push(Date.now() - start)
     }

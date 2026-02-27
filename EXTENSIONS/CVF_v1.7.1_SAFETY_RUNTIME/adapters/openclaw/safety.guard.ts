@@ -15,20 +15,14 @@ interface ProviderBudget {
 let tokenUsage = 0
 const providerBudgets: Record<string, ProviderBudget> = {}
 
-export function registerProviderBudget(
-  providerName: string,
-  dailyLimit: number
-) {
+export function registerProviderBudget(providerName: string, dailyLimit: number) {
   providerBudgets[providerName] = {
     tokensUsed: 0,
-    dailyLimit
+    dailyLimit,
   }
 }
 
-export function registerTokenUsage(
-  providerName: string,
-  tokens: number
-) {
+export function registerTokenUsage(providerName: string, tokens: number) {
   // Update global token usage
   tokenUsage += tokens
 
@@ -51,15 +45,12 @@ export function guardBudget(providerName: string): boolean {
   return budget.tokensUsed < budget.dailyLimit
 }
 
-export function guardProposal(
-  proposal: CVFProposalEnvelope
-): GuardResult {
-
+export function guardProposal(proposal: CVFProposalEnvelope): GuardResult {
   // 1️⃣ Budget control
   if (tokenUsage > defaultOpenClawConfig.maxTokensPerDay) {
     return {
       allowed: false,
-      reason: "Daily AI token budget exceeded"
+      reason: "Daily AI token budget exceeded",
     }
   }
 
@@ -68,21 +59,17 @@ export function guardProposal(
     return {
       allowed: true,
       escalatedRisk: "high",
-      reason: "Low AI confidence"
+      reason: "Low AI confidence",
     }
   }
 
   // 3️⃣ Dangerous actions blacklist
-  const blockedActions = [
-    "delete_database",
-    "shutdown_system",
-    "transfer_funds"
-  ]
+  const blockedActions = ["delete_database", "shutdown_system", "transfer_funds"]
 
   if (blockedActions.includes(proposal.action)) {
     return {
       allowed: false,
-      reason: "Blocked high-risk action"
+      reason: "Blocked high-risk action",
     }
   }
 

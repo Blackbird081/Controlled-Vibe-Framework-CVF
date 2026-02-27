@@ -1,10 +1,6 @@
 import { ContractConsumerRole, IOContract } from "./contract.types"
 
-const DEFAULT_ALLOWED: ContractConsumerRole[] = [
-  "assistant",
-  "system",
-  "integration"
-]
+const DEFAULT_ALLOWED: ContractConsumerRole[] = ["assistant", "system", "integration"]
 
 export class ConsumerAuthorityMatrix {
   isConsumerAllowed(
@@ -15,4 +11,3 @@ export class ConsumerAuthorityMatrix {
     return allowed.includes(consumerRole)
   }
 }
-

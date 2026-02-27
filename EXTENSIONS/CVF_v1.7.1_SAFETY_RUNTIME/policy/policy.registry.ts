@@ -3,11 +3,7 @@ import { generatePolicyHash } from "./policy.hash"
 
 const registry: Record<string, PolicyDefinition> = {}
 
-export function registerPolicy(
-  version: string,
-  rules: PolicyRule[]
-) {
-
+export function registerPolicy(version: string, rules: PolicyRule[]) {
   if (registry[version]) {
     throw new Error("Policy version already exists (immutable)")
   }
@@ -18,12 +14,11 @@ export function registerPolicy(
     version,
     createdAt: Date.now(),
     rules,
-    hash
+    hash,
   }
 }
 
 export function getPolicy(version: string): PolicyDefinition {
-
   const policy = registry[version]
 
   if (!policy) {

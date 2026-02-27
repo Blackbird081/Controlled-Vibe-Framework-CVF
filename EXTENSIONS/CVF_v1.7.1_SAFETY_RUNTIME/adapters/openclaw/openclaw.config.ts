@@ -15,5 +15,5 @@ export const defaultOpenClawConfig: OpenClawConfig = {
   maxTokensPerDay: 100000,
   monthlyBudgetLimit: 0,
   allowToolExecution: false,
-  requireHumanApproval: true
+  requireHumanApproval: true,
 }

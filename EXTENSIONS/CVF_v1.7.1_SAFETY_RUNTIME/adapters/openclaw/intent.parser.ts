@@ -2,19 +2,18 @@ import { ParsedIntent } from "./types/intent.types"
 import { ProviderAdapter } from "./provider.registry"
 
 function deterministicFallback(raw: string): ParsedIntent {
-
   if (raw.includes("tạo") && raw.includes("nhân sự")) {
     return {
       action: "create_hr_module",
       confidence: 0.6,
-      parameters: {}
+      parameters: {},
     }
   }
 
   return {
     action: "unknown",
     confidence: 0.2,
-    parameters: {}
+    parameters: {},
   }
 }
 
@@ -22,9 +21,7 @@ export async function parseIntent(
   raw: string,
   provider: ProviderAdapter
 ): Promise<ParsedIntent> {
-
   try {
-
     const prompt = `
     Extract structured intent JSON:
     {
@@ -42,9 +39,8 @@ export async function parseIntent(
     return {
       action: parsed.action,
       confidence: parsed.confidence ?? 0,
-      parameters: parsed.parameters ?? {}
+      parameters: parsed.parameters ?? {},
     }
-
   } catch {
     return deterministicFallback(raw)
   }

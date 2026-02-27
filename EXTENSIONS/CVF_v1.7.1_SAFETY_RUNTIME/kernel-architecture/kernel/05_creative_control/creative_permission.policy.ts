@@ -6,7 +6,7 @@ const RISK_ORDER: Record<CVFRiskLevel, number> = {
   R1: 1,
   R2: 2,
   R3: 3,
-  R4: 4
+  R4: 4,
 }
 
 export class CreativePermissionPolicy {
@@ -18,4 +18,3 @@ export class CreativePermissionPolicy {
     return RISK_ORDER[riskLevel] <= RISK_ORDER.R1
   }
 }
-

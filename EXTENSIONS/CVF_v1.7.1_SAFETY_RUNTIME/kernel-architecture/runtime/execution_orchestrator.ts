@@ -7,7 +7,7 @@ import { ContractRuntimeEngine } from "../kernel/02_contract_runtime/contract_ru
 import {
   ContractConsumerRole,
   ContractDefinition,
-  IOContract
+  IOContract,
 } from "../kernel/02_contract_runtime/contract.types"
 import { RiskDetector } from "../kernel/03_contamination_guard/risk_detector"
 import { CVFRiskLevel } from "../kernel/03_contamination_guard/risk.types"
@@ -99,10 +99,7 @@ export class ExecutionOrchestrator {
   private riskHistory = new RiskEvolution()
   private boundaryHistory = new BoundarySnapshot()
 
-  private constructor(
-    guard: symbol,
-    options: ExecutionOrchestratorOptions = {}
-  ) {
+  private constructor(guard: symbol, options: ExecutionOrchestratorOptions = {}) {
     if (guard !== ORCHESTRATOR_CONSTRUCTOR_GUARD) {
       throw new Error(
         "Direct orchestrator construction blocked: use KernelRuntimeEntrypoint."
@@ -110,9 +107,8 @@ export class ExecutionOrchestrator {
     }
 
     this.policyVersion = options.policyVersion || "v1"
-    this.llmTimeoutMs = options.llmTimeoutMs && options.llmTimeoutMs > 0
-      ? options.llmTimeoutMs
-      : 5000
+    this.llmTimeoutMs =
+      options.llmTimeoutMs && options.llmTimeoutMs > 0 ? options.llmTimeoutMs : 5000
     this.llm = new LLMAdapter(options.llmProvider, this.llmExecutionToken)
     this.refusal = new RefusalRouter(this.policyVersion)
   }
@@ -142,7 +138,8 @@ export class ExecutionOrchestrator {
         reject(new Error(timeoutMessage))
       }, this.llmTimeoutMs)
 
-      this.llm.generate(input, this.llmExecutionToken)
+      this.llm
+        .generate(input, this.llmExecutionToken)
         .then((result) => {
           clearTimeout(timer)
           resolve(result)
@@ -163,7 +160,10 @@ export class ExecutionOrchestrator {
 
     if (input.capabilityRequest) {
       this.executionGate.authorize(input.capabilityRequest)
-      this.audit.log("capability", `Authorized capability '${input.capabilityRequest.capability}'`)
+      this.audit.log(
+        "capability",
+        `Authorized capability '${input.capabilityRequest.capability}'`
+      )
     }
 
     this.domain.enforce(input)
@@ -171,7 +171,7 @@ export class ExecutionOrchestrator {
     const domainContext = this.domainLock.lock({
       message: input.message,
       declaredDomain: input.domain,
-      inputClass: input.inputClass || "text"
+      inputClass: input.inputClass || "text",
     })
     this.audit.log("domain_preflight", `Domain '${domainContext.domain_type}' locked`)
 
@@ -179,7 +179,7 @@ export class ExecutionOrchestrator {
       requestId,
       this.policyVersion,
       input.domain,
-      input.message
+      input.message,
     ])
 
     this.lineage.record({
@@ -190,20 +190,20 @@ export class ExecutionOrchestrator {
       policyVersion: this.policyVersion,
       decisionCode: "INPUT_ACCEPTED",
       traceHash: inputTraceHash,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
     this.lineageStore.add({
       id: `${requestId}-input`,
       type: "input",
       parentIds: [],
       domain: input.domain,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
     this.riskLineage.addNode({
       id: `${requestId}-input`,
       domain: input.domain,
       risk: this.session.getRisk() || "R0",
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
 
     try {
@@ -218,7 +218,7 @@ export class ExecutionOrchestrator {
         declaredDomain: input.domain,
         classifiedDomain: classifiedOutputDomain,
         previousRisk: this.parseRiskLevel(this.session.getRisk()),
-        currentRisk: baseAssessment.cvfRiskLevel
+        currentRisk: baseAssessment.cvfRiskLevel,
       })
       const riskAssessment = this.riskPropagation.propagate(
         baseAssessment,
@@ -231,7 +231,7 @@ export class ExecutionOrchestrator {
         this.policyVersion,
         input.domain,
         riskAssessment.cvfRiskLevel,
-        String(riskAssessment.score)
+        String(riskAssessment.score),
       ])
 
       this.session.setDomain(input.domain)
@@ -244,13 +244,13 @@ export class ExecutionOrchestrator {
         level: riskAssessment.cvfRiskLevel,
         score: riskAssessment.score,
         reasons: riskAssessment.reasons,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
       this.riskLineage.addNode({
         id: `${requestId}-risk`,
         domain: input.domain,
         risk: riskAssessment.cvfRiskLevel,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
       this.riskLineage.addEdge(`${requestId}-input`, `${requestId}-risk`)
       this.audit.log("risk", `Risk assessed at ${riskAssessment.cvfRiskLevel}`)
@@ -265,7 +265,7 @@ export class ExecutionOrchestrator {
           domain: input.domain,
           contractValid: true,
           refusalTriggered: true,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         })
         this.audit.log("rollback", rollback.reason || "rollback_required")
         return {
@@ -273,7 +273,7 @@ export class ExecutionOrchestrator {
           risk: riskAssessment.cvfRiskLevel,
           policyVersion: this.policyVersion,
           requestId,
-          traceHash: riskTraceHash
+          traceHash: riskTraceHash,
         }
       }
 
@@ -294,14 +294,14 @@ export class ExecutionOrchestrator {
           domain: input.domain,
           contractValid: true,
           refusalTriggered: true,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         })
         this.audit.log("refusal", `Refusal action: ${refusalDecision.action}`)
         return {
           ...refusalDecision.response,
           policyVersion: refusalDecision.policyVersion,
           requestId,
-          traceHash: riskTraceHash
+          traceHash: riskTraceHash,
         }
       }
 
@@ -322,7 +322,7 @@ export class ExecutionOrchestrator {
           ioContract: input.ioContract,
           consumerRole: input.consumerRole || "assistant",
           transformRequested: input.transformRequested || false,
-          declaredDomain: input.domain
+          declaredDomain: input.domain,
         })
       }
 
@@ -331,7 +331,7 @@ export class ExecutionOrchestrator {
         this.policyVersion,
         input.domain,
         riskAssessment.cvfRiskLevel,
-        finalOutput
+        finalOutput,
       ])
 
       this.lineage.record({
@@ -342,20 +342,20 @@ export class ExecutionOrchestrator {
         policyVersion: this.policyVersion,
         decisionCode: "ALLOW_RELEASED",
         traceHash: outputTraceHash,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
       this.lineageStore.add({
         id: `${requestId}-output`,
         type: "output",
         parentIds: [`${requestId}-input`],
         domain: input.domain,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
       this.riskLineage.addNode({
         id: `${requestId}-output`,
         domain: input.domain,
         risk: riskAssessment.cvfRiskLevel,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
       this.riskLineage.addEdge(`${requestId}-risk`, `${requestId}-output`)
       this.invariants.validateNoCrossDomainReuse()
@@ -369,7 +369,7 @@ export class ExecutionOrchestrator {
         domain: input.domain,
         contractValid: true,
         refusalTriggered: false,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
 
       return finalOutput
@@ -380,7 +380,7 @@ export class ExecutionOrchestrator {
         this.policyVersion,
         input.domain,
         "PIPELINE_ERROR",
-        message
+        message,
       ])
       const inferredRisk = message.toLowerCase().includes("timeout") ? "R3" : "R4"
 
@@ -392,7 +392,7 @@ export class ExecutionOrchestrator {
         level: inferredRisk,
         score: 100,
         reasons: [message],
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
       this.boundaryHistory.capture({
         requestId,
@@ -402,7 +402,7 @@ export class ExecutionOrchestrator {
         domain: input.domain,
         contractValid: false,
         refusalTriggered: true,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
       this.audit.log("error", message)
       this.session.setRisk(inferredRisk)
@@ -415,7 +415,7 @@ export class ExecutionOrchestrator {
         traceHash,
         errorCode: message.toLowerCase().includes("timeout")
           ? "LLM_TIMEOUT"
-          : "PIPELINE_ERROR"
+          : "PIPELINE_ERROR",
       }
     }
   }
@@ -428,14 +428,14 @@ export class ExecutionOrchestrator {
     return {
       session: {
         domain: this.session.getDomain(),
-        risk: this.session.getRisk()
+        risk: this.session.getRisk(),
       },
       policyVersion: this.policyVersion,
       lineage: this.lineage.getAll(),
       contaminationLineage: this.riskLineage.getSnapshot(),
       riskEvolution: this.riskHistory.getHistory(),
       boundarySnapshots: this.boundaryHistory.getAll(),
-      trace: this.traceReporter.generateReport()
+      trace: this.traceReporter.generateReport(),
     }
   }
 }

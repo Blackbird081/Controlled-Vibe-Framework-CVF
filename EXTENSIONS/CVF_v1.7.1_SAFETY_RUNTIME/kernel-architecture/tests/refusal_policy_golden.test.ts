@@ -1,7 +1,10 @@
 import { readFileSync } from "fs"
 import { fileURLToPath } from "url"
 import { describe, it, expect } from "vitest"
-import { RefusalPolicy, RefusalPolicyContext } from "../kernel/04_refusal_router/refusal_policy"
+import {
+  RefusalPolicy,
+  RefusalPolicyContext,
+} from "../kernel/04_refusal_router/refusal_policy"
 import { CVFRiskLevel } from "../kernel/03_contamination_guard/risk.types"
 
 interface GoldenCase {

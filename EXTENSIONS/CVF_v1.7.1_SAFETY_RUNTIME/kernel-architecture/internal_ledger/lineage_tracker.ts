@@ -10,7 +10,6 @@ export interface LineageNode {
 }
 
 export class LineageTracker {
-
   private nodes: LineageNode[] = []
 
   record(node: LineageNode) {

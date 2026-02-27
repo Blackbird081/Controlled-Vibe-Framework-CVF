@@ -1,7 +1,4 @@
-export type PolicyDecision =
-  | "approved"
-  | "rejected"
-  | "pending"
+export type PolicyDecision = "approved" | "rejected" | "pending"
 
 export interface PolicyRule {
   id: string

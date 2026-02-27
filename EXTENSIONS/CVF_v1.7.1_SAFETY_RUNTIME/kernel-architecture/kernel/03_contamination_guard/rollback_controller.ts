@@ -12,7 +12,7 @@ export class RollbackController {
       return {
         required: true,
         reason: "critical_risk",
-        safeMessage: "Output withheld due to critical safety risk."
+        safeMessage: "Output withheld due to critical safety risk.",
       }
     }
 
@@ -20,11 +20,10 @@ export class RollbackController {
       return {
         required: true,
         reason: "drift_detected",
-        safeMessage: "Output withheld until domain alignment is confirmed."
+        safeMessage: "Output withheld until domain alignment is confirmed.",
       }
     }
 
     return { required: false }
   }
 }
-

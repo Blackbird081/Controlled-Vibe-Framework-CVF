@@ -13,11 +13,46 @@ interface ExecutionEntry {
 }
 
 const sampleExecutions: ExecutionEntry[] = [
-  { id: "ex-001", proposalId: "p-001", policyVersion: "v2.1", decision: "approved", duration: "12ms", timestamp: "2026-02-24 20:15" },
-  { id: "ex-002", proposalId: "p-002", policyVersion: "v2.1", decision: "pending", duration: "8ms", timestamp: "2026-02-24 20:10" },
-  { id: "ex-003", proposalId: "p-003", policyVersion: "v2.1", decision: "rejected", duration: "15ms", timestamp: "2026-02-24 19:55" },
-  { id: "ex-004", proposalId: "p-004", policyVersion: "v2.0", decision: "approved", duration: "9ms", timestamp: "2026-02-24 19:40" },
-  { id: "ex-005", proposalId: "p-005", policyVersion: "v2.1", decision: "approved", duration: "11ms", timestamp: "2026-02-24 19:30" },
+  {
+    id: "ex-001",
+    proposalId: "p-001",
+    policyVersion: "v2.1",
+    decision: "approved",
+    duration: "12ms",
+    timestamp: "2026-02-24 20:15",
+  },
+  {
+    id: "ex-002",
+    proposalId: "p-002",
+    policyVersion: "v2.1",
+    decision: "pending",
+    duration: "8ms",
+    timestamp: "2026-02-24 20:10",
+  },
+  {
+    id: "ex-003",
+    proposalId: "p-003",
+    policyVersion: "v2.1",
+    decision: "rejected",
+    duration: "15ms",
+    timestamp: "2026-02-24 19:55",
+  },
+  {
+    id: "ex-004",
+    proposalId: "p-004",
+    policyVersion: "v2.0",
+    decision: "approved",
+    duration: "9ms",
+    timestamp: "2026-02-24 19:40",
+  },
+  {
+    id: "ex-005",
+    proposalId: "p-005",
+    policyVersion: "v2.1",
+    decision: "approved",
+    duration: "11ms",
+    timestamp: "2026-02-24 19:30",
+  },
 ]
 
 export default function ExecutionPage() {
@@ -45,15 +80,21 @@ export default function ExecutionPage() {
         </div>
         <div className="cvf-card">
           <div className="cvf-card-title">Approved</div>
-          <div className="cvf-card-value" style={{ color: "var(--cvf-success)" }}>{stats.approved}</div>
+          <div className="cvf-card-value" style={{ color: "var(--cvf-success)" }}>
+            {stats.approved}
+          </div>
         </div>
         <div className="cvf-card">
           <div className="cvf-card-title">Rejected</div>
-          <div className="cvf-card-value" style={{ color: "var(--cvf-danger)" }}>{stats.rejected}</div>
+          <div className="cvf-card-value" style={{ color: "var(--cvf-danger)" }}>
+            {stats.rejected}
+          </div>
         </div>
         <div className="cvf-card">
           <div className="cvf-card-title">Pending</div>
-          <div className="cvf-card-value" style={{ color: "var(--cvf-pending)" }}>{stats.pending}</div>
+          <div className="cvf-card-value" style={{ color: "var(--cvf-pending)" }}>
+            {stats.pending}
+          </div>
         </div>
       </div>
 
@@ -78,10 +119,29 @@ export default function ExecutionPage() {
               <tr key={e.id}>
                 <td>{e.id}</td>
                 <td>{e.proposalId}</td>
-                <td><span className="cvf-badge cvf-badge-low">{e.policyVersion}</span></td>
-                <td><StatusBadge status={e.decision} /></td>
-                <td style={{ fontFamily: "var(--cvf-font-mono)", color: "var(--cvf-text-muted)" }}>{e.duration}</td>
-                <td style={{ color: "var(--cvf-text-muted)", fontSize: "12px", fontFamily: "var(--cvf-font-mono)" }}>{e.timestamp}</td>
+                <td>
+                  <span className="cvf-badge cvf-badge-low">{e.policyVersion}</span>
+                </td>
+                <td>
+                  <StatusBadge status={e.decision} />
+                </td>
+                <td
+                  style={{
+                    fontFamily: "var(--cvf-font-mono)",
+                    color: "var(--cvf-text-muted)",
+                  }}
+                >
+                  {e.duration}
+                </td>
+                <td
+                  style={{
+                    color: "var(--cvf-text-muted)",
+                    fontSize: "12px",
+                    fontFamily: "var(--cvf-font-mono)",
+                  }}
+                >
+                  {e.timestamp}
+                </td>
               </tr>
             ))}
           </tbody>

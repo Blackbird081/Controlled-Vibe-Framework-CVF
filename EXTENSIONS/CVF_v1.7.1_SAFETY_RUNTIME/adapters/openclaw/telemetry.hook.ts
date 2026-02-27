@@ -10,10 +10,9 @@ interface AIInteractionLog {
 const memoryLogs: AIInteractionLog[] = []
 
 export function logAIInteraction(entry: Partial<AIInteractionLog>) {
-
   memoryLogs.push({
     ...entry,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   } as AIInteractionLog)
 
   // Simple console logging (can plug into ELK, Datadog later)

@@ -3,4 +3,3 @@ export class SafeRewriteEngine {
     return message.replace(/kill myself|suicide/gi, "[self-harm redacted]")
   }
 }
-

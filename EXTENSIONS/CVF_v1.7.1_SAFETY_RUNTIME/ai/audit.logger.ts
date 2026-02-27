@@ -1,4 +1,8 @@
-import type { AIGenerationRequest, AIGenerationResponse, AIAuditEntry } from "../types/index"
+import type {
+  AIGenerationRequest,
+  AIGenerationResponse,
+  AIAuditEntry,
+} from "../types/index"
 
 const auditLog: AIAuditEntry[] = []
 

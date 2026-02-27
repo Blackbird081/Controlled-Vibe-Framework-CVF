@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
 interface Props {
-  riskScore: number;
+  riskScore: number
 }
 
 export default function RiskBadge({ riskScore }: Props) {
-  let label = "Low";
-  let color = "green";
+  let label = "Low"
+  let color = "green"
 
   if (riskScore > 5) {
-    label = "High";
-    color = "red";
+    label = "High"
+    color = "red"
   } else if (riskScore > 3) {
-    label = "Medium";
-    color = "orange";
+    label = "Medium"
+    color = "orange"
   }
 
   return (
@@ -28,5 +28,5 @@ export default function RiskBadge({ riskScore }: Props) {
     >
       {label} (Score: {riskScore})
     </span>
-  );
+  )
 }

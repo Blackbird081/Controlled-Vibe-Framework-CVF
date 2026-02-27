@@ -41,7 +41,7 @@ describe("Risk and Refusal", () => {
 
     const withDrift = router.evaluate({
       ...medium,
-      driftDetected: true
+      driftDetected: true,
     })
     expect(withDrift.blocked).toBe(true)
     expect(withDrift.action).toBe("clarify")

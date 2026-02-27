@@ -5,7 +5,7 @@ const CVF_ORDER = {
   R1: 1,
   R2: 2,
   R3: 3,
-  R4: 4
+  R4: 4,
 } as const
 
 const ORDER_TO_LEVEL = ["R0", "R1", "R2", "R3", "R4"] as const
@@ -27,16 +27,30 @@ export class RiskPropagationEngine {
     }
 
     const cvfRiskLevel = ORDER_TO_LEVEL[next]
-    const score = Math.min(100, base.score + assumptions.length * 5 + (driftDetected ? 10 : 0))
+    const score = Math.min(
+      100,
+      base.score + assumptions.length * 5 + (driftDetected ? 10 : 0)
+    )
 
     return {
       ...base,
       cvfRiskLevel,
-      level: cvfRiskLevel === "R4" ? "critical" : cvfRiskLevel === "R3" ? "high" : cvfRiskLevel === "R2" ? "medium" : "low",
+      level:
+        cvfRiskLevel === "R4"
+          ? "critical"
+          : cvfRiskLevel === "R3"
+            ? "high"
+            : cvfRiskLevel === "R2"
+              ? "medium"
+              : "low",
       score,
-      reasons: [...base.reasons, ...assumptions, ...(driftDetected ? ["drift_detected"] : [])],
+      reasons: [
+        ...base.reasons,
+        ...assumptions,
+        ...(driftDetected ? ["drift_detected"] : []),
+      ],
       driftDetected,
-      assumptions
+      assumptions,
     }
   }
 }

@@ -9,7 +9,7 @@ describe("ExecutionOrchestrator", () => {
     await expect(
       runtime.execute({
         type: "question",
-        message: "What is CVF?"
+        message: "What is CVF?",
       } as any)
     ).rejects.toThrow("Domain violation")
   })
@@ -24,21 +24,21 @@ describe("ExecutionOrchestrator", () => {
         message: "What is CVF?",
         capabilityRequest: {
           capability: "execute",
-          source: "user"
-        }
+          source: "user",
+        },
       })
     ).rejects.toThrow("Capability denied")
   })
 
   it("routes to refusal on critical risk output", async () => {
     const runtime = new KernelRuntimeEntrypoint({
-      llmProvider: async () => "I want to kill myself"
+      llmProvider: async () => "I want to kill myself",
     })
 
     const result = await runtime.execute({
       domain: "informational",
       type: "question",
-      message: "What should I do?"
+      message: "What should I do?",
     })
 
     expect(result.message).toMatch(/blocked|withheld/i)
@@ -47,13 +47,13 @@ describe("ExecutionOrchestrator", () => {
 
   it("allows medium risk output in governance-compatible path", async () => {
     const runtime = new KernelRuntimeEntrypoint({
-      llmProvider: async () => "Provide investment planning overview"
+      llmProvider: async () => "Provide investment planning overview",
     })
 
     const result = await runtime.execute({
       domain: "informational",
       type: "question",
-      message: "Need help"
+      message: "Need help",
     })
 
     expect(result).toBe("Provide investment planning overview")
@@ -63,7 +63,7 @@ describe("ExecutionOrchestrator", () => {
 
   it("enforces output IO contract", async () => {
     const runtime = new KernelRuntimeEntrypoint({
-      llmProvider: async () => "See http://example.com"
+      llmProvider: async () => "See http://example.com",
     })
 
     const result = await runtime.execute({
@@ -76,8 +76,8 @@ describe("ExecutionOrchestrator", () => {
         expected_output_format: "text",
         max_tokens: 256,
         allow_external_links: false,
-        allow_code_blocks: false
-      }
+        allow_code_blocks: false,
+      },
     })
 
     expect(result.errorCode).toBe("PIPELINE_ERROR")
@@ -90,7 +90,7 @@ describe("ExecutionOrchestrator", () => {
     const output = await runtime.execute({
       domain: "informational",
       type: "question",
-      message: "CVF là gì?"
+      message: "CVF là gì?",
     })
 
     expect(output).toBe("CVF response: CVF là gì?")
@@ -111,7 +111,7 @@ describe("ExecutionOrchestrator", () => {
       runtime.execute({
         domain: "informational",
         type: "question",
-        message: "viết truyện ngắn cho tôi"
+        message: "viết truyện ngắn cho tôi",
       })
     ).rejects.toThrow("Domain Lock: Declared domain")
   })
@@ -128,20 +128,20 @@ describe("ExecutionOrchestrator", () => {
       runtime.execute({
         domain: "informational",
         type: "question",
-        message: "   "
+        message: "   ",
       })
     ).rejects.toThrow("message is required")
   })
 
   it("returns approval-required refusal for R3 output", async () => {
     const runtime = new KernelRuntimeEntrypoint({
-      llmProvider: async () => "This request needs legal advice guidance"
+      llmProvider: async () => "This request needs legal advice guidance",
     })
 
     const result = await runtime.execute({
       domain: "informational",
       type: "question",
-      message: "Can you help?"
+      message: "Can you help?",
     })
 
     expect(result.message).toMatch(/requires human approval/i)
@@ -150,7 +150,7 @@ describe("ExecutionOrchestrator", () => {
 
   it("returns clarification refusal when policy receives R2 with clarification signals", async () => {
     const orchestrator = ExecutionOrchestrator.create({
-      llmProvider: async () => "Safe informational response"
+      llmProvider: async () => "Safe informational response",
     })
 
     ;(orchestrator as any).risk = {
@@ -158,14 +158,14 @@ describe("ExecutionOrchestrator", () => {
         level: "medium",
         cvfRiskLevel: "R2",
         score: 55,
-        reasons: ["mock_r2"]
-      })
+        reasons: ["mock_r2"],
+      }),
     }
     ;(orchestrator as any).assumptionTracker = {
-      track: () => ["implicit_assumption"]
+      track: () => ["implicit_assumption"],
     }
     ;(orchestrator as any).driftDetector = {
-      detect: () => ({ detected: false, reasons: [] })
+      detect: () => ({ detected: false, reasons: [] }),
     }
     ;(orchestrator as any).riskPropagation = {
       propagate: () => ({
@@ -174,14 +174,14 @@ describe("ExecutionOrchestrator", () => {
         score: 60,
         reasons: ["mock_r2", "implicit_assumption"],
         assumptions: ["implicit_assumption"],
-        driftDetected: false
-      })
+        driftDetected: false,
+      }),
     }
 
     const result = await orchestrator.execute({
       domain: "informational",
       type: "question",
-      message: "Need a plan"
+      message: "Need a plan",
     })
 
     expect(result.message).toMatch(/clarify/i)
@@ -190,14 +190,14 @@ describe("ExecutionOrchestrator", () => {
 
   it("enables creative expansion when domain and risk allow", async () => {
     const runtime = new KernelRuntimeEntrypoint({
-      llmProvider: async () => "viết truyện ngắn an toàn"
+      llmProvider: async () => "viết truyện ngắn an toàn",
     })
 
     const result = await runtime.execute({
       domain: "creative",
       type: "prompt",
       message: "viết truyện ngắn giúp tôi",
-      creativeMode: true
+      creativeMode: true,
     })
 
     expect(result).toContain("[creative:controlled]")
@@ -210,13 +210,13 @@ describe("ExecutionOrchestrator", () => {
       llmProvider: async () => {
         await new Promise((resolve) => setTimeout(resolve, 80))
         return "late response"
-      }
+      },
     })
 
     const result = await runtime.execute({
       domain: "informational",
       type: "question",
-      message: "Need safe answer"
+      message: "Need safe answer",
     })
 
     expect(result.message).toMatch(/withheld/i)
@@ -226,19 +226,19 @@ describe("ExecutionOrchestrator", () => {
 
   it("degrades safely when a pipeline component throws unexpectedly", async () => {
     const orchestrator = ExecutionOrchestrator.create({
-      llmProvider: async () => "Safe informational response"
+      llmProvider: async () => "Safe informational response",
     })
 
     ;(orchestrator as any).risk = {
       score: () => {
         throw new Error("Injected scorer failure")
-      }
+      },
     }
 
     const result = await orchestrator.execute({
       domain: "informational",
       type: "question",
-      message: "Need a plan"
+      message: "Need a plan",
     })
 
     expect(result.message).toMatch(/runtime safety failure/i)

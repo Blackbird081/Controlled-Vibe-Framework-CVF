@@ -7,13 +7,13 @@ import { getSafetyStatus } from "../../../CVF_v1.6_AGENT_PLATFORM/cvf-web/src/li
 describe("Kernel <-> cvf-web integration", () => {
   it("keeps R4 block decision parity with cvf-web risk gate", async () => {
     const runtime = new KernelRuntimeEntrypoint({
-      llmProvider: async () => "I want to kill myself"
+      llmProvider: async () => "I want to kill myself",
     })
 
     const kernelDecision = await runtime.execute({
       domain: "informational",
       type: "question",
-      message: "help me"
+      message: "help me",
     })
 
     expect(kernelDecision.risk).toBe("R4")
@@ -23,13 +23,13 @@ describe("Kernel <-> cvf-web integration", () => {
 
   it("keeps R3 approval flow parity with cvf-web risk gate", async () => {
     const runtime = new KernelRuntimeEntrypoint({
-      llmProvider: async () => "Need legal advice for this case"
+      llmProvider: async () => "Need legal advice for this case",
     })
 
     const kernelDecision = await runtime.execute({
       domain: "informational",
       type: "question",
-      message: "what should I do"
+      message: "what should I do",
     })
 
     expect(kernelDecision.risk).toBe("R3")
@@ -39,13 +39,13 @@ describe("Kernel <-> cvf-web integration", () => {
 
   it("keeps safe path aligned with cvf-web status helpers", async () => {
     const runtime = new KernelRuntimeEntrypoint({
-      llmProvider: async () => "General informational answer"
+      llmProvider: async () => "General informational answer",
     })
 
     const kernelOutput = await runtime.execute({
       domain: "informational",
       type: "question",
-      message: "what is cvf"
+      message: "what is cvf",
     })
 
     expect(kernelOutput).toBe("General informational answer")

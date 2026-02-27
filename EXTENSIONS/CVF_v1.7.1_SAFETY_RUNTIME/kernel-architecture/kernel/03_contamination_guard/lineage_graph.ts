@@ -25,8 +25,7 @@ export class LineageGraph {
   getSnapshot(): { nodes: LineageGraphNode[]; edges: LineageGraphEdge[] } {
     return {
       nodes: [...this.nodes],
-      edges: [...this.edges]
+      edges: [...this.edges],
     }
   }
 }
-

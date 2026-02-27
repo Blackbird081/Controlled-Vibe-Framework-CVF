@@ -8,11 +8,7 @@ export type DomainType =
   | "sensitive"
   | "restricted"
 
-export type InputClass =
-  | "text"
-  | "numeric"
-  | "instruction"
-  | "mixed"
+export type InputClass = "text" | "numeric" | "instruction" | "mixed"
 
 export type RiskLevel = "low" | "medium" | "high" | "critical"
 

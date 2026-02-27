@@ -1,8 +1,4 @@
-export type RiskLevel =
-  | "low"
-  | "medium"
-  | "high"
-  | "critical"
+export type RiskLevel = "low" | "medium" | "high" | "critical"
 
 export type CVFRiskLevel = "R0" | "R1" | "R2" | "R3" | "R4"
 

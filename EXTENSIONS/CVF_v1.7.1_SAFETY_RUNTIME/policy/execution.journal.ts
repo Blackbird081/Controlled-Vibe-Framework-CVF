@@ -8,13 +8,12 @@ export function recordExecution(
   policyHash: string,
   decision: PolicyDecision
 ) {
-
   journal.push({
     proposalId,
     policyVersion,
     policyHash,
     decision,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   })
 }
 

@@ -1,5 +1,4 @@
 export class SessionState {
-
   private domain?: string
   private riskLevel?: string
 

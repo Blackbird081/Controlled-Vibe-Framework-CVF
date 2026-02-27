@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Lite Tream
+# SKILL MAPPING RECORD — Litestream
 
 > **Skill ID:** litestream  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: litestream
-- Skill Name: Lite Tream
+- Skill Name: Litestream
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/benbjohnson/litestream/tree/main/skills/litestream
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Lite Tream theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Litestream theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

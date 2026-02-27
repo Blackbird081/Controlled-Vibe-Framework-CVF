@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Etup Time Caledb Hypertable
+# SKILL MAPPING RECORD — Setup Timescaledb Hypertables
 
 > **Skill ID:** setup_timescaledb_hypertables  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: setup_timescaledb_hypertables
-- Skill Name: Etup Time Caledb Hypertable
+- Skill Name: Setup Timescaledb Hypertables
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/timescale/pg-aiguide/tree/main/skills/setup-timescaledb-hypertables
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Etup Time Caledb Hypertable theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Setup Timescaledb Hypertables theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

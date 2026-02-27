@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Numerai Re Earch
+# SKILL MAPPING RECORD — Numerai Research
 
 > **Skill ID:** numerai_research  
 > **Domain:** Product Ux  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: numerai_research
-- Skill Name: Numerai Re Earch
+- Skill Name: Numerai Research
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/numerai/example-scripts/tree/master/numerai/agents/skills/numerai-research
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Numerai Re Earch theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Numerai Research theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Lazyllm Kill
+# SKILL MAPPING RECORD — Lazyllm Skill
 
 > **Skill ID:** lazyllm_skill  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: lazyllm_skill
-- Skill Name: Lazyllm Kill
+- Skill Name: Lazyllm Skill
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/LazyAGI/LazyLLM/tree/main/docs/lazyllm-skill
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Lazyllm Kill theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Lazyllm Skill theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

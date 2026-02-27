@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Mermaid Diagram
+# SKILL MAPPING RECORD — Mermaid Diagrams
 
 > **Skill ID:** mermaid_diagrams  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: mermaid_diagrams
-- Skill Name: Mermaid Diagram
+- Skill Name: Mermaid Diagrams
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/softaworks/agent-toolkit/tree/main/dist/plugins/mermaid-diagrams/skills/mermaid-diagrams
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Mermaid Diagram theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Mermaid Diagrams theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

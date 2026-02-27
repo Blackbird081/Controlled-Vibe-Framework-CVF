@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Re Earch
+# SKILL MAPPING RECORD — Research
 
 > **Skill ID:** research  
 > **Domain:** Product Ux  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: research
-- Skill Name: Re Earch
+- Skill Name: Research
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/danielmiessler/Personal_AI_Infrastructure/tree/main/Releases/v2.5/.claude/skills/Research
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Re Earch theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Research theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

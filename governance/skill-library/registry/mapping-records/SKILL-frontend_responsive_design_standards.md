@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Frontend Re Pon Ive De Ign Tandard
+# SKILL MAPPING RECORD — Frontend Responsive Design Standards
 
 > **Skill ID:** frontend_responsive_design_standards  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: frontend_responsive_design_standards
-- Skill Name: Frontend Re Pon Ive De Ign Tandard
+- Skill Name: Frontend Responsive Design Standards
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/am-will/codex-skills/tree/main/skills/frontend-responsive-ui
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Frontend Re Pon Ive De Ign Tandard theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Frontend Responsive Design Standards theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

@@ -8,7 +8,7 @@ skill_id,title,domain,risk_level,status,badge,decision_score,completeness_score,
 01_landing_page,UAT RECORD — Landing Page,Web Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 01_model_selection,UAT RECORD — Model Selection,AI/ML Evaluation,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.1,2026-02-07
 01_strategy_analysis,UAT RECORD — Strategy Analysis,Business Analysis,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
-01_vibe_to_spec,UAT RECORD — Vibe-to-Spec Translator,Non-coder Workflow,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
+01_vibe_to_spec,UAT RECORD — Vibe-to-Spec Translator,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 02_architecture_review,UAT RECORD — Architecture Review,Technical Review,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 02_financial_statement_review,UAT RECORD — Financial Statement Review,Finance & Analytics,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.1,2026-02-07
 02_interview_evaluation,UAT RECORD — Interview Evaluation,HR & Operations,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
@@ -18,11 +18,11 @@ skill_id,title,domain,risk_level,status,badge,decision_score,completeness_score,
 02_risk_assessment,UAT RECORD — Risk Assessment,Business Analysis,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 02_saas_app,UAT RECORD — SaaS App,Web Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 02_tech_stack_selection,UAT RECORD — Tech Stack Selection,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.1.1,2026-02-07
-02_vibe_logic_mapping,UAT RECORD — Vibe Logic Mapping,Non-coder Workflow,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
+02_vibe_logic_mapping,UAT RECORD — Vibe Logic Mapping,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 03_architecture_design,UAT RECORD — Architecture Design,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.1.1,2026-02-07
 03_dashboard,UAT RECORD — Dashboard,Web Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 03_market_research,UAT RECORD — Market Research,Business Analysis,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
-03_non_coder_debug,UAT RECORD — Non-coder Debug,Non-coder Workflow,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
+03_non_coder_debug,UAT RECORD — Non-coder Debug,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 03_output_quality_check,UAT RECORD — Output Quality Check,AI/ML Evaluation,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.1,2026-02-07
 03_performance_review,UAT RECORD — Performance Review,HR & Operations,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 03_presentation,UAT RECORD — Presentation,Content Creation,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
@@ -33,11 +33,11 @@ skill_id,title,domain,risk_level,status,badge,decision_score,completeness_score,
 04_blog_docs,UAT RECORD — Blog / Documentation,Web Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 04_compliance_checklist,UAT RECORD — Compliance Checklist,Legal & Contracts,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 04_database_schema_design,UAT RECORD — Database Schema Design,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.1.1,2026-02-07
-04_grandma_ux_test,UAT RECORD — Grandma UX Test,Non-coder Workflow,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
+04_grandma_ux_test,UAT RECORD — Grandma UX Test,Product UX,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 04_kpi_dashboard_audit,UAT RECORD — KPI Dashboard Audit,Finance & Analytics,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.1,2026-02-07
 04_onboarding_checklist,UAT RECORD — Onboarding Checklist,HR & Operations,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 05_api_design_spec,UAT RECORD — API Design Spec,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.1.1,2026-02-07
-05_auto_documentation_vn,UAT RECORD — Auto Documentation (Vietnamese),Non-coder Workflow,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
+05_auto_documentation_vn,UAT RECORD — Auto Documentation (Vietnamese),App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 05_cash_flow_analysis,UAT RECORD — Cash Flow Analysis,Finance & Analytics,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.1,2026-02-07
 05_cost_optimization,UAT RECORD — Cost Optimization,AI/ML Evaluation,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.1,2026-02-07
 05_ip_protection,UAT RECORD — IP Protection,Legal & Contracts,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
@@ -47,11 +47,11 @@ skill_id,title,domain,risk_level,status,badge,decision_score,completeness_score,
 06_chart_data_visualization,UAT RECORD — Chart & Data Visualization,Web Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 06_desktop_app_spec,UAT RECORD — Desktop App Spec,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.1.1,2026-02-07
 06_investment_due_diligence,UAT RECORD — Investment Due Diligence,Finance & Analytics,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.1,2026-02-07
-06_portable_packaging,UAT RECORD — Portable App Packaging,Non-coder Workflow,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
+06_portable_packaging,UAT RECORD — Portable App Packaging,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 07_cli_tool_spec,UAT RECORD — CLI Tool Spec,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.1.1,2026-02-07
 07_financial_risk_assessment,UAT RECORD — Financial Risk Assessment,Finance & Analytics,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.1,2026-02-07
 07_landing_page_pattern,UAT RECORD — Landing Page Pattern,Web Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
-07_project_init_checklist,UAT RECORD — Project Init Checklist (Non-coder),Non-coder Workflow,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
+07_project_init_checklist,UAT RECORD — Project Init Checklist (Non-coder),App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07
 08_local_deployment,UAT RECORD — Local Deployment Spec,App Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.1.1,2026-02-07
 08_revenue_forecast_review,UAT RECORD — Revenue Forecast Review,Finance & Analytics,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.1,2026-02-07
 08_web_aria_keyboard_audit,UAT RECORD — Web ARIA & Keyboard Audit,Web Development,R1,Not Run,NOT_RUN,0,0,0,0,Not Ready,1.0.0,2026-02-07

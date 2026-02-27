@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Y Admin Toolbox
+# SKILL MAPPING RECORD — Sysadmin Toolbox
 
 > **Skill ID:** sysadmin_toolbox  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: sysadmin_toolbox
-- Skill Name: Y Admin Toolbox
+- Skill Name: Sysadmin Toolbox
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/jdrhyne/agent-skills/tree/main/skills/sysadmin-toolbox
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Y Admin Toolbox theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Sysadmin Toolbox theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

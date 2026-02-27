@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Enior Data Cienti T
+# SKILL MAPPING RECORD — Senior Data Scientist
 
 > **Skill ID:** senior_data_scientist  
 > **Domain:** Ai Ml Evaluation  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: senior_data_scientist
-- Skill Name: Enior Data Cienti T
+- Skill Name: Senior Data Scientist
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/benchflow-ai/skillsbench/tree/main/tasks-no-skills/powerlifting-coef-calc/environment/skills/senior-data-scientist
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Enior Data Cienti T theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Senior Data Scientist theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

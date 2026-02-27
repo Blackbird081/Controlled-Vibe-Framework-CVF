@@ -140,7 +140,7 @@
     {
       "skill_id": "01_vibe_to_spec",
       "title": "UAT RECORD — Vibe-to-Spec Translator",
-      "domain": "Non-coder Workflow",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "badge": "NOT_RUN",
@@ -290,7 +290,7 @@
     {
       "skill_id": "02_vibe_logic_mapping",
       "title": "UAT RECORD — Vibe Logic Mapping",
-      "domain": "Non-coder Workflow",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "badge": "NOT_RUN",
@@ -350,7 +350,7 @@
     {
       "skill_id": "03_non_coder_debug",
       "title": "UAT RECORD — Non-coder Debug",
-      "domain": "Non-coder Workflow",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "badge": "NOT_RUN",
@@ -515,7 +515,7 @@
     {
       "skill_id": "04_grandma_ux_test",
       "title": "UAT RECORD — Grandma UX Test",
-      "domain": "Non-coder Workflow",
+      "domain": "Product UX",
       "risk_level": "R1",
       "status": "Not Run",
       "badge": "NOT_RUN",
@@ -575,7 +575,7 @@
     {
       "skill_id": "05_auto_documentation_vn",
       "title": "UAT RECORD — Auto Documentation (Vietnamese)",
-      "domain": "Non-coder Workflow",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "badge": "NOT_RUN",
@@ -725,7 +725,7 @@
     {
       "skill_id": "06_portable_packaging",
       "title": "UAT RECORD — Portable App Packaging",
-      "domain": "Non-coder Workflow",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "badge": "NOT_RUN",
@@ -785,7 +785,7 @@
     {
       "skill_id": "07_project_init_checklist",
       "title": "UAT RECORD — Project Init Checklist (Non-coder)",
-      "domain": "Non-coder Workflow",
+      "domain": "App Development",
       "risk_level": "R1",
       "status": "Not Run",
       "badge": "NOT_RUN",

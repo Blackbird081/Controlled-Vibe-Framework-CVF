@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Dev Brow Er
+# SKILL MAPPING RECORD — Dev Browser
 
 > **Skill ID:** dev_browser  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: dev_browser
-- Skill Name: Dev Brow Er
+- Skill Name: Dev Browser
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/MemTensor/MemOS/tree/main/openwork-memos-integration/apps/desktop/skills/dev-browser
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Dev Brow Er theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Dev Browser theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

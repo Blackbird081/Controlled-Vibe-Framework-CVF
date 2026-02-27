@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Devop Trouble Hooter
+# SKILL MAPPING RECORD — Devops Troubleshooter
 
 > **Skill ID:** devops_troubleshooter  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: devops_troubleshooter
-- Skill Name: Devop Trouble Hooter
+- Skill Name: Devops Troubleshooter
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/rmyndharis/antigravity-skills/tree/main/skills/devops-troubleshooter
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Devop Trouble Hooter theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Devops Troubleshooter theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

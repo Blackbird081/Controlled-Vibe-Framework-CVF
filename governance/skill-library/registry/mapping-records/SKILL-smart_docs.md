@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Mart Doc
+# SKILL MAPPING RECORD — Smart Docs
 
 > **Skill ID:** smart_docs  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: smart_docs
-- Skill Name: Mart Doc
+- Skill Name: Smart Docs
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/sopaco/deepwiki-rs/tree/main/skills/smart-docs
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Mart Doc theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Smart Docs theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

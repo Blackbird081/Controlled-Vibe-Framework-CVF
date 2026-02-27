@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Bu Ine Plan
+# SKILL MAPPING RECORD — Business Plan
 
 > **Skill ID:** business_plan  
 > **Domain:** Business Analysis  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: business_plan
-- Skill Name: Bu Ine Plan
+- Skill Name: Business Plan
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/openclaw/skills/tree/main/skills/jk-0001/business-plan
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Bu Ine Plan theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Business Plan theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

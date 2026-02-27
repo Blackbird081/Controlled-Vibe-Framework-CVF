@@ -17,7 +17,7 @@
 |---|---|
 | AI/ML Evaluation | 6 |
 | Ai Ml Evaluation | 4 |
-| App Development | 44 |
+| App Development | 50 |
 | Business Analysis | 6 |
 | Content Creation | 4 |
 | Finance & Analytics | 9 |
@@ -27,8 +27,8 @@
 | Legal Contracts | 2 |
 | Marketing & SEO | 11 |
 | Marketing Seo | 2 |
-| Non-coder Workflow | 7 |
 | Product & UX | 14 |
+| Product UX | 1 |
 | Product Ux | 6 |
 | Security & Compliance | 6 |
 | Security Compliance | 2 |
@@ -47,7 +47,7 @@
 | 01_landing_page | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 01_model_selection | AI/ML Evaluation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 01_strategy_analysis | Business Analysis | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 01_vibe_to_spec | Non-coder Workflow | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
+| 01_vibe_to_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 02_architecture_review | Technical Review | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 02_financial_statement_review | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 02_interview_evaluation | HR & Operations | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
@@ -57,11 +57,11 @@
 | 02_risk_assessment | Business Analysis | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 02_saas_app | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 02_tech_stack_selection | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 02_vibe_logic_mapping | Non-coder Workflow | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
+| 02_vibe_logic_mapping | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 03_architecture_design | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 03_dashboard | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 03_market_research | Business Analysis | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 03_non_coder_debug | Non-coder Workflow | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
+| 03_non_coder_debug | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 03_output_quality_check | AI/ML Evaluation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 03_performance_review | HR & Operations | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 03_presentation | Content Creation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
@@ -72,11 +72,11 @@
 | 04_blog_docs | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 04_compliance_checklist | Legal & Contracts | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 04_database_schema_design | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 04_grandma_ux_test | Non-coder Workflow | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
+| 04_grandma_ux_test | Product UX | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 04_kpi_dashboard_audit | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 04_onboarding_checklist | HR & Operations | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 05_api_design_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 05_auto_documentation_vn | Non-coder Workflow | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
+| 05_auto_documentation_vn | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 05_cash_flow_analysis | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 05_cost_optimization | AI/ML Evaluation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 05_ip_protection | Legal & Contracts | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
@@ -86,11 +86,11 @@
 | 06_chart_data_visualization | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 06_desktop_app_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 06_investment_due_diligence | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 06_portable_packaging | Non-coder Workflow | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
+| 06_portable_packaging | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 07_cli_tool_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 07_financial_risk_assessment | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 07_landing_page_pattern | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 07_project_init_checklist | Non-coder Workflow | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
+| 07_project_init_checklist | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 08_local_deployment | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 08_revenue_forecast_review | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 08_web_aria_keyboard_audit | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |

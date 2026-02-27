@@ -86,6 +86,12 @@ export const templateToSkillMap: Record<string, SkillRef> = {
     'research_project_wizard': { domain: 'ai_ml_evaluation', skillId: '01_model_selection' },
     'data_analysis_wizard': { domain: 'finance_analytics', skillId: '01_budget_analysis' },
     'data_analysis': { domain: 'finance_analytics', skillId: '01_budget_analysis' },
+
+    // === New skills added to existing domains ===
+    // Financial Trend Predictor → linked from data_analysis template (new unique key)
+    'data_analysis_finance': { domain: 'finance_analytics', skillId: '09_financial_trend_predictor' },
+    // Grandma UX Test → linked from new unique key (existing ux_heuristic_evaluation kept as-is above)
+    'grandma_ux_test': { domain: 'product_ux', skillId: '04_grandma_ux_test' },
 };
 
 /**

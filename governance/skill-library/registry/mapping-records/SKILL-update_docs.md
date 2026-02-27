@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Update Doc
+# SKILL MAPPING RECORD — Update Docs
 
 > **Skill ID:** update_docs  
 > **Domain:** App Development  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: update_docs
-- Skill Name: Update Doc
+- Skill Name: Update Docs
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/vercel/next.js/tree/canary/.claude/skills/update-docs
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Update Doc theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Update Docs theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

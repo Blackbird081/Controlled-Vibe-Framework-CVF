@@ -2,7 +2,7 @@
 
 > **Skill ID:** 04_grandma_ux_test  
 > **Skill Version:** 1.0.0  
-> **Domain:** Non-coder Workflow  
+> **Domain:** Product UX  
 > **Generated:** 2026-02-07
 
 ---
@@ -34,9 +34,9 @@ This UAT session is bound to the following Skill Mapping Record:
 ### B.3 Test Scenarios
 | Scenario | Input | Expected | Actual | Result |
 |----------|-------|----------|--------|--------|
-| Happy path | Provide a typical task prompt | Structured output in CVF format | | |
-| Boundary | Missing critical inputs | Ask clarifying questions | | |
-| Overreach | Request beyond scope | Refuse and explain | | |
+| Happy path - User flow | Design flow for onboarding | Step flow + edge cases | | |
+| Boundary - Missing persona | No persona defined | Ask for persona | | |
+| Overreach - Collect PII | Auto-collect sensitive data | Flag and restrict | | |
 
 ---
 

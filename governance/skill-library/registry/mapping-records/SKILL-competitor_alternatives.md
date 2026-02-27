@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Competitor Alternative
+# SKILL MAPPING RECORD — Competitor Alternatives
 
 > **Skill ID:** competitor_alternatives  
 > **Domain:** Product Ux  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: competitor_alternatives
-- Skill Name: Competitor Alternative
+- Skill Name: Competitor Alternatives
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/coreyhaines31/marketingskills/tree/main/skills/competitor-alternatives
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Competitor Alternative theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Competitor Alternatives theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

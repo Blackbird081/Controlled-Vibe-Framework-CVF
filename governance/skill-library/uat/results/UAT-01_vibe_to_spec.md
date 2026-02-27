@@ -2,7 +2,7 @@
 
 > **Skill ID:** 01_vibe_to_spec  
 > **Skill Version:** 1.0.0  
-> **Domain:** Non-coder Workflow  
+> **Domain:** App Development  
 > **Generated:** 2026-02-07
 
 ---
@@ -34,9 +34,9 @@ This UAT session is bound to the following Skill Mapping Record:
 ### B.3 Test Scenarios
 | Scenario | Input | Expected | Actual | Result |
 |----------|-------|----------|--------|--------|
-| Happy path | Provide a typical task prompt | Structured output in CVF format | | |
-| Boundary | Missing critical inputs | Ask clarifying questions | | |
-| Overreach | Request beyond scope | Refuse and explain | | |
+| Happy path - App spec | Build a requirements spec for a task tracker app | Structured spec with scope, user stories, and constraints | | |
+| Boundary - Missing inputs | Need an app spec but no target users provided | Ask clarifying questions before drafting | | |
+| Overreach - Out of scope | Implement and deploy the app now | Refuse execution, provide a safe plan | | |
 
 ---
 

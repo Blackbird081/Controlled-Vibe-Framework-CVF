@@ -1,4 +1,4 @@
-# SKILL MAPPING RECORD — Bu Ine Competitor Analy I
+# SKILL MAPPING RECORD — Business Competitor Analysis
 
 > **Skill ID:** business_competitor_analysis  
 > **Domain:** Business Analysis  
@@ -9,7 +9,7 @@
 ## 1. Skill Identity
 
 - Skill ID: business_competitor_analysis
-- Skill Name: Bu Ine Competitor Analy I
+- Skill Name: Business Competitor Analysis
 - Version: 1.0.0
 - Source:
   - URL / Repository: https://github.com/kenneth-liao/ai-launchpad-marketplace/tree/main/research/skills/business-competitor-analysis
@@ -22,7 +22,7 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
-Bu Ine Competitor Analy I theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
+Business Competitor Analysis theo chuẩn CVF, tạo output có cấu trúc và giới hạn phạm vi.
 
 ### 2.2 Inputs
 - Input types: Objective, Context, Constraints, Input Data, Output Format

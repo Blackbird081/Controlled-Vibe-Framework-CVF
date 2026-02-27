@@ -4,12 +4,12 @@
 
 ## Overview
 
-| Criteria | v1.0 | v1.1 | v1.2 | v1.3 | v1.6 | v1.6.1 | v1.7 | v1.7.1 | v1.7.2 |
-|----------|:----:|:----:|:----:|:----:|:----:|:------:|:----:|:------:|:------:|
-| **Type** | Core | Core | Extension | Toolkit | Web App | Gov Engine | Intelligence | Safety Runtime | Safety Dashboard |
-| **Purpose** | Baseline | Control | Skill Gov | Implementation | End-User | Enterprise | Agent Behavior | Policy Enforcement | Non-Coder View |
-| **Target** | Beginners | Complex projects | Enterprise | DevOps | ALL users | CI/CD + Audit | AI Safety | Runtime Engine | Non-Coders |
-| **Status** | 🔒 FROZEN | 🔒 FROZEN | 🔒 FROZEN | 🔒 FROZEN | ✅ ACTIVE | ✅ ACTIVE | ✅ STABLE | ✅ STABLE | ✅ STABLE |
+| Criteria | v1.0 | v1.1 | v1.2 | v1.3 | v1.6 | v1.6.1 | v1.7 | v1.7.1 | v1.7.2 | v1.7.3 |
+|----------|:----:|:----:|:----:|:----:|:----:|:------:|:----:|:------:|:------:|:------:|
+| **Type** | Core | Core | Extension | Toolkit | Web App | Gov Engine | Intelligence | Safety Runtime | Safety Dashboard | Adapter Hub |
+| **Purpose** | Baseline | Control | Skill Gov | Implementation | End-User | Enterprise | Agent Behavior | Policy Enforcement | Non-Coder View | Multi-Runtime |
+| **Target** | Beginners | Complex projects | Enterprise | DevOps | ALL users | CI/CD + Audit | AI Safety | Runtime Engine | Non-Coders | Runtime Agnostic |
+| **Status** | 🔒 FROZEN | 🔒 FROZEN | 🔒 FROZEN | 🔒 FROZEN | ✅ ACTIVE | ✅ ACTIVE | ✅ STABLE | ✅ STABLE | ✅ STABLE | 🆕 NEW |
 
 ---
 
@@ -124,18 +124,23 @@ timeline
 
 ### 6. AI Safety Layer (v1.7+)
 
-| Feature | v1.0–v1.6.1 | v1.7 | v1.7.1 | v1.7.2 |
-|---------|:-----------:|:----:|:------:|:------:|
-| Reasoning Gate | ❌ | ✅ | ✅ | ✅ |
-| Entropy Guard | ❌ | ✅ | ✅ | ✅ |
-| Prompt Sanitizer | ❌ | ✅ | ✅ | ✅ |
-| Anomaly Detection | ❌ | ✅ | ✅ | ✅ |
-| Policy Lifecycle Engine | ❌ | ❌ | ✅ | ✅ |
-| Auth & DI Container | ❌ | ❌ | ✅ | ✅ |
-| Audit Trail | ❌ | ❌ | ✅ | ✅ |
-| Safety Dashboard | ❌ | ❌ | ❌ | ✅ |
-| Risk Level View (🟢🟡🟠🔴) | ❌ | ❌ | ❌ | ✅ |
-| Non-Coder Interface | ❌ | ❌ | ❌ | ✅ |
+| Feature | v1.0–v1.6.1 | v1.7 | v1.7.1 | v1.7.2 | v1.7.3 |
+|---------|:-----------:|:----:|:------:|:------:|:------:|
+| Reasoning Gate | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Entropy Guard | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Prompt Sanitizer | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Anomaly Detection | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Policy Lifecycle Engine | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Auth & DI Container | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Audit Trail | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Safety Dashboard | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Risk Level View (🟢🟡🟠🔴) | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Non-Coder Interface | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Runtime Adapter Contracts | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Multi-Runtime Support | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Explainability Layer (EN/VI) | ❌ | ❌ | ❌ | ❌ | ✅ |
+| NL Policy Parser | ❌ | ❌ | ❌ | ❌ | ✅ |
+| JSON Risk Models | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -160,6 +165,7 @@ timeline
 | AI behavior control | **v1.7** | Reasoning gate + entropy guard |
 | Policy enforcement runtime | **v1.7.1** | Safety Runtime |
 | Non-coder risk visibility | **v1.7.2** | Safety Dashboard |
+| Multi-runtime adapter layer | **v1.7.3** | Runtime Adapter Hub |
 
 ---
 
@@ -230,6 +236,7 @@ flowchart TB
 - **v1.7 adds Intelligence** — Agent behavior control layer
 - **v1.7.1 adds Runtime** — Policy enforcement engine
 - **v1.7.2 adds Dashboard** — Non-coder safety UI
+- **v1.7.3 adds Adapter Hub** — Universal runtime adapter contracts
 
 ---
 
@@ -308,9 +315,10 @@ flowchart TB
 | **v1.7** | AI behavior control, prompt safety |
 | **v1.7.1** | Policy enforcement runtime |
 | **v1.7.2** | Non-coder safety dashboard |
+| **v1.7.3** | Multi-runtime adapter layer |
 
 > **Recommendation:** Start with v1.0, upgrade progressively as needed. The Web UI (v1.6) is the quickest path for most users. v1.7.x safety features are automatically included.
 
 ---
 
-*Updated: February 25, 2026*
+*Updated: February 28, 2026*

@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "external_communication": {
+
+    "sensitive_domains": [
+      "unknown-domain.com",
+      "suspicious-api.net"
+    ],
+
+    "risk_increase_if_unlisted": 25,
+
+    "data_exfiltration_keywords": [
+      "export all data",
+      "dump database",
+      "send credentials"
+    ],
+
+    "risk_increase_if_sensitive_content": 35
+  }
+}

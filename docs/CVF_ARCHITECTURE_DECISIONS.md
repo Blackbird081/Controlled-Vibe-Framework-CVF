@@ -162,3 +162,58 @@ Created `governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md` defining:
 - `governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md`
 - `governance/toolkit/05_OPERATION/CONTINUOUS_GOVERNANCE_LOOP.md`
 - `docs/CVF_ARCHITECTURE_DECISIONS.md` (this file)
+
+---
+
+## ADR-005: Hypervisor Mode Integration — Extract, Don't Duplicate
+
+| Field | Value |
+|---|---|
+| Date | 2026-02-28 |
+| Status | Active |
+| Related commits | *(this commit)* |
+
+### Context
+A `CVF_Hypervisor Mode` folder (30 files) was created as a prototype for an AI Safety Hypervisor concept — a runtime layer sitting between LLM output and system execution. Quality evaluation revealed that ~60% of its code duplicated existing v1.7.x modules (risk scorer, policy engine, decision gate, dashboard, ledger) at lower quality (0 tests, in-memory only, no auth/DI), while ~40% introduced genuinely new concepts not found anywhere in CVF.
+
+### Decision
+**Extract unique value into a new extension; discard duplicates; delete the original folder.**
+
+1. **Version**: v1.7.3 (PATCH extending v1.7.1, following established pattern v1.7 → v1.7.1 → v1.7.2 → v1.7.3)
+2. **Name**: Runtime Adapter Hub
+3. **Layer**: AI Safety Layer (Layer 3)
+4. **Location**: `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/`
+
+**Kept** (13 files — unique value):
+- `contracts/` — 5 universal adapter interfaces (LLM, Runtime, Tool, Memory, Policy)
+- `adapters/` — 4 runtime implementations (OpenClaw, PicoClaw, ZeroClaw, Nano) + shared base
+- `explainability/` — Human-readable action explanations (EN/VI)
+- `policy/` — Natural language policy parser
+- `risk_models/` — 4 JSON risk configuration files
+
+**Discarded** (14 files — duplicated v1.7.x at lower quality):
+- `core/` (5 of 6 files) — v1.7.1 has superior risk engine, policy registry, state machine
+- `dashboard/` (4 files) — v1.7.2 has complete React Safety Dashboard
+- `ledger/` (4 files) — v1.7.1 has Prisma-backed journal and snapshots
+- `index.ts` — Demo file that did not use the core pipeline
+
+**Deleted**: `CVF_Hypervisor Mode/` folder removed entirely after extraction.
+
+### Rationale
+- Maintaining parallel code would create a weaker second codebase competing with production-grade v1.7.x
+- The unique innovations (runtime adapter contracts, NLP policy, explainability) are genuinely new capabilities that extend CVF without overlapping
+- v1.7.3 as a PATCH version correctly signals "sub-extension of v1.7.1" without breaking backward compatibility
+- The `Thong_tin.md` competitive analysis was preserved as `docs/CVF_HYPERVISOR_STRATEGY.md`
+
+### Consequences
+- Future runtime adapter additions must implement the `RuntimeAdapter` contract in `contracts/`
+- The explainability layer can be integrated into v1.7.2 Safety Dashboard for NL action descriptions
+- 41 unit tests validate all new modules (contracts, adapters, explainability, NLP parser)
+- `docs/VERSIONING.md` and `docs/VERSION_COMPARISON.md` updated with v1.7.3
+
+### Related Files
+- `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/` (new extension)
+- `docs/VERSIONING.md` (updated)
+- `docs/VERSION_COMPARISON.md` (updated)
+- `docs/CVF_HYPERVISOR_STRATEGY.md` (moved from Hypervisor Mode)
+- `.gitignore` (still contains `CVF_Hypervisor Mode/` entry — harmless)

@@ -25,6 +25,7 @@ Examples:
 - `v1.3` — Implementation Toolkit
 - `v1.6` — Agent Platform
 - `v1.7.2` — Safety Dashboard
+- `v1.7.3` — Runtime Adapter Hub
 
 PATCH versions are used for sub-extensions within a minor version (e.g., v1.7.1, v1.7.2).
 
@@ -41,6 +42,7 @@ PATCH versions are used for sub-extensions within a minor version (e.g., v1.7.1,
 | v1.7 | Controlled Intelligence | ✅ STABLE | Feb 24, 2026 |
 | v1.7.1 | Safety Runtime | ✅ STABLE | Feb 24, 2026 |
 | v1.7.2 | Safety Dashboard | ✅ STABLE | Feb 24, 2026 |
+| v1.7.3 | Runtime Adapter Hub | 🆕 NEW | Feb 28, 2026 |
 
 ---
 
@@ -86,6 +88,7 @@ Examples:
 - CVF v1.6.1 — Governance Engine (extends v1.6)
 - CVF v1.7.1 — Safety Runtime (extends v1.7)
 - CVF v1.7.2 — Safety Dashboard (extends v1.7.1)
+- CVF v1.7.3 — Runtime Adapter Hub (extends v1.7.1)
 
 ---
 
@@ -173,6 +176,7 @@ Examples:
 - CVF v1.7 – Controlled Intelligence
 - CVF v1.7.1 – Safety Runtime
 - CVF v1.7.2 – Safety Dashboard
+- CVF v1.7.3 – Runtime Adapter Hub
 
 ---
 
@@ -191,4 +195,4 @@ All other interpretations are **not valid**.
 
 ---
 
-*Updated: February 25, 2026*
+*Updated: February 28, 2026*

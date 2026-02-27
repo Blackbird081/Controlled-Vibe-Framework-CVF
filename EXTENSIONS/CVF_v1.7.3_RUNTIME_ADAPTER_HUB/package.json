@@ -1,0 +1,22 @@
+{
+    "name": "cvf-runtime-adapter-hub",
+    "version": "1.7.3",
+    "description": "CVF v1.7.3 — Runtime Adapter Hub: Universal adapter layer for multi-runtime AI safety",
+    "main": "index.ts",
+    "scripts": {
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "test:watch": "vitest"
+    },
+    "devDependencies": {
+        "typescript": "^5.7.0",
+        "vitest": "^3.0.0"
+    },
+    "keywords": [
+        "cvf",
+        "ai-safety",
+        "runtime-adapter",
+        "hypervisor"
+    ],
+    "license": "CC-BY-NC-ND-4.0"
+}

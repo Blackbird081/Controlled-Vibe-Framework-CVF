@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "description": "Base risk matrix",
+
+  "filesystem": {
+    "read": 20,
+    "write": 60,
+    "delete": 85
+  },
+
+  "shell": {
+    "execute": 95
+  },
+
+  "http": {
+    "get": 30,
+    "post": 50,
+    "external_call": 70
+  },
+
+  "email": {
+    "send": 55
+  },
+
+  "database": {
+    "read": 40,
+    "write": 75,
+    "drop": 98
+  }
+}

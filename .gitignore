@@ -53,3 +53,6 @@ AI-Research-SKILLs/
 # Mini Game projects (local case study, publish later when completed)
 Mini Game/
 Mini_Game/scores.db
+
+# Hypervisor Mode (restricted, not for public release)
+CVF_Hypervisor Mode/

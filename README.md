@@ -4,7 +4,7 @@
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
-[![Version](https://img.shields.io/badge/version-1.7.2-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
+[![Version](https://img.shields.io/badge/version-1.7.3-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-1764%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
 [![Kernel Tests](https://img.shields.io/badge/kernel%20tests-51%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
@@ -125,6 +125,8 @@ When using AI to code without a framework:
 - 🧠 **5-Layer Safety Kernel** - Domain Lock → Contract Runtime → Contamination Guard → Refusal Router → Creative Control
 - 🛡️ **AI Safety Runtime** - Prompt sanitizer, entropy guard, anomaly detection, policy enforcement
 - 📊 **Safety Dashboard** - Real-time risk view: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous
+- 🔌 **Runtime Adapter Hub** (v1.7.3 NEW) - Universal adapter contracts for multi-runtime AI safety (OpenClaw, PicoClaw, ZeroClaw, Nano)
+- 🗣️ **Explainability Layer** (v1.7.3 NEW) - Human-readable action explanations in English & Vietnamese
 - 🔍 **Kernel Health Dashboard** - Domain lock status, risk level (R0-R4), refusal count, pipeline latency
 - 📈 **Risk Evolution Chart** - Historical risk trend visualization with hover tooltips
 - 🔎 **Request Trace Viewer** - Click-to-view forensic trace (requestId, traceHash, decision)
@@ -249,11 +251,16 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  🛡️ SAFETY UI (Layer 4)    — Non-Coder Safety Dashboard │
+│  🛡️ SAFETY UI (Layer 5)    — Non-Coder Safety Dashboard │
 │     v1.7.2                  — Read-only risk view         │
 │     Risk: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous   │
 │     + Health Dashboard, Trace Viewer, Risk Chart         │
 │     + Policy Selector, Creative Mode, Domain Map         │
+├─────────────────────────────────────────────────────────┤
+│  🔌 ADAPTER HUB (Layer 4)  — Runtime Adapter Contracts   │
+│     v1.7.3                  — Multi-runtime AI safety     │
+│     OpenClaw | PicoClaw | ZeroClaw | Nano                │
+│     + Explainability (EN/VI) + NLP Policy + Risk Models  │
 ├─────────────────────────────────────────────────────────┤
 │  🌐 PLATFORM (Layer 3)     — Web UI, Agent Chat          │
 │     v1.6 Agent Platform    — Production runtime           │
@@ -295,6 +302,7 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 - **v1.7** 🧠 - Controlled Intelligence (agent behavior control, prompt sanitizer)
 - **v1.7.1** ⚙️ - Safety Runtime (5-layer kernel: domain lock, contract, contamination, refusal, creative)
 - **v1.7.2** 🛡️ - Safety Dashboard (non-coder risk view)
+- **v1.7.3** 🔌 - Runtime Adapter Hub (multi-runtime contracts, explainability, NLP policy)
 
 **Which should you use?**
 
@@ -372,7 +380,7 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 
 | Metric | Status |
 |--------|--------|
-| **Version** | 1.7.2 (Feb 2026) |
+| **Version** | 1.7.3 (Feb 2026) |
 | **Stability** | Production-ready — 6/6 integration sprints complete |
 | **Quality Snapshot (2026-02-26)** | Lint: 0 errors · Web Tests: 1764 passing · Kernel Tests: 51 passing |
 | **Coverage Snapshot (2026-02-26)** | Web: Stmts 93.05% · Kernel: Stmts 96.45% Br 91.41% Fn 99.09% Ln 97.01% |
@@ -460,4 +468,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 27, 2026 | Version 1.7.2 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: February 28, 2026 | Version 1.7.3 | [Documentation](docs/GET_STARTED.md)*

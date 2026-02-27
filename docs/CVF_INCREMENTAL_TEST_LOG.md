@@ -580,3 +580,30 @@ Template:
   - No GitHub push/merge actions executed (owner approval required).
 - Notes/Risks:
   - Non-escalated Vitest runs initially failed with sandbox `spawn EPERM`; reruns with escalation succeeded.
+
+## [2026-02-27] Batch: cvf-web coverage threshold recovery after governance updates
+- Change reference:
+  - `85a5ede` (coverage thresholds: statements/functions/lines 90, branches 80)
+  - `f9de6d2` (governance enforcement update in `governance-post-check`)
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/vitest.config.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governance-post-check.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governance-post-check.test.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/safety-status.test.ts` (new)
+- Tests executed:
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && npm ci` -> PASS
+  - `npm run test:coverage -- src/lib/governance-post-check.test.ts` -> PASS
+    - `governance-post-check.ts`: Statements `100%`, Branches `87.5%`, Functions `100%`, Lines `100%`
+  - `npm run test:run -- "src/app/(dashboard)/safety/page.test.tsx"` -> PASS (`6/6`)
+  - `npm run test:run -- src/lib/safety-status.test.ts` -> PASS (`10/10`)
+  - `npm run test:coverage` -> PASS (full `cvf-web`)
+- Coverage result (full `cvf-web`):
+  - Statements `92%+` (pass)
+  - Branches `80%+` (pass)
+  - Functions `90%+` (pass)
+  - Lines `93%+` (pass)
+- Skip scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**`: skipped in this batch because request focused on latest `cvf-web`/GitHub updates.
+- Notes/Risks:
+  - Some tests log non-blocking stderr (`fetch failed` fallback logs, jsdom navigation not implemented); suite remains green and coverage gate passes.

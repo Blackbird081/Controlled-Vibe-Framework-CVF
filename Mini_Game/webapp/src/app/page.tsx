@@ -467,6 +467,34 @@ export default function Home() {
         progress.dailyStats.byGame.color.rounds > 0,
     };
   }, [progress.dailyStats]);
+  const comboStatus = useMemo(() => {
+    const comboModulo = progress.combo % 3;
+    const progressToBadge = comboModulo === 0 && progress.combo > 0 ? 100 : Math.round((comboModulo / 3) * 100);
+    const remainingForBadge = comboModulo === 0 ? 3 : 3 - comboModulo;
+    const streakProgress = Math.min(100, Math.round((progress.streak / 7) * 100));
+    return {
+      progressToBadge,
+      remainingForBadge,
+      streakProgress,
+    };
+  }, [progress.combo, progress.streak]);
+  const coachTip = useMemo(() => {
+    if (!playable) {
+      return "Hom nay da het quota choi. Nghia 1 chut roi quay lai vao ngay mai nhe.";
+    }
+    if (feedback.tone === "success") {
+      return "Nhip rat tot. Giu combo de mo khoa them huy hieu!";
+    }
+    if (feedback.tone === "error" && wrongStreak >= 2) {
+      if (activeGame === "math") return "Thu tach phep tinh thanh so nho de tim dap an nhanh hon.";
+      if (activeGame === "memory") return "Nhin cum 2 ky hieu 1 lan de nho de hon.";
+      return "Tap trung vao MAU chu, dung doc noi dung cua chu.";
+    }
+    if (timeLeft <= 6) {
+      return "Sap het gio. Chon dap an nhanh va chinh xac!";
+    }
+    return "Nhan phim 1-4 de tra loi sieu nhanh, phim R de choi lai run.";
+  }, [activeGame, feedback.tone, playable, timeLeft, wrongStreak]);
 
   const handleWrong = useCallback(
     (reason: "answer_wrong" | "round_timeout") => {
@@ -949,9 +977,38 @@ export default function Home() {
           </article>
         </section>
 
+        <section className={styles.arcadeStrip} aria-label="Bang trang thai tran dau">
+          <article className={styles.arcadeCard}>
+            <p className={styles.arcadeTitle}>Combo Reactor</p>
+            <p className={styles.arcadeHint}>Con {comboStatus.remainingForBadge} cau dung nua de no huy hieu.</p>
+            <div className={styles.arcadeTrack} role="presentation" aria-hidden>
+              <span className={styles.arcadeFill} style={{ width: `${comboStatus.progressToBadge}%` }} />
+            </div>
+            <p className={styles.arcadeValue}>x{progress.combo}</p>
+          </article>
+          <article className={styles.arcadeCard}>
+            <p className={styles.arcadeTitle}>Nang luong vong</p>
+            <p className={styles.arcadeHint}>Giu nhip trong {activeRoundConfig.roundSeconds}s de dat diem cao.</p>
+            <div className={styles.arcadeTrack} role="presentation" aria-hidden>
+              <span className={styles.arcadeFillWarm} style={{ width: `${Math.round(timeRatio * 100)}%` }} />
+            </div>
+            <p className={styles.arcadeValue}>{Math.round(timeRatio * 100)}%</p>
+          </article>
+          <article className={styles.arcadeCard}>
+            <p className={styles.arcadeTitle}>Coach Bot</p>
+            <p className={styles.arcadeHint}>{coachTip}</p>
+            <div className={styles.arcadeTrack} role="presentation" aria-hidden>
+              <span className={styles.arcadeFillCool} style={{ width: `${comboStatus.streakProgress}%` }} />
+            </div>
+            <p className={styles.arcadeValue}>Streak {progress.streak}/7</p>
+          </article>
+        </section>
+
         <section
           id="mission-zone"
-          className={`${styles.questionCard} ${timeLeft <= 6 ? styles.questionCardDanger : ""}`}
+          className={`${styles.questionCard} ${timeLeft <= 6 ? styles.questionCardDanger : ""} ${
+            feedback.tone === "success" ? styles.questionCardBoost : ""
+          }`}
         >
           {showCelebration ? (
             <div className={styles.confettiLayer} aria-hidden>

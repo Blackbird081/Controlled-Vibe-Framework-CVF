@@ -23,7 +23,16 @@ import {
 import { explain, mapCvfRiskLevel, type IntentType } from '@/lib/explainability';
 import { parseNaturalPolicy, getDecisionColor } from '@/lib/natural-policy-parser';
 import { RUNTIME_ADAPTERS, CAPABILITY_LABELS, STATUS_STYLES } from '@/lib/runtime-adapters';
-import { RISK_MATRIX, DESTRUCTIVE_RULES, ESCALATION_THRESHOLDS, getCategoryColor, getCategoryBg, getScoreBar } from '@/lib/risk-models';
+import {
+    RISK_MATRIX,
+    DESTRUCTIVE_RULES,
+    ESCALATION_THRESHOLDS,
+    getCategoryColor,
+    getCategoryBg,
+    getScoreBar,
+    getRiskScoreForIntent,
+    toCvfRiskBand,
+} from '@/lib/risk-models';
 
 // ==================== LOCAL TYPES ====================
 
@@ -1056,13 +1065,11 @@ function ExplainabilityPanel({ lang }: { lang: 'vi' | 'en' }) {
     const intents: IntentType[] = ['FILE_READ', 'FILE_WRITE', 'FILE_DELETE', 'EMAIL_SEND', 'API_CALL', 'CODE_EXECUTION', 'DATA_EXPORT'];
     const actions: Array<'EXECUTE' | 'BLOCK' | 'ESCALATE'> = ['EXECUTE', 'BLOCK', 'ESCALATE'];
 
-    const riskScore = selectedIntent === 'FILE_DELETE' || selectedIntent === 'CODE_EXECUTION' ? 80
-        : selectedIntent === 'EMAIL_SEND' || selectedIntent === 'DATA_EXPORT' ? 55
-            : selectedIntent === 'FILE_WRITE' || selectedIntent === 'API_CALL' ? 40 : 15;
+    const riskScore = getRiskScoreForIntent(selectedIntent);
 
     const result = explain({
         intentType: selectedIntent,
-        riskLevel: mapCvfRiskLevel(riskScore >= 80 ? 'R4' : riskScore >= 60 ? 'R3' : riskScore >= 30 ? 'R2' : 'R1'),
+        riskLevel: mapCvfRiskLevel(toCvfRiskBand(riskScore)),
         riskScore,
         action: selectedAction,
     }, lang);

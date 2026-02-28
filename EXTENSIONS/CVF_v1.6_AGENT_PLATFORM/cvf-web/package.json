@@ -3,8 +3,9 @@
   "version": "1.6.0",
   "private": true,
   "scripts": {
-    "predev": "node scripts/build-skill-index.js",
-    "prebuild": "node -e \"const fs=require('fs');try{fs.rmSync('.next',{recursive:true,force:true})}catch(e){}\" && node scripts/build-skill-index.js",
+    "sync:risk-models": "node scripts/build-risk-models.js",
+    "predev": "node scripts/build-risk-models.js && node scripts/build-skill-index.js",
+    "prebuild": "node -e \"const fs=require('fs');try{fs.rmSync('.next',{recursive:true,force:true})}catch(e){}\" && node scripts/build-risk-models.js && node scripts/build-skill-index.js",
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",

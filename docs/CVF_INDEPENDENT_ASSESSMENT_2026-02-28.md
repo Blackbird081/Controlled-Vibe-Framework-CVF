@@ -7,6 +7,8 @@
 ## Assessment Timeline
 - Initial baseline head: `7b7062e` (pre-fix state).
 - Revalidation head: `3570a1d` (`fix: resolve all 5 findings from independent assessment 2026-02-28`).
+- Second revalidation head: `bc42782` (`fix(lint): resolve all 24 lint issues — zero errors, zero warnings`).
+- Third revalidation head: `working tree after drift-hardening` (risk model sync automation applied).
 
 ## Revalidation Evidence (Current)
 - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
@@ -15,36 +17,13 @@
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web`
   - `npm run test:run`: PASS
   - `npm run build`: PASS
-  - `npm run lint`: FAIL (24 issues: 18 errors, 6 warnings)
+  - `npm run lint`: PASS (0 errors, 0 warnings)
 - CI workflow review:
   - `.github/workflows/cvf-extensions-ci.yml` now includes `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` path filters and a dedicated test job.
 
 ## Findings (Current, Ordered by Severity)
-
-### 1) High - Lint gate remains red in `cvf-web`
-- Current codebase still has lint errors/warnings, including:
-  - `@typescript-eslint/no-explicit-any`
-  - `react-hooks/set-state-in-effect`
-  - unused imports/variables
-- Representative evidence:
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx:497`
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx:1353`
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/Settings.tsx:129`
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useModals.ts:21`
-
-### 2) Medium - Risk model drift risk still exists
-- `cvf-web` risk data is still manually ported constants (not directly loaded from canonical JSON in hub).
-- This is improved by warning comments but still structurally prone to drift.
-- Evidence:
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/risk-models.ts:7`
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/risk-models.ts:8`
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/risk.matrix.json`
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/destructive.rules.json`
-
-### 3) Low - README quality snapshot is not fully aligned with rerun
-- README claims `Lint: 0 errors`, while current independent rerun still reports lint failures.
-- Evidence:
-  - `README.md:385`
+- No open High/Medium quality findings in assessed scope after the latest rerun.
+- Remaining note: keep running risk-model sync script when canonical JSON changes (now automated via `predev`/`prebuild`).
 
 ## Resolved Since Baseline
 - Safety page regression test issue resolved:
@@ -65,9 +44,25 @@
     - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tsconfig.json:6`
     - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tsconfig.json:10`
     - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/package.json:12`
+- Web lint backlog resolved:
+  - `npm run lint` now passes with 0 errors and 0 warnings.
+- README quality snapshot alignment restored:
+  - `README.md` now matches the current lint status (`Lint: 0 errors`).
+  - Evidence:
+    - `README.md:385`
+- Risk model drift hardening resolved:
+  - `cvf-web` no longer hardcodes risk matrix/rules/thresholds.
+  - Risk data is generated from canonical hub JSON via script:
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/scripts/build-risk-models.js`
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/generated/risk-models.generated.ts`
+  - Sync is automated in npm lifecycle:
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package.json` (`predev`, `prebuild`)
+  - Explainability risk score mapping now consumes centralized risk data:
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx`
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/risk-models.ts`
 
 ## Independent Conclusion (Updated)
 - Major blockers from the previous assessment are fixed.
-- Current quality posture is materially improved: tests/build/typecheck are green in assessed scope.
-- Remaining stabilization gap is mainly lint discipline plus one design-level drift risk.
-- Recommended status: **Good progress; near-production quality once lint backlog and README alignment are closed.**
+- Current quality posture is strong: lint/tests/build/typecheck are green in assessed scope.
+- Previous drift gap is now closed with canonical-json-driven generation in `cvf-web`.
+- Recommended status: **Production-ready in assessed non-Mini_Game scope.**

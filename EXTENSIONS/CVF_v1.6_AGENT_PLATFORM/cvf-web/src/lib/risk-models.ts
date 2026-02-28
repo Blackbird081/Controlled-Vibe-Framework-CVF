@@ -1,13 +1,10 @@
 'use client';
 
-/**
- * CVF v1.7.3 — Risk Models (ported for Web UI)
- * Data-driven risk matrix from JSON configs.
- *
- * ⚠️ SYNC WARNING: These values are manually ported from
- * EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/*.json
- * If the canonical JSON files change, update these constants accordingly.
- */
+import {
+    GENERATED_DESTRUCTIVE_RULES,
+    GENERATED_ESCALATION_THRESHOLDS,
+    GENERATED_RISK_MATRIX,
+} from './generated/risk-models.generated';
 
 export interface RiskMatrixEntry {
     intent: string;
@@ -31,42 +28,44 @@ export interface EscalationThreshold {
     label: { vi: string; en: string };
 }
 
-// ─── Risk Matrix (from risk.matrix.json) ───
+function normalizeCategory(category: string): RiskMatrixEntry['category'] {
+    switch (category) {
+        case 'safe':
+        case 'caution':
+        case 'dangerous':
+        case 'critical':
+            return category;
+        default:
+            return 'caution';
+    }
+}
 
-export const RISK_MATRIX: RiskMatrixEntry[] = [
-    { intent: 'FILE_READ', label: { vi: 'Đọc tệp', en: 'File Read' }, baseScore: 10, category: 'safe' },
-    { intent: 'FILE_WRITE', label: { vi: 'Ghi tệp', en: 'File Write' }, baseScore: 40, category: 'caution' },
-    { intent: 'FILE_DELETE', label: { vi: 'Xóa tệp', en: 'File Delete' }, baseScore: 75, category: 'dangerous' },
-    { intent: 'EMAIL_SEND', label: { vi: 'Gửi email', en: 'Email Send' }, baseScore: 55, category: 'caution' },
-    { intent: 'API_CALL', label: { vi: 'Gọi API', en: 'API Call' }, baseScore: 45, category: 'caution' },
-    { intent: 'CODE_EXECUTION', label: { vi: 'Thực thi mã', en: 'Code Execution' }, baseScore: 80, category: 'dangerous' },
-    { intent: 'DATA_EXPORT', label: { vi: 'Xuất dữ liệu', en: 'Data Export' }, baseScore: 60, category: 'caution' },
-    { intent: 'SHELL_COMMAND', label: { vi: 'Lệnh shell', en: 'Shell Command' }, baseScore: 85, category: 'critical' },
-    { intent: 'DB_WRITE', label: { vi: 'Ghi database', en: 'DB Write' }, baseScore: 65, category: 'dangerous' },
-    { intent: 'DB_DELETE', label: { vi: 'Xóa database', en: 'DB Delete' }, baseScore: 90, category: 'critical' },
-];
+export const RISK_MATRIX: RiskMatrixEntry[] = GENERATED_RISK_MATRIX.map((entry) => ({
+    ...entry,
+    category: normalizeCategory(entry.category),
+}));
+export const DESTRUCTIVE_RULES: DestructiveRule[] = GENERATED_DESTRUCTIVE_RULES;
+export const ESCALATION_THRESHOLDS: EscalationThreshold[] = GENERATED_ESCALATION_THRESHOLDS;
 
-// ─── Destructive Patterns (from destructive.rules.json) ───
+export function getRiskScoreForIntent(intent: string): number {
+    const found = RISK_MATRIX.find((entry) => entry.intent === intent);
+    return found ? found.baseScore : 0;
+}
 
-export const DESTRUCTIVE_RULES: DestructiveRule[] = [
-    { pattern: 'rm -rf', label: { vi: 'Xóa đệ quy', en: 'Recursive delete' }, riskBoost: 30 },
-    { pattern: 'DROP TABLE', label: { vi: 'Xóa bảng DB', en: 'Drop DB table' }, riskBoost: 40 },
-    { pattern: 'FORMAT', label: { vi: 'Format ổ đĩa', en: 'Format drive' }, riskBoost: 50 },
-    { pattern: 'DELETE FROM', label: { vi: 'Xóa dữ liệu', en: 'Delete data' }, riskBoost: 25 },
-    { pattern: 'sudo', label: { vi: 'Quyền root', en: 'Root access' }, riskBoost: 20 },
-    { pattern: 'chmod 777', label: { vi: 'Mở toàn quyền', en: 'Full permissions' }, riskBoost: 15 },
-];
+export function toCvfRiskBand(score: number): 'R1' | 'R2' | 'R3' | 'R4' {
+    const threshold = ESCALATION_THRESHOLDS.find(
+        (item) => score >= item.minScore && score <= item.maxScore
+    );
 
-// ─── Escalation Thresholds (from escalation.thresholds.json) ───
+    if (!threshold) {
+        return score >= 90 ? 'R4' : score >= 70 ? 'R3' : score >= 40 ? 'R2' : 'R1';
+    }
 
-export const ESCALATION_THRESHOLDS: EscalationThreshold[] = [
-    { level: 'SAFE', minScore: 0, maxScore: 29, action: 'EXECUTE', color: 'bg-emerald-500', label: { vi: 'An toàn', en: 'Safe' } },
-    { level: 'CAUTION', minScore: 30, maxScore: 59, action: 'EXECUTE', color: 'bg-amber-500', label: { vi: 'Cẩn thận', en: 'Caution' } },
-    { level: 'REVIEW', minScore: 60, maxScore: 79, action: 'ESCALATE', color: 'bg-orange-500', label: { vi: 'Cần duyệt', en: 'Review' } },
-    { level: 'CRITICAL', minScore: 80, maxScore: 100, action: 'BLOCK', color: 'bg-red-500', label: { vi: 'Nguy hiểm', en: 'Critical' } },
-];
-
-// ─── Helpers ───
+    if (threshold.level === 'DENY') return 'R4';
+    if (threshold.level === 'SANDBOX') return 'R3';
+    if (threshold.level === 'REVIEW') return 'R2';
+    return 'R1';
+}
 
 export function getCategoryColor(category: string): string {
     switch (category) {
@@ -89,8 +88,8 @@ export function getCategoryBg(category: string): string {
 }
 
 export function getScoreBar(score: number): string {
-    if (score >= 80) return 'bg-red-500';
-    if (score >= 60) return 'bg-orange-500';
-    if (score >= 30) return 'bg-amber-500';
+    if (score >= 90) return 'bg-red-500';
+    if (score >= 70) return 'bg-orange-500';
+    if (score >= 40) return 'bg-amber-500';
     return 'bg-emerald-500';
 }

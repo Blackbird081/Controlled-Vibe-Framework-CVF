@@ -56,3 +56,6 @@ Mini_Game/scores.db
 
 # Hypervisor Mode (restricted, not for public release)
 CVF_Hypervisor Mode/
+
+# Ignore all CVF documentation folders
+CVF_DOCS/

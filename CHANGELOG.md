@@ -16,7 +16,7 @@
   - `explainability.ts` — NL action explanations
   - `natural-policy-parser.ts` — NLP → structured rules
   - `runtime-adapters.ts` — Adapter registry for UI
-  - `risk-models.ts` — Risk matrix + destructive patterns
+  - `risk-models.ts` + `build-risk-models.js` — Automated CI sync script generating TS from canonical JSON hub config
   - 4 new sections on Safety Dashboard: Runtime Adapters, Action Explainability, NLP Policy Editor, Risk Matrix
 - **CI job** `runtime-adapter-hub-tests` for v1.7.3 (vitest + typecheck)
 - **ADR-005** — Architectural decision record for Hypervisor Mode extraction
@@ -26,8 +26,9 @@
 - **BUG-010** — Safety page test regression: ambiguous `/send/i` selector (added `aria-label="Submit OpenClaw"`)
 - **BUG-011** — CI workflow missing v1.7.3 path filter
 - **BUG-012** — v1.7.3 typecheck failure (added `@types/node` + DOM lib)
-- **BUG-013** — Risk model drift risk (added sync warning comments)
+- **BUG-013** — Risk model drift risk (fixed by implementing `build-risk-models.js` to auto-generate TS definitions during build)
 - **BUG-014** — README quality snapshot outdated (updated to 2026-02-28)
+- **BUG-015** — 24 lint errors and build typecheck crashes across Web UI (resolved `no-explicit-any`, `set-state-in-effect`, introduced `OpenClawResultData`)
 
 ### Changed
 - `README.md` — Updated version to 1.7.3, quality snapshot, architecture diagram

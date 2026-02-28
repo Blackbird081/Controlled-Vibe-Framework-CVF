@@ -20,6 +20,7 @@
   - [BUG-012: v1.7.3 Runtime Adapter Hub Typecheck Failure](#bug-012-v173-runtime-adapter-hub-typecheck-failure)
   - [BUG-013: Risk Model Data Drift Between Hub and Web UI](#bug-013-risk-model-data-drift-between-hub-and-web-ui)
   - [BUG-014: README Quality Snapshot Outdated](#bug-014-readme-quality-snapshot-outdated)
+  - [BUG-015: Extensive Lint Errors and Build Typecheck Failures](#bug-015-extensive-lint-errors-and-build-typecheck-failures)
 - [Quick Reference: Common Error Patterns](#quick-reference-common-error-patterns)
 - [Prevention Checklist](#prevention-checklist)
 
@@ -337,7 +338,7 @@ error TS2307: Cannot find module 'fs' or its corresponding type declarations.
 | **Severity** | 🟡 Medium |
 | **Component** | cvf-web, CVF_v1.7.3_RUNTIME_ADAPTER_HUB |
 | **File(s)** | `cvf-web/src/lib/risk-models.ts`, `CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/*.json` |
-| **Status** | 🔄 Mitigated (sync warning added) |
+| **Status** | ✅ Fixed |
 
 **Error Message:**
 ```
@@ -348,13 +349,13 @@ No error — silent data inconsistency risk.
 Risk model data was manually ported (hardcoded) into `cvf-web/src/lib/risk-models.ts` from canonical JSON files in v1.7.3. Changes to the JSON files would not propagate to the Web UI.
 
 **Solution:**
-Added `⚠️ SYNC WARNING` comment to `risk-models.ts` referencing canonical source files. Full automation (build-time import) deferred.
+Implemented an automated `build-risk-models.js` script to parse the source JSON files directly and output a TypeScript file (`risk-models.generated.ts`). Tied this script into `package.json` lifecycle hooks (`predev`, `prebuild`) so that the UI always consumes fresh configuration logic. The initial mitigation (adding a warning comment) was replaced entirely by this CI-safe process.
 
 **Prevention:**
-- ✅ Always add sync warnings when manually porting data between modules
-- 🔲 Future: automate JSON→TS code generation during build
+- ✅ Use code-generation (`fs` → template string) during build-steps for strictly shared JSON data.
+- ✅ Never rely on developers manually copy-pasting configurations between disconnected repo packages.
 
-**Related Commits:** `3570a1d`
+**Related Commits:** `e882ec8` (user sync automation commit)
 
 ---
 
@@ -387,6 +388,45 @@ README quality snapshot was dated 2026-02-26 and did not include v1.7.3 Hub Test
 - ✅ Include new extension test counts in the snapshot
 
 **Related Commits:** `3570a1d`
+
+---
+
+### BUG-015: Extensive Lint Errors and Build Typecheck Failures
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-02-28 |
+| **Severity** | 🔴 Critical |
+| **Component** | cvf-web (Safety Page / Config) |
+| **File(s)** | `page.tsx`, `Settings.tsx`, `openclaw-engine.ts`, `openclaw-config.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+\`\`\`
+24 problems (18 errors, 6 warnings)
+- @typescript-eslint/no-explicit-any
+- react-hooks/set-state-in-effect
+- @typescript-eslint/no-unused-vars
+\`\`\`
+Along with a Next.js build crash:
+\`\`\`
+Type error: Property 'status' does not exist on type '{}'.
+\`\`\`
+
+**Root Cause:**
+While porting logic from v1.7.3 into Web UI, many types were lazily cast to `any` or `Record<string, any>`, triggering strict linting rules. Simultaneously, `refresh()` hooks were written in `useEffect` and triggered synchronous state updates, causing `cascading renders` warnings. Lastly, fixing the `any` types by replacing them with `Record<string, unknown>` broke the Next.js production build because `unknown` prevents deep property access (e.g., `result.decision?.status`).
+
+**Solution:**
+1. **Linting:** Removed unused imports. Replaced `any` arrays with proper generic structures.
+2. **React Hooks:** Wrapped `setState`-triggering functions inside `useEffect` with `queueMicrotask(() => void refresh())` to safely schedule state updates outside the render phase.
+3. **Typing & Build:** Introduced an explicit `OpenClawResultData` interface in `page.tsx` mapping the expected return signatures, rather than using `Record<string, unknown>`.
+
+**Prevention:**
+- ✅ Never use `any`. Define granular interfaces upfront.
+- ✅ Use `queueMicrotask` or restructure `useEffect` when state modifications are strictly required post-mount.
+- ✅ Always test full `npm run build` after fixing typechecker complaints.
+
+**Related Commits:** `bc42782`
 
 ---
 

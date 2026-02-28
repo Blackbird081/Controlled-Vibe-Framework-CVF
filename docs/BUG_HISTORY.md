@@ -1,7 +1,7 @@
 # 🐛 Bug History & Troubleshooting Guide
 
 > **Purpose**: Document all bugs encountered during development, their root causes, solutions, and prevention strategies.  
-> **Last Updated**: 2026-02-26  
+> **Last Updated**: 2026-02-28  
 > **Maintained by**: CVF Development Team  
 > **Governance Policy**: [`CVF_BUG_DOCUMENTATION_GUARD.md`](../governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md)  
 > **Compat Check**: `python governance/compat/check_bug_doc_compat.py --enforce`
@@ -15,6 +15,11 @@
   - [BUG-001: Next.js Hydration Error](#bug-001-nextjs-hydration-error)
   - [BUG-008: API Key Wizard Button Missing onClick](#bug-008-api-key-wizard-button-missing-onclick)
   - [BUG-009: Tools Page Static Cards No Interactivity](#bug-009-tools-page-static-cards-no-interactivity)
+  - [BUG-010: Safety Page Test Regression — Ambiguous Send Selector](#bug-010-safety-page-test-regression--ambiguous-send-selector)
+  - [BUG-011: CI Workflow Missing v1.7.3 Path Filter](#bug-011-ci-workflow-missing-v173-path-filter)
+  - [BUG-012: v1.7.3 Runtime Adapter Hub Typecheck Failure](#bug-012-v173-runtime-adapter-hub-typecheck-failure)
+  - [BUG-013: Risk Model Data Drift Between Hub and Web UI](#bug-013-risk-model-data-drift-between-hub-and-web-ui)
+  - [BUG-014: README Quality Snapshot Outdated](#bug-014-readme-quality-snapshot-outdated)
 - [Quick Reference: Common Error Patterns](#quick-reference-common-error-patterns)
 - [Prevention Checklist](#prevention-checklist)
 
@@ -202,6 +207,186 @@ Rewrote `ToolsPage.tsx`:
 - ✅ Remove "Coming Soon" banners when features are implemented
 
 **Related Commits:** `67dc382`
+
+---
+
+### BUG-010: Safety Page Test Regression — Ambiguous Send Selector
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-02-28 |
+| **Severity** | 🔴 Critical |
+| **Component** | cvf-web (Safety Page) |
+| **File(s)** | `src/app/(dashboard)/safety/page.tsx`, `src/app/(dashboard)/safety/page.test.tsx` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+TestingLibraryError: Found multiple elements with the role "button" and name /send/i
+```
+
+**Root Cause:**
+Integrating v1.7.3 ExplainabilityPanel added intent chips (e.g. `EMAIL SEND`) rendered as `<button>`. The existing test selector `screen.getByRole('button', { name: /send/i })` now matched both the OpenClaw submit button ("🐾 Send") and the intent chip ("EMAIL SEND").
+
+**Solution:**
+```diff
+// page.tsx — add aria-label to disambiguate
+  <button
+      onClick={handleSubmit}
++     aria-label="Submit OpenClaw"
+  >
+
+// page.test.tsx — use specific selector
+- fireEvent.click(screen.getByRole('button', { name: /send/i }));
++ fireEvent.click(screen.getByRole('button', { name: /Submit OpenClaw/i }));
+```
+
+**Prevention:**
+- ✅ Always add `aria-label` to buttons with generic text ("Send", "Submit", "OK")
+- ✅ After adding new UI components, re-run existing tests to check for selector collisions
+
+**Related Commits:** `3570a1d`
+
+---
+
+### BUG-011: CI Workflow Missing v1.7.3 Path Filter
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-02-28 |
+| **Severity** | 🔴 Critical |
+| **Component** | CI/CD |
+| **File(s)** | `.github/workflows/cvf-extensions-ci.yml` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+No error — v1.7.3 changes pushed without triggering CI.
+```
+
+**Root Cause:**
+When `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` was added, the CI workflow path filters were not updated. Only v1.7, v1.7.1, v1.7.2 were listed.
+
+**Solution:**
+```diff
+  paths:
+    - 'EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/**'
+    - 'EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/**'
+    - 'EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/**'
++   - 'EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/**'
+```
+Also added a new `runtime-adapter-hub-tests` job with `vitest run` + `npm run typecheck`.
+
+**Prevention:**
+- ✅ When adding a new EXTENSION, always update CI path filters and add a corresponding job
+- ✅ Add CI update as a checklist item in the versioning workflow
+
+**Related Commits:** `3570a1d`
+
+---
+
+### BUG-012: v1.7.3 Runtime Adapter Hub Typecheck Failure
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-02-28 |
+| **Severity** | 🟠 High |
+| **Component** | CVF_v1.7.3_RUNTIME_ADAPTER_HUB |
+| **File(s)** | `tsconfig.json`, `package.json`, `adapters/base.adapter.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+error TS2304: Cannot find name 'fetch'.
+error TS2304: Cannot find name 'AbortController'.
+error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+```
+
+**Root Cause:**
+`tsconfig.json` only had `"lib": ["ES2022"]` without `"DOM"` (needed for `fetch`, `AbortController`) and no `@types/node` (needed for `fs`, `path`, `child_process`).
+
+**Solution:**
+```diff
+// tsconfig.json
+  "lib": [
+-     "ES2022"
++     "ES2022",
++     "DOM"
+  ],
++ "types": ["node"],
+
+// package.json
+  "devDependencies": {
++     "@types/node": "^22.0.0",
+```
+
+**Prevention:**
+- ✅ When using Node.js APIs (`fs`, `child_process`), always include `@types/node`
+- ✅ When using browser APIs (`fetch`), add `"DOM"` to lib
+- ✅ Run `npm run typecheck` before committing new extensions
+
+**Related Commits:** `3570a1d`
+
+---
+
+### BUG-013: Risk Model Data Drift Between Hub and Web UI
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-02-28 |
+| **Severity** | 🟡 Medium |
+| **Component** | cvf-web, CVF_v1.7.3_RUNTIME_ADAPTER_HUB |
+| **File(s)** | `cvf-web/src/lib/risk-models.ts`, `CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/*.json` |
+| **Status** | 🔄 Mitigated (sync warning added) |
+
+**Error Message:**
+```
+No error — silent data inconsistency risk.
+```
+
+**Root Cause:**
+Risk model data was manually ported (hardcoded) into `cvf-web/src/lib/risk-models.ts` from canonical JSON files in v1.7.3. Changes to the JSON files would not propagate to the Web UI.
+
+**Solution:**
+Added `⚠️ SYNC WARNING` comment to `risk-models.ts` referencing canonical source files. Full automation (build-time import) deferred.
+
+**Prevention:**
+- ✅ Always add sync warnings when manually porting data between modules
+- 🔲 Future: automate JSON→TS code generation during build
+
+**Related Commits:** `3570a1d`
+
+---
+
+### BUG-014: README Quality Snapshot Outdated
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-02-28 |
+| **Severity** | 🟡 Medium |
+| **Component** | Root documentation |
+| **File(s)** | `README.md` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+No error — misleading quality claims.
+```
+
+**Root Cause:**
+README quality snapshot was dated 2026-02-26 and did not include v1.7.3 Hub Tests count. After adding v1.7.3 and Web UI integration, the snapshot should reflect the new test counts.
+
+**Solution:**
+```diff
+- | **Quality Snapshot (2026-02-26)** | ... Kernel Tests: 51 passing |
++ | **Quality Snapshot (2026-02-28)** | ... Kernel Tests: 51 passing · Hub Tests: 41 passing |
+```
+
+**Prevention:**
+- ✅ Update README quality snapshot whenever tests are added or removed
+- ✅ Include new extension test counts in the snapshot
+
+**Related Commits:** `3570a1d`
 
 ---
 

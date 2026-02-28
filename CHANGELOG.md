@@ -2,6 +2,43 @@
 
 ---
 
+## [2026-02-28] — v1.7.3 Runtime Adapter Hub + Web UI Integration
+
+### Added
+- **CVF v1.7.3 Runtime Adapter Hub** — Extracted from CVF_Hypervisor Mode into `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/`
+  - 5 contract interfaces (LLM, Runtime, Tool, Memory, Policy)
+  - 4 runtime adapters (OpenClaw, PicoClaw, ZeroClaw, Nano)
+  - Explainability layer with Vietnamese/English i18n
+  - NLP policy parser with priority-based conflict resolution
+  - 4 risk model JSON configs
+  - 41 unit tests passing
+- **Web UI Integration** — Ported v1.7.3 modules into `cvf-web/src/lib/`:
+  - `explainability.ts` — NL action explanations
+  - `natural-policy-parser.ts` — NLP → structured rules
+  - `runtime-adapters.ts` — Adapter registry for UI
+  - `risk-models.ts` — Risk matrix + destructive patterns
+  - 4 new sections on Safety Dashboard: Runtime Adapters, Action Explainability, NLP Policy Editor, Risk Matrix
+- **CI job** `runtime-adapter-hub-tests` for v1.7.3 (vitest + typecheck)
+- **ADR-005** — Architectural decision record for Hypervisor Mode extraction
+- **BUG-010 → BUG-014** — 5 new entries in `BUG_HISTORY.md`
+
+### Fixed
+- **BUG-010** — Safety page test regression: ambiguous `/send/i` selector (added `aria-label="Submit OpenClaw"`)
+- **BUG-011** — CI workflow missing v1.7.3 path filter
+- **BUG-012** — v1.7.3 typecheck failure (added `@types/node` + DOM lib)
+- **BUG-013** — Risk model drift risk (added sync warning comments)
+- **BUG-014** — README quality snapshot outdated (updated to 2026-02-28)
+
+### Changed
+- `README.md` — Updated version to 1.7.3, quality snapshot, architecture diagram
+- `VERSIONING.md` — Added v1.7.3 to version table
+- `VERSION_COMPARISON.md` — Added v1.7.3 comparison
+
+### Removed
+- `CVF_Hypervisor Mode/` folder — Deleted after extracting unique value (added to `.gitignore`)
+
+---
+
 ## [2026-02-17] — Reference Implementation Restructuring
 
 ### Changed

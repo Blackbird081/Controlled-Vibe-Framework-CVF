@@ -1,87 +1,73 @@
-# CVF Independent Assessment - 2026-02-28
+# CVF Independent Assessment - 2026-02-28 (Revalidation)
 
 ## Scope
 - Independent software assessment for CVF core/extensions.
 - Explicitly excludes `Mini_Game`.
 
-## Baseline
-- Assessment date: 2026-02-28
-- Repository head at assessment time: `7b7062e`
+## Assessment Timeline
+- Initial baseline head: `7b7062e` (pre-fix state).
+- Revalidation head: `3570a1d` (`fix: resolve all 5 findings from independent assessment 2026-02-28`).
 
-## Evidence Collected
+## Revalidation Evidence (Current)
 - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
   - `npm test`: PASS (41 tests)
-  - `npm run typecheck`: FAIL
+  - `npm run typecheck`: PASS
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web`
-  - `npm run test:run`: FAIL (2 tests failing in safety page)
-  - `npm run lint`: FAIL (24 issues: 18 errors, 6 warnings)
+  - `npm run test:run`: PASS
   - `npm run build`: PASS
+  - `npm run lint`: FAIL (24 issues: 18 errors, 6 warnings)
 - CI workflow review:
-  - `cvf-extensions-ci.yml` does not include `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` paths.
+  - `.github/workflows/cvf-extensions-ci.yml` now includes `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` path filters and a dedicated test job.
 
-## Findings (Ordered by Severity)
+## Findings (Current, Ordered by Severity)
 
-### 1) Critical - Safety page regression in web test suite
-- `cvf-web` test run fails in `src/app/(dashboard)/safety/page.test.tsx`.
-- Root cause observed: ambiguous selector `/send/i` matches both:
-  - OpenClaw submit button (`Send`)
-  - Explainability intent chip (`EMAIL SEND`)
+### 1) High - Lint gate remains red in `cvf-web`
+- Current codebase still has lint errors/warnings, including:
+  - `@typescript-eslint/no-explicit-any`
+  - `react-hooks/set-state-in-effect`
+  - unused imports/variables
+- Representative evidence:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx:497`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx:1353`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/Settings.tsx:129`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useModals.ts:21`
+
+### 2) Medium - Risk model drift risk still exists
+- `cvf-web` risk data is still manually ported constants (not directly loaded from canonical JSON in hub).
+- This is improved by warning comments but still structurally prone to drift.
 - Evidence:
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.test.tsx:211`
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.test.tsx:422`
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx:411`
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx:1068`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/risk-models.ts:7`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/risk-models.ts:8`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/risk.matrix.json`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/destructive.rules.json`
 
-### 2) Critical - CI gap for v1.7.3 extension
-- Existing extension workflow only triggers for:
-  - `CVF_v1.7_CONTROLLED_INTELLIGENCE`
-  - `CVF_v1.7.1_SAFETY_RUNTIME`
-  - `CVF_v1.7.2_SAFETY_DASHBOARD`
-- `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` is not covered by CI path filters.
-- Evidence:
-  - `.github/workflows/cvf-extensions-ci.yml:6`
-  - `.github/workflows/cvf-extensions-ci.yml:13`
-
-### 3) High - Runtime Adapter Hub is not type-safe in current state
-- Typecheck fails due to missing runtime/lib/type wiring:
-  - Missing Node declarations (`fs`, `path`, `child_process`)
-  - Missing globals (`fetch`, `AbortController`, timers)
-- Evidence:
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tsconfig.json:6`
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/package.json:11`
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/adapters/base.adapter.ts:5`
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/adapters/openclaw.adapter.ts:5`
-
-### 4) Medium - Risk/policy drift risk between hub and web UI
-- `cvf-web` risk model is hardcoded while comments state data is from JSON configs.
-- Canonical JSON in hub and UI values are not guaranteed to stay in sync.
-- Evidence:
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/risk-models.ts:5`
-  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/risk-models.ts:33`
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/risk.matrix.json:6`
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/destructive.rules.json:3`
-
-### 5) Medium - Public quality claims require refresh
-- README quality snapshot advertises strong pass metrics while current independent rerun shows failures in web tests/lint and hub typecheck.
+### 3) Low - README quality snapshot is not fully aligned with rerun
+- README claims `Lint: 0 errors`, while current independent rerun still reports lint failures.
 - Evidence:
   - `README.md:385`
-  - `README.md:9`
 
-## Strengths Observed
-- Versioning policy and ADR discipline are clearly maintained.
-  - `docs/VERSIONING.md`
-  - `docs/CVF_ARCHITECTURE_DECISIONS.md`
-- Runtime Adapter Hub has meaningful unit tests (41 passing) for core behaviors.
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tests/adapters.test.ts`
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tests/policy-parser.test.ts`
-  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tests/explainability.test.ts`
-- `cvf-web` production build currently compiles successfully.
+## Resolved Since Baseline
+- Safety page regression test issue resolved:
+  - Submit control is now uniquely targetable with `aria-label="Submit OpenClaw"`.
+  - Test selectors updated to `getByRole(... /Submit OpenClaw/i)`.
+  - Evidence:
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx:407`
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.test.tsx:211`
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.test.tsx:422`
+- CI coverage gap for `v1.7.3` resolved:
+  - Evidence:
+    - `.github/workflows/cvf-extensions-ci.yml:9`
+    - `.github/workflows/cvf-extensions-ci.yml:15`
+    - `.github/workflows/cvf-extensions-ci.yml:65`
+- Runtime Adapter Hub typecheck issue resolved:
+  - `tsconfig` now includes `DOM` + `node` types, and `@types/node` added.
+  - Evidence:
+    - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tsconfig.json:6`
+    - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tsconfig.json:10`
+    - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/package.json:12`
 
-## Independent Conclusion
-- CVF is architecturally strong and governance-mature.
-- Current release hygiene is not yet at "high confidence production" for non-Mini_Game scope because:
-  - Regression tests are red in `cvf-web`
-  - `v1.7.3` is not covered by extension CI path filters
-  - Runtime adapter hub typecheck is failing
-- Recommended status: **Engineering progress is strong, but stabilization is required before asserting fully green quality posture.**
-
+## Independent Conclusion (Updated)
+- Major blockers from the previous assessment are fixed.
+- Current quality posture is materially improved: tests/build/typecheck are green in assessed scope.
+- Remaining stabilization gap is mainly lint discipline plus one design-level drift risk.
+- Recommended status: **Good progress; near-production quality once lint backlog and README alignment are closed.**

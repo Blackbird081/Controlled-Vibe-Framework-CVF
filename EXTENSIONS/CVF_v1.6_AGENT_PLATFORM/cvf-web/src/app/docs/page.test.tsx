@@ -9,7 +9,7 @@ import { DOCS } from '@/data/docs-data';
 let mockLanguage: 'vi' | 'en' = 'vi';
 
 vi.mock('next/link', () => ({
-    default: ({ href, children, ...props }: any) => (
+    default: ({ href, children, ...props }: { href: string | object; children: React.ReactNode;[key: string]: unknown }) => (
         <a href={typeof href === 'string' ? href : String(href)} {...props}>
             {children}
         </a>

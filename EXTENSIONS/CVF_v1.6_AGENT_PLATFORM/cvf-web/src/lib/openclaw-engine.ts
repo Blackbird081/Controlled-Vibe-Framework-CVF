@@ -11,7 +11,7 @@
 export interface OpenClawIntent {
     action: string;
     confidence: number;
-    parameters: Record<string, any>;
+    parameters: Record<string, unknown>;
     simulateOnly?: boolean;
 }
 
@@ -19,7 +19,7 @@ export interface OpenClawProposalEnvelope {
     id: string;
     source: 'openclaw' | 'api' | 'structured';
     action: string;
-    payload: Record<string, any>;
+    payload: Record<string, unknown>;
     createdAt: number;
     confidence: number;
     riskLevel: 'low' | 'medium' | 'high';

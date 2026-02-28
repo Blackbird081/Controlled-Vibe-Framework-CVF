@@ -8,7 +8,7 @@ import SafetyPage from './page';
 const updatePreferencesMock = vi.fn();
 const executeToolMock = vi.fn();
 
-let mockedSettings: any;
+let mockedSettings: Record<string, unknown>;
 let mockLanguage: 'en' | 'vi' = 'en';
 
 vi.mock('@/lib/i18n', () => ({
@@ -73,8 +73,8 @@ function makeKernelTelemetry(overrides: TelemetryInput = {}) {
 function setupFetchMock(fetchMock: ReturnType<typeof vi.fn>, options?: {
     kernelTelemetry?: ReturnType<typeof makeKernelTelemetry>;
     kernelOk?: boolean;
-    proposals?: any[];
-    postResult?: any;
+    proposals?: Array<Record<string, unknown>>;
+    postResult?: Record<string, unknown>;
 }) {
     const kernelTelemetry = options?.kernelTelemetry ?? makeKernelTelemetry();
     const kernelOk = options?.kernelOk ?? true;

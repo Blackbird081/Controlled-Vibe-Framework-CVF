@@ -18,7 +18,7 @@ export function useModals(permissions?: {
     // Defer localStorage check to client-side only to prevent hydration mismatch
     useEffect(() => {
         if (!localStorage.getItem('cvf_onboarding_complete')) {
-            setShowOnboarding(true);
+            queueMicrotask(() => setShowOnboarding(true));
         }
     }, []);
 

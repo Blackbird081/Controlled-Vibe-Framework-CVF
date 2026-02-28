@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useSettings } from '@/components/Settings';
-import { AVAILABLE_TOOLS, useTools } from '@/lib/agent-tools';
+import { useTools } from '@/lib/agent-tools';
 import {
     getAllRiskLevels,
     sanitizePrompt,
@@ -20,10 +20,25 @@ import {
     type OpenClawMode,
     type OpenClawProposal,
 } from '@/lib/openclaw-config';
-import { explain, mapCvfRiskLevel, mapDecisionToAction, type IntentType } from '@/lib/explainability';
-import { parseNaturalPolicy, getDecisionColor, type ParsedPolicyRule } from '@/lib/natural-policy-parser';
+import { explain, mapCvfRiskLevel, type IntentType } from '@/lib/explainability';
+import { parseNaturalPolicy, getDecisionColor } from '@/lib/natural-policy-parser';
 import { RUNTIME_ADAPTERS, CAPABILITY_LABELS, STATUS_STYLES } from '@/lib/runtime-adapters';
 import { RISK_MATRIX, DESTRUCTIVE_RULES, ESCALATION_THRESHOLDS, getCategoryColor, getCategoryBg, getScoreBar } from '@/lib/risk-models';
+
+// ==================== LOCAL TYPES ====================
+
+interface OpenClawResultData {
+    response?: string;
+    decision?: { status?: string };
+    proposal?: { action?: string; confidence?: number; riskLevel?: string };
+    mode?: string;
+    guard?: { reason?: string };
+    data?: {
+        summary?: string;
+        checklist?: Array<{ rule: string; hint: string; required: boolean }>;
+    };
+    success?: boolean;
+}
 
 // ==================== EXISTING COMPONENTS ====================
 
@@ -361,7 +376,7 @@ function ProposalsTable({ proposals, language }: {
 function OpenClawTestSection({ language, onSubmit, lastResult }: {
     language: 'vi' | 'en';
     onSubmit: (message: string) => void;
-    lastResult: any | null;
+    lastResult: OpenClawResultData | null;
 }) {
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -429,7 +444,7 @@ function OpenClawTestSection({ language, onSubmit, lastResult }: {
                             </div>
                             <div className="p-2 rounded bg-white dark:bg-gray-800">
                                 <div className="text-gray-500">{language === 'vi' ? 'Độ tin cậy' : 'Confidence'}</div>
-                                <div className="font-mono font-medium mt-0.5">{(lastResult.proposal?.confidence * 100).toFixed(0)}%</div>
+                                <div className="font-mono font-medium mt-0.5">{((lastResult.proposal?.confidence ?? 0) * 100).toFixed(0)}%</div>
                             </div>
                             <div className="p-2 rounded bg-white dark:bg-gray-800">
                                 <div className="text-gray-500">{language === 'vi' ? 'Rủi ro' : 'Risk'}</div>
@@ -494,8 +509,8 @@ function useKernelTelemetry() {
     }, []);
 
     useEffect(() => {
-        refresh();
-        const interval = setInterval(refresh, 15000);
+        queueMicrotask(() => void refresh());
+        const interval = setInterval(() => void refresh(), 15000);
         return () => clearInterval(interval);
     }, [refresh]);
 
@@ -1236,11 +1251,11 @@ function GovernanceCheckerSection({ lang }: { lang: 'vi' | 'en' }) {
     const { executeTool, isExecuting } = useTools();
     const [action, setAction] = useState('bug_fix');
     const [context, setContext] = useState('');
-    const [result, setResult] = useState<any>(null);
+    const [result, setResult] = useState<OpenClawResultData | null>(null);
 
     const handleCheck = useCallback(async () => {
         const res = await executeTool('governance_check', { action, context });
-        setResult(res);
+        setResult(res as OpenClawResultData);
     }, [action, context, executeTool]);
 
     const actions = [
@@ -1300,10 +1315,10 @@ function GovernanceCheckerSection({ lang }: { lang: 'vi' | 'en' }) {
                     <div className="text-xs font-semibold text-gray-500 uppercase mb-2">
                         {lang === 'vi' ? 'Checklist' : 'Compliance Checklist'}
                         <span className="ml-2 text-gray-400">
-                            {(result.data as any)?.summary}
+                            {result.data?.summary}
                         </span>
                     </div>
-                    {((result.data as any)?.checklist || []).map((item: any, i: number) => (
+                    {(result.data?.checklist || []).map((item, i: number) => (
                         <div key={i} className="flex items-start gap-2 text-sm">
                             <span className="flex-shrink-0 mt-0.5">
                                 {item.required ? '❌' : '📋'}
@@ -1332,7 +1347,7 @@ export default function SafetyPage() {
 
     // Live proposals
     const [proposals, setProposals] = useState<OpenClawProposal[]>(SAMPLE_PROPOSALS);
-    const [lastResult, setLastResult] = useState<any>(null);
+    const [lastResult, setLastResult] = useState<Record<string, unknown> | null>(null);
 
     const proposalStats = useMemo(() => {
         const total = proposals.length;
@@ -1350,12 +1365,12 @@ export default function SafetyPage() {
     }, []);
 
     useEffect(() => {
-        if (openClawEnabled) loadProposals();
+        if (openClawEnabled) queueMicrotask(() => void loadProposals());
     }, [openClawEnabled, loadProposals]);
 
     const handleTestSubmit = useCallback(async (message: string) => {
         // Find first enabled provider with API key
-        const providerEntries = Object.entries(settings.providers) as [string, any][];
+        const providerEntries = Object.entries(settings.providers) as [string, { enabled: boolean; apiKey: string; selectedModel: string }][];
         const activeProvider = providerEntries.find(([, v]) => v.enabled && v.apiKey);
 
         const providerSettings = activeProvider

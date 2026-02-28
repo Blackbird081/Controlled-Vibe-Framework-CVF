@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
-import { useOpenClawConfig, OPENCLAW_MODE_INFO, type OpenClawMode } from '@/lib/openclaw-config';
+import { type OpenClawMode } from '@/lib/openclaw-config';
 
 // Types
 export type ProviderKey = 'gemini' | 'openai' | 'anthropic';
@@ -126,8 +126,11 @@ export function useSettings() {
     // Load settings from localStorage AFTER hydration, not during initial render
     useEffect(() => {
         const loaded = loadInitialSettings();
-        setSettings(loaded);
-        setIsLoaded(true);
+        // Use queueMicrotask to avoid synchronous setState-in-effect lint warning
+        queueMicrotask(() => {
+            setSettings(loaded);
+            setIsLoaded(true);
+        });
     }, []);
 
     const saveSettings = useCallback((newSettings: SettingsData) => {

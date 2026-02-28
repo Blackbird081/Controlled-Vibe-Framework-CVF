@@ -9,7 +9,7 @@
 
 'use client';
 
-import { useState, useCallback, useMemo, useSyncExternalStore } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 // ==================== TYPES ====================
 
@@ -138,7 +138,7 @@ export function useOpenClawConfig() {
 export async function submitToOpenClaw(
     message: string,
     providerSettings?: { provider: string; apiKey: string; model: string },
-): Promise<any> {
+): Promise<Record<string, unknown>> {
     const res = await fetch('/api/openclaw', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

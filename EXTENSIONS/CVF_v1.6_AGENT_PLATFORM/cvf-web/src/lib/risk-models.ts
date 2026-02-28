@@ -3,6 +3,10 @@
 /**
  * CVF v1.7.3 — Risk Models (ported for Web UI)
  * Data-driven risk matrix from JSON configs.
+ *
+ * ⚠️ SYNC WARNING: These values are manually ported from
+ * EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/*.json
+ * If the canonical JSON files change, update these constants accordingly.
  */
 
 export interface RiskMatrixEntry {

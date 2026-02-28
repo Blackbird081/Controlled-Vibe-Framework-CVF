@@ -382,7 +382,7 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 |--------|--------|
 | **Version** | 1.7.3 (Feb 2026) |
 | **Stability** | Production-ready — 6/6 integration sprints complete |
-| **Quality Snapshot (2026-02-26)** | Lint: 0 errors · Web Tests: 1764 passing · Kernel Tests: 51 passing |
+| **Quality Snapshot (2026-02-28)** | Lint: 0 errors · Web Tests: 1764 passing · Kernel Tests: 51 passing · Hub Tests: 41 passing |
 | **Coverage Snapshot (2026-02-26)** | Web: Stmts 93.05% · Kernel: Stmts 96.45% Br 91.41% Fn 99.09% Ln 97.01% |
 | **Skills** | 141 skills across 12 domains + 34 agent tools |
 | **AI Safety** | Kernel active — 5-layer pipeline, anti-bypass, forensic tracing |

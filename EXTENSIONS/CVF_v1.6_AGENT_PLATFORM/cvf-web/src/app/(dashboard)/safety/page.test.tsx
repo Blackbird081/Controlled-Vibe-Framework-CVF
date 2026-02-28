@@ -208,7 +208,7 @@ describe('SafetyPage OpenClaw integration UI', () => {
 
         const input = await screen.findByPlaceholderText(/e\.g\. Deploy auth system/i);
         fireEvent.change(input, { target: { value: 'Deploy auth system now' } });
-        fireEvent.click(screen.getByRole('button', { name: /send/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Submit OpenClaw/i }));
 
         await waitFor(() => {
             const postCall = fetchMock.mock.calls.find(([, options]) => options?.method === 'POST');
@@ -419,7 +419,7 @@ describe('SafetyPage OpenClaw integration UI', () => {
 
         const input = await screen.findByPlaceholderText(/e\.g\. Deploy auth system/i);
         fireEvent.change(input, { target: { value: 'Run fallback flow' } });
-        fireEvent.click(screen.getByRole('button', { name: /send/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Submit OpenClaw/i }));
 
         await waitFor(() => {
             const postCall = fetchMock.mock.calls.find(([, options]) => options?.method === 'POST');

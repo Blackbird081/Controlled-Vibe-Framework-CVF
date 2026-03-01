@@ -1,6 +1,7 @@
 # CVF MASTER POLICY
 
 **Effective:** 12/02/2026  
+**Amendment (Workspace Isolation Rule):** 2026-03-02  
 **Applies to:** Internal teams & Enterprise deployments
 
 ---
@@ -48,6 +49,13 @@ Personal AI usage unrelated to company work is excluded.
    - verify each skill has a valid Skill Mapping Record and is allowed for current phase/risk,
    - log the declaration in trace before coding starts using `governance/toolkit/03_CONTROL/SKILL_PREFLIGHT_RECORD.md`,
    - if no suitable skill exists, STOP and create an intake/escalation record.
+8. Workspace isolation is mandatory for all downstream projects using CVF:
+   - DO NOT open or build downstream projects directly inside the CVF repository root.
+   - Keep CVF as a framework core repository only; place each downstream project in a separate sibling workspace.
+   - Approved patterns:
+     - shared core: `D:\Work\.Controlled-Vibe-Framework-CVF` + `D:\Work\<ProjectName>`
+     - per-project clone: `D:\Work\.Controlled-Vibe-Framework-CVF` (cloned as isolated core) + separate project folder
+   - A leading `.` in CVF core folder naming is allowed as an isolation convention; it is not required for hidden mode.
 
 ---
 

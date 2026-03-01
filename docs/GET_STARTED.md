@@ -6,6 +6,25 @@
 
 ---
 
+## 🧭 Workspace Rule (Mandatory)
+
+CVF root chỉ dùng để bảo trì framework.  
+Không mở/không build project sản phẩm trực tiếp trong thư mục gốc CVF.
+Ngày áp dụng: 2026-03-02.
+
+Sử dụng workspace tách riêng theo mô hình sibling:
+
+```text
+D:\Work\
+  .Controlled-Vibe-Framework-CVF\   # CVF core (shared hoặc cloned)
+  Trading-Tools\                    # project A
+  My-Next-Project\                  # project B
+```
+
+Tiền tố `.` cho folder CVF core là quy ước cách ly để tránh sửa nhầm, không bắt buộc chế độ hidden.
+
+---
+
 ## 🚦 Bạn Là Ai?
 
 Chọn đường đi phù hợp với bạn:
@@ -217,7 +236,7 @@ npm run dev
 # - Set up PostgreSQL for persistence
 
 # 2. Configure governance
-# - Edit governance/toolkit/02_POLICY/master-policy.md
+# - Edit governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md
 # - Set risk levels per phase
 # - Define approval workflows
 

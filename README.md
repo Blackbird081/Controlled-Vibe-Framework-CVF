@@ -64,6 +64,23 @@ CVF helps you **control AI coding** through:
 
 ## 🚀 Quick Start
 
+### Workspace Rule (Mandatory For Real Projects)
+
+CVF root is reserved for framework maintenance.  
+Do not open or build downstream projects directly inside this repository root.
+Effective date: 2026-03-02.
+
+Use isolated sibling workspaces instead:
+
+```text
+D:\Work\
+  .Controlled-Vibe-Framework-CVF\   # CVF core (shared or cloned)
+  Trading-Tools\                    # your project workspace
+  Another-Project\                  # another project workspace
+```
+
+`.Controlled-Vibe-Framework-CVF` naming (leading dot) is an isolation convention to avoid accidental cross-edits. It does not need hidden mode.
+
 ### Option 1: Web UI (Recommended — 2 minutes)
 
 ```bash

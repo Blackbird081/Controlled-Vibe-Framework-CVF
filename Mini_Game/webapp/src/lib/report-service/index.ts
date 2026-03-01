@@ -71,6 +71,8 @@ function normalizeEntry(entry: TodayMetricsInput): DailyReportEntry {
 }
 
 function sameEntry(left: DailyReportEntry, right: DailyReportEntry): boolean {
+  const leftByGame = cloneByGame(left.byGame);
+  const rightByGame = cloneByGame(right.byGame);
   return (
     left.date === right.date &&
     left.rounds === right.rounds &&
@@ -78,18 +80,18 @@ function sameEntry(left: DailyReportEntry, right: DailyReportEntry): boolean {
     left.wrong === right.wrong &&
     left.accuracy === right.accuracy &&
     left.usedMs === right.usedMs &&
-    left.byGame.math.rounds === right.byGame.math.rounds &&
-    left.byGame.memory.rounds === right.byGame.memory.rounds &&
-    left.byGame.color.rounds === right.byGame.color.rounds &&
-    left.byGame.logic.rounds === right.byGame.logic.rounds &&
-    left.byGame.compare.rounds === right.byGame.compare.rounds &&
-    left.byGame.vocab.rounds === right.byGame.vocab.rounds &&
-    left.byGame.math.correct === right.byGame.math.correct &&
-    left.byGame.memory.correct === right.byGame.memory.correct &&
-    left.byGame.color.correct === right.byGame.color.correct &&
-    left.byGame.logic.correct === right.byGame.logic.correct &&
-    left.byGame.compare.correct === right.byGame.compare.correct &&
-    left.byGame.vocab.correct === right.byGame.vocab.correct
+    leftByGame.math.rounds === rightByGame.math.rounds &&
+    leftByGame.memory.rounds === rightByGame.memory.rounds &&
+    leftByGame.color.rounds === rightByGame.color.rounds &&
+    leftByGame.logic.rounds === rightByGame.logic.rounds &&
+    leftByGame.compare.rounds === rightByGame.compare.rounds &&
+    leftByGame.vocab.rounds === rightByGame.vocab.rounds &&
+    leftByGame.math.correct === rightByGame.math.correct &&
+    leftByGame.memory.correct === rightByGame.memory.correct &&
+    leftByGame.color.correct === rightByGame.color.correct &&
+    leftByGame.logic.correct === rightByGame.logic.correct &&
+    leftByGame.compare.correct === rightByGame.compare.correct &&
+    leftByGame.vocab.correct === rightByGame.vocab.correct
   );
 }
 
@@ -112,8 +114,20 @@ export function loadReportHistoryState(): ReportHistoryState {
     if (!raw) return getDefaultReportHistoryState();
     const parsed = JSON.parse(raw) as unknown;
     if (!isHistoryLike(parsed)) return getDefaultReportHistoryState();
+    const safeEntries = (parsed.entries as Array<Partial<DailyReportEntry>>)
+      .filter((entry) => typeof entry?.date === "string" && entry.date.length > 0)
+      .map((entry) =>
+        normalizeEntry({
+          date: entry.date as string,
+          rounds: Number(entry.rounds ?? 0),
+          correct: Number(entry.correct ?? 0),
+          wrong: Number(entry.wrong ?? 0),
+          usedMs: Number(entry.usedMs ?? 0),
+          byGame: cloneByGame((entry.byGame ?? {}) as Record<MiniGameKey, { rounds: number; correct: number; wrong: number }>),
+        }),
+      );
     return {
-      entries: (parsed.entries as DailyReportEntry[]).slice(-MAX_ENTRIES),
+      entries: safeEntries.slice(-MAX_ENTRIES),
     };
   } catch {
     return getDefaultReportHistoryState();

@@ -158,6 +158,7 @@ const AGE_PROFILES: Record<AgeGroupKey, AgeProfileConfig> = {
 const AGE_PROFILE_STORAGE_KEY = "cvf-mini-age-group-v1";
 const AUDIO_PREF_STORAGE_KEY = "cvf-mini-audio-pref-v1";
 const LANGUAGE_STORAGE_KEY = "cvf-mini-language-v1";
+const TTS_VOICE_STORAGE_KEY = "cvf-mini-tts-voice-v1";
 
 const AGE_PROFILE_LABELS: Record<UiLanguage, Record<AgeGroupKey, string>> = {
   vi: {
@@ -264,14 +265,18 @@ function feedbackClass(tone: FeedbackTone): string {
   return styles.feedbackInfo;
 }
 
-function pickSpeechVoice(voices: SpeechSynthesisVoice[], locale: SpeechLocale): SpeechSynthesisVoice | null {
+function pickSpeechVoice(voices: SpeechSynthesisVoice[], lockedVoiceName: string | null): SpeechSynthesisVoice | null {
   const preferredNameHints = ["aria", "jenny", "samantha", "google us english", "zira", "guy", "davis", "alloy"];
-  const localeLower = locale.toLowerCase();
-  const langPrefix = localeLower.slice(0, 2);
+  const englishVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith("en"));
+  if (englishVoices.length === 0) return null;
 
-  const exact = voices.filter((voice) => voice.lang.toLowerCase() === localeLower);
-  const byPrefix = voices.filter((voice) => voice.lang.toLowerCase().startsWith(langPrefix));
-  const pool = exact.length > 0 ? exact : byPrefix;
+  if (lockedVoiceName) {
+    const locked = englishVoices.find((voice) => voice.name === lockedVoiceName);
+    if (locked) return locked;
+  }
+
+  const usEnglishVoices = englishVoices.filter((voice) => voice.lang.toLowerCase().startsWith("en-us"));
+  const pool = usEnglishVoices.length > 0 ? usEnglishVoices : englishVoices;
   if (pool.length === 0) return null;
 
   for (const hint of preferredNameHints) {
@@ -346,6 +351,7 @@ export default function Home() {
   const previousAgeGroupRef = useRef<AgeGroupKey | null>(null);
   const previousViewRef = useRef<DashboardView | null>(null);
   const spokenRoundRef = useRef<string | null>(null);
+  const fixedTtsVoiceNameRef = useRef<string | null>(null);
   const selfChallengeCelebratedRef = useRef<string | null>(null);
   const sessionStartedAtRef = useRef<number | null>(null);
   const retentionPingSentRef = useRef(false);
@@ -790,17 +796,18 @@ export default function Home() {
       const voices = speech.getVoices();
       const segments = buildSpeechSegments();
       const volume = Math.max(0, Math.min(1, soundVolume / 100));
+      const fixedVoice = pickSpeechVoice(voices, fixedTtsVoiceNameRef.current);
 
-      let firstVoiceName = "";
-      segments.forEach((segment, index) => {
+      if (fixedVoice && fixedTtsVoiceNameRef.current !== fixedVoice.name) {
+        fixedTtsVoiceNameRef.current = fixedVoice.name;
+        window.localStorage.setItem(TTS_VOICE_STORAGE_KEY, fixedVoice.name);
+      }
+
+      segments.forEach((segment) => {
         const utterance = new SpeechSynthesisUtterance(segment.text);
-        const pickedVoice = pickSpeechVoice(voices, segment.locale);
-        if (pickedVoice) {
-          utterance.voice = pickedVoice;
-          utterance.lang = pickedVoice.lang;
-          if (index === 0) {
-            firstVoiceName = pickedVoice.name;
-          }
+        if (fixedVoice) {
+          utterance.voice = fixedVoice;
+          utterance.lang = fixedVoice.lang;
         } else {
           utterance.lang = segment.locale;
         }
@@ -819,7 +826,7 @@ export default function Home() {
         language,
         locale: segments[0]?.locale ?? "en-US",
         segments: segments.length,
-        voice: firstVoiceName || "default",
+        voice: fixedVoice?.name || "default",
       });
     },
     [activeGame, ageGroup, buildSpeechSegments, language, soundMuted, soundVolume, ttsEnabled, ttsSupported],
@@ -872,6 +879,22 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined" || !ttsSupported) return;
+    const speech = window.speechSynthesis;
+    const syncVoice = () => {
+      const picked = pickSpeechVoice(speech.getVoices(), fixedTtsVoiceNameRef.current);
+      if (!picked) return;
+      if (fixedTtsVoiceNameRef.current === picked.name) return;
+      fixedTtsVoiceNameRef.current = picked.name;
+      window.localStorage.setItem(TTS_VOICE_STORAGE_KEY, picked.name);
+    };
+
+    syncVoice();
+    speech.addEventListener("voiceschanged", syncVoice);
+    return () => speech.removeEventListener("voiceschanged", syncVoice);
+  }, [ttsSupported]);
+
+  useEffect(() => {
     if (!hydrated) return;
     const rawAgeGroup = window.localStorage.getItem(AGE_PROFILE_STORAGE_KEY);
     if (rawAgeGroup && rawAgeGroup in AGE_PROFILES) {
@@ -880,6 +903,10 @@ export default function Home() {
     const rawLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
     if (rawLanguage === "vi" || rawLanguage === "en") {
       setLanguage(rawLanguage);
+    }
+    const rawVoiceName = window.localStorage.getItem(TTS_VOICE_STORAGE_KEY);
+    if (rawVoiceName) {
+      fixedTtsVoiceNameRef.current = rawVoiceName;
     }
 
     const rawAudioPref = window.localStorage.getItem(AUDIO_PREF_STORAGE_KEY);

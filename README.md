@@ -43,6 +43,8 @@ Only run full regression when gate/triggers require it.
 
 > 🏛️ **Architecture Decision Rule:** Every `feat(governance):`, `feat(domain):`, `feat(core-value):`, `refactor(arch):`, or `docs(policy):` commit MUST have an ADR entry in [`docs/CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md). See [ADR Guard](governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md).
 
+> 🧱 **Workspace Isolation Rule:** Downstream projects MUST NOT be opened or developed inside CVF root. Use isolated sibling workspace only. See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
+
 ---
 
 ## 🎯 CVF In 30 Seconds
@@ -167,6 +169,7 @@ The AI Agent automatically enforces CVF governance through **3 layers**:
 - 📋 [`CVF_BUG_DOCUMENTATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md) — Every bug fix must be logged
 - 📋 [`CVF_TEST_DOCUMENTATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md) — Every test run must be documented
 - 📋 [`CVF_ADR_GUARD.md`](governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md) — Every architecture/strategy decision must have an ADR entry
+- 📋 [`CVF_WORKSPACE_ISOLATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md) — Downstream projects must run in isolated workspace, not in CVF root
 - 📋 [`BUG_HISTORY.md`](docs/BUG_HISTORY.md) — Troubleshooting knowledge base
 - 📋 [`CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md) — Test history log
 - 📋 [`CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md) — Architecture decision records (ADR-001 → ...)

@@ -56,6 +56,7 @@ Personal AI usage unrelated to company work is excluded.
      - shared core: `D:\Work\.Controlled-Vibe-Framework-CVF` + `D:\Work\<ProjectName>`
      - per-project clone: `D:\Work\.Controlled-Vibe-Framework-CVF` (cloned as isolated core) + separate project folder
    - A leading `.` in CVF core folder naming is allowed as an isolation convention; it is not required for hidden mode.
+   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md`.
 
 ---
 

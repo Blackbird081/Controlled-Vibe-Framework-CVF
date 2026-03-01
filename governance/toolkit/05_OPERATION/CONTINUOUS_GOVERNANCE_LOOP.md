@@ -58,6 +58,7 @@ Self-UAT MUST re-run if:
 - Bug fix pushed without BUG_HISTORY.md documentation (see CVF_BUG_DOCUMENTATION_GUARD.md)
 - Test executed without CVF_INCREMENTAL_TEST_LOG.md entry (see CVF_TEST_DOCUMENTATION_GUARD.md)
 - Architecture/strategy decision made WITHOUT a corresponding ADR entry (see CVF_ADR_GUARD.md)
+- Downstream project work detected inside CVF root (see CVF_WORKSPACE_ISOLATION_GUARD.md)
 
 ---
 
@@ -121,6 +122,7 @@ For architectural or strategic decisions specifically:
 | Tests executed | `docs/CVF_INCREMENTAL_TEST_LOG.md` (Test Guard) |
 | Skill added | `CVF_SKILL_INTAKE_RECORD.md` (Skill Intake) |
 | Architecture/strategy decision | `docs/CVF_ARCHITECTURE_DECISIONS.md` (ADR Guard) |
+| Workspace isolation violation | `CVF_WORKSPACE_ISOLATION_GUARD.md` + remediation record in session log |
 
 ---
 

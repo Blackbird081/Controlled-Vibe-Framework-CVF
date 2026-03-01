@@ -22,6 +22,7 @@ D:\Work\
 ```
 
 Tiền tố `.` cho folder CVF core là quy ước cách ly để tránh sửa nhầm, không bắt buộc chế độ hidden.
+Chi tiết enforcement: [CVF_WORKSPACE_ISOLATION_GUARD.md](../governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
 
 ---
 

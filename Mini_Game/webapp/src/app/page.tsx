@@ -115,6 +115,12 @@ type FeedbackTone = "success" | "error" | "info";
 type AgeGroupKey = "age_5_6" | "age_7_8" | "age_9_10";
 type UiLanguage = "vi" | "en";
 type DashboardView = "play" | "progress" | "parent" | "settings";
+type SpeechLocale = "vi-VN" | "en-US";
+
+interface SpeechSegment {
+  text: string;
+  locale: SpeechLocale;
+}
 
 interface AgeProfileConfig {
   key: AgeGroupKey;
@@ -254,6 +260,26 @@ function feedbackClass(tone: FeedbackTone): string {
   if (tone === "success") return styles.feedbackSuccess;
   if (tone === "error") return styles.feedbackError;
   return styles.feedbackInfo;
+}
+
+function pickSpeechVoice(voices: SpeechSynthesisVoice[], locale: SpeechLocale): SpeechSynthesisVoice | null {
+  const preferredNameHints =
+    locale === "en-US"
+      ? ["aria", "jenny", "samantha", "google us english", "zira", "guy"]
+      : ["hoai", "linh", "vietnam", "google vietnamese"];
+  const localeLower = locale.toLowerCase();
+  const langPrefix = localeLower.slice(0, 2);
+
+  const exact = voices.filter((voice) => voice.lang.toLowerCase() === localeLower);
+  const byPrefix = voices.filter((voice) => voice.lang.toLowerCase().startsWith(langPrefix));
+  const pool = exact.length > 0 ? exact : byPrefix;
+  if (pool.length === 0) return null;
+
+  for (const hint of preferredNameHints) {
+    const found = pool.find((voice) => voice.name.toLowerCase().includes(hint));
+    if (found) return found;
+  }
+  return pool[0];
 }
 
 export default function Home() {
@@ -731,6 +757,40 @@ export default function Home() {
       startRound,
     ],
   );
+  const buildSpeechSegments = useCallback((): SpeechSegment[] => {
+    if (activeGame !== "vocab") {
+      return [
+        {
+          text: currentSpeechText,
+          locale: language === "vi" ? "vi-VN" : "en-US",
+        },
+      ];
+    }
+
+    if (vocabRound.direction === "vi_to_en") {
+      return [
+        {
+          text: language === "vi" ? `Tu khoa: ${vocabRound.prompt}.` : `Vietnamese word: ${vocabRound.prompt}.`,
+          locale: "vi-VN",
+        },
+        {
+          text: language === "vi" ? "Hay chon nghia tieng Anh dung." : "Choose the correct English meaning.",
+          locale: "en-US",
+        },
+      ];
+    }
+
+    return [
+      {
+        text: language === "vi" ? `Word: ${vocabRound.prompt}.` : `Word: ${vocabRound.prompt}.`,
+        locale: "en-US",
+      },
+      {
+        text: language === "vi" ? "Hay chon nghia tieng Viet dung." : "Choose the correct Vietnamese meaning.",
+        locale: "vi-VN",
+      },
+    ];
+  }, [activeGame, currentSpeechText, language, vocabRound.direction, vocabRound.prompt]);
   const speakCurrentPrompt = useCallback(
     (source: "manual" | "auto") => {
       if (!ttsEnabled || soundMuted) return;
@@ -738,15 +798,42 @@ export default function Home() {
 
       const speech = window.speechSynthesis;
       speech.cancel();
-      const utterance = new SpeechSynthesisUtterance(currentSpeechText);
-      utterance.lang = language === "vi" ? "vi-VN" : "en-US";
-      utterance.rate = ageGroup === "age_5_6" ? 0.88 : 0.96;
-      utterance.pitch = 1.03;
-      utterance.volume = Math.max(0, Math.min(1, soundVolume / 100));
-      speech.speak(utterance);
-      void trackEvent("tts_speak", { source, game: activeGame, ageGroup, language });
+      const voices = speech.getVoices();
+      const segments = buildSpeechSegments();
+      const volume = Math.max(0, Math.min(1, soundVolume / 100));
+
+      let firstVoiceName = "";
+      segments.forEach((segment, index) => {
+        const utterance = new SpeechSynthesisUtterance(segment.text);
+        const pickedVoice = pickSpeechVoice(voices, segment.locale);
+        if (pickedVoice) {
+          utterance.voice = pickedVoice;
+          utterance.lang = pickedVoice.lang;
+          if (index === 0) {
+            firstVoiceName = pickedVoice.name;
+          }
+        } else {
+          utterance.lang = segment.locale;
+        }
+
+        // Slightly calmer prosody to improve clarity across browsers.
+        utterance.rate = segment.locale === "en-US" ? (ageGroup === "age_5_6" ? 0.9 : 0.96) : ageGroup === "age_5_6" ? 0.86 : 0.92;
+        utterance.pitch = segment.locale === "en-US" ? 0.98 : 1;
+        utterance.volume = volume;
+        speech.speak(utterance);
+      });
+
+      void trackEvent("tts_speak", {
+        source,
+        game: activeGame,
+        ageGroup,
+        language,
+        locale: segments[0]?.locale ?? "vi-VN",
+        segments: segments.length,
+        voice: firstVoiceName || "default",
+      });
     },
-    [activeGame, ageGroup, currentSpeechText, language, soundMuted, soundVolume, ttsEnabled, ttsSupported],
+    [activeGame, ageGroup, buildSpeechSegments, language, soundMuted, soundVolume, ttsEnabled, ttsSupported],
   );
 
   useEffect(() => {

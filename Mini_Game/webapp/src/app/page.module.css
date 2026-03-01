@@ -1061,6 +1061,118 @@
   transition: width 280ms ease;
 }
 
+.runTracker {
+  margin: 8px 0 10px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--game-primary) 50%, white);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 8px 10px;
+}
+
+.runTrackerLabel {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #2f5d82;
+}
+
+.runTrackerTrack {
+  margin-top: 6px;
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--game-primary) 50%, white);
+  background: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+}
+
+.runTrackerFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #38bdf8, #60d394, #facc15);
+  transition: width 240ms ease;
+}
+
+.runTrackerStats {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #3f6788;
+}
+
+.runSummaryCard {
+  position: relative;
+  overflow: hidden;
+  margin-top: 8px;
+  border-radius: 14px;
+  border: 2px solid #97d8ff;
+  background: linear-gradient(165deg, #ffffff, #edfaff 60%, #fff8dc);
+  padding: 14px;
+  animation: popMessage 260ms ease-out;
+}
+
+.runSummaryCard h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #14486f;
+}
+
+.runSummaryCard p {
+  margin: 8px 0 0;
+  color: #2f6288;
+  font-weight: 800;
+}
+
+.runSummaryBalloons {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  gap: 7px;
+  pointer-events: none;
+}
+
+.runBalloon {
+  width: 16px;
+  height: 20px;
+  border-radius: 999px;
+  opacity: 0.92;
+  animation: floatBlob 4.2s ease-in-out infinite;
+}
+
+.runBalloon:nth-child(1) {
+  background: #7dd3fc;
+}
+
+.runBalloon:nth-child(2) {
+  background: #facc15;
+  animation-delay: 120ms;
+}
+
+.runBalloon:nth-child(3) {
+  background: #fb7185;
+  animation-delay: 240ms;
+}
+
+.runSummaryButton {
+  margin-top: 10px;
+  border-radius: 12px;
+  border: 1px solid #7ec8ff;
+  background: linear-gradient(130deg, #ffe088, #ffd166);
+  color: #173d5a;
+  font-weight: 900;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.runSummaryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(255, 180, 80, 0.26);
+}
+
 .questionValue {
   margin: 8px 0 4px;
   text-align: center;
@@ -1750,6 +1862,8 @@
   .questionCardDanger,
   .questionCardCombo,
   .confettiPiece,
+  .runSummaryCard,
+  .runBalloon,
   .feedbackSuccess,
   .feedbackError {
     animation: none;
@@ -1760,7 +1874,8 @@
   .tabCard,
   .primaryCta,
   .secondaryCta,
-  .restartButton {
+  .restartButton,
+  .runSummaryButton {
     transition: none;
   }
 }

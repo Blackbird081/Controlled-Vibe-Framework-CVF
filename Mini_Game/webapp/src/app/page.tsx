@@ -22,6 +22,7 @@ import {
   MiniGameKey,
 } from "@/lib/game-core";
 import {
+  playApplauseTone,
   getAudioPreferences,
   playCelebrationTone,
   playErrorTone,
@@ -115,7 +116,7 @@ type FeedbackTone = "success" | "error" | "info";
 type AgeGroupKey = "age_5_6" | "age_7_8" | "age_9_10";
 type UiLanguage = "vi" | "en";
 type DashboardView = "play" | "progress" | "parent" | "settings";
-type SpeechLocale = "vi-VN" | "en-US";
+type SpeechLocale = "en-US";
 
 interface SpeechSegment {
   text: string;
@@ -241,6 +242,7 @@ const LEVEL_LABELS: Record<UiLanguage, Record<LevelKey, { label: string; subtitl
 
 const LEVEL_ORDER: LevelKey[] = ["rookie", "talent", "master"];
 const DAILY_ROUNDS_TARGET = 18;
+const RUN_EXERCISE_LIMIT = 15;
 
 function getUnlockedLevelByAcademyProgress(activeZoneIndex: number): LevelKey {
   if (activeZoneIndex >= 2) return "master";
@@ -263,10 +265,7 @@ function feedbackClass(tone: FeedbackTone): string {
 }
 
 function pickSpeechVoice(voices: SpeechSynthesisVoice[], locale: SpeechLocale): SpeechSynthesisVoice | null {
-  const preferredNameHints =
-    locale === "en-US"
-      ? ["aria", "jenny", "samantha", "google us english", "zira", "guy"]
-      : ["hoai", "linh", "vietnam", "google vietnamese"];
+  const preferredNameHints = ["aria", "jenny", "samantha", "google us english", "zira", "guy", "davis", "alloy"];
   const localeLower = locale.toLowerCase();
   const langPrefix = localeLower.slice(0, 2);
 
@@ -337,6 +336,12 @@ export default function Home() {
   const [feedback, setFeedback] = useState<{ tone: FeedbackTone; text: string }>({
     tone: "info",
     text: "Chon mini game va bat dau hanh trinh hoc ma choi!",
+  });
+  const [runStats, setRunStats] = useState({
+    total: 0,
+    correct: 0,
+    wrong: 0,
+    completed: false,
   });
   const previousAgeGroupRef = useRef<AgeGroupKey | null>(null);
   const previousViewRef = useRef<DashboardView | null>(null);
@@ -533,6 +538,8 @@ export default function Home() {
   );
   const ageProfileLabel = AGE_PROFILE_LABELS[language][ageGroup];
   const timeRatio = Math.max(0, Math.min(1, timeLeft / Math.max(1, roundDurationSeconds)));
+  const runProgressRatio = Math.max(0, Math.min(1, runStats.total / RUN_EXERCISE_LIMIT));
+  const runAccuracy = runStats.total > 0 ? Math.round((runStats.correct / runStats.total) * 100) : 0;
   const getBossMetaByTotalRounds = useCallback((totalRounds: number) => {
     const probe = {
       ...academyProgress,
@@ -614,51 +621,32 @@ export default function Home() {
   ]);
   const currentSpeechText = useMemo(() => {
     if (activeGame === "math") {
-      return language === "vi"
-        ? `Cau hoi toan: ${mathQuestion.left} ${mathQuestion.operator === "+" ? "cong" : "tru"} ${mathQuestion.right} bang bao nhieu?`
-        : `Math question: what is ${mathQuestion.left} ${mathQuestion.operator === "+" ? "plus" : "minus"} ${mathQuestion.right}?`;
+      return `Math question: what is ${mathQuestion.left} ${mathQuestion.operator === "+" ? "plus" : "minus"} ${mathQuestion.right}?`;
     }
     if (activeGame === "memory") {
       if (memoryRevealLeft > 0) {
-        return language === "vi"
-          ? `Hay nho chuoi ky hieu trong ${memoryRevealLeft} giay.`
-          : `Remember the symbol sequence in ${memoryRevealLeft} seconds.`;
+        return `Remember the symbol sequence in ${memoryRevealLeft} seconds.`;
       }
-      return pickLanguageText(language, "Chuoi da an. Ky hieu nao xuat hien nhieu nhat?", "Sequence hidden. Which symbol appeared the most?");
+      return "Sequence hidden. Which symbol appeared the most?";
     }
     if (activeGame === "logic") {
       const seq = logicRound.sequence.join(", ");
-      return language === "vi"
-        ? `Logic chuoi: ${seq}. So tiep theo la so nao?`
-        : `Logic sequence: ${seq}. Which number comes next?`;
+      return `Logic sequence: ${seq}. Which number comes next?`;
     }
     if (activeGame === "compare") {
-      return language === "vi"
-        ? `So sanh nhanh: ${compareRound.left} va ${compareRound.right}. Hay chon so lon hon.`
-        : `Quick compare: ${compareRound.left} and ${compareRound.right}. Choose the larger number.`;
+      return `Quick compare: ${compareRound.left} and ${compareRound.right}. Choose the larger number.`;
     }
     if (activeGame === "vocab") {
       return vocabRound.direction === "vi_to_en"
-        ? pickLanguageText(
-            language,
-            `Tu tieng Anh cua "${vocabRound.prompt}" la gi?`,
-            `What is the English word for "${vocabRound.prompt}"?`,
-          )
-        : pickLanguageText(
-            language,
-            `Tu tieng Viet cua "${vocabRound.prompt}" la gi?`,
-            `What is the Vietnamese word for "${vocabRound.prompt}"?`,
-          );
+        ? "Vocabulary challenge. Match the Vietnamese word on screen to the correct English meaning."
+        : `Vocabulary challenge. What is the Vietnamese meaning of "${vocabRound.prompt}"?`;
     }
-    return language === "vi"
-      ? `Phan xa mau. Tu hien thi la ${colorRound.word}. Hay chon mau cua chu dang hien thi.`
-      : `Color reflex. The shown word is ${getColorEnglishName(colorRound.word)}. Pick the color of the text.`;
+    return `Color reflex. The shown word is ${getColorEnglishName(colorRound.word)}. Pick the color of the text.`;
   }, [
     activeGame,
     colorRound.word,
     compareRound.left,
     compareRound.right,
-    language,
     logicRound.sequence,
     mathQuestion.left,
     mathQuestion.operator,
@@ -757,40 +745,41 @@ export default function Home() {
       startRound,
     ],
   );
+  const startNewRunSession = useCallback(() => {
+    resetRun();
+    setRunStats({
+      total: 0,
+      correct: 0,
+      wrong: 0,
+      completed: false,
+    });
+    setWrongStreak(0);
+    beginRound(activeGame, activeRoundConfig, "restart");
+  }, [activeGame, activeRoundConfig, beginRound, resetRun]);
   const buildSpeechSegments = useCallback((): SpeechSegment[] => {
-    if (activeGame !== "vocab") {
+    if (activeGame === "vocab") {
+      if (vocabRound.direction === "vi_to_en") {
+        return [
+          {
+            text: "Vocabulary challenge. Match the Vietnamese word shown on screen to the correct English meaning.",
+            locale: "en-US",
+          },
+        ];
+      }
       return [
         {
-          text: currentSpeechText,
-          locale: language === "vi" ? "vi-VN" : "en-US",
-        },
-      ];
-    }
-
-    if (vocabRound.direction === "vi_to_en") {
-      return [
-        {
-          text: language === "vi" ? `Tu khoa: ${vocabRound.prompt}.` : `Vietnamese word: ${vocabRound.prompt}.`,
-          locale: "vi-VN",
-        },
-        {
-          text: language === "vi" ? "Hay chon nghia tieng Anh dung." : "Choose the correct English meaning.",
+          text: `English word: ${vocabRound.prompt}. Choose the correct Vietnamese meaning.`,
           locale: "en-US",
         },
       ];
     }
-
     return [
       {
-        text: language === "vi" ? `Word: ${vocabRound.prompt}.` : `Word: ${vocabRound.prompt}.`,
+        text: currentSpeechText,
         locale: "en-US",
       },
-      {
-        text: language === "vi" ? "Hay chon nghia tieng Viet dung." : "Choose the correct Vietnamese meaning.",
-        locale: "vi-VN",
-      },
     ];
-  }, [activeGame, currentSpeechText, language, vocabRound.direction, vocabRound.prompt]);
+  }, [activeGame, currentSpeechText, vocabRound.direction, vocabRound.prompt]);
   const speakCurrentPrompt = useCallback(
     (source: "manual" | "auto") => {
       if (!ttsEnabled || soundMuted) return;
@@ -816,9 +805,9 @@ export default function Home() {
           utterance.lang = segment.locale;
         }
 
-        // Slightly calmer prosody to improve clarity across browsers.
-        utterance.rate = segment.locale === "en-US" ? (ageGroup === "age_5_6" ? 0.9 : 0.96) : ageGroup === "age_5_6" ? 0.86 : 0.92;
-        utterance.pitch = segment.locale === "en-US" ? 0.98 : 1;
+        // Fixed English prosody for clearer pronunciation.
+        utterance.rate = ageGroup === "age_5_6" ? 0.88 : 0.92;
+        utterance.pitch = 0.96;
         utterance.volume = volume;
         speech.speak(utterance);
       });
@@ -828,7 +817,7 @@ export default function Home() {
         game: activeGame,
         ageGroup,
         language,
-        locale: segments[0]?.locale ?? "vi-VN",
+        locale: segments[0]?.locale ?? "en-US",
         segments: segments.length,
         voice: firstVoiceName || "default",
       });
@@ -996,13 +985,14 @@ export default function Home() {
   useEffect(() => {
     if (activeView !== "play") return;
     if (!hydrated || !autoReadEnabled) return;
+    if (runStats.completed) return;
     if (spokenRoundRef.current === currentRoundKey) return;
     spokenRoundRef.current = currentRoundKey;
     const timer = window.setTimeout(() => {
       speakCurrentPrompt("auto");
     }, 180);
     return () => window.clearTimeout(timer);
-  }, [activeView, autoReadEnabled, currentRoundKey, hydrated, speakCurrentPrompt]);
+  }, [activeView, autoReadEnabled, currentRoundKey, hydrated, runStats.completed, speakCurrentPrompt]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !ttsSupported) return;
@@ -1075,7 +1065,7 @@ export default function Home() {
   const remainingSessionMinutes = Number.isFinite(sessionRemainingMs) ? Math.ceil(sessionRemainingMs / (60 * 1000)) : null;
   const playable = hydrated && canPlay(progress) && sessionRemainingMs > 0;
   const parentLocked = Boolean(progress.parentMode.pinCode) && !parentUnlocked;
-  const answerLocked = activeView !== "play" || !playable || (activeGame === "memory" && memoryRevealLeft > 0);
+  const answerLocked = activeView !== "play" || !playable || runStats.completed || (activeGame === "memory" && memoryRevealLeft > 0);
   const currentChoices = useMemo<(string | number)[]>(() => {
     if (activeGame === "math") return mathQuestion.choices;
     if (activeGame === "memory") return memoryRound.choices;
@@ -1430,6 +1420,9 @@ export default function Home() {
       const shouldShowHint = nextWrongStreak >= 2;
       const activeBossMeta = getBossMetaByTotalRounds(academyProgress.totalRounds);
       const nextRoundTotalRounds = academyProgress.totalRounds + 1;
+      const nextRunTotal = Math.min(RUN_EXERCISE_LIMIT, runStats.total + 1);
+      const nextRunWrong = runStats.wrong + 1;
+      const reachedRunLimit = nextRunTotal >= RUN_EXERCISE_LIMIT;
       const roundMs = roundDurationSeconds * 1000;
       const responseMs =
         reason === "round_timeout"
@@ -1448,6 +1441,12 @@ export default function Home() {
         responseMs,
         roundMs,
       });
+      setRunStats((previous) => ({
+        total: Math.min(RUN_EXERCISE_LIMIT, previous.total + 1),
+        correct: previous.correct,
+        wrong: previous.wrong + 1,
+        completed: Math.min(RUN_EXERCISE_LIMIT, previous.total + 1) >= RUN_EXERCISE_LIMIT,
+      }));
       playErrorTone();
       setWrongStreak(nextWrongStreak);
 
@@ -1485,6 +1484,20 @@ export default function Home() {
         });
       }
       applyAcademyRoundResult(false);
+      if (reachedRunLimit) {
+        const accuracy = Math.round((runStats.correct / Math.max(1, nextRunTotal)) * 100);
+        triggerCelebration();
+        playApplauseTone();
+        setFeedback({
+          tone: "success",
+          text: pickLanguageText(
+            language,
+            `Hoan thanh luot 15 cau! Dung ${runStats.correct} | Sai ${nextRunWrong} | Chinh xac ${accuracy}%.`,
+            `Run complete! Correct ${runStats.correct} | Wrong ${nextRunWrong} | Accuracy ${accuracy}%.`,
+          ),
+        });
+        return;
+      }
       beginRound(activeGame, activeRoundConfig, reason === "round_timeout" ? "timeout" : "answer_wrong", level.key, nextRoundTotalRounds);
     },
     [
@@ -1499,7 +1512,11 @@ export default function Home() {
       language,
       level.key,
       roundDurationSeconds,
+      runStats.correct,
+      runStats.total,
+      runStats.wrong,
       timeLeft,
+      triggerCelebration,
       updateProgress,
       wrongStreak,
     ],
@@ -1534,6 +1551,9 @@ export default function Home() {
       const activeBossMeta = getBossMetaByTotalRounds(academyProgress.totalRounds);
       const runtimeRound = getRuntimeRoundConfig(activeRoundConfig, academyProgress.totalRounds);
       const nextRoundTotalRounds = academyProgress.totalRounds + 1;
+      const nextRunTotal = Math.min(RUN_EXERCISE_LIMIT, runStats.total + 1);
+      const nextRunCorrect = runStats.correct + 1;
+      const reachedRunLimit = nextRunTotal >= RUN_EXERCISE_LIMIT;
       const nextCombo = progress.combo + 1;
       const points = calculateEarnedScore(nextCombo, level.baseScore) * runtimeRound.scoreMultiplier;
       const isComboMilestone = nextCombo > 0 && nextCombo % 3 === 0;
@@ -1554,6 +1574,12 @@ export default function Home() {
         responseMs,
         roundMs,
       });
+      setRunStats((previous) => ({
+        total: Math.min(RUN_EXERCISE_LIMIT, previous.total + 1),
+        correct: previous.correct + 1,
+        wrong: previous.wrong,
+        completed: Math.min(RUN_EXERCISE_LIMIT, previous.total + 1) >= RUN_EXERCISE_LIMIT,
+      }));
 
       setWrongStreak(0);
       playSuccessTone();
@@ -1589,6 +1615,20 @@ export default function Home() {
         });
       }
       applyAcademyRoundResult(true);
+      if (reachedRunLimit) {
+        const accuracy = Math.round((nextRunCorrect / Math.max(1, nextRunTotal)) * 100);
+        triggerCelebration();
+        playApplauseTone();
+        setFeedback({
+          tone: "success",
+          text: pickLanguageText(
+            language,
+            `Hoan thanh luot 15 cau! Dung ${nextRunCorrect} | Sai ${runStats.wrong} | Chinh xac ${accuracy}%.`,
+            `Run complete! Correct ${nextRunCorrect} | Wrong ${runStats.wrong} | Accuracy ${accuracy}%.`,
+          ),
+        });
+        return;
+      }
       beginRound(activeGame, activeRoundConfig, "answer_correct", level.key, nextRoundTotalRounds);
     },
     [
@@ -1614,6 +1654,9 @@ export default function Home() {
       progress.highScores,
       progress.score,
       roundDurationSeconds,
+      runStats.correct,
+      runStats.total,
+      runStats.wrong,
       beginRound,
       timeLeft,
       triggerCelebration,
@@ -1624,6 +1667,7 @@ export default function Home() {
   useEffect(() => {
     if (activeView !== "play") return;
     if (!playable) return;
+    if (runStats.completed) return;
     if (timeLeft <= 0) return;
 
     const timer = window.setTimeout(() => {
@@ -1636,11 +1680,12 @@ export default function Home() {
     }, 1000);
 
     return () => window.clearTimeout(timer);
-  }, [activeView, handleWrong, playable, timeLeft]);
+  }, [activeView, handleWrong, playable, runStats.completed, timeLeft]);
 
   useEffect(() => {
     if (activeView !== "play") return;
     if (!playable) return;
+    if (runStats.completed) return;
     if (activeGame !== "memory") return;
     if (memoryRevealLeft <= 0) return;
 
@@ -1649,16 +1694,17 @@ export default function Home() {
     }, 1000);
 
     return () => window.clearTimeout(revealTimer);
-  }, [activeGame, activeView, memoryRevealLeft, playable]);
+  }, [activeGame, activeView, memoryRevealLeft, playable, runStats.completed]);
 
   useEffect(() => {
     if (activeView !== "play") return;
     if (!playable) return;
+    if (runStats.completed) return;
     const usageTicker = window.setInterval(() => {
       updateProgress((previous) => addPlayTime(previous, 1000));
     }, 1000);
     return () => window.clearInterval(usageTicker);
-  }, [activeView, playable, updateProgress]);
+  }, [activeView, playable, runStats.completed, updateProgress]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -1671,12 +1717,10 @@ export default function Home() {
 
       if (event.key === "r" || event.key === "R") {
         event.preventDefault();
-        resetRun();
-        setWrongStreak(0);
-        beginRound(activeGame, activeRoundConfig, "restart");
+        startNewRunSession();
         setFeedback({
           tone: "info",
-          text: pickLanguageText(language, "Da reset run moi (shortcut R).", "Run restarted (shortcut R)."),
+          text: pickLanguageText(language, "Bat dau luot moi 15 cau (shortcut R).", "Started a new 15-question run (shortcut R)."),
         });
         return;
       }
@@ -1690,7 +1734,7 @@ export default function Home() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeGame, activeRoundConfig, activeView, beginRound, currentChoices, handleAnswer, language, resetRun]);
+  }, [activeView, currentChoices, handleAnswer, language, startNewRunSession]);
 
   if (!hydrated) {
     return (
@@ -2406,7 +2450,7 @@ export default function Home() {
               <button
                 type="button"
                 className={styles.ttsButton}
-                disabled={!ttsEnabled || soundMuted || !ttsSupported}
+                disabled={!ttsEnabled || soundMuted || !ttsSupported || runStats.completed}
                 onClick={() => speakCurrentPrompt("manual")}
               >
                 {pickLanguageText(language, "Doc cau hoi", "Read question")}
@@ -2443,7 +2487,46 @@ export default function Home() {
             </div>
           </div>
 
-          {renderMainQuestion()}
+          <div className={styles.runTracker}>
+            <p className={styles.runTrackerLabel}>
+              {pickLanguageText(language, "Tien do luot", "Run progress")}: {runStats.total}/{RUN_EXERCISE_LIMIT}
+            </p>
+            <div className={styles.runTrackerTrack} role="presentation" aria-hidden>
+              <span className={styles.runTrackerFill} style={{ width: `${Math.round(runProgressRatio * 100)}%` }} />
+            </div>
+            <p className={styles.runTrackerStats}>
+              {pickLanguageText(language, "Dung", "Correct")} {runStats.correct} | {pickLanguageText(language, "Sai", "Wrong")} {runStats.wrong} | {pickLanguageText(language, "Chinh xac", "Accuracy")} {runAccuracy}%
+            </p>
+          </div>
+
+          {runStats.completed ? (
+            <section className={styles.runSummaryCard} aria-live="polite">
+              <div className={styles.runSummaryBalloons} aria-hidden>
+                <span className={styles.runBalloon} />
+                <span className={styles.runBalloon} />
+                <span className={styles.runBalloon} />
+              </div>
+              <h3>{pickLanguageText(language, "Hoan thanh luot 15 cau!", "15-question run complete!")}</h3>
+              <p>
+                {pickLanguageText(language, "Ket qua:", "Result:")} {pickLanguageText(language, "Dung", "Correct")} {runStats.correct} | {pickLanguageText(language, "Sai", "Wrong")} {runStats.wrong} | {pickLanguageText(language, "Chinh xac", "Accuracy")} {runAccuracy}%
+              </p>
+              <button
+                type="button"
+                className={styles.runSummaryButton}
+                onClick={() => {
+                  startNewRunSession();
+                  setFeedback({
+                    tone: "info",
+                    text: pickLanguageText(language, "Bat dau luot moi 15 cau. San sang!", "New 15-question run started. Ready!"),
+                  });
+                }}
+              >
+                {pickLanguageText(language, "Bat dau luot moi", "Start New Run")}
+              </button>
+            </section>
+          ) : (
+            renderMainQuestion()
+          )}
 
           <p className={`${styles.feedback} ${feedbackClass(feedback.tone)}`} aria-live="polite">
             {feedback.text}
@@ -2453,17 +2536,17 @@ export default function Home() {
             type="button"
             className={styles.restartButton}
             onClick={() => {
-              resetRun();
-              setWrongStreak(0);
-              beginRound(activeGame, activeRoundConfig, "restart");
+              startNewRunSession();
               setFeedback({
                 tone: "info",
-                text: pickLanguageText(language, "Da reset run moi. Co gang pha ky luc nao!", "Run restarted. Let's break your high score!"),
+                text: pickLanguageText(language, "Bat dau luot moi 15 cau. Co gang pha ky luc nao!", "Started a new 15-question run. Let's break your high score!"),
               });
               void trackEvent("restart_run", { level: level.key, game: activeGame });
             }}
           >
-            {pickLanguageText(language, "Choi lai tu dau", "Restart Run")}
+            {runStats.completed
+              ? pickLanguageText(language, "Lam luot moi", "Start Next Run")
+              : pickLanguageText(language, "Choi lai tu dau", "Restart Run")}
           </button>
           </section>
         ) : null}

@@ -116,3 +116,13 @@ export function playCelebrationTone(): void {
   playTone({ frequency: 840, durationMs: 86, type: "triangle", volume: 0.05, delayMs: 80 });
   playTone({ frequency: 1020, durationMs: 106, type: "triangle", volume: 0.045, delayMs: 160 });
 }
+
+export function playApplauseTone(): void {
+  if (audioPreferences.muted || audioPreferences.volume <= 0) return;
+  for (let idx = 0; idx < 18; idx += 1) {
+    const delay = idx * 70;
+    const base = 360 + Math.floor(Math.random() * 320);
+    playTone({ frequency: base, durationMs: 36, type: "square", volume: 0.016, delayMs: delay });
+    playTone({ frequency: base + 220, durationMs: 24, type: "triangle", volume: 0.012, delayMs: delay + 16 });
+  }
+}

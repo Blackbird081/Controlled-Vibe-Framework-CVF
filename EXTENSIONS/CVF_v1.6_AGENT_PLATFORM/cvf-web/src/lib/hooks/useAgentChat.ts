@@ -315,11 +315,15 @@ ${attachedFile.content}
 
         setMessages(prev => [...prev, userMessage]);
 
+        const govState = governanceStateRef.current;
         const budgetStatus = checkBudget();
         const enforcement = evaluateEnforcement({
             mode: currentModeRef.current,
             content: finalContent,
             budgetOk: budgetStatus.ok,
+            cvfPhase: govState.phase,
+            cvfRiskLevel: govState.riskLevel,
+            requiresSkillPreflight: Boolean(govState.toolkitEnabled && govState.phase === 'BUILD'),
         });
         logEnforcementDecision({
             source: 'agent_chat',
@@ -349,6 +353,16 @@ ${attachedFile.content}
                     content: language === 'vi'
                         ? `⛔ Yêu cầu bị chặn do rủi ro ${enforcement.riskGate.riskLevel}. Vui lòng chuyển sang Governance/Full mode hoặc giảm rủi ro.`
                         : `⛔ Request blocked due to risk ${enforcement.riskGate.riskLevel}. Switch to Governance/Full mode or reduce risk.`,
+                    timestamp: new Date(),
+                };
+                setMessages(prev => [...prev, blockMessage]);
+            } else if (enforcement.skillPreflight?.required && !enforcement.skillPreflight.declared) {
+                const blockMessage: ChatMessage = {
+                    id: `msg_${Date.now() + 1}`,
+                    role: 'system',
+                    content: language === 'vi'
+                        ? '⛔ Thiếu Skill Preflight declaration cho Build/Execute. Hãy khai báo SKILL_PREFLIGHT_RECORD trước khi tiếp tục.'
+                        : '⛔ Missing Skill Preflight declaration for Build/Execute. Declare SKILL_PREFLIGHT_RECORD before continuing.',
                     timestamp: new Date(),
                 };
                 setMessages(prev => [...prev, blockMessage]);

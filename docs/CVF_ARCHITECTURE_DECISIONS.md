@@ -306,3 +306,99 @@ ADR-006 made Skill Preflight mandatory before Build/Execute, but teams still nee
 - `Mini_Game/CVF_DOCS/SKILL_PREFLIGHT_RECORD.md`
 - `Mini_Game/CVF_DOCS/DECISIONS.md`
 - `Mini_Game/PROJECT_ARCHIVE/CHANGE_HISTORY.md`
+
+---
+
+## ADR-008: Web UI Skill Preflight Integration Baseline (Pre-Upgrade Snapshot)
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-01 |
+| Status | Active |
+| Related commits | *(this commit)* |
+
+### Context
+ADR-006 and ADR-007 established mandatory Skill Preflight governance and a standard preflight record artifact. Before implementing Web UI upgrades, a framework-level baseline snapshot is required to capture actual integration state and avoid "policy declared but not enforced in runtime" drift.
+
+### Decision
+**Record the current Web UI integration state as a formal baseline: Skill Preflight is only partially integrated in `cvf-web` and is not yet enforced as a hard pre-code gate.**
+
+Baseline findings:
+1. Framework policy/docs include mandatory Skill Preflight and `SKILL_PREFLIGHT_RECORD` requirements.
+2. Web UI phase-gate checklist (`Build`) does not contain an explicit Skill Preflight item.
+3. Client/server execution enforcement currently checks budget/spec/risk, but not Skill Preflight evidence.
+4. Governance evaluate request schema does not require Skill Preflight declaration fields.
+5. Skill library/planner and template-skill bridge exist, but currently operate as support/discovery, not as mandatory pre-build gate controls.
+
+### Rationale
+- Preserves an auditable "before upgrade" reference for CVF governance evolution.
+- Prevents ambiguity when validating whether upcoming implementation truly closes the enforcement gap.
+- Enables post-upgrade regression checks against a documented baseline instead of ad-hoc memory.
+
+### Consequences
+- This ADR becomes the authoritative baseline for Web UI Skill Preflight upgrade scope.
+- Upgrade acceptance criteria must demonstrate movement from partial integration to enforced gate behavior.
+- Future audits can trace exactly why and where Web UI governance changes were introduced.
+
+### Related Files
+- `docs/concepts/governance-model.md`
+- `docs/CVF_ARCHITECTURE_DECISIONS.md`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/cvf-checklists.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/PhaseGateModal.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/enforcement.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/types/governance-engine.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/governance/evaluate/route.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/skill-template-map.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/skill-planner.ts`
+
+---
+
+## ADR-009: Web UI Skill Preflight Enforcement Upgrade (Framework-Level Integration)
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-01 |
+| Status | Active |
+| Related commits | *(this commit)* |
+
+### Context
+ADR-008 captured a pre-upgrade baseline showing that Web UI governance had phase/risk/spec controls but did not enforce Skill Preflight as a hard gate for Build/Execute actions. This left a runtime gap between framework policy and actual execution behavior.
+
+### Decision
+**Upgrade `cvf-web` to enforce Skill Preflight in Build/Execute flows, and add test evidence for the new controls.**
+
+Implementation scope:
+1. Added mandatory Skill Preflight item to Build checklist in phase gate UI.
+2. Extended enforcement model with Skill Preflight state (`required/declared/source`).
+3. Added blocking rule: Build/Execute actions are blocked if Skill Preflight declaration is missing.
+4. Extended execution/governance request schemas with `skill_preflight` metadata.
+5. Added API route validation for governance evaluate calls in BUILD phase.
+6. Wired chat and multi-agent runtime enforcement with phase-aware Skill Preflight requirements.
+7. Added/updated tests for checklist, enforcement (sync/async), execute route, and governance evaluate route.
+
+### Rationale
+- Closes the "policy exists but runtime bypasses" gap identified in ADR-008.
+- Converts Skill Preflight from documentation-only requirement into enforceable platform behavior.
+- Preserves compatibility by accepting declaration via explicit fields or recognized content markers.
+
+### Consequences
+- Build/Execute requests in Web UI now require Skill Preflight evidence before execution.
+- API consumers targeting BUILD evaluation must provide declared Skill Preflight metadata.
+- Test coverage for upgraded modules is expanded; remaining heavy hook suite may require higher memory in local environments.
+
+### Related Files
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/cvf-checklists.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/cvf-checklists.test.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/enforcement.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/enforcement.test.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/enforcement-async.test.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/ai/types.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/types/governance-engine.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.test.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/governance/evaluate/route.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/governance/evaluate/route.test.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useAgentChat.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useAgentChat.test.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/MultiAgentPanel.tsx`

@@ -129,10 +129,16 @@ Step 2: Build components
         });
 
         it('auto-checks Build phase items', () => {
-            const response = '```typescript\nconst x = 1;\n```\nNote: implementation details.';
+            const response = `\`\`\`typescript
+const x = 1;
+\`\`\`
+Note: implementation details.
+Skill Preflight PASS.
+SKILL_PREFLIGHT_RECORD: XD_App/DOCUMENTS/SKILL_PREFLIGHT_RECORD.md`;
             const checked = autoCheckItems('Build', response);
             expect(checked).toContain('build-2'); // Code blocks
             expect(checked).toContain('build-4'); // Notes
+            expect(checked).toContain('build-5'); // Skill preflight
         });
 
         it('auto-checks Review phase items', () => {

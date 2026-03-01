@@ -40,6 +40,13 @@ export interface GovernanceEvaluateRequest {
     payload: Record<string, unknown>;
     cvf_phase?: string;       // A-E
     cvf_risk_level?: string;  // R0-R4
+    skill_preflight?: {
+        required: boolean;
+        declared: boolean;
+        source?: 'explicit' | 'content' | 'none';
+        record_ref?: string;
+        skill_ids?: string[];
+    };
 }
 
 /** CVF Quality 4-dimension result from CVFQualityAdapter */

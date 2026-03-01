@@ -268,6 +268,9 @@ ${directive.handoff}
                     mode,
                     content: agentPrompt,
                     budgetOk: checkBudget().ok,
+                    cvfPhase: govState.phase,
+                    cvfRiskLevel: govState.riskLevel,
+                    requiresSkillPreflight: Boolean(govState.toolkitEnabled && govState.phase === 'BUILD'),
                 });
                 logEnforcementDecision({
                     source: 'multi_agent',

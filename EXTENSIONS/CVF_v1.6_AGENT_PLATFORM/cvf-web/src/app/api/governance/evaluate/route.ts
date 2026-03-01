@@ -3,6 +3,12 @@ import { verifySessionCookie } from '@/lib/middleware-auth';
 import { governanceEvaluate } from '@/lib/governance-engine';
 import type { GovernanceEvaluateRequest } from '@/types/governance-engine';
 
+function isBuildPhase(phase?: string): boolean {
+    if (!phase) return false;
+    const normalized = phase.trim().toUpperCase();
+    return normalized === 'BUILD' || normalized === 'PHASE C' || normalized === 'C';
+}
+
 /**
  * POST /api/governance/evaluate
  * Proxy to v1.6.1 Governance Engine — full pipeline evaluation.
@@ -36,12 +42,23 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        if (isBuildPhase(body.cvf_phase) && !body.skill_preflight?.declared) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Skill Preflight declaration is required for BUILD evaluation requests.',
+                },
+                { status: 400 },
+            );
+        }
+
         const payload: GovernanceEvaluateRequest = {
             request_id: body.request_id,
             artifact_id: body.artifact_id,
             payload: body.payload,
             cvf_phase: body.cvf_phase,
             cvf_risk_level: body.cvf_risk_level,
+            skill_preflight: body.skill_preflight,
         };
 
         const result = await governanceEvaluate(payload);

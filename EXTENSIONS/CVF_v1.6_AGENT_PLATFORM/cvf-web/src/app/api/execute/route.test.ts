@@ -295,4 +295,43 @@ describe('/api/execute', () => {
         expect(res.status).toBe(400);
         expect(data.enforcement.status).toBe('BLOCK');
     });
+
+    it('requires skill preflight for build/development execution', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'BLOCK',
+            reasons: ['Skill Preflight declaration is required before Build/Execute actions.'],
+            skillPreflight: {
+                required: true,
+                declared: false,
+                source: 'none',
+                skillIds: [],
+            },
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateId: 'build_my_app',
+                templateName: 'Build My App',
+                intent: 'Build a desktop app for me',
+                inputs: { appIdea: 'Task manager app' },
+                provider: 'openai',
+                cvfPhase: 'BUILD',
+            }),
+            headers: { cookie: makeSessionCookie() },
+        });
+
+        const res = await POST(req as never);
+        const data = await res.json();
+
+        expect(res.status).toBe(400);
+        expect(data.error).toMatch(/Skill Preflight/i);
+        expect(evaluateEnforcementMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                cvfPhase: 'BUILD',
+                requiresSkillPreflight: true,
+            }),
+        );
+    });
 });

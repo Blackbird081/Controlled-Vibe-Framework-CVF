@@ -171,6 +171,13 @@ export const CVF_PHASE_CHECKLISTS: PhaseChecklist[] = [
                 required: false,
                 autoCheck: (r) => /Note|Ghi chú/i.test(r),
             },
+            {
+                id: 'build-5',
+                label: 'Skill Preflight declared before coding',
+                labelVi: 'Đã khai báo Skill Preflight trước khi code',
+                required: true,
+                autoCheck: (r) => /SKILL_PREFLIGHT_RECORD|Skill Preflight PASS|Preflight PASS/i.test(r),
+            },
         ],
         gateQuestion: 'Build complete. Ready for Review?',
         gateQuestionVi: 'Build hoàn thành. Sẵn sàng Review?',

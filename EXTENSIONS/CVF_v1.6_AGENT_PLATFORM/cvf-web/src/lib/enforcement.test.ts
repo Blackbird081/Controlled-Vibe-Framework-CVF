@@ -143,4 +143,49 @@ describe('evaluateEnforcement', () => {
         expect(result.status).toBe('NEEDS_APPROVAL');
         expect(result.reasons).toContain('R3 requires explicit human approval before execution.');
     });
+
+    it('blocks build actions when skill preflight is missing', () => {
+        const result = evaluateEnforcement({
+            mode: 'governance',
+            content: 'Implement API endpoints and write code.',
+            budgetOk: true,
+            cvfPhase: 'BUILD',
+            requiresSkillPreflight: true,
+        });
+        expect(result.status).toBe('BLOCK');
+        expect(result.reasons.join(' ')).toContain('Skill Preflight declaration is required');
+        expect(result.skillPreflight?.required).toBe(true);
+        expect(result.skillPreflight?.declared).toBe(false);
+    });
+
+    it('allows build actions with explicit skill preflight declaration', () => {
+        const result = evaluateEnforcement({
+            mode: 'governance',
+            content: 'Implement API endpoints and write code.',
+            budgetOk: true,
+            cvfPhase: 'BUILD',
+            requiresSkillPreflight: true,
+            skillPreflight: {
+                passed: true,
+                recordRef: 'governance/toolkit/03_CONTROL/SKILL_PREFLIGHT_RECORD.md',
+                skillIds: ['CVF_CORE_SKILL_PREFLIGHT_GOVERNANCE'],
+            },
+        });
+        expect(result.status).toBe('ALLOW');
+        expect(result.skillPreflight?.declared).toBe(true);
+        expect(result.skillPreflight?.source).toBe('explicit');
+    });
+
+    it('allows build actions when declaration appears in content', () => {
+        const result = evaluateEnforcement({
+            mode: 'governance',
+            content: 'Skill Preflight PASS. SKILL_PREFLIGHT_RECORD: XD_App/DOCUMENTS/SKILL_PREFLIGHT_RECORD.md',
+            budgetOk: true,
+            cvfPhase: 'BUILD',
+            requiresSkillPreflight: true,
+        });
+        expect(result.status).toBe('ALLOW');
+        expect(result.skillPreflight?.declared).toBe(true);
+        expect(result.skillPreflight?.source).toBe('content');
+    });
 });

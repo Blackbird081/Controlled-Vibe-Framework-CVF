@@ -154,6 +154,19 @@ The AI Agent automatically enforces CVF governance through **3 layers**:
 - 📋 [`CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md) — Test history log
 - 📋 [`CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md) — Architecture decision records (ADR-001 → ...)
 
+### 🔒 Skill Preflight Enforcement in Web UI (Updated 2026-03-01)
+
+Skill Preflight is now enforced in `cvf-web` as a runtime gate, not only a documentation rule.
+
+- Build checklist includes mandatory Skill Preflight declaration item
+- Build/Execute enforcement blocks execution when Skill Preflight declaration is missing
+- `/api/governance/evaluate` requires `skill_preflight.declared=true` for BUILD phase requests
+- Execution payloads can carry `skill_preflight` metadata (`record_ref`, `skill_ids`, declaration source)
+
+Decision trace:
+- [ADR-008 Baseline](docs/CVF_ARCHITECTURE_DECISIONS.md#adr-008-web-ui-skill-preflight-integration-baseline-pre-upgrade-snapshot)
+- [ADR-009 Enforcement Upgrade](docs/CVF_ARCHITECTURE_DECISIONS.md#adr-009-web-ui-skill-preflight-enforcement-upgrade-framework-level-integration)
+
 
 ### v1.6 Features
 

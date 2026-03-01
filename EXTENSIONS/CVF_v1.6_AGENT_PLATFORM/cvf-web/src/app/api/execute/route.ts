@@ -7,6 +7,27 @@ import { applySafetyFilters } from '@/lib/safety';
 import { getRateLimiter } from '@/lib/rate-limit';
 import { checkBudget } from '@/lib/budget';
 
+function isBuildPhase(phase?: string): boolean {
+    if (!phase) return false;
+    const normalized = phase.trim().toUpperCase();
+    return normalized === 'BUILD' || normalized === 'PHASE C' || normalized === 'C';
+}
+
+function isBuildLikeIntent(intent?: string): boolean {
+    if (!intent) return false;
+    return /\b(build|implement|code|develop|create files?|write code|generate code|sua code|viết code|thực thi|triển khai)\b/i.test(intent);
+}
+
+function shouldRequireSkillPreflight(input: {
+    phase?: string;
+    templateCategory?: string;
+    intent?: string;
+}): boolean {
+    return isBuildPhase(input.phase)
+        || input.templateCategory === 'development'
+        || isBuildLikeIntent(input.intent);
+}
+
 export async function POST(request: NextRequest) {
     try {
         // AuthN: allow either session cookie or service token
@@ -95,12 +116,26 @@ export async function POST(request: NextRequest) {
         const mode = body.mode || 'simple';
         const template = body.templateId ? getTemplateById(body.templateId) : undefined;
         const specFields = template?.fields || [];
+        const requiresSkillPreflight = shouldRequireSkillPreflight({
+            phase: body.cvfPhase,
+            templateCategory: template?.category,
+            intent: body.intent,
+        });
         const enforcement = evaluateEnforcement({
             mode,
             content: userPrompt,
             budgetOk: checkBudget(userPrompt),
             specFields: specFields.length ? specFields : undefined,
             specValues: body.inputs,
+            cvfPhase: body.cvfPhase,
+            cvfRiskLevel: body.cvfRiskLevel,
+            requiresSkillPreflight,
+            skillPreflight: {
+                passed: body.skillPreflightPassed,
+                declaration: body.skillPreflightDeclaration,
+                recordRef: body.skillPreflightRecordRef,
+                skillIds: body.skillIds,
+            },
         });
 
         if (enforcement.status === 'BLOCK') {

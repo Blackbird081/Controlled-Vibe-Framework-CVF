@@ -110,6 +110,21 @@ describe('enforcement — dual-mode', () => {
             expect(result.serverResult).toBeDefined();
         });
 
+        it('blocks early when BUILD is missing skill preflight declaration', async () => {
+            mockIsEnabled.mockReturnValue(true);
+
+            const result = await evaluateEnforcementAsync({
+                ...baseInput,
+                cvfPhase: 'BUILD',
+                requiresSkillPreflight: true,
+            });
+
+            expect(result.source).toBe('client');
+            expect(result.status).toBe('BLOCK');
+            expect(result.reasons.join(' ')).toContain('Skill Preflight declaration is required');
+            expect(mockGovernanceEvaluate).not.toHaveBeenCalled();
+        });
+
         it('maps MANUAL_REVIEW → NEEDS_APPROVAL', async () => {
             mockIsEnabled.mockReturnValue(true);
             mockGovernanceEvaluate.mockResolvedValue({
@@ -265,6 +280,11 @@ describe('enforcement — dual-mode', () => {
                 artifactId: 'custom-artifact',
                 cvfPhase: 'C',
                 cvfRiskLevel: 'R2',
+                skillPreflight: {
+                    passed: true,
+                    recordRef: 'XD_App/DOCUMENTS/SKILL_PREFLIGHT_RECORD.md',
+                    skillIds: ['XD-SPF-001'],
+                },
             });
 
             expect(mockGovernanceEvaluate).toHaveBeenCalledWith(
@@ -273,6 +293,10 @@ describe('enforcement — dual-mode', () => {
                     artifact_id: 'custom-artifact',
                     cvf_phase: 'C',
                     cvf_risk_level: 'R2',
+                    skill_preflight: expect.objectContaining({
+                        required: true,
+                        declared: true,
+                    }),
                 }),
             );
         });

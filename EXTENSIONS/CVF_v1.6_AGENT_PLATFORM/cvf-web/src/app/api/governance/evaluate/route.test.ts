@@ -73,6 +73,11 @@ describe('POST /api/governance/evaluate', () => {
                 artifact_id: 'art-1',
                 payload: { content: 'test' },
                 cvf_phase: 'C',
+                skill_preflight: {
+                    required: true,
+                    declared: true,
+                    source: 'explicit',
+                },
             }),
         );
         const json = await res.json();
@@ -80,6 +85,23 @@ describe('POST /api/governance/evaluate', () => {
         expect(res.status).toBe(200);
         expect(json.success).toBe(true);
         expect(json.data.report.status).toBe('APPROVED');
+    });
+
+    it('returns 400 for BUILD requests without skill preflight declaration', async () => {
+        const res = await POST(
+            makeRequest({
+                request_id: 'build-1',
+                artifact_id: 'art-build-1',
+                payload: { content: 'build task' },
+                cvf_phase: 'BUILD',
+            }),
+        );
+        const json = await res.json();
+
+        expect(res.status).toBe(400);
+        expect(json.success).toBe(false);
+        expect(json.error).toMatch(/Skill Preflight/i);
+        expect(mockGovernanceEvaluate).not.toHaveBeenCalled();
     });
 
     it('returns 503 when engine unavailable', async () => {

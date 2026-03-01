@@ -13,12 +13,29 @@ import type {
 
 export type EnforcementStatus = 'ALLOW' | 'CLARIFY' | 'BLOCK' | 'NEEDS_APPROVAL';
 
+export interface SkillPreflightInput {
+    passed?: boolean;
+    declaration?: string;
+    recordRef?: string;
+    skillIds?: string[];
+}
+
+export interface SkillPreflightStatus {
+    required: boolean;
+    declared: boolean;
+    source: 'explicit' | 'content' | 'none';
+    recordRef?: string;
+    skillIds: string[];
+}
+
 export interface EnforcementInput {
     mode: CVFMode;
     content: string;
     budgetOk: boolean;
     specFields?: SpecGateField[];
     specValues?: Record<string, string>;
+    requiresSkillPreflight?: boolean;
+    skillPreflight?: SkillPreflightInput;
     /** Optional: pass through for server-side evaluation */
     requestId?: string;
     artifactId?: string;
@@ -31,6 +48,7 @@ export interface EnforcementResult {
     reasons: string[];
     riskGate?: RiskGateResult;
     specGate?: SpecGateResult;
+    skillPreflight?: SkillPreflightStatus;
     /** Present when server-side evaluation was used */
     serverResult?: GovernanceEvaluateResult;
     /** CVF 4-dim quality from server */
@@ -41,6 +59,34 @@ export interface EnforcementResult {
     source: 'client' | 'server';
 }
 
+const SKILL_PREFLIGHT_MISSING_REASON = 'Skill Preflight declaration is required before Build/Execute actions.';
+const SKILL_PREFLIGHT_PATTERN = /\b(SKILL_PREFLIGHT_RECORD|SKILL PREFLIGHT PASS|PREFLIGHT PASS|SPF-[A-Z0-9_-]+)\b/i;
+
+function isBuildPhase(phase?: string): boolean {
+    if (!phase) return false;
+    const normalized = phase.trim().toUpperCase();
+    return normalized === 'BUILD' || normalized === 'PHASE C' || normalized === 'C';
+}
+
+function evaluateSkillPreflight(input: EnforcementInput): SkillPreflightStatus {
+    const required = input.requiresSkillPreflight ?? isBuildPhase(input.cvfPhase);
+    const recordRef = input.skillPreflight?.recordRef?.trim();
+    const explicitSkillIds = input.skillPreflight?.skillIds || [];
+    const declaration = input.skillPreflight?.declaration?.trim();
+
+    const explicitDeclared = input.skillPreflight?.passed === true || Boolean(declaration) || Boolean(recordRef);
+    const contentDeclared = SKILL_PREFLIGHT_PATTERN.test(input.content);
+    const declared = explicitDeclared || contentDeclared;
+
+    return {
+        required,
+        declared,
+        source: explicitDeclared ? 'explicit' : (contentDeclared ? 'content' : 'none'),
+        recordRef: recordRef || undefined,
+        skillIds: explicitSkillIds,
+    };
+}
+
 /**
  * Synchronous client-side enforcement — original logic.
  * Always available, no network dependency.
@@ -48,6 +94,7 @@ export interface EnforcementResult {
 export function evaluateEnforcement(input: EnforcementInput): EnforcementResult {
     const reasons: string[] = [];
     let status: EnforcementStatus = 'ALLOW';
+    const skillPreflight = evaluateSkillPreflight(input);
 
     if (!input.budgetOk) {
         status = 'BLOCK';
@@ -66,6 +113,11 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
         }
     }
 
+    if (skillPreflight.required && !skillPreflight.declared) {
+        status = 'BLOCK';
+        reasons.push(SKILL_PREFLIGHT_MISSING_REASON);
+    }
+
     const inferredRisk = inferRiskLevelFromText(input.content);
     const riskGate = evaluateRiskGate(inferredRisk, input.mode);
     if (riskGate.status === 'BLOCK') {
@@ -77,7 +129,7 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
         reasons.push(riskGate.reason);
     }
 
-    return { status, reasons, riskGate, specGate, source: 'client' };
+    return { status, reasons, riskGate, specGate, skillPreflight, source: 'client' };
 }
 
 // ─── Server status → EnforcementStatus mapping ──────────────────────
@@ -123,6 +175,16 @@ function mapServerStatus(
 export async function evaluateEnforcementAsync(
     input: EnforcementInput,
 ): Promise<EnforcementResult> {
+    const skillPreflight = evaluateSkillPreflight(input);
+    if (skillPreflight.required && !skillPreflight.declared) {
+        return {
+            status: 'BLOCK',
+            reasons: [SKILL_PREFLIGHT_MISSING_REASON],
+            skillPreflight,
+            source: 'client',
+        };
+    }
+
     // If governance engine is not enabled, use client-side directly
     if (!isGovernanceEngineEnabled()) {
         return evaluateEnforcement(input);
@@ -139,9 +201,23 @@ export async function evaluateEnforcementAsync(
                 content: input.content,
                 mode: input.mode,
                 spec_values: input.specValues || {},
+                skill_preflight: {
+                    required: skillPreflight.required,
+                    declared: skillPreflight.declared,
+                    source: skillPreflight.source,
+                    record_ref: skillPreflight.recordRef,
+                    skill_ids: skillPreflight.skillIds,
+                },
             },
             cvf_phase: input.cvfPhase,
             cvf_risk_level: input.cvfRiskLevel,
+            skill_preflight: {
+                required: skillPreflight.required,
+                declared: skillPreflight.declared,
+                source: skillPreflight.source,
+                record_ref: skillPreflight.recordRef,
+                skill_ids: skillPreflight.skillIds,
+            },
         });
 
         if (!serverResult || !serverResult.report) {
@@ -154,6 +230,7 @@ export async function evaluateEnforcementAsync(
         return {
             status: mapped.status,
             reasons: mapped.reasons,
+            skillPreflight,
             serverResult,
             cvfQuality: serverResult.report.cvf_quality,
             cvfEnforcement: serverResult.report.cvf_enforcement,

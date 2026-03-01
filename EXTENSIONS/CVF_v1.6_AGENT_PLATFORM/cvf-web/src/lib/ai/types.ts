@@ -18,6 +18,12 @@ export interface ExecutionRequest {
     intent: string;
     provider?: AIProvider;
     mode?: 'simple' | 'governance' | 'full';
+    cvfPhase?: string;
+    cvfRiskLevel?: string;
+    skillPreflightPassed?: boolean;
+    skillPreflightDeclaration?: string;
+    skillPreflightRecordRef?: string;
+    skillIds?: string[];
 }
 
 export interface ExecutionResponse {

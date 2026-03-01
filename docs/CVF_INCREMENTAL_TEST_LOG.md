@@ -607,3 +607,34 @@ Template:
   - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**`: skipped in this batch because request focused on latest `cvf-web`/GitHub updates.
 - Notes/Risks:
   - Some tests log non-blocking stderr (`fetch failed` fallback logs, jsdom navigation not implemented); suite remains green and coverage gate passes.
+
+## [2026-03-01] Batch: Mini_Game gameplay upgrade validation (new modes + progression)
+- Change reference:
+  - Mini_Game gameplay upgrade: add `compare` + `vocab` modes, mobile UX refinements, level unlock gating, and combo visual effect.
+- Impacted scope:
+  - `Mini_Game/webapp/src/app/page.tsx`
+  - `Mini_Game/webapp/src/app/page.module.css`
+  - `Mini_Game/webapp/src/components/ui-shell/LevelSelector.tsx`
+  - `Mini_Game/webapp/src/lib/game-core/types.ts`
+  - `Mini_Game/webapp/src/lib/game-core/index.ts`
+  - `Mini_Game/webapp/src/lib/game-core/compare.ts` (new)
+  - `Mini_Game/webapp/src/lib/game-core/vocab.ts` (new)
+  - `Mini_Game/webapp/src/lib/content-bank/index.ts`
+  - `Mini_Game/webapp/src/lib/adaptive-engine/index.ts`
+  - `Mini_Game/webapp/src/lib/learning-path-service/index.ts`
+  - `Mini_Game/webapp/src/lib/progress-service/storage.ts`
+  - `Mini_Game/webapp/src/lib/report-service/index.ts`
+  - `Mini_Game/webapp/src/lib/game-core/compare.test.ts` (new)
+  - `Mini_Game/webapp/src/lib/game-core/vocab.test.ts` (new)
+- Tests/execution performed:
+  - `cd "Mini_Game/webapp" && npm run lint` -> PASS
+  - `cd "Mini_Game/webapp" && npm run test:run` -> PASS (`15/15` files, `61/61` tests)
+  - `cd "Mini_Game/webapp" && npm run test:coverage` -> PASS
+    - Coverage snapshot: Statements `95.69%`, Branches `88.50%`, Functions `97.91%`, Lines `95.83%`
+  - `cd "Mini_Game/webapp" && npm run build` -> PASS
+- Result:
+  - No conflict detected after upgrade.
+  - New gameplay modes and progression logic pass lint/test/build gates.
+- Skip scope:
+  - Full monorepo regression outside `Mini_Game/webapp` skipped in this batch.
+  - No deployment executed in this batch.

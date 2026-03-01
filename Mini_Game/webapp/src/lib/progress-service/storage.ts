@@ -68,6 +68,8 @@ function getDefaultGameStats(): Record<MiniGameKey, GameStat> {
     memory: { rounds: 0, correct: 0, wrong: 0 },
     color: { rounds: 0, correct: 0, wrong: 0 },
     logic: { rounds: 0, correct: 0, wrong: 0 },
+    compare: { rounds: 0, correct: 0, wrong: 0 },
+    vocab: { rounds: 0, correct: 0, wrong: 0 },
   };
 }
 

@@ -49,6 +49,8 @@ function cloneByGame(
     memory: getSafe(value.memory),
     color: getSafe(value.color),
     logic: getSafe(value.logic),
+    compare: getSafe(value.compare),
+    vocab: getSafe(value.vocab),
   };
 }
 
@@ -80,10 +82,14 @@ function sameEntry(left: DailyReportEntry, right: DailyReportEntry): boolean {
     left.byGame.memory.rounds === right.byGame.memory.rounds &&
     left.byGame.color.rounds === right.byGame.color.rounds &&
     left.byGame.logic.rounds === right.byGame.logic.rounds &&
+    left.byGame.compare.rounds === right.byGame.compare.rounds &&
+    left.byGame.vocab.rounds === right.byGame.vocab.rounds &&
     left.byGame.math.correct === right.byGame.math.correct &&
     left.byGame.memory.correct === right.byGame.memory.correct &&
     left.byGame.color.correct === right.byGame.color.correct &&
-    left.byGame.logic.correct === right.byGame.logic.correct
+    left.byGame.logic.correct === right.byGame.logic.correct &&
+    left.byGame.compare.correct === right.byGame.compare.correct &&
+    left.byGame.vocab.correct === right.byGame.vocab.correct
   );
 }
 
@@ -166,6 +172,8 @@ function getWeakGame(days: DailyReportEntry[]): MiniGameKey | null {
     memory: { rounds: 0, correct: 0 },
     color: { rounds: 0, correct: 0 },
     logic: { rounds: 0, correct: 0 },
+    compare: { rounds: 0, correct: 0 },
+    vocab: { rounds: 0, correct: 0 },
   };
 
   days.forEach((day) => {
@@ -212,6 +220,18 @@ function getSuggestion(weakGame: MiniGameKey | null, trend: "up" | "down" | "fla
     return {
       vi: "Luyen Logic Chuoi voi cac day so ngan, sau do moi tang do phuc tap.",
       en: "Practice Logic Sequence with shorter patterns before increasing complexity.",
+    };
+  }
+  if (weakGame === "compare") {
+    return {
+      vi: "Luyen So Sanh So 5 phut/ngay de tang toc do nhin-so sanh.",
+      en: "Practice Number Compare 5 minutes daily to improve visual comparison speed.",
+    };
+  }
+  if (weakGame === "vocab") {
+    return {
+      vi: "Luyen Tu Vung Song Ngu theo cap tu ngan 3-5 phut moi ngay.",
+      en: "Practice bilingual word matching for 3-5 minutes daily.",
     };
   }
   if (trend === "up") {

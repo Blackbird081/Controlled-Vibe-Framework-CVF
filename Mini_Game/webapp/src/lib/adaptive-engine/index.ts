@@ -35,6 +35,8 @@ function createEmptyRecentByGame(): Record<MiniGameKey, AdaptiveRoundOutcome[]> 
     memory: [],
     color: [],
     logic: [],
+    compare: [],
+    vocab: [],
   };
 }
 
@@ -65,6 +67,8 @@ export function loadAdaptiveEngineState(): AdaptiveEngineState {
         memory: Array.isArray(candidate.recentByGame.memory) ? candidate.recentByGame.memory.slice(-WINDOW_SIZE) : [],
         color: Array.isArray(candidate.recentByGame.color) ? candidate.recentByGame.color.slice(-WINDOW_SIZE) : [],
         logic: Array.isArray(candidate.recentByGame.logic) ? candidate.recentByGame.logic.slice(-WINDOW_SIZE) : [],
+        compare: Array.isArray(candidate.recentByGame.compare) ? candidate.recentByGame.compare.slice(-WINDOW_SIZE) : [],
+        vocab: Array.isArray(candidate.recentByGame.vocab) ? candidate.recentByGame.vocab.slice(-WINDOW_SIZE) : [],
       },
     };
   } catch {

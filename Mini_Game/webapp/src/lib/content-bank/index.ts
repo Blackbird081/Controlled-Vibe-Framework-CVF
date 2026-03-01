@@ -1,12 +1,14 @@
 import {
   COLOR_LIBRARY,
   ColorEntry,
+  generateCompareRound,
   generateColorRound,
   generateLogicRound,
   generateMathQuestion,
   generateMemoryRound,
+  generateVocabRound,
 } from "@/lib/game-core";
-import { ColorRound, LogicRound, MathQuestion, MemoryRound, MiniGameKey } from "@/lib/game-core/types";
+import { ColorRound, CompareRound, LogicRound, MathQuestion, MemoryRound, MiniGameKey, VocabRound } from "@/lib/game-core/types";
 
 export type WeeklyThemeKey = "space" | "ocean" | "forest" | "robot";
 export type ContentAgeGroup = "age_5_6" | "age_7_8" | "age_9_10";
@@ -108,6 +110,18 @@ const AGE_GAME_COPY: Record<ContentAgeGroup, Record<MiniGameKey, AgeGameCopy>> =
       focusVi: "Nhan ra quy luat cong them.",
       focusEn: "Recognize addition patterns.",
     },
+    compare: {
+      descriptionVi: "So sanh 2 so va chon so lon hon.",
+      descriptionEn: "Compare 2 numbers and pick the larger one.",
+      focusVi: "Nhin nhanh de chon so lon hon.",
+      focusEn: "Scan quickly and choose the bigger number.",
+    },
+    vocab: {
+      descriptionVi: "Ghep cap tu Viet-Anh co ban.",
+      descriptionEn: "Match basic Vietnamese-English word pairs.",
+      focusVi: "Nho nghia tu don gian qua tro choi.",
+      focusEn: "Build simple vocabulary through matching.",
+    },
   },
   age_7_8: {
     math: {
@@ -134,6 +148,18 @@ const AGE_GAME_COPY: Record<ContentAgeGroup, Record<MiniGameKey, AgeGameCopy>> =
       focusVi: "So sanh 2 buoc lien tiep de tim mau chung.",
       focusEn: "Compare consecutive steps to detect the pattern.",
     },
+    compare: {
+      descriptionVi: "So sanh so trung binh va chon ket qua hop ly.",
+      descriptionEn: "Compare medium numbers and pick the right value.",
+      focusVi: "Tang toc do xu ly nhin-so sanh.",
+      focusEn: "Improve visual number-comparison speed.",
+    },
+    vocab: {
+      descriptionVi: "Ghep tu vung theo ngu canh hoc vien.",
+      descriptionEn: "Match vocabulary in academy context.",
+      focusVi: "Luyen song ngu moi ngay voi cap tu ngan.",
+      focusEn: "Practice daily bilingual matching with short pairs.",
+    },
   },
   age_9_10: {
     math: {
@@ -159,6 +185,18 @@ const AGE_GAME_COPY: Record<ContentAgeGroup, Record<MiniGameKey, AgeGameCopy>> =
       descriptionEn: "More advanced sequences, including multiply patterns.",
       focusVi: "Nhan dien nhanh cong thuoc tiep theo trong thoi gian ngan.",
       focusEn: "Infer the next rule quickly under time pressure.",
+    },
+    compare: {
+      descriptionVi: "So sanh nhanh so lon trong gioi han thoi gian.",
+      descriptionEn: "Rapidly compare larger numbers under time pressure.",
+      focusVi: "Toi uu toc do va do chinh xac.",
+      focusEn: "Optimize speed while staying accurate.",
+    },
+    vocab: {
+      descriptionVi: "Song ngu nang cao voi tu hanh dong va ky nang.",
+      descriptionEn: "Advanced bilingual rounds with action and skill words.",
+      focusVi: "Lien ket nghia Viet-Anh nhanh va chinh xac.",
+      focusEn: "Map Vietnamese-English meaning quickly and accurately.",
     },
   },
 };
@@ -211,6 +249,8 @@ function createDefaultRecentKeys(): Record<MiniGameKey, string[]> {
     memory: [],
     color: [],
     logic: [],
+    compare: [],
+    vocab: [],
   };
 }
 
@@ -223,6 +263,8 @@ function cloneState(state: ContentBankState): ContentBankState {
       memory: [...state.recentKeys.memory],
       color: [...state.recentKeys.color],
       logic: [...state.recentKeys.logic],
+      compare: [...state.recentKeys.compare],
+      vocab: [...state.recentKeys.vocab],
     },
   };
 }
@@ -256,6 +298,14 @@ function getKeyForColorRound(round: ColorRound): string {
 
 function getKeyForLogicRound(round: LogicRound): string {
   return `${round.sequence.join("-")}|${round.answer}|${[...round.choices].sort().join(",")}`;
+}
+
+function getKeyForCompareRound(round: CompareRound): string {
+  return `${round.left}:${round.right}|${round.answer}|${[...round.choices].sort((left, right) => left - right).join(",")}`;
+}
+
+function getKeyForVocabRound(round: VocabRound): string {
+  return `${round.direction}|${round.prompt}|${round.answer}|${[...round.choices].sort().join(",")}`;
 }
 
 export function getDefaultContentBankState(now: Date = new Date()): ContentBankState {
@@ -297,6 +347,12 @@ export function loadContentBankState(now: Date = new Date()): ContentBankState {
         color: Array.isArray(parsed.recentKeys.color) ? parsed.recentKeys.color.slice(-HISTORY_WINDOW) : [],
         logic: Array.isArray((parsed.recentKeys as Record<string, unknown>).logic)
           ? ((parsed.recentKeys as Record<string, string[]>).logic ?? []).slice(-HISTORY_WINDOW)
+          : [],
+        compare: Array.isArray((parsed.recentKeys as Record<string, unknown>).compare)
+          ? ((parsed.recentKeys as Record<string, string[]>).compare ?? []).slice(-HISTORY_WINDOW)
+          : [],
+        vocab: Array.isArray((parsed.recentKeys as Record<string, unknown>).vocab)
+          ? ((parsed.recentKeys as Record<string, string[]>).vocab ?? []).slice(-HISTORY_WINDOW)
           : [],
       },
     };
@@ -447,6 +503,21 @@ function getAgeAdjustedLogicRound(limit: number, ageGroup: ContentAgeGroup, adap
   });
 }
 
+function getAgeAdjustedCompareRound(limit: number, ageGroup: ContentAgeGroup, adaptive: ContentAdaptiveTuning): CompareRound {
+  const tunedLimit = Math.max(12, limit + (adaptive.mathLimitDelta ?? 0));
+  if (ageGroup === "age_5_6") {
+    return generateCompareRound(Math.min(tunedLimit, 20), { minValue: 1, maxValue: 20 });
+  }
+  if (ageGroup === "age_7_8") {
+    return generateCompareRound(Math.min(tunedLimit, 60), { minValue: 5, maxValue: 60 });
+  }
+  return generateCompareRound(Math.min(tunedLimit, 120), { minValue: 10, maxValue: 120 });
+}
+
+function getAgeAdjustedVocabRound(ageGroup: ContentAgeGroup): VocabRound {
+  return generateVocabRound({ ageGroup });
+}
+
 function pickRound<T>(
   game: MiniGameKey,
   state: ContentBankState,
@@ -522,4 +593,20 @@ export function getNextLogicRound(
   adaptive: ContentAdaptiveTuning = {},
 ): NextRoundResult<LogicRound> {
   return pickRound("logic", state, () => getAgeAdjustedLogicRound(limit, ageGroup, adaptive), getKeyForLogicRound);
+}
+
+export function getNextCompareRound(
+  limit: number,
+  state: ContentBankState,
+  ageGroup: ContentAgeGroup = "age_7_8",
+  adaptive: ContentAdaptiveTuning = {},
+): NextRoundResult<CompareRound> {
+  return pickRound("compare", state, () => getAgeAdjustedCompareRound(limit, ageGroup, adaptive), getKeyForCompareRound);
+}
+
+export function getNextVocabRound(
+  state: ContentBankState,
+  ageGroup: ContentAgeGroup = "age_7_8",
+): NextRoundResult<VocabRound> {
+  return pickRound("vocab", state, () => getAgeAdjustedVocabRound(ageGroup), getKeyForVocabRound);
 }

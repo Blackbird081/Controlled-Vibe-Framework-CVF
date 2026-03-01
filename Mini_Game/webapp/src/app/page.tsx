@@ -9,12 +9,14 @@ import { MiniGameTabs } from "@/components/ui-shell/MiniGameTabs";
 import { ParentModePanel } from "@/components/ui-shell/ParentModePanel";
 import {
   calculateEarnedScore,
+  getCompareHint,
   getColorEnglishName,
   getColorHint,
   getColorMarker,
   getLogicHint,
   getMathHint,
   getMemoryHint,
+  getVocabHint,
   LEVELS,
   LevelKey,
   MiniGameKey,
@@ -55,10 +57,12 @@ import {
   ContentBankState,
   getDefaultContentBankState,
   getAgeGameCopy,
+  getNextCompareRound,
   getNextColorRound,
   getNextLogicRound,
   getNextMathRound,
   getNextMemoryRound,
+  getNextVocabRound,
   getWeeklyThemeLabel,
   loadContentBankState,
   saveContentBankState,
@@ -179,6 +183,14 @@ const MINI_GAME_LABELS: Record<UiLanguage, Record<MiniGameKey, { title: string; 
       title: "Logic Chuoi",
       description: "Tim quy luat day so va chon so tiep theo.",
     },
+    compare: {
+      title: "So Sanh So",
+      description: "So sanh 2 so va chon so lon hon.",
+    },
+    vocab: {
+      title: "Tu Vung Song Ngu",
+      description: "Noi cap tu Viet-Anh dung nghia.",
+    },
   },
   en: {
     math: {
@@ -197,6 +209,14 @@ const MINI_GAME_LABELS: Record<UiLanguage, Record<MiniGameKey, { title: string; 
       title: "Logic Sequence",
       description: "Find number pattern rules and pick the next value.",
     },
+    compare: {
+      title: "Number Compare",
+      description: "Compare two numbers and choose the larger one.",
+    },
+    vocab: {
+      title: "Bilingual Vocab",
+      description: "Match Vietnamese and English word pairs.",
+    },
   },
 };
 
@@ -212,6 +232,19 @@ const LEVEL_LABELS: Record<UiLanguage, Record<LevelKey, { label: string; subtitl
     master: { label: "Gate 3: Super Detective", subtitle: "Numbers up to 100" },
   },
 };
+
+const LEVEL_ORDER: LevelKey[] = ["rookie", "talent", "master"];
+const DAILY_ROUNDS_TARGET = 18;
+
+function getUnlockedLevelByAcademyProgress(activeZoneIndex: number): LevelKey {
+  if (activeZoneIndex >= 2) return "master";
+  if (activeZoneIndex >= 1) return "talent";
+  return "rookie";
+}
+
+function isLevelUnlocked(level: LevelKey, highest: LevelKey): boolean {
+  return LEVEL_ORDER.indexOf(level) <= LEVEL_ORDER.indexOf(highest);
+}
 
 function pickLanguageText(language: UiLanguage, vi: string, en: string): string {
   return language === "vi" ? vi : en;
@@ -244,6 +277,8 @@ export default function Home() {
   const [memoryRound, setMemoryRound] = useState(() => getNextMemoryRound(level.limit, getDefaultContentBankState()).round);
   const [colorRound, setColorRound] = useState(() => getNextColorRound(getDefaultContentBankState()).round);
   const [logicRound, setLogicRound] = useState(() => getNextLogicRound(level.limit, getDefaultContentBankState()).round);
+  const [compareRound, setCompareRound] = useState(() => getNextCompareRound(level.limit, getDefaultContentBankState()).round);
+  const [vocabRound, setVocabRound] = useState(() => getNextVocabRound(getDefaultContentBankState()).round);
   const [memoryRevealLeft, setMemoryRevealLeft] = useState(0);
   const [wrongStreak, setWrongStreak] = useState(0);
   const [timeLeft, setTimeLeft] = useState(level.roundSeconds);
@@ -251,6 +286,7 @@ export default function Home() {
   const [ageGroup, setAgeGroup] = useState<AgeGroupKey>("age_7_8");
   const [language, setLanguage] = useState<UiLanguage>("vi");
   const [activeView, setActiveView] = useState<DashboardView>("play");
+  const [isMobileLayout, setIsMobileLayout] = useState(false);
   const [soundMuted, setSoundMuted] = useState(false);
   const [soundVolume, setSoundVolume] = useState(75);
   const [uiSfxEnabled, setUiSfxEnabled] = useState(true);
@@ -282,6 +318,33 @@ export default function Home() {
   const selfChallengeCelebratedRef = useRef<string | null>(null);
   const sessionStartedAtRef = useRef<number | null>(null);
   const retentionPingSentRef = useRef(false);
+  const settingsPanelRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
+    const mediaQuery = window.matchMedia("(max-width: 740px)");
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobileLayout(event.matches);
+    };
+
+    setIsMobileLayout(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileLayout || activeView !== "settings") return;
+    const frameId = window.requestAnimationFrame(() => {
+      settingsPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frameId);
+  }, [activeView, isMobileLayout]);
 
   const startRound = useCallback((
     game: MiniGameKey,
@@ -313,6 +376,20 @@ export default function Home() {
         saveContentBankState(nextRound.nextState);
         return nextRound.nextState;
       }
+      if (game === "compare") {
+        const nextRound = getNextCompareRound(limit, previous, targetAgeGroup, adaptiveTuning);
+        setCompareRound(nextRound.round);
+        setMemoryRevealLeft(0);
+        saveContentBankState(nextRound.nextState);
+        return nextRound.nextState;
+      }
+      if (game === "vocab") {
+        const nextRound = getNextVocabRound(previous, targetAgeGroup);
+        setVocabRound(nextRound.round);
+        setMemoryRevealLeft(0);
+        saveContentBankState(nextRound.nextState);
+        return nextRound.nextState;
+      }
       const nextRound = getNextColorRound(previous, targetAgeGroup, adaptiveTuning);
       setColorRound(nextRound.round);
       setMemoryRevealLeft(0);
@@ -333,8 +410,14 @@ export default function Home() {
     if (activeGame === "logic") {
       return getLogicHint(logicRound, language);
     }
+    if (activeGame === "compare") {
+      return getCompareHint(compareRound, language);
+    }
+    if (activeGame === "vocab") {
+      return getVocabHint(vocabRound, language);
+    }
     return getColorHint(colorRound.answerColorName, language);
-  }, [activeGame, colorRound.answerColorName, language, logicRound, mathQuestion, memoryRound.answer]);
+  }, [activeGame, colorRound.answerColorName, compareRound, language, logicRound, mathQuestion, memoryRound.answer, vocabRound]);
 
   const miniGameLabels = useMemo(() => {
     const base = MINI_GAME_LABELS[language];
@@ -354,6 +437,14 @@ export default function Home() {
       logic: {
         title: base.logic.title,
         description: getAgeGameCopy(ageGroup, "logic", language).description,
+      },
+      compare: {
+        title: base.compare.title,
+        description: getAgeGameCopy(ageGroup, "compare", language).description,
+      },
+      vocab: {
+        title: base.vocab.title,
+        description: getAgeGameCopy(ageGroup, "vocab", language).description,
       },
     };
   }, [ageGroup, language]);
@@ -401,7 +492,9 @@ export default function Home() {
       const targetLevel = LEVELS[targetLevelKey];
       const profile = AGE_PROFILES[targetAgeGroup];
       return {
-        limit: game === "math" || game === "logic" ? Math.min(targetLevel.limit, profile.maxMathLimit) : targetLevel.limit,
+        limit: game === "math" || game === "logic" || game === "compare"
+          ? Math.min(targetLevel.limit, profile.maxMathLimit)
+          : targetLevel.limit,
         roundSeconds: Math.max(12, targetLevel.roundSeconds + profile.roundBonusSeconds),
         memoryRevealBonusSeconds: profile.memoryRevealBonusSeconds,
       };
@@ -469,17 +562,29 @@ export default function Home() {
     if (activeGame === "logic") {
       return `logic:${logicRound.sequence.join("-")}:${logicRound.answer}`;
     }
+    if (activeGame === "compare") {
+      return `compare:${compareRound.left}:${compareRound.right}:${compareRound.answer}`;
+    }
+    if (activeGame === "vocab") {
+      return `vocab:${vocabRound.direction}:${vocabRound.prompt}:${vocabRound.answer}`;
+    }
     return `color:${colorRound.word}:${colorRound.wordColorHex}:${colorRound.answerColorName}`;
   }, [
     activeGame,
     colorRound.answerColorName,
     colorRound.word,
     colorRound.wordColorHex,
+    compareRound.answer,
+    compareRound.left,
+    compareRound.right,
     logicRound.answer,
     logicRound.sequence,
     mathQuestion,
     memoryRound.answer,
     memoryRound.sequence,
+    vocabRound.answer,
+    vocabRound.direction,
+    vocabRound.prompt,
   ]);
   const currentSpeechText = useMemo(() => {
     if (activeGame === "math") {
@@ -501,18 +606,40 @@ export default function Home() {
         ? `Logic chuoi: ${seq}. So tiep theo la so nao?`
         : `Logic sequence: ${seq}. Which number comes next?`;
     }
+    if (activeGame === "compare") {
+      return language === "vi"
+        ? `So sanh nhanh: ${compareRound.left} va ${compareRound.right}. Hay chon so lon hon.`
+        : `Quick compare: ${compareRound.left} and ${compareRound.right}. Choose the larger number.`;
+    }
+    if (activeGame === "vocab") {
+      return vocabRound.direction === "vi_to_en"
+        ? pickLanguageText(
+            language,
+            `Tu tieng Anh cua "${vocabRound.prompt}" la gi?`,
+            `What is the English word for "${vocabRound.prompt}"?`,
+          )
+        : pickLanguageText(
+            language,
+            `Tu tieng Viet cua "${vocabRound.prompt}" la gi?`,
+            `What is the Vietnamese word for "${vocabRound.prompt}"?`,
+          );
+    }
     return language === "vi"
       ? `Phan xa mau. Tu hien thi la ${colorRound.word}. Hay chon mau cua chu dang hien thi.`
       : `Color reflex. The shown word is ${getColorEnglishName(colorRound.word)}. Pick the color of the text.`;
   }, [
     activeGame,
     colorRound.word,
+    compareRound.left,
+    compareRound.right,
     language,
     logicRound.sequence,
     mathQuestion.left,
     mathQuestion.operator,
     mathQuestion.right,
     memoryRevealLeft,
+    vocabRound.direction,
+    vocabRound.prompt,
   ]);
   const englishLearningLine = useMemo(() => {
     if (activeGame === "math") {
@@ -526,8 +653,16 @@ export default function Home() {
     if (activeGame === "logic") {
       return "English: Find the sequence rule and choose the next number.";
     }
+    if (activeGame === "compare") {
+      return "English: Compare two numbers and pick the larger one.";
+    }
+    if (activeGame === "vocab") {
+      return vocabRound.direction === "vi_to_en"
+        ? `English: "${vocabRound.prompt}" means "${vocabRound.answer}".`
+        : `English: "${vocabRound.answer}" means "${vocabRound.prompt}".`;
+    }
     return "English: Choose the COLOR of the word.";
-  }, [activeGame, mathQuestion.left, mathQuestion.operator, mathQuestion.right, memoryRevealLeft]);
+  }, [activeGame, mathQuestion.left, mathQuestion.operator, mathQuestion.right, memoryRevealLeft, vocabRound.answer, vocabRound.direction, vocabRound.prompt]);
   const getColorChoiceDisplay = useCallback(
     (choice: string) => {
       const marker = colorAssistEnabled ? ` ${getColorMarker(choice)}` : "";
@@ -552,7 +687,9 @@ export default function Home() {
     ) => {
       const runtime = getRuntimeRoundConfig(config, totalRoundsForRound);
       const adaptive = getAdaptiveGameTuning(adaptiveState, game);
-      const tunedLimit = game === "math" || game === "logic" ? Math.max(10, runtime.limit + adaptive.mathLimitDelta) : runtime.limit;
+      const tunedLimit = game === "math" || game === "logic" || game === "compare"
+        ? Math.max(10, runtime.limit + adaptive.mathLimitDelta)
+        : runtime.limit;
       const tunedRoundSeconds = Math.max(10, runtime.roundSeconds + adaptive.roundSecondsDelta);
       const tunedMemoryBonus = Math.max(0, runtime.memoryRevealBonusSeconds + adaptive.memoryRevealDelta);
       const contentAdaptive: ContentAdaptiveTuning = {
@@ -856,8 +993,10 @@ export default function Home() {
     if (activeGame === "math") return mathQuestion.choices;
     if (activeGame === "memory") return memoryRound.choices;
     if (activeGame === "logic") return logicRound.choices;
+    if (activeGame === "compare") return compareRound.choices;
+    if (activeGame === "vocab") return vocabRound.choices;
     return colorRound.choices;
-  }, [activeGame, colorRound.choices, logicRound.choices, mathQuestion.choices, memoryRound.choices]);
+  }, [activeGame, colorRound.choices, compareRound.choices, logicRound.choices, mathQuestion.choices, memoryRound.choices, vocabRound.choices]);
   const todayMetrics = useMemo(
     () => ({
       date: progress.dailyStats.date,
@@ -888,12 +1027,16 @@ export default function Home() {
       memory: pickLanguageText(language, "Nho", "Memory"),
       color: pickLanguageText(language, "Mau", "Color"),
       logic: pickLanguageText(language, "Logic", "Logic"),
+      compare: pickLanguageText(language, "So sanh", "Compare"),
+      vocab: pickLanguageText(language, "Tu vung", "Vocab"),
     };
     const skillScores = {
       [pickLanguageText(language, "Toan", "Math")]: learningPathState.skills.math.score,
       [pickLanguageText(language, "Nho", "Memory")]: learningPathState.skills.memory.score,
       [pickLanguageText(language, "Mau", "Color")]: learningPathState.skills.color.score,
       [pickLanguageText(language, "Logic", "Logic")]: learningPathState.skills.logic.score,
+      [pickLanguageText(language, "So sanh", "Compare")]: learningPathState.skills.compare.score,
+      [pickLanguageText(language, "Tu vung", "Vocab")]: learningPathState.skills.vocab.score,
     };
     const offlineActivity = weeklyReport.weakGame === "math"
       ? pickLanguageText(language, "Choi dominos/phep tinh do vat 5-10 phut.", "Try domino or object-counting math for 5-10 minutes.")
@@ -901,6 +1044,10 @@ export default function Home() {
         ? pickLanguageText(language, "Tro nho hinh voi 6-8 the bai giay.", "Use 6-8 paper cards for memory matching.")
         : weeklyReport.weakGame === "logic"
           ? pickLanguageText(language, "Sap xep day so bang que tinh theo quy luat.", "Build number patterns using sticks or blocks.")
+          : weeklyReport.weakGame === "compare"
+            ? pickLanguageText(language, "So sanh so tren flashcard, bat dau tu cap so gan nhau.", "Compare number flashcards, starting with close values.")
+            : weeklyReport.weakGame === "vocab"
+              ? pickLanguageText(language, "On tu vung Viet-Anh 5 phut bang flashcard.", "Review Vietnamese-English words for 5 minutes using flashcards.")
           : pickLanguageText(language, "Tro choi nhan mau do vat trong nha.", "Play household color spotting challenges.");
     const teacherSummary = pickLanguageText(
       language,
@@ -1030,16 +1177,19 @@ export default function Home() {
     previousViewRef.current = activeView;
   }, [activeGame, activeView, hydrated, progress.combo, progress.score, timeLeft]);
   const questProgress = useMemo(() => {
-    const dailyRoundsTarget = 14;
-    const mathRoundsTarget = 4;
-    const memoryRoundsTarget = 4;
+    const mathRoundsTarget = 3;
+    const memoryRoundsTarget = 3;
     const colorRoundsTarget = 3;
     const logicRoundsTarget = 3;
-    const roundsProgress = Math.min(100, Math.round((progress.dailyStats.rounds / dailyRoundsTarget) * 100));
+    const compareRoundsTarget = 3;
+    const vocabRoundsTarget = 3;
+    const roundsProgress = Math.min(100, Math.round((progress.dailyStats.rounds / DAILY_ROUNDS_TARGET) * 100));
     const mathProgress = Math.min(100, Math.round((progress.dailyStats.byGame.math.rounds / mathRoundsTarget) * 100));
     const memoryProgress = Math.min(100, Math.round((progress.dailyStats.byGame.memory.rounds / memoryRoundsTarget) * 100));
     const colorProgress = Math.min(100, Math.round((progress.dailyStats.byGame.color.rounds / colorRoundsTarget) * 100));
     const logicProgress = Math.min(100, Math.round((progress.dailyStats.byGame.logic.rounds / logicRoundsTarget) * 100));
+    const compareProgress = Math.min(100, Math.round((progress.dailyStats.byGame.compare.rounds / compareRoundsTarget) * 100));
+    const vocabProgress = Math.min(100, Math.round((progress.dailyStats.byGame.vocab.rounds / vocabRoundsTarget) * 100));
     const todayAccuracy = progress.dailyStats.rounds > 0 ? Math.round((progress.dailyStats.correct / progress.dailyStats.rounds) * 100) : 0;
     const accuracyTarget = 70;
     const accuracyProgress = Math.min(100, Math.round((todayAccuracy / accuracyTarget) * 100));
@@ -1050,15 +1200,19 @@ export default function Home() {
       memoryProgress,
       colorProgress,
       logicProgress,
+      compareProgress,
+      vocabProgress,
       accuracyProgress,
       todayAccuracy,
-      roundsDone: progress.dailyStats.rounds >= dailyRoundsTarget,
+      roundsDone: progress.dailyStats.rounds >= DAILY_ROUNDS_TARGET,
       accuracyDone: todayAccuracy >= accuracyTarget && progress.dailyStats.rounds >= 6,
       balanceDone:
         progress.dailyStats.byGame.math.rounds > 0 &&
         progress.dailyStats.byGame.memory.rounds > 0 &&
         progress.dailyStats.byGame.color.rounds > 0 &&
-        progress.dailyStats.byGame.logic.rounds > 0,
+        progress.dailyStats.byGame.logic.rounds > 0 &&
+        progress.dailyStats.byGame.compare.rounds > 0 &&
+        progress.dailyStats.byGame.vocab.rounds > 0,
     };
   }, [progress.dailyStats]);
   const comboStatus = useMemo(() => {
@@ -1112,6 +1266,20 @@ export default function Home() {
           "Compare the gaps between numbers to spot the pattern.",
         );
       }
+      if (activeGame === "compare") {
+        return pickLanguageText(
+          language,
+          "Dat mat vao so hang chuc truoc, roi moi den so hang don vi.",
+          "Compare tens first, then ones for faster decisions.",
+        );
+      }
+      if (activeGame === "vocab") {
+        return pickLanguageText(
+          language,
+          "Doc tu trong dau 1 lan va lien tuong theo cap nghia.",
+          "Say the prompt once in your head and map it to its meaning pair.",
+        );
+      }
       return pickLanguageText(language, "Tap trung vao MAU chu, dung doc noi dung cua chu.", "Focus on the COLOR of the text, not the word meaning.");
     }
     if (timeLeft <= 6) {
@@ -1122,10 +1290,27 @@ export default function Home() {
   const roundsUntilBoss = useMemo(() => getRoundsUntilBoss(academyProgress), [academyProgress]);
   const activeZone = academyProgress.zones[academyProgress.activeZoneIndex];
   const activeNode = activeZone.nodes[academyProgress.activeNodeIndex];
+  const highestUnlockedLevel = useMemo(
+    () => getUnlockedLevelByAcademyProgress(academyProgress.activeZoneIndex),
+    [academyProgress.activeZoneIndex],
+  );
   const getZoneTitle = useCallback(
     (zone: AcademyZoneState) => (language === "vi" ? zone.titleVi : zone.titleEn),
     [language],
   );
+  useEffect(() => {
+    if (!hydrated) return;
+    if (isLevelUnlocked(levelKey, highestUnlockedLevel)) return;
+    setLevelKey(highestUnlockedLevel);
+    setFeedback({
+      tone: "info",
+      text: pickLanguageText(
+        language,
+        `Ban da mo khoa ${levelLabels[highestUnlockedLevel].label}. Level duoc nang tu dong.`,
+        `${levelLabels[highestUnlockedLevel].label} is now unlocked. Level upgraded automatically.`,
+      ),
+    });
+  }, [highestUnlockedLevel, hydrated, language, levelKey, levelLabels, setLevelKey]);
   const applyAcademyRoundResult = useCallback((isCorrect: boolean) => {
     setAcademyProgress((previous) => {
       const { next, telemetry } = advanceAcademyProgress(previous, isCorrect);
@@ -1248,7 +1433,11 @@ export default function Home() {
             ? choice === memoryRound.answer
             : activeGame === "logic"
               ? choice === logicRound.answer
-              : choice === colorRound.answerColorName;
+              : activeGame === "compare"
+                ? choice === compareRound.answer
+                : activeGame === "vocab"
+                  ? choice === vocabRound.answer
+                  : choice === colorRound.answerColorName;
 
       if (!isCorrect) {
         handleWrong("answer_wrong");
@@ -1331,6 +1520,8 @@ export default function Home() {
       memoryRound.answer,
       language,
       logicRound.answer,
+      compareRound.answer,
+      vocabRound.answer,
       applyAcademyRoundResult,
       progress.combo,
       progress.highScores,
@@ -1502,6 +1693,59 @@ export default function Home() {
       );
     }
 
+    if (activeGame === "compare") {
+      return (
+        <>
+          <p className={styles.hint}>
+            {pickLanguageText(language, "So nao lon hon? Chon dap an nhanh.", "Which number is larger? Choose quickly.")}
+          </p>
+          <p className={styles.questionValue}>
+            {compareRound.left} ? {compareRound.right}
+          </p>
+          <p className={styles.questionGloss}>{englishLearningLine}</p>
+          <div className={styles.answers}>
+            {compareRound.choices.map((choice) => (
+              <button
+                key={choice}
+                type="button"
+                className={styles.answerButton}
+                onClick={() => handleAnswer(choice)}
+                disabled={answerLocked}
+              >
+                {choice}
+              </button>
+            ))}
+          </div>
+        </>
+      );
+    }
+
+    if (activeGame === "vocab") {
+      return (
+        <>
+          <p className={styles.hint}>
+            {vocabRound.direction === "vi_to_en"
+              ? pickLanguageText(language, `Tu tieng Anh cua "${vocabRound.prompt}" la gi?`, `What is the English word for "${vocabRound.prompt}"?`)
+              : pickLanguageText(language, `Tu tieng Viet cua "${vocabRound.prompt}" la gi?`, `What is the Vietnamese word for "${vocabRound.prompt}"?`)}
+          </p>
+          <p className={styles.questionGloss}>{englishLearningLine}</p>
+          <div className={styles.answers}>
+            {vocabRound.choices.map((choice) => (
+              <button
+                key={choice}
+                type="button"
+                className={styles.answerButton}
+                onClick={() => handleAnswer(choice)}
+                disabled={answerLocked}
+              >
+                {choice}
+              </button>
+            ))}
+          </div>
+        </>
+      );
+    }
+
     return (
       <>
         <p className={styles.hint}>
@@ -1534,6 +1778,14 @@ export default function Home() {
     );
   };
 
+  const playgroundPreviewCard =
+    activeView === "play" ? null : (
+      <div className={styles.playgroundWrap}>
+        <PhaserPlayground className={styles.playground} />
+        <span className={styles.playgroundLabel}>{pickLanguageText(language, "Phaser playground live", "Phaser playground live")}</span>
+      </div>
+    );
+
   return (
     <main id="cvf-game-root" className={styles.page} data-game={activeGame} data-age={ageGroup}>
       {showOnboarding ? (
@@ -1541,8 +1793,9 @@ export default function Home() {
           <section className={styles.onboardingCard}>
             <h2>{pickLanguageText(language, "Chao mung den CVF Mini Detective Academy", "Welcome to CVF Mini Detective Academy")}</h2>
             <ul className={styles.onboardingList}>
-              <li>{pickLanguageText(language, "Chon 1 trong 4 mini game o hang tab phia tren.", "Choose 1 of 4 mini games on the top tab row.")}</li>
+              <li>{pickLanguageText(language, "Chon 1 trong 6 mini game o hang tab phia tren.", "Choose 1 of 6 mini games on the top tab row.")}</li>
               <li>{pickLanguageText(language, "Nhan phim 1-4 de chon dap an nhanh, nhan R de choi lai run.", "Press keys 1-4 to answer quickly, and press R to restart the run.")}</li>
+              <li>{pickLanguageText(language, "Thu game Tu Vung Song Ngu de luyen Viet-Anh theo dang ghep cap.", "Try Bilingual Vocab to practice Vietnamese-English matching.")}</li>
               <li>{pickLanguageText(language, "Parent Mode cho phep gioi han thoi gian choi moi ngay.", "Parent Mode can limit total daily play time.")}</li>
             </ul>
             <div className={styles.onboardingActions}>
@@ -1599,6 +1852,12 @@ export default function Home() {
               <span className={styles.chip}>
                 {pickLanguageText(language, "Goi y luyen", "Practice next")}: {recommendedGameTitle}
               </span>
+              <span className={styles.chip}>
+                {pickLanguageText(language, "Tien do man", "Stage progress")}: {language === "vi" ? activeNode.labelVi : activeNode.labelEn} ({activeNode.correctCount}/{activeNode.requiredCorrect})
+              </span>
+              <span className={styles.chip}>
+                {pickLanguageText(language, "Level mo khoa", "Unlocked level")}: {levelLabels[highestUnlockedLevel].label}
+              </span>
               {remainingSessionMinutes !== null ? (
                 <span className={styles.chip}>
                   {pickLanguageText(language, "Con lai phien", "Session left")}: {remainingSessionMinutes}m
@@ -1646,12 +1905,7 @@ export default function Home() {
               </button>
             </div>
           </article>
-          {activeView === "play" ? null : (
-            <div className={styles.playgroundWrap}>
-              <PhaserPlayground className={styles.playground} />
-              <span className={styles.playgroundLabel}>{pickLanguageText(language, "Phaser playground live", "Phaser playground live")}</span>
-            </div>
-          )}
+          {isMobileLayout ? null : playgroundPreviewCard}
         </section>
 
         {activeView === "progress" ? (
@@ -1731,7 +1985,19 @@ export default function Home() {
         <LevelSelector
           selected={levelKey}
           labels={levelLabels}
+          highestUnlocked={highestUnlockedLevel}
           onSelect={(nextLevelKey) => {
+            if (!isLevelUnlocked(nextLevelKey, highestUnlockedLevel)) {
+              setFeedback({
+                tone: "info",
+                text: pickLanguageText(
+                  language,
+                  `Can hoan thanh them nhiem vu de mo ${levelLabels[nextLevelKey].label}.`,
+                  `Complete more missions to unlock ${levelLabels[nextLevelKey].label}.`,
+                ),
+              });
+              return;
+            }
             const nextRound = getRoundConfig(activeGame, nextLevelKey, ageGroup);
             setLevelKey(nextLevelKey);
             setWrongStreak(0);
@@ -1762,11 +2028,11 @@ export default function Home() {
             <section className={styles.questStrip} aria-label={pickLanguageText(language, "Nhiem vu hom nay", "Today missions")}>
           <article className={styles.questCard}>
             <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 1: Choi deu tay", "Mission 1: Keep Playing")}</p>
-            <p className={styles.questHint}>{pickLanguageText(language, "Hoan thanh 12 vong trong ngay.", "Finish 12 rounds today.")}</p>
+            <p className={styles.questHint}>{pickLanguageText(language, `Hoan thanh ${DAILY_ROUNDS_TARGET} vong trong ngay.`, `Finish ${DAILY_ROUNDS_TARGET} rounds today.`)}</p>
             <div className={styles.questTrack} role="presentation" aria-hidden>
               <span className={styles.questFill} style={{ width: `${questProgress.roundsProgress}%` }} />
             </div>
-            <p className={styles.questValue}>{progress.dailyStats.rounds}/12</p>
+            <p className={styles.questValue}>{progress.dailyStats.rounds}/{DAILY_ROUNDS_TARGET}</p>
           </article>
           <article className={styles.questCard}>
             <p className={styles.questTitle}>{pickLanguageText(language, "Nhiem vu 2: Chinh xac", "Mission 2: Accuracy")}</p>
@@ -1791,6 +2057,12 @@ export default function Home() {
               </span>
               <span className={`${styles.questMiniPill} ${questProgress.logicProgress > 0 ? styles.questMiniDone : ""}`}>
                 {pickLanguageText(language, "Logic", "Logic")}
+              </span>
+              <span className={`${styles.questMiniPill} ${questProgress.compareProgress > 0 ? styles.questMiniDone : ""}`}>
+                {pickLanguageText(language, "So sanh", "Compare")}
+              </span>
+              <span className={`${styles.questMiniPill} ${questProgress.vocabProgress > 0 ? styles.questMiniDone : ""}`}>
+                {pickLanguageText(language, "Tu vung", "Vocab")}
               </span>
             </div>
             <p className={styles.questValue}>{questProgress.balanceDone ? pickLanguageText(language, "Hoan thanh", "Done") : pickLanguageText(language, "Dang mo", "In progress")}</p>
@@ -2006,7 +2278,9 @@ export default function Home() {
           id="mission-zone"
           className={`${styles.questionCard} ${timeLeft <= 6 ? styles.questionCardDanger : ""} ${
             feedback.tone === "success" ? styles.questionCardBoost : ""
-          } ${currentBossRoundMeta.isBossRound ? styles.questionCardBoss : ""}`}
+          } ${currentBossRoundMeta.isBossRound ? styles.questionCardBoss : ""} ${
+            progress.combo >= 5 ? styles.questionCardCombo : ""
+          }`}
         >
           {showCelebration ? (
             <div className={styles.confettiLayer} aria-hidden>
@@ -2215,7 +2489,7 @@ export default function Home() {
         ) : null}
 
         {activeView === "settings" ? (
-          <section className={styles.settingsPanel}>
+          <section ref={settingsPanelRef} className={styles.settingsPanel}>
             <div className={styles.heroControlGrid}>
               <section className={styles.heroControlCard}>
                 <p className={styles.controlTitle}>{pickLanguageText(language, "Do tuoi", "Age group")}</p>
@@ -2357,6 +2631,7 @@ export default function Home() {
             </p>
           </section>
         ) : null}
+        {isMobileLayout ? playgroundPreviewCard : null}
       </div>
     </main>
   );

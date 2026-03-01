@@ -1,6 +1,6 @@
 export type LevelKey = "rookie" | "talent" | "master";
 export type MathOperator = "+" | "-";
-export type MiniGameKey = "math" | "memory" | "color" | "logic";
+export type MiniGameKey = "math" | "memory" | "color" | "logic" | "compare" | "vocab";
 
 export interface LevelConfig {
   key: LevelKey;
@@ -43,6 +43,20 @@ export interface LogicRound {
   sequence: number[];
   answer: number;
   choices: number[];
+}
+
+export interface CompareRound {
+  left: number;
+  right: number;
+  answer: number;
+  choices: number[];
+}
+
+export interface VocabRound {
+  prompt: string;
+  answer: string;
+  choices: string[];
+  direction: "vi_to_en" | "en_to_vi";
 }
 
 export interface MiniGameDefinition {
@@ -114,5 +128,15 @@ export const MINI_GAMES: MiniGameDefinition[] = [
     key: "logic",
     title: "Logic Chuoi",
     description: "Tim quy luat day so va chon dap an tiep theo.",
+  },
+  {
+    key: "compare",
+    title: "So Sanh So",
+    description: "So sanh 2 so va chon so lon hon.",
+  },
+  {
+    key: "vocab",
+    title: "Tu Vung Song Ngu",
+    description: "Noi tu tieng Viet va tieng Anh dung nghia.",
   },
 ];

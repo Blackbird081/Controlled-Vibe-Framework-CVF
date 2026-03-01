@@ -35,6 +35,8 @@ function createDefaultSkills(): Record<MiniGameKey, SkillSnapshot> {
     memory: { score: 50, rounds: 0 },
     color: { score: 50, rounds: 0 },
     logic: { score: 50, rounds: 0 },
+    compare: { score: 50, rounds: 0 },
+    vocab: { score: 50, rounds: 0 },
   };
 }
 
@@ -60,6 +62,8 @@ export function loadLearningPathState(): LearningPathState {
         memory: state.skills.memory ?? defaults.memory,
         color: state.skills.color ?? defaults.color,
         logic: state.skills.logic ?? defaults.logic,
+        compare: state.skills.compare ?? defaults.compare,
+        vocab: state.skills.vocab ?? defaults.vocab,
       },
       lastRecommendedGame: state.lastRecommendedGame ?? null,
     };
@@ -130,12 +134,7 @@ export function getLearningSuggestion(
 ): LearningSuggestion {
   const weakest = getWeakestGame(state.skills);
   const weakestScore = state.skills[weakest].score;
-  const strongestScore = Math.max(
-    state.skills.math.score,
-    state.skills.memory.score,
-    state.skills.color.score,
-    state.skills.logic.score,
-  );
+  const strongestScore = Math.max(...Object.values(state.skills).map((item) => item.score));
   const gap = strongestScore - weakestScore;
   const recommendedGame = gap >= 7 ? weakest : activeGame;
   return {

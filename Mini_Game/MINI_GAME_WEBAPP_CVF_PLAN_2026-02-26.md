@@ -102,6 +102,7 @@ Xay dung 1 web app game cho tre em (6-10 tuoi), vui, dep, nhieu dong luc quay la
 - [x] Data schema + event tracking da chot
 - [x] Risk + bien phap giam thieu da log
 - [x] Ke hoach test da san sang
+- [x] Skill Preflight PASS da duoc ghi nhan truoc Build action
 
 ---
 

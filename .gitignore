@@ -59,3 +59,29 @@ CVF_Hypervisor Mode/
 
 # Ignore all CVF documentation folders
 CVF_DOCS/
+
+# Local case workspace (private, do not publish)
+XD_App/
+Xd_App/
+
+# Allow CVF governance evidence for pilot projects
+!XD_App/
+XD_App/*
+!XD_App/README.md
+!XD_App/DOCUMENTS/
+XD_App/DOCUMENTS/*
+!XD_App/DOCUMENTS/CVF_PHASE_B_DESIGN.md
+!XD_App/DOCUMENTS/CVF_PHASE_C_BUILD.md
+!XD_App/DOCUMENTS/CVF_PHASE_D_REVIEW.md
+!XD_App/DOCUMENTS/CVF_PROFESSIONAL_UPGRADE_BLUEPRINT.md
+!XD_App/DOCUMENTS/CVF_OUTPUT.md
+!XD_App/DOCUMENTS/DECISIONS.md
+!XD_App/DOCUMENTS/SKILL_PREFLIGHT_RECORD.md
+
+!Mini_Game/CVF_DOCS/
+Mini_Game/CVF_DOCS/*
+!Mini_Game/CVF_DOCS/DECISIONS.md
+!Mini_Game/CVF_DOCS/OUTPUT_SPEC.md
+!Mini_Game/CVF_DOCS/UAT_CHECKLIST.md
+!Mini_Game/CVF_DOCS/README.md
+!Mini_Game/CVF_DOCS/SKILL_PREFLIGHT_RECORD.md

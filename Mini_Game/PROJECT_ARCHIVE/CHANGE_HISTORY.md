@@ -43,3 +43,8 @@
 - Pre-public gate updated to:
   - `READY FOR INTERNAL PILOT`
   - `NOT READY FOR PUBLIC RELEASE` (pending pilot UAT real users)
+
+## 2026-03-01 - Skill Preflight Governance Pilot
+- Added `Mini_Game/CVF_DOCS/SKILL_PREFLIGHT_RECORD.md` as project pre-code governance evidence.
+- Updated B->C gate and OUTPUT/UAT docs to require Skill Preflight PASS before Build artifact changes.
+- Logged decision in `Mini_Game/CVF_DOCS/DECISIONS.md` (D-020).

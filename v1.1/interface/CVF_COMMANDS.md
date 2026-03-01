@@ -15,7 +15,7 @@ Purpose: Intent chuẩn hóa cho hành động; mỗi command yêu cầu artifac
 - FREEZE: freeze declaration, frozen scope
 - DESIGN: design notes, alternatives
 - REFINE: before/after diff, no scope expansion
-- EXECUTE: Action Unit definition, linked Input/Output spec
+- EXECUTE: Action Unit definition, linked Input/Output spec, Skill Preflight declaration (SKILL_PREFLIGHT_RECORD)
 - REVIEW: findings, compliance verdict
 - AUDIT: audit report, violation list
 
@@ -34,7 +34,7 @@ Purpose: Intent chuẩn hóa cho hành động; mỗi command yêu cầu artifac
 | CVF:DECIDE | Decision | Decision Policy | Decision Record | Decision statement, rationale, impact scope |
 | CVF:DESIGN | Planning / Analysis | Planning / Analysis | Design Note | Design notes, alternatives, constraints |
 | CVF:REFINE | Planning / Analysis | Planning / Analysis | Refine Note | Before/after diff, unchanged intent proof |
-| CVF:EXECUTE | Execution | Execution Policy | Execution Task | AU definition, INPUT/OUTPUT spec links, trace path |
+| CVF:EXECUTE | Execution | Execution Policy | Execution Task | AU definition, INPUT/OUTPUT spec links, Skill Preflight declaration (SKILL_PREFLIGHT_RECORD), trace path |
 | CVF:REVIEW | Supervisor / Analysis | Supervisor / Analysis | Review Record | Findings, compliance verdict, accept/reject |
 | CVF:AUDIT | Supervisor | Supervisor Policy | Audit Record | Audit report, violation list, follow-up actions |
 

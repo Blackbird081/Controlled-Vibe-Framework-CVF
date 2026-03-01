@@ -354,6 +354,7 @@ Vui lòng xác nhận bởi người có thẩm quyền.
 
 - [ ] Paste **Prompt Rút Gọn** vào đầu chat
 - [ ] Agent khai báo Phase / Role / Risk
+- [ ] Nếu ở Build/Execute: chạy Skill Preflight trước khi code (theo `SKILL_PREFLIGHT_RECORD.md`)
 - [ ] Bắt đầu làm việc
 
 ### Khi chuyển phase

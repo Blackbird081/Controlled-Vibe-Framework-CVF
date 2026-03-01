@@ -96,6 +96,10 @@ Forbidden Skill IDs:
 Skill Usage Rules:
 - Skills must be declared before use
 - Skills must map to the current CVF phase
+- Before any Build action that modifies artifacts, Skill Preflight is mandatory:
+  - Identify intended skill(s)
+  - Verify each skill has valid mapping for current phase/risk
+  - Declare selected skill IDs in trace before coding (SKILL_PREFLIGHT_RECORD.md)
 - If no suitable skill exists, the agent must STOP
 
 ---

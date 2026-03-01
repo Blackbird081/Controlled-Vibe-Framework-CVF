@@ -43,6 +43,11 @@ Personal AI usage unrelated to company work is excluded.
    - a runnable coverage command,
    - a declared baseline report,
    - enforced minimum threshold in CI/local gate.
+7. Before any Build/Execute action that modifies artifacts, Skill Preflight is mandatory:
+   - identify applicable skill(s) first,
+   - verify each skill has a valid Skill Mapping Record and is allowed for current phase/risk,
+   - log the declaration in trace before coding starts using `governance/toolkit/03_CONTROL/SKILL_PREFLIGHT_RECORD.md`,
+   - if no suitable skill exists, STOP and create an intake/escalation record.
 
 ---
 

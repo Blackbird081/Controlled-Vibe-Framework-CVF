@@ -95,7 +95,7 @@ CVF defines 8 commands that structure all interactions:
 | `CVF:FREEZE` | Any | Lock scope/spec | Freeze declaration |
 | `CVF:DESIGN` | Planning / Analysis | Create design | Design notes, alternatives |
 | `CVF:REFINE` | Planning / Analysis | Improve existing | Before/after diff |
-| `CVF:EXECUTE` | Execution | Build something | AU definition, spec links |
+| `CVF:EXECUTE` | Execution | Build something | AU definition, spec links, Skill Preflight declaration (`SKILL_PREFLIGHT_RECORD`) |
 | `CVF:REVIEW` | Supervisor / Analysis | Evaluate quality | Findings, verdict |
 | `CVF:AUDIT` | Supervisor | Check compliance | Audit report, violation list |
 
@@ -109,6 +109,7 @@ INPUT CONTRACT → SCOPE DEFINITION → SCOPE FREEZE → ACTION UNIT → CONTROL
 
 - Every action must specify: 1 command + 1 archetype + 1 preset + 1 Action Unit
 - Must link INPUT/OUTPUT spec
+- Build/Execute actions must include Skill Preflight declaration before coding
 - Output without review = **non-authoritative**
 
 ---
@@ -149,6 +150,7 @@ Phase gates are quality checkpoints between phases:
 - [ ] Key decisions logged
 - [ ] Risks identified
 - [ ] Feasibility confirmed
+- [ ] Skill Preflight completed (mapped skill(s) + phase/risk fit)
 ```
 
 ### Gate: Phase C → Phase D

@@ -70,6 +70,11 @@ SKILL USAGE RULES
   - Are explicitly allowed
   - Are mapped to the current CVF Phase
   - Have a valid Skill Mapping Record
+- Before any Build/Execute action that writes or modifies artifacts, you MUST run Skill Preflight:
+  - Identify the skill(s) you will use
+  - Verify phase and risk compatibility from Skill Mapping Record
+  - Declare the selected skill IDs before coding using SKILL_PREFLIGHT_RECORD.md format
+  - If no suitable skill exists, STOP and request intake/escalation
 
 - If no suitable skill exists:
   → DO NOT improvise.

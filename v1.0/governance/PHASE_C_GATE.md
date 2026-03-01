@@ -64,6 +64,14 @@ Không đạt Gate → **không được phép bước vào Phase C**.
 
 ---
 
+### 6. Skill Preflight trước Build
+☐ Đã xác định skill dự kiến dùng cho Phase C  
+☐ Mỗi skill có Skill Mapping Record hợp lệ và đúng Phase/Risk hiện tại  
+☐ Agent đã khai báo skill trước khi code trong trace  
+☐ Nếu chưa có skill phù hợp, đã STOP và tạo intake/escalation record  
+
+---
+
 ## Quyết định Gate
 
 - **PASS** → Được phép bước vào Phase C  

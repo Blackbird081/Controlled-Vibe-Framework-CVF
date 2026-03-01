@@ -217,3 +217,92 @@ A `CVF_Hypervisor Mode` folder (30 files) was created as a prototype for an AI S
 - `docs/VERSION_COMPARISON.md` (updated)
 - `docs/CVF_HYPERVISOR_STRATEGY.md` (moved from Hypervisor Mode)
 - `.gitignore` (still contains `CVF_Hypervisor Mode/` entry — harmless)
+
+---
+
+## ADR-006: Mandatory Skill Preflight Before Build/Code
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-01 |
+| Status | Active |
+| Related commits | *(this commit)* |
+
+### Context
+CVF governance already required skill mapping and phase/risk compliance, but project-level execution often entered Phase C directly from design artifacts without an explicit pre-code skill check. This created an enforcement gap: the rule existed conceptually, but was easy to skip during real delivery.
+
+### Decision
+**Skill Preflight is now a mandatory gate before any Build/Execute action that modifies artifacts.**
+
+Skill Preflight requires:
+1. Identify intended skill(s) before coding.
+2. Verify each skill has valid mapping for current phase and risk.
+3. Declare selected skill IDs in trace before code/file modification.
+4. If no suitable skill exists, STOP and create intake/escalation record.
+
+### Rationale
+- Converts implicit skill governance into explicit operational behavior.
+- Aligns policy, bootstrap, command contract, and phase gate in one consistent rule.
+- Prevents "policy exists but execution bypasses" failure mode.
+- Improves auditability by requiring concrete pre-build evidence.
+
+### Consequences
+- Phase B→C gate now fails if Skill Preflight is missing.
+- `CVF:EXECUTE` requires Skill Preflight declaration artifact.
+- Agent UAT now includes a mandatory refusal test for missing Skill Preflight in Build.
+- This change applies framework-wide to future projects, not only current repos.
+
+### Related Files
+- `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+- `governance/toolkit/01_BOOTSTRAP/CVF_AGENT_SYSTEM_PROMPT.md`
+- `governance/toolkit/01_BOOTSTRAP/CVF_VSCODE_BOOTSTRAP.md`
+- `v1.0/governance/PHASE_C_GATE.md`
+- `v1.1/interface/CVF_COMMANDS.md`
+- `governance/toolkit/04_TESTING/CVF_AGENT_UAT.md`
+- `governance/toolkit/04_TESTING/CVF_AGENT_UAT_TEST.yaml`
+- `governance/toolkit/04_TESTING/CVF_AGENT_UAT_TEST.json`
+- `docs/concepts/4-phase-process.md`
+- `docs/concepts/governance-model.md`
+
+---
+
+## ADR-007: Standard Skill Preflight Record Template + Pilot Rollout
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-01 |
+| Status | Active |
+| Related commits | *(this commit)* |
+
+### Context
+ADR-006 made Skill Preflight mandatory before Build/Execute, but teams still needed a concrete reusable artifact template and project-level pilot evidence to avoid inconsistent adoption.
+
+### Decision
+**Introduce a standard `SKILL_PREFLIGHT_RECORD` template at framework level and rollout pilot adoption in `XD_App` and `Mini_Game`.**
+
+1. Added canonical template:
+   - `governance/toolkit/03_CONTROL/SKILL_PREFLIGHT_RECORD.md`
+2. Added active mapping record for governance skill used by preflight:
+   - `governance/toolkit/03_CONTROL/CVF_CORE_SKILL_PREFLIGHT_GOVERNANCE.mapping.md`
+3. Applied pilot in 2 projects with local records + gate/checklist integration:
+   - `XD_App/DOCUMENTS/SKILL_PREFLIGHT_RECORD.md`
+   - `Mini_Game/CVF_DOCS/SKILL_PREFLIGHT_RECORD.md`
+
+### Rationale
+- Turns policy into an operational artifact teams can execute consistently.
+- Provides evidence-first governance for audit and root-cause analysis.
+- Validates framework rule in real project contexts before broader rollout.
+
+### Consequences
+- Future projects can adopt Skill Preflight without inventing their own format.
+- Project documentation now contains explicit pre-code governance evidence.
+- Decision traces for rollout are logged in project-level decision/history files.
+
+### Related Files
+- `governance/toolkit/03_CONTROL/SKILL_PREFLIGHT_RECORD.md`
+- `governance/toolkit/03_CONTROL/CVF_CORE_SKILL_PREFLIGHT_GOVERNANCE.mapping.md`
+- `XD_App/DOCUMENTS/SKILL_PREFLIGHT_RECORD.md`
+- `XD_App/DOCUMENTS/DECISIONS.md`
+- `Mini_Game/CVF_DOCS/SKILL_PREFLIGHT_RECORD.md`
+- `Mini_Game/CVF_DOCS/DECISIONS.md`
+- `Mini_Game/PROJECT_ARCHIVE/CHANGE_HISTORY.md`

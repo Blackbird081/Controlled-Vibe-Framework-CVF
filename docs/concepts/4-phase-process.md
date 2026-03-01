@@ -122,6 +122,7 @@ PHASE_C_GATE Checklist:
 - [ ] Key decisions logged
 - [ ] Risks identified
 - [ ] Feasibility confirmed
+- [ ] Skill Preflight completed (mapped skill(s) declared before coding)
 ```
 
 All boxes must be checked. PASS or FAIL — no partial.
@@ -150,11 +151,13 @@ Phase C CANNOT start unless:
 - [ ] Phase B complete (design approved)
 - [ ] No ambiguous intent remaining
 - [ ] No unclear design elements
+- [ ] Skill Preflight completed for planned Build actions
 
 ### Rules
 - AI executes design **precisely**
 - No optimization outside scope
 - No self-modifying structure (AI can't change its own plan)
+- Before modifying artifacts, AI must declare mapped skill(s) for the Build action
 - If design is not feasible: **STOP Phase C**, log the issue, return to Phase B
 - All output must be **traceable** back to design and intent
 

@@ -24,6 +24,22 @@ D:\Work\
 Tiền tố `.` cho folder CVF core là quy ước cách ly để tránh sửa nhầm, không bắt buộc chế độ hidden.
 Chi tiết enforcement: [CVF_WORKSPACE_ISOLATION_GUARD.md](../governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
 
+### Bootstrap nhanh cho project mới (Khuyến nghị)
+
+Dùng script bootstrap để chuẩn hóa workspace sibling cho mọi project downstream:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
+  -WorkspaceRoot "D:\CVF-Workspace" `
+  -ProjectName "Trading-Tools" `
+  -ProjectRepo "https://github.com/Blackbird081/Trading-Tools.git"
+```
+
+Kết quả:
+- `D:\CVF-Workspace\.Controlled-Vibe-Framework-CVF`
+- `D:\CVF-Workspace\Trading-Tools`
+- `D:\CVF-Workspace\Trading-Tools.code-workspace` (terminal mặc định vào project)
+
 ---
 
 ## 🚦 Bạn Là Ai?
@@ -102,10 +118,13 @@ Phase A (Discovery)  →  Phase B (Design)  →  Phase C (Build)  →  Phase D (
 
 ### Step 2: Chạy Ví Dụ Đầu Tiên (3 phút)
 
-#### Option A: Web UI (Recommended)
+#### Option A: Web UI (CVF Core Only)
+
+Lưu ý: phần này để chạy CVF framework UI.  
+Project downstream phải đặt ở workspace sibling riêng, không làm trực tiếp trong CVF root.
 
 ```bash
-# Clone repo
+# Clone repo (CVF core)
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 cd Controlled-Vibe-Framework-CVF
 
@@ -151,7 +170,7 @@ Sau khi chạy được ví dụ đầu tiên:
 ### Step 1: Setup (5 phút)
 
 ```bash
-# 1. Clone repo
+# 1. Clone repo (CVF core)
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 cd Controlled-Vibe-Framework-CVF
 

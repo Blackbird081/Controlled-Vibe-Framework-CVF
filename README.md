@@ -83,7 +83,31 @@ D:\Work\
 
 `.Controlled-Vibe-Framework-CVF` naming (leading dot) is an isolation convention to avoid accidental cross-edits. It does not need hidden mode.
 
-### Option 1: Web UI (Recommended — 2 minutes)
+### Bootstrap Isolated Workspace (Recommended For New Projects)
+
+Use the bootstrap script to standardize sibling layout and keep terminal default at project root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
+  -WorkspaceRoot "D:\CVF-Workspace" `
+  -ProjectName "Trading-Tools" `
+  -ProjectRepo "https://github.com/Blackbird081/Trading-Tools.git"
+```
+
+What this creates:
+
+```text
+D:\CVF-Workspace\
+  .Controlled-Vibe-Framework-CVF\
+  Trading-Tools\
+  Trading-Tools.code-workspace
+```
+
+`Trading-Tools.code-workspace` is configured with `terminal.integrated.cwd=${workspaceFolder}`.
+
+### Option 1: Web UI (CVF Core Only — 2 minutes)
+
+Use this only to run CVF itself (framework UI), not for downstream product development.
 
 ```bash
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git

@@ -85,6 +85,57 @@ $workspaceJson = $workspaceDef | ConvertTo-Json -Depth 5
 Set-Content -Path $workspaceFilePath -Value $workspaceJson -Encoding utf8
 Write-Ok "Updated: $workspaceFilePath"
 
+$docsDir = Join-Path $projectPath "docs"
+Ensure-Directory $docsDir
+
+$dateStamp = Get-Date -Format "yyyy-MM-dd"
+$recordIdDate = Get-Date -Format "yyyyMMdd"
+$bootstrapLogPath = Join-Path $docsDir "CVF_BOOTSTRAP_LOG_$recordIdDate.md"
+$cvfHead = git -C $cvfCorePath rev-parse --short HEAD
+
+$logContent = @"
+# CVF Project Bootstrap Log
+
+## 1. Record Metadata
+- Record ID: BOOTSTRAP-$recordIdDate-$ProjectName
+- Date: $dateStamp
+- Prepared By:
+- Reviewed By:
+- CVF Core Commit: $cvfHead
+
+## 2. Workspace Topology
+- Workspace Root: $workspaceRootResolved
+- CVF Core Path: $cvfCorePath
+- Project Path: $projectPath
+- VS Code Workspace File: $workspaceFilePath
+
+## 3. Isolation Validation
+- [x] CVF core and downstream project are sibling folders
+- [x] IDE/terminal target is project workspace
+- [x] terminal.integrated.cwd is `${workspaceFolder}`
+- [ ] Team acknowledgment recorded
+
+## 4. Bootstrap Actions
+- [x] CVF core available
+- [x] Project folder available
+- [x] VS Code terminal defaults configured
+- [ ] Runtime artifacts migrated (if needed)
+- [ ] Toolchain baseline recorded (python, node, pnpm, optional uv)
+
+## 5. Post-Bootstrap Checks
+- [ ] API health check
+- [ ] Frontend startup check
+- [ ] Critical workflow smoke check
+
+## 6. Approval
+- Result: PASS / PASS WITH NOTE / FAIL
+- Approved By:
+- Approval Date:
+"@
+
+Set-Content -Path $bootstrapLogPath -Value $logContent -Encoding utf8
+Write-Ok "Created: $bootstrapLogPath"
+
 Write-Host ""
 Write-Ok "Workspace bootstrap complete."
 Write-Host "Open this workspace file in VS Code:" -ForegroundColor Yellow

@@ -39,6 +39,7 @@ Kết quả:
 - `D:\CVF-Workspace\.Controlled-Vibe-Framework-CVF`
 - `D:\CVF-Workspace\Trading-Tools`
 - `D:\CVF-Workspace\Trading-Tools.code-workspace` (terminal mặc định vào project)
+- `D:\CVF-Workspace\Trading-Tools\docs\CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
 
 ---
 

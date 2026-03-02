@@ -104,6 +104,9 @@ D:\CVF-Workspace\
 ```
 
 `Trading-Tools.code-workspace` is configured with `terminal.integrated.cwd=${workspaceFolder}`.
+The script also creates a downstream bootstrap record:
+`<Project>/docs/CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
+from `governance/toolkit/05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`.
 
 ### Option 1: Web UI (CVF Core Only — 2 minutes)
 

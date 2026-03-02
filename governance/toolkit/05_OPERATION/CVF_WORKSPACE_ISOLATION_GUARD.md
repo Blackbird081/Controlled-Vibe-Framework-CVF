@@ -66,6 +66,9 @@ Notes:
 2. Clone/link CVF core into its dedicated folder
 3. Open IDE at project workspace folder, not CVF root
 4. Use CVF as framework reference, not as downstream app workspace
+5. Create and store a bootstrap record in downstream project docs using:
+   - `governance/toolkit/05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`
+   - recommended file: `<Project>/docs/CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
 
 ---
 
@@ -86,6 +89,7 @@ Violation is considered governance drift and must be corrected before normal ope
 
 - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
 - `governance/toolkit/05_OPERATION/CONTINUOUS_GOVERNANCE_LOOP.md`
+- `governance/toolkit/05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`
 - `README.md` (mandatory governance notice)
 - `docs/GET_STARTED.md` (onboarding rule)
 

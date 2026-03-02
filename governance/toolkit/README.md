@@ -55,6 +55,7 @@ CVF Cores (v1.0, v1.1)        ← Framework gốc (FROZEN)
 | **Auditor** | 02 + 04 + 05 |
 
 Coverage policy reference: `04_TESTING/CVF_TEST_COVERAGE_POLICY.md`
+Workspace bootstrap record template: `05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`
 
 ---
 

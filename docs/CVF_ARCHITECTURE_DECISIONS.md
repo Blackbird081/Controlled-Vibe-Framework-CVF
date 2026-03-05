@@ -402,3 +402,70 @@ Implementation scope:
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useAgentChat.ts`
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useAgentChat.test.ts`
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/MultiAgentPanel.tsx`
+
+---
+
+## ADR-010: CVF v1.8–v2.0 Integration — Kernel Strategy and Version Placement
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-05 |
+| Status | Active |
+| Related commits | *(this commit)* |
+
+### Context
+A `CVF_AI Runtime/` folder was developed as a concept workspace documenting the architecture for CVF v1.8 (Safety Hardening), v1.9 (Deterministic Reproducibility), and v2.0 (Non-Coder Safety Runtime). This represented ~27KB of governance specs across 8 files.
+
+A compatibility audit (COMPAT score 46/54, 85%) confirmed the concepts are aligned with CVF principles. Two open architectural questions required decisions before integration:
+
+1. **Kernel conflict:** CVF v1.7.1 has a production 5-layer Safety Kernel (51 tests, 96.45% coverage). CVF v1.8 proposes a new 5-component Control Kernel with deterministic phase isolation. Both target Layer 2.5.
+2. **Risk model mismatch:** CVF uses R0–R3 notation (CVF_POSITIONING.md). v1.8 GOVERNANCE.md uses numeric score (0–16+). No canonical mapping existed.
+
+### Decision
+**1. Kernel Strategy — Option A: v1.8 refines v1.7.1 (same Layer 2.5, additive)**
+
+- v1.8 is NOT a replacement layer or a wrapper. It is a **hardening extension** of the v1.7.1 kernel.
+- Each v1.7.1 kernel component maps 1:1 to a v1.8 component (see COMPAT_AI_Runtime.md Section III-C).
+- v1.7.1 remains the **production kernel** with 51 tests. v1.8 defines the specification for the *next iteration* of that same kernel.
+- Implementation of v1.8 code = refactoring v1.7.1, not building a parallel codebase.
+
+**2. Canonical Risk Level Mapping established**
+
+```
+R0 = Score 0–2   → LOW (auto approve)
+R1 = Score 3–5   → LOW (guarded execution)
+R2 = Score 6–10  → MODERATE (human in loop)
+R3 = Score 11–15 → HIGH (escalation required)
+R3+= Score 16+   → CRITICAL (hard stop)
+```
+
+**3. Version Placement**
+
+| Version | Name | Layer | Folder |
+|---------|------|-------|--------|
+| v1.8 | Safety Hardening | 2.5 | `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/` |
+| v1.9 | Deterministic Reproducibility | 2.5 | `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` |
+| v2.0 | Non-Coder Safety Runtime | 4/5 | `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/` |
+
+**4. Integration scope = spec/docs only**
+
+All content in `CVF_AI Runtime/` is governance specification (no production code). Integration = moving and standardizing these specs into CVF folder structure. TypeScript code referenced in TREEVIEW.md is a future implementation target, not current scope.
+
+### Rationale
+- Extension Rule R2: additive, not replacement. Building v1.8 as a separate codebase would violate this principle.
+- v1.7.1 kernel has 51 passing tests — any replacement would require re-testing everything. Refinement approach protects existing quality.
+- Numeric risk scores (0–16+) are a more precise *implementation* of the same R0–R3 risk model. They are complementary, not competing.
+- Option B (v1.8 as wrapper above v1.7.1) would add unnecessary architectural complexity without benefit at this stage.
+
+### Consequences
+- `CVF_AI Runtime/` folder becomes obsolete after integration. Contents moved to EXTENSIONS.
+- All future v1.8+ implementation must treat v1.7.1 as the starting point, not a blank slate.
+- Risk scoring in v1.8+ implementations must expose both numeric score AND R-level label.
+- Creative Mode definition in v2.0 (SAFE/BALANCED/CREATIVE) becomes the authoritative spec, superseding v1.7.1 Creative Control layer docs.
+
+### Related Files
+- `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/` (new, this commit)
+- `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` (new, this commit)
+- `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/` (new, this commit)
+- `governance/compat/risk_level_mapping.md` (new, this commit)
+- `REVIEW/COMPAT_AI_Runtime.md` (compatibility assessment baseline)

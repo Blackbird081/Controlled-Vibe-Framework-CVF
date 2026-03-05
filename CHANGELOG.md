@@ -2,6 +2,46 @@
 
 ---
 
+## [2026-03-05] — v1.8/v1.9/v2.0 Governance Specs Integrated + Extension Rules
+
+### Added
+- **CVF v1.8 Safety Hardening** spec — `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/`
+  - 7-phase execution state machine (INTENT→COMMIT), strictly enforced
+  - Deterministic Mutation Sandbox + Mandatory Rollback Manager
+  - Governance Brain: Risk formula, Mutation Budget, Escalation Tiers (L0–L3)
+  - Behavior Drift Monitor + Stability Index (self-regulating autonomy)
+  - TypeScript implementation treeview (future code target)
+- **CVF v1.9 Deterministic Reproducibility** spec — `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/`
+  - ExecutionRecord (9-field immutable record per execution)
+  - Context Freezer (hash-locks context before ANALYSIS phase)
+  - Replay Engine (audit-only replay of any past execution)
+  - Forensic audit trail extending v1.7.1 requestId+traceHash
+- **CVF v2.0 Non-Coder Safety Runtime** spec — `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/`
+  - Mode Abstraction Layer: SAFE / BALANCED / CREATIVE (authoritative definition)
+  - Intent Interpreter (human language → kernel policy mapping)
+  - Builds on v1.7.2 Dashboard + v1.7.3 Adapter Hub
+- **ADR-010** — Kernel Integration Strategy (v1.7.1 vs v1.8) + version placement decisions
+- **`governance/compat/risk_level_mapping.md`** — Canonical R0–R3 ↔ numeric score mapping
+- **CVF Extension Rules (R1/R2/R3)** — Mandatory governance for all future CVF additions
+  - R1: Existing structure is always standard
+  - R2: Additions must be compatible and additive
+  - R3: Naming must follow CVF conventions
+- **Architecture Check Guard** — `governance/toolkit/05_OPERATION/CVF_ARCHITECTURE_CHECK_GUARD.md`
+- **CVF_CORE_KNOWLEDGE_BASE.md** — Permanent governance reference at `docs/`
+
+### Changed
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md` — Added v1.8/v1.9/v2.0 to Section II (Layer 2.5) and Section III (version table). Added Section XIV (CVF Extension Rules).
+- `README.md` — Added Architecture Check Rule + CVF Extension Rules in governance section
+- `docs/CVF_ARCHITECTURE_DECISIONS.md` — Added ADR-010
+
+### Architecture decisions
+- v1.8 is a refinement of v1.7.1 (not replacement) — same Layer 2.5, starts from v1.7.1 codebase
+- v1.9 is purely additive on top of v1.8 (no v1.8 components changed)
+- v2.0 extends v1.7.2 + v1.7.3 at Layer 4/5 (does not bypass kernel)
+- All v1.8→v2.0 content at Spec level — code implementation is future scope
+
+---
+
 ## [2026-02-28] — v1.7.3 Runtime Adapter Hub + Web UI Integration
 
 ### Added

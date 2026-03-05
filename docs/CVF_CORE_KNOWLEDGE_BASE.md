@@ -76,6 +76,13 @@ CVF = Governance Framework (Rules + Process + Tools)
 │     ● 51 Kernel Tests | 96.45%+ coverage                   │
 │     ● Anti-bypass Symbol guard | 12-step pipeline           │
 │     ● Forensic tracing: requestId + traceHash               │
+│     v1.8 — Safety Hardening (Spec)                         │
+│     ● 7-phase state machine: INTENT→COMMIT                  │
+│     ● Deterministic Mutation Sandbox + Rollback Manager     │
+│     ● Drift Monitor + Stability Index                       │
+│     v1.9 — Deterministic Reproducibility (Spec)            │
+│     ● ExecutionRecord (9-field, immutable)                  │
+│     ● Context Freezer + Replay Engine + Forensic audit      │
 ├─────────────────────────────────────────────────────────────┤
 │  🛠️ LAYER 2 — TOOLS (Validation + Automation)               │
 │     v1.3 — Python SDK + cvf-validate CLI                    │
@@ -118,13 +125,9 @@ CVF = Governance Framework (Rules + Process + Tools)
 | v1.7.1 | Safety Runtime | 2.5 | Active ⚙️ | `CVF_v1.7.1_SAFETY_RUNTIME/` |
 | v1.7.2 | Safety Dashboard | 4 | Active 🛡️ | `CVF_v1.7.2_SAFETY_DASHBOARD/` |
 | v1.7.3 | Runtime Adapter Hub | 5 | **CURRENT** 🔌 | *(integrated)* |
-
-**Roadmap tương lai (chưa implement — cần review trước khi tích hợp):**
-| Version | Tên | Layer | Mục tiêu |
-|---------|-----|-------|---------|
-| v1.8 | Hardening Kernel | 1/2.5 | Siết mutation boundary, rollback, role lock |
-| v1.9 | Deterministic Reproducibility | 2.5 | Replay engine, context freezer, audit forensic |
-| v2.0 | Non-Coder Safety Runtime | 4/5 | Abstraction UI: SAFE/BALANCED/CREATIVE modes |
+| v1.8 | Safety Hardening | 2.5 | Spec ✍️ | `CVF_v1.8_SAFETY_HARDENING/` |
+| v1.9 | Deterministic Reproducibility | 2.5 | Spec ✍️ | `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` |
+| v2.0 | Non-Coder Safety Runtime | 4/5 | Spec ✍️ | `CVF_v2.0_NONCODER_SAFETY_RUNTIME/` |
 
 ---
 

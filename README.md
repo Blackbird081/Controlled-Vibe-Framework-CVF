@@ -4,10 +4,10 @@
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
-[![Version](https://img.shields.io/badge/version-1.7.3-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-1764%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![Kernel Tests](https://img.shields.io/badge/kernel%20tests-51%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
+[![Kernel Tests](https://img.shields.io/badge/kernel+extension%20tests-183%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
 [![Coverage](https://img.shields.io/badge/coverage-93.05%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
 [![Kernel Coverage](https://img.shields.io/badge/kernel%20coverage-96.45%25-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
 [![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
@@ -179,8 +179,8 @@ When using AI to code without a framework:
 - 🧠 **5-Layer Safety Kernel** - Domain Lock → Contract Runtime → Contamination Guard → Refusal Router → Creative Control
 - 🛡️ **AI Safety Runtime** - Prompt sanitizer, entropy guard, anomaly detection, policy enforcement
 - 📊 **Safety Dashboard** - Real-time risk view: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous
-- 🔌 **Runtime Adapter Hub** (v1.7.3 NEW) - Universal adapter contracts for multi-runtime AI safety (OpenClaw, PicoClaw, ZeroClaw, Nano)
-- 🗣️ **Explainability Layer** (v1.7.3 NEW) - Human-readable action explanations in English & Vietnamese
+- 🔌 **Runtime Adapter Hub** (v1.7.3) - Universal adapter contracts for multi-runtime AI safety (OpenClaw, PicoClaw, ZeroClaw, Nano)
+- 🗣️ **Explainability Layer** (v1.7.3) - Human-readable action explanations in English & Vietnamese
 - 🔍 **Kernel Health Dashboard** - Domain lock status, risk level (R0-R4), refusal count, pipeline latency
 - 📈 **Risk Evolution Chart** - Historical risk trend visualization with hover tooltips
 - 🔎 **Request Trace Viewer** - Click-to-view forensic trace (requestId, traceHash, decision)
@@ -189,6 +189,13 @@ When using AI to code without a framework:
 - 🗺️ **Domain Map** - Interactive SVG visualization of domain relationships
 - 🔒 **Anti-Bypass Design** - Symbol guard, 12-step non-bypass pipeline, forensic tracing
 - 🧪 **51 Kernel Tests** - Golden dataset regression, E2E, benchmark, 96%+ coverage
+
+### v1.8–v2.0 Highlights 🚀 (NEW — Implemented)
+
+- 🔐 **v1.8 Safety Hardening** — 7-phase state machine (INTENT→COMMIT), mutation budget enforcement, deterministic rollback, drift monitor + stability index | **42 tests**
+- 📋 **v1.9 Deterministic Reproducibility** — Immutable ExecutionRecord (9 fields), Context Freezer, Replay Engine (EXACT/DRIFT/FAILED), forensic audit | **29 tests**
+- 🎯 **v2.0 Non-Coder Safety Runtime** — ModeMapper (SAFE/BALANCED/CREATIVE → KernelPolicy), Intent Interpreter (NL → ParsedIntent), Confirmation Engine (R3+ hard stop), Stability Index override | **32 tests**
+- 📦 **v1.2.1 External Integration** — Skill supply chain (intake→validate→certify→publish), Policy Decision Engine (6-layer precedence), blockchain-style audit ledger, R0–R3 mapping | **29 tests**
 
 ### 🛡️ Governance Integration for AI Agent (NEW)
 
@@ -319,35 +326,33 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  🛡️ SAFETY UI (Layer 5)    — Non-Coder Safety Dashboard │
-│     v1.7.2                  — Read-only risk view         │
-│     Risk: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous   │
-│     + Health Dashboard, Trace Viewer, Risk Chart         │
-│     + Policy Selector, Creative Mode, Domain Map         │
+│  🛡️ SAFETY UI (Layer 4)      — Non-Coder Safety         │
+│     v1.7.2                    — Safety Dashboard          │
+│     v2.0 🆕                   — Non-Coder Safety Runtime  │
+│     ModeMapper + IntentInterpreter + ConfirmationEngine  │
 ├─────────────────────────────────────────────────────────┤
-│  🔌 ADAPTER HUB (Layer 4)  — Runtime Adapter Contracts   │
-│     v1.7.3                  — Multi-runtime AI safety     │
+│  🔌 ADAPTER HUB (Layer 5)    — Runtime Adapter Contracts  │
+│     v1.7.3                    — Multi-runtime AI safety   │
 │     OpenClaw | PicoClaw | ZeroClaw | Nano                │
-│     + Explainability (EN/VI) + NLP Policy + Risk Models  │
 ├─────────────────────────────────────────────────────────┤
-│  🌐 PLATFORM (Layer 3)     — Web UI, Agent Chat          │
-│     v1.6 Agent Platform    — Production runtime           │
-│  🔐 v1.6.1                 — Enterprise Governance Engine │
+│  🌐 PLATFORM (Layer 3)       — Web UI, Agent Chat         │
+│     v1.6 Agent Platform      — Production runtime          │
+│  🔐 v1.6.1                   — Enterprise Governance Engine│
 ├─────────────────────────────────────────────────────────┤
-│  ⚙️ SAFETY RUNTIME (Layer 2.5) — Kernel Architecture     │
-│     v1.7.1                 — 5-Layer Safety Kernel        │
-│     Domain Lock → Contract → Contamination → Refusal     │
-│     → Creative Control | 51 tests | 96%+ coverage        │
+│  ⚙️ SAFETY RUNTIME (Layer 2.5) — Kernel Architecture      │
+│     v1.7.1                   — 5-Layer Safety Kernel       │
+│     v1.8 🆕                   — Safety Hardening (42 tests)│
+│     v1.9 🆕                   — Deterministic Replay (29t) │
 ├─────────────────────────────────────────────────────────┤
-│  🧠 INTELLIGENCE (Layer 2)  — Agent Behavior Control     │
-│     v1.7                   — Reasoning gate, Entropy      │
-│                              guard, Prompt sanitizer      │
-│  🛠️ TOOLS                   — Scoring, UAT, Validation   │
-│     v1.3, governance/      — Python scripts, CI/CD       │
+│  🧠 INTELLIGENCE (Layer 2)    — Agent Behavior Control    │
+│     v1.7                     — Reasoning, Entropy, Prompt  │
+│  🛠️ TOOLS                     — Scoring, UAT, Validation  │
+│     v1.3, v1.2.1 🆕           — External Integration (29t)│
+│     governance/               — Python scripts, CI/CD     │
 ├─────────────────────────────────────────────────────────┤
-│  📖 CORE (Layer 1)          — Principles, Phases, Skills │
-│     v1.0, v1.1, v1.2       — Rules + 141 Skills          │
-│     → Always needed. Start here.                          │
+│  📖 CORE (Layer 1)            — Principles, Phases, Skills│
+│     v1.0, v1.1, v1.2         — Rules + 141 Skills         │
+│     → Always needed. Start here.                           │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -362,6 +367,7 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 - **v1.0** - Core baseline (simple, fast)
 - **v1.1** - Extended control (input/output specs, multi-agent)
 - **v1.2** - Skill governance (registry, risk model)
+- **v1.2.1** 📦 - **External Integration** (skill supply chain pipeline, policy decision engine, audit ledger) — **29 tests**
 - **v1.3** - SDK & Tooling (Python, CLI, CI/CD)
 - **v1.5** - UX & End-User orientation (FROZEN)
 - **v1.5.2** - Skill Library (141 skills, ACTIVE)
@@ -371,6 +377,9 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 - **v1.7.1** ⚙️ - Safety Runtime (5-layer kernel: domain lock, contract, contamination, refusal, creative)
 - **v1.7.2** 🛡️ - Safety Dashboard (non-coder risk view)
 - **v1.7.3** 🔌 - Runtime Adapter Hub (multi-runtime contracts, explainability, NLP policy)
+- **v1.8** 🔐 - **Safety Hardening** (7-phase state machine, mutation budget, deterministic rollback, drift monitor) — **42 tests**
+- **v1.9** 📋 - **Deterministic Reproducibility** (ExecutionRecord, context freezer, replay engine, forensic audit) — **29 tests**
+- **v2.0** 🎯 - **Non-Coder Safety Runtime** (ModeMapper, IntentInterpreter, ConfirmationEngine, stability override) — **32 tests**
 
 **Which should you use?**
 
@@ -448,10 +457,11 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 
 | Metric | Status |
 |--------|--------|
-| **Version** | 1.7.3 (Feb 2026) |
+| **Version** | 2.0.0 (Mar 2026) |
 | **Stability** | Production-ready — 6/6 integration sprints complete |
-| **Quality Snapshot (2026-02-28)** | Lint: 0 errors · Web Tests: 1764 passing · Kernel Tests: 51 passing · Hub Tests: 41 passing |
+| **Quality Snapshot (2026-03-05)** | Lint: 0 errors · Web Tests: 1764 passing · Kernel+Extension Tests: **183 passing** |
 | **Coverage Snapshot (2026-02-26)** | Web: Stmts 93.05% · Kernel: Stmts 96.45% Br 91.41% Fn 99.09% Ln 97.01% |
+| **Extension Test Breakdown** | v1.7.1: 51 · v1.8: 42 · v1.9: 29 · v2.0: 32 · v1.2.1: 29 |
 | **Skills** | 141 skills across 12 domains + 34 agent tools |
 | **AI Safety** | Kernel active — 5-layer pipeline, anti-bypass, forensic tracing |
 | **Active Development** | Yes — extensions + Web UI enhancements |
@@ -459,8 +469,9 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 
 **Current Status:** 9.4/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md)) | Kernel: 8.5/10 ([Antigravity assessment](docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md))
 - ✅ **Excellent:** Technical quality (9.3/10), AI Safety (9.4/10), Testing (9.5/10), Governance (9/10)
-- ✅ **Kernel:** 51 tests, 96%+ coverage, anti-bypass Symbol guard, 12-step pipeline
+- ✅ **Kernel:** 183 tests total, 96%+ coverage, anti-bypass Symbol guard, 12-step pipeline
 - ✅ **Complete:** Sprint 1-6 integration, full test coverage, bilingual i18n
+- ✅ **NEW:** v1.8 Safety Hardening, v1.9 Deterministic Reproducibility, v2.0 Non-Coder Runtime, v1.2.1 External Integration
 - ⏳ **Pending:** Real-world validation, Community, npm/PyPI packages
 
 [→ Get Started](docs/GET_STARTED.md)
@@ -536,4 +547,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: February 28, 2026 | Version 1.7.3 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: March 5, 2026 | Version 2.0.0 | [Documentation](docs/GET_STARTED.md)*

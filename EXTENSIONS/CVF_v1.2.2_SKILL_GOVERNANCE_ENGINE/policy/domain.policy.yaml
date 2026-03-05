@@ -1,0 +1,26 @@
+policy_name: CVF-Domain-Policy
+version: 1.0
+
+domain_keywords:
+  ai_research:
+    - research
+    - paper
+    - model
+    - experiment
+    - optimize
+
+  application:
+    - code
+    - refactor
+    - deploy
+    - api
+    - build
+
+domain_constraints:
+  ai_research:
+    max_risk_score: 70
+    allow_dynamic: true
+
+  application:
+    max_risk_score: 75
+    allow_dynamic: false

@@ -101,6 +101,12 @@ CVF = Governance Framework (Rules + Process + Tools)
 │     ● Policy Decision Engine (6-layer precedence)           │
 │     ● Blockchain-style Governance Audit Ledger              │
 │     ● 29 tests | 100% pass                                  │
+│     v1.2.2 — Skill Governance Engine (Implemented ✅)       │
+│     ● Skill Spec Schema (CSS-1.0) với R0–R3 mapping         │
+│     ● Maturity Model: EXPERIMENTAL→PROBATION→STABLE         │
+│     ● Fusion Intelligence: semantic+historical+cost rank    │
+│     ● Evolution Engine (Acontext-style dynamic skills)      │
+│     ● Constitution + Phase Gate + Internal Ledger           │
 │     governance/ — Compat scripts, CI/CD, Skill-library      │
 │     tools/     — Python validation scripts                  │
 ├─────────────────────────────────────────────────────────────┤
@@ -127,6 +133,7 @@ CVF = Governance Framework (Rules + Process + Tools)
 | v1.1 | Extended Control | 1 | Active ✅ | `v1.1/` (root) |
 | v1.2 | Skill Governance | 1 | Active ✅ | `CVF_v1.2_CAPABILITY_EXTENSION/` |
 | v1.2.1 | External Integration | 2 | **Implemented** ✅ | `CVF_v1.2.1_EXTERNAL_INTEGRATION/` |
+| v1.2.2 | Skill Governance Engine | 2 | **Implemented** ✅ | `CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` |
 | v1.3 | SDK & Tooling | 2 | Active ✅ | `CVF_v1.3_IMPLEMENTATION_TOOLKIT/` |
 | v1.3.1 | Operator Edition | 2 | Active ✅ | `CVF_v1.3.1_OPERATOR_EDITION/` |
 | v1.4 | Usage Layer | 2 | Active ✅ | `CVF_v1.4_USAGE_LAYER/` |

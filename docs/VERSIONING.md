@@ -36,13 +36,15 @@ PATCH versions are used for sub-extensions within a minor version (e.g., v1.7.1,
 | v1.0 | Foundation | 🔒 FROZEN | 2025 |
 | v1.1 | Governance Refinement | 🔒 FROZEN | 2025 |
 | v1.2 | Capability Extension | 🔒 FROZEN | Jan 2026 |
+| v1.2.1 | External Integration | ✅ ACTIVE | Mar 05, 2026 |
+| v1.2.2 | Skill Governance Engine | 🆕 NEW | Mar 05, 2026 |
 | v1.3 | Implementation Toolkit | 🔒 FROZEN | Jan 29, 2026 |
 | v1.6 | Agent Platform (Web App) | ✅ ACTIVE | Feb 06, 2026 |
 | v1.6.1 | Governance Engine | ✅ ACTIVE | Feb 21, 2026 |
 | v1.7 | Controlled Intelligence | ✅ STABLE | Feb 24, 2026 |
 | v1.7.1 | Safety Runtime | ✅ STABLE | Feb 24, 2026 |
 | v1.7.2 | Safety Dashboard | ✅ STABLE | Feb 24, 2026 |
-| v1.7.3 | Runtime Adapter Hub | 🆕 NEW | Feb 28, 2026 |
+| v1.7.3 | Runtime Adapter Hub | ✅ ACTIVE | Feb 28, 2026 |
 
 ---
 

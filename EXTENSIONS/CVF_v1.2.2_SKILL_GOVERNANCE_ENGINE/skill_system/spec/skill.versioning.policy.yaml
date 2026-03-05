@@ -1,0 +1,31 @@
+versioning_policy: CVF-Strict-Semver
+
+rules:
+
+  semantic_versioning:
+    format: MAJOR.MINOR.PATCH
+
+  major:
+    description: Breaking contract change
+    governance_required: true
+    probation_required: true
+
+  minor:
+    description: Backward-compatible enhancement
+    governance_required: true
+    probation_required: false
+
+  patch:
+    description: Bug fix or performance improvement
+    governance_required: false
+    probation_required: false
+
+  downgrade:
+    allowed: false
+
+  version_conflict:
+    resolution: reject_new_version
+
+  dynamic_skill_upgrade:
+    automatic_patch_increment: true
+    probation_reentry_on_major: true

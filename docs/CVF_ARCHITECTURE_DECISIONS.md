@@ -522,3 +522,71 @@ Architecture Check Guard (9 questions) was completed. Results: 6/9 PASS, 3 neede
 - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/` (new, this commit)
 - `REVIEW/CVF_EXTERNAL_INTEGRATION_REVIEW.md` (Architecture Check Guard assessment)
 
+---
+
+## ADR-012: CVF v1.2.2 Skill Governance Engine — Integration Decision
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-05 |
+| Status | Active |
+| Related commits | *(this commit)* |
+
+### Context
+A `CVF_Skill Specification` folder was developed at CVF root containing a complete Skill Governance & Evolution Engine (CVF-SGE v2.0). It comprised 8 sub-directories and 60+ files spanning: Skill Spec Schema (CSS-1.0), Constitution layer, Governance Kernel, Phase Manager, Skill Fusion Intelligence, Evolution Engine (Acontext-style), Internal Ledger, and Policy system.
+
+Architecture Check Guard (9 questions) was completed. The primary design question: **Version placement — new MAJOR/MINOR version or sub-extension of existing version?**
+
+A Decision Framework (3 criteria) was established to prevent version sprawl:
+1. **Scope**: New concept vs extension of existing domain
+2. **Dependency**: Standalone vs natural extension of specific version
+3. **User Impact**: Mandatory to know vs optional
+
+### Decision
+**Integration as `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/`**
+
+- **Version**: v1.2.2 (sub-extension of v1.2 Skill Governance, following v1.2.1 External Integration)
+- **Layer**: 2 (Tools/Governance Tooling)
+- **NOT v2.1**: CVF v2.x territory is Non-Coder UX (Safety UI Layer 4). Placing technical governance tooling in v2.x would mislead users.
+
+**Rationale for v1.2.2 over new MAJOR/MINOR:**
+| Criterion | Result |
+|---|---|
+| Scope | Core domain is Skill Governance (Schema, Validator, Risk) — same domain as v1.2 |
+| Dependency | Natural extension of v1.2 (Skill Registry + R0–R3). v1.2.1 already is a sub-extension of v1.2 |
+| User Impact | Optional — basic CVF users can skip entirely |
+
+**Issues Fixed During Integration**
+
+| Issue | Fix |
+|---|---|
+| Risk threshold conflict: policy=80 vs code=70 | Aligned `global.policy.yaml` to 70 |
+| Phase transition had no governance gate | Added `GovernanceKernel.evaluate()` check in `PhaseManager.transition()` for critical phases |
+| `skill.schema.yaml` missing `evaluation` block | Added `success_metrics`, `failure_conditions`, `rollback_strategy` |
+| No R0–R3 canonical mapping | Added `risk_r_level` field with R0–R3 enum + numeric mapping documentation |
+| `/fusion` appeared at both root and `/skill_system/fusion/` | Rewrote `TREEVIEW.md`, fusion is only in `/skill_system/fusion/` |
+| Folder outside `EXTENSIONS/` | Moved to `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` |
+
+### New Decision Framework (Permanent Rule)
+```
+MỞ VERSION MỚI khi:          MỞ RỘNG LAYER CŨ khi:
+- Scope hoàn toàn mới         - Extension của domain đã có
+- Cần tất cả versions làm nền  - Natural PATCH của version cụ thể
+- User PHẢI biết để dùng CVF  - User có thể bỏ qua
+
+Ví dụ đúng version mới:       Ví dụ đúng mở rộng:
+  v1.6 = Agent Platform (Web)    v1.2.1 = External Integration
+  v1.7 = Controlled Intelligence  v1.7.1 = Safety Runtime
+  v2.0 = Non-Coder Safety Runtime v1.2.2 = Skill Governance Engine (this)
+```
+
+### Consequences
+- `CVF_Skill Specification/` folder at root deleted after migration.
+- Decision Framework (3 criteria) is now a permanent versioning governance rule.
+- Future additions to Skill Governance domain should extend v1.2.x (v1.2.3+).
+- `VERSIONING.md` and `CVF_CORE_KNOWLEDGE_BASE.md` updated with v1.2.2.
+
+### Related Files
+- `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` (new, this commit)
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md` (updated: Section II Layer 2, Section III table)
+- `docs/VERSIONING.md` (updated: v1.2.2 added to Current Status)

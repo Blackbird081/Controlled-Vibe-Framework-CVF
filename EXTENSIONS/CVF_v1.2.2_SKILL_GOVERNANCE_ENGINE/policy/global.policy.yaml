@@ -1,0 +1,17 @@
+policy_name: CVF-Global-Policy
+version: 1.0
+
+constraints:
+  max_global_risk_score: 70  # Aligned with governance.kernel.ts strict threshold
+  allow_external_skills: true
+  require_integrity_verification: true
+  require_contract_validation: true
+
+allowed_domains:
+  - ai_research
+  - application
+
+execution_rules:
+  require_governance_approval: true
+  log_all_executions: true
+  enforce_maturity_model: true

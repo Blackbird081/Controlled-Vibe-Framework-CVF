@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "registry_type": "STATIC",
+  "skills": [
+    {
+      "id": "ai_research.paper_summarizer",
+      "name": "AI Research Paper Summarizer",
+      "domain": "ai_research",
+      "version": "1.0.0",
+      "maturity": "STABLE",
+      "type": "STATIC",
+      "metadata": {
+        "description": "Summarizes academic AI research papers into structured insights.",
+        "risk_profile": {
+          "base_score": 20,
+          "factors": ["data_access"]
+        },
+        "cost_profile": {
+          "estimated_tokens": 1500,
+          "estimated_runtime_ms": 800,
+          "external_cost_flag": false
+        }
+      }
+    },
+    {
+      "id": "application.code_refactor_assistant",
+      "name": "Code Refactor Assistant",
+      "domain": "application",
+      "version": "1.2.0",
+      "maturity": "STABLE",
+      "type": "STATIC",
+      "metadata": {
+        "description": "Refactors existing source code while preserving logic.",
+        "risk_profile": {
+          "base_score": 35,
+          "factors": ["code_execution"]
+        },
+        "cost_profile": {
+          "estimated_tokens": 2500,
+          "estimated_runtime_ms": 1200,
+          "external_cost_flag": false
+        }
+      }
+    }
+  ]
+}

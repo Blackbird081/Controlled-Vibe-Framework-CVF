@@ -2,6 +2,37 @@
 
 ---
 
+## [2026-03-05] — v1.2.2 Skill Governance Engine Integrated
+
+### Added
+- **CVF v1.2.2 Skill Governance Engine** — `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/`
+  - **Skill Spec Schema (CSS-1.0)**: Chuẩn hóa toàn bộ skills với R0–R3 canonical mapping, evaluation block bắt buộc, maturity lifecycle
+  - **Constitution Layer**: 5 CVF Rules STRICT, `constitution.ts` — không component nào được bypass
+  - **Governance Kernel**: Risk threshold evaluation (≤70 = approve), integrity check, skill verification
+  - **Phase Manager** (với Governance Gate): Phase transition bị block nếu không pass GovernanceKernel
+  - **Skill Fusion Intelligence**: Multi-factor ranking (semantic 35% + historical 20% + maturity 15% − risk 15% − cost 15%)
+  - **Evolution Engine** (Acontext-style): Execution trace → Pattern distill → Dynamic skill → Probation → Governance approve
+  - **Internal Ledger**: skill_usage, risk_decision, dynamic_promotion, execution_trace logs
+  - **Policy System**: global.policy.yaml + domain.policy.yaml + risk.matrix.yaml + cost.control.policy.yaml
+  - **Maturity Model**: EXPERIMENTAL → PROBATION (5+ runs, 70% success) → STABLE (20+ runs, 85% success) → DEPRECATED
+- **ADR-012** — Versioning Decision Framework (3 criteria: Scope / Dependency / User Impact) + v1.2.2 integration rationale
+- **Decision Framework**: Permanent rule: "MỞ VERSION MỚI khi scope hoàn toàn mới. MỞ RỘNG LAYER CŨ khi là natural extension." Prevents version sprawl.
+
+### Fixed (During Integration)
+- Risk threshold conflict: `global.policy.yaml` aligned to 70 (matches `governance.kernel.ts`)
+- Phase Manager: Added `GovernanceKernel.evaluate()` gate for GOVERNANCE_DECISION / EXECUTION / LEDGER_RECORD phases
+- `skill.schema.yaml`: Added mandatory `evaluation` block (success_metrics, failure_conditions, rollback_strategy)
+- `skill.schema.yaml`: Added `risk_r_level` enum (R0–R3) with numeric mapping documentation
+- `TREEVIEW.md`: Removed duplicate `/fusion` reference — now only exists under `/skill_system/fusion/`
+
+### Architecture decisions
+- v1.2.2 is sub-extension of v1.2 (Skill Governance) — same domain, NOT a new MAJOR/MINOR version
+- Layer 2 (Tools) — technical governance tooling, not UI/UX layer
+- `CVF_Skill Specification/` folder at root replaced by `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/`
+- Dynamic skills never auto-approved (probation required) — consistent with CVF safety-over-speed principle
+
+---
+
 ## [2026-03-05] — v1.8/v1.9/v2.0 Governance Specs Integrated + Extension Rules
 
 ### Added

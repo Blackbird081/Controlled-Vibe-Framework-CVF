@@ -2,6 +2,23 @@
 
 ---
 
+## [2026-03-06] — CVF v1.1.1 Phase Governance Protocol Integrated
+
+### Added
+- **CVF v1.1.1 Phase Governance Protocol** — `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/`
+  - **Layer 1.5 (Development Governance)** — NEW layer between Core and Tools
+  - 9-stage deterministic pipeline: SPEC→STATE_MACHINE→STATE_DIAGRAM→IMPLEMENTATION→STATE_VALIDATION→UNIT_TESTING→SCENARIO_SIMULATION→PHASE_GATE→COMPLETE
+  - 7 sub-modules: phase_protocol, phase_gate, state_enforcement, diagram_validation, structural_diff, scenario_simulator, reports
+  - 21 TypeScript files
+- **ADR-014** — Phase Governance Protocol integration decision
+
+### Fixed (during integration)
+- `scenario.generator.ts` — added MAX_SCENARIOS=100, MAX_DEPTH=50, cycle-safe DFS
+- `mermaid.parser.ts` — added `toStateMachine()` converter for data structure compatibility
+- `gate.result.ts` — added R0–R3 canonical risk level mapping
+
+---
+
 ## [2026-03-05] — CVF_Layer AI Stack Integrated (v1.8.1 + v1.7.3 update + tools/)
 
 ### Added

@@ -122,6 +122,14 @@ CVF = Governance Framework (Rules + Process + Tools)
 │     v1.5 — UX Platform (FROZEN)                            │
 │     v1.5.1 — End-User Orientation                           │
 │     v1.5.2 — Skill Library (141 skills, 12 domains, ACTIVE) │
+├─────────────────────────────────────────────────────────────┤
+│  🛡️ LAYER 1.5 — DEVELOPMENT GOVERNANCE (NEW)                │
+│     v1.1.1 — Phase Governance Protocol (Implemented ✅)     │
+│     ● 9-stage deterministic pipeline: SPEC→COMPLETE          │
+│     ● State machine verification + deadlock detection        │
+│     ● Architecture drift detection + diagram validation      │
+│     ● Phase Gate with R0–R3 risk levels                      │
+│     ● 7 sub-modules | 21 TypeScript files                   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -136,6 +144,7 @@ CVF = Governance Framework (Rules + Process + Tools)
 |---------|-----|-------|-----------|--------------------------|
 | v1.0 | Core Baseline | 1 | Active ✅ | `v1.0/` (root) |
 | v1.1 | Extended Control | 1 | Active ✅ | `v1.1/` (root) |
+| v1.1.1 | Phase Governance Protocol | 1.5 | **Implemented** ✅ | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` |
 | v1.2 | Skill Governance | 1 | Active ✅ | `CVF_v1.2_CAPABILITY_EXTENSION/` |
 | v1.2.1 | External Integration | 2 | **Implemented** ✅ | `CVF_v1.2.1_EXTERNAL_INTEGRATION/` |
 | v1.2.2 | Skill Governance Engine | 2 | **Implemented** ✅ | `CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` |

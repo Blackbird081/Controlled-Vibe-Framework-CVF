@@ -642,3 +642,57 @@ A `CVF_Layer AI Stack` folder was added at CVF root containing a **compound syst
 - `tools/skill_security_scanner/` (new)
 - `docs/CVF_CORE_KNOWLEDGE_BASE.md` (updated: Section II Layer 2.5+5, Section III table)
 - `docs/VERSIONING.md` (updated: v1.8.1 added)
+
+---
+
+## ADR-014: CVF_Phase Governance Protocol — Layer 1.5 Integration
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-06 |
+| Status | Active |
+| Related commits | *(local commit, not yet pushed)* |
+
+### Context
+CVF controls **runtime execution** through Safety Runtime (v1.7.x), Safety Hardening (v1.8), and Deterministic Reproducibility (v1.9). However, there is a **critical gap**: CVF does not control the **development lifecycle** — the process of building AI-generated systems before they enter runtime.
+
+`CVF_Phase Governance Protocol` addresses this gap by introducing a **9-stage deterministic development pipeline** with state machine verification, architecture drift detection, and phase gate enforcement.
+
+**Uniqueness assessment:**
+- Zero overlap with any existing CVF version
+- Does NOT modify runtime (pre-runtime only)
+- Complements all existing layers without dependency
+
+### Decision
+**Integrate as `CVF v1.1.1 — Phase Governance Protocol` (Layer 1.5)**
+
+| Decision Point | Choice | Rationale |
+|---|---|---|
+| New version vs extend | Sub-extension of v1.1 | v1.1 defined governance principles; v1.1.1 implements development lifecycle enforcement |
+| New layer | Layer 1.5 (Development Governance) | Sits between Core (Layer 1) and Tools (Layer 2) — pre-code verification |
+| Naming | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL` | Follows CVF convention |
+
+**Decision Framework applied:**
+| Criterion | Result |
+|---|---|
+| Scope | New concept, but closely related to v1.1 governance principles |
+| Dependency | No dependency on specific versions — works independently |
+| User Impact | Must know if using structured AI development |
+
+→ **Sub-extension** (not new MAJOR version) — extends governance principles into development lifecycle.
+
+### Technical fixes during integration
+1. `scenario.generator.ts` — Added MAX_SCENARIOS=100, MAX_DEPTH=50, cycle-safe DFS with visited tracking
+2. `mermaid.parser.ts` — Added `toStateMachine()` converter to bridge Set/Map ↔ array/Record data structures
+3. `gate.result.ts` — Added R0–R3 canonical CVF risk level mapping with `deriveRiskLevel()`
+
+### Consequences
+- CVF architecture **expands from 5 layers to 6** (Layer 1.5 added)
+- Development governance = separate from runtime governance (no interference)
+- Future development tooling should extend v1.1.x chain
+- Phase Gate validation integrates with CVF audit trail
+
+### Related Files
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` (new)
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md` (updated: Layer 1.5 added, Section III table)
+- `docs/VERSIONING.md` (updated: v1.1.1 added)

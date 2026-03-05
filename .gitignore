@@ -57,6 +57,12 @@ Mini_Game/scores.db
 # Hypervisor Mode (restricted, not for public release)
 CVF_Hypervisor Mode/
 
+# CVF_AI Runtime (concept workspace — content mapped to EXTENSIONS/v1.8→v2.0)
+CVF_AI Runtime/
+
+# REVIEW folder (local temporary review workspace, not for public release)
+REVIEW/
+
 # Ignore all CVF documentation folders
 CVF_DOCS/
 

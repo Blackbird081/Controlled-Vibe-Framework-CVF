@@ -96,6 +96,11 @@ CVF = Governance Framework (Rules + Process + Tools)
 │     v1.3 — Python SDK + cvf-validate CLI                    │
 │     v1.3.1 — Operator Edition                               │
 │     v1.4 — Usage Layer                                      │
+│     v1.2.1 — External Integration (Implemented ✅)          │
+│     ● Skill Supply Chain: intake→validate→certify→publish   │
+│     ● Policy Decision Engine (6-layer precedence)           │
+│     ● Blockchain-style Governance Audit Ledger              │
+│     ● 29 tests | 100% pass                                  │
 │     governance/ — Compat scripts, CI/CD, Skill-library      │
 │     tools/     — Python validation scripts                  │
 ├─────────────────────────────────────────────────────────────┤
@@ -121,6 +126,7 @@ CVF = Governance Framework (Rules + Process + Tools)
 | v1.0 | Core Baseline | 1 | Active ✅ | `v1.0/` (root) |
 | v1.1 | Extended Control | 1 | Active ✅ | `v1.1/` (root) |
 | v1.2 | Skill Governance | 1 | Active ✅ | `CVF_v1.2_CAPABILITY_EXTENSION/` |
+| v1.2.1 | External Integration | 2 | **Implemented** ✅ | `CVF_v1.2.1_EXTERNAL_INTEGRATION/` |
 | v1.3 | SDK & Tooling | 2 | Active ✅ | `CVF_v1.3_IMPLEMENTATION_TOOLKIT/` |
 | v1.3.1 | Operator Edition | 2 | Active ✅ | `CVF_v1.3.1_OPERATOR_EDITION/` |
 | v1.4 | Usage Layer | 2 | Active ✅ | `CVF_v1.4_USAGE_LAYER/` |
@@ -272,6 +278,7 @@ Controlled-Vibe-Framework-CVF/
 ├── v1.1/                        ← Core: Extended control
 ├── EXTENSIONS/                  ← Tất cả extensions (v1.2 → v1.7.3)
 │   ├── CVF_v1.2_CAPABILITY_EXTENSION/
+│   ├── CVF_v1.2.1_EXTERNAL_INTEGRATION/     (Implemented ✅)
 │   ├── CVF_v1.3_IMPLEMENTATION_TOOLKIT/
 │   ├── CVF_v1.3.1_OPERATOR_EDITION/
 │   ├── CVF_v1.4_USAGE_LAYER/
@@ -325,7 +332,8 @@ Controlled-Vibe-Framework-CVF/
 | v1.8 Safety Hardening Tests | **42 passing** (12 describe blocks) |
 | v1.9 Reproducibility Tests | **29 passing** |
 | v2.0 Non-Coder Runtime Tests | **32 passing** |
-| **Total Kernel+Extension Tests** | **154 tests** |
+| v1.2.1 External Integration Tests | **29 passing** |
+| **Total Kernel+Extension Tests** | **183 tests** |
 | Web Coverage | 93.05% Stmts |
 | Kernel Coverage | 96.45% Stmts · 91.41% Branch · 99.09% Fn · 97.01% Lines |
 | Skills | 141 skills, 12 domains |

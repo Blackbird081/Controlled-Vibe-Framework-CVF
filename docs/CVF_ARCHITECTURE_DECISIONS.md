@@ -469,3 +469,56 @@ All content in `CVF_AI Runtime/` is governance specification (no production code
 - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/` (new, this commit)
 - `governance/compat/risk_level_mapping.md` (new, this commit)
 - `REVIEW/COMPAT_AI_Runtime.md` (compatibility assessment baseline)
+
+---
+
+## ADR-011: CVF v1.2.1 External Integration — Skill Supply Chain Pipeline
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-05 |
+| Status | Active |
+| Related commits | *(this commit)* |
+
+### Context
+A `CVF_external_integration/` folder was developed at CVF root containing a skill supply chain pipeline: intake → adapter → validator → certifier → publisher. It included models (raw/draft/certified), policies (trust/risk/domain/phase), governance hooks, and a blockchain-style audit ledger.
+
+Architecture Check Guard (9 questions) was completed. Results: 6/9 PASS, 3 needed work.
+
+### Decision
+**1. Integration as `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/`**
+
+- Placed in **Layer 2 (Tools)** — this is pipeline tooling, not governance rules (Layer 1) or runtime (Layer 2.5)
+- Version `1.2.1` = direct extension of v1.2 (Skill Governance: Registry, Risk model R0–R3)
+- Naming follows CVF convention: `CVF_v[MAJOR].[MINOR]_[NAME]`
+
+**2. Issues Fixed During Integration**
+
+| Issue | Fix |
+|-------|-----|
+| Folder outside `EXTENSIONS/` | Moved to `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/` |
+| 4 broken import paths | Fixed `../policy/` → `./policies/`, `../external_integration/models/` → `../models/` |
+| TS strict errors (`'current' possibly undefined`) | Added null guard in `verifyIntegrity()` loop |
+| `ExternalSkillSource` key mismatch (`skills_sh` vs `"skills.sh"`) | Fixed to quoted key `"skills.sh"`, removed non-existent `internal_repo` |
+| No R0–R3 mapping | Added canonical mapping: `low→R0, medium→R1, high→R2, critical→R3` |
+| No tests | Created 29-test suite covering state machine, risk mapping, audit ledger, policy engine |
+| No project config | Added `package.json`, `tsconfig.json`, `vitest.config.ts` |
+
+**3. Test-only: `GovernanceAuditLedger.reset()` added for test isolation** (static state shared across tests)
+
+### Rationale
+- v1.2 defines Skill Governance (registry, R0–R3 risk model). v1.2.1 adds the *mechanism* to ingest external skills through that governance.
+- Blockchain-style chained hash audit ledger provides enterprise-grade forensic trail.
+- Policy Decision Engine with 6-layer precedence + absolute reject layers (domain/phase) aligns with CVF's layered governance model.
+- State machine (raw → draft → validated → under_review → certified → promoted → production) enforces no-shortcut certification.
+
+### Consequences
+- `CVF_external_integration/` folder at root is deleted after migration.
+- External skill ingestion now has a formal governance pipeline with 29 passing tests.
+- Future skill imports must go through this pipeline — no direct insertion into Skill Library.
+- `REVIEW/CVF_EXTERNAL_INTEGRATION_REVIEW.md` contains the full Architecture Check Guard assessment.
+
+### Related Files
+- `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/` (new, this commit)
+- `REVIEW/CVF_EXTERNAL_INTEGRATION_REVIEW.md` (Architecture Check Guard assessment)
+

@@ -1,164 +1,175 @@
-# CVF-SGE v2.0
-Controlled Vibe Framework – Self-Governed Execution Engine
+# CVF v1.2.2 — Skill Governance Engine
+
+> **CVF Version:** v1.2.2 — Sub-extension of v1.2 (Skill Governance)  
+> **Layer:** 2 (Tools / Governance Tooling)  
+> **Status:** Implemented ✅  
+> **Integrated:** 2026-03-05 | **ADR:** ADR-012
 
 ---
 
 ## 1. Mục tiêu
 
-CVF-SGE v2.0 là một Execution Framework có khả năng:
+CVF v1.2.2 mở rộng Skill Governance của v1.2 (Registry, Risk R0–R3) bằng:
 
-- Quản lý nhiều nguồn skill (static + dynamic)
-- Đánh giá risk và cost trước khi thực thi
-- Tự xếp hạng và chọn skill tối ưu
-- Ghi nhận đầy đủ execution, cost và audit trail
-- Tự tiến hóa thông qua historical weighting
+- Chuẩn hóa skill theo **CVF Skill Spec Schema (CSS-1.0)**
+- Đánh giá risk và cost trước khi thực thi (R0–R3 canonical mapping)
+- Tự xếp hạng và chọn skill tối ưu qua **Fusion Intelligence**
+- Ghi nhận đầy đủ execution, cost và audit trail vào **Internal Ledger**
+- Tự tiến hóa an toàn qua **Evolution Engine** (có probation gate)
 
-Đây không phải là skill repository.
-Đây là một runtime intelligence layer có governance tích hợp.
+Đây không phải skill repository.  
+Đây là **Skill Governance & Selection Engine** xây trên CVF Constitution.
 
 ---
 
 ## 2. Kiến trúc tổng thể
 
-/policy → Quy tắc & ngưỡng kiểm soát
-/internal_ledger → Lưu trữ trạng thái & lịch sử
-/runtime → Thực thi & kiểm soát hợp đồng
-/fusion → Quyết định chọn skill đa yếu tố
-
+```
+/core          → Constitution + Governance Kernel + Phase Manager (với gate)
+/skill_system  → Spec / Governance / Fusion / Execution / Static / Dynamic / Adapter
+/evolution_engine → Trace → Pattern → Draft Skill → Probation → Governance Approve
+/intent        → Intent Classifier + Domain Mapper
+/policy        → global / domain / risk.matrix / cost.control
+/internal_ledger → skill_usage / risk_decision / dynamic_promotion / execution_trace
+```
 
 Luồng chính:
 
-Candidate Search
-→ Semantic Ranking
-→ Historical Weight
-→ Cost Optimization
-→ Final Selection
-→ Contract Enforcement
-→ Execution
-→ Logging & Cost Ledger
+```
+User Request → Intent Classifier
+→ Skill Search (static + dynamic)
+→ Fusion Ranking (semantic 35% + historical 20% + maturity 15% − risk 15% − cost 15%)
+→ GovernanceKernel.evaluate() ← Constitution + Risk + Integrity
+→ Phase Gate (critical phases require approval)
+→ Execution Runtime
+→ Ledger Logging → Evolution Engine
+```
 
 ---
 
 ## 3. Nguồn Skill được hỗ trợ
 
-Framework hỗ trợ 4 loại nguồn:
+| Nguồn | Loại | Vị trí |
+|---|---|---|
+| AI Research Skills | Static | `/skill_system/static/ai_research/` |
+| Application Skills | Static | `/skill_system/static/application/` |
+| Dynamic (Evolution) | Dynamic | `/skill_system/dynamic/approved/` |
+| External (skills.sh, GitHub) | External | Pull qua `/skill_system/external_adapter/` |
 
-- ai_research_skills
-- awesome_claude_skills
-- skills_sh
-- acontext_dynamic (injected runtime)
-
-Dynamic skill injection được quản lý qua internal ledger và không bypass governance.
+Dynamic skill không bao giờ tự động được approve — phải qua probation.
 
 ---
 
 ## 4. Governance Model
 
-Governance được phân tầng:
+Governance phân 4 tầng:
 
-- Global Policy (risk & execution rules)
-- Domain Policy (domain-specific constraint)
-- Risk Matrix (weighted factors)
-- Cost Control Policy (token & runtime limits)
+- **Constitution** (core/constitution.ts) — 5 STRICT rules, tối cao tuyệt đối
+- **Global Policy** (policy/global.policy.yaml) — Risk threshold ≤70, execution rules
+- **Domain Policy** (policy/domain.policy.yaml) — Domain-specific constraints
+- **Risk Matrix** (policy/risk.matrix.yaml) — Weighted risk factors
 
 Mọi execution phải đi qua:
 
-- Risk threshold check
-- Contract validation
-- Cost evaluation
-- Revocation check
-
-Không có execution trực tiếp.
+- Risk threshold check (≤70 = eligible)
+- Skill verification + integrity check
+- Phase Gate (GOVERNANCE_DECISION / EXECUTION phải được approve)
+- Không có execution trực tiếp.
 
 ---
 
-## 5. Fusion Intelligence
+## 5. Skill Spec Schema (CSS-1.0)
 
-Fusion layer hoạt động theo pipeline:
+Tất cả skill phải tuân theo schema tại `/skill_system/spec/skill.schema.yaml`:
 
-1. candidate.search.ts  
-   → Lọc skill theo domain + keyword
+**Các trường bắt buộc:** `id`, `name`, `description`, `version`, `type`, `domain`, `owner`, `maturity`, `risk_r_level`, `risk_profile`, `evaluation`
 
-2. semantic.rank.ts  
-   → Chấm điểm ngữ nghĩa theo query
+**R0–R3 Canonical Mapping:**
 
-3. historical.weight.ts  
-   → Tăng trọng số theo usage & maturity
-
-4. cost.optimizer.ts  
-   → Trừ điểm theo estimated cost
-
-5. final.selector.ts  
-   → Chọn skill cuối cùng theo risk threshold
-
-Fusion không thực thi.
-Fusion chỉ quyết định.
+| R Level | Numeric Score | Nghĩa |
+|---|---|---|
+| R0 | 0–20 | Passive — no side effects |
+| R1 | 21–40 | Controlled — small bounded changes |
+| R2 | 41–60 | Elevated — has authority |
+| R3 | 61–70 | Critical — hard gate required |
 
 ---
 
-## 6. Internal Ledger
+## 6. Maturity Model
 
-Internal ledger đảm bảo:
+```
+EXPERIMENTAL → PROBATION → STABLE → DEPRECATED
+```
 
-- Skill registry
-- Revocation tracking
-- Execution logging
-- Cost tracking
-- Audit trail
-
-Mọi hành động đều có thể truy vết.
-
----
-
-## 7. Runtime Layer
-
-Runtime chịu trách nhiệm:
-
-- Load skill hợp lệ
-- Enforce contract
-- Execute handler
-- Log execution
-- Ghi cost
-
-Runtime không quyết định chọn skill.
-Runtime không tự ý bypass policy.
+| Level | Điều kiện |
+|---|---|
+| EXPERIMENTAL | Import/generate, chưa test |
+| PROBATION | 5+ runs, success rate ≥ 70%, risk ≤ 60 |
+| STABLE | 20+ runs, success rate ≥ 85%, risk ≤ 80 |
+| DEPRECATED | Không còn execute được |
 
 ---
 
-## 8. Tính chất hệ thống
+## 7. Fusion Intelligence
 
-- Deterministic execution pipeline
-- Multi-factor skill selection
-- Risk-aware
-- Cost-aware
-- Audit-ready
-- Extensible nhưng không phá vỡ cấu trúc
+Công thức chọn skill:
+
+```
+Final Score =
+  (0.35 × semantic relevance)
++ (0.20 × historical success rate)
++ (0.15 × maturity level weight)
+− (0.15 × risk penalty)
+− (0.15 × cost penalty)
+```
+
+Fusion chỉ quyết định — không thực thi.
 
 ---
 
-## 9. Không phải
+## 8. Evolution Engine
 
-- Không phải chatbot
-- Không phải skill marketplace
-- Không phải LLM wrapper đơn thuần
+```
+Execution → Trace (experience.collector.ts)
+→ Analysis (trace.analyzer.ts)
+→ Pattern Distill (pattern.distiller.ts)
+→ Draft Skill (dynamic_skill.generator.ts)
+→ Probation (skill.probation.manager.ts)
+→ Governance Submit (governance.submitter.ts)
+→ Approved / Rejected
+```
 
-Đây là một Self-Governed Execution Engine.
+Dynamic skill KHÔNG bao giờ auto-approved.
+
+---
+
+## 9. CVF Compatibility
+
+| Nguyên tắc CVF | Tuân thủ |
+|---|---|
+| Human authority — con người quyết định cuối | ✅ Constitution không thể override |
+| Safety over speed | ✅ Risk gate trước mọi execution |
+| No silent mutation | ✅ Internal Ledger log mọi thứ |
+| Backward compatibility | ✅ Không phá v1.2 hay v1.2.1 |
+| Audit trail mandatory | ✅ 4 log files trong /internal_ledger/ |
 
 ---
 
 ## 10. Versioning
 
-Current Version: v2.0
+**Current:** CVF v1.2.2 (Skill Governance Engine)
 
-Nếu cần bổ sung:
+**Chuỗi v1.2.x:**
 
-- Multi-agent governance
-- Phase binding enforcement
-- External compliance layer
+| Version | Tên | Nội dung |
+|---|---|---|
+| v1.2 | Skill Governance | Registry + Risk R0–R3 |
+| v1.2.1 | External Integration | Supply chain pipeline |
+| v1.2.2 | Skill Governance Engine | Schema + Fusion + Evolution ← bạn đang ở đây |
 
-→ Sẽ nâng lên v2.1 và bổ sung layer mới
-không thay đổi core structure.
+Nếu cần bổ sung (multi-agent governance, external compliance layer) → mở `v1.2.3`.  
+Không bao giờ bump lên v2.x vì CVF v2.x là territory của Non-Coder Safety UI.
 
 ---
 
-End of README.
+*Updated: 2026-03-05 | See [ADR-012](../../docs/CVF_ARCHITECTURE_DECISIONS.md) for integration rationale.*

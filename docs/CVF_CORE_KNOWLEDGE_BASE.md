@@ -381,6 +381,73 @@ Tất cả 9 checkbox phải được check trước khi bắt đầu implement.
 
 ---
 
+## XIV. CVF EXTENSION RULES (Bất di bất dịch)
+
+> 🔒 **Ượu tiên cao nhất.** Ba quy tắc này áp dụng cho mọi thứ được bổ sung vào CVF, không có ngoại lệ.
+
+### RULE 1 — Cấu trúc hiện tại luôn là chuẩn
+
+> **CVF củ luôn là điểm tham chiếu, không phải philosphy mới.**
+
+- Cấu trúc CVF hiện tại (5 layers, version history, 4-Phase Process, Risk Model R0–R3) là **ground truth**
+- Bất kỳ đề xuất nào MUỐN đặt lại tên, redefine, hay "cải tiến" cấu trúc cũ → phải hỏi **tại sao cấu trúc cũ chưa đủ** thay vì replace nó
+- Người muốn sửa structure hiện tại phải viết ADR và có approval rõ ràng
+
+```
+❌ SAI:  "Cấu trúc cũ hạn chế, tôi đề xuất 6-layer mới"
+✅ ĐÚNG: "Tôi muốn thêm Layer 5.5 giữa Adapter và Safety UI vì [lý do cụ thể]"
+```
+
+---
+
+### RULE 2 — Mọi addition phải tương thích và bổ sung, không thay thế
+
+> **Nâng cấp CVF = thêm vào, không phải viết lại.**
+
+- Mọi version mới phải **interoperate** với tất cả version đã tồn tại
+- Không được **silent-replace** bất kỳ component nào — nếu cần replace, viết ADR trước
+- **Test backward compat** trước khi propose: chạy `governance/compat/check_core_compat.py`
+- Phương châm: **"CVF 1.9 không phá 1.8. CVF 2.0 không phá 1.9."**
+
+```
+❌ SAI:  "Module mới sẽ thay thế Risk Model cũ"
+✅ ĐÚNG: "Module mới thêm numeric scoring, dùng song song với R0–R3, có mapping chính thức"
+```
+
+---
+
+### RULE 3 — Governance và Naming phải theo chuẩn CVF
+
+> **Không tư ý đặt tên version, layer, hay guard mới.**
+
+**Version naming:**
+```
+Đúng:  CVF_v[MAJOR].[MINOR]_[TEN_VIET_HOA]
+         ví dụ: CVF_v1.8_SAFETY_HARDENING
+Đưa cho AI: CVF_v1.8_ENHANCED_KERNEL (không rõ nội dung)
+```
+
+**Layer naming:**
+```
+Đúng:  LAYER [N] — [MÔ TẢ CHỤC NĂNG]
+         ví dụ: LAYER 5 — ADAPTER HUB
+Đưa cho AI: "AI Execution Layer" (không rõ vị trí trong 5-layer)
+```
+
+**Guard naming:**
+```
+ĐúNG: CVF_[MỤC_ĐÍCH]_GUARD.md
+        ví dụ: CVF_ARCHITECTURE_CHECK_GUARD.md
+Đưa cho AI: "new_safety_rules.md" (không follow convention)
+```
+
+**Governance additions:** Phải với:
+- Scope rõ ràng (trigger condition, what it covers)
+- Không duplicate guard đã tồn tại
+- ADR entry vì mang ý nghĩa architectural decision
+
+---
+
 > **Cập nhật file này khi:** CVF có major structural change hoặc new layer/version được chính thức release.
 > **Không cập nhật khi:** Chỉ thêm skills, fix bugs, hoặc update docs thông thường.
 > **Vị trí cố định:** `docs/CVF_CORE_KNOWLEDGE_BASE.md` — không được di chuyển hay đổi tên.

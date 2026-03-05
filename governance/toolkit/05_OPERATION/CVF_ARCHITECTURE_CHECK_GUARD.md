@@ -7,6 +7,21 @@
 
 ---
 
+## 0. CVF EXTENSION RULES — ƯỨU TIÊN CAO NHẤT
+
+Ba quy tắc này áp dụng cho **mọi thứ** được thêm vào CVF. Chúng có ưu tiên cao hơn mọi quy tắc khác.
+
+| # | Rule | Nội dung |
+|---|------|----------|
+| **R1** | **Cấu trúc hiện tại luôn là chuẩn** | CVF hiện tại là ground truth. Không được redefine hay replace cấu trúc cũ — phải viết ADR + approval nếu muốn thay đổi |
+| **R2** | **Addition phải tương thích, không thay thế** | Mọi version mới interoperate với version cũ. Không silent-replace. Test backward compat trước khi propose |
+| **R3** | **Naming và Governance theo chuẩn CVF** | Version: `CVF_v[x.y]_[TEN]`. Layer: `LAYER [N] — [MÔ_TẢ]`. Guard: `CVF_[MỤC_ĐÍCH]_GUARD.md`. Không tùy tiện đặt tên |
+
+> **Vi phạm bất kỳ rule nào → proposal bị reject ngay, không cần review tiếp.**
+> Xem full detail: `docs/CVF_CORE_KNOWLEDGE_BASE.md` Section XIV.
+
+---
+
 ## 1. PURPOSE
 
 **Before proposing or implementing anything new in CVF** — a new version, layer, extension, module, or feature — you MUST first read and understand the current CVF architecture through `docs/CVF_CORE_KNOWLEDGE_BASE.md`.

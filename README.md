@@ -47,6 +47,12 @@ Only run full regression when gate/triggers require it.
 
 > 🗺️ **Architecture Check Rule:** Before proposing ANY new version, layer, extension, or module for CVF, you MUST first read [`docs/CVF_CORE_KNOWLEDGE_BASE.md`](docs/CVF_CORE_KNOWLEDGE_BASE.md) and explicitly state: the target Layer (1–5), overlap check result, what it extends, and which core principles apply. See [Architecture Check Guard](governance/toolkit/05_OPERATION/CVF_ARCHITECTURE_CHECK_GUARD.md).
 
+> 🔒 **CVF Extension Rules (Non-negotiable):**
+> **R1** — Existing CVF structure is always the standard. No redefinition without ADR + approval.
+> **R2** — New additions must be compatible and additive — upgrade, never replace.
+> **R3** — Naming (version/layer/guard) must follow CVF conventions — no arbitrary naming.
+> See full rules: [`docs/CVF_CORE_KNOWLEDGE_BASE.md` Section XIV](docs/CVF_CORE_KNOWLEDGE_BASE.md).
+
 ---
 
 ## 🎯 CVF In 30 Seconds

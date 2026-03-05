@@ -51,6 +51,7 @@ CVF = Governance Framework (Rules + Process + Tools)
 │     4 runtime adapters: OpenClaw / PicoClaw /               │
 │                          ZeroClaw / Nano                     │
 │     Kết nối Safety Dashboard với runtime execution          │
+│     + Edge Security (PII/Secret masking, injection precheck) │
 ├─────────────────────────────────────────────────────────────┤
 │  🛡️ LAYER 4 — SAFETY UI (Non-Coder Interface)               │
 │     v1.7.2 — Safety Dashboard (Read-only risk view)         │
@@ -91,6 +92,10 @@ CVF = Governance Framework (Rules + Process + Tools)
 │     ● ExecutionRecord (9-field, immutable)                  │
 │     ● Context Freezer + Replay Engine + Forensic audit      │
 │     ● 5 modules | 29 tests | 100% pass                     │
+│     v1.8.1 — Adaptive Observability Runtime (Implemented ✅)│
+│     ● Adaptive Governance: risk→mode→guard feedback loop   │
+│     ● Observability: telemetry, satisfaction, cost, regress │
+│     ● 10 observability modules + 3 stores + 4 dashboards   │
 ├─────────────────────────────────────────────────────────────┤
 │  🛠️ LAYER 2 — TOOLS (Validation + Automation)               │
 │     v1.3 — Python SDK + cvf-validate CLI                    │
@@ -147,6 +152,7 @@ CVF = Governance Framework (Rules + Process + Tools)
 | v1.7.2 | Safety Dashboard | 4 | Active 🛡️ | `CVF_v1.7.2_SAFETY_DASHBOARD/` |
 | v1.7.3 | Runtime Adapter Hub | 5 | **CURRENT** 🔌 | *(integrated)* |
 | v1.8 | Safety Hardening | 2.5 | **Implemented** ✅ | `CVF_v1.8_SAFETY_HARDENING/` |
+| v1.8.1 | Adaptive Observability Runtime | 2.5+3 | **Implemented** ✅ | `CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` |
 | v1.9 | Deterministic Reproducibility | 2.5 | **Implemented** ✅ | `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` |
 | v2.0 | Non-Coder Safety Runtime | 4 | **Implemented** ✅ | `CVF_v2.0_NONCODER_SAFETY_RUNTIME/` |
 

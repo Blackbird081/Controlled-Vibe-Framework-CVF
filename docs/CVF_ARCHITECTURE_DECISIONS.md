@@ -590,3 +590,55 @@ Ví dụ đúng version mới:       Ví dụ đúng mở rộng:
 - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` (new, this commit)
 - `docs/CVF_CORE_KNOWLEDGE_BASE.md` (updated: Section II Layer 2, Section III table)
 - `docs/VERSIONING.md` (updated: v1.2.2 added to Current Status)
+
+---
+
+## ADR-013: CVF_Layer AI Stack — Refactoring & Integration Decision
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-05 |
+| Status | Active |
+| Related commits | *(this commit)* |
+
+### Context
+A `CVF_Layer AI Stack` folder was added at CVF root containing a **compound system** — 3 external repos (Skill Evolver, AgentVeil, SkillsEntry) + 1 new Adaptive Governance layer, all mixed in a single folder with 6 subdirectories.
+
+**Problem:** The folder spanned 4 CVF layers (2, 2.5, 3, 4) in one place. README self-identified as "CVF v1.8" but contained content far beyond v1.8 scope. This caused:
+- Layer confusion (where does each component belong?)
+- Version ambiguity (is this v1.8? v3.0? something else?)
+- Naming violation (not following `CVF_v[X].[Y]_[NAME]` convention)
+
+### Decision
+**Refactor the compound system into 3 separate destinations:**
+
+| Component | Source | Destination | Version | Rationale |
+|---|---|---|---|---|
+| Adaptive Governance + Observability | `governance/adaptive*` + `observability/` + `storage/` + `ui/` + `sdk/` | `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` | v1.8.1 | Tight coupling (skill.risk.score.ts imports from both observability/ and storage/). Natural extension of v1.8 Safety Hardening. |
+| Edge Security | `runtime/edge_security/` | `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security/` | merge into v1.7.3 | Pre-kernel network layer = natural extension of v1.7.3 adapter hub. Not a new version. |
+| Security Scanner | `governance/security_scanner/` | `tools/skill_security_scanner/` | n/a (tool) | Pre-install static analysis tool = Layer 2 (Tools). Was incorrectly placed under governance/. |
+
+**Why NOT v3.0?** Applying Decision Framework (3 criteria from ADR-012):
+
+| Criterion | Test Result |
+|---|---|
+| Scope | Adaptive Governance = extension of v1.8; Observability = new but coupled to adaptive; Edge Security = extension of v1.7.3; Scanner = tool |
+| Dependency | Each part naturally extends a specific existing version |
+| User Impact | All optional — basic CVF users can skip |
+
+**All 3 criteria point to "extend existing versions" — no new MAJOR version needed.**
+
+### Consequences
+- `CVF_Layer AI Stack/` folder at root to be removed after integration
+- v1.8.1 inherits v1.8's Layer 2.5 placement, extends into Layer 3 (observability)
+- v1.7.3 gains edge_security subfolder — backward compatible, additive only
+- tools/ gains skill_security_scanner — standalone Layer 2 tool
+- Future observability improvements should extend v1.8.x chain
+- Future edge security improvements should extend v1.7.x chain
+
+### Related Files
+- `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` (new)
+- `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security/` (new subfolder)
+- `tools/skill_security_scanner/` (new)
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md` (updated: Section II Layer 2.5+5, Section III table)
+- `docs/VERSIONING.md` (updated: v1.8.1 added)

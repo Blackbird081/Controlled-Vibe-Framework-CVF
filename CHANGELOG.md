@@ -2,6 +2,29 @@
 
 ---
 
+## [2026-03-05] — CVF_Layer AI Stack Integrated (v1.8.1 + v1.7.3 update + tools/)
+
+### Added
+- **CVF v1.8.1 Adaptive Observability Runtime** — `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/`
+  - **Adaptive Governance**: Risk-based enforcement feedback loop (normal/moderate/strict/block)
+  - **Observability**: 10 modules — telemetry, satisfaction, cost, regression, health, A/B testing
+  - **Storage**: metrics.store, audit.store, snapshot.store
+  - **UI Dashboards**: risk, skill analytics, cost, security audit
+  - **SDK**: cvf.client.ts + integration.hooks.ts
+- **Edge Security** merged into v1.7.3 Runtime Adapter Hub — PII detector, secret detector, injection precheck, vault + rehydration
+- **Skill Security Scanner** — `tools/skill_security_scanner/` — pre-install static security analysis (behavior chain, obfuscation, base64 decode, prompt injection)
+- **ADR-013** — CVF_Layer AI Stack refactoring decision: tách compound system thành 3 đích đến
+
+### Architecture decisions
+- CVF_Layer AI Stack = compound system (3 repos + 1 layer) → refactored into 3 đích đến:
+  - Adaptive + Observability (tight coupling) → v1.8.1 (sub-extension of v1.8, Layer 2.5+3)
+  - Edge Security → merge vào v1.7.3 (natural extension, Layer 5)
+  - Security Scanner → tools/ (Layer 2 static analysis tool)
+- Không tạo v3.0 — áp dụng Decision Framework: chưa đủ scope cho MAJOR version mới
+- `CVF_Layer AI Stack/` folder at root sẽ bị xóa sau khi tích hợp xong
+
+---
+
 ## [2026-03-05] — v1.2.2 Skill Governance Engine Integrated
 
 ### Added

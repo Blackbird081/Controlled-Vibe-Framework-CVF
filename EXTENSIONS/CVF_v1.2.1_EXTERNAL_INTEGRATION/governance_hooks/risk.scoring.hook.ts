@@ -1,6 +1,6 @@
 // risk.scoring.hook.ts
 
-import { RiskLevel } from "../policy/risk.threshold.policy";
+import { RiskLevel } from "../policies/risk.threshold.policy";
 
 export interface RiskScoringContext {
 

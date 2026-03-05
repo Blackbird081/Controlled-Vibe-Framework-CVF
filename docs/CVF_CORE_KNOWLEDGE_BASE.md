@@ -1,5 +1,7 @@
 # 🗺️ CVF CORE KNOWLEDGE BASE — Architectural Map
 
+> **Developed by Tien - Tan Thuan Port@2026**
+
 > **Loại tài liệu:** Governance Reference (Permanent)
 > **Mục đích:** Bản đồ kiến trúc toàn diện của CVF gốc.
 > Dùng để **định vị nhanh** bất kỳ extension/version/layer mới vào đúng chỗ trong cấu trúc,

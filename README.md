@@ -1,5 +1,7 @@
 # Controlled Vibe Framework (CVF)
 
+> **Developed by Tien - Tan Thuan Port@2026**
+
 > **Controlled vibe coding — not faster, but smarter.**
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)

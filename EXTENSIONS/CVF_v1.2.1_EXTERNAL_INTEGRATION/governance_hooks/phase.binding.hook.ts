@@ -1,6 +1,6 @@
 // phase.binding.hook.ts
 
-import { CVFPhase } from "../policy/phase.binding.policy";
+import { CVFPhase } from "../policies/phase.binding.policy";
 
 export interface PhaseBindingContext {
 

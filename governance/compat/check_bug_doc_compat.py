@@ -149,6 +149,12 @@ def _print_report(report: dict[str, Any], base: str, head: str) -> None:
 
 
 def main() -> int:
+    # Avoid UnicodeEncodeError on legacy Windows consoles (cp1252).
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(errors="replace")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(errors="replace")
+
     parser = argparse.ArgumentParser(
         description="CVF Bug Documentation compatibility gate"
     )

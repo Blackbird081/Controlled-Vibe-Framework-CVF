@@ -39,9 +39,25 @@ export function generateScenarios(
 
   }
 
-  // Only start from initial state (first in states array)
-  if (machine.states.length > 0) {
-    walk(machine.states[0], [], new Set([machine.states[0]]))
+  const incoming = new Map<string, number>()
+  machine.states.forEach(s => incoming.set(s, 0))
+
+  for (const targets of Object.values(machine.transitions)) {
+    for (const to of targets) {
+      incoming.set(to, (incoming.get(to) ?? 0) + 1)
+    }
+  }
+
+  const startStates = machine.states.filter(s => (incoming.get(s) ?? 0) === 0)
+  const entrypoints = startStates.length > 0
+    ? startStates
+    : machine.states.length > 0
+      ? [machine.states[0]]
+      : []
+
+  for (const start of entrypoints) {
+    if (scenarios.length >= maxScenarios) break
+    walk(start, [], new Set([start]))
   }
 
   return scenarios

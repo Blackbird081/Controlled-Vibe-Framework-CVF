@@ -25,7 +25,10 @@ function isLikelyBase64(str: string): boolean {
 
 function safeDecodeBase64(str: string): string | null {
   try {
-    const buffer = Buffer.from(str, 'base64')
+    const BufferCtor = (globalThis as any).Buffer
+    if (!BufferCtor) return null
+
+    const buffer = BufferCtor.from(str, 'base64')
     const decoded = buffer.toString('utf-8')
 
     // Reject if decoded contains too many non-printable chars
@@ -60,4 +63,13 @@ export function decodeBase64Blocks(content: string): DecodedBlock[] {
   }
 
   return results
+}
+
+export function decodeSuspiciousContent(content: string): string | null {
+  const decoded = decodeBase64Blocks(content)
+    .filter(b => b.isValid && b.decoded.trim().length > 0)
+    .map(b => b.decoded.trim())
+
+  if (decoded.length === 0) return null
+  return decoded.join('\n')
 }

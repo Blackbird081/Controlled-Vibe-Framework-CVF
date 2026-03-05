@@ -2,7 +2,7 @@
 // Maps user's SafetyMode selection → KernelPolicy for v1.8 LifecycleController.
 // The kernel treats these as immutable hard limits.
 
-import type { SafetyMode, KernelPolicy } from '../types/index.js'
+import type { SafetyMode, KernelPolicy } from '../../types/index.js'
 
 const POLICIES: Record<SafetyMode, KernelPolicy> = {
     SAFE: {

@@ -61,8 +61,15 @@ export class GovernanceAuditLedger {
 
     const baseEntry: Omit<GovernanceLedgerEntry, "hash"> = {
       index,
-      previous_hash,
-      ...entryData
+      timestamp: entryData.timestamp,
+      skill_id: entryData.skill_id,
+      event_type: entryData.event_type,
+      from_state: entryData.from_state,
+      to_state: entryData.to_state,
+      decision: entryData.decision,
+      actor: entryData.actor,
+      metadata: entryData.metadata,
+      previous_hash
     };
 
     const hash = this.computeHash(baseEntry);

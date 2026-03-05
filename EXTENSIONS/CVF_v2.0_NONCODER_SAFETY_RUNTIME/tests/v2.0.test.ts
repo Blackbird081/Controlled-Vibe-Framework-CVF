@@ -98,6 +98,12 @@ describe('ModeMapper — Stability Index override', () => {
     it('SAFE mode unaffected by stability', () => {
         expect(mapper.applyStabilityOverride('SAFE', 30)).toBe('SAFE')
     })
+
+    it('returns complete policy map', () => {
+        const policies = mapper.getAllPolicies()
+        expect(Object.keys(policies).sort()).toEqual(['BALANCED', 'CREATIVE', 'SAFE'])
+        expect(policies.SAFE.riskCeiling).toBe('R1')
+    })
 })
 
 // ─── IntentInterpreter ────────────────────────────────────────────────────────

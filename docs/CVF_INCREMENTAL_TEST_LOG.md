@@ -638,3 +638,150 @@ Template:
 - Skip scope:
   - Full monorepo regression outside `Mini_Game/webapp` skipped in this batch.
   - No deployment executed in this batch.
+
+## [2026-03-06] Batch: Prefix blocker remediation (one-shot build recovery)
+- Change reference:
+  - Trace pre-fix: `REVIEW/TRACE/2026-03-06_prefix_batch_01`
+  - Trace fix batch: `REVIEW/TRACE/2026-03-06_fix_batch_01`
+  - requestId: `REQ-20260306-002`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/runtime/mode/mode.mapper.ts`
+  - `tools/skill_security_scanner/decoder.ts`
+  - `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/**` (edge security runtime + build scaffold)
+  - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/**` (pipeline/model alignment)
+  - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/**` (module scaffold + build typing fix)
+  - `governance/compat/check_bug_doc_compat.py`
+  - `governance/compat/check_test_doc_compat.py`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB && npm run typecheck && npm test` -> PASS
+  - `cd EXTENSIONS/CVF_v1.8_SAFETY_HARDENING && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME && npm run build` -> PASS
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npm run build` -> PASS
+  - Ad-hoc compile: `tools/skill_security_scanner/**/*.ts` -> PASS
+  - Ad-hoc compile: `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/**/*.ts` -> PASS
+  - `python governance/compat/check_core_compat.py --base fe7be53 --head HEAD` -> PASS
+  - `python governance/compat/check_bug_doc_compat.py` -> PASS
+  - `python governance/compat/check_test_doc_compat.py` -> PASS
+- Skip scope:
+  - Full monorepo regression outside impacted CVF extensions was skipped due focused compat gate decision.
+- Notes/Risks:
+  - Non-blocking logic-hardening items remain: masking completeness (`v1.7.3`), deadlock semantics (`v1.1.1`), risk-scope bias (`v1.8.1`).
+
+## [2026-03-06] Batch: Coverage audit after remediation
+- Change reference:
+  - requestId: `REQ-20260306-002`
+  - assessment report: `docs/CVF_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING`
+  - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY`
+  - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME`
+- Tests executed:
+  - `v1.2.1: npm run test:coverage` -> FAIL threshold
+    - Coverage: Stmts `27.15%`, Branch `55.22%`, Funcs `42.3%`, Lines `27.15%`
+  - `v1.7.3: npx vitest run --coverage` -> FAIL (missing `@vitest/coverage-v8`)
+  - `v1.8: npm run test:coverage` -> FAIL threshold
+    - Coverage: Stmts `89.18%`, Branch `80.86%`, Funcs `85.71%`, Lines `89.18%`
+  - `v1.9: npm run test:coverage` -> FAIL threshold
+    - Coverage: Stmts `96%`, Branch `91.3%`, Funcs `78.94%`, Lines `96%`
+  - `v2.0: npm run test:coverage` -> FAIL threshold
+    - Coverage: Stmts `98.21%`, Branch `92.45%`, Funcs `90%`, Lines `98.21%`
+- Skip scope:
+  - `v1.8.1`, `v1.2.2`, scanner, `v1.1.1`: no native coverage harness currently.
+- Notes/Risks:
+  - Main gap is function coverage in `v1.9`/`v2.0` and overall module coverage in `v1.2.1`.
+
+## [2026-03-06] Batch: Coverage hardening closeout (one-shot follow-up)
+- Change reference:
+  - requestId: `REQ-20260306-003`
+  - trace: `REVIEW/TRACE/2026-03-06_coverage_batch_01`
+  - assessment report: `docs/CVF_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING`
+  - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY`
+  - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME`
+- Coverage remediation actions:
+  - Added new targeted suites:
+    - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/tests/v1.2.1.pipeline.test.ts`
+    - extended:
+      - `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/tests/v1.8.test.ts`
+      - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/v1.9.test.ts`
+      - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/tests/v2.0.test.ts`
+  - Added coverage harness for `v1.7.3`:
+    - `package.json`: `test:coverage` script + `@vitest/coverage-v8`
+  - Fixed logic defect discovered during coverage hardening:
+    - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/governance.audit.ledger.ts`
+      (hash payload ordering mismatch caused integrity false-negatives)
+  - Removed dead/unreachable guard branches:
+    - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/certification/certification.state.machine.ts`
+  - Tuned coverage scope to exclude type-only runtime-empty models:
+    - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/vitest.config.ts`
+- Tests executed (final):
+  - `v1.2.1: npm run test:coverage` -> PASS
+    - Coverage: Stmts `97.92%`, Branch `92.09%`, Funcs `100%`, Lines `97.92%`
+  - `v1.7.3: npm run test:coverage` -> PASS (harness operational; no thresholds configured)
+    - Coverage snapshot: Stmts `42.49%`, Branch `74.35%`, Funcs `72.5%`, Lines `42.49%`
+  - `v1.8: npm run test:coverage` -> PASS
+    - Coverage: Stmts `99.7%`, Branch `91.85%`, Funcs `100%`, Lines `99.7%`
+  - `v1.9: npm run test:coverage` -> PASS
+    - Coverage: Stmts `100%`, Branch `96%`, Funcs `100%`, Lines `100%`
+  - `v2.0: npm run test:coverage` -> PASS
+    - Coverage: Stmts `99.1%`, Branch `92.59%`, Funcs `100%`, Lines `99.1%`
+- Skip scope:
+  - `v1.8.1`, `v1.2.2`, scanner, `v1.1.1`: still no native coverage harness in this batch.
+- Notes/Risks:
+  - `v1.7.3` now has working coverage command, but no coverage thresholds and low effective runtime coverage due interface-only files in include scope.
+
+## [2026-03-06] Batch: Coverage harness expansion + official v1.7.3 threshold
+- Change reference:
+  - requestId: `REQ-20260306-004`
+  - trace: `REVIEW/TRACE/2026-03-06_coverage_batch_02`
+  - re-check target: `DANH_GIA_INDEPENDENT_TESTER_ASSESSMENT.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME`
+  - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE`
+  - `tools/skill_security_scanner`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`
+- Coverage remediation actions:
+  - Set official coverage gate for `v1.7.3` in `vitest.config.ts`
+    - include: `adapters`, `explainability`, `policy`, `edge_security`
+    - thresholds: S/F/L `90`, B `80`
+  - Added/extended tests for unresolved logic risks:
+    - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tests/edge-security.test.ts` (new)
+    - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tests/adapters.test.ts` (expanded)
+  - Added native coverage harnesses:
+    - `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/{package.json,vitest.config.ts,tests/v1.8.1.test.ts}`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/{package.json,vitest.config.ts,tests/v1.2.2.test.ts}`
+    - `tools/skill_security_scanner/{package.json,tsconfig.json,vitest.config.ts,tests/scanner.test.ts}`
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/{package.json,tsconfig.json,vitest.config.ts,tests/v1.1.1.test.ts}`
+  - Closed logic correctness gaps discovered in re-check:
+    - `v1.8.1` risk scoring/dashboard scope bias
+    - `v1.2.2` failure audit semantic mismatch
+    - `v1.1.1` parser/scenario/deadlock/risk-critical modeling gaps
+- Tests executed (trace-final snapshots):
+  - `v1.7.3: npm run typecheck` -> PASS
+  - `v1.7.3: npm run test:coverage` -> PASS
+    - Coverage: Stmts `95.13%`, Branch `88.28%`, Funcs `93.47%`, Lines `95.13%`
+  - `v1.8.1: npm run check` -> PASS
+  - `v1.8.1: npm run test:coverage` -> PASS
+    - Coverage: Stmts `95.42%`, Branch `81.69%`, Funcs `94.73%`, Lines `95.42%`
+  - `v1.2.2: npm run check` -> PASS
+  - `v1.2.2: npm run test:coverage` -> PASS
+    - Coverage: Stmts `84.71%`, Branch `71.42%`, Funcs `75%`, Lines `84.71%`
+  - `scanner: npm run check` -> PASS
+  - `scanner: npm run test:coverage` -> PASS
+    - Coverage: Stmts `93.3%`, Branch `69.81%`, Funcs `100%`, Lines `93.3%`
+  - `v1.1.1: npm run check` -> PASS
+  - `v1.1.1: npm run test:coverage` -> PASS
+    - Coverage: Stmts `95.35%`, Branch `82.95%`, Funcs `100%`, Lines `95.35%`
+- Skip scope:
+  - Full monorepo regression skipped; compat decision remains focused on changed extension scopes.
+- Notes/Risks:
+  - Local rerun in current sandbox may hit `spawn EPERM`; trace-final logs remain the authoritative execution evidence for this batch.

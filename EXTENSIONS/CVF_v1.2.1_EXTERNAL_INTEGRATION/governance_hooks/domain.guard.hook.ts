@@ -1,8 +1,7 @@
 // domain.guard.hook.ts
 
-import { CVFDomain } from "../policy/domain.binding.policy";
-import { CVFPhase } from "../policy/phase.binding.policy";
-import { PolicyDecisionEngine } from "../policy/policy.decision.engine";
+import { CVFDomain } from "../policies/domain.binding.policy";
+import { CVFPhase } from "../policies/phase.binding.policy";
 
 export interface DomainGuardContext {
 

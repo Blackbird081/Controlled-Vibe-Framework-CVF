@@ -79,6 +79,16 @@ describe('ContextFreezer', () => {
         expect(() => freezer.get('no-such-exec')).toThrow('no frozen context')
     })
 
+    it('reports has() and computes hash for retrieved snapshot', () => {
+        freezer.freeze('exec-has-1', makeFileHashes(), 'v1.0', { NODE_ENV: 'test' })
+        expect(freezer.has('exec-has-1')).toBe(true)
+        expect(freezer.has('exec-has-missing')).toBe(false)
+
+        const snapshot = freezer.get('exec-has-1')
+        const hash = freezer.computeHashForSnapshot(snapshot)
+        expect(hash).toHaveLength(16)
+    })
+
     it('detects context drift — changed file', () => {
         freezer.freeze('exec-1', makeFileHashes(), 'v1.0')
         const drift = freezer.detectDrift('exec-1', makeFileHashes({ 'src/config.ts': 'NEW-HASH' }))
@@ -217,6 +227,21 @@ describe('ExecutionSnapshot', () => {
         expect(retrieved.executionId).toBe('exec-4')
     })
 
+    it('reports has() and listAll() for stored records', () => {
+        store.capture({
+            executionId: 'exec-5',
+            role: 'dev',
+            mode: 'SAFE',
+            frozenContextHash: 'ctx-5',
+            riskHash: 'risk-5',
+            mutationFingerprint: 'mut-5',
+            snapshotId: 'snap-5',
+        })
+        expect(store.has('exec-5')).toBe(true)
+        expect(store.has('exec-missing')).toBe(false)
+        expect(store.listAll()).toContain('exec-5')
+    })
+
     it('throws if record not found', () => {
         expect(() => store.get('no-such')).toThrow('no record')
     })
@@ -267,6 +292,16 @@ describe('ReplayEngine', () => {
         expect(result.contextDrift).toContain('src/config.ts')
     })
 
+    it('reports risk drift when currentRiskScore is provided', () => {
+        setupExecution('exec-replay-risk')
+        const result = engine.replay('exec-replay-risk', {
+            currentFileHashes: makeFileHashes(),
+            currentRiskScore: 7,
+        })
+        expect(result.status).toBe('EXACT')
+        expect(result.riskDrift).toBe(7)
+    })
+
     it('returns FAILED for unknown executionId', () => {
         const result = engine.replay('no-such-exec', { currentFileHashes: makeFileHashes() })
         expect(result.status).toBe('FAILED')
@@ -314,6 +349,13 @@ describe('ReplayValidator', () => {
         const result = validator.validate(record)
         expect(result.valid).toBe(false)
         expect(result.errors.some(e => e.includes('Invalid mode'))).toBe(true)
+    })
+
+    it('fails if timestamp is in the future', () => {
+        const record = makeRecord({ timestamp: Date.now() + 5000 })
+        const result = validator.validate(record)
+        expect(result.valid).toBe(false)
+        expect(result.errors.some(e => e.includes('timestamp is in the future'))).toBe(true)
     })
 
     it('assertValid throws on invalid record', () => {

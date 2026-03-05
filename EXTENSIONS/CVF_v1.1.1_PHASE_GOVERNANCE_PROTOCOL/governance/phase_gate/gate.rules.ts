@@ -18,12 +18,14 @@ export class GateRules {
 
     checks.push({
       rule: "feature_spec_exists",
-      passed: artifacts.hasArtifact("feature.spec")
+      passed: artifacts.hasArtifact("feature.spec"),
+      critical: true
     });
 
     checks.push({
       rule: "state_machine_exists",
-      passed: artifacts.hasArtifact("state.machine")
+      passed: artifacts.hasArtifact("state.machine"),
+      critical: true
     });
 
     checks.push({
@@ -33,12 +35,14 @@ export class GateRules {
 
     checks.push({
       rule: "implementation_exists",
-      passed: artifacts.hasArtifact("implementation")
+      passed: artifacts.hasArtifact("implementation"),
+      critical: true
     });
 
     checks.push({
       rule: "unit_tests_exist",
-      passed: artifacts.hasArtifact("unit.tests")
+      passed: artifacts.hasArtifact("unit.tests"),
+      critical: true
     });
 
     checks.push({

@@ -1,15 +1,23 @@
 import { StateMachine } from "./state.machine.parser"
 
-export function detectDeadlocks(machine: StateMachine): string[] {
+export interface DeadlockDetectionOptions {
+  terminalStates?: string[]
+}
+
+export function detectDeadlocks(
+  machine: StateMachine,
+  options: DeadlockDetectionOptions = {}
+): string[] {
 
   const visited = new Set<string>()
   const stack = new Set<string>()
-  const cycles: string[] = []
+  const problematic = new Set<string>()
+  const terminalStates = new Set(options.terminalStates ?? [])
 
   function dfs(state: string) {
 
     if (stack.has(state)) {
-      cycles.push(state)
+      problematic.add(state)
       return
     }
 
@@ -32,6 +40,14 @@ export function detectDeadlocks(machine: StateMachine): string[] {
     dfs(s)
   }
 
-  return cycles
+  // Dead-end states: no outgoing transitions and not explicitly terminal.
+  for (const state of machine.states) {
+    const next = machine.transitions[state] || []
+    if (next.length === 0 && !terminalStates.has(state)) {
+      problematic.add(state)
+    }
+  }
+
+  return [...problematic]
 
 }

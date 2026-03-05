@@ -4,6 +4,13 @@ import React from "react"
 import { getAllMetrics } from "../../storage/metrics.store"
 import { detectRegression } from "../../observability/regression.detector"
 
+export function detectAnyRegressionForMetrics(
+  metrics: Array<{ skillId: string }>
+): boolean {
+  const uniqueSkillIds = Array.from(new Set(metrics.map(m => m.skillId)))
+  return uniqueSkillIds.some(skillId => detectRegression(skillId))
+}
+
 export const RiskDashboard = () => {
   const metrics = getAllMetrics()
 
@@ -26,7 +33,7 @@ export const RiskDashboard = () => {
 
   const regressionDetected =
     totalRuns > 0
-      ? detectRegression(metrics[0].skillId)
+      ? detectAnyRegressionForMetrics(metrics)
       : false
 
   return (

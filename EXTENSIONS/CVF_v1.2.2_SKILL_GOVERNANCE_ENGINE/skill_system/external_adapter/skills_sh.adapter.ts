@@ -13,10 +13,10 @@ export class SkillsShAdapter {
       const response = await fetch(url);
       if (!response.ok) return null;
 
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       return {
-        id: data.id || "",
+        id: typeof data.id === "string" ? data.id : "",
         source: "skills.sh",
         raw: data
       };

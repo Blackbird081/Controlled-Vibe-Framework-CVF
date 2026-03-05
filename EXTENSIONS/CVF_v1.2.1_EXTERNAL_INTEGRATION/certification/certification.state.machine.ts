@@ -104,22 +104,6 @@ export class CertificationStateMachine {
       }
     }
 
-    // 4️⃣ Promotion requires certified
-    if (target_state === "promoted" && current_state !== "certified") {
-      return {
-        allowed: false,
-        reason: "Only certified skills can be promoted"
-      };
-    }
-
-    // 5️⃣ Production requires promoted
-    if (target_state === "production" && current_state !== "promoted") {
-      return {
-        allowed: false,
-        reason: "Only promoted skills can enter production"
-      };
-    }
-
     return {
       allowed: true,
       new_state: target_state

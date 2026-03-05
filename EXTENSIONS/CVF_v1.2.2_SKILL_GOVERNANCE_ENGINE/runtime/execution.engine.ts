@@ -50,7 +50,7 @@ export class ExecutionEngine {
         skill_id: context.skill_id,
         risk_score: context.risk_score,
         cost_estimate: context.cost_estimate,
-        approved: true,
+        approved: false,
         timestamp: Date.now(),
         result_status: "failure"
       });

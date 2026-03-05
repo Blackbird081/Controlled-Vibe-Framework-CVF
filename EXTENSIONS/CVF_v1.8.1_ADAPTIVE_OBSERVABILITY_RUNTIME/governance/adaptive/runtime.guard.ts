@@ -1,7 +1,23 @@
 import { computeRisk } from './risk.engine'
 import { derivePolicy } from './policy.deriver'
 
-export async function runtimeGuard(context, metrics) {
+interface AdaptiveRuntimeContext {
+  maxTokens: number
+  validationLevel?: 'normal' | 'strict'
+}
+
+interface AdaptiveRuntimeMetrics {
+  cancelRate: number
+  correctionRate: number
+  tokenSpike: number
+  modelShift: boolean
+  securityFlags: number
+}
+
+export async function runtimeGuard(
+  context: AdaptiveRuntimeContext,
+  metrics: AdaptiveRuntimeMetrics
+) {
   const risk = computeRisk(metrics)
   const action = derivePolicy(risk.value)
 

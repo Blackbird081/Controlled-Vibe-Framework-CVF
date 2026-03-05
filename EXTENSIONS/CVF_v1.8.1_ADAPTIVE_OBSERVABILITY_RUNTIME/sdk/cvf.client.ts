@@ -73,6 +73,7 @@ export async function runSkill(options: RunSkillOptions) {
   const record = {
     id: crypto.randomUUID(),
     skillId,
+    versionHash: "v1.8.1",
     timestamp: Date.now(),
     tokensUsed: result.tokensUsed,
     durationMs: result.durationMs ?? end - start,

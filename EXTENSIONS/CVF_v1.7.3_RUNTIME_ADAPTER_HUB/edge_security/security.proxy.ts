@@ -19,12 +19,13 @@ export class SecurityProxy {
     let maskedInput = input
 
     const allSensitive = [...pii, ...secrets]
+    const uniqueSensitiveValues = Array.from(new Set(allSensitive.map(item => item.value)))
 
-    allSensitive.forEach((item, index) => {
+    uniqueSensitiveValues.forEach((value, index) => {
       const token = `${defaultEdgeSecurityConfig.maskingTokenPrefix}_${index}`
-      maskedInput = maskedInput.replace(item.value, token)
+      maskedInput = maskedInput.split(value).join(token)
       this.vault.add(sessionId, {
-        original: item.value,
+        original: value,
         masked: token
       })
     })

@@ -5,21 +5,21 @@ export interface PIIMatch {
 }
 
 const patterns = {
-  email: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i,
-  phone: /\b\d{9,11}\b/,
-  creditCard: /\b\d{13,16}\b/
+  email: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
+  phone: /\b\d{9,11}\b/g,
+  creditCard: /\b\d{13,16}\b/g
 }
 
 export function detectPII(input: string): PIIMatch[] {
   const matches: PIIMatch[] = []
 
   Object.entries(patterns).forEach(([type, regex]) => {
-    const result = input.match(regex)
-    if (result) {
+    for (const result of input.matchAll(regex)) {
+      if (!result[0]) continue
       matches.push({
         type,
         value: result[0],
-        index: result.index || 0
+        index: result.index ?? 0
       })
     }
   })

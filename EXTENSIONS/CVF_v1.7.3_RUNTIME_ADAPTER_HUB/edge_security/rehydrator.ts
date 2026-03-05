@@ -5,7 +5,7 @@ export function rehydrateResponse(
   let output = response
 
   vaultEntries.forEach(entry => {
-    output = output.replace(entry.masked, entry.original)
+    output = output.split(entry.masked).join(entry.original)
   })
 
   return output

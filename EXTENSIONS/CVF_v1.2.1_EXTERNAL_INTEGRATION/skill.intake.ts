@@ -1,18 +1,21 @@
-// skill.intake.ts
-
 import { ExternalSkillRaw } from "./models/external-skill.raw";
 import { SkillAdapter } from "./skill.adapter";
-import { ExternalSkillAudit } from "./internal_ledger/external_skill.audit.log";
+import { ExternalSkillAuditLog } from "./internal_ledger/external_skill.audit.log";
 
 export class SkillIntake {
-
   static async ingest(raw: ExternalSkillRaw) {
-
-    ExternalSkillAudit.log("INGEST_RECEIVED", raw.meta);
+    ExternalSkillAuditLog.append({
+      skill_id: `raw_${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      event_type: "raw_ingested",
+      actor: "system",
+      metadata: {
+        source: raw.source,
+        source_reference: raw.source_reference,
+      },
+    });
 
     const draft = await SkillAdapter.transform(raw);
-
     return draft;
   }
-
 }

@@ -1,7 +1,7 @@
 # 🐛 Bug History & Troubleshooting Guide
 
 > **Purpose**: Document all bugs encountered during development, their root causes, solutions, and prevention strategies.  
-> **Last Updated**: 2026-02-28  
+> **Last Updated**: 2026-03-06  
 > **Maintained by**: CVF Development Team  
 > **Governance Policy**: [`CVF_BUG_DOCUMENTATION_GUARD.md`](../governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md)  
 > **Compat Check**: `python governance/compat/check_bug_doc_compat.py --enforce`
@@ -427,6 +427,279 @@ While porting logic from v1.7.3 into Web UI, many types were lazily cast to `any
 - ✅ Always test full `npm run build` after fixing typechecker complaints.
 
 **Related Commits:** `bc42782`
+
+---
+
+### BUG-016: v2.0 Non-Coder Runtime Build Break (Wrong Type Import Path)
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-06 |
+| **Severity** | 🔴 Critical |
+| **Component** | `CVF_v2.0_NONCODER_SAFETY_RUNTIME` |
+| **File(s)** | `runtime/mode/mode.mapper.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+TS2307: Cannot find module '../types/index.js'
+```
+
+**Root Cause:**  
+`mode.mapper.ts` lives under `runtime/mode` but imported type definitions using `../types/index.js` (one level up). Correct relative path is two levels up.
+
+**Solution:**
+```diff
+- import type { SafetyMode, KernelPolicy } from '../types/index.js'
++ import type { SafetyMode, KernelPolicy } from '../../types/index.js'
+```
+
+**Prevention:**
+- ✅ Run module-level `npm run check` (build + tests), not only tests.
+- ✅ Add path integrity check for relative imports in release checklist.
+
+**Related Commits:** pending local (trace: `REQ-20260306-002`)
+
+---
+
+### BUG-017: External Integration Pipeline Model Drift Broke Typecheck
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-06 |
+| **Severity** | 🔴 Critical |
+| **Component** | `CVF_v1.2.1_EXTERNAL_INTEGRATION` |
+| **File(s)** | `skill.adapter.ts`, `skill.validator.ts`, `skill.certifier.ts`, `skill.intake.ts`, `skill.publisher.ts`, `governance_hooks/*` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+Multiple TS errors:
+- Cannot find module '../policy/...'
+- Property does not exist on type ...
+- Type 'X' is not assignable to type 'Y'
+```
+
+**Root Cause:**  
+Pipeline orchestration files were out of sync with normalized v1.2.1 models/policies (`models/*`, `policies/*`) and still used legacy field names/import paths.
+
+**Solution:**  
+Aligned pipeline with canonical model contracts:
+1. Fixed hook imports from `../policy/*` -> `../policies/*`.
+2. Rebuilt adapter/validator/certifier/intake/publisher to use normalized structures.
+3. Added compatibility shim in `external_skill.audit.log.ts` for legacy audit calls.
+4. Revalidated full contract via `npm run check`.
+
+**Prevention:**
+- ✅ Keep pipeline files schema-locked to `models/*` via type-based CI.
+- ✅ Require `npm run check` as release gate for each extension.
+
+**Related Commits:** pending local (trace: `REQ-20260306-002`)
+
+---
+
+### BUG-018: Governance Compat Scripts Crash on Windows Console Encoding
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-06 |
+| **Severity** | 🟡 Medium |
+| **Component** | `governance/compat` |
+| **File(s)** | `check_bug_doc_compat.py`, `check_test_doc_compat.py` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2705'
+```
+
+**Root Cause:**  
+Scripts print Unicode symbols to stdout; on Windows cp1252 consoles, emoji output crashes despite underlying compliance result being valid.
+
+**Solution:**  
+Configured stdout/stderr to tolerate unsupported characters:
+```python
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(errors="replace")
+```
+
+**Prevention:**
+- ✅ Treat CLI output encoding as part of compat tooling portability tests.
+- ✅ Prefer ASCII-safe output or graceful fallback in governance scripts.
+
+**Related Commits:** pending local (trace: `REQ-20260306-002`)
+
+---
+
+### BUG-019: Governance Audit Ledger Integrity False-Negative
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-06 |
+| **Severity** | 🟠 High |
+| **Component** | `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION` |
+| **File(s)** | `governance.audit.ledger.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Pattern:**
+`GovernanceAuditLedger.verifyIntegrity()` may return `false` even when ledger was not tampered.
+
+**Root Cause:**  
+`append()` built hash payload with property order different from `verifyIntegrity()` recomputation payload. Because hash input was raw JSON serialization, key-order mismatch produced different hashes.
+
+**Solution:**  
+Normalized payload field order in `append()` to match `verifyIntegrity()` recomputation shape.
+
+**Prevention:**
+- ✅ Keep hash payload construction centralized/reused to avoid duplicate shape drift.
+- ✅ Add regression tests that validate integrity before and after intentional tampering.
+
+**Related Commits:** pending local (trace: `REQ-20260306-003`)
+
+---
+
+### BUG-020: v1.7.3 Edge Masking/Rehydration Only Applied First Occurrence
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-06 |
+| **Severity** | 🟠 High |
+| **Component** | `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` |
+| **File(s)** | `edge_security/pii.detector.ts`, `edge_security/secret.detector.ts`, `edge_security/security.proxy.ts`, `edge_security/rehydrator.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Pattern:**
+Repeated secrets/PII inside a payload were only partially masked or rehydrated, creating leakage risk.
+
+**Root Cause:**  
+Detector and proxy flow depended on single `match` and one-shot replacement behavior.
+
+**Solution:**  
+1. Switched detectors to collect all matches (`matchAll`).
+2. Normalized to unique sensitive values before masking.
+3. Replaced single replacement with all-occurrence replace in masking and rehydration paths.
+4. Added regression tests in `tests/edge-security.test.ts`.
+
+**Prevention:**
+- ✅ Add repeated-occurrence payloads as mandatory security regression cases.
+- ✅ Keep masking and rehydration strategies symmetric for all matches.
+
+**Related Commits:** pending local (trace: `REQ-20260306-004`)
+
+---
+
+### BUG-021: v1.8.1 Risk Score Counted Global Incidents (Unscoped)
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-06 |
+| **Severity** | 🟡 Medium |
+| **Component** | `CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME` |
+| **File(s)** | `storage/audit.store.ts`, `governance/skill.risk.score.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Pattern:**
+`securityIncidents` for one skill was inflated by incidents from other skills.
+
+**Root Cause:**  
+Risk scoring used unfiltered `getAuditLogs()` length instead of skill-scoped logs.
+
+**Solution:**  
+1. Added `skillId` filtering support in `audit.store`.
+2. Updated risk score computation to query `getAuditLogs(skillId)`.
+
+**Prevention:**
+- ✅ Enforce scope parameter for per-entity scoring functions.
+- ✅ Add mixed-skill audit fixtures in regression tests.
+
+**Related Commits:** pending local (trace: `REQ-20260306-004`)
+
+---
+
+### BUG-022: v1.8.1 Dashboard Regression Detection Biased to First Metric Skill
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-06 |
+| **Severity** | 🟡 Medium |
+| **Component** | `CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME` |
+| **File(s)** | `ui/dashboards/risk.dashboard.tsx` |
+| **Status** | ✅ Fixed |
+
+**Error Pattern:**
+Regression flag could miss issues when dataset contains multiple skills because only `metrics[0].skillId` was checked.
+
+**Root Cause:**  
+Dashboard logic assumed first metric skill is representative for full dataset.
+
+**Solution:**  
+1. Added helper to evaluate regression across all unique skill IDs.
+2. Removed first-item bias in dashboard risk evaluation.
+
+**Prevention:**
+- ✅ Require multi-skill datasets in dashboard unit tests.
+- ✅ Avoid first-item heuristics for aggregated governance metrics.
+
+**Related Commits:** pending local (trace: `REQ-20260306-004`)
+
+---
+
+### BUG-023: v1.2.2 Failure Audit Logged `approved: true`
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-06 |
+| **Severity** | 🟠 High |
+| **Component** | `CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE` |
+| **File(s)** | `runtime/execution.engine.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Pattern:**
+Failure execution path wrote approval status as true, causing semantic inconsistency in governance audit.
+
+**Root Cause:**  
+Shared logging path reused success approval flag in failure branch.
+
+**Solution:**  
+Set `approved: false` explicitly for failure path log entry and verified via module test harness.
+
+**Prevention:**
+- ✅ Add assertion for success/failure semantic parity in audit logs.
+- ✅ Treat audit fields as policy contract and test explicitly.
+
+**Related Commits:** pending local (trace: `REQ-20260306-004`)
+
+---
+
+### BUG-024: v1.1.1 Governance Protocol Had Semantic Gaps and No Native Test Harness
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-06 |
+| **Severity** | 🟠 High |
+| **Component** | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL` |
+| **File(s)** | `state.machine.parser.ts`, `scenario.generator.ts`, `deadlock.detector.ts`, `phase_gate/gate.rules.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Pattern:**
+1) transition payload shape not strictly validated, 2) scenario generation explored only first state, 3) deadlock detector missed dead-end non-terminal states, 4) no native module tests.
+
+**Root Cause:**  
+Initial integration prioritized structure completeness over executable governance validation depth.
+
+**Solution:**  
+1. Added strict transition shape validation.
+2. Expanded scenario entrypoint exploration.
+3. Enhanced deadlock detection for cycle + dead-end states.
+4. Added native test harness (`package.json`, `tsconfig.json`, `vitest.config.ts`, `tests/v1.1.1.test.ts`).
+
+**Prevention:**
+- ✅ Gate governance modules with mandatory local `check` + `test:coverage`.
+- ✅ Include malformed-input and multi-entry topology tests by default.
+
+**Related Commits:** pending local (trace: `REQ-20260306-004`)
 
 ---
 

@@ -42,7 +42,7 @@ export function calculateSkillRisk(skillId: string): SkillRiskResult {
   const regression = detectRegression(skillId)
 
   // ---------- Security Incidents ----------
-  const auditLogs = getAuditLogs()
+  const auditLogs = getAuditLogs(skillId)
   const securityIncidents = auditLogs.length
 
   // ---------- Token Spike ----------

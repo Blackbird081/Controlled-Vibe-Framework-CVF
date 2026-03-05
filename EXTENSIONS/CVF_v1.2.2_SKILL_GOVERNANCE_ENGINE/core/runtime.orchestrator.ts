@@ -20,7 +20,7 @@ export class RuntimeOrchestrator {
     this.phaseManager.transition("RISK_EVALUATION");
 
     // Phase 3: Governance Decision
-    this.phaseManager.transition("GOVERNANCE_DECISION");
+    this.phaseManager.transition("GOVERNANCE_DECISION", context);
     const decision = GovernanceKernel.evaluate(context);
 
     if (decision !== "APPROVED") {
@@ -28,10 +28,10 @@ export class RuntimeOrchestrator {
     }
 
     // Phase 4: Execution
-    this.phaseManager.transition("EXECUTION");
+    this.phaseManager.transition("EXECUTION", context);
 
     // Phase 5: Ledger Record
-    this.phaseManager.transition("LEDGER_RECORD");
+    this.phaseManager.transition("LEDGER_RECORD", context);
 
     return decision;
   }

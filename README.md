@@ -45,7 +45,7 @@ Only run full regression when gate/triggers require it.
 
 > 🧱 **Workspace Isolation Rule:** Downstream projects MUST NOT be opened or developed inside CVF root. Use isolated sibling workspace only. See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
 
-> 🗺️ **Architecture Check Rule:** Before proposing ANY new version, layer, extension, or module for CVF, you MUST first read [`REVIEW/CVF_CORE_KNOWLEDGE_BASE.md`](REVIEW/CVF_CORE_KNOWLEDGE_BASE.md) and explicitly state: the target Layer (1–5), overlap check result, what it extends, and which core principles apply. See [Architecture Check Guard](governance/toolkit/05_OPERATION/CVF_ARCHITECTURE_CHECK_GUARD.md).
+> 🗺️ **Architecture Check Rule:** Before proposing ANY new version, layer, extension, or module for CVF, you MUST first read [`docs/CVF_CORE_KNOWLEDGE_BASE.md`](docs/CVF_CORE_KNOWLEDGE_BASE.md) and explicitly state: the target Layer (1–5), overlap check result, what it extends, and which core principles apply. See [Architecture Check Guard](governance/toolkit/05_OPERATION/CVF_ARCHITECTURE_CHECK_GUARD.md).
 
 ---
 

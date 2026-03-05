@@ -5,7 +5,7 @@
 > Dùng để **định vị nhanh** bất kỳ extension/version/layer mới vào đúng chỗ trong cấu trúc,
 > kiểm tra overlap và backward compatibility — **không cần đọc lại codebase CVF mỗi lần**.
 >
-> **Phiên bản hiện tại:** v1.7.3 | **Cập nhật:** 2026-03-05
+> **Phiên bản hiện tại:** v2.0.0 | **Cập nhật:** 2026-03-05
 > **Nguồn xác minh:** GitHub repo + README.md + CVF_POSITIONING.md + CVF_ARCHITECTURE_DIAGRAMS.md
 
 ---
@@ -20,7 +20,7 @@ CVF = Governance Framework (Rules + Process + Tools)
 | Thuộc tính | Giá trị |
 |---|---|
 | **Tên chính thức** | Controlled Vibe Framework (CVF) |
-| **Phiên bản hiện tại** | **v1.7.3** (Feb 2026) |
+| **Phiên bản hiện tại** | **v2.0.0** (Mar 2026) |
 | **Slogan** | "Controlled vibe coding — not faster, but smarter." |
 | **Định vị** | Governance Framework for AI-assisted development |
 | **Agent-agnostic** | ✅ Works with Claude, GPT, Gemini, Copilot, local LLMs |
@@ -58,6 +58,12 @@ CVF = Governance Framework (Rules + Process + Tools)
 │     ● Health Dashboard + Trace Viewer + Risk Chart          │
 │     ● Policy Selector + Creative Mode + Domain Map          │
 │     ● Policy Simulation (what-if scenarios)                 │
+│     v2.0 — Non-Coder Safety Runtime (Implemented ✅)       │
+│     ● ModeMapper: SAFE/BALANCED/CREATIVE → KernelPolicy    │
+│     ● IntentInterpreter: NL → ParsedIntent (pattern-based) │
+│     ● ConfirmationEngine: per-mode + R3+ hard stop         │
+│     ● Stability Index override: <70→SAFE, <50→no CREATIVE  │
+│     ● 3 modules | 32 tests | 100% pass                     │
 ├─────────────────────────────────────────────────────────────┤
 │  🌐 LAYER 3 — PLATFORM (Web UI + Agent Platform)            │
 │     v1.6 — Agent Platform (Web UI Next.js, Agent Chat,      │
@@ -76,13 +82,15 @@ CVF = Governance Framework (Rules + Process + Tools)
 │     ● 51 Kernel Tests | 96.45%+ coverage                   │
 │     ● Anti-bypass Symbol guard | 12-step pipeline           │
 │     ● Forensic tracing: requestId + traceHash               │
-│     v1.8 — Safety Hardening (Spec)                         │
+│     v1.8 — Safety Hardening (Implemented ✅)               │
 │     ● 7-phase state machine: INTENT→COMMIT                  │
 │     ● Deterministic Mutation Sandbox + Rollback Manager     │
 │     ● Drift Monitor + Stability Index                       │
-│     v1.9 — Deterministic Reproducibility (Spec)            │
+│     ● 10 modules | 42 tests | 100% pass                    │
+│     v1.9 — Deterministic Reproducibility (Implemented ✅)   │
 │     ● ExecutionRecord (9-field, immutable)                  │
 │     ● Context Freezer + Replay Engine + Forensic audit      │
+│     ● 5 modules | 29 tests | 100% pass                     │
 ├─────────────────────────────────────────────────────────────┤
 │  🛠️ LAYER 2 — TOOLS (Validation + Automation)               │
 │     v1.3 — Python SDK + cvf-validate CLI                    │
@@ -125,9 +133,9 @@ CVF = Governance Framework (Rules + Process + Tools)
 | v1.7.1 | Safety Runtime | 2.5 | Active ⚙️ | `CVF_v1.7.1_SAFETY_RUNTIME/` |
 | v1.7.2 | Safety Dashboard | 4 | Active 🛡️ | `CVF_v1.7.2_SAFETY_DASHBOARD/` |
 | v1.7.3 | Runtime Adapter Hub | 5 | **CURRENT** 🔌 | *(integrated)* |
-| v1.8 | Safety Hardening | 2.5 | Spec ✍️ | `CVF_v1.8_SAFETY_HARDENING/` |
-| v1.9 | Deterministic Reproducibility | 2.5 | Spec ✍️ | `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` |
-| v2.0 | Non-Coder Safety Runtime | 4/5 | Spec ✍️ | `CVF_v2.0_NONCODER_SAFETY_RUNTIME/` |
+| v1.8 | Safety Hardening | 2.5 | **Implemented** ✅ | `CVF_v1.8_SAFETY_HARDENING/` |
+| v1.9 | Deterministic Reproducibility | 2.5 | **Implemented** ✅ | `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` |
+| v2.0 | Non-Coder Safety Runtime | 4 | **Implemented** ✅ | `CVF_v2.0_NONCODER_SAFETY_RUNTIME/` |
 
 ---
 
@@ -274,6 +282,9 @@ Controlled-Vibe-Framework-CVF/
 │   ├── CVF_v1.7_CONTROLLED_INTELLIGENCE/
 │   ├── CVF_v1.7.1_SAFETY_RUNTIME/
 │   ├── CVF_v1.7.2_SAFETY_DASHBOARD/
+│   ├── CVF_v1.8_SAFETY_HARDENING/           (Implemented ✅)
+│   ├── CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/ (Implemented ✅)
+│   ├── CVF_v2.0_NONCODER_SAFETY_RUNTIME/    (Implemented ✅)
 │   ├── CVF_TOOLKIT_REFERENCE/       (Reference only)
 │   ├── CVF_STARTER_TEMPLATE_REFERENCE/ (Reference only)
 │   └── examples/
@@ -310,7 +321,11 @@ Controlled-Vibe-Framework-CVF/
 | Metric | Giá trị |
 |--------|---------|
 | Web Tests | 1764 passing |
-| Kernel Tests | 51 passing |
+| Kernel Tests (v1.7.1) | 51 passing |
+| v1.8 Safety Hardening Tests | **42 passing** (12 describe blocks) |
+| v1.9 Reproducibility Tests | **29 passing** |
+| v2.0 Non-Coder Runtime Tests | **32 passing** |
+| **Total Kernel+Extension Tests** | **154 tests** |
 | Web Coverage | 93.05% Stmts |
 | Kernel Coverage | 96.45% Stmts · 91.41% Branch · 99.09% Fn · 97.01% Lines |
 | Skills | 141 skills, 12 domains |
@@ -333,6 +348,7 @@ Extension/version mới **bắt buộc** phải tôn trọng:
 7. **Phase integrity** — 4-Phase A→D không thể skip hay merge
 8. **Workspace isolation** — Downstream projects phải là sibling workspace, không phát triển trong CVF root
 9. **Architecture check mandatory** — Mọi addition mới phải đọc file này và xác định Layer, overlap, backward compat trước khi implement
+10. **KB auto-update mandatory** — Sau mỗi lần nâng cấp/bổ sung version mới, **phải cập nhật file này** (Section II, III, X) để nó luôn là base chính xác cho lần bổ sung sau
 
 ---
 
@@ -451,6 +467,28 @@ Tất cả 9 checkbox phải được check trước khi bắt đầu implement.
 
 ---
 
-> **Cập nhật file này khi:** CVF có major structural change hoặc new layer/version được chính thức release.
+### RULE 4 — KB Auto-Update sau mỗi nâng cấp (Bắt buộc)
+
+> **Quy tắc:** Mỗi khi version/layer mới được implement hoặc nâng cấp, **phải cập nhật** `CVF_CORE_KNOWLEDGE_BASE.md` ngay lập tức.
+
+**Cụ thể phải update:**
+- **Section II** (Layer Diagram): thêm version mới vào đúng layer, ghi trạng thái (Spec/Implemented)
+- **Section III** (Version Table): cập nhật trạng thái, folder
+- **Section X** (Quality Metrics): thêm test count mới
+- **Header**: cập nhật version hiện tại
+
+**Tại sao bắt buộc:**
+- File này là **base cho tất cả lần bổ sung sau** — nếu không update, contributor sau sẽ đề xuất dựa trên thông tin cũ
+- Governance check sẽ dẫn vào file này — nếu file lỗi thời thì governance cũng sai theo
+- Giữ tính **liên tục** và **tự cập nhật** — không cần nhớ, chỉ cần follow rule
+
+```
+❌ SAI:  Implement v3.0 xong → quên update Knowledge Base → contributor sau không biết v3.0 tồn tại
+✅ ĐÚNG: Implement v3.0 xong → Update Section II, III, X ngay → Commit cùng lúc
+```
+
+---
+
+> **Cập nhật file này khi:** CVF có major structural change hoặc new layer/version được chính thức release. **(Rule 4: BẮT BUỘC)**
 > **Không cập nhật khi:** Chỉ thêm skills, fix bugs, hoặc update docs thông thường.
 > **Vị trí cố định:** `docs/CVF_CORE_KNOWLEDGE_BASE.md` — không được di chuyển hay đổi tên.

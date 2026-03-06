@@ -765,3 +765,75 @@ CVF v1.1.1 established the Phase Governance Protocol but had architectural gaps 
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/v1.1.1.test.ts` (updated)
 - `docs/VERSIONING.md` (updated: v1.1.2 added)
 
+---
+
+## ADR-016: CVF v3.0 — Core Foundation Primitives (Major Version Gate)
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-06 |
+| Status | DRAFT — pending merge of `cvf-next` → `main` |
+| Branch | `cvf-next` |
+| Layer | Layer 0 — Foundation Primitives (NEW) |
+| Related commits | *(local branch cvf-next, not yet merged/pushed)* |
+
+### Context
+CVF v1.x (Layers 1–2.5) addresses development governance and runtime safety. However, there is no formal model for **what AI produces** — only governance of the process. 
+
+The De_xuat review (De_xuat_08–13 + Whitepaper) proposes a paradigm shift: CVF should define a **"Git for AI Development"** model — a set of first-class primitives that describe AI output in the same structured, traceable way that Git describes code changes.
+
+This is a **core identity change** — from "AI process governance tool" to "AI development substrate". Per CVF Versioning Policy, a core identity change requires a MAJOR version bump.
+
+### Decision
+**CVF v3.0 — Core Foundation Primitives** on branch `cvf-next`.
+
+| Decision Point | Choice | Rationale |
+|---|---|---|
+| Version | MAJOR (v3.0) | Core identity change: adds Layer 0 to the framework |
+| Branch | `cvf-next` | Separate from `main` to avoid disrupting v1.1.x users |
+| Scope | De_xuat_08–13 (partial: 10p, 11, 12) | Staged scope per DE_XUAT_IMPLEMENT_DECISION_MATRIX |
+| De_xuat_10 status | Implemented as partial (AI Commit schema + parser) | core_id change requires this gate |
+| De_xuat_03, 08full, 09-phase-branch | DEFERRED → v3.x | Too broad for Phase 2 first wave |
+
+### Layer 0 Modules Implemented
+
+| Module | File | Primitive |
+|---|---|---|
+| AI Commit Schema | `ai_commit/ai.commit.schema.ts` | Commit (AICommit interface) |
+| AI Commit Parser | `ai_commit/ai.commit.parser.ts` | Commit (createCommit, verifyIntegrity) |
+| AI Commit Validator | `ai_commit/ai.commit.validator.ts` | Commit (8 RULE checks) |
+| Artifact Staging | `artifact_staging/artifact.staging.ts` | Staging (4-state machine) |
+| Artifact Ledger | `artifact_ledger/artifact.ledger.ts` | Artifact (append-only, content-addressed) |
+| Process Model | `process_model/process.model.ts` | Process (gate-required, multi-process) |
+| Core Index | `index.ts` | All 3+1 Primitives export |
+
+### Documentation Produced
+
+- `docs/CVF_ARCHITECTURE_MAP.md` — Layer diagram, module list, entry points
+- `docs/CVF_WHITEPAPER_GIT_FOR_AI.md` — Formal whitepaper
+- `docs/CVF_ADOPTION_STRATEGY.md` — 5-phase adoption model
+- `docs/CVF_SKILL_LIFECYCLE.md` — 6-state skill governance model
+
+### Test coverage
+- Total: 25 tests — 100% new (CVF Core tests)
+- All 25/25 PASS
+
+### Merge prerequisites (before merging cvf-next → main)
+1. ADR-016 reviewed and approved
+2. Backward compatibility with v1.1.x confirmed (no breaking changes to v1.1.x)
+3. VERSIONING.md updated to v3.0
+4. CVF_CORE_KNOWLEDGE_BASE.md updated with Layer 0 description
+
+### Consequences
+- CVF architecture expands from 6 layers to 7 (Layer 0 added)
+- CVF Core and CVF Full become officially distinct scopes
+- AI agents can now produce first-class CVF commits (not just trigger governance)
+- Future: De_xuat_03 (Multi-State-System) and De_xuat_09 (Phase-Bound Branch) → v3.x
+
+### Related Files
+- `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/` (new — branch cvf-next)
+- `docs/CVF_ARCHITECTURE_MAP.md` (new)
+- `docs/CVF_WHITEPAPER_GIT_FOR_AI.md` (new)
+- `docs/CVF_ADOPTION_STRATEGY.md` (new)
+- `docs/CVF_SKILL_LIFECYCLE.md` (new)
+- `docs/VERSIONING.md` (pending update: v3.0 added)

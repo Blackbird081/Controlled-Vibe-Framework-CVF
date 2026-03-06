@@ -35,7 +35,8 @@ PATCH versions are used for sub-extensions within a minor version (e.g., v1.7.1,
 |---------|------|--------|------|
 | v1.0 | Foundation | 🔒 FROZEN | 2025 |
 | v1.1 | Governance Refinement | 🔒 FROZEN | 2025 |
-| v1.1.1 | Phase Governance Protocol | 🆕 NEW | Mar 06, 2026 |
+| v1.1.1 | Phase Governance Protocol | 🔒 STABLE | Mar 06, 2026 |
+| v1.1.2 | Phase Governance Hardening | 🆕 NEW | Mar 06, 2026 |
 | v1.2 | Capability Extension | 🔒 FROZEN | Jan 2026 |
 | v1.2.1 | External Integration | ✅ ACTIVE | Mar 05, 2026 |
 | v1.2.2 | Skill Governance Engine | 🆕 NEW | Mar 05, 2026 |

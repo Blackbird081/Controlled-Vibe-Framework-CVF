@@ -696,3 +696,72 @@ CVF controls **runtime execution** through Safety Runtime (v1.7.x), Safety Harde
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` (new)
 - `docs/CVF_CORE_KNOWLEDGE_BASE.md` (updated: Layer 1.5 added, Section III table)
 - `docs/VERSIONING.md` (updated: v1.1.1 added)
+
+---
+
+## ADR-015: CVF v1.1.2 — Phase Governance Hardening
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-06 |
+| Status | Active |
+| Layer | 1.5 — Development Governance |
+| Related commits | *(local commit, not yet pushed)* |
+
+### Context
+CVF v1.1.1 established the Phase Governance Protocol but had architectural gaps identified by independent testers (LR-002) and the De_xuat review:
+
+1. No deterministic pipeline order → inconsistent governance results
+2. No trust boundary for artifacts → silent rewrites undetected
+3. Capability isolation absent → agents could inject artifacts in wrong phases
+4. Deadlock detector was actually a cycle detector (LR-002) → dead-end states missed
+5. Scenario generator only explored `states[0]` → partial coverage
+6. No system-level invariants → cross-state logic violations undetected
+7. No runtime executor → pipeline order not enforced at runtime
+
+### Decision
+**Implement as v1.1.2 — Phase Governance Hardening** on `main` branch (sub-extension of v1.1.1).
+
+| Decision Point | Choice | Rationale |
+|---|---|---|
+| Version | PATCH (v1.1.2) | All changes extend v1.1.1 logic, no new modules in /governance |
+| Branch | main | Backward compatible, no structural break |
+| Executor placement | `runtime/` outside `/governance/` | De_xuat_01: executor ≠ engine. Keep /governance pure. |
+
+### Changes (9 items)
+
+| # | De_xuat | File changed | Type |
+|---|---|---|---|
+| 1 | 02 | `gate.rules.ts` | Added `GOVERNANCE_PIPELINE` const (6-module deterministic order) |
+| 2 | 06 | `artifact.registry.ts` | Added Trust Boundary: `verifyAllHashes()`, `contentHash` per artifact |
+| 3 | 06 | `artifact.registry.ts` | Added Hash Ledger: `getHashLedger()`, `detectTampering()` |
+| 4 | 07 | `phase.protocol.ts` | Added Capability Isolation: `PHASE_CAPABILITIES`, `CapabilityViolationError` |
+| 5 | 04 | `execution.trace.ts` | Added Self-Debugging: `detectAnomalies()` — DEAD_PATH, UNREACHABLE_STATE, LOOP_TRAP |
+| 6 | 05 | `scenario.generator.ts` | Added System Invariants: `checkInvariants()`, `BUILT_IN_INVARIANTS` (INV-01/02/03) |
+| 7 | 01 | `runtime/governance.executor.ts` | NEW — Runtime pipeline orchestrator (6 modules in PIPELINE order) |
+| 8 | 11p | `governance.audit.log.ts` | Added Hash Ledger audit: `recordHashLedger()`, `HashLedgerSnapshot` |
+| 9 | 11p+12p | `docs/CVF_EVOLUTION_GOVERNANCE_RULES.md` | NEW — 5 Design Invariants + Evolution Governance (3-layer model) |
+
+### Test coverage
+- Total: 22 tests (previously 12) — 10 new tests for v1.1.2 features
+- All 22/22 PASS
+- Coverage threshold maintained (90/80/90/90)
+
+### Consequences
+- `registerArtifact()` now accepts optional `content` param for hash generation
+- Gate rule `artifact_hashes_verified` added as `critical: true`
+- Agents without hashed artifacts will receive R3 rejection (by design)
+- `runtime/` folder introduced as executor layer (outside governance modules)
+
+### Related Files
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/phase_gate/gate.rules.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/phase_protocol/artifact.registry.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/phase_protocol/phase.protocol.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/scenario_simulator/execution.trace.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/scenario_simulator/scenario.generator.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/reports/governance.audit.log.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/runtime/governance.executor.ts` (new)
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/docs/CVF_EVOLUTION_GOVERNANCE_RULES.md` (new)
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/v1.1.1.test.ts` (updated)
+- `docs/VERSIONING.md` (updated: v1.1.2 added)
+

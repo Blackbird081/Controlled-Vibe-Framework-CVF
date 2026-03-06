@@ -785,3 +785,33 @@ Template:
   - Full monorepo regression skipped; compat decision remains focused on changed extension scopes.
 - Notes/Risks:
   - Local rerun in current sandbox may hit `spawn EPERM`; trace-final logs remain the authoritative execution evidence for this batch.
+
+## [2026-03-06] Batch: Independent reassessment hardening follow-up
+- Change reference:
+  - requestId: `REQ-20260306-007`
+  - trace: `REVIEW/TRACE/2026-03-06_independent_reassessment_batch_01`
+- Impacted scope:
+  - `governance/compat/check_bug_doc_compat.py`
+  - `governance/compat/check_test_doc_compat.py`
+  - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - `tools/skill_security_scanner`
+- Hardening actions:
+  - compat gates now auto-detect base range via merge-base (or `CVF_COMPAT_BASE`) instead of fixed `HEAD~1`.
+  - added standardized `check` script for `v1.7.3` (`typecheck + test`).
+  - expanded `v1.2.2` coverage tests (runtime/governance/execution/ledger/logger branches) and raised official thresholds to:
+    - Statements `95`, Branches `90`, Functions `95`, Lines `95`.
+  - expanded scanner tests (decode edge, severity mapping, report detail branches, no-decoded path) and raised official thresholds to:
+    - Statements `95`, Branches `85`, Functions `95`, Lines `95`.
+- Tests executed (final):
+  - `v1.2.2: npm run check` -> PASS
+  - `v1.2.2: npm run test:coverage` -> PASS
+    - Coverage: Stmts `99.32%`, Branch `97.67%`, Funcs `97.29%`, Lines `99.32%`
+  - `v1.7.3: npm run check` -> PASS
+  - `scanner: npm run check` -> PASS
+  - `scanner: npm run test:coverage` -> PASS
+    - Coverage: Stmts `99.29%`, Branch `92.85%`, Funcs `100%`, Lines `99.29%`
+  - `python governance/compat/check_bug_doc_compat.py --enforce` -> PASS
+  - `python governance/compat/check_test_doc_compat.py --enforce` -> PASS
+- Notes:
+  - This batch closes findings around shallow range detection and weak threshold floors in scanner/v1.2.2.

@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
 import re
 import subprocess
 import sys
@@ -48,6 +49,7 @@ TEST_FILE_PATTERNS = [
 
 TEST_COMMIT_RE = re.compile("|".join(TEST_COMMIT_PATTERNS), re.IGNORECASE)
 TEST_FILE_RE = re.compile("|".join(TEST_FILE_PATTERNS), re.IGNORECASE)
+DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 
 def _run_git(args: list[str]) -> tuple[int, str, str]:
@@ -61,11 +63,32 @@ def _run_git(args: list[str]) -> tuple[int, str, str]:
     return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
 
 
-def _resolve_range(base: str | None, head: str | None) -> tuple[str, str]:
+def _ref_exists(ref: str) -> bool:
+    code, _, _ = _run_git(["rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}"])
+    return code == 0
+
+
+def _discover_default_base(head: str) -> tuple[str, str]:
+    env_base = os.getenv("CVF_COMPAT_BASE")
+    if env_base:
+        return env_base, "env:CVF_COMPAT_BASE"
+
+    for ref in DEFAULT_BASE_CANDIDATES:
+        if not _ref_exists(ref):
+            continue
+        code, out, _ = _run_git(["merge-base", ref, head])
+        if code == 0 and out:
+            return out, f"merge-base({ref},{head})"
+
+    return "HEAD~1", "fallback:HEAD~1"
+
+
+def _resolve_range(base: str | None, head: str | None) -> tuple[str, str, str]:
     resolved_head = head or "HEAD"
     if base:
-        return base, resolved_head
-    return "HEAD~1", resolved_head
+        return base, resolved_head, "explicit:--base"
+    resolved_base, source = _discover_default_base(resolved_head)
+    return resolved_base, resolved_head, source
 
 
 def _get_commits_in_range(base: str, head: str) -> list[dict[str, str]]:
@@ -90,6 +113,19 @@ def _get_changed_files(base: str, head: str) -> list[str]:
     if code != 0:
         raise RuntimeError(f"git diff failed for range {base}..{head}: {err or out}")
     return [line.replace("\\", "/").strip() for line in out.splitlines() if line.strip()]
+
+
+def _get_worktree_changed_files() -> list[str]:
+    """Get changed files in working tree (staged + unstaged)."""
+    files: set[str] = set()
+    for args in (["diff", "--name-only"], ["diff", "--name-only", "--cached"]):
+        code, out, _ = _run_git(args)
+        if code == 0 and out:
+            for line in out.splitlines():
+                normalized = line.replace("\\", "/").strip()
+                if normalized:
+                    files.add(normalized)
+    return sorted(files)
 
 
 def _find_test_commits(commits: list[dict[str, str]]) -> list[dict[str, str]]:
@@ -144,10 +180,11 @@ def _classify(
     }
 
 
-def _print_report(report: dict[str, Any], base: str, head: str) -> None:
+def _print_report(report: dict[str, Any], base: str, head: str, base_source: str) -> None:
     """Print a human-readable report."""
     print("=== CVF Test Documentation Gate ===")
     print(f"Range: {base}..{head}")
+    print(f"Base source: {base_source}")
     print(f"Total commits: {report['totalCommits']}")
     print(f"Test commits (by message): {report['testCommitCount']}")
     print(f"Test files changed: {report['testFileCount']}")
@@ -187,7 +224,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--base", default=None,
-        help="Git base ref (default: HEAD~1)"
+        help="Git base ref (default: auto-detect merge-base, then fallback HEAD~1)"
     )
     parser.add_argument(
         "--head", default=None,
@@ -207,7 +244,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    base, head = _resolve_range(args.base, args.head)
+    base, head, base_source = _resolve_range(args.base, args.head)
 
     try:
         commits = _get_commits_in_range(base, head)
@@ -223,6 +260,7 @@ def main() -> int:
                     file=sys.stderr,
                 )
                 base = fallback_base
+                base_source = "fallback-after-error:HEAD~1"
             except RuntimeError as fallback_exc:
                 print(str(fallback_exc), file=sys.stderr)
                 return 1
@@ -230,11 +268,15 @@ def main() -> int:
             print(str(exc), file=sys.stderr)
             return 1
 
+    worktree_files = _get_worktree_changed_files()
+    if worktree_files:
+        changed_files = sorted(set(changed_files) | set(worktree_files))
+
     classified = _classify(commits, changed_files)
     report = {
         "timestamp": dt.datetime.now(dt.timezone.utc)
             .replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        "range": {"base": base, "head": head},
+        "range": {"base": base, "head": head, "baseSource": base_source},
         "policy": "governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md",
         **classified,
     }
@@ -249,7 +291,7 @@ def main() -> int:
     if args.json:
         print(json.dumps(report, indent=2))
     else:
-        _print_report(report, base, head)
+        _print_report(report, base, head, base_source)
 
     if args.enforce and not classified["compliant"]:
         return 2

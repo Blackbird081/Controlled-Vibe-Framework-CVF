@@ -19,13 +19,15 @@ export class RuntimeOrchestrator {
     // Phase 2: Risk Evaluation
     this.phaseManager.transition("RISK_EVALUATION");
 
-    // Phase 3: Governance Decision
-    this.phaseManager.transition("GOVERNANCE_DECISION", context);
+    // Evaluate decision before entering execution-governed phases.
     const decision = GovernanceKernel.evaluate(context);
 
     if (decision !== "APPROVED") {
       return decision;
     }
+
+    // Phase 3: Governance Decision
+    this.phaseManager.transition("GOVERNANCE_DECISION", context);
 
     // Phase 4: Execution
     this.phaseManager.transition("EXECUTION", context);

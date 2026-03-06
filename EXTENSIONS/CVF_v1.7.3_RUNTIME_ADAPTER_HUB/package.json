@@ -4,6 +4,7 @@
     "description": "CVF v1.7.3 — Runtime Adapter Hub: Universal adapter layer for multi-runtime AI safety",
     "main": "index.ts",
     "scripts": {
+        "check": "npm run typecheck && npm run test",
         "typecheck": "tsc --noEmit",
         "test": "vitest run",
         "test:watch": "vitest",

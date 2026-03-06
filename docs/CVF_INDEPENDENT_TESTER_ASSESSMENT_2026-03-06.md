@@ -352,3 +352,90 @@ Before accepting a new upgrade wave, require:
    - module `test:coverage`
    - `python governance/compat/check_bug_doc_compat.py --enforce`
    - `python governance/compat/check_test_doc_compat.py --enforce`
+
+## Retest Addendum (REQ-20260306-005)
+
+Date: 2026-03-06  
+Scope: re-check upgraded `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI` and close coverage/check blockers.
+
+### Forensic trace
+
+- Trace batch: `REVIEW/TRACE/2026-03-06_v3_core_retest_batch_01`
+- requestId: `REQ-20260306-005`
+- traceHash: `ea1573a7225312472140c943a8e610601af0b21538c186f1dec5123541021491`
+- Index file: `REVIEW/TRACE/2026-03-06_v3_core_retest_batch_01/TRACE_INDEX.md`
+
+### Fixes applied
+
+- Added Node type dependency for module check stability:
+  - `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/package.json`
+- Added Node typing context in compiler options:
+  - `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/tsconfig.json`
+- Expanded test harness to cover previously untested branches/getters/error paths:
+  - `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/tests/v3.0.core.test.ts`
+
+### Validation results
+
+- `npm run check`: PASS
+- `npm run test:coverage`: PASS
+- Tests: `49/49` passed
+- Coverage:
+  - Statements: `100%`
+  - Branches: `97.11%`
+  - Functions: `100%`
+  - Lines: `100%`
+
+Additional upgraded module recheck (same batch):
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`
+  - `npm run check`: PASS
+  - `npm run test:coverage`: PASS
+  - Coverage: Statements `93.99%`, Branches `82.03%`, Functions `100%`, Lines `93.99%`
+
+### Updated conclusion for this scope
+
+- The upgraded `v3.0 core` module now satisfies the configured threshold gate (`90/80/90/90`) and is no longer a release blocker in this assessed batch.
+
+## Findings Remediation Addendum (REQ-20260306-007)
+
+Date: 2026-03-06  
+Scope: close open findings from independent reassessment (`REQ-20260306-006`).
+
+### Forensic trace
+
+- Trace batch: `REVIEW/TRACE/2026-03-06_findings_fix_batch_01`
+- requestId: `REQ-20260306-007`
+- traceHash: `267d0570f7216a1d348c6b36e8fa167d87a286ca0738b7951531b4c0a03208a2`
+- Index file: `REVIEW/TRACE/2026-03-06_findings_fix_batch_01/TRACE_INDEX.md`
+
+### Findings closure status
+
+1. Compat range hardening: CLOSED
+- `governance/compat/check_bug_doc_compat.py`
+- `governance/compat/check_test_doc_compat.py`
+- Change: default range now auto-detects merge-base (`origin/main|origin/master|main|master`) or `CVF_COMPAT_BASE`, with fallback to `HEAD~1`.
+- Change: gate now also considers staged/unstaged working-tree changes to avoid local false violations when docs are updated pre-commit.
+
+2. `v1.7.3` pipeline consistency: CLOSED
+- `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/package.json`
+- Change: added standardized `check` script (`typecheck + test`).
+
+3. `v1.2.2` coverage floor weakness: CLOSED
+- `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/tests/v1.2.2.test.ts`
+- `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/core/runtime.orchestrator.ts`
+- `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/vitest.config.ts`
+- Change: expanded branch/edge test matrix and raised official thresholds to `95/90/95/95`.
+- Result: `npm run test:coverage` PASS with `99.32/97.67/97.29/99.32`.
+
+4. Scanner threshold leniency: CLOSED
+- `tools/skill_security_scanner/tests/scanner.test.ts`
+- `tools/skill_security_scanner/vitest.config.ts`
+- Change: added branch-oriented tests (decode edge, no-decoded path, severity mapping, report detail loops) and raised thresholds to `95/85/95/95`.
+- Result: `npm run test:coverage` PASS with `99.29/92.85/100/99.29`.
+
+### Validation summary (post-fix)
+
+- `v1.2.2`: `npm run check` PASS, `npm run test:coverage` PASS
+- `v1.7.3`: `npm run check` PASS
+- `scanner`: `npm run check` PASS, `npm run test:coverage` PASS
+- `python governance/compat/check_bug_doc_compat.py --enforce`: PASS
+- `python governance/compat/check_test_doc_compat.py --enforce`: PASS

@@ -125,13 +125,25 @@ CVF = Governance Framework (Rules + Process + Tools)
 │     v1.5.1 — End-User Orientation                           │
 │     v1.5.2 — Skill Library (141 skills, 12 domains, ACTIVE) │
 ├─────────────────────────────────────────────────────────────┤
-│  🛡️ LAYER 1.5 — DEVELOPMENT GOVERNANCE (NEW)                │
-│     v1.1.1 — Phase Governance Protocol (Implemented ✅)     │
-│     ● 9-stage deterministic pipeline: SPEC→COMPLETE          │
-│     ● State machine verification + deadlock detection        │
-│     ● Architecture drift detection + diagram validation      │
-│     ● Phase Gate with R0–R3 risk levels                      │
-│     ● 7 sub-modules | 21 TypeScript files                   │
+│  🛡️ LAYER 1.5 — DEVELOPMENT GOVERNANCE                      │
+│     v1.1.1 — Phase Governance Protocol (STABLE ✅)          │
+│     v1.1.2 — Phase Governance Hardening (NEW ✅)            │
+│     ● GOVERNANCE_PIPELINE: deterministic 6-module order      │
+│     ● Trust Boundary + Hash Ledger (SHA-256)                 │
+│     ● Capability Isolation (PHASE_CAPABILITIES)              │
+│     ● Self-Debugging (detectAnomalies)                       │
+│     ● System Invariants (INV-01/02/03)                       │
+│     ● Governance Executor (runtime/)                         │
+│     ● 22 tests | coverage 90/80/90/90                        │
+├─────────────────────────────────────────────────────────────┤
+│  🧬 LAYER 0 — CVF CORE FOUNDATION (branch cvf-next)   v3.0  │
+│     "Git for AI Development" — 3+1 Primitives:               │
+│     ● AI Commit (schema + parser + validator)                │
+│     ● Artifact Staging (CANDIDATE→ACCEPTED, 4-state)        │
+│     ● Artifact Ledger (append-only, content-addressed)       │
+│     ● Process Model (gate-required, multi-process)           │
+│     ● 49 tests | coverage 90/80/90/90                        │
+│     ● CVF Core = standalone | CVF Full = Core + Governance   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -146,7 +158,8 @@ CVF = Governance Framework (Rules + Process + Tools)
 |---------|-----|-------|-----------|--------------------------|
 | v1.0 | Core Baseline | 1 | Active ✅ | `v1.0/` (root) |
 | v1.1 | Extended Control | 1 | Active ✅ | `v1.1/` (root) |
-| v1.1.1 | Phase Governance Protocol | 1.5 | **Implemented** ✅ | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` |
+| v1.1.1 | Phase Governance Protocol | 1.5 | **STABLE** 🔒 | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` |
+| v1.1.2 | Phase Governance Hardening | 1.5 | **NEW** 🆕 | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` |
 | v1.2 | Skill Governance | 1 | Active ✅ | `CVF_v1.2_CAPABILITY_EXTENSION/` |
 | v1.2.1 | External Integration | 2 | **Implemented** ✅ | `CVF_v1.2.1_EXTERNAL_INTEGRATION/` |
 | v1.2.2 | Skill Governance Engine | 2 | **Implemented** ✅ | `CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` |
@@ -166,6 +179,7 @@ CVF = Governance Framework (Rules + Process + Tools)
 | v1.8.1 | Adaptive Observability Runtime | 2.5+3 | **Implemented** ✅ | `CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` |
 | v1.9 | Deterministic Reproducibility | 2.5 | **Implemented** ✅ | `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` |
 | v2.0 | Non-Coder Safety Runtime | 4 | **Implemented** ✅ | `CVF_v2.0_NONCODER_SAFETY_RUNTIME/` |
+| v3.0 | Core Foundation — Git for AI | 0 | **DRAFT** 🔵 (cvf-next) | `CVF_v3.0_CORE_GIT_FOR_AI/` |
 
 ---
 

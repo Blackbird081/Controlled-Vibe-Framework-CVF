@@ -2,6 +2,40 @@
 
 ---
 
+## [2026-03-06] — CVF v3.0 Core Foundation Primitives (branch cvf-next)
+
+### Added
+- **CVF v3.0 Core — "Git for AI Development"** — `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/`
+  - **Layer 0 (Foundation Primitives)** — NEW layer below all existing layers
+  - **AI Commit Model**: schema (9 CommitTypes), parser (deterministic SHA-256 commit_id), validator (8 RULE checks)
+  - **Artifact Staging**: 4-state machine CANDIDATE→IN_GOVERNANCE→ACCEPTED/REJECTED
+  - **Artifact Ledger**: append-only, content-addressed, version tracking with lineage
+  - **Process Model**: gate-required stage advance, multi-process, auto-complete
+  - 49 tests (100% PASS), coverage 90/80/90/90
+- **CVF Core vs CVF Full** — officially distinct scopes:
+  - CVF Core = standalone (AI dev teams)  
+  - CVF Full = Core + Verification + Observability (enterprise)
+- **ADR-016** — Major version gate for v3.0 (DRAFT)
+- **Docs new**: CVF_ARCHITECTURE_MAP.md, CVF_WHITEPAPER_GIT_FOR_AI.md, CVF_ADOPTION_STRATEGY.md, CVF_SKILL_LIFECYCLE.md
+
+---
+
+## [2026-03-06] — CVF v1.1.2 Phase Governance Hardening
+
+### Added
+- **GOVERNANCE_PIPELINE** — deterministic fixed 6-module execution order (De_xuat_02)
+- **Trust Boundary** — SHA-256 contentHash per artifact, `verifyAllHashes()` (De_xuat_06)
+- **Hash Ledger** — `getHashLedger()`, `detectTampering()`, Hash Ledger audit snapshots (De_xuat_06)
+- **Capability Isolation** — `PHASE_CAPABILITIES` map, `CapabilityViolationError` (De_xuat_07)
+- **Self-Debugging** — `detectAnomalies()`: DEAD_PATH, UNREACHABLE_STATE, LOOP_TRAP (De_xuat_04)
+- **System Invariants** — `checkInvariants()`, 3 built-in invariants INV-01/02/03 (De_xuat_05)
+- **Governance Executor** — `runtime/governance.executor.ts` pipeline orchestrator (De_xuat_01)
+- **Evolution Governance Rules** — 3-layer model (CORE/VERIFICATION/OBSERVABILITY), 5 Design Invariants INV-A→E
+- **ADR-015** — v1.1.2 integration decision
+- Tests increased from 12 → 22 (10 new), all PASS
+
+---
+
 ## [2026-03-06] — CVF v1.1.1 Phase Governance Protocol Integrated
 
 ### Added

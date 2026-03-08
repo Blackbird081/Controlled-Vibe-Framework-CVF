@@ -1,226 +1,202 @@
-# Architecture Separation Diagram
+# CVF Architecture Separation Diagram
 
-> **Cập nhật 2026-02-21** — Phản ánh cấu trúc thực tế của hệ thống CVF (bao gồm v1.6.1 Governance Engine)
+> **Updated 2026-03-08** — CVF Core vs CVF Full separation, Layer 0–5 architecture
 
 ---
 
-## Hệ Thống CVF — Tổng Quan Kiến Trúc
+## Two Scopes of CVF
 
 ```
-┌────────────────────────────────────────────────────────────────────────────┐
-│                        CVF CORE (v1.0 + v1.1)                             │
-│                         🔒 FROZEN — Không thay đổi                        │
-│                                                                            │
-│   ✦ 4-Phase Model: Discovery → Design → Build → Review                   │
-│   ✦ Governance Principles & Checklists                                     │
-│   ✦ Agent Archetypes: Analysis / Execution / Orchestration                │
-│   ✦ INPUT/OUTPUT Specs & Command Taxonomy                                  │
-│   ✦ Execution Spine + Action Units                                         │
-│                                                                            │
-│   📌 Foundation — Tất cả extensions đều dựa trên đây                      │
-└────────────────────────────────────────────────────────────────────────────┘
+                    ┌─────────────────────────────────┐
+                    │     Controlled Vibe Framework    │
+                    │             (CVF)                │
+                    └───────────────┬─────────────────┘
                                     │
-                    ┌───────────────┼───────────────┐
-                    │ extends       │ extends       │ extends
-                    ▼               ▼               ▼
-┌──────────────┐ ┌──────────────┐ ┌──────────────────────────────────────┐
-│ v1.2         │ │ v1.3         │ │ v1.4 → v1.5 → v1.5.1 → v1.5.2      │
-│ Capability   │ │ Toolkit      │ │ Usage / UX / End-User / Skills      │
-│ Extension    │ │ (SDKs)       │ │                                      │
-│              │ │ Python + TS  │ │ 131 Reusable Skills                  │
-│ Risk R0–R3   │ │ SDK          │ │ 12 Domains                           │
-│ Skill Spec   │ │              │ │                                      │
-└──────────────┘ └──────────────┘ └──────────────────────────────────────┘
-                                    │
-                                    │ extends
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────────┐
-│                    CVF v1.6 — AGENT PLATFORM                              │
-│                   ✅ Production Runtime                                    │
-│                                                                            │
-│   📂 cvf-web/ (Next.js 16 + React 19)                                    │
-│   ✦ 1068 tests | 95.6% coverage | 79.4% branch                          │
-│   ✦ AI Agent Chat (multi-provider: OpenAI, Claude, Gemini)                │
-│   ✦ Governance Enforcement (3-mode: simple/governance/full)               │
-│   ✦ Quality Scoring (0–100, 4 dimensions)                                │
-│   ✦ Phase Gates, Risk Check (R0–R4), Spec Gate                           │
-│   ✦ Multi-Agent Workflow (Orchestrator/Architect/Builder/Reviewer)        │
-│   ✦ i18n (English/Vietnamese), Dark Mode, Analytics                      │
-│                                                                            │
-│   📌 Đây là PRODUCTION RUNTIME chính thức của CVF                         │
-└──────────────────────────────────┬─────────────────────────────────────────┘
-                                   │
-                    ┌──────────────┴──────────────┐
-                    │ sub-layer                   │
-                    ▼                             ▼
-┌────────────────────────────────────┐  ┌─────────────────────────────────┐
-│  CVF v1.6.1 — GOVERNANCE ENGINE   │  │  📂 governance/                 │
-│  🔐 Enterprise Enforcement         │  │  Toolkit bootstrap (7 folders)  │
-│                                    │  │  Skill Library (131 skills)     │
-│  📂 ai_governance_core/ (Python)   │  │  Registry + Validation Scripts  │
-│  ✦ 143 tests | Score 8.2/10       │  └─────────────────────────────────┘
-│  ✦ Policy-as-Code DSL (RULE/WHEN/ │
-│    THEN)                           │
-│  ✦ Immutable Hash-Chain Ledger     │
-│  ✦ RBAC + Multi-level Approval     │
-│  ✦ CI/CD Gate (exit codes 0/2/3/4) │
-│  ✦ CVF Adapters (Risk R0-R4,      │
-│    Quality 4-dim, Enforcement)     │
-│  ✦ FastAPI REST Server             │
-│  ✦ Tamper Detection + Brand Drift  │
-│  ✦ Policy Simulation Sandbox       │
-│                                    │
-│  📌 Enterprise enforcement backend │
-│     Bổ sung cvf-web, không thay thế│
-└────────────────────────────────────┘
-
+                    ┌───────────────┴───────────────┐
+                    │                               │
+                    ▼                               ▼
+    ┌───────────────────────────┐   ┌───────────────────────────────┐
+    │       🧬 CVF Core         │   │        🏛️ CVF Full            │
+    │   "Git for AI Development"│   │  "AI Governance Framework"    │
+    │                           │   │                               │
+    │   Deterministic           │   │   Complete governance         │
+    │   development primitives  │   │   ecosystem built on Core     │
+    │                           │   │                               │
+    │   Layer 0                 │   │   Layer 1 → Layer 5           │
+    └───────────────────────────┘   └───────────────────────────────┘
 ```
 
 ---
 
-## v1.6 ↔ v1.6.1 — Mối Quan Hệ Bổ Sung
+## CVF Core — Layer 0 (Foundation)
+
+> **"Git for AI Development"** — Giống cách Git giải quyết version control cho code,
+> CVF Core giải quyết governance control cho AI development.
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                         CVF CORE (v1.0/v1.1)                            │
-│                    Supreme Authority — FROZEN                            │
-│            4-Phase Model • Risk R0-R4 • Phase Authority                  │
-└──────────────────────────────┬───────────────────────────────────────────┘
-                               │
-          ┌────────────────────┴────────────────────┐
-          ▼                                        ▼
-┌────────────────────────┐           ┌───────────────────────────────┐
-│  cvf-web (v1.6)        │           │ ai_governance_core (v1.6.1)   │
-│  "Live Guardrails"     │           │ "Enterprise Enforcement"      │
-│  TypeScript / Next.js  │           │ Python / FastAPI              │
-│                        │           │                               │
-│  • Browser runtime     │  ◄─API─► │  • CI/CD pipeline             │
-│  • Quality scoring     │           │  • Approval workflows         │
-│  • Safety filters      │           │  • Policy-as-Code DSL         │
-│  • Acceptance gate     │           │  • Immutable audit ledger     │
-│  • Risk check R0-R4    │           │  • RBAC + identity            │
-│  • Enforcement log     │           │  • Tamper detection           │
-│  • Monitoring/Sentry   │           │  • Simulation sandbox         │
-│  • 1255 tests          │           │  • 143 tests                  │
-└────────────────────────┘           └───────────────────────────────┘
-         │                                        │
-         │    Shared: CVF Risk R0-R4               │
-         │    Shared: CVF Quality 4-dim            │
-         │    Shared: CVF Phase Authority A-E      │
-         │    Shared: CVF Roles Operator/Lead/     │
-         │            Reviewer/Observer            │
-         └────────────────────────────────────────┘
-
-  ✦ cvf-web  = Real-time governance trong browser
-  ✦ v1.6.1   = Enterprise governance backend: audit, CI, approval
-  ✦ Không thay thế nhau — bổ sung ở hai tầng khác nhau
+┌──────────────────────────────────────────────────────────────────┐
+│                     🧬 CVF CORE — LAYER 0                        │
+│               Deterministic Development Primitives               │
+│                        🔒 IMMUTABLE                              │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   v1.0 / v1.1  (FROZEN — Foundation specs)                       │
+│   ├── 4-Phase Model: Discovery → Design → Build → Review        │
+│   ├── Governance Principles & Checklists                         │
+│   ├── Agent Archetypes: Analysis / Execution / Orchestration     │
+│   ├── INPUT/OUTPUT Specs & Command Taxonomy                      │
+│   └── Execution Spine + Action Units                             │
+│                                                                  │
+│   v3.0  Core Governance Engine (TypeScript)                      │
+│   ├── ai_commit         — Deterministic commit protocol          │
+│   ├── artifact_ledger   — Immutable artifact chain               │
+│   ├── process_model     — Phase state machine engine             │
+│   ├── skill_lifecycle   — Skill governance pipeline              │
+│   └── 49 tests                                                   │
+│                                                                  │
+│   📌 ALL higher layers depend on Layer 0                         │
+│   📌 Layer 0 NEVER depends on higher layers                      │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Reference Implementations — Ứng Dụng Mở Rộng Có Kiểm Soát
+## CVF Full — Layer 1→5 (Ecosystem)
+
+> **"AI Governance Framework"** — The complete ecosystem built on CVF Core.
 
 ```
-┌────────────────────────────────────────────────────────────────────────────┐
-│                    📘 REFERENCE IMPLEMENTATIONS                           │
-│               Ví dụ minh họa — Không phải production code                 │
-│                                                                            │
-│  ┌─────────────────────────────┐  ┌─────────────────────────────────────┐ │
-│  │  CVF_TOOLKIT_REFERENCE      │  │  CVF_STARTER_TEMPLATE_REFERENCE     │ │
-│  │                             │  │                                     │ │
-│  │  Minh họa:                  │  │  Minh họa:                          │ │
-│  │  • Governance Guard Engine  │  │  • Express AI Server Template       │ │
-│  │  • Risk Classifier (R1–R4) │  │  • 13-step Execution Pipeline       │ │
-│  │  • Phase Controller (P0–P6)│  │  • Multi-provider AI Abstraction    │ │
-│  │  • Skill Registry           │  │  • Budget/Freeze/Audit Guards       │ │
-│  │  • Change Control           │  │  • DI Pattern for Governance        │ │
-│  │  • AI Provider Abstraction  │  │  • Docker Deployment                │ │
-│  │  • Extension Templates      │  │  • UAT & Certification              │ │
-│  │                             │  │                                     │ │
-│  │  Stack: TypeScript + Jest   │  │  Stack: Express + TypeScript        │ │
-│  │  75 files, ~4,750 lines     │  │  63 files, ~1,650 lines             │ │
-│  └─────────────────────────────┘  └─────────────────────────────────────┘ │
-│                                                                            │
-│  📌 Dùng để tham khảo khi xây dựng project mới dựa trên CVF principles   │
-│  📌 Mỗi implementation minh họa một cách tiếp cận khác nhau              │
-│  📌 KHÔNG dùng trực tiếp cho production — dùng cvf-web hoặc v1.3 SDK     │
-└────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│  🛡️ Layer 5 — ADAPTER HUB                                       │
+│     v1.7.3  Runtime Adapter Contracts                            │
+│     OpenClaw │ PicoClaw │ ZeroClaw │ Nano                        │
+├──────────────────────────────────────────────────────────────────┤
+│  🎯 Layer 4 — SAFETY UI                                         │
+│     v1.7.2  Safety Dashboard (real-time risk view)               │
+│     v2.0    Non-Coder Safety Runtime                             │
+│             ModeMapper + IntentInterpreter + ConfirmationEngine  │
+├──────────────────────────────────────────────────────────────────┤
+│  🌐 Layer 3 — PLATFORM                                          │
+│     v1.6    Agent Platform (Next.js, AI Chat, Multi-Agent)       │
+│     v1.6.1  Governance Engine (Enterprise, FastAPI)              │
+├──────────────────────────────────────────────────────────────────┤
+│  ⚙️ Layer 2 — SAFETY RUNTIME                                    │
+│     v1.7.1  5-Layer Safety Kernel (51 tests)                     │
+│     v1.8    Safety Hardening — state machine, rollback (42 tests)│
+│     v1.9    Deterministic Replay — context freezer (29 tests)    │
+├──────────────────────────────────────────────────────────────────┤
+│  🧠 Layer 1 — INTELLIGENCE & TOOLS                              │
+│     v1.2    Capability Extension (Risk R0–R3, Skill Spec)        │
+│     v1.2.1  External Integration (supply chain, audit ledger)    │
+│     v1.3    SDK & Tooling (Python, TypeScript, CLI)              │
+│     v1.5.2  Skill Library (141 skills × 12 domains)              │
+│     v1.7    Controlled Intelligence (reasoning, entropy, prompt) │
+│     v1.1.1  Phase Governance Protocol (state enforcement)        │
+├──────────────────────────────────────────────────────────────────┤
+│  🧬 Layer 0 — CVF CORE (see above)                              │
+│     v1.0/v1.1 (FROZEN) + v3.0 Core Engine                       │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Khi Xây Dựng Project Mới
+## Branching Architecture View
 
 ```
-YOUR NEW AI PROJECT
-(ví dụ: Financial AI, HR AI, Legal AI...)
-     │
-     │  Tham khảo reference implementations
-     │  để hiểu governance patterns
-     │
-     ├──→ 📘 CVF Toolkit Reference    (governance engine patterns)
-     ├──→ 📘 Starter Template Reference (server template patterns)
-     │
-     │  Sử dụng production components
-     │
-     ├──→ ✅ CVF Core (v1.0/v1.1)     (governance principles)
-     ├──→ ✅ v1.3 SDK                  (skill contracts, validation)
-     ├──→ ✅ v1.5.2 Skill Library      (131 reusable skills)
-     └──→ ✅ cvf-web platform          (web UI, agent chat)
+CVF
+ │
+ ├─── 🧬 CVF Core (Layer 0) ─── "Git for AI Development"
+ │     │
+ │     ├── v1.0  Manifesto, 4-Phase, Governance Principles  [FROZEN]
+ │     ├── v1.1  Extended Control, I/O Specs, Multi-Agent    [FROZEN]
+ │     └── v3.0  Core Governance Engine                      [ACTIVE]
+ │           ├── ai_commit
+ │           ├── artifact_ledger
+ │           ├── process_model
+ │           └── skill_lifecycle
+ │
+ └─── 🏛️ CVF Full (Layer 1–5) ─── "AI Governance Framework"
+       │
+       ├── Layer 1: Intelligence & Tools
+       │     ├── v1.2   Capability Extension (Risk R0–R3)
+       │     ├── v1.2.1 External Integration (29 tests)
+       │     ├── v1.3   SDK & Tooling
+       │     ├── v1.5.2 Skill Library (141 skills)
+       │     ├── v1.7   Controlled Intelligence
+       │     └── v1.1.1 Phase Governance Protocol
+       │
+       ├── Layer 2: Safety Runtime
+       │     ├── v1.7.1 Safety Kernel (51 tests)
+       │     ├── v1.8   Safety Hardening (42 tests)
+       │     └── v1.9   Deterministic Replay (29 tests)
+       │
+       ├── Layer 3: Platform
+       │     ├── v1.6   Agent Platform (Next.js, AI Chat)
+       │     └── v1.6.1 Governance Engine (Enterprise)
+       │
+       ├── Layer 4: Safety UI
+       │     ├── v1.7.2 Safety Dashboard
+       │     └── v2.0   Non-Coder Safety Runtime (32 tests)
+       │
+       └── Layer 5: Adapter Hub
+             └── v1.7.3 Runtime Adapter Contracts
 ```
-
-### Quy Trình Đề Xuất:
-
-1. **Đọc CVF Core** (v1.0/v1.1) — hiểu 4-phase model, governance principles
-2. **Đọc Reference Implementations** — hiểu enforcement patterns, architecture
-3. **Chọn stack** — Next.js (cvf-web) hoặc Express (starter template pattern)
-4. **Import v1.3 SDK** — cho skill contract validation
-5. **Extend** — thêm domain logic riêng, KHÔNG sửa governance core
 
 ---
 
-## Architectural Principles (Vẫn Giữ Nguyên)
+## Dependency Rule
+
+```
+Layer 5  ──depends on──►  Layer 4  ──►  Layer 3  ──►  Layer 2  ──►  Layer 1
+                                                                       │
+                                                                       ▼
+                                                              🧬 Layer 0
+                                                              CVF Core
+                                                              (NEVER depends up)
+```
+
+**Key rules:**
+- Layer 0 is **immutable** — all changes through extensions only
+- Higher layers **depend on** lower layers, never the reverse
+- Layer 0 can run **standalone** — CVF Core works without CVF Full
+- CVF Full **requires** Layer 0 as foundation
+
+---
+
+## Separation Matrix
+
+| Layer | Scope | Purpose | Type | Key Tests |
+|-------|-------|---------|------|-----------|
+| **0** | **CVF Core** | Development primitives, governance engine | 🔒 Immutable | 49 (v3.0) |
+| **1** | CVF Full | Intelligence, skills, tools, SDK | ✅ Production | Mixed |
+| **2** | CVF Full | Safety kernel, hardening, replay | ✅ Production | 122 |
+| **3** | CVF Full | Web platform, governance engine | ✅ Production | 1764+ |
+| **4** | CVF Full | Safety UI, non-coder runtime | ✅ Production | 32 |
+| **5** | CVF Full | Runtime adapter contracts | ✅ Production | — |
+
+---
+
+## Enterprise Thinking
+
+| Analogy | CVF Equivalent |
+|---------|----------------|
+| Git kernel | CVF Core (Layer 0) — deterministic primitives |
+| GitHub / GitLab | CVF Full (Layer 1–5) — ecosystem on top |
+| ISO framework | CVF Core — standards that don't change |
+| Certified products | Downstream projects in CVF-Workspace |
+
+---
+
+## Architectural Principles
 
 ### Rule 1 — CVF Core Is Immutable
-CVF v1.0/v1.1 không sửa. Mọi thay đổi qua extensions.
+v1.0/v1.1 specs are FROZEN. v3.0 engine extends but preserves Core contracts.
 
-### Rule 2 — Production Runtime = cvf-web
-cvf-web (v1.6) là runtime chính thức với 1068 tests.
+### Rule 2 — Layer 0 Never Depends Up
+CVF Core can exist and function without any higher layer.
 
-### Rule 3 — Reference ≠ Production
-CVF Toolkit Reference và Starter Template Reference là ví dụ minh họa, không phải production code.
+### Rule 3 — Extend Without Mutation
+New capabilities go into Layer 1–5 extensions, never modify Layer 0.
 
-### Rule 4 — Extend Without Mutation
-Project mới thêm domain logic, không sửa governance.
-
----
-
-## Separation Matrix (Cập Nhật)
-
-| Layer | Purpose | Type | Tests |
-|-------|---------|------|-------|
-| CVF Core (v1.0/v1.1) | Governance specs | 🔒 FROZEN | N/A (specs) |
-| CVF Extensions (v1.2–v1.5.2) | Capability + Skills | ✅ Production | Mixed |
-| CVF Web (v1.6/cvf-web) | Production platform | ✅ Production | 1255 tests |
-| **CVF Governance Engine (v1.6.1)** | **Enterprise enforcement** | **✅ Production** | **143 tests** |
-| v1.3 TypeScript SDK | Skill contract SDK | ✅ Production | Has tests |
-| governance/toolkit | Bootstrap + Library | ✅ Production | Scripts |
-| 📘 Toolkit Reference | Governance engine example | 📘 Reference | 5 test files |
-| 📘 Starter Template Reference | Server template example | 📘 Reference | 0 test files |
-
----
-
-## Enterprise Thinking (Vẫn Giữ Nguyên)
-
-Xây hệ thống dùng dài hạn cho nhiều dự án sau này:
-
-- CVF Core = giống ISO framework nội bộ
-- CVF Web = production platform chính thức
-- Reference Implementations = SOP tham khảo khi triển khai project mới
-- Business Projects = từng hợp đồng / từng khách hàng
-
-Đây là cách tách giúp:
-- Audit rõ ràng
-- Freeze version rõ ràng
-- Rollback governance độc lập business
-- Giảm rủi ro AI sai chính sách
+### Rule 4 — Downstream Projects Are Separate
+Apps using CVF governance live in `CVF-Workspace/`, not in CVF root (ADR-020).

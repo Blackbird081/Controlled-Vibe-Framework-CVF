@@ -135,31 +135,47 @@ See [`docs/INDEX.md`](docs/INDEX.md) for complete document taxonomy and storage 
 
 ## 🏗️ Architecture
 
-CVF has 5 layers — an AI Safety Runtime that protects non-coders:
+CVF can be understood in **two scopes**:
+
+| Scope | Identity | Layer | Focus |
+|-------|----------|-------|-------|
+| 🧬 **CVF Core** | "Git for AI Development" | Layer 0 | Deterministic development primitives |
+| 🏛️ **CVF Full** | "AI Governance Framework" | Layer 1–5 | Complete governance ecosystem |
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  🛡️ SAFETY UI (Layer 4)      — Non-Coder Safety         │
-│     v1.7.2 Safety Dashboard  — v2.0 Non-Coder Runtime    │
-├─────────────────────────────────────────────────────────┤
-│  🔌 ADAPTER HUB (Layer 5)    — Runtime Adapter Contracts  │
-│     v1.7.3 OpenClaw | PicoClaw | ZeroClaw | Nano         │
-├─────────────────────────────────────────────────────────┤
-│  🌐 PLATFORM (Layer 3)       — Web UI, Agent Chat         │
-│     v1.6 Agent Platform      — v1.6.1 Governance Engine   │
-├─────────────────────────────────────────────────────────┤
-│  ⚙️ SAFETY RUNTIME (Layer 2.5) — Kernel Architecture      │
-│     v1.7.1 Safety Kernel     — v1.8 Hardening — v1.9 Replay│
-├─────────────────────────────────────────────────────────┤
-│  🧠 INTELLIGENCE (Layer 2)    — Agent Behavior Control    │
-│     v1.7 Reasoning/Entropy   — v1.3 SDK — v1.2.1 Integr.  │
-├─────────────────────────────────────────────────────────┤
-│  📖 CORE (Layer 1)            — Principles, Phases, Skills│
-│     v1.0, v1.1, v1.2         — Rules + 141 Skills         │
-└─────────────────────────────────────────────────────────┘
+CVF
+ │
+ ├─── 🧬 CVF Core (Layer 0) ─── "Git for AI Development"
+ │     │
+ │     ├── v1.0  4-Phase Model, Governance Principles       [FROZEN]
+ │     ├── v1.1  Extended Control, I/O Specs                 [FROZEN]
+ │     └── v3.0  Core Governance Engine                      [ACTIVE]
+ │           ├── ai_commit        (deterministic commits)
+ │           ├── artifact_ledger  (immutable artifact chain)
+ │           ├── process_model    (phase state machine)
+ │           └── skill_lifecycle  (skill governance pipeline)
+ │
+ └─── 🏛️ CVF Full (Layer 1–5) ─── "AI Governance Framework"
+       │
+       ├── Layer 1: Intelligence & Tools
+       │     v1.2 · v1.2.1 · v1.3 · v1.5.2 · v1.7 · v1.1.1
+       │
+       ├── Layer 2: Safety Runtime
+       │     v1.7.1 Safety Kernel · v1.8 Hardening · v1.9 Replay
+       │
+       ├── Layer 3: Platform
+       │     v1.6 Agent Platform · v1.6.1 Governance Engine
+       │
+       ├── Layer 4: Safety UI
+       │     v1.7.2 Dashboard · v2.0 Non-Coder Runtime
+       │
+       └── Layer 5: Adapter Hub
+             v1.7.3 OpenClaw · PicoClaw · ZeroClaw · Nano
 ```
 
-**Read more:** [CVF Positioning](docs/reference/CVF_POSITIONING.md) | [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md) | [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
+> **Layer 0 never depends up.** CVF Core works standalone. CVF Full requires Layer 0 as foundation.
+
+**Read more:** [Architecture Separation Diagram](EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md) | [CVF Positioning](docs/reference/CVF_POSITIONING.md) | [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
 
 ---
 

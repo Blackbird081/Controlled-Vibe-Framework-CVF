@@ -277,16 +277,22 @@ Output (Allow / Strip & Allow / Block)
 
 | Guard | Trigger | Required File |
 |-------|---------|---------------|
-| Bug Documentation Guard | `fix:` commits | `docs/BUG_HISTORY.md` |
-| Test Documentation Guard | `test:` commits | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
-| Test Log Rotation Guard | active test log window exceeds threshold | `docs/CVF_INCREMENTAL_TEST_LOG.md` + `docs/logs/` |
-| ADR Guard | `feat(governance):`, `refactor(arch):`, `docs(policy):` | `docs/CVF_ARCHITECTURE_DECISIONS.md` |
-| Document Naming Guard | New/migrated long-term governance docs | `CVF_` naming convention + approved exceptions |
-| Document Storage Guard | New long-term docs in `docs/` | Correct taxonomy folder per `docs/INDEX.md` |
-| Depth Audit Guard | Any roadmap deepening / new semantic layer | Explicit scoring before continuing deeper |
-| Workspace Isolation Guard | Opening projects in CVF root | Sibling workspace only |
-| Test Depth Classification Guard | Any test count report in assessment/review/release | T1–T4 tier breakdown + Meaningful Assertion Rate |
-| **Architecture Check Guard** | **Any new version/layer/extension/module proposal** | **`docs/CVF_CORE_KNOWLEDGE_BASE.md` ← file này** |
+| CVF_BUG_DOCUMENTATION_GUARD.md | `fix:` commits | `docs/BUG_HISTORY.md` |
+| CVF_TEST_DOCUMENTATION_GUARD.md | `test:` commits | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
+| CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md | active test log window exceeds threshold | `docs/CVF_INCREMENTAL_TEST_LOG.md` + `docs/logs/` |
+| CVF_ADR_GUARD.md | `feat(governance):`, `refactor(arch):`, `docs(policy):` | `docs/CVF_ARCHITECTURE_DECISIONS.md` |
+| CVF_DOCUMENT_NAMING_GUARD.md | New/migrated long-term governance docs | `CVF_` naming convention + approved exceptions |
+| CVF_DOCUMENT_STORAGE_GUARD.md | New long-term docs in `docs/` | Correct taxonomy folder per `docs/INDEX.md` |
+| CVF_DEPTH_AUDIT_GUARD.md | Any roadmap deepening / new semantic layer | Explicit scoring before continuing deeper |
+| CVF_WORKSPACE_ISOLATION_GUARD.md | Opening projects in CVF root | Sibling workspace only |
+| CVF_TEST_DEPTH_CLASSIFICATION_GUARD.md | Any test count report in assessment/review/release | T1–T4 tier breakdown + Meaningful Assertion Rate |
+| CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md | Trace exceeds threshold | Rotate to `docs/reviews/*/logs/` |
+| CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md | Wave 1 closure | Sequential runner, shared bootstrap |
+| CVF_PYTHON_AUTOMATION_SIZE_GUARD.md | Scripts in `scripts/`, `governance/compat/` | Stay within size thresholds |
+| CVF_ARCHITECTURE_CHECK_GUARD.md | Any new version/layer/extension/module proposal | `docs/CVF_CORE_KNOWLEDGE_BASE.md` ← file này |
+| CVF_EXTENSION_VERSIONING_GUARD.md | New extension folder in `EXTENSIONS/` | `CVF_{STREAM}_v{major}.{minor}_{NAME}/` format |
+| CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
+
 
 ### Compatibility Gates (Chạy trước khi merge):
 ```bash

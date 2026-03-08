@@ -288,6 +288,8 @@ python governance/compat/check_docs_governance_compat.py --enforce
 | [Test Depth Classification](governance/toolkit/05_OPERATION/CVF_TEST_DEPTH_CLASSIFICATION_GUARD.md) | Test count reports | T1–T4 tier breakdown required |
 | [Python Automation Size](governance/toolkit/05_OPERATION/CVF_PYTHON_AUTOMATION_SIZE_GUARD.md) | Scripts in `scripts/`, `governance/compat/` | Stay within size thresholds |
 | [Conformance Performance](governance/toolkit/05_OPERATION/CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md) | Wave 1 closure | Sequential runner, shared bootstrap |
+| [Extension Versioning](governance/toolkit/05_OPERATION/CVF_EXTENSION_VERSIONING_GUARD.md) | New extension folder in `EXTENSIONS/` | `CVF_{STREAM}_v{major}.{minor}_{NAME}/` format |
+| [Guard Registry](governance/toolkit/05_OPERATION/CVF_GUARD_REGISTRY_GUARD.md) | New guard created | Register in README.md + CVF_CORE_KNOWLEDGE_BASE.md |
 
 ### Extension Rules (Non-negotiable)
 

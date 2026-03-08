@@ -182,6 +182,7 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 | **v1.8** 🔐 | Safety Hardening — state machine, mutation budget, rollback | 42 |
 | **v1.9** 📋 | Deterministic Reproducibility — replay engine, forensic audit | 29 |
 | **v2.0** 🎯 | Non-Coder Safety Runtime — ModeMapper, IntentInterpreter | 32 |
+| **v3.0** 🧬 | **Core Governance Engine** — AI commit, artifact ledger, process model, skill lifecycle | 49 |
 
 → [Version Comparison](docs/VERSION_COMPARISON.md) | [Decision Tree](docs/cheatsheets/version-picker.md)
 

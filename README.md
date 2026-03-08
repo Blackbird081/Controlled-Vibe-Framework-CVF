@@ -162,11 +162,9 @@ npm install && npm run dev
 
 **→ [📖 Full Getting Started Guide](docs/GET_STARTED.md)**
 
-### Real Project Case Study (Local)
+### Real Project Case Studies
 
-- [Mini Game CVF Project](Mini_Game/MINI_GAME_WEBAPP_CVF_PLAN_2026-02-26.md)
-- CVF docs bundle: [Mini_Game/CVF_DOCS](Mini_Game/CVF_DOCS/)
-- Archive bundle (bug/test/history/fig): [Mini_Game/PROJECT_ARCHIVE](Mini_Game/PROJECT_ARCHIVE/)
+Downstream projects are developed in a separate `CVF-Workspace/` following [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md). See [ADR-020](docs/CVF_ARCHITECTURE_DECISIONS.md) for rationale.
 
 ---
 
@@ -331,16 +329,40 @@ Decision trace:
 
 ---
 
-## 📚 Documentation
+## 📚 Documentation Index
+
+> **Bắt đầu từ đây:** [🚀 CVF Quick Orientation (15 phút)](docs/guides/CVF_QUICK_ORIENTATION.md) | [📖 Full Getting Started](docs/GET_STARTED.md) | [🧠 Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
+
+### 📘 Learning
 
 | Category | Links |
 |----------|-------|
-| **🎓 Learn** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance](docs/concepts/governance-model.md) |
-| **🚀 Build** | [First Project](docs/tutorials/first-project.md) · [Web UI](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
-| **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
-| **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 141 skills across 12 domains |
-| **🤖 Agent Skills** | [34 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide v1](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Usage Guide v2](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-new-skills-v2.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
-| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) · [Core Compatibility Baseline](docs/baselines/CVF_CORE_COMPAT_BASELINE.md) · [Bug History](docs/BUG_HISTORY.md) · [Architecture Decisions](docs/CVF_ARCHITECTURE_DECISIONS.md) |
+| **Concepts** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance Model](docs/concepts/governance-model.md) · [Risk Model](docs/concepts/risk-model.md) · [Skill System](docs/concepts/skill-system.md) · [Version Evolution](docs/concepts/version-evolution.md) |
+| **Guides** | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) · [Solo Developer](docs/guides/solo-developer.md) · [Team Setup](docs/guides/team-setup.md) · [Enterprise](docs/guides/enterprise.md) |
+| **Tutorials** | [First Project](docs/tutorials/first-project.md) · [Web UI Setup](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
+| **Cheatsheets** | [Troubleshooting](docs/cheatsheets/troubleshooting.md) · [Version Picker](docs/cheatsheets/version-picker.md) |
+
+### 📋 Governance & Records
+
+| Category | Links |
+|----------|-------|
+| **Reference** | [Release Manifest](docs/reference/CVF_RELEASE_MANIFEST.md) · [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md) · [Maturity Matrix](docs/reference/CVF_MATURITY_MATRIX.md) · [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md) · [Positioning](docs/reference/CVF_POSITIONING.md) |
+| **Assessments** | [Independent Review 2026-03-08](docs/assessments/CVF_INDEPENDENT_EXPERT_REVIEW_UPGRADE_WAVE_2026-03-08.md) · [Assessment 2026-02-25](docs/assessments/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md) · [Antigravity Assessment](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md) |
+| **Baselines** | [Core Compat Baseline](docs/baselines/CVF_CORE_COMPAT_BASELINE.md) · [Version Comparison](docs/VERSION_COMPARISON.md) · [Versioning Policy](docs/VERSIONING.md) |
+| **Records** | [Architecture Decisions (ADR-001→020)](docs/CVF_ARCHITECTURE_DECISIONS.md) · [Bug History](docs/BUG_HISTORY.md) · [Test Log](docs/CVF_INCREMENTAL_TEST_LOG.md) · [CHANGELOG](CHANGELOG.md) |
+| **Enterprise** | [Evidence Pack](docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md) · [Control Mapping](docs/reference/CVF_CONTROL_TO_ARTIFACT_MAPPING.md) · [Approval Template](docs/reference/CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md) |
+
+### 🧩 Skills & Tools
+
+| Category | Links |
+|----------|-------|
+| **Skill Library** | [141 Skills × 12 Domains](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| **Agent Skills** | [34 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
+| **SDK & Tooling** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) · [Governance Guards](governance/toolkit/05_OPERATION/) |
+
+### 🗂️ Full Index
+
+See [`docs/INDEX.md`](docs/INDEX.md) for complete document taxonomy and storage rules.
 
 **Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
 
@@ -573,4 +595,4 @@ Inspired by real-world challenges in AI-assisted development.
 
 ---
 
-*Last updated: March 5, 2026 | Version 2.0.0 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: March 8, 2026 | Version 2.0.0 | [Documentation](docs/GET_STARTED.md) | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md)*

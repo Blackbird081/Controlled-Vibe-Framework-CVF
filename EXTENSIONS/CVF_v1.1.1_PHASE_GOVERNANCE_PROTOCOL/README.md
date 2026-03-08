@@ -18,6 +18,13 @@ CVF After v1.1.1: idea → SPEC → STATE_MACHINE → CODE → VALIDATE → GATE
 
 This is a **pre-runtime verification system** that validates architectural integrity before code enters the runtime environment.
 
+Current hardening status (2026-03-07):
+- `GovernanceExecutor` supports pluggable verification modules while preserving canonical pipeline order.
+- Executor can persist phase report + hash ledger into `GovernanceAuditLog` when audit logging is provided.
+- `artifact_integrity` now runs first in `GOVERNANCE_PIPELINE` so untrusted artifacts fail before deeper verification work starts.
+- Audit persistence now supports forensic trace metadata (`requestId`, `traceBatch`, `traceHash`, remediation linkage) for upgrade tracking.
+- Runtime execution now binds `policyVersion` and default `auditPhase` from a shared governance control-plane contract instead of leaving them fully caller-defined.
+
 ---
 
 ## 2. The 9-Stage Deterministic Pipeline
@@ -53,6 +60,9 @@ Every component must follow this strict sequential lifecycle:
 │   ├── phase.gate.ts            ← evaluate() + enforce()
 │   ├── gate.rules.ts            ← Validation rules
 │   └── gate.result.ts           ← APPROVED/REJECTED + R0–R3 risk level
+│
+├── control_plane/               ← Shared runtime-governance binding
+│   └── governance.control.plane.ts ← Canonical policyVersion/auditPhase contract
 │
 ├── state_enforcement/           ← State machine verification
 │   ├── state.machine.parser.ts  ← Parse YAML → StateMachine

@@ -13,6 +13,9 @@ export default defineConfig({
                 'governance/scenario_simulator/**/*.ts',
                 'governance/phase_gate/**/*.ts',
                 'governance/phase_protocol/artifact.registry.ts',
+                'governance/diagram_validation/diagram.validator.ts',
+                'governance/structural_diff/structural.diff.ts',
+                'runtime/governance.executor.ts',
             ],
             thresholds: {
                 statements: 90,

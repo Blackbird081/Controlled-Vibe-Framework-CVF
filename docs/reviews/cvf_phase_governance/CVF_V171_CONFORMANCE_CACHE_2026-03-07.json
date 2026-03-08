@@ -1,0 +1,77 @@
+{
+  "cacheId": "CVF_V171_CONFORMANCE_CACHE_2026-03-07",
+  "workdir": "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME",
+  "suiteResult": "PASS",
+  "scenarioCount": 3,
+  "scenarios": {
+    "CF-012": {
+      "testFile": "tests/checkpoint-resume.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 10.533,
+      "assertions": [
+        {
+          "fullName": "CVF v1.7.1 checkpoint/resume conformance creates a validated checkpoint without executing the proposal",
+          "status": "passed",
+          "durationMs": 3.552
+        },
+        {
+          "fullName": "CVF v1.7.1 checkpoint/resume conformance resumes a validated checkpoint and records execution",
+          "status": "passed",
+          "durationMs": 1.083
+        },
+        {
+          "fullName": "CVF v1.7.1 checkpoint/resume conformance fails closed when resuming a missing checkpoint",
+          "status": "passed",
+          "durationMs": 5.898
+        }
+      ]
+    },
+    "CF-017": {
+      "testFile": "tests/session-resume.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 10.21,
+      "assertions": [
+        {
+          "fullName": "CVF v1.7.1 session resume conformance resumes a checkpoint only when session and token match",
+          "status": "passed",
+          "durationMs": 3.212
+        },
+        {
+          "fullName": "CVF v1.7.1 session resume conformance fails closed when session id does not match the checkpoint",
+          "status": "passed",
+          "durationMs": 5.896
+        },
+        {
+          "fullName": "CVF v1.7.1 session resume conformance fails closed when resume token does not match the checkpoint",
+          "status": "passed",
+          "durationMs": 1.101
+        }
+      ]
+    },
+    "CF-018": {
+      "testFile": "tests/session-audit-linkage.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 10.704,
+      "assertions": [
+        {
+          "fullName": "CVF v1.7.1 session audit linkage conformance records checkpoint/session linkage into the execution journal after resume",
+          "status": "passed",
+          "durationMs": 3.117
+        },
+        {
+          "fullName": "CVF v1.7.1 session audit linkage conformance preserves checkpoint resume metadata even when simulateOnly avoids journal writes",
+          "status": "passed",
+          "durationMs": 1.208
+        },
+        {
+          "fullName": "CVF v1.7.1 session audit linkage conformance does not write audit linkage when resume authorization fails",
+          "status": "passed",
+          "durationMs": 6.379
+        }
+      ]
+    }
+  }
+}

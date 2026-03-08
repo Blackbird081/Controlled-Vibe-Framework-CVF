@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "2026-03-07",
+  "adapter": "FILE_BACKED_REMEDIATION_ADAPTER",
+  "receiptCount": 6,
+  "receipts": [
+    {
+      "receiptId": "RESUMED:proposal-remediation-export-001:persist_resume_evidence",
+      "action": "RESUMED",
+      "sourceProposalId": "proposal-remediation-export-001",
+      "step": "persist_resume_evidence",
+      "recordedAt": 1772904960933
+    },
+    {
+      "receiptId": "RESUMED:proposal-remediation-export-001:schedule_deterministic_replay_verification",
+      "action": "RESUMED",
+      "sourceProposalId": "proposal-remediation-export-001",
+      "step": "schedule_deterministic_replay_verification",
+      "recordedAt": 1772904960935
+    },
+    {
+      "receiptId": "RESUMED:proposal-remediation-export-001:mark_trace_ready_for_append",
+      "action": "RESUMED",
+      "sourceProposalId": "proposal-remediation-export-001",
+      "step": "mark_trace_ready_for_append",
+      "recordedAt": 1772904960936
+    },
+    {
+      "receiptId": "INTERRUPTED:proposal-remediation-export-001:verify_checkpoint_integrity",
+      "action": "INTERRUPTED",
+      "sourceProposalId": "proposal-remediation-export-001",
+      "step": "verify_checkpoint_integrity",
+      "recordedAt": 1772904960937
+    },
+    {
+      "receiptId": "INTERRUPTED:proposal-remediation-export-001:prepare_retry_from_latest_checkpoint",
+      "action": "INTERRUPTED",
+      "sourceProposalId": "proposal-remediation-export-001",
+      "step": "prepare_retry_from_latest_checkpoint",
+      "recordedAt": 1772904960938
+    },
+    {
+      "receiptId": "INTERRUPTED:proposal-remediation-export-001:mark_runtime_recovery_pending",
+      "action": "INTERRUPTED",
+      "sourceProposalId": "proposal-remediation-export-001",
+      "step": "mark_runtime_recovery_pending",
+      "recordedAt": 1772904960939
+    }
+  ]
+}

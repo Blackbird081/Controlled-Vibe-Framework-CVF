@@ -17,7 +17,7 @@
 CVF v1.7.3 adds:
 
 - **Universal runtime adapter contracts** — CVF can sit above any AI runtime
-- **4 adapter implementations** — OpenClaw, PicoClaw, ZeroClaw, Nano
+- **5 adapter implementations** — OpenClaw, PicoClaw, ZeroClaw, Nano, Release Evidence
 - **Explainability layer** — Human-readable action explanations (EN/VI)
 - **Natural language policy parser** — Write policies in plain language
 - **JSON-driven risk models** — Configurable risk matrices
@@ -62,7 +62,7 @@ npm run typecheck  # Type check
 | Module | Purpose | Files |
 |--------|---------|-------|
 | `contracts/` | Universal adapter interfaces | 5 interfaces + barrel |
-| `adapters/` | Runtime implementations | 4 adapters + shared base |
+| `adapters/` | Runtime implementations | 5 adapters + shared base |
 | `explainability/` | Human-readable explanations (EN/VI) | 1 |
 | `policy/` | NLP policy parser | 1 |
 | `risk_models/` | JSON risk configuration | 4 JSON files |
@@ -82,7 +82,7 @@ npm run typecheck  # Type check
 ## Strategic Background
 
 For the full competitive analysis and strategic positioning rationale, see:
-[CVF_HYPERVISOR_STRATEGY.md](../../docs/CVF_HYPERVISOR_STRATEGY.md)
+[CVF_HYPERVISOR_STRATEGY.md](../../docs/reference/CVF_HYPERVISOR_STRATEGY.md)
 
 ---
 

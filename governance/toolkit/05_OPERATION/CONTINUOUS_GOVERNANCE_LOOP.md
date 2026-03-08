@@ -119,7 +119,7 @@ For architectural or strategic decisions specifically:
 | Event type | Recorded in |
 |---|---|
 | Bug fixed | `docs/BUG_HISTORY.md` (Bug Guard) |
-| Tests executed | `docs/CVF_INCREMENTAL_TEST_LOG.md` (Test Guard) |
+| Tests executed | `docs/CVF_INCREMENTAL_TEST_LOG.md` + `docs/logs/` archive chain (Test Guard) |
 | Skill added | `CVF_SKILL_INTAKE_RECORD.md` (Skill Intake) |
 | Architecture/strategy decision | `docs/CVF_ARCHITECTURE_DECISIONS.md` (ADR Guard) |
 | Workspace isolation violation | `CVF_WORKSPACE_ISOLATION_GUARD.md` + remediation record in session log |

@@ -9,13 +9,14 @@
  *   - getHashLedgerHistory(): returns all ledger snapshots for audit trail.
  */
 
-import { PhaseReport } from "./phase.report.generator";
+import { GovernanceTraceMetadata, PhaseReport } from "./phase.report.generator";
 import { ArtifactHashEntry } from "../phase_protocol/artifact.registry";
 
 export interface HashLedgerSnapshot {
   phase: string;
   timestamp: number;
   entries: ArtifactHashEntry[];
+  trace?: GovernanceTraceMetadata;
 }
 
 export class GovernanceAuditLog {
@@ -43,11 +44,12 @@ export class GovernanceAuditLog {
    * Stores a tamper-evident snapshot of artifact hashes at a given phase.
    * Called automatically by GovernanceExecutor after artifact_integrity check.
    */
-  recordHashLedger(phase: string, entries: ArtifactHashEntry[]): void {
+  recordHashLedger(phase: string, entries: ArtifactHashEntry[], trace?: GovernanceTraceMetadata): void {
     this.hashLedgerHistory.push({
       phase,
       timestamp: Date.now(),
       entries,
+      trace,
     });
   }
 

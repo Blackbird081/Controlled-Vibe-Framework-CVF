@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "2026-03-07",
+  "adapter": "PHASE_GOVERNANCE_RUNTIME_EVIDENCE",
+  "receiptCount": 3,
+  "receipts": [
+    {
+      "receiptId": "INTEGRITY_VERIFIED:phase-governance-001:artifact_integrity",
+      "action": "INTEGRITY_VERIFIED",
+      "sourceProposalId": "phase-governance-001",
+      "step": "artifact_integrity",
+      "recordedAt": 1772863600000
+    },
+    {
+      "receiptId": "PIPELINE_EXECUTED:phase-governance-001:verification_pipeline",
+      "action": "PIPELINE_EXECUTED",
+      "sourceProposalId": "phase-governance-001",
+      "step": "verification_pipeline",
+      "recordedAt": 1772863601000
+    },
+    {
+      "receiptId": "AUDIT_EMITTED:phase-governance-001:phase_report_snapshot",
+      "action": "AUDIT_EMITTED",
+      "sourceProposalId": "phase-governance-001",
+      "step": "phase_report_snapshot",
+      "recordedAt": 1772863602000
+    }
+  ]
+}

@@ -6,6 +6,8 @@ import { detectDeadlocks } from '../governance/state_enforcement/deadlock.detect
 import { generateScenarios, checkInvariants, BUILT_IN_INVARIANTS } from '../governance/scenario_simulator/scenario.generator.js'
 import { traceExecution, detectAnomalies, AnomalyType } from '../governance/scenario_simulator/execution.trace.js'
 import { simulateFailures } from '../governance/scenario_simulator/failure.simulator.js'
+import { validateDiagram } from '../governance/diagram_validation/diagram.validator.js'
+import { detectStructuralDiff } from '../governance/structural_diff/structural.diff.js'
 import { ArtifactRegistry } from '../governance/phase_protocol/artifact.registry.js'
 import { GateRules, GOVERNANCE_PIPELINE } from '../governance/phase_gate/gate.rules.js'
 import { createGateResult } from '../governance/phase_gate/gate.result.js'
@@ -160,6 +162,70 @@ describe('v1.1.1 scenario simulation', () => {
     })
 })
 
+describe('v1.1.1 diagram + structural diff', () => {
+    it('validateDiagram fails when raw diagram context is empty', () => {
+        const machine = {
+            states: ['START', 'END'],
+            transitions: { START: ['END'], END: [] },
+        }
+
+        const result = validateDiagram(machine, '')
+        expect(result.passed).toBe(false)
+        expect(result.missingStates).toEqual(['START', 'END'])
+        expect(result.missingTransitions).toContain('START->END')
+    })
+
+    it('validateDiagram detects extra states/transitions in diagram', () => {
+        const machine = {
+            states: ['START', 'END'],
+            transitions: { START: ['END'], END: [] },
+        }
+
+        const diagram = [
+            'stateDiagram-v2',
+            'START --> END',
+            'START --> REVIEW',
+            'REVIEW --> END',
+        ].join('\n')
+
+        const result = validateDiagram(machine, diagram)
+        expect(result.passed).toBe(false)
+        expect(result.extraStates).toContain('REVIEW')
+        expect(result.extraTransitions).toContain('START->REVIEW')
+    })
+
+    it('detectStructuralDiff returns pass when no baseline is provided', () => {
+        const current = {
+            states: ['A', 'B'],
+            transitions: { A: ['B'], B: [] },
+        }
+
+        const result = detectStructuralDiff(current)
+        expect(result.passed).toBe(true)
+        expect(result.baselineProvided).toBe(false)
+    })
+
+    it('detectStructuralDiff reports added, removed and modified transitions', () => {
+        const baseline = {
+            states: ['A', 'B', 'OLD'],
+            transitions: { A: ['B'], B: [], OLD: [] },
+        }
+
+        const current = {
+            states: ['A', 'B', 'NEW'],
+            transitions: { A: ['NEW'], B: [], NEW: [] },
+        }
+
+        const result = detectStructuralDiff(current, baseline)
+        expect(result.passed).toBe(false)
+        expect(result.baselineProvided).toBe(true)
+        expect(result.addedStates).toContain('NEW')
+        expect(result.removedStates).toContain('OLD')
+        expect(result.modifiedTransitions).toContain('A->NEW (Added)')
+        expect(result.modifiedTransitions).toContain('A->B (Removed)')
+    })
+})
+
 describe('v1.1.1 phase gate and artifact governance', () => {
     it('ArtifactRegistry register/find/clear lifecycle', () => {
         const reg = new ArtifactRegistry('comp')
@@ -185,8 +251,9 @@ describe('v1.1.1 phase gate and artifact governance', () => {
     // ── v1.1.2: GOVERNANCE_PIPELINE (De_xuat_02) ─────────────────────────
     it('GOVERNANCE_PIPELINE has 6 modules in fixed order', () => {
         expect(GOVERNANCE_PIPELINE).toHaveLength(6)
-        expect(GOVERNANCE_PIPELINE[0]).toBe('state_enforcement')
-        expect(GOVERNANCE_PIPELINE[4]).toBe('artifact_integrity')
+        expect(GOVERNANCE_PIPELINE[0]).toBe('artifact_integrity')
+        expect(GOVERNANCE_PIPELINE[1]).toBe('state_enforcement')
+        expect(GOVERNANCE_PIPELINE[4]).toBe('scenario_simulator')
         expect(GOVERNANCE_PIPELINE[5]).toBe('reports')
     })
 

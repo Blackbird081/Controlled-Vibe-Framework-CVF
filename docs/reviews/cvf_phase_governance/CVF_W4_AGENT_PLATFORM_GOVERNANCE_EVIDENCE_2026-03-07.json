@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "2026-03-07",
+  "adapter": "AGENT_PLATFORM_GOVERNANCE_EVIDENCE",
+  "receiptCount": 3,
+  "receipts": [
+    {
+      "receiptId": "SNAPSHOT_RESOLVED:agent-platform-001:resolve_registry_binding",
+      "action": "SNAPSHOT_RESOLVED",
+      "sourceProposalId": "agent-platform-001",
+      "step": "resolve_registry_binding",
+      "recordedAt": 1772863300000
+    },
+    {
+      "receiptId": "SNAPSHOT_RESOLVED:agent-platform-001:resolve_uat_binding",
+      "action": "SNAPSHOT_RESOLVED",
+      "sourceProposalId": "agent-platform-001",
+      "step": "resolve_uat_binding",
+      "recordedAt": 1772863301000
+    },
+    {
+      "receiptId": "ENFORCEMENT_EVALUATED:agent-platform-001:evaluate_governance_route",
+      "action": "ENFORCEMENT_EVALUATED",
+      "sourceProposalId": "agent-platform-001",
+      "step": "evaluate_governance_route",
+      "recordedAt": 1772863302000
+    }
+  ]
+}

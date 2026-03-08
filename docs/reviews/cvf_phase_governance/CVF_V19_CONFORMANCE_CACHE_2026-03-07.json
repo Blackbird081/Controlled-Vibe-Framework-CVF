@@ -1,0 +1,238 @@
+{
+  "cacheId": "CVF_V19_CONFORMANCE_CACHE_2026-03-07",
+  "workdir": "EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY",
+  "suiteResult": "PASS",
+  "scenarioCount": 10,
+  "scenarios": {
+    "CF-011": {
+      "testFile": "tests/replay.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 26.707,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 replay conformance replays exactly when context is unchanged",
+          "status": "passed",
+          "durationMs": 24.481
+        },
+        {
+          "fullName": "CVF v1.9 replay conformance reports drift when replay context changed",
+          "status": "passed",
+          "durationMs": 1.575
+        },
+        {
+          "fullName": "CVF v1.9 replay conformance fails closed for unknown execution records",
+          "status": "passed",
+          "durationMs": 0.65
+        }
+      ]
+    },
+    "CF-019": {
+      "testFile": "tests/cross-extension-audit-replay.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 18.683,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 cross-extension audit replay conformance replays a v1.7.1 authorized audit record exactly when context is unchanged",
+          "status": "passed",
+          "durationMs": 16.56
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension audit replay conformance reports drift when cross-extension replay context changes",
+          "status": "passed",
+          "durationMs": 1.126
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension audit replay conformance fails closed for unauthorized resume audit linkage",
+          "status": "passed",
+          "durationMs": 0.997
+        }
+      ]
+    },
+    "CF-020": {
+      "testFile": "tests/cross-extension-workflow-resume.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 20.932,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 cross-extension workflow resume conformance resumes a validated v1.7.1 checkpoint into v1.9 replay when session and token match",
+          "status": "passed",
+          "durationMs": 18.997
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension workflow resume conformance fails closed when cross-extension resume token does not match the checkpoint",
+          "status": "passed",
+          "durationMs": 1.515
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension workflow resume conformance fails closed when checkpoint is not in resumable validated state",
+          "status": "passed",
+          "durationMs": 0.42
+        }
+      ]
+    },
+    "CF-021": {
+      "testFile": "tests/cross-extension-recovery-orchestration.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 24.698,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 cross-extension recovery orchestration conformance resumes workflow when no rollback record is present",
+          "status": "passed",
+          "durationMs": 21.57
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension recovery orchestration conformance returns rollback-required when a matching v1.8 rollback record exists",
+          "status": "passed",
+          "durationMs": 1.244
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension recovery orchestration conformance fails closed when rollback snapshot does not match replay seed snapshot",
+          "status": "passed",
+          "durationMs": 1.884
+        }
+      ]
+    },
+    "CF-022": {
+      "testFile": "tests/cross-extension-failure-classification.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 5.282,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 cross-extension failure classification conformance classifies runtime interruption without resuming workflow",
+          "status": "passed",
+          "durationMs": 3.627
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension failure classification conformance classifies policy refusal without attempting resume",
+          "status": "passed",
+          "durationMs": 0.949
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension failure classification conformance classifies system abort without attempting resume",
+          "status": "passed",
+          "durationMs": 0.706
+        }
+      ]
+    },
+    "CF-023": {
+      "testFile": "tests/cross-extension-remediation-policy.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 25.577,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 cross-extension remediation policy conformance attaches an informational remediation plan to successful resume",
+          "status": "passed",
+          "durationMs": 23.627
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation policy conformance attaches a critical human-gated remediation plan to rollback-required outcomes",
+          "status": "passed",
+          "durationMs": 0.917
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation policy conformance attaches a refusal-specific remediation plan for policy refusal outcomes",
+          "status": "passed",
+          "durationMs": 1.033
+        }
+      ]
+    },
+    "CF-024": {
+      "testFile": "tests/cross-extension-remediation-execution.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 22.126,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 cross-extension remediation execution conformance executes automated remediation steps for resumed outcomes",
+          "status": "passed",
+          "durationMs": 20.173
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation execution conformance executes automated remediation steps for interrupted outcomes",
+          "status": "passed",
+          "durationMs": 1.185
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation execution conformance fails closed for human-gated rollback-required remediation",
+          "status": "passed",
+          "durationMs": 0.768
+        }
+      ]
+    },
+    "CF-025": {
+      "testFile": "tests/cross-extension-remediation-adapter.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 27.542,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 cross-extension remediation adapter conformance emits adapter receipts for resumed remediation steps",
+          "status": "passed",
+          "durationMs": 26.193
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation adapter conformance emits adapter receipts for interrupted remediation steps",
+          "status": "passed",
+          "durationMs": 0.84
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation adapter conformance keeps human-gated rollback-required remediation blocked even when an adapter is present",
+          "status": "passed",
+          "durationMs": 0.508
+        }
+      ]
+    },
+    "CF-026": {
+      "testFile": "tests/cross-extension-remediation-file-adapter.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 44.555,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 cross-extension remediation file-backed adapter conformance persists resumed remediation receipts into a file-backed artifact",
+          "status": "passed",
+          "durationMs": 32.314
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation file-backed adapter conformance appends interrupted remediation receipts without losing prior runtime artifacts",
+          "status": "passed",
+          "durationMs": 9.617
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation file-backed adapter conformance keeps rollback-required remediation blocked and leaves the file-backed artifact untouched",
+          "status": "passed",
+          "durationMs": 2.624
+        }
+      ]
+    },
+    "CF-028": {
+      "testFile": "tests/cross-extension-remediation-release-adapter.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 47.488,
+      "assertions": [
+        {
+          "fullName": "CVF v1.9 cross-extension remediation release adapter conformance writes both machine-readable and markdown remediation evidence for resumed outcomes",
+          "status": "passed",
+          "durationMs": 33.446
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation release adapter conformance updates markdown evidence after interrupted remediation without losing prior receipts",
+          "status": "passed",
+          "durationMs": 11.569
+        },
+        {
+          "fullName": "CVF v1.9 cross-extension remediation release adapter conformance keeps release evidence absent for rollback-required outcomes",
+          "status": "passed",
+          "durationMs": 2.473
+        }
+      ]
+    }
+  }
+}

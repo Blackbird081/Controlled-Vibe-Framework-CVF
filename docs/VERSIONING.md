@@ -195,9 +195,17 @@ Examples:
 
 ## Canonical Status
 
-This document is the **single source of truth** for CVF versioning.
+This document is the **single source of truth for versioning policy**.
 
-All other interpretations are **not valid**.
+Operational release-state questions must use:
+- `docs/reference/CVF_RELEASE_MANIFEST.md`
+- `docs/reference/CVF_MODULE_INVENTORY.md`
+- `docs/reference/CVF_MATURITY_MATRIX.md`
+
+This split exists to avoid mixing:
+- naming/version rules
+- actual local baseline readiness
+- draft vs active vs local-only operational state
 
 ---
 

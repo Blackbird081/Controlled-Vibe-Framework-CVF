@@ -11,8 +11,8 @@ Official Mapping Note (CVF Canonical):
 
 Status (2026-02-26):
 - Stabilized local module baseline (no GitHub publish yet by owner rule).
-- Pre-fix baseline: `docs/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`.
-- Fix roadmap: `docs/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`.
+- Pre-fix baseline: `docs/assessments/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`.
+- Fix roadmap: `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`.
 - Tree docs:
   - Target: `TREEVIEW_TARGET.md`
   - Implemented: `TREEVIEW_IMPLEMENTED.md`

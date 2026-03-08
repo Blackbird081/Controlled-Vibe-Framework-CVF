@@ -245,7 +245,7 @@
 - **Combined Assessment Roadmap** (`docs/CVF_COMBINED_ASSESSMENT_ROADMAP_2026-02-08.md`) — 15 findings, 4 sprints
 - **Scoring Methodology** (`docs/CVF_SCORING_METHODOLOGY.md`) — Self vs Independent rating process
 - **CVF Lite** (`CVF_LITE.md`) — 5-minute quick start guide
-- **CVF Positioning** (`docs/CVF_POSITIONING.md`) — Clear identity definition (3-layer architecture)
+- **CVF Positioning** (`docs/reference/CVF_POSITIONING.md`) — Clear identity definition (3-layer architecture)
 - **Quality Dimensions Spec** (`specs/QUALITY_DIMENSIONS.md`) — Separates Spec/UAT/Satisfaction scoring
 - **UAT Status Spec** (`specs/UAT_STATUS_SPEC.md`) — 4-state badge system (NOT_RUN/NEEDS_UAT/VALIDATED/FAILED)
 - **Deduplication Policy** (`specs/SKILL_DEDUPLICATION_POLICY.md`) — Similarity thresholds and process

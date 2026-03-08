@@ -38,6 +38,7 @@ export interface GovernanceEvaluateRequest {
     request_id: string;
     artifact_id: string;
     payload: Record<string, unknown>;
+    agent_id?: string;
     cvf_phase?: string;       // A-E
     cvf_risk_level?: string;  // R0-R4
     skill_preflight?: {
@@ -94,6 +95,26 @@ export interface GovernanceEvaluateResult {
         timestamp: string;
         [key: string]: unknown;
     };
+}
+
+export interface GovernanceResolvedBindings {
+    registryBinding?: {
+        agentId?: string;
+        certificationStatus?: string;
+        approvedPhases?: string[];
+        approvedSkills?: string[];
+        lastSelfUatDate?: string;
+    };
+    uatBinding?: {
+        badge?: 'NOT_RUN' | 'NEEDS_UAT' | 'VALIDATED' | 'FAILED';
+        status?: 'PASS' | 'FAIL' | 'NOT_TESTED';
+        lastRunAt?: string;
+    };
+}
+
+export interface GovernanceEvaluateRouteResult {
+    result: GovernanceEvaluateResult;
+    governanceBindings?: GovernanceResolvedBindings;
 }
 
 // ──────────────────────────────────────────────

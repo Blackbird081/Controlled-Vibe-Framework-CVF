@@ -60,3 +60,136 @@ export interface ReplayResult {
     /** Recomputed commitHash from current context */
     replayCommitHash: string
 }
+
+// ─── Cross-Extension Audit Replay ───────────────────────────────────────────
+
+export interface LegacyResumeAuditContext {
+    sessionId?: string
+    checkpointedAt: number
+    lastResumedAt?: number
+    resumeCount: number
+    resumeAuthorized: boolean
+}
+
+export interface LegacyExecutionAuditRecord {
+    proposalId: string
+    policyVersion: string
+    policyHash: string
+    decision: string
+    timestamp: number
+    resumeContext?: LegacyResumeAuditContext
+}
+
+export interface CrossExtensionReplaySeed {
+    executionId?: string
+    role: string
+    mode: 'SAFE' | 'BALANCED' | 'CREATIVE'
+    fileHashes: Record<string, string>
+    policyVersion: string
+    envMeta?: Record<string, string>
+    riskHash: string
+    mutationFingerprint: string
+    snapshotId: string
+}
+
+export interface CrossExtensionReplayInput {
+    auditRecord: LegacyExecutionAuditRecord
+    replaySeed: CrossExtensionReplaySeed
+    currentFileHashes: Record<string, string>
+    currentRiskScore?: number
+}
+
+export interface CrossExtensionReplayResult {
+    executionId: string
+    sourceProposalId: string
+    replay: ReplayResult
+}
+
+export interface LegacyLifecycleCheckpoint {
+    proposalId: string
+    state: string
+    policyVersion: string
+    policyHash: string
+    simulateOnly: boolean
+    checkpointedAt: number
+    sessionId?: string
+    resumeToken: string
+    resumeCount: number
+    lastResumedAt?: number
+}
+
+export interface CrossExtensionWorkflowResumeInput extends CrossExtensionReplayInput {
+    checkpoint: LegacyLifecycleCheckpoint
+    sessionId?: string
+    resumeToken?: string
+}
+
+export interface CrossExtensionWorkflowResumeResult extends CrossExtensionReplayResult {
+    resumed: boolean
+    resumeCount: number
+    checkpointState: string
+    sessionId?: string
+}
+
+export interface LegacyRollbackRecord {
+    executionId: string
+    snapshotId: string
+    restoredAt: number
+    stateHash: string
+}
+
+export type CrossExtensionFailureKind =
+    | 'RUNTIME_INTERRUPTION'
+    | 'POLICY_REFUSAL'
+    | 'SYSTEM_ABORT'
+
+export interface CrossExtensionFailureSignal {
+    kind: CrossExtensionFailureKind
+    reason: string
+    phase?: string
+}
+
+export interface CrossExtensionRecoveryInput extends CrossExtensionWorkflowResumeInput {
+    rollbackRecord?: LegacyRollbackRecord
+    failureSignal?: CrossExtensionFailureSignal
+}
+
+export interface CrossExtensionRecoveryResult {
+    action: 'RESUMED' | 'ROLLBACK_REQUIRED' | 'INTERRUPTED' | 'REFUSED' | 'ABORTED'
+    sourceProposalId: string
+    resumed: boolean
+    workflow?: CrossExtensionWorkflowResumeResult
+    rollbackRecord?: LegacyRollbackRecord
+    failureSignal?: CrossExtensionFailureSignal
+    remediation?: CrossExtensionRemediationPolicy
+}
+
+export interface CrossExtensionRemediationPolicy {
+    severity: 'INFO' | 'WARN' | 'CRITICAL'
+    requiresHumanApproval: boolean
+    nextStep: string
+    playbook: string[]
+}
+
+export interface CrossExtensionRemediationExecution {
+    automated: boolean
+    blocked: boolean
+    executedSteps: string[]
+    blockedReason?: string
+    adapterReceipts?: string[]
+}
+
+export interface CrossExtensionRemediationReceipt {
+    receiptId: string
+    action: CrossExtensionRecoveryResult['action']
+    sourceProposalId: string
+    step: string
+    recordedAt: number
+}
+
+export interface CrossExtensionRemediationAdapter {
+    execute(step: string, context: {
+        action: CrossExtensionRecoveryResult['action']
+        sourceProposalId: string
+    }): string
+}

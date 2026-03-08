@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "2026-03-07",
+  "manifestType": "CVF_MULTI_RUNTIME_REMEDIATION_EVIDENCE",
+  "requestId": "REQ-20260307-002",
+  "traceBatch": "CVF_CROSS_EXTENSION_CONFORMANCE_BATCH_2026-03-07",
+  "releaseManifestPath": "docs/reference/CVF_RELEASE_MANIFEST.md",
+  "linkedPacketPath": "docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md",
+  "manifestLogPath": "docs/reviews/cvf_phase_governance/CVF_W4_MULTI_RUNTIME_EVIDENCE_LOG_2026-03-07.md",
+  "runtimeFamilyCount": 8,
+  "totalReceiptCount": 27,
+  "releaseLinesCovered": [
+    "active",
+    "local-ready",
+    "stable"
+  ],
+  "maturityBandsCovered": [
+    "hardening-active",
+    "implemented-local",
+    "production-candidate"
+  ],
+  "entries": [
+    {
+      "runtimeFamily": "CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL",
+      "versionToken": "v1.1.1",
+      "moduleName": "Phase Governance Protocol",
+      "releaseLine": "stable",
+      "maturity": "production-candidate",
+      "evidenceAnchor": "`EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/`",
+      "artifactPath": "docs/reviews/cvf_phase_governance/CVF_W4_PHASE_GOVERNANCE_EVIDENCE_2026-03-07.json",
+      "logPath": "docs/reviews/cvf_phase_governance/CVF_W4_PHASE_GOVERNANCE_LOG_2026-03-07.md",
+      "adapter": "PHASE_GOVERNANCE_RUNTIME_EVIDENCE",
+      "receiptCount": 3,
+      "schemaVersion": "2026-03-07"
+    },
+    {
+      "runtimeFamily": "CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE",
+      "versionToken": "v1.2.2",
+      "moduleName": "Skill Governance Engine",
+      "releaseLine": "local-ready",
+      "maturity": "hardening-active",
+      "evidenceAnchor": "`EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/`",
+      "artifactPath": "docs/reviews/cvf_phase_governance/CVF_W4_SKILL_GOVERNANCE_EVIDENCE_2026-03-07.json",
+      "logPath": "docs/reviews/cvf_phase_governance/CVF_W4_SKILL_GOVERNANCE_LOG_2026-03-07.md",
+      "adapter": "SKILL_GOVERNANCE_RUNTIME_EVIDENCE",
+      "receiptCount": 3,
+      "schemaVersion": "2026-03-07"
+    },
+    {
+      "runtimeFamily": "CVF_v1.6.1_GOVERNANCE_ENGINE",
+      "versionToken": "v1.6.1",
+      "moduleName": "Governance Engine",
+      "releaseLine": "active",
+      "maturity": "production-candidate",
+      "evidenceAnchor": "`EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/`",
+      "artifactPath": "docs/reviews/cvf_phase_governance/CVF_W4_GOVERNANCE_ENGINE_EVIDENCE_2026-03-07.json",
+      "logPath": "docs/reviews/cvf_phase_governance/CVF_W4_GOVERNANCE_ENGINE_LOG_2026-03-07.md",
+      "adapter": "GOVERNANCE_ENGINE_RUNTIME_EVIDENCE",
+      "receiptCount": 3,
+      "schemaVersion": "2026-03-07"
+    },
+    {
+      "runtimeFamily": "CVF_v1.6_AGENT_PLATFORM",
+      "versionToken": "v1.6",
+      "moduleName": "Agent Platform",
+      "releaseLine": "active",
+      "maturity": "production-candidate",
+      "evidenceAnchor": "`EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/`",
+      "artifactPath": "docs/reviews/cvf_phase_governance/CVF_W4_AGENT_PLATFORM_GOVERNANCE_EVIDENCE_2026-03-07.json",
+      "logPath": "docs/reviews/cvf_phase_governance/CVF_W4_AGENT_PLATFORM_GOVERNANCE_LOG_2026-03-07.md",
+      "adapter": "AGENT_PLATFORM_GOVERNANCE_EVIDENCE",
+      "receiptCount": 3,
+      "schemaVersion": "2026-03-07"
+    },
+    {
+      "runtimeFamily": "CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY",
+      "versionToken": "v1.9",
+      "moduleName": "Deterministic Reproducibility",
+      "releaseLine": "local-ready",
+      "maturity": "implemented-local",
+      "evidenceAnchor": "`EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/`",
+      "artifactPath": "docs/reviews/cvf_phase_governance/CVF_W4_REMEDIATION_RECEIPTS_LOCAL_BASELINE_2026-03-07.json",
+      "logPath": "docs/reviews/cvf_phase_governance/CVF_W4_REMEDIATION_RECEIPT_LOG_2026-03-07.md",
+      "adapter": "FILE_BACKED_REMEDIATION_ADAPTER",
+      "receiptCount": 6,
+      "schemaVersion": "2026-03-07"
+    },
+    {
+      "runtimeFamily": "CVF_v1.8_SAFETY_HARDENING",
+      "versionToken": "v1.8",
+      "moduleName": "Safety Hardening",
+      "releaseLine": "local-ready",
+      "maturity": "implemented-local",
+      "evidenceAnchor": "`EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/`",
+      "artifactPath": "docs/reviews/cvf_phase_governance/CVF_W4_SAFETY_HARDENING_ROLLBACK_EVIDENCE_2026-03-07.json",
+      "logPath": "docs/reviews/cvf_phase_governance/CVF_W4_SAFETY_HARDENING_ROLLBACK_LOG_2026-03-07.md",
+      "adapter": "SAFETY_HARDENING_ROLLBACK_EVIDENCE",
+      "receiptCount": 3,
+      "schemaVersion": "2026-03-07"
+    },
+    {
+      "runtimeFamily": "CVF_v1.7.3_RUNTIME_ADAPTER_HUB",
+      "versionToken": "v1.7.3",
+      "moduleName": "Runtime Adapter Hub",
+      "releaseLine": "active",
+      "maturity": "production-candidate",
+      "evidenceAnchor": "`EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/`",
+      "artifactPath": "docs/reviews/cvf_phase_governance/CVF_W4_RUNTIME_ADAPTER_HUB_REMEDIATION_RECEIPTS_2026-03-07.json",
+      "logPath": "docs/reviews/cvf_phase_governance/CVF_W4_RUNTIME_ADAPTER_HUB_REMEDIATION_RECEIPT_LOG_2026-03-07.md",
+      "adapter": "RUNTIME_ADAPTER_HUB_RELEASE_EVIDENCE",
+      "receiptCount": 3,
+      "schemaVersion": "2026-03-07"
+    },
+    {
+      "runtimeFamily": "CVF_v1.7.1_SAFETY_RUNTIME",
+      "versionToken": "v1.7.1",
+      "moduleName": "Safety Runtime",
+      "releaseLine": "stable",
+      "maturity": "production-candidate",
+      "evidenceAnchor": "`EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/`",
+      "artifactPath": "docs/reviews/cvf_phase_governance/CVF_W4_SAFETY_RUNTIME_SESSION_EVIDENCE_2026-03-07.json",
+      "logPath": "docs/reviews/cvf_phase_governance/CVF_W4_SAFETY_RUNTIME_SESSION_LOG_2026-03-07.md",
+      "adapter": "SAFETY_RUNTIME_SESSION_EVIDENCE",
+      "receiptCount": 3,
+      "schemaVersion": "2026-03-07"
+    }
+  ]
+}

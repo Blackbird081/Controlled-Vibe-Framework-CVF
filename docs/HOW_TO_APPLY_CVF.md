@@ -403,7 +403,7 @@ Với mỗi task:
 ### Core Documentation
 - [CVF Manifesto](../v1.0/CVF_MANIFESTO.md) — Triết lý cốt lõi
 - [Version Comparison](./VERSION_COMPARISON.md) — So sánh các versions
-- [Architecture Diagrams](./CVF_ARCHITECTURE_DIAGRAMS.md) — Sơ đồ kiến trúc
+- [Architecture Diagrams](./reference/CVF_ARCHITECTURE_DIAGRAMS.md) — Sơ đồ kiến trúc
 
 ### v1.1 Guides
 - [Quick Start](../v1.1/QUICK_START.md) — Bắt đầu trong 5 phút

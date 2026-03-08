@@ -12,7 +12,7 @@
 [![Kernel Tests](https://img.shields.io/badge/kernel+extension%20tests-183%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
 [![Coverage](https://img.shields.io/badge/coverage-93.05%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
 [![Kernel Coverage](https://img.shields.io/badge/kernel%20coverage-96.45%25-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
-[![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
+[![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
 [![Agent Skills](https://img.shields.io/badge/agent%20skills-34-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
 
 ---
@@ -21,7 +21,7 @@
 
 Before running any tests, read:
 - [Incremental Test Log](docs/CVF_INCREMENTAL_TEST_LOG.md)
-- [Core Compatibility Baseline](docs/CVF_CORE_COMPAT_BASELINE.md)
+- [Core Compatibility Baseline](docs/baselines/CVF_CORE_COMPAT_BASELINE.md)
 - [Bug History & Troubleshooting](docs/BUG_HISTORY.md)
 
 Run compatibility gates first:
@@ -35,6 +35,9 @@ python governance/compat/check_bug_doc_compat.py --enforce
 
 # Test documentation gate (enforced on test: commits)
 python governance/compat/check_test_doc_compat.py --enforce
+
+# Docs governance gate (enforced on docs markdown changes)
+python governance/compat/check_docs_governance_compat.py --enforce
 ```
 
 Only run full regression when gate/triggers require it.
@@ -43,16 +46,37 @@ Only run full regression when gate/triggers require it.
 
 > 🧪 **Test Log Rule:** Every `test:` commit or test file change MUST have a batch entry in [`docs/CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md). See [Test Documentation Guard](governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md).
 
+> 🗄️ **Test Log Rotation Rule:** [`docs/CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md) is the active window, not an infinite single-file ledger. Rotate it when it exceeds the governance threshold and archive history under `docs/logs/`. See [Incremental Test Log Rotation Guard](governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md).
+
+> 🧾 **Conformance Trace Rotation Rule:** Scoped conformance traces are also governed as active windows. For `cvf_phase_governance`, rotate [`CVF_CONFORMANCE_TRACE_2026-03-07.md`](docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md) when it crosses its threshold and archive older windows under `docs/reviews/cvf_phase_governance/logs/`. See [Conformance Trace Rotation Guard](governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md).
+
+> 🐍 **Python Automation Size Rule:** Governed Python automation under `scripts/` and `governance/compat/` must stay within the active size thresholds or be explicitly registered as a temporary exception. Run [`governance/compat/check_python_automation_size.py`](governance/compat/check_python_automation_size.py) with `--enforce`. See [Python Automation Size Guard](governance/toolkit/05_OPERATION/CVF_PYTHON_AUTOMATION_SIZE_GUARD.md).
+
+> ⏱️ **Conformance Performance Rule:** Canonical Wave 1 closure must use the sequential authoritative runner, and sibling packet wrappers must reuse shared bootstrap state instead of regenerating the same runtime evidence repeatedly. See [Conformance Execution Performance Guard](governance/toolkit/05_OPERATION/CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md).
+
 > 🏛️ **Architecture Decision Rule:** Every `feat(governance):`, `feat(domain):`, `feat(core-value):`, `refactor(arch):`, or `docs(policy):` commit MUST have an ADR entry in [`docs/CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md). See [ADR Guard](governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md).
 
 > 🧱 **Workspace Isolation Rule:** Downstream projects MUST NOT be opened or developed inside CVF root. Use isolated sibling workspace only. See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
+
+> 🗂️ **Document Naming Rule:** Long-term governance/review records in `docs/` and `governance/` MUST follow CVF naming conventions and use `CVF_` prefix unless explicitly exempted. See [Document Naming Guard](governance/toolkit/05_OPERATION/CVF_DOCUMENT_NAMING_GUARD.md).
+
+> 🗃️ **Document Storage Rule:** New long-term documents in `docs/` MUST be placed in the correct taxonomy folder defined by [`docs/INDEX.md`](docs/INDEX.md). See [Document Storage Guard](governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md).
+
+> 🧭 **Docs Governance Gate:** Markdown files created or changed under `docs/` MUST pass root allowlist, taxonomy, and naming checks. Run [`governance/compat/check_docs_governance_compat.py`](governance/compat/check_docs_governance_compat.py) with `--enforce`.
+
+> 🎯 **Depth Audit Rule:** Before deepening any roadmap phase with a new semantic layer, policy layer, or `CF-*` expansion, you MUST justify it with explicit depth-audit scoring. This applies to all phases, not only Phase 6. See [Depth Audit Guard](governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md).
+
+> 🗺️ **Release State Rule:** Use [`docs/reference/CVF_RELEASE_MANIFEST.md`](docs/reference/CVF_RELEASE_MANIFEST.md) for current operational release state, [`docs/reference/CVF_MODULE_INVENTORY.md`](docs/reference/CVF_MODULE_INVENTORY.md) for module scope, and [`docs/VERSIONING.md`](docs/VERSIONING.md) for versioning policy semantics.
+
+> 🧾 **Enterprise Evidence Rule:** For audit/release/onboarding packets, start from [`docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md`](docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md) and its canonical mapping/template companions.
+> For packet generation on the current baseline, prefer `python scripts/export_cvf_release_packet.py --output <packet-path>`.
 
 > 🗺️ **Architecture Check Rule:** Before proposing ANY new version, layer, extension, or module for CVF, you MUST first read [`docs/CVF_CORE_KNOWLEDGE_BASE.md`](docs/CVF_CORE_KNOWLEDGE_BASE.md) and explicitly state: the target Layer (1–5), overlap check result, what it extends, and which core principles apply. See [Architecture Check Guard](governance/toolkit/05_OPERATION/CVF_ARCHITECTURE_CHECK_GUARD.md).
 
 > 🔒 **CVF Extension Rules (Non-negotiable):**
 > **R1** — Existing CVF structure is always the standard. No redefinition without ADR + approval.
 > **R2** — New additions must be compatible and additive — upgrade, never replace.
-> **R3** — Naming (version/layer/guard) must follow CVF conventions — no arbitrary naming.
+> **R3** — Naming (version/layer/guard/document) and storage placement must follow CVF conventions — no arbitrary naming or arbitrary folder placement.
 > See full rules: [`docs/CVF_CORE_KNOWLEDGE_BASE.md` Section XIV](docs/CVF_CORE_KNOWLEDGE_BASE.md).
 
 ---
@@ -316,7 +340,7 @@ Decision trace:
 | **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
 | **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 141 skills across 12 domains |
 | **🤖 Agent Skills** | [34 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide v1](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Usage Guide v2](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-new-skills-v2.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
-| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) · [Core Compatibility Baseline](docs/CVF_CORE_COMPAT_BASELINE.md) · [Bug History](docs/BUG_HISTORY.md) · [Architecture Decisions](docs/CVF_ARCHITECTURE_DECISIONS.md) |
+| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) · [Core Compatibility Baseline](docs/baselines/CVF_CORE_COMPAT_BASELINE.md) · [Bug History](docs/BUG_HISTORY.md) · [Architecture Decisions](docs/CVF_ARCHITECTURE_DECISIONS.md) |
 
 **Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
 
@@ -358,7 +382,7 @@ CVF has 5 layers — an AI Safety Runtime that protects non-coders:
 └─────────────────────────────────────────────────────────┘
 ```
 
-**Read more:** [CVF Positioning](docs/CVF_POSITIONING.md)
+**Read more:** [CVF Positioning](docs/reference/CVF_POSITIONING.md)
 
 ---
 
@@ -469,7 +493,7 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 | **Active Development** | Yes — extensions + Web UI enhancements |
 | **Community** | Building — Discord coming soon |
 
-**Current Status:** 9.4/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md)) | Kernel: 8.5/10 ([Antigravity assessment](docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md))
+**Current Status:** 9.4/10 ([independent assessment](docs/assessments/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md)) | Kernel: 8.5/10 ([Antigravity assessment](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md))
 - ✅ **Excellent:** Technical quality (9.3/10), AI Safety (9.4/10), Testing (9.5/10), Governance (9/10)
 - ✅ **Kernel:** 183 tests total, 96%+ coverage, anti-bypass Symbol guard, 12-step pipeline
 - ✅ **Complete:** Sprint 1-6 integration, full test coverage, bilingual i18n

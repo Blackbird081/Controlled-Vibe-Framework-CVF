@@ -10,6 +10,7 @@ export default defineConfig({
                 "artifact_staging/**/*.ts",
                 "artifact_ledger/**/*.ts",
                 "process_model/**/*.ts",
+                "skill_lifecycle/**/*.ts",
             ],
             exclude: ["**/index.ts", "**/*.schema.ts"],
             thresholds: {

@@ -1,3 +1,13 @@
+export type SkillExecutionPhase =
+  | "INTENT_ANALYSIS"
+  | "SKILL_DISCOVERY"
+  | "RISK_EVALUATION"
+  | "GOVERNANCE_DECISION"
+  | "EXECUTION"
+  | "LEDGER_RECORD";
+
+export type SkillDependencyStatus = "ready" | "degraded" | "blocked";
+
 export type SkillSource =
   | "ai_research_skills"
   | "awesome_claude_skills"
@@ -17,6 +27,10 @@ export interface RegisteredSkill {
   last_used_at?: number;
   usage_count: number;
   revoked: boolean;
+  deprecated?: boolean;
+  successor_skill_id?: string;
+  dependency_status?: SkillDependencyStatus;
+  allowed_phases?: SkillExecutionPhase[];
 }
 
 export class SkillRegistry {
@@ -48,5 +62,20 @@ export class SkillRegistry {
     const skill = this.skills.get(skillId);
     if (!skill) return;
     skill.revoked = true;
+  }
+
+  markDeprecated(skillId: string, successorSkillId?: string) {
+    const skill = this.skills.get(skillId);
+    if (!skill) return;
+    skill.deprecated = true;
+    if (successorSkillId) {
+      skill.successor_skill_id = successorSkillId;
+    }
+  }
+
+  getSuccessor(skillId: string): RegisteredSkill | undefined {
+    const skill = this.skills.get(skillId);
+    if (!skill?.successor_skill_id) return undefined;
+    return this.skills.get(skill.successor_skill_id);
   }
 }

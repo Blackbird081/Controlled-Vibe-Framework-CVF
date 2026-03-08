@@ -1,6 +1,7 @@
 export interface StateMachine {
   states: string[]
   transitions: Record<string, string[]>
+  terminalStates?: string[]
 }
 
 export function parseStateMachine(input: any): StateMachine {
@@ -31,7 +32,8 @@ export function parseStateMachine(input: any): StateMachine {
 
   return {
     states: input.states,
-    transitions: input.transitions
+    transitions: input.transitions,
+    terminalStates: input.terminalStates
   }
 
 }

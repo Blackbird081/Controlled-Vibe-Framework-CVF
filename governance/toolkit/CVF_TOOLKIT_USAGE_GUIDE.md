@@ -5,7 +5,7 @@
 
 **Version:** 2.0 | **Ngày:** 13/02/2026
 
-> 🌐 **Dùng trên Web?** Xem [CVF_WEB_TOOLKIT_GUIDE.md](../../docs/CVF_WEB_TOOLKIT_GUIDE.md)  
+> 🌐 **Dùng trên Web?** Xem [CVF_WEB_TOOLKIT_GUIDE.md](../../docs/reference/CVF_WEB_TOOLKIT_GUIDE.md)  
 > — Hướng dẫn SpecExport, Agent Chat, GovernanceBar, Self-UAT trên nền tảng web v1.6.
 
 ---

@@ -20,6 +20,7 @@ describe('evaluateEnforcement', () => {
             budgetOk: true,
         });
         expect(result.status).toBe('NEEDS_APPROVAL');
+        expect(result.governanceStateSnapshot.approval.status).toBe('PENDING');
     });
 
     it('blocks on spec FAIL', () => {
@@ -50,6 +51,7 @@ describe('evaluateEnforcement', () => {
             specValues: { goal: 'Launch app' },
         });
         expect(result.status).toBe('ALLOW');
+        expect(result.governanceStateSnapshot.approval.status).toBe('NOT_REQUIRED');
     });
 
     it('returns CLARIFY when spec has optional missing fields', () => {
@@ -164,6 +166,13 @@ describe('evaluateEnforcement', () => {
             content: 'Implement API endpoints and write code.',
             budgetOk: true,
             cvfPhase: 'BUILD',
+            registryBinding: {
+                agentId: 'AI_ASSISTANT_V1',
+                certificationStatus: 'ACTIVE',
+                approvedPhases: ['BUILD', 'REVIEW'],
+                approvedSkills: ['CVF_CORE_SKILL_PREFLIGHT_GOVERNANCE'],
+                lastSelfUatDate: new Date(Date.now() - (7 * 24 * 60 * 60 * 1000)).toISOString(),
+            },
             requiresSkillPreflight: true,
             skillPreflight: {
                 passed: true,
@@ -174,6 +183,10 @@ describe('evaluateEnforcement', () => {
         expect(result.status).toBe('ALLOW');
         expect(result.skillPreflight?.declared).toBe(true);
         expect(result.skillPreflight?.source).toBe('explicit');
+        expect(result.governanceStateSnapshot.skillPreflight.declared).toBe(true);
+        expect(result.governanceStateSnapshot.phase).toBe('BUILD');
+        expect(result.governanceStateSnapshot.registry.source).toBe('registry');
+        expect(result.governanceStateSnapshot.uat.status).toBe('VALIDATED');
     });
 
     it('allows build actions when declaration appears in content', () => {

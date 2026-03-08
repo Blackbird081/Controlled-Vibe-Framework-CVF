@@ -29,6 +29,7 @@ from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TEST_LOG_PATH = "docs/CVF_INCREMENTAL_TEST_LOG.md"
+TEST_LOG_ARCHIVE_GLOB = "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_*.md"
 
 # Patterns in commit messages that indicate test activity
 TEST_COMMIT_PATTERNS = [
@@ -145,12 +146,17 @@ def _check_test_log_updated(changed_files: list[str]) -> bool:
 
 
 def _count_batch_entries() -> int:
-    """Count the number of batch entries in the test log."""
-    test_log = REPO_ROOT / TEST_LOG_PATH
-    if not test_log.exists():
-        return 0
-    content = test_log.read_text(encoding="utf-8")
-    return len(re.findall(r"## \[\d{4}-\d{2}-\d{2}\] Batch:", content))
+    """Count the number of batch entries across the active log and archive chain."""
+    paths = [REPO_ROOT / TEST_LOG_PATH]
+    paths.extend(sorted(REPO_ROOT.glob(TEST_LOG_ARCHIVE_GLOB)))
+
+    total = 0
+    for path in paths:
+        if not path.exists():
+            continue
+        content = path.read_text(encoding="utf-8")
+        total += len(re.findall(r"## \[\d{4}-\d{2}-\d{2}\] Batch:", content))
+    return total
 
 
 def _classify(
@@ -200,7 +206,7 @@ def _print_report(report: dict[str, Any], base: str, head: str, base_source: str
             print(f"  - {tf}")
 
     print(f"\nCVF_INCREMENTAL_TEST_LOG.md updated: {'YES' if report['testLogUpdated'] else 'NO'}")
-    print(f"Total batch entries in test log: {report['totalBatchEntries']}")
+    print(f"Total batch entries in active+archive log chain: {report['totalBatchEntries']}")
 
     if report["compliant"]:
         print("\n✅ COMPLIANT — All test activities are documented.")

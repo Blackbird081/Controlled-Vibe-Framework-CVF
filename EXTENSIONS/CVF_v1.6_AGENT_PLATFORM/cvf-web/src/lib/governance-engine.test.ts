@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
     governanceApprove,
     governanceEvaluate,
+    governanceEvaluateWithBindings,
     governanceFetchDirect,
     governanceHealth,
     governanceLedger,
@@ -53,6 +54,7 @@ describe('governance-engine', () => {
 
         await expect(governanceHealth()).resolves.toBeNull();
         await expect(governanceEvaluate({ request_id: 'r1', artifact_id: 'a1', payload: {} })).resolves.toBeNull();
+        await expect(governanceEvaluateWithBindings({ request_id: 'r1', artifact_id: 'a1', payload: {} })).resolves.toBeNull();
         await expect(governanceApprove({ request_id: 'r1', approver_id: 'u1', decision: 'APPROVED' })).resolves.toBeNull();
         await expect(governanceLedger()).resolves.toBeNull();
         await expect(governanceRiskConvert('R2')).resolves.toBeNull();
@@ -151,6 +153,46 @@ describe('governance-engine', () => {
             expect.stringContaining('/api/v1/evaluate'),
             expect.objectContaining({
                 method: 'POST',
+                body: JSON.stringify(payload),
+            }),
+        );
+    });
+
+    it('returns evaluated data with governance bindings from local route', async () => {
+        const payload = {
+            request_id: 'req-route-1',
+            artifact_id: 'art-route-1',
+            agent_id: 'AI_ASSISTANT_V1',
+            payload: { content: 'hello' },
+        };
+        const routeJson = {
+            success: true,
+            data: {
+                report: { status: 'APPROVED' },
+                execution_record: { request_id: 'req-route-1', artifact_id: 'art-route-1', risk_score: 0.2, status: 'done', timestamp: '2026-02-22T00:00:00Z' },
+            },
+            governance_bindings: {
+                registryBinding: {
+                    agentId: 'AI_ASSISTANT_V1',
+                    certificationStatus: 'ACTIVE',
+                },
+                uatBinding: {
+                    status: 'PASS',
+                    lastRunAt: '2026-03-01T10:00:00Z',
+                },
+            },
+        };
+        const fetchMock = vi.fn().mockResolvedValue(asResponse({ ok: true, json: routeJson }));
+        vi.stubGlobal('fetch', fetchMock);
+
+        const result = await governanceEvaluateWithBindings(payload);
+        expect(result?.result.report.status).toBe('APPROVED');
+        expect(result?.governanceBindings?.registryBinding?.agentId).toBe('AI_ASSISTANT_V1');
+        expect(fetchMock).toHaveBeenCalledWith(
+            '/api/governance/evaluate',
+            expect.objectContaining({
+                method: 'POST',
+                credentials: 'include',
                 body: JSON.stringify(payload),
             }),
         );

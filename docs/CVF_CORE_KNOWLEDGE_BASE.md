@@ -279,8 +279,13 @@ Output (Allow / Strip & Allow / Block)
 |-------|---------|---------------|
 | Bug Documentation Guard | `fix:` commits | `docs/BUG_HISTORY.md` |
 | Test Documentation Guard | `test:` commits | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
+| Test Log Rotation Guard | active test log window exceeds threshold | `docs/CVF_INCREMENTAL_TEST_LOG.md` + `docs/logs/` |
 | ADR Guard | `feat(governance):`, `refactor(arch):`, `docs(policy):` | `docs/CVF_ARCHITECTURE_DECISIONS.md` |
+| Document Naming Guard | New/migrated long-term governance docs | `CVF_` naming convention + approved exceptions |
+| Document Storage Guard | New long-term docs in `docs/` | Correct taxonomy folder per `docs/INDEX.md` |
+| Depth Audit Guard | Any roadmap deepening / new semantic layer | Explicit scoring before continuing deeper |
 | Workspace Isolation Guard | Opening projects in CVF root | Sibling workspace only |
+| Test Depth Classification Guard | Any test count report in assessment/review/release | T1–T4 tier breakdown + Meaningful Assertion Rate |
 | **Architecture Check Guard** | **Any new version/layer/extension/module proposal** | **`docs/CVF_CORE_KNOWLEDGE_BASE.md` ← file này** |
 
 ### Compatibility Gates (Chạy trước khi merge):
@@ -288,6 +293,7 @@ Output (Allow / Strip & Allow / Block)
 python governance/compat/check_core_compat.py --base <BASE_REF> --head <HEAD_REF>
 python governance/compat/check_bug_doc_compat.py --enforce
 python governance/compat/check_test_doc_compat.py --enforce
+python governance/compat/check_docs_governance_compat.py --enforce
 ```
 
 ---
@@ -335,12 +341,27 @@ Controlled-Vibe-Framework-CVF/
 │   └── examples/
 ├── docs/                        ← Governance & Documentation hub
 │   ├── CVF_CORE_KNOWLEDGE_BASE.md   ← ★ FILE NÀY (Governance permanent)
-│   ├── CVF_POSITIONING.md           ← Định vị chiến lược
-│   ├── CVF_ARCHITECTURE_DIAGRAMS.md ← Mermaid diagrams
+│   ├── reference/
+│   │   ├── CVF_POSITIONING.md           ← Định vị chiến lược
+│   │   ├── CVF_ARCHITECTURE_DIAGRAMS.md ← Mermaid diagrams
+│   │   ├── CVF_ARCHITECTURE_MAP.md
+│   │   ├── CVF_ADOPTION_STRATEGY.md
+│   │   ├── CVF_SKILL_LIFECYCLE.md
+│   │   ├── CVF_WEB_TOOLKIT_GUIDE.md
+│   │   ├── CVF_WHITEPAPER_GIT_FOR_AI.md
+│   │   └── CVF_v16_AGENT_PLATFORM.md
 │   ├── CVF_ARCHITECTURE_DECISIONS.md ← ADR records
-│   ├── CVF_CORE_COMPAT_BASELINE.md  ← Official compat baseline
+│   ├── baselines/
+│   │   ├── CVF_CORE_COMPAT_BASELINE.md  ← Official compat baseline
+│   │   └── CVF_TESTER_BASELINE_2026-02-25.md
+│   ├── assessments/
+│   │   ├── CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md
+│   │   ├── CVF_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md
+│   │   └── CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md
+│   ├── logs/
+│   │   └── CVF_INCREMENTAL_TEST_LOG_ARCHIVE_<YYYY>_PART_<NN>.md
 │   ├── BUG_HISTORY.md               ← Bug knowledge base
-│   ├── CVF_INCREMENTAL_TEST_LOG.md  ← Test history
+│   ├── CVF_INCREMENTAL_TEST_LOG.md  ← Test history entrypoint + active window
 │   └── VERSIONING.md, VERSION_COMPARISON.md, GET_STARTED.md ...
 ├── governance/
 │   ├── compat/                  ← Compatibility gate scripts
@@ -349,7 +370,10 @@ Controlled-Vibe-Framework-CVF/
 │       ├── CVF_ARCHITECTURE_CHECK_GUARD.md ← Guard dẫn đến file này
 │       ├── CVF_ADR_GUARD.md
 │       ├── CVF_BUG_DOCUMENTATION_GUARD.md
-│       └── CVF_TEST_DOCUMENTATION_GUARD.md
+│       ├── CVF_DEPTH_AUDIT_GUARD.md
+│       ├── CVF_TEST_DOCUMENTATION_GUARD.md
+│       ├── CVF_DOCUMENT_NAMING_GUARD.md
+│       └── CVF_DOCUMENT_STORAGE_GUARD.md
 ├── tools/                       ← Python validation scripts
 ├── README.md                    ← Main entry point
 ├── CHANGELOG.md                 ← Version history
@@ -395,6 +419,7 @@ Extension/version mới **bắt buộc** phải tôn trọng:
 8. **Workspace isolation** — Downstream projects phải là sibling workspace, không phát triển trong CVF root
 9. **Architecture check mandatory** — Mọi addition mới phải đọc file này và xác định Layer, overlap, backward compat trước khi implement
 10. **KB auto-update mandatory** — Sau mỗi lần nâng cấp/bổ sung version mới, **phải cập nhật file này** (Section II, III, X) để nó luôn là base chính xác cho lần bổ sung sau
+11. **Depth audit mandatory before deeper layering** — Không tiếp tục đào sâu roadmap nếu chưa chứng minh được `risk reduction`, `decision value`, và `machine-enforceable closure`
 
 ---
 
@@ -438,10 +463,10 @@ Tất cả 9 checkbox phải được check trước khi bắt đầu implement.
 
 | File | Khi nào đọc |
 |------|------------|
-| [`docs/CVF_POSITIONING.md`](CVF_POSITIONING.md) | Cần hiểu identity CVF, anti-patterns |
-| [`docs/CVF_ARCHITECTURE_DIAGRAMS.md`](CVF_ARCHITECTURE_DIAGRAMS.md) | Cần xem Mermaid diagrams đầy đủ |
+| [`docs/reference/CVF_POSITIONING.md`](reference/CVF_POSITIONING.md) | Cần hiểu identity CVF, anti-patterns |
+| [`docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md`](reference/CVF_ARCHITECTURE_DIAGRAMS.md) | Cần xem Mermaid diagrams đầy đủ |
 | [`docs/CVF_ARCHITECTURE_DECISIONS.md`](CVF_ARCHITECTURE_DECISIONS.md) | Xem ADR history, quyết định thiết kế |
-| [`docs/CVF_CORE_COMPAT_BASELINE.md`](CVF_CORE_COMPAT_BASELINE.md) | Chạy compat check |
+| [`docs/baselines/CVF_CORE_COMPAT_BASELINE.md`](baselines/CVF_CORE_COMPAT_BASELINE.md) | Chạy compat check |
 | [`EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md`](../EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md) | Hiểu reference vs production separation |
 
 ---
@@ -505,6 +530,29 @@ Tất cả 9 checkbox phải được check trước khi bắt đầu implement.
         ví dụ: CVF_ARCHITECTURE_CHECK_GUARD.md
 Đưa cho AI: "new_safety_rules.md" (không follow convention)
 ```
+
+**Document naming (long-term records in `docs/` / `governance/`):**
+```
+ĐúNG: CVF_[MỤC_ĐÍCH]_[PHẠM_VI]_[YYYY-MM-DD].md
+        ví dụ: CVF_EXECUTIVE_REVIEW_BASELINE_2026-03-06.md
+        ví dụ: CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md
+SAI:   roadmap_latest.md / final_review.md / danh_gia_moi.md
+```
+
+**Approved standard exceptions:**
+`README.md`, `INDEX.md`, `CHANGELOG.md`, `LICENSE`, `BUG_HISTORY.md`,
+`GET_STARTED.md`, `VERSIONING.md`, `VERSION_COMPARISON.md`
+
+**Document storage placement (new long-term docs):**
+```
+reference/    = authoritative long-lived reference docs
+assessments/  = assessments, audits, reassessments
+baselines/    = baseline snapshots and comparison anchors
+roadmaps/     = remediation / upgrade / rollout plans
+reviews/      = review archives by module or scope
+```
+
+**Quy tắc cứng:** Không tạo hồ sơ dài hạn mới trực tiếp ở `docs/` root nếu không có phê duyệt rõ ràng.
 
 **Governance additions:** Phải với:
 - Scope rõ ràng (trigger condition, what it covers)

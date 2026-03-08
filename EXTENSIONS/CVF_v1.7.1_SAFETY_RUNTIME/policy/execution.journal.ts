@@ -1,4 +1,4 @@
-import type { PolicyDecision, ExecutionRecord } from "../types/index"
+import type { ExecutionRecord, ExecutionResumeContext, PolicyDecision } from "../types/index"
 
 const journal: ExecutionRecord[] = []
 
@@ -6,7 +6,8 @@ export function recordExecution(
   proposalId: string,
   policyVersion: string,
   policyHash: string,
-  decision: PolicyDecision
+  decision: PolicyDecision,
+  resumeContext?: ExecutionResumeContext
 ) {
   journal.push({
     proposalId,
@@ -14,9 +15,14 @@ export function recordExecution(
     policyHash,
     decision,
     timestamp: Date.now(),
+    resumeContext,
   })
 }
 
 export function getJournal(): readonly ExecutionRecord[] {
   return journal
+}
+
+export function _clearJournal() {
+  journal.length = 0
 }

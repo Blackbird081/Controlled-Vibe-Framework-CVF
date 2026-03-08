@@ -57,6 +57,22 @@ Personal AI usage unrelated to company work is excluded.
      - per-project clone: `D:\Work\.Controlled-Vibe-Framework-CVF` (cloned as isolated core) + separate project folder
    - A leading `.` in CVF core folder naming is allowed as an isolation convention; it is not required for hidden mode.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md`.
+9. Document naming under CVF governance is mandatory:
+   - Long-term governance and review records stored in `docs/` or `governance/` must follow CVF naming conventions.
+   - Non-exempt governance records must use the `CVF_` prefix.
+   - This rule applies equally to humans and AI agents.
+   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DOCUMENT_NAMING_GUARD.md`.
+10. Document storage classification under CVF governance is mandatory:
+   - New long-term documents created in `docs/` must be placed in the correct taxonomy folder.
+   - `docs/INDEX.md` is the canonical storage map.
+   - This rule applies equally to humans and AI agents.
+   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`.
+   - Automated docs gate reference: `governance/compat/check_docs_governance_compat.py`.
+11. Depth audit is mandatory before deepening any roadmap phase:
+   - This rule applies to all phases, not only deep policy branches.
+   - Any new semantic layer, `CF-*` expansion, or comparable roadmap deepening must be justified by explicit depth-audit scoring.
+   - The default should be `defer` unless the proposal demonstrates real risk reduction, decision value, and machine-enforceable closure.
+   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`.
 
 ---
 

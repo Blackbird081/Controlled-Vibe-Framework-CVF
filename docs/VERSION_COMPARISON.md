@@ -273,7 +273,7 @@ flowchart TB
 2. Use AI Agent Chat with Gemini/OpenAI/Anthropic
 3. Browse 141 skills + 34 agent tools
 
-→ See [Agent Platform Guide](CVF_v16_AGENT_PLATFORM.md)
+→ See [Agent Platform Guide](reference/CVF_v16_AGENT_PLATFORM.md)
 
 ### v1.6 → v1.7.x
 

@@ -68,12 +68,34 @@ export interface ExecutionResult {
   policyHash: string
 }
 
+export interface ExecutionResumeContext {
+  sessionId?: string
+  checkpointedAt: number
+  lastResumedAt?: number
+  resumeCount: number
+  resumeAuthorized: boolean
+}
+
+export interface LifecycleCheckpoint {
+  proposalId: string
+  state: ApprovalState
+  policyVersion: string
+  policyHash: string
+  simulateOnly: boolean
+  checkpointedAt: number
+  sessionId?: string
+  resumeToken: string
+  resumeCount: number
+  lastResumedAt?: number
+}
+
 export interface ExecutionRecord {
   proposalId: string
   policyVersion: string
   policyHash: string
   decision: PolicyDecision
   timestamp: number
+  resumeContext?: ExecutionResumeContext
 }
 
 // ─── Lifecycle Types ────────────────────────────────────────────
@@ -83,6 +105,13 @@ export interface LifecycleInput {
   payload: ProposalPayload
   policyVersion: string
   simulateOnly?: boolean
+  sessionId?: string
+}
+
+export interface ResumeCheckpointInput {
+  proposalId: string
+  sessionId?: string
+  resumeToken?: string
 }
 
 // ─── AI Provider Types ──────────────────────────────────────────

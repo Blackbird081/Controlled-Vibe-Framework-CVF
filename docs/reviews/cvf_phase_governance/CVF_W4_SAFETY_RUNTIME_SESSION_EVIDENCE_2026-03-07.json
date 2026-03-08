@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "2026-03-07",
+  "adapter": "SAFETY_RUNTIME_SESSION_EVIDENCE",
+  "receiptCount": 3,
+  "receipts": [
+    {
+      "receiptId": "CHECKPOINT_CREATED:session-runtime-001:create_checkpoint",
+      "action": "CHECKPOINT_CREATED",
+      "sourceProposalId": "session-runtime-001",
+      "step": "create_checkpoint",
+      "recordedAt": 1772863000000
+    },
+    {
+      "receiptId": "RESUMED:session-runtime-001:resume_session",
+      "action": "RESUMED",
+      "sourceProposalId": "session-runtime-001",
+      "step": "resume_session",
+      "recordedAt": 1772863001000
+    },
+    {
+      "receiptId": "AUDIT_LINKED:session-runtime-001:record_audit_linkage",
+      "action": "AUDIT_LINKED",
+      "sourceProposalId": "session-runtime-001",
+      "step": "record_audit_linkage",
+      "recordedAt": 1772863002000
+    }
+  ]
+}

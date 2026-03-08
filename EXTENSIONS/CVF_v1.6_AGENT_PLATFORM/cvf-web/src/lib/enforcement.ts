@@ -3,8 +3,11 @@ import { evaluateRiskGate, inferRiskLevelFromText, RiskGateResult } from '@/lib/
 import { evaluateSpecGate, SpecGateField, SpecGateResult } from '@/lib/spec-gate';
 import {
     governanceEvaluate,
+    governanceEvaluateWithBindings,
     isGovernanceEngineEnabled,
 } from '@/lib/governance-engine';
+import { buildUnifiedGovernanceState, type UnifiedGovernanceState } from '@/lib/governance-state-contract';
+import type { GovernanceState } from '@/lib/governance-context';
 import type {
     GovernanceEvaluateResult,
     CVFQualityResult,
@@ -32,6 +35,20 @@ export interface EnforcementInput {
     mode: CVFMode;
     content: string;
     budgetOk: boolean;
+    governanceState?: Partial<GovernanceState>;
+    agentId?: string;
+    registryBinding?: {
+        agentId?: string;
+        certificationStatus?: string;
+        approvedPhases?: string[];
+        approvedSkills?: string[];
+        lastSelfUatDate?: string;
+    };
+    uatBinding?: {
+        badge?: 'NOT_RUN' | 'NEEDS_UAT' | 'VALIDATED' | 'FAILED';
+        status?: 'PASS' | 'FAIL' | 'NOT_TESTED';
+        lastRunAt?: string;
+    };
     specFields?: SpecGateField[];
     specValues?: Record<string, string>;
     requiresSkillPreflight?: boolean;
@@ -55,6 +72,8 @@ export interface EnforcementResult {
     cvfQuality?: CVFQualityResult;
     /** CVF enforcement (phase authority) from server */
     cvfEnforcement?: CVFEnforcementResult;
+    /** Unified local/server governance snapshot */
+    governanceStateSnapshot: UnifiedGovernanceState;
     /** Whether server-side evaluation was used */
     source: 'client' | 'server';
 }
@@ -129,7 +148,27 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
         reasons.push(riskGate.reason);
     }
 
-    return { status, reasons, riskGate, specGate, skillPreflight, source: 'client' };
+    return {
+        status,
+        reasons,
+        riskGate,
+        specGate,
+        skillPreflight,
+        governanceStateSnapshot: buildUnifiedGovernanceState({
+            governanceState: input.governanceState,
+            cvfPhase: input.cvfPhase,
+            cvfRiskLevel: input.cvfRiskLevel ?? inferredRisk ?? undefined,
+            enforcementStatus: status,
+            reasons,
+            source: 'client',
+            requestId: input.requestId,
+            artifactId: input.artifactId,
+            skillPreflight,
+            registryBinding: input.registryBinding,
+            uatBinding: input.uatBinding,
+        }),
+        source: 'client',
+    };
 }
 
 // ─── Server status → EnforcementStatus mapping ──────────────────────
@@ -181,6 +220,19 @@ export async function evaluateEnforcementAsync(
             status: 'BLOCK',
             reasons: [SKILL_PREFLIGHT_MISSING_REASON],
             skillPreflight,
+            governanceStateSnapshot: buildUnifiedGovernanceState({
+                governanceState: input.governanceState,
+                cvfPhase: input.cvfPhase,
+                cvfRiskLevel: input.cvfRiskLevel,
+                enforcementStatus: 'BLOCK',
+                reasons: [SKILL_PREFLIGHT_MISSING_REASON],
+                source: 'client',
+                requestId: input.requestId,
+                artifactId: input.artifactId,
+                skillPreflight,
+                registryBinding: input.registryBinding,
+                uatBinding: input.uatBinding,
+            }),
             source: 'client',
         };
     }
@@ -193,10 +245,10 @@ export async function evaluateEnforcementAsync(
     try {
         const requestId = input.requestId || `req-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
         const artifactId = input.artifactId || 'web-execution';
-
-        const serverResult = await governanceEvaluate({
+        const requestPayload = {
             request_id: requestId,
             artifact_id: artifactId,
+            agent_id: input.agentId ?? input.registryBinding?.agentId,
             payload: {
                 content: input.content,
                 mode: input.mode,
@@ -218,7 +270,10 @@ export async function evaluateEnforcementAsync(
                 record_ref: skillPreflight.recordRef,
                 skill_ids: skillPreflight.skillIds,
             },
-        });
+        };
+
+        const routeResult = await governanceEvaluateWithBindings(requestPayload);
+        const serverResult = routeResult?.result ?? await governanceEvaluate(requestPayload);
 
         if (!serverResult || !serverResult.report) {
             // Server unreachable or invalid response — fallback
@@ -234,6 +289,20 @@ export async function evaluateEnforcementAsync(
             serverResult,
             cvfQuality: serverResult.report.cvf_quality,
             cvfEnforcement: serverResult.report.cvf_enforcement,
+            governanceStateSnapshot: buildUnifiedGovernanceState({
+                governanceState: input.governanceState,
+                cvfPhase: input.cvfPhase,
+                cvfRiskLevel: input.cvfRiskLevel,
+                enforcementStatus: mapped.status,
+                reasons: mapped.reasons,
+                source: 'server',
+                requestId,
+                artifactId,
+                skillPreflight,
+                registryBinding: routeResult?.governanceBindings?.registryBinding ?? input.registryBinding,
+                uatBinding: routeResult?.governanceBindings?.uatBinding ?? input.uatBinding,
+                serverResult,
+            }),
             source: 'server',
         };
     } catch {

@@ -60,3 +60,6 @@ Xd_App/
 
 # REVIEW folder (local temporary review workspace)
 REVIEW/
+
+# CVF_Restructure (private — do not publish until approved)
+CVF_Restructure/

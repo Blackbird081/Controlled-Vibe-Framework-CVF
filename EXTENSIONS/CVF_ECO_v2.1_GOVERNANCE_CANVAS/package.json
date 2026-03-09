@@ -1,0 +1,15 @@
+{
+  "name": "@cvf/governance-canvas",
+  "version": "2.1.0",
+  "description": "CVF Governance Canvas — Visual governance state reporting and dashboard generation",
+  "main": "src/canvas.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.3.0",
+    "vite": "^5.1.0"
+  }
+}

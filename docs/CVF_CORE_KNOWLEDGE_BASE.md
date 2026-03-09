@@ -499,7 +499,96 @@ Tất cả 9 checkbox phải được check trước khi bắt đầu implement.
 
 ---
 
-## XIII. KEY DOCS ĐỂ ĐỌC THÊM
+## XIII. CVF MCP SERVER (M1-M7) — Complete Implementation
+
+> **Phiên bản:** v2.1.0 | **Cập nhật:** 2026-03-09  
+> **Location:** `EXTENSIONS/CVF_v1.7_MCP_SERVER/`  
+> **Tests:** 476 passing across 14 test files  
+> **Status:** ✅ All milestones complete, pushed to `cvf-next`
+
+### Architecture Overview
+
+```
+EXTENSIONS/CVF_v1.7_MCP_SERVER/src/
+├── guards/           — 6 guards + engine (102 tests)
+├── persistence/      — JSON file adapter (26 tests)
+├── prompt/          — System prompt generator (37 tests)
+├── cli/             — 9-command CLI wrapper (38 tests)
+├── registry/        — Unified guard registry + skill-guard wire (54 tests)
+├── vibe-translator/ — Vibe parser, clarification, confirmation card (96 tests)
+├── memory/          — Session memory with TTL (40 tests)
+├── non-coder/       — 5 Golden Screens + Smart Onboarding (60 tests)
+├── integration/     — E2E pipeline tests (23 tests)
+├── sdk.ts           — Barrel exports for consumers
+└── index.ts         — MCP server entry point (7 tools)
+```
+
+### Key Capabilities
+
+| Capability | Description | Tests |
+|------------|-------------|-------|
+| **MCP Server** | 7 tools: phase_gate, risk_gate, authority, validate_output, advance_phase, audit_log, evaluate_full | 102 |
+| **Guard Persistence** | JSON file audit log + session state | 26 |
+| **System Prompt** | Context-aware prompt with MCP tool references | 37 |
+| **CLI** | Terminal commands for non-IDE usage | 38 |
+| **Unified Registry** | Single source of truth for all guards | 54 |
+| **Skill-Guard Wire** | Map skills to required guards | 54 |
+| **Vibe Translator** | NL input → structured intent → guard evaluation (EN/VI) | 96 |
+| **Session Memory** | Cross-request state with TTL expiry | 40 |
+| **Non-coder Screens** | 5 Golden Screens data models + Smart Onboarding | 60 |
+| **E2E Tests** | Full pipeline integration tests | 23 |
+
+### MCP Tools (IDE Integration)
+
+| Tool | Usage |
+|------|-------|
+| `cvf_check_phase_gate` | Before starting work in a new phase |
+| `cvf_check_risk_gate` | Before any action with side effects |
+| `cvf_check_authority` | Before approve/merge/deploy actions |
+| `cvf_validate_output` | After generating output, before presenting |
+| `cvf_advance_phase` | When current phase work is complete |
+| `cvf_get_audit_log` | Retrieve session audit trail |
+| `cvf_evaluate_full` | Run full 6-guard pipeline on an action |
+
+### Non-coder First Product Features
+
+| Feature | Description |
+|---------|-------------|
+| **Vibe Box** | Single input + voice, phase-specific prompts |
+| **Intention Map** | Mindmap confirmation + auto-guardrails |
+| **Live Dashboard** | Progress + budget + pause controls |
+| **Human-in-the-Loop** | Push notifications for risk events |
+| **Audit Ledger** | Human-language daily summaries |
+| **Smart Onboarding** | Persona profiling + red lines + personal dictionary |
+
+### Quick Start
+
+```bash
+# Install
+cd EXTENSIONS/CVF_v1.7_MCP_SERVER
+npm install
+
+# Run tests
+npm test          # 476 tests pass
+npm run test:run  # Single run
+
+# Start MCP server (stdio transport)
+npm start
+
+# CLI usage
+npx tsx src/cli.ts evaluate --phase BUILD --risk R0 --role HUMAN --action "write code"
+```
+
+### Integration Points
+
+- **IDEs**: Add to Windsurf/Cursor MCP settings to get guard tools
+- **CLI**: Use for CI/CD, shell scripts, Python integration
+- **SDK**: Import from `./sdk.ts` for TypeScript consumers
+- **Frontend**: Use `generateVibeBoxScreen()` etc. for UI data contracts
+
+---
+
+## XIV. KEY DOCS ĐỂ ĐỌC THÊM
 
 | File | Khi nào đọc |
 |------|------------|
@@ -508,6 +597,7 @@ Tất cả 9 checkbox phải được check trước khi bắt đầu implement.
 | [`docs/CVF_ARCHITECTURE_DECISIONS.md`](CVF_ARCHITECTURE_DECISIONS.md) | Xem ADR history, quyết định thiết kế |
 | [`docs/baselines/CVF_CORE_COMPAT_BASELINE.md`](baselines/CVF_CORE_COMPAT_BASELINE.md) | Chạy compat check |
 | [`EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md`](../EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md) | Hiểu reference vs production separation |
+| [`EXTENSIONS/CVF_v1.7_MCP_SERVER/README.md`](../EXTENSIONS/CVF_v1.7_MCP_SERVER/README.md) | MCP Server usage guide |
 
 ---
 

@@ -282,6 +282,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md | active test log window exceeds threshold | `docs/CVF_INCREMENTAL_TEST_LOG.md` + `docs/logs/` |
 | CVF_ADR_GUARD.md | `feat(governance):`, `refactor(arch):`, `docs(policy):` | `docs/CVF_ARCHITECTURE_DECISIONS.md` |
 | CVF_DOCUMENT_NAMING_GUARD.md | New/migrated long-term governance docs | `CVF_` naming convention + approved exceptions |
+| CVF_DIAGRAM_VALIDATION_GUARD.md | Diagram changes | `docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md` |
 | CVF_DOCUMENT_STORAGE_GUARD.md | New long-term docs in `docs/` | Correct taxonomy folder per `docs/INDEX.md` |
 | CVF_DEPTH_AUDIT_GUARD.md | Any roadmap deepening / new semantic layer | Explicit scoring before continuing deeper |
 | CVF_WORKSPACE_ISOLATION_GUARD.md | Opening projects in CVF root | Sibling workspace only |

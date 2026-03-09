@@ -285,6 +285,7 @@ python governance/compat/check_docs_governance_compat.py --enforce
 | [ADR Guard](governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md) | `feat(governance):`, `refactor(arch):` | Entry in [`CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md) |
 | [Document Naming](governance/toolkit/05_OPERATION/CVF_DOCUMENT_NAMING_GUARD.md) | New governance docs | `CVF_` prefix convention |
 | [Document Storage](governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md) | New docs in `docs/` | Per [`docs/INDEX.md`](docs/INDEX.md) taxonomy |
+| [Diagram Validation](governance/toolkit/05_OPERATION/CVF_DIAGRAM_VALIDATION_GUARD.md) | New State Machines or Workflows | Must pass `diagram.validator.ts` check |
 | [Workspace Isolation](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md) | Opening projects in CVF root | Sibling workspace only |
 | [Depth Audit](governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md) | Roadmap deepening | Explicit scoring before continuing |
 | [Architecture Check](governance/toolkit/05_OPERATION/CVF_ARCHITECTURE_CHECK_GUARD.md) | New version/layer/extension | Read KB, state Layer + overlap |

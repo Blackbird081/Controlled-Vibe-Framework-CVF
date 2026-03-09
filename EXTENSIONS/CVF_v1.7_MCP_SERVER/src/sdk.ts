@@ -127,3 +127,42 @@ export type {
   SessionMemoryConfig,
   SessionSnapshot,
 } from './memory/session-memory.js';
+
+// ─── Non-coder: 5 Golden Screens ─────────────────────────────────────
+export {
+  generateVibeBoxScreen,
+  generateIntentionMapScreen,
+  generateLiveDashboardScreen,
+  generateHITLScreen,
+  generateAuditLedgerScreen,
+} from './non-coder/golden-screens.js';
+export type {
+  VibeBoxScreen,
+  IntentionMapScreen,
+  IntentionMapNode,
+  LiveDashboardScreen,
+  HITLScreen,
+  HITLNotification,
+  AuditLedgerScreen,
+  AuditLedgerEntry,
+} from './non-coder/golden-screens.js';
+
+// ─── Non-coder: Smart Onboarding ─────────────────────────────────────
+export {
+  getPersonaQuestions,
+  buildPersonaProfile,
+  getMaxRiskForAutonomy,
+  getDefaultRedLines,
+  mergeRedLines,
+  checkRedLine,
+  PersonalDictionary,
+  completeOnboarding,
+} from './non-coder/smart-onboarding.js';
+export type {
+  AutonomyLevel,
+  PersonaProfile,
+  PersonaQuestion,
+  RedLineConfig,
+  DictionaryEntry,
+  OnboardingResult,
+} from './non-coder/smart-onboarding.js';

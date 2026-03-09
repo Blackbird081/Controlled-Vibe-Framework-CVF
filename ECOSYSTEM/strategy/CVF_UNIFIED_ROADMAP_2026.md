@@ -12,14 +12,14 @@
 ```
 TRACK I:  Hardening (Close W1-W7)          █████████░ 90%   ← W1,W3,W4 CLOSED
 TRACK II: Ecosystem Restructure            ██████████ 100%  ← COMPLETE ✅ (Archive DONE)
-TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   ← UNBLOCKED — ready to begin
+TRACK III: Ecosystem Expansion             █░░░░░░░░░  5%   ← Phase 2 STARTED (Intent Validation ✅)
 ```
 
 | Track | Phases | Tasks | Status | Next Action |
 |---|---|---|---|---|
 | **I. Hardening** | 0-6 | ~50 items | 90% — Phase 0,5 DONE; W1,W3,W4 CLOSED; Phase 2 STRONG; Phase 6 FROZEN | Validate W2 release-grade gate |
 | **II. Eco Restructure** | 1 (Eco) | 17 tasks | ✅ 100% — ALL SECTIONS COMPLETE incl. Archive | — (CLOSED) |
-| **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | 0% — UNBLOCKED (Track I W1-W4 closed, Track II complete) | Begin Phase 2: Intent Validation |
+| **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | 5% — Phase 2 started: Intent Validation ✅ (41 tests) | NL Policy (Task 2.2) |
 
 ---
 
@@ -71,7 +71,7 @@ TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   
 
 | Phase | Key Deliverables | Tasks | Status | Expected Output (Treeview Target) | Blocked By |
 |---|---|---|---|---|---|
-| **Phase 2** (Q3 2026) | Intent Validation, NL Policy, LLM Risk | 23 | 🔲 | `EXTENSIONS/CVF_v2.1_INTELLIGENCE/` | Track I: W1, W2, W3 |
+| **Phase 2** (Q3 2026) | Intent Validation, NL Policy, LLM Risk | 23 | � 1/5 | `EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION/` | Task 2.2 NL Policy |
 | **Phase 3** (Q4 2026) | Agent Guard SDK, Canvas, CLI | 17 | 🔲 | `EXTENSIONS/CVF_v2.2_SDK_PLATFORM/` | Track I: W4 + Phase 2 |
 | **Phase 4** (2027) | Agent Identity, Graph Governance | 8 | 🔲 | `EXTENSIONS/CVF_v2.3_NETWORK/` | Phase 3 |
 | **Phase 5** (2028+) | Task Marketplace, Reputation | 5 | 🔲 | `EXTENSIONS/CVF_v3.1_ECONOMY/` | Phase 4 |
@@ -163,7 +163,8 @@ Mọi guard mới (ở bất kỳ track nào) → phải qua `check_guard_regist
 | 4 | **Close W3** — Skill Rollout Policy | Track I | P1 | Medium | ✅ DONE |
 | 5 | **Close W4** — Durable Execution Policy | Track I | P1 | Medium | ✅ DONE |
 | 6 | **Archive CVF_Restructure** — Migrate + archive | Track II | P2 | Low | ✅ DONE |
-| 7 | **Begin Eco Phase 2** — Intent Validation + NL Policy | Track III | P2 | High | 🔲 NEXT |
+| 7 | **Intent Validation** — Triple-S engine (41 tests) | Track III | P2 | High | ✅ DONE |
+| 8 | **NL Policy** — Natural Language Policy spec | Track III | P2 | High | 🔲 NEXT |
 
 ---
 

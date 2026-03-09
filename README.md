@@ -102,7 +102,10 @@ See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_IS
 
 | | |
 |---|---|
-| **Concepts** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance Model](docs/concepts/governance-model.md) · [Risk Model](docs/concepts/risk-model.md) · [Skill System](docs/concepts/skill-system.md) · [Version Evolution](docs/concepts/version-evolution.md) |
+| **Concepts** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance Model](docs/concepts/governance-model.md) · [Risk Model](docs/concepts/risk-model.md) · [Skill System](docs/concepts/skill-system.md) · [Version Evolution](docs/concepts/version-evolution.md) · [Hierarchical Governance Pipeline](docs/concepts/CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md) |
+| **Doctrine** | [Architecture Principles](docs/doctrine/CVF_ARCHITECTURE_PRINCIPLES.md) · [Product Positioning](docs/doctrine/CVF_PRODUCT_POSITIONING.md) · [Ecosystem Map](docs/doctrine/CVF_ECOSYSTEM_MAP.md) · [Layer Model](docs/doctrine/CVF_LAYER_MODEL.md) · [Doctrine Rules](docs/doctrine/CVF_DOCTRINE_RULES.md) |
+| **Operating Model** | [Agent Operating Model](docs/operating-model/CVF_AGENT_OPERATING_MODEL.md) · [Builder Model (Non-Coder)](docs/operating-model/CVF_BUILDER_MODEL.md) |
+| **Strategy** | [Strategic Summary](docs/strategy/CVF_STRATEGIC_SUMMARY.md) · [Unified Roadmap 2026](docs/roadmaps/CVF_UNIFIED_ROADMAP_2026.md) |
 | **Guides** | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) · [Solo Developer](docs/guides/solo-developer.md) · [Team Setup](docs/guides/team-setup.md) · [Enterprise](docs/guides/enterprise.md) |
 | **Tutorials** | [First Project](docs/tutorials/first-project.md) · [Web UI Setup](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
 | **Cheatsheets** | [Troubleshooting](docs/cheatsheets/troubleshooting.md) · [Version Picker](docs/cheatsheets/version-picker.md) |
@@ -175,7 +178,7 @@ CVF
 
 > **Layer 0 never depends up.** CVF Core works standalone. CVF Full requires Layer 0 as foundation.
 
-**Read more:** [Architecture Separation Diagram](EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md) | [CVF Positioning](docs/reference/CVF_POSITIONING.md) | [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
+**Read more:** [Architecture Separation Diagram](EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md) | [CVF Positioning](docs/doctrine/CVF_PRODUCT_POSITIONING.md) | [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md) | [Unified Roadmap](docs/roadmaps/CVF_UNIFIED_ROADMAP_2026.md)
 
 ---
 

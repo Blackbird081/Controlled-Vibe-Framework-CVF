@@ -1,0 +1,15 @@
+{
+  "name": "@cvf/governance-cli",
+  "version": "2.2.0",
+  "description": "CVF Governance CLI — Command-line interface for governance operations",
+  "main": "src/cli.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.3.0",
+    "vite": "^5.1.0"
+  }
+}

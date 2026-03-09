@@ -1,0 +1,17 @@
+{
+    "name": "cvf-core-git-for-ai",
+    "version": "3.0.0",
+    "description": "CVF Core — Git for AI Development. Foundation Primitives: Commit, Artifact, Process, Staging.",
+    "type": "module",
+    "scripts": {
+        "check": "tsc --noEmit",
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "typescript": "^5.0.0",
+        "vitest": "^1.0.0",
+        "@vitest/coverage-v8": "^1.0.0"
+    }
+}

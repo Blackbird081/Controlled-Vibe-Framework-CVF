@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "2026-03-07",
+  "adapter": "SKILL_GOVERNANCE_RUNTIME_EVIDENCE",
+  "receiptCount": 3,
+  "receipts": [
+    {
+      "receiptId": "CANDIDATE_FILTERED:skill-governance-001:filter_revoked_skill",
+      "action": "CANDIDATE_FILTERED",
+      "sourceProposalId": "skill-governance-001",
+      "step": "filter_revoked_skill",
+      "recordedAt": 1772863500000
+    },
+    {
+      "receiptId": "PHASE_GUARDED:skill-governance-001:enforce_phase_compatibility",
+      "action": "PHASE_GUARDED",
+      "sourceProposalId": "skill-governance-001",
+      "step": "enforce_phase_compatibility",
+      "recordedAt": 1772863501000
+    },
+    {
+      "receiptId": "MIGRATION_ORCHESTRATED:skill-governance-001:resolve_successor_chain",
+      "action": "MIGRATION_ORCHESTRATED",
+      "sourceProposalId": "skill-governance-001",
+      "step": "resolve_successor_chain",
+      "recordedAt": 1772863502000
+    }
+  ]
+}

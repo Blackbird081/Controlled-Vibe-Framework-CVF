@@ -1,0 +1,123 @@
+{
+  "cacheId": "CVF_V122_CONFORMANCE_CACHE_2026-03-07",
+  "workdir": "EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE",
+  "suiteResult": "PASS",
+  "scenarioCount": 5,
+  "scenarios": {
+    "CF-009": {
+      "testFile": "tests/skill.misuse.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 4.378,
+      "assertions": [
+        {
+          "fullName": "skill misuse conformance filters revoked skills from candidate search results",
+          "status": "passed",
+          "durationMs": 1.931
+        },
+        {
+          "fullName": "skill misuse conformance blocks runtime loading of revoked skills and returns refusal reason",
+          "status": "passed",
+          "durationMs": 1.714
+        },
+        {
+          "fullName": "skill misuse conformance blocks forbidden operations declared by contract",
+          "status": "passed",
+          "durationMs": 0.733
+        }
+      ]
+    },
+    "CF-013": {
+      "testFile": "tests/skill.deprecation.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 3.72,
+      "assertions": [
+        {
+          "fullName": "CVF v1.2.2 deprecated-skill conformance filters deprecated skills from candidate search results",
+          "status": "passed",
+          "durationMs": 2.113
+        },
+        {
+          "fullName": "CVF v1.2.2 deprecated-skill conformance blocks runtime loading of deprecated skills and returns refusal reason",
+          "status": "passed",
+          "durationMs": 1.232
+        },
+        {
+          "fullName": "CVF v1.2.2 deprecated-skill conformance supports runtime deprecation marking through the registry",
+          "status": "passed",
+          "durationMs": 0.374
+        }
+      ]
+    },
+    "CF-014": {
+      "testFile": "tests/skill.successor.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 3.182,
+      "assertions": [
+        {
+          "fullName": "CVF v1.2.2 deprecated-skill successor conformance migrates deprecated skills to an active successor when available",
+          "status": "passed",
+          "durationMs": 1.724
+        },
+        {
+          "fullName": "CVF v1.2.2 deprecated-skill successor conformance supports deprecation marking with successor metadata through the registry",
+          "status": "passed",
+          "durationMs": 0.513
+        },
+        {
+          "fullName": "CVF v1.2.2 deprecated-skill successor conformance fails closed when the declared successor is not executable",
+          "status": "passed",
+          "durationMs": 0.945
+        }
+      ]
+    },
+    "CF-015": {
+      "testFile": "tests/skill.phase-compat.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 3.159,
+      "assertions": [
+        {
+          "fullName": "CVF v1.2.2 phase/dependency compatibility conformance blocks runtime loading when dependency status is blocked",
+          "status": "passed",
+          "durationMs": 2.164
+        },
+        {
+          "fullName": "CVF v1.2.2 phase/dependency compatibility conformance blocks runtime loading when the current phase is not allowed",
+          "status": "passed",
+          "durationMs": 0.503
+        },
+        {
+          "fullName": "CVF v1.2.2 phase/dependency compatibility conformance does not allow successor migration to bypass dependency or phase checks",
+          "status": "passed",
+          "durationMs": 0.492
+        }
+      ]
+    },
+    "CF-016": {
+      "testFile": "tests/skill.upgrade-orchestration.conformance.test.ts",
+      "status": "passed",
+      "assertionCount": 3,
+      "durationMs": 4.433,
+      "assertions": [
+        {
+          "fullName": "CVF v1.2.2 upgrade orchestration conformance resolves a multi-hop deprecated chain to the first active executable successor",
+          "status": "passed",
+          "durationMs": 2.686
+        },
+        {
+          "fullName": "CVF v1.2.2 upgrade orchestration conformance fails closed when the successor chain contains a migration cycle",
+          "status": "passed",
+          "durationMs": 1.21
+        },
+        {
+          "fullName": "CVF v1.2.2 upgrade orchestration conformance fails closed when the final migration target violates runtime policy",
+          "status": "passed",
+          "durationMs": 0.537
+        }
+      ]
+    }
+  }
+}

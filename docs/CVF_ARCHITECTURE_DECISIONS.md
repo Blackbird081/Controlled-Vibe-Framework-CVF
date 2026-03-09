@@ -203,7 +203,7 @@ A `CVF_Hypervisor Mode` folder (30 files) was created as a prototype for an AI S
 - Maintaining parallel code would create a weaker second codebase competing with production-grade v1.7.x
 - The unique innovations (runtime adapter contracts, NLP policy, explainability) are genuinely new capabilities that extend CVF without overlapping
 - v1.7.3 as a PATCH version correctly signals "sub-extension of v1.7.1" without breaking backward compatibility
-- The `Thong_tin.md` competitive analysis was preserved as `docs/CVF_HYPERVISOR_STRATEGY.md`
+- The `Thong_tin.md` competitive analysis was preserved as `docs/reference/CVF_HYPERVISOR_STRATEGY.md`
 
 ### Consequences
 - Future runtime adapter additions must implement the `RuntimeAdapter` contract in `contracts/`
@@ -215,7 +215,7 @@ A `CVF_Hypervisor Mode` folder (30 files) was created as a prototype for an AI S
 - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/` (new extension)
 - `docs/VERSIONING.md` (updated)
 - `docs/VERSION_COMPARISON.md` (updated)
-- `docs/CVF_HYPERVISOR_STRATEGY.md` (moved from Hypervisor Mode)
+- `docs/reference/CVF_HYPERVISOR_STRATEGY.md` (moved from Hypervisor Mode)
 - `.gitignore` (still contains `CVF_Hypervisor Mode/` entry — harmless)
 
 ---
@@ -765,3 +765,312 @@ CVF v1.1.1 established the Phase Governance Protocol but had architectural gaps 
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/v1.1.1.test.ts` (updated)
 - `docs/VERSIONING.md` (updated: v1.1.2 added)
 
+---
+
+## ADR-016: CVF v3.0 — Core Foundation Primitives (Major Version Gate)
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-06 |
+| Status | DRAFT — pending merge of `cvf-next` → `main` |
+| Branch | `cvf-next` |
+| Layer | Layer 0 — Foundation Primitives (NEW) |
+| Related commits | *(local branch cvf-next, not yet merged/pushed)* |
+
+### Context
+CVF v1.x (Layers 1–2.5) addresses development governance and runtime safety. However, there is no formal model for **what AI produces** — only governance of the process. 
+
+The De_xuat review (De_xuat_08–13 + Whitepaper) proposes a paradigm shift: CVF should define a **"Git for AI Development"** model — a set of first-class primitives that describe AI output in the same structured, traceable way that Git describes code changes.
+
+This is a **core identity change** — from "AI process governance tool" to "AI development substrate". Per CVF Versioning Policy, a core identity change requires a MAJOR version bump.
+
+### Decision
+**CVF v3.0 — Core Foundation Primitives** on branch `cvf-next`.
+
+| Decision Point | Choice | Rationale |
+|---|---|---|
+| Version | MAJOR (v3.0) | Core identity change: adds Layer 0 to the framework |
+| Branch | `cvf-next` | Separate from `main` to avoid disrupting v1.1.x users |
+| Scope | De_xuat_08–13 (partial: 10p, 11, 12) | Staged scope per DE_XUAT_IMPLEMENT_DECISION_MATRIX |
+| De_xuat_10 status | Implemented as partial (AI Commit schema + parser) | core_id change requires this gate |
+| De_xuat_03, 08full, 09-phase-branch | DEFERRED → v3.x | Too broad for Phase 2 first wave |
+
+### Layer 0 Modules Implemented
+
+| Module | File | Primitive |
+|---|---|---|
+| AI Commit Schema | `ai_commit/ai.commit.schema.ts` | Commit (AICommit interface) |
+| AI Commit Parser | `ai_commit/ai.commit.parser.ts` | Commit (createCommit, verifyIntegrity) |
+| AI Commit Validator | `ai_commit/ai.commit.validator.ts` | Commit (8 RULE checks) |
+| Artifact Staging | `artifact_staging/artifact.staging.ts` | Staging (4-state machine) |
+| Artifact Ledger | `artifact_ledger/artifact.ledger.ts` | Artifact (append-only, content-addressed) |
+| Process Model | `process_model/process.model.ts` | Process (gate-required, multi-process) |
+| Core Index | `index.ts` | All 3+1 Primitives export |
+
+### Documentation Produced
+
+- `docs/reference/CVF_ARCHITECTURE_MAP.md` — Layer diagram, module list, entry points
+- `docs/reference/CVF_WHITEPAPER_GIT_FOR_AI.md` — Formal whitepaper
+- `docs/reference/CVF_ADOPTION_STRATEGY.md` — 5-phase adoption model
+- `docs/reference/CVF_SKILL_LIFECYCLE.md` — 6-state skill governance model
+
+### Test coverage
+- Total: 25 tests — 100% new (CVF Core tests)
+- All 25/25 PASS
+
+### Merge prerequisites (before merging cvf-next → main)
+1. ADR-016 reviewed and approved
+2. Backward compatibility with v1.1.x confirmed (no breaking changes to v1.1.x)
+3. VERSIONING.md updated to v3.0
+4. CVF_CORE_KNOWLEDGE_BASE.md updated with Layer 0 description
+
+### Consequences
+- CVF architecture expands from 6 layers to 7 (Layer 0 added)
+- CVF Core and CVF Full become officially distinct scopes
+- AI agents can now produce first-class CVF commits (not just trigger governance)
+- Future: De_xuat_03 (Multi-State-System) and De_xuat_09 (Phase-Bound Branch) → v3.x
+
+### Related Files
+- `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/` (new — branch cvf-next)
+- `docs/reference/CVF_ARCHITECTURE_MAP.md` (new)
+- `docs/reference/CVF_WHITEPAPER_GIT_FOR_AI.md` (new)
+- `docs/reference/CVF_ADOPTION_STRATEGY.md` (new)
+- `docs/reference/CVF_SKILL_LIFECYCLE.md` (new)
+- `docs/VERSIONING.md` (pending update: v3.0 added)
+
+---
+
+## ADR-017: Operational Release Manifest Separation
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-07 |
+| Status | Active |
+| Related commits | *(local commit, not yet pushed)* |
+
+### Context
+
+By March 2026, CVF had a growing mismatch between:
+
+- versioning policy (`docs/VERSIONING.md`)
+- root README positioning
+- review/baseline documents
+- actual locally implemented extension lines (`v1.8`, `v1.9`, `v2.0`, `v3.0 draft`)
+
+This made it harder to answer simple operational questions such as:
+
+- Which line is the current baseline?
+- Which versions are stable vs local-only?
+- Which extensions are reference-only vs current upgrade targets?
+
+The baseline review explicitly identified this as a weakness in release/version narrative and ecosystem maturity mapping.
+
+### Decision
+
+Separate **versioning policy** from **operational release state**.
+
+| Concern | Canonical file |
+|---|---|
+| Naming/version semantics | `docs/VERSIONING.md` |
+| Operational release state | `docs/reference/CVF_RELEASE_MANIFEST.md` |
+| Module scope/inventory | `docs/reference/CVF_MODULE_INVENTORY.md` |
+| Operational maturity view | `docs/reference/CVF_MATURITY_MATRIX.md` |
+
+### Consequences
+
+- `docs/VERSIONING.md` remains normative for version rules, not day-to-day release readiness.
+- Release/baseline questions should now resolve through the manifest/inventory/maturity trio.
+- README and review-roadmap entrypoints must point to these reference docs.
+- Future version additions must update both policy and operational reference layers.
+
+### Related Files
+
+- `docs/reference/CVF_RELEASE_MANIFEST.md`
+- `docs/reference/CVF_MODULE_INVENTORY.md`
+- `docs/reference/CVF_MATURITY_MATRIX.md`
+- `docs/VERSIONING.md`
+- `docs/reference/CVF_ARCHITECTURE_MAP.md`
+- `docs/INDEX.md`
+
+---
+
+## ADR-018: Enterprise Evidence Pack Canonicalization
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-07 |
+| Status | Active |
+| Related commits | *(local commit, not yet pushed)* |
+
+### Context
+
+CVF had strong audit habits, but enterprise-facing evidence remained distributed across:
+
+- baseline reviews
+- ADRs
+- test log
+- policy docs
+- release-state docs
+- trace files
+
+This made ad hoc review possible, but not repeatable packet generation. The roadmap identified this as weakness `W7`.
+
+### Decision
+
+Create a canonical enterprise evidence pack layer under `docs/reference/`:
+
+| Purpose | Canonical file |
+|---|---|
+| Evidence pack structure | `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md` |
+| Control mapping | `docs/reference/CVF_CONTROL_TO_ARTIFACT_MAPPING.md` |
+| Release approval template | `docs/reference/CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md` |
+
+### Consequences
+
+- enterprise/release/audit packets now have a canonical starting point
+- release manifest and trace chain become packet inputs, not disconnected references
+- future automation can export packets from this structure instead of inventing a new format
+
+### Related Files
+
+- `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md`
+- `docs/reference/CVF_CONTROL_TO_ARTIFACT_MAPPING.md`
+- `docs/reference/CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md`
+- `docs/reference/CVF_RELEASE_MANIFEST.md`
+
+---
+
+## ADR-019: Branch Strategy for Comprehensive Upgrade Wave (2026-03-06 → 2026-03-08)
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-08 |
+| Status | Active |
+| Related commits | *(local, not yet pushed)* |
+
+### Context
+
+Sau đợt nâng cấp toàn diện CVF (Phase 0–6: conformance pipeline, governance automation, enterprise evidence pack, durable execution, skill governance, release discipline), trạng thái local có divergence lớn so với `origin/main` trên GitHub:
+
+| Metric | Value |
+|---|---|
+| Uncommitted changes trên `cvf-next` | **260 files** (173 mới, 57 sửa, 30 xóa) |
+| Thư mục bị ảnh hưởng | `docs/`, `EXTENSIONS/`, `governance/`, `scripts/`, `.github/`, `README.md`, `CHANGELOG.md` |
+| Local `main` vs `origin/main` | 1 commit chưa push (`f11355a` — v1.1.2 Phase Governance Hardening) |
+| `cvf-next` vs local `main` | 2 commits riêng (v3.0 Core Foundation) + 260 uncommitted files |
+| Conformance scenarios | 84/84 PASS (local) |
+
+Câu hỏi cần quyết định: **push trực tiếp lên `main` (overwrite) hay giữ branch tách biệt?**
+
+### Decision
+
+**Giữ `cvf-next` làm branch tách biệt. Push `main` chỉ với commit v1.1.2 đã sẵn sàng. Không force-push.**
+
+Lý do:
+
+1. **260 files là quá nhiều cho một lần push thẳng** — nếu có regression, rollback cực khó vì không có mốc đối chiếu trên remote.
+2. **`cvf-next` chứa v3.0 DRAFT** — đây là core identity change (Layer 0), chưa đủ mature để merge vào `main`. CVF roadmap và ADR-016 đều quy định v3.0 phải trải qua merge prerequisites.
+3. **CVF tự quy định: "Không trộn hardening current line với major-version innovation line"** (Roadmap Section 9, Final Recommendation).
+4. **Branch tách biệt bảo toàn lịch sử Git** — khi merge qua Pull Request, toàn bộ commit cũ trên `origin/main` vẫn tồn tại trong lịch sử (git append-only). Đây là khác biệt then chốt so với force-push.
+
+### Phương án thực hiện
+
+| Bước | Hành động | Mục đích |
+|---|---|---|
+| 1 | `git checkout main && git push origin main` | Đẩy v1.1.2 hardening (đã committed, backward-compatible) |
+| 2 | `git checkout cvf-next && git add -A && git commit && git push origin cvf-next` | Đẩy toàn bộ upgrade wave lên branch riêng |
+| 3 | Tạo Pull Request `cvf-next → main` khi sẵn sàng | Review diff, CI validation, merge có record chính thức |
+
+### Git history giải thích
+
+```
+Trước merge:
+  origin/main:  A → B → C          (bản cũ, stable)
+  cvf-next:     A → B → C → D → E  (bản mới, upgrade wave)
+
+Sau merge (PR):
+  main:         A → B → C → D → E → M (merge commit)
+                          ↑               ↑
+                  bản cũ VẪN CÒN     bản mới chính thức
+                  (git checkout C)   (HEAD)
+```
+
+Bản cũ trên origin không bị xóa — Git chỉ thêm lịch sử mới, không bao giờ xóa lịch sử cũ (trừ force-push).
+
+### Rationale
+
+- **Discipline nhất quán:** CVF governance chính nó yêu cầu tách biệt innovation line khỏi stable baseline — ADR-019 tuân thủ nguyên tắc này.
+- **Risk mitigation:** 260 files thay đổi trong 1 push = single point of failure. Branch + PR = review gate trước khi merge.
+- **Audit trail:** PR trên GitHub tạo record chính thức: ai review, khi nào approve, diff summary — phù hợp với CVF audit mindset.
+- **Rollback dễ dàng:** Nếu merge gặp vấn đề, `git revert <merge-commit>` hoàn tác trong 1 lệnh.
+
+### Consequences
+
+- `origin/main` tiếp tục là stable baseline (v1.1.2 sau push bước 1).
+- `origin/cvf-next` sẽ chứa toàn bộ upgrade wave, visible trên GitHub cho review.
+- Merge chỉ được thực hiện sau khi CI chạy và owner review trên PR.
+- Quyết định này áp dụng cho đợt upgrade hiện tại; các đợt sau nên áp dụng cùng pattern nếu divergence > 50 files.
+
+### Independent Assessment Reference
+
+- `docs/assessments/CVF_INDEPENDENT_EXPERT_REVIEW_UPGRADE_WAVE_2026-03-08.md` — Bản đánh giá độc lập toàn đợt nâng cấp, cho điểm 8.5/10, khuyến nghị push qua branch tách biệt.
+
+### Related Files
+
+- `docs/assessments/CVF_INDEPENDENT_EXPERT_REVIEW_UPGRADE_WAVE_2026-03-08.md`
+- `docs/reviews/cvf_phase_governance/CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md`
+- `docs/reviews/cvf_phase_governance/CVF_DANH_GIA_DOC_LAP_TOAN_DIEN_2026-03-06.md`
+
+---
+
+## ADR-020: Workspace Restructuring — Downstream Projects out of CVF Root
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-08 |
+| Status | Active |
+| Related commits | *(local, not yet pushed)* |
+
+### Context
+
+CVF root chứa 2 folders `Mini_Game/` và `XD_App/` — đây là 2 app thử nghiệm để đánh giá hiệu quả áp dụng quy tắc CVF. Tuy nhiên, theo Workspace Isolation Guard (đã ghi trong `CVF_CORE_KNOWLEDGE_BASE.md` Section VII), **không nên phát triển project trong CVF root**. CVF là governance layer, không phải monorepo cho downstream projects.
+
+Independent Review (ADR-019 reference) xác nhận CVF cần phân biệt rõ hơn giữa "governance cho CVF contributors" vs "governance cho downstream project dùng CVF".
+
+### Decision
+
+**Di chuyển `Mini_Game/` và `XD_App/` ra khỏi CVF root vào `CVF-Workspace`.**
+
+| Folder | Source | Destination |
+|---|---|---|
+| `Mini_Game/` | `CVF root/Mini_Game/` | `D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\Mini_Game` |
+| `XD_App/` | `CVF root/XD_App/` | `D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\XD_App` |
+
+**Workspace layout sau di chuyển:**
+
+```
+D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
+├── .Controlled-Vibe-Framework-CVF/   ← CVF clone (dot prefix = governance layer ưu tiên)
+├── Mini_Game/                         ← Downstream project 1
+├── XD_App/                            ← Downstream project 2
+└── Trading-Tools/                     ← Downstream project 3
+```
+
+### Rationale
+
+- **Workspace Isolation Guard compliance:** CVF root phải chứa governance code, không phải application code.
+- **Dot-prefix convention:** `.Controlled-Vibe-Framework-CVF` có dấu `.` → Agent đọc CVF trước khi đọc project → CVF trở thành tầng kiểm soát cao nhất.
+- **Evidence preservation:** Các app này vẫn dùng làm bằng chứng đánh giá hiệu quả CVF, chỉ thay đổi vị trí lưu trữ.
+- **Giảm complexity cho CVF repo:** Bớt folders không liên quan trong CVF root → onboarding dễ hơn.
+
+### Consequences
+
+- `Mini_Game/` và `XD_App/` không còn trong CVF git repo (đã có trong `.gitignore` từ trước).
+- Future downstream projects phải nằm trong `CVF-Workspace/`, không phải CVF root.
+- CVF-Workspace trở thành reference workspace layout cho adoption guide (`docs/guides/CVF_QUICK_ORIENTATION.md`).
+
+### Related Files
+
+- `docs/guides/CVF_QUICK_ORIENTATION.md` (references workspace layout)
+- `governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md`
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md` (Section VII — Workspace Isolation Guard)

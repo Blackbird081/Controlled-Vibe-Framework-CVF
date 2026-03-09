@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "2026-03-07",
+  "adapter": "GOVERNANCE_ENGINE_RUNTIME_EVIDENCE",
+  "receiptCount": 3,
+  "receipts": [
+    {
+      "receiptId": "POLICY_EVALUATED:governance-engine-001:evaluate_policy_dsl",
+      "action": "POLICY_EVALUATED",
+      "sourceProposalId": "governance-engine-001",
+      "step": "evaluate_policy_dsl",
+      "recordedAt": 1772863400000
+    },
+    {
+      "receiptId": "ENFORCEMENT_ROUTED:governance-engine-001:route_enforcement_decision",
+      "action": "ENFORCEMENT_ROUTED",
+      "sourceProposalId": "governance-engine-001",
+      "step": "route_enforcement_decision",
+      "recordedAt": 1772863401000
+    },
+    {
+      "receiptId": "APPROVAL_SNAPSHOTTED:governance-engine-001:record_approval_state",
+      "action": "APPROVAL_SNAPSHOTTED",
+      "sourceProposalId": "governance-engine-001",
+      "step": "record_approval_state",
+      "recordedAt": 1772863402000
+    }
+  ]
+}

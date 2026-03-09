@@ -5,6 +5,7 @@ import { NextRequest } from 'next/server';
 
 const mockGovernanceEvaluate = vi.fn();
 const mockVerifySession = vi.fn();
+const mockResolveBindings = vi.fn();
 
 vi.mock('@/lib/governance-engine', () => ({
     governanceEvaluate: (...args: unknown[]) => mockGovernanceEvaluate(...args),
@@ -12,6 +13,10 @@ vi.mock('@/lib/governance-engine', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: (req: unknown) => mockVerifySession(req),
+}));
+
+vi.mock('@/lib/server/governance-binding-resolver', () => ({
+    resolveGovernanceBindingsForAgent: (agentId?: string) => mockResolveBindings(agentId),
 }));
 
 // ─── Import route ───────────────────────────────────────────────────
@@ -35,6 +40,7 @@ describe('POST /api/governance/evaluate', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         mockVerifySession.mockResolvedValue({ user: 'admin', role: 'admin' });
+        mockResolveBindings.mockReturnValue({});
     });
 
     it('returns 401 when not authenticated', async () => {
@@ -85,6 +91,7 @@ describe('POST /api/governance/evaluate', () => {
         expect(res.status).toBe(200);
         expect(json.success).toBe(true);
         expect(json.data.report.status).toBe('APPROVED');
+        expect(json.governance_bindings).toEqual({});
     });
 
     it('returns 400 for BUILD requests without skill preflight declaration', async () => {
@@ -142,5 +149,37 @@ describe('POST /api/governance/evaluate', () => {
         expect(json.success).toBe(true);
 
         delete process.env.CVF_SERVICE_TOKEN;
+    });
+
+    it('returns resolved governance bindings when agent_id is provided', async () => {
+        mockGovernanceEvaluate.mockResolvedValue({
+            report: { status: 'APPROVED' },
+            execution_record: { request_id: 'test-bindings' },
+        });
+        mockResolveBindings.mockReturnValue({
+            registryBinding: {
+                agentId: 'AI_ASSISTANT_V1',
+                certificationStatus: 'ACTIVE',
+            },
+            uatBinding: {
+                status: 'PASS',
+                lastRunAt: '2026-03-01T10:00:00Z',
+            },
+        });
+
+        const res = await POST(
+            makeRequest({
+                request_id: 'test-bindings',
+                artifact_id: 'art-bindings',
+                payload: { content: 'test' },
+                agent_id: 'AI_ASSISTANT_V1',
+            }),
+        );
+        const json = await res.json();
+
+        expect(res.status).toBe(200);
+        expect(mockResolveBindings).toHaveBeenCalledWith('AI_ASSISTANT_V1');
+        expect(json.governance_bindings.registryBinding.agentId).toBe('AI_ASSISTANT_V1');
+        expect(json.governance_bindings.uatBinding.status).toBe('PASS');
     });
 });

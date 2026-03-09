@@ -13,6 +13,7 @@ export class CandidateSearch {
 
     return all.filter(skill => {
       if (skill.revoked) return false;
+      if (skill.deprecated) return false;
 
       if (query.domain && skill.domain !== query.domain) {
         return false;

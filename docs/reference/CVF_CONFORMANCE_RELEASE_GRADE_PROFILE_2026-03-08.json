@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "2026-03-08",
+  "profileId": "WAVE_1_RELEASE_GRADE_PROFILE",
+  "wave": "WAVE_1",
+  "minimumRequiredFamilyCount": 5,
+  "requireDisjointFamilyCoverage": true,
+  "minimumCoveredScenarioCount": 84,
+  "requireCriticalAnchorCoverage": true,
+  "requireCoverageGroupThresholds": true,
+  "requiredFamilies": [
+    {
+      "familyId": "core_governance_surface",
+      "title": "Core governance surface",
+      "requiredForReleaseGrade": true,
+      "minimumScenarioCount": 5,
+      "criticalAnchorScenarioIds": ["CF-001", "CF-004"],
+      "requiredCoverageGroups": [
+        {
+          "groupId": "integrity_controls",
+          "title": "Integrity controls",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-001", "CF-002"]
+        },
+        {
+          "groupId": "pipeline_execution",
+          "title": "Pipeline execution",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-003", "CF-004"]
+        },
+        {
+          "groupId": "audit_binding",
+          "title": "Audit binding",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-005"]
+        }
+      ],
+      "scenarioIds": ["CF-001", "CF-002", "CF-003", "CF-004", "CF-005"]
+    },
+    {
+      "familyId": "skill_governance_surface",
+      "title": "Skill governance surface",
+      "requiredForReleaseGrade": true,
+      "minimumScenarioCount": 7,
+      "criticalAnchorScenarioIds": ["CF-009", "CF-015", "CF-016"],
+      "requiredCoverageGroups": [
+        {
+          "groupId": "misuse_blocking",
+          "title": "Misuse blocking",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-009"]
+        },
+        {
+          "groupId": "lifecycle_controls",
+          "title": "Lifecycle controls",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-013", "CF-014"]
+        },
+        {
+          "groupId": "compatibility_checks",
+          "title": "Compatibility checks",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-015"]
+        },
+        {
+          "groupId": "migration_orchestration",
+          "title": "Migration orchestration",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-016", "CF-040"]
+        }
+      ],
+      "scenarioIds": ["CF-008", "CF-009", "CF-013", "CF-014", "CF-015", "CF-016", "CF-040"]
+    },
+    {
+      "familyId": "durable_runtime_surface",
+      "title": "Durable runtime surface",
+      "requiredForReleaseGrade": true,
+      "minimumScenarioCount": 18,
+      "criticalAnchorScenarioIds": ["CF-018", "CF-020", "CF-022", "CF-027", "CF-029"],
+      "requiredCoverageGroups": [
+        {
+          "groupId": "rollback_recovery",
+          "title": "Rollback and recovery",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-010", "CF-020", "CF-021", "CF-022", "CF-023", "CF-024", "CF-025", "CF-026", "CF-027", "CF-028", "CF-029", "CF-032"]
+        },
+        {
+          "groupId": "deterministic_replay",
+          "title": "Deterministic replay",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-011", "CF-019"]
+        },
+        {
+          "groupId": "checkpoint_resume",
+          "title": "Checkpoint and resume",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-012", "CF-017", "CF-018", "CF-034"]
+        }
+      ],
+      "scenarioIds": ["CF-010", "CF-011", "CF-012", "CF-017", "CF-018", "CF-019", "CF-020", "CF-021", "CF-022", "CF-023", "CF-024", "CF-025", "CF-026", "CF-027", "CF-028", "CF-029", "CF-032", "CF-034"]
+    },
+    {
+      "familyId": "release_evidence_surface",
+      "title": "Release and evidence surface",
+      "requiredForReleaseGrade": true,
+      "minimumScenarioCount": 11,
+      "criticalAnchorScenarioIds": ["CF-031", "CF-033", "CF-038"],
+      "requiredCoverageGroups": [
+        {
+          "groupId": "evidence_baseline",
+          "title": "Evidence baseline",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-006", "CF-007", "CF-030", "CF-031", "CF-033"]
+        },
+        {
+          "groupId": "packet_postures",
+          "title": "Packet postures",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-035", "CF-036", "CF-037"]
+        },
+        {
+          "groupId": "runtime_family_manifest",
+          "title": "Runtime family manifest",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-038", "CF-039", "CF-041"]
+        }
+      ],
+      "scenarioIds": ["CF-006", "CF-007", "CF-030", "CF-031", "CF-033", "CF-035", "CF-036", "CF-037", "CF-038", "CF-039", "CF-041"]
+    },
+    {
+      "familyId": "packet_policy_surface",
+      "title": "Packet policy surface",
+      "requiredForReleaseGrade": true,
+      "minimumScenarioCount": 43,
+      "criticalAnchorScenarioIds": ["CF-045", "CF-056", "CF-067", "CF-076", "CF-084"],
+      "requiredCoverageGroups": [
+        {
+          "groupId": "promotion_transition",
+          "title": "Promotion and transition",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-042", "CF-043", "CF-044", "CF-045", "CF-046", "CF-047", "CF-048", "CF-049", "CF-050", "CF-051", "CF-052", "CF-053", "CF-054", "CF-055"]
+        },
+        {
+          "groupId": "validity_lifecycle",
+          "title": "Validity lifecycle",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-056", "CF-057", "CF-058", "CF-059", "CF-060", "CF-061", "CF-062", "CF-063", "CF-064"]
+        },
+        {
+          "groupId": "revocation_authority",
+          "title": "Revocation authority",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-065", "CF-066", "CF-067", "CF-068", "CF-069", "CF-070", "CF-071", "CF-072", "CF-073", "CF-074", "CF-075", "CF-076"]
+        },
+        {
+          "groupId": "revocation_proof_semantics",
+          "title": "Revocation proof semantics",
+          "minimumPassingScenarioCount": 1,
+          "scenarioIds": ["CF-077", "CF-078", "CF-079", "CF-080", "CF-081", "CF-082", "CF-083", "CF-084"]
+        }
+      ],
+      "scenarioIds": ["CF-042", "CF-043", "CF-044", "CF-045", "CF-046", "CF-047", "CF-048", "CF-049", "CF-050", "CF-051", "CF-052", "CF-053", "CF-054", "CF-055", "CF-056", "CF-057", "CF-058", "CF-059", "CF-060", "CF-061", "CF-062", "CF-063", "CF-064", "CF-065", "CF-066", "CF-067", "CF-068", "CF-069", "CF-070", "CF-071", "CF-072", "CF-073", "CF-074", "CF-075", "CF-076", "CF-077", "CF-078", "CF-079", "CF-080", "CF-081", "CF-082", "CF-083", "CF-084"]
+    }
+  ]
+}

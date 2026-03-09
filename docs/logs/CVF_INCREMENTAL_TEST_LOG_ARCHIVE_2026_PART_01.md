@@ -1,0 +1,1581 @@
+# CVF Incremental Test Log Archive
+
+- Canonical entrypoint: `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Archive file: `docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_01.md`
+- Archived entry count: `59`
+- Archive window: `[2026-03-07] Batch: W4 cross-extension audit replay bridge` -> `[2026-03-06] Batch: Independent reassessment hardening follow-up`
+
+---
+
+## [2026-03-07] Batch: W4 cross-extension audit replay bridge
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.replay.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/types/index.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-audit-replay.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 cross-extension audit replay baseline
+  - `CVF_v1.7.1_SAFETY_RUNTIME -> CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` replay bridge
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-audit-replay.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `19` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Full release-candidate workflow resume: still deferred because this batch only adds an audit-bridge replay baseline, not full cross-extension orchestration.
+- Notes/Risks:
+  - Wave 1 now includes `CF-019` for cross-extension audit replay.
+  - This closes the first `v1.7.1 -> v1.9` replay bridge gap, but broader workflow/session resume remains open.
+## [2026-03-07] Batch: W4 cross-extension workflow resume bridge
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.workflow.resume.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/types/index.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-workflow-resume.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 cross-extension workflow/session resume baseline
+  - `CVF_v1.7.1_SAFETY_RUNTIME -> CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` workflow resume bridge
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-workflow-resume.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `20` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Broader release-grade orchestration across multiple extension lines: still deferred because this batch only adds the first guarded cross-extension workflow-resume baseline.
+- Notes/Risks:
+  - Wave 1 now includes `CF-020` for cross-extension workflow resume.
+  - This closes the first workflow/session resume gap across the `v1.7.1 -> v1.9` boundary, but broader orchestration is still open.
+## [2026-03-07] Batch: W4 cross-extension recovery orchestration
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.recovery.orchestrator.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/types/index.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-recovery-orchestration.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 cross-extension recovery orchestration baseline
+  - `CVF_v1.8_SAFETY_HARDENING -> CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` recovery gating
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-recovery-orchestration.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `21` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Policy-refusal vs system-abort orchestration remains deferred; this batch only distinguishes `resume` from `rollback-required`.
+- Notes/Risks:
+  - Wave 1 now includes `CF-021` for cross-extension recovery orchestration.
+  - This closes the first `rollback-required` orchestration gap across the `v1.8/v1.9` boundary, but broader release-grade orchestration is still open.
+## [2026-03-07] Batch: W4 cross-extension failure classification
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.recovery.orchestrator.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/types/index.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-failure-classification.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 cross-extension failure classification baseline
+  - `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` recovery decision surface
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-failure-classification.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `22` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Remediation policy after classification is still deferred; this batch classifies outcomes but does not yet prescribe recovery playbooks per class.
+- Notes/Risks:
+  - Wave 1 now includes `CF-022` for cross-extension failure classification.
+  - This closes the explicit classification gap for `runtime interruption`, `policy refusal`, and `system abort`, but remediation policy depth is still open.
+## [2026-03-07] Batch: W4 cross-extension remediation policy
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.recovery.orchestrator.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/types/index.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-remediation-policy.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 remediation-policy baseline
+  - `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` orchestration response policy
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-remediation-policy.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `23` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Executable recovery actions are still deferred; this batch emits playbook guidance but does not auto-run remediation steps.
+- Notes/Risks:
+  - Wave 1 now includes `CF-023` for cross-extension remediation policy.
+  - This closes the playbook-baseline gap, but executable remediation automation is still open.
+## [2026-03-07] Batch: W4 cross-extension remediation execution
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.recovery.orchestrator.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/types/index.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-remediation-execution.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 executable remediation baseline
+  - `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` safe automation path
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-remediation-execution.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `24` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Richer automation for human-gated outcomes remains intentionally blocked; this batch only automates the safe subset.
+- Notes/Risks:
+  - Wave 1 now includes `CF-024` for cross-extension remediation execution.
+  - This closes the first executable-remediation gap, but broader automation remains open by design.
+## [2026-03-07] Batch: W4 cross-extension remediation adapter
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.remediation.adapter.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.recovery.orchestrator.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/types/index.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-remediation-adapter.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 remediation adapter baseline
+  - `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` adapter seam for safe automation
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-remediation-adapter.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `25` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Real runtime adapters are still deferred; this batch only introduces the canonical adapter seam with an in-memory baseline.
+- Notes/Risks:
+  - Wave 1 now includes `CF-025` for cross-extension remediation adapter behavior.
+  - This closes the adapter-seam gap, but production/runtime adapter integration is still open.
+## [2026-03-07] Batch: W4 cross-extension remediation file adapter
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.remediation.adapter.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/types/index.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-remediation-file-adapter.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 file-backed remediation adapter baseline
+  - `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` local runtime receipt persistence
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-remediation-file-adapter.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `26` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Release-grade adapters and export-path integration are still deferred; this batch only adds the first file-backed local runtime adapter baseline.
+- Notes/Risks:
+  - Wave 1 now includes `CF-026` for file-backed remediation adapter behavior.
+  - This closes the gap between adapter seam and local runtime artifact persistence, but release-grade adapter integration is still open.
+## [2026-03-07] Batch: W4 cross-extension remediation export path
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-remediation-export.conformance.test.ts`
+    - `scripts/export_cvf_remediation_receipt_log.py`
+    - `scripts/run_cvf_remediation_export_conformance.py`
+    - `scripts/export_cvf_release_packet.py`
+    - `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_W4_REMEDIATION_RECEIPTS_LOCAL_BASELINE_2026-03-07.json`
+    - `docs/reviews/cvf_phase_governance/CVF_W4_REMEDIATION_RECEIPT_LOG_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 remediation export-path baseline
+  - Phase 6 / enterprise evidence linkage for remediation receipts
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-remediation-export.conformance.test.ts` -> PASS
+    - Result: `1/1`
+  - `python -m py_compile scripts/export_cvf_remediation_receipt_log.py scripts/run_cvf_remediation_export_conformance.py scripts/export_cvf_release_packet.py` -> PASS
+  - `python scripts/run_cvf_remediation_export_conformance.py` -> PASS
+  - `python scripts/export_cvf_release_packet.py --output docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `27` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - broader release-grade runtime adapters are still deferred; this batch only closes the local export/evidence path from remediation receipts into canonical review artifacts.
+- Notes/Risks:
+  - Wave 1 now includes `CF-027` for remediation export-path behavior.
+  - This closes the first release/evidence-linkage gap for remediation receipts, but broader runtime adapter integration is still open.
+## [2026-03-07] Batch: W4 cross-extension release-evidence remediation adapter
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/cross.extension.remediation.adapter.ts`
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/cross-extension-remediation-release-adapter.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 release-evidence adapter baseline
+  - `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` runtime-safe release evidence emission
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/cross-extension-remediation-release-adapter.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `28` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - cross-family adapter integration with `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` remains deferred; this batch only adds a release-grade adapter baseline inside the `v1.9` execution line.
+- Notes/Risks:
+  - Wave 1 now includes `CF-028` for direct release-evidence remediation adapter behavior.
+  - This closes the gap between local export scripts and runtime-safe evidence emission, but broader adapter-hub integration is still open.
+## [2026-03-07] Batch: W2 cross-extension conformance wave 1
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `scripts/run_cvf_cross_extension_conformance.py`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+- Impacted scope:
+  - Phase 2 / W2 initial conformance baseline
+  - Cross-extension governance verification
+- Tests executed:
+  - `python -m py_compile scripts/run_cvf_cross_extension_conformance.py` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md` -> PASS
+    - Includes:
+      - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS
+      - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm test` -> PASS (34/34)
+      - `cd EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI && npm test` -> PASS (58/58)
+      - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/phase-authority.test.ts --reporter verbose` -> PASS (11/11)
+      - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/governance-post-check.test.ts --reporter verbose` -> PASS (13/13)
+      - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+      - `python governance/compat/check_enterprise_evidence_pack.py --packet docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md --enforce` -> PASS
+- Skip scope:
+  - Full monorepo release-candidate regression: skipped because Wave 1 is intentionally a focused conformance batch, not the final system-wide gate.
+- Notes/Risks:
+  - This batch establishes the first executable cross-extension conformance baseline for W2.
+  - Future waves should add skill governance, durable execution, and broader release-candidate coverage.
+## [2026-03-07] Batch: W2 conformance artifact gate
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `scripts/run_cvf_cross_extension_conformance.py`
+    - `governance/compat/check_conformance_artifact_consistency.py`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+    - `.github/workflows/documentation-testing.yml`
+- Impacted scope:
+  - Phase 2 / W2 conformance baseline discipline
+  - Conformance artifacts and gate alignment
+- Tests executed:
+  - `python -m py_compile scripts/run_cvf_cross_extension_conformance.py governance/compat/check_conformance_artifact_consistency.py` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS`
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Full monorepo release-candidate regression: skipped because this batch strengthens Wave 1 artifact/gate discipline, not scenario breadth.
+- Notes/Risks:
+  - W2 now has a machine-readable scenario registry and summary artifact, not only a markdown report.
+  - Scenario breadth is still limited; skill governance and durable execution conformance remain open.
+## [2026-03-07] Batch: W2 skill governance conformance extension
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 scenario breadth expansion
+  - Layer 2 skill governance runtime coverage
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npm test` -> PASS
+    - Result: `17/17`
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `8` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Durable execution / recovery scenarios: still deferred because no release-grade runtime gate has been selected yet.
+- Notes/Risks:
+  - Wave 1 now includes `CF-008` for `CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE`.
+  - Deeper skill misuse/deprecation scenarios are still not part of the conformance baseline yet.
+## [2026-03-07] Batch: W2 skill misuse refusal conformance
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/tests/skill.misuse.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 refusal-path scenario depth
+  - Layer 2 skill misuse governance behavior
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npx vitest run tests/skill.misuse.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `9` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Deprecated-skill runtime conformance: still deferred because the current skill engine does not expose a dedicated runtime deprecation block yet.
+- Notes/Risks:
+  - Wave 1 now includes `CF-009` for revoked skill / forbidden operation misuse paths.
+  - Deprecated-skill handling remains a documented gap rather than an implemented runtime gate.
+## [2026-03-07] Batch: W2 durable recovery conformance
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/tests/durable.recovery.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable recovery scenario depth
+  - Phase 4 / W4 rollback and recovery baseline
+  - Layer 2 safety hardening recovery behavior
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.8_SAFETY_HARDENING && npx vitest run tests/durable.recovery.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `10` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Checkpoint / pause-resume / replay coverage: still deferred because the current batch only closes the rollback/recovery baseline slice.
+- Notes/Risks:
+  - Wave 1 now includes `CF-010` for rollback-record persistence and force-rollback recovery behavior.
+  - Durable execution is no longer completely absent from conformance, but broader checkpoint/replay coverage is still open.
+## [2026-03-07] Batch: W2 deterministic replay conformance
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/replay.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 replay baseline
+  - Layer 2 deterministic reproducibility behavior
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npx vitest run tests/replay.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `11` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Checkpoint / pause-resume coverage: still deferred because the current batch only closes the replay baseline slice.
+- Notes/Risks:
+  - Wave 1 now includes `CF-011` for exact replay, drift detection, and fail-closed behavior.
+  - Durable execution now has rollback/recovery plus replay baseline coverage, but not session checkpoint/resume yet.
+## [2026-03-07] Batch: W2 checkpoint resume conformance
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/core/checkpoint.store.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/core/lifecycle.engine.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/core/proposal.store.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/core/state.store.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/policy/execution.journal.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/checkpoint-resume.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 durable execution scenario depth
+  - Phase 4 / W4 checkpoint and resume baseline
+  - Layer 2 safety runtime proposal lifecycle behavior
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx vitest run tests/checkpoint-resume.conformance.test.ts --reporter verbose` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx tsc --noEmit` -> FAIL
+    - Result: unrelated legacy package debt at `cvf-ui/lib/db.ts`
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && targeted touched-file grep over tsc output` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `12` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Long-running workflow/session resume: still deferred because the current batch only adds a proposal-lifecycle checkpoint/resume baseline.
+- Notes/Risks:
+  - Wave 1 now includes `CF-012` for stored-checkpoint resume behavior.
+  - Durable execution now has rollback/recovery, replay, and checkpoint/resume baseline coverage, but not broader orchestration/session continuity yet.
+## [2026-03-07] Batch: W2 deprecated skill runtime conformance
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/internal_ledger/skill.registry.ts`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/fusion/candidate.search.ts`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/runtime/skill.loader.ts`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/runtime/refusal.router.ts`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/tests/skill.deprecation.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 skill lifecycle scenario depth
+  - Phase 3 / W3 deprecated-skill runtime enforcement
+  - Layer 2 skill governance runtime behavior
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npx vitest run tests/skill.deprecation.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `13` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Deprecated-skill successor / migration path: still deferred because the current batch only adds block/refuse behavior, not replacement flow.
+- Notes/Risks:
+  - Wave 1 now includes `CF-013` for deprecated-skill runtime blocking.
+  - Skill lifecycle conformance is stronger now, but successor routing and upgrade flows are still open.
+## [2026-03-07] Batch: W3 deprecated skill successor migration
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/internal_ledger/skill.registry.ts`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/runtime/skill.loader.ts`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/tests/skill.successor.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 skill lifecycle scenario depth
+  - Phase 3 / W3 deprecated-skill successor routing
+  - Layer 2 skill governance runtime migration behavior
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npx vitest run tests/skill.successor.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `14` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Release-candidate full regression: still deferred because Wave 1 remains a focused cross-extension conformance batch, not the final release gate.
+- Notes/Risks:
+  - Wave 1 now includes `CF-014` for deprecated-skill successor migration.
+  - This closes the simple successor-routing gap, but richer upgrade orchestration and phase/dependency compatibility checks are still open.
+## [2026-03-07] Batch: W3 skill dependency and phase compatibility conformance
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/internal_ledger/skill.registry.ts`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/runtime/skill.loader.ts`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/tests/skill.phase-compat.conformance.test.ts`
+    - `scripts/run_cvf_cross_extension_conformance.py`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 scenario depth for skill execution controls
+  - Phase 3 / W3 runtime dependency-status and phase-compatibility enforcement
+  - Conformance runner output stability on Windows local environments
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npx vitest run tests/skill.phase-compat.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npx tsc --noEmit` -> PASS
+  - `python -m py_compile scripts/run_cvf_cross_extension_conformance.py` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `15` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Release-candidate full regression: still deferred because Wave 1 remains a focused cross-extension conformance batch, not the final release gate.
+- Notes/Risks:
+  - Wave 1 now includes `CF-015` for dependency-status and phase-compatibility failure paths.
+  - Basic fail-closed gating is now in place, but richer lifecycle upgrade orchestration is still open.
+## [2026-03-07] Batch: W3 skill upgrade orchestration conformance
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/runtime/skill.loader.ts`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/tests/skill.upgrade-orchestration.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 2 / W2 skill lifecycle scenario depth
+  - Phase 3 / W3 multi-hop upgrade orchestration
+  - Layer 2 fail-closed migration-cycle handling
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npx vitest run tests/skill.upgrade-orchestration.conformance.test.ts` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npx tsc --noEmit` -> PASS
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `16` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Release-candidate full regression: still deferred because Wave 1 remains a focused cross-extension conformance batch, not the final release gate.
+- Notes/Risks:
+  - Wave 1 now includes `CF-016` for multi-hop upgrade orchestration and migration-cycle refusal.
+  - This closes the simple upgrade-chain gap, but broader rollout/replacement policy remains open.
+## [2026-03-07] Batch: W4 session-aware checkpoint resume
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/types/index.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/core/event-bus.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/core/lifecycle.engine.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/session-resume.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 4 / W4 long-running session resume hardening
+  - Layer 2 durable execution metadata and resume authorization
+  - Event/audit visibility for session-bound resume activity
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx vitest run tests/session-resume.conformance.test.ts --reporter verbose` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx tsc --noEmit` -> FAIL
+    - Legacy debt: `cvf-ui/lib/db.ts(1,10): error TS2305: Module '"@prisma/client"' has no exported member 'PrismaClient'.`
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx tsc --noEmit 2>&1 | Select-String -Pattern "core/lifecycle.engine.ts|core/event-bus.ts|types/index.ts|tests/session-resume.conformance.test.ts"` -> PASS
+    - Result: no batch-local files surfaced
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `17` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Cross-extension workflow resume: still deferred because this batch only hardens session-aware checkpoint resume inside `v1.7.1`.
+- Notes/Risks:
+  - Wave 1 now includes `CF-017` for session-aware checkpoint resume.
+  - Durable execution has moved beyond proposal-only resume, but cross-extension orchestration and deeper audit replay are still open.
+## [2026-03-07] Batch: W4 session audit linkage
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree conformance update:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/types/index.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/policy/execution.journal.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/core/lifecycle.engine.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/session-audit-linkage.conformance.test.ts`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`
+    - `docs/reference/CVF_CONFORMANCE_SCENARIOS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md`
+    - `docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json`
+- Impacted scope:
+  - Phase 4 / W4 audit-linked durable execution
+  - Layer 2 execution journal lineage for session-bound resumes
+  - Resume authorization evidence persistence
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx vitest run tests/session-audit-linkage.conformance.test.ts --reporter verbose` -> PASS
+    - Result: `3/3`
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx tsc --noEmit` -> FAIL
+    - Legacy debt: `cvf-ui/lib/db.ts(1,10): error TS2305: Module '"@prisma/client"' has no exported member 'PrismaClient'.`
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx tsc --noEmit 2>&1 | Select-String -Pattern "types/index.ts|policy/execution.journal.ts|core/lifecycle.engine.ts|tests/session-audit-linkage.conformance.test.ts"` -> PASS
+    - Result: no batch-local files surfaced
+  - `python scripts/run_cvf_cross_extension_conformance.py --output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md --summary-output docs/reviews/cvf_phase_governance/CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json` -> PASS
+    - Result: overall conformance `PASS` with `18` scenarios
+  - `python governance/compat/check_conformance_artifact_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Cross-extension audit replay: still deferred because this batch only links session resume metadata into the local execution journal.
+- Notes/Risks:
+  - Wave 1 now includes `CF-018` for session audit linkage.
+  - Durable execution now has checkpoint/session resume plus journal linkage, but deeper replay across extension boundaries is still open.
+## [2026-03-07] Batch: W4 Prisma/typecheck unblock
+- Change reference:
+  - requestId: `REQ-20260307-002`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md`
+  - traceHash: `c40af507d93d6adfdeb209130c7f968dd50aa5c9f81d953589ff4cf1c4bda11d`
+  - Working tree hardening update:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/cvf-ui/prisma/schema.prisma`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tsconfig.json`
+- Impacted scope:
+  - Phase 4 / W4 verification confidence for `CVF_v1.7.1_SAFETY_RUNTIME`
+  - Prisma client generation and TypeScript module resolution under `bundler`
+  - Local validation readiness for session resume and audit-linkage hardening
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx prisma generate --schema cvf-ui/prisma/schema.prisma` -> PASS
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx tsc --noEmit` -> PASS
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npx vitest run tests/session-resume.conformance.test.ts tests/session-audit-linkage.conformance.test.ts --reporter verbose` -> PASS
+    - Result: `6/6`
+- Skip scope:
+  - Wave 1 scenario count: unchanged because this batch removes validation debt rather than adding a new conformance slice.
+- Notes/Risks:
+  - This removes the earlier Prisma-based typecheck blocker that had been carried as legacy debt in recent W4 batches.
+  - Cross-extension workflow resume and deeper replay remain open roadmap items.
+## [2026-03-07] Batch: Phase 6 enterprise packet export automation
+- Change reference:
+  - requestId: `REQ-20260307-001`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md`
+  - traceHash: `eda526539c7e525b1b1e593225a6f2cb7f00e89f4f48793eb4e34020066627ce`
+  - Working tree automation update:
+    - `scripts/export_cvf_release_packet.py`
+    - `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md`
+    - `docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md`
+- Impacted scope:
+  - Phase 6 packet synthesis/export path
+  - Docs/governance automation only
+- Tests executed:
+  - `python -m py_compile scripts/export_cvf_release_packet.py` -> PASS
+  - `python scripts/export_cvf_release_packet.py --output docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md` -> PASS
+  - `python governance/compat/check_enterprise_evidence_pack.py --packet docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md --enforce` -> PASS
+- Skip scope:
+  - Extension runtime tests: skipped because this batch only adds packet export automation.
+  - Full regression: skipped because no product/runtime behavior changed.
+- Notes/Risks:
+  - Phase 6 now has canonical docs, gate, sample packet, and reproducible export path.
+## [2026-03-07] Batch: Phase 6 enterprise evidence enforcement
+- Change reference:
+  - requestId: `REQ-20260307-001`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md`
+  - traceHash: `eda526539c7e525b1b1e593225a6f2cb7f00e89f4f48793eb4e34020066627ce`
+  - Working tree enforcement update:
+    - `governance/compat/check_enterprise_evidence_pack.py`
+    - `docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md`
+    - `.github/workflows/documentation-testing.yml`
+- Impacted scope:
+  - Phase 6 enterprise evidence enforcement
+  - Docs/governance compatibility enforcement only
+- Tests executed:
+  - `python -m py_compile governance/compat/check_enterprise_evidence_pack.py` -> PASS
+  - `python governance/compat/check_enterprise_evidence_pack.py --packet docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md --enforce` -> PASS
+- Skip scope:
+  - Extension runtime tests: skipped because this batch adds evidence-packet enforcement only.
+  - Full regression: skipped because no product/runtime behavior changed.
+- Notes/Risks:
+  - This batch turns the Phase 6 packet structure into a locally validated artifact chain.
+## [2026-03-07] Batch: Phase 6 enterprise evidence pack canonicalization
+- Change reference:
+  - requestId: `REQ-20260307-001`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md`
+  - traceHash: `eda526539c7e525b1b1e593225a6f2cb7f00e89f4f48793eb4e34020066627ce`
+  - Working tree reference/docs update:
+    - `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md`
+    - `docs/reference/CVF_CONTROL_TO_ARTIFACT_MAPPING.md`
+    - `docs/reference/CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md`
+    - `docs/CVF_ARCHITECTURE_DECISIONS.md`
+    - `docs/reviews/cvf_phase_governance/CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md`
+    - `docs/guides/enterprise.md`
+- Impacted scope:
+  - Phase 6 enterprise evidence packaging
+  - Reference/ADR/docs authority layer only
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_test_doc_compat.py --base HEAD --head HEAD --enforce` -> PASS
+- Skip scope:
+  - Extension runtime tests: skipped because no runtime/product behavior changed.
+  - Full regression: skipped because this batch only changes enterprise evidence/reference docs.
+- Notes/Risks:
+  - This batch establishes the canonical packet structure and evidence mapping, but not yet automated packet export.
+## [2026-03-07] Batch: Phase 5 release manifest consistency enforcement
+- Change reference:
+  - requestId: `REQ-20260307-001`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md`
+  - traceHash: `eda526539c7e525b1b1e593225a6f2cb7f00e89f4f48793eb4e34020066627ce`
+  - Working tree enforcement update:
+    - `governance/compat/check_release_manifest_consistency.py`
+    - `.github/workflows/documentation-testing.yml`
+    - `docs/reference/CVF_RELEASE_MANIFEST.md`
+    - `docs/reviews/cvf_phase_governance/CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md`
+- Impacted scope:
+  - Phase 5 release/version/baseline discipline
+  - Docs/governance compatibility enforcement only
+- Tests executed:
+  - `python -m py_compile governance/compat/check_release_manifest_consistency.py` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+- Skip scope:
+  - Extension runtime tests: skipped because this batch adds a docs/governance consistency gate only.
+  - Full regression: skipped because no product/runtime behavior changed.
+- Notes/Risks:
+  - This batch turns Phase 5 from documentation-only into a locally enforceable contract.
+  - Current checker validates canonical file presence, anchor path existence, maturity coverage, and entrypoint references.
+## [2026-03-07] Batch: Phase 5 release manifest normalization
+- Change reference:
+  - requestId: `REQ-20260307-001`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md`
+  - traceHash: `eda526539c7e525b1b1e593225a6f2cb7f00e89f4f48793eb4e34020066627ce`
+  - Working tree reference/docs update:
+    - `docs/reference/CVF_RELEASE_MANIFEST.md`
+    - `docs/reference/CVF_MODULE_INVENTORY.md`
+    - `docs/reference/CVF_MATURITY_MATRIX.md`
+    - `docs/VERSIONING.md`
+    - `docs/reference/CVF_ARCHITECTURE_MAP.md`
+    - `docs/INDEX.md`
+    - `docs/reference/README.md`
+    - `README.md`
+    - `docs/CVF_ARCHITECTURE_DECISIONS.md`
+- Impacted scope:
+  - Release/version/baseline discipline docs only
+  - No product/runtime logic change outside documentation authority layer
+- Tests executed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS (`FOCUSED TESTS ALLOWED`)
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+- Skip scope:
+  - Extension test suites: skipped because this batch changes release/reference/ADR docs only.
+  - Full regression: skipped because compat gate showed no frozen-core or runtime trigger.
+- Notes/Risks:
+  - This batch starts Phase 5 of the roadmap by separating versioning policy from operational release state.
+  - `CVF_RELEASE_MANIFEST.md`, `CVF_MODULE_INVENTORY.md`, and `CVF_MATURITY_MATRIX.md` are now the canonical operational reference set.
+## [2026-03-07] Batch: Phase governance plugin hardening (De_xuat_04/05/11 follow-up)
+- Change reference:
+  - requestId: `REQ-20260307-001`
+  - trace: `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md`
+  - traceHash: `eda526539c7e525b1b1e593225a6f2cb7f00e89f4f48793eb4e34020066627ce`
+  - Working tree implementation update:
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/phase_gate/gate.rules.ts`
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/runtime/governance.executor.ts`
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/governance.executor.test.ts`
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/v1.1.1.test.ts`
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/reports/phase.report.generator.ts`
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/reports/governance.audit.log.ts`
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/docs/CVF_EVOLUTION_GOVERNANCE_RULES.md`
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/README.md`
+    - `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`
+  - Runtime governance orchestration only
+- Tests executed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS (`FOCUSED TESTS ALLOWED`)
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm test` -> PASS (34/34)
+- Skip scope:
+  - Other extensions/modules: skipped because unchanged and unrelated to this executor hardening batch.
+- Notes/Risks:
+  - Objective is to satisfy `INV-E` by making verification modules pluggable without changing canonical pipeline order.
+  - This batch also closes the missing runtime connection between executor reports and `GovernanceAuditLog` hash-ledger persistence.
+  - Canonical pipeline was further refined so `artifact_integrity` executes first as fail-fast trust boundary.
+## [2026-03-06] Batch: Independent review baseline supplement (REQ-20260306-009)
+- Change reference:
+  - Working tree docs update for baseline review supplement:
+    - `docs/reviews/cvf_phase_governance/CVF_DANH_GIA_DOC_LAP_TOAN_DIEN_2026-03-06.md`
+    - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Impacted scope:
+  - Review/baseline documentation only
+  - Focused verification scope used as evidence:
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`
+    - `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI`
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/phase-authority.test.ts`
+    - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governance-post-check.test.ts`
+- Tests executed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS (`FOCUSED TESTS ALLOWED`)
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm test` -> PASS (31/31)
+  - `cd EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI && npm test` -> PASS (58/58)
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/phase-authority.test.ts --reporter verbose` -> PASS (11/11)
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/governance-post-check.test.ts --reporter verbose` -> PASS (13/13)
+- Skip scope:
+  - Full `cvf-web` regression: skipped because compat gate allowed focused scope and this batch is documentation/baseline verification only.
+  - Unrelated extensions/modules: skipped because unchanged and not needed to support the current review supplement.
+- Notes/Risks:
+  - Focused `cvf-web` Vitest execution required elevated run due to local sandbox `esbuild` spawn `EPERM`; test logic itself passed after rerun.
+  - This batch exists to satisfy CVF test documentation governance for evidence used in the independent baseline review.
+## [2026-02-25] Batch: Baseline confirmed snapshot (latest standard)
+- Source:
+  - `docs/assessments/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md`
+- Purpose:
+  - Imported as the latest confirmed standard baseline.
+  - All future focused testing decisions should compare against this snapshot first.
+- Confirmed scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web`
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME`
+  - `EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD`
+- Confirmed tests executed:
+  - `npm run lint` -> PASS (0 errors, 0 warnings)
+  - `npm run test:run` (`npx vitest run --reporter=json --outputFile test-results.json`) -> PASS
+    - 1480 passed / 1483 total, failed 0, skipped 3
+  - `npm run test:coverage` -> PASS
+    - Statements 93.05%, Branches 80.46%, Functions 91.48%, Lines 94.18%
+  - `npm run build` -> PASS when elevated (`Next.js 16.1.6`)
+- Confirmed extension smoke tests:
+  - `CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (138/138)
+  - `CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (97/97)
+  - `CVF_v1.7.2_SAFETY_DASHBOARD` -> PASS (49/49)
+- Cross-verification note:
+  - Independent re-check confirmed total 1764 passed, 0 failed.
+- Notes/Risks:
+  - Windows local build may hit `.next` lock (`EPERM`) when not elevated.
+## [2026-02-25] Batch: Compatibility gate bootstrap
+- Change reference:
+  - Added fast compatibility gate artifacts for core-impact decisioning.
+- Impacted scope:
+  - `governance/compat/core-manifest.json`
+  - `governance/compat/check_core_compat.py`
+  - `.github/workflows/cvf-web-ci.yml` (added compatibility impact report step)
+  - `docs/baselines/CVF_CORE_COMPAT_BASELINE.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md` (pre-test gate updated)
+- Tests executed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS
+- Skip scope:
+  - Full regression: skipped (docs/process/tooling bootstrap only; no runtime logic changes in product modules).
+- Notes/Risks:
+  - Keep `core-manifest.json` in sync when trigger files or architecture boundaries change.
+## [2026-02-25] Batch: CVF Kernel Architecture independent pre-fix assessment
+- Change reference:
+  - New folder under evaluation: `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/` (untracked prototype)
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**`
+  - `docs/assessments/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`
+- Tests/execution performed:
+  - Structural/code audit across all kernel layers
+  - Isolated type-check via local TypeScript binary -> FAIL (compile mismatches)
+- Result:
+  - Decision = **NO-GO** for integration at current state
+  - Baseline file created for fix tracking:
+    - `docs/assessments/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`
+- Skip scope:
+  - No full regression run (module not integrated, no package/test harness yet)
+- Notes/Risks:
+  - Must fix compile + invariant enforcement + CVF risk model compatibility before merge consideration.
+## [2026-02-25] Batch: CVF Kernel Architecture fix roadmap created
+- Change reference:
+  - Roadmap generated from pre-fix findings F1-F6.
+- Impacted scope:
+  - `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+- Result:
+  - Execution plan established (Phase 0 -> Phase 6) with gate criteria and milestones.
+- Skip scope:
+  - No code fix executed in this batch (planning only).
+- Notes/Risks:
+  - Publish remains blocked until post-fix reassessment passes.
+## [2026-02-25] Batch: Kernel tree split + roadmap alignment update
+- Change reference:
+  - Split architecture docs into target vs implemented views before code fix.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_TARGET.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW.md` (converted to index)
+  - `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md` (added Target vs Implemented table + core preservation principle)
+- Result:
+  - Documentation baseline now separates design intent from actual implementation.
+  - Roadmap explicitly enforces: CVF current architecture is root baseline; kernel changes are additive only.
+- Skip scope:
+  - No runtime/code fix yet in this batch (docs-first alignment only).
+- Notes/Risks:
+  - Keep both tree files updated during each fix phase to avoid drift.
+## [2026-02-25] Batch: CVF Kernel Phase 1 fix (compile and naming normalization)
+- Change reference:
+  - Phase 1 execution from `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/execution_orchestrator.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/01_domain_lock/domain_guard.ts` (renamed from `domain.guard`)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/01_domain_lock/domain.types.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/01_domain_lock/domain.registry.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/02_contract_runtime/contract.types.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/02_contract_runtime/contract_enforcer.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/risk.types.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/risk_scorer.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.router.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.risk.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tsconfig.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+- Tests/execution performed:
+  - `node EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/node_modules/typescript/bin/tsc --noEmit --target ES2020 --module commonjs --skipLibCheck --pretty false <all-ts-files-in-folder>` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run typecheck` -> PASS
+- Result:
+  - Previous compile blockers resolved.
+  - Module now has local typecheck gate.
+- Skip scope:
+  - Runtime behavior regression tests still pending (Phase 4 test suite not implemented yet).
+- Notes/Risks:
+  - Risk compatibility mapping to CVF levels added (`R0-R4`) but requires dedicated behavior tests before integration decision.
+## [2026-02-25] Batch: CVF Kernel Phase 2/4 progress (runtime hardening + behavior tests)
+- Change reference:
+  - Continued execution from kernel fix roadmap (Phase 2, 3, 4 in progress).
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/execution_orchestrator.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/risk.types.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/risk_scorer.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.router.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.risk.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/*.test.ts`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (12/12, 4 files)
+- Result:
+  - Runtime now enforces domain gate hard in orchestrator.
+  - Optional capability authorization integrated.
+  - IO contract runtime enforcement integrated.
+  - Risk scoring now emits CVF-compatible `cvfRiskLevel` (`R0-R4`) and refusal flow validated.
+  - Initial behavior suite established and passing.
+- Skip scope:
+  - Full integration tests against `cvf-web` governance stack not executed yet.
+  - Post-fix independent assessment not executed yet.
+- Notes/Risks:
+  - Module remains under kernel-fix track until Phase 6 reassessment gate.
+## [2026-02-25] Batch: Web UI updates (OpenClaw + useModals)
+- Change reference:
+  - `3424138` (hydration fix in `useModals`)
+  - `f7e7404` (OpenClaw integration in Safety Dashboard)
+- Impacted scope:
+  - `src/lib/hooks/useModals.ts`
+  - `src/lib/openclaw-config.ts`
+  - `src/app/(dashboard)/safety/page.tsx`
+- Tests executed:
+  - `npm run test:run -- src/lib/hooks/useModals.test.ts src/lib/openclaw-config.test.ts "src/app/(dashboard)/safety/page.test.tsx"` -> PASS (11/11)
+- Skip scope:
+  - Full `cvf-web` regression: skipped because no full-regression trigger matched for this batch.
+  - Unrelated components/libs: skipped because unchanged.
+- Notes/Risks:
+  - Initial run had one assertion conflict (duplicate text match), fixed by using non-ambiguous assertion.
+## [2026-02-25] Batch: CVF Kernel architecture target-completion fix
+- Change reference:
+  - Final closure pass for pre-fix findings (F2/F3/F5/F6 partial items).
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/01_domain_lock/**` (added `domain_map.schema.ts`, strict preflight domain lock)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/02_contract_runtime/**` (registry/matrix/transformation/validator + runtime wiring)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/03_contamination_guard/**` (assumption/lineage/propagation/drift/rollback)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/**` (policy/rewrite/clarification/alternative)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/05_creative_control/**` (creative permission + provenance tagging)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/**` (orchestrator no-bypass chain + telemetry trace)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/*.test.ts` (expanded suite + CVF policy parity test)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+  - `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+  - `docs/assessments/CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run typecheck` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (22/22, 7 files)
+- Result:
+  - Target modules are implemented and wired in module scope.
+  - CVF risk policy parity validated against `cvf-web` baseline risk gate behavior.
+  - Post-fix gate updated to **GO (module scope, local)**.
+- Skip scope:
+  - Full repo regression (`cvf-web` full suite): skipped because changes are isolated to ignored kernel module/docs and no active runtime integration in mainline path.
+- Notes/Risks:
+  - Folder remains ignored in git; CI integration requires explicit owner decision to unignore and wire pipeline.
+## [2026-02-25] Batch: Kernel canonical mapping + folder normalization
+- Change reference:
+  - Standardized module identity, naming, and folder placement per CVF convention.
+- Impacted scope:
+  - Folder renamed/moved:
+    - `CVF Kernel Architecture/` -> `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/`
+  - Canonical mapping notes added:
+    - `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+  - Path/script/reference updates:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/cvf_policy_parity.test.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW*.md`
+    - `docs/assessments/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`
+    - `docs/assessments/CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md`
+    - `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+    - `.gitignore` (removed stale ignore entry for old folder path)
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (22/22, 7 files)
+- Result:
+  - Module now follows CVF extension naming convention and sits under `EXTENSIONS/`.
+  - Team-facing docs now use one canonical module ID and layer/version mapping.
+- Skip scope:
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Repo-level CI integration for this extension remains a separate activation decision.
+## [2026-02-25] Batch: Kernel remap to Safety Runtime submodule
+- Change reference:
+  - Owner decision: keep Kernel Architecture as submodule under Safety Runtime (`v1.7.1`), not standalone extension version.
+- Impacted scope:
+  - Folder remap:
+    - `EXTENSIONS/CVF_v1.7.1_KERNEL_ARCHITECTURE/` -> `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/`
+  - Canonical mapping note update:
+    - `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+  - Runtime scripts/test runner isolation after move:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs` (new)
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/cvf_policy_parity.test.ts`
+  - Path updates in kernel assessment docs:
+    - `docs/assessments/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`
+    - `docs/assessments/CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md`
+    - `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (22/22, 7 files)
+- Result:
+  - Module is now placed exactly in Safety Runtime tree as a submodule.
+  - Canonical module path for team usage is finalized.
+- Skip scope:
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Repo-level CI wiring for this submodule remains pending.
+## [2026-02-25] Batch: Kernel advanced upgrade (Phase 7-9 baseline)
+- Change reference:
+  - Advanced hardening implementation from roadmap (entrypoint enforcement, policy versioning, forensic/CI baseline).
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/execution_orchestrator.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/kernel_runtime_entrypoint.ts` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/llm_adapter.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal_policy.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal_policy_registry.ts` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/kernel/04_refusal_router/refusal.router.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/internal_ledger/*.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/entrypoint_enforcement.test.ts` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/refusal_policy_golden.test.ts` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/golden/refusal-policy.v1.json` (new)
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/ROLLOUT_PLAN.md` (new)
+  - `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`
+  - `docs/assessments/CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run ci:gate` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (26/26, 9 files)
+- Result:
+  - Phase 7 baseline complete: mandatory entrypoint + anti-bypass controls.
+  - Phase 8 baseline complete: versioned refusal policy + golden regression dataset.
+  - Phase 9 baseline complete: forensic trace fields + module CI gate + rollout plan doc.
+- Skip scope:
+  - Parent `CVF_v1.7.1_SAFETY_RUNTIME` repo-level workflow integration not changed in this batch.
+- Notes/Risks:
+  - Next step for production promotion is wiring kernel gate into shared CI workflow.
+## [2026-02-25] Batch: Kernel coverage quality snapshot
+- Change reference:
+  - Coverage measurement for `kernel-architecture` after Phase 7-9 baseline.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/*.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/risk-check.ts`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && node ./node_modules/vitest/vitest.mjs run --config "D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF/EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs" --dir "D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF/EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" --coverage` -> PASS (26/26, 9 files)
+- Coverage result:
+  - Statements: **44.82%**
+  - Branches: **34.61%**
+  - Functions: **50.00%**
+  - Lines: **52.00%**
+  - Reported file: `risk-check.ts` (uncovered lines: `25-40,58,72`)
+- Quality assessment:
+  - **NOT PASS** for production-grade coverage gate (below common threshold 80%+).
+  - Functional correctness gate is PASS (`26/26`), but test breadth for untested paths is still limited.
+- Notes/Risks:
+  - Current coverage report scope is narrow; need explicit source include/threshold policy in `vitest.config.mjs` before using coverage as hard release gate.
+## [2026-02-25] Batch: Coverage standard enforcement (80 global / 90 core branches)
+- Change reference:
+  - Owner safety rule applied: all coverage metrics >= 80%, core safety branches >= 90%.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/domain_guard.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/risk_refusal.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/entrypoint_enforcement.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/execution_orchestrator.test.ts`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (33/33, 9 files)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run ci:gate` -> PASS
+- Coverage result (enforced scope):
+  - Global: Statements `98.35%`, Branches `94.59%`, Functions `100%`, Lines `99.41%`
+  - Core branches:
+    - `runtime/execution_orchestrator.ts`: Statements `98.9%`, Branches `90.69%`, Functions `100%`, Lines `98.9%`
+    - `runtime/kernel_runtime_entrypoint.ts`: `100%` all metrics
+    - `runtime/llm_adapter.ts`: `100%` all metrics
+    - `kernel/01_domain_lock/domain_guard.ts`: `100%` all metrics
+    - `kernel/02_contract_runtime/contract_runtime_engine.ts`: `100%` all metrics
+    - `kernel/03_contamination_guard/risk_scorer.ts`: Statements `94.73%`, Branches `94.44%`, Functions `100%`, Lines `100%`
+    - `kernel/04_refusal_router/refusal.router.ts`: `100%` all metrics
+- Result:
+  - Coverage gate now enforced by config and CI script.
+  - Module meets owner-defined safety threshold (80 global / 90 core branches).
+- Skip scope:
+  - No GitHub push/merge actions executed (owner approval required).
+## [2026-02-25] Batch: Kernel docs cleanup + expanded coverage scope
+- Change reference:
+  - Owner request: clean/update kernel markdown docs first, then expand coverage.
+- Impacted scope:
+  - Markdown cleanup in module:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/Thong_tin.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_TARGET.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/ROLLOUT_PLAN.md`
+  - Coverage expansion + tests:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/vitest.config.mjs`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/kernel_expanded_coverage.test.ts` (new)
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (43/43, 10 files)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run ci:gate` -> PASS
+- Coverage result (expanded scope):
+  - Scope: `kernel/**/*.ts`, `runtime/**/*.ts`, `internal_ledger/**/*.ts` (with explicit exclusions for type/schema-only artifacts).
+  - Global: Statements `96.52%`, Branches `90.78%`, Functions `100%`, Lines `97.11%`
+  - Core branch thresholds (>=90) remain PASS.
+- Result:
+  - Kernel docs are synchronized with current module structure and gate policy.
+  - Coverage scope now reflects broader runtime/kernel logic, not only minimal core subset.
+- Skip scope:
+  - No GitHub push/merge actions executed (owner approval required).
+## [2026-02-26] Batch: Antigravity independent assessment baseline
+- Change reference:
+  - Independent evaluation by Antigravity (Gemini 2.5), separate from GPT-5 assessments.
+  - Assessment saved: `docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**` (code review + test verification)
+  - `docs/CVF_*_2026-02-25.md` (cross-validated claims vs actual code)
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (43/43, 10 files, 1.12s)
+  - Typecheck -> PASS
+- Verification findings:
+  - All F1-F6 closure claims confirmed in code
+  - Anti-bypass Symbol guard verified
+  - Forensic trace (`requestId`, `policyVersion`, `decisionCode`, `traceHash`) present in all ledger records
+  - Orchestrator 12-step non-bypass pipeline confirmed
+  - Test count: 43 (increased from 26 in post-fix doc)
+- Assessment scores:
+  - Kernel Architecture (code): **8.5/10**
+  - Docs / Assessment Pipeline: **9.0/10**
+  - Test Suite: **8.0/10**
+- Recommendations for next governance/compat batch:
+  1. Add error boundary in orchestrator pipeline
+  2. Add timeout guard for LLM call
+  3. Decouple dependency (install typescript/vitest locally instead of relative path to cvf-web)
+  4. Add integration test kernel ↔ cvf-web
+- Skip scope:
+  - `cvf-web` full regression: not re-verified (focus on kernel module only)
+  - No GitHub push/merge actions for kernel module
+- Notes/Risks:
+  - This assessment serves as independent baseline for future governance/compat work.
+  - Next step: address recommendations then run `ci:gate` to confirm regression.
+## [2026-02-26] Batch: Antigravity recommendation closure + Nice-to-have full run
+- Change reference:
+  - Closed 4 recommendations from `docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md`.
+  - Executed Nice-to-have verification (`E2E` + benchmark).
+- Impacted scope:
+  - Runtime hardening:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/execution_orchestrator.ts`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/runtime/kernel_runtime_entrypoint.ts`
+  - Dependency decouple:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package.json`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/package-lock.json` (new)
+  - New tests:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/cvf_web_integration.test.ts` (new)
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/orchestrator_e2e.test.ts` (new)
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/orchestrator_benchmark.test.ts` (new)
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/tests/execution_orchestrator.test.ts` (updated)
+  - Doc sync:
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/README.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/TREEVIEW_IMPLEMENTED.md`
+    - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/ROLLOUT_PLAN.md`
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm install` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (51/51, 13 files)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:e2e` -> PASS (5/5)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run bench:orchestrator` -> PASS
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run ci:gate` -> PASS
+- Result:
+  - Recommendation #1 closed: orchestrator now has fail-safe error boundary (safe withheld response on internal pipeline error).
+  - Recommendation #2 closed: LLM call now has timeout guard (`llmTimeoutMs`, default 5000 ms).
+  - Recommendation #3 closed: module no longer depends on `../../cvf-web/node_modules` for local test/typecheck scripts.
+  - Recommendation #4 closed: kernel↔cvf-web integration parity tests added and passing.
+  - Nice-to-have full run completed:
+    - E2E runtime path test PASS
+    - Benchmark PASS (`runs=40`, `avg_ms=0.15-0.28`, `p95_ms=1.00`)
+  - Coverage snapshot after upgrade:
+    - Statements `96.45%`, Branches `91.41%`, Functions `99.09%`, Lines `97.01%`
+- Skip scope:
+  - `cvf-web` full app regression suite not re-run in this batch (kernel-focused closure batch).
+  - No GitHub push/merge actions executed (owner approval required).
+## [2026-02-26] Batch: Post-closure re-validation (rule-compliant latest snapshot)
+- Change reference:
+  - Owner request: update latest test record under incremental testing rule after recommendation closure.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**` (verification-only retest, no additional code changes in this batch)
+- Tests/execution performed:
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:run` -> PASS (51/51, 13 files)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS
+    - Global coverage: Statements `96.45%`, Branches `91.41%`, Functions `99.09%`, Lines `97.01%`
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:e2e` -> PASS (5/5)
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run bench:orchestrator` -> PASS
+    - Benchmark snapshot: `runs=40`, `avg_ms=0.15`, `p95_ms=1.00`
+- Result:
+  - Quality gate remains PASS with owner threshold (`>=80%` global, core branches `>=90%`).
+  - Prior 4 recommendations remain verified as closed; no regression detected in retest.
+- Skip scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/**`: skipped (no new changes from previous passing parity batch; kernel-only verification request).
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - This entry is the latest trusted snapshot for next incremental test decisions.
+## [2026-02-26] Batch: Kernel-architecture Web UI update coverage check
+- Change reference:
+  - Owner request: re-check coverage after latest kernel-architecture Web UI updates.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**` (coverage verification batch)
+- Tests/execution performed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS
+    - Decision: `FOCUSED TESTS ALLOWED`
+  - `cd "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture" && npm run test:coverage` -> PASS (51/51, 13 files)
+- Coverage result:
+  - Global coverage: Statements `96.45%`, Branches `91.41%`, Functions `99.09%`, Lines `97.01%`
+  - Core runtime highlights:
+    - `runtime/execution_orchestrator.ts`: Statements `98.18%`, Branches `92.45%`, Functions `91.66%`, Lines `98.18%`
+    - `runtime/kernel_runtime_entrypoint.ts`: `100%` all metrics
+    - `runtime/llm_adapter.ts`: `100%` all metrics
+- Result:
+  - PASS owner threshold (`>=80%` global, main safety branches `>=90%`).
+  - No regression observed from latest snapshot.
+- Skip scope:
+  - Full `cvf-web` regression skipped (compat gate allowed focused run; no frozen-core trigger in this range).
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Initial non-escalated coverage run failed with sandbox `spawn EPERM`; rerun with escalation succeeded.
+## [2026-02-26] Batch: Web UI mobile-focused test check
+- Change reference:
+  - Owner question: verify whether mobile Web UI test has been executed for latest cycle.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/MobileComponents.test.tsx`
+- Tests/execution performed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS
+    - Decision: `FOCUSED TESTS ALLOWED`
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && npm run test:run -- src/components/MobileComponents.test.tsx` -> PASS (`43/43`, `1` file)
+- Result:
+  - Mobile Web UI focused suite is passing in current run.
+- Skip scope:
+  - Full `cvf-web` regression skipped (focused verification request only; no frozen-core trigger in gate).
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Initial non-escalated run failed with sandbox `spawn EPERM`; rerun with escalation succeeded.
+## [2026-02-26] Batch: /docs Web UI update (AI-Research-SKILLs section) focused validation
+- Change reference:
+  - Owner update: added section `Thư viện Skills Tham khảo` on `/docs` after cloning `AI-Research-SKILLs`.
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/docs/page.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/docs/page.test.tsx` (new)
+- Tests/execution performed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS
+    - Decision: `FOCUSED TESTS ALLOWED`
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && npm run test:run -- src/app/docs/page.test.tsx` -> PASS (`3/3`, `1` file)
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && npm run test:coverage -- src/app/docs/page.test.tsx` -> PASS
+    - Focused coverage snapshot:
+      - Global (focused set): Statements `93.33%`, Branches `100%`, Functions `90%`, Lines `92.85%`
+      - `src/app/docs/page.tsx`: Statements `90.9%`, Branches `100%`, Functions `87.5%`, Lines `90.9%`
+- Result:
+  - New external skills section is now covered by page-level regression tests (VI/EN content + external links + category filter behavior).
+  - Focused coverage passes current cvf-web threshold for statements/branches.
+- Skip scope:
+  - Full `cvf-web` regression skipped (focused route-level update; compat gate has no frozen-core trigger).
+  - No GitHub push/merge actions executed (owner approval required).
+- Notes/Risks:
+  - Non-escalated Vitest runs initially failed with sandbox `spawn EPERM`; reruns with escalation succeeded.
+## [2026-02-27] Batch: cvf-web coverage threshold recovery after governance updates
+- Change reference:
+  - `85a5ede` (coverage thresholds: statements/functions/lines 90, branches 80)
+  - `f9de6d2` (governance enforcement update in `governance-post-check`)
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/vitest.config.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governance-post-check.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governance-post-check.test.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/safety-status.test.ts` (new)
+- Tests executed:
+  - `cd "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web" && npm ci` -> PASS
+  - `npm run test:coverage -- src/lib/governance-post-check.test.ts` -> PASS
+    - `governance-post-check.ts`: Statements `100%`, Branches `87.5%`, Functions `100%`, Lines `100%`
+  - `npm run test:run -- "src/app/(dashboard)/safety/page.test.tsx"` -> PASS (`6/6`)
+  - `npm run test:run -- src/lib/safety-status.test.ts` -> PASS (`10/10`)
+  - `npm run test:coverage` -> PASS (full `cvf-web`)
+- Coverage result (full `cvf-web`):
+  - Statements `92%+` (pass)
+  - Branches `80%+` (pass)
+  - Functions `90%+` (pass)
+  - Lines `93%+` (pass)
+- Skip scope:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/**`: skipped in this batch because request focused on latest `cvf-web`/GitHub updates.
+- Notes/Risks:
+  - Some tests log non-blocking stderr (`fetch failed` fallback logs, jsdom navigation not implemented); suite remains green and coverage gate passes.
+## [2026-03-01] Batch: Mini_Game gameplay upgrade validation (new modes + progression)
+- Change reference:
+  - Mini_Game gameplay upgrade: add `compare` + `vocab` modes, mobile UX refinements, level unlock gating, and combo visual effect.
+- Impacted scope:
+  - `Mini_Game/webapp/src/app/page.tsx`
+  - `Mini_Game/webapp/src/app/page.module.css`
+  - `Mini_Game/webapp/src/components/ui-shell/LevelSelector.tsx`
+  - `Mini_Game/webapp/src/lib/game-core/types.ts`
+  - `Mini_Game/webapp/src/lib/game-core/index.ts`
+  - `Mini_Game/webapp/src/lib/game-core/compare.ts` (new)
+  - `Mini_Game/webapp/src/lib/game-core/vocab.ts` (new)
+  - `Mini_Game/webapp/src/lib/content-bank/index.ts`
+  - `Mini_Game/webapp/src/lib/adaptive-engine/index.ts`
+  - `Mini_Game/webapp/src/lib/learning-path-service/index.ts`
+  - `Mini_Game/webapp/src/lib/progress-service/storage.ts`
+  - `Mini_Game/webapp/src/lib/report-service/index.ts`
+  - `Mini_Game/webapp/src/lib/game-core/compare.test.ts` (new)
+  - `Mini_Game/webapp/src/lib/game-core/vocab.test.ts` (new)
+- Tests/execution performed:
+  - `cd "Mini_Game/webapp" && npm run lint` -> PASS
+  - `cd "Mini_Game/webapp" && npm run test:run` -> PASS (`15/15` files, `61/61` tests)
+  - `cd "Mini_Game/webapp" && npm run test:coverage` -> PASS
+    - Coverage snapshot: Statements `95.69%`, Branches `88.50%`, Functions `97.91%`, Lines `95.83%`
+  - `cd "Mini_Game/webapp" && npm run build` -> PASS
+- Result:
+  - No conflict detected after upgrade.
+  - New gameplay modes and progression logic pass lint/test/build gates.
+- Skip scope:
+  - Full monorepo regression outside `Mini_Game/webapp` skipped in this batch.
+  - No deployment executed in this batch.
+## [2026-03-06] Batch: Prefix blocker remediation (one-shot build recovery)
+- Change reference:
+  - Trace pre-fix: `REVIEW/TRACE/2026-03-06_prefix_batch_01`
+  - Trace fix batch: `REVIEW/TRACE/2026-03-06_fix_batch_01`
+  - requestId: `REQ-20260306-002`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/runtime/mode/mode.mapper.ts`
+  - `tools/skill_security_scanner/decoder.ts`
+  - `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/**` (edge security runtime + build scaffold)
+  - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/**` (pipeline/model alignment)
+  - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/**` (module scaffold + build typing fix)
+  - `governance/compat/check_bug_doc_compat.py`
+  - `governance/compat/check_test_doc_compat.py`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB && npm run typecheck && npm test` -> PASS
+  - `cd EXTENSIONS/CVF_v1.8_SAFETY_HARDENING && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME && npm run build` -> PASS
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npm run build` -> PASS
+  - Ad-hoc compile: `tools/skill_security_scanner/**/*.ts` -> PASS
+  - Ad-hoc compile: `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/**/*.ts` -> PASS
+  - `python governance/compat/check_core_compat.py --base fe7be53 --head HEAD` -> PASS
+  - `python governance/compat/check_bug_doc_compat.py` -> PASS
+  - `python governance/compat/check_test_doc_compat.py` -> PASS
+- Skip scope:
+  - Full monorepo regression outside impacted CVF extensions was skipped due focused compat gate decision.
+- Notes/Risks:
+  - Non-blocking logic-hardening items remain: masking completeness (`v1.7.3`), deadlock semantics (`v1.1.1`), risk-scope bias (`v1.8.1`).
+## [2026-03-06] Batch: Coverage audit after remediation
+- Change reference:
+  - requestId: `REQ-20260306-002`
+  - assessment report: `docs/assessments/CVF_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING`
+  - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY`
+  - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME`
+- Tests executed:
+  - `v1.2.1: npm run test:coverage` -> FAIL threshold
+    - Coverage: Stmts `27.15%`, Branch `55.22%`, Funcs `42.3%`, Lines `27.15%`
+  - `v1.7.3: npx vitest run --coverage` -> FAIL (missing `@vitest/coverage-v8`)
+  - `v1.8: npm run test:coverage` -> FAIL threshold
+    - Coverage: Stmts `89.18%`, Branch `80.86%`, Funcs `85.71%`, Lines `89.18%`
+  - `v1.9: npm run test:coverage` -> FAIL threshold
+    - Coverage: Stmts `96%`, Branch `91.3%`, Funcs `78.94%`, Lines `96%`
+  - `v2.0: npm run test:coverage` -> FAIL threshold
+    - Coverage: Stmts `98.21%`, Branch `92.45%`, Funcs `90%`, Lines `98.21%`
+- Skip scope:
+  - `v1.8.1`, `v1.2.2`, scanner, `v1.1.1`: no native coverage harness currently.
+- Notes/Risks:
+  - Main gap is function coverage in `v1.9`/`v2.0` and overall module coverage in `v1.2.1`.
+## [2026-03-06] Batch: Coverage hardening closeout (one-shot follow-up)
+- Change reference:
+  - requestId: `REQ-20260306-003`
+  - trace: `REVIEW/TRACE/2026-03-06_coverage_batch_01`
+  - assessment report: `docs/assessments/CVF_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING`
+  - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY`
+  - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME`
+- Coverage remediation actions:
+  - Added new targeted suites:
+    - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/tests/v1.2.1.pipeline.test.ts`
+    - extended:
+      - `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/tests/v1.8.test.ts`
+      - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/v1.9.test.ts`
+      - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/tests/v2.0.test.ts`
+  - Added coverage harness for `v1.7.3`:
+    - `package.json`: `test:coverage` script + `@vitest/coverage-v8`
+  - Fixed logic defect discovered during coverage hardening:
+    - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/governance.audit.ledger.ts`
+      (hash payload ordering mismatch caused integrity false-negatives)
+  - Removed dead/unreachable guard branches:
+    - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/certification/certification.state.machine.ts`
+  - Tuned coverage scope to exclude type-only runtime-empty models:
+    - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/vitest.config.ts`
+- Tests executed (final):
+  - `v1.2.1: npm run test:coverage` -> PASS
+    - Coverage: Stmts `97.92%`, Branch `92.09%`, Funcs `100%`, Lines `97.92%`
+  - `v1.7.3: npm run test:coverage` -> PASS (harness operational; no thresholds configured)
+    - Coverage snapshot: Stmts `42.49%`, Branch `74.35%`, Funcs `72.5%`, Lines `42.49%`
+  - `v1.8: npm run test:coverage` -> PASS
+    - Coverage: Stmts `99.7%`, Branch `91.85%`, Funcs `100%`, Lines `99.7%`
+  - `v1.9: npm run test:coverage` -> PASS
+    - Coverage: Stmts `100%`, Branch `96%`, Funcs `100%`, Lines `100%`
+  - `v2.0: npm run test:coverage` -> PASS
+    - Coverage: Stmts `99.1%`, Branch `92.59%`, Funcs `100%`, Lines `99.1%`
+- Skip scope:
+  - `v1.8.1`, `v1.2.2`, scanner, `v1.1.1`: still no native coverage harness in this batch.
+- Notes/Risks:
+  - `v1.7.3` now has working coverage command, but no coverage thresholds and low effective runtime coverage due interface-only files in include scope.
+## [2026-03-06] Batch: Coverage harness expansion + official v1.7.3 threshold
+- Change reference:
+  - requestId: `REQ-20260306-004`
+  - trace: `REVIEW/TRACE/2026-03-06_coverage_batch_02`
+  - re-check target: `docs/reviews/cvf_phase_governance/CVF_DANH_GIA_INDEPENDENT_TESTER_ASSESSMENT.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME`
+  - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE`
+  - `tools/skill_security_scanner`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`
+- Coverage remediation actions:
+  - Set official coverage gate for `v1.7.3` in `vitest.config.ts`
+    - include: `adapters`, `explainability`, `policy`, `edge_security`
+    - thresholds: S/F/L `90`, B `80`
+  - Added/extended tests for unresolved logic risks:
+    - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tests/edge-security.test.ts` (new)
+    - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tests/adapters.test.ts` (expanded)
+  - Added native coverage harnesses:
+    - `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/{package.json,vitest.config.ts,tests/v1.8.1.test.ts}`
+    - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/{package.json,vitest.config.ts,tests/v1.2.2.test.ts}`
+    - `tools/skill_security_scanner/{package.json,tsconfig.json,vitest.config.ts,tests/scanner.test.ts}`
+    - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/{package.json,tsconfig.json,vitest.config.ts,tests/v1.1.1.test.ts}`
+  - Closed logic correctness gaps discovered in re-check:
+    - `v1.8.1` risk scoring/dashboard scope bias
+    - `v1.2.2` failure audit semantic mismatch
+    - `v1.1.1` parser/scenario/deadlock/risk-critical modeling gaps
+- Tests executed (trace-final snapshots):
+  - `v1.7.3: npm run typecheck` -> PASS
+  - `v1.7.3: npm run test:coverage` -> PASS
+    - Coverage: Stmts `95.13%`, Branch `88.28%`, Funcs `93.47%`, Lines `95.13%`
+  - `v1.8.1: npm run check` -> PASS
+  - `v1.8.1: npm run test:coverage` -> PASS
+    - Coverage: Stmts `95.42%`, Branch `81.69%`, Funcs `94.73%`, Lines `95.42%`
+  - `v1.2.2: npm run check` -> PASS
+  - `v1.2.2: npm run test:coverage` -> PASS
+    - Coverage: Stmts `84.71%`, Branch `71.42%`, Funcs `75%`, Lines `84.71%`
+  - `scanner: npm run check` -> PASS
+  - `scanner: npm run test:coverage` -> PASS
+    - Coverage: Stmts `93.3%`, Branch `69.81%`, Funcs `100%`, Lines `93.3%`
+  - `v1.1.1: npm run check` -> PASS
+  - `v1.1.1: npm run test:coverage` -> PASS
+    - Coverage: Stmts `95.35%`, Branch `82.95%`, Funcs `100%`, Lines `95.35%`
+- Skip scope:
+  - Full monorepo regression skipped; compat decision remains focused on changed extension scopes.
+- Notes/Risks:
+  - Local rerun in current sandbox may hit `spawn EPERM`; trace-final logs remain the authoritative execution evidence for this batch.
+## [2026-03-06] Batch: Independent reassessment hardening follow-up
+- Change reference:
+  - requestId: `REQ-20260306-007`
+  - trace: `REVIEW/TRACE/2026-03-06_independent_reassessment_batch_01`
+- Impacted scope:
+  - `governance/compat/check_bug_doc_compat.py`
+  - `governance/compat/check_test_doc_compat.py`
+  - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - `tools/skill_security_scanner`
+- Hardening actions:
+  - compat gates now auto-detect base range via merge-base (or `CVF_COMPAT_BASE`) instead of fixed `HEAD~1`.
+  - added standardized `check` script for `v1.7.3` (`typecheck + test`).
+  - expanded `v1.2.2` coverage tests (runtime/governance/execution/ledger/logger branches) and raised official thresholds to:
+    - Statements `95`, Branches `90`, Functions `95`, Lines `95`.
+  - expanded scanner tests (decode edge, severity mapping, report detail branches, no-decoded path) and raised official thresholds to:
+    - Statements `95`, Branches `85`, Functions `95`, Lines `95`.
+- Tests executed (final):
+  - `v1.2.2: npm run check` -> PASS
+  - `v1.2.2: npm run test:coverage` -> PASS
+    - Coverage: Stmts `99.32%`, Branch `97.67%`, Funcs `97.29%`, Lines `99.32%`
+  - `v1.7.3: npm run check` -> PASS
+  - `scanner: npm run check` -> PASS
+  - `scanner: npm run test:coverage` -> PASS
+    - Coverage: Stmts `99.29%`, Branch `92.85%`, Funcs `100%`, Lines `99.29%`
+  - `python governance/compat/check_bug_doc_compat.py --enforce` -> PASS
+  - `python governance/compat/check_test_doc_compat.py --enforce` -> PASS
+- Notes:
+  - This batch closes findings around shallow range detection and weak threshold floors in scanner/v1.2.2.

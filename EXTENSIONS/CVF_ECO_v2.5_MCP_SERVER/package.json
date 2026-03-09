@@ -1,0 +1,28 @@
+{
+  "name": "@cvf/eco-mcp-server",
+  "version": "2.5.0",
+  "description": "CVF Guard Runtime MCP Server — exposes governance guards as MCP tools for IDE integration (Windsurf, Cursor, VSCode)",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "cvf-mcp-server": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "^4.19.0",
+    "typescript": "^5",
+    "vitest": "^4.0.18"
+  },
+  "keywords": ["cvf", "mcp", "governance", "guard", "ai-safety"],
+  "license": "MIT"
+}

@@ -28,6 +28,11 @@ export interface ProposalExecutedEvent extends CVFEvent {
   data: { proposalId: string; result: string }
 }
 
+export interface ProposalResumedEvent extends CVFEvent {
+  type: "proposal:resumed"
+  data: { proposalId: string; sessionId?: string; resumeCount: number }
+}
+
 export interface PolicyRegisteredEvent extends CVFEvent {
   type: "policy:registered"
   data: { version: string; rulesCount: number; hash: string }
@@ -47,6 +52,7 @@ export type CVFEventType =
   | ProposalSubmittedEvent
   | ProposalDecidedEvent
   | ProposalExecutedEvent
+  | ProposalResumedEvent
   | PolicyRegisteredEvent
   | AIUsageEvent
   | ErrorEvent

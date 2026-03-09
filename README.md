@@ -6,25 +6,270 @@
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0%20Runtime-9e6b2b.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-1764%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![Kernel Tests](https://img.shields.io/badge/kernel+extension%20tests-183%20passing-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
-[![Coverage](https://img.shields.io/badge/coverage-93.05%25-brightgreen.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web)
-[![Kernel Coverage](https://img.shields.io/badge/kernel%20coverage-96.45%25-brightgreen.svg)](EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture)
-[![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
-[![Agent Skills](https://img.shields.io/badge/agent%20skills-34-blue.svg)](governance/skill-library/registry/agent-skills/INDEX.md)
+[![Runtime Tests](https://img.shields.io/badge/runtime-453%2F453%20PASS-brightgreen.svg)](EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/)
+[![Conformance](https://img.shields.io/badge/conformance-84%2F84%20PASS-brightgreen.svg)](docs/reviews/cvf_phase_governance/)
+[![Tests](https://img.shields.io/badge/tests-1%2C799%20passing-brightgreen.svg)](docs/CVF_INCREMENTAL_TEST_LOG.md)
+[![Skills](https://img.shields.io/badge/skills-141%20×%2012%20domains-blue.svg)](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
+[![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
+[![CVF_ECO](https://img.shields.io/badge/CVF_ECO-12%20extensions%2C%20434%20tests-blue.svg)](ECOSYSTEM/strategy/CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md)
 
 ---
 
-## 🔔 Testing & Quality Standard Notice (Mandatory)
+## Table of Contents
 
-Before running any tests, read:
-- [Incremental Test Log](docs/CVF_INCREMENTAL_TEST_LOG.md)
-- [Core Compatibility Baseline](docs/CVF_CORE_COMPAT_BASELINE.md)
-- [Bug History & Troubleshooting](docs/BUG_HISTORY.md)
+- 👋 [Overview](#-overview)
+- 🚀 [Quick Start](#-quick-start)
+- 📚 [Documentation](#-documentation)
+- 🏗️ [Architecture](#️-architecture)
+- 🎯 [Version Guide](#-version-guide)
+- 🎨 [Features](#-features)
+- 📊 [Project Status](#-project-status)
+- 🔔 [Governance Rules](#-governance-rules)
+- 🤝 [Contributing](#-contributing)
+- 📄 [License](#-license)
 
-Run compatibility gates first:
+---
+
+## 👋 Overview
+
+CVF is a **governance-enforced runtime platform** for AI-assisted software development. It ensures **humans stay in control** while **AI executes within runtime-enforced boundaries**.
+
+**Key Capabilities:**
+
+- **4-Phase Process** — Discovery → Design → Build → Review (no skipping phases)
+- **Risk Control** — 4-level risk model (R0–R3) with authority boundaries
+- **141 Reusable Skills** — Across 12 domains, with bi-directional linking
+- **34 Agent Tools** — RAG, Data Viz, Browser Auto, MCP, Agent Teams & more
+- **CVF_ECO Extensions** — 12 ecosystem modules, 434 tests, 100% pass
+- **Conformance Pipeline** — 84 scenarios, release-grade gate, golden baseline
+- **Web UI + Agent Platform** — No-code interface, multi-agent workflows, v1.6 non-coder enhancement complete
+- **AI Safety Kernel** — 5-layer pipeline, anti-bypass, forensic tracing
+
+> **CVF doesn't help you go faster. CVF helps you avoid going wrong.**
+
+---
+
+## 🚀 Quick Start
+
+### Option 1: Read the Quick Orientation (15 minutes)
+
+**→ [🚀 CVF Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md)** — Understand CVF, how to use it, and where to go next.
+
+### Option 2: Run the Web UI (2 minutes)
+
+```bash
+git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
+cd Controlled-Vibe-Framework-CVF/EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+npm install && npm run dev
+```
+
+→ Open http://localhost:3000
+
+### Option 3: Core CVF (5 minutes)
+
+1. Read the [Manifesto](v1.0/CVF_MANIFESTO.md)
+2. Follow the [4-Phase Process](v1.0/phases/)
+3. Use the [Governance Checklists](v1.0/governance/)
+
+**→ [📖 Full Getting Started Guide](docs/GET_STARTED.md)**
+
+### Workspace Setup (Mandatory for Real Projects)
+
+CVF root is the governance layer — downstream projects live in a separate workspace:
+
+```text
+D:\CVF-Workspace\
+  .Controlled-Vibe-Framework-CVF\   # CVF (governance layer, dot-prefix)
+  My-Project\                       # your app
+  Another-App\                      # another app
+```
+
+```powershell
+# Bootstrap a new workspace:
+powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
+  -WorkspaceRoot "D:\CVF-Workspace" `
+  -ProjectName "My-Project"
+```
+
+See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md) | [ADR-020](docs/CVF_ARCHITECTURE_DECISIONS.md)
+
+---
+
+## 📚 Documentation
+
+> **Start here:** [🚀 Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) | [📖 Getting Started](docs/GET_STARTED.md) | [🧠 Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
+
+### 📘 Learning
+
+| | |
+|---|---|
+| **Concepts** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance Model](docs/concepts/governance-model.md) · [Risk Model](docs/concepts/risk-model.md) · [Skill System](docs/concepts/skill-system.md) · [Version Evolution](docs/concepts/version-evolution.md) · [Hierarchical Governance Pipeline](docs/concepts/CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md) |
+| **Doctrine** | [Architecture Principles](ECOSYSTEM/doctrine/CVF_ARCHITECTURE_PRINCIPLES.md) · [Product Positioning](ECOSYSTEM/doctrine/CVF_PRODUCT_POSITIONING.md) · [Ecosystem Map](ECOSYSTEM/doctrine/CVF_ECOSYSTEM_MAP.md) · [Layer Model](ECOSYSTEM/doctrine/CVF_LAYER_MODEL.md) · [Doctrine Rules](ECOSYSTEM/doctrine/CVF_DOCTRINE_RULES.md) |
+| **Operating Model** | [Agent Operating Model](ECOSYSTEM/operating-model/CVF_AGENT_OPERATING_MODEL.md) · [Builder Model (Non-Coder)](ECOSYSTEM/operating-model/CVF_BUILDER_MODEL.md) · [VOM Quick Start](ECOSYSTEM/operating-model/CVF_VOM_QUICK_START.md) |
+| **Strategy** | [Strategic Summary](ECOSYSTEM/strategy/CVF_STRATEGIC_SUMMARY.md) · [Unified Roadmap 2026](ECOSYSTEM/strategy/CVF_UNIFIED_ROADMAP_2026.md) |
+| **Guides** | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) · [Solo Developer](docs/guides/solo-developer.md) · [Team Setup](docs/guides/team-setup.md) · [Enterprise](docs/guides/enterprise.md) |
+| **Tutorials** | [First Project](docs/tutorials/first-project.md) · [Web UI Setup](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
+| **Cheatsheets** | [Troubleshooting](docs/cheatsheets/troubleshooting.md) · [Version Picker](docs/cheatsheets/version-picker.md) |
+
+### 📋 Governance & Records
+
+| | |
+|---|---|
+| **Reference** | [Release Manifest](docs/reference/CVF_RELEASE_MANIFEST.md) · [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md) · [Maturity Matrix](docs/reference/CVF_MATURITY_MATRIX.md) · [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md) · [Positioning](docs/reference/CVF_POSITIONING.md) |
+| **Assessments** | [Independent Review 2026-03-08](docs/assessments/CVF_INDEPENDENT_EXPERT_REVIEW_UPGRADE_WAVE_2026-03-08.md) · [Assessment 2026-02-25](docs/assessments/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md) · [Antigravity Assessment](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md) |
+| **Baselines** | [Core Compat Baseline](docs/baselines/CVF_CORE_COMPAT_BASELINE.md) · [Version Comparison](docs/VERSION_COMPARISON.md) · [Versioning Policy](docs/VERSIONING.md) |
+| **Records** | [Architecture Decisions (ADR-001→020)](docs/CVF_ARCHITECTURE_DECISIONS.md) · [Bug History](docs/BUG_HISTORY.md) · [Test Log](docs/CVF_INCREMENTAL_TEST_LOG.md) · [CHANGELOG](CHANGELOG.md) |
+| **Enterprise** | [Evidence Pack](docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md) · [Control Mapping](docs/reference/CVF_CONTROL_TO_ARTIFACT_MAPPING.md) · [Approval Template](docs/reference/CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md) |
+
+### 🧩 Skills & Tools
+
+| | |
+|---|---|
+| **Skill Library** | [141 Skills × 12 Domains](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| **Agent Skills** | [34 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
+| **SDK & Tooling** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) · [Governance Guards](governance/toolkit/05_OPERATION/) |
+
+### 🗂️ Full Index
+
+See [`docs/INDEX.md`](docs/INDEX.md) for complete document taxonomy and storage rules.
+
+**Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
+
+---
+
+## 🏗️ Architecture
+
+CVF can be understood in **two scopes**:
+
+| Scope | Identity | Layer | Focus |
+|-------|----------|-------|-------|
+| 🧬 **CVF Core** | "Git for AI Development" | Layer 0 | Deterministic development primitives |
+| 🏛️ **CVF Full** | "AI Governance Framework" | Layer 1–5 | Complete governance ecosystem |
+
+```
+CVF
+ │
+ ├─── 🧬 CVF Core (Layer 0) ─── "Git for AI Development"
+ │     │
+ │     ├── v1.0  4-Phase Model, Governance Principles       [FROZEN]
+ │     ├── v1.1  Extended Control, I/O Specs                 [FROZEN]
+ │     └── v3.0  Core Governance Engine                      [ACTIVE]
+ │           ├── ai_commit        (deterministic commits)
+ │           ├── artifact_ledger  (immutable artifact chain)
+ │           ├── process_model    (phase state machine)
+ │           └── skill_lifecycle  (skill governance pipeline)
+ │
+ └─── 🏛️ CVF Full (Layer 1–5) ─── "AI Governance Framework"
+       │
+       ├── Layer 1: Intelligence & Tools
+       │     v1.2 · v1.2.1 · v1.3 · v1.5.2 · v1.7 · v1.1.1
+       │
+       ├── Layer 2: Safety Runtime
+       │     v1.7.1 Safety Kernel · v1.8 Hardening · v1.9 Replay
+       │
+       ├── Layer 3: Platform
+       │     v1.6 Agent Platform · v1.6.1 Governance Engine
+       │
+       ├── Layer 4: Safety UI
+       │     v1.7.2 Dashboard · v2.0 Non-Coder Runtime
+       │
+       ├── Layer 5: Adapter Hub
+       │     v1.7.3 OpenClaw · PicoClaw · ZeroClaw · Nano
+       │
+       └── CVF_ECO Extensions (Track III)
+             12 modules · 434 tests · Phase 2-5 complete
+
+> **Layer 0 never depends up.** CVF Core works standalone. CVF Full requires Layer 0 as foundation.
+
+**Read more:** [Architecture Separation Diagram](EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md) | [CVF Positioning](ECOSYSTEM/doctrine/CVF_PRODUCT_POSITIONING.md) | [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md) | [Unified Roadmap](ECOSYSTEM/strategy/CVF_UNIFIED_ROADMAP_2026.md) | [ECOSYSTEM Overview](ECOSYSTEM/README.md)
+
+---
+
+## 🎯 Version Guide
+
+| Version | Focus | Tests |
+|---------|-------|-------|
+| **v1.0** | Core baseline — 4-phase process, governance | — |
+| **v1.1** | Extended control — input/output specs, multi-agent | — |
+| **v1.2** | Skill governance — registry, risk model | — |
+| **v1.2.1** 📦 | External Integration — supply chain, policy engine, audit ledger | 29 |
+| **v1.3** | SDK & Tooling — Python, CLI, CI/CD | — |
+| **v1.5.2** | Skill Library — 141 skills, 12 domains | — |
+| **v1.6** ⭐ | Agent Platform — AI chat, multi-agent, governance UI | 1764 |
+| **v1.6.1** 🔐 | Governance Engine — enterprise enforcement, audit | — |
+| **v1.7** 🧠 | Controlled Intelligence — agent behavior, prompt sanitizer | — |
+| **v1.7.1** ⚙️ | Safety Runtime — 5-layer kernel architecture | 51 |
+| **v1.7.2** 🛡️ | Safety Dashboard — non-coder risk view | — |
+| **v1.7.3** 🔌 | Runtime Adapter Hub — multi-runtime contracts | — |
+| **v1.8** 🔐 | Safety Hardening — state machine, mutation budget, rollback | 42 |
+| **v1.9** 📋 | Deterministic Reproducibility — replay engine, forensic audit | 29 |
+| **v2.0** 🎯 | Non-Coder Safety Runtime — ModeMapper, IntentInterpreter | 32 |
+| **v3.0** 🧬 | **Core Governance Engine** — AI commit, artifact ledger, process model, skill lifecycle | 49 |
+| **CVF_ECO Track** | **Ecosystem Expansion** — 12 extensions across 4 phases | 434 |
+| └─ Phase 2 | Intelligence Layer — Intent, Policy, Risk, Guards, RAG | 197 |
+| └─ Phase 3 | Product Packaging — SDK, Canvas, CLI | 112 |
+| └─ Phase 4 | Governance Network — Identity, Graph | 66 |
+| └─ Phase 5 | Economy Layer — Marketplace, Reputation | 59 |
+
+→ [Version Comparison](docs/VERSION_COMPARISON.md) | [Decision Tree](docs/cheatsheets/version-picker.md)
+
+---
+
+## 🎨 Features
+
+### v1.7+ Highlights ⭐ (AI Safety Runtime + Kernel)
+
+- 🧠 **5-Layer Safety Kernel** — Domain Lock → Contract Runtime → Contamination Guard → Refusal Router → Creative Control
+- 🛡️ **AI Safety Runtime** — Prompt sanitizer, entropy guard, anomaly detection, policy enforcement
+- 📊 **Safety Dashboard** — Real-time risk view: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous
+- 🔌 **Runtime Adapter Hub** (v1.7.3) — Universal adapter contracts for multi-runtime AI safety
+- 🔐 **Safety Hardening** (v1.8) — 7-phase state machine, mutation budget, deterministic rollback
+- 📋 **Deterministic Replay** (v1.9) — Immutable ExecutionRecord, Context Freezer, Replay Engine
+- 🎯 **Non-Coder Runtime** (v2.0) — ModeMapper, IntentInterpreter, ConfirmationEngine
+
+### v1.6 Platform
+
+- 🤖 **AI Agent Chat** — Gemini, OpenAI, Anthropic
+- 🎯 **Multi-Agent Workflow** — Orchestrator, Architect, Builder, Reviewer
+- ✅ **34 Agent Tools** — Web search, code execute, RAG retrieval, data viz, browser auto, MCP, agent teams & more
+- 💾 **Chat History** — Persistent conversations
+- 🔐 **Governance Toolkit** — Phase/role/risk control (R0–R3)
+- 🌐 **Bilingual** — Vietnamese/English
+- 📱 **Mobile Responsive** — Touch-optimized UI
+
+### Governance Integration for AI Agent
+
+| Layer | Mechanism | How |
+|-------|-----------|-----|
+| **System Prompt** | Rule 16 in governance context | AI calls `governance_check` tool for fixes, tests, code changes |
+| **Post-Processing** | `governance-post-check.ts` | Auto-scans AI responses, injects enforcement if docs missing |
+| **Governance Checker** | UI on Safety + Tools page | Interactive compliance checklist per action type |
+
+---
+
+## 📊 Project Status
+
+| Metric | Status |
+|--------|--------|
+| **Version** | 2.0.0 (Mar 2026) |
+| **Conformance** | 84/84 scenarios PASS, 18/18 critical anchors, 17/17 coverage groups |
+| **Tests** | 2,430+ passing (Core + Legacy + CVF_ECO) |
+| **Skills** | 141 skills × 12 domains + 34 agent tools |
+| **AI Safety** | Kernel active — 5-layer pipeline, anti-bypass, forensic tracing |
+| **Independent Review** | [8.7/10](docs/assessments/CVF_INDEPENDENT_EXPERT_REVIEW_UPGRADE_WAVE_2026-03-08.md) — Strong upgrade wave |
+| **CVF_ECO Evaluation** | [434/434 PASS](ECOSYSTEM/strategy/CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md) — 100% quality gate |
+| **Active Development** | Yes — `cvf-next` branch |
+
+---
+
+## 🔔 Governance Rules
+
+<details>
+<summary><strong>Click to expand all governance rules and gates</strong></summary>
+
+### Compatibility Gates (Run before merge)
 
 ```bash
 # Core compatibility gate
@@ -35,448 +280,48 @@ python governance/compat/check_bug_doc_compat.py --enforce
 
 # Test documentation gate (enforced on test: commits)
 python governance/compat/check_test_doc_compat.py --enforce
+
+# Docs governance gate (enforced on docs markdown changes)
+python governance/compat/check_docs_governance_compat.py --enforce
 ```
 
-Only run full regression when gate/triggers require it.
-
-> 📋 **Bug Fix Rule:** Every `fix:` commit MUST have a corresponding entry in [`docs/BUG_HISTORY.md`](docs/BUG_HISTORY.md). See [Bug Documentation Guard](governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md).
-
-> 🧪 **Test Log Rule:** Every `test:` commit or test file change MUST have a batch entry in [`docs/CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md). See [Test Documentation Guard](governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md).
-
-> 🏛️ **Architecture Decision Rule:** Every `feat(governance):`, `feat(domain):`, `feat(core-value):`, `refactor(arch):`, or `docs(policy):` commit MUST have an ADR entry in [`docs/CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md). See [ADR Guard](governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md).
-
-> 🧱 **Workspace Isolation Rule:** Downstream projects MUST NOT be opened or developed inside CVF root. Use isolated sibling workspace only. See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
-
-> 🗺️ **Architecture Check Rule:** Before proposing ANY new version, layer, extension, or module for CVF, you MUST first read [`docs/CVF_CORE_KNOWLEDGE_BASE.md`](docs/CVF_CORE_KNOWLEDGE_BASE.md) and explicitly state: the target Layer (1–5), overlap check result, what it extends, and which core principles apply. See [Architecture Check Guard](governance/toolkit/05_OPERATION/CVF_ARCHITECTURE_CHECK_GUARD.md).
-
-> 🔒 **CVF Extension Rules (Non-negotiable):**
-> **R1** — Existing CVF structure is always the standard. No redefinition without ADR + approval.
-> **R2** — New additions must be compatible and additive — upgrade, never replace.
-> **R3** — Naming (version/layer/guard) must follow CVF conventions — no arbitrary naming.
-> See full rules: [`docs/CVF_CORE_KNOWLEDGE_BASE.md` Section XIV](docs/CVF_CORE_KNOWLEDGE_BASE.md).
-
----
-
-## 🎯 CVF In 30 Seconds
-
-CVF helps you **control AI coding** through:
-
-- ✅ **4-Phase Process** - Discovery → Design → Build → Review
-- ✅ **Governance Toolkit** - Phase gates, risk control, authority matrix
-- ✅ **141 Reusable Skills** - Across 12 domains
-- ✅ **34 Agent Tools** - RAG, Data Viz, Agentic Loop, Browser Auto, MCP, Workflow Hooks, Scientific Research, Agent Teams, Context Engineering, Debugging, API Architecture, Testing, Security, Database, Frontend, Cloud Deployment, Code Review, MCP Builder, AI Multimodal, Operator Workflow & more
-- ✅ **Web UI + Agent Platform** - No-code interface, multi-agent workflows
-
-**Use CVF when:**
-- You use AI (ChatGPT / Claude / Copilot) for coding
-- You want AI to code **correctly and safely**
-- You need governance for your team or enterprise
-
----
-
-## 🚀 Quick Start
-
-### Workspace Rule (Mandatory For Real Projects)
-
-CVF root is reserved for framework maintenance.  
-Do not open or build downstream projects directly inside this repository root.
-Effective date: 2026-03-02.
-
-Use isolated sibling workspaces instead:
-
-```text
-D:\Work\
-  .Controlled-Vibe-Framework-CVF\   # CVF core (shared or cloned)
-  Trading-Tools\                    # your project workspace
-  Another-Project\                  # another project workspace
-```
-
-`.Controlled-Vibe-Framework-CVF` naming (leading dot) is an isolation convention to avoid accidental cross-edits. It does not need hidden mode.
-
-### Bootstrap Isolated Workspace (Recommended For New Projects)
-
-Use the bootstrap script to standardize sibling layout and keep terminal default at project root:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
-  -WorkspaceRoot "D:\CVF-Workspace" `
-  -ProjectName "Trading-Tools" `
-  -ProjectRepo "https://github.com/Blackbird081/Trading-Tools.git"
-```
-
-What this creates:
-
-```text
-D:\CVF-Workspace\
-  .Controlled-Vibe-Framework-CVF\
-  Trading-Tools\
-  Trading-Tools.code-workspace
-```
-
-`Trading-Tools.code-workspace` is configured with `terminal.integrated.cwd=${workspaceFolder}`.
-The script also creates a downstream bootstrap record:
-`<Project>/docs/CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
-from `governance/toolkit/05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`.
-
-### Option 1: Web UI (CVF Core Only — 2 minutes)
-
-Use this only to run CVF itself (framework UI), not for downstream product development.
-
-```bash
-git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
-cd Controlled-Vibe-Framework-CVF/EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npm install && npm run dev
-```
-
-→ Open http://localhost:3000
-
-### Option 2: Core CVF (5 minutes)
-
-1. Read the [Manifesto](v1.0/CVF_MANIFESTO.md)
-2. Follow the [4-Phase Process](v1.0/phases/)
-3. Use the [Governance Checklists](v1.0/governance/)
-
-**→ [📖 Full Getting Started Guide](docs/GET_STARTED.md)**
-
-### Real Project Case Study (Local)
-
-- [Mini Game CVF Project](Mini_Game/MINI_GAME_WEBAPP_CVF_PLAN_2026-02-26.md)
-- CVF docs bundle: [Mini_Game/CVF_DOCS](Mini_Game/CVF_DOCS/)
-- Archive bundle (bug/test/history/fig): [Mini_Game/PROJECT_ARCHIVE](Mini_Game/PROJECT_ARCHIVE/)
-
----
-
-## 💡 Why CVF?
-
-### The Problem: Uncontrolled AI Coding
-
-When using AI to code without a framework:
-
-- ❌ Code you don't understand ("black box")
-- ❌ Security vulnerabilities
-- ❌ Accumulated technical debt
-- ❌ No documentation
-- ❌ Inconsistent team output
-
-### The Solution: CVF's 4-Phase Control
-
-```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│  Phase A    │ →  │  Phase B    │ →  │  Phase C    │ →  │  Phase D    │
-│  Discovery  │    │  Design     │    │  Build      │    │  Review     │
-├─────────────┤    ├─────────────┤    ├─────────────┤    ├─────────────┤
-│ YOU decide  │    │ YOU decide  │    │ AI executes │    │ YOU validate│
-│ requirements│    │ architecture│    │ writes code │    │ approve/fix │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
-```
-
-**Outcome:** Quality code, controlled process, reusable artifacts
-
----
-
-## 🎨 Features
-
-### v1.7 Highlights ⭐ (AI Safety Runtime + Kernel Architecture)
-
-- 🧠 **5-Layer Safety Kernel** - Domain Lock → Contract Runtime → Contamination Guard → Refusal Router → Creative Control
-- 🛡️ **AI Safety Runtime** - Prompt sanitizer, entropy guard, anomaly detection, policy enforcement
-- 📊 **Safety Dashboard** - Real-time risk view: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous
-- 🔌 **Runtime Adapter Hub** (v1.7.3) - Universal adapter contracts for multi-runtime AI safety (OpenClaw, PicoClaw, ZeroClaw, Nano)
-- 🗣️ **Explainability Layer** (v1.7.3) - Human-readable action explanations in English & Vietnamese
-- 🔍 **Kernel Health Dashboard** - Domain lock status, risk level (R0-R4), refusal count, pipeline latency
-- 📈 **Risk Evolution Chart** - Historical risk trend visualization with hover tooltips
-- 🔎 **Request Trace Viewer** - Click-to-view forensic trace (requestId, traceHash, decision)
-- 📜 **Policy Selector** - Switch between Standard, Strict, and Permissive policy versions
-- 🎨 **Creative Mode Indicator** - Toggle with drift warning at R2+ threshold
-- 🗺️ **Domain Map** - Interactive SVG visualization of domain relationships
-- 🔒 **Anti-Bypass Design** - Symbol guard, 12-step non-bypass pipeline, forensic tracing
-- 🧪 **51 Kernel Tests** - Golden dataset regression, E2E, benchmark, 96%+ coverage
-
-### v1.8–v2.0 Highlights 🚀 (NEW — Implemented)
-
-- 🔐 **v1.8 Safety Hardening** — 7-phase state machine (INTENT→COMMIT), mutation budget enforcement, deterministic rollback, drift monitor + stability index | **42 tests**
-- 📋 **v1.9 Deterministic Reproducibility** — Immutable ExecutionRecord (9 fields), Context Freezer, Replay Engine (EXACT/DRIFT/FAILED), forensic audit | **29 tests**
-- 🎯 **v2.0 Non-Coder Safety Runtime** — ModeMapper (SAFE/BALANCED/CREATIVE → KernelPolicy), Intent Interpreter (NL → ParsedIntent), Confirmation Engine (R3+ hard stop), Stability Index override | **32 tests**
-- 📦 **v1.2.1 External Integration** — Skill supply chain (intake→validate→certify→publish), Policy Decision Engine (6-layer precedence), blockchain-style audit ledger, R0–R3 mapping | **29 tests**
-
-### 🛡️ Governance Integration for AI Agent (NEW)
-
-The AI Agent automatically enforces CVF governance through **3 layers**:
-
-| Layer | Mechanism | How |
-|-------|-----------|-----|
-| **System Prompt** | Rule 16 in governance context | AI is instructed to call `governance_check` tool when fixing bugs, running tests, or changing code |
-| **Post-Processing** | `governance-post-check.ts` | Automatically scans AI responses; injects 🚨 **enforcement** message if `BUG_HISTORY.md` or `CVF_INCREMENTAL_TEST_LOG.md` documentation is missing |
-| **Governance Checker** | Tool on Safety page + Tools page | Interactive UI: select action (Bug Fix / Test Run / Code Change) → get compliance checklist |
-
-**Governance policies enforced:**
-- 📋 [`CVF_BUG_DOCUMENTATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md) — Every bug fix must be logged
-- 📋 [`CVF_TEST_DOCUMENTATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md) — Every test run must be documented
-- 📋 [`CVF_ADR_GUARD.md`](governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md) — Every architecture/strategy decision must have an ADR entry
-- 📋 [`CVF_WORKSPACE_ISOLATION_GUARD.md`](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md) — Downstream projects must run in isolated workspace, not in CVF root
-- 📋 [`BUG_HISTORY.md`](docs/BUG_HISTORY.md) — Troubleshooting knowledge base
-- 📋 [`CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md) — Test history log
-- 📋 [`CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md) — Architecture decision records (ADR-001 → ...)
-
-### 🔒 Skill Preflight Enforcement in Web UI (Updated 2026-03-01)
-
-Skill Preflight is now enforced in `cvf-web` as a runtime gate, not only a documentation rule.
-
-- Build checklist includes mandatory Skill Preflight declaration item
-- Build/Execute enforcement blocks execution when Skill Preflight declaration is missing
-- `/api/governance/evaluate` requires `skill_preflight.declared=true` for BUILD phase requests
-- Execution payloads can carry `skill_preflight` metadata (`record_ref`, `skill_ids`, declaration source)
-
-Decision trace:
-- [ADR-008 Baseline](docs/CVF_ARCHITECTURE_DECISIONS.md#adr-008-web-ui-skill-preflight-integration-baseline-pre-upgrade-snapshot)
-- [ADR-009 Enforcement Upgrade](docs/CVF_ARCHITECTURE_DECISIONS.md#adr-009-web-ui-skill-preflight-enforcement-upgrade-framework-level-integration)
-
-
-### v1.6 Features
-
-- 🤖 **AI Agent Chat** - Gemini, OpenAI, Anthropic
-- 🎯 **Multi-Agent Workflow** - Orchestrator, Architect, Builder, Reviewer
-- ✅ **34 Agent Tools** - Web search, code execute, RAG retrieval, data viz, doc parser, agentic loop, browser automation, MCP connector, workflow hooks, scientific research, document converter, agent teams, progressive loader, analytics dashboard, context engineering, problem-solving, systematic debugging, MCP isolation, API architecture, full-stack testing, security & auth, database schema, frontend components, cloud deployment, code review, MCP builder, AI multimodal, operator workflow orchestrator
-- 💾 **Chat History** - Persistent conversations
-- 🔐 **Governance Toolkit** - Phase/role/risk control (R0–R3)
-- 📝 **50 Templates** → 📚 **141 Skills** - Bi-directional linking
-- 🧪 **Self-UAT** - 1-click testing
-- 🌐 **Bilingual** - Vietnamese/English
-- 📱 **Mobile Responsive** - Touch-optimized UI with bottom nav & swipe gestures
-
-### Core Features (All Versions)
-
-| Feature | Description |
-|---------|-------------|
-| **4-Phase Process** | Structured workflow from idea to production |
-| **Governance Model** | Phase gates, risk levels (R0-R3), authority matrix |
-| **Skill Library** | 141 reusable skills across 12 domains |
-| **Web UI** | No-code template builder + agent chat |
-| **Python SDK** | Programmatic access to CVF |
-| **CI/CD Templates** | GitHub Actions, GitLab CI |
-
----
-
-## 📊 Who Uses CVF?
-
-<table>
-<tr>
-<td width="33%" align="center">
-
-### 👤 Solo Developers
-
-"CVF helps me code with AI<br>without losing direction"
-
-[→ Solo Guide](docs/guides/solo-developer.md)
-
-</td>
-<td width="33%" align="center">
-
-### 👥 Small Teams
-
-"Our team is more consistent<br>and we reuse many skills"
-
-[→ Team Setup](docs/guides/team-setup.md)
-
-</td>
-<td width="33%" align="center">
-
-### 🏢 Enterprise
-
-"CVF gives us full governance<br>while maintaining velocity"
-
-[→ Enterprise](docs/guides/enterprise.md)
-
-</td>
-</tr>
-</table>
-
----
-
-## 🗺️ Choose Your Path
-
-| Who are you? | Recommended Path |
-|-----------|------------------|
-| 🆕 **New to AI coding** | [CVF Essentials](docs/GET_STARTED.md#-solo-developer---5-phút) → Learn 4 phases → Run 1 example |
-| 💻 **Solo developer** | [Web UI](docs/tutorials/web-ui-setup.md) → Pick template → Build project |
-| 👥 **Team lead** | [Team Setup](docs/guides/team-setup.md) → Governance → Collaboration |
-| 🏢 **Enterprise** | [Enterprise Guide](docs/guides/enterprise.md) → Pilot → Scale |
-| 🛠️ **Want to contribute** | [Contributing Guide](v1.0/CONTRIBUTING.md) → Pick issue → Submit PR |
-
-**→ [📖 Comprehensive Getting Started Guide](docs/GET_STARTED.md)**
-
----
-
-## 📚 Documentation
-
-| Category | Links |
-|----------|-------|
-| **🎓 Learn** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance](docs/concepts/governance-model.md) |
-| **🚀 Build** | [First Project](docs/tutorials/first-project.md) · [Web UI](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
-| **📖 Reference** | [Skills](docs/concepts/skill-system.md) · [Risk Model](docs/concepts/risk-model.md) · [Version History](docs/concepts/version-evolution.md) |
-| **🧩 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 141 skills across 12 domains |
-| **🤖 Agent Skills** | [34 Agent Tools](governance/skill-library/registry/agent-skills/INDEX.md) · [Usage Guide v1](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-agentic-skills.md) · [Usage Guide v2](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/using-new-skills-v2.md) · [Agentic Patterns](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agentic-patterns.md) |
-| **⚙️ Tools** | [Python SDK](EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) · [Governance Toolkit](governance/) · [Core Compatibility Baseline](docs/CVF_CORE_COMPAT_BASELINE.md) · [Bug History](docs/BUG_HISTORY.md) · [Architecture Decisions](docs/CVF_ARCHITECTURE_DECISIONS.md) |
-
-**Full docs:** [vibcode.netlify.app/docs](https://vibcode.netlify.app/docs) | [GitHub Wiki](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/wiki)
-
----
-
-## 🏗️ Architecture
-
-CVF has 5 layers — an AI Safety Runtime that protects non-coders:
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  🛡️ SAFETY UI (Layer 4)      — Non-Coder Safety         │
-│     v1.7.2                    — Safety Dashboard          │
-│     v2.0 🆕                   — Non-Coder Safety Runtime  │
-│     ModeMapper + IntentInterpreter + ConfirmationEngine  │
-├─────────────────────────────────────────────────────────┤
-│  🔌 ADAPTER HUB (Layer 5)    — Runtime Adapter Contracts  │
-│     v1.7.3                    — Multi-runtime AI safety   │
-│     OpenClaw | PicoClaw | ZeroClaw | Nano                │
-├─────────────────────────────────────────────────────────┤
-│  🌐 PLATFORM (Layer 3)       — Web UI, Agent Chat         │
-│     v1.6 Agent Platform      — Production runtime          │
-│  🔐 v1.6.1                   — Enterprise Governance Engine│
-├─────────────────────────────────────────────────────────┤
-│  ⚙️ SAFETY RUNTIME (Layer 2.5) — Kernel Architecture      │
-│     v1.7.1                   — 5-Layer Safety Kernel       │
-│     v1.8 🆕                   — Safety Hardening (42 tests)│
-│     v1.9 🆕                   — Deterministic Replay (29t) │
-├─────────────────────────────────────────────────────────┤
-│  🧠 INTELLIGENCE (Layer 2)    — Agent Behavior Control    │
-│     v1.7                     — Reasoning, Entropy, Prompt  │
-│  🛠️ TOOLS                     — Scoring, UAT, Validation  │
-│     v1.3, v1.2.1 🆕           — External Integration (29t)│
-│     governance/               — Python scripts, CI/CD     │
-├─────────────────────────────────────────────────────────┤
-│  📖 CORE (Layer 1)            — Principles, Phases, Skills│
-│     v1.0, v1.1, v1.2         — Rules + 141 Skills         │
-│     → Always needed. Start here.                           │
-└─────────────────────────────────────────────────────────┘
-```
-
-**Read more:** [CVF Positioning](docs/CVF_POSITIONING.md)
-
----
-
-## 🎯 Version Guide
-
-**Confused about versions? Use this:**
-
-- **v1.0** - Core baseline (simple, fast)
-- **v1.1** - Extended control (input/output specs, multi-agent)
-- **v1.2** - Skill governance (registry, risk model)
-- **v1.2.1** 📦 - **External Integration** (skill supply chain pipeline, policy decision engine, audit ledger) — **29 tests**
-- **v1.3** - SDK & Tooling (Python, CLI, CI/CD)
-- **v1.5** - UX & End-User orientation (FROZEN)
-- **v1.5.2** - Skill Library (141 skills, ACTIVE)
-- **v1.6** ⭐ - Agent Platform (AI chat, multi-agent, governance)
-- **v1.6.1** 🔐 - Governance Engine (enterprise enforcement, audit, CI/CD)
-- **v1.7** 🧠 - Controlled Intelligence (agent behavior control, prompt sanitizer)
-- **v1.7.1** ⚙️ - Safety Runtime (5-layer kernel: domain lock, contract, contamination, refusal, creative)
-- **v1.7.2** 🛡️ - Safety Dashboard (non-coder risk view)
-- **v1.7.3** 🔌 - Runtime Adapter Hub (multi-runtime contracts, explainability, NLP policy)
-- **v1.8** 🔐 - **Safety Hardening** (7-phase state machine, mutation budget, deterministic rollback, drift monitor) — **42 tests**
-- **v1.9** 📋 - **Deterministic Reproducibility** (ExecutionRecord, context freezer, replay engine, forensic audit) — **29 tests**
-- **v2.0** 🎯 - **Non-Coder Safety Runtime** (ModeMapper, IntentInterpreter, ConfirmationEngine, stability override) — **32 tests**
-
-**Which should you use?**
-
-→ See: [Version Comparison](docs/VERSION_COMPARISON.md) | [Decision Tree](docs/cheatsheets/version-picker.md)
-
----
-
-## 🧪 Examples
-
-### Example 1: Simple Task Manager (v1.0)
-
-```bash
-# 1. Follow 4 phases
-Phase A: Define requirements
-Phase B: Design architecture  
-Phase C: Let AI generate code
-Phase D: Review & approve
-
-# 2. Use checklist
-v1.0/governance/PHASE_C_GATE.md
-```
-
-### Example 2: API Backend (v1.6 Web UI)
-
-```bash
-# 1. Start web UI
-npm run dev
-
-# 2. Templates → "API Backend"
-
-# 3. Fill form:
-- Database: PostgreSQL
-- Auth: JWT
-- Risk Level: R2
-
-# 4. Export → Use with Claude/GPT
-
-# 5. Validate with Self-UAT
-```
-
-### Example 3: Enterprise Project (v1.1 + v1.3)
-
-```bash
-# 1. Set governance policy
-governance/toolkit/02_POLICY/master-policy.md
-
-# 2. Define phases with contracts
-v1.1/architecture/CONTRACT_SPECIFICATION.md
-
-# 3. Use SDK for automation
-python -m cvf.cli validate-skill my-skill.yaml
-
-# 4. Integrate with CI/CD
-.github/workflows/cvf-validation.yml
-```
-
----
-
-## 🌟 Testimonials
-
-> "CVF transformed how our team uses AI. We're 40% faster but with better quality."
-> — **Team Lead, SaaS Startup**
-
-> "The governance toolkit gives us confidence to use AI in production."
-> — **CTO, Enterprise Company**
-
-> "Finally, a framework that respects both speed AND control."
-> — **Solo Developer**
-
-_(Want to share your story? [Submit testimonial](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues/new?template=testimonial.md))_
-
----
-
-## 📈 Project Status
-
-| Metric | Status |
-|--------|--------|
-| **Version** | 2.0.0 (Mar 2026) |
-| **Stability** | Production-ready — 6/6 integration sprints complete |
-| **Quality Snapshot (2026-03-05)** | Lint: 0 errors · Web Tests: 1764 passing · Kernel+Extension Tests: **183 passing** |
-| **Coverage Snapshot (2026-02-26)** | Web: Stmts 93.05% · Kernel: Stmts 96.45% Br 91.41% Fn 99.09% Ln 97.01% |
-| **Extension Test Breakdown** | v1.7.1: 51 · v1.8: 42 · v1.9: 29 · v2.0: 32 · v1.2.1: 29 |
-| **Skills** | 141 skills across 12 domains + 34 agent tools |
-| **AI Safety** | Kernel active — 5-layer pipeline, anti-bypass, forensic tracing |
-| **Active Development** | Yes — extensions + Web UI enhancements |
-| **Community** | Building — Discord coming soon |
-
-**Current Status:** 9.4/10 ([independent assessment](docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md)) | Kernel: 8.5/10 ([Antigravity assessment](docs/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md))
-- ✅ **Excellent:** Technical quality (9.3/10), AI Safety (9.4/10), Testing (9.5/10), Governance (9/10)
-- ✅ **Kernel:** 183 tests total, 96%+ coverage, anti-bypass Symbol guard, 12-step pipeline
-- ✅ **Complete:** Sprint 1-6 integration, full test coverage, bilingual i18n
-- ✅ **NEW:** v1.8 Safety Hardening, v1.9 Deterministic Reproducibility, v2.0 Non-Coder Runtime, v1.2.1 External Integration
-- ⏳ **Pending:** Real-world validation, Community, npm/PyPI packages
-
-[→ Get Started](docs/GET_STARTED.md)
+### Mandatory Guards
+
+| Guard | Trigger | Required |
+|-------|---------|----------|
+| [Bug Documentation](governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md) | `fix:` commits | Entry in [`BUG_HISTORY.md`](docs/BUG_HISTORY.md) |
+| [Test Documentation](governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md) | `test:` commits | Batch in [`CVF_INCREMENTAL_TEST_LOG.md`](docs/CVF_INCREMENTAL_TEST_LOG.md) |
+| [Test Log Rotation](governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md) | Log exceeds threshold | Rotate to `docs/logs/` |
+| [Conformance Trace Rotation](governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md) | Trace exceeds threshold | Rotate to `docs/reviews/*/logs/` |
+| [ADR Guard](governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md) | `feat(governance):`, `refactor(arch):` | Entry in [`CVF_ARCHITECTURE_DECISIONS.md`](docs/CVF_ARCHITECTURE_DECISIONS.md) |
+| [Document Naming](governance/toolkit/05_OPERATION/CVF_DOCUMENT_NAMING_GUARD.md) | New governance docs | `CVF_` prefix convention |
+| [Document Storage](governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md) | New docs in `docs/` | Per [`docs/INDEX.md`](docs/INDEX.md) taxonomy |
+| [Diagram Validation](governance/toolkit/05_OPERATION/CVF_DIAGRAM_VALIDATION_GUARD.md) | New State Machines or Workflows | Must pass `diagram.validator.ts` check |
+| [Workspace Isolation](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md) | Opening projects in CVF root | Sibling workspace only |
+| [Depth Audit](governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md) | Roadmap deepening | Explicit scoring before continuing |
+| [Architecture Check](governance/toolkit/05_OPERATION/CVF_ARCHITECTURE_CHECK_GUARD.md) | New version/layer/extension | Read KB, state Layer + overlap |
+| [Test Depth Classification](governance/toolkit/05_OPERATION/CVF_TEST_DEPTH_CLASSIFICATION_GUARD.md) | Test count reports | T1–T4 tier breakdown required |
+| [Python Automation Size](governance/toolkit/05_OPERATION/CVF_PYTHON_AUTOMATION_SIZE_GUARD.md) | Scripts in `scripts/`, `governance/compat/` | Stay within size thresholds |
+| [Conformance Performance](governance/toolkit/05_OPERATION/CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md) | Wave 1 closure | Sequential runner, shared bootstrap |
+| [Extension Versioning](governance/toolkit/05_OPERATION/CVF_EXTENSION_VERSIONING_GUARD.md) | New extension folder in `EXTENSIONS/` | `CVF_{STREAM}_v{major}.{minor}_{NAME}/` format |
+| [Guard Registry](governance/toolkit/05_OPERATION/CVF_GUARD_REGISTRY_GUARD.md) | New guard created | Register in README.md + CVF_CORE_KNOWLEDGE_BASE.md |
+| [Ecosystem Governance Contract](governance/toolkit/05_OPERATION/CVF_ECOSYSTEM_GOVERNANCE_CONTRACT.md) | Governance state changes | Single-source contract for all extensions |
+| [Skill Rollout Policy](governance/toolkit/05_OPERATION/CVF_SKILL_ROLLOUT_POLICY.md) | Skill promotion/deprecation | 5-stage rollout lifecycle |
+| [Durable Execution Policy](governance/toolkit/05_OPERATION/CVF_DURABLE_EXECUTION_POLICY.md) | Long-running workflows | Checkpoint/recovery/replay coordination |
+
+### Extension Rules (Non-negotiable)
+
+- **R1** — Existing CVF structure is always the standard. No redefinition without ADR + approval.
+- **R2** — New additions must be compatible and additive — upgrade, never replace.
+- **R3** — Naming and storage must follow CVF conventions. See [`CVF_CORE_KNOWLEDGE_BASE.md` Section XIV](docs/CVF_CORE_KNOWLEDGE_BASE.md).
+
+### Release Navigation
+
+- [Release Manifest](docs/reference/CVF_RELEASE_MANIFEST.md) — Current operational release state
+- [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md) — Module scope
+- [Enterprise Evidence Pack](docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md) — Audit/release/onboarding packets
+
+</details>
 
 ---
 
@@ -484,35 +329,25 @@ _(Want to share your story? [Submit testimonial](https://github.com/Blackbird081
 
 We welcome contributions!
 
-**Ways to contribute:**
 - 📖 Improve documentation
 - 🐛 Report bugs
 - ✨ Suggest features
 - 🧩 Add new skills
 - 🌐 Translate content
-- 💬 Help in discussions
 
 **Get started:**
+
 1. Read [Contributing Guide](v1.0/CONTRIBUTING.md)
 2. Check [Good First Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-3. Star this repo and watch for community updates
+3. Star this repo ⭐
 
 ---
 
-## 📞 Support & Community
+## 📞 Support
 
-### Get Help
-
-- 🔍 **Search:** [Documentation](docs/GET_STARTED.md) | [Troubleshooting](docs/cheatsheets/troubleshooting.md)
-- 💬 **Chat:** Discord (coming soon)
-- 🐛 **Issues:** [GitHub Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
-- 📧 **Email:** Coming soon
-
-### Stay Updated
-
-- ⭐ **Star this repo** to get updates
-- 📢 **Follow development** via [CHANGELOG.md](CHANGELOG.md)
-- 📢 **Changelog:** [CHANGELOG.md](CHANGELOG.md)
+- 🔍 [Documentation](docs/GET_STARTED.md) | [Troubleshooting](docs/cheatsheets/troubleshooting.md)
+- 🐛 [GitHub Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
+- 📢 [CHANGELOG](CHANGELOG.md)
 
 ---
 
@@ -524,29 +359,16 @@ We welcome contributions!
 - ❌ Commercial use — not allowed
 - ❌ Modify and redistribute — not allowed
 
-> The entire repository (including v1.0, v1.1, v1.2+, EXTENSIONS/, docs/, governance/, tools/) is licensed under CC BY-NC-ND 4.0.
-
----
-
-## 🙏 Acknowledgments
-
-Built with love by [@Blackbird081](https://github.com/Blackbird081) and [contributors](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/graphs/contributors).
-
-Inspired by real-world challenges in AI-assisted development.
-
 ---
 
 <div align="center">
 
-### 🎯 Remember
+**🙏 Built by [@Blackbird081](https://github.com/Blackbird081)**
 
-**CVF doesn't help you go faster.**<br>
-**CVF helps you avoid going wrong.**
-
-[⭐ Star on GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF) · [📖 Get Started](docs/GET_STARTED.md) · [💬 Join Community](https://discord.gg/cvf)
+[⭐ Star on GitHub](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF) · [📖 Get Started](docs/GET_STARTED.md) · [🚀 Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md)
 
 </div>
 
 ---
 
-*Last updated: March 5, 2026 | Version 2.0.0 | [Documentation](docs/GET_STARTED.md)*
+*Last updated: March 9, 2026 | Version 2.0.0 | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) | [Full Docs](docs/INDEX.md)*

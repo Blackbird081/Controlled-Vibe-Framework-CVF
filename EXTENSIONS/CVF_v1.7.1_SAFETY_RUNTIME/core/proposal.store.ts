@@ -19,3 +19,13 @@ export function getProposal(id: string): StoredProposal {
 
   return proposal
 }
+
+export function hasProposal(id: string): boolean {
+  return Boolean(proposalStore[id])
+}
+
+export function _clearAllProposals() {
+  for (const id of Object.keys(proposalStore)) {
+    delete proposalStore[id]
+  }
+}

@@ -358,7 +358,7 @@ git push origin feature/your-feature-name
 - [Governance Toolkit](../governance/toolkit/) - Comprehensive
 - [Skill Library](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills
 - [Version History](concepts/version-evolution.md) - Evolution
-- [Architecture](CVF_ARCHITECTURE_DIAGRAMS.md) - Technical specs
+- [Architecture](reference/CVF_ARCHITECTURE_DIAGRAMS.md) - Technical specs
 
 ---
 

@@ -9,7 +9,9 @@
 
 ## 1. PURPOSE
 
-Every test execution batch MUST be logged in `docs/CVF_INCREMENTAL_TEST_LOG.md`.
+Every test execution batch MUST be logged in the active window at `docs/CVF_INCREMENTAL_TEST_LOG.md`.
+
+Historical windows may be rotated into `docs/logs/`, but the active root file remains the canonical entrypoint and current working log.
 
 This ensures:
 - **No blind spots**: every test decision is traceable
@@ -21,7 +23,7 @@ This ensures:
 ## 2. RULE
 
 > ⚠️ **NON-NEGOTIABLE:**  
-> Any commit that runs tests (`test:`, `test(`, `chore(test)`) or changes test files (`*.test.ts`, `*.test.tsx`, `*.spec.ts`) **MUST** have a corresponding batch entry in `docs/CVF_INCREMENTAL_TEST_LOG.md` within the same push.
+> Any commit that runs tests (`test:`, `test(`, `chore(test)`) or changes test files (`*.test.ts`, `*.test.tsx`, `*.spec.ts`) **MUST** have a corresponding batch entry in the active incremental test log window `docs/CVF_INCREMENTAL_TEST_LOG.md` within the same push.
 
 ### What Triggers This Guard?
 
@@ -40,7 +42,7 @@ This ensures:
 
 ## 3. REQUIRED LOG FORMAT
 
-Each batch entry in `CVF_INCREMENTAL_TEST_LOG.md` MUST include:
+Each batch entry in the active incremental test log chain MUST include:
 
 | Field | Required? | Description |
 |-------|:---------:|-------------|
@@ -120,8 +122,9 @@ This guard works in tandem with:
 - `check_core_compat.py` — Decides WHAT to test (focused vs full)
 - `check_bug_doc_compat.py` — Ensures bug fixes are documented
 - `check_test_doc_compat.py` — Ensures test results are logged ← **THIS GUARD**
+- `check_incremental_test_log_rotation.py` — Ensures the active test log window stays reviewable
 - `CONTINUOUS_GOVERNANCE_LOOP.md` — Test without documentation is a drift trigger
-- `CVF_CORE_COMPAT_BASELINE.md` — Baseline reference for test decisions
+- `docs/baselines/CVF_CORE_COMPAT_BASELINE.md` — Baseline reference for test decisions
 
 ### Complete Compat Gate Pipeline
 

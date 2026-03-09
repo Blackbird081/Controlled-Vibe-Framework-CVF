@@ -1,10 +1,17 @@
-import type { LifecycleInput, ExecutionResult, PolicyDecision } from "../types/index"
+import type {
+  LifecycleInput,
+  ExecutionResult,
+  LifecycleCheckpoint,
+  PolicyDecision,
+  ResumeCheckpointInput,
+} from "../types/index"
 import { executePolicy } from "../policy/policy.executor"
 import { recordExecution } from "../policy/execution.journal"
 import { getPolicy } from "../policy/policy.registry"
 import { nextState } from "../policy/approval.state-machine"
-import { saveProposal } from "./proposal.store"
+import { getProposal, saveProposal } from "./proposal.store"
 import { setState, getState } from "./state.store"
+import { getCheckpoint, saveCheckpoint } from "./checkpoint.store"
 import { runWithinBoundary } from "./execution.boundary"
 import type { EventBus } from "./event-bus"
 
@@ -21,60 +28,140 @@ export class LifecycleEngine {
 
   async submit(input: LifecycleInput): Promise<ExecutionResult> {
     return runWithinBoundary(async () => {
-      const policy = getPolicy(input.policyVersion)
-
-      // 1️⃣ Save proposal immutable
-      saveProposal({
-        id: input.id,
-        payload: input.payload,
-        policyVersion: policy.version,
-        policyHash: policy.hash,
-        createdAt: Date.now(),
-      })
-
-      // 2️⃣ Initialize state
-      setState(input.id, "proposed")
-
-      // 🔔 Emit: proposal submitted
-      this.eventBus?.emitTyped("proposal:submitted", {
-        proposalId: input.id,
-        source: "lifecycle",
-        action: "submit",
-      })
-
-      // 3️⃣ Validate phase
-      const validatedState = nextState("proposed", "pending")
-      setState(input.id, validatedState)
-
-      // 4️⃣ Execute policy
-      const decision: PolicyDecision = executePolicy(input.payload, input.policyVersion)
-
-      const newState = nextState(validatedState, decision)
-      setState(input.id, newState)
-
-      // 🔔 Emit: proposal decided
-      this.eventBus?.emitTyped("proposal:decided", {
-        proposalId: input.id,
-        decision,
-        policyVersion: policy.version,
-      })
-
-      // 5️⃣ Record journal (production only)
-      if (!input.simulateOnly) {
-        recordExecution(input.id, policy.version, policy.hash, decision)
-
-        // 🔔 Emit: proposal executed
-        this.eventBus?.emitTyped("proposal:executed", {
-          proposalId: input.id,
-          result: decision,
-        })
-      }
-
-      return {
-        status: decision,
-        state: getState(input.id),
-        policyHash: policy.hash,
-      }
+      const checkpoint = this.createCheckpointInternal(input, "submit")
+      return this.resumeInternal({ proposalId: checkpoint.proposalId })
     })
+  }
+
+  async createCheckpoint(input: LifecycleInput): Promise<LifecycleCheckpoint> {
+    return runWithinBoundary(async () => {
+      return this.createCheckpointInternal(input, "checkpoint")
+    })
+  }
+
+  async resumeFromCheckpoint(proposalId: string): Promise<ExecutionResult> {
+    return runWithinBoundary(async () => {
+      return this.resumeInternal({ proposalId })
+    })
+  }
+
+  async resumeSession(input: ResumeCheckpointInput): Promise<ExecutionResult> {
+    return runWithinBoundary(async () => {
+      return this.resumeInternal(input)
+    })
+  }
+
+  private createCheckpointInternal(
+    input: LifecycleInput,
+    action: "submit" | "checkpoint"
+  ): LifecycleCheckpoint {
+    const policy = getPolicy(input.policyVersion)
+
+    saveProposal({
+      id: input.id,
+      payload: input.payload,
+      policyVersion: policy.version,
+      policyHash: policy.hash,
+      createdAt: Date.now(),
+    })
+
+    setState(input.id, "proposed")
+
+    this.eventBus?.emitTyped("proposal:submitted", {
+      proposalId: input.id,
+      source: "lifecycle",
+      action,
+    })
+
+    const validatedState = nextState("proposed", "pending")
+    setState(input.id, validatedState)
+
+    const checkpoint: LifecycleCheckpoint = {
+      proposalId: input.id,
+      state: validatedState,
+      policyVersion: policy.version,
+      policyHash: policy.hash,
+      simulateOnly: Boolean(input.simulateOnly),
+      checkpointedAt: Date.now(),
+      sessionId: input.sessionId,
+      resumeToken: this.createResumeToken(input.id, policy.version),
+      resumeCount: 0,
+    }
+
+    saveCheckpoint(checkpoint)
+    return checkpoint
+  }
+
+  private resumeInternal(input: ResumeCheckpointInput): ExecutionResult {
+    const checkpoint = getCheckpoint(input.proposalId)
+    const proposal = getProposal(input.proposalId)
+    const currentState = getState(input.proposalId)
+
+    this.assertResumeAccess(checkpoint, input)
+
+    if (currentState !== "validated") {
+      throw new Error(`Cannot resume proposal from state=${currentState ?? "missing"}`)
+    }
+
+    const decision: PolicyDecision = executePolicy(proposal.payload, checkpoint.policyVersion)
+    const newState = nextState(currentState, decision)
+    setState(input.proposalId, newState)
+
+    checkpoint.resumeCount += 1
+    checkpoint.lastResumedAt = Date.now()
+    saveCheckpoint(checkpoint)
+
+    this.eventBus?.emitTyped("proposal:resumed", {
+      proposalId: input.proposalId,
+      sessionId: checkpoint.sessionId,
+      resumeCount: checkpoint.resumeCount,
+    })
+
+    this.eventBus?.emitTyped("proposal:decided", {
+      proposalId: input.proposalId,
+      decision,
+      policyVersion: checkpoint.policyVersion,
+    })
+
+    if (!checkpoint.simulateOnly) {
+      recordExecution(
+        input.proposalId,
+        checkpoint.policyVersion,
+        checkpoint.policyHash,
+        decision,
+        {
+          sessionId: checkpoint.sessionId,
+          checkpointedAt: checkpoint.checkpointedAt,
+          lastResumedAt: checkpoint.lastResumedAt,
+          resumeCount: checkpoint.resumeCount,
+          resumeAuthorized: true,
+        }
+      )
+
+      this.eventBus?.emitTyped("proposal:executed", {
+        proposalId: input.proposalId,
+        result: decision,
+      })
+    }
+
+    return {
+      status: decision,
+      state: getState(input.proposalId),
+      policyHash: checkpoint.policyHash,
+    }
+  }
+
+  private assertResumeAccess(checkpoint: LifecycleCheckpoint, input: ResumeCheckpointInput) {
+    if (input.resumeToken && input.resumeToken !== checkpoint.resumeToken) {
+      throw new Error("Resume token mismatch")
+    }
+
+    if (checkpoint.sessionId && input.sessionId && input.sessionId !== checkpoint.sessionId) {
+      throw new Error("Resume session mismatch")
+    }
+  }
+
+  private createResumeToken(proposalId: string, policyVersion: string): string {
+    return `${proposalId}:${policyVersion}:${Date.now()}`
   }
 }

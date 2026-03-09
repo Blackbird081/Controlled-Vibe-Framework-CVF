@@ -48,6 +48,7 @@ PATCH versions are used for sub-extensions within a minor version (e.g., v1.7.1,
 | v1.7.2 | Safety Dashboard | ✅ STABLE | Feb 24, 2026 |
 | v1.7.3 | Runtime Adapter Hub | ✅ ACTIVE | Feb 28, 2026 |
 | v1.8.1 | Adaptive Observability Runtime | 🆕 NEW | Mar 05, 2026 |
+| v3.0 | Core Foundation Primitives — Git for AI | 🔵 DRAFT (branch cvf-next) | Mar 06, 2026 |
 
 ---
 
@@ -194,9 +195,17 @@ Examples:
 
 ## Canonical Status
 
-This document is the **single source of truth** for CVF versioning.
+This document is the **single source of truth for versioning policy**.
 
-All other interpretations are **not valid**.
+Operational release-state questions must use:
+- `docs/reference/CVF_RELEASE_MANIFEST.md`
+- `docs/reference/CVF_MODULE_INVENTORY.md`
+- `docs/reference/CVF_MATURITY_MATRIX.md`
+
+This split exists to avoid mixing:
+- naming/version rules
+- actual local baseline readiness
+- draft vs active vs local-only operational state
 
 ---
 

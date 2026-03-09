@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifySessionCookie } from '@/lib/middleware-auth';
 import { governanceEvaluate } from '@/lib/governance-engine';
+import { resolveGovernanceBindingsForAgent } from '@/lib/server/governance-binding-resolver';
 import type { GovernanceEvaluateRequest } from '@/types/governance-engine';
 
 function isBuildPhase(phase?: string): boolean {
@@ -62,6 +63,7 @@ export async function POST(request: NextRequest) {
         };
 
         const result = await governanceEvaluate(payload);
+        const governanceBindings = resolveGovernanceBindingsForAgent(body.agent_id);
 
         if (!result) {
             return NextResponse.json(
@@ -74,7 +76,11 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        return NextResponse.json({ success: true, data: result });
+        return NextResponse.json({
+            success: true,
+            data: result,
+            governance_bindings: governanceBindings,
+        });
     } catch (error) {
         console.error('[API] /governance/evaluate error:', error);
         return NextResponse.json(

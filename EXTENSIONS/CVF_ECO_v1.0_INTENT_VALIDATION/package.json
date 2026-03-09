@@ -1,0 +1,15 @@
+{
+  "name": "@cvf/intent-validation",
+  "version": "1.0.0",
+  "description": "CVF Intent Validation — Triple-S Vibe → Policy translator",
+  "main": "src/intent.pipeline.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.3.0",
+    "vite": "^5.1.0"
+  }
+}

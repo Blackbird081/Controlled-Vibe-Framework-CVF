@@ -14,6 +14,158 @@ on:
     branches: [ main, develop ]
 
 jobs:
+  docs-governance-compat:
+    name: Docs Governance Compat
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce docs governance guard
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_docs_governance_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  incremental-test-log-rotation:
+    name: Incremental Test Log Rotation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce incremental test log rotation guard
+        run: |
+          python governance/compat/check_incremental_test_log_rotation.py --enforce
+
+  conformance-trace-rotation:
+    name: Conformance Trace Rotation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce conformance trace rotation guard
+        run: |
+          python governance/compat/check_conformance_trace_rotation.py --enforce
+
+  python-automation-size:
+    name: Python Automation Size
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce governed Python automation size guard
+        run: |
+          python governance/compat/check_python_automation_size.py --enforce
+
+  release-manifest-consistency:
+    name: Release Manifest Consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce release manifest consistency
+        run: |
+          python governance/compat/check_release_manifest_consistency.py --enforce
+
+  enterprise-evidence-pack:
+    name: Enterprise Evidence Pack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce enterprise evidence pack consistency
+        run: |
+          python governance/compat/check_enterprise_evidence_pack.py --packet docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md --enforce
+
+  conformance-artifact-consistency:
+    name: Conformance Artifact Consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Rebuild conformance artifacts
+        run: |
+          python scripts/run_cvf_cross_extension_conformance.py
+
+      - name: Enforce conformance artifact consistency
+        run: |
+          python governance/compat/check_conformance_artifact_consistency.py --enforce
+
+  conformance-golden-diff:
+    name: Conformance Golden Diff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Rebuild canonical conformance artifacts
+        run: |
+          python scripts/run_cvf_cross_extension_conformance.py
+
+      - name: Enforce conformance golden diff
+        run: |
+          python governance/compat/check_conformance_golden_diff.py --enforce
+
+  conformance-release-grade:
+    name: Conformance Release Grade
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Rebuild canonical conformance artifacts
+        run: |
+          python scripts/run_cvf_cross_extension_conformance.py
+
+      - name: Enforce conformance release-grade gate
+        run: |
+          python scripts/run_cvf_conformance_release_gate.py
+
   markdown-lint:
     name: Markdown Linting
     runs-on: ubuntu-latest
@@ -125,13 +277,22 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [markdown-lint, test, integration-test, documentation-build, registry-validate]
+    needs: [docs-governance-compat, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, release-manifest-consistency, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
     if: always()
     
     steps:
       - name: Check status
         run: |
           echo "All checks completed"
+          echo "Docs governance compat: ${{ needs.docs-governance-compat.result }}"
+          echo "Incremental test log rotation: ${{ needs.incremental-test-log-rotation.result }}"
+          echo "Conformance trace rotation: ${{ needs.conformance-trace-rotation.result }}"
+          echo "Python automation size: ${{ needs.python-automation-size.result }}"
+          echo "Release manifest consistency: ${{ needs.release-manifest-consistency.result }}"
+          echo "Enterprise evidence pack: ${{ needs.enterprise-evidence-pack.result }}"
+          echo "Conformance artifact consistency: ${{ needs.conformance-artifact-consistency.result }}"
+          echo "Conformance golden diff: ${{ needs.conformance-golden-diff.result }}"
+          echo "Conformance release grade: ${{ needs.conformance-release-grade.result }}"
           echo "Markdown lint: ${{ needs.markdown-lint.result }}"
           echo "Unit tests: ${{ needs.test.result }}"
           echo "Integration tests: ${{ needs.integration-test.result }}"

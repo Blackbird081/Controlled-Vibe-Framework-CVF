@@ -19,6 +19,7 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
+      ".prisma/*": ["./node_modules/.prisma/*"],
       "@cvf/core/*": ["./core/*"],
       "@cvf/policy/*": ["./policy/*"],
       "@cvf/ai/*": ["./ai/*"],

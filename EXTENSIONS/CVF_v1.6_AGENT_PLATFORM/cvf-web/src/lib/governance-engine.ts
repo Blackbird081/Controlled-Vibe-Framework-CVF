@@ -15,6 +15,7 @@ import type {
     GovernanceHealthStatus,
     GovernanceEvaluateRequest,
     GovernanceEvaluateResult,
+    GovernanceEvaluateRouteResult,
     GovernanceApproveRequest,
     GovernanceApproveResult,
     GovernanceLedgerResult,
@@ -138,6 +139,54 @@ export async function governanceEvaluate(
         { method: 'POST', body: payload },
     );
     return res?.data ?? null;
+}
+
+/**
+ * POST /api/governance/evaluate
+ * Uses the local Next.js route so server-side registry/UAT bindings can be resolved.
+ */
+export async function governanceEvaluateWithBindings(
+    payload: GovernanceEvaluateRequest,
+): Promise<GovernanceEvaluateRouteResult | null> {
+    const cfg = getConfig();
+    if (!cfg.enabled) return null;
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), cfg.timeout);
+
+    try {
+        const res = await fetch('/api/governance/evaluate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload),
+            signal: controller.signal,
+        });
+
+        clearTimeout(timer);
+
+        if (!res.ok) {
+            return null;
+        }
+
+        const json = await res.json() as {
+            success?: boolean;
+            data?: GovernanceEvaluateResult;
+            governance_bindings?: GovernanceEvaluateRouteResult['governanceBindings'];
+        };
+
+        if (!json.success || !json.data) {
+            return null;
+        }
+
+        return {
+            result: json.data,
+            governanceBindings: json.governance_bindings,
+        };
+    } catch {
+        clearTimeout(timer);
+        return null;
+    }
 }
 
 /**

@@ -3,10 +3,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 // ─── Mock governance-engine ─────────────────────────────────────────
 
 const mockGovernanceEvaluate = vi.fn();
+const mockGovernanceEvaluateWithBindings = vi.fn();
 const mockIsEnabled = vi.fn(() => false);
 
 vi.mock('@/lib/governance-engine', () => ({
     governanceEvaluate: (...args: unknown[]) => mockGovernanceEvaluate(...args),
+    governanceEvaluateWithBindings: (...args: unknown[]) => mockGovernanceEvaluateWithBindings(...args),
     isGovernanceEngineEnabled: () => mockIsEnabled(),
 }));
 
@@ -21,6 +23,7 @@ import {
 describe('enforcement — dual-mode', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        mockGovernanceEvaluateWithBindings.mockResolvedValue(null);
     });
 
     afterEach(() => {
@@ -71,34 +74,46 @@ describe('enforcement — dual-mode', () => {
 
         it('uses server-side when engine enabled and server responds', async () => {
             mockIsEnabled.mockReturnValue(true);
-            mockGovernanceEvaluate.mockResolvedValue({
-                report: {
-                    status: 'APPROVED',
-                    risk_score: 0.1,
-                    cvf_risk_level: 'R0',
-                    cvf_quality: {
-                        correctness: 0.95,
-                        safety: 0.9,
-                        alignment: 0.88,
-                        quality: 0.92,
-                        overall: 0.91,
-                        grade: 'A',
-                    },
-                    cvf_enforcement: {
-                        action: 'ALLOW',
-                        phase_authority: {
-                            phase: 'BUILD',
-                            can_approve: true,
-                            can_override: false,
-                            max_risk: 'R3',
+            mockGovernanceEvaluateWithBindings.mockResolvedValue({
+                result: {
+                    report: {
+                        status: 'APPROVED',
+                        risk_score: 0.1,
+                        cvf_risk_level: 'R0',
+                        cvf_quality: {
+                            correctness: 0.95,
+                            safety: 0.9,
+                            alignment: 0.88,
+                            quality: 0.92,
+                            overall: 0.91,
+                            grade: 'A',
+                        },
+                        cvf_enforcement: {
+                            action: 'ALLOW',
+                            phase_authority: {
+                                phase: 'BUILD',
+                                can_approve: true,
+                                can_override: false,
+                                max_risk: 'R3',
+                            },
                         },
                     },
+                    execution_record: {
+                        request_id: 'test-1',
+                        artifact_id: 'web-execution',
+                        risk_score: 0.1,
+                        status: 'completed',
+                    },
                 },
-                execution_record: {
-                    request_id: 'test-1',
-                    artifact_id: 'web-execution',
-                    risk_score: 0.1,
-                    status: 'completed',
+                governanceBindings: {
+                    registryBinding: {
+                        agentId: 'AI_ASSISTANT_V1',
+                        certificationStatus: 'ACTIVE',
+                    },
+                    uatBinding: {
+                        status: 'PASS',
+                        lastRunAt: '2026-03-01T10:00:00Z',
+                    },
                 },
             });
 
@@ -108,6 +123,11 @@ describe('enforcement — dual-mode', () => {
             expect(result.cvfQuality?.grade).toBe('A');
             expect(result.cvfEnforcement?.action).toBe('ALLOW');
             expect(result.serverResult).toBeDefined();
+            expect(result.governanceStateSnapshot.source).toBe('server');
+            expect(result.governanceStateSnapshot.phase).toBe('BUILD');
+            expect(result.governanceStateSnapshot.approval.status).toBe('APPROVED');
+            expect(result.governanceStateSnapshot.registry.agentId).toBe('AI_ASSISTANT_V1');
+            expect(result.governanceStateSnapshot.uat.status).toBe('VALIDATED');
         });
 
         it('blocks early when BUILD is missing skill preflight declaration', async () => {
@@ -127,34 +147,37 @@ describe('enforcement — dual-mode', () => {
 
         it('maps MANUAL_REVIEW → NEEDS_APPROVAL', async () => {
             mockIsEnabled.mockReturnValue(true);
-            mockGovernanceEvaluate.mockResolvedValue({
-                report: {
-                    status: 'MANUAL_REVIEW',
-                    risk_score: 0.7,
-                    cvf_enforcement: {
-                        action: 'NEEDS_APPROVAL',
-                        phase_authority: {
-                            phase: 'BUILD',
-                            can_approve: true,
-                            can_override: false,
-                            max_risk: 'R3',
+            mockGovernanceEvaluateWithBindings.mockResolvedValue({
+                result: {
+                    report: {
+                        status: 'MANUAL_REVIEW',
+                        risk_score: 0.7,
+                        cvf_enforcement: {
+                            action: 'NEEDS_APPROVAL',
+                            phase_authority: {
+                                phase: 'BUILD',
+                                can_approve: true,
+                                can_override: false,
+                                max_risk: 'R3',
+                            },
+                        },
+                        cvf_quality: {
+                            correctness: 0.6,
+                            safety: 0.5,
+                            alignment: 0.7,
+                            quality: 0.6,
+                            overall: 0.58,
+                            grade: 'D',
                         },
                     },
-                    cvf_quality: {
-                        correctness: 0.6,
-                        safety: 0.5,
-                        alignment: 0.7,
-                        quality: 0.6,
-                        overall: 0.58,
-                        grade: 'D',
-                    },
+                    execution_record: { request_id: 'test-2' },
                 },
-                execution_record: { request_id: 'test-2' },
             });
 
             const result = await evaluateEnforcementAsync(baseInput);
             expect(result.source).toBe('server');
             expect(result.status).toBe('NEEDS_APPROVAL');
+            expect(result.governanceStateSnapshot.approval.status).toBe('PENDING');
         });
 
         it('maps REJECTED → BLOCK', async () => {
@@ -247,6 +270,7 @@ describe('enforcement — dual-mode', () => {
 
         it('falls back to client-side when server returns null', async () => {
             mockIsEnabled.mockReturnValue(true);
+            mockGovernanceEvaluateWithBindings.mockResolvedValue(null);
             mockGovernanceEvaluate.mockResolvedValue(null);
 
             const result = await evaluateEnforcementAsync(baseInput);
@@ -256,6 +280,7 @@ describe('enforcement — dual-mode', () => {
 
         it('falls back to client-side on network error', async () => {
             mockIsEnabled.mockReturnValue(true);
+            mockGovernanceEvaluateWithBindings.mockResolvedValue(null);
             mockGovernanceEvaluate.mockRejectedValue(new Error('Connection refused'));
 
             const result = await evaluateEnforcementAsync(baseInput);
@@ -265,17 +290,20 @@ describe('enforcement — dual-mode', () => {
 
         it('passes through requestId and artifactId', async () => {
             mockIsEnabled.mockReturnValue(true);
-            mockGovernanceEvaluate.mockResolvedValue({
-                report: {
-                    status: 'APPROVED',
-                    cvf_enforcement: { action: 'ALLOW', phase_authority: {} },
-                    cvf_quality: { overall: 0.9, grade: 'A' },
+            mockGovernanceEvaluateWithBindings.mockResolvedValue({
+                result: {
+                    report: {
+                        status: 'APPROVED',
+                        cvf_enforcement: { action: 'ALLOW', phase_authority: {} },
+                        cvf_quality: { overall: 0.9, grade: 'A' },
+                    },
+                    execution_record: { request_id: 'custom-id' },
                 },
-                execution_record: { request_id: 'custom-id' },
             });
 
             await evaluateEnforcementAsync({
                 ...baseInput,
+                agentId: 'AI_ASSISTANT_V1',
                 requestId: 'custom-id',
                 artifactId: 'custom-artifact',
                 cvfPhase: 'C',
@@ -287,10 +315,11 @@ describe('enforcement — dual-mode', () => {
                 },
             });
 
-            expect(mockGovernanceEvaluate).toHaveBeenCalledWith(
+            expect(mockGovernanceEvaluateWithBindings).toHaveBeenCalledWith(
                 expect.objectContaining({
                     request_id: 'custom-id',
                     artifact_id: 'custom-artifact',
+                    agent_id: 'AI_ASSISTANT_V1',
                     cvf_phase: 'C',
                     cvf_risk_level: 'R2',
                     skill_preflight: expect.objectContaining({

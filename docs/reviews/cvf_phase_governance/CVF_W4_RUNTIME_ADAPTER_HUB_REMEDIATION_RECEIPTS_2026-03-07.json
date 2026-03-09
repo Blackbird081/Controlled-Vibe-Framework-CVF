@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "2026-03-07",
+  "adapter": "RUNTIME_ADAPTER_HUB_RELEASE_EVIDENCE",
+  "receiptCount": 3,
+  "receipts": [
+    {
+      "receiptId": "RESUMED:proposal-runtime-adapter-hub-001:validate_resume_token",
+      "action": "RESUMED",
+      "sourceProposalId": "proposal-runtime-adapter-hub-001",
+      "step": "validate_resume_token",
+      "recordedAt": 1772863200000
+    },
+    {
+      "receiptId": "RESUMED:proposal-runtime-adapter-hub-001:emit_release_evidence",
+      "action": "RESUMED",
+      "sourceProposalId": "proposal-runtime-adapter-hub-001",
+      "step": "emit_release_evidence",
+      "recordedAt": 1772863201000
+    },
+    {
+      "receiptId": "INTERRUPTED:proposal-runtime-adapter-hub-001:stage_local_receipt_log",
+      "action": "INTERRUPTED",
+      "sourceProposalId": "proposal-runtime-adapter-hub-001",
+      "step": "stage_local_receipt_log",
+      "recordedAt": 1772863202000
+    }
+  ]
+}

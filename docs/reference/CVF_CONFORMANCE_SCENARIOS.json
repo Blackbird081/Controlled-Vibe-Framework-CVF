@@ -1,0 +1,595 @@
+{
+  "schemaVersion": "2026-03-07",
+  "wave": "WAVE_1",
+  "requestId": "REQ-20260307-002",
+  "scenarios": [
+    {
+      "scenarioId": "CF-001",
+      "title": "Core compatibility gate",
+      "objective": "verify current batch does not require full regression by frozen-core rules",
+      "workdir": ".",
+      "command": ["python", "governance/compat/check_core_compat.py", "--base", "HEAD~1", "--head", "HEAD"]
+    },
+    {
+      "scenarioId": "CF-002",
+      "title": "Phase Governance Protocol",
+      "objective": "verify development-governance runtime baseline still passes",
+      "workdir": "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL",
+      "command": ["npm", "test"]
+    },
+    {
+      "scenarioId": "CF-003",
+      "title": "Core Git for AI",
+      "objective": "verify layer 0 primitives still pass current test suite",
+      "workdir": "EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI",
+      "command": ["npm", "test"]
+    },
+    {
+      "scenarioId": "CF-004",
+      "title": "Agent Platform phase authority",
+      "objective": "verify phase/risk authority layer in web runtime",
+      "workdir": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
+      "command": ["npx", "vitest", "run", "src/lib/phase-authority.test.ts", "--reporter", "verbose"]
+    },
+    {
+      "scenarioId": "CF-005",
+      "title": "Agent response governance",
+      "objective": "verify governance post-check layer in web runtime",
+      "workdir": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
+      "command": ["npx", "vitest", "run", "src/lib/governance-post-check.test.ts", "--reporter", "verbose"]
+    },
+    {
+      "scenarioId": "CF-006",
+      "title": "Release manifest consistency",
+      "objective": "verify Phase 5 operational release references remain aligned",
+      "workdir": ".",
+      "command": ["python", "governance/compat/check_release_manifest_consistency.py", "--enforce"]
+    },
+    {
+      "scenarioId": "CF-007",
+      "title": "Enterprise evidence pack",
+      "objective": "verify Phase 6 canonical packet remains valid",
+      "workdir": ".",
+      "command": ["python", "governance/compat/check_enterprise_evidence_pack.py", "--packet", "docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md", "--enforce"]
+    },
+    {
+      "scenarioId": "CF-008",
+      "title": "Skill Governance Engine",
+      "objective": "verify the v1.2.2 skill governance runtime and approval flow still pass",
+      "workdir": "EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE",
+      "command": ["npm", "test"]
+    },
+    {
+      "scenarioId": "CF-009",
+      "title": "Skill misuse refusal paths",
+      "objective": "verify revoked skill and forbidden operation misuse paths are blocked",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v122_cached_conformance.py", "--scenario-id", "CF-009"]
+    },
+    {
+      "scenarioId": "CF-010",
+      "title": "Durable rollback and recovery",
+      "objective": "verify rollback and recovery state are recorded across failure and force-rollback paths",
+      "workdir": "EXTENSIONS/CVF_v1.8_SAFETY_HARDENING",
+      "command": ["npx", "vitest", "run", "tests/durable.recovery.conformance.test.ts"]
+    },
+    {
+      "scenarioId": "CF-011",
+      "title": "Deterministic replay baseline",
+      "objective": "verify exact replay, drift detection, and fail-closed behavior in v1.9 deterministic reproducibility",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-011"]
+    },
+    {
+      "scenarioId": "CF-012",
+      "title": "Checkpoint and resume baseline",
+      "objective": "verify proposals can pause after validation and resume from a stored checkpoint",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v171_cached_conformance.py", "--scenario-id", "CF-012"]
+    },
+    {
+      "scenarioId": "CF-013",
+      "title": "Deprecated skill runtime gate",
+      "objective": "verify deprecated skills are filtered, blocked at load time, and routed to refusal",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v122_cached_conformance.py", "--scenario-id", "CF-013"]
+    },
+    {
+      "scenarioId": "CF-014",
+      "title": "Deprecated skill successor migration",
+      "objective": "verify deprecated skills can migrate to an active successor through runtime registry metadata",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v122_cached_conformance.py", "--scenario-id", "CF-014"]
+    },
+    {
+      "scenarioId": "CF-015",
+      "title": "Skill dependency and phase compatibility",
+      "objective": "verify runtime loading fails closed when dependencies are blocked or the current phase is incompatible",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v122_cached_conformance.py", "--scenario-id", "CF-015"]
+    },
+    {
+      "scenarioId": "CF-016",
+      "title": "Skill upgrade orchestration",
+      "objective": "verify multi-hop successor migration resolves safely and fails closed on cycles or policy-incompatible targets",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v122_cached_conformance.py", "--scenario-id", "CF-016"]
+    },
+    {
+      "scenarioId": "CF-017",
+      "title": "Session-aware checkpoint resume",
+      "objective": "verify long-running session resumes require the correct checkpoint token and session identity",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v171_cached_conformance.py", "--scenario-id", "CF-017"]
+    },
+    {
+      "scenarioId": "CF-018",
+      "title": "Session audit linkage",
+      "objective": "verify authorized session resumes persist checkpoint linkage into the execution journal and unauthorized resumes leave no audit record",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v171_cached_conformance.py", "--scenario-id", "CF-018"]
+    },
+    {
+      "scenarioId": "CF-019",
+      "title": "Cross-extension audit replay bridge",
+      "objective": "verify a v1.7.1 audit-linked execution record can seed v1.9 replay exactly, detect drift, and fail closed for unauthorized resume linkage",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-019"]
+    },
+    {
+      "scenarioId": "CF-020",
+      "title": "Cross-extension workflow resume bridge",
+      "objective": "verify a validated v1.7.1 checkpoint can resume into v1.9 replay only with matching session/token and fails closed for non-resumable checkpoint state",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-020"]
+    },
+    {
+      "scenarioId": "CF-021",
+      "title": "Cross-extension recovery orchestration",
+      "objective": "verify v1.8 rollback records block cross-extension resume, validated checkpoints resume when no rollback is present, and snapshot mismatches fail closed",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-021"]
+    },
+    {
+      "scenarioId": "CF-022",
+      "title": "Cross-extension failure classification",
+      "objective": "verify runtime interruption, policy refusal, and system abort are classified distinctly and do not attempt workflow resume",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-022"]
+    },
+    {
+      "scenarioId": "CF-023",
+      "title": "Cross-extension remediation policy",
+      "objective": "verify each orchestration outcome emits a remediation policy with the expected severity, approval requirement, and next-step playbook",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-023"]
+    },
+    {
+      "scenarioId": "CF-024",
+      "title": "Cross-extension remediation execution",
+      "objective": "verify safe remediation steps execute automatically for resumable/interrupted outcomes and fail closed for human-gated outcomes",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-024"]
+    },
+    {
+      "scenarioId": "CF-025",
+      "title": "Cross-extension remediation adapter",
+      "objective": "verify remediation adapters receive machine-readable step execution for safe outcomes and remain unused for blocked human-gated outcomes",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-025"]
+    },
+    {
+      "scenarioId": "CF-026",
+      "title": "Cross-extension remediation file adapter",
+      "objective": "verify safe remediation steps can persist runtime receipts to a local file-backed adapter artifact while blocked outcomes leave no artifact behind",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-026"]
+    },
+    {
+      "scenarioId": "CF-027",
+      "title": "Cross-extension remediation export path",
+      "objective": "verify the file-backed remediation artifact can be exported into a canonical markdown evidence log and linked into the release-grade artifact path",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_remediation_export_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-028",
+      "title": "Cross-extension release-evidence remediation adapter",
+      "objective": "verify a release-grade remediation adapter can emit both machine-readable and markdown evidence directly at runtime while human-gated outcomes still stay fail-closed",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v19_cached_conformance.py", "--scenario-id", "CF-028"]
+    },
+    {
+      "scenarioId": "CF-029",
+      "title": "Runtime Adapter Hub release-evidence adapter",
+      "objective": "verify the release-evidence path now extends into CVF_v1.7.3_RUNTIME_ADAPTER_HUB so another runtime family can emit compatible remediation evidence artifacts",
+      "workdir": "EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB",
+      "command": ["npx", "vitest", "run", "tests/release-evidence-adapter.conformance.test.ts"]
+    },
+    {
+      "scenarioId": "CF-030",
+      "title": "Multi-runtime remediation evidence manifest",
+      "objective": "verify remediation evidence from the current runtime families can be assembled into a canonical manifest and validated through the release packet / enterprise evidence chain",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_multi_runtime_evidence_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-031",
+      "title": "Runtime evidence manifest release metadata",
+      "objective": "verify the multi-runtime remediation evidence manifest stays aligned with CVF_RELEASE_MANIFEST.md and the linked release packet",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_runtime_evidence_release_gate.py"]
+    },
+    {
+      "scenarioId": "CF-032",
+      "title": "Safety Hardening evidence family",
+      "objective": "verify the v1.8 safety hardening rollback/recovery line is present as a third runtime family in the multi-runtime evidence manifest",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v18_runtime_family_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-033",
+      "title": "Runtime evidence release policy coverage",
+      "objective": "verify the linked release packet posture remains semantically compatible with the releaseLine and maturity mix of the current runtime evidence families",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_runtime_evidence_policy_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-034",
+      "title": "Safety Runtime evidence family",
+      "objective": "verify the v1.7.1 safety runtime checkpoint/session line is present as a fourth runtime family in the multi-runtime evidence manifest",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v171_runtime_family_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-035",
+      "title": "Production-candidate packet policy coverage",
+      "objective": "verify the runtime evidence chain also supports a canonical production-candidate review packet, not only the local-ready packet posture",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_production_candidate_packet_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-036",
+      "title": "Internal audit packet policy coverage",
+      "objective": "verify the runtime evidence chain also supports a canonical internal-audit packet posture with audit-only semantics and non-approval decision state",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_internal_audit_packet_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-037",
+      "title": "Enterprise onboarding packet policy coverage",
+      "objective": "verify the runtime evidence chain also supports a canonical enterprise-onboarding packet posture with onboarding-only semantics and non-approval decision state",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_enterprise_onboarding_packet_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-038",
+      "title": "Agent Platform evidence family",
+      "objective": "verify the v1.6 agent platform governance snapshot/enforcement line is present as a fifth runtime family in the multi-runtime evidence manifest",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v16_runtime_family_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-039",
+      "title": "Governance Engine evidence family",
+      "objective": "verify the v1.6.1 governance engine policy/enforcement/approval line is present as a sixth runtime family in the multi-runtime evidence manifest",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v161_runtime_family_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-040",
+      "title": "Skill Governance evidence family",
+      "objective": "verify the v1.2.2 skill governance filtering/phase-gating/migration line is present as a seventh runtime family in the multi-runtime evidence manifest",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v122_runtime_family_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-041",
+      "title": "Phase Governance evidence family",
+      "objective": "verify the v1.1.1 phase governance integrity/pipeline/audit line is present as an eighth runtime family in the multi-runtime evidence manifest",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_v111_runtime_family_conformance.py"]
+    },
+    {
+      "scenarioId": "CF-042",
+      "title": "Cross-family packet coverage",
+      "objective": "verify the canonical release packet explicitly reflects runtime-family count, release-line coverage, maturity-band coverage, and deferred-family policy for the current multi-runtime manifest",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_cached_conformance.py", "--scenario-id", "CF-042"]
+    },
+    {
+      "scenarioId": "CF-043",
+      "title": "Secondary packet cross-family coverage",
+      "objective": "verify the production-candidate, internal-audit, and enterprise-onboarding packet postures also carry explicit cross-family runtime coverage aligned with the current multi-runtime manifest",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_cached_conformance.py", "--scenario-id", "CF-043"]
+    },
+    {
+      "scenarioId": "CF-044",
+      "title": "Cross-family deferred policy stratification",
+      "objective": "verify local and secondary packet postures all expose consistent deferred-family counts, release-line defer lists, maturity-based defer lists, promotion-eligible families, and packet-specific mixed-maturity posture",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_deferred_policy.py"]
+    },
+    {
+      "scenarioId": "CF-045",
+      "title": "Cross-family promotion readiness policy",
+      "objective": "verify every supported packet posture classifies runtime families consistently as reviewable, auditable, onboarding-visible, or strictly deferred from the same multi-runtime manifest",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_promotion_readiness.py"]
+    },
+    {
+      "scenarioId": "CF-046",
+      "title": "Cross-family promotion exception policy",
+      "objective": "verify every supported packet posture states explicitly that promotion remains blocked by default and identifies which families require a separate exception or approval path before promotion",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_promotion_policy.py"]
+    },
+    {
+      "scenarioId": "CF-047",
+      "title": "Cross-family approval decision policy",
+      "objective": "verify every supported packet posture states explicitly which families are approval-eligible versus approval-blocked, rather than inferring that decision from promotion or visibility semantics",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_decision_policy.py"]
+    },
+    {
+      "scenarioId": "CF-048",
+      "title": "Cross-family transition policy",
+      "objective": "verify every supported packet posture states explicitly which families can enter a future promotion transition path and which remain transition-blocked pending stronger approval conditions",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_transition_policy.py"]
+    },
+    {
+      "scenarioId": "CF-049",
+      "title": "Cross-family transition prerequisites",
+      "objective": "verify every supported packet posture states explicitly which families remain transition-prerequisite candidates and which concrete evidence threshold must be met before they can become promotable",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_transition_prerequisites.py"]
+    },
+    {
+      "scenarioId": "CF-050",
+      "title": "Cross-family transition threshold satisfaction",
+      "objective": "verify every supported packet posture states explicitly whether transition-prerequisite families are currently threshold-satisfied or still pending, instead of implying fulfillment from prerequisite declaration alone",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_transition_threshold_satisfaction.py"]
+    },
+    {
+      "scenarioId": "CF-051",
+      "title": "Cross-family transition fulfillment evidence",
+      "objective": "verify every supported packet posture states explicitly whether transition fulfillment evidence is actually attached, instead of implying fulfillment from threshold satisfaction semantics alone",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_transition_fulfillment.py"]
+    },
+    {
+      "scenarioId": "CF-052",
+      "title": "Cross-family approval artifact binding",
+      "objective": "verify every supported packet posture states explicitly which approval artifact, if any, is bound as the decision basis for transition fulfillment",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_binding.py"]
+    },
+    {
+      "scenarioId": "CF-053",
+      "title": "Cross-family approval artifact fulfillment",
+      "objective": "verify every supported packet posture states explicitly whether the bound approval artifact is already fulfillment-sufficient or still pending a stronger approval-strength decision",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_fulfillment.py"]
+    },
+    {
+      "scenarioId": "CF-054",
+      "title": "Cross-family approval artifact strength",
+      "objective": "verify every supported packet posture states explicitly which approval strength is required for transition use and which strength is currently observed in the bound artifact or packet posture",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_strength.py"]
+    },
+    {
+      "scenarioId": "CF-055",
+      "title": "Cross-family approval artifact authority",
+      "objective": "verify every supported packet posture states explicitly which authority issued the current approval artifact or posture and whether that authority is review-only, approval-authorized, audit-only, or onboarding-only",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_authority.py"]
+    },
+    {
+      "scenarioId": "CF-056",
+      "title": "Cross-family approval artifact validity lifecycle",
+      "objective": "verify every supported packet posture states explicitly whether the current approval artifact is active, expired, invalidated, or still unbound for transition use",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_validity.py"]
+    },
+    {
+      "scenarioId": "CF-057",
+      "title": "Cross-family approval artifact invalidation evidence",
+      "objective": "verify every supported packet posture states explicitly whether revocation evidence, expiry evidence, and invalidation-source binding are present, absent, or still unbound for the current approval artifact",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_invalidation_evidence.py"]
+    },
+    {
+      "scenarioId": "CF-058",
+      "title": "Cross-family approval artifact external validity",
+      "objective": "verify every supported packet posture states explicitly whether expiry timestamp checks, freshness state, and external invalidation authority are bound, absent, or still unbound for the current approval artifact",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_validity.py"]
+    },
+    {
+      "scenarioId": "CF-059",
+      "title": "Cross-family approval artifact external authority trust",
+      "objective": "verify every supported packet posture states explicitly whether externally scoped approval authority trust remains unbound, is satisfied by a self-issued governing authority, or is not applicable for the current packet posture",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_authority_trust.py"]
+    },
+    {
+      "scenarioId": "CF-060",
+      "title": "Cross-family approval artifact external issuer policy",
+      "objective": "verify every supported packet posture states explicitly whether external issuer attestation is unbound or self-attested and whether third-party issuer trust remains disabled or not applicable for the current packet posture",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_issuer_policy.py"]
+    },
+    {
+      "scenarioId": "CF-061",
+      "title": "Cross-family approval artifact external issuer verification",
+      "objective": "verify every supported packet posture states explicitly whether external issuer attestation has actually been verified at the current governing boundary and whether third-party issuer trust enforcement remains disabled or not applicable for the current packet posture",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_issuer_verification.py"]
+    },
+    {
+      "scenarioId": "CF-062",
+      "title": "Cross-family approval artifact external proof binding",
+      "objective": "verify every supported packet posture states explicitly whether issuer-attestation proof is bound to the current packet and whether external revocation authority has actually been verified at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_proof_binding.py"]
+    },
+    {
+      "scenarioId": "CF-063",
+      "title": "Cross-family approval artifact external proof verification",
+      "objective": "verify every supported packet posture states explicitly whether issuer-attestation proof has actually been verified and which proof-issuer scope is allowed at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_proof_verification.py"]
+    },
+    {
+      "scenarioId": "CF-064",
+      "title": "Cross-family approval artifact external proof attestation",
+      "objective": "verify every supported packet posture states explicitly which attestation evidence backs the current issuer proof and whether third-party proof trust remains denied or not applicable at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_proof_attestation.py"]
+    },
+    {
+      "scenarioId": "CF-065",
+      "title": "Cross-family approval artifact external revocation validation",
+      "objective": "verify every supported packet posture states explicitly whether external revocation authority validation is complete and whether third-party revocation trust remains denied or not applicable at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_validation.py"]
+    },
+    {
+      "scenarioId": "CF-066",
+      "title": "Cross-family approval artifact external revocation attestation",
+      "objective": "verify every supported packet posture states explicitly which external revocation proof evidence is in force and whether third-party revocation attestation remains denied or not applicable at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_attestation.py"]
+    },
+    {
+      "scenarioId": "CF-067",
+      "title": "Cross-family approval artifact external revocation issuer authority",
+      "objective": "verify every supported packet posture states explicitly which revocation issuer authority is bound and whether revocation attestation verification is complete or not applicable at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_authority.py"]
+    },
+    {
+      "scenarioId": "CF-068",
+      "title": "Cross-family approval artifact external revocation issuer attestation",
+      "objective": "verify every supported packet posture states explicitly which revocation issuer attestation proof is bound and whether third-party revocation issuer trust remains denied or not applicable at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_attestation.py"]
+    },
+    {
+      "scenarioId": "CF-069",
+      "title": "Cross-family approval artifact external revocation issuer verification",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof has actually been verified and whether third-party revocation issuer trust enforcement remains denied or not applicable at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_verification.py"]
+    },
+    {
+      "scenarioId": "CF-070",
+      "title": "Cross-family approval artifact external revocation issuer proof attestation",
+      "objective": "verify every supported packet posture states explicitly which revocation issuer proof attestation evidence is bound and whether third-party revocation issuer trust validation remains denied or not applicable at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_attestation.py"]
+    },
+    {
+      "scenarioId": "CF-071",
+      "title": "Cross-family approval artifact external revocation issuer proof validity",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof attestation evidence is still fresh and whether third-party revocation issuer attestation remains denied or not applicable at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_validity.py"]
+    },
+    {
+      "scenarioId": "CF-072",
+      "title": "Cross-family approval artifact external revocation issuer proof external validity",
+      "objective": "verify every supported packet posture states explicitly which expiry timestamp and invalidation source govern revocation issuer proof semantics at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_external_validity.py"]
+    },
+    {
+      "scenarioId": "CF-073",
+      "title": "Cross-family approval artifact external revocation issuer proof authority validation",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof timestamps have actually been verified and whether the invalidation authority itself has been validated at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_validation.py"]
+    },
+    {
+      "scenarioId": "CF-074",
+      "title": "Cross-family approval artifact external revocation issuer proof authority provenance",
+      "objective": "verify every supported packet posture states explicitly which authority provenance chain and invalidation-authority provenance chain govern revocation issuer proof semantics at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance.py"]
+    },
+    {
+      "scenarioId": "CF-075",
+      "title": "Cross-family approval artifact external revocation issuer proof authority attestation",
+      "objective": "verify every supported packet posture states explicitly which authority attestation evidence and invalidation-authority attestation evidence govern revocation issuer proof semantics at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_attestation.py"]
+    },
+    {
+      "scenarioId": "CF-076",
+      "title": "Cross-family approval artifact external revocation issuer proof authority attestation verification",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof authority attestation and invalidation-authority attestation have actually been verified at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_attestation_verification.py"]
+    },
+    {
+      "scenarioId": "CF-077",
+      "title": "Cross-family approval artifact external revocation issuer proof authority provenance verification",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof authority provenance and invalidation-authority provenance have actually been verified at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_verification.py"]
+    },
+    {
+      "scenarioId": "CF-078",
+      "title": "Cross-family approval artifact external revocation issuer proof authority provenance attestation verification",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof authority provenance attestation and invalidation-authority provenance attestation have actually been verified at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_verification.py"]
+    },
+    {
+      "scenarioId": "CF-079",
+      "title": "Cross-family approval artifact external revocation issuer proof authority provenance attestation freshness",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof authority provenance attestation and invalidation-authority provenance attestation remain fresh at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_freshness.py"]
+    },
+    {
+      "scenarioId": "CF-080",
+      "title": "Cross-family approval artifact external revocation issuer proof authority provenance attestation provenance",
+      "objective": "verify every supported packet posture states explicitly which provenance chain governs revocation issuer proof authority provenance attestation and invalidation-authority provenance attestation at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance.py"]
+    },
+    {
+      "scenarioId": "CF-081",
+      "title": "Cross-family approval artifact external revocation issuer proof authority provenance attestation provenance verification",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof authority provenance attestation provenance and invalidation-authority provenance attestation provenance have actually been verified at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_verification.py"]
+    },
+    {
+      "scenarioId": "CF-082",
+      "title": "Cross-family approval artifact external revocation issuer proof authority provenance attestation provenance freshness",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof authority provenance attestation provenance and invalidation-authority provenance attestation provenance remain fresh at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_freshness.py"]
+    },
+    {
+      "scenarioId": "CF-083",
+      "title": "Cross-family approval artifact external revocation issuer proof authority provenance attestation provenance freshness proof",
+      "objective": "verify every supported packet posture states explicitly which freshness-proof evidence governs revocation issuer proof authority provenance attestation provenance and invalidation-authority provenance attestation provenance at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_freshness_proof.py"]
+    },
+    {
+      "scenarioId": "CF-084",
+      "title": "Cross-family approval artifact external revocation issuer proof authority provenance attestation provenance freshness proof verification",
+      "objective": "verify every supported packet posture states explicitly whether revocation issuer proof authority provenance attestation provenance freshness proof and invalidation-authority provenance attestation provenance freshness proof have actually been verified at the current governing boundary",
+      "workdir": ".",
+      "command": ["python", "scripts/run_cvf_packet_posture_gate_conformance.py", "--gate", "governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_freshness_proof_verification.py"]
+    }
+  ]
+}

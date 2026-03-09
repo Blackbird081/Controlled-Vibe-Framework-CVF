@@ -27,7 +27,7 @@ For best understanding, read in this order:
 ## See Also
 
 - [CVF Manifesto](../../v1.0/CVF_MANIFESTO.md) — Original manifesto
-- [Architecture Diagrams](../CVF_ARCHITECTURE_DIAGRAMS.md) — Visual overview
+- [Architecture Diagrams](../reference/CVF_ARCHITECTURE_DIAGRAMS.md) — Visual overview
 - [Guides](../guides/) — Role-based guides
 - [Tutorials](../tutorials/) — Hands-on walkthroughs
 

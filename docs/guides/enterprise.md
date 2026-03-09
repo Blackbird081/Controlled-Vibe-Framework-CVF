@@ -6,6 +6,11 @@
 **Reading time:** 20 minutes  
 **Recommended:** v1.1 + v1.2 + v1.3 + v1.6
 
+Enterprise evidence shortcut:
+- current packet structure: `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md`
+- control mapping: `docs/reference/CVF_CONTROL_TO_ARTIFACT_MAPPING.md`
+- packet export: `python scripts/export_cvf_release_packet.py --output <packet-path>`
+
 ---
 
 ## Why CVF for Enterprise?
@@ -419,7 +424,7 @@ A: CVF v1.6 supports English and Vietnamese. Core specs (INPUT_SPEC, OUTPUT_SPEC
 - 🛠️ [Set Up Web UI for Teams](../tutorials/web-ui-setup.md)
 - 🧪 [Create Custom Skills](../tutorials/custom-skills.md)
 - 📋 [See Case Studies](../case-studies/)
-- 📐 [Architecture Diagrams](../CVF_ARCHITECTURE_DIAGRAMS.md)
+- 📐 [Architecture Diagrams](../reference/CVF_ARCHITECTURE_DIAGRAMS.md)
 
 ---
 

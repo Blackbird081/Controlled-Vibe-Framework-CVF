@@ -6,6 +6,8 @@ import { verifySessionCookie } from '@/lib/middleware-auth';
 import { applySafetyFilters } from '@/lib/safety';
 import { getRateLimiter } from '@/lib/rate-limit';
 import { checkBudget } from '@/lib/budget';
+import { createWebGuardEngine, buildWebGuardContext, type GuardPipelineResult } from '@/lib/guard-runtime-adapter';
+import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
 
 function isBuildPhase(phase?: string): boolean {
     if (!phase) return false;
@@ -178,10 +180,78 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Execute AI request
-        const result = await executeAI(provider, apiKey, userPrompt);
+        // ── PRE-GUARDS: Run guard runtime pipeline (invisible to user) ──
+        const guardEngine = createWebGuardEngine();
+        const guardContext = buildWebGuardContext({
+            requestId: (rawBody as Record<string, unknown>).requestId as string || undefined,
+            phase: body.cvfPhase,
+            riskLevel: body.cvfRiskLevel,
+            role: isServiceAllowed ? 'OPERATOR' : 'HUMAN',
+            intent: body.intent,
+        });
+        const guardResult: GuardPipelineResult = guardEngine.evaluate(guardContext);
 
-        return NextResponse.json({ ...result, enforcement });
+        if (guardResult.finalDecision === 'BLOCK') {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'We need to adjust your request for better results.',
+                    provider,
+                    model: 'guard-blocked',
+                    enforcement,
+                    guardResult,
+                },
+                { status: 400 }
+            );
+        }
+
+        // ── EXECUTE AI with auto-retry on output validation failure ──
+        let aiResult = await executeAI(provider, apiKey, userPrompt);
+        let outputValidation: ValidationResult | undefined;
+        const retryState: RetryState = { attempt: 0, previousIssues: [] };
+
+        if (aiResult.success && aiResult.output) {
+            outputValidation = validateOutput({
+                output: aiResult.output,
+                intent: body.intent!,
+                templateName: body.templateName,
+                templateCategory: template?.category,
+            });
+
+            // Auto-retry loop (max 2 retries, invisible to user)
+            while (outputValidation.decision === 'RETRY') {
+                const retryDecision = shouldRetry(outputValidation, retryState);
+                if (!retryDecision.retry) break;
+
+                retryState.previousIssues = [...outputValidation.issues];
+                retryState.attempt++;
+
+                const retryPrompt = retryDecision.adjustedHint
+                    ? `${userPrompt}\n\n[Improvement note: ${retryDecision.adjustedHint}]`
+                    : userPrompt;
+
+                aiResult = await executeAI(provider, apiKey, retryPrompt);
+                if (!aiResult.success || !aiResult.output) break;
+
+                outputValidation = validateOutput({
+                    output: aiResult.output,
+                    intent: body.intent!,
+                    templateName: body.templateName,
+                    templateCategory: template?.category,
+                });
+            }
+        }
+
+        return NextResponse.json({
+            ...aiResult,
+            enforcement,
+            guardResult,
+            outputValidation: outputValidation ? {
+                qualityHint: outputValidation.qualityHint,
+                issues: outputValidation.issues,
+                retryAttempts: retryState.attempt,
+            } : undefined,
+        });
 
     } catch (error) {
         console.error('Execute API error:', error);

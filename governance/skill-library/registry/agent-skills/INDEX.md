@@ -187,8 +187,8 @@ The following 6 skills were added based on analysis of claude-code-templates pat
 | AGT-019 | Anthropic progressive disclosure pattern | Dynamic skill loading & composability |
 | AGT-020 | claude-code-templates analytics dashboard | Real-time session monitoring |
 
-For full analysis: [Claude Code Templates Analysis Report](../../../../docs/CVF_CLAUDE_CODE_TEMPLATES_ANALYSIS_2026-02-18.md)
-For progressive disclosure guide: [Progressive Disclosure Guide](../../../../docs/CVF_PROGRESSIVE_DISCLOSURE_GUIDE.md)
+For full analysis: [Claude Code Templates Analysis Report](../../../../docs/reference/CVF_CLAUDE_CODE_TEMPLATES_ANALYSIS_2026-02-18.md)
+For progressive disclosure guide: [Progressive Disclosure Guide](../../../../docs/reference/CVF_PROGRESSIVE_DISCLOSURE_GUIDE.md)
 
 ---
 
@@ -203,7 +203,7 @@ The following 4 skills were added based on analysis of claudekit-skills (mrgooni
 | AGT-023 | claudekit-skills/debugging (4 sub-skills) | 4-phase systematic debugging with verification gates |
 | AGT-024 | claudekit-skills/mcp-management + subagent | MCP tool isolation via dedicated subagent |
 
-For full analysis: [ClaudeKit Skills Analysis Report](../../../../docs/CVF_CLAUDEKIT_SKILLS_ANALYSIS_2026-02-18.md)
+For full analysis: [ClaudeKit Skills Analysis Report](../../../../docs/reference/CVF_CLAUDEKIT_SKILLS_ANALYSIS_2026-02-18.md)
 
 ---
 

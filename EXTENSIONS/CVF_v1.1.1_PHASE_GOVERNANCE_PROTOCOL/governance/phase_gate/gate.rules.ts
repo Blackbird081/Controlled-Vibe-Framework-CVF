@@ -19,19 +19,19 @@ import { GateCheckResult } from "./gate.result";
  * Rationale: different execution orders can produce inconsistent results,
  * undermining the deterministic guarantee of CVF governance.
  *
- *  1. state_enforcement   — state machine validity (cycles + dead-ends)
- *  2. diagram_validation  — diagram-state consistency
- *  3. structural_diff     — architecture drift detection
- *  4. scenario_simulator  — behavioral path simulation
- *  5. artifact_integrity  — hash-based trust boundary check  (v1.1.2)
+ *  1. artifact_integrity  — hash-based trust boundary check / fail-fast trust boundary
+ *  2. state_enforcement   — state machine validity (cycles + dead-ends)
+ *  3. diagram_validation  — diagram-state consistency
+ *  4. structural_diff     — architecture drift detection
+ *  5. scenario_simulator  — behavioral path simulation
  *  6. reports             — audit log + governance report generation
  */
 export const GOVERNANCE_PIPELINE = [
+  "artifact_integrity",
   "state_enforcement",
   "diagram_validation",
   "structural_diff",
   "scenario_simulator",
-  "artifact_integrity",
   "reports",
 ] as const;
 

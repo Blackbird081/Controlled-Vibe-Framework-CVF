@@ -7,7 +7,7 @@ import { useLanguage, LanguageToggle } from '@/lib/i18n';
 function LoginPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const from = searchParams.get('from') || '/';
+    const from = searchParams.get('from') || '/home';
     const { language } = useLanguage();
     const isVi = language === 'vi';
 

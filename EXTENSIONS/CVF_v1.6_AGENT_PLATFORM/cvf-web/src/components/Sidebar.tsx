@@ -137,7 +137,7 @@ export default function Sidebar({
                 {/* Logo + User Info */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
                     <Link
-                        href="/"
+                        href="/home"
                         onClick={() => handleNav('home')}
                         className="flex items-center gap-2"
                     >

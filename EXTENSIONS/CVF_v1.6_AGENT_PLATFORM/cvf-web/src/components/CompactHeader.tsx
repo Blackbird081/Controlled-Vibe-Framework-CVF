@@ -20,7 +20,7 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <SidebarToggle onClick={onSidebarOpen} />
-                            <Link href="/" onClick={onLogoClick}>
+                            <Link href="/home" onClick={onLogoClick}>
                                 <h1 className="text-lg font-bold flex items-center gap-2 text-gray-900 dark:text-white">
                                     <span>🎯</span>
                                     <span>CVF v1.6</span>

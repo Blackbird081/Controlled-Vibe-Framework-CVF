@@ -619,7 +619,7 @@ export default function ToolkitGuidePage() {
                 {/* Bottom CTA */}
                 <div className="text-center mt-8 sm:mt-12 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
                     <Link
-                        href="/"
+                        href="/home"
                         className="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-semibold hover:opacity-90 transition-opacity w-full sm:w-auto text-center"
                     >
                         {isVi ? '🚀 Bắt đầu sử dụng CVF' : '🚀 Start using CVF'}

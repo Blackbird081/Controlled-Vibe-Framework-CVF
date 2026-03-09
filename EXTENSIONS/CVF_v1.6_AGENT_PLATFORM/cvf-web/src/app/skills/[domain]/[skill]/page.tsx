@@ -70,7 +70,7 @@ export default function SkillDetailPage() {
             <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
                 <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
                     <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-                        <Link href="/" className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600">
+                        <Link href="/home" className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600">
                             {t('skills.backToCvf')}
                         </Link>
                     </div>
@@ -87,7 +87,7 @@ export default function SkillDetailPage() {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
                 <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-                    <Link href="/" className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600">
+                    <Link href="/home" className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600">
                         {t('skills.backToCvf')}
                     </Link>
                 </div>

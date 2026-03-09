@@ -14,7 +14,7 @@ export default function HelpPage() {
                 {/* Header */}
                 <div className="text-center mb-12">
                     <Link
-                        href="/"
+                        href="/home"
                         className="inline-block mb-6 text-purple-400 hover:text-purple-300 transition-colors"
                     >
                         {t('help.backHome')}
@@ -194,7 +194,7 @@ export default function HelpPage() {
                 {/* CTA */}
                 <div className="text-center mt-12">
                     <Link
-                        href="/"
+                        href="/home"
                         className="inline-block px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
                     >
                         {content.header.cta}

@@ -10,14 +10,14 @@
 ## 1. DASHBOARD — Toàn cảnh 1 phút
 
 ```
-TRACK I:  Hardening (Close W1-W7)          █████████░ 90%   ← W1,W3,W4 CLOSED
+TRACK I:  Hardening (Close W1-W7)          ██████████ 100%  ← ALL CLOSED ✅ W2 RELEASE-GRADE PASS
 TRACK II: Ecosystem Restructure            ██████████ 100%  ← COMPLETE ✅ (Archive DONE)
 TRACK III: Ecosystem Expansion             ██████████ 100%  ← COMPLETE ✅ Phase 2-5 (12 modules, 434 tests)
 ```
 
 | Track | Phases | Tasks | Status | Next Action |
 |---|---|---|---|---|
-| **I. Hardening** | 0-6 | ~50 items | 90% — Phase 0,5 DONE; W1,W3,W4 CLOSED; Phase 2 STRONG; Phase 6 FROZEN | Validate W2 release-grade gate |
+| **I. Hardening** | 0-6 | ~50 items | ✅ 100% — Phase 0-5 DONE; W1-W4 CLOSED; W2 RELEASE-GRADE PASS; Phase 6 DEPTH-FROZEN | — (CLOSED) |
 | **II. Eco Restructure** | 1 (Eco) | 17 tasks | ✅ 100% — ALL SECTIONS COMPLETE incl. Archive | — (CLOSED) |
 | **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | ✅ 100% — Phase 2-5 ALL COMPLETE (434 tests, 12 extensions) | — (CLOSED) |
 
@@ -32,7 +32,7 @@ TRACK III: Ecosystem Expansion             ██████████ 100%  
 |---|---|---|---|
 | **Phase 0** | Baseline freeze | ✅ **DONE** | Baseline, executive review, decision matrix, trace chain, rotation rules |
 | **Phase 1** | W1 — Unified control plane | ✅ **CLOSED** | Ecosystem Governance Contract established as single-source |
-| **Phase 2** | W2 — E2E conformance | 🔵 **STRONG BASELINE** | 84/84 scenarios PASS, 18/18 critical anchors, 17/17 coverage groups — chưa phải full release gate |
+| **Phase 2** | W2 — E2E conformance | ✅ **RELEASE-GRADE PASS** | 84/84 scenarios, 18/18 anchors, 17/17 groups, 5/5 families, golden diff clean, 0 violations |
 | **Phase 3** | W3 — Skill governance | ✅ **CLOSED** | Blocking, successor, dependency, phase compat + Skill Rollout Policy |
 | **Phase 4** | W4 — Durable execution | ✅ **CLOSED** | Rollback, replay, checkpoint/resume, remediation + Durable Execution Policy |
 | **Phase 5** | W5-W6 — Release discipline | ✅ **DONE** | Release manifest, module inventory, maturity matrix |

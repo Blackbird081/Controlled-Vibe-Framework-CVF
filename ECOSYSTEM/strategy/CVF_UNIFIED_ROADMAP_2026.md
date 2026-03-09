@@ -51,14 +51,14 @@ TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   
 > **Detail:** `CVF_Restructure/Independent Review/CVF_ECOSYSTEM_ROADMAP_2026-03-08.md` → Phase 1
 > **ADR:** `CVF_Restructure/Independent Review/ADR-021_CVF_ECOSYSTEM_RESTRUCTURE.md`
 
-| Section | Tasks | Status |
-|---|---|---|
-| 1.1 Doctrine Layer | 5 tasks | ✅ DONE — `ECOSYSTEM/doctrine/` (5 files) |
-| 1.2 VOM (Operating Model) | 3 tasks | ✅ 2/3 DONE — `ECOSYSTEM/operating-model/` (2 files) |
-| 1.3 Repository Restructure | 5 tasks | ✅ 4/5 DONE — `ECOSYSTEM/` created, README updated |
-| 1.4 Governance Pipeline Blueprint | 2 tasks | ✅ DONE — `CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md` |
-| 1.5 Governance Enforcement | 3 tasks | ✅ DONE — Extension Versioning + Guard Registry + ADR-021 |
-| 1.6 Archive CVF_Restructure | 4 tasks | 🔲 Chưa bắt đầu |
+| Section | Tasks | Status | Expected Output (Treeview Target) |
+|---|---|---|---|
+| 1.1 Doctrine Layer | 5 tasks | ✅ DONE | `ECOSYSTEM/doctrine/` (5 files) |
+| 1.2 VOM (Operating Model) | 3 tasks | ✅ 2/3 DONE | `ECOSYSTEM/operating-model/` (3 files) |
+| 1.3 Repository Restructure | 5 tasks | ✅ 4/5 DONE | `ECOSYSTEM/strategy/` + Root README |
+| 1.4 Governance Pipeline | 2 tasks | ✅ DONE | `docs/concepts/CVF_HIERARCHICAL...md` |
+| 1.5 Governance Enforcement | 3 tasks | ✅ DONE | `governance/toolkit/05_OPERATION/` (2 guards) |
+| 1.6 Archive CVF_Restructure | 4 tasks | 🔲 Chưa bắt đầu | `CVF_Restructure/` (removed/ignored) |
 
 **Dependency:** Track II có thể chạy song song với Track I (không block nhau).
 
@@ -69,12 +69,12 @@ TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   
 > **Detail:** `CVF_Restructure/Independent Review/CVF_ECOSYSTEM_ROADMAP_2026-03-08.md` → Phase 2-5
 > **Blueprint:** `docs/concepts/CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md`
 
-| Phase | Key Deliverables | Tasks | Status | Blocked By |
-|---|---|---|---|---|
-| **Phase 2** (Q3 2026) | Intent Validation, NL Policy (Triple-S), LLM Risk, Domain Guards, Hierarchical RAG | 23 | 🔲 | Track I: W1, W2, W3 |
-| **Phase 3** (Q4 2026) | Agent Guard SDK, Governance Canvas, CLI, Browser Extension | 17 | 🔲 | Track I: W4 + Phase 2 |
-| **Phase 4** (2027) | Agent Identity, Graph Governance, Conflict Detection, Plugins | 8 | 🔲 | Phase 3 |
-| **Phase 5** (2028+) | Task Marketplace, Reputation System, Agent Economy | 5 | 🔲 | Phase 4 |
+| Phase | Key Deliverables | Tasks | Status | Expected Output (Treeview Target) | Blocked By |
+|---|---|---|---|---|---|
+| **Phase 2** (Q3 2026) | Intent Validation, NL Policy, LLM Risk | 23 | 🔲 | `EXTENSIONS/CVF_v2.1_INTELLIGENCE/` | Track I: W1, W2, W3 |
+| **Phase 3** (Q4 2026) | Agent Guard SDK, Canvas, CLI | 17 | 🔲 | `EXTENSIONS/CVF_v2.2_SDK_PLATFORM/` | Track I: W4 + Phase 2 |
+| **Phase 4** (2027) | Agent Identity, Graph Governance | 8 | 🔲 | `EXTENSIONS/CVF_v2.3_NETWORK/` | Phase 3 |
+| **Phase 5** (2028+) | Task Marketplace, Reputation | 5 | 🔲 | `EXTENSIONS/CVF_v3.1_ECONOMY/` | Phase 4 |
 
 ### Mapping: Hardening Directions → Ecosystem Phases
 

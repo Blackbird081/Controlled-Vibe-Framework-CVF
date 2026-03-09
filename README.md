@@ -9,9 +9,10 @@
 [![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
 [![Conformance](https://img.shields.io/badge/conformance-84%2F84%20PASS-brightgreen.svg)](docs/reviews/cvf_phase_governance/)
-[![Tests](https://img.shields.io/badge/tests-341%20passing-brightgreen.svg)](docs/CVF_INCREMENTAL_TEST_LOG.md)
+[![Tests](https://img.shields.io/badge/tests-2%2C430%2B%20passing-brightgreen.svg)](docs/CVF_INCREMENTAL_TEST_LOG.md)
 [![Skills](https://img.shields.io/badge/skills-141%20×%2012%20domains-blue.svg)](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
 [![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
+[![CVF_ECO](https://img.shields.io/badge/CVF_ECO-12%20extensions%2C%20434%20tests-blue.svg)](ECOSYSTEM/strategy/CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md)
 
 ---
 
@@ -40,6 +41,7 @@ CVF is a **governance framework** for AI-assisted software development. It ensur
 - **Risk Control** — 4-level risk model (R0–R3) with authority boundaries
 - **141 Reusable Skills** — Across 12 domains, with bi-directional linking
 - **34 Agent Tools** — RAG, Data Viz, Browser Auto, MCP, Agent Teams & more
+- **CVF_ECO Extensions** — 12 ecosystem modules, 434 tests, 100% pass
 - **Conformance Pipeline** — 84 scenarios, release-grade gate, golden baseline
 - **Web UI + Agent Platform** — No-code interface, multi-agent workflows
 - **AI Safety Kernel** — 5-layer pipeline, anti-bypass, forensic tracing
@@ -172,9 +174,11 @@ CVF
        ├── Layer 4: Safety UI
        │     v1.7.2 Dashboard · v2.0 Non-Coder Runtime
        │
-       └── Layer 5: Adapter Hub
-             v1.7.3 OpenClaw · PicoClaw · ZeroClaw · Nano
-```
+       ├── Layer 5: Adapter Hub
+       │     v1.7.3 OpenClaw · PicoClaw · ZeroClaw · Nano
+       │
+       └── CVF_ECO Extensions (Track III)
+             12 modules · 434 tests · Phase 2-5 complete
 
 > **Layer 0 never depends up.** CVF Core works standalone. CVF Full requires Layer 0 as foundation.
 
@@ -202,6 +206,11 @@ CVF
 | **v1.9** 📋 | Deterministic Reproducibility — replay engine, forensic audit | 29 |
 | **v2.0** 🎯 | Non-Coder Safety Runtime — ModeMapper, IntentInterpreter | 32 |
 | **v3.0** 🧬 | **Core Governance Engine** — AI commit, artifact ledger, process model, skill lifecycle | 49 |
+| **CVF_ECO Track** | **Ecosystem Expansion** — 12 extensions across 4 phases | 434 |
+| └─ Phase 2 | Intelligence Layer — Intent, Policy, Risk, Guards, RAG | 197 |
+| └─ Phase 3 | Product Packaging — SDK, Canvas, CLI | 112 |
+| └─ Phase 4 | Governance Network — Identity, Graph | 66 |
+| └─ Phase 5 | Economy Layer — Marketplace, Reputation | 59 |
 
 → [Version Comparison](docs/VERSION_COMPARISON.md) | [Decision Tree](docs/cheatsheets/version-picker.md)
 
@@ -245,10 +254,11 @@ CVF
 |--------|--------|
 | **Version** | 2.0.0 (Mar 2026) |
 | **Conformance** | 84/84 scenarios PASS, 18/18 critical anchors, 17/17 coverage groups |
-| **Tests** | 341 passing (kernel + extensions) |
+| **Tests** | 2,430+ passing (Core + Legacy + CVF_ECO) |
 | **Skills** | 141 skills × 12 domains + 34 agent tools |
 | **AI Safety** | Kernel active — 5-layer pipeline, anti-bypass, forensic tracing |
 | **Independent Review** | [8.7/10](docs/assessments/CVF_INDEPENDENT_EXPERT_REVIEW_UPGRADE_WAVE_2026-03-08.md) — Strong upgrade wave |
+| **CVF_ECO Evaluation** | [434/434 PASS](ECOSYSTEM/strategy/CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md) — 100% quality gate |
 | **Active Development** | Yes — `cvf-next` branch |
 
 ---
@@ -360,4 +370,4 @@ We welcome contributions!
 
 ---
 
-*Last updated: March 8, 2026 | Version 2.0.0 | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) | [Full Docs](docs/INDEX.md)*
+*Last updated: March 9, 2026 | Version 2.0.0 | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) | [Full Docs](docs/INDEX.md)*

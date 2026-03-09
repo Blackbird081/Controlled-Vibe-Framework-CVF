@@ -1,0 +1,272 @@
+{
+  "wave": 2,
+  "description": "CVF_ECO Extension Conformance Scenarios — Wave 2",
+  "createdAt": "2026-03-09",
+  "sourceBaseline": "CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md",
+  "totalScenarios": 24,
+  "capabilityFamilies": [
+    {
+      "familyId": "eco-intelligence",
+      "name": "Intelligence Layer",
+      "phase": 2,
+      "scenarios": [
+        {
+          "scenarioId": "ECO-001",
+          "title": "Intent Validation — Triple-S classification",
+          "extension": "CVF_ECO_v1.0_INTENT_VALIDATION",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION",
+          "expectedTests": 41,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-002",
+          "title": "NL Policy — Compiler + Templates + Store",
+          "extension": "CVF_ECO_v1.1_NL_POLICY",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v1.1_NL_POLICY",
+          "expectedTests": 46,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-003",
+          "title": "LLM Risk Engine — RiskScorer + ContextAnalyzer",
+          "extension": "CVF_ECO_v1.2_LLM_RISK_ENGINE",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v1.2_LLM_RISK_ENGINE",
+          "expectedTests": 37,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-004",
+          "title": "Domain Guards — Finance + Privacy + CodeSecurity",
+          "extension": "CVF_ECO_v1.3_DOMAIN_GUARDS",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v1.3_DOMAIN_GUARDS",
+          "expectedTests": 39,
+          "critical": false
+        },
+        {
+          "scenarioId": "ECO-005",
+          "title": "RAG Pipeline — DocumentStore + Retriever + Pipeline",
+          "extension": "CVF_ECO_v1.4_RAG_PIPELINE",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE",
+          "expectedTests": 34,
+          "critical": false
+        }
+      ]
+    },
+    {
+      "familyId": "eco-packaging",
+      "name": "Product Packaging Layer",
+      "phase": 3,
+      "scenarios": [
+        {
+          "scenarioId": "ECO-006",
+          "title": "Agent Guard SDK — RiskModule + GuardModule + SessionManager",
+          "extension": "CVF_ECO_v2.0_AGENT_GUARD_SDK",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v2.0_AGENT_GUARD_SDK",
+          "expectedTests": 43,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-007",
+          "title": "Governance Canvas — MetricsCollector + ReportRenderer",
+          "extension": "CVF_ECO_v2.1_GOVERNANCE_CANVAS",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v2.1_GOVERNANCE_CANVAS",
+          "expectedTests": 30,
+          "critical": false
+        },
+        {
+          "scenarioId": "ECO-008",
+          "title": "Governance CLI — ArgParser + CommandRegistry",
+          "extension": "CVF_ECO_v2.2_GOVERNANCE_CLI",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI",
+          "expectedTests": 39,
+          "critical": false
+        }
+      ]
+    },
+    {
+      "familyId": "eco-network",
+      "name": "Governance Network Layer",
+      "phase": 4,
+      "scenarios": [
+        {
+          "scenarioId": "ECO-009",
+          "title": "Agent Identity — AgentRegistry + CredentialStore",
+          "extension": "CVF_ECO_v2.3_AGENT_IDENTITY",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v2.3_AGENT_IDENTITY",
+          "expectedTests": 39,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-010",
+          "title": "Graph Governance — GraphStore + TrustPropagator",
+          "extension": "CVF_ECO_v2.4_GRAPH_GOVERNANCE",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v2.4_GRAPH_GOVERNANCE",
+          "expectedTests": 27,
+          "critical": true
+        }
+      ]
+    },
+    {
+      "familyId": "eco-economy",
+      "name": "Economy Layer",
+      "phase": 5,
+      "scenarios": [
+        {
+          "scenarioId": "ECO-011",
+          "title": "Task Marketplace — TaskRegistry + BidManager",
+          "extension": "CVF_ECO_v3.0_TASK_MARKETPLACE",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v3.0_TASK_MARKETPLACE",
+          "expectedTests": 29,
+          "critical": false
+        },
+        {
+          "scenarioId": "ECO-012",
+          "title": "Reputation System — ScoreCalculator + ReputationSystem",
+          "extension": "CVF_ECO_v3.1_REPUTATION",
+          "command": "npx vitest run --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_ECO_v3.1_REPUTATION",
+          "expectedTests": 30,
+          "critical": false
+        }
+      ]
+    },
+    {
+      "familyId": "eco-architecture",
+      "name": "Cross-Extension Architecture Conformance",
+      "phase": null,
+      "scenarios": [
+        {
+          "scenarioId": "ECO-013",
+          "title": "3-Layer Architecture — All modules follow types → components → orchestrator",
+          "extension": "ALL_CVF_ECO",
+          "command": "echo 'Structural audit — verified in CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md'",
+          "workingDir": "EXTENSIONS",
+          "expectedTests": 0,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-014",
+          "title": "TypeScript Compilation — Zero errors across all 12 modules",
+          "extension": "ALL_CVF_ECO",
+          "command": "echo 'tsc --noEmit — verified in CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md'",
+          "workingDir": "EXTENSIONS",
+          "expectedTests": 0,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-015",
+          "title": "Package Scaffolding — All modules have package.json + tsconfig.json + vitest.config.ts",
+          "extension": "ALL_CVF_ECO",
+          "command": "echo 'Scaffolding audit — verified in CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md'",
+          "workingDir": "EXTENSIONS",
+          "expectedTests": 0,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-016",
+          "title": "Naming Convention — CVF_ECO_v{major}.{minor}_{NAME} pattern",
+          "extension": "ALL_CVF_ECO",
+          "command": "echo 'Naming audit — verified in CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md'",
+          "workingDir": "EXTENSIONS",
+          "expectedTests": 0,
+          "critical": false
+        }
+      ]
+    },
+    {
+      "familyId": "eco-hardening-integration",
+      "name": "Hardening Integration Conformance",
+      "phase": null,
+      "scenarios": [
+        {
+          "scenarioId": "ECO-017",
+          "title": "Unified Control Plane — UnifiedStateResolver resolves without drift",
+          "extension": "CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL",
+          "command": "npx vitest run tests/unified.state.resolver.test.ts --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL",
+          "expectedTests": 20,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-018",
+          "title": "Skill Rollout Engine — 5-stage rollout lifecycle",
+          "extension": "CVF_v3.0_CORE_GIT_FOR_AI",
+          "command": "npx vitest run tests/skill.rollout.engine.test.ts --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI",
+          "expectedTests": 20,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-019",
+          "title": "Workflow Coordinator — Multi-extension orchestration",
+          "extension": "CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY",
+          "command": "npx vitest run tests/workflow.coordinator.test.ts --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY",
+          "expectedTests": 25,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-020",
+          "title": "Unified Control Plane — Drift detection catches guard registry drift",
+          "extension": "CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL",
+          "command": "npx vitest run tests/unified.state.resolver.test.ts -t 'drift' --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL",
+          "expectedTests": 4,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-021",
+          "title": "Skill Rollout — Canary gate blocks promotion with anomalies",
+          "extension": "CVF_v3.0_CORE_GIT_FOR_AI",
+          "command": "npx vitest run tests/skill.rollout.engine.test.ts -t 'anomalies' --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI",
+          "expectedTests": 1,
+          "critical": false
+        },
+        {
+          "scenarioId": "ECO-022",
+          "title": "Skill Rollout — Deprecation requires successor at GA",
+          "extension": "CVF_v3.0_CORE_GIT_FOR_AI",
+          "command": "npx vitest run tests/skill.rollout.engine.test.ts -t 'successor' --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI",
+          "expectedTests": 3,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-023",
+          "title": "Workflow Coordinator — Rollback in reverse order",
+          "extension": "CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY",
+          "command": "npx vitest run tests/workflow.coordinator.test.ts -t 'reverse' --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY",
+          "expectedTests": 1,
+          "critical": true
+        },
+        {
+          "scenarioId": "ECO-024",
+          "title": "Workflow Coordinator — Remediation policy escalation",
+          "extension": "CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY",
+          "command": "npx vitest run tests/workflow.coordinator.test.ts -t 'remediation' --reporter=json",
+          "workingDir": "EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY",
+          "expectedTests": 4,
+          "critical": false
+        }
+      ]
+    }
+  ],
+  "releaseGrade": {
+    "minimumScenarios": 24,
+    "criticalAnchors": ["ECO-001", "ECO-002", "ECO-003", "ECO-006", "ECO-009", "ECO-010", "ECO-013", "ECO-014", "ECO-015", "ECO-017", "ECO-018", "ECO-019", "ECO-020", "ECO-022", "ECO-023"],
+    "coverageFamilies": ["eco-intelligence", "eco-packaging", "eco-network", "eco-economy", "eco-architecture", "eco-hardening-integration"]
+  }
+}

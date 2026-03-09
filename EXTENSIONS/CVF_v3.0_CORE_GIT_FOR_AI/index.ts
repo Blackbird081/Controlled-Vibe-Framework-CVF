@@ -9,3 +9,4 @@ export * from "./artifact_ledger/artifact.ledger.js";
 export * from "./process_model/process.model.js";
 
 export * from "./skill_lifecycle/skill.lifecycle.js";
+export * from "./skill_lifecycle/skill.rollout.engine.js";

@@ -502,14 +502,14 @@ Tất cả 9 checkbox phải được check trước khi bắt đầu implement.
 ## XIII. CVF MCP SERVER (M1-M7) — Complete Implementation
 
 > **Phiên bản:** v2.1.0 | **Cập nhật:** 2026-03-09  
-> **Location:** `EXTENSIONS/CVF_v1.7_MCP_SERVER/`  
+> **Location:** `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/`  
 > **Tests:** 476 passing across 14 test files  
 > **Status:** ✅ All milestones complete, pushed to `cvf-next`
 
 ### Architecture Overview
 
 ```
-EXTENSIONS/CVF_v1.7_MCP_SERVER/src/
+EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/
 ├── guards/           — 6 guards + engine (102 tests)
 ├── persistence/      — JSON file adapter (26 tests)
 ├── prompt/          — System prompt generator (37 tests)
@@ -565,7 +565,7 @@ EXTENSIONS/CVF_v1.7_MCP_SERVER/src/
 
 ```bash
 # Install
-cd EXTENSIONS/CVF_v1.7_MCP_SERVER
+cd EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER
 npm install
 
 # Run tests
@@ -597,7 +597,7 @@ npx tsx src/cli.ts evaluate --phase BUILD --risk R0 --role HUMAN --action "write
 | [`docs/CVF_ARCHITECTURE_DECISIONS.md`](CVF_ARCHITECTURE_DECISIONS.md) | Xem ADR history, quyết định thiết kế |
 | [`docs/baselines/CVF_CORE_COMPAT_BASELINE.md`](baselines/CVF_CORE_COMPAT_BASELINE.md) | Chạy compat check |
 | [`EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md`](../EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md) | Hiểu reference vs production separation |
-| [`EXTENSIONS/CVF_v1.7_MCP_SERVER/README.md`](../EXTENSIONS/CVF_v1.7_MCP_SERVER/README.md) | MCP Server usage guide |
+| [`EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/README.md`](../EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/README.md) | MCP Server usage guide |
 
 ---
 

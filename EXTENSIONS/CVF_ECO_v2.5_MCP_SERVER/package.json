@@ -1,6 +1,6 @@
 {
-  "name": "@cvf/mcp-server",
-  "version": "1.7.0",
+  "name": "@cvf/eco-mcp-server",
+  "version": "2.5.0",
   "description": "CVF Guard Runtime MCP Server — exposes governance guards as MCP tools for IDE integration (Windsurf, Cursor, VSCode)",
   "type": "module",
   "main": "dist/index.js",

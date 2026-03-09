@@ -42,7 +42,7 @@ Add to your Windsurf MCP settings:
   "mcpServers": {
     "cvf-guard-server": {
       "command": "node",
-      "args": ["EXTENSIONS/CVF_v1.7_MCP_SERVER/dist/index.js"]
+      "args": ["EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/dist/index.js"]
     }
   }
 }
@@ -57,7 +57,7 @@ Add to `.cursor/mcp.json`:
   "mcpServers": {
     "cvf-guard-server": {
       "command": "node",
-      "args": ["EXTENSIONS/CVF_v1.7_MCP_SERVER/dist/index.js"]
+      "args": ["EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/dist/index.js"]
     }
   }
 }

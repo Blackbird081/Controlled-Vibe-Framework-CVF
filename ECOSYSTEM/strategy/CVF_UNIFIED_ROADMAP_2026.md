@@ -12,14 +12,14 @@
 ```
 TRACK I:  Hardening (Close W1-W7)          █████████░ 90%   ← W1,W3,W4 CLOSED
 TRACK II: Ecosystem Restructure            ██████████ 100%  ← COMPLETE ✅ (Archive DONE)
-TRACK III: Ecosystem Expansion             ███████░░░ 50%   ← Phase 2+3 COMPLETE ✅ (8 modules, 309 tests)
+TRACK III: Ecosystem Expansion             █████████░ 75%   ← Phase 2-4 COMPLETE ✅ (10 modules, 375 tests)
 ```
 
 | Track | Phases | Tasks | Status | Next Action |
 |---|---|---|---|---|
 | **I. Hardening** | 0-6 | ~50 items | 90% — Phase 0,5 DONE; W1,W3,W4 CLOSED; Phase 2 STRONG; Phase 6 FROZEN | Validate W2 release-grade gate |
 | **II. Eco Restructure** | 1 (Eco) | 17 tasks | ✅ 100% — ALL SECTIONS COMPLETE incl. Archive | — (CLOSED) |
-| **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | 50% — Phase 2+3 COMPLETE ✅ (309 tests) | Phase 4: Agent Identity |
+| **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | 75% — Phase 2-4 COMPLETE ✅ (375 tests) | Phase 5: Task Marketplace |
 
 ---
 
@@ -73,7 +73,7 @@ TRACK III: Ecosystem Expansion             ███████░░░ 50%   
 |---|---|---|---|---|---|
 | **Phase 2** (Q3 2026) | Intent Validation, NL Policy, LLM Risk, Domain Guards, RAG Pipeline | 23 | ✅ 5/5 | `CVF_ECO_v1.0-v1.4` (5 extensions, 197 tests) | Phase 3 |
 | **Phase 3** (Q4 2026) | Agent Guard SDK, Governance Canvas, CLI | 17 | ✅ 3/3 | `CVF_ECO_v2.0-v2.2` (3 extensions, 112 tests) | Phase 4 |
-| **Phase 4** (2027) | Agent Identity, Graph Governance | 8 | 🔲 | `EXTENSIONS/CVF_v2.3_NETWORK/` | Phase 3 |
+| **Phase 4** (2027) | Agent Identity, Graph Governance | 8 | ✅ 2/2 | `CVF_ECO_v2.3-v2.4` (2 extensions, 66 tests) | Phase 5 |
 | **Phase 5** (2028+) | Task Marketplace, Reputation | 5 | 🔲 | `EXTENSIONS/CVF_v3.1_ECONOMY/` | Phase 4 |
 
 ### Mapping: Hardening Directions → Ecosystem Phases
@@ -171,6 +171,8 @@ Mọi guard mới (ở bất kỳ track nào) → phải qua `check_guard_regist
 | 12 | **Agent Guard SDK** — Unified SDK: RiskModule + GuardModule + SessionManager + AuditLogger (43 tests) | Track III | P3 | High | ✅ DONE |
 | 13 | **Governance Canvas** — MetricsCollector + ReportRenderer text/markdown (30 tests) | Track III | P3 | Medium | ✅ DONE |
 | 14 | **Governance CLI** — ArgParser + CommandRegistry + 7 commands (39 tests) | Track III | P3 | Medium | ✅ DONE |
+| 15 | **Agent Identity** — AgentRegistry + CredentialStore + IdentityManager (39 tests) | Track III | P4 | High | ✅ DONE |
+| 16 | **Graph Governance** — GraphStore + TrustPropagator + GovernanceGraph (27 tests) | Track III | P4 | High | ✅ DONE |
 
 ---
 

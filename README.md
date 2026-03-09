@@ -104,7 +104,7 @@ See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_IS
 |---|---|
 | **Concepts** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance Model](docs/concepts/governance-model.md) · [Risk Model](docs/concepts/risk-model.md) · [Skill System](docs/concepts/skill-system.md) · [Version Evolution](docs/concepts/version-evolution.md) · [Hierarchical Governance Pipeline](docs/concepts/CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md) |
 | **Doctrine** | [Architecture Principles](ECOSYSTEM/doctrine/CVF_ARCHITECTURE_PRINCIPLES.md) · [Product Positioning](ECOSYSTEM/doctrine/CVF_PRODUCT_POSITIONING.md) · [Ecosystem Map](ECOSYSTEM/doctrine/CVF_ECOSYSTEM_MAP.md) · [Layer Model](ECOSYSTEM/doctrine/CVF_LAYER_MODEL.md) · [Doctrine Rules](ECOSYSTEM/doctrine/CVF_DOCTRINE_RULES.md) |
-| **Operating Model** | [Agent Operating Model](ECOSYSTEM/operating-model/CVF_AGENT_OPERATING_MODEL.md) · [Builder Model (Non-Coder)](ECOSYSTEM/operating-model/CVF_BUILDER_MODEL.md) |
+| **Operating Model** | [Agent Operating Model](ECOSYSTEM/operating-model/CVF_AGENT_OPERATING_MODEL.md) · [Builder Model (Non-Coder)](ECOSYSTEM/operating-model/CVF_BUILDER_MODEL.md) · [VOM Quick Start](ECOSYSTEM/operating-model/CVF_VOM_QUICK_START.md) |
 | **Strategy** | [Strategic Summary](ECOSYSTEM/strategy/CVF_STRATEGIC_SUMMARY.md) · [Unified Roadmap 2026](ECOSYSTEM/strategy/CVF_UNIFIED_ROADMAP_2026.md) |
 | **Guides** | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) · [Solo Developer](docs/guides/solo-developer.md) · [Team Setup](docs/guides/team-setup.md) · [Enterprise](docs/guides/enterprise.md) |
 | **Tutorials** | [First Project](docs/tutorials/first-project.md) · [Web UI Setup](docs/tutorials/web-ui-setup.md) · [Agent Platform](docs/tutorials/agent-platform.md) |
@@ -294,6 +294,9 @@ python governance/compat/check_docs_governance_compat.py --enforce
 | [Conformance Performance](governance/toolkit/05_OPERATION/CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md) | Wave 1 closure | Sequential runner, shared bootstrap |
 | [Extension Versioning](governance/toolkit/05_OPERATION/CVF_EXTENSION_VERSIONING_GUARD.md) | New extension folder in `EXTENSIONS/` | `CVF_{STREAM}_v{major}.{minor}_{NAME}/` format |
 | [Guard Registry](governance/toolkit/05_OPERATION/CVF_GUARD_REGISTRY_GUARD.md) | New guard created | Register in README.md + CVF_CORE_KNOWLEDGE_BASE.md |
+| [Ecosystem Governance Contract](governance/toolkit/05_OPERATION/CVF_ECOSYSTEM_GOVERNANCE_CONTRACT.md) | Governance state changes | Single-source contract for all extensions |
+| [Skill Rollout Policy](governance/toolkit/05_OPERATION/CVF_SKILL_ROLLOUT_POLICY.md) | Skill promotion/deprecation | 5-stage rollout lifecycle |
+| [Durable Execution Policy](governance/toolkit/05_OPERATION/CVF_DURABLE_EXECUTION_POLICY.md) | Long-running workflows | Checkpoint/recovery/replay coordination |
 
 ### Extension Rules (Non-negotiable)
 

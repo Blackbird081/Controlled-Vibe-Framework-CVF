@@ -18,7 +18,8 @@ ECOSYSTEM/
 │
 ├── operating-model/       ← VOM: cách vận hành
 │   ├── CVF_AGENT_OPERATING_MODEL.md  (for dev teams)
-│   └── CVF_BUILDER_MODEL.md          (for non-coders)
+│   ├── CVF_BUILDER_MODEL.md          (for non-coders)
+│   └── CVF_VOM_QUICK_START.md        (10-min onboarding)
 │
 ├── strategy/              ← Chiến lược, roadmap
 │   ├── CVF_STRATEGIC_SUMMARY.md

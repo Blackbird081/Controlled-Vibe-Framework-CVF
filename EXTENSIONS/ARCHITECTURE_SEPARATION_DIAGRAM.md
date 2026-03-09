@@ -1,29 +1,31 @@
 # CVF Architecture Separation Diagram
 
-> **Updated 2026-03-08** — CVF Core vs CVF Full separation, Layer 0–5 architecture
+> **Updated 2026-03-09** — CVF Core vs CVF Full separation, Layer 0–5 + ECOSYSTEM meta layer
 
 ---
 
-## Two Scopes of CVF
+## Three-Tier Architecture
 
 ```
                     ┌─────────────────────────────────┐
                     │     Controlled Vibe Framework    │
-                    │             (CVF)                │
+                    │          (CVF Ecosystem)         │
                     └───────────────┬─────────────────┘
                                     │
-                    ┌───────────────┴───────────────┐
-                    │                               │
-                    ▼                               ▼
-    ┌───────────────────────────┐   ┌───────────────────────────────┐
-    │       🧬 CVF Core         │   │        🏛️ CVF Full            │
-    │   "Git for AI Development"│   │  "AI Governance Framework"    │
-    │                           │   │                               │
-    │   Deterministic           │   │   Complete governance         │
-    │   development primitives  │   │   ecosystem built on Core     │
-    │                           │   │                               │
-    │   Layer 0                 │   │   Layer 1 → Layer 5           │
-    └───────────────────────────┘   └───────────────────────────────┘
+              ┌─────────────────────┼─────────────────────┐
+              │                     │                     │
+              ▼                     ▼                     ▼
+┌─────────────────────┐ ┌───────────────────────┐ ┌────────────────────────┐
+│  📜 ECOSYSTEM/       │ │   🧬 CVF Core         │ │   🏛️ CVF Full          │
+│  "Meta Layer"        │ │   "Git for AI Dev"    │ │   "Governance Fwk"     │
+│                      │ │                       │ │                        │
+│  Doctrine            │ │   Deterministic       │ │   Complete governance  │
+│  Operating Model     │ │   development         │ │   ecosystem built on   │
+│  Strategy            │ │   primitives          │ │   Core                 │
+│                      │ │                       │ │                        │
+│  WHY + WHAT          │ │   Layer 0             │ │   Layer 1 → Layer 5    │
+└─────────────────────┘ └───────────────────────┘ └────────────────────────┘
+        governs ─────────────────►  depends on  ◄────────────────
 ```
 
 ---
@@ -100,10 +102,51 @@
 
 ---
 
+## ECOSYSTEM Meta Layer
+
+> **"Why + What"** — Doctrine, Operating Model, and Strategy sit above the engineering stack.
+> They govern engineering but contain no code.
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                  📜 ECOSYSTEM — META LAYER                       │
+│            Doctrine · Operating Model · Strategy                 │
+│                     🔏 GOVERNANCE AUTHORITY                      │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   doctrine/              L0 — Tư tưởng & Nguyên lý (FROZEN)     │
+│   ├── CVF_PRODUCT_POSITIONING.md                                 │
+│   ├── CVF_ARCHITECTURE_PRINCIPLES.md                             │
+│   ├── CVF_ECOSYSTEM_MAP.md                                       │
+│   ├── CVF_LAYER_MODEL.md                                         │
+│   └── CVF_DOCTRINE_RULES.md                                      │
+│                                                                  │
+│   operating-model/       L3 — VOM (Vibecode Operating Model)     │
+│   ├── CVF_AGENT_OPERATING_MODEL.md    (for dev teams)            │
+│   ├── CVF_BUILDER_MODEL.md            (for non-coders)           │
+│   └── CVF_VOM_QUICK_START.md          (10-min onboarding)        │
+│                                                                  │
+│   strategy/              Roadmap & Blueprint                     │
+│   ├── CVF_STRATEGIC_SUMMARY.md                                   │
+│   └── CVF_UNIFIED_ROADMAP_2026.md                                │
+│                                                                  │
+│   📌 ECOSYSTEM defines WHY and WHAT                              │
+│   📌 Engineering (Layer 0–5) implements HOW                      │
+│   📌 Doctrine governs all — engineering NEVER overrides doctrine │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## Branching Architecture View
 
 ```
-CVF
+CVF Ecosystem
+ │
+ ├─── 📜 ECOSYSTEM/ (Meta Layer) ─── "Why + What"
+ │     ├── doctrine/          Architecture Principles, Positioning   [FROZEN]
+ │     ├── operating-model/   Agent Model, Builder Model, Quick Start
+ │     └── strategy/          Unified Roadmap, Strategic Summary
  │
  ├─── 🧬 CVF Core (Layer 0) ─── "Git for AI Development"
  │     │
@@ -147,6 +190,9 @@ CVF
 ## Dependency Rule
 
 ```
+📜 ECOSYSTEM (Meta Layer)
+     │ governs
+     ▼
 Layer 5  ──depends on──►  Layer 4  ──►  Layer 3  ──►  Layer 2  ──►  Layer 1
                                                                        │
                                                                        ▼
@@ -156,6 +202,7 @@ Layer 5  ──depends on──►  Layer 4  ──►  Layer 3  ──►  Laye
 ```
 
 **Key rules:**
+- ECOSYSTEM **governs** all layers — defines WHY and WHAT, contains no code
 - Layer 0 is **immutable** — all changes through extensions only
 - Higher layers **depend on** lower layers, never the reverse
 - Layer 0 can run **standalone** — CVF Core works without CVF Full
@@ -167,6 +214,7 @@ Layer 5  ──depends on──►  Layer 4  ──►  Layer 3  ──►  Laye
 
 | Layer | Scope | Purpose | Type | Key Tests |
 |-------|-------|---------|------|-----------|
+| **Meta** | **ECOSYSTEM** | Doctrine, operating model, strategy | 📜 Governance Authority | — |
 | **0** | **CVF Core** | Development primitives, governance engine | 🔒 Immutable | 49 (v3.0) |
 | **1** | CVF Full | Intelligence, skills, tools, SDK | ✅ Production | Mixed |
 | **2** | CVF Full | Safety kernel, hardening, replay | ✅ Production | 122 |
@@ -180,6 +228,7 @@ Layer 5  ──depends on──►  Layer 4  ──►  Layer 3  ──►  Laye
 
 | Analogy | CVF Equivalent |
 |---------|----------------|
+| Company doctrine / constitution | ECOSYSTEM — defines identity, principles, strategy |
 | Git kernel | CVF Core (Layer 0) — deterministic primitives |
 | GitHub / GitLab | CVF Full (Layer 1–5) — ecosystem on top |
 | ISO framework | CVF Core — standards that don't change |
@@ -200,3 +249,7 @@ New capabilities go into Layer 1–5 extensions, never modify Layer 0.
 
 ### Rule 4 — Downstream Projects Are Separate
 Apps using CVF governance live in `CVF-Workspace/`, not in CVF root (ADR-020).
+
+### Rule 5 — ECOSYSTEM Governs, Engineering Implements (ADR-021)
+
+Doctrine defines WHY. Engineering implements HOW. `ECOSYSTEM/` contains no code — only meta-level documents. Engineering never overrides doctrine.

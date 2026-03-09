@@ -10,16 +10,16 @@
 ## 1. DASHBOARD — Toàn cảnh 1 phút
 
 ```
-TRACK I:  Hardening (Close W1-W7)          ████████░░ 75%   ← ĐANG CHẠY
-TRACK II: Ecosystem Restructure            ██░░░░░░░░ 20%   ← ĐANG CHUẨN BỊ
-TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   ← BLOCKED BY TRACK I
+TRACK I:  Hardening (Close W1-W7)          █████████░ 90%   ← W1,W3,W4 CLOSED
+TRACK II: Ecosystem Restructure            ████████░░ 85%   ← VOM ✅, Arch ✅, Guards ✅
+TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   ← READY WHEN ARCHIVE DONE
 ```
 
 | Track | Phases | Tasks | Status | Next Action |
 |---|---|---|---|---|
-| **I. Hardening** | 0-6 | ~50 items | 75% — Phase 0,5 DONE; Phase 1,3,4,6 MOSTLY DONE; Phase 2 OPEN NEXT | Close W1 control plane unification |
-| **II. Eco Restructure** | 1 (Eco) | 17 tasks | 60% — Doctrine ✅, VOM ✅, Guards ✅, Blueprint ✅, ECOSYSTEM/ ✅ | VOM Quick Start + Archive |
-| **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | 0% — Blocked by Track I W1-W4 | Wait until W1-W4 closed |
+| **I. Hardening** | 0-6 | ~50 items | 90% — Phase 0,5 DONE; W1,W3,W4 CLOSED; Phase 2 STRONG; Phase 6 FROZEN | Validate W2 release-grade gate |
+| **II. Eco Restructure** | 1 (Eco) | 17 tasks | 85% — Doctrine ✅, VOM 3/3 ✅, Guards ✅, Blueprint ✅, ECOSYSTEM/ ✅, Arch Diagram ✅ | Archive CVF_Restructure |
+| **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | 0% — Unblocked (W1-W4 closed), waiting for Track II archive | Begin Phase 2 after archive |
 
 ---
 
@@ -31,10 +31,10 @@ TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   
 | Phase | Weakness | Status | Summary |
 |---|---|---|---|
 | **Phase 0** | Baseline freeze | ✅ **DONE** | Baseline, executive review, decision matrix, trace chain, rotation rules |
-| **Phase 1** | W1 — Unified control plane | 🟡 **MOSTLY DONE** | Contract, snapshot, resolver, registry — chưa single-source cho toàn ecosystem |
+| **Phase 1** | W1 — Unified control plane | ✅ **CLOSED** | Ecosystem Governance Contract established as single-source |
 | **Phase 2** | W2 — E2E conformance | 🔵 **STRONG BASELINE** | 84/84 scenarios PASS, 18/18 critical anchors, 17/17 coverage groups — chưa phải full release gate |
-| **Phase 3** | W3 — Skill governance | 🟡 **MOSTLY DONE** | Blocking, successor, dependency, phase compat — broader rollout policy còn mở |
-| **Phase 4** | W4 — Durable execution | 🟡 **MOSTLY DONE** | Rollback, replay, checkpoint/resume, remediation — broader orchestration còn mở |
+| **Phase 3** | W3 — Skill governance | ✅ **CLOSED** | Blocking, successor, dependency, phase compat + Skill Rollout Policy |
+| **Phase 4** | W4 — Durable execution | ✅ **CLOSED** | Rollback, replay, checkpoint/resume, remediation + Durable Execution Policy |
 | **Phase 5** | W5-W6 — Release discipline | ✅ **DONE** | Release manifest, module inventory, maturity matrix |
 | **Phase 6** | W7 — Enterprise evidence | ⏸ **DEPTH-FROZEN** | 4 packet postures, 8 runtime families, CF-084 — Depth Audit 3/10 = DEFER |
 
@@ -54,10 +54,10 @@ TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   
 | Section | Tasks | Status | Expected Output (Treeview Target) |
 |---|---|---|---|
 | 1.1 Doctrine Layer | 5 tasks | ✅ DONE | `ECOSYSTEM/doctrine/` (5 files) |
-| 1.2 VOM (Operating Model) | 3 tasks | ✅ 2/3 DONE | `ECOSYSTEM/operating-model/` (3 files) |
-| 1.3 Repository Restructure | 5 tasks | ✅ 4/5 DONE | `ECOSYSTEM/strategy/` + Root README |
+| 1.2 VOM (Operating Model) | 3 tasks | ✅ 3/3 DONE | `ECOSYSTEM/operating-model/` (3 files incl. Quick Start) |
+| 1.3 Repository Restructure | 5 tasks | ✅ 5/5 DONE | `ECOSYSTEM/strategy/` + Root README + Arch Diagram updated |
 | 1.4 Governance Pipeline | 2 tasks | ✅ DONE | `docs/concepts/CVF_HIERARCHICAL...md` |
-| 1.5 Governance Enforcement | 3 tasks | ✅ DONE | `governance/toolkit/05_OPERATION/` (2 guards) |
+| 1.5 Governance Enforcement | 3 tasks | ✅ DONE | `governance/toolkit/05_OPERATION/` (5 guards) |
 | 1.6 Archive CVF_Restructure | 4 tasks | 🔲 Chưa bắt đầu | `CVF_Restructure/` (removed/ignored) |
 
 **Dependency:** Track II có thể chạy song song với Track I (không block nhau).
@@ -156,14 +156,14 @@ Mọi guard mới (ở bất kỳ track nào) → phải qua `check_guard_regist
 
 ## 7. NEXT ACTIONS (Cụ thể)
 
-| # | Action | Track | Priority | Effort |
-|---|---|---|---|---|
-| 2 | **VOM Quick Start Guide** — Tài liệu giúp non-coders bắt đầu | Track II | P1 | Low |
-| 3 | **Close W1** — Single-source governance contract cho ecosystem | Track I | P0 | High |
-| 4 | **Close W3** — Broader skill rollout policy | Track I | P1 | Medium |
-| 5 | **Close W4** — Broader durable execution coverage | Track I | P1 | Medium |
-| 6 | **Archive CVF_Restructure** — Migrate + archive | Track II | P2 | Low |
-| 7 | **Begin Eco Phase 2** — ONLY after W1-W4 closed | Track III | P2 | High |
+| # | Action | Track | Priority | Effort | Status |
+|---|---|---|---|---|---|
+| 2 | **VOM Quick Start Guide** — Tài liệu giúp non-coders bắt đầu | Track II | P1 | Low | ✅ DONE |
+| 3 | **Close W1** — Ecosystem Governance Contract | Track I | P0 | High | ✅ DONE |
+| 4 | **Close W3** — Skill Rollout Policy | Track I | P1 | Medium | ✅ DONE |
+| 5 | **Close W4** — Durable Execution Policy | Track I | P1 | Medium | ✅ DONE |
+| 6 | **Archive CVF_Restructure** — Migrate + archive | Track II | P2 | Low | 🔲 NEXT |
+| 7 | **Begin Eco Phase 2** — ONLY after archive done | Track III | P2 | High | 🔲 BLOCKED BY #6 |
 
 ---
 

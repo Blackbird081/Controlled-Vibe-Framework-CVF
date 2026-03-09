@@ -18,7 +18,7 @@ TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   
 | Track | Phases | Tasks | Status | Next Action |
 |---|---|---|---|---|
 | **I. Hardening** | 0-6 | ~50 items | 75% — Phase 0,5 DONE; Phase 1,3,4,6 MOSTLY DONE; Phase 2 OPEN NEXT | Close W1 control plane unification |
-| **II. Eco Restructure** | 1 (Eco) | 17 tasks | 20% — ADR-021 ✅, Guards ✅, Blueprint ✅ | Integrate Doctrine + VOM |
+| **II. Eco Restructure** | 1 (Eco) | 17 tasks | 60% — Doctrine ✅, VOM ✅, Guards ✅, Blueprint ✅, ECOSYSTEM/ ✅ | VOM Quick Start + Archive |
 | **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | 0% — Blocked by Track I W1-W4 | Wait until W1-W4 closed |
 
 ---
@@ -53,9 +53,9 @@ TRACK III: Ecosystem Expansion             ░░░░░░░░░░  0%   
 
 | Section | Tasks | Status |
 |---|---|---|
-| 1.1 Doctrine Layer | 5 tasks | 🔲 Chưa bắt đầu |
-| 1.2 VOM (Operating Model) | 3 tasks | 🔲 Chưa bắt đầu (2 files đã viết clean) |
-| 1.3 Repository Restructure | 5 tasks | 🔲 Chưa bắt đầu |
+| 1.1 Doctrine Layer | 5 tasks | ✅ DONE — `ECOSYSTEM/doctrine/` (5 files) |
+| 1.2 VOM (Operating Model) | 3 tasks | ✅ 2/3 DONE — `ECOSYSTEM/operating-model/` (2 files) |
+| 1.3 Repository Restructure | 5 tasks | ✅ 4/5 DONE — `ECOSYSTEM/` created, README updated |
 | 1.4 Governance Pipeline Blueprint | 2 tasks | ✅ DONE — `CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md` |
 | 1.5 Governance Enforcement | 3 tasks | ✅ DONE — Extension Versioning + Guard Registry + ADR-021 |
 | 1.6 Archive CVF_Restructure | 4 tasks | 🔲 Chưa bắt đầu |
@@ -158,11 +158,10 @@ Mọi guard mới (ở bất kỳ track nào) → phải qua `check_guard_regist
 
 | # | Action | Track | Priority | Effort |
 |---|---|---|---|---|
-| 1 | **Close W1** — Single-source governance contract cho ecosystem | Track I | P0 | High |
-| 2 | **Integrate Doctrine** — Tích hợp positioning, principles, VOM | Track II | P1 | Low |
-| 3 | **Close W3** — Broader skill rollout policy | Track I | P1 | Medium |
-| 4 | **Close W4** — Broader durable execution coverage | Track I | P1 | Medium |
-| 5 | **Restructure Repository** — Tạo docs folders, update README | Track II | P1 | Medium |
+| 2 | **VOM Quick Start Guide** — Tài liệu giúp non-coders bắt đầu | Track II | P1 | Low |
+| 3 | **Close W1** — Single-source governance contract cho ecosystem | Track I | P0 | High |
+| 4 | **Close W3** — Broader skill rollout policy | Track I | P1 | Medium |
+| 5 | **Close W4** — Broader durable execution coverage | Track I | P1 | Medium |
 | 6 | **Archive CVF_Restructure** — Migrate + archive | Track II | P2 | Low |
 | 7 | **Begin Eco Phase 2** — ONLY after W1-W4 closed | Track III | P2 | High |
 

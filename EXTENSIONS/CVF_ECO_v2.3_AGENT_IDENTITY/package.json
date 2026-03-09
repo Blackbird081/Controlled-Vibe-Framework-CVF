@@ -1,0 +1,15 @@
+{
+  "name": "@cvf/agent-identity",
+  "version": "2.3.0",
+  "description": "CVF Agent Identity — Agent registration, credentials, and identity verification",
+  "main": "src/identity.manager.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.3.0",
+    "vite": "^5.1.0"
+  }
+}

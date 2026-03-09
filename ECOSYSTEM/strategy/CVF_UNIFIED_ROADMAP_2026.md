@@ -13,6 +13,7 @@
 TRACK I:  Hardening (Close W1-W7)          ██████████ 100%  ← ALL CLOSED ✅ W2 RELEASE-GRADE PASS + 76 hardening tests
 TRACK II: Ecosystem Restructure            ██████████ 100%  ← COMPLETE ✅ (Archive DONE)
 TRACK III: Ecosystem Expansion             ██████████ 100%  ← COMPLETE ✅ Phase 2-5 (12 modules, 434 tests)
+TRACK IV: Runtime Evolution                ██████████ 100%  ← COMPLETE ✅ Phase A-E (394 runtime tests, 453 total)
 ```
 
 | Track | Phases | Tasks | Status | Next Action |
@@ -20,6 +21,7 @@ TRACK III: Ecosystem Expansion             ██████████ 100%  
 | **I. Hardening** | 0-6 | ~50 items | ✅ 100% — Phase 0-5 DONE; W1-W4 CLOSED (runtime implemented); W2 RELEASE-GRADE PASS; Phase 6 DEPTH-FROZEN | See §2.1 Operational Reality |
 | **II. Eco Restructure** | 1 (Eco) | 17 tasks | ✅ 100% — ALL SECTIONS COMPLETE incl. Archive | — (CLOSED) |
 | **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | ✅ 100% — Phase 2-5 ALL COMPLETE (434 tests, 12 extensions) | — (CLOSED) |
+| **IV. Runtime Evolution** | A-E | ~80 tasks | ✅ 100% — Phase A-E DONE (394 runtime tests, 30+ modules) | — (CLOSED) |
 
 ---
 
@@ -274,6 +276,24 @@ Mọi guard mới (ở bất kỳ track nào) → phải qua `check_guard_regist
 
 ---
 
+## 5. TRACK IV — Runtime Evolution (Phase A-E)
+
+> **Detail:** `ECOSYSTEM/strategy/CVF_UPGRADE_ROADMAP_RUNTIME_EVOLUTION_2026-03-09.md`
+> **Baseline:** `docs/assessments/CVF_INDEPENDENT_SYSTEM_ASSESSMENT_2026-03-09.md`
+> **Mục tiêu:** Nâng CVF từ governance framework → governance-enforced runtime platform (7.8 → 9.2/10)
+
+| Phase | Tên | Gaps Closed | New Tests | Status |
+|---|---|---|---|---|
+| **A** | Guard Runtime Engine | GAP-GUARD-01, GAP-GUARD-04, GAP-PIPE-01 | 180+ | 🔵 OPEN |
+| **B** | Agent Conformance & Cross-Extension Wiring | GAP-GUARD-02, GAP-GUARD-03, GAP-PIPE-02 | 120+ | 🔵 OPEN |
+| **C** | Adoption Simplification & SDK | GAP-GUARD-05, GAP-VIBE-01, GAP-PIPE-03 | 73+ | 🔵 OPEN |
+| **D** | Observability & Feedback Loop | GAP-PIPE-04, GAP-VIBE-02, GAP-VIBE-03 | 81+ | 🔵 OPEN |
+| **E** | Cloud-Ready & Multi-Agent Runtime | GAP-VIBE-04 | 98+ | 🔵 OPEN |
+
+**Dependencies:** Phase B requires Phase A. Phase E requires A+B+C.
+
+---
+
 ## 8. REFERENCE FILES
 
 | Document | Role |
@@ -284,6 +304,8 @@ Mọi guard mới (ở bất kỳ track nào) → phải qua `check_guard_regist
 | `CVF_Restructure/Independent Review/ADR-021_CVF_ECOSYSTEM_RESTRUCTURE.md` | Architecture decision record |
 | `CVF_Restructure/Independent Review/CVF_STRATEGIC_INTEGRATION_REVIEW_2026-03-08.md` | Tích hợp 3 nguồn |
 | `docs/concepts/CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md` | Blueprint cho Track III Phase 2-4 |
+| `ECOSYSTEM/strategy/CVF_UPGRADE_ROADMAP_RUNTIME_EVOLUTION_2026-03-09.md` | Track IV detail — Runtime Evolution roadmap |
+| `docs/assessments/CVF_INDEPENDENT_SYSTEM_ASSESSMENT_2026-03-09.md` | Track IV baseline — Independent system assessment |
 
 ---
 

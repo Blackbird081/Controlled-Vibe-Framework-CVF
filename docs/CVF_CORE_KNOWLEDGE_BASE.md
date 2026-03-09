@@ -435,10 +435,13 @@ Controlled-Vibe-Framework-CVF/
 | Kernel Coverage | 96.45% Stmts · 91.41% Branch · 99.09% Fn · 97.01% Lines |
 | Skills | 141 skills, 12 domains |
 | Agent Tools | 34 tools |
-| Overall Score | 9.4/10 (independent) · 8.5/10 (Antigravity) |
+| Overall Score | 9.4/10 (independent) · 8.5/10 (Antigravity) · **7.8/10** (system assessment 2026-03-09) |
 | **v1.7.3 addition** | Runtime Adapter Hub: 5 contracts + 4 adapters |
 | **CVF_ECO addition** | Track III: 12 extensions, 434 tests, 100% pass |
 | **Full Ecosystem** | CVF Core + Legacy + CVF_ECO: 34 extensions |
+| **Hardening Track I** | 76 new tests (Phase 1-4: UnifiedStateResolver, SkillRolloutEngine, WorkflowCoordinator) |
+| **Track IV Runtime Evolution** | ✅ COMPLETE: Phase A-E, 394 runtime tests, 453 total, governance-enforced runtime platform |
+| **Overall Score** | **9.2/10** (Runtime Evolution achieved) |
 
 ---
 

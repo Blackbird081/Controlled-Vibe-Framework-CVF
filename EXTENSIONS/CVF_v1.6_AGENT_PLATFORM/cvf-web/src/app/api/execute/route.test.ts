@@ -84,7 +84,7 @@ describe('/api/execute', () => {
         process.env.OPENAI_API_KEY = 'test-key';
         executeAIMock.mockResolvedValue({
             success: true,
-            output: 'ok',
+            output: '## Market Analysis\n\nThe SMB market shows strong growth potential.\n\n### Key Findings\n\n1. Market size is expanding at 12% annually.\n2. Customer acquisition costs are declining.\n3. Competition remains moderate in key segments.',
             provider: 'openai',
             model: 'gpt-4o',
         });

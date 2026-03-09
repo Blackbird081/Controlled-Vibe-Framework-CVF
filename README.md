@@ -6,10 +6,11 @@
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0%20Runtime-9e6b2b.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
+[![Runtime Tests](https://img.shields.io/badge/runtime-453%2F453%20PASS-brightgreen.svg)](EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/)
 [![Conformance](https://img.shields.io/badge/conformance-84%2F84%20PASS-brightgreen.svg)](docs/reviews/cvf_phase_governance/)
-[![Tests](https://img.shields.io/badge/tests-2%2C430%2B%20passing-brightgreen.svg)](docs/CVF_INCREMENTAL_TEST_LOG.md)
+[![Tests](https://img.shields.io/badge/tests-1%2C799%20passing-brightgreen.svg)](docs/CVF_INCREMENTAL_TEST_LOG.md)
 [![Skills](https://img.shields.io/badge/skills-141%20×%2012%20domains-blue.svg)](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
 [![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
 [![CVF_ECO](https://img.shields.io/badge/CVF_ECO-12%20extensions%2C%20434%20tests-blue.svg)](ECOSYSTEM/strategy/CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md)
@@ -33,7 +34,7 @@
 
 ## 👋 Overview
 
-CVF is a **governance framework** for AI-assisted software development. It ensures **humans stay in control** while **AI executes within boundaries**.
+CVF is a **governance-enforced runtime platform** for AI-assisted software development. It ensures **humans stay in control** while **AI executes within runtime-enforced boundaries**.
 
 **Key Capabilities:**
 
@@ -43,7 +44,7 @@ CVF is a **governance framework** for AI-assisted software development. It ensur
 - **34 Agent Tools** — RAG, Data Viz, Browser Auto, MCP, Agent Teams & more
 - **CVF_ECO Extensions** — 12 ecosystem modules, 434 tests, 100% pass
 - **Conformance Pipeline** — 84 scenarios, release-grade gate, golden baseline
-- **Web UI + Agent Platform** — No-code interface, multi-agent workflows
+- **Web UI + Agent Platform** — No-code interface, multi-agent workflows, v1.6 non-coder enhancement complete
 - **AI Safety Kernel** — 5-layer pipeline, anti-bypass, forensic tracing
 
 > **CVF doesn't help you go faster. CVF helps you avoid going wrong.**

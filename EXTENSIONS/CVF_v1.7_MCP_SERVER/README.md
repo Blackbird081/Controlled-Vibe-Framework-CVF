@@ -90,24 +90,41 @@ Unlike v1.6, guards now return **natural language guidance** when blocking or es
 
 ```bash
 npm test          # Watch mode
-npm run test:run  # Single run (102 tests)
+npm run test:run  # Single run (416 tests)
 ```
 
 ## Architecture
 
 ```
 src/
-  guards/
-    types.ts              — Shared type definitions
-    engine.ts             — GuardRuntimeEngine (deterministic pipeline)
-    phase-gate.guard.ts   — Phase enforcement + NL guidance
-    risk-gate.guard.ts    — Risk model + NL guidance
+  guards/                   — Guard Runtime Engine (102 tests)
+    types.ts                — Shared types (phases, risk, roles)
+    engine.ts               — Deterministic pipeline
+    phase-gate.guard.ts     — Phase enforcement + NL guidance
+    risk-gate.guard.ts      — R0-R3 risk model + NL guidance
     authority-gate.guard.ts — Role authorization + NL guidance
-    mutation-budget.guard.ts — Budget enforcement + NL guidance
-    scope.guard.ts        — Path protection + NL guidance
-    audit-trail.guard.ts  — Traceability + NL guidance
-    index.ts              — Exports + factory
-    engine.test.ts        — Engine tests (31)
-    guards.test.ts        — Guard tests (71)
-  index.ts                — MCP server entry point (7 tools)
+    mutation-budget.guard.ts — Budget limits + NL guidance
+    scope.guard.ts          — Path protection + NL guidance
+    audit-trail.guard.ts    — Traceability + NL guidance
+    index.ts                — Exports + factory
+  persistence/              — Guard Persistence (26 tests)
+    persistence.interface.ts — Adapter contract
+    json-file.adapter.ts    — JSON file storage
+  prompt/                   — System Prompt Generator (37 tests)
+    system-prompt.ts        — Context-aware prompt with MCP tools
+  cli/                      — CLI Wrapper (38 tests)
+    cli.ts                  — 9 commands for terminal usage
+  registry/                 — Unified Guard Registry (54 tests)
+    guard-registry.ts       — Single source of truth for guards
+    skill-guard-wire.ts     — Skill-to-guard mapping
+  vibe-translator/          — Vibe-to-Action (96 tests)
+    vibe-parser.ts          — NL intent/entity extraction (EN/VI)
+    clarification-engine.ts — Slot filling + active clarification
+    confirmation-card.ts    — Structured confirmation cards
+  memory/                   — Session Memory (40 tests)
+    session-memory.ts       — Cross-request state persistence
+  integration/              — E2E Integration (23 tests)
+    e2e-pipeline.test.ts    — Full pipeline tests
+  sdk.ts                    — Barrel exports for consumers
+  index.ts                  — MCP server entry point (7 tools)
 ```

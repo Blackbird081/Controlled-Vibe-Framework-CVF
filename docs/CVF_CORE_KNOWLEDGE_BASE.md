@@ -510,11 +510,11 @@ Tất cả 9 checkbox phải được check trước khi bắt đầu implement.
 
 ## XIV. CVF EXTENSION RULES (Bất di bất dịch)
 
-> 🔒 **Ượu tiên cao nhất.** Ba quy tắc này áp dụng cho mọi thứ được bổ sung vào CVF, không có ngoại lệ.
+> 🔒 **Ưu tiên cao nhất.** Ba quy tắc này áp dụng cho mọi thứ được bổ sung vào CVF, không có ngoại lệ.
 
 ### RULE 1 — Cấu trúc hiện tại luôn là chuẩn
 
-> **CVF củ luôn là điểm tham chiếu, không phải philosphy mới.**
+> **CVF cũ luôn là điểm tham chiếu, không phải philosphy mới.**
 
 - Cấu trúc CVF hiện tại (5 layers, version history, 4-Phase Process, Risk Model R0–R3) là **ground truth**
 - Bất kỳ đề xuất nào MUỐN đặt lại tên, redefine, hay "cải tiến" cấu trúc cũ → phải hỏi **tại sao cấu trúc cũ chưa đủ** thay vì replace nó

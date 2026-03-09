@@ -17,7 +17,7 @@ TRACK III: Ecosystem Expansion             ██████████ 100%  
 
 | Track | Phases | Tasks | Status | Next Action |
 |---|---|---|---|---|
-| **I. Hardening** | 0-6 | ~50 items | ✅ 100% — Phase 0-5 DONE; W1-W4 CLOSED; W2 RELEASE-GRADE PASS; Phase 6 DEPTH-FROZEN | — (CLOSED) |
+| **I. Hardening** | 0-6 | ~50 items | ✅ 85% — Phase 0-5 DONE; W1-W4 BASELINE; W2 RELEASE-GRADE PASS; Phase 6 DEPTH-FROZEN | See §2.1 Operational Reality |
 | **II. Eco Restructure** | 1 (Eco) | 17 tasks | ✅ 100% — ALL SECTIONS COMPLETE incl. Archive | — (CLOSED) |
 | **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | ✅ 100% — Phase 2-5 ALL COMPLETE (434 tests, 12 extensions) | — (CLOSED) |
 
@@ -28,21 +28,136 @@ TRACK III: Ecosystem Expansion             ██████████ 100%  
 > **Detail:** `docs/reviews/cvf_phase_governance/CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md`
 > **Principle:** "Close first, expand later" (§9 Hardening Roadmap)
 
-| Phase | Weakness | Status | Summary |
+### 2.1 Operational Reality Assessment
+
+> **Source:** `CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md` §1.3-1.4 (Detailed reality check)
+> **Assessment Date:** 2026-03-09
+> **Method:** Compare deliverables vs operational completeness
+
+| Phase | Deliverable Status | Operational Reality | Gap | Production Ready? |
+|---|---|---|---|---|
+| **Phase 0** | ✅ DONE | ✅ **BASELINE COMPLETE** | None | ✅ YES |
+| **Phase 1** | ✅ CLOSED | ⚠️ **MOSTLY DONE** | Not single-source control plane | 🔶 NEEDS UNIFICATION |
+| **Phase 2** | ✅ RELEASE-GRADE PASS | ✅ **STRONG BASELINE** | Full release-candidate gate missing | 🔶 NEEDS EXPANSION |
+| **Phase 3** | ✅ CLOSED | ⚠️ **RUNTIME BASELINE** | Broader rollout policy missing | 🔶 NEEDS POLICY EXPANSION |
+| **Phase 4** | ✅ CLOSED | ⚠️ **BASELINE ORCHESTRATION** | Broader long-running orchestration missing | 🔶 NEEDS ORCHESTRATION EXPANSION |
+| **Phase 5** | ✅ DONE | ✅ **BASELINE COMPLETE** | None | ✅ YES |
+| **Phase 6** | ⏸ DEPTH-FROZEN | ⏸ **DEFERRED** | Depth Audit 3/10 = DEFER | ⚠️ INTENTIONALLY PAUSED |
+
+**Overall Assessment:** 85% operational ready, 15% gaps remain for production readiness.
+
+### 2.2 Detailed Fix Plan
+
+#### Phase 1 — Complete Control Plane Unification
+**Target:** Single-source governance state for entire ecosystem
+**Current Gap:** Distributed state across multiple components
+**Effort:** HIGH (4-6 weeks)
+**Dependencies:** None
+
+**Tasks:**
+1. **Week 1-2:** Audit current distributed state sources
+   - Map all governance state locations
+   - Identify state synchronization gaps
+   - Design unified state schema
+2. **Week 3-4:** Implement unified control plane
+   - Create single governance state registry
+   - Migrate all components to read from unified source
+   - Add state consistency validation
+3. **Week 5-6:** Testing & Deployment
+   - End-to-end testing of unified state
+   - Backward compatibility verification
+   - Production deployment plan
+
+#### Phase 2 — Expand to Full Release-Candidate Gate
+**Target:** Complete release-grade conformance for all future waves
+**Current Gap:** Only Wave 1 covered, missing future extension coverage
+**Effort:** MEDIUM (3-4 weeks)
+**Dependencies:** Phase 1 completion
+
+**Tasks:**
+1. **Week 1:** Analyze Wave 1 gaps
+   - Review current scenario coverage
+   - Identify missing extension types
+   - Design extensibility framework
+2. **Week 2-3:** Implement extensibility
+   - Create scenario template system
+   - Build automated scenario generation
+   - Add extension coverage validation
+3. **Week 4:** Validation & Documentation
+   - Test with hypothetical Wave 2 extensions
+   - Update conformance documentation
+   - Create extension onboarding guide
+
+#### Phase 3 — Complete Skill Rollout Policy
+**Target:** Enterprise-scale skill governance rollout
+**Current Gap:** Basic runtime blocking, missing enterprise policies
+**Effort:** MEDIUM (2-3 weeks)
+**Dependencies:** Phase 1 completion
+
+**Tasks:**
+1. **Week 1:** Design enterprise rollout framework
+   - Multi-environment skill deployment
+   - Staged rollout policies
+   - Rollback procedures for skill updates
+2. **Week 2:** Implementation
+   - Build rollout orchestration engine
+   - Add skill lifecycle management
+   - Implement monitoring & alerting
+3. **Week 3:** Testing & Documentation
+   - Enterprise scenario testing
+   - Rollback procedure validation
+   - Operations documentation
+
+#### Phase 4 — Expand Durable Execution Orchestration
+**Target:** Production-grade long-running workflow orchestration
+**Current Gap:** Basic recovery, missing production orchestration
+**Effort:** HIGH (4-5 weeks)
+**Dependencies:** Phase 1-3 completion
+
+**Tasks:**
+1. **Week 1-2:** Design orchestration framework
+   - Complex workflow modeling
+   - Resource management strategies
+   - Failure handling policies
+2. **Week 3-4:** Implementation
+   - Build orchestration engine
+   - Add resource scheduling
+   - Implement advanced recovery patterns
+3. **Week 5:** Production Readiness
+   - Load testing
+   - Disaster recovery testing
+   - Operations documentation
+
+### 2.3 Updated Timeline
+
+| Phase | Original Status | Target Completion | Priority |
 |---|---|---|---|
-| **Phase 0** | Baseline freeze | ✅ **DONE** | Baseline, executive review, decision matrix, trace chain, rotation rules |
-| **Phase 1** | W1 — Unified control plane | ✅ **CLOSED** | Ecosystem Governance Contract established as single-source |
-| **Phase 2** | W2 — E2E conformance | ✅ **RELEASE-GRADE PASS** | 84/84 scenarios, 18/18 anchors, 17/17 groups, 5/5 families, golden diff clean, 0 violations |
-| **Phase 3** | W3 — Skill governance | ✅ **CLOSED** | Blocking, successor, dependency, phase compat + Skill Rollout Policy |
-| **Phase 4** | W4 — Durable execution | ✅ **CLOSED** | Rollback, replay, checkpoint/resume, remediation + Durable Execution Policy |
-| **Phase 5** | W5-W6 — Release discipline | ✅ **DONE** | Release manifest, module inventory, maturity matrix |
-| **Phase 6** | W7 — Enterprise evidence | ⏸ **DEPTH-FROZEN** | 4 packet postures, 8 runtime families, CF-084 — Depth Audit 3/10 = DEFER |
+| **Phase 1** | 85% (MOSTLY DONE) | Q2 2026 (6 weeks) | P0 - CRITICAL |
+| **Phase 2** | 85% (STRONG BASELINE) | Q3 2026 (4 weeks) | P1 - HIGH |
+| **Phase 3** | 85% (RUNTIME BASELINE) | Q3 2026 (3 weeks) | P1 - HIGH |
+| **Phase 4** | 80% (BASELINE ORCHESTRATION) | Q4 2026 (5 weeks) | P1 - HIGH |
+| **Phase 6** | DEFERRED | REMAIN DEFERRED | P2 - LOW |
+
+**Total Effort:** ~18 weeks across 4 phases
+**Critical Path:** Phase 1 → Phase 2 → Phase 3 → Phase 4
+**Parallel Work:** Phases 2-3 can run in parallel after Phase 1 completion
+
+| Phase | Weakness | Status | Summary | Operational Reality |
+|---|---|---|---|---|
+| **Phase 0** | Baseline freeze | ✅ **DONE** | Baseline, executive review, decision matrix, trace chain, rotation rules | ✅ **PRODUCTION READY** |
+| **Phase 1** | W1 — Unified control plane | ⚠️ **OPERATIONAL BASELINE** | Ecosystem Governance Contract + distributed state | 🔶 **NEEDS UNIFICATION** (85% complete) |
+| **Phase 2** | W2 — E2E conformance | ✅ **RELEASE-GRADE PASS** | 84/84 scenarios, 18/18 anchors, 17/17 groups, golden diff clean | 🔶 **NEEDS EXPANSION** (85% complete) |
+| **Phase 3** | W3 — Skill governance | ⚠️ **RUNTIME BASELINE** | Blocking, successor, dependency, phase compat + basic rollout | 🔶 **NEEDS POLICY EXPANSION** (85% complete) |
+| **Phase 4** | W4 — Durable execution | ⚠️ **BASELINE ORCHESTRATION** | Rollback, replay, checkpoint/resume, remediation + basic orchestration | 🔶 **NEEDS ORCHESTRATION EXPANSION** (80% complete) |
+| **Phase 5** | W5-W6 — Release discipline | ✅ **DONE** | Release manifest, module inventory, maturity matrix | ✅ **PRODUCTION READY** |
+| **Phase 6** | W7 — Enterprise evidence | ⏸ **DEPTH-FROZEN** | 4 packet postures, 8 runtime families, CF-084 — Depth Audit 3/10 = DEFER | ⚠️ **INTENTIONALLY DEFERRED** |
 
 ### Track I — Decision Rules
 
 - Mỗi phase mở thêm layer → phải qua **Depth Audit** (§1.5, score ≥ 8/10)
 - Ưu tiên: `risk reduced` > `detail added` > `semantic perfection`
 - Phase 6 không mở thêm trừ khi có real risk mới
+- **NEW:** Operational completeness > deliverable existence — production readiness requires full operational coverage
 
 ---
 

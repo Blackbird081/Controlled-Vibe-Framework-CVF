@@ -105,30 +105,45 @@ Controlled-Vibe-Framework-CVF/
 │   ├── governance/
 │   └── ...
 │
-├── EXTENSIONS/                         ← Layer 1-5 (22 extensions)
-│   ├── CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/
-│   ├── CVF_v1.2_CAPABILITY_EXTENSION/
-│   ├── CVF_v1.2.1_EXTERNAL_INTEGRATION/
-│   ├── CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/
-│   ├── CVF_v1.3_IMPLEMENTATION_TOOLKIT/
-│   ├── CVF_v1.3.1_OPERATOR_EDITION/
-│   ├── CVF_v1.4_USAGE_LAYER/
-│   ├── CVF_v1.5_UX_PLATFORM/
-│   ├── CVF_v1.5.1_END_USER_ORIENTATION/
-│   ├── CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/
-│   ├── CVF_v1.6_AGENT_PLATFORM/
-│   ├── CVF_v1.6.1_GOVERNANCE_ENGINE/
-│   ├── CVF_v1.7_CONTROLLED_INTELLIGENCE/
-│   ├── CVF_v1.7.1_SAFETY_RUNTIME/
-│   ├── CVF_v1.7.2_SAFETY_DASHBOARD/
-│   ├── CVF_v1.7.3_RUNTIME_ADAPTER_HUB/
-│   ├── CVF_v1.8_SAFETY_HARDENING/
-│   ├── CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/
-│   ├── CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/
-│   ├── CVF_v2.0_NONCODER_SAFETY_RUNTIME/
-│   ├── CVF_v3.0_CORE_GIT_FOR_AI/
-│   ├── ARCHITECTURE_SEPARATION_DIAGRAM.md
-│   └── examples/
+├── EXTENSIONS/                         ← Layer 1-5 (22 legacy + 12 CVF_ECO)
+│   ├── Legacy Extensions (v1.1.1-v3.0)      ← 22 modules
+│   │   ├── CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/
+│   │   ├── CVF_v1.2_CAPABILITY_EXTENSION/
+│   │   ├── CVF_v1.2.1_EXTERNAL_INTEGRATION/
+│   │   ├── CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/
+│   │   ├── CVF_v1.3_IMPLEMENTATION_TOOLKIT/
+│   │   ├── CVF_v1.3.1_OPERATOR_EDITION/
+│   │   ├── CVF_v1.4_USAGE_LAYER/
+│   │   ├── CVF_v1.5_UX_PLATFORM/
+│   │   ├── CVF_v1.5.1_END_USER_ORIENTATION/
+│   │   ├── CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/
+│   │   ├── CVF_v1.6_AGENT_PLATFORM/
+│   │   ├── CVF_v1.6.1_GOVERNANCE_ENGINE/
+│   │   ├── CVF_v1.7_CONTROLLED_INTELLIGENCE/
+│   │   ├── CVF_v1.7.1_SAFETY_RUNTIME/
+│   │   ├── CVF_v1.7.2_SAFETY_DASHBOARD/
+│   │   ├── CVF_v1.7.3_RUNTIME_ADAPTER_HUB/
+│   │   ├── CVF_v1.8_SAFETY_HARDENING/
+│   │   ├── CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/
+│   │   ├── CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/
+│   │   ├── CVF_v2.0_NONCODER_SAFETY_RUNTIME/
+│   │   ├── CVF_v3.0_CORE_GIT_FOR_AI/
+│   │   ├── ARCHITECTURE_SEPARATION_DIAGRAM.md
+│   │   └── examples/
+│   │
+│   └── CVF_ECO Extensions (Track III)        ← 12 modules, 434 tests ✅
+│       ├── CVF_ECO_v1.0_INTENT_VALIDATION/       ← 41 tests
+│       ├── CVF_ECO_v1.1_NL_POLICY/                ← 46 tests
+│       ├── CVF_ECO_v1.2_LLM_RISK_ENGINE/         ← 37 tests
+│       ├── CVF_ECO_v1.3_DOMAIN_GUARDS/          ← 39 tests
+│       ├── CVF_ECO_v1.4_RAG_PIPELINE/             ← 34 tests
+│       ├── CVF_ECO_v2.0_AGENT_GUARD_SDK/         ← 43 tests
+│       ├── CVF_ECO_v2.1_GOVERNANCE_CANVAS/       ← 30 tests
+│       ├── CVF_ECO_v2.2_GOVERNANCE_CLI/          ← 39 tests
+│       ├── CVF_ECO_v2.3_AGENT_IDENTITY/          ← 39 tests
+│       ├── CVF_ECO_v2.4_GRAPH_GOVERNANCE/         ← 27 tests
+│       ├── CVF_ECO_v3.0_TASK_MARKETPLACE/         ← 29 tests
+│       └── CVF_ECO_v3.1_REPUTATION/              ← 30 tests
 │
 ├── governance/                         ← Guards, policies, toolkit
 │   ├── toolkit/
@@ -179,14 +194,14 @@ ECOSYSTEM/doctrine/                    ECOSYSTEM/doctrine/
 └── CVF_DOCTRINE_RULES.md              └── CVF_DOCTRINE_RULES.md           ✅
 ```
 
-### Track II Phase 1.2 — VOM Integration ✅ 2/3 DONE
+### Track II Phase 1.2 — VOM Integration ✅ DONE
 
 ```
 EXPECTED:                              ACTUAL:
 ECOSYSTEM/operating-model/             ECOSYSTEM/operating-model/
 ├── CVF_AGENT_OPERATING_MODEL.md       ├── CVF_AGENT_OPERATING_MODEL.md    ✅
 ├── CVF_BUILDER_MODEL.md               ├── CVF_BUILDER_MODEL.md            ✅
-└── CVF_VOM_QUICK_START.md             └── (not yet created)               🔲
+└── CVF_VOM_QUICK_START.md             └── CVF_VOM_QUICK_START.md          ✅
 ```
 
 ### Track II Phase 1.3 — Repository Restructure ✅ 4/5 DONE
@@ -224,13 +239,13 @@ governance/compat/                         governance/compat/
 └── check_guard_registry.py                └── check_guard_registry.py            ✅
 ```
 
-### Track II Phase 1.6 — Archive CVF_Restructure 🔲 NOT STARTED
+### Track II Phase 1.6 — Archive CVF_Restructure ✅ DONE
 
 ```
-EXPECTED:
-CVF_Restructure/                      ← should remain .gitignored
-├── ARCHIVED_README.md                ← mark as archived
-└── (files stay local for reference)
+EXPECTED:                              ACTUAL:
+CVF_Restructure/                      ← .gitignored (local only)
+├── ARCHIVED_README.md                ├── ARCHIVED_README.md              ✅
+└── (files stay local for reference)   └── (archived locally)              ✅
 ```
 
 ---

@@ -180,6 +180,18 @@ CVF = Governance Framework (Rules + Process + Tools)
 | v1.9 | Deterministic Reproducibility | 2.5 | **Implemented** ✅ | `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` |
 | v2.0 | Non-Coder Safety Runtime | 4 | **Implemented** ✅ | `CVF_v2.0_NONCODER_SAFETY_RUNTIME/` |
 | v3.0 | Core Foundation — Git for AI | 0 | **DRAFT** 🔵 (cvf-next) | `CVF_v3.0_CORE_GIT_FOR_AI/` |
+| v1.0 | Intent Validation | 2 | **Implemented** ✅ | `CVF_ECO_v1.0_INTENT_VALIDATION/` |
+| v1.1 | NL Policy | 2 | **Implemented** ✅ | `CVF_ECO_v1.1_NL_POLICY/` |
+| v1.2 | LLM Risk Engine | 2 | **Implemented** ✅ | `CVF_ECO_v1.2_LLM_RISK_ENGINE/` |
+| v1.3 | Domain Guards | 2 | **Implemented** ✅ | `CVF_ECO_v1.3_DOMAIN_GUARDS/` |
+| v1.4 | RAG Pipeline | 2 | **Implemented** ✅ | `CVF_ECO_v1.4_RAG_PIPELINE/` |
+| v2.0 | Agent Guard SDK | 3 | **Implemented** ✅ | `CVF_ECO_v2.0_AGENT_GUARD_SDK/` |
+| v2.1 | Governance Canvas | 3 | **Implemented** ✅ | `CVF_ECO_v2.1_GOVERNANCE_CANVAS/` |
+| v2.2 | Governance CLI | 3 | **Implemented** ✅ | `CVF_ECO_v2.2_GOVERNANCE_CLI/` |
+| v2.3 | Agent Identity | 4 | **Implemented** ✅ | `CVF_ECO_v2.3_AGENT_IDENTITY/` |
+| v2.4 | Graph Governance | 4 | **Implemented** ✅ | `CVF_ECO_v2.4_GRAPH_GOVERNANCE/` |
+| v3.0 | Task Marketplace | 5 | **Implemented** ✅ | `CVF_ECO_v3.0_TASK_MARKETPLACE/` |
+| v3.1 | Reputation System | 5 | **Implemented** ✅ | `CVF_ECO_v3.1_REPUTATION/` |
 
 ---
 
@@ -346,6 +358,20 @@ Controlled-Vibe-Framework-CVF/
 │   ├── CVF_TOOLKIT_REFERENCE/       (Reference only)
 │   ├── CVF_STARTER_TEMPLATE_REFERENCE/ (Reference only)
 │   └── examples/
+│
+│   └── CVF_ECO Extensions (Track III)              ← 12 modules, 434 tests ✅
+│       ├── CVF_ECO_v1.0_INTENT_VALIDATION/         ← 41 tests
+│       ├── CVF_ECO_v1.1_NL_POLICY/                  ← 46 tests
+│       ├── CVF_ECO_v1.2_LLM_RISK_ENGINE/           ← 37 tests
+│       ├── CVF_ECO_v1.3_DOMAIN_GUARDS/            ← 39 tests
+│       ├── CVF_ECO_v1.4_RAG_PIPELINE/               ← 34 tests
+│       ├── CVF_ECO_v2.0_AGENT_GUARD_SDK/           ← 43 tests
+│       ├── CVF_ECO_v2.1_GOVERNANCE_CANVAS/         ← 30 tests
+│       ├── CVF_ECO_v2.2_GOVERNANCE_CLI/              ← 39 tests
+│       ├── CVF_ECO_v2.3_AGENT_IDENTITY/            ← 39 tests
+│       ├── CVF_ECO_v2.4_GRAPH_GOVERNANCE/           ← 27 tests
+│       ├── CVF_ECO_v3.0_TASK_MARKETPLACE/           ← 29 tests
+│       └── CVF_ECO_v3.1_REPUTATION/                ← 30 tests
 ├── docs/                        ← Governance & Documentation hub
 │   ├── CVF_CORE_KNOWLEDGE_BASE.md   ← ★ FILE NÀY (Governance permanent)
 │   ├── reference/
@@ -396,19 +422,23 @@ Controlled-Vibe-Framework-CVF/
 
 | Metric | Giá trị |
 |--------|---------|
-| Web Tests | 1764 passing |
+| CVF Core v3.0 Tests | 49 passing |
 | Kernel Tests (v1.7.1) | 51 passing |
 | v1.8 Safety Hardening Tests | **42 passing** (12 describe blocks) |
 | v1.9 Reproducibility Tests | **29 passing** |
 | v2.0 Non-Coder Runtime Tests | **32 passing** |
 | v1.2.1 External Integration Tests | **29 passing** |
-| **Total Kernel+Extension Tests** | **183 tests** |
+| **CVF_ECO Extensions Tests** | **434 passing** (12 modules) |
+| Legacy Extension Tests | **1764+ passing** (22 modules) |
+| **Total Tests** | **~2,430+ tests** |
 | Web Coverage | 93.05% Stmts |
 | Kernel Coverage | 96.45% Stmts · 91.41% Branch · 99.09% Fn · 97.01% Lines |
 | Skills | 141 skills, 12 domains |
 | Agent Tools | 34 tools |
 | Overall Score | 9.4/10 (independent) · 8.5/10 (Antigravity) |
 | **v1.7.3 addition** | Runtime Adapter Hub: 5 contracts + 4 adapters |
+| **CVF_ECO addition** | Track III: 12 extensions, 434 tests, 100% pass |
+| **Full Ecosystem** | CVF Core + Legacy + CVF_ECO: 34 extensions |
 
 ---
 

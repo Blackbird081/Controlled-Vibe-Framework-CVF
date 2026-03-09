@@ -403,11 +403,160 @@ Tháng 8/2026:  M7 — Non-coder First Product
 
 ## Phần Bổ Sung — Non-coder.md Integration
 
-> **Lưu ý:** File `CVF_Restructure/Information for non_coder.md` bị gitignore và chưa đọc được.  
-> Mục này sẽ được cập nhật sau khi đọc file đó.  
-> **Action required:** Bổ sung các ý kiến từ file đó vào các tracks liên quan (M2, M7).
+**Ngày cập nhật:** 2026-03-09  
+**Nguồn:** `Non coder.md` (file gốc từ CVF_Restructure)  
+**Trạng thái:** ✅ Đã phân tích và map vào milestones
+
+### Tổng quan 10 ý tưởng chủ đạo từ Non-coder.md
+
+| # | Ý tưởng | Giá trị | Map vào Milestone |
+|---|---|---|---|
+| 1 | **"Safe-Auto" mode** — Auto-suggest guardrails khi user nhập Vibe | Rất cao — đúng core CVF | M4 (NL Guidance) |
+| 2 | **Ngôn ngữ tin cậy** — Audit bằng tiếng người, không phải log code | Rất cao — đã có v1.6 cơ bản | M4 (NL Guidance) + M6 (Dashboard) |
+| 3 | **Vibe-to-Action translator** — LLM dịch Vibe → Policy + Constraints | Cực cao — thiếu hoàn toàn hiện tại | **M4 mới: Track M4.3** |
+| 4 | **5 mong muốn Non-coder** — Đừng ép làm dev, phanh khẩn cấp, giải thích, chứng minh, orchestrator | UX direction — xuyên suốt | M7 (First Product) |
+| 5 | **5 màn hình UX** — Vibe Box, Intention Map, Live Dashboard, HITL, Audit Ledger | Blueprint cụ thể cho UI | **M7: Track M7.3** |
+| 6 | **Active Clarification** — Slot Filling hỏi ngược khi thiếu thông tin | Cao — tránh hallucination | **M4 mới: Track M4.3** |
+| 7 | **Few-Shot Vibe Mapping** — Intent Library + Vector Similarity | Cao — nâng cấp template recommender | M3 (Skill-Guard) |
+| 8 | **Smart Onboarding** — Psychographic Profiling (autonomy, risk, dictionary) | Rất cao — cá nhân hóa | **M7: Track M7.4** |
+| 9 | **Identity Mapping** — Danh bạ → Graph nodes, Action Cards | Cao — thực tế cho mobile | M7 (First Product) |
+| 10 | **Optimistic UI** — Phản hồi ảo + Parallel Parsing | UX critical — cảm giác nhanh | M6 (Dashboard) + M7 |
+
+### Các Tasks mới bổ sung vào Milestones
+
+---
+
+#### Bổ sung M2 — CVF System Prompt (v1.7.1)
+
+| Task mới | Mô tả | Nguồn |
+|---|---|---|
+| M2.1.8 | Tích hợp Goal/Constraint separation vào prompt — Planner vs Governor pattern | Non-coder #4 (line 108–111) |
+| M2.1.9 | Self-Correction Loop instruction — Agent tự giải trình kế hoạch trước khi thực thi | Non-coder #3 (line 103–106) |
+
+---
+
+#### Bổ sung M4 — Agent NL Guidance (v1.8.1)
+
+**Track M4.3 MỚI — Vibe-to-Action Translator**
+
+Đây là ý tưởng quan trọng nhất từ Non-coder.md: CVF không chỉ BLOCK/ALLOW mà phải DỊCH Vibe thành Policy.
+
+| Task | Mô tả | File đích | Ước tính test |
+|---|---|---|---|
+| M4.3.1 | Vibe Parser — Trích xuất intent, entities, constraints từ NL input | `src/lib/vibe-translator/vibe-parser.ts` | 25 |
+| M4.3.2 | Active Clarification Engine — Slot Filling khi thiếu thông tin | `src/lib/vibe-translator/clarification-engine.ts` | 20 |
+| M4.3.3 | Constraint Extractor — Tách goal vs constraint tự động | `src/lib/vibe-translator/constraint-extractor.ts` | 15 |
+| M4.3.4 | Confirmation Card Generator — Tạo bản tóm tắt xác nhận | `src/lib/vibe-translator/confirmation-card.ts` | 15 |
+| M4.3.5 | Self-Correction Loop — Agent giải trình kế hoạch → User approve | `src/lib/vibe-translator/self-correction.ts` | 20 |
+| M4.3.6 | Structured Output enforcement (JSON mode) | `src/lib/vibe-translator/structured-output.ts` | 10 |
+| M4.3.7 | Integration tests — full Vibe → Policy → Guard → Execute flow | `src/lib/vibe-translator/vibe-translator.test.ts` | 30 |
+
+**Ước tính tests Track M4.3:** ~135 tests  
+**Verification:** User nhập "Gửi báo cáo cho sếp hàng tuần" → CVF hỏi ngược 3 câu → tạo Policy → Guard approve → Execute
+
+**Cập nhật M4 tổng tests:** 130 + 135 = ~265 tests
+
+---
+
+#### Bổ sung M3 — Skill-Guard (v1.8)
+
+| Task mới | Mô tả | Nguồn |
+|---|---|---|
+| M3.2.8 | Few-Shot Vibe Mapping — Intent Library với vector similarity cho template matching | Non-coder #7 (line 100–102) |
+| M3.2.9 | Nâng cấp template-recommender dùng semantic matching thay vì keyword-only | Non-coder #7 |
+
+---
+
+#### Bổ sung M6 — Dashboard (v2.0)
+
+| Task mới | Mô tả | Nguồn |
+|---|---|---|
+| M6.1.8 | Optimistic UI — Phản hồi ảo (0.5s → 1.5s → 3s) trong khi xử lý | Non-coder #10 (line 239–243) |
+| M6.1.9 | Parallel Parsing indicator — Hiển thị nhiều nhánh xử lý song song | Non-coder #10 (line 244–248) |
+| M6.1.10 | "Ngôn ngữ tin cậy" Audit — Audit Ledger bằng tiếng người, không log code | Non-coder #2 (line 14–17) |
+
+---
+
+#### Bổ sung M7 — Non-coder First Product (v2.1)
+
+**Track M7.3 MỚI — 5 Màn Hình Vàng (Golden Screens)**
+
+Từ Non-coder.md: Blueprint cụ thể cho UI non-coder.
+
+| Task | Mô tả | Nguồn |
+|---|---|---|
+| M7.3.1 | **"The Vibe Box"** — Ô nhập liệu duy nhất + nút ghi âm | Line 50–52 |
+| M7.3.2 | **"Intention Map"** — Mindmap xác nhận trước khi chạy + auto-suggested guardrails | Line 53–66 |
+| M7.3.3 | **"Live Operation Dashboard"** — Thanh tiến trình + ví tiền + nút Pause đỏ | Line 67–76 |
+| M7.3.4 | **"Human-in-the-loop"** — Push notification khi Risk Engine phát hiện vấn đề | Line 77–80 |
+| M7.3.5 | **"Audit Ledger"** — Bản tóm tắt cuối ngày bằng ngôn ngữ con người | Line 81–83 |
+
+**Track M7.4 MỚI — Smart Onboarding (Psychographic Profiling)**
+
+Từ Non-coder.md: Bộ câu hỏi thông minh thay thế cài đặt kỹ thuật.
+
+| Task | Mô tả | Nguồn |
+|---|---|---|
+| M7.4.1 | **Persona Alignment** — Hỏi phong cách: "Lính đặc nhiệm" vs "Thực tập sinh" → Autonomy Level | Line 117–122 |
+| M7.4.2 | **Red Lines** — Checklist vùng đỏ: Data Access Whitelist, HITL triggers | Line 123–128 |
+| M7.4.3 | **Personal Dictionary** — Context Mapping: "Sếp" = Anh Nam, "Báo cáo" = gạch đầu dòng | Line 129–137 |
+| M7.4.4 | **Identity Mapping** — Tích hợp danh bạ, gán nhãn, tạo Graph nodes | Line 149–172 |
+| M7.4.5 | **Action Cards** — Thẻ cử chỉ: slider tiền, co-pilot/auto-pilot, bộ lọc tin cậy | Line 173–177 |
+
+---
+
+### Tác động đến Tổng Hợp Kế Hoạch
+
+#### Tests cập nhật
+
+| Milestone | Tests ban đầu | Tests bổ sung | Tổng mới |
+|---|---|---|---|
+| M2 (v1.7.1) | +53 | +0 (tasks là prompt, không code test) | ~53 |
+| M3 (v1.8) | +127 | +20 (semantic matching) | ~147 |
+| M4 (v1.8.1) | +130 | +135 (Vibe Translator) | ~265 |
+| M6 (v2.0) | +152 | +25 (optimistic UI, audit NL) | ~177 |
+| M7 (v2.1) | +100 | +80 (5 screens + onboarding) | ~180 |
+
+#### Tổng tests mới dự kiến
+
+| Milestone | Tests mới | Tổng cộng |
+|---|---|---|
+| Hiện tại (v1.6) | — | 1,799 |
+| M1 (v1.7) | +175 | ~1,974 |
+| M2 (v1.7.1) | +53 | ~2,027 |
+| M3 (v1.8) | +147 | ~2,174 |
+| M4 (v1.8.1) | +265 | ~2,439 |
+| M5 (v1.9) | +227 | ~2,666 |
+| M6 (v2.0) | +177 | ~2,843 |
+| M7 (v2.1) | +180 | ~3,023 |
+
+### Ý tưởng từ Non-coder.md đã có sẵn trong CVF v1.6
+
+| Ý tưởng | Hiện trạng v1.6 | Cần nâng cấp? |
+|---|---|---|
+| Ngôn ngữ thân thiện | ✅ `non-coder-language.ts` (vi/en) | Cần mở rộng → "ngôn ngữ tin cậy" |
+| Template recommendation | ✅ `template-recommender.ts` (keyword) | Cần nâng → semantic matching |
+| Wizard progress | ✅ `wizard-progress.ts` | Giữ nguyên, bổ sung onboarding |
+| Workflow monitor | ✅ `workflow-monitor.ts` | Cần nâng → Live Operation Dashboard |
+| Output validation | ✅ `output-validator.ts` | Giữ nguyên |
+
+### Kết luận
+
+Non-coder.md cung cấp **vision rất rõ ràng** cho sản phẩm cuối cùng:
+
+> **CVF = "Người bảo hộ thông minh"**  
+> User đưa Vibe (ý tưởng) → CVF trả lại sự an tâm + kết quả
+
+Các ý tưởng quan trọng nhất cần ưu tiên:
+
+1. 🔴 **Vibe-to-Action Translator** (M4.3) — thiếu hoàn toàn, là trái tim của non-coder experience
+2. 🔴 **5 Golden Screens** (M7.3) — blueprint UI cụ thể, không cần phát minh thêm
+3. 🟡 **Smart Onboarding** (M7.4) — cá nhân hóa CVF cho từng user
+4. 🟡 **Active Clarification** (M4.3.2) — tránh hallucination bằng slot filling
+5. 🟢 **Action Cards** (M7.4.5) — UX "gạt tay" thay đổi governance nhanh
 
 ---
 
 *Tài liệu này được tạo dựa trên CVF Independent Expert Assessment 2026-03-09.*  
-*Cập nhật khi có thay đổi scope hoặc sau mỗi milestone.*
+*Cập nhật lần 1: Tích hợp Non-coder.md insights (2026-03-09).*  
+*Cập nhật tiếp khi có thay đổi scope hoặc sau mỗi milestone.*

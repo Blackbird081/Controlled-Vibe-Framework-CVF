@@ -105,8 +105,8 @@ export async function encryptDataAsync(data: string): Promise<string> {
         combined.set(iv, salt.length);
         combined.set(new Uint8Array(encrypted), salt.length + iv.length);
 
-        // Return as base64
-        return btoa(String.fromCharCode(...combined));
+        // Return as base64 (properly handle Unicode)
+        return btoa(String.fromCharCode.apply(null, Array.from(combined)));
     } catch (error) {
         console.error('Encryption failed:', error);
         throw new Error('Encryption failed');
@@ -116,10 +116,12 @@ export async function encryptDataAsync(data: string): Promise<string> {
 // Decrypt data using AES-GCM (async)
 export async function decryptDataAsync(encryptedBase64: string): Promise<string> {
     try {
-        // Decode base64
-        const combined = new Uint8Array(
-            atob(encryptedBase64).split('').map(c => c.charCodeAt(0))
-        );
+        // Decode base64 (properly handle Unicode)
+        const binaryString = atob(encryptedBase64);
+        const combined = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            combined[i] = binaryString.charCodeAt(i);
+        }
 
         // Extract salt, iv, and encrypted data
         const salt = combined.slice(0, 16);

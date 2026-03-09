@@ -12,14 +12,14 @@
 ```
 TRACK I:  Hardening (Close W1-W7)          █████████░ 90%   ← W1,W3,W4 CLOSED
 TRACK II: Ecosystem Restructure            ██████████ 100%  ← COMPLETE ✅ (Archive DONE)
-TRACK III: Ecosystem Expansion             ██░░░░░░░░ 10%   ← Phase 2: Intent Validation ✅ + NL Policy ✅
+TRACK III: Ecosystem Expansion             ████░░░░░░ 20%   ← Phase 2: 4/5 modules DONE
 ```
 
 | Track | Phases | Tasks | Status | Next Action |
 |---|---|---|---|---|
 | **I. Hardening** | 0-6 | ~50 items | 90% — Phase 0,5 DONE; W1,W3,W4 CLOSED; Phase 2 STRONG; Phase 6 FROZEN | Validate W2 release-grade gate |
 | **II. Eco Restructure** | 1 (Eco) | 17 tasks | ✅ 100% — ALL SECTIONS COMPLETE incl. Archive | — (CLOSED) |
-| **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | 10% — Phase 2: Intent Validation ✅ + NL Policy ✅ (87 tests) | LLM Risk Engine (Task 2.3) |
+| **III. Eco Expansion** | 2-5 (Eco) | 65 tasks | 20% — Phase 2: 4/5 modules ✅ (163 tests) | Hierarchical RAG (Task 2.5) |
 
 ---
 
@@ -71,7 +71,7 @@ TRACK III: Ecosystem Expansion             ██░░░░░░░░ 10%   
 
 | Phase | Key Deliverables | Tasks | Status | Expected Output (Treeview Target) | Blocked By |
 |---|---|---|---|---|---|
-| **Phase 2** (Q3 2026) | Intent Validation, NL Policy, LLM Risk | 23 | 🟡 2/5 | `CVF_ECO_v1.0_INTENT_VALIDATION/` + `CVF_ECO_v1.1_NL_POLICY/` | Task 2.3 LLM Risk |
+| **Phase 2** (Q3 2026) | Intent Validation, NL Policy, LLM Risk, Domain Guards | 23 | 🟡 4/5 | `CVF_ECO_v1.0-v1.3` (4 extensions) | Task 2.5 RAG Pipeline |
 | **Phase 3** (Q4 2026) | Agent Guard SDK, Canvas, CLI | 17 | 🔲 | `EXTENSIONS/CVF_v2.2_SDK_PLATFORM/` | Track I: W4 + Phase 2 |
 | **Phase 4** (2027) | Agent Identity, Graph Governance | 8 | 🔲 | `EXTENSIONS/CVF_v2.3_NETWORK/` | Phase 3 |
 | **Phase 5** (2028+) | Task Marketplace, Reputation | 5 | 🔲 | `EXTENSIONS/CVF_v3.1_ECONOMY/` | Phase 4 |
@@ -165,7 +165,9 @@ Mọi guard mới (ở bất kỳ track nào) → phải qua `check_guard_regist
 | 6 | **Archive CVF_Restructure** — Migrate + archive | Track II | P2 | Low | ✅ DONE |
 | 7 | **Intent Validation** — Triple-S engine (41 tests) | Track III | P2 | High | ✅ DONE |
 | 8 | **NL Policy** — Compiler + Templates + Store + Serializer (46 tests) | Track III | P2 | High | ✅ DONE |
-| 9 | **LLM Risk Engine** — Context-aware risk scoring | Track III | P2 | Medium | 🔲 NEXT |
+| 9 | **LLM Risk Engine** — RiskScorer + ContextAnalyzer + Aggregator (37 tests) | Track III | P2 | Medium | ✅ DONE |
+| 10 | **Domain Guards** — Finance + Privacy + CodeSecurity guards (39 tests) | Track III | P2 | Medium | ✅ DONE |
+| 11 | **Hierarchical RAG Pipeline** — Tiered retrieval | Track III | P2 | Medium | 🔲 NEXT |
 
 ---
 

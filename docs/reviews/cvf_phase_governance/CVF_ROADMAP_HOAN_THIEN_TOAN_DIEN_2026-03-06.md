@@ -6,6 +6,15 @@ Trạng thái: Roadmap tổng hợp để xử lý toàn bộ điểm yếu ghi 
 > **Input baseline:** `CVF_DANH_GIA_DOC_LAP_TOAN_DIEN_2026-03-06.md`  
 > **Executive companion:** `CVF_EXECUTIVE_REVIEW_BASELINE_2026-03-06.md`
 
+## 0.2 Addendum (2026-03-10)
+
+Để phục vụ batch fix và các upgrade tiếp theo, đã bổ sung 2 tài liệu tham chiếu mới:
+
+- Independent review snapshot: `CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-10.md`
+- Roadmap fix chi tiết (tổng hợp review + requirements): `CVF_ROADMAP_FIXES_2026-03-10.md`
+
+Ghi chú: Các mục “User Actions Required” trong `ECOSYSTEM/strategy/CVF_USER_REQUIREMENTS_2026-03-10.md` đã được loại khỏi roadmap fix theo yêu cầu.
+
 ---
 
 ## 1. Mục tiêu roadmap

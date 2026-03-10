@@ -5,9 +5,13 @@ on:
     branches: [ main, develop ]
     paths:
       - '**.md'
+      - 'governance/contracts/**'
+      - 'governance/compat/**'
       - 'governance/skill-library/registry/**.py'
       - 'governance/skill-library/registry/**.md'
       - 'EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/**.skill.md'
+      - 'EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/guards/**'
+      - 'EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/guard-runtime-adapter.ts'
       - 'sdk/**'
       - '.github/workflows/**'
   pull_request:
@@ -93,6 +97,21 @@ jobs:
       - name: Enforce release manifest consistency
         run: |
           python governance/compat/check_release_manifest_consistency.py --enforce
+
+  cross-channel-guard-compat:
+    name: Cross-Channel Guard Compat
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce cross-channel guard contract compat
+        run: |
+          python governance/compat/check_guard_contract_compat.py --enforce
 
   enterprise-evidence-pack:
     name: Enterprise Evidence Pack
@@ -277,7 +296,7 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [docs-governance-compat, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, release-manifest-consistency, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
+    needs: [docs-governance-compat, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, release-manifest-consistency, cross-channel-guard-compat, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
     if: always()
     
     steps:
@@ -289,6 +308,7 @@ jobs:
           echo "Conformance trace rotation: ${{ needs.conformance-trace-rotation.result }}"
           echo "Python automation size: ${{ needs.python-automation-size.result }}"
           echo "Release manifest consistency: ${{ needs.release-manifest-consistency.result }}"
+          echo "Cross-channel guard compat: ${{ needs.cross-channel-guard-compat.result }}"
           echo "Enterprise evidence pack: ${{ needs.enterprise-evidence-pack.result }}"
           echo "Conformance artifact consistency: ${{ needs.conformance-artifact-consistency.result }}"
           echo "Conformance golden diff: ${{ needs.conformance-golden-diff.result }}"

@@ -5,12 +5,32 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { SkillLibrary } from './SkillLibrary';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const trackEventMock = vi.fn();
 const getSkillCategoriesMock = vi.fn();
 const saveUatContentMock = vi.fn();
 const routerPushMock = vi.fn();
 const fetchMock = vi.fn();
+const fixturePath = resolve(dirname(fileURLToPath(import.meta.url)), '__fixtures__/skills-index.fixture.json');
+const fixtureCategories = JSON.parse(readFileSync(fixturePath, 'utf-8'));
+
+const setFetchPayload = (payload: unknown) => {
+    fetchMock.mockReset();
+    fetchMock.mockResolvedValue({
+        ok: true,
+        json: async () => payload,
+    });
+    // @ts-expect-error — assign test fetch
+    global.fetch = fetchMock;
+};
+
+const setCategories = (categories: unknown) => {
+    setFetchPayload(categories);
+    getSkillCategoriesMock.mockResolvedValue(categories);
+};
 
 // i18n mock — toggle between en/vi
 let mockLanguage = 'en';
@@ -218,21 +238,18 @@ describe('SkillLibrary i18n — EN mode', () => {
         trackEventMock.mockClear();
         getSkillCategoriesMock.mockReset();
         saveUatContentMock.mockReset();
-        fetchMock.mockReset();
-        fetchMock.mockRejectedValue(new Error('fetch failed'));
-        // @ts-expect-error — assign test fetch
-        global.fetch = fetchMock;
+        setFetchPayload(fixtureCategories);
     });
 
     it('renders sidebar header and search in English', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText('📚 Skill Library')).toBeTruthy());
         expect(screen.getByPlaceholderText('Search skills...')).toBeTruthy();
     });
 
     it('renders domain report section in English', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText('📊 Domain Report')).toBeTruthy());
         expect(screen.getByText(/Total skills/)).toBeTruthy();
@@ -241,7 +258,7 @@ describe('SkillLibrary i18n — EN mode', () => {
     });
 
     it('renders filter labels in English', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText('Sort')).toBeTruthy());
         expect(screen.getByText('Sort Dir')).toBeTruthy();
@@ -249,7 +266,7 @@ describe('SkillLibrary i18n — EN mode', () => {
     });
 
     it('renders difficulty badges in English', async () => {
-        getSkillCategoriesMock.mockResolvedValue([{
+        setCategories([{
             id: 'dev',
             name: 'Development',
             skills: [
@@ -265,7 +282,7 @@ describe('SkillLibrary i18n — EN mode', () => {
     });
 
     it('renders skill detail badges in English after selecting', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText('Test Skill')).toBeTruthy());
         fireEvent.click(screen.getByText('Test Skill'));
@@ -279,7 +296,7 @@ describe('SkillLibrary i18n — EN mode', () => {
     });
 
     it('renders view tabs in English', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => fireEvent.click(screen.getByText('Test Skill')));
         expect(screen.getByText('Skill')).toBeTruthy();
@@ -288,7 +305,7 @@ describe('SkillLibrary i18n — EN mode', () => {
     });
 
     it('renders UAT editor labels in English', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => fireEvent.click(screen.getByText('Test Skill')));
         fireEvent.click(screen.getByText('UAT'));
@@ -300,13 +317,13 @@ describe('SkillLibrary i18n — EN mode', () => {
     });
 
     it('renders empty state in English', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText('Select a skill to view')).toBeTruthy());
     });
 
     it('renders pagination labels in English', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText(/Showing/)).toBeTruthy());
         expect(screen.getByText(/Rows/)).toBeTruthy();
@@ -315,7 +332,7 @@ describe('SkillLibrary i18n — EN mode', () => {
     });
 
     it('renders table headers in English', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => {
             const table = screen.getByRole('table');
@@ -335,21 +352,18 @@ describe('SkillLibrary i18n — VI mode', () => {
         trackEventMock.mockClear();
         getSkillCategoriesMock.mockReset();
         saveUatContentMock.mockReset();
-        fetchMock.mockReset();
-        fetchMock.mockRejectedValue(new Error('fetch failed'));
-        // @ts-expect-error — assign test fetch
-        global.fetch = fetchMock;
+        setFetchPayload(fixtureCategories);
     });
 
     it('renders sidebar header and search in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText('📚 Thư viện Skill')).toBeTruthy());
         expect(screen.getByPlaceholderText('Tìm kiếm skill...')).toBeTruthy();
     });
 
     it('renders domain report section in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText('📊 Báo cáo Domain')).toBeTruthy());
         expect(screen.getByText(/Tổng skill/)).toBeTruthy();
@@ -357,7 +371,7 @@ describe('SkillLibrary i18n — VI mode', () => {
     });
 
     it('renders filter labels in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText('Sắp xếp')).toBeTruthy());
         expect(screen.getByText('Thứ tự')).toBeTruthy();
@@ -365,7 +379,7 @@ describe('SkillLibrary i18n — VI mode', () => {
     });
 
     it('renders difficulty badges in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue([{
+        setCategories([{
             id: 'dev',
             name: 'Development',
             skills: [
@@ -381,7 +395,7 @@ describe('SkillLibrary i18n — VI mode', () => {
     });
 
     it('renders skill detail badges in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => fireEvent.click(screen.getByText('Test Skill')));
 
@@ -394,7 +408,7 @@ describe('SkillLibrary i18n — VI mode', () => {
     });
 
     it('renders view tabs in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => fireEvent.click(screen.getByText('Test Skill')));
         expect(screen.getByText('Skill')).toBeTruthy();
@@ -403,7 +417,7 @@ describe('SkillLibrary i18n — VI mode', () => {
     });
 
     it('renders UAT editor labels in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => fireEvent.click(screen.getByText('Test Skill')));
         fireEvent.click(screen.getByText('UAT'));
@@ -417,13 +431,13 @@ describe('SkillLibrary i18n — VI mode', () => {
     });
 
     it('renders empty state in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText('Chọn một skill để xem')).toBeTruthy());
     });
 
     it('renders pagination in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue(sampleCategories);
+        setCategories(sampleCategories);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText(/Hiển thị/)).toBeTruthy());
         expect(screen.getByText(/Dòng/)).toBeTruthy();
@@ -432,7 +446,7 @@ describe('SkillLibrary i18n — VI mode', () => {
     });
 
     it('renders quality badges in Vietnamese', async () => {
-        getSkillCategoriesMock.mockResolvedValue([{
+        setCategories([{
             id: 'dev',
             name: 'Development',
             skills: [

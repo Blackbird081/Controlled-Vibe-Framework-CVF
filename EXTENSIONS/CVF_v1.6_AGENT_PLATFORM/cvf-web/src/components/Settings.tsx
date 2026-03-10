@@ -94,7 +94,15 @@ function loadInitialSettings(): SettingsData {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) {
         localStorage.setItem(MIGRATION_KEY, '1');
-        return defaultSettings;
+        const initial = { ...defaultSettings };
+        const envGeminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
+        if (envGeminiKey) {
+            initial.providers = {
+                ...initial.providers,
+                gemini: { ...initial.providers.gemini, apiKey: envGeminiKey },
+            };
+        }
+        return initial;
     }
 
     try {
@@ -105,6 +113,11 @@ function loadInitialSettings(): SettingsData {
             providers: { ...defaultSettings.providers, ...parsed.providers },
             preferences: { ...defaultSettings.preferences, ...parsed.preferences },
         };
+
+        const envGeminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
+        if (envGeminiKey && !merged.providers.gemini.apiKey) {
+            merged.providers.gemini = { ...merged.providers.gemini, apiKey: envGeminiKey };
+        }
 
         const migrated = localStorage.getItem(MIGRATION_KEY) === '1';
         if (!migrated) {

@@ -1,9 +1,20 @@
 [build]
-  base = "Mini_Game/webapp"
-  publish = "out"
-  command = "npm install && npm run build"
+  base = "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web"
+  command = "npm run build"
+  publish = ".next"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

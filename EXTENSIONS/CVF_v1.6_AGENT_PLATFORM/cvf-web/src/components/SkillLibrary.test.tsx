@@ -4,12 +4,32 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { SkillLibrary } from './SkillLibrary';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const trackEventMock = vi.fn();
 const getSkillCategoriesMock = vi.fn();
 const saveUatContentMock = vi.fn();
 const routerPushMock = vi.fn();
 const fetchMock = vi.fn();
+const fixturePath = resolve(dirname(fileURLToPath(import.meta.url)), '__fixtures__/skills-index.fixture.json');
+const fixtureCategories = JSON.parse(readFileSync(fixturePath, 'utf-8'));
+
+const setFetchPayload = (payload: unknown) => {
+    fetchMock.mockReset();
+    fetchMock.mockResolvedValue({
+        ok: true,
+        json: async () => payload,
+    });
+    // @ts-expect-error — assign test fetch
+    global.fetch = fetchMock;
+};
+
+const setCategories = (categories: unknown) => {
+    setFetchPayload(categories);
+    getSkillCategoriesMock.mockResolvedValue(categories);
+};
 
 vi.mock('@/lib/analytics', () => ({
     trackEvent: (...args: unknown[]) => trackEventMock(...args),
@@ -127,14 +147,12 @@ describe('SkillLibrary', () => {
         trackEventMock.mockClear();
         getSkillCategoriesMock.mockReset();
         saveUatContentMock.mockReset();
-        fetchMock.mockReset();
-        fetchMock.mockRejectedValue(new Error('fetch failed'));
         getTemplatesForSkillMock.mockReset().mockReturnValue([]);
-        global.fetch = fetchMock;
+        setFetchPayload(fixtureCategories);
     });
 
     it('tracks skill view and copy actions', async () => {
-        getSkillCategoriesMock.mockResolvedValue([
+        setCategories([
             {
                 id: 'dev',
                 name: 'Development',
@@ -174,7 +192,13 @@ describe('SkillLibrary', () => {
     it('shows loading spinner and empty state when no skills exist', async () => {
         let resolve: (value: unknown) => void;
         const promise = new Promise((res) => { resolve = res; });
-        getSkillCategoriesMock.mockReturnValue(promise);
+        fetchMock.mockReset();
+        fetchMock.mockResolvedValue({
+            ok: true,
+            json: async () => promise,
+        });
+        // @ts-expect-error — assign test fetch
+        global.fetch = fetchMock;
 
         const { container } = render(<SkillLibrary />);
         expect(container.querySelector('.animate-spin')).toBeTruthy();
@@ -184,7 +208,7 @@ describe('SkillLibrary', () => {
     });
 
     it('filters skills and renders difficulty badges', async () => {
-        getSkillCategoriesMock.mockResolvedValue([
+        setCategories([
             {
                 id: 'dev',
                 name: 'Development',
@@ -235,6 +259,10 @@ describe('SkillLibrary', () => {
     it('handles failed skill loading gracefully', async () => {
         const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
         getSkillCategoriesMock.mockRejectedValue(new Error('fail'));
+        fetchMock.mockReset();
+        fetchMock.mockRejectedValue(new Error('fetch failed'));
+        // @ts-expect-error — assign test fetch
+        global.fetch = fetchMock;
 
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText(/No skills found matching/i)).toBeTruthy());
@@ -243,7 +271,7 @@ describe('SkillLibrary', () => {
     });
 
     it('renders domain report metrics and filters by UAT/spec criteria', async () => {
-        getSkillCategoriesMock.mockResolvedValue([
+        setCategories([
             {
                 id: 'app',
                 name: 'App Development',
@@ -338,7 +366,7 @@ describe('SkillLibrary', () => {
     });
 
     it('allows editing UAT content and saves updates', async () => {
-        getSkillCategoriesMock.mockResolvedValue([
+        setCategories([
             {
                 id: 'app',
                 name: 'App Development',
@@ -386,7 +414,7 @@ describe('SkillLibrary', () => {
     });
 
     it('blocks UAT edit when Spec Gate fails', async () => {
-        getSkillCategoriesMock.mockResolvedValue([
+        setCategories([
             {
                 id: 'app',
                 name: 'App Development',
@@ -421,7 +449,7 @@ describe('SkillLibrary', () => {
 
     it('renders linked templates when getTemplatesForSkill returns IDs', async () => {
         getTemplatesForSkillMock.mockReturnValue(['tmpl-1']);
-        getSkillCategoriesMock.mockResolvedValue([{
+        setCategories([{
             id: 'dev', name: 'Development',
             skills: [{
                 id: 'skill-1', title: 'Skill One', domain: 'App Development',
@@ -442,7 +470,7 @@ describe('SkillLibrary', () => {
         const stm = await import('@/lib/skill-template-map');
         (stm.domainToCategoryMap as Record<string, string>)['app_development'] = 'App';
 
-        getSkillCategoriesMock.mockResolvedValue([{
+        setCategories([{
             id: 'dev', name: 'Development',
             skills: [{
                 id: 'skill-1', title: 'Skill One', domain: 'App Development',
@@ -459,7 +487,7 @@ describe('SkillLibrary', () => {
     });
 
     it('toggles view mode between Skill and UAT', async () => {
-        getSkillCategoriesMock.mockResolvedValue([{
+        setCategories([{
             id: 'dev', name: 'Development',
             skills: [{
                 id: 'skill-1', title: 'Skill One', domain: 'App Development',
@@ -483,7 +511,7 @@ describe('SkillLibrary', () => {
     });
 
     it('cancels UAT edit and reverts draft', async () => {
-        getSkillCategoriesMock.mockResolvedValue([{
+        setCategories([{
             id: 'app', name: 'App Development',
             skills: [{
                 id: 'skill-a', title: 'Skill A', domain: 'App Development',
@@ -507,7 +535,7 @@ describe('SkillLibrary', () => {
     });
 
     it('filters domain report by min count and min coverage', async () => {
-        getSkillCategoriesMock.mockResolvedValue([
+        setCategories([
             {
                 id: 'app', name: 'App Development', skills: [
                     { id: 's1', title: 'S1', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's1', content: '#', uatStatus: 'PASS', uatScore: 80, specScore: 90 },
@@ -547,7 +575,7 @@ describe('SkillLibrary', () => {
             id: `cat${i}`, name: `Grp ${String.fromCharCode(65 + i)}`,
             skills: [{ id: `s${i}`, title: `Sk${i}`, domain: `Grp ${String.fromCharCode(65 + i)}`, difficulty: 'Easy', summary: 'S', path: `s${i}`, content: '#', uatStatus: 'Not Run', uatScore: 0, specScore: 50 }],
         }));
-        getSkillCategoriesMock.mockResolvedValue(cats);
+        setCategories(cats);
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getAllByText('Grp A').length).toBeGreaterThan(0));
 
@@ -577,7 +605,7 @@ describe('SkillLibrary', () => {
     });
 
     it('selects a skill using Space key', async () => {
-        getSkillCategoriesMock.mockResolvedValue([
+        setCategories([
             {
                 id: 'dev',
                 name: 'Development',
@@ -608,9 +636,8 @@ describe('SkillLibrary', () => {
     });
 
     it('handles skills-index.json with categories wrapper format', async () => {
-        // First call: getSkillCategories fails
-        getSkillCategoriesMock.mockResolvedValue([]);
         // Second call: fetch succeeds with {categories: [...]} format
+        fetchMock.mockReset();
         fetchMock.mockResolvedValueOnce({
             ok: true,
             json: async () => ({
@@ -633,6 +660,8 @@ describe('SkillLibrary', () => {
                 ],
             }),
         });
+        // @ts-expect-error — assign test fetch
+        global.fetch = fetchMock;
 
         render(<SkillLibrary />);
         await waitFor(() => {
@@ -643,7 +672,7 @@ describe('SkillLibrary', () => {
     });
 
     it('sorts domain report by name and ascending direction', async () => {
-        getSkillCategoriesMock.mockResolvedValue([
+        setCategories([
             {
                 id: 'cat-a', name: 'Alpha Domain',
                 skills: [
@@ -681,7 +710,7 @@ describe('SkillLibrary', () => {
     });
 
     it('renders skill with full metadata badges', async () => {
-        getSkillCategoriesMock.mockResolvedValue([
+        setCategories([
             {
                 id: 'full-meta',
                 name: 'Full Metadata',

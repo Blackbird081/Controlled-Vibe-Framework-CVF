@@ -25,7 +25,7 @@ Status: authoritative operational release manifest for the current local baselin
 | `draft` | design/branch track, not mainline baseline |
 | `legacy-reference` | retained for historical/reference use, not current upgrade focus |
 
-## Current Operational Manifest (2026-03-07)
+## Current Operational Manifest (2026-03-10)
 
 | Version | Module / Line | Release line | Maturity | Evidence anchor | Notes |
 |---|---|---|---|---|---|
@@ -50,6 +50,9 @@ Status: authoritative operational release manifest for the current local baselin
 | v1.8.1 | Adaptive Observability Runtime | local-ready | implemented-local | `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` | added in Mar 2026 wave |
 | v1.9 | Deterministic Reproducibility | local-ready | implemented-local | `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` | reproducibility line referenced in root README |
 | v2.0 | Non-Coder Safety Runtime | local-ready | implemented-local | `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/` | current local implementation line |
+| v2.5 | Ecosystem MCP Server | active | production-candidate | `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/` | 476 tests passed, renamed from v1.7 |
+| v2.5.1 | Cross-Channel Guard Contract | active | production-candidate | `governance/contracts/` | 49 tests passed, unified governance types |
+| v2.5.2 | VS Code Governance Adapter | active | production-candidate | `governance/contracts/adapters/` | 49 tests passed, programmatic enforcement |
 | v3.0 | Core Foundation Primitives / Git for AI | draft | branch-track | `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/` | draft track under ADR-016 |
 
 ## Current Baseline Pointers
@@ -58,10 +61,12 @@ Status: authoritative operational release manifest for the current local baselin
 |---|---|
 | baseline review | `docs/reviews/cvf_phase_governance/CVF_DANH_GIA_DOC_LAP_TOAN_DIEN_2026-03-06.md` |
 | executive summary | `docs/reviews/cvf_phase_governance/CVF_EXECUTIVE_REVIEW_BASELINE_2026-03-06.md` |
-| roadmap | `docs/reviews/cvf_phase_governance/CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md` |
+| roadmap | `docs/reviews/cvf_phase_governance/CVF_ROADMAP_FIXES_2026-03-10.md` |
 | current upgrade trace | `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md` |
 | test evidence chain | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
 | enterprise evidence pack | `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md` |
+| sprint 0.4 evidence | `governance/contracts/cross-channel-guard-contract.test.ts` |
+| sprint 0.5 evidence | `governance/contracts/adapters/vscode-governance-adapter.test.ts` |
 
 ## Operational Notes
 

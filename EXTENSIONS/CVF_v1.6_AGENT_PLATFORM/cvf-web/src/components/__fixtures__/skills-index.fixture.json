@@ -1,0 +1,23 @@
+[
+  {
+    "id": "dev",
+    "name": "Development",
+    "skills": [
+      {
+        "id": "fixture-skill-1",
+        "title": "Fixture Skill One",
+        "domain": "App Development",
+        "difficulty": "Easy",
+        "summary": "Fixture summary",
+        "path": "fixture-skill-1",
+        "content": "# Fixture Skill One",
+        "uatStatus": "PASS",
+        "uatScore": 80,
+        "uatQuality": "Good",
+        "specScore": 90,
+        "specQuality": "Excellent",
+        "specGate": "PASS"
+      }
+    ]
+  }
+]

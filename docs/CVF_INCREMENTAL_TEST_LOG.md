@@ -2655,3 +2655,32 @@ Utility and guard:
 - Notes:
   - canonical Wave 1 remains `scenarioCount = 84`, `overallResult = PASS`
   - release-grade now depends on `17/17` required coverage groups remaining present and PASS across the 5 required capability families
+
+## [2026-03-10] Batch: Roadmap fixes + cross-channel guard compat audit
+- Change reference:
+  - branch: `cvf-next`
+  - commit: `9f2ef56`
+- Impacted scope:
+  - `governance/compat/check_guard_contract_compat.py`
+  - `governance/contracts/**`
+  - `.github/workflows/documentation-testing.yml`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.i18n.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/__fixtures__/skills-index.fixture.json`
+  - `docs/reviews/cvf_phase_governance/CVF_ROADMAP_FIXES_2026-03-10.md`
+  - `docs/reference/CVF_MATURITY_MATRIX.md`
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+- Tests executed:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS
+  - `python governance/compat/check_guard_contract_compat.py --enforce` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --base HEAD~1 --head HEAD --enforce` -> PASS
+  - `governance/contracts: npm test` -> PASS (`98/98`)
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web: npm run test:run -- src/components/SkillLibrary.test.tsx src/components/SkillLibrary.i18n.test.tsx` -> PASS (`37/37`)
+  - `python governance/compat/check_test_doc_compat.py --base HEAD~1 --head HEAD --enforce` -> PASS
+  - `python governance/compat/check_incremental_test_log_rotation.py --enforce` -> PASS
+- Skip scope:
+  - Full `cvf-web` regression/build — focused tests allowed by compat gate; changes limited to SkillLibrary tests/fixtures.
+  - MCP server tests — no MCP code changes in range; compat gate only reads type definitions.
+- Notes/Risks:
+  - SkillLibrary failure-path test emits stderr "Failed to load skills index from public data" by design; tests still PASS.
+  - Cross-channel guard compat gate is now wired into documentation CI.

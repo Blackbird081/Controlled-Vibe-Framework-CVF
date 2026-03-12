@@ -229,8 +229,8 @@ npm run test:e2e
 
 Result (summary):
 ```
-FAIL: http://localhost:3001 is already used (Playwright webServer)
-Active listener: node process PID 10348
+FAIL: 3 tests (agent-flows.spec.ts) timed out in beforeEach login
+Error: locator.selectOption timeout waiting for `select` in login (utils.ts:29)
 ```
 
 ---

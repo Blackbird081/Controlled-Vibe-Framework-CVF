@@ -6,7 +6,8 @@ import { verifySessionCookie } from '@/lib/middleware-auth';
 import { applySafetyFilters } from '@/lib/safety';
 import { getRateLimiter } from '@/lib/rate-limit';
 import { checkBudget } from '@/lib/budget';
-import { createWebGuardEngine, buildWebGuardContext, type GuardPipelineResult } from '@/lib/guard-runtime-adapter';
+import { buildWebGuardContext, type GuardPipelineResult } from '@/lib/guard-runtime-adapter';
+import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
 import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
 
 function isBuildPhase(phase?: string): boolean {
@@ -182,8 +183,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // ── PRE-GUARDS: Run guard runtime pipeline (invisible to user) ──
-        const guardEngine = createWebGuardEngine();
+        // ── PRE-GUARDS: Run guard runtime pipeline (shared engine — Sprint 6) ──
+        const guardEngine = getSharedGuardEngine();
         const guardContext = buildWebGuardContext({
             requestId: (rawBody as Record<string, unknown>).requestId as string || undefined,
             phase: body.cvfPhase,

@@ -1,15 +1,16 @@
 /**
- * CVF Cross-Channel Guard Contract
+ * CVF Cross-Channel Guard Contract — Extended Types & Mapping Functions
  *
- * Canonical type definitions that unify governance enforcement
- * across ALL channels: Web UI, MCP Server, VS Code, CLI, external agents.
- *
- * This is the single source of truth for guard-related types.
- * Each channel adapter maps its local types to/from this contract.
+ * ⚠️ CANONICAL SOURCE OF TRUTH: EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts
+ * This file provides SUPERSET types (5 phases, R0-R4, 8 roles) and
+ * mapping functions for cross-channel normalization.
+ * For core guard types used in the runtime engine, import from 'cvf-guard-contract'.
  *
  * @module governance/contracts/cross-channel-guard-contract
- * @version 1.0.0
- * @date 2026-03-10
+ * @version 1.0.1
+ * @date 2026-03-12
+ *
+ * @see EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts — Canonical guard types
  */
 
 // ─── Canonical Phase Model (superset: 5 phases) ─────────────────────

@@ -50,7 +50,7 @@
 - ✅ **Mandatory Gateway Mode** — SDK-level enforcement (Sprint 8)
 
 ### 🟡 Remaining:
-- Task 8.6 Enterprise features (team roles, SSO, approval workflows) — cần requirements
+- Không còn task nào. Sprint 0-8 **HOÀN THÀNH 100%**.
 
 ---
 
@@ -69,14 +69,14 @@
 | 6.3 | Consolidate guard contract files | `governance/contracts/cross-channel-guard-contract.ts` [MODIFY] | ✅ DONE |
 | 6.4 | Wire rate limiter vào `/api/guards/evaluate` | `cvf-web/src/app/api/guards/evaluate/route.ts` [MODIFY] | ✅ DONE |
 | 6.5 | Singleton guard engine (shared across routes) | `cvf-web/src/lib/guard-engine-singleton.ts` [NEW] | ✅ DONE |
-| 6.6 | Fix E2E Playwright login timeout | — | ⏸️ Deferred |
+| 6.6 | Fix E2E Playwright login timeout | `tests/e2e/utils.ts` [MODIFY] | ✅ DONE |
 
 ### Exit Criteria Sprint 6:
 - [x] `/api/execute` uses shared GuardEngine → guard preCheck chạy tự động
 - [x] Guard evaluation uses shared singleton — no more per-route fragmentation
 - [x] Chỉ có 1 guard contract source of truth (canonical note added)
 - [x] Rate limiter active trên guard endpoints (`.middleware()` enforced)
-- [~] E2E tests — deferred (non-blocking)
+- [x] E2E login fix: role select optional + timeout added
 
 ---
 
@@ -92,10 +92,10 @@
 |---|---|---|---|
 | 7.1 | Auto-intent detection | `cvf-web/src/lib/intent-detector.ts` [NEW] | ✅ DONE |
 | 7.2 | Server-side session persistence | `cvf-web/src/lib/session-store.ts` [NEW] + API routes | ✅ DONE |
-| 7.3 | Progress dashboard | — | ⏸️ Future |
+| 7.3 | Progress dashboard | `cvf-web/src/components/ProjectProgress.tsx` [NEW] | ✅ DONE |
 | 7.4 | Smart template auto-suggest | `cvf-web/src/components/TemplateSuggester.tsx` [NEW] | ✅ DONE |
 | 7.5 | Simplified onboarding (3 steps) | `cvf-web/src/components/QuickStart.tsx` [NEW] | ✅ DONE |
-| 7.6 | Hide CVF internals | — | ⏸️ Future |
+| 7.6 | Hide CVF internals | `cvf-web/src/lib/friendly-labels.ts` [NEW] | ✅ DONE |
 
 ### Exit Criteria Sprint 7:
 - [x] User nói tự nhiên → CVF auto-detect Phase/Risk/Template
@@ -117,16 +117,18 @@
 |---|---|---|---|
 | 8.1 | CVF SDK package | `CVF_GUARD_CONTRACT/src/sdk/guard-sdk.ts` [NEW] | ✅ DONE |
 | 8.2 | Full skill registry (141 skills) | `CVF_GUARD_CONTRACT/src/runtime/full-skill-registry.ts` [NEW] | ✅ DONE |
-| 8.3 | Mandatory gateway mode | — | ⏸️ Future |
+| 8.3 | Mandatory gateway mode | `CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` [NEW] | ✅ DONE |
 | 8.4 | GitHub Actions CI | `.github/workflows/ci.yml` [NEW] | ✅ DONE |
 | 8.5 | API documentation (OpenAPI) | `cvf-web/src/app/api/guards/openapi/route.ts` [NEW] | ✅ DONE |
-| 8.6 | Enterprise features | — | ⏸️ Future |
+| 8.6 | Enterprise features | `CVF_GUARD_CONTRACT/src/enterprise/enterprise.ts` [NEW] | ✅ DONE |
 
 ### Exit Criteria Sprint 8:
 - [x] CVF Guard SDK with evaluate, checkPhaseGate, getAuditLog, healthCheck, assertAllowed
 - [x] 141 skills mapped with phase/risk metadata across 12 domains
 - [x] CI pipeline runs Guard Contract + Web UI tests on push/PR
 - [x] OpenAPI 3.0 spec available at `/api/guards/openapi`
+- [x] Mandatory gateway mode with hard/soft block, bypass list
+- [x] Enterprise: 5 team roles (RBAC), approval workflow, compliance report generator
 
 ---
 

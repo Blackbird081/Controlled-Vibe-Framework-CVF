@@ -50,6 +50,9 @@ PATCH versions are used for sub-extensions within a minor version (e.g., v1.7.1,
 | v1.8.1 | Adaptive Observability Runtime | 🆕 NEW | Mar 05, 2026 |
 | v1.9 | Deterministic Reproducibility | ✅ ACTIVE | Mar 07, 2026 |
 | **CVF_GUARD_CONTRACT** | **Unified Guard System** (cross-channel) | **✅ ACTIVE** | **Mar 12, 2026** |
+| **Sprint 6: Wiring** | Guard Engine Singleton, Rate Limiter, Execute→Guard wiring | **✅ DONE** | **Mar 12, 2026** |
+| **Sprint 7: Non-coder** | Intent Detector, Session Store, QuickStart, TemplateSuggester | **✅ DONE** | **Mar 12, 2026** |
+| **Sprint 8: Ecosystem** | CVF Guard SDK, 141-Skill Registry, GitHub CI, OpenAPI | **✅ DONE** | **Mar 12, 2026** |
 | v3.0 | Core Foundation Primitives — Git for AI | 🔵 DRAFT (branch cvf-next) | Mar 06, 2026 |
 
 ---

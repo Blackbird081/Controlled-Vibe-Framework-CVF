@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import crypto from 'crypto';
 
 const executeAIMock = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
+const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
     executeAI: executeAIMock,
@@ -12,35 +12,31 @@ vi.mock('@/lib/enforcement', () => ({
     evaluateEnforcement: evaluateEnforcementMock,
 }));
 
+vi.mock('@/lib/middleware-auth', () => ({
+    verifySessionCookie: verifySessionCookieMock,
+}));
+
 import { POST } from './route';
 
 describe('/api/execute', () => {
     const originalEnv = { ...process.env };
-    const secret = 'test-secret';
-
-    function makeSessionCookie(user = 'tester') {
-        const payload = {
-            user,
-            role: 'admin',
-            issuedAt: Date.now(),
-            expiresAt: Date.now() + 1000 * 60 * 60,
-        };
-        const json = JSON.stringify(payload);
-        const sig = crypto.createHmac('sha256', secret).update(json).digest('hex');
-        const base = Buffer.from(json).toString('base64url');
-        return `cvf_session=${base}.${sig}`;
-    }
 
     beforeEach(() => {
         executeAIMock.mockReset();
         evaluateEnforcementMock.mockReset();
+        verifySessionCookieMock.mockReset();
         evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
         process.env = { ...originalEnv };
         delete process.env.OPENAI_API_KEY;
         delete process.env.ANTHROPIC_API_KEY;
         delete process.env.GOOGLE_AI_API_KEY;
         delete process.env.DEFAULT_AI_PROVIDER;
-        process.env.CVF_SESSION_SECRET = secret;
+        delete process.env.CVF_SESSION_SECRET;
+        verifySessionCookieMock.mockResolvedValue({
+            user: 'tester',
+            role: 'admin',
+            expiresAt: Date.now() + 1000 * 60 * 60,
+        });
     });
 
     afterEach(() => {
@@ -51,7 +47,6 @@ describe('/api/execute', () => {
         const req = new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({ templateName: 'T', inputs: {} }),
-            headers: { cookie: makeSessionCookie() },
         });
 
         const res = await POST(req as never);
@@ -70,7 +65,6 @@ describe('/api/execute', () => {
                 inputs: { goal: 'Test' },
                 provider: 'openai',
             }),
-            headers: { cookie: makeSessionCookie() },
         });
 
         const res = await POST(req as never);
@@ -97,7 +91,6 @@ describe('/api/execute', () => {
                 inputs: { targetMarket: 'SMBs', emptyField: '' },
                 provider: 'openai',
             }),
-            headers: { cookie: makeSessionCookie() },
         });
 
         const res = await POST(req as never);
@@ -126,7 +119,6 @@ describe('/api/execute', () => {
                 inputs: { goal: 'Test' },
                 provider: 'openai',
             }),
-            headers: { cookie: makeSessionCookie() },
         });
 
         const res = await POST(req as never);
@@ -139,6 +131,7 @@ describe('/api/execute', () => {
     it('allows service token without session', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_SERVICE_TOKEN = 'svc';
+        verifySessionCookieMock.mockResolvedValueOnce(null);
         executeAIMock.mockResolvedValue({
             success: true,
             output: 'ok',
@@ -169,7 +162,6 @@ describe('/api/execute', () => {
                 inputs: { goal: 'Test' },
                 provider: 'openai',
             }),
-            headers: { cookie: makeSessionCookie() },
         });
         const res = await POST(req as never);
         const data = await res.json();
@@ -194,7 +186,6 @@ describe('/api/execute', () => {
                 inputs: { goal: 'Test' },
                 provider: 'openai',
             }),
-            headers: { cookie: makeSessionCookie() },
         });
         await POST(mkReq() as never);
         const res2 = await POST(mkReq() as never);
@@ -202,6 +193,7 @@ describe('/api/execute', () => {
     });
 
     it('returns 401 when no session and no service token', async () => {
+        verifySessionCookieMock.mockResolvedValueOnce(null);
         const req = new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
@@ -238,7 +230,6 @@ describe('/api/execute', () => {
                 inputs: { goal: 'Test' },
                 provider: 'openai',
             }),
-            headers: { cookie: makeSessionCookie() },
         });
         const res = await POST(req as never);
         const data = await res.json();
@@ -264,7 +255,6 @@ describe('/api/execute', () => {
                 inputs: { goal: 'Test' },
                 provider: 'openai',
             }),
-            headers: { cookie: makeSessionCookie() },
         });
         const res = await POST(req as never);
         const data = await res.json();
@@ -288,7 +278,6 @@ describe('/api/execute', () => {
                 inputs: { goal: 'Test' },
                 provider: 'openai',
             }),
-            headers: { cookie: makeSessionCookie() },
         });
         const res = await POST(req as never);
         const data = await res.json();
@@ -319,7 +308,6 @@ describe('/api/execute', () => {
                 provider: 'openai',
                 cvfPhase: 'BUILD',
             }),
-            headers: { cookie: makeSessionCookie() },
         });
 
         const res = await POST(req as never);

@@ -6,6 +6,7 @@
 
 import type { Guard, GuardRequestContext, GuardResult, CVFPhase, CVFRole } from '../types';
 import { PHASE_ORDER } from '../types';
+import { getPermissions, type TeamRole } from '../enterprise/enterprise';
 
 export const PHASE_ROLE_MATRIX: Record<CVFPhase, CVFRole[]> = {
   DISCOVERY: ['HUMAN', 'OPERATOR'],
@@ -42,6 +43,28 @@ export class PhaseGateGuard implements Guard {
         suggestedAction: 'specify_valid_phase',
         timestamp,
       };
+    }
+
+    // Enterprise RBAC Check (Task 8.6 Phase 3)
+    const userRole = context.metadata?.userRole as TeamRole | undefined;
+    if (userRole) {
+      try {
+        const perms = getPermissions(userRole);
+        if (perms && !perms.allowedPhases.includes(context.phase)) {
+          return {
+            guardId: this.id,
+            decision: 'BLOCK',
+            severity: 'ERROR',
+            reason: `Enterprise Role "${userRole}" is not authorized for phase "${context.phase}". Allowed phases: ${perms.allowedPhases.join(', ')}.`,
+            agentGuidance: `The active user has the "${userRole}" role, which is not allowed in the "${context.phase}" phase. Allowed phases are: ${perms.allowedPhases.join(', ')}.`,
+            suggestedAction: 'switch_to_allowed_phase',
+            timestamp,
+            metadata: { userRole, phase: context.phase, allowedPhases: perms.allowedPhases },
+          };
+        }
+      } catch (e) {
+        // Fallback
+      }
     }
 
     if (!allowedRoles.includes(context.role)) {

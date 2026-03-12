@@ -69,7 +69,7 @@ Các điểm dưới đây là **competitive moat** — cần bảo vệ, KHÔNG
 ### 2. Evidence-Based Governance *(Rare trong open-source)*
 - Mỗi thay đổi có requestId → traceHash → audit log
 - Conformance baseline/golden diff — drift detectable
-- Release-grade gate packet (84/84 scenarios)
+- Release-grade gate packet (84/84 scenarios)                                                
 - Forensic trace chain từ bug report → fix → verification
 
 **Tại sao quan trọng:** Cho phép CVF *chứng minh* governance thay vì chỉ *tuyên bố*.

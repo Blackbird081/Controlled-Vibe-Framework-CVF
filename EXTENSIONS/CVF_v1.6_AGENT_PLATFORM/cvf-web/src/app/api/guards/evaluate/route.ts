@@ -4,6 +4,11 @@
  * Full guard pipeline evaluation endpoint.
  * External agents call this to check if an action is ALLOWED, BLOCKED, or needs ESCALATION.
  *
+ * Sprint 6 wiring:
+ *  - Task 6.5: Uses shared guard engine singleton (no more per-route engine)
+ *  - Task 6.4: Rate limiter enforced before evaluation
+ *  - Task 6.2: Audit persistence wired (trace entries saved to SQLite)
+ *
  * Request body:
  *   { requestId, phase, riskLevel, role, action, agentId?, targetFiles?, mutationCount? }
  *
@@ -13,29 +18,24 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  createGuardEngine,
   type GuardRequestContext,
   type CVFPhase,
   type CVFRiskLevel,
   type CVFRole,
 } from 'cvf-guard-contract';
+import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
 import { guardsRateLimiter } from '@/lib/rate-limiter';
 
 const VALID_PHASES: CVFPhase[] = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
 const VALID_RISK_LEVELS: CVFRiskLevel[] = ['R0', 'R1', 'R2', 'R3'];
 const VALID_ROLES: CVFRole[] = ['HUMAN', 'AI_AGENT', 'REVIEWER', 'OPERATOR'];
 
-// Singleton engine — reused across requests
-let engine: ReturnType<typeof createGuardEngine> | null = null;
-function getEngine() {
-  if (!engine) {
-    engine = createGuardEngine();
-  }
-  return engine;
-}
-
 export async function POST(request: NextRequest) {
   try {
+    // ── Task 6.4: Rate limiting ──
+    const rateLimitErr = guardsRateLimiter.middleware(request);
+    if (rateLimitErr) return rateLimitErr;
+
     const body = await request.json();
 
     // Validate required fields
@@ -89,7 +89,8 @@ export async function POST(request: NextRequest) {
       channel: 'mcp',
     };
 
-    const guardEngine = getEngine();
+    // ── Task 6.5: Shared guard engine ──
+    const guardEngine = getSharedGuardEngine();
     const result = guardEngine.evaluate(context);
 
     return NextResponse.json({

@@ -86,6 +86,7 @@ export interface WebGuardInput {
   phase?: string;
   riskLevel?: string;
   role?: string;
+  userRole?: string; // Enterprise RBAC role
   agentId?: string;
   action?: string;
   templateCategory?: string;
@@ -111,6 +112,9 @@ export function buildWebGuardContext(input: WebGuardInput): GuardRequestContext 
     action: input.action || input.intent || 'execute_template',
     mutationCount: input.mutationCount,
     channel: 'web',
+    metadata: {
+      userRole: input.userRole,
+    },
   };
 }
 

@@ -16,7 +16,7 @@ async function executeOpenAI(
                 'Authorization': `Bearer ${config.apiKey}`,
             },
             body: JSON.stringify({
-                model: config.model || DEFAULT_MODELS.openai,
+                model: config.model,
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userPrompt },
@@ -36,7 +36,7 @@ async function executeOpenAI(
             success: true,
             output: data.choices[0].message.content,
             provider: 'openai',
-            model: config.model || DEFAULT_MODELS.openai,
+            model: config.model,
             tokensUsed: data.usage?.total_tokens,
             executionTime: Date.now() - startTime,
         };
@@ -45,7 +45,7 @@ async function executeOpenAI(
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error',
             provider: 'openai',
-            model: config.model || DEFAULT_MODELS.openai,
+            model: config.model,
             executionTime: Date.now() - startTime,
         };
     }
@@ -68,7 +68,7 @@ async function executeClaude(
                 'anthropic-version': '2023-06-01',
             },
             body: JSON.stringify({
-                model: config.model || DEFAULT_MODELS.claude,
+                model: config.model,
                 max_tokens: config.maxTokens || 4096,
                 system: systemPrompt,
                 messages: [
@@ -87,7 +87,7 @@ async function executeClaude(
             success: true,
             output: data.content[0].text,
             provider: 'claude',
-            model: config.model || DEFAULT_MODELS.claude,
+            model: config.model,
             tokensUsed: data.usage?.input_tokens + data.usage?.output_tokens,
             executionTime: Date.now() - startTime,
         };
@@ -96,7 +96,7 @@ async function executeClaude(
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error',
             provider: 'claude',
-            model: config.model || DEFAULT_MODELS.claude,
+            model: config.model,
             executionTime: Date.now() - startTime,
         };
     }
@@ -111,7 +111,7 @@ async function executeGemini(
     const startTime = Date.now();
 
     try {
-        const model = config.model || DEFAULT_MODELS.gemini;
+        const model = config.model;
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${config.apiKey}`,
             {
@@ -153,7 +153,7 @@ async function executeGemini(
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error',
             provider: 'gemini',
-            model: config.model || DEFAULT_MODELS.gemini,
+            model: config.model,
             executionTime: Date.now() - startTime,
         };
     }
@@ -175,7 +175,7 @@ async function executeAlibaba(
                 'Authorization': `Bearer ${config.apiKey}`,
             },
             body: JSON.stringify({
-                model: config.model || DEFAULT_MODELS.alibaba,
+                model: config.model,
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userPrompt },
@@ -195,7 +195,7 @@ async function executeAlibaba(
             success: true,
             output: data.choices[0].message.content,
             provider: 'alibaba',
-            model: config.model || DEFAULT_MODELS.alibaba,
+            model: config.model,
             tokensUsed: data.usage?.total_tokens,
             executionTime: Date.now() - startTime,
         };
@@ -204,7 +204,7 @@ async function executeAlibaba(
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error',
             provider: 'alibaba',
-            model: config.model || DEFAULT_MODELS.alibaba,
+            model: config.model,
             executionTime: Date.now() - startTime,
         };
     }
@@ -228,7 +228,7 @@ async function executeOpenRouter(
                 'X-Title': 'CVF Agent Platform',
             },
             body: JSON.stringify({
-                model: config.model || DEFAULT_MODELS.openrouter,
+                model: config.model,
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userPrompt },
@@ -248,7 +248,7 @@ async function executeOpenRouter(
             success: true,
             output: data.choices[0].message.content,
             provider: 'openrouter',
-            model: config.model || DEFAULT_MODELS.openrouter,
+            model: config.model,
             tokensUsed: data.usage?.total_tokens,
             executionTime: Date.now() - startTime,
         };
@@ -257,7 +257,7 @@ async function executeOpenRouter(
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error',
             provider: 'openrouter',
-            model: config.model || DEFAULT_MODELS.openrouter,
+            model: config.model,
             executionTime: Date.now() - startTime,
         };
     }

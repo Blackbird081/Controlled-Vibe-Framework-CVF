@@ -1,8 +1,8 @@
 /**
  * GET /api/guards/audit-log
  * =========================
- * Returns the in-memory audit log from the guard engine.
- * Supports filtering by requestId.
+ * Returns the audit log from the shared guard engine.
+ * Sprint 6 — Task 6.5: Uses shared guard engine singleton.
  *
  * Query params:
  *   ?requestId=xxx — filter to a specific request
@@ -10,17 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createGuardEngine } from 'cvf-guard-contract';
-
-// Share the same engine singleton as /evaluate
-// (In production, this should be a shared module)
-let engine: ReturnType<typeof createGuardEngine> | null = null;
-function getEngine() {
-  if (!engine) {
-    engine = createGuardEngine();
-  }
-  return engine;
-}
+import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
 
 export async function GET(request: NextRequest) {
   try {
@@ -28,7 +18,7 @@ export async function GET(request: NextRequest) {
     const requestId = searchParams.get('requestId');
     const limit = parseInt(searchParams.get('limit') || '50', 10);
 
-    const guardEngine = getEngine();
+    const guardEngine = getSharedGuardEngine();
     const fullLog = guardEngine.getAuditLog();
 
     if (requestId) {

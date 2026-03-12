@@ -28,7 +28,10 @@ interface SidebarProps {
 }
 
 const ROLE_BADGE_STYLES = {
+    owner: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-200',
     admin: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-200',
+    developer: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200',
+    reviewer: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200',
     editor: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200',
     viewer: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200',
 } as const;
@@ -275,6 +278,38 @@ export default function Sidebar({
                                 isActive={appState === 'simulation'}
                                 onClick={() => handleNav('simulation')}
                             />
+                        </NavGroup>
+                    )}
+
+                    {/* Enterprise Group (Task 8.6) */}
+                    {(userRole === 'admin' || userRole === 'owner' || userRole === 'reviewer') && (
+                        <NavGroup title={t('sidebar.enterprise') || 'Enterprise'} icon="🏢">
+                            {(userRole === 'admin' || userRole === 'owner') && (
+                                <Link
+                                    href="/admin/team"
+                                    className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
+                                    onClick={onClose}
+                                >
+                                    <span className="flex-1 text-left">👥 Team Roles</span>
+                                </Link>
+                            )}
+                            <Link
+                                href="/approvals"
+                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
+                                onClick={onClose}
+                            >
+                                <span className="flex-1 text-left">📥 Approvals</span>
+                                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200">
+                                    New
+                                </span>
+                            </Link>
+                            <Link
+                                href="/reports/compliance"
+                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
+                                onClick={onClose}
+                            >
+                                <span className="flex-1 text-left">📊 Compliance Reports</span>
+                            </Link>
                         </NavGroup>
                     )}
 

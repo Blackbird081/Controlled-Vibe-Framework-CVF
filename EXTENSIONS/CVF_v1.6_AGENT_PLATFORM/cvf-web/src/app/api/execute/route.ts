@@ -6,7 +6,8 @@ import { verifySessionCookie } from '@/lib/middleware-auth';
 import { applySafetyFilters } from '@/lib/safety';
 import { getRateLimiter } from '@/lib/rate-limit';
 import { checkBudget } from '@/lib/budget';
-import { createWebGuardEngine, buildWebGuardContext, type GuardPipelineResult } from '@/lib/guard-runtime-adapter';
+import { buildWebGuardContext, type GuardPipelineResult } from '@/lib/guard-runtime-adapter';
+import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
 import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
 
 function isBuildPhase(phase?: string): boolean {
@@ -81,6 +82,8 @@ export async function POST(request: NextRequest) {
             openai: process.env.OPENAI_API_KEY,
             claude: process.env.ANTHROPIC_API_KEY,
             gemini: process.env.GOOGLE_AI_API_KEY,
+            alibaba: process.env.ALIBABA_API_KEY,
+            openrouter: process.env.OPENROUTER_API_KEY,
         };
 
         const apiKey = apiKeyMap[provider];
@@ -180,13 +183,14 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // ── PRE-GUARDS: Run guard runtime pipeline (invisible to user) ──
-        const guardEngine = createWebGuardEngine();
+        // ── PRE-GUARDS: Run guard runtime pipeline (shared engine — Sprint 6) ──
+        const guardEngine = getSharedGuardEngine();
         const guardContext = buildWebGuardContext({
             requestId: (rawBody as Record<string, unknown>).requestId as string || undefined,
             phase: body.cvfPhase,
             riskLevel: body.cvfRiskLevel,
             role: isServiceAllowed ? 'OPERATOR' : 'HUMAN',
+            userRole: isServiceAllowed ? 'admin' : session?.role,
             intent: body.intent,
         });
         const guardResult: GuardPipelineResult = guardEngine.evaluate(guardContext);

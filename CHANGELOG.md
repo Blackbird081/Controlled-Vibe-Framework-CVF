@@ -2,6 +2,25 @@
 
 ---
 
+## [2026-03-13] — CVF Enterprise Features (Task 8.6)
+
+### Added
+- **NextAuth.js Integration** — Added `src/auth.ts` with Mock Credentials, GitHub, and Google SSO providers.
+- **Enterprise RBAC** — Implemented 5 enterprise roles: Owner, Admin, Developer, Reviewer, Viewer.
+- **Enterprise Guard Context** — Wired WebUI `session.role` securely into `GuardRequestContext.metadata.userRole`.
+- **PhaseGateGuard Update** — Evaluates Enterprise RBAC allowed phases dynamically based on NextAuth roles.
+- **RiskGateGuard Update** — Evaluates Enterprise RBAC maximum risk levels based on NextAuth roles.
+- **Enterprise UI Hub** — `/admin/team` dashboard to map user roles.
+- **Approval Workflow** — `/approvals` inbox for Admins/Owners to process ESCALATED R3 requests.
+- **Compliance Reports** — `/reports/compliance` analytics dashboard auto-generating governance metrics UI.
+
+### Changed
+- `middleware.ts` upgraded to utilize NextAuth edge compatibility without breaking legacy fallback `verifySessionCookie`.
+- Upgraded `playwright.config.ts` to cleanly invoke `npm run dev` with Next.js specific server ports.
+- CVF Roadmap and task history updated to fully clear out deferred tasks from Sprint 8.
+
+---
+
 ## [2026-03-06] — CVF v3.0 Core Foundation Primitives (branch cvf-next)
 
 ### Added

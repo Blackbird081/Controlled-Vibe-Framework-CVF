@@ -66,10 +66,10 @@ export class AuditDatabase {
     this.db = new Database(this.dbPath);
 
     // Enable WAL mode for better read concurrency
-    this.db.pragma('journal_mode = WAL');
-    this.db.pragma('synchronous = NORMAL');
+    this.db!.pragma('journal_mode = WAL');
+    this.db!.pragma('synchronous = NORMAL');
 
-    this.db.exec(`
+    this.db!.exec(`
       CREATE TABLE IF NOT EXISTS audit_log (
         id            INTEGER PRIMARY KEY AUTOINCREMENT,
         trace_id      TEXT NOT NULL UNIQUE,

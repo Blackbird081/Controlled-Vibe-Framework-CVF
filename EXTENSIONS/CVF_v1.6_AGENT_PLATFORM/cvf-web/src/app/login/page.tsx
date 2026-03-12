@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLanguage, LanguageToggle } from '@/lib/i18n';
+import { signIn } from 'next-auth/react';
 
 function LoginPageContent() {
     const router = useRouter();
@@ -40,15 +41,14 @@ function LoginPageContent() {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
+            const res = await signIn('credentials', {
+                username,
+                password,
+                redirect: false,
             });
 
-            const data = await response.json();
-            if (!response.ok || !data.success) {
-                setError(data.error || (isVi ? 'Đăng nhập thất bại.' : 'Login failed.'));
+            if (res?.error) {
+                setError(isVi ? 'Đăng nhập thất bại. Vui lòng kiểm tra lại.' : 'Login failed. Invalid credentials.');
                 setIsSubmitting(false);
                 return;
             }
@@ -151,10 +151,12 @@ function LoginPageContent() {
                     </button>
                 </form>
 
-                <div className="mt-6 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/60 rounded-lg px-3 py-2">
-                    {isVi
-                        ? <>Tài khoản mặc định: <strong>admin</strong> / <strong>admin123</strong></>
-                        : <>Default account: <strong>admin</strong> / <strong>admin123</strong></>}
+                <div className="mt-6 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/60 rounded-lg px-3 py-2 space-y-1">
+                    <p className="font-semibold mb-1">{isVi ? 'Tài khoản giả lập (Enterprise Mock)' : 'Enterprise Mock Accounts'}:</p>
+                    <p>• <strong>owner</strong> / owner123 (Full admin)</p>
+                    <p>• <strong>admin</strong> / admin123 (Admin)</p>
+                    <p>• <strong>dev</strong> / dev123 (Developer - Max: R2)</p>
+                    <p>• <strong>reviewer</strong> / reviewer123 (Approver)</p>
                 </div>
             </div>
         </div>

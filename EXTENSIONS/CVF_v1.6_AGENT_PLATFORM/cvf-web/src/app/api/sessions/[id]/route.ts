@@ -13,10 +13,11 @@ import { loadSession, addMessage, deleteSession } from '@/lib/session-store';
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await loadSession(params.id);
+    const { id } = await params;
+    const session = await loadSession(id);
     if (!session) {
       return NextResponse.json({ success: false, error: 'Session not found' }, { status: 404 });
     }
@@ -31,7 +32,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
@@ -48,7 +49,8 @@ export async function PUT(
       model: body.model,
     };
 
-    const session = await addMessage(params.id, message);
+    const { id } = await params;
+    const session = await addMessage(id, message);
     if (!session) {
       return NextResponse.json({ success: false, error: 'Session not found' }, { status: 404 });
     }
@@ -63,10 +65,11 @@ export async function PUT(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const deleted = await deleteSession(params.id);
+    const { id } = await params;
+    const deleted = await deleteSession(id);
     if (!deleted) {
       return NextResponse.json({ success: false, error: 'Session not found' }, { status: 404 });
     }

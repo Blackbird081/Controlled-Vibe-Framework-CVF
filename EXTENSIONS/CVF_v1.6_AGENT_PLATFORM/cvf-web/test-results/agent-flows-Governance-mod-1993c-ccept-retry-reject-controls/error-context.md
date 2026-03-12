@@ -1,34 +1,642 @@
 # Page snapshot
 
 ```yaml
-- generic [ref=e1]:
-  - generic [ref=e3]:
-    - button "🌐 EN" [ref=e5]
-    - generic [ref=e6]:
-      - generic [ref=e7]: 🔐
-      - heading "Đăng Nhập CVF v1.6" [level=1] [ref=e8]
-      - paragraph [ref=e9]: Đăng nhập để truy cập toàn bộ giao diện.
-    - generic [ref=e10]:
-      - generic [ref=e11]:
-        - generic [ref=e12]: Tên đăng nhập
-        - textbox "admin" [ref=e13]
-      - generic [ref=e14]:
-        - generic [ref=e15]: Mật khẩu
-        - textbox "admin123" [active] [ref=e16]
-      - generic [ref=e17]:
-        - generic [ref=e18] [cursor=pointer]:
-          - checkbox "Nhớ tài khoản" [ref=e19]
-          - text: Nhớ tài khoản
-        - generic [ref=e20] [cursor=pointer]:
-          - checkbox "Hiện mật khẩu" [ref=e21]
-          - text: Hiện mật khẩu
-      - button "Đăng nhập" [ref=e22]
-    - generic [ref=e23]:
-      - text: "Tài khoản mặc định:"
-      - strong [ref=e24]: admin
-      - text: /
-      - strong [ref=e25]: admin123
-  - button "Open Next.js Dev Tools" [ref=e31] [cursor=pointer]:
-    - img [ref=e32]
-  - alert [ref=e35]
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]: Demo Mode
+      - button "🌐 EN" [ref=e16]
+      - button "☀️" [ref=e17]
+    - complementary [ref=e18]:
+      - link "🎯 CVF v1.6" [ref=e20] [cursor=pointer]:
+        - /url: /home
+        - generic [ref=e21]: 🎯
+        - generic [ref=e22]: CVF v1.6
+      - generic [ref=e23]:
+        - generic [ref=e24]: Admin User
+        - generic [ref=e25]: admin
+      - navigation "Main navigation" [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - generic [ref=e29]: 📁
+            - generic [ref=e30]: Duyệt
+          - generic [ref=e31]:
+            - button "🏠 Trang chủ" [ref=e32]:
+              - generic [ref=e33]: 🏠 Trang chủ
+            - button "📚 Kỹ năng" [ref=e34]:
+              - generic [ref=e35]: 📚 Kỹ năng
+            - link "Skill Search & Planner" [ref=e36] [cursor=pointer]:
+              - /url: /skills/search
+              - generic [ref=e37]: 🔍 Skill Search
+            - link "📖 Hướng dẫn" [ref=e38] [cursor=pointer]:
+              - /url: /help
+              - generic [ref=e39]: 📖 Hướng dẫn
+            - link "📚 Tài liệu" [ref=e40] [cursor=pointer]:
+              - /url: /docs
+              - generic [ref=e41]: 📚 Tài liệu
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]: 🤖
+            - generic [ref=e45]: AI Features
+          - generic [ref=e46]:
+            - button "🤖 AI Agent" [ref=e47]:
+              - generic [ref=e48]: 🤖 AI Agent
+            - button "🎯 Multi-Agent" [ref=e49]:
+              - generic [ref=e50]: 🎯 Multi-Agent
+            - button "🛠️ Tools" [ref=e51]:
+              - generic [ref=e52]: 🛠️ Tools
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - generic [ref=e55]: 📊
+            - generic [ref=e56]: Dữ liệu
+          - generic [ref=e57]:
+            - button "📜 Lịch sử" [ref=e58]:
+              - generic [ref=e59]: 📜 Lịch sử
+            - button "📊 Analytics" [ref=e60]:
+              - generic [ref=e61]: 📊 Analytics
+            - button "🏪 Marketplace" [ref=e62]:
+              - generic [ref=e63]: 🏪 Marketplace
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - generic [ref=e66]: 🛡️
+            - generic [ref=e67]: Quản trị
+          - generic [ref=e68]:
+            - button "🛡️ Quản trị" [ref=e69]:
+              - generic [ref=e70]: 🛡️ Quản trị
+            - button "🧪 Mô phỏng" [ref=e71]:
+              - generic [ref=e72]: 🧪 Mô phỏng
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - generic [ref=e75]: 🔒
+            - generic [ref=e76]: An toàn
+          - button "🛡️ AI Safety" [ref=e78]:
+            - generic [ref=e79]: 🛡️ AI Safety
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - generic [ref=e82]: ⚙️
+            - generic [ref=e83]: Người dùng
+          - generic [ref=e84]:
+            - button "👤 Context" [ref=e85]:
+              - generic [ref=e86]: 👤 Context
+            - button "⚙️ Cài đặt" [ref=e87]:
+              - generic [ref=e88]: ⚙️ Cài đặt
+            - button "💰 Sử dụng AI" [ref=e89]:
+              - generic [ref=e90]: 💰 Sử dụng AI
+            - button "⏻ Đăng xuất" [ref=e91]:
+              - generic [ref=e92]: ⏻ Đăng xuất
+      - generic [ref=e95]: ADMIN
+    - main [ref=e96]:
+      - generic [ref=e97]:
+        - generic [ref=e98]:
+          - heading "User không cần biết CVF để dùng CVF" [level=2] [ref=e99]:
+            - text: User không cần biết CVF
+            - text: để dùng CVF
+          - paragraph [ref=e100]: CVF v1.6 giúp bạn sử dụng AI mà không cần viết prompt. Chỉ cần chọn template, điền form, và nhận kết quả.
+        - generic [ref=e102]:
+          - button "🎯 Tất cả" [ref=e103]:
+            - generic [ref=e104]: 🎯
+            - generic [ref=e105]: Tất cả
+          - button "📈 Kinh doanh" [ref=e106]:
+            - generic [ref=e107]: 📈
+            - generic [ref=e108]: Kinh doanh
+          - button "🔧 Kỹ thuật" [ref=e109]:
+            - generic [ref=e110]: 🔧
+            - generic [ref=e111]: Kỹ thuật
+          - button "✍️ Nội dung" [ref=e112]:
+            - generic [ref=e113]: ✍️
+            - generic [ref=e114]: Nội dung
+          - button "🔬 Nghiên cứu" [ref=e115]:
+            - generic [ref=e116]: 🔬
+            - generic [ref=e117]: Nghiên cứu
+          - button "📣 Marketing & SEO" [ref=e118]:
+            - generic [ref=e119]: 📣
+            - generic [ref=e120]: Marketing & SEO
+          - button "🎨 Sản phẩm & UX" [ref=e121]:
+            - generic [ref=e122]: 🎨
+            - generic [ref=e123]: Sản phẩm & UX
+          - button "🔐 Bảo mật & Tuân thủ" [ref=e124]:
+            - generic [ref=e125]: 🔐
+            - generic [ref=e126]: Bảo mật & Tuân thủ
+          - button "🚀 Phát triển ứng dụng" [ref=e127]:
+            - generic [ref=e128]: 🚀
+            - generic [ref=e129]: Phát triển ứng dụng
+        - generic [ref=e131]:
+          - img [ref=e132]
+          - textbox "Tìm kiếm template" [ref=e134]:
+            - /placeholder: Tìm kiếm template...
+        - generic [ref=e135]:
+          - 'button "📈 Nâng cao Kinh doanh 📈 Chiến lược Kinh doanh Wizard nhiều bước tạo Tài liệu Quyết định Chiến lược qua 4 bước: Bối cảnh → Phương án → SWOT/Rủi ro → Đánh giá Sử dụng" [ref=e137] [cursor=pointer]':
+            - generic [ref=e138]:
+              - generic [ref=e139]: 📈
+              - generic [ref=e140]:
+                - generic [ref=e141]: Nâng cao
+                - generic [ref=e142]: Kinh doanh
+            - heading "📈 Chiến lược Kinh doanh" [level=3] [ref=e143]
+            - paragraph [ref=e144]: "Wizard nhiều bước tạo Tài liệu Quyết định Chiến lược qua 4 bước: Bối cảnh → Phương án → SWOT/Rủi ro → Đánh giá"
+            - generic [ref=e146]:
+              - text: Sử dụng
+              - img [ref=e147]
+          - button "📊 Trung bình Kinh doanh Phân tích Chiến lược Phân tích chiến lược kinh doanh, so sánh các phương án Sử dụng" [ref=e150] [cursor=pointer]:
+            - generic [ref=e151]:
+              - generic [ref=e152]: 📊
+              - generic [ref=e153]:
+                - generic [ref=e154]: Trung bình
+                - generic [ref=e155]: Kinh doanh
+            - heading "Phân tích Chiến lược" [level=3] [ref=e156]
+            - paragraph [ref=e157]: Phân tích chiến lược kinh doanh, so sánh các phương án
+            - generic [ref=e158]:
+              - generic [ref=e159]:
+                - text: Sử dụng
+                - img [ref=e160]
+              - button "Xem trước kết quả" [ref=e162]:
+                - img [ref=e163]
+          - button "⚠️ Trung bình Kinh doanh Đánh giá Rủi ro Đánh giá rủi ro với kế hoạch giảm thiểu Sử dụng" [ref=e167] [cursor=pointer]:
+            - generic [ref=e168]:
+              - generic [ref=e169]: ⚠️
+              - generic [ref=e170]:
+                - generic [ref=e171]: Trung bình
+                - generic [ref=e172]: Kinh doanh
+            - heading "Đánh giá Rủi ro" [level=3] [ref=e173]
+            - paragraph [ref=e174]: Đánh giá rủi ro với kế hoạch giảm thiểu
+            - generic [ref=e176]:
+              - text: Sử dụng
+              - img [ref=e177]
+          - button "🔍 Trung bình Kinh doanh Phân tích Đối thủ Phân tích đối thủ cạnh tranh Sử dụng" [ref=e180] [cursor=pointer]:
+            - generic [ref=e181]:
+              - generic [ref=e182]: 🔍
+              - generic [ref=e183]:
+                - generic [ref=e184]: Trung bình
+                - generic [ref=e185]: Kinh doanh
+            - heading "Phân tích Đối thủ" [level=3] [ref=e186]
+            - paragraph [ref=e187]: Phân tích đối thủ cạnh tranh
+            - generic [ref=e189]:
+              - text: Sử dụng
+              - img [ref=e190]
+          - button "🔧 Nâng cao Kỹ thuật 🔧 Thiết kế Hệ thống Multi-step wizard tạo System Design Document qua 5 bước. Requirements → Estimations → Design → Deep Dive → Review Sử dụng" [ref=e193] [cursor=pointer]:
+            - generic [ref=e194]:
+              - generic [ref=e195]: 🔧
+              - generic [ref=e196]:
+                - generic [ref=e197]: Nâng cao
+                - generic [ref=e198]: Kỹ thuật
+            - heading "🔧 Thiết kế Hệ thống" [level=3] [ref=e199]
+            - paragraph [ref=e200]: Multi-step wizard tạo System Design Document qua 5 bước. Requirements → Estimations → Design → Deep Dive → Review
+            - generic [ref=e202]:
+              - text: Sử dụng
+              - img [ref=e203]
+          - button "💻 Trung bình Kỹ thuật Review Code Review code về chất lượng, security, performance Sử dụng" [ref=e206] [cursor=pointer]:
+            - generic [ref=e207]:
+              - generic [ref=e208]: 💻
+              - generic [ref=e209]:
+                - generic [ref=e210]: Trung bình
+                - generic [ref=e211]: Kỹ thuật
+            - heading "Review Code" [level=3] [ref=e212]
+            - paragraph [ref=e213]: Review code về chất lượng, security, performance
+            - generic [ref=e214]:
+              - generic [ref=e215]:
+                - text: Sử dụng
+                - img [ref=e216]
+              - button "Xem trước kết quả" [ref=e218]:
+                - img [ref=e219]
+          - button "🏗️ Nâng cao Kỹ thuật Review Kiến trúc Review kiến trúc hệ thống Sử dụng" [ref=e223] [cursor=pointer]:
+            - generic [ref=e224]:
+              - generic [ref=e225]: 🏗️
+              - generic [ref=e226]:
+                - generic [ref=e227]: Nâng cao
+                - generic [ref=e228]: Kỹ thuật
+            - heading "Review Kiến trúc" [level=3] [ref=e229]
+            - paragraph [ref=e230]: Review kiến trúc hệ thống
+            - generic [ref=e232]:
+              - text: Sử dụng
+              - img [ref=e233]
+          - button "✍️ Trung bình Nội dung ✍️ Chiến lược Nội dung Multi-step wizard tạo Content Strategy qua 5 bước. Brand → Audience → Pillars → Channels → Review Sử dụng" [ref=e236] [cursor=pointer]:
+            - generic [ref=e237]:
+              - generic [ref=e238]: ✍️
+              - generic [ref=e239]:
+                - generic [ref=e240]: Trung bình
+                - generic [ref=e241]: Nội dung
+            - heading "✍️ Chiến lược Nội dung" [level=3] [ref=e242]
+            - paragraph [ref=e243]: Multi-step wizard tạo Content Strategy qua 5 bước. Brand → Audience → Pillars → Channels → Review
+            - generic [ref=e245]:
+              - text: Sử dụng
+              - img [ref=e246]
+          - button "📝 Dễ Nội dung Tài liệu Kỹ thuật Tạo technical documentation Sử dụng" [ref=e249] [cursor=pointer]:
+            - generic [ref=e250]:
+              - generic [ref=e251]: 📝
+              - generic [ref=e252]:
+                - generic [ref=e253]: Dễ
+                - generic [ref=e254]: Nội dung
+            - heading "Tài liệu Kỹ thuật" [level=3] [ref=e255]
+            - paragraph [ref=e256]: Tạo technical documentation
+            - generic [ref=e257]:
+              - generic [ref=e258]:
+                - text: Sử dụng
+                - img [ref=e259]
+              - button "Xem trước kết quả" [ref=e261]:
+                - img [ref=e262]
+          - button "📧 Dễ Nội dung Mẫu Email Tạo email chuyên nghiệp Sử dụng" [ref=e266] [cursor=pointer]:
+            - generic [ref=e267]:
+              - generic [ref=e268]: 📧
+              - generic [ref=e269]:
+                - generic [ref=e270]: Dễ
+                - generic [ref=e271]: Nội dung
+            - heading "Mẫu Email" [level=3] [ref=e272]
+            - paragraph [ref=e273]: Tạo email chuyên nghiệp
+            - generic [ref=e275]:
+              - text: Sử dụng
+              - img [ref=e276]
+          - button "🔬 Trung bình Nghiên cứu 🔬 Dự án Nghiên cứu Multi-step wizard tạo Research Proposal qua 4 bước. Question → Methodology → Resources → Review Sử dụng" [ref=e279] [cursor=pointer]:
+            - generic [ref=e280]:
+              - generic [ref=e281]: 🔬
+              - generic [ref=e282]:
+                - generic [ref=e283]: Trung bình
+                - generic [ref=e284]: Nghiên cứu
+            - heading "🔬 Dự án Nghiên cứu" [level=3] [ref=e285]
+            - paragraph [ref=e286]: Multi-step wizard tạo Research Proposal qua 4 bước. Question → Methodology → Resources → Review
+            - generic [ref=e288]:
+              - text: Sử dụng
+              - img [ref=e289]
+          - button "📉 Nâng cao Nghiên cứu 📊 Phân tích Dữ liệu Multi-step wizard tạo Data Analysis Plan qua 5 bước. Problem → Understanding → Methodology → Deliverables → Review Sử dụng" [ref=e292] [cursor=pointer]:
+            - generic [ref=e293]:
+              - generic [ref=e294]: 📉
+              - generic [ref=e295]:
+                - generic [ref=e296]: Nâng cao
+                - generic [ref=e297]: Nghiên cứu
+            - heading "📊 Phân tích Dữ liệu" [level=3] [ref=e298]
+            - paragraph [ref=e299]: Multi-step wizard tạo Data Analysis Plan qua 5 bước. Problem → Understanding → Methodology → Deliverables → Review
+            - generic [ref=e301]:
+              - text: Sử dụng
+              - img [ref=e302]
+          - button "📈 Nâng cao Nghiên cứu Phân tích Dữ liệu Phân tích dữ liệu và rút insights Sử dụng" [ref=e305] [cursor=pointer]:
+            - generic [ref=e306]:
+              - generic [ref=e307]: 📈
+              - generic [ref=e308]:
+                - generic [ref=e309]: Nâng cao
+                - generic [ref=e310]: Nghiên cứu
+            - heading "Phân tích Dữ liệu" [level=3] [ref=e311]
+            - paragraph [ref=e312]: Phân tích dữ liệu và rút insights
+            - generic [ref=e313]:
+              - generic [ref=e314]:
+                - text: Sử dụng
+                - img [ref=e315]
+              - button "Xem trước kết quả" [ref=e317]:
+                - img [ref=e318]
+          - button "📣 Trung bình Marketing & SEO 📣 Chiến dịch Marketing Multi-step wizard tạo Campaign Brief qua 5 bước. Goals → Audience → Channels → Content → Review Sử dụng" [ref=e322] [cursor=pointer]:
+            - generic [ref=e323]:
+              - generic [ref=e324]: 📣
+              - generic [ref=e325]:
+                - generic [ref=e326]: Trung bình
+                - generic [ref=e327]: Marketing & SEO
+            - heading "📣 Chiến dịch Marketing" [level=3] [ref=e328]
+            - paragraph [ref=e329]: Multi-step wizard tạo Campaign Brief qua 5 bước. Goals → Audience → Channels → Content → Review
+            - generic [ref=e331]:
+              - text: Sử dụng
+              - img [ref=e332]
+          - button "🔎 Trung bình Marketing & SEO Kiểm tra SEO Đánh giá website về Technical SEO, On-page, Off-page Sử dụng" [ref=e335] [cursor=pointer]:
+            - generic [ref=e336]:
+              - generic [ref=e337]: 🔎
+              - generic [ref=e338]:
+                - generic [ref=e339]: Trung bình
+                - generic [ref=e340]: Marketing & SEO
+            - heading "Kiểm tra SEO" [level=3] [ref=e341]
+            - paragraph [ref=e342]: Đánh giá website về Technical SEO, On-page, Off-page
+            - generic [ref=e343]:
+              - generic [ref=e344]:
+                - text: Sử dụng
+                - img [ref=e345]
+              - button "Xem trước kết quả" [ref=e347]:
+                - img [ref=e348]
+          - button "✏️ Trung bình Marketing & SEO Đánh giá Copywriting Đánh giá và cải thiện marketing copy Sử dụng" [ref=e352] [cursor=pointer]:
+            - generic [ref=e353]:
+              - generic [ref=e354]: ✏️
+              - generic [ref=e355]:
+                - generic [ref=e356]: Trung bình
+                - generic [ref=e357]: Marketing & SEO
+            - heading "Đánh giá Copywriting" [level=3] [ref=e358]
+            - paragraph [ref=e359]: Đánh giá và cải thiện marketing copy
+            - generic [ref=e361]:
+              - text: Sử dụng
+              - img [ref=e362]
+          - button "🎯 Trung bình Marketing & SEO Tối ưu Landing Page Tối ưu conversion rate cho landing pages Sử dụng" [ref=e365] [cursor=pointer]:
+            - generic [ref=e366]:
+              - generic [ref=e367]: 🎯
+              - generic [ref=e368]:
+                - generic [ref=e369]: Trung bình
+                - generic [ref=e370]: Marketing & SEO
+            - heading "Tối ưu Landing Page" [level=3] [ref=e371]
+            - paragraph [ref=e372]: Tối ưu conversion rate cho landing pages
+            - generic [ref=e374]:
+              - text: Sử dụng
+              - img [ref=e375]
+          - button "💰 Trung bình Marketing & SEO Review Chiến lược Giá Đánh giá và tối ưu pricing strategy Sử dụng" [ref=e378] [cursor=pointer]:
+            - generic [ref=e379]:
+              - generic [ref=e380]: 💰
+              - generic [ref=e381]:
+                - generic [ref=e382]: Trung bình
+                - generic [ref=e383]: Marketing & SEO
+            - heading "Review Chiến lược Giá" [level=3] [ref=e384]
+            - paragraph [ref=e385]: Đánh giá và tối ưu pricing strategy
+            - generic [ref=e387]:
+              - text: Sử dụng
+              - img [ref=e388]
+          - button "📄 Trung bình Marketing & SEO Checklist Chất lượng Nội dung Đánh giá chất lượng content với E-E-A-T Sử dụng" [ref=e391] [cursor=pointer]:
+            - generic [ref=e392]:
+              - generic [ref=e393]: 📄
+              - generic [ref=e394]:
+                - generic [ref=e395]: Trung bình
+                - generic [ref=e396]: Marketing & SEO
+            - heading "Checklist Chất lượng Nội dung" [level=3] [ref=e397]
+            - paragraph [ref=e398]: Đánh giá chất lượng content với E-E-A-T
+            - generic [ref=e400]:
+              - text: Sử dụng
+              - img [ref=e401]
+          - button "📨 Trung bình Marketing & SEO Review Chiến dịch Email Đánh giá email marketing campaigns Sử dụng" [ref=e404] [cursor=pointer]:
+            - generic [ref=e405]:
+              - generic [ref=e406]: 📨
+              - generic [ref=e407]:
+                - generic [ref=e408]: Trung bình
+                - generic [ref=e409]: Marketing & SEO
+            - heading "Review Chiến dịch Email" [level=3] [ref=e410]
+            - paragraph [ref=e411]: Đánh giá email marketing campaigns
+            - generic [ref=e413]:
+              - text: Sử dụng
+              - img [ref=e414]
+          - button "📱 Trung bình Marketing & SEO Review Quảng cáo MXH Tối ưu ads trên Facebook, Instagram, TikTok Sử dụng" [ref=e417] [cursor=pointer]:
+            - generic [ref=e418]:
+              - generic [ref=e419]: 📱
+              - generic [ref=e420]:
+                - generic [ref=e421]: Trung bình
+                - generic [ref=e422]: Marketing & SEO
+            - heading "Review Quảng cáo MXH" [level=3] [ref=e423]
+            - paragraph [ref=e424]: Tối ưu ads trên Facebook, Instagram, TikTok
+            - generic [ref=e426]:
+              - text: Sử dụng
+              - img [ref=e427]
+          - button "🎙️ Trung bình Marketing & SEO Đồng bộ Giọng điệu Thương hiệu Đảm bảo brand voice nhất quán Sử dụng" [ref=e430] [cursor=pointer]:
+            - generic [ref=e431]:
+              - generic [ref=e432]: 🎙️
+              - generic [ref=e433]:
+                - generic [ref=e434]: Trung bình
+                - generic [ref=e435]: Marketing & SEO
+            - heading "Đồng bộ Giọng điệu Thương hiệu" [level=3] [ref=e436]
+            - paragraph [ref=e437]: Đảm bảo brand voice nhất quán
+            - generic [ref=e439]:
+              - text: Sử dụng
+              - img [ref=e440]
+          - button "🎨 Trung bình Sản phẩm & UX 🎨 Thiết kế Sản phẩm Multi-step wizard tạo Product Design Spec qua 6 bước. Problem → User → Solution → UX → Visual → Review Sử dụng" [ref=e443] [cursor=pointer]:
+            - generic [ref=e444]:
+              - generic [ref=e445]: 🎨
+              - generic [ref=e446]:
+                - generic [ref=e447]: Trung bình
+                - generic [ref=e448]: Sản phẩm & UX
+            - heading "🎨 Thiết kế Sản phẩm" [level=3] [ref=e449]
+            - paragraph [ref=e450]: Multi-step wizard tạo Product Design Spec qua 6 bước. Problem → User → Solution → UX → Visual → Review
+            - generic [ref=e452]:
+              - text: Sử dụng
+              - img [ref=e453]
+          - button "🧪 Nâng cao Sản phẩm & UX Review A/B Test Đánh giá A/B test design và results Sử dụng" [ref=e456] [cursor=pointer]:
+            - generic [ref=e457]:
+              - generic [ref=e458]: 🧪
+              - generic [ref=e459]:
+                - generic [ref=e460]: Nâng cao
+                - generic [ref=e461]: Sản phẩm & UX
+            - heading "Review A/B Test" [level=3] [ref=e462]
+            - paragraph [ref=e463]: Đánh giá A/B test design và results
+            - generic [ref=e465]:
+              - text: Sử dụng
+              - img [ref=e466]
+          - button "♿ Trung bình Sản phẩm & UX Kiểm tra Accessibility Kiểm tra WCAG compliance Sử dụng" [ref=e469] [cursor=pointer]:
+            - generic [ref=e470]:
+              - generic [ref=e471]: ♿
+              - generic [ref=e472]:
+                - generic [ref=e473]: Trung bình
+                - generic [ref=e474]: Sản phẩm & UX
+            - heading "Kiểm tra Accessibility" [level=3] [ref=e475]
+            - paragraph [ref=e476]: Kiểm tra WCAG compliance
+            - generic [ref=e478]:
+              - text: Sử dụng
+              - img [ref=e479]
+          - button "🔄 Trung bình Sản phẩm & UX Phân tích User Flow Phân tích và tối ưu user journeys Sử dụng" [ref=e482] [cursor=pointer]:
+            - generic [ref=e483]:
+              - generic [ref=e484]: 🔄
+              - generic [ref=e485]:
+                - generic [ref=e486]: Trung bình
+                - generic [ref=e487]: Sản phẩm & UX
+            - heading "Phân tích User Flow" [level=3] [ref=e488]
+            - paragraph [ref=e489]: Phân tích và tối ưu user journeys
+            - generic [ref=e491]:
+              - text: Sử dụng
+              - img [ref=e492]
+          - button "📋 Trung bình Sản phẩm & UX Đánh giá UX Heuristic Đánh giá UX theo Nielsen's 10 Heuristics Sử dụng" [ref=e495] [cursor=pointer]:
+            - generic [ref=e496]:
+              - generic [ref=e497]: 📋
+              - generic [ref=e498]:
+                - generic [ref=e499]: Trung bình
+                - generic [ref=e500]: Sản phẩm & UX
+            - heading "Đánh giá UX Heuristic" [level=3] [ref=e501]
+            - paragraph [ref=e502]: Đánh giá UX theo Nielsen's 10 Heuristics
+            - generic [ref=e504]:
+              - text: Sử dụng
+              - img [ref=e505]
+          - button "⚖️ Trung bình Sản phẩm & UX Ưu tiên Tính năng RICE/ICE framework cho feature prioritization Sử dụng" [ref=e508] [cursor=pointer]:
+            - generic [ref=e509]:
+              - generic [ref=e510]: ⚖️
+              - generic [ref=e511]:
+                - generic [ref=e512]: Trung bình
+                - generic [ref=e513]: Sản phẩm & UX
+            - heading "Ưu tiên Tính năng" [level=3] [ref=e514]
+            - paragraph [ref=e515]: RICE/ICE framework cho feature prioritization
+            - generic [ref=e517]:
+              - text: Sử dụng
+              - img [ref=e518]
+          - button "👤 Dễ Sản phẩm & UX Xây dựng User Persona Tạo user personas dựa trên data Sử dụng" [ref=e521] [cursor=pointer]:
+            - generic [ref=e522]:
+              - generic [ref=e523]: 👤
+              - generic [ref=e524]:
+                - generic [ref=e525]: Dễ
+                - generic [ref=e526]: Sản phẩm & UX
+            - heading "Xây dựng User Persona" [level=3] [ref=e527]
+            - paragraph [ref=e528]: Tạo user personas dựa trên data
+            - generic [ref=e530]:
+              - text: Sử dụng
+              - img [ref=e531]
+          - button "🛑 Trung bình Sản phẩm & UX UX Xử lý Lỗi Cải thiện cách handle errors Sử dụng" [ref=e534] [cursor=pointer]:
+            - generic [ref=e535]:
+              - generic [ref=e536]: 🛑
+              - generic [ref=e537]:
+                - generic [ref=e538]: Trung bình
+                - generic [ref=e539]: Sản phẩm & UX
+            - heading "UX Xử lý Lỗi" [level=3] [ref=e540]
+            - paragraph [ref=e541]: Cải thiện cách handle errors
+            - generic [ref=e543]:
+              - text: Sử dụng
+              - img [ref=e544]
+          - button "🎓 Trung bình Sản phẩm & UX Review Onboarding Tối ưu first-time user experience Sử dụng" [ref=e547] [cursor=pointer]:
+            - generic [ref=e548]:
+              - generic [ref=e549]: 🎓
+              - generic [ref=e550]:
+                - generic [ref=e551]: Trung bình
+                - generic [ref=e552]: Sản phẩm & UX
+            - heading "Review Onboarding" [level=3] [ref=e553]
+            - paragraph [ref=e554]: Tối ưu first-time user experience
+            - generic [ref=e556]:
+              - text: Sử dụng
+              - img [ref=e557]
+          - button "👵 Dễ Sản phẩm & UX Grandma UX Test Non-technical UX review — can a 60-year-old grandma use your app? Tests simplicity, clarity, and button design. Sử dụng" [ref=e560] [cursor=pointer]:
+            - generic [ref=e561]:
+              - generic [ref=e562]: 👵
+              - generic [ref=e563]:
+                - generic [ref=e564]: Dễ
+                - generic [ref=e565]: Sản phẩm & UX
+            - heading "Grandma UX Test" [level=3] [ref=e566]
+            - paragraph [ref=e567]: Non-technical UX review — can a 60-year-old grandma use your app? Tests simplicity, clarity, and button design.
+            - generic [ref=e569]:
+              - text: Sử dụng
+              - img [ref=e570]
+          - button "🔐 Nâng cao Bảo mật & Tuân thủ 🔐 Đánh giá Bảo mật Multi-step wizard tạo Security Assessment Report qua 5 bước. Scope → Threats → Vulns → Risk → Review Sử dụng" [ref=e573] [cursor=pointer]:
+            - generic [ref=e574]:
+              - generic [ref=e575]: 🔐
+              - generic [ref=e576]:
+                - generic [ref=e577]: Nâng cao
+                - generic [ref=e578]: Bảo mật & Tuân thủ
+            - heading "🔐 Đánh giá Bảo mật" [level=3] [ref=e579]
+            - paragraph [ref=e580]: Multi-step wizard tạo Security Assessment Report qua 5 bước. Scope → Threats → Vulns → Risk → Review
+            - generic [ref=e582]:
+              - text: Sử dụng
+              - img [ref=e583]
+          - button "🔒 Nâng cao Bảo mật & Tuân thủ Checklist Bảo mật API OWASP Top 10 API security audit Sử dụng" [ref=e586] [cursor=pointer]:
+            - generic [ref=e587]:
+              - generic [ref=e588]: 🔒
+              - generic [ref=e589]:
+                - generic [ref=e590]: Nâng cao
+                - generic [ref=e591]: Bảo mật & Tuân thủ
+            - heading "Checklist Bảo mật API" [level=3] [ref=e592]
+            - paragraph [ref=e593]: OWASP Top 10 API security audit
+            - generic [ref=e595]:
+              - text: Sử dụng
+              - img [ref=e596]
+          - button "🇪🇺 Nâng cao Bảo mật & Tuân thủ Kiểm tra Tuân thủ GDPR EU data protection compliance check Sử dụng" [ref=e599] [cursor=pointer]:
+            - generic [ref=e600]:
+              - generic [ref=e601]: 🇪🇺
+              - generic [ref=e602]:
+                - generic [ref=e603]: Nâng cao
+                - generic [ref=e604]: Bảo mật & Tuân thủ
+            - heading "Kiểm tra Tuân thủ GDPR" [level=3] [ref=e605]
+            - paragraph [ref=e606]: EU data protection compliance check
+            - generic [ref=e608]:
+              - text: Sử dụng
+              - img [ref=e609]
+          - button "📜 Trung bình Bảo mật & Tuân thủ Kiểm tra Chính sách Bảo mật Privacy policy review và cải thiện Sử dụng" [ref=e612] [cursor=pointer]:
+            - generic [ref=e613]:
+              - generic [ref=e614]: 📜
+              - generic [ref=e615]:
+                - generic [ref=e616]: Trung bình
+                - generic [ref=e617]: Bảo mật & Tuân thủ
+            - heading "Kiểm tra Chính sách Bảo mật" [level=3] [ref=e618]
+            - paragraph [ref=e619]: Privacy policy review và cải thiện
+            - generic [ref=e621]:
+              - text: Sử dụng
+              - img [ref=e622]
+          - button "🚨 Nâng cao Bảo mật & Tuân thủ Kế hoạch Ứng phó Sự cố Security incident response planning Sử dụng" [ref=e625] [cursor=pointer]:
+            - generic [ref=e626]:
+              - generic [ref=e627]: 🚨
+              - generic [ref=e628]:
+                - generic [ref=e629]: Nâng cao
+                - generic [ref=e630]: Bảo mật & Tuân thủ
+            - heading "Kế hoạch Ứng phó Sự cố" [level=3] [ref=e631]
+            - paragraph [ref=e632]: Security incident response planning
+            - generic [ref=e634]:
+              - text: Sử dụng
+              - img [ref=e635]
+          - button "🗃️ Nâng cao Bảo mật & Tuân thủ Review Xử lý Dữ liệu Data lifecycle management review Sử dụng" [ref=e638] [cursor=pointer]:
+            - generic [ref=e639]:
+              - generic [ref=e640]: 🗃️
+              - generic [ref=e641]:
+                - generic [ref=e642]: Nâng cao
+                - generic [ref=e643]: Bảo mật & Tuân thủ
+            - heading "Review Xử lý Dữ liệu" [level=3] [ref=e644]
+            - paragraph [ref=e645]: Data lifecycle management review
+            - generic [ref=e647]:
+              - text: Sử dụng
+              - img [ref=e648]
+          - button "📃 Trung bình Bảo mật & Tuân thủ Review Điều khoản Dịch vụ Terms of Service coverage và fairness Sử dụng" [ref=e651] [cursor=pointer]:
+            - generic [ref=e652]:
+              - generic [ref=e653]: 📃
+              - generic [ref=e654]:
+                - generic [ref=e655]: Trung bình
+                - generic [ref=e656]: Bảo mật & Tuân thủ
+            - heading "Review Điều khoản Dịch vụ" [level=3] [ref=e657]
+            - paragraph [ref=e658]: Terms of Service coverage và fairness
+            - generic [ref=e660]:
+              - text: Sử dụng
+              - img [ref=e661]
+          - button "🧙 Trung bình Phát triển ứng dụng 🧙 Xây dựng Ứng dụng Multi-step wizard tạo spec qua 8 bước. Khuyên dùng cho app phức tạp! Sử dụng" [ref=e664] [cursor=pointer]:
+            - generic [ref=e665]:
+              - generic [ref=e666]: 🧙
+              - generic [ref=e667]:
+                - generic [ref=e668]: Trung bình
+                - generic [ref=e669]: Phát triển ứng dụng
+            - heading "🧙 Xây dựng Ứng dụng" [level=3] [ref=e670]
+            - paragraph [ref=e671]: Multi-step wizard tạo spec qua 8 bước. Khuyên dùng cho app phức tạp!
+            - generic [ref=e673]:
+              - text: Sử dụng
+              - img [ref=e674]
+          - button "🚀 Dễ Phát triển ứng dụng 🚀 Tạo Ứng dụng Mô tả ý tưởng app → AI tự quyết định mọi thứ và build cho bạn. Dành cho người không biết code. Sử dụng" [ref=e677] [cursor=pointer]:
+            - generic [ref=e678]:
+              - generic [ref=e679]: 🚀
+              - generic [ref=e680]:
+                - generic [ref=e681]: Dễ
+                - generic [ref=e682]: Phát triển ứng dụng
+            - heading "🚀 Tạo Ứng dụng" [level=3] [ref=e683]
+            - paragraph [ref=e684]: Mô tả ý tưởng app → AI tự quyết định mọi thứ và build cho bạn. Dành cho người không biết code.
+            - generic [ref=e686]:
+              - text: Sử dụng
+              - img [ref=e687]
+          - button "📦 Nâng cao Phát triển ứng dụng 📦 Tạo Ứng dụng Hoàn chỉnh Tạo spec hoàn chỉnh với đầy đủ thông tin kỹ thuật. Dành cho người hiểu quy trình CVF. Sử dụng" [ref=e690] [cursor=pointer]:
+            - generic [ref=e691]:
+              - generic [ref=e692]: 📦
+              - generic [ref=e693]:
+                - generic [ref=e694]: Nâng cao
+                - generic [ref=e695]: Phát triển ứng dụng
+            - heading "📦 Tạo Ứng dụng Hoàn chỉnh" [level=3] [ref=e696]
+            - paragraph [ref=e697]: Tạo spec hoàn chỉnh với đầy đủ thông tin kỹ thuật. Dành cho người hiểu quy trình CVF.
+            - generic [ref=e699]:
+              - text: Sử dụng
+              - img [ref=e700]
+          - 'button "📂 Trung bình Phát triển ứng dụng 📂 Bộ Skill Templates (8) 8 templates riêng lẻ cho từng khâu: Requirements, Tech Stack, Architecture, Database, API, Desktop/CLI, Deployment. Sử dụng" [ref=e703] [cursor=pointer]':
+            - generic [ref=e704]:
+              - generic [ref=e705]: 📂
+              - generic [ref=e706]:
+                - generic [ref=e707]: Trung bình
+                - generic [ref=e708]: Phát triển ứng dụng
+            - heading "📂 Bộ Skill Templates (8)" [level=3] [ref=e709]
+            - paragraph [ref=e710]: "8 templates riêng lẻ cho từng khâu: Requirements, Tech Stack, Architecture, Database, API, Desktop/CLI, Deployment."
+            - generic [ref=e712]:
+              - text: Sử dụng
+              - img [ref=e713]
+          - button "🎨 Dễ Phát triển ứng dụng 🎨 Vibe Workflow (4) Vibe-to-Spec, Logic Mapping, Debug, Packaging — tools for non-coders to go from idea to delivered app. Sử dụng" [ref=e716] [cursor=pointer]:
+            - generic [ref=e717]:
+              - generic [ref=e718]: 🎨
+              - generic [ref=e719]:
+                - generic [ref=e720]: Dễ
+                - generic [ref=e721]: Phát triển ứng dụng
+            - heading "🎨 Vibe Workflow (4)" [level=3] [ref=e722]
+            - paragraph [ref=e723]: Vibe-to-Spec, Logic Mapping, Debug, Packaging — tools for non-coders to go from idea to delivered app.
+            - generic [ref=e725]:
+              - text: Sử dụng
+              - img [ref=e726]
+      - generic [ref=e730]:
+        - generic [ref=e731]: CVF v1.6 UX Platform — User không cần biết CVF để dùng CVF
+        - generic [ref=e732]: Tien-Tan Thuan Port @2026
+        - generic [ref=e733]:
+          - generic [ref=e734]: 🛡️
+          - generic [ref=e735]: AI đang được kiểm soát bởi CVF
+    - button "❓ Trợ giúp" [ref=e737]:
+      - generic [ref=e738]: ❓
+      - generic [ref=e739]: Trợ giúp
+    - button "🎓 Hướng dẫn" [ref=e740]:
+      - generic [ref=e741]: 🎓
+      - generic [ref=e742]: Hướng dẫn
 ```

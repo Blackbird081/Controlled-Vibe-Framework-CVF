@@ -1,14 +1,13 @@
+import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { verifySessionCookie } from '@/lib/middleware-auth';
 
 const LOGIN_PATH = '/login';
 
 // Routes accessible without authentication
 const PUBLIC_PATHS = ['/docs', '/help', '/skills', '/landing'];
 
-export async function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl;
+export default auth((req) => {
+    const { pathname } = req.nextUrl;
 
     const isPublicAsset = pathname.startsWith('/_next') || pathname === '/favicon.ico' || pathname.startsWith('/public');
     const isLogin = pathname === LOGIN_PATH;
@@ -19,23 +18,21 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const session = await verifySessionCookie(request);
-
-    if (!session) {
+    if (!req.auth) {
         // Unauthenticated root → landing page instead of login
         if (pathname === '/') {
-            const landingUrl = request.nextUrl.clone();
+            const landingUrl = req.nextUrl.clone();
             landingUrl.pathname = '/landing';
             return NextResponse.redirect(landingUrl);
         }
-        const loginUrl = request.nextUrl.clone();
+        const loginUrl = req.nextUrl.clone();
         loginUrl.pathname = LOGIN_PATH;
         loginUrl.searchParams.set('from', pathname);
         return NextResponse.redirect(loginUrl);
     }
 
     return NextResponse.next();
-}
+});
 
 export const config = {
     matcher: ['/((?!_next/|favicon.ico).*)'],

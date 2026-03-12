@@ -215,6 +215,179 @@ describe('ai/providers', () => {
         });
     });
 
+    describe('executeAI — Alibaba DashScope', () => {
+        it('returns success with parsed response', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'Hello from Alibaba' } }],
+                    usage: { total_tokens: 42 },
+                }),
+            });
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello');
+            expect(result.success).toBe(true);
+            expect(result.output).toBe('Hello from Alibaba');
+            expect(result.provider).toBe('alibaba');
+            expect(result.tokensUsed).toBe(42);
+        });
+
+        it('handles Alibaba API error', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: false,
+                json: async () => ({ error: { message: 'Alibaba error' } }),
+            });
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('Alibaba error');
+        });
+
+        it('handles Alibaba API error without message', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: false,
+                json: async () => ({}),
+            });
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('Alibaba DashScope API error');
+        });
+
+        it('handles Alibaba network error', async () => {
+            fetchMock.mockRejectedValueOnce(new Error('Alibaba timeout'));
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toBe('Alibaba timeout');
+        });
+
+        it('handles Alibaba non-Error thrown objects', async () => {
+            fetchMock.mockRejectedValueOnce('alibaba string error');
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toBe('Unknown error');
+        });
+
+        it('uses custom model and options for Alibaba', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'custom alibaba' } }],
+                    usage: { total_tokens: 11 },
+                }),
+            });
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello', {
+                model: 'qwen-max',
+                maxTokens: 1234,
+                temperature: 0.2,
+            });
+
+            expect(result.success).toBe(true);
+            expect(result.model).toBe('qwen-max');
+            const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+            expect(body.model).toBe('qwen-max');
+            expect(body.max_tokens).toBe(1234);
+            expect(body.temperature).toBe(0.2);
+        });
+    });
+
+    describe('executeAI — OpenRouter', () => {
+        it('returns success with parsed response', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'Hello from OpenRouter' } }],
+                    usage: { total_tokens: 33 },
+                }),
+            });
+
+            const result = await executeAI('openrouter', 'or-key', 'Hello');
+            expect(result.success).toBe(true);
+            expect(result.output).toBe('Hello from OpenRouter');
+            expect(result.provider).toBe('openrouter');
+            expect(result.tokensUsed).toBe(33);
+        });
+
+        it('handles OpenRouter API error without message', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: false,
+                json: async () => ({}),
+            });
+
+            const result = await executeAI('openrouter', 'or-key', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('OpenRouter API error');
+        });
+
+        it('handles OpenRouter API error with message', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: false,
+                json: async () => ({ error: { message: 'OpenRouter error' } }),
+            });
+
+            const result = await executeAI('openrouter', 'or-key', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('OpenRouter error');
+        });
+
+        it('handles OpenRouter network error', async () => {
+            fetchMock.mockRejectedValueOnce(new Error('OpenRouter down'));
+
+            const result = await executeAI('openrouter', 'or-key', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toBe('OpenRouter down');
+        });
+
+        it('handles OpenRouter non-Error thrown objects', async () => {
+            fetchMock.mockRejectedValueOnce('openrouter string error');
+
+            const result = await executeAI('openrouter', 'or-key', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toBe('Unknown error');
+        });
+
+        it('sends OpenRouter headers', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'ok' } }],
+                    usage: { total_tokens: 1 },
+                }),
+            });
+
+            await executeAI('openrouter', 'or-key', 'Hello');
+            const headers = fetchMock.mock.calls[0][1].headers;
+            expect(headers['HTTP-Referer']).toBe('https://cvf.dev');
+            expect(headers['X-Title']).toBe('CVF Agent Platform');
+        });
+
+        it('uses custom model and options for OpenRouter', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'custom openrouter' } }],
+                    usage: { total_tokens: 9 },
+                }),
+            });
+
+            const result = await executeAI('openrouter', 'or-key', 'Hello', {
+                model: 'openrouter/custom-model',
+                maxTokens: 2222,
+                temperature: 0.4,
+            });
+
+            expect(result.success).toBe(true);
+            expect(result.model).toBe('openrouter/custom-model');
+            const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+            expect(body.model).toBe('openrouter/custom-model');
+            expect(body.max_tokens).toBe(2222);
+            expect(body.temperature).toBe(0.4);
+        });
+    });
+
     describe('executeAI — unknown provider', () => {
         it('returns error for unknown provider', async () => {
             const result = await executeAI('deepseek' as unknown as Parameters<typeof executeAI>[0], 'key', 'hello');

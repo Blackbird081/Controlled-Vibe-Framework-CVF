@@ -2,7 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { submitToOpenClaw, fetchProposals } from './openclaw-config';
+import { renderHook, act } from '@testing-library/react';
+import { submitToOpenClaw, fetchProposals, useOpenClawConfig } from './openclaw-config';
 
 describe('openclaw-config API helpers', () => {
     const fetchMock = vi.fn();
@@ -87,5 +88,54 @@ describe('openclaw-config API helpers', () => {
         fetchMock.mockRejectedValue(new Error('network failure'));
 
         await expect(fetchProposals()).resolves.toEqual([]);
+    });
+});
+
+describe('useOpenClawConfig', () => {
+    beforeEach(() => {
+        localStorage.clear();
+    });
+
+    it('loads default config when storage is empty', () => {
+        const { result } = renderHook(() => useOpenClawConfig());
+        expect(result.current.config).toEqual({ enabled: false, mode: 'disabled' });
+        expect(result.current.statusBadge.isActive).toBe(false);
+    });
+
+    it('loads config from localStorage when present', () => {
+        localStorage.setItem('cvf_openclaw_config', JSON.stringify({ enabled: true, mode: 'full' }));
+        const { result } = renderHook(() => useOpenClawConfig());
+        expect(result.current.config).toEqual({ enabled: true, mode: 'full' });
+        expect(result.current.statusBadge.isActive).toBe(true);
+    });
+
+    it('disables mode when enabled is set to false', () => {
+        const { result } = renderHook(() => useOpenClawConfig());
+        act(() => {
+            result.current.updateConfig({ enabled: false, mode: 'full' });
+        });
+        expect(result.current.config).toEqual({ enabled: false, mode: 'disabled' });
+    });
+
+    it('auto-enables proposal-only when enabling from disabled', () => {
+        const { result } = renderHook(() => useOpenClawConfig());
+        act(() => {
+            result.current.toggleEnabled();
+        });
+        expect(result.current.config.enabled).toBe(true);
+        expect(result.current.config.mode).toBe('proposal-only');
+    });
+
+    it('setMode updates enabled flag consistently', () => {
+        const { result } = renderHook(() => useOpenClawConfig());
+        act(() => {
+            result.current.setMode('full');
+        });
+        expect(result.current.config).toEqual({ enabled: true, mode: 'full' });
+
+        act(() => {
+            result.current.setMode('disabled');
+        });
+        expect(result.current.config).toEqual({ enabled: false, mode: 'disabled' });
     });
 });

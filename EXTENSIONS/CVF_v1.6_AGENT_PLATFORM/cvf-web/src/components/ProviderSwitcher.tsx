@@ -17,6 +17,8 @@ const PROVIDERS: ProviderOption[] = [
     { id: 'gemini', name: 'Gemini', icon: '✨', color: 'from-blue-500 to-cyan-500', model: 'gemini-2.5-flash' },
     { id: 'openai', name: 'GPT-4o', icon: '🤖', color: 'from-green-500 to-emerald-500', model: 'gpt-4o' },
     { id: 'anthropic', name: 'Claude', icon: '🧠', color: 'from-purple-500 to-pink-500', model: 'claude-sonnet-4-20250514' },
+    { id: 'alibaba', name: 'Qwen', icon: '🌏', color: 'from-amber-500 to-orange-500', model: 'qwen-turbo' },
+    { id: 'openrouter', name: 'OpenRouter', icon: '🔀', color: 'from-violet-500 to-indigo-500', model: 'meta-llama/llama-4-maverick' },
 ];
 
 interface ProviderSwitcherProps {
@@ -127,7 +129,7 @@ export function ProviderSwitcher({ compact = false, showStatus = true, onChange 
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
             <h4 className="text-sm font-medium text-gray-500 mb-3">{l.selectProvider}</h4>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                 {PROVIDERS.map(provider => {
                     const providerHasKey = !!settings.providers[provider.id]?.apiKey;
                     const isSelected = provider.id === currentProvider.id;

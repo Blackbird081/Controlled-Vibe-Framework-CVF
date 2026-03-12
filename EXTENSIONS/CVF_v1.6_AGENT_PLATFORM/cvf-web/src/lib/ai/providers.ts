@@ -159,6 +159,110 @@ async function executeGemini(
     }
 }
 
+// Alibaba DashScope Client (OpenAI-compatible)
+async function executeAlibaba(
+    config: AIConfig,
+    systemPrompt: string,
+    userPrompt: string
+): Promise<ExecutionResponse> {
+    const startTime = Date.now();
+
+    try {
+        const response = await fetch('https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${config.apiKey}`,
+            },
+            body: JSON.stringify({
+                model: config.model || DEFAULT_MODELS.alibaba,
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt },
+                ],
+                max_tokens: config.maxTokens || 4096,
+                temperature: config.temperature || 0.7,
+            }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error?.message || 'Alibaba DashScope API error');
+        }
+
+        const data = await response.json();
+        return {
+            success: true,
+            output: data.choices[0].message.content,
+            provider: 'alibaba',
+            model: config.model || DEFAULT_MODELS.alibaba,
+            tokensUsed: data.usage?.total_tokens,
+            executionTime: Date.now() - startTime,
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            provider: 'alibaba',
+            model: config.model || DEFAULT_MODELS.alibaba,
+            executionTime: Date.now() - startTime,
+        };
+    }
+}
+
+// OpenRouter Client (OpenAI-compatible)
+async function executeOpenRouter(
+    config: AIConfig,
+    systemPrompt: string,
+    userPrompt: string
+): Promise<ExecutionResponse> {
+    const startTime = Date.now();
+
+    try {
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${config.apiKey}`,
+                'HTTP-Referer': 'https://cvf.dev',
+                'X-Title': 'CVF Agent Platform',
+            },
+            body: JSON.stringify({
+                model: config.model || DEFAULT_MODELS.openrouter,
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt },
+                ],
+                max_tokens: config.maxTokens || 4096,
+                temperature: config.temperature || 0.7,
+            }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error?.message || 'OpenRouter API error');
+        }
+
+        const data = await response.json();
+        return {
+            success: true,
+            output: data.choices[0].message.content,
+            provider: 'openrouter',
+            model: config.model || DEFAULT_MODELS.openrouter,
+            tokensUsed: data.usage?.total_tokens,
+            executionTime: Date.now() - startTime,
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            provider: 'openrouter',
+            model: config.model || DEFAULT_MODELS.openrouter,
+            executionTime: Date.now() - startTime,
+        };
+    }
+}
+
 // Main execute function
 export async function executeAI(
     provider: AIProvider,
@@ -183,6 +287,10 @@ export async function executeAI(
             return executeClaude(config, systemPrompt, userPrompt);
         case 'gemini':
             return executeGemini(config, systemPrompt, userPrompt);
+        case 'alibaba':
+            return executeAlibaba(config, systemPrompt, userPrompt);
+        case 'openrouter':
+            return executeOpenRouter(config, systemPrompt, userPrompt);
         default:
             return {
                 success: false,
@@ -194,3 +302,4 @@ export async function executeAI(
 }
 
 export { CVF_SYSTEM_PROMPT, DEFAULT_MODELS };
+

@@ -1,7 +1,7 @@
 import type { EnforcementResult } from '@/lib/enforcement';
 
 // AI Provider Types and Interfaces
-export type AIProvider = 'openai' | 'claude' | 'gemini';
+export type AIProvider = 'openai' | 'claude' | 'gemini' | 'alibaba' | 'openrouter';
 
 export interface AIConfig {
     provider: AIProvider;
@@ -48,6 +48,8 @@ export const DEFAULT_MODELS: Record<AIProvider, string> = {
     openai: 'gpt-4o',
     claude: 'claude-sonnet-4-20250514',
     gemini: 'gemini-2.5-flash',
+    alibaba: 'qwen-turbo',
+    openrouter: 'meta-llama/llama-4-maverick',
 };
 
 // CVF System prompt with full platform knowledge

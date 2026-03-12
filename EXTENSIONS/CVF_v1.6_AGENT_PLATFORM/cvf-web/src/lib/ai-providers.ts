@@ -8,7 +8,7 @@
 import { detectSpecMode } from '@/lib/agent-chat';
 
 // Types
-export type AIProvider = 'gemini' | 'openai' | 'anthropic';
+export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter';
 
 export interface AIMessage {
     role: 'user' | 'assistant' | 'system';
@@ -672,6 +672,214 @@ export class AnthropicProvider {
     }
 }
 
+// ==================== ALIBABA DASHSCOPE PROVIDER ====================
+export class AlibabaDashScopeWebProvider {
+    private apiKey: string;
+    private model: string;
+    private baseUrl = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+    private language: 'vi' | 'en';
+
+    constructor(config: AIProviderConfig) {
+        this.apiKey = config.apiKey;
+        this.model = config.model || 'qwen-turbo';
+        this.language = config.language || 'vi';
+    }
+
+    async chat(messages: AIMessage[], onStream?: (chunk: AIStreamChunk) => void): Promise<AIResponse> {
+        const systemMessage: AIMessage = { role: 'system', content: getCVFSystemPrompt(this.language) };
+        const allMessages = [systemMessage, ...messages];
+
+        const body = {
+            model: this.model,
+            messages: allMessages.map(m => ({ role: m.role, content: m.content })),
+            temperature: 0.7,
+            max_tokens: 4096,
+            stream: !!onStream,
+        };
+
+        try {
+            const response = await fetch(`${this.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.apiKey}`,
+                },
+                body: JSON.stringify(body),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error?.message || `HTTP ${response.status}`);
+            }
+
+            if (onStream) {
+                return await this.handleStream(response, onStream);
+            } else {
+                const data = await response.json();
+                return {
+                    text: data.choices[0]?.message?.content || '',
+                    model: this.model,
+                    usage: {
+                        promptTokens: data.usage?.prompt_tokens || 0,
+                        completionTokens: data.usage?.completion_tokens || 0,
+                        totalTokens: data.usage?.total_tokens || 0,
+                    },
+                    finishReason: data.choices[0]?.finish_reason,
+                };
+            }
+        } catch (error: unknown) {
+            const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+            throw new Error(`Alibaba DashScope API Error: ${errorMsg}`);
+        }
+    }
+
+    private async handleStream(response: Response, onStream: (chunk: AIStreamChunk) => void): Promise<AIResponse> {
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error('No response body');
+
+        const decoder = new TextDecoder();
+        let fullText = '';
+        let buffer = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+                if (line.startsWith('data: ') && !line.includes('[DONE]')) {
+                    try {
+                        const data = JSON.parse(line.slice(6));
+                        const text = data.choices?.[0]?.delta?.content || '';
+                        if (text) {
+                            fullText += text;
+                            onStream({ text, isComplete: false });
+                        }
+                    } catch {
+                        // Skip invalid JSON
+                    }
+                }
+            }
+        }
+
+        onStream({ text: '', isComplete: true });
+
+        return {
+            text: fullText,
+            model: this.model,
+            finishReason: 'stop',
+        };
+    }
+}
+
+// ==================== OPENROUTER PROVIDER ====================
+export class OpenRouterProvider {
+    private apiKey: string;
+    private model: string;
+    private baseUrl = 'https://openrouter.ai/api/v1';
+    private language: 'vi' | 'en';
+
+    constructor(config: AIProviderConfig) {
+        this.apiKey = config.apiKey;
+        this.model = config.model || 'meta-llama/llama-4-maverick';
+        this.language = config.language || 'vi';
+    }
+
+    async chat(messages: AIMessage[], onStream?: (chunk: AIStreamChunk) => void): Promise<AIResponse> {
+        const systemMessage: AIMessage = { role: 'system', content: getCVFSystemPrompt(this.language) };
+        const allMessages = [systemMessage, ...messages];
+
+        const body = {
+            model: this.model,
+            messages: allMessages.map(m => ({ role: m.role, content: m.content })),
+            temperature: 0.7,
+            max_tokens: 4096,
+            stream: !!onStream,
+        };
+
+        try {
+            const response = await fetch(`${this.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.apiKey}`,
+                    'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://cvf.dev',
+                    'X-Title': 'CVF Agent Platform',
+                },
+                body: JSON.stringify(body),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error?.message || `HTTP ${response.status}`);
+            }
+
+            if (onStream) {
+                return await this.handleStream(response, onStream);
+            } else {
+                const data = await response.json();
+                return {
+                    text: data.choices[0]?.message?.content || '',
+                    model: this.model,
+                    usage: {
+                        promptTokens: data.usage?.prompt_tokens || 0,
+                        completionTokens: data.usage?.completion_tokens || 0,
+                        totalTokens: data.usage?.total_tokens || 0,
+                    },
+                    finishReason: data.choices[0]?.finish_reason,
+                };
+            }
+        } catch (error: unknown) {
+            const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+            throw new Error(`OpenRouter API Error: ${errorMsg}`);
+        }
+    }
+
+    private async handleStream(response: Response, onStream: (chunk: AIStreamChunk) => void): Promise<AIResponse> {
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error('No response body');
+
+        const decoder = new TextDecoder();
+        let fullText = '';
+        let buffer = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+                if (line.startsWith('data: ') && !line.includes('[DONE]')) {
+                    try {
+                        const data = JSON.parse(line.slice(6));
+                        const text = data.choices?.[0]?.delta?.content || '';
+                        if (text) {
+                            fullText += text;
+                            onStream({ text, isComplete: false });
+                        }
+                    } catch {
+                        // Skip invalid JSON
+                    }
+                }
+            }
+        }
+
+        onStream({ text: '', isComplete: true });
+
+        return {
+            text: fullText,
+            model: this.model,
+            finishReason: 'stop',
+        };
+    }
+}
+
 // ==================== UNIFIED PROVIDER ====================
 export function createAIProvider(provider: AIProvider, config: AIProviderConfig) {
     if (MOCK_AI_ENABLED) {
@@ -684,6 +892,10 @@ export function createAIProvider(provider: AIProvider, config: AIProviderConfig)
             return new OpenAIProvider(config);
         case 'anthropic':
             return new AnthropicProvider(config);
+        case 'alibaba':
+            return new AlibabaDashScopeWebProvider(config);
+        case 'openrouter':
+            return new OpenRouterProvider(config);
         default:
             throw new Error(`Unknown provider: ${provider}`);
     }

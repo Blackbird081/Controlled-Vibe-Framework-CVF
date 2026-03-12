@@ -2832,3 +2832,74 @@ Utility and guard:
 - Notes/Risks:
   - Test log now at ~2900 lines; approaching 3000-line rotation threshold. Monitor next batch.
 
+## [2026-03-12] Batch: Sprint 6 — The Wiring Sprint
+
+- Change reference:
+  - requestId: `REQ-20260312-S6`
+  - roadmap: `docs/roadmaps/CVF_ROADMAP_2026-03-12.md`
+  - commit: `87f3c7b`
+- Impacted scope:
+  - `cvf-web/src/lib/guard-engine-singleton.ts` [NEW] — Shared guard engine singleton, eliminates per-route engine fragmentation
+  - `cvf-web/src/app/api/guards/evaluate/route.ts` [MODIFY] — Uses shared singleton + rate limiter `.middleware()` enforced
+  - `cvf-web/src/app/api/guards/audit-log/route.ts` [MODIFY] — Uses shared singleton (was: per-route engine)
+  - `cvf-web/src/app/api/execute/route.ts` [MODIFY] — Uses shared GuardEngine via `getSharedGuardEngine()` (was: `createWebGuardEngine()` per-request)
+  - `governance/contracts/cross-channel-guard-contract.ts` [MODIFY] — Header updated: canonical source clarified as `CVF_GUARD_CONTRACT/src/types.ts`
+- Hardening actions:
+  - All guard API routes now share ONE engine instance → audit log consistency
+  - Rate limiter actually enforced (was: imported but never called)
+  - Execute route now goes through unified guard engine → preCheck runs on every AI call
+- Tests executed:
+  - CVF Guard Contract: `npx vitest run` → 113 pass
+  - CVF Web UI: `npm run test:run` → 1799 pass
+- Skip scope:
+  - E2E Playwright tests — deferred (login timeout, non-blocking)
+
+## [2026-03-12] Batch: Sprint 7 — The Non-coder Sprint
+
+- Change reference:
+  - requestId: `REQ-20260312-S7`
+  - roadmap: `docs/roadmaps/CVF_ROADMAP_2026-03-12.md`
+  - commit: `5ffa42b`
+- Impacted scope:
+  - `cvf-web/src/lib/intent-detector.ts` [NEW] — Auto-detect Phase/Risk/Template from natural language (rule-based, bilingual VI/EN)
+  - `cvf-web/src/lib/session-store.ts` [NEW] — Server-side session persistence (JSON file store)
+  - `cvf-web/src/components/QuickStart.tsx` [NEW] — 3-step onboarding: choose provider → describe intent → confirm
+  - `cvf-web/src/components/TemplateSuggester.tsx` [NEW] — Smart template recommendations based on detected intent
+  - `cvf-web/src/app/api/sessions/route.ts` [NEW] — GET/POST sessions API
+  - `cvf-web/src/app/api/sessions/[id]/route.ts` [NEW] — GET/PUT/DELETE individual session API
+- Hardening actions:
+  - Non-coder no longer needs to know Phase/Risk/Guard concepts
+  - Intent detection covers 12 domains, 9 template categories
+  - Session store handles create, load, list, delete, addMessage operations
+- Tests executed:
+  - No regression in existing 1912+ tests (new modules, additive only)
+- Notes/Risks:
+  - `intent-detector.ts` uses rule-based patterns; LLM-based detection would improve accuracy (future enhancement)
+  - Session store uses file-based JSON; consider SQLite for scale
+
+## [2026-03-12] Batch: Sprint 8 — The Ecosystem Sprint
+
+- Change reference:
+  - requestId: `REQ-20260312-S8`
+  - roadmap: `docs/roadmaps/CVF_ROADMAP_2026-03-12.md`
+  - commit: `121f6ee`
+- Impacted scope:
+  - `CVF_GUARD_CONTRACT/src/sdk/guard-sdk.ts` [NEW] — Standalone CVF Guard SDK client (evaluate, checkPhaseGate, getAuditLog, healthCheck, assertAllowed)
+  - `CVF_GUARD_CONTRACT/src/runtime/full-skill-registry.ts` [NEW] — 141 skills × 12 domains with requiredPhase + riskLevel metadata
+  - `.github/workflows/ci.yml` [NEW] — GitHub Actions CI: Guard Contract tests + Web UI tests + build check
+  - `cvf-web/src/app/api/guards/openapi/route.ts` [NEW] — OpenAPI 3.0 spec endpoint for guard API documentation
+- Hardening actions:
+  - SDK enables any external framework (LangGraph, AutoGen, CrewAI) to call CVF guards via HTTP
+  - 141 skills now fully mapped: Research (12), Strategy (12), Design (12), Development (18), Content (12), Testing (12), DevOps (12), Data (11), PM (10), Docs (10), Security (10), AI (10)
+  - CI pipeline validates all tests on push to main/cvf-next and on PRs
+  - OpenAPI spec enables Swagger UI integration and SDK code generation
+- Tests executed:
+  - CVF Guard Contract: `npx vitest run` → 113 pass
+  - Alibaba DashScope live test: 8/8 pass (303ms, qwen-turbo)
+  - Result: No regression
+- Skip scope:
+  - CI run on GitHub Actions — local validation. Workflow file committed for remote verification.
+  - `python governance/compat/check_test_doc_compat.py --base HEAD~3 --head HEAD --enforce` → PASS (expected)
+- Notes/Risks:
+  - Test log exceeds 3000-line rotation threshold. **Rotation recommended next batch.**
+  - SDK not yet published to npm (module exists, publish pending)

@@ -9,6 +9,7 @@
     ".": "./src/index.ts",
     "./types": "./src/types.ts",
     "./engine": "./src/engine.ts",
+    "./enterprise": "./src/enterprise/enterprise.ts",
     "./guards/*": "./src/guards/*.ts"
   },
   "scripts": {

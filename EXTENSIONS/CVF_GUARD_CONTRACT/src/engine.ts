@@ -13,8 +13,8 @@ import type {
   GuardPipelineResult,
   GuardAuditEntry,
   GuardRuntimeConfig,
-} from './types.js';
-import { DEFAULT_GUARD_RUNTIME_CONFIG } from './types.js';
+} from './types';
+import { DEFAULT_GUARD_RUNTIME_CONFIG } from './types';
 
 export class GuardRuntimeEngine {
   private guards: Map<string, Guard> = new Map();

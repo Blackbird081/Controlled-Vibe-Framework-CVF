@@ -5,11 +5,11 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import type { TraceEntry } from './trace-emitter.js';
+import type { TraceEntry } from './trace-emitter';
 
 // Import dynamically to handle environments where better-sqlite3 isn't compiled
 // These tests run only when the module is available
-let AuditDatabase: typeof import('./sqlite-db.js').AuditDatabase;
+let AuditDatabase: typeof import('./sqlite-db.js').AuditDatabase = undefined!;
 
 try {
   const mod = await import('./sqlite-db.js');

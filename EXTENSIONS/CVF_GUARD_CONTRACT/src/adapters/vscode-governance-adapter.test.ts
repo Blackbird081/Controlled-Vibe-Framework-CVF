@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { generateGovernancePrompt, generateGovernancePayload } from './vscode-governance-adapter.js';
+import { generateGovernancePrompt, generateGovernancePayload } from './vscode-governance-adapter';
 
 describe('generateGovernancePrompt', () => {
   it('generates prompt for BUILD phase AI_AGENT', () => {

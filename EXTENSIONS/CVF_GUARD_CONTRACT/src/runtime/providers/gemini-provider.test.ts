@@ -5,9 +5,9 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { GeminiProvider } from './gemini-provider.js';
-import { AgentExecutionRuntime } from '../agent-execution-runtime.js';
-import { createGuardEngine } from '../../index.js';
+import { GeminiProvider } from './gemini-provider';
+import { AgentExecutionRuntime } from '../agent-execution-runtime';
+import { createGuardEngine } from '../../index';
 
 // Use environment variable for API key (do not commit raw keys)
 const API_KEY = process.env.CVF_GEMINI_API_KEY || 'PLACEHOLDER_KEY';

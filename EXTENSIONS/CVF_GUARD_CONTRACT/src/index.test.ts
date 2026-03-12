@@ -16,7 +16,7 @@ import {
   ScopeGuard,
   AuditTrailGuard,
   type GuardRequestContext,
-} from './index.js';
+} from './index';
 
 function ctx(overrides?: Partial<GuardRequestContext>): GuardRequestContext {
   return {

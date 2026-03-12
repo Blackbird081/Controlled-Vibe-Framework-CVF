@@ -3,7 +3,7 @@
  * @module cvf-guard-contract/guards/mutation-budget
  */
 
-import type { Guard, GuardRequestContext, GuardResult, CVFRiskLevel } from '../types.js';
+import type { Guard, GuardRequestContext, GuardResult, CVFRiskLevel } from '../types';
 
 export const DEFAULT_MUTATION_BUDGETS: Record<CVFRiskLevel, number> = {
   R0: 50,

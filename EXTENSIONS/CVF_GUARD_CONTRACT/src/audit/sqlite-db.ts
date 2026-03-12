@@ -9,7 +9,7 @@
  * @module cvf-guard-contract/audit/sqlite-db
  */
 
-import type { TraceEntry } from './trace-emitter.js';
+import type { TraceEntry } from './trace-emitter';
 
 /**
  * Minimal interface for better-sqlite3 to avoid hard dependency in tests.

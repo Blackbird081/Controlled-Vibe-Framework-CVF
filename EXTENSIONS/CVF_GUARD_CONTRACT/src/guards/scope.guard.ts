@@ -3,7 +3,7 @@
  * @module cvf-guard-contract/guards/scope
  */
 
-import type { Guard, GuardRequestContext, GuardResult } from '../types.js';
+import type { Guard, GuardRequestContext, GuardResult } from '../types';
 
 export const PROTECTED_PATHS = [
   'governance/',

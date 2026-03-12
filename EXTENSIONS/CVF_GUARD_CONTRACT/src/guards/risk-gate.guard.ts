@@ -3,8 +3,8 @@
  * @module cvf-guard-contract/guards/risk-gate
  */
 
-import type { Guard, GuardRequestContext, GuardResult, CVFRiskLevel } from '../types.js';
-import { RISK_NUMERIC } from '../types.js';
+import type { Guard, GuardRequestContext, GuardResult, CVFRiskLevel } from '../types';
+import { RISK_NUMERIC } from '../types';
 
 export const RISK_DESCRIPTIONS: Record<CVFRiskLevel, string> = {
   R0: 'Safe — no risk, free to proceed',

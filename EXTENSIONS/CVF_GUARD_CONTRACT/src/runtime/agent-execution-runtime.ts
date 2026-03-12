@@ -13,9 +13,9 @@ import type {
   CVFPhase,
   CVFRiskLevel,
   CVFRole,
-} from '../types.js';
-import { GuardRuntimeEngine } from '../engine.js';
-import type { SkillDefinition } from './skill-registry.js';
+} from '../types';
+import { GuardRuntimeEngine } from '../engine';
+import type { SkillDefinition } from './skill-registry';
 
 // ─── Types ────────────────────────────────────────────────────────────
 

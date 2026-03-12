@@ -1,18 +1,19 @@
 /**
  * AlibabaDashScopeProvider Tests
  * ================================
- * Unit tests + Live tests (always run — key is valid)
+ * Unit tests (always run) + Live tests (run when CVF_ALIBABA_API_KEY is set)
  */
 
 import { describe, it, expect } from 'vitest';
-import { AlibabaDashScopeProvider } from './alibaba-dashscope-provider.js';
-import { AgentExecutionRuntime } from '../agent-execution-runtime.js';
-import { createGuardEngine } from '../../index.js';
+import { AlibabaDashScopeProvider } from './alibaba-dashscope-provider';
+import { AgentExecutionRuntime } from '../agent-execution-runtime';
+import { createGuardEngine } from '../../index';
 
 // Use environment variable for API key (do not commit raw keys)
 const API_KEY = process.env.CVF_ALIBABA_API_KEY || 'PLACEHOLDER_KEY';
+const LIVE = !!process.env.CVF_ALIBABA_API_KEY;
 
-// ─── Constructor ──────────────────────────────────────────────────────
+// ─── Constructor (always run) ─────────────────────────────────────────
 
 describe('AlibabaDashScopeProvider constructor', () => {
   it('creates with valid config', () => {
@@ -35,7 +36,7 @@ describe('AlibabaDashScopeProvider constructor', () => {
   });
 });
 
-// ─── Guard blocks before API call ─────────────────────────────────────
+// ─── Guard blocks before API call (always run — no real API needed) ───
 
 describe('AlibabaDashScopeProvider with guard blocking', () => {
   it('blocks AI_AGENT in DISCOVERY — Alibaba never called', async () => {
@@ -55,9 +56,9 @@ describe('AlibabaDashScopeProvider with guard blocking', () => {
   });
 });
 
-// ─── Live API Tests ───────────────────────────────────────────────────
+// ─── Live API Tests (only when CVF_ALIBABA_API_KEY is set) ────────────
 
-describe('AlibabaDashScopeProvider live execution', () => {
+describe.skipIf(!LIVE)('AlibabaDashScopeProvider live execution', () => {
   it('calls Qwen API and returns response', async () => {
     const provider = new AlibabaDashScopeProvider({
       apiKey: API_KEY,
@@ -75,9 +76,9 @@ describe('AlibabaDashScopeProvider live execution', () => {
   }, 15000);
 });
 
-// ─── E2E: Full governed pipeline with Alibaba ─────────────────────────
+// ─── E2E: Full governed pipeline (only when CVF_ALIBABA_API_KEY is set)
 
-describe('Full governed pipeline with AlibabaDashScopeProvider', () => {
+describe.skipIf(!LIVE)('Full governed pipeline with AlibabaDashScopeProvider', () => {
   it('executes safe HUMAN action end-to-end', async () => {
     const engine = createGuardEngine();
     const provider = new AlibabaDashScopeProvider({ apiKey: API_KEY, maxTokens: 30, temperature: 0 });
@@ -96,3 +97,4 @@ describe('Full governed pipeline with AlibabaDashScopeProvider', () => {
     expect(result.guardDecision?.finalDecision).toBe('ALLOW');
   }, 15000);
 });
+

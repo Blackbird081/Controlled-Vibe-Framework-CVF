@@ -99,12 +99,16 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
         gemini: 'bg-blue-500',
         openai: 'bg-green-500',
         anthropic: 'bg-purple-500',
+        alibaba: 'bg-amber-500',
+        openrouter: 'bg-slate-500',
     };
 
     const providerNames: Record<ProviderKey, string> = {
         gemini: 'Gemini',
         openai: 'OpenAI',
         anthropic: 'Anthropic',
+        alibaba: 'Alibaba',
+        openrouter: 'OpenRouter',
     };
 
     return (

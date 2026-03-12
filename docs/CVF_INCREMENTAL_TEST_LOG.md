@@ -2941,3 +2941,27 @@ Utility and guard:
   - E2E Playwright (`npm run test:e2e`) — skipped (last run 2026-03-12 failed login timeout; no E2E changes)
 - Notes/Risks:
   - Compat gate executed against HEAD~1..HEAD due to uncommitted worktree; rerun after commit if strict trace is required.
+
+## [2026-03-13] Batch: Web UI build fix — provider type alignment
+
+- Change reference:
+  - local working tree (pre-commit)
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/approvals/page.tsx` [MODIFY]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/quota-manager.ts` [MODIFY]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useAgentChat.ts` [MODIFY]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/chat-history.tsx` [MODIFY]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AgentChatHeader.tsx` [MODIFY]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AgentChatWithHistory.tsx` [MODIFY]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AIUsagePanel.tsx` [MODIFY]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/ExecuteWithAI.tsx` [MODIFY]
+- Compatibility gate:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS (FOCUSED TESTS ALLOWED)
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run build` -> PASS
+- Skip scope:
+  - Unit tests + coverage — skipped (targeted type fix + build verification only)
+  - E2E Playwright (`npm run test:e2e`) — skipped (no e2e-related changes)
+- Notes/Risks:
+  - Build initially failed due to provider key type mismatches (`AgentChat.tsx`, `AgentChatWithHistory.tsx`, `ExecuteWithAI.tsx`); fixed by widening ProviderKey coverage and updating provider label maps.
+  - Compat gate executed against HEAD~1..HEAD due to uncommitted worktree; rerun after commit if strict trace is required.

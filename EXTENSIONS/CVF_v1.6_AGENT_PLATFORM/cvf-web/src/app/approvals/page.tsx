@@ -8,50 +8,49 @@ import type { ApprovalRequest } from 'cvf-guard-contract/enterprise';
 const MOCK_REQUESTS: ApprovalRequest[] = [
   {
     id: 'req_1',
-    userId: 'usr_3',
-    phase: 'R3',
-    requestedRiskLevel: 'R3',
+    requestedBy: 'usr_3',
+    action: 'Deploy hotfix to production server',
+    phase: 'BUILD',
+    riskLevel: 'R3',
     reason: 'Deploy hotfix to production server',
-    status: 'PENDING',
+    status: 'pending',
     createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
     expiresAt: new Date(Date.now() + 3600000 * 22).toISOString(),
   },
   {
     id: 'req_2',
-    userId: 'usr_3',
-    phase: 'R2',
-    requestedRiskLevel: 'R3', // Developer pushing to R3
+    requestedBy: 'usr_3',
+    action: 'Run migrations on staging database',
+    phase: 'REVIEW',
+    riskLevel: 'R3', // Developer pushing to R3
     reason: 'Run migrations on staging database',
-    status: 'APPROVED',
+    status: 'approved',
     createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
     expiresAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-    decisionOptions: {
-      decisionAt: new Date(Date.now() - 3600000 * 47).toISOString(),
-      decisionBy: 'usr_2',
-      decisionReason: 'Verified migration script, looks safe.'
-    }
+    reviewedAt: new Date(Date.now() - 3600000 * 47).toISOString(),
+    reviewedBy: 'usr_2',
+    reviewComment: 'Verified migration script, looks safe.',
   },
   {
     id: 'req_3',
-    userId: 'usr_4',
-    phase: 'V2',
-    requestedRiskLevel: 'R1',
+    requestedBy: 'usr_4',
+    action: 'Export full database snapshot for local testing',
+    phase: 'DISCOVERY',
+    riskLevel: 'R1',
     reason: 'Export full database snapshot for local testing',
-    status: 'REJECTED',
+    status: 'rejected',
     createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
     expiresAt: new Date(Date.now() + 3600000 * 12).toISOString(),
-    decisionOptions: {
-      decisionAt: new Date(Date.now() - 3600000 * 11).toISOString(),
-      decisionBy: 'usr_1',
-      decisionReason: 'Security risk. Please use anonymized dump instead.'
-    }
+    reviewedAt: new Date(Date.now() - 3600000 * 11).toISOString(),
+    reviewedBy: 'usr_1',
+    reviewComment: 'Security risk. Please use anonymized dump instead.',
   }
 ];
 
 export default function ApprovalsPage() {
   const [requests, setRequests] = useState<ApprovalRequest[]>(MOCK_REQUESTS);
 
-  const handleAction = (id: string, action: 'APPROVED' | 'REJECTED') => {
+  const handleAction = (id: string, action: 'approved' | 'rejected') => {
     const reason = prompt(`Enter reason for ${action.toLowerCase()}:`);
     if (reason === null) return; // cancelled
     
@@ -60,18 +59,16 @@ export default function ApprovalsPage() {
         ? { 
             ...req, 
             status: action, 
-            decisionOptions: { 
-              decisionAt: new Date().toISOString(), 
-              decisionBy: 'Current Admin', 
-              decisionReason: reason 
-            }
+            reviewedAt: new Date().toISOString(),
+            reviewedBy: 'Current Admin',
+            reviewComment: reason,
           } 
         : req
     ));
   };
 
-  const pending = requests.filter(r => r.status === 'PENDING');
-  const history = requests.filter(r => r.status !== 'PENDING');
+  const pending = requests.filter(r => r.status === 'pending');
+  const history = requests.filter(r => r.status !== 'pending');
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
@@ -114,9 +111,9 @@ export default function ApprovalsPage() {
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="font-semibold text-gray-900 dark:text-white">{req.userId}</span>
+                        <span className="font-semibold text-gray-900 dark:text-white">{req.requestedBy}</span>
                         <span className="text-gray-400 dark:text-gray-500 text-sm">requested</span>
-                        <span className="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-bold rounded">Risk: {req.requestedRiskLevel}</span>
+                        <span className="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-bold rounded">Risk: {req.riskLevel}</span>
                         <span className="text-gray-400 dark:text-gray-500 text-sm">in</span>
                         <span className="px-2 py-0.5 bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 text-xs font-bold rounded">Phase: {req.phase}</span>
                       </div>
@@ -127,13 +124,13 @@ export default function ApprovalsPage() {
                     </div>
                     <div className="flex flex-col gap-2">
                       <button 
-                        onClick={() => handleAction(req.id, 'APPROVED')}
+                        onClick={() => handleAction(req.id, 'approved')}
                         className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors"
                       >
                         Approve
                       </button>
                       <button 
-                        onClick={() => handleAction(req.id, 'REJECTED')}
+                        onClick={() => handleAction(req.id, 'rejected')}
                         className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg font-medium transition-colors"
                       >
                         Reject
@@ -164,23 +161,23 @@ export default function ApprovalsPage() {
                   <tr key={req.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/50">
                     <td className="py-4 px-6">
                       <div className="font-medium text-gray-900 dark:text-white truncate max-w-xs" title={req.reason}>{req.reason}</div>
-                      <div className="text-xs text-gray-500 mt-1">By {req.userId} on {new Date(req.createdAt).toLocaleDateString()}</div>
+                      <div className="text-xs text-gray-500 mt-1">By {req.requestedBy} on {new Date(req.createdAt).toLocaleDateString()}</div>
                     </td>
                     <td className="py-4 px-6 text-gray-500">
-                      {req.phase} / {req.requestedRiskLevel}
+                      {req.phase} / {req.riskLevel}
                     </td>
                     <td className="py-4 px-6">
                       <span className={`px-2 py-1 text-xs font-bold rounded ${
-                         req.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-700' : 
-                         req.status === 'EXPIRED' ? 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300' : 
+                         req.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : 
+                         req.status === 'expired' ? 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300' : 
                          'bg-red-100 text-red-700'
                       }`}>
-                        {req.status}
+                        {req.status.toUpperCase()}
                       </span>
                     </td>
                     <td className="py-4 px-6">
-                      <div className="text-gray-700 dark:text-gray-300 truncate max-w-xs">{req.decisionOptions?.decisionReason || '-'}</div>
-                      <div className="text-xs text-gray-500 mt-1">{req.decisionOptions?.decisionBy}</div>
+                      <div className="text-gray-700 dark:text-gray-300 truncate max-w-xs">{req.reviewComment || '-'}</div>
+                      <div className="text-xs text-gray-500 mt-1">{req.reviewedBy}</div>
                     </td>
                   </tr>
                 ))}

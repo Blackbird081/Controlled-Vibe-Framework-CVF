@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
-import { useSettings } from './Settings';
+import { useSettings, type ProviderKey } from './Settings';
 import { Template } from '@/types';
 
 // Props for the Execute with AI button
@@ -47,10 +47,12 @@ export function ExecuteWithAIButton({ template, spec, onExecute, disabled }: Exe
     const provider = settings.preferences.defaultProvider;
     const hasApiKey = !!settings.providers[provider]?.apiKey;
 
-    const providerLabels = {
+    const providerLabels: Record<ProviderKey, string> = {
         gemini: '✨ Gemini',
         openai: '🤖 GPT-4',
         anthropic: '🧠 Claude',
+        alibaba: '🧭 Qwen',
+        openrouter: '🧩 OpenRouter',
     };
 
     const handleExecute = () => {

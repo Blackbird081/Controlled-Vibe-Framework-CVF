@@ -44,6 +44,8 @@ export function AgentChatHeader({
                         {defaultProvider === 'gemini' && '✨ Gemini'}
                         {defaultProvider === 'openai' && '🤖 GPT-4'}
                         {defaultProvider === 'anthropic' && '🧠 Claude'}
+                        {defaultProvider === 'alibaba' && '🧭 Qwen'}
+                        {defaultProvider === 'openrouter' && '🧩 OpenRouter'}
                     </p>
                 </div>
                 {currentMode !== 'simple' && (

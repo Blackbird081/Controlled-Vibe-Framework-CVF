@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createAIProvider, AIMessage } from '@/lib/ai-providers';
+import { createAIProvider, AIMessage, AIProvider } from '@/lib/ai-providers';
 import { useQuotaManager, ProviderKey } from '@/lib/quota-manager';
 import { checkResponseGovernance } from '@/lib/governance-post-check';
 import {
@@ -133,7 +133,7 @@ export function useAgentChat({
     const callRealAI = useCallback(async (
         messageId: string,
         userContent: string,
-        provider: 'gemini' | 'openai' | 'anthropic',
+        provider: AIProvider,
         apiKey: string,
         model: string
     ) => {
@@ -438,7 +438,7 @@ ${attachedFile.content}
         setIsStreaming(true);
 
         try {
-            await callRealAI(assistantId, content, provider as 'gemini' | 'openai' | 'anthropic', apiKey, selectedModel);
+            await callRealAI(assistantId, content, provider as AIProvider, apiKey, selectedModel);
         } catch {
             setMessages(prev => prev.map(m =>
                 m.id === assistantId

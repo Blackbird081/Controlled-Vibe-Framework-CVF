@@ -4,8 +4,8 @@
  * @module cvf-guard-contract/guards/phase-gate
  */
 
-import type { Guard, GuardRequestContext, GuardResult, CVFPhase, CVFRole } from '../types.js';
-import { PHASE_ORDER } from '../types.js';
+import type { Guard, GuardRequestContext, GuardResult, CVFPhase, CVFRole } from '../types';
+import { PHASE_ORDER } from '../types';
 
 export const PHASE_ROLE_MATRIX: Record<CVFPhase, CVFRole[]> = {
   DISCOVERY: ['HUMAN', 'OPERATOR'],

@@ -7,7 +7,7 @@
  * @module cvf-guard-contract/runtime/providers/gemini-provider
  */
 
-import type { ExecutionProvider } from '../agent-execution-runtime.js';
+import type { ExecutionProvider } from '../agent-execution-runtime';
 
 interface GeminiResponse {
   candidates?: Array<{

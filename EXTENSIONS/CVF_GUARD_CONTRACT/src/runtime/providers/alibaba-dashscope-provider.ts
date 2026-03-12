@@ -10,7 +10,7 @@
  * @module cvf-guard-contract/runtime/providers/alibaba-dashscope-provider
  */
 
-import type { ExecutionProvider } from '../agent-execution-runtime.js';
+import type { ExecutionProvider } from '../agent-execution-runtime';
 
 interface DashScopeMessage {
   role: 'system' | 'user' | 'assistant';

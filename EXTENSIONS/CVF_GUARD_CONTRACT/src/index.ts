@@ -10,28 +10,28 @@
  */
 
 // Types
-export * from './types.js';
+export * from './types';
 
 // Engine
-export { GuardRuntimeEngine } from './engine.js';
+export { GuardRuntimeEngine } from './engine';
 
 // Guards
-export { PhaseGateGuard, PHASE_ROLE_MATRIX, PHASE_DESCRIPTIONS } from './guards/phase-gate.guard.js';
-export { RiskGateGuard, RISK_DESCRIPTIONS } from './guards/risk-gate.guard.js';
-export { AuthorityGateGuard, RESTRICTED_ACTIONS } from './guards/authority-gate.guard.js';
-export { MutationBudgetGuard, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD } from './guards/mutation-budget.guard.js';
-export { ScopeGuard, PROTECTED_PATHS, CVF_ROOT_INDICATORS } from './guards/scope.guard.js';
-export { AuditTrailGuard } from './guards/audit-trail.guard.js';
+export { PhaseGateGuard, PHASE_ROLE_MATRIX, PHASE_DESCRIPTIONS } from './guards/phase-gate.guard';
+export { RiskGateGuard, RISK_DESCRIPTIONS } from './guards/risk-gate.guard';
+export { AuthorityGateGuard, RESTRICTED_ACTIONS } from './guards/authority-gate.guard';
+export { MutationBudgetGuard, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD } from './guards/mutation-budget.guard';
+export { ScopeGuard, PROTECTED_PATHS, CVF_ROOT_INDICATORS } from './guards/scope.guard';
+export { AuditTrailGuard } from './guards/audit-trail.guard';
 
 // Factory
-import type { GuardRuntimeConfig } from './types.js';
-import { GuardRuntimeEngine } from './engine.js';
-import { PhaseGateGuard } from './guards/phase-gate.guard.js';
-import { RiskGateGuard } from './guards/risk-gate.guard.js';
-import { AuthorityGateGuard } from './guards/authority-gate.guard.js';
-import { MutationBudgetGuard } from './guards/mutation-budget.guard.js';
-import { ScopeGuard } from './guards/scope.guard.js';
-import { AuditTrailGuard } from './guards/audit-trail.guard.js';
+import type { GuardRuntimeConfig } from './types';
+import { GuardRuntimeEngine } from './engine';
+import { PhaseGateGuard } from './guards/phase-gate.guard';
+import { RiskGateGuard } from './guards/risk-gate.guard';
+import { AuthorityGateGuard } from './guards/authority-gate.guard';
+import { MutationBudgetGuard } from './guards/mutation-budget.guard';
+import { ScopeGuard } from './guards/scope.guard';
+import { AuditTrailGuard } from './guards/audit-trail.guard';
 
 /**
  * Creates a GuardRuntimeEngine pre-loaded with all 6 canonical guards.

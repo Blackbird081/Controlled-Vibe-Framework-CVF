@@ -3,7 +3,7 @@
  * @module cvf-guard-contract/guards/authority-gate
  */
 
-import type { Guard, GuardRequestContext, GuardResult, CVFRole } from '../types.js';
+import type { Guard, GuardRequestContext, GuardResult, CVFRole } from '../types';
 
 export const RESTRICTED_ACTIONS: Record<CVFRole, string[]> = {
   AI_AGENT: ['approve', 'merge', 'release', 'deploy', 'delete_governance', 'override_gate'],

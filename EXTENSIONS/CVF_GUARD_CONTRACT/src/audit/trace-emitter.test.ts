@@ -3,8 +3,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { generateTraceHash, createTraceEntry } from './trace-emitter.js';
-import type { GuardRequestContext, GuardPipelineResult } from '../types.js';
+import { generateTraceHash, createTraceEntry } from './trace-emitter';
+import type { GuardRequestContext, GuardPipelineResult } from '../types';
 
 function mockContext(overrides?: Partial<GuardRequestContext>): GuardRequestContext {
   return {

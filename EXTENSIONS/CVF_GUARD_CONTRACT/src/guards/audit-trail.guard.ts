@@ -3,7 +3,7 @@
  * @module cvf-guard-contract/guards/audit-trail
  */
 
-import type { Guard, GuardRequestContext, GuardResult } from '../types.js';
+import type { Guard, GuardRequestContext, GuardResult } from '../types';
 
 export class AuditTrailGuard implements Guard {
   id = 'audit_trail';

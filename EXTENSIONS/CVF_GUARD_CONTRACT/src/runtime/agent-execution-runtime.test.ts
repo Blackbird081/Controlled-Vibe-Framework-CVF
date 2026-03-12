@@ -11,13 +11,13 @@ import {
   DryRunProvider,
   type RuntimeConfig,
   type ExecutionProvider,
-} from './agent-execution-runtime.js';
+} from './agent-execution-runtime';
 import {
   SkillRegistry,
   createDefaultSkillRegistry,
   type SkillDefinition,
-} from './skill-registry.js';
-import { createGuardEngine } from '../index.js';
+} from './skill-registry';
+import { createGuardEngine } from '../index';
 
 // ─── Helpers ──────────────────────────────────────────────────────────
 

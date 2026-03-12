@@ -10,7 +10,7 @@
 import { createHash, randomUUID } from 'crypto';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
-import type { GuardPipelineResult, GuardRequestContext } from '../types.js';
+import type { GuardPipelineResult, GuardRequestContext } from '../types';
 
 export interface TraceEntry {
   traceId: string;

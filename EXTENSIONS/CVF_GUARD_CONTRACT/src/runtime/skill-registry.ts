@@ -7,7 +7,7 @@
  * @module cvf-guard-contract/runtime/skill-registry
  */
 
-import type { CVFPhase, CVFRiskLevel } from '../types.js';
+import type { CVFPhase, CVFRiskLevel } from '../types';
 
 // ─── Skill Definition ─────────────────────────────────────────────────
 

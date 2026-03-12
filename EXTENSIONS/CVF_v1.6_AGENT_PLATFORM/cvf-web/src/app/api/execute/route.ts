@@ -81,6 +81,8 @@ export async function POST(request: NextRequest) {
             openai: process.env.OPENAI_API_KEY,
             claude: process.env.ANTHROPIC_API_KEY,
             gemini: process.env.GOOGLE_AI_API_KEY,
+            alibaba: process.env.ALIBABA_API_KEY,
+            openrouter: process.env.OPENROUTER_API_KEY,
         };
 
         const apiKey = apiKeyMap[provider];

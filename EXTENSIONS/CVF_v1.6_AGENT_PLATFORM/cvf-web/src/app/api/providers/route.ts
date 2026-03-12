@@ -18,6 +18,16 @@ export async function GET() {
             configured: !!process.env.GOOGLE_AI_API_KEY,
             model: DEFAULT_MODELS.gemini,
         },
+        {
+            provider: 'alibaba',
+            configured: !!process.env.ALIBABA_API_KEY,
+            model: DEFAULT_MODELS.alibaba,
+        },
+        {
+            provider: 'openrouter',
+            configured: !!process.env.OPENROUTER_API_KEY,
+            model: DEFAULT_MODELS.openrouter,
+        },
     ];
 
     const defaultProvider = (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';

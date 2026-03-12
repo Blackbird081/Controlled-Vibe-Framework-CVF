@@ -2903,3 +2903,18 @@ Utility and guard:
 - Notes/Risks:
   - Test log exceeds 3000-line rotation threshold. **Rotation recommended next batch.**
   - SDK not yet published to npm (module exists, publish pending)
+
+## [2026-03-12] Batch: Deferred Tasks Completion (Sprint 6/7/8 gaps closed)
+
+- Change reference:
+  - requestId: `REQ-20260312-DEFERRED`
+  - commit: `b8a2d23`
+- Impacted scope:
+  - `tests/e2e/utils.ts` [MODIFY] — Login: role `select` now optional (check `.count()` before `.selectOption()`), `waitForURL` timeout added
+  - `cvf-web/src/components/ProjectProgress.tsx` [NEW] — Phase progress bar, guard stats, event timeline (bilingual VI/EN)
+  - `cvf-web/src/lib/friendly-labels.ts` [NEW] — Maps Phase/Risk/Guard/Decision to friendly labels (hides CVF internals)
+  - `CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` [NEW] — SDK-level enforcement: all channels pass through guards, hard/soft block, bypass list
+- Tests executed:
+  - No regression (additive changes only)
+- Notes/Risks:
+  - Only Task 8.6 (Enterprise features) remains — needs requirements specification

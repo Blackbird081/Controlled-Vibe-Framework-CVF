@@ -44,11 +44,13 @@
 - ✅ **141-skill registry** × 12 domains (Sprint 8)
 - ✅ **GitHub Actions CI** pipeline (Sprint 8)
 - ✅ **OpenAPI 3.0 spec** endpoint (Sprint 8)
+- ✅ **E2E Playwright fix** — login selector + timeout (Sprint 6)
+- ✅ **ProjectProgress dashboard** — phase bar, stats, timeline (Sprint 7)
+- ✅ **Friendly labels** — hide CVF internals from non-coder (Sprint 7)
+- ✅ **Mandatory Gateway Mode** — SDK-level enforcement (Sprint 8)
 
-### 🟡 Remaining (không blocking):
-- E2E Playwright tests timeout (3 tests) — deferred
-- Task 8.3 Mandatory gateway mode — future
-- Task 8.6 Enterprise features — future
+### 🟡 Remaining:
+- Task 8.6 Enterprise features (team roles, SSO, approval workflows) — cần requirements
 
 ---
 

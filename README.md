@@ -8,12 +8,11 @@
 
 [![Version](https://img.shields.io/badge/version-4.0.0%20Runtime-9e6b2b.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
-[![Runtime Tests](https://img.shields.io/badge/runtime-453%2F453%20PASS-brightgreen.svg)](EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/)
-[![Conformance](https://img.shields.io/badge/conformance-84%2F84%20PASS-brightgreen.svg)](docs/reviews/cvf_phase_governance/)
-[![Tests](https://img.shields.io/badge/tests-1%2C799%20passing-brightgreen.svg)](docs/CVF_INCREMENTAL_TEST_LOG.md)
-[![Skills](https://img.shields.io/badge/skills-141%20×%2012%20domains-blue.svg)](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
+[![Guard Contract](https://img.shields.io/badge/Guard%20Contract-187%20tests%20pass-brightgreen.svg)](EXTENSIONS/CVF_GUARD_CONTRACT/)
+[![MCP Bridge](https://img.shields.io/badge/MCP%20Bridge-4%20endpoints%20active-blue.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/)
+[![Skills](https://img.shields.io/badge/skills-141%20%C3%97%2012%20domains-blue.svg)](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
 [![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
-[![CVF_ECO](https://img.shields.io/badge/CVF_ECO-12%20extensions%2C%20434%20tests-blue.svg)](ECOSYSTEM/strategy/CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md)
+[![CI](https://img.shields.io/badge/CI-GitHub%20Actions%20ready-blue.svg)](.github/workflows/cvf-ci.yml)
 
 ---
 
@@ -41,9 +40,15 @@ CVF is a **governance-enforced runtime platform** for AI-assisted software devel
 - **4-Phase Process** — Discovery → Design → Build → Review (no skipping phases)
 - **Risk Control** — 4-level risk model (R0–R3) with authority boundaries
 - **141 Reusable Skills** — Across 12 domains, with bi-directional linking
-- **34 Agent Tools** — RAG, Data Viz, Browser Auto, MCP, Agent Teams & more
-- **CVF_ECO Extensions** — 12 ecosystem modules, 434 tests, 100% pass
-- **Conformance Pipeline** — 84 scenarios, release-grade gate, golden baseline
+- **Unified Guard System** — `CVF_GUARD_CONTRACT`: 1 engine, 6 guards, phase/risk/role enforcement via `GuardRuntimeEngine`
+- **MCP HTTP Bridge** — External agents call `POST /api/guards/evaluate` → ALLOW/BLOCK/ESCALATE + `agentGuidance`
+- **Agent Execution Runtime** — Full governed pipeline: `parseIntent → preCheck → execute → postCheck → audit`
+- **Multi-Provider AI** — Pluggable `ExecutionProvider`: Alibaba Qwen (`qwen-turbo`) + Google Gemini (`gemini-2.0-flash`)
+- **SQLite Audit Trail** — Persistent, indexed audit log (WAL mode) with stats, filtering, pagination
+- **Rate Limiting** — Sliding window 60 req/60s, 429 + Retry-After headers for API endpoints
+- **Guard Dashboard UI** — Interactive governance UI for non-coders (`/(dashboard)/guards`)
+- **VS Code Governance Adapter** — Prompt injection for Cursor/Windsurf/AI IDE agents
+- **CI Pipeline** — GitHub Actions: guard contract tests + MCP tests + Web UI typecheck
 - **Web UI + Agent Platform** — No-code interface, multi-agent workflows, v1.6 non-coder enhancement complete
 - **AI Safety Kernel** — 5-layer pipeline, anti-bypass, forensic tracing
 

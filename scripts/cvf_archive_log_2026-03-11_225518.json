@@ -1,0 +1,404 @@
+{
+  "timestamp": "2026-03-11T22:55:18.189288",
+  "cutoff_date": "2026-03-08",
+  "mode": "dry-run",
+  "directories": {
+    "docs\\assessments": {
+      "active_count": 4,
+      "archive_count": 10,
+      "permanent_count": 1,
+      "already_archived_count": 0,
+      "files_to_archive": [
+        {
+          "file": "CVF_AI_RESEARCH_SKILLS_ASSESSMENT_2026-02-26.md",
+          "date": "2026-02-26",
+          "size_kb": 5.0,
+          "destination": "docs\\assessments\\archive\\CVF_AI_RESEARCH_SKILLS_ASSESSMENT_2026-02-26.md"
+        },
+        {
+          "file": "CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md",
+          "date": "2026-02-26",
+          "size_kb": 7.1,
+          "destination": "docs\\assessments\\archive\\CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md"
+        },
+        {
+          "file": "CVF_FULL_PROJECT_ASSESSMENT_2026-02-24.md",
+          "date": "2026-02-24",
+          "size_kb": 12.1,
+          "destination": "docs\\assessments\\archive\\CVF_FULL_PROJECT_ASSESSMENT_2026-02-24.md"
+        },
+        {
+          "file": "CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md",
+          "date": "2026-02-25",
+          "size_kb": 5.9,
+          "destination": "docs\\assessments\\archive\\CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md"
+        },
+        {
+          "file": "CVF_INDEPENDENT_ASSESSMENT_2026-02-28.md",
+          "date": "2026-02-28",
+          "size_kb": 3.5,
+          "destination": "docs\\assessments\\archive\\CVF_INDEPENDENT_ASSESSMENT_2026-02-28.md"
+        },
+        {
+          "file": "CVF_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 19.0,
+          "destination": "docs\\assessments\\archive\\CVF_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md"
+        },
+        {
+          "file": "CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md",
+          "date": "2026-02-25",
+          "size_kb": 2.7,
+          "destination": "docs\\assessments\\archive\\CVF_KERNEL_ARCHITECTURE_POST_FIX_ASSESSMENT_2026-02-25.md"
+        },
+        {
+          "file": "CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md",
+          "date": "2026-02-25",
+          "size_kb": 5.1,
+          "destination": "docs\\assessments\\archive\\CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md"
+        },
+        {
+          "file": "CVF_PRE_FIX_ASSESSMENT_2026-02-25.md",
+          "date": "2026-02-25",
+          "size_kb": 2.2,
+          "destination": "docs\\assessments\\archive\\CVF_PRE_FIX_ASSESSMENT_2026-02-25.md"
+        },
+        {
+          "file": "CVF_VS_UUPM_COMPARISON_2026-02-22.md",
+          "date": "2026-02-22",
+          "size_kb": 8.1,
+          "destination": "docs\\assessments\\archive\\CVF_VS_UUPM_COMPARISON_2026-02-22.md"
+        }
+      ]
+    },
+    "docs\\reviews\\cvf_phase_governance": {
+      "active_count": 3,
+      "archive_count": 44,
+      "permanent_count": 1,
+      "already_archived_count": 0,
+      "files_to_archive": [
+        {
+          "file": "CVF_CONFORMANCE_DIFF_REPORT_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 0.4,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_CONFORMANCE_DIFF_REPORT_2026-03-07.md"
+        },
+        {
+          "file": "CVF_CONFORMANCE_RELEASE_GATE_REPORT_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 2.8,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_CONFORMANCE_RELEASE_GATE_REPORT_2026-03-07.md"
+        },
+        {
+          "file": "CVF_CONFORMANCE_TRACE_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 82.1,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_CONFORMANCE_TRACE_2026-03-07.md"
+        },
+        {
+          "file": "CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 240.8,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md"
+        },
+        {
+          "file": "CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 309.8,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json"
+        },
+        {
+          "file": "CVF_DANH_GIA_DOC_LAP_TOAN_DIEN_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 22.6,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_DANH_GIA_DOC_LAP_TOAN_DIEN_2026-03-06.md"
+        },
+        {
+          "file": "CVF_DANH_GIA_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 8.7,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_DANH_GIA_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md"
+        },
+        {
+          "file": "CVF_DANH_GIA_TONG_HOP_13_DE_XUAT_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 10.1,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_DANH_GIA_TONG_HOP_13_DE_XUAT_2026-03-06.md"
+        },
+        {
+          "file": "CVF_ENTERPRISE_ONBOARDING_PACKET_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 26.1,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_ENTERPRISE_ONBOARDING_PACKET_2026-03-07.md"
+        },
+        {
+          "file": "CVF_EXECUTIVE_REVIEW_BASELINE_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 4.8,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_EXECUTIVE_REVIEW_BASELINE_2026-03-06.md"
+        },
+        {
+          "file": "CVF_IMPLEMENT_DECISION_MATRIX_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 5.6,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_IMPLEMENT_DECISION_MATRIX_2026-03-06.md"
+        },
+        {
+          "file": "CVF_INTERNAL_AUDIT_PACKET_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 25.5,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_INTERNAL_AUDIT_PACKET_2026-03-07.md"
+        },
+        {
+          "file": "CVF_PACKET_POSTURE_STATE_CACHE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 55.2,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_PACKET_POSTURE_STATE_CACHE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_PHASE_GOVERNANCE_PROTOCOL_INDEPENDENT_REVIEW_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 7.7,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_PHASE_GOVERNANCE_PROTOCOL_INDEPENDENT_REVIEW_2026-03-06.md"
+        },
+        {
+          "file": "CVF_QUYET_DINH_TICH_HOP_CHINH_THUC_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 11.6,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_QUYET_DINH_TICH_HOP_CHINH_THUC_2026-03-06.md"
+        },
+        {
+          "file": "CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 24.6,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md"
+        },
+        {
+          "file": "CVF_RELEASE_REVIEW_PACKET_PRODUCTION_CANDIDATE_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 25.4,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_RELEASE_REVIEW_PACKET_PRODUCTION_CANDIDATE_2026-03-07.md"
+        },
+        {
+          "file": "CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 56.8,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md"
+        },
+        {
+          "file": "CVF_ROADMAP_NANG_CAP_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 8.3,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_ROADMAP_NANG_CAP_2026-03-06.md"
+        },
+        {
+          "file": "CVF_UPGRADE_TRACE_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 32.9,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_UPGRADE_TRACE_2026-03-07.md"
+        },
+        {
+          "file": "CVF_V122_CONFORMANCE_CACHE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 4.4,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_V122_CONFORMANCE_CACHE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_V122_CONFORMANCE_RAW_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 6.7,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_V122_CONFORMANCE_RAW_2026-03-07.json"
+        },
+        {
+          "file": "CVF_V171_CONFORMANCE_CACHE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 2.7,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_V171_CONFORMANCE_CACHE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_V171_CONFORMANCE_RAW_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 4.1,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_V171_CONFORMANCE_RAW_2026-03-07.json"
+        },
+        {
+          "file": "CVF_V19_CONFORMANCE_CACHE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 9.2,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_V19_CONFORMANCE_CACHE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_V19_CONFORMANCE_RAW_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 14.0,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_V19_CONFORMANCE_RAW_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_AGENT_PLATFORM_GOVERNANCE_EVIDENCE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 0.9,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_AGENT_PLATFORM_GOVERNANCE_EVIDENCE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_AGENT_PLATFORM_GOVERNANCE_LOG_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 1.2,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_AGENT_PLATFORM_GOVERNANCE_LOG_2026-03-07.md"
+        },
+        {
+          "file": "CVF_W4_GOVERNANCE_ENGINE_EVIDENCE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 0.9,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_GOVERNANCE_ENGINE_EVIDENCE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_GOVERNANCE_ENGINE_LOG_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 1.2,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_GOVERNANCE_ENGINE_LOG_2026-03-07.md"
+        },
+        {
+          "file": "CVF_W4_MULTI_RUNTIME_EVIDENCE_LOG_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 4.7,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_MULTI_RUNTIME_EVIDENCE_LOG_2026-03-07.md"
+        },
+        {
+          "file": "CVF_W4_MULTI_RUNTIME_EVIDENCE_MANIFEST_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 5.7,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_MULTI_RUNTIME_EVIDENCE_MANIFEST_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_PHASE_GOVERNANCE_EVIDENCE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 0.9,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_PHASE_GOVERNANCE_EVIDENCE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_PHASE_GOVERNANCE_LOG_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 1.1,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_PHASE_GOVERNANCE_LOG_2026-03-07.md"
+        },
+        {
+          "file": "CVF_W4_REMEDIATION_RECEIPTS_LOCAL_BASELINE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 1.8,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_REMEDIATION_RECEIPTS_LOCAL_BASELINE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_REMEDIATION_RECEIPT_LOG_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 1.9,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_REMEDIATION_RECEIPT_LOG_2026-03-07.md"
+        },
+        {
+          "file": "CVF_W4_RUNTIME_ADAPTER_HUB_REMEDIATION_RECEIPTS_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 0.9,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_RUNTIME_ADAPTER_HUB_REMEDIATION_RECEIPTS_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_RUNTIME_ADAPTER_HUB_REMEDIATION_RECEIPT_LOG_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 1.2,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_RUNTIME_ADAPTER_HUB_REMEDIATION_RECEIPT_LOG_2026-03-07.md"
+        },
+        {
+          "file": "CVF_W4_SAFETY_HARDENING_ROLLBACK_EVIDENCE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 0.9,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_SAFETY_HARDENING_ROLLBACK_EVIDENCE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_SAFETY_HARDENING_ROLLBACK_LOG_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 1.1,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_SAFETY_HARDENING_ROLLBACK_LOG_2026-03-07.md"
+        },
+        {
+          "file": "CVF_W4_SAFETY_RUNTIME_SESSION_EVIDENCE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 0.8,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_SAFETY_RUNTIME_SESSION_EVIDENCE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_SAFETY_RUNTIME_SESSION_LOG_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 1.1,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_SAFETY_RUNTIME_SESSION_LOG_2026-03-07.md"
+        },
+        {
+          "file": "CVF_W4_SKILL_GOVERNANCE_EVIDENCE_2026-03-07.json",
+          "date": "2026-03-07",
+          "size_kb": 0.9,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_SKILL_GOVERNANCE_EVIDENCE_2026-03-07.json"
+        },
+        {
+          "file": "CVF_W4_SKILL_GOVERNANCE_LOG_2026-03-07.md",
+          "date": "2026-03-07",
+          "size_kb": 1.2,
+          "destination": "docs\\reviews\\cvf_phase_governance\\archive\\CVF_W4_SKILL_GOVERNANCE_LOG_2026-03-07.md"
+        }
+      ]
+    },
+    "docs\\roadmaps": {
+      "active_count": 0,
+      "archive_count": 6,
+      "permanent_count": 1,
+      "already_archived_count": 0,
+      "files_to_archive": [
+        {
+          "file": "CVF_DOCUMENT_MIGRATION_PLAN_2026-03-06.md",
+          "date": "2026-03-06",
+          "size_kb": 8.8,
+          "destination": "docs\\roadmaps\\archive\\CVF_DOCUMENT_MIGRATION_PLAN_2026-03-06.md"
+        },
+        {
+          "file": "CVF_INTEGRATION_ROADMAP_2026-02-24.md",
+          "date": "2026-02-24",
+          "size_kb": 10.3,
+          "destination": "docs\\roadmaps\\archive\\CVF_INTEGRATION_ROADMAP_2026-02-24.md"
+        },
+        {
+          "file": "CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md",
+          "date": "2026-02-25",
+          "size_kb": 11.0,
+          "destination": "docs\\roadmaps\\archive\\CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md"
+        },
+        {
+          "file": "CVF_SKILL_UPGRADE_ROADMAP_2026-02-22.md",
+          "date": "2026-02-22",
+          "size_kb": 20.1,
+          "destination": "docs\\roadmaps\\archive\\CVF_SKILL_UPGRADE_ROADMAP_2026-02-22.md"
+        },
+        {
+          "file": "CVF_TECHNICAL_STABILIZATION_ROADMAP_2026-02-22.md",
+          "date": "2026-02-22",
+          "size_kb": 7.4,
+          "destination": "docs\\roadmaps\\archive\\CVF_TECHNICAL_STABILIZATION_ROADMAP_2026-02-22.md"
+        },
+        {
+          "file": "CVF_V161_WEBUI_INTEGRATION_ROADMAP_2026-02-21.md",
+          "date": "2026-02-21",
+          "size_kb": 24.4,
+          "destination": "docs\\roadmaps\\archive\\CVF_V161_WEBUI_INTEGRATION_ROADMAP_2026-02-21.md"
+        }
+      ]
+    },
+    "ECOSYSTEM\\strategy": {
+      "active_count": 7,
+      "archive_count": 0,
+      "permanent_count": 2,
+      "already_archived_count": 0,
+      "files_to_archive": []
+    }
+  },
+  "totals": {
+    "moved": 0,
+    "active": 14,
+    "permanent": 5,
+    "already_archived": 0
+  }
+}

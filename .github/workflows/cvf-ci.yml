@@ -1,0 +1,102 @@
+name: CVF CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ─── Guard Contract Tests ────────────────────────────────────────────
+  test-guard-contract:
+    name: Guard Contract (unit tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_GUARD_CONTRACT/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npx vitest run
+        # Note: live API tests (CVF_GEMINI_LIVE_TEST=true) are excluded in CI
+        # to avoid quota/billing issues. Run manually with API keys.
+
+  # ─── MCP Server Tests ────────────────────────────────────────────────
+  test-mcp-server:
+    name: MCP ECO v2.5 (71 tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/package-lock.json
+
+      - name: Install CVF Guard Contract (local dep)
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm ci
+
+      - name: Install MCP Server dependencies
+        run: npm ci
+
+      - name: Run MCP tests
+        run: npm test
+
+  # ─── Web UI Type Check ───────────────────────────────────────────────
+  typecheck-web-ui:
+    name: Web UI v1.6 (type check)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+
+      - name: Install CVF Guard Contract (local dep)
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm ci
+
+      - name: Install Web UI dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+  # ─── Summary gate ────────────────────────────────────────────────────
+  ci-passed:
+    name: CI Passed
+    needs: [test-guard-contract, test-mcp-server, typecheck-web-ui]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "✅ All CVF CI checks passed."

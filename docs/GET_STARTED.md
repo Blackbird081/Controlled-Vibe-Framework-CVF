@@ -205,7 +205,7 @@ npm run dev
 3. **Tools:**
    - Web UI: Templates & Skills
    - Governance Toolkit: Phase gates, risk control
-   - Skill Library: 124 reusable skills
+   - Skill Library: **141** reusable skills (12 domains)
 
 ### Step 3: First Team Project (5 phút)
 
@@ -440,4 +440,4 @@ After getting started, here are recommended next steps:
 
 ---
 
-*Last updated: February 2026 · Version: 1.6.0*
+*Last updated: March 2026 · Version: 1.6.0 + Guard Contract (Sprint 0-5 complete)*

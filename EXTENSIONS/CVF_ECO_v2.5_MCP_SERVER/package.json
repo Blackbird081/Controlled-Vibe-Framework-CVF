@@ -15,7 +15,8 @@
     "test:run": "vitest run"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1"
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "cvf-guard-contract": "file:../CVF_GUARD_CONTRACT"
   },
   "devDependencies": {
     "@types/node": "^20",

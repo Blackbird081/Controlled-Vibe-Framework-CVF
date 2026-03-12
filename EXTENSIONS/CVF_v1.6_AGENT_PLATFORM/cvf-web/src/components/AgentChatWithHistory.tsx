@@ -109,6 +109,8 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
                             {activeSession.provider === 'gemini' && '✨'}
                             {activeSession.provider === 'openai' && '🤖'}
                             {activeSession.provider === 'anthropic' && '🧠'}
+                            {activeSession.provider === 'alibaba' && '🧭'}
+                            {activeSession.provider === 'openrouter' && '🧩'}
                         </span>
                         <span className="font-medium truncate">{activeSession.title}</span>
                         <span className="text-gray-500 ml-auto text-xs">

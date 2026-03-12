@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { ChatMessage } from '@/components/AgentChat';
+import type { ProviderKey } from '@/lib/quota-manager';
 
 // Types
 export interface ChatSession {
@@ -10,7 +11,7 @@ export interface ChatSession {
     messages: ChatMessage[];
     createdAt: Date;
     updatedAt: Date;
-    provider: 'gemini' | 'openai' | 'anthropic';
+    provider: ProviderKey;
     metadata?: {
         totalTokens?: number;
         messageCount: number;
@@ -83,7 +84,7 @@ export function useChatHistory() {
         saveHistory(state);
     }, [state]);
 
-    const createSession = useCallback((provider: 'gemini' | 'openai' | 'anthropic'): string => {
+    const createSession = useCallback((provider: ProviderKey): string => {
         const newSession: ChatSession = {
             id: `session_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
             title: 'New Chat',
@@ -226,6 +227,8 @@ export function ChatHistorySidebar({
                                                 {session.provider === 'gemini' && '✨'}
                                                 {session.provider === 'openai' && '🤖'}
                                                 {session.provider === 'anthropic' && '🧠'}
+                                                {session.provider === 'alibaba' && '🧭'}
+                                                {session.provider === 'openrouter' && '🧩'}
                                             </span>
                                             <span className="font-medium text-sm text-gray-900 dark:text-white truncate">
                                                 {session.title}

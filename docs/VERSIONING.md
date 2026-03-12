@@ -48,6 +48,8 @@ PATCH versions are used for sub-extensions within a minor version (e.g., v1.7.1,
 | v1.7.2 | Safety Dashboard | ✅ STABLE | Feb 24, 2026 |
 | v1.7.3 | Runtime Adapter Hub | ✅ ACTIVE | Feb 28, 2026 |
 | v1.8.1 | Adaptive Observability Runtime | 🆕 NEW | Mar 05, 2026 |
+| v1.9 | Deterministic Reproducibility | ✅ ACTIVE | Mar 07, 2026 |
+| **CVF_GUARD_CONTRACT** | **Unified Guard System** (cross-channel) | **✅ ACTIVE** | **Mar 12, 2026** |
 | v3.0 | Core Foundation Primitives — Git for AI | 🔵 DRAFT (branch cvf-next) | Mar 06, 2026 |
 
 ---
@@ -209,4 +211,4 @@ This split exists to avoid mixing:
 
 ---
 
-*Updated: February 28, 2026*
+*Updated: March 12, 2026*

@@ -190,6 +190,7 @@ export async function POST(request: NextRequest) {
             phase: body.cvfPhase,
             riskLevel: body.cvfRiskLevel,
             role: isServiceAllowed ? 'OPERATOR' : 'HUMAN',
+            userRole: isServiceAllowed ? 'admin' : session?.role,
             intent: body.intent,
         });
         const guardResult: GuardPipelineResult = guardEngine.evaluate(guardContext);

@@ -5,6 +5,7 @@
 
 import type { Guard, GuardRequestContext, GuardResult, CVFRiskLevel } from '../types';
 import { RISK_NUMERIC } from '../types';
+import { getPermissions, type TeamRole } from '../enterprise/enterprise';
 
 export const RISK_DESCRIPTIONS: Record<CVFRiskLevel, string> = {
   R0: 'Safe — no risk, free to proceed',
@@ -34,6 +35,28 @@ export class RiskGateGuard implements Guard {
         suggestedAction: 'specify_valid_risk_level',
         timestamp,
       };
+    }
+
+    // Enterprise RBAC Check (Task 8.6 Phase 3)
+    const userRole = context.metadata?.userRole as TeamRole | undefined;
+    if (userRole) {
+      try {
+        const perms = getPermissions(userRole);
+        if (perms && RISK_NUMERIC[context.riskLevel] > RISK_NUMERIC[perms.maxRiskLevel]) {
+          return {
+            guardId: this.id,
+            decision: 'BLOCK',
+            severity: 'CRITICAL',
+            reason: `Role "${userRole}" has maximum risk level ${perms.maxRiskLevel}. Cannot execute ${context.riskLevel} action.`,
+            agentGuidance: `The active user has the "${userRole}" role, which restricts them to ${perms.maxRiskLevel} risk actions. This action is classified as ${context.riskLevel}. It is blocked by enterprise policy.`,
+            suggestedAction: 'request_role_elevation',
+            timestamp,
+            metadata: { userRole, maxRiskLevel: perms.maxRiskLevel, requestedRisk: context.riskLevel },
+          };
+        }
+      } catch (e) {
+        // Log silently or fallback to base model
+      }
     }
 
     if (context.riskLevel === 'R3') {

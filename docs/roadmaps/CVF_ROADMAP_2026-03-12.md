@@ -182,5 +182,5 @@
 ---
 
 *Roadmap này là tài liệu CHÍNH THỨC và DUY NHẤT cho tất cả công việc từ ngày 2026-03-12 trở đi.*  
-*Sprint 0-8: ALL DONE. Remaining tasks (8.3, 8.6) deferred to future sprints.*  
-*Reviewer: Antigravity AI | Cập nhật lần cuối: 2026-03-12 23:20*
+*Sprint 0-8: ALL DONE. Tasks 8.3 and 8.6 have now been fully implemented.*  
+*Reviewer: Antigravity AI | Cập nhật lần cuối: 2026-03-13 00:15*

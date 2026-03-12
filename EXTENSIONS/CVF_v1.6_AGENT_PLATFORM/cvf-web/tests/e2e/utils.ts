@@ -26,9 +26,16 @@ export async function login(page: Page) {
     await page.goto('/login');
     await page.locator('input[type="text"][placeholder="admin"]').fill('admin');
     await page.locator('input[type="password"][placeholder="admin123"]').fill('admin123');
-    await page.locator('select').selectOption('admin');
+
+    // Role select is optional — some login forms don't have it
+    const roleSelect = page.locator('select');
+    const selectCount = await roleSelect.count();
+    if (selectCount > 0) {
+        await roleSelect.first().selectOption('admin');
+    }
+
     await page.getByRole('button', { name: /Đăng nhập/i }).click();
-    await page.waitForURL('**/');
+    await page.waitForURL('**/', { timeout: 10000 });
 }
 
 export async function openStrategyAnalysis(page: Page) {

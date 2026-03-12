@@ -2918,3 +2918,26 @@ Utility and guard:
   - No regression (additive changes only)
 - Notes/Risks:
   - Only Task 8.6 (Enterprise features) remains — needs requirements specification
+
+## [2026-03-13] Batch: Test coverage refresh + auth test alignment
+
+- Change reference:
+  - local working tree (pre-commit)
+- Impacted scope:
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/enterprise/enterprise.test.ts` [NEW]
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/sdk/guard-sdk.test.ts` [NEW]
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts` [NEW]
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/full-skill-registry.test.ts` [NEW]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.test.ts` [MODIFY]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.test.ts` [MODIFY]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/auth/me/route.test.ts` [MODIFY]
+  - `docs/reviews/CVF_INDEPENDENT_POSTFIX_REVIEW_2026-03-12.md` [MODIFY]
+- Compatibility gate:
+  - `python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD` -> PASS (FOCUSED TESTS ALLOWED)
+- Tests executed:
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run test:coverage` -> PASS (All files: 90.9% Stmts | 88.27% Branch | 82.4% Funcs | 90.9% Lines)
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run test:coverage` -> PASS (All files: 91.99% Stmts | 80% Branch | 91.13% Funcs | 93.1% Lines)
+- Skip scope:
+  - E2E Playwright (`npm run test:e2e`) — skipped (last run 2026-03-12 failed login timeout; no E2E changes)
+- Notes/Risks:
+  - Compat gate executed against HEAD~1..HEAD due to uncommitted worktree; rerun after commit if strict trace is required.

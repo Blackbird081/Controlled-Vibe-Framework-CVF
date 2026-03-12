@@ -162,27 +162,9 @@ This checkpoint is intentionally conservative and evidence-based. If any of the 
 
 ---
 
-## 7) Test Evidence (2026-03-12)
+## 7) Test Evidence (2026-03-13)
 
-### 7.1 CVF_GUARD_CONTRACT — Unit Tests
-
-Command:
-```
-npm test
-```
-
-Result (summary):
-```
-Test Files 7 passed
-Tests 113 passed | 5 skipped (118)
-```
-
-### 7.2 CVF_GUARD_CONTRACT — Coverage
-
-Note: Coverage initially failed due to missing dependency. Installed compatible coverage reporter for vitest 1.6.1:
-```
-npm install -D @vitest/coverage-v8@1.6.1
-```
+### 7.1 CVF_GUARD_CONTRACT — Unit Tests + Coverage
 
 Command:
 ```
@@ -191,23 +173,12 @@ npm run test:coverage
 
 Result (summary):
 ```
-All files: 90.01% Stmts | 92.34% Branch | 83.78% Funcs | 90.01% Lines
+Test Files 11 passed
+Tests 133 passed | 5 skipped (138)
+All files: 90.9% Stmts | 88.27% Branch | 82.4% Funcs | 90.9% Lines
 ```
 
-### 7.3 CVF Web UI (v1.6) — Unit Tests
-
-Command:
-```
-npm run test:run
-```
-
-Result (summary):
-```
-Test Files 109 passed | 1 skipped (110)
-Tests 1799 passed | 3 skipped (1802)
-```
-
-### 7.4 CVF Web UI (v1.6) — Coverage
+### 7.2 CVF Web UI (v1.6) — Unit Tests + Coverage
 
 Command:
 ```
@@ -216,11 +187,13 @@ npm run test:coverage
 
 Result (summary):
 ```
-All files: 92.01% Stmts | 80.05% Branch | 91.16% Funcs | 93.12% Lines
+Test Files 111 passed | 1 skipped (112)
+Tests 1820 passed | 3 skipped (1823)
+All files: 91.99% Stmts | 80% Branch | 91.13% Funcs | 93.1% Lines
 PASS: Branch coverage >= global threshold 80%
 ```
 
-### 7.5 CVF Web UI (v1.6) — E2E (Playwright)
+### 7.3 CVF Web UI (v1.6) — E2E (Playwright)
 
 Command:
 ```
@@ -229,6 +202,7 @@ npm run test:e2e
 
 Result (summary):
 ```
+Last recorded run (2026-03-12):
 FAIL: 3 tests (agent-flows.spec.ts) timed out in beforeEach login
 Error: locator.selectOption timeout waiting for `select` in login (utils.ts:29)
 ```

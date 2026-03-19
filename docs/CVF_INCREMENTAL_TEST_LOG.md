@@ -102,6 +102,24 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: Non-coder governed packet
+- Change reference:
+  - scope: add one reusable governed packet for the Web non-coder path inside App Builder Wizard review
+  - baseline receipt: `docs/baselines/CVF_NONCODER_REFERENCE_GOVERNED_PACKET_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/non-coder-reference-loop.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AppBuilderWizard.tsx`
+  - `docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/non-coder-reference-loop.test.ts src/components/AppBuilderWizard.test.tsx` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - runtime SDK and extension workflow tests: skipped because this batch only strengthens the Web non-coder evidence path and does not modify runtime execution code
+  - release-manifest consistency check: skipped because no release manifest file changed
+
 ## [2026-03-20] Batch: System unification roadmap status refresh
 - Change reference:
   - scope: refresh current roadmap status so completed, in-progress, and not-started items are explicit at the top of the active roadmap

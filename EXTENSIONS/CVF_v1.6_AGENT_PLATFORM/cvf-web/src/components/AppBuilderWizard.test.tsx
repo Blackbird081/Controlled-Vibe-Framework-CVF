@@ -251,6 +251,35 @@ describe('AppBuilderWizard', () => {
         expect(specText).not.toContain('## 5️⃣ API DESIGN');
     });
 
+    it('shows governed demo packet on review step', async () => {
+        render(<AppBuilderWizard onBack={vi.fn()} />);
+
+        fillStep1('Desktop App');
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('Tech Stack'));
+        fillStep2('Không cần');
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('Architecture'));
+        fillStep3();
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('API Design'));
+        fillStep5('REST API');
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('App Spec'));
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('Deployment'));
+        fillStep7();
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('Review'));
+
+        fireEvent.click(screen.getByText('Governed demo packet'));
+
+        expect(await screen.findByText(/Governed Demo Packet cho non-coder/i)).toBeTruthy();
+        expect(screen.getAllByText(/Approval checkpoints/i).length).toBeGreaterThan(0);
+        expect(screen.getAllByText(/Freeze receipt/i).length).toBeGreaterThan(0);
+        expect(screen.getAllByText(/Execution handoff/i).length).toBeGreaterThan(0);
+    });
+
     it('generates CLI defaults in review spec when optional fields are empty', async () => {
         render(<AppBuilderWizard onBack={vi.fn()} />);
 

@@ -46,7 +46,7 @@ Current snapshot as of `2026-03-20`:
 
 ### In Progress
 
-- non-coder end-to-end governed demo path as one reusable packaged proof with the same evidence quality as the coder-facing reference path: `IN PROGRESS`
+- non-coder live governed execution path with the same proof strength as the coder-facing reference path: `IN PROGRESS`
 - ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces: `IN PROGRESS`
 
 ### Not Started
@@ -203,6 +203,11 @@ Reference governed loop evidence reconciliation batch executed on `2026-03-20`:
 - release-readiness and reassessment records now explicitly cite the reusable coder-facing governed loop helper: `COMPLETED`
 - roadmap success metric for at least one coder-facing governed demo path is now evidence-backed rather than only inferential: `COMPLETED`
 - non-coder demo-path maturity remains a breadth caveat rather than being overstated as fully equivalent
+
+Non-coder governed packet batch executed on `2026-03-20`:
+
+- App Builder Wizard now produces one reusable non-coder governed demo packet with explicit phases, approval checkpoints, execution handoff, and freeze receipt: `COMPLETED`
+- non-coder packaged proof is stronger and easier to audit, but live runtime-backed parity with the coder-facing reference helper remains: `IN PROGRESS`
 
 Verification completed for this batch:
 
@@ -717,7 +722,8 @@ Success should be measured with explicit signals:
 - `0` channel-level disagreements on canonical phase vocabulary
 - `0` legacy-only default guard factories remaining in active entrypoints
 - `100%` of critical governance controls assigned to an executable owner
-- at least `1` full end-to-end governed execution demo path for non-coders: `IN PROGRESS`
+- at least `1` reusable governed demo packet for non-coders with freeze-ready evidence: `COMPLETED`
+- at least `1` full end-to-end governed execution demo path for non-coders backed by one packaged live path: `IN PROGRESS`
 - at least `1` full end-to-end governed execution demo path for coder-facing channels: `COMPLETED`
 - independent reassessment upgrades whole-system status from `PARTIAL` to `ALIGNED`: `COMPLETED` (`SUBSTANTIALLY ALIGNED` on the active reference path)
 

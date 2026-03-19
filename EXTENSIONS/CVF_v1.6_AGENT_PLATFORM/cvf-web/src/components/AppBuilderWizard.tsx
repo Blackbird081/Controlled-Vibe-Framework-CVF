@@ -4,6 +4,11 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { SpecExport } from './SpecExport';
+import { WorkflowVisualizer } from './WorkflowVisualizer';
+import {
+    buildNonCoderReferenceLoop,
+    formatNonCoderReferenceLoopMarkdown,
+} from '@/lib/non-coder-reference-loop';
 import { Template } from '@/types';
 
 // Local storage key for draft
@@ -324,6 +329,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
+    const [showGovernedPacket, setShowGovernedPacket] = useState(false);
     const [hasDraft, setHasDraft] = useState(false);
 
     // Load draft from localStorage on mount
@@ -459,6 +465,12 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
         intentPattern: generateConsolidatedSpec(wizardData),
         outputExpected: ['Complete Working App', 'Setup Instructions', 'User Guide'],
     });
+
+    const governedPacket = buildNonCoderReferenceLoop({
+        ...wizardData,
+        spec: generateConsolidatedSpec(wizardData),
+    });
+    const governedPacketMarkdown = formatNonCoderReferenceLoopMarkdown(governedPacket);
 
     if (showExport) {
         return (
@@ -599,6 +611,90 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                                 {language === 'vi' ? '✅ Spec đã sẵn sàng! Nhấn "Xuất Spec" để copy và paste vào AI Agent.' : '✅ Spec is ready! Click "Export Spec" to copy and paste into AI Agent.'}
                             </p>
                         </div>
+                        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200">
+                                        {language === 'vi' ? 'Governed Demo Packet cho non-coder' : 'Governed demo packet for non-coders'}
+                                    </h3>
+                                    <p className="text-xs text-blue-700 dark:text-blue-300">
+                                        {language === 'vi'
+                                            ? 'Gói này gom kế hoạch, checkpoint duyệt, execution handoff và freeze receipt thành một artifact dễ đối soát.'
+                                            : 'This packet bundles the plan, approval checkpoints, execution handoff, and freeze receipt into one auditable artifact.'}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setShowGovernedPacket(prev => !prev)}
+                                    className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors"
+                                >
+                                    {showGovernedPacket
+                                        ? (language === 'vi' ? 'Ẩn packet' : 'Hide packet')
+                                        : (language === 'vi' ? 'Xem governed packet' : 'View governed packet')}
+                                </button>
+                            </div>
+
+                            {showGovernedPacket && (
+                                <div className="mt-4 space-y-4">
+                                    <WorkflowVisualizer mode="full" currentStep={4} />
+
+                                    <div className="grid gap-4 lg:grid-cols-2">
+                                        <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
+                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                                {language === 'vi' ? 'Approval checkpoints' : 'Approval checkpoints'}
+                                            </h4>
+                                            <div className="space-y-3">
+                                                {governedPacket.approvals.map(approval => (
+                                                    <div key={approval.id} className="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+                                                        <div className="text-xs uppercase tracking-wide text-gray-500">
+                                                            {approval.phase} → {approval.requiredFor}
+                                                        </div>
+                                                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                                            {approval.reason}
+                                                        </div>
+                                                        <div className="mt-1 text-xs text-gray-600 dark:text-gray-400">
+                                                            {language === 'vi' ? 'Owner' : 'Owner'}: {approval.humanOwner}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
+                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                                {language === 'vi' ? 'Freeze receipt' : 'Freeze receipt'}
+                                            </h4>
+                                            <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <div><strong>{language === 'vi' ? 'Accepted output' : 'Accepted output'}:</strong> {governedPacket.freezeReceipt.acceptedOutput}</div>
+                                                <div><strong>{language === 'vi' ? 'Baseline artifact' : 'Baseline artifact'}:</strong> {governedPacket.freezeReceipt.baselineArtifact}</div>
+                                                <div><strong>{language === 'vi' ? 'Locked scope' : 'Locked scope'}:</strong> {governedPacket.freezeReceipt.lockedScope.join(', ')}</div>
+                                                <div><strong>{language === 'vi' ? 'Risk' : 'Risk'}:</strong> {governedPacket.riskLevel}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
+                                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                            {language === 'vi' ? 'Execution handoff' : 'Execution handoff'}
+                                        </h4>
+                                        <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                            <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
+                                            <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>
+                                            <div><strong>File scope:</strong> {governedPacket.executionHandoff.fileScope.join(', ')}</div>
+                                            <div><strong>Skill preflight:</strong> {governedPacket.executionHandoff.skillPreflightDeclaration}</div>
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
+                                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                            {language === 'vi' ? 'Packet preview' : 'Packet preview'}
+                                        </h4>
+                                        <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono max-h-80 overflow-y-auto">
+                                            {governedPacketMarkdown}
+                                        </pre>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ) : (
                     /* Form Fields */
@@ -670,12 +766,22 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
 
                 <div className="flex gap-3">
                     {currentStepConfig.isReview ? (
-                        <button
-                            onClick={() => setShowExport(true)}
-                            className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg"
-                        >
-                            {wt(WIZARD_COMMON.exportSpec, language)}
-                        </button>
+                        <>
+                            <button
+                                onClick={() => setShowGovernedPacket(prev => !prev)}
+                                className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-lg"
+                            >
+                                {showGovernedPacket
+                                    ? (language === 'vi' ? 'Ẩn governed packet' : 'Hide governed packet')
+                                    : (language === 'vi' ? 'Governed demo packet' : 'Governed demo packet')}
+                            </button>
+                            <button
+                                onClick={() => setShowExport(true)}
+                                className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg"
+                            >
+                                {wt(WIZARD_COMMON.exportSpec, language)}
+                            </button>
+                        </>
                     ) : (
                         <button
                             onClick={() => setCurrentStep(getNextStep(currentStep))}

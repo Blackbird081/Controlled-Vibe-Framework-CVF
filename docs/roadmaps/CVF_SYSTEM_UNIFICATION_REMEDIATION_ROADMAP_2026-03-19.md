@@ -48,7 +48,15 @@ User-facing Web alignment batch executed on `2026-03-20`:
 - guard dashboard and project progress updated to canonical `5-phase / 8-guard` framing: `COMPLETED`
 - phase checklist, phase gate, and chat phase metadata aligned to canonical runtime semantics: `COMPLETED`
 - spec export, workflow visualizer, and help content updated away from `4-phase` framing: `COMPLETED`
-- cross-extension workflow realism: `NOT STARTED`
+- cross-extension workflow realism: `STARTED`
+
+Phase 3 workflow realism batch executed on `2026-03-20`:
+
+- `ExtensionBridge` step execution no longer auto-completes implicitly: `COMPLETED`
+- explicit `RUNNING -> report result -> COMPLETED/FAILED/SKIPPED` workflow contract added: `COMPLETED`
+- rollback reason and step-level rollback evidence captured: `COMPLETED`
+- workflow-level execution log and lightweight freeze receipt added: `COMPLETED`
+- binding workflow steps to real extension adapters: `NOT STARTED`
 
 Verification completed for this batch:
 
@@ -58,11 +66,14 @@ Verification completed for this batch:
 - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/agent-chat.test.ts src/lib/non-coder-language.test.ts src/lib/cvf-checklists.test.ts src/components/WorkflowVisualizer.test.tsx src/components/AgentChatMessageBubble.test.tsx src/components/DecisionLogSidebar.test.tsx src/components/AgentChat.test.tsx` -> pass
 - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/SpecExport.test.tsx src/components/AppBuilderWizard.test.tsx` -> pass
 - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> pass
+- `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/extension.bridge.test.ts` -> pass
+- `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run build` -> pass
 
 Baseline receipt:
 
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_WEB_ALIGNMENT_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_WORKFLOW_DELTA_2026-03-20.md`
 
 ---
 

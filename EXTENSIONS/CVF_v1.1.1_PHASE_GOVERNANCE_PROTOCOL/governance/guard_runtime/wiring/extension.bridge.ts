@@ -41,10 +41,21 @@ export interface WorkflowStep {
   status: WorkflowStepStatus;
   input?: Record<string, unknown>;
   output?: Record<string, unknown>;
+  evidence?: Record<string, unknown>;
+  rollbackData?: Record<string, unknown>;
   guardResult?: GuardPipelineResult;
   startedAt?: string;
   completedAt?: string;
   error?: string;
+  attempts?: number;
+}
+
+export interface WorkflowStepResult {
+  status: Extract<WorkflowStepStatus, 'COMPLETED' | 'FAILED' | 'SKIPPED'>;
+  output?: Record<string, unknown>;
+  error?: string;
+  evidence?: Record<string, unknown>;
+  rollbackData?: Record<string, unknown>;
 }
 
 // --- Cross-Extension Workflow ---
@@ -61,6 +72,12 @@ export interface CrossExtensionWorkflow {
   updatedAt: string;
   completedAt?: string;
   metadata?: Record<string, unknown>;
+  executionLog?: Array<{
+    timestamp: string;
+    stepId: string;
+    event: 'STARTED' | 'COMPLETED' | 'FAILED' | 'SKIPPED' | 'ROLLED_BACK';
+    details?: string;
+  }>;
 }
 
 // --- Extension Bridge ---
@@ -169,6 +186,7 @@ export class ExtensionBridge {
       createdAt: now,
       updatedAt: now,
       metadata: config.metadata,
+      executionLog: [],
     };
 
     this.workflows.set(config.id, workflow);
@@ -178,6 +196,7 @@ export class ExtensionBridge {
   advanceWorkflow(workflowId: string, guardResult?: GuardPipelineResult): {
     success: boolean;
     step?: WorkflowStep;
+    waitingForResult?: boolean;
     error?: string;
   } {
     const wf = this.workflows.get(workflowId);
@@ -195,6 +214,16 @@ export class ExtensionBridge {
     }
 
     const step = wf.steps[wf.currentStepIndex]!;
+
+    if (step.status === 'RUNNING') {
+      return {
+        success: false,
+        step,
+        waitingForResult: true,
+        error: `Step "${step.id}" is already RUNNING. Report a real execution result before advancing.`,
+      };
+    }
+
     const ext = this.extensions.get(step.extensionId);
 
     if (!ext || ext.status === 'OFFLINE') {
@@ -202,6 +231,7 @@ export class ExtensionBridge {
       step.error = `Extension "${step.extensionId}" is ${ext ? ext.status : 'not registered'}.`;
       wf.status = 'FAILED';
       wf.updatedAt = new Date().toISOString();
+      this.recordExecutionEvent(wf, step.id, 'FAILED', step.error);
       return { success: false, step, error: step.error };
     }
 
@@ -211,45 +241,108 @@ export class ExtensionBridge {
       step.error = `Guard blocked: ${guardResult.blockedBy}`;
       wf.status = 'FAILED';
       wf.updatedAt = new Date().toISOString();
+      this.recordExecutionEvent(wf, step.id, 'FAILED', step.error);
       return { success: false, step, error: step.error };
     }
 
     wf.status = 'RUNNING';
     step.status = 'RUNNING';
     step.startedAt = new Date().toISOString();
+    step.attempts = (step.attempts ?? 0) + 1;
     step.guardResult = guardResult;
+    wf.updatedAt = step.startedAt;
+    this.recordExecutionEvent(wf, step.id, 'STARTED', `Started ${step.action} on extension ${step.extensionId}.`);
 
-    // Simulate step completion
-    step.status = 'COMPLETED';
-    step.completedAt = new Date().toISOString();
-    step.output = { result: 'ok', extension: step.extensionId, action: step.action };
+    return { success: true, step, waitingForResult: true };
+  }
+
+  reportStepResult(workflowId: string, result: WorkflowStepResult): {
+    success: boolean;
+    step?: WorkflowStep;
+    error?: string;
+  } {
+    const wf = this.workflows.get(workflowId);
+    if (!wf) return { success: false, error: `Workflow "${workflowId}" not found.` };
+
+    if (wf.status !== 'RUNNING') {
+      return { success: false, error: `Workflow "${workflowId}" is not RUNNING.` };
+    }
+
+    const step = wf.steps[wf.currentStepIndex];
+    if (!step) {
+      return { success: false, error: `Workflow "${workflowId}" has no active step.` };
+    }
+
+    if (step.status !== 'RUNNING') {
+      return { success: false, error: `Step "${step.id}" is not RUNNING.` };
+    }
+
+    const completedAt = new Date().toISOString();
+    step.status = result.status;
+    step.output = result.output;
+    step.evidence = result.evidence;
+    step.rollbackData = result.rollbackData;
+    step.error = result.error;
+    step.completedAt = completedAt;
+    wf.updatedAt = completedAt;
+
+    if (result.status === 'FAILED') {
+      wf.status = 'FAILED';
+      this.recordExecutionEvent(wf, step.id, 'FAILED', result.error ?? `Step "${step.id}" failed.`);
+      return { success: false, step, error: step.error ?? `Step "${step.id}" failed.` };
+    }
+
+    if (result.status === 'SKIPPED') {
+      this.recordExecutionEvent(wf, step.id, 'SKIPPED', `Step "${step.id}" was skipped.`);
+    } else {
+      this.recordExecutionEvent(wf, step.id, 'COMPLETED', `Step "${step.id}" completed.`);
+    }
 
     wf.currentStepIndex++;
-    wf.updatedAt = step.completedAt;
 
     if (wf.currentStepIndex >= wf.steps.length) {
       wf.status = 'COMPLETED';
-      wf.completedAt = wf.updatedAt;
+      wf.completedAt = completedAt;
+      wf.metadata = {
+        ...wf.metadata,
+        freezeReceipt: {
+          completedSteps: wf.steps.filter((s) => s.status === 'COMPLETED').length,
+          skippedSteps: wf.steps.filter((s) => s.status === 'SKIPPED').length,
+          failedSteps: wf.steps.filter((s) => s.status === 'FAILED').length,
+          finalizedAt: completedAt,
+        },
+      };
     }
 
     return { success: true, step };
   }
 
-  rollbackWorkflow(workflowId: string): boolean {
+  rollbackWorkflow(workflowId: string, reason = 'Manual rollback requested.'): boolean {
     const wf = this.workflows.get(workflowId);
     if (!wf) return false;
     if (wf.status === 'COMPLETED' || wf.status === 'ROLLED_BACK') return false;
+
+    const activeStep = wf.steps[wf.currentStepIndex];
+    if (activeStep?.status === 'RUNNING') {
+      activeStep.status = 'FAILED';
+      activeStep.error = reason;
+      activeStep.completedAt = new Date().toISOString();
+      this.recordExecutionEvent(wf, activeStep.id, 'FAILED', reason);
+    }
 
     for (let i = wf.currentStepIndex - 1; i >= 0; i--) {
       const step = wf.steps[i]!;
       if (step.status === 'COMPLETED') {
         step.status = 'SKIPPED';
+        step.rollbackData = { ...step.rollbackData, rolledBack: true, reason };
         step.output = { ...step.output, rolledBack: true };
+        this.recordExecutionEvent(wf, step.id, 'ROLLED_BACK', reason);
       }
     }
 
     wf.status = 'ROLLED_BACK';
     wf.updatedAt = new Date().toISOString();
+    wf.metadata = { ...wf.metadata, rollbackReason: reason };
     return true;
   }
 
@@ -263,5 +356,20 @@ export class ExtensionBridge {
 
   getWorkflowCount(): number {
     return this.workflows.size;
+  }
+
+  private recordExecutionEvent(
+    workflow: CrossExtensionWorkflow,
+    stepId: string,
+    event: 'STARTED' | 'COMPLETED' | 'FAILED' | 'SKIPPED' | 'ROLLED_BACK',
+    details?: string,
+  ): void {
+    workflow.executionLog ??= [];
+    workflow.executionLog.push({
+      timestamp: new Date().toISOString(),
+      stepId,
+      event,
+      details,
+    });
   }
 }

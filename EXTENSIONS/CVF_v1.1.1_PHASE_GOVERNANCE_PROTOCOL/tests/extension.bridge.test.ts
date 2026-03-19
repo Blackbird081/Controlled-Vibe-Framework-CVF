@@ -173,13 +173,30 @@ describe('ExtensionBridge', () => {
 
       const r1 = bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
       expect(r1.success).toBe(true);
-      expect(r1.step?.status).toBe('COMPLETED');
+      expect(r1.step?.status).toBe('RUNNING');
+      expect(r1.waitingForResult).toBe(true);
+
+      const c1 = bridge.reportStepResult('wf-1', {
+        status: 'COMPLETED',
+        output: { result: 'ok-1' },
+        evidence: { artifact: 'guard-log-1' },
+      });
+      expect(c1.success).toBe(true);
+      expect(c1.step?.status).toBe('COMPLETED');
 
       const r2 = bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
       expect(r2.success).toBe(true);
+      expect(r2.step?.status).toBe('RUNNING');
+
+      const c2 = bridge.reportStepResult('wf-1', {
+        status: 'COMPLETED',
+        output: { result: 'ok-2' },
+      });
+      expect(c2.success).toBe(true);
 
       const wf = bridge.getWorkflow('wf-1')!;
       expect(wf.status).toBe('COMPLETED');
+      expect(wf.metadata?.freezeReceipt).toBeDefined();
     });
 
     it('fails workflow when guard blocks', () => {
@@ -223,6 +240,7 @@ describe('ExtensionBridge', () => {
         steps: [{ extensionId: 'v1.1.1', action: 'check' }],
       });
       bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-1', { status: 'COMPLETED', output: { result: 'done' } });
       const r = bridge.advanceWorkflow('wf-1');
       expect(r.success).toBe(false);
       expect(r.error).toContain('terminal state');
@@ -244,13 +262,16 @@ describe('ExtensionBridge', () => {
         ],
       });
       bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-1', { status: 'COMPLETED', output: { result: 'check-ok' } });
       bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-1', { status: 'COMPLETED', output: { result: 'validate-ok' } });
       // Now at step 2, rollback
-      expect(bridge.rollbackWorkflow('wf-1')).toBe(true);
+      expect(bridge.rollbackWorkflow('wf-1', 'Need to re-run with narrower scope')).toBe(true);
       const wf = bridge.getWorkflow('wf-1')!;
       expect(wf.status).toBe('ROLLED_BACK');
       expect(wf.steps[0]!.status).toBe('SKIPPED');
       expect(wf.steps[1]!.status).toBe('SKIPPED');
+      expect(wf.metadata?.rollbackReason).toBe('Need to re-run with narrower scope');
     });
 
     it('cannot rollback COMPLETED workflow', () => {
@@ -259,7 +280,28 @@ describe('ExtensionBridge', () => {
         steps: [{ extensionId: 'v1.1.1', action: 'check' }],
       });
       bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-1', { status: 'COMPLETED', output: { result: 'done' } });
       expect(bridge.rollbackWorkflow('wf-1')).toBe(false);
+    });
+
+    it('fails workflow when reported step result fails', () => {
+      bridge.createWorkflow({
+        id: 'wf-1', name: 'Test',
+        steps: [{ extensionId: 'v3.0', action: 'skill_validate' }],
+      });
+
+      const started = bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      expect(started.success).toBe(true);
+      expect(started.step?.status).toBe('RUNNING');
+
+      const failed = bridge.reportStepResult('wf-1', {
+        status: 'FAILED',
+        error: 'Extension returned invalid schema.',
+        evidence: { extensionStatus: 'invalid_schema' },
+      });
+      expect(failed.success).toBe(false);
+      expect(failed.error).toContain('invalid schema');
+      expect(bridge.getWorkflow('wf-1')!.status).toBe('FAILED');
     });
 
     it('returns false for rollback of unknown workflow', () => {
@@ -295,12 +337,20 @@ describe('ExtensionBridge', () => {
       for (let i = 0; i < 3; i++) {
         const r = bridge.advanceWorkflow('e2e-1', mockGuardResult('ALLOW'));
         expect(r.success).toBe(true);
+        const completion = bridge.reportStepResult('e2e-1', {
+          status: 'COMPLETED',
+          output: { step: i, ok: true },
+          evidence: { artifact: `artifact-${i}` },
+        });
+        expect(completion.success).toBe(true);
       }
 
       const completed = bridge.getWorkflow('e2e-1')!;
       expect(completed.status).toBe('COMPLETED');
       expect(completed.steps.every((s) => s.status === 'COMPLETED')).toBe(true);
       expect(completed.completedAt).toBeDefined();
+      expect(completed.executionLog?.length).toBeGreaterThanOrEqual(6);
+      expect(completed.metadata?.freezeReceipt).toBeDefined();
     });
   });
 });

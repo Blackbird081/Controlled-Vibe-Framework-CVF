@@ -3108,3 +3108,22 @@ Utility and guard:
   - This batch materially reduces the remaining Web/UI drift identified in the independent system review.
   - Non-coder UX and exported Full Mode prompts now teach the canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` flow instead of the legacy `DISCOVERY -> DESIGN -> BUILD -> REVIEW` framing.
   - Cross-extension workflow realism and full end-to-end controlled execution loop closure still remain open roadmap items.
+
+## [2026-03-20] Batch: Phase 3 workflow realism — explicit step result propagation in ExtensionBridge
+- Change reference:
+  - local working tree Phase 3 workflow batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_WORKFLOW_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/wiring/extension.bridge.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/extension.bridge.test.ts`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/extension.bridge.test.ts` -> PASS
+    - Result: `1 test file, 28 passed`
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run build` -> PASS
+- Skip scope:
+  - full extension test suite — skipped because this batch is localized to workflow bridge realism
+  - real external extension adapter binding — not implemented in this slice; remains next-step roadmap work
+- Notes/Risks:
+  - This batch removes the biggest scaffold in `ExtensionBridge`: step completion is no longer implicitly simulated on `advanceWorkflow()`.
+  - Workflow steps now carry explicit output/evidence/failure/rollback semantics, but real adapter execution binding still remains open.

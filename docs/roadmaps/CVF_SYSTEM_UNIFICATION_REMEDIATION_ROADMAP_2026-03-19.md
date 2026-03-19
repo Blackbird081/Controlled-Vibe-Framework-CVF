@@ -104,6 +104,12 @@ Legacy-boundary tightening batch executed on `2026-03-20`:
 - OpenAPI and SpecExport no longer present `DISCOVERY` as a canonical phase in user-facing/public guidance: `COMPLETED`
 - legacy compatibility is now narrower and more explicit on active public surfaces
 
+User-facing documentation canonicalization batch executed on `2026-03-20`:
+
+- VS Code guide updated from active `4-phase` teaching to canonical `5-phase` controlled loop: `COMPLETED`
+- quick orientation updated to canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`: `COMPLETED`
+- enterprise guide wording no longer teaches the active model as `4-phase`: `COMPLETED`
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -127,6 +133,7 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

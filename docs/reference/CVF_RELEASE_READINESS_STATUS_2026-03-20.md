@@ -30,6 +30,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - baseline/update governance now has policy, CI, and local hook enforcement
 - a canonical governance control matrix now assigns one primary enforcement owner to each critical control
 - public SDK/OpenAPI surfaces now publish canonical phases while confining legacy `DISCOVERY` support to explicit normalization boundaries
+- key user-facing guides now teach the canonical 5-phase controlled loop instead of the formerly active 4-phase framing
 
 ## Open Risks
 
@@ -62,6 +63,7 @@ Claims to avoid for now:
 - [Governance Ownership Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md)
 - [System Unification Closure Delta](../baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md)
 - [Legacy Boundary Delta](../baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md)
+- [Docs Canonicalization Delta](../baselines/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md)
 
 ## Verdict
 

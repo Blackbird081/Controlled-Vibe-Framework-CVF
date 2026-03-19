@@ -51,6 +51,7 @@ Claims to avoid for now:
 ## Evidence Chain
 
 - [Independent System Review](../reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md)
+- [System Unification Reassessment](../reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md)
 - [System Unification Roadmap](../roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md)
 - [Governance Control Matrix](./CVF_GOVERNANCE_CONTROL_MATRIX.md)
 - [Phase 1 Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md)
@@ -58,6 +59,7 @@ Claims to avoid for now:
 - [Workflow Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE3_WORKFLOW_DELTA_2026-03-20.md)
 - [Handler Binding Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md)
 - [Governance Ownership Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md)
+- [System Unification Closure Delta](../baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md)
 
 ## Verdict
 

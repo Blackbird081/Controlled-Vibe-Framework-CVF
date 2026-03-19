@@ -91,6 +91,12 @@ Phase 2 ownership and helper-alignment batch executed on `2026-03-20`:
 - canonical governance control matrix (`rule -> owner -> class -> evidence`) published: `COMPLETED`
 - Workstream B is now considered `COMPLETED` for the active local baseline
 
+Roadmap closure reassessment executed on `2026-03-20`:
+
+- independent follow-up reassessment issued: `COMPLETED`
+- active local baseline upgraded from `PARTIAL INTEGRATION` to `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+- roadmap is now considered `MATERIALLY DELIVERED` for the active reference path
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -112,6 +118,7 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_COMPLETION_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_CONTROL_LOOP_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

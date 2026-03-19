@@ -1,0 +1,552 @@
+# CVF System Unification Remediation Roadmap
+
+> Date: `2026-03-19`
+> Source review: `docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md`
+> Comparison anchor: `docs/baselines/CVF_SYSTEM_STATUS_ASSESSMENT_DELTA_2026-03-19.md`
+> Goal: Close the major whole-system weaknesses identified in the independent system review
+> Scope: Shared guard contract, governance execution model, workflow runtime, Web UI, cross-extension execution, and documentation alignment
+> Priority bands: `P0-P2`
+> Time horizon: `90 days`
+> Phase 1 execution backlog: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md`
+
+---
+
+## 1. Objective
+
+This roadmap addresses the 6 major system gaps identified in the independent review:
+
+1. canonical guard model drift between remediated runtime and shared contract
+2. governance not yet fully converted into executable enforcement
+3. cross-extension workflow still partially scaffolded
+4. Web UI non-coder layer not aligned to hardened runtime
+5. documentation and product framing lag runtime reality
+6. controlled-autonomy loop not yet complete end-to-end
+
+Target outcome at the end of this roadmap:
+
+- one canonical governance runtime model across all channels
+- one explicit control loop from intent to freeze
+- one consistent non-coder experience backed by the same hardened runtime
+- one audit-ready story that matches actual implementation
+
+---
+
+## 2. Strategic Principle
+
+The most important rule for this roadmap is:
+
+**Do not add more isolated capabilities before the control model is unified.**
+
+Reason:
+
+- CVF already has enough strong pieces
+- the current weakness is not lack of ideas
+- the current weakness is fragmentation between runtime, shared contract, UI, and workflow layers
+
+Execution principle:
+
+1. unify the canonical model
+2. convert governance into executable control ownership
+3. close the end-to-end execution loop
+4. align Web UI and documentation last, once backend truth is stable
+
+---
+
+## 3. Gap Summary
+
+| Gap ID | Gap | Severity | Current State | Required End State |
+|---|---|---|---|---|
+| `G1` | Canonical guard model drift | High | Runtime uses `5-phase / 15-guard`; shared layers still use `4-phase / 6-guard` | One shared schema and one hardened default factory across channels |
+| `G2` | Governance not fully executable | High | Some controls are still docs, hooks, or compat gates only | Every critical governance rule has explicit executable owner |
+| `G3` | Cross-extension workflow scaffolding | Medium | Workflow state exists, but step completion is still simulated in places | Real execution bindings and real outcome propagation |
+| `G4` | Web UI model drift | Medium | Web UX is useful, but still backed by legacy shared engine | Non-coder UX runs on same canonical runtime semantics as backend |
+| `G5` | Docs and claims drift | Medium | README and system framing can lag implementation truth | Canonical docs reflect actual runtime posture |
+| `G6` | Controlled autonomy loop incomplete | High | Execution can be governed, but not via one unified loop everywhere | Canonical `intent -> plan -> approve -> execute -> review -> freeze` loop exists |
+
+---
+
+## 4. Execution Order
+
+Implementation should follow this order:
+
+1. canonical model unification
+2. governance execution mapping
+3. workflow runtime closure
+4. Web UI alignment
+5. docs and positioning reconciliation
+
+Reason for this order:
+
+- Web UI should not be upgraded before the backend control model is stable
+- workflow execution should not be scaled before control ownership is clear
+- documentation should not be refreshed until runtime truth is settled
+
+---
+
+## 5. Workstream A — Canonical Governance Model Unification
+
+> Priority: `P0`
+> Goal: Remove the split between remediated runtime and shared guard contract
+
+### A.1 Shared Schema Alignment
+
+Tasks:
+
+- upgrade shared phase model from legacy 4-phase to canonical 5-phase model
+- align shared role, context, and metadata types with hardened runtime expectations
+- include explicit fields for controls already proven important in runtime:
+  - `ai_commit`
+  - `fileScope`
+  - canonical phase aliases only at entry boundaries
+- define one compatibility strategy for legacy `DISCOVERY`
+
+Target areas:
+
+- `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts`
+- guard adapters in Web/API/CLI/MCP layers
+
+### A.2 Shared Factory Alignment
+
+Tasks:
+
+- update the shared guard factory to load the hardened default set rather than legacy 6 guards
+- define one canonical guard order
+- ensure the same default guard stack is used by:
+  - shared contract
+  - Web singleton engine
+  - runtime SDK
+  - channel adapters
+
+Target areas:
+
+- `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts`
+- Web singleton and adapter wiring
+- channel integration tests
+
+### A.3 Compatibility Boundary
+
+Tasks:
+
+- keep legacy aliases only at input normalization boundaries
+- prohibit legacy alias logic inside core runtime state machine logic
+- document a deprecation path for legacy vocabulary
+
+Exit criteria:
+
+- one phase vocabulary is used inside runtime and tests
+- one default guard factory exists across channels
+- legacy compatibility is explicit, narrow, and temporary
+
+---
+
+## 6. Workstream B — Governance Execution Ownership
+
+> Priority: `P0`
+> Goal: Convert governance from mixed doctrine into explicit executable control ownership
+
+### B.1 Governance Control Inventory
+
+Tasks:
+
+- inventory critical governance rules across policy, compat checks, reviews, hooks, and runtime
+- classify each rule into exactly one primary enforcement class:
+  - runtime guard
+  - gateway precondition
+  - human approval checkpoint
+  - CI or repository compliance gate
+- identify overlaps, gaps, and rules with no executable owner
+
+Target output:
+
+- one governance control matrix mapping rule -> owner -> entrypoint -> evidence
+
+### B.2 Runtime Guard Expansion
+
+Tasks:
+
+- move high-value governance rules into runtime guards where action-time enforcement is required
+- keep CI hooks only for repository hygiene and historical evidence enforcement
+- avoid duplicating the same rule ambiguously across multiple layers without clear ownership
+
+Examples of areas to close:
+
+- artifact lineage continuity
+- approval-boundary enforcement
+- output acceptance criteria where blocking is needed
+- rollback eligibility or refusal conditions
+
+### B.3 Conformance Ownership
+
+Tasks:
+
+- make conformance scenarios prove the actual production control path
+- ensure each critical governance control has at least one proving scenario
+- distinguish between:
+  - runtime-enforced
+  - approval-enforced
+  - compliance-enforced
+
+Exit criteria:
+
+- every critical governance rule has an explicit executable owner
+- no critical control exists only as a markdown expectation
+- conformance outputs can show coverage by enforcement class
+
+---
+
+## 7. Workstream C — Controlled Execution Loop Completion
+
+> Priority: `P0`
+> Goal: Create one canonical control loop for governed execution
+
+### C.1 Canonical Loop Definition
+
+Define the single official loop as:
+
+1. intent capture
+2. context and scope normalization
+3. plan synthesis
+4. approval checkpoints
+5. governed execution
+6. review and validation
+7. freeze and evidence closure
+
+Tasks:
+
+- formalize this loop in runtime terms
+- identify the controlling state transitions
+- define which phases are mandatory and which approvals are conditional
+
+### C.2 Planner and Approval Boundaries
+
+Tasks:
+
+- separate planning actions from modifying actions
+- define what an agent may do autonomously before approval
+- require approval for high-risk transitions or broad-scope mutations
+- ensure planning artifacts are traceable and linked to execution artifacts
+
+### C.3 Freeze Closure Model
+
+Tasks:
+
+- formalize what `FREEZE` means operationally
+- define required evidence for entering `FREEZE`
+- ensure freeze is a real closure state, not only a label
+
+Exit criteria:
+
+- one explicit control loop exists in code and tests
+- all channels can map user requests into that loop
+- `FREEZE` is a real governed closure state
+
+---
+
+## 8. Workstream D — Cross-Extension Workflow Realization
+
+> Priority: `P1`
+> Goal: Replace scaffolded workflow behavior with real extension execution semantics
+
+### D.1 Execution Binding
+
+Tasks:
+
+- replace simulated step completion with real execution adapters
+- define how extension steps report:
+  - input receipt
+  - guard result
+  - execution result
+  - failure result
+  - rollback result
+- standardize step result contracts across extensions
+
+Target area:
+
+- `extension.bridge.ts`
+- related workflow runtime tests
+
+### D.2 Failure and Rollback Semantics
+
+Tasks:
+
+- define failure propagation rules across workflow steps
+- define rollback entry conditions
+- ensure rollback evidence is preserved in audit trail
+
+### D.3 Multi-Agent Coordination Guardrails
+
+Tasks:
+
+- align multi-agent runtime with the canonical workflow loop
+- ensure task ownership, file boundaries, and authority boundaries are enforced consistently
+
+Exit criteria:
+
+- workflow steps represent real operations, not placeholders
+- failure and rollback semantics are explicit and testable
+- multi-agent execution stays inside the same control model
+
+---
+
+## 9. Workstream E — Web UI v1.6+ Non-Coder Alignment
+
+> Priority: `P1`
+> Goal: Make non-coder UX reflect the hardened backend truth
+
+### E.1 Intent and Phase Alignment
+
+Tasks:
+
+- update natural-language intent detection to canonical phase semantics
+- stop teaching legacy phase vocabulary as front-door UX
+- preserve user-friendly labels while using canonical backend phases
+
+Target areas:
+
+- `cvf-web/src/lib/intent-detector.ts`
+- `cvf-web/src/components/QuickStart.tsx`
+- dashboard phase displays
+
+### E.2 Controlled UX Flow
+
+Tasks:
+
+- evolve non-coder UX from "submit request and run" to:
+  - goal capture
+  - auto-plan preview
+  - approval checkpoints
+  - governed execution
+  - review result
+  - freeze receipt
+- expose why a request was blocked, escalated, or deferred in understandable language
+
+### E.3 Dashboard Truthfulness
+
+Tasks:
+
+- align guard dashboard with actual canonical guard set
+- align counts, phase views, and decisions with backend runtime
+- expose evidence lineage and not only execution summaries
+
+Exit criteria:
+
+- non-coder Web UX uses the same control semantics as backend runtime
+- UI no longer hardcodes legacy guard and phase assumptions
+- the UI helps users supervise governed execution rather than just trigger it
+
+---
+
+## 10. Workstream F — Documentation And Positioning Reconciliation
+
+> Priority: `P2`
+> Goal: Ensure public claims match actual implementation
+
+### F.1 Canonical Docs Alignment
+
+Tasks:
+
+- update `README.md` and core overview docs to match the actual canonical runtime model
+- distinguish clearly between:
+  - implemented runtime controls
+  - roadmap items
+  - aspirational positioning
+
+### F.2 Evidence Chain Alignment
+
+Tasks:
+
+- update roadmaps, reviews, and baseline deltas when major milestones close
+- ensure each major remediation wave leaves:
+  - review evidence
+  - baseline delta or snapshot
+  - verification evidence
+
+### F.3 Product Positioning Discipline
+
+Tasks:
+
+- position CVF as governance-first control plane until controlled autonomy loop is fully complete
+- avoid claims that imply platform parity with broader orchestration ecosystems before evidence supports it
+
+Exit criteria:
+
+- no canonical doc materially overstates runtime reality
+- system narrative and runtime evidence are reconcilable in one pass
+
+---
+
+## 11. 90-Day Phased Delivery Plan
+
+### Phase 0 — Prep And Design Lock
+
+Duration:
+
+- `Week 1`
+
+Tasks:
+
+- freeze gap definitions from the independent system review
+- create governance control inventory
+- define canonical phase and guard vocabulary
+- identify all legacy compatibility surfaces
+
+Outputs:
+
+- approved control glossary
+- gap-to-workstream tracker
+- compatibility boundary list
+
+### Phase 1 — Model Unification
+
+Duration:
+
+- `Weeks 2-4`
+
+Tasks:
+
+- complete Workstream A
+- begin Workstream B inventory and ownership mapping
+- align default shared guard factory and core channel adapters
+
+Outputs:
+
+- one canonical shared schema
+- one canonical default guard stack
+- updated shared tests and adapter tests
+
+Definition of done:
+
+- backend channels no longer disagree on core phase/guard model
+
+### Phase 2 — Executable Governance
+
+Duration:
+
+- `Weeks 5-8`
+
+Tasks:
+
+- complete Workstream B
+- complete Workstream C
+- expand conformance to prove executable ownership
+
+Outputs:
+
+- governance control matrix
+- canonical controlled execution loop
+- conformance scenarios proving critical controls
+
+Definition of done:
+
+- critical governance is executable by design, not mostly documentary by expectation
+
+### Phase 3 — Workflow And Non-Coder Closure
+
+Duration:
+
+- `Weeks 9-11`
+
+Tasks:
+
+- complete Workstream D
+- complete Workstream E
+- validate end-to-end non-coder governed execution flow
+
+Outputs:
+
+- real cross-extension workflow semantics
+- aligned non-coder Web flow
+- audit-ready freeze receipts
+
+Definition of done:
+
+- one user-facing path can demonstrate full governed execution end-to-end
+
+### Phase 4 — Documentation And Release Readiness
+
+Duration:
+
+- `Week 12`
+
+Tasks:
+
+- complete Workstream F
+- issue final review and baseline delta
+- update positioning docs and readiness claim
+
+Outputs:
+
+- reconciled documentation set
+- release-readiness evidence package
+
+Definition of done:
+
+- implementation, docs, and evidence all tell the same story
+
+---
+
+## 12. Verification Matrix
+
+| Area | Required Check | Pass Condition |
+|---|---|---|
+| Shared contract | schema and factory tests | shared model matches canonical runtime |
+| Channel alignment | Web/API/CLI/MCP integration tests | all channels evaluate against same default guard semantics |
+| Governance ownership | control matrix review + conformance suite | every critical rule has explicit enforcement owner |
+| Control loop | end-to-end runtime tests | request flows through canonical `intent -> ... -> freeze` lifecycle |
+| Workflow realism | cross-extension workflow tests | step results are real, failures and rollbacks propagate correctly |
+| Non-coder UX | Web integration and acceptance tests | UI exposes canonical phases, approvals, guard results, and freeze closure |
+| Documentation truthfulness | docs governance + targeted review | canonical docs match actual runtime behavior |
+
+---
+
+## 13. Success Metrics
+
+Success should be measured with explicit signals:
+
+- `0` channel-level disagreements on canonical phase vocabulary
+- `0` legacy-only default guard factories remaining in active entrypoints
+- `100%` of critical governance controls assigned to an executable owner
+- at least `1` full end-to-end governed execution demo path for non-coders
+- at least `1` full end-to-end governed execution demo path for coder-facing channels
+- independent reassessment upgrades whole-system status from `PARTIAL` to `ALIGNED`
+
+---
+
+## 14. Risks And Mitigations
+
+| Risk | Impact | Mitigation |
+|---|---|---|
+| Breaking compatibility for legacy callers | Medium | confine legacy aliases to input normalization and document migration path |
+| Expanding runtime too quickly without clear ownership | High | finish governance control inventory before adding more runtime controls |
+| Web UI outruns backend truth again | High | treat backend canonical model as source of truth and upgrade UI after backend lock |
+| Cross-extension execution adds hidden complexity | Medium | start with one reference workflow and harden incrementally |
+| Documentation gets ahead of implementation | Medium | only update claims after verification and baseline artifacts exist |
+
+---
+
+## 15. Definition Of Done
+
+This roadmap is complete only when all statements below are true:
+
+- shared contract, runtime SDK, Web, and channel adapters use one canonical governance model
+- hardened default guards are the real default across active user-facing channels
+- critical governance controls are mapped to explicit executable ownership
+- cross-extension workflow executes real steps with real outcomes
+- Web UI non-coder flow uses the canonical controlled execution loop
+- `FREEZE` is operationally meaningful and evidence-backed
+- canonical docs and release claims match runtime reality
+- a fresh independent reassessment can reasonably rate whole-system integration as no longer partial
+
+---
+
+## 16. Final Recommendation
+
+Recommended merge strategy:
+
+1. `phase-model + shared-contract unification`
+2. `governance control ownership + conformance upgrade`
+3. `workflow execution realism + multi-agent alignment`
+4. `Web UI non-coder alignment`
+5. `docs + baseline reconciliation`
+
+This keeps the roadmap reviewable, reduces regression risk, and makes future independent re-audit substantially easier.

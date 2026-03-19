@@ -2965,3 +2965,30 @@ Utility and guard:
 - Notes/Risks:
   - Build initially failed due to provider key type mismatches (`AgentChat.tsx`, `AgentChatWithHistory.tsx`, `ExecuteWithAI.tsx`); fixed by widening ProviderKey coverage and updating provider label maps.
   - Compat gate executed against HEAD~1..HEAD due to uncommitted worktree; rerun after commit if strict trace is required.
+
+## [2026-03-19] Batch: CVF Edit Integration — Full Phase 1-6 verification
+
+- Change reference:
+  - commit: `0d1937a` on `cvf-next`
+  - scope: Phase 1-6 Governance Runtime implementation verification + documentation post-implementation updates
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` — full governance module (state enforcement, guard runtime, conformance, pipeline, multi-agent, SDK, adapters, observability)
+  - `governance/contracts/` — cross-channel guard contract + adapters
+  - `docs/assessments/CVF_GOVERNANCE_AUDIT_LOG_2026-03-19.md` [MODIFY]
+  - `docs/reviews/CVF_ARCHITECTURE_REVIEW_CONSOLIDATED_2026-03-19.md` [MODIFY]
+  - `docs/roadmaps/CVF_IMPROVEMENT_PROPOSALS_2026-03-19.md` [MODIFY]
+  - `docs/roadmaps/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md` [MODIFY]
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run` -> PASS
+    - Result: `13 test files, 504/504 tests PASSED` (1.71s)
+    - Suites: `sdk.test.ts` (30), `v1.1.1.test.ts` (26), `governance.executor.test.ts` (10), `guard.runtime.test.ts` (84), `pipeline.orchestrator.test.ts` (50), `conformance.runner.test.ts` (39), `v1.1.3.hardening.test.ts` (51), `multi.agent.runtime.test.ts` (42), `guard.doc2code.test.ts` (52), `multi.entry.test.ts` (30), `observability.test.ts` (26), `extension.bridge.test.ts` (34), `unified.state.resolver.test.ts` (30)
+  - `cd governance/contracts && npx vitest run` -> PASS
+    - Result: `2 test files, 98/98 tests PASSED` (352ms)
+    - Suites: `cross-channel-guard-contract.test.ts` (49), `adapters/vscode-governance-adapter.test.ts` (49)
+- Skip scope:
+  - `cvf-web` E2E/build — skipped (no code changes, documentation-only updates)
+  - Python compat gates — skipped (documentation-only changes, no governance/workflow code changes)
+- Notes/Risks:
+  - This batch documents **full Phase 1-6 verification**, confirming all 6 phases of the CVF Edit Integration Roadmap are implemented and tested.
+  - Governance Level upgraded from 2.5 → 4.0 based on verified enforcement (15 guards, MANDATORY_GUARD_IDS, conformance runner, SDK).
+  - Two architectural gaps remain partial: Agent Scheduler (multi-agent has tenant/resource locking but no full task queue) and Skill Runtime Binding (preflight guards exist, no `skill.execute()` runtime).

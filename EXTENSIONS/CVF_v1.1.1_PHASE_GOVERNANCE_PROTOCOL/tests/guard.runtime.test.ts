@@ -271,7 +271,8 @@ describe('PhaseGateGuard', () => {
   });
 
   it('has correct PHASE_ROLE_MATRIX entries', () => {
-    expect(PHASE_ROLE_MATRIX.DISCOVERY).toContain('HUMAN');
+    expect(Object.keys(PHASE_ROLE_MATRIX)).toEqual(PHASE_ORDER);
+    expect(PHASE_ROLE_MATRIX.INTAKE).toContain('HUMAN');
     expect(PHASE_ROLE_MATRIX.BUILD).toContain('AI_AGENT');
     expect(PHASE_ROLE_MATRIX.REVIEW).toContain('REVIEWER');
     expect(PHASE_ROLE_MATRIX.FREEZE).toContain('GOVERNOR');
@@ -377,6 +378,9 @@ describe('AuthorityGateGuard', () => {
   it('exports AUTHORITY_MATRIX with all roles', () => {
     expect(Object.keys(AUTHORITY_MATRIX)).toContain('BUILDER');
     expect(Object.keys(AUTHORITY_MATRIX)).toContain('HUMAN');
+    for (const cells of Object.values(AUTHORITY_MATRIX)) {
+      expect(Object.keys(cells)).toEqual(PHASE_ORDER);
+    }
   });
 });
 

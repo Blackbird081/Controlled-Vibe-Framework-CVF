@@ -10,8 +10,12 @@
  *   - Cross-agent communication via message bus
  */
 
-import type { CVFPhase, CVFRole, CVFRiskLevel, GuardPipelineResult } from '../guard.runtime.types.js';
+import type { CanonicalCVFPhase, CVFPhase, CVFRole, CVFRiskLevel, GuardPipelineResult } from '../guard.runtime.types.js';
 import { PHASE_ROLE_MATRIX } from '../guards/phase.gate.guard.js';
+
+function normalizePhaseAlias(phase: CVFPhase): CanonicalCVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
 
 // --- Agent Types ---
 
@@ -186,11 +190,12 @@ export class MultiAgentRuntime {
       return { allowed: false, reason: `Tenant "${agent.tenantId}" not found.` };
     }
 
-    const allowedRoles = PHASE_ROLE_MATRIX[assignment.phase] ?? [];
+    const normalizedPhase = normalizePhaseAlias(assignment.phase);
+    const allowedRoles = PHASE_ROLE_MATRIX[normalizedPhase] ?? [];
     if (!allowedRoles.includes(agent.role)) {
       return {
         allowed: false,
-        reason: `Role "${agent.role}" is not authorized for phase "${assignment.phase}".`,
+        reason: `Role "${agent.role}" is not authorized for phase "${normalizedPhase}".`,
       };
     }
 

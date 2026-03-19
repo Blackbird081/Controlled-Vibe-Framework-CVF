@@ -12,6 +12,7 @@
  */
 
 import {
+  CanonicalCVFPhase,
   Guard,
   GuardRequestContext,
   GuardResult,
@@ -19,17 +20,19 @@ import {
   CVFRole,
 } from '../guard.runtime.types.js';
 
-const PHASE_ROLE_MATRIX: Record<CVFPhase, CVFRole[]> = {
+function normalizePhaseAlias(phase: CVFPhase): CanonicalCVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
+
+const PHASE_ROLE_MATRIX: Record<CanonicalCVFPhase, CVFRole[]> = {
   INTAKE:  ['OBSERVER', 'ANALYST', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
   DESIGN:  ['OBSERVER', 'ANALYST', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
   BUILD:   ['BUILDER', 'HUMAN', 'AI_AGENT', 'OPERATOR'],
   REVIEW:  ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
   FREEZE:  ['GOVERNOR', 'HUMAN'],
-  // Legacy alias
-  DISCOVERY: ['OBSERVER', 'ANALYST', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
 };
 
-const PHASE_ORDER: CVFPhase[] = ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
+const PHASE_ORDER: CanonicalCVFPhase[] = ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
 
 export class PhaseGateGuard implements Guard {
   id = 'phase_gate';
@@ -40,8 +43,9 @@ export class PhaseGateGuard implements Guard {
 
   evaluate(context: GuardRequestContext): GuardResult {
     const timestamp = new Date().toISOString();
+    const normalizedPhase = normalizePhaseAlias(context.phase);
 
-    const allowedRoles = PHASE_ROLE_MATRIX[context.phase];
+    const allowedRoles = PHASE_ROLE_MATRIX[normalizedPhase];
     if (!allowedRoles) {
       return {
         guardId: this.id,
@@ -57,9 +61,9 @@ export class PhaseGateGuard implements Guard {
         guardId: this.id,
         decision: 'BLOCK',
         severity: 'ERROR',
-        reason: `Role "${context.role}" is not authorized for phase "${context.phase}". Allowed roles: ${allowedRoles.join(', ')}.`,
+        reason: `Role "${context.role}" is not authorized for phase "${normalizedPhase}". Allowed roles: ${allowedRoles.join(', ')}.`,
         timestamp,
-        metadata: { phase: context.phase, role: context.role, allowedRoles },
+        metadata: { phase: normalizedPhase, requestedPhase: context.phase, role: context.role, allowedRoles },
       };
     }
 
@@ -67,7 +71,7 @@ export class PhaseGateGuard implements Guard {
       guardId: this.id,
       decision: 'ALLOW',
       severity: 'INFO',
-      reason: `Role "${context.role}" authorized for phase "${context.phase}".`,
+      reason: `Role "${context.role}" authorized for phase "${normalizedPhase}".`,
       timestamp,
     };
   }

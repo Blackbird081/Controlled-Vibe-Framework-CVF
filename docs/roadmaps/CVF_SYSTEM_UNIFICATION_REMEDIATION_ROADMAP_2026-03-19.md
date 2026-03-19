@@ -129,6 +129,13 @@ Core guard alias-boundary tightening batch executed on `2026-03-20`:
 - VS Code governance adapter now renders canonical phase guidance even when legacy input alias is received: `COMPLETED`
 - `DISCOVERY` is no longer a first-class key inside active core guard matrices on the shared contract path
 
+Runtime guard alias-boundary tightening batch executed on `2026-03-20`:
+
+- runtime phase helper types now distinguish canonical phases from legacy alias input: `COMPLETED`
+- `v1.1.1` phase and authority guards now normalize legacy phase aliases before matrix lookup: `COMPLETED`
+- multi-agent runtime now normalizes legacy phase alias input before assignment-phase authorization: `COMPLETED`
+- `DISCOVERY` is no longer a first-class key inside active `v1.1.1` runtime guard matrices
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -156,6 +163,7 @@ Baseline receipt:
 - `docs/baselines/CVF_ENTERPRISE_COMPLIANCE_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_CANONICAL_PHASE_TYPE_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_CORE_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_RUNTIME_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

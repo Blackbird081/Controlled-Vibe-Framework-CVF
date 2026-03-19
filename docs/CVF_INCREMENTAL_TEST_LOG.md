@@ -102,6 +102,26 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: Runtime guard alias-boundary tightening in v1.1.1
+- Change reference:
+  - scope: canonical-only runtime guard matrices with legacy alias normalization kept at compatibility boundaries
+  - baseline receipt: `docs/baselines/CVF_RUNTIME_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guard.runtime.types.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guards/phase.gate.guard.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guards/authority.gate.guard.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/cloud/multi.agent.runtime.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/guard.runtime.test.ts`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/guard.runtime.test.ts tests/sdk.test.ts tests/multi.entry.test.ts tests/conformance.runner.test.ts tests/multi.agent.runtime.test.ts` -> PASS
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run build` -> PASS
+- Skip scope:
+  - shared contract and `cvf-web`: skipped because this batch only hardens the already-remediated runtime extension internals
+  - full runtime suite: skipped because the touched scope is localized to phase/authority alias handling and assignment checks
+- Notes/Risks:
+  - legacy `DISCOVERY` input still works for compatibility callers
+  - runtime core matrices and multi-agent assignment logic no longer keep `DISCOVERY` as a first-class internal matrix key
+
 ## [2026-03-20] Batch: Core guard alias-boundary tightening
 - Change reference:
   - scope: remove `DISCOVERY` as first-class key from active core guard matrices while preserving compatibility input normalization

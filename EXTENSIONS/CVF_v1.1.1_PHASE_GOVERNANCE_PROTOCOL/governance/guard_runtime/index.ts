@@ -64,6 +64,8 @@ export {
   type ExtensionStatus,
   type CrossExtensionWorkflow,
   type WorkflowStep,
+  type WorkflowStepReceipt,
+  type WorkflowStepReceiptType,
   type WorkflowStepResult,
   type ExtensionActionHandler,
   type ExtensionActionHandlerContext,
@@ -77,4 +79,13 @@ export { generateCIPipeline, generateGitHubActionsYaml, generateProjectTemplate 
 export { MetricsCollector, type GuardMetrics, type PipelineMetrics, type ConformanceMetrics, type SystemHealthMetrics, type DashboardSnapshot, type Alert, type AlertRule } from './observability/metrics.collector.js';
 
 // Multi-Agent Runtime (Phase E)
-export { MultiAgentRuntime, type AgentDescriptor, type AgentStatus, type TenantConfig, type AgentMessage, type ConflictRecord } from './cloud/multi.agent.runtime.js';
+export {
+  MultiAgentRuntime,
+  type AgentDescriptor,
+  type AgentStatus,
+  type TenantConfig,
+  type AgentMessage,
+  type ConflictRecord,
+  type GovernedTaskAssignment,
+  type GovernedTaskDecision,
+} from './cloud/multi.agent.runtime.js';

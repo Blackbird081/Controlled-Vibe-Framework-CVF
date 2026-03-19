@@ -50,6 +50,7 @@ import type { CVFRole } from '../guard.runtime.types.js';
 
 // Phase B.3
 import { ExtensionBridge } from '../wiring/extension.bridge.js';
+import type { CrossExtensionWorkflow, WorkflowStep, WorkflowStepResult } from '../wiring/extension.bridge.js';
 
 // --- SDK Config ---
 
@@ -106,6 +107,7 @@ export class CvfSdk {
 
     // Bridge
     this.bridge = config.enableExtensionBridge ? new ExtensionBridge() : null;
+    this.bootstrapExtensionBridge();
   }
 
   // --- Factory ---
@@ -162,6 +164,253 @@ export class CvfSdk {
 
   // --- Internals ---
 
+  private bootstrapExtensionBridge(): void {
+    if (!this.bridge) return;
+
+    this.bridge.registerExtension({
+      id: 'v1.1.1',
+      name: 'Phase Governance',
+      version: '1.1.1',
+      capabilities: ['guard_runtime', 'pipeline_orchestration', 'entry_gateway'],
+      dependencies: [],
+    });
+    this.bridge.registerExtension({
+      id: 'v3.0',
+      name: 'Core Git',
+      version: '3.0',
+      capabilities: ['skill_lifecycle', 'artifact_validation'],
+      dependencies: [],
+    });
+    this.bridge.registerExtension({
+      id: 'v1.9',
+      name: 'Deterministic Reproducibility',
+      version: '1.9',
+      capabilities: ['durable_execution', 'checkpoint_receipts'],
+      dependencies: ['v3.0', 'v1.1.1'],
+    });
+
+    this.bridge.registerActionHandler('v1.1.1', 'guard_check', ({ workflow, step }): WorkflowStepResult => {
+      const input = step.input ?? {};
+      const guardResult = this.runGuardCheck(input);
+
+      if (guardResult.finalDecision !== 'ALLOW') {
+        return {
+          status: 'FAILED',
+          guardResult,
+          output: {
+            decision: guardResult.finalDecision,
+            blockedBy: guardResult.blockedBy,
+            escalatedBy: guardResult.escalatedBy,
+          },
+          error: `Guard decision is ${guardResult.finalDecision}.`,
+          evidence: {
+            runtime: 'guard_runtime',
+            requestId: guardResult.requestId,
+          },
+        };
+      }
+
+      workflow.metadata = {
+        ...workflow.metadata,
+        lastGuardRequestId: guardResult.requestId,
+        lastGuardDecision: guardResult.finalDecision,
+      };
+
+      return {
+        status: 'COMPLETED',
+        guardResult,
+        output: {
+          decision: guardResult.finalDecision,
+          requestId: guardResult.requestId,
+        },
+        evidence: {
+          runtime: 'guard_runtime',
+          guardCount: guardResult.results.length,
+        },
+      };
+    });
+
+    this.bridge.registerActionHandler('v1.1.1', 'pipeline_create', ({ workflow, step }): WorkflowStepResult => {
+      const input = step.input ?? {};
+      const pipelineId = String(input['pipelineId'] ?? `${workflow.id}-pipeline`);
+      const pipeline = this.pipeline.createPipeline({
+        id: pipelineId,
+        intent: String(input['intent'] ?? workflow.name),
+        riskLevel: this.parseRiskLevel(input['riskLevel'] ?? 'R1'),
+        role: this.parseRole(input['role'] ?? 'HUMAN'),
+        agentId: input['agentId'] ? String(input['agentId']) : undefined,
+        metadata: {
+          workflowId: workflow.id,
+          sourceStepId: step.id,
+        },
+      });
+
+      workflow.metadata = {
+        ...workflow.metadata,
+        linkedPipelineId: pipeline.id,
+      };
+
+      return {
+        status: 'COMPLETED',
+        output: {
+          pipelineId: pipeline.id,
+          status: pipeline.status,
+        },
+        evidence: {
+          runtime: 'pipeline_orchestrator',
+          createdAt: pipeline.createdAt,
+        },
+      };
+    });
+
+    this.bridge.registerActionHandler('v1.1.1', 'pipeline_advance', ({ workflow, step }): WorkflowStepResult => {
+      const input = step.input ?? {};
+      const pipeline = this.requireLinkedPipeline(workflow, input);
+      const advanceCount = Math.max(1, Number(input['advanceCount'] ?? 1));
+
+      let lastGuardResult: GuardPipelineResult | undefined;
+      for (let i = 0; i < advanceCount; i++) {
+        const advanced = this.pipeline.advancePhase(pipeline.id);
+        if (!advanced.success) {
+          return {
+            status: 'FAILED',
+            error: advanced.error ?? 'Pipeline advance failed.',
+            guardResult: advanced.guardResult,
+            output: {
+              pipelineId: pipeline.id,
+              attemptedAdvances: i + 1,
+            },
+            evidence: {
+              runtime: 'pipeline_orchestrator',
+              status: this.pipeline.getPipeline(pipeline.id)?.status,
+            },
+          };
+        }
+        lastGuardResult = advanced.guardResult;
+      }
+
+      const updated = this.pipeline.getPipeline(pipeline.id)!;
+      return {
+        status: 'COMPLETED',
+        guardResult: lastGuardResult,
+        output: {
+          pipelineId: pipeline.id,
+          status: updated.status,
+          phaseHistoryLength: updated.phaseHistory.length,
+        },
+        evidence: {
+          runtime: 'pipeline_orchestrator',
+          eventCount: updated.events.length,
+        },
+      };
+    });
+
+    this.bridge.registerActionHandler('v1.1.1', 'pipeline_complete', ({ workflow, step }): WorkflowStepResult => {
+      const pipeline = this.requireLinkedPipeline(workflow, step.input ?? {});
+      const success = this.pipeline.completePipeline(pipeline.id);
+      const updated = this.pipeline.getPipeline(pipeline.id);
+
+      if (!success || !updated) {
+        return {
+          status: 'FAILED',
+          error: `Pipeline "${pipeline.id}" could not be completed. Ensure it reached FREEZE first.`,
+          output: {
+            pipelineId: pipeline.id,
+          },
+        };
+      }
+
+      return {
+        status: 'COMPLETED',
+        output: {
+          pipelineId: updated.id,
+          status: updated.status,
+        },
+        evidence: {
+          runtime: 'pipeline_orchestrator',
+          completedAt: updated.updatedAt,
+        },
+      };
+    });
+
+    this.bridge.registerActionHandler('v3.0', 'skill_validate', ({ workflow, step }): WorkflowStepResult => {
+      const input = step.input ?? {};
+      const pipeline = this.requireLinkedPipeline(workflow, input);
+      const pipelineState = this.pipeline.getPipeline(pipeline.id);
+      const declaredSkill = String(input['skill'] ?? input['skillId'] ?? '').trim();
+
+      if (!declaredSkill) {
+        return {
+          status: 'FAILED',
+          error: 'Skill validation requires `skill` or `skillId` in step input.',
+          output: {
+            pipelineId: pipeline.id,
+          },
+        };
+      }
+
+      if (!pipelineState || (pipelineState.status !== 'FREEZE' && pipelineState.status !== 'COMPLETED')) {
+        return {
+          status: 'FAILED',
+          error: `Pipeline "${pipeline.id}" must be at FREEZE or COMPLETED before skill validation.`,
+          output: {
+            pipelineId: pipeline.id,
+            skill: declaredSkill,
+          },
+          evidence: {
+            runtime: 'core_git_reference',
+            pipelineStatus: pipelineState?.status ?? 'MISSING',
+          },
+        };
+      }
+
+      return {
+        status: 'COMPLETED',
+        output: {
+          skill: declaredSkill,
+          validated: true,
+          pipelineId: pipeline.id,
+        },
+        evidence: {
+          runtime: 'core_git_reference',
+          pipelineStatus: pipelineState.status,
+          priorCompletedSteps: workflow.steps.filter((candidate) => candidate.status === 'COMPLETED').length,
+        },
+      };
+    });
+
+    this.bridge.registerActionHandler('v1.9', 'checkpoint', ({ workflow, step }): WorkflowStepResult => {
+      const pipeline = this.requireLinkedPipeline(workflow, step.input ?? {});
+      const pipelineState = this.pipeline.getPipeline(pipeline.id);
+
+      if (!pipelineState) {
+        return {
+          status: 'FAILED',
+          error: `Pipeline "${pipeline.id}" not found for checkpoint.`,
+          output: {
+            pipelineId: pipeline.id,
+          },
+        };
+      }
+
+      const checkpointId = `${workflow.id}:${pipeline.id}:${step.id}`;
+      return {
+        status: 'COMPLETED',
+        output: {
+          checkpointId,
+          pipelineId: pipeline.id,
+          pipelineStatus: pipelineState.status,
+        },
+        evidence: {
+          runtime: 'deterministic_reference',
+          phaseHistoryLength: pipelineState.phaseHistory.length,
+          eventCount: pipelineState.events.length,
+          linkedGuardRequestId: workflow.metadata?.['lastGuardRequestId'],
+        },
+      };
+    });
+  }
+
   private registerGuards(preset: GuardPreset, custom: Guard[]): void {
     if (preset === 'core' || preset === 'full') {
       this.engine.registerGuard(new PhaseGateGuard());
@@ -187,5 +436,101 @@ export class CvfSdk {
     for (const guard of custom) {
       this.engine.registerGuard(guard);
     }
+  }
+
+  private runGuardCheck(input: Record<string, unknown>): GuardPipelineResult {
+    const entryPoint = input['entryPoint'];
+    if (entryPoint && this.gateway) {
+      const normalizedEntryPoint = String(entryPoint).toUpperCase() as EntryPointType;
+      const rawInput = this.parseRecord(input['rawInput']) ?? input;
+      return this.gateway.process(normalizedEntryPoint, rawInput).guardResult;
+    }
+
+    return this.engine.evaluate(this.buildGuardContext(input));
+  }
+
+  private buildGuardContext(input: Record<string, unknown>): GuardRequestContext {
+    const metadata = this.parseRecord(input['metadata']) ?? {};
+    return {
+      requestId: String(input['requestId'] ?? `bridge-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`),
+      phase: this.parsePhase(input['phase'] ?? 'BUILD'),
+      riskLevel: this.parseRiskLevel(input['riskLevel'] ?? 'R1'),
+      role: this.parseRole(input['role'] ?? 'HUMAN'),
+      agentId: input['agentId'] ? String(input['agentId']) : undefined,
+      action: String(input['action'] ?? 'workflow_guard_check'),
+      targetFiles: this.parseStringArray(input['targetFiles']),
+      fileScope: this.parseStringArray(input['fileScope']),
+      mutationCount: input['mutationCount'] != null ? Number(input['mutationCount']) : undefined,
+      mutationBudget: input['mutationBudget'] != null ? Number(input['mutationBudget']) : undefined,
+      traceHash: input['traceHash'] ? String(input['traceHash']) : undefined,
+      scope: input['scope'] ? String(input['scope']) : undefined,
+      metadata: {
+        ...metadata,
+        ...(input['ai_commit'] ? { ai_commit: input['ai_commit'] } : {}),
+        workflowSource: 'extension_bridge',
+      },
+    };
+  }
+
+  private requireLinkedPipeline(
+    workflow: CrossExtensionWorkflow,
+    input: Record<string, unknown>,
+  ): PipelineInstance {
+    const pipelineId = String(input['pipelineId'] ?? workflow.metadata?.['linkedPipelineId'] ?? '');
+    if (!pipelineId) {
+      throw new Error(`Workflow "${workflow.id}" has no linked pipeline. Run pipeline_create first or provide pipelineId.`);
+    }
+
+    const pipeline = this.pipeline.getPipeline(pipelineId);
+    if (!pipeline) {
+      throw new Error(`Linked pipeline "${pipelineId}" not found.`);
+    }
+
+    workflow.metadata = {
+      ...workflow.metadata,
+      linkedPipelineId: pipeline.id,
+    };
+
+    return pipeline;
+  }
+
+  private parsePhase(value: unknown): GuardRequestContext['phase'] {
+    const phase = String(value ?? 'BUILD').toUpperCase();
+    if (['INTAKE', 'DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'].includes(phase)) {
+      return phase as GuardRequestContext['phase'];
+    }
+    throw new Error(`Invalid phase "${value}" for workflow bridge guard execution.`);
+  }
+
+  private parseRiskLevel(value: unknown): GuardRequestContext['riskLevel'] {
+    const riskLevel = String(value ?? 'R1').toUpperCase();
+    if (['R0', 'R1', 'R2', 'R3'].includes(riskLevel)) {
+      return riskLevel as GuardRequestContext['riskLevel'];
+    }
+    throw new Error(`Invalid risk level "${value}" for workflow bridge execution.`);
+  }
+
+  private parseRole(value: unknown): CVFRole {
+    const role = String(value ?? 'HUMAN').toUpperCase();
+    if (['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'AI_AGENT', 'OPERATOR'].includes(role)) {
+      return role as CVFRole;
+    }
+    throw new Error(`Invalid role "${value}" for workflow bridge execution.`);
+  }
+
+  private parseRecord(value: unknown): Record<string, unknown> | undefined {
+    return value && typeof value === 'object' && !Array.isArray(value)
+      ? { ...(value as Record<string, unknown>) }
+      : undefined;
+  }
+
+  private parseStringArray(value: unknown): string[] | undefined {
+    if (Array.isArray(value)) {
+      return value.map(String);
+    }
+    if (typeof value === 'string') {
+      return value.split(',').map((entry) => entry.trim()).filter(Boolean);
+    }
+    return undefined;
   }
 }

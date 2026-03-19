@@ -161,6 +161,87 @@ describe('CvfSdk', () => {
     });
   });
 
+  describe('extension bridge defaults', () => {
+    it('bootstraps default bridge extensions', () => {
+      const cvf = CvfSdk.create();
+      expect(cvf.bridge?.getExtension('v1.1.1')).toBeDefined();
+      expect(cvf.bridge?.getExtension('v3.0')).toBeDefined();
+      expect(cvf.bridge?.getExtension('v1.9')).toBeDefined();
+    });
+
+    it('executes a governed workflow through default runtime bindings', async () => {
+      const cvf = CvfSdk.create();
+      const workflow = cvf.bridge!.createWorkflow({
+        id: 'sdk-wf-runtime',
+        name: 'SDK runtime bridge',
+        steps: [
+          {
+            extensionId: 'v1.1.1',
+            action: 'guard_check',
+            input: {
+              requestId: 'sdk-wf-guard',
+              phase: 'BUILD',
+              riskLevel: 'R1',
+              role: 'HUMAN',
+              action: 'write_code',
+              ai_commit: VALID_AI_COMMIT,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_create',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              intent: 'Close workflow realism gap',
+              riskLevel: 'R1',
+              role: 'HUMAN',
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              advanceCount: 5,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_complete',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+            },
+          },
+          {
+            extensionId: 'v3.0',
+            action: 'skill_validate',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              skill: 'workflow-remediation',
+            },
+          },
+          {
+            extensionId: 'v1.9',
+            action: 'checkpoint',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+            },
+          },
+        ],
+      });
+
+      const result = await cvf.bridge!.executeWorkflow('sdk-wf-runtime');
+      expect(result.success).toBe(true);
+      expect(result.workflow?.status).toBe('COMPLETED');
+      expect(result.workflow?.steps.every((step) => step.status === 'COMPLETED')).toBe(true);
+      expect(result.workflow?.steps[0]?.guardResult?.finalDecision).toBe('ALLOW');
+      expect(result.workflow?.steps[2]?.output?.status).toBe('FREEZE');
+      expect(result.workflow?.steps[5]?.output?.checkpointId).toBeDefined();
+      expect(result.workflow?.steps[5]?.evidence?.runtime).toBe('deterministic_reference');
+      expect(workflow.metadata?.linkedPipelineId).toBe('sdk-wf-runtime-pipeline');
+    });
+  });
+
   describe('audit', () => {
     it('returns audit log after evaluation', () => {
       const cvf = CvfSdk.create();

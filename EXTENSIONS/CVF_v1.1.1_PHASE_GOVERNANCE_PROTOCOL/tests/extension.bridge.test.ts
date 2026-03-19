@@ -175,6 +175,7 @@ describe('ExtensionBridge', () => {
       expect(r1.success).toBe(true);
       expect(r1.step?.status).toBe('RUNNING');
       expect(r1.waitingForResult).toBe(true);
+      expect(r1.step?.inputReceipt?.type).toBe('INPUT');
 
       const c1 = bridge.reportStepResult('wf-1', {
         status: 'COMPLETED',
@@ -183,6 +184,7 @@ describe('ExtensionBridge', () => {
       });
       expect(c1.success).toBe(true);
       expect(c1.step?.status).toBe('COMPLETED');
+      expect(c1.step?.executionReceipt?.type).toBe('EXECUTION');
 
       const r2 = bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
       expect(r2.success).toBe(true);
@@ -301,6 +303,7 @@ describe('ExtensionBridge', () => {
       });
       expect(failed.success).toBe(false);
       expect(failed.error).toContain('invalid schema');
+      expect(failed.step?.failureReceipt?.type).toBe('FAILURE');
       expect(bridge.getWorkflow('wf-1')!.status).toBe('FAILED');
     });
 
@@ -321,6 +324,8 @@ describe('ExtensionBridge', () => {
       expect(result.waitingForResult).toBe(false);
       expect(result.step?.status).toBe('COMPLETED');
       expect(result.step?.evidence?.handler).toBe('skill_validate');
+      expect(result.step?.inputReceipt?.type).toBe('INPUT');
+      expect(result.step?.executionReceipt?.type).toBe('EXECUTION');
       expect(bridge.getWorkflow('wf-2')!.status).toBe('COMPLETED');
     });
 
@@ -369,6 +374,28 @@ describe('ExtensionBridge', () => {
       expect(result.success).toBe(false);
       expect(result.error).toContain('waiting for a manual result');
       expect(bridge.getWorkflow('wf-4')!.steps[0]!.status).toBe('RUNNING');
+    });
+
+    it('records rollback receipts when completed steps are rolled back', () => {
+      bridge.createWorkflow({
+        id: 'wf-rollback-receipt', name: 'Rollback receipts',
+        steps: [
+          { extensionId: 'v1.1.1', action: 'check' },
+          { extensionId: 'v3.0', action: 'validate' },
+          { extensionId: 'v1.9', action: 'checkpoint' },
+        ],
+      });
+
+      bridge.advanceWorkflow('wf-rollback-receipt', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-rollback-receipt', { status: 'COMPLETED', output: { result: 'done-1' } });
+      bridge.advanceWorkflow('wf-rollback-receipt', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-rollback-receipt', { status: 'COMPLETED', output: { result: 'done-2' } });
+
+      expect(bridge.rollbackWorkflow('wf-rollback-receipt', 'operator requested rollback')).toBe(true);
+
+      const workflow = bridge.getWorkflow('wf-rollback-receipt')!;
+      expect(workflow.steps[0]!.rollbackReceipt?.type).toBe('ROLLBACK');
+      expect(workflow.steps[1]!.rollbackReceipt?.type).toBe('ROLLBACK');
     });
 
     it('returns false for rollback of unknown workflow', () => {

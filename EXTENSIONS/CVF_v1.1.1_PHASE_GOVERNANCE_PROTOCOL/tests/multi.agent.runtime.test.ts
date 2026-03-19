@@ -128,6 +128,68 @@ describe('MultiAgentRuntime', () => {
       expect(runtime.suspendAgent('unknown')).toBe(false);
       expect(runtime.terminateAgent('unknown')).toBe(false);
     });
+
+    it('blocks task assignment when role is not authorized for the phase', () => {
+      runtime.registerAgent({ id: 'a1', name: 'A', role: 'AI_AGENT', capabilities: [], maxRiskLevel: 'R1', tenantId: 't1' });
+      runtime.activateAgent('a1');
+
+      const decision = runtime.canAssignTask('a1', {
+        id: 'task-1',
+        phase: 'DESIGN',
+        riskLevel: 'R1',
+      });
+
+      expect(decision.allowed).toBe(false);
+      expect(decision.reason).toContain('not authorized');
+    });
+
+    it('blocks task assignment when target files exceed agent file scope', () => {
+      runtime.registerAgent({
+        id: 'a1',
+        name: 'Scoped agent',
+        role: 'BUILDER',
+        capabilities: ['write'],
+        maxRiskLevel: 'R1',
+        tenantId: 't1',
+        metadata: { fileScope: ['src/owned.ts'] },
+      });
+      runtime.activateAgent('a1');
+
+      const decision = runtime.canAssignTask('a1', {
+        id: 'task-2',
+        phase: 'BUILD',
+        riskLevel: 'R1',
+        targetFiles: ['src/other.ts'],
+      });
+
+      expect(decision.allowed).toBe(false);
+      expect(decision.reason).toContain('file scope');
+    });
+
+    it('assigns governed task and acquires file locks when checks pass', () => {
+      runtime.registerAgent({
+        id: 'builder-1',
+        name: 'Builder',
+        role: 'BUILDER',
+        capabilities: ['write'],
+        maxRiskLevel: 'R1',
+        tenantId: 't1',
+        metadata: { fileScope: ['src/owned.ts'] },
+      });
+      runtime.activateAgent('builder-1');
+
+      const assignment = runtime.assignTask('builder-1', {
+        id: 'task-3',
+        phase: 'BUILD',
+        riskLevel: 'R1',
+        targetFiles: ['src/owned.ts'],
+        requiresLock: true,
+      });
+
+      expect(assignment.success).toBe(true);
+      expect(runtime.getLockHolder('src/owned.ts')).toBe('builder-1');
+      expect(runtime.getMessages('builder-1')[0]?.type).toBe('TASK_ASSIGN');
+    });
   });
 
   // --- Resource Locking ---

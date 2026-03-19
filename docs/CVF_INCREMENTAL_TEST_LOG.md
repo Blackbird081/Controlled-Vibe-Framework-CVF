@@ -2992,3 +2992,35 @@ Utility and guard:
   - This batch documents **full Phase 1-6 verification**, confirming all 6 phases of the CVF Edit Integration Roadmap are implemented and tested.
   - Governance Level upgraded from 2.5 → 4.0 based on verified enforcement (15 guards, MANDATORY_GUARD_IDS, conformance runner, SDK).
   - Two architectural gaps remain partial: Agent Scheduler (multi-agent has tenant/resource locking but no full task queue) and Skill Runtime Binding (preflight guards exist, no `skill.execute()` runtime).
+
+## [2026-03-19] Batch: Governance runtime remediation closure
+- Change reference:
+  - local working tree remediation batch
+  - source roadmap: `docs/roadmaps/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
+  - source review: `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guards/ai.commit.guard.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guards/file.scope.guard.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guards/action.intent.ts` [NEW]
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/entry/*`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/conformance/*`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/*.test.ts` (runtime, SDK, entry, orchestrator, conformance, hardening coverage)
+  - `docs/baselines/CVF_GOVERNANCE_RUNTIME_REMEDIATION_DELTA_2026-03-19.md` [NEW]
+  - `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
+  - `docs/roadmaps/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/conformance.runner.test.ts` -> PASS
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/guard.runtime.test.ts` -> PASS
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm test` -> PASS
+    - Result: `13 test files, 506/506 tests PASSED`
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run build` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> FAIL
+    - Result: expected failure before this log entry existed; test documentation gate required updating `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Skip scope:
+  - Full repo regression outside `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`: skipped because remediation scope is localized to governance runtime extension + governance docs receipts.
+  - GitHub Actions remote execution: skipped locally; workflow/runtime behavior validated via local test and compat gates.
+- Notes/Risks:
+  - This batch closes the 4 independent findings from `CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`.
+  - Default runtime contract changed materially: `full/core` guard counts are now `15/8`, modifying actions require `ai_commit`, `fileScope` is enforced, and orchestrator now uses `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`.

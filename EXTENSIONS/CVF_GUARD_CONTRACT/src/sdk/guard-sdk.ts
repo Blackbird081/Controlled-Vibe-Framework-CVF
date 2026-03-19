@@ -17,7 +17,9 @@
 
 // ─── Types ───────────────────────────────────────────────────────────
 
-export type CVFPhase = 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE' | 'DISCOVERY';
+export type CanonicalCVFPhase = 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE';
+export type LegacyCVFPhaseAlias = 'DISCOVERY';
+export type CVFPhaseInput = CanonicalCVFPhase | LegacyCVFPhaseAlias;
 export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
 export type CVFRole = 'OBSERVER' | 'ANALYST' | 'BUILDER' | 'REVIEWER' | 'GOVERNOR' | 'HUMAN' | 'AI_AGENT' | 'OPERATOR';
 export type CVFDecision = 'ALLOW' | 'BLOCK' | 'ESCALATE';
@@ -25,7 +27,7 @@ export type CVFDecision = 'ALLOW' | 'BLOCK' | 'ESCALATE';
 export interface CVFGuardRequest {
   requestId?: string;
   action: string;
-  phase?: CVFPhase;
+  phase?: CVFPhaseInput;
   riskLevel?: CVFRiskLevel;
   role?: CVFRole;
   agentId?: string;
@@ -62,7 +64,7 @@ export interface CVFPhaseGateResponse {
   success: boolean;
   data?: {
     allowed: boolean;
-    currentPhase: CVFPhase;
+    currentPhase: CanonicalCVFPhase;
     requestedAction: string;
     reason: string;
     agentGuidance?: string;
@@ -113,6 +115,13 @@ export class CVFGuardClient {
     return `sdk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   }
 
+  private normalizePhase(phase?: CVFPhaseInput): CanonicalCVFPhase {
+    if (!phase) {
+      return 'BUILD';
+    }
+    return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+  }
+
   /**
    * Evaluate full guard pipeline.
    * Call this before executing any action to check if it's allowed.
@@ -121,7 +130,7 @@ export class CVFGuardClient {
     const body = {
       requestId: request.requestId || this.generateRequestId(),
       action: request.action,
-      phase: request.phase || 'BUILD',
+      phase: this.normalizePhase(request.phase),
       riskLevel: request.riskLevel || 'R0',
       role: request.role || 'AI_AGENT',
       agentId: request.agentId || this.agentId,
@@ -145,11 +154,11 @@ export class CVFGuardClient {
    * Quick phase gate check.
    * Lightweight check if an action is allowed in the current phase.
    */
-  async checkPhaseGate(action: string, phase?: CVFPhase): Promise<CVFPhaseGateResponse> {
+  async checkPhaseGate(action: string, phase?: CVFPhaseInput): Promise<CVFPhaseGateResponse> {
     const body = {
       requestId: this.generateRequestId(),
       action,
-      phase: phase || 'BUILD',
+      phase: this.normalizePhase(phase),
     };
 
     const response = await fetch(`${this.baseUrl}/api/guards/phase-gate`, {

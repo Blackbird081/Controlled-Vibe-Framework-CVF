@@ -97,6 +97,13 @@ Roadmap closure reassessment executed on `2026-03-20`:
 - active local baseline upgraded from `PARTIAL INTEGRATION` to `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 - roadmap is now considered `MATERIALLY DELIVERED` for the active reference path
 
+Legacy-boundary tightening batch executed on `2026-03-20`:
+
+- public guard SDK now publishes canonical phases while still normalizing legacy `DISCOVERY` input at the boundary: `COMPLETED`
+- full skill registry migrated intake-class skills from `DISCOVERY` to canonical `INTAKE`: `COMPLETED`
+- OpenAPI and SpecExport no longer present `DISCOVERY` as a canonical phase in user-facing/public guidance: `COMPLETED`
+- legacy compatibility is now narrower and more explicit on active public surfaces
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -119,6 +126,7 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_CONTROL_LOOP_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

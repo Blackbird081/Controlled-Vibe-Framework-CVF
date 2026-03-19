@@ -102,6 +102,28 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: Legacy boundary tightening on public SDK and user-facing exports
+- Change reference:
+  - scope: canonical phase contract tightening after roadmap closure
+- Impacted scope:
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/sdk/guard-sdk.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/skill-registry.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/full-skill-registry.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/gemini-provider.test.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/alibaba-dashscope-provider.test.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/openapi/route.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SpecExport.tsx`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npx vitest run src/sdk/guard-sdk.test.ts src/runtime/full-skill-registry.test.ts src/runtime/agent-execution-runtime.test.ts src/runtime/providers/gemini-provider.test.ts src/runtime/providers/alibaba-dashscope-provider.test.ts` -> PASS
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/SpecExport.test.tsx` -> PASS
+- Skip scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`: skipped because this batch narrows public/shared boundary semantics, not the already-remediated core runtime
+- Notes/Risks:
+  - legacy `DISCOVERY` compatibility remains accepted at explicit input-normalization boundaries
+  - public contract and user-facing guidance now prefer canonical `INTAKE` more consistently
+
 ## [2026-03-20] Batch: Phase 2 governance ownership and helper alignment
 - Change reference:
   - scope: governed helper runtime semantics + governance ownership closure

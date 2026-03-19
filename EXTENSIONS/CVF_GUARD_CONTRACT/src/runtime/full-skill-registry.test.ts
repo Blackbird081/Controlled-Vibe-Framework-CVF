@@ -30,4 +30,10 @@ describe('full-skill-registry', () => {
     expect(domains).toContain('research');
     expect(domains).toContain('ai');
   });
+
+  it('uses canonical INTAKE instead of DISCOVERY for intake-class skills', () => {
+    const intakeSkills = FULL_SKILLS.filter((skill) => skill.requiredPhase === 'INTAKE');
+    expect(intakeSkills.length).toBeGreaterThan(0);
+    expect(FULL_SKILLS.some((skill) => skill.requiredPhase === 'DISCOVERY')).toBe(false);
+  });
 });

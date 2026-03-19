@@ -39,11 +39,11 @@ describe('AlibabaDashScopeProvider constructor', () => {
 // ─── Guard blocks before API call (always run — no real API needed) ───
 
 describe('AlibabaDashScopeProvider with guard blocking', () => {
-  it('blocks AI_AGENT in DISCOVERY — Alibaba never called', async () => {
+  it('blocks AI_AGENT in INTAKE — Alibaba never called', async () => {
     const engine = createGuardEngine();
     const provider = new AlibabaDashScopeProvider({ apiKey: API_KEY });
     const runtime = new AgentExecutionRuntime(engine, provider, {
-      phase: 'DISCOVERY',
+      phase: 'INTAKE',
       riskLevel: 'R0',
       role: 'AI_AGENT',
       agentId: 'ai-test',

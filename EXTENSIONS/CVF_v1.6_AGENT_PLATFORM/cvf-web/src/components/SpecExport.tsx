@@ -180,7 +180,7 @@ You MUST complete each phase in order. NO SHORTCUTS.
 ---
 
 ### ═══════════════════════════════════════════════════════════
-### PHASE A: DISCOVERY 🔍
+### PHASE A: INTAKE 🔍
 ### ═══════════════════════════════════════════════════════════
 
 **YOUR ROLE**: Interpreter - understand the problem deeply
@@ -194,7 +194,7 @@ You MUST complete each phase in order. NO SHORTCUTS.
 
 **OUTPUT FORMAT (MUST PRODUCE):**
 \`\`\`
-## 📋 PHASE A: Discovery Summary
+## 📋 PHASE A: Intake Summary
 
 ### 1. My Understanding
 [Restate user's goal in your words]
@@ -447,7 +447,7 @@ Bạn PHẢI hoàn thành từng phase theo thứ tự. KHÔNG TẮT ĐƯỜNG.
 ---
 
 ### ═══════════════════════════════════════════════════════════
-### PHASE A: KHÁM PHÁ 🔍
+### PHASE A: TIẾP NHẬN 🔍
 ### ═══════════════════════════════════════════════════════════
 
 **VAI TRÒ**: Interpreter - hiểu sâu vấn đề
@@ -461,7 +461,7 @@ Bạn PHẢI hoàn thành từng phase theo thứ tự. KHÔNG TẮT ĐƯỜNG.
 
 **OUTPUT FORMAT (PHẢI TẠO RA):**
 \`\`\`
-## 📋 PHASE A: Tóm tắt Khám phá
+## 📋 PHASE A: Tóm tắt Tiếp nhận
 
 ### 1. Hiểu biết của tôi
 [Diễn đạt lại mục tiêu của user]

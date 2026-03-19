@@ -15,7 +15,7 @@ import { SkillRegistry, type SkillDefinition } from './skill-registry';
 // ─── Skill Categories ────────────────────────────────────────────────
 
 const SKILL_CATEGORIES = {
-  DISCOVERY: { phase: 'DISCOVERY' as const, defaultRisk: 'R0' as const },
+  INTAKE: { phase: 'INTAKE' as const, defaultRisk: 'R0' as const },
   DESIGN: { phase: 'DESIGN' as const, defaultRisk: 'R1' as const },
   BUILD: { phase: 'BUILD' as const, defaultRisk: 'R2' as const },
   REVIEW: { phase: 'REVIEW' as const, defaultRisk: 'R1' as const },
@@ -26,18 +26,18 @@ const SKILL_CATEGORIES = {
 
 const FULL_SKILLS: SkillDefinition[] = [
   // ── Domain 1: Research & Analysis (12 skills) ──
-  { id: 'market-research', name: 'Market Research', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'Analyze market trends and competitive landscape' },
-  { id: 'competitor-analysis', name: 'Competitor Analysis', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'Deep-dive competitor strategies' },
-  { id: 'user-research', name: 'User Research', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'User interviews and persona development' },
-  { id: 'data-analysis', name: 'Data Analysis', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'Statistical analysis and insights' },
-  { id: 'feasibility-study', name: 'Feasibility Study', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R1', description: 'Technical and business feasibility assessment' },
-  { id: 'trend-analysis', name: 'Trend Analysis', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'Identify and analyze industry trends' },
-  { id: 'swot-analysis', name: 'SWOT Analysis', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'Strengths, weaknesses, opportunities, threats' },
-  { id: 'gap-analysis', name: 'Gap Analysis', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'Identify gaps between current and desired state' },
-  { id: 'stakeholder-analysis', name: 'Stakeholder Analysis', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R1', description: 'Map stakeholders and their interests' },
-  { id: 'risk-assessment', name: 'Risk Assessment', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R1', description: 'Identify and evaluate project risks' },
-  { id: 'benchmarking', name: 'Benchmarking', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'Compare performance against industry standards' },
-  { id: 'technology-evaluation', name: 'Technology Evaluation', domain: 'research', requiredPhase: 'DISCOVERY', riskLevel: 'R1', description: 'Evaluate technology options and trade-offs' },
+  { id: 'market-research', name: 'Market Research', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'Analyze market trends and competitive landscape' },
+  { id: 'competitor-analysis', name: 'Competitor Analysis', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'Deep-dive competitor strategies' },
+  { id: 'user-research', name: 'User Research', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'User interviews and persona development' },
+  { id: 'data-analysis', name: 'Data Analysis', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'Statistical analysis and insights' },
+  { id: 'feasibility-study', name: 'Feasibility Study', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R1', description: 'Technical and business feasibility assessment' },
+  { id: 'trend-analysis', name: 'Trend Analysis', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'Identify and analyze industry trends' },
+  { id: 'swot-analysis', name: 'SWOT Analysis', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'Strengths, weaknesses, opportunities, threats' },
+  { id: 'gap-analysis', name: 'Gap Analysis', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'Identify gaps between current and desired state' },
+  { id: 'stakeholder-analysis', name: 'Stakeholder Analysis', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R1', description: 'Map stakeholders and their interests' },
+  { id: 'risk-assessment', name: 'Risk Assessment', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R1', description: 'Identify and evaluate project risks' },
+  { id: 'benchmarking', name: 'Benchmarking', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'Compare performance against industry standards' },
+  { id: 'technology-evaluation', name: 'Technology Evaluation', domain: 'research', requiredPhase: 'INTAKE', riskLevel: 'R1', description: 'Evaluate technology options and trade-offs' },
 
   // ── Domain 2: Strategy & Planning (12 skills) ──
   { id: 'business-strategy', name: 'Business Strategy', domain: 'strategy', requiredPhase: 'DESIGN', riskLevel: 'R1', description: 'Develop business strategy and goals' },
@@ -143,13 +143,13 @@ const FULL_SKILLS: SkillDefinition[] = [
   { id: 'recommendation-engine', name: 'Recommendation Engine', domain: 'data', requiredPhase: 'BUILD', riskLevel: 'R1', description: 'Personalized recommendations' },
 
   // ── Domain 9: Project Management (10 skills) ──
-  { id: 'project-kickoff', name: 'Project Kickoff', domain: 'pm', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'Project initiation and kickoff' },
+  { id: 'project-kickoff', name: 'Project Kickoff', domain: 'pm', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'Project initiation and kickoff' },
   { id: 'sprint-planning', name: 'Sprint Planning', domain: 'pm', requiredPhase: 'DESIGN', riskLevel: 'R0', description: 'Agile sprint planning' },
   { id: 'task-breakdown', name: 'Task Breakdown', domain: 'pm', requiredPhase: 'DESIGN', riskLevel: 'R0', description: 'Work breakdown structure' },
   { id: 'progress-tracking', name: 'Progress Tracking', domain: 'pm', requiredPhase: 'REVIEW', riskLevel: 'R0', description: 'Track project progress and velocity' },
   { id: 'retrospective', name: 'Retrospective', domain: 'pm', requiredPhase: 'REVIEW', riskLevel: 'R0', description: 'Team retrospective and improvements' },
   { id: 'status-report', name: 'Status Report', domain: 'pm', requiredPhase: 'REVIEW', riskLevel: 'R0', description: 'Project status documentation' },
-  { id: 'requirement-gathering', name: 'Requirement Gathering', domain: 'pm', requiredPhase: 'DISCOVERY', riskLevel: 'R0', description: 'Elicit and document requirements' },
+  { id: 'requirement-gathering', name: 'Requirement Gathering', domain: 'pm', requiredPhase: 'INTAKE', riskLevel: 'R0', description: 'Elicit and document requirements' },
   { id: 'scope-management', name: 'Scope Management', domain: 'pm', requiredPhase: 'DESIGN', riskLevel: 'R1', description: 'Define and control project scope' },
   { id: 'risk-management', name: 'Risk Management', domain: 'pm', requiredPhase: 'DESIGN', riskLevel: 'R1', description: 'Risk identification and mitigation' },
   { id: 'stakeholder-communication', name: 'Stakeholder Communication', domain: 'pm', requiredPhase: 'REVIEW', riskLevel: 'R0', description: 'Stakeholder updates and alignment' },

@@ -29,6 +29,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - mandatory gateway and governed helper runtime now surface approval-required boundaries and execution lineage explicitly
 - baseline/update governance now has policy, CI, and local hook enforcement
 - a canonical governance control matrix now assigns one primary enforcement owner to each critical control
+- public SDK/OpenAPI surfaces now publish canonical phases while confining legacy `DISCOVERY` support to explicit normalization boundaries
 
 ## Open Risks
 
@@ -60,6 +61,7 @@ Claims to avoid for now:
 - [Handler Binding Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md)
 - [Governance Ownership Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md)
 - [System Unification Closure Delta](../baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md)
+- [Legacy Boundary Delta](../baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md)
 
 ## Verdict
 

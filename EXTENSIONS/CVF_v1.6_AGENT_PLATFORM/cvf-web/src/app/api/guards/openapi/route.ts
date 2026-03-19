@@ -35,7 +35,7 @@ const OPENAPI_SPEC = {
                 properties: {
                   requestId: { type: 'string', description: 'Unique request identifier' },
                   action: { type: 'string', description: 'Description of the action to evaluate' },
-                  phase: { type: 'string', enum: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE', 'DISCOVERY'], default: 'BUILD' },
+                  phase: { type: 'string', enum: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'], default: 'BUILD', description: 'Canonical CVF phase. Legacy DISCOVERY input is normalized to INTAKE at compatibility boundaries.' },
                   riskLevel: { type: 'string', enum: ['R0', 'R1', 'R2', 'R3'], default: 'R0' },
                   role: { type: 'string', enum: ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'AI_AGENT', 'OPERATOR'], default: 'AI_AGENT' },
                   agentId: { type: 'string', description: 'Optional agent identifier' },
@@ -92,7 +92,7 @@ const OPENAPI_SPEC = {
                 properties: {
                   requestId: { type: 'string' },
                   action: { type: 'string' },
-                  phase: { type: 'string', enum: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE', 'DISCOVERY'] },
+                  phase: { type: 'string', enum: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'], description: 'Canonical CVF phase. Legacy DISCOVERY input is normalized to INTAKE at compatibility boundaries.' },
                 },
               },
             },

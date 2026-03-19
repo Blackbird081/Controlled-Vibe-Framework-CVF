@@ -409,9 +409,16 @@ describe('SkillRegistry', () => {
 
   it('rejects skill in wrong phase', () => {
     const registry = createDefaultSkillRegistry();
-    const result = registry.validateSkillForContext('code_gen_component', 'DISCOVERY', 'R0');
+    const result = registry.validateSkillForContext('code_gen_component', 'INTAKE', 'R0');
     expect(result.allowed).toBe(false);
     expect(result.reason).toContain('requires phase BUILD');
+  });
+
+  it('normalizes legacy DISCOVERY alias when validating skill context', () => {
+    const registry = createDefaultSkillRegistry();
+    const result = registry.validateSkillForContext('code_gen_component', 'DISCOVERY', 'R0');
+    expect(result.allowed).toBe(false);
+    expect(result.reason).toContain('current phase is INTAKE');
   });
 
   it('rejects skill with higher risk than session', () => {

@@ -39,17 +39,17 @@ const ROLE_PERMISSIONS: Record<TeamRole, TeamPermissions> = {
   owner: {
     canExecute: true, canApprove: true, canConfigureGuards: true,
     canViewAudit: true, canManageTeam: true, canExportReports: true,
-    maxRiskLevel: 'R3', allowedPhases: ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'],
+    maxRiskLevel: 'R3', allowedPhases: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'],
   },
   admin: {
     canExecute: true, canApprove: true, canConfigureGuards: true,
     canViewAudit: true, canManageTeam: true, canExportReports: true,
-    maxRiskLevel: 'R3', allowedPhases: ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'],
+    maxRiskLevel: 'R3', allowedPhases: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'],
   },
   developer: {
     canExecute: true, canApprove: false, canConfigureGuards: false,
     canViewAudit: true, canManageTeam: false, canExportReports: false,
-    maxRiskLevel: 'R2', allowedPhases: ['DISCOVERY', 'DESIGN', 'BUILD'],
+    maxRiskLevel: 'R2', allowedPhases: ['INTAKE', 'DESIGN', 'BUILD'],
   },
   reviewer: {
     canExecute: false, canApprove: true, canConfigureGuards: false,
@@ -59,7 +59,7 @@ const ROLE_PERMISSIONS: Record<TeamRole, TeamPermissions> = {
   viewer: {
     canExecute: false, canApprove: false, canConfigureGuards: false,
     canViewAudit: true, canManageTeam: false, canExportReports: false,
-    maxRiskLevel: 'R0', allowedPhases: ['DISCOVERY'],
+    maxRiskLevel: 'R0', allowedPhases: ['INTAKE'],
   },
 };
 
@@ -260,7 +260,14 @@ export function generateComplianceReport(
   const riskDist: Record<CVFRiskLevel, number> = { R0: 0, R1: 0, R2: 0, R3: 0 };
 
   // Phase distribution
-  const phaseDist: Record<CVFPhase, number> = { DISCOVERY: 0, DESIGN: 0, BUILD: 0, REVIEW: 0 };
+  const phaseDist: Record<CVFPhase, number> = {
+    INTAKE: 0,
+    DESIGN: 0,
+    BUILD: 0,
+    REVIEW: 0,
+    FREEZE: 0,
+    DISCOVERY: 0,
+  };
 
   // Avg response time
   const totalMs = results.reduce((sum, r) => sum + (r.durationMs ?? 0), 0);

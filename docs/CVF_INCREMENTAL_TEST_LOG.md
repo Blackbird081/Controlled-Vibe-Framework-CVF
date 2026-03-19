@@ -3024,3 +3024,87 @@ Utility and guard:
 - Notes/Risks:
   - This batch closes the 4 independent findings from `CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`.
   - Default runtime contract changed materially: `full/core` guard counts are now `15/8`, modifying actions require `ai_commit`, `fileScope` is enforced, and orchestrator now uses `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`.
+
+## [2026-03-19] Batch: System unification Phase 1 — shared contract and backend adapter alignment
+- Change reference:
+  - local working tree Phase 1 remediation batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - source backlog: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/phase-gate.guard.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/risk-gate.guard.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/authority-gate.guard.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/ai-commit.guard.ts` [NEW]
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/file-scope.guard.ts` [NEW]
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/action-intent.ts` [NEW]
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/sdk/guard-sdk.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/adapters/vscode-governance-adapter.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/guard-runtime-adapter.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/evaluate/route.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/phase-gate/route.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/openapi/route.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts`
+  - targeted tests in `CVF_GUARD_CONTRACT` and `cvf-web`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> PASS
+    - Result: `11 test files, 129 passed, 5 skipped`
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/guard-runtime-adapter.test.ts src/app/api/execute/route.test.ts` -> PASS
+    - Result: `2 test files, 86 passed`
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx tsc --noEmit` -> FAIL
+    - Result: unrelated pre-existing type errors remain in other Web component/test areas outside this batch
+- Skip scope:
+  - Full `cvf-web` test suite — skipped because Phase 1 batch targets shared contract + backend adapter surfaces only
+  - Next.js production build — skipped because local TypeScript already reports unrelated pre-existing failures outside touched scope
+  - Cross-extension workflow runtime — skipped, belongs to later roadmap phase
+- Notes/Risks:
+  - Shared contract default guard stack changed materially from legacy `6` to hardened `8`.
+  - Canonical backend phase model is now `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`, with `DISCOVERY` retained as legacy alias input only.
+  - Backend Web adapter and guard routes are aligned to the canonical model, but user-facing UI copy, dashboard semantics, and broader Web content still require later-phase remediation.
+
+## [2026-03-20] Batch: System unification Web/UI alignment — non-coder semantics and spec export truthfulness
+- Change reference:
+  - local working tree Web/UI alignment batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_SYSTEM_UNIFICATION_WEB_ALIGNMENT_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/intent-detector.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/friendly-labels.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/non-coder-language.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/cvf-checklists.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/agent-chat.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useAgentChat.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/PhaseGateModal.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/ProjectProgress.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/WorkflowVisualizer.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SpecExport.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AppBuilderWizard.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AgentChatMessageBubble.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/guards/page.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/approvals/page.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/help/toolkit/page.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/data/help-content.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/data/docs-data.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/ai-providers.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/ai/types.ts`
+  - targeted Web tests for chat, labels, workflow, checklists, spec export, and dashboard-adjacent helpers
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/agent-chat.test.ts src/lib/non-coder-language.test.ts src/lib/cvf-checklists.test.ts src/components/WorkflowVisualizer.test.tsx src/components/AgentChatMessageBubble.test.tsx src/components/DecisionLogSidebar.test.tsx src/components/AgentChat.test.tsx` -> PASS
+    - Result: `7 test files, 142 passed`
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/guard-runtime-adapter.test.ts src/app/api/execute/route.test.ts` -> PASS
+    - Result: `2 test files, 86 passed`
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/SpecExport.test.tsx src/components/AppBuilderWizard.test.tsx` -> PASS
+    - Result: `2 test files, 38 passed`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - full `cvf-web` TypeScript check — skipped in this batch because repo still contains unrelated pre-existing type issues outside the touched alignment surfaces
+  - full Next.js production build — skipped for the same reason; targeted test coverage was used instead
+- Notes/Risks:
+  - This batch materially reduces the remaining Web/UI drift identified in the independent system review.
+  - Non-coder UX and exported Full Mode prompts now teach the canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` flow instead of the legacy `DISCOVERY -> DESIGN -> BUILD -> REVIEW` framing.
+  - Cross-extension workflow realism and full end-to-end controlled execution loop closure still remain open roadmap items.

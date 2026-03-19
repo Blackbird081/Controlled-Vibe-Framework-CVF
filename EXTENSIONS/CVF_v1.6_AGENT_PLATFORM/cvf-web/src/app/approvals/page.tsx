@@ -35,7 +35,7 @@ const MOCK_REQUESTS: ApprovalRequest[] = [
     id: 'req_3',
     requestedBy: 'usr_4',
     action: 'Export full database snapshot for local testing',
-    phase: 'DISCOVERY',
+    phase: 'INTAKE',
     riskLevel: 'R1',
     reason: 'Export full database snapshot for local testing',
     status: 'rejected',

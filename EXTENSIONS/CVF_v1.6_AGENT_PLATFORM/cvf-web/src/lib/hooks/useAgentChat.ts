@@ -121,7 +121,7 @@ export function useAgentChat({
     const resolvePhaseForMessage = useCallback((messageId: string): CVFPhase | null => {
         const message = messages.find(m => m.id === messageId);
         const metaPhase = message?.metadata?.phase;
-        if (metaPhase && ['Discovery', 'Design', 'Build', 'Review'].includes(metaPhase)) {
+        if (metaPhase && ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'].includes(metaPhase)) {
             return metaPhase as CVFPhase;
         }
         if (message?.content) {

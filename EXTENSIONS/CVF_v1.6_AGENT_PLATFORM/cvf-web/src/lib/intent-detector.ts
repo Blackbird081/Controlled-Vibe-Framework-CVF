@@ -9,7 +9,7 @@
  * @module lib/intent-detector
  */
 
-export type DetectedPhase = 'DISCOVERY' | 'DESIGN' | 'BUILD' | 'REVIEW';
+export type DetectedPhase = 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE';
 export type DetectedRisk = 'R0' | 'R1' | 'R2' | 'R3';
 
 export interface DetectedIntent {
@@ -25,11 +25,11 @@ export interface DetectedIntent {
 
 const PHASE_PATTERNS: { phase: DetectedPhase; patterns: RegExp[]; friendly: string }[] = [
   {
-    phase: 'DISCOVERY',
-    friendly: '🔍 Khám phá & Phân tích',
+    phase: 'INTAKE',
+    friendly: '🧭 Tiếp nhận & Làm rõ',
     patterns: [
       /\b(tìm hiểu|research|explore|analyze|phân tích|khám phá|discover|tìm|survey|investigate|what is|là gì|cách nào|how to)\b/i,
-      /\b(market research|competitive analysis|feasibility|khảo sát|đánh giá)\b/i,
+      /\b(market research|competitive analysis|feasibility|khảo sát|đánh giá|clarify|làm rõ|scope|phạm vi)\b/i,
     ],
   },
   {
@@ -54,6 +54,14 @@ const PHASE_PATTERNS: { phase: DetectedPhase; patterns: RegExp[]; friendly: stri
     patterns: [
       /\b(review|kiểm tra|test|check|verify|validate|audit|inspect|evaluate|đánh giá|rà soát|QA)\b/i,
       /\b(security review|code review|performance test|báo cáo|report|summary)\b/i,
+    ],
+  },
+  {
+    phase: 'FREEZE',
+    friendly: '🔒 Chốt kết quả & Khóa phạm vi',
+    patterns: [
+      /\b(freeze|lock|finalize|finalise|close out|handoff|sign off|baseline|snapshot|release readiness|khóa|chốt|đóng lại|bàn giao cuối|nghiệm thu)\b/i,
+      /\b(approval artifact|audit evidence|final acceptance|acceptance record|đối soát|biên bản)\b/i,
     ],
   },
 ];
@@ -118,19 +126,19 @@ export function detectIntent(userInput: string): DetectedIntent {
   const input = userInput.trim();
   if (!input) {
     return {
-      phase: 'DISCOVERY',
+      phase: 'INTAKE',
       riskLevel: 'R0',
       suggestedTemplates: [],
       confidence: 0,
-      friendlyPhase: '🔍 Khám phá & Phân tích',
+      friendlyPhase: '🧭 Tiếp nhận & Làm rõ',
       friendlyRisk: '⚪ Không rủi ro',
     };
   }
 
   // Detect phase
-  let detectedPhase: DetectedPhase = 'DISCOVERY';
+  let detectedPhase: DetectedPhase = 'INTAKE';
   let phaseConfidence = 0.3;
-  let friendlyPhase = '🔍 Khám phá & Phân tích';
+  let friendlyPhase = '🧭 Tiếp nhận & Làm rõ';
 
   for (const rule of PHASE_PATTERNS) {
     for (const pattern of rule.patterns) {

@@ -64,13 +64,13 @@ describe('getFriendlyPhaseLabel', () => {
     expect(r.emoji).toBe('🔨');
   });
 
-  test('DISCOVERY Vietnamese', () => {
-    const r = getFriendlyPhaseLabel('DISCOVERY', 'vi');
-    expect(r.label).toBe('Tìm hiểu yêu cầu');
+  test('INTAKE Vietnamese', () => {
+    const r = getFriendlyPhaseLabel('INTAKE', 'vi');
+    expect(r.label).toBe('Làm rõ yêu cầu');
   });
 
-  test('Phase A alias maps to DISCOVERY', () => {
-    expect(getFriendlyPhaseLabel('Phase A', 'en').label).toBe('Understanding your needs');
+  test('Phase A alias maps to INTAKE', () => {
+    expect(getFriendlyPhaseLabel('Phase A', 'en').label).toBe('Clarifying your request');
   });
 
   test('C alias maps to BUILD', () => {
@@ -79,6 +79,10 @@ describe('getFriendlyPhaseLabel', () => {
 
   test('D alias maps to REVIEW', () => {
     expect(getFriendlyPhaseLabel('D', 'en').label).toBe('Quality check');
+  });
+
+  test('Freeze alias maps to FREEZE', () => {
+    expect(getFriendlyPhaseLabel('Phase E', 'en').label).toBe('Freezing the result');
   });
 
   test('unknown defaults to BUILD', () => {

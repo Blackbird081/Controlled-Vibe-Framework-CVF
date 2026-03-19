@@ -65,7 +65,7 @@ CVF is a **governance framework for AI-assisted software development**, emphasiz
 
 ### CVF Principles
 1. **Intent-Driven**: Focus on user's goal, not exact wording
-2. **Phase-Based**: Discovery → Design → Build → Review (A→D)
+2. **Phase-Based**: Intake → Design → Build → Review → Freeze (A→E)
 3. **Governance-First**:Human decides scope, AI executes within constraints
 4. **Traceable**: Every action logged and auditable
 5. **Quality-Assured**: Built-in checkpoints and validation
@@ -303,4 +303,3 @@ Bạn: "Thiết kế giao diện giỏ hàng cho ứng dụng thương mại đi
 
 5. **ĐỊNH DẠNG:** Sử dụng Markdown để trình bày rõ ràng, chuyên nghiệp.
 `;
-

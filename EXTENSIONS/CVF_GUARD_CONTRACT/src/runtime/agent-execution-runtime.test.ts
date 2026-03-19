@@ -29,6 +29,13 @@ function defaultConfig(overrides?: Partial<RuntimeConfig>): RuntimeConfig {
     agentId: 'test-agent',
     channel: 'cli',
     liveExecution: false,
+    metadata: {
+      ai_commit: {
+        commitId: 'runtime-test-commit',
+        agentId: 'test-agent',
+        timestamp: Date.now(),
+      },
+    },
     ...overrides,
   };
 }
@@ -116,8 +123,8 @@ describe('AgentExecutionRuntime.preCheck', () => {
     expect(result.finalDecision).toBe('ALLOW');
   });
 
-  it('blocks AI_AGENT in DISCOVERY phase', () => {
-    const runtime = createRuntime({ phase: 'DISCOVERY', role: 'AI_AGENT' });
+  it('blocks AI_AGENT in INTAKE phase', () => {
+    const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT' });
     const intent = runtime.parseIntent('write some code');
     const result = runtime.preCheck(intent);
     expect(result.finalDecision).toBe('BLOCK');
@@ -184,7 +191,7 @@ describe('AgentExecutionRuntime.execute', () => {
   });
 
   it('blocks when guard blocks', async () => {
-    const runtime = createRuntime({ phase: 'DISCOVERY', role: 'AI_AGENT' });
+    const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT' });
     const intent = runtime.parseIntent('write code');
     const guardResult = runtime.preCheck(intent);
     const result = await runtime.execute(intent, guardResult);
@@ -236,7 +243,7 @@ describe('AgentExecutionRuntime.postCheck', () => {
   });
 
   it('invalid for blocked execution', async () => {
-    const runtime = createRuntime({ phase: 'DISCOVERY', role: 'AI_AGENT' });
+    const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT' });
     const result = await runtime.run('write code');
     const check = runtime.postCheck(result);
     expect(check.valid).toBe(false);
@@ -267,7 +274,7 @@ describe('AgentExecutionRuntime.run (full pipeline)', () => {
   });
 
   it('blocks full pipeline for AI_AGENT in wrong phase', async () => {
-    const runtime = createRuntime({ phase: 'DISCOVERY', role: 'AI_AGENT', riskLevel: 'R0' });
+    const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT', riskLevel: 'R0' });
     const result = await runtime.run('write code');
     expect(result.status).toBe('BLOCKED');
   });

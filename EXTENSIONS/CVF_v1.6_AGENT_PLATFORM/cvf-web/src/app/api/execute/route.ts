@@ -192,6 +192,13 @@ export async function POST(request: NextRequest) {
             role: isServiceAllowed ? 'OPERATOR' : 'HUMAN',
             userRole: isServiceAllowed ? 'admin' : session?.role,
             intent: body.intent,
+            fileScope: (rawBody as Record<string, unknown>).fileScope as string[] | undefined,
+            aiCommit: (rawBody as Record<string, unknown>).aiCommit as {
+                commitId: string;
+                agentId: string;
+                timestamp: number;
+                description?: string;
+            } | undefined,
         });
         const guardResult: GuardPipelineResult = guardEngine.evaluate(guardContext);
 

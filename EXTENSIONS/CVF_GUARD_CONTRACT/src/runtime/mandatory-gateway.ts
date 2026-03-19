@@ -74,7 +74,9 @@ export class MandatoryGateway {
     role?: CVFRole;
     agentId?: string;
     targetFiles?: string[];
+    fileScope?: string[];
     channel?: string;
+    metadata?: Record<string, unknown>;
   }): GatewayResult {
     // Check bypass list
     const normalizedAction = request.action.toLowerCase().trim();
@@ -110,7 +112,9 @@ export class MandatoryGateway {
       agentId: request.agentId,
       action: request.action,
       targetFiles: request.targetFiles,
+      fileScope: request.fileScope,
       channel: (request.channel as 'web' | 'ide' | 'cli' | 'mcp' | 'api') || 'api',
+      metadata: request.metadata,
     };
 
     // Run guard evaluation

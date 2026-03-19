@@ -34,7 +34,7 @@ describe('DecisionLogSidebar', () => {
                 entries={[
                     {
                         id: '1',
-                        phase: 'Discovery',
+                        phase: 'INTAKE',
                         action: 'gate_approved',
                         details: 'Approved',
                         timestamp: new Date('2026-02-07T10:00:00Z'),

@@ -72,12 +72,13 @@ describe('WorkflowVisualizer', () => {
 
     // ── Full mode ──
     describe('full mode', () => {
-        it('renders all 4 steps', () => {
+        it('renders all 5 steps', () => {
             render(<WorkflowVisualizer mode="full" />);
-            expect(screen.getByText('Discovery')).toBeTruthy();
+            expect(screen.getByText('Intake')).toBeTruthy();
             expect(screen.getByText('Design')).toBeTruthy();
             expect(screen.getByText('Build')).toBeTruthy();
             expect(screen.getByText('Review')).toBeTruthy();
+            expect(screen.getByText('Freeze')).toBeTruthy();
         });
 
         it('shows full mode name and badge', () => {
@@ -212,7 +213,7 @@ describe('WorkflowModeSelector', () => {
         render(<WorkflowModeSelector selectedMode="simple" onModeChange={onChange} />);
         expect(screen.getAllByText('Quick prompts, no rules. Best for simple tasks.').length).toBeGreaterThanOrEqual(1);
         expect(screen.getAllByText('Adds stop conditions & guardrails for safer AI execution.').length).toBeGreaterThanOrEqual(1);
-        expect(screen.getAllByText('4-Phase protocol: Discovery → Design → Build → Review').length).toBeGreaterThanOrEqual(1);
+        expect(screen.getAllByText('5-phase protocol: Intake → Design → Build → Review → Freeze').length).toBeGreaterThanOrEqual(1);
     });
 
     it('renders mode badges', () => {
@@ -241,7 +242,7 @@ describe('WorkflowModeSelector', () => {
         const onChange = vi.fn();
         render(<WorkflowModeSelector selectedMode="full" onModeChange={onChange} />);
         // The WorkflowVisualizer preview should show full mode steps
-        expect(screen.getAllByText('Discovery').length).toBeGreaterThanOrEqual(1);
+        expect(screen.getAllByText('Intake').length).toBeGreaterThanOrEqual(1);
         expect(screen.getAllByText('Design').length).toBeGreaterThanOrEqual(1);
     });
 

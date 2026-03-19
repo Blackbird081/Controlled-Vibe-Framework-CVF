@@ -12,16 +12,17 @@ import {
 
 describe('cvf-checklists.ts', () => {
     describe('CVF_PHASE_CHECKLISTS', () => {
-        it('has 4 phases defined', () => {
-            expect(CVF_PHASE_CHECKLISTS).toHaveLength(4);
+        it('has 5 phases defined', () => {
+            expect(CVF_PHASE_CHECKLISTS).toHaveLength(5);
         });
 
-        it('contains Discovery, Design, Build, Review phases', () => {
+        it('contains Intake, Design, Build, Review, Freeze phases', () => {
             const phases = CVF_PHASE_CHECKLISTS.map(c => c.phase);
-            expect(phases).toContain('Discovery');
-            expect(phases).toContain('Design');
-            expect(phases).toContain('Build');
-            expect(phases).toContain('Review');
+            expect(phases).toContain('INTAKE');
+            expect(phases).toContain('DESIGN');
+            expect(phases).toContain('BUILD');
+            expect(phases).toContain('REVIEW');
+            expect(phases).toContain('FREEZE');
         });
 
         it('each phase has required items', () => {
@@ -33,24 +34,29 @@ describe('cvf-checklists.ts', () => {
     });
 
     describe('detectCurrentPhase', () => {
-        it('detects Discovery phase', () => {
-            expect(detectCurrentPhase('## PHASE A: Discovery')).toBe('Discovery');
-            expect(detectCurrentPhase('Trong giai đoạn Khám phá')).toBe('Discovery');
+        it('detects Intake phase', () => {
+            expect(detectCurrentPhase('## PHASE A: Discovery')).toBe('INTAKE');
+            expect(detectCurrentPhase('Trong giai đoạn Tiếp nhận')).toBe('INTAKE');
         });
 
         it('detects Design phase', () => {
-            expect(detectCurrentPhase('## PHASE B: Design')).toBe('Design');
-            expect(detectCurrentPhase('Thiết kế solution')).toBe('Design');
+            expect(detectCurrentPhase('## PHASE B: Design')).toBe('DESIGN');
+            expect(detectCurrentPhase('Thiết kế solution')).toBe('DESIGN');
         });
 
         it('detects Build phase', () => {
-            expect(detectCurrentPhase('PHASE C: Build')).toBe('Build');
-            expect(detectCurrentPhase('Thực thi implementation')).toBe('Build');
+            expect(detectCurrentPhase('PHASE C: Build')).toBe('BUILD');
+            expect(detectCurrentPhase('Thực thi implementation')).toBe('BUILD');
         });
 
         it('detects Review phase', () => {
-            expect(detectCurrentPhase('PHASE D: Review')).toBe('Review');
-            expect(detectCurrentPhase('Đánh giá cuối cùng')).toBe('Review');
+            expect(detectCurrentPhase('PHASE D: Review')).toBe('REVIEW');
+            expect(detectCurrentPhase('Đánh giá cuối cùng')).toBe('REVIEW');
+        });
+
+        it('detects Freeze phase', () => {
+            expect(detectCurrentPhase('PHASE E: Freeze')).toBe('FREEZE');
+            expect(detectCurrentPhase('Khóa kết quả và baseline')).toBe('FREEZE');
         });
 
         it('returns null for unrecognized content', () => {
@@ -60,10 +66,10 @@ describe('cvf-checklists.ts', () => {
 
     describe('getPhaseChecklist', () => {
         it('returns checklist for valid phase', () => {
-            const discovery = getPhaseChecklist('Discovery');
-            expect(discovery).toBeDefined();
-            expect(discovery?.phase).toBe('Discovery');
-            expect(discovery?.icon).toBe('🔍');
+            const intake = getPhaseChecklist('INTAKE');
+            expect(intake).toBeDefined();
+            expect(intake?.phase).toBe('INTAKE');
+            expect(intake?.icon).toBe('🧭');
         });
 
         it('returns undefined for invalid phase', () => {
@@ -89,7 +95,7 @@ I understand the goal...
 - Feature B
             `;
 
-            const checked = autoCheckItems('Discovery', response);
+            const checked = autoCheckItems('INTAKE', response);
             expect(checked).toContain('disc-1'); // AI restated goal
             expect(checked).toContain('disc-2'); // Assumptions listed
             expect(checked).toContain('disc-3'); // Scope defined
@@ -97,7 +103,7 @@ I understand the goal...
 
         it('returns empty array when no items match', () => {
             const response = 'Just a simple response without structure.';
-            const checked = autoCheckItems('Discovery', response);
+            const checked = autoCheckItems('INTAKE', response);
             expect(checked.length).toBeLessThan(3);
         });
 
@@ -120,7 +126,7 @@ Step 2: Build components
 ### Risk
 - Timeline risk
             `;
-            const checked = autoCheckItems('Design', response);
+            const checked = autoCheckItems('DESIGN', response);
             expect(checked).toContain('design-1'); // Solution approach
             expect(checked).toContain('design-2'); // Technical decisions
             expect(checked).toContain('design-3'); // Implementation plan
@@ -135,7 +141,7 @@ const x = 1;
 Note: implementation details.
 Skill Preflight PASS.
 SKILL_PREFLIGHT_RECORD: XD_App/DOCUMENTS/SKILL_PREFLIGHT_RECORD.md`;
-            const checked = autoCheckItems('Build', response);
+            const checked = autoCheckItems('BUILD', response);
             expect(checked).toContain('build-2'); // Code blocks
             expect(checked).toContain('build-4'); // Notes
             expect(checked).toContain('build-5'); // Skill preflight
@@ -155,11 +161,25 @@ No mobile support yet.
 ### FINAL CHECKPOINT
 Everything is ready.
             `;
-            const checked = autoCheckItems('Review', response);
+            const checked = autoCheckItems('REVIEW', response);
             expect(checked).toContain('review-1'); // Delivery summary
             expect(checked).toContain('review-2'); // Success criteria
             expect(checked).toContain('review-3'); // Limitations
             expect(checked).toContain('review-4'); // Final checkpoint
+        });
+
+        it('auto-checks Freeze phase items', () => {
+            const response = `
+Final acceptance recorded.
+Baseline delta updated for comparison.
+Open risk: UI copy still needs review.
+Scope closed and frozen.
+            `;
+            const checked = autoCheckItems('FREEZE', response);
+            expect(checked).toContain('freeze-1');
+            expect(checked).toContain('freeze-2');
+            expect(checked).toContain('freeze-3');
+            expect(checked).toContain('freeze-4');
         });
 
         it('returns empty array for invalid phase', () => {
@@ -168,9 +188,9 @@ Everything is ready.
             expect(checked).toEqual([]);
         });
 
-        it('detects Vietnamese Discovery keywords', () => {
+        it('detects Vietnamese Intake keywords', () => {
             const response = 'Hiểu biết của tôi về vấn đề. Giả định: A. TRONG PHẠM VI: X. Ràng buộc: Y.';
-            const checked = autoCheckItems('Discovery', response);
+            const checked = autoCheckItems('INTAKE', response);
             expect(checked).toContain('disc-1');
             expect(checked).toContain('disc-2');
             expect(checked).toContain('disc-3');
@@ -180,17 +200,17 @@ Everything is ready.
 
     describe('calculatePhaseCompliance', () => {
         it('returns 100% when all required items checked', () => {
-            const discovery = getPhaseChecklist('Discovery');
-            const requiredIds = discovery!.items.filter(i => i.required).map(i => i.id);
+            const intake = getPhaseChecklist('INTAKE');
+            const requiredIds = intake!.items.filter(i => i.required).map(i => i.id);
 
-            const compliance = calculatePhaseCompliance('Discovery', requiredIds);
+            const compliance = calculatePhaseCompliance('INTAKE', requiredIds);
             expect(compliance.score).toBe(100);
             expect(compliance.passed).toBe(true);
             expect(compliance.missing).toHaveLength(0);
         });
 
         it('returns lower score when items missing', () => {
-            const compliance = calculatePhaseCompliance('Discovery', ['disc-1']);
+            const compliance = calculatePhaseCompliance('INTAKE', ['disc-1']);
             expect(compliance.score).toBeLessThan(100);
             expect(compliance.passed).toBe(false);
             expect(compliance.missing.length).toBeGreaterThan(0);
@@ -198,41 +218,45 @@ Everything is ready.
     });
 
     describe('getNextPhase', () => {
-        it('returns Design after Discovery', () => {
-            expect(getNextPhase('Discovery')).toBe('Design');
+        it('returns Design after Intake', () => {
+            expect(getNextPhase('INTAKE')).toBe('DESIGN');
         });
 
         it('returns Build after Design', () => {
-            expect(getNextPhase('Design')).toBe('Build');
+            expect(getNextPhase('DESIGN')).toBe('BUILD');
         });
 
         it('returns Review after Build', () => {
-            expect(getNextPhase('Build')).toBe('Review');
+            expect(getNextPhase('BUILD')).toBe('REVIEW');
         });
 
-        it('returns null after Review', () => {
-            expect(getNextPhase('Review')).toBeNull();
+        it('returns Freeze after Review', () => {
+            expect(getNextPhase('REVIEW')).toBe('FREEZE');
+        });
+
+        it('returns null after Freeze', () => {
+            expect(getNextPhase('FREEZE')).toBeNull();
         });
     });
 
     describe('canProceedToNextPhase', () => {
         it('returns true when gate is approved', () => {
-            const progress = [{ phase: 'Discovery' as const, completed: true, checkedItems: [], gateApproved: true }];
-            expect(canProceedToNextPhase('Discovery', progress)).toBe(true);
+            const progress = [{ phase: 'INTAKE' as const, completed: true, checkedItems: [], gateApproved: true }];
+            expect(canProceedToNextPhase('INTAKE', progress)).toBe(true);
         });
 
         it('returns false when gate is not approved', () => {
-            const progress = [{ phase: 'Discovery' as const, completed: true, checkedItems: [], gateApproved: false }];
-            expect(canProceedToNextPhase('Discovery', progress)).toBe(false);
+            const progress = [{ phase: 'INTAKE' as const, completed: true, checkedItems: [], gateApproved: false }];
+            expect(canProceedToNextPhase('INTAKE', progress)).toBe(false);
         });
     });
 
     describe('createDecisionLogEntry', () => {
         it('creates entry with correct structure', () => {
-            const entry = createDecisionLogEntry('Discovery', 'gate_approved', 'User approved phase');
+            const entry = createDecisionLogEntry('INTAKE', 'gate_approved', 'User approved phase');
 
             expect(entry.id).toMatch(/^decision_\d+$/);
-            expect(entry.phase).toBe('Discovery');
+            expect(entry.phase).toBe('INTAKE');
             expect(entry.action).toBe('gate_approved');
             expect(entry.details).toBe('User approved phase');
             expect(entry.timestamp).toBeInstanceOf(Date);

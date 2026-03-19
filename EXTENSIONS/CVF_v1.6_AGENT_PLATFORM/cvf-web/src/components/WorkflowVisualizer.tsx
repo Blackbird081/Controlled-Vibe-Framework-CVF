@@ -77,12 +77,12 @@ const WORKFLOW_STEPS: Record<WorkflowMode, WorkflowStep[]> = {
     ],
     full: [
         {
-            id: 'discovery',
-            label: 'Discovery',
-            labelVi: 'Khám Phá',
-            icon: '🔍',
-            description: 'AI understands your needs',
-            descriptionVi: 'AI hiểu yêu cầu của bạn',
+            id: 'intake',
+            label: 'Intake',
+            labelVi: 'Tiếp Nhận',
+            icon: '🧭',
+            description: 'Clarify request, scope, and constraints',
+            descriptionVi: 'Làm rõ yêu cầu, phạm vi và ràng buộc',
         },
         {
             id: 'design',
@@ -108,6 +108,14 @@ const WORKFLOW_STEPS: Record<WorkflowMode, WorkflowStep[]> = {
             description: 'Quality check & delivery',
             descriptionVi: 'Kiểm tra & bàn giao',
         },
+        {
+            id: 'freeze',
+            label: 'Freeze',
+            labelVi: 'Khóa Lại',
+            icon: '🔒',
+            description: 'Lock the result and capture evidence',
+            descriptionVi: 'Khóa kết quả và lưu bằng chứng',
+        },
     ],
 };
 
@@ -131,8 +139,8 @@ const MODE_INFO = {
     full: {
         name: 'CVF Full Mode',
         nameVi: 'CVF Full Mode',
-        description: '4-Phase protocol: Discovery → Design → Build → Review',
-        descriptionVi: 'Quy trình 4 giai đoạn: Khám phá → Thiết kế → Thực thi → Đánh giá',
+        description: '5-phase protocol: Intake → Design → Build → Review → Freeze',
+        descriptionVi: 'Quy trình 5 giai đoạn: Tiếp nhận → Thiết kế → Thực thi → Đánh giá → Khóa lại',
         color: 'purple',
         badge: '🚀',
     },

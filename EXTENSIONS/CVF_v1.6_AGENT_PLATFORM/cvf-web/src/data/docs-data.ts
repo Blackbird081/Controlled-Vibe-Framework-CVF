@@ -155,11 +155,11 @@ export const DOCS: DocCategory[] = [
             },
             {
                 icon: '🔄',
-                slug: '4-phase-process',
-                title: { vi: 'Quy trình 4 Phase', en: '4-Phase Process' },
+                slug: '5-phase-process',
+                title: { vi: 'Quy trình 5 Phase', en: '5-Phase Process' },
                 desc: {
-                    vi: 'Discovery → Design → Build → Review — mỗi phase có role, gate, và rules riêng.',
-                    en: 'Discovery → Design → Build → Review — each phase has its own roles, gates, and rules.',
+                    vi: 'Intake → Design → Build → Review → Freeze — mỗi phase có role, gate, và rules riêng.',
+                    en: 'Intake → Design → Build → Review → Freeze — each phase has its own roles, gates, and rules.',
                 },
             },
             {

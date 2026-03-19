@@ -119,7 +119,7 @@ AI INSTRUCTIONS
 
 Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
 
-**Phase A - Discovery:** Xác nhận bạn hiểu đúng requirements.
+**Phase A - Intake:** Xác nhận bạn hiểu đúng requirements.
 
 **Phase B - Design:** 
 - Chọn tech stack (KHÔNG hỏi user chọn)
@@ -135,7 +135,12 @@ Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
 **Phase D - Review:**
 - Tóm tắt những gì đã build
 - Hướng dẫn setup và chạy
-- Hướng dẫn packaging/distribution`,
+- Hướng dẫn packaging/distribution
+
+**Phase E - Freeze:**
+- Chốt kết quả đã được chấp nhận
+- Ghi lại baseline / artifact đối soát
+- Nêu follow-up nếu còn`,
         outputExpected: [
             'Tech Stack Decision',
             'Architecture Diagram',

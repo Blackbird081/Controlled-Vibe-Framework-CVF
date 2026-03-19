@@ -61,10 +61,10 @@ These rules are NON-NEGOTIABLE. Violating them will invalidate your work.
 ${session.projectName ? `- **Project:** ${session.projectName}` : ''}
 
 ### Phase Rules
-The CVF process follows 4 phases: DISCOVERY → DESIGN → BUILD → REVIEW.
+The CVF process follows 5 phases: INTAKE → DESIGN → BUILD → REVIEW → FREEZE.
 You are currently in **${session.phase}**. Only these roles can operate in this phase: ${allowedRoles.join(', ')}.
 ${session.role === 'AI_AGENT' && !allowedRoles.includes('AI_AGENT')
-    ? `⚠️ WARNING: As AI_AGENT, you are NOT authorized for ${session.phase} phase. You may only operate in BUILD phase.`
+    ? `⚠️ WARNING: As AI_AGENT, you are NOT authorized for ${session.phase} phase. AI_AGENT activity is limited to controlled builder-class phases.`
     : ''}
 
 ### Risk Rules

@@ -68,6 +68,10 @@ export interface RuntimeConfig {
   channel: 'web' | 'ide' | 'cli' | 'mcp' | 'api';
   /** If true, real AI provider is called. If false, dry-run mode. */
   liveExecution: boolean;
+  /** Optional default file scope for the session. */
+  fileScope?: string[];
+  /** Optional default metadata passed to guard evaluation. */
+  metadata?: Record<string, unknown>;
 }
 
 // ─── Execution Provider Interface ─────────────────────────────────────
@@ -160,7 +164,9 @@ export class AgentExecutionRuntime {
       agentId: this.config.agentId,
       action: intent.action,
       targetFiles: intent.targetFiles,
+      fileScope: this.config.fileScope,
       channel: this.config.channel,
+      metadata: this.config.metadata,
     };
 
     return this.guardEngine.evaluate(context);

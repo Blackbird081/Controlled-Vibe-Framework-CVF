@@ -22,17 +22,21 @@ import {
 } from 'cvf-guard-contract';
 
 const guard = new PhaseGateGuard();
-const VALID_PHASES: CVFPhase[] = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
-const VALID_ROLES: CVFRole[] = ['HUMAN', 'AI_AGENT', 'REVIEWER', 'OPERATOR'];
+const VALID_PHASES: CVFPhase[] = [...PHASE_ORDER, 'DISCOVERY'];
+const VALID_ROLES: CVFRole[] = ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'AI_AGENT', 'OPERATOR'];
+
+function normalizePhase(phase: CVFPhase): CVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    const phase = (body.phase || 'BUILD') as CVFPhase;
+    const rawPhase = (body.phase || 'BUILD') as CVFPhase;
     const role = (body.role || 'AI_AGENT') as CVFRole;
 
-    if (!VALID_PHASES.includes(phase)) {
+    if (!VALID_PHASES.includes(rawPhase)) {
       return NextResponse.json(
         { success: false, error: `Invalid phase: "${body.phase}". Valid: ${VALID_PHASES.join(', ')}` },
         { status: 400 },
@@ -45,6 +49,8 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
+
+    const phase = normalizePhase(rawPhase);
 
     const result = guard.evaluate({
       requestId: `phase-gate-${Date.now()}`,

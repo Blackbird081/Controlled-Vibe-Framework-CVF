@@ -28,9 +28,9 @@ interface EvalResponse {
   error?: string;
 }
 
-const PHASES = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'] as const;
+const PHASES = ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'] as const;
 const RISK_LEVELS = ['R0', 'R1', 'R2', 'R3'] as const;
-const ROLES = ['HUMAN', 'AI_AGENT', 'REVIEWER', 'OPERATOR'] as const;
+const ROLES = ['HUMAN', 'OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'AI_AGENT', 'OPERATOR'] as const;
 
 const DECISION_STYLES: Record<Decision, { bg: string; text: string; icon: string }> = {
   ALLOW: { bg: 'bg-emerald-500/15', text: 'text-emerald-400', icon: '✅' },
@@ -41,7 +41,7 @@ const DECISION_STYLES: Record<Decision, { bg: string; text: string; icon: string
 export default function GuardsPage() {
   const [phase, setPhase] = useState<string>('BUILD');
   const [riskLevel, setRiskLevel] = useState<string>('R0');
-  const [role, setRole] = useState<string>('AI_AGENT');
+  const [role, setRole] = useState<string>('BUILDER');
   const [action, setAction] = useState<string>('write code');
   const [result, setResult] = useState<EvalResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -77,15 +77,15 @@ export default function GuardsPage() {
       <div>
         <h1 className="text-3xl font-bold text-white">🛡️ Guard Dashboard</h1>
         <p className="text-gray-400 mt-1">
-          Kiểm tra bất kỳ hành động nào qua 6 Guards bảo vệ của CVF
+          Kiểm tra hành động theo canonical runtime `5-phase / 8-guard` của CVF
         </p>
       </div>
 
       {/* Status Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <StatusCard label="Guards Active" value="6 / 6" color="emerald" />
+        <StatusCard label="Guards Active" value="8 / 8" color="emerald" />
         <StatusCard label="Engine Mode" value="Strict" color="blue" />
-        <StatusCard label="Default Decision" value="ALLOW" color="emerald" />
+        <StatusCard label="Default Flow" value="INTAKE → FREEZE" color="amber" />
         <StatusCard label="Bridge" value="Next.js API" color="purple" />
       </div>
 
@@ -106,14 +106,14 @@ export default function GuardsPage() {
             onChange={setRiskLevel}
             options={RISK_LEVELS.map((r) => ({
               value: r,
-              label: r === 'R0' ? 'R0 (Safe)' : r === 'R1' ? 'R1 (Low)' : r === 'R2' ? 'R2 (Elevated)' : 'R3 (Critical)',
+              label: r === 'R0' ? 'R0 (Safe)' : r === 'R1' ? 'R1 (Controlled)' : r === 'R2' ? 'R2 (Elevated)' : 'R3 (Critical)',
             }))}
           />
           <SelectField
             label="Role"
             value={role}
             onChange={setRole}
-            options={ROLES.map((r) => ({ value: r, label: r.replace('_', ' ') }))}
+            options={ROLES.map((r) => ({ value: r, label: r.replaceAll('_', ' ') }))}
           />
           <div>
             <label className="block text-xs font-medium text-gray-400 mb-1">Action</label>
@@ -122,7 +122,7 @@ export default function GuardsPage() {
               value={action}
               onChange={(e) => setAction(e.target.value)}
               className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="write code, deploy, approve..."
+              placeholder="clarify scope, analyze spec, write code, approve review..."
             />
           </div>
         </div>
@@ -206,30 +206,36 @@ export default function GuardsPage() {
       {/* Phase Matrix */}
       <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
         <h3 className="text-lg font-semibold text-white mb-4">📐 Phase-Role Matrix</h3>
+        <p className="text-sm text-gray-400 mb-4">
+          Bảng tóm tắt core roles trong canonical CVF runtime. Các legacy roles như `AI_AGENT` và `OPERATOR` vẫn được hỗ trợ để tương thích.
+        </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-800">
                 <th className="text-left py-2 px-3 text-gray-400">Phase</th>
                 <th className="text-center py-2 px-3 text-gray-400">HUMAN</th>
-                <th className="text-center py-2 px-3 text-gray-400">AI AGENT</th>
+                <th className="text-center py-2 px-3 text-gray-400">ANALYST</th>
+                <th className="text-center py-2 px-3 text-gray-400">BUILDER</th>
                 <th className="text-center py-2 px-3 text-gray-400">REVIEWER</th>
-                <th className="text-center py-2 px-3 text-gray-400">OPERATOR</th>
+                <th className="text-center py-2 px-3 text-gray-400">GOVERNOR</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { phase: 'DISCOVERY', human: true, ai: false, reviewer: false, operator: true },
-                { phase: 'DESIGN', human: true, ai: false, reviewer: false, operator: true },
-                { phase: 'BUILD', human: true, ai: true, reviewer: false, operator: true },
-                { phase: 'REVIEW', human: true, ai: false, reviewer: true, operator: true },
+                { phase: 'INTAKE', human: true, analyst: true, builder: false, reviewer: false, governor: true },
+                { phase: 'DESIGN', human: true, analyst: true, builder: false, reviewer: true, governor: true },
+                { phase: 'BUILD', human: true, analyst: false, builder: true, reviewer: false, governor: false },
+                { phase: 'REVIEW', human: true, analyst: true, builder: true, reviewer: true, governor: true },
+                { phase: 'FREEZE', human: true, analyst: false, builder: false, reviewer: false, governor: true },
               ].map((row) => (
                 <tr key={row.phase} className="border-b border-gray-800/50">
                   <td className="py-2 px-3 font-mono text-white">{row.phase}</td>
                   <td className="py-2 px-3 text-center">{row.human ? '✅' : '🚫'}</td>
-                  <td className="py-2 px-3 text-center">{row.ai ? '✅' : '🚫'}</td>
+                  <td className="py-2 px-3 text-center">{row.analyst ? '✅' : '🚫'}</td>
+                  <td className="py-2 px-3 text-center">{row.builder ? '✅' : '🚫'}</td>
                   <td className="py-2 px-3 text-center">{row.reviewer ? '✅' : '🚫'}</td>
-                  <td className="py-2 px-3 text-center">{row.operator ? '✅' : '🚫'}</td>
+                  <td className="py-2 px-3 text-center">{row.governor ? '✅' : '🚫'}</td>
                 </tr>
               ))}
             </tbody>

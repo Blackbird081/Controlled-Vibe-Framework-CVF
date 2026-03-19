@@ -105,7 +105,7 @@ export function AgentChatMessageBubble({
     const factualScore = message.metadata?.factualScore;
     const factualRisk = message.metadata?.factualRisk;
     const phaseKey = message.metadata?.phase;
-    const isKnownPhase = phaseKey && ['Discovery', 'Design', 'Build', 'Review'].includes(phaseKey);
+    const isKnownPhase = phaseKey && ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'].includes(phaseKey);
     const preUatBadgeClass = preUatStatus === 'PASS'
         ? 'bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300'
         : 'bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-300';
@@ -182,7 +182,7 @@ export function AgentChatMessageBubble({
                                 return (
                                     <span className={`px-2 py-0.5 rounded-full flex items-center gap-1 ${config.color}`}>
                                         <span>{config.icon}</span>
-                                        <span>{config.label} {phaseKey}</span>
+                                        <span>{config.label || phaseKey}</span>
                                     </span>
                                 );
                             })()}

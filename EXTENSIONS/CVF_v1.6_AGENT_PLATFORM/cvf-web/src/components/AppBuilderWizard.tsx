@@ -289,7 +289,7 @@ ${data.cliCommands || 'AI will design'}
 
 Based on this complete specification, please:
 
-1. **Phase A - Discovery:** Confirm you understand all requirements correctly.
+1. **Phase A - Intake:** Confirm you understand all requirements correctly.
 
 2. **Phase B - Design:**
    - Finalize tech stack (if not specified, YOU choose)
@@ -306,6 +306,11 @@ Based on this complete specification, please:
    - Summarize what was built
    - Provide setup & run instructions
    - Include packaging/distribution guide
+
+5. **Phase E - Freeze:**
+   - Record the final accepted output
+   - Capture baseline / handoff artifacts
+   - List follow-up work if any
 
 **REMEMBER:** You are the EXECUTOR. Make decisions, don't ask user to choose!
 `;
@@ -695,4 +700,3 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
         </div>
     );
 }
-

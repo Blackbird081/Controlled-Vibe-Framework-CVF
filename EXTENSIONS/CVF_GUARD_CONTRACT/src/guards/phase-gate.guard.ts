@@ -1,7 +1,5 @@
 /**
- * Phase Gate Guard — Enforces CVF 4-Phase Process boundaries
- * Enhanced with agentGuidance for NL explanations to AI agents.
- * @module cvf-guard-contract/guards/phase-gate
+ * Phase Gate Guard — Enforces canonical CVF phase boundaries.
  */
 
 import type { Guard, GuardRequestContext, GuardResult, CVFPhase, CVFRole } from '../types';
@@ -9,23 +7,27 @@ import { PHASE_ORDER } from '../types';
 import { getPermissions, type TeamRole } from '../enterprise/enterprise';
 
 export const PHASE_ROLE_MATRIX: Record<CVFPhase, CVFRole[]> = {
-  DISCOVERY: ['HUMAN', 'OPERATOR'],
-  DESIGN: ['HUMAN', 'OPERATOR'],
-  BUILD: ['HUMAN', 'AI_AGENT', 'OPERATOR'],
-  REVIEW: ['HUMAN', 'REVIEWER', 'OPERATOR'],
+  INTAKE: ['OBSERVER', 'ANALYST', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
+  DESIGN: ['OBSERVER', 'ANALYST', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
+  BUILD: ['BUILDER', 'HUMAN', 'AI_AGENT', 'OPERATOR'],
+  REVIEW: ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
+  FREEZE: ['GOVERNOR', 'HUMAN'],
+  DISCOVERY: ['OBSERVER', 'ANALYST', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
 };
 
 export const PHASE_DESCRIPTIONS: Record<CVFPhase, string> = {
-  DISCOVERY: 'Requirements gathering and problem definition',
-  DESIGN: 'Architecture decisions and solution design',
-  BUILD: 'Implementation and coding',
-  REVIEW: 'Testing, validation, and quality assurance',
+  INTAKE: 'Problem intake, discovery, and initial scoping',
+  DESIGN: 'Architecture design, planning, and evaluation',
+  BUILD: 'Implementation and controlled execution',
+  REVIEW: 'Validation, critique, testing, and approval',
+  FREEZE: 'Governed closure, locking, and evidence completion',
+  DISCOVERY: 'Legacy alias for intake and initial scoping',
 };
 
 export class PhaseGateGuard implements Guard {
   id = 'phase_gate';
   name = 'Phase Gate Guard';
-  description = 'Enforces CVF 4-Phase Process boundaries and role-phase authorization.';
+  description = 'Enforces CVF phase boundaries and role-phase authorization.';
   priority = 10;
   enabled = true;
 
@@ -39,47 +41,43 @@ export class PhaseGateGuard implements Guard {
         decision: 'BLOCK',
         severity: 'CRITICAL',
         reason: `Unknown phase: "${context.phase}". Valid phases: ${PHASE_ORDER.join(', ')}.`,
-        agentGuidance: `The phase "${context.phase}" is not recognized. CVF uses a 4-phase process: DISCOVERY → DESIGN → BUILD → REVIEW. Please specify one of these phases.`,
+        agentGuidance: `The phase "${context.phase}" is not recognized. Use the canonical CVF phases INTAKE, DESIGN, BUILD, REVIEW, or FREEZE.`,
         suggestedAction: 'specify_valid_phase',
         timestamp,
       };
     }
 
-    // Enterprise RBAC Check (Task 8.6 Phase 3)
     const userRole = context.metadata?.userRole as TeamRole | undefined;
     if (userRole) {
       try {
         const perms = getPermissions(userRole);
-        if (perms && !perms.allowedPhases.includes(context.phase)) {
+        if (!perms.allowedPhases.includes(context.phase)) {
           return {
             guardId: this.id,
             decision: 'BLOCK',
             severity: 'ERROR',
-            reason: `Enterprise Role "${userRole}" is not authorized for phase "${context.phase}". Allowed phases: ${perms.allowedPhases.join(', ')}.`,
-            agentGuidance: `The active user has the "${userRole}" role, which is not allowed in the "${context.phase}" phase. Allowed phases are: ${perms.allowedPhases.join(', ')}.`,
+            reason: `Enterprise role "${userRole}" is not authorized for phase "${context.phase}". Allowed phases: ${perms.allowedPhases.join(', ')}.`,
+            agentGuidance: `The active user has the "${userRole}" role, which is not allowed in the "${context.phase}" phase.`,
             suggestedAction: 'switch_to_allowed_phase',
             timestamp,
             metadata: { userRole, phase: context.phase, allowedPhases: perms.allowedPhases },
           };
         }
-      } catch (e) {
-        // Fallback
+      } catch {
+        // Fall through to the base phase model if enterprise permissions are unavailable.
       }
     }
 
     if (!allowedRoles.includes(context.role)) {
-      const currentPhaseIndex = PHASE_ORDER.indexOf(context.phase);
-      const allowedPhases = PHASE_ORDER.filter((p) =>
-        PHASE_ROLE_MATRIX[p].includes(context.role)
-      );
+      const allowedPhases = PHASE_ORDER.filter((phase) => PHASE_ROLE_MATRIX[phase].includes(context.role));
 
       return {
         guardId: this.id,
         decision: 'BLOCK',
         severity: 'ERROR',
         reason: `Role "${context.role}" is not authorized for phase "${context.phase}". Allowed roles: ${allowedRoles.join(', ')}.`,
-        agentGuidance: `You are operating as "${context.role}" but the current phase is "${context.phase}" (${PHASE_DESCRIPTIONS[context.phase]}). Your role can only operate in phases: ${allowedPhases.join(', ')}. ${currentPhaseIndex < 2 ? 'Wait for the human to complete this phase before proceeding.' : 'Request phase advancement from the human operator.'}`,
-        suggestedAction: allowedPhases.length > 0 ? `switch_to_phase_${allowedPhases[0]}` : 'request_role_change',
+        agentGuidance: `You are operating as "${context.role}" but the current phase is "${context.phase}". Your role may only operate in phases: ${allowedPhases.join(', ')}.`,
+        suggestedAction: allowedPhases.length > 0 ? `switch_to_phase_${allowedPhases[0].toLowerCase()}` : 'request_role_change',
         timestamp,
         metadata: { phase: context.phase, role: context.role, allowedRoles, allowedPhases },
       };

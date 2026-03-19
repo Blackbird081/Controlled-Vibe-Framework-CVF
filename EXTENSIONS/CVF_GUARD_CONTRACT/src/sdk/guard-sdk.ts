@@ -17,9 +17,9 @@
 
 // ─── Types ───────────────────────────────────────────────────────────
 
-export type CVFPhase = 'DISCOVERY' | 'DESIGN' | 'BUILD' | 'REVIEW';
+export type CVFPhase = 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE' | 'DISCOVERY';
 export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
-export type CVFRole = 'HUMAN' | 'AI_AGENT' | 'REVIEWER' | 'OPERATOR';
+export type CVFRole = 'OBSERVER' | 'ANALYST' | 'BUILDER' | 'REVIEWER' | 'GOVERNOR' | 'HUMAN' | 'AI_AGENT' | 'OPERATOR';
 export type CVFDecision = 'ALLOW' | 'BLOCK' | 'ESCALATE';
 
 export interface CVFGuardRequest {
@@ -30,7 +30,9 @@ export interface CVFGuardRequest {
   role?: CVFRole;
   agentId?: string;
   targetFiles?: string[];
+  fileScope?: string[];
   mutationCount?: number;
+  metadata?: Record<string, unknown>;
 }
 
 export interface CVFGuardResult {
@@ -124,7 +126,9 @@ export class CVFGuardClient {
       role: request.role || 'AI_AGENT',
       agentId: request.agentId || this.agentId,
       targetFiles: request.targetFiles,
+      fileScope: request.fileScope,
       mutationCount: request.mutationCount,
+      metadata: request.metadata,
     };
 
     const response = await fetch(`${this.baseUrl}/api/guards/evaluate`, {

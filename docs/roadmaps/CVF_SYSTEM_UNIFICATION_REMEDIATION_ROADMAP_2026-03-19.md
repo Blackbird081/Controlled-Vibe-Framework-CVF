@@ -29,6 +29,41 @@ Target outcome at the end of this roadmap:
 - one consistent non-coder experience backed by the same hardened runtime
 - one audit-ready story that matches actual implementation
 
+## 1A. Execution Status Update
+
+Phase 1 remediation batch executed on `2026-03-19`:
+
+- shared contract type unification: `COMPLETED`
+- shared default guard factory hardening (`6 -> 8` guards): `COMPLETED`
+- canonical guard surface expansion (`AiCommitGuard`, `FileScopeGuard`): `COMPLETED`
+- backend Web adapter and guard route alignment: `COMPLETED`
+- runtime helper alignment (`mandatory-gateway`, `agent-execution-runtime`): `PARTIAL`
+- non-coder UI copy, dashboards, and intent UX alignment: `NOT STARTED`
+- cross-extension workflow realism: `NOT STARTED`
+
+User-facing Web alignment batch executed on `2026-03-20`:
+
+- natural-language intent detection aligned to canonical `INTAKE`: `COMPLETED`
+- non-coder phase labels and friendly UX copy aligned to canonical `FREEZE` posture: `COMPLETED`
+- guard dashboard and project progress updated to canonical `5-phase / 8-guard` framing: `COMPLETED`
+- phase checklist, phase gate, and chat phase metadata aligned to canonical runtime semantics: `COMPLETED`
+- spec export, workflow visualizer, and help content updated away from `4-phase` framing: `COMPLETED`
+- cross-extension workflow realism: `NOT STARTED`
+
+Verification completed for this batch:
+
+- `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
+- `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run check` -> pass
+- `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/guard-runtime-adapter.test.ts src/app/api/execute/route.test.ts` -> pass
+- `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/agent-chat.test.ts src/lib/non-coder-language.test.ts src/lib/cvf-checklists.test.ts src/components/WorkflowVisualizer.test.tsx src/components/AgentChatMessageBubble.test.tsx src/components/DecisionLogSidebar.test.tsx src/components/AgentChat.test.tsx` -> pass
+- `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/SpecExport.test.tsx src/components/AppBuilderWizard.test.tsx` -> pass
+- `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> pass
+
+Baseline receipt:
+
+- `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md`
+- `docs/baselines/CVF_SYSTEM_UNIFICATION_WEB_ALIGNMENT_DELTA_2026-03-20.md`
+
 ---
 
 ## 2. Strategic Principle

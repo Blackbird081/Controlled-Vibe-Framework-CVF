@@ -1074,3 +1074,41 @@ D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
 - `docs/guides/CVF_QUICK_ORIENTATION.md` (references workspace layout)
 - `governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md`
 - `docs/CVF_CORE_KNOWLEDGE_BASE.md` (Section VII — Workspace Isolation Guard)
+
+---
+
+## ADR-021: Phase 1 Governance Runtime Hardening Integration
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-19 |
+| Status | Active |
+| Branch | `cvf-next` (then merged to `main`) |
+| Layer | Layer 1 / 1.5 — Governance Platform |
+| Related commits | `0d1937a` |
+
+### Context
+Phase 1 of the CVF Edit Integration Roadmap mandated strict Governance Runtime Hardening. Before this, CVF had theoretical governance guards, but lacked an enforceable strict perimeter at runtime. Agents could bypass phase conditions if the simulator wasn't called manually. A strict `PipelineOrchestrator` and a set of `MANDATORY_GUARD_IDS` needed to be anchored into the runtime.
+
+### Decision
+**Implement a centralized `GuardRuntimeEngine` with unbypassable `MANDATORY_GUARD_IDS` and a `PipelineOrchestrator` that enforces state machine rules.**
+
+- Included 15 distinct guards (including ContextFreeze, AuthorityGate, ConceptAlignment).
+- Defined `authority_gate`, `phase_gate`, and `ai_commit` as non-bypassable even in "permissive" settings.
+- Integrated SDK (`cvf.evaluate()`) to expose this runtime engine to external tools.
+
+### Rationale
+- Theoretical governance is insufficient for achieving Governance Level 4.0. Without unbypassable chokepoints in the runtime, the framework acts only as an advisory linter.
+- The `PipelineOrchestrator` guarantees that transition phases completely rollback if any single mandatory guard fails.
+- Consolidating into the `GuardRuntimeEngine` prevents distributed, brittle checks spread across different agent prompt logic.
+
+### Consequences
+- CVF immediately shifts to **Governance Level 4.0 (Enforceable Framework)**.
+- Any tool missing `authority` context or attempting illegal phase transitions will systematically crash rather than proceed silently.
+- 602 tests explicitly validate these chokepoints across scenarios.
+
+### Related Files
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guard.runtime.engine.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guard.runtime.types.ts`
+- `docs/roadmaps/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md`

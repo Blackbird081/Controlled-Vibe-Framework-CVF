@@ -703,6 +703,64 @@ Initial integration prioritized structure completeness over executable governanc
 
 ---
 
+### BUG-025: Pipeline Orchestrator Blocking System Transition Events
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-19 |
+| **Severity** | 🔴 Critical |
+| **Component** | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL` |
+| **File(s)** | `governance/guard_runtime/pipeline.orchestrator.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+Error: Transition denied by runtime pipeline (event unrecognized)
+```
+
+**Root Cause:**  
+The `PipelineOrchestrator` was narrowly expecting user-initiated events only, and treated internal system transitions (e.g. timeout handling, automated rollback states) as illegal because they lacked user signatures. The strict mode enforcement unintentionally blocked standard state machine recovery paths.
+
+**Solution:**  
+Refactored the orchestrator to differentiate between `UserInitiated` and `SystemInitiated` transition events. Allowed system events to bypass the signature-based PhaseGate while still being logged in the audit trail.
+
+**Prevention:**
+- ✅ Always write separate integration tests for automated/system transitions vs user transitions.
+- ✅ Ensure strict mode evaluates event origin, not just explicit shapes.
+
+**Related Commits:** `0d1937a`
+
+---
+
+### BUG-026: Off-by-one Counting Error in Global History Tracker
+
+| Field | Detail |
+|-------|--------|
+| **Date** | 2026-03-19 |
+| **Severity** | 🟡 Medium |
+| **Component** | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL` |
+| **File(s)** | `governance/scenario_simulator/execution.trace.ts` |
+| **Status** | ✅ Fixed |
+
+**Error Message:**
+```
+AssertionError: Expected trace length to be 1, got 2
+```
+
+**Root Cause:**  
+During integration testing across the 602-test suite, the global history tracker was pushing the `INITIAL` state to the history stack twice: once during orchestrator boot and again upon entering the first execution phase. This caused the deadlock/loop trap detector to preemptively flag valid initial transitions as loops.
+
+**Solution:**  
+Updated `execution.trace.ts` to check if `historyStack[length - 1] === nextState` before pushing, ensuring idempotent entry recording for the initial state.
+
+**Prevention:**
+- ✅ Ensure state machine boot operations are idempotent.
+- ✅ Include single-transition trace tests in the basic suite.
+
+**Related Commits:** `0d1937a`
+
+---
+
 ## Quick Reference: Common Error Patterns
 
 ### Next.js / React

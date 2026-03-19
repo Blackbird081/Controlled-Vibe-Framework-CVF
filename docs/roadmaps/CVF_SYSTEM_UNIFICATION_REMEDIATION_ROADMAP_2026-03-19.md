@@ -56,7 +56,8 @@ Phase 3 workflow realism batch executed on `2026-03-20`:
 - explicit `RUNNING -> report result -> COMPLETED/FAILED/SKIPPED` workflow contract added: `COMPLETED`
 - rollback reason and step-level rollback evidence captured: `COMPLETED`
 - workflow-level execution log and lightweight freeze receipt added: `COMPLETED`
-- binding workflow steps to real extension adapters: `NOT STARTED`
+- handler registry and reference `executeWorkflow()` binding added: `COMPLETED`
+- binding workflow steps to production-grade extension adapters: `NOT STARTED`
 
 Verification completed for this batch:
 
@@ -68,12 +69,14 @@ Verification completed for this batch:
 - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> pass
 - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/extension.bridge.test.ts` -> pass
 - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run build` -> pass
+- `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/extension.bridge.test.ts` after handler-binding update -> pass (`31 passed`)
 
 Baseline receipt:
 
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_WEB_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_WORKFLOW_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md`
 
 ---
 

@@ -58,6 +58,16 @@ export interface WorkflowStepResult {
   rollbackData?: Record<string, unknown>;
 }
 
+export interface ExtensionActionHandlerContext {
+  workflow: CrossExtensionWorkflow;
+  step: WorkflowStep;
+  extension: ExtensionDescriptor;
+  guardResult?: GuardPipelineResult;
+}
+
+export type ExtensionActionHandler =
+  (context: ExtensionActionHandlerContext) => WorkflowStepResult | Promise<WorkflowStepResult>;
+
 // --- Cross-Extension Workflow ---
 
 export type CrossWorkflowStatus = 'CREATED' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'ROLLED_BACK';
@@ -85,6 +95,7 @@ export interface CrossExtensionWorkflow {
 export class ExtensionBridge {
   private extensions: Map<string, ExtensionDescriptor> = new Map();
   private workflows: Map<string, CrossExtensionWorkflow> = new Map();
+  private handlers: Map<string, ExtensionActionHandler> = new Map();
 
   // --- Extension Registry ---
 
@@ -154,6 +165,15 @@ export class ExtensionBridge {
       graph.set(id, [...ext.dependencies]);
     }
     return graph;
+  }
+
+  registerActionHandler(extensionId: string, action: string, handler: ExtensionActionHandler): void {
+    this.handlers.set(this.getHandlerKey(extensionId, action), handler);
+  }
+
+  getActionHandler(extensionId: string, action: string): ExtensionActionHandler | undefined {
+    return this.handlers.get(this.getHandlerKey(extensionId, action))
+      ?? this.handlers.get(this.getHandlerKey(extensionId, '*'));
   }
 
   // --- Cross-Extension Workflow ---
@@ -317,6 +337,89 @@ export class ExtensionBridge {
     return { success: true, step };
   }
 
+  async executeCurrentStep(
+    workflowId: string,
+    options?: { guardResult?: GuardPipelineResult },
+  ): Promise<{
+    success: boolean;
+    step?: WorkflowStep;
+    waitingForResult?: boolean;
+    error?: string;
+  }> {
+    const start = this.advanceWorkflow(workflowId, options?.guardResult);
+    if (!start.success || !start.step || !start.waitingForResult) {
+      return start;
+    }
+
+    const workflow = this.workflows.get(workflowId);
+    const extension = this.extensions.get(start.step.extensionId);
+    if (!workflow || !extension) {
+      return { success: false, step: start.step, error: `Workflow or extension missing for "${workflowId}".` };
+    }
+
+    const handler = this.getActionHandler(start.step.extensionId, start.step.action);
+    if (!handler) {
+      return start;
+    }
+
+    try {
+      const result = await handler({
+        workflow,
+        step: start.step,
+        extension,
+        guardResult: options?.guardResult,
+      });
+      const completion = this.reportStepResult(workflowId, result);
+      return { ...completion, waitingForResult: false };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      const failed = this.reportStepResult(workflowId, {
+        status: 'FAILED',
+        error: message,
+        evidence: { thrownByHandler: true },
+      });
+      return { success: false, step: failed.step, error: failed.error ?? message, waitingForResult: false };
+    }
+  }
+
+  async executeWorkflow(
+    workflowId: string,
+    options?: {
+      guardResultProvider?: (step: WorkflowStep, workflow: CrossExtensionWorkflow) => GuardPipelineResult | undefined | Promise<GuardPipelineResult | undefined>;
+    },
+  ): Promise<{ success: boolean; workflow?: CrossExtensionWorkflow; error?: string }> {
+    const workflow = this.workflows.get(workflowId);
+    if (!workflow) return { success: false, error: `Workflow "${workflowId}" not found.` };
+
+    while (workflow.status !== 'COMPLETED' && workflow.status !== 'FAILED' && workflow.status !== 'ROLLED_BACK') {
+      const step = workflow.steps[workflow.currentStepIndex];
+      if (!step) break;
+
+      const guardResult = options?.guardResultProvider
+        ? await options.guardResultProvider(step, workflow)
+        : undefined;
+
+      const execution = await this.executeCurrentStep(workflowId, { guardResult });
+      if (!execution.success && !execution.waitingForResult) {
+        return { success: false, workflow, error: execution.error };
+      }
+
+      if (execution.waitingForResult) {
+        return {
+          success: false,
+          workflow,
+          error: `Workflow "${workflowId}" is waiting for a manual result on step "${step.id}".`,
+        };
+      }
+    }
+
+    return {
+      success: workflow.status === 'COMPLETED',
+      workflow,
+      error: workflow.status === 'COMPLETED' ? undefined : `Workflow ended in state ${workflow.status}.`,
+    };
+  }
+
   rollbackWorkflow(workflowId: string, reason = 'Manual rollback requested.'): boolean {
     const wf = this.workflows.get(workflowId);
     if (!wf) return false;
@@ -371,5 +474,9 @@ export class ExtensionBridge {
       event,
       details,
     });
+  }
+
+  private getHandlerKey(extensionId: string, action: string): string {
+    return `${extensionId}::${action}`;
   }
 }

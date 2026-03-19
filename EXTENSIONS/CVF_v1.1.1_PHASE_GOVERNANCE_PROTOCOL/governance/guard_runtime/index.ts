@@ -58,7 +58,16 @@ export { ApiAdapter } from './entry/api.adapter.js';
 export { type EntryPointType, type EntryAdapter, type EntryResponse, type NormalizedRequest } from './entry/entry.types.js';
 
 // Cross-Extension Wiring (Phase B.3)
-export { ExtensionBridge, type ExtensionDescriptor, type ExtensionStatus, type CrossExtensionWorkflow, type WorkflowStep } from './wiring/extension.bridge.js';
+export {
+  ExtensionBridge,
+  type ExtensionDescriptor,
+  type ExtensionStatus,
+  type CrossExtensionWorkflow,
+  type WorkflowStep,
+  type WorkflowStepResult,
+  type ExtensionActionHandler,
+  type ExtensionActionHandlerContext,
+} from './wiring/extension.bridge.js';
 
 // SDK (Phase C)
 export { CvfSdk, type CvfSdkConfig, type GuardPreset } from './sdk/cvf.sdk.js';

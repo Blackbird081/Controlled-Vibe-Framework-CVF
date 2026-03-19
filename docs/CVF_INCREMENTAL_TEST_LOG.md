@@ -3127,3 +3127,23 @@ Utility and guard:
 - Notes/Risks:
   - This batch removes the biggest scaffold in `ExtensionBridge`: step completion is no longer implicitly simulated on `advanceWorkflow()`.
   - Workflow steps now carry explicit output/evidence/failure/rollback semantics, but real adapter execution binding still remains open.
+
+## [2026-03-20] Batch: Phase 3 workflow realism — handler-based execution binding in ExtensionBridge
+- Change reference:
+  - local working tree Phase 3 handler-binding batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/wiring/extension.bridge.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/index.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/extension.bridge.test.ts`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/extension.bridge.test.ts` -> PASS
+    - Result: `1 test file, 31 passed`
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run build` -> PASS
+- Skip scope:
+  - full extension test suite — skipped because this slice only expands workflow handler execution binding
+  - production-grade extension handlers — still out of scope; this batch adds the runtime hook points and reference execution path only
+- Notes/Risks:
+  - `ExtensionBridge` can now run workflows via registered action handlers instead of only waiting for manual result reporting.
+  - When no handler exists, the workflow now stops truthfully in a manual-handoff state rather than faking success.

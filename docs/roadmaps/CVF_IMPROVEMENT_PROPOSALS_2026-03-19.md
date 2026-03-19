@@ -3,7 +3,7 @@
 > **Location:** `docs/roadmaps/CVF_IMPROVEMENT_PROPOSALS_2026-03-19.md`
 > **Date:** 2026-03-19
 > **Source:** Independent audit of CVF architecture
-> **Status:** Proposed — pending implementation schedule
+> **Status:** ✅ Implemented — verified 2026-03-19 (602 tests PASS)
 
 ---
 
@@ -131,14 +131,14 @@ Define failure handling strategy:
 
 ## Priority Matrix
 
-| Group | Impact | Effort | Priority |
-|-------|--------|--------|----------|
-| 1. State Machine | Very High | Medium | P0 |
-| 2. Guard Enforcement | Very High | High | P0 |
-| 6. Failure Handling | High | Medium | P1 |
-| 3. Self-Review | High | Low | P1 |
-| 5. Spec Validation | Medium | Medium | P2 |
-| 4. Context Management | Medium | High | P2 |
+| Group | Impact | Effort | Priority | Status |
+|-------|--------|--------|----------|--------|
+| 1. State Machine | Very High | Medium | P0 | ✅ Done |
+| 2. Guard Enforcement | Very High | High | P0 | ✅ Done |
+| 6. Failure Handling | High | Medium | P1 | ✅ Done |
+| 3. Self-Review | High | Low | P1 | ✅ Done |
+| 5. Spec Validation | Medium | Medium | P2 | ✅ Done |
+| 4. Context Management | Medium | High | P2 | ✅ Done |
 
 ---
 

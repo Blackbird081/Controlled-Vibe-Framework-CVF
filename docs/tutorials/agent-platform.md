@@ -11,14 +11,16 @@
 
 ## What is Multi-Agent in CVF?
 
-Instead of one AI doing everything, CVF v1.6 splits work across **4 specialized agents**, each mapped to a CVF phase:
+Instead of one AI doing everything, CVF v1.6 splits work across **4 specialized agents** that cover the active execution phases, while `FREEZE` remains a governed closure step:
 
 | Agent | Role | CVF Phase | Specialty |
 |-------|------|-----------|-----------|
-| 🎯 **Orchestrator** | Coordinate & delegate | Phase A (Discovery) | Understanding intent, breaking down tasks |
+| 🎯 **Orchestrator** | Coordinate & delegate | Phase A (Intake) | Understanding intent, breaking down tasks |
 | 📐 **Architect** | Design solution | Phase B (Design) | Architecture, component design, trade-offs |
 | 🔨 **Builder** | Write code | Phase C (Build) | Implementation, following specs precisely |
 | 🔍 **Reviewer** | Quality assurance | Phase D (Review) | Testing, finding bugs, compliance checking |
+
+`Phase E (Freeze)` is the governed close-out step that records accepted output, evidence, and scope lock rather than a separate always-on chat persona.
 
 ### Why Multi-Agent?
 
@@ -191,8 +193,8 @@ The Reviewer evaluates the Builder's code against the original intent:
 
 ### Automatic Handoff
 In Full CVF governance mode, agents hand off automatically:
-```
-Orchestrator → (Phase A complete?) → Architect → (Phase B complete?) → Builder → (Phase C complete?) → Reviewer
+```text
+Orchestrator → (Phase A complete?) → Architect → (Phase B complete?) → Builder → (Phase C complete?) → Reviewer → Freeze receipt
 ```
 
 Each transition requires the previous phase's checklist to be completed.
@@ -287,7 +289,8 @@ Multi-agent uses 3–4x more tokens than single-agent. Monitor the usage tracker
 | I want to... | Go to... |
 |-------------|---------|
 | Create reusable skill templates | [Custom Skills Tutorial](custom-skills.md) |
-| Understand phase gates deeper | [4-Phase Process](../concepts/4-phase-process.md) |
+| Understand the canonical control loop deeper | [Controlled Execution Loop](../concepts/controlled-execution-loop.md) |
+| Understand the historical 4-phase foundation | [4-Phase Process](../concepts/4-phase-process.md) |
 | Learn about risk levels | [Risk Model](../concepts/risk-model.md) |
 | Deploy the web UI for my team | [Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) |
 | Set up team governance | [Team Setup Guide](../guides/team-setup.md) |

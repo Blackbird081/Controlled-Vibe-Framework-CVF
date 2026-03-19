@@ -5,7 +5,7 @@
 **Time:** 20 minutes  
 **Level:** Intermediate  
 **What you'll learn:** How to create, version, and share reusable CVF skills  
-**Prerequisites:** Understanding of [CVF 4-phase process](../concepts/4-phase-process.md)
+**Prerequisites:** Understanding of the [Controlled Execution Loop](../concepts/controlled-execution-loop.md)
 
 ---
 

@@ -142,6 +142,13 @@ Residual user-facing wording cleanup batch executed on `2026-03-20`:
 - `CVF_IN_VSCODE_GUIDE.md` no longer teaches active VS Code usage as a `4-phase` model: `COMPLETED`
 - legacy `4-phase` language is now kept to historical-reference contexts rather than active user guidance
 
+Tutorial and concept entrypoint cleanup batch executed on `2026-03-20`:
+
+- tutorial index and starter tutorials now point new users at the canonical controlled loop first: `COMPLETED`
+- `agent-platform` and `first-project` tutorials now describe `FREEZE` as part of the active learning path: `COMPLETED`
+- concept index now lists the controlled execution loop as the active model and the 4-phase process as historical foundation: `COMPLETED`
+- `version-evolution` now explicitly distinguishes historical 4-phase origin from the current canonical 5-phase posture
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -171,6 +178,7 @@ Baseline receipt:
 - `docs/baselines/CVF_CORE_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_RUNTIME_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_RESIDUAL_USER_FACING_WORDING_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_TUTORIAL_CONCEPT_ENTRYPOINT_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

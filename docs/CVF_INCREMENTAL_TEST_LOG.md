@@ -102,6 +102,28 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: Tutorial and concept entrypoint alignment
+- Change reference:
+  - scope: front-door learning materials now lead with the canonical controlled loop instead of the historical 4-phase model
+  - baseline receipt: `docs/baselines/CVF_TUTORIAL_CONCEPT_ENTRYPOINT_ALIGNMENT_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `docs/tutorials/README.md`
+  - `docs/tutorials/first-project.md`
+  - `docs/tutorials/custom-skills.md`
+  - `docs/tutorials/agent-platform.md`
+  - `docs/concepts/README.md`
+  - `docs/concepts/version-evolution.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - application/runtime tests: skipped because this batch only updates documentation entrypoints
+  - release-manifest consistency check: skipped because no release/readiness manifest files changed in this batch
+- Notes/Risks:
+  - historical 4-phase references remain where they intentionally explain earlier CVF versions
+  - new readers now encounter the canonical controlled loop earlier and more consistently
+
 ## [2026-03-20] Batch: Residual user-facing wording cleanup
 - Change reference:
   - scope: remove remaining active `4-phase` wording from user-facing docs and point readers at the latest reassessment

@@ -8,7 +8,9 @@ import { describe, expect, it } from 'vitest';
 import {
   createGuardEngine,
   GuardRuntimeEngine,
+  AUTHORITY_MATRIX,
   PhaseGateGuard,
+  PHASE_ROLE_MATRIX,
   RiskGateGuard,
   AuthorityGateGuard,
   AiCommitGuard,
@@ -100,6 +102,10 @@ describe('PhaseGateGuard', () => {
     expect(PHASE_ORDER).toEqual(['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE']);
   });
 
+  it('keeps DISCOVERY out of the internal phase-role matrix', () => {
+    expect(Object.keys(PHASE_ROLE_MATRIX)).toEqual(PHASE_ORDER);
+  });
+
   it('allows HUMAN in canonical phases', () => {
     for (const phase of PHASE_ORDER) {
       expect(guard.evaluate(ctx({ phase, role: 'HUMAN' })).decision).toBe('ALLOW');
@@ -157,6 +163,14 @@ describe('AuthorityGateGuard', () => {
   it('blocks risk above authority cell limit', () => {
     const result = guard.evaluate(ctx({ phase: 'BUILD', role: 'AI_AGENT', riskLevel: 'R3', action: 'write component' }));
     expect(result.decision).toBe('BLOCK');
+  });
+
+  it('keeps DISCOVERY out of the internal authority matrix while preserving alias input', () => {
+    for (const cells of Object.values(AUTHORITY_MATRIX)) {
+      expect(Object.keys(cells)).toEqual(PHASE_ORDER);
+    }
+    const result = guard.evaluate(ctx({ phase: 'DISCOVERY', role: 'ANALYST', riskLevel: 'R1', action: 'analyze scope' }));
+    expect(result.decision).toBe('ALLOW');
   });
 });
 

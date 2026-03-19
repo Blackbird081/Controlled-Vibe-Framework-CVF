@@ -2,7 +2,7 @@
  * Authority Gate Guard — Enforces phase × role × risk authority.
  */
 
-import type { Guard, GuardRequestContext, GuardResult, CVFPhase, CVFRiskLevel, CVFRole } from '../types';
+import type { CanonicalCVFPhase, Guard, GuardRequestContext, GuardResult, CVFPhase, CVFRiskLevel, CVFRole } from '../types';
 
 const RISK_NUMERIC: Record<CVFRiskLevel, number> = {
   R0: 0,
@@ -19,14 +19,17 @@ export interface AuthorityCell {
 
 const FORBIDDEN: AuthorityCell = { allowed: false, allowedActions: [], maxRisk: 'R0' };
 
-export const AUTHORITY_MATRIX: Record<CVFRole, Record<CVFPhase, AuthorityCell>> = {
+function normalizePhaseAlias(phase: CVFPhase): CanonicalCVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
+
+export const AUTHORITY_MATRIX: Record<CVFRole, Record<CanonicalCVFPhase, AuthorityCell>> = {
   OBSERVER: {
     INTAKE: { allowed: true, allowedActions: ['read', 'ask', 'clarify'], maxRisk: 'R0' },
     DESIGN: { allowed: true, allowedActions: ['observe', 'read'], maxRisk: 'R0' },
     BUILD: FORBIDDEN,
     REVIEW: { allowed: true, allowedActions: ['observe', 'read'], maxRisk: 'R0' },
     FREEZE: FORBIDDEN,
-    DISCOVERY: { allowed: true, allowedActions: ['read', 'ask', 'clarify'], maxRisk: 'R0' },
   },
   ANALYST: {
     INTAKE: { allowed: true, allowedActions: ['analyze', 'summarize', 'read', 'ask'], maxRisk: 'R1' },
@@ -34,7 +37,6 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CVFPhase, AuthorityCell>> 
     BUILD: FORBIDDEN,
     REVIEW: { allowed: true, allowedActions: ['analyze', 'read'], maxRisk: 'R1' },
     FREEZE: FORBIDDEN,
-    DISCOVERY: { allowed: true, allowedActions: ['analyze', 'summarize', 'read', 'ask'], maxRisk: 'R1' },
   },
   BUILDER: {
     INTAKE: FORBIDDEN,
@@ -42,7 +44,6 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CVFPhase, AuthorityCell>> 
     BUILD: { allowed: true, allowedActions: ['create', 'modify', 'build', 'implement', 'code', 'write'], maxRisk: 'R2' },
     REVIEW: { allowed: true, allowedActions: ['explain', 'read'], maxRisk: 'R1' },
     FREEZE: FORBIDDEN,
-    DISCOVERY: FORBIDDEN,
   },
   REVIEWER: {
     INTAKE: FORBIDDEN,
@@ -50,7 +51,6 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CVFPhase, AuthorityCell>> 
     BUILD: FORBIDDEN,
     REVIEW: { allowed: true, allowedActions: ['critique', 'test', 'approve', 'reject', 'read'], maxRisk: 'R2' },
     FREEZE: FORBIDDEN,
-    DISCOVERY: FORBIDDEN,
   },
   GOVERNOR: {
     INTAKE: { allowed: true, allowedActions: ['approve', 'reject', 'scope', 'read'], maxRisk: 'R2' },
@@ -58,7 +58,6 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CVFPhase, AuthorityCell>> 
     BUILD: FORBIDDEN,
     REVIEW: { allowed: true, allowedActions: ['approve', 'reject', 'read', 'override'], maxRisk: 'R3' },
     FREEZE: { allowed: true, allowedActions: ['lock', 'enforce', 'freeze', 'read'], maxRisk: 'R3' },
-    DISCOVERY: { allowed: true, allowedActions: ['approve', 'reject', 'scope', 'read'], maxRisk: 'R2' },
   },
   HUMAN: {
     INTAKE: { allowed: true, allowedActions: ['approve', 'reject', 'scope', 'read', 'ask', 'analyze'], maxRisk: 'R3' },
@@ -66,7 +65,6 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CVFPhase, AuthorityCell>> 
     BUILD: { allowed: true, allowedActions: ['create', 'modify', 'build', 'implement', 'code', 'write', 'read', 'deploy', 'release', 'execute'], maxRisk: 'R3' },
     REVIEW: { allowed: true, allowedActions: ['approve', 'reject', 'read', 'critique', 'test', 'override', 'deploy', 'release'], maxRisk: 'R3' },
     FREEZE: { allowed: true, allowedActions: ['lock', 'enforce', 'freeze', 'read'], maxRisk: 'R3' },
-    DISCOVERY: { allowed: true, allowedActions: ['approve', 'reject', 'scope', 'read', 'ask', 'analyze'], maxRisk: 'R3' },
   },
   AI_AGENT: {
     INTAKE: FORBIDDEN,
@@ -74,7 +72,6 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CVFPhase, AuthorityCell>> 
     BUILD: { allowed: true, allowedActions: ['create', 'modify', 'build', 'implement', 'code', 'write'], maxRisk: 'R2' },
     REVIEW: { allowed: true, allowedActions: ['explain', 'read'], maxRisk: 'R1' },
     FREEZE: FORBIDDEN,
-    DISCOVERY: FORBIDDEN,
   },
   OPERATOR: {
     INTAKE: { allowed: true, allowedActions: ['read', 'ask', 'analyze', 'approve'], maxRisk: 'R2' },
@@ -82,7 +79,6 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CVFPhase, AuthorityCell>> 
     BUILD: { allowed: true, allowedActions: ['create', 'modify', 'build', 'implement', 'code', 'write', 'read', 'deploy', 'release', 'execute'], maxRisk: 'R2' },
     REVIEW: { allowed: true, allowedActions: ['read', 'approve', 'critique', 'test', 'deploy', 'release'], maxRisk: 'R2' },
     FREEZE: FORBIDDEN,
-    DISCOVERY: { allowed: true, allowedActions: ['read', 'ask', 'analyze', 'approve'], maxRisk: 'R2' },
   },
 };
 
@@ -112,6 +108,7 @@ export class AuthorityGateGuard implements Guard {
   evaluate(context: GuardRequestContext): GuardResult {
     const timestamp = new Date().toISOString();
     const roleMatrix = AUTHORITY_MATRIX[context.role];
+    const normalizedPhase = normalizePhaseAlias(context.phase);
 
     if (!roleMatrix) {
       return {
@@ -125,7 +122,7 @@ export class AuthorityGateGuard implements Guard {
       };
     }
 
-    const cell = roleMatrix[context.phase];
+    const cell = roleMatrix[normalizedPhase];
     if (!cell) {
       return {
         guardId: this.id,
@@ -141,11 +138,11 @@ export class AuthorityGateGuard implements Guard {
         guardId: this.id,
         decision: 'BLOCK',
         severity: 'ERROR',
-        reason: `Role "${context.role}" is forbidden in phase "${context.phase}".`,
+        reason: `Role "${context.role}" is forbidden in phase "${normalizedPhase}".`,
         agentGuidance: 'This role cannot act in the current phase. Request a phase change or a different role.',
         suggestedAction: 'switch_phase_or_role',
         timestamp,
-        metadata: { role: context.role, phase: context.phase },
+        metadata: { role: context.role, phase: normalizedPhase, requestedPhase: context.phase },
       };
     }
 
@@ -158,11 +155,11 @@ export class AuthorityGateGuard implements Guard {
         guardId: this.id,
         decision: 'BLOCK',
         severity: 'ERROR',
-        reason: `Action "${context.action}" is not authorized for role "${context.role}" in phase "${context.phase}". Allowed actions: [${cell.allowedActions.join(', ')}].`,
+        reason: `Action "${context.action}" is not authorized for role "${context.role}" in phase "${normalizedPhase}". Allowed actions: [${cell.allowedActions.join(', ')}].`,
         agentGuidance: 'Choose an action that is explicitly allowed for this role and phase.',
         suggestedAction: 'choose_authorized_action',
         timestamp,
-        metadata: { role: context.role, phase: context.phase, action: context.action, allowedActions: cell.allowedActions },
+        metadata: { role: context.role, phase: normalizedPhase, requestedPhase: context.phase, action: context.action, allowedActions: cell.allowedActions },
       };
     }
 
@@ -173,11 +170,11 @@ export class AuthorityGateGuard implements Guard {
         guardId: this.id,
         decision: 'BLOCK',
         severity: 'ERROR',
-        reason: `Risk level "${context.riskLevel}" exceeds maximum allowed "${cell.maxRisk}" for role "${context.role}" in phase "${context.phase}".`,
+        reason: `Risk level "${context.riskLevel}" exceeds maximum allowed "${cell.maxRisk}" for role "${context.role}" in phase "${normalizedPhase}".`,
         agentGuidance: 'Lower the risk level or escalate to an authorized governor or human.',
         suggestedAction: 'reduce_risk_or_escalate',
         timestamp,
-        metadata: { role: context.role, phase: context.phase, riskLevel: context.riskLevel, maxRisk: cell.maxRisk },
+        metadata: { role: context.role, phase: normalizedPhase, requestedPhase: context.phase, riskLevel: context.riskLevel, maxRisk: cell.maxRisk },
       };
     }
 
@@ -185,7 +182,7 @@ export class AuthorityGateGuard implements Guard {
       guardId: this.id,
       decision: 'ALLOW',
       severity: 'INFO',
-      reason: `Role "${context.role}" authorized for action "${context.action}" in phase "${context.phase}" at risk "${context.riskLevel}".`,
+      reason: `Role "${context.role}" authorized for action "${context.action}" in phase "${normalizedPhase}" at risk "${context.riskLevel}".`,
       timestamp,
     };
   }

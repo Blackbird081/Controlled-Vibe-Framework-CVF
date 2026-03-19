@@ -122,6 +122,13 @@ Canonical phase type-depth alignment batch executed on `2026-03-20`:
 - user-facing friendly phase labels now normalize legacy aliases at render time instead of teaching them as canonical entries: `COMPLETED`
 - enterprise/compliance auxiliary surfaces are now materially cleaner at the internal type level on the active path
 
+Core guard alias-boundary tightening batch executed on `2026-03-20`:
+
+- `PhaseGateGuard` now normalizes legacy phase aliases before touching its internal role matrix: `COMPLETED`
+- `AuthorityGateGuard` now normalizes legacy phase aliases before touching its internal authority matrix: `COMPLETED`
+- VS Code governance adapter now renders canonical phase guidance even when legacy input alias is received: `COMPLETED`
+- `DISCOVERY` is no longer a first-class key inside active core guard matrices on the shared contract path
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -148,6 +155,7 @@ Baseline receipt:
 - `docs/baselines/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_ENTERPRISE_COMPLIANCE_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_CANONICAL_PHASE_TYPE_ALIGNMENT_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_CORE_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

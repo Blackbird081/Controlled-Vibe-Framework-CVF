@@ -102,6 +102,25 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: Core guard alias-boundary tightening
+- Change reference:
+  - scope: remove `DISCOVERY` as first-class key from active core guard matrices while preserving compatibility input normalization
+  - baseline receipt: `docs/baselines/CVF_CORE_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/phase-gate.guard.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/authority-gate.guard.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/adapters/vscode-governance-adapter.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.test.ts`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npx vitest run src/index.test.ts src/adapters/vscode-governance-adapter.test.ts src/sdk/guard-sdk.test.ts` -> PASS
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run check` -> PASS
+- Skip scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web`: skipped because this batch only tightens shared core guard internals and IDE adapter output
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`: skipped because no code changed in the already-remediated runtime extension
+- Notes/Risks:
+  - legacy `DISCOVERY` input remains accepted, but only through explicit normalization
+  - active shared guard matrices now align better with the roadmap principle that legacy vocabulary must not remain embedded in core runtime logic
+
 ## [2026-03-20] Batch: Canonical phase type-depth alignment on enterprise and auxiliary surfaces
 - Change reference:
   - scope: shared canonical phase helper types + enterprise/reporting canonical storage + UI label normalization

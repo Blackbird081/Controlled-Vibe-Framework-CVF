@@ -384,6 +384,20 @@ describe('v1.1.3 file scope guard', () => {
     expect(result.decision).toBe('ALLOW')
   })
 
+  it('blocks Builder when target file is outside assigned fileScope', () => {
+    const result = guard.evaluate({
+      requestId: 'fs-2b',
+      phase: 'BUILD',
+      riskLevel: 'R1',
+      role: 'BUILDER',
+      action: 'modify file',
+      targetFiles: ['src/components/button.ts', 'tests/button.test.ts'],
+      fileScope: ['src/'],
+    })
+    expect(result.decision).toBe('BLOCK')
+    expect(result.reason).toContain('fileScope')
+  })
+
   it('blocks Reviewer from modifying any files', () => {
     const result = guard.evaluate({
       requestId: 'fs-3',
@@ -512,6 +526,18 @@ describe('v1.1.3 ai commit guard', () => {
       action: 'observe status',
     })
     expect(result.decision).toBe('ALLOW')
+  })
+
+  it('does not misclassify modify README action as read-only', () => {
+    const result = guard.evaluate({
+      requestId: 'ac-6',
+      phase: 'BUILD',
+      riskLevel: 'R1',
+      role: 'BUILDER',
+      action: 'modify README.md',
+    })
+    expect(result.decision).toBe('BLOCK')
+    expect(result.reason).toContain('Missing ai_commit')
   })
 })
 

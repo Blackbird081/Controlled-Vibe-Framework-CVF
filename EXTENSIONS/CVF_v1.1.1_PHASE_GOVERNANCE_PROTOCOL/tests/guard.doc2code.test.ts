@@ -21,20 +21,33 @@ import { GuardRuntimeEngine } from '../governance/guard_runtime/guard.runtime.en
 import { PhaseGateGuard } from '../governance/guard_runtime/guards/phase.gate.guard.js';
 import { RiskGateGuard } from '../governance/guard_runtime/guards/risk.gate.guard.js';
 import { AuthorityGateGuard } from '../governance/guard_runtime/guards/authority.gate.guard.js';
+import { AiCommitGuard } from '../governance/guard_runtime/guards/ai.commit.guard.js';
 import { MutationBudgetGuard } from '../governance/guard_runtime/guards/mutation.budget.guard.js';
+import { FileScopeGuard } from '../governance/guard_runtime/guards/file.scope.guard.js';
 import { ScopeGuard } from '../governance/guard_runtime/guards/scope.guard.js';
 import { AuditTrailGuard } from '../governance/guard_runtime/guards/audit.trail.guard.js';
 import type { GuardRequestContext } from '../governance/guard_runtime/guard.runtime.types.js';
 
 function makeContext(overrides: Partial<GuardRequestContext> = {}): GuardRequestContext {
-  return {
+  const metadata = {
+    ai_commit: {
+      commitId: 'doc2code-commit-001',
+      agentId: 'doc2code-human',
+      timestamp: Date.now(),
+    },
+    ...(overrides.metadata ?? {}),
+  };
+
+  const base: GuardRequestContext = {
     requestId: 'req-a2-001',
     phase: 'BUILD',
     riskLevel: 'R1',
     role: 'HUMAN',
     action: 'write_code',
-    ...overrides,
+    metadata,
   };
+
+  return { ...base, ...overrides, metadata };
 }
 
 // --- AdrGuard ---
@@ -515,9 +528,9 @@ describe('GuardRegistryGuard', () => {
   });
 });
 
-// --- Full Integration: All 13 Guards ---
+// --- Full Integration: All 15 Guards ---
 
-describe('Phase A.2 Full Guard Pipeline (13 guards)', () => {
+describe('Phase A.2 Full Guard Pipeline (15 guards)', () => {
   let engine: GuardRuntimeEngine;
 
   beforeEach(() => {
@@ -527,7 +540,9 @@ describe('Phase A.2 Full Guard Pipeline (13 guards)', () => {
     engine.registerGuard(new PhaseGateGuard());
     engine.registerGuard(new RiskGateGuard());
     engine.registerGuard(new AuthorityGateGuard());
+    engine.registerGuard(new AiCommitGuard());
     engine.registerGuard(new MutationBudgetGuard());
+    engine.registerGuard(new FileScopeGuard());
     engine.registerGuard(new ScopeGuard());
     engine.registerGuard(new AuditTrailGuard());
 
@@ -541,8 +556,8 @@ describe('Phase A.2 Full Guard Pipeline (13 guards)', () => {
     engine.registerGuard(new GuardRegistryGuard());
   });
 
-  it('has all 13 guards registered', () => {
-    expect(engine.getGuardCount()).toBe(13);
+  it('has all 15 guards registered', () => {
+    expect(engine.getGuardCount()).toBe(15);
   });
 
   it('allows simple BUILD action with all guards', () => {
@@ -556,7 +571,7 @@ describe('Phase A.2 Full Guard Pipeline (13 guards)', () => {
       targetFiles: ['src/components/Button.tsx'],
     }));
     expect(result.finalDecision).toBe('ALLOW');
-    expect(result.results.length).toBe(13);
+    expect(result.results.length).toBe(15);
   });
 
   it('blocks architectural action without ADR', () => {

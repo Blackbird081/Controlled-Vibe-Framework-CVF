@@ -1,7 +1,7 @@
 /**
  * Guard Runtime Tests — Track IV Phase A.1
  *
- * Comprehensive tests for GuardRuntimeEngine and all 6 core guards.
+ * Comprehensive tests for GuardRuntimeEngine and all 8 core guards.
  * Covers: registration, pipeline execution, short-circuit, audit log,
  * phase gate, risk gate, authority gate, mutation budget, scope, audit trail,
  * and full integration pipeline.
@@ -12,7 +12,9 @@ import { GuardRuntimeEngine } from '../governance/guard_runtime/guard.runtime.en
 import { PhaseGateGuard, PHASE_ROLE_MATRIX, PHASE_ORDER } from '../governance/guard_runtime/guards/phase.gate.guard.js';
 import { RiskGateGuard, RISK_NUMERIC } from '../governance/guard_runtime/guards/risk.gate.guard.js';
 import { AuthorityGateGuard, AUTHORITY_MATRIX } from '../governance/guard_runtime/guards/authority.gate.guard.js';
+import { AiCommitGuard } from '../governance/guard_runtime/guards/ai.commit.guard.js';
 import { MutationBudgetGuard, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD } from '../governance/guard_runtime/guards/mutation.budget.guard.js';
+import { FileScopeGuard } from '../governance/guard_runtime/guards/file.scope.guard.js';
 import { ScopeGuard, PROTECTED_PATHS, CVF_ROOT_INDICATORS } from '../governance/guard_runtime/guards/scope.guard.js';
 import { AuditTrailGuard } from '../governance/guard_runtime/guards/audit.trail.guard.js';
 import type { GuardRequestContext, Guard, GuardResult } from '../governance/guard_runtime/guard.runtime.types.js';
@@ -20,15 +22,26 @@ import type { GuardRequestContext, Guard, GuardResult } from '../governance/guar
 // --- Helpers ---
 
 function makeContext(overrides: Partial<GuardRequestContext> = {}): GuardRequestContext {
-  return {
+  const metadata = {
+    ai_commit: {
+      commitId: 'runtime-commit-001',
+      agentId: 'agent-claude',
+      timestamp: Date.now(),
+    },
+    ...(overrides.metadata ?? {}),
+  };
+
+  const base: GuardRequestContext = {
     requestId: 'req-001',
     phase: 'BUILD',
     riskLevel: 'R1',
     role: 'AI_AGENT',
     agentId: 'agent-claude',
     action: 'write_code',
-    ...overrides,
+    metadata,
   };
+
+  return { ...base, ...overrides, metadata };
 }
 
 // --- GuardRuntimeEngine ---
@@ -558,7 +571,9 @@ describe('Guard Runtime Integration', () => {
     engine.registerGuard(new PhaseGateGuard());
     engine.registerGuard(new RiskGateGuard());
     engine.registerGuard(new AuthorityGateGuard());
+    engine.registerGuard(new AiCommitGuard());
     engine.registerGuard(new MutationBudgetGuard());
+    engine.registerGuard(new FileScopeGuard());
     engine.registerGuard(new ScopeGuard());
     engine.registerGuard(new AuditTrailGuard());
   });
@@ -574,7 +589,7 @@ describe('Guard Runtime Integration', () => {
       targetFiles: ['src/app.ts'],
     }));
     expect(result.finalDecision).toBe('ALLOW');
-    expect(result.results).toHaveLength(6);
+    expect(result.results).toHaveLength(8);
   });
 
   it('blocks AI_AGENT attempting DESIGN phase', () => {
@@ -630,7 +645,7 @@ describe('Guard Runtime Integration', () => {
       targetFiles: ['governance/guard.md'],
     }));
     expect(result.finalDecision).toBe('BLOCK');
-    expect(result.blockedBy).toBe('scope_guard');
+    expect(result.blockedBy).toBe('file_scope');
   });
 
   it('allows full HUMAN workflow', () => {
@@ -675,13 +690,15 @@ describe('Guard Runtime Integration', () => {
     expect(log[0]!.pipelineResult.results.length).toBeGreaterThan(0);
   });
 
-  it('has all 6 guards registered', () => {
-    expect(engine.getGuardCount()).toBe(6);
+  it('has all 8 guards registered', () => {
+    expect(engine.getGuardCount()).toBe(8);
     const guards = engine.getRegisteredGuards();
     const ids = guards.map((g) => g.id).sort();
     expect(ids).toEqual([
+      'ai_commit',
       'audit_trail',
       'authority_gate',
+      'file_scope',
       'mutation_budget',
       'phase_gate',
       'risk_gate',

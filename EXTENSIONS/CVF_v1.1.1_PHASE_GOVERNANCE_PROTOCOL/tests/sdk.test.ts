@@ -6,12 +6,17 @@
 
 import { describe, it, expect } from 'vitest';
 import { CvfSdk } from '../governance/guard_runtime/sdk/cvf.sdk.js';
-import type { GuardRequestContext } from '../governance/guard_runtime/guard.runtime.types.js';
 import {
   generateCIPipeline,
   generateGitHubActionsYaml,
   generateProjectTemplate,
 } from '../governance/guard_runtime/sdk/ci.config.js';
+
+const VALID_AI_COMMIT = {
+  commitId: 'sdk-commit-001',
+  agentId: 'sdk-agent',
+  timestamp: Date.now(),
+};
 
 // --- CvfSdk ---
 
@@ -19,13 +24,13 @@ describe('CvfSdk', () => {
   describe('factory', () => {
     it('creates with default full config', () => {
       const cvf = CvfSdk.create();
-      expect(cvf.getGuardCount()).toBe(13);
+      expect(cvf.getGuardCount()).toBe(15);
       expect(cvf.getVersion()).toBe('4.0.0-runtime');
     });
 
-    it('creates with core preset (6 guards)', () => {
+    it('creates with core preset (8 guards)', () => {
       const cvf = CvfSdk.create({ guards: 'core' });
-      expect(cvf.getGuardCount()).toBe(6);
+      expect(cvf.getGuardCount()).toBe(8);
     });
 
     it('creates with minimal preset (0 guards)', () => {
@@ -73,6 +78,7 @@ describe('CvfSdk', () => {
       const result = cvf.evaluate({
         requestId: 'sdk-1', phase: 'BUILD', riskLevel: 'R0',
         role: 'HUMAN', action: 'write_code',
+        metadata: { ai_commit: VALID_AI_COMMIT },
       });
       expect(result.finalDecision).toBe('ALLOW');
     });
@@ -101,7 +107,7 @@ describe('CvfSdk', () => {
       const cvf = CvfSdk.create();
       const resp = cvf.processEntry('CLI', {
         requestId: 'sdk-cli-1', action: 'write_code', phase: 'BUILD',
-        risk: 'R0', role: 'HUMAN',
+        risk: 'R0', role: 'HUMAN', ai_commit: VALID_AI_COMMIT,
       });
       expect(resp.allowed).toBe(true);
     });
@@ -110,7 +116,7 @@ describe('CvfSdk', () => {
       const cvf = CvfSdk.create();
       const resp = cvf.processEntry('MCP', {
         id: 'sdk-mcp-1', tool_name: 'write_file',
-        arguments: { agentId: 'claude' },
+        arguments: { agentId: 'claude', ai_commit: VALID_AI_COMMIT },
       });
       expect(resp.entryPoint).toBe('MCP');
     });

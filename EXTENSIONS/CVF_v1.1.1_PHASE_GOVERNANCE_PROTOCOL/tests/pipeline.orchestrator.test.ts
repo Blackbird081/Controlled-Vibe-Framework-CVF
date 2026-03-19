@@ -83,14 +83,14 @@ describe('PipelineOrchestrator', () => {
   });
 
   describe('phase transitions (HUMAN)', () => {
-    it('advances CREATED → DISCOVERY', () => {
+    it('advances CREATED → INTAKE', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
       const r = orchestrator.advancePhase('p1');
       expect(r.success).toBe(true);
-      expect(orchestrator.getPipeline('p1')!.status).toBe('DISCOVERY');
+      expect(orchestrator.getPipeline('p1')!.status).toBe('INTAKE');
     });
 
-    it('advances DISCOVERY → DESIGN', () => {
+    it('advances INTAKE → DESIGN', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
       orchestrator.advancePhase('p1');
       const r = orchestrator.advancePhase('p1');
@@ -115,15 +115,15 @@ describe('PipelineOrchestrator', () => {
       expect(orchestrator.getPipeline('p1')!.status).toBe('REVIEW');
     });
 
-    it('advances REVIEW → AUDIT', () => {
+    it('advances REVIEW → FREEZE', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
       for (let i = 0; i < 4; i++) orchestrator.advancePhase('p1');
       const r = orchestrator.advancePhase('p1');
       expect(r.success).toBe(true);
-      expect(orchestrator.getPipeline('p1')!.status).toBe('AUDIT');
+      expect(orchestrator.getPipeline('p1')!.status).toBe('FREEZE');
     });
 
-    it('cannot advance past AUDIT', () => {
+    it('cannot advance past FREEZE', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
       for (let i = 0; i < 5; i++) orchestrator.advancePhase('p1');
       const r = orchestrator.advancePhase('p1');
@@ -133,34 +133,36 @@ describe('PipelineOrchestrator', () => {
   });
 
   describe('gate enforcement', () => {
-    it('blocks AI_AGENT from DISCOVERY phase', () => {
+    it('blocks AI_AGENT from INTAKE phase', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'AI_AGENT', agentId: 'claude' });
       const r = orchestrator.advancePhase('p1');
-      // DISCOVERY requires HUMAN or OPERATOR, AI_AGENT should be blocked
+      // INTAKE requires HUMAN, GOVERNOR, OBSERVER, ANALYST, or OPERATOR
       expect(r.success).toBe(false);
       expect(r.guardResult?.finalDecision).toBe('BLOCK');
     });
 
     it('blocks AI_AGENT from DESIGN phase', () => {
-      // Use OPERATOR to get through DISCOVERY, then switch to AI_AGENT pipeline
+      // Use OPERATOR to get through INTAKE, then switch to AI_AGENT pipeline
       const opOrch = new PipelineOrchestrator(engine);
       opOrch.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'OPERATOR' });
-      opOrch.advancePhase('p1'); // DISCOVERY ok for OPERATOR
+      opOrch.advancePhase('p1'); // INTAKE ok for OPERATOR
 
-      // Create AI_AGENT pipeline already at DISCOVERY
+      // Create AI_AGENT pipeline still starting from CREATED
       orchestrator.createPipeline({ id: 'p-ai', intent: 'AI task', riskLevel: 'R0', role: 'AI_AGENT', agentId: 'claude' });
-      // Cannot even get to DISCOVERY
+      // Cannot even get to INTAKE
       const r = orchestrator.advancePhase('p-ai');
       expect(r.success).toBe(false);
     });
 
-    it('allows OPERATOR through all phases', () => {
+    it('blocks OPERATOR at FREEZE', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'OPERATOR' });
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         const r = orchestrator.advancePhase('p1');
         expect(r.success).toBe(true);
       }
-      expect(orchestrator.getPipeline('p1')!.status).toBe('AUDIT');
+      const freezeAttempt = orchestrator.advancePhase('p1');
+      expect(freezeAttempt.success).toBe(false);
+      expect(freezeAttempt.guardResult?.finalDecision).toBe('BLOCK');
     });
 
     it('stores gate results', () => {
@@ -168,7 +170,7 @@ describe('PipelineOrchestrator', () => {
       orchestrator.advancePhase('p1');
       const p = orchestrator.getPipeline('p1')!;
       expect(p.gateResults.size).toBe(1);
-      expect(p.gateResults.has('DISCOVERY')).toBe(true);
+      expect(p.gateResults.has('INTAKE')).toBe(true);
     });
 
     it('returns guard result on block', () => {
@@ -180,16 +182,16 @@ describe('PipelineOrchestrator', () => {
   });
 
   describe('complete pipeline', () => {
-    it('completes from AUDIT', () => {
+    it('completes from FREEZE', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
       for (let i = 0; i < 5; i++) orchestrator.advancePhase('p1');
       expect(orchestrator.completePipeline('p1')).toBe(true);
       expect(orchestrator.getPipeline('p1')!.status).toBe('COMPLETED');
     });
 
-    it('cannot complete from non-AUDIT', () => {
+    it('cannot complete from non-FREEZE', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
-      orchestrator.advancePhase('p1'); // DISCOVERY
+      orchestrator.advancePhase('p1'); // INTAKE
       expect(orchestrator.completePipeline('p1')).toBe(false);
     });
 
@@ -211,8 +213,8 @@ describe('PipelineOrchestrator', () => {
     it('rolls back to specific phase', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
       for (let i = 0; i < 3; i++) orchestrator.advancePhase('p1'); // BUILD
-      expect(orchestrator.rollback('p1', 'DISCOVERY')).toBe(true);
-      expect(orchestrator.getPipeline('p1')!.status).toBe('DISCOVERY');
+      expect(orchestrator.rollback('p1', 'INTAKE')).toBe(true);
+      expect(orchestrator.getPipeline('p1')!.status).toBe('INTAKE');
     });
 
     it('full rollback sets ROLLED_BACK', () => {
@@ -244,24 +246,24 @@ describe('PipelineOrchestrator', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
       orchestrator.advancePhase('p1');
       orchestrator.advancePhase('p1');
-      orchestrator.rollback('p1', 'DISCOVERY');
+      orchestrator.rollback('p1', 'INTAKE');
       const p = orchestrator.getPipeline('p1')!;
       const last = p.phaseHistory[p.phaseHistory.length - 1]!;
-      expect(last.phase).toBe('DISCOVERY');
+      expect(last.phase).toBe('INTAKE');
     });
   });
 
   describe('pause / resume', () => {
     it('pauses a running pipeline', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
-      orchestrator.advancePhase('p1'); // DISCOVERY
+      orchestrator.advancePhase('p1'); // INTAKE
       expect(orchestrator.pause('p1')).toBe(true);
       expect(orchestrator.getPipeline('p1')!.status).toBe('PAUSED');
     });
 
     it('resumes paused pipeline to previous phase', () => {
       orchestrator.createPipeline({ id: 'p1', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
-      orchestrator.advancePhase('p1'); // DISCOVERY
+      orchestrator.advancePhase('p1'); // INTAKE
       orchestrator.advancePhase('p1'); // DESIGN
       orchestrator.pause('p1');
       expect(orchestrator.resume('p1')).toBe(true);
@@ -391,7 +393,7 @@ describe('PipelineOrchestrator', () => {
       orchestrator.completePipeline('p1');
       const p = orchestrator.getPipeline('p1')!;
       const phases = p.phaseHistory.map((h) => h.phase);
-      expect(phases).toEqual(['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW', 'AUDIT', 'COMPLETED']);
+      expect(phases).toEqual(['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE', 'COMPLETED']);
     });
 
     it('records entry timestamps', () => {
@@ -411,8 +413,8 @@ describe('PipelineOrchestrator', () => {
   });
 
   describe('PHASE_SEQUENCE export', () => {
-    it('has correct 4-phase sequence', () => {
-      expect(PHASE_SEQUENCE).toEqual(['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW']);
+    it('has correct 5-phase sequence', () => {
+      expect(PHASE_SEQUENCE).toEqual(['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE']);
     });
   });
 
@@ -427,7 +429,7 @@ describe('PipelineOrchestrator', () => {
   // --- E2E Integration ---
 
   describe('E2E: full HUMAN pipeline lifecycle', () => {
-    it('completes full Discovery → Complete lifecycle', () => {
+    it('completes full INTAKE → FREEZE → Complete lifecycle', () => {
       const events: PipelineEvent[] = [];
       orchestrator.addEventListener((e) => events.push(e));
 
@@ -438,13 +440,13 @@ describe('PipelineOrchestrator', () => {
         role: 'HUMAN',
       });
 
-      // CREATED → DISCOVERY → DESIGN → BUILD → REVIEW → AUDIT
+      // CREATED → INTAKE → DESIGN → BUILD → REVIEW → FREEZE
       for (let i = 0; i < 5; i++) {
         const r = orchestrator.advancePhase('e2e-1');
         expect(r.success).toBe(true);
       }
 
-      // AUDIT → COMPLETED
+      // FREEZE → COMPLETED
       expect(orchestrator.completePipeline('e2e-1')).toBe(true);
 
       const p = orchestrator.getPipeline('e2e-1')!;
@@ -480,16 +482,17 @@ describe('PipelineOrchestrator', () => {
       expect(orchestrator.rollback('e2e-2', 'DESIGN')).toBe(true);
       expect(orchestrator.getPipeline('e2e-2')!.status).toBe('DESIGN');
 
-      // Advance again: DESIGN → BUILD → REVIEW → AUDIT
-      for (let i = 0; i < 3; i++) {
+      // Advance again: DESIGN → BUILD → REVIEW
+      for (let i = 0; i < 2; i++) {
         const r = orchestrator.advancePhase('e2e-2');
         expect(r.success).toBe(true);
       }
-      expect(orchestrator.getPipeline('e2e-2')!.status).toBe('AUDIT');
+      expect(orchestrator.getPipeline('e2e-2')!.status).toBe('REVIEW');
 
-      // Complete
-      expect(orchestrator.completePipeline('e2e-2')).toBe(true);
-      expect(orchestrator.getPipeline('e2e-2')!.status).toBe('COMPLETED');
+      // OPERATOR cannot pass FREEZE
+      const freezeAttempt = orchestrator.advancePhase('e2e-2');
+      expect(freezeAttempt.success).toBe(false);
+      expect(orchestrator.getPipeline('e2e-2')!.status).toBe('REVIEW');
     });
   });
 });

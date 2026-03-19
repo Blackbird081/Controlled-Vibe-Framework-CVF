@@ -1,10 +1,13 @@
 # Archive Index
 
-> Last updated: 2026-03-11 22:55
-> Total archived files: 6
+> Last updated: 2026-03-19
+> Total archived files: 9
 
 | File | Original Date | Archived On | Size |
 |---|---|---|---|
+| `CVF_ENTERPRISE_8.6_SPEC_2026-03-12.md` | 2026-03-12 | 2026-03-19 | — |
+| `CVF_EXECUTION_UPGRADE_ROADMAP_2026-03-11.md` | 2026-03-11 | 2026-03-19 | — |
+| `CVF_ROADMAP_2026-03-12.md` | 2026-03-12 | 2026-03-19 | — |
 | `CVF_DOCUMENT_MIGRATION_PLAN_2026-03-06.md` | 2026-03-06 | 2026-03-11 | 8.8 KB |
 | `CVF_INTEGRATION_ROADMAP_2026-02-24.md` | 2026-02-24 | 2026-03-11 | 10.3 KB |
 | `CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md` | 2026-02-25 | 2026-03-11 | 11.0 KB |

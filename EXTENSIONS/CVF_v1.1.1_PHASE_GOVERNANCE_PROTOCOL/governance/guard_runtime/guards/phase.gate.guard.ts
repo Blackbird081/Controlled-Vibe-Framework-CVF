@@ -1,14 +1,14 @@
 /**
- * Phase Gate Guard — Track IV Phase A.1
+ * Phase Gate Guard — v1.1.3 Governance Runtime Hardening
  *
- * Enforces CVF 4-Phase Process boundaries.
+ * Enforces CVF 5-Phase Process boundaries (matching CVF_PHASE_AUTHORITY_MATRIX.md).
  * Blocks actions that attempt to skip phases or execute in wrong phase.
  *
- * Rules:
- *   - AI agents can only execute in BUILD phase
- *   - DISCOVERY and DESIGN require HUMAN role
- *   - REVIEW requires HUMAN or REVIEWER role
- *   - Phase must be explicitly set (no implicit default)
+ * v1.1.3 changes:
+ *   - Expanded from 4 to 5 phases: INTAKE, DESIGN, BUILD, REVIEW, FREEZE
+ *   - Expanded from 4 to 5 roles: OBSERVER, ANALYST, BUILDER, REVIEWER, GOVERNOR
+ *   - FREEZE phase only allows GOVERNOR role
+ *   - Added PHASE_ORDER with all 5 phases
  */
 
 import {
@@ -20,18 +20,21 @@ import {
 } from '../guard.runtime.types.js';
 
 const PHASE_ROLE_MATRIX: Record<CVFPhase, CVFRole[]> = {
-  DISCOVERY: ['HUMAN', 'OPERATOR'],
-  DESIGN: ['HUMAN', 'OPERATOR'],
-  BUILD: ['HUMAN', 'AI_AGENT', 'OPERATOR'],
-  REVIEW: ['HUMAN', 'REVIEWER', 'OPERATOR'],
+  INTAKE:  ['OBSERVER', 'ANALYST', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
+  DESIGN:  ['OBSERVER', 'ANALYST', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
+  BUILD:   ['BUILDER', 'HUMAN', 'AI_AGENT', 'OPERATOR'],
+  REVIEW:  ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
+  FREEZE:  ['GOVERNOR', 'HUMAN'],
+  // Legacy alias
+  DISCOVERY: ['OBSERVER', 'ANALYST', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
 };
 
-const PHASE_ORDER: CVFPhase[] = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
+const PHASE_ORDER: CVFPhase[] = ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
 
 export class PhaseGateGuard implements Guard {
   id = 'phase_gate';
   name = 'Phase Gate Guard';
-  description = 'Enforces CVF 4-Phase Process boundaries and role-phase authorization.';
+  description = 'Enforces CVF 5-Phase Process boundaries and role-phase authorization.';
   priority = 10;
   enabled = true;
 

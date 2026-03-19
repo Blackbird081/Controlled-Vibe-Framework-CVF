@@ -1,18 +1,30 @@
 /**
- * Guard Runtime Types — Track IV Phase A.1
+ * Guard Runtime Types — v1.1.3 Governance Runtime Hardening
  *
  * Defines the core type system for the CVF Guard Runtime Engine.
  * Every governance guard must implement the Guard interface.
  * The engine processes guards in a deterministic pipeline order.
+ *
+ * v1.1.3 changes:
+ *   - CVFPhase expanded to 5 phases matching CVF_PHASE_AUTHORITY_MATRIX.md
+ *   - CVFRole expanded to 5 roles matching CVF_PHASE_AUTHORITY_MATRIX.md
+ *   - Added fileScope to GuardRequestContext for file-level enforcement
+ *   - Added MANDATORY_GUARD_IDS for non-bypassable governance guards
  */
 
 // --- Phase & Risk Types ---
 
-export type CVFPhase = 'DISCOVERY' | 'DESIGN' | 'BUILD' | 'REVIEW';
+/** v1.1.3 canonical phases + legacy aliases for backward compat */
+export type CVFPhase =
+  | 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE'
+  | 'DISCOVERY';  // legacy alias for INTAKE
 
 export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
 
-export type CVFRole = 'HUMAN' | 'AI_AGENT' | 'REVIEWER' | 'OPERATOR';
+/** v1.1.3 canonical roles + legacy aliases for backward compat */
+export type CVFRole =
+  | 'OBSERVER' | 'ANALYST' | 'BUILDER' | 'REVIEWER' | 'GOVERNOR'
+  | 'HUMAN' | 'AI_AGENT' | 'OPERATOR';  // legacy aliases
 
 // --- Guard Decision ---
 
@@ -39,6 +51,8 @@ export interface GuardRequestContext {
   agentId?: string;
   action: string;
   targetFiles?: string[];
+  /** File paths the agent is allowed to modify (file scope restriction) */
+  fileScope?: string[];
   mutationCount?: number;
   mutationBudget?: number;
   scope?: string;
@@ -95,3 +109,17 @@ export interface GuardAuditEntry {
   context: GuardRequestContext;
   pipelineResult: GuardPipelineResult;
 }
+
+// --- Mandatory Guards (v1.1.3) ---
+
+/**
+ * Guards that cannot be unregistered or disabled.
+ * These form the non-bypassable governance core.
+ */
+export const MANDATORY_GUARD_IDS = [
+  'authority_gate',
+  'phase_gate',
+  'ai_commit',
+] as const;
+
+export type MandatoryGuardId = (typeof MANDATORY_GUARD_IDS)[number];

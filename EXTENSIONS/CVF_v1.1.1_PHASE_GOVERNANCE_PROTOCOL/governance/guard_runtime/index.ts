@@ -26,7 +26,7 @@ export { GuardRuntimeEngine } from './guard.runtime.engine.js';
 // Core Guards (Phase A.1)
 export { PhaseGateGuard, PHASE_ROLE_MATRIX, PHASE_ORDER } from './guards/phase.gate.guard.js';
 export { RiskGateGuard, RISK_NUMERIC } from './guards/risk.gate.guard.js';
-export { AuthorityGateGuard, RESTRICTED_ACTIONS } from './guards/authority.gate.guard.js';
+export { AuthorityGateGuard, AUTHORITY_MATRIX } from './guards/authority.gate.guard.js';
 export { MutationBudgetGuard, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD } from './guards/mutation.budget.guard.js';
 export { ScopeGuard, PROTECTED_PATHS, CVF_ROOT_INDICATORS } from './guards/scope.guard.js';
 export { AuditTrailGuard } from './guards/audit.trail.guard.js';

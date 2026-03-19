@@ -67,6 +67,9 @@ const PHASE_TO_STATUS: Record<CVFPhase, PipelineStatus> = {
   DESIGN: 'DESIGN',
   BUILD: 'BUILD',
   REVIEW: 'REVIEW',
+  // v1.1.3: backward compat — INTAKE maps to DISCOVERY status, FREEZE to REVIEW
+  INTAKE: 'DISCOVERY',
+  FREEZE: 'REVIEW',
 };
 
 // --- Orchestrator ---

@@ -102,6 +102,24 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: Residual user-facing wording cleanup
+- Change reference:
+  - scope: remove remaining active `4-phase` wording from user-facing docs and point readers at the latest reassessment
+  - baseline receipt: `docs/baselines/CVF_RESIDUAL_USER_FACING_WORDING_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `README.md`
+  - `docs/reference/CVF_IN_VSCODE_GUIDE.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - application/runtime tests: skipped because this batch only updates user-facing documentation wording
+  - release-manifest consistency check: skipped because no release manifest file changed in this batch
+- Notes/Risks:
+  - historical `4-phase` references remain intentionally where they describe legacy versions or archived concepts
+  - active user guidance now more cleanly matches the canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` posture
+
 ## [2026-03-20] Batch: Runtime guard alias-boundary tightening in v1.1.1
 - Change reference:
   - scope: canonical-only runtime guard matrices with legacy alias normalization kept at compatibility boundaries

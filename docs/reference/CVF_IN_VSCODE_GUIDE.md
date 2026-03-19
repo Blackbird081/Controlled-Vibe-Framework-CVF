@@ -256,7 +256,7 @@ Guardrails:
 
 ```text
 CVF MODE: Governance
-Phase: A (Discovery)
+Phase: A (Intake)
 Task:
 - [Describe the goal]
 Constraints:
@@ -643,7 +643,7 @@ ALL changes are LOCKED.
 
 | Nhu cau | Version goi y | Ly do |
 |---|---|---|
-| Lam viec trong VS Code, khong can UI | v1.1 + governance tools | 4-phase ro rang + risk model |
+| Lam viec trong VS Code, khong can UI | v1.1 + governance tools | 5-phase controlled loop + risk model |
 | Can templates va spec export | v1.5.2 (skills) + v1.1 core | Day du spec, giam moi phai tu viet |
 | Can UI + multi-agent | v1.6 Agent Platform | UI day du, tools va workflow |
 
@@ -693,9 +693,9 @@ Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../
 
 ---
 
-## 2) Quy trinh core (4 phase)
+## 2) Quy trinh core (5 phase)
 
-### Phase A: Kham pha
+### Phase A: Intake
 - Dien giai lai yeu cau
 - Liet ke gia dinh
 - Dinh nghia scope
@@ -715,19 +715,24 @@ Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../
 - Neu sai lech, neu ro
 - Xin acceptance
 
+### Phase E: Freeze
+- Chot ket qua da duoc chap nhan
+- Khoa scope va bang chung
+- Dong task voi freeze receipt ro rang
+
 ---
 
 ## 3) Cau hinh agent (Prompt mau)
 
 ```text
 Ban dang van hanh theo CVF (Controlled Vibe Framework).
-Mode: FULL (4-phase).
+Mode: FULL (5-phase controlled loop).
 Rules:
-- Follow Phase A -> B -> C -> D theo thu tu.
+- Follow Phase A -> B -> C -> D -> E theo thu tu.
 - Dung lai de xin xac nhan truoc khi tu A->B va B->C.
 - Khong viet code o Phase A/B.
 - Neu thieu input bat buoc, dung lai va hoi.
-- Phase C tao deliverables, Phase D tu review.
+- Phase C tao deliverables, Phase D tu review, Phase E chot va khoa ket qua.
 
 Bat dau Phase A ngay.
 ```
@@ -835,7 +840,7 @@ Guardrails:
 |---|---|---|
 | Simple | Viec nho, nhanh | Governance toi thieu |
 | Governance | Phan lon cong viec | Stop conditions + guardrails |
-| Full | Viec phuc tap/rui ro | 4-phase + checkpoints |
+| Full | Viec phuc tap/rui ro | 5-phase + checkpoints |
 
 ---
 
@@ -843,7 +848,7 @@ Guardrails:
 
 ### v1.0 / v1.1 (Core + Execution)
 - Dung docs: [v1.0/](../v1.0/) va [v1.1/](../v1.1/)
-- Luon chay 4-phase
+- Luon chay 5-phase controlled loop
 - Dung checklist trong v1.0/governance hoac v1.1/execution
 
 ### v1.5.2 (Skill Library)
@@ -859,7 +864,7 @@ Guardrails:
 
 ```text
 CVF MODE: Governance
-Phase: A (Discovery)
+Phase: A (Intake)
 Task:
 - [Mo ta muc tieu]
 Constraints:

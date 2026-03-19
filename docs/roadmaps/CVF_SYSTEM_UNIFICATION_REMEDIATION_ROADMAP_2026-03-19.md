@@ -136,6 +136,12 @@ Runtime guard alias-boundary tightening batch executed on `2026-03-20`:
 - multi-agent runtime now normalizes legacy phase alias input before assignment-phase authorization: `COMPLETED`
 - `DISCOVERY` is no longer a first-class key inside active `v1.1.1` runtime guard matrices
 
+Residual user-facing wording cleanup batch executed on `2026-03-20`:
+
+- `README.md` now points readers to the latest reassessment instead of the older partial-integration readout: `COMPLETED`
+- `CVF_IN_VSCODE_GUIDE.md` no longer teaches active VS Code usage as a `4-phase` model: `COMPLETED`
+- legacy `4-phase` language is now kept to historical-reference contexts rather than active user guidance
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -164,6 +170,7 @@ Baseline receipt:
 - `docs/baselines/CVF_CANONICAL_PHASE_TYPE_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_CORE_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_RUNTIME_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_RESIDUAL_USER_FACING_WORDING_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

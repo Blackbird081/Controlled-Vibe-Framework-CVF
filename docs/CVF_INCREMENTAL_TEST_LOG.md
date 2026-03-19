@@ -102,6 +102,21 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: System unification roadmap status refresh
+- Change reference:
+  - scope: refresh current roadmap status so completed, in-progress, and not-started items are explicit at the top of the active roadmap
+  - baseline receipt: `docs/baselines/CVF_SYSTEM_UNIFICATION_ROADMAP_STATUS_REFRESH_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/baselines/CVF_SYSTEM_UNIFICATION_ROADMAP_STATUS_REFRESH_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - runtime and Web test suites: skipped because this batch only updates roadmap/readout artifacts and does not change executable code
+  - release-manifest consistency check: skipped because no release manifest or readiness files changed in this batch
+
 ## [2026-03-20] Batch: Foundational concept labeling cleanup
 - Change reference:
   - scope: distinguish historical governance doctrine from active canonical loop guidance in concept and version-picker docs

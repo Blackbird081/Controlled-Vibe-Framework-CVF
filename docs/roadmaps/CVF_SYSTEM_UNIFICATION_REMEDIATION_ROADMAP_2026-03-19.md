@@ -31,6 +31,36 @@ Target outcome at the end of this roadmap:
 
 ## 1A. Execution Status Update
 
+Current snapshot as of `2026-03-20`:
+
+### Completed
+
+- Workstream A — canonical governance model unification: `COMPLETED`
+- Workstream B — governance execution ownership on the active reference path: `COMPLETED`
+- Workstream C — canonical controlled execution loop on the active reference path: `COMPLETED`
+- Workstream D — cross-extension workflow realization on the active reference path: `COMPLETED`
+- Workstream E — Web UI canonical phase and guard alignment on the active reference path: `COMPLETED`
+- Workstream F — documentation, readiness, and positioning reconciliation: `COMPLETED`
+- coder-facing governed reference execution path: `COMPLETED`
+- independent reassessment and closure evidence chain for the active reference path: `COMPLETED`
+
+### In Progress
+
+- non-coder end-to-end governed demo path as one reusable packaged proof with the same evidence quality as the coder-facing reference path: `IN PROGRESS`
+- ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces: `IN PROGRESS`
+
+### Not Started
+
+- no critical remediation workstream remains `NOT STARTED` on the active reference path
+
+Interpretation:
+
+- this roadmap is `MATERIALLY DELIVERED` for the active reference path
+- the remaining work is breadth expansion and proof-strengthening, not a core-path governance drift crisis
+
+Historical batch receipts follow below.
+Status labels inside each batch preserve the state at the moment that batch landed; the snapshot above is the latest aggregate readout.
+
 Phase 1 remediation batch executed on `2026-03-19`:
 
 - shared contract type unification: `COMPLETED`
@@ -687,9 +717,9 @@ Success should be measured with explicit signals:
 - `0` channel-level disagreements on canonical phase vocabulary
 - `0` legacy-only default guard factories remaining in active entrypoints
 - `100%` of critical governance controls assigned to an executable owner
-- at least `1` full end-to-end governed execution demo path for non-coders
-- at least `1` full end-to-end governed execution demo path for coder-facing channels
-- independent reassessment upgrades whole-system status from `PARTIAL` to `ALIGNED`
+- at least `1` full end-to-end governed execution demo path for non-coders: `IN PROGRESS`
+- at least `1` full end-to-end governed execution demo path for coder-facing channels: `COMPLETED`
+- independent reassessment upgrades whole-system status from `PARTIAL` to `ALIGNED`: `COMPLETED` (`SUBSTANTIALLY ALIGNED` on the active reference path)
 
 ---
 

@@ -3330,6 +3330,28 @@ Utility and guard:
   - `ExtensionBridge` can now run workflows via registered action handlers instead of only waiting for manual result reporting.
   - When no handler exists, the workflow now stops truthfully in a manual-handoff state rather than faking success.
 
+## [2026-03-20] Batch: Reference governed loop evidence reconciliation
+- Change reference:
+  - local working tree release-evidence reconciliation batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_REFERENCE_GOVERNED_LOOP_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `README.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_REFERENCE_GOVERNED_LOOP_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - runtime and Web tests — skipped because this batch only reconciles audit/readiness evidence after the reference loop helper already passed build and targeted tests in the prior batch
+- Notes/Risks:
+  - coder-facing governed reference-path proof is now explicitly reflected in readiness and reassessment artifacts
+  - non-coder governed demo-path maturity is intentionally still described as a remaining breadth caveat
+
 ## [2026-03-20] Batch: Reference governed loop helper
 - Change reference:
   - local working tree reference governed loop batch

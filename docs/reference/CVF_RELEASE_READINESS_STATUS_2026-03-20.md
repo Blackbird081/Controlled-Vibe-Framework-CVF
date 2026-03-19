@@ -15,9 +15,9 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 | Canonical phase model | `ALIGNED` | active runtime, shared guard contract, and major Web surfaces now use `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` |
 | Hardened default guard path | `ALIGNED` | `ai_commit` and `fileScope` are wired into the hardened default path in active remediated runtime areas |
 | Web non-coder semantics | `SUBSTANTIALLY ALIGNED` | key UX surfaces and exported prompts now teach canonical phase semantics |
-| Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` | explicit step lifecycle, default runtime bindings, and receipt-backed execution now exist for the reference governed path |
+| Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` | explicit step lifecycle, default runtime bindings, receipt-backed execution, and a reusable SDK reference loop now exist for the governed path |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` | canonical control matrix now maps critical rules to runtime guard, gateway, approval, or CI owner; remaining caveat is ecosystem breadth, not owner ambiguity |
-| End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` | the governed reference path now enforces artifacts, approvals, review, and freeze closure, though not every channel is equally mature |
+| End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` | the governed reference path now enforces artifacts, approvals, review, and freeze closure through a reusable coder-facing helper, though not every channel is equally mature |
 | Documentation truthfulness | `ALIGNED WITH CAVEATS` | canonical entry docs updated to stop overstating legacy or incomplete behavior |
 
 ## Implemented Strengths
@@ -31,12 +31,13 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - a canonical governance control matrix now assigns one primary enforcement owner to each critical control
 - public SDK/OpenAPI surfaces now publish canonical phases while confining legacy `DISCOVERY` support to explicit normalization boundaries
 - key user-facing guides now teach the canonical 5-phase controlled loop instead of the formerly active 4-phase framing
+- `CvfSdk.runReferenceGovernedLoop()` now provides one reusable coder-facing governed execution path with auto-supplied `ai_commit`, `traceHash`, approval handling, freeze artifact, and checkpoint receipt
 
 ## Open Risks
 
 1. The reference governed path is real, but broader adapter coverage across every extension family is still narrower than a full ecosystem mesh.
 2. Some secondary or ecosystem-specific controls still rely on the reference runtime rather than every extension family exposing identical maturity.
-3. CVF can credibly claim a governed reference control loop, but not yet "fully unified controlled autonomy" across all active channels.
+3. CVF can credibly claim a governed reference control loop for coder-facing execution, but not yet "fully unified controlled autonomy" across all active channels.
 
 ## Positioning Guidance
 
@@ -64,6 +65,8 @@ Claims to avoid for now:
 - [System Unification Closure Delta](../baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md)
 - [Legacy Boundary Delta](../baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md)
 - [Docs Canonicalization Delta](../baselines/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md)
+- [Reference Governed Loop](./CVF_REFERENCE_GOVERNED_LOOP.md)
+- [Reference Governed Loop Delta](../baselines/CVF_REFERENCE_GOVERNED_LOOP_DELTA_2026-03-20.md)
 
 ## Verdict
 
@@ -72,6 +75,7 @@ Current local baseline is suitable for:
 - continued hardening
 - controlled internal use
 - governance-oriented demonstrations
+- coder-facing governed reference demonstrations
 - further release-readiness preparation
 
 Current local baseline is not yet justified for:
@@ -79,6 +83,7 @@ Current local baseline is not yet justified for:
 - strongest possible "fully unified" marketing claims
 - declaring all roadmap-level governance ownership gaps closed
 - treating cross-extension execution semantics as fully production-complete
+- claiming that non-coder and coder-facing governed demo paths are equally mature everywhere
 
 ---
 

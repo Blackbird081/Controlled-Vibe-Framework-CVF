@@ -31,6 +31,11 @@ The original six major gaps from the `2026-03-19` system review are now material
 5. docs and claim drift: materially closed through readiness and canonical doc reconciliation
 6. incomplete controlled loop: materially closed on the governed reference path
 
+Supplemental evidence update recorded later on `2026-03-20`:
+
+- the governed reference path is now exposed as a reusable SDK helper via `CvfSdk.runReferenceGovernedLoop()`
+- this reduces reliance on scattered lower-level tests as the only proof that the coder-facing controlled loop can be re-run end to end
+
 ---
 
 ## 2. Updated Scorecard
@@ -60,7 +65,7 @@ Updated overall score:
 | `G3` | workflow execution still simulated in key places | workflow bridge, SDK bindings, step receipts, and handler execution now propagate real results | `MATERIALLY CLOSED` |
 | `G4` | non-coder layer taught legacy phase model | canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` now appears in active UX and exports | `MATERIALLY CLOSED` |
 | `G5` | docs and release posture lagged implementation | canonical docs, readiness, positioning, and roadmap receipts now reflect actual state | `MATERIALLY CLOSED` |
-| `G6` | no single believable governed control loop | governed reference path now enforces `intent -> plan -> approve -> execute -> review -> freeze` semantics with evidence-backed closure | `MATERIALLY CLOSED` |
+| `G6` | no single believable governed control loop | governed reference path now enforces `intent -> plan -> approve -> execute -> review -> freeze` semantics with evidence-backed closure, and is callable through one reusable SDK helper | `MATERIALLY CLOSED` |
 
 ---
 
@@ -70,6 +75,7 @@ Updated overall score:
 - Shared contract, runtime remediation path, bridge workflow path, and major Web entrypoints are materially closer to one canonical model.
 - Governance can now be explained in enforceable ownership classes rather than only by doctrine.
 - The non-coder story is stronger because the UI teaches the same canonical posture the backend actually uses.
+- The coder-facing story is stronger because one governed reference path is now reusable instead of being implied only by internal test composition.
 
 ---
 
@@ -97,6 +103,6 @@ Independent judgment for the active local baseline:
 - Whole-system status: `SUBSTANTIALLY ALIGNED`
 - Safe product positioning: `governance-first controlled execution system`
 - Strongest justified claim today:
-  - CVF now demonstrates a substantially aligned governed execution path with canonical phases, hardened guard defaults, explicit approval boundaries, evidence-backed freeze closure, and audit-ready reconciliation artifacts.
+  - CVF now demonstrates a substantially aligned governed execution path with canonical phases, hardened guard defaults, explicit approval boundaries, evidence-backed freeze closure, audit-ready reconciliation artifacts, and one reusable coder-facing reference loop.
 
 This is a meaningful step up from the prior review. The system no longer reads as "promising but fragmented"; it now reads as "coherent on the active reference path, with remaining caveats mostly about breadth and maximum-strength claims."

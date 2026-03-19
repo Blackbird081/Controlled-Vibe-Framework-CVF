@@ -168,6 +168,12 @@ Reference governed loop helper batch executed on `2026-03-20`:
 - the helper covers guard check, governed pipeline, approval-aware advancement, freeze artifact, completion, skill validation, and deterministic checkpointing: `COMPLETED`
 - a canonical reference doc now points future audits and demos to one executable example instead of scattered test slices
 
+Reference governed loop evidence reconciliation batch executed on `2026-03-20`:
+
+- release-readiness and reassessment records now explicitly cite the reusable coder-facing governed loop helper: `COMPLETED`
+- roadmap success metric for at least one coder-facing governed demo path is now evidence-backed rather than only inferential: `COMPLETED`
+- non-coder demo-path maturity remains a breadth caveat rather than being overstated as fully equivalent
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass

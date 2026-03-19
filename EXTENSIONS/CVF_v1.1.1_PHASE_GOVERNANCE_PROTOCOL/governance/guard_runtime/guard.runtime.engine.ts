@@ -1,8 +1,13 @@
 /**
- * Guard Runtime Engine — Track IV Phase A.1
+ * Guard Runtime Engine — v1.1.3 Governance Runtime Hardening
  *
  * Central engine that processes all governance guards in a deterministic pipeline.
  * Every action must pass through this engine before agent execution.
+ *
+ * v1.1.3 changes:
+ *   - Added MANDATORY_GUARD_IDS protection: mandatory guards cannot be unregistered or disabled
+ *   - unregisterGuard() throws for mandatory guards
+ *   - disableGuard() method added with mandatory guard protection
  *
  * Architecture:
  *   Request → GuardRuntimeEngine.evaluate() → ALLOW / BLOCK / ESCALATE
@@ -19,6 +24,7 @@ import {
   GuardAuditEntry,
   GuardRuntimeConfig,
   DEFAULT_GUARD_RUNTIME_CONFIG,
+  MANDATORY_GUARD_IDS,
 } from './guard.runtime.types.js';
 
 export class GuardRuntimeEngine {
@@ -44,8 +50,38 @@ export class GuardRuntimeEngine {
     this.guards.set(guard.id, guard);
   }
 
+  /**
+   * unregisterGuard — v1.1.3
+   *
+   * Prevents unregistering mandatory guards (ai_commit, authority_gate, phase_gate).
+   * These guards form the non-bypassable governance core.
+   */
   unregisterGuard(guardId: string): boolean {
+    if ((MANDATORY_GUARD_IDS as readonly string[]).includes(guardId)) {
+      throw new Error(
+        `Cannot unregister mandatory guard "${guardId}". ` +
+        `Mandatory guards: [${MANDATORY_GUARD_IDS.join(', ')}].`
+      );
+    }
     return this.guards.delete(guardId);
+  }
+
+  /**
+   * disableGuard — v1.1.3
+   *
+   * Disables a guard by ID. Mandatory guards cannot be disabled.
+   */
+  disableGuard(guardId: string): void {
+    if ((MANDATORY_GUARD_IDS as readonly string[]).includes(guardId)) {
+      throw new Error(
+        `Cannot disable mandatory guard "${guardId}". ` +
+        `Mandatory guards: [${MANDATORY_GUARD_IDS.join(', ')}].`
+      );
+    }
+    const guard = this.guards.get(guardId);
+    if (guard) {
+      guard.enabled = false;
+    }
   }
 
   getGuard(guardId: string): Guard | undefined {

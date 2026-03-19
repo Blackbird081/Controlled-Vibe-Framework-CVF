@@ -1,14 +1,15 @@
 /**
- * Risk Gate Guard — Track IV Phase A.1
+ * Risk Gate Guard — v1.1.3 Governance Runtime Hardening
  *
  * Enforces CVF R0-R3 Risk Model.
  * Escalates or blocks actions based on risk level and role authorization.
  *
- * Rules:
- *   - R0 (Passive): Any role allowed
- *   - R1 (Controlled): Any role, logged
- *   - R2 (Elevated): Requires approval — ESCALATE for AI_AGENT
- *   - R3 (Critical): Hard gate — BLOCK for AI_AGENT, ESCALATE for others
+ * v1.1.3 changes:
+ *   - Updated role references from AI_AGENT to BUILDER
+ *   - BUILDER and ANALYST are escalated at R2, blocked at R3
+ *   - OBSERVER is blocked at R1+
+ *   - GOVERNOR allows up to R3
+ *   - REVIEWER allows up to R2
  */
 
 import {
@@ -46,34 +47,46 @@ export class RiskGateGuard implements Guard {
       };
     }
 
+    // R3: Critical — only GOVERNOR allowed, others blocked or escalated
     if (context.riskLevel === 'R3') {
-      if (context.role === 'AI_AGENT') {
+      if (context.role === 'GOVERNOR' || context.role === 'HUMAN' || context.role === 'OPERATOR') {
         return {
           guardId: this.id,
-          decision: 'BLOCK',
-          severity: 'CRITICAL',
-          reason: `R3 (Critical) actions are blocked for AI agents. Requires human-in-the-loop approval.`,
+          decision: 'ESCALATE',
+          severity: 'ERROR',
+          reason: `R3 (Critical) action by ${context.role} requires explicit audit trail.`,
           timestamp,
           metadata: { riskLevel: context.riskLevel, role: context.role },
         };
       }
       return {
         guardId: this.id,
-        decision: 'ESCALATE',
-        severity: 'ERROR',
-        reason: `R3 (Critical) action requires explicit human approval and audit trail.`,
+        decision: 'BLOCK',
+        severity: 'CRITICAL',
+        reason: `R3 (Critical) actions are blocked for role "${context.role}". Requires Governor or human-in-the-loop approval.`,
         timestamp,
         metadata: { riskLevel: context.riskLevel, role: context.role },
       };
     }
 
+    // R2: Elevated — BUILDER/ANALYST escalated, OBSERVER blocked
     if (context.riskLevel === 'R2') {
-      if (context.role === 'AI_AGENT') {
+      if (context.role === 'OBSERVER') {
+        return {
+          guardId: this.id,
+          decision: 'BLOCK',
+          severity: 'ERROR',
+          reason: `R2 (Elevated) actions are blocked for Observer role.`,
+          timestamp,
+          metadata: { riskLevel: context.riskLevel, role: context.role },
+        };
+      }
+      if (context.role === 'BUILDER' || context.role === 'ANALYST' || context.role === 'AI_AGENT') {
         return {
           guardId: this.id,
           decision: 'ESCALATE',
           severity: 'WARN',
-          reason: `R2 (Elevated) action by AI agent requires approval. Escalating to human review.`,
+          reason: `R2 (Elevated) action by "${context.role}" requires approval. Escalating to review.`,
           timestamp,
           metadata: { riskLevel: context.riskLevel, role: context.role },
         };
@@ -87,6 +100,21 @@ export class RiskGateGuard implements Guard {
       };
     }
 
+    // R1: Controlled — OBSERVER blocked
+    if (context.riskLevel === 'R1') {
+      if (context.role === 'OBSERVER') {
+        return {
+          guardId: this.id,
+          decision: 'BLOCK',
+          severity: 'WARN',
+          reason: `R1 (Controlled) actions are blocked for Observer role. Max risk: R0.`,
+          timestamp,
+          metadata: { riskLevel: context.riskLevel, role: context.role },
+        };
+      }
+    }
+
+    // R0/R1 for non-Observer: Allow
     return {
       guardId: this.id,
       decision: 'ALLOW',

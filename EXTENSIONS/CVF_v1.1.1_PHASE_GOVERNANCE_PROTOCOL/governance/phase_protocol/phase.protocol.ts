@@ -1,9 +1,16 @@
 /**
- * CVF Phase Governance Protocol — v1.1.2 Hardening
+ * CVF Phase Governance Protocol — v1.1.3 Governance Runtime Hardening
  *
  * Defines the deterministic lifecycle of a development phase.
  * This protocol ensures every component follows a verifiable
  * construction pipeline before entering the runtime system.
+ *
+ * v1.1.3 changes:
+ *   - Added FAILURE states: REVIEW_FAILED, SPEC_CONFLICT, VALIDATION_FAILED
+ *   - Replaced linear isValidTransition() with explicit VALID_TRANSITIONS map
+ *   - Added RetryLimitExceededError with MAX_RETRY_COUNT = 3
+ *   - Added recovery paths: failure → recovery target
+ *   - PHASE_CAPABILITIES extended for failure states (read-only)
  *
  * v1.1.2 changes (De_xuat_07 — Capability Isolation):
  *   - PHASE_CAPABILITIES: maps each PhaseStage to allowed artifact operations.
@@ -23,10 +30,28 @@ export type PhaseStage =
   | "UNIT_TESTING"
   | "SCENARIO_SIMULATION"
   | "PHASE_GATE"
-  | "COMPLETE";
+  | "COMPLETE"
+  // v1.1.3: Failure states
+  | "REVIEW_FAILED"
+  | "SPEC_CONFLICT"
+  | "VALIDATION_FAILED";
 
 export interface PhaseProtocolConfig {
   componentName: string;
+}
+
+// ─── v1.1.3: Retry Limit ────────────────────────────────────────────────────
+
+export const MAX_RETRY_COUNT = 3;
+
+export class RetryLimitExceededError extends Error {
+  constructor(from: PhaseStage, to: PhaseStage, count: number) {
+    super(
+      `[RetryLimitExceeded] Transition "${from}" → "${to}" has been attempted ${count} times ` +
+      `(max: ${MAX_RETRY_COUNT}). Escalation to human required.`
+    );
+    this.name = "RetryLimitExceededError";
+  }
 }
 
 // ─── Capability Isolation (De_xuat_07) ──────────────────────────────────────
@@ -50,6 +75,10 @@ export const PHASE_CAPABILITIES: Record<PhaseStage, string[]> = {
   SCENARIO_SIMULATION: ["scenario.tests", "scenario.simulation.report"],
   PHASE_GATE: [],          // read-only phase — no new artifacts
   COMPLETE: [],            // terminal — no new artifacts
+  // v1.1.3: Failure states are read-only — no artifact production
+  REVIEW_FAILED: [],
+  SPEC_CONFLICT: [],
+  VALIDATION_FAILED: [],
 };
 
 export class CapabilityViolationError extends Error {
@@ -61,6 +90,34 @@ export class CapabilityViolationError extends Error {
     this.name = "CapabilityViolationError";
   }
 }
+
+// ─── v1.1.3: Valid Transition Map ────────────────────────────────────────────
+
+/**
+ * VALID_TRANSITIONS
+ *
+ * Explicit map of all allowed state transitions.
+ * Replaces linear index-based validation for full control.
+ *
+ * Forward path: SPEC → STATE_MACHINE → ... → PHASE_GATE → COMPLETE
+ * Failure entries: PHASE_GATE → REVIEW_FAILED, STATE_VALIDATION → VALIDATION_FAILED, etc.
+ * Recovery paths: REVIEW_FAILED → IMPLEMENTATION, SPEC_CONFLICT → SPEC, etc.
+ */
+export const VALID_TRANSITIONS: Record<PhaseStage, PhaseStage[]> = {
+  SPEC: ["STATE_MACHINE", "SPEC_CONFLICT"],
+  STATE_MACHINE: ["STATE_DIAGRAM"],
+  STATE_DIAGRAM: ["IMPLEMENTATION"],
+  IMPLEMENTATION: ["STATE_VALIDATION"],
+  STATE_VALIDATION: ["UNIT_TESTING", "VALIDATION_FAILED"],
+  UNIT_TESTING: ["SCENARIO_SIMULATION"],
+  SCENARIO_SIMULATION: ["PHASE_GATE"],
+  PHASE_GATE: ["COMPLETE", "REVIEW_FAILED"],
+  COMPLETE: [],              // terminal — no outgoing transitions
+  // Recovery paths from failure states
+  REVIEW_FAILED: ["IMPLEMENTATION"],
+  SPEC_CONFLICT: ["SPEC"],
+  VALIDATION_FAILED: ["IMPLEMENTATION"],
+};
 
 // ─── PhaseProtocol ───────────────────────────────────────────────────────────
 
@@ -84,6 +141,12 @@ export class PhaseProtocol {
       throw new Error(
         `Invalid phase transition from ${current} to ${nextStage}`
       );
+    }
+
+    // v1.1.3: Check retry limit for recovery transitions
+    const retryCount = this.context.getTransitionCount(current, nextStage);
+    if (retryCount >= MAX_RETRY_COUNT) {
+      throw new RetryLimitExceededError(current, nextStage, retryCount);
     }
 
     this.context.setStage(nextStage);
@@ -118,38 +181,38 @@ export class PhaseProtocol {
     return this.artifacts;
   }
 
+  /**
+   * v1.1.3: Get full transition history from context for audit trail.
+   */
+  public getTransitionHistory() {
+    return this.context.getTransitionHistory();
+  }
+
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
   /**
    * canRegisterArtifact()
    *
    * Returns true if the given artifact type is in the capability list for the stage.
-   * PHASE_GATE and COMPLETE stages have empty capability sets → always false.
+   * PHASE_GATE, COMPLETE, and failure stages have empty capability sets → always false.
    */
   private canRegisterArtifact(stage: PhaseStage, artifactType: string): boolean {
     const allowed = PHASE_CAPABILITIES[stage] ?? [];
     return allowed.includes(artifactType);
   }
 
+  /**
+   * isValidTransition — v1.1.3
+   *
+   * Uses explicit VALID_TRANSITIONS map instead of linear index.
+   * Supports forward, failure, and recovery paths.
+   */
   private isValidTransition(
     current: PhaseStage,
     next: PhaseStage
   ): boolean {
-    const order: PhaseStage[] = [
-      "SPEC",
-      "STATE_MACHINE",
-      "STATE_DIAGRAM",
-      "IMPLEMENTATION",
-      "STATE_VALIDATION",
-      "UNIT_TESTING",
-      "SCENARIO_SIMULATION",
-      "PHASE_GATE",
-      "COMPLETE",
-    ];
-
-    const currentIndex = order.indexOf(current);
-    const nextIndex = order.indexOf(next);
-
-    return nextIndex === currentIndex + 1;
+    const allowed = VALID_TRANSITIONS[current];
+    if (!allowed) return false;
+    return allowed.includes(next);
   }
 }

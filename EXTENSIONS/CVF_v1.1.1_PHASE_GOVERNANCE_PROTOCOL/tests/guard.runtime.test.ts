@@ -11,7 +11,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { GuardRuntimeEngine } from '../governance/guard_runtime/guard.runtime.engine.js';
 import { PhaseGateGuard, PHASE_ROLE_MATRIX, PHASE_ORDER } from '../governance/guard_runtime/guards/phase.gate.guard.js';
 import { RiskGateGuard, RISK_NUMERIC } from '../governance/guard_runtime/guards/risk.gate.guard.js';
-import { AuthorityGateGuard, RESTRICTED_ACTIONS } from '../governance/guard_runtime/guards/authority.gate.guard.js';
+import { AuthorityGateGuard, AUTHORITY_MATRIX } from '../governance/guard_runtime/guards/authority.gate.guard.js';
 import { MutationBudgetGuard, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD } from '../governance/guard_runtime/guards/mutation.budget.guard.js';
 import { ScopeGuard, PROTECTED_PATHS, CVF_ROOT_INDICATORS } from '../governance/guard_runtime/guards/scope.guard.js';
 import { AuditTrailGuard } from '../governance/guard_runtime/guards/audit.trail.guard.js';
@@ -58,9 +58,9 @@ describe('GuardRuntimeEngine', () => {
       expect(() => smallEngine.registerGuard(new AuthorityGateGuard())).toThrow('limit reached');
     });
 
-    it('unregisters a guard', () => {
-      engine.registerGuard(new PhaseGateGuard());
-      expect(engine.unregisterGuard('phase_gate')).toBe(true);
+    it('unregisters a non-mandatory guard', () => {
+      engine.registerGuard(new RiskGateGuard());
+      expect(engine.unregisterGuard('risk_gate')).toBe(true);
       expect(engine.getGuardCount()).toBe(0);
     });
 
@@ -242,21 +242,26 @@ describe('PhaseGateGuard', () => {
     expect(result.decision).toBe('BLOCK');
   });
 
-  it('allows OPERATOR in all phases', () => {
+  it('allows OPERATOR in first 4 phases, blocked in FREEZE', () => {
     for (const phase of PHASE_ORDER) {
       const result = guard.evaluate(makeContext({ phase, role: 'OPERATOR' }));
-      expect(result.decision).toBe('ALLOW');
+      if (phase === 'FREEZE') {
+        expect(result.decision).toBe('BLOCK');
+      } else {
+        expect(result.decision).toBe('ALLOW');
+      }
     }
   });
 
-  it('exports correct PHASE_ORDER', () => {
-    expect(PHASE_ORDER).toEqual(['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW']);
+  it('exports correct PHASE_ORDER with 5 phases', () => {
+    expect(PHASE_ORDER).toEqual(['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE']);
   });
 
   it('has correct PHASE_ROLE_MATRIX entries', () => {
     expect(PHASE_ROLE_MATRIX.DISCOVERY).toContain('HUMAN');
     expect(PHASE_ROLE_MATRIX.BUILD).toContain('AI_AGENT');
     expect(PHASE_ROLE_MATRIX.REVIEW).toContain('REVIEWER');
+    expect(PHASE_ROLE_MATRIX.FREEZE).toContain('GOVERNOR');
   });
 });
 
@@ -311,54 +316,54 @@ describe('RiskGateGuard', () => {
 describe('AuthorityGateGuard', () => {
   const guard = new AuthorityGateGuard();
 
-  it('allows AI_AGENT for write_code', () => {
-    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'write_code' }));
+  it('allows AI_AGENT for write in BUILD', () => {
+    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'write code', phase: 'BUILD', riskLevel: 'R1' }));
     expect(result.decision).toBe('ALLOW');
   });
 
   it('blocks AI_AGENT for approve', () => {
-    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'approve' }));
+    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'approve', phase: 'BUILD', riskLevel: 'R1' }));
     expect(result.decision).toBe('BLOCK');
   });
 
-  it('blocks AI_AGENT for merge', () => {
-    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'merge' }));
+  it('blocks AI_AGENT for merge (not in allowed actions)', () => {
+    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'merge', phase: 'BUILD', riskLevel: 'R1' }));
     expect(result.decision).toBe('BLOCK');
   });
 
   it('blocks AI_AGENT for release', () => {
-    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'release' }));
+    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'release', phase: 'BUILD', riskLevel: 'R1' }));
     expect(result.decision).toBe('BLOCK');
   });
 
   it('blocks AI_AGENT for deploy', () => {
-    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'deploy' }));
+    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'deploy', phase: 'BUILD', riskLevel: 'R1' }));
     expect(result.decision).toBe('BLOCK');
   });
 
   it('blocks AI_AGENT for override_gate', () => {
-    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'override_gate' }));
+    const result = guard.evaluate(makeContext({ role: 'AI_AGENT', action: 'override_gate', phase: 'BUILD', riskLevel: 'R1' }));
     expect(result.decision).toBe('BLOCK');
   });
 
-  it('allows HUMAN for any action', () => {
-    const result = guard.evaluate(makeContext({ role: 'HUMAN', action: 'deploy' }));
+  it('allows HUMAN for deploy in BUILD', () => {
+    const result = guard.evaluate(makeContext({ role: 'HUMAN', action: 'build and deploy', phase: 'BUILD', riskLevel: 'R1' }));
     expect(result.decision).toBe('ALLOW');
   });
 
   it('blocks REVIEWER for build', () => {
-    const result = guard.evaluate(makeContext({ role: 'REVIEWER', action: 'build' }));
+    const result = guard.evaluate(makeContext({ role: 'REVIEWER', action: 'build', phase: 'BUILD', riskLevel: 'R1' }));
     expect(result.decision).toBe('BLOCK');
   });
 
-  it('allows REVIEWER for review action', () => {
-    const result = guard.evaluate(makeContext({ role: 'REVIEWER', action: 'review_code' }));
+  it('allows REVIEWER for critique action in REVIEW', () => {
+    const result = guard.evaluate(makeContext({ role: 'REVIEWER', action: 'critique code', phase: 'REVIEW', riskLevel: 'R1' }));
     expect(result.decision).toBe('ALLOW');
   });
 
-  it('exports RESTRICTED_ACTIONS', () => {
-    expect(RESTRICTED_ACTIONS.AI_AGENT).toContain('approve');
-    expect(RESTRICTED_ACTIONS.HUMAN).toHaveLength(0);
+  it('exports AUTHORITY_MATRIX with all roles', () => {
+    expect(Object.keys(AUTHORITY_MATRIX)).toContain('BUILDER');
+    expect(Object.keys(AUTHORITY_MATRIX)).toContain('HUMAN');
   });
 });
 
@@ -634,7 +639,7 @@ describe('Guard Runtime Integration', () => {
         phase,
         riskLevel: 'R0',
         role: 'HUMAN',
-        action: 'review',
+        action: 'read',
         mutationCount: 2,
         targetFiles: ['src/app.ts'],
       }));

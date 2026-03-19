@@ -38,6 +38,26 @@ jobs:
         run: |
           python governance/compat/check_docs_governance_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
+  baseline-update-compat:
+    name: Baseline Update Compat
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce baseline update guard
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_baseline_update_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
   incremental-test-log-rotation:
     name: Incremental Test Log Rotation
     runs-on: ubuntu-latest

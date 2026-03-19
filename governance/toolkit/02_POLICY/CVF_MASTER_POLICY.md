@@ -73,6 +73,11 @@ Personal AI usage unrelated to company work is excluded.
    - Any new semantic layer, `CF-*` expansion, or comparable roadmap deepening must be justified by explicit depth-audit scoring.
    - The default should be `defer` unless the proposal demonstrates real risk reduction, decision value, and machine-enforceable closure.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`.
+12. Baseline update is mandatory after every accepted fix/update:
+   - Every real fix/update must produce a baseline update artifact, not only a normal log entry.
+   - Acceptable forms: new baseline snapshot, baseline delta/addendum, or post-fix assessment linked to the prior baseline.
+   - `docs/CVF_INCREMENTAL_TEST_LOG.md` does not replace this requirement.
+   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md`.
 
 ---
 

@@ -83,6 +83,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_RELEASE_MANIFEST.md`
 - `reference/CVF_MODULE_INVENTORY.md`
 - `reference/CVF_MATURITY_MATRIX.md`
+- `../governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md` — rule bắt buộc cập nhật baseline sau mỗi fix/update
 
 ## Enterprise Audit Navigation
 
@@ -104,6 +105,7 @@ Nếu cần chạy hoặc tra cứu conformance baseline:
 Gate kỹ thuật hiện hành cho `docs/**/*.md`:
 
 - `python governance/compat/check_docs_governance_compat.py --enforce`
+- `python governance/compat/check_baseline_update_compat.py --enforce`
 
 Gate kỹ thuật cho active test log window:
 

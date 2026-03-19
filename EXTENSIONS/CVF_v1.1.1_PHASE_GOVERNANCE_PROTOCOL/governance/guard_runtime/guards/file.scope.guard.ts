@@ -17,6 +17,7 @@ import {
   GuardResult,
   CVFRole,
 } from '../guard.runtime.types.js';
+import { MODIFY_ACTIONS, hasModifyIntent } from './action.intent.js';
 
 /** File path patterns that are protected from non-Governor modification */
 const PROTECTED_PATHS = [
@@ -29,8 +30,23 @@ const PROTECTED_PATHS = [
 /** Roles that are read-only (no file modifications) */
 const READ_ONLY_ROLES: CVFRole[] = ['OBSERVER', 'ANALYST', 'REVIEWER'];
 
-/** Actions that constitute file modification */
-const MODIFY_ACTIONS = ['create', 'modify', 'write', 'delete', 'build', 'implement', 'code'];
+/** Roles treated as builder-class modifiers for protected path enforcement */
+const BUILDER_CLASS_ROLES: CVFRole[] = ['BUILDER', 'AI_AGENT', 'OPERATOR'];
+
+function normalizePath(path: string): string {
+  return path.replace(/\\/g, '/').replace(/^\.\//, '').replace(/\/+/g, '/').toLowerCase();
+}
+
+function isPathWithinScope(targetFile: string, allowedScope: string): boolean {
+  const target = normalizePath(targetFile);
+  const scope = normalizePath(allowedScope).replace(/\/$/, '');
+
+  if (!scope) {
+    return false;
+  }
+
+  return target === scope || target.startsWith(`${scope}/`);
+}
 
 export class FileScopeGuard implements Guard {
   id = 'file_scope';
@@ -54,8 +70,17 @@ export class FileScopeGuard implements Guard {
       };
     }
 
-    const normalizedAction = context.action.toLowerCase().trim();
-    const isModifyAction = MODIFY_ACTIONS.some((a) => normalizedAction.includes(a));
+    const isModifyAction = hasModifyIntent(context.action);
+
+    if (!isModifyAction) {
+      return {
+        guardId: this.id,
+        decision: 'ALLOW',
+        severity: 'INFO',
+        reason: `Action "${context.action}" is read-only or non-mutating — file scope restriction not required.`,
+        timestamp,
+      };
+    }
 
     // Read-only roles cannot modify any files
     if (isModifyAction && READ_ONLY_ROLES.includes(context.role)) {
@@ -69,6 +94,24 @@ export class FileScopeGuard implements Guard {
       };
     }
 
+    if (context.fileScope && context.fileScope.length > 0 && context.role !== 'GOVERNOR') {
+      const outOfScope = targetFiles.filter((file) =>
+        !context.fileScope!.some((scope) => isPathWithinScope(file, scope))
+      );
+
+      if (outOfScope.length > 0) {
+        return {
+          guardId: this.id,
+          decision: 'BLOCK',
+          severity: 'ERROR',
+          reason: `Target files exceed assigned fileScope: [${outOfScope.join(', ')}]. ` +
+            `Allowed scope: [${context.fileScope.join(', ')}].`,
+          timestamp,
+          metadata: { role: context.role, violations: outOfScope, fileScope: context.fileScope },
+        };
+      }
+    }
+
     // GOVERNOR has full access
     if (context.role === 'GOVERNOR') {
       return {
@@ -80,10 +123,10 @@ export class FileScopeGuard implements Guard {
       };
     }
 
-    // BUILDER: check protected paths
-    if (isModifyAction && context.role === 'BUILDER') {
+    // Builder-class roles cannot modify protected paths
+    if (BUILDER_CLASS_ROLES.includes(context.role)) {
       const violations = targetFiles.filter((file) => {
-        const normalizedFile = file.replace(/\\/g, '/').toLowerCase();
+        const normalizedFile = normalizePath(file);
         return PROTECTED_PATHS.some((p) => normalizedFile.includes(p.toLowerCase()));
       });
 
@@ -110,4 +153,4 @@ export class FileScopeGuard implements Guard {
   }
 }
 
-export { PROTECTED_PATHS, READ_ONLY_ROLES, MODIFY_ACTIONS };
+export { PROTECTED_PATHS, READ_ONLY_ROLES, MODIFY_ACTIONS, BUILDER_CLASS_ROLES };

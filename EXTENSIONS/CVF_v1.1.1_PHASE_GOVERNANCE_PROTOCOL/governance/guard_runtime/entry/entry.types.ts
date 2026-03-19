@@ -23,6 +23,7 @@ export interface NormalizedRequest {
   agentId?: string;
   action: string;
   targetFiles?: string[];
+  fileScope?: string[];
   mutationCount?: number;
   mutationBudget?: number;
   traceHash?: string;

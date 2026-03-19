@@ -43,6 +43,7 @@ export class GuardGateway {
       agentId: normalized.agentId,
       action: normalized.action,
       targetFiles: normalized.targetFiles,
+      fileScope: normalized.fileScope,
       mutationCount: normalized.mutationCount,
       mutationBudget: normalized.mutationBudget,
       traceHash: normalized.traceHash,

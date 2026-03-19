@@ -19,7 +19,9 @@ import type { GuardRequestContext, GuardPipelineResult, Guard, GuardAuditEntry }
 import { PhaseGateGuard } from '../guards/phase.gate.guard.js';
 import { RiskGateGuard } from '../guards/risk.gate.guard.js';
 import { AuthorityGateGuard } from '../guards/authority.gate.guard.js';
+import { AiCommitGuard } from '../guards/ai.commit.guard.js';
 import { MutationBudgetGuard } from '../guards/mutation.budget.guard.js';
+import { FileScopeGuard } from '../guards/file.scope.guard.js';
 import { ScopeGuard } from '../guards/scope.guard.js';
 import { AuditTrailGuard } from '../guards/audit.trail.guard.js';
 
@@ -44,6 +46,7 @@ import type { ConformanceReport } from '../conformance/conformance.types.js';
 // Phase B.2
 import { GuardGateway } from '../entry/guard.gateway.js';
 import type { EntryPointType, EntryResponse } from '../entry/entry.types.js';
+import type { CVFRole } from '../guard.runtime.types.js';
 
 // Phase B.3
 import { ExtensionBridge } from '../wiring/extension.bridge.js';
@@ -137,7 +140,7 @@ export class CvfSdk {
     id: string;
     intent: string;
     riskLevel: 'R0' | 'R1' | 'R2' | 'R3';
-    role: 'HUMAN' | 'AI_AGENT' | 'REVIEWER' | 'OPERATOR';
+    role: CVFRole;
     agentId?: string;
   }): PipelineInstance {
     return this.pipeline.createPipeline(config);
@@ -164,7 +167,9 @@ export class CvfSdk {
       this.engine.registerGuard(new PhaseGateGuard());
       this.engine.registerGuard(new RiskGateGuard());
       this.engine.registerGuard(new AuthorityGateGuard());
+      this.engine.registerGuard(new AiCommitGuard());
       this.engine.registerGuard(new MutationBudgetGuard());
+      this.engine.registerGuard(new FileScopeGuard());
       this.engine.registerGuard(new ScopeGuard());
       this.engine.registerGuard(new AuditTrailGuard());
     }

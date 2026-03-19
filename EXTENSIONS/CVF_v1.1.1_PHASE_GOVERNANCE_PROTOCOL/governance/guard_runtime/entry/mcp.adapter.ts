@@ -18,6 +18,7 @@ export class McpAdapter implements EntryAdapter {
     const phase = this.resolvePhase(toolName);
     const riskLevel = this.resolveRisk(toolName, args);
     const role: CVFRole = 'AI_AGENT';
+    const metadata = this.parseMetadata(args['metadata']);
 
     return {
       requestId: String(raw['id'] ?? raw['requestId'] ?? `mcp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`),
@@ -27,11 +28,18 @@ export class McpAdapter implements EntryAdapter {
       agentId: String(args['agentId'] ?? raw['agentId'] ?? 'mcp-agent'),
       action: toolName,
       targetFiles: this.extractFiles(args),
+      fileScope: this.extractFileScope(args),
       mutationCount: args['mutationCount'] != null ? Number(args['mutationCount']) : undefined,
       mutationBudget: args['mutationBudget'] != null ? Number(args['mutationBudget']) : undefined,
       traceHash: args['traceHash'] ? String(args['traceHash']) : undefined,
       scope: args['scope'] ? String(args['scope']) : undefined,
-      metadata: { entryPoint: 'MCP', toolName, originalArgs: args },
+      metadata: {
+        ...metadata,
+        ...(args['ai_commit'] ? { ai_commit: args['ai_commit'] } : {}),
+        entryPoint: 'MCP',
+        toolName,
+        originalArgs: args,
+      },
     };
   }
 
@@ -61,9 +69,10 @@ export class McpAdapter implements EntryAdapter {
 
   private resolvePhase(toolName: string): CVFPhase {
     const lower = toolName.toLowerCase();
-    if (lower.includes('discover') || lower.includes('explore')) return 'DISCOVERY';
+    if (lower.includes('discover') || lower.includes('explore')) return 'INTAKE';
     if (lower.includes('design') || lower.includes('plan')) return 'DESIGN';
     if (lower.includes('review') || lower.includes('audit')) return 'REVIEW';
+    if (lower.includes('freeze') || lower.includes('lock')) return 'FREEZE';
     return 'BUILD';
   }
 
@@ -86,5 +95,21 @@ export class McpAdapter implements EntryAdapter {
     if (args['file']) return [String(args['file'])];
     if (args['path']) return [String(args['path'])];
     return undefined;
+  }
+
+  private extractFileScope(args: Record<string, unknown>): string[] | undefined {
+    if (args['fileScope'] && Array.isArray(args['fileScope'])) {
+      return (args['fileScope'] as unknown[]).map(String);
+    }
+    if (typeof args['fileScope'] === 'string') {
+      return String(args['fileScope']).split(',').map((entry) => entry.trim());
+    }
+    return undefined;
+  }
+
+  private parseMetadata(value: unknown): Record<string, unknown> {
+    return value && typeof value === 'object' && !Array.isArray(value)
+      ? { ...(value as Record<string, unknown>) }
+      : {};
   }
 }

@@ -2,7 +2,7 @@
  * Pipeline Orchestrator — Track IV Phase A.3
  *
  * Manages the E2E governance pipeline lifecycle:
- *   intent → DISCOVERY → DESIGN → BUILD → REVIEW → AUDIT → COMPLETE/ROLLBACK
+ *   intent → INTAKE → DESIGN → BUILD → REVIEW → FREEZE → COMPLETE/ROLLBACK
  *
  * Features:
  *   - Phase transitions with gate enforcement via GuardRuntimeEngine
@@ -25,11 +25,11 @@ import type {
 
 export type PipelineStatus =
   | 'CREATED'
-  | 'DISCOVERY'
+  | 'INTAKE'
   | 'DESIGN'
   | 'BUILD'
   | 'REVIEW'
-  | 'AUDIT'
+  | 'FREEZE'
   | 'COMPLETED'
   | 'ROLLED_BACK'
   | 'PAUSED'
@@ -38,7 +38,7 @@ export type PipelineStatus =
 export interface PipelineEvent {
   type: 'PHASE_ENTER' | 'PHASE_EXIT' | 'GATE_CHECK' | 'ROLLBACK' | 'PAUSE' | 'RESUME' | 'COMPLETE' | 'FAIL';
   pipelineId: string;
-  phase?: CVFPhase | 'AUDIT';
+  phase?: CVFPhase;
   previousPhase?: PipelineStatus;
   timestamp: string;
   details?: string;
@@ -60,16 +60,15 @@ export interface PipelineInstance {
   metadata?: Record<string, unknown>;
 }
 
-const PHASE_SEQUENCE: CVFPhase[] = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
+const PHASE_SEQUENCE: CVFPhase[] = ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
 
 const PHASE_TO_STATUS: Record<CVFPhase, PipelineStatus> = {
-  DISCOVERY: 'DISCOVERY',
+  DISCOVERY: 'INTAKE',
+  INTAKE: 'INTAKE',
   DESIGN: 'DESIGN',
   BUILD: 'BUILD',
   REVIEW: 'REVIEW',
-  // v1.1.3: backward compat — INTAKE maps to DISCOVERY status, FREEZE to REVIEW
-  INTAKE: 'DISCOVERY',
-  FREEZE: 'REVIEW',
+  FREEZE: 'FREEZE',
 };
 
 // --- Orchestrator ---
@@ -138,7 +137,7 @@ export class PipelineOrchestrator {
 
     const guardContext: GuardRequestContext = {
       requestId: `${pipelineId}-gate-${nextPhase}`,
-      phase: nextPhase === 'AUDIT' ? 'REVIEW' : nextPhase as CVFPhase,
+      phase: nextPhase as CVFPhase,
       riskLevel: pipeline.riskLevel,
       role: pipeline.role,
       agentId: pipeline.agentId,
@@ -151,7 +150,7 @@ export class PipelineOrchestrator {
     this.emitEvent({
       type: 'GATE_CHECK',
       pipelineId,
-      phase: nextPhase === 'AUDIT' ? 'AUDIT' : nextPhase as CVFPhase,
+      phase: nextPhase as CVFPhase,
       timestamp: new Date().toISOString(),
       details: `Gate check for ${nextPhase}: ${guardResult.finalDecision}`,
       guardResult,
@@ -180,7 +179,7 @@ export class PipelineOrchestrator {
     }
 
     const previousStatus = pipeline.status;
-    const newStatus = nextPhase === 'AUDIT' ? 'AUDIT' as PipelineStatus : PHASE_TO_STATUS[nextPhase as CVFPhase];
+    const newStatus = PHASE_TO_STATUS[nextPhase as CVFPhase];
     pipeline.status = newStatus;
     pipeline.updatedAt = new Date().toISOString();
     pipeline.phaseHistory.push({ phase: newStatus, enteredAt: pipeline.updatedAt });
@@ -188,7 +187,7 @@ export class PipelineOrchestrator {
     this.emitEvent({
       type: 'PHASE_ENTER',
       pipelineId,
-      phase: nextPhase === 'AUDIT' ? 'AUDIT' : nextPhase as CVFPhase,
+      phase: nextPhase as CVFPhase,
       previousPhase: previousStatus,
       timestamp: pipeline.updatedAt,
     });
@@ -200,7 +199,7 @@ export class PipelineOrchestrator {
     const pipeline = this.getPipeline(pipelineId);
     if (!pipeline) return false;
 
-    if (pipeline.status !== 'AUDIT') {
+    if (pipeline.status !== 'FREEZE') {
       return false;
     }
 
@@ -368,13 +367,13 @@ export class PipelineOrchestrator {
 
   // --- Internals ---
 
-  private getNextPhase(currentStatus: PipelineStatus): CVFPhase | 'AUDIT' | null {
+  private getNextPhase(currentStatus: PipelineStatus): CVFPhase | null {
     switch (currentStatus) {
-      case 'CREATED': return 'DISCOVERY';
-      case 'DISCOVERY': return 'DESIGN';
+      case 'CREATED': return 'INTAKE';
+      case 'INTAKE': return 'DESIGN';
       case 'DESIGN': return 'BUILD';
       case 'BUILD': return 'REVIEW';
-      case 'REVIEW': return 'AUDIT';
+      case 'REVIEW': return 'FREEZE';
       default: return null;
     }
   }

@@ -43,7 +43,17 @@ export { WorkspaceIsolationGuard, DOWNSTREAM_INDICATORS, CVF_ALLOWED_ROOT_FILES 
 export { GuardRegistryGuard } from './guards/guard.registry.guard.js';
 
 // Pipeline Orchestrator (Phase A.3)
-export { PipelineOrchestrator, PHASE_SEQUENCE, type PipelineStatus, type PipelineEvent, type PipelineInstance } from './pipeline.orchestrator.js';
+export {
+  PipelineOrchestrator,
+  PHASE_SEQUENCE,
+  type PipelineStatus,
+  type PipelineEvent,
+  type PipelineInstance,
+  type PipelineArtifact,
+  type PipelineArtifactType,
+  type PipelineApprovalCheckpoint,
+  type PipelineApprovalStatus,
+} from './pipeline.orchestrator.js';
 
 // Conformance (Phase B.1)
 export { ConformanceRunner } from './conformance/conformance.runner.js';

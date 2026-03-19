@@ -199,10 +199,62 @@ describe('CvfSdk', () => {
           },
           {
             extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              type: 'PLAN',
+              details: { spec: 'approved plan' },
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
             action: 'pipeline_advance',
             input: {
               pipelineId: 'sdk-wf-runtime-pipeline',
-              advanceCount: 5,
+              advanceCount: 3,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              type: 'EXECUTION',
+              details: { artifact: 'build-log' },
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              advanceCount: 1,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              type: 'REVIEW',
+              details: { accepted: true },
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              advanceCount: 1,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              type: 'FREEZE',
+              details: { receipt: 'freeze-1' },
             },
           },
           {
@@ -235,10 +287,80 @@ describe('CvfSdk', () => {
       expect(result.workflow?.status).toBe('COMPLETED');
       expect(result.workflow?.steps.every((step) => step.status === 'COMPLETED')).toBe(true);
       expect(result.workflow?.steps[0]?.guardResult?.finalDecision).toBe('ALLOW');
-      expect(result.workflow?.steps[2]?.output?.status).toBe('FREEZE');
-      expect(result.workflow?.steps[5]?.output?.checkpointId).toBeDefined();
-      expect(result.workflow?.steps[5]?.evidence?.runtime).toBe('deterministic_reference');
+      expect(result.workflow?.steps[3]?.output?.status).toBe('BUILD');
+      expect(result.workflow?.steps[7]?.output?.status).toBe('FREEZE');
+      expect(result.workflow?.steps[11]?.output?.checkpointId).toBeDefined();
+      expect(result.workflow?.steps[11]?.evidence?.runtime).toBe('deterministic_reference');
       expect(workflow.metadata?.linkedPipelineId).toBe('sdk-wf-runtime-pipeline');
+    });
+
+    it('supports governed approval checkpoints through default bridge handlers', async () => {
+      const cvf = CvfSdk.create();
+      cvf.bridge!.createWorkflow({
+        id: 'sdk-wf-approval',
+        name: 'SDK governed approval',
+        steps: [
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_create',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              intent: 'High-risk governed build',
+              riskLevel: 'R2',
+              role: 'HUMAN',
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              type: 'PLAN',
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              advanceCount: 2,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              advanceCount: 1,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_approve_checkpoint',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              reviewerId: 'governor-1',
+              reviewerRole: 'GOVERNOR',
+              comment: 'Approved for BUILD',
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              advanceCount: 1,
+            },
+          },
+        ],
+      });
+
+      const result = await cvf.bridge!.executeWorkflow('sdk-wf-approval');
+      expect(result.success).toBe(true);
+      expect(result.workflow?.steps[3]?.status).toBe('SKIPPED');
+      expect(result.workflow?.steps[3]?.output?.pendingApprovalId).toBeDefined();
+      expect(result.workflow?.steps[4]?.output?.approvalStatus).toBe('APPROVED');
+      expect(result.workflow?.steps[5]?.output?.status).toBe('BUILD');
     });
   });
 

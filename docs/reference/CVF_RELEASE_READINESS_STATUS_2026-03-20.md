@@ -16,8 +16,8 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 | Hardened default guard path | `ALIGNED` | `ai_commit` and `fileScope` are wired into the hardened default path in active remediated runtime areas |
 | Web non-coder semantics | `SUBSTANTIALLY ALIGNED` | key UX surfaces and exported prompts now teach canonical phase semantics |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` | explicit step lifecycle, default runtime bindings, and receipt-backed execution now exist for the reference governed path |
-| Governance executable ownership | `PARTIAL` | many critical controls are executable, but the full control matrix is not yet closed |
-| End-to-end controlled autonomy loop | `PARTIAL` | strong governed components exist, but not every channel demonstrates one fully unified loop |
+| Governance executable ownership | `PARTIAL` | approval-boundary and freeze-closure ownership now exist on the governed pipeline path, but the full control matrix is not yet closed |
+| End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` | the governed reference path now enforces artifacts, approvals, review, and freeze closure, though not every channel is equally mature |
 | Documentation truthfulness | `ALIGNED WITH CAVEATS` | canonical entry docs updated to stop overstating legacy or incomplete behavior |
 
 ## Implemented Strengths
@@ -32,7 +32,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 
 1. The reference governed path is real, but broader adapter coverage across every extension family is still narrower than a full ecosystem mesh.
 2. Not every critical governance rule has been fully mapped to one explicit enforcement owner.
-3. CVF can credibly claim "governed execution," but not yet "fully unified controlled autonomy" across all active channels.
+3. CVF can credibly claim a governed reference control loop, but not yet "fully unified controlled autonomy" across all active channels.
 
 ## Positioning Guidance
 

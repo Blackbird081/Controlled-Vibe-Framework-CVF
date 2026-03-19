@@ -75,6 +75,15 @@ Phase 4 documentation and readiness reconciliation batch executed on `2026-03-20
 - release-readiness checkpoint issued with explicit open gaps: `COMPLETED`
 - strongest claims constrained to governance-first / hardening-active posture: `COMPLETED`
 
+Phase 2 executable governance and control-loop batch executed on `2026-03-20`:
+
+- governed pipeline mode added with explicit artifact boundaries: `COMPLETED`
+- approval checkpoints added as runtime-owned enforcement objects: `COMPLETED`
+- `BUILD` transition now requires `PLAN` evidence on governed path: `COMPLETED`
+- `FREEZE` transition now requires `EXECUTION` and `REVIEW` evidence on governed path: `COMPLETED`
+- final completion now requires `FREEZE` artifact on governed path: `COMPLETED`
+- SDK/bridge path now supports artifact recording and checkpoint approval actions: `COMPLETED`
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -94,6 +103,7 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_WORKFLOW_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_COMPLETION_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_CONTROL_LOOP_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

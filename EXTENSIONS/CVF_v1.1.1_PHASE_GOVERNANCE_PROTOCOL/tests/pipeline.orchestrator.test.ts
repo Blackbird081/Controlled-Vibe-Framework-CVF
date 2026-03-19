@@ -418,6 +418,121 @@ describe('PipelineOrchestrator', () => {
     });
   });
 
+  describe('governed control loop enforcement', () => {
+    it('blocks DESIGN -> BUILD without PLAN artifact in governed mode', () => {
+      orchestrator.createPipeline({
+        id: 'gov-1',
+        intent: 'Governed build',
+        riskLevel: 'R1',
+        role: 'HUMAN',
+        metadata: { controlMode: 'governed' },
+      });
+
+      orchestrator.advancePhase('gov-1'); // INTAKE
+      orchestrator.advancePhase('gov-1'); // DESIGN
+
+      const result = orchestrator.advancePhase('gov-1');
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('PLAN artifact');
+    });
+
+    it('creates pending approval for BUILD when governed risk is R2', () => {
+      orchestrator.createPipeline({
+        id: 'gov-2',
+        intent: 'Elevated governed build',
+        riskLevel: 'R2',
+        role: 'HUMAN',
+        metadata: { controlMode: 'governed' },
+      });
+
+      orchestrator.advancePhase('gov-2'); // INTAKE
+      orchestrator.advancePhase('gov-2'); // DESIGN
+      orchestrator.recordArtifact('gov-2', { type: 'PLAN', details: { spec: 'approved-design' } });
+
+      const result = orchestrator.advancePhase('gov-2');
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('waiting for approval');
+      expect(orchestrator.getPendingApprovals('gov-2')).toHaveLength(1);
+      expect(orchestrator.getPendingApprovals('gov-2')[0]?.phase).toBe('BUILD');
+    });
+
+    it('allows BUILD after approval checkpoint is approved', () => {
+      orchestrator.createPipeline({
+        id: 'gov-3',
+        intent: 'Approved governed build',
+        riskLevel: 'R2',
+        role: 'HUMAN',
+        metadata: { controlMode: 'governed' },
+      });
+
+      orchestrator.advancePhase('gov-3'); // INTAKE
+      orchestrator.advancePhase('gov-3'); // DESIGN
+      orchestrator.recordArtifact('gov-3', { type: 'PLAN', details: { spec: 'approved-design' } });
+
+      const blocked = orchestrator.advancePhase('gov-3');
+      expect(blocked.success).toBe(false);
+
+      const approval = orchestrator.getPendingApprovals('gov-3')[0]!;
+      orchestrator.approveCheckpoint('gov-3', approval.id, {
+        id: 'governor-1',
+        role: 'GOVERNOR',
+        comment: 'Plan approved',
+      });
+
+      const advanced = orchestrator.advancePhase('gov-3');
+      expect(advanced.success).toBe(true);
+      expect(orchestrator.getPipeline('gov-3')!.status).toBe('BUILD');
+    });
+
+    it('requires EXECUTION and REVIEW evidence before FREEZE in governed mode', () => {
+      orchestrator.createPipeline({
+        id: 'gov-4',
+        intent: 'Freeze enforcement',
+        riskLevel: 'R1',
+        role: 'HUMAN',
+        metadata: { controlMode: 'governed' },
+      });
+
+      orchestrator.advancePhase('gov-4'); // INTAKE
+      orchestrator.advancePhase('gov-4'); // DESIGN
+      orchestrator.recordArtifact('gov-4', { type: 'PLAN' });
+      orchestrator.advancePhase('gov-4'); // BUILD
+      orchestrator.advancePhase('gov-4'); // REVIEW
+
+      const freezeAttempt = orchestrator.advancePhase('gov-4');
+      expect(freezeAttempt.success).toBe(false);
+      expect(freezeAttempt.error).toContain('EXECUTION evidence');
+
+      orchestrator.recordArtifact('gov-4', { type: 'EXECUTION' });
+      const freezeAttempt2 = orchestrator.advancePhase('gov-4');
+      expect(freezeAttempt2.success).toBe(false);
+      expect(freezeAttempt2.error).toContain('REVIEW evidence');
+    });
+
+    it('requires FREEZE artifact before completion in governed mode', () => {
+      orchestrator.createPipeline({
+        id: 'gov-5',
+        intent: 'Freeze completion evidence',
+        riskLevel: 'R1',
+        role: 'HUMAN',
+        metadata: { controlMode: 'governed' },
+      });
+
+      orchestrator.advancePhase('gov-5'); // INTAKE
+      orchestrator.advancePhase('gov-5'); // DESIGN
+      orchestrator.recordArtifact('gov-5', { type: 'PLAN' });
+      orchestrator.advancePhase('gov-5'); // BUILD
+      orchestrator.recordArtifact('gov-5', { type: 'EXECUTION' });
+      orchestrator.advancePhase('gov-5'); // REVIEW
+      orchestrator.recordArtifact('gov-5', { type: 'REVIEW' });
+      orchestrator.advancePhase('gov-5'); // FREEZE
+
+      expect(orchestrator.completePipeline('gov-5')).toBe(false);
+      orchestrator.recordArtifact('gov-5', { type: 'FREEZE', details: { receipt: 'freeze-1' } });
+      expect(orchestrator.completePipeline('gov-5')).toBe(true);
+    });
+  });
+
   describe('error handling', () => {
     it('advancePhase returns error for unknown pipeline', () => {
       const r = orchestrator.advancePhase('nonexistent');

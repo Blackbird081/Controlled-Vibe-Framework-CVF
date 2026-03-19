@@ -3204,3 +3204,27 @@ Utility and guard:
   - `CvfSdk` now boots real default bridge bindings that execute through `GuardRuntimeEngine`, `GuardGateway`, and `PipelineOrchestrator`.
   - `ExtensionBridge` steps now emit structured `INPUT / EXECUTION / FAILURE / ROLLBACK` receipts.
   - Multi-agent runtime now blocks assignments that violate phase, risk, or file-boundary constraints before resource locking occurs.
+
+## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
+- Change reference:
+  - local working tree Phase 2 control-loop batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_CONTROL_LOOP_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/index.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/pipeline.orchestrator.test.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/sdk.test.ts`
+  - targeted regression coverage via `tests/extension.bridge.test.ts`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/pipeline.orchestrator.test.ts tests/sdk.test.ts tests/extension.bridge.test.ts` -> PASS
+    - Result: `3 test files, 120 passed`
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run build` -> PASS
+- Skip scope:
+  - full extension test suite — skipped because this batch is localized to control-loop ownership in orchestrator + sdk/bridge path
+  - Web/UI suites — unchanged in this batch
+- Notes/Risks:
+  - Governed runtime path now requires `PLAN` evidence before `BUILD`, `EXECUTION` + `REVIEW` evidence before `FREEZE`, and `FREEZE` evidence before completion.
+  - Approval checkpoints are now executable runtime objects rather than only guidance text.
+  - Whole-system governance ownership matrix is still broader than this slice and remains an open roadmap item.

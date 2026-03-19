@@ -36,7 +36,7 @@ import { GuardRegistryGuard } from '../guards/guard.registry.guard.js';
 
 // Phase A.3
 import { PipelineOrchestrator } from '../pipeline.orchestrator.js';
-import type { PipelineInstance } from '../pipeline.orchestrator.js';
+import type { PipelineArtifactType, PipelineInstance } from '../pipeline.orchestrator.js';
 
 // Phase B.1
 import { ConformanceRunner } from '../conformance/conformance.runner.js';
@@ -144,6 +144,7 @@ export class CvfSdk {
     riskLevel: 'R0' | 'R1' | 'R2' | 'R3';
     role: CVFRole;
     agentId?: string;
+    metadata?: Record<string, unknown>;
   }): PipelineInstance {
     return this.pipeline.createPipeline(config);
   }
@@ -240,8 +241,10 @@ export class CvfSdk {
         role: this.parseRole(input['role'] ?? 'HUMAN'),
         agentId: input['agentId'] ? String(input['agentId']) : undefined,
         metadata: {
+          controlMode: 'governed',
           workflowId: workflow.id,
           sourceStepId: step.id,
+          ...this.parseRecord(input['metadata']),
         },
       });
 
@@ -263,6 +266,99 @@ export class CvfSdk {
       };
     });
 
+    this.bridge.registerActionHandler('v1.1.1', 'pipeline_record_artifact', ({ workflow, step }): WorkflowStepResult => {
+      const input = step.input ?? {};
+      const pipeline = this.requireLinkedPipeline(workflow, input);
+      const type = String(input['type'] ?? '').toUpperCase() as PipelineArtifactType;
+
+      if (!['INTENT', 'PLAN', 'EXECUTION', 'REVIEW', 'FREEZE'].includes(type)) {
+        return {
+          status: 'FAILED',
+          error: `Invalid pipeline artifact type "${input['type']}".`,
+          output: {
+            pipelineId: pipeline.id,
+          },
+        };
+      }
+
+      const artifact = this.pipeline.recordArtifact(pipeline.id, {
+        type,
+        details: this.parseRecord(input['details']),
+        id: input['artifactId'] ? String(input['artifactId']) : undefined,
+      });
+
+      if (!artifact) {
+        return {
+          status: 'FAILED',
+          error: `Failed to record ${type} artifact for pipeline "${pipeline.id}".`,
+          output: {
+            pipelineId: pipeline.id,
+          },
+        };
+      }
+
+      return {
+        status: 'COMPLETED',
+        output: {
+          pipelineId: pipeline.id,
+          artifactId: artifact.id,
+          artifactType: artifact.type,
+        },
+        evidence: {
+          runtime: 'pipeline_orchestrator',
+          recordedAt: artifact.recordedAt,
+        },
+      };
+    });
+
+    this.bridge.registerActionHandler('v1.1.1', 'pipeline_approve_checkpoint', ({ workflow, step }): WorkflowStepResult => {
+      const input = step.input ?? {};
+      const pipeline = this.requireLinkedPipeline(workflow, input);
+      const pending = this.pipeline.getPendingApprovals(pipeline.id);
+      const checkpointId = String(input['checkpointId'] ?? pending[0]?.id ?? '');
+
+      if (!checkpointId) {
+        return {
+          status: 'FAILED',
+          error: `Pipeline "${pipeline.id}" has no pending approval checkpoint to approve.`,
+          output: {
+            pipelineId: pipeline.id,
+          },
+        };
+      }
+
+      const approved = this.pipeline.approveCheckpoint(pipeline.id, checkpointId, {
+        id: String(input['reviewerId'] ?? 'governor'),
+        role: this.parseRole(input['reviewerRole'] ?? 'GOVERNOR'),
+        comment: input['comment'] ? String(input['comment']) : undefined,
+      });
+
+      if (!approved) {
+        return {
+          status: 'FAILED',
+          error: `Approval checkpoint "${checkpointId}" could not be approved.`,
+          output: {
+            pipelineId: pipeline.id,
+            checkpointId,
+          },
+        };
+      }
+
+      return {
+        status: 'COMPLETED',
+        output: {
+          pipelineId: pipeline.id,
+          checkpointId: approved.id,
+          approvalStatus: approved.status,
+        },
+        evidence: {
+          runtime: 'pipeline_orchestrator',
+          reviewedAt: approved.reviewedAt,
+          reviewerId: approved.reviewerId,
+        },
+      };
+    });
+
     this.bridge.registerActionHandler('v1.1.1', 'pipeline_advance', ({ workflow, step }): WorkflowStepResult => {
       const input = step.input ?? {};
       const pipeline = this.requireLinkedPipeline(workflow, input);
@@ -272,6 +368,23 @@ export class CvfSdk {
       for (let i = 0; i < advanceCount; i++) {
         const advanced = this.pipeline.advancePhase(pipeline.id);
         if (!advanced.success) {
+          const pendingApproval = this.pipeline.getPendingApprovals(pipeline.id)[0];
+          if (advanced.error?.includes('waiting for approval') && pendingApproval) {
+            return {
+              status: 'SKIPPED',
+              output: {
+                pipelineId: pipeline.id,
+                status: this.pipeline.getPipeline(pipeline.id)?.status,
+                pendingApprovalId: pendingApproval.id,
+                pendingApprovalPhase: pendingApproval.phase,
+              },
+              evidence: {
+                runtime: 'pipeline_orchestrator',
+                pendingApprovalReason: pendingApproval.reason,
+              },
+            };
+          }
+
           return {
             status: 'FAILED',
             error: advanced.error ?? 'Pipeline advance failed.',

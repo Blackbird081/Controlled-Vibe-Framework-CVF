@@ -36,13 +36,37 @@ export type PipelineStatus =
   | 'FAILED';
 
 export interface PipelineEvent {
-  type: 'PHASE_ENTER' | 'PHASE_EXIT' | 'GATE_CHECK' | 'ROLLBACK' | 'PAUSE' | 'RESUME' | 'COMPLETE' | 'FAIL';
+  type: 'PHASE_ENTER' | 'PHASE_EXIT' | 'GATE_CHECK' | 'ROLLBACK' | 'PAUSE' | 'RESUME' | 'COMPLETE' | 'FAIL' | 'ARTIFACT_RECORDED' | 'APPROVAL_REQUESTED' | 'APPROVAL_APPROVED' | 'APPROVAL_REJECTED';
   pipelineId: string;
   phase?: CVFPhase;
   previousPhase?: PipelineStatus;
   timestamp: string;
   details?: string;
   guardResult?: GuardPipelineResult;
+}
+
+export type PipelineArtifactType = 'INTENT' | 'PLAN' | 'EXECUTION' | 'REVIEW' | 'FREEZE';
+
+export interface PipelineArtifact {
+  id: string;
+  type: PipelineArtifactType;
+  recordedAt: string;
+  details?: Record<string, unknown>;
+}
+
+export type PipelineApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+
+export interface PipelineApprovalCheckpoint {
+  id: string;
+  phase: Extract<CVFPhase, 'BUILD' | 'FREEZE'>;
+  status: PipelineApprovalStatus;
+  requiredBy: 'RISK' | 'MANUAL';
+  reason: string;
+  requestedAt: string;
+  reviewedAt?: string;
+  reviewerId?: string;
+  reviewerRole?: CVFRole;
+  comment?: string;
 }
 
 export interface PipelineInstance {
@@ -57,6 +81,8 @@ export interface PipelineInstance {
   phaseHistory: Array<{ phase: PipelineStatus; enteredAt: string; exitedAt?: string }>;
   events: PipelineEvent[];
   gateResults: Map<string, GuardPipelineResult>;
+  artifacts: PipelineArtifact[];
+  approvals: PipelineApprovalCheckpoint[];
   metadata?: Record<string, unknown>;
 }
 
@@ -109,6 +135,15 @@ export class PipelineOrchestrator {
       phaseHistory: [],
       events: [],
       gateResults: new Map(),
+      artifacts: [
+        {
+          id: `${config.id}-artifact-intent`,
+          type: 'INTENT',
+          recordedAt: now,
+          details: { intent: config.intent },
+        },
+      ],
+      approvals: [],
       metadata: config.metadata,
     };
 
@@ -133,6 +168,11 @@ export class PipelineOrchestrator {
     const nextPhase = this.getNextPhase(pipeline.status);
     if (!nextPhase) {
       return { success: false, error: `No next phase after "${pipeline.status}".` };
+    }
+
+    const controlBoundaryError = this.validateControlBoundary(pipeline, nextPhase);
+    if (controlBoundaryError) {
+      return { success: false, error: controlBoundaryError };
     }
 
     const guardContext: GuardRequestContext = {
@@ -200,6 +240,10 @@ export class PipelineOrchestrator {
     if (!pipeline) return false;
 
     if (pipeline.status !== 'FREEZE') {
+      return false;
+    }
+
+    if (this.isGoverned(pipeline) && !this.hasArtifact(pipeline, 'FREEZE')) {
       return false;
     }
 
@@ -349,6 +393,140 @@ export class PipelineOrchestrator {
     return this.pipelines.size;
   }
 
+  recordArtifact(
+    pipelineId: string,
+    artifact: {
+      type: PipelineArtifactType;
+      details?: Record<string, unknown>;
+      id?: string;
+    },
+  ): PipelineArtifact | null {
+    const pipeline = this.getPipeline(pipelineId);
+    if (!pipeline) return null;
+
+    const recordedAt = new Date().toISOString();
+    const entry: PipelineArtifact = {
+      id: artifact.id ?? `${pipelineId}-artifact-${artifact.type.toLowerCase()}-${pipeline.artifacts.length + 1}`,
+      type: artifact.type,
+      recordedAt,
+      details: artifact.details,
+    };
+    pipeline.artifacts.push(entry);
+    pipeline.updatedAt = recordedAt;
+
+    this.emitEvent({
+      type: 'ARTIFACT_RECORDED',
+      pipelineId,
+      phase: pipeline.status === 'CREATED' ? undefined : (pipeline.status as CVFPhase),
+      timestamp: recordedAt,
+      details: `Recorded ${artifact.type} artifact.`,
+    });
+
+    return entry;
+  }
+
+  requestApproval(
+    pipelineId: string,
+    config: {
+      phase: Extract<CVFPhase, 'BUILD' | 'FREEZE'>;
+      reason: string;
+      requiredBy?: 'RISK' | 'MANUAL';
+    },
+  ): PipelineApprovalCheckpoint | null {
+    const pipeline = this.getPipeline(pipelineId);
+    if (!pipeline) return null;
+
+    const existing = pipeline.approvals.find((approval) =>
+      approval.phase === config.phase && approval.status === 'PENDING');
+    if (existing) return existing;
+
+    const requestedAt = new Date().toISOString();
+    const approval: PipelineApprovalCheckpoint = {
+      id: `${pipelineId}-approval-${config.phase.toLowerCase()}-${pipeline.approvals.length + 1}`,
+      phase: config.phase,
+      status: 'PENDING',
+      requiredBy: config.requiredBy ?? 'MANUAL',
+      reason: config.reason,
+      requestedAt,
+    };
+    pipeline.approvals.push(approval);
+    pipeline.updatedAt = requestedAt;
+
+    this.emitEvent({
+      type: 'APPROVAL_REQUESTED',
+      pipelineId,
+      phase: config.phase,
+      timestamp: requestedAt,
+      details: config.reason,
+    });
+
+    return approval;
+  }
+
+  approveCheckpoint(
+    pipelineId: string,
+    checkpointId: string,
+    reviewer: { id: string; role: CVFRole; comment?: string },
+  ): PipelineApprovalCheckpoint | null {
+    const pipeline = this.getPipeline(pipelineId);
+    if (!pipeline) return null;
+
+    const approval = pipeline.approvals.find((entry) => entry.id === checkpointId);
+    if (!approval || approval.status !== 'PENDING') return null;
+
+    approval.status = 'APPROVED';
+    approval.reviewerId = reviewer.id;
+    approval.reviewerRole = reviewer.role;
+    approval.comment = reviewer.comment;
+    approval.reviewedAt = new Date().toISOString();
+    pipeline.updatedAt = approval.reviewedAt;
+
+    this.emitEvent({
+      type: 'APPROVAL_APPROVED',
+      pipelineId,
+      phase: approval.phase,
+      timestamp: approval.reviewedAt,
+      details: reviewer.comment ?? `Approved by ${reviewer.id}.`,
+    });
+
+    return approval;
+  }
+
+  rejectCheckpoint(
+    pipelineId: string,
+    checkpointId: string,
+    reviewer: { id: string; role: CVFRole; comment?: string },
+  ): PipelineApprovalCheckpoint | null {
+    const pipeline = this.getPipeline(pipelineId);
+    if (!pipeline) return null;
+
+    const approval = pipeline.approvals.find((entry) => entry.id === checkpointId);
+    if (!approval || approval.status !== 'PENDING') return null;
+
+    approval.status = 'REJECTED';
+    approval.reviewerId = reviewer.id;
+    approval.reviewerRole = reviewer.role;
+    approval.comment = reviewer.comment;
+    approval.reviewedAt = new Date().toISOString();
+    pipeline.updatedAt = approval.reviewedAt;
+
+    this.emitEvent({
+      type: 'APPROVAL_REJECTED',
+      pipelineId,
+      phase: approval.phase,
+      timestamp: approval.reviewedAt,
+      details: reviewer.comment ?? `Rejected by ${reviewer.id}.`,
+    });
+
+    return approval;
+  }
+
+  getPendingApprovals(pipelineId: string): PipelineApprovalCheckpoint[] {
+    const pipeline = this.getPipeline(pipelineId);
+    if (!pipeline) return [];
+    return pipeline.approvals.filter((entry) => entry.status === 'PENDING');
+  }
+
   // --- Events ---
 
   addEventListener(listener: (event: PipelineEvent) => void): void {
@@ -366,6 +544,83 @@ export class PipelineOrchestrator {
   }
 
   // --- Internals ---
+
+  private validateControlBoundary(pipeline: PipelineInstance, nextPhase: CVFPhase): string | null {
+    if (!this.isGoverned(pipeline)) return null;
+
+    if (nextPhase === 'BUILD') {
+      if (!this.hasArtifact(pipeline, 'PLAN')) {
+        return 'Governed transition to BUILD requires a PLAN artifact.';
+      }
+
+      if (this.requiresApproval(pipeline, 'BUILD')) {
+        const approval = this.ensureApprovalCheckpoint(
+          pipeline,
+          'BUILD',
+          `Governed transition to BUILD requires approval for risk level ${pipeline.riskLevel}.`,
+        );
+        if (approval.status !== 'APPROVED') {
+          return `Governed transition to BUILD is waiting for approval (${approval.id}).`;
+        }
+      }
+    }
+
+    if (nextPhase === 'FREEZE') {
+      if (!this.hasArtifact(pipeline, 'EXECUTION')) {
+        return 'Governed transition to FREEZE requires EXECUTION evidence.';
+      }
+      if (!this.hasArtifact(pipeline, 'REVIEW')) {
+        return 'Governed transition to FREEZE requires REVIEW evidence.';
+      }
+
+      if (this.requiresApproval(pipeline, 'FREEZE')) {
+        const approval = this.ensureApprovalCheckpoint(
+          pipeline,
+          'FREEZE',
+          `Governed transition to FREEZE requires approval for risk level ${pipeline.riskLevel}.`,
+        );
+        if (approval.status !== 'APPROVED') {
+          return `Governed transition to FREEZE is waiting for approval (${approval.id}).`;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private isGoverned(pipeline: PipelineInstance): boolean {
+    return pipeline.metadata?.['controlMode'] === 'governed';
+  }
+
+  private hasArtifact(pipeline: PipelineInstance, type: PipelineArtifactType): boolean {
+    return pipeline.artifacts.some((artifact) => artifact.type === type);
+  }
+
+  private requiresApproval(
+    pipeline: PipelineInstance,
+    phase: Extract<CVFPhase, 'BUILD' | 'FREEZE'>,
+  ): boolean {
+    if (pipeline.metadata?.[`requires${phase}Approval`] === true) {
+      return true;
+    }
+    return pipeline.riskLevel === 'R2' || pipeline.riskLevel === 'R3';
+  }
+
+  private ensureApprovalCheckpoint(
+    pipeline: PipelineInstance,
+    phase: Extract<CVFPhase, 'BUILD' | 'FREEZE'>,
+    reason: string,
+  ): PipelineApprovalCheckpoint {
+    const existing = pipeline.approvals.find((approval) =>
+      approval.phase === phase && (approval.status === 'PENDING' || approval.status === 'APPROVED'));
+    if (existing) return existing;
+
+    return this.requestApproval(pipeline.id, {
+      phase,
+      reason,
+      requiredBy: 'RISK',
+    })!;
+  }
 
   private getNextPhase(currentStatus: PipelineStatus): CVFPhase | null {
     switch (currentStatus) {

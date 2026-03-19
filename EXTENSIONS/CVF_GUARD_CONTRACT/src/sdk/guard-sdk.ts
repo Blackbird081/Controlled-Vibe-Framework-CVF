@@ -17,11 +17,22 @@
 
 // ─── Types ───────────────────────────────────────────────────────────
 
-export type CanonicalCVFPhase = 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE';
-export type LegacyCVFPhaseAlias = 'DISCOVERY';
-export type CVFPhaseInput = CanonicalCVFPhase | LegacyCVFPhaseAlias;
-export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
-export type CVFRole = 'OBSERVER' | 'ANALYST' | 'BUILDER' | 'REVIEWER' | 'GOVERNOR' | 'HUMAN' | 'AI_AGENT' | 'OPERATOR';
+import type {
+  CanonicalCVFPhase,
+  CVFPhaseInput,
+  CVFRiskLevel,
+  CVFRole,
+  LegacyCVFPhaseAlias,
+} from '../types';
+
+export type {
+  CanonicalCVFPhase,
+  CVFPhaseInput,
+  CVFRiskLevel,
+  CVFRole,
+  LegacyCVFPhaseAlias,
+};
+
 export type CVFDecision = 'ALLOW' | 'BLOCK' | 'ESCALATE';
 
 export interface CVFGuardRequest {

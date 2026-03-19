@@ -102,6 +102,30 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: Canonical phase type-depth alignment on enterprise and auxiliary surfaces
+- Change reference:
+  - scope: shared canonical phase helper types + enterprise/reporting canonical storage + UI label normalization
+  - baseline receipt: `docs/baselines/CVF_CANONICAL_PHASE_TYPE_ALIGNMENT_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/sdk/guard-sdk.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/enterprise/enterprise.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/enterprise/enterprise.test.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/phase-gate.guard.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/friendly-labels.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/friendly-labels.test.ts` [NEW]
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/reports/compliance/page.tsx`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npx vitest run src/enterprise/enterprise.test.ts src/sdk/guard-sdk.test.ts` -> PASS
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/friendly-labels.test.ts` -> PASS
+- Skip scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`: skipped because this batch only tightens shared auxiliary type semantics, not the already-remediated runtime extension
+  - broader `cvf-web` suite: skipped because touched Web scope is limited to label normalization and one compliance mock
+- Notes/Risks:
+  - legacy `DISCOVERY` remains accepted at compatibility boundaries, but canonical storage/reporting on the active path is now cleaner
+  - this batch reduces residual auxiliary drift rather than introducing new runtime capability
+
 ## [2026-03-20] Batch: Enterprise and compliance auxiliary alignment
 - Change reference:
   - scope: enterprise permission boundary + compliance reporting posture

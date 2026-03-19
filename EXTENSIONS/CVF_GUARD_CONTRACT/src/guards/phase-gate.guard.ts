@@ -2,9 +2,13 @@
  * Phase Gate Guard — Enforces canonical CVF phase boundaries.
  */
 
-import type { Guard, GuardRequestContext, GuardResult, CVFPhase, CVFRole } from '../types';
+import type { CanonicalCVFPhase, Guard, GuardRequestContext, GuardResult, CVFPhase, CVFRole } from '../types';
 import { PHASE_ORDER } from '../types';
 import { getPermissions, type TeamRole } from '../enterprise/enterprise';
+
+function normalizePhaseAlias(phase: CVFPhase): CanonicalCVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
 
 export const PHASE_ROLE_MATRIX: Record<CVFPhase, CVFRole[]> = {
   INTAKE: ['OBSERVER', 'ANALYST', 'GOVERNOR', 'HUMAN', 'OPERATOR'],
@@ -51,16 +55,17 @@ export class PhaseGateGuard implements Guard {
     if (userRole) {
       try {
         const perms = getPermissions(userRole);
-        if (!perms.allowedPhases.includes(context.phase)) {
+        const normalizedPhase = normalizePhaseAlias(context.phase);
+        if (!perms.allowedPhases.includes(normalizedPhase)) {
           return {
             guardId: this.id,
             decision: 'BLOCK',
             severity: 'ERROR',
-            reason: `Enterprise role "${userRole}" is not authorized for phase "${context.phase}". Allowed phases: ${perms.allowedPhases.join(', ')}.`,
-            agentGuidance: `The active user has the "${userRole}" role, which is not allowed in the "${context.phase}" phase.`,
+            reason: `Enterprise role "${userRole}" is not authorized for phase "${normalizedPhase}". Allowed phases: ${perms.allowedPhases.join(', ')}.`,
+            agentGuidance: `The active user has the "${userRole}" role, which is not allowed in the "${normalizedPhase}" phase.`,
             suggestedAction: 'switch_to_allowed_phase',
             timestamp,
-            metadata: { userRole, phase: context.phase, allowedPhases: perms.allowedPhases },
+            metadata: { userRole, phase: normalizedPhase, allowedPhases: perms.allowedPhases },
           };
         }
       } catch {

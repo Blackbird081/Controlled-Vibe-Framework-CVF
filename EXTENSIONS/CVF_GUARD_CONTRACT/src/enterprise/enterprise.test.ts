@@ -66,11 +66,12 @@ describe('enterprise', () => {
     const req = workflow.createRequest({
       requestedBy: 'u1',
       action: 'deploy',
-      phase: 'BUILD',
+      phase: 'DISCOVERY',
       riskLevel: 'R3',
       reason: 'High risk',
     });
     expect(req.status).toBe('pending');
+    expect(req.phase).toBe('INTAKE');
 
     const approved = workflow.approve(req.id, 'reviewer-1', 'ok');
     expect(approved?.status).toBe('approved');
@@ -124,5 +125,12 @@ describe('enterprise', () => {
     expect(report.complianceScore).toBe(90);
     expect(report.guardBreakdown.length).toBeGreaterThan(0);
     expect(report.topBlockedActions[0].action).toBe('g2');
+    expect(report.phaseDistribution).toEqual({
+      INTAKE: 0,
+      DESIGN: 0,
+      BUILD: 0,
+      REVIEW: 0,
+      FREEZE: 0,
+    });
   });
 });

@@ -16,13 +16,17 @@
 
 // ─── Core Enums ───────────────────────────────────────────────────────
 
-export type CVFPhase =
+export type CanonicalCVFPhase =
   | 'INTAKE'
   | 'DESIGN'
   | 'BUILD'
   | 'REVIEW'
-  | 'FREEZE'
-  | 'DISCOVERY';
+  | 'FREEZE';
+
+export type LegacyCVFPhaseAlias = 'DISCOVERY';
+
+export type CVFPhase = CanonicalCVFPhase | LegacyCVFPhaseAlias;
+export type CVFPhaseInput = CVFPhase;
 
 export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
 
@@ -133,7 +137,7 @@ export interface GuardRuntimeConfig {
 
 // ─── Constants ────────────────────────────────────────────────────────
 
-export const PHASE_ORDER: CVFPhase[] = ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
+export const PHASE_ORDER: CanonicalCVFPhase[] = ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
 
 export const RISK_NUMERIC: Record<CVFRiskLevel, number> = {
   R0: 0,

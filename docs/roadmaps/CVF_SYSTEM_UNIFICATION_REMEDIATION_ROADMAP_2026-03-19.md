@@ -115,6 +115,13 @@ Enterprise/compliance auxiliary alignment batch executed on `2026-03-20`:
 - enterprise permission checks normalize legacy `DISCOVERY` input to canonical `INTAKE`: `COMPLETED`
 - compliance dashboard mock posture now reflects canonical `FREEZE`-aware reporting: `COMPLETED`
 
+Canonical phase type-depth alignment batch executed on `2026-03-20`:
+
+- shared contract now exports canonical phase helper types from one source (`CanonicalCVFPhase`, legacy alias, input union): `COMPLETED`
+- enterprise approval and compliance reporting now store canonical phases internally while still accepting legacy boundary input: `COMPLETED`
+- user-facing friendly phase labels now normalize legacy aliases at render time instead of teaching them as canonical entries: `COMPLETED`
+- enterprise/compliance auxiliary surfaces are now materially cleaner at the internal type level on the active path
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -140,6 +147,7 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_ENTERPRISE_COMPLIANCE_ALIGNMENT_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_CANONICAL_PHASE_TYPE_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

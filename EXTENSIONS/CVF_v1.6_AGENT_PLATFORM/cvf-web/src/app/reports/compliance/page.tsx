@@ -34,8 +34,7 @@ const MOCK_REPORT: ComplianceReport = {
     'DESIGN': 255,
     'BUILD': 360,
     'REVIEW': 170,
-    'FREEZE': 50,
-    'DISCOVERY': 0
+    'FREEZE': 50
   },
   topBlockedActions: [
     { action: 'system_execute', count: 18, reason: 'Risk R3 exceeds Developer Role Max R2' },

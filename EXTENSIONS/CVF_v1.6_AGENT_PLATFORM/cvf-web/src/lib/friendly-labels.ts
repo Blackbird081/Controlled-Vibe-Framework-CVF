@@ -18,7 +18,6 @@ export const PHASE_FRIENDLY: Record<string, { vi: string; en: string; icon: stri
   'REVIEW': { vi: 'Kiểm tra & Đánh giá', en: 'Review & Verify', icon: '✅' },
   'FREEZE': { vi: 'Chốt kết quả & Khóa phạm vi', en: 'Freeze & Close Out', icon: '🔒' },
   // Aliases
-  'DISCOVERY': { vi: 'Tiếp nhận & Làm rõ', en: 'Intake & Clarify', icon: '🧭' },
   'PHASE A': { vi: 'Tiếp nhận & Làm rõ', en: 'Intake & Clarify', icon: '🧭' },
   'PHASE B': { vi: 'Thiết kế & Lên kế hoạch', en: 'Design & Plan', icon: '📐' },
   'PHASE C': { vi: 'Xây dựng & Thực thi', en: 'Build & Execute', icon: '🔨' },
@@ -78,8 +77,13 @@ export const STATUS_FRIENDLY: Record<string, { vi: string; en: string }> = {
 
 type Lang = 'vi' | 'en';
 
-export function friendlyPhase(phase: string, lang: Lang = 'vi'): string {
+function normalizePhaseLabelKey(phase: string): string {
   const key = phase.toUpperCase().trim();
+  return key === 'DISCOVERY' ? 'INTAKE' : key;
+}
+
+export function friendlyPhase(phase: string, lang: Lang = 'vi'): string {
+  const key = normalizePhaseLabelKey(phase);
   const entry = PHASE_FRIENDLY[key];
   return entry ? `${entry.icon} ${entry[lang]}` : phase;
 }

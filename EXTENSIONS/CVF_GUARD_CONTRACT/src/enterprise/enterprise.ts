@@ -9,9 +9,15 @@
  * @module cvf-guard-contract/enterprise
  */
 
-import type { CVFPhase, CVFRiskLevel, CVFRole, GuardPipelineResult } from '../types';
+import type {
+  CanonicalCVFPhase,
+  CVFPhase,
+  CVFRiskLevel,
+  CVFRole,
+  GuardPipelineResult,
+} from '../types';
 
-function normalizePhaseAlias(phase: CVFPhase): CVFPhase {
+function normalizePhaseAlias(phase: CVFPhase): CanonicalCVFPhase {
   return phase === 'DISCOVERY' ? 'INTAKE' : phase;
 }
 
@@ -36,7 +42,7 @@ export interface TeamPermissions {
   canManageTeam: boolean;
   canExportReports: boolean;
   maxRiskLevel: CVFRiskLevel;
-  allowedPhases: CVFPhase[];
+  allowedPhases: CanonicalCVFPhase[];
 }
 
 const ROLE_PERMISSIONS: Record<TeamRole, TeamPermissions> = {
@@ -99,7 +105,7 @@ export interface ApprovalRequest {
   id: string;
   requestedBy: string;
   action: string;
-  phase: CVFPhase;
+  phase: CanonicalCVFPhase;
   riskLevel: CVFRiskLevel;
   reason: string;
   status: ApprovalStatus;
@@ -136,7 +142,7 @@ export class ApprovalWorkflow {
       id,
       requestedBy: params.requestedBy,
       action: params.action,
-      phase: params.phase,
+      phase: normalizePhaseAlias(params.phase),
       riskLevel: params.riskLevel,
       reason: params.reason,
       status: 'pending',
@@ -230,7 +236,7 @@ export interface ComplianceReport {
     allowed: number;
   }[];
   riskDistribution: Record<CVFRiskLevel, number>;
-  phaseDistribution: Record<CVFPhase, number>;
+  phaseDistribution: Record<CanonicalCVFPhase, number>;
   topBlockedActions: { action: string; count: number; reason: string }[];
   teamActivity: { memberId: string; actions: number; blocked: number }[];
   complianceScore: number; // 0-100
@@ -265,13 +271,12 @@ export function generateComplianceReport(
   const riskDist: Record<CVFRiskLevel, number> = { R0: 0, R1: 0, R2: 0, R3: 0 };
 
   // Phase distribution
-  const phaseDist: Record<CVFPhase, number> = {
+  const phaseDist: Record<CanonicalCVFPhase, number> = {
     INTAKE: 0,
     DESIGN: 0,
     BUILD: 0,
     REVIEW: 0,
     FREEZE: 0,
-    DISCOVERY: 0,
   };
 
   // Avg response time

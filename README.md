@@ -265,7 +265,7 @@ CVF
 | **Skills** | 141 skills × 12 domains + 34 agent tools |
 | **AI Safety** | Kernel active — 5-layer pipeline, anti-bypass, forensic tracing |
 | **Current System Review** | [System unification reassessment](docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md) — active reference path is now substantially aligned, with breadth caveats remaining |
-| **Release Readiness** | [Local readiness status](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md) — governance-first control plane with a reusable coder-facing reference loop, further unification still active |
+| **Release Readiness** | [Local readiness status](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md) — governance-first control plane with reusable coder-facing and active non-coder governed reference paths, further breadth expansion still active |
 | **CVF_ECO Evaluation** | [434/434 PASS](ECOSYSTEM/strategy/CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md) — 100% quality gate |
 | **Active Development** | Yes — `cvf-next` branch |
 

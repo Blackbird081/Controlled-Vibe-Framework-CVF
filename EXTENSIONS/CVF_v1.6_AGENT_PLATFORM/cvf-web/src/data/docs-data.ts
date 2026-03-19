@@ -105,8 +105,8 @@ export const DOCS: DocCategory[] = [
                 slug: 'first-project',
                 title: { vi: 'Dự án đầu tiên', en: 'First Project' },
                 desc: {
-                    vi: 'Tạo dự án CVF đầu tiên từ A-Z: init → 4 phases → review → hoàn thành.',
-                    en: 'Create your first CVF project A-Z: init → 4 phases → review → done.',
+                    vi: 'Tạo dự án CVF đầu tiên từ A-Z: intake → design → build → review → freeze.',
+                    en: 'Create your first CVF project A-Z: intake → design → build → review → freeze.',
                 },
             },
             {

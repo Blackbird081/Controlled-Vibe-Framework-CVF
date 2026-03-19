@@ -156,6 +156,12 @@ Foundational concept labeling cleanup batch executed on `2026-03-20`:
 - `risk-model` now labels older 4-phase references as historical foundation rather than active default guidance: `COMPLETED`
 - `version-picker` now distinguishes the original 4-phase foundation from the current canonical loop
 
+Front-door Web docs catalog canonicalization batch executed on `2026-03-20`:
+
+- docs index metadata for `first-project` now advertises the canonical `intake -> design -> build -> review -> freeze` journey: `COMPLETED`
+- non-coder alias handling comments now describe legacy input as compatibility normalization rather than active UI truth: `COMPLETED`
+- active Web docs front door is now cleaner and less likely to reinforce the old generic `4 phases` framing
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -178,6 +184,8 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_CONTROL_LOOP_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_FOUNDATIONAL_CONCEPT_LABELING_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_FRONT_DOOR_WEB_DOCS_CANONICALIZATION_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_ENTERPRISE_COMPLIANCE_ALIGNMENT_DELTA_2026-03-20.md`

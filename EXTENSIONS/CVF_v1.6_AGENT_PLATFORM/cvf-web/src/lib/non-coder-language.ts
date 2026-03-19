@@ -79,7 +79,7 @@ const PHASE_LABELS: Record<string, Record<Lang, FriendlyPhaseLabel>> = {
 
 export function getFriendlyPhaseLabel(phase: string, lang: Lang): FriendlyPhaseLabel {
   const normalized = phase?.toUpperCase?.().trim() || 'BUILD';
-  // Handle legacy aliases from the older 4-phase UI.
+  // Normalize compatibility aliases without teaching them as canonical phases.
   const aliasMap: Record<string, string> = {
     DISCOVERY: 'INTAKE',
     'PHASE A': 'INTAKE', A: 'INTAKE',

@@ -106,13 +106,12 @@ Khi bạn dùng AI (ChatGPT/Claude/Copilot) để code:
 - ❌ Không có documentation
 - ❌ Technical debt tích tụ
 
-#### CVF Solution: 4-Phase Process
+#### CVF Solution: Controlled Execution Loop
 
 ```
-Phase A (Discovery)  →  Phase B (Design)  →  Phase C (Build)  →  Phase D (Review)
-      ↓                       ↓                    ↓                    ↓
- Requirements            Architecture          AI Codes           You Validate
- YOU decide              YOU decide          AI executes         YOU approve/reject
+INTAKE  →  DESIGN  →  BUILD  →  REVIEW  →  FREEZE
+   ↓         ↓         ↓         ↓          ↓
+Scope      Plan     Execute    Validate   Close + lock evidence
 ```
 
 **Nguyên tắc vàng:** AI là executor, BẠN là decision maker.
@@ -140,7 +139,7 @@ npm run dev
 **What to try:**
 1. Click "Templates" → Chọn "Simple Todo App"
 2. Fill form → Click "Generate"
-3. See 4-phase breakdown
+3. See canonical 5-phase breakdown
 4. Export prompt to use with AI
 
 #### Option B: Manual (Core CVF)
@@ -192,14 +191,14 @@ npm run dev
 **Share với team:**
 
 1. **Roles trong CVF:**
-   - 🎯 **Project Owner:** Quyết định requirements (Phase A)
-   - 🎨 **Architect:** Design solution (Phase B)
-   - 🤖 **AI Executor:** Generate code (Phase C)
-   - ✅ **Reviewer:** Validate quality (Phase D)
+   - 🎯 **Project Owner:** Quyết định intent/scope (`INTAKE`)
+   - 🎨 **Architect:** Design solution (`DESIGN`)
+   - 🤖 **AI Executor:** Generate code (`BUILD`)
+   - ✅ **Reviewer / Governor:** Validate rồi đóng lại (`REVIEW` → `FREEZE`)
 
 2. **Workflow:**
    ```
-   Owner defines → Architect designs → AI builds → Reviewer validates
+   Owner scopes → Architect designs → AI builds → Reviewer validates → Governor closes
    ```
 
 3. **Tools:**
@@ -342,7 +341,7 @@ git push origin feature/your-feature-name
 ### Path 1: Core Concepts (1-2 hours)
 
 1. [Core Philosophy](concepts/core-philosophy.md) - 15 mins
-2. [4-Phase Process](concepts/4-phase-process.md) - 20 mins
+2. [Controlled Execution Loop](concepts/controlled-execution-loop.md) - 20 mins
 3. [Governance Model](concepts/governance-model.md) - 25 mins
 4. [Skill System](concepts/skill-system.md) - 20 mins
 
@@ -399,7 +398,7 @@ git push origin feature/your-feature-name
 |----------|------|
 | **Guides** | [Solo Dev](guides/solo-developer.md) · [Team](guides/team-setup.md) · [Enterprise](guides/enterprise.md) |
 | **Tutorials** | [First Project](tutorials/first-project.md) · [Web UI](tutorials/web-ui-setup.md) · [Agent](tutorials/agent-platform.md) |
-| **Concepts** | [Philosophy](concepts/core-philosophy.md) · [Phases](concepts/4-phase-process.md) · [Governance](concepts/governance-model.md) |
+| **Concepts** | [Philosophy](concepts/core-philosophy.md) · [Controlled Loop](concepts/controlled-execution-loop.md) · [Legacy 4-Phase](concepts/4-phase-process.md) · [Governance](concepts/governance-model.md) |
 | **Reference** | [Skills](concepts/skill-system.md) · [Risk Model](concepts/risk-model.md) · [Version History](concepts/version-evolution.md) |
 | **Cheatsheets** | [Versions](cheatsheets/version-picker.md) · [Troubleshoot](cheatsheets/troubleshooting.md) |
 
@@ -440,4 +439,4 @@ After getting started, here are recommended next steps:
 
 ---
 
-*Last updated: March 2026 · Version: 1.6.0 + Guard Contract (Sprint 0-5 complete)*
+*Last updated: March 20, 2026 · Version: 1.6.0 + canonical runtime alignment active*

@@ -57,7 +57,23 @@ Phase 3 workflow realism batch executed on `2026-03-20`:
 - rollback reason and step-level rollback evidence captured: `COMPLETED`
 - workflow-level execution log and lightweight freeze receipt added: `COMPLETED`
 - handler registry and reference `executeWorkflow()` binding added: `COMPLETED`
-- binding workflow steps to production-grade extension adapters: `NOT STARTED`
+- binding workflow steps to production-grade extension adapters: `COMPLETED`
+
+Phase 3 workflow closure batch executed on `2026-03-20`:
+
+- `CvfSdk` now bootstraps real default runtime bindings for bridge-driven workflow execution: `COMPLETED`
+- workflow steps now emit standardized `INPUT / EXECUTION / FAILURE / ROLLBACK` receipts: `COMPLETED`
+- `v1.1.1`, `v3.0`, and `v1.9` reference workflow actions now execute against real runtime components, not test-only mock handlers: `COMPLETED`
+- multi-agent task assignment now enforces phase/risk/file-boundary checks before locking work: `COMPLETED`
+- Phase 3 delivery target (`Workstream D + Workstream E`) is now considered `COMPLETED` for the active local baseline
+
+Phase 4 documentation and readiness reconciliation batch executed on `2026-03-20`:
+
+- canonical entry docs updated away from stale `4-phase / 6-guard` framing: `COMPLETED`
+- canonical concept entry for the controlled execution loop added: `COMPLETED`
+- release manifest, maturity, and positioning narrative reconciled to current runtime truth: `COMPLETED`
+- release-readiness checkpoint issued with explicit open gaps: `COMPLETED`
+- strongest claims constrained to governance-first / hardening-active posture: `COMPLETED`
 
 Verification completed for this batch:
 
@@ -77,6 +93,8 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_WEB_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_WORKFLOW_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_COMPLETION_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---
 

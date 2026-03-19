@@ -7,7 +7,7 @@
 
 ## 1. What is CVF?
 
-**CVF (Controlled Vibe Framework)** is a **governance framework** for AI-assisted development.
+**CVF (Controlled Vibe Framework)** is a **governance-first control plane** for AI-assisted development.
 
 ```
 CVF = Rules + Process + Tools
@@ -18,10 +18,10 @@ CVF = Rules + Process + Tools
 
 | Aspect | CVF IS | CVF IS NOT |
 |--------|--------|------------|
-| Type | Governance framework | AI model / AI tool |
+| Type | Governance-first control plane | AI model / AI tool |
 | Scope | Process + standards | Code library / SDK |
-| Target | Human + AI collaboration | Pure AI automation |
-| Output | Rules, specs, checklists | App / Software product |
+| Target | Human-supervised AI execution | Pure AI automation |
+| Output | Runtime controls, workflow discipline, evidence chain | App / Software product |
 | Dependency | Agent-agnostic | Tied to specific AI |
 
 ---
@@ -55,7 +55,7 @@ CVF has 5 distinct layers (not a monolith):
 
 ### Layer 1: Core (Required)
 - **Principles:** Outcome > Code, Spec-first, Risk-aware
-- **Phases:** Discovery → Design → Build → Review → Ship
+- **Canonical loop:** INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 - **Risk Model:** R0 (Auto) → R1 (Audit) → R2 (Review) → R3 (Manual)
 - **Skill Library:** 141 skills across 12 domains
 
@@ -72,7 +72,7 @@ CVF has 5 distinct layers (not a monolith):
 - Anomaly detection, system prompt hardening
 
 ### Layer 4: Platform (Reference Implementation)
-- Web app (Next.js) — production-grade UI
+- Web app (Next.js) — governed UI and non-coder control surface
 - AI Agent Chat — Gemini, OpenAI, Anthropic
 - 34 Agent Tools — multi-agent workflows
 - Template Marketplace — community templates
@@ -120,9 +120,21 @@ CVF has 5 distinct layers (not a monolith):
 | AI Safety Runtime | ✅ v1.7.x | ❌ | ❌ | ❌ |
 | Lightweight | ✅ | ✅ | ❌ Heavy | ✅ |
 
+## 5. Current Positioning Discipline
+
+Safe current statement:
+
+> CVF is a governance-first control plane with a substantially aligned runtime and an active roadmap toward full end-to-end controlled autonomy.
+
+Statements to avoid until further roadmap closure:
+
+- full platform parity with larger orchestration ecosystems
+- fully unified autonomy across every active CVF channel
+- complete replacement of human supervision
+
 ---
 
-## 5. Tagline Options
+## 6. Tagline Options
 
 Use one of these taglines when introducing CVF:
 
@@ -133,7 +145,7 @@ Use one of these taglines when introducing CVF:
 
 ---
 
-## 6. Elevator Pitch
+## 7. Elevator Pitch
 
 > CVF is a governance framework that helps you control AI when developing software.  
 > Instead of letting AI run free, CVF provides 141 ready-made skill templates,  
@@ -143,7 +155,7 @@ Use one of these taglines when introducing CVF:
 
 ---
 
-## 7. Anti-Patterns (Avoid)
+## 8. Anti-Patterns (Avoid)
 
 | Say | Instead of | Because |
 |-----|-----------|---------|
@@ -154,4 +166,4 @@ Use one of these taglines when introducing CVF:
 
 ---
 
-*Updated: February 25, 2026*
+*Updated: March 20, 2026*

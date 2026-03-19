@@ -25,14 +25,14 @@ Status: authoritative operational release manifest for the current local baselin
 | `draft` | design/branch track, not mainline baseline |
 | `legacy-reference` | retained for historical/reference use, not current upgrade focus |
 
-## Current Operational Manifest (2026-03-10)
+## Current Operational Manifest (2026-03-20)
 
 | Version | Module / Line | Release line | Maturity | Evidence anchor | Notes |
 |---|---|---|---|---|---|
 | v1.0 | Foundation | frozen | baseline-reference | `v1.0/` | original framework baseline |
 | v1.1 | Governance Refinement | frozen | baseline-reference | `v1.1/` | policy/governance lineage root |
-| v1.1.1 | Phase Governance Protocol | stable | production-candidate | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` | integrated under ADR-014 |
-| v1.1.2 | Phase Governance Hardening | local-ready | hardening-active | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` | current local hardening wave; tracked by `REQ-20260307-001` |
+| v1.1.1 | Phase Governance Protocol | stable | production-candidate | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` | stable governance runtime line with active workflow realism hardening |
+| v1.1.2 | Phase Governance Hardening | local-ready | hardening-active | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` | local remediation wave aligned to canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` semantics |
 | v1.2 | Capability Extension | frozen | baseline-reference | `EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/` | capability governance root |
 | v1.2.1 | External Integration | active | production-candidate | `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/` | independently reassessed 2026-03-06 |
 | v1.2.2 | Skill Governance Engine | local-ready | hardening-active | `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` | present in current upgrade chain |
@@ -40,7 +40,7 @@ Status: authoritative operational release manifest for the current local baselin
 | v1.3.1 | Operator Edition | legacy-reference | reference-only | `EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/` | retained for operator lineage |
 | v1.4.x | Usage Layer family | legacy-reference | reference-only | `EXTENSIONS/CVF_v1.4_USAGE_LAYER/` | historical usage/operator branch |
 | v1.5.x | UX / end-user family | legacy-reference | reference-only | `EXTENSIONS/CVF_v1.5_UX_PLATFORM/` | retained, not current hardening priority |
-| v1.6 | Agent Platform | active | production-candidate | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/` | current web entrypoint line |
+| v1.6 | Agent Platform | active | production-candidate | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/` | current web entrypoint line with canonical phase/UI alignment batch applied locally |
 | v1.6.1 | Governance Engine | active | production-candidate | `EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/` | governance runtime line |
 | v1.7 | Controlled Intelligence | stable | production-candidate | `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/` | intelligence/safety line root |
 | v1.7.1 | Safety Runtime | stable | production-candidate | `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/` | tested kernel/safety runtime |
@@ -59,18 +59,18 @@ Status: authoritative operational release manifest for the current local baselin
 
 | Need | Canonical file |
 |---|---|
-| baseline review | `docs/reviews/cvf_phase_governance/CVF_DANH_GIA_DOC_LAP_TOAN_DIEN_2026-03-06.md` |
-| executive summary | `docs/reviews/cvf_phase_governance/CVF_EXECUTIVE_REVIEW_BASELINE_2026-03-06.md` |
-| roadmap | `docs/reviews/cvf_phase_governance/CVF_ROADMAP_FIXES_2026-03-10.md` |
-| current upgrade trace | `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md` |
+| whole-system review | `docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md` |
+| update remediation review | `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md` |
+| active roadmap | `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md` |
+| readiness checkpoint | `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md` |
 | test evidence chain | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
 | enterprise evidence pack | `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md` |
-| sprint 0.4 evidence | `governance/contracts/cross-channel-guard-contract.test.ts` |
-| sprint 0.5 evidence | `governance/contracts/adapters/vscode-governance-adapter.test.ts` |
+| baseline delta chain | `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md` |
+| release/module inventory | `docs/reference/CVF_MODULE_INVENTORY.md` |
 
 ## Operational Notes
 
-- this manifest is local-authoritative until the current upgrade wave is pushed and frozen
+- this manifest is local-authoritative until the current system unification wave is reassessed and frozen
 - any new version/line must update:
   - `docs/CVF_ARCHITECTURE_DECISIONS.md`
   - `docs/VERSIONING.md`

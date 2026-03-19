@@ -3147,3 +3147,60 @@ Utility and guard:
 - Notes/Risks:
   - `ExtensionBridge` can now run workflows via registered action handlers instead of only waiting for manual result reporting.
   - When no handler exists, the workflow now stops truthfully in a manual-handoff state rather than faking success.
+
+## [2026-03-20] Batch: Phase 4 docs and release-readiness reconciliation
+- Change reference:
+  - local working tree Phase 4 documentation batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `README.md`
+  - `docs/GET_STARTED.md`
+  - `docs/concepts/4-phase-process.md`
+  - `docs/concepts/controlled-execution-loop.md`
+  - `docs/guides/solo-developer.md`
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+  - `docs/reference/CVF_MATURITY_MATRIX.md`
+  - `docs/reference/CVF_POSITIONING.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `docs/reference/README.md`
+  - `docs/INDEX.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `governance/compat/check_release_manifest_consistency.py`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - application runtime tests — skipped because this batch only changes canonical docs, release narrative, and one manifest-consistency helper
+  - full Web and extension test suites — skipped because no execution-path code changed outside documentation governance support
+- Notes/Risks:
+  - Canonical entry docs now describe the current `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` posture instead of the stale `4-phase / 6-guard` framing.
+  - Release narrative is now intentionally constrained to governance-first / hardening-active truth, not full whole-system closure.
+  - Production-grade cross-extension adapter binding and full control-ownership closure remain open roadmap items.
+
+## [2026-03-20] Batch: Phase 3 completion — real runtime bridge binding and multi-agent guardrails
+- Change reference:
+  - local working tree Phase 3 completion batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_COMPLETION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/wiring/extension.bridge.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/cloud/multi.agent.runtime.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/index.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/extension.bridge.test.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/sdk.test.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/multi.agent.runtime.test.ts`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/extension.bridge.test.ts tests/sdk.test.ts tests/multi.agent.runtime.test.ts` -> PASS
+    - Result: `3 test files, 100 passed`
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run build` -> PASS
+- Skip scope:
+  - full extension test suite — skipped because this batch is localized to workflow binding, SDK defaults, and multi-agent runtime guardrails
+  - broader Web/UI suites — unchanged in this batch and already covered by prior alignment receipts
+- Notes/Risks:
+  - `CvfSdk` now boots real default bridge bindings that execute through `GuardRuntimeEngine`, `GuardGateway`, and `PipelineOrchestrator`.
+  - `ExtensionBridge` steps now emit structured `INPUT / EXECUTION / FAILURE / ROLLBACK` receipts.
+  - Multi-agent runtime now blocks assignments that violate phase, risk, or file-boundary constraints before resource locking occurs.

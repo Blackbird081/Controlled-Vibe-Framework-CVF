@@ -37,19 +37,19 @@ CVF is a **governance-enforced runtime platform** for AI-assisted software devel
 
 **Key Capabilities:**
 
-- **4-Phase Process** — Discovery → Design → Build → Review (no skipping phases)
+- **Canonical Controlled Execution Loop** — `INTAKE → DESIGN → BUILD → REVIEW → FREEZE`
 - **Risk Control** — 4-level risk model (R0–R3) with authority boundaries
 - **141 Reusable Skills** — Across 12 domains, with bi-directional linking
-- **Unified Guard System** — `CVF_GUARD_CONTRACT`: 1 engine, 6 guards, phase/risk/role enforcement via `GuardRuntimeEngine`
+- **Unified Guard System** — `CVF_GUARD_CONTRACT`: hardened default guard stack for shared channels, aligned to canonical runtime semantics
 - **MCP HTTP Bridge** — External agents call `POST /api/guards/evaluate` → ALLOW/BLOCK/ESCALATE + `agentGuidance`
-- **Agent Execution Runtime** — Full governed pipeline: `parseIntent → preCheck → execute → postCheck → audit`
+- **Agent Execution Runtime** — governed execution pipeline with explicit guard evaluation, review, and audit evidence
 - **Multi-Provider AI** — Pluggable `ExecutionProvider`: Alibaba Qwen (`qwen-turbo`) + Google Gemini (`gemini-2.0-flash`)
 - **SQLite Audit Trail** — Persistent, indexed audit log (WAL mode) with stats, filtering, pagination
 - **Rate Limiting** — Sliding window 60 req/60s, 429 + Retry-After headers for API endpoints
 - **Guard Dashboard UI** — Interactive governance UI for non-coders (`/(dashboard)/guards`)
 - **VS Code Governance Adapter** — Prompt injection for Cursor/Windsurf/AI IDE agents
 - **CI Pipeline** — GitHub Actions: guard contract tests + MCP tests + Web UI typecheck
-- **Web UI + Agent Platform** — No-code interface, multi-agent workflows, v1.6 non-coder enhancement complete
+- **Web UI + Agent Platform** — non-coder interface aligned to the canonical phase model and governed execution prompts
 - **AI Safety Kernel** — 5-layer pipeline, anti-bypass, forensic tracing
 
 > **CVF doesn't help you go faster. CVF helps you avoid going wrong.**
@@ -72,10 +72,10 @@ npm install && npm run dev
 
 → Open http://localhost:3000
 
-### Option 3: Core CVF (5 minutes)
+### Option 3: Core CVF Baseline (5 minutes)
 
 1. Read the [Manifesto](v1.0/CVF_MANIFESTO.md)
-2. Follow the [4-Phase Process](v1.0/phases/)
+2. Learn the [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md)
 3. Use the [Governance Checklists](v1.0/governance/)
 
 **→ [📖 Full Getting Started Guide](docs/GET_STARTED.md)**
@@ -110,7 +110,7 @@ See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_IS
 
 | | |
 |---|---|
-| **Concepts** | [Core Philosophy](docs/concepts/core-philosophy.md) · [4-Phase Process](docs/concepts/4-phase-process.md) · [Governance Model](docs/concepts/governance-model.md) · [Risk Model](docs/concepts/risk-model.md) · [Skill System](docs/concepts/skill-system.md) · [Version Evolution](docs/concepts/version-evolution.md) · [Hierarchical Governance Pipeline](docs/concepts/CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md) |
+| **Concepts** | [Core Philosophy](docs/concepts/core-philosophy.md) · [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md) · [Legacy 4-Phase Process](docs/concepts/4-phase-process.md) · [Governance Model](docs/concepts/governance-model.md) · [Risk Model](docs/concepts/risk-model.md) · [Skill System](docs/concepts/skill-system.md) · [Version Evolution](docs/concepts/version-evolution.md) · [Hierarchical Governance Pipeline](docs/concepts/CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md) |
 | **Doctrine** | [Architecture Principles](ECOSYSTEM/doctrine/CVF_ARCHITECTURE_PRINCIPLES.md) · [Product Positioning](ECOSYSTEM/doctrine/CVF_PRODUCT_POSITIONING.md) · [Ecosystem Map](ECOSYSTEM/doctrine/CVF_ECOSYSTEM_MAP.md) · [Layer Model](ECOSYSTEM/doctrine/CVF_LAYER_MODEL.md) · [Doctrine Rules](ECOSYSTEM/doctrine/CVF_DOCTRINE_RULES.md) |
 | **Operating Model** | [Agent Operating Model](ECOSYSTEM/operating-model/CVF_AGENT_OPERATING_MODEL.md) · [Builder Model (Non-Coder)](ECOSYSTEM/operating-model/CVF_BUILDER_MODEL.md) · [VOM Quick Start](ECOSYSTEM/operating-model/CVF_VOM_QUICK_START.md) |
 | **Strategy** | [Strategic Summary](ECOSYSTEM/strategy/CVF_STRATEGIC_SUMMARY.md) · [Unified Roadmap 2026](ECOSYSTEM/strategy/CVF_UNIFIED_ROADMAP_2026.md) |
@@ -122,7 +122,7 @@ See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_IS
 
 | | |
 |---|---|
-| **Reference** | [Release Manifest](docs/reference/CVF_RELEASE_MANIFEST.md) · [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md) · [Maturity Matrix](docs/reference/CVF_MATURITY_MATRIX.md) · [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md) · [Positioning](docs/reference/CVF_POSITIONING.md) |
+| **Reference** | [Release Manifest](docs/reference/CVF_RELEASE_MANIFEST.md) · [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md) · [Maturity Matrix](docs/reference/CVF_MATURITY_MATRIX.md) · [Release Readiness](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md) · [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md) · [Positioning](docs/reference/CVF_POSITIONING.md) |
 | **Assessments** | [Independent Review 2026-03-08](docs/assessments/CVF_INDEPENDENT_EXPERT_REVIEW_UPGRADE_WAVE_2026-03-08.md) · [Assessment 2026-02-25](docs/assessments/CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md) · [Antigravity Assessment](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md) |
 | **Baselines** | [Core Compat Baseline](docs/baselines/CVF_CORE_COMPAT_BASELINE.md) · [Version Comparison](docs/VERSION_COMPARISON.md) · [Versioning Policy](docs/VERSIONING.md) |
 | **Records** | [Architecture Decisions (ADR-001→020)](docs/CVF_ARCHITECTURE_DECISIONS.md) · [Bug History](docs/BUG_HISTORY.md) · [Test Log](docs/CVF_INCREMENTAL_TEST_LOG.md) · [CHANGELOG](CHANGELOG.md) |
@@ -240,7 +240,7 @@ CVF
 - 🎯 **Multi-Agent Workflow** — Orchestrator, Architect, Builder, Reviewer
 - ✅ **34 Agent Tools** — Web search, code execute, RAG retrieval, data viz, browser auto, MCP, agent teams & more
 - 💾 **Chat History** — Persistent conversations
-- 🔐 **Governance Toolkit** — Phase/role/risk control (R0–R3)
+- 🔐 **Governance Toolkit** — canonical `INTAKE → DESIGN → BUILD → REVIEW → FREEZE` semantics, phase/role/risk control (R0–R3)
 - 🌐 **Bilingual** — Vietnamese/English
 - 📱 **Mobile Responsive** — Touch-optimized UI
 
@@ -263,7 +263,8 @@ CVF
 | **Tests** | 2,430+ passing (Core + Legacy + CVF_ECO) |
 | **Skills** | 141 skills × 12 domains + 34 agent tools |
 | **AI Safety** | Kernel active — 5-layer pipeline, anti-bypass, forensic tracing |
-| **Independent Review** | [8.7/10](docs/assessments/CVF_INDEPENDENT_EXPERT_REVIEW_UPGRADE_WAVE_2026-03-08.md) — Strong upgrade wave |
+| **Current System Review** | [Independent system review](docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md) — strong governance core, whole-system unification still partial |
+| **Release Readiness** | [Local readiness status](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md) — governance-first control plane, further unification still active |
 | **CVF_ECO Evaluation** | [434/434 PASS](ECOSYSTEM/strategy/CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md) — 100% quality gate |
 | **Active Development** | Yes — `cvf-next` branch |
 
@@ -376,4 +377,4 @@ We welcome contributions!
 
 ---
 
-*Last updated: March 9, 2026 | Version 2.0.0 | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) | [Full Docs](docs/INDEX.md)*
+*Last updated: March 20, 2026 | Version 2.0.0 | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) | [Full Docs](docs/INDEX.md)*

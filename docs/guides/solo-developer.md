@@ -4,7 +4,7 @@
 
 **Target:** Individual developers using AI to code  
 **Reading time:** 10 minutes  
-**CVF Version:** v1.0 (core) — optionally v1.6 (web UI)
+**CVF Version:** v1.0 baseline concepts + current canonical runtime guidance
 
 ---
 
@@ -14,13 +14,13 @@ When you code with AI (ChatGPT, Claude, Copilot, Cursor), these problems show up
 
 | Problem | What Happens | CVF Fix |
 |---------|-------------|---------|
-| **Scope creep** | AI adds features you didn't ask for | Phase A freezes intent |
-| **Lost context** | After 10 prompts, AI forgets your goals | Phase B design doc persists |
-| **Hidden bugs** | AI code looks right but breaks edge cases | Phase D review checklist |
+| **Scope creep** | AI adds features you didn't ask for | INTAKE freezes intent |
+| **Lost context** | After 10 prompts, AI forgets your goals | DESIGN doc persists |
+| **Hidden bugs** | AI code looks right but breaks edge cases | REVIEW checklist catches gaps |
 | **Code debt** | "It works" becomes "I can't maintain this" | Governance structure |
 | **Wasted time** | Re-explaining the same thing to AI | Spec files stay as context |
 
-CVF fixes these with **structure without overhead**. You don't need a team, a manager, or special tools. Just 4 phases and a few markdown files.
+CVF fixes these with **structure without overhead**. You don't need a team, a manager, or special tools. Start with the controlled loop and a few markdown files.
 
 ---
 
@@ -86,22 +86,22 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000 → Pick a template → Fill the form → Export → Give to AI.
+Open http://localhost:3000 → Pick a template → Fill the form → Review the plan → Export → Give to AI.
 
-The web UI guides you through the 4 phases automatically.
+The web UI now guides you through the canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` flow.
 
 > **Note:** You need at least one AI API key (OpenAI, Anthropic, or Google AI). Copy `.env.example` to `.env.local` and add your key.
 
 ---
 
-## The 4-Phase Workflow for Solo Devs
+## The Controlled Execution Loop For Solo Devs
 
-### Phase A — DISCOVERY (5 minutes)
+### Phase 1 — INTAKE (5 minutes)
 
 **What you do:** Write down what you want. Be specific.
 
 ```markdown
-## Phase A: Discovery
+## INTAKE
 
 **Intent:** I want a CLI tool that converts CSV files to JSON.
 
@@ -126,12 +126,12 @@ The web UI guides you through the 4 phases automatically.
 
 ---
 
-### Phase B — DESIGN (10 minutes)
+### Phase 2 — DESIGN (10 minutes)
 
 **What you do:** Sketch the solution approach before coding.
 
 ```markdown
-## Phase B: Design
+## DESIGN
 
 **Approach:** 
 - Use Python's built-in `csv` module for parsing
@@ -157,19 +157,19 @@ CLI input → validate path → read CSV → convert to dicts → write JSON →
 
 ---
 
-### Phase C — BUILD (AI does this)
+### Phase 3 — BUILD (AI does this)
 
-**What you do:** Give AI your Phase A + Phase B docs and let it code.
+**What you do:** Give AI your INTAKE + DESIGN docs and let it code.
 
 ```
 You are an Execution agent. Follow the design exactly.
 
-Read the attached Phase A (Discovery) and Phase B (Design) docs.
+Read the attached INTAKE and DESIGN docs.
 Implement the solution as designed.
 
 Rules:
 - Do NOT add features not in the spec
-- Do NOT change the approach from Phase B
+- Do NOT change the approved DESIGN approach
 - If the design is not feasible, STOP and tell me why
 - Do NOT optimize unless I ask
 
@@ -180,14 +180,14 @@ Create: src/csv_to_json.py
 
 ---
 
-### Phase D — REVIEW (5 minutes)
+### Phase 4 — REVIEW (5 minutes)
 
-**What you do:** Check the output against your Phase A intent.
+**What you do:** Check the output against your original INTAKE intent.
 
 **Review checklist:**
 
 ```markdown
-## Phase D: Review
+## REVIEW
 
 - [ ] Does it take a CSV path as input? → YES
 - [ ] Does it output JSON in same directory? → YES
@@ -200,14 +200,32 @@ Create: src/csv_to_json.py
 **Verdict:** ✅ ACCEPT (after testing quoted fields)
 ```
 
-**If something fails:** Don't fix in Phase D. Go back to Phase B (adjust design) or Phase C (re-execute).
+**If something fails:** Don't fix in REVIEW. Go back to DESIGN (adjust plan) or BUILD (re-execute).
+
+---
+
+### Phase 5 — FREEZE (2 minutes)
+
+When the result is acceptable, close it cleanly:
+
+```markdown
+## FREEZE
+
+- [ ] Final result accepted
+- [ ] Key evidence links saved
+- [ ] Important decisions recorded
+- [ ] Open risks noted explicitly
+- [ ] Scope is considered closed for this task
+```
+
+`FREEZE` is the small step that keeps future you from asking "what exactly did we accept here?"
 
 ---
 
 ## Tips for Solo Success
 
 ### 1. Start Simple
-Don't use all CVF features at once. Start with just `INPUT_SPEC.md` and Phase D checklist. Add more structure only when you need it.
+Don't use all CVF features at once. Start with just `INPUT_SPEC.md`, a simple DESIGN note, and a REVIEW checklist. Add more structure only when you need it.
 
 ### 2. Use the 2-Hour Rule
 If a task takes more than 2 hours, break it into smaller tasks. Each task gets its own spec and trace.
@@ -232,7 +250,7 @@ After each AI session, save a quick trace:
 ## AU-001: Implement CSV parser
 
 **Command:** CVF:EXECUTE
-**Input:** Phase A + Phase B specs
+**Input:** INTAKE + DESIGN specs
 **AI Used:** Claude 3.5
 **Output:** src/csv_to_json.py (87 lines)
 **Review:** ACCEPT — all criteria met
@@ -250,7 +268,7 @@ AI will always suggest "improvements." Your response:
 
 | Signal | Action |
 |--------|--------|
-| Projects take more than 1 day | Add Phase B (proper design) |
+| Projects take more than 1 day | Add a proper DESIGN artifact |
 | AI output increasingly wrong | Add INPUT_SPEC (clearer context) |
 | Can't remember why you built things | Add Decision Log |
 | Working with 1-2 other people | Move to [Team Guide](team-setup.md) |
@@ -262,16 +280,16 @@ AI will always suggest "improvements." Your response:
 ## Common Questions
 
 **Q: Is CVF overkill for small projects?**  
-A: No. The minimum viable CVF is just writing down your intent (Phase A) and checking the result (Phase D). That's 10 minutes of overhead that saves hours of rework.
+A: No. The minimum viable CVF is just writing down your intent (`INTAKE`) and checking the result (`REVIEW`), then recording closure in `FREEZE`. That's a small overhead that saves hours of rework.
 
 **Q: Do I need the web UI?**  
 A: No. Core CVF works with Markdown files only. The web UI just makes it easier to fill forms and manage templates.
 
 **Q: Can I use CVF with Cursor / Windsurf / Cline?**  
-A: Yes. CVF is editor-agnostic. Your Phase A + Phase B docs become context for any AI tool.
+A: Yes. CVF is editor-agnostic. Your INTAKE + DESIGN docs become context for any AI tool.
 
 **Q: What if I forget a phase?**  
-A: Start with Phase A and Phase D only. Add B and C when you feel the need. The framework adapts to your workflow.
+A: Start with `INTAKE`, `BUILD`, and `REVIEW` if needed, then add fuller planning discipline as your work gets more complex.
 
 **Q: How is this different from just writing a prompt?**  
 A: A prompt is one-shot. CVF gives you persistent context (specs), decision history, and a review process. When projects get complex, prompts fail — specs don't.
@@ -280,7 +298,7 @@ A: A prompt is one-shot. CVF gives you persistent context (specs), decision hist
 
 ## Next Steps
 
-- 📖 [Understand the 4 Phases](../concepts/4-phase-process.md)
+- 📖 [Understand the Controlled Execution Loop](../concepts/controlled-execution-loop.md)
 - 🧪 [Try Your First CVF Project (Tutorial)](../tutorials/first-project.md)
 - 📚 [Browse 131 skills](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
 - 🖥️ [Set Up Web UI](../tutorials/web-ui-setup.md)
@@ -288,4 +306,4 @@ A: A prompt is one-shot. CVF gives you persistent context (specs), decision hist
 
 ---
 
-*Last updated: February 15, 2026 | CVF v1.6*
+*Last updated: March 20, 2026 | Canonical loop aligned*

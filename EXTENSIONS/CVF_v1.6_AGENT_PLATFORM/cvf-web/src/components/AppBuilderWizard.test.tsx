@@ -22,6 +22,29 @@ vi.mock('./SpecExport', () => ({
     ),
 }));
 
+vi.mock('./ProcessingScreen', () => ({
+    ProcessingScreen: ({
+        templateName,
+        executionOverrides,
+        onComplete,
+        onCancel,
+    }: {
+        templateName: string;
+        executionOverrides?: { cvfPhase?: string; cvfRiskLevel?: string; skillPreflightDeclaration?: string };
+        onComplete: (output: string) => void;
+        onCancel: () => void;
+    }) => (
+        <div>
+            <p>ProcessingScreenMock:{templateName}</p>
+            <p>Phase:{executionOverrides?.cvfPhase}</p>
+            <p>Risk:{executionOverrides?.cvfRiskLevel}</p>
+            <p>Skill:{executionOverrides?.skillPreflightDeclaration}</p>
+            <button onClick={() => onComplete('Live governed output')}>CompleteProcessingMock</button>
+            <button onClick={onCancel}>CancelProcessingMock</button>
+        </div>
+    ),
+}));
+
 function fillAll() {
     screen.queryAllByRole('textbox').forEach(tb => fireEvent.change(tb, { target: { value: 'Test data' } }));
     screen.queryAllByRole('combobox').forEach(sel => {
@@ -278,6 +301,41 @@ describe('AppBuilderWizard', () => {
         expect(screen.getAllByText(/Approval checkpoints/i).length).toBeGreaterThan(0);
         expect(screen.getAllByText(/Freeze receipt/i).length).toBeGreaterThan(0);
         expect(screen.getAllByText(/Execution handoff/i).length).toBeGreaterThan(0);
+    });
+
+    it('launches live governed path from review step', async () => {
+        render(<AppBuilderWizard onBack={vi.fn()} />);
+
+        fillStep1('Desktop App');
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('Tech Stack'));
+        fillStep2('Không cần');
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('Architecture'));
+        fillStep3();
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('API Design'));
+        fillStep5('REST API');
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('App Spec'));
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('Deployment'));
+        fillStep7();
+        clickNext();
+        await waitFor(() => expect(document.body.textContent).toContain('Review'));
+
+        fireEvent.click(screen.getByText('Chạy live governed path'));
+
+        expect(await screen.findByText(/ProcessingScreenMock:App Builder Wizard/i)).toBeTruthy();
+        expect(screen.getByText('Phase:BUILD')).toBeTruthy();
+        expect(screen.getByText('Risk:R2')).toBeTruthy();
+        expect(screen.getByText(/Skill:NONCODER_REFERENCE_PACKET:taskflow/i)).toBeTruthy();
+
+        fireEvent.click(screen.getByText('CompleteProcessingMock'));
+
+        expect(await screen.findByText(/Live Governed Run đã hoàn tất/i)).toBeTruthy();
+        expect(screen.getByText(/Live governed output/i)).toBeTruthy();
+        expect(screen.getAllByText(/Freeze receipt/i).length).toBeGreaterThan(0);
     });
 
     it('generates CLI defaults in review spec when optional fields are empty', async () => {

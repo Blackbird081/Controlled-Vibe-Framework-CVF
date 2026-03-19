@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildNonCoderReferenceLoop,
+  buildNonCoderLiveExecutionRequest,
   formatNonCoderReferenceLoopMarkdown,
 } from './non-coder-reference-loop';
 
@@ -34,9 +35,28 @@ describe('non-coder reference loop', () => {
       'freeze-gate',
     ]);
     expect(artifact.executionHandoff.mode).toBe('full');
+    expect(artifact.executionHandoff.templateId).toBe('app_builder_wizard');
     expect(artifact.executionHandoff.cvfPhase).toBe('BUILD');
     expect(artifact.executionHandoff.skillPreflightDeclaration).toContain('NONCODER_REFERENCE_PACKET');
     expect(artifact.freezeReceipt.baselineArtifact).toContain('TASKFLOW_FREEZE_RECEIPT.md');
+  });
+
+  it('converts the packet into a governed live execution request', () => {
+    const artifact = buildNonCoderReferenceLoop({
+      appName: 'DeskMate',
+      appType: 'Desktop App',
+      problem: 'Personal admin work is too fragmented',
+      spec: '# DeskMate Spec',
+    });
+
+    const live = buildNonCoderLiveExecutionRequest(artifact);
+
+    expect(live.request.templateId).toBe('app_builder_wizard');
+    expect(live.request.mode).toBe('full');
+    expect(live.request.cvfPhase).toBe('BUILD');
+    expect(live.request.fileScope?.length).toBeGreaterThan(0);
+    expect(live.request.skillPreflightDeclaration).toContain('NONCODER_REFERENCE_PACKET');
+    expect(live.freezeReceipt.acceptedOutput).toContain('DeskMate');
   });
 
   it('formats markdown with freeze receipt and approvals', () => {

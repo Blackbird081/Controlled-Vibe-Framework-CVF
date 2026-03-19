@@ -4,12 +4,24 @@ import { useEffect, useState, useCallback } from 'react';
 import { useSettings } from './Settings';
 import { useLanguage } from '@/lib/i18n';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
+import type { ExecutionRequest } from '@/lib/ai';
+
+export interface ProcessingExecutionOverrides {
+    mode?: ExecutionRequest['mode'];
+    cvfPhase?: ExecutionRequest['cvfPhase'];
+    cvfRiskLevel?: ExecutionRequest['cvfRiskLevel'];
+    skillPreflightDeclaration?: ExecutionRequest['skillPreflightDeclaration'];
+    skillPreflightRecordRef?: ExecutionRequest['skillPreflightRecordRef'];
+    skillIds?: ExecutionRequest['skillIds'];
+    fileScope?: ExecutionRequest['fileScope'];
+}
 
 interface ProcessingScreenProps {
     templateName: string;
     templateId?: string;
     inputs?: Record<string, string>;
     intent?: string;
+    executionOverrides?: ProcessingExecutionOverrides;
     onComplete: (output: string) => void;
     onCancel: () => void;
 }
@@ -19,6 +31,7 @@ export function ProcessingScreen({
     templateId,
     inputs,
     intent,
+    executionOverrides,
     onComplete,
     onCancel
 }: ProcessingScreenProps) {
@@ -48,6 +61,7 @@ export function ProcessingScreen({
                     inputs,
                     intent,
                     mode,
+                    ...executionOverrides,
                 }),
             });
 
@@ -108,7 +122,7 @@ export function ProcessingScreen({
             setError(err instanceof Error ? err.message : 'Network error');
             return false;
         }
-    }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode, isVi]);
+    }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode, isVi, executionOverrides]);
 
     const runMockExecution = useCallback(() => {
         const statuses = isVi

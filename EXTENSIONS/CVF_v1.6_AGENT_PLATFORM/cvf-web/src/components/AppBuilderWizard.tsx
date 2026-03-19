@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { SpecExport } from './SpecExport';
+import { ProcessingScreen } from './ProcessingScreen';
 import { WorkflowVisualizer } from './WorkflowVisualizer';
 import {
     buildNonCoderReferenceLoop,
+    buildNonCoderLiveExecutionRequest,
     formatNonCoderReferenceLoopMarkdown,
 } from '@/lib/non-coder-reference-loop';
 import { Template } from '@/types';
@@ -330,6 +332,8 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
     const [showGovernedPacket, setShowGovernedPacket] = useState(false);
+    const [showLiveRun, setShowLiveRun] = useState(false);
+    const [liveRunOutput, setLiveRunOutput] = useState<string | null>(null);
     const [hasDraft, setHasDraft] = useState(false);
 
     // Load draft from localStorage on mount
@@ -471,6 +475,7 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
         spec: generateConsolidatedSpec(wizardData),
     });
     const governedPacketMarkdown = formatNonCoderReferenceLoopMarkdown(governedPacket);
+    const governedLiveExecution = buildNonCoderLiveExecutionRequest(governedPacket);
 
     if (showExport) {
         return (
@@ -480,6 +485,77 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                     values={{}}
                     onClose={() => setShowExport(false)}
                 />
+            </div>
+        );
+    }
+
+    if (showLiveRun) {
+        return (
+            <div className="max-w-5xl mx-auto">
+                {liveRunOutput ? (
+                    <div className="space-y-6">
+                        <div className="flex items-center justify-between gap-4">
+                            <div>
+                                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    {language === 'vi' ? 'Live Governed Run đã hoàn tất' : 'Live governed run completed'}
+                                </h1>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {language === 'vi'
+                                        ? 'Đây là kết quả chạy thật của non-coder governed path qua Web execute pipeline.'
+                                        : 'This is the real non-coder governed path output from the Web execute pipeline.'}
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    setShowLiveRun(false);
+                                    setLiveRunOutput(null);
+                                }}
+                                className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                            >
+                                {language === 'vi' ? 'Quay lại review' : 'Back to review'}
+                            </button>
+                        </div>
+
+                        <div className="rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-4">
+                            <div className="text-sm font-semibold text-green-800 dark:text-green-200 mb-2">
+                                {language === 'vi' ? 'Freeze receipt' : 'Freeze receipt'}
+                            </div>
+                            <div className="space-y-1 text-sm text-green-900 dark:text-green-100">
+                                <div><strong>{language === 'vi' ? 'Accepted output' : 'Accepted output'}:</strong> {governedLiveExecution.freezeReceipt.acceptedOutput}</div>
+                                <div><strong>{language === 'vi' ? 'Baseline artifact' : 'Baseline artifact'}:</strong> {governedLiveExecution.freezeReceipt.baselineArtifact}</div>
+                                <div><strong>{language === 'vi' ? 'Locked scope' : 'Locked scope'}:</strong> {governedLiveExecution.freezeReceipt.lockedScope.join(', ')}</div>
+                            </div>
+                        </div>
+
+                        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
+                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                                {language === 'vi' ? 'Live output' : 'Live output'}
+                            </h2>
+                            <pre className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300 font-mono max-h-[28rem] overflow-y-auto">
+                                {liveRunOutput}
+                            </pre>
+                        </div>
+                    </div>
+                ) : (
+                    <ProcessingScreen
+                        templateName={governedLiveExecution.request.templateName}
+                        templateId={governedLiveExecution.request.templateId}
+                        inputs={governedLiveExecution.request.inputs}
+                        intent={governedLiveExecution.request.intent}
+                        executionOverrides={{
+                            mode: governedLiveExecution.request.mode,
+                            cvfPhase: governedLiveExecution.request.cvfPhase,
+                            cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
+                            fileScope: governedLiveExecution.request.fileScope,
+                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
+                        }}
+                        onComplete={(output) => setLiveRunOutput(output)}
+                        onCancel={() => {
+                            setShowLiveRun(false);
+                            setLiveRunOutput(null);
+                        }}
+                    />
+                )}
             </div>
         );
     }
@@ -684,6 +760,30 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                                         </div>
                                     </div>
 
+                                    <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50/70 dark:bg-emerald-900/20 p-4">
+                                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">
+                                                    {language === 'vi' ? 'Live governed run' : 'Live governed run'}
+                                                </h4>
+                                                <p className="text-xs text-emerald-700 dark:text-emerald-300">
+                                                    {language === 'vi'
+                                                        ? 'Chạy thật qua Web execute pipeline với BUILD phase, risk, fileScope và skill preflight đã khóa từ governed packet.'
+                                                        : 'Run the real Web execute pipeline with BUILD phase, risk, fileScope, and skill preflight pre-bound from the governed packet.'}
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    setLiveRunOutput(null);
+                                                    setShowLiveRun(true);
+                                                }}
+                                                className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors"
+                                            >
+                                                {language === 'vi' ? 'Chạy live governed path' : 'Run live governed path'}
+                                            </button>
+                                        </div>
+                                    </div>
+
                                     <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
                                         <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
                                             {language === 'vi' ? 'Packet preview' : 'Packet preview'}
@@ -774,6 +874,15 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                                 {showGovernedPacket
                                     ? (language === 'vi' ? 'Ẩn governed packet' : 'Hide governed packet')
                                     : (language === 'vi' ? 'Governed demo packet' : 'Governed demo packet')}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setLiveRunOutput(null);
+                                    setShowLiveRun(true);
+                                }}
+                                className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-all shadow-lg"
+                            >
+                                {language === 'vi' ? 'Chạy live governed path' : 'Run live governed path'}
                             </button>
                             <button
                                 onClick={() => setShowExport(true)}

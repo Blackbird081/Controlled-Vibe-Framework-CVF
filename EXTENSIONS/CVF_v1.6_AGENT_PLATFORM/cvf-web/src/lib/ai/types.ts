@@ -24,6 +24,7 @@ export interface ExecutionRequest {
     skillPreflightDeclaration?: string;
     skillPreflightRecordRef?: string;
     skillIds?: string[];
+    fileScope?: string[];
 }
 
 export interface ExecutionResponse {

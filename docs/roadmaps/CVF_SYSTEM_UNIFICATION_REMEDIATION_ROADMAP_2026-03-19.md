@@ -46,8 +46,11 @@ Current snapshot as of `2026-03-20`:
 
 ### In Progress
 
-- non-coder live governed execution path with the same proof strength as the coder-facing reference path: `IN PROGRESS`
 - ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces: `IN PROGRESS`
+
+### Newly Closed
+
+- non-coder live governed execution path on the active Web reference path: `COMPLETED`
 
 ### Not Started
 
@@ -208,6 +211,12 @@ Non-coder governed packet batch executed on `2026-03-20`:
 
 - App Builder Wizard now produces one reusable non-coder governed demo packet with explicit phases, approval checkpoints, execution handoff, and freeze receipt: `COMPLETED`
 - non-coder packaged proof is stronger and easier to audit, but live runtime-backed parity with the coder-facing reference helper remains: `IN PROGRESS`
+
+Non-coder live governed run batch executed on `2026-03-20`:
+
+- App Builder Wizard can now launch one governed live execution path through the Web execute pipeline using packet-bound `BUILD`, risk, `fileScope`, and skill-preflight metadata: `COMPLETED`
+- roadmap success metric for at least one non-coder governed live demo path is now evidence-backed on the active Web reference path: `COMPLETED`
+- remaining caveat shifts from "missing live path" to broader ecosystem parity and proof breadth outside this active path
 
 Verification completed for this batch:
 
@@ -723,7 +732,7 @@ Success should be measured with explicit signals:
 - `0` legacy-only default guard factories remaining in active entrypoints
 - `100%` of critical governance controls assigned to an executable owner
 - at least `1` reusable governed demo packet for non-coders with freeze-ready evidence: `COMPLETED`
-- at least `1` full end-to-end governed execution demo path for non-coders backed by one packaged live path: `IN PROGRESS`
+- at least `1` full end-to-end governed execution demo path for non-coders backed by one packaged live path: `COMPLETED`
 - at least `1` full end-to-end governed execution demo path for coder-facing channels: `COMPLETED`
 - independent reassessment upgrades whole-system status from `PARTIAL` to `ALIGNED`: `COMPLETED` (`SUBSTANTIALLY ALIGNED` on the active reference path)
 

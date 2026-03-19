@@ -1,4 +1,5 @@
 import type { CVFPhase } from '@/lib/cvf-checklists';
+import type { ExecutionRequest } from '@/lib/ai/types';
 
 export interface NonCoderReferenceLoopInput {
   appName?: string;
@@ -42,10 +43,12 @@ export interface NonCoderFreezeReceipt {
 
 export interface NonCoderExecutionHandoff {
   mode: 'full';
+  templateId: string;
   templateName: string;
   intent: string;
   cvfPhase: 'BUILD';
   cvfRiskLevel: 'R1' | 'R2';
+  inputs: Record<string, string>;
   fileScope: string[];
   skillPreflightDeclaration: string;
 }
@@ -56,6 +59,11 @@ export interface NonCoderReferenceLoopArtifact {
   phases: NonCoderReferencePhase[];
   approvals: NonCoderReferenceApproval[];
   executionHandoff: NonCoderExecutionHandoff;
+  freezeReceipt: NonCoderFreezeReceipt;
+}
+
+export interface NonCoderLiveExecutionRequest {
+  request: ExecutionRequest;
   freezeReceipt: NonCoderFreezeReceipt;
 }
 
@@ -150,6 +158,23 @@ export function buildNonCoderReferenceLoop(input: NonCoderReferenceLoopInput): N
   const fileScope = inferFileScope(appType, slug);
   const baselineArtifact = `docs/baselines/${slug.toUpperCase().replace(/-/g, '_')}_FREEZE_RECEIPT.md`;
 
+  const executionInputs: Record<string, string> = {
+    appName,
+    appType,
+    problem,
+    targetUsers,
+    coreFeatures: input.coreFeatures?.trim() || '',
+    outOfScope: input.outOfScope?.trim() || '',
+    techPreference: input.techPreference?.trim() || '',
+    dataStorage: input.dataStorage?.trim() || '',
+    architecture: input.archType?.trim() || '',
+    apiStyle: input.apiStyle?.trim() || '',
+    distribution: input.distribution?.trim() || '',
+    governedPacketTitle: `${appName} Governed Non-Coder Reference Packet`,
+    freezeBaselineArtifact: baselineArtifact,
+    governedSpec: input.spec,
+  };
+
   return {
     title: `${appName} Governed Non-Coder Reference Packet`,
     riskLevel,
@@ -236,10 +261,12 @@ export function buildNonCoderReferenceLoop(input: NonCoderReferenceLoopInput): N
     ],
     executionHandoff: {
       mode: 'full',
+      templateId: 'app_builder_wizard',
       templateName: 'App Builder Wizard',
       intent: `Build ${appName} for ${targetUsers}. Core problem: ${problem}`,
       cvfPhase: 'BUILD',
       cvfRiskLevel: riskLevel,
+      inputs: executionInputs,
       fileScope,
       skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:${slug}`,
     },
@@ -257,6 +284,25 @@ export function buildNonCoderReferenceLoop(input: NonCoderReferenceLoopInput): N
         'Human approval checkpoints',
       ],
     },
+  };
+}
+
+export function buildNonCoderLiveExecutionRequest(
+  artifact: NonCoderReferenceLoopArtifact,
+): NonCoderLiveExecutionRequest {
+  return {
+    request: {
+      templateId: artifact.executionHandoff.templateId,
+      templateName: artifact.executionHandoff.templateName,
+      inputs: artifact.executionHandoff.inputs,
+      intent: artifact.executionHandoff.intent,
+      mode: artifact.executionHandoff.mode,
+      cvfPhase: artifact.executionHandoff.cvfPhase,
+      cvfRiskLevel: artifact.executionHandoff.cvfRiskLevel,
+      fileScope: artifact.executionHandoff.fileScope,
+      skillPreflightDeclaration: artifact.executionHandoff.skillPreflightDeclaration,
+    },
+    freezeReceipt: artifact.freezeReceipt,
   };
 }
 
@@ -292,6 +338,7 @@ export function formatNonCoderReferenceLoopMarkdown(artifact: NonCoderReferenceL
     approvalLines,
     '',
     '## Execution Handoff',
+    `- Template ID: ${artifact.executionHandoff.templateId}`,
     `- Mode: ${artifact.executionHandoff.mode}`,
     `- Template: ${artifact.executionHandoff.templateName}`,
     `- Intent: ${artifact.executionHandoff.intent}`,

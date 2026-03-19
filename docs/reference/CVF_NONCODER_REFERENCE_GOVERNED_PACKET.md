@@ -1,6 +1,6 @@
 # CVF Non-Coder Reference Governed Packet
 
-Status: reusable non-coder evidence packet for the canonical controlled loop.
+Status: reusable non-coder governed packet plus one live Web execution path for the canonical controlled loop.
 
 ## Purpose
 
@@ -30,7 +30,8 @@ The governed packet shows:
 1. canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
 2. human approval checkpoints before build and freeze
 3. one governed execution handoff payload for the Web execution path
-4. one freeze receipt with:
+4. one live launch path from App Builder Wizard into the Web `execute` pipeline
+5. one freeze receipt with:
    - accepted output
    - baseline artifact
    - locked scope
@@ -39,11 +40,16 @@ The governed packet shows:
 ## Why It Matters
 
 - it gives non-coder supervision one reusable artifact instead of relying only on screenshots, dispersed UI states, or narrative docs
+- it proves that at least one non-coder path can now execute through the governed Web pipeline with pre-bound phase, risk, scope, and skill-preflight metadata
 - it makes future audits faster because reviewers can inspect one packet and compare it with the coder-facing reference loop
 - it improves evidence quality without overstating that the non-coder path already has total ecosystem parity
 
 ## Current Caveat
 
-This packet is a governed handoff and evidence artifact.
+This reference path is now live on the active Web path, but it is still narrower than full ecosystem parity.
 
-It improves the non-coder reference path substantially, but it is not yet the same thing as one fully packaged live runtime helper equivalent to `CvfSdk.runReferenceGovernedLoop()`.
+What remains open:
+
+- broader parity across auxiliary extension families
+- more than one reusable non-coder live path
+- evidence depth equivalent across every channel family, not only the App Builder Wizard reference path

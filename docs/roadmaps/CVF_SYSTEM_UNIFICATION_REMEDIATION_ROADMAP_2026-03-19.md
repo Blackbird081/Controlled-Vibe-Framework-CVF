@@ -149,6 +149,13 @@ Tutorial and concept entrypoint cleanup batch executed on `2026-03-20`:
 - concept index now lists the controlled execution loop as the active model and the 4-phase process as historical foundation: `COMPLETED`
 - `version-evolution` now explicitly distinguishes historical 4-phase origin from the current canonical 5-phase posture
 
+Foundational concept labeling cleanup batch executed on `2026-03-20`:
+
+- `core-philosophy` now points readers to the canonical controlled loop before the historical 4-phase process: `COMPLETED`
+- `governance-model` now states explicitly that it presents foundational doctrine and should be read alongside the active controlled loop: `COMPLETED`
+- `risk-model` now labels older 4-phase references as historical foundation rather than active default guidance: `COMPLETED`
+- `version-picker` now distinguishes the original 4-phase foundation from the current canonical loop
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -179,6 +186,7 @@ Baseline receipt:
 - `docs/baselines/CVF_RUNTIME_GUARD_ALIAS_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_RESIDUAL_USER_FACING_WORDING_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_TUTORIAL_CONCEPT_ENTRYPOINT_ALIGNMENT_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_FOUNDATIONAL_CONCEPT_LABELING_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

@@ -4,6 +4,12 @@
 
 CVF's governance model defines **who** can do **what**, **when**, and **how** — especially when AI is involved. It scales from solo developers (lightweight) to enterprises (full compliance).
 
+Current note:
+
+- this document explains the foundational governance doctrine that originated in earlier CVF versions
+- the active reference path now uses the canonical `INTAKE → DESIGN → BUILD → REVIEW → FREEZE` controlled loop
+- use [Controlled Execution Loop](controlled-execution-loop.md) together with the latest readiness/reassessment artifacts when you need the current runtime posture
+
 ---
 
 ## Roles
@@ -248,8 +254,9 @@ Every AI interaction can be tested across 6 categories:
 
 ## Further Reading
 
+- [Controlled Execution Loop](controlled-execution-loop.md) — Current canonical loop and freeze closure
 - [Risk Model](risk-model.md) — R0–R3 risk levels in detail
-- [4-Phase Process](4-phase-process.md) — Phases and gates
+- [4-Phase Process](4-phase-process.md) — Historical phases and gates
 - [Skill System](skill-system.md) — How skills are governed
 - [Enterprise Guide](../guides/enterprise.md) — Full governance deployment
 - [Governance Toolkit](../../governance/) — Source files

@@ -84,6 +84,13 @@ Phase 2 executable governance and control-loop batch executed on `2026-03-20`:
 - final completion now requires `FREEZE` artifact on governed path: `COMPLETED`
 - SDK/bridge path now supports artifact recording and checkpoint approval actions: `COMPLETED`
 
+Phase 2 ownership and helper-alignment batch executed on `2026-03-20`:
+
+- runtime helper alignment (`mandatory-gateway`, `agent-execution-runtime`): `COMPLETED`
+- governed helper runtime now stops on approval-required escalations and records execution lineage: `COMPLETED`
+- canonical governance control matrix (`rule -> owner -> class -> evidence`) published: `COMPLETED`
+- Workstream B is now considered `COMPLETED` for the active local baseline
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -104,6 +111,7 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE3_COMPLETION_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_CONTROL_LOOP_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

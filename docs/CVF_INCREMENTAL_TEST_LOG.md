@@ -102,6 +102,28 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: Phase 2 governance ownership and helper alignment
+- Change reference:
+  - scope: governed helper runtime semantics + governance ownership closure
+- Impacted scope:
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/package.json`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npx vitest run src/runtime/mandatory-gateway.test.ts src/runtime/agent-execution-runtime.test.ts src/runtime/providers/gemini-provider.test.ts src/runtime/providers/alibaba-dashscope-provider.test.ts src/index.test.ts` -> PASS
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run check` -> PASS
+- Skip scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web`: skipped because this batch only changes shared governed helper/runtime ownership surfaces
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL`: skipped because no code changed in this extension for this batch
+- Notes/Risks:
+  - governed helper runtime now pauses on escalation instead of silently continuing
+  - ownership ambiguity is reduced, but ecosystem breadth remains a release-readiness caveat
+
 ## [2026-03-06] Batch: Docs governance compat enforcement
 - Change reference:
   - requestId: `REQ-20260306-008`

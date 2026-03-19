@@ -199,6 +199,21 @@ describe('AgentExecutionRuntime.execute', () => {
     expect(result.error).toContain('Guard blocked');
   });
 
+  it('returns NEEDS_APPROVAL for governed escalation', async () => {
+    const runtime = createRuntime({
+      phase: 'BUILD',
+      role: 'AI_AGENT',
+      riskLevel: 'R2',
+      controlMode: 'governed',
+    });
+    const intent = runtime.parseIntent('write code');
+    const guardResult = runtime.preCheck(intent);
+    const result = await runtime.execute(intent, guardResult);
+    expect(result.status).toBe('NEEDS_APPROVAL');
+    expect(result.metadata?.governance).toBeDefined();
+    expect((result.metadata?.governance as any).approvalCheckpoint.status).toBe('PENDING');
+  });
+
   it('fails when provider throws', async () => {
     const failingProvider: ExecutionProvider = {
       name: 'failing',
@@ -229,6 +244,17 @@ describe('AgentExecutionRuntime.execute', () => {
     expect(result.guardDecision).toBeDefined();
     expect(result.guardDecision!.finalDecision).toBe('ALLOW');
   });
+
+  it('records governed execution lineage in metadata', async () => {
+    const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN', controlMode: 'governed' });
+    const intent = runtime.parseIntent('write code');
+    const guardResult = runtime.preCheck(intent);
+    const result = await runtime.execute(intent, guardResult);
+    const governance = result.metadata?.governance as any;
+    expect(governance.controlMode).toBe('governed');
+    expect(governance.artifacts.map((artifact: any) => artifact.type)).toEqual(['INTENT', 'EXECUTION']);
+    expect(governance.lineageStatus).toBe('READY_FOR_REVIEW');
+  });
 });
 
 // ─── postCheck ────────────────────────────────────────────────────────
@@ -248,6 +274,20 @@ describe('AgentExecutionRuntime.postCheck', () => {
     const check = runtime.postCheck(result);
     expect(check.valid).toBe(false);
     expect(check.issues.length).toBeGreaterThan(0);
+  });
+
+  it('invalid for approval-pending execution', async () => {
+    const runtime = createRuntime({
+      phase: 'BUILD',
+      role: 'AI_AGENT',
+      riskLevel: 'R2',
+      controlMode: 'governed',
+    });
+    const result = await runtime.run('write code');
+    const check = runtime.postCheck(result);
+    expect(result.status).toBe('NEEDS_APPROVAL');
+    expect(check.valid).toBe(false);
+    expect(check.issues[0]).toContain('waiting for approval');
   });
 
   it('invalid for failed execution', () => {

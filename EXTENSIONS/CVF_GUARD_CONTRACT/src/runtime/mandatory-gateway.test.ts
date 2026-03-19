@@ -24,6 +24,7 @@ describe('mandatory-gateway', () => {
     expect(result.allowed).toBe(true);
     expect(engine.evaluate).not.toHaveBeenCalled();
     expect(gateway.getAuditLog().length).toBe(1);
+    expect(result.controlMode).toBe('standard');
   });
 
   it('allows all when enforcement disabled', () => {
@@ -57,6 +58,19 @@ describe('mandatory-gateway', () => {
     const result = gateway.check({ action: 'risky-change' });
     expect(result.decision).toBe('ESCALATE');
     expect(result.allowed).toBe(false);
+    expect(result.approvalRequired).toBe(false);
+  });
+
+  it('marks governed escalations as approval-required', () => {
+    const engine = { evaluate: vi.fn().mockReturnValue(makePipelineResult('ESCALATE')) } as any;
+    const gateway = new MandatoryGateway(engine, { hardEscalate: true });
+    const result = gateway.check({
+      action: 'risky-change',
+      metadata: { controlMode: 'governed' },
+    });
+    expect(result.controlMode).toBe('governed');
+    expect(result.approvalRequired).toBe(true);
+    expect(result.evidence?.escalatedBy).toBe('guard-esc');
   });
 
   it('assertAllowed throws on blocked', () => {

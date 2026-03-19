@@ -16,7 +16,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 | Hardened default guard path | `ALIGNED` | `ai_commit` and `fileScope` are wired into the hardened default path in active remediated runtime areas |
 | Web non-coder semantics | `SUBSTANTIALLY ALIGNED` | key UX surfaces and exported prompts now teach canonical phase semantics |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` | explicit step lifecycle, default runtime bindings, and receipt-backed execution now exist for the reference governed path |
-| Governance executable ownership | `PARTIAL` | approval-boundary and freeze-closure ownership now exist on the governed pipeline path, but the full control matrix is not yet closed |
+| Governance executable ownership | `SUBSTANTIALLY ALIGNED` | canonical control matrix now maps critical rules to runtime guard, gateway, approval, or CI owner; remaining caveat is ecosystem breadth, not owner ambiguity |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` | the governed reference path now enforces artifacts, approvals, review, and freeze closure, though not every channel is equally mature |
 | Documentation truthfulness | `ALIGNED WITH CAVEATS` | canonical entry docs updated to stop overstating legacy or incomplete behavior |
 
@@ -26,12 +26,14 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - shared contract and major Web/API entrypoints no longer default to the legacy `4-phase / 6-guard` framing
 - non-coder UX now exposes the canonical `FREEZE` posture instead of stopping at `REVIEW`
 - workflow bridge no longer auto-completes implicitly and can execute registered handlers with explicit results
+- mandatory gateway and governed helper runtime now surface approval-required boundaries and execution lineage explicitly
 - baseline/update governance now has policy, CI, and local hook enforcement
+- a canonical governance control matrix now assigns one primary enforcement owner to each critical control
 
 ## Open Risks
 
 1. The reference governed path is real, but broader adapter coverage across every extension family is still narrower than a full ecosystem mesh.
-2. Not every critical governance rule has been fully mapped to one explicit enforcement owner.
+2. Some secondary or ecosystem-specific controls still rely on the reference runtime rather than every extension family exposing identical maturity.
 3. CVF can credibly claim a governed reference control loop, but not yet "fully unified controlled autonomy" across all active channels.
 
 ## Positioning Guidance
@@ -50,10 +52,12 @@ Claims to avoid for now:
 
 - [Independent System Review](../reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md)
 - [System Unification Roadmap](../roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md)
+- [Governance Control Matrix](./CVF_GOVERNANCE_CONTROL_MATRIX.md)
 - [Phase 1 Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md)
 - [Web Alignment Delta](../baselines/CVF_SYSTEM_UNIFICATION_WEB_ALIGNMENT_DELTA_2026-03-20.md)
 - [Workflow Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE3_WORKFLOW_DELTA_2026-03-20.md)
 - [Handler Binding Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md)
+- [Governance Ownership Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md)
 
 ## Verdict
 

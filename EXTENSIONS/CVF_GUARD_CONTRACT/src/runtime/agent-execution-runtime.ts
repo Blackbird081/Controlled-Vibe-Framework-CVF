@@ -27,6 +27,34 @@ export interface ParsedIntent {
   confidence: number;
 }
 
+export type RuntimeControlMode = 'standard' | 'governed';
+
+export type ExecutionArtifactType = 'INTENT' | 'EXECUTION' | 'REVIEW' | 'FREEZE';
+
+export interface ExecutionArtifact {
+  id: string;
+  type: ExecutionArtifactType;
+  recordedAt: string;
+  source: 'agent_execution_runtime';
+  details?: Record<string, unknown>;
+}
+
+export interface ExecutionApprovalCheckpoint {
+  id: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  requiredBy: string;
+  reason: string;
+  createdAt: string;
+}
+
+export interface ExecutionGovernanceState {
+  controlMode: RuntimeControlMode;
+  artifacts: ExecutionArtifact[];
+  approvalCheckpoint?: ExecutionApprovalCheckpoint;
+  lineageStatus: 'INCOMPLETE' | 'READY_FOR_REVIEW' | 'READY_FOR_FREEZE';
+  acceptanceStatus: 'NOT_EVALUATED' | 'PENDING_APPROVAL' | 'ACCEPTED' | 'REJECTED';
+}
+
 export interface ActionPlan {
   requestId: string;
   intent: ParsedIntent;
@@ -41,7 +69,7 @@ export interface PlannedStep {
   parameters?: Record<string, unknown>;
 }
 
-export type ExecutionStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'BLOCKED';
+export type ExecutionStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'BLOCKED' | 'NEEDS_APPROVAL';
 
 export interface ExecutionResult {
   requestId: string;
@@ -68,6 +96,8 @@ export interface RuntimeConfig {
   channel: 'web' | 'ide' | 'cli' | 'mcp' | 'api';
   /** If true, real AI provider is called. If false, dry-run mode. */
   liveExecution: boolean;
+  /** Control posture for this execution session. */
+  controlMode?: RuntimeControlMode;
   /** Optional default file scope for the session. */
   fileScope?: string[];
   /** Optional default metadata passed to guard evaluation. */
@@ -166,7 +196,10 @@ export class AgentExecutionRuntime {
       targetFiles: intent.targetFiles,
       fileScope: this.config.fileScope,
       channel: this.config.channel,
-      metadata: this.config.metadata,
+      metadata: {
+        ...this.config.metadata,
+        controlMode: this.getControlMode(),
+      },
     };
 
     return this.guardEngine.evaluate(context);
@@ -178,6 +211,12 @@ export class AgentExecutionRuntime {
   async execute(intent: ParsedIntent, guardResult: GuardPipelineResult): Promise<ExecutionResult> {
     const startedAt = new Date().toISOString();
     const startTime = Date.now();
+    const intentArtifact = this.createArtifact('INTENT', startedAt, {
+      action: intent.action,
+      targetFiles: intent.targetFiles,
+      confidence: intent.confidence,
+    });
+    const governance = this.createGovernanceState([intentArtifact]);
 
     // BLOCK check
     if (guardResult.finalDecision === 'BLOCK') {
@@ -189,28 +228,62 @@ export class AgentExecutionRuntime {
         completedAt: new Date().toISOString(),
         durationMs: Date.now() - startTime,
         guardDecision: guardResult,
+        metadata: {
+          governance: {
+            ...governance,
+            acceptanceStatus: 'REJECTED',
+          },
+        },
       };
       this.executionLog.push(result);
       return result;
     }
 
-    // ESCALATE check — still allowed but logged
-    if (guardResult.finalDecision === 'ESCALATE') {
-      // In a real system, this would pause and wait for human approval.
-      // For now, we proceed but flag it.
+    // Governed ESCALATE check — do not execute until approval is granted.
+    if (guardResult.finalDecision === 'ESCALATE' && this.getControlMode() === 'governed') {
+      const approvalCheckpoint = this.createApprovalCheckpoint(guardResult, startedAt);
+      const result: ExecutionResult = {
+        requestId: guardResult.requestId,
+        status: 'NEEDS_APPROVAL',
+        error: `Approval required before execution: ${guardResult.agentGuidance ?? guardResult.escalatedBy ?? 'Guard escalation triggered.'}`,
+        startedAt,
+        completedAt: new Date().toISOString(),
+        durationMs: Date.now() - startTime,
+        guardDecision: guardResult,
+        metadata: {
+          governance: {
+            ...governance,
+            approvalCheckpoint,
+            acceptanceStatus: 'PENDING_APPROVAL',
+          },
+        },
+      };
+      this.executionLog.push(result);
+      return result;
     }
 
     try {
       const output = await this.provider.execute(intent.action, intent.parameters);
+      const completedAt = new Date().toISOString();
+      const executionArtifact = this.createArtifact('EXECUTION', completedAt, {
+        provider: this.provider.name,
+        status: 'COMPLETED',
+      });
 
       const result: ExecutionResult = {
         requestId: guardResult.requestId,
         status: 'COMPLETED',
         output,
         startedAt,
-        completedAt: new Date().toISOString(),
+        completedAt,
         durationMs: Date.now() - startTime,
         guardDecision: guardResult,
+        metadata: {
+          governance: {
+            ...this.createGovernanceState([intentArtifact, executionArtifact]),
+            acceptanceStatus: 'ACCEPTED',
+          },
+        },
       };
       this.executionLog.push(result);
       return result;
@@ -223,6 +296,12 @@ export class AgentExecutionRuntime {
         completedAt: new Date().toISOString(),
         durationMs: Date.now() - startTime,
         guardDecision: guardResult,
+        metadata: {
+          governance: {
+            ...governance,
+            acceptanceStatus: 'REJECTED',
+          },
+        },
       };
       this.executionLog.push(result);
       return result;
@@ -241,6 +320,10 @@ export class AgentExecutionRuntime {
 
     if (result.status === 'BLOCKED') {
       issues.push(`Execution was blocked by guard: ${result.guardDecision?.blockedBy}`);
+    }
+
+    if (result.status === 'NEEDS_APPROVAL') {
+      issues.push(`Execution is waiting for approval: ${result.guardDecision?.escalatedBy ?? 'approval required'}`);
     }
 
     if (!result.requestId) {
@@ -282,5 +365,50 @@ export class AgentExecutionRuntime {
 
   updateConfig(updates: Partial<RuntimeConfig>): void {
     this.config = { ...this.config, ...updates };
+  }
+
+  private getControlMode(): RuntimeControlMode {
+    if (this.config.controlMode) {
+      return this.config.controlMode;
+    }
+    return this.config.metadata?.controlMode === 'governed' ? 'governed' : 'standard';
+  }
+
+  private createArtifact(
+    type: ExecutionArtifactType,
+    recordedAt: string,
+    details?: Record<string, unknown>,
+  ): ExecutionArtifact {
+    return {
+      id: `runtime-artifact-${type.toLowerCase()}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      type,
+      recordedAt,
+      source: 'agent_execution_runtime',
+      details,
+    };
+  }
+
+  private createApprovalCheckpoint(
+    guardResult: GuardPipelineResult,
+    createdAt: string,
+  ): ExecutionApprovalCheckpoint {
+    return {
+      id: `runtime-approval-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      status: 'PENDING',
+      requiredBy: guardResult.escalatedBy ?? 'guard_runtime',
+      reason: guardResult.agentGuidance ?? 'Human approval required before governed execution can continue.',
+      createdAt,
+    };
+  }
+
+  private createGovernanceState(artifacts: ExecutionArtifact[]): ExecutionGovernanceState {
+    return {
+      controlMode: this.getControlMode(),
+      artifacts,
+      lineageStatus: artifacts.some((artifact) => artifact.type === 'EXECUTION')
+        ? 'READY_FOR_REVIEW'
+        : 'INCOMPLETE',
+      acceptanceStatus: 'NOT_EVALUATED',
+    };
   }
 }

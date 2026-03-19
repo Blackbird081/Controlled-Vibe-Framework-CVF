@@ -102,6 +102,21 @@ Utility and guard:
 
 ## 5) Execution Log
 
+## [2026-03-20] Batch: Enterprise and compliance auxiliary alignment
+- Change reference:
+  - scope: enterprise permission boundary + compliance reporting posture
+- Impacted scope:
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/enterprise/enterprise.ts`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/enterprise/enterprise.test.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/reports/compliance/page.tsx`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npx vitest run src/enterprise/enterprise.test.ts` -> PASS
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run check` -> PASS
+- Skip scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` broader suite skipped because this batch only adjusts dashboard mock data, not component logic
+- Notes/Risks:
+  - legacy alias handling remains accepted at enterprise boundaries but is normalized immediately to canonical semantics
+
 ## [2026-03-20] Batch: Legacy boundary tightening on public SDK and user-facing exports
 - Change reference:
   - scope: canonical phase contract tightening after roadmap closure

@@ -30,11 +30,11 @@ const MOCK_REPORT: ComplianceReport = {
     'R3': 42
   },
   phaseDistribution: {
-    'INTAKE': 600,
-    'DESIGN': 300,
-    'BUILD': 245,
-    'REVIEW': 100,
-    'FREEZE': 0,
+    'INTAKE': 410,
+    'DESIGN': 255,
+    'BUILD': 360,
+    'REVIEW': 170,
+    'FREEZE': 50,
     'DISCOVERY': 0
   },
   topBlockedActions: [

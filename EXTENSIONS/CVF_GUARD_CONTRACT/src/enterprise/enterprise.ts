@@ -11,6 +11,10 @@
 
 import type { CVFPhase, CVFRiskLevel, CVFRole, GuardPipelineResult } from '../types';
 
+function normalizePhaseAlias(phase: CVFPhase): CVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
+
 // ─── Team Roles & Permissions ────────────────────────────────────────
 
 export type TeamRole = 'owner' | 'admin' | 'developer' | 'reviewer' | 'viewer';
@@ -73,6 +77,7 @@ export function canPerformAction(member: TeamMember, action: string, riskLevel: 
 } {
   const perms = ROLE_PERMISSIONS[member.role];
   const riskOrder: CVFRiskLevel[] = ['R0', 'R1', 'R2', 'R3'];
+  const normalizedPhase = normalizePhaseAlias(phase);
 
   if (!perms.canExecute) {
     return { allowed: false, reason: `Role "${member.role}" cannot execute actions` };
@@ -80,8 +85,8 @@ export function canPerformAction(member: TeamMember, action: string, riskLevel: 
   if (riskOrder.indexOf(riskLevel) > riskOrder.indexOf(perms.maxRiskLevel)) {
     return { allowed: false, reason: `Risk ${riskLevel} exceeds max ${perms.maxRiskLevel} for role "${member.role}"` };
   }
-  if (!perms.allowedPhases.includes(phase)) {
-    return { allowed: false, reason: `Phase ${phase} not allowed for role "${member.role}"` };
+  if (!perms.allowedPhases.includes(normalizedPhase)) {
+    return { allowed: false, reason: `Phase ${normalizedPhase} not allowed for role "${member.role}"` };
   }
   return { allowed: true, reason: 'Permitted' };
 }

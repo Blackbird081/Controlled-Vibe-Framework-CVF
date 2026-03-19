@@ -110,6 +110,11 @@ User-facing documentation canonicalization batch executed on `2026-03-20`:
 - quick orientation updated to canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`: `COMPLETED`
 - enterprise guide wording no longer teaches the active model as `4-phase`: `COMPLETED`
 
+Enterprise/compliance auxiliary alignment batch executed on `2026-03-20`:
+
+- enterprise permission checks normalize legacy `DISCOVERY` input to canonical `INTAKE`: `COMPLETED`
+- compliance dashboard mock posture now reflects canonical `FREEZE`-aware reporting: `COMPLETED`
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -134,6 +139,7 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_ENTERPRISE_COMPLIANCE_ALIGNMENT_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md`
 
 ---

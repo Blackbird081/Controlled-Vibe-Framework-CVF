@@ -55,6 +55,12 @@ describe('enterprise', () => {
     expect(allowed.allowed).toBe(true);
   });
 
+  it('normalizes legacy DISCOVERY alias for enterprise phase checks', () => {
+    const developer = { id: 'u1', name: 'Dev', email: 'dev@cvf', role: 'developer', joinedAt: 'now' as const };
+    const allowed = canPerformAction(developer, 'clarify', 'R0', 'DISCOVERY');
+    expect(allowed.allowed).toBe(true);
+  });
+
   it('tracks approval requests and approvals', () => {
     const workflow = new ApprovalWorkflow(24);
     const req = workflow.createRequest({

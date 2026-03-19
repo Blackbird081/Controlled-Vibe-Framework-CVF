@@ -84,6 +84,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_MODULE_INVENTORY.md`
 - `reference/CVF_MATURITY_MATRIX.md`
 - `reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+- `reference/CVF_REFERENCE_GOVERNED_LOOP.md`
 - `../governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md` — rule bắt buộc cập nhật baseline sau mỗi fix/update
 
 ## Enterprise Audit Navigation

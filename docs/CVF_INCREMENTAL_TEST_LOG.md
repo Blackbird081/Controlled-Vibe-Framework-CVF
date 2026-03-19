@@ -3330,6 +3330,34 @@ Utility and guard:
   - `ExtensionBridge` can now run workflows via registered action handlers instead of only waiting for manual result reporting.
   - When no handler exists, the workflow now stops truthfully in a manual-handoff state rather than faking success.
 
+## [2026-03-20] Batch: Reference governed loop helper
+- Change reference:
+  - local working tree reference governed loop batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_REFERENCE_GOVERNED_LOOP_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/index.ts`
+  - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/sdk.test.ts`
+  - `docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md`
+  - `docs/reference/README.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/baselines/CVF_REFERENCE_GOVERNED_LOOP_DELTA_2026-03-20.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/sdk.test.ts` -> PASS
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run build` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - full extension suite — skipped because this batch is localized to SDK reference-helper behavior and supporting docs
+  - Web/UI suites — unchanged in this batch
+- Notes/Risks:
+  - `CvfSdk` now exposes one reusable, receipt-backed governed reference path instead of leaving the proof scattered across lower-level tests only
+  - this strengthens coder-facing demo/readiness evidence, but does not by itself imply every extension family has identical end-to-end maturity
+
 ## [2026-03-20] Batch: Front-door Web docs catalog canonicalization
 - Change reference:
   - local working tree front-door Web docs metadata batch

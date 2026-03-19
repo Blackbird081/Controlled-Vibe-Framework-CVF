@@ -65,6 +65,43 @@ export interface CvfSdkConfig {
   strictMode?: boolean;
 }
 
+export interface ReferenceGovernedLoopOptions {
+  workflowId?: string;
+  pipelineId?: string;
+  intent: string;
+  riskLevel?: 'R0' | 'R1' | 'R2' | 'R3';
+  role?: CVFRole;
+  agentId?: string;
+  action?: string;
+  fileScope?: string[];
+  targetFiles?: string[];
+  requireApproval?: boolean;
+  reviewerId?: string;
+  reviewerRole?: CVFRole;
+  reviewerComment?: string;
+  aiCommit?: {
+    commitId: string;
+    agentId: string;
+    timestamp: number;
+    description?: string;
+  };
+  skillId?: string;
+}
+
+export interface ReferenceGovernedLoopResult {
+  success: boolean;
+  workflowId: string;
+  pipelineId: string;
+  workflowStatus?: CrossExtensionWorkflow['status'];
+  pipelineStatus?: PipelineInstance['status'];
+  guardDecision?: GuardPipelineResult['finalDecision'];
+  checkpointId?: string;
+  approvalCheckpointId?: string;
+  freezeReceipt?: unknown;
+  workflow?: CrossExtensionWorkflow;
+  pipeline?: PipelineInstance;
+}
+
 const DEFAULT_CONFIG: Required<CvfSdkConfig> = {
   guards: 'full',
   customGuards: [],
@@ -147,6 +184,49 @@ export class CvfSdk {
     metadata?: Record<string, unknown>;
   }): PipelineInstance {
     return this.pipeline.createPipeline(config);
+  }
+
+  async runReferenceGovernedLoop(options: ReferenceGovernedLoopOptions): Promise<ReferenceGovernedLoopResult> {
+    if (!this.bridge) {
+      throw new Error('Extension bridge is not enabled. Set enableExtensionBridge: true in config.');
+    }
+
+    const workflowId = options.workflowId ?? `reference-loop-${Date.now()}`;
+    const pipelineId = options.pipelineId ?? `${workflowId}-pipeline`;
+    const riskLevel = options.riskLevel ?? 'R1';
+    const requireApproval = options.requireApproval ?? (riskLevel === 'R2' || riskLevel === 'R3');
+    const workflow = this.bridge.createWorkflow({
+      id: workflowId,
+      name: `Reference governed loop: ${options.intent}`,
+      steps: this.buildReferenceGovernedLoopSteps({
+        ...options,
+        workflowId,
+        pipelineId,
+        riskLevel,
+        requireApproval,
+      }),
+    });
+
+    const result = await this.bridge.executeWorkflow(workflow.id);
+    const pipeline = this.pipeline.getPipeline(pipelineId);
+    const completedSteps = result.workflow?.steps ? [...result.workflow.steps].reverse() : [];
+    const checkpointStep = completedSteps.find((step) => step.action === 'checkpoint' && step.status === 'COMPLETED');
+    const approvalStep = completedSteps.find((step) => step.action === 'pipeline_approve_checkpoint' && step.status === 'COMPLETED');
+    const guardStep = result.workflow?.steps.find((step) => step.action === 'guard_check');
+
+    return {
+      success: result.success,
+      workflowId,
+      pipelineId,
+      workflowStatus: result.workflow?.status,
+      pipelineStatus: pipeline?.status,
+      guardDecision: guardStep?.guardResult?.finalDecision,
+      checkpointId: typeof checkpointStep?.output?.['checkpointId'] === 'string' ? checkpointStep.output['checkpointId'] : undefined,
+      approvalCheckpointId: typeof approvalStep?.output?.['checkpointId'] === 'string' ? approvalStep.output['checkpointId'] : undefined,
+      freezeReceipt: result.workflow?.metadata?.['freezeReceipt'],
+      workflow: result.workflow,
+      pipeline,
+    };
   }
 
   // --- Audit ---
@@ -522,6 +602,218 @@ export class CvfSdk {
         },
       };
     });
+  }
+
+  private buildReferenceGovernedLoopSteps(
+    options: ReferenceGovernedLoopOptions & {
+      workflowId: string;
+      pipelineId: string;
+      riskLevel: 'R0' | 'R1' | 'R2' | 'R3';
+      requireApproval: boolean;
+    },
+  ): Array<{ extensionId: string; action: string; input?: Record<string, unknown> }> {
+    const aiCommit = options.aiCommit ?? {
+      commitId: `${options.pipelineId}:reference-commit`,
+      agentId: options.agentId ?? 'reference-governed-loop',
+      timestamp: Date.now(),
+      description: 'Auto-generated ai_commit for the SDK reference governed loop.',
+    };
+    const traceHash = `${options.workflowId}:trace:${options.riskLevel}`;
+
+    const steps: Array<{ extensionId: string; action: string; input?: Record<string, unknown> }> = [
+      {
+        extensionId: 'v1.1.1',
+        action: 'guard_check',
+        input: {
+          requestId: `${options.workflowId}:guard`,
+          phase: 'BUILD',
+          riskLevel: options.riskLevel,
+          role: options.role ?? 'HUMAN',
+          agentId: options.agentId,
+          action: options.action ?? 'write_code',
+          targetFiles: options.targetFiles,
+          fileScope: options.fileScope,
+          traceHash,
+          ai_commit: aiCommit,
+        },
+      },
+      {
+        extensionId: 'v1.1.1',
+        action: 'pipeline_create',
+        input: {
+          pipelineId: options.pipelineId,
+          intent: options.intent,
+          riskLevel: options.riskLevel,
+          role: options.role ?? 'HUMAN',
+          agentId: options.agentId,
+        },
+      },
+      {
+        extensionId: 'v1.1.1',
+        action: 'pipeline_record_artifact',
+        input: {
+          pipelineId: options.pipelineId,
+          type: 'PLAN',
+          details: {
+            source: 'reference_governed_loop',
+            intent: options.intent,
+          },
+        },
+      },
+    ];
+
+    if (options.requireApproval) {
+      steps.push(
+        {
+          extensionId: 'v1.1.1',
+          action: 'pipeline_advance',
+          input: {
+            pipelineId: options.pipelineId,
+            advanceCount: 2,
+          },
+        },
+        {
+          extensionId: 'v1.1.1',
+          action: 'pipeline_advance',
+          input: {
+            pipelineId: options.pipelineId,
+            advanceCount: 1,
+          },
+        },
+        {
+          extensionId: 'v1.1.1',
+          action: 'pipeline_approve_checkpoint',
+          input: {
+            pipelineId: options.pipelineId,
+            reviewerId: options.reviewerId ?? 'governor-reference',
+            reviewerRole: options.reviewerRole ?? 'GOVERNOR',
+            comment: options.reviewerComment ?? 'Approved through reference governed loop.',
+          },
+        },
+        {
+          extensionId: 'v1.1.1',
+          action: 'pipeline_advance',
+          input: {
+            pipelineId: options.pipelineId,
+            advanceCount: 1,
+          },
+        },
+      );
+    } else {
+      steps.push({
+        extensionId: 'v1.1.1',
+        action: 'pipeline_advance',
+        input: {
+          pipelineId: options.pipelineId,
+          advanceCount: 3,
+        },
+      });
+    }
+
+    steps.push(
+      {
+        extensionId: 'v1.1.1',
+        action: 'pipeline_record_artifact',
+        input: {
+          pipelineId: options.pipelineId,
+          type: 'EXECUTION',
+          details: {
+            targetFiles: options.targetFiles ?? options.fileScope ?? [],
+            action: options.action ?? 'write_code',
+          },
+        },
+      },
+      {
+        extensionId: 'v1.1.1',
+        action: 'pipeline_advance',
+        input: {
+          pipelineId: options.pipelineId,
+          advanceCount: 1,
+        },
+      },
+      {
+        extensionId: 'v1.1.1',
+        action: 'pipeline_record_artifact',
+        input: {
+          pipelineId: options.pipelineId,
+          type: 'REVIEW',
+          details: {
+            accepted: true,
+            reviewerRole: options.reviewerRole ?? 'GOVERNOR',
+          },
+        },
+      },
+      {
+        extensionId: 'v1.1.1',
+        action: 'pipeline_advance',
+        input: {
+          pipelineId: options.pipelineId,
+          advanceCount: 1,
+        },
+      },
+    );
+
+    if (options.requireApproval) {
+      steps.push(
+        {
+          extensionId: 'v1.1.1',
+          action: 'pipeline_approve_checkpoint',
+          input: {
+            pipelineId: options.pipelineId,
+            reviewerId: options.reviewerId ?? 'governor-reference',
+            reviewerRole: options.reviewerRole ?? 'GOVERNOR',
+            comment: options.reviewerComment ?? 'Approved through reference governed loop.',
+          },
+        },
+        {
+          extensionId: 'v1.1.1',
+          action: 'pipeline_advance',
+          input: {
+            pipelineId: options.pipelineId,
+            advanceCount: 1,
+          },
+        },
+      );
+    }
+
+    steps.push(
+      {
+        extensionId: 'v1.1.1',
+        action: 'pipeline_record_artifact',
+        input: {
+          pipelineId: options.pipelineId,
+          type: 'FREEZE',
+          details: {
+            receipt: `${options.pipelineId}:freeze`,
+            source: 'reference_governed_loop',
+          },
+        },
+      },
+      {
+        extensionId: 'v1.1.1',
+        action: 'pipeline_complete',
+        input: {
+          pipelineId: options.pipelineId,
+        },
+      },
+      {
+        extensionId: 'v3.0',
+        action: 'skill_validate',
+        input: {
+          pipelineId: options.pipelineId,
+          skill: options.skillId ?? 'reference_governed_loop',
+        },
+      },
+      {
+        extensionId: 'v1.9',
+        action: 'checkpoint',
+        input: {
+          pipelineId: options.pipelineId,
+        },
+      },
+    );
+
+    return steps;
   }
 
   private registerGuards(preset: GuardPreset, custom: Guard[]): void {

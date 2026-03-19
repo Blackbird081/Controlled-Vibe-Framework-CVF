@@ -82,7 +82,13 @@ export {
 } from './wiring/extension.bridge.js';
 
 // SDK (Phase C)
-export { CvfSdk, type CvfSdkConfig, type GuardPreset } from './sdk/cvf.sdk.js';
+export {
+  CvfSdk,
+  type CvfSdkConfig,
+  type GuardPreset,
+  type ReferenceGovernedLoopOptions,
+  type ReferenceGovernedLoopResult,
+} from './sdk/cvf.sdk.js';
 export { generateCIPipeline, generateGitHubActionsYaml, generateProjectTemplate } from './sdk/ci.config.js';
 
 // Observability (Phase D)

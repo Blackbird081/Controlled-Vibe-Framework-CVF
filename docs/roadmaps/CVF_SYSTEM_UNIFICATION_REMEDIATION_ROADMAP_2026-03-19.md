@@ -162,6 +162,12 @@ Front-door Web docs catalog canonicalization batch executed on `2026-03-20`:
 - non-coder alias handling comments now describe legacy input as compatibility normalization rather than active UI truth: `COMPLETED`
 - active Web docs front door is now cleaner and less likely to reinforce the old generic `4 phases` framing
 
+Reference governed loop helper batch executed on `2026-03-20`:
+
+- `CvfSdk` now exposes `runReferenceGovernedLoop()` as one reusable coder-facing governed execution path: `COMPLETED`
+- the helper covers guard check, governed pipeline, approval-aware advancement, freeze artifact, completion, skill validation, and deterministic checkpointing: `COMPLETED`
+- a canonical reference doc now points future audits and demos to one executable example instead of scattered test slices
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -186,6 +192,7 @@ Baseline receipt:
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_FOUNDATIONAL_CONCEPT_LABELING_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_FRONT_DOOR_WEB_DOCS_CANONICALIZATION_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_REFERENCE_GOVERNED_LOOP_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_ENTERPRISE_COMPLIANCE_ALIGNMENT_DELTA_2026-03-20.md`

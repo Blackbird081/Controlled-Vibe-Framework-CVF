@@ -362,6 +362,32 @@ describe('CvfSdk', () => {
       expect(result.workflow?.steps[4]?.output?.approvalStatus).toBe('APPROVED');
       expect(result.workflow?.steps[5]?.output?.status).toBe('BUILD');
     });
+
+    it('runs the reference governed loop helper end-to-end', async () => {
+      const cvf = CvfSdk.create();
+
+      const result = await cvf.runReferenceGovernedLoop({
+        workflowId: 'sdk-reference-loop',
+        pipelineId: 'sdk-reference-pipeline',
+        intent: 'Deliver a governed reference execution path',
+        riskLevel: 'R2',
+        requireApproval: true,
+        fileScope: ['src/features/reference-loop.ts'],
+        targetFiles: ['src/features/reference-loop.ts'],
+        reviewerId: 'governor-42',
+        reviewerComment: 'Approved via reference helper.',
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.workflowStatus).toBe('COMPLETED');
+      expect(result.pipelineStatus).toBe('COMPLETED');
+      expect(result.guardDecision).toBe('ALLOW');
+      expect(result.approvalCheckpointId).toBeDefined();
+      expect(result.checkpointId).toBeDefined();
+      expect(result.freezeReceipt).toBeDefined();
+      expect(result.workflow?.steps.every((step) => step.status === 'COMPLETED' || step.status === 'SKIPPED')).toBe(true);
+      expect(result.pipeline?.artifacts.some((artifact) => artifact.type === 'FREEZE')).toBe(true);
+    });
   });
 
   describe('audit', () => {

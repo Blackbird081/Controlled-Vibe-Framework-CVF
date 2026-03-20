@@ -4156,3 +4156,23 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not authorize any new continuation candidate.
   - It standardizes the packet future candidates should use if they attempt to reopen a depth-frozen roadmap.
+## [2026-03-20] Batch: GC-018 P3 continuation packet issuance
+- Scope:
+  - publish one canonical scored continuation packet for the current deferred `P3` breadth candidate
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+- Files updated:
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md`
+  - `docs/baselines/CVF_GC018_P3_CONTINUATION_PACKET_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not authorize `P3`.
+  - It records the current defer decision in the standardized packet form introduced by `GC-018`.

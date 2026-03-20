@@ -119,6 +119,7 @@ Independent judgment for the active local baseline:
 - Whole-system status: `SUBSTANTIALLY ALIGNED`
 - Safe product positioning: `governance-first controlled execution system`
 - Post-standard continuation decision: `P3` remains `DEFERRED` until a freshly scored candidate crosses `GC-018`
+- Canonical scored continuation packet for the current `P3` decision: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md`
 - Continuation control status: `GC-018` is now machine-enforced on the repository path before push/merge
 - Active remediation status: no currently authorized roadmap batch remains `IN PROGRESS` on the active reference path
 - Current wave hold posture: intentionally `DEPTH-FROZEN` pending a new reassessment or a newly scored continuation candidate

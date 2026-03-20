@@ -156,6 +156,10 @@ Depth Audit
 
 ### Candidate P3 — Additional breadth expansion after nine active Web paths
 
+Canonical continuation packet:
+
+- `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md`
+
 Depth Audit
 - Risk reduction: `0`
 - Decision value: `1`
@@ -170,7 +174,7 @@ Decision boundary now active for this roadmap:
 
 - `P1` has now been executed and is considered `COMPLETED`
 - `P2` has now been executed and is considered `COMPLETED`
-- `P3` is explicitly `DEFERRED` until a later reassessment proves a new breadth candidate crosses the continue threshold
+- `P3` is explicitly `DEFERRED` until a later reassessment proves a new breadth candidate crosses the continue threshold; the current scored packet is recorded in `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md`
 - this register must be refreshed before any future attempt to reopen breadth expansion on this roadmap
 
 Current post-standard continuation readout:

@@ -71,6 +71,32 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-20] Batch: Non-coder breadth expansion — Data Analysis Wizard
+- Change reference:
+  - local working tree Data Analysis Wizard governed breadth-expansion batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_NONCODER_DATA_ANALYSIS_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/DataAnalysisWizard.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/DataAnalysisWizard.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/template-i18n.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/research.ts`
+  - `docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/baselines/CVF_NONCODER_DATA_ANALYSIS_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/DataAnalysisWizard.test.tsx` -> `PASS`
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/template-recommender.test.ts` -> `PASS`
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> `PASS`
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> `PASS`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> `PASS`
+- Skip scope:
+  - runtime/contract suites — skipped because this batch only expands one Web wizard to an already-proven governed packet/live-run pattern
+  - broader Web regression — skipped because the shared helper and execute pipeline were already covered by previous governed non-coder batches
+- Notes/Risks:
+  - Data Analysis Wizard now follows the same governed packet + live path pattern as App Builder, Business Strategy, Research Project, Product Design, and the existing active Web governed reference packet flow.
+  - The remaining gap is breadth beyond these five active Web reference paths, not missing governed proof on the current Data Analysis surface.
+
 ---
 
 ## 4A) Rotation and Archive Rule

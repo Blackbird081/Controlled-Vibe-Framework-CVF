@@ -16,7 +16,7 @@ export const researchTemplates: Template[] = [
         id: 'data_analysis_wizard',
         name: '📊 Phân tích Dữ liệu',
         icon: '📉',
-        description: 'Multi-step wizard tạo Data Analysis Plan qua 5 bước. Problem → Understanding → Methodology → Deliverables → Review',
+        description: 'Multi-step wizard tạo Data Analysis Plan với governed packet và live path để đối soát',
         category: 'research',
         difficulty: 'advanced',
         fields: [],

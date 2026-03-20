@@ -4216,3 +4216,23 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not reopen any continuation candidate.
   - It marks the roadmap as complete for the active wave and pushes all future work into reassessment or `GC-018` continuation flow.
+## [2026-03-20] Batch: Reference active-wave closure alignment
+- Scope:
+  - align high-level reference docs with the now-explicit active-wave closure posture
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+- Files updated:
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+  - `docs/reference/CVF_MATURITY_MATRIX.md`
+  - `docs/reference/CVF_POSITIONING.md`
+  - `docs/baselines/CVF_REFERENCE_ACTIVE_WAVE_CLOSURE_ALIGNMENT_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not change the active-wave closure decision.
+  - It extends the same closure posture into manifest, maturity, and positioning reference surfaces.

@@ -38,4 +38,4 @@ Status: operational maturity view for current CVF lines.
 - `candidate` means the line has enough evidence to be treated seriously in current baseline work
 - `local-implemented` means the code/docs exist and may pass local verification, but whole-system closure and release narrative are not fully normalized yet
 - this matrix is intentionally operational, not marketing-oriented
-- the current active reference path should now be read together with the release-readiness checkpoint and the governed continuation roadmap, because the present wave is materially delivered and depth-frozen rather than broadly open-ended
+- the current active reference path should now be read together with the release-readiness checkpoint, the governed continuation roadmap, and the canonical `P3` defer packet, because the present wave is complete for the active wave and depth-frozen rather than broadly open-ended

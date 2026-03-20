@@ -14,7 +14,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 |---|---|---|
 | Canonical phase model | `ALIGNED` | active runtime, shared guard contract, and major Web surfaces now use `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` |
 | Hardened default guard path | `ALIGNED` | `ai_commit` and `fileScope` are wired into the hardened default path in active remediated runtime areas |
-| Web non-coder semantics | `SUBSTANTIALLY ALIGNED` | key UX surfaces teach canonical phase semantics and the active Web reference line now provides seven governed live execution paths |
+| Web non-coder semantics | `SUBSTANTIALLY ALIGNED` | key UX surfaces teach canonical phase semantics and the active Web reference line now provides eight governed live execution paths |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` | explicit step lifecycle, default runtime bindings, receipt-backed execution, and a reusable SDK reference loop now exist for the governed path |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` | canonical control matrix now maps critical rules to runtime guard, gateway, approval, or CI owner; remaining caveat is ecosystem breadth, not owner ambiguity |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` | coder-facing and non-coder active reference paths now both have governed loop evidence, though not every channel family is equally mature |
@@ -33,7 +33,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - public SDK/OpenAPI surfaces now publish canonical phases while confining legacy `DISCOVERY` support to explicit normalization boundaries
 - key user-facing guides now teach the canonical 5-phase controlled loop instead of the formerly active 4-phase framing
 - `CvfSdk.runReferenceGovernedLoop()` now provides one reusable coder-facing governed execution path with auto-supplied `ai_commit`, `traceHash`, approval handling, freeze artifact, and checkpoint receipt
-- the non-coder reference packet now has seven live governed launch paths instead of being only a documentation-grade handoff artifact
+- the non-coder reference packet now has eight live governed launch paths instead of being only a documentation-grade handoff artifact
 
 ## Open Risks
 

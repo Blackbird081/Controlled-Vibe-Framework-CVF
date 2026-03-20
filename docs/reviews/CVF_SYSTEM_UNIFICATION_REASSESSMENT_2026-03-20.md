@@ -35,7 +35,7 @@ Supplemental evidence update recorded later on `2026-03-20`:
 
 - the governed reference path is now exposed as a reusable SDK helper via `CvfSdk.runReferenceGovernedLoop()`
 - this reduces reliance on scattered lower-level tests as the only proof that the coder-facing controlled loop can be re-run end to end
-- the active Web reference line now provides seven non-coder governed live paths through the Web execute pipeline:
+- the active Web reference line now provides eight non-coder governed live paths through the Web execute pipeline:
   - App Builder Wizard
   - Business Strategy Wizard
   - Research Project Wizard
@@ -43,6 +43,7 @@ Supplemental evidence update recorded later on `2026-03-20`:
   - Data Analysis Wizard
   - Content Strategy Wizard
   - Marketing Campaign Wizard
+  - System Design Wizard
 
 ---
 
@@ -52,7 +53,7 @@ Supplemental evidence update recorded later on `2026-03-20`:
 |---|---:|---:|---|
 | Pipeline / workflow continuity | `6.5/10` | `8.2/10` | canonical workflow now exists across runtime, bridge, SDK, and major user-facing paths |
 | Governance converted into executable ownership | `6.0/10` | `8.0/10` | critical controls now map to runtime guard, gateway, approval checkpoint, or CI owner |
-| Web UI value for non-coders | `7.0/10` | `8.6/10` | non-coder flow now teaches canonical phases, freeze posture, and has seven governed live execution paths on the active Web reference line |
+| Web UI value for non-coders | `7.0/10` | `8.7/10` | non-coder flow now teaches canonical phases, freeze posture, and has eight governed live execution paths on the active Web reference line |
 | Core value: controlled vibe execution | `6.0/10` | `8.2/10` | governed reference paths now exist for coder-facing execution and multiple non-coder active reference executions |
 | Auditability / reconciliation strength | `8.5/10` | `9.0/10` | baseline, hook, readiness, and control-matrix evidence chain is now unusually strong |
 | Comparative maturity vs. major ecosystems | `6.0/10` | `6.8/10` | stronger internal governance maturity, still not platform-breadth parity |
@@ -112,6 +113,6 @@ Independent judgment for the active local baseline:
 - Whole-system status: `SUBSTANTIALLY ALIGNED`
 - Safe product positioning: `governance-first controlled execution system`
 - Strongest justified claim today:
-  - CVF now demonstrates substantially aligned governed execution paths with canonical phases, hardened guard defaults, explicit approval boundaries, evidence-backed freeze closure, audit-ready reconciliation artifacts, one reusable coder-facing reference loop, and seven active non-coder Web reference runs.
+  - CVF now demonstrates substantially aligned governed execution paths with canonical phases, hardened guard defaults, explicit approval boundaries, evidence-backed freeze closure, audit-ready reconciliation artifacts, one reusable coder-facing reference loop, and eight active non-coder Web reference runs.
 
 This is a meaningful step up from the prior review. The system no longer reads as "promising but fragmented"; it now reads as "coherent on the active reference path, with remaining caveats mostly about breadth and maximum-strength claims."

@@ -4358,3 +4358,22 @@ Utility and guard:
 - Notes/Risks:
   - This roadmap is planning-only and does not authorize a new remediation wave.
   - Any future activation still requires reassessment or a passing `GC-018` continuation candidate.
+## [2026-03-20] Batch: Next-wave GC-018 continuation candidate N1
+- Scope:
+  - score the first continuation candidate for the successor roadmap and make the authorization boundary explicit before any next-wave implementation begins
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_NEXT_WAVE_PLATFORM_COMPLETION_ROADMAP_2026-03-20.md`
+  - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+- Files updated:
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_N1_2026-03-20.md`
+  - `docs/baselines/CVF_NEXT_WAVE_GC018_CANDIDATE_N1_DELTA_2026-03-20.md`
+  - `docs/roadmaps/CVF_NEXT_WAVE_PLATFORM_COMPLETION_ROADMAP_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not authorize the next wave.
+  - The resulting decision is `REVIEW REQUIRED`, not `CONTINUE`.

@@ -60,6 +60,15 @@ Until then, this roadmap must be read as:
 - `reviewable`
 - `not yet active`
 
+Canonical first continuation packet:
+
+- `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_N1_2026-03-20.md`
+
+Current scored readout:
+
+- `REVIEW REQUIRED`
+- not yet authorized for implementation
+
 ## 4. Next-Wave Objective
 
 Move CVF from:
@@ -206,6 +215,12 @@ Expected review question:
 
 - does the proposed breadth close a new material execution or governance gap,
 - or does it mostly add proof volume without moving a real decision boundary?
+
+Current packet status:
+
+- candidate created on `2026-03-20`
+- current decision: `REVIEW REQUIRED`
+- current authorization: `NO`
 
 ## 11. Practical Reading
 

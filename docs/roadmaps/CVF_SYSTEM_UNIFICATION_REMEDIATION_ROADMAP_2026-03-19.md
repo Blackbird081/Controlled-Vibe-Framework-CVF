@@ -46,7 +46,7 @@ Current snapshot as of `2026-03-20`:
 
 ### In Progress
 
-- ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces; now strengthened by more than one governed non-coder Web reference path: `IN PROGRESS`
+- ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces; now strengthened by multiple governed non-coder Web reference paths: `IN PROGRESS`
 
 ### Newly Closed
 
@@ -224,6 +224,12 @@ Non-coder breadth expansion batch executed on `2026-03-20`:
 - active Web non-coder breadth no longer depends on App Builder Wizard alone for governed live-path proof: `COMPLETED`
 - broader ecosystem parity remains `IN PROGRESS` outside these two active Web reference paths
 
+Non-coder research breadth expansion batch executed on `2026-03-20`:
+
+- Research Project Wizard now produces the same governed packet evidence pattern and can launch a third governed live execution path through the Web execute pipeline: `COMPLETED`
+- active Web non-coder breadth is now demonstrated across app-building, business-strategy, and research-proposal paths on the same control model: `COMPLETED`
+- broader ecosystem parity remains `IN PROGRESS` outside these three active Web reference paths
+
 Verification completed for this batch:
 
 - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test` -> pass
@@ -262,6 +268,7 @@ Baseline receipt:
 - `docs/baselines/CVF_NONCODER_REFERENCE_GOVERNED_PACKET_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_NONCODER_LIVE_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
 - `docs/baselines/CVF_NONCODER_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+- `docs/baselines/CVF_NONCODER_RESEARCH_BREADTH_EXPANSION_DELTA_2026-03-20.md`
 
 ---
 

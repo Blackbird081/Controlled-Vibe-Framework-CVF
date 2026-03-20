@@ -5,7 +5,7 @@ export const researchTemplates: Template[] = [
         id: 'research_project_wizard',
         name: '🔬 Dự án Nghiên cứu',
         icon: '🔬',
-        description: 'Multi-step wizard tạo Research Proposal qua 4 bước. Question → Methodology → Resources → Review',
+        description: 'Multi-step wizard tạo Research Proposal với governed packet và live path để đối soát',
         category: 'research',
         difficulty: 'medium',
         fields: [],

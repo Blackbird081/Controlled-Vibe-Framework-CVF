@@ -22,7 +22,7 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     email_template: { name: 'Email Templates', description: 'Create professional emails' },
 
     // Research
-    research_project_wizard: { name: '🔬 Research Project Wizard', description: 'Multi-step wizard to create Research Proposal in 4 steps: Question → Methodology → Resources → Review' },
+    research_project_wizard: { name: '🔬 Research Project Wizard', description: 'Multi-step wizard to create a governed Research Proposal with review packet and live path' },
     data_analysis_wizard: { name: '📊 Data Analysis Wizard', description: 'Multi-step wizard to create Data Analysis Plan in 5 steps: Problem → Understanding → Methodology → Deliverables → Review' },
     data_analysis: { name: 'Data Analysis', description: 'Analyze data and extract insights' },
 

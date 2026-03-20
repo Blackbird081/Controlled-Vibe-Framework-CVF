@@ -4236,3 +4236,24 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not change the active-wave closure decision.
   - It extends the same closure posture into manifest, maturity, and positioning reference surfaces.
+## [2026-03-20] Batch: Active-wave closure review issuance
+- Scope:
+  - publish one dedicated independent closure review for the now-complete system-unification active wave
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md`
+- Files updated:
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `README.md`
+  - `docs/baselines/CVF_ACTIVE_WAVE_CLOSURE_REVIEW_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not reopen continuation work.
+  - It publishes one explicit review artifact that confirms the wave is closed and defines the only legitimate reopen paths.

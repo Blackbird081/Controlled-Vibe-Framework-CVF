@@ -46,6 +46,7 @@ Current snapshot as of `2026-03-20`:
 - onboarding -> governed starter handoff on the active Web reference path: `COMPLETED`
 - active `cvf-web` production build on the current local baseline: `COMPLETED`
 - independent reassessment and closure evidence chain for the active reference path: `COMPLETED`
+- independent active-wave closure review for the active reference path: `COMPLETED`
 
 ### In Progress
 

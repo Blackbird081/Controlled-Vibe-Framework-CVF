@@ -65,6 +65,7 @@ Claims to avoid for now:
 
 - [Independent System Review](../reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md)
 - [System Unification Reassessment](../reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md)
+- [System Unification Active-Wave Closure Review](../reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md)
 - [System Unification Roadmap](../roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md)
 - [Governance Control Matrix](./CVF_GOVERNANCE_CONTROL_MATRIX.md)
 - [Phase 1 Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md)

@@ -17,7 +17,7 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     architecture_review: { name: 'Architecture Review', description: 'System architecture review' },
 
     // Content
-    content_strategy_wizard: { name: '✍️ Content Strategy Wizard', description: 'Multi-step wizard to create Content Strategy in 5 steps: Brand → Audience → Pillars → Channels → Review' },
+    content_strategy_wizard: { name: '✍️ Content Strategy Wizard', description: 'Multi-step wizard to create a governed Content Strategy with review packet and live path' },
     documentation: { name: 'Documentation', description: 'Create technical documentation' },
     email_template: { name: 'Email Templates', description: 'Create professional emails' },
 

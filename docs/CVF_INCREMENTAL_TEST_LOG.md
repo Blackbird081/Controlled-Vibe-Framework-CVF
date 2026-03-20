@@ -123,6 +123,28 @@ Template:
   - Content Strategy Wizard now follows the same governed packet + live path pattern as App Builder, Business Strategy, Research Project, Product Design, Data Analysis, and the existing active Web governed reference packet flow.
   - The remaining gap is breadth beyond these six active Web reference paths, not missing governed proof on the current Content Strategy surface.
 
+## [2026-03-20] Batch: Non-coder six-path evidence reconciliation
+- Change reference:
+  - local working tree non-coder six-path evidence reconciliation batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_NONCODER_SIX_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `README.md`
+  - `docs/baselines/CVF_NONCODER_SIX_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> `PASS`
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> `PASS`
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> `PASS`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> `PASS`
+- Skip scope:
+  - runtime/contract/Web component suites — skipped because this batch only reconciles status artifacts to already-implemented evidence
+  - broader docs refresh — skipped because only readiness/reassessment/top-level summary needed count updates
+- Notes/Risks:
+  - This batch intentionally updates evidence counts without inflating the whole-system claim beyond `SUBSTANTIALLY ALIGNED`.
+  - Remaining caveats continue to focus on ecosystem-breadth parity rather than missing governed proof on the active Web reference line.
+
 ---
 
 ## 4A) Rotation and Archive Rule

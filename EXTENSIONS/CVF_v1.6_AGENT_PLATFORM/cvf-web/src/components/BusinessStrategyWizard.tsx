@@ -4,6 +4,13 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { evaluateSpecGate } from '@/lib/spec-gate';
+import { ProcessingScreen } from './ProcessingScreen';
+import { WorkflowVisualizer } from './WorkflowVisualizer';
+import {
+    buildNonCoderLiveExecutionRequest,
+    buildNonCoderReferenceLoop,
+    formatNonCoderReferenceLoopMarkdown,
+} from '@/lib/non-coder-reference-loop';
 
 const DRAFT_STORAGE_KEY = 'cvf_business_strategy_wizard_draft';
 
@@ -186,12 +193,78 @@ Based on this document, AI should generate:
     return spec.trim();
 }
 
+function toStrategySlug(value: string): string {
+    return value
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        || 'business-strategy';
+}
+
+function buildBusinessStrategyGovernedPacket(data: WizardData) {
+    const strategicQuestion = data.strategicQuestion?.trim() || 'Business Strategy Review';
+    const slug = toStrategySlug(strategicQuestion);
+    const stakeholders = data.stakeholders?.trim() || 'leadership team';
+    const strategySpec = generateConsolidatedSpec(data);
+
+    return buildNonCoderReferenceLoop({
+        appName: strategicQuestion,
+        appType: 'Strategy Document',
+        problem: data.businessContext?.trim() || strategicQuestion,
+        targetUsers: stakeholders,
+        coreFeatures: data.options?.trim() || data.strategicGoals?.trim() || 'Strategic recommendation\nOptions comparison\nRisk analysis',
+        outOfScope: data.constraints?.trim() || 'Any implementation work outside the strategy decision packet',
+        techPreference: 'Governed strategic analysis workflow',
+        dataStorage: 'Không cần',
+        archType: 'Decision-analysis packet',
+        apiStyle: 'None',
+        distribution: 'Stakeholder review packet',
+        spec: strategySpec,
+        title: `${strategicQuestion} Governed Strategy Packet`,
+        templateId: 'business_strategy_wizard',
+        templateName: 'Business Strategy Wizard',
+        intent: `Produce one governed strategic decision document for "${strategicQuestion}" for ${stakeholders}.`,
+        riskLevel: 'R1',
+        fileScope: [
+            `docs/strategy/${slug}.md`,
+            `docs/strategy/${slug}.review.md`,
+            `docs/strategy/${slug}.freeze.md`,
+        ],
+        baselineArtifact: `docs/baselines/${slug.toUpperCase().replace(/-/g, '_')}_STRATEGY_FREEZE_RECEIPT.md`,
+        acceptedOutput: `${strategicQuestion} governed strategy decision packet`,
+        followUps: [
+            `Validate the recommendation for "${strategicQuestion}" with decision stakeholders`,
+            'Open a separate follow-up batch for implementation work outside this strategy packet',
+        ],
+        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:strategy-${slug}`,
+        inputs: {
+            strategicQuestion: data.strategicQuestion || '',
+            businessContext: data.businessContext || '',
+            strategicGoals: data.strategicGoals || '',
+            constraints: data.constraints || '',
+            stakeholders: data.stakeholders || '',
+            options: data.options || '',
+            criteria: data.criteria || '',
+            priorities: data.priorities || '',
+            strengths: data.strengths || '',
+            weaknesses: data.weaknesses || '',
+            opportunities: data.opportunities || '',
+            threats: data.threats || '',
+            risks: data.risks || '',
+        },
+    });
+}
+
 export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) {
     const { language } = useLanguage();
     const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
+    const [showGovernedPacket, setShowGovernedPacket] = useState(false);
+    const [showLiveRun, setShowLiveRun] = useState(false);
+    const [liveRunOutput, setLiveRunOutput] = useState<string | null>(null);
     const [hasDraft, setHasDraft] = useState(false);
 
     // Load draft from localStorage on mount
@@ -289,6 +362,9 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
     const generatedSpec = generateConsolidatedSpec(wizardData);
     const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
     const canExport = specGate.status === 'PASS';
+    const governedPacket = buildBusinessStrategyGovernedPacket(wizardData);
+    const governedPacketMarkdown = formatNonCoderReferenceLoopMarkdown(governedPacket);
+    const governedLiveExecution = buildNonCoderLiveExecutionRequest(governedPacket);
     const specGateLabel = specGate.status === 'PASS'
         ? wt(WIZARD_COMMON.specGatePass, language)
         : specGate.status === 'CLARIFY'
@@ -365,6 +441,79 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                     </div>
                 </div>
             </div>
+            );
+    }
+
+    if (showLiveRun) {
+        return (
+            <div className="max-w-5xl mx-auto">
+                {liveRunOutput ? (
+                    <div className="space-y-6">
+                        <div className="rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/70 dark:bg-emerald-900/20 p-6">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <h2 className="text-xl font-bold text-emerald-900 dark:text-emerald-100">
+                                        {language === 'vi' ? 'Live Governed Run đã hoàn tất' : 'Live governed run completed'}
+                                    </h2>
+                                    <p className="text-sm text-emerald-800 dark:text-emerald-200">
+                                        {language === 'vi'
+                                            ? 'Strategic decision packet đã đi qua governed execute path và sẵn sàng cho bước freeze/đối soát.'
+                                            : 'The strategic decision packet completed the governed execute path and is ready for freeze/audit handoff.'}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        setShowLiveRun(false);
+                                        setLiveRunOutput(null);
+                                    }}
+                                    className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                >
+                                    {language === 'vi' ? 'Quay lại review' : 'Back to review'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                                {language === 'vi' ? 'Live output' : 'Live output'}
+                            </h3>
+                            <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono max-h-[40vh] overflow-y-auto">
+                                {liveRunOutput}
+                            </pre>
+                        </div>
+
+                        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50/70 dark:bg-blue-900/20 p-6">
+                            <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
+                                Freeze receipt
+                            </h3>
+                            <div className="space-y-2 text-sm text-blue-900 dark:text-blue-100">
+                                <div><strong>{language === 'vi' ? 'Accepted output' : 'Accepted output'}:</strong> {governedPacket.freezeReceipt.acceptedOutput}</div>
+                                <div><strong>{language === 'vi' ? 'Baseline artifact' : 'Baseline artifact'}:</strong> {governedPacket.freezeReceipt.baselineArtifact}</div>
+                                <div><strong>{language === 'vi' ? 'Locked scope' : 'Locked scope'}:</strong> {governedPacket.freezeReceipt.lockedScope.join(', ')}</div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <ProcessingScreen
+                        templateName={governedLiveExecution.request.templateName}
+                        templateId={governedLiveExecution.request.templateId}
+                        inputs={governedLiveExecution.request.inputs}
+                        intent={governedLiveExecution.request.intent}
+                        executionOverrides={{
+                            mode: governedLiveExecution.request.mode,
+                            cvfPhase: governedLiveExecution.request.cvfPhase,
+                            cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
+                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
+                            fileScope: governedLiveExecution.request.fileScope,
+                        }}
+                        onComplete={(output) => setLiveRunOutput(output)}
+                        onCancel={() => {
+                            setShowLiveRun(false);
+                            setLiveRunOutput(null);
+                        }}
+                    />
+                )}
+            </div>
         );
     }
 
@@ -386,7 +535,9 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                         📈 Business Strategy Wizard
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400">
-                        {language === 'vi' ? 'Tạo Strategic Decision Document qua 4 bước' : 'Create Strategic Decision Document in 4 steps'}
+                        {language === 'vi'
+                            ? 'Thu thập strategy brief rồi review governed packet và live path'
+                            : 'Capture the strategy brief, then review the governed packet and live path'}
                     </p>
                 </div>
             </div>
@@ -506,16 +657,144 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                             )}
                         </div>
 
-                        <button
-                            onClick={handleExport}
-                            disabled={!canExport}
-                            className={`w-full py-3 rounded-lg font-medium transition-all ${canExport
-                                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700'
-                                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                }`}
-                        >
-                            {language === 'vi' ? '📈 Xuất Strategy Document' : '📈 Export Strategy Document'}
-                        </button>
+                        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200">
+                                        {language === 'vi' ? 'Governed strategy packet cho non-coder' : 'Governed strategy packet for non-coders'}
+                                    </h3>
+                                    <p className="text-xs text-blue-700 dark:text-blue-300">
+                                        {language === 'vi'
+                                            ? 'Packet này gom canonical phases, approval checkpoints, execution handoff và freeze receipt cho strategic decision document.'
+                                            : 'This packet bundles canonical phases, approval checkpoints, execution handoff, and the freeze receipt for the strategic decision document.'}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setShowGovernedPacket(prev => !prev)}
+                                    className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors"
+                                >
+                                    {showGovernedPacket
+                                        ? (language === 'vi' ? 'Ẩn packet' : 'Hide packet')
+                                        : (language === 'vi' ? 'Xem governed packet' : 'View governed packet')}
+                                </button>
+                            </div>
+
+                            {showGovernedPacket && (
+                                <div className="mt-4 space-y-4">
+                                    <WorkflowVisualizer mode="full" currentStep={4} />
+
+                                    <div className="grid gap-4 lg:grid-cols-2">
+                                        <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
+                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                                Approval checkpoints
+                                            </h4>
+                                            <div className="space-y-3">
+                                                {governedPacket.approvals.map(approval => (
+                                                    <div key={approval.id} className="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+                                                        <div className="text-xs uppercase tracking-wide text-gray-500">
+                                                            {approval.phase} → {approval.requiredFor}
+                                                        </div>
+                                                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                                            {approval.reason}
+                                                        </div>
+                                                        <div className="mt-1 text-xs text-gray-600 dark:text-gray-400">
+                                                            Owner: {approval.humanOwner}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
+                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                                Freeze receipt
+                                            </h4>
+                                            <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <div><strong>{language === 'vi' ? 'Accepted output' : 'Accepted output'}:</strong> {governedPacket.freezeReceipt.acceptedOutput}</div>
+                                                <div><strong>{language === 'vi' ? 'Baseline artifact' : 'Baseline artifact'}:</strong> {governedPacket.freezeReceipt.baselineArtifact}</div>
+                                                <div><strong>{language === 'vi' ? 'Locked scope' : 'Locked scope'}:</strong> {governedPacket.freezeReceipt.lockedScope.join(', ')}</div>
+                                                <div><strong>{language === 'vi' ? 'Risk' : 'Risk'}:</strong> {governedPacket.riskLevel}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
+                                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                            Execution handoff
+                                        </h4>
+                                        <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                            <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
+                                            <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>
+                                            <div><strong>File scope:</strong> {governedPacket.executionHandoff.fileScope.join(', ')}</div>
+                                            <div><strong>Skill preflight:</strong> {governedPacket.executionHandoff.skillPreflightDeclaration}</div>
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50/70 dark:bg-emerald-900/20 p-4">
+                                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">
+                                                    {language === 'vi' ? 'Live governed run' : 'Live governed run'}
+                                                </h4>
+                                                <p className="text-xs text-emerald-700 dark:text-emerald-300">
+                                                    {language === 'vi'
+                                                        ? 'Chạy thật qua Web execute pipeline với strategic packet đã khóa BUILD phase, risk, file scope và skill preflight.'
+                                                        : 'Run the real Web execute pipeline with the strategic packet pre-bound to BUILD phase, risk, file scope, and skill preflight.'}
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    setLiveRunOutput(null);
+                                                    setShowLiveRun(true);
+                                                }}
+                                                className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors"
+                                            >
+                                                {language === 'vi' ? 'Chạy live governed path' : 'Run live governed path'}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
+                                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                            {language === 'vi' ? 'Packet preview' : 'Packet preview'}
+                                        </h4>
+                                        <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono max-h-80 overflow-y-auto">
+                                            {governedPacketMarkdown}
+                                        </pre>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="grid gap-3 sm:grid-cols-3">
+                            <button
+                                onClick={() => setShowGovernedPacket(prev => !prev)}
+                                className="py-3 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all"
+                            >
+                                {showGovernedPacket
+                                    ? (language === 'vi' ? 'Ẩn governed packet' : 'Hide governed packet')
+                                    : (language === 'vi' ? 'Governed demo packet' : 'Governed demo packet')}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setLiveRunOutput(null);
+                                    setShowLiveRun(true);
+                                }}
+                                className="py-3 rounded-lg font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-all"
+                            >
+                                {language === 'vi' ? 'Chạy live governed path' : 'Run live governed path'}
+                            </button>
+                            <button
+                                onClick={handleExport}
+                                disabled={!canExport}
+                                className={`py-3 rounded-lg font-medium transition-all ${canExport
+                                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700'
+                                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                    }`}
+                            >
+                                {language === 'vi' ? '📈 Xuất Strategy Document' : '📈 Export Strategy Document'}
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     /* Form Fields */
@@ -601,4 +880,3 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
         </div>
     );
 }
-

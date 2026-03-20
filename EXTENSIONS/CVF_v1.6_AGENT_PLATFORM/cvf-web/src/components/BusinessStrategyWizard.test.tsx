@@ -13,6 +13,33 @@ vi.mock('@/lib/spec-gate', () => ({
     evaluateSpecGate: () => ({ status: 'PASS', missing: [], score: 1 }),
 }));
 
+vi.mock('./ProcessingScreen', () => ({
+    ProcessingScreen: ({
+        templateName,
+        executionOverrides,
+        onComplete,
+        onCancel,
+    }: {
+        templateName: string;
+        executionOverrides?: {
+            cvfPhase?: string;
+            cvfRiskLevel?: string;
+            skillPreflightDeclaration?: string;
+        };
+        onComplete: (output: string) => void;
+        onCancel: () => void;
+    }) => (
+        <div>
+            <p>ProcessingScreenMock:{templateName}</p>
+            <p>Phase:{executionOverrides?.cvfPhase}</p>
+            <p>Risk:{executionOverrides?.cvfRiskLevel}</p>
+            <p>Skill:{executionOverrides?.skillPreflightDeclaration}</p>
+            <button onClick={() => onComplete('Live governed strategy output')}>CompleteProcessingMock</button>
+            <button onClick={onCancel}>CancelProcessingMock</button>
+        </div>
+    ),
+}));
+
 function fillAllRequired() {
     const textboxes = screen.getAllByRole('textbox');
     textboxes.forEach(tb => fireEvent.change(tb, { target: { value: 'Test data' } }));
@@ -157,5 +184,39 @@ describe('BusinessStrategyWizard', () => {
         fireEvent.click(screen.getByText(/Download .md/));
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
+    });
+
+    it('shows governed packet on review step', async () => {
+        render(<BusinessStrategyWizard onBack={vi.fn()} />);
+        fillAllRequired(); clickNext();
+        fillAllRequired(); clickNext();
+        fillAllRequired(); clickNext();
+
+        fireEvent.click(screen.getByText('Governed demo packet'));
+
+        expect(await screen.findByText(/Governed strategy packet cho non-coder/i)).toBeTruthy();
+        expect(screen.getAllByText(/Approval checkpoints/i).length).toBeGreaterThan(0);
+        expect(screen.getAllByText(/Freeze receipt/i).length).toBeGreaterThan(0);
+        expect(screen.getAllByText(/Execution handoff/i).length).toBeGreaterThan(0);
+    });
+
+    it('launches live governed path from review step', async () => {
+        render(<BusinessStrategyWizard onBack={vi.fn()} />);
+        fillAllRequired(); clickNext();
+        fillAllRequired(); clickNext();
+        fillAllRequired(); clickNext();
+
+        fireEvent.click(screen.getByText('Chạy live governed path'));
+
+        expect(await screen.findByText(/ProcessingScreenMock:Business Strategy Wizard/i)).toBeTruthy();
+        expect(screen.getByText('Phase:BUILD')).toBeTruthy();
+        expect(screen.getByText('Risk:R1')).toBeTruthy();
+        expect(screen.getByText(/Skill:NONCODER_REFERENCE_PACKET:strategy-test-data/i)).toBeTruthy();
+
+        fireEvent.click(screen.getByText('CompleteProcessingMock'));
+
+        expect(await screen.findByText(/Live Governed Run đã hoàn tất/i)).toBeTruthy();
+        expect(screen.getByText(/Live governed strategy output/i)).toBeTruthy();
+        expect(screen.getAllByText(/Freeze receipt/i).length).toBeGreaterThan(0);
     });
 });

@@ -6,7 +6,7 @@
 
 export const templateEnglish: Record<string, { name: string; description?: string }> = {
     // Business
-    business_strategy_wizard: { name: '📈 Business Strategy Wizard', description: 'Multi-step wizard to create Strategic Decision Document in 4 steps: Context → Options → SWOT/Risk → Review' },
+    business_strategy_wizard: { name: '📈 Business Strategy Wizard', description: 'Multi-step wizard to create a governed Strategic Decision Document with review packet and live path' },
     strategy_analysis: { name: 'Strategy Analysis', description: 'Analyze business strategy, compare alternatives' },
     risk_assessment: { name: 'Risk Assessment', description: 'Risk assessment with mitigation plans' },
     competitor_review: { name: 'Competitor Review', description: 'Competitive analysis' },

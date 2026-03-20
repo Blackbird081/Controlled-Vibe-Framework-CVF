@@ -14,6 +14,17 @@ export interface NonCoderReferenceLoopInput {
   apiStyle?: string;
   distribution?: string;
   spec: string;
+  title?: string;
+  templateId?: string;
+  templateName?: string;
+  intent?: string;
+  riskLevel?: 'R1' | 'R2';
+  fileScope?: string[];
+  baselineArtifact?: string;
+  acceptedOutput?: string;
+  followUps?: string[];
+  skillPreflightDeclaration?: string;
+  inputs?: Record<string, string>;
 }
 
 export interface NonCoderReferencePhase {
@@ -85,6 +96,10 @@ function compactLines(value?: string, fallback?: string): string[] {
 }
 
 function inferRiskLevel(input: NonCoderReferenceLoopInput): 'R1' | 'R2' {
+  if (input.riskLevel) {
+    return input.riskLevel;
+  }
+
   const storage = (input.dataStorage || '').toLowerCase();
   const apiStyle = (input.apiStyle || '').toLowerCase();
   const appType = (input.appType || '').toLowerCase();
@@ -155,8 +170,23 @@ export function buildNonCoderReferenceLoop(input: NonCoderReferenceLoopInput): N
   const riskLevel = inferRiskLevel(input);
   const features = compactLines(input.coreFeatures, 'Core feature set to be finalized during design review');
   const outOfScope = compactLines(input.outOfScope, 'Any behavior outside the defined v1 scope');
-  const fileScope = inferFileScope(appType, slug);
-  const baselineArtifact = `docs/baselines/${slug.toUpperCase().replace(/-/g, '_')}_FREEZE_RECEIPT.md`;
+  const fileScope = input.fileScope && input.fileScope.length > 0
+    ? input.fileScope
+    : inferFileScope(appType, slug);
+  const baselineArtifact = input.baselineArtifact
+    || `docs/baselines/${slug.toUpperCase().replace(/-/g, '_')}_FREEZE_RECEIPT.md`;
+  const title = input.title || `${appName} Governed Non-Coder Reference Packet`;
+  const templateId = input.templateId || 'app_builder_wizard';
+  const templateName = input.templateName || 'App Builder Wizard';
+  const skillPreflightDeclaration = input.skillPreflightDeclaration || `NONCODER_REFERENCE_PACKET:${slug}`;
+  const intent = input.intent || `Build ${appName} for ${targetUsers}. Core problem: ${problem}`;
+  const acceptedOutput = input.acceptedOutput || `${appName} v1 governed handoff packet`;
+  const followUps = input.followUps && input.followUps.length > 0
+    ? input.followUps
+    : [
+      `Validate ${features[0] || 'the highest-priority feature'} with a live user scenario`,
+      'Open a follow-up batch for anything outside the agreed v1 scope',
+    ];
 
   const executionInputs: Record<string, string> = {
     appName,
@@ -170,13 +200,14 @@ export function buildNonCoderReferenceLoop(input: NonCoderReferenceLoopInput): N
     architecture: input.archType?.trim() || '',
     apiStyle: input.apiStyle?.trim() || '',
     distribution: input.distribution?.trim() || '',
-    governedPacketTitle: `${appName} Governed Non-Coder Reference Packet`,
+    governedPacketTitle: title,
     freezeBaselineArtifact: baselineArtifact,
     governedSpec: input.spec,
+    ...(input.inputs || {}),
   };
 
   return {
-    title: `${appName} Governed Non-Coder Reference Packet`,
+    title,
     riskLevel,
     phases: [
       {
@@ -261,23 +292,20 @@ export function buildNonCoderReferenceLoop(input: NonCoderReferenceLoopInput): N
     ],
     executionHandoff: {
       mode: 'full',
-      templateId: 'app_builder_wizard',
-      templateName: 'App Builder Wizard',
-      intent: `Build ${appName} for ${targetUsers}. Core problem: ${problem}`,
+      templateId,
+      templateName,
+      intent,
       cvfPhase: 'BUILD',
       cvfRiskLevel: riskLevel,
       inputs: executionInputs,
       fileScope,
-      skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:${slug}`,
+      skillPreflightDeclaration,
     },
     freezeReceipt: {
-      acceptedOutput: `${appName} v1 governed handoff packet`,
+      acceptedOutput,
       baselineArtifact,
       lockedScope: fileScope,
-      followUps: [
-        `Validate ${features[0] || 'the highest-priority feature'} with a live user scenario`,
-        `Open a follow-up batch for anything outside the agreed v1 scope`,
-      ],
+      followUps,
       evidence: [
         'Wizard specification',
         'Governed demo packet',

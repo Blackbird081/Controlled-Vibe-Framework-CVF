@@ -71,6 +71,45 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-20] Batch: GitHub architecture front-door diagram
+- Change reference:
+  - local working tree architecture front-door visualization batch
+  - baseline receipt: `docs/baselines/CVF_GITHUB_ARCHITECTURE_FRONTDOOR_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `ARCHITECTURE.md`
+  - `README.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_GITHUB_ARCHITECTURE_FRONTDOOR_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce`
+  - `python governance/compat/check_baseline_update_compat.py --enforce`
+  - `python governance/compat/check_release_manifest_consistency.py --enforce`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+- Skip scope:
+  - runtime, contract, and Web test suites — skipped because this batch adds a repository-front architecture visualization and README navigation only
+- Notes/Risks:
+  - GitHub does not provide a documented arbitrary custom front-door tab for `Architecture`, so this batch uses a root-level `ARCHITECTURE.md` landing page as the closest truthful front-door approximation.
+  - The new architecture page is diagram-first and links back into the canonical detailed references instead of duplicating every long-form architecture artifact.
+
+## [2026-03-20] Batch: GitHub front-door README simplification
+- Change reference:
+  - local working tree README front-door cleanup batch
+  - baseline receipt: `docs/baselines/CVF_GITHUB_FRONTDOOR_README_REDUCTION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `README.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_GITHUB_FRONTDOOR_README_REDUCTION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> `PASS`
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> `PASS`
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> `PASS`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> `PASS`
+- Skip scope:
+  - runtime, web, and contract test suites — skipped because this batch only restructures top-level GitHub navigation and does not change executable code or runtime semantics
+- Notes/Risks:
+  - `README.md` was reduced from a long mixed-purpose document into a front-door landing page with quick-link navigation, shorter status framing, and direct links to the authoritative docs set.
+  - Detailed architecture, version history, and evidence chains remain preserved in dedicated docs rather than being repeated at the repository front door.
+
 ## [2026-03-20] Batch: Non-coder breadth expansion — Data Analysis Wizard
 - Change reference:
   - local working tree Data Analysis Wizard governed breadth-expansion batch

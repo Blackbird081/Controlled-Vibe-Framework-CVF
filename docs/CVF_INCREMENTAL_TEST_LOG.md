@@ -3773,6 +3773,28 @@ Utility and guard:
 - Notes/Risks:
   - This batch only reconciles status artifacts to the already-shipped eighth active non-coder governed live path.
 
+## [2026-03-20] Batch: Non-coder breadth expansion — Security Assessment Wizard
+- Change reference:
+  - local working tree Security Assessment Wizard governed breadth-expansion batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_NONCODER_SECURITY_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SecurityAssessmentWizard.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SecurityAssessmentWizard.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/template-i18n.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/security.ts`
+  - `docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/baselines/CVF_NONCODER_SECURITY_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/SecurityAssessmentWizard.test.tsx src/lib/template-recommender.test.ts` -> PASS
+- Skip scope:
+  - full Web suite — skipped because this batch is localized to one wizard plus shared template metadata and reference docs
+  - reassessment/readiness artifacts — deferred to a follow-up evidence reconciliation batch
+- Notes/Risks:
+  - Security Assessment Wizard now follows the same governed packet + live path pattern as the other active non-coder Web reference flows.
+  - The remaining gap is breadth beyond these nine active Web reference paths, not missing governed proof on the current security-assessment surface.
+
 ## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
 - Change reference:
   - local working tree Phase 2 control-loop batch

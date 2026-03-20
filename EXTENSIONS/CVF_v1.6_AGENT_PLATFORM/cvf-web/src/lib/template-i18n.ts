@@ -49,7 +49,7 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     onboarding_review: { name: 'Onboarding Experience Review', description: 'Optimize first-time user experience' },
 
     // Security
-    security_assessment_wizard: { name: '🔐 Security Assessment Wizard', description: 'Multi-step wizard to create Security Assessment Report in 5 steps: Scope → Threats → Vulns → Risk → Review' },
+    security_assessment_wizard: { name: '🔐 Security Assessment Wizard', description: 'Multi-step wizard to create a governed Security Assessment Report with review packet and live path' },
     api_security: { name: 'API Security Checklist', description: 'OWASP Top 10 API security audit' },
     gdpr_compliance: { name: 'GDPR Compliance Review', description: 'EU data protection compliance check' },
     privacy_policy_audit: { name: 'Privacy Policy Audit', description: 'Privacy policy review and improvement' },

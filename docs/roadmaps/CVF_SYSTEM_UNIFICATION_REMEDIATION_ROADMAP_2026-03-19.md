@@ -46,7 +46,7 @@ Current snapshot as of `2026-03-20`:
 
 ### In Progress
 
-- ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces; now strengthened by eight governed non-coder Web reference paths: `IN PROGRESS`
+- ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces; now strengthened by nine governed non-coder Web reference paths: `IN PROGRESS`
 
 ### Newly Closed
 
@@ -259,6 +259,12 @@ Non-coder system-design breadth expansion batch executed on `2026-03-20`:
 - System Design Wizard now produces the same governed packet evidence pattern and can launch an eighth governed live execution path through the Web execute pipeline: `COMPLETED`
 - active Web non-coder breadth is now demonstrated across app-building, business-strategy, research-proposal, product-design, data-analysis, content-strategy, marketing, and system-design paths on the same control model: `COMPLETED`
 - broader ecosystem parity remains `IN PROGRESS` outside these eight active Web reference paths
+
+Non-coder security-assessment breadth expansion batch executed on `2026-03-20`:
+
+- Security Assessment Wizard now produces the same governed packet evidence pattern and can launch a ninth governed live execution path through the Web execute pipeline: `COMPLETED`
+- active Web non-coder breadth is now demonstrated across app-building, business-strategy, research-proposal, product-design, data-analysis, content-strategy, marketing, system-design, and security-assessment paths on the same control model: `COMPLETED`
+- broader ecosystem parity remains `IN PROGRESS` outside these nine active Web reference paths
 
 Verification completed for this batch:
 

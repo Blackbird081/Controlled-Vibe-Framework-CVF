@@ -4,6 +4,13 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
 import { evaluateSpecGate } from '@/lib/spec-gate';
+import { ProcessingScreen } from './ProcessingScreen';
+import { WorkflowVisualizer } from './WorkflowVisualizer';
+import {
+    buildNonCoderLiveExecutionRequest,
+    buildNonCoderReferenceLoop,
+    formatNonCoderReferenceLoopMarkdown,
+} from '@/lib/non-coder-reference-loop';
 
 const DRAFT_STORAGE_KEY = 'cvf_security_assessment_wizard_draft';
 
@@ -209,12 +216,81 @@ Based on this assessment, AI should generate:
     return spec.trim();
 }
 
+function toSecuritySlug(value: string): string {
+    return value
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        || 'security-assessment';
+}
+
+function buildSecurityAssessmentGovernedPacket(data: WizardData) {
+    const systemName = data.systemName?.trim() || 'Security Assessment';
+    const slug = toSecuritySlug(systemName);
+    const targetUsers = data.assets?.trim() || 'security stakeholders';
+    const assessmentSpec = generateConsolidatedSpec(data);
+
+    return buildNonCoderReferenceLoop({
+        appName: systemName,
+        appType: 'Security Assessment',
+        problem: data.boundaries?.trim() || systemName,
+        targetUsers,
+        coreFeatures: data.attackVectors?.trim() || data.riskMatrix?.trim() || 'Threat model\nRisk matrix\nRemediation roadmap',
+        outOfScope: data.existingControls?.trim() || 'Any remediation implementation work outside this governed assessment packet',
+        techPreference: data.systemType?.trim() || 'Governed security workflow',
+        dataStorage: data.dataClassification?.trim() || data.assets?.trim() || 'Security-relevant assets',
+        archType: 'Security assessment packet',
+        apiStyle: 'Threat and risk review',
+        distribution: 'Security review packet',
+        spec: assessmentSpec,
+        title: `${systemName} Governed Security Assessment Packet`,
+        templateId: 'security_assessment_wizard',
+        templateName: 'Security Assessment Wizard',
+        intent: `Produce one governed security assessment packet for "${systemName}" for ${targetUsers}.`,
+        riskLevel: 'R3',
+        fileScope: [
+            `docs/security-assessment/${slug}.assessment.md`,
+            `docs/security-assessment/${slug}.review.md`,
+            `docs/security-assessment/${slug}.freeze.md`,
+        ],
+        baselineArtifact: `docs/baselines/${slug.toUpperCase().replace(/-/g, '_')}_SECURITY_ASSESSMENT_FREEZE_RECEIPT.md`,
+        acceptedOutput: `${systemName} governed security assessment packet`,
+        followUps: [
+            `Validate the threat model and remediation priorities for "${systemName}" with the security owner`,
+            'Open a separate implementation batch for remediation work outside this assessment packet',
+        ],
+        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:security-${slug}`,
+        inputs: {
+            systemName: data.systemName || '',
+            systemType: data.systemType || '',
+            assets: data.assets || '',
+            boundaries: data.boundaries || '',
+            regulations: data.regulations || '',
+            threatActors: data.threatActors || '',
+            attackVectors: data.attackVectors || '',
+            dataFlow: data.dataFlow || '',
+            existingControls: data.existingControls || '',
+            knownVulns: data.knownVulns || '',
+            techStack: data.techStack || '',
+            authMechanism: data.authMechanism || '',
+            dataClassification: data.dataClassification || '',
+            riskMatrix: data.riskMatrix || '',
+            riskAppetite: data.riskAppetite || '',
+            businessImpact: data.businessImpact || '',
+        },
+    });
+}
+
 export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardProps) {
     const { language } = useLanguage();
     const WIZARD_STEPS = getWizardSteps(language);
     const [currentStep, setCurrentStep] = useState(1);
     const [wizardData, setWizardData] = useState<WizardData>({});
     const [showExport, setShowExport] = useState(false);
+    const [showGovernedPacket, setShowGovernedPacket] = useState(false);
+    const [showLiveRun, setShowLiveRun] = useState(false);
+    const [liveRunOutput, setLiveRunOutput] = useState<string | null>(null);
     const [hasDraft, setHasDraft] = useState(false);
 
     useEffect(() => {
@@ -300,6 +376,9 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
         : specGate.status === 'CLARIFY'
             ? 'bg-amber-50 border-amber-200 text-amber-700'
             : 'bg-rose-50 border-rose-200 text-rose-700';
+    const governedPacket = buildSecurityAssessmentGovernedPacket(wizardData);
+    const governedPacketMarkdown = formatNonCoderReferenceLoopMarkdown(governedPacket);
+    const governedLiveExecution = buildNonCoderLiveExecutionRequest(governedPacket);
 
     if (showExport) {
         return (
@@ -351,6 +430,79 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
         );
     }
 
+    if (showLiveRun) {
+        return (
+            <div className="max-w-5xl mx-auto">
+                {liveRunOutput ? (
+                    <div className="space-y-6">
+                        <div className="rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/70 dark:bg-emerald-900/20 p-6">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <h2 className="text-xl font-bold text-emerald-900 dark:text-emerald-100">
+                                        {language === 'vi' ? 'Live Governed Run đã hoàn tất' : 'Live governed run completed'}
+                                    </h2>
+                                    <p className="text-sm text-emerald-800 dark:text-emerald-200">
+                                        {language === 'vi'
+                                            ? 'Security assessment packet đã đi qua governed execute path và sẵn sàng cho bước freeze/đối soát.'
+                                            : 'The security assessment packet completed the governed execute path and is ready for freeze/audit handoff.'}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        setShowLiveRun(false);
+                                        setLiveRunOutput(null);
+                                    }}
+                                    className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                >
+                                    {language === 'vi' ? 'Quay lại review' : 'Back to review'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                                {language === 'vi' ? 'Live output' : 'Live output'}
+                            </h3>
+                            <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono max-h-[40vh] overflow-y-auto">
+                                {liveRunOutput}
+                            </pre>
+                        </div>
+
+                        <div className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50/70 dark:bg-red-900/20 p-6">
+                            <h3 className="text-lg font-semibold text-red-900 dark:text-red-100 mb-3">
+                                Freeze receipt
+                            </h3>
+                            <div className="space-y-2 text-sm text-red-900 dark:text-red-100">
+                                <div><strong>{language === 'vi' ? 'Accepted output' : 'Accepted output'}:</strong> {governedPacket.freezeReceipt.acceptedOutput}</div>
+                                <div><strong>{language === 'vi' ? 'Baseline artifact' : 'Baseline artifact'}:</strong> {governedPacket.freezeReceipt.baselineArtifact}</div>
+                                <div><strong>{language === 'vi' ? 'Locked scope' : 'Locked scope'}:</strong> {governedPacket.freezeReceipt.lockedScope.join(', ')}</div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <ProcessingScreen
+                        templateName={governedLiveExecution.request.templateName}
+                        templateId={governedLiveExecution.request.templateId}
+                        inputs={governedLiveExecution.request.inputs}
+                        intent={governedLiveExecution.request.intent}
+                        executionOverrides={{
+                            mode: governedLiveExecution.request.mode,
+                            cvfPhase: governedLiveExecution.request.cvfPhase,
+                            cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
+                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
+                            fileScope: governedLiveExecution.request.fileScope,
+                        }}
+                        onComplete={(output) => setLiveRunOutput(output)}
+                        onCancel={() => {
+                            setShowLiveRun(false);
+                            setLiveRunOutput(null);
+                        }}
+                    />
+                )}
+            </div>
+        );
+    }
+
     return (
         <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-4 mb-6">
@@ -361,7 +513,11 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                 </button>
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">🔐 Security Assessment Wizard</h1>
-                    <p className="text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Tạo Security Assessment Report qua 5 bước' : 'Create Security Assessment Report in 5 steps'}</p>
+                    <p className="text-gray-600 dark:text-gray-400">
+                        {language === 'vi'
+                            ? 'Thu thập security brief rồi review governed packet và live path'
+                            : 'Capture the security brief, then review the governed packet and live path'}
+                    </p>
                 </div>
             </div>
 
@@ -423,6 +579,7 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                             <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">{wt(WIZARD_COMMON.reviewReady, language)}</h3>
                             <p className="text-green-700 dark:text-green-300 text-sm">{wt(WIZARD_COMMON.reviewDesc, language)}</p>
                         </div>
+                        <WorkflowVisualizer mode="full" currentStep={4} />
                         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 max-h-96 overflow-y-auto">
                             <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">{generatedSpec}</pre>
                         </div>
@@ -434,12 +591,82 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                                 </div>
                             )}
                         </div>
-                        <button onClick={() => setShowExport(true)} disabled={!canExport} className={`w-full py-3 rounded-lg font-medium transition-all ${canExport
-                            ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white hover:from-red-700 hover:to-rose-700'
-                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                        }`}>
-                            {language === 'vi' ? '🔐 Xuất Security Assessment Report' : '🔐 Export Security Assessment Report'}
-                        </button>
+                        <div className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50/70 dark:bg-red-900/20 p-5">
+                            <div className="flex items-start justify-between gap-4">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-red-900 dark:text-red-100">
+                                        Governed system packet cho non-coder
+                                    </h3>
+                                    <p className="text-sm text-red-800 dark:text-red-200 mt-1">
+                                        {language === 'vi'
+                                            ? 'Packet này khóa phase, risk, file scope, approval checkpoints và freeze receipt trước khi launch live path.'
+                                            : 'This packet locks phase, risk, file scope, approval checkpoints, and freeze receipt before launching the live path.'}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setShowGovernedPacket((value) => !value)}
+                                    className="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors text-sm font-medium"
+                                >
+                                    {showGovernedPacket
+                                        ? (language === 'vi' ? 'Ẩn packet' : 'Hide packet')
+                                        : (language === 'vi' ? 'Governed demo packet' : 'Governed demo packet')}
+                                </button>
+                            </div>
+
+                            <div className="mt-4 grid gap-3 md:grid-cols-3 text-sm">
+                                <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
+                                    <div className="font-semibold text-red-900 dark:text-red-100">Approval checkpoints</div>
+                                    <div className="text-red-800 dark:text-red-200 mt-1">
+                                        {governedPacket.approvals.map((approval) => approval.label).join(', ')}
+                                    </div>
+                                </div>
+                                <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
+                                    <div className="font-semibold text-red-900 dark:text-red-100">Freeze receipt</div>
+                                    <div className="text-red-800 dark:text-red-200 mt-1">
+                                        {governedPacket.freezeReceipt.baselineArtifact}
+                                    </div>
+                                </div>
+                                <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
+                                    <div className="font-semibold text-red-900 dark:text-red-100">Execution handoff</div>
+                                    <div className="text-red-800 dark:text-red-200 mt-1">
+                                        {governedLiveExecution.request.cvfPhase} / {governedLiveExecution.request.cvfRiskLevel}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {showGovernedPacket && (
+                                <div className="mt-4 rounded-lg border border-red-200 dark:border-red-800 bg-white dark:bg-gray-950 p-4">
+                                    <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono max-h-[28rem] overflow-y-auto">
+                                        {governedPacketMarkdown}
+                                    </pre>
+                                </div>
+                            )}
+                        </div>
+                        <div className="grid gap-3 md:grid-cols-3">
+                            <button
+                                type="button"
+                                onClick={() => setShowGovernedPacket((value) => !value)}
+                                className="py-3 rounded-lg font-medium bg-white dark:bg-gray-900 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-200 hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
+                            >
+                                {language === 'vi' ? 'Governed demo packet' : 'Governed demo packet'}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowLiveRun(true);
+                                    setLiveRunOutput(null);
+                                }}
+                                className="py-3 rounded-lg font-medium bg-gradient-to-r from-red-600 to-rose-600 text-white hover:from-red-700 hover:to-rose-700 transition-all"
+                            >
+                                {language === 'vi' ? 'Chạy live governed path' : 'Run live governed path'}
+                            </button>
+                            <button onClick={() => setShowExport(true)} disabled={!canExport} className={`py-3 rounded-lg font-medium transition-all ${canExport
+                                ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            }`}>
+                                {language === 'vi' ? '🔐 Xuất Security Assessment Report' : '🔐 Export Security Assessment Report'}
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     <div className="space-y-4">
@@ -485,4 +712,3 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
         </div>
     );
 }
-

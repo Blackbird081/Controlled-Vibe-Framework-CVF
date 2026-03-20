@@ -1,11 +1,13 @@
 # CVF Non-Coder Reference Governed Packet
 
-Status: reusable non-coder governed packet plus nine live Web execution paths for the canonical controlled loop on the active reference line.
+Status: reusable non-coder governed packet plus one governed onboarding starter handoff and nine live Web execution paths for the canonical controlled loop on the active reference line.
 
 ## Purpose
 
 - provide one repeatable non-coder-facing packet that explains the governed loop without requiring users to inspect runtime internals
+- connect onboarding guidance to a real starter handoff before the user lands in a wizard review step
 - package the most important supervision evidence in one place:
+  - starter handoff
   - phases
   - approval checkpoints
   - execution handoff
@@ -16,6 +18,9 @@ Status: reusable non-coder governed packet plus nine live Web execution paths fo
 
 Active implementation:
 
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OnboardingWizard.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/QuickStart.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governed-starter-path.ts`
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/non-coder-reference-loop.ts`
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AppBuilderWizard.tsx`
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/BusinessStrategyWizard.tsx`
@@ -28,6 +33,7 @@ Active implementation:
 
 Primary user-facing entrypoint:
 
+- Onboarding Wizard -> Quick Start -> governed starter handoff card on the home dashboard
 - App Builder Wizard review step
 - Business Strategy Wizard review step
 - Research Project Wizard review step
@@ -42,11 +48,12 @@ Primary user-facing entrypoint:
 
 The governed packet shows:
 
-1. canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
-2. human approval checkpoints before build and freeze
-3. one governed execution handoff payload for the Web execution path
-4. live launch paths from App Builder Wizard, Business Strategy Wizard, Research Project Wizard, Product Design Wizard, Data Analysis Wizard, Content Strategy Wizard, Marketing Campaign Wizard, System Design Wizard, and Security Assessment Wizard into the Web `execute` pipeline
-5. one freeze receipt with:
+1. one governed onboarding starter handoff carrying user goal, routed phase, routed risk, and recommended starter wizard
+2. canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
+3. human approval checkpoints before build and freeze
+4. one governed execution handoff payload for the Web execution path
+5. live launch paths from App Builder Wizard, Business Strategy Wizard, Research Project Wizard, Product Design Wizard, Data Analysis Wizard, Content Strategy Wizard, Marketing Campaign Wizard, System Design Wizard, and Security Assessment Wizard into the Web `execute` pipeline
+6. one freeze receipt with:
    - accepted output
    - baseline artifact
    - locked scope
@@ -55,6 +62,7 @@ The governed packet shows:
 ## Why It Matters
 
 - it gives non-coder supervision one reusable artifact instead of relying only on screenshots, dispersed UI states, or narrative docs
+- it proves the non-coder journey now has a governed starter handoff before the wizard/live-run surfaces begin
 - it proves that at least nine non-coder paths can now execute through the governed Web pipeline with pre-bound phase, risk, scope, and skill-preflight metadata
 - it makes future audits faster because reviewers can inspect one packet and compare it with the coder-facing reference loop
 - it improves evidence quality without overstating that the non-coder path already has total ecosystem parity

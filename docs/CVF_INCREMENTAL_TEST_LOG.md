@@ -3895,6 +3895,27 @@ Utility and guard:
   - The active Web reference path now has a reviewable starter handoff before the routed wizard opens, but broader ecosystem parity remains a separate roadmap concern.
   - Additional verification attempted: `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run build` -> FAIL due to a pre-existing syntax error in `src/lib/ai-providers.ts:294`, outside the files touched by this batch.
 
+## [2026-03-20] Batch: Onboarding starter evidence reconciliation
+- Change reference:
+  - local working tree onboarding starter evidence reconciliation batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_ONBOARDING_STARTER_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `README.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md`
+  - `docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
+  - `docs/baselines/CVF_ONBOARDING_STARTER_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - runtime and Web component tests — no executable runtime behavior changed in this batch
+- Notes/Risks:
+  - This batch only reconciles status artifacts so they explicitly mention the governed onboarding starter handoff landed in `P2`.
+
 ## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
 - Change reference:
   - local working tree Phase 2 control-loop batch

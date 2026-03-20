@@ -14,7 +14,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 |---|---|---|
 | Canonical phase model | `ALIGNED` | active runtime, shared guard contract, and major Web surfaces now use `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` |
 | Hardened default guard path | `ALIGNED` | `ai_commit` and `fileScope` are wired into the hardened default path in active remediated runtime areas |
-| Web non-coder semantics | `SUBSTANTIALLY ALIGNED` | key UX surfaces teach canonical phase semantics and the active Web reference line now provides nine governed live execution paths |
+| Web non-coder semantics | `SUBSTANTIALLY ALIGNED` | key UX surfaces teach canonical phase semantics, onboarding now hands off into a governed starter flow, and the active Web reference line provides nine governed live execution paths |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` | explicit step lifecycle, default runtime bindings, receipt-backed execution, and a reusable SDK reference loop now exist for the governed path |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` | canonical control matrix now maps critical rules to runtime guard, gateway, approval, or CI owner; remaining caveat is ecosystem breadth, not owner ambiguity |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` | coder-facing and non-coder active reference paths now both have governed loop evidence, though not every channel family is equally mature |
@@ -25,6 +25,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - canonical runtime phases are now operationally represented
 - shared contract and major Web/API entrypoints no longer default to the legacy `4-phase / 6-guard` framing
 - non-coder UX now exposes the canonical `FREEZE` posture instead of stopping at `REVIEW`
+- onboarding now opens Quick Start, which emits a persisted governed starter handoff before the routed starter wizard is launched
 - App Builder Wizard, Business Strategy Wizard, Research Project Wizard, Product Design Wizard, Data Analysis Wizard, Content Strategy Wizard, and Marketing Campaign Wizard now provide governed live paths that reach the Web execute pipeline with pre-bound `BUILD`, risk, scope, and skill-preflight metadata
 - workflow bridge no longer auto-completes implicitly and can execute registered handlers with explicit results
 - mandatory gateway and governed helper runtime now surface approval-required boundaries and execution lineage explicitly
@@ -70,6 +71,7 @@ Claims to avoid for now:
 - [Reference Governed Loop](./CVF_REFERENCE_GOVERNED_LOOP.md)
 - [Reference Governed Loop Delta](../baselines/CVF_REFERENCE_GOVERNED_LOOP_DELTA_2026-03-20.md)
 - [Non-Coder Governed Packet](./CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md)
+- [Onboarding Governed Starter Path Delta](../baselines/CVF_ONBOARDING_GOVERNED_STARTER_PATH_DELTA_2026-03-20.md)
 - [Non-Coder Live Path Evidence Delta](../baselines/CVF_NONCODER_LIVE_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md)
 - [Non-Coder Breadth Expansion Delta](../baselines/CVF_NONCODER_BREADTH_EXPANSION_DELTA_2026-03-20.md)
 - [Non-Coder Research Breadth Expansion Delta](../baselines/CVF_NONCODER_RESEARCH_BREADTH_EXPANSION_DELTA_2026-03-20.md)

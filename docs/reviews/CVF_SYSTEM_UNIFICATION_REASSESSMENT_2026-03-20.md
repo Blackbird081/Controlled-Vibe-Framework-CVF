@@ -35,6 +35,7 @@ Supplemental evidence update recorded later on `2026-03-20`:
 
 - the governed reference path is now exposed as a reusable SDK helper via `CvfSdk.runReferenceGovernedLoop()`
 - this reduces reliance on scattered lower-level tests as the only proof that the coder-facing controlled loop can be re-run end to end
+- onboarding now opens Quick Start and persists a governed starter handoff before the routed non-coder starter wizard launches
 - the active Web reference line now provides nine non-coder governed live paths through the Web execute pipeline:
   - App Builder Wizard
   - Business Strategy Wizard
@@ -54,7 +55,7 @@ Supplemental evidence update recorded later on `2026-03-20`:
 |---|---:|---:|---|
 | Pipeline / workflow continuity | `6.5/10` | `8.2/10` | canonical workflow now exists across runtime, bridge, SDK, and major user-facing paths |
 | Governance converted into executable ownership | `6.0/10` | `8.0/10` | critical controls now map to runtime guard, gateway, approval checkpoint, or CI owner |
-| Web UI value for non-coders | `7.0/10` | `8.8/10` | non-coder flow now teaches canonical phases, freeze posture, and has nine governed live execution paths on the active Web reference line |
+| Web UI value for non-coders | `7.0/10` | `8.8/10` | non-coder flow now teaches canonical phases, includes a governed onboarding starter handoff, and has nine governed live execution paths on the active Web reference line |
 | Core value: controlled vibe execution | `6.0/10` | `8.2/10` | governed reference paths now exist for coder-facing execution and multiple non-coder active reference executions |
 | Auditability / reconciliation strength | `8.5/10` | `9.0/10` | baseline, hook, readiness, and control-matrix evidence chain is now unusually strong |
 | Comparative maturity vs. major ecosystems | `6.0/10` | `6.8/10` | stronger internal governance maturity, still not platform-breadth parity |
@@ -85,6 +86,7 @@ Updated overall score:
 - Shared contract, runtime remediation path, bridge workflow path, and major Web entrypoints are materially closer to one canonical model.
 - Governance can now be explained in enforceable ownership classes rather than only by doctrine.
 - The non-coder story is stronger because the UI teaches the same canonical posture the backend actually uses.
+- The non-coder story is stronger again because onboarding now hands users into a reviewable starter flow instead of stopping at explanatory copy.
 - The non-coder story is now stronger again because multiple active Web paths can launch governed execution runs instead of stopping at packet generation alone.
 - The coder-facing story is stronger because one governed reference path is now reusable instead of being implied only by internal test composition.
 
@@ -114,6 +116,6 @@ Independent judgment for the active local baseline:
 - Whole-system status: `SUBSTANTIALLY ALIGNED`
 - Safe product positioning: `governance-first controlled execution system`
 - Strongest justified claim today:
-  - CVF now demonstrates substantially aligned governed execution paths with canonical phases, hardened guard defaults, explicit approval boundaries, evidence-backed freeze closure, audit-ready reconciliation artifacts, one reusable coder-facing reference loop, and nine active non-coder Web reference runs.
+  - CVF now demonstrates substantially aligned governed execution paths with canonical phases, hardened guard defaults, explicit approval boundaries, evidence-backed freeze closure, audit-ready reconciliation artifacts, one reusable coder-facing reference loop, one governed non-coder onboarding starter handoff, and nine active non-coder Web reference runs.
 
 This is a meaningful step up from the prior review. The system no longer reads as "promising but fragmented"; it now reads as "coherent on the active reference path, with remaining caveats mostly about breadth and maximum-strength claims."

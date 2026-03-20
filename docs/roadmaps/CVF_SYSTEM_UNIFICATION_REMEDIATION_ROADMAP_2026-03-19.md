@@ -69,6 +69,32 @@ Interpretation:
 - the remaining work is future breadth expansion and proof-strengthening candidates under `GC-018`, not an active core-path remediation stream
 - the current wave should be treated as intentionally depth-frozen until a new scored continuation candidate is approved
 
+### Current Remaining Scope
+
+What still remains after the active remediation wave:
+
+- no critical active-path remediation item remains open
+- no currently authorized continuation batch remains active
+- breadth parity beyond the active reference path remains possible, but only as a future continuation candidate
+- strongest product claims beyond `SUBSTANTIALLY ALIGNED` still require a future reassessment, not roadmap drift by habit
+
+What does **not** remain:
+
+- no core-path `P0/P1/P2` remediation item is still waiting to start
+- no active Web reference-path correction is still marked as required for this wave
+- no roadmap item currently requires implementation merely to preserve the current truthful readiness claim
+
+Only two conditions can legitimately reopen this roadmap for deeper work:
+
+1. a new independent reassessment finds a fresh material gap on the active reference path
+2. a newly proposed continuation candidate records a passing `GC-018` score and clears the stop-rule gates
+
+Operational reading:
+
+- current roadmap posture: `HOLD`
+- current depth posture: `DEPTH-FROZEN`
+- current continuation posture: `DEFERRED UNLESS RE-SCORED`
+
 ## 1B. Post-Closure Depth Audit Register
 
 Canonical rule reference:

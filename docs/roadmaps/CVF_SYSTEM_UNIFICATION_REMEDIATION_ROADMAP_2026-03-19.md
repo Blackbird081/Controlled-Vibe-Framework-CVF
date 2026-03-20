@@ -67,6 +67,7 @@ Interpretation:
 
 - this roadmap is `MATERIALLY DELIVERED` for the active reference path
 - the remaining work is future breadth expansion and proof-strengthening candidates under `GC-018`, not an active core-path remediation stream
+- the current wave should be treated as intentionally depth-frozen until a new scored continuation candidate is approved
 
 ## 1B. Post-Closure Depth Audit Register
 

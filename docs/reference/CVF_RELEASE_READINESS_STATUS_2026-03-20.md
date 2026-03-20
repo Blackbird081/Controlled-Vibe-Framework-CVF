@@ -51,7 +51,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 
 Current safe claim:
 
-> CVF is a governance-first control plane for AI-assisted execution with a substantially aligned canonical runtime and an active roadmap toward full end-to-end controlled autonomy.
+> CVF is a governance-first control plane for AI-assisted execution with a substantially aligned canonical runtime on the active reference path, while future continuation remains gated by `GC-018`.
 
 Claims to avoid for now:
 

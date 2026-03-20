@@ -145,6 +145,32 @@ Template:
   - This batch intentionally updates evidence counts without inflating the whole-system claim beyond `SUBSTANTIALLY ALIGNED`.
   - Remaining caveats continue to focus on ecosystem-breadth parity rather than missing governed proof on the active Web reference line.
 
+## [2026-03-20] Batch: Non-coder breadth expansion — Marketing Campaign Wizard
+- Change reference:
+  - local working tree Marketing Campaign Wizard governed breadth-expansion batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_NONCODER_MARKETING_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/MarketingCampaignWizard.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/MarketingCampaignWizard.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/template-i18n.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/marketing.ts`
+  - `docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/baselines/CVF_NONCODER_MARKETING_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/MarketingCampaignWizard.test.tsx` -> `PASS`
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/template-recommender.test.ts` -> `PASS`
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> `PASS`
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> `PASS`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> `PASS`
+- Skip scope:
+  - runtime/contract suites — skipped because this batch only expands one Web wizard to an already-proven governed packet/live-run pattern
+  - broader Web regression — skipped because the shared helper and execute pipeline were already covered by previous governed non-coder batches
+- Notes/Risks:
+  - Marketing Campaign Wizard now follows the same governed packet + live path pattern as the other active non-coder Web reference flows.
+  - The remaining gap is breadth beyond these seven active Web reference paths, not missing governed proof on the current Marketing Campaign surface.
+
 ---
 
 ## 4A) Rotation and Archive Rule

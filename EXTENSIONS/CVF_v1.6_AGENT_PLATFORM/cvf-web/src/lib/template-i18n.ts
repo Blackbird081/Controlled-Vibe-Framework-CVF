@@ -27,7 +27,7 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     data_analysis: { name: 'Data Analysis', description: 'Analyze data and extract insights' },
 
     // Marketing
-    marketing_campaign_wizard: { name: '📣 Marketing Campaign Wizard', description: 'Multi-step wizard to create Campaign Brief in 5 steps: Goals → Audience → Channels → Content → Review' },
+    marketing_campaign_wizard: { name: '📣 Marketing Campaign Wizard', description: 'Multi-step wizard to create a governed Campaign Brief with review packet and live path' },
     seo_audit: { name: 'SEO Audit', description: 'Website evaluation for Technical SEO, On-page, Off-page' },
     copywriting_evaluation: { name: 'Copywriting Evaluation', description: 'Evaluate and improve marketing copy' },
     landing_page_cro: { name: 'Landing Page CRO', description: 'Conversion rate optimization for landing pages' },

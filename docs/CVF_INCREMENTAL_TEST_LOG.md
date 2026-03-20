@@ -3861,6 +3861,40 @@ Utility and guard:
   - Onboarding and front-door copy now teach governed starter semantics rather than legacy `3-step / AI does the rest` framing.
   - This batch closes `P1` from the depth-audit register, but `P2` remains the next authorized continuation step.
 
+## [2026-03-20] Batch: Onboarding -> governed starter path
+- Change reference:
+  - local working tree onboarding -> governed starter path batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_ONBOARDING_GOVERNED_STARTER_PATH_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/layout.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/home/page.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OnboardingWizard.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OnboardingWizard.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/QuickStart.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/QuickStart.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/index.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governed-starter-path.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governed-starter-path.test.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useModals.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/hooks/useModals.test.ts`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/baselines/CVF_ONBOARDING_GOVERNED_STARTER_PATH_DELTA_2026-03-20.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/OnboardingWizard.test.tsx src/components/QuickStart.test.tsx src/lib/hooks/useModals.test.ts src/lib/governed-starter-path.test.ts` -> PASS
+    - Result: `4 test files, 11 passed`
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - full Web suite — skipped because this batch is localized to onboarding, quick-start routing, starter handoff persistence, and dashboard launcher wiring
+  - breadth-expansion batches — explicitly deferred by the depth-audit register
+- Notes/Risks:
+  - Onboarding now opens a real governed starter entry path instead of ending at explanatory copy.
+  - The active Web reference path now has a reviewable starter handoff before the routed wizard opens, but broader ecosystem parity remains a separate roadmap concern.
+  - Additional verification attempted: `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run build` -> FAIL due to a pre-existing syntax error in `src/lib/ai-providers.ts:294`, outside the files touched by this batch.
+
 ## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
 - Change reference:
   - local working tree Phase 2 control-loop batch

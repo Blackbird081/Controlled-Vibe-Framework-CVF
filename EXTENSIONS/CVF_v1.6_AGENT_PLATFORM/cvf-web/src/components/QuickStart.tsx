@@ -12,14 +12,13 @@
 
 import React, { useState } from 'react';
 import { detectIntent, type DetectedIntent } from '@/lib/intent-detector';
+import {
+  resolveGovernedStarterTemplate,
+  type QuickStartResult,
+} from '@/lib/governed-starter-path';
 
 interface QuickStartProps {
-  onComplete: (result: {
-    provider: string;
-    apiKey: string;
-    userInput: string;
-    detectedIntent: DetectedIntent;
-  }) => void;
+  onComplete: (result: QuickStartResult) => void;
   onSkip?: () => void;
   language?: 'vi' | 'en';
 }
@@ -38,6 +37,8 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
   const [apiKey, setApiKey] = useState('');
   const [userInput, setUserInput] = useState('');
   const [detectedIntent, setDetectedIntent] = useState<DetectedIntent | null>(null);
+  const routedIntent = detectedIntent ?? detectIntent(userInput);
+  const governedStarter = resolveGovernedStarterTemplate(routedIntent.suggestedTemplates);
 
   const l = language === 'vi' ? {
     title: '🚀 Governed Quick Start',
@@ -51,6 +52,7 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
     phase: 'Giai đoạn',
     risk: 'Mức rủi ro',
     templates: 'Templates gợi ý',
+    starter: 'Starter path',
     start: 'Mở governed path! 🚀',
     next: 'Tiếp tục →',
     back: '← Quay lại',
@@ -68,6 +70,7 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
     phase: 'Phase',
     risk: 'Risk Level',
     templates: 'Suggested Templates',
+    starter: 'Starter path',
     start: 'Open governed path! 🚀',
     next: 'Continue →',
     back: '← Back',
@@ -202,7 +205,11 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
             </div>
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">{l.risk}</div>
-              <div className="font-medium">{detectedIntent?.friendlyRisk ?? 'Routed by CVF'}</div>
+              <div className="font-medium">{routedIntent.friendlyRisk ?? 'Routed by CVF'}</div>
+            </div>
+            <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="text-xs text-gray-500 mb-1">{l.starter}</div>
+              <div className="font-medium">{governedStarter.label}</div>
             </div>
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">Request</div>
@@ -217,7 +224,7 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
                 provider,
                 apiKey,
                 userInput,
-                detectedIntent: detectedIntent ?? detectIntent(userInput),
+                detectedIntent: routedIntent,
               })}
               className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-purple-600 transition-all shadow-lg"
             >

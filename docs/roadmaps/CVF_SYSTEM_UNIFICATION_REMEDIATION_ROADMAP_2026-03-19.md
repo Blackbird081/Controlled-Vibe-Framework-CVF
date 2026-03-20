@@ -43,6 +43,7 @@ Current snapshot as of `2026-03-20`:
 - Workstream F — documentation, readiness, and positioning reconciliation: `COMPLETED`
 - coder-facing governed reference execution path: `COMPLETED`
 - front-door / onboarding governed semantics on the active Web reference path: `COMPLETED`
+- onboarding -> governed starter handoff on the active Web reference path: `COMPLETED`
 - independent reassessment and closure evidence chain for the active reference path: `COMPLETED`
 
 ### In Progress
@@ -114,8 +115,8 @@ Depth Audit
 - Operational efficiency: `1`
 - Portfolio priority: `2`
 - Total: `9`
-- Decision: `CONTINUE`
-- Reason: this closes the gap between introductory guidance and a real governed starter flow, improving practical non-coder execution decisions and producing a reusable, auditable starter path rather than only narrative guidance.
+- Decision: `COMPLETED`
+- Reason: executed on `2026-03-20`; onboarding now opens Quick Start, Quick Start emits a governed starter handoff, and the home surface can launch the routed starter wizard from a reviewable packet-like handoff card.
 
 ### Candidate P3 — Additional breadth expansion after nine active Web paths
 
@@ -132,7 +133,7 @@ Depth Audit
 Decision boundary now active for this roadmap:
 
 - `P1` has now been executed and is considered `COMPLETED`
-- `P2` remains the next authorized continuation step
+- `P2` has now been executed and is considered `COMPLETED`
 - `P3` is explicitly `DEFERRED` until a later reassessment proves a new breadth candidate crosses the continue threshold
 - this register must be refreshed before any future attempt to reopen breadth expansion on this roadmap
 
@@ -283,6 +284,14 @@ Front-door / onboarding canonicalization batch executed on `2026-03-20`:
 - App Builder front-door metadata now explains governed packet review and live-path launch semantics for non-coders: `COMPLETED`
 - Candidate `P1` in the depth-audit register is now considered `COMPLETED`
 - Candidate `P2` remains the next authorized continuation batch on this roadmap
+
+Onboarding -> governed starter path batch executed on `2026-03-20`:
+
+- onboarding completion can now open Quick Start as the governed starter entry surface: `COMPLETED`
+- Quick Start now resolves a recommended governed starter wizard and emits a persisted starter handoff: `COMPLETED`
+- home dashboard can now consume the starter handoff and launch the routed starter wizard from a reviewable governed handoff card: `COMPLETED`
+- Candidate `P2` in the depth-audit register is now considered `COMPLETED`
+- Candidate `P3` remains explicitly `DEFERRED` on this roadmap until a later reassessment crosses the continue threshold
 
 Reference governed loop helper batch executed on `2026-03-20`:
 

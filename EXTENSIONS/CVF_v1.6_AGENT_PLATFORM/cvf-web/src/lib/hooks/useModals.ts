@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 
-export type ModalName = 'userContext' | 'settings' | 'aiUsage' | 'apiKeyWizard' | 'onboarding';
+export type ModalName = 'userContext' | 'settings' | 'aiUsage' | 'apiKeyWizard' | 'onboarding' | 'quickStart';
 
 export function useModals(permissions?: {
     canUseSettings: boolean;
@@ -14,6 +14,7 @@ export function useModals(permissions?: {
     const [showAIUsage, setShowAIUsage] = useState(false);
     const [showApiKeyWizard, setShowApiKeyWizard] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
+    const [showQuickStart, setShowQuickStart] = useState(false);
 
     // Defer localStorage check to client-side only to prevent hydration mismatch
     useEffect(() => {
@@ -22,9 +23,12 @@ export function useModals(permissions?: {
         }
     }, []);
 
-    const handleOnboardingComplete = useCallback(() => {
+    const handleOnboardingComplete = useCallback((mode: 'dismiss' | 'starter' = 'dismiss') => {
         localStorage.setItem('cvf_onboarding_complete', 'true');
         setShowOnboarding(false);
+        if (mode === 'starter') {
+            setShowQuickStart(true);
+        }
     }, []);
 
     const canUseSettings = permissions?.canUseSettings ?? true;
@@ -38,6 +42,7 @@ export function useModals(permissions?: {
             case 'aiUsage': setShowAIUsage(true); break;
             case 'apiKeyWizard': setShowApiKeyWizard(true); break;
             case 'onboarding': setShowOnboarding(true); break;
+            case 'quickStart': setShowQuickStart(true); break;
         }
     }, []);
 
@@ -48,6 +53,7 @@ export function useModals(permissions?: {
             case 'aiUsage': setShowAIUsage(false); break;
             case 'apiKeyWizard': setShowApiKeyWizard(false); break;
             case 'onboarding': setShowOnboarding(false); break;
+            case 'quickStart': setShowQuickStart(false); break;
         }
     }, []);
 
@@ -57,6 +63,7 @@ export function useModals(permissions?: {
         showAIUsage: canUseAIUsage && showAIUsage,
         showApiKeyWizard,
         showOnboarding,
+        showQuickStart,
         openModal,
         closeModal,
         handleOnboardingComplete,

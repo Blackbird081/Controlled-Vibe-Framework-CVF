@@ -15,7 +15,7 @@ describe('OnboardingWizard', () => {
         render(<OnboardingWizard onComplete={onComplete} />);
 
         fireEvent.click(screen.getByText('Bỏ qua giới thiệu'));
-        expect(onComplete).toHaveBeenCalled();
+        expect(onComplete).toHaveBeenCalledWith('dismiss');
     });
 
     it('advances steps and completes on final step', () => {
@@ -27,7 +27,7 @@ describe('OnboardingWizard', () => {
         }
 
         fireEvent.click(screen.getByText('Mở governed starter path 🚀'));
-        expect(onComplete).toHaveBeenCalled();
+        expect(onComplete).toHaveBeenCalledWith('starter');
     });
 
     it('teaches governed starter semantics instead of legacy 3-step framing', () => {

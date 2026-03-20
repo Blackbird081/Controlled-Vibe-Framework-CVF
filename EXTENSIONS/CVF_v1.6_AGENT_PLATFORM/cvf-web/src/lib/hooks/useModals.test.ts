@@ -42,6 +42,23 @@ describe('useModals', () => {
         });
 
         expect(result.current.showOnboarding).toBe(false);
+        expect(result.current.showQuickStart).toBe(false);
+        expect(localStorage.getItem('cvf_onboarding_complete')).toBe('true');
+    });
+
+    it('opens quick start when onboarding completes into starter mode', async () => {
+        const { result } = renderHook(() => useModals());
+
+        await waitFor(() => {
+            expect(result.current.showOnboarding).toBe(true);
+        });
+
+        act(() => {
+            result.current.handleOnboardingComplete('starter');
+        });
+
+        expect(result.current.showOnboarding).toBe(false);
+        expect(result.current.showQuickStart).toBe(true);
         expect(localStorage.getItem('cvf_onboarding_complete')).toBe('true');
     });
 
@@ -57,11 +74,13 @@ describe('useModals', () => {
             result.current.openModal('aiUsage');
             result.current.openModal('userContext');
             result.current.openModal('apiKeyWizard');
+            result.current.openModal('quickStart');
         });
 
         expect(result.current.showSettings).toBe(false);
         expect(result.current.showAIUsage).toBe(false);
         expect(result.current.showUserContext).toBe(false);
         expect(result.current.showApiKeyWizard).toBe(true);
+        expect(result.current.showQuickStart).toBe(true);
     });
 });

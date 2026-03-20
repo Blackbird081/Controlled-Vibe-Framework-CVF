@@ -6,7 +6,7 @@ import { useLanguage } from '@/lib/i18n';
 type Lang = 'vi' | 'en';
 
 interface OnboardingWizardProps {
-    onComplete: () => void;
+    onComplete: (mode?: 'dismiss' | 'starter') => void;
 }
 
 interface StepData {
@@ -147,7 +147,7 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
                             if (step < STEPS.length - 1) {
                                 setStep(step + 1);
                             } else {
-                                onComplete();
+                                onComplete('starter');
                             }
                         }}
                         className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-lg shadow-lg shadow-blue-500/30 transition-all hover:scale-[1.02]"
@@ -157,7 +157,7 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
 
                     {step < STEPS.length - 1 && (
                         <button
-                            onClick={onComplete}
+                            onClick={() => onComplete('dismiss')}
                             className="w-full mt-3 py-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-sm font-medium"
                         >
                             {labels.skip}

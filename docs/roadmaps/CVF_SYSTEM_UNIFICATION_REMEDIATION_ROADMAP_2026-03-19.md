@@ -96,6 +96,11 @@ Only two conditions can legitimately reopen this roadmap for deeper work:
 1. a new independent reassessment finds a fresh material gap on the active reference path
 2. a newly proposed continuation candidate records a passing `GC-018` score and clears the stop-rule gates
 
+Reusable trigger packets:
+
+- reassessment path: `docs/reference/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md`
+- continuation path: `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+
 Operational reading:
 
 - current roadmap posture: `HOLD`

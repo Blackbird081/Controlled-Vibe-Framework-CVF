@@ -49,6 +49,11 @@ Only two next-step classes are justified from this point:
 1. a fresh independent reassessment that identifies a new material governance gap
 2. a new `GC-018` continuation candidate that clears the current threshold and hard-stop rules
 
+Standard reusable packets now exist for both paths:
+
+- reassessment trigger: `docs/reference/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md`
+- continuation candidate: `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+
 Anything else should be treated as:
 
 - ordinary maintenance

@@ -4257,3 +4257,24 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not reopen continuation work.
   - It publishes one explicit review artifact that confirms the wave is closed and defines the only legitimate reopen paths.
+## [2026-03-20] Batch: Post-closure reassessment-trigger standardization
+- Scope:
+  - standardize the reassessment path that may legitimately follow a closed active wave
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md`
+  - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+- Files updated:
+  - `docs/reference/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `docs/baselines/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not reopen the roadmap.
+  - It makes the reassessment path as standardized as the continuation-candidate path.

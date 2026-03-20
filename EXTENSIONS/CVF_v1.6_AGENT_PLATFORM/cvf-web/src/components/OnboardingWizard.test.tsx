@@ -26,7 +26,19 @@ describe('OnboardingWizard', () => {
             fireEvent.click(screen.getByText('Tiếp tục →'));
         }
 
-        fireEvent.click(screen.getByText('Bắt đầu ngay 🚀'));
+        fireEvent.click(screen.getByText('Mở governed starter path 🚀'));
         expect(onComplete).toHaveBeenCalled();
+    });
+
+    it('teaches governed starter semantics instead of legacy 3-step framing', () => {
+        render(<OnboardingWizard onComplete={vi.fn()} />);
+
+        for (let i = 0; i < 4; i++) {
+            fireEvent.click(screen.getByText('Tiếp tục →'));
+        }
+
+        expect(screen.getByText('Governed starter path')).toBeTruthy();
+        expect(screen.getByText('Review packet')).toBeTruthy();
+        expect(screen.getByText('Live run + freeze')).toBeTruthy();
     });
 });

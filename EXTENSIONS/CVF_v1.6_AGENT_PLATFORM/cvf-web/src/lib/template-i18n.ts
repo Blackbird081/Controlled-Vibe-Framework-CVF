@@ -58,8 +58,8 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     tos_review: { name: 'Terms of Service Review', description: 'Terms of Service coverage and fairness' },
 
     // Development
-    app_builder_wizard: { name: '🧙 App Builder Wizard', description: 'Multi-step wizard to create spec in 8 steps. Recommended for complex apps!' },
-    build_my_app: { name: '🚀 Build My App', description: 'Describe your app idea → AI decides everything and builds for you. For non-coders.' },
+    app_builder_wizard: { name: '🧙 App Builder Wizard', description: 'Multi-step wizard to create a governed app spec with packet review and live path. Recommended for complex apps.' },
+    build_my_app: { name: '🚀 Build My App', description: 'Describe your app idea and let CVF route it into a governed starter path for non-coders.' },
     app_builder_complete: { name: '📦 App Builder Complete', description: 'Create comprehensive spec with full technical details. For users who understand CVF workflow.' },
     individual_skills_folder: { name: '📂 Skill Templates (8)', description: '8 individual templates for each step: Requirements, Tech Stack, Architecture, Database, API, Desktop/CLI, Deployment.' },
     app_requirements_spec: { name: 'App Requirements Spec', description: 'Gather requirements for new app, define scope and success criteria' },

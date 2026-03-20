@@ -36,8 +36,8 @@ const STEPS: StepData[] = [
             en: 'Q: What is CVF?',
         },
         description: {
-            vi: 'Là "người gác cổng" thông minh. Bạn cho biết ý định (Intent), CVF sẽ lo phần thực thi (Execution) để đảm bảo kết quả chuẩn xác.',
-            en: 'A smart "gatekeeper". You provide the intent, CVF handles execution to ensure accurate results.',
+            vi: 'Là lớp governance điều hướng từ intent sang execute path có kiểm soát. CVF khóa phase, risk, approval và freeze evidence để kết quả có thể đối soát.',
+            en: 'It is the governance layer that routes intent into a controlled execute path. CVF locks phase, risk, approvals, and freeze evidence so outcomes stay reviewable.',
         },
     },
     {
@@ -47,8 +47,8 @@ const STEPS: StepData[] = [
             en: "Q: I don't know how to write prompts?",
         },
         description: {
-            vi: 'Không vấn đề! CVF không dùng prompt. Bạn chỉ cần chọn Template và điền form giống như khai báo y tế.',
-            en: "No problem! CVF doesn't use prompts. Just pick a Template and fill out a form — like filling out a medical form.",
+            vi: 'Không sao. Bạn không cần prompt engineering phức tạp. Chỉ cần chọn wizard/template phù hợp và điền brief có cấu trúc để CVF bind đúng governed path.',
+            en: "That is fine. You do not need complex prompt engineering. Pick the right wizard/template and fill a structured brief so CVF can bind the correct governed path.",
         },
     },
     {
@@ -58,27 +58,27 @@ const STEPS: StepData[] = [
             en: 'Q: How do I get started?',
         },
         description: {
-            vi: 'Chọn một Template phù hợp (Kinh doanh, Kỹ thuật, Nội dung...), điền thông tin và bấm Gửi. AI sẽ làm phần còn lại.',
-            en: 'Pick a matching Template (Business, Technical, Content...), fill in the details and hit Submit. AI does the rest.',
+            vi: 'Chọn wizard phù hợp, điền brief, review governed packet và chỉ launch live path khi bạn thấy đúng phạm vi. CVF giữ execution trong boundary đã khóa.',
+            en: 'Pick the right wizard, fill the brief, review the governed packet, and only launch the live path when the scope looks right. CVF keeps execution inside the locked boundary.',
         },
     },
     {
         icon: '🎯',
         title: {
-            vi: 'Hướng dẫn 3 bước',
-            en: '3-Step Guide',
+            vi: 'Governed starter path',
+            en: 'Governed starter path',
         },
         description: {
-            vi: 'Chỉ cần 3 bước đơn giản để có kết quả chuyên nghiệp từ AI.',
-            en: 'Just 3 simple steps to get professional AI-powered results.',
+            vi: 'Bắt đầu bằng một luồng ngắn, nhưng kết thúc bằng packet review, live run có kiểm soát, và freeze evidence rõ ràng.',
+            en: 'Start with a short guided flow, but end with packet review, a controlled live run, and explicit freeze evidence.',
         },
         hasQuickGuide: true,
     },
 ];
 
 const LABELS: Record<Lang, { next: string; start: string; skip: string }> = {
-    vi: { next: 'Tiếp tục →', start: 'Bắt đầu ngay 🚀', skip: 'Bỏ qua giới thiệu' },
-    en: { next: 'Continue →', start: 'Get Started 🚀', skip: 'Skip intro' },
+    vi: { next: 'Tiếp tục →', start: 'Mở governed starter path 🚀', skip: 'Bỏ qua giới thiệu' },
+    en: { next: 'Continue →', start: 'Open governed starter path 🚀', skip: 'Skip intro' },
 };
 
 export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
@@ -105,24 +105,26 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
                     </p>
 
                     {currentStep.hasQuickGuide && (
-                        <div className="mt-4 grid grid-cols-3 gap-3">
-                            {/* Step 1: Pick Template */}
+                        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
                             <div className="flex flex-col items-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-blue-800">
                                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center text-2xl mb-2">📋</div>
                                 <span className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">{language === 'vi' ? 'Bước 1' : 'Step 1'}</span>
-                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Chọn Template' : 'Pick Template'}</span>
+                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Chọn wizard' : 'Pick a wizard'}</span>
                             </div>
-                            {/* Step 2: Fill Form */}
                             <div className="flex flex-col items-center p-3 bg-green-50 dark:bg-green-900/30 rounded-xl border border-green-200 dark:border-green-800">
                                 <div className="w-12 h-12 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center text-2xl mb-2">✏️</div>
                                 <span className="text-xs font-bold text-green-700 dark:text-green-300 mb-1">{language === 'vi' ? 'Bước 2' : 'Step 2'}</span>
-                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Điền Form' : 'Fill Form'}</span>
+                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Điền brief' : 'Fill the brief'}</span>
                             </div>
-                            {/* Step 3: Get Result */}
+                            <div className="flex flex-col items-center p-3 bg-amber-50 dark:bg-amber-900/30 rounded-xl border border-amber-200 dark:border-amber-800">
+                                <div className="w-12 h-12 bg-amber-100 dark:bg-amber-800 rounded-full flex items-center justify-center text-2xl mb-2">🧾</div>
+                                <span className="text-xs font-bold text-amber-700 dark:text-amber-300 mb-1">{language === 'vi' ? 'Bước 3' : 'Step 3'}</span>
+                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Review packet' : 'Review packet'}</span>
+                            </div>
                             <div className="flex flex-col items-center p-3 bg-purple-50 dark:bg-purple-900/30 rounded-xl border border-purple-200 dark:border-purple-800">
-                                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center text-2xl mb-2">🎉</div>
-                                <span className="text-xs font-bold text-purple-700 dark:text-purple-300 mb-1">{language === 'vi' ? 'Bước 3' : 'Step 3'}</span>
-                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Nhận Kết quả' : 'Get Result'}</span>
+                                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center text-2xl mb-2">🧊</div>
+                                <span className="text-xs font-bold text-purple-700 dark:text-purple-300 mb-1">{language === 'vi' ? 'Bước 4' : 'Step 4'}</span>
+                                <span className="text-xs text-center text-gray-600 dark:text-gray-400">{language === 'vi' ? 'Live run + freeze' : 'Live run + freeze'}</span>
                             </div>
                         </div>
                     )}

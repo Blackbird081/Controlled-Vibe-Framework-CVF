@@ -3835,6 +3835,32 @@ Utility and guard:
   - This batch formalizes a reviewable stop/continue gate for roadmap continuation before P1/P2/P3 implementation resumes.
   - The rule is now explicitly mapped in the control matrix, but still not auto-enforced by a dedicated compat checker yet.
 
+## [2026-03-20] Batch: Front-door / onboarding canonicalization
+- Change reference:
+  - local working tree front-door / onboarding canonicalization batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_FRONT_DOOR_ONBOARDING_CANONICALIZATION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OnboardingWizard.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OnboardingWizard.test.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/QuickStart.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/template-i18n.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/development.ts`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/baselines/CVF_FRONT_DOOR_ONBOARDING_CANONICALIZATION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/OnboardingWizard.test.tsx src/lib/template-i18n.test.ts` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - full Web suite — skipped because this batch is localized to onboarding/front-door copy and template metadata semantics
+  - actual onboarding-to-governed-starter runtime handoff — deferred to `P2`
+- Notes/Risks:
+  - Onboarding and front-door copy now teach governed starter semantics rather than legacy `3-step / AI does the rest` framing.
+  - This batch closes `P1` from the depth-audit register, but `P2` remains the next authorized continuation step.
+
 ## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
 - Change reference:
   - local working tree Phase 2 control-loop batch

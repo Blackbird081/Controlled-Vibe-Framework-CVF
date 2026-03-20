@@ -5,7 +5,7 @@ export const developmentTemplates: Template[] = [
         id: 'app_builder_wizard',
         name: '🧙 Xây dựng Ứng dụng',
         icon: '🧙',
-        description: 'Multi-step wizard tạo spec qua 8 bước. Khuyên dùng cho app phức tạp!',
+        description: 'Multi-step wizard tạo app spec với governed packet, review và live path. Khuyên dùng cho app phức tạp!',
         category: 'development',
         difficulty: 'medium',
         fields: [], // No fields - handled by wizard component
@@ -16,7 +16,7 @@ export const developmentTemplates: Template[] = [
         id: 'build_my_app',
         name: '🚀 Tạo Ứng dụng',
         icon: '🚀',
-        description: 'Mô tả ý tưởng app → AI tự quyết định mọi thứ và build cho bạn. Dành cho người không biết code.',
+        description: 'Mô tả ý tưởng app để CVF route vào governed starter path cho người không biết code.',
         category: 'development',
         difficulty: 'easy',
         fields: [

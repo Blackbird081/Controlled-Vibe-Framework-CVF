@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * QuickStart Component — 3-Step Onboarding
+ * QuickStart Component — Guided Governed Intake
  * ==========================================
  * Step 1: Choose provider + paste API key
- * Step 2: Describe what you want (natural language)
- * Step 3: Review result
+ * Step 2: Describe the goal so CVF can bind a governed intake path
+ * Step 3: Review routed phase/risk before launching the next surface
  *
  * Sprint 7 — Task 7.5
  */
@@ -40,35 +40,35 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
   const [detectedIntent, setDetectedIntent] = useState<DetectedIntent | null>(null);
 
   const l = language === 'vi' ? {
-    title: '🚀 Bắt đầu nhanh',
+    title: '🚀 Governed Quick Start',
     step1: 'Bước 1: Chọn AI Provider',
-    step2: 'Bước 2: Bạn muốn làm gì?',
-    step3: 'Bước 3: Xác nhận',
+    step2: 'Bước 2: Bạn muốn CVF xử lý mục tiêu nào?',
+    step3: 'Bước 3: Xác nhận governed routing',
     apiKeyLabel: 'API Key',
     apiKeyPlaceholder: 'Paste API key tại đây...',
     inputPlaceholder: 'Mô tả yêu cầu của bạn bằng ngôn ngữ tự nhiên...\n\nVí dụ:\n• "Tôi muốn tạo app quản lý công việc"\n• "Phân tích chiến lược marketing cho startup"\n• "Review code bảo mật cho ứng dụng web"',
-    detected: 'CVF tự động phát hiện:',
+    detected: 'CVF chuẩn bị bind:',
     phase: 'Giai đoạn',
     risk: 'Mức rủi ro',
     templates: 'Templates gợi ý',
-    start: 'Bắt đầu! 🚀',
+    start: 'Mở governed path! 🚀',
     next: 'Tiếp tục →',
     back: '← Quay lại',
     skip: 'Bỏ qua',
     recommended: '⭐ Khuyên dùng',
   } : {
-    title: '🚀 Quick Start',
+    title: '🚀 Governed Quick Start',
     step1: 'Step 1: Choose AI Provider',
-    step2: 'Step 2: What do you want to do?',
-    step3: 'Step 3: Confirm',
+    step2: 'Step 2: What goal should CVF route?',
+    step3: 'Step 3: Confirm governed routing',
     apiKeyLabel: 'API Key',
     apiKeyPlaceholder: 'Paste your API key here...',
     inputPlaceholder: 'Describe your request in natural language...\n\nExamples:\n• "I want to build a task management app"\n• "Analyze marketing strategy for my startup"\n• "Review security of my web application"',
-    detected: 'CVF auto-detected:',
+    detected: 'CVF is preparing to bind:',
     phase: 'Phase',
     risk: 'Risk Level',
     templates: 'Suggested Templates',
-    start: 'Start! 🚀',
+    start: 'Open governed path! 🚀',
     next: 'Continue →',
     back: '← Back',
     skip: 'Skip',
@@ -198,11 +198,11 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
             </div>
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">{l.phase}</div>
-              <div className="font-medium">{detectedIntent?.friendlyPhase ?? 'Auto-detect'}</div>
+              <div className="font-medium">{detectedIntent?.friendlyPhase ?? 'Governed intake'}</div>
             </div>
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">{l.risk}</div>
-              <div className="font-medium">{detectedIntent?.friendlyRisk ?? 'Auto-detect'}</div>
+              <div className="font-medium">{detectedIntent?.friendlyRisk ?? 'Routed by CVF'}</div>
             </div>
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">Request</div>

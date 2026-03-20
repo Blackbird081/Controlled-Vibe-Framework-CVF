@@ -42,6 +42,7 @@ Current snapshot as of `2026-03-20`:
 - Workstream E — Web UI canonical phase and guard alignment on the active reference path: `COMPLETED`
 - Workstream F — documentation, readiness, and positioning reconciliation: `COMPLETED`
 - coder-facing governed reference execution path: `COMPLETED`
+- front-door / onboarding governed semantics on the active Web reference path: `COMPLETED`
 - independent reassessment and closure evidence chain for the active reference path: `COMPLETED`
 
 ### In Progress
@@ -101,8 +102,8 @@ Depth Audit
 - Operational efficiency: `2`
 - Portfolio priority: `2`
 - Total: `9`
-- Decision: `CONTINUE`
-- Reason: front-door semantics still shape first-time user behavior; aligning onboarding and front-door copy reduces user-model drift on the active Web line and improves governed path selection without broad new runtime complexity.
+- Decision: `COMPLETED`
+- Reason: executed on `2026-03-20`; onboarding, quick-start, and front-door app-building metadata now teach governed starter semantics instead of legacy `3-step / AI does the rest` framing.
 
 ### Candidate P2 — Onboarding -> governed starter path
 
@@ -130,7 +131,8 @@ Depth Audit
 
 Decision boundary now active for this roadmap:
 
-- `P1` and `P2` are authorized next steps
+- `P1` has now been executed and is considered `COMPLETED`
+- `P2` remains the next authorized continuation step
 - `P3` is explicitly `DEFERRED` until a later reassessment proves a new breadth candidate crosses the continue threshold
 - this register must be refreshed before any future attempt to reopen breadth expansion on this roadmap
 
@@ -273,6 +275,14 @@ Front-door Web docs catalog canonicalization batch executed on `2026-03-20`:
 - docs index metadata for `first-project` now advertises the canonical `intake -> design -> build -> review -> freeze` journey: `COMPLETED`
 - non-coder alias handling comments now describe legacy input as compatibility normalization rather than active UI truth: `COMPLETED`
 - active Web docs front door is now cleaner and less likely to reinforce the old generic `4 phases` framing
+
+Front-door / onboarding canonicalization batch executed on `2026-03-20`:
+
+- Onboarding Wizard now teaches governed starter semantics instead of legacy `3-step / AI does the rest` framing: `COMPLETED`
+- Quick Start now describes governed intake and routed phase/risk confirmation rather than generic auto-detection: `COMPLETED`
+- App Builder front-door metadata now explains governed packet review and live-path launch semantics for non-coders: `COMPLETED`
+- Candidate `P1` in the depth-audit register is now considered `COMPLETED`
+- Candidate `P2` remains the next authorized continuation batch on this roadmap
 
 Reference governed loop helper batch executed on `2026-03-20`:
 

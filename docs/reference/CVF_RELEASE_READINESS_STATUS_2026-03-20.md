@@ -14,7 +14,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 |---|---|---|
 | Canonical phase model | `ALIGNED` | active runtime, shared guard contract, and major Web surfaces now use `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` |
 | Hardened default guard path | `ALIGNED` | `ai_commit` and `fileScope` are wired into the hardened default path in active remediated runtime areas |
-| Web non-coder semantics | `ALIGNED WITH CAVEATS` | key UX surfaces teach canonical phase semantics and App Builder Wizard now provides one governed live execution path on the active Web reference line |
+| Web non-coder semantics | `SUBSTANTIALLY ALIGNED` | key UX surfaces teach canonical phase semantics and the active Web reference line now provides four governed live execution paths |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` | explicit step lifecycle, default runtime bindings, receipt-backed execution, and a reusable SDK reference loop now exist for the governed path |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` | canonical control matrix now maps critical rules to runtime guard, gateway, approval, or CI owner; remaining caveat is ecosystem breadth, not owner ambiguity |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` | coder-facing and non-coder active reference paths now both have governed loop evidence, though not every channel family is equally mature |
@@ -25,7 +25,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - canonical runtime phases are now operationally represented
 - shared contract and major Web/API entrypoints no longer default to the legacy `4-phase / 6-guard` framing
 - non-coder UX now exposes the canonical `FREEZE` posture instead of stopping at `REVIEW`
-- App Builder Wizard now provides one non-coder governed live path that reaches the Web execute pipeline with pre-bound `BUILD`, risk, scope, and skill-preflight metadata
+- App Builder Wizard, Business Strategy Wizard, Research Project Wizard, and Product Design Wizard now provide governed live paths that reach the Web execute pipeline with pre-bound `BUILD`, risk, scope, and skill-preflight metadata
 - workflow bridge no longer auto-completes implicitly and can execute registered handlers with explicit results
 - mandatory gateway and governed helper runtime now surface approval-required boundaries and execution lineage explicitly
 - baseline/update governance now has policy, CI, and local hook enforcement
@@ -33,13 +33,13 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - public SDK/OpenAPI surfaces now publish canonical phases while confining legacy `DISCOVERY` support to explicit normalization boundaries
 - key user-facing guides now teach the canonical 5-phase controlled loop instead of the formerly active 4-phase framing
 - `CvfSdk.runReferenceGovernedLoop()` now provides one reusable coder-facing governed execution path with auto-supplied `ai_commit`, `traceHash`, approval handling, freeze artifact, and checkpoint receipt
-- the non-coder reference packet now has one live governed launch path instead of being only a documentation-grade handoff artifact
+- the non-coder reference packet now has four live governed launch paths instead of being only a documentation-grade handoff artifact
 
 ## Open Risks
 
 1. The reference governed path is real, but broader adapter coverage across every extension family is still narrower than a full ecosystem mesh.
 2. Some secondary or ecosystem-specific controls still rely on the reference runtime rather than every extension family exposing identical maturity.
-3. CVF can credibly claim governed reference control loops for both coder-facing and one non-coder active path, but not yet "fully unified controlled autonomy" across all active channels.
+3. CVF can credibly claim governed reference control loops for both coder-facing and multiple non-coder active paths, but not yet "fully unified controlled autonomy" across all active channels.
 
 ## Positioning Guidance
 
@@ -71,6 +71,9 @@ Claims to avoid for now:
 - [Reference Governed Loop Delta](../baselines/CVF_REFERENCE_GOVERNED_LOOP_DELTA_2026-03-20.md)
 - [Non-Coder Governed Packet](./CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md)
 - [Non-Coder Live Path Evidence Delta](../baselines/CVF_NONCODER_LIVE_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md)
+- [Non-Coder Breadth Expansion Delta](../baselines/CVF_NONCODER_BREADTH_EXPANSION_DELTA_2026-03-20.md)
+- [Non-Coder Research Breadth Expansion Delta](../baselines/CVF_NONCODER_RESEARCH_BREADTH_EXPANSION_DELTA_2026-03-20.md)
+- [Non-Coder Product Breadth Expansion Delta](../baselines/CVF_NONCODER_PRODUCT_BREADTH_EXPANSION_DELTA_2026-03-20.md)
 
 ## Verdict
 

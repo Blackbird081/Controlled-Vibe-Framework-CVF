@@ -4176,3 +4176,22 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not authorize `P3`.
   - It records the current defer decision in the standardized packet form introduced by `GC-018`.
+## [2026-03-20] Batch: GC-018 packet front-door alignment
+- Scope:
+  - connect top-level status entrypoints to the canonical scored `P3` defer packet
+- Policy / roadmap references:
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+- Files updated:
+  - `README.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `docs/baselines/CVF_GC018_PACKET_FRONTDOOR_ALIGNMENT_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not change the defer decision.
+  - It makes the justification chain easier to follow from top-level entrypoints.

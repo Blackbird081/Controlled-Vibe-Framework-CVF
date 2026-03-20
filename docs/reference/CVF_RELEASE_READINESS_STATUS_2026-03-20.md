@@ -18,7 +18,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` | explicit step lifecycle, default runtime bindings, receipt-backed execution, and a reusable SDK reference loop now exist for the governed path |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` | canonical control matrix now maps critical rules to runtime guard, gateway, approval, or CI owner; remaining caveat is ecosystem breadth, not owner ambiguity |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` | coder-facing and non-coder active reference paths now both have governed loop evidence, though not every channel family is equally mature |
-| Continuation-stop governance | `ALIGNED` | `GC-018` continuation control is now repository-enforced via local hook + CI compatibility gate |
+| Continuation-stop governance | `ALIGNED` | `GC-018` continuation control is now repository-enforced via local hook + CI compatibility gate, and the current `P3` defer posture is backed by a canonical scored continuation packet |
 | Documentation truthfulness | `ALIGNED WITH CAVEATS` | canonical entry docs updated to stop overstating legacy or incomplete behavior |
 
 ## Implemented Strengths
@@ -33,6 +33,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - mandatory gateway and governed helper runtime now surface approval-required boundaries and execution lineage explicitly
 - baseline/update governance now has policy, CI, and local hook enforcement
 - post-closure continuation governance (`GC-018`) now has a dedicated compat checker in both CI and the local pre-push chain
+- the current breadth-defer posture is no longer only roadmap prose; it is also recorded in one canonical scored packet for `P3`
 - a canonical governance control matrix now assigns one primary enforcement owner to each critical control
 - public SDK/OpenAPI surfaces now publish canonical phases while confining legacy `DISCOVERY` support to explicit normalization boundaries
 - key user-facing guides now teach the canonical 5-phase controlled loop instead of the formerly active 4-phase framing
@@ -79,6 +80,8 @@ Claims to avoid for now:
 - [Onboarding Governed Starter Path Delta](../baselines/CVF_ONBOARDING_GOVERNED_STARTER_PATH_DELTA_2026-03-20.md)
 - [Web Build Blocker Closure Delta](../baselines/CVF_WEB_BUILD_BLOCKER_CLOSURE_DELTA_2026-03-20.md)
 - [Depth Audit Continuation Automation Delta](../baselines/CVF_DEPTH_AUDIT_CONTINUATION_AUTOMATION_DELTA_2026-03-20.md)
+- [GC-018 Continuation Candidate P3](../reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md)
+- [GC-018 P3 Continuation Packet Delta](../baselines/CVF_GC018_P3_CONTINUATION_PACKET_DELTA_2026-03-20.md)
 - [Non-Coder Live Path Evidence Delta](../baselines/CVF_NONCODER_LIVE_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md)
 - [Non-Coder Breadth Expansion Delta](../baselines/CVF_NONCODER_BREADTH_EXPANSION_DELTA_2026-03-20.md)
 - [Non-Coder Research Breadth Expansion Delta](../baselines/CVF_NONCODER_RESEARCH_BREADTH_EXPANSION_DELTA_2026-03-20.md)

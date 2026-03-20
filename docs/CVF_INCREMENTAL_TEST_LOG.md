@@ -71,6 +71,25 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-20] Batch: GitHub front-door README simplification
+- Change reference:
+  - local working tree README front-door cleanup batch
+  - baseline receipt: `docs/baselines/CVF_GITHUB_FRONTDOOR_README_REDUCTION_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `README.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_GITHUB_FRONTDOOR_README_REDUCTION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> `PASS`
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> `PASS`
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> `PASS`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> `PASS`
+- Skip scope:
+  - runtime, web, and contract test suites — skipped because this batch only restructures top-level GitHub navigation and does not change executable code or runtime semantics
+- Notes/Risks:
+  - `README.md` was reduced from a long mixed-purpose document into a front-door landing page with quick-link navigation, shorter status framing, and direct links to the authoritative docs set.
+  - Detailed architecture, version history, and evidence chains remain preserved in dedicated docs rather than being repeated at the repository front door.
+
 ## [2026-03-20] Batch: Non-coder breadth expansion — Data Analysis Wizard
 - Change reference:
   - local working tree Data Analysis Wizard governed breadth-expansion batch

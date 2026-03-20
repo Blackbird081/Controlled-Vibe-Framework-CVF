@@ -4135,3 +4135,24 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not reopen breadth work.
   - It preserves historical receipts while clarifying that later snapshot and `GC-018` decisions supersede those intermediate states.
+## [2026-03-20] Batch: GC-018 continuation template standardization
+- Scope:
+  - add one reusable continuation-candidate packet so future roadmap reopening follows a standard format instead of ad hoc depth-audit prose
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+- Files updated:
+  - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/baselines/CVF_GC018_CONTINUATION_TEMPLATE_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not authorize any new continuation candidate.
+  - It standardizes the packet future candidates should use if they attempt to reopen a depth-frozen roadmap.

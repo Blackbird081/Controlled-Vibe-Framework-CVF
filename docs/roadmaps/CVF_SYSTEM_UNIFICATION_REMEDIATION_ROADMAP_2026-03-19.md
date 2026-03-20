@@ -124,6 +124,10 @@ Depth Audit
 - Reason: <short justification>
 ```
 
+Standard reusable packet:
+
+- `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+
 Current scored continuation candidates as of `2026-03-20`:
 
 ### Candidate P1 — Front-door / onboarding canonicalization

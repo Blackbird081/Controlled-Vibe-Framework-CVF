@@ -89,6 +89,10 @@ This record may live in:
 
 but it must be explicit and reviewable.
 
+Standard continuation packet template:
+
+- `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+
 Automated continuation enforcement reference:
 
 - `governance/compat/check_depth_audit_continuation_compat.py`

@@ -38,7 +38,7 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     brand_voice: { name: 'Brand Voice Consistency', description: 'Ensure consistent brand voice' },
 
     // Product & UX
-    product_design_wizard: { name: '🎨 Product Design Wizard', description: 'Multi-step wizard to create Product Design Spec in 6 steps: Problem → User → Solution → UX → Visual → Review' },
+    product_design_wizard: { name: '🎨 Product Design Wizard', description: 'Multi-step wizard to create a governed Product Design Spec with review packet and live path' },
     ab_test_review: { name: 'A/B Test Review', description: 'Evaluate A/B test design and results' },
     accessibility_audit: { name: 'Accessibility Audit', description: 'WCAG compliance check' },
     user_flow_analysis: { name: 'User Flow Analysis', description: 'Analyze and optimize user journeys' },

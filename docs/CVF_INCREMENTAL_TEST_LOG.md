@@ -4116,3 +4116,22 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not reopen breadth expansion.
   - It only makes the stop boundary and the true remainder state easier to read in one pass.
+## [2026-03-20] Batch: Residual status-wording cleanup
+- Scope:
+  - remove residual `IN PROGRESS` wording that could still make the delivered wave look actively unfinished
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- Files updated:
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/concepts/controlled-execution-loop.md`
+  - `docs/baselines/CVF_RESIDUAL_STATUS_WORDING_CLEANUP_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not reopen breadth work.
+  - It preserves historical receipts while clarifying that later snapshot and `GC-018` decisions supersede those intermediate states.

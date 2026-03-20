@@ -81,15 +81,15 @@ Entering `FREEZE` means:
 
 ## Current Reality
 
-As of `2026-03-20`, CVF has aligned much of its runtime, shared guard contract, and Web flow to this canonical loop.
+As of `2026-03-20`, CVF has aligned its active runtime, shared guard contract, and major Web reference flows to this canonical loop.
 
-Still-open system work remains:
+Current truthful reading:
 
-- production-grade binding of cross-extension workflow steps
-- full governance ownership matrix across all critical controls
-- one complete end-to-end demo path that exercises the full loop for every active channel
+- the active reference path is materially delivered against this loop
+- coder-facing and non-coder governed reference paths both exist on the active baseline
+- broader ecosystem parity and future breadth deepening are no longer open-by-default roadmap work; they are continuation candidates gated by `GC-018`
 
-That means the loop is now the canonical design truth and partially implemented runtime truth, but whole-system completion is still an active roadmap item.
+That means the loop is now both the canonical design truth and the active reference-path runtime truth, while future whole-system broadening remains governed continuation work rather than an already-authorized active batch.
 
 ---
 

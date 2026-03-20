@@ -617,7 +617,7 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                                 <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
                                     <div className="font-semibold text-red-900 dark:text-red-100">Approval checkpoints</div>
                                     <div className="text-red-800 dark:text-red-200 mt-1">
-                                        {governedPacket.approvals.map((approval) => approval.label).join(', ')}
+                                        {governedPacket.approvals.map((approval) => `${approval.phase} -> ${approval.requiredFor}`).join(', ')}
                                     </div>
                                 </div>
                                 <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">

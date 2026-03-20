@@ -17,6 +17,7 @@ import {
   PHASE_DESCRIPTIONS,
   PHASE_ROLE_MATRIX,
   PHASE_ORDER,
+  type CanonicalCVFPhase,
   type CVFPhase,
   type CVFRole,
 } from 'cvf-guard-contract';
@@ -25,7 +26,7 @@ const guard = new PhaseGateGuard();
 const VALID_PHASES: CVFPhase[] = [...PHASE_ORDER, 'DISCOVERY'];
 const VALID_ROLES: CVFRole[] = ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'AI_AGENT', 'OPERATOR'];
 
-function normalizePhase(phase: CVFPhase): CVFPhase {
+function normalizePhase(phase: CVFPhase): CanonicalCVFPhase {
   return phase === 'DISCOVERY' ? 'INTAKE' : phase;
 }
 

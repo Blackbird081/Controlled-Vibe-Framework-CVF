@@ -18,7 +18,7 @@ export interface NonCoderReferenceLoopInput {
   templateId?: string;
   templateName?: string;
   intent?: string;
-  riskLevel?: 'R1' | 'R2';
+  riskLevel?: 'R1' | 'R2' | 'R3';
   fileScope?: string[];
   baselineArtifact?: string;
   acceptedOutput?: string;
@@ -58,7 +58,7 @@ export interface NonCoderExecutionHandoff {
   templateName: string;
   intent: string;
   cvfPhase: 'BUILD';
-  cvfRiskLevel: 'R1' | 'R2';
+  cvfRiskLevel: 'R1' | 'R2' | 'R3';
   inputs: Record<string, string>;
   fileScope: string[];
   skillPreflightDeclaration: string;
@@ -66,7 +66,7 @@ export interface NonCoderExecutionHandoff {
 
 export interface NonCoderReferenceLoopArtifact {
   title: string;
-  riskLevel: 'R1' | 'R2';
+  riskLevel: 'R1' | 'R2' | 'R3';
   phases: NonCoderReferencePhase[];
   approvals: NonCoderReferenceApproval[];
   executionHandoff: NonCoderExecutionHandoff;
@@ -95,7 +95,7 @@ function compactLines(value?: string, fallback?: string): string[] {
     .filter(Boolean);
 }
 
-function inferRiskLevel(input: NonCoderReferenceLoopInput): 'R1' | 'R2' {
+function inferRiskLevel(input: NonCoderReferenceLoopInput): 'R1' | 'R2' | 'R3' {
   if (input.riskLevel) {
     return input.riskLevel;
   }

@@ -27,6 +27,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - non-coder UX now exposes the canonical `FREEZE` posture instead of stopping at `REVIEW`
 - onboarding now opens Quick Start, which emits a persisted governed starter handoff before the routed starter wizard is launched
 - App Builder Wizard, Business Strategy Wizard, Research Project Wizard, Product Design Wizard, Data Analysis Wizard, Content Strategy Wizard, and Marketing Campaign Wizard now provide governed live paths that reach the Web execute pipeline with pre-bound `BUILD`, risk, scope, and skill-preflight metadata
+- the active `cvf-web` production build now passes again after the latest Web build-blocker closure batch
 - workflow bridge no longer auto-completes implicitly and can execute registered handlers with explicit results
 - mandatory gateway and governed helper runtime now surface approval-required boundaries and execution lineage explicitly
 - baseline/update governance now has policy, CI, and local hook enforcement
@@ -72,6 +73,7 @@ Claims to avoid for now:
 - [Reference Governed Loop Delta](../baselines/CVF_REFERENCE_GOVERNED_LOOP_DELTA_2026-03-20.md)
 - [Non-Coder Governed Packet](./CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md)
 - [Onboarding Governed Starter Path Delta](../baselines/CVF_ONBOARDING_GOVERNED_STARTER_PATH_DELTA_2026-03-20.md)
+- [Web Build Blocker Closure Delta](../baselines/CVF_WEB_BUILD_BLOCKER_CLOSURE_DELTA_2026-03-20.md)
 - [Non-Coder Live Path Evidence Delta](../baselines/CVF_NONCODER_LIVE_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md)
 - [Non-Coder Breadth Expansion Delta](../baselines/CVF_NONCODER_BREADTH_EXPANSION_DELTA_2026-03-20.md)
 - [Non-Coder Research Breadth Expansion Delta](../baselines/CVF_NONCODER_RESEARCH_BREADTH_EXPANSION_DELTA_2026-03-20.md)

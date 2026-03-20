@@ -3916,6 +3916,32 @@ Utility and guard:
 - Notes/Risks:
   - This batch only reconciles status artifacts so they explicitly mention the governed onboarding starter handoff landed in `P2`.
 
+## [2026-03-20] Batch: Web build-blocker closure
+- Change reference:
+  - local working tree Web build-blocker closure batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_WEB_BUILD_BLOCKER_CLOSURE_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/ai-providers.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/ai-providers.test.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/phase-gate/route.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/non-coder-reference-loop.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SecurityAssessmentWizard.tsx`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `docs/baselines/CVF_WEB_BUILD_BLOCKER_CLOSURE_DELTA_2026-03-20.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/ai-providers.test.ts src/components/SecurityAssessmentWizard.test.tsx` -> PASS
+  - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run build` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - full Web test suite — skipped because this batch is localized to build blockers exposed by the latest Web baseline
+- Notes/Risks:
+  - This batch closes concrete build blockers on the active Web reference line and restores a passing production build.
+
 ## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
 - Change reference:
   - local working tree Phase 2 control-loop batch

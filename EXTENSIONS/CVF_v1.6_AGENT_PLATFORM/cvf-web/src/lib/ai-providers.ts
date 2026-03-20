@@ -291,7 +291,7 @@ app.post('/api/orders', async (req, res) => {
 
 ### Freeze Record
 - **Acceptance:** Đã chấp nhận sau review
-- **Baseline artifact:** `docs/baselines/...`
+- **Baseline artifact:** \`docs/baselines/...\`
 - **Open follow-up:** Bổ sung test hiệu năng ở batch sau
 - **Status:** Scope của lần chạy này đã được khóa
 

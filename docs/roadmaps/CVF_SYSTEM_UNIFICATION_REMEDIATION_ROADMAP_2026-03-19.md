@@ -293,6 +293,14 @@ Onboarding -> governed starter path batch executed on `2026-03-20`:
 - Candidate `P2` in the depth-audit register is now considered `COMPLETED`
 - Candidate `P3` remains explicitly `DEFERRED` on this roadmap until a later reassessment crosses the continue threshold
 
+Web build-blocker closure batch executed on `2026-03-20`:
+
+- `ai-providers.ts` system prompt now escapes inline baseline-artifact markdown correctly inside the template literal: `COMPLETED`
+- `phase-gate` API route now normalizes to canonical phase typing before indexing canonical matrices: `COMPLETED`
+- non-coder reference loop types now accept `R3` so security-governed packets match the active governance model: `COMPLETED`
+- Security Assessment Wizard approval summary now reads canonical approval fields instead of a nonexistent `label` property: `COMPLETED`
+- active `cvf-web` production build now passes again on the current local baseline: `COMPLETED`
+
 Reference governed loop helper batch executed on `2026-03-20`:
 
 - `CvfSdk` now exposes `runReferenceGovernedLoop()` as one reusable coder-facing governed execution path: `COMPLETED`

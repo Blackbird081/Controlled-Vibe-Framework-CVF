@@ -4340,3 +4340,21 @@ Utility and guard:
 - Notes/Risks:
   - Archive cleanup is intentionally earlier than the normal 3-day window for clarity, not because of a retention violation.
   - Historical files are preserved, not deleted.
+## [2026-03-20] Batch: Next-wave platform completion roadmap proposal
+- Scope:
+  - define the most sensible successor roadmap after the active system-unification wave closure without reopening implementation by default
+- Policy / roadmap references:
+  - `docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+- Files updated:
+  - `docs/roadmaps/CVF_NEXT_WAVE_PLATFORM_COMPLETION_ROADMAP_2026-03-20.md`
+  - `docs/baselines/CVF_NEXT_WAVE_PLATFORM_COMPLETION_ROADMAP_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This roadmap is planning-only and does not authorize a new remediation wave.
+  - Any future activation still requires reassessment or a passing `GC-018` continuation candidate.

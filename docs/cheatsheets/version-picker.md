@@ -35,7 +35,7 @@
 
 | Feature | v1.0 | v1.1 | v1.2 | v1.3 | v1.5 | v1.6 |
 |---------|:----:|:----:|:----:|:----:|:----:|:----:|
-| **4-Phase Process** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Original 4-Phase Foundation** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Governance Basics** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Input/Output Specs** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Agent Archetypes** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -455,7 +455,8 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 Before deciding, ask yourself:
 
 - [ ] Đã đọc [Core Philosophy](../docs/concepts/core-philosophy.md)?
-- [ ] Hiểu [4-Phase Process](../docs/concepts/4-phase-process.md)?
+- [ ] Hiểu [Controlled Execution Loop](../docs/concepts/controlled-execution-loop.md)?
+- [ ] Biết [4-Phase Process](../docs/concepts/4-phase-process.md) chỉ là historical foundation?
 - [ ] Biết team size & complexity của project?
 - [ ] Có time để setup không?
 - [ ] Cần governance không?

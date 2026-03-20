@@ -12,7 +12,7 @@
  * @module governance/adapters/vscode-governance-adapter
  */
 
-import type { CVFPhase, CVFRiskLevel, CVFRole } from 'cvf-guard-contract';
+import type { CanonicalCVFPhase, CVFPhase, CVFRiskLevel, CVFRole } from 'cvf-guard-contract';
 import {
   PHASE_ROLE_MATRIX,
   PHASE_DESCRIPTIONS,
@@ -33,6 +33,10 @@ export interface GovernanceSession {
   mutationCount?: number;
 }
 
+function normalizePhaseAlias(phase: CVFPhase): CanonicalCVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
+
 // ─── Prompt Generator ─────────────────────────────────────────────────
 
 /**
@@ -42,9 +46,10 @@ export interface GovernanceSession {
 export function generateGovernancePrompt(session: GovernanceSession): string {
   const budget = session.mutationBudget ?? DEFAULT_MUTATION_BUDGETS[session.riskLevel];
   const count = session.mutationCount ?? 0;
-  const allowedRoles = PHASE_ROLE_MATRIX[session.phase];
+  const normalizedPhase = normalizePhaseAlias(session.phase);
+  const allowedRoles = PHASE_ROLE_MATRIX[normalizedPhase];
   const restricted = RESTRICTED_ACTIONS[session.role];
-  const phaseDesc = PHASE_DESCRIPTIONS[session.phase];
+  const phaseDesc = PHASE_DESCRIPTIONS[normalizedPhase];
   const riskDesc = RISK_DESCRIPTIONS[session.riskLevel];
 
   return `
@@ -54,17 +59,17 @@ You are operating under the **Controlled Vibe Framework (CVF)** governance proto
 These rules are NON-NEGOTIABLE. Violating them will invalidate your work.
 
 ### Current Session State
-- **Phase:** ${session.phase} — ${phaseDesc}
+- **Phase:** ${normalizedPhase} — ${phaseDesc}
 - **Risk Level:** ${session.riskLevel} — ${riskDesc}
 - **Your Role:** ${session.role}
 - **Mutation Budget:** ${count}/${budget} changes used
 ${session.projectName ? `- **Project:** ${session.projectName}` : ''}
 
 ### Phase Rules
-The CVF process follows 4 phases: DISCOVERY → DESIGN → BUILD → REVIEW.
-You are currently in **${session.phase}**. Only these roles can operate in this phase: ${allowedRoles.join(', ')}.
+The CVF process follows 5 phases: INTAKE → DESIGN → BUILD → REVIEW → FREEZE.
+You are currently in **${normalizedPhase}**. Only these roles can operate in this phase: ${allowedRoles.join(', ')}.
 ${session.role === 'AI_AGENT' && !allowedRoles.includes('AI_AGENT')
-    ? `⚠️ WARNING: As AI_AGENT, you are NOT authorized for ${session.phase} phase. You may only operate in BUILD phase.`
+    ? `⚠️ WARNING: As AI_AGENT, you are NOT authorized for ${normalizedPhase} phase. AI_AGENT activity is limited to controlled builder-class phases.`
     : ''}
 
 ### Risk Rules
@@ -102,14 +107,15 @@ ${session.riskLevel === 'R2' || session.riskLevel === 'R3' ? '- You MUST include
  */
 export function generateGovernancePayload(session: GovernanceSession): Record<string, unknown> {
   const budget = session.mutationBudget ?? DEFAULT_MUTATION_BUDGETS[session.riskLevel];
+  const normalizedPhase = normalizePhaseAlias(session.phase);
   return {
     cvf_version: '2.0',
-    phase: session.phase,
-    phase_description: PHASE_DESCRIPTIONS[session.phase],
+    phase: normalizedPhase,
+    phase_description: PHASE_DESCRIPTIONS[normalizedPhase],
     risk_level: session.riskLevel,
     risk_description: RISK_DESCRIPTIONS[session.riskLevel],
     role: session.role,
-    allowed_roles_in_phase: PHASE_ROLE_MATRIX[session.phase],
+    allowed_roles_in_phase: PHASE_ROLE_MATRIX[normalizedPhase],
     restricted_actions: RESTRICTED_ACTIONS[session.role],
     mutation_budget: budget,
     mutation_count: session.mutationCount ?? 0,

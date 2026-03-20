@@ -7,7 +7,8 @@ Deep dives into CVF's principles, architecture, and design decisions.
 | Concept | What It Covers |
 |---------|---------------|
 | [Core Philosophy](core-philosophy.md) | The 7 non-negotiable principles behind CVF |
-| [4-Phase Process](4-phase-process.md) | Discovery → Design → Build → Review in depth |
+| [Controlled Execution Loop](controlled-execution-loop.md) | The canonical `INTAKE → DESIGN → BUILD → REVIEW → FREEZE` model |
+| [4-Phase Process](4-phase-process.md) | Legacy Discovery → Design → Build → Review foundation |
 | [Governance Model](governance-model.md) | Roles, authority matrix, agents, commands |
 | [Skill System](skill-system.md) | Skill structure, 114-skill library, lifecycle |
 | [Risk Model](risk-model.md) | R0-R4 levels, 5 risk dimensions, aggregation rules |
@@ -18,11 +19,12 @@ Deep dives into CVF's principles, architecture, and design decisions.
 For best understanding, read in this order:
 
 1. **[Core Philosophy](core-philosophy.md)** — Why CVF exists
-2. **[4-Phase Process](4-phase-process.md)** — How work flows
+2. **[Controlled Execution Loop](controlled-execution-loop.md)** — How the active model works
 3. **[Governance Model](governance-model.md)** — Who controls what
 4. **[Risk Model](risk-model.md)** — How risk is managed
 5. **[Skill System](skill-system.md)** — What AI can do
-6. **[Version Evolution](version-evolution.md)** — How CVF grew
+6. **[4-Phase Process](4-phase-process.md)** — Historical foundation and legacy compatibility context
+7. **[Version Evolution](version-evolution.md)** — How CVF grew
 
 ## See Also
 

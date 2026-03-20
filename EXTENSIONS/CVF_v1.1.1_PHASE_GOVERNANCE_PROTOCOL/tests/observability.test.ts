@@ -152,9 +152,9 @@ describe('MetricsCollector', () => {
     });
 
     it('tracks guard count', () => {
-      collector.setRegisteredGuardCount(13);
+      collector.setRegisteredGuardCount(15);
       const m = collector.getSystemHealthMetrics();
-      expect(m.registeredGuards).toBe(13);
+      expect(m.registeredGuards).toBe(15);
     });
 
     it('tracks errors', () => {
@@ -174,14 +174,14 @@ describe('MetricsCollector', () => {
       collector.recordEvaluation(mockResult('ALLOW'));
       collector.recordPipelineEvent('created');
       collector.recordConformanceRun(1.0, 0, 20);
-      collector.setRegisteredGuardCount(13);
+      collector.setRegisteredGuardCount(15);
 
       const snap = collector.getDashboardSnapshot();
       expect(snap.timestamp).toBeDefined();
       expect(snap.guard.totalEvaluations).toBe(1);
       expect(snap.pipeline.totalPipelines).toBe(1);
       expect(snap.conformance.passRate).toBe(1.0);
-      expect(snap.system.registeredGuards).toBe(13);
+      expect(snap.system.registeredGuards).toBe(15);
     });
   });
 

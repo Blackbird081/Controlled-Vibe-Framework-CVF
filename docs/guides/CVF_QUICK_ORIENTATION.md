@@ -21,13 +21,14 @@
 | Cộng tác Human + AI | Tự động hóa hoàn toàn |
 | Hoạt động với mọi AI (Claude, GPT, Gemini...) | Gắn riêng với một AI nào |
 
-### 4-Phase Process — Trái tim của CVF
+### 5-Phase Controlled Loop — Trái tim của CVF
 
 ```
-Phase A: Discovery  → Con người quyết định yêu cầu
-Phase B: Design     → Con người quyết định kiến trúc
-Phase C: Build      → AI thực thi (viết code theo spec đã duyệt)
-Phase D: Review     → Con người kiểm tra, phê duyệt hoặc sửa
+Phase A: Intake     → Làm rõ yêu cầu, scope, assumptions
+Phase B: Design     → Chốt hướng đi và kế hoạch
+Phase C: Build      → AI thực thi trong phạm vi đã duyệt
+Phase D: Review     → Kiểm tra kết quả và acceptance
+Phase E: Freeze     → Chốt trạng thái cuối và khóa phạm vi
 ```
 
 **Quy tắc cứng:** Không skip phase, không merge phase. Con người luôn là authority cuối cùng.
@@ -55,7 +56,7 @@ Phase D: Review     → Con người kiểm tra, phê duyệt hoặc sửa
    └── AnotherApp/                        ← Project khác
    ```
 
-2. **Cho AI đọc CVF rules** khi bắt đầu phiên làm việc — AI sẽ tự tuân thủ 4-phase, risk model, governance guards.
+2. **Cho AI đọc CVF rules** khi bắt đầu phiên làm việc — AI sẽ tự tuân thủ 5-phase controlled loop, risk model, governance guards.
 
 3. **Dùng Skill Library** (141 skills, 12 domains) — chọn skill phù hợp trước khi code.
 

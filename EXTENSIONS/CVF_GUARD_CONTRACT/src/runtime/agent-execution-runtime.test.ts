@@ -29,6 +29,13 @@ function defaultConfig(overrides?: Partial<RuntimeConfig>): RuntimeConfig {
     agentId: 'test-agent',
     channel: 'cli',
     liveExecution: false,
+    metadata: {
+      ai_commit: {
+        commitId: 'runtime-test-commit',
+        agentId: 'test-agent',
+        timestamp: Date.now(),
+      },
+    },
     ...overrides,
   };
 }
@@ -116,8 +123,8 @@ describe('AgentExecutionRuntime.preCheck', () => {
     expect(result.finalDecision).toBe('ALLOW');
   });
 
-  it('blocks AI_AGENT in DISCOVERY phase', () => {
-    const runtime = createRuntime({ phase: 'DISCOVERY', role: 'AI_AGENT' });
+  it('blocks AI_AGENT in INTAKE phase', () => {
+    const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT' });
     const intent = runtime.parseIntent('write some code');
     const result = runtime.preCheck(intent);
     expect(result.finalDecision).toBe('BLOCK');
@@ -184,12 +191,27 @@ describe('AgentExecutionRuntime.execute', () => {
   });
 
   it('blocks when guard blocks', async () => {
-    const runtime = createRuntime({ phase: 'DISCOVERY', role: 'AI_AGENT' });
+    const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT' });
     const intent = runtime.parseIntent('write code');
     const guardResult = runtime.preCheck(intent);
     const result = await runtime.execute(intent, guardResult);
     expect(result.status).toBe('BLOCKED');
     expect(result.error).toContain('Guard blocked');
+  });
+
+  it('returns NEEDS_APPROVAL for governed escalation', async () => {
+    const runtime = createRuntime({
+      phase: 'BUILD',
+      role: 'AI_AGENT',
+      riskLevel: 'R2',
+      controlMode: 'governed',
+    });
+    const intent = runtime.parseIntent('write code');
+    const guardResult = runtime.preCheck(intent);
+    const result = await runtime.execute(intent, guardResult);
+    expect(result.status).toBe('NEEDS_APPROVAL');
+    expect(result.metadata?.governance).toBeDefined();
+    expect((result.metadata?.governance as any).approvalCheckpoint.status).toBe('PENDING');
   });
 
   it('fails when provider throws', async () => {
@@ -222,6 +244,17 @@ describe('AgentExecutionRuntime.execute', () => {
     expect(result.guardDecision).toBeDefined();
     expect(result.guardDecision!.finalDecision).toBe('ALLOW');
   });
+
+  it('records governed execution lineage in metadata', async () => {
+    const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN', controlMode: 'governed' });
+    const intent = runtime.parseIntent('write code');
+    const guardResult = runtime.preCheck(intent);
+    const result = await runtime.execute(intent, guardResult);
+    const governance = result.metadata?.governance as any;
+    expect(governance.controlMode).toBe('governed');
+    expect(governance.artifacts.map((artifact: any) => artifact.type)).toEqual(['INTENT', 'EXECUTION']);
+    expect(governance.lineageStatus).toBe('READY_FOR_REVIEW');
+  });
 });
 
 // ─── postCheck ────────────────────────────────────────────────────────
@@ -236,11 +269,25 @@ describe('AgentExecutionRuntime.postCheck', () => {
   });
 
   it('invalid for blocked execution', async () => {
-    const runtime = createRuntime({ phase: 'DISCOVERY', role: 'AI_AGENT' });
+    const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT' });
     const result = await runtime.run('write code');
     const check = runtime.postCheck(result);
     expect(check.valid).toBe(false);
     expect(check.issues.length).toBeGreaterThan(0);
+  });
+
+  it('invalid for approval-pending execution', async () => {
+    const runtime = createRuntime({
+      phase: 'BUILD',
+      role: 'AI_AGENT',
+      riskLevel: 'R2',
+      controlMode: 'governed',
+    });
+    const result = await runtime.run('write code');
+    const check = runtime.postCheck(result);
+    expect(result.status).toBe('NEEDS_APPROVAL');
+    expect(check.valid).toBe(false);
+    expect(check.issues[0]).toContain('waiting for approval');
   });
 
   it('invalid for failed execution', () => {
@@ -267,7 +314,7 @@ describe('AgentExecutionRuntime.run (full pipeline)', () => {
   });
 
   it('blocks full pipeline for AI_AGENT in wrong phase', async () => {
-    const runtime = createRuntime({ phase: 'DISCOVERY', role: 'AI_AGENT', riskLevel: 'R0' });
+    const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT', riskLevel: 'R0' });
     const result = await runtime.run('write code');
     expect(result.status).toBe('BLOCKED');
   });
@@ -362,9 +409,16 @@ describe('SkillRegistry', () => {
 
   it('rejects skill in wrong phase', () => {
     const registry = createDefaultSkillRegistry();
-    const result = registry.validateSkillForContext('code_gen_component', 'DISCOVERY', 'R0');
+    const result = registry.validateSkillForContext('code_gen_component', 'INTAKE', 'R0');
     expect(result.allowed).toBe(false);
     expect(result.reason).toContain('requires phase BUILD');
+  });
+
+  it('normalizes legacy DISCOVERY alias when validating skill context', () => {
+    const registry = createDefaultSkillRegistry();
+    const result = registry.validateSkillForContext('code_gen_component', 'DISCOVERY', 'R0');
+    expect(result.allowed).toBe(false);
+    expect(result.reason).toContain('current phase is INTAKE');
   });
 
   it('rejects skill with higher risk than session', () => {

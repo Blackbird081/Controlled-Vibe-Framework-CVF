@@ -173,13 +173,32 @@ describe('ExtensionBridge', () => {
 
       const r1 = bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
       expect(r1.success).toBe(true);
-      expect(r1.step?.status).toBe('COMPLETED');
+      expect(r1.step?.status).toBe('RUNNING');
+      expect(r1.waitingForResult).toBe(true);
+      expect(r1.step?.inputReceipt?.type).toBe('INPUT');
+
+      const c1 = bridge.reportStepResult('wf-1', {
+        status: 'COMPLETED',
+        output: { result: 'ok-1' },
+        evidence: { artifact: 'guard-log-1' },
+      });
+      expect(c1.success).toBe(true);
+      expect(c1.step?.status).toBe('COMPLETED');
+      expect(c1.step?.executionReceipt?.type).toBe('EXECUTION');
 
       const r2 = bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
       expect(r2.success).toBe(true);
+      expect(r2.step?.status).toBe('RUNNING');
+
+      const c2 = bridge.reportStepResult('wf-1', {
+        status: 'COMPLETED',
+        output: { result: 'ok-2' },
+      });
+      expect(c2.success).toBe(true);
 
       const wf = bridge.getWorkflow('wf-1')!;
       expect(wf.status).toBe('COMPLETED');
+      expect(wf.metadata?.freezeReceipt).toBeDefined();
     });
 
     it('fails workflow when guard blocks', () => {
@@ -223,6 +242,7 @@ describe('ExtensionBridge', () => {
         steps: [{ extensionId: 'v1.1.1', action: 'check' }],
       });
       bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-1', { status: 'COMPLETED', output: { result: 'done' } });
       const r = bridge.advanceWorkflow('wf-1');
       expect(r.success).toBe(false);
       expect(r.error).toContain('terminal state');
@@ -244,13 +264,16 @@ describe('ExtensionBridge', () => {
         ],
       });
       bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-1', { status: 'COMPLETED', output: { result: 'check-ok' } });
       bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-1', { status: 'COMPLETED', output: { result: 'validate-ok' } });
       // Now at step 2, rollback
-      expect(bridge.rollbackWorkflow('wf-1')).toBe(true);
+      expect(bridge.rollbackWorkflow('wf-1', 'Need to re-run with narrower scope')).toBe(true);
       const wf = bridge.getWorkflow('wf-1')!;
       expect(wf.status).toBe('ROLLED_BACK');
       expect(wf.steps[0]!.status).toBe('SKIPPED');
       expect(wf.steps[1]!.status).toBe('SKIPPED');
+      expect(wf.metadata?.rollbackReason).toBe('Need to re-run with narrower scope');
     });
 
     it('cannot rollback COMPLETED workflow', () => {
@@ -259,7 +282,120 @@ describe('ExtensionBridge', () => {
         steps: [{ extensionId: 'v1.1.1', action: 'check' }],
       });
       bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-1', { status: 'COMPLETED', output: { result: 'done' } });
       expect(bridge.rollbackWorkflow('wf-1')).toBe(false);
+    });
+
+    it('fails workflow when reported step result fails', () => {
+      bridge.createWorkflow({
+        id: 'wf-1', name: 'Test',
+        steps: [{ extensionId: 'v3.0', action: 'skill_validate' }],
+      });
+
+      const started = bridge.advanceWorkflow('wf-1', mockGuardResult('ALLOW'));
+      expect(started.success).toBe(true);
+      expect(started.step?.status).toBe('RUNNING');
+
+      const failed = bridge.reportStepResult('wf-1', {
+        status: 'FAILED',
+        error: 'Extension returned invalid schema.',
+        evidence: { extensionStatus: 'invalid_schema' },
+      });
+      expect(failed.success).toBe(false);
+      expect(failed.error).toContain('invalid schema');
+      expect(failed.step?.failureReceipt?.type).toBe('FAILURE');
+      expect(bridge.getWorkflow('wf-1')!.status).toBe('FAILED');
+    });
+
+    it('executeCurrentStep auto-runs a registered handler', async () => {
+      bridge.registerActionHandler('v3.0', 'skill_validate', ({ step }) => ({
+        status: 'COMPLETED',
+        output: { stepId: step.id, validated: true },
+        evidence: { handler: 'skill_validate' },
+      }));
+
+      bridge.createWorkflow({
+        id: 'wf-2', name: 'Execute via handler',
+        steps: [{ extensionId: 'v3.0', action: 'skill_validate' }],
+      });
+
+      const result = await bridge.executeCurrentStep('wf-2', { guardResult: mockGuardResult('ALLOW') });
+      expect(result.success).toBe(true);
+      expect(result.waitingForResult).toBe(false);
+      expect(result.step?.status).toBe('COMPLETED');
+      expect(result.step?.evidence?.handler).toBe('skill_validate');
+      expect(result.step?.inputReceipt?.type).toBe('INPUT');
+      expect(result.step?.executionReceipt?.type).toBe('EXECUTION');
+      expect(bridge.getWorkflow('wf-2')!.status).toBe('COMPLETED');
+    });
+
+    it('executeWorkflow runs a full workflow when handlers are registered', async () => {
+      bridge.registerActionHandler('v1.1.1', 'guard_check', ({ step }) => ({
+        status: 'COMPLETED',
+        output: { action: step.action, ok: true },
+      }));
+      bridge.registerActionHandler('v3.0', 'skill_validate', ({ step }) => ({
+        status: 'COMPLETED',
+        output: { action: step.action, ok: true },
+      }));
+      bridge.registerActionHandler('v1.9', 'checkpoint', ({ workflow }) => ({
+        status: 'COMPLETED',
+        output: { workflowId: workflow.id, checkpointed: true },
+        evidence: { receipt: 'checkpoint-1' },
+      }));
+
+      bridge.createWorkflow({
+        id: 'wf-3', name: 'Auto execute',
+        steps: [
+          { extensionId: 'v1.1.1', action: 'guard_check' },
+          { extensionId: 'v3.0', action: 'skill_validate' },
+          { extensionId: 'v1.9', action: 'checkpoint' },
+        ],
+      });
+
+      const result = await bridge.executeWorkflow('wf-3', {
+        guardResultProvider: async () => mockGuardResult('ALLOW'),
+      });
+      expect(result.success).toBe(true);
+      expect(result.workflow?.status).toBe('COMPLETED');
+      expect(result.workflow?.steps.every((step) => step.status === 'COMPLETED')).toBe(true);
+      expect(result.workflow?.metadata?.freezeReceipt).toBeDefined();
+    });
+
+    it('executeWorkflow stops when a step requires manual result reporting', async () => {
+      bridge.createWorkflow({
+        id: 'wf-4', name: 'Manual handoff',
+        steps: [{ extensionId: 'v3.0', action: 'skill_validate' }],
+      });
+
+      const result = await bridge.executeWorkflow('wf-4', {
+        guardResultProvider: async () => mockGuardResult('ALLOW'),
+      });
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('waiting for a manual result');
+      expect(bridge.getWorkflow('wf-4')!.steps[0]!.status).toBe('RUNNING');
+    });
+
+    it('records rollback receipts when completed steps are rolled back', () => {
+      bridge.createWorkflow({
+        id: 'wf-rollback-receipt', name: 'Rollback receipts',
+        steps: [
+          { extensionId: 'v1.1.1', action: 'check' },
+          { extensionId: 'v3.0', action: 'validate' },
+          { extensionId: 'v1.9', action: 'checkpoint' },
+        ],
+      });
+
+      bridge.advanceWorkflow('wf-rollback-receipt', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-rollback-receipt', { status: 'COMPLETED', output: { result: 'done-1' } });
+      bridge.advanceWorkflow('wf-rollback-receipt', mockGuardResult('ALLOW'));
+      bridge.reportStepResult('wf-rollback-receipt', { status: 'COMPLETED', output: { result: 'done-2' } });
+
+      expect(bridge.rollbackWorkflow('wf-rollback-receipt', 'operator requested rollback')).toBe(true);
+
+      const workflow = bridge.getWorkflow('wf-rollback-receipt')!;
+      expect(workflow.steps[0]!.rollbackReceipt?.type).toBe('ROLLBACK');
+      expect(workflow.steps[1]!.rollbackReceipt?.type).toBe('ROLLBACK');
     });
 
     it('returns false for rollback of unknown workflow', () => {
@@ -278,7 +414,7 @@ describe('ExtensionBridge', () => {
   // --- E2E Integration ---
 
   describe('E2E: full cross-extension workflow', () => {
-    it('runs a 3-extension pipeline to completion', () => {
+    it('runs a 3-extension pipeline to completion', async () => {
       bridge.registerExtension({ id: 'v1.1.1', name: 'Phase Governance', version: '1.1.1', capabilities: ['guard_runtime'], dependencies: [] });
       bridge.registerExtension({ id: 'v3.0', name: 'Core Git', version: '3.0', capabilities: ['skill_lifecycle'], dependencies: [] });
       bridge.registerExtension({ id: 'v1.9', name: 'Deterministic', version: '1.9', capabilities: ['durable_execution'], dependencies: ['v3.0'] });
@@ -295,12 +431,20 @@ describe('ExtensionBridge', () => {
       for (let i = 0; i < 3; i++) {
         const r = bridge.advanceWorkflow('e2e-1', mockGuardResult('ALLOW'));
         expect(r.success).toBe(true);
+        const completion = bridge.reportStepResult('e2e-1', {
+          status: 'COMPLETED',
+          output: { step: i, ok: true },
+          evidence: { artifact: `artifact-${i}` },
+        });
+        expect(completion.success).toBe(true);
       }
 
       const completed = bridge.getWorkflow('e2e-1')!;
       expect(completed.status).toBe('COMPLETED');
       expect(completed.steps.every((s) => s.status === 'COMPLETED')).toBe(true);
       expect(completed.completedAt).toBeDefined();
+      expect(completed.executionLog?.length).toBeGreaterThanOrEqual(6);
+      expect(completed.metadata?.freezeReceipt).toBeDefined();
     });
   });
 });

@@ -27,7 +27,9 @@ export { GuardRuntimeEngine } from './guard.runtime.engine.js';
 export { PhaseGateGuard, PHASE_ROLE_MATRIX, PHASE_ORDER } from './guards/phase.gate.guard.js';
 export { RiskGateGuard, RISK_NUMERIC } from './guards/risk.gate.guard.js';
 export { AuthorityGateGuard, AUTHORITY_MATRIX } from './guards/authority.gate.guard.js';
+export { AiCommitGuard, READ_ONLY_ACTIONS, MODIFY_ACTIONS } from './guards/ai.commit.guard.js';
 export { MutationBudgetGuard, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD } from './guards/mutation.budget.guard.js';
+export { FileScopeGuard, READ_ONLY_ROLES, BUILDER_CLASS_ROLES } from './guards/file.scope.guard.js';
 export { ScopeGuard, PROTECTED_PATHS, CVF_ROOT_INDICATORS } from './guards/scope.guard.js';
 export { AuditTrailGuard } from './guards/audit.trail.guard.js';
 
@@ -41,7 +43,17 @@ export { WorkspaceIsolationGuard, DOWNSTREAM_INDICATORS, CVF_ALLOWED_ROOT_FILES 
 export { GuardRegistryGuard } from './guards/guard.registry.guard.js';
 
 // Pipeline Orchestrator (Phase A.3)
-export { PipelineOrchestrator, PHASE_SEQUENCE, type PipelineStatus, type PipelineEvent, type PipelineInstance } from './pipeline.orchestrator.js';
+export {
+  PipelineOrchestrator,
+  PHASE_SEQUENCE,
+  type PipelineStatus,
+  type PipelineEvent,
+  type PipelineInstance,
+  type PipelineArtifact,
+  type PipelineArtifactType,
+  type PipelineApprovalCheckpoint,
+  type PipelineApprovalStatus,
+} from './pipeline.orchestrator.js';
 
 // Conformance (Phase B.1)
 export { ConformanceRunner } from './conformance/conformance.runner.js';
@@ -56,14 +68,40 @@ export { ApiAdapter } from './entry/api.adapter.js';
 export { type EntryPointType, type EntryAdapter, type EntryResponse, type NormalizedRequest } from './entry/entry.types.js';
 
 // Cross-Extension Wiring (Phase B.3)
-export { ExtensionBridge, type ExtensionDescriptor, type ExtensionStatus, type CrossExtensionWorkflow, type WorkflowStep } from './wiring/extension.bridge.js';
+export {
+  ExtensionBridge,
+  type ExtensionDescriptor,
+  type ExtensionStatus,
+  type CrossExtensionWorkflow,
+  type WorkflowStep,
+  type WorkflowStepReceipt,
+  type WorkflowStepReceiptType,
+  type WorkflowStepResult,
+  type ExtensionActionHandler,
+  type ExtensionActionHandlerContext,
+} from './wiring/extension.bridge.js';
 
 // SDK (Phase C)
-export { CvfSdk, type CvfSdkConfig, type GuardPreset } from './sdk/cvf.sdk.js';
+export {
+  CvfSdk,
+  type CvfSdkConfig,
+  type GuardPreset,
+  type ReferenceGovernedLoopOptions,
+  type ReferenceGovernedLoopResult,
+} from './sdk/cvf.sdk.js';
 export { generateCIPipeline, generateGitHubActionsYaml, generateProjectTemplate } from './sdk/ci.config.js';
 
 // Observability (Phase D)
 export { MetricsCollector, type GuardMetrics, type PipelineMetrics, type ConformanceMetrics, type SystemHealthMetrics, type DashboardSnapshot, type Alert, type AlertRule } from './observability/metrics.collector.js';
 
 // Multi-Agent Runtime (Phase E)
-export { MultiAgentRuntime, type AgentDescriptor, type AgentStatus, type TenantConfig, type AgentMessage, type ConflictRecord } from './cloud/multi.agent.runtime.js';
+export {
+  MultiAgentRuntime,
+  type AgentDescriptor,
+  type AgentStatus,
+  type TenantConfig,
+  type AgentMessage,
+  type ConflictRecord,
+  type GovernedTaskAssignment,
+  type GovernedTaskDecision,
+} from './cloud/multi.agent.runtime.js';

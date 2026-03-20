@@ -39,6 +39,7 @@ export function PhaseGateModal({
         purple: 'from-purple-500 to-purple-600',
         green: 'from-green-500 to-green-600',
         orange: 'from-orange-500 to-orange-600',
+        slate: 'from-slate-600 to-slate-700',
     };
 
     const toggleItem = (id: string) => {

@@ -55,9 +55,9 @@ export interface FriendlyPhaseLabel {
 }
 
 const PHASE_LABELS: Record<string, Record<Lang, FriendlyPhaseLabel>> = {
-  DISCOVERY: {
-    vi: { label: 'Tìm hiểu yêu cầu', emoji: '🔍', description: 'Đang tìm hiểu những gì bạn cần' },
-    en: { label: 'Understanding your needs', emoji: '🔍', description: 'Learning about what you need' },
+  INTAKE: {
+    vi: { label: 'Làm rõ yêu cầu', emoji: '🧭', description: 'Đang tiếp nhận và làm rõ chính xác điều bạn cần' },
+    en: { label: 'Clarifying your request', emoji: '🧭', description: 'Clarifying exactly what you need' },
   },
   DESIGN: {
     vi: { label: 'Lên kế hoạch', emoji: '📐', description: 'Đang thiết kế giải pháp phù hợp' },
@@ -71,16 +71,22 @@ const PHASE_LABELS: Record<string, Record<Lang, FriendlyPhaseLabel>> = {
     vi: { label: 'Kiểm tra chất lượng', emoji: '✅', description: 'Đang kiểm tra để đảm bảo kết quả tốt nhất' },
     en: { label: 'Quality check', emoji: '✅', description: 'Reviewing to ensure the best results' },
   },
+  FREEZE: {
+    vi: { label: 'Chốt kết quả', emoji: '🔒', description: 'Đang khóa lại kết quả và bằng chứng để đối soát' },
+    en: { label: 'Freezing the result', emoji: '🔒', description: 'Locking the result and evidence for comparison later' },
+  },
 };
 
 export function getFriendlyPhaseLabel(phase: string, lang: Lang): FriendlyPhaseLabel {
   const normalized = phase?.toUpperCase?.().trim() || 'BUILD';
-  // Handle "Phase A/B/C/D" and "A/B/C/D" aliases
+  // Normalize compatibility aliases without teaching them as canonical phases.
   const aliasMap: Record<string, string> = {
-    'PHASE A': 'DISCOVERY', A: 'DISCOVERY',
+    DISCOVERY: 'INTAKE',
+    'PHASE A': 'INTAKE', A: 'INTAKE',
     'PHASE B': 'DESIGN', B: 'DESIGN',
     'PHASE C': 'BUILD', C: 'BUILD',
     'PHASE D': 'REVIEW', D: 'REVIEW',
+    'PHASE E': 'FREEZE', E: 'FREEZE',
   };
   const key = aliasMap[normalized] || normalized;
   return PHASE_LABELS[key]?.[lang] || PHASE_LABELS.BUILD[lang];

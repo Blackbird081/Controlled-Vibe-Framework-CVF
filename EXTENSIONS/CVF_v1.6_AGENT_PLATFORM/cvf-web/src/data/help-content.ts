@@ -80,7 +80,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 steps: [
                     '📝 Simple — Prompt nhanh, không có governance',
                     '⚠️ With Rules — Thêm stop conditions & guardrails',
-                    '🚦 CVF Full Mode — Quy trình 4-Phase đầy đủ + governance metadata',
+                    '🚦 CVF Full Mode — Quy trình 5 phase đầy đủ + governance metadata',
                     '→ Copy & paste vào AI bất kỳ HOẶC nhấn "🤖 Send to Agent" để gửi trực tiếp',
                 ],
             },
@@ -211,7 +211,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 steps: [
                     '📝 Simple — Quick prompt, no governance',
                     '⚠️ With Rules — Add stop conditions & guardrails',
-                    '🚦 CVF Full Mode — Full 4-Phase protocol + governance metadata',
+                    '🚦 CVF Full Mode — Full 5-phase protocol + governance metadata',
                     '→ Copy & paste into any AI OR click "🤖 Send to Agent" to send directly',
                 ],
             },

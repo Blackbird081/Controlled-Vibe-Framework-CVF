@@ -5,7 +5,7 @@ export const marketingTemplates: Template[] = [
         id: 'marketing_campaign_wizard',
         name: '📣 Chiến dịch Marketing',
         icon: '📣',
-        description: 'Multi-step wizard tạo Campaign Brief qua 5 bước. Goals → Audience → Channels → Content → Review',
+        description: 'Multi-step wizard tạo Campaign Brief với governed packet và live path để đối soát',
         category: 'marketing',
         difficulty: 'medium',
         fields: [], // No fields - handled by wizard component

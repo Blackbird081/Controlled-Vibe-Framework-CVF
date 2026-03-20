@@ -17,9 +17,7 @@ import {
   GuardRequestContext,
   GuardResult,
 } from '../guard.runtime.types.js';
-
-/** Actions that are read-only and exempt from ai_commit */
-const READ_ONLY_ACTIONS = ['read', 'observe', 'ask', 'clarify', 'analyze', 'explain'];
+import { READ_ONLY_ACTIONS, MODIFY_ACTIONS, hasModifyIntent, isReadOnlyAction } from './action.intent.js';
 
 export interface AiCommitMetadata {
   commitId: string;
@@ -39,14 +37,22 @@ export class AiCommitGuard implements Guard {
     const timestamp = new Date().toISOString();
 
     // Read-only actions are exempt
-    const normalizedAction = context.action.toLowerCase().trim();
-    const isReadOnly = READ_ONLY_ACTIONS.some((a) => normalizedAction.includes(a));
-    if (isReadOnly) {
+    if (isReadOnlyAction(context.action)) {
       return {
         guardId: this.id,
         decision: 'ALLOW',
         severity: 'INFO',
         reason: `Read-only action "${context.action}" is exempt from ai_commit requirement.`,
+        timestamp,
+      };
+    }
+
+    if (!hasModifyIntent(context.action)) {
+      return {
+        guardId: this.id,
+        decision: 'ALLOW',
+        severity: 'INFO',
+        reason: `Action "${context.action}" does not express modification intent; ai_commit not required.`,
         timestamp,
       };
     }
@@ -89,4 +95,4 @@ export class AiCommitGuard implements Guard {
   }
 }
 
-export { READ_ONLY_ACTIONS };
+export { READ_ONLY_ACTIONS, MODIFY_ACTIONS };

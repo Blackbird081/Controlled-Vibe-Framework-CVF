@@ -7,7 +7,7 @@
 
 // ==================== TYPES ====================
 
-export type CVFPhase = 'Discovery' | 'Design' | 'Build' | 'Review';
+export type CVFPhase = 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE';
 
 export interface ChecklistItem {
     id: string;
@@ -42,20 +42,20 @@ export interface PhaseProgress {
 
 export const CVF_PHASE_CHECKLISTS: PhaseChecklist[] = [
     {
-        phase: 'Discovery',
-        icon: '🔍',
+        phase: 'INTAKE',
+        icon: '🧭',
         color: 'blue',
-        title: 'Phase A: Discovery',
-        titleVi: 'Phase A: Khám phá',
-        description: 'Understand the problem deeply',
-        descriptionVi: 'Hiểu sâu vấn đề',
+        title: 'Phase 1: Intake',
+        titleVi: 'Phase 1: Tiếp nhận',
+        description: 'Clarify the request, scope, and constraints',
+        descriptionVi: 'Làm rõ yêu cầu, phạm vi và ràng buộc',
         items: [
             {
                 id: 'disc-1',
                 label: 'AI restated user goal in own words',
                 labelVi: 'AI đã diễn đạt lại mục tiêu bằng lời của mình',
                 required: true,
-                autoCheck: (r) => /My Understanding|Hiểu biết của tôi/i.test(r),
+                autoCheck: (r) => /My Understanding|Hiểu biết của tôi|Intake Summary|Tóm tắt Tiếp nhận/i.test(r),
             },
             {
                 id: 'disc-2',
@@ -85,15 +85,15 @@ export const CVF_PHASE_CHECKLISTS: PhaseChecklist[] = [
                 required: false,
             },
         ],
-        gateQuestion: 'Do you confirm the AI understood correctly?',
-        gateQuestionVi: 'Bạn xác nhận AI đã hiểu đúng chưa?',
+        gateQuestion: 'Is the intake clear enough to move into design?',
+        gateQuestionVi: 'Phần tiếp nhận đã đủ rõ để chuyển sang thiết kế chưa?',
     },
     {
-        phase: 'Design',
-        icon: '✏️',
+        phase: 'DESIGN',
+        icon: '📐',
         color: 'purple',
-        title: 'Phase B: Design',
-        titleVi: 'Phase B: Thiết kế',
+        title: 'Phase 2: Design',
+        titleVi: 'Phase 2: Thiết kế',
         description: 'Design the solution approach',
         descriptionVi: 'Thiết kế hướng giải pháp',
         items: [
@@ -133,15 +133,15 @@ export const CVF_PHASE_CHECKLISTS: PhaseChecklist[] = [
                 autoCheck: (r) => /Risk|Rủi ro/i.test(r),
             },
         ],
-        gateQuestion: 'Approve this design to proceed to Build?',
-        gateQuestionVi: 'Duyệt thiết kế này để tiến hành Build?',
+        gateQuestion: 'Approve this design to proceed to build?',
+        gateQuestionVi: 'Duyệt thiết kế này để tiến hành build?',
     },
     {
-        phase: 'Build',
+        phase: 'BUILD',
         icon: '🔨',
         color: 'green',
-        title: 'Phase C: Build',
-        titleVi: 'Phase C: Thực thi',
+        title: 'Phase 3: Build',
+        titleVi: 'Phase 3: Thực thi',
         description: 'Execute and build deliverables',
         descriptionVi: 'Thực thi và xây dựng',
         items: [
@@ -179,15 +179,15 @@ export const CVF_PHASE_CHECKLISTS: PhaseChecklist[] = [
                 autoCheck: (r) => /SKILL_PREFLIGHT_RECORD|Skill Preflight PASS|Preflight PASS/i.test(r),
             },
         ],
-        gateQuestion: 'Build complete. Ready for Review?',
-        gateQuestionVi: 'Build hoàn thành. Sẵn sàng Review?',
+        gateQuestion: 'Build complete. Ready for review?',
+        gateQuestionVi: 'Build hoàn thành. Sẵn sàng review?',
     },
     {
-        phase: 'Review',
+        phase: 'REVIEW',
         icon: '✅',
         color: 'orange',
-        title: 'Phase D: Review',
-        titleVi: 'Phase D: Đánh giá',
+        title: 'Phase 4: Review',
+        titleVi: 'Phase 4: Đánh giá',
         description: 'Quality check and delivery',
         descriptionVi: 'Kiểm tra chất lượng và bàn giao',
         items: [
@@ -220,18 +220,60 @@ export const CVF_PHASE_CHECKLISTS: PhaseChecklist[] = [
                 autoCheck: (r) => /FINAL CHECKPOINT|CHECKPOINT CUỐI/i.test(r),
             },
         ],
-        gateQuestion: 'Accept this delivery?',
-        gateQuestionVi: 'Chấp nhận delivery này?',
+        gateQuestion: 'Review complete. Ready to freeze the result?',
+        gateQuestionVi: 'Review đã xong. Sẵn sàng khóa kết quả chưa?',
+    },
+    {
+        phase: 'FREEZE',
+        icon: '🔒',
+        color: 'slate',
+        title: 'Phase 5: Freeze',
+        titleVi: 'Phase 5: Khóa kết quả',
+        description: 'Close out the run, lock scope, and capture evidence',
+        descriptionVi: 'Khép phiên làm việc, khóa phạm vi và lưu bằng chứng',
+        items: [
+            {
+                id: 'freeze-1',
+                label: 'Final deliverable accepted',
+                labelVi: 'Deliverable cuối đã được chấp nhận',
+                required: true,
+                autoCheck: (r) => /final acceptance|accepted|approved|đã chấp nhận|đã duyệt/i.test(r),
+            },
+            {
+                id: 'freeze-2',
+                label: 'Baseline or comparison artifact recorded',
+                labelVi: 'Đã ghi nhận baseline hoặc artifact đối soát',
+                required: true,
+                autoCheck: (r) => /baseline|delta|assessment|review artifact|đối soát|biên bản/i.test(r),
+            },
+            {
+                id: 'freeze-3',
+                label: 'Open risks or follow-ups captured',
+                labelVi: 'Đã ghi nhận rủi ro còn mở hoặc việc theo sau',
+                required: true,
+                autoCheck: (r) => /follow-up|next step|open risk|rủi ro còn mở|bước tiếp theo/i.test(r),
+            },
+            {
+                id: 'freeze-4',
+                label: 'Execution scope explicitly closed',
+                labelVi: 'Phạm vi thực thi đã được chốt rõ ràng',
+                required: false,
+                autoCheck: (r) => /scope closed|freeze|locked|khóa phạm vi|đóng phạm vi/i.test(r),
+            },
+        ],
+        gateQuestion: 'Accept this result as the frozen baseline for this run?',
+        gateQuestionVi: 'Chấp nhận kết quả này là baseline đã khóa cho lần chạy này?',
     },
 ];
 
 // ==================== PHASE DETECTION ====================
 
 export function detectCurrentPhase(response: string): CVFPhase | null {
-    if (/PHASE A|Phase A|Discovery|Khám phá/i.test(response)) return 'Discovery';
-    if (/PHASE B|Phase B|Design|Thiết kế/i.test(response)) return 'Design';
-    if (/PHASE C|Phase C|Build|Thực thi/i.test(response)) return 'Build';
-    if (/PHASE D|Phase D|Review|Đánh giá/i.test(response)) return 'Review';
+    if (/PHASE A|Phase A|INTAKE|Discovery|Khám phá|Tiếp nhận/i.test(response)) return 'INTAKE';
+    if (/PHASE B|Phase B|DESIGN|Design|Thiết kế/i.test(response)) return 'DESIGN';
+    if (/PHASE C|Phase C|BUILD|Build|Thực thi/i.test(response)) return 'BUILD';
+    if (/PHASE D|Phase D|REVIEW|Review|Đánh giá/i.test(response)) return 'REVIEW';
+    if (/PHASE E|Phase E|FREEZE|Freeze|Khóa kết quả|Chốt kết quả/i.test(response)) return 'FREEZE';
     return null;
 }
 
@@ -280,7 +322,7 @@ export function canProceedToNextPhase(
 }
 
 export function getNextPhase(currentPhase: CVFPhase): CVFPhase | null {
-    const phases: CVFPhase[] = ['Discovery', 'Design', 'Build', 'Review'];
+    const phases: CVFPhase[] = ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
     const currentIndex = phases.indexOf(currentPhase);
     if (currentIndex === -1 || currentIndex === phases.length - 1) return null;
     return phases[currentIndex + 1];

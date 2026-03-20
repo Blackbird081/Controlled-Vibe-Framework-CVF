@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+set -eu
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+python governance/compat/run_local_governance_hook_chain.py --hook pre-push

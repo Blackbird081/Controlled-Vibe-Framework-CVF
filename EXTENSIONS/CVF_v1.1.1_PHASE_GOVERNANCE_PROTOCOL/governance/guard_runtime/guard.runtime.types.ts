@@ -15,9 +15,13 @@
 // --- Phase & Risk Types ---
 
 /** v1.1.3 canonical phases + legacy aliases for backward compat */
-export type CVFPhase =
-  | 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE'
-  | 'DISCOVERY';  // legacy alias for INTAKE
+export type CanonicalCVFPhase =
+  | 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE';
+
+export type LegacyCVFPhaseAlias = 'DISCOVERY';
+
+export type CVFPhase = CanonicalCVFPhase | LegacyCVFPhaseAlias;  // legacy alias for INTAKE
+export type CVFPhaseInput = CVFPhase;
 
 export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
 

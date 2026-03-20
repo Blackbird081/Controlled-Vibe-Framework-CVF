@@ -12,6 +12,7 @@ export * from './MarketingCampaignWizard';
 export * from './OnboardingWizard';
 export * from './ProcessingScreen';
 export * from './ProductDesignWizard';
+export { default as QuickStart } from './QuickStart';
 export * from './QuickReference';
 export * from './ResearchProjectWizard';
 export * from './ResultViewer';

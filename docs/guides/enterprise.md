@@ -19,7 +19,7 @@ AI is already in your organization. Developers are using ChatGPT, Copilot, and C
 
 | Enterprise Need | CVF Solution |
 |----------------|-------------|
-| **Governance** — Who can do what | Authority Matrix: 4 roles × 4 phases |
+| **Governance** — Who can do what | Authority Matrix across canonical CVF phases |
 | **Auditability** — Trace decisions | Action Unit logs + Decision Records |
 | **Risk management** — Contain blast radius | R0–R3 risk levels with phase gates |
 | **Compliance** — Meet regulatory needs | Governance Toolkit (7 modules) |
@@ -133,7 +133,7 @@ Edit `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 4. **Train pilot team** (4-hour workshop)
 
 **Workshop agenda:**
-- Hour 1: CVF philosophy ("Outcome > Code", 4 phases)
+- Hour 1: CVF philosophy ("Outcome > Code", 5-phase controlled loop)
 - Hour 2: Hands-on: Write first INPUT_SPEC + use Phase D checklist
 - Hour 3: Risk levels, governance, roles
 - Hour 4: Web UI demo + Skill Library walkthrough

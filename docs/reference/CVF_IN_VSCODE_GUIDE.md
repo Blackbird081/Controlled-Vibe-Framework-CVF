@@ -9,7 +9,7 @@
 
 | Use case | Recommended version | Why |
 |---|---|---|
-| Coding in VS Code, no web UI | v1.1 + governance tools | Clear 4-phase execution + risk model + audit mindset |
+| Coding in VS Code, no web UI | v1.1 + governance tools | Clear 5-phase controlled loop + risk model + audit mindset |
 | Need templates and spec export | v1.5.2 (skills) + v1.1 core | Best spec coverage, still lightweight |
 | Need agent UI + multi-agent | v1.6 Agent Platform | Full app with chat, tools, workflows |
 
@@ -61,9 +61,9 @@ See: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../
 
 ## 2) CVF Core Workflow (Applies to All Versions)
 
-CVF is a **4-phase protocol**. You can run it in VS Code by enforcing these phases in your prompt.
+CVF is a **5-phase controlled execution loop**. You can run it in VS Code by enforcing these phases in your prompt.
 
-### Phase A: Discovery
+### Phase A: Intake
 - Restate the request
 - List assumptions
 - Clarify scope
@@ -83,6 +83,11 @@ CVF is a **4-phase protocol**. You can run it in VS Code by enforcing these phas
 - List deviations
 - Ask for acceptance
 
+### Phase E: Freeze
+- Record final accepted state
+- Lock scope and evidence
+- Close with explicit freeze receipt
+
 ---
 
 ## 3) VS Code Agent Setup (Prompt Template)
@@ -91,13 +96,13 @@ Use this in VS Code with your AI assistant:
 
 ```text
 You are operating under CVF (Controlled Vibe Framework).
-Mode: FULL (4-phase protocol).
+Mode: FULL (5-phase controlled loop).
 Rules:
-- Follow Phase A -> B -> C -> D in order.
+- Follow Phase A -> B -> C -> D -> E in order.
 - Stop and ask for confirmation before moving from A to B and B to C.
 - No coding in Phase A or B.
 - If required inputs are missing, stop and ask for clarification.
-- Provide deliverables in Phase C and self-review in Phase D.
+- Provide deliverables in Phase C, self-review in Phase D, and freeze record in Phase E.
 
 Start with Phase A now.
 ```
@@ -112,7 +117,7 @@ Start with Phase A now.
 **Profile: Full Mode (default for complex work)**
 ```text
 CVF MODE: FULL
-PHASE FLOW: A -> B -> C -> D
+PHASE FLOW: A -> B -> C -> D -> E
 STOP CONDITIONS:
 - Missing required inputs
 - Unclear acceptance criteria
@@ -167,6 +172,9 @@ Agent writes the code and explains how to run it.
 ### Step 4: Phase D review
 Agent checks success criteria and asks for acceptance.
 
+### Step 5: Phase E freeze
+Agent records the accepted result, scope boundary, and closure notes.
+
 ---
 
 ## 4.1) End-to-End Workflow (Practical)
@@ -176,6 +184,7 @@ Agent checks success criteria and asks for acceptance.
 2. **Phase B**: Design plan + decisions + checklist
 3. **Phase C**: Implement code + tests
 4. **Phase D**: Review, list risks, ask for acceptance
+5. **Phase E**: Freeze the accepted result and capture closure evidence
 
 **Tip:** Use the same format for every task. The consistency is the governance.
 
@@ -222,7 +231,7 @@ Guardrails:
 |---|---|---|
 | Simple | Quick tasks | Minimal governance, fast output |
 | Governance | Most work | Enforces stop conditions + guardrails |
-| Full | Complex or risky work | 4-phase protocol with checkpoints |
+| Full | Complex or risky work | 5-phase controlled loop with checkpoints |
 
 ---
 
@@ -230,7 +239,7 @@ Guardrails:
 
 ### v1.0 / v1.1 (Core + Execution)
 - Use docs in [v1.0/](../v1.0/) and [v1.1/](../v1.1/)
-- Always run 4-phase protocol
+- Always run the 5-phase controlled loop
 - Use checklists under v1.0/governance or v1.1/execution
 
 ### v1.5.2 (Skill Library)
@@ -247,7 +256,7 @@ Guardrails:
 
 ```text
 CVF MODE: Governance
-Phase: A (Discovery)
+Phase: A (Intake)
 Task:
 - [Describe the goal]
 Constraints:
@@ -634,7 +643,7 @@ ALL changes are LOCKED.
 
 | Nhu cau | Version goi y | Ly do |
 |---|---|---|
-| Lam viec trong VS Code, khong can UI | v1.1 + governance tools | 4-phase ro rang + risk model |
+| Lam viec trong VS Code, khong can UI | v1.1 + governance tools | 5-phase controlled loop + risk model |
 | Can templates va spec export | v1.5.2 (skills) + v1.1 core | Day du spec, giam moi phai tu viet |
 | Can UI + multi-agent | v1.6 Agent Platform | UI day du, tools va workflow |
 
@@ -684,9 +693,9 @@ Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../
 
 ---
 
-## 2) Quy trinh core (4 phase)
+## 2) Quy trinh core (5 phase)
 
-### Phase A: Kham pha
+### Phase A: Intake
 - Dien giai lai yeu cau
 - Liet ke gia dinh
 - Dinh nghia scope
@@ -706,19 +715,24 @@ Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../
 - Neu sai lech, neu ro
 - Xin acceptance
 
+### Phase E: Freeze
+- Chot ket qua da duoc chap nhan
+- Khoa scope va bang chung
+- Dong task voi freeze receipt ro rang
+
 ---
 
 ## 3) Cau hinh agent (Prompt mau)
 
 ```text
 Ban dang van hanh theo CVF (Controlled Vibe Framework).
-Mode: FULL (4-phase).
+Mode: FULL (5-phase controlled loop).
 Rules:
-- Follow Phase A -> B -> C -> D theo thu tu.
+- Follow Phase A -> B -> C -> D -> E theo thu tu.
 - Dung lai de xin xac nhan truoc khi tu A->B va B->C.
 - Khong viet code o Phase A/B.
 - Neu thieu input bat buoc, dung lai va hoi.
-- Phase C tao deliverables, Phase D tu review.
+- Phase C tao deliverables, Phase D tu review, Phase E chot va khoa ket qua.
 
 Bat dau Phase A ngay.
 ```
@@ -826,7 +840,7 @@ Guardrails:
 |---|---|---|
 | Simple | Viec nho, nhanh | Governance toi thieu |
 | Governance | Phan lon cong viec | Stop conditions + guardrails |
-| Full | Viec phuc tap/rui ro | 4-phase + checkpoints |
+| Full | Viec phuc tap/rui ro | 5-phase + checkpoints |
 
 ---
 
@@ -834,7 +848,7 @@ Guardrails:
 
 ### v1.0 / v1.1 (Core + Execution)
 - Dung docs: [v1.0/](../v1.0/) va [v1.1/](../v1.1/)
-- Luon chay 4-phase
+- Luon chay 5-phase controlled loop
 - Dung checklist trong v1.0/governance hoac v1.1/execution
 
 ### v1.5.2 (Skill Library)
@@ -850,7 +864,7 @@ Guardrails:
 
 ```text
 CVF MODE: Governance
-Phase: A (Discovery)
+Phase: A (Intake)
 Task:
 - [Mo ta muc tieu]
 Constraints:

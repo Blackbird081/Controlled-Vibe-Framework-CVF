@@ -18,6 +18,8 @@ export class CliAdapter implements EntryAdapter {
     const role = this.parseRole(raw['role']);
     const agentId = raw['agentId'] ? String(raw['agentId']) : undefined;
     const files = this.parseFiles(raw['files'] ?? raw['targetFiles']);
+    const fileScope = this.parseFiles(raw['fileScope']);
+    const rawMetadata = this.parseMetadata(raw['metadata']);
 
     return {
       requestId: String(raw['requestId'] ?? `cli-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`),
@@ -27,11 +29,17 @@ export class CliAdapter implements EntryAdapter {
       agentId,
       action,
       targetFiles: files,
+      fileScope,
       mutationCount: raw['mutationCount'] != null ? Number(raw['mutationCount']) : undefined,
       mutationBudget: raw['mutationBudget'] != null ? Number(raw['mutationBudget']) : undefined,
       traceHash: raw['traceHash'] ? String(raw['traceHash']) : undefined,
       scope: raw['scope'] ? String(raw['scope']) : undefined,
-      metadata: { entryPoint: 'CLI', originalArgs: raw },
+      metadata: {
+        ...rawMetadata,
+        ...(raw['ai_commit'] ? { ai_commit: raw['ai_commit'] } : {}),
+        entryPoint: 'CLI',
+        originalArgs: raw,
+      },
     };
   }
 
@@ -61,7 +69,7 @@ export class CliAdapter implements EntryAdapter {
 
   private parsePhase(value: unknown): CVFPhase {
     const str = String(value ?? 'BUILD').toUpperCase();
-    const valid: CVFPhase[] = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
+    const valid: CVFPhase[] = ['INTAKE', 'DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
     return valid.includes(str as CVFPhase) ? (str as CVFPhase) : 'BUILD';
   }
 
@@ -73,7 +81,7 @@ export class CliAdapter implements EntryAdapter {
 
   private parseRole(value: unknown): CVFRole {
     const str = String(value ?? 'AI_AGENT').toUpperCase();
-    const valid: CVFRole[] = ['HUMAN', 'AI_AGENT', 'REVIEWER', 'OPERATOR'];
+    const valid: CVFRole[] = ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'AI_AGENT', 'OPERATOR'];
     return valid.includes(str as CVFRole) ? (str as CVFRole) : 'AI_AGENT';
   }
 
@@ -82,5 +90,11 @@ export class CliAdapter implements EntryAdapter {
     if (Array.isArray(value)) return value.map(String);
     if (typeof value === 'string') return value.split(',').map((f) => f.trim());
     return undefined;
+  }
+
+  private parseMetadata(value: unknown): Record<string, unknown> {
+    return value && typeof value === 'object' && !Array.isArray(value)
+      ? { ...(value as Record<string, unknown>) }
+      : {};
   }
 }

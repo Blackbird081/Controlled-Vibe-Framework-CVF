@@ -122,7 +122,7 @@ function OverviewTab({ lang }: { lang: Lang }) {
                         ┌─────────────┼──────────────┐
                         ▼             ▼              ▼
                    📝 Simple    ⚠️ Rules      🚦 CVF Full
-                   (no rules)  (+guardrails)  (4-Phase +
+                   (no rules)  (+guardrails)  (5-phase +
                                               governance)
                                                   │
                                           ┌───────▼───────┐
@@ -441,7 +441,7 @@ function SpecExportTab({ lang }: { lang: Lang }) {
                     rows={[
                         ['📝 Simple', '~15%', isVi ? 'Task đơn giản, không cần governance' : 'Simple task, no governance needed', isVi ? 'Prompt ngắn gọn' : 'Concise prompt'],
                         ['⚠️ With Rules', '~35%', isVi ? 'Cần guardrails, stop conditions' : 'Need guardrails, stop conditions', isVi ? 'Prompt + rules' : 'Prompt + rules'],
-                        ['🚦 CVF Full', '~80%', isVi ? 'Dự án quan trọng, cần 4-Phase' : 'Important project, need 4-Phase', isVi ? '4-Phase + governance metadata' : '4-Phase + governance metadata'],
+                        ['🚦 CVF Full', '~80%', isVi ? 'Dự án quan trọng, cần 5 phase có kiểm soát' : 'Important project, need governed 5-phase flow', isVi ? '5-phase + governance metadata' : '5-phase + governance metadata'],
                     ]}
                 />
             </SectionCard>
@@ -526,7 +526,7 @@ Database: PostgreSQL`}
 
 I'll implement the JWT authentication API following CVF.
 
-## Phase A: Discovery
+## Phase 1: Intake
 - Understanding: REST API for user auth with JWT...
 - Scope: 4 endpoints, PostgreSQL, stateless tokens
 - Constraints: Must use bcrypt for passwords`}

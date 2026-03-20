@@ -9,6 +9,7 @@ import { useSettings } from '@/components/Settings';
 import {
     Sidebar,
     OnboardingWizard,
+    QuickStart,
     QuickReference,
     TourGuide,
     UserContextForm,
@@ -21,6 +22,11 @@ import {
 } from '@/components';
 import CompactHeader from '@/components/CompactHeader';
 import { useLanguage } from '@/lib/i18n';
+import {
+    buildGovernedStarterHandoff,
+    saveGovernedStarterHandoff,
+    type QuickStartResult,
+} from '@/lib/governed-starter-path';
 
 /**
  * Inner layout component — uses useSearchParams which requires Suspense.
@@ -29,7 +35,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
 
     const { userRole, userName, permissions, handleLogout } = useAuth();
@@ -90,11 +96,35 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const handleQuickStartComplete = (result: QuickStartResult) => {
+        saveGovernedStarterHandoff(buildGovernedStarterHandoff(result));
+        modals.closeModal('quickStart');
+
+        if (pathname !== '/') {
+            router.push('/');
+            return;
+        }
+
+        window.dispatchEvent(new CustomEvent('cvf:starterHandoffReady'));
+    };
+
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {/* Onboarding */}
             {modals.showOnboarding && (
                 <OnboardingWizard onComplete={modals.handleOnboardingComplete} />
+            )}
+
+            {modals.showQuickStart && (
+                <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-3 md:p-4">
+                    <div className="w-full md:max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-gray-900 safe-area-pt safe-area-pb">
+                        <QuickStart
+                            language={language}
+                            onComplete={handleQuickStartComplete}
+                            onSkip={() => modals.closeModal('quickStart')}
+                        />
+                    </div>
+                </div>
             )}
 
             {/* Compact Header */}

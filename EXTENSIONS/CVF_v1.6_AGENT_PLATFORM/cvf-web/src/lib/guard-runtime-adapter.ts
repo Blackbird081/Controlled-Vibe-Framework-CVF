@@ -45,10 +45,12 @@ export {
   RiskGateGuard,
   RISK_DESCRIPTIONS,
   AuthorityGateGuard,
+  AiCommitGuard,
   RESTRICTED_ACTIONS,
   MutationBudgetGuard,
   DEFAULT_MUTATION_BUDGETS,
   ESCALATION_THRESHOLD,
+  FileScopeGuard,
   ScopeGuard,
   PROTECTED_PATHS,
   CVF_ROOT_INDICATORS,
@@ -92,12 +94,19 @@ export interface WebGuardInput {
   templateCategory?: string;
   intent?: string;
   mutationCount?: number;
+  fileScope?: string[];
+  aiCommit?: {
+    commitId: string;
+    agentId: string;
+    timestamp: number;
+    description?: string;
+  };
 }
 
 /**
  * Converts loose v1.6 web request fields into a typed GuardRequestContext.
  * Provides sensible defaults for non-coder usage:
- *   - Default phase: BUILD (non-coders are always "building" via templates)
+ *   - Default phase: INTAKE (safe front-door for loosely specified requests)
  *   - Default risk: R0 (safe by default)
  *   - Default role: HUMAN (non-coder = human user)
  *   - Channel: 'web' (hardcoded for Web UI context)
@@ -111,21 +120,24 @@ export function buildWebGuardContext(input: WebGuardInput): GuardRequestContext 
     agentId: input.agentId,
     action: input.action || input.intent || 'execute_template',
     mutationCount: input.mutationCount,
+    fileScope: input.fileScope,
     channel: 'web',
     metadata: {
       userRole: input.userRole,
+      ...(input.aiCommit ? { ai_commit: input.aiCommit } : {}),
     },
   };
 }
 
 function normalizePhase(raw?: string): CVFPhase {
-  if (!raw) return 'BUILD';
+  if (!raw) return 'INTAKE';
   const upper = raw.trim().toUpperCase();
-  if (upper === 'DISCOVERY' || upper === 'PHASE A' || upper === 'A') return 'DISCOVERY';
+  if (upper === 'INTAKE' || upper === 'DISCOVERY' || upper === 'PHASE A' || upper === 'A') return 'INTAKE';
   if (upper === 'DESIGN' || upper === 'PHASE B' || upper === 'B') return 'DESIGN';
   if (upper === 'BUILD' || upper === 'PHASE C' || upper === 'C') return 'BUILD';
   if (upper === 'REVIEW' || upper === 'PHASE D' || upper === 'D') return 'REVIEW';
-  return 'BUILD';
+  if (upper === 'FREEZE' || upper === 'PHASE E' || upper === 'E') return 'FREEZE';
+  return 'INTAKE';
 }
 
 function normalizeRiskLevel(raw?: string): CVFRiskLevel {
@@ -141,8 +153,12 @@ function normalizeRiskLevel(raw?: string): CVFRiskLevel {
 function normalizeRole(raw?: string): CVFRole {
   if (!raw) return 'HUMAN';
   const upper = raw.trim().toUpperCase();
+  if (upper === 'OBSERVER') return 'OBSERVER';
+  if (upper === 'ANALYST') return 'ANALYST';
+  if (upper === 'BUILDER') return 'BUILDER';
   if (upper === 'AI_AGENT' || upper === 'AI' || upper === 'AGENT') return 'AI_AGENT';
   if (upper === 'REVIEWER') return 'REVIEWER';
+  if (upper === 'GOVERNOR') return 'GOVERNOR';
   if (upper === 'OPERATOR') return 'OPERATOR';
   return 'HUMAN';
 }

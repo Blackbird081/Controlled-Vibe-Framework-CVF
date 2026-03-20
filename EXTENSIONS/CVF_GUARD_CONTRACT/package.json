@@ -1,7 +1,7 @@
 {
   "name": "cvf-guard-contract",
   "version": "1.0.0",
-  "description": "CVF Guard Contract — Unified guard types, engine, and 6 core guards for cross-channel governance enforcement",
+  "description": "CVF Guard Contract — Unified guard types, hardened default engine, and governed runtime helpers for cross-channel governance enforcement",
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",

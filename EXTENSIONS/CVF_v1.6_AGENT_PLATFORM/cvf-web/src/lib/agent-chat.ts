@@ -24,10 +24,11 @@ export interface ChatMessage {
 }
 
 export const PHASE_CONFIG = {
-    Discovery: { color: 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300', icon: '🔍', label: 'Phase A' },
-    Design: { color: 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300', icon: '✏️', label: 'Phase B' },
-    Build: { color: 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300', icon: '🔨', label: 'Phase C' },
-    Review: { color: 'bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300', icon: '✅', label: 'Phase D' },
+    INTAKE: { color: 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300', icon: '🧭', label: 'Intake' },
+    DESIGN: { color: 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300', icon: '📐', label: 'Design' },
+    BUILD: { color: 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300', icon: '🔨', label: 'Build' },
+    REVIEW: { color: 'bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300', icon: '✅', label: 'Review' },
+    FREEZE: { color: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300', icon: '🔒', label: 'Freeze' },
     Processing: { color: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300', icon: '⚙️', label: '' },
 };
 
@@ -60,13 +61,15 @@ export function detectSpecMode(content: string): CVFMode {
     // Full mode detection — flexible matching (case-insensitive, partial matches)
     if (
         content.includes('CVF FULL MODE PROTOCOL') ||
-        content.includes('MANDATORY 4-PHASE PROCESS') ||
-        content.includes('QUY TRÌNH 4-PHASE BẮT BUỘC') ||
-        content.includes('Full Mode (4-Phase)') ||
+        content.includes('MANDATORY 5-PHASE PROCESS') ||
+        content.includes('QUY TRÌNH 5-PHASE BẮT BUỘC') ||
+        content.includes('Full Mode (5-Phase)') ||
         lower.includes('cvf full mode') ||
         lower.includes('full cvf mode') ||
-        lower.includes('4-phase process') ||
+        lower.includes('5-phase process') ||
+        lower.includes('intake -> design -> build -> review -> freeze') ||
         lower.includes('4 phase bắt buộc') ||
+        lower.includes('5 phase bắt buộc') ||
         /full\s*mode/i.test(content)
     ) {
         return 'full';

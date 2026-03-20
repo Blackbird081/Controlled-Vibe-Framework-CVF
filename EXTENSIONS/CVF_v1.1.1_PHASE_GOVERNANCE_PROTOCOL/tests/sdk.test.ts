@@ -6,12 +6,17 @@
 
 import { describe, it, expect } from 'vitest';
 import { CvfSdk } from '../governance/guard_runtime/sdk/cvf.sdk.js';
-import type { GuardRequestContext } from '../governance/guard_runtime/guard.runtime.types.js';
 import {
   generateCIPipeline,
   generateGitHubActionsYaml,
   generateProjectTemplate,
 } from '../governance/guard_runtime/sdk/ci.config.js';
+
+const VALID_AI_COMMIT = {
+  commitId: 'sdk-commit-001',
+  agentId: 'sdk-agent',
+  timestamp: Date.now(),
+};
 
 // --- CvfSdk ---
 
@@ -19,13 +24,13 @@ describe('CvfSdk', () => {
   describe('factory', () => {
     it('creates with default full config', () => {
       const cvf = CvfSdk.create();
-      expect(cvf.getGuardCount()).toBe(13);
+      expect(cvf.getGuardCount()).toBe(15);
       expect(cvf.getVersion()).toBe('4.0.0-runtime');
     });
 
-    it('creates with core preset (6 guards)', () => {
+    it('creates with core preset (8 guards)', () => {
       const cvf = CvfSdk.create({ guards: 'core' });
-      expect(cvf.getGuardCount()).toBe(6);
+      expect(cvf.getGuardCount()).toBe(8);
     });
 
     it('creates with minimal preset (0 guards)', () => {
@@ -73,6 +78,7 @@ describe('CvfSdk', () => {
       const result = cvf.evaluate({
         requestId: 'sdk-1', phase: 'BUILD', riskLevel: 'R0',
         role: 'HUMAN', action: 'write_code',
+        metadata: { ai_commit: VALID_AI_COMMIT },
       });
       expect(result.finalDecision).toBe('ALLOW');
     });
@@ -101,7 +107,7 @@ describe('CvfSdk', () => {
       const cvf = CvfSdk.create();
       const resp = cvf.processEntry('CLI', {
         requestId: 'sdk-cli-1', action: 'write_code', phase: 'BUILD',
-        risk: 'R0', role: 'HUMAN',
+        risk: 'R0', role: 'HUMAN', ai_commit: VALID_AI_COMMIT,
       });
       expect(resp.allowed).toBe(true);
     });
@@ -110,7 +116,7 @@ describe('CvfSdk', () => {
       const cvf = CvfSdk.create();
       const resp = cvf.processEntry('MCP', {
         id: 'sdk-mcp-1', tool_name: 'write_file',
-        arguments: { agentId: 'claude' },
+        arguments: { agentId: 'claude', ai_commit: VALID_AI_COMMIT },
       });
       expect(resp.entryPoint).toBe('MCP');
     });
@@ -152,6 +158,235 @@ describe('CvfSdk', () => {
       });
       expect(p.id).toBe('p1');
       expect(p.status).toBe('CREATED');
+    });
+  });
+
+  describe('extension bridge defaults', () => {
+    it('bootstraps default bridge extensions', () => {
+      const cvf = CvfSdk.create();
+      expect(cvf.bridge?.getExtension('v1.1.1')).toBeDefined();
+      expect(cvf.bridge?.getExtension('v3.0')).toBeDefined();
+      expect(cvf.bridge?.getExtension('v1.9')).toBeDefined();
+    });
+
+    it('executes a governed workflow through default runtime bindings', async () => {
+      const cvf = CvfSdk.create();
+      const workflow = cvf.bridge!.createWorkflow({
+        id: 'sdk-wf-runtime',
+        name: 'SDK runtime bridge',
+        steps: [
+          {
+            extensionId: 'v1.1.1',
+            action: 'guard_check',
+            input: {
+              requestId: 'sdk-wf-guard',
+              phase: 'BUILD',
+              riskLevel: 'R1',
+              role: 'HUMAN',
+              action: 'write_code',
+              ai_commit: VALID_AI_COMMIT,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_create',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              intent: 'Close workflow realism gap',
+              riskLevel: 'R1',
+              role: 'HUMAN',
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              type: 'PLAN',
+              details: { spec: 'approved plan' },
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              advanceCount: 3,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              type: 'EXECUTION',
+              details: { artifact: 'build-log' },
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              advanceCount: 1,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              type: 'REVIEW',
+              details: { accepted: true },
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              advanceCount: 1,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              type: 'FREEZE',
+              details: { receipt: 'freeze-1' },
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_complete',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+            },
+          },
+          {
+            extensionId: 'v3.0',
+            action: 'skill_validate',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+              skill: 'workflow-remediation',
+            },
+          },
+          {
+            extensionId: 'v1.9',
+            action: 'checkpoint',
+            input: {
+              pipelineId: 'sdk-wf-runtime-pipeline',
+            },
+          },
+        ],
+      });
+
+      const result = await cvf.bridge!.executeWorkflow('sdk-wf-runtime');
+      expect(result.success).toBe(true);
+      expect(result.workflow?.status).toBe('COMPLETED');
+      expect(result.workflow?.steps.every((step) => step.status === 'COMPLETED')).toBe(true);
+      expect(result.workflow?.steps[0]?.guardResult?.finalDecision).toBe('ALLOW');
+      expect(result.workflow?.steps[3]?.output?.status).toBe('BUILD');
+      expect(result.workflow?.steps[7]?.output?.status).toBe('FREEZE');
+      expect(result.workflow?.steps[11]?.output?.checkpointId).toBeDefined();
+      expect(result.workflow?.steps[11]?.evidence?.runtime).toBe('deterministic_reference');
+      expect(workflow.metadata?.linkedPipelineId).toBe('sdk-wf-runtime-pipeline');
+    });
+
+    it('supports governed approval checkpoints through default bridge handlers', async () => {
+      const cvf = CvfSdk.create();
+      cvf.bridge!.createWorkflow({
+        id: 'sdk-wf-approval',
+        name: 'SDK governed approval',
+        steps: [
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_create',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              intent: 'High-risk governed build',
+              riskLevel: 'R2',
+              role: 'HUMAN',
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_record_artifact',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              type: 'PLAN',
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              advanceCount: 2,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              advanceCount: 1,
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_approve_checkpoint',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              reviewerId: 'governor-1',
+              reviewerRole: 'GOVERNOR',
+              comment: 'Approved for BUILD',
+            },
+          },
+          {
+            extensionId: 'v1.1.1',
+            action: 'pipeline_advance',
+            input: {
+              pipelineId: 'sdk-wf-approval-pipeline',
+              advanceCount: 1,
+            },
+          },
+        ],
+      });
+
+      const result = await cvf.bridge!.executeWorkflow('sdk-wf-approval');
+      expect(result.success).toBe(true);
+      expect(result.workflow?.steps[3]?.status).toBe('SKIPPED');
+      expect(result.workflow?.steps[3]?.output?.pendingApprovalId).toBeDefined();
+      expect(result.workflow?.steps[4]?.output?.approvalStatus).toBe('APPROVED');
+      expect(result.workflow?.steps[5]?.output?.status).toBe('BUILD');
+    });
+
+    it('runs the reference governed loop helper end-to-end', async () => {
+      const cvf = CvfSdk.create();
+
+      const result = await cvf.runReferenceGovernedLoop({
+        workflowId: 'sdk-reference-loop',
+        pipelineId: 'sdk-reference-pipeline',
+        intent: 'Deliver a governed reference execution path',
+        riskLevel: 'R2',
+        requireApproval: true,
+        fileScope: ['src/features/reference-loop.ts'],
+        targetFiles: ['src/features/reference-loop.ts'],
+        reviewerId: 'governor-42',
+        reviewerComment: 'Approved via reference helper.',
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.workflowStatus).toBe('COMPLETED');
+      expect(result.pipelineStatus).toBe('COMPLETED');
+      expect(result.guardDecision).toBe('ALLOW');
+      expect(result.approvalCheckpointId).toBeDefined();
+      expect(result.checkpointId).toBeDefined();
+      expect(result.freezeReceipt).toBeDefined();
+      expect(result.workflow?.steps.every((step) => step.status === 'COMPLETED' || step.status === 'SKIPPED')).toBe(true);
+      expect(result.pipeline?.artifacts.some((artifact) => artifact.type === 'FREEZE')).toBe(true);
     });
   });
 

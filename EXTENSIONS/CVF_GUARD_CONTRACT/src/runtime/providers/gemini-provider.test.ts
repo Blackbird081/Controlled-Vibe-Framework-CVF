@@ -43,11 +43,11 @@ describe('GeminiProvider constructor', () => {
 // ─── Guard blocks before Gemini call (no API needed) ──────────────────
 
 describe('GeminiProvider with guard blocking (no API call)', () => {
-  it('blocks AI_AGENT in DISCOVERY — Gemini never called', async () => {
+  it('blocks AI_AGENT in INTAKE — Gemini never called', async () => {
     const engine = createGuardEngine();
     const provider = new GeminiProvider({ apiKey: API_KEY });
     const runtime = new AgentExecutionRuntime(engine, provider, {
-      phase: 'DISCOVERY',
+      phase: 'INTAKE',
       riskLevel: 'R0',
       role: 'AI_AGENT',
       agentId: 'ai-test',

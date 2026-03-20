@@ -5,7 +5,7 @@
 **Time:** 30 minutes  
 **Level:** Beginner  
 **What you'll build:** A CLI bookmark manager using Python  
-**What you'll learn:** The complete CVF 4-phase workflow
+**What you'll learn:** The complete CVF controlled execution loop (`INTAKE → DESIGN → BUILD → REVIEW → FREEZE`)
 
 ---
 
@@ -50,7 +50,7 @@ bookmark-manager/
 
 ---
 
-## Step 2: Phase A — Discovery
+## Step 2: Phase A — Intake
 
 Open `specs/INPUT_SPEC.md` and write what you want:
 
@@ -319,14 +319,15 @@ python bookmarks.py
 
 ## Step 7: Reflect
 
-Congratulations! You've completed a full CVF cycle:
+Congratulations! You've completed a full CVF controlled execution loop:
 
 | Phase | What You Did | Time |
 |-------|-------------|------|
-| A — Discovery | Wrote INPUT_SPEC + OUTPUT_SPEC | 5 min |
+| A — Intake | Wrote INPUT_SPEC + OUTPUT_SPEC | 5 min |
 | B — Design | Sketched architecture | 5 min |
 | C — Build | Gave specs to AI, saved trace | 5 min |
 | D — Review | Tested against acceptance criteria | 10 min |
+| E — Freeze | Locked the accepted result and closure evidence | ~1 min |
 | **Total** | | **~25 min** |
 
 **Without CVF**, you might have asked AI: *"Build me a bookmark manager in Python"* and spent 45 minutes going back and forth:
@@ -345,6 +346,7 @@ Congratulations! You've completed a full CVF cycle:
 2. **Decisions log exists for "future you"** — When you come back in 3 months, you'll know WHY you chose SQLite
 3. **Traces make AI work auditable** — You know what AI did and can reproduce it
 4. **Phase D catches problems** — A checklist is faster than "does it work?"
+5. **Phase E closes the loop** — A freeze receipt tells future you what was accepted and where scope stopped
 
 ---
 
@@ -352,7 +354,8 @@ Congratulations! You've completed a full CVF cycle:
 
 | I want to... | Go to... |
 |-------------|---------|
-| Learn about the 4 phases in depth | [4-Phase Process](../concepts/4-phase-process.md) |
+| Learn the canonical controlled loop in depth | [Controlled Execution Loop](../concepts/controlled-execution-loop.md) |
+| Understand the historical 4-phase foundation | [4-Phase Process](../concepts/4-phase-process.md) |
 | Set up the Web UI | [Web UI Tutorial](web-ui-setup.md) |
 | Use pre-built skill templates | [Custom Skills Tutorial](custom-skills.md) |
 | Work with a team | [Team Setup Guide](../guides/team-setup.md) |

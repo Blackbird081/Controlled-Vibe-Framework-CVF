@@ -7,12 +7,12 @@ describe('detectSpecMode', () => {
     });
 
     it('detects full mode from explicit markers', () => {
-        const content = 'CVF FULL MODE PROTOCOL\nMANDATORY 4-PHASE PROCESS';
+        const content = 'CVF FULL MODE PROTOCOL\nMANDATORY 5-PHASE PROCESS';
         expect(detectSpecMode(content)).toBe('full');
     });
 
     it('detects full mode from flexible phrasing', () => {
-        const content = 'This requires full mode and a 4-phase process.';
+        const content = 'This requires full mode and a 5-phase process.';
         expect(detectSpecMode(content)).toBe('full');
     });
 

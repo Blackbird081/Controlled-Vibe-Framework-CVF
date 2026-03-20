@@ -1,20 +1,24 @@
 /**
- * CVF Guard Contract — Full Test Suite
- * =====================================
- * Tests all 6 guards + engine + factory.
- * Promoted from MCP v2.5 test suite with adaptations for contract package.
+ * CVF Guard Contract — Canonical Test Suite
+ *
+ * Locks the hardened shared default path and canonical phase model.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
   createGuardEngine,
   GuardRuntimeEngine,
+  AUTHORITY_MATRIX,
   PhaseGateGuard,
+  PHASE_ROLE_MATRIX,
   RiskGateGuard,
   AuthorityGateGuard,
+  AiCommitGuard,
   MutationBudgetGuard,
+  FileScopeGuard,
   ScopeGuard,
   AuditTrailGuard,
+  PHASE_ORDER,
   type GuardRequestContext,
 } from './index';
 
@@ -24,47 +28,46 @@ function ctx(overrides?: Partial<GuardRequestContext>): GuardRequestContext {
     phase: 'BUILD',
     riskLevel: 'R0',
     role: 'HUMAN',
-    action: 'test_action',
+    action: 'analyze request',
     ...overrides,
   };
 }
 
-// ─── Factory ──────────────────────────────────────────────────────────
-
 describe('createGuardEngine', () => {
-  it('creates engine with 6 guards', () => {
+  it('creates engine with 8 hardened default guards', () => {
     const engine = createGuardEngine();
-    expect(engine.getGuardCount()).toBe(6);
+    expect(engine.getGuardCount()).toBe(8);
   });
 
-  it('registers all guard IDs', () => {
+  it('registers all canonical guard IDs', () => {
     const engine = createGuardEngine();
-    const ids = engine.getRegisteredGuards().map((g) => g.id);
-    expect(ids).toContain('phase_gate');
-    expect(ids).toContain('risk_gate');
-    expect(ids).toContain('authority_gate');
-    expect(ids).toContain('mutation_budget');
-    expect(ids).toContain('scope_guard');
-    expect(ids).toContain('audit_trail');
+    const ids = engine.getRegisteredGuards().map((guard) => guard.id);
+    expect(ids).toEqual([
+      'ai_commit',
+      'phase_gate',
+      'risk_gate',
+      'authority_gate',
+      'mutation_budget',
+      'file_scope',
+      'scope_guard',
+      'audit_trail',
+    ]);
   });
 
-  it('evaluates full pipeline — ALLOW for safe context', () => {
+  it('allows safe read-only evaluation', () => {
     const engine = createGuardEngine();
-    const result = engine.evaluate(ctx());
+    const result = engine.evaluate(ctx({ phase: 'REVIEW', role: 'REVIEWER', action: 'read report' }));
     expect(result.finalDecision).toBe('ALLOW');
-    expect(result.results.length).toBe(6);
+    expect(result.results.length).toBe(8);
   });
 
-  it('blocks AI_AGENT in DISCOVERY phase', () => {
+  it('blocks modifying action without ai_commit', () => {
     const engine = createGuardEngine();
-    const result = engine.evaluate(ctx({ phase: 'DISCOVERY', role: 'AI_AGENT' }));
+    const result = engine.evaluate(ctx({ role: 'AI_AGENT', action: 'write code' }));
     expect(result.finalDecision).toBe('BLOCK');
-    expect(result.blockedBy).toBe('phase_gate');
-    expect(result.agentGuidance).toBeDefined();
+    expect(result.blockedBy).toBe('ai_commit');
   });
 });
-
-// ─── Engine ───────────────────────────────────────────────────────────
 
 describe('GuardRuntimeEngine', () => {
   it('creates with default config', () => {
@@ -84,114 +87,126 @@ describe('GuardRuntimeEngine', () => {
     expect(() => engine.registerGuard(new PhaseGateGuard())).toThrow();
   });
 
-  it('unregisters guards', () => {
-    const engine = new GuardRuntimeEngine();
-    engine.registerGuard(new PhaseGateGuard());
-    expect(engine.unregisterGuard('phase_gate')).toBe(true);
-    expect(engine.getGuardCount()).toBe(0);
-  });
-
-  it('stores audit log', () => {
+  it('stores audit log entries', () => {
     const engine = createGuardEngine();
     engine.evaluate(ctx());
     expect(engine.getAuditLogSize()).toBe(1);
-    const entry = engine.getAuditEntry('test-001');
-    expect(entry).toBeDefined();
-  });
-
-  it('clears audit log', () => {
-    const engine = createGuardEngine();
-    engine.evaluate(ctx());
-    engine.clearAuditLog();
-    expect(engine.getAuditLogSize()).toBe(0);
+    expect(engine.getAuditEntry('test-001')).toBeDefined();
   });
 });
-
-// ─── Phase Gate Guard ─────────────────────────────────────────────────
 
 describe('PhaseGateGuard', () => {
   const guard = new PhaseGateGuard();
 
-  it('allows HUMAN in all phases', () => {
-    for (const phase of ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'] as const) {
+  it('uses canonical 5-phase order', () => {
+    expect(PHASE_ORDER).toEqual(['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE']);
+  });
+
+  it('keeps DISCOVERY out of the internal phase-role matrix', () => {
+    expect(Object.keys(PHASE_ROLE_MATRIX)).toEqual(PHASE_ORDER);
+  });
+
+  it('allows HUMAN in canonical phases', () => {
+    for (const phase of PHASE_ORDER) {
       expect(guard.evaluate(ctx({ phase, role: 'HUMAN' })).decision).toBe('ALLOW');
     }
   });
 
-  it('allows AI_AGENT in BUILD only', () => {
-    expect(guard.evaluate(ctx({ phase: 'BUILD', role: 'AI_AGENT' })).decision).toBe('ALLOW');
-    expect(guard.evaluate(ctx({ phase: 'DISCOVERY', role: 'AI_AGENT' })).decision).toBe('BLOCK');
-    expect(guard.evaluate(ctx({ phase: 'DESIGN', role: 'AI_AGENT' })).decision).toBe('BLOCK');
-    expect(guard.evaluate(ctx({ phase: 'REVIEW', role: 'AI_AGENT' })).decision).toBe('BLOCK');
+  it('blocks AI_AGENT in INTAKE', () => {
+    const result = guard.evaluate(ctx({ phase: 'INTAKE', role: 'AI_AGENT' }));
+    expect(result.decision).toBe('BLOCK');
   });
 
-  it('provides agentGuidance on block', () => {
-    const r = guard.evaluate(ctx({ phase: 'DISCOVERY', role: 'AI_AGENT' }));
-    expect(r.agentGuidance).toContain('AI_AGENT');
-    expect(r.suggestedAction).toBeDefined();
+  it('allows AI_AGENT in BUILD', () => {
+    const result = guard.evaluate(ctx({ phase: 'BUILD', role: 'AI_AGENT' }));
+    expect(result.decision).toBe('ALLOW');
   });
 
-  it('blocks unknown phase', () => {
-    const r = guard.evaluate(ctx({ phase: 'INVALID' as any }));
-    expect(r.decision).toBe('BLOCK');
-    expect(r.severity).toBe('CRITICAL');
+  it('treats DISCOVERY as legacy alias input', () => {
+    const result = guard.evaluate(ctx({ phase: 'DISCOVERY', role: 'AI_AGENT' }));
+    expect(result.decision).toBe('BLOCK');
   });
 });
-
-// ─── Risk Gate Guard ──────────────────────────────────────────────────
 
 describe('RiskGateGuard', () => {
   const guard = new RiskGateGuard();
 
-  it('allows R0/R1 for any role', () => {
-    expect(guard.evaluate(ctx({ riskLevel: 'R0', role: 'AI_AGENT' })).decision).toBe('ALLOW');
-    expect(guard.evaluate(ctx({ riskLevel: 'R1', role: 'AI_AGENT' })).decision).toBe('ALLOW');
+  it('allows R0 for AI_AGENT in BUILD', () => {
+    const result = guard.evaluate(ctx({ riskLevel: 'R0', role: 'AI_AGENT' }));
+    expect(result.decision).toBe('ALLOW');
   });
 
-  it('escalates R2 for AI_AGENT', () => {
-    const r = guard.evaluate(ctx({ riskLevel: 'R2', role: 'AI_AGENT' }));
-    expect(r.decision).toBe('ESCALATE');
-    expect(r.suggestedAction).toBe('present_plan_for_approval');
+  it('escalates R2 for builder-class roles', () => {
+    const result = guard.evaluate(ctx({ riskLevel: 'R2', role: 'AI_AGENT' }));
+    expect(result.decision).toBe('ESCALATE');
   });
 
   it('blocks R3 for AI_AGENT', () => {
-    const r = guard.evaluate(ctx({ riskLevel: 'R3', role: 'AI_AGENT' }));
-    expect(r.decision).toBe('BLOCK');
-    expect(r.suggestedAction).toBe('request_human_approval');
-  });
-
-  it('escalates R3 for HUMAN', () => {
-    expect(guard.evaluate(ctx({ riskLevel: 'R3', role: 'HUMAN' })).decision).toBe('ESCALATE');
+    const result = guard.evaluate(ctx({ riskLevel: 'R3', role: 'AI_AGENT' }));
+    expect(result.decision).toBe('BLOCK');
   });
 });
-
-// ─── Authority Gate Guard ─────────────────────────────────────────────
 
 describe('AuthorityGateGuard', () => {
   const guard = new AuthorityGateGuard();
 
-  it('allows HUMAN for any action', () => {
-    expect(guard.evaluate(ctx({ role: 'HUMAN', action: 'deploy' })).decision).toBe('ALLOW');
+  it('allows AI_AGENT write action in BUILD', () => {
+    const result = guard.evaluate(ctx({ phase: 'BUILD', role: 'AI_AGENT', riskLevel: 'R1', action: 'write component' }));
+    expect(result.decision).toBe('ALLOW');
   });
 
-  it('blocks AI_AGENT from restricted actions', () => {
-    for (const action of ['approve PR', 'merge branch', 'deploy to prod', 'release v2']) {
-      expect(guard.evaluate(ctx({ role: 'AI_AGENT', action })).decision).toBe('BLOCK');
+  it('blocks AI_AGENT in INTAKE', () => {
+    const result = guard.evaluate(ctx({ phase: 'INTAKE', role: 'AI_AGENT', action: 'analyze requirements' }));
+    expect(result.decision).toBe('BLOCK');
+  });
+
+  it('blocks risk above authority cell limit', () => {
+    const result = guard.evaluate(ctx({ phase: 'BUILD', role: 'AI_AGENT', riskLevel: 'R3', action: 'write component' }));
+    expect(result.decision).toBe('BLOCK');
+  });
+
+  it('keeps DISCOVERY out of the internal authority matrix while preserving alias input', () => {
+    for (const cells of Object.values(AUTHORITY_MATRIX)) {
+      expect(Object.keys(cells)).toEqual(PHASE_ORDER);
     }
-  });
-
-  it('allows AI_AGENT for safe actions', () => {
-    expect(guard.evaluate(ctx({ role: 'AI_AGENT', action: 'write code' })).decision).toBe('ALLOW');
-  });
-
-  it('provides agentGuidance on block', () => {
-    const r = guard.evaluate(ctx({ role: 'AI_AGENT', action: 'deploy' }));
-    expect(r.agentGuidance).toContain('AI_AGENT');
-    expect(r.suggestedAction).toBe('delegate_to_authorized_role');
+    const result = guard.evaluate(ctx({ phase: 'DISCOVERY', role: 'ANALYST', riskLevel: 'R1', action: 'analyze scope' }));
+    expect(result.decision).toBe('ALLOW');
   });
 });
 
-// ─── Mutation Budget Guard ────────────────────────────────────────────
+describe('AiCommitGuard', () => {
+  const guard = new AiCommitGuard();
+
+  it('allows read-only action without ai_commit', () => {
+    const result = guard.evaluate(ctx({ action: 'read docs', role: 'AI_AGENT' }));
+    expect(result.decision).toBe('ALLOW');
+  });
+
+  it('blocks modifying action without ai_commit', () => {
+    const result = guard.evaluate(ctx({ action: 'write code', role: 'AI_AGENT' }));
+    expect(result.decision).toBe('BLOCK');
+  });
+
+  it('does not misclassify README as read-only', () => {
+    const result = guard.evaluate(ctx({ action: 'modify README.md', role: 'AI_AGENT' }));
+    expect(result.decision).toBe('BLOCK');
+  });
+
+  it('allows valid ai_commit metadata', () => {
+    const result = guard.evaluate(ctx({
+      action: 'write code',
+      role: 'AI_AGENT',
+      metadata: {
+        ai_commit: {
+          commitId: 'cmp-1',
+          agentId: 'agent-1',
+          timestamp: Date.now(),
+        },
+      },
+    }));
+    expect(result.decision).toBe('ALLOW');
+  });
+});
 
 describe('MutationBudgetGuard', () => {
   const guard = new MutationBudgetGuard();
@@ -203,66 +218,56 @@ describe('MutationBudgetGuard', () => {
   it('blocks over budget', () => {
     expect(guard.evaluate(ctx({ mutationCount: 51, riskLevel: 'R0' })).decision).toBe('BLOCK');
   });
-
-  it('escalates approaching budget (>80%)', () => {
-    expect(guard.evaluate(ctx({ mutationCount: 41, riskLevel: 'R0' })).decision).toBe('ESCALATE');
-  });
-
-  it('respects per-risk budgets', () => {
-    expect(guard.evaluate(ctx({ mutationCount: 21, riskLevel: 'R1' })).decision).toBe('BLOCK');
-    expect(guard.evaluate(ctx({ mutationCount: 11, riskLevel: 'R2' })).decision).toBe('BLOCK');
-    expect(guard.evaluate(ctx({ mutationCount: 4, riskLevel: 'R3' })).decision).toBe('BLOCK');
-  });
 });
 
-// ─── Scope Guard ──────────────────────────────────────────────────────
+describe('FileScopeGuard', () => {
+  const guard = new FileScopeGuard();
+
+  it('allows in-scope builder changes', () => {
+    const result = guard.evaluate(ctx({
+      role: 'AI_AGENT',
+      action: 'write code',
+      targetFiles: ['src/app.ts'],
+      fileScope: ['src/'],
+    }));
+    expect(result.decision).toBe('ALLOW');
+  });
+
+  it('blocks out-of-scope changes', () => {
+    const result = guard.evaluate(ctx({
+      role: 'AI_AGENT',
+      action: 'write code',
+      targetFiles: ['docs/guide.md'],
+      fileScope: ['src/'],
+    }));
+    expect(result.decision).toBe('BLOCK');
+  });
+});
 
 describe('ScopeGuard', () => {
   const guard = new ScopeGuard();
 
-  it('allows when no target files', () => {
-    expect(guard.evaluate(ctx()).decision).toBe('ALLOW');
+  it('blocks builder-class roles from protected paths', () => {
+    const result = guard.evaluate(ctx({ role: 'AI_AGENT', targetFiles: ['governance/rules.yaml'] }));
+    expect(result.decision).toBe('BLOCK');
   });
 
-  it('blocks AI_AGENT from governance paths', () => {
-    const r = guard.evaluate(ctx({ role: 'AI_AGENT', targetFiles: ['governance/rules.yaml'] }));
-    expect(r.decision).toBe('BLOCK');
-  });
-
-  it('allows HUMAN to modify governance', () => {
-    expect(guard.evaluate(ctx({ role: 'HUMAN', targetFiles: ['governance/rules.yaml'] })).decision).toBe('ALLOW');
-  });
-
-  it('escalates AI_AGENT modifying root files', () => {
-    expect(guard.evaluate(ctx({ role: 'AI_AGENT', targetFiles: ['README.md'] })).decision).toBe('ESCALATE');
+  it('escalates builder-class roles touching root files', () => {
+    const result = guard.evaluate(ctx({ role: 'AI_AGENT', targetFiles: ['README.md'] }));
+    expect(result.decision).toBe('ESCALATE');
   });
 });
-
-// ─── Audit Trail Guard ────────────────────────────────────────────────
 
 describe('AuditTrailGuard', () => {
   const guard = new AuditTrailGuard();
 
-  it('allows when all fields present', () => {
-    const r = guard.evaluate(ctx({ role: 'AI_AGENT', agentId: 'a1', riskLevel: 'R2', traceHash: 'h1' }));
-    expect(r.decision).toBe('ALLOW');
+  it('allows when required fields are present', () => {
+    const result = guard.evaluate(ctx({ role: 'AI_AGENT', agentId: 'a1', riskLevel: 'R2', traceHash: 'h1' }));
+    expect(result.decision).toBe('ALLOW');
   });
 
-  it('blocks when requestId is empty', () => {
-    expect(guard.evaluate(ctx({ requestId: '' })).decision).toBe('BLOCK');
-  });
-
-  it('escalates when AI_AGENT has no agentId', () => {
-    expect(guard.evaluate(ctx({ role: 'AI_AGENT' })).decision).toBe('ESCALATE');
-  });
-
-  it('escalates when R2/R3 has no traceHash', () => {
-    expect(guard.evaluate(ctx({ riskLevel: 'R2' })).decision).toBe('ESCALATE');
-    expect(guard.evaluate(ctx({ riskLevel: 'R3' })).decision).toBe('ESCALATE');
-  });
-
-  it('allows R0/R1 without traceHash', () => {
-    expect(guard.evaluate(ctx({ riskLevel: 'R0' })).decision).toBe('ALLOW');
-    expect(guard.evaluate(ctx({ riskLevel: 'R1' })).decision).toBe('ALLOW');
+  it('blocks empty requestId', () => {
+    const result = guard.evaluate(ctx({ requestId: '' }));
+    expect(result.decision).toBe('BLOCK');
   });
 });

@@ -1,6 +1,6 @@
 # CVF Edit Integration Roadmap
 
-> **Location:** `docs/roadmaps/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md`
+> **Location:** `docs/roadmaps/archive/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md`
 > **Date:** 2026-03-19
 > **Source:** Analysis of CVF Edit folder — 9 files of independent audit & review
 > **Goal:** Tích hợp có hệ thống tất cả nội dung hay, bổ sung vào CVF gốc
@@ -219,8 +219,8 @@ After each phase, re-run the 5 failure scenarios and update the assessment:
 
 | Original (CVF Edit) | Standardized (docs/) | Category |
 |---------------------|---------------------|----------|
-| `De_xuat.md` | `docs/roadmaps/CVF_IMPROVEMENT_PROPOSALS_2026-03-19.md` | Roadmap |
+| `De_xuat.md` | `docs/roadmaps/archive/CVF_IMPROVEMENT_PROPOSALS_2026-03-19.md` | Roadmap |
 | `CVF AUDIT LOG_md` | `docs/assessments/CVF_GOVERNANCE_AUDIT_LOG_2026-03-19.md` | Assessment |
 | `Failure Simulation cho CVF.md` | `docs/assessments/CVF_FAILURE_SIMULATION_ASSESSMENT_2026-03-19.md` | Assessment |
-| `Review CVF.md` → `Review CVF_5.md` | `docs/reviews/CVF_ARCHITECTURE_REVIEW_CONSOLIDATED_2026-03-19.md` | Review |
+| `Review CVF.md` → `Review CVF_5.md` | `docs/reviews/archive/CVF_ARCHITECTURE_REVIEW_CONSOLIDATED_2026-03-19.md` | Review |
 | (analysis) | `CVF Edit/CVF_EDIT_ANALYSIS.md` | Internal reference |

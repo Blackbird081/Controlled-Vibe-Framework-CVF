@@ -9,7 +9,17 @@
  * @module cvf-guard-contract/enterprise
  */
 
-import type { CVFPhase, CVFRiskLevel, CVFRole, GuardPipelineResult } from '../types';
+import type {
+  CanonicalCVFPhase,
+  CVFPhase,
+  CVFRiskLevel,
+  CVFRole,
+  GuardPipelineResult,
+} from '../types';
+
+function normalizePhaseAlias(phase: CVFPhase): CanonicalCVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
 
 // ─── Team Roles & Permissions ────────────────────────────────────────
 
@@ -32,24 +42,24 @@ export interface TeamPermissions {
   canManageTeam: boolean;
   canExportReports: boolean;
   maxRiskLevel: CVFRiskLevel;
-  allowedPhases: CVFPhase[];
+  allowedPhases: CanonicalCVFPhase[];
 }
 
 const ROLE_PERMISSIONS: Record<TeamRole, TeamPermissions> = {
   owner: {
     canExecute: true, canApprove: true, canConfigureGuards: true,
     canViewAudit: true, canManageTeam: true, canExportReports: true,
-    maxRiskLevel: 'R3', allowedPhases: ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'],
+    maxRiskLevel: 'R3', allowedPhases: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'],
   },
   admin: {
     canExecute: true, canApprove: true, canConfigureGuards: true,
     canViewAudit: true, canManageTeam: true, canExportReports: true,
-    maxRiskLevel: 'R3', allowedPhases: ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'],
+    maxRiskLevel: 'R3', allowedPhases: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'],
   },
   developer: {
     canExecute: true, canApprove: false, canConfigureGuards: false,
     canViewAudit: true, canManageTeam: false, canExportReports: false,
-    maxRiskLevel: 'R2', allowedPhases: ['DISCOVERY', 'DESIGN', 'BUILD'],
+    maxRiskLevel: 'R2', allowedPhases: ['INTAKE', 'DESIGN', 'BUILD'],
   },
   reviewer: {
     canExecute: false, canApprove: true, canConfigureGuards: false,
@@ -59,7 +69,7 @@ const ROLE_PERMISSIONS: Record<TeamRole, TeamPermissions> = {
   viewer: {
     canExecute: false, canApprove: false, canConfigureGuards: false,
     canViewAudit: true, canManageTeam: false, canExportReports: false,
-    maxRiskLevel: 'R0', allowedPhases: ['DISCOVERY'],
+    maxRiskLevel: 'R0', allowedPhases: ['INTAKE'],
   },
 };
 
@@ -73,6 +83,7 @@ export function canPerformAction(member: TeamMember, action: string, riskLevel: 
 } {
   const perms = ROLE_PERMISSIONS[member.role];
   const riskOrder: CVFRiskLevel[] = ['R0', 'R1', 'R2', 'R3'];
+  const normalizedPhase = normalizePhaseAlias(phase);
 
   if (!perms.canExecute) {
     return { allowed: false, reason: `Role "${member.role}" cannot execute actions` };
@@ -80,8 +91,8 @@ export function canPerformAction(member: TeamMember, action: string, riskLevel: 
   if (riskOrder.indexOf(riskLevel) > riskOrder.indexOf(perms.maxRiskLevel)) {
     return { allowed: false, reason: `Risk ${riskLevel} exceeds max ${perms.maxRiskLevel} for role "${member.role}"` };
   }
-  if (!perms.allowedPhases.includes(phase)) {
-    return { allowed: false, reason: `Phase ${phase} not allowed for role "${member.role}"` };
+  if (!perms.allowedPhases.includes(normalizedPhase)) {
+    return { allowed: false, reason: `Phase ${normalizedPhase} not allowed for role "${member.role}"` };
   }
   return { allowed: true, reason: 'Permitted' };
 }
@@ -94,7 +105,7 @@ export interface ApprovalRequest {
   id: string;
   requestedBy: string;
   action: string;
-  phase: CVFPhase;
+  phase: CanonicalCVFPhase;
   riskLevel: CVFRiskLevel;
   reason: string;
   status: ApprovalStatus;
@@ -131,7 +142,7 @@ export class ApprovalWorkflow {
       id,
       requestedBy: params.requestedBy,
       action: params.action,
-      phase: params.phase,
+      phase: normalizePhaseAlias(params.phase),
       riskLevel: params.riskLevel,
       reason: params.reason,
       status: 'pending',
@@ -225,7 +236,7 @@ export interface ComplianceReport {
     allowed: number;
   }[];
   riskDistribution: Record<CVFRiskLevel, number>;
-  phaseDistribution: Record<CVFPhase, number>;
+  phaseDistribution: Record<CanonicalCVFPhase, number>;
   topBlockedActions: { action: string; count: number; reason: string }[];
   teamActivity: { memberId: string; actions: number; blocked: number }[];
   complianceScore: number; // 0-100
@@ -260,7 +271,13 @@ export function generateComplianceReport(
   const riskDist: Record<CVFRiskLevel, number> = { R0: 0, R1: 0, R2: 0, R3: 0 };
 
   // Phase distribution
-  const phaseDist: Record<CVFPhase, number> = { DISCOVERY: 0, DESIGN: 0, BUILD: 0, REVIEW: 0 };
+  const phaseDist: Record<CanonicalCVFPhase, number> = {
+    INTAKE: 0,
+    DESIGN: 0,
+    BUILD: 0,
+    REVIEW: 0,
+    FREEZE: 0,
+  };
 
   // Avg response time
   const totalMs = results.reduce((sum, r) => sum + (r.durationMs ?? 0), 0);

@@ -30,6 +30,7 @@ export class ScopeGuard implements Guard {
   evaluate(context: GuardRequestContext): GuardResult {
     const timestamp = new Date().toISOString();
     const targetFiles = context.targetFiles ?? [];
+    const isBuilderClassRole = ['AI_AGENT', 'BUILDER', 'OPERATOR'].includes(context.role);
 
     if (targetFiles.length === 0) {
       return {
@@ -48,13 +49,13 @@ export class ScopeGuard implements Guard {
         normalizedFile.includes(p)
       );
 
-      if (protectedViolation && context.role === 'AI_AGENT') {
+      if (protectedViolation && isBuilderClassRole) {
         return {
           guardId: this.id,
           decision: 'BLOCK',
           severity: 'ERROR',
-          reason: `AI agent cannot modify protected path "${protectedViolation}" (file: "${file}"). Requires HUMAN or OPERATOR role.`,
-          agentGuidance: `The file "${file}" is in a protected governance path ("${protectedViolation}"). As an AI agent, you cannot modify governance files directly. Ask the human operator to make this change, or suggest the change and let them apply it.`,
+          reason: `Role "${context.role}" cannot modify protected path "${protectedViolation}" (file: "${file}"). Requires HUMAN or GOVERNOR authority.`,
+          agentGuidance: `The file "${file}" is in a protected governance path ("${protectedViolation}"). This change requires a human or governor-controlled path.`,
           suggestedAction: 'suggest_change_to_human',
           timestamp,
           metadata: { file, protectedPath: protectedViolation, role: context.role },
@@ -65,13 +66,13 @@ export class ScopeGuard implements Guard {
         normalizedFile.endsWith(r)
       );
 
-      if (isRootFile && context.role === 'AI_AGENT') {
+      if (isRootFile && isBuilderClassRole) {
         return {
           guardId: this.id,
           decision: 'ESCALATE',
           severity: 'WARN',
-          reason: `AI agent modifying CVF root file "${file}" requires escalation.`,
-          agentGuidance: `The file "${file}" is a CVF root file. Modifying it requires human approval. Present your proposed changes and wait for confirmation.`,
+          reason: `Role "${context.role}" modifying CVF root file "${file}" requires escalation.`,
+          agentGuidance: `The file "${file}" is a CVF root file. Present the proposed changes for approval before continuing.`,
           suggestedAction: 'present_changes_for_approval',
           timestamp,
           metadata: { file, role: context.role },

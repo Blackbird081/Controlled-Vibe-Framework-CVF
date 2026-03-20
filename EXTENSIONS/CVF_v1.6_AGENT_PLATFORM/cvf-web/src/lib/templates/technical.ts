@@ -5,7 +5,7 @@ export const technicalTemplates: Template[] = [
         id: 'system_design_wizard',
         name: '🔧 Thiết kế Hệ thống',
         icon: '🔧',
-        description: 'Multi-step wizard tạo System Design Document qua 5 bước. Requirements → Estimations → Design → Deep Dive → Review',
+        description: 'Multi-step wizard tạo System Design Document với governed packet và live path để đối soát',
         category: 'technical',
         difficulty: 'advanced',
         fields: [],

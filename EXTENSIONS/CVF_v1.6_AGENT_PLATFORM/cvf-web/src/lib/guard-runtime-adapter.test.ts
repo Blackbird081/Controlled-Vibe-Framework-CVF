@@ -45,7 +45,7 @@ function ctx(overrides: Partial<GuardRequestContext> = {}): GuardRequestContext 
 // ═══════════════════════════════════════════════════════════════════════
 
 describe('WebGuardRuntimeEngine', () => {
-  let engine: WebGuardRuntimeEngine;
+  let engine: InstanceType<typeof WebGuardRuntimeEngine>;
 
   beforeEach(() => {
     engine = new WebGuardRuntimeEngine();
@@ -220,7 +220,7 @@ describe('PhaseGateGuard', () => {
   test('OPERATOR allowed in all phases', () => {
     for (const phase of PHASE_ORDER) {
       const r = guard.evaluate(ctx({ phase, role: 'OPERATOR' }));
-      expect(r.decision).toBe('ALLOW');
+      expect(r.decision).toBe(phase === 'FREEZE' ? 'BLOCK' : 'ALLOW');
     }
   });
 });
@@ -284,8 +284,8 @@ describe('AuthorityGateGuard', () => {
     expect(r.decision).toBe('BLOCK');
   });
 
-  test('ALLOW AI_AGENT for execute action', () => {
-    const r = guard.evaluate(ctx({ role: 'AI_AGENT', action: 'execute_template' }));
+  test('ALLOW AI_AGENT for write action', () => {
+    const r = guard.evaluate(ctx({ role: 'AI_AGENT', action: 'write component' }));
     expect(r.decision).toBe('ALLOW');
   });
 
@@ -428,22 +428,22 @@ describe('AuditTrailGuard', () => {
 // ═══════════════════════════════════════════════════════════════════════
 
 describe('createWebGuardEngine', () => {
-  test('creates engine with 6 guards', () => {
+  test('creates engine with 8 guards', () => {
     const engine = createWebGuardEngine();
-    expect(engine.getGuardCount()).toBe(6);
+    expect(engine.getGuardCount()).toBe(8);
   });
 
   test('all guards have unique IDs', () => {
     const engine = createWebGuardEngine();
     const ids = engine.getRegisteredGuards().map((g) => g.id);
-    expect(new Set(ids).size).toBe(6);
+    expect(new Set(ids).size).toBe(8);
   });
 
   test('full pipeline ALLOW for safe HUMAN request', () => {
     const engine = createWebGuardEngine();
-    const result = engine.evaluate(ctx());
+    const result = engine.evaluate(ctx({ phase: 'INTAKE', action: 'analyze request' }));
     expect(result.finalDecision).toBe('ALLOW');
-    expect(result.results).toHaveLength(6);
+    expect(result.results).toHaveLength(8);
   });
 
   test('full pipeline BLOCK for AI in DISCOVERY', () => {
@@ -466,7 +466,7 @@ describe('createWebGuardEngine', () => {
 describe('buildWebGuardContext', () => {
   test('provides sensible defaults for empty input', () => {
     const c = buildWebGuardContext({});
-    expect(c.phase).toBe('BUILD');
+    expect(c.phase).toBe('INTAKE');
     expect(c.riskLevel).toBe('R0');
     expect(c.role).toBe('HUMAN');
     expect(c.action).toBe('execute_template');
@@ -474,11 +474,12 @@ describe('buildWebGuardContext', () => {
   });
 
   test('normalizes phase aliases', () => {
-    expect(buildWebGuardContext({ phase: 'Phase A' }).phase).toBe('DISCOVERY');
+    expect(buildWebGuardContext({ phase: 'Phase A' }).phase).toBe('INTAKE');
     expect(buildWebGuardContext({ phase: 'B' }).phase).toBe('DESIGN');
     expect(buildWebGuardContext({ phase: 'build' }).phase).toBe('BUILD');
     expect(buildWebGuardContext({ phase: 'D' }).phase).toBe('REVIEW');
-    expect(buildWebGuardContext({ phase: 'unknown' }).phase).toBe('BUILD');
+    expect(buildWebGuardContext({ phase: 'E' }).phase).toBe('FREEZE');
+    expect(buildWebGuardContext({ phase: 'unknown' }).phase).toBe('INTAKE');
   });
 
   test('normalizes risk level aliases', () => {
@@ -516,8 +517,8 @@ describe('Constants', () => {
     expect(DEFAULT_GUARD_RUNTIME_CONFIG.strictMode).toBe(true);
   });
 
-  test('PHASE_ORDER has 4 phases', () => {
-    expect(PHASE_ORDER).toHaveLength(4);
+  test('PHASE_ORDER has 5 phases', () => {
+    expect(PHASE_ORDER).toHaveLength(5);
   });
 
   test('RISK_NUMERIC covers R0-R3', () => {
@@ -525,7 +526,7 @@ describe('Constants', () => {
   });
 
   test('RESTRICTED_ACTIONS covers all roles', () => {
-    expect(Object.keys(RESTRICTED_ACTIONS)).toHaveLength(4);
+    expect(Object.keys(RESTRICTED_ACTIONS)).toHaveLength(8);
   });
 
   test('DEFAULT_MUTATION_BUDGETS R3 is smallest', () => {

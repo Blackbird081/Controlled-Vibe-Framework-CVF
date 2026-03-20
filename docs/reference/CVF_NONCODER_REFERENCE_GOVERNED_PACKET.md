@@ -1,0 +1,77 @@
+# CVF Non-Coder Reference Governed Packet
+
+Status: reusable non-coder governed packet plus one governed onboarding starter handoff and nine live Web execution paths for the canonical controlled loop on the active reference line.
+
+## Purpose
+
+- provide one repeatable non-coder-facing packet that explains the governed loop without requiring users to inspect runtime internals
+- connect onboarding guidance to a real starter handoff before the user lands in a wizard review step
+- package the most important supervision evidence in one place:
+  - starter handoff
+  - phases
+  - approval checkpoints
+  - execution handoff
+  - freeze receipt
+- strengthen the roadmap claim that the non-coder path is no longer only a collection of loosely related UI surfaces
+
+## Where It Lives
+
+Active implementation:
+
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OnboardingWizard.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/QuickStart.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governed-starter-path.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/non-coder-reference-loop.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AppBuilderWizard.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/BusinessStrategyWizard.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/ResearchProjectWizard.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/ProductDesignWizard.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/DataAnalysisWizard.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/ContentStrategyWizard.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/MarketingCampaignWizard.tsx`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SystemDesignWizard.tsx`
+
+Primary user-facing entrypoint:
+
+- Onboarding Wizard -> Quick Start -> governed starter handoff card on the home dashboard
+- App Builder Wizard review step
+- Business Strategy Wizard review step
+- Research Project Wizard review step
+- Product Design Wizard review step
+- Data Analysis Wizard review step
+- Content Strategy Wizard review step
+- Marketing Campaign Wizard review step
+- System Design Wizard review step
+- Security Assessment Wizard review step
+
+## What It Packages
+
+The governed packet shows:
+
+1. one governed onboarding starter handoff carrying user goal, routed phase, routed risk, and recommended starter wizard
+2. canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
+3. human approval checkpoints before build and freeze
+4. one governed execution handoff payload for the Web execution path
+5. live launch paths from App Builder Wizard, Business Strategy Wizard, Research Project Wizard, Product Design Wizard, Data Analysis Wizard, Content Strategy Wizard, Marketing Campaign Wizard, System Design Wizard, and Security Assessment Wizard into the Web `execute` pipeline
+6. one freeze receipt with:
+   - accepted output
+   - baseline artifact
+   - locked scope
+   - follow-up items
+
+## Why It Matters
+
+- it gives non-coder supervision one reusable artifact instead of relying only on screenshots, dispersed UI states, or narrative docs
+- it proves the non-coder journey now has a governed starter handoff before the wizard/live-run surfaces begin
+- it proves that at least nine non-coder paths can now execute through the governed Web pipeline with pre-bound phase, risk, scope, and skill-preflight metadata
+- it makes future audits faster because reviewers can inspect one packet and compare it with the coder-facing reference loop
+- it improves evidence quality without overstating that the non-coder path already has total ecosystem parity
+
+## Current Caveat
+
+These reference paths are now live on the active Web path, but they are still narrower than full ecosystem parity.
+
+What remains open:
+
+- broader parity across auxiliary extension families
+- evidence depth equivalent across every channel family, not only the App Builder Wizard, Business Strategy Wizard, Research Project Wizard, Product Design Wizard, Data Analysis Wizard, Content Strategy Wizard, Marketing Campaign Wizard, System Design Wizard, and Security Assessment Wizard reference paths

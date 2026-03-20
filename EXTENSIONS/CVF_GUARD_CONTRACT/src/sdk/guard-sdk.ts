@@ -17,20 +17,35 @@
 
 // ─── Types ───────────────────────────────────────────────────────────
 
-export type CVFPhase = 'DISCOVERY' | 'DESIGN' | 'BUILD' | 'REVIEW';
-export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
-export type CVFRole = 'HUMAN' | 'AI_AGENT' | 'REVIEWER' | 'OPERATOR';
+import type {
+  CanonicalCVFPhase,
+  CVFPhaseInput,
+  CVFRiskLevel,
+  CVFRole,
+  LegacyCVFPhaseAlias,
+} from '../types';
+
+export type {
+  CanonicalCVFPhase,
+  CVFPhaseInput,
+  CVFRiskLevel,
+  CVFRole,
+  LegacyCVFPhaseAlias,
+};
+
 export type CVFDecision = 'ALLOW' | 'BLOCK' | 'ESCALATE';
 
 export interface CVFGuardRequest {
   requestId?: string;
   action: string;
-  phase?: CVFPhase;
+  phase?: CVFPhaseInput;
   riskLevel?: CVFRiskLevel;
   role?: CVFRole;
   agentId?: string;
   targetFiles?: string[];
+  fileScope?: string[];
   mutationCount?: number;
+  metadata?: Record<string, unknown>;
 }
 
 export interface CVFGuardResult {
@@ -60,7 +75,7 @@ export interface CVFPhaseGateResponse {
   success: boolean;
   data?: {
     allowed: boolean;
-    currentPhase: CVFPhase;
+    currentPhase: CanonicalCVFPhase;
     requestedAction: string;
     reason: string;
     agentGuidance?: string;
@@ -111,6 +126,13 @@ export class CVFGuardClient {
     return `sdk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   }
 
+  private normalizePhase(phase?: CVFPhaseInput): CanonicalCVFPhase {
+    if (!phase) {
+      return 'BUILD';
+    }
+    return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+  }
+
   /**
    * Evaluate full guard pipeline.
    * Call this before executing any action to check if it's allowed.
@@ -119,12 +141,14 @@ export class CVFGuardClient {
     const body = {
       requestId: request.requestId || this.generateRequestId(),
       action: request.action,
-      phase: request.phase || 'BUILD',
+      phase: this.normalizePhase(request.phase),
       riskLevel: request.riskLevel || 'R0',
       role: request.role || 'AI_AGENT',
       agentId: request.agentId || this.agentId,
       targetFiles: request.targetFiles,
+      fileScope: request.fileScope,
       mutationCount: request.mutationCount,
+      metadata: request.metadata,
     };
 
     const response = await fetch(`${this.baseUrl}/api/guards/evaluate`, {
@@ -141,11 +165,11 @@ export class CVFGuardClient {
    * Quick phase gate check.
    * Lightweight check if an action is allowed in the current phase.
    */
-  async checkPhaseGate(action: string, phase?: CVFPhase): Promise<CVFPhaseGateResponse> {
+  async checkPhaseGate(action: string, phase?: CVFPhaseInput): Promise<CVFPhaseGateResponse> {
     const body = {
       requestId: this.generateRequestId(),
       action,
-      phase: phase || 'BUILD',
+      phase: this.normalizePhase(phase),
     };
 
     const response = await fetch(`${this.baseUrl}/api/guards/phase-gate`, {

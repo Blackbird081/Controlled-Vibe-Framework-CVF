@@ -22,13 +22,18 @@ import {
   type CVFPhase,
   type CVFRiskLevel,
   type CVFRole,
+  PHASE_ORDER,
 } from 'cvf-guard-contract';
 import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
 import { guardsRateLimiter } from '@/lib/rate-limiter';
 
-const VALID_PHASES: CVFPhase[] = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
+const VALID_PHASES: CVFPhase[] = [...PHASE_ORDER, 'DISCOVERY'];
 const VALID_RISK_LEVELS: CVFRiskLevel[] = ['R0', 'R1', 'R2', 'R3'];
-const VALID_ROLES: CVFRole[] = ['HUMAN', 'AI_AGENT', 'REVIEWER', 'OPERATOR'];
+const VALID_ROLES: CVFRole[] = ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'AI_AGENT', 'OPERATOR'];
+
+function normalizePhase(phase: CVFPhase): CVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate enum values
-    const phase = (body.phase || 'BUILD') as CVFPhase;
+    const phase = normalizePhase((body.phase || 'BUILD') as CVFPhase);
     if (!VALID_PHASES.includes(phase)) {
       return NextResponse.json(
         { success: false, error: `Invalid phase: "${body.phase}". Valid: ${VALID_PHASES.join(', ')}` },
@@ -83,10 +88,12 @@ export async function POST(request: NextRequest) {
       agentId: body.agentId,
       action: body.action,
       targetFiles: body.targetFiles,
+      fileScope: body.fileScope,
       mutationCount: body.mutationCount,
       mutationBudget: body.mutationBudget,
       traceHash: body.traceHash,
       channel: 'mcp',
+      metadata: body.metadata,
     };
 
     // ── Task 6.5: Shared guard engine ──

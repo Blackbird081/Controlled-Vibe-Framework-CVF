@@ -33,7 +33,7 @@ describe('AgentChatMessageBubble', () => {
             content: 'PHASE B: Design\n\n```ts\nconsole.log(\"ok\");\n```',
             status: 'complete',
             metadata: {
-                phase: 'Design',
+                phase: 'DESIGN',
                 qualityScore: 88,
                 acceptanceStatus: 'pending',
                 model: 'gpt-4o',

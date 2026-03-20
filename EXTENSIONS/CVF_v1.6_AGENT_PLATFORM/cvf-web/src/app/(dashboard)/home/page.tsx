@@ -1,12 +1,17 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { templates } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import { useSettings } from '@/components/Settings';
 import { Template, Execution } from '@/types';
 import { useLanguage } from '@/lib/i18n';
 import { trackEvent } from '@/lib/analytics';
+import {
+    clearGovernedStarterHandoff,
+    readGovernedStarterHandoff,
+    type GovernedStarterHandoff,
+} from '@/lib/governed-starter-path';
 import {
     TemplateCard,
     CategoryTabs,
@@ -56,6 +61,7 @@ export default function HomePage() {
     const [currentIntent, setCurrentIntent] = useState('');
     const [currentFolder, setCurrentFolder] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [starterHandoff, setStarterHandoff] = useState<GovernedStarterHandoff | null>(null);
 
     const { addExecution, updateExecution, currentExecution } = useExecutionStore();
 
@@ -177,6 +183,16 @@ export default function HomePage() {
         setWorkflowState('browse');
     }, []);
 
+    useEffect(() => {
+        const syncStarterHandoff = () => {
+            setStarterHandoff(readGovernedStarterHandoff());
+        };
+
+        syncStarterHandoff();
+        window.addEventListener('cvf:starterHandoffReady', syncStarterHandoff);
+        return () => window.removeEventListener('cvf:starterHandoffReady', syncStarterHandoff);
+    }, []);
+
     const handleAccept = useCallback(() => {
         if (currentExecution) {
             updateExecution(currentExecution.id, { result: 'accepted' });
@@ -190,6 +206,33 @@ export default function HomePage() {
         }
         setWorkflowState('form');
     }, [currentExecution, updateExecution]);
+
+    const handleOpenGovernedStarter = useCallback(() => {
+        if (!starterHandoff) {
+            return;
+        }
+
+        clearGovernedStarterHandoff();
+        setStarterHandoff(null);
+
+        const wizardState = WIZARD_MAP[starterHandoff.recommendedTemplateId];
+        if (wizardState) {
+            setWorkflowState(wizardState);
+            return;
+        }
+
+        const starterTemplate = templates.find(template => template.id === starterHandoff.recommendedTemplateId);
+        if (starterTemplate) {
+            setSelectedTemplate(starterTemplate);
+            setCurrentIntent(starterHandoff.userInput);
+            setWorkflowState('form');
+        }
+    }, [starterHandoff]);
+
+    const handleDismissGovernedStarter = useCallback(() => {
+        clearGovernedStarterHandoff();
+        setStarterHandoff(null);
+    }, []);
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-6 md:py-8">
@@ -220,6 +263,61 @@ export default function HomePage() {
                             </button>
                         )}
                     </div>
+
+                    {starterHandoff && !currentFolder && (
+                        <div className="mb-8 rounded-2xl border border-blue-200 bg-blue-50/80 dark:border-blue-800 dark:bg-blue-900/20 p-5">
+                            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                                <div className="space-y-3">
+                                    <div>
+                                        <div className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-300">
+                                            {language === 'vi' ? 'Governed starter handoff' : 'Governed starter handoff'}
+                                        </div>
+                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-1">
+                                            {language === 'vi'
+                                                ? 'Starter path đã sẵn sàng từ onboarding'
+                                                : 'Your starter path is ready from onboarding'}
+                                        </h3>
+                                    </div>
+                                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                                        {starterHandoff.userInput}
+                                    </p>
+                                    <div className="grid gap-3 md:grid-cols-3">
+                                        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-white/80 dark:bg-gray-900/40 p-3">
+                                            <div className="text-xs text-gray-500 mb-1">{language === 'vi' ? 'Starter path' : 'Starter path'}</div>
+                                            <div className="font-medium text-gray-900 dark:text-white">{starterHandoff.recommendedTemplateLabel}</div>
+                                        </div>
+                                        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-white/80 dark:bg-gray-900/40 p-3">
+                                            <div className="text-xs text-gray-500 mb-1">{language === 'vi' ? 'Routed phase' : 'Routed phase'}</div>
+                                            <div className="font-medium text-gray-900 dark:text-white">{starterHandoff.friendlyPhase}</div>
+                                        </div>
+                                        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-white/80 dark:bg-gray-900/40 p-3">
+                                            <div className="text-xs text-gray-500 mb-1">{language === 'vi' ? 'Risk' : 'Risk'}</div>
+                                            <div className="font-medium text-gray-900 dark:text-white">{starterHandoff.friendlyRisk}</div>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-blue-700 dark:text-blue-300">
+                                        {language === 'vi'
+                                            ? 'CVF đã khóa starter handoff này theo intent, phase và risk đã route ở Quick Start. Bước tiếp theo là mở đúng wizard để review packet và launch live governed path.'
+                                            : 'CVF has locked this starter handoff to the routed intent, phase, and risk from Quick Start. The next step is to open the right wizard, review the packet, and launch the live governed path.'}
+                                    </p>
+                                </div>
+                                <div className="flex flex-col gap-3 lg:w-64">
+                                    <button
+                                        onClick={handleOpenGovernedStarter}
+                                        className="px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
+                                    >
+                                        {language === 'vi' ? 'Mở starter path' : 'Open starter path'}
+                                    </button>
+                                    <button
+                                        onClick={handleDismissGovernedStarter}
+                                        className="px-4 py-3 rounded-xl border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 font-medium hover:bg-blue-100/70 dark:hover:bg-blue-900/30 transition-colors"
+                                    >
+                                        {language === 'vi' ? 'Ẩn handoff' : 'Dismiss handoff'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {!mockAiEnabled && !hasAnyApiKey && (
                         <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">

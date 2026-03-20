@@ -34,7 +34,7 @@ const modeLabels = {
         governanceMode: 'With Rules',
         governanceDesc: 'Add stop conditions & guardrails',
         fullMode: 'CVF Full Mode',
-        fullDesc: '4-Phase protocol with full governance',
+        fullDesc: '5-phase protocol with full governance',
     },
     vi: {
         modeLabel: 'Chế độ xuất',
@@ -43,7 +43,7 @@ const modeLabels = {
         governanceMode: 'Có Quy tắc',
         governanceDesc: 'Thêm stop conditions & guardrails',
         fullMode: 'CVF Full Mode',
-        fullDesc: 'Quy trình 4-Phase đầy đủ',
+        fullDesc: 'Quy trình 5 phase đầy đủ',
     }
 };
 
@@ -152,7 +152,7 @@ const validationHooks = {
 `
 };
 
-// CVF Full Mode: 4-Phase Protocol - ENHANCED VERSION
+// CVF Full Mode: 5-Phase Protocol
 const fullModeProtocol = {
     en: `
 ---
@@ -173,14 +173,14 @@ const fullModeProtocol = {
 
 ---
 
-## 🔄 MANDATORY 4-PHASE PROCESS
+## 🔄 MANDATORY 5-PHASE PROCESS
 
 You MUST complete each phase in order. NO SHORTCUTS.
 
 ---
 
 ### ═══════════════════════════════════════════════════════════
-### PHASE A: DISCOVERY 🔍
+### PHASE A: INTAKE 🔍
 ### ═══════════════════════════════════════════════════════════
 
 **YOUR ROLE**: Interpreter - understand the problem deeply
@@ -194,7 +194,7 @@ You MUST complete each phase in order. NO SHORTCUTS.
 
 **OUTPUT FORMAT (MUST PRODUCE):**
 \`\`\`
-## 📋 PHASE A: Discovery Summary
+## 📋 PHASE A: Intake Summary
 
 ### 1. My Understanding
 [Restate user's goal in your words]
@@ -221,9 +221,9 @@ You MUST complete each phase in order. NO SHORTCUTS.
 ⏸️ **CHECKPOINT A**: Do you confirm my understanding is correct?
 \`\`\`
 
-**⛔ HARD STOP**: Wait for user confirmation before Phase B.
-- If user says "yes/đúng/ok/proceed" → Go to Phase B
-- If user says "đúng rồi" or similar → Go to Phase B  
+**⛔ HARD STOP**: Wait for user confirmation before Design.
+- If user says "yes/đúng/ok/proceed" → Go to Design
+- If user says "đúng rồi" or similar → Go to Design  
 - If user corrects you → Update understanding, re-confirm
 - If unclear → Ask specific questions
 
@@ -275,7 +275,7 @@ You MUST complete each phase in order. NO SHORTCUTS.
 ⏸️ **CHECKPOINT B**: Approve this design to proceed to Build phase?
 \`\`\`
 
-**⛔ HARD STOP**: Wait for user approval before Phase C.
+**⛔ HARD STOP**: Wait for user approval before Build.
 
 **FORBIDDEN IN PHASE B:**
 - ❌ Asking "Which option do you prefer?" (YOU decide!)
@@ -357,6 +357,31 @@ You MUST complete each phase in order. NO SHORTCUTS.
 - Any revisions needed?
 \`\`\`
 
+### PHASE E: FREEZE 🔒
+
+**ONLY AFTER ACCEPTANCE:**
+1. Confirm acceptance status
+2. Capture baseline / review artifact / comparison evidence
+3. List open follow-ups
+4. State that the current run is now frozen
+
+**FREEZE OUTPUT FORMAT:**
+\`\`\`
+## 🔒 PHASE E: Freeze Record
+
+### 1. Acceptance Status
+[Accepted / Needs follow-up]
+
+### 2. Evidence
+- Baseline / delta / review artifact
+
+### 3. Open Follow-ups
+- ...
+
+---
+✅ Scope frozen for this run.
+\`\`\`
+
 ---
 
 ## ⚠️ AI ROLE CONSTRAINTS (ALWAYS ENFORCED)
@@ -393,8 +418,8 @@ You MUST complete each phase in order. NO SHORTCUTS.
 
 ## 🚀 START NOW
 
-Begin with **PHASE A: Discovery**.
-Produce the Phase A output format and wait for confirmation.
+Begin with **PHASE A: Intake**.
+Produce the Phase A intake output format and wait for confirmation.
 `,
     vi: `
 ---
@@ -415,14 +440,14 @@ Produce the Phase A output format and wait for confirmation.
 
 ---
 
-## 🔄 QUY TRÌNH 4-PHASE BẮT BUỘC
+## 🔄 QUY TRÌNH 5 PHASE BẮT BUỘC
 
 Bạn PHẢI hoàn thành từng phase theo thứ tự. KHÔNG TẮT ĐƯỜNG.
 
 ---
 
 ### ═══════════════════════════════════════════════════════════
-### PHASE A: KHÁM PHÁ 🔍
+### PHASE A: TIẾP NHẬN 🔍
 ### ═══════════════════════════════════════════════════════════
 
 **VAI TRÒ**: Interpreter - hiểu sâu vấn đề
@@ -436,7 +461,7 @@ Bạn PHẢI hoàn thành từng phase theo thứ tự. KHÔNG TẮT ĐƯỜNG.
 
 **OUTPUT FORMAT (PHẢI TẠO RA):**
 \`\`\`
-## 📋 PHASE A: Tóm tắt Khám phá
+## 📋 PHASE A: Tóm tắt Tiếp nhận
 
 ### 1. Hiểu biết của tôi
 [Diễn đạt lại mục tiêu của user]
@@ -463,8 +488,8 @@ Bạn PHẢI hoàn thành từng phase theo thứ tự. KHÔNG TẮT ĐƯỜNG.
 ⏸️ **CHECKPOINT A**: Bạn xác nhận tôi hiểu đúng chưa?
 \`\`\`
 
-**⛔ DỪNG CỨNG**: Chờ user xác nhận trước khi sang Phase B.
-- Nếu user nói "đúng/ok/được/tiếp tục" → Sang Phase B
+**⛔ DỪNG CỨNG**: Chờ user xác nhận trước khi sang Design.
+- Nếu user nói "đúng/ok/được/tiếp tục" → Sang Design
 - Nếu user sửa → Cập nhật hiểu biết, xác nhận lại
 - Nếu không rõ → Hỏi câu hỏi cụ thể
 
@@ -516,7 +541,7 @@ Bạn PHẢI hoàn thành từng phase theo thứ tự. KHÔNG TẮT ĐƯỜNG.
 ⏸️ **CHECKPOINT B**: Duyệt thiết kế này để tiến hành Build?
 \`\`\`
 
-**⛔ DỪNG CỨNG**: Chờ user duyệt trước khi sang Phase C.
+**⛔ DỪNG CỨNG**: Chờ user duyệt trước khi sang Build.
 
 **CẤM TRONG PHASE B:**
 - ❌ Hỏi "Bạn thích option nào?" (BẠN quyết định!)
@@ -598,6 +623,31 @@ Bạn PHẢI hoàn thành từng phase theo thứ tự. KHÔNG TẮT ĐƯỜNG.
 - Cần sửa đổi gì không?
 \`\`\`
 
+### PHASE E: KHÓA KẾT QUẢ 🔒
+
+**CHỈ THỰC HIỆN SAU KHI ĐƯỢC CHẤP NHẬN:**
+1. Xác nhận trạng thái chấp nhận
+2. Ghi lại baseline / review artifact / bằng chứng đối soát
+3. Liệt kê việc còn mở
+4. Nêu rõ lần chạy hiện tại đã được khóa
+
+**FREEZE OUTPUT FORMAT:**
+\`\`\`
+## 🔒 PHASE E: Biên bản Khóa Kết quả
+
+### 1. Trạng thái chấp nhận
+[Đã chấp nhận / Cần follow-up]
+
+### 2. Bằng chứng
+- Baseline / delta / review artifact
+
+### 3. Việc còn mở
+- ...
+
+---
+✅ Phạm vi của lần chạy này đã được khóa.
+\`\`\`
+
 ---
 
 ## ⚠️ RÀNG BUỘC VAI TRÒ AI (LUÔN ÁP DỤNG)
@@ -634,8 +684,8 @@ Bạn PHẢI hoàn thành từng phase theo thứ tự. KHÔNG TẮT ĐƯỜNG.
 
 ## 🚀 BẮT ĐẦU NGAY
 
-Bắt đầu với **PHASE A: Khám phá**.
-Tạo output theo format Phase A và chờ xác nhận.
+Bắt đầu với **PHASE A: Tiếp nhận**.
+Tạo output theo format intake và chờ xác nhận.
 `
 };
 
@@ -692,7 +742,7 @@ function generateSpec(
         noRequired: '(Không có input bắt buộc)',
         modeSimple: 'Đơn giản',
         modeGovernance: 'Có Quy Tắc',
-        modeFull: 'Full Mode (4-Phase)',
+        modeFull: 'Full Mode (5-Phase)',
     } : {
         specTitle: mode === 'full' ? 'CVF Task Specification (FULL MODE)' : mode === 'governance' ? 'CVF Task Specification (With Rules)' : 'CVF Task Specification',
         generated: 'Generated',
@@ -718,7 +768,7 @@ function generateSpec(
         noRequired: '(No required inputs)',
         modeSimple: 'Simple',
         modeGovernance: 'With Rules',
-        modeFull: 'Full Mode (4-Phase)',
+        modeFull: 'Full Mode (5-Phase)',
     };
 
     // Generate intent
@@ -997,8 +1047,8 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
                     <p className="text-xs text-green-700 dark:text-green-300">
                         <strong>🚦 CVF Full Mode:</strong> {exportLang === 'vi'
-                            ? 'AI sẽ tuân theo quy trình 4-phase (Discovery → Design → Build → Review) với đầy đủ governance rules. Đây là chế độ mạnh nhất của CVF.'
-                            : 'AI will follow the 4-phase process (Discovery → Design → Build → Review) with full governance rules. This is the most powerful CVF mode.'
+                            ? 'AI sẽ tuân theo quy trình 5 phase (Intake → Design → Build → Review → Freeze) với đầy đủ governance rules. Đây là chế độ mạnh nhất của CVF.'
+                            : 'AI will follow the 5-phase process (Intake → Design → Build → Review → Freeze) with full governance rules. This is the most powerful CVF mode.'
                         }
                     </p>
                 </div>

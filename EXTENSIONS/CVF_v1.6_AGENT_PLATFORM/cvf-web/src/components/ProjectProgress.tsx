@@ -29,10 +29,11 @@ interface ProjectProgressProps {
 }
 
 const PHASES = [
-  { id: 'DISCOVERY', icon: '🔍', labelVi: 'Khám phá', labelEn: 'Discovery' },
+  { id: 'INTAKE', icon: '🧭', labelVi: 'Tiếp nhận', labelEn: 'Intake' },
   { id: 'DESIGN', icon: '📐', labelVi: 'Thiết kế', labelEn: 'Design' },
   { id: 'BUILD', icon: '🔨', labelVi: 'Xây dựng', labelEn: 'Build' },
   { id: 'REVIEW', icon: '✅', labelVi: 'Kiểm tra', labelEn: 'Review' },
+  { id: 'FREEZE', icon: '🔒', labelVi: 'Khóa', labelEn: 'Freeze' },
 ];
 
 export default function ProjectProgress({

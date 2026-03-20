@@ -48,6 +48,7 @@ export interface ConformanceInput {
   agentId?: string;
   action: string;
   targetFiles?: string[];
+  fileScope?: string[];
   mutationCount?: number;
   mutationBudget?: number;
   traceHash?: string;

@@ -4,6 +4,12 @@
 
 CVF has evolved through 6 versions, each adding a layer of capability while preserving backward compatibility. All versions prior to v1.6 are **frozen** — meaning their specifications are final and will not change.
 
+Current note:
+
+- the original CVF foundation introduced a `4-phase` model
+- the active reference path now teaches the canonical `INTAKE → DESIGN → BUILD → REVIEW → FREEZE` controlled loop
+- older versions are still important historically, but they should not be mistaken for the current canonical execution posture
+
 ---
 
 ## Version Timeline
@@ -26,7 +32,7 @@ v1.6  Agent Platform      ██████████████████
 **Status:** FROZEN
 
 **What it introduced:**
-- The 4-phase process: Discovery → Design → Build → Review
+- The original 4-phase process: Discovery → Design → Build → Review
 - Phase gates (must pass to continue)
 - Basic decision logging (`DECISIONS.md`)
 - CVF Manifesto and core philosophy
@@ -159,11 +165,12 @@ v1.6  Agent Platform      ██████████████████
 
 **What it added:**
 - Full web application (Next.js 16 + React 19 + TypeScript 5)
-- Interactive templates for all 4 phases
+- Interactive templates and governance flows that now align to the canonical controlled loop
 - Multi-agent chat interface
 - Single and multi-AI mode
 - Agent handoffs and phase transitions
 - 3 governance modes: Minimal, Standard, Full
+- governed freeze closure on the active reference path
 - Real-time risk assessment UI
 - Zustand state management
 - Tailwind CSS 4 styling

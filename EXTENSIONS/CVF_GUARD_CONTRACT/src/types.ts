@@ -4,16 +4,41 @@
  * SINGLE SOURCE OF TRUTH for all CVF guard types.
  * Both Web UI (v1.6) and MCP Server (v2.5) MUST import from here.
  *
+ * Canonical runtime model:
+ *   - phases: INTAKE → DESIGN → BUILD → REVIEW → FREEZE
+ *   - roles: OBSERVER / ANALYST / BUILDER / REVIEWER / GOVERNOR
+ *
+ * Legacy aliases remain accepted at input boundaries for backward compatibility,
+ * but they are not the preferred canonical runtime vocabulary.
+ *
  * @module cvf-guard-contract/types
  */
 
 // ─── Core Enums ───────────────────────────────────────────────────────
 
-export type CVFPhase = 'DISCOVERY' | 'DESIGN' | 'BUILD' | 'REVIEW';
+export type CanonicalCVFPhase =
+  | 'INTAKE'
+  | 'DESIGN'
+  | 'BUILD'
+  | 'REVIEW'
+  | 'FREEZE';
+
+export type LegacyCVFPhaseAlias = 'DISCOVERY';
+
+export type CVFPhase = CanonicalCVFPhase | LegacyCVFPhaseAlias;
+export type CVFPhaseInput = CVFPhase;
 
 export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
 
-export type CVFRole = 'HUMAN' | 'AI_AGENT' | 'REVIEWER' | 'OPERATOR';
+export type CVFRole =
+  | 'OBSERVER'
+  | 'ANALYST'
+  | 'BUILDER'
+  | 'REVIEWER'
+  | 'GOVERNOR'
+  | 'HUMAN'
+  | 'AI_AGENT'
+  | 'OPERATOR';
 
 export type GuardDecision = 'ALLOW' | 'BLOCK' | 'ESCALATE';
 
@@ -51,6 +76,8 @@ export interface GuardRequestContext {
   agentId?: string;
   action: string;
   targetFiles?: string[];
+  /** Explicit file-level boundaries for mutating actions. */
+  fileScope?: string[];
   mutationCount?: number;
   mutationBudget?: number;
   scope?: string;
@@ -110,7 +137,7 @@ export interface GuardRuntimeConfig {
 
 // ─── Constants ────────────────────────────────────────────────────────
 
-export const PHASE_ORDER: CVFPhase[] = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
+export const PHASE_ORDER: CanonicalCVFPhase[] = ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
 
 export const RISK_NUMERIC: Record<CVFRiskLevel, number> = {
   R0: 0,
@@ -126,3 +153,11 @@ export const DEFAULT_GUARD_RUNTIME_CONFIG: GuardRuntimeConfig = {
   defaultDecision: 'ALLOW',
   escalationThreshold: 'R2',
 };
+
+/**
+ * Guards that form the non-bypassable governance core.
+ * Shared factories should always register these by default.
+ */
+export const MANDATORY_GUARD_IDS = ['authority_gate', 'phase_gate', 'ai_commit'] as const;
+
+export type MandatoryGuardId = (typeof MANDATORY_GUARD_IDS)[number];

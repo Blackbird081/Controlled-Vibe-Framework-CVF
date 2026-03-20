@@ -55,16 +55,23 @@ describe('enterprise', () => {
     expect(allowed.allowed).toBe(true);
   });
 
+  it('normalizes legacy DISCOVERY alias for enterprise phase checks', () => {
+    const developer = { id: 'u1', name: 'Dev', email: 'dev@cvf', role: 'developer', joinedAt: 'now' as const };
+    const allowed = canPerformAction(developer, 'clarify', 'R0', 'DISCOVERY');
+    expect(allowed.allowed).toBe(true);
+  });
+
   it('tracks approval requests and approvals', () => {
     const workflow = new ApprovalWorkflow(24);
     const req = workflow.createRequest({
       requestedBy: 'u1',
       action: 'deploy',
-      phase: 'BUILD',
+      phase: 'DISCOVERY',
       riskLevel: 'R3',
       reason: 'High risk',
     });
     expect(req.status).toBe('pending');
+    expect(req.phase).toBe('INTAKE');
 
     const approved = workflow.approve(req.id, 'reviewer-1', 'ok');
     expect(approved?.status).toBe('approved');
@@ -118,5 +125,12 @@ describe('enterprise', () => {
     expect(report.complianceScore).toBe(90);
     expect(report.guardBreakdown.length).toBeGreaterThan(0);
     expect(report.topBlockedActions[0].action).toBe('g2');
+    expect(report.phaseDistribution).toEqual({
+      INTAKE: 0,
+      DESIGN: 0,
+      BUILD: 0,
+      REVIEW: 0,
+      FREEZE: 0,
+    });
   });
 });

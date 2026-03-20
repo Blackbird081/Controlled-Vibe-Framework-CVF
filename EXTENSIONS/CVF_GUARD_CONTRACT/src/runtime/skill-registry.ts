@@ -9,6 +9,10 @@
 
 import type { CVFPhase, CVFRiskLevel } from '../types';
 
+function normalizePhaseAlias(phase: CVFPhase | undefined): CVFPhase | undefined {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
+
 // ─── Skill Definition ─────────────────────────────────────────────────
 
 export interface SkillDefinition {
@@ -49,7 +53,8 @@ export class SkillRegistry {
   }
 
   getByPhase(phase: CVFPhase): SkillDefinition[] {
-    return this.getAll().filter((s) => !s.requiredPhase || s.requiredPhase === phase);
+    const normalizedPhase = normalizePhaseAlias(phase);
+    return this.getAll().filter((s) => !s.requiredPhase || normalizePhaseAlias(s.requiredPhase) === normalizedPhase);
   }
 
   getCount(): number {
@@ -70,10 +75,13 @@ export class SkillRegistry {
       return { allowed: false, reason: `Skill "${skillId}" not found in registry.` };
     }
 
-    if (skill.requiredPhase && skill.requiredPhase !== currentPhase) {
+    const normalizedCurrentPhase = normalizePhaseAlias(currentPhase);
+    const normalizedRequiredPhase = normalizePhaseAlias(skill.requiredPhase);
+
+    if (normalizedRequiredPhase && normalizedRequiredPhase !== normalizedCurrentPhase) {
       return {
         allowed: false,
-        reason: `Skill "${skill.name}" requires phase ${skill.requiredPhase} but current phase is ${currentPhase}.`,
+        reason: `Skill "${skill.name}" requires phase ${normalizedRequiredPhase} but current phase is ${normalizedCurrentPhase}.`,
       };
     }
 

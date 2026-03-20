@@ -131,7 +131,7 @@ describe('AgentChat', () => {
         render(<AgentChat initialPrompt="CVF FULL MODE PROTOCOL" />);
 
         await waitFor(() => expect(chatMock).toHaveBeenCalled());
-        expect(await screen.findByText(/Phase A: Discovery/i)).toBeTruthy();
+        expect(await screen.findByText(/Phase 1: Intake/i)).toBeTruthy();
     });
 
     it('adds decision log entry when governance response is accepted', async () => {
@@ -187,13 +187,13 @@ describe('AgentChat', () => {
 
         render(<AgentChat initialPrompt="CVF FULL MODE PROTOCOL" />);
 
-        expect(await screen.findByText(/Phase A: Discovery/i)).toBeTruthy();
+        expect(await screen.findByText(/Phase 1: Intake/i)).toBeTruthy();
         const approveButton = screen.getByRole('button', { name: /Approve/i });
         await waitFor(() => expect(approveButton.hasAttribute('disabled')).toBe(false));
         fireEvent.click(approveButton);
 
-        await waitFor(() => expect(screen.queryByText(/Phase A: Discovery/i)).toBeNull());
-        expect(await screen.findByText(/Phase Discovery approved/i)).toBeTruthy();
+        await waitFor(() => expect(screen.queryByText(/Phase 1: Intake/i)).toBeNull());
+        expect(await screen.findByText(/Phase INTAKE approved/i)).toBeTruthy();
 
         fireEvent.click(screen.getByTitle('Decision log'));
         expect(await screen.findByText('Gate approved')).toBeTruthy();

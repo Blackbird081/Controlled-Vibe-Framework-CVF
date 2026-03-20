@@ -74,6 +74,7 @@ export class ConformanceRunner {
         agentId: scenario.input.agentId,
         action: scenario.input.action,
         targetFiles: scenario.input.targetFiles,
+        fileScope: scenario.input.fileScope,
         mutationCount: scenario.input.mutationCount,
         mutationBudget: scenario.input.mutationBudget,
         traceHash: scenario.input.traceHash,

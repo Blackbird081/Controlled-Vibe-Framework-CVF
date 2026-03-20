@@ -12,15 +12,17 @@
 // ─── Phase Labels ────────────────────────────────────────────────────
 
 export const PHASE_FRIENDLY: Record<string, { vi: string; en: string; icon: string }> = {
-  'DISCOVERY': { vi: 'Khám phá & Phân tích', en: 'Explore & Analyze', icon: '🔍' },
+  'INTAKE': { vi: 'Tiếp nhận & Làm rõ', en: 'Intake & Clarify', icon: '🧭' },
   'DESIGN': { vi: 'Thiết kế & Lên kế hoạch', en: 'Design & Plan', icon: '📐' },
   'BUILD': { vi: 'Xây dựng & Thực thi', en: 'Build & Execute', icon: '🔨' },
   'REVIEW': { vi: 'Kiểm tra & Đánh giá', en: 'Review & Verify', icon: '✅' },
+  'FREEZE': { vi: 'Chốt kết quả & Khóa phạm vi', en: 'Freeze & Close Out', icon: '🔒' },
   // Aliases
-  'PHASE A': { vi: 'Khám phá & Phân tích', en: 'Explore & Analyze', icon: '🔍' },
+  'PHASE A': { vi: 'Tiếp nhận & Làm rõ', en: 'Intake & Clarify', icon: '🧭' },
   'PHASE B': { vi: 'Thiết kế & Lên kế hoạch', en: 'Design & Plan', icon: '📐' },
   'PHASE C': { vi: 'Xây dựng & Thực thi', en: 'Build & Execute', icon: '🔨' },
   'PHASE D': { vi: 'Kiểm tra & Đánh giá', en: 'Review & Verify', icon: '✅' },
+  'PHASE E': { vi: 'Chốt kết quả & Khóa phạm vi', en: 'Freeze & Close Out', icon: '🔒' },
 };
 
 // ─── Risk Labels ─────────────────────────────────────────────────────
@@ -43,6 +45,16 @@ export const DECISION_FRIENDLY: Record<string, { vi: string; en: string; icon: s
 // ─── Guard Names ─────────────────────────────────────────────────────
 
 export const GUARD_FRIENDLY: Record<string, { vi: string; en: string }> = {
+  'ai_commit': { vi: 'Cam kết AI trước khi sửa', en: 'AI Commit Check' },
+  'file_scope': { vi: 'Kiểm tra phạm vi file', en: 'File Scope Check' },
+  'phase_gate': { vi: 'Kiểm tra giai đoạn', en: 'Phase Check' },
+  'risk_gate': { vi: 'Kiểm tra rủi ro', en: 'Risk Check' },
+  'authority_gate': { vi: 'Kiểm tra quyền hạn', en: 'Permission Check' },
+  'mutation_budget': { vi: 'Giới hạn thay đổi', en: 'Change Limit' },
+  'scope_guard': { vi: 'Kiểm tra phạm vi', en: 'Scope Check' },
+  'audit_trail': { vi: 'Ghi nhật ký', en: 'Audit Log' },
+  'AiCommitGuard': { vi: 'Cam kết AI trước khi sửa', en: 'AI Commit Check' },
+  'FileScopeGuard': { vi: 'Kiểm tra phạm vi file', en: 'File Scope Check' },
   'PhaseGateGuard': { vi: 'Kiểm tra giai đoạn', en: 'Phase Check' },
   'RiskGateGuard': { vi: 'Kiểm tra rủi ro', en: 'Risk Check' },
   'AuthorityGateGuard': { vi: 'Kiểm tra quyền hạn', en: 'Permission Check' },
@@ -65,8 +77,13 @@ export const STATUS_FRIENDLY: Record<string, { vi: string; en: string }> = {
 
 type Lang = 'vi' | 'en';
 
+function normalizePhaseLabelKey(phase: string): string {
+  const key = phase.toUpperCase().trim();
+  return key === 'DISCOVERY' ? 'INTAKE' : key;
+}
+
 export function friendlyPhase(phase: string, lang: Lang = 'vi'): string {
-  const key = phase.toUpperCase();
+  const key = normalizePhaseLabelKey(phase);
   const entry = PHASE_FRIENDLY[key];
   return entry ? `${entry.icon} ${entry[lang]}` : phase;
 }

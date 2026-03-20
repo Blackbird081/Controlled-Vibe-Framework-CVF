@@ -14,16 +14,26 @@ import { GuardRuntimeEngine } from '../governance/guard_runtime/guard.runtime.en
 import { PhaseGateGuard } from '../governance/guard_runtime/guards/phase.gate.guard.js';
 import { RiskGateGuard } from '../governance/guard_runtime/guards/risk.gate.guard.js';
 import { AuthorityGateGuard } from '../governance/guard_runtime/guards/authority.gate.guard.js';
+import { AiCommitGuard } from '../governance/guard_runtime/guards/ai.commit.guard.js';
 import { MutationBudgetGuard } from '../governance/guard_runtime/guards/mutation.budget.guard.js';
+import { FileScopeGuard } from '../governance/guard_runtime/guards/file.scope.guard.js';
 import { ScopeGuard } from '../governance/guard_runtime/guards/scope.guard.js';
 import { AuditTrailGuard } from '../governance/guard_runtime/guards/audit.trail.guard.js';
+
+const VALID_AI_COMMIT = {
+  commitId: 'entry-commit-001',
+  agentId: 'entry-agent',
+  timestamp: Date.now(),
+};
 
 function createEngine(): GuardRuntimeEngine {
   const engine = new GuardRuntimeEngine();
   engine.registerGuard(new PhaseGateGuard());
   engine.registerGuard(new RiskGateGuard());
   engine.registerGuard(new AuthorityGateGuard());
+  engine.registerGuard(new AiCommitGuard());
   engine.registerGuard(new MutationBudgetGuard());
+  engine.registerGuard(new FileScopeGuard());
   engine.registerGuard(new ScopeGuard());
   engine.registerGuard(new AuditTrailGuard());
   return engine;
@@ -42,6 +52,8 @@ describe('CliAdapter', () => {
       risk: 'R1',
       role: 'AI_AGENT',
       agentId: 'claude',
+      ai_commit: VALID_AI_COMMIT,
+      fileScope: ['src/'],
     });
     expect(req.requestId).toBe('cli-1');
     expect(req.action).toBe('write_code');
@@ -49,6 +61,8 @@ describe('CliAdapter', () => {
     expect(req.riskLevel).toBe('R1');
     expect(req.role).toBe('AI_AGENT');
     expect(req.agentId).toBe('claude');
+    expect(req.fileScope).toEqual(['src/']);
+    expect(req.metadata?.ai_commit).toEqual(VALID_AI_COMMIT);
   });
 
   it('defaults to BUILD phase when missing', () => {
@@ -85,6 +99,7 @@ describe('CliAdapter', () => {
     const engine = createEngine();
     const result = engine.evaluate({
       requestId: 'cli-fmt', phase: 'BUILD', riskLevel: 'R0', role: 'HUMAN', action: 'write_code',
+      metadata: { ai_commit: VALID_AI_COMMIT },
     });
     const resp = adapter.formatResponse(result, 'cli-fmt');
     expect(resp.entryPoint).toBe('CLI');
@@ -113,13 +128,21 @@ describe('McpAdapter', () => {
     const req = adapter.normalize({
       id: 'mcp-1',
       tool_name: 'write_file',
-      arguments: { agentId: 'claude', targetFiles: ['src/app.ts'], traceHash: 'h1' },
+      arguments: {
+        agentId: 'claude',
+        targetFiles: ['src/app.ts'],
+        traceHash: 'h1',
+        ai_commit: VALID_AI_COMMIT,
+        fileScope: ['src/'],
+      },
     });
     expect(req.requestId).toBe('mcp-1');
     expect(req.action).toBe('write_file');
     expect(req.role).toBe('AI_AGENT');
     expect(req.agentId).toBe('claude');
     expect(req.targetFiles).toEqual(['src/app.ts']);
+    expect(req.fileScope).toEqual(['src/']);
+    expect(req.metadata?.ai_commit).toEqual(VALID_AI_COMMIT);
   });
 
   it('resolves phase from tool name (write → BUILD)', () => {
@@ -134,7 +157,7 @@ describe('McpAdapter', () => {
 
   it('resolves phase from tool name (discover → DISCOVERY)', () => {
     const req = adapter.normalize({ tool_name: 'discover_requirements', arguments: {} });
-    expect(req.phase).toBe('DISCOVERY');
+    expect(req.phase).toBe('INTAKE');
   });
 
   it('resolves risk from tool name (delete → R3)', () => {
@@ -192,11 +215,15 @@ describe('ApiAdapter', () => {
       agentId: 'claude',
       action: 'write_code',
       targetFiles: ['src/app.ts'],
+      fileScope: ['src/'],
+      ai_commit: VALID_AI_COMMIT,
     });
     expect(req.requestId).toBe('api-1');
     expect(req.phase).toBe('BUILD');
     expect(req.riskLevel).toBe('R1');
     expect(req.role).toBe('AI_AGENT');
+    expect(req.fileScope).toEqual(['src/']);
+    expect(req.metadata?.ai_commit).toEqual(VALID_AI_COMMIT);
   });
 
   it('throws on invalid phase', () => {
@@ -253,7 +280,7 @@ describe('GuardGateway', () => {
   it('processes CLI request', () => {
     const resp = gateway.process('CLI', {
       requestId: 'gw-cli-1', action: 'write_code', phase: 'BUILD',
-      risk: 'R1', role: 'AI_AGENT', agentId: 'claude',
+      risk: 'R1', role: 'AI_AGENT', agentId: 'claude', ai_commit: VALID_AI_COMMIT,
     });
     expect(resp.entryPoint).toBe('CLI');
     expect(resp.allowed).toBe(true);
@@ -262,7 +289,7 @@ describe('GuardGateway', () => {
   it('processes MCP request', () => {
     const resp = gateway.process('MCP', {
       id: 'gw-mcp-1', tool_name: 'write_file',
-      arguments: { agentId: 'claude', targetFiles: ['src/app.ts'] },
+      arguments: { agentId: 'claude', targetFiles: ['src/app.ts'], ai_commit: VALID_AI_COMMIT },
     });
     expect(resp.entryPoint).toBe('MCP');
     expect(resp.requestId).toBe('gw-mcp-1');
@@ -271,7 +298,7 @@ describe('GuardGateway', () => {
   it('processes API request', () => {
     const resp = gateway.process('API', {
       requestId: 'gw-api-1', phase: 'BUILD', riskLevel: 'R0',
-      role: 'HUMAN', action: 'write_code',
+      role: 'HUMAN', action: 'write_code', ai_commit: VALID_AI_COMMIT,
     });
     expect(resp.entryPoint).toBe('API');
     expect(resp.allowed).toBe(true);

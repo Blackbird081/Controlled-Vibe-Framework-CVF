@@ -8,6 +8,7 @@ Primary inputs:
 - `governance/compat/core-manifest.json`
 - `governance/compat/check_core_compat.py`
 - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- `governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md`
 
 ---
 
@@ -74,4 +75,8 @@ python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD --enforc
 
 - This process optimizes developer time; it does not reduce quality gates.
 - `core-manifest.json` must be updated if architecture boundaries or trigger files change.
+- After every accepted fix/update with real behavior or governance impact, baseline must also be updated:
+  - full snapshot when the comparison anchor itself changes materially
+  - delta/addendum when the active baseline remains valid but needs a new reconciliation checkpoint
+  - post-fix assessment when closing findings against an existing pre-fix baseline
 - `cvf-web-ci.yml` now runs the compatibility gate as an impact report step before lint/test.

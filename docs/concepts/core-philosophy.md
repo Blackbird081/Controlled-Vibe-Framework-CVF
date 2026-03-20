@@ -93,7 +93,7 @@ CVF's discipline (phases, specs, checklists) creates space for creativity. Witho
 | Structure, not micro | Phase gates + checklists | Checklist: `[x] Meets spec` |
 | AI = executor | AI gets frozen specs, can't expand scope | "Follow this design. Do not add features." |
 | Non-coders welcome | Skill forms guide input; no code needed | Fill a form → get structured output |
-| Discipline = creativity | Phases free you from "what do I do next?" | Clear path: Discover → Design → Build → Review |
+| Discipline = creativity | Phases free you from "what do I do next?" | Clear path: Intake → Design → Build → Review → Freeze |
 
 ---
 
@@ -125,7 +125,8 @@ Everything else — Phase B, governance toolkit, skill library, web UI, risk mod
 
 ## Further Reading
 
-- [The 4-Phase Process](4-phase-process.md) — How the phases work
+- [Controlled Execution Loop](controlled-execution-loop.md) — The active canonical phase model
+- [The 4-Phase Process](4-phase-process.md) — Historical foundation and legacy context
 - [Governance Model](governance-model.md) — Roles, authority, risk
 - [CVF Manifesto](../../v1.0/CVF_MANIFESTO.md) — Full philosophical foundation
 

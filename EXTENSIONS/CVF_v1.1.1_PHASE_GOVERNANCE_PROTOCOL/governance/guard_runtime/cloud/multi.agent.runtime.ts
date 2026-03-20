@@ -10,7 +10,12 @@
  *   - Cross-agent communication via message bus
  */
 
-import type { CVFRole, CVFRiskLevel, GuardPipelineResult } from '../guard.runtime.types.js';
+import type { CanonicalCVFPhase, CVFPhase, CVFRole, CVFRiskLevel, GuardPipelineResult } from '../guard.runtime.types.js';
+import { PHASE_ROLE_MATRIX } from '../guards/phase.gate.guard.js';
+
+function normalizePhaseAlias(phase: CVFPhase): CanonicalCVFPhase {
+  return phase === 'DISCOVERY' ? 'INTAKE' : phase;
+}
 
 // --- Agent Types ---
 
@@ -63,6 +68,22 @@ export interface ConflictRecord {
   detectedAt: string;
   resolved: boolean;
   resolution?: string;
+}
+
+export interface GovernedTaskAssignment {
+  id: string;
+  phase: CVFPhase;
+  riskLevel: CVFRiskLevel;
+  targetFiles?: string[];
+  fileScope?: string[];
+  requiresLock?: boolean;
+  payload?: Record<string, unknown>;
+}
+
+export interface GovernedTaskDecision {
+  allowed: boolean;
+  reason: string;
+  conflictingResources?: string[];
 }
 
 // --- Multi-Agent Runtime ---
@@ -152,6 +173,144 @@ export class MultiAgentRuntime {
 
   getAgentCount(): number {
     return this.agents.size;
+  }
+
+  canAssignTask(agentId: string, assignment: GovernedTaskAssignment): GovernedTaskDecision {
+    const agent = this.agents.get(agentId);
+    if (!agent) {
+      return { allowed: false, reason: `Agent "${agentId}" not found.` };
+    }
+
+    if (agent.status === 'SUSPENDED' || agent.status === 'TERMINATED') {
+      return { allowed: false, reason: `Agent "${agentId}" is ${agent.status}.` };
+    }
+
+    const tenant = this.tenants.get(agent.tenantId);
+    if (!tenant) {
+      return { allowed: false, reason: `Tenant "${agent.tenantId}" not found.` };
+    }
+
+    const normalizedPhase = normalizePhaseAlias(assignment.phase);
+    const allowedRoles = PHASE_ROLE_MATRIX[normalizedPhase] ?? [];
+    if (!allowedRoles.includes(agent.role)) {
+      return {
+        allowed: false,
+        reason: `Role "${agent.role}" is not authorized for phase "${normalizedPhase}".`,
+      };
+    }
+
+    if (!tenant.allowedRiskLevels.includes(assignment.riskLevel)) {
+      return {
+        allowed: false,
+        reason: `Tenant "${tenant.id}" does not allow risk level "${assignment.riskLevel}".`,
+      };
+    }
+
+    if (this.compareRiskLevels(assignment.riskLevel, agent.maxRiskLevel) > 0) {
+      return {
+        allowed: false,
+        reason: `Agent "${agent.id}" max risk "${agent.maxRiskLevel}" is lower than requested "${assignment.riskLevel}".`,
+      };
+    }
+
+    const targetFiles = assignment.targetFiles ?? [];
+    const assignmentScope = assignment.fileScope ?? [];
+    if (targetFiles.length > 0 && assignmentScope.length > 0 && !targetFiles.every((file) => assignmentScope.includes(file))) {
+      return {
+        allowed: false,
+        reason: 'Target files exceed the assignment file scope.',
+      };
+    }
+
+    const agentScope = this.parseStringArray(agent.metadata?.['fileScope']);
+    if (targetFiles.length > 0 && agentScope.length > 0 && !targetFiles.every((file) => agentScope.includes(file))) {
+      return {
+        allowed: false,
+        reason: `Target files exceed the file scope assigned to agent "${agent.id}".`,
+      };
+    }
+
+    if (assignment.requiresLock && targetFiles.length > 0) {
+      const conflictingResources = targetFiles.filter((resource) => {
+        const holder = this.resourceLocks.get(resource);
+        return holder != null && holder !== agentId;
+      });
+      if (conflictingResources.length > 0) {
+        return {
+          allowed: false,
+          reason: 'One or more target resources are locked by another agent.',
+          conflictingResources,
+        };
+      }
+    }
+
+    return { allowed: true, reason: 'Assignment satisfies phase, risk, and file-boundary checks.' };
+  }
+
+  assignTask(agentId: string, assignment: GovernedTaskAssignment): { success: boolean; decision: GovernedTaskDecision } {
+    const decision = this.canAssignTask(agentId, assignment);
+    if (!decision.allowed) {
+      return { success: false, decision };
+    }
+
+    const agent = this.agents.get(agentId);
+    if (!agent) {
+      return {
+        success: false,
+        decision: { allowed: false, reason: `Agent "${agentId}" not found.` },
+      };
+    }
+
+    const lockedResources: string[] = [];
+    if (assignment.requiresLock) {
+      for (const resource of assignment.targetFiles ?? []) {
+        if (!this.acquireLock(agentId, resource)) {
+          for (const locked of lockedResources) {
+            this.releaseLock(agentId, locked);
+          }
+          return {
+            success: false,
+            decision: {
+              allowed: false,
+              reason: `Could not acquire lock for "${resource}".`,
+              conflictingResources: [resource],
+            },
+          };
+        }
+        lockedResources.push(resource);
+      }
+    }
+
+    agent.lastActiveAt = new Date().toISOString();
+    agent.metadata = {
+      ...agent.metadata,
+      currentAssignment: {
+        id: assignment.id,
+        phase: assignment.phase,
+        riskLevel: assignment.riskLevel,
+        targetFiles: assignment.targetFiles,
+        fileScope: assignment.fileScope,
+        requiresLock: assignment.requiresLock ?? false,
+      },
+    };
+
+    this.sendMessage({
+      fromAgentId: 'runtime',
+      toAgentId: agentId,
+      type: 'TASK_ASSIGN',
+      payload: {
+        assignmentId: assignment.id,
+        phase: assignment.phase,
+        riskLevel: assignment.riskLevel,
+        targetFiles: assignment.targetFiles,
+        lockedResources,
+      },
+    });
+
+    return {
+      success: true,
+      decision,
+    };
   }
 
   activateAgent(agentId: string): boolean {
@@ -307,5 +466,25 @@ export class MultiAgentRuntime {
       lockedResources: this.resourceLocks.size,
       unresolvedConflicts: this.conflicts.filter((c) => !c.resolved).length,
     };
+  }
+
+  private compareRiskLevels(left: CVFRiskLevel, right: CVFRiskLevel): number {
+    const order: Record<CVFRiskLevel, number> = {
+      R0: 0,
+      R1: 1,
+      R2: 2,
+      R3: 3,
+    };
+    return order[left] - order[right];
+  }
+
+  private parseStringArray(value: unknown): string[] {
+    if (Array.isArray(value)) {
+      return value.map(String);
+    }
+    if (typeof value === 'string') {
+      return value.split(',').map((entry) => entry.trim()).filter(Boolean);
+    }
+    return [];
   }
 }

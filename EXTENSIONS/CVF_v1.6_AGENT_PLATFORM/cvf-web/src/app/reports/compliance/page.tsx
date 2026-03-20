@@ -30,10 +30,11 @@ const MOCK_REPORT: ComplianceReport = {
     'R3': 42
   },
   phaseDistribution: {
-    'DISCOVERY': 600,
-    'DESIGN': 300,
-    'BUILD': 245,
-    'REVIEW': 100
+    'INTAKE': 410,
+    'DESIGN': 255,
+    'BUILD': 360,
+    'REVIEW': 170,
+    'FREEZE': 50
   },
   topBlockedActions: [
     { action: 'system_execute', count: 18, reason: 'Risk R3 exceeds Developer Role Max R2' },

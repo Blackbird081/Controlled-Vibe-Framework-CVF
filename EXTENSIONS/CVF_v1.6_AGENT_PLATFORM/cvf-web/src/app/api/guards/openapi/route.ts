@@ -23,7 +23,7 @@ const OPENAPI_SPEC = {
     '/api/guards/evaluate': {
       post: {
         summary: 'Full guard pipeline evaluation',
-        description: 'Evaluate an action against all 13 CVF guards. Returns ALLOW, BLOCK, or ESCALATE.',
+        description: 'Evaluate an action against the hardened default CVF guard stack. Returns ALLOW, BLOCK, or ESCALATE.',
         operationId: 'evaluateGuards',
         requestBody: {
           required: true,
@@ -35,11 +35,12 @@ const OPENAPI_SPEC = {
                 properties: {
                   requestId: { type: 'string', description: 'Unique request identifier' },
                   action: { type: 'string', description: 'Description of the action to evaluate' },
-                  phase: { type: 'string', enum: ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'], default: 'BUILD' },
+                  phase: { type: 'string', enum: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'], default: 'BUILD', description: 'Canonical CVF phase. Legacy DISCOVERY input is normalized to INTAKE at compatibility boundaries.' },
                   riskLevel: { type: 'string', enum: ['R0', 'R1', 'R2', 'R3'], default: 'R0' },
-                  role: { type: 'string', enum: ['HUMAN', 'AI_AGENT', 'REVIEWER', 'OPERATOR'], default: 'AI_AGENT' },
+                  role: { type: 'string', enum: ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'AI_AGENT', 'OPERATOR'], default: 'AI_AGENT' },
                   agentId: { type: 'string', description: 'Optional agent identifier' },
                   targetFiles: { type: 'array', items: { type: 'string' } },
+                  fileScope: { type: 'array', items: { type: 'string' } },
                   mutationCount: { type: 'integer' },
                 },
               },
@@ -91,7 +92,7 @@ const OPENAPI_SPEC = {
                 properties: {
                   requestId: { type: 'string' },
                   action: { type: 'string' },
-                  phase: { type: 'string', enum: ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'] },
+                  phase: { type: 'string', enum: ['INTAKE', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'], description: 'Canonical CVF phase. Legacy DISCOVERY input is normalized to INTAKE at compatibility boundaries.' },
                 },
               },
             },

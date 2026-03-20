@@ -1111,4 +1111,4 @@ Phase 1 of the CVF Edit Integration Roadmap mandated strict Governance Runtime H
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guard.runtime.engine.ts`
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guard.runtime.types.ts`
-- `docs/roadmaps/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md`
+- `docs/roadmaps/archive/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md`

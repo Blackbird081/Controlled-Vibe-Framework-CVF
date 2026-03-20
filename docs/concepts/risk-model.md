@@ -4,6 +4,12 @@
 
 CVF's risk model classifies every AI interaction by its potential impact. Higher risk = more controls. This prevents "move fast and break things" from breaking the wrong things.
 
+Current note:
+
+- the risk doctrine here is still valid
+- however, the active reference path now couples it to the canonical `INTAKE → DESIGN → BUILD → REVIEW → FREEZE` controlled loop
+- where this document mentions the older 4-phase structure, read it as historical foundation rather than the active instructional default
+
 ---
 
 ## Risk Levels: R0–R3
@@ -233,7 +239,8 @@ See [Skill System](skill-system.md) for how skills are governed.
 ## Further Reading
 
 - [Governance Model](governance-model.md) — Roles and authority per risk level
-- [4-Phase Process](4-phase-process.md) — Phase-risk mapping
+- [Controlled Execution Loop](controlled-execution-loop.md) — Current canonical phase model
+- [4-Phase Process](4-phase-process.md) — Historical phase-risk foundation
 - [Enterprise Guide](../guides/enterprise.md) — Risk management at scale
 - [Risk Matrix source](../../governance/) — Full risk matrix definitions
 

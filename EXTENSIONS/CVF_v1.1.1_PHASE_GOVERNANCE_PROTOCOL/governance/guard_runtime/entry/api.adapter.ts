@@ -12,6 +12,8 @@ export class ApiAdapter implements EntryAdapter {
   type = 'API' as const;
 
   normalize(raw: Record<string, unknown>): NormalizedRequest {
+    const metadata = this.parseMetadata(raw['metadata']);
+
     return {
       requestId: String(raw['requestId'] ?? `api-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`),
       phase: this.validatePhase(raw['phase']),
@@ -20,11 +22,16 @@ export class ApiAdapter implements EntryAdapter {
       agentId: raw['agentId'] ? String(raw['agentId']) : undefined,
       action: String(raw['action'] ?? 'unknown'),
       targetFiles: Array.isArray(raw['targetFiles']) ? (raw['targetFiles'] as unknown[]).map(String) : undefined,
+      fileScope: Array.isArray(raw['fileScope']) ? (raw['fileScope'] as unknown[]).map(String) : undefined,
       mutationCount: raw['mutationCount'] != null ? Number(raw['mutationCount']) : undefined,
       mutationBudget: raw['mutationBudget'] != null ? Number(raw['mutationBudget']) : undefined,
       traceHash: raw['traceHash'] ? String(raw['traceHash']) : undefined,
       scope: raw['scope'] ? String(raw['scope']) : undefined,
-      metadata: { entryPoint: 'API', ...(raw['metadata'] as Record<string, unknown> ?? {}) },
+      metadata: {
+        ...metadata,
+        ...(raw['ai_commit'] ? { ai_commit: raw['ai_commit'] } : {}),
+        entryPoint: 'API',
+      },
     };
   }
 
@@ -53,7 +60,7 @@ export class ApiAdapter implements EntryAdapter {
   }
 
   private validatePhase(value: unknown): CVFPhase {
-    const valid: CVFPhase[] = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
+    const valid: CVFPhase[] = ['INTAKE', 'DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW', 'FREEZE'];
     const str = String(value ?? '').toUpperCase();
     if (valid.includes(str as CVFPhase)) return str as CVFPhase;
     throw new Error(`Invalid phase: "${value}". Must be one of: ${valid.join(', ')}`);
@@ -67,9 +74,15 @@ export class ApiAdapter implements EntryAdapter {
   }
 
   private validateRole(value: unknown): CVFRole {
-    const valid: CVFRole[] = ['HUMAN', 'AI_AGENT', 'REVIEWER', 'OPERATOR'];
+    const valid: CVFRole[] = ['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR', 'HUMAN', 'AI_AGENT', 'OPERATOR'];
     const str = String(value ?? '').toUpperCase();
     if (valid.includes(str as CVFRole)) return str as CVFRole;
     throw new Error(`Invalid role: "${value}". Must be one of: ${valid.join(', ')}`);
+  }
+
+  private parseMetadata(value: unknown): Record<string, unknown> {
+    return value && typeof value === 'object' && !Array.isArray(value)
+      ? { ...(value as Record<string, unknown>) }
+      : {};
   }
 }

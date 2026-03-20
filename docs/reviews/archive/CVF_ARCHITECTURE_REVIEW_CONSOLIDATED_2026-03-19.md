@@ -1,6 +1,6 @@
 # CVF Architecture Review — Consolidated Assessment
 
-> **Location:** `docs/reviews/CVF_ARCHITECTURE_REVIEW_CONSOLIDATED_2026-03-19.md`
+> **Location:** `docs/reviews/archive/CVF_ARCHITECTURE_REVIEW_CONSOLIDATED_2026-03-19.md`
 > **Date:** 2026-03-19
 > **Scope:** Full architecture audit of CVF framework — Layer 0 through Layer 5 + ECO
 > **Method:** OS kernel / platform architecture review methodology

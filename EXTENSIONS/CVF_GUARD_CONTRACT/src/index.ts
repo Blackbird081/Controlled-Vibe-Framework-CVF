@@ -18,8 +18,10 @@ export { GuardRuntimeEngine } from './engine';
 // Guards
 export { PhaseGateGuard, PHASE_ROLE_MATRIX, PHASE_DESCRIPTIONS } from './guards/phase-gate.guard';
 export { RiskGateGuard, RISK_DESCRIPTIONS } from './guards/risk-gate.guard';
-export { AuthorityGateGuard, RESTRICTED_ACTIONS } from './guards/authority-gate.guard';
+export { AuthorityGateGuard, AUTHORITY_MATRIX, RESTRICTED_ACTIONS } from './guards/authority-gate.guard';
+export { AiCommitGuard } from './guards/ai-commit.guard';
 export { MutationBudgetGuard, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD } from './guards/mutation-budget.guard';
+export { FileScopeGuard, PROTECTED_PATHS as FILE_SCOPE_PROTECTED_PATHS, READ_ONLY_ROLES, BUILDER_CLASS_ROLES } from './guards/file-scope.guard';
 export { ScopeGuard, PROTECTED_PATHS, CVF_ROOT_INDICATORS } from './guards/scope.guard';
 export { AuditTrailGuard } from './guards/audit-trail.guard';
 
@@ -29,12 +31,14 @@ import { GuardRuntimeEngine } from './engine';
 import { PhaseGateGuard } from './guards/phase-gate.guard';
 import { RiskGateGuard } from './guards/risk-gate.guard';
 import { AuthorityGateGuard } from './guards/authority-gate.guard';
+import { AiCommitGuard } from './guards/ai-commit.guard';
 import { MutationBudgetGuard } from './guards/mutation-budget.guard';
+import { FileScopeGuard } from './guards/file-scope.guard';
 import { ScopeGuard } from './guards/scope.guard';
 import { AuditTrailGuard } from './guards/audit-trail.guard';
 
 /**
- * Creates a GuardRuntimeEngine pre-loaded with all 6 canonical guards.
+ * Creates a GuardRuntimeEngine pre-loaded with the hardened default guard stack.
  * Ready to use — just call engine.evaluate(context).
  *
  * This factory is the RECOMMENDED way to create an engine.
@@ -44,10 +48,12 @@ export function createGuardEngine(
   config?: Partial<GuardRuntimeConfig>,
 ): GuardRuntimeEngine {
   const engine = new GuardRuntimeEngine(config);
+  engine.registerGuard(new AiCommitGuard());
   engine.registerGuard(new PhaseGateGuard());
   engine.registerGuard(new RiskGateGuard());
   engine.registerGuard(new AuthorityGateGuard());
   engine.registerGuard(new MutationBudgetGuard());
+  engine.registerGuard(new FileScopeGuard());
   engine.registerGuard(new ScopeGuard());
   engine.registerGuard(new AuditTrailGuard());
   return engine;

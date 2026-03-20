@@ -5,7 +5,7 @@ export const developmentTemplates: Template[] = [
         id: 'app_builder_wizard',
         name: '🧙 Xây dựng Ứng dụng',
         icon: '🧙',
-        description: 'Multi-step wizard tạo spec qua 8 bước. Khuyên dùng cho app phức tạp!',
+        description: 'Multi-step wizard tạo app spec với governed packet, review và live path. Khuyên dùng cho app phức tạp!',
         category: 'development',
         difficulty: 'medium',
         fields: [], // No fields - handled by wizard component
@@ -16,7 +16,7 @@ export const developmentTemplates: Template[] = [
         id: 'build_my_app',
         name: '🚀 Tạo Ứng dụng',
         icon: '🚀',
-        description: 'Mô tả ý tưởng app → AI tự quyết định mọi thứ và build cho bạn. Dành cho người không biết code.',
+        description: 'Mô tả ý tưởng app để CVF route vào governed starter path cho người không biết code.',
         category: 'development',
         difficulty: 'easy',
         fields: [
@@ -119,7 +119,7 @@ AI INSTRUCTIONS
 
 Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
 
-**Phase A - Discovery:** Xác nhận bạn hiểu đúng requirements.
+**Phase A - Intake:** Xác nhận bạn hiểu đúng requirements.
 
 **Phase B - Design:** 
 - Chọn tech stack (KHÔNG hỏi user chọn)
@@ -135,7 +135,12 @@ Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
 **Phase D - Review:**
 - Tóm tắt những gì đã build
 - Hướng dẫn setup và chạy
-- Hướng dẫn packaging/distribution`,
+- Hướng dẫn packaging/distribution
+
+**Phase E - Freeze:**
+- Chốt kết quả đã được chấp nhận
+- Ghi lại baseline / artifact đối soát
+- Nêu follow-up nếu còn`,
         outputExpected: [
             'Tech Stack Decision',
             'Architecture Diagram',

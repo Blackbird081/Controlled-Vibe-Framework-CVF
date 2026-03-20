@@ -5,7 +5,7 @@ export const productTemplates: Template[] = [
         id: 'product_design_wizard',
         name: '🎨 Thiết kế Sản phẩm',
         icon: '🎨',
-        description: 'Multi-step wizard tạo Product Design Spec qua 6 bước. Problem → User → Solution → UX → Visual → Review',
+        description: 'Multi-step wizard tạo Product Design Spec với governed packet và live path để đối soát',
         category: 'product',
         difficulty: 'medium',
         fields: [], // No fields - handled by wizard component

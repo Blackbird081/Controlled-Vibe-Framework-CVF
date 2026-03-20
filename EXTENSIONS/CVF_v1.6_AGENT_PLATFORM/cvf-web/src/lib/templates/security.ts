@@ -5,7 +5,7 @@ export const securityTemplates: Template[] = [
         id: 'security_assessment_wizard',
         name: '🔐 Đánh giá Bảo mật',
         icon: '🔐',
-        description: 'Multi-step wizard tạo Security Assessment Report qua 5 bước. Scope → Threats → Vulns → Risk → Review',
+        description: 'Multi-step wizard tạo Security Assessment Report với governed packet và live path để đối soát',
         category: 'security',
         difficulty: 'advanced',
         fields: [],

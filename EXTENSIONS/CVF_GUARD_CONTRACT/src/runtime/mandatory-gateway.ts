@@ -29,6 +29,8 @@ export interface GatewayConfig {
   defaultRisk: CVFRiskLevel;
   /** Default role if not specified */
   defaultRole: CVFRole;
+  /** Default execution posture for channels that do not specify one explicitly. */
+  defaultControlMode: 'standard' | 'governed';
 }
 
 export interface GatewayResult {
@@ -37,6 +39,13 @@ export interface GatewayResult {
   reason: string;
   guardResult?: GuardPipelineResult;
   bypassed: boolean;
+  controlMode: 'standard' | 'governed';
+  approvalRequired?: boolean;
+  evidence?: {
+    requestId?: string;
+    blockedBy?: string;
+    escalatedBy?: string;
+  };
 }
 
 // ─── Default Config ──────────────────────────────────────────────────
@@ -49,6 +58,7 @@ export const DEFAULT_GATEWAY_CONFIG: GatewayConfig = {
   defaultPhase: 'BUILD',
   defaultRisk: 'R1',
   defaultRole: 'AI_AGENT',
+  defaultControlMode: 'standard',
 };
 
 // ─── Mandatory Gateway ───────────────────────────────────────────────
@@ -74,8 +84,14 @@ export class MandatoryGateway {
     role?: CVFRole;
     agentId?: string;
     targetFiles?: string[];
+    fileScope?: string[];
     channel?: string;
+    metadata?: Record<string, unknown>;
   }): GatewayResult {
+    const controlMode = request.metadata?.controlMode === 'governed'
+      ? 'governed'
+      : this.config.defaultControlMode;
+
     // Check bypass list
     const normalizedAction = request.action.toLowerCase().trim();
     if (this.config.bypassActions.some(bp => normalizedAction.includes(bp))) {
@@ -84,6 +100,7 @@ export class MandatoryGateway {
         decision: 'BYPASS',
         reason: `Action "${request.action}" is in bypass list`,
         bypassed: true,
+        controlMode,
       };
       this.auditLog.push(result);
       return result;
@@ -96,6 +113,7 @@ export class MandatoryGateway {
         decision: 'ALLOW',
         reason: 'Gateway enforcement is disabled',
         bypassed: false,
+        controlMode,
       };
       this.auditLog.push(result);
       return result;
@@ -110,7 +128,12 @@ export class MandatoryGateway {
       agentId: request.agentId,
       action: request.action,
       targetFiles: request.targetFiles,
+      fileScope: request.fileScope,
       channel: (request.channel as 'web' | 'ide' | 'cli' | 'mcp' | 'api') || 'api',
+      metadata: {
+        ...request.metadata,
+        controlMode,
+      },
     };
 
     // Run guard evaluation
@@ -143,6 +166,13 @@ export class MandatoryGateway {
       reason: guardResult.agentGuidance || `Guard decision: ${guardResult.finalDecision}`,
       guardResult,
       bypassed: false,
+      controlMode,
+      approvalRequired: guardResult.finalDecision === 'ESCALATE' && controlMode === 'governed',
+      evidence: {
+        requestId: guardResult.requestId,
+        blockedBy: guardResult.blockedBy,
+        escalatedBy: guardResult.escalatedBy,
+      },
     };
 
     this.auditLog.push(result);

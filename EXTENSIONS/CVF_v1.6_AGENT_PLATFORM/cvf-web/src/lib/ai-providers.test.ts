@@ -68,6 +68,7 @@ describe('ai-providers', () => {
     it('returns localized CVF system prompt', () => {
         expect(getCVFSystemPrompt('vi')).toContain('CVF Agent');
         expect(getCVFSystemPrompt('en')).toContain('Controlled-Vibe Framework');
+        expect(getCVFSystemPrompt('vi')).toContain('`docs/baselines/...`');
     });
 
     it('GeminiProvider parses standard response', async () => {

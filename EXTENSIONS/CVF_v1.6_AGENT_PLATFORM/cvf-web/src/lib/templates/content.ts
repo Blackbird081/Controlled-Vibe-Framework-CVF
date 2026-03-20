@@ -5,7 +5,7 @@ export const contentTemplates: Template[] = [
         id: 'content_strategy_wizard',
         name: '✍️ Chiến lược Nội dung',
         icon: '✍️',
-        description: 'Multi-step wizard tạo Content Strategy qua 5 bước. Brand → Audience → Pillars → Channels → Review',
+        description: 'Multi-step wizard tạo Content Strategy với governed packet và live path để đối soát',
         category: 'content',
         difficulty: 'medium',
         fields: [],

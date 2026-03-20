@@ -42,6 +42,19 @@ describe('guard-sdk', () => {
     expect(body.requestId).toMatch(/^sdk-/);
   });
 
+  it('normalizes legacy DISCOVERY input to canonical INTAKE', async () => {
+    fetchMock.mockResolvedValue({
+      json: vi.fn().mockResolvedValue({ success: true }),
+    });
+
+    const client = new CVFGuardClient({ baseUrl: 'https://cvf.example' });
+    await client.evaluate({ action: 'clarify scope', phase: 'DISCOVERY' });
+
+    const [, init] = fetchMock.mock.calls[0];
+    const body = JSON.parse(init.body);
+    expect(body.phase).toBe('INTAKE');
+  });
+
   it('checks phase gate with default phase', async () => {
     fetchMock.mockResolvedValue({
       json: vi.fn().mockResolvedValue({ success: true }),
@@ -54,6 +67,19 @@ describe('guard-sdk', () => {
     expect(url).toBe('https://cvf.example/api/guards/phase-gate');
     const body = JSON.parse(init.body);
     expect(body.phase).toBe('BUILD');
+  });
+
+  it('normalizes legacy DISCOVERY phase gate input to INTAKE', async () => {
+    fetchMock.mockResolvedValue({
+      json: vi.fn().mockResolvedValue({ success: true }),
+    });
+
+    const client = createCVFGuard({ baseUrl: 'https://cvf.example' });
+    await client.checkPhaseGate('clarify-scope', 'DISCOVERY');
+
+    const [, init] = fetchMock.mock.calls[0];
+    const body = JSON.parse(init.body);
+    expect(body.phase).toBe('INTAKE');
   });
 
   it('requests audit log with query parameters', async () => {

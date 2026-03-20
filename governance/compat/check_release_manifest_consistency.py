@@ -198,7 +198,12 @@ def build_report() -> dict[str, Any]:
     maturity_content = ""
 
     if MANIFEST_PATH.exists():
-        manifest_rows = _extract_table_rows(_read(MANIFEST_PATH), "## Current Operational Manifest (2026-03-07)")
+        manifest_content = _read(MANIFEST_PATH)
+        manifest_heading = next(
+            (line.strip() for line in manifest_content.splitlines() if line.startswith("## Current Operational Manifest (")),
+            "## Current Operational Manifest (2026-03-07)",
+        )
+        manifest_rows = _extract_table_rows(manifest_content, manifest_heading)
         violations.extend(_validate_path_cells(manifest_rows, MANIFEST_PATH, [4]))
 
     if INVENTORY_PATH.exists():

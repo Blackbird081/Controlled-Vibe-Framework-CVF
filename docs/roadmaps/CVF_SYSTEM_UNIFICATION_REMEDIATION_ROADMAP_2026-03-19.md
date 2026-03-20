@@ -49,7 +49,11 @@ Current snapshot as of `2026-03-20`:
 
 ### In Progress
 
-- ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces; now strengthened by nine governed non-coder Web reference paths: `IN PROGRESS`
+- no currently authorized continuation batch remains `IN PROGRESS` on the active reference path
+
+### Deferred
+
+- ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces; now strengthened by nine governed non-coder Web reference paths, but explicitly `DEFERRED` until a fresh `GC-018` continuation score reopens it
 
 ### Newly Closed
 
@@ -62,7 +66,7 @@ Current snapshot as of `2026-03-20`:
 Interpretation:
 
 - this roadmap is `MATERIALLY DELIVERED` for the active reference path
-- the remaining work is breadth expansion and proof-strengthening, not a core-path governance drift crisis
+- the remaining work is future breadth expansion and proof-strengthening candidates under `GC-018`, not an active core-path remediation stream
 
 ## 1B. Post-Closure Depth Audit Register
 
@@ -323,6 +327,11 @@ Depth-audit continuation automation batch executed on `2026-03-20`:
 - local pre-push hook chain now includes depth-audit continuation compatibility: `COMPLETED`
 - documentation workflow now includes a dedicated depth-audit continuation job: `COMPLETED`
 - `GC-018` is no longer only documentary on the repository path; continuation checkpoints are now machine-enforced before push/merge: `COMPLETED`
+
+Roadmap stop-boundary refresh executed on `2026-03-20`:
+
+- active snapshot no longer reports ecosystem breadth as an `IN PROGRESS` remediation stream: `COMPLETED`
+- active-path roadmap status now reads as `no authorized in-progress batch` with future breadth explicitly `DEFERRED` under `GC-018`: `COMPLETED`
 
 Reference governed loop helper batch executed on `2026-03-20`:
 

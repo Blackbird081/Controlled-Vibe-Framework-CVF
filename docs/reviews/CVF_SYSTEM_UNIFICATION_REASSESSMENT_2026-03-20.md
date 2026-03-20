@@ -120,6 +120,7 @@ Independent judgment for the active local baseline:
 - Safe product positioning: `governance-first controlled execution system`
 - Post-standard continuation decision: `P3` remains `DEFERRED` until a freshly scored candidate crosses `GC-018`
 - Continuation control status: `GC-018` is now machine-enforced on the repository path before push/merge
+- Active remediation status: no currently authorized roadmap batch remains `IN PROGRESS` on the active reference path
 - Strongest justified claim today:
   - CVF now demonstrates substantially aligned governed execution paths with canonical phases, hardened guard defaults, explicit approval boundaries, evidence-backed freeze closure, audit-ready reconciliation artifacts, one reusable coder-facing reference loop, one governed non-coder onboarding starter handoff, and nine active non-coder Web reference runs.
 

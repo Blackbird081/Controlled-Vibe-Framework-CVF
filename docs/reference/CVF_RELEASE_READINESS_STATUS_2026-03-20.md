@@ -45,6 +45,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 2. Some secondary or ecosystem-specific controls still rely on the reference runtime rather than every extension family exposing identical maturity.
 3. CVF can credibly claim governed reference control loops for both coder-facing and multiple non-coder active paths, but not yet "fully unified controlled autonomy" across all active channels.
 4. Breadth expansion after the current active-path closure is no longer an open default; it now requires a freshly scored `GC-018` continuation checkpoint.
+5. The active reference path should now be read as depth-frozen for the current wave unless a new scored continuation candidate reopens it.
 
 ## Positioning Guidance
 
@@ -95,6 +96,7 @@ Current local baseline is suitable for:
 - non-coder governed reference demonstrations on the active Web path
 - active `cvf-web` production-build demonstrations on the current local baseline
 - further release-readiness preparation
+- future continuation reassessment under `GC-018`
 
 Current local baseline is not yet justified for:
 

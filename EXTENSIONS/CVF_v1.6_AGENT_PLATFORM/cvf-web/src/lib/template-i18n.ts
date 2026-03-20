@@ -12,7 +12,7 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     competitor_review: { name: 'Competitor Review', description: 'Competitive analysis' },
 
     // Technical
-    system_design_wizard: { name: '🔧 System Design Wizard', description: 'Multi-step wizard to create System Design Document in 5 steps: Requirements → Estimations → Design → Deep Dive → Review' },
+    system_design_wizard: { name: '🔧 System Design Wizard', description: 'Multi-step wizard to create a governed System Design Document with review packet and live path' },
     code_review: { name: 'Code Review', description: 'Code review for quality, security, performance' },
     architecture_review: { name: 'Architecture Review', description: 'System architecture review' },
 

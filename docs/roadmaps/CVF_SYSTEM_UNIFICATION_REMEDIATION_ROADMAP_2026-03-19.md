@@ -46,7 +46,7 @@ Current snapshot as of `2026-03-20`:
 
 ### In Progress
 
-- ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces; now strengthened by seven governed non-coder Web reference paths: `IN PROGRESS`
+- ecosystem-breadth parity beyond the active reference path, especially across auxiliary extension families and future adapter surfaces; now strengthened by eight governed non-coder Web reference paths: `IN PROGRESS`
 
 ### Newly Closed
 
@@ -253,6 +253,12 @@ Non-coder marketing breadth expansion batch executed on `2026-03-20`:
 - Marketing Campaign Wizard now produces the same governed packet evidence pattern and can launch a seventh governed live execution path through the Web execute pipeline: `COMPLETED`
 - active Web non-coder breadth is now demonstrated across app-building, business-strategy, research-proposal, product-design, data-analysis, content-strategy, and marketing paths on the same control model: `COMPLETED`
 - broader ecosystem parity remains `IN PROGRESS` outside these seven active Web reference paths
+
+Non-coder system-design breadth expansion batch executed on `2026-03-20`:
+
+- System Design Wizard now produces the same governed packet evidence pattern and can launch an eighth governed live execution path through the Web execute pipeline: `COMPLETED`
+- active Web non-coder breadth is now demonstrated across app-building, business-strategy, research-proposal, product-design, data-analysis, content-strategy, marketing, and system-design paths on the same control model: `COMPLETED`
+- broader ecosystem parity remains `IN PROGRESS` outside these eight active Web reference paths
 
 Verification completed for this batch:
 
@@ -774,7 +780,7 @@ Success should be measured with explicit signals:
 - `100%` of critical governance controls assigned to an executable owner
 - at least `1` reusable governed demo packet for non-coders with freeze-ready evidence: `COMPLETED`
 - at least `1` full end-to-end governed execution demo path for non-coders backed by one packaged live path: `COMPLETED`
-- at least `7` active non-coder governed live execution paths on the active Web reference line: `COMPLETED`
+- at least `8` active non-coder governed live execution paths on the active Web reference line: `COMPLETED`
 - at least `1` full end-to-end governed execution demo path for coder-facing channels: `COMPLETED`
 - independent reassessment upgrades whole-system status from `PARTIAL` to `ALIGNED`: `COMPLETED` (`SUBSTANTIALLY ALIGNED` on the active reference path)
 

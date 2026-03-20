@@ -22,6 +22,7 @@
   <tr>
     <td align="center"><a href="#what-cvf-is"><strong>Overview</strong></a></td>
     <td align="center"><a href="#start-here"><strong>Start Here</strong></a></td>
+    <td align="center"><a href="ARCHITECTURE.md"><strong>Architecture</strong></a></td>
     <td align="center"><a href="#current-status"><strong>Status</strong></a></td>
     <td align="center"><a href="#repository-map"><strong>Repo Map</strong></a></td>
     <td align="center"><a href="#key-docs"><strong>Docs Hub</strong></a></td>
@@ -50,6 +51,8 @@ What CVF is not claiming today:
 - platform breadth comparable to larger orchestration ecosystems
 
 The safest current product claim is recorded in [Release Readiness](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md).
+
+For a visual system map, open [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Start Here
 
@@ -125,6 +128,7 @@ Primary status anchors:
 
 ### Learn the model
 
+- [Architecture Overview](ARCHITECTURE.md)
 - [Docs Index](docs/INDEX.md)
 - [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
 - [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md)

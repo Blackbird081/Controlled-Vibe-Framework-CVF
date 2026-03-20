@@ -3942,6 +3942,26 @@ Utility and guard:
 - Notes/Risks:
   - This batch closes concrete build blockers on the active Web reference line and restores a passing production build.
 
+## [2026-03-20] Batch: Post-standard continuation checkpoint
+- Change reference:
+  - local working tree post-standard continuation checkpoint batch
+  - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - baseline receipt: `docs/baselines/CVF_POST_STANDARD_CONTINUATION_CHECKPOINT_DELTA_2026-03-20.md`
+- Impacted scope:
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `docs/baselines/CVF_POST_STANDARD_CONTINUATION_CHECKPOINT_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - runtime and Web component tests — no executable behavior changed in this checkpoint batch
+- Notes/Risks:
+  - This batch applies the standardized continuation rule after the latest active-path fixes and explicitly keeps `P3` deferred.
+
 ## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
 - Change reference:
   - local working tree Phase 2 control-loop batch

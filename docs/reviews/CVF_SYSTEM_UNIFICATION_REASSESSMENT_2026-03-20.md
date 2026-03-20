@@ -36,6 +36,7 @@ Supplemental evidence update recorded later on `2026-03-20`:
 - the governed reference path is now exposed as a reusable SDK helper via `CvfSdk.runReferenceGovernedLoop()`
 - this reduces reliance on scattered lower-level tests as the only proof that the coder-facing controlled loop can be re-run end to end
 - onboarding now opens Quick Start and persists a governed starter handoff before the routed non-coder starter wizard launches
+- the active `cvf-web` production build now passes again after the latest active-path hardening fixes
 - the active Web reference line now provides nine non-coder governed live paths through the Web execute pipeline:
   - App Builder Wizard
   - Business Strategy Wizard
@@ -115,6 +116,7 @@ Independent judgment for the active local baseline:
 - Roadmap status: `MATERIALLY DELIVERED`
 - Whole-system status: `SUBSTANTIALLY ALIGNED`
 - Safe product positioning: `governance-first controlled execution system`
+- Post-standard continuation decision: `P3` remains `DEFERRED` until a freshly scored candidate crosses `GC-018`
 - Strongest justified claim today:
   - CVF now demonstrates substantially aligned governed execution paths with canonical phases, hardened guard defaults, explicit approval boundaries, evidence-backed freeze closure, audit-ready reconciliation artifacts, one reusable coder-facing reference loop, one governed non-coder onboarding starter handoff, and nine active non-coder Web reference runs.
 

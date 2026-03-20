@@ -44,6 +44,7 @@ Current snapshot as of `2026-03-20`:
 - coder-facing governed reference execution path: `COMPLETED`
 - front-door / onboarding governed semantics on the active Web reference path: `COMPLETED`
 - onboarding -> governed starter handoff on the active Web reference path: `COMPLETED`
+- active `cvf-web` production build on the current local baseline: `COMPLETED`
 - independent reassessment and closure evidence chain for the active reference path: `COMPLETED`
 
 ### In Progress
@@ -136,6 +137,12 @@ Decision boundary now active for this roadmap:
 - `P2` has now been executed and is considered `COMPLETED`
 - `P3` is explicitly `DEFERRED` until a later reassessment proves a new breadth candidate crosses the continue threshold
 - this register must be refreshed before any future attempt to reopen breadth expansion on this roadmap
+
+Current post-standard continuation readout:
+
+- latest active-path hardening work improved execution credibility and restored a passing `cvf-web` production build
+- despite that improvement, the register still does **not** justify reopening `P3`
+- the next justified move after this checkpoint is another reassessment or a newly scored continuation candidate, not breadth expansion by habit
 
 Automation status:
 
@@ -300,6 +307,12 @@ Web build-blocker closure batch executed on `2026-03-20`:
 - non-coder reference loop types now accept `R3` so security-governed packets match the active governance model: `COMPLETED`
 - Security Assessment Wizard approval summary now reads canonical approval fields instead of a nonexistent `label` property: `COMPLETED`
 - active `cvf-web` production build now passes again on the current local baseline: `COMPLETED`
+
+Post-standard continuation checkpoint executed on `2026-03-20`:
+
+- roadmap snapshot refreshed after `P1`, `P2`, onboarding evidence reconciliation, and Web build-blocker closure: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+- `P3` remains `DEFERRED` under `GC-018` because the newest fixes increased quality on the active path but still did not create a new breadth-expansion decision boundary: `COMPLETED`
 
 Reference governed loop helper batch executed on `2026-03-20`:
 

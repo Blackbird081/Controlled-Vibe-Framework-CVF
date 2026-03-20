@@ -89,6 +89,7 @@ Current local baseline is suitable for:
 - governance-oriented demonstrations
 - coder-facing governed reference demonstrations
 - non-coder governed reference demonstrations on the active Web path
+- active `cvf-web` production-build demonstrations on the current local baseline
 - further release-readiness preparation
 
 Current local baseline is not yet justified for:
@@ -97,6 +98,7 @@ Current local baseline is not yet justified for:
 - declaring all roadmap-level governance ownership gaps closed
 - treating cross-extension execution semantics as fully production-complete
 - claiming that non-coder and coder-facing governed demo paths are equally mature everywhere
+- reopening roadmap breadth expansion without a fresh `GC-018` continuation score
 
 ---
 

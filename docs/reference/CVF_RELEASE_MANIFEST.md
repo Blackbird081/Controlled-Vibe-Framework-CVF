@@ -61,7 +61,7 @@ Status: authoritative operational release manifest for the current local baselin
 |---|---|
 | whole-system review | `docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md` |
 | update remediation review | `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md` |
-| active roadmap | `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md` |
+| governed continuation roadmap | `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md` |
 | readiness checkpoint | `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md` |
 | test evidence chain | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
 | enterprise evidence pack | `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md` |
@@ -70,7 +70,7 @@ Status: authoritative operational release manifest for the current local baselin
 
 ## Operational Notes
 
-- this manifest is local-authoritative until the current system unification wave is reassessed and frozen
+- this manifest is local-authoritative for a system-unification wave that is now materially delivered and intentionally depth-frozen under `GC-018`
 - any new version/line must update:
   - `docs/CVF_ARCHITECTURE_DECISIONS.md`
   - `docs/VERSIONING.md`

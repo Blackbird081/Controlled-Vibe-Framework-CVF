@@ -124,13 +124,14 @@ CVF has 5 distinct layers (not a monolith):
 
 Safe current statement:
 
-> CVF is a governance-first control plane with a substantially aligned runtime and an active roadmap toward full end-to-end controlled autonomy.
+> CVF is a governance-first control plane with a substantially aligned runtime on the active reference path, while further continuation is explicitly gated by `GC-018`.
 
 Statements to avoid until further roadmap closure:
 
 - full platform parity with larger orchestration ecosystems
 - fully unified autonomy across every active CVF channel
 - complete replacement of human supervision
+- implying that breadth expansion remains open by default after the current wave
 
 ---
 

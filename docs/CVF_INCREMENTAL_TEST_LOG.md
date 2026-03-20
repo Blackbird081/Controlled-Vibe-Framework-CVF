@@ -4054,6 +4054,27 @@ Utility and guard:
   - This batch does not add new runtime behavior.
   - It clarifies that the current wave is intentionally paused by governance, not merely lacking the next implementation step.
 
+## [2026-03-20] Batch: Release-manifest and positioning hold-state reconciliation
+- Scope:
+  - align high-level reference docs with the current `GC-018` hold posture
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+- Files updated:
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+  - `docs/reference/CVF_MATURITY_MATRIX.md`
+  - `docs/reference/CVF_POSITIONING.md`
+  - `docs/baselines/CVF_RELEASE_POSITIONING_HOLD_STATE_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not change implementation scope.
+  - It removes the last high-level wording that could imply the roadmap remains broadly active by default.
+
 ## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
 - Change reference:
   - local working tree Phase 2 control-loop batch

@@ -147,8 +147,11 @@ Current post-standard continuation readout:
 Automation status:
 
 - rule exists in policy and operational guard form
-- no dedicated compat checker or CI gate currently auto-enforces the presence of a depth-audit record for breadth-expansion batches
-- until such automation exists, this roadmap register is the canonical reviewable decision gate for continuation scope
+- dedicated compat checker now enforces reviewable continuation checkpoints for post-closure active-path changes:
+  - `governance/compat/check_depth_audit_continuation_compat.py`
+  - local hook chain: `governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+  - CI workflow: `.github/workflows/documentation-testing.yml`
+- this roadmap register remains the canonical decision source, while the compat gate now enforces that continuation evidence actually exists before push/merge
 
 Historical batch receipts follow below.
 Status labels inside each batch preserve the state at the moment that batch landed; the snapshot above is the latest aggregate readout.
@@ -313,6 +316,13 @@ Post-standard continuation checkpoint executed on `2026-03-20`:
 - roadmap snapshot refreshed after `P1`, `P2`, onboarding evidence reconciliation, and Web build-blocker closure: `COMPLETED`
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 - `P3` remains `DEFERRED` under `GC-018` because the newest fixes increased quality on the active path but still did not create a new breadth-expansion decision boundary: `COMPLETED`
+
+Depth-audit continuation automation batch executed on `2026-03-20`:
+
+- repo-level compat checker added for `GC-018` continuation enforcement: `COMPLETED`
+- local pre-push hook chain now includes depth-audit continuation compatibility: `COMPLETED`
+- documentation workflow now includes a dedicated depth-audit continuation job: `COMPLETED`
+- `GC-018` is no longer only documentary on the repository path; continuation checkpoints are now machine-enforced before push/merge: `COMPLETED`
 
 Reference governed loop helper batch executed on `2026-03-20`:
 

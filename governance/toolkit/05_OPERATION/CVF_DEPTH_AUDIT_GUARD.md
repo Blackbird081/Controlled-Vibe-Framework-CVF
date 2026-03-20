@@ -89,6 +89,12 @@ This record may live in:
 
 but it must be explicit and reviewable.
 
+Automated continuation enforcement reference:
+
+- `governance/compat/check_depth_audit_continuation_compat.py`
+- local hook chain: `governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+- CI workflow: `.github/workflows/documentation-testing.yml`
+
 ---
 
 ## 5. Default Guidance

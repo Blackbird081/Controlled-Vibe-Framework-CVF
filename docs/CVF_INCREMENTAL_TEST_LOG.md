@@ -3962,6 +3962,34 @@ Utility and guard:
 - Notes/Risks:
   - This batch applies the standardized continuation rule after the latest active-path fixes and explicitly keeps `P3` deferred.
 
+## [2026-03-20] Batch: Depth-audit continuation automation gate
+- Scope:
+  - repo-level enforcement for `GC-018` continuation control after the system-unification roadmap became `MATERIALLY DELIVERED`
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+- Files updated:
+  - `governance/compat/check_depth_audit_continuation_compat.py`
+  - `governance/compat/run_local_governance_hook_chain.py`
+  - `.github/workflows/documentation-testing.yml`
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/baselines/CVF_DEPTH_AUDIT_CONTINUATION_AUTOMATION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python -m py_compile governance/compat/check_depth_audit_continuation_compat.py` -> PASS
+  - `python governance/compat/check_depth_audit_continuation_compat.py --base HEAD --head HEAD --enforce` -> PASS
+  - `python governance/compat/check_depth_audit_continuation_compat.py --base 205cd86 --head f11a1a0 --enforce` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch closes the remaining repo-level automation gap for `GC-018`.
+  - Post-closure continuation on the active reference path is now machine-enforced instead of relying only on manual roadmap discipline.
+
 ## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
 - Change reference:
   - local working tree Phase 2 control-loop batch

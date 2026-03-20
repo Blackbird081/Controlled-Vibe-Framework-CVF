@@ -39,6 +39,7 @@ Status: release-readiness checkpoint for the current local remediation baseline.
 - key user-facing guides now teach the canonical 5-phase controlled loop instead of the formerly active 4-phase framing
 - `CvfSdk.runReferenceGovernedLoop()` now provides one reusable coder-facing governed execution path with auto-supplied `ai_commit`, `traceHash`, approval handling, freeze artifact, and checkpoint receipt
 - the non-coder reference packet now has nine live governed launch paths instead of being only a documentation-grade handoff artifact
+- the system-unification remediation roadmap should now be read as complete for the active wave, with future work redirected into reassessment or `GC-018` continuation handling
 
 ## Open Risks
 

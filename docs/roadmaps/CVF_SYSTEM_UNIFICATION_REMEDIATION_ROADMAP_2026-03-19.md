@@ -69,6 +69,12 @@ Interpretation:
 - the remaining work is future breadth expansion and proof-strengthening candidates under `GC-018`, not an active core-path remediation stream
 - the current wave should be treated as intentionally depth-frozen until a new scored continuation candidate is approved
 
+Closure decision:
+
+- the active-wave definition of done is now satisfied on the active reference path
+- this roadmap should now be read as `COMPLETE FOR ACTIVE WAVE`
+- future work belongs to reassessment or `GC-018` continuation handling, not to unfinished remediation inside this roadmap
+
 ### Current Remaining Scope
 
 What still remains after the active remediation wave:
@@ -94,6 +100,7 @@ Operational reading:
 - current roadmap posture: `HOLD`
 - current depth posture: `DEPTH-FROZEN`
 - current continuation posture: `DEFERRED UNLESS RE-SCORED`
+- current closure posture: `COMPLETE FOR ACTIVE WAVE`
 
 ## 1B. Post-Closure Depth Audit Register
 

@@ -4195,3 +4195,24 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not change the defer decision.
   - It makes the justification chain easier to follow from top-level entrypoints.
+## [2026-03-20] Batch: Active-wave roadmap closure checkpoint
+- Scope:
+  - formalize that the system-unification remediation roadmap is complete for the active wave before any future continuation is considered
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+- Files updated:
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `README.md`
+  - `docs/baselines/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not reopen any continuation candidate.
+  - It marks the roadmap as complete for the active wave and pushes all future work into reassessment or `GC-018` continuation flow.

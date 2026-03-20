@@ -265,7 +265,7 @@ CVF
 | **Tests** | 2,430+ passing (Core + Legacy + CVF_ECO) |
 | **Skills** | 141 skills × 12 domains + 34 agent tools |
 | **AI Safety** | Kernel active — 5-layer pipeline, anti-bypass, forensic tracing |
-| **Current System Review** | [System unification reassessment](docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md) — active reference path is now substantially aligned, now including a governed onboarding starter handoff, with breadth caveats remaining |
+| **Current System Review** | [System unification reassessment](docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md) — active reference path is now substantially aligned and the remediation roadmap is complete for the active wave, with future breadth gated by `GC-018` |
 | **Release Readiness** | [Local readiness status](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md) — governance-first control plane with reusable coder-facing and nine active non-coder governed reference paths; the active wave is now depth-frozen, with the current breadth defer recorded in [GC-018 continuation candidate P3](docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md) |
 | **CVF_ECO Evaluation** | [434/434 PASS](ECOSYSTEM/strategy/CVF_ECOSYSTEM_TEST_EVALUATION_REPORT_2026-03-09.md) — 100% quality gate |
 | **Active Development** | Yes — `cvf-next` branch |

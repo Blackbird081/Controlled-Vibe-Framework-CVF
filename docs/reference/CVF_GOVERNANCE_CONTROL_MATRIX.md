@@ -16,6 +16,7 @@ Status: canonical ownership map for critical governance controls in the active C
 | `GATEWAY_PRECONDITION` | single entry gate that must run before execution starts | mandatory gateway, entry adapters |
 | `APPROVAL_CHECKPOINT` | human decision boundary before governed execution may continue | pipeline orchestrator, governed workflow steps |
 | `CI_REPO_GATE` | repository or historical evidence enforcement | compat scripts, hooks, CI workflows |
+| `GOVERNANCE_DECISION_GATE` | mandatory scored decision before roadmap deepening or breadth expansion continues | roadmap depth-audit register, governance policy records |
 
 ## Control Matrix
 
@@ -38,6 +39,7 @@ Status: canonical ownership map for critical governance controls in the active C
 | `GC-015` | baseline artifact must be updated after every substantive change | `check_baseline_update_compat.py` | `CI_REPO_GATE` | CI, local pre-push hook chain | `governance/compat/check_baseline_update_compat.py`, `governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md` |
 | `GC-016` | docs, bug, and test evidence must remain historically consistent | `docs governance + bug/test compat gates` | `CI_REPO_GATE` | CI, local hooks | `governance/compat/check_docs_governance_compat.py`, `governance/compat/check_bug_doc_compat.py`, `governance/compat/check_test_doc_compat.py` |
 | `GC-017` | release/readiness claims must stay aligned with actual reference docs | `check_release_manifest_consistency.py` | `CI_REPO_GATE` | CI, release-readiness verification | `governance/compat/check_release_manifest_consistency.py`, `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md` |
+| `GC-018` | roadmap deepening and breadth expansion must stop unless depth-audit scoring justifies continuation | `CVF_DEPTH_AUDIT_GUARD` + roadmap depth-audit register | `GOVERNANCE_DECISION_GATE` | roadmap continuation decisions, post-closure breadth batches | `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`, `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md` |
 
 ## Notes
 
@@ -45,6 +47,7 @@ Status: canonical ownership map for critical governance controls in the active C
 - Secondary evidence or helper layers may support the same rule, but they are not the primary owner unless listed above.
 - Runtime guards exist for action-time blocking or escalation.
 - CI/repository gates remain valid on purpose for historical evidence, baseline continuity, and release-truth controls.
+- Governance decision gates exist to prevent low-yield semantic deepening even when no runtime or CI gate is appropriate.
 
 ## Current Closure Statement
 

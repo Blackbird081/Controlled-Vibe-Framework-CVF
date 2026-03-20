@@ -61,6 +61,85 @@ Interpretation:
 - this roadmap is `MATERIALLY DELIVERED` for the active reference path
 - the remaining work is breadth expansion and proof-strengthening, not a core-path governance drift crisis
 
+## 1B. Post-Closure Depth Audit Register
+
+Canonical rule reference:
+
+- `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+- `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md#GC-018`
+
+Standardized stop rule for all post-closure breadth expansion on this roadmap:
+
+- every new breadth-expansion or semantic-deepening batch after the roadmap became `MATERIALLY DELIVERED` must record an explicit Depth Audit before implementation
+- if total score is `< 8`, the default decision is not `CONTINUE`
+- if `Risk reduction`, `Decision value`, or `Machine enforceability` is `0`, the batch must be treated as `DEFER`
+- breadth should stop when complexity added grows faster than risk removed or when the batch no longer improves a real decision boundary
+
+Required record format for all future continuation candidates:
+
+```text
+Depth Audit
+- Risk reduction: <0|1|2>
+- Decision value: <0|1|2>
+- Machine enforceability: <0|1|2>
+- Operational efficiency: <0|1|2>
+- Portfolio priority: <0|1|2>
+- Total: <0..10>
+- Decision: CONTINUE | REVIEW REQUIRED | DEFER
+- Reason: <short justification>
+```
+
+Current scored continuation candidates as of `2026-03-20`:
+
+### Candidate P1 — Front-door / onboarding canonicalization
+
+Depth Audit
+- Risk reduction: `2`
+- Decision value: `2`
+- Machine enforceability: `1`
+- Operational efficiency: `2`
+- Portfolio priority: `2`
+- Total: `9`
+- Decision: `CONTINUE`
+- Reason: front-door semantics still shape first-time user behavior; aligning onboarding and front-door copy reduces user-model drift on the active Web line and improves governed path selection without broad new runtime complexity.
+
+### Candidate P2 — Onboarding -> governed starter path
+
+Depth Audit
+- Risk reduction: `2`
+- Decision value: `2`
+- Machine enforceability: `2`
+- Operational efficiency: `1`
+- Portfolio priority: `2`
+- Total: `9`
+- Decision: `CONTINUE`
+- Reason: this closes the gap between introductory guidance and a real governed starter flow, improving practical non-coder execution decisions and producing a reusable, auditable starter path rather than only narrative guidance.
+
+### Candidate P3 — Additional breadth expansion after nine active Web paths
+
+Depth Audit
+- Risk reduction: `0`
+- Decision value: `1`
+- Machine enforceability: `1`
+- Operational efficiency: `0`
+- Portfolio priority: `1`
+- Total: `3`
+- Decision: `DEFER`
+- Reason: after nine active governed non-coder Web paths, adding another breadth path does not currently remove a material risk on the active reference line and should not outrank front-door canonicalization or starter-path closure unless a clearly distinct governance gap appears.
+
+Decision boundary now active for this roadmap:
+
+- `P1` and `P2` are authorized next steps
+- `P3` is explicitly `DEFERRED` until a later reassessment proves a new breadth candidate crosses the continue threshold
+- this register must be refreshed before any future attempt to reopen breadth expansion on this roadmap
+
+Automation status:
+
+- rule exists in policy and operational guard form
+- no dedicated compat checker or CI gate currently auto-enforces the presence of a depth-audit record for breadth-expansion batches
+- until such automation exists, this roadmap register is the canonical reviewable decision gate for continuation scope
+
 Historical batch receipts follow below.
 Status labels inside each batch preserve the state at the moment that batch landed; the snapshot above is the latest aggregate readout.
 

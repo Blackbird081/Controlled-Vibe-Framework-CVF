@@ -52,6 +52,7 @@ Only two next-step classes are justified from this point:
 Standard reusable packets now exist for both paths:
 
 - reassessment trigger: `docs/reference/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md`
+- canonical current reassessment-trigger packet: `docs/reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md`
 - continuation candidate: `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
 
 Anything else should be treated as:

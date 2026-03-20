@@ -1,12 +1,13 @@
 # CVF Post-Closure Reassessment Trigger Template
 
-Status: reusable template for proposing a new independent reassessment after an active wave has been closed.
+Status: reusable template for evaluating whether a new independent reassessment should be opened after an active wave has been closed.
 
 ## Purpose
 
 - standardize when and why a closed wave should be reassessed
 - distinguish real new-gap discovery from routine maintenance or curiosity-driven re-audit
 - make the reassessment path as reviewable as the `GC-018` continuation-candidate path
+- allow both `OPEN TRIGGER` and `HOLD` decisions to be recorded in one consistent packet format
 
 ## When To Use
 
@@ -46,7 +47,9 @@ Post-Closure Reassessment Trigger
 - What would count as a confirmed gap:
   - <short criterion>
 - Requested next step:
-  - INDEPENDENT REASSESSMENT
+  - INDEPENDENT REASSESSMENT | HOLD
+- Trigger decision:
+  - OPEN TRIGGER | HOLD
 - If reassessment finds no new material gap:
   - remain closed
 - If reassessment finds a material gap:
@@ -55,7 +58,9 @@ Post-Closure Reassessment Trigger
 
 ## Reading Rules
 
-- this template proposes investigation, not implementation
+- this template governs investigation, not implementation
+- `OPEN TRIGGER` means a fresh independent reassessment should begin
+- `HOLD` means no reassessment is justified yet and the wave remains closed
 - using this template does not reopen the roadmap by itself
 - any implementation that follows from the reassessment still needs the appropriate roadmap/update controls and baseline evidence
 

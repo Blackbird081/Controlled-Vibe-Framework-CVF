@@ -67,6 +67,7 @@ Claims to avoid for now:
 - [System Unification Reassessment](../reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md)
 - [System Unification Active-Wave Closure Review](../reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md)
 - [Post-Closure Reassessment Trigger Template](./CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md)
+- [Post-Closure Reassessment Trigger Hold](../reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md)
 - [System Unification Roadmap](../roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md)
 - [Governance Control Matrix](./CVF_GOVERNANCE_CONTROL_MATRIX.md)
 - [Phase 1 Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md)

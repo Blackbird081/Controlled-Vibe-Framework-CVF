@@ -99,6 +99,7 @@ Only two conditions can legitimately reopen this roadmap for deeper work:
 Reusable trigger packets:
 
 - reassessment path: `docs/reference/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md`
+- canonical current reassessment-trigger readout: `docs/reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md`
 - continuation path: `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
 
 Operational reading:

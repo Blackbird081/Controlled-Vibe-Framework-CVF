@@ -3990,6 +3990,27 @@ Utility and guard:
   - This batch closes the remaining repo-level automation gap for `GC-018`.
   - Post-closure continuation on the active reference path is now machine-enforced instead of relying only on manual roadmap discipline.
 
+## [2026-03-20] Batch: Depth-audit automation evidence reconciliation
+- Scope:
+  - status/readiness/readme reconciliation after `GC-018` continuation enforcement became machine-enforced
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+- Files updated:
+  - `docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+  - `README.md`
+  - `docs/baselines/CVF_DEPTH_AUDIT_ENFORCEMENT_RECONCILIATION_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not add new runtime behavior.
+  - It updates the evidence chain so readiness and reassessment no longer describe continuation control as partly manual.
+
 ## [2026-03-20] Batch: Phase 2 control loop enforcement — governed approvals and freeze closure
 - Change reference:
   - local working tree Phase 2 control-loop batch

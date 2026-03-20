@@ -37,6 +37,7 @@ Supplemental evidence update recorded later on `2026-03-20`:
 - this reduces reliance on scattered lower-level tests as the only proof that the coder-facing controlled loop can be re-run end to end
 - onboarding now opens Quick Start and persists a governed starter handoff before the routed non-coder starter wizard launches
 - the active `cvf-web` production build now passes again after the latest active-path hardening fixes
+- post-closure continuation on the active roadmap is now machine-enforced through the repository path via `GC-018` compatibility checks, not only by manual roadmap discipline
 - the active Web reference line now provides nine non-coder governed live paths through the Web execute pipeline:
   - App Builder Wizard
   - Business Strategy Wizard
@@ -58,7 +59,7 @@ Supplemental evidence update recorded later on `2026-03-20`:
 | Governance converted into executable ownership | `6.0/10` | `8.0/10` | critical controls now map to runtime guard, gateway, approval checkpoint, or CI owner |
 | Web UI value for non-coders | `7.0/10` | `8.8/10` | non-coder flow now teaches canonical phases, includes a governed onboarding starter handoff, and has nine governed live execution paths on the active Web reference line |
 | Core value: controlled vibe execution | `6.0/10` | `8.2/10` | governed reference paths now exist for coder-facing execution and multiple non-coder active reference executions |
-| Auditability / reconciliation strength | `8.5/10` | `9.0/10` | baseline, hook, readiness, and control-matrix evidence chain is now unusually strong |
+| Auditability / reconciliation strength | `8.5/10` | `9.2/10` | baseline, hook, readiness, control-matrix, and continuation-stop evidence are now unusually strong and partially machine-enforced |
 | Comparative maturity vs. major ecosystems | `6.0/10` | `6.8/10` | stronger internal governance maturity, still not platform-breadth parity |
 | Strategic differentiation | `8.0/10` | `8.6/10` | CVF now has a more believable governance-first execution story |
 
@@ -90,6 +91,7 @@ Updated overall score:
 - The non-coder story is stronger again because onboarding now hands users into a reviewable starter flow instead of stopping at explanatory copy.
 - The non-coder story is now stronger again because multiple active Web paths can launch governed execution runs instead of stopping at packet generation alone.
 - The coder-facing story is stronger because one governed reference path is now reusable instead of being implied only by internal test composition.
+- The continuation-stop story is stronger because post-closure roadmap deepening is now checked by repository automation instead of being only a documented expectation.
 
 ---
 
@@ -117,6 +119,7 @@ Independent judgment for the active local baseline:
 - Whole-system status: `SUBSTANTIALLY ALIGNED`
 - Safe product positioning: `governance-first controlled execution system`
 - Post-standard continuation decision: `P3` remains `DEFERRED` until a freshly scored candidate crosses `GC-018`
+- Continuation control status: `GC-018` is now machine-enforced on the repository path before push/merge
 - Strongest justified claim today:
   - CVF now demonstrates substantially aligned governed execution paths with canonical phases, hardened guard defaults, explicit approval boundaries, evidence-backed freeze closure, audit-ready reconciliation artifacts, one reusable coder-facing reference loop, one governed non-coder onboarding starter handoff, and nine active non-coder Web reference runs.
 

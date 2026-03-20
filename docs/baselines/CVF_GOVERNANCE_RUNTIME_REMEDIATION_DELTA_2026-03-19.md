@@ -2,8 +2,8 @@
 
 > Date: `2026-03-19`
 > Type: Post-fix baseline delta
-> Source roadmap: `docs/roadmaps/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
-> Source review: `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
+> Source roadmap: `docs/roadmaps/archive/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
+> Source review: `docs/reviews/archive/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
 > Scope: Governance runtime remediation batch for mandatory guard wiring, 5-phase runtime alignment, and file-scope enforcement
 
 ---

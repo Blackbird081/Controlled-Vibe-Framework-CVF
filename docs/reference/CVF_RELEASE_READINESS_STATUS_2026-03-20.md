@@ -64,6 +64,7 @@ Claims to avoid for now:
 ## Evidence Chain
 
 - [Independent System Review](../reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md)
+- [Independent System Checkpoint](../reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md)
 - [System Unification Reassessment](../reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md)
 - [System Unification Active-Wave Closure Review](../reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md)
 - [Post-Closure Reassessment Trigger Template](./CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md)

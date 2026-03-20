@@ -59,8 +59,9 @@ Status: authoritative operational release manifest for the current local baselin
 
 | Need | Canonical file |
 |---|---|
-| whole-system review | `docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md` |
-| update remediation review | `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md` |
+| whole-system review | `docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md` |
+| prior independent review baseline | `docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md` |
+| archived update remediation review | `docs/reviews/archive/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md` |
 | governed continuation roadmap | `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md` |
 | current reassessment-trigger packet | `docs/reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md` |
 | current continuation defer packet | `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md` |

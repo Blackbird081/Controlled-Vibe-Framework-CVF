@@ -3450,9 +3450,9 @@ Utility and guard:
   - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` — full governance module (state enforcement, guard runtime, conformance, pipeline, multi-agent, SDK, adapters, observability)
   - `governance/contracts/` — cross-channel guard contract + adapters
   - `docs/assessments/CVF_GOVERNANCE_AUDIT_LOG_2026-03-19.md` [MODIFY]
-  - `docs/reviews/CVF_ARCHITECTURE_REVIEW_CONSOLIDATED_2026-03-19.md` [MODIFY]
-  - `docs/roadmaps/CVF_IMPROVEMENT_PROPOSALS_2026-03-19.md` [MODIFY]
-  - `docs/roadmaps/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md` [MODIFY]
+  - `docs/reviews/archive/CVF_ARCHITECTURE_REVIEW_CONSOLIDATED_2026-03-19.md` [MODIFY]
+  - `docs/roadmaps/archive/CVF_IMPROVEMENT_PROPOSALS_2026-03-19.md` [MODIFY]
+  - `docs/roadmaps/archive/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md` [MODIFY]
 - Tests executed:
   - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run` -> PASS
     - Result: `13 test files, 504/504 tests PASSED` (1.71s)
@@ -3471,8 +3471,8 @@ Utility and guard:
 ## [2026-03-19] Batch: Governance runtime remediation closure
 - Change reference:
   - local working tree remediation batch
-  - source roadmap: `docs/roadmaps/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
-  - source review: `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
+  - source roadmap: `docs/roadmaps/archive/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
+  - source review: `docs/reviews/archive/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
 - Impacted scope:
   - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guards/ai.commit.guard.ts`
   - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guards/file.scope.guard.ts`
@@ -3483,8 +3483,8 @@ Utility and guard:
   - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/conformance/*`
   - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/*.test.ts` (runtime, SDK, entry, orchestrator, conformance, hardening coverage)
   - `docs/baselines/CVF_GOVERNANCE_RUNTIME_REMEDIATION_DELTA_2026-03-19.md` [NEW]
-  - `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
-  - `docs/roadmaps/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reviews/archive/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
+  - `docs/roadmaps/archive/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
 - Tests executed:
   - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/conformance.runner.test.ts` -> PASS
   - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npx vitest run tests/guard.runtime.test.ts` -> PASS
@@ -3504,7 +3504,7 @@ Utility and guard:
 - Change reference:
   - local working tree Phase 1 remediation batch
   - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - source backlog: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md`
+  - source backlog: `docs/roadmaps/archive/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md`
   - baseline receipt: `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md`
 - Impacted scope:
   - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts`
@@ -4320,3 +4320,23 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not open a reassessment or continuation path.
   - It only makes the current hold posture more visible and less ambiguous at front-door/reference surfaces.
+## [2026-03-20] Batch: System checkpoint and early archive cleanup
+- Scope:
+  - save the next independent whole-system checkpoint and archive completed review/roadmap artifacts early to reduce active reading noise
+- Policy / roadmap references:
+  - `docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md`
+- Files updated:
+  - `docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md`
+  - `docs/baselines/CVF_SYSTEM_CHECKPOINT_AND_ARCHIVE_CLEANUP_DELTA_2026-03-20.md`
+  - active reference docs updated to point to the new checkpoint
+  - superseded roadmap/review files moved into archive locations
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - Archive cleanup is intentionally earlier than the normal 3-day window for clarity, not because of a retention violation.
+  - Historical files are preserved, not deleted.

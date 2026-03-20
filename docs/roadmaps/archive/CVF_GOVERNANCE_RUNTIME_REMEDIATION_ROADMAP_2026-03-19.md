@@ -1,7 +1,7 @@
 # CVF Governance Runtime Remediation Roadmap
 
 > Date: `2026-03-19`
-> Source review: `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
+> Source review: `docs/reviews/archive/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
 > Goal: Fix all independently identified governance runtime gaps
 > Scope: Governance runtime, SDK wiring, conformance, orchestrator, and regression coverage
 > Priority: `P0-P2`
@@ -360,7 +360,7 @@ Suggested target docs:
 - `docs/assessments/CVF_GOVERNANCE_AUDIT_LOG_2026-03-19.md`
 - `docs/assessments/CVF_PHASE1_COMPLETION_REPORT_2026-03-19.md`
 - `docs/baselines/CVF_CORE_COMPAT_BASELINE.md`
-- `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
+- `docs/reviews/archive/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
 
 Exit criteria:
 

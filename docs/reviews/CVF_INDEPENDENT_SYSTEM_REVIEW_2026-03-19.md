@@ -59,8 +59,8 @@ Primary evidence reviewed:
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/intent-detector.ts`
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/guard-engine-singleton.ts`
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts`
-- `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
-- `docs/roadmaps/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
+- `docs/reviews/archive/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
+- `docs/roadmaps/archive/CVF_GOVERNANCE_RUNTIME_REMEDIATION_ROADMAP_2026-03-19.md`
 
 ---
 

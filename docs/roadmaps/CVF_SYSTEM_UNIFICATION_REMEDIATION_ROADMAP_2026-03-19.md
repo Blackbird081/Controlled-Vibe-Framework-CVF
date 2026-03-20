@@ -7,7 +7,7 @@
 > Scope: Shared guard contract, governance execution model, workflow runtime, Web UI, cross-extension execution, and documentation alignment
 > Priority bands: `P0-P2`
 > Time horizon: `90 days`
-> Phase 1 execution backlog: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md`
+> Phase 1 execution backlog: `docs/roadmaps/archive/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md`
 
 ---
 

@@ -1,6 +1,6 @@
 # CVF Improvement Proposals — 6 Essential Groups
 
-> **Location:** `docs/roadmaps/CVF_IMPROVEMENT_PROPOSALS_2026-03-19.md`
+> **Location:** `docs/roadmaps/archive/CVF_IMPROVEMENT_PROPOSALS_2026-03-19.md`
 > **Date:** 2026-03-19
 > **Source:** Independent audit of CVF architecture
 > **Status:** ✅ Implemented — verified 2026-03-19 (602 tests PASS)

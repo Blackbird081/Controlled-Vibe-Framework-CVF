@@ -79,7 +79,7 @@ This delta is linked to:
 - supporting review:
   - `docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md`
 - supporting finding-closure review:
-  - `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
+  - `docs/reviews/archive/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md`
 
 ---
 

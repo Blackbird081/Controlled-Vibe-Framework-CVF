@@ -62,6 +62,7 @@ Status: authoritative operational release manifest for the current local baselin
 | whole-system review | `docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md` |
 | update remediation review | `docs/reviews/CVF_INDEPENDENT_UPDATE_REVIEW_2026-03-19.md` |
 | governed continuation roadmap | `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md` |
+| current reassessment-trigger packet | `docs/reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md` |
 | current continuation defer packet | `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md` |
 | readiness checkpoint | `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md` |
 | test evidence chain | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
@@ -71,7 +72,7 @@ Status: authoritative operational release manifest for the current local baselin
 
 ## Operational Notes
 
-- this manifest is local-authoritative for a system-unification wave that is now complete for the active wave and intentionally held closed under `GC-018`
+- this manifest is local-authoritative for a system-unification wave that is now complete for the active wave, intentionally held closed under `GC-018`, and currently has no open post-closure reassessment trigger
 - any new version/line must update:
   - `docs/CVF_ARCHITECTURE_DECISIONS.md`
   - `docs/VERSIONING.md`

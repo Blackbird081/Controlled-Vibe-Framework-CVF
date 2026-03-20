@@ -4300,3 +4300,23 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not open a new reassessment.
   - It makes the current `no fresh trigger` posture explicit and reviewable.
+## [2026-03-20] Batch: Reassessment-hold front-door alignment
+- Scope:
+  - align top-level reference surfaces with the canonical reassessment-hold packet so the current post-closure posture is visible without reading only roadmap internals
+- Policy / roadmap references:
+  - `docs/reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md`
+  - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+  - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+- Files updated:
+  - `README.md`
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+  - `docs/reference/CVF_POSITIONING.md`
+  - `docs/baselines/CVF_REASSESSMENT_HOLD_FRONTDOOR_ALIGNMENT_DELTA_2026-03-20.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - This batch does not open a reassessment or continuation path.
+  - It only makes the current hold posture more visible and less ambiguous at front-door/reference surfaces.

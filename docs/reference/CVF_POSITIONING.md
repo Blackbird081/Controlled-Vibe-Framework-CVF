@@ -124,7 +124,7 @@ CVF has 5 distinct layers (not a monolith):
 
 Safe current statement:
 
-> CVF is a governance-first control plane with a substantially aligned runtime on the active reference path, while the current remediation wave is complete for the active wave and any further continuation is explicitly gated by `GC-018`.
+> CVF is a governance-first control plane with a substantially aligned runtime on the active reference path, while the current remediation wave is complete for the active wave, continuation is explicitly gated by `GC-018`, and no fresh post-closure reassessment trigger is currently open.
 
 Statements to avoid until further roadmap closure:
 

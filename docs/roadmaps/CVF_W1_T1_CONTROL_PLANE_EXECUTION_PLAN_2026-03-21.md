@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`  
 > Tranche packet: `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 / CP2 / CP3 IMPLEMENTED / CP4 PACKET OPENED`
+> Status: `AUTHORIZED TRANCHE — CP1 / CP2 / CP3 / CP4 IMPLEMENTED`
 
 ---
 
@@ -119,7 +119,7 @@ Guardrail:
 
 Status:
 
-- `PACKET OPENED — AWAITING DECISION`
+- `IMPLEMENTED`
 
 ### CP5 — Tranche Closure Review
 
@@ -171,7 +171,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T1` is authorized, `CP1-CP3` are implemented, and `CP4` is now packeted for tranche-local review.
+> `W1-T1` is authorized, and `CP1`, `CP2`, `CP3`, and `CP4` have now been implemented in their approved tranche-local forms.
 
 ## 8. Implementation Receipt
 
@@ -233,3 +233,21 @@ Receipt highlights:
 Evidence anchor:
 
 - `docs/baselines/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_IMPLEMENTATION_DELTA_2026-03-22.md`
+
+## 11. Implementation Receipt
+
+Implemented wrapper target:
+
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/`
+
+Receipt highlights:
+
+- the shell now re-exports selected `CVF_v1.7_CONTROLLED_INTELLIGENCE` helper/type surfaces for risk mapping, context segmentation, and reasoning-boundary alignment
+- source lineage remains preserved for `CVF_v1.7_CONTROLLED_INTELLIGENCE`
+- runtime-critical reasoning execution internals remain outside the wrapper boundary
+- package-local verification is green
+- preserved-source regression verification is green
+
+Evidence anchor:
+
+- `docs/baselines/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_IMPLEMENTATION_DELTA_2026-03-22.md`

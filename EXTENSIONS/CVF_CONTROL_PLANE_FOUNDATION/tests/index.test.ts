@@ -1,9 +1,21 @@
 import { describe, expect, it } from "vitest";
 import {
   CONTROL_PLANE_FOUNDATION_COORDINATION,
+  CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT,
+  AgentRole,
+  ReasoningMode,
+  canAccessScope,
   createControlPlaneEvidenceSurface,
   createControlPlaneFoundationShell,
+  formatRiskDisplay,
+  getRiskLabel,
+  normalizeRuntimeScore,
   resetDocCounter,
+  resolveReasoningMode,
+  riskLevelToScore,
+  runtimeToCVFRisk,
+  scoreToRiskLevel,
+  segmentContext,
 } from "../src/index";
 
 describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
@@ -126,5 +138,60 @@ describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
     expect(evidence.markdownSurface).toContain("## Governance Canvas Report");
     expect(evidence.markdownSurface).toContain("`freeze-abc123`");
     expect(evidence.markdownSurface).toContain("CP3 keeps governance-core semantics unchanged.");
+  });
+
+  it("exports selected controlled-intelligence risk surfaces through the shell", () => {
+    expect(scoreToRiskLevel(0.72)).toBe("R2");
+    expect(riskLevelToScore("R3")).toBe(0.92);
+    expect(getRiskLabel("R2", "en").label).toBe("Review Required");
+    expect(formatRiskDisplay("R1", "vi")).toContain("Cần chú ý");
+    expect(runtimeToCVFRisk("HIGH")).toBe("R2");
+    expect(normalizeRuntimeScore(120)).toBe(riskLevelToScore("R3"));
+  });
+
+  it("exports selected context-segmentation helpers through the shell", () => {
+    const segmented = segmentContext(
+      "cp4-session",
+      "REVIEW",
+      Array.from({ length: 24 }, (_, index) => ({
+        content: `chunk-${index + 1}`,
+        timestamp: index + 1,
+        role: "RESEARCH",
+      })),
+      [],
+      {
+        role: "REVIEW",
+        summary: "Latest review summary",
+        timestamp: Date.now(),
+      }
+    );
+
+    expect(segmented.prunedChunks).toHaveLength(20);
+    expect(segmented.activeSummaries).toHaveLength(1);
+    expect(segmented.currentFork?.parentSessionId).toBe("cp4-session");
+    expect(
+      canAccessScope(
+        { forkId: "fork-1", allowedScopes: ["finance", "governance"] },
+        "governance"
+      )
+    ).toBe(true);
+  });
+
+  it("keeps CP4 aligned to selected wrappers and defers runtime-critical reasoning execution", () => {
+    expect(CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT.controlPointId).toBe("CP4");
+    expect(CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT.executionClass).toBe(
+      "wrapper/re-export"
+    );
+    expect(CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT.includedSurfaces).toContain(
+      "core/governance/risk.mapping"
+    );
+    expect(CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT.includedSurfaces).toContain(
+      "intelligence/context_segmentation/context.segmenter"
+    );
+    expect(CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT.deferredSurfaces).toContain(
+      "intelligence/reasoning_gate/controlled.reasoning"
+    );
+    expect(resolveReasoningMode(AgentRole.REVIEW)).toBe(ReasoningMode.STRICT);
+    expect(resolveReasoningMode(AgentRole.DESIGN)).toBe(ReasoningMode.CONTROLLED);
   });
 });

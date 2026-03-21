@@ -60,6 +60,59 @@ export {
 } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 export type { ContextSnapshot } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/types/index";
 
+export {
+  CVF_RISK_SCORE_MAP,
+  scoreToRiskLevel,
+  riskLevelToScore,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/core/governance/risk.mapping";
+export type { CVFRiskLevel } from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/core/governance/risk.mapping";
+export {
+  getRiskLabel,
+  formatRiskDisplay,
+  getAllRiskLabels,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/core/governance/risk.labels";
+export type {
+  SupportedLocale,
+  NonCoderRiskLabel,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/core/governance/risk.labels";
+export {
+  runtimeToCVFRisk,
+  cvfToRuntimeRisk,
+  normalizeRuntimeScore,
+  runtimeRiskToDisplay,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/integration/risk.bridge";
+export {
+  segmentContext,
+  pruneContext,
+  injectSummary,
+  createFork,
+  canAccessScope,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/context_segmentation/context.segmenter";
+export type {
+  SegmentedContext,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/context_segmentation/context.segmenter";
+export type {
+  ContextChunk,
+  PhaseSummary,
+  MemoryBoundary,
+  ForkedSession,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/context_segmentation/context.types";
+export { AgentRole } from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/role_transition_guard/role.types";
+export {
+  ReasoningMode,
+  resolveTemperature,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/determinism_control/temperature.policy";
+export { resolveReasoningMode } from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/determinism_control/reasoning.mode";
+export type {
+  ReasoningInput,
+  ReasoningConfig,
+  ReasoningDecision,
+  ReasoningResult,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/reasoning_gate/reasoning.types";
+export type {
+  ReproducibilitySnapshot,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/determinism_control/reproducibility.snapshot";
+
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";
 import { GovernanceCanvas } from "../../CVF_ECO_v2.1_GOVERNANCE_CANVAS/src/canvas";
@@ -84,6 +137,33 @@ export const CONTROL_PLANE_FOUNDATION_COORDINATION = {
   preservesLineage: true,
   rationale:
     "Creates one governed control-plane shell while preserving source ownership and rollback safety.",
+} as const;
+
+export const CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT = {
+  controlPointId: "CP4",
+  executionClass: "wrapper/re-export",
+  sourceModule: "EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE",
+  includedSurfaces: [
+    "core/governance/risk.mapping",
+    "core/governance/risk.labels",
+    "integration/risk.bridge",
+    "intelligence/context_segmentation/context.segmenter",
+    "intelligence/context_segmentation/context.types",
+    "intelligence/context_segmentation/memory.boundary",
+    "intelligence/reasoning_gate/reasoning.types",
+    "intelligence/determinism_control/reasoning.mode",
+    "intelligence/determinism_control/temperature.policy",
+    "intelligence/role_transition_guard/role.types",
+  ],
+  deferredSurfaces: [
+    "intelligence/reasoning_gate/controlled.reasoning",
+    "intelligence/role_transition_guard/recursion.guard",
+    "core/governance/verification_policy/verification.engine",
+  ],
+  preservesLineage: true,
+  physicalConsolidation: false,
+  rationale:
+    "Aligns selected v1.7 helper/type surfaces to the control-plane shell without absorbing runtime-critical reasoning execution.",
 } as const;
 
 export interface ControlPlaneFoundationShell {

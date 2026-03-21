@@ -1456,3 +1456,25 @@ Utility and guard:
 - Notes/Risks:
   - this packet is planning-only and does not reopen implementation
   - execution still requires a fresh `GC-018` continuation decision
+## [2026-03-21] Batch: whitepaper completion GC-018 W0 authorization
+- Scope:
+  - score and issue the first `GC-018` continuation packet for the whitepaper-completion roadmap
+  - authorize only `W0` reopening/scoping, not downstream implementation
+- Policy / roadmap references:
+  - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
+- Files updated:
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W0_AUTHORIZATION_DELTA_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - only `W0` is authorized
+  - first implementation tranche still needs a new governed follow-up packet

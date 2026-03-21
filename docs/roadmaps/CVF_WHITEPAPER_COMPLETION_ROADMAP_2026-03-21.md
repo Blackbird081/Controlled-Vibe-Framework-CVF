@@ -5,7 +5,8 @@
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  
-> Authorization posture: `PROPOSAL ONLY — NOT ACTIVE UNTIL REOPENED THROUGH GC-018`
+> Authorization posture: `LIMITED ACTIVE — W0 ONLY VIA GC-018`
+> Canonical continuation packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
 
 ---
 
@@ -39,12 +40,17 @@ What is still incomplete against the whitepaper target-state:
 
 ## 3. Authorization Boundary
 
-Nothing in this roadmap may execute until:
+Current authorization state:
 
-1. a new `GC-018` continuation candidate is raised and approved, or
-2. an independent reassessment explicitly concludes that whitepaper-completion gaps are now material enough to reopen the wave
+- `W0` is authorized through `GC-018`
+- no downstream implementation tranche is authorized yet
 
-After authorization, every major structural change in this roadmap must still pass `GC-019`.
+Nothing beyond `W0` in this roadmap may execute until:
+
+1. a follow-up `GC-018` or equivalent governed decision authorizes the first implementation tranche, or
+2. an independent reassessment explicitly reshapes the next-wave priority
+
+After `W0`, every major structural change in this roadmap must still pass `GC-019`.
 
 ---
 
@@ -174,6 +180,11 @@ Reasoning:
 - select only the highest-value whitepaper gaps
 - define no more than one execution tranche ahead
 
+Current status:
+
+- `AUTHORIZED`
+- this is the only currently open phase in the roadmap
+
 ### Phase W1 — Control Plane
 
 - package and stabilize control-plane target modules
@@ -234,3 +245,4 @@ This roadmap means:
 ## Final Readout
 
 > **Prepared successor roadmap** — correct direction for completing the whitepaper target-state, but not authorized for implementation yet.
+> **Updated readout:** `W0` is now authorized; downstream implementation remains gated.

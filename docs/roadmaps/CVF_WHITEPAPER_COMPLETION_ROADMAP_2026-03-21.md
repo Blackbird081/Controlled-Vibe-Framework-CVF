@@ -199,6 +199,12 @@ Current status:
 Current authorized scope:
 
 - `W1-T1 — Control-Plane Foundation` only
+- tranche-local execution plan:
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+- first structural packet:
+  - `docs/audits/CVF_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_AUDIT_2026-03-21.md`
+- first independent review:
+  - `docs/reviews/CVF_GC019_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_REVIEW_2026-03-21.md`
 - every major structural change inside `W1-T1` still requires `GC-019`
 - everything beyond `W1-T1` remains unopened
 

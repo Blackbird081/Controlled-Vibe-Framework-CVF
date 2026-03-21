@@ -3,8 +3,8 @@
 > Date: 2026-03-21  
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > W0 backlog: `docs/roadmaps/CVF_WHITEPAPER_W0_SCOPED_BACKLOG_2026-03-21.md`  
-> Scope: first-tranche proposal only  
-> Authorization status: `NOT YET AUTHORIZED`
+> Scope: first authorized implementation tranche  
+> Authorization status: `AUTHORIZED THROUGH GC-018 W1-T1`
 
 ---
 
@@ -74,12 +74,22 @@ The first tranche should only be considered successful if it delivers all of the
 
 ---
 
-## W0 Recommendation
+## Current Governed Move
 
-> **Recommended next governed move:** if the user wants to continue after `W0`, open a new follow-up authorization packet for this first tranche and keep the tranche limited to `control-plane foundation` only.
+The first tranche is now authorized through:
+
+- `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
+
+Recommended first execution step inside the tranche:
+
+- `CP1 — Control-Plane Foundation Shell`
+- reference execution plan:
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+- reference audit:
+  - `docs/audits/CVF_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_AUDIT_2026-03-21.md`
 
 ---
 
 ## Final Readout
 
-> **Prepared first tranche** — this is the correct next candidate after `W0`, but it still requires its own follow-up governed authorization before implementation.
+> **Authorized first tranche** — `W1-T1` is open, but each major structural change inside the tranche still requires `GC-019` audit, review, and explicit execution approval.

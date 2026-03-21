@@ -29,7 +29,6 @@ The package now provides one stable shell surface for:
 New package:
 
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/package.json`
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/package-lock.json`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tsconfig.json`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/vitest.config.ts`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/README.md`
@@ -88,4 +87,5 @@ Source-module regression:
 ## 5. Notes
 
 - The only non-shell code change in this batch is a minimal test-typing repair in `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` so the audit-required regression command returns cleanly under the current baseline.
+- `EXTENSIONS/**/package-lock.json` remains ignored by repo policy, so the package lock for this shell is a local install artifact rather than a tracked baseline artifact.
 - This delta does not authorize `CP2+` or any broader control-plane physical move.

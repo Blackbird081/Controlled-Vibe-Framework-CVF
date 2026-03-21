@@ -1690,3 +1690,31 @@ Utility and guard:
   - the new reporting surface is additive and does not change active-path governance-core semantics.
   - the README status banner is advanced because the shell surface expanded, not because ownership moved.
   - closure checkpoint remains deferred to `CP5`.
+## [2026-03-22] Batch: W1-T1 CP4 selected controlled-intelligence packet opening
+- Scope:
+  - open the tranche-local `GC-019` packet chain for `CP4`
+  - define a narrow wrapper/re-export review boundary for selected `CVF_v1.7_CONTROLLED_INTELLIGENCE` surfaces after `CP3`
+  - keep documentation traceability explicit through audit/review/delta/test-log/status/index updates
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/audits/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_SURFACE_ALIGNMENT_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_SURFACE_ALIGNMENT_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_PACKET_DELTA_2026-03-22.md`
+- Files updated:
+  - `docs/audits/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_SURFACE_ALIGNMENT_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_SURFACE_ALIGNMENT_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_PACKET_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch opens `CP4` only; it does not execute any wrapper/re-export alignment.
+  - README banners stay unchanged because no ownership movement is proposed here.
+  - closure checkpoint stays unchanged because tranche closure belongs to `CP5`, not `CP4` packet opening.

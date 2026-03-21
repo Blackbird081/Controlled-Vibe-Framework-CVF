@@ -1501,3 +1501,26 @@ Utility and guard:
 - Notes/Risks:
   - `W0` closes only the scoping phase
   - first tranche is prepared but still not implementation-authorized
+## [2026-03-21] Batch: whitepaper completion GC-018 W1-T1 authorization
+- Scope:
+  - authorize the first bounded implementation tranche after `W0`
+  - keep the whitepaper-completion wave limited to `W1-T1 — Control-Plane Foundation`
+- Policy / roadmap references:
+  - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
+- Files updated:
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W1_T1_AUTHORIZATION_DELTA_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - only `W1-T1` is authorized
+  - all structural changes inside the tranche still require `GC-019`

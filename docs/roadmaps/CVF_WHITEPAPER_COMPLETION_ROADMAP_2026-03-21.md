@@ -5,8 +5,10 @@
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  
-> Authorization posture: `LIMITED ACTIVE — W0 ONLY VIA GC-018`
-> Canonical continuation packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
+> Authorization posture: `LIMITED ACTIVE — W1-T1 ONLY VIA GC-018 + GC-019`
+> Canonical continuation packets:
+> - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
+> - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
 
 ---
 
@@ -42,8 +44,9 @@ What is still incomplete against the whitepaper target-state:
 
 Current authorization state:
 
-- `W0` is authorized through `GC-018`
-- no downstream implementation tranche is authorized yet
+- `W0` is complete through `GC-018`
+- `W1-T1 — Control-Plane Foundation` is authorized through `GC-018`
+- all other downstream phases and tranches remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
 
@@ -186,15 +189,18 @@ Current status:
 - canonical outputs:
   - `docs/roadmaps/CVF_WHITEPAPER_W0_SCOPED_BACKLOG_2026-03-21.md`
   - `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`
-
-Recommended next governed move:
-
-- raise a follow-up packet for the first bounded implementation tranche only
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
 
 ### Phase W1 — Control Plane
 
 - package and stabilize control-plane target modules
 - verify boundaries, handlers, and ownership
+
+Current authorized scope:
+
+- `W1-T1 — Control-Plane Foundation` only
+- every major structural change inside `W1-T1` still requires `GC-019`
+- everything beyond `W1-T1` remains unopened
 
 ### Phase W2 — Execution Plane
 
@@ -250,5 +256,5 @@ This roadmap means:
 
 ## Final Readout
 
-> **Prepared successor roadmap** — correct direction for completing the whitepaper target-state, but not authorized for implementation yet.
-> **Updated readout:** `W0` is complete; downstream implementation remains gated.
+> **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
+> **Updated readout:** `W0` is complete and `W1-T1` is the only currently authorized implementation tranche; all further scope remains gated.

@@ -3,7 +3,7 @@
 > **Revised:** 2026-03-21 (post-EA review)
 > **Roadmap Ref:** `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md` — Phase 4
 > **EA Review:** `docs/reviews/CVF_PHASE_4_CONSOLIDATION_OPTION_REVIEW_2026-03-21.md`
-> **Status:** DECISION PACKET v2 — Pending User Sign-off
+> **Status:** ✅ SIGNED OFF — Option B* approved (2026-03-21)
 > **Prerequisites:** Phase 0 ✅ | Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅
 
 ---
@@ -179,7 +179,7 @@ src/
 | Option | Your Call |
 |--------|---------|
 | **A** — Stay Federated (0 consolidation merges this cycle) | ☐ |
-| **B*** — Partial Consolidation (5 current-cycle merges + 1 deferred) | ☐ ← Recommended |
+| **B*** — Partial Consolidation (5 current-cycle merges + 1 deferred) | ☑ **APPROVED** |
 | **C** — Full Consolidation (plane-based tree) | ☐ |
 
 > [!CAUTION]

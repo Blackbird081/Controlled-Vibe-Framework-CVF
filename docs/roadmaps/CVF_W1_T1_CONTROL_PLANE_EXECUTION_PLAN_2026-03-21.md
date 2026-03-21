@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`  
 > Tranche packet: `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 / CP2 IMPLEMENTED / CP3 PACKET OPENED`
+> Status: `AUTHORIZED TRANCHE — CP1 / CP2 / CP3 IMPLEMENTED`
 
 ---
 
@@ -97,7 +97,7 @@ Scope:
 
 Status:
 
-- `PACKET OPENED — AWAITING DECISION`
+- `IMPLEMENTED`
 
 ### CP4 — Selected Controlled-Intelligence Surface Alignment
 
@@ -171,7 +171,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T1` is authorized, and both `CP1` and `CP2` have now been implemented in their approved tranche-local forms.
+> `W1-T1` is authorized, and `CP1`, `CP2`, and `CP3` have now been implemented in their approved tranche-local forms.
 
 ## 8. Implementation Receipt
 
@@ -212,3 +212,24 @@ Receipt highlights:
 Evidence anchor:
 
 - `docs/baselines/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_IMPLEMENTATION_DELTA_2026-03-21.md`
+
+## 10. Implementation Receipt
+
+Implemented reporting surface:
+
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/`
+
+Receipt highlights:
+
+- the shell now exports one explicit governance-canvas evidence surface for tranche-local review
+- review output is available as both text and markdown without changing governance-core enforcement semantics
+- source lineage remains preserved for:
+  - `CVF_ECO_v2.1_GOVERNANCE_CANVAS`
+  - `CVF_ECO_v1.4_RAG_PIPELINE`
+  - `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY`
+- package-local verification is green
+- downstream facade compatibility remains green
+
+Evidence anchor:
+
+- `docs/baselines/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_IMPLEMENTATION_DELTA_2026-03-22.md`

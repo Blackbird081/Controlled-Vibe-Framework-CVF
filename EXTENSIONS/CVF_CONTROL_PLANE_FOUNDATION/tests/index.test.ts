@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   CONTROL_PLANE_FOUNDATION_COORDINATION,
+  createControlPlaneEvidenceSurface,
   createControlPlaneFoundationShell,
   resetDocCounter,
 } from "../src/index";
@@ -85,5 +86,45 @@ describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
     expect(
       CONTROL_PLANE_FOUNDATION_COORDINATION.initialPhysicalMoveExcluded
     ).toContain("EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE");
+  });
+
+  it("exports a reviewable governance-canvas evidence surface for the tranche", () => {
+    const evidence = createControlPlaneEvidenceSurface(
+      [
+        {
+          sessionId: "cp3-session-1",
+          agentId: "agent-control",
+          actionCount: 4,
+          cumulativeRisk: 2.5,
+          highestRisk: "R2",
+          verdictCounts: {
+            ALLOW: 2,
+            WARN: 1,
+            ESCALATE: 1,
+            BLOCK: 0,
+          },
+          domainBreakdown: {
+            finance: 2,
+            governance: 2,
+          },
+          startedAt: Date.now() - 5000,
+          endedAt: Date.now(),
+        },
+      ],
+      {
+        knowledgeSources: ["EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE"],
+        frozenContextHashes: ["freeze-abc123"],
+        notes: ["CP3 keeps governance-core semantics unchanged."],
+      }
+    );
+
+    expect(evidence.trancheId).toBe("W1-T1");
+    expect(evidence.controlPointId).toBe("CP3");
+    expect(evidence.report.metrics.totalSessions).toBe(1);
+    expect(evidence.textSurface).toContain("CVF W1-T1 CP3 Control-Plane Review Surface");
+    expect(evidence.textSurface).toContain("EXTENSIONS/CVF_ECO_v2.1_GOVERNANCE_CANVAS");
+    expect(evidence.markdownSurface).toContain("## Governance Canvas Report");
+    expect(evidence.markdownSurface).toContain("`freeze-abc123`");
+    expect(evidence.markdownSurface).toContain("CP3 keeps governance-core semantics unchanged.");
   });
 });

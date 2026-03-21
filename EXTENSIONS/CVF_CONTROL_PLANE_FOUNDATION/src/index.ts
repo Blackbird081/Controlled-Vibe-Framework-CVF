@@ -63,6 +63,10 @@ export type { ContextSnapshot } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILI
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";
 import { GovernanceCanvas } from "../../CVF_ECO_v2.1_GOVERNANCE_CANVAS/src/canvas";
+import type {
+  CanvasReport,
+  SessionSnapshot,
+} from "../../CVF_ECO_v2.1_GOVERNANCE_CANVAS/src/types";
 import { ContextFreezer } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/context.freezer";
 
 export const CONTROL_PLANE_FOUNDATION_COORDINATION = {
@@ -89,6 +93,25 @@ export interface ControlPlaneFoundationShell {
   context: ContextFreezer;
 }
 
+export interface ControlPlaneEvidenceSurfaceOptions {
+  reportTitle?: string;
+  evidenceTitle?: string;
+  includeSessionDetails?: boolean;
+  knowledgeSources?: string[];
+  frozenContextHashes?: string[];
+  notes?: string[];
+}
+
+export interface ControlPlaneEvidenceSurface {
+  trancheId: "W1-T1";
+  controlPointId: "CP3";
+  generatedAt: string;
+  coordination: typeof CONTROL_PLANE_FOUNDATION_COORDINATION;
+  report: CanvasReport;
+  textSurface: string;
+  markdownSurface: string;
+}
+
 export function createControlPlaneFoundationShell(): ControlPlaneFoundationShell {
   return {
     intent: new IntentPipeline(),
@@ -96,4 +119,138 @@ export function createControlPlaneFoundationShell(): ControlPlaneFoundationShell
     reporting: new GovernanceCanvas(),
     context: new ContextFreezer(),
   };
+}
+
+export function createControlPlaneEvidenceSurface(
+  sessions: SessionSnapshot[],
+  options: ControlPlaneEvidenceSurfaceOptions = {},
+): ControlPlaneEvidenceSurface {
+  const shell = createControlPlaneFoundationShell();
+  const reportTitle = options.reportTitle ?? "CVF Control Plane Governance Canvas";
+  const evidenceTitle =
+    options.evidenceTitle ?? "CVF W1-T1 CP3 Control-Plane Review Surface";
+  const generatedAt = new Date().toISOString();
+
+  shell.reporting = new GovernanceCanvas({
+    title: reportTitle,
+    includeSessionDetails: options.includeSessionDetails ?? true,
+  });
+  shell.reporting.addSessions(sessions);
+  const report = shell.reporting.generateReport();
+  const textSurface = buildControlPlaneEvidenceTextSurface(
+    evidenceTitle,
+    generatedAt,
+    report,
+    options,
+  );
+  const markdownSurface = buildControlPlaneEvidenceMarkdownSurface(
+    evidenceTitle,
+    generatedAt,
+    report,
+    options,
+  );
+
+  return {
+    trancheId: "W1-T1",
+    controlPointId: "CP3",
+    generatedAt,
+    coordination: CONTROL_PLANE_FOUNDATION_COORDINATION,
+    report,
+    textSurface,
+    markdownSurface,
+  };
+}
+
+function buildControlPlaneEvidenceTextSurface(
+  evidenceTitle: string,
+  generatedAt: string,
+  report: CanvasReport,
+  options: ControlPlaneEvidenceSurfaceOptions,
+): string {
+  const lines = [
+    "=".repeat(72),
+    `  ${evidenceTitle}`,
+    "=".repeat(72),
+    `Tranche: W1-T1`,
+    `Control Point: CP3`,
+    `Execution Class: ${CONTROL_PLANE_FOUNDATION_COORDINATION.executionClass}`,
+    `Generated At: ${generatedAt}`,
+    `Source Lineage: ${buildLineageList().join(", ")}`,
+  ];
+
+  if (options.knowledgeSources && options.knowledgeSources.length > 0) {
+    lines.push(`Knowledge Sources: ${options.knowledgeSources.join(", ")}`);
+  }
+
+  if (options.frozenContextHashes && options.frozenContextHashes.length > 0) {
+    lines.push(`Frozen Context Hashes: ${options.frozenContextHashes.join(", ")}`);
+  }
+
+  if (options.notes && options.notes.length > 0) {
+    lines.push(`Notes: ${options.notes.join(" | ")}`);
+  }
+
+  lines.push("");
+  lines.push(report.textReport);
+
+  return lines.join("\n");
+}
+
+function buildControlPlaneEvidenceMarkdownSurface(
+  evidenceTitle: string,
+  generatedAt: string,
+  report: CanvasReport,
+  options: ControlPlaneEvidenceSurfaceOptions,
+): string {
+  const lines = [
+    `# ${evidenceTitle}`,
+    "",
+    `> Tranche: \`W1-T1\``,
+    `> Control Point: \`CP3\``,
+    `> Execution Class: \`${CONTROL_PLANE_FOUNDATION_COORDINATION.executionClass}\``,
+    `> Generated At: \`${generatedAt}\``,
+    "",
+    "## Source Lineage",
+    "",
+    ...buildLineageList().map((lineage) => `- \`${lineage}\``),
+  ];
+
+  if (options.knowledgeSources && options.knowledgeSources.length > 0) {
+    lines.push("");
+    lines.push("## Knowledge Sources");
+    lines.push("");
+    lines.push(...options.knowledgeSources.map((source) => `- \`${source}\``));
+  }
+
+  if (options.frozenContextHashes && options.frozenContextHashes.length > 0) {
+    lines.push("");
+    lines.push("## Frozen Context Hashes");
+    lines.push("");
+    lines.push(
+      ...options.frozenContextHashes.map((hash) => `- \`${hash}\``),
+    );
+  }
+
+  if (options.notes && options.notes.length > 0) {
+    lines.push("");
+    lines.push("## Notes");
+    lines.push("");
+    lines.push(...options.notes.map((note) => `- ${note}`));
+  }
+
+  lines.push("");
+  lines.push("## Governance Canvas Report");
+  lines.push("");
+  lines.push(report.markdownReport);
+
+  return lines.join("\n");
+}
+
+function buildLineageList(): string[] {
+  return [
+    CONTROL_PLANE_FOUNDATION_COORDINATION.intentValidation,
+    CONTROL_PLANE_FOUNDATION_COORDINATION.ragPipeline,
+    CONTROL_PLANE_FOUNDATION_COORDINATION.governanceCanvas,
+    CONTROL_PLANE_FOUNDATION_COORDINATION.deterministicReproducibility,
+  ];
 }

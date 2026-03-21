@@ -1,12 +1,13 @@
 # CVF Control Plane Foundation
 
-Status: coordination package shell for `W1-T1 / CP1` in the whitepaper-completion roadmap.
+Status: coordination package shell for `W1-T1 / CP1-CP3` in the whitepaper-completion roadmap.
 
 ## Purpose
 
 - create one stable control-plane import surface without physically merging source modules
 - preserve lineage for intent, knowledge, reporting, and deterministic context-freezing modules
 - keep `CVF_v1.7_CONTROLLED_INTELLIGENCE` out of the initial package body
+- expose one reviewable governance-canvas evidence surface for tranche-local reporting
 
 ## Source lineage
 
@@ -28,3 +29,8 @@ Reference-only selected control-plane surfaces remain outside the package body:
 - rollback unit is this package only
 - source modules remain canonical for implementation ownership
 - physical consolidation is out of scope for `CP1`
+
+## Current-cycle reporting surface
+
+- `createControlPlaneEvidenceSurface()` builds a tranche-local text/markdown review surface from governance-canvas sessions
+- the reporting surface stays additive and does not modify active-path governance-core behavior

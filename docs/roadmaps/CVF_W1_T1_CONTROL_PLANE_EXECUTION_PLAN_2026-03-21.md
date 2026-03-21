@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`  
 > Tranche packet: `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 / CP2 IMPLEMENTED`
+> Status: `AUTHORIZED TRANCHE — CP1 / CP2 IMPLEMENTED / CP3 PACKET OPENED`
 
 ---
 
@@ -97,7 +97,7 @@ Scope:
 
 Status:
 
-- `READY AFTER CP2`
+- `PACKET OPENED — AWAITING DECISION`
 
 ### CP4 — Selected Controlled-Intelligence Surface Alignment
 

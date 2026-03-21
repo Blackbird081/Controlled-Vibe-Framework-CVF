@@ -1626,3 +1626,31 @@ Utility and guard:
 - Notes/Risks:
   - `CP2` remains additive and does not move any source-module ownership.
   - `filterPII` stays facade-owned in this batch; governance-canvas reporting and selected controlled-intelligence surfaces remain out of scope.
+## [2026-03-22] Batch: W1-T1 CP3 governance-canvas packet opening
+- Scope:
+  - open the tranche-local `GC-019` packet chain for `CP3`
+  - define governance-canvas reporting integration as the next reviewable control-plane step after `CP2`
+  - keep documentation traceability explicit for future reviewers through test log, delta, roadmap, and index updates
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/audits/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_REPORTING_INTEGRATION_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T1_CP3_GOVERNANCE_CANVAS_REPORTING_INTEGRATION_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_PACKET_DELTA_2026-03-22.md`
+- Files updated:
+  - `docs/audits/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_REPORTING_INTEGRATION_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T1_CP3_GOVERNANCE_CANVAS_REPORTING_INTEGRATION_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_PACKET_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch opens `CP3` only; it does not execute the reporting integration.
+  - README banners stay unchanged because no ownership movement is proposed here.
+  - closure checkpoint stays unchanged because tranche closure belongs to `CP5`, not `CP3` packet opening.

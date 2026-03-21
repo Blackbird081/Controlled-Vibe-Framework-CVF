@@ -46,6 +46,7 @@ Current authorization state:
 
 - `W0` is complete through `GC-018`
 - `W1-T1 — Control-Plane Foundation` is authorized through `GC-018`
+- `W1-T1 / CP1` is implemented as a coordination-package shell
 - all other downstream phases and tranches remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -205,6 +206,8 @@ Current authorized scope:
   - `docs/audits/CVF_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_AUDIT_2026-03-21.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_REVIEW_2026-03-21.md`
+- first implementation delta:
+  - `docs/baselines/CVF_W1_T1_CP1_CONTROL_PLANE_IMPLEMENTATION_DELTA_2026-03-21.md`
 - every major structural change inside `W1-T1` still requires `GC-019`
 - everything beyond `W1-T1` remains unopened
 
@@ -263,4 +266,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete and `W1-T1` is the only currently authorized implementation tranche; all further scope remains gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is the only currently authorized implementation tranche, and `CP1` is now implemented; all further scope remains gated.

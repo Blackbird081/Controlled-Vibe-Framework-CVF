@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`  
 > Tranche packet: `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`  
-> Status: `AUTHORIZED TRANCHE — EXECUTION NOT STARTED`
+> Status: `AUTHORIZED TRANCHE — CP1 IMPLEMENTED`
 
 ---
 
@@ -49,7 +49,7 @@ Change class:
 
 Target:
 
-- proposed package shell `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION`
+- package shell `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION`
 
 Scope:
 
@@ -67,7 +67,7 @@ Notes:
 
 Status:
 
-- `READY FOR GC-019`
+- `IMPLEMENTED`
 
 ### CP2 — Knowledge And Context Wrapper Alignment
 
@@ -82,7 +82,7 @@ Scope:
 
 Status:
 
-- `DEFER UNTIL CP1 DECISION`
+- `READY AFTER CP1`
 
 ### CP3 — Governance-Canvas Reporting Integration
 
@@ -97,7 +97,7 @@ Scope:
 
 Status:
 
-- `DEFER UNTIL CP1 DECISION`
+- `READY AFTER CP1`
 
 ### CP4 — Selected Controlled-Intelligence Surface Alignment
 
@@ -171,4 +171,25 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T1` is now authorized, and `CP1 — Control-Plane Foundation Shell` is the correct first governed change inside the tranche.
+> `W1-T1` is authorized, and `CP1 — Control-Plane Foundation Shell` has now been implemented in its approved coordination-package form.
+
+## 8. Implementation Receipt
+
+Implemented package:
+
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/`
+
+Receipt highlights:
+
+- source lineage preserved for:
+  - `CVF_ECO_v1.0_INTENT_VALIDATION`
+  - `CVF_ECO_v1.4_RAG_PIPELINE`
+  - `CVF_ECO_v2.1_GOVERNANCE_CANVAS`
+  - `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY`
+- `CVF_v1.7_CONTROLLED_INTELLIGENCE` remains outside the initial package body
+- package-local verification is green
+- source-module regression verification is green
+
+Evidence anchor:
+
+- `docs/baselines/CVF_W1_T1_CP1_CONTROL_PLANE_IMPLEMENTATION_DELTA_2026-03-21.md`

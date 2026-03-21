@@ -1550,3 +1550,42 @@ Utility and guard:
 - Notes/Risks:
   - `CP1` is recommended as a coordination package shell only
   - no code implementation is started by this planning batch
+## [2026-03-21] Batch: W1-T1 CP1 control-plane foundation implementation
+- Scope:
+  - implement `CP1` inside `W1-T1` as an approved `coordination package` shell
+  - preserve lineage for intent, knowledge, reporting, and deterministic context-freezing modules
+  - restore clean regression for `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` by fixing two pre-existing test-only non-null assertions
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/audits/CVF_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_AUDIT_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_REVIEW_2026-03-21.md`
+  - `docs/baselines/CVF_W1_T1_CP1_CONTROL_PLANE_IMPLEMENTATION_DELTA_2026-03-21.md`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/package.json`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/package-lock.json`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tsconfig.json`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/vitest.config.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/README.md`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts`
+  - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/tests/workflow.coordinator.test.ts`
+  - `docs/reference/CVF_MODULE_INVENTORY.md`
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/baselines/CVF_W1_T1_CP1_CONTROL_PLANE_IMPLEMENTATION_DELTA_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v2.1_GOVERNANCE_CANVAS && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE && npm run test` -> PASS
+- Notes/Risks:
+  - `CP1` stays strictly in `coordination package` scope; no physical merge was introduced.
+  - `CVF_v1.7_CONTROLLED_INTELLIGENCE` remains reference-only for this sub-batch and is not part of the new package body.

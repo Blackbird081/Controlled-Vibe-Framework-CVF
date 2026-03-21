@@ -32,6 +32,7 @@ This is the correct interpretation because the whitepaper is explicitly marked a
 | `CVF_TRUST_SANDBOX` target merge | delivered in approved current-cycle form | `DONE FOR CURRENT CYCLE` |
 | `CVF_AGENT_LEDGER` target merge | delivered in approved current-cycle form | `DONE FOR CURRENT CYCLE` |
 | Proposal-derived `Audit / Consensus` consolidation | not executed in current cycle | `DEFERRED` |
+| `W1-T1 / CP1` control-plane foundation shell | implemented as a coordination package with lineage preserved | `DONE FOR CURRENT TRANCHE` |
 | Control-plane `AI Gateway` target-state | not implemented as whitepaper target-state | `NOT STARTED / NOT AUTHORIZED` |
 | Unified `Knowledge Layer` target-state | partial ecosystem pieces exist, target-state not delivered | `PARTIAL` |
 | `Context Builder & Packager` target-state | partial ingredients exist, target-state not delivered | `PARTIAL` |

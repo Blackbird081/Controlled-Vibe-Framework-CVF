@@ -181,7 +181,7 @@ describe('WorkflowCoordinator', () => {
       expect(instance.status).toBe('ROLLED_BACK');
       expect(rollbackOrder).toEqual(['step-2', 'step-1']);
       expect(instance.rollbackLog).toHaveLength(2);
-      expect(instance.rollbackLog[0].stepId).toBe('step-2');
+      expect(instance.rollbackLog[0]!.stepId).toBe('step-2');
     });
 
     it('skips steps without rollback capability', () => {
@@ -199,7 +199,7 @@ describe('WorkflowCoordinator', () => {
 
       coordinator.rollbackWorkflow(instance.instanceId, 'Selective rollback');
       expect(instance.rollbackLog).toHaveLength(1);
-      expect(instance.rollbackLog[0].stepId).toBe('s1');
+      expect(instance.rollbackLog[0]!.stepId).toBe('s1');
     });
   });
 

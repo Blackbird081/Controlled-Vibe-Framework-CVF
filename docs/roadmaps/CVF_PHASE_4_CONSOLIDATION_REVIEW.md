@@ -172,6 +172,20 @@ src/
 2. Execution overlaps next (most used)
 3. Learning overlaps last (lowest criticality per Phase 0)
 
+### Active GC-019 Packet Chain
+
+Current active packet chain for the first approved `B*` merge:
+
+- audit packet:
+  - `docs/audits/CVF_BSTAR_MERGE_1_POLICY_ENGINE_AUDIT_2026-03-21.md`
+- independent review:
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_1_POLICY_ENGINE_REVIEW_2026-03-21.md`
+
+Current reviewed posture:
+
+- `coordination package` approved for `B* Merge 1`
+- `physical merge` rejected for current cycle
+
 ---
 
 ## Decision Required

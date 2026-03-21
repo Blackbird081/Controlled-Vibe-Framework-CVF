@@ -29,7 +29,7 @@
 - RBAC + CVF Role Mapper — `identity_layer/`
 - Brand Drift Detection — `brand_control_layer/`
 - CI/CD Gate — `ci/`
-- CVF Adapters (Risk R0-R4, Quality, Enforcement) — `adapters/`
+- CVF Adapters (Risk R0-R3, Quality, Enforcement) — `adapters/`
 
 **Import pattern:** All 28 subdirs use **intra-package relative imports**:
 ```python

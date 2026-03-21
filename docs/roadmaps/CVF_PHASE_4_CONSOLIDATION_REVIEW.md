@@ -194,8 +194,8 @@ Batch summary review:
 |---|---|---|
 | `Merge 1` `CVF_POLICY_ENGINE` | coordination package | `IMPLEMENTED` |
 | `Merge 2` `CVF_AGENT_DEFINITION` | coordination package | `IMPLEMENTED` |
-| `Merge 3` `CVF_MODEL_GATEWAY` | wrapper/re-export merge | `PENDING` |
-| `Merge 4` `CVF_TRUST_SANDBOX` | coordination package | `PENDING` |
+| `Merge 3` `CVF_MODEL_GATEWAY` | wrapper/re-export merge | `IMPLEMENTED` |
+| `Merge 4` `CVF_TRUST_SANDBOX` | coordination package | `IMPLEMENTED` |
 | `Merge 5` `CVF_AGENT_LEDGER` | physical merge | `PENDING` |
 
 ---

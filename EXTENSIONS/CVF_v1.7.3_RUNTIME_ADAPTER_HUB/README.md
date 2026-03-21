@@ -1,5 +1,9 @@
 # CVF v1.7.3 — Runtime Adapter Hub
 
+> This source module now participates in the approved `B* Merge 3` wrapper surface:
+> canonical wrapper: `EXTENSIONS/CVF_MODEL_GATEWAY/`
+> execution class: `wrapper/re-export merge`
+
 > **This extension is part of the [Controlled Vibe Framework (CVF)](../../README.md).**
 > CVF gốc (v1.0–v1.7.2) là chuẩn tuyệt đối. Extension này bổ sung runtime adapter abstraction.
 

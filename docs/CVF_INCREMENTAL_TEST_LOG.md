@@ -1356,3 +1356,36 @@ Utility and guard:
 - Notes/Risks:
   - both merges preserve lineage exactly as approved by `GC-019`
   - neither batch introduces a physical source move
+## [2026-03-21] Batch: B* Merge 3-4 wrapper and coordination implementation
+- Scope:
+  - implement the next two approved `B*` merges in their exact `GC-019`-approved form:
+    - `Merge 3` `CVF_MODEL_GATEWAY`
+    - `Merge 4` `CVF_TRUST_SANDBOX`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_3_MODEL_GATEWAY_REVIEW_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_4_TRUST_SANDBOX_REVIEW_2026-03-21.md`
+  - `docs/baselines/CVF_BSTAR_M3_M4_WRAPPER_COORDINATION_IMPLEMENTATION_DELTA_2026-03-21.md`
+- Files updated:
+  - `EXTENSIONS/CVF_MODEL_GATEWAY/**`
+  - `EXTENSIONS/CVF_TRUST_SANDBOX/**`
+  - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/README.md`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/README.md`
+  - `EXTENSIONS/CVF_ECO_v2.0_AGENT_GUARD_SDK/README.md`
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/README.md`
+  - `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
+  - `docs/baselines/CVF_BSTAR_M3_M4_WRAPPER_COORDINATION_IMPLEMENTATION_DELTA_2026-03-21.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_MODEL_GATEWAY && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_MODEL_GATEWAY && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_MODEL_GATEWAY && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_TRUST_SANDBOX && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_TRUST_SANDBOX && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_TRUST_SANDBOX && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v2.0_AGENT_GUARD_SDK && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME && npm run test` -> PASS
+- Notes/Risks:
+  - `Merge 3` keeps adapter-hub risk-model assets and release-evidence paths in place.
+  - `Merge 4` intentionally exposes only lightweight SDK surfaces and lineage guidance; it does not claim runtime collapse.

@@ -1,0 +1,12 @@
+{
+  "name": "cvf-plane-facades",
+  "version": "0.1.0",
+  "description": "CVF Federated Plane Facades — Stable plane-level APIs over existing extensions",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "private": true,
+  "keywords": ["cvf", "governance", "facades", "planes"],
+  "dependencies": {
+    "cvf-guard-contract": "workspace:*"
+  }
+}

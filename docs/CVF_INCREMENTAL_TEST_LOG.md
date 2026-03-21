@@ -1414,3 +1414,24 @@ Utility and guard:
 - Notes/Risks:
   - `Merge 5` is the only current-cycle `B*` merge approved as a `physical merge`
   - compatibility wrappers remain in both legacy packages for the transition cycle
+## [2026-03-21] Batch: restructuring current-cycle closure checkpoint
+- Scope:
+  - issue a final closure checkpoint showing the approved current-cycle restructuring wave is fully complete after `Phase 4 / Option B*`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
+  - `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
+  - `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`
+- Files updated:
+  - `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`
+  - `docs/baselines/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_DELTA_2026-03-21.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/INDEX.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - no new implementation scope is opened by this checkpoint
+  - future restructuring work requires a new governed packet rather than implicit continuation

@@ -5,6 +5,7 @@
 > **Purpose:** Revised federated restructuring proposal incorporating formal critique
 > **Revision Note:** This version keeps the original federated strategy, but strengthens execution discipline by adding per-phase verification gates, rollback criteria, and a mandatory physical-consolidation decision review
 > **Revision 2.1 Addendum:** Added baseline re-verify gate (R0-R3, 8/15 guards) in Phase 0, and highlighted independent subsystem rollback in Phase 3
+> **Current-cycle execution status:** `COMPLETE` via approved `Phase 4 / Option B*` packet and implemented `B* Merge 1-5`
 
 ---
 
@@ -22,6 +23,20 @@ However, this revision adopts two important corrections:
 2. every phase now has explicit verification gates and rollback criteria
 
 That makes the federated strategy stronger not only as architecture, but as governance-ready execution planning.
+
+## Current-Cycle Closure Snapshot
+
+The restructuring roadmap is no longer only a planning artifact. Its approved current-cycle execution scope has now been completed:
+
+- `Phase 0` through `Phase 3` delivered and verified
+- `Phase 4` signed off `Option B*`
+- all five approved current-cycle `B*` merges implemented in their exact `GC-019`-approved forms
+- proposal-derived `Audit/Consensus` scope remains deferred outside the current cycle
+
+Canonical closure review:
+
+- `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`
+- `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
 
 ---
 

@@ -1,7 +1,9 @@
 # CVF Phase 4 — Mandatory Physical Consolidation Review
 > **Date:** 2026-03-21
+> **Revised:** 2026-03-21 (post-EA review)
 > **Roadmap Ref:** `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md` — Phase 4
-> **Status:** DECISION PACKET — Pending User Sign-off
+> **EA Review:** `docs/reviews/CVF_PHASE_4_CONSOLIDATION_OPTION_REVIEW_2026-03-21.md`
+> **Status:** DECISION PACKET v2 — Pending User Sign-off
 > **Prerequisites:** Phase 0 ✅ | Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅
 
 ---
@@ -36,50 +38,51 @@ Force a governed, evidence-based decision on CVF's physical layout. The system M
 
 ## Decision Options
 
-### Option A — Keep Extension-Based Physical Layout (FEDERATED)
+### Option A — Stay Federated (NO consolidation merges)
 
-**Description:** Extensions remain in `EXTENSIONS/` as independent directories. Facades delegate to existing modules. Phase 0 merges proceed as planned within `EXTENSIONS/`.
+**Description:** Extensions remain as-is in `EXTENSIONS/` with **0 consolidation merges** in this cycle. Facades provide plane-level APIs. Known overlaps remain under-addressed until a future decision cycle.
 
 | Dimension | Assessment |
-|-----------|-----------|
-| **Operational cost** | 🟢 LOW — No migration overhead. Build/deploy unchanged. |
-| **Developer ergonomics** | 🟡 MEDIUM — 39 directories need familiarity, but facades provide entry points. |
-| **Build/test complexity** | 🟢 LOW — Each extension has own `package.json`/tsconfig. Independent testing. |
-| **Rollback complexity** | 🟢 LOW — Changes are always extension-scoped. |
-| **Governance clarity** | 🟢 HIGH — Phase 0 ownership matrix + facades define clear boundaries. |
-| **Ownership clarity** | 🟢 HIGH — Each module has explicit plane ownership. |
-| **Extension lineage** | 🟢 PRESERVED — Version history intact per extension. |
+|-----------|------------|
+| **Operational cost** | 🟢 NONE — No migration, no import rewiring. |
+| **Developer ergonomics** | 🟡 MEDIUM — 39 directories remain, facades mitigate. |
+| **Build/test complexity** | 🟢 NONE — No changes to build pipeline. |
+| **Rollback complexity** | 🟢 TRIVIAL — Nothing to roll back. |
+| **Governance clarity** | 🟢 HIGH — Phase 0 matrix + facades. |
+| **Ownership clarity** | 🟢 HIGH — Each module has plane ownership. |
+| **Extension lineage** | 🟢 FULLY PRESERVED |
 
 **Pros:**
-- No migration risk
+- Zero migration risk
 - Git history fully preserved
 - Independent module testing continues
 - Facade layer already provides clean entry points
-- Phase 0 merges can proceed incrementally within EXTENSIONS/
 
 **Cons:**
+- 6 known overlap pairs remain unaddressed
 - 39 directories may feel overwhelming to newcomers
-- Some directory names carry version history that's no longer meaningful
-- `import` paths require path mapping or relative traversal
+- Can drift into "facade-only but never-decide" posture
 
 ---
 
-### Option B — Partial Consolidation (HYBRID)
+### Option B* — Partial Consolidation (Current-Cycle Evidence-Backed Merges Only)
 
-**Description:** Merge the 6 overlap pairs from Phase 0 into consolidated modules. Keep active-path critical modules (`GUARD_CONTRACT`, `PHASE_GOV_PROTOCOL`, `AGENT_PLATFORM`) in place. Consolidate remaining ecosystem modules by plane.
+**Description:** Merge **5 inventory-backed** overlap pairs from Phase 0. Keep active-path critical modules untouched. Defer the 6th pair (Audit/Consensus) which is proposal-derived, not inventory-backed.
 
-**Proposed consolidation:**
+**Current-cycle merges (5 pairs):**
 1. `CVF_v1.6.1_GOVERNANCE_ENGINE` + `CVF_ECO_v1.1_NL_POLICY` → `CVF_POLICY_ENGINE`
 2. `CVF_ECO_v2.3_AGENT_IDENTITY` + `CVF_v1.2_CAPABILITY_EXTENSION` → `CVF_AGENT_DEFINITION`
 3. `CVF_v1.2.1_EXTERNAL_INTEGRATION` + `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` → `CVF_MODEL_GATEWAY`
 4. `CVF_v1.7.1_SAFETY_RUNTIME` + `CVF_ECO_v2.0_AGENT_GUARD_SDK` → `CVF_TRUST_SANDBOX`
 5. `CVF_ECO_v3.0_TASK_MARKETPLACE` + `CVF_ECO_v3.1_REPUTATION` → `CVF_AGENT_LEDGER`
-6. *(Audit/Consensus — future, from ADDING proposals)*
+
+**Explicitly deferred:**
+6. ~~Audit/Consensus~~ — proposal-derived (from ADDING proposals R3+R5), not equivalently inventory-backed. Requires separate future review.
 
 | Dimension | Assessment |
-|-----------|-----------|
-| **Operational cost** | 🟡 MEDIUM — 6 merge operations with import rewiring. |
-| **Developer ergonomics** | 🟢 HIGH — Reduces from 39 to ~33 directories with clearer names. |
+|-----------|------------|
+| **Operational cost** | 🟡 MEDIUM — 5 merge operations with import rewiring. |
+| **Developer ergonomics** | 🟢 HIGH — Reduces from 39 to **~34** directories with clearer names. |
 | **Build/test complexity** | 🟡 MEDIUM — Merged modules need new test suites. |
 | **Rollback complexity** | 🟡 MEDIUM — Each merge independently reversible (Phase 3 proved this). |
 | **Governance clarity** | 🟢 HIGH — Merged modules eliminate ambiguous ownership. |
@@ -87,15 +90,16 @@ Force a governed, evidence-based decision on CVF's physical layout. The system M
 | **Extension lineage** | 🟡 PARTIAL — Original modules archived as git history. |
 
 **Pros:**
-- Eliminates 6 known overlap pairs
+- Eliminates 5 inventory-backed overlap pairs
 - Cleaner module names
 - Active-path modules untouched
 - Each merge is independently testable and reversible
+- Scope matches evidence — no over-reach
 
 **Cons:**
 - Requires import path updates across consumers
 - Test migration needed for each merged module
-- 6 separate PRs/batches to manage
+- 5 separate PRs/batches to manage
 
 ---
 
@@ -136,16 +140,16 @@ src/
 
 ## Side-by-Side Comparison
 
-| Criterion | A: Federated | B: Partial | C: Full |
+| Criterion | A: Stay Federated | B*: Partial (5 merges) | C: Full |
 |-----------|:---:|:---:|:---:|
 | Migration risk | 🟢 None | 🟡 Low | 🔴 High |
 | Rollback safety | 🟢 Trivial | 🟢 Good | 🔴 Poor |
-| Developer onboarding | 🟡 39 dirs | 🟢 33 dirs | 🟢 5 top-level |
+| Developer onboarding | 🟡 39 dirs | 🟢 34 dirs | 🟢 5 top-level |
 | Git history preservation | 🟢 Full | 🟡 Partial | 🔴 Lost |
 | Build pipeline changes | 🟢 None | 🟡 Some | 🔴 Complete |
 | Governance alignment | 🟢 High | 🟢 High | 🟢 High |
 | Time to execute | 🟢 ~0h | 🟡 ~1-2 weeks | 🔴 ~4-8 weeks |
-| Phase 0 merges addressed | ❌ Deferred | ✅ All 6 | ✅ All 6 |
+| Phase 0 merges addressed | ❌ 0 of 5 | ✅ 5 of 5 (+ 1 deferred) | ✅ All |
 | Facade utility | ✅ Used | ✅ Used | ❌ Replaced |
 
 ---
@@ -153,16 +157,17 @@ src/
 ## Recommendation
 
 > [!IMPORTANT]
-> **Recommended: Option B — Partial Consolidation**
+> **Recommended: Option B* — Partial Consolidation, current-cycle scope only**
 
 **Justification:**
-1. **Evidence-based:** Phase 0 identified exactly 6 overlap pairs, all documented with merge targets and owner planes.
-2. **Proven reversible:** Phase 3 demonstrated that re-export → merge → re-export is safe and independently reversible.
-3. **Low risk:** Active-path modules (`GUARD_CONTRACT`, `PHASE_GOV_PROTOCOL`, `AGENT_PLATFORM`) remain untouched.
-4. **Incremental:** Each merge is a standalone, testable batch — not a big-bang.
-5. **Preserves investment:** Facade layer (Phase 2) continues to provide plane-level APIs above the merged modules.
+1. **Evidence-based:** Phase 0 identified exactly 5 evidence-backed overlap pairs with documented merge targets and owner planes.
+2. **Scope-honest:** The 6th pair (Audit/Consensus) is deferred because it is proposal-derived, not inventory-backed.
+3. **Proven reversible:** Phase 3 demonstrated that re-export → merge → re-export is safe and independently reversible.
+4. **Low risk:** Active-path modules (`GUARD_CONTRACT`, `PHASE_GOV_PROTOCOL`, `AGENT_PLATFORM`) remain untouched.
+5. **Incremental:** Each merge is a standalone, testable batch — not a big-bang.
+6. **Preserves investment:** Facade layer (Phase 2) continues to provide plane-level APIs above the merged modules.
 
-**Implementation order** (if Option B approved):
+**Implementation order** (if B* approved):
 1. Governance overlaps first (highest governance value)
 2. Execution overlaps next (most used)
 3. Learning overlaps last (lowest criticality per Phase 0)
@@ -172,9 +177,9 @@ src/
 ## Decision Required
 
 | Option | Your Call |
-|--------|----------|
-| **A** — Stay Federated (0 merges, keep facades only) | ☐ |
-| **B** — Partial Consolidation (6 merges + facades) | ☐ ← Recommended |
+|--------|---------|
+| **A** — Stay Federated (0 consolidation merges this cycle) | ☐ |
+| **B*** — Partial Consolidation (5 current-cycle merges + 1 deferred) | ☐ ← Recommended |
 | **C** — Full Consolidation (plane-based tree) | ☐ |
 
 > [!CAUTION]

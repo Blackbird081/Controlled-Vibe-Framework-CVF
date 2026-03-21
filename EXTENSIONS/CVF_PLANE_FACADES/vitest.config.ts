@@ -4,6 +4,10 @@ export default {
   resolve: {
     alias: [
       {
+        find: /^cvf-control-plane-foundation$/,
+        replacement: resolve(__dirname, '../CVF_CONTROL_PLANE_FOUNDATION/src/index.ts'),
+      },
+      {
         find: /^cvf-guard-contract$/,
         replacement: resolve(__dirname, '../CVF_GUARD_CONTRACT/src/index.ts'),
       },

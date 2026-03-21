@@ -1588,3 +1588,41 @@ Utility and guard:
 - Notes/Risks:
   - `CP1` stays strictly in `coordination package` scope; no physical merge was introduced.
   - `CVF_v1.7_CONTROLLED_INTELLIGENCE` remains reference-only for this sub-batch and is not part of the new package body.
+## [2026-03-21] Batch: W1-T1 CP2 knowledge/context wrapper alignment
+- Scope:
+  - implement `CP2` inside `W1-T1` as an approved `wrapper/re-export merge`
+  - align `CVF_PLANE_FACADES` knowledge/context entrypoints to the `CP1` control-plane shell
+  - preserve the public facade contract while removing the remaining stub-style knowledge boundary
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/audits/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_WRAPPER_ALIGNMENT_AUDIT_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_W1_T1_CP2_KNOWLEDGE_CONTEXT_WRAPPER_ALIGNMENT_REVIEW_2026-03-21.md`
+  - `docs/baselines/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_IMPLEMENTATION_DELTA_2026-03-21.md`
+- Files updated:
+  - `EXTENSIONS/CVF_PLANE_FACADES/package.json`
+  - `EXTENSIONS/CVF_PLANE_FACADES/tsconfig.json`
+  - `EXTENSIONS/CVF_PLANE_FACADES/vitest.config.ts`
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/knowledge.facade.ts`
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/index.ts`
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/index.test.ts`
+  - `docs/roadmaps/CVF_PHASE_2_FEDERATED_PLANE_FACADES.md`
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/baselines/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_IMPLEMENTATION_DELTA_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npm run check` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+- Notes/Risks:
+  - `CP2` remains additive and does not move any source-module ownership.
+  - `filterPII` stays facade-owned in this batch; governance-canvas reporting and selected controlled-intelligence surfaces remain out of scope.

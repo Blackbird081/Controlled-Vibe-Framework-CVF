@@ -15,7 +15,7 @@
 | `package.json` | — | — | Package manifest, depends on `cvf-guard-contract` |
 | `src/governance.facade.ts` | 🛡️ Governance | ~180 | Guard eval, phase validation, assertAllowed, audit |
 | `src/execution.facade.ts` | ⚡ Execution | ~155 | Governance-checked execute, risk-based model routing |
-| `src/knowledge.facade.ts` | 🧭 Control | ~150 | RAG retrieval (stub), context packaging, PII filter |
+| `src/knowledge.facade.ts` | 🧭 Control | ~150 | RAG retrieval via `CVF_CONTROL_PLANE_FOUNDATION`, context packaging, PII filter |
 | `src/learning.facade.ts` | 🧠 Learning | ~190 | Reputation (10% cap), batch task ledger, metrics, disabled by default |
 | `src/index.ts` | — | ~75 | Barrel export — single import point |
 | `src/index.test.ts` | — | ~220 | Package-local smoke/integration tests across all four facades |

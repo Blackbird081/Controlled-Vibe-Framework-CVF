@@ -6,6 +6,10 @@ import {
   type Guard,
   type GuardRequestContext,
 } from './index';
+import {
+  createControlPlaneFoundationShell,
+  resetDocCounter,
+} from 'cvf-control-plane-foundation';
 
 function createBlockForbiddenGuard(): Guard {
   return {
@@ -140,21 +144,48 @@ describe('CVF Plane Facades', () => {
     expect(packaged.truncated).toBe(true);
     expect(packaged.totalTokens).toBe(10);
     expect(packaged.snapshotHash).toBe(packagedAgain.snapshotHash);
+    expect(packaged.snapshotHash).toHaveLength(32);
   });
 
-  it('filters PII and records retrieval activity', () => {
-    const knowledge = createKnowledgeFacade();
+  it('filters PII and records retrieval activity through the CP1 shell', () => {
+    resetDocCounter();
+
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: 'CVF Governance Guide',
+      content: 'CVF governance requires explicit evidence and control-plane alignment.',
+      tier: 'T2_POLICY',
+      documentType: 'policy',
+      domain: 'governance',
+      tags: ['cvf', 'governance'],
+      metadata: {
+        source: 'governance-doc',
+        owner: 'control-plane',
+      },
+    });
+
+    const knowledge = createKnowledgeFacade({ shell });
 
     const filtered = knowledge.filterPII(
       'Contact me at alice@example.com with api_key_sk-12345678901234567890 and -----BEGIN PRIVATE KEY-----',
     );
-    const retrieved = knowledge.retrieveContext('cvf governance', { maxChunks: 3 });
+    const retrieved = knowledge.retrieveContext('cvf governance', {
+      maxChunks: 3,
+      sources: ['governance-doc'],
+      filters: {
+        owner: 'control-plane',
+      },
+    });
 
     expect(filtered.piiDetected).toBe(true);
     expect(filtered.filteredCount).toBeGreaterThanOrEqual(2);
     expect(filtered.content).toContain('[REDACTED:email]');
     expect(filtered.content).toContain('[REDACTED:private_key]');
-    expect(retrieved).toEqual([]);
+    expect(retrieved).toHaveLength(1);
+    expect(retrieved[0]).toMatchObject({
+      source: 'governance-doc',
+    });
+    expect(retrieved[0]?.metadata?.title).toBe('CVF Governance Guide');
     expect(knowledge.getRetrievalLog()).toHaveLength(1);
   });
 

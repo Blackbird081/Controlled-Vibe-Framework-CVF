@@ -12,9 +12,11 @@
   },
   "keywords": ["cvf", "governance", "facades", "planes"],
   "dependencies": {
+    "cvf-control-plane-foundation": "file:../CVF_CONTROL_PLANE_FOUNDATION",
     "cvf-guard-contract": "file:../CVF_GUARD_CONTRACT"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "@vitest/coverage-v8": "^1.6.1",
     "typescript": "^5.4.0",
     "vitest": "^1.6.1"

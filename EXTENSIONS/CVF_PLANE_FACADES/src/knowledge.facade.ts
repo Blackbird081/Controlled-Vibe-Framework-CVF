@@ -2,14 +2,19 @@
  * CVF Knowledge Facade (Control Plane)
  * =====================================
  * Single entry point for ALL knowledge/context operations.
- * Delegates to CVF_ECO_v1.4_RAG_PIPELINE and CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY.
+ * Delegates to the `CP1` control-plane shell so public knowledge/context
+ * entrypoints stay aligned with the tranche-local foundation package.
  *
- * NOTE: This facade defines the INTERFACE contract. Actual implementations
- * will be wired when RAG and Context Packager modules are upgraded.
  * Per XP-02: Execution → Knowledge MUST go through this facade.
  *
  * @module cvf-plane-facades/knowledge
  */
+
+import {
+  computeDeterministicHash,
+  createControlPlaneFoundationShell,
+  type ControlPlaneFoundationShell,
+} from 'cvf-control-plane-foundation';
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -43,25 +48,56 @@ export interface FilteredContent {
   filteredCount: number;
 }
 
+export interface KnowledgeFacadeDependencies {
+  shell?: ControlPlaneFoundationShell;
+  now?: () => string;
+}
+
 // ─── Knowledge Facade ─────────────────────────────────────────────────
 
 export class KnowledgeFacade {
+  private shell: ControlPlaneFoundationShell;
+  private readonly now: () => string;
   private retrievalLog: Array<{ query: string; chunkCount: number; timestamp: string }> = [];
 
+  constructor(dependencies: KnowledgeFacadeDependencies = {}) {
+    this.shell = dependencies.shell ?? createControlPlaneFoundationShell();
+    this.now = dependencies.now ?? (() => new Date().toISOString());
+  }
+
   /**
-   * Retrieve context chunks via RAG pipeline.
-   * Delegates to CVF_ECO_v1.4_RAG_PIPELINE.
-   *
-   * CURRENT: Stub implementation — returns empty results.
-   * PHASE 3: Will wire to actual RAG module after merge.
+   * Retrieve context chunks via the `CP1` shell's canonical knowledge delegate.
    */
   retrieveContext(query: string, options?: RetrievalOptions): ContextChunk[] {
-    const chunks: ContextChunk[] = [];
+    const result = this.shell.knowledge.query({
+      query,
+      maxResults: options?.maxChunks ?? 10,
+      minScore: options?.minRelevance ?? 0.01,
+      domain: this.readStringFilter(options?.filters?.domain),
+      tags: this.readStringList(options?.filters?.tags),
+    });
+
+    const chunks = result.documents
+      .map((doc) => ({
+        id: doc.id,
+        source: this.resolveSource(doc),
+        content: doc.content,
+        relevanceScore: doc.score ?? 0,
+        metadata: {
+          title: doc.title,
+          tier: doc.tier,
+          documentType: doc.documentType,
+          domain: doc.domain,
+          tags: doc.tags,
+          ...doc.metadata,
+        },
+      }))
+      .filter((chunk) => this.matchesFilters(chunk, options));
 
     this.retrievalLog.push({
       query,
       chunkCount: chunks.length,
-      timestamp: new Date().toISOString(),
+      timestamp: this.now(),
     });
 
     return chunks;
@@ -69,13 +105,10 @@ export class KnowledgeFacade {
 
   /**
    * Package context chunks within a token budget.
-   * Delegates to CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY.
-   *
-   * Per Whitepaper: Context pipeline is SEQUENTIAL (Fusion → Packager).
-   * Per Migration Guardrail 7.2.6: Deterministic output (same input = same output).
+   * Uses the deterministic hash line from the `CP1` shell so the wrapper no
+   * longer invents its own hash formula.
    */
   packageContext(chunks: ContextChunk[], tokenBudget: number): PackagedContext {
-    // Simple token estimation (4 chars ≈ 1 token)
     let totalTokens = 0;
     const selectedChunks: ContextChunk[] = [];
 
@@ -87,9 +120,12 @@ export class KnowledgeFacade {
       }
     }
 
-    // Deterministic hash for reproducibility
-    const contentString = selectedChunks.map(c => c.content).join('|');
-    const snapshotHash = this.simpleHash(contentString);
+    const snapshotHash = computeDeterministicHash(
+      'knowledge-facade',
+      `budget:${tokenBudget}`,
+      `tokens:${totalTokens}:selected:${selectedChunks.length}:truncated:${selectedChunks.length < chunks.length}`,
+      this.serializeChunks(selectedChunks),
+    );
 
     return {
       chunks: selectedChunks,
@@ -145,19 +181,104 @@ export class KnowledgeFacade {
     return this.retrievalLog;
   }
 
-  private simpleHash(str: string): string {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash |= 0;
+  private resolveSource(doc: {
+    title: string;
+    metadata: Record<string, unknown>;
+  }): string {
+    if (typeof doc.metadata.source === 'string' && doc.metadata.source.length > 0) {
+      return doc.metadata.source;
     }
-    return `ctx-${Math.abs(hash).toString(36)}`;
+    return doc.title;
+  }
+
+  private matchesFilters(chunk: ContextChunk, options?: RetrievalOptions): boolean {
+    if (options?.sources && options.sources.length > 0 && !options.sources.includes(chunk.source)) {
+      return false;
+    }
+
+    const filters = options?.filters;
+    if (!filters) {
+      return true;
+    }
+
+    for (const [key, expected] of Object.entries(filters)) {
+      if (key === 'domain' || key === 'tags') {
+        continue;
+      }
+
+      const actual = chunk.metadata?.[key];
+      if (Array.isArray(expected)) {
+        if (!Array.isArray(actual)) {
+          return false;
+        }
+
+        const expectedValues = expected.map((value) => String(value));
+        const actualValues = actual.map((value) => String(value));
+        const hasOverlap = expectedValues.some((value) => actualValues.includes(value));
+        if (!hasOverlap) {
+          return false;
+        }
+        continue;
+      }
+
+      if (actual !== expected) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private readStringFilter(value: unknown): string | undefined {
+    return typeof value === 'string' && value.length > 0 ? value : undefined;
+  }
+
+  private readStringList(value: unknown): string[] | undefined {
+    if (!Array.isArray(value)) {
+      return undefined;
+    }
+
+    const items = value.filter((entry): entry is string => typeof entry === 'string' && entry.length > 0);
+    return items.length > 0 ? items : undefined;
+  }
+
+  private serializeChunks(chunks: ContextChunk[]): string {
+    if (chunks.length === 0) {
+      return 'empty';
+    }
+
+    return chunks
+      .map((chunk) => JSON.stringify({
+        id: chunk.id,
+        source: chunk.source,
+        content: chunk.content,
+        relevanceScore: chunk.relevanceScore,
+        metadata: this.sortValue(chunk.metadata ?? {}),
+      }))
+      .join('|');
+  }
+
+  private sortValue(value: unknown): unknown {
+    if (Array.isArray(value)) {
+      return value.map((entry) => this.sortValue(entry));
+    }
+
+    if (value && typeof value === 'object') {
+      return Object.fromEntries(
+        Object.entries(value as Record<string, unknown>)
+          .sort(([left], [right]) => left.localeCompare(right))
+          .map(([key, nestedValue]) => [key, this.sortValue(nestedValue)]),
+      );
+    }
+
+    return value;
   }
 }
 
 // ─── Factory ──────────────────────────────────────────────────────────
 
-export function createKnowledgeFacade(): KnowledgeFacade {
-  return new KnowledgeFacade();
+export function createKnowledgeFacade(
+  dependencies?: KnowledgeFacadeDependencies,
+): KnowledgeFacade {
+  return new KnowledgeFacade(dependencies);
 }

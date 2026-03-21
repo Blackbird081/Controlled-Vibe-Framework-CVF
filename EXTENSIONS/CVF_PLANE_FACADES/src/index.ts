@@ -43,6 +43,7 @@ export {
 export {
   KnowledgeFacade,
   createKnowledgeFacade,
+  type KnowledgeFacadeDependencies,
   type ContextChunk,
   type RetrievalOptions,
   type PackagedContext,

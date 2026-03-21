@@ -47,6 +47,7 @@ Current authorization state:
 - `W0` is complete through `GC-018`
 - `W1-T1 — Control-Plane Foundation` is authorized through `GC-018`
 - `W1-T1 / CP1` is implemented as a coordination-package shell
+- `W1-T1 / CP2` is implemented as a bounded wrapper/re-export alignment
 - all other downstream phases and tranches remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -208,6 +209,14 @@ Current authorized scope:
   - `docs/reviews/CVF_GC019_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_REVIEW_2026-03-21.md`
 - first implementation delta:
   - `docs/baselines/CVF_W1_T1_CP1_CONTROL_PLANE_IMPLEMENTATION_DELTA_2026-03-21.md`
+- second structural packet:
+  - `docs/audits/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_WRAPPER_ALIGNMENT_AUDIT_2026-03-21.md`
+- second independent review:
+  - `docs/reviews/CVF_GC019_W1_T1_CP2_KNOWLEDGE_CONTEXT_WRAPPER_ALIGNMENT_REVIEW_2026-03-21.md`
+- second packet delta:
+  - `docs/baselines/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_PACKET_DELTA_2026-03-21.md`
+- second implementation delta:
+  - `docs/baselines/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_IMPLEMENTATION_DELTA_2026-03-21.md`
 - every major structural change inside `W1-T1` still requires `GC-019`
 - everything beyond `W1-T1` remains unopened
 

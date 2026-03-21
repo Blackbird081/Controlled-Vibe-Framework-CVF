@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`  
 > Tranche packet: `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 IMPLEMENTED`
+> Status: `AUTHORIZED TRANCHE — CP1 / CP2 IMPLEMENTED`
 
 ---
 
@@ -82,7 +82,7 @@ Scope:
 
 Status:
 
-- `READY AFTER CP1`
+- `IMPLEMENTED`
 
 ### CP3 — Governance-Canvas Reporting Integration
 
@@ -97,7 +97,7 @@ Scope:
 
 Status:
 
-- `READY AFTER CP1`
+- `READY AFTER CP2`
 
 ### CP4 — Selected Controlled-Intelligence Surface Alignment
 
@@ -171,7 +171,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T1` is authorized, and `CP1 — Control-Plane Foundation Shell` has now been implemented in its approved coordination-package form.
+> `W1-T1` is authorized, and both `CP1` and `CP2` have now been implemented in their approved tranche-local forms.
 
 ## 8. Implementation Receipt
 
@@ -193,3 +193,22 @@ Receipt highlights:
 Evidence anchor:
 
 - `docs/baselines/CVF_W1_T1_CP1_CONTROL_PLANE_IMPLEMENTATION_DELTA_2026-03-21.md`
+
+## 9. Implementation Receipt
+
+Implemented wrapper target:
+
+- `EXTENSIONS/CVF_PLANE_FACADES/`
+
+Receipt highlights:
+
+- knowledge/context facade entrypoints now align to the `CP1` shell
+- retrieval delegates through `CVF_CONTROL_PLANE_FOUNDATION`
+- deterministic packaging hash aligns to the v1.9 line surfaced by the shell
+- public facade signatures remain stable
+- package-local verification is green
+- regression verification against the preserved source lines is green
+
+Evidence anchor:
+
+- `docs/baselines/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_IMPLEMENTATION_DELTA_2026-03-21.md`

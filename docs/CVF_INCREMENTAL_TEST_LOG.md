@@ -1478,3 +1478,26 @@ Utility and guard:
 - Notes/Risks:
   - only `W0` is authorized
   - first implementation tranche still needs a new governed follow-up packet
+## [2026-03-21] Batch: whitepaper W0 discovery and scoping
+- Scope:
+  - complete the authorized `W0` phase by ranking remaining whitepaper target-state gaps and preparing one bounded first-tranche packet
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_W0_SCOPED_BACKLOG_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`
+- Files updated:
+  - `docs/roadmaps/CVF_WHITEPAPER_W0_SCOPED_BACKLOG_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`
+  - `docs/baselines/CVF_WHITEPAPER_W0_DISCOVERY_SCOPING_DELTA_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - `W0` closes only the scoping phase
+  - first tranche is prepared but still not implementation-authorized

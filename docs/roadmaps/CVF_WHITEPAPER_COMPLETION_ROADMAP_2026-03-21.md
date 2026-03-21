@@ -182,8 +182,14 @@ Reasoning:
 
 Current status:
 
-- `AUTHORIZED`
-- this is the only currently open phase in the roadmap
+- `COMPLETE`
+- canonical outputs:
+  - `docs/roadmaps/CVF_WHITEPAPER_W0_SCOPED_BACKLOG_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`
+
+Recommended next governed move:
+
+- raise a follow-up packet for the first bounded implementation tranche only
 
 ### Phase W1 — Control Plane
 
@@ -245,4 +251,4 @@ This roadmap means:
 ## Final Readout
 
 > **Prepared successor roadmap** — correct direction for completing the whitepaper target-state, but not authorized for implementation yet.
-> **Updated readout:** `W0` is now authorized; downstream implementation remains gated.
+> **Updated readout:** `W0` is complete; downstream implementation remains gated.

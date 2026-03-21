@@ -107,6 +107,8 @@ Nếu cần đọc bộ tài liệu chốt cuối cho restructuring thay vì đ�
 - `reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`
 - `reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - `reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
+- `roadmaps/CVF_WHITEPAPER_W0_SCOPED_BACKLOG_2026-03-21.md`
+- `reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`
 - `roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - `reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md`
 - `reviews/CVF_EA_CROSS_CHECK_RECONCILIATION_2026-03-21.md`
@@ -116,6 +118,7 @@ Nếu cần đọc bộ tài liệu chốt cuối cho restructuring thay vì đ�
 - `baselines/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_DELTA_2026-03-21.md`
 - `baselines/CVF_WHITEPAPER_COMPLETION_PLANNING_DELTA_2026-03-21.md`
 - `baselines/CVF_WHITEPAPER_GC018_W0_AUTHORIZATION_DELTA_2026-03-21.md`
+ - `baselines/CVF_WHITEPAPER_W0_DISCOVERY_SCOPING_DELTA_2026-03-21.md`
 
 `CVF_Important/REVIEW FOLDER` vẫn được giữ làm reference archive cho packet này, nhưng không còn là canonical storage path.
 

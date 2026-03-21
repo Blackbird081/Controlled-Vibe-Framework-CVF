@@ -2,6 +2,49 @@
 
 ---
 
+## [2026-03-21] — Federated Plane Convergence: Phase 0-2 Complete
+
+### Added
+- **CVF_PLANE_FACADES** — New extension package (`EXTENSIONS/CVF_PLANE_FACADES/`)
+  - `GovernanceFacade` — Guard evaluation, phase validation, assertAllowed, audit
+  - `ExecutionFacade` — Governance-checked execution, risk-based model routing (R0→CHEAP, R3→REASONING)
+  - `KnowledgeFacade` — RAG retrieval (stub), deterministic context packaging, PII filter
+  - `LearningFacade` — Reputation scoring (10% delta cap), batch task ledger, disabled by default
+- **Phase 0 deliverable** — `docs/roadmaps/CVF_PHASE_0_PLANE_OWNERSHIP_INVENTORY.md`
+  - Plane Ownership Matrix: 39 modules classified (24 KEEP, 12 MERGE, 1 DEPRECATE)
+  - Dependency Map: 5 cross-plane dependencies identified
+  - Overlap Register: 6 overlap groups requiring merge
+  - Active-Path Criticality Register: 3 critical, 12 important, 24 breadth
+- **Phase 1 deliverable** — `docs/roadmaps/CVF_PHASE_1_CONTRACT_BOUNDARY_CONVERGENCE.md`
+  - Contract Matrix: 16 contracts across 4 planes
+  - Canonical Facade Definitions: 4 TypeScript interfaces
+  - Cross-Plane Interaction Rules: 8 rules (XP-01 to XP-08)
+  - Boundary Violation Register: 6 violations found (2 HIGH: duplicate types/engine)
+- **Phase 2 deliverable** — `docs/roadmaps/CVF_PHASE_2_FEDERATED_PLANE_FACADES.md`
+
+### Changed
+- **Whitepaper Section 7** — Replaced mixed "Architecture Invariants" with EA-approved 3-tier structure:
+  - 7.1 Current Frozen Invariants (4 items — already true in code)
+  - 7.2 Migration Guardrails (6 items — transition rules)
+  - 7.3 Target-State Design Principles (6 items — future intent)
+- **Federated Convergence Roadmap REV2** — Added baseline re-verify gate (Phase 0) and independent subsystem rollback highlight (Phase 3)
+
+### Deprecated
+- `CVF_V2_RESTRUCTURING_ROADMAP.md` — big-bang approach replaced by Federated Convergence
+- `CVF_FEDERATED_PLANE_CONVERGENCE_ROADMAP_PROPOSAL_2026-03-21.md` — REV1 replaced by REV2
+
+### Fixed
+- `knowledge.facade.ts` — `readonly Array<T>` → `ReadonlyArray<T>` (TypeScript syntax)
+- `tsconfig.json` — Removed `rootDir`/`outDir`, added `noEmit: true` (path mapping conflict)
+
+### Baseline Verified
+- Risk Model: **R0-R3** (types.ts:31) ✅
+- Guard Shared Default: **8** (index.ts:47-59) ✅
+- Guard Full Runtime: **15** (cvf.sdk.ts:819-839) ✅
+- Phases: **INTAKE → DESIGN → BUILD → REVIEW → FREEZE** ✅
+
+---
+
 ## [2026-03-19] — CVF Edit Integration: Phase 1-6 Verified Complete (Level 4.0)
 
 ### Verified

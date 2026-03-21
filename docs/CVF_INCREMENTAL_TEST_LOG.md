@@ -71,6 +71,34 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-21] Batch: Federated Plane Convergence Phase 0-2
+- Change reference:
+  - commit: feat(restructuring): Phase 0-2 Federated Plane Convergence
+  - baseline: `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
+- Impacted scope:
+  - `EXTENSIONS/CVF_PLANE_FACADES/` (NEW — 6 files)
+  - `docs/roadmaps/CVF_PHASE_0_PLANE_OWNERSHIP_INVENTORY.md` (NEW)
+  - `docs/roadmaps/CVF_PHASE_1_CONTRACT_BOUNDARY_CONVERGENCE.md` (NEW)
+  - `docs/roadmaps/CVF_PHASE_2_FEDERATED_PLANE_FACADES.md` (NEW)
+  - `CVF_Important/REVIEW FOLDER/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (MODIFIED — Section 7)
+  - `CVF_Important/REVIEW FOLDER/CVF_V2_RESTRUCTURING_ROADMAP.md` (DEPRECATED)
+  - `CVF_Important/REVIEW FOLDER/CVF_FEDERATED_...PROPOSAL.md` (DEPRECATED)
+  - `CHANGELOG.md` (UPDATED)
+- Tests executed:
+  - CVF docs governance gate (pre-commit hook) -> PASS (0 violations)
+  - Document naming guard (`CVF_` prefix) -> PASS (after rename fix)
+  - Baseline re-verification (R0-R3, 8/15 guards, 5-phase) -> PASS
+  - TypeScript type-check (CVF_PLANE_FACADES tsconfig) -> PASS (after bug fixes)
+- Skip scope:
+  - `CVF_GUARD_CONTRACT` unit tests — skipped because guard contract code was NOT modified, facades only import from it
+  - `CVF_v1.6_AGENT_PLATFORM` test suite — skipped because agent platform code was NOT modified
+  - `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL` test suite — skipped because protocol code was NOT modified
+  - Full regression — skipped because this batch is additive only (new facade package + documentation), no existing code paths changed
+- Notes/Risks:
+  - Phase 2 facades are additive only — rollback = delete `CVF_PLANE_FACADES/` folder
+  - BV-01/BV-02 (duplicate types/engine in PHASE_GOV_PROTOCOL) identified but not yet resolved — deferred to Phase 3
+  - Bug fixes applied during Phase 2: ReadonlyArray<T> syntax, tsconfig rootDir conflict
+
 ## [2026-03-20] Batch: GitHub architecture front-door diagram
 - Change reference:
   - local working tree architecture front-door visualization batch

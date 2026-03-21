@@ -1435,3 +1435,24 @@ Utility and guard:
 - Notes/Risks:
   - no new implementation scope is opened by this checkpoint
   - future restructuring work requires a new governed packet rather than implicit continuation
+## [2026-03-21] Batch: whitepaper completion planning packet
+- Scope:
+  - create the first formal planning packet for completing the whitepaper target-state after the restructuring current-cycle closure
+- Policy / roadmap references:
+  - `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
+  - `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+- Files updated:
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/baselines/CVF_WHITEPAPER_COMPLETION_PLANNING_DELTA_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this packet is planning-only and does not reopen implementation
+  - execution still requires a fresh `GC-018` continuation decision

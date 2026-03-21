@@ -1250,3 +1250,30 @@ Utility and guard:
 - Notes/Risks:
   - `CVF_PLANE_FACADES` now has its own local test toolchain and no longer depends on borrowed runtime-only verification.
   - `CVF_Important/REVIEW FOLDER` remains reference-only and is not part of this batch.
+## [2026-03-21] Batch: GC-019 structural change audit standardization
+- Scope:
+  - formalize one mandatory governance rule for major structural changes so restructuring cannot proceed from a single audit packet without independent cross-check and explicit approval
+- Policy / roadmap references:
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
+- Files updated:
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`
+  - `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`
+  - `governance/compat/check_docs_governance_compat.py`
+  - `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`
+  - `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_REVIEW_TEMPLATE.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/INDEX.md`
+  - `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
+  - `docs/baselines/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_STANDARDIZATION_DELTA_2026-03-21.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - `GC-019` is intentionally separate from `GC-018`.
+  - `GC-018` governs whether a wave opens; `GC-019` governs whether a specific structural change inside that wave may execute.

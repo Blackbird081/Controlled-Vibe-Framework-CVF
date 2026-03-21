@@ -40,6 +40,7 @@ Status: canonical ownership map for critical governance controls in the active C
 | `GC-016` | docs, bug, and test evidence must remain historically consistent | `docs governance + bug/test compat gates` | `CI_REPO_GATE` | CI, local hooks | `governance/compat/check_docs_governance_compat.py`, `governance/compat/check_bug_doc_compat.py`, `governance/compat/check_test_doc_compat.py` |
 | `GC-017` | release/readiness claims must stay aligned with actual reference docs | `check_release_manifest_consistency.py` | `CI_REPO_GATE` | CI, release-readiness verification | `governance/compat/check_release_manifest_consistency.py`, `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md` |
 | `GC-018` | roadmap deepening and breadth expansion must stop unless depth-audit scoring justifies continuation | `CVF_DEPTH_AUDIT_GUARD` + roadmap depth-audit register + `check_depth_audit_continuation_compat.py` | `GOVERNANCE_DECISION_GATE` | roadmap continuation decisions, CI, local pre-push hook chain | `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`, `governance/compat/check_depth_audit_continuation_compat.py`, `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`, `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md` |
+| `GC-019` | major structural changes must complete `audit -> independent review -> explicit decision -> execution` before code moves or merges begin | `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD` + structural audit packet + independent review packet | `GOVERNANCE_DECISION_GATE` | restructuring roadmap execution, structural merge packets, user approval checkpoints | `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`, `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`, `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_REVIEW_TEMPLATE.md`, `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md` |
 
 ## Notes
 
@@ -48,6 +49,7 @@ Status: canonical ownership map for critical governance controls in the active C
 - Runtime guards exist for action-time blocking or escalation.
 - CI/repository gates remain valid on purpose for historical evidence, baseline continuity, and release-truth controls.
 - Governance decision gates exist to prevent low-yield semantic deepening even when no runtime or CI gate is appropriate.
+- `GC-019` is intentionally separate from `GC-018`: one governs whether a wave should open, the other governs whether a specific structural merge inside a wave is safe to execute.
 
 ## Current Closure Statement
 

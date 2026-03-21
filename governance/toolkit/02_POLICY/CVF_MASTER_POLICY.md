@@ -79,6 +79,15 @@ Personal AI usage unrelated to company work is excluded.
    - Acceptable forms: new baseline snapshot, baseline delta/addendum, or post-fix assessment linked to the prior baseline.
    - `docs/CVF_INCREMENTAL_TEST_LOG.md` does not replace this requirement.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md`.
+13. Structural change audit is mandatory before any major restructuring execution:
+   - This rule applies to major module merges, physical moves, ownership-plane transfers, package unification, or boundary-changing consolidation work.
+   - Execution must follow the mandatory sequence:
+     1. create a structural audit packet,
+     2. create an independent review of that audit,
+     3. obtain explicit user or authority decision,
+     4. only then execute the structural change.
+   - Each audit must classify the proposed change as `coordination package`, `wrapper/re-export merge`, or `physical merge`.
+   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`.
 
 ---
 

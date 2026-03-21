@@ -22,6 +22,7 @@ Trạng thái: Chỉ mục lưu trữ chính thức cho `docs/`.
 
 - `reference/` — tài liệu chuẩn, authoritative, long-lived
 - `assessments/` — đánh giá, audit, reassessment, independent assessment
+- `audits/` — audit packet chuyên biệt cho thay đổi lớn, merge review, structural audit, execution preflight audit
 - `baselines/` — baseline, snapshot, freeze records, compatibility baselines
 - `roadmaps/` — roadmap, remediation plan, stabilization plan, rollout plan
 - `reviews/` — review archive theo scope/module

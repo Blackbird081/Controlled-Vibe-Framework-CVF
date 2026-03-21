@@ -55,6 +55,7 @@ This roadmap aims to:
 4. **Each phase must prove success through measurable gates**
 5. **Each phase must define rollback, not just forward motion**
 6. **Physical consolidation is a governed decision, not a stylistic preference**
+7. **Every major structural merge must pass `GC-019`: audit, independent review, explicit decision, then execution**
 
 ---
 
@@ -249,6 +250,15 @@ This phase is mandatory because the system must not remain indefinitely in a “
 
 - if the decision is “stay federated”, the federated architecture is declared complete and stable
 - if the decision is “partial” or “full” consolidation, a separate implementation roadmap must exist before execution begins
+
+#### Execution Rule After Approval
+
+If Phase 4 approves any partial or full consolidation path, each major structural change must still pass `GC-019` before code execution begins:
+
+1. structural audit packet
+2. independent review packet
+3. explicit user / authority approval
+4. implementation
 
 ---
 

@@ -37,6 +37,7 @@ DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 ALLOWED_DOCS_FOLDERS = {
     "reference",
     "assessments",
+    "audits",
     "baselines",
     "roadmaps",
     "reviews",
@@ -47,7 +48,7 @@ ALLOWED_DOCS_FOLDERS = {
     "cheatsheets",
     "case-studies",
 }
-GOVERNANCE_FOLDERS = {"reference", "assessments", "baselines", "roadmaps", "reviews", "logs"}
+GOVERNANCE_FOLDERS = {"reference", "assessments", "audits", "baselines", "roadmaps", "reviews", "logs"}
 APPROVED_ROOT_FILES = {
     "BUG_HISTORY.md",
     "CHEAT_SHEET.md",

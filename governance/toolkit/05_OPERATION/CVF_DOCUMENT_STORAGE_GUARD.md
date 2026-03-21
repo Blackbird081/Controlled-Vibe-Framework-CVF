@@ -46,6 +46,7 @@ This rule applies equally to:
 |---|---|
 | `docs/reference/` | authoritative long-lived reference docs |
 | `docs/assessments/` | assessments, audits, verdict-driven evaluations |
+| `docs/audits/` | specialized audit packets for structural changes, execution preflight, or evidence-first merge reviews |
 | `docs/baselines/` | baseline snapshots and comparison anchors |
 | `docs/roadmaps/` | plans, remediation, rollout, upgrade sequencing |
 | `docs/reviews/` | review archives by scope/module |

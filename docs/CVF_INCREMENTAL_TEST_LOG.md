@@ -1297,3 +1297,30 @@ Utility and guard:
 - Notes/Risks:
   - independent review agrees with the audit recommendation only for `coordination package`
   - physical merge remains rejected for this pair in the current cycle
+## [2026-03-21] Batch: GC-019 B* Merge 2-5 audit and batch review closure
+- Scope:
+  - complete the `GC-019` packet chain for the remaining `B*` current-cycle merges so the owner can review and approve the full pack in one decision
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`
+  - `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_BATCH_REVIEW_2026-03-21.md`
+- Files updated:
+  - `docs/audits/CVF_BSTAR_MERGE_2_AGENT_DEFINITION_AUDIT_2026-03-21.md`
+  - `docs/audits/CVF_BSTAR_MERGE_3_MODEL_GATEWAY_AUDIT_2026-03-21.md`
+  - `docs/audits/CVF_BSTAR_MERGE_4_TRUST_SANDBOX_AUDIT_2026-03-21.md`
+  - `docs/audits/CVF_BSTAR_MERGE_5_AGENT_LEDGER_AUDIT_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_2_AGENT_DEFINITION_REVIEW_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_3_MODEL_GATEWAY_REVIEW_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_4_TRUST_SANDBOX_REVIEW_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_5_AGENT_LEDGER_REVIEW_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_BATCH_REVIEW_2026-03-21.md`
+  - `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
+  - `docs/baselines/CVF_GC019_BSTAR_MERGE_BATCH_REVIEW_DELTA_2026-03-21.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - `B*` remains the correct cycle-level strategy, but the five merges are not structurally identical
+  - only `Merge 5` is currently approved as a physical merge candidate

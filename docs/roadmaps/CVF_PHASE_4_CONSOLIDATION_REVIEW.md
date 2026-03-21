@@ -174,17 +174,19 @@ src/
 
 ### Active GC-019 Packet Chain
 
-Current active packet chain for the first approved `B*` merge:
+Current packet chain for the approved `B*` merge pack:
 
-- audit packet:
-  - `docs/audits/CVF_BSTAR_MERGE_1_POLICY_ENGINE_AUDIT_2026-03-21.md`
-- independent review:
-  - `docs/reviews/CVF_GC019_BSTAR_MERGE_1_POLICY_ENGINE_REVIEW_2026-03-21.md`
+| Merge | Audit | Independent review | Current posture |
+|---|---|---|---|
+| `Merge 1` `CVF_POLICY_ENGINE` | `docs/audits/CVF_BSTAR_MERGE_1_POLICY_ENGINE_AUDIT_2026-03-21.md` | `docs/reviews/CVF_GC019_BSTAR_MERGE_1_POLICY_ENGINE_REVIEW_2026-03-21.md` | coordination package approved / physical merge rejected |
+| `Merge 2` `CVF_AGENT_DEFINITION` | `docs/audits/CVF_BSTAR_MERGE_2_AGENT_DEFINITION_AUDIT_2026-03-21.md` | `docs/reviews/CVF_GC019_BSTAR_MERGE_2_AGENT_DEFINITION_REVIEW_2026-03-21.md` | coordination package approved / physical merge rejected |
+| `Merge 3` `CVF_MODEL_GATEWAY` | `docs/audits/CVF_BSTAR_MERGE_3_MODEL_GATEWAY_AUDIT_2026-03-21.md` | `docs/reviews/CVF_GC019_BSTAR_MERGE_3_MODEL_GATEWAY_REVIEW_2026-03-21.md` | wrapper/re-export merge approved / physical merge rejected |
+| `Merge 4` `CVF_TRUST_SANDBOX` | `docs/audits/CVF_BSTAR_MERGE_4_TRUST_SANDBOX_AUDIT_2026-03-21.md` | `docs/reviews/CVF_GC019_BSTAR_MERGE_4_TRUST_SANDBOX_REVIEW_2026-03-21.md` | coordination package approved / physical merge rejected |
+| `Merge 5` `CVF_AGENT_LEDGER` | `docs/audits/CVF_BSTAR_MERGE_5_AGENT_LEDGER_AUDIT_2026-03-21.md` | `docs/reviews/CVF_GC019_BSTAR_MERGE_5_AGENT_LEDGER_REVIEW_2026-03-21.md` | physical merge approved with compatibility wrappers |
 
-Current reviewed posture:
+Batch summary review:
 
-- `coordination package` approved for `B* Merge 1`
-- `physical merge` rejected for current cycle
+- `docs/reviews/CVF_GC019_BSTAR_MERGE_BATCH_REVIEW_2026-03-21.md`
 
 ---
 

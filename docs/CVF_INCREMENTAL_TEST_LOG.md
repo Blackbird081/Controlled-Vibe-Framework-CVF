@@ -1227,3 +1227,26 @@ Utility and guard:
 - Notes/Risks:
   - `CVF_Important/REVIEW FOLDER` is retained as reference-only for this packet.
   - This promotion standardizes canonical storage paths but does not itself authorize restructuring execution.
+## [2026-03-21] Batch: Phase 2 facade package test hardening
+- Scope:
+  - close the last verification gap in `Phase 2` by giving `EXTENSIONS/CVF_PLANE_FACADES` package-local `check`, `test`, and `coverage` evidence before any move toward `Phase 4`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_PHASE_2_FEDERATED_PLANE_FACADES.md`
+  - `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
+  - `docs/baselines/CVF_PHASE2_FACADE_TEST_HARDENING_DELTA_2026-03-21.md`
+- Files updated:
+  - `EXTENSIONS/CVF_PLANE_FACADES/package.json`
+  - `EXTENSIONS/CVF_PLANE_FACADES/tsconfig.json`
+  - `EXTENSIONS/CVF_PLANE_FACADES/vitest.config.ts`
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/index.test.ts`
+  - `docs/roadmaps/CVF_PHASE_2_FEDERATED_PLANE_FACADES.md`
+  - `docs/baselines/CVF_PHASE2_FACADE_TEST_HARDENING_DELTA_2026-03-21.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run test:coverage` -> PASS
+- Notes/Risks:
+  - `CVF_PLANE_FACADES` now has its own local test toolchain and no longer depends on borrowed runtime-only verification.
+  - `CVF_Important/REVIEW FOLDER` remains reference-only and is not part of this batch.

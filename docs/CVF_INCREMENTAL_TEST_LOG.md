@@ -4416,3 +4416,27 @@ Utility and guard:
 - Notes/Risks:
   - This batch does not authorize the next wave.
   - The resulting decision is `REVIEW REQUIRED`, not `CONTINUE`.
+## [2026-03-21] Batch: Promote finalized restructuring packet into official docs taxonomy
+- Scope:
+  - promote the cleaned-baseline restructuring artifacts and final candidate docs from `CVF_Important/REVIEW FOLDER` into canonical `docs/` locations before implementation planning begins
+- Policy / roadmap references:
+  - `docs/INDEX.md`
+  - `docs/baselines/README.md`
+  - `docs/roadmaps/README.md`
+- Files updated:
+  - `docs/reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md`
+  - `docs/reviews/CVF_EA_CROSS_CHECK_RECONCILIATION_2026-03-21.md`
+  - `docs/baselines/CVF_BASELINE_ERRATA_MATRIX_2026-03-21.md`
+  - `docs/baselines/CVF_BASELINE_ASSERTION_CLASSIFICATION_2026-03-21.md`
+  - `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
+  - `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
+  - `docs/baselines/CVF_RESTRUCTURING_CANONICAL_DOC_PROMOTION_DELTA_2026-03-21.md`
+  - `docs/INDEX.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - `CVF_Important/REVIEW FOLDER` is retained as reference-only for this packet.
+  - This promotion standardizes canonical storage paths but does not itself authorize restructuring execution.

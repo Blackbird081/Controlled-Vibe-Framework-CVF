@@ -96,6 +96,21 @@ Nếu cần đóng gói bằng chứng cho audit/release/onboarding:
 - `reference/CVF_CONTROL_TO_ARTIFACT_MAPPING.md`
 - `reference/CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md`
 
+## Restructuring Navigation
+
+Nếu cần đọc bộ tài liệu chốt cuối cho restructuring thay vì đọc trực tiếp `CVF_Important/REVIEW FOLDER`:
+
+- `architecture/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
+- `reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
+- `roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
+- `reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md`
+- `reviews/CVF_EA_CROSS_CHECK_RECONCILIATION_2026-03-21.md`
+- `baselines/CVF_BASELINE_ERRATA_MATRIX_2026-03-21.md`
+- `baselines/CVF_BASELINE_ASSERTION_CLASSIFICATION_2026-03-21.md`
+- `baselines/CVF_RESTRUCTURING_CANONICAL_DOC_PROMOTION_DELTA_2026-03-21.md`
+
+`CVF_Important/REVIEW FOLDER` vẫn được giữ làm reference archive cho packet này, nhưng không còn là canonical storage path.
+
 ## Conformance Navigation
 
 Nếu cần chạy hoặc tra cứu conformance baseline:

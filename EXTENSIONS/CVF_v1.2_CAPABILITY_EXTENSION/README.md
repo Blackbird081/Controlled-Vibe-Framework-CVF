@@ -1,5 +1,17 @@
 # CVF v1.2 – Capability Extension
 
+> This module is now part of the coordination package [`CVF_AGENT_DEFINITION`](../CVF_AGENT_DEFINITION/).
+
+Current role:
+
+- frozen capability governance baseline
+- canonical documentation source for capability/risk/skill contract semantics
+
+Related source:
+
+- runtime identity implementation:
+  - [`CVF_ECO_v2.3_AGENT_IDENTITY`](../CVF_ECO_v2.3_AGENT_IDENTITY/)
+
 **Tagline:** *Agent-agnostic capability layer, governed by CVF.*
 
 ## Mục tiêu (Scope – đã khóa)

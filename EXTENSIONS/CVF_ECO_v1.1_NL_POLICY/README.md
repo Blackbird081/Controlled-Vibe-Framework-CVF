@@ -1,5 +1,17 @@
 # CVF ECO v1.1 — Natural Language Policy
 
+> This module is now part of the coordination package [`CVF_POLICY_ENGINE`](../CVF_POLICY_ENGINE/).
+
+Current role:
+
+- canonical TypeScript natural-language policy compiler
+- reusable policy templates, store, and serializer for policy authoring
+
+Related source:
+
+- Python governance enforcement:
+  - [`CVF_v1.6.1_GOVERNANCE_ENGINE`](../CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core/)
+
 > **Type:** Ecosystem Extension (Track III, Phase 2)
 > **Status:** Active
 > **Date:** 2026-03-09

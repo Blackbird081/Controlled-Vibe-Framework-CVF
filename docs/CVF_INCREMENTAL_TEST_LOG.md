@@ -1324,3 +1324,35 @@ Utility and guard:
 - Notes/Risks:
   - `B*` remains the correct cycle-level strategy, but the five merges are not structurally identical
   - only `Merge 5` is currently approved as a physical merge candidate
+## [2026-03-21] Batch: B* Merge 1-2 coordination package implementation
+- Scope:
+  - implement the first two approved `B*` merges in their exact `GC-019`-approved form:
+    - `Merge 1` `CVF_POLICY_ENGINE`
+    - `Merge 2` `CVF_AGENT_DEFINITION`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_1_POLICY_ENGINE_REVIEW_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_2_AGENT_DEFINITION_REVIEW_2026-03-21.md`
+  - `docs/baselines/CVF_BSTAR_M1_M2_COORDINATION_IMPLEMENTATION_DELTA_2026-03-21.md`
+- Files updated:
+  - `EXTENSIONS/CVF_POLICY_ENGINE/**`
+  - `EXTENSIONS/CVF_AGENT_DEFINITION/**`
+  - `EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core/README.md`
+  - `EXTENSIONS/CVF_ECO_v1.1_NL_POLICY/README.md`
+  - `EXTENSIONS/CVF_ECO_v2.3_AGENT_IDENTITY/README.md`
+  - `EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/README.md`
+  - `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
+  - `docs/baselines/CVF_BSTAR_M1_M2_COORDINATION_IMPLEMENTATION_DELTA_2026-03-21.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_AGENT_DEFINITION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_AGENT_DEFINITION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_AGENT_DEFINITION && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v2.3_AGENT_IDENTITY && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_POLICY_ENGINE && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_POLICY_ENGINE && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_POLICY_ENGINE && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v1.1_NL_POLICY && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core && python -m pytest tests -q` -> PASS
+- Notes/Risks:
+  - both merges preserve lineage exactly as approved by `GC-019`
+  - neither batch introduces a physical source move

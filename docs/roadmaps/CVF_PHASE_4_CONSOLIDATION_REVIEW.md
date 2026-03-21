@@ -188,6 +188,16 @@ Batch summary review:
 
 - `docs/reviews/CVF_GC019_BSTAR_MERGE_BATCH_REVIEW_2026-03-21.md`
 
+### Current Execution Status
+
+| Merge | Approved class | Execution status |
+|---|---|---|
+| `Merge 1` `CVF_POLICY_ENGINE` | coordination package | `IMPLEMENTED` |
+| `Merge 2` `CVF_AGENT_DEFINITION` | coordination package | `IMPLEMENTED` |
+| `Merge 3` `CVF_MODEL_GATEWAY` | wrapper/re-export merge | `PENDING` |
+| `Merge 4` `CVF_TRUST_SANDBOX` | coordination package | `PENDING` |
+| `Merge 5` `CVF_AGENT_LEDGER` | physical merge | `PENDING` |
+
 ---
 
 ## Decision Required

@@ -196,7 +196,15 @@ Batch summary review:
 | `Merge 2` `CVF_AGENT_DEFINITION` | coordination package | `IMPLEMENTED` |
 | `Merge 3` `CVF_MODEL_GATEWAY` | wrapper/re-export merge | `IMPLEMENTED` |
 | `Merge 4` `CVF_TRUST_SANDBOX` | coordination package | `IMPLEMENTED` |
-| `Merge 5` `CVF_AGENT_LEDGER` | physical merge | `PENDING` |
+| `Merge 5` `CVF_AGENT_LEDGER` | physical merge | `IMPLEMENTED` |
+
+### Current-Cycle Closure Note
+
+The approved current-cycle `B*` merge pack is now fully implemented:
+
+- `Merge 1` through `Merge 4` were delivered in their exact `GC-019`-approved non-invasive forms
+- `Merge 5` was delivered as the only approved `physical merge`, with compatibility wrappers preserved in both legacy packages for the transition cycle
+- the proposal-derived `Audit/Consensus` pair remains explicitly deferred and outside the current-cycle execution scope
 
 ---
 

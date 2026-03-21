@@ -1389,3 +1389,28 @@ Utility and guard:
 - Notes/Risks:
   - `Merge 3` keeps adapter-hub risk-model assets and release-evidence paths in place.
   - `Merge 4` intentionally exposes only lightweight SDK surfaces and lineage guidance; it does not claim runtime collapse.
+## [2026-03-21] Batch: B* Merge 5 physical merge implementation
+- Scope:
+  - implement the final approved current-cycle `B*` merge in its exact `GC-019`-approved form:
+    - `Merge 5` `CVF_AGENT_LEDGER`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
+  - `docs/reviews/CVF_GC019_BSTAR_MERGE_5_AGENT_LEDGER_REVIEW_2026-03-21.md`
+  - `docs/baselines/CVF_BSTAR_M5_AGENT_LEDGER_IMPLEMENTATION_DELTA_2026-03-21.md`
+- Files updated:
+  - `EXTENSIONS/CVF_AGENT_LEDGER/**`
+  - `EXTENSIONS/CVF_ECO_v3.0_TASK_MARKETPLACE/src/**`
+  - `EXTENSIONS/CVF_ECO_v3.1_REPUTATION/src/**`
+  - `EXTENSIONS/CVF_ECO_v3.0_TASK_MARKETPLACE/README.md`
+  - `EXTENSIONS/CVF_ECO_v3.1_REPUTATION/README.md`
+  - `docs/roadmaps/CVF_PHASE_4_CONSOLIDATION_REVIEW.md`
+  - `docs/baselines/CVF_BSTAR_M5_AGENT_LEDGER_IMPLEMENTATION_DELTA_2026-03-21.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_AGENT_LEDGER && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_AGENT_LEDGER && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_AGENT_LEDGER && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v3.0_TASK_MARKETPLACE && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v3.1_REPUTATION && npm run test` -> PASS
+- Notes/Risks:
+  - `Merge 5` is the only current-cycle `B*` merge approved as a `physical merge`
+  - compatibility wrappers remain in both legacy packages for the transition cycle

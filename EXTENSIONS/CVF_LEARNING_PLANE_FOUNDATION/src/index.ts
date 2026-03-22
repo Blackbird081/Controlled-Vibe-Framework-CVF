@@ -1,3 +1,22 @@
+// W4-T6 — Learning Plane Persistent Storage Slice (CP1–CP2)
+export {
+  LearningStorageContract,
+  createLearningStorageContract,
+} from "./learning.storage.contract";
+export type {
+  LearningRecordType,
+  LearningStorageRecord,
+  LearningStorageContractDependencies,
+} from "./learning.storage.contract";
+export {
+  LearningStorageLogContract,
+  createLearningStorageLogContract,
+} from "./learning.storage.log.contract";
+export type {
+  LearningStorageLog,
+  LearningStorageLogContractDependencies,
+} from "./learning.storage.log.contract";
+
 // W4-T5 — Learning Plane Re-injection Loop (CP1–CP2)
 export {
   LearningReinjectionContract,

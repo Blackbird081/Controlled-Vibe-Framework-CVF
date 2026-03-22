@@ -21,6 +21,10 @@ import {
   createLearningReinjectionContract,
   LearningLoopContract,
   createLearningLoopContract,
+  LearningStorageContract,
+  createLearningStorageContract,
+  LearningStorageLogContract,
+  createLearningStorageLogContract,
 } from "../src/index";
 import type {
   LearningFeedbackInput,
@@ -1008,6 +1012,163 @@ describe("CVF_LEARNING_PLANE_FOUNDATION", () => {
     it("creates PatternDetectionContract via class constructor", () => {
       const contract = new PatternDetectionContract();
       expect(contract).toBeInstanceOf(PatternDetectionContract);
+    });
+  });
+
+  // ─── W4-T6 CP1 — LearningStorageContract ─────────────────────────────────
+
+  describe("W4-T6 CP1 — LearningStorageContract", () => {
+    it("stores an artifact and returns a LearningStorageRecord with correct recordType", () => {
+      const contract = createLearningStorageContract();
+      const record = contract.store({ signal: "test" }, "FEEDBACK_LEDGER");
+
+      expect(record.recordType).toBe("FEEDBACK_LEDGER");
+    });
+
+    it("stores artifact and returns non-empty recordId, payloadHash, storageHash", () => {
+      const contract = createLearningStorageContract();
+      const record = contract.store({ model: "truth" }, "TRUTH_MODEL");
+
+      expect(record.recordId.length).toBeGreaterThan(0);
+      expect(record.payloadHash.length).toBeGreaterThan(0);
+      expect(record.storageHash.length).toBeGreaterThan(0);
+    });
+
+    it("payloadSize matches JSON.stringify length of the artifact", () => {
+      const artifact = { evaluationId: "e-001", verdict: "PASS" };
+      const contract = createLearningStorageContract();
+      const record = contract.store(artifact, "EVALUATION_RESULT");
+
+      expect(record.payloadSize).toBe(JSON.stringify(artifact).length);
+    });
+
+    it("produces stable storageHash with fixed time injection", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createLearningStorageContract({ now: () => fixedTime });
+      const c2 = createLearningStorageContract({ now: () => fixedTime });
+      const artifact = { threshold: "PASSING" };
+
+      expect(c1.store(artifact, "THRESHOLD_ASSESSMENT").storageHash).toBe(
+        c2.store(artifact, "THRESHOLD_ASSESSMENT").storageHash,
+      );
+    });
+
+    it("identical artifact with different recordType produces different payloadHash", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const contract = createLearningStorageContract({ now: () => fixedTime });
+      const artifact = { id: "x" };
+
+      const r1 = contract.store(artifact, "GOVERNANCE_SIGNAL");
+      const r2 = contract.store(artifact, "REINJECTION_RESULT");
+
+      expect(r1.payloadHash).not.toBe(r2.payloadHash);
+    });
+
+    it("stores all seven LearningRecordType values without error", () => {
+      const contract = createLearningStorageContract();
+      const types = [
+        "FEEDBACK_LEDGER",
+        "TRUTH_MODEL",
+        "EVALUATION_RESULT",
+        "THRESHOLD_ASSESSMENT",
+        "GOVERNANCE_SIGNAL",
+        "REINJECTION_RESULT",
+        "LOOP_SUMMARY",
+      ] as const;
+
+      for (const rt of types) {
+        const record = contract.store({ type: rt }, rt);
+        expect(record.recordType).toBe(rt);
+      }
+    });
+
+    it("storedAt is a non-empty ISO string", () => {
+      const contract = createLearningStorageContract();
+      const record = contract.store({}, "LOOP_SUMMARY");
+
+      expect(record.storedAt.length).toBeGreaterThan(0);
+      expect(() => new Date(record.storedAt)).not.toThrow();
+    });
+
+    it("creates LearningStorageContract via class constructor", () => {
+      const contract = new LearningStorageContract();
+      expect(contract).toBeInstanceOf(LearningStorageContract);
+    });
+  });
+
+  // ─── W4-T6 CP2 — LearningStorageLogContract ──────────────────────────────
+
+  describe("W4-T6 CP2 — LearningStorageLogContract", () => {
+    function makeRecord(recordType: "FEEDBACK_LEDGER" | "TRUTH_MODEL" | "GOVERNANCE_SIGNAL", id = "r1") {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const contract = createLearningStorageContract({ now: () => fixedTime });
+      return contract.store({ id }, recordType);
+    }
+
+    it("returns null dominantRecordType for empty records", () => {
+      const contract = createLearningStorageLogContract();
+      const log = contract.log([]);
+
+      expect(log.dominantRecordType).toBeNull();
+      expect(log.totalRecords).toBe(0);
+    });
+
+    it("returns dominant type matching the most frequent record type", () => {
+      const contract = createLearningStorageLogContract();
+      const log = contract.log([
+        makeRecord("GOVERNANCE_SIGNAL", "r1"),
+        makeRecord("GOVERNANCE_SIGNAL", "r2"),
+        makeRecord("FEEDBACK_LEDGER", "r3"),
+      ]);
+
+      expect(log.dominantRecordType).toBe("GOVERNANCE_SIGNAL");
+      expect(log.totalRecords).toBe(3);
+    });
+
+    it("breaks tie by enum order (FEEDBACK_LEDGER before TRUTH_MODEL)", () => {
+      const contract = createLearningStorageLogContract();
+      const log = contract.log([
+        makeRecord("FEEDBACK_LEDGER", "r1"),
+        makeRecord("TRUTH_MODEL", "r2"),
+      ]);
+
+      expect(log.dominantRecordType).toBe("FEEDBACK_LEDGER");
+    });
+
+    it("produces stable logHash with fixed time injection", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createLearningStorageLogContract({ now: () => fixedTime });
+      const c2 = createLearningStorageLogContract({ now: () => fixedTime });
+      const records = [makeRecord("FEEDBACK_LEDGER", "r1"), makeRecord("TRUTH_MODEL", "r2")];
+
+      expect(c1.log(records).logHash).toBe(c2.log(records).logHash);
+    });
+
+    it("summary contains total record count", () => {
+      const contract = createLearningStorageLogContract();
+      const log = contract.log([makeRecord("FEEDBACK_LEDGER", "r1"), makeRecord("TRUTH_MODEL", "r2")]);
+
+      expect(log.summary).toContain("2");
+    });
+
+    it("summary is non-empty for empty records", () => {
+      const contract = createLearningStorageLogContract();
+      const log = contract.log([]);
+
+      expect(log.summary.length).toBeGreaterThan(0);
+    });
+
+    it("logId is non-empty and distinct from logHash", () => {
+      const contract = createLearningStorageLogContract();
+      const log = contract.log([makeRecord("GOVERNANCE_SIGNAL", "r1")]);
+
+      expect(log.logId.length).toBeGreaterThan(0);
+      expect(log.logId).not.toBe(log.logHash);
+    });
+
+    it("creates LearningStorageLogContract via class constructor", () => {
+      const contract = new LearningStorageLogContract();
+      expect(contract).toBeInstanceOf(LearningStorageLogContract);
     });
   });
 });

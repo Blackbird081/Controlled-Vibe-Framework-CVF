@@ -8,7 +8,7 @@ Memory class: SUMMARY_RECORD
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  
-> Authorization posture: `CYCLE COMPLETE - W1-T1 / W1-T2 / W1-T3 / W1-T4 / W1-T5 / W2-T1 / W2-T2 / W2-T3 / W2-T4 / W2-T5 / W3-T1 / W4-T1 / W4-T2 / W4-T3 / W4-T4 / W4-T5 / W5-T1 ALL CLOSED DELIVERED`
+> Authorization posture: `CYCLE COMPLETE - W1-T1 / W1-T2 / W1-T3 / W1-T4 / W1-T5 / W1-T6 / W2-T1 / W2-T2 / W2-T3 / W2-T4 / W2-T5 / W2-T6 / W2-T7 / W3-T1 / W4-T1 / W4-T2 / W4-T3 / W4-T4 / W4-T5 / W4-T6 / W5-T1 ALL CLOSED DELIVERED`
 > Canonical continuation packets:
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
@@ -125,6 +125,10 @@ Current authorization state:
 - `W1-T6 / CP1` is now implemented as a bounded boardroom round contract baseline (`BoardroomSession → BoardroomRound`); W1-T3 defer "multi-round session loop" closed
 - `W1-T6 / CP2` is now implemented as a boardroom multi-round summary contract (`BoardroomRound[] → BoardroomMultiRoundSummary`)
 - `W1-T6 / CP3` tranche closure review is executed; first iterative boardroom refinement surface in the control plane delivered; CPF: 116 → 132 tests
+- `W4-T6 — Learning Plane Persistent Storage Slice` is now authorized (GC-018: 13/15) and canonically closed
+- `W4-T6 / CP1` is now implemented as a bounded learning storage contract baseline (`object + LearningRecordType → LearningStorageRecord`); `LearningRecordType` enum covers all 7 W4 artifact types; W4 explicit defer "persistent storage deferred" closed
+- `W4-T6 / CP2` is now implemented as a learning storage log contract (`LearningStorageRecord[] → LearningStorageLog`); dominant record type by frequency; Fast Lane (GC-021)
+- `W4-T6 / CP3` tranche closure review is executed; W4 all 6 tranches CLOSED DELIVERED; learning plane production-capable for persistence; LPF: +16 tests
 
 Nothing beyond `W0` in this roadmap may execute until:
 
@@ -279,7 +283,7 @@ Reasoning:
 
 ## 7. W5 Final Readout — 2026-03-22
 
-All 16 tranches across 5 workstreams are now closed and delivered:
+All 21 tranches across 5 workstreams are now closed and delivered:
 
 | Tranche | Plane | Result |
 |---|---|---|
@@ -288,22 +292,28 @@ All 16 tranches across 5 workstreams are now closed and delivered:
 | W1-T3 | Control | CLOSED DELIVERED |
 | W1-T4 | Control | CLOSED DELIVERED |
 | W1-T5 | Control | CLOSED DELIVERED |
+| W1-T6 | Control | CLOSED DELIVERED |
 | W2-T1 | Execution | CLOSED DELIVERED |
 | W2-T2 | Execution | CLOSED DELIVERED |
 | W2-T3 | Execution | CLOSED DELIVERED |
 | W2-T4 | Execution | CLOSED DELIVERED |
 | W2-T5 | Execution | CLOSED DELIVERED |
+| W2-T6 | Execution | CLOSED DELIVERED |
+| W2-T7 | Execution | CLOSED DELIVERED |
 | W3-T1 | Governance | CLOSED DELIVERED |
 | W4-T1 | Learning | CLOSED DELIVERED |
 | W4-T2 | Learning | CLOSED DELIVERED |
 | W4-T3 | Learning | CLOSED DELIVERED |
 | W4-T4 | Learning | CLOSED DELIVERED |
 | W4-T5 | Learning | CLOSED DELIVERED |
+| W4-T6 | Learning | CLOSED DELIVERED |
 | W5-T1 | Whitepaper Closure | CLOSED DELIVERED |
 
 **CVF platform foundation is governed, test-verified, and fully architecture-loop-proved.**
 
 **Whitepaper status: PARTIALLY DELIVERED — evidence-backed truth reconciliation as of 2026-03-22.**
+
+**W4 Learning Plane: ALL 6 TRANCHES CLOSED DELIVERED — persistent storage slice delivered; learning plane production-capable.**
 
 Future continuation requires new GC-018 authorization per wave.
 

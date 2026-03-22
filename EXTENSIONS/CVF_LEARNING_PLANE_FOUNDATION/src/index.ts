@@ -1,3 +1,24 @@
+// W4-T3 — Learning Plane Evaluation Engine Slice (CP1–CP2)
+export {
+  EvaluationEngineContract,
+  createEvaluationEngineContract,
+} from "./evaluation.engine.contract";
+export type {
+  EvaluationVerdict,
+  EvaluationSeverity,
+  EvaluationResult,
+  EvaluationEngineContractDependencies,
+} from "./evaluation.engine.contract";
+export {
+  EvaluationThresholdContract,
+  createEvaluationThresholdContract,
+} from "./evaluation.threshold.contract";
+export type {
+  OverallStatus,
+  ThresholdAssessment,
+  EvaluationThresholdContractDependencies,
+} from "./evaluation.threshold.contract";
+
 // W4-T2 — Learning Plane Truth Model Slice (CP1–CP2)
 export {
   TruthModelContract,

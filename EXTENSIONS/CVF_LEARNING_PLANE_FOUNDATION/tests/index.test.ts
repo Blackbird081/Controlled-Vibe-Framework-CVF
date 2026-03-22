@@ -9,8 +9,17 @@ import {
   createTruthModelContract,
   TruthModelUpdateContract,
   createTruthModelUpdateContract,
+  EvaluationEngineContract,
+  createEvaluationEngineContract,
+  EvaluationThresholdContract,
+  createEvaluationThresholdContract,
 } from "../src/index";
-import type { LearningFeedbackInput, PatternInsight } from "../src/index";
+import type {
+  LearningFeedbackInput,
+  PatternInsight,
+  TruthModel,
+  EvaluationResult,
+} from "../src/index";
 
 function makeSignal(
   feedbackClass: "ACCEPT" | "RETRY" | "ESCALATE" | "REJECT",
@@ -255,6 +264,182 @@ describe("CVF_LEARNING_PLANE_FOUNDATION", () => {
     it("creates TruthModelUpdateContract via class constructor", () => {
       const contract = new TruthModelUpdateContract();
       expect(contract).toBeInstanceOf(TruthModelUpdateContract);
+    });
+  });
+
+  // ─── W4-T3 CP1 — EvaluationEngineContract ────────────────────────────────
+
+  describe("W4-T3 CP1 — EvaluationEngineContract", () => {
+    function makeModel(overrides: Partial<TruthModel> = {}): TruthModel {
+      return {
+        modelId: "model-001",
+        createdAt: "2026-03-22T10:00:00.000Z",
+        version: 3,
+        totalInsightsProcessed: 5,
+        dominantPattern: "ACCEPT",
+        currentHealthSignal: "HEALTHY",
+        healthTrajectory: "STABLE",
+        confidenceLevel: 0.8,
+        patternHistory: [],
+        modelHash: "hash-model-001",
+        ...overrides,
+      };
+    }
+
+    it("returns INCONCLUSIVE when confidenceLevel < 0.3", () => {
+      const contract = createEvaluationEngineContract();
+      const result = contract.evaluate(makeModel({ confidenceLevel: 0.2, healthTrajectory: "STABLE" }));
+
+      expect(result.verdict).toBe("INCONCLUSIVE");
+      expect(result.severity).toBe("LOW");
+    });
+
+    it("returns INCONCLUSIVE when healthTrajectory is UNKNOWN", () => {
+      const contract = createEvaluationEngineContract();
+      const result = contract.evaluate(makeModel({ healthTrajectory: "UNKNOWN", confidenceLevel: 0.9 }));
+
+      expect(result.verdict).toBe("INCONCLUSIVE");
+      expect(result.severity).toBe("LOW");
+    });
+
+    it("returns FAIL with CRITICAL severity when currentHealthSignal is CRITICAL", () => {
+      const contract = createEvaluationEngineContract();
+      const result = contract.evaluate(makeModel({ currentHealthSignal: "CRITICAL", confidenceLevel: 0.9 }));
+
+      expect(result.verdict).toBe("FAIL");
+      expect(result.severity).toBe("CRITICAL");
+    });
+
+    it("returns FAIL with HIGH severity when dominantPattern is REJECT", () => {
+      const contract = createEvaluationEngineContract();
+      const result = contract.evaluate(makeModel({ dominantPattern: "REJECT", confidenceLevel: 0.9 }));
+
+      expect(result.verdict).toBe("FAIL");
+      expect(result.severity).toBe("HIGH");
+    });
+
+    it("returns WARN with MEDIUM severity when currentHealthSignal is DEGRADED", () => {
+      const contract = createEvaluationEngineContract();
+      const result = contract.evaluate(makeModel({ currentHealthSignal: "DEGRADED", confidenceLevel: 0.9 }));
+
+      expect(result.verdict).toBe("WARN");
+      expect(result.severity).toBe("MEDIUM");
+    });
+
+    it("returns WARN with HIGH severity when healthTrajectory is DEGRADING", () => {
+      const contract = createEvaluationEngineContract();
+      const result = contract.evaluate(makeModel({ healthTrajectory: "DEGRADING", confidenceLevel: 0.9 }));
+
+      expect(result.verdict).toBe("WARN");
+      expect(result.severity).toBe("HIGH");
+    });
+
+    it("returns PASS with NONE severity when health is nominal and confidence >= 0.5", () => {
+      const contract = createEvaluationEngineContract();
+      const result = contract.evaluate(makeModel({ confidenceLevel: 0.8 }));
+
+      expect(result.verdict).toBe("PASS");
+      expect(result.severity).toBe("NONE");
+    });
+
+    it("produces stable evaluationHash with fixed time injection", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createEvaluationEngineContract({ now: () => fixedTime });
+      const c2 = createEvaluationEngineContract({ now: () => fixedTime });
+      const model = makeModel();
+
+      expect(c1.evaluate(model).evaluationHash).toBe(c2.evaluate(model).evaluationHash);
+    });
+
+    it("creates EvaluationEngineContract via class constructor", () => {
+      const contract = new EvaluationEngineContract();
+      expect(contract).toBeInstanceOf(EvaluationEngineContract);
+    });
+  });
+
+  // ─── W4-T3 CP2 — EvaluationThresholdContract ─────────────────────────────
+
+  describe("W4-T3 CP2 — EvaluationThresholdContract", () => {
+    function makeResult(verdict: EvaluationResult["verdict"], id = "r1"): EvaluationResult {
+      return {
+        resultId: id,
+        evaluatedAt: "2026-03-22T10:00:00.000Z",
+        sourceTruthModelId: "model-001",
+        sourceTruthModelVersion: 1,
+        verdict,
+        severity: "NONE",
+        confidenceLevel: 0.8,
+        rationale: `Test result ${id}`,
+        evaluationHash: `hash-${id}`,
+      };
+    }
+
+    it("returns INSUFFICIENT_DATA for empty results", () => {
+      const contract = createEvaluationThresholdContract();
+      const assessment = contract.assess([]);
+
+      expect(assessment.overallStatus).toBe("INSUFFICIENT_DATA");
+      expect(assessment.totalVerdicts).toBe(0);
+    });
+
+    it("returns INSUFFICIENT_DATA when all results are INCONCLUSIVE", () => {
+      const contract = createEvaluationThresholdContract();
+      const assessment = contract.assess([
+        makeResult("INCONCLUSIVE", "r1"),
+        makeResult("INCONCLUSIVE", "r2"),
+      ]);
+
+      expect(assessment.overallStatus).toBe("INSUFFICIENT_DATA");
+      expect(assessment.inconclusiveCount).toBe(2);
+    });
+
+    it("returns FAILING when any result has FAIL verdict", () => {
+      const contract = createEvaluationThresholdContract();
+      const assessment = contract.assess([
+        makeResult("PASS", "r1"),
+        makeResult("FAIL", "r2"),
+        makeResult("WARN", "r3"),
+      ]);
+
+      expect(assessment.overallStatus).toBe("FAILING");
+      expect(assessment.failCount).toBe(1);
+    });
+
+    it("returns WARNING when any WARN present and no FAIL", () => {
+      const contract = createEvaluationThresholdContract();
+      const assessment = contract.assess([
+        makeResult("PASS", "r1"),
+        makeResult("WARN", "r2"),
+      ]);
+
+      expect(assessment.overallStatus).toBe("WARNING");
+      expect(assessment.warnCount).toBe(1);
+    });
+
+    it("returns PASSING when all results are PASS", () => {
+      const contract = createEvaluationThresholdContract();
+      const assessment = contract.assess([
+        makeResult("PASS", "r1"),
+        makeResult("PASS", "r2"),
+        makeResult("PASS", "r3"),
+      ]);
+
+      expect(assessment.overallStatus).toBe("PASSING");
+      expect(assessment.passCount).toBe(3);
+    });
+
+    it("produces stable assessmentHash with fixed time injection", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createEvaluationThresholdContract({ now: () => fixedTime });
+      const c2 = createEvaluationThresholdContract({ now: () => fixedTime });
+      const results = [makeResult("PASS", "r1"), makeResult("WARN", "r2")];
+
+      expect(c1.assess(results).assessmentHash).toBe(c2.assess(results).assessmentHash);
+    });
+
+    it("creates EvaluationThresholdContract via class constructor", () => {
+      const contract = new EvaluationThresholdContract();
+      expect(contract).toBeInstanceOf(EvaluationThresholdContract);
     });
   });
 

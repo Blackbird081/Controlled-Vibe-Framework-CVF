@@ -88,6 +88,11 @@ Personal AI usage unrelated to company work is excluded.
      4. only then execute the structural change.
    - Each audit must classify the proposed change as `coordination package`, `wrapper/re-export merge`, or `physical merge`.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`.
+14. Agent handoff is mandatory whenever governed work pauses or transfers before closure:
+   - This rule applies to pause/resume, agent-to-agent transfer, and mid-tranche stop states.
+   - The handoff must truthfully state repo truth, tranche truth, latest completed commit, next governed move, and explicit scope limits.
+   - The canonical handoff template is `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`.
+   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`.
 
 ---
 

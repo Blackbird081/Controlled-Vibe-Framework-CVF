@@ -2205,3 +2205,28 @@ Utility and guard:
 - Notes/Risks:
   - this batch adds a canonical documentation artifact only; it does not change runtime behavior.
   - future handoffs should still be updated per tranche truth rather than copied blindly.
+## [2026-03-22] Batch: Agent handoff guard adoption
+- Scope:
+  - promote agent handoff from a canonical template into an explicit governance guard requirement
+  - connect the new guard to the master policy and governance control matrix
+  - treat pause/transfer between agents as a real governed checkpoint rather than informal courtesy
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- Files updated:
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_AGENT_HANDOFF_GUARD_ADOPTION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch changes governance posture and documentation only; it does not yet add a dedicated automated compat gate for missing handoff artifacts.
+  - until automation exists, compliance depends on policy discipline plus review-time enforcement.

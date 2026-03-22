@@ -85,6 +85,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_MODULE_INVENTORY.md`
 - `reference/CVF_MATURITY_MATRIX.md`
 - `reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+- `../governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
 - `reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
 - `reference/CVF_REFERENCE_GOVERNED_LOOP.md`
 - `reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
@@ -176,6 +177,7 @@ Nếu cần đọc bộ tài liệu chốt cuối cho restructuring thay vì đ�
 - `baselines/CVF_W1_T2_USABLE_INTAKE_SLICE_PLANNING_DELTA_2026-03-22.md`
 - `baselines/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`
 - `baselines/CVF_AGENT_HANDOFF_TEMPLATE_CANONICALIZATION_DELTA_2026-03-22.md`
+- `baselines/CVF_AGENT_HANDOFF_GUARD_ADOPTION_DELTA_2026-03-22.md`
 - `baselines/CVF_WHITEPAPER_GC018_W1_T2_AUTHORIZATION_DELTA_2026-03-22.md`
 - `baselines/CVF_WHITEPAPER_REALIZATION_RECONCILIATION_DELTA_2026-03-22.md`
 - `reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md`

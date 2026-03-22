@@ -64,12 +64,18 @@ import {
   createGatewayAuthContract,
   GatewayAuthLogContract,
   createGatewayAuthLogContract,
+  // W1-T9
+  GatewayPIIDetectionContract,
+  createGatewayPIIDetectionContract,
+  GatewayPIIDetectionLogContract,
+  createGatewayPIIDetectionLogContract,
 } from "../src/index";
 import type {
   GatewayProcessedRequest,
   RouteDefinition,
   RouteMatchResult,
   GatewayAuthResult,
+  GatewayPIIDetectionResult,
 } from "../src/index";
 
 describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
@@ -2625,6 +2631,217 @@ describe("W1-T4 CP2 — GatewayConsumerContract", () => {
     it("creates GatewayAuthLogContract via class constructor", () => {
       const contract = new GatewayAuthLogContract();
       expect(contract).toBeInstanceOf(GatewayAuthLogContract);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W1-T9 — AI Gateway NLP-PII Detection Slice
+  // ---------------------------------------------------------------------------
+
+  function makePIIResult(
+    piiDetected: boolean,
+    piiTypes: GatewayPIIDetectionResult["piiTypes"] = [],
+    id = "r1",
+  ): GatewayPIIDetectionResult {
+    return {
+      resultId: `result-${id}`,
+      detectedAt: "2026-03-22T10:00:00.000Z",
+      tenantId: "tenant-1",
+      piiDetected,
+      piiTypes,
+      matches: piiTypes.map((t) => ({ piiType: t, matchCount: 1 })),
+      redactedSignal: piiDetected ? "[PII_EMAIL]" : "clean signal",
+      detectionHash: `hash-${id}`,
+    };
+  }
+
+  describe("W1-T9 CP1 — GatewayPIIDetectionContract", () => {
+    it("detects email PII in signal", () => {
+      const contract = createGatewayPIIDetectionContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.detect({
+        signal: "contact me at user@example.com please",
+        tenantId: "t1",
+      });
+
+      expect(result.piiDetected).toBe(true);
+      expect(result.piiTypes).toContain("EMAIL");
+    });
+
+    it("returns clean result for signal with no PII", () => {
+      const contract = createGatewayPIIDetectionContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.detect({
+        signal: "build a feature for the dashboard",
+        tenantId: "t1",
+      });
+
+      expect(result.piiDetected).toBe(false);
+      expect(result.piiTypes).toHaveLength(0);
+    });
+
+    it("redactedSignal replaces PII tokens with labels", () => {
+      const contract = createGatewayPIIDetectionContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.detect({
+        signal: "my ssn is 123-45-6789",
+        tenantId: "t1",
+      });
+
+      expect(result.piiDetected).toBe(true);
+      expect(result.redactedSignal).not.toContain("123-45-6789");
+      expect(result.redactedSignal).toContain("[PII_SSN]");
+    });
+
+    it("detects phone PII in signal", () => {
+      const contract = createGatewayPIIDetectionContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.detect({
+        signal: "call me at 555-123-4567",
+        tenantId: "t1",
+      });
+
+      expect(result.piiDetected).toBe(true);
+      expect(result.piiTypes).toContain("PHONE");
+    });
+
+    it("tenantId is preserved in the result", () => {
+      const contract = createGatewayPIIDetectionContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.detect({
+        signal: "hello world",
+        tenantId: "my-tenant",
+      });
+
+      expect(result.tenantId).toBe("my-tenant");
+    });
+
+    it("resultId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const req = { signal: "user@example.com", tenantId: "t1" };
+      const c1 = createGatewayPIIDetectionContract({ now: () => fixedTime });
+      const c2 = createGatewayPIIDetectionContract({ now: () => fixedTime });
+
+      expect(c1.detect(req).resultId).toBe(c2.detect(req).resultId);
+    });
+
+    it("config with specific enabledTypes only scans those types", () => {
+      const contract = createGatewayPIIDetectionContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      // email present but only scanning for PHONE — should not detect email
+      const result = contract.detect({
+        signal: "contact user@example.com",
+        tenantId: "t1",
+        config: { enabledTypes: ["PHONE"] },
+      });
+
+      expect(result.piiTypes).not.toContain("EMAIL");
+    });
+
+    it("creates GatewayPIIDetectionContract via class constructor", () => {
+      const contract = new GatewayPIIDetectionContract();
+      expect(contract).toBeInstanceOf(GatewayPIIDetectionContract);
+    });
+  });
+
+  describe("W1-T9 CP2 — GatewayPIIDetectionLogContract", () => {
+    it("log with all clean results returns piiDetectedCount 0 and dominantPIIType null", () => {
+      const contract = createGatewayPIIDetectionLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makePIIResult(false, [], "1"),
+        makePIIResult(false, [], "2"),
+      ]);
+
+      expect(result.piiDetectedCount).toBe(0);
+      expect(result.cleanCount).toBe(2);
+      expect(result.dominantPIIType).toBeNull();
+    });
+
+    it("log counts piiDetectedCount and cleanCount correctly", () => {
+      const contract = createGatewayPIIDetectionLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makePIIResult(true, ["EMAIL"], "1"),
+        makePIIResult(false, [], "2"),
+        makePIIResult(true, ["SSN"], "3"),
+      ]);
+
+      expect(result.piiDetectedCount).toBe(2);
+      expect(result.cleanCount).toBe(1);
+      expect(result.totalScanned).toBe(3);
+    });
+
+    it("dominant PII type is SSN when SSN is most sensitive present", () => {
+      const contract = createGatewayPIIDetectionLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makePIIResult(true, ["EMAIL"], "1"),
+        makePIIResult(true, ["SSN"], "2"),
+      ]);
+
+      expect(result.dominantPIIType).toBe("SSN");
+    });
+
+    it("dominant PII type is EMAIL when only EMAIL detected", () => {
+      const contract = createGatewayPIIDetectionLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makePIIResult(true, ["EMAIL"], "1"),
+        makePIIResult(true, ["EMAIL"], "2"),
+      ]);
+
+      expect(result.dominantPIIType).toBe("EMAIL");
+    });
+
+    it("logId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createGatewayPIIDetectionLogContract({ now: () => fixedTime });
+      const c2 = createGatewayPIIDetectionLogContract({ now: () => fixedTime });
+      const results = [
+        makePIIResult(true, ["EMAIL"], "1"),
+        makePIIResult(false, [], "2"),
+      ];
+
+      expect(c1.log(results).logId).toBe(c2.log(results).logId);
+    });
+
+    it("log with mixed PII types tracks all correctly", () => {
+      const contract = createGatewayPIIDetectionLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makePIIResult(true, ["EMAIL", "PHONE"], "1"),
+        makePIIResult(true, ["CREDIT_CARD"], "2"),
+      ]);
+
+      expect(result.piiDetectedCount).toBe(2);
+      expect(result.dominantPIIType).toBe("CREDIT_CARD");
+    });
+
+    it("log with single PII result returns totalScanned 1", () => {
+      const contract = createGatewayPIIDetectionLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([makePIIResult(true, ["PHONE"], "1")]);
+
+      expect(result.totalScanned).toBe(1);
+      expect(result.piiDetectedCount).toBe(1);
+    });
+
+    it("creates GatewayPIIDetectionLogContract via class constructor", () => {
+      const contract = new GatewayPIIDetectionLogContract();
+      expect(contract).toBeInstanceOf(GatewayPIIDetectionLogContract);
     });
   });
 });

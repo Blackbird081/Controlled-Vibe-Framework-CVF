@@ -1,3 +1,25 @@
+// W1-T9 — AI Gateway NLP-PII Detection Slice (CP1–CP2)
+export {
+  GatewayPIIDetectionContract,
+  createGatewayPIIDetectionContract,
+} from "./gateway.pii.detection.contract";
+export type {
+  PIIType,
+  PIIDetectionConfig,
+  GatewayPIIDetectionRequest,
+  PIIDetectionMatch,
+  GatewayPIIDetectionResult,
+  GatewayPIIDetectionContractDependencies,
+} from "./gateway.pii.detection.contract";
+export {
+  GatewayPIIDetectionLogContract,
+  createGatewayPIIDetectionLogContract,
+} from "./gateway.pii.detection.log.contract";
+export type {
+  GatewayPIIDetectionLog,
+  GatewayPIIDetectionLogContractDependencies,
+} from "./gateway.pii.detection.log.contract";
+
 // W1-T8 — AI Gateway Tenant Auth Slice (CP1–CP2)
 export {
   GatewayAuthContract,

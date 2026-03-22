@@ -8,7 +8,7 @@ Memory class: SUMMARY_RECORD
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  
-> Authorization posture: `CYCLE COMPLETE - W1-T1 / W1-T2 / W1-T3 / W1-T4 / W1-T5 / W1-T6 / W1-T7 / W1-T8 / W2-T1 / W2-T2 / W2-T3 / W2-T4 / W2-T5 / W2-T6 / W2-T7 / W2-T8 / W3-T1 / W3-T2 / W3-T3 / W4-T1 / W4-T2 / W4-T3 / W4-T4 / W4-T5 / W4-T6 / W4-T7 / W5-T1 ALL CLOSED DELIVERED`
+> Authorization posture: `CYCLE COMPLETE - W1-T1 / W1-T2 / W1-T3 / W1-T4 / W1-T5 / W1-T6 / W1-T7 / W1-T8 / W1-T9 / W2-T1 / W2-T2 / W2-T3 / W2-T4 / W2-T5 / W2-T6 / W2-T7 / W2-T8 / W3-T1 / W3-T2 / W3-T3 / W4-T1 / W4-T2 / W4-T3 / W4-T4 / W4-T5 / W4-T6 / W4-T7 / W5-T1 ALL CLOSED DELIVERED`
 > Canonical continuation packets:
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
@@ -295,7 +295,7 @@ Reasoning:
 
 ## 7. W5 Final Readout — 2026-03-22
 
-All 27 tranches across 5 workstreams are now closed and delivered:
+All 28 tranches across 5 workstreams are now closed and delivered:
 
 | Tranche | Plane | Result |
 |---|---|---|
@@ -307,6 +307,7 @@ All 27 tranches across 5 workstreams are now closed and delivered:
 | W1-T6 | Control | CLOSED DELIVERED |
 | W1-T7 | Control | CLOSED DELIVERED |
 | W1-T8 | Control | CLOSED DELIVERED |
+| W1-T9 | Control | CLOSED DELIVERED |
 | W2-T1 | Execution | CLOSED DELIVERED |
 | W2-T2 | Execution | CLOSED DELIVERED |
 | W2-T3 | Execution | CLOSED DELIVERED |
@@ -341,7 +342,9 @@ All 27 tranches across 5 workstreams are now closed and delivered:
 
 **Control-plane AI Gateway routing: W1-T4 HTTP routing defer closed by W1-T7 (`RouteMatchContract`). Gateway now has three governed surfaces.**
 
-**Control-plane AI Gateway tenant auth: W1-T4 multi-tenant auth defer closed by W1-T8 (`GatewayAuthContract`). Five governed gateway surfaces. 2 of 3 W1-T4 defers resolved. NLP-PII remains.**
+**Control-plane AI Gateway tenant auth: W1-T4 multi-tenant auth defer closed by W1-T8 (`GatewayAuthContract`). Five governed gateway surfaces.**
+
+**Control-plane AI Gateway NLP-PII: W1-T4 LAST defer "NLP-based PII detection" closed by W1-T9. All 3 W1-T4 defers resolved. AI Gateway: PARTIAL → SUBSTANTIALLY DELIVERED. Seven governed surfaces. Full safety chain complete.**
 
 Future continuation requires new GC-018 authorization per wave.
 

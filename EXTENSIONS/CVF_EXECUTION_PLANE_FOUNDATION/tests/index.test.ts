@@ -36,6 +36,11 @@ import {
   createCommandRuntimeContract,
   ExecutionPipelineContract,
   createExecutionPipelineContract,
+  // W2-T4
+  ExecutionObserverContract,
+  createExecutionObserverContract,
+  ExecutionFeedbackContract,
+  createExecutionFeedbackContract,
 } from "../src/index";
 import { createGuardEngine } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
 import {
@@ -827,5 +832,245 @@ describe("W2-T3 CP2 — ExecutionPipelineContract", () => {
     const bridgeReceipt = buildBridgeReceipt();
     const result = contract.run(bridgeReceipt);
     expect(result.pipelineReceiptId).toBeTruthy();
+  });
+
+  // ─── W2-T4 CP1 — ExecutionObserverContract ──────────────────────────────
+
+  describe("W2-T4 CP1 — ExecutionObserverContract", () => {
+    function makePipelineReceipt(overrides: Partial<{
+      executedCount: number;
+      failedCount: number;
+      sandboxedCount: number;
+      skippedCount: number;
+      totalEntries: number;
+      warnings: string[];
+    }> = {}) {
+      const executedCount = overrides.executedCount ?? 3;
+      const failedCount = overrides.failedCount ?? 0;
+      const sandboxedCount = overrides.sandboxedCount ?? 0;
+      const skippedCount = overrides.skippedCount ?? 0;
+      const totalEntries = overrides.totalEntries ?? ((executedCount + failedCount + sandboxedCount + skippedCount) || 3);
+      return {
+        pipelineReceiptId: "pipe-test-001",
+        createdAt: "2026-03-22T10:00:00.000Z",
+        bridgeReceiptId: "bridge-001",
+        orchestrationId: "orch-001",
+        gateId: "gate-001",
+        runtimeId: "runtime-001",
+        commandRuntimeResult: {} as any,
+        totalEntries,
+        executedCount,
+        failedCount,
+        sandboxedCount,
+        skippedCount,
+        pipelineStages: [],
+        pipelineHash: "hash-001",
+        warnings: overrides.warnings ?? [],
+      };
+    }
+
+    it("classifies SUCCESS when all entries executed with no failures", () => {
+      const observer = createExecutionObserverContract();
+      const receipt = makePipelineReceipt({ executedCount: 3, failedCount: 0, sandboxedCount: 0, skippedCount: 0 });
+      const obs = observer.observe(receipt as any);
+
+      expect(obs.outcomeClass).toBe("SUCCESS");
+      expect(obs.confidenceSignal).toBe(1.0);
+    });
+
+    it("classifies SUCCESS with reduced confidence when warnings present", () => {
+      const observer = createExecutionObserverContract();
+      const receipt = makePipelineReceipt({ executedCount: 3, warnings: ["Some warning."] });
+      const obs = observer.observe(receipt as any);
+
+      expect(obs.outcomeClass).toBe("SUCCESS");
+      expect(obs.confidenceSignal).toBe(0.8);
+    });
+
+    it("classifies FAILED when any failure exists", () => {
+      const observer = createExecutionObserverContract();
+      const receipt = makePipelineReceipt({ executedCount: 1, failedCount: 2, totalEntries: 3 });
+      const obs = observer.observe(receipt as any);
+
+      expect(obs.outcomeClass).toBe("FAILED");
+      expect(obs.confidenceSignal).toBe(0.0);
+    });
+
+    it("classifies GATED when nothing executed and entries skipped", () => {
+      const observer = createExecutionObserverContract();
+      const receipt = makePipelineReceipt({ executedCount: 0, skippedCount: 3, totalEntries: 3 });
+      const obs = observer.observe(receipt as any);
+
+      expect(obs.outcomeClass).toBe("GATED");
+    });
+
+    it("classifies SANDBOXED when sandboxed but nothing executed", () => {
+      const observer = createExecutionObserverContract();
+      const receipt = makePipelineReceipt({ executedCount: 0, sandboxedCount: 2, totalEntries: 2 });
+      const obs = observer.observe(receipt as any);
+
+      expect(obs.outcomeClass).toBe("SANDBOXED");
+    });
+
+    it("classifies PARTIAL when some executed and some skipped", () => {
+      const observer = createExecutionObserverContract();
+      const receipt = makePipelineReceipt({ executedCount: 2, skippedCount: 1, totalEntries: 3 });
+      const obs = observer.observe(receipt as any);
+
+      expect(obs.outcomeClass).toBe("PARTIAL");
+    });
+
+    it("builds at least one observation note always", () => {
+      const observer = createExecutionObserverContract();
+      const receipt = makePipelineReceipt();
+      const obs = observer.observe(receipt as any);
+
+      expect(obs.notes.length).toBeGreaterThanOrEqual(1);
+      expect(obs.notes[0].noteId.length).toBeGreaterThan(0);
+    });
+
+    it("builds additional notes for failures, sandbox, skips, and warnings", () => {
+      const observer = createExecutionObserverContract();
+      const receipt = makePipelineReceipt({
+        executedCount: 1,
+        failedCount: 1,
+        sandboxedCount: 1,
+        skippedCount: 1,
+        totalEntries: 4,
+        warnings: ["A warning."],
+      });
+      const obs = observer.observe(receipt as any);
+
+      const categories = obs.notes.map((n) => n.category);
+      expect(categories).toContain("risk_signal");
+      expect(categories).toContain("gate_signal");
+      expect(categories).toContain("warning_signal");
+    });
+
+    it("produces stable observationHash for identical inputs with fixed time", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const o1 = createExecutionObserverContract({ now: () => fixedTime });
+      const o2 = createExecutionObserverContract({ now: () => fixedTime });
+      const receipt = makePipelineReceipt({ executedCount: 2 });
+
+      expect(o1.observe(receipt as any).observationHash).toBe(o2.observe(receipt as any).observationHash);
+    });
+
+    it("accepts injectable classifyOutcome override", () => {
+      const observer = createExecutionObserverContract({
+        classifyOutcome: () => "REJECT" as any,
+      });
+      const receipt = makePipelineReceipt({ executedCount: 3 });
+      const obs = observer.observe(receipt as any);
+
+      expect(obs.outcomeClass).toBe("REJECT");
+    });
+
+    it("creates ExecutionObserverContract via class constructor", () => {
+      const contract = new ExecutionObserverContract();
+      expect(contract).toBeInstanceOf(ExecutionObserverContract);
+    });
+  });
+
+  // ─── W2-T4 CP2 — ExecutionFeedbackContract ──────────────────────────────
+
+  describe("W2-T4 CP2 — ExecutionFeedbackContract", () => {
+    function makeObservation(outcomeClass: string, confidenceSignal = 1.0) {
+      return {
+        observationId: "obs-001",
+        createdAt: "2026-03-22T10:00:00.000Z",
+        sourcePipelineId: "pipe-001",
+        outcomeClass,
+        confidenceSignal,
+        totalEntries: 3,
+        executedCount: outcomeClass === "SUCCESS" ? 3 : 1,
+        failedCount: outcomeClass === "FAILED" ? 2 : 0,
+        sandboxedCount: outcomeClass === "SANDBOXED" ? 2 : 0,
+        skippedCount: outcomeClass === "GATED" ? 3 : 0,
+        notes: [],
+        observationHash: "obs-hash-001",
+      };
+    }
+
+    it("maps SUCCESS → ACCEPT with low priority", () => {
+      const contract = createExecutionFeedbackContract();
+      const obs = makeObservation("SUCCESS", 1.0);
+      const signal = contract.generate(obs as any);
+
+      expect(signal.feedbackClass).toBe("ACCEPT");
+      expect(signal.priority).toBe("low");
+    });
+
+    it("maps PARTIAL → RETRY with medium priority", () => {
+      const contract = createExecutionFeedbackContract();
+      const obs = makeObservation("PARTIAL", 0.6);
+      const signal = contract.generate(obs as any);
+
+      expect(signal.feedbackClass).toBe("RETRY");
+      expect(signal.priority).toBe("medium");
+    });
+
+    it("maps FAILED → ESCALATE with high priority", () => {
+      const contract = createExecutionFeedbackContract();
+      const obs = makeObservation("FAILED", 0.0);
+      const signal = contract.generate(obs as any);
+
+      expect(signal.feedbackClass).toBe("ESCALATE");
+      expect(signal.priority).toBe("critical");
+    });
+
+    it("maps GATED → ESCALATE", () => {
+      const contract = createExecutionFeedbackContract();
+      const obs = makeObservation("GATED", 0.3);
+      const signal = contract.generate(obs as any);
+
+      expect(signal.feedbackClass).toBe("ESCALATE");
+    });
+
+    it("maps SANDBOXED → RETRY", () => {
+      const contract = createExecutionFeedbackContract();
+      const obs = makeObservation("SANDBOXED", 0.5);
+      const signal = contract.generate(obs as any);
+
+      expect(signal.feedbackClass).toBe("RETRY");
+    });
+
+    it("ACCEPT signal has non-zero confidenceBoost", () => {
+      const contract = createExecutionFeedbackContract();
+      const obs = makeObservation("SUCCESS", 0.8);
+      const signal = contract.generate(obs as any);
+
+      expect(signal.confidenceBoost).toBeGreaterThan(0);
+    });
+
+    it("ESCALATE signal has zero confidenceBoost", () => {
+      const contract = createExecutionFeedbackContract();
+      const obs = makeObservation("FAILED", 0.0);
+      const signal = contract.generate(obs as any);
+
+      expect(signal.confidenceBoost).toBe(0);
+    });
+
+    it("produces stable feedbackHash for identical inputs with fixed time", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const f1 = createExecutionFeedbackContract({ now: () => fixedTime });
+      const f2 = createExecutionFeedbackContract({ now: () => fixedTime });
+      const obs = makeObservation("SUCCESS", 1.0);
+
+      expect(f1.generate(obs as any).feedbackHash).toBe(f2.generate(obs as any).feedbackHash);
+    });
+
+    it("rationale is non-empty for all feedback classes", () => {
+      const contract = createExecutionFeedbackContract();
+      for (const outcome of ["SUCCESS", "PARTIAL", "FAILED", "GATED", "SANDBOXED"]) {
+        const signal = contract.generate(makeObservation(outcome, 0.5) as any);
+        expect(signal.rationale.length).toBeGreaterThan(0);
+      }
+    });
+
+    it("creates ExecutionFeedbackContract via class constructor", () => {
+      const contract = new ExecutionFeedbackContract();
+      expect(contract).toBeInstanceOf(ExecutionFeedbackContract);
+    });
   });
 });

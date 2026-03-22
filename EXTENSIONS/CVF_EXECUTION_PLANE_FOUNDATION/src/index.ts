@@ -1,3 +1,26 @@
+// W2-T4 — Execution Observer Slice (CP1–CP2)
+export {
+  ExecutionObserverContract,
+  createExecutionObserverContract,
+} from "./execution.observer.contract";
+export type {
+  OutcomeClass,
+  ObservationCategory,
+  ObservationNote,
+  ExecutionObservation,
+  ExecutionObserverContractDependencies,
+} from "./execution.observer.contract";
+export {
+  ExecutionFeedbackContract,
+  createExecutionFeedbackContract,
+} from "./execution.feedback.contract";
+export type {
+  FeedbackClass,
+  FeedbackPriority,
+  ExecutionFeedbackSignal,
+  ExecutionFeedbackContractDependencies,
+} from "./execution.feedback.contract";
+
 // W2-T3 — Bounded Execution Command Runtime (CP1–CP2)
 export {
   CommandRuntimeContract,

@@ -54,7 +54,13 @@ import {
   createBoardroomRoundContract,
   BoardroomMultiRoundContract,
   createBoardroomMultiRoundContract,
+  // W1-T7
+  RouteMatchContract,
+  createRouteMatchContract,
+  RouteMatchLogContract,
+  createRouteMatchLogContract,
 } from "../src/index";
+import type { GatewayProcessedRequest, RouteDefinition, RouteMatchResult } from "../src/index";
 
 describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
   it("re-exports intent validation through the control-plane shell", () => {
@@ -2155,6 +2161,252 @@ describe("W1-T4 CP2 — GatewayConsumerContract", () => {
     it("creates BoardroomMultiRoundContract via class constructor", () => {
       const contract = new BoardroomMultiRoundContract();
       expect(contract).toBeInstanceOf(BoardroomMultiRoundContract);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W1-T7 — AI Gateway HTTP Routing Slice
+  // ---------------------------------------------------------------------------
+
+  function makeGatewayRequest(
+    normalizedSignal = "build a feature",
+    signalType: GatewayProcessedRequest["signalType"] = "vibe",
+    gatewayId = "gw-1",
+  ): GatewayProcessedRequest {
+    return {
+      gatewayId,
+      processedAt: "2026-03-22T10:00:00.000Z",
+      rawSignal: normalizedSignal,
+      normalizedSignal,
+      signalType,
+      envMetadata: {
+        platform: "cvf",
+        phase: "INTAKE",
+        riskLevel: "R1",
+        locale: "en",
+        tags: [],
+      },
+      privacyReport: { filtered: false, maskedTokenCount: 0, appliedPatterns: [] },
+      gatewayHash: `hash-${gatewayId}`,
+      warnings: [],
+    };
+  }
+
+  function makeRoute(
+    routeId: string,
+    pathPattern: string,
+    gatewayAction: RouteDefinition["gatewayAction"],
+    priority = 1,
+    signalTypes?: RouteDefinition["signalTypes"],
+  ): RouteDefinition {
+    return { routeId, pathPattern, gatewayAction, priority, signalTypes };
+  }
+
+  function makeMatchResult(
+    action: RouteMatchResult["gatewayAction"],
+    matched = true,
+    id = "m1",
+  ): RouteMatchResult {
+    return {
+      matchId: `match-${id}`,
+      resolvedAt: "2026-03-22T10:00:00.000Z",
+      sourceGatewayId: "gw-1",
+      matched,
+      routeId: matched ? `route-${id}` : null,
+      matchedPattern: matched ? "*" : null,
+      gatewayAction: action,
+      matchHash: `mhash-${id}`,
+    };
+  }
+
+  describe("W1-T7 CP1 — RouteMatchContract", () => {
+    it("matches a wildcard route and returns FORWARD action", () => {
+      const contract = createRouteMatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.match(makeGatewayRequest(), [
+        makeRoute("r1", "*", "FORWARD"),
+      ]);
+
+      expect(result.matched).toBe(true);
+      expect(result.gatewayAction).toBe("FORWARD");
+      expect(result.routeId).toBe("r1");
+    });
+
+    it("returns PASSTHROUGH when no routes match", () => {
+      const contract = createRouteMatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.match(makeGatewayRequest("hello world"), [
+        makeRoute("r1", "nomatch", "FORWARD"),
+      ]);
+
+      expect(result.matched).toBe(false);
+      expect(result.gatewayAction).toBe("PASSTHROUGH");
+      expect(result.routeId).toBeNull();
+    });
+
+    it("returns REJECT action when matched route specifies REJECT", () => {
+      const contract = createRouteMatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.match(makeGatewayRequest("build*"), [
+        makeRoute("r1", "build*", "REJECT"),
+      ]);
+
+      expect(result.gatewayAction).toBe("REJECT");
+    });
+
+    it("prefix pattern matches when signal starts with prefix", () => {
+      const contract = createRouteMatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.match(makeGatewayRequest("build a feature"), [
+        makeRoute("r1", "build*", "FORWARD"),
+      ]);
+
+      expect(result.matched).toBe(true);
+      expect(result.matchedPattern).toBe("build*");
+    });
+
+    it("signal type filter excludes non-matching signal types", () => {
+      const contract = createRouteMatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.match(makeGatewayRequest("build", "vibe"), [
+        makeRoute("r1", "*", "FORWARD", 1, ["command"]),
+      ]);
+
+      expect(result.matched).toBe(false);
+      expect(result.gatewayAction).toBe("PASSTHROUGH");
+    });
+
+    it("higher priority route wins over lower priority route", () => {
+      const contract = createRouteMatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.match(makeGatewayRequest("build"), [
+        makeRoute("low", "*", "REROUTE", 10),
+        makeRoute("high", "*", "FORWARD", 1),
+      ]);
+
+      expect(result.routeId).toBe("high");
+      expect(result.gatewayAction).toBe("FORWARD");
+    });
+
+    it("matchId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const req = makeGatewayRequest("test-signal");
+      const routes = [makeRoute("r1", "*", "FORWARD")];
+      const c1 = createRouteMatchContract({ now: () => fixedTime });
+      const c2 = createRouteMatchContract({ now: () => fixedTime });
+
+      expect(c1.match(req, routes).matchId).toBe(c2.match(req, routes).matchId);
+    });
+
+    it("creates RouteMatchContract via class constructor", () => {
+      const contract = new RouteMatchContract();
+      expect(contract).toBeInstanceOf(RouteMatchContract);
+    });
+  });
+
+  describe("W1-T7 CP2 — RouteMatchLogContract", () => {
+    it("log with all FORWARD returns dominantAction FORWARD", () => {
+      const contract = createRouteMatchLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeMatchResult("FORWARD", true, "1"),
+        makeMatchResult("FORWARD", true, "2"),
+      ]);
+
+      expect(result.dominantAction).toBe("FORWARD");
+      expect(result.forwardCount).toBe(2);
+    });
+
+    it("log with any REJECT returns dominantAction REJECT", () => {
+      const contract = createRouteMatchLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeMatchResult("FORWARD", true, "1"),
+        makeMatchResult("REJECT", true, "2"),
+      ]);
+
+      expect(result.dominantAction).toBe("REJECT");
+    });
+
+    it("log counts matchedCount and unmatchedCount correctly", () => {
+      const contract = createRouteMatchLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeMatchResult("FORWARD", true, "1"),
+        makeMatchResult("PASSTHROUGH", false, "2"),
+        makeMatchResult("PASSTHROUGH", false, "3"),
+      ]);
+
+      expect(result.matchedCount).toBe(1);
+      expect(result.unmatchedCount).toBe(2);
+      expect(result.totalRequests).toBe(3);
+    });
+
+    it("log with REROUTE majority dominates FORWARD", () => {
+      const contract = createRouteMatchLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeMatchResult("REROUTE", true, "1"),
+        makeMatchResult("REROUTE", true, "2"),
+        makeMatchResult("FORWARD", true, "3"),
+      ]);
+
+      expect(result.dominantAction).toBe("REROUTE");
+      expect(result.rerouteCount).toBe(2);
+    });
+
+    it("log counts all action types correctly", () => {
+      const contract = createRouteMatchLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeMatchResult("FORWARD", true, "1"),
+        makeMatchResult("REJECT", true, "2"),
+        makeMatchResult("REROUTE", true, "3"),
+        makeMatchResult("PASSTHROUGH", false, "4"),
+      ]);
+
+      expect(result.forwardCount).toBe(1);
+      expect(result.rejectCount).toBe(1);
+      expect(result.rerouteCount).toBe(1);
+      expect(result.passthroughCount).toBe(1);
+    });
+
+    it("logId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createRouteMatchLogContract({ now: () => fixedTime });
+      const c2 = createRouteMatchLogContract({ now: () => fixedTime });
+      const results = [
+        makeMatchResult("FORWARD", true, "1"),
+        makeMatchResult("REJECT", true, "2"),
+      ];
+
+      expect(c1.log(results).logId).toBe(c2.log(results).logId);
+    });
+
+    it("log with PASSTHROUGH only returns dominantAction PASSTHROUGH", () => {
+      const contract = createRouteMatchLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([makeMatchResult("PASSTHROUGH", false, "1")]);
+
+      expect(result.dominantAction).toBe("PASSTHROUGH");
+      expect(result.unmatchedCount).toBe(1);
+    });
+
+    it("creates RouteMatchLogContract via class constructor", () => {
+      const contract = new RouteMatchLogContract();
+      expect(contract).toBeInstanceOf(RouteMatchLogContract);
     });
   });
 });

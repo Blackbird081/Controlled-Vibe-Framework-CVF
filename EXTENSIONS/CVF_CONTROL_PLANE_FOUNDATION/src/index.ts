@@ -1,3 +1,23 @@
+// W1-T7 — AI Gateway HTTP Routing Slice (CP1–CP2)
+export {
+  RouteMatchContract,
+  createRouteMatchContract,
+} from "./route.match.contract";
+export type {
+  GatewayAction,
+  RouteDefinition,
+  RouteMatchResult,
+  RouteMatchContractDependencies,
+} from "./route.match.contract";
+export {
+  RouteMatchLogContract,
+  createRouteMatchLogContract,
+} from "./route.match.log.contract";
+export type {
+  RouteMatchLog,
+  RouteMatchLogContractDependencies,
+} from "./route.match.log.contract";
+
 // W1-T6 — AI Boardroom Multi-round Session Slice (CP1–CP2)
 export {
   BoardroomRoundContract,

@@ -1739,6 +1739,32 @@ Utility and guard:
 - Notes/Risks:
   - `CP1` is recommended as a coordination package shell only
   - no code implementation is started by this planning batch
+## [2026-03-22] Batch: W4-T4 governance signal bridge authorization
+- Scope:
+  - authorize the next bounded learning-plane tranche after `W4-T3`
+  - keep scope limited to governance signal bridging from `ThresholdAssessment`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T4_2026-03-22.md`
+  - `docs/roadmaps/CVF_W4_T4_GOVERNANCE_SIGNAL_BRIDGE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W4_T4_AUTHORIZATION_DELTA_2026-03-22.md`
+- Files updated:
+  - `.gitignore`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T4_2026-03-22.md`
+  - `docs/roadmaps/CVF_W4_T4_GOVERNANCE_SIGNAL_BRIDGE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W4_T4_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch authorizes `W4-T4` only; no implementation starts in this step
+  - `.claude/` is now treated as local-only workspace metadata
 ## [2026-03-21] Batch: W1-T1 CP1 control-plane foundation implementation
 - Scope:
   - implement `CP1` inside `W1-T1` as an approved `coordination package` shell

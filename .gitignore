@@ -17,6 +17,7 @@ dev.db
 # IDE
 .idea/
 .vscode/
+.claude/
 *.swp
 *.swo
 

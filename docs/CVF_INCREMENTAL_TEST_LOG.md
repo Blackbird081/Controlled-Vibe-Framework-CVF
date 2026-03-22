@@ -2081,3 +2081,30 @@ Utility and guard:
 - Notes/Risks:
   - this batch is planning/scope only; it does not authorize or implement a new realization tranche by itself.
   - the packet intentionally keeps `Watchdog`, `Audit / Consensus`, and the `Learning Plane` deferred with explicit reasons so the roadmap does not confuse concept labels with usable system capability.
+## [2026-03-22] Batch: W1-T2 usable intake slice authorization
+- Scope:
+  - authorize the next bounded whitepaper-completion tranche as `W1-T2 — Usable Intake Slice`
+  - keep the tranche explicitly inside control-plane completion rather than auto-opening `W4` learning-plane scope
+  - record that the next tranche must end with a real consumer path rather than another shell-only closure
+- Policy / roadmap references:
+  - `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
+  - `docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_PACKET_2026-03-22.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T2_2026-03-22.md`
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W1_T2_AUTHORIZATION_DELTA_2026-03-22.md`
+- Files updated:
+  - `docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_PACKET_2026-03-22.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T2_2026-03-22.md`
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W1_T2_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch authorizes `W1-T2` only; it does not open the tranche-local execution plan or any `GC-019` packet yet.
+  - `W4` remains gated as `Learning Plane`; `W1-T2` is a control-plane continuation tranche, not a phase renumbering trick.
+  - the authorization is intentionally strict that a successful `W1-T2` tranche must produce usable behavior, not only another package shell.

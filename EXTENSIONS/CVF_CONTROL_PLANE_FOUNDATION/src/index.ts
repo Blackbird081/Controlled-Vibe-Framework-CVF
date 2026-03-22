@@ -1,3 +1,22 @@
+// W1-T6 — AI Boardroom Multi-round Session Slice (CP1–CP2)
+export {
+  BoardroomRoundContract,
+  createBoardroomRoundContract,
+} from "./boardroom.round.contract";
+export type {
+  RefinementFocus,
+  BoardroomRound,
+  BoardroomRoundContractDependencies,
+} from "./boardroom.round.contract";
+export {
+  BoardroomMultiRoundContract,
+  createBoardroomMultiRoundContract,
+} from "./boardroom.multi.round.contract";
+export type {
+  BoardroomMultiRoundSummary,
+  BoardroomMultiRoundContractDependencies,
+} from "./boardroom.multi.round.contract";
+
 // W1-T5 — AI Boardroom Reverse Prompting (CP1–CP2)
 export {
   ReversePromptingContract,

@@ -121,6 +121,10 @@ Current authorization state:
 - `W2-T7 / CP1` is now implemented as a bounded async command runtime contract baseline (`CommandRuntimeResult → AsyncCommandRuntimeTicket`); asyncStatus: PENDING on issue
 - `W2-T7 / CP2` is now implemented as an async execution status contract (`AsyncCommandRuntimeTicket[] → AsyncExecutionStatusSummary`); W2-T3 defer "async adapter invocation" closed
 - `W2-T7 / CP3` tranche closure review is executed; first async execution surface in the execution plane delivered; EPF: 111 → 127 tests
+- `W1-T6 — AI Boardroom Multi-round Session Slice` is now authorized (GC-018: 13/15) and canonically closed
+- `W1-T6 / CP1` is now implemented as a bounded boardroom round contract baseline (`BoardroomSession → BoardroomRound`); W1-T3 defer "multi-round session loop" closed
+- `W1-T6 / CP2` is now implemented as a boardroom multi-round summary contract (`BoardroomRound[] → BoardroomMultiRoundSummary`)
+- `W1-T6 / CP3` tranche closure review is executed; first iterative boardroom refinement surface in the control plane delivered; CPF: 116 → 132 tests
 
 Nothing beyond `W0` in this roadmap may execute until:
 

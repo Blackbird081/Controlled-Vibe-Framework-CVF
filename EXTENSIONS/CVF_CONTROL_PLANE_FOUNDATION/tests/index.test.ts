@@ -49,6 +49,11 @@ import {
   createReversePromptingContract,
   ClarificationRefinementContract,
   createClarificationRefinementContract,
+  // W1-T6
+  BoardroomRoundContract,
+  createBoardroomRoundContract,
+  BoardroomMultiRoundContract,
+  createBoardroomMultiRoundContract,
 } from "../src/index";
 
 describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
@@ -1936,6 +1941,220 @@ describe("W1-T4 CP2 — GatewayConsumerContract", () => {
     it("creates ClarificationRefinementContract via class constructor", () => {
       const contract = new ClarificationRefinementContract();
       expect(contract).toBeInstanceOf(ClarificationRefinementContract);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W1-T6 CP1 — BoardroomRoundContract
+  // ---------------------------------------------------------------------------
+
+  describe("W1-T6 CP1 — BoardroomRoundContract", () => {
+    function makeSession(decision: "PROCEED" | "AMEND_PLAN" | "ESCALATE" | "REJECT") {
+      resetDocCounter();
+      const shell = createControlPlaneFoundationShell();
+      shell.knowledge.getStore().add({
+        title: "Round Test Doc",
+        content: "Testing boardroom rounds.",
+        tier: "T2_POLICY",
+        documentType: "policy",
+        domain: "code_security",
+        tags: ["w1-t6"],
+        metadata: { source: "round-test" },
+      });
+      const intake = createControlPlaneIntakeContract({
+        shell,
+        now: () => "2026-03-22T18:00:00.000Z",
+      }).execute({ vibe: "analyze code security", consumerId: "round-test", tokenBudget: 256 });
+      const plan = createDesignContract({ now: () => "2026-03-22T18:01:00.000Z" }).design(intake);
+
+      // Override decision by injecting specific clarifications for AMEND_PLAN
+      const clarifications =
+        decision === "AMEND_PLAN"
+          ? [{ question: "What is the risk level?", answer: undefined }]
+          : [];
+
+      const rawSession = createBoardroomContract({ now: () => "2026-03-22T18:02:00.000Z" })
+        .review({ plan, clarifications });
+
+      // For test purposes we patch the decision for ESCALATE/REJECT scenarios
+      if (decision === "ESCALATE" || decision === "REJECT") {
+        return {
+          ...rawSession,
+          decision: { decision, rationale: `Patched for test: ${decision}` },
+        } as typeof rawSession;
+      }
+      return rawSession;
+    }
+
+    it("opens a TASK_AMENDMENT round for AMEND_PLAN session", () => {
+      const session = makeSession("AMEND_PLAN");
+      const contract = createBoardroomRoundContract({ now: () => "2026-03-22T18:03:00.000Z" });
+      const round = contract.openRound(session, 1);
+
+      expect(round.refinementFocus).toBe("TASK_AMENDMENT");
+      expect(round.sourceDecision).toBe("AMEND_PLAN");
+      expect(round.roundNumber).toBe(1);
+    });
+
+    it("opens a CLARIFICATION round for PROCEED session", () => {
+      const session = makeSession("PROCEED");
+      const contract = createBoardroomRoundContract({ now: () => "2026-03-22T18:03:00.000Z" });
+      const round = contract.openRound(session, 1);
+
+      expect(round.refinementFocus).toBe("CLARIFICATION");
+      expect(round.sourceDecision).toBe("PROCEED");
+    });
+
+    it("opens an ESCALATION_REVIEW round for ESCALATE session", () => {
+      const session = makeSession("ESCALATE");
+      const contract = createBoardroomRoundContract({ now: () => "2026-03-22T18:03:00.000Z" });
+      const round = contract.openRound(session, 2);
+
+      expect(round.refinementFocus).toBe("ESCALATION_REVIEW");
+      expect(round.roundNumber).toBe(2);
+    });
+
+    it("opens a RISK_REVIEW round for REJECT session", () => {
+      const session = makeSession("REJECT");
+      const contract = createBoardroomRoundContract({ now: () => "2026-03-22T18:03:00.000Z" });
+      const round = contract.openRound(session, 1);
+
+      expect(round.refinementFocus).toBe("RISK_REVIEW");
+    });
+
+    it("sets sourceSessionId from the input session", () => {
+      const session = makeSession("PROCEED");
+      const contract = createBoardroomRoundContract({ now: () => "2026-03-22T18:03:00.000Z" });
+      const round = contract.openRound(session);
+
+      expect(round.sourceSessionId).toBe(session.sessionId);
+    });
+
+    it("produces a stable roundHash for identical inputs", () => {
+      const session = makeSession("AMEND_PLAN");
+      const fixedTime = "2026-03-22T18:03:00.000Z";
+      const c1 = createBoardroomRoundContract({ now: () => fixedTime });
+      const c2 = createBoardroomRoundContract({ now: () => fixedTime });
+
+      expect(c1.openRound(session, 1).roundHash).toBe(c2.openRound(session, 1).roundHash);
+    });
+
+    it("allows injecting a custom deriveRefinementFocus function", () => {
+      const session = makeSession("PROCEED");
+      const contract = createBoardroomRoundContract({
+        deriveRefinementFocus: () => "RISK_REVIEW",
+        now: () => "2026-03-22T18:03:00.000Z",
+      });
+      const round = contract.openRound(session, 1);
+
+      expect(round.refinementFocus).toBe("RISK_REVIEW");
+    });
+
+    it("creates BoardroomRoundContract via class constructor", () => {
+      const contract = new BoardroomRoundContract();
+      expect(contract).toBeInstanceOf(BoardroomRoundContract);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W1-T6 CP2 — BoardroomMultiRoundContract
+  // ---------------------------------------------------------------------------
+
+  describe("W1-T6 CP2 — BoardroomMultiRoundContract", () => {
+    function makeRound(
+      decision: "PROCEED" | "AMEND_PLAN" | "ESCALATE" | "REJECT",
+      roundNumber: number,
+    ) {
+      return {
+        roundId: `round-${decision}-${roundNumber}`,
+        roundNumber,
+        createdAt: "2026-03-22T18:03:00.000Z",
+        sourceSessionId: `session-${decision}`,
+        sourceDecision: decision,
+        refinementFocus: (
+          decision === "AMEND_PLAN" ? "TASK_AMENDMENT"
+          : decision === "ESCALATE" ? "ESCALATION_REVIEW"
+          : decision === "REJECT" ? "RISK_REVIEW"
+          : "CLARIFICATION"
+        ) as "TASK_AMENDMENT" | "ESCALATION_REVIEW" | "RISK_REVIEW" | "CLARIFICATION",
+        refinementNote: `Test note for ${decision}`,
+        roundHash: `hash-${decision}-${roundNumber}`,
+      };
+    }
+
+    it("returns empty summary with PROCEED dominant for no rounds", () => {
+      const contract = createBoardroomMultiRoundContract({ now: () => "2026-03-22T18:04:00.000Z" });
+      const result = contract.summarize([]);
+
+      expect(result.totalRounds).toBe(0);
+      expect(result.dominantDecision).toBe("PROCEED");
+      expect(result.summary).toContain("empty");
+    });
+
+    it("dominant decision is REJECT when any round has REJECT", () => {
+      const contract = createBoardroomMultiRoundContract({ now: () => "2026-03-22T18:04:00.000Z" });
+      const result = contract.summarize([
+        makeRound("AMEND_PLAN", 1),
+        makeRound("REJECT", 2),
+        makeRound("PROCEED", 3),
+      ]);
+
+      expect(result.dominantDecision).toBe("REJECT");
+      expect(result.rejectCount).toBe(1);
+      expect(result.amendCount).toBe(1);
+      expect(result.proceedCount).toBe(1);
+    });
+
+    it("dominant decision is ESCALATE when no REJECT but some ESCALATE", () => {
+      const contract = createBoardroomMultiRoundContract({ now: () => "2026-03-22T18:04:00.000Z" });
+      const result = contract.summarize([
+        makeRound("ESCALATE", 1),
+        makeRound("AMEND_PLAN", 2),
+      ]);
+
+      expect(result.dominantDecision).toBe("ESCALATE");
+    });
+
+    it("dominant decision is AMEND_PLAN when no REJECT/ESCALATE", () => {
+      const contract = createBoardroomMultiRoundContract({ now: () => "2026-03-22T18:04:00.000Z" });
+      const result = contract.summarize([
+        makeRound("PROCEED", 1),
+        makeRound("AMEND_PLAN", 2),
+      ]);
+
+      expect(result.dominantDecision).toBe("AMEND_PLAN");
+    });
+
+    it("finalRoundNumber is the max round number", () => {
+      const contract = createBoardroomMultiRoundContract({ now: () => "2026-03-22T18:04:00.000Z" });
+      const result = contract.summarize([
+        makeRound("PROCEED", 1),
+        makeRound("AMEND_PLAN", 3),
+        makeRound("PROCEED", 2),
+      ]);
+
+      expect(result.finalRoundNumber).toBe(3);
+    });
+
+    it("produces a stable summaryHash for identical inputs", () => {
+      const fixedTime = "2026-03-22T18:04:00.000Z";
+      const c1 = createBoardroomMultiRoundContract({ now: () => fixedTime });
+      const c2 = createBoardroomMultiRoundContract({ now: () => fixedTime });
+      const rounds = [makeRound("AMEND_PLAN", 1), makeRound("PROCEED", 2)];
+
+      expect(c1.summarize(rounds).summaryHash).toBe(c2.summarize(rounds).summaryHash);
+    });
+
+    it("summary text contains dominant decision", () => {
+      const contract = createBoardroomMultiRoundContract({ now: () => "2026-03-22T18:04:00.000Z" });
+      const result = contract.summarize([makeRound("ESCALATE", 1)]);
+
+      expect(result.summary).toContain("ESCALATE");
+    });
+
+    it("creates BoardroomMultiRoundContract via class constructor", () => {
+      const contract = new BoardroomMultiRoundContract();
+      expect(contract).toBeInstanceOf(BoardroomMultiRoundContract);
     });
   });
 });

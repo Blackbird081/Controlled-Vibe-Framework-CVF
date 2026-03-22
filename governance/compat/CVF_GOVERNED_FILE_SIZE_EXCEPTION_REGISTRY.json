@@ -24,15 +24,15 @@
       "approvedMaxLines": 3200,
       "status": "ACTIVE_EXCEPTION",
       "rationale": "Legacy CPF cumulative tranche test file still carries pre-GC-023 history despite ongoing tranche-local extraction.",
-      "requiredFollowup": "Continue extracting tranche-local and subsystem-local tests out of CPF index.test.ts whenever CPF test surface is touched."
+      "requiredFollowup": "MANDATORY for ANY tranche touching CPF tests: new tranche tests MUST go into a dedicated file, never appended to index.test.ts. index.test.ts is frozen at current line count and must only shrink."
     },
     {
       "path": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts",
       "fileClass": "test_code",
       "approvedMaxLines": 2100,
       "status": "ACTIVE_EXCEPTION",
-      "rationale": "Execution plane foundation still carries multi-tranche cumulative tests in one governed entry file.",
-      "requiredFollowup": "Split execution runtime, observer, feedback, and MCP bridge tests into dedicated files before or during the next W2 execution tranche touching test coverage."
+      "rationale": "Execution plane foundation still carries multi-tranche cumulative tests in one governed entry file. W6-T1 violation (2155 lines) was caught and remediated: streaming tests extracted to execution.streaming.test.ts.",
+      "requiredFollowup": "MANDATORY for ANY tranche touching EPF tests: new tranche tests MUST go into a dedicated file (e.g. execution.<domain>.test.ts), never appended to index.test.ts. index.test.ts is frozen at current line count and must only shrink."
     },
     {
       "path": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts",
@@ -40,7 +40,7 @@
       "approvedMaxLines": 1500,
       "status": "ACTIVE_EXCEPTION",
       "rationale": "Learning plane foundation still carries cumulative tranche tests in one governed entry file.",
-      "requiredFollowup": "Split truth-model, evaluation, reinjection, storage, and observability tests into dedicated files before the next substantive W4 tranche touching test coverage."
+      "requiredFollowup": "MANDATORY for ANY tranche touching LPF tests: new tranche tests MUST go into a dedicated file, never appended to index.test.ts. index.test.ts is frozen at current line count and must only shrink."
     },
     {
       "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx",

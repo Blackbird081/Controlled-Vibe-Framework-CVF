@@ -107,6 +107,8 @@ docs/reviews/ + CHANGELOG    ← Audit trail
 
 **Memory Classification (GC-022):** Records are classified as FULL / SUMMARY / POINTER. See `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`.
 
+**File Size Guard (GC-023):** All governed source, test, frontend, and markdown files have hard line-count thresholds. Policy: `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`. Exception registry: `governance/compat/CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json`. **Before adding tests or code to any existing file:** (1) check the current line count, (2) check the exception registry for that file's `approvedMaxLines` and `requiredFollowup`, (3) if adding would exceed the limit, create a dedicated file instead. Run `python governance/compat/check_governed_file_size.py --enforce` before every commit.
+
 **Risk Model:** R0 (Safe) → R3 (Dangerous). All changes are classified before execution.
 
 ---

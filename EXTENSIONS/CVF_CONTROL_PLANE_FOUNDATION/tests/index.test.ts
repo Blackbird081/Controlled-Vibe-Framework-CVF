@@ -39,6 +39,11 @@ import {
   runtimeToCVFRisk,
   scoreToRiskLevel,
   segmentContext,
+  // W1-T4
+  AIGatewayContract,
+  createAIGatewayContract,
+  GatewayConsumerContract,
+  createGatewayConsumerContract,
 } from "../src/index";
 
 describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
@@ -1495,5 +1500,189 @@ describe("W1-T3 CP4: DesignConsumerContract", () => {
     expect(
       receipt.warnings.some((w) => w.includes("did not PROCEED")),
     ).toBe(true);
+  });
+});
+
+describe("W1-T4 CP1 — AIGatewayContract", () => {
+  it("processes a clean signal and returns a GatewayProcessedRequest", () => {
+    const gateway = createAIGatewayContract();
+    const result = gateway.process({ rawSignal: "Build a governed AI platform for document review" });
+
+    expect(result.gatewayId).toBeTruthy();
+    expect(result.normalizedSignal).toBe("Build a governed AI platform for document review");
+    expect(result.signalType).toBe("vibe");
+    expect(result.gatewayHash).toBeTruthy();
+    expect(result.privacyReport.filtered).toBe(false);
+    expect(result.privacyReport.maskedTokenCount).toBe(0);
+  });
+
+  it("masks email addresses when maskPII is true (default)", () => {
+    const gateway = createAIGatewayContract();
+    const result = gateway.process({
+      rawSignal: "Contact user@example.com to confirm deployment",
+    });
+
+    expect(result.normalizedSignal).toContain("[PII_EMAIL]");
+    expect(result.normalizedSignal).not.toContain("user@example.com");
+    expect(result.privacyReport.filtered).toBe(true);
+    expect(result.privacyReport.maskedTokenCount).toBeGreaterThan(0);
+  });
+
+  it("masks secret tokens when maskSecrets is true (default)", () => {
+    const gateway = createAIGatewayContract();
+    const result = gateway.process({
+      rawSignal: "Use skTESTtoken123abcXYZ789012345 for the API call",
+    });
+
+    expect(result.normalizedSignal).toContain("[SECRET_MASKED]");
+    expect(result.privacyReport.filtered).toBe(true);
+  });
+
+  it("applies custom redactPatterns", () => {
+    const gateway = createAIGatewayContract();
+    const result = gateway.process({
+      rawSignal: "Order ID: ORD-12345 needs processing",
+      privacyConfig: { maskPII: false, maskSecrets: false, redactPatterns: ["ORD-\\d+"] },
+    });
+
+    expect(result.normalizedSignal).toContain("[REDACTED]");
+    expect(result.normalizedSignal).not.toContain("ORD-12345");
+  });
+
+  it("enriches with env metadata defaults when no context provided", () => {
+    const gateway = createAIGatewayContract();
+    const result = gateway.process({ rawSignal: "Design a new intake flow" });
+
+    expect(result.envMetadata.platform).toBe("cvf");
+    expect(result.envMetadata.phase).toBe("INTAKE");
+    expect(result.envMetadata.riskLevel).toBe("R1");
+    expect(result.envMetadata.locale).toBe("en");
+  });
+
+  it("uses provided env context when supplied", () => {
+    const gateway = createAIGatewayContract();
+    const result = gateway.process({
+      rawSignal: "Deploy to staging",
+      envContext: { platform: "production", phase: "BUILD", riskLevel: "R3", locale: "vi" },
+    });
+
+    expect(result.envMetadata.platform).toBe("production");
+    expect(result.envMetadata.phase).toBe("BUILD");
+    expect(result.envMetadata.riskLevel).toBe("R3");
+    expect(result.envMetadata.locale).toBe("vi");
+  });
+
+  it("handles empty signal with warning", () => {
+    const gateway = createAIGatewayContract();
+    const result = gateway.process({ rawSignal: "" });
+
+    expect(result.normalizedSignal).toBe("");
+    expect(result.warnings.some((w) => w.includes("empty signal"))).toBe(true);
+  });
+
+  it("produces stable gatewayHash for identical inputs", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+    const g1 = createAIGatewayContract({ now: () => fixedTime });
+    const g2 = createAIGatewayContract({ now: () => fixedTime });
+
+    const r1 = g1.process({ rawSignal: "Build a deployment pipeline", consumerId: "test" });
+    const r2 = g2.process({ rawSignal: "Build a deployment pipeline", consumerId: "test" });
+
+    expect(r1.gatewayHash).toBe(r2.gatewayHash);
+  });
+
+  it("accepts injectable privacy filter", () => {
+    let called = false;
+    const customFilter = (signal: string) => {
+      called = true;
+      return { filtered: signal.replace("SECRET", "[CUSTOM_MASKED]"), report: { filtered: true, maskedTokenCount: 1, appliedPatterns: ["[CUSTOM_MASKED]"] } };
+    };
+    const gateway = createAIGatewayContract({ applyPrivacyFilter: customFilter });
+    gateway.process({ rawSignal: "Use SECRET key here" });
+
+    expect(called).toBe(true);
+  });
+
+  it("creates AIGatewayContract via class constructor", () => {
+    const contract = new AIGatewayContract();
+    expect(contract).toBeInstanceOf(AIGatewayContract);
+    const result = contract.process({ rawSignal: "Test signal" });
+    expect(result.gatewayId).toBeTruthy();
+  });
+
+  it("preserves sessionId and agentId in processed request", () => {
+    const gateway = createAIGatewayContract();
+    const result = gateway.process({
+      rawSignal: "Analyze project risk",
+      sessionId: "session-001",
+      agentId: "agent-planner",
+      consumerId: "w1-t4-test",
+    });
+
+    expect(result.sessionId).toBe("session-001");
+    expect(result.agentId).toBe("agent-planner");
+    expect(result.consumerId).toBe("w1-t4-test");
+  });
+});
+
+describe("W1-T4 CP2 — GatewayConsumerContract", () => {
+  it("produces a GatewayConsumptionReceipt from a signal", () => {
+    const consumer = createGatewayConsumerContract();
+    const receipt = consumer.consume({ rawSignal: "Build a governed AI intake flow", consumerId: "w1-t4-cp2-test" });
+
+    expect(receipt.receiptId).toBeTruthy();
+    expect(receipt.consumerId).toBe("w1-t4-cp2-test");
+    expect(receipt.consumptionHash).toBeTruthy();
+    expect(receipt.gatewayRequest).toBeTruthy();
+    expect(receipt.intakeResult).toBeTruthy();
+  });
+
+  it("tracks 3 pipeline stages", () => {
+    const consumer = createGatewayConsumerContract();
+    const receipt = consumer.consume({ rawSignal: "Govern the deployment process end to end" });
+
+    expect(receipt.stages).toHaveLength(3);
+    const stageNames = receipt.stages.map((s) => s.stage);
+    expect(stageNames).toContain("SIGNAL_PROCESSED");
+    expect(stageNames).toContain("INTAKE_EXECUTED");
+    expect(stageNames).toContain("RECEIPT_ISSUED");
+  });
+
+  it("gateway request inside receipt has correct normalized signal", () => {
+    const consumer = createGatewayConsumerContract();
+    const receipt = consumer.consume({ rawSignal: "Create a review workflow for contracts" });
+
+    expect(receipt.gatewayRequest.normalizedSignal).toBe("Create a review workflow for contracts");
+    expect(receipt.intakeResult.intent).toBeTruthy();
+  });
+
+  it("gateway portion of receipt has stable hash for identical inputs", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+    const c1 = createGatewayConsumerContract({ now: () => fixedTime });
+    const c2 = createGatewayConsumerContract({ now: () => fixedTime });
+
+    const r1 = c1.consume({ rawSignal: "Build a review engine", consumerId: "stable-test" });
+    const r2 = c2.consume({ rawSignal: "Build a review engine", consumerId: "stable-test" });
+
+    // gatewayHash is fully deterministic; consumptionHash includes RAG-pipeline state
+    expect(r1.gatewayRequest.gatewayHash).toBe(r2.gatewayRequest.gatewayHash);
+    expect(r1.consumptionHash).toBeTruthy();
+    expect(r2.consumptionHash).toBeTruthy();
+  });
+
+  it("propagates gateway warnings into receipt warnings", () => {
+    const consumer = createGatewayConsumerContract();
+    const receipt = consumer.consume({
+      rawSignal: "Contact admin@corp.example.com for approval",
+    });
+
+    expect(receipt.warnings.some((w) => w.includes("[gateway]"))).toBe(true);
+  });
+
+  it("creates GatewayConsumerContract via class constructor", () => {
+    const contract = new GatewayConsumerContract();
+    expect(contract).toBeInstanceOf(GatewayConsumerContract);
+    const receipt = contract.consume({ rawSignal: "Test gateway consumer" });
+    expect(receipt.receiptId).toBeTruthy();
   });
 });

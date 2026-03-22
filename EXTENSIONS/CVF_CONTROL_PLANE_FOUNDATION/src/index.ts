@@ -1,3 +1,29 @@
+// W1-T4 — Control-Plane AI Gateway Slice (CP1–CP2)
+export {
+  AIGatewayContract,
+  createAIGatewayContract,
+} from "./ai.gateway.contract";
+export type {
+  GatewaySignalType,
+  GatewayEnvContext,
+  GatewayPrivacyConfig,
+  GatewaySignalRequest,
+  GatewayPrivacyReport,
+  GatewayEnvMetadata,
+  GatewayProcessedRequest,
+  AIGatewayContractDependencies,
+} from "./ai.gateway.contract";
+export {
+  GatewayConsumerContract,
+  createGatewayConsumerContract,
+} from "./gateway.consumer.contract";
+export type {
+  GatewayConsumptionStage,
+  GatewayConsumptionStageEntry,
+  GatewayConsumptionReceipt,
+  GatewayConsumerContractDependencies,
+} from "./gateway.consumer.contract";
+
 export { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 export { IntentParser } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.parser";
 export {

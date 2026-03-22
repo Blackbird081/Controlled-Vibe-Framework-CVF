@@ -10,13 +10,13 @@ Memory class: FULL_RECORD
 
 ## Readout
 
-CVF has **completed the approved current-cycle restructuring wave**, but it has **not completed the full target-state described in the whitepaper**.
+CVF has **completed the approved current-cycle restructuring wave** and has now **completed the first governed whitepaper-completion verification cycle through `W5-T1`**.
 
-This is the correct interpretation because the whitepaper is explicitly marked as:
+The correct interpretation at this point is:
 
-- `TARGET-STATE ARCHITECTURE CONCEPT`
-- `Not current-state truth`
-- `Pending GC-018 Continuation Wave approval`
+- the whitepaper is **no longer only a target-state concept**
+- it is now an **evidence-backed partially delivered architecture whitepaper**
+- significant future waves remain possible, but they are not implicitly open
 
 ---
 

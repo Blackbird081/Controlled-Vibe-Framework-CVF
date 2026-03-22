@@ -1,13 +1,21 @@
-# 🏛️ CVF Target-State Architecture Concept (Whitepaper)
-> **Version:** 2.0-BASELINE-CLEAN
-> **Date:** 2026-03-21
-> **Document Type:** TARGET-STATE ARCHITECTURE CONCEPT — Not current-state truth
-> **Authorization Status:** Pending GC-018 Continuation Wave approval. Not implementation-authorized.
+# 🏛️ CVF Master Architecture Whitepaper
+Memory class: POINTER_RECORD
+
+> **Version:** 2.1-RECONCILED
+> **Date:** 2026-03-23
+> **Document Type:** PARTIALLY DELIVERED ARCHITECTURE WHITEPAPER — evidence-backed truth reconciliation complete as of 2026-03-22
+> **Authorization Status:** First whitepaper-completion cycle through `W5-T1` is canonically closed. Any further continuation requires a new `GC-018` wave decision.
 > **Clean Baseline References:**
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts` (phases, risk model)
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts` (shared default guard stack)
 > - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts` (full runtime preset)
-> - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_N1_2026-03-20.md` (authorization posture)
+> - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md` (current evidence-backed status)
+> - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (canonical delivered wave line)
+
+> **Status Note:** this document now contains a reconciled mix of:
+> - delivered current truth already evidenced in code and tranche packets
+> - partially delivered target-state areas
+> - future-facing design principles that still require later governed waves
 
 > **Core Principle:** *"Agents may execute tasks, but they cannot control the system that governs them."*
 
@@ -85,10 +93,10 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ---
 
-## 4. Sơ đồ Kiến trúc Đề xuất (TARGET-STATE — Chưa phê duyệt)
+## 4. Sơ đồ Kiến trúc Đề xuất (TARGET-STATE / PARTIALLY DELIVERED)
 
 > [!WARNING]
-> Sơ đồ bên dưới là **kiến trúc mục tiêu đề xuất**, không phải trạng thái hiện tại. Cần GC-018 Continuation Wave để triển khai.
+> Sơ đồ bên dưới là kiến trúc mục tiêu đã được hiện thực hóa một phần. Không phải mọi khối trong sơ đồ đều đã fully delivered ở runtime hiện tại; continuation lớn hơn vẫn cần GC-018.
 
 ```
                          USER / External Signal
@@ -216,9 +224,11 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ---
 
-## 5. Bảng Hợp nhất Module (Merge Map — Target-State)
+## 5. Bảng Hợp nhất Module (Merge Map — Target-State / Delivered Anchors)
 
-> ⚠️ Đây là bảng **đề xuất** hợp nhất. Thực hiện chỉ sau khi GC-018 Wave được phê duyệt.
+> ⚠️ Bảng này hiện chứa cả:
+> - các anchor đã được delivered trong current-cycle và whitepaper-completion cycle
+> - các merge/upgrade target vẫn future-facing và chỉ được mở lại qua GC-018
 
 | Module CVF hiện có | Đề xuất mới | Hành động | Vị trí đề xuất |
 |---|---|---|---|

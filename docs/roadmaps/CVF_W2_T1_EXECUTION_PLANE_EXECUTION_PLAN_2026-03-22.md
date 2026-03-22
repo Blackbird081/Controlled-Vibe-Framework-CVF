@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`  
 > Tranche packet: `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 IMPLEMENTED`
+> Status: `AUTHORIZED TRANCHE — CP1 IMPLEMENTED / CP2 PACKET OPENED`
 
 ---
 
@@ -80,9 +80,14 @@ Scope:
 - make MCP bridge and gateway entrypoints explicit and consistent with the execution-shell contract
 - keep runtime compatibility with current active-path usage
 
+Notes:
+
+- preserve `CVF_MODEL_GATEWAY` as the canonical gateway-facing wrapper anchor
+- do not absorb `CVF_ECO_v2.5_MCP_SERVER` guard-runtime or CLI internals into the shell package body
+
 Status:
 
-- `PLANNED`
+- `PACKET OPENED / REVIEWABLE / NOT EXECUTED`
 
 ### CP3 — Adapter Evidence And Explainability Integration
 
@@ -171,7 +176,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W2-T1` is authorized, and `CP1` is now implemented as the first tranche-local execution-plane shell.
+> `W2-T1` is authorized, `CP1` is implemented as the first tranche-local execution-plane shell, and the `CP2` wrapper-alignment packet chain is now open and reviewable.
 
 ## 8. Implementation Receipt
 

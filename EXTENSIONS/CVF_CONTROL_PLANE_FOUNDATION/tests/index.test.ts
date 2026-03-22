@@ -69,6 +69,11 @@ import {
   createGatewayPIIDetectionContract,
   GatewayPIIDetectionLogContract,
   createGatewayPIIDetectionLogContract,
+  // W1-T10
+  KnowledgeQueryContract,
+  createKnowledgeQueryContract,
+  KnowledgeQueryBatchContract,
+  createKnowledgeQueryBatchContract,
 } from "../src/index";
 import type {
   GatewayProcessedRequest,
@@ -76,6 +81,8 @@ import type {
   RouteMatchResult,
   GatewayAuthResult,
   GatewayPIIDetectionResult,
+  KnowledgeItem,
+  KnowledgeResult,
 } from "../src/index";
 
 describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
@@ -2842,6 +2849,251 @@ describe("W1-T4 CP2 — GatewayConsumerContract", () => {
     it("creates GatewayPIIDetectionLogContract via class constructor", () => {
       const contract = new GatewayPIIDetectionLogContract();
       expect(contract).toBeInstanceOf(GatewayPIIDetectionLogContract);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W1-T10 — Knowledge Layer Foundation Slice
+  // ---------------------------------------------------------------------------
+
+  function makeKnowledgeItem(
+    id: string,
+    relevanceScore: number,
+  ): KnowledgeItem {
+    return {
+      itemId: `item-${id}`,
+      title: `Title ${id}`,
+      content: `Content for item ${id}`,
+      relevanceScore,
+      source: `source-${id}`,
+    };
+  }
+
+  function makeKnowledgeResult(
+    totalFound: number,
+    id = "r1",
+  ): KnowledgeResult {
+    return {
+      resultId: `result-${id}`,
+      queriedAt: "2026-03-22T10:00:00.000Z",
+      contextId: "ctx-1",
+      query: "test query",
+      items: Array.from({ length: totalFound }, (_, i) =>
+        makeKnowledgeItem(`${id}-${i}`, 0.8),
+      ),
+      totalFound,
+      relevanceThreshold: 0.0,
+      queryHash: `hash-${id}`,
+    };
+  }
+
+  describe("W1-T10 CP1 — KnowledgeQueryContract", () => {
+    it("returns all candidate items when no threshold set", () => {
+      const contract = createKnowledgeQueryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.query({
+        query: "find features",
+        contextId: "ctx-1",
+        candidateItems: [
+          makeKnowledgeItem("a", 0.9),
+          makeKnowledgeItem("b", 0.3),
+        ],
+      });
+
+      expect(result.totalFound).toBe(2);
+      expect(result.items).toHaveLength(2);
+    });
+
+    it("filters items below relevance threshold", () => {
+      const contract = createKnowledgeQueryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.query({
+        query: "find features",
+        contextId: "ctx-1",
+        relevanceThreshold: 0.7,
+        candidateItems: [
+          makeKnowledgeItem("a", 0.9),
+          makeKnowledgeItem("b", 0.5),
+          makeKnowledgeItem("c", 0.8),
+        ],
+      });
+
+      expect(result.totalFound).toBe(2);
+      expect(result.items.every((i) => i.relevanceScore >= 0.7)).toBe(true);
+    });
+
+    it("returns items sorted by relevance descending", () => {
+      const contract = createKnowledgeQueryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.query({
+        query: "find features",
+        contextId: "ctx-1",
+        candidateItems: [
+          makeKnowledgeItem("a", 0.5),
+          makeKnowledgeItem("b", 0.9),
+          makeKnowledgeItem("c", 0.7),
+        ],
+      });
+
+      expect(result.items[0].relevanceScore).toBe(0.9);
+      expect(result.items[1].relevanceScore).toBe(0.7);
+      expect(result.items[2].relevanceScore).toBe(0.5);
+    });
+
+    it("respects maxItems cap", () => {
+      const contract = createKnowledgeQueryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.query({
+        query: "find features",
+        contextId: "ctx-1",
+        maxItems: 2,
+        candidateItems: [
+          makeKnowledgeItem("a", 0.9),
+          makeKnowledgeItem("b", 0.8),
+          makeKnowledgeItem("c", 0.7),
+        ],
+      });
+
+      expect(result.items).toHaveLength(2);
+      expect(result.totalFound).toBe(2);
+    });
+
+    it("returns empty items for empty candidateItems", () => {
+      const contract = createKnowledgeQueryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.query({
+        query: "find features",
+        contextId: "ctx-1",
+        candidateItems: [],
+      });
+
+      expect(result.totalFound).toBe(0);
+      expect(result.items).toHaveLength(0);
+    });
+
+    it("contextId is preserved in result", () => {
+      const contract = createKnowledgeQueryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.query({
+        query: "q",
+        contextId: "my-context",
+        candidateItems: [],
+      });
+
+      expect(result.contextId).toBe("my-context");
+    });
+
+    it("resultId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const req = {
+        query: "find features",
+        contextId: "ctx-1",
+        candidateItems: [makeKnowledgeItem("a", 0.9)],
+      };
+      const c1 = createKnowledgeQueryContract({ now: () => fixedTime });
+      const c2 = createKnowledgeQueryContract({ now: () => fixedTime });
+
+      expect(c1.query(req).resultId).toBe(c2.query(req).resultId);
+    });
+
+    it("creates KnowledgeQueryContract via class constructor", () => {
+      const contract = new KnowledgeQueryContract();
+      expect(contract).toBeInstanceOf(KnowledgeQueryContract);
+    });
+  });
+
+  describe("W1-T10 CP2 — KnowledgeQueryBatchContract", () => {
+    it("batch totals totalItemsFound across all results", () => {
+      const contract = createKnowledgeQueryBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([
+        makeKnowledgeResult(3, "1"),
+        makeKnowledgeResult(2, "2"),
+      ]);
+
+      expect(result.totalItemsFound).toBe(5);
+      expect(result.totalQueries).toBe(2);
+    });
+
+    it("batch computes queriesWithResults and emptyQueryCount correctly", () => {
+      const contract = createKnowledgeQueryBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([
+        makeKnowledgeResult(3, "1"),
+        makeKnowledgeResult(0, "2"),
+        makeKnowledgeResult(0, "3"),
+      ]);
+
+      expect(result.queriesWithResults).toBe(1);
+      expect(result.emptyQueryCount).toBe(2);
+    });
+
+    it("batch with all empty queries returns totalItemsFound 0", () => {
+      const contract = createKnowledgeQueryBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([
+        makeKnowledgeResult(0, "1"),
+        makeKnowledgeResult(0, "2"),
+      ]);
+
+      expect(result.totalItemsFound).toBe(0);
+      expect(result.emptyQueryCount).toBe(2);
+    });
+
+    it("batch computes avgItemsPerQuery correctly", () => {
+      const contract = createKnowledgeQueryBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([
+        makeKnowledgeResult(4, "1"),
+        makeKnowledgeResult(2, "2"),
+      ]);
+
+      expect(result.avgItemsPerQuery).toBe(3);
+    });
+
+    it("batchId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createKnowledgeQueryBatchContract({ now: () => fixedTime });
+      const c2 = createKnowledgeQueryBatchContract({ now: () => fixedTime });
+      const results = [makeKnowledgeResult(3, "1"), makeKnowledgeResult(1, "2")];
+
+      expect(c1.batch(results).batchId).toBe(c2.batch(results).batchId);
+    });
+
+    it("batch with single result returns correct totals", () => {
+      const contract = createKnowledgeQueryBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([makeKnowledgeResult(5, "1")]);
+
+      expect(result.totalQueries).toBe(1);
+      expect(result.totalItemsFound).toBe(5);
+      expect(result.queriesWithResults).toBe(1);
+    });
+
+    it("empty batch returns avgItemsPerQuery 0", () => {
+      const contract = createKnowledgeQueryBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([]);
+
+      expect(result.avgItemsPerQuery).toBe(0);
+      expect(result.totalQueries).toBe(0);
+    });
+
+    it("creates KnowledgeQueryBatchContract via class constructor", () => {
+      const contract = new KnowledgeQueryBatchContract();
+      expect(contract).toBeInstanceOf(KnowledgeQueryBatchContract);
     });
   });
 });

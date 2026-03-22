@@ -1,3 +1,23 @@
+// W1-T10 — Knowledge Layer Foundation Slice (CP1–CP2)
+export {
+  KnowledgeQueryContract,
+  createKnowledgeQueryContract,
+} from "./knowledge.query.contract";
+export type {
+  KnowledgeItem,
+  KnowledgeQueryRequest,
+  KnowledgeResult,
+  KnowledgeQueryContractDependencies,
+} from "./knowledge.query.contract";
+export {
+  KnowledgeQueryBatchContract,
+  createKnowledgeQueryBatchContract,
+} from "./knowledge.query.batch.contract";
+export type {
+  KnowledgeQueryBatch,
+  KnowledgeQueryBatchContractDependencies,
+} from "./knowledge.query.batch.contract";
+
 // W1-T9 — AI Gateway NLP-PII Detection Slice (CP1–CP2)
 export {
   GatewayPIIDetectionContract,

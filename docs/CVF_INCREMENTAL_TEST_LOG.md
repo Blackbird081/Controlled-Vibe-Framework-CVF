@@ -2108,3 +2108,33 @@ Utility and guard:
   - this batch authorizes `W1-T2` only; it does not open the tranche-local execution plan or any `GC-019` packet yet.
   - `W4` remains gated as `Learning Plane`; `W1-T2` is a control-plane continuation tranche, not a phase renumbering trick.
   - the authorization is intentionally strict that a successful `W1-T2` tranche must produce usable behavior, not only another package shell.
+## [2026-03-22] Batch: W1-T2 usable intake slice planning + CP1 packet opening
+- Scope:
+  - open the tranche-local execution plan for `W1-T2`
+  - issue the first `GC-019` packet chain for `CP1`
+  - keep `CP1` explicitly centered on one usable intake contract baseline rather than another shell package
+- Policy / roadmap references:
+  - `docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_PACKET_2026-03-22.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T2_2026-03-22.md`
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/audits/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T2_USABLE_INTAKE_SLICE_PLANNING_DELTA_2026-03-22.md`
+- Files updated:
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/audits/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T2_USABLE_INTAKE_SLICE_PLANNING_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch is planning/review only; it does not execute `CP1`.
+  - `CP1` is intentionally bounded as a usable contract baseline and must not be relabeled as full `AI Gateway` realization.
+  - later `W1-T2` packets still need to prove deterministic packaged output and one real consumer path before the tranche can close.

@@ -1,3 +1,20 @@
+// W4-T2 — Learning Plane Truth Model Slice (CP1–CP2)
+export {
+  TruthModelContract,
+  createTruthModelContract,
+} from "./truth.model.contract";
+export type {
+  HealthTrajectory,
+  PatternHistoryEntry,
+  TruthModel,
+  TruthModelContractDependencies,
+} from "./truth.model.contract";
+export {
+  TruthModelUpdateContract,
+  createTruthModelUpdateContract,
+} from "./truth.model.update.contract";
+export type { TruthModelUpdateContractDependencies } from "./truth.model.update.contract";
+
 // W4-T1 — Learning Plane Foundation Slice (CP1–CP2)
 export {
   FeedbackLedgerContract,

@@ -5,8 +5,12 @@ import {
   createFeedbackLedgerContract,
   PatternDetectionContract,
   createPatternDetectionContract,
+  TruthModelContract,
+  createTruthModelContract,
+  TruthModelUpdateContract,
+  createTruthModelUpdateContract,
 } from "../src/index";
-import type { LearningFeedbackInput } from "../src/index";
+import type { LearningFeedbackInput, PatternInsight } from "../src/index";
 
 function makeSignal(
   feedbackClass: "ACCEPT" | "RETRY" | "ESCALATE" | "REJECT",
@@ -26,6 +30,232 @@ describe("CVF_LEARNING_PLANE_FOUNDATION", () => {
     expect(LEARNING_PLANE_FOUNDATION_COORDINATION.tranche).toBe("W4-T1");
     expect(LEARNING_PLANE_FOUNDATION_COORDINATION.crossPlaneIndependence).toBe(true);
     expect(LEARNING_PLANE_FOUNDATION_COORDINATION.prerequisite).toContain("W2-T4");
+  });
+
+  // ─── W4-T2 CP1 — TruthModelContract ─────────────────────────────────────
+
+  describe("W4-T2 CP1 — TruthModelContract", () => {
+    function makeInsight(
+      dominantPattern: "ACCEPT" | "RETRY" | "ESCALATE" | "REJECT" | "MIXED" | "EMPTY",
+      healthSignal: "HEALTHY" | "DEGRADED" | "CRITICAL",
+      id = "insight-001",
+    ): PatternInsight {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      return {
+        insightId: id,
+        analyzedAt: fixedTime,
+        sourceLedgerId: `ledger-${id}`,
+        dominantPattern,
+        acceptRate: dominantPattern === "ACCEPT" ? 1 : 0,
+        retryRate: dominantPattern === "RETRY" ? 1 : 0,
+        escalateRate: dominantPattern === "ESCALATE" ? 1 : 0,
+        rejectRate: dominantPattern === "REJECT" ? 1 : 0,
+        healthSignal,
+        summary: `Test insight ${id}`,
+        insightHash: `hash-${id}`,
+      };
+    }
+
+    it("builds model from empty insights with EMPTY pattern and UNKNOWN trajectory", () => {
+      const contract = createTruthModelContract();
+      const model = contract.build([]);
+
+      expect(model.dominantPattern).toBe("EMPTY");
+      expect(model.currentHealthSignal).toBe("HEALTHY");
+      expect(model.healthTrajectory).toBe("UNKNOWN");
+      expect(model.totalInsightsProcessed).toBe(0);
+      expect(model.version).toBe(1);
+      expect(model.confidenceLevel).toBe(0);
+      expect(model.patternHistory).toHaveLength(0);
+    });
+
+    it("builds model from single ACCEPT/HEALTHY insight with UNKNOWN trajectory", () => {
+      const contract = createTruthModelContract();
+      const model = contract.build([makeInsight("ACCEPT", "HEALTHY", "i1")]);
+
+      expect(model.dominantPattern).toBe("ACCEPT");
+      expect(model.currentHealthSignal).toBe("HEALTHY");
+      expect(model.healthTrajectory).toBe("UNKNOWN");
+      expect(model.totalInsightsProcessed).toBe(1);
+      expect(model.patternHistory).toHaveLength(1);
+    });
+
+    it("derives STABLE trajectory when first and last health are identical", () => {
+      const contract = createTruthModelContract();
+      const model = contract.build([
+        makeInsight("ACCEPT", "HEALTHY", "i1"),
+        makeInsight("ACCEPT", "HEALTHY", "i2"),
+      ]);
+
+      expect(model.healthTrajectory).toBe("STABLE");
+    });
+
+    it("derives IMPROVING trajectory from CRITICAL to HEALTHY", () => {
+      const contract = createTruthModelContract();
+      const model = contract.build([
+        makeInsight("ESCALATE", "CRITICAL", "i1"),
+        makeInsight("ACCEPT", "HEALTHY", "i2"),
+      ]);
+
+      expect(model.healthTrajectory).toBe("IMPROVING");
+    });
+
+    it("derives DEGRADING trajectory from HEALTHY to CRITICAL", () => {
+      const contract = createTruthModelContract();
+      const model = contract.build([
+        makeInsight("ACCEPT", "HEALTHY", "i1"),
+        makeInsight("ESCALATE", "CRITICAL", "i2"),
+      ]);
+
+      expect(model.healthTrajectory).toBe("DEGRADING");
+    });
+
+    it("returns MIXED dominantPattern when two classes are equally frequent", () => {
+      const contract = createTruthModelContract();
+      const model = contract.build([
+        makeInsight("ACCEPT", "HEALTHY", "i1"),
+        makeInsight("ACCEPT", "HEALTHY", "i2"),
+        makeInsight("RETRY", "DEGRADED", "i3"),
+        makeInsight("RETRY", "DEGRADED", "i4"),
+      ]);
+
+      expect(model.dominantPattern).toBe("MIXED");
+    });
+
+    it("confidence level grows with insights and caps at 1.0", () => {
+      const contract = createTruthModelContract();
+      const m1 = contract.build([makeInsight("ACCEPT", "HEALTHY", "i1")]);
+      const m10 = contract.build(
+        Array.from({ length: 10 }, (_, i) => makeInsight("ACCEPT", "HEALTHY", `i${i}`)),
+      );
+      const m20 = contract.build(
+        Array.from({ length: 20 }, (_, i) => makeInsight("ACCEPT", "HEALTHY", `i${i}`)),
+      );
+
+      expect(m1.confidenceLevel).toBeCloseTo(0.1);
+      expect(m10.confidenceLevel).toBe(1.0);
+      expect(m20.confidenceLevel).toBe(1.0);
+    });
+
+    it("produces stable modelHash for identical inputs with fixed time", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createTruthModelContract({ now: () => fixedTime });
+      const c2 = createTruthModelContract({ now: () => fixedTime });
+      const insights = [makeInsight("ACCEPT", "HEALTHY", "i1")];
+
+      expect(c1.build(insights).modelHash).toBe(c2.build(insights).modelHash);
+    });
+
+    it("accepts injectable computeConfidence override", () => {
+      const contract = createTruthModelContract({
+        computeConfidence: () => 0.5,
+      });
+      const model = contract.build([makeInsight("ACCEPT", "HEALTHY", "i1")]);
+
+      expect(model.confidenceLevel).toBe(0.5);
+    });
+
+    it("creates TruthModelContract via class constructor", () => {
+      const contract = new TruthModelContract();
+      expect(contract).toBeInstanceOf(TruthModelContract);
+    });
+  });
+
+  // ─── W4-T2 CP2 — TruthModelUpdateContract ────────────────────────────────
+
+  describe("W4-T2 CP2 — TruthModelUpdateContract", () => {
+    function makeInsight(
+      dominantPattern: "ACCEPT" | "RETRY" | "ESCALATE" | "REJECT" | "MIXED" | "EMPTY",
+      healthSignal: "HEALTHY" | "DEGRADED" | "CRITICAL",
+      id = "insight-001",
+    ): PatternInsight {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      return {
+        insightId: id,
+        analyzedAt: fixedTime,
+        sourceLedgerId: `ledger-${id}`,
+        dominantPattern,
+        acceptRate: dominantPattern === "ACCEPT" ? 1 : 0,
+        retryRate: dominantPattern === "RETRY" ? 1 : 0,
+        escalateRate: dominantPattern === "ESCALATE" ? 1 : 0,
+        rejectRate: dominantPattern === "REJECT" ? 1 : 0,
+        healthSignal,
+        summary: `Test insight ${id}`,
+        insightHash: `hash-${id}`,
+      };
+    }
+
+    function makeBaseModel() {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      return createTruthModelContract({ now: () => fixedTime }).build([
+        makeInsight("ACCEPT", "HEALTHY", "base-1"),
+      ]);
+    }
+
+    it("update increments version by 1", () => {
+      const model = makeBaseModel();
+      const updated = createTruthModelUpdateContract().update(
+        model,
+        makeInsight("RETRY", "DEGRADED", "new-1"),
+      );
+
+      expect(updated.version).toBe(model.version + 1);
+    });
+
+    it("update appends exactly one entry to patternHistory", () => {
+      const model = makeBaseModel();
+      const updated = createTruthModelUpdateContract().update(
+        model,
+        makeInsight("RETRY", "DEGRADED", "new-1"),
+      );
+
+      expect(updated.patternHistory).toHaveLength(model.patternHistory.length + 1);
+    });
+
+    it("update increments totalInsightsProcessed by 1", () => {
+      const model = makeBaseModel();
+      const updated = createTruthModelUpdateContract().update(
+        model,
+        makeInsight("RETRY", "DEGRADED", "new-1"),
+      );
+
+      expect(updated.totalInsightsProcessed).toBe(model.totalInsightsProcessed + 1);
+    });
+
+    it("currentHealthSignal reflects the new insight after update", () => {
+      const model = makeBaseModel();
+      const updated = createTruthModelUpdateContract().update(
+        model,
+        makeInsight("ESCALATE", "CRITICAL", "new-1"),
+      );
+
+      expect(updated.currentHealthSignal).toBe("CRITICAL");
+    });
+
+    it("healthTrajectory updates correctly — HEALTHY then CRITICAL becomes DEGRADING", () => {
+      const model = makeBaseModel(); // base = HEALTHY
+      const updated = createTruthModelUpdateContract().update(
+        model,
+        makeInsight("ESCALATE", "CRITICAL", "new-1"),
+      );
+
+      expect(updated.healthTrajectory).toBe("DEGRADING");
+    });
+
+    it("modelHash changes after update (different input produces different hash)", () => {
+      const model = makeBaseModel();
+      const updated = createTruthModelUpdateContract().update(
+        model,
+        makeInsight("RETRY", "DEGRADED", "new-1"),
+      );
+
+      expect(updated.modelHash).not.toBe(model.modelHash);
+    });
+
+    it("creates TruthModelUpdateContract via class constructor", () => {
+      const contract = new TruthModelUpdateContract();
+      expect(contract).toBeInstanceOf(TruthModelUpdateContract);
+    });
   });
 
   // ─── W4-T1 CP1 — FeedbackLedgerContract ─────────────────────────────────

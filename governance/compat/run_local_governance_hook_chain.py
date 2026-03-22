@@ -21,6 +21,10 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
     "pre-commit": [
         (
+            "governed file size compatibility",
+            ["python", "governance/compat/check_governed_file_size.py", "--enforce"],
+        ),
+        (
             "docs governance compatibility",
             ["python", "governance/compat/check_docs_governance_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),

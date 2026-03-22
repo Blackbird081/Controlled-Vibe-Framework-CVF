@@ -1765,6 +1765,29 @@ Utility and guard:
 - Notes/Risks:
   - this batch authorizes `W4-T4` only; no implementation starts in this step
   - `.claude/` is now treated as local-only workspace metadata
+## [2026-03-22] Batch: whitepaper progress tracker
+- Scope:
+  - add a simple visual tracker for whitepaper progress
+  - keep detailed governance truth in the longer status review
+- Policy / roadmap references:
+  - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/baselines/CVF_WHITEPAPER_PROGRESS_TRACKER_DELTA_2026-03-22.md`
+- Files updated:
+  - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
+  - `docs/baselines/CVF_WHITEPAPER_PROGRESS_TRACKER_DELTA_2026-03-22.md`
+  - `docs/INDEX.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - tracker is intentionally short and should be treated as a pointer surface
+  - detailed tranche evidence remains in the dated status review and tranche packets
 ## [2026-03-21] Batch: W1-T1 CP1 control-plane foundation implementation
 - Scope:
   - implement `CP1` inside `W1-T1` as an approved `coordination package` shell

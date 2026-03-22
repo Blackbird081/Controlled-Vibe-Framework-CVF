@@ -4,6 +4,7 @@ Memory class: SUMMARY_RECORD
 
 > Date: 2026-03-21  
 > Parent concept: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`  
+> Quick tracker: `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`  
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  

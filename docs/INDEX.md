@@ -122,6 +122,7 @@ Nếu cần đọc bộ tài liệu chốt cuối cho restructuring thay vì đ�
 
 - `architecture/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 - `reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
+- `reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
 - `roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
 - `reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`
 - `reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`

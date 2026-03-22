@@ -3,6 +3,7 @@ import {
   type CVFSkillDraft,
   DEFAULT_GUARD_RUNTIME_CONFIG,
   EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT,
+  EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT,
   EXECUTION_GATEWAY_WRAPPER_ALIGNMENT,
   EXECUTION_MCP_BRIDGE_ALIGNMENT,
   EXECUTION_PLANE_FOUNDATION_COORDINATION,
@@ -13,11 +14,13 @@ import {
   SessionMemory,
   SkillValidator,
   createExecutionAdapterEvidenceSurface,
+  createExecutionAuthorizationBoundarySurface,
   createExecutionGatewaySurface,
   createExecutionMcpBridgeSurface,
   createExecutionPlaneFoundationShell,
   createExecutionPlanePromptPreview,
   describeExecutionAdapterEvidence,
+  describeExecutionAuthorizationBoundary,
   describeExecutionPlaneFoundationShell,
   describeExecutionPlaneWrapperAlignment,
   parseVibe,
@@ -165,5 +168,47 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
     expect(EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.evidenceEntrypoints).toContain("ExplainabilityLayer");
     expect(EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.evidenceEntrypoints).toContain("ReleaseEvidenceAdapter");
     expect(EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.adapterInventory).toHaveLength(4);
+  });
+
+  // CP4 — Selected Execution Authorization Boundary Alignment
+  it("creates an authorization boundary surface with policy, edge security, and guard boundary", () => {
+    const surface = createExecutionAuthorizationBoundarySurface();
+
+    expect(surface.alignment.controlPoint).toBe("CP4");
+    expect(surface.alignment.executionClass).toBe("wrapper/re-export");
+    expect(surface.alignment.preservesLineage).toBe(true);
+    expect(surface.policy.decisionTypes).toContain("allow");
+    expect(surface.policy.decisionTypes).toContain("deny");
+    expect(surface.policy.decisionTypes).toContain("pending");
+    expect(surface.policy.contractSurface).toContain("PolicyContract");
+    expect(surface.edgeSecurity.config.enablePIIMasking).toBe(true);
+    expect(surface.edgeSecurity.config.enableAuditLog).toBe(true);
+    expect(surface.edgeSecurity.enabledCapabilities).toContain("PII Masking");
+    expect(surface.edgeSecurity.enabledCapabilities).toContain("Audit Log");
+    expect(surface.guardBoundary.registeredGuardCount).toBeGreaterThan(0);
+  });
+
+  it("describes authorization boundary as a CP4 review surface with text and markdown", () => {
+    const summary = describeExecutionAuthorizationBoundary();
+
+    expect(summary.trancheId).toBe("W2-T1");
+    expect(summary.controlPointId).toBe("CP4");
+    expect(summary.policyDecisionTypes).toHaveLength(5);
+    expect(summary.edgeSecurityCapabilities.length).toBeGreaterThan(0);
+    expect(summary.registeredGuardCount).toBeGreaterThan(0);
+    expect(summary.textSurface).toContain("CVF W2-T1 CP4 Selected Execution Authorization Boundary Alignment");
+    expect(summary.markdownSurface).toContain("## Policy Authorization Boundary");
+    expect(summary.markdownSurface).toContain("## Edge Security Boundary");
+    expect(summary.markdownSurface).toContain("## Guard Boundary");
+    expect(summary.markdownSurface).toContain("## Deferred Internals");
+  });
+
+  it("records CP4 alignment metadata with deferred internals", () => {
+    expect(EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT.preservesLineage).toBe(true);
+    expect(EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT.authorizationTypes).toContain("PolicyContract");
+    expect(EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT.authorizationTypes).toContain("EdgeSecurityConfig");
+    expect(EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT.deferredInternals).toContain(
+      "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/guards",
+    );
   });
 });

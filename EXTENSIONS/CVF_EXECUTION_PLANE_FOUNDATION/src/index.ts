@@ -103,6 +103,13 @@ export type {
   HumanReadableExplanation,
 } from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/explainability/explainability.layer";
 
+export {
+  defaultEdgeSecurityConfig,
+} from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security/edge.config";
+export type {
+  EdgeSecurityConfig,
+} from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security/edge.config";
+
 import {
   GuardRuntimeEngine,
   createGuardEngine,
@@ -112,7 +119,8 @@ import {
   generateSystemPrompt,
   type GeneratedPrompt,
 } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
-import { ExplainabilityLayer } from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/explainability/explainability.layer";
+import { ExplainabilityLayer, type HumanReadableExplanation } from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/explainability/explainability.layer";
+import { defaultEdgeSecurityConfig, type EdgeSecurityConfig } from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security/edge.config";
 import {
   OpenClawAdapter,
   PicoClawAdapter,
@@ -496,6 +504,106 @@ export function describeExecutionAdapterEvidence(): ExecutionAdapterEvidenceSumm
   };
 }
 
+// =============================================
+// CP4 — Selected Execution Authorization Boundary Alignment
+// =============================================
+
+
+export const EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT = {
+  executionClass: "wrapper/re-export" as const,
+  controlPoint: "CP4" as const,
+  shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION" as const,
+  policyContractSource: "EXTENSIONS/CVF_MODEL_GATEWAY (via CVF_v1.7.3_RUNTIME_ADAPTER_HUB/contracts)" as const,
+  edgeSecuritySource: "EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security" as const,
+  authorizationTypes: [
+    "PolicyDecision",
+    "PolicyContract",
+    "PolicyEvaluationRequest",
+    "PolicyEvaluationResult",
+    "EdgeSecurityConfig",
+  ] as const,
+  deferredInternals: [
+    "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/guards",
+    "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli",
+  ] as const,
+  preservesLineage: true as const,
+} as const;
+
+export interface ExecutionAuthorizationBoundarySurface {
+  alignment: typeof EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT;
+  policy: {
+    decisionTypes: readonly string[];
+    contractSurface: string;
+  };
+  edgeSecurity: {
+    config: EdgeSecurityConfig;
+    enabledCapabilities: readonly string[];
+  };
+  guardBoundary: {
+    registeredGuardCount: number;
+    enabledGuardCount: number;
+  };
+}
+
+export interface ExecutionAuthorizationBoundarySummary {
+  trancheId: "W2-T1";
+  controlPointId: "CP4";
+  generatedAt: string;
+  alignment: typeof EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT;
+  policyDecisionTypes: readonly string[];
+  edgeSecurityCapabilities: readonly string[];
+  registeredGuardCount: number;
+  enabledGuardCount: number;
+  textSurface: string;
+  markdownSurface: string;
+}
+
+export function createExecutionAuthorizationBoundarySurface(): ExecutionAuthorizationBoundarySurface {
+  const registry = createUnifiedRegistry();
+  const stats = registry.getStats();
+  const config = defaultEdgeSecurityConfig;
+
+  const enabledCapabilities: string[] = [];
+  if (config.enablePIIMasking) enabledCapabilities.push("PII Masking");
+  if (config.enableSecretMasking) enabledCapabilities.push("Secret Masking");
+  if (config.enableInjectionPrecheck) enabledCapabilities.push("Injection Precheck");
+  if (config.enableAuditLog) enabledCapabilities.push("Audit Log");
+
+  return {
+    alignment: EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT,
+    policy: {
+      decisionTypes: ["allow", "deny", "review", "sandbox", "pending"],
+      contractSurface: "PolicyContract.evaluate(request) → PolicyEvaluationResult",
+    },
+    edgeSecurity: {
+      config,
+      enabledCapabilities,
+    },
+    guardBoundary: {
+      registeredGuardCount: stats.totalGuards,
+      enabledGuardCount: stats.enabledGuards,
+    },
+  };
+}
+
+export function describeExecutionAuthorizationBoundary(): ExecutionAuthorizationBoundarySummary {
+  const surface = createExecutionAuthorizationBoundarySurface();
+  const generatedAt = new Date().toISOString();
+
+  return {
+    trancheId: "W2-T1",
+    controlPointId: "CP4",
+    generatedAt,
+    alignment: EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT,
+    policyDecisionTypes: surface.policy.decisionTypes,
+    edgeSecurityCapabilities: surface.edgeSecurity.enabledCapabilities,
+    registeredGuardCount: surface.guardBoundary.registeredGuardCount,
+    enabledGuardCount: surface.guardBoundary.enabledGuardCount,
+    textSurface: buildAuthorizationBoundaryTextSurface(generatedAt, surface),
+    markdownSurface: buildAuthorizationBoundaryMarkdownSurface(generatedAt, surface),
+  };
+}
+
 function buildExecutionPlaneTextSurface(
   generatedAt: string,
   stats: { totalGuards: number; enabledGuards: number },
@@ -681,3 +789,61 @@ function buildAdapterEvidenceMarkdownSurface(
   ].join("\n");
 }
 
+function buildAuthorizationBoundaryTextSurface(
+  generatedAt: string,
+  surface: ExecutionAuthorizationBoundarySurface,
+): string {
+  return [
+    "=".repeat(72),
+    "  CVF W2-T1 CP4 Selected Execution Authorization Boundary Alignment",
+    "=".repeat(72),
+    "Tranche: W2-T1",
+    "Control Point: CP4",
+    `Execution Class: ${EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT.executionClass}`,
+    `Generated At: ${generatedAt}`,
+    `Policy Decision Types: ${surface.policy.decisionTypes.join(", ")}`,
+    `Policy Contract Surface: ${surface.policy.contractSurface}`,
+    `Edge Security Config: PII=${surface.edgeSecurity.config.enablePIIMasking}, Secret=${surface.edgeSecurity.config.enableSecretMasking}, Injection=${surface.edgeSecurity.config.enableInjectionPrecheck}, Audit=${surface.edgeSecurity.config.enableAuditLog}`,
+    `Edge Security Capabilities: ${surface.edgeSecurity.enabledCapabilities.join(", ")}`,
+    `Guard Boundary: ${surface.guardBoundary.registeredGuardCount} registered, ${surface.guardBoundary.enabledGuardCount} enabled`,
+  ].join("\n");
+}
+
+function buildAuthorizationBoundaryMarkdownSurface(
+  generatedAt: string,
+  surface: ExecutionAuthorizationBoundarySurface,
+): string {
+  return [
+    "# CVF W2-T1 CP4 Selected Execution Authorization Boundary Alignment",
+    "",
+    `> Tranche: \`W2-T1\``,
+    `> Control Point: \`CP4\``,
+    `> Execution Class: \`${EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT.executionClass}\``,
+    `> Generated At: \`${generatedAt}\``,
+    "",
+    "## Policy Authorization Boundary",
+    "",
+    `- contract surface: \`${surface.policy.contractSurface}\``,
+    ...surface.policy.decisionTypes.map(
+      (dt) => `- decision type: \`${dt}\``,
+    ),
+    "",
+    "## Edge Security Boundary",
+    "",
+    ...surface.edgeSecurity.enabledCapabilities.map(
+      (cap) => `- enabled capability: \`${cap}\``,
+    ),
+    `- masking token prefix: \`${surface.edgeSecurity.config.maskingTokenPrefix}\``,
+    "",
+    "## Guard Boundary",
+    "",
+    `- registered guards: \`${surface.guardBoundary.registeredGuardCount}\``,
+    `- enabled guards: \`${surface.guardBoundary.enabledGuardCount}\``,
+    "",
+    "## Deferred Internals",
+    "",
+    ...EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT.deferredInternals.map(
+      (d) => `- \`${d}\``,
+    ),
+  ].join("\n");
+}

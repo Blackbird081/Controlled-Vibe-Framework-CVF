@@ -36,6 +36,7 @@ This is the correct interpretation because the whitepaper is explicitly marked a
 | `W1-T1 / CP2` knowledge/context wrapper alignment | implemented with facade boundary aligned to the `CP1` shell | `DONE FOR CURRENT TRANCHE` |
 | `W1-T1 / CP3` governance-canvas reporting integration | implemented as a reviewable evidence surface from the control-plane shell | `DONE FOR CURRENT TRANCHE` |
 | `W1-T1 / CP4` selected controlled-intelligence surface alignment | implemented as a narrow wrapper/re-export alignment with runtime-critical reasoning execution still deferred | `DONE FOR CURRENT TRANCHE` |
+| `W1-T1 / CP5` tranche closure review packet chain | audit and independent review issued; closure execution still gated | `REVIEWABLE / NOT EXECUTED` |
 | Control-plane `AI Gateway` target-state | not implemented as whitepaper target-state | `NOT STARTED / NOT AUTHORIZED` |
 | Unified `Knowledge Layer` target-state | partial ecosystem pieces exist, target-state not delivered | `PARTIAL` |
 | `Context Builder & Packager` target-state | partial ingredients exist, target-state not delivered | `PARTIAL` |

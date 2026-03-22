@@ -50,6 +50,7 @@ Current authorization state:
 - `W1-T1 / CP2` is implemented as a bounded wrapper/re-export alignment
 - `W1-T1 / CP3` is implemented as a bounded governance-canvas reporting integration
 - `W1-T1 / CP4` is implemented as a narrow selected controlled-intelligence wrapper/re-export alignment
+- `W1-T1 / CP5` packet chain is open for tranche closure review, but execution remains gated pending explicit decision
 - all other downstream phases and tranches remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -235,6 +236,12 @@ Current authorized scope:
   - `docs/baselines/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_PACKET_DELTA_2026-03-22.md`
 - fourth implementation delta:
   - `docs/baselines/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_IMPLEMENTATION_DELTA_2026-03-22.md`
+- fifth closure packet:
+  - `docs/audits/CVF_W1_T1_CP5_TRANCHE_CLOSURE_REVIEW_AUDIT_2026-03-22.md`
+- fifth independent review:
+  - `docs/reviews/CVF_GC019_W1_T1_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+- fifth packet delta:
+  - `docs/baselines/CVF_W1_T1_CP5_TRANCHE_CLOSURE_PACKET_DELTA_2026-03-22.md`
 - every major structural change inside `W1-T1` still requires `GC-019`
 - everything beyond `W1-T1` remains unopened
 
@@ -293,4 +300,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, `W1-T1` is the only currently authorized implementation tranche, `CP1-CP4` are implemented, and all further scope remains gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is the only currently authorized implementation tranche, `CP1-CP4` are implemented, `CP5` is reviewable, and all further scope remains gated.

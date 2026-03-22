@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`  
 > Tranche packet: `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 / CP2 / CP3 / CP4 IMPLEMENTED`
+> Status: `AUTHORIZED TRANCHE — CP1 / CP2 / CP3 / CP4 IMPLEMENTED / CP5 PACKET OPENED`
 
 ---
 
@@ -132,7 +132,7 @@ Scope:
 
 Status:
 
-- `END-OF-TRANCHE`
+- `PACKET OPENED — AWAITING DECISION`
 
 ---
 
@@ -171,7 +171,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T1` is authorized, and `CP1`, `CP2`, `CP3`, and `CP4` have now been implemented in their approved tranche-local forms.
+> `W1-T1` is authorized, `CP1-CP4` are implemented, and `CP5` is now packeted as the tranche-closure decision step.
 
 ## 8. Implementation Receipt
 

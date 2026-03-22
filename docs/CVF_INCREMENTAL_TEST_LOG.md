@@ -131,6 +131,26 @@ Template:
   - This batch resolves a real ambiguity: `Fast Lane` means lighter process burden, not lighter memory class by default.
   - The updated compat gates now enforce the separation so future edits do not collapse `GC-021` into a simplified version of `GC-022`.
 
+## [2026-03-22] Batch: README governance front-door sync
+- Change reference:
+  - local working tree front-door sync batch for repository `README.md`
+  - baseline receipt: `docs/baselines/CVF_README_GOVERNANCE_FRONTDOOR_SYNC_DELTA_2026-03-22.md`
+- Impacted scope:
+  - `README.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/INDEX.md`
+  - `docs/baselines/CVF_README_GOVERNANCE_FRONTDOOR_SYNC_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce`
+  - `python governance/compat/check_baseline_update_compat.py --enforce`
+  - `python governance/compat/check_release_manifest_consistency.py --enforce`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+- Skip scope:
+  - runtime/package test suites — skipped because this batch updates repository front-door navigation and governance framing only
+- Notes/Risks:
+  - The README remains intentionally shorter than the canonical docs and links outward instead of re-explaining the full control stack.
+  - This batch is documentation synchronization only; no runtime or module truth changed.
+
 ## [2026-03-21] Batch: Federated Plane Convergence Phase 0-2
 - Change reference:
   - commit: feat(restructuring): Phase 0-2 Federated Plane Convergence

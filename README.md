@@ -149,12 +149,16 @@ Primary status anchors:
 - [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md)
 - [Release Readiness](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md)
 - [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
+- [Context Continuity Model](docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md)
+- [Memory Record Classification](docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md)
 - [Independent System Checkpoint](docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md)
 - [Active-Wave Closure Review](docs/reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md)
 
 ### Govern future changes
 
 - [GC-018 Continuation Candidate Template](docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md)
+- [Fast Lane Audit Template](docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md)
+- [Fast Lane Review Template](docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md)
 - [GC-018 Continuation Candidate N1](docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_N1_2026-03-20.md)
 - [Post-Closure Reassessment Trigger Template](docs/reference/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md)
 - [Post-Closure Reassessment Hold](docs/reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md)
@@ -171,11 +175,24 @@ CVF treats governance as an executable system, not just documentation. Critical 
 
 The authoritative mapping lives in [CVF_GOVERNANCE_CONTROL_MATRIX.md](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md).
 
+Important current continuity controls:
+
+- `GC-020` keeps pause/resume and agent transfer truthful through governed handoff and phase-bounded context continuity
+- `GC-021` allows `Fast Lane` for low-risk additive work inside an already-authorized tranche
+- `GC-022` classifies durable memory records as `FULL_RECORD`, `SUMMARY_RECORD`, or `POINTER_RECORD` so future memory stays useful without over-recording
+
 For future roadmap deepening:
 
 - active-wave continuation is gated by `GC-018`
 - continuation is not default-open after closure
 - substantive active-path expansion must carry an explicit scored packet before implementation
+
+For the current canonical chain, start from:
+
+- [Docs Index](docs/INDEX.md)
+- [Reference README](docs/reference/README.md)
+- [Context Continuity Model](docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md)
+- [Memory Record Classification](docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md)
 
 ## Contributing
 

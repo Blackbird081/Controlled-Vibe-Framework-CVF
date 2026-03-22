@@ -13,12 +13,18 @@ import {
   createEvaluationEngineContract,
   EvaluationThresholdContract,
   createEvaluationThresholdContract,
+  GovernanceSignalContract,
+  createGovernanceSignalContract,
+  GovernanceSignalLogContract,
+  createGovernanceSignalLogContract,
 } from "../src/index";
 import type {
   LearningFeedbackInput,
   PatternInsight,
   TruthModel,
   EvaluationResult,
+  GovernanceSignal,
+  ThresholdAssessment,
 } from "../src/index";
 
 function makeSignal(
@@ -264,6 +270,196 @@ describe("CVF_LEARNING_PLANE_FOUNDATION", () => {
     it("creates TruthModelUpdateContract via class constructor", () => {
       const contract = new TruthModelUpdateContract();
       expect(contract).toBeInstanceOf(TruthModelUpdateContract);
+    });
+  });
+
+  // ─── W4-T4 CP1 — GovernanceSignalContract ────────────────────────────────
+
+  describe("W4-T4 CP1 — GovernanceSignalContract", () => {
+    function makeAssessment(
+      overrides: Partial<ThresholdAssessment> = {},
+    ): ThresholdAssessment {
+      return {
+        assessmentId: "assess-001",
+        assessedAt: "2026-03-22T10:00:00.000Z",
+        totalVerdicts: 3,
+        passCount: 3,
+        warnCount: 0,
+        failCount: 0,
+        inconclusiveCount: 0,
+        overallStatus: "PASSING",
+        summary: "All passing",
+        assessmentHash: "hash-assess-001",
+        ...overrides,
+      };
+    }
+
+    it("returns ESCALATE + CRITICAL urgency for FAILING assessment", () => {
+      const contract = createGovernanceSignalContract();
+      const result = contract.signal(
+        makeAssessment({ overallStatus: "FAILING", failCount: 2, passCount: 1 }),
+      );
+
+      expect(result.signalType).toBe("ESCALATE");
+      expect(result.urgency).toBe("CRITICAL");
+    });
+
+    it("returns TRIGGER_REVIEW + HIGH urgency for WARNING assessment", () => {
+      const contract = createGovernanceSignalContract();
+      const result = contract.signal(
+        makeAssessment({ overallStatus: "WARNING", warnCount: 1, passCount: 2 }),
+      );
+
+      expect(result.signalType).toBe("TRIGGER_REVIEW");
+      expect(result.urgency).toBe("HIGH");
+    });
+
+    it("returns MONITOR + LOW urgency for INSUFFICIENT_DATA assessment", () => {
+      const contract = createGovernanceSignalContract();
+      const result = contract.signal(
+        makeAssessment({
+          overallStatus: "INSUFFICIENT_DATA",
+          inconclusiveCount: 2,
+          totalVerdicts: 2,
+          passCount: 0,
+        }),
+      );
+
+      expect(result.signalType).toBe("MONITOR");
+      expect(result.urgency).toBe("LOW");
+    });
+
+    it("returns NO_ACTION + LOW urgency for PASSING assessment", () => {
+      const contract = createGovernanceSignalContract();
+      const result = contract.signal(makeAssessment({ overallStatus: "PASSING" }));
+
+      expect(result.signalType).toBe("NO_ACTION");
+      expect(result.urgency).toBe("LOW");
+    });
+
+    it("sourceAssessmentId traces back to input assessment", () => {
+      const contract = createGovernanceSignalContract();
+      const assessment = makeAssessment({ assessmentId: "my-assess-xyz" });
+      const result = contract.signal(assessment);
+
+      expect(result.sourceAssessmentId).toBe("my-assess-xyz");
+    });
+
+    it("recommendation is non-empty for all signal types", () => {
+      const contract = createGovernanceSignalContract();
+      for (const status of ["FAILING", "WARNING", "INSUFFICIENT_DATA", "PASSING"] as const) {
+        const result = contract.signal(makeAssessment({ overallStatus: status }));
+        expect(result.recommendation.length).toBeGreaterThan(0);
+      }
+    });
+
+    it("produces stable signalHash with fixed time injection", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createGovernanceSignalContract({ now: () => fixedTime });
+      const c2 = createGovernanceSignalContract({ now: () => fixedTime });
+      const assessment = makeAssessment();
+
+      expect(c1.signal(assessment).signalHash).toBe(c2.signal(assessment).signalHash);
+    });
+
+    it("signalId and signalHash are distinct values", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const contract = createGovernanceSignalContract({ now: () => fixedTime });
+      const result = contract.signal(makeAssessment());
+
+      expect(result.signalId).not.toBe(result.signalHash);
+    });
+
+    it("creates GovernanceSignalContract via class constructor", () => {
+      const contract = new GovernanceSignalContract();
+      expect(contract).toBeInstanceOf(GovernanceSignalContract);
+    });
+  });
+
+  // ─── W4-T4 CP2 — GovernanceSignalLogContract ─────────────────────────────
+
+  describe("W4-T4 CP2 — GovernanceSignalLogContract", () => {
+    function makeSignalOfType(
+      signalType: GovernanceSignal["signalType"],
+      id = "s1",
+    ): GovernanceSignal {
+      return {
+        signalId: id,
+        issuedAt: "2026-03-22T10:00:00.000Z",
+        sourceAssessmentId: "assess-001",
+        sourceOverallStatus: "PASSING",
+        signalType,
+        urgency: "LOW",
+        recommendation: `Test signal ${id}`,
+        signalHash: `hash-${id}`,
+      };
+    }
+
+    it("returns NO_ACTION dominant for empty signals", () => {
+      const contract = createGovernanceSignalLogContract();
+      const log = contract.log([]);
+
+      expect(log.dominantSignalType).toBe("NO_ACTION");
+      expect(log.totalSignals).toBe(0);
+    });
+
+    it("returns ESCALATE as dominant when any ESCALATE present", () => {
+      const contract = createGovernanceSignalLogContract();
+      const log = contract.log([
+        makeSignalOfType("NO_ACTION", "s1"),
+        makeSignalOfType("TRIGGER_REVIEW", "s2"),
+        makeSignalOfType("ESCALATE", "s3"),
+      ]);
+
+      expect(log.dominantSignalType).toBe("ESCALATE");
+      expect(log.escalateCount).toBe(1);
+    });
+
+    it("returns TRIGGER_REVIEW as dominant when no ESCALATE present", () => {
+      const contract = createGovernanceSignalLogContract();
+      const log = contract.log([
+        makeSignalOfType("MONITOR", "s1"),
+        makeSignalOfType("TRIGGER_REVIEW", "s2"),
+        makeSignalOfType("NO_ACTION", "s3"),
+      ]);
+
+      expect(log.dominantSignalType).toBe("TRIGGER_REVIEW");
+    });
+
+    it("counts all signal types correctly", () => {
+      const contract = createGovernanceSignalLogContract();
+      const log = contract.log([
+        makeSignalOfType("ESCALATE", "s1"),
+        makeSignalOfType("TRIGGER_REVIEW", "s2"),
+        makeSignalOfType("MONITOR", "s3"),
+        makeSignalOfType("NO_ACTION", "s4"),
+      ]);
+
+      expect(log.escalateCount).toBe(1);
+      expect(log.reviewCount).toBe(1);
+      expect(log.monitorCount).toBe(1);
+      expect(log.noActionCount).toBe(1);
+      expect(log.totalSignals).toBe(4);
+    });
+
+    it("produces stable logHash with fixed time injection", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createGovernanceSignalLogContract({ now: () => fixedTime });
+      const c2 = createGovernanceSignalLogContract({ now: () => fixedTime });
+      const signals = [makeSignalOfType("NO_ACTION", "s1"), makeSignalOfType("MONITOR", "s2")];
+
+      expect(c1.log(signals).logHash).toBe(c2.log(signals).logHash);
+    });
+
+    it("summary is non-empty for any input", () => {
+      const contract = createGovernanceSignalLogContract();
+      expect(contract.log([]).summary.length).toBeGreaterThan(0);
+      expect(contract.log([makeSignalOfType("ESCALATE")]).summary.length).toBeGreaterThan(0);
+    });
+
+    it("creates GovernanceSignalLogContract via class constructor", () => {
+      const contract = new GovernanceSignalLogContract();
+      expect(contract).toBeInstanceOf(GovernanceSignalLogContract);
     });
   });
 

@@ -1,3 +1,23 @@
+// W4-T4 — Learning Plane Governance Signal Bridge (CP1–CP2)
+export {
+  GovernanceSignalContract,
+  createGovernanceSignalContract,
+} from "./governance.signal.contract";
+export type {
+  GovernanceSignalType,
+  GovernanceUrgency,
+  GovernanceSignal,
+  GovernanceSignalContractDependencies,
+} from "./governance.signal.contract";
+export {
+  GovernanceSignalLogContract,
+  createGovernanceSignalLogContract,
+} from "./governance.signal.log.contract";
+export type {
+  GovernanceSignalLog,
+  GovernanceSignalLogContractDependencies,
+} from "./governance.signal.log.contract";
+
 // W4-T3 — Learning Plane Evaluation Engine Slice (CP1–CP2)
 export {
   EvaluationEngineContract,

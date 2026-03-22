@@ -1,4 +1,10 @@
 import { describe, expect, it } from "vitest";
+
+// GC-024 canonical test partition note:
+// Do not add context-builder tests to this file.
+// That surface now lives in `tests/context.builder.test.ts`
+// so CPF index.test.ts can keep shrinking over time.
+
 import {
   CONTROL_PLANE_FOUNDATION_COORDINATION,
   CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT,

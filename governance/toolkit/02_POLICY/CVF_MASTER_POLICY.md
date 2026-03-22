@@ -117,6 +117,11 @@ Personal AI usage unrelated to company work is excluded.
    - Dedicated rotation guards remain authoritative for long-lived logs and traces.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`.
    - Automated enforcement reference: `governance/compat/check_governed_file_size.py`.
+18. Canonical test partition ownership is mandatory once a large governed test surface has been split:
+   - After tranche-local or subsystem-local tests are extracted into a canonical file, the old monolithic file must not re-absorb that surface.
+   - Canonical ownership and forbidden legacy files must be recorded in a machine-readable registry.
+   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`.
+   - Automated enforcement reference: `governance/compat/check_test_partition_ownership.py`.
 
 ---
 

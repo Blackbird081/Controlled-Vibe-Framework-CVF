@@ -2839,3 +2839,31 @@ Utility and guard:
   - `GC-023` complements dedicated rotation guards; it does not replace the specialized guards for `docs/CVF_INCREMENTAL_TEST_LOG.md` or conformance traces
   - current large-file debt is preserved only through explicit exception entries with rationale and required follow-up
   - future growth of oversized governed files now requires either a split or a truthful exception trail
+
+### Batch: GC-024 Test Partition Ownership Guard (2026-03-23)
+
+- Scope:
+  - make the `CPF Context Builder` test split durable after extracting tranche-local tests out of `tests/index.test.ts`
+  - prevent future `ContextBuild*` tests from being re-added into the legacy monolithic file
+- Policy references:
+  - `governance/toolkit/05_OPERATION/CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`
+  - `governance/compat/check_test_partition_ownership.py`
+- Files created:
+  - `governance/toolkit/05_OPERATION/CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`
+  - `governance/compat/check_test_partition_ownership.py`
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.builder.test.ts`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `governance/compat/run_local_governance_hook_chain.py`
+  - `.github/workflows/documentation-testing.yml`
+- Tests executed:
+  - `python -m py_compile governance/compat/check_test_partition_ownership.py` -> PASS
+  - `python governance/compat/check_test_partition_ownership.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes:
+  - `GC-024` does not replace `GC-023`
+  - `GC-024` ensures the `ContextBuildContract` / `ContextBuildBatchContract` surface stays owned by `tests/context.builder.test.ts`
+  - the legacy `tests/index.test.ts` file now carries a visible do-not-add note for this scope

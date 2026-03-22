@@ -1,0 +1,17 @@
+{
+  "partitions": [
+    {
+      "scope": "CPF Context Builder",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.builder.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextBuildContract",
+        "createContextBuildContract",
+        "ContextBuildBatchContract",
+        "createContextBuildBatchContract"
+      ]
+    }
+  ]
+}

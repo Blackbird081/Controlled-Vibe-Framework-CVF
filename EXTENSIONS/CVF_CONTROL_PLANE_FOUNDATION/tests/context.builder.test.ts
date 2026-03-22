@@ -1,4 +1,9 @@
 import { describe, expect, it } from "vitest";
+
+// GC-024 canonical ownership:
+// This is the only approved home for ContextBuildContract /
+// ContextBuildBatchContract tranche-local tests inside CPF.
+
 import {
   ContextBuildBatchContract,
   ContextBuildContract,

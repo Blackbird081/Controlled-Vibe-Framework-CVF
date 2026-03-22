@@ -62,6 +62,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             "governed file size compatibility",
             ["python", "governance/compat/check_governed_file_size.py", "--enforce"],
         ),
+        (
+            "test partition ownership compatibility",
+            ["python", "governance/compat/check_test_partition_ownership.py", "--enforce"],
+        ),
     ]
 }
 

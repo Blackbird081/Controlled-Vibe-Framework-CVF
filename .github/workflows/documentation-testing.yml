@@ -138,6 +138,21 @@ jobs:
         run: |
           python governance/compat/check_governed_file_size.py --enforce
 
+  test-partition-ownership:
+    name: Test Partition Ownership
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce test partition ownership guard
+        run: |
+          python governance/compat/check_test_partition_ownership.py --enforce
+
   release-manifest-consistency:
     name: Release Manifest Consistency
     runs-on: ubuntu-latest

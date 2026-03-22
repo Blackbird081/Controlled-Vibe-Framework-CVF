@@ -11,6 +11,8 @@
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T1_2026-03-22.md`
+> Scope clarification packet:
+> - `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
 
 ---
 
@@ -169,24 +171,43 @@ Definition of done:
 
 - whitepaper truth layers can be re-labeled from evidence instead of aspiration
 
+## 5A. Clarified Planning Rule
+
+As clarified by:
+
+- `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
+
+The roadmap should now be read with one additional rule:
+
+- do **not** treat packaging-only continuation as the default next step
+- do prioritize one usable realization slice at a time
+- do defer concept-only targets explicitly when they are not source-backed
+
+Operational implication:
+
+- the preferred next move is a usable intake slice
+- `W4` should not be auto-opened just because `W3` is closed
+- `Watchdog`, `Audit / Consensus`, and the `Learning Plane` remain later scopes for explicit reasons, not because they were forgotten
+
 ---
 
 ## 6. Proposed Delivery Order
 
 Recommended order if this roadmap is authorized:
 
-1. Workstream A — Control Plane Completion
-2. Workstream B — Execution Plane Completion
-3. Workstream C — Governance Completion Beyond Current Cycle
-4. Workstream D — Learning Plane Completion
-5. Workstream E — Final Whitepaper Truth Reconciliation
+1. one usable intake slice across `AI Gateway -> Knowledge Layer -> Context Builder / Packager`
+2. one usable design/orchestration slice across `AI Boardroom -> CEO Orchestrator`
+3. selective execution deepening only where it unlocks a real consumer path
+4. concept-only governance targets only when they become source-backed and operationally necessary
+5. learning-plane completion only after lower-plane artifacts and feedback semantics are stable
+6. final whitepaper truth reconciliation
 
 Reasoning:
 
-- control and execution gaps are prerequisites for a believable target-state
+- usable intake and orchestration slices create value sooner than finishing more wrappers
 - governance additions should only expand once they are tied to real plane behavior
-- learning should remain late, consistent with current migration guardrails
-- truth reconciliation belongs after implementation evidence exists
+- learning should remain late because its core `Truth Model` and `Evaluation Engine` are not yet source-backed
+- truth reconciliation belongs after realization evidence exists, not after more packaging alone
 
 ---
 
@@ -384,6 +405,7 @@ This roadmap means:
 
 - CVF does have a clean next step after the completed restructuring wave
 - that next step is **whitepaper completion**, not random breadth expansion
+- but the next step is now clarified as `realization-first`, not `packaging-first`
 - but it remains governed and unopened until a fresh `GC-018` decision says otherwise
 
 ---
@@ -391,4 +413,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, and `W4-W5` remain gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, and the next correct move is a `realization-first usable intake slice` rather than auto-opening `W4`.

@@ -106,11 +106,16 @@ The next correct planning move is:
 3. reopen execution only through a fresh `GC-018` continuation packet
 4. keep `GC-019` mandatory for each major structural change inside that future wave
 
-That move is now partially executed and then advanced further:
+That move is now partially executed and then clarified further:
 
 - `W2-T1` is now closed through `CP5` as the first execution-plane tranche
 - `W3-T1` is now closed as a bounded governance-expansion tranche for operational governance modules
-- `W4` and `W5` remain gated because the larger learning-plane and final whitepaper closure scopes still require explicit governed authorization
+- one explicit scope-clarification packet now states that the next preferred move is a `usable intake slice`, not another packaging-only tranche
+- `W4` and `W5` remain gated because the larger learning-plane and final whitepaper closure scopes still require explicit governed authorization and stronger prerequisites
+
+Canonical scope-clarification anchor:
+
+- `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
 
 ---
 

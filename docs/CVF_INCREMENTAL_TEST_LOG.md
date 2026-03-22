@@ -2056,3 +2056,28 @@ Utility and guard:
   - this batch is a retrospective canonicalization pass; some packet artifacts were created after the code commits they document.
   - the reconciliation is explicit about chronology and does not retroactively claim that `Watchdog` or `Audit / Consensus` were implemented.
   - after this batch, top-level progress claims for `W2-T1` and `W3-T1` should be read as evidence-backed closed tranche claims, not full whitepaper target-state completion claims.
+## [2026-03-22] Batch: Whitepaper scope clarification packet
+- Scope:
+  - issue one scope-clarification packet defining what CVF should prioritize next and what should remain deferred
+  - make the route explicit that future whitepaper-completion work must be `realization-first`, not `packaging-first`
+  - connect the clarification back into roadmap/status/index surfaces so later readers see the same planning rule
+- Policy / roadmap references:
+  - `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `CVF_Important/REVIEW FOLDER/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
+- Files updated:
+  - `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
+  - `docs/baselines/CVF_WHITEPAPER_SCOPE_CLARIFICATION_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch is planning/scope only; it does not authorize or implement a new realization tranche by itself.
+  - the packet intentionally keeps `Watchdog`, `Audit / Consensus`, and the `Learning Plane` deferred with explicit reasons so the roadmap does not confuse concept labels with usable system capability.

@@ -129,11 +129,15 @@ Scope:
 - remaining-gap notes against the whitepaper target-state
 - closure / defer decisions for unfinished sub-items
 
-Lane: `Full Lane` (tranche state change)
+Lane: `Full Lane` (tranche closure requires full governance review)
 
 Status:
 
-- `PLANNED`
+- `CLOSED — DELIVERED`
+
+Implementation receipt:
+
+- closure review: `docs/reviews/CVF_W1_T3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 
 ---
 
@@ -153,4 +157,4 @@ All artifacts follow `GC-022` memory classification.
 
 ## 5. Final Readout
 
-> `W1-T3` is execution-planned. `CP1`–`CP4` are IMPLEMENTED with 35 new tests (82 total). `CP5` (Tranche Closure Review) remains PLANNED.
+> `W1-T3` is **CLOSED — DELIVERED**. All 5 control points completed: CP1–CP4 IMPLEMENTED (35 new tests, 82 total, 0 failures), CP5 closure review filed. Tranche delivered the usable INTAKE → DESIGN → BOARDROOM → ORCHESTRATION pipeline.

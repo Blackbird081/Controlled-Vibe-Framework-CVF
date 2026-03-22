@@ -7,7 +7,12 @@ import {
   Constitution,
   createGovernanceExpansionFoundationSurface,
   describeGovernanceExpansionFoundation,
+  WatchdogPulseContract,
+  createWatchdogPulseContract,
+  WatchdogAlertLogContract,
+  createWatchdogAlertLogContract,
 } from "../src/index";
+import type { WatchdogObservabilityInput, WatchdogExecutionInput } from "../src/index";
 
 describe("CVF_GOVERNANCE_EXPANSION_FOUNDATION", () => {
   it("creates a governance expansion foundation surface with all 4 modules", () => {
@@ -76,5 +81,186 @@ describe("CVF_GOVERNANCE_EXPANSION_FOUNDATION", () => {
     const analysis = graph.analyze();
     expect(analysis.nodeCount).toBe(2);
     expect(analysis.edgeCount).toBe(1);
+  });
+
+  // ─── W3-T2 CP1 — WatchdogPulseContract ───────────────────────────────────
+
+  describe("W3-T2 CP1 — WatchdogPulseContract", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+
+    function makeObs(
+      dominantHealth: WatchdogObservabilityInput["dominantHealth"],
+      id = "snap-001",
+    ): WatchdogObservabilityInput {
+      return {
+        snapshotId: id,
+        dominantHealth,
+        criticalCount: dominantHealth === "CRITICAL" ? 1 : 0,
+        degradedCount: dominantHealth === "DEGRADED" ? 1 : 0,
+      };
+    }
+
+    function makeExec(
+      dominantStatus: WatchdogExecutionInput["dominantStatus"],
+      id = "sum-001",
+    ): WatchdogExecutionInput {
+      return {
+        summaryId: id,
+        dominantStatus,
+        failedCount: dominantStatus === "FAILED" ? 1 : 0,
+        runningCount: dominantStatus === "RUNNING" ? 1 : 0,
+      };
+    }
+
+    it("returns CRITICAL when observability dominantHealth is CRITICAL", () => {
+      const contract = createWatchdogPulseContract();
+      const pulse = contract.pulse(makeObs("CRITICAL"), makeExec("COMPLETED"));
+
+      expect(pulse.watchdogStatus).toBe("CRITICAL");
+    });
+
+    it("returns CRITICAL when execution dominantStatus is FAILED", () => {
+      const contract = createWatchdogPulseContract();
+      const pulse = contract.pulse(makeObs("HEALTHY"), makeExec("FAILED"));
+
+      expect(pulse.watchdogStatus).toBe("CRITICAL");
+    });
+
+    it("returns WARNING when observability is DEGRADED (no CRITICAL)", () => {
+      const contract = createWatchdogPulseContract();
+      const pulse = contract.pulse(makeObs("DEGRADED"), makeExec("COMPLETED"));
+
+      expect(pulse.watchdogStatus).toBe("WARNING");
+    });
+
+    it("returns WARNING when execution is RUNNING (no CRITICAL)", () => {
+      const contract = createWatchdogPulseContract();
+      const pulse = contract.pulse(makeObs("HEALTHY"), makeExec("RUNNING"));
+
+      expect(pulse.watchdogStatus).toBe("WARNING");
+    });
+
+    it("returns NOMINAL when observability is HEALTHY and execution is COMPLETED", () => {
+      const contract = createWatchdogPulseContract();
+      const pulse = contract.pulse(makeObs("HEALTHY"), makeExec("COMPLETED"));
+
+      expect(pulse.watchdogStatus).toBe("NOMINAL");
+    });
+
+    it("traces source IDs to input snapshotId and summaryId", () => {
+      const contract = createWatchdogPulseContract();
+      const obs = makeObs("HEALTHY", "snap-xyz");
+      const exec = makeExec("COMPLETED", "sum-xyz");
+      const pulse = contract.pulse(obs, exec);
+
+      expect(pulse.sourceObservabilitySnapshotId).toBe("snap-xyz");
+      expect(pulse.sourceExecutionSummaryId).toBe("sum-xyz");
+    });
+
+    it("produces stable pulseHash with fixed time injection", () => {
+      const c1 = createWatchdogPulseContract({ now: () => fixedTime });
+      const c2 = createWatchdogPulseContract({ now: () => fixedTime });
+
+      expect(c1.pulse(makeObs("HEALTHY"), makeExec("COMPLETED")).pulseHash).toBe(
+        c2.pulse(makeObs("HEALTHY"), makeExec("COMPLETED")).pulseHash,
+      );
+    });
+
+    it("creates WatchdogPulseContract via class constructor", () => {
+      const contract = new WatchdogPulseContract();
+      expect(contract).toBeInstanceOf(WatchdogPulseContract);
+    });
+  });
+
+  // ─── W3-T2 CP2 — WatchdogAlertLogContract ────────────────────────────────
+
+  describe("W3-T2 CP2 — WatchdogAlertLogContract", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+
+    function makePulse(
+      status: "NOMINAL" | "WARNING" | "CRITICAL" | "UNKNOWN",
+      id = "p1",
+    ): ReturnType<WatchdogPulseContract["pulse"]> {
+      return {
+        pulseId: id,
+        issuedAt: fixedTime,
+        sourceObservabilitySnapshotId: `snap-${id}`,
+        sourceExecutionSummaryId: `sum-${id}`,
+        watchdogStatus: status,
+        statusRationale: `Test pulse ${id}`,
+        pulseHash: `hash-${id}`,
+      };
+    }
+
+    it("returns UNKNOWN dominantStatus and alertActive=false for empty pulses", () => {
+      const contract = createWatchdogAlertLogContract();
+      const log = contract.log([]);
+
+      expect(log.dominantStatus).toBe("UNKNOWN");
+      expect(log.alertActive).toBe(false);
+      expect(log.totalPulses).toBe(0);
+    });
+
+    it("returns CRITICAL as dominant when any CRITICAL pulse present", () => {
+      const contract = createWatchdogAlertLogContract();
+      const log = contract.log([
+        makePulse("NOMINAL", "p1"),
+        makePulse("CRITICAL", "p2"),
+        makePulse("WARNING", "p3"),
+      ]);
+
+      expect(log.dominantStatus).toBe("CRITICAL");
+      expect(log.alertActive).toBe(true);
+    });
+
+    it("returns alertActive=true when dominantStatus is WARNING", () => {
+      const contract = createWatchdogAlertLogContract();
+      const log = contract.log([makePulse("WARNING", "p1"), makePulse("NOMINAL", "p2")]);
+
+      expect(log.alertActive).toBe(true);
+    });
+
+    it("returns alertActive=false when dominantStatus is NOMINAL", () => {
+      const contract = createWatchdogAlertLogContract();
+      const log = contract.log([makePulse("NOMINAL", "p1"), makePulse("NOMINAL", "p2")]);
+
+      expect(log.alertActive).toBe(false);
+      expect(log.dominantStatus).toBe("NOMINAL");
+    });
+
+    it("counts all status types correctly", () => {
+      const contract = createWatchdogAlertLogContract();
+      const log = contract.log([
+        makePulse("CRITICAL", "p1"),
+        makePulse("WARNING", "p2"),
+        makePulse("NOMINAL", "p3"),
+        makePulse("UNKNOWN", "p4"),
+      ]);
+
+      expect(log.criticalCount).toBe(1);
+      expect(log.warningCount).toBe(1);
+      expect(log.nominalCount).toBe(1);
+      expect(log.unknownCount).toBe(1);
+      expect(log.totalPulses).toBe(4);
+    });
+
+    it("produces stable logHash with fixed time injection", () => {
+      const c1 = createWatchdogAlertLogContract({ now: () => fixedTime });
+      const c2 = createWatchdogAlertLogContract({ now: () => fixedTime });
+      const pulses = [makePulse("NOMINAL", "p1"), makePulse("WARNING", "p2")];
+
+      expect(c1.log(pulses).logHash).toBe(c2.log(pulses).logHash);
+    });
+
+    it("summary is non-empty for any input", () => {
+      const contract = createWatchdogAlertLogContract();
+      expect(contract.log([]).summary.length).toBeGreaterThan(0);
+      expect(contract.log([makePulse("CRITICAL")]).summary.length).toBeGreaterThan(0);
+    });
+
+    it("creates WatchdogAlertLogContract via class constructor", () => {
+      const contract = new WatchdogAlertLogContract();
+      expect(contract).toBeInstanceOf(WatchdogAlertLogContract);
+    });
   });
 });

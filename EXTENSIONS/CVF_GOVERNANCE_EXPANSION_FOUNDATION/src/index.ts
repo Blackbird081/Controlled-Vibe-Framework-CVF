@@ -1,3 +1,24 @@
+// W3-T2 — Governance Watchdog Pulse Slice (CP1–CP2)
+export {
+  WatchdogPulseContract,
+  createWatchdogPulseContract,
+} from "./watchdog.pulse.contract";
+export type {
+  WatchdogObservabilityInput,
+  WatchdogExecutionInput,
+  WatchdogStatus,
+  WatchdogPulse,
+  WatchdogPulseContractDependencies,
+} from "./watchdog.pulse.contract";
+export {
+  WatchdogAlertLogContract,
+  createWatchdogAlertLogContract,
+} from "./watchdog.alert.log.contract";
+export type {
+  WatchdogAlertLog,
+  WatchdogAlertLogContractDependencies,
+} from "./watchdog.alert.log.contract";
+
 // =============================================
 // CVF Governance Expansion Foundation — W3-T1
 // Coordination package for unconsolidated governance modules

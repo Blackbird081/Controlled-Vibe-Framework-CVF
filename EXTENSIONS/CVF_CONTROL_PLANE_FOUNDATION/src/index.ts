@@ -1,3 +1,24 @@
+// W1-T11 — Context Builder Foundation Slice (CP1–CP2)
+export {
+  ContextBuildContract,
+  createContextBuildContract,
+} from "./context.build.contract";
+export type {
+  ContextSegmentType,
+  ContextSegment,
+  ContextBuildRequest,
+  ContextPackage,
+  ContextBuildContractDependencies,
+} from "./context.build.contract";
+export {
+  ContextBuildBatchContract,
+  createContextBuildBatchContract,
+} from "./context.build.batch.contract";
+export type {
+  ContextBuildBatch,
+  ContextBuildBatchContractDependencies,
+} from "./context.build.batch.contract";
+
 // W1-T10 — Knowledge Layer Foundation Slice (CP1–CP2)
 export {
   KnowledgeQueryContract,

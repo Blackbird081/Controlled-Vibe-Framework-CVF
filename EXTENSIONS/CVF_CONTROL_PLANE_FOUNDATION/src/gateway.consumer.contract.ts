@@ -48,10 +48,13 @@ export class GatewayConsumerContract {
   private readonly now: () => string;
 
   constructor(dependencies: GatewayConsumerContractDependencies = {}) {
-    this.gateway = dependencies.gateway
-      ?? createAIGatewayContract(dependencies.gatewayDependencies);
-    this.intake = dependencies.intake ?? createControlPlaneIntakeContract();
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.gateway = dependencies.gateway
+      ?? createAIGatewayContract({
+        ...dependencies.gatewayDependencies,
+        now: dependencies.gatewayDependencies?.now ?? this.now,
+      });
+    this.intake = dependencies.intake ?? createControlPlaneIntakeContract();
   }
 
   consume(signal: GatewaySignalRequest): GatewayConsumptionReceipt {

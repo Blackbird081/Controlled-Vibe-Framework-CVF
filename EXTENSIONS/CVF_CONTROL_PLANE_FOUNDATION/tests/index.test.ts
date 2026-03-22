@@ -3096,4 +3096,5 @@ describe("W1-T4 CP2 — GatewayConsumerContract", () => {
       expect(contract).toBeInstanceOf(KnowledgeQueryBatchContract);
     });
   });
+
 });

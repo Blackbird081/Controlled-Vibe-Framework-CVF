@@ -2783,3 +2783,32 @@ Utility and guard:
   - all five control points (CP1-CP5) are implemented and verified
   - 7 whitepaper target-state gaps explicitly deferred with rationale
   - future work requires fresh `GC-018` authorization
+
+### Batch: W1-T11 — Context Builder Foundation Slice (2026-03-23)
+
+- Scope:
+  - implement `W1-T11 / CP1` context build contract in `CVF_CONTROL_PLANE_FOUNDATION`
+  - implement `W1-T11 / CP2` context build batch contract
+  - split `W1-T11` tests into dedicated `context.builder.test.ts` to reduce `tests/index.test.ts` size
+  - restore deterministic hash helper compatibility and gateway clock propagation needed to keep CPF package green
+- References:
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T11_2026-03-22.md`
+  - `docs/roadmaps/CVF_W1_T11_CONTEXT_BUILDER_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/reviews/CVF_W1_T11_CP1_AUDIT_2026-03-23.md`
+  - `docs/reviews/CVF_W1_T11_CP1_REVIEW_2026-03-23.md`
+  - `docs/reviews/CVF_W1_T11_CP2_AUDIT_2026-03-23.md`
+  - `docs/reviews/CVF_W1_T11_CP2_REVIEW_2026-03-23.md`
+  - `docs/reviews/CVF_W1_T11_CP3_AUDIT_2026-03-23.md`
+  - `docs/reviews/CVF_W1_T11_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-23.md`
+  - `docs/baselines/CVF_W1_T11_CP1_DELTA_2026-03-23.md`
+  - `docs/baselines/CVF_W1_T11_CP2_DELTA_2026-03-23.md`
+  - `docs/baselines/CVF_W1_T11_CP3_DELTA_2026-03-23.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test` -> PASS (`2 test files, 213 passed`)
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test:coverage` -> PASS (`98.01%` statements, `92.21%` branches, `89.22%` funcs, `98.01%` lines)
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npm run test` -> PASS (`13 test files, 94 passed`)
+- Notes:
+  - `W1-T11` is the first operational Context Builder slice in CVF
+  - `tests/index.test.ts` was reduced from `2879` lines to `2676` lines by extracting tranche-local tests into `tests/context.builder.test.ts` (`199` lines)
+  - there is no repo-wide hard cap discovered for all test files, but tranche-local split improves maintainability and reviewability

@@ -8,7 +8,7 @@ Memory class: SUMMARY_RECORD
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  
-> Authorization posture: `CYCLE COMPLETE - W1-T1 / W1-T2 / W1-T3 / W1-T4 / W1-T5 / W1-T6 / W2-T1 / W2-T2 / W2-T3 / W2-T4 / W2-T5 / W2-T6 / W2-T7 / W3-T1 / W3-T2 / W3-T3 / W4-T1 / W4-T2 / W4-T3 / W4-T4 / W4-T5 / W4-T6 / W4-T7 / W5-T1 ALL CLOSED DELIVERED`
+> Authorization posture: `CYCLE COMPLETE - W1-T1 / W1-T2 / W1-T3 / W1-T4 / W1-T5 / W1-T6 / W2-T1 / W2-T2 / W2-T3 / W2-T4 / W2-T5 / W2-T6 / W2-T7 / W2-T8 / W3-T1 / W3-T2 / W3-T3 / W4-T1 / W4-T2 / W4-T3 / W4-T4 / W4-T5 / W4-T6 / W4-T7 / W5-T1 ALL CLOSED DELIVERED`
 > Canonical continuation packets:
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
@@ -295,7 +295,7 @@ Reasoning:
 
 ## 7. W5 Final Readout — 2026-03-22
 
-All 24 tranches across 5 workstreams are now closed and delivered:
+All 25 tranches across 5 workstreams are now closed and delivered:
 
 | Tranche | Plane | Result |
 |---|---|---|
@@ -312,6 +312,7 @@ All 24 tranches across 5 workstreams are now closed and delivered:
 | W2-T5 | Execution | CLOSED DELIVERED |
 | W2-T6 | Execution | CLOSED DELIVERED |
 | W2-T7 | Execution | CLOSED DELIVERED |
+| W2-T8 | Execution | CLOSED DELIVERED |
 | W3-T1 | Governance | CLOSED DELIVERED |
 | W3-T2 | Governance | CLOSED DELIVERED |
 | W3-T3 | Governance | CLOSED DELIVERED |
@@ -333,6 +334,8 @@ All 24 tranches across 5 workstreams are now closed and delivered:
 **W3 Governance Watchdog: DEFERRED → PARTIAL — first cross-plane watchdog pulse delivered through W3-T2.**
 
 **W3 Governance Audit/Consensus: DEFERRED → PARTIAL — first governed audit signal delivered through W3-T3. Both W3-T1 defers resolved.**
+
+**Execution MCP Bridge: PARTIAL → SUBSTANTIALLY DELIVERED — first operational MCP invocation slice delivered through W2-T8. W2-T1 CP2 defer "MCP internals deferred" closed.**
 
 Future continuation requires new GC-018 authorization per wave.
 

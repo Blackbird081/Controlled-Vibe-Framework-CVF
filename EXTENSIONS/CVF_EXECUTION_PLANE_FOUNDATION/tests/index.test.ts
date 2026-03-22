@@ -56,8 +56,16 @@ import {
   createAsyncCommandRuntimeContract,
   AsyncExecutionStatusContract,
   createAsyncExecutionStatusContract,
+  // W2-T8
+  MCPInvocationContract,
+  createMCPInvocationContract,
+  MCPInvocationBatchContract,
+  createMCPInvocationBatchContract,
 } from "../src/index";
-import type { ExecutionFeedbackSignal } from "../src/index";
+import type {
+  ExecutionFeedbackSignal,
+  MCPInvocationResult,
+} from "../src/index";
 import { createGuardEngine } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
 import {
   createDesignConsumerContract,
@@ -1743,6 +1751,202 @@ describe("W2-T3 CP2 — ExecutionPipelineContract", () => {
     it("creates AsyncExecutionStatusContract via class constructor", () => {
       const contract = new AsyncExecutionStatusContract();
       expect(contract).toBeInstanceOf(AsyncExecutionStatusContract);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W2-T8 — Execution MCP Bridge Slice
+  // ---------------------------------------------------------------------------
+
+  function makeMCPRequest(toolName = "test-tool", id = "req-1"): Parameters<MCPInvocationContract["invoke"]>[0] {
+    return {
+      toolName,
+      toolArgs: { input: "value" },
+      contextId: "ctx-1",
+      requestId: id,
+    };
+  }
+
+  function makeMCPResult(status: MCPInvocationResult["invocationStatus"], id = "r1"): MCPInvocationResult {
+    return {
+      resultId: `result-${id}`,
+      issuedAt: "2026-03-22T10:00:00.000Z",
+      toolName: "test-tool",
+      contextId: "ctx-1",
+      sourceRequestId: id,
+      invocationStatus: status,
+      responsePayload: { out: id },
+      invocationHash: `hash-${id}`,
+    };
+  }
+
+  describe("W2-T8 CP1 — MCPInvocationContract", () => {
+    it("invoke with SUCCESS status returns MCPInvocationResult with toolName", () => {
+      const contract = createMCPInvocationContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.invoke(makeMCPRequest("my-tool"), "SUCCESS", { out: 1 });
+
+      expect(result.toolName).toBe("my-tool");
+      expect(result.invocationStatus).toBe("SUCCESS");
+    });
+
+    it("invoke with FAILURE status returns FAILURE invocationStatus", () => {
+      const contract = createMCPInvocationContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.invoke(makeMCPRequest(), "FAILURE", null);
+
+      expect(result.invocationStatus).toBe("FAILURE");
+    });
+
+    it("invoke with TIMEOUT status returns TIMEOUT invocationStatus", () => {
+      const contract = createMCPInvocationContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.invoke(makeMCPRequest(), "TIMEOUT", null);
+
+      expect(result.invocationStatus).toBe("TIMEOUT");
+    });
+
+    it("invoke with REJECTED status returns REJECTED invocationStatus", () => {
+      const contract = createMCPInvocationContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.invoke(makeMCPRequest(), "REJECTED", null);
+
+      expect(result.invocationStatus).toBe("REJECTED");
+    });
+
+    it("sourceRequestId matches the requestId of the input", () => {
+      const contract = createMCPInvocationContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.invoke(makeMCPRequest("t", "req-abc"), "SUCCESS", {});
+
+      expect(result.sourceRequestId).toBe("req-abc");
+    });
+
+    it("resultId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const req = makeMCPRequest("tool-x", "req-99");
+      const c1 = createMCPInvocationContract({ now: () => fixedTime });
+      const c2 = createMCPInvocationContract({ now: () => fixedTime });
+
+      expect(c1.invoke(req, "SUCCESS", {}).resultId).toBe(
+        c2.invoke(req, "SUCCESS", {}).resultId,
+      );
+    });
+
+    it("invocationHash differs for different statuses", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const contract = createMCPInvocationContract({ now: () => fixedTime });
+      const req = makeMCPRequest();
+
+      const r1 = contract.invoke(req, "SUCCESS", {});
+      const r2 = contract.invoke(req, "FAILURE", {});
+
+      expect(r1.invocationHash).not.toBe(r2.invocationHash);
+    });
+
+    it("creates MCPInvocationContract via class constructor", () => {
+      const contract = new MCPInvocationContract();
+      expect(contract).toBeInstanceOf(MCPInvocationContract);
+    });
+  });
+
+  describe("W2-T8 CP2 — MCPInvocationBatchContract", () => {
+    it("batch with all SUCCESS returns dominantStatus SUCCESS", () => {
+      const contract = createMCPInvocationBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([
+        makeMCPResult("SUCCESS", "1"),
+        makeMCPResult("SUCCESS", "2"),
+      ]);
+
+      expect(result.dominantStatus).toBe("SUCCESS");
+      expect(result.successCount).toBe(2);
+    });
+
+    it("batch with any FAILURE returns dominantStatus FAILURE", () => {
+      const contract = createMCPInvocationBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([
+        makeMCPResult("SUCCESS", "1"),
+        makeMCPResult("FAILURE", "2"),
+      ]);
+
+      expect(result.dominantStatus).toBe("FAILURE");
+    });
+
+    it("batch with TIMEOUT and no FAILURE returns dominantStatus TIMEOUT", () => {
+      const contract = createMCPInvocationBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([
+        makeMCPResult("TIMEOUT", "1"),
+        makeMCPResult("SUCCESS", "2"),
+      ]);
+
+      expect(result.dominantStatus).toBe("TIMEOUT");
+    });
+
+    it("batch counts successCount, failureCount, timeoutCount, rejectedCount correctly", () => {
+      const contract = createMCPInvocationBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([
+        makeMCPResult("SUCCESS", "1"),
+        makeMCPResult("FAILURE", "2"),
+        makeMCPResult("TIMEOUT", "3"),
+        makeMCPResult("REJECTED", "4"),
+      ]);
+
+      expect(result.successCount).toBe(1);
+      expect(result.failureCount).toBe(1);
+      expect(result.timeoutCount).toBe(1);
+      expect(result.rejectedCount).toBe(1);
+      expect(result.totalInvocations).toBe(4);
+    });
+
+    it("batch with FAILURE majority dominates over others", () => {
+      const contract = createMCPInvocationBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([
+        makeMCPResult("FAILURE", "1"),
+        makeMCPResult("FAILURE", "2"),
+        makeMCPResult("SUCCESS", "3"),
+      ]);
+
+      expect(result.dominantStatus).toBe("FAILURE");
+      expect(result.failureCount).toBe(2);
+    });
+
+    it("batchId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createMCPInvocationBatchContract({ now: () => fixedTime });
+      const c2 = createMCPInvocationBatchContract({ now: () => fixedTime });
+      const results = [makeMCPResult("SUCCESS", "1"), makeMCPResult("FAILURE", "2")];
+
+      expect(c1.batch(results).batchId).toBe(c2.batch(results).batchId);
+    });
+
+    it("batch with REJECTED only returns dominantStatus REJECTED", () => {
+      const contract = createMCPInvocationBatchContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.batch([makeMCPResult("REJECTED", "1")]);
+
+      expect(result.dominantStatus).toBe("REJECTED");
+      expect(result.rejectedCount).toBe(1);
+    });
+
+    it("creates MCPInvocationBatchContract via class constructor", () => {
+      const contract = new MCPInvocationBatchContract();
+      expect(contract).toBeInstanceOf(MCPInvocationBatchContract);
     });
   });
 });

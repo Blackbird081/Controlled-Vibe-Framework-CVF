@@ -1,3 +1,23 @@
+// W2-T8 — Execution MCP Bridge Slice (CP1–CP2)
+export {
+  MCPInvocationContract,
+  createMCPInvocationContract,
+} from "./mcp.invocation.contract";
+export type {
+  MCPInvocationStatus,
+  MCPInvocationRequest,
+  MCPInvocationResult,
+  MCPInvocationContractDependencies,
+} from "./mcp.invocation.contract";
+export {
+  MCPInvocationBatchContract,
+  createMCPInvocationBatchContract,
+} from "./mcp.invocation.batch.contract";
+export type {
+  MCPInvocationBatch,
+  MCPInvocationBatchContractDependencies,
+} from "./mcp.invocation.batch.contract";
+
 // W2-T7 — Execution Command Runtime Async Slice (CP1–CP2)
 export {
   AsyncCommandRuntimeContract,

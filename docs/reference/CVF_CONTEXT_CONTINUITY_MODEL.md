@@ -1,5 +1,7 @@
 # CVF Context Continuity Model
 
+Memory class: POINTER_RECORD
+
 Status: canonical cross-cutting model for context quality control across memory, handoff, and phase-bounded loading in multi-agent CVF.
 
 ## Purpose
@@ -56,10 +58,24 @@ It does not replace memory systems or context loaders by itself.
 
 Instead, it ensures that pause/transfer boundaries produce one truthful, reviewable summary checkpoint so later context loading can stay phase-bounded.
 
+## Relationship To GC-022
+
+`GC-022` governs the memory-storage side of this model.
+
+It distinguishes:
+
+- full durable evidence
+- durable summary records
+- pointer-only routing records
+
+This keeps durable memory truthful without forcing every record to preserve the same level of detail.
+
 ## Related References
 
 - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+- `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`

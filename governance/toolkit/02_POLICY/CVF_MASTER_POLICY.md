@@ -103,6 +103,12 @@ Personal AI usage unrelated to company work is excluded.
    - Fast lane is allowed only when the change stays additive, remains inside the approved tranche scope, and keeps rollback bounded.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`.
    - Canonical templates: `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md` and `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`.
+16. Memory governance is mandatory for evidence-bearing records intended to support later CVF memory:
+   - Every memory-bearing record must classify itself as `FULL_RECORD`, `SUMMARY_RECORD`, or `POINTER_RECORD`.
+   - The chosen class must match the document's storage role and the canonical `docs/` taxonomy.
+   - Do not preserve full-detail durable history when a truthful summary or pointer-only record is sufficient.
+   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`.
+   - Canonical classification reference: `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`.
 
 ---
 

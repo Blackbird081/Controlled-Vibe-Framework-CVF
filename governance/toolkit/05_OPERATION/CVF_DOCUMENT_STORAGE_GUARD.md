@@ -16,6 +16,7 @@ Correct placement is required for:
 
 - discoverability,
 - traceability,
+- memory classification,
 - governance continuity,
 - future maintenance.
 
@@ -58,6 +59,16 @@ This rule applies equally to:
 | `docs/case-studies/` | real-world applications |
 
 `docs/INDEX.md` is the current canonical storage map.
+
+This storage map also carries the default memory-role relationship used by
+`CVF_MEMORY_GOVERNANCE_GUARD.md` and
+`docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`.
+
+Default relationship:
+
+- `docs/assessments/`, `docs/audits/`, `docs/reviews/` -> `FULL_RECORD`
+- `docs/baselines/`, `docs/roadmaps/`, `docs/logs/` -> `SUMMARY_RECORD`
+- `docs/reference/`, `docs/INDEX.md`, `docs/reference/README.md` -> `POINTER_RECORD`
 
 ---
 

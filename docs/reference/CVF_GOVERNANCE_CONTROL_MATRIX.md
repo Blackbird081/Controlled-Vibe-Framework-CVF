@@ -1,5 +1,7 @@
 # CVF Governance Control Matrix
 
+Memory class: POINTER_RECORD
+
 Status: canonical ownership map for critical governance controls in the active CVF baseline.
 
 ## Purpose
@@ -43,6 +45,7 @@ Status: canonical ownership map for critical governance controls in the active C
 | `GC-019` | major structural changes must complete `audit -> independent review -> explicit decision -> execution` before code moves or merges begin | `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD` + structural audit packet + independent review packet | `GOVERNANCE_DECISION_GATE` | restructuring roadmap execution, structural merge packets, user approval checkpoints | `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`, `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`, `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_REVIEW_TEMPLATE.md`, `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md` |
 | `GC-020` | governed work pauses/transfers must classify the transition first and then leave one truthful handoff before another worker continues | `CVF_AGENT_HANDOFF_TRANSITION_GUARD` + `CVF_AGENT_HANDOFF_GUARD` + handoff compat gate | `APPROVAL_CHECKPOINT` | pause/resume checkpoints, agent-to-agent transfer, governed tranche continuation | `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`, `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`, `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`, `governance/compat/check_agent_handoff_guard_compat.py`, `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-handoff.ts`, `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts`, `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`, `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/pipeline.orchestrator.test.ts` |
 | `GC-021` | low-risk additive work inside an already-authorized tranche may use fast-lane governance only when no physical merge, ownership transfer, runtime-authority change, target-state claim expansion, or concept-to-module move is involved | `CVF_FAST_LANE_GOVERNANCE_GUARD` + fast-lane templates + fast-lane compat gate | `CI_REPO_GATE` | additive tranche-local implementation batches, realization-first control points, lightweight contract/extraction work | `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`, `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`, `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`, `governance/compat/check_fast_lane_governance_compat.py`, `governance/compat/run_local_governance_hook_chain.py` |
+| `GC-022` | memory-bearing governance records must declare the right durable memory class so future CVF memory stays truthful without over-recording | `CVF_MEMORY_GOVERNANCE_GUARD` + memory classification reference + memory compat gate | `CI_REPO_GATE` | evidence-bearing docs, storage-taxonomy updates, durable-memory records, local pre-push hook chain | `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`, `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`, `governance/compat/check_memory_governance_compat.py`, `governance/compat/run_local_governance_hook_chain.py`, `docs/INDEX.md` |
 
 ## Notes
 
@@ -57,6 +60,7 @@ Status: canonical ownership map for critical governance controls in the active C
 - `GC-020` now has both repo-level compatibility enforcement and active runtime checkpoint surfaces for governed pause and approval-required escalation paths.
 - `GC-020` is the enforced handoff layer of the CVF context-continuity model: memory keeps durable truth, handoff compresses transition truth, and context loading should stay phase-bounded.
 - `GC-021` does not weaken `GC-018` or `GC-019`; it only allows a lighter evidence path after tranche boundaries are already settled and only for additive low-risk work.
+- `GC-022` gives operational meaning to the memory side of context continuity by distinguishing full durable evidence from summary records and pointer-only navigation records.
 
 ## Current Closure Statement
 

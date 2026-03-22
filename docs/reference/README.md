@@ -1,5 +1,7 @@
 # CVF Reference Docs
 
+Memory class: POINTER_RECORD
+
 Đây là nơi lưu các tài liệu chuẩn, authoritative, long-lived của CVF.
 
 Đặt vào đây:
@@ -41,6 +43,7 @@ Current canonical docs:
 - `CVF_MODULE_INVENTORY.md`
 - `CVF_MATURITY_MATRIX.md`
 - `CVF_AGENT_HANDOFF_TEMPLATE.md`
+- `CVF_MEMORY_RECORD_CLASSIFICATION.md`
 - `CVF_FAST_LANE_AUDIT_TEMPLATE.md`
 - `CVF_FAST_LANE_REVIEW_TEMPLATE.md`
 - `CVF_RELEASE_READINESS_STATUS_2026-03-20.md`

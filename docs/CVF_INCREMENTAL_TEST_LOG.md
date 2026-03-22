@@ -1,5 +1,7 @@
 # CVF Incremental Test Log
 
+Memory class: SUMMARY_RECORD
+
 ## 1) Purpose
 
 This file is the canonical entrypoint and active window for incremental testing decisions.
@@ -70,6 +72,35 @@ Template:
   - `<module/file>`: skipped because unchanged from baseline/previous passing batch
 - Notes/Risks:
 ```
+
+## [2026-03-22] Batch: GC-022 memory governance adoption
+- Change reference:
+  - local working tree `GC-022` memory governance adoption batch
+  - baseline receipt: `docs/baselines/CVF_GC022_MEMORY_GOVERNANCE_ADOPTION_DELTA_2026-03-22.md`
+- Impacted scope:
+  - `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`
+  - `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `governance/compat/check_memory_governance_compat.py`
+  - `governance/compat/run_local_governance_hook_chain.py`
+  - `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
+  - `docs/reference/README.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_GC022_MEMORY_GOVERNANCE_ADOPTION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_memory_governance_compat.py --enforce`
+  - `python governance/compat/check_docs_governance_compat.py --enforce`
+  - `python governance/compat/check_baseline_update_compat.py --enforce`
+  - `python governance/compat/check_release_manifest_consistency.py --enforce`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+- Skip scope:
+  - runtime/package test suites — skipped because this batch governs evidence storage, classification, and repo-level automation only
+- Notes/Risks:
+  - `GC-022` intentionally governs the granularity of durable memory records rather than retrofitting every historical doc in one batch.
+  - The compat gate enforces the new standard on changed memory-bearing records so adoption can remain controlled and incremental.
 
 ## [2026-03-21] Batch: Federated Plane Convergence Phase 0-2
 - Change reference:

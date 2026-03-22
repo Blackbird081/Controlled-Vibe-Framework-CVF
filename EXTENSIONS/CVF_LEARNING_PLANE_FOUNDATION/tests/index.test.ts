@@ -25,6 +25,10 @@ import {
   createLearningStorageContract,
   LearningStorageLogContract,
   createLearningStorageLogContract,
+  LearningObservabilityContract,
+  createLearningObservabilityContract,
+  LearningObservabilitySnapshotContract,
+  createLearningObservabilitySnapshotContract,
 } from "../src/index";
 import type {
   LearningFeedbackInput,
@@ -1169,6 +1173,202 @@ describe("CVF_LEARNING_PLANE_FOUNDATION", () => {
     it("creates LearningStorageLogContract via class constructor", () => {
       const contract = new LearningStorageLogContract();
       expect(contract).toBeInstanceOf(LearningStorageLogContract);
+    });
+  });
+
+  // ─── W4-T7 CP1 — LearningObservabilityContract ───────────────────────────
+
+  describe("W4-T7 CP1 — LearningObservabilityContract", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+
+    function makeStorageLog(totalRecords: number): ReturnType<LearningStorageLogContract["log"]> {
+      const logContract = createLearningStorageLogContract({ now: () => fixedTime });
+      const storageContract = createLearningStorageContract({ now: () => fixedTime });
+      const records = Array.from({ length: totalRecords }, (_, i) =>
+        storageContract.store({ id: i }, "FEEDBACK_LEDGER"),
+      );
+      return logContract.log(records);
+    }
+
+    function makeLoopSummary(
+      dominantFeedbackClass: "ACCEPT" | "RETRY" | "ESCALATE" | "REJECT",
+      totalSignals: number,
+    ): ReturnType<LearningLoopContract["summarize"]> {
+      return {
+        summaryId: `sum-${dominantFeedbackClass}`,
+        createdAt: fixedTime,
+        totalSignals,
+        rejectCount: dominantFeedbackClass === "REJECT" ? 1 : 0,
+        escalateCount: dominantFeedbackClass === "ESCALATE" ? 1 : 0,
+        retryCount: dominantFeedbackClass === "RETRY" ? 1 : 0,
+        acceptCount: dominantFeedbackClass === "ACCEPT" ? totalSignals : 0,
+        dominantFeedbackClass,
+        summary: `Test loop summary`,
+        summaryHash: `hash-${dominantFeedbackClass}`,
+      };
+    }
+
+    it("returns UNKNOWN health when both storage and loop are empty", () => {
+      const contract = createLearningObservabilityContract();
+      const report = contract.report(makeStorageLog(0), makeLoopSummary("ACCEPT", 0));
+
+      expect(report.observabilityHealth).toBe("UNKNOWN");
+    });
+
+    it("returns CRITICAL health when dominantFeedbackClass is REJECT", () => {
+      const contract = createLearningObservabilityContract();
+      const report = contract.report(makeStorageLog(3), makeLoopSummary("REJECT", 1));
+
+      expect(report.observabilityHealth).toBe("CRITICAL");
+    });
+
+    it("returns CRITICAL health when dominantFeedbackClass is ESCALATE", () => {
+      const contract = createLearningObservabilityContract();
+      const report = contract.report(makeStorageLog(2), makeLoopSummary("ESCALATE", 1));
+
+      expect(report.observabilityHealth).toBe("CRITICAL");
+    });
+
+    it("returns DEGRADED health when dominantFeedbackClass is RETRY", () => {
+      const contract = createLearningObservabilityContract();
+      const report = contract.report(makeStorageLog(2), makeLoopSummary("RETRY", 2));
+
+      expect(report.observabilityHealth).toBe("DEGRADED");
+    });
+
+    it("returns HEALTHY health when dominantFeedbackClass is ACCEPT", () => {
+      const contract = createLearningObservabilityContract();
+      const report = contract.report(makeStorageLog(5), makeLoopSummary("ACCEPT", 5));
+
+      expect(report.observabilityHealth).toBe("HEALTHY");
+    });
+
+    it("sources are traced to input logId and summaryId", () => {
+      const contract = createLearningObservabilityContract();
+      const storageLog = makeStorageLog(2);
+      const loopSummary = makeLoopSummary("ACCEPT", 2);
+      const report = contract.report(storageLog, loopSummary);
+
+      expect(report.sourceStorageLogId).toBe(storageLog.logId);
+      expect(report.sourceLoopSummaryId).toBe(loopSummary.summaryId);
+    });
+
+    it("produces stable reportHash with fixed time injection", () => {
+      const c1 = createLearningObservabilityContract({ now: () => fixedTime });
+      const c2 = createLearningObservabilityContract({ now: () => fixedTime });
+      const storageLog = makeStorageLog(3);
+      const loopSummary = makeLoopSummary("ACCEPT", 3);
+
+      expect(c1.report(storageLog, loopSummary).reportHash).toBe(
+        c2.report(storageLog, loopSummary).reportHash,
+      );
+    });
+
+    it("creates LearningObservabilityContract via class constructor", () => {
+      const contract = new LearningObservabilityContract();
+      expect(contract).toBeInstanceOf(LearningObservabilityContract);
+    });
+  });
+
+  // ─── W4-T7 CP2 — LearningObservabilitySnapshotContract ───────────────────
+
+  describe("W4-T7 CP2 — LearningObservabilitySnapshotContract", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+
+    function makeReport(
+      health: "HEALTHY" | "DEGRADED" | "CRITICAL" | "UNKNOWN",
+      id = "r1",
+    ): ReturnType<LearningObservabilityContract["report"]> {
+      return {
+        reportId: id,
+        generatedAt: fixedTime,
+        sourceStorageLogId: `log-${id}`,
+        sourceLoopSummaryId: `sum-${id}`,
+        storageRecordCount: 2,
+        loopSignalCount: 2,
+        observabilityHealth: health,
+        healthRationale: `Test rationale ${id}`,
+        reportHash: `hash-${id}`,
+      };
+    }
+
+    it("returns UNKNOWN dominantHealth and INSUFFICIENT_DATA trend for empty reports", () => {
+      const contract = createLearningObservabilitySnapshotContract();
+      const snapshot = contract.snapshot([]);
+
+      expect(snapshot.dominantHealth).toBe("UNKNOWN");
+      expect(snapshot.snapshotTrend).toBe("INSUFFICIENT_DATA");
+      expect(snapshot.totalReports).toBe(0);
+    });
+
+    it("returns CRITICAL as dominant when any CRITICAL report present", () => {
+      const contract = createLearningObservabilitySnapshotContract();
+      const snapshot = contract.snapshot([
+        makeReport("HEALTHY", "r1"),
+        makeReport("CRITICAL", "r2"),
+        makeReport("DEGRADED", "r3"),
+      ]);
+
+      expect(snapshot.dominantHealth).toBe("CRITICAL");
+    });
+
+    it("returns IMPROVING trend when first report is CRITICAL and last is HEALTHY", () => {
+      const contract = createLearningObservabilitySnapshotContract();
+      const snapshot = contract.snapshot([
+        makeReport("CRITICAL", "r1"),
+        makeReport("HEALTHY", "r2"),
+      ]);
+
+      expect(snapshot.snapshotTrend).toBe("IMPROVING");
+    });
+
+    it("returns DEGRADING trend when first report is HEALTHY and last is CRITICAL", () => {
+      const contract = createLearningObservabilitySnapshotContract();
+      const snapshot = contract.snapshot([
+        makeReport("HEALTHY", "r1"),
+        makeReport("CRITICAL", "r2"),
+      ]);
+
+      expect(snapshot.snapshotTrend).toBe("DEGRADING");
+    });
+
+    it("returns STABLE trend when first and last health are equal", () => {
+      const contract = createLearningObservabilitySnapshotContract();
+      const snapshot = contract.snapshot([
+        makeReport("DEGRADED", "r1"),
+        makeReport("HEALTHY", "r2"),
+        makeReport("DEGRADED", "r3"),
+      ]);
+
+      expect(snapshot.snapshotTrend).toBe("STABLE");
+    });
+
+    it("counts all health types correctly", () => {
+      const contract = createLearningObservabilitySnapshotContract();
+      const snapshot = contract.snapshot([
+        makeReport("HEALTHY", "r1"),
+        makeReport("DEGRADED", "r2"),
+        makeReport("CRITICAL", "r3"),
+        makeReport("UNKNOWN", "r4"),
+      ]);
+
+      expect(snapshot.healthyCount).toBe(1);
+      expect(snapshot.degradedCount).toBe(1);
+      expect(snapshot.criticalCount).toBe(1);
+      expect(snapshot.unknownCount).toBe(1);
+    });
+
+    it("produces stable snapshotHash with fixed time injection", () => {
+      const c1 = createLearningObservabilitySnapshotContract({ now: () => fixedTime });
+      const c2 = createLearningObservabilitySnapshotContract({ now: () => fixedTime });
+      const reports = [makeReport("HEALTHY", "r1"), makeReport("DEGRADED", "r2")];
+
+      expect(c1.snapshot(reports).snapshotHash).toBe(c2.snapshot(reports).snapshotHash);
+    });
+
+    it("creates LearningObservabilitySnapshotContract via class constructor", () => {
+      const contract = new LearningObservabilitySnapshotContract();
+      expect(contract).toBeInstanceOf(LearningObservabilitySnapshotContract);
     });
   });
 });

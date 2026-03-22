@@ -1,3 +1,23 @@
+// W4-T7 — Learning Plane Observability Slice (CP1–CP2)
+export {
+  LearningObservabilityContract,
+  createLearningObservabilityContract,
+} from "./learning.observability.contract";
+export type {
+  ObservabilityHealth,
+  LearningObservabilityReport,
+  LearningObservabilityContractDependencies,
+} from "./learning.observability.contract";
+export {
+  LearningObservabilitySnapshotContract,
+  createLearningObservabilitySnapshotContract,
+} from "./learning.observability.snapshot.contract";
+export type {
+  SnapshotTrend,
+  LearningObservabilitySnapshot,
+  LearningObservabilitySnapshotContractDependencies,
+} from "./learning.observability.snapshot.contract";
+
 // W4-T6 — Learning Plane Persistent Storage Slice (CP1–CP2)
 export {
   LearningStorageContract,

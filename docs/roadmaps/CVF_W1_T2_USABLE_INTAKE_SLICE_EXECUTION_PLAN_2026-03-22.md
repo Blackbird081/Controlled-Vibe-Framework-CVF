@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T2_2026-03-22.md`  
 > Tranche packet: `docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_PACKET_2026-03-22.md`  
-> Status: `AUTHORIZED TRANCHE - CP1 IMPLEMENTED / TRANCHE OPEN`
+> Status: `CLOSED TRANCHE - CP1-CP5 IMPLEMENTED`
 
 ---
 
@@ -138,7 +138,7 @@ Scope:
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
 
 ---
 

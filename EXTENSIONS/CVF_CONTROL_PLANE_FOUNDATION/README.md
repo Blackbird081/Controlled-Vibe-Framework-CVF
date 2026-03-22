@@ -1,6 +1,6 @@
 # CVF Control Plane Foundation
 
-Status: control-plane foundation shell for the closed `W1-T1 / CP1-CP5` tranche, now extended by `W1-T2 / CP1` with one usable intake contract baseline.
+Status: control-plane foundation shell for the closed `W1-T1 / CP1-CP5` tranche, now canonically extended by the closed `W1-T2 / CP1-CP5` usable-intake tranche.
 
 ## Purpose
 
@@ -10,6 +10,7 @@ Status: control-plane foundation shell for the closed `W1-T1 / CP1-CP5` tranche,
 - expose one reviewable governance-canvas evidence surface for tranche-local reporting
 - expose one narrow wrapper surface for selected `CVF_v1.7_CONTROLLED_INTELLIGENCE` helpers and types
 - expose one callable intake contract baseline spanning intent validation, retrieval, and deterministic packaged context for `W1-T2 / CP1`
+- expose standalone retrieval, packaging, and consumer-path contracts delivered through `W1-T2 / CP2-CP4`
 
 ## Source lineage
 
@@ -43,6 +44,18 @@ Canonical controlled-intelligence ownership remains outside the package body:
 - the contract validates the intake vibe, performs source-backed retrieval, and returns deterministic packaged context
 - the package still does not claim full `AI Gateway` target-state completion
 
+## Current-cycle retrieval and packaging contracts
+
+- `W1-T2 / CP2` adds `createRetrievalContract()` as one unified retrieval contract with source/metadata filtering
+- `W1-T2 / CP3` adds `createPackagingContract()` as one deterministic packaging contract with token budgeting, deterministic hashing, and optional context freezing
+- these contracts deepen the usable intake slice without claiming full target-state `Knowledge Layer` or `Context Builder & Packager` completion
+
+## Current-cycle consumer path proof
+
+- `W1-T2 / CP4` adds `createConsumerContract()` as one real downstream consumer path proving the intake pipeline is operationally meaningful
+- `KnowledgeFacade.consume()` is the caller-facing consumer entry point
+- governed `ConsumptionReceipt` evidence remains bounded to the usable intake slice and does not claim execution-runtime completion
+
 ## Current-cycle selected controlled-intelligence alignment
 
 - `CP4` re-exports a narrow set of selected `CVF_v1.7_CONTROLLED_INTELLIGENCE` mapping, context-boundary, and reasoning-boundary helpers/types
@@ -51,6 +64,7 @@ Canonical controlled-intelligence ownership remains outside the package body:
 
 ## Tranche closure checkpoint
 
-- `CP5` closes the approved `W1-T1` tranche as a documentation-only checkpoint
-- the package remains the canonical shell produced by the tranche, but not the full whitepaper target-state control plane
+- `W1-T1 / CP5` closed the first approved control-plane tranche as a documentation-only checkpoint
+- `W1-T2 / CP5` now closes the usable-intake tranche after `CP1-CP4` implementation and receipt reconciliation
+- the package now stands as the canonical control-plane foundation plus one closed usable-intake slice, but not the full whitepaper target-state control plane
 - any additional control-plane completion work now requires a new governed packet

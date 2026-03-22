@@ -2338,6 +2338,28 @@ Utility and guard:
 - Notes/Risks:
   - this batch strengthens the canonical model and repo-level enforcement, not universal runtime/session capture.
   - the principle is now explicit: handoff is not only work transfer; it is context quality control by phase for multi-agent CVF.
+## [2026-03-22] Batch: W1-T2 closure doc reconciliation
+- Scope:
+  - reconcile the remaining stale `W1-T2` wording in the tranche execution plan and package-level README
+  - make the lower-level docs match the already-canonical `CP1-CP5` closure truth
+- Policy / roadmap references:
+  - `docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+- Files updated:
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/README.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/INDEX.md`
+  - `docs/baselines/CVF_W1_T2_CLOSURE_DOC_RECONCILIATION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch reconciles documentation truth only; it does not widen `W1-T2` scope.
+  - the larger whitepaper target-state still remains only partially realized.
 ## [2026-03-22] Batch: W1-T2 CP2 — Unified Knowledge Retrieval Contract
 - Scope:
   - implement CP2 inside W1-T2 as an additive contract alignment

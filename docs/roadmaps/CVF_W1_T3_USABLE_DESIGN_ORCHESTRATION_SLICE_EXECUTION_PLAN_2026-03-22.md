@@ -65,7 +65,14 @@ Lane: `Fast Lane` (additive contract inside already-authorized tranche)
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
+
+Implementation receipt:
+
+- audit: `docs/audits/CVF_W1_T3_CP2_BOARDROOM_SESSION_CONTRACT_AUDIT_2026-03-22.md`
+- review: `docs/reviews/CVF_GC019_W1_T3_CP2_BOARDROOM_SESSION_CONTRACT_REVIEW_2026-03-22.md`
+- delta: `docs/baselines/CVF_W1_T3_CP2_BOARDROOM_SESSION_IMPLEMENTATION_DELTA_2026-03-22.md`
+- tests: 65 foundation tests, 0 failures (8 new CP2 tests)
 
 ### CP3 — Orchestration Contract
 
@@ -132,4 +139,4 @@ All artifacts follow `GC-022` memory classification.
 
 ## 5. Final Readout
 
-> `W1-T3` is execution-planned. `CP1` (Design Contract Baseline) is IMPLEMENTED with 10 new tests. `CP2`–`CP5` remain PLANNED.
+> `W1-T3` is execution-planned. `CP1` (Design Contract Baseline) and `CP2` (Boardroom Session Contract) are IMPLEMENTED with 18 new tests. `CP3`–`CP5` remain PLANNED.

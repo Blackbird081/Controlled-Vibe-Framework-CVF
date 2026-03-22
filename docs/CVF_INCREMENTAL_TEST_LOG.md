@@ -73,6 +73,26 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-22] Batch: W1-T3 CP2 — Boardroom Session Contract
+- Scope:
+  - implement `BoardroomContract` as Fast Lane additive contract inside W1-T3
+  - contract accepts `DesignPlan` and optional clarifications, produces governed `BoardroomSession`
+  - clarification loop, decision logic (PROCEED/AMEND/ESCALATE/REJECT), governance canvas snapshot
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_EXECUTION_PLAN_2026-03-22.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP2) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts` (8 new tests)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (65 tests, 0 failures)
+- Skip scope:
+  - deterministic, facades, other packages — unchanged
+- Notes/Risks:
+  - CP2 exercises the DESIGN-phase boardroom pattern; CP3 will compose over it for orchestration
+
 ## [2026-03-22] Batch: W1-T3 CP1 — Design Contract Baseline
 - Scope:
   - implement `DesignContract` inside W1-T3 as the first design-phase contract baseline

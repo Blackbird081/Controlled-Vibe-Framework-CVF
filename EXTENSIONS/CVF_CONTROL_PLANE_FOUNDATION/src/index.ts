@@ -178,6 +178,19 @@ export type {
   DesignTaskPhase,
   DesignContractDependencies,
 } from "./design.contract";
+export {
+  BoardroomContract,
+  createBoardroomContract,
+} from "./boardroom.contract";
+export type {
+  BoardroomSession,
+  BoardroomRequest,
+  BoardroomSessionDecision,
+  BoardroomDecision,
+  ClarificationEntry,
+  ClarificationStatus,
+  BoardroomContractDependencies,
+} from "./boardroom.contract";
 
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";

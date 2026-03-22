@@ -15,6 +15,8 @@ import {
   buildPipelineStages,
   createDesignContract,
   DesignContract,
+  createBoardroomContract,
+  BoardroomContract,
   mapDocument,
   resolveSource,
   matchesFilters,
@@ -1062,5 +1064,143 @@ describe("W1-T3 CP1: DesignContract", () => {
         plan.warnings.some((w) => w.includes("no retrieved context")),
       ).toBe(true);
     }
+  });
+});
+
+// ─── W1-T3 CP2: Boardroom Session Contract ────────────────────────────────────
+
+describe("W1-T3 CP2: BoardroomContract", () => {
+  function seedShell() {
+    resetDocCounter();
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "Boardroom Test Doc",
+      content: "This document supports boardroom session testing.",
+      tier: "T2_POLICY",
+      documentType: "policy",
+      domain: "code_security",
+      tags: ["cp2-boardroom"],
+      metadata: { source: "boardroom-test" },
+    });
+    return shell;
+  }
+
+  function makeDesignPlan(overrides: Record<string, unknown> = {}) {
+    const shell = seedShell();
+    const intake = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T17:00:00.000Z",
+    }).execute({
+      vibe: (overrides.vibe as string) ?? "analyze code security patterns",
+      consumerId: (overrides.consumerId as string) ?? "boardroom-test",
+      tokenBudget: 256,
+    });
+    return createDesignContract({
+      now: () => "2026-03-22T17:01:00.000Z",
+    }).design(intake);
+  }
+
+  it("createBoardroomContract returns a BoardroomContract instance", () => {
+    const contract = createBoardroomContract();
+    expect(contract).toBeInstanceOf(BoardroomContract);
+  });
+
+  it("produces a BoardroomSession with PROCEED for a clean plan", () => {
+    const plan = makeDesignPlan();
+    const contract = createBoardroomContract({
+      now: () => "2026-03-22T17:02:00.000Z",
+    });
+    const session = contract.review({ plan });
+
+    expect(session.sessionId).toHaveLength(32);
+    expect(session.createdAt).toBe("2026-03-22T17:02:00.000Z");
+    expect(session.planId).toBe(plan.planId);
+    expect(session.decision.decision).toBe("PROCEED");
+    expect(session.finalPlan).toBeDefined();
+    expect(session.sessionHash).toHaveLength(32);
+  });
+
+  it("processes clarifications and marks answered vs pending", () => {
+    const plan = makeDesignPlan();
+    const contract = createBoardroomContract({
+      now: () => "2026-03-22T17:03:00.000Z",
+    });
+    const session = contract.review({
+      plan,
+      clarifications: [
+        { question: "What is the target architecture?", answer: "Microservices" },
+        { question: "What about scalability?" },
+      ],
+    });
+
+    expect(session.clarifications).toHaveLength(2);
+    expect(session.clarifications[0].status).toBe("answered");
+    expect(session.clarifications[1].status).toBe("pending");
+  });
+
+  it("amends plan when clarifications are pending", () => {
+    const plan = makeDesignPlan();
+    const contract = createBoardroomContract({
+      now: () => "2026-03-22T17:04:00.000Z",
+    });
+    const session = contract.review({
+      plan,
+      clarifications: [{ question: "Unresolved question" }],
+    });
+
+    expect(session.decision.decision).toBe("AMEND_PLAN");
+    expect(session.warnings.some((w) => w.includes("unanswered"))).toBe(true);
+  });
+
+  it("includes governance snapshot from canvas", () => {
+    const plan = makeDesignPlan();
+    const contract = createBoardroomContract({
+      now: () => "2026-03-22T17:05:00.000Z",
+    });
+    const session = contract.review({ plan });
+
+    expect(session.governanceSnapshot).toBeDefined();
+    expect(session.governanceSnapshot.totalSessions).toBeGreaterThanOrEqual(1);
+  });
+
+  it("produces deterministic session hash for same input", () => {
+    const plan = makeDesignPlan();
+    const fixedNow = () => "2026-03-22T17:06:00.000Z";
+    const s1 = createBoardroomContract({ now: fixedNow }).review({ plan });
+    const s2 = createBoardroomContract({ now: fixedNow }).review({ plan });
+
+    expect(s1.sessionHash).toBe(s2.sessionHash);
+  });
+
+  it("carries design plan warnings into session warnings", () => {
+    const shell = seedShell();
+    const intake = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T17:07:00.000Z",
+    }).execute({
+      vibe: "x",
+      consumerId: "warn-test",
+      tokenBudget: 256,
+    });
+    const plan = createDesignContract({
+      now: () => "2026-03-22T17:07:01.000Z",
+    }).design(intake);
+
+    const contract = createBoardroomContract({
+      now: () => "2026-03-22T17:07:02.000Z",
+    });
+    const session = contract.review({ plan });
+
+    expect(session.warnings.some((w) => w.includes("warning(s)"))).toBe(true);
+  });
+
+  it("session with no clarifications has empty clarifications array", () => {
+    const plan = makeDesignPlan();
+    const contract = createBoardroomContract({
+      now: () => "2026-03-22T17:08:00.000Z",
+    });
+    const session = contract.review({ plan });
+
+    expect(session.clarifications).toHaveLength(0);
   });
 });

@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`  
 > Tranche packet: `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 / CP2 IMPLEMENTED`
+> Status: `AUTHORIZED TRANCHE — CP1-CP5 IMPLEMENTED / TRANCHE CLOSED`
 
 ---
 
@@ -102,7 +102,7 @@ Scope:
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
 
 ### CP4 — Selected Execution Authorization Boundary Alignment
 
@@ -124,7 +124,7 @@ Guardrail:
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
 
 ### CP5 — Tranche Closure Review
 
@@ -137,7 +137,7 @@ Scope:
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
 
 ---
 
@@ -218,3 +218,53 @@ Receipt highlights:
 Evidence anchor:
 
 - `docs/baselines/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
+
+## 10. CP3 Implementation Receipt
+
+Implemented surface:
+
+- adapter evidence and explainability integration inside `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/`
+
+Receipt highlights:
+
+- `createExecutionAdapterEvidenceSurface()` connects ExplainabilityLayer (vi/en) + ReleaseEvidenceAdapter + adapter inventory
+- `describeExecutionAdapterEvidence()` produces a tranche-local `CP3` review surface
+- adapter inventory: 4 registered adapters (OpenClaw, PicoClaw, ZeroClaw, Nano)
+- sample explainability produces valid human-readable explanation with risk scoring
+- 3 new tests (9 total pass at CP3)
+
+Evidence anchor:
+
+- `docs/audits/CVF_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_AUDIT_2026-03-22.md`
+
+## 11. CP4 Implementation Receipt
+
+Implemented surface:
+
+- authorization boundary alignment inside `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/`
+
+Receipt highlights:
+
+- `createExecutionAuthorizationBoundarySurface()` connects PolicyContract + EdgeSecurityConfig + guard boundary
+- `describeExecutionAuthorizationBoundary()` produces a tranche-local `CP4` review surface
+- re-exports EdgeSecurityConfig + defaultEdgeSecurityConfig from adapter hub
+- policy boundary: 5 decision types (allow, deny, review, sandbox, pending)
+- edge security: PII masking, secret masking, injection precheck, audit log
+- 3 new tests (12 total pass at CP4)
+
+Evidence anchor:
+
+- `docs/audits/CVF_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_AUDIT_2026-03-22.md`
+
+## 12. CP5 Tranche Closure Receipt
+
+Tranche status:
+
+- all 5 control points (`CP1`–`CP5`) are `IMPLEMENTED`
+- 12 tests pass in `CVF_EXECUTION_PLANE_FOUNDATION`
+- no source-module internals were physically moved
+- all deferred internals remain deferred
+
+Final readout:
+
+> `W2-T1` execution-plane foundation tranche is closed. The execution plane now has a governed, reviewable package surface connecting gateway adapters, MCP bridge, explainability, release evidence, policy authorization, and edge security boundaries.

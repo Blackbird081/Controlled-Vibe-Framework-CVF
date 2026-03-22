@@ -90,6 +90,7 @@ Personal AI usage unrelated to company work is excluded.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`.
 14. Agent handoff is mandatory whenever governed work pauses or transfers before closure:
    - This rule applies to pause/resume, agent-to-agent transfer, and mid-tranche stop states.
+   - Transition classification must be determined first using `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`.
    - The handoff must truthfully state repo truth, tranche truth, latest completed commit, next governed move, and explicit scope limits.
    - The canonical handoff template is `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`.

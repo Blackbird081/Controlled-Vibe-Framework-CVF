@@ -43,6 +43,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_baseline_update_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
         (
+            "agent handoff guard compatibility",
+            ["python", "governance/compat/check_agent_handoff_guard_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
             "depth-audit continuation compatibility",
             ["python", "governance/compat/check_depth_audit_continuation_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),

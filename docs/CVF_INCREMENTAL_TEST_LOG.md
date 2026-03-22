@@ -2230,3 +2230,33 @@ Utility and guard:
 - Notes/Risks:
   - this batch changes governance posture and documentation only; it does not yet add a dedicated automated compat gate for missing handoff artifacts.
   - until automation exists, compliance depends on policy discipline plus review-time enforcement.
+## [2026-03-22] Batch: Agent handoff transition semantics and automation
+- Scope:
+  - define transition semantics for `continue`, `break`, `pause`, `shift handoff`, `agent transfer`, `escalation handoff`, and `closure`
+  - require transition classification before the handoff template is used
+  - add an automated compat gate so `GC-020` alignment is checked without waiting for prompt-time reminders
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- Files updated:
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `governance/compat/check_agent_handoff_guard_compat.py`
+  - `governance/compat/run_local_governance_hook_chain.py`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_AGENT_HANDOFF_TRANSITION_AUTOMATION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_agent_handoff_guard_compat.py --enforce` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this gate enforces repo-level alignment for `GC-020`; it does not yet detect live chat pauses by itself because that needs session/runtime signals.
+  - the automation is still valuable because it stops the handoff standard from silently drifting out of policy, docs, and hook-chain alignment.

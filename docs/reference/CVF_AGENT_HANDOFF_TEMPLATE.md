@@ -10,6 +10,10 @@ Status: canonical handoff template for pause, session stop, and agent-to-agent t
 
 ## When To Use
 
+Before using this template, classify the current transition with:
+
+- `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
+
 Use this template whenever any of the following happens:
 
 - the current agent is about to stop before the tranche is closed
@@ -137,6 +141,7 @@ Use the current tranche artifacts instead of copying stale scope language from o
 
 ## Related References
 
+- `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 - `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
 - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
 - `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`

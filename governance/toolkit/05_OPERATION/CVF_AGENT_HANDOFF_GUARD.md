@@ -10,6 +10,10 @@
 
 Whenever governed work pauses or is transferred, the current worker MUST leave one explicit handoff artifact in the conversation or record chain.
 
+The current state transition must first be classified using:
+
+- `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
+
 This rule applies when:
 
 - the current agent is stopping before the tranche is closed
@@ -58,6 +62,7 @@ Every governed handoff must include:
 Canonical template:
 
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+- `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 
 ---
 
@@ -134,6 +139,7 @@ Until automation exists, reviewers and workers should treat missing handoff stat
 
 - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
 - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
 - `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`

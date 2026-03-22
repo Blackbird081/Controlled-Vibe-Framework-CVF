@@ -31,6 +31,11 @@ import {
   createPolicyGateContract,
   ExecutionBridgeConsumerContract,
   createExecutionBridgeConsumerContract,
+  // W2-T3
+  CommandRuntimeContract,
+  createCommandRuntimeContract,
+  ExecutionPipelineContract,
+  createExecutionPipelineContract,
 } from "../src/index";
 import { createGuardEngine } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
 import {
@@ -559,5 +564,268 @@ describe("W2-T2 CP3 — ExecutionBridgeConsumerContract", () => {
     const designReceipt = buildDesignConsumptionReceipt();
     const result = contract.bridge(designReceipt);
     expect(result.bridgeReceiptId).toBeTruthy();
+  });
+});
+
+describe("W2-T3 CP1 — CommandRuntimeContract", () => {
+  function makePolicyGateResult(
+    entries: { assignmentId: string; taskId: string; gateDecision: "allow" | "deny" | "review" | "sandbox" | "pending"; riskLevel?: string }[],
+  ) {
+    const gateEntries = entries.map((e) => ({
+      assignmentId: e.assignmentId,
+      taskId: e.taskId,
+      guardDecision: "ALLOW" as const,
+      riskLevel: e.riskLevel ?? "R1",
+      gateDecision: e.gateDecision,
+      rationale: `Test rationale for ${e.gateDecision}`,
+    }));
+
+    return {
+      gateId: "gate-test-001",
+      dispatchId: "dispatch-test-001",
+      evaluatedAt: "2026-03-22T10:00:00.000Z",
+      entries: gateEntries,
+      allowedCount: gateEntries.filter((e) => e.gateDecision === "allow").length,
+      deniedCount: gateEntries.filter((e) => e.gateDecision === "deny").length,
+      reviewRequiredCount: gateEntries.filter((e) => e.gateDecision === "review").length,
+      sandboxedCount: gateEntries.filter((e) => e.gateDecision === "sandbox").length,
+      pendingCount: gateEntries.filter((e) => e.gateDecision === "pending").length,
+      gateHash: "gate-hash-001",
+      summary: "Test gate result",
+    };
+  }
+
+  it("produces EXECUTED records for allow decisions", () => {
+    const contract = createCommandRuntimeContract();
+    const gateResult = makePolicyGateResult([
+      { assignmentId: "a1", taskId: "t1", gateDecision: "allow" },
+    ]);
+    const result = contract.execute(gateResult);
+
+    expect(result.executedCount).toBe(1);
+    expect(result.records[0].status).toBe("EXECUTED");
+    expect(result.records[0].assignmentId).toBe("a1");
+    expect(result.records[0].executionHash).toBeTruthy();
+  });
+
+  it("produces DELEGATED_TO_SANDBOX records for sandbox decisions", () => {
+    const contract = createCommandRuntimeContract();
+    const gateResult = makePolicyGateResult([
+      { assignmentId: "a1", taskId: "t1", gateDecision: "sandbox", riskLevel: "R3" },
+    ]);
+    const result = contract.execute(gateResult);
+
+    expect(result.sandboxedCount).toBe(1);
+    expect(result.records[0].status).toBe("DELEGATED_TO_SANDBOX");
+  });
+
+  it("produces SKIPPED_DENIED records for deny decisions", () => {
+    const contract = createCommandRuntimeContract();
+    const gateResult = makePolicyGateResult([
+      { assignmentId: "a1", taskId: "t1", gateDecision: "deny" },
+    ]);
+    const result = contract.execute(gateResult);
+
+    expect(result.skippedCount).toBe(1);
+    expect(result.records[0].status).toBe("SKIPPED_DENIED");
+  });
+
+  it("produces SKIPPED_REVIEW_REQUIRED records for review decisions", () => {
+    const contract = createCommandRuntimeContract();
+    const gateResult = makePolicyGateResult([
+      { assignmentId: "a1", taskId: "t1", gateDecision: "review" },
+    ]);
+    const result = contract.execute(gateResult);
+
+    expect(result.skippedCount).toBe(1);
+    expect(result.records[0].status).toBe("SKIPPED_REVIEW_REQUIRED");
+  });
+
+  it("produces SKIPPED_PENDING records for pending decisions", () => {
+    const contract = createCommandRuntimeContract();
+    const gateResult = makePolicyGateResult([
+      { assignmentId: "a1", taskId: "t1", gateDecision: "pending" },
+    ]);
+    const result = contract.execute(gateResult);
+
+    expect(result.skippedCount).toBe(1);
+    expect(result.records[0].status).toBe("SKIPPED_PENDING");
+  });
+
+  it("counts are correct for mixed gate decisions", () => {
+    const contract = createCommandRuntimeContract();
+    const gateResult = makePolicyGateResult([
+      { assignmentId: "a1", taskId: "t1", gateDecision: "allow" },
+      { assignmentId: "a2", taskId: "t2", gateDecision: "sandbox", riskLevel: "R3" },
+      { assignmentId: "a3", taskId: "t3", gateDecision: "deny" },
+      { assignmentId: "a4", taskId: "t4", gateDecision: "review" },
+      { assignmentId: "a5", taskId: "t5", gateDecision: "pending" },
+    ]);
+    const result = contract.execute(gateResult);
+
+    expect(result.executedCount).toBe(1);
+    expect(result.sandboxedCount).toBe(1);
+    expect(result.skippedCount).toBe(3);
+    expect(result.failedCount).toBe(0);
+    expect(result.records).toHaveLength(5);
+  });
+
+  it("accepts injectable executeTask and calls it for allow decisions", () => {
+    let called = false;
+    const customExecutor = (entry: any, sandbox: boolean) => {
+      called = true;
+      return {
+        assignmentId: entry.assignmentId,
+        taskId: entry.taskId,
+        gateDecision: entry.gateDecision,
+        status: "EXECUTED" as const,
+        executionHash: "custom-hash-001",
+        notes: "custom executor invoked",
+      };
+    };
+    const contract = createCommandRuntimeContract({ executeTask: customExecutor });
+    const gateResult = makePolicyGateResult([{ assignmentId: "a1", taskId: "t1", gateDecision: "allow" }]);
+    contract.execute(gateResult);
+
+    expect(called).toBe(true);
+  });
+
+  it("produces a stable runtimeHash for identical inputs", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+    const contract1 = createCommandRuntimeContract({ now: () => fixedTime });
+    const contract2 = createCommandRuntimeContract({ now: () => fixedTime });
+    const gateResult = makePolicyGateResult([{ assignmentId: "a1", taskId: "t1", gateDecision: "allow" }]);
+
+    const r1 = contract1.execute(gateResult);
+    const r2 = contract2.execute(gateResult);
+
+    expect(r1.runtimeHash).toBe(r2.runtimeHash);
+  });
+
+  it("handles empty gate result", () => {
+    const contract = createCommandRuntimeContract();
+    const gateResult = makePolicyGateResult([]);
+    const result = contract.execute(gateResult);
+
+    expect(result.records).toHaveLength(0);
+    expect(result.executedCount).toBe(0);
+    expect(result.summary).toContain("zero entries");
+  });
+
+  it("creates CommandRuntimeContract via class constructor", () => {
+    const contract = new CommandRuntimeContract();
+    expect(contract).toBeInstanceOf(CommandRuntimeContract);
+    const gateResult = makePolicyGateResult([{ assignmentId: "a1", taskId: "t1", gateDecision: "allow" }]);
+    const result = contract.execute(gateResult);
+    expect(result.runtimeId).toBeTruthy();
+  });
+
+  it("records include gateDecision field from the entry", () => {
+    const contract = createCommandRuntimeContract();
+    const gateResult = makePolicyGateResult([
+      { assignmentId: "a1", taskId: "t1", gateDecision: "allow" },
+      { assignmentId: "a2", taskId: "t2", gateDecision: "deny" },
+    ]);
+    const result = contract.execute(gateResult);
+
+    expect(result.records[0].gateDecision).toBe("allow");
+    expect(result.records[1].gateDecision).toBe("deny");
+  });
+});
+
+describe("W2-T3 CP2 — ExecutionPipelineContract", () => {
+  function buildBridgeReceipt() {
+    const intakeContract = createControlPlaneIntakeContract();
+    const intake = intakeContract.execute({
+      vibe: "Build an execution command runtime for task processing",
+      consumerId: "w2-t3-test",
+    });
+    const designConsumer = createDesignConsumerContract();
+    const designReceipt = designConsumer.consume(intake);
+    const bridge = createExecutionBridgeConsumerContract();
+    return bridge.bridge(designReceipt);
+  }
+
+  it("runs ExecutionPipelineContract and returns an ExecutionPipelineReceipt", () => {
+    const bridgeReceipt = buildBridgeReceipt();
+    const pipeline = createExecutionPipelineContract();
+    const result = pipeline.run(bridgeReceipt);
+
+    expect(result.pipelineReceiptId).toBeTruthy();
+    expect(result.bridgeReceiptId).toBe(bridgeReceipt.bridgeReceiptId);
+    expect(result.orchestrationId).toBe(bridgeReceipt.orchestrationId);
+    expect(result.pipelineHash).toBeTruthy();
+  });
+
+  it("tracks 4 pipeline stages", () => {
+    const bridgeReceipt = buildBridgeReceipt();
+    const pipeline = createExecutionPipelineContract();
+    const result = pipeline.run(bridgeReceipt);
+
+    expect(result.pipelineStages).toHaveLength(4);
+    const stageNames = result.pipelineStages.map((s) => s.stage);
+    expect(stageNames).toContain("BRIDGE_INGESTED");
+    expect(stageNames).toContain("GATE_EXTRACTED");
+    expect(stageNames).toContain("RUNTIME_EXECUTED");
+    expect(stageNames).toContain("PIPELINE_RECEIPT_ISSUED");
+  });
+
+  it("produces a CommandRuntimeResult inside the pipeline receipt", () => {
+    const bridgeReceipt = buildBridgeReceipt();
+    const pipeline = createExecutionPipelineContract();
+    const result = pipeline.run(bridgeReceipt);
+
+    expect(result.commandRuntimeResult).toBeTruthy();
+    expect(result.commandRuntimeResult.runtimeId).toBeTruthy();
+    expect(result.gateId).toBe(bridgeReceipt.policyGateResult.gateId);
+    expect(result.runtimeId).toBe(result.commandRuntimeResult.runtimeId);
+  });
+
+  it("execution counts match command runtime result", () => {
+    const bridgeReceipt = buildBridgeReceipt();
+    const pipeline = createExecutionPipelineContract();
+    const result = pipeline.run(bridgeReceipt);
+
+    expect(result.executedCount).toBe(result.commandRuntimeResult.executedCount);
+    expect(result.sandboxedCount).toBe(result.commandRuntimeResult.sandboxedCount);
+    expect(result.skippedCount).toBe(result.commandRuntimeResult.skippedCount);
+    expect(result.failedCount).toBe(result.commandRuntimeResult.failedCount);
+  });
+
+  it("totalEntries equals number of records in runtime result", () => {
+    const bridgeReceipt = buildBridgeReceipt();
+    const pipeline = createExecutionPipelineContract();
+    const result = pipeline.run(bridgeReceipt);
+
+    expect(result.totalEntries).toBe(result.commandRuntimeResult.records.length);
+  });
+
+  it("produces a stable pipelineHash for identical inputs", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+    const bridgeReceipt = buildBridgeReceipt();
+    const p1 = createExecutionPipelineContract({ now: () => fixedTime });
+    const p2 = createExecutionPipelineContract({ now: () => fixedTime });
+
+    const r1 = p1.run(bridgeReceipt);
+    const r2 = p2.run(bridgeReceipt);
+
+    expect(r1.pipelineHash).toBe(r2.pipelineHash);
+  });
+
+  it("propagates bridge receipt warnings", () => {
+    const bridgeReceipt = buildBridgeReceipt();
+    const receiptWithWarning = { ...bridgeReceipt, warnings: ["test bridge warning"] };
+    const pipeline = createExecutionPipelineContract();
+    const result = pipeline.run(receiptWithWarning);
+
+    expect(result.warnings.some((w) => w.includes("[bridge]") && w.includes("test bridge warning"))).toBe(true);
+  });
+
+  it("creates ExecutionPipelineContract via class constructor", () => {
+    const contract = new ExecutionPipelineContract();
+    expect(contract).toBeInstanceOf(ExecutionPipelineContract);
+    const bridgeReceipt = buildBridgeReceipt();
+    const result = contract.run(bridgeReceipt);
+    expect(result.pipelineReceiptId).toBeTruthy();
   });
 });

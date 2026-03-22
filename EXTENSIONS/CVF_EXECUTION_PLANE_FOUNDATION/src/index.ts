@@ -1,3 +1,25 @@
+// W2-T3 — Bounded Execution Command Runtime (CP1–CP2)
+export {
+  CommandRuntimeContract,
+  createCommandRuntimeContract,
+} from "./command.runtime.contract";
+export type {
+  RuntimeExecutionStatus,
+  RuntimeExecutionRecord,
+  CommandRuntimeResult,
+  CommandRuntimeContractDependencies,
+} from "./command.runtime.contract";
+export {
+  ExecutionPipelineContract,
+  createExecutionPipelineContract,
+} from "./execution.pipeline.contract";
+export type {
+  ExecutionPipelineStage,
+  ExecutionPipelineStageEntry,
+  ExecutionPipelineReceipt,
+  ExecutionPipelineContractDependencies,
+} from "./execution.pipeline.contract";
+
 // W2-T2 — Execution Dispatch Bridge (CP1–CP3)
 export {
   DispatchContract,

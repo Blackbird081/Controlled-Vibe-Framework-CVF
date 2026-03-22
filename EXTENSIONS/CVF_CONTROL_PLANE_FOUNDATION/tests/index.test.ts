@@ -4,6 +4,12 @@ import {
   CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT,
   AgentRole,
   createControlPlaneIntakeContract,
+  createRetrievalContract,
+  mapDocument,
+  resolveSource,
+  matchesFilters,
+  readStringFilter,
+  readStringList,
   ReasoningMode,
   canAccessScope,
   createControlPlaneEvidenceSurface,
@@ -241,5 +247,266 @@ describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
     );
     expect(resolveReasoningMode(AgentRole.REVIEW)).toBe(ReasoningMode.STRICT);
     expect(resolveReasoningMode(AgentRole.DESIGN)).toBe(ReasoningMode.CONTROLLED);
+  });
+});
+
+describe("CVF_CONTROL_PLANE_FOUNDATION — CP2 Unified Retrieval Contract", () => {
+  it("retrieves chunks independently through the unified retrieval contract", () => {
+    resetDocCounter();
+
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "Security Baseline Policy",
+      content: "All deployments must pass security review before production release.",
+      tier: "T1_DOCTRINE",
+      documentType: "doctrine",
+      domain: "security",
+      tags: ["security", "deployment"],
+      metadata: { source: "security-baseline", owner: "governance" },
+    });
+
+    const contract = createRetrievalContract({ knowledge: shell.knowledge });
+    const result = contract.retrieve({
+      query: "security deployment review",
+      options: { maxChunks: 5, minRelevance: 0.01 },
+    });
+
+    expect(result.query).toBe("security deployment review");
+    expect(result.chunkCount).toBe(1);
+    expect(result.totalCandidates).toBeGreaterThan(0);
+    expect(result.retrievalTimeMs).toBeGreaterThanOrEqual(0);
+    expect(result.tiersSearched).toContain("T1_DOCTRINE");
+    expect(result.chunks[0]?.source).toBe("security-baseline");
+    expect(result.chunks[0]?.content).toContain("security review");
+    expect(result.chunks[0]?.relevanceScore).toBeGreaterThan(0);
+    expect(result.chunks[0]?.metadata?.title).toBe("Security Baseline Policy");
+    expect(result.chunks[0]?.metadata?.tier).toBe("T1_DOCTRINE");
+    expect(result.chunks[0]?.metadata?.domain).toBe("security");
+  });
+
+  it("applies source filters through the unified contract", () => {
+    resetDocCounter();
+
+    const shell = createControlPlaneFoundationShell();
+    const store = shell.knowledge.getStore();
+    store.add({
+      title: "Policy A",
+      content: "Policy A content about finance approval.",
+      tier: "T2_POLICY",
+      documentType: "policy",
+      domain: "finance",
+      tags: ["finance"],
+      metadata: { source: "source-a" },
+    });
+    store.add({
+      title: "Policy B",
+      content: "Policy B content about finance review.",
+      tier: "T2_POLICY",
+      documentType: "policy",
+      domain: "finance",
+      tags: ["finance"],
+      metadata: { source: "source-b" },
+    });
+
+    const contract = createRetrievalContract({ knowledge: shell.knowledge });
+    const result = contract.retrieve({
+      query: "finance",
+      options: { sources: ["source-a"] },
+    });
+
+    expect(result.chunkCount).toBe(1);
+    expect(result.chunks[0]?.source).toBe("source-a");
+  });
+
+  it("applies metadata filters through the unified contract", () => {
+    resetDocCounter();
+
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "Ops Log",
+      content: "Operational log for deployment pipeline verification.",
+      tier: "T3_OPERATIONAL",
+      documentType: "operational_log",
+      domain: "devops",
+      tags: ["ops"],
+      metadata: { source: "ops-log", environment: "production" },
+    });
+    shell.knowledge.getStore().add({
+      title: "Ops Log Staging",
+      content: "Operational log for staging deployment pipeline.",
+      tier: "T3_OPERATIONAL",
+      documentType: "operational_log",
+      domain: "devops",
+      tags: ["ops"],
+      metadata: { source: "ops-staging", environment: "staging" },
+    });
+
+    const contract = createRetrievalContract({ knowledge: shell.knowledge });
+    const result = contract.retrieve({
+      query: "deployment pipeline",
+      options: { filters: { environment: "production" } },
+    });
+
+    expect(result.chunkCount).toBe(1);
+    expect(result.chunks[0]?.source).toBe("ops-log");
+  });
+
+  it("returns empty chunks when no documents match", () => {
+    const contract = createRetrievalContract();
+    const result = contract.retrieve({
+      query: "nonexistent topic",
+    });
+
+    expect(result.chunkCount).toBe(0);
+    expect(result.chunks).toEqual([]);
+    expect(result.totalCandidates).toBe(0);
+  });
+
+  it("exposes the underlying knowledge pipeline through getKnowledge()", () => {
+    const shell = createControlPlaneFoundationShell();
+    const contract = createRetrievalContract({ knowledge: shell.knowledge });
+    expect(contract.getKnowledge()).toBe(shell.knowledge);
+  });
+
+  it("resolveSource falls back to title when metadata.source is absent", () => {
+    const doc = {
+      id: "doc-1",
+      title: "Fallback Title",
+      content: "content",
+      tier: "T2_POLICY" as const,
+      documentType: "policy" as const,
+      domain: "general",
+      tags: [],
+      metadata: {},
+    };
+    expect(resolveSource(doc)).toBe("Fallback Title");
+  });
+
+  it("resolveSource uses metadata.source when present", () => {
+    const doc = {
+      id: "doc-2",
+      title: "Title",
+      content: "content",
+      tier: "T2_POLICY" as const,
+      documentType: "policy" as const,
+      domain: "general",
+      tags: [],
+      metadata: { source: "explicit-source" },
+    };
+    expect(resolveSource(doc)).toBe("explicit-source");
+  });
+
+  it("mapDocument produces a correctly shaped RetrievalChunk", () => {
+    const doc = {
+      id: "doc-3",
+      title: "Test Doc",
+      content: "Test content",
+      tier: "T1_DOCTRINE" as const,
+      documentType: "doctrine" as const,
+      domain: "governance",
+      tags: ["gov"],
+      score: 0.85,
+      metadata: { source: "test-source", custom: "value" },
+    };
+    const chunk = mapDocument(doc);
+    expect(chunk.id).toBe("doc-3");
+    expect(chunk.source).toBe("test-source");
+    expect(chunk.content).toBe("Test content");
+    expect(chunk.relevanceScore).toBe(0.85);
+    expect(chunk.metadata?.title).toBe("Test Doc");
+    expect(chunk.metadata?.tier).toBe("T1_DOCTRINE");
+    expect(chunk.metadata?.custom).toBe("value");
+  });
+
+  it("matchesFilters passes when no filters are set", () => {
+    const chunk = { id: "c1", source: "s", content: "", relevanceScore: 0 };
+    expect(matchesFilters(chunk)).toBe(true);
+    expect(matchesFilters(chunk, {})).toBe(true);
+  });
+
+  it("matchesFilters rejects when source filter does not match", () => {
+    const chunk = { id: "c1", source: "source-a", content: "", relevanceScore: 0 };
+    expect(matchesFilters(chunk, { sources: ["source-b"] })).toBe(false);
+  });
+
+  it("matchesFilters handles array-valued metadata filters on non-reserved keys", () => {
+    const chunk = {
+      id: "c1",
+      source: "s",
+      content: "",
+      relevanceScore: 0,
+      metadata: { categories: ["a", "b"] },
+    };
+    expect(matchesFilters(chunk, { filters: { categories: ["b", "c"] } })).toBe(true);
+    expect(matchesFilters(chunk, { filters: { categories: ["x", "y"] } })).toBe(false);
+  });
+
+  it("matchesFilters skips reserved keys (domain, tags) since they are handled by RAGPipeline", () => {
+    const chunk = {
+      id: "c1",
+      source: "s",
+      content: "",
+      relevanceScore: 0,
+      metadata: { tags: ["a"], domain: "finance" },
+    };
+    expect(matchesFilters(chunk, { filters: { tags: ["x"], domain: "other" } })).toBe(true);
+  });
+
+  it("readStringFilter returns undefined for non-strings", () => {
+    expect(readStringFilter(undefined)).toBeUndefined();
+    expect(readStringFilter(42)).toBeUndefined();
+    expect(readStringFilter("")).toBeUndefined();
+    expect(readStringFilter("valid")).toBe("valid");
+  });
+
+  it("readStringList returns undefined for non-arrays and empty arrays", () => {
+    expect(readStringList(undefined)).toBeUndefined();
+    expect(readStringList("not-array")).toBeUndefined();
+    expect(readStringList([])).toBeUndefined();
+    expect(readStringList(["a", "b"])).toEqual(["a", "b"]);
+  });
+
+  it("intake contract delegates retrieval to the unified contract producing identical results", () => {
+    resetDocCounter();
+
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "Delegation Test Policy",
+      content: "Policy content for verifying delegation through unified retrieval.",
+      tier: "T2_POLICY",
+      documentType: "policy",
+      domain: "governance",
+      tags: ["governance", "delegation"],
+      metadata: { source: "delegation-test", owner: "cp2" },
+    });
+
+    const intakeContract = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T14:00:00.000Z",
+    });
+    const intakeResult = intakeContract.execute({
+      vibe: "Verify governance delegation policy compliance.",
+      tokenBudget: 100,
+      consumerId: "cp2-delegation-test",
+      retrieval: {
+        maxChunks: 5,
+        sources: ["delegation-test"],
+        filters: { owner: "cp2" },
+      },
+    });
+
+    const retrievalContract = createRetrievalContract({ knowledge: shell.knowledge });
+    const directResult = retrievalContract.retrieve({
+      query: intakeResult.retrieval.query,
+      options: {
+        maxChunks: 5,
+        sources: ["delegation-test"],
+        filters: { owner: "cp2", domain: "governance" },
+      },
+    });
+
+    expect(intakeResult.retrieval.chunkCount).toBe(directResult.chunkCount);
+    expect(intakeResult.retrieval.chunks[0]?.source).toBe(directResult.chunks[0]?.source);
+    expect(intakeResult.retrieval.chunks[0]?.content).toBe(directResult.chunks[0]?.content);
   });
 });

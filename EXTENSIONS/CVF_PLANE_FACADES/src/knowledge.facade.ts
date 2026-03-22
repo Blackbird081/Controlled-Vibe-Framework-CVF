@@ -13,6 +13,7 @@
 import {
   createControlPlaneIntakeContract,
   createControlPlaneFoundationShell,
+  createRetrievalContract,
   packageIntakeContext,
   type ControlPlaneFoundationShell,
   type ControlPlaneIntakeResult,
@@ -94,41 +95,25 @@ export class KnowledgeFacade {
   }
 
   /**
-   * Retrieve context chunks via the `CP1` shell's canonical knowledge delegate.
+   * Retrieve context chunks via the unified `CP2` retrieval contract.
+   * Delegates to `RetrievalContract` instead of reimplementing mapping/filtering.
    */
   retrieveContext(query: string, options?: RetrievalOptions): ContextChunk[] {
-    const result = this.shell.knowledge.query({
-      query,
-      maxResults: options?.maxChunks ?? 10,
-      minScore: options?.minRelevance ?? 0.01,
-      domain: this.readStringFilter(options?.filters?.domain),
-      tags: this.readStringList(options?.filters?.tags),
+    const retrievalContract = createRetrievalContract({
+      knowledge: this.shell.knowledge,
     });
-
-    const chunks = result.documents
-      .map((doc) => ({
-        id: doc.id,
-        source: this.resolveSource(doc),
-        content: doc.content,
-        relevanceScore: doc.score ?? 0,
-        metadata: {
-          title: doc.title,
-          tier: doc.tier,
-          documentType: doc.documentType,
-          domain: doc.domain,
-          tags: doc.tags,
-          ...doc.metadata,
-        },
-      }))
-      .filter((chunk) => this.matchesFilters(chunk, options));
+    const result = retrievalContract.retrieve({
+      query,
+      options,
+    });
 
     this.retrievalLog.push({
       query,
-      chunkCount: chunks.length,
+      chunkCount: result.chunkCount,
       timestamp: this.now(),
     });
 
-    return chunks;
+    return result.chunks;
   }
 
   /**
@@ -209,67 +194,6 @@ export class KnowledgeFacade {
    */
   getRetrievalLog(): ReadonlyArray<{ query: string; chunkCount: number; timestamp: string }> {
     return this.retrievalLog;
-  }
-
-  private resolveSource(doc: {
-    title: string;
-    metadata: Record<string, unknown>;
-  }): string {
-    if (typeof doc.metadata.source === 'string' && doc.metadata.source.length > 0) {
-      return doc.metadata.source;
-    }
-    return doc.title;
-  }
-
-  private matchesFilters(chunk: ContextChunk, options?: RetrievalOptions): boolean {
-    if (options?.sources && options.sources.length > 0 && !options.sources.includes(chunk.source)) {
-      return false;
-    }
-
-    const filters = options?.filters;
-    if (!filters) {
-      return true;
-    }
-
-    for (const [key, expected] of Object.entries(filters)) {
-      if (key === 'domain' || key === 'tags') {
-        continue;
-      }
-
-      const actual = chunk.metadata?.[key];
-      if (Array.isArray(expected)) {
-        if (!Array.isArray(actual)) {
-          return false;
-        }
-
-        const expectedValues = expected.map((value) => String(value));
-        const actualValues = actual.map((value) => String(value));
-        const hasOverlap = expectedValues.some((value) => actualValues.includes(value));
-        if (!hasOverlap) {
-          return false;
-        }
-        continue;
-      }
-
-      if (actual !== expected) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private readStringFilter(value: unknown): string | undefined {
-    return typeof value === 'string' && value.length > 0 ? value : undefined;
-  }
-
-  private readStringList(value: unknown): string[] | undefined {
-    if (!Array.isArray(value)) {
-      return undefined;
-    }
-
-    const items = value.filter((entry): entry is string => typeof entry === 'string' && entry.length > 0);
-    return items.length > 0 ? items : undefined;
   }
 
   private mapIntakeResult(result: ControlPlaneIntakeResult): IntakeResult {

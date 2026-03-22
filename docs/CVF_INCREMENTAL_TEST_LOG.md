@@ -2338,3 +2338,49 @@ Utility and guard:
 - Notes/Risks:
   - this batch strengthens the canonical model and repo-level enforcement, not universal runtime/session capture.
   - the principle is now explicit: handoff is not only work transfer; it is context quality control by phase for multi-agent CVF.
+## [2026-03-22] Batch: W1-T2 CP2 — Unified Knowledge Retrieval Contract
+- Scope:
+  - implement CP2 inside W1-T2 as an additive contract alignment
+  - extract unified retrieval contract from duplicated logic in `intake.contract.ts` and `knowledge.facade.ts`
+  - make retrieval independently callable through a governed contract
+  - refactor both consumers to delegate retrieval to the new unified contract
+- Policy / roadmap references:
+  - `docs/audits/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_REVIEW_2026-03-22.md`
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/retrieval.contract.ts`
+  - `docs/audits/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/intake.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts`
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/knowledge.facade.ts`
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/reference/CVF_MODULE_INVENTORY.md`
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+  - `docs/reference/CVF_MATURITY_MATRIX.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test` -> PASS (23 tests: 8 existing + 15 new CP2)
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test:coverage` -> PASS (stmts 97.66%, branches 86.27%, funcs 92.85%, lines 97.66%)
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test` -> PASS (8 tests)
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test:coverage` -> PASS (stmts 98.11%, branches 78.12%, funcs 94.44%, lines 98.11%)
+  - `cd EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION && npm run test` -> PASS (41 tests)
+  - `cd EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE && npm run test` -> PASS (34 tests)
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npm run test` -> PASS (94 tests)
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+- Notes/Risks:
+  - this batch eliminates real duplication across 5+ private methods that were independently maintained in two files
+  - source lineage remains preserved; this batch extracts shared logic via delegation, not physical merge
+  - retrieval is now independently callable, which is a genuine new consumer capability
+  - later W1-T2 packets still need to prove deterministic packaging and one real downstream consumer path before the tranche can close

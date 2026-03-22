@@ -95,7 +95,7 @@ Scope:
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
 
 ### CP3 - Deterministic Context Packaging
 
@@ -176,7 +176,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T2` is now execution-planned as a realization-first control-plane tranche. `CP1` is implemented as the first bounded move toward one usable intake contract, while broader `AI Gateway` completion remains out of scope.
+> `W1-T2` is now execution-planned as a realization-first control-plane tranche. `CP1` and `CP2` are implemented. `CP1` provides the usable intake contract baseline. `CP2` provides the unified knowledge retrieval contract. Broader `AI Gateway` completion remains out of scope.
 
 ## 8. CP1 Implementation Receipt
 
@@ -195,3 +195,26 @@ Receipt highlights:
 Evidence anchor:
 
 - `docs/baselines/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`
+
+## 9. CP2 Implementation Receipt
+
+Implemented surfaces:
+
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/retrieval.contract.ts` (NEW)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/intake.contract.ts` (REFACTORED)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (UPDATED)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts` (15 new tests)
+- `EXTENSIONS/CVF_PLANE_FACADES/src/knowledge.facade.ts` (REFACTORED)
+
+Receipt highlights:
+
+- `RetrievalContract` now provides one unified retrieval contract that both `ControlPlaneIntakeContract` and `KnowledgeFacade` delegate to
+- `createRetrievalContract()` allows callers to perform governed retrieval independently without committing to full intake
+- 5 duplicated private methods eliminated across `intake.contract.ts` and `knowledge.facade.ts`
+- 15 new retrieval-contract-level tests added, all passing
+- source lineage preserved — no physical merge, delegation-based composition only
+- full knowledge-layer convergence and RAG internals remain out of scope
+
+Evidence anchor:
+
+- `docs/baselines/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`

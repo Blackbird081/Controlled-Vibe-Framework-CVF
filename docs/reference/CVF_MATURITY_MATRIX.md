@@ -28,7 +28,7 @@ Status: operational maturity view for current CVF lines.
 | v1.6 / v1.6.1 | candidate | active app/runtime line with canonical phase alignment evidence | active |
 | v1.7 / v1.7.1 / v1.7.2 / v1.7.3 | candidate | stable safety family with test evidence | stable/active |
 | v1.8 / v1.8.1 / v1.9 / v2.0 | local-implemented | implemented locally, not yet normalized into a single release narrative | local-ready |
-| W1-T1 / W1-T2 control-plane line | local-implemented | closed control-plane tranche plus a bounded usable-intake contract baseline with local verification and regression receipts | local-ready |
+| W1-T1 / W1-T2 control-plane line | local-implemented | closed control-plane tranche plus a bounded usable-intake contract baseline and unified knowledge retrieval contract with local verification and regression receipts | local-ready |
 | W2-T1 shell line | local-implemented | closed tranche with shell, wrapper, adapter-evidence, authorization-boundary, and closure receipts | local-ready |
 | W3-T1 governance-expansion line | local-implemented | closed tranche for operational governance packaging with explicit defer receipts for concept-only targets | local-ready |
 | v2.5 | candidate | 476 tests across 14 files, 0 failures | active |

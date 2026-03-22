@@ -1,6 +1,5 @@
 import type { ValidatedIntent } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/types";
 import type {
-  RAGDocument,
   RetrievalTier,
 } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/types";
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
@@ -8,6 +7,11 @@ import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";
 import { GovernanceCanvas } from "../../CVF_ECO_v2.1_GOVERNANCE_CANVAS/src/canvas";
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import { ContextFreezer } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/context.freezer";
+import {
+  RetrievalContract,
+  readStringFilter,
+  type RetrievalChunk,
+} from "./retrieval.contract";
 
 export interface ControlPlaneIntakeShell {
   intent: IntentPipeline;
@@ -84,16 +88,23 @@ export class ControlPlaneIntakeContract {
     const createdAt = this.now();
     const intent = this.shell.intent.validate(request.vibe);
     const retrievalQuery = this.resolveRetrievalQuery(request, intent);
-    const ragResult = this.shell.knowledge.query({
-      query: retrievalQuery,
-      maxResults: request.retrieval?.maxChunks ?? 5,
-      minScore: request.retrieval?.minRelevance ?? 0.01,
-      domain: this.resolveDomainFilter(request, intent),
-      tags: this.readStringList(request.retrieval?.filters?.tags),
+    const domainFilter = this.resolveDomainFilter(request, intent);
+    const retrievalContract = new RetrievalContract({
+      knowledge: this.shell.knowledge,
     });
-    const chunks = ragResult.documents
-      .map((document) => this.mapDocument(document))
-      .filter((chunk) => this.matchesFilters(chunk, request.retrieval));
+    const retrievalResult = retrievalContract.retrieve({
+      query: retrievalQuery,
+      options: {
+        maxChunks: request.retrieval?.maxChunks ?? 5,
+        minRelevance: request.retrieval?.minRelevance ?? 0.01,
+        sources: request.retrieval?.sources,
+        filters: {
+          ...request.retrieval?.filters,
+          ...(domainFilter ? { domain: domainFilter } : {}),
+        },
+      },
+    });
+    const chunks = retrievalResult.chunks;
     const packagedContext = packageIntakeContext(
       chunks,
       request.tokenBudget ?? 256,
@@ -112,10 +123,10 @@ export class ControlPlaneIntakeContract {
       intent,
       retrieval: {
         query: retrievalQuery,
-        chunkCount: chunks.length,
-        totalCandidates: ragResult.totalCandidates,
-        retrievalTimeMs: ragResult.retrievalTimeMs,
-        tiersSearched: ragResult.tiersSearched,
+        chunkCount: retrievalResult.chunkCount,
+        totalCandidates: retrievalResult.totalCandidates,
+        retrievalTimeMs: retrievalResult.retrievalTimeMs,
+        tiersSearched: retrievalResult.tiersSearched,
         chunks,
       },
       packagedContext,
@@ -150,7 +161,7 @@ export class ControlPlaneIntakeContract {
     request: ControlPlaneIntakeRequest,
     intent: ValidatedIntent,
   ): string | undefined {
-    const directDomain = this.readStringFilter(request.retrieval?.filters?.domain);
+    const directDomain = readStringFilter(request.retrieval?.filters?.domain);
     if (directDomain) {
       return directDomain;
     }
@@ -160,7 +171,7 @@ export class ControlPlaneIntakeContract {
 
   private buildWarnings(
     intent: ValidatedIntent,
-    chunks: IntakeContextChunk[],
+    chunks: RetrievalChunk[],
   ): string[] {
     const warnings = [...intent.errors];
 
@@ -173,96 +184,6 @@ export class ControlPlaneIntakeContract {
     }
 
     return Array.from(new Set(warnings));
-  }
-
-  private mapDocument(document: RAGDocument): IntakeContextChunk {
-    return {
-      id: document.id,
-      source: this.resolveSource(document),
-      content: document.content,
-      relevanceScore: document.score ?? 0,
-      metadata: {
-        title: document.title,
-        tier: document.tier,
-        documentType: document.documentType,
-        domain: document.domain,
-        tags: document.tags,
-        ...document.metadata,
-      },
-    };
-  }
-
-  private resolveSource(document: RAGDocument): string {
-    if (
-      typeof document.metadata.source === "string" &&
-      document.metadata.source.length > 0
-    ) {
-      return document.metadata.source;
-    }
-
-    return document.title;
-  }
-
-  private matchesFilters(
-    chunk: IntakeContextChunk,
-    options?: ControlPlaneIntakeRetrievalOptions,
-  ): boolean {
-    if (
-      options?.sources &&
-      options.sources.length > 0 &&
-      !options.sources.includes(chunk.source)
-    ) {
-      return false;
-    }
-
-    const filters = options?.filters;
-    if (!filters) {
-      return true;
-    }
-
-    for (const [key, expected] of Object.entries(filters)) {
-      if (key === "domain" || key === "tags") {
-        continue;
-      }
-
-      const actual = chunk.metadata?.[key];
-      if (Array.isArray(expected)) {
-        if (!Array.isArray(actual)) {
-          return false;
-        }
-
-        const expectedValues = expected.map((value) => String(value));
-        const actualValues = actual.map((value) => String(value));
-        const hasOverlap = expectedValues.some((value) =>
-          actualValues.includes(value),
-        );
-        if (!hasOverlap) {
-          return false;
-        }
-        continue;
-      }
-
-      if (actual !== expected) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private readStringFilter(value: unknown): string | undefined {
-    return typeof value === "string" && value.length > 0 ? value : undefined;
-  }
-
-  private readStringList(value: unknown): string[] | undefined {
-    if (!Array.isArray(value)) {
-      return undefined;
-    }
-
-    const items = value.filter(
-      (entry): entry is string => typeof entry === "string" && entry.length > 0,
-    );
-    return items.length > 0 ? items : undefined;
   }
 }
 

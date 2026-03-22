@@ -126,6 +126,22 @@ export type {
   ControlPlaneIntakeResult,
   ControlPlaneIntakeContractDependencies,
 } from "./intake.contract";
+export {
+  RetrievalContract,
+  createRetrievalContract,
+  mapDocument,
+  resolveSource,
+  matchesFilters,
+  readStringFilter,
+  readStringList,
+} from "./retrieval.contract";
+export type {
+  RetrievalChunk,
+  RetrievalRequestOptions,
+  RetrievalRequest,
+  RetrievalResultSurface,
+  RetrievalContractDependencies,
+} from "./retrieval.contract";
 
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";

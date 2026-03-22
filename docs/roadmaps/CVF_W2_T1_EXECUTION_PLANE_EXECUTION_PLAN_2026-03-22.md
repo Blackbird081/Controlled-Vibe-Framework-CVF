@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`  
 > Tranche packet: `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 PACKET OPENED`
+> Status: `AUTHORIZED TRANCHE — CP1 IMPLEMENTED`
 
 ---
 
@@ -67,7 +67,7 @@ Notes:
 
 Status:
 
-- `PACKET OPENED — AWAITING DECISION`
+- `IMPLEMENTED`
 
 ### CP2 — MCP And Gateway Wrapper Alignment
 
@@ -171,4 +171,26 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W2-T1` is authorized, and `CP1` is now packeted as the first tranche-local execution-plane decision step.
+> `W2-T1` is authorized, and `CP1` is now implemented as the first tranche-local execution-plane shell.
+
+## 8. Implementation Receipt
+
+Implemented package:
+
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/`
+
+Receipt highlights:
+
+- source lineage preserved for:
+  - `CVF_ECO_v2.5_MCP_SERVER`
+  - `CVF_MODEL_GATEWAY`
+  - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+- `CVF_v1.2.1_EXTERNAL_INTEGRATION` remains indirect through `CVF_MODEL_GATEWAY`
+- `CVF_MODEL_GATEWAY` remains the gateway-facing wrapper anchor
+- MCP guard-runtime and CLI internals remain outside the initial package body
+- package-local verification is green
+- source-module regression verification is green
+
+Evidence anchor:
+
+- `docs/baselines/CVF_W2_T1_CP1_EXECUTION_PLANE_IMPLEMENTATION_DELTA_2026-03-22.md`

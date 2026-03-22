@@ -1871,3 +1871,46 @@ Utility and guard:
   - this batch opens `CP1` only; it does not create `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` yet.
   - `CVF_MODEL_GATEWAY` remains the preserved gateway wrapper anchor rather than being bypassed.
   - MCP guard-runtime internals remain intentionally outside the initial execution-shell proposal.
+## [2026-03-22] Batch: W2-T1 CP1 execution-plane foundation implementation
+- Scope:
+  - implement `CP1` inside `W2-T1` as an approved `coordination package` shell
+  - create `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` as the first execution-plane package surface
+  - preserve `CVF_MODEL_GATEWAY` as the gateway wrapper anchor while exposing shell-level registry, memory, prompt-preview, adapter evidence, and explainability helpers
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/audits/CVF_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W2_T1_CP1_EXECUTION_PLANE_IMPLEMENTATION_DELTA_2026-03-22.md`
+- Files updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/README.md`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/package.json`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tsconfig.json`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/vitest.config.ts`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts`
+  - `docs/reference/CVF_MODULE_INVENTORY.md`
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+  - `docs/reference/CVF_MATURITY_MATRIX.md`
+  - `docs/roadmaps/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/baselines/CVF_W2_T1_CP1_EXECUTION_PLANE_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER && npm run test:run` -> PASS
+  - `cd EXTENSIONS/CVF_MODEL_GATEWAY && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_MODEL_GATEWAY && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB && npm run typecheck` -> PASS
+  - `cd EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB && npm run test` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - `CP1` stays strictly in `coordination package` scope; no physical merge was introduced.
+  - `CVF_MODEL_GATEWAY` remains the preserved gateway wrapper anchor.
+  - MCP guard-runtime and CLI internals remain explicitly outside the initial package body.

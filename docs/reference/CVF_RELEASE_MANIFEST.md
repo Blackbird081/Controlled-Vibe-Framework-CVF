@@ -50,6 +50,7 @@ Status: authoritative operational release manifest for the current local baselin
 | v1.8.1 | Adaptive Observability Runtime | local-ready | implemented-local | `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` | added in Mar 2026 wave |
 | v1.9 | Deterministic Reproducibility | local-ready | implemented-local | `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` | reproducibility line referenced in root README |
 | v2.0 | Non-Coder Safety Runtime | local-ready | implemented-local | `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/` | current local implementation line |
+| W2-T1 | Execution Plane Foundation Shell | local-ready | implemented-local | `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/` | first execution-plane shell for whitepaper completion, preserving gateway and MCP lineage |
 | v2.5 | Ecosystem MCP Server | active | production-candidate | `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/` | 476 tests passed, renamed from v1.7 |
 | v2.5.1 | Cross-Channel Guard Contract | active | production-candidate | `governance/contracts/` | 49 tests passed, unified governance types |
 | v2.5.2 | VS Code Governance Adapter | active | production-candidate | `governance/contracts/adapters/` | 49 tests passed, programmatic enforcement |

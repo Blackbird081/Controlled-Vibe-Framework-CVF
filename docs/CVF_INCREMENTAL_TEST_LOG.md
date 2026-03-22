@@ -2182,3 +2182,26 @@ Utility and guard:
 - Notes/Risks:
   - this batch intentionally stops at a bounded intake baseline and does not claim full `AI Gateway` completion.
   - `CP2+` still need to deepen retrieval unification, packaging semantics, and one real downstream consumer path before tranche closure.
+## [2026-03-22] Batch: Agent handoff template canonicalization
+- Scope:
+  - store one canonical handoff template for pause and agent-transfer events
+  - make the template durable under `docs/reference/` instead of leaving it as chat-only guidance
+  - index the template so future users and agents can reuse the same truthful handoff pattern
+- Policy / roadmap references:
+  - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+  - `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
+  - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+- Files updated:
+  - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+  - `docs/reference/README.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_AGENT_HANDOFF_TEMPLATE_CANONICALIZATION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch adds a canonical documentation artifact only; it does not change runtime behavior.
+  - future handoffs should still be updated per tranche truth rather than copied blindly.

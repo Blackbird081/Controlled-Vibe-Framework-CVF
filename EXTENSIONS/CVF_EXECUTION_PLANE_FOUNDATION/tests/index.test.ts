@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   type CVFSkillDraft,
   DEFAULT_GUARD_RUNTIME_CONFIG,
+  EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT,
   EXECUTION_GATEWAY_WRAPPER_ALIGNMENT,
   EXECUTION_MCP_BRIDGE_ALIGNMENT,
   EXECUTION_PLANE_FOUNDATION_COORDINATION,
@@ -11,10 +12,12 @@ import {
   ReleaseEvidenceAdapter,
   SessionMemory,
   SkillValidator,
+  createExecutionAdapterEvidenceSurface,
   createExecutionGatewaySurface,
   createExecutionMcpBridgeSurface,
   createExecutionPlaneFoundationShell,
   createExecutionPlanePromptPreview,
+  describeExecutionAdapterEvidence,
   describeExecutionPlaneFoundationShell,
   describeExecutionPlaneWrapperAlignment,
   parseVibe,
@@ -121,5 +124,46 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
     expect(EXECUTION_PLANE_FOUNDATION_COORDINATION.externalIntegrationReference).toContain(
       "CVF_v1.2.1_EXTERNAL_INTEGRATION",
     );
+  });
+
+  // CP3 — Adapter Evidence & Explainability Integration
+  it("creates a reviewable adapter evidence surface with explainability and release evidence", () => {
+    const surface = createExecutionAdapterEvidenceSurface();
+
+    expect(surface.alignment.controlPoint).toBe("CP3");
+    expect(surface.alignment.executionClass).toBe("coordination package");
+    expect(surface.alignment.preservesLineage).toBe(true);
+    expect(surface.explainability.layer).toBeInstanceOf(ExplainabilityLayer);
+    expect(surface.explainability.supportedLocales).toContain("vi");
+    expect(surface.explainability.supportedLocales).toContain("en");
+    expect(surface.explainability.sampleExplanation.summary).toBeTruthy();
+    expect(surface.explainability.sampleExplanation.riskMessage).toContain("45");
+    expect(surface.releaseEvidence.adapter).toBeInstanceOf(ReleaseEvidenceAdapter);
+    expect(surface.adapterInventory.count).toBe(4);
+    expect(surface.adapterInventory.registered).toContain("OpenClawAdapter");
+    expect(surface.adapterInventory.registered).toContain("NanoAdapter");
+  });
+
+  it("describes adapter evidence as a CP3 review surface with text and markdown", () => {
+    const summary = describeExecutionAdapterEvidence();
+
+    expect(summary.trancheId).toBe("W2-T1");
+    expect(summary.controlPointId).toBe("CP3");
+    expect(summary.alignment.explainabilitySource).toContain("RUNTIME_ADAPTER_HUB");
+    expect(summary.explainabilityLocales).toContain("en");
+    expect(summary.sampleExplanation.summary).toBeTruthy();
+    expect(summary.registeredAdapters).toHaveLength(4);
+    expect(summary.adapterCount).toBe(4);
+    expect(summary.textSurface).toContain("CVF W2-T1 CP3 Adapter Evidence And Explainability Integration");
+    expect(summary.markdownSurface).toContain("## Explainability Surface");
+    expect(summary.markdownSurface).toContain("## Release Evidence Surface");
+    expect(summary.markdownSurface).toContain("## Adapter Inventory");
+  });
+
+  it("records CP3 alignment metadata preserving lineage", () => {
+    expect(EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.preservesLineage).toBe(true);
+    expect(EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.evidenceEntrypoints).toContain("ExplainabilityLayer");
+    expect(EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.evidenceEntrypoints).toContain("ReleaseEvidenceAdapter");
+    expect(EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.adapterInventory).toHaveLength(4);
   });
 });

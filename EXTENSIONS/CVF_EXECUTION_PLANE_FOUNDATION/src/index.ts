@@ -403,6 +403,99 @@ export function describeExecutionPlaneWrapperAlignment(): ExecutionPlaneWrapperA
   };
 }
 
+// =============================================
+// CP3 — Adapter Evidence & Explainability Integration
+// =============================================
+
+export const EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT = {
+  executionClass: "coordination package" as const,
+  controlPoint: "CP3" as const,
+  shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION" as const,
+  explainabilitySource: "EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/explainability" as const,
+  releaseEvidenceSource: "EXTENSIONS/CVF_MODEL_GATEWAY" as const,
+  adapterInventory: [
+    "OpenClawAdapter",
+    "PicoClawAdapter",
+    "ZeroClawAdapter",
+    "NanoAdapter",
+  ] as const,
+  evidenceEntrypoints: ["ReleaseEvidenceAdapter", "ExplainabilityLayer"] as const,
+  preservesLineage: true as const,
+} as const;
+
+export interface ExecutionAdapterEvidenceSurface {
+  alignment: typeof EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT;
+  explainability: {
+    layer: ExplainabilityLayer;
+    supportedLocales: readonly string[];
+    sampleExplanation: HumanReadableExplanation;
+  };
+  releaseEvidence: {
+    adapter: ReleaseEvidenceAdapter;
+  };
+  adapterInventory: {
+    registered: readonly string[];
+    count: number;
+  };
+}
+
+export interface ExecutionAdapterEvidenceSummary {
+  trancheId: "W2-T1";
+  controlPointId: "CP3";
+  generatedAt: string;
+  alignment: typeof EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT;
+  explainabilityLocales: readonly string[];
+  sampleExplanation: HumanReadableExplanation;
+  registeredAdapters: readonly string[];
+  adapterCount: number;
+  textSurface: string;
+  markdownSurface: string;
+}
+
+export function createExecutionAdapterEvidenceSurface(): ExecutionAdapterEvidenceSurface {
+  const layer = new ExplainabilityLayer("en");
+  const sampleExplanation = layer.explain({
+    intentType: "CODE_EXECUTION",
+    riskLevel: "MEDIUM",
+    riskScore: 45,
+    action: "ESCALATE",
+  });
+
+  return {
+    alignment: EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT,
+    explainability: {
+      layer,
+      supportedLocales: ["vi", "en"],
+      sampleExplanation,
+    },
+    releaseEvidence: {
+      adapter: new ReleaseEvidenceAdapter(),
+    },
+    adapterInventory: {
+      registered: EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.adapterInventory,
+      count: EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.adapterInventory.length,
+    },
+  };
+}
+
+export function describeExecutionAdapterEvidence(): ExecutionAdapterEvidenceSummary {
+  const surface = createExecutionAdapterEvidenceSurface();
+  const generatedAt = new Date().toISOString();
+
+  return {
+    trancheId: "W2-T1",
+    controlPointId: "CP3",
+    generatedAt,
+    alignment: EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT,
+    explainabilityLocales: surface.explainability.supportedLocales,
+    sampleExplanation: surface.explainability.sampleExplanation,
+    registeredAdapters: surface.adapterInventory.registered,
+    adapterCount: surface.adapterInventory.count,
+    textSurface: buildAdapterEvidenceTextSurface(generatedAt, surface),
+    markdownSurface: buildAdapterEvidenceMarkdownSurface(generatedAt, surface),
+  };
+}
+
 function buildExecutionPlaneTextSurface(
   generatedAt: string,
   stats: { totalGuards: number; enabledGuards: number },
@@ -529,3 +622,62 @@ function buildLineageList(): string[] {
     EXECUTION_PLANE_FOUNDATION_COORDINATION.runtimeAdapterHub,
   ];
 }
+
+function buildAdapterEvidenceTextSurface(
+  generatedAt: string,
+  surface: ExecutionAdapterEvidenceSurface,
+): string {
+  return [
+    "=".repeat(72),
+    "  CVF W2-T1 CP3 Adapter Evidence And Explainability Integration",
+    "=".repeat(72),
+    "Tranche: W2-T1",
+    "Control Point: CP3",
+    `Execution Class: ${EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.executionClass}`,
+    `Generated At: ${generatedAt}`,
+    `Explainability Source: ${EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.explainabilitySource}`,
+    `Release Evidence Source: ${EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.releaseEvidenceSource}`,
+    `Supported Locales: ${surface.explainability.supportedLocales.join(", ")}`,
+    `Registered Adapters: ${surface.adapterInventory.registered.join(", ")}`,
+    `Adapter Count: ${surface.adapterInventory.count}`,
+    `Sample Explanation Summary: ${surface.explainability.sampleExplanation.summary}`,
+    `Sample Explanation Details: ${surface.explainability.sampleExplanation.details}`,
+    `Sample Risk Message: ${surface.explainability.sampleExplanation.riskMessage}`,
+  ].join("\n");
+}
+
+function buildAdapterEvidenceMarkdownSurface(
+  generatedAt: string,
+  surface: ExecutionAdapterEvidenceSurface,
+): string {
+  return [
+    "# CVF W2-T1 CP3 Adapter Evidence And Explainability Integration",
+    "",
+    `> Tranche: \`W2-T1\``,
+    `> Control Point: \`CP3\``,
+    `> Execution Class: \`${EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.executionClass}\``,
+    `> Generated At: \`${generatedAt}\``,
+    "",
+    "## Explainability Surface",
+    "",
+    `- source: \`${EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.explainabilitySource}\``,
+    `- supported locales: \`${surface.explainability.supportedLocales.join(", ")}\``,
+    `- sample explanation summary: \`${surface.explainability.sampleExplanation.summary}\``,
+    `- sample risk message: \`${surface.explainability.sampleExplanation.riskMessage}\``,
+    "",
+    "## Release Evidence Surface",
+    "",
+    `- source: \`${EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.releaseEvidenceSource}\``,
+    ...EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT.evidenceEntrypoints.map(
+      (ep) => `- evidence entrypoint: \`${ep}\``,
+    ),
+    "",
+    "## Adapter Inventory",
+    "",
+    ...surface.adapterInventory.registered.map(
+      (adapter) => `- registered adapter: \`${adapter}\``,
+    ),
+    `- total count: \`${surface.adapterInventory.count}\``,
+  ].join("\n");
+}
+

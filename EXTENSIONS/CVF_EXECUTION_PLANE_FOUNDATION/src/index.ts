@@ -1,3 +1,22 @@
+// W6-T1 — Streaming Execution Slice (CP1–CP2)
+export {
+  StreamingExecutionContract,
+  createStreamingExecutionContract,
+} from "./execution.streaming.contract";
+export type {
+  StreamingChunkStatus,
+  StreamingExecutionChunk,
+  StreamingExecutionContractDependencies,
+} from "./execution.streaming.contract";
+export {
+  StreamingExecutionAggregatorContract,
+  createStreamingExecutionAggregatorContract,
+} from "./execution.streaming.aggregator.contract";
+export type {
+  StreamingExecutionSummary,
+  StreamingExecutionAggregatorContractDependencies,
+} from "./execution.streaming.aggregator.contract";
+
 // W2-T8 — Execution MCP Bridge Slice (CP1–CP2)
 export {
   MCPInvocationContract,

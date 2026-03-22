@@ -166,6 +166,18 @@ export type {
   ConsumptionReceipt,
   ConsumerContractDependencies,
 } from "./consumer.contract";
+export {
+  DesignContract,
+  createDesignContract,
+} from "./design.contract";
+export type {
+  DesignPlan,
+  DesignTask,
+  DesignAgentRole,
+  DesignTaskRisk,
+  DesignTaskPhase,
+  DesignContractDependencies,
+} from "./design.contract";
 
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";

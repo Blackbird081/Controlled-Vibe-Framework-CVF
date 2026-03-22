@@ -13,6 +13,8 @@ import {
   createConsumerContract,
   ConsumerContract,
   buildPipelineStages,
+  createDesignContract,
+  DesignContract,
   mapDocument,
   resolveSource,
   matchesFilters,
@@ -856,5 +858,209 @@ describe("CVF_CONTROL_PLANE_FOUNDATION — CP4 Real Consumer Path Proof", () => 
     expect(receipt.intake.retrieval).toBeDefined();
     expect(receipt.intake.packagedContext).toBeDefined();
     expect(receipt.intake.warnings).toBeDefined();
+  });
+});
+
+// ─── W1-T3 CP1: Design Contract Baseline ─────────────────────────────────────
+
+describe("W1-T3 CP1: DesignContract", () => {
+  function seedShell() {
+    resetDocCounter();
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "Design Contract Test Doc",
+      content: "This document supports design contract testing with relevant context.",
+      tier: "T2_POLICY",
+      documentType: "policy",
+      domain: "code_security",
+      tags: ["cp1-design"],
+      metadata: { source: "design-test" },
+    });
+    return shell;
+  }
+
+  function makeIntakeResult(overrides: Record<string, unknown> = {}) {
+    const shell = seedShell();
+    const intakeContract = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T16:00:00.000Z",
+    });
+    return intakeContract.execute({
+      vibe: (overrides.vibe as string) ?? "analyze security vulnerabilities in backend code",
+      consumerId: (overrides.consumerId as string) ?? "design-test-consumer",
+      tokenBudget: (overrides.tokenBudget as number) ?? 256,
+    });
+  }
+
+  it("createDesignContract returns a DesignContract instance", () => {
+    const contract = createDesignContract();
+    expect(contract).toBeInstanceOf(DesignContract);
+  });
+
+  it("produces a DesignPlan from a valid intake result", () => {
+    const intake = makeIntakeResult();
+    const contract = createDesignContract({
+      now: () => "2026-03-22T16:01:00.000Z",
+    });
+    const plan = contract.design(intake);
+
+    expect(plan.planId).toHaveLength(32);
+    expect(plan.createdAt).toBe("2026-03-22T16:01:00.000Z");
+    expect(plan.intakeRequestId).toBe(intake.requestId);
+    expect(plan.consumerId).toBe("design-test-consumer");
+    expect(plan.vibeOriginal).toBe(intake.intent.intent.rawVibe);
+    expect(plan.domainDetected).toBe(intake.intent.intent.domain);
+    expect(plan.tasks.length).toBeGreaterThanOrEqual(2);
+    expect(plan.totalTasks).toBe(plan.tasks.length);
+    expect(plan.planHash).toHaveLength(32);
+  });
+
+  it("decomposes tasks with correct agent role assignments", () => {
+    const intake = makeIntakeResult();
+    const contract = createDesignContract({
+      now: () => "2026-03-22T16:02:00.000Z",
+    });
+    const plan = contract.design(intake);
+
+    const roles = plan.tasks.map((t) => t.assignedRole);
+    expect(roles).toContain("architect");
+    expect(roles).toContain("builder");
+
+    expect(plan.roleSummary.architect).toBeGreaterThanOrEqual(1);
+    expect(plan.roleSummary.builder).toBeGreaterThanOrEqual(1);
+  });
+
+  it("assigns risk levels based on intake domain", () => {
+    const intake = makeIntakeResult({
+      vibe: "deploy production database migration",
+    });
+    const contract = createDesignContract({
+      now: () => "2026-03-22T16:03:00.000Z",
+    });
+    const plan = contract.design(intake);
+
+    for (const task of plan.tasks) {
+      expect(["R0", "R1", "R2", "R3"]).toContain(task.riskLevel);
+    }
+
+    const totalRiskTasks = Object.values(plan.riskSummary).reduce(
+      (a, b) => a + b,
+      0,
+    );
+    expect(totalRiskTasks).toBe(plan.totalTasks);
+  });
+
+  it("includes review task for R2+ domains", () => {
+    const intake = makeIntakeResult({
+      vibe: "refactor authentication module for code security",
+    });
+    const contract = createDesignContract({
+      now: () => "2026-03-22T16:04:00.000Z",
+    });
+    const plan = contract.design(intake);
+
+    const reviewTasks = plan.tasks.filter(
+      (t) => t.assignedRole === "reviewer",
+    );
+    if (
+      plan.tasks.some(
+        (t) => t.riskLevel === "R2" || t.riskLevel === "R3",
+      )
+    ) {
+      expect(reviewTasks.length).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it("task dependencies form a valid chain", () => {
+    const intake = makeIntakeResult();
+    const contract = createDesignContract({
+      now: () => "2026-03-22T16:05:00.000Z",
+    });
+    const plan = contract.design(intake);
+
+    const taskIds = new Set(plan.tasks.map((t) => t.taskId));
+    for (const task of plan.tasks) {
+      for (const dep of task.dependencies) {
+        expect(taskIds.has(dep)).toBe(true);
+      }
+    }
+  });
+
+  it("produces deterministic plan hash for same input", () => {
+    const intake = makeIntakeResult();
+    const fixedNow = () => "2026-03-22T16:06:00.000Z";
+    const plan1 = createDesignContract({ now: fixedNow }).design(intake);
+    const plan2 = createDesignContract({ now: fixedNow }).design(intake);
+
+    expect(plan1.planHash).toBe(plan2.planHash);
+    expect(plan1.planId).toBe(plan2.planId);
+  });
+
+  it("generates warnings for invalid or low-confidence intake", () => {
+    const shell = seedShell();
+    const intakeContract = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T16:07:00.000Z",
+    });
+    const intake = intakeContract.execute({
+      vibe: "x",
+      consumerId: "low-conf",
+      tokenBudget: 256,
+    });
+    const contract = createDesignContract({
+      now: () => "2026-03-22T16:07:01.000Z",
+    });
+    const plan = contract.design(intake);
+
+    expect(plan.warnings.length).toBeGreaterThanOrEqual(1);
+    expect(
+      plan.warnings.some((w) =>
+        w.includes("low-confidence") || w.includes("invalid"),
+      ),
+    ).toBe(true);
+  });
+
+  it("each task has all required fields", () => {
+    const intake = makeIntakeResult();
+    const contract = createDesignContract({
+      now: () => "2026-03-22T16:08:00.000Z",
+    });
+    const plan = contract.design(intake);
+
+    for (const task of plan.tasks) {
+      expect(task.taskId).toHaveLength(32);
+      expect(task.title).toBeTruthy();
+      expect(task.description).toBeTruthy();
+      expect(["orchestrator", "architect", "builder", "reviewer"]).toContain(
+        task.assignedRole,
+      );
+      expect(["R0", "R1", "R2", "R3"]).toContain(task.riskLevel);
+      expect(["DESIGN", "BUILD", "REVIEW"]).toContain(task.targetPhase);
+      expect(["low", "medium", "high"]).toContain(task.estimatedComplexity);
+      expect(Array.isArray(task.dependencies)).toBe(true);
+    }
+  });
+
+  it("design plan with no context chunks produces a warning", () => {
+    const shell = seedShell();
+    const intakeContract = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T16:09:00.000Z",
+    });
+    const intake = intakeContract.execute({
+      vibe: "analyze general topic with no specific retrieval match",
+      consumerId: "no-context",
+      tokenBudget: 0,
+    });
+    const contract = createDesignContract({
+      now: () => "2026-03-22T16:09:01.000Z",
+    });
+    const plan = contract.design(intake);
+
+    if (intake.packagedContext.chunks.length === 0) {
+      expect(
+        plan.warnings.some((w) => w.includes("no retrieved context")),
+      ).toBe(true);
+    }
   });
 });

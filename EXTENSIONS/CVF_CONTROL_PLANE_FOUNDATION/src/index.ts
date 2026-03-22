@@ -112,6 +112,20 @@ export type {
 export type {
   ReproducibilitySnapshot,
 } from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/determinism_control/reproducibility.snapshot";
+export {
+  ControlPlaneIntakeContract,
+  createControlPlaneIntakeContract,
+  packageIntakeContext,
+} from "./intake.contract";
+export type {
+  IntakeContextChunk,
+  IntakePackagedContext,
+  ControlPlaneIntakeRequest,
+  ControlPlaneIntakeRetrievalOptions,
+  ControlPlaneIntakeRetrievalSurface,
+  ControlPlaneIntakeResult,
+  ControlPlaneIntakeContractDependencies,
+} from "./intake.contract";
 
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";

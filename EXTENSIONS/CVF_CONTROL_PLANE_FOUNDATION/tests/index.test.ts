@@ -3,6 +3,7 @@ import {
   CONTROL_PLANE_FOUNDATION_COORDINATION,
   CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT,
   AgentRole,
+  createControlPlaneIntakeContract,
   ReasoningMode,
   canAccessScope,
   createControlPlaneEvidenceSurface,
@@ -28,6 +29,53 @@ describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
     expect(result.intent.domain).toBe("finance");
     expect(result.rules.length).toBeGreaterThan(0);
     expect(result.constraints.length).toBeGreaterThan(0);
+  });
+
+  it("creates one usable intake contract baseline across intent, retrieval, and packaged context", () => {
+    resetDocCounter();
+
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "Finance Review Policy",
+      content:
+        "Finance spend over 500 requires manager review and evidence before approval.",
+      tier: "T2_POLICY",
+      documentType: "policy",
+      domain: "finance",
+      tags: ["finance", "approval"],
+      metadata: {
+        source: "finance-policy",
+        owner: "control-plane",
+      },
+    });
+
+    const contract = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T10:00:00.000Z",
+    });
+    const result = contract.execute({
+      vibe:
+        "Approve finance spend only after manager review and keep the limit below 500 dollars.",
+      tokenBudget: 30,
+      consumerId: "w1-t2-test-consumer",
+      retrieval: {
+        maxChunks: 3,
+        sources: ["finance-policy"],
+        filters: {
+          owner: "control-plane",
+        },
+      },
+    });
+
+    expect(result.requestId).toHaveLength(32);
+    expect(result.intent.valid).toBe(true);
+    expect(result.intent.intent.domain).toBe("finance");
+    expect(result.retrieval.chunkCount).toBe(1);
+    expect(result.retrieval.query).toContain("finance");
+    expect(result.packagedContext.truncated).toBe(false);
+    expect(result.packagedContext.snapshotHash).toHaveLength(32);
+    expect(result.packagedContext.chunks[0]?.source).toBe("finance-policy");
+    expect(result.warnings).toEqual([]);
   });
 
   it("composes knowledge, reporting, and deterministic context services", () => {

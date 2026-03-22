@@ -147,6 +147,50 @@ describe('CVF Plane Facades', () => {
     expect(packaged.snapshotHash).toHaveLength(32);
   });
 
+  it('prepares one usable intake result through the shared control-plane contract', () => {
+    resetDocCounter();
+
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: 'Finance Approval Policy',
+      content: 'Finance spend over 500 requires manager review and explicit evidence.',
+      tier: 'T2_POLICY',
+      documentType: 'policy',
+      domain: 'finance',
+      tags: ['finance', 'approval'],
+      metadata: {
+        source: 'finance-policy',
+        owner: 'control-plane',
+      },
+    });
+
+    const knowledge = createKnowledgeFacade({
+      shell,
+      now: () => '2026-03-22T11:00:00.000Z',
+    });
+    const prepared = knowledge.prepareIntake({
+      vibe: 'Approve finance spend after manager review and keep the amount below 500 dollars.',
+      tokenBudget: 40,
+      consumerId: 'facade-intake-test',
+      retrieval: {
+        maxChunks: 3,
+        sources: ['finance-policy'],
+        filters: {
+          owner: 'control-plane',
+        },
+      },
+    });
+
+    expect(prepared.requestId).toHaveLength(32);
+    expect(prepared.intent.valid).toBe(true);
+    expect(prepared.intent.intent.domain).toBe('finance');
+    expect(prepared.retrieval.chunkCount).toBe(1);
+    expect(prepared.packagedContext.snapshotHash).toHaveLength(32);
+    expect(prepared.packagedContext.chunks[0]?.source).toBe('finance-policy');
+    expect(prepared.warnings).toEqual([]);
+    expect(knowledge.getRetrievalLog()).toHaveLength(1);
+  });
+
   it('filters PII and records retrieval activity through the CP1 shell', () => {
     resetDocCounter();
 

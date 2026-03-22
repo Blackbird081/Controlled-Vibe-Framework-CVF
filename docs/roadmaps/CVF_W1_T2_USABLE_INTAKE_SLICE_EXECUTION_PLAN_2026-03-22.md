@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T2_2026-03-22.md`  
 > Tranche packet: `docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_PACKET_2026-03-22.md`  
-> Status: `AUTHORIZED TRANCHE - EXECUTION PLAN OPEN / CP1 REVIEWABLE`
+> Status: `AUTHORIZED TRANCHE - CP1 IMPLEMENTED / TRANCHE OPEN`
 
 ---
 
@@ -80,7 +80,7 @@ Guardrails:
 
 Status:
 
-- `REVIEWABLE`
+- `IMPLEMENTED`
 
 ### CP2 - Unified Knowledge Retrieval Contract
 
@@ -176,4 +176,22 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T2` is now execution-planned as a realization-first control-plane tranche. `CP1` is reviewable as the first bounded move toward one usable intake contract, while broader `AI Gateway` completion remains out of scope.
+> `W1-T2` is now execution-planned as a realization-first control-plane tranche. `CP1` is implemented as the first bounded move toward one usable intake contract, while broader `AI Gateway` completion remains out of scope.
+
+## 8. CP1 Implementation Receipt
+
+Implemented surfaces:
+
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/intake.contract.ts`
+- `EXTENSIONS/CVF_PLANE_FACADES/src/knowledge.facade.ts`
+
+Receipt highlights:
+
+- `createControlPlaneIntakeContract()` now provides one bounded intake contract across intent validation, retrieval, and deterministic packaged context
+- `KnowledgeFacade.prepareIntake()` now gives callers one shared entrypoint to that contract
+- source lineage is preserved for `CVF_ECO_v1.0_INTENT_VALIDATION`, `CVF_ECO_v1.4_RAG_PIPELINE`, and `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY`
+- full `AI Gateway` target-state completion remains explicitly out of scope
+
+Evidence anchor:
+
+- `docs/baselines/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`

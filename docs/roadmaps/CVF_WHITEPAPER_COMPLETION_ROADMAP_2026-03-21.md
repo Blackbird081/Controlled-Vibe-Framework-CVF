@@ -5,7 +5,7 @@
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  
-> Authorization posture: `LIMITED ACTIVE - W1-T1 / W2-T1 / W3-T1 CLOSED / W1-T2 PLANNED / W4-W5 GATED`
+> Authorization posture: `LIMITED ACTIVE - W1-T1 / W2-T1 / W3-T1 CLOSED / W1-T2 CP1 IMPLEMENTED / W4-W5 GATED`
 > Canonical continuation packets:
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
@@ -66,6 +66,7 @@ Current authorization state:
 - `W3-T1` explicitly defers concept-only `Watchdog` and `Audit / Consensus` targets rather than claiming them implemented
 - `W1-T2 — Usable Intake Slice` is now authorized as the next bounded realization-first tranche
 - `W1-T2` now has a tranche-local execution plan and `CP1` review packet chain
+- `W1-T2 / CP1` is now implemented as a bounded usable-intake contract baseline
 - `W4` and `W5` remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -296,8 +297,10 @@ Current authorized scope:
   - `docs/reviews/CVF_GC019_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_REVIEW_2026-03-22.md`
 - planning delta:
   - `docs/baselines/CVF_W1_T2_USABLE_INTAKE_SLICE_PLANNING_DELTA_2026-03-22.md`
+- first implementation delta:
+  - `docs/baselines/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`
 - every major structural change inside `W1-T1` still requires `GC-019`
-- `W1-T2` is now the only open next-step control-plane continuation, and `CP1` is reviewable
+- `W1-T2` is now the only open next-step control-plane continuation, and `CP1` is implemented
 
 ### Phase W2 — Execution Plane
 
@@ -432,4 +435,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, `W1-T2` now has an open execution plan with `CP1` reviewable as the next realization-first usable intake slice, and `W4-W5` remain gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, `W1-T2` now has `CP1` implemented as the next realization-first usable intake slice baseline, and `W4-W5` remain gated.

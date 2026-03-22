@@ -1,6 +1,6 @@
 # CVF Control Plane Foundation
 
-Status: coordination package shell for the closed `W1-T1 / CP1-CP5` tranche in the whitepaper-completion roadmap.
+Status: control-plane foundation shell for the closed `W1-T1 / CP1-CP5` tranche, now extended by `W1-T2 / CP1` with one usable intake contract baseline.
 
 ## Purpose
 
@@ -9,6 +9,7 @@ Status: coordination package shell for the closed `W1-T1 / CP1-CP5` tranche in t
 - keep `CVF_v1.7_CONTROLLED_INTELLIGENCE` out of the initial package body
 - expose one reviewable governance-canvas evidence surface for tranche-local reporting
 - expose one narrow wrapper surface for selected `CVF_v1.7_CONTROLLED_INTELLIGENCE` helpers and types
+- expose one callable intake contract baseline spanning intent validation, retrieval, and deterministic packaged context for `W1-T2 / CP1`
 
 ## Source lineage
 
@@ -35,6 +36,12 @@ Canonical controlled-intelligence ownership remains outside the package body:
 
 - `createControlPlaneEvidenceSurface()` builds a tranche-local text/markdown review surface from governance-canvas sessions
 - the reporting surface stays additive and does not modify active-path governance-core behavior
+
+## Current-cycle usable intake baseline
+
+- `W1-T2 / CP1` adds `createControlPlaneIntakeContract()` as a bounded behavioral contract
+- the contract validates the intake vibe, performs source-backed retrieval, and returns deterministic packaged context
+- the package still does not claim full `AI Gateway` target-state completion
 
 ## Current-cycle selected controlled-intelligence alignment
 

@@ -45,7 +45,7 @@ This is the correct interpretation because the whitepaper is explicitly marked a
 | `W2-T1 / CP5` tranche closure checkpoint | canonical tranche closure review issued; tranche boundary closed with explicit defer list | `DONE FOR CURRENT TRANCHE` |
 | `W3-T1` governance-expansion foundation tranche | authorized, implemented, and canonically closed as a bounded governance-expansion tranche for operational governance modules only | `DONE FOR CURRENT TRANCHE` |
 | `W3-T1 / CP1` governance-expansion foundation shell | implemented as a coordination package preserving governance CLI, graph-governance, phase-governance protocol, and skill-governance engine lineage | `DONE FOR CURRENT TRANCHE` |
-| `W1-T2` usable intake slice tranche | authorized as the next realization-first control-plane tranche; execution plan is open and `CP1` is reviewable | `AUTHORIZED / PLANNED / CP1 REVIEWABLE` |
+| `W1-T2` usable intake slice tranche | authorized as the next realization-first control-plane tranche; `CP1` usable-intake contract baseline is implemented and the tranche remains open | `IN PROGRESS / CP1 IMPLEMENTED` |
 | Control-plane `AI Gateway` target-state | not implemented as whitepaper target-state | `NOT STARTED / NOT AUTHORIZED` |
 | Unified `Knowledge Layer` target-state | partial ecosystem pieces exist, target-state not delivered | `PARTIAL` |
 | `Context Builder & Packager` target-state | partial ingredients exist, target-state not delivered | `PARTIAL` |
@@ -113,7 +113,7 @@ That move is now partially executed and then clarified further:
 - `W3-T1` is now closed as a bounded governance-expansion tranche for operational governance modules
 - one explicit scope-clarification packet now states that the next preferred move is a `usable intake slice`, not another packaging-only tranche
 - `W1-T2` is now authorized as that next usable intake slice
-- the tranche-local execution plan for `W1-T2` is now open and `CP1` is reviewable as a bounded usable-intake contract baseline
+- the tranche-local execution plan for `W1-T2` is now open and `CP1` is implemented as a bounded usable-intake contract baseline
 - `W4` and `W5` remain gated because the larger learning-plane and final whitepaper closure scopes still require explicit governed authorization and stronger prerequisites
 
 Canonical scope-clarification anchor:
@@ -124,4 +124,4 @@ Canonical scope-clarification anchor:
 
 ## Final Verdict
 
-> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** - current-cycle restructuring is complete, `W1-T1`, `W2-T1`, and `W3-T1` are now canonically closed for their approved tranche boundaries, `W1-T2` now has an open execution plan with `CP1` reviewable as the next usable intake slice, concept-only governance targets such as `Watchdog` remain deferred, and the full whitepaper target-state still requires later governed waves.
+> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** - current-cycle restructuring is complete, `W1-T1`, `W2-T1`, and `W3-T1` are now canonically closed for their approved tranche boundaries, `W1-T2` now has `CP1` implemented as the next usable intake slice baseline, concept-only governance targets such as `Watchdog` remain deferred, and the full whitepaper target-state still requires later governed waves.

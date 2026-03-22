@@ -47,6 +47,8 @@ export {
   type ContextChunk,
   type RetrievalOptions,
   type PackagedContext,
+  type IntakeRequest,
+  type IntakeResult,
   type FilteredContent,
 } from './knowledge.facade';
 

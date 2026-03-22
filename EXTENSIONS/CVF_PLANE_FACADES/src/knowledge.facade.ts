@@ -11,9 +11,12 @@
  */
 
 import {
-  computeDeterministicHash,
+  createControlPlaneIntakeContract,
   createControlPlaneFoundationShell,
+  packageIntakeContext,
   type ControlPlaneFoundationShell,
+  type ControlPlaneIntakeResult,
+  type ValidatedIntent,
 } from 'cvf-control-plane-foundation';
 
 // ─── Types ────────────────────────────────────────────────────────────
@@ -39,6 +42,31 @@ export interface PackagedContext {
   tokenBudget: number;
   truncated: boolean;
   snapshotHash: string;
+}
+
+export interface IntakeRequest {
+  vibe: string;
+  retrievalQuery?: string;
+  tokenBudget?: number;
+  consumerId?: string;
+  retrieval?: RetrievalOptions;
+}
+
+export interface IntakeResult {
+  requestId: string;
+  createdAt: string;
+  consumerId?: string;
+  intent: ValidatedIntent;
+  retrieval: {
+    query: string;
+    chunkCount: number;
+    totalCandidates: number;
+    retrievalTimeMs: number;
+    tiersSearched: string[];
+    chunks: ContextChunk[];
+  };
+  packagedContext: PackagedContext;
+  warnings: string[];
 }
 
 export interface FilteredContent {
@@ -109,31 +137,33 @@ export class KnowledgeFacade {
    * longer invents its own hash formula.
    */
   packageContext(chunks: ContextChunk[], tokenBudget: number): PackagedContext {
-    let totalTokens = 0;
-    const selectedChunks: ContextChunk[] = [];
+    return packageIntakeContext(chunks, tokenBudget);
+  }
 
-    for (const chunk of chunks) {
-      const chunkTokens = Math.ceil(chunk.content.length / 4);
-      if (totalTokens + chunkTokens <= tokenBudget) {
-        selectedChunks.push(chunk);
-        totalTokens += chunkTokens;
-      }
-    }
+  /**
+   * Build one usable intake baseline by validating the vibe, retrieving
+   * source-backed context, and packaging it behind one caller-facing result.
+   */
+  prepareIntake(request: IntakeRequest): IntakeResult {
+    const contract = createControlPlaneIntakeContract({
+      shell: this.shell,
+      now: this.now,
+    });
+    const result = contract.execute({
+      vibe: request.vibe,
+      retrievalQuery: request.retrievalQuery,
+      tokenBudget: request.tokenBudget,
+      consumerId: request.consumerId,
+      retrieval: request.retrieval,
+    });
 
-    const snapshotHash = computeDeterministicHash(
-      'knowledge-facade',
-      `budget:${tokenBudget}`,
-      `tokens:${totalTokens}:selected:${selectedChunks.length}:truncated:${selectedChunks.length < chunks.length}`,
-      this.serializeChunks(selectedChunks),
-    );
+    this.retrievalLog.push({
+      query: result.retrieval.query,
+      chunkCount: result.retrieval.chunkCount,
+      timestamp: result.createdAt,
+    });
 
-    return {
-      chunks: selectedChunks,
-      totalTokens,
-      tokenBudget,
-      truncated: selectedChunks.length < chunks.length,
-      snapshotHash,
-    };
+    return this.mapIntakeResult(result);
   }
 
   /**
@@ -242,36 +272,23 @@ export class KnowledgeFacade {
     return items.length > 0 ? items : undefined;
   }
 
-  private serializeChunks(chunks: ContextChunk[]): string {
-    if (chunks.length === 0) {
-      return 'empty';
-    }
-
-    return chunks
-      .map((chunk) => JSON.stringify({
-        id: chunk.id,
-        source: chunk.source,
-        content: chunk.content,
-        relevanceScore: chunk.relevanceScore,
-        metadata: this.sortValue(chunk.metadata ?? {}),
-      }))
-      .join('|');
-  }
-
-  private sortValue(value: unknown): unknown {
-    if (Array.isArray(value)) {
-      return value.map((entry) => this.sortValue(entry));
-    }
-
-    if (value && typeof value === 'object') {
-      return Object.fromEntries(
-        Object.entries(value as Record<string, unknown>)
-          .sort(([left], [right]) => left.localeCompare(right))
-          .map(([key, nestedValue]) => [key, this.sortValue(nestedValue)]),
-      );
-    }
-
-    return value;
+  private mapIntakeResult(result: ControlPlaneIntakeResult): IntakeResult {
+    return {
+      requestId: result.requestId,
+      createdAt: result.createdAt,
+      consumerId: result.consumerId,
+      intent: result.intent,
+      retrieval: {
+        query: result.retrieval.query,
+        chunkCount: result.retrieval.chunkCount,
+        totalCandidates: result.retrieval.totalCandidates,
+        retrievalTimeMs: result.retrieval.retrievalTimeMs,
+        tiersSearched: result.retrieval.tiersSearched,
+        chunks: result.retrieval.chunks,
+      },
+      packagedContext: result.packagedContext,
+      warnings: result.warnings,
+    };
   }
 }
 

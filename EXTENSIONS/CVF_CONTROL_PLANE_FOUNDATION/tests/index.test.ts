@@ -44,6 +44,11 @@ import {
   createAIGatewayContract,
   GatewayConsumerContract,
   createGatewayConsumerContract,
+  // W1-T5
+  ReversePromptingContract,
+  createReversePromptingContract,
+  ClarificationRefinementContract,
+  createClarificationRefinementContract,
 } from "../src/index";
 
 describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
@@ -1684,5 +1689,253 @@ describe("W1-T4 CP2 — GatewayConsumerContract", () => {
     expect(contract).toBeInstanceOf(GatewayConsumerContract);
     const receipt = contract.consume({ rawSignal: "Test gateway consumer" });
     expect(receipt.receiptId).toBeTruthy();
+  });
+
+  // ─── W1-T5 CP1 — ReversePromptingContract ───────────────────────────────
+
+  describe("W1-T5 CP1 — ReversePromptingContract", () => {
+    function makeIntakeResult(overrides: Partial<{
+      valid: boolean;
+      domain: string;
+      chunkCount: number;
+      truncated: boolean;
+      warnings: string[];
+    }> = {}) {
+      const valid = overrides.valid ?? true;
+      const domain = overrides.domain ?? "finance";
+      const chunkCount = overrides.chunkCount ?? 3;
+      const truncated = overrides.truncated ?? false;
+      const warnings = overrides.warnings ?? [];
+      return {
+        requestId: "req-test-001",
+        createdAt: "2026-03-22T10:00:00.000Z",
+        intent: {
+          valid,
+          intent: { domain, action: "create", object: "report", rawVibe: "create finance report" },
+          rules: [],
+          constraints: [],
+          errors: [],
+        },
+        retrieval: {
+          query: "finance report",
+          chunkCount,
+          totalCandidates: chunkCount,
+          retrievalTimeMs: 5,
+          tiersSearched: ["T1_EXACT"] as const,
+          chunks: [],
+        },
+        packagedContext: {
+          chunks: [],
+          totalTokens: 100,
+          tokenBudget: 256,
+          truncated,
+          snapshotHash: "hash-001",
+        },
+        warnings,
+      };
+    }
+
+    it("generates no questions for a clean intake result", () => {
+      const contract = createReversePromptingContract();
+      const result = makeIntakeResult();
+      const packet = contract.generate(result as any);
+
+      expect(packet.totalQuestions).toBe(0);
+      expect(packet.questions).toHaveLength(0);
+      expect(packet.highPriorityCount).toBe(0);
+    });
+
+    it("generates intent_clarity question when intent is invalid", () => {
+      const contract = createReversePromptingContract();
+      const result = makeIntakeResult({ valid: false });
+      const packet = contract.generate(result as any);
+
+      expect(packet.questions.some((q) => q.category === "intent_clarity")).toBe(true);
+      expect(packet.questions.find((q) => q.category === "intent_clarity")!.priority).toBe("high");
+    });
+
+    it("generates domain_specificity question for general domain", () => {
+      const contract = createReversePromptingContract();
+      const result = makeIntakeResult({ domain: "general" });
+      const packet = contract.generate(result as any);
+
+      expect(packet.questions.some((q) => q.category === "domain_specificity")).toBe(true);
+    });
+
+    it("generates context_gap question when retrieval is empty", () => {
+      const contract = createReversePromptingContract();
+      const result = makeIntakeResult({ chunkCount: 0 });
+      const packet = contract.generate(result as any);
+
+      expect(packet.questions.some((q) => q.category === "context_gap")).toBe(true);
+      expect(packet.questions.find((q) => q.category === "context_gap")!.priority).toBe("high");
+    });
+
+    it("generates scope_boundary question when context is truncated", () => {
+      const contract = createReversePromptingContract();
+      const result = makeIntakeResult({ truncated: true });
+      const packet = contract.generate(result as any);
+
+      expect(packet.questions.some((q) => q.category === "scope_boundary")).toBe(true);
+      expect(packet.questions.find((q) => q.category === "scope_boundary")!.priority).toBe("medium");
+    });
+
+    it("generates risk_acknowledgement question when warnings are present", () => {
+      const contract = createReversePromptingContract();
+      const result = makeIntakeResult({ warnings: ["Low confidence intent.", "No chunks found."] });
+      const packet = contract.generate(result as any);
+
+      expect(packet.questions.some((q) => q.category === "risk_acknowledgement")).toBe(true);
+    });
+
+    it("generates multiple questions for multiple signals", () => {
+      const contract = createReversePromptingContract();
+      const result = makeIntakeResult({ valid: false, chunkCount: 0, warnings: ["Some warning."] });
+      const packet = contract.generate(result as any);
+
+      expect(packet.totalQuestions).toBeGreaterThanOrEqual(3);
+      expect(packet.highPriorityCount).toBeGreaterThanOrEqual(2);
+    });
+
+    it("packet has stable packetId for identical inputs with fixed time", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createReversePromptingContract({ now: () => fixedTime });
+      const c2 = createReversePromptingContract({ now: () => fixedTime });
+      const result = makeIntakeResult({ valid: false });
+
+      const p1 = c1.generate(result as any);
+      const p2 = c2.generate(result as any);
+
+      expect(p1.packetId).toBe(p2.packetId);
+    });
+
+    it("each question has a non-empty questionId", () => {
+      const contract = createReversePromptingContract();
+      const result = makeIntakeResult({ valid: false, chunkCount: 0, truncated: true });
+      const packet = contract.generate(result as any);
+
+      for (const q of packet.questions) {
+        expect(q.questionId.length).toBeGreaterThan(0);
+        expect(q.signal.length).toBeGreaterThan(0);
+      }
+    });
+
+    it("accepts injectable analyzeSignals override", () => {
+      const contract = createReversePromptingContract({
+        analyzeSignals: () => ({
+          intentValid: false,
+          domainDetected: "general",
+          retrievalEmpty: true,
+          contextTruncated: true,
+          hasWarnings: true,
+          warningCount: 2,
+        }),
+      });
+      const result = makeIntakeResult();
+      const packet = contract.generate(result as any);
+
+      // All 5 signal types triggered
+      expect(packet.totalQuestions).toBe(5);
+    });
+
+    it("creates ReversePromptingContract via class constructor", () => {
+      const contract = new ReversePromptingContract();
+      expect(contract).toBeInstanceOf(ReversePromptingContract);
+    });
+  });
+
+  // ─── W1-T5 CP2 — ClarificationRefinementContract ────────────────────────
+
+  describe("W1-T5 CP2 — ClarificationRefinementContract", () => {
+    function makePacket(questionCount: number) {
+      const questions = Array.from({ length: questionCount }, (_, i) => ({
+        questionId: `q-${i}`,
+        category: "intent_clarity" as const,
+        priority: "high" as const,
+        question: `Question ${i}?`,
+        signal: `signal-${i}`,
+      }));
+      return {
+        packetId: "packet-001",
+        createdAt: "2026-03-22T10:00:00.000Z",
+        sourceRequestId: "req-001",
+        questions,
+        totalQuestions: questionCount,
+        highPriorityCount: questionCount,
+        signalAnalysis: {
+          intentValid: false,
+          domainDetected: "general",
+          retrievalEmpty: true,
+          contextTruncated: false,
+          hasWarnings: false,
+          warningCount: 0,
+        },
+      };
+    }
+
+    it("returns a RefinedIntakeRequest with correct counts when all answered", () => {
+      const contract = createClarificationRefinementContract();
+      const packet = makePacket(3);
+      const answers = [
+        { questionId: "q-0", answer: "I want to create a deployment plan." },
+        { questionId: "q-1", answer: "The domain is DevOps." },
+        { questionId: "q-2", answer: "Focus on the rollback steps." },
+      ];
+      const refined = contract.refine(packet, answers);
+
+      expect(refined.answeredCount).toBe(3);
+      expect(refined.skippedCount).toBe(0);
+      expect(refined.confidenceBoost).toBeCloseTo(1.0);
+    });
+
+    it("counts partially answered questions correctly", () => {
+      const contract = createClarificationRefinementContract();
+      const packet = makePacket(4);
+      const answers = [
+        { questionId: "q-0", answer: "Answer to first." },
+        { questionId: "q-1", answer: "" }, // empty → skipped
+      ];
+      const refined = contract.refine(packet, answers);
+
+      expect(refined.answeredCount).toBe(1);
+      expect(refined.skippedCount).toBe(3); // q-1 empty + q-2 + q-3 not provided
+      expect(refined.confidenceBoost).toBeCloseTo(0.25);
+    });
+
+    it("returns zero confidence boost when no answers provided", () => {
+      const contract = createClarificationRefinementContract();
+      const packet = makePacket(2);
+      const refined = contract.refine(packet, []);
+
+      expect(refined.confidenceBoost).toBe(0);
+      expect(refined.answeredCount).toBe(0);
+    });
+
+    it("enrichments carry correct category from packet questions", () => {
+      const contract = createClarificationRefinementContract();
+      const packet = makePacket(1);
+      const refined = contract.refine(packet, [{ questionId: "q-0", answer: "My answer." }]);
+
+      expect(refined.enrichments[0].category).toBe("intent_clarity");
+      expect(refined.enrichments[0].applied).toBe(true);
+    });
+
+    it("refinedId is stable for identical inputs with fixed time", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createClarificationRefinementContract({ now: () => fixedTime });
+      const c2 = createClarificationRefinementContract({ now: () => fixedTime });
+      const packet = makePacket(2);
+      const answers = [{ questionId: "q-0", answer: "Same answer." }];
+
+      const r1 = c1.refine(packet, answers);
+      const r2 = c2.refine(packet, answers);
+
+      expect(r1.refinedId).toBe(r2.refinedId);
+    });
+
+    it("creates ClarificationRefinementContract via class constructor", () => {
+      const contract = new ClarificationRefinementContract();
+      expect(contract).toBeInstanceOf(ClarificationRefinementContract);
+    });
   });
 });

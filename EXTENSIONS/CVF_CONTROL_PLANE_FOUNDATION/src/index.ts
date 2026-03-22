@@ -1,3 +1,27 @@
+// W1-T5 — AI Boardroom Reverse Prompting (CP1–CP2)
+export {
+  ReversePromptingContract,
+  createReversePromptingContract,
+} from "./reverse.prompting.contract";
+export type {
+  QuestionCategory,
+  QuestionPriority,
+  ClarificationQuestion,
+  SignalAnalysis,
+  ReversePromptPacket,
+  ReversePromptingContractDependencies,
+} from "./reverse.prompting.contract";
+export {
+  ClarificationRefinementContract,
+  createClarificationRefinementContract,
+} from "./clarification.refinement.contract";
+export type {
+  ClarificationAnswer,
+  RefinementEnrichment,
+  RefinedIntakeRequest,
+  ClarificationRefinementContractDependencies,
+} from "./clarification.refinement.contract";
+
 // W1-T4 — Control-Plane AI Gateway Slice (CP1–CP2)
 export {
   AIGatewayContract,

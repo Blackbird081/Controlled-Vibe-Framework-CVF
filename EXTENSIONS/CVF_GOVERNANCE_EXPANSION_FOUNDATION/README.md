@@ -1,6 +1,6 @@
 # CVF Governance Expansion Foundation
 
-> W3-T1 coordination package for unconsolidated governance modules.
+> Coordination package shell for the closed `W3-T1 / CP1` tranche in the whitepaper-completion roadmap.
 > Part of the CVF Whitepaper Completion Roadmap.
 
 ## Source Lineage
@@ -19,3 +19,9 @@
 
 - **Watchdog** — concept-only, no operational source exists
 - **Consensus** — concept-only, no operational source exists
+
+## Tranche Closure Checkpoint
+
+- `W3-T1` is closed as a bounded governance-expansion tranche for operational governance modules only
+- this package does **not** claim that `Watchdog` or `Audit / Consensus` are implemented modules
+- any later governance target-state completion work requires a new governed packet

@@ -12,7 +12,7 @@ Status: operational maturity view for current CVF lines.
 | `local-implemented` | implemented and locally verified, but still under current upgrade discipline |
 | `draft` | exploratory or branch track, not current baseline |
 
-## Matrix (2026-03-20)
+## Matrix (2026-03-22)
 
 | Version / Family | Maturity | Test / evidence posture | Release posture |
 |---|---|---|---|
@@ -28,7 +28,8 @@ Status: operational maturity view for current CVF lines.
 | v1.6 / v1.6.1 | candidate | active app/runtime line with canonical phase alignment evidence | active |
 | v1.7 / v1.7.1 / v1.7.2 / v1.7.3 | candidate | stable safety family with test evidence | stable/active |
 | v1.8 / v1.8.1 / v1.9 / v2.0 | local-implemented | implemented locally, not yet normalized into a single release narrative | local-ready |
-| W2-T1 shell line | local-implemented | coordination shell and wrapper alignment implemented with tranche-local tests and governance receipts | local-ready |
+| W2-T1 shell line | local-implemented | closed tranche with shell, wrapper, adapter-evidence, authorization-boundary, and closure receipts | local-ready |
+| W3-T1 governance-expansion line | local-implemented | closed tranche for operational governance packaging with explicit defer receipts for concept-only targets | local-ready |
 | v2.5 | candidate | 476 tests across 14 files, 0 failures | active |
 | v2.5.1 | candidate | 49 tests passed, unified governance types | active |
 | v2.5.2 | candidate | 49 tests passed, programmatic enforcement | active |

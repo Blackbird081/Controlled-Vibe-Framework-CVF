@@ -2004,3 +2004,55 @@ Utility and guard:
 - Notes/Risks:
   - this batch is assessment-only; it does not reopen implementation scope.
   - the review intentionally records `W2-T1` evidence drift instead of silently normalizing top-level status claims without backfilling the missing packet chain.
+## [2026-03-22] Batch: W2-T1 and W3-T1 canonical evidence reconciliation
+- Scope:
+  - backfill the missing canonical receipt chain for `W2-T1 / CP3-CP5`
+  - create the tranche-local canonical packet/evidence chain for already-implemented `W3-T1`
+  - synchronize top-level roadmap/status/index/release surfaces to current repository truth without overstating concept-only targets
+- Policy / roadmap references:
+  - `docs/reviews/CVF_WHITEPAPER_REALIZATION_RECONCILIATION_REVIEW_2026-03-22.md`
+  - `docs/roadmaps/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/CVF_W3_T1_GOVERNANCE_EXPANSION_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/reviews/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+- Files updated:
+  - `docs/audits/CVF_W2_T1_CP5_TRANCHE_CLOSURE_REVIEW_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_REVIEW_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_REVIEW_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W2_T1_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/CVF_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/CVF_W2_T1_CP5_TRANCHE_CLOSURE_PACKET_DELTA_2026-03-22.md`
+  - `docs/baselines/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/reviews/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_PACKET_2026-03-22.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T1_2026-03-22.md`
+  - `docs/audits/CVF_W3_T1_CP1_GOVERNANCE_EXPANSION_FOUNDATION_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W3_T1_CP1_GOVERNANCE_EXPANSION_FOUNDATION_REVIEW_2026-03-22.md`
+  - `docs/reviews/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W3_T1_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/CVF_W3_T1_GOVERNANCE_EXPANSION_PLANNING_DELTA_2026-03-22.md`
+  - `docs/baselines/CVF_W3_T1_CP1_GOVERNANCE_EXPANSION_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/reference/CVF_MODULE_INVENTORY.md`
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+  - `docs/reference/CVF_MATURITY_MATRIX.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v2.4_GRAPH_GOVERNANCE && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE && npm run check` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch is a retrospective canonicalization pass; some packet artifacts were created after the code commits they document.
+  - the reconciliation is explicit about chronology and does not retroactively claim that `Watchdog` or `Audit / Consensus` were implemented.
+  - after this batch, top-level progress claims for `W2-T1` and `W3-T1` should be read as evidence-backed closed tranche claims, not full whitepaper target-state completion claims.

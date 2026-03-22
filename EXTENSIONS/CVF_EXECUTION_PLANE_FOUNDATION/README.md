@@ -1,6 +1,6 @@
 # CVF Execution Plane Foundation
 
-Status: coordination package shell with explicit wrapper alignment for `W2-T1 / CP1-CP2` in the whitepaper-completion roadmap.
+Status: coordination package shell for the closed `W2-T1 / CP1-CP5` tranche in the whitepaper-completion roadmap.
 
 ## Purpose
 
@@ -10,6 +10,8 @@ Status: coordination package shell with explicit wrapper alignment for `W2-T1 / 
 - preserve `CVF_MODEL_GATEWAY` as the canonical gateway-facing wrapper anchor
 - expose one reviewable execution-plane shell summary for tranche-local planning and implementation
 - make gateway and MCP bridge wrapper boundaries explicit without changing source-module ownership
+- expose one reviewable adapter-evidence and explainability surface
+- expose one narrow execution authorization-boundary surface
 
 ## Source lineage
 
@@ -37,6 +39,8 @@ Reference-only through the preserved gateway wrapper:
 - `describeExecutionPlaneFoundationShell()` produces one tranche-local summary for review and documentation surfaces
 - `createExecutionGatewaySurface()` and `createExecutionMcpBridgeSurface()` expose explicit shell-facing wrapper surfaces for gateway and MCP entrypoints
 - `describeExecutionPlaneWrapperAlignment()` produces the `CP2` review surface for MCP / gateway wrapper alignment
+- `createExecutionAdapterEvidenceSurface()` and `describeExecutionAdapterEvidence()` provide the `CP3` adapter-evidence and explainability review surface
+- `createExecutionAuthorizationBoundarySurface()` and `describeExecutionAuthorizationBoundary()` provide the `CP4` authorization-boundary review surface
 - the shell stays additive and does not modify active-path runtime behavior by itself
 
 ## Current-cycle wrapper boundary
@@ -44,3 +48,9 @@ Reference-only through the preserved gateway wrapper:
 - `CVF_MODEL_GATEWAY` remains the gateway-facing wrapper anchor
 - MCP bridge entrypoints stay sourced from `CVF_ECO_v2.5_MCP_SERVER/src/sdk.ts`
 - MCP guard-runtime and CLI internals remain deferred outside the shell package body
+
+## Tranche closure checkpoint
+
+- `CP5` closes the approved `W2-T1` tranche as a documentation-only checkpoint
+- the package remains the canonical shell produced by the tranche, but not the full whitepaper target-state execution plane
+- any additional execution-plane completion work now requires a new governed packet

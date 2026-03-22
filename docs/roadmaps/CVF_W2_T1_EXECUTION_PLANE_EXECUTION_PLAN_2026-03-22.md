@@ -235,7 +235,7 @@ Receipt highlights:
 
 Evidence anchor:
 
-- `docs/audits/CVF_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_AUDIT_2026-03-22.md`
+- `docs/baselines/CVF_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_IMPLEMENTATION_DELTA_2026-03-22.md`
 
 ## 11. CP4 Implementation Receipt
 
@@ -254,7 +254,7 @@ Receipt highlights:
 
 Evidence anchor:
 
-- `docs/audits/CVF_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_AUDIT_2026-03-22.md`
+- `docs/baselines/CVF_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
 
 ## 12. CP5 Tranche Closure Receipt
 
@@ -268,3 +268,8 @@ Tranche status:
 Final readout:
 
 > `W2-T1` execution-plane foundation tranche is closed. The execution plane now has a governed, reviewable package surface connecting gateway adapters, MCP bridge, explainability, release evidence, policy authorization, and edge security boundaries.
+
+Canonical closure anchors:
+
+- `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+- `docs/baselines/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`

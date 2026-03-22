@@ -36,7 +36,7 @@ This is the correct interpretation because the whitepaper is explicitly marked a
 | `W1-T1 / CP2` knowledge/context wrapper alignment | implemented with facade boundary aligned to the `CP1` shell | `DONE FOR CURRENT TRANCHE` |
 | `W1-T1 / CP3` governance-canvas reporting integration | implemented as a reviewable evidence surface from the control-plane shell | `DONE FOR CURRENT TRANCHE` |
 | `W1-T1 / CP4` selected controlled-intelligence surface alignment | implemented as a narrow wrapper/re-export alignment with runtime-critical reasoning execution still deferred | `DONE FOR CURRENT TRANCHE` |
-| `W1-T1 / CP5` tranche closure review packet chain | audit and independent review issued; closure execution still gated | `REVIEWABLE / NOT EXECUTED` |
+| `W1-T1 / CP5` tranche closure checkpoint | canonical tranche closure review issued; tranche boundary closed with explicit defer list | `DONE FOR CURRENT TRANCHE` |
 | Control-plane `AI Gateway` target-state | not implemented as whitepaper target-state | `NOT STARTED / NOT AUTHORIZED` |
 | Unified `Knowledge Layer` target-state | partial ecosystem pieces exist, target-state not delivered | `PARTIAL` |
 | `Context Builder & Packager` target-state | partial ingredients exist, target-state not delivered | `PARTIAL` |
@@ -59,10 +59,12 @@ The following is complete and can be treated as the current post-restructuring b
 - federated restructuring `Phase 0-4`
 - approved current-cycle `B*` merge pack
 - `GC-019` structural audit/review discipline
+- first whitepaper-completion tranche `W1-T1` as a closed control-plane foundation line
 
 Canonical closure packet:
 
 - `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`
+- `docs/reviews/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 
 ---
 
@@ -96,4 +98,4 @@ The next correct planning move is:
 
 ## Final Verdict
 
-> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** — current-cycle restructuring is complete, but the full whitepaper target-state remains only partially delivered and still requires a new governed wave.
+> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** — current-cycle restructuring is complete, the first whitepaper-completion tranche `W1-T1` is now closed, but the full whitepaper target-state still requires new governed waves.

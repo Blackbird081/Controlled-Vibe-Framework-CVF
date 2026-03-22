@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`  
 > Tranche packet: `docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 / CP2 / CP3 / CP4 IMPLEMENTED / CP5 PACKET OPENED`
+> Status: `AUTHORIZED TRANCHE — CP1 / CP2 / CP3 / CP4 IMPLEMENTED / CP5 CLOSED`
 
 ---
 
@@ -132,7 +132,7 @@ Scope:
 
 Status:
 
-- `PACKET OPENED — AWAITING DECISION`
+- `CLOSED`
 
 ---
 
@@ -171,7 +171,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T1` is authorized, `CP1-CP4` are implemented, and `CP5` is now packeted as the tranche-closure decision step.
+> `W1-T1` is authorized, `CP1-CP4` are implemented, and `CP5` is now executed as the tranche-closure checkpoint.
 
 ## 8. Implementation Receipt
 
@@ -251,3 +251,17 @@ Receipt highlights:
 Evidence anchor:
 
 - `docs/baselines/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_IMPLEMENTATION_DELTA_2026-03-22.md`
+
+## 12. Closure Receipt
+
+Closure artifacts:
+
+- `docs/reviews/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+- `docs/baselines/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+
+Receipt highlights:
+
+- the approved `W1-T1` boundary is explicitly closed after `CP1-CP4`
+- deferred scope is named explicitly rather than left implicit
+- no new implementation work is opened by the closure batch
+- documentation standards are refreshed through test log, delta, README banner, status, and index updates

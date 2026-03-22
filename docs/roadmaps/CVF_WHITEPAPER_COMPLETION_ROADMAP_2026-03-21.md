@@ -5,7 +5,7 @@
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  
-> Authorization posture: `LIMITED ACTIVE — W1-T1 ONLY VIA GC-018 + GC-019`
+> Authorization posture: `LIMITED ACTIVE — W1-T1 CLOSED / ALL FURTHER SCOPE GATED`
 > Canonical continuation packets:
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
@@ -50,7 +50,7 @@ Current authorization state:
 - `W1-T1 / CP2` is implemented as a bounded wrapper/re-export alignment
 - `W1-T1 / CP3` is implemented as a bounded governance-canvas reporting integration
 - `W1-T1 / CP4` is implemented as a narrow selected controlled-intelligence wrapper/re-export alignment
-- `W1-T1 / CP5` packet chain is open for tranche closure review, but execution remains gated pending explicit decision
+- `W1-T1 / CP5` closure checkpoint is executed and closes the first authorized control-plane tranche
 - all other downstream phases and tranches remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -242,6 +242,10 @@ Current authorized scope:
   - `docs/reviews/CVF_GC019_W1_T1_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - fifth packet delta:
   - `docs/baselines/CVF_W1_T1_CP5_TRANCHE_CLOSURE_PACKET_DELTA_2026-03-22.md`
+- canonical tranche closure review:
+  - `docs/reviews/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+- canonical tranche closure delta:
+  - `docs/baselines/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - every major structural change inside `W1-T1` still requires `GC-019`
 - everything beyond `W1-T1` remains unopened
 
@@ -300,4 +304,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, `W1-T1` is the only currently authorized implementation tranche, `CP1-CP4` are implemented, `CP5` is reviewable, and all further scope remains gated.
+> **Updated readout:** `W0` is complete, the first authorized implementation tranche `W1-T1` is now closed through `CP5`, and all further whitepaper-completion scope remains gated.

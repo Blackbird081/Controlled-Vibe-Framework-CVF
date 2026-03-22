@@ -34,7 +34,7 @@ Status: canonical module inventory for the current repo baseline.
 | `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` | observability runtime | safety/observability | local-ready | current local line |
 | `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` | reproducibility | deterministic replay | local-ready | implemented local line |
 | `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/` | non-coder safety | simplified runtime | local-ready | implemented local line |
-| `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/` | control-plane coordination shell | whitepaper completion `W1-T1 / CP1-CP4` | local-ready | coordination package preserving lineage for intent, knowledge, reporting, context freeze, tranche-local evidence surfacing, and selected controlled-intelligence wrappers |
+| `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/` | control-plane coordination shell | whitepaper completion `W1-T1 / CP1-CP5` | local-ready | closed first control-plane tranche preserving lineage for intent, knowledge, reporting, context freeze, tranche-local evidence surfacing, selected controlled-intelligence wrappers, and explicit closure/defer posture |
 | `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/` | core primitives | layer 0 | draft | branch-track / future-facing |
 | `docs/reference/` | canonical reference | source-of-truth docs | active | long-lived authoritative docs |
 | `docs/assessments/` | assessment archive | audit/reassessment | active | evidence archive |

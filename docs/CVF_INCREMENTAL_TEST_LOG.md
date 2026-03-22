@@ -1784,3 +1784,32 @@ Utility and guard:
   - this batch opens `CP5` only; it does not issue the tranche closure review yet.
   - README banners stay unchanged because no ownership movement is proposed here.
   - canonical closure/defer judgment remains intentionally paused until the `CP5` decision is explicitly affirmed.
+## [2026-03-22] Batch: W1-T1 tranche closure checkpoint
+- Scope:
+  - issue one canonical closure review for the approved `W1-T1` tranche after `CP1-CP4`
+  - record one tranche closure delta and move all `W1-T1` status surfaces to the closed-tranche posture
+  - refresh README banner and module inventory so later readers can see the closure state from package-entry surfaces
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/reviews/CVF_GC019_W1_T1_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/reviews/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/README.md`
+  - `docs/reference/CVF_MODULE_INVENTORY.md`
+  - `docs/reviews/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch closes only the approved `W1-T1` tranche; it does not claim full whitepaper target-state completion.
+  - deferred control-plane target-state work remains governed future-wave scope rather than hidden residual work.
+  - runtime-critical `CVF_v1.7_CONTROLLED_INTELLIGENCE` internals remain explicitly outside the closed tranche boundary.

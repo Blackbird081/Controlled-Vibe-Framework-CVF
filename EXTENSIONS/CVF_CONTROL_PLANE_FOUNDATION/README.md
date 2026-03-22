@@ -1,6 +1,6 @@
 # CVF Control Plane Foundation
 
-Status: coordination package shell for `W1-T1 / CP1-CP4` in the whitepaper-completion roadmap.
+Status: coordination package shell for the closed `W1-T1 / CP1-CP5` tranche in the whitepaper-completion roadmap.
 
 ## Purpose
 
@@ -41,3 +41,9 @@ Canonical controlled-intelligence ownership remains outside the package body:
 - `CP4` re-exports a narrow set of selected `CVF_v1.7_CONTROLLED_INTELLIGENCE` mapping, context-boundary, and reasoning-boundary helpers/types
 - runtime-critical reasoning execution remains source-owned in `CVF_v1.7_CONTROLLED_INTELLIGENCE`
 - the wrapper stays additive and does not claim physical consolidation
+
+## Tranche closure checkpoint
+
+- `CP5` closes the approved `W1-T1` tranche as a documentation-only checkpoint
+- the package remains the canonical shell produced by the tranche, but not the full whitepaper target-state control plane
+- any additional control-plane completion work now requires a new governed packet

@@ -176,7 +176,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T2` is now execution-planned as a realization-first control-plane tranche. `CP1`, `CP2`, `CP3`, and `CP4` are implemented. `CP1` provides the usable intake contract baseline. `CP2` provides the unified knowledge retrieval contract. `CP3` provides the deterministic context packaging contract. `CP4` provides the real consumer path proof. Broader `AI Gateway` completion remains out of scope.
+> `W1-T2` is now **CLOSED** as a realization-first control-plane tranche. `CP1`, `CP2`, `CP3`, `CP4`, and `CP5` are implemented. `CP1` provides the usable intake contract baseline. `CP2` provides the unified knowledge retrieval contract. `CP3` provides the deterministic context packaging contract. `CP4` provides the real consumer path proof. Broader `AI Gateway` completion remains out of scope.
 
 ## 8. CP1 Implementation Receipt
 

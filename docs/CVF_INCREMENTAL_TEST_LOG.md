@@ -2446,3 +2446,25 @@ Utility and guard:
   - `KnowledgeFacade.consume()` is wired as the public consumer entry point
   - source lineage remains preserved; composition over existing contracts, no physical merge
   - the tranche is now ready for CP5 closure review
+
+### Batch: W1-T2 CP5 — Tranche Closure Review (2026-03-22)
+
+- Scope: formal tranche closure checkpoint with receipts, test evidence, remaining-gap notes, and closure/defer decisions
+- Policy references: `GC-019` tranche closure checkpoint
+- Authorization chain:
+  - `docs/audits/CVF_W1_T2_CP5_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+- Files created:
+  - `docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md` — canonical tranche closure review with CP1-CP5 receipts, consolidated test evidence (149 tests, 0 failures), remaining-gap analysis against whitepaper target-state, explicit closure/defer decisions
+- No code changes — documentation-only closure checkpoint
+- Governance docs updated:
+  - execution plan: CP5 status PLANNED -> IMPLEMENTED, final readout updated to CLOSED
+  - completion status: W1-T2 updated to DONE FOR CURRENT TRANCHE
+  - completion roadmap: CP5 packet chain + final readout updated
+  - module inventory, release manifest, maturity matrix: W1-T2 closure reflected
+  - INDEX.md: CP5 audit, review, and closure review added
+- Notes:
+  - `W1-T2` is now canonically closed as a realization-first control-plane tranche
+  - all five control points (CP1-CP5) are implemented and verified
+  - 7 whitepaper target-state gaps explicitly deferred with rationale
+  - future work requires fresh `GC-018` authorization

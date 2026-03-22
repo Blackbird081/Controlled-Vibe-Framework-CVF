@@ -102,6 +102,35 @@ Template:
   - `GC-022` intentionally governs the granularity of durable memory records rather than retrofitting every historical doc in one batch.
   - The compat gate enforces the new standard on changed memory-bearing records so adoption can remain controlled and incremental.
 
+## [2026-03-22] Batch: GC-021 / GC-022 role clarification
+- Change reference:
+  - local working tree clarification batch for `GC-021` fast-lane governance and `GC-022` memory governance
+  - baseline receipt: `docs/baselines/CVF_GC021_GC022_ROLE_CLARIFICATION_DELTA_2026-03-22.md`
+- Impacted scope:
+  - `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`
+  - `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`
+  - `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`
+  - `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `governance/compat/check_fast_lane_governance_compat.py`
+  - `governance/compat/check_memory_governance_compat.py`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_GC021_GC022_ROLE_CLARIFICATION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_fast_lane_governance_compat.py --enforce`
+  - `python governance/compat/check_memory_governance_compat.py --enforce`
+  - `python governance/compat/check_docs_governance_compat.py --enforce`
+  - `python governance/compat/check_baseline_update_compat.py --enforce`
+  - `python governance/compat/check_release_manifest_consistency.py --enforce`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+- Skip scope:
+  - runtime/package test suites — skipped because this batch clarifies governance semantics, templates, and compat logic only
+- Notes/Risks:
+  - This batch resolves a real ambiguity: `Fast Lane` means lighter process burden, not lighter memory class by default.
+  - The updated compat gates now enforce the separation so future edits do not collapse `GC-021` into a simplified version of `GC-022`.
+
 ## [2026-03-21] Batch: Federated Plane Convergence Phase 0-2
 - Change reference:
   - commit: feat(restructuring): Phase 0-2 Federated Plane Convergence

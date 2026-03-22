@@ -141,6 +141,10 @@ Do not use `FULL_RECORD` just because a file feels important.
 
 Do not duplicate full evidence into `SUMMARY_RECORD` or `POINTER_RECORD` files.
 
+Lane selection does not decide memory class by itself.
+
+`GC-021 Fast Lane` reduces procedural burden, but the resulting audit/review artifacts can still be `FULL_RECORD` while deltas remain `SUMMARY_RECORD`.
+
 ---
 
 ## 7. VIOLATIONS

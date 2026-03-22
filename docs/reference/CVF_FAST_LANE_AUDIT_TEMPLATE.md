@@ -1,7 +1,10 @@
 # CVF Fast Lane Audit Template
 
+Memory class: POINTER_RECORD
+
 > Decision type: `Fast Lane` additive tranche-local audit  
 > Purpose: justify why one bounded additive change may use lightweight governance instead of a full structural packet
+> Default output memory class for the filled audit: `FULL_RECORD` under `GC-022`
 
 ---
 
@@ -50,3 +53,4 @@
 ## 7. Notes
 
 - tranche-local notes:
+- memory-class note: lane selection does not decide memory class; the filled audit should normally be stored as `FULL_RECORD`

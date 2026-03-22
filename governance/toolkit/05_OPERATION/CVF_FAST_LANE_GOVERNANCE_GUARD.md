@@ -77,9 +77,35 @@ Top-level roadmap/status/inventory/manifest refresh is required only when one of
 - release or module truth
 - maturity or readiness claim
 
+## 5. Lane Selection Is Not Memory Classification
+
+`Fast Lane` decides the **minimum governed evidence burden** for one additive control point.
+
+It does **not** decide the durable memory class of every artifact produced by that control point.
+
+`GC-022` still governs the memory class.
+
+This means:
+
+- `short` does not automatically mean `SUMMARY_RECORD`
+- `full lane` does not automatically mean every artifact becomes `FULL_RECORD`
+
+Typical default mapping:
+
+| Artifact | Default memory class |
+|---|---|
+| fast-lane audit | `FULL_RECORD` |
+| fast-lane independent review | `FULL_RECORD` |
+| implementation delta | `SUMMARY_RECORD` |
+| execution plan update | `SUMMARY_RECORD` |
+| test log update | `SUMMARY_RECORD` |
+| index or README navigation refresh | `POINTER_RECORD` |
+
+If one artifact needs a different class, that exception must be justified truthfully by `GC-022`.
+
 ---
 
-## 5. Required Fast Lane Content
+## 6. Required Fast Lane Content
 
 The short audit must still state:
 
@@ -97,7 +123,7 @@ The short review must still answer:
 
 ---
 
-## 6. Token Discipline
+## 7. Token Discipline
 
 `Fast Lane` should reduce token cost by:
 
@@ -112,7 +138,7 @@ It is also a context-discipline rule aligned with the CVF context-continuity mod
 
 ---
 
-## 7. Required Templates
+## 8. Required Templates
 
 Use these templates for `Fast Lane` work:
 
@@ -123,11 +149,12 @@ Do **not** use `Fast Lane` templates to hide work that should have been escalate
 
 ---
 
-## 8. Relationship To Existing Controls
+## 9. Relationship To Existing Controls
 
 - `GC-018` still governs whether a new wave or tranche may open
 - `GC-019` full-lane flow still governs major structural or boundary-changing work
 - this guard adds a lightweight governed path for additive work after the tranche boundary is already approved
+- `GC-022` still governs how the resulting records are stored for durable memory
 
 `Fast Lane` does not replace `GC-018` or `GC-019`.
 
@@ -135,10 +162,11 @@ It narrows when full-packet heaviness is necessary.
 
 ---
 
-## 9. Related References
+## 10. Related References
 
 - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`
 - `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`
+- `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
 - `governance/compat/check_fast_lane_governance_compat.py`

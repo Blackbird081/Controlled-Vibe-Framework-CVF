@@ -61,6 +61,7 @@ Status: canonical ownership map for critical governance controls in the active C
 - `GC-020` is the enforced handoff layer of the CVF context-continuity model: memory keeps durable truth, handoff compresses transition truth, and context loading should stay phase-bounded.
 - `GC-021` does not weaken `GC-018` or `GC-019`; it only allows a lighter evidence path after tranche boundaries are already settled and only for additive low-risk work.
 - `GC-022` gives operational meaning to the memory side of context continuity by distinguishing full durable evidence from summary records and pointer-only navigation records.
+- `GC-021` and `GC-022` are intentionally separate: lane selection sets evidence burden, while memory governance sets durable storage class for each artifact.
 
 ## Current Closure Statement
 

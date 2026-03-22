@@ -101,12 +101,14 @@ Personal AI usage unrelated to company work is excluded.
    - `GC-018` still opens the wave or tranche.
    - `GC-019` full-lane handling remains mandatory for physical merges, ownership transfer, target-state claim expansion, runtime-authority changes, or concept-to-module work.
    - Fast lane is allowed only when the change stays additive, remains inside the approved tranche scope, and keeps rollback bounded.
+   - Fast-lane selection controls evidence burden only; durable memory class is still governed separately by `GC-022`.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`.
    - Canonical templates: `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md` and `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`.
 16. Memory governance is mandatory for evidence-bearing records intended to support later CVF memory:
    - Every memory-bearing record must classify itself as `FULL_RECORD`, `SUMMARY_RECORD`, or `POINTER_RECORD`.
    - The chosen class must match the document's storage role and the canonical `docs/` taxonomy.
    - Do not preserve full-detail durable history when a truthful summary or pointer-only record is sufficient.
+   - Memory class follows artifact role, not whether the change used `Fast Lane` or `Full Lane`.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`.
    - Canonical classification reference: `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`.
 

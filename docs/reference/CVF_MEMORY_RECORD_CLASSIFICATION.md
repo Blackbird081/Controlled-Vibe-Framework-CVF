@@ -58,6 +58,35 @@ Typical examples:
 | `docs/INDEX.md` | `POINTER_RECORD` | index exists to route, not to duplicate |
 | `docs/reference/README.md` | `POINTER_RECORD` | README exists to route, not to duplicate |
 
+## Relationship To GC-021 Fast Lane
+
+`GC-021` and `GC-022` are related, but they do not do the same job.
+
+- `GC-021` decides the governance lane and the minimum artifact burden for one change
+- `GC-022` decides the durable memory class of the resulting artifacts
+
+So:
+
+- `Fast Lane` does not automatically mean `SUMMARY_RECORD`
+- `Full Lane` does not automatically mean every artifact becomes `FULL_RECORD`
+
+The durable memory class follows artifact role, not lane name.
+
+### Common Crosswalk
+
+| Artifact type | Typical lane | Default memory class |
+|---|---|---|
+| audit | fast lane or full lane | `FULL_RECORD` |
+| independent review | fast lane or full lane | `FULL_RECORD` |
+| approval or closure review | fast lane or full lane | `FULL_RECORD` |
+| implementation delta | fast lane or full lane | `SUMMARY_RECORD` |
+| planning delta | fast lane or full lane | `SUMMARY_RECORD` |
+| execution plan update | fast lane or full lane | `SUMMARY_RECORD` |
+| test log entry | fast lane or full lane | `SUMMARY_RECORD` |
+| index / reference README / navigation page | any | `POINTER_RECORD` |
+
+This crosswalk exists to prevent hidden token cost caused by confusing process simplification with memory-storage class.
+
 ## Relationship To Context Continuity
 
 This classification supplies the durable-memory side of the CVF context continuity model:

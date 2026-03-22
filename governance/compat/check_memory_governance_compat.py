@@ -58,6 +58,7 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         "POINTER_RECORD",
         "DEFAULT TAXONOMY MAPPING",
         MEMORY_CLASSIFICATION_PATH,
+        "Lane selection does not decide memory class by itself.",
     ),
     MEMORY_CLASSIFICATION_PATH: (
         "Memory class: POINTER_RECORD",
@@ -65,6 +66,8 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         "SUMMARY_RECORD",
         "POINTER_RECORD",
         "Relationship To Context Continuity",
+        "Relationship To GC-021 Fast Lane",
+        "does not automatically mean `SUMMARY_RECORD`",
     ),
     DOC_STORAGE_GUARD_PATH: (
         "memory classification",
@@ -73,6 +76,7 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
     ),
     MASTER_POLICY_PATH: (
         "Memory governance is mandatory for evidence-bearing records intended to support later CVF memory",
+        "Memory class follows artifact role, not whether the change used `Fast Lane` or `Full Lane`.",
         MEMORY_GUARD_PATH,
         MEMORY_CLASSIFICATION_PATH,
     ),

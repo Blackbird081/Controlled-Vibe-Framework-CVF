@@ -1,7 +1,10 @@
 # CVF Fast Lane Review Template
 
+Memory class: POINTER_RECORD
+
 > Decision type: `Fast Lane` additive tranche-local review  
 > Purpose: independently confirm that a proposed additive change truly qualifies for `Fast Lane`
+> Default output memory class for the filled review: `FULL_RECORD` under `GC-022`
 
 ---
 
@@ -36,3 +39,4 @@
 ## 5. Notes
 
 - reviewer notes:
+- memory-class note: lane selection does not decide memory class; the filled review should normally be stored as `FULL_RECORD`

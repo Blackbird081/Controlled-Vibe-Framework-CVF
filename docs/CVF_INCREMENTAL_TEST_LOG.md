@@ -2360,6 +2360,36 @@ Utility and guard:
 - Notes/Risks:
   - this batch reconciles documentation truth only; it does not widen `W1-T2` scope.
   - the larger whitepaper target-state still remains only partially realized.
+## [2026-03-22] Batch: GC-021 fast-lane governance adoption
+- Scope:
+  - define a canonical `Fast Lane / Full Lane` split so additive tranche-local work can move faster without losing control
+  - keep `GC-018`, `GC-019`, test/gate, baseline delta, clean commit, and closure checkpoint mandatory
+  - add repo-level automation so the fast-lane chain stays aligned without prompt-time reminders
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- Files updated:
+  - `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`
+  - `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`
+  - `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`
+  - `governance/compat/check_fast_lane_governance_compat.py`
+  - `governance/compat/run_local_governance_hook_chain.py`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/reference/README.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_GC021_FAST_LANE_GOVERNANCE_ADOPTION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_fast_lane_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch formalizes the two-speed governance model at repo-policy level; it does not yet auto-classify individual future packets.
+  - the intended effect is lower token cost and less doc churn for low-risk additive work, while preserving full-lane protection for structural or scope-changing changes.
 ## [2026-03-22] Batch: W1-T2 CP2 — Unified Knowledge Retrieval Contract
 - Scope:
   - implement CP2 inside W1-T2 as an additive contract alignment

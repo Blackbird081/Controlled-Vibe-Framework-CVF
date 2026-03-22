@@ -97,6 +97,12 @@ Personal AI usage unrelated to company work is excluded.
    - The canonical handoff template is `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`.
    - The canonical context-continuity reference is `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`.
+15. Fast-lane governance is allowed only for low-risk additive work inside an already-authorized tranche:
+   - `GC-018` still opens the wave or tranche.
+   - `GC-019` full-lane handling remains mandatory for physical merges, ownership transfer, target-state claim expansion, runtime-authority changes, or concept-to-module work.
+   - Fast lane is allowed only when the change stays additive, remains inside the approved tranche scope, and keeps rollback bounded.
+   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`.
+   - Canonical templates: `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md` and `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`.
 
 ---
 

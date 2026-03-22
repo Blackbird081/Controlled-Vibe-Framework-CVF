@@ -58,6 +58,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             "depth-audit continuation compatibility",
             ["python", "governance/compat/check_depth_audit_continuation_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
+        (
+            "governed file size compatibility",
+            ["python", "governance/compat/check_governed_file_size.py", "--enforce"],
+        ),
     ]
 }
 

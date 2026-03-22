@@ -123,6 +123,21 @@ jobs:
         run: |
           python governance/compat/check_python_automation_size.py --enforce
 
+  governed-file-size:
+    name: Governed File Size
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce governed file size guard
+        run: |
+          python governance/compat/check_governed_file_size.py --enforce
+
   release-manifest-consistency:
     name: Release Manifest Consistency
     runs-on: ubuntu-latest

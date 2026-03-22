@@ -111,6 +111,12 @@ Personal AI usage unrelated to company work is excluded.
    - Memory class follows artifact role, not whether the change used `Fast Lane` or `Full Lane`.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`.
    - Canonical classification reference: `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`.
+17. Governed file size discipline is mandatory for maintainability across CVF:
+   - Governed source, test, frontend, and active markdown files must stay within the active class-specific size thresholds unless an approved exception exists.
+   - Oversized files must be split by responsibility or tranche unless they are explicitly registered as legacy debt with rationale and follow-up.
+   - Dedicated rotation guards remain authoritative for long-lived logs and traces.
+   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`.
+   - Automated enforcement reference: `governance/compat/check_governed_file_size.py`.
 
 ---
 

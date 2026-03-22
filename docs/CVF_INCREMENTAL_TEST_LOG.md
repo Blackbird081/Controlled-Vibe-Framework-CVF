@@ -2812,3 +2812,30 @@ Utility and guard:
   - `W1-T11` is the first operational Context Builder slice in CVF
   - `tests/index.test.ts` was reduced from `2879` lines to `2676` lines by extracting tranche-local tests into `tests/context.builder.test.ts` (`199` lines)
   - there is no repo-wide hard cap discovered for all test files, but tranche-local split improves maintainability and reviewability
+
+### Batch: GC-023 Governed File Size Guard Standardization (2026-03-23)
+
+- Scope:
+  - promote file-size discipline from a one-off test-log rotation rule into a repo-wide governed maintainability guard
+  - enforce class-specific thresholds for governed source, test, frontend, and active markdown files
+  - seed a canonical exception registry for existing legacy oversize files
+- Policy references:
+  - `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`
+  - `governance/compat/check_governed_file_size.py`
+- Files created:
+  - `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`
+  - `governance/compat/check_governed_file_size.py`
+  - `governance/compat/CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json`
+- Files updated:
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `governance/compat/run_local_governance_hook_chain.py`
+  - `.github/workflows/documentation-testing.yml`
+- Tests executed:
+  - `python -m py_compile governance/compat/check_governed_file_size.py` -> PASS
+  - `python governance/compat/check_governed_file_size.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes:
+  - `GC-023` complements dedicated rotation guards; it does not replace the specialized guards for `docs/CVF_INCREMENTAL_TEST_LOG.md` or conformance traces
+  - current large-file debt is preserved only through explicit exception entries with rationale and required follow-up
+  - future growth of oversized governed files now requires either a split or a truthful exception trail

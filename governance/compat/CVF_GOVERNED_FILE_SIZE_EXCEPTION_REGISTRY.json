@@ -1,0 +1,86 @@
+{
+  "thresholds": {
+    "test_code": {
+      "softThresholdLines": 800,
+      "hardThresholdLines": 1200
+    },
+    "frontend_component": {
+      "softThresholdLines": 700,
+      "hardThresholdLines": 1000
+    },
+    "general_source": {
+      "softThresholdLines": 700,
+      "hardThresholdLines": 1000
+    },
+    "active_markdown": {
+      "softThresholdLines": 900,
+      "hardThresholdLines": 1200
+    }
+  },
+  "exceptions": [
+    {
+      "path": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts",
+      "fileClass": "test_code",
+      "approvedMaxLines": 3200,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Legacy CPF cumulative tranche test file still carries pre-GC-023 history despite ongoing tranche-local extraction.",
+      "requiredFollowup": "Continue extracting tranche-local and subsystem-local tests out of CPF index.test.ts whenever CPF test surface is touched."
+    },
+    {
+      "path": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts",
+      "fileClass": "test_code",
+      "approvedMaxLines": 2100,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Execution plane foundation still carries multi-tranche cumulative tests in one governed entry file.",
+      "requiredFollowup": "Split execution runtime, observer, feedback, and MCP bridge tests into dedicated files before or during the next W2 execution tranche touching test coverage."
+    },
+    {
+      "path": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts",
+      "fileClass": "test_code",
+      "approvedMaxLines": 1500,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Learning plane foundation still carries cumulative tranche tests in one governed entry file.",
+      "requiredFollowup": "Split truth-model, evaluation, reinjection, storage, and observability tests into dedicated files before the next substantive W4 tranche touching test coverage."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/safety/page.tsx",
+      "fileClass": "frontend_component",
+      "approvedMaxLines": 1650,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Safety dashboard page is a legacy dense route surface with unresolved subcomponent extraction debt.",
+      "requiredFollowup": "Extract route sections and view-model helpers into subcomponents/hooks before the next substantive safety dashboard change."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.5_UX_PLATFORM/cvf-web/src/lib/templates.ts",
+      "fileClass": "general_source",
+      "approvedMaxLines": 1650,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Legacy template catalog remains centralized and exceeds the new general-source threshold.",
+      "requiredFollowup": "Split the template catalog by domain or template family before the next substantive template-library expansion."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SpecExport.tsx",
+      "fileClass": "frontend_component",
+      "approvedMaxLines": 1300,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Spec export component still combines multiple export views and orchestration helpers in one surface.",
+      "requiredFollowup": "Extract export panels and helper logic into subordinate components/hooks before the next substantive export workflow change."
+    },
+    {
+      "path": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts",
+      "fileClass": "general_source",
+      "approvedMaxLines": 1100,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Execution plane foundation barrel still aggregates multiple contract exports in one compatibility surface.",
+      "requiredFollowup": "Split the barrel into tranche-local or domain-local export files before the next substantive execution-plane surface expansion."
+    },
+    {
+      "path": "docs/reference/CVF_IN_VSCODE_GUIDE.md",
+      "fileClass": "active_markdown",
+      "approvedMaxLines": 1300,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "The VS Code guide is a legacy dense active reference that still concentrates setup, workflow, and troubleshooting in one place.",
+      "requiredFollowup": "Split the guide into narrower linked references before the next substantive VS Code guide expansion."
+    }
+  ]
+}

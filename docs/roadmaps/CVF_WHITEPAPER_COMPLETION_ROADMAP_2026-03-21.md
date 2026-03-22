@@ -8,7 +8,7 @@ Memory class: SUMMARY_RECORD
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  
-> Authorization posture: `LIMITED ACTIVE - W1-T1 / W1-T2 / W1-T3 / W1-T4 / W1-T5 / W2-T1 / W2-T2 / W2-T3 / W2-T4 / W2-T5 / W3-T1 / W4-T1 / W4-T2 / W4-T3 / W4-T4 CLOSED / W5 GATED`
+> Authorization posture: `LIMITED ACTIVE - W1-T1 / W1-T2 / W1-T3 / W1-T4 / W1-T5 / W2-T1 / W2-T2 / W2-T3 / W2-T4 / W2-T5 / W3-T1 / W4-T1 / W4-T2 / W4-T3 / W4-T4 / W4-T5 CLOSED / W5 GATED`
 > Canonical continuation packets:
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
@@ -105,6 +105,10 @@ Current authorization state:
 - `W4-T4 / CP1` is now implemented as a governance signal contract (`ThresholdAssessment → GovernanceSignal`)
 - `W4-T4 / CP2` is now implemented as a governance signal log contract (`GovernanceSignal[] → GovernanceSignalLog`)
 - `W4-T4 / CP3` tranche closure review is executed and closes the governance signal bridge tranche
+- `W4-T5 — Learning Plane Re-injection Loop` is now authorized and canonically closed
+- `W4-T5 / CP1` is now implemented as a learning re-injection contract (`GovernanceSignal → LearningFeedbackInput`)
+- `W4-T5 / CP2` is now implemented as a learning loop contract (`GovernanceSignal[] → LearningLoopSummary`)
+- `W4-T5 / CP3` tranche closure review is executed; W4 loop closed; W4 deferred scope exhausted
 - `W5` remains gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -700,6 +704,33 @@ Current authorized scope:
 - third closure delta:
   - `docs/baselines/CVF_W4_T4_CP3_DELTA_2026-03-22.md`
 - `W4-T4` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `ThresholdAssessment → GovernanceSignal` and `GovernanceSignal[] → GovernanceSignalLog` consumer paths delivered; first cross-plane signal from learning plane to governance; W4 deferred scope "governance action surface" delivered
+- next authorized tranche:
+  - `W4-T5 — Learning Plane Re-injection Loop`
+- continuation candidate:
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T5_2026-03-22.md`
+- tranche-local execution plan:
+  - `docs/roadmaps/CVF_W4_T5_REINJECTION_LOOP_EXECUTION_PLAN_2026-03-22.md`
+- authorization delta:
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W4_T5_AUTHORIZATION_DELTA_2026-03-22.md`
+- first structural packet:
+  - `docs/reviews/CVF_W4_T5_CP1_AUDIT_2026-03-22.md`
+- first independent review:
+  - `docs/reviews/CVF_W4_T5_CP1_REVIEW_2026-03-22.md`
+- first implementation delta:
+  - `docs/baselines/CVF_W4_T5_CP1_DELTA_2026-03-22.md`
+- second structural packet (Fast Lane):
+  - `docs/reviews/CVF_W4_T5_CP2_AUDIT_2026-03-22.md`
+- second independent review:
+  - `docs/reviews/CVF_W4_T5_CP2_REVIEW_2026-03-22.md`
+- second implementation delta:
+  - `docs/baselines/CVF_W4_T5_CP2_DELTA_2026-03-22.md`
+- third closure packet:
+  - `docs/reviews/CVF_W4_T5_CP3_AUDIT_2026-03-22.md`
+- third independent review:
+  - `docs/reviews/CVF_W4_T5_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md`
+- third closure delta:
+  - `docs/baselines/CVF_W4_T5_CP3_DELTA_2026-03-22.md`
+- `W4-T5` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `GovernanceSignal → LearningFeedbackInput` and `GovernanceSignal[] → LearningLoopSummary` consumer paths delivered; W4 feedback re-injection loop closed; W4 deferred scope exhausted
 
 ### Phase W2 — Execution Plane (continued)
 
@@ -799,8 +830,9 @@ Current authorized scope:
 - `W4-T2` closed: `PatternInsight[] → TruthModel` and `TruthModel + PatternInsight → TruthModel`
 - `W4-T3` closed: `TruthModel → EvaluationResult` and `EvaluationResult[] → ThresholdAssessment`; first learning-plane evaluation surface; W4 foundation complete
 - `W4-T4` closed: `ThresholdAssessment → GovernanceSignal` and `GovernanceSignal[] → GovernanceSignalLog`; first cross-plane governance signal from learning plane; W4 deferred scope "governance action surface" delivered
+- `W4-T5` closed: `GovernanceSignal → LearningFeedbackInput` and `GovernanceSignal[] → LearningLoopSummary`; W4 feedback re-injection loop closed; W4 deferred scope exhausted (persistent storage deferred to future wave)
 - cross-plane independence: CONFIRMED — learning plane defines its own input interfaces; no runtime coupling to EPF/CPF
-- deferred scope: persistent storage, feedback re-injection loop (future W4 tranches)
+- deferred scope: persistent storage only (future wave)
 
 ### Phase W5 — Whitepaper Closure Review
 
@@ -845,4 +877,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, `W1-T2` is now canonically closed through `CP5` with one usable intake slice delivered, `W1-T3` is now canonically closed through `CP5` with one bounded design/orchestration slice delivered, `W2-T2` is now canonically closed through `CP4` with one bounded execution dispatch bridge delivered (full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE cross-plane path proven), `W2-T3` is now canonically closed through `CP3` with one bounded execution command runtime delivered (full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE→EXECUTION cross-plane path proven; 140 tests passing), `W1-T4` is now canonically closed through `CP3` with one bounded AI Gateway slice delivered (EXTERNAL SIGNAL→GATEWAY→INTAKE consumer path proven; whitepaper NOT STARTED AI Gateway gap closed; 157 tests passing), `W1-T5` is now canonically closed through `CP3` with one bounded AI Boardroom Reverse Prompting slice delivered (ControlPlaneIntakeResult→ReversePromptPacket→RefinedIntakeRequest consumer path proven; first question-generating contract in control plane; 174 tests passing), `W2-T4` is now canonically closed through `CP3` with one bounded Execution Observer slice delivered (ExecutionPipelineReceipt→ExecutionObservation→ExecutionFeedbackSignal; first observation/feedback layer in execution plane; W4 learning-plane prerequisite established; 195 tests passing), `W4-T1` is now canonically closed through `CP3` with one bounded Learning Plane Foundation slice delivered (LearningFeedbackInput[]→FeedbackLedger→PatternInsight; first learning-plane package with two governed contracts; W4 gate opened; 214 tests passing), `W4-T2` is now canonically closed through `CP3` with one bounded Learning Plane Truth Model slice delivered (PatternInsight[]→TruthModel and TruthModel+PatternInsight→TruthModel; first durable versioned accumulated learning state; 231 tests passing), `W2-T5` is now canonically closed through `CP3` with one bounded Execution Feedback Routing slice delivered (ExecutionFeedbackSignal→FeedbackRoutingDecision→FeedbackResolutionSummary; execution self-correction loop closed; full architecture loop EXTERNAL SIGNAL→GATEWAY→INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE→EXECUTION→OBSERVATION→FEEDBACK→ROUTING DECISION→RESOLUTION now provable; 247 tests passing), `W4-T3` is now canonically closed through `CP3` with one bounded Learning Plane Evaluation Engine slice delivered (TruthModel→EvaluationResult and EvaluationResult[]→ThresholdAssessment; EvaluationVerdict is the first learning-plane governance signal actionable by governance surfaces; full evaluation chain from raw insight through threshold assessment; W4 learning-plane foundation complete; 263 tests passing), `W4-T4` is now canonically closed through `CP3` with one bounded Learning Plane Governance Signal Bridge slice delivered (ThresholdAssessment→GovernanceSignal and GovernanceSignal[]→GovernanceSignalLog; first cross-plane signal from learning plane to governance; W4 deferred scope "governance action surface" delivered; 279 tests passing), and `W5` remains gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, `W1-T2` is now canonically closed through `CP5` with one usable intake slice delivered, `W1-T3` is now canonically closed through `CP5` with one bounded design/orchestration slice delivered, `W2-T2` is now canonically closed through `CP4` with one bounded execution dispatch bridge delivered (full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE cross-plane path proven), `W2-T3` is now canonically closed through `CP3` with one bounded execution command runtime delivered (full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE→EXECUTION cross-plane path proven; 140 tests passing), `W1-T4` is now canonically closed through `CP3` with one bounded AI Gateway slice delivered (EXTERNAL SIGNAL→GATEWAY→INTAKE consumer path proven; whitepaper NOT STARTED AI Gateway gap closed; 157 tests passing), `W1-T5` is now canonically closed through `CP3` with one bounded AI Boardroom Reverse Prompting slice delivered (ControlPlaneIntakeResult→ReversePromptPacket→RefinedIntakeRequest consumer path proven; first question-generating contract in control plane; 174 tests passing), `W2-T4` is now canonically closed through `CP3` with one bounded Execution Observer slice delivered (ExecutionPipelineReceipt→ExecutionObservation→ExecutionFeedbackSignal; first observation/feedback layer in execution plane; W4 learning-plane prerequisite established; 195 tests passing), `W4-T1` is now canonically closed through `CP3` with one bounded Learning Plane Foundation slice delivered (LearningFeedbackInput[]→FeedbackLedger→PatternInsight; first learning-plane package with two governed contracts; W4 gate opened; 214 tests passing), `W4-T2` is now canonically closed through `CP3` with one bounded Learning Plane Truth Model slice delivered (PatternInsight[]→TruthModel and TruthModel+PatternInsight→TruthModel; first durable versioned accumulated learning state; 231 tests passing), `W2-T5` is now canonically closed through `CP3` with one bounded Execution Feedback Routing slice delivered (ExecutionFeedbackSignal→FeedbackRoutingDecision→FeedbackResolutionSummary; execution self-correction loop closed; full architecture loop EXTERNAL SIGNAL→GATEWAY→INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE→EXECUTION→OBSERVATION→FEEDBACK→ROUTING DECISION→RESOLUTION now provable; 247 tests passing), `W4-T3` is now canonically closed through `CP3` with one bounded Learning Plane Evaluation Engine slice delivered (TruthModel→EvaluationResult and EvaluationResult[]→ThresholdAssessment; EvaluationVerdict is the first learning-plane governance signal actionable by governance surfaces; full evaluation chain from raw insight through threshold assessment; W4 learning-plane foundation complete; 263 tests passing), `W4-T4` is now canonically closed through `CP3` with one bounded Learning Plane Governance Signal Bridge slice delivered (ThresholdAssessment→GovernanceSignal and GovernanceSignal[]→GovernanceSignalLog; first cross-plane signal from learning plane to governance; W4 deferred scope "governance action surface" delivered; 279 tests passing), `W4-T5` is now canonically closed through `CP3` with one bounded Learning Plane Re-injection Loop slice delivered (GovernanceSignal→LearningFeedbackInput and GovernanceSignal[]→LearningLoopSummary; W4 feedback re-injection loop closed; full W4 self-correction cycle: LearningFeedbackInput→...→GovernanceSignal→LearningFeedbackInput now governs in contracts; W4 deferred scope exhausted; 295 tests passing), and `W5` remains gated.

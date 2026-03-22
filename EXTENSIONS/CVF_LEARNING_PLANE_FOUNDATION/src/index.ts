@@ -1,3 +1,21 @@
+// W4-T5 — Learning Plane Re-injection Loop (CP1–CP2)
+export {
+  LearningReinjectionContract,
+  createLearningReinjectionContract,
+} from "./learning.reinjection.contract";
+export type {
+  LearningReinjectionResult,
+  LearningReinjectionContractDependencies,
+} from "./learning.reinjection.contract";
+export {
+  LearningLoopContract,
+  createLearningLoopContract,
+} from "./learning.loop.contract";
+export type {
+  LearningLoopSummary,
+  LearningLoopContractDependencies,
+} from "./learning.loop.contract";
+
 // W4-T4 — Learning Plane Governance Signal Bridge (CP1–CP2)
 export {
   GovernanceSignalContract,

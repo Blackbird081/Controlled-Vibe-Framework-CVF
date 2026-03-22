@@ -17,6 +17,10 @@ import {
   createGovernanceSignalContract,
   GovernanceSignalLogContract,
   createGovernanceSignalLogContract,
+  LearningReinjectionContract,
+  createLearningReinjectionContract,
+  LearningLoopContract,
+  createLearningLoopContract,
 } from "../src/index";
 import type {
   LearningFeedbackInput,
@@ -270,6 +274,186 @@ describe("CVF_LEARNING_PLANE_FOUNDATION", () => {
     it("creates TruthModelUpdateContract via class constructor", () => {
       const contract = new TruthModelUpdateContract();
       expect(contract).toBeInstanceOf(TruthModelUpdateContract);
+    });
+  });
+
+  // ─── W4-T5 CP1 — LearningReinjectionContract ─────────────────────────────
+
+  describe("W4-T5 CP1 — LearningReinjectionContract", () => {
+    function makeSignal(
+      signalType: GovernanceSignal["signalType"],
+      id = "sig-001",
+    ): GovernanceSignal {
+      return {
+        signalId: id,
+        issuedAt: "2026-03-22T10:00:00.000Z",
+        sourceAssessmentId: "assess-001",
+        sourceOverallStatus: "FAILING",
+        signalType,
+        urgency: "CRITICAL",
+        recommendation: `Test signal ${id}`,
+        signalHash: `hash-${id}`,
+      };
+    }
+
+    it("maps ESCALATE signal to REJECT feedbackClass with critical priority", () => {
+      const contract = createLearningReinjectionContract();
+      const result = contract.reinject(makeSignal("ESCALATE"));
+
+      expect(result.feedbackInput.feedbackClass).toBe("REJECT");
+      expect(result.feedbackInput.priority).toBe("critical");
+      expect(result.feedbackInput.confidenceBoost).toBe(0);
+    });
+
+    it("maps TRIGGER_REVIEW signal to ESCALATE feedbackClass with critical priority", () => {
+      const contract = createLearningReinjectionContract();
+      const result = contract.reinject(makeSignal("TRIGGER_REVIEW"));
+
+      expect(result.feedbackInput.feedbackClass).toBe("ESCALATE");
+      expect(result.feedbackInput.priority).toBe("critical");
+      expect(result.feedbackInput.confidenceBoost).toBe(0);
+    });
+
+    it("maps MONITOR signal to RETRY feedbackClass with low priority", () => {
+      const contract = createLearningReinjectionContract();
+      const result = contract.reinject(makeSignal("MONITOR"));
+
+      expect(result.feedbackInput.feedbackClass).toBe("RETRY");
+      expect(result.feedbackInput.priority).toBe("low");
+      expect(result.feedbackInput.confidenceBoost).toBe(0.05);
+    });
+
+    it("maps NO_ACTION signal to ACCEPT feedbackClass with low priority", () => {
+      const contract = createLearningReinjectionContract();
+      const result = contract.reinject(makeSignal("NO_ACTION"));
+
+      expect(result.feedbackInput.feedbackClass).toBe("ACCEPT");
+      expect(result.feedbackInput.priority).toBe("low");
+      expect(result.feedbackInput.confidenceBoost).toBe(0.1);
+    });
+
+    it("sourceSignalId and sourceSignalType trace back to input", () => {
+      const contract = createLearningReinjectionContract();
+      const signal = makeSignal("ESCALATE", "my-signal-xyz");
+      const result = contract.reinject(signal);
+
+      expect(result.sourceSignalId).toBe("my-signal-xyz");
+      expect(result.sourceSignalType).toBe("ESCALATE");
+    });
+
+    it("feedbackInput.feedbackId matches source signal signalId", () => {
+      const contract = createLearningReinjectionContract();
+      const signal = makeSignal("NO_ACTION", "sig-abc");
+      const result = contract.reinject(signal);
+
+      expect(result.feedbackInput.feedbackId).toBe("sig-abc");
+    });
+
+    it("produces stable reinjectionHash with fixed time injection", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createLearningReinjectionContract({ now: () => fixedTime });
+      const c2 = createLearningReinjectionContract({ now: () => fixedTime });
+      const signal = makeSignal("ESCALATE");
+
+      expect(c1.reinject(signal).reinjectionHash).toBe(c2.reinject(signal).reinjectionHash);
+    });
+
+    it("reinjectionId and reinjectionHash are distinct values", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const contract = createLearningReinjectionContract({ now: () => fixedTime });
+      const result = contract.reinject(makeSignal("ESCALATE"));
+
+      expect(result.reinjectionId).not.toBe(result.reinjectionHash);
+    });
+
+    it("creates LearningReinjectionContract via class constructor", () => {
+      const contract = new LearningReinjectionContract();
+      expect(contract).toBeInstanceOf(LearningReinjectionContract);
+    });
+  });
+
+  // ─── W4-T5 CP2 — LearningLoopContract ────────────────────────────────────
+
+  describe("W4-T5 CP2 — LearningLoopContract", () => {
+    function makeSignalOfType(
+      signalType: GovernanceSignal["signalType"],
+      id = "s1",
+    ): GovernanceSignal {
+      return {
+        signalId: id,
+        issuedAt: "2026-03-22T10:00:00.000Z",
+        sourceAssessmentId: "assess-001",
+        sourceOverallStatus: "PASSING",
+        signalType,
+        urgency: "LOW",
+        recommendation: `Test signal ${id}`,
+        signalHash: `hash-${id}`,
+      };
+    }
+
+    it("returns ACCEPT dominant and 0 totals for empty signals", () => {
+      const contract = createLearningLoopContract();
+      const summary = contract.summarize([]);
+
+      expect(summary.dominantFeedbackClass).toBe("ACCEPT");
+      expect(summary.totalSignals).toBe(0);
+    });
+
+    it("returns REJECT dominant when any ESCALATE signal present", () => {
+      const contract = createLearningLoopContract();
+      const summary = contract.summarize([
+        makeSignalOfType("ESCALATE", "s1"),
+        makeSignalOfType("NO_ACTION", "s2"),
+      ]);
+
+      expect(summary.dominantFeedbackClass).toBe("REJECT");
+      expect(summary.rejectCount).toBe(1);
+    });
+
+    it("returns ESCALATE dominant when TRIGGER_REVIEW present (no ESCALATE signal)", () => {
+      const contract = createLearningLoopContract();
+      const summary = contract.summarize([
+        makeSignalOfType("TRIGGER_REVIEW", "s1"),
+        makeSignalOfType("MONITOR", "s2"),
+      ]);
+
+      expect(summary.dominantFeedbackClass).toBe("ESCALATE");
+    });
+
+    it("counts all re-injected feedback classes correctly", () => {
+      const contract = createLearningLoopContract();
+      const summary = contract.summarize([
+        makeSignalOfType("ESCALATE", "s1"),    // → REJECT
+        makeSignalOfType("TRIGGER_REVIEW", "s2"), // → ESCALATE
+        makeSignalOfType("MONITOR", "s3"),     // → RETRY
+        makeSignalOfType("NO_ACTION", "s4"),   // → ACCEPT
+      ]);
+
+      expect(summary.rejectCount).toBe(1);
+      expect(summary.escalateCount).toBe(1);
+      expect(summary.retryCount).toBe(1);
+      expect(summary.acceptCount).toBe(1);
+      expect(summary.totalSignals).toBe(4);
+    });
+
+    it("produces stable summaryHash with fixed time injection", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createLearningLoopContract({ now: () => fixedTime });
+      const c2 = createLearningLoopContract({ now: () => fixedTime });
+      const signals = [makeSignalOfType("NO_ACTION", "s1"), makeSignalOfType("MONITOR", "s2")];
+
+      expect(c1.summarize(signals).summaryHash).toBe(c2.summarize(signals).summaryHash);
+    });
+
+    it("summary is non-empty for any input", () => {
+      const contract = createLearningLoopContract();
+      expect(contract.summarize([]).summary.length).toBeGreaterThan(0);
+      expect(contract.summarize([makeSignalOfType("ESCALATE")]).summary.length).toBeGreaterThan(0);
+    });
+
+    it("creates LearningLoopContract via class constructor", () => {
+      const contract = new LearningLoopContract();
+      expect(contract).toBeInstanceOf(LearningLoopContract);
     });
   });
 

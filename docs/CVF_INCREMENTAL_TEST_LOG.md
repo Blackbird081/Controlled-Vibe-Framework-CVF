@@ -73,6 +73,26 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-22] Batch: W1-T3 CP3 — Orchestration Contract
+- Scope:
+  - implement `OrchestrationContract` as Fast Lane additive contract inside W1-T3
+  - contract accepts finalized `DesignPlan` and produces governed `TaskAssignment[]`
+  - scope constraints, phase/role/risk breakdowns, execution authorization hashes
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_EXECUTION_PLAN_2026-03-22.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP3) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/orchestration.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts` (8 new tests)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (73 tests, 0 failures)
+- Skip scope:
+  - deterministic, facades, other packages — unchanged
+- Notes/Risks:
+  - CP3 produces assignment surface only; CP4 will wire the full consumer path
+
 ## [2026-03-22] Batch: W1-T3 CP2 — Boardroom Session Contract
 - Scope:
   - implement `BoardroomContract` as Fast Lane additive contract inside W1-T3

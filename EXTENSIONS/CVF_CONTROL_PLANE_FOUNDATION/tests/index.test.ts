@@ -17,6 +17,8 @@ import {
   DesignContract,
   createBoardroomContract,
   BoardroomContract,
+  createOrchestrationContract,
+  OrchestrationContract,
   mapDocument,
   resolveSource,
   matchesFilters,
@@ -1202,5 +1204,151 @@ describe("W1-T3 CP2: BoardroomContract", () => {
     const session = contract.review({ plan });
 
     expect(session.clarifications).toHaveLength(0);
+  });
+});
+
+// ─── W1-T3 CP3: Orchestration Contract ────────────────────────────────────────
+
+describe("W1-T3 CP3: OrchestrationContract", () => {
+  function seedShell() {
+    resetDocCounter();
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "Orchestration Test Doc",
+      content: "This document supports orchestration contract testing.",
+      tier: "T2_POLICY",
+      documentType: "policy",
+      domain: "code_security",
+      tags: ["cp3-orchestration"],
+      metadata: { source: "orchestration-test" },
+    });
+    return shell;
+  }
+
+  function makeDesignPlan(overrides: Record<string, unknown> = {}) {
+    const shell = seedShell();
+    const intake = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T18:00:00.000Z",
+    }).execute({
+      vibe: (overrides.vibe as string) ?? "analyze code security patterns",
+      consumerId: (overrides.consumerId as string) ?? "orchestration-test",
+      tokenBudget: 256,
+    });
+    return createDesignContract({
+      now: () => "2026-03-22T18:01:00.000Z",
+    }).design(intake);
+  }
+
+  it("createOrchestrationContract returns an OrchestrationContract instance", () => {
+    const contract = createOrchestrationContract();
+    expect(contract).toBeInstanceOf(OrchestrationContract);
+  });
+
+  it("produces task assignments from a design plan", () => {
+    const plan = makeDesignPlan();
+    const contract = createOrchestrationContract({
+      now: () => "2026-03-22T18:02:00.000Z",
+    });
+    const result = contract.orchestrate(plan);
+
+    expect(result.orchestrationId).toHaveLength(32);
+    expect(result.createdAt).toBe("2026-03-22T18:02:00.000Z");
+    expect(result.planId).toBe(plan.planId);
+    expect(result.assignments.length).toBe(plan.totalTasks);
+    expect(result.totalAssignments).toBe(plan.totalTasks);
+    expect(result.orchestrationHash).toHaveLength(32);
+  });
+
+  it("each assignment has correct fields and execution auth hash", () => {
+    const plan = makeDesignPlan();
+    const contract = createOrchestrationContract({
+      now: () => "2026-03-22T18:03:00.000Z",
+    });
+    const result = contract.orchestrate(plan);
+
+    for (const a of result.assignments) {
+      expect(a.assignmentId).toHaveLength(32);
+      expect(a.taskId).toHaveLength(32);
+      expect(a.title).toBeTruthy();
+      expect(["orchestrator", "architect", "builder", "reviewer"]).toContain(a.assignedRole);
+      expect(["DESIGN", "BUILD", "REVIEW"]).toContain(a.targetPhase);
+      expect(["R0", "R1", "R2", "R3"]).toContain(a.riskLevel);
+      expect(Array.isArray(a.scopeConstraints)).toBe(true);
+      expect(a.scopeConstraints.length).toBeGreaterThanOrEqual(3);
+      expect(a.executionAuthorizationHash).toHaveLength(32);
+    }
+  });
+
+  it("scope constraints include phase, risk, and role", () => {
+    const plan = makeDesignPlan();
+    const contract = createOrchestrationContract({
+      now: () => "2026-03-22T18:04:00.000Z",
+    });
+    const result = contract.orchestrate(plan);
+
+    for (const a of result.assignments) {
+      expect(a.scopeConstraints.some((c) => c.startsWith("phase:"))).toBe(true);
+      expect(a.scopeConstraints.some((c) => c.startsWith("risk:"))).toBe(true);
+      expect(a.scopeConstraints.some((c) => c.startsWith("role:"))).toBe(true);
+    }
+  });
+
+  it("phase/role/risk breakdowns sum to total assignments", () => {
+    const plan = makeDesignPlan();
+    const contract = createOrchestrationContract({
+      now: () => "2026-03-22T18:05:00.000Z",
+    });
+    const result = contract.orchestrate(plan);
+
+    const phaseSum = Object.values(result.phaseBreakdown).reduce((a, b) => a + b, 0);
+    const roleSum = Object.values(result.roleBreakdown).reduce((a, b) => a + b, 0);
+    const riskSum = Object.values(result.riskBreakdown).reduce((a, b) => a + b, 0);
+    expect(phaseSum).toBe(result.totalAssignments);
+    expect(roleSum).toBe(result.totalAssignments);
+    expect(riskSum).toBe(result.totalAssignments);
+  });
+
+  it("produces deterministic orchestration hash for same input", () => {
+    const plan = makeDesignPlan();
+    const fixedNow = () => "2026-03-22T18:06:00.000Z";
+    const r1 = createOrchestrationContract({ now: fixedNow }).orchestrate(plan);
+    const r2 = createOrchestrationContract({ now: fixedNow }).orchestrate(plan);
+
+    expect(r1.orchestrationHash).toBe(r2.orchestrationHash);
+    expect(r1.orchestrationId).toBe(r2.orchestrationId);
+  });
+
+  it("carries design plan warnings into orchestration warnings", () => {
+    const shell = seedShell();
+    const intake = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T18:07:00.000Z",
+    }).execute({
+      vibe: "x",
+      consumerId: "warn-test",
+      tokenBudget: 256,
+    });
+    const plan = createDesignContract({
+      now: () => "2026-03-22T18:07:01.000Z",
+    }).design(intake);
+
+    const result = createOrchestrationContract({
+      now: () => "2026-03-22T18:07:02.000Z",
+    }).orchestrate(plan);
+
+    expect(result.warnings.some((w) => w.includes("warning(s)"))).toBe(true);
+  });
+
+  it("warns about blocked assignments with dependencies", () => {
+    const plan = makeDesignPlan();
+    const result = createOrchestrationContract({
+      now: () => "2026-03-22T18:08:00.000Z",
+    }).orchestrate(plan);
+
+    const blocked = result.assignments.filter((a) => a.dependencies.length > 0);
+    if (blocked.length > 0) {
+      expect(result.warnings.some((w) => w.includes("dependencies"))).toBe(true);
+    }
   });
 });

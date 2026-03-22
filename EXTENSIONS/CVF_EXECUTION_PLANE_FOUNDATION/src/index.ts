@@ -1,3 +1,24 @@
+// W2-T5 — Execution Feedback Routing Slice (CP1–CP2)
+export {
+  FeedbackRoutingContract,
+  createFeedbackRoutingContract,
+} from "./feedback.routing.contract";
+export type {
+  RoutingAction,
+  RoutingPriority,
+  FeedbackRoutingDecision,
+  FeedbackRoutingContractDependencies,
+} from "./feedback.routing.contract";
+export {
+  FeedbackResolutionContract,
+  createFeedbackResolutionContract,
+} from "./feedback.resolution.contract";
+export type {
+  UrgencyLevel,
+  FeedbackResolutionSummary,
+  FeedbackResolutionContractDependencies,
+} from "./feedback.resolution.contract";
+
 // W2-T4 — Execution Observer Slice (CP1–CP2)
 export {
   ExecutionObserverContract,

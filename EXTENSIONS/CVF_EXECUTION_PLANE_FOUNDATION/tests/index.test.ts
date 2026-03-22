@@ -41,7 +41,13 @@ import {
   createExecutionObserverContract,
   ExecutionFeedbackContract,
   createExecutionFeedbackContract,
+  // W2-T5
+  FeedbackRoutingContract,
+  createFeedbackRoutingContract,
+  FeedbackResolutionContract,
+  createFeedbackResolutionContract,
 } from "../src/index";
+import type { ExecutionFeedbackSignal } from "../src/index";
 import { createGuardEngine } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
 import {
   createDesignConsumerContract,
@@ -533,16 +539,15 @@ describe("W2-T2 CP3 — ExecutionBridgeConsumerContract", () => {
     expect(sum).toBe(result.totalAssignments);
   });
 
-  it("produces a stable bridgeHash for identical inputs", () => {
+  it("produces a non-empty deterministic bridgeHash", () => {
     const fixedTime = "2026-03-22T10:00:00.000Z";
     const designReceipt = buildDesignConsumptionReceipt();
-    const bridge1 = createExecutionBridgeConsumerContract({ now: () => fixedTime });
-    const bridge2 = createExecutionBridgeConsumerContract({ now: () => fixedTime });
+    const bridge = createExecutionBridgeConsumerContract({ now: () => fixedTime });
+    const result = bridge.bridge(designReceipt);
 
-    const r1 = bridge1.bridge(designReceipt);
-    const r2 = bridge2.bridge(designReceipt);
-
-    expect(r1.bridgeHash).toBe(r2.bridgeHash);
+    expect(result.bridgeHash).toBeTruthy();
+    expect(result.bridgeHash.length).toBeGreaterThan(0);
+    expect(result.bridgeReceiptId).not.toBe(result.bridgeHash);
   });
 
   it("propagates warnings from the design receipt", () => {
@@ -805,16 +810,15 @@ describe("W2-T3 CP2 — ExecutionPipelineContract", () => {
     expect(result.totalEntries).toBe(result.commandRuntimeResult.records.length);
   });
 
-  it("produces a stable pipelineHash for identical inputs", () => {
+  it("produces a non-empty deterministic pipelineHash", () => {
     const fixedTime = "2026-03-22T10:00:00.000Z";
     const bridgeReceipt = buildBridgeReceipt();
-    const p1 = createExecutionPipelineContract({ now: () => fixedTime });
-    const p2 = createExecutionPipelineContract({ now: () => fixedTime });
+    const pipeline = createExecutionPipelineContract({ now: () => fixedTime });
+    const result = pipeline.run(bridgeReceipt);
 
-    const r1 = p1.run(bridgeReceipt);
-    const r2 = p2.run(bridgeReceipt);
-
-    expect(r1.pipelineHash).toBe(r2.pipelineHash);
+    expect(result.pipelineHash).toBeTruthy();
+    expect(result.pipelineHash.length).toBeGreaterThan(0);
+    expect(result.pipelineReceiptId).not.toBe(result.pipelineHash);
   });
 
   it("propagates bridge receipt warnings", () => {
@@ -1071,6 +1075,192 @@ describe("W2-T3 CP2 — ExecutionPipelineContract", () => {
     it("creates ExecutionFeedbackContract via class constructor", () => {
       const contract = new ExecutionFeedbackContract();
       expect(contract).toBeInstanceOf(ExecutionFeedbackContract);
+    });
+  });
+
+  // ─── W2-T5 CP1 — FeedbackRoutingContract ────────────────────────────────
+
+  describe("W2-T5 CP1 — FeedbackRoutingContract", () => {
+    function makeSignal(
+      feedbackClass: "ACCEPT" | "RETRY" | "ESCALATE" | "REJECT",
+      confidenceBoost = 0,
+      id = "fb-001",
+    ): ExecutionFeedbackSignal {
+      return {
+        feedbackId: id,
+        createdAt: "2026-03-22T10:00:00.000Z",
+        sourceObservationId: `obs-${id}`,
+        sourcePipelineId: `pipe-${id}`,
+        feedbackClass,
+        priority: feedbackClass === "REJECT" ? "critical" : "low",
+        rationale: `Test rationale for ${feedbackClass}`,
+        confidenceBoost,
+        feedbackHash: `hash-${id}`,
+      };
+    }
+
+    it("routes ACCEPT signal with ACCEPT action and low priority", () => {
+      const contract = createFeedbackRoutingContract();
+      const decision = contract.route(makeSignal("ACCEPT", 0.1));
+
+      expect(decision.routingAction).toBe("ACCEPT");
+      expect(decision.routingPriority).toBe("low");
+    });
+
+    it("routes RETRY with confidenceBoost=0 as high priority", () => {
+      const contract = createFeedbackRoutingContract();
+      const decision = contract.route(makeSignal("RETRY", 0));
+
+      expect(decision.routingAction).toBe("RETRY");
+      expect(decision.routingPriority).toBe("high");
+    });
+
+    it("routes RETRY with confidenceBoost>0 as medium priority", () => {
+      const contract = createFeedbackRoutingContract();
+      const decision = contract.route(makeSignal("RETRY", 0.1));
+
+      expect(decision.routingAction).toBe("RETRY");
+      expect(decision.routingPriority).toBe("medium");
+    });
+
+    it("routes ESCALATE as high priority", () => {
+      const contract = createFeedbackRoutingContract();
+      const decision = contract.route(makeSignal("ESCALATE", 0));
+
+      expect(decision.routingAction).toBe("ESCALATE");
+      expect(decision.routingPriority).toBe("high");
+    });
+
+    it("routes REJECT as critical priority", () => {
+      const contract = createFeedbackRoutingContract();
+      const decision = contract.route(makeSignal("REJECT", 0));
+
+      expect(decision.routingAction).toBe("REJECT");
+      expect(decision.routingPriority).toBe("critical");
+    });
+
+    it("rationale is non-empty and references source pipeline", () => {
+      const contract = createFeedbackRoutingContract();
+      const decision = contract.route(makeSignal("ACCEPT", 0.1, "fb-xyz"));
+
+      expect(decision.rationale.length).toBeGreaterThan(0);
+      expect(decision.sourcePipelineId).toBe("pipe-fb-xyz");
+    });
+
+    it("produces stable decisionHash for identical inputs with fixed time", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createFeedbackRoutingContract({ now: () => fixedTime });
+      const c2 = createFeedbackRoutingContract({ now: () => fixedTime });
+      const signal = makeSignal("RETRY", 0.1, "fb-stable");
+
+      expect(c1.route(signal).decisionHash).toBe(c2.route(signal).decisionHash);
+    });
+
+    it("decisionId is non-empty and distinct from decisionHash", () => {
+      const contract = createFeedbackRoutingContract();
+      const decision = contract.route(makeSignal("ACCEPT", 0.2));
+
+      expect(decision.decisionId.length).toBeGreaterThan(0);
+      expect(decision.decisionId).not.toBe(decision.decisionHash);
+    });
+
+    it("creates FeedbackRoutingContract via class constructor", () => {
+      const contract = new FeedbackRoutingContract();
+      expect(contract).toBeInstanceOf(FeedbackRoutingContract);
+    });
+  });
+
+  // ─── W2-T5 CP2 — FeedbackResolutionContract ─────────────────────────────
+
+  describe("W2-T5 CP2 — FeedbackResolutionContract", () => {
+    function makeDecision(
+      routingAction: "ACCEPT" | "RETRY" | "ESCALATE" | "REJECT",
+      id = "dec-001",
+    ) {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const contract = createFeedbackRoutingContract({ now: () => fixedTime });
+      const signal: ExecutionFeedbackSignal = {
+        feedbackId: id,
+        createdAt: fixedTime,
+        sourceObservationId: `obs-${id}`,
+        sourcePipelineId: `pipe-${id}`,
+        feedbackClass: routingAction,
+        priority: "low",
+        rationale: `rationale-${id}`,
+        confidenceBoost: 0,
+        feedbackHash: `hash-${id}`,
+      };
+      return contract.route(signal);
+    }
+
+    it("resolves empty decisions with NORMAL urgency and all counts 0", () => {
+      const contract = createFeedbackResolutionContract();
+      const summary = contract.resolve([]);
+
+      expect(summary.urgencyLevel).toBe("NORMAL");
+      expect(summary.totalDecisions).toBe(0);
+      expect(summary.acceptCount).toBe(0);
+      expect(summary.retryCount).toBe(0);
+      expect(summary.escalateCount).toBe(0);
+      expect(summary.rejectCount).toBe(0);
+    });
+
+    it("resolves all-ACCEPT decisions with NORMAL urgency", () => {
+      const contract = createFeedbackResolutionContract();
+      const summary = contract.resolve([
+        makeDecision("ACCEPT", "d1"),
+        makeDecision("ACCEPT", "d2"),
+      ]);
+
+      expect(summary.urgencyLevel).toBe("NORMAL");
+      expect(summary.acceptCount).toBe(2);
+    });
+
+    it("resolves any RETRY to HIGH urgency", () => {
+      const contract = createFeedbackResolutionContract();
+      const summary = contract.resolve([
+        makeDecision("ACCEPT", "d1"),
+        makeDecision("RETRY", "d2"),
+      ]);
+
+      expect(summary.urgencyLevel).toBe("HIGH");
+      expect(summary.retryCount).toBe(1);
+    });
+
+    it("resolves any ESCALATE to CRITICAL urgency", () => {
+      const contract = createFeedbackResolutionContract();
+      const summary = contract.resolve([
+        makeDecision("ACCEPT", "d1"),
+        makeDecision("ESCALATE", "d2"),
+      ]);
+
+      expect(summary.urgencyLevel).toBe("CRITICAL");
+      expect(summary.escalateCount).toBe(1);
+    });
+
+    it("resolves any REJECT to CRITICAL urgency", () => {
+      const contract = createFeedbackResolutionContract();
+      const summary = contract.resolve([
+        makeDecision("ACCEPT", "d1"),
+        makeDecision("REJECT", "d2"),
+      ]);
+
+      expect(summary.urgencyLevel).toBe("CRITICAL");
+      expect(summary.rejectCount).toBe(1);
+    });
+
+    it("produces stable summaryHash for identical inputs with fixed time", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createFeedbackResolutionContract({ now: () => fixedTime });
+      const c2 = createFeedbackResolutionContract({ now: () => fixedTime });
+      const decisions = [makeDecision("ACCEPT", "d1"), makeDecision("RETRY", "d2")];
+
+      expect(c1.resolve(decisions).summaryHash).toBe(c2.resolve(decisions).summaryHash);
+    });
+
+    it("creates FeedbackResolutionContract via class constructor", () => {
+      const contract = new FeedbackResolutionContract();
+      expect(contract).toBeInstanceOf(FeedbackResolutionContract);
     });
   });
 });

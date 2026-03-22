@@ -107,11 +107,18 @@ Scope:
 - wire `KnowledgeFacade.design()` or equivalent facade method
 - proves the design/orchestration path is operationally meaningful
 
-Lane: `Fast Lane` (additive consumer path inside already-authorized tranche)
+Lane: `Fast Lane` (additive consumer contract inside already-authorized tranche)
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
+
+Implementation receipt:
+
+- audit: `docs/audits/CVF_W1_T3_CP4_DESIGN_CONSUMER_PATH_PROOF_AUDIT_2026-03-22.md`
+- review: `docs/reviews/CVF_GC019_W1_T3_CP4_DESIGN_CONSUMER_PATH_PROOF_REVIEW_2026-03-22.md`
+- delta: `docs/baselines/CVF_W1_T3_CP4_DESIGN_CONSUMER_PATH_PROOF_DELTA_2026-03-22.md`
+- tests: 82 foundation tests, 0 failures (9 new CP4 tests)
 
 ### CP5 — Tranche Closure Review
 
@@ -146,4 +153,4 @@ All artifacts follow `GC-022` memory classification.
 
 ## 5. Final Readout
 
-> `W1-T3` is execution-planned. `CP1` (Design Contract Baseline), `CP2` (Boardroom Session Contract), and `CP3` (Orchestration Contract) are IMPLEMENTED with 26 new tests. `CP4`–`CP5` remain PLANNED.
+> `W1-T3` is execution-planned. `CP1`–`CP4` are IMPLEMENTED with 35 new tests (82 total). `CP5` (Tranche Closure Review) remains PLANNED.

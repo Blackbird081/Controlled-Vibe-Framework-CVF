@@ -73,6 +73,26 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-22] Batch: W1-T3 CP4 — Design-to-Orchestration Consumer Path Proof
+- Scope:
+  - implement `DesignConsumerContract` as Fast Lane additive contract inside W1-T3
+  - exercises full INTAKE → DESIGN → BOARDROOM → ORCHESTRATION pipeline end-to-end
+  - produces `DesignConsumptionReceipt` with pipeline stages, evidence hash, aggregated warnings
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_EXECUTION_PLAN_2026-03-22.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP4) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/design.consumer.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts` (9 new tests)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (82 tests, 0 failures)
+- Skip scope:
+  - deterministic, facades, other packages — unchanged
+- Notes/Risks:
+  - CP4 proves the design/orchestration path is operationally meaningful; CP5 will close the tranche
+
 ## [2026-03-22] Batch: W1-T3 CP3 — Orchestration Contract
 - Scope:
   - implement `OrchestrationContract` as Fast Lane additive contract inside W1-T3

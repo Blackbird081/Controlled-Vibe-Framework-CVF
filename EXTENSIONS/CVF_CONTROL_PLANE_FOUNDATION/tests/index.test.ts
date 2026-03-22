@@ -19,6 +19,8 @@ import {
   BoardroomContract,
   createOrchestrationContract,
   OrchestrationContract,
+  createDesignConsumerContract,
+  DesignConsumerContract,
   mapDocument,
   resolveSource,
   matchesFilters,
@@ -1350,5 +1352,148 @@ describe("W1-T3 CP3: OrchestrationContract", () => {
     if (blocked.length > 0) {
       expect(result.warnings.some((w) => w.includes("dependencies"))).toBe(true);
     }
+  });
+});
+
+// ─── W1-T3 CP4: Design-to-Orchestration Consumer Path Proof ───────────────────
+
+describe("W1-T3 CP4: DesignConsumerContract", () => {
+  function seedShell() {
+    resetDocCounter();
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "Consumer Path Doc",
+      content: "This document supports design consumer path proof testing.",
+      tier: "T2_POLICY",
+      documentType: "policy",
+      domain: "code_security",
+      tags: ["cp4-consumer"],
+      metadata: { source: "consumer-test" },
+    });
+    return shell;
+  }
+
+  function makeIntake(overrides: Record<string, unknown> = {}) {
+    const shell = seedShell();
+    return createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T19:00:00.000Z",
+    }).execute({
+      vibe: (overrides.vibe as string) ?? "analyze code security patterns",
+      consumerId: (overrides.consumerId as string) ?? "consumer-path-test",
+      tokenBudget: 256,
+    });
+  }
+
+  it("createDesignConsumerContract returns a DesignConsumerContract instance", () => {
+    const contract = createDesignConsumerContract();
+    expect(contract).toBeInstanceOf(DesignConsumerContract);
+  });
+
+  it("consumes intake and produces a full design consumption receipt", () => {
+    const intake = makeIntake();
+    const contract = createDesignConsumerContract({
+      now: () => "2026-03-22T19:01:00.000Z",
+    });
+    const receipt = contract.consume(intake);
+
+    expect(receipt.receiptId).toHaveLength(32);
+    expect(receipt.createdAt).toBe("2026-03-22T19:01:00.000Z");
+    expect(receipt.consumerId).toBe("consumer-path-test");
+    expect(receipt.designPlan).toBeDefined();
+    expect(receipt.boardroomSession).toBeDefined();
+    expect(receipt.orchestrationResult).toBeDefined();
+    expect(receipt.evidenceHash).toHaveLength(32);
+  });
+
+  it("pipeline stages cover all four phases in order", () => {
+    const intake = makeIntake();
+    const contract = createDesignConsumerContract({
+      now: () => "2026-03-22T19:02:00.000Z",
+    });
+    const receipt = contract.consume(intake);
+
+    expect(receipt.pipelineStages).toHaveLength(4);
+    expect(receipt.pipelineStages[0].stage).toBe("INTAKE");
+    expect(receipt.pipelineStages[1].stage).toBe("DESIGN");
+    expect(receipt.pipelineStages[2].stage).toBe("BOARDROOM");
+    expect(receipt.pipelineStages[3].stage).toBe("ORCHESTRATION");
+  });
+
+  it("orchestration assignments match the design plan task count", () => {
+    const intake = makeIntake();
+    const contract = createDesignConsumerContract({
+      now: () => "2026-03-22T19:03:00.000Z",
+    });
+    const receipt = contract.consume(intake);
+
+    expect(receipt.orchestrationResult.totalAssignments).toBe(
+      receipt.designPlan.totalTasks,
+    );
+  });
+
+  it("boardroom session references the design plan ID", () => {
+    const intake = makeIntake();
+    const contract = createDesignConsumerContract({
+      now: () => "2026-03-22T19:04:00.000Z",
+    });
+    const receipt = contract.consume(intake);
+
+    expect(receipt.boardroomSession.planId).toBe(receipt.designPlan.planId);
+  });
+
+  it("produces deterministic evidence hash for same input", () => {
+    const intake = makeIntake();
+    const fixedNow = () => "2026-03-22T19:05:00.000Z";
+    const r1 = createDesignConsumerContract({ now: fixedNow }).consume(intake);
+    const r2 = createDesignConsumerContract({ now: fixedNow }).consume(intake);
+
+    expect(r1.evidenceHash).toBe(r2.evidenceHash);
+    expect(r1.receiptId).toBe(r2.receiptId);
+  });
+
+  it("passes clarifications through to boardroom", () => {
+    const intake = makeIntake();
+    const contract = createDesignConsumerContract({
+      now: () => "2026-03-22T19:06:00.000Z",
+      clarifications: [
+        { question: "What is the deployment target?", answer: "Cloud" },
+      ],
+    });
+    const receipt = contract.consume(intake);
+
+    expect(receipt.boardroomSession.clarifications).toHaveLength(1);
+    expect(receipt.boardroomSession.clarifications[0].status).toBe("answered");
+  });
+
+  it("aggregates warnings from all pipeline phases", () => {
+    const shell = seedShell();
+    const intake = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T19:07:00.000Z",
+    }).execute({
+      vibe: "x",
+      consumerId: "warn-test",
+      tokenBudget: 256,
+    });
+
+    const receipt = createDesignConsumerContract({
+      now: () => "2026-03-22T19:07:01.000Z",
+    }).consume(intake);
+
+    expect(receipt.warnings.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("warns when boardroom decision is not PROCEED", () => {
+    const intake = makeIntake();
+    const contract = createDesignConsumerContract({
+      now: () => "2026-03-22T19:08:00.000Z",
+      clarifications: [{ question: "Unanswered" }],
+    });
+    const receipt = contract.consume(intake);
+
+    expect(
+      receipt.warnings.some((w) => w.includes("did not PROCEED")),
+    ).toBe(true);
   });
 });

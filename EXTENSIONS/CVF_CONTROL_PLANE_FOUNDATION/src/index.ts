@@ -200,6 +200,16 @@ export type {
   OrchestrationResult,
   OrchestrationContractDependencies,
 } from "./orchestration.contract";
+export {
+  DesignConsumerContract,
+  createDesignConsumerContract,
+} from "./design.consumer.contract";
+export type {
+  DesignConsumptionReceipt,
+  DesignPipelineStage,
+  DesignPipelineStageEntry,
+  DesignConsumerContractDependencies,
+} from "./design.consumer.contract";
 
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";

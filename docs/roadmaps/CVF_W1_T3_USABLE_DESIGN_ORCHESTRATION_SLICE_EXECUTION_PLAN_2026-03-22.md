@@ -6,7 +6,7 @@ Memory class: SUMMARY_RECORD
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T3_2026-03-22.md`
 > Tranche packet: `docs/reviews/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_PACKET_2026-03-22.md`
-> Status: `AUTHORIZED TRANCHE - OPEN`
+> Status: `CLOSED TRANCHE - CP1-CP5 IMPLEMENTED`
 
 ---
 
@@ -104,7 +104,7 @@ Scope:
 - create `design.consumer.contract.ts` with a `DesignConsumerContract` class
 - exercises the full INTAKE → DESIGN → BOARDROOM → ORCHESTRATION pipeline end-to-end
 - produces a `DesignConsumptionReceipt` with: design plan, boardroom session, task assignments, pipeline stages, evidence hash
-- wire `KnowledgeFacade.design()` or equivalent facade method
+- prove the consumer path inside `CVF_CONTROL_PLANE_FOUNDATION` without requiring tranche-local facade wiring
 - proves the design/orchestration path is operationally meaningful
 
 Lane: `Fast Lane` (additive consumer contract inside already-authorized tranche)

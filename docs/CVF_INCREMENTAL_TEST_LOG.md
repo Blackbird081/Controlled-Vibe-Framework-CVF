@@ -93,6 +93,34 @@ Template:
 - Notes/Risks:
   - CP4 proves the design/orchestration path is operationally meaningful; CP5 will close the tranche
 
+## [2026-03-22] Batch: W1-T3 canonical reconciliation
+- Scope:
+  - reconcile `W1-T3` tranche truth into top-level canonical docs after closure
+  - fix `CP4` execution-plan wording so facade wiring is clearly deferred, not silently implied as implemented
+  - sync package-level README and docs index with the now-closed design/orchestration tranche
+- Policy / roadmap references:
+  - `docs/reviews/CVF_W1_T3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/roadmaps/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T3_CANONICAL_RECONCILIATION_DELTA_2026-03-22.md`
+- Files created / updated:
+  - `docs/roadmaps/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/README.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_W1_T3_CANONICAL_RECONCILIATION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Skip scope:
+  - runtime/package test suites — skipped because this batch reconciles docs truth only and does not change executable behavior
+- Notes/Risks:
+  - this batch does not widen `W1-T3`; facade wiring remains explicitly deferred to later governed work
+  - top-level docs now match tranche-local closure truth more closely
+
 ## [2026-03-22] Batch: W1-T3 CP3 — Orchestration Contract
 - Scope:
   - implement `OrchestrationContract` as Fast Lane additive contract inside W1-T3

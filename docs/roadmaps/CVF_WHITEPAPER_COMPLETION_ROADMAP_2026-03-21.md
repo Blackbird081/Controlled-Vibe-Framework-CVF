@@ -113,6 +113,10 @@ Current authorization state:
 - `W5-T1 / CP1` delivers the whitepaper truth assessment: all 15 closed tranches as evidence anchors; full architecture loop proved; all 4 planes re-labeled
 - `W5-T1 / CP2` delivers the release readiness gate (Fast Lane): per-workstream gate PASS; cross-plane loop gate PASS; overall verdict PARTIALLY DELIVERED — RELEASE READY FOR PLATFORM FOUNDATION
 - `W5-T1 / CP3` tranche closure review is executed; W5 closed; whitepaper label updated to PARTIALLY DELIVERED; roadmap first verification cycle complete
+- `W2-T6 — Execution Re-intake Loop` is now authorized (GC-018: 13/15) and canonically closed
+- `W2-T6 / CP1` is now implemented as a bounded execution re-intake contract baseline (`FeedbackResolutionSummary → ExecutionReintakeRequest`)
+- `W2-T6 / CP2` is now implemented as an execution re-intake summary contract (`FeedbackResolutionSummary[] → ExecutionReintakeSummary`); W2-T5 defer record "re-intake loop" closed
+- `W2-T6 / CP3` tranche closure review is executed; W2 execution self-correction cycle complete; EPF: 95 → 111 tests
 
 Nothing beyond `W0` in this roadmap may execute until:
 

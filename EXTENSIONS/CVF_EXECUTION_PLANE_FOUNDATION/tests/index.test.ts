@@ -46,6 +46,11 @@ import {
   createFeedbackRoutingContract,
   FeedbackResolutionContract,
   createFeedbackResolutionContract,
+  // W2-T6
+  ExecutionReintakeContract,
+  createExecutionReintakeContract,
+  ExecutionReintakeSummaryContract,
+  createExecutionReintakeSummaryContract,
 } from "../src/index";
 import type { ExecutionFeedbackSignal } from "../src/index";
 import { createGuardEngine } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
@@ -1261,6 +1266,248 @@ describe("W2-T3 CP2 — ExecutionPipelineContract", () => {
     it("creates FeedbackResolutionContract via class constructor", () => {
       const contract = new FeedbackResolutionContract();
       expect(contract).toBeInstanceOf(FeedbackResolutionContract);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W2-T6 CP1 — Execution Re-intake Contract
+  // ---------------------------------------------------------------------------
+
+  describe("W2-T6 CP1 — ExecutionReintakeContract", () => {
+    function makeSummary(
+      urgencyLevel: "CRITICAL" | "HIGH" | "NORMAL",
+      overrides: Partial<{
+        escalateCount: number;
+        rejectCount: number;
+        retryCount: number;
+      }> = {},
+    ) {
+      const contract = createFeedbackResolutionContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      // Build a summary with matching urgency by providing appropriate decisions
+      const makeDecision = (action: "ACCEPT" | "RETRY" | "ESCALATE" | "REJECT", id: string) => ({
+        decisionId: id,
+        createdAt: "2026-03-22T10:00:00.000Z",
+        sourceFeedbackId: `fb-${id}`,
+        sourcePipelineId: "pipeline-test",
+        routingAction: action as "ACCEPT" | "RETRY" | "ESCALATE" | "REJECT",
+        routingPriority: "medium" as const,
+        rationale: "test",
+        decisionHash: `hash-${id}`,
+      });
+      let decisions;
+      if (urgencyLevel === "CRITICAL") {
+        decisions = [makeDecision("ESCALATE", "d1")];
+      } else if (urgencyLevel === "HIGH") {
+        decisions = [makeDecision("RETRY", "d1")];
+      } else {
+        decisions = [makeDecision("ACCEPT", "d1")];
+      }
+      return contract.resolve(decisions);
+    }
+
+    it("maps CRITICAL urgency to REPLAN action", () => {
+      const contract = createExecutionReintakeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const summary = makeSummary("CRITICAL");
+      const result = contract.reinject(summary);
+
+      expect(result.reintakeAction).toBe("REPLAN");
+      expect(result.sourceUrgencyLevel).toBe("CRITICAL");
+      expect(result.reintakeVibe).toContain("replanning required");
+    });
+
+    it("maps HIGH urgency to RETRY action", () => {
+      const contract = createExecutionReintakeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const summary = makeSummary("HIGH");
+      const result = contract.reinject(summary);
+
+      expect(result.reintakeAction).toBe("RETRY");
+      expect(result.sourceUrgencyLevel).toBe("HIGH");
+      expect(result.reintakeVibe).toContain("retry requested");
+    });
+
+    it("maps NORMAL urgency to ACCEPT action", () => {
+      const contract = createExecutionReintakeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const summary = makeSummary("NORMAL");
+      const result = contract.reinject(summary);
+
+      expect(result.reintakeAction).toBe("ACCEPT");
+      expect(result.sourceUrgencyLevel).toBe("NORMAL");
+      expect(result.reintakeVibe).toContain("accepted");
+    });
+
+    it("produces a stable reintakeHash for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createExecutionReintakeContract({ now: () => fixedTime });
+      const c2 = createExecutionReintakeContract({ now: () => fixedTime });
+      const summary = makeSummary("HIGH");
+
+      expect(c1.reinject(summary).reintakeHash).toBe(c2.reinject(summary).reintakeHash);
+    });
+
+    it("sets sourceSummaryId from the input summary", () => {
+      const contract = createExecutionReintakeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const summary = makeSummary("NORMAL");
+      const result = contract.reinject(summary);
+
+      expect(result.sourceSummaryId).toBe(summary.summaryId);
+    });
+
+    it("allows injecting a custom deriveAction function", () => {
+      const contract = createExecutionReintakeContract({
+        deriveAction: () => "REPLAN",
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const summary = makeSummary("NORMAL");
+      const result = contract.reinject(summary);
+
+      expect(result.reintakeAction).toBe("REPLAN");
+    });
+
+    it("creates ExecutionReintakeContract via class constructor", () => {
+      const contract = new ExecutionReintakeContract();
+      expect(contract).toBeInstanceOf(ExecutionReintakeContract);
+    });
+
+    it("produces a non-empty reintakeId", () => {
+      const contract = createExecutionReintakeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const summary = makeSummary("HIGH");
+      const result = contract.reinject(summary);
+
+      expect(result.reintakeId.length).toBeGreaterThan(0);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W2-T6 CP2 — Execution Re-intake Summary Contract
+  // ---------------------------------------------------------------------------
+
+  describe("W2-T6 CP2 — ExecutionReintakeSummaryContract", () => {
+    function makeResolutionSummary(urgency: "CRITICAL" | "HIGH" | "NORMAL") {
+      const reintake = createExecutionReintakeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const resolutionContract = createFeedbackResolutionContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const makeDecision = (action: "ACCEPT" | "RETRY" | "ESCALATE", id: string) => ({
+        decisionId: id,
+        createdAt: "2026-03-22T10:00:00.000Z",
+        sourceFeedbackId: `fb-${id}`,
+        sourcePipelineId: "pipeline-test",
+        routingAction: action as "ACCEPT" | "RETRY" | "ESCALATE",
+        routingPriority: "medium" as const,
+        rationale: "test",
+        decisionHash: `hash-${id}`,
+      });
+      const decisions =
+        urgency === "CRITICAL"
+          ? [makeDecision("ESCALATE", "d1")]
+          : urgency === "HIGH"
+            ? [makeDecision("RETRY", "d1")]
+            : [makeDecision("ACCEPT", "d1")];
+      return resolutionContract.resolve(decisions);
+    }
+
+    it("returns an empty summary with ACCEPT dominant when given no summaries", () => {
+      const contract = createExecutionReintakeSummaryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.summarize([]);
+
+      expect(result.totalRequests).toBe(0);
+      expect(result.dominantReintakeAction).toBe("ACCEPT");
+      expect(result.summary).toContain("empty");
+    });
+
+    it("dominant action is REPLAN when any CRITICAL summary is present", () => {
+      const contract = createExecutionReintakeSummaryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.summarize([
+        makeResolutionSummary("CRITICAL"),
+        makeResolutionSummary("HIGH"),
+        makeResolutionSummary("NORMAL"),
+      ]);
+
+      expect(result.dominantReintakeAction).toBe("REPLAN");
+      expect(result.replanCount).toBe(1);
+      expect(result.retryCount).toBe(1);
+      expect(result.acceptCount).toBe(1);
+    });
+
+    it("dominant action is RETRY when no CRITICAL but some HIGH", () => {
+      const contract = createExecutionReintakeSummaryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.summarize([
+        makeResolutionSummary("HIGH"),
+        makeResolutionSummary("NORMAL"),
+      ]);
+
+      expect(result.dominantReintakeAction).toBe("RETRY");
+    });
+
+    it("dominant action is ACCEPT when all are NORMAL", () => {
+      const contract = createExecutionReintakeSummaryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.summarize([
+        makeResolutionSummary("NORMAL"),
+        makeResolutionSummary("NORMAL"),
+      ]);
+
+      expect(result.dominantReintakeAction).toBe("ACCEPT");
+      expect(result.acceptCount).toBe(2);
+    });
+
+    it("produces a stable summaryHash for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createExecutionReintakeSummaryContract({ now: () => fixedTime });
+      const c2 = createExecutionReintakeSummaryContract({ now: () => fixedTime });
+      const summaries = [makeResolutionSummary("HIGH")];
+
+      expect(c1.summarize(summaries).summaryHash).toBe(c2.summarize(summaries).summaryHash);
+    });
+
+    it("includes correct count totals", () => {
+      const contract = createExecutionReintakeSummaryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.summarize([
+        makeResolutionSummary("CRITICAL"),
+        makeResolutionSummary("CRITICAL"),
+        makeResolutionSummary("NORMAL"),
+      ]);
+
+      expect(result.totalRequests).toBe(3);
+      expect(result.replanCount).toBe(2);
+      expect(result.acceptCount).toBe(1);
+    });
+
+    it("creates ExecutionReintakeSummaryContract via class constructor", () => {
+      const contract = new ExecutionReintakeSummaryContract();
+      expect(contract).toBeInstanceOf(ExecutionReintakeSummaryContract);
+    });
+
+    it("summary text contains dominant action", () => {
+      const contract = createExecutionReintakeSummaryContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.summarize([makeResolutionSummary("HIGH")]);
+
+      expect(result.summary).toContain("RETRY");
     });
   });
 });

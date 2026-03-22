@@ -65,10 +65,11 @@ Current authorization state:
 - `W3-T1 — Governance Expansion Foundation` is authorized and closed as a bounded governance-expansion tranche for operational governance modules
 - `W3-T1` explicitly defers concept-only `Watchdog` and `Audit / Consensus` targets rather than claiming them implemented
 - `W1-T2 — Usable Intake Slice` is now authorized as the next bounded realization-first tranche
-- `W1-T2` now has a tranche-local execution plan with `CP1`, `CP2`, and `CP3` review packet chains
+- `W1-T2` now has a tranche-local execution plan with `CP1`, `CP2`, `CP3`, and `CP4` review packet chains
 - `W1-T2 / CP1` is now implemented as a bounded usable-intake contract baseline
 - `W1-T2 / CP2` is now implemented as a unified knowledge retrieval contract
 - `W1-T2 / CP3` is now implemented as a deterministic context packaging contract
+- `W1-T2 / CP4` is now implemented as a real consumer path proof
 - `W4` and `W5` remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -318,8 +319,14 @@ Current authorized scope:
   - `docs/reviews/CVF_GC019_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_REVIEW_2026-03-22.md`
 - third implementation delta:
   - `docs/baselines/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_IMPLEMENTATION_DELTA_2026-03-22.md`
+- fourth structural packet:
+  - `docs/audits/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_AUDIT_2026-03-22.md`
+- fourth independent review:
+  - `docs/reviews/CVF_GC019_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_REVIEW_2026-03-22.md`
+- fourth implementation delta:
+  - `docs/baselines/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_IMPLEMENTATION_DELTA_2026-03-22.md`
 - every major structural change inside `W1-T2` still requires `GC-019`
-- `W1-T2` is now the only open next-step control-plane continuation, and `CP1` + `CP2` + `CP3` are implemented
+- `W1-T2` is now the only open next-step control-plane continuation, and `CP1` + `CP2` + `CP3` + `CP4` are implemented
 
 ### Phase W2 — Execution Plane
 
@@ -454,4 +461,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, `W1-T2` now has `CP1` (usable intake contract), `CP2` (unified knowledge retrieval contract), and `CP3` (deterministic context packaging contract) implemented as realization-first baselines, and `W4-W5` remain gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, `W1-T2` now has `CP1` (usable intake contract), `CP2` (unified knowledge retrieval contract), `CP3` (deterministic context packaging contract), and `CP4` (real consumer path proof) implemented as realization-first baselines, and `W4-W5` remain gated.

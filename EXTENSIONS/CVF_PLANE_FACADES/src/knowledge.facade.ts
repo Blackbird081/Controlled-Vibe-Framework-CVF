@@ -15,8 +15,10 @@ import {
   createControlPlaneFoundationShell,
   createRetrievalContract,
   createPackagingContract,
+  createConsumerContract,
   type ControlPlaneFoundationShell,
   type ControlPlaneIntakeResult,
+  type ConsumptionReceipt,
   type ValidatedIntent,
 } from 'cvf-control-plane-foundation';
 
@@ -82,6 +84,15 @@ export interface KnowledgeFacadeDependencies {
   now?: () => string;
 }
 
+export interface ConsumerFacadeRequest {
+  vibe: string;
+  consumerId: string;
+  retrievalQuery?: string;
+  tokenBudget?: number;
+  retrieval?: RetrievalOptions;
+  executionId?: string;
+}
+
 // ─── Knowledge Facade ─────────────────────────────────────────────────
 
 export class KnowledgeFacade {
@@ -133,6 +144,35 @@ export class KnowledgeFacade {
       truncated: result.truncated,
       snapshotHash: result.snapshotHash,
     };
+  }
+
+  /**
+   * Consume the full intake pipeline end-to-end and produce a governed
+   * `ConsumptionReceipt` proving the pipeline was exercised.
+   * This is the CP4 real consumer path entry point.
+   */
+  consume(request: ConsumerFacadeRequest): ConsumptionReceipt {
+    const contract = createConsumerContract({
+      shell: this.shell,
+      context: this.shell.context,
+      now: this.now,
+    });
+    const receipt = contract.consume({
+      vibe: request.vibe,
+      consumerId: request.consumerId,
+      retrievalQuery: request.retrievalQuery,
+      tokenBudget: request.tokenBudget,
+      retrieval: request.retrieval,
+      executionId: request.executionId,
+    });
+
+    this.retrievalLog.push({
+      query: receipt.intake.retrieval.query,
+      chunkCount: receipt.intake.retrieval.chunkCount,
+      timestamp: receipt.consumedAt,
+    });
+
+    return receipt;
   }
 
   /**

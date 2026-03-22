@@ -2415,3 +2415,34 @@ Utility and guard:
   - `packageIntakeContext()` preserved as backward-compatible wrapper for existing callers
   - source lineage remains preserved; extraction via delegation, not physical merge
   - later W1-T2 packets still need to prove one real downstream consumer path before the tranche can close
+
+### Batch: W1-T2 CP4 — Real Consumer Path Proof (2026-03-22)
+
+- Scope: connect one real downstream consumer path to prove the intake pipeline is operationally meaningful
+- Policy references: `GC-019` consumer-path integration
+- Authorization chain:
+  - `docs/audits/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_REVIEW_2026-03-22.md`
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/consumer.contract.ts` — standalone consumer contract with `ConsumerContract` class, `createConsumerContract()` factory, `buildPipelineStages()` helper, governed `ConsumptionReceipt` type with evidence hash, pipeline stages, full intake result, and optional ContextFreezer freeze
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` — added barrel exports for consumer contract types and helpers
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts` — added 9 new CP4 consumer path tests; fixed pre-existing `RetrievalTier` type issue in CP3 delegation test
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/knowledge.facade.ts` — added `consume()` method delegating to `createConsumerContract()`, added `ConsumerFacadeRequest` interface
+- Tests executed:
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test` -> PASS (47 tests: 8 CP1 + 15 CP2 + 15 CP3 + 9 new CP4)
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test:coverage` -> PASS (stmts 97.46%, branches 93.02%, funcs 90%; `consumer.contract.ts` at 100% stmts)
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test` -> PASS (8 tests)
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npm run test` -> PASS (94 tests)
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+- Notes/Risks:
+  - the consumer contract proves the intake pipeline is operationally meaningful — a real downstream consumer exercises intent, retrieval, and packaging end-to-end
+  - `ConsumptionReceipt` provides governed evidence (evidence hash + pipeline stages + full intake result) for auditability
+  - optional `ContextFreezer` integration adds reproducibility support without breaking the non-freeze path
+  - `KnowledgeFacade.consume()` is wired as the public consumer entry point
+  - source lineage remains preserved; composition over existing contracts, no physical merge
+  - the tranche is now ready for CP5 closure review

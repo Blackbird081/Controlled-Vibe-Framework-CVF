@@ -156,6 +156,16 @@ export type {
   PackagingContractDependencies,
   FreezeReceipt,
 } from "./packaging.contract";
+export {
+  ConsumerContract,
+  createConsumerContract,
+  buildPipelineStages,
+} from "./consumer.contract";
+export type {
+  ConsumerRequest,
+  ConsumptionReceipt,
+  ConsumerContractDependencies,
+} from "./consumer.contract";
 
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";

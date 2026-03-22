@@ -125,7 +125,7 @@ Scope:
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
 
 ### CP5 - Tranche Closure Review
 
@@ -176,7 +176,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W1-T2` is now execution-planned as a realization-first control-plane tranche. `CP1`, `CP2`, and `CP3` are implemented. `CP1` provides the usable intake contract baseline. `CP2` provides the unified knowledge retrieval contract. `CP3` provides the deterministic context packaging contract. Broader `AI Gateway` completion remains out of scope.
+> `W1-T2` is now execution-planned as a realization-first control-plane tranche. `CP1`, `CP2`, `CP3`, and `CP4` are implemented. `CP1` provides the usable intake contract baseline. `CP2` provides the unified knowledge retrieval contract. `CP3` provides the deterministic context packaging contract. `CP4` provides the real consumer path proof. Broader `AI Gateway` completion remains out of scope.
 
 ## 8. CP1 Implementation Receipt
 
@@ -242,3 +242,27 @@ Receipt highlights:
 Evidence anchor:
 
 - `docs/baselines/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_IMPLEMENTATION_DELTA_2026-03-22.md`
+
+## 11. CP4 Implementation Receipt
+
+Implemented surfaces:
+
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/consumer.contract.ts` (NEW)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (UPDATED)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts` (9 new tests)
+- `EXTENSIONS/CVF_PLANE_FACADES/src/knowledge.facade.ts` (ADDED `consume()` method)
+
+Receipt highlights:
+
+- `ConsumerContract` now provides one real downstream consumer path that exercises the full intake pipeline end-to-end (intent → retrieval → packaging)
+- `createConsumerContract()` allows callers to consume the pipeline independently with governed evidence receipts
+- `ConsumptionReceipt` includes `evidenceHash`, `pipelineStages`, full `intake` result, and optional `ContextFreezer` freeze
+- `KnowledgeFacade.consume()` wired as the public consumer entry point
+- `buildPipelineStages()` exported as a shared helper for stage introspection
+- 9 new consumer-contract-level tests added, all passing
+- source lineage preserved — composition over existing contracts, no physical merge
+- full execution runtime integration remains out of scope
+
+Evidence anchor:
+
+- `docs/baselines/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_IMPLEMENTATION_DELTA_2026-03-22.md`

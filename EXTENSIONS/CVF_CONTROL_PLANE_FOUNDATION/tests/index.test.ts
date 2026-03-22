@@ -10,6 +10,9 @@ import {
   estimateTokenCount,
   serializeChunks,
   sortValue,
+  createConsumerContract,
+  ConsumerContract,
+  buildPipelineStages,
   mapDocument,
   resolveSource,
   matchesFilters,
@@ -656,7 +659,7 @@ describe("CVF_CONTROL_PLANE_FOUNDATION — CP3 Deterministic Context Packaging",
     shell.knowledge.getStore().add({
       title: "CP3 Packaging Test",
       content: "Short test content for packaging verification.",
-      tier: "T1_CORE",
+      tier: "T1_DOCTRINE",
       documentType: "policy",
       domain: "governance",
       tags: ["test"],
@@ -682,5 +685,176 @@ describe("CVF_CONTROL_PLANE_FOUNDATION — CP3 Deterministic Context Packaging",
     expect(intakeResult.packagedContext.snapshotHash).toBe(directResult.snapshotHash);
     expect(intakeResult.packagedContext.totalTokens).toBe(directResult.totalTokens);
     expect(intakeResult.packagedContext.truncated).toBe(directResult.truncated);
+  });
+});
+
+describe("CVF_CONTROL_PLANE_FOUNDATION — CP4 Real Consumer Path Proof", () => {
+  function seedShell() {
+    resetDocCounter();
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "Consumer Path Test Doc",
+      content: "This document proves the intake pipeline is operationally meaningful.",
+      tier: "T2_POLICY",
+      documentType: "policy",
+      domain: "governance",
+      tags: ["cp4"],
+      metadata: { source: "cp4-test" },
+    });
+    return shell;
+  }
+
+  it("consumes the full intake pipeline and produces a governed receipt", () => {
+    const shell = seedShell();
+    const contract = createConsumerContract({
+      shell,
+      now: () => "2026-03-22T15:00:00.000Z",
+    });
+    const receipt = contract.consume({
+      vibe: "prove consumer path for governance test",
+      consumerId: "cp4-test-consumer",
+      tokenBudget: 256,
+      retrieval: { sources: ["cp4-test"] },
+    });
+
+    expect(receipt.consumerId).toBe("cp4-test-consumer");
+    expect(receipt.consumedAt).toBe("2026-03-22T15:00:00.000Z");
+    expect(receipt.requestId).toHaveLength(32);
+    expect(receipt.evidenceHash).toHaveLength(32);
+    expect(receipt.intake.intent).toBeDefined();
+    expect(receipt.intake.retrieval.chunkCount).toBeGreaterThanOrEqual(0);
+    expect(receipt.intake.packagedContext.snapshotHash).toHaveLength(32);
+  });
+
+  it("includes all pipeline stages in the receipt", () => {
+    const shell = seedShell();
+    const contract = createConsumerContract({
+      shell,
+      now: () => "2026-03-22T15:00:00.000Z",
+    });
+    const receipt = contract.consume({
+      vibe: "verify pipeline stages",
+      consumerId: "stage-test",
+      retrieval: { sources: ["cp4-test"] },
+    });
+
+    expect(receipt.pipelineStages).toContain("intent-validation");
+    expect(receipt.pipelineStages).toContain("knowledge-retrieval");
+    expect(receipt.pipelineStages).toContain("context-packaging");
+    expect(receipt.pipelineStages).toContain("deterministic-hashing");
+  });
+
+  it("omits knowledge-retrieval stage when no chunks match", () => {
+    const shell = seedShell();
+    const contract = createConsumerContract({
+      shell,
+      now: () => "2026-03-22T15:00:00.000Z",
+    });
+    const receipt = contract.consume({
+      vibe: "no matching docs",
+      consumerId: "empty-test",
+      retrieval: { sources: ["nonexistent-source"] },
+    });
+
+    expect(receipt.pipelineStages).toContain("intent-validation");
+    expect(receipt.pipelineStages).not.toContain("knowledge-retrieval");
+    expect(receipt.pipelineStages).toContain("context-packaging");
+  });
+
+  it("produces deterministic evidence hash for identical inputs", () => {
+    const shell = seedShell();
+    const now = () => "2026-03-22T15:00:00.000Z";
+    const request = {
+      vibe: "determinism test",
+      consumerId: "hash-test",
+      tokenBudget: 256,
+      retrieval: { sources: ["cp4-test"] },
+    };
+
+    const r1 = createConsumerContract({ shell, now }).consume(request);
+    const r2 = createConsumerContract({ shell, now }).consume(request);
+
+    expect(r1.evidenceHash).toBe(r2.evidenceHash);
+  });
+
+  it("freezes context when executionId is provided", () => {
+    const shell = seedShell();
+    const contract = createConsumerContract({
+      shell,
+      now: () => "2026-03-22T15:00:00.000Z",
+    });
+    const receipt = contract.consume({
+      vibe: "freeze test",
+      consumerId: "freeze-consumer",
+      tokenBudget: 256,
+      retrieval: { sources: ["cp4-test"] },
+      executionId: "cp4-exec-001",
+    });
+
+    expect(receipt.freeze).toBeDefined();
+    expect(receipt.freeze!.executionId).toBe("cp4-exec-001");
+    expect(receipt.freeze!.frozenContextHash).toBeTruthy();
+    expect(contract.getContext().has("cp4-exec-001")).toBe(true);
+  });
+
+  it("does not freeze context when executionId is absent", () => {
+    const shell = seedShell();
+    const contract = createConsumerContract({
+      shell,
+      now: () => "2026-03-22T15:00:00.000Z",
+    });
+    const receipt = contract.consume({
+      vibe: "no freeze",
+      consumerId: "no-freeze-consumer",
+    });
+
+    expect(receipt.freeze).toBeUndefined();
+  });
+
+  it("ConsumerContract is independently instantiable via factory", () => {
+    const contract = createConsumerContract();
+    expect(contract).toBeInstanceOf(ConsumerContract);
+  });
+
+  it("buildPipelineStages returns correct stages for a full intake result", () => {
+    const shell = seedShell();
+    const intakeContract = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T15:00:00.000Z",
+    });
+    const intake = intakeContract.execute({
+      vibe: "stages test",
+      tokenBudget: 256,
+      retrieval: { sources: ["cp4-test"] },
+    });
+
+    const stages = buildPipelineStages(intake);
+    expect(stages).toEqual([
+      "intent-validation",
+      "knowledge-retrieval",
+      "context-packaging",
+      "deterministic-hashing",
+    ]);
+  });
+
+  it("receipt includes the full intake result for downstream consumers", () => {
+    const shell = seedShell();
+    const contract = createConsumerContract({
+      shell,
+      now: () => "2026-03-22T15:00:00.000Z",
+    });
+    const receipt = contract.consume({
+      vibe: "downstream consumer test",
+      consumerId: "downstream-test",
+      tokenBudget: 256,
+      retrieval: { sources: ["cp4-test"] },
+    });
+
+    expect(receipt.intake).toBeDefined();
+    expect(receipt.intake.requestId).toHaveLength(32);
+    expect(receipt.intake.intent).toBeDefined();
+    expect(receipt.intake.retrieval).toBeDefined();
+    expect(receipt.intake.packagedContext).toBeDefined();
+    expect(receipt.intake.warnings).toBeDefined();
   });
 });

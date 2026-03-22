@@ -1,0 +1,15 @@
+{
+  "name": "cvf-governance-expansion-foundation",
+  "version": "0.1.0",
+  "description": "CVF W3-T1 Governance Expansion Foundation — coordination package for unconsolidated governance modules",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^1.6.0"
+  }
+}

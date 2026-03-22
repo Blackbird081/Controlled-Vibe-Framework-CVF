@@ -59,8 +59,18 @@ import {
   createRouteMatchContract,
   RouteMatchLogContract,
   createRouteMatchLogContract,
+  // W1-T8
+  GatewayAuthContract,
+  createGatewayAuthContract,
+  GatewayAuthLogContract,
+  createGatewayAuthLogContract,
 } from "../src/index";
-import type { GatewayProcessedRequest, RouteDefinition, RouteMatchResult } from "../src/index";
+import type {
+  GatewayProcessedRequest,
+  RouteDefinition,
+  RouteMatchResult,
+  GatewayAuthResult,
+} from "../src/index";
 
 describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
   it("re-exports intent validation through the control-plane shell", () => {
@@ -2407,6 +2417,214 @@ describe("W1-T4 CP2 — GatewayConsumerContract", () => {
     it("creates RouteMatchLogContract via class constructor", () => {
       const contract = new RouteMatchLogContract();
       expect(contract).toBeInstanceOf(RouteMatchLogContract);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W1-T8 — AI Gateway Tenant Auth Slice
+  // ---------------------------------------------------------------------------
+
+  function makeAuthRequest(
+    tenantId = "tenant-1",
+    token = "valid-token-abc",
+    scope = ["read"],
+    overrides: Partial<{ expiresAt: string; revoked: boolean }> = {},
+  ) {
+    return {
+      tenantId,
+      credentials: { token, ...overrides },
+      scope,
+    };
+  }
+
+  function makeAuthResult(
+    status: GatewayAuthResult["authStatus"],
+    id = "r1",
+  ): GatewayAuthResult {
+    return {
+      resultId: `result-${id}`,
+      evaluatedAt: "2026-03-22T10:00:00.000Z",
+      tenantId: "tenant-1",
+      authenticated: status === "AUTHENTICATED",
+      authStatus: status,
+      scopeGranted: status === "AUTHENTICATED" ? ["read"] : [],
+      authHash: `hash-${id}`,
+    };
+  }
+
+  describe("W1-T8 CP1 — GatewayAuthContract", () => {
+    it("valid token returns AUTHENTICATED status", () => {
+      const contract = createGatewayAuthContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.evaluate(makeAuthRequest());
+
+      expect(result.authStatus).toBe("AUTHENTICATED");
+      expect(result.authenticated).toBe(true);
+    });
+
+    it("empty token returns DENIED status", () => {
+      const contract = createGatewayAuthContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.evaluate(makeAuthRequest("t1", ""));
+
+      expect(result.authStatus).toBe("DENIED");
+      expect(result.authenticated).toBe(false);
+    });
+
+    it("revoked credential returns REVOKED status", () => {
+      const contract = createGatewayAuthContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.evaluate(
+        makeAuthRequest("t1", "token", ["read"], { revoked: true }),
+      );
+
+      expect(result.authStatus).toBe("REVOKED");
+    });
+
+    it("expired credential returns EXPIRED status", () => {
+      const contract = createGatewayAuthContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.evaluate(
+        makeAuthRequest("t1", "token", ["read"], {
+          expiresAt: "2026-03-22T09:00:00.000Z",
+        }),
+      );
+
+      expect(result.authStatus).toBe("EXPIRED");
+    });
+
+    it("scopeGranted is empty when not AUTHENTICATED", () => {
+      const contract = createGatewayAuthContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.evaluate(makeAuthRequest("t1", ""));
+
+      expect(result.scopeGranted).toHaveLength(0);
+    });
+
+    it("tenantId is preserved in the result", () => {
+      const contract = createGatewayAuthContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.evaluate(makeAuthRequest("my-tenant"));
+
+      expect(result.tenantId).toBe("my-tenant");
+    });
+
+    it("resultId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const req = makeAuthRequest("t1", "token-xyz");
+      const c1 = createGatewayAuthContract({ now: () => fixedTime });
+      const c2 = createGatewayAuthContract({ now: () => fixedTime });
+
+      expect(c1.evaluate(req).resultId).toBe(c2.evaluate(req).resultId);
+    });
+
+    it("creates GatewayAuthContract via class constructor", () => {
+      const contract = new GatewayAuthContract();
+      expect(contract).toBeInstanceOf(GatewayAuthContract);
+    });
+  });
+
+  describe("W1-T8 CP2 — GatewayAuthLogContract", () => {
+    it("log with all AUTHENTICATED returns dominantStatus AUTHENTICATED", () => {
+      const contract = createGatewayAuthLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeAuthResult("AUTHENTICATED", "1"),
+        makeAuthResult("AUTHENTICATED", "2"),
+      ]);
+
+      expect(result.dominantStatus).toBe("AUTHENTICATED");
+      expect(result.authenticatedCount).toBe(2);
+    });
+
+    it("log with any DENIED returns dominantStatus DENIED", () => {
+      const contract = createGatewayAuthLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeAuthResult("AUTHENTICATED", "1"),
+        makeAuthResult("DENIED", "2"),
+      ]);
+
+      expect(result.dominantStatus).toBe("DENIED");
+    });
+
+    it("log counts all auth status types correctly", () => {
+      const contract = createGatewayAuthLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeAuthResult("AUTHENTICATED", "1"),
+        makeAuthResult("DENIED", "2"),
+        makeAuthResult("EXPIRED", "3"),
+        makeAuthResult("REVOKED", "4"),
+      ]);
+
+      expect(result.authenticatedCount).toBe(1);
+      expect(result.deniedCount).toBe(1);
+      expect(result.expiredCount).toBe(1);
+      expect(result.revokedCount).toBe(1);
+      expect(result.totalRequests).toBe(4);
+    });
+
+    it("REVOKED dominates over EXPIRED when equal count", () => {
+      const contract = createGatewayAuthLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeAuthResult("REVOKED", "1"),
+        makeAuthResult("EXPIRED", "2"),
+      ]);
+
+      // DENIED > REVOKED > EXPIRED > AUTHENTICATED — REVOKED wins tie over EXPIRED
+      expect(result.dominantStatus).toBe("REVOKED");
+    });
+
+    it("logId is deterministic for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createGatewayAuthLogContract({ now: () => fixedTime });
+      const c2 = createGatewayAuthLogContract({ now: () => fixedTime });
+      const results = [
+        makeAuthResult("AUTHENTICATED", "1"),
+        makeAuthResult("DENIED", "2"),
+      ];
+
+      expect(c1.log(results).logId).toBe(c2.log(results).logId);
+    });
+
+    it("log with DENIED majority dominates", () => {
+      const contract = createGatewayAuthLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([
+        makeAuthResult("DENIED", "1"),
+        makeAuthResult("DENIED", "2"),
+        makeAuthResult("AUTHENTICATED", "3"),
+      ]);
+
+      expect(result.dominantStatus).toBe("DENIED");
+      expect(result.deniedCount).toBe(2);
+    });
+
+    it("log with EXPIRED only returns dominantStatus EXPIRED", () => {
+      const contract = createGatewayAuthLogContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.log([makeAuthResult("EXPIRED", "1")]);
+
+      expect(result.dominantStatus).toBe("EXPIRED");
+    });
+
+    it("creates GatewayAuthLogContract via class constructor", () => {
+      const contract = new GatewayAuthLogContract();
+      expect(contract).toBeInstanceOf(GatewayAuthLogContract);
     });
   });
 });

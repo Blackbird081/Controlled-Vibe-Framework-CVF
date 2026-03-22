@@ -1,3 +1,24 @@
+// W1-T8 — AI Gateway Tenant Auth Slice (CP1–CP2)
+export {
+  GatewayAuthContract,
+  createGatewayAuthContract,
+} from "./gateway.auth.contract";
+export type {
+  AuthStatus,
+  GatewayCredentials,
+  GatewayAuthRequest,
+  GatewayAuthResult,
+  GatewayAuthContractDependencies,
+} from "./gateway.auth.contract";
+export {
+  GatewayAuthLogContract,
+  createGatewayAuthLogContract,
+} from "./gateway.auth.log.contract";
+export type {
+  GatewayAuthLog,
+  GatewayAuthLogContractDependencies,
+} from "./gateway.auth.log.contract";
+
 // W1-T7 — AI Gateway HTTP Routing Slice (CP1–CP2)
 export {
   RouteMatchContract,

@@ -117,6 +117,10 @@ Current authorization state:
 - `W2-T6 / CP1` is now implemented as a bounded execution re-intake contract baseline (`FeedbackResolutionSummary → ExecutionReintakeRequest`)
 - `W2-T6 / CP2` is now implemented as an execution re-intake summary contract (`FeedbackResolutionSummary[] → ExecutionReintakeSummary`); W2-T5 defer record "re-intake loop" closed
 - `W2-T6 / CP3` tranche closure review is executed; W2 execution self-correction cycle complete; EPF: 95 → 111 tests
+- `W2-T7 — Execution Command Runtime Async Slice` is now authorized (GC-018: 13/15) and canonically closed
+- `W2-T7 / CP1` is now implemented as a bounded async command runtime contract baseline (`CommandRuntimeResult → AsyncCommandRuntimeTicket`); asyncStatus: PENDING on issue
+- `W2-T7 / CP2` is now implemented as an async execution status contract (`AsyncCommandRuntimeTicket[] → AsyncExecutionStatusSummary`); W2-T3 defer "async adapter invocation" closed
+- `W2-T7 / CP3` tranche closure review is executed; first async execution surface in the execution plane delivered; EPF: 111 → 127 tests
 
 Nothing beyond `W0` in this roadmap may execute until:
 

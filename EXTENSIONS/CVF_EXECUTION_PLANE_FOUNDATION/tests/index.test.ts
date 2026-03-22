@@ -51,6 +51,11 @@ import {
   createExecutionReintakeContract,
   ExecutionReintakeSummaryContract,
   createExecutionReintakeSummaryContract,
+  // W2-T7
+  AsyncCommandRuntimeContract,
+  createAsyncCommandRuntimeContract,
+  AsyncExecutionStatusContract,
+  createAsyncExecutionStatusContract,
 } from "../src/index";
 import type { ExecutionFeedbackSignal } from "../src/index";
 import { createGuardEngine } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
@@ -1508,6 +1513,236 @@ describe("W2-T3 CP2 — ExecutionPipelineContract", () => {
       const result = contract.summarize([makeResolutionSummary("HIGH")]);
 
       expect(result.summary).toContain("RETRY");
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W2-T7 CP1 — AsyncCommandRuntimeContract
+  // ---------------------------------------------------------------------------
+
+  describe("W2-T7 CP1 — AsyncCommandRuntimeContract", () => {
+    function makeCommandRuntimeResult(
+      executedCount: number,
+      failedCount = 0,
+    ) {
+      const contract = createCommandRuntimeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const entries = [];
+      for (let i = 0; i < executedCount; i++) {
+        entries.push({ assignmentId: `a${i}`, taskId: `t${i}`, gateDecision: "allow" as const });
+      }
+      for (let i = 0; i < failedCount; i++) {
+        entries.push({ assignmentId: `af${i}`, taskId: `tf${i}`, gateDecision: "deny" as const });
+      }
+      const gate = {
+        gateId: "gate-async-001",
+        dispatchId: "dispatch-async-001",
+        evaluatedAt: "2026-03-22T10:00:00.000Z",
+        entries: entries.map((e) => ({
+          assignmentId: e.assignmentId,
+          taskId: e.taskId,
+          guardDecision: "ALLOW" as const,
+          riskLevel: "R1",
+          gateDecision: e.gateDecision,
+          rationale: "test",
+        })),
+        allowedCount: executedCount,
+        deniedCount: failedCount,
+        reviewRequiredCount: 0,
+        sandboxedCount: 0,
+        pendingCount: 0,
+        gateHash: "gate-hash-async",
+        summary: "test gate",
+      };
+      return contract.execute(gate);
+    }
+
+    it("issues a ticket with PENDING status for a valid runtime result", () => {
+      const contract = createAsyncCommandRuntimeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = makeCommandRuntimeResult(2);
+      const ticket = contract.issue(result);
+
+      expect(ticket.asyncStatus).toBe("PENDING");
+      expect(ticket.sourceRuntimeId).toBe(result.runtimeId);
+      expect(ticket.sourceGateId).toBe(result.gateId);
+    });
+
+    it("sets recordCount and executedCount from the runtime result", () => {
+      const contract = createAsyncCommandRuntimeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = makeCommandRuntimeResult(3);
+      const ticket = contract.issue(result);
+
+      expect(ticket.recordCount).toBe(result.records.length);
+      expect(ticket.executedCount).toBe(result.executedCount);
+    });
+
+    it("estimates timeout as max(1000, executedCount * 1000)", () => {
+      const contract = createAsyncCommandRuntimeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = makeCommandRuntimeResult(3);
+      const ticket = contract.issue(result);
+
+      expect(ticket.estimatedTimeoutMs).toBe(Math.max(1000, result.executedCount * 1000));
+    });
+
+    it("uses 1000ms minimum timeout when executedCount is zero", () => {
+      const contract = createAsyncCommandRuntimeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = makeCommandRuntimeResult(0);
+      const ticket = contract.issue(result);
+
+      expect(ticket.estimatedTimeoutMs).toBe(1000);
+    });
+
+    it("produces a stable ticketHash for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createAsyncCommandRuntimeContract({ now: () => fixedTime });
+      const c2 = createAsyncCommandRuntimeContract({ now: () => fixedTime });
+      const result = makeCommandRuntimeResult(2);
+
+      expect(c1.issue(result).ticketHash).toBe(c2.issue(result).ticketHash);
+    });
+
+    it("allows injecting a custom estimateTimeout function", () => {
+      const contract = createAsyncCommandRuntimeContract({
+        estimateTimeout: () => 5000,
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = makeCommandRuntimeResult(1);
+      const ticket = contract.issue(result);
+
+      expect(ticket.estimatedTimeoutMs).toBe(5000);
+    });
+
+    it("creates AsyncCommandRuntimeContract via class constructor", () => {
+      const contract = new AsyncCommandRuntimeContract();
+      expect(contract).toBeInstanceOf(AsyncCommandRuntimeContract);
+    });
+
+    it("produces a non-empty ticketId", () => {
+      const contract = createAsyncCommandRuntimeContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = makeCommandRuntimeResult(1);
+      const ticket = contract.issue(result);
+
+      expect(ticket.ticketId.length).toBeGreaterThan(0);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W2-T7 CP2 — AsyncExecutionStatusContract
+  // ---------------------------------------------------------------------------
+
+  describe("W2-T7 CP2 — AsyncExecutionStatusContract", () => {
+    function makeTicket(
+      status: "PENDING" | "RUNNING" | "COMPLETED" | "FAILED",
+      id: string,
+    ) {
+      return {
+        ticketId: `ticket-${id}`,
+        issuedAt: "2026-03-22T10:00:00.000Z",
+        sourceRuntimeId: `runtime-${id}`,
+        sourceGateId: "gate-001",
+        asyncStatus: status,
+        recordCount: 1,
+        executedCount: 1,
+        failedCount: 0,
+        estimatedTimeoutMs: 1000,
+        ticketHash: `hash-${id}`,
+      };
+    }
+
+    it("returns empty summary with COMPLETED dominant when given no tickets", () => {
+      const contract = createAsyncExecutionStatusContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.assess([]);
+
+      expect(result.totalTickets).toBe(0);
+      expect(result.dominantStatus).toBe("COMPLETED");
+      expect(result.summary).toContain("empty");
+    });
+
+    it("dominant status is FAILED when any ticket has FAILED", () => {
+      const contract = createAsyncExecutionStatusContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.assess([
+        makeTicket("PENDING", "1"),
+        makeTicket("FAILED", "2"),
+        makeTicket("COMPLETED", "3"),
+      ]);
+
+      expect(result.dominantStatus).toBe("FAILED");
+      expect(result.failedCount).toBe(1);
+    });
+
+    it("dominant status is RUNNING when no FAILED but some RUNNING", () => {
+      const contract = createAsyncExecutionStatusContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.assess([
+        makeTicket("RUNNING", "1"),
+        makeTicket("PENDING", "2"),
+      ]);
+
+      expect(result.dominantStatus).toBe("RUNNING");
+    });
+
+    it("dominant status is PENDING when no FAILED/RUNNING but some PENDING", () => {
+      const contract = createAsyncExecutionStatusContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.assess([
+        makeTicket("PENDING", "1"),
+        makeTicket("COMPLETED", "2"),
+      ]);
+
+      expect(result.dominantStatus).toBe("PENDING");
+    });
+
+    it("dominant status is COMPLETED when all tickets are COMPLETED", () => {
+      const contract = createAsyncExecutionStatusContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.assess([
+        makeTicket("COMPLETED", "1"),
+        makeTicket("COMPLETED", "2"),
+      ]);
+
+      expect(result.dominantStatus).toBe("COMPLETED");
+      expect(result.completedCount).toBe(2);
+    });
+
+    it("produces a stable summaryHash for identical inputs", () => {
+      const fixedTime = "2026-03-22T10:00:00.000Z";
+      const c1 = createAsyncExecutionStatusContract({ now: () => fixedTime });
+      const c2 = createAsyncExecutionStatusContract({ now: () => fixedTime });
+      const tickets = [makeTicket("PENDING", "1"), makeTicket("RUNNING", "2")];
+
+      expect(c1.assess(tickets).summaryHash).toBe(c2.assess(tickets).summaryHash);
+    });
+
+    it("summary text contains dominant status", () => {
+      const contract = createAsyncExecutionStatusContract({
+        now: () => "2026-03-22T10:00:00.000Z",
+      });
+      const result = contract.assess([makeTicket("FAILED", "1")]);
+
+      expect(result.summary).toContain("FAILED");
+    });
+
+    it("creates AsyncExecutionStatusContract via class constructor", () => {
+      const contract = new AsyncExecutionStatusContract();
+      expect(contract).toBeInstanceOf(AsyncExecutionStatusContract);
     });
   });
 });

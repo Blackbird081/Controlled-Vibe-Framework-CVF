@@ -1,3 +1,22 @@
+// W2-T7 — Execution Command Runtime Async Slice (CP1–CP2)
+export {
+  AsyncCommandRuntimeContract,
+  createAsyncCommandRuntimeContract,
+} from "./execution.async.runtime.contract";
+export type {
+  AsyncExecutionStatus,
+  AsyncCommandRuntimeTicket,
+  AsyncCommandRuntimeContractDependencies,
+} from "./execution.async.runtime.contract";
+export {
+  AsyncExecutionStatusContract,
+  createAsyncExecutionStatusContract,
+} from "./execution.async.status.contract";
+export type {
+  AsyncExecutionStatusSummary,
+  AsyncExecutionStatusContractDependencies,
+} from "./execution.async.status.contract";
+
 // W2-T6 — Execution Re-intake Loop (CP1–CP2)
 export {
   ExecutionReintakeContract,

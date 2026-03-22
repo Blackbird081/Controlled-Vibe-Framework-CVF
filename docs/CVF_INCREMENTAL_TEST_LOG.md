@@ -1813,3 +1813,32 @@ Utility and guard:
   - this batch closes only the approved `W1-T1` tranche; it does not claim full whitepaper target-state completion.
   - deferred control-plane target-state work remains governed future-wave scope rather than hidden residual work.
   - runtime-critical `CVF_v1.7_CONTROLLED_INTELLIGENCE` internals remain explicitly outside the closed tranche boundary.
+## [2026-03-22] Batch: W2-T1 execution-plane tranche authorization
+- Scope:
+  - issue the next bounded `GC-018` continuation packet after `W1-T1` closure
+  - authorize `W2-T1` as the execution-plane successor tranche without opening implementation yet
+  - update roadmap/status/index surfaces so the next authorized tranche is visible to later reviewers
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_W0_SCOPED_BACKLOG_2026-03-21.md`
+  - `docs/reviews/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+  - `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T1_AUTHORIZATION_DELTA_2026-03-22.md`
+- Files updated:
+  - `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T1_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch authorizes `W2-T1` only; it does not create the tranche-local execution plan or any `GC-019` packet yet.
+  - the batch intentionally treats the closed `W1-T1` tranche as upstream baseline, not reopenable implementation scope.
+  - all scope beyond `W2-T1` remains gated.

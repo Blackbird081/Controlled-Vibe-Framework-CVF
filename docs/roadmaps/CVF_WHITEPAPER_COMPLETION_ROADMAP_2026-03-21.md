@@ -5,7 +5,7 @@
 > Status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`  
 > Current baseline closure: `docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md`  
 > Document type: successor roadmap proposal  
-> Authorization posture: `LIMITED ACTIVE — W1-T1 CLOSED / ALL FURTHER SCOPE GATED`
+> Authorization posture: `LIMITED ACTIVE — W1-T1 CLOSED / W2-T1 ONLY VIA GC-018 + GC-019`
 > Canonical continuation packets:
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
@@ -51,6 +51,7 @@ Current authorization state:
 - `W1-T1 / CP3` is implemented as a bounded governance-canvas reporting integration
 - `W1-T1 / CP4` is implemented as a narrow selected controlled-intelligence wrapper/re-export alignment
 - `W1-T1 / CP5` closure checkpoint is executed and closes the first authorized control-plane tranche
+- `W2-T1 — Execution-Plane Foundation` is authorized through `GC-018` as the next bounded tranche
 - all other downstream phases and tranches remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -254,6 +255,17 @@ Current authorized scope:
 - package execution-plane target modules
 - prove governed integration with existing active path
 
+Current authorized scope:
+
+- `W2-T1 — Execution-Plane Foundation` only
+- tranche packet:
+  - `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`
+- continuation candidate:
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`
+- authorization delta:
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T1_AUTHORIZATION_DELTA_2026-03-22.md`
+- everything beyond `W2-T1` remains unopened
+
 ### Phase W3 — Governance Expansion
 
 - review and implement only governance targets that now have proven operational need
@@ -304,4 +316,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, the first authorized implementation tranche `W1-T1` is now closed through `CP5`, and all further whitepaper-completion scope remains gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is now the only authorized next implementation tranche, and all further whitepaper-completion scope remains gated.

@@ -54,7 +54,7 @@ Current authorization state:
 - `W1-T1 / CP5` closure checkpoint is executed and closes the first authorized control-plane tranche
 - `W2-T1 — Execution-Plane Foundation` is authorized through `GC-018` as the next bounded tranche
 - `W2-T1 / CP1` is implemented as a coordination-package shell
-- `W2-T1 / CP2` packet chain is now open as the next reviewable execution-plane wrapper-alignment step
+- `W2-T1 / CP2` is implemented as a bounded MCP / gateway wrapper-alignment step
 - all other downstream phases and tranches remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -283,6 +283,8 @@ Current authorized scope:
   - `docs/reviews/CVF_GC019_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_REVIEW_2026-03-22.md`
 - second packet delta:
   - `docs/baselines/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_PACKET_DELTA_2026-03-22.md`
+- second implementation delta:
+  - `docs/baselines/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - everything beyond `W2-T1` remains unopened
 
 ### Phase W3 — Governance Expansion
@@ -335,4 +337,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is authorized with `CP1` implemented and `CP2` now reviewable, and all further whitepaper-completion scope remains gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is authorized with `CP1` and `CP2` implemented, and all further whitepaper-completion scope remains gated.

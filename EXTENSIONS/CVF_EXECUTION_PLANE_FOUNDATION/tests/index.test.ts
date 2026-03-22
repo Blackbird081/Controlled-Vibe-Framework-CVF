@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   type CVFSkillDraft,
   DEFAULT_GUARD_RUNTIME_CONFIG,
+  EXECUTION_GATEWAY_WRAPPER_ALIGNMENT,
+  EXECUTION_MCP_BRIDGE_ALIGNMENT,
   EXECUTION_PLANE_FOUNDATION_COORDINATION,
   ExplainabilityLayer,
   MODEL_GATEWAY_WRAPPER,
@@ -9,9 +11,12 @@ import {
   ReleaseEvidenceAdapter,
   SessionMemory,
   SkillValidator,
+  createExecutionGatewaySurface,
+  createExecutionMcpBridgeSurface,
   createExecutionPlaneFoundationShell,
   createExecutionPlanePromptPreview,
   describeExecutionPlaneFoundationShell,
+  describeExecutionPlaneWrapperAlignment,
   parseVibe,
 } from "../src/index";
 
@@ -20,6 +25,8 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
     const shell = createExecutionPlaneFoundationShell();
 
     expect(shell.gatewayWrapper.executionClass).toBe("wrapper/re-export merge");
+    expect(shell.gateway.wrapper).toBe(MODEL_GATEWAY_WRAPPER);
+    expect(shell.mcpBridge.alignment.sourcePackage).toContain("CVF_ECO_v2.5_MCP_SERVER");
     expect(shell.registry.count()).toBeGreaterThan(0);
     expect(shell.memory.getPhase()).toBe("DISCOVERY");
     expect(shell.explainability).toBeInstanceOf(ExplainabilityLayer);
@@ -41,6 +48,25 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
     expect(summary.enabledGuardCount).toBe(summary.registeredGuardCount);
     expect(summary.textSurface).toContain("CVF W2-T1 CP1 Execution-Plane Foundation Shell");
     expect(summary.markdownSurface).toContain("## Deferred Initial Surfaces");
+  });
+
+  it("publishes explicit gateway and MCP wrapper alignment surfaces", () => {
+    const gateway = createExecutionGatewaySurface();
+    const mcpBridge = createExecutionMcpBridgeSurface();
+    const summary = describeExecutionPlaneWrapperAlignment();
+
+    expect(gateway.alignment).toBe(EXECUTION_GATEWAY_WRAPPER_ALIGNMENT);
+    expect(gateway.wrapper).toBe(MODEL_GATEWAY_WRAPPER);
+    expect(gateway.skills.SkillValidator).toBe(SkillValidator);
+    expect(mcpBridge.alignment).toBe(EXECUTION_MCP_BRIDGE_ALIGNMENT);
+    expect(typeof mcpBridge.runtime.createGuardEngine).toBe("function");
+    expect(summary.controlPointId).toBe("CP2");
+    expect(summary.gatewayAlignment.wrapperAnchor).toBe("wrapper/re-export merge");
+    expect(summary.mcpBridgeAlignment.deferredInternals).toContain(
+      "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli",
+    );
+    expect(summary.textSurface).toContain("CP2 MCP And Gateway Wrapper Alignment");
+    expect(summary.markdownSurface).toContain("## Gateway Wrapper Boundary");
   });
 
   it("re-exports core MCP and execution surfaces needed for the shell", async () => {

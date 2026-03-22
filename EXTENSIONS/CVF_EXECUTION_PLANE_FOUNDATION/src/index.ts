@@ -43,7 +43,6 @@ export {
   SkillCertifier,
   MODEL_GATEWAY_WRAPPER,
 } from "../../CVF_MODEL_GATEWAY/src/index";
-
 export {
   GuardRuntimeEngine,
   createGuardEngine,
@@ -115,9 +114,24 @@ import {
 } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
 import { ExplainabilityLayer } from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/explainability/explainability.layer";
 import {
+  OpenClawAdapter,
+  PicoClawAdapter,
+  ZeroClawAdapter,
+  NanoAdapter,
+  NaturalPolicyParser,
+  SkillAdapter,
+  SkillValidator,
+  SkillCertifier,
   MODEL_GATEWAY_WRAPPER,
   ReleaseEvidenceAdapter,
 } from "../../CVF_MODEL_GATEWAY/src/index";
+import {
+  MCP_TOOL_DESCRIPTIONS,
+  formatCardAsText,
+  generateClarifications,
+  generateConfirmationCard,
+  parseVibe,
+} from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
 
 export const EXECUTION_PLANE_FOUNDATION_COORDINATION = {
   executionClass: "coordination package",
@@ -135,7 +149,91 @@ export const EXECUTION_PLANE_FOUNDATION_COORDINATION = {
     "Creates one governed execution-plane shell while preserving source ownership, prior wrapper boundaries, and rollback safety.",
 } as const;
 
+export const EXECUTION_GATEWAY_WRAPPER_ALIGNMENT = {
+  executionClass: "wrapper/re-export alignment",
+  shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION",
+  sourcePackage: "EXTENSIONS/CVF_MODEL_GATEWAY",
+  wrapperAnchor: MODEL_GATEWAY_WRAPPER.executionClass,
+  adapterEntrypoints: [
+    "OpenClawAdapter",
+    "PicoClawAdapter",
+    "ZeroClawAdapter",
+    "NanoAdapter",
+    "executeFilesystemAction",
+    "executeHttpAction",
+  ],
+  policyEntrypoints: ["NaturalPolicyParser"],
+  skillEntrypoints: ["SkillAdapter", "SkillValidator", "SkillCertifier"],
+  evidenceEntrypoints: ["ReleaseEvidenceAdapter"],
+  preservesLineage: true,
+} as const;
+
+export const EXECUTION_MCP_BRIDGE_ALIGNMENT = {
+  executionClass: "wrapper/re-export alignment",
+  shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION",
+  sourcePackage: "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/sdk.ts",
+  runtimeEntrypoints: [
+    "createGuardEngine",
+    "createUnifiedRegistry",
+    "SessionMemory",
+    "DEFAULT_GUARD_RUNTIME_CONFIG",
+  ],
+  promptEntrypoints: ["generateSystemPrompt", "MCP_TOOL_DESCRIPTIONS"],
+  translationEntrypoints: [
+    "parseVibe",
+    "generateClarifications",
+    "generateConfirmationCard",
+    "formatCardAsText",
+  ],
+  deferredInternals:
+    EXECUTION_PLANE_FOUNDATION_COORDINATION.initialPhysicalMoveExcluded,
+  preservesLineage: true,
+} as const;
+
+export interface ExecutionGatewaySurface {
+  alignment: typeof EXECUTION_GATEWAY_WRAPPER_ALIGNMENT;
+  wrapper: typeof MODEL_GATEWAY_WRAPPER;
+  adapters: {
+    OpenClawAdapter: typeof OpenClawAdapter;
+    PicoClawAdapter: typeof PicoClawAdapter;
+    ZeroClawAdapter: typeof ZeroClawAdapter;
+    NanoAdapter: typeof NanoAdapter;
+  };
+  policy: {
+    NaturalPolicyParser: typeof NaturalPolicyParser;
+  };
+  skills: {
+    SkillAdapter: typeof SkillAdapter;
+    SkillValidator: typeof SkillValidator;
+    SkillCertifier: typeof SkillCertifier;
+  };
+  evidence: {
+    ReleaseEvidenceAdapter: typeof ReleaseEvidenceAdapter;
+  };
+}
+
+export interface ExecutionMcpBridgeSurface {
+  alignment: typeof EXECUTION_MCP_BRIDGE_ALIGNMENT;
+  runtime: {
+    createGuardEngine: typeof createGuardEngine;
+    createUnifiedRegistry: typeof createUnifiedRegistry;
+    SessionMemory: typeof SessionMemory;
+  };
+  prompt: {
+    generateSystemPrompt: typeof generateSystemPrompt;
+    MCP_TOOL_DESCRIPTIONS: typeof MCP_TOOL_DESCRIPTIONS;
+  };
+  translation: {
+    parseVibe: typeof parseVibe;
+    generateClarifications: typeof generateClarifications;
+    generateConfirmationCard: typeof generateConfirmationCard;
+    formatCardAsText: typeof formatCardAsText;
+  };
+}
+
 export interface ExecutionPlaneFoundationShell {
+  gateway: ExecutionGatewaySurface;
+  mcpBridge: ExecutionMcpBridgeSurface;
   gatewayWrapper: typeof MODEL_GATEWAY_WRAPPER;
   guardEngine: GuardRuntimeEngine;
   registry: UnifiedGuardRegistry;
@@ -165,14 +263,75 @@ export interface ExecutionPlaneFoundationPromptPreview {
   prompt: GeneratedPrompt;
 }
 
-export function createExecutionPlaneFoundationShell(): ExecutionPlaneFoundationShell {
+export interface ExecutionPlaneWrapperAlignmentSummary {
+  trancheId: "W2-T1";
+  controlPointId: "CP2";
+  generatedAt: string;
+  shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION";
+  gatewayAlignment: typeof EXECUTION_GATEWAY_WRAPPER_ALIGNMENT;
+  mcpBridgeAlignment: typeof EXECUTION_MCP_BRIDGE_ALIGNMENT;
+  textSurface: string;
+  markdownSurface: string;
+}
+
+export function createExecutionGatewaySurface(): ExecutionGatewaySurface {
   return {
-    gatewayWrapper: MODEL_GATEWAY_WRAPPER,
-    guardEngine: createGuardEngine(),
-    registry: createUnifiedRegistry(),
-    memory: new SessionMemory("w2-t1-cp1-shell"),
+    alignment: EXECUTION_GATEWAY_WRAPPER_ALIGNMENT,
+    wrapper: MODEL_GATEWAY_WRAPPER,
+    adapters: {
+      OpenClawAdapter,
+      PicoClawAdapter,
+      ZeroClawAdapter,
+      NanoAdapter,
+    },
+    policy: {
+      NaturalPolicyParser,
+    },
+    skills: {
+      SkillAdapter,
+      SkillValidator,
+      SkillCertifier,
+    },
+    evidence: {
+      ReleaseEvidenceAdapter,
+    },
+  };
+}
+
+export function createExecutionMcpBridgeSurface(): ExecutionMcpBridgeSurface {
+  return {
+    alignment: EXECUTION_MCP_BRIDGE_ALIGNMENT,
+    runtime: {
+      createGuardEngine,
+      createUnifiedRegistry,
+      SessionMemory,
+    },
+    prompt: {
+      generateSystemPrompt,
+      MCP_TOOL_DESCRIPTIONS,
+    },
+    translation: {
+      parseVibe,
+      generateClarifications,
+      generateConfirmationCard,
+      formatCardAsText,
+    },
+  };
+}
+
+export function createExecutionPlaneFoundationShell(): ExecutionPlaneFoundationShell {
+  const gateway = createExecutionGatewaySurface();
+  const mcpBridge = createExecutionMcpBridgeSurface();
+
+  return {
+    gateway,
+    mcpBridge,
+    gatewayWrapper: gateway.wrapper,
+    guardEngine: mcpBridge.runtime.createGuardEngine(),
+    registry: mcpBridge.runtime.createUnifiedRegistry(),
+    memory: new mcpBridge.runtime.SessionMemory("w2-t1-cp1-shell"),
     explainability: new ExplainabilityLayer("en"),
-    releaseEvidence: new ReleaseEvidenceAdapter(),
+    releaseEvidence: new gateway.evidence.ReleaseEvidenceAdapter(),
   };
 }
 
@@ -229,6 +388,21 @@ export function createExecutionPlanePromptPreview(): ExecutionPlaneFoundationPro
   };
 }
 
+export function describeExecutionPlaneWrapperAlignment(): ExecutionPlaneWrapperAlignmentSummary {
+  const generatedAt = new Date().toISOString();
+
+  return {
+    trancheId: "W2-T1",
+    controlPointId: "CP2",
+    generatedAt,
+    shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION",
+    gatewayAlignment: EXECUTION_GATEWAY_WRAPPER_ALIGNMENT,
+    mcpBridgeAlignment: EXECUTION_MCP_BRIDGE_ALIGNMENT,
+    textSurface: buildExecutionPlaneWrapperAlignmentTextSurface(generatedAt),
+    markdownSurface: buildExecutionPlaneWrapperAlignmentMarkdownSurface(generatedAt),
+  };
+}
+
 function buildExecutionPlaneTextSurface(
   generatedAt: string,
   stats: { totalGuards: number; enabledGuards: number },
@@ -280,6 +454,69 @@ function buildExecutionPlaneMarkdownSurface(
     "## Deferred Initial Surfaces",
     "",
     ...EXECUTION_PLANE_FOUNDATION_COORDINATION.initialPhysicalMoveExcluded.map(
+      (surface) => `- \`${surface}\``,
+    ),
+  ].join("\n");
+}
+
+function buildExecutionPlaneWrapperAlignmentTextSurface(generatedAt: string): string {
+  return [
+    "=".repeat(72),
+    "  CVF W2-T1 CP2 MCP And Gateway Wrapper Alignment",
+    "=".repeat(72),
+    "Tranche: W2-T1",
+    "Control Point: CP2",
+    `Generated At: ${generatedAt}`,
+    `Gateway Wrapper Anchor: ${EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.wrapperAnchor}`,
+    `Gateway Entrypoints: ${EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.adapterEntrypoints.join(", ")}, ${EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.policyEntrypoints.join(", ")}, ${EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.skillEntrypoints.join(", ")}, ${EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.evidenceEntrypoints.join(", ")}`,
+    `MCP Entrypoints: ${EXECUTION_MCP_BRIDGE_ALIGNMENT.runtimeEntrypoints.join(", ")}, ${EXECUTION_MCP_BRIDGE_ALIGNMENT.promptEntrypoints.join(", ")}, ${EXECUTION_MCP_BRIDGE_ALIGNMENT.translationEntrypoints.join(", ")}`,
+    `Deferred Initial Surfaces: ${EXECUTION_MCP_BRIDGE_ALIGNMENT.deferredInternals.join(", ")}`,
+  ].join("\n");
+}
+
+function buildExecutionPlaneWrapperAlignmentMarkdownSurface(generatedAt: string): string {
+  return [
+    "# CVF W2-T1 CP2 MCP And Gateway Wrapper Alignment",
+    "",
+    `> Tranche: \`W2-T1\``,
+    `> Control Point: \`CP2\``,
+    `> Generated At: \`${generatedAt}\``,
+    "",
+    "## Gateway Wrapper Boundary",
+    "",
+    `- shell package: \`${EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.shellPackage}\``,
+    `- source package: \`${EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.sourcePackage}\``,
+    `- wrapper anchor: \`${EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.wrapperAnchor}\``,
+    ...EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.adapterEntrypoints.map(
+      (entrypoint) => `- gateway adapter entrypoint: \`${entrypoint}\``,
+    ),
+    ...EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.policyEntrypoints.map(
+      (entrypoint) => `- gateway policy entrypoint: \`${entrypoint}\``,
+    ),
+    ...EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.skillEntrypoints.map(
+      (entrypoint) => `- gateway skill entrypoint: \`${entrypoint}\``,
+    ),
+    ...EXECUTION_GATEWAY_WRAPPER_ALIGNMENT.evidenceEntrypoints.map(
+      (entrypoint) => `- gateway evidence entrypoint: \`${entrypoint}\``,
+    ),
+    "",
+    "## MCP Bridge Boundary",
+    "",
+    `- shell package: \`${EXECUTION_MCP_BRIDGE_ALIGNMENT.shellPackage}\``,
+    `- source package: \`${EXECUTION_MCP_BRIDGE_ALIGNMENT.sourcePackage}\``,
+    ...EXECUTION_MCP_BRIDGE_ALIGNMENT.runtimeEntrypoints.map(
+      (entrypoint) => `- mcp runtime entrypoint: \`${entrypoint}\``,
+    ),
+    ...EXECUTION_MCP_BRIDGE_ALIGNMENT.promptEntrypoints.map(
+      (entrypoint) => `- mcp prompt entrypoint: \`${entrypoint}\``,
+    ),
+    ...EXECUTION_MCP_BRIDGE_ALIGNMENT.translationEntrypoints.map(
+      (entrypoint) => `- mcp translation entrypoint: \`${entrypoint}\``,
+    ),
+    "",
+    "## Deferred Initial Surfaces",
+    "",
+    ...EXECUTION_MCP_BRIDGE_ALIGNMENT.deferredInternals.map(
       (surface) => `- \`${surface}\``,
     ),
   ].join("\n");

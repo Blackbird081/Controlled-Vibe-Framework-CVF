@@ -1942,3 +1942,41 @@ Utility and guard:
   - this batch opens `CP2` only; it does not execute any execution-shell wrapper alignment yet.
   - `CVF_MODEL_GATEWAY` remains the preserved gateway wrapper anchor.
   - README banners stay unchanged because no ownership movement is proposed in this packet-opening batch.
+## [2026-03-22] Batch: W2-T1 CP2 MCP/gateway wrapper alignment
+- Scope:
+  - implement `CP2` inside `W2-T1` as an approved `wrapper/re-export alignment`
+  - make shell-facing gateway and MCP bridge boundaries explicit inside `CVF_EXECUTION_PLANE_FOUNDATION`
+  - keep the shell additive and preserve all source-module lineage and deferred MCP internals
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/audits/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
+- Files updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/README.md`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts`
+  - `docs/reference/CVF_MODULE_INVENTORY.md`
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+  - `docs/reference/CVF_MATURITY_MATRIX.md`
+  - `docs/roadmaps/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/baselines/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_MODEL_GATEWAY && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_MODEL_GATEWAY && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER && npm run test:run` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - the shell remains additive and backward compatible with the earlier `CP1` surface.
+  - `CVF_MODEL_GATEWAY` remains the preserved gateway wrapper anchor.
+  - MCP guard-runtime and CLI internals remain explicitly outside the shell package body.

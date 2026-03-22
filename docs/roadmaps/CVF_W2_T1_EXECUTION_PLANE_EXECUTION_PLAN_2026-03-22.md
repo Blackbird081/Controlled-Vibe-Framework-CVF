@@ -4,7 +4,7 @@
 > Parent roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`  
 > Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`  
 > Tranche packet: `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`  
-> Status: `AUTHORIZED TRANCHE — CP1 IMPLEMENTED / CP2 PACKET OPENED`
+> Status: `AUTHORIZED TRANCHE — CP1 / CP2 IMPLEMENTED`
 
 ---
 
@@ -87,7 +87,7 @@ Notes:
 
 Status:
 
-- `PACKET OPENED / REVIEWABLE / NOT EXECUTED`
+- `IMPLEMENTED`
 
 ### CP3 — Adapter Evidence And Explainability Integration
 
@@ -176,7 +176,7 @@ For `CP1`, the minimum evidence chain is:
 
 ## 7. Final Readout
 
-> `W2-T1` is authorized, `CP1` is implemented as the first tranche-local execution-plane shell, and the `CP2` wrapper-alignment packet chain is now open and reviewable.
+> `W2-T1` is authorized, `CP1` is implemented as the first tranche-local execution-plane shell, and `CP2` is now implemented as the MCP / gateway wrapper-alignment follow-on.
 
 ## 8. Implementation Receipt
 
@@ -199,3 +199,22 @@ Receipt highlights:
 Evidence anchor:
 
 - `docs/baselines/CVF_W2_T1_CP1_EXECUTION_PLANE_IMPLEMENTATION_DELTA_2026-03-22.md`
+
+## 9. CP2 Implementation Receipt
+
+Implemented surface:
+
+- explicit wrapper alignment inside `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/`
+
+Receipt highlights:
+
+- gateway-facing shell boundary is now explicit through `createExecutionGatewaySurface()`
+- MCP-facing shell boundary is now explicit through `createExecutionMcpBridgeSurface()`
+- `describeExecutionPlaneWrapperAlignment()` now produces one tranche-local `CP2` review surface
+- `CVF_MODEL_GATEWAY` remains the preserved gateway-facing wrapper anchor
+- MCP guard-runtime and CLI internals remain outside the shell package body
+- package-local verification and source-package regression verification are green
+
+Evidence anchor:
+
+- `docs/baselines/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`

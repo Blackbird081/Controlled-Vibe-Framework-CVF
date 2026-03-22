@@ -1,6 +1,6 @@
 # CVF Execution Plane Foundation
 
-Status: coordination package shell for `W2-T1 / CP1` in the whitepaper-completion roadmap.
+Status: coordination package shell with explicit wrapper alignment for `W2-T1 / CP1-CP2` in the whitepaper-completion roadmap.
 
 ## Purpose
 
@@ -9,6 +9,7 @@ Status: coordination package shell for `W2-T1 / CP1` in the whitepaper-completio
 - keep `CVF_ECO_v2.5_MCP_SERVER` guard-runtime internals out of the initial package body
 - preserve `CVF_MODEL_GATEWAY` as the canonical gateway-facing wrapper anchor
 - expose one reviewable execution-plane shell summary for tranche-local planning and implementation
+- make gateway and MCP bridge wrapper boundaries explicit without changing source-module ownership
 
 ## Source lineage
 
@@ -34,4 +35,12 @@ Reference-only through the preserved gateway wrapper:
 
 - `createExecutionPlaneFoundationShell()` composes one stable reviewable shell from gateway, MCP-runtime, registry, memory, explainability, and evidence helpers
 - `describeExecutionPlaneFoundationShell()` produces one tranche-local summary for review and documentation surfaces
+- `createExecutionGatewaySurface()` and `createExecutionMcpBridgeSurface()` expose explicit shell-facing wrapper surfaces for gateway and MCP entrypoints
+- `describeExecutionPlaneWrapperAlignment()` produces the `CP2` review surface for MCP / gateway wrapper alignment
 - the shell stays additive and does not modify active-path runtime behavior by itself
+
+## Current-cycle wrapper boundary
+
+- `CVF_MODEL_GATEWAY` remains the gateway-facing wrapper anchor
+- MCP bridge entrypoints stay sourced from `CVF_ECO_v2.5_MCP_SERVER/src/sdk.ts`
+- MCP guard-runtime and CLI internals remain deferred outside the shell package body

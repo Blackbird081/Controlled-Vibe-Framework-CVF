@@ -37,9 +37,9 @@ This is the correct interpretation because the whitepaper is explicitly marked a
 | `W1-T1 / CP3` governance-canvas reporting integration | implemented as a reviewable evidence surface from the control-plane shell | `DONE FOR CURRENT TRANCHE` |
 | `W1-T1 / CP4` selected controlled-intelligence surface alignment | implemented as a narrow wrapper/re-export alignment with runtime-critical reasoning execution still deferred | `DONE FOR CURRENT TRANCHE` |
 | `W1-T1 / CP5` tranche closure checkpoint | canonical tranche closure review issued; tranche boundary closed with explicit defer list | `DONE FOR CURRENT TRANCHE` |
-| `W2-T1` execution-plane foundation tranche | authorized as the next bounded whitepaper-completion tranche after `W1-T1` closure; first shell package is implemented and the next wrapper-alignment packet chain is now open | `AUTHORIZED / CP1 IMPLEMENTED / CP2 REVIEWABLE` |
+| `W2-T1` execution-plane foundation tranche | authorized as the next bounded whitepaper-completion tranche after `W1-T1` closure; first shell package and the next wrapper-alignment step are now both implemented | `AUTHORIZED / CP1 / CP2 IMPLEMENTED` |
 | `W2-T1 / CP1` execution-plane foundation shell | implemented as a coordination package with gateway-wrapper lineage and MCP internals still deferred | `DONE FOR CURRENT TRANCHE` |
-| `W2-T1 / CP2` MCP/gateway wrapper alignment | packet opened to align shell-facing MCP and gateway entrypoints after `CP1` while preserving source lineage | `PACKET OPENED / REVIEWABLE` |
+| `W2-T1 / CP2` MCP/gateway wrapper alignment | implemented as an explicit shell-facing gateway/MCP wrapper boundary while preserving source lineage and deferred MCP internals | `DONE FOR CURRENT TRANCHE` |
 | Control-plane `AI Gateway` target-state | not implemented as whitepaper target-state | `NOT STARTED / NOT AUTHORIZED` |
 | Unified `Knowledge Layer` target-state | partial ecosystem pieces exist, target-state not delivered | `PARTIAL` |
 | `Context Builder & Packager` target-state | partial ingredients exist, target-state not delivered | `PARTIAL` |
@@ -102,10 +102,10 @@ That move is now partially executed:
 - `W2-T1` is authorized as the next bounded tranche
 - tranche-local planning and the first `GC-019` packet chain are now opened for `W2-T1`
 - `CP1` is now implemented inside `W2-T1` as the first execution-plane shell package
-- `CP2` is now opened as the next reviewable MCP / gateway wrapper-alignment step inside `W2-T1`
+- `CP2` is now implemented as the MCP / gateway wrapper-alignment step inside `W2-T1`
 
 ---
 
 ## Final Verdict
 
-> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** — current-cycle restructuring is complete, `W1-T1` is closed, `W2-T1` is authorized with `CP1` implemented and `CP2` review-open, and the full whitepaper target-state still requires later governed waves.
+> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** — current-cycle restructuring is complete, `W1-T1` is closed, `W2-T1` is authorized with `CP1` and `CP2` implemented, and the full whitepaper target-state still requires later governed waves.

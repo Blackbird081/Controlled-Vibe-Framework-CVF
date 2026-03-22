@@ -37,7 +37,8 @@ This is the correct interpretation because the whitepaper is explicitly marked a
 | `W1-T1 / CP3` governance-canvas reporting integration | implemented as a reviewable evidence surface from the control-plane shell | `DONE FOR CURRENT TRANCHE` |
 | `W1-T1 / CP4` selected controlled-intelligence surface alignment | implemented as a narrow wrapper/re-export alignment with runtime-critical reasoning execution still deferred | `DONE FOR CURRENT TRANCHE` |
 | `W1-T1 / CP5` tranche closure checkpoint | canonical tranche closure review issued; tranche boundary closed with explicit defer list | `DONE FOR CURRENT TRANCHE` |
-| `W2-T1` execution-plane foundation tranche | authorized as the next bounded whitepaper-completion tranche after `W1-T1` closure | `AUTHORIZED / NOT STARTED` |
+| `W2-T1` execution-plane foundation tranche | authorized as the next bounded whitepaper-completion tranche after `W1-T1` closure; tranche-local plan is issued | `AUTHORIZED / CP1 REVIEWABLE` |
+| `W2-T1 / CP1` execution-plane foundation shell | audit and independent review issued for the first execution-plane shell candidate | `REVIEWABLE / NOT EXECUTED` |
 | Control-plane `AI Gateway` target-state | not implemented as whitepaper target-state | `NOT STARTED / NOT AUTHORIZED` |
 | Unified `Knowledge Layer` target-state | partial ecosystem pieces exist, target-state not delivered | `PARTIAL` |
 | `Context Builder & Packager` target-state | partial ingredients exist, target-state not delivered | `PARTIAL` |
@@ -98,10 +99,11 @@ The next correct planning move is:
 That move is now partially executed:
 
 - `W2-T1` is authorized as the next bounded tranche
-- implementation inside `W2-T1` is still paused until tranche-local planning and `GC-019` packets are opened
+- tranche-local planning and the first `GC-019` packet chain are now opened for `W2-T1`
+- implementation inside `W2-T1` is still paused until the `CP1` review outcome is explicitly approved
 
 ---
 
 ## Final Verdict
 
-> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** — current-cycle restructuring is complete, `W1-T1` is closed, `W2-T1` is authorized but not started, and the full whitepaper target-state still requires later governed waves.
+> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** — current-cycle restructuring is complete, `W1-T1` is closed, `W2-T1` is authorized with `CP1` reviewable but not executed, and the full whitepaper target-state still requires later governed waves.

@@ -9,6 +9,7 @@
 > Canonical continuation packets:
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md`
 > - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md`
+> - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`
 
 ---
 
@@ -258,12 +259,20 @@ Current authorized scope:
 Current authorized scope:
 
 - `W2-T1 — Execution-Plane Foundation` only
+- tranche-local execution plan:
+  - `docs/roadmaps/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
 - tranche packet:
   - `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`
 - authorization delta:
   - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T1_AUTHORIZATION_DELTA_2026-03-22.md`
+- first structural packet:
+  - `docs/audits/CVF_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_AUDIT_2026-03-22.md`
+- first independent review:
+  - `docs/reviews/CVF_GC019_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_REVIEW_2026-03-22.md`
+- first planning delta:
+  - `docs/baselines/CVF_W2_T1_EXECUTION_PLANE_PLANNING_DELTA_2026-03-22.md`
 - everything beyond `W2-T1` remains unopened
 
 ### Phase W3 — Governance Expansion
@@ -316,4 +325,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is now the only authorized next implementation tranche, and all further whitepaper-completion scope remains gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is authorized with `CP1` now reviewable, and all further whitepaper-completion scope remains gated.

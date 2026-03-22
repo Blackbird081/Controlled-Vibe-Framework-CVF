@@ -1842,3 +1842,32 @@ Utility and guard:
   - this batch authorizes `W2-T1` only; it does not create the tranche-local execution plan or any `GC-019` packet yet.
   - the batch intentionally treats the closed `W1-T1` tranche as upstream baseline, not reopenable implementation scope.
   - all scope beyond `W2-T1` remains gated.
+## [2026-03-22] Batch: W2-T1 execution-plane planning and CP1 packet opening
+- Scope:
+  - create the tranche-local execution plan for `W2-T1`
+  - select `CP1` as the first execution-plane structural candidate
+  - issue the first `GC-019` audit/review packet chain for the execution-plane shell
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/roadmaps/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W2_T1_EXECUTION_PLANE_PLANNING_DELTA_2026-03-22.md`
+- Files updated:
+  - `docs/roadmaps/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/audits/CVF_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W2_T1_EXECUTION_PLANE_PLANNING_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch opens `CP1` only; it does not create `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` yet.
+  - `CVF_MODEL_GATEWAY` remains the preserved gateway wrapper anchor rather than being bypassed.
+  - MCP guard-runtime internals remain intentionally outside the initial execution-shell proposal.

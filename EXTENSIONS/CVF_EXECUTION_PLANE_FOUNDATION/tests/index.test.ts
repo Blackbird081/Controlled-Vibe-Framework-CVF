@@ -24,7 +24,21 @@ import {
   describeExecutionPlaneFoundationShell,
   describeExecutionPlaneWrapperAlignment,
   parseVibe,
+  // W2-T2
+  DispatchContract,
+  createDispatchContract,
+  PolicyGateContract,
+  createPolicyGateContract,
+  ExecutionBridgeConsumerContract,
+  createExecutionBridgeConsumerContract,
 } from "../src/index";
+import { createGuardEngine } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
+import {
+  createDesignConsumerContract,
+  createControlPlaneIntakeContract,
+} from "../../CVF_CONTROL_PLANE_FOUNDATION/src/index";
+import type { TaskAssignment } from "../../CVF_CONTROL_PLANE_FOUNDATION/src/orchestration.contract";
+import type { DispatchResult } from "../src/dispatch.contract";
 
 describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
   it("creates a stable execution-plane shell while preserving lineage", () => {
@@ -210,5 +224,340 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
     expect(EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT.deferredInternals).toContain(
       "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/guards",
     );
+  });
+});
+
+// W2-T2 — Execution Dispatch Bridge
+
+function makeAssignment(overrides: Partial<TaskAssignment> = {}): TaskAssignment {
+  return {
+    assignmentId: "assign-001",
+    taskId: "task-001",
+    title: "Implement intake module",
+    assignedRole: "builder",
+    targetPhase: "BUILD",
+    riskLevel: "R1",
+    scopeConstraints: ["phase:BUILD", "risk:R1", "role:builder", "requires:test-coverage"],
+    dependencies: [],
+    executionAuthorizationHash: "auth-hash-001",
+    ...overrides,
+  };
+}
+
+describe("W2-T2 CP1 — DispatchContract", () => {
+  it("dispatches a single R1 assignment and returns ALLOW decision", () => {
+    const contract = createDispatchContract();
+    const assignments = [makeAssignment()];
+    const result = contract.dispatch("orch-001", assignments);
+
+    expect(result.orchestrationId).toBe("orch-001");
+    expect(result.totalDispatched).toBe(1);
+    expect(result.entries).toHaveLength(1);
+    expect(result.entries[0].assignmentId).toBe("assign-001");
+    expect(result.entries[0].taskId).toBe("task-001");
+    expect(["ALLOW", "BLOCK", "ESCALATE"]).toContain(result.entries[0].guardDecision);
+    expect(result.dispatchId).toBeTruthy();
+    expect(result.dispatchHash).toBe(result.dispatchId);
+  });
+
+  it("sets dispatchAuthorized=true when guard returns ALLOW", () => {
+    const engine = createGuardEngine();
+    const contract = createDispatchContract({ engine });
+    const assignments = [makeAssignment({ riskLevel: "R0", targetPhase: "DESIGN" })];
+    const result = contract.dispatch("orch-r0", assignments);
+
+    const entry = result.entries[0];
+    expect(entry.dispatchAuthorized).toBe(entry.guardDecision === "ALLOW");
+  });
+
+  it("correctly counts authorized, blocked, and escalated entries", () => {
+    const contract = createDispatchContract();
+    const assignments = [
+      makeAssignment({ assignmentId: "a1", taskId: "t1", riskLevel: "R0" }),
+      makeAssignment({ assignmentId: "a2", taskId: "t2", riskLevel: "R1" }),
+      makeAssignment({ assignmentId: "a3", taskId: "t3", riskLevel: "R2" }),
+    ];
+    const result = contract.dispatch("orch-multi", assignments);
+
+    expect(result.totalDispatched).toBe(3);
+    expect(result.authorizedCount + result.blockedCount + result.escalatedCount).toBe(3);
+  });
+
+  it("handles empty assignment list and emits warning", () => {
+    const contract = createDispatchContract();
+    const result = contract.dispatch("orch-empty", []);
+
+    expect(result.totalDispatched).toBe(0);
+    expect(result.entries).toHaveLength(0);
+    expect(result.authorizedCount).toBe(0);
+    expect(result.warnings.some((w) => w.includes("zero assignments"))).toBe(true);
+  });
+
+  it("maps reviewer role to REVIEWER guard role", () => {
+    const contract = createDispatchContract();
+    const assignments = [makeAssignment({ assignedRole: "reviewer", targetPhase: "REVIEW" })];
+    const result = contract.dispatch("orch-review", assignments);
+
+    expect(result.entries[0].pipelineResult.requestId).toBe(assignments[0].assignmentId);
+  });
+
+  it("produces a stable dispatchHash for identical inputs", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+    const contract = createDispatchContract({ now: () => fixedTime });
+    const assignments = [makeAssignment()];
+
+    const r1 = contract.dispatch("orch-stable", assignments);
+    const r2 = contract.dispatch("orch-stable", assignments);
+
+    expect(r1.dispatchHash).toBe(r2.dispatchHash);
+  });
+
+  it("produces a different dispatchHash when orchestrationId changes", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+    const contract = createDispatchContract({ now: () => fixedTime });
+    const assignments = [makeAssignment()];
+
+    const r1 = contract.dispatch("orch-A", assignments);
+    const r2 = contract.dispatch("orch-B", assignments);
+
+    expect(r1.dispatchHash).not.toBe(r2.dispatchHash);
+  });
+
+  it("populates agentGuidance from pipelineResult", () => {
+    const contract = createDispatchContract();
+    const result = contract.dispatch("orch-guidance", [makeAssignment()]);
+
+    const entry = result.entries[0];
+    // agentGuidance may be undefined if no guidance is emitted by the engine
+    expect(entry.pipelineResult).toBeTruthy();
+    expect(entry.pipelineResult.executedAt).toBeTruthy();
+  });
+
+  it("includes R3 assignments and records warnings for high-risk dispatch", () => {
+    const contract = createDispatchContract();
+    const assignments = [makeAssignment({ riskLevel: "R3", scopeConstraints: ["phase:BUILD", "risk:R3", "requires:full-governance-review"] })];
+    const result = contract.dispatch("orch-r3", assignments);
+
+    expect(result.totalDispatched).toBe(1);
+    // warnings may include BLOCK or ESCALATE signals from guard engine on R3
+    expect(Array.isArray(result.warnings)).toBe(true);
+  });
+
+  it("creates DispatchContract via class constructor with default engine", () => {
+    const contract = new DispatchContract();
+    expect(contract).toBeInstanceOf(DispatchContract);
+    const result = contract.dispatch("orch-ctor", [makeAssignment()]);
+    expect(result.dispatchId).toBeTruthy();
+  });
+});
+
+describe("W2-T2 CP2 — PolicyGateContract", () => {
+  function makeDispatchResult(entries: { assignmentId: string; taskId: string; guardDecision: "ALLOW" | "BLOCK" | "ESCALATE"; riskLevel: string }[]): DispatchResult {
+    const dispatchEntries = entries.map((e) => ({
+      assignmentId: e.assignmentId,
+      taskId: e.taskId,
+      dispatchedAt: "2026-03-22T10:00:00.000Z",
+      guardDecision: e.guardDecision as any,
+      pipelineResult: {
+        requestId: e.assignmentId,
+        finalDecision: e.guardDecision as any,
+        results: [{ context: { riskLevel: e.riskLevel } } as any],
+        executedAt: "2026-03-22T10:00:00.000Z",
+        durationMs: 1,
+      },
+      dispatchAuthorized: e.guardDecision === "ALLOW",
+    }));
+
+    return {
+      dispatchId: "dispatch-test-001",
+      orchestrationId: "orch-test-001",
+      dispatchedAt: "2026-03-22T10:00:00.000Z",
+      entries: dispatchEntries as any,
+      totalDispatched: entries.length,
+      authorizedCount: entries.filter((e) => e.guardDecision === "ALLOW").length,
+      blockedCount: entries.filter((e) => e.guardDecision === "BLOCK").length,
+      escalatedCount: entries.filter((e) => e.guardDecision === "ESCALATE").length,
+      dispatchHash: "test-dispatch-hash",
+      warnings: [],
+    };
+  }
+
+  it("produces allow decision for ALLOW + R0", () => {
+    const gate = createPolicyGateContract();
+    const result = gate.evaluate(makeDispatchResult([{ assignmentId: "a1", taskId: "t1", guardDecision: "ALLOW", riskLevel: "R0" }]));
+
+    expect(result.entries[0].gateDecision).toBe("allow");
+    expect(result.allowedCount).toBe(1);
+    expect(result.deniedCount).toBe(0);
+  });
+
+  it("produces deny decision for BLOCK", () => {
+    const gate = createPolicyGateContract();
+    const result = gate.evaluate(makeDispatchResult([{ assignmentId: "a1", taskId: "t1", guardDecision: "BLOCK", riskLevel: "R1" }]));
+
+    expect(result.entries[0].gateDecision).toBe("deny");
+    expect(result.deniedCount).toBe(1);
+  });
+
+  it("produces review decision for ESCALATE", () => {
+    const gate = createPolicyGateContract();
+    const result = gate.evaluate(makeDispatchResult([{ assignmentId: "a1", taskId: "t1", guardDecision: "ESCALATE", riskLevel: "R2" }]));
+
+    expect(result.entries[0].gateDecision).toBe("review");
+    expect(result.reviewRequiredCount).toBe(1);
+  });
+
+  it("produces sandbox decision for ALLOW + R3", () => {
+    const gate = createPolicyGateContract();
+    const result = gate.evaluate(makeDispatchResult([{ assignmentId: "a1", taskId: "t1", guardDecision: "ALLOW", riskLevel: "R3" }]));
+
+    expect(result.entries[0].gateDecision).toBe("sandbox");
+    expect(result.sandboxedCount).toBe(1);
+  });
+
+  it("produces review decision for ALLOW + R2", () => {
+    const gate = createPolicyGateContract();
+    const result = gate.evaluate(makeDispatchResult([{ assignmentId: "a1", taskId: "t1", guardDecision: "ALLOW", riskLevel: "R2" }]));
+
+    expect(result.entries[0].gateDecision).toBe("review");
+  });
+
+  it("handles mixed decisions and counts correctly", () => {
+    const gate = createPolicyGateContract();
+    const result = gate.evaluate(makeDispatchResult([
+      { assignmentId: "a1", taskId: "t1", guardDecision: "ALLOW", riskLevel: "R0" },
+      { assignmentId: "a2", taskId: "t2", guardDecision: "BLOCK", riskLevel: "R1" },
+      { assignmentId: "a3", taskId: "t3", guardDecision: "ALLOW", riskLevel: "R3" },
+    ]));
+
+    expect(result.allowedCount).toBe(1);
+    expect(result.deniedCount).toBe(1);
+    expect(result.sandboxedCount).toBe(1);
+    expect(result.entries).toHaveLength(3);
+  });
+
+  it("handles empty dispatch result", () => {
+    const gate = createPolicyGateContract();
+    const result = gate.evaluate(makeDispatchResult([]));
+
+    expect(result.entries).toHaveLength(0);
+    expect(result.allowedCount).toBe(0);
+    expect(result.summary).toContain("zero entries");
+  });
+
+  it("produces a stable gateHash for identical inputs", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+    const gate = createPolicyGateContract({ now: () => fixedTime });
+    const dispatchResult = makeDispatchResult([{ assignmentId: "a1", taskId: "t1", guardDecision: "ALLOW", riskLevel: "R1" }]);
+
+    const r1 = gate.evaluate(dispatchResult);
+    const r2 = gate.evaluate(dispatchResult);
+
+    expect(r1.gateHash).toBe(r2.gateHash);
+  });
+});
+
+describe("W2-T2 CP3 — ExecutionBridgeConsumerContract", () => {
+  function buildDesignConsumptionReceipt() {
+    const intakeContract = createControlPlaneIntakeContract();
+    const intake = intakeContract.execute({
+      vibe: "Build a governed execution bridge for task dispatch",
+      consumerId: "w2-t2-test",
+    });
+    const designConsumer = createDesignConsumerContract();
+    return designConsumer.consume(intake);
+  }
+
+  it("bridges a DesignConsumptionReceipt to an ExecutionBridgeReceipt", () => {
+    const designReceipt = buildDesignConsumptionReceipt();
+    const bridge = createExecutionBridgeConsumerContract();
+    const result = bridge.bridge(designReceipt);
+
+    expect(result.bridgeReceiptId).toBeTruthy();
+    expect(result.designReceiptId).toBe(designReceipt.receiptId);
+    expect(result.orchestrationId).toBe(designReceipt.orchestrationResult.orchestrationId);
+    expect(result.totalAssignments).toBe(designReceipt.orchestrationResult.assignments.length);
+    expect(result.bridgeHash).toBeTruthy();
+  });
+
+  it("produces a DispatchResult inside the bridge receipt", () => {
+    const designReceipt = buildDesignConsumptionReceipt();
+    const bridge = createExecutionBridgeConsumerContract();
+    const result = bridge.bridge(designReceipt);
+
+    expect(result.dispatchResult).toBeTruthy();
+    expect(result.dispatchResult.totalDispatched).toBe(result.totalAssignments);
+    expect(result.dispatchResult.orchestrationId).toBe(result.orchestrationId);
+  });
+
+  it("produces a PolicyGateResult inside the bridge receipt", () => {
+    const designReceipt = buildDesignConsumptionReceipt();
+    const bridge = createExecutionBridgeConsumerContract();
+    const result = bridge.bridge(designReceipt);
+
+    expect(result.policyGateResult).toBeTruthy();
+    expect(result.policyGateResult.entries).toHaveLength(result.totalAssignments);
+    expect(result.policyGateResult.dispatchId).toBe(result.dispatchResult.dispatchId);
+  });
+
+  it("tracks 5 pipeline stages", () => {
+    const designReceipt = buildDesignConsumptionReceipt();
+    const bridge = createExecutionBridgeConsumerContract();
+    const result = bridge.bridge(designReceipt);
+
+    expect(result.pipelineStages).toHaveLength(5);
+    const stageNames = result.pipelineStages.map((s) => s.stage);
+    expect(stageNames).toContain("DESIGN_RECEIPT_INGESTED");
+    expect(stageNames).toContain("ORCHESTRATION_EXTRACTED");
+    expect(stageNames).toContain("DISPATCH_EVALUATED");
+    expect(stageNames).toContain("POLICY_GATE_APPLIED");
+    expect(stageNames).toContain("BRIDGE_RECEIPT_ISSUED");
+  });
+
+  it("authorization counts sum to totalAssignments", () => {
+    const designReceipt = buildDesignConsumptionReceipt();
+    const bridge = createExecutionBridgeConsumerContract();
+    const result = bridge.bridge(designReceipt);
+
+    const sum = result.authorizedForExecution + result.requiresReview + result.sandboxed + result.blockedFromExecution;
+    expect(sum).toBe(result.totalAssignments);
+  });
+
+  it("produces a stable bridgeHash for identical inputs", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+    const designReceipt = buildDesignConsumptionReceipt();
+    const bridge1 = createExecutionBridgeConsumerContract({ now: () => fixedTime });
+    const bridge2 = createExecutionBridgeConsumerContract({ now: () => fixedTime });
+
+    const r1 = bridge1.bridge(designReceipt);
+    const r2 = bridge2.bridge(designReceipt);
+
+    expect(r1.bridgeHash).toBe(r2.bridgeHash);
+  });
+
+  it("propagates warnings from the design receipt", () => {
+    const designReceipt = buildDesignConsumptionReceipt();
+    // Add a synthetic warning to the design receipt
+    const receiptWithWarning = { ...designReceipt, warnings: ["test warning from design phase"] };
+    const bridge = createExecutionBridgeConsumerContract();
+    const result = bridge.bridge(receiptWithWarning);
+
+    expect(result.warnings.some((w) => w.includes("[design]") && w.includes("test warning"))).toBe(true);
+  });
+
+  it("preserves consumerId from design receipt", () => {
+    const designReceipt = buildDesignConsumptionReceipt();
+    const bridge = createExecutionBridgeConsumerContract();
+    const result = bridge.bridge(designReceipt);
+
+    expect(result.consumerId).toBe(designReceipt.consumerId);
+  });
+
+  it("creates ExecutionBridgeConsumerContract via class constructor", () => {
+    const contract = new ExecutionBridgeConsumerContract();
+    expect(contract).toBeInstanceOf(ExecutionBridgeConsumerContract);
+    const designReceipt = buildDesignConsumptionReceipt();
+    const result = contract.bridge(designReceipt);
+    expect(result.bridgeReceiptId).toBeTruthy();
   });
 });

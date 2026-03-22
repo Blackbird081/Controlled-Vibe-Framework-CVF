@@ -81,6 +81,7 @@ Current authorization state:
 - `W1-T3 / CP3` is now implemented as an orchestration contract
 - `W1-T3 / CP4` is now implemented as a design consumer path proof
 - `W1-T3 / CP5` tranche closure review is executed and closes the usable design/orchestration slice tranche
+- `W2-T2` is now authorized and canonically closed as a bounded execution dispatch bridge tranche
 - `W4` and `W5` remain gated
 
 Nothing beyond `W0` in this roadmap may execute until:
@@ -382,6 +383,43 @@ Current authorized scope:
 - reconciliation delta:
   - `docs/baselines/CVF_W1_T3_CANONICAL_RECONCILIATION_DELTA_2026-03-22.md`
 - `W1-T3` is now canonically closed through `CP5` with `CP1` + `CP2` + `CP3` + `CP4` implemented
+- next authorized tranche:
+  - `W2-T2 — Execution Dispatch Bridge`
+- continuation candidate:
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T2_2026-03-22.md`
+- tranche packet:
+  - `docs/reviews/CVF_W2_T2_EXECUTION_DISPATCH_BRIDGE_TRANCHE_PACKET_2026-03-22.md`
+- tranche-local execution plan:
+  - `docs/roadmaps/CVF_W2_T2_EXECUTION_DISPATCH_BRIDGE_EXECUTION_PLAN_2026-03-22.md`
+- authorization delta:
+  - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T2_AUTHORIZATION_DELTA_2026-03-22.md`
+- first structural packet:
+  - `docs/audits/CVF_W2_T2_CP1_DISPATCH_CONTRACT_AUDIT_2026-03-22.md`
+- first independent review:
+  - `docs/reviews/CVF_GC019_W2_T2_CP1_DISPATCH_CONTRACT_REVIEW_2026-03-22.md`
+- first implementation delta:
+  - `docs/baselines/CVF_W2_T2_CP1_DISPATCH_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+- second structural packet:
+  - `docs/audits/CVF_W2_T2_CP2_POLICY_GATE_CONTRACT_AUDIT_2026-03-22.md`
+- second independent review:
+  - `docs/reviews/CVF_GC019_W2_T2_CP2_POLICY_GATE_CONTRACT_REVIEW_2026-03-22.md`
+- second implementation delta:
+  - `docs/baselines/CVF_W2_T2_CP2_POLICY_GATE_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+- third structural packet:
+  - `docs/audits/CVF_W2_T2_CP3_EXECUTION_BRIDGE_CONSUMER_AUDIT_2026-03-22.md`
+- third independent review:
+  - `docs/reviews/CVF_GC019_W2_T2_CP3_EXECUTION_BRIDGE_CONSUMER_REVIEW_2026-03-22.md`
+- third implementation delta:
+  - `docs/baselines/CVF_W2_T2_CP3_EXECUTION_BRIDGE_CONSUMER_IMPLEMENTATION_DELTA_2026-03-22.md`
+- fourth closure packet:
+  - `docs/audits/CVF_W2_T2_CP4_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
+- fourth independent review:
+  - `docs/reviews/CVF_GC019_W2_T2_CP4_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+- fourth closure delta:
+  - `docs/baselines/CVF_W2_T2_CP4_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+- canonical tranche closure review:
+  - `docs/reviews/CVF_W2_T2_EXECUTION_DISPATCH_BRIDGE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+- `W2-T2` is now canonically closed through `CP4` with `CP1` + `CP2` + `CP3` implemented; full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE cross-plane path delivered
 
 ### Phase W2 — Execution Plane
 
@@ -516,4 +554,4 @@ This roadmap means:
 ## Final Readout
 
 > **Governed successor roadmap** — correct direction for completing the whitepaper target-state.
-> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, `W1-T2` is now canonically closed through `CP5` with one usable intake slice delivered, `W1-T3` is now canonically closed through `CP5` with one bounded design/orchestration slice delivered, and `W4-W5` remain gated.
+> **Updated readout:** `W0` is complete, `W1-T1` is closed through `CP5`, `W2-T1` is canonically closed through `CP5`, `W3-T1` is canonically closed for operational governance expansion with explicit defer of concept-only targets, `W1-T2` is now canonically closed through `CP5` with one usable intake slice delivered, `W1-T3` is now canonically closed through `CP5` with one bounded design/orchestration slice delivered, `W2-T2` is now canonically closed through `CP4` with one bounded execution dispatch bridge delivered (full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE cross-plane path proven), and `W4-W5` remain gated.

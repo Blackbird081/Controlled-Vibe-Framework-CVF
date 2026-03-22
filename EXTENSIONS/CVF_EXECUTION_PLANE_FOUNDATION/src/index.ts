@@ -1,3 +1,34 @@
+// W2-T2 — Execution Dispatch Bridge (CP1–CP3)
+export {
+  DispatchContract,
+  createDispatchContract,
+} from "./dispatch.contract";
+export type {
+  DispatchEntry,
+  DispatchResult,
+  DispatchContractDependencies,
+} from "./dispatch.contract";
+export {
+  PolicyGateContract,
+  createPolicyGateContract,
+} from "./policy.gate.contract";
+export type {
+  PolicyGateDecision,
+  PolicyGateEntry,
+  PolicyGateResult,
+  PolicyGateContractDependencies,
+} from "./policy.gate.contract";
+export {
+  ExecutionBridgeConsumerContract,
+  createExecutionBridgeConsumerContract,
+} from "./execution.bridge.consumer.contract";
+export type {
+  ExecutionBridgePipelineStage,
+  ExecutionBridgePipelineStageEntry,
+  ExecutionBridgeReceipt,
+  ExecutionBridgeConsumerContractDependencies,
+} from "./execution.bridge.consumer.contract";
+
 export type {
   LLMRequest,
   LLMUsage,

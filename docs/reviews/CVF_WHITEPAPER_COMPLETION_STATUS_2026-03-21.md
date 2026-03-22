@@ -54,6 +54,7 @@ This is the correct interpretation because the whitepaper is explicitly marked a
 | `W1-T4` control-plane AI gateway slice tranche | authorized and now canonically closed through `CP3`; `CP1` AI gateway contract, `CP2` gateway consumer contract, and `CP3` tranche closure review are all implemented; EXTERNAL SIGNAL→GATEWAY→INTAKE consumer path delivered; 157 passing tests | `DONE FOR CURRENT TRANCHE` |
 | `W1-T5` AI boardroom reverse prompting tranche | authorized and now canonically closed through `CP3`; `CP1` reverse prompting contract, `CP2` clarification refinement contract, and `CP3` tranche closure review are all implemented; ControlPlaneIntakeResult→ReversePromptPacket→RefinedIntakeRequest consumer path delivered; 174 passing tests | `DONE FOR CURRENT TRANCHE` |
 | `W2-T4` execution observer slice tranche | authorized and now canonically closed through `CP3`; `CP1` execution observer contract, `CP2` execution feedback contract, and `CP3` tranche closure review are all implemented; ExecutionPipelineReceipt→ExecutionObservation→ExecutionFeedbackSignal consumer path delivered; W4 learning-plane prerequisite established; 195 passing tests | `DONE FOR CURRENT TRANCHE` |
+| `W4-T1` learning plane foundation slice tranche | authorized and now canonically closed through `CP3`; `CP1` feedback ledger contract, `CP2` pattern detection contract, and `CP3` tranche closure review are all implemented; LearningFeedbackInput[]→FeedbackLedger→PatternInsight consumer path delivered; W4 gate opened; cross-plane independence confirmed; 214 passing tests | `DONE FOR CURRENT TRANCHE` |
 | Control-plane `AI Gateway` target-state | one bounded usable slice delivered through `W1-T4`; HTTP routing, multi-tenant auth, and NLP-based PII detection remain deferred | `PARTIAL` |
 | Unified `Knowledge Layer` target-state | partial ecosystem pieces exist, target-state not delivered | `PARTIAL` |
 | `Context Builder & Packager` target-state | partial ingredients exist, target-state not delivered | `PARTIAL` |
@@ -63,7 +64,8 @@ This is the correct interpretation because the whitepaper is explicitly marked a
 | Governance `CVF Watchdog` target-state | concept-only target explicitly deferred in `W3-T1`; not implemented as a standalone module | `DEFERRED / NOT IMPLEMENTED AS MODULE` |
 | Execution `Command Runtime` target-state | one bounded usable slice delivered through `W2-T3`; async adapter invocation, streaming, and multi-agent execution remain deferred | `PARTIAL` |
 | Execution `MCP Bridge` target-state | partial ingredients exist, target-state not delivered | `PARTIAL` |
-| Learning-plane `Truth Model / Evaluation Engine / feedback loop` | conceptual direction only | `NOT STARTED / NOT AUTHORIZED` |
+| Learning-plane `FeedbackLedger / PatternInsight` foundation | first usable slice delivered through `W4-T1`; `LearningFeedbackInput[] → FeedbackLedger → PatternInsight` consumer path delivered; persistent storage, truth model update loops, evaluation engine remain deferred | `PARTIAL` |
+| Learning-plane `Truth Model / Evaluation Engine / feedback loop` | conceptual direction only; foundation slice delivered through W4-T1 opens the path | `PARTIAL / FUTURE W4 TRANCHES` |
 | Learning observability target-state | partial foundations exist, target-state not delivered | `PARTIAL` |
 | UX / non-coder governed path strength | active-path strong | `DONE ON ACTIVE PATH` |
 
@@ -88,6 +90,7 @@ The following is complete and can be treated as the current post-restructuring b
 - closed realization-first tranche `W1-T4` for one usable AI gateway slice (EXTERNAL SIGNAL→GATEWAY→INTAKE path now governed; only remaining NOT STARTED control-plane module addressed)
 - closed realization-first tranche `W1-T5` for one usable AI Boardroom Reverse Prompting slice (ControlPlaneIntakeResult→ReversePromptPacket→RefinedIntakeRequest; first question-generating contract in the control plane)
 - closed realization-first tranche `W2-T4` for one usable Execution Observer slice (ExecutionPipelineReceipt→ExecutionObservation→ExecutionFeedbackSignal; first observation/feedback layer; W4 learning-plane prerequisite established)
+- closed realization-first tranche `W4-T1` for the Learning Plane Foundation (LearningFeedbackInput[]→FeedbackLedger→PatternInsight; first learning-plane package with two governed contracts; W4 gate opened; full architecture loop now provable end-to-end)
 
 Canonical closure packet:
 
@@ -102,6 +105,7 @@ Canonical closure packet:
 - `docs/reviews/CVF_W1_T4_AI_GATEWAY_SLICE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `docs/reviews/CVF_W1_T5_REVERSE_PROMPTING_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `docs/reviews/CVF_W2_T4_EXECUTION_OBSERVER_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
+- `docs/reviews/CVF_W4_T1_LEARNING_PLANE_FOUNDATION_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 
 ---
 
@@ -139,7 +143,8 @@ That move is now partially executed and then clarified further:
 - `W1-T2` is now authorized as that next usable intake slice
 - the tranche-local execution plan for `W1-T2` is now closed through `CP5` with `CP1` + `CP2` + `CP3` + `CP4` implemented as bounded usable-intake, unified-retrieval, deterministic-packaging, and real-consumer-path contract baselines
 - `W1-T3` is now authorized and canonically closed as the next realization-first control-plane tranche with `CP1` + `CP2` + `CP3` + `CP4` implemented as bounded design, boardroom, orchestration, and consumer-proof contracts
-- `W4` and `W5` remain gated because the larger learning-plane and final whitepaper closure scopes still require explicit governed authorization and stronger prerequisites
+- `W4-T1` is now authorized and canonically closed as the first learning-plane tranche; W4 gate opened
+- `W5` remains gated because the final whitepaper closure scope still requires explicit governed authorization and complete lower-plane maturity
 
 Canonical scope-clarification anchor:
 
@@ -149,4 +154,4 @@ Canonical scope-clarification anchor:
 
 ## Final Verdict
 
-> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** - current-cycle restructuring is complete, `W1-T1`, `W2-T1`, `W3-T1`, `W1-T2`, `W1-T3`, `W2-T2`, `W2-T3`, `W1-T4`, and `W1-T5` are now canonically closed for their approved tranche boundaries, `W1-T2` delivered one usable intake slice, `W1-T3` delivered one bounded design/orchestration slice, `W2-T2` delivered one bounded execution dispatch bridge closing the Scope Clarification Packet Priority 3 (full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE cross-plane path; 121 tests passing), `W2-T3` delivered one bounded execution command runtime (full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE→EXECUTION cross-plane path now provable; 140 tests passing), `W1-T4` delivered one bounded AI gateway slice (EXTERNAL SIGNAL→GATEWAY→INTAKE path governed; the only NOT STARTED control-plane module is now PARTIAL; 157 tests passing), `W1-T5` delivered one bounded AI Boardroom Reverse Prompting slice (ControlPlaneIntakeResult→ReversePromptPacket→RefinedIntakeRequest; first question-generating contract in control plane; 174 tests passing), `W2-T4` delivered one bounded Execution Observer slice (ExecutionPipelineReceipt→ExecutionObservation→ExecutionFeedbackSignal; first observation/feedback layer in execution plane; W4 prerequisite established; 195 tests passing), concept-only governance targets such as `Watchdog` remain deferred, and the full whitepaper target-state still requires later governed waves.
+> **PARTIAL AGAINST WHITEPAPER TARGET-STATE** - current-cycle restructuring is complete, `W1-T1`, `W2-T1`, `W3-T1`, `W1-T2`, `W1-T3`, `W2-T2`, `W2-T3`, `W1-T4`, `W1-T5`, `W2-T4`, and `W4-T1` are now canonically closed for their approved tranche boundaries, `W1-T2` delivered one usable intake slice, `W1-T3` delivered one bounded design/orchestration slice, `W2-T2` delivered one bounded execution dispatch bridge closing the Scope Clarification Packet Priority 3 (full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE cross-plane path; 121 tests passing), `W2-T3` delivered one bounded execution command runtime (full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE→EXECUTION cross-plane path now provable; 140 tests passing), `W1-T4` delivered one bounded AI gateway slice (EXTERNAL SIGNAL→GATEWAY→INTAKE path governed; the only NOT STARTED control-plane module is now PARTIAL; 157 tests passing), `W1-T5` delivered one bounded AI Boardroom Reverse Prompting slice (ControlPlaneIntakeResult→ReversePromptPacket→RefinedIntakeRequest; first question-generating contract in control plane; 174 tests passing), `W2-T4` delivered one bounded Execution Observer slice (ExecutionPipelineReceipt→ExecutionObservation→ExecutionFeedbackSignal; first observation/feedback layer in execution plane; W4 prerequisite established; 195 tests passing), `W4-T1` delivered the Learning Plane Foundation (LearningFeedbackInput[]→FeedbackLedger→PatternInsight; first learning-plane package with two governed contracts; W4 gate opened; full architecture loop EXTERNAL SIGNAL→GATEWAY→INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE→EXECUTION→OBSERVATION→FEEDBACK→LEARNING→PATTERN INSIGHT now provable; 214 tests passing), concept-only governance targets such as `Watchdog` remain deferred, and the full whitepaper target-state still requires later governed waves.

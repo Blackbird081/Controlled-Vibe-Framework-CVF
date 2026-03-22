@@ -129,9 +129,10 @@ Current enforcement posture:
 
 - mandatory by policy
 - reviewable by repo artifacts and conversation truth
-- not yet machine-enforced as a dedicated compat gate
+- machine-enforced at repo level by `governance/compat/check_agent_handoff_guard_compat.py`
+- partially surfaced at runtime through active helper/orchestrator pause and approval-required handoff checkpoints
 
-Until automation exists, reviewers and workers should treat missing handoff state as a governance quality defect.
+Until universal session/runtime interception exists, reviewers and workers should still treat missing handoff state as a governance quality defect.
 
 ---
 
@@ -141,5 +142,7 @@ Until automation exists, reviewers and workers should treat missing handoff stat
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-handoff.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
 - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
 - `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`

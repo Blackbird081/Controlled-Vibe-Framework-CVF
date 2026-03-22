@@ -44,6 +44,25 @@ export type GuardDecision = 'ALLOW' | 'BLOCK' | 'ESCALATE';
 
 export type GuardSeverity = 'INFO' | 'WARN' | 'ERROR' | 'CRITICAL';
 
+export type HandoffTransitionKind =
+  | 'CONTINUE'
+  | 'BREAK'
+  | 'PAUSE'
+  | 'SHIFT_HANDOFF'
+  | 'AGENT_TRANSFER'
+  | 'ESCALATION_HANDOFF'
+  | 'CLOSURE';
+
+export type HandoffNextOwnerType = 'HUMAN' | 'AGENT' | 'REVIEWER';
+
+export type HandoffCheckpointStatus = 'OPEN' | 'RESOLVED';
+
+export type HandoffCheckpointResolution =
+  | 'RESUMED'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'CANCELLED';
+
 // ─── Core Interfaces ──────────────────────────────────────────────────
 
 /**
@@ -112,6 +131,33 @@ export interface GuardPipelineResult {
   escalatedBy?: string;
   /** Aggregated agent guidance from all guards */
   agentGuidance?: string;
+}
+
+export interface HandoffTransitionContext {
+  workActuallyClosed?: boolean;
+  sameWorkerContinuesImmediately?: boolean;
+  sameWorkerWillResumeLater?: boolean;
+  ownershipChanges?: boolean;
+  nextOwnerType?: HandoffNextOwnerType;
+  approvalOrDecisionPending?: boolean;
+  meaningfulStatePresent?: boolean;
+}
+
+export interface HandoffCheckpoint {
+  id: string;
+  transition: HandoffTransitionKind;
+  formalHandoffRequired: boolean;
+  reason: string;
+  createdAt: string;
+  currentOwnerId?: string;
+  nextOwnerId?: string;
+  nextOwnerType?: HandoffNextOwnerType;
+  nextGovernedMove?: string;
+  scopeHint?: string;
+  status: HandoffCheckpointStatus;
+  resolvedAt?: string;
+  resolution?: HandoffCheckpointResolution;
+  metadata?: Record<string, unknown>;
 }
 
 /**

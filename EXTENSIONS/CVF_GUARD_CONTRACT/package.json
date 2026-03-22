@@ -10,7 +10,8 @@
     "./types": "./src/types.ts",
     "./engine": "./src/engine.ts",
     "./enterprise": "./src/enterprise/enterprise.ts",
-    "./guards/*": "./src/guards/*.ts"
+    "./guards/*": "./src/guards/*.ts",
+    "./runtime/*": "./src/runtime/*.ts"
   },
   "scripts": {
     "test": "vitest run",

@@ -191,10 +191,23 @@ Decision boundary now active for this roadmap:
 - `P3` is explicitly `DEFERRED` until a later reassessment proves a new breadth candidate crosses the continue threshold; the current scored packet is recorded in `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md`
 - this register must be refreshed before any future attempt to reopen breadth expansion on this roadmap
 
+### Candidate P4 — GC-020 runtime handoff enforcement
+
+Depth Audit
+- Risk reduction: `2`
+- Decision value: `2`
+- Machine enforceability: `2`
+- Operational efficiency: `1`
+- Portfolio priority: `1`
+- Total: `8`
+- Decision: `COMPLETED`
+- Reason: executed on `2026-03-22`; this narrow continuation deepens machine-enforceability on the active governed runtime path by surfacing formal handoff checkpoints for pause and approval-required escalation, without reopening breadth expansion or changing active-wave closure truth.
+
 Current post-standard continuation readout:
 
 - latest active-path hardening work improved execution credibility and restored a passing `cvf-web` production build
 - despite that improvement, the register still does **not** justify reopening `P3`
+- the newest active-path continuation is a narrow `GC-020` enforcement hardening step, not a breadth-expansion reopen
 - the next justified move after this checkpoint is another reassessment or a newly scored continuation candidate, not breadth expansion by habit
 
 Automation status:

@@ -53,6 +53,10 @@ export {
   type PipelineArtifactType,
   type PipelineApprovalCheckpoint,
   type PipelineApprovalStatus,
+  type PipelineHandoffCheckpoint,
+  type PipelineHandoffResolution,
+  type PipelineHandoffStatus,
+  type PipelineHandoffTransition,
 } from './pipeline.orchestrator.js';
 
 // Conformance (Phase B.1)

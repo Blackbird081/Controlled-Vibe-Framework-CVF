@@ -36,13 +36,46 @@ export type PipelineStatus =
   | 'FAILED';
 
 export interface PipelineEvent {
-  type: 'PHASE_ENTER' | 'PHASE_EXIT' | 'GATE_CHECK' | 'ROLLBACK' | 'PAUSE' | 'RESUME' | 'COMPLETE' | 'FAIL' | 'ARTIFACT_RECORDED' | 'APPROVAL_REQUESTED' | 'APPROVAL_APPROVED' | 'APPROVAL_REJECTED';
+  type: 'PHASE_ENTER' | 'PHASE_EXIT' | 'GATE_CHECK' | 'ROLLBACK' | 'PAUSE' | 'RESUME' | 'COMPLETE' | 'FAIL' | 'ARTIFACT_RECORDED' | 'APPROVAL_REQUESTED' | 'APPROVAL_APPROVED' | 'APPROVAL_REJECTED' | 'HANDOFF_REQUIRED';
   pipelineId: string;
   phase?: CVFPhase;
   previousPhase?: PipelineStatus;
   timestamp: string;
   details?: string;
   guardResult?: GuardPipelineResult;
+}
+
+export type PipelineHandoffTransition =
+  | 'CONTINUE'
+  | 'BREAK'
+  | 'PAUSE'
+  | 'SHIFT_HANDOFF'
+  | 'AGENT_TRANSFER'
+  | 'ESCALATION_HANDOFF'
+  | 'CLOSURE';
+
+export type PipelineHandoffStatus = 'OPEN' | 'RESOLVED';
+
+export type PipelineHandoffResolution =
+  | 'RESUMED'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'CANCELLED';
+
+export interface PipelineHandoffCheckpoint {
+  id: string;
+  transition: PipelineHandoffTransition;
+  formalHandoffRequired: boolean;
+  reason: string;
+  createdAt: string;
+  currentStatus: PipelineStatus;
+  nextOwnerId?: string;
+  nextOwnerType?: 'HUMAN' | 'AGENT' | 'REVIEWER';
+  nextGovernedMove?: string;
+  status: PipelineHandoffStatus;
+  resolvedAt?: string;
+  resolution?: PipelineHandoffResolution;
+  metadata?: Record<string, unknown>;
 }
 
 export type PipelineArtifactType = 'INTENT' | 'PLAN' | 'EXECUTION' | 'REVIEW' | 'FREEZE';
@@ -83,6 +116,7 @@ export interface PipelineInstance {
   gateResults: Map<string, GuardPipelineResult>;
   artifacts: PipelineArtifact[];
   approvals: PipelineApprovalCheckpoint[];
+  handoffCheckpoints: PipelineHandoffCheckpoint[];
   metadata?: Record<string, unknown>;
 }
 
@@ -144,6 +178,7 @@ export class PipelineOrchestrator {
         },
       ],
       approvals: [],
+      handoffCheckpoints: [],
       metadata: config.metadata,
     };
 
@@ -311,7 +346,16 @@ export class PipelineOrchestrator {
 
   // --- Pause / Resume ---
 
-  pause(pipelineId: string): boolean {
+  pause(
+    pipelineId: string,
+    config?: {
+      transition?: Extract<PipelineHandoffTransition, 'PAUSE' | 'SHIFT_HANDOFF' | 'AGENT_TRANSFER'>;
+      reason?: string;
+      nextOwnerId?: string;
+      nextOwnerType?: 'HUMAN' | 'AGENT';
+      nextGovernedMove?: string;
+    },
+  ): boolean {
     const pipeline = this.getPipeline(pipelineId);
     if (!pipeline) return false;
     if (pipeline.status === 'COMPLETED' || pipeline.status === 'ROLLED_BACK' || pipeline.status === 'PAUSED' || pipeline.status === 'FAILED') {
@@ -321,13 +365,34 @@ export class PipelineOrchestrator {
     const savedStatus = pipeline.status;
     pipeline.status = 'PAUSED';
     pipeline.updatedAt = new Date().toISOString();
-    pipeline.metadata = { ...pipeline.metadata, pausedFrom: savedStatus };
+    const handoff = this.createHandoffCheckpoint(pipeline, {
+      transition: config?.transition ?? 'PAUSE',
+      reason: config?.reason ?? `Pipeline paused from ${savedStatus}.`,
+      currentStatus: savedStatus,
+      nextOwnerId: config?.nextOwnerId,
+      nextOwnerType: config?.nextOwnerType,
+      nextGovernedMove: config?.nextGovernedMove ?? 'Resume the paused governed pipeline before advancing phases.',
+      metadata: {
+        pausedFrom: savedStatus,
+      },
+    });
+    pipeline.handoffCheckpoints.push(handoff);
+    pipeline.metadata = { ...pipeline.metadata, pausedFrom: savedStatus, pausedHandoffId: handoff.id };
 
     this.emitEvent({
       type: 'PAUSE',
       pipelineId,
       previousPhase: savedStatus,
       timestamp: pipeline.updatedAt,
+      details: `${handoff.transition}:${handoff.id}`,
+    });
+
+    this.emitEvent({
+      type: 'HANDOFF_REQUIRED',
+      pipelineId,
+      previousPhase: savedStatus,
+      timestamp: pipeline.updatedAt,
+      details: `${handoff.transition}:${handoff.reason}`,
     });
 
     return true;
@@ -343,7 +408,12 @@ export class PipelineOrchestrator {
 
     pipeline.status = resumeTo;
     pipeline.updatedAt = new Date().toISOString();
+    const pausedHandoffId = pipeline.metadata?.['pausedHandoffId'] as string | undefined;
     delete pipeline.metadata?.['pausedFrom'];
+    delete pipeline.metadata?.['pausedHandoffId'];
+    if (pausedHandoffId) {
+      this.resolveHandoffCheckpoint(pipeline, pausedHandoffId, 'RESUMED');
+    }
 
     this.emitEvent({
       type: 'RESUME',
@@ -450,6 +520,18 @@ export class PipelineOrchestrator {
       requestedAt,
     };
     pipeline.approvals.push(approval);
+    const handoff = this.createHandoffCheckpoint(pipeline, {
+      transition: 'ESCALATION_HANDOFF',
+      reason: config.reason,
+      currentStatus: pipeline.status,
+      nextOwnerType: 'REVIEWER',
+      nextGovernedMove: `Review approval checkpoint ${approval.id} before phase ${config.phase} may continue.`,
+      metadata: {
+        approvalId: approval.id,
+        approvalPhase: config.phase,
+      },
+    });
+    pipeline.handoffCheckpoints.push(handoff);
     pipeline.updatedAt = requestedAt;
 
     this.emitEvent({
@@ -458,6 +540,14 @@ export class PipelineOrchestrator {
       phase: config.phase,
       timestamp: requestedAt,
       details: config.reason,
+    });
+
+    this.emitEvent({
+      type: 'HANDOFF_REQUIRED',
+      pipelineId,
+      phase: config.phase,
+      timestamp: requestedAt,
+      details: `${handoff.transition}:${config.reason}`,
     });
 
     return approval;
@@ -480,6 +570,7 @@ export class PipelineOrchestrator {
     approval.comment = reviewer.comment;
     approval.reviewedAt = new Date().toISOString();
     pipeline.updatedAt = approval.reviewedAt;
+    this.resolveApprovalHandoff(pipeline, approval.id, 'APPROVED');
 
     this.emitEvent({
       type: 'APPROVAL_APPROVED',
@@ -509,6 +600,7 @@ export class PipelineOrchestrator {
     approval.comment = reviewer.comment;
     approval.reviewedAt = new Date().toISOString();
     pipeline.updatedAt = approval.reviewedAt;
+    this.resolveApprovalHandoff(pipeline, approval.id, 'REJECTED');
 
     this.emitEvent({
       type: 'APPROVAL_REJECTED',
@@ -525,6 +617,12 @@ export class PipelineOrchestrator {
     const pipeline = this.getPipeline(pipelineId);
     if (!pipeline) return [];
     return pipeline.approvals.filter((entry) => entry.status === 'PENDING');
+  }
+
+  getPendingHandoffs(pipelineId: string): PipelineHandoffCheckpoint[] {
+    const pipeline = this.getPipeline(pipelineId);
+    if (!pipeline) return [];
+    return pipeline.handoffCheckpoints.filter((entry) => entry.status === 'OPEN');
   }
 
   // --- Events ---
@@ -620,6 +718,60 @@ export class PipelineOrchestrator {
       reason,
       requiredBy: 'RISK',
     })!;
+  }
+
+  private createHandoffCheckpoint(
+    pipeline: PipelineInstance,
+    config: {
+      transition: PipelineHandoffTransition;
+      reason: string;
+      currentStatus: PipelineStatus;
+      nextOwnerId?: string;
+      nextOwnerType?: 'HUMAN' | 'AGENT' | 'REVIEWER';
+      nextGovernedMove?: string;
+      metadata?: Record<string, unknown>;
+    },
+  ): PipelineHandoffCheckpoint {
+    return {
+      id: `${pipeline.id}-handoff-${config.transition.toLowerCase()}-${pipeline.handoffCheckpoints.length + 1}`,
+      transition: config.transition,
+      formalHandoffRequired: config.transition === 'PAUSE' || config.transition === 'SHIFT_HANDOFF' || config.transition === 'AGENT_TRANSFER' || config.transition === 'ESCALATION_HANDOFF',
+      reason: config.reason,
+      createdAt: new Date().toISOString(),
+      currentStatus: config.currentStatus,
+      nextOwnerId: config.nextOwnerId,
+      nextOwnerType: config.nextOwnerType,
+      nextGovernedMove: config.nextGovernedMove,
+      status: 'OPEN',
+      metadata: config.metadata,
+    };
+  }
+
+  private resolveHandoffCheckpoint(
+    pipeline: PipelineInstance,
+    checkpointId: string,
+    resolution: PipelineHandoffResolution,
+  ): void {
+    const checkpoint = pipeline.handoffCheckpoints.find((entry) => entry.id === checkpointId);
+    if (!checkpoint || checkpoint.status !== 'OPEN') return;
+    checkpoint.status = 'RESOLVED';
+    checkpoint.resolution = resolution;
+    checkpoint.resolvedAt = new Date().toISOString();
+  }
+
+  private resolveApprovalHandoff(
+    pipeline: PipelineInstance,
+    approvalId: string,
+    resolution: Extract<PipelineHandoffResolution, 'APPROVED' | 'REJECTED'>,
+  ): void {
+    const checkpoint = pipeline.handoffCheckpoints.find((entry) =>
+      entry.status === 'OPEN' &&
+      entry.transition === 'ESCALATION_HANDOFF' &&
+      entry.metadata?.['approvalId'] === approvalId);
+    if (!checkpoint) return;
+    checkpoint.status = 'RESOLVED';
+    checkpoint.resolution = resolution;
+    checkpoint.resolvedAt = new Date().toISOString();
   }
 
   private getNextPhase(currentStatus: PipelineStatus): CVFPhase | null {

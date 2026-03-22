@@ -142,6 +142,20 @@ export type {
   RetrievalResultSurface,
   RetrievalContractDependencies,
 } from "./retrieval.contract";
+export {
+  PackagingContract,
+  createPackagingContract,
+  estimateTokenCount,
+  serializeChunks,
+  sortValue,
+} from "./packaging.contract";
+export type {
+  PackagingChunk,
+  PackagingRequest,
+  PackagingResultSurface,
+  PackagingContractDependencies,
+  FreezeReceipt,
+} from "./packaging.contract";
 
 import { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 import { RAGPipeline } from "../../CVF_ECO_v1.4_RAG_PIPELINE/src/rag.pipeline";

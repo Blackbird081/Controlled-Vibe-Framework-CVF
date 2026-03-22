@@ -14,7 +14,7 @@ import {
   createControlPlaneIntakeContract,
   createControlPlaneFoundationShell,
   createRetrievalContract,
-  packageIntakeContext,
+  createPackagingContract,
   type ControlPlaneFoundationShell,
   type ControlPlaneIntakeResult,
   type ValidatedIntent,
@@ -122,7 +122,17 @@ export class KnowledgeFacade {
    * longer invents its own hash formula.
    */
   packageContext(chunks: ContextChunk[], tokenBudget: number): PackagedContext {
-    return packageIntakeContext(chunks, tokenBudget);
+    const packagingContract = createPackagingContract({
+      context: this.shell.context,
+    });
+    const result = packagingContract.package({ chunks, tokenBudget });
+    return {
+      chunks: result.chunks,
+      totalTokens: result.totalTokens,
+      tokenBudget: result.tokenBudget,
+      truncated: result.truncated,
+      snapshotHash: result.snapshotHash,
+    };
   }
 
   /**

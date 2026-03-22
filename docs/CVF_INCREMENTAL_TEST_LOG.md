@@ -2384,3 +2384,34 @@ Utility and guard:
   - source lineage remains preserved; this batch extracts shared logic via delegation, not physical merge
   - retrieval is now independently callable, which is a genuine new consumer capability
   - later W1-T2 packets still need to prove deterministic packaging and one real downstream consumer path before the tranche can close
+
+### Batch: W1-T2 CP3 — Deterministic Context Packaging Contract (2026-03-22)
+
+- Scope: extract deterministic context packaging logic from `intake.contract.ts` into a standalone `PackagingContract` with optional `ContextFreezer` integration
+- Policy references: `GC-019` additive runtime integration
+- Authorization chain:
+  - `docs/audits/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_REVIEW_2026-03-22.md`
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/packaging.contract.ts` — standalone packaging contract with `PackagingContract` class, `createPackagingContract()` factory, optional `ContextFreezer` integration, and shared helpers (`estimateTokenCount`, `serializeChunks`, `sortValue`)
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/intake.contract.ts` — `execute()` delegates to `PackagingContract`; `packageIntakeContext()` preserved as backward-compatible wrapper; removed inline `estimateTokenCount`, `serializeChunks`, `sortValue`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` — added barrel exports for packaging contract types and helpers
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts` — added 15 new CP3 packaging contract tests
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/knowledge.facade.ts` — `packageContext()` now delegates to `createPackagingContract()` instead of `packageIntakeContext()`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test` -> PASS (38 tests: 8 CP1 + 15 CP2 + 15 new CP3)
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test:coverage` -> PASS (stmts 97.03%, branches 91.22%, funcs 90.9%; `packaging.contract.ts` at 100% stmts)
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test` -> PASS (8 tests)
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npm run test` -> PASS (94 tests)
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+- Notes/Risks:
+  - packaging is now independently callable as a governed contract, which is a genuine new consumer capability
+  - optional `ContextFreezer` integration adds snapshot freeze and drift detection support without breaking the non-freeze path
+  - `packageIntakeContext()` preserved as backward-compatible wrapper for existing callers
+  - source lineage remains preserved; extraction via delegation, not physical merge
+  - later W1-T2 packets still need to prove one real downstream consumer path before the tranche can close

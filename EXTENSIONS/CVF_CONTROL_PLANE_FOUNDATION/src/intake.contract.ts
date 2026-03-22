@@ -12,6 +12,10 @@ import {
   readStringFilter,
   type RetrievalChunk,
 } from "./retrieval.contract";
+import {
+  PackagingContract,
+  type PackagingChunk,
+} from "./packaging.contract";
 
 export interface ControlPlaneIntakeShell {
   intent: IntentPipeline;
@@ -105,10 +109,20 @@ export class ControlPlaneIntakeContract {
       },
     });
     const chunks = retrievalResult.chunks;
-    const packagedContext = packageIntakeContext(
+    const packagingContract = new PackagingContract({
+      context: this.shell.context,
+    });
+    const packagingResult = packagingContract.package({
       chunks,
-      request.tokenBudget ?? 256,
-    );
+      tokenBudget: request.tokenBudget ?? 256,
+    });
+    const packagedContext: IntakePackagedContext = {
+      chunks: packagingResult.chunks,
+      totalTokens: packagingResult.totalTokens,
+      tokenBudget: packagingResult.tokenBudget,
+      truncated: packagingResult.truncated,
+      snapshotHash: packagingResult.snapshotHash,
+    };
     const requestId = computeDeterministicHash(
       "w1-t2-cp1-intake",
       `${createdAt}:${request.consumerId ?? "anonymous"}`,
@@ -197,33 +211,15 @@ export function packageIntakeContext(
   chunks: IntakeContextChunk[],
   tokenBudget: number,
 ): IntakePackagedContext {
-  let totalTokens = 0;
-  const selectedChunks: IntakeContextChunk[] = [];
-
-  for (const chunk of chunks) {
-    const chunkTokens = estimateTokenCount(chunk.content);
-    if (totalTokens + chunkTokens <= tokenBudget) {
-      selectedChunks.push(chunk);
-      totalTokens += chunkTokens;
-    }
-  }
-
+  const contract = new PackagingContract();
+  const result = contract.package({ chunks, tokenBudget });
   return {
-    chunks: selectedChunks,
-    totalTokens,
-    tokenBudget,
-    truncated: selectedChunks.length < chunks.length,
-    snapshotHash: computeDeterministicHash(
-      "control-plane-intake-context",
-      `budget:${tokenBudget}`,
-      `tokens:${totalTokens}:selected:${selectedChunks.length}:truncated:${selectedChunks.length < chunks.length}`,
-      serializeChunks(selectedChunks),
-    ),
+    chunks: result.chunks,
+    totalTokens: result.totalTokens,
+    tokenBudget: result.tokenBudget,
+    truncated: result.truncated,
+    snapshotHash: result.snapshotHash,
   };
-}
-
-function estimateTokenCount(content: string): number {
-  return Math.ceil(content.length / 4);
 }
 
 function createDefaultIntakeShell(): ControlPlaneIntakeShell {
@@ -235,36 +231,3 @@ function createDefaultIntakeShell(): ControlPlaneIntakeShell {
   };
 }
 
-function serializeChunks(chunks: IntakeContextChunk[]): string {
-  if (chunks.length === 0) {
-    return "empty";
-  }
-
-  return chunks
-    .map((chunk) =>
-      JSON.stringify({
-        id: chunk.id,
-        source: chunk.source,
-        content: chunk.content,
-        relevanceScore: chunk.relevanceScore,
-        metadata: sortValue(chunk.metadata ?? {}),
-      }),
-    )
-    .join("|");
-}
-
-function sortValue(value: unknown): unknown {
-  if (Array.isArray(value)) {
-    return value.map((entry) => sortValue(entry));
-  }
-
-  if (value && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>)
-        .sort(([left], [right]) => left.localeCompare(right))
-        .map(([key, nestedValue]) => [key, sortValue(nestedValue)]),
-    );
-  }
-
-  return value;
-}

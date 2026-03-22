@@ -5,6 +5,11 @@ import {
   AgentRole,
   createControlPlaneIntakeContract,
   createRetrievalContract,
+  createPackagingContract,
+  PackagingContract,
+  estimateTokenCount,
+  serializeChunks,
+  sortValue,
   mapDocument,
   resolveSource,
   matchesFilters,
@@ -508,5 +513,174 @@ describe("CVF_CONTROL_PLANE_FOUNDATION — CP2 Unified Retrieval Contract", () =
     expect(intakeResult.retrieval.chunkCount).toBe(directResult.chunkCount);
     expect(intakeResult.retrieval.chunks[0]?.source).toBe(directResult.chunks[0]?.source);
     expect(intakeResult.retrieval.chunks[0]?.content).toBe(directResult.chunks[0]?.content);
+  });
+});
+
+describe("CVF_CONTROL_PLANE_FOUNDATION — CP3 Deterministic Context Packaging", () => {
+  const makeChunks = (count: number, contentLength = 20) =>
+    Array.from({ length: count }, (_, i) => ({
+      id: `chunk-${i}`,
+      source: `source-${i}`,
+      content: "x".repeat(contentLength),
+      relevanceScore: 1 - i * 0.1,
+      metadata: { tier: "T1_CORE" },
+    }));
+
+  it("packages chunks within a token budget using the packaging contract", () => {
+    const contract = createPackagingContract();
+    const chunks = makeChunks(3, 40);
+    const result = contract.package({ chunks, tokenBudget: 20 });
+
+    expect(result.totalTokens).toBeLessThanOrEqual(20);
+    expect(result.tokenBudget).toBe(20);
+    expect(result.chunks.length).toBeLessThanOrEqual(3);
+    expect(result.snapshotHash).toHaveLength(32);
+  });
+
+  it("marks result as truncated when not all chunks fit the budget", () => {
+    const contract = createPackagingContract();
+    const chunks = makeChunks(5, 40);
+    const result = contract.package({ chunks, tokenBudget: 15 });
+
+    expect(result.truncated).toBe(true);
+    expect(result.chunks.length).toBeLessThan(5);
+  });
+
+  it("marks result as not truncated when all chunks fit", () => {
+    const contract = createPackagingContract();
+    const chunks = makeChunks(2, 8);
+    const result = contract.package({ chunks, tokenBudget: 1000 });
+
+    expect(result.truncated).toBe(false);
+    expect(result.chunks.length).toBe(2);
+  });
+
+  it("returns empty result for empty chunks", () => {
+    const contract = createPackagingContract();
+    const result = contract.package({ chunks: [], tokenBudget: 100 });
+
+    expect(result.chunks).toEqual([]);
+    expect(result.totalTokens).toBe(0);
+    expect(result.truncated).toBe(false);
+    expect(result.snapshotHash).toHaveLength(32);
+  });
+
+  it("produces deterministic snapshot hash for identical inputs", () => {
+    const chunks = makeChunks(2, 20);
+    const result1 = createPackagingContract().package({ chunks, tokenBudget: 100 });
+    const result2 = createPackagingContract().package({ chunks, tokenBudget: 100 });
+
+    expect(result1.snapshotHash).toBe(result2.snapshotHash);
+  });
+
+  it("produces different snapshot hash when budget changes", () => {
+    const chunks = makeChunks(2, 20);
+    const result1 = createPackagingContract().package({ chunks, tokenBudget: 100 });
+    const result2 = createPackagingContract().package({ chunks, tokenBudget: 200 });
+
+    expect(result1.snapshotHash).not.toBe(result2.snapshotHash);
+  });
+
+  it("integrates with ContextFreezer when executionId is provided", () => {
+    const contract = createPackagingContract();
+    const chunks = makeChunks(2, 20);
+    const result = contract.package({
+      chunks,
+      tokenBudget: 100,
+      executionId: "cp3-test-exec-001",
+    });
+
+    expect(result.freeze).toBeDefined();
+    expect(result.freeze!.executionId).toBe("cp3-test-exec-001");
+    expect(result.freeze!.frozenContextHash).toBeTruthy();
+    expect(contract.getContext().has("cp3-test-exec-001")).toBe(true);
+  });
+
+  it("does not freeze context when executionId is absent", () => {
+    const contract = createPackagingContract();
+    const chunks = makeChunks(2, 20);
+    const result = contract.package({ chunks, tokenBudget: 100 });
+
+    expect(result.freeze).toBeUndefined();
+  });
+
+  it("does not freeze context when executionId is empty string", () => {
+    const contract = createPackagingContract();
+    const chunks = makeChunks(2, 20);
+    const result = contract.package({ chunks, tokenBudget: 100, executionId: "" });
+
+    expect(result.freeze).toBeUndefined();
+  });
+
+  it("estimateTokenCount approximates content.length / 4", () => {
+    expect(estimateTokenCount("abcdefgh")).toBe(2);
+    expect(estimateTokenCount("a")).toBe(1);
+    expect(estimateTokenCount("")).toBe(0);
+    expect(estimateTokenCount("x".repeat(100))).toBe(25);
+  });
+
+  it("serializeChunks returns 'empty' for zero chunks", () => {
+    expect(serializeChunks([])).toBe("empty");
+  });
+
+  it("serializeChunks produces deterministic output regardless of metadata key order", () => {
+    const chunk1 = {
+      id: "c1", source: "s1", content: "text", relevanceScore: 0.9,
+      metadata: { alpha: "a", beta: "b" },
+    };
+    const chunk2 = {
+      id: "c1", source: "s1", content: "text", relevanceScore: 0.9,
+      metadata: { beta: "b", alpha: "a" },
+    };
+
+    expect(serializeChunks([chunk1])).toBe(serializeChunks([chunk2]));
+  });
+
+  it("sortValue sorts nested objects deterministically", () => {
+    const input = { z: 1, a: { y: 2, b: 3 } };
+    const result = sortValue(input) as Record<string, unknown>;
+
+    const keys = Object.keys(result);
+    expect(keys[0]).toBe("a");
+    expect(keys[1]).toBe("z");
+  });
+
+  it("PackagingContract is independently instantiable via factory function", () => {
+    const contract = createPackagingContract();
+    expect(contract).toBeInstanceOf(PackagingContract);
+  });
+
+  it("intake contract delegates packaging to the PackagingContract producing identical hash", () => {
+    resetDocCounter();
+    const shell = createControlPlaneFoundationShell();
+    shell.knowledge.getStore().add({
+      title: "CP3 Packaging Test",
+      content: "Short test content for packaging verification.",
+      tier: "T1_CORE",
+      documentType: "policy",
+      domain: "governance",
+      tags: ["test"],
+      metadata: { source: "cp3-test" },
+    });
+
+    const intakeContract = createControlPlaneIntakeContract({
+      shell,
+      now: () => "2026-03-22T12:00:00.000Z",
+    });
+    const intakeResult = intakeContract.execute({
+      vibe: "verify packaging delegation for CP3 governance test",
+      tokenBudget: 256,
+      retrieval: { sources: ["cp3-test"] },
+    });
+
+    const packagingContract = createPackagingContract();
+    const directResult = packagingContract.package({
+      chunks: intakeResult.retrieval.chunks,
+      tokenBudget: 256,
+    });
+
+    expect(intakeResult.packagedContext.snapshotHash).toBe(directResult.snapshotHash);
+    expect(intakeResult.packagedContext.totalTokens).toBe(directResult.totalTokens);
+    expect(intakeResult.packagedContext.truncated).toBe(directResult.truncated);
   });
 });

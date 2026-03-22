@@ -11,8 +11,13 @@ import {
   createWatchdogPulseContract,
   WatchdogAlertLogContract,
   createWatchdogAlertLogContract,
+  GovernanceAuditSignalContract,
+  createGovernanceAuditSignalContract,
+  GovernanceAuditLogContract,
+  createGovernanceAuditLogContract,
 } from "../src/index";
-import type { WatchdogObservabilityInput, WatchdogExecutionInput } from "../src/index";
+import type { WatchdogObservabilityInput, WatchdogExecutionInput, WatchdogAlertLog } from "../src/index";
+import type { GovernanceAuditSignal } from "../src/index";
 
 describe("CVF_GOVERNANCE_EXPANSION_FOUNDATION", () => {
   it("creates a governance expansion foundation surface with all 4 modules", () => {
@@ -261,6 +266,190 @@ describe("CVF_GOVERNANCE_EXPANSION_FOUNDATION", () => {
     it("creates WatchdogAlertLogContract via class constructor", () => {
       const contract = new WatchdogAlertLogContract();
       expect(contract).toBeInstanceOf(WatchdogAlertLogContract);
+    });
+  });
+
+  // ─── W3-T3 CP1 — GovernanceAuditSignalContract ───────────────────────────
+
+  describe("W3-T3 CP1 — GovernanceAuditSignalContract", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+
+    function makeAlertLog(
+      overrides: Partial<WatchdogAlertLog> = {},
+    ): WatchdogAlertLog {
+      return {
+        logId: "log-001",
+        createdAt: fixedTime,
+        totalPulses: 2,
+        criticalCount: 0,
+        warningCount: 0,
+        nominalCount: 2,
+        unknownCount: 0,
+        dominantStatus: "NOMINAL",
+        alertActive: false,
+        summary: "Test alert log",
+        logHash: "hash-log-001",
+        ...overrides,
+      };
+    }
+
+    it("returns CRITICAL_THRESHOLD when dominantStatus is CRITICAL and criticalCount >= 1", () => {
+      const contract = createGovernanceAuditSignalContract();
+      const signal = contract.signal(
+        makeAlertLog({ dominantStatus: "CRITICAL", criticalCount: 2, alertActive: true }),
+      );
+
+      expect(signal.auditTrigger).toBe("CRITICAL_THRESHOLD");
+    });
+
+    it("returns ALERT_ACTIVE when alertActive is true and not CRITICAL_THRESHOLD", () => {
+      const contract = createGovernanceAuditSignalContract();
+      const signal = contract.signal(
+        makeAlertLog({ dominantStatus: "WARNING", alertActive: true, criticalCount: 0 }),
+      );
+
+      expect(signal.auditTrigger).toBe("ALERT_ACTIVE");
+    });
+
+    it("returns ROUTINE when totalPulses > 0 and no active alert", () => {
+      const contract = createGovernanceAuditSignalContract();
+      const signal = contract.signal(
+        makeAlertLog({ totalPulses: 3, alertActive: false, dominantStatus: "NOMINAL" }),
+      );
+
+      expect(signal.auditTrigger).toBe("ROUTINE");
+    });
+
+    it("returns NO_ACTION when totalPulses is 0", () => {
+      const contract = createGovernanceAuditSignalContract();
+      const signal = contract.signal(
+        makeAlertLog({ totalPulses: 0, alertActive: false, dominantStatus: "UNKNOWN" }),
+      );
+
+      expect(signal.auditTrigger).toBe("NO_ACTION");
+    });
+
+    it("traces sourceAlertLogId to input alertLog.logId", () => {
+      const contract = createGovernanceAuditSignalContract();
+      const log = makeAlertLog({ logId: "log-xyz" });
+      const signal = contract.signal(log);
+
+      expect(signal.sourceAlertLogId).toBe("log-xyz");
+    });
+
+    it("triggerRationale is non-empty for all trigger types", () => {
+      const contract = createGovernanceAuditSignalContract();
+      for (const log of [
+        makeAlertLog({ dominantStatus: "CRITICAL", criticalCount: 1, alertActive: true }),
+        makeAlertLog({ dominantStatus: "WARNING", alertActive: true, criticalCount: 0 }),
+        makeAlertLog({ totalPulses: 1, alertActive: false }),
+        makeAlertLog({ totalPulses: 0 }),
+      ]) {
+        expect(contract.signal(log).triggerRationale.length).toBeGreaterThan(0);
+      }
+    });
+
+    it("produces stable signalHash with fixed time injection", () => {
+      const c1 = createGovernanceAuditSignalContract({ now: () => fixedTime });
+      const c2 = createGovernanceAuditSignalContract({ now: () => fixedTime });
+      const log = makeAlertLog({ dominantStatus: "NOMINAL" });
+
+      expect(c1.signal(log).signalHash).toBe(c2.signal(log).signalHash);
+    });
+
+    it("creates GovernanceAuditSignalContract via class constructor", () => {
+      const contract = new GovernanceAuditSignalContract();
+      expect(contract).toBeInstanceOf(GovernanceAuditSignalContract);
+    });
+  });
+
+  // ─── W3-T3 CP2 — GovernanceAuditLogContract ──────────────────────────────
+
+  describe("W3-T3 CP2 — GovernanceAuditLogContract", () => {
+    const fixedTime = "2026-03-22T10:00:00.000Z";
+
+    function makeSignal(
+      trigger: "CRITICAL_THRESHOLD" | "ALERT_ACTIVE" | "ROUTINE" | "NO_ACTION",
+      id = "s1",
+    ): GovernanceAuditSignal {
+      return {
+        signalId: id,
+        issuedAt: fixedTime,
+        sourceAlertLogId: `log-${id}`,
+        auditTrigger: trigger,
+        triggerRationale: `Test rationale ${id}`,
+        signalHash: `hash-${id}`,
+      };
+    }
+
+    it("returns NO_ACTION dominantTrigger and auditRequired=false for empty signals", () => {
+      const contract = createGovernanceAuditLogContract();
+      const log = contract.log([]);
+
+      expect(log.dominantTrigger).toBe("NO_ACTION");
+      expect(log.auditRequired).toBe(false);
+      expect(log.totalSignals).toBe(0);
+    });
+
+    it("returns CRITICAL_THRESHOLD as dominant when any CRITICAL_THRESHOLD present", () => {
+      const contract = createGovernanceAuditLogContract();
+      const log = contract.log([
+        makeSignal("ROUTINE", "s1"),
+        makeSignal("CRITICAL_THRESHOLD", "s2"),
+        makeSignal("ALERT_ACTIVE", "s3"),
+      ]);
+
+      expect(log.dominantTrigger).toBe("CRITICAL_THRESHOLD");
+      expect(log.auditRequired).toBe(true);
+    });
+
+    it("returns auditRequired=true when dominantTrigger is ALERT_ACTIVE", () => {
+      const contract = createGovernanceAuditLogContract();
+      const log = contract.log([makeSignal("ALERT_ACTIVE", "s1"), makeSignal("ROUTINE", "s2")]);
+
+      expect(log.auditRequired).toBe(true);
+    });
+
+    it("returns auditRequired=false when dominantTrigger is ROUTINE", () => {
+      const contract = createGovernanceAuditLogContract();
+      const log = contract.log([makeSignal("ROUTINE", "s1"), makeSignal("NO_ACTION", "s2")]);
+
+      expect(log.auditRequired).toBe(false);
+    });
+
+    it("counts all trigger types correctly", () => {
+      const contract = createGovernanceAuditLogContract();
+      const log = contract.log([
+        makeSignal("CRITICAL_THRESHOLD", "s1"),
+        makeSignal("ALERT_ACTIVE", "s2"),
+        makeSignal("ROUTINE", "s3"),
+        makeSignal("NO_ACTION", "s4"),
+      ]);
+
+      expect(log.criticalThresholdCount).toBe(1);
+      expect(log.alertActiveCount).toBe(1);
+      expect(log.routineCount).toBe(1);
+      expect(log.noActionCount).toBe(1);
+      expect(log.totalSignals).toBe(4);
+    });
+
+    it("produces stable logHash with fixed time injection", () => {
+      const c1 = createGovernanceAuditLogContract({ now: () => fixedTime });
+      const c2 = createGovernanceAuditLogContract({ now: () => fixedTime });
+      const signals = [makeSignal("ROUTINE", "s1"), makeSignal("NO_ACTION", "s2")];
+
+      expect(c1.log(signals).logHash).toBe(c2.log(signals).logHash);
+    });
+
+    it("summary is non-empty for any input", () => {
+      const contract = createGovernanceAuditLogContract();
+      expect(contract.log([]).summary.length).toBeGreaterThan(0);
+      expect(contract.log([makeSignal("CRITICAL_THRESHOLD")]).summary.length).toBeGreaterThan(0);
+    });
+
+    it("creates GovernanceAuditLogContract via class constructor", () => {
+      const contract = new GovernanceAuditLogContract();
+      expect(contract).toBeInstanceOf(GovernanceAuditLogContract);
     });
   });
 });

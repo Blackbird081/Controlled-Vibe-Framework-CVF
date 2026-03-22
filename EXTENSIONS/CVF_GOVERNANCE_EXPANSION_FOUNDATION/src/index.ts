@@ -1,3 +1,22 @@
+// W3-T3 — Governance Audit Signal Slice (CP1–CP2)
+export {
+  GovernanceAuditSignalContract,
+  createGovernanceAuditSignalContract,
+} from "./governance.audit.signal.contract";
+export type {
+  AuditTrigger,
+  GovernanceAuditSignal,
+  GovernanceAuditSignalContractDependencies,
+} from "./governance.audit.signal.contract";
+export {
+  GovernanceAuditLogContract,
+  createGovernanceAuditLogContract,
+} from "./governance.audit.log.contract";
+export type {
+  GovernanceAuditLog,
+  GovernanceAuditLogContractDependencies,
+} from "./governance.audit.log.contract";
+
 // W3-T2 — Governance Watchdog Pulse Slice (CP1–CP2)
 export {
   WatchdogPulseContract,

@@ -91,8 +91,11 @@ Personal AI usage unrelated to company work is excluded.
 14. Agent handoff is mandatory whenever governed work pauses or transfers before closure:
    - This rule applies to pause/resume, agent-to-agent transfer, and mid-tranche stop states.
    - Transition classification must be determined first using `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`.
+   - The governing context-continuity model is `memory = repository of facts, history, and durable evidence`, `handoff = governance-filtered summary and transfer checkpoint`, and `context loading = phase-bounded loading of only what the current step needs`.
+   - In CVF, handoff is context quality control by phase for multi-agent continuation, not only work transfer.
    - The handoff must truthfully state repo truth, tranche truth, latest completed commit, next governed move, and explicit scope limits.
    - The canonical handoff template is `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`.
+   - The canonical context-continuity reference is `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`.
 
 ---

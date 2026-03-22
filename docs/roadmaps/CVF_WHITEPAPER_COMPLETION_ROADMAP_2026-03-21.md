@@ -186,12 +186,17 @@ The roadmap should now be read with one additional rule:
 - do **not** treat packaging-only continuation as the default next step
 - do prioritize one usable realization slice at a time
 - do defer concept-only targets explicitly when they are not source-backed
+- do preserve the context-continuity model across later tranches:
+  - `memory = repository of facts, history, and durable evidence`
+  - `handoff = governance-filtered summary and transfer checkpoint`
+  - `context loading = phase-bounded loading of only what the current step needs`
 
 Operational implication:
 
 - the preferred next move is a usable intake slice
 - `W4` should not be auto-opened just because `W3` is closed
 - `Watchdog`, `Audit / Consensus`, and the `Learning Plane` remain later scopes for explicit reasons, not because they were forgotten
+- handoff should now be read as context quality control by phase for multi-agent continuation, not only as pause/transfer etiquette
 
 ---
 

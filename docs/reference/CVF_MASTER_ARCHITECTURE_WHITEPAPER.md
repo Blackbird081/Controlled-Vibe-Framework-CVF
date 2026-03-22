@@ -11,6 +11,8 @@
 
 > **Core Principle:** *"Agents may execute tasks, but they cannot control the system that governs them."*
 
+> **Cross-Plane Context Continuity Principle:** `memory = repository of facts, history, and durable evidence`; `handoff = governance-filtered summary and transfer checkpoint`; `context loading = phase-bounded loading of only what the current step needs`. In CVF, handoff is context quality control by phase for multi-agent continuation.
+
 ---
 
 ## 1. Mô hình Thực thi Chính thức — CURRENT BASELINE (Đã xác minh bằng Code)

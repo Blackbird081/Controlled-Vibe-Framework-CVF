@@ -2305,3 +2305,36 @@ Utility and guard:
 - Notes/Risks:
   - this batch adds active runtime handoff checkpoints for governed pause and approval-required escalation, but it does not yet intercept every external chat/session pause automatically.
   - full universal detection would still require session/entrypoint instrumentation above repo-only and package-local runtime boundaries.
+## [2026-03-22] Batch: GC-020 context continuity principle
+- Scope:
+  - promote the `memory / handoff / context loading` model into a canonical CVF principle
+  - align `GC-020` policy, guard, template, control matrix, and whitepaper-facing docs around context quality control by phase
+  - extend the handoff compat gate so this principle cannot silently drift out of the canonical chain
+- Policy / roadmap references:
+  - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+- Files updated:
+  - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
+  - `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `governance/compat/check_agent_handoff_guard_compat.py`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_GC020_CONTEXT_CONTINUITY_PRINCIPLE_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_agent_handoff_guard_compat.py --enforce` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch strengthens the canonical model and repo-level enforcement, not universal runtime/session capture.
+  - the principle is now explicit: handoff is not only work transfer; it is context quality control by phase for multi-agent CVF.

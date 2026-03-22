@@ -18,6 +18,14 @@ The required order is:
 
 This prevents the handoff template from becoming a loose checklist with unclear trigger boundaries.
 
+It also protects the CVF context-continuity model:
+
+- `memory = repository of facts, history, and durable evidence`
+- `handoff = governance-filtered summary and transfer checkpoint`
+- `context loading = phase-bounded loading of only what the current step needs`
+
+Without transition classification first, workers cannot tell when a governance-filtered context checkpoint is required.
+
 ---
 
 ## 2. Canonical Transition Types
@@ -138,10 +146,19 @@ This guard comes before the handoff template.
 The template tells workers what to write.  
 This guard tells workers when a formal handoff is required.
 
+The broader model is:
+
+- memory stores durable truth
+- handoff compresses the transition truth
+- context loading should only bring the next phase what it needs
+
+This is why transition classification comes before the handoff template.
+
 Canonical follow-on artifacts:
 
 - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+- `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 
 ---
 
@@ -150,4 +167,3 @@ Canonical follow-on artifacts:
 - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `governance/compat/check_agent_handoff_guard_compat.py`
-

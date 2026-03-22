@@ -33,6 +33,7 @@ HANDOFF_GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md
 HANDOFF_TEMPLATE_PATH = "docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md"
 MASTER_POLICY_PATH = "governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md"
 CONTROL_MATRIX_PATH = "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
+CONTEXT_MODEL_PATH = "docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md"
 HOOK_CHAIN_PATH = "governance/compat/run_local_governance_hook_chain.py"
 THIS_SCRIPT_PATH = "governance/compat/check_agent_handoff_guard_compat.py"
 
@@ -42,6 +43,7 @@ REQUIRED_FILES = (
     HANDOFF_TEMPLATE_PATH,
     MASTER_POLICY_PATH,
     CONTROL_MATRIX_PATH,
+    CONTEXT_MODEL_PATH,
     HOOK_CHAIN_PATH,
 )
 
@@ -60,23 +62,36 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         TRANSITION_GUARD_PATH,
         HANDOFF_TEMPLATE_PATH,
         "Pause / Resume Interpretation",
+        "context quality control by phase for multi-agent continuation",
     ),
     HANDOFF_TEMPLATE_PATH: (
         TRANSITION_GUARD_PATH,
         "When To Use",
         "Minimum Handoff Fields",
+        "Phase-bounded context to load first",
+        "context quality control by phase for multi-agent continuation",
     ),
     MASTER_POLICY_PATH: (
         "Agent handoff is mandatory whenever governed work pauses or transfers before closure",
         TRANSITION_GUARD_PATH,
         HANDOFF_GUARD_PATH,
         HANDOFF_TEMPLATE_PATH,
+        CONTEXT_MODEL_PATH,
+        "context quality control by phase for multi-agent continuation",
     ),
     CONTROL_MATRIX_PATH: (
         "GC-020",
         TRANSITION_GUARD_PATH,
         HANDOFF_GUARD_PATH,
         HANDOFF_TEMPLATE_PATH,
+        CONTEXT_MODEL_PATH,
+        "memory keeps durable truth, handoff compresses transition truth, and context loading should stay phase-bounded",
+    ),
+    CONTEXT_MODEL_PATH: (
+        "memory = repository of facts, history, and durable evidence",
+        "handoff = governance-filtered summary and transfer checkpoint",
+        "context loading = phase-bounded loading of only what the current step needs",
+        "handoff is context quality control by phase for multi-agent continuation",
     ),
     HOOK_CHAIN_PATH: (
         THIS_SCRIPT_PATH,
@@ -212,15 +227,16 @@ def _print_report(report: dict[str, Any], base: str, head: str, base_source: str
                 print(f"    missing: {marker}")
 
     if report["compliant"]:
-        print("\n✅ COMPLIANT — GC-020 handoff transition, guard, template, policy, and hook-chain alignment is intact.")
+        print("\n✅ COMPLIANT — GC-020 handoff transition, context-continuity model, guard, template, policy, and hook-chain alignment is intact.")
         return
 
     print("\n❌ VIOLATION — GC-020 handoff chain is incomplete or misaligned.")
     print("   Action required:")
     print(f"   1. Ensure {TRANSITION_GUARD_PATH} exists and defines the canonical transition taxonomy.")
-    print(f"   2. Ensure {HANDOFF_GUARD_PATH}, {HANDOFF_TEMPLATE_PATH}, {MASTER_POLICY_PATH}, and")
+    print(f"   2. Ensure {CONTEXT_MODEL_PATH} defines the canonical memory/handoff/context-loading model.")
+    print(f"   3. Ensure {HANDOFF_GUARD_PATH}, {HANDOFF_TEMPLATE_PATH}, {MASTER_POLICY_PATH}, and")
     print(f"      {CONTROL_MATRIX_PATH} reference the same GC-020 chain truthfully.")
-    print(f"   3. Ensure {HOOK_CHAIN_PATH} runs {THIS_SCRIPT_PATH}.")
+    print(f"   4. Ensure {HOOK_CHAIN_PATH} runs {THIS_SCRIPT_PATH}.")
 
 
 def main() -> int:

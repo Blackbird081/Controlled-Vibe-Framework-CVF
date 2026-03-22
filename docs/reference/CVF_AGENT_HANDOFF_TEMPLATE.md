@@ -6,7 +6,16 @@ Status: canonical handoff template for pause, session stop, and agent-to-agent t
 
 - preserve truthful execution state when work pauses
 - reduce restart confusion for the next user or agent
+- reduce token waste by avoiding full-history replay when a bounded checkpoint is enough
 - keep continuation aligned with the active tranche scope, governance boundary, and documentation standards
+
+This template follows the CVF context-continuity model:
+
+- `memory = repository of facts, history, and durable evidence`
+- `handoff = governance-filtered summary and transfer checkpoint`
+- `context loading = phase-bounded loading of only what the current step needs`
+
+In CVF, handoff is context quality control by phase for multi-agent continuation.
 
 ## When To Use
 
@@ -50,6 +59,7 @@ Every handoff should include:
 - current repo state
 - latest completed commit
 - canonical docs the next agent must read first
+- the minimal phase-bounded context the next worker should load first
 - current tranche truth
 - what was actually delivered in the last batch
 - non-negotiable scope rules
@@ -70,6 +80,11 @@ Read these first:
 - `<canonical doc path 2>`
 - `<canonical doc path 3>`
 - `<canonical doc path 4>`
+
+Phase-bounded context to load first:
+- `<fact/history source that should stay as reference memory>`
+- `<handoff-critical artifact or delta>`
+- `<small set of files/docs needed for the next phase only>`
 
 Current tranche truth:
 - We are in `<wave/tranche>`.
@@ -142,6 +157,7 @@ Use the current tranche artifacts instead of copying stale scope language from o
 ## Related References
 
 - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
+- `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
 - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
 - `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`

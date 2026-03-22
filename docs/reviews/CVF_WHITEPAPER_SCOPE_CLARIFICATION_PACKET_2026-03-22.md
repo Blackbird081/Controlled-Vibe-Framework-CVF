@@ -212,6 +212,26 @@ In short:
 - `usable slice`, not `diagram completion`
 - `defer honestly`, not `name-only completion`
 
+## 6A. Cross-Cutting Context Continuity Principle
+
+The same realization-first rule should apply to context handling across all later whitepaper work:
+
+- `memory = repository of facts, history, and durable evidence`
+- `handoff = governance-filtered summary and transfer checkpoint`
+- `context loading = phase-bounded loading of only what the current step needs`
+
+Why this matters:
+
+- multi-agent continuation should not depend on replaying full history
+- token cost should be controlled by bounded context loading
+- later phases should inherit the smallest truthful context that still preserves decision quality
+
+Therefore:
+
+- handoff should not be treated as a courtesy note
+- handoff should be treated as context quality control by phase for multi-agent CVF
+- future usable-slice work should preserve this boundary explicitly
+
 ## 7. Recommended Next Governed Move
 
 The next correct governed move is:

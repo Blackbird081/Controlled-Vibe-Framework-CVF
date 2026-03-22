@@ -27,6 +27,14 @@ The default assumption is:
 - no memory-only transfer
 - no resume based on guesswork
 
+This guard is part of the wider CVF context-continuity model:
+
+- `memory = repository of facts, history, and durable evidence`
+- `handoff = governance-filtered summary and transfer checkpoint`
+- `context loading = phase-bounded loading of only what the current step needs`
+
+In CVF, handoff is context quality control by phase for multi-agent continuation, not only work transfer.
+
 ---
 
 ## 2. Required Handoff Truth
@@ -94,6 +102,12 @@ For governance purposes, an agent handoff should be treated like a human work ha
 
 This guard exists because governed continuation quality depends not only on code and docs, but also on truthful transfer of execution state.
 
+It also exists because token efficiency and context quality improve when:
+
+- durable facts stay in memory/reference artifacts
+- transition truth is compressed into one governed handoff
+- the next phase loads only the bounded context it actually needs
+
 ---
 
 ## 6. Recommended Evidence Placement
@@ -142,6 +156,7 @@ Until universal session/runtime interception exists, reviewers and workers shoul
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+- `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-handoff.ts`
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
 - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`

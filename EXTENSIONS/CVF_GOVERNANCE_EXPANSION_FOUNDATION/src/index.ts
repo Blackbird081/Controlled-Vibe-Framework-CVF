@@ -1,3 +1,22 @@
+// W3-T4 — Governance Consensus Slice (CP1–CP2)
+export {
+  GovernanceConsensusContract,
+  createGovernanceConsensusContract,
+} from "./governance.consensus.contract";
+export type {
+  ConsensusVerdict,
+  ConsensusDecision,
+  GovernanceConsensusContractDependencies,
+} from "./governance.consensus.contract";
+export {
+  GovernanceConsensusSummaryContract,
+  createGovernanceConsensusSummaryContract,
+} from "./governance.consensus.summary.contract";
+export type {
+  GovernanceConsensusSummary,
+  GovernanceConsensusSummaryContractDependencies,
+} from "./governance.consensus.summary.contract";
+
 // W3-T3 — Governance Audit Signal Slice (CP1–CP2)
 export {
   GovernanceAuditSignalContract,

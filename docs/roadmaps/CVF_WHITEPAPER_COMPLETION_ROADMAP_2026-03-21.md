@@ -145,6 +145,10 @@ Current authorization state:
 - `W1-T11 / CP1` is now implemented as a bounded context build contract baseline (`ContextBuildRequest + knowledgeItems? + metadata? → ContextPackage`)
 - `W1-T11 / CP2` is now implemented as a context build batch contract (`ContextPackage[] → ContextBuildBatch`); Fast Lane (GC-021)
 - `W1-T11 / CP3` tranche closure review is executed; the last major W1 partial gap now has a first operational slice
+- `W3-T4 — Governance Consensus Slice` is now authorized (GC-018: 14/15) and canonically closed as a scoped post-cycle governance continuation tranche
+- `W3-T4 / CP1` is now implemented as a bounded governance consensus contract baseline (`GovernanceAuditSignal[] → ConsensusDecision`); W3-T1 explicit defer "Consensus — concept-only" closed
+- `W3-T4 / CP2` is now implemented as a governance consensus summary contract (`ConsensusDecision[] → GovernanceConsensusSummary`); dominant verdict: ESCALATE > PAUSE > PROCEED; Fast Lane (GC-021)
+- `W3-T4 / CP3` tranche closure review is executed; W3 whitepaper "Audit / Consensus" target now has first operational slice for both Audit (W3-T3) and Consensus (W3-T4); GEF: 38 → 54 tests
 
 Nothing beyond `W0` in this roadmap may execute until:
 

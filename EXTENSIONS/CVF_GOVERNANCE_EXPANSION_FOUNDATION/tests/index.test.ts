@@ -15,9 +15,13 @@ import {
   createGovernanceAuditSignalContract,
   GovernanceAuditLogContract,
   createGovernanceAuditLogContract,
+  GovernanceConsensusContract,
+  createGovernanceConsensusContract,
+  GovernanceConsensusSummaryContract,
+  createGovernanceConsensusSummaryContract,
 } from "../src/index";
 import type { WatchdogObservabilityInput, WatchdogExecutionInput, WatchdogAlertLog } from "../src/index";
-import type { GovernanceAuditSignal } from "../src/index";
+import type { GovernanceAuditSignal, ConsensusDecision } from "../src/index";
 
 describe("CVF_GOVERNANCE_EXPANSION_FOUNDATION", () => {
   it("creates a governance expansion foundation surface with all 4 modules", () => {
@@ -450,6 +454,217 @@ describe("CVF_GOVERNANCE_EXPANSION_FOUNDATION", () => {
     it("creates GovernanceAuditLogContract via class constructor", () => {
       const contract = new GovernanceAuditLogContract();
       expect(contract).toBeInstanceOf(GovernanceAuditLogContract);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // W3-T4 — Governance Consensus Slice
+  // ---------------------------------------------------------------------------
+
+  function makeAuditSignal(
+    trigger: GovernanceAuditSignal["auditTrigger"],
+    id: string,
+  ): GovernanceAuditSignal {
+    return {
+      signalId: `sig-${id}`,
+      issuedAt: "2026-03-23T10:00:00.000Z",
+      sourceAlertLogId: `log-${id}`,
+      auditTrigger: trigger,
+      triggerRationale: `rationale-${trigger}`,
+      signalHash: `hash-${id}`,
+    };
+  }
+
+  function makeDecision(verdict: ConsensusDecision["verdict"], id: string): ConsensusDecision {
+    return {
+      decisionId: `dec-${id}`,
+      issuedAt: "2026-03-23T10:00:00.000Z",
+      verdict,
+      criticalCount: verdict === "ESCALATE" ? 1 : 0,
+      alertActiveCount: verdict === "PAUSE" ? 1 : 0,
+      totalSignals: 1,
+      consensusScore: verdict === "ESCALATE" ? 100 : 0,
+      decisionHash: `dhash-${id}`,
+    };
+  }
+
+  describe("W3-T4 CP1 — GovernanceConsensusContract", () => {
+    it("returns ESCALATE verdict when any signal has CRITICAL_THRESHOLD trigger", () => {
+      const contract = createGovernanceConsensusContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.decide([
+        makeAuditSignal("CRITICAL_THRESHOLD", "1"),
+        makeAuditSignal("ROUTINE", "2"),
+      ]);
+
+      expect(result.verdict).toBe("ESCALATE");
+    });
+
+    it("returns PAUSE verdict when ALERT_ACTIVE and no CRITICAL_THRESHOLD", () => {
+      const contract = createGovernanceConsensusContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.decide([
+        makeAuditSignal("ALERT_ACTIVE", "1"),
+        makeAuditSignal("ROUTINE", "2"),
+      ]);
+
+      expect(result.verdict).toBe("PAUSE");
+    });
+
+    it("returns PROCEED verdict when only ROUTINE or NO_ACTION signals", () => {
+      const contract = createGovernanceConsensusContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.decide([
+        makeAuditSignal("ROUTINE", "1"),
+        makeAuditSignal("NO_ACTION", "2"),
+      ]);
+
+      expect(result.verdict).toBe("PROCEED");
+    });
+
+    it("empty signals batch returns PROCEED with consensusScore 0", () => {
+      const contract = createGovernanceConsensusContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.decide([]);
+
+      expect(result.verdict).toBe("PROCEED");
+      expect(result.consensusScore).toBe(0);
+      expect(result.totalSignals).toBe(0);
+    });
+
+    it("consensusScore reflects proportion of CRITICAL_THRESHOLD signals", () => {
+      const contract = createGovernanceConsensusContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.decide([
+        makeAuditSignal("CRITICAL_THRESHOLD", "1"),
+        makeAuditSignal("CRITICAL_THRESHOLD", "2"),
+        makeAuditSignal("ROUTINE", "3"),
+        makeAuditSignal("ROUTINE", "4"),
+      ]);
+
+      expect(result.consensusScore).toBe(50);
+      expect(result.criticalCount).toBe(2);
+    });
+
+    it("decisionId and decisionHash are deterministic for identical inputs", () => {
+      const fixed = "2026-03-23T10:00:00.000Z";
+      const c1 = createGovernanceConsensusContract({ now: () => fixed });
+      const c2 = createGovernanceConsensusContract({ now: () => fixed });
+      const signals = [makeAuditSignal("ROUTINE", "1")];
+
+      expect(c1.decide(signals).decisionHash).toBe(c2.decide(signals).decisionHash);
+      expect(c1.decide(signals).decisionId).toBe(c2.decide(signals).decisionId);
+    });
+
+    it("CRITICAL_THRESHOLD overrides ALERT_ACTIVE in verdict priority", () => {
+      const contract = createGovernanceConsensusContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.decide([
+        makeAuditSignal("CRITICAL_THRESHOLD", "1"),
+        makeAuditSignal("ALERT_ACTIVE", "2"),
+      ]);
+
+      expect(result.verdict).toBe("ESCALATE");
+    });
+
+    it("creates GovernanceConsensusContract via class constructor", () => {
+      const contract = new GovernanceConsensusContract();
+      expect(contract).toBeInstanceOf(GovernanceConsensusContract);
+    });
+  });
+
+  describe("W3-T4 CP2 — GovernanceConsensusSummaryContract", () => {
+    it("summarize returns correct counts for mixed verdicts", () => {
+      const contract = createGovernanceConsensusSummaryContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.summarize([
+        makeDecision("ESCALATE", "1"),
+        makeDecision("PAUSE", "2"),
+        makeDecision("PROCEED", "3"),
+      ]);
+
+      expect(result.totalDecisions).toBe(3);
+      expect(result.escalateCount).toBe(1);
+      expect(result.pauseCount).toBe(1);
+      expect(result.proceedCount).toBe(1);
+    });
+
+    it("dominant verdict is ESCALATE when tied with PAUSE", () => {
+      const contract = createGovernanceConsensusSummaryContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.summarize([
+        makeDecision("ESCALATE", "1"),
+        makeDecision("PAUSE", "2"),
+      ]);
+
+      expect(result.dominantVerdict).toBe("ESCALATE");
+    });
+
+    it("empty decisions batch returns totalDecisions 0 and ESCALATE dominant (tie-break)", () => {
+      const contract = createGovernanceConsensusSummaryContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.summarize([]);
+
+      expect(result.totalDecisions).toBe(0);
+      expect(result.escalateCount).toBe(0);
+    });
+
+    it("summaryId is deterministic for identical inputs", () => {
+      const fixed = "2026-03-23T10:00:00.000Z";
+      const c1 = createGovernanceConsensusSummaryContract({ now: () => fixed });
+      const c2 = createGovernanceConsensusSummaryContract({ now: () => fixed });
+      const decisions = [makeDecision("PROCEED", "1"), makeDecision("PAUSE", "2")];
+
+      expect(c1.summarize(decisions).summaryId).toBe(c2.summarize(decisions).summaryId);
+    });
+
+    it("dominant verdict is PROCEED when all decisions are PROCEED", () => {
+      const contract = createGovernanceConsensusSummaryContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.summarize([
+        makeDecision("PROCEED", "1"),
+        makeDecision("PROCEED", "2"),
+        makeDecision("PROCEED", "3"),
+      ]);
+
+      expect(result.dominantVerdict).toBe("PROCEED");
+    });
+
+    it("summaryHash is a 32-char deterministic string", () => {
+      const contract = createGovernanceConsensusSummaryContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.summarize([makeDecision("ESCALATE", "1")]);
+
+      expect(result.summaryHash).toHaveLength(32);
+    });
+
+    it("dominant verdict is PAUSE when PAUSE majority", () => {
+      const contract = createGovernanceConsensusSummaryContract({
+        now: () => "2026-03-23T10:00:00.000Z",
+      });
+      const result = contract.summarize([
+        makeDecision("PAUSE", "1"),
+        makeDecision("PAUSE", "2"),
+        makeDecision("PROCEED", "3"),
+      ]);
+
+      expect(result.dominantVerdict).toBe("PAUSE");
+    });
+
+    it("creates GovernanceConsensusSummaryContract via class constructor", () => {
+      const contract = new GovernanceConsensusSummaryContract();
+      expect(contract).toBeInstanceOf(GovernanceConsensusSummaryContract);
     });
   });
 });

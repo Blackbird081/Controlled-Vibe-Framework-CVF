@@ -15,8 +15,8 @@ Memory class: POINTER_RECORD
 |---|---|
 | Whitepaper target-state | `PARTIALLY DELIVERED` |
 | Current-cycle restructuring | `DONE` |
-| Whitepaper completion wave | `FIRST CYCLE COMPLETE + W1-T11 POST-CYCLE CLOSED` |
-| Current active tranche | `NONE - LAST CANONICAL CLOSURE W1-T11` |
+| Whitepaper completion wave | `FIRST CYCLE COMPLETE + W1-T11 + W3-T4 POST-CYCLE CLOSED` |
+| Current active tranche | `NONE - LAST CANONICAL CLOSURE W3-T4` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -27,7 +27,7 @@ Memory class: POINTER_RECORD
 |---|---|---|---|---|
 | Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T11` closed; gateway, boardroom, first knowledge-layer slice, and first context-builder slice delivered; richer context-packager semantics still future-facing | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Execution Plane | Model Gateway, Command Runtime, MCP Bridge, observer/feedback loop | `W2-T1` to `W2-T8` closed; async runtime, re-intake loop, and MCP bridge slices delivered; streaming/multi-agent execution still future-facing | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
-| Governance Layer | Policy, Trust, Guard Engine, Audit/Consensus, Watchdog | `W3-T1` to `W3-T3` closed; watchdog and audit-signal slices now exist; deeper consensus-style governance remains future-facing | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
+| Governance Layer | Policy, Trust, Guard Engine, Audit/Consensus, Watchdog | `W3-T1` to `W3-T4` closed; watchdog, audit-signal, and consensus decision slices now exist; both "Audit" and "Consensus" targets have first operational slices | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Learning Plane | Feedback Ledger, Pattern Insight, Truth Model, Evaluation, Governance feedback, storage, observability | `W4-T1` to `W4-T7` closed; governance signal bridge, re-injection, storage, and observability delivered | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Final Whitepaper Truth Reconciliation | convert concept document into evidence-backed truth layers | `W5-T1` closed; whitepaper re-labeled to evidence-backed partial delivery | `DONE FOR CURRENT CYCLE` | future truth upgrades require a new wave |
 
@@ -63,6 +63,7 @@ Memory class: POINTER_RECORD
 | `W4-T6` persistent storage | `DONE` |
 | `W4-T7` observability | `DONE` |
 | `W5-T1` final whitepaper truth reconciliation | `DONE` |
+| `W3-T4` governance consensus slice | `DONE` |
 
 ---
 
@@ -80,4 +81,4 @@ Memory class: POINTER_RECORD
 - Detailed status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
-- Current closure anchor: `docs/reviews/CVF_W1_T11_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-23.md`
+- Current closure anchor: `docs/reviews/CVF_W3_T4_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-23.md`

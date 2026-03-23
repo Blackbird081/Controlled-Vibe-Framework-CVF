@@ -3101,4 +3101,17 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (644 tests, 15 files)
 - Notes:
   - CPF: 599→644 tests (+45). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T37 ECO Extension Dedicated Test Gaps (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gaps for 3 ECO extensions: CVF_ECO_v1.0 (domain.registry.ts), CVF_ECO_v2.0 (audit.logger.ts), CVF_ECO_v2.4 (trust.propagator.ts)
+- Files created:
+  - `EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION/tests/domain.registry.test.ts` (148 lines, 20 tests)
+  - `EXTENSIONS/CVF_ECO_v2.0_AGENT_GUARD_SDK/tests/audit.logger.test.ts` (200 lines, 19 tests)
+  - `EXTENSIONS/CVF_ECO_v2.4_GRAPH_GOVERNANCE/tests/trust.propagator.test.ts` (195 lines, 15 tests)
+- Tests executed:
+  - ECO v1.0: PASS (61 tests). ECO v2.0: PASS (62 tests). ECO v2.4: PASS (42 tests).
+- Notes:
+  - ECO v1.0: 41→61 (+20). ECO v2.0: 43→62 (+19). ECO v2.4: 27→42 (+15). Risk R0 (test-only). GC-023 compliant.
   - All CPF dedicated test gaps FULLY CLOSED (W6-T25 through W6-T36).

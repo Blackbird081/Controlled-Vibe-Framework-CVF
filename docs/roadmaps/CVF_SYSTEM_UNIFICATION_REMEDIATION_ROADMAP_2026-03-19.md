@@ -1415,3 +1415,16 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T36):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T36_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T37):
+
+- W6-T37 (ECO Extension Dedicated Test Gaps Slice) delivered and closed: `COMPLETED`
+- Dedicated tests for domain.registry (findDomains/findActions), AuditLogger (ID sequencing/filters/exportJSON), and TrustPropagator (propagate/propagateAll/applyPropagation): `COMPLETED`
+- 54 new tests across 3 ECO extensions in 3 new dedicated test files (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- ECO v1.0: 61 (+20), ECO v2.0: 62 (+19), ECO v2.4: 42 (+15). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T37_AUTHORIZATION_DELTA_2026-03-23.md`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T36_AUTHORIZATION_DELTA_2026-03-23.md`

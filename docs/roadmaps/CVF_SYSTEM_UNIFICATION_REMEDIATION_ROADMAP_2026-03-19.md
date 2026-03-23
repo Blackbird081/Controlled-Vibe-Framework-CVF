@@ -74,3 +74,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T78_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T79_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T80 (2026-03-23)
+
+**Tranche:** W6-T80 — Approval State Machine, EventBus, Policy Hash, CostGuard & Roles Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for nextState (proposed→validated/validated→3decisions/approved→executed/others-unchanged), EventBus (on/emit/off/onAll/offAll/listenerCount/clear/error-isolation), generatePolicyHash (hex64/deterministic/different-input), CostGuard.validate (OK/WARNING-80pct/LIMIT_EXCEEDED-tokens-files-user-daily), canExecute (ADMIN+OPERATOR→true/VIEWER→false), canApprove (ADMIN→true/others→false): `COMPLETED`
+- 27 new tests in dedicated `safety-runtime-approval-statemachine-eventbus-cost-roles.test.ts` (GC-023 compliant, 215 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 616→643 tests (+27). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T80_AUTHORIZATION_DELTA_2026-03-23.md`
+

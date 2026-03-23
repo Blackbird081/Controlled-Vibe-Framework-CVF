@@ -3149,4 +3149,16 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE` -> PASS (89 tests, 8 files)
 - Notes:
   - CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE: 65→89 (+24). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T41 Adaptive Observability Runtime Pure Logic Tests (2026-03-23)
+
+- Scope:
+  - close 5 pure-logic dedicated test coverage gaps in CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME
+  - contracts: computeRisk, derivePolicy, calculateCost, analyzeSatisfaction, assignABVersion
+- Files created:
+  - `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/tests/adaptive.observability.internals.test.ts` (225 lines, 31 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME` -> PASS (39 tests, 2 files)
+- Notes:
+  - CVF_v1.8.1: 8→39 (+31). Risk R0 (test-only). GC-023 compliant.
   - All CPF dedicated test gaps FULLY CLOSED (W6-T25 through W6-T36).

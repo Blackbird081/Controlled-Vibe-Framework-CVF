@@ -2968,3 +2968,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (416 tests, 10 files)
 - Notes:
   - EPF: 390→416 tests (+26). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T25 CPF Retrieval & Packaging Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF RetrievalContract and PackagingContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/retrieval.packaging.test.ts` (383 lines, 49 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (285 tests, 4 files)
+- Notes:
+  - CPF: 236→285 tests (+49). Risk R0 (test-only). GC-023 compliant.

@@ -3731,3 +3731,22 @@ Utility and guard:
   - DomainLockEngine.lock: chains Classifier+ScopeResolver+BoundaryRules; classifier mismatch throws.
   - scoreRisk: totalScore = keywordRisk + lengthRisk + roleRisk + devAutomationRisk (pure function).
   - Roadmap archived at W6-T76; W6-T77+ appended to reset roadmap file.
+
+---
+
+## Batch W6-T78 — 2026-03-23
+
+### Entry W6-T78
+
+- Tranche: W6-T78 — Safety Runtime RefusalRouter, LLMAdapter, Deploy & PR Gateway Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-refusal-router-llm-deploy-pr.test.ts` (179 lines, 12 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (591 tests, 52 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 579→591 (+12). Risk R0 (test-only). GC-023 compliant.
+  - Covered 4 contracts: RefusalRouter, LLMAdapter, deploy.gateway, pr.gateway.
+  - LLMAdapter uses Symbol-based execution token gating; correct symbol must be passed for access.
+  - RefusalRouter.evaluate: R2+driftDetected→clarify (clarifyOnSignalsAtR2=true in default profile).
+  - deploy.gateway/pr.gateway: module-level null client — "no client" tests run before registration.

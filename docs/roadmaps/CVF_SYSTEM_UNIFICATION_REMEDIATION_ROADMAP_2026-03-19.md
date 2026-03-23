@@ -46,3 +46,17 @@ The archive contains all GC-018 checkpoint blocks from W1-T1 through W6-T76 (149
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T77_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T78 (2026-03-23)
+
+**Tranche:** W6-T78 — Safety Runtime RefusalRouter, LLMAdapter, Deploy & PR Gateway Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for RefusalRouter.evaluate (R0/R3/R4/R2+drift), LLMAdapter.generate (wrong-token-throws/correct-token/no-provider-fallback), deploy.gateway (no-client/register+deploy), pr.gateway (no-client/register+create+branchName): `COMPLETED`
+- 12 new tests in dedicated `safety-runtime-refusal-router-llm-deploy-pr.test.ts` (GC-023 compliant, 179 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 579→591 tests (+12). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T78_AUTHORIZATION_DELTA_2026-03-23.md`
+

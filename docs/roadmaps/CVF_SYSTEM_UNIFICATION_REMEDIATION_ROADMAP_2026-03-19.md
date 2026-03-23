@@ -1280,3 +1280,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T60_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T61_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T62 (2026-03-23)
+
+**Tranche:** W6-T62 — Safety Runtime Kernel Engines Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for AlternativeRouteEngine (suggest message), SafeRewriteEngine (self-harm redact/clean pass), CreativeController (disable/enable/no-perm/permission lifecycle), DomainLockEngine (valid/unknown-domain/mismatch/disallowed-inputClass): `COMPLETED`
+- 12 new tests in dedicated `safety-runtime-kernel-engines.test.ts` (GC-023 compliant, 137 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 301→313 tests (+12). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T62_AUTHORIZATION_DELTA_2026-03-23.md`
+

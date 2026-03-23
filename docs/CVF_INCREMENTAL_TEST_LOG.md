@@ -3439,3 +3439,20 @@ Utility and guard:
   - CVF_v1.7.1_SAFETY_RUNTIME: 283→301 (+18). Risk R0 (test-only). GC-023 compliant.
   - Covered 6 contracts: DomainRegistry, RiskDetector, RollbackController, LineageGraph, BoundarySnapshot, ClarificationGenerator.
   - DomainRegistry bootstrap test verified all 6 CVF safety domains are present by default.
+
+---
+
+## Batch W6-T62 — 2026-03-23
+
+### Entry W6-T62
+
+- Tranche: W6-T62 — Safety Runtime Kernel Engines Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-kernel-engines.test.ts` (137 lines, 12 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (313 tests, 36 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 301→313 (+12). Risk R0 (test-only). GC-023 compliant.
+  - Covered 4 kernel engine contracts: AlternativeRouteEngine, SafeRewriteEngine, CreativeController, DomainLockEngine.
+  - DomainLockEngine tested all 4 branches: valid/unknown-domain/mismatch/disallowed-inputClass.

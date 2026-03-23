@@ -1070,3 +1070,14 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T44):
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T44_AUTHORIZATION_DELTA_2026-03-23.md`
 
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T45):
+
+- W6-T45 (Controlled Intelligence Context Segmentation Dedicated Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated tests for pruneContext, canAccessScope, createFork, injectSummary, segmentContext: `COMPLETED`
+- 29 new tests in dedicated `context.segmentation.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7_CONTROLLED_INTELLIGENCE: 238 tests (+29). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T45_AUTHORIZATION_DELTA_2026-03-23.md`
+

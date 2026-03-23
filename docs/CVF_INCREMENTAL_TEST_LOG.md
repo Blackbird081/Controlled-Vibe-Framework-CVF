@@ -3198,3 +3198,15 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (209 tests, 12 files)
 - Notes:
   - CVF_v1.7: 174→209 (+35). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T45 Controlled Intelligence Context Segmentation Tests (2026-03-23)
+
+- Scope:
+  - close 5 pure-logic dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE context_segmentation
+  - contracts: pruneContext, canAccessScope, createFork, injectSummary, segmentContext
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/context_segmentation/context.segmentation.test.ts` (228 lines, 29 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (238 tests, 13 files)
+- Notes:
+  - CVF_v1.7: 209→238 (+29). Risk R0 (test-only). GC-023 compliant.

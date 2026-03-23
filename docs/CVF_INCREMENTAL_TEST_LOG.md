@@ -3125,4 +3125,16 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_GUARD_CONTRACT` -> PASS (212 tests, 14 files)
 - Notes:
   - CVF_GUARD_CONTRACT: 172→212 (+40). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T39 Skill Governance Engine Internal Ledger & Fusion Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gaps for 6 pure-logic contracts in CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE
+  - contracts: AuditTrail, IntentClassifier, SemanticRank, HistoricalWeight, CostOptimizer, FinalSelector
+- Files created:
+  - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/tests/skill.engine.internals.test.ts` (331 lines, 33 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE` -> PASS (65 tests, 7 files)
+- Notes:
+  - CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE: 32→65 (+33). Risk R0 (test-only). GC-023 compliant.
   - All CPF dedicated test gaps FULLY CLOSED (W6-T25 through W6-T36).

@@ -1438,4 +1438,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T38):
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T38_AUTHORIZATION_DELTA_2026-03-23.md`
 
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T39):
+
+- W6-T39 (Skill Governance Engine Internal Ledger & Fusion Dedicated Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated tests for AuditTrail, IntentClassifier, SemanticRank, HistoricalWeight, CostOptimizer, FinalSelector: `COMPLETED`
+- 33 new tests in dedicated `skill.engine.internals.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE: 65 tests (+33). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T39_AUTHORIZATION_DELTA_2026-03-23.md`
+
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T36_AUTHORIZATION_DELTA_2026-03-23.md`

@@ -1,5 +1,7 @@
 # CVF System Unification Remediation Roadmap
 
+Memory class: SUMMARY_RECORD
+
 > Date: `2026-03-19`
 > Source review: `docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md`
 > Comparison anchor: `docs/baselines/CVF_SYSTEM_STATUS_ASSESSMENT_DELTA_2026-03-19.md`
@@ -1030,3 +1032,18 @@ Recommended merge strategy:
 5. `docs + baseline reconciliation`
 
 This keeps the roadmap reviewable, reduces regression risk, and makes future independent re-audit substantially easier.
+
+---
+
+## Depth-Audit Continuation — W6 Wave (2026-03-23)
+
+GC-018 continuation checkpoint executed on `2026-03-23`:
+
+- W6-T1 (Streaming Execution Slice) delivered and closed: `COMPLETED`
+- W6-T2 (Multi-Agent Coordination Slice) delivered and closed: `COMPLETED`
+- `AgentCoordinationBus` now provides governed multi-agent message routing at the Guard Contract layer: `COMPLETED`
+- Message types `BROADCAST`, `DIRECT`, `QUORUM_REQUEST`, `QUORUM_RESPONSE` all guard-evaluated before delivery: `COMPLETED`
+- 25 new tests added in dedicated `agent-coordination.test.ts` (GC-023 compliant): `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T2_AUTHORIZATION_DELTA_2026-03-23.md`

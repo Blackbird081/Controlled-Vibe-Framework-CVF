@@ -12,6 +12,17 @@
       ]
     },
     {
+      "scope": "CPF Gateway Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayConsumerPipelineBatchContract",
+        "createGatewayConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "CPF Gateway Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.consumer.pipeline.test.ts",
       "forbiddenFiles": [

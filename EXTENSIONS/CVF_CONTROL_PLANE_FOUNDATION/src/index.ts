@@ -1,4 +1,4 @@
-// W1-T14 — Gateway Knowledge Pipeline Integration Slice (CP1)
+// W1-T14 — Gateway Knowledge Pipeline Integration Slice (CP1–CP2)
 export {
   GatewayConsumerPipelineContract,
   createGatewayConsumerPipelineContract,
@@ -8,6 +8,14 @@ export type {
   GatewayConsumerPipelineResult,
   GatewayConsumerPipelineContractDependencies,
 } from "./gateway.consumer.pipeline.contract";
+export {
+  GatewayConsumerPipelineBatchContract,
+  createGatewayConsumerPipelineBatchContract,
+} from "./gateway.consumer.pipeline.batch.contract";
+export type {
+  GatewayConsumerPipelineBatch,
+  GatewayConsumerPipelineBatchContractDependencies,
+} from "./gateway.consumer.pipeline.batch.contract";
 
 // W1-T13 — Control Plane Consumer Pipeline Slice (CP1–CP2)
 export {

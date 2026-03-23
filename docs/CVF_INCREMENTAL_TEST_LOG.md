@@ -3371,3 +3371,20 @@ Utility and guard:
   - CVF_v1.7.1_SAFETY_RUNTIME: 209→228 (+19). Risk R0 (test-only). GC-023 compliant.
   - Covered 5 contracts: state.store, execution.journal, AuthorityPolicy, CreativePermissionPolicy, SessionState.
   - Kernel-architecture contracts use relative imports — all resolve correctly from tests/ root.
+
+---
+
+## Batch W6-T58 — 2026-03-23
+
+### Entry W6-T58
+
+- Tranche: W6-T58 — Safety Runtime Kernel Infrastructure Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-kernel-infra.test.ts` (181 lines, 14 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (242 tests, 32 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 228→242 (+14). Risk R0 (test-only). GC-023 compliant.
+  - Covered 6 kernel infrastructure contracts: CapabilityGuard, RefusalRegistry, LineageStore, InvariantChecker, RiskEvolution, LineageTracker.
+  - Cross-domain invariant checker test verified throw-on-violation behavior.

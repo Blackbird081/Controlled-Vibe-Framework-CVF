@@ -1224,3 +1224,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T56_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T57_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T58 (2026-03-23)
+
+**Tranche:** W6-T58 — Safety Runtime Kernel Infrastructure Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for CapabilityGuard (allow/deny), RefusalRegistry (record/getAll), LineageStore (add/getAll), InvariantChecker (same-domain/cross-domain), RiskEvolution (record/getHistory), LineageTracker (record/getAll): `COMPLETED`
+- 14 new tests in dedicated `safety-runtime-kernel-infra.test.ts` (GC-023 compliant, 181 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 228→242 tests (+14). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T58_AUTHORIZATION_DELTA_2026-03-23.md`
+

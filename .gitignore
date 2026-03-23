@@ -70,3 +70,11 @@ CVF Edit/
 
 # CVF_Important (under review)
 CVF_Important/
+
+# CVF v1.7 generated runtime telemetry / audit artifacts
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_audit.jsonl
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_lessons.json
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_rollback.jsonl
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_telemetry_elegance.jsonl
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_telemetry_mistakes.jsonl
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_telemetry_verification.jsonl

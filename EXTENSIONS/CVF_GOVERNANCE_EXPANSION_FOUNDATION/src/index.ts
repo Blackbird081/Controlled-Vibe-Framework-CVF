@@ -1,3 +1,22 @@
+// W6-T4 — Governance-Execution Checkpoint Slice (CP1–CP2)
+export {
+  GovernanceCheckpointContract,
+  createGovernanceCheckpointContract,
+} from "./governance.checkpoint.contract";
+export type {
+  CheckpointAction,
+  GovernanceCheckpointDecision,
+  GovernanceCheckpointContractDependencies,
+} from "./governance.checkpoint.contract";
+export {
+  GovernanceCheckpointLogContract,
+  createGovernanceCheckpointLogContract,
+} from "./governance.checkpoint.log.contract";
+export type {
+  GovernanceCheckpointLog,
+  GovernanceCheckpointLogContractDependencies,
+} from "./governance.checkpoint.log.contract";
+
 // W3-T4 — Governance Consensus Slice (CP1–CP2)
 export {
   GovernanceConsensusContract,

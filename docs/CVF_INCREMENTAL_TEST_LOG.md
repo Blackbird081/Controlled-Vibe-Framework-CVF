@@ -3388,3 +3388,20 @@ Utility and guard:
   - CVF_v1.7.1_SAFETY_RUNTIME: 228→242 (+14). Risk R0 (test-only). GC-023 compliant.
   - Covered 6 kernel infrastructure contracts: CapabilityGuard, RefusalRegistry, LineageStore, InvariantChecker, RiskEvolution, LineageTracker.
   - Cross-domain invariant checker test verified throw-on-violation behavior.
+
+---
+
+## Batch W6-T59 — 2026-03-23
+
+### Entry W6-T59
+
+- Tranche: W6-T59 — Safety Runtime Kernel Domain & Creative Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-kernel-domain.test.ts` (199 lines, 19 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (261 tests, 33 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 242→261 (+19). Risk R0 (test-only). GC-023 compliant.
+  - Covered 6 contracts: CreativeProvenanceTagger, AuditLogger, TraceReporter, DomainClassifier, BoundaryRules, ScopeResolver.
+  - DomainClassifier tests use Vietnamese keywords matching the source implementation.

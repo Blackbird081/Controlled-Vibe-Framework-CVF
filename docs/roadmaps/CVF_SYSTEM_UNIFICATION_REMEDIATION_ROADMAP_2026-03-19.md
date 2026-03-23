@@ -1420,3 +1420,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T70_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T71_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T72 (2026-03-23)
+
+**Tranche:** W6-T72 — Safety Runtime OpenClaw Adapters & Execution Journal Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for provider.registry (register/get/unknown-throws), response.formatter (approved/pending/rejected/default), proposal.builder (risk-by-confidence/fields), intent.parser (valid-JSON/fallback/Vietnamese/generic), safety.guard (guardProposal/guardBudget/budget-tracking), execution.journal (record/get/clear): `COMPLETED`
+- 24 new tests in dedicated `safety-runtime-openclaw-adapters-journal.test.ts` (GC-023 compliant, 217 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 454→478 tests (+24). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T72_AUTHORIZATION_DELTA_2026-03-23.md`
+

@@ -3617,3 +3617,22 @@ Utility and guard:
   - Covered 6 contracts: sandbox.mode, provider.policy, usage.tracker, proposal.snapshot, policy.diff, ai.governance (governedGenerate).
   - policy.diff depends on proposal.snapshot's module-level store — test ordering arranged so snapshot describe runs before policy.diff describe.
   - governedGenerate calls enforceProviderPolicy before provider.generate; mock provider validated.
+
+---
+
+## Batch W6-T72 — 2026-03-23
+
+### Entry W6-T72
+
+- Tranche: W6-T72 — Safety Runtime OpenClaw Adapters & Execution Journal Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-openclaw-adapters-journal.test.ts` (217 lines, 24 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (478 tests, 46 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 454→478 (+24). Risk R0 (test-only). GC-023 compliant.
+  - Covered 6 contracts: provider.registry, response.formatter, proposal.builder, intent.parser, safety.guard, execution.journal.
+  - safety.guard uses module-level state (tokenUsage, providerBudgets); used beforeEach(resetTokenUsage) for isolation.
+  - intent.parser: deterministicFallback on JSON parse error — Vietnamese "tạo nhân sự" → create_hr_module; generic → unknown.
+  - proposal.builder: confidence>0.8→low, 0.5–0.8→medium, <0.5→high; crypto.randomUUID() available in Node.js test env.

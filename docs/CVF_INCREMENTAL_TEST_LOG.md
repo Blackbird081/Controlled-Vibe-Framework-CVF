@@ -2935,3 +2935,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (331 tests, 7 files)
 - Notes:
   - EPF: 297→331 tests (+34). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T22 EPF Reintake Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for EPF ExecutionReintakeContract and ExecutionReintakeSummaryContract (W2-T6 era)
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/reintake.test.ts` (259 lines, 28 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (359 tests, 8 files)
+- Notes:
+  - EPF: 331→359 tests (+28). Risk R0 (test-only). GC-023 compliant.

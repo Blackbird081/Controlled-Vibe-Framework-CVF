@@ -3563,3 +3563,21 @@ Utility and guard:
   - Covered 3 contracts: DomainGuard, RefusalRouter, ExecutionGate.
   - DomainGuard fix: kernel-architecture/kernel/01_domain_lock/domain.registry.ts uses allowedInputTypes: ["question","clarification"] (not "text") for informational domain.
   - RefusalRouter.evaluate wraps RefusalPolicy + SafeRewriteEngine + ClarificationGenerator + AlternativeRouteEngine.
+
+---
+
+## Batch W6-T69 — 2026-03-23
+
+### Entry W6-T69
+
+- Tranche: W6-T69 — Safety Runtime Policy Engines Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-policy-engines.test.ts` (194 lines, 18 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (422 tests, 43 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 404→422 (+18). Risk R0 (test-only). GC-023 compliant.
+  - Covered 3 contracts: CostGuard (static validate), nextState approval machine, RiskEngine (static assess).
+  - CostGuard WARNING threshold at 80% of proposal token limit (8000/10000 = 80% of 10000).
+  - RiskEngine: POLICY+policy-file = 50+100 = 150 → CRITICAL; INFRA+large-diff+core = 20+30+30 = 80 → HIGH.

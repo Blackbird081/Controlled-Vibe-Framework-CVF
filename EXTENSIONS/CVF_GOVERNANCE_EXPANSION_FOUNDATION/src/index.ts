@@ -1,4 +1,4 @@
-// W3-T5 — Watchdog Escalation Pipeline Slice (CP1)
+// W3-T5 — Watchdog Escalation Pipeline Slice (CP1–CP2)
 export {
   WatchdogEscalationPipelineContract,
   createWatchdogEscalationPipelineContract,
@@ -8,6 +8,14 @@ export type {
   WatchdogEscalationPipelineResult,
   WatchdogEscalationPipelineContractDependencies,
 } from "./watchdog.escalation.pipeline.contract";
+export {
+  WatchdogEscalationPipelineBatchContract,
+  createWatchdogEscalationPipelineBatchContract,
+} from "./watchdog.escalation.pipeline.batch.contract";
+export type {
+  WatchdogEscalationPipelineBatch,
+  WatchdogEscalationPipelineBatchContractDependencies,
+} from "./watchdog.escalation.pipeline.batch.contract";
 
 // W6-T7 — Watchdog-Governance Bridge Slice (CP1–CP2)
 export {

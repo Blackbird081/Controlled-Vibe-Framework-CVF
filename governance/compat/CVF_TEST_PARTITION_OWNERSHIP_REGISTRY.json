@@ -1,6 +1,17 @@
 {
   "partitions": [
     {
+      "scope": "GEF Watchdog Escalation Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationPipelineBatchContract",
+        "createWatchdogEscalationPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "GEF Watchdog Escalation Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.test.ts",
       "forbiddenFiles": [

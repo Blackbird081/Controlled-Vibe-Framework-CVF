@@ -3527,3 +3527,21 @@ Utility and guard:
   - Covered 4 contracts: ContractEnforcer, ContractRuntimeEngine, provider.registry, runWithinBoundary.
   - ContractEnforcer.enforce calls OutputValidator.validate internally — uses allow_code_blocks=false + ``` to trigger violation.
   - runWithinBoundary.suppressError=true swallows error and returns undefined (as T cast).
+
+---
+
+## Batch W6-T67 — 2026-03-23
+
+### Entry W6-T67
+
+- Tranche: W6-T67 — Safety Runtime Skills Dev-Automation Generators & CVF-UI Auth Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-skills-cvfui-auth.test.ts` (201 lines, 11 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (390 tests, 41 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 379→390 (+11). Risk R0 (test-only). GC-023 compliant.
+  - Covered 3 contracts: blueprint.generator, test.generator, cvf-ui/lib/auth.
+  - blueprint.generator module-level state: first test runs before any registration (client=null), subsequent tests re-register fresh mocks.
+  - cvf-ui/lib/auth uses simple base64+secret stub (distinct from security/auth.ts which uses HMAC-SHA256).

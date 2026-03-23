@@ -1350,3 +1350,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T65_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T66_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T67 (2026-03-23)
+
+**Tranche:** W6-T67 — Safety Runtime Skills Dev-Automation Generators & CVF-UI Auth Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for blueprint.generator (no-client-throws/mock-delegates/empty-modules-throws/empty-techStack-throws), test.generator (no-client-throws/mock-merges-fileChanges), cvf-ui/lib/auth (signToken/verifyToken/hashPassword/comparePassword stubs): `COMPLETED`
+- 11 new tests in dedicated `safety-runtime-skills-cvfui-auth.test.ts` (GC-023 compliant, 201 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 379→390 tests (+11). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T67_AUTHORIZATION_DELTA_2026-03-23.md`
+

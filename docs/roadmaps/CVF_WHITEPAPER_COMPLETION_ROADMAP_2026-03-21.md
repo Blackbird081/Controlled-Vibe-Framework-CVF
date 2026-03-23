@@ -267,6 +267,8 @@ The roadmap should now be read with one additional rule:
 - do **not** treat packaging-only continuation as the default next step
 - do prioritize one usable realization slice at a time
 - do defer concept-only targets explicitly when they are not source-backed
+- do treat validation/test-only continuation as a stop-boundary case once tranche-local confidence is already strong; further breadth must prove a real release/runtime/governance decision gain
+- do treat truth-label or claim-expansion continuation as a stop-boundary case; status relabeling may continue only when new evidence materially changes the canonical posture
 - do preserve the context-continuity model across later tranches:
   - `memory = repository of facts, history, and durable evidence`
   - `handoff = governance-filtered summary and transfer checkpoint`
@@ -277,6 +279,7 @@ Operational implication:
 - the preferred next move is a usable intake slice
 - `W4` should not be auto-opened just because `W3` is closed
 - `Watchdog`, `Audit / Consensus`, and the `Learning Plane` remain later scopes for explicit reasons, not because they were forgotten
+- once a validation wave reaches diminishing returns, the next governed move should usually shift laterally to the largest unresolved architecture or product gap instead of expanding test breadth by habit
 - handoff should now be read as context quality control by phase for multi-agent continuation, not only as pause/transfer etiquette
 
 ---

@@ -67,6 +67,7 @@ Status: canonical ownership map for critical governance controls in the active C
 - `GC-023` complements, but does not replace, dedicated rotation guards such as the incremental test log and conformance trace guards.
 - The incremental test log rotation guard is enforced both in CI and in the local pre-push hook chain so append-only test evidence cannot silently outgrow the active review window.
 - `GC-024` complements `GC-023`: one controls overall file size, the other keeps an intentional test split from silently collapsing back into the legacy file.
+- `GC-018` now also serves as the canonical stop-boundary rule for low-yield continuation classes: validation/test breadth, packaging-only continuation, and truth/claim-expansion continuation should all bias toward `DEFER` unless they move a real decision boundary.
 
 ## Current Closure Statement
 

@@ -110,6 +110,12 @@ Prefer stopping when:
 - the gate/evidence cost grows faster than the trust gain
 - another phase has a broader unresolved weakness
 
+Special stop-boundary guidance:
+
+- validation/test waves should default toward `DEFER` once tranche-local confidence is already strong; continue only when the next batch closes an explicit defer, protects a newly delivered capability, or changes a real release/runtime/governance decision boundary
+- packaging/wrapper/facade-only continuation should default toward `DEFER` unless it unlocks a real consumer path, retires a real legacy boundary, or materially reduces maintainability risk
+- target-state claim expansion, truth relabeling, or status-marketing continuation should default toward `DEFER` unless new evidence changes the canonical delivered/partial/deferred posture in a reviewable way
+
 Prefer continuing when:
 
 - the new layer closes a real ambiguity at release, audit, remediation, or promotion time
@@ -125,6 +131,7 @@ At the current baseline:
 - `Phase 0` and `Phase 5` should usually resist deepening unless there is a clear governance gap
 - `Phase 2` and `Phase 6` are still active, but must justify every new layer through this guard
 - once a phase enters diminishing returns, the burden of proof shifts toward `DEFER`
+- when a wave is already substantially delivered, lateral movement toward broader unresolved weaknesses should usually beat further local validation breadth or label-only refinement
 
 This guard is analogous to a coverage threshold:
 

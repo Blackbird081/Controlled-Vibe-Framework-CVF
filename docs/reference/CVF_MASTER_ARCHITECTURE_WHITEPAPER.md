@@ -279,6 +279,11 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
    - Mọi mở rộng hoặc tái cấu trúc cần GC-018 Continuation authorization
    - Source: `CVF_GC018_CONTINUATION_CANDIDATE_N1_2026-03-20.md`
 
+5. **Marginal-Value Stop Boundary**
+   - validation/test-only breadth, packaging-only continuation, và truth-label/claim expansion không được tiếp tục theo quán tính
+   - khi confidence đã mạnh hoặc posture đã đủ rõ, burden of proof chuyển sang `DEFER` và ưu tiên nên dịch ngang sang gap kiến trúc/capability lớn hơn
+   - Source: `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
+
 ---
 
 ### 7.2 Migration Guardrails

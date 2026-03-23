@@ -3210,3 +3210,15 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (238 tests, 13 files)
 - Notes:
   - CVF_v1.7: 209→238 (+29). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T46 Controlled Intelligence Determinism Control Tests (2026-03-23)
+
+- Scope:
+  - close 3 pure-logic dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE determinism_control
+  - contracts: ReasoningMode enum, resolveTemperature, resolveReasoningMode, createSnapshot
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/determinism_control/determinism.control.test.ts` (156 lines, 25 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (263 tests, 14 files)
+- Notes:
+  - CVF_v1.7: 238→263 (+25). Risk R0 (test-only). GC-023 compliant.

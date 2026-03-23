@@ -1179,3 +1179,16 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T16):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T16_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T17):
+
+- W6-T17 (GEF Governance Consensus Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for GovernanceConsensusContract (empty→PROCEED/score=0; ESCALATE/PAUSE/PROCEED verdict derivation; consensusScore rounded 2dp; determinism): `COMPLETED`
+- Dedicated test coverage for GovernanceConsensusSummaryContract (frequency-first dominant; ESCALATE tiebreaks; 0>=0 tiebreak gives ESCALATE for empty; accurate counts; determinism): `COMPLETED`
+- 28 new tests in dedicated `governance.consensus.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- GEF: 185 tests (+28). All planes green: `COMPLETED`
+- All GEF source contracts now have dedicated test file coverage: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T17_AUTHORIZATION_DELTA_2026-03-23.md`

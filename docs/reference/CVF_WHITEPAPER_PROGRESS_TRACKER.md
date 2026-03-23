@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Purpose: simple visual tracker for progress against `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-23` (W2-T9 closed delivered)
+> Last refreshed: `2026-03-23` (W1-T13 authorized)
 
 ---
 
@@ -15,9 +15,9 @@ Memory class: POINTER_RECORD
 |---|---|
 | Whitepaper target-state | `PARTIALLY DELIVERED` |
 | Current-cycle restructuring | `DONE` |
-| Whitepaper completion wave | `FIRST CYCLE COMPLETE + W1-T11 + W3-T4 + W1-T12 + W2-T9 POST-CYCLE CLOSED` |
+| Whitepaper completion wave | `FIRST CYCLE COMPLETE + W1-T11 + W3-T4 + W1-T12 + W2-T9 POST-CYCLE CLOSED; W1-T13 AUTHORIZED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `NONE — LAST CANONICAL CLOSURE W2-T9` |
+| Current active tranche | `W1-T13 — Control Plane Consumer Pipeline Slice — AUTHORIZED` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -77,7 +77,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `NO AUTHORIZED ACTIVE TRANCHE — LAST CLOSED W2-T9` |
+| Current canonical validation posture | `NO ACTIVE VALIDATION TRANCHE — W1-T13 CAPABILITY TRANCHE NOW AUTHORIZED` |
 
 ---
 
@@ -97,5 +97,5 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Current closure anchor: `docs/reviews/CVF_W2_T9_TRANCHE_CLOSURE_REVIEW_2026-03-23.md`
-- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T9_2026-03-23.md`
+- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T13_2026-03-23.md`
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

@@ -157,6 +157,10 @@ Current authorization state:
   - `W2-T9 / CP1` — MultiAgentCoordinationContract (`CommandRuntimeResult[] + CoordinationPolicy -> MultiAgentCoordinationResult`; agent assignment, task distribution, COORDINATED/PARTIAL/FAILED status) — Full Lane
   - `W2-T9 / CP2` — MultiAgentCoordinationSummaryContract (`MultiAgentCoordinationResult[] -> MultiAgentCoordinationSummary`; dominant status, agent count) — Fast Lane (GC-021)
   - `W2-T9 / CP3` — Tranche closure review — Full Lane
+- `W1-T13 — Control Plane Consumer Pipeline Slice` is now authorized (GC-018: 10/10 depth audit) as the next bounded realization-first control-plane tranche; closes W1-T12 implied gap “consumer path proof wiring RankedKnowledgeResult → TypedContextPackage”
+  - `W1-T13 / CP1` — ControlPlaneConsumerPipelineContract (`KnowledgeQueryRequest + ScoringWeights + SegmentTypeConstraints → ControlPlaneConsumerPackage`) — Full Lane
+  - `W1-T13 / CP2` — ControlPlaneConsumerPipelineBatchContract (`ControlPlaneConsumerPackage[] → ControlPlaneConsumerPipelineBatch`) — Fast Lane (GC-021)
+  - `W1-T13 / CP3` — Tranche closure review — Full Lane
 
 Nothing beyond `W0` in this roadmap may execute until:
 

@@ -1080,3 +1080,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T8):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T8_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T9):
+
+- W6-T9 (Execution Audit Summary Slice) delivered and closed: `COMPLETED`
+- `ExecutionAuditSummaryContract` aggregates ExecutionObservation batches into ExecutionAuditSummary: `COMPLETED`
+- Severity-first dominantOutcome (FAILED > GATED > SANDBOXED > PARTIAL > SUCCESS): `COMPLETED`
+- ExecutionAuditRisk derivation (HIGH/MEDIUM/LOW/NONE) from failure/gate/sandbox/partial signals: `COMPLETED`
+- 22 new tests in dedicated `execution.audit.summary.test.ts` (GC-023 compliant): `COMPLETED`
+- EPF: 181 tests (+22). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T9_AUTHORIZATION_DELTA_2026-03-23.md`

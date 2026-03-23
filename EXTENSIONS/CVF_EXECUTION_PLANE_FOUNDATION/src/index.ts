@@ -1,3 +1,14 @@
+// W6-T9 — Execution Audit Summary Slice (CP1)
+export {
+  ExecutionAuditSummaryContract,
+  createExecutionAuditSummaryContract,
+} from "./execution.audit.summary.contract";
+export type {
+  ExecutionAuditRisk,
+  ExecutionAuditSummary,
+  ExecutionAuditSummaryContractDependencies,
+} from "./execution.audit.summary.contract";
+
 // W6-T1 — Streaming Execution Slice (CP1–CP2)
 export {
   StreamingExecutionContract,

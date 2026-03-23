@@ -73,6 +73,43 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W3-T5 CP2 — WatchdogEscalationPipelineBatchContract
+- Scope:
+  - implement `WatchdogEscalationPipelineBatchContract` — aggregates `WatchdogEscalationPipelineResult[]` → `WatchdogEscalationPipelineBatch`
+  - `dominantAction` = severity-first (ESCALATE > MONITOR > CLEAR)
+  - `escalationActiveCount` = count of results where `escalationActive` is true
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W3_T5_WATCHDOG_ESCALATION_PIPELINE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP2) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/index.ts` (barrel exports CP1–CP2)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.batch.test.ts` (new, 9 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (GEF Watchdog Escalation Pipeline Batch partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION` -> PASS (208 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
+## [2026-03-24] Batch: W3-T5 CP1 — WatchdogEscalationPipelineContract
+- Scope:
+  - implement `WatchdogEscalationPipelineContract` — chains `(obs, exec)` → `WatchdogPulse` → `WatchdogAlertLog` → `WatchdogEscalationDecision` → `WatchdogEscalationLog` → `WatchdogEscalationPipelineResult`
+  - closes W6-T7 implied gap (no end-to-end escalation pipeline) and W3-T2 implied gap (watchdog pulse has no governed escalation path)
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W3_T5_WATCHDOG_ESCALATION_PIPELINE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-018` Full Lane audit + review (CP1) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/index.ts` (barrel exports W3-T5 CP1)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.test.ts` (new, 14 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (GEF Watchdog Escalation Pipeline partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION` -> PASS (199 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-24] Batch: W2-T10 CP2 — ExecutionConsumerResultBatchContract
 - Scope:
   - implement `ExecutionConsumerResultBatchContract` — aggregates `ExecutionConsumerResult[]` → `ExecutionConsumerResultBatch`

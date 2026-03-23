@@ -33,7 +33,7 @@ export type {
   MultiAgentCoordinationSummaryContractDependencies,
 } from "./execution.multi.agent.coordination.summary.contract";
 
-// W2-T10 — Execution Consumer Result Bridge Slice (CP1)
+// W2-T10 — Execution Consumer Result Bridge Slice (CP1–CP2)
 export {
   ExecutionConsumerResultContract,
   createExecutionConsumerResultContract,
@@ -43,6 +43,14 @@ export type {
   ExecutionConsumerResult,
   ExecutionConsumerResultContractDependencies,
 } from "./execution.consumer.result.contract";
+export {
+  ExecutionConsumerResultBatchContract,
+  createExecutionConsumerResultBatchContract,
+} from "./execution.consumer.result.batch.contract";
+export type {
+  ExecutionConsumerResultBatch,
+  ExecutionConsumerResultBatchContractDependencies,
+} from "./execution.consumer.result.batch.contract";
 
 // W6-T1 — Streaming Execution Slice (CP1–CP2)
 export {

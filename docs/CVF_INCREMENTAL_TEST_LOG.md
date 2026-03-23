@@ -73,6 +73,24 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W2-T10 CP2 — ExecutionConsumerResultBatchContract
+- Scope:
+  - implement `ExecutionConsumerResultBatchContract` — aggregates `ExecutionConsumerResult[]` → `ExecutionConsumerResultBatch`
+  - `dominantTokenBudget` = max `estimatedTokens` (pessimistic budget)
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W2_T10_EXECUTION_CONSUMER_RESULT_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP2) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.consumer.result.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (barrel exports CP1–CP2)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.consumer.result.batch.test.ts` (new, 8 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (EPF Execution Consumer Result Batch partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (457 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-24] Batch: W2-T10 CP1 — ExecutionConsumerResultContract
 - Scope:
   - implement `ExecutionConsumerResultContract` — chains `MultiAgentCoordinationResult` → `ControlPlaneConsumerPipeline.execute()` → `ExecutionConsumerResult`

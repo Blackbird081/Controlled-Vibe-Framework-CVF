@@ -1313,3 +1313,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T27):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T27_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T28):
+
+- W6-T28 (CPF Boardroom & Boardroom Round Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for BoardroomContract (createdAt; planId/consumerId; clarification status; AMEND_PLAN/ESCALATE/REJECT/PROCEED decisions; sessionId=sessionHash; determinism; warnings): `COMPLETED`
+- Dedicated test coverage for BoardroomRoundContract (focus mapping all 4 decisions; roundNumber; sourceSessionId/sourceDecision; refinementNote; roundHash/roundId determinism; custom override): `COMPLETED`
+- 27 new tests in dedicated `boardroom.round.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CPF: 374 tests (+27). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T28_AUTHORIZATION_DELTA_2026-03-23.md`

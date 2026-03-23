@@ -3001,3 +3001,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (347 tests, 6 files)
 - Notes:
   - CPF: 313→347 tests (+34). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T28 CPF Boardroom & Boardroom Round Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF BoardroomContract and BoardroomRoundContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.round.test.ts` (311 lines, 27 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (374 tests, 7 files)
+- Notes:
+  - CPF: 347→374 tests (+27). Risk R0 (test-only). GC-023 compliant.

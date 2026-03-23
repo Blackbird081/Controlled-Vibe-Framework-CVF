@@ -133,3 +133,4 @@ If routing is uncertain:
 - `governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`
 - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- `GC-026` keeps bootstrap depends on tracker freshness rather than stale progress pointers

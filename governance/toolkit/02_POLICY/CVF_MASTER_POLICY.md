@@ -131,6 +131,13 @@ Personal AI usage unrelated to company work is excluded.
    - The canonical bootstrap reference is `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`.
    - Automated enforcement reference: `governance/compat/check_session_governance_bootstrap.py`.
+20. Progress tracker sync is mandatory after any governed tranche or authorization state change that alters canonical progress posture:
+   - Workers must update the canonical tracker for the affected workline so session bootstrap does not read stale progress truth.
+   - Workers must also leave one short standardized sync note instead of relying on tracker edits alone.
+   - This rule is intentionally lighter than a full status-review rewrite, but stronger than an optional tracker refresh.
+   - Canonical template: `docs/reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`.
+   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PROGRESS_TRACKER_SYNC_GUARD.md`.
+   - Automated enforcement reference: `governance/compat/check_progress_tracker_sync.py`.
 
 ---
 

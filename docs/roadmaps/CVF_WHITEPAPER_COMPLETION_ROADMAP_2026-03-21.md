@@ -149,6 +149,10 @@ Current authorization state:
 - `W3-T4 / CP1` is now implemented as a bounded governance consensus contract baseline (`GovernanceAuditSignal[] → ConsensusDecision`); W3-T1 explicit defer "Consensus — concept-only" closed
 - `W3-T4 / CP2` is now implemented as a governance consensus summary contract (`ConsensusDecision[] → GovernanceConsensusSummary`); dominant verdict: ESCALATE > PAUSE > PROCEED; Fast Lane (GC-021)
 - `W3-T4 / CP3` tranche closure review is executed; W3 whitepaper "Audit / Consensus" target now has first operational slice for both Audit (W3-T3) and Consensus (W3-T4); GEF: 38 → 54 tests
+- `W1-T12 — Richer Knowledge Layer + Context Packager Enhancement Slice` is now authorized (GC-018: 9/10 depth audit) as the next bounded realization-first control-plane tranche; closes W1-T10 defer "advanced scoring/ranking" and W1-T11 defer "richer packager semantics"
+  - `W1-T12 / CP1` — Richer Knowledge Ranking contract (`KnowledgeQueryRequest + ScoringWeights → RankedKnowledgeResult`; multi-criteria: relevance, tier priority, recency bias) — Full Lane
+  - `W1-T12 / CP2` — Enhanced Context Packager contract (`ContextBuildRequest + SegmentTypeConstraints → TypedContextPackage`; CODE/TEXT/STRUCTURED/METADATA segment types; type-aware token budgeting) — Fast Lane (GC-021)
+  - `W1-T12 / CP3` — Tranche closure review — Full Lane
 
 Nothing beyond `W0` in this roadmap may execute until:
 

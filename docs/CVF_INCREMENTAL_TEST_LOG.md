@@ -3581,3 +3581,21 @@ Utility and guard:
   - Covered 3 contracts: CostGuard (static validate), nextState approval machine, RiskEngine (static assess).
   - CostGuard WARNING threshold at 80% of proposal token limit (8000/10000 = 80% of 10000).
   - RiskEngine: POLICY+policy-file = 50+100 = 150 → CRITICAL; INFRA+large-diff+core = 20+30+30 = 80 → HIGH.
+
+---
+
+## Batch W6-T70 — 2026-03-23
+
+### Entry W6-T70
+
+- Tranche: W6-T70 — Safety Runtime Policy Hash, Executor & Kernel Entrypoint Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-policy-hash-executor.test.ts` (143 lines, 11 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (433 tests, 44 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 422→433 (+11). Risk R0 (test-only). GC-023 compliant.
+  - Covered 3 contracts: generatePolicyHash, executePolicy, KernelRuntimeEntrypoint.
+  - Fix: registerPolicy(version, rules) takes 2 args, not an object; ProposalPayload = { [key: string]: unknown }.
+  - KernelRuntimeEntrypoint wraps ExecutionOrchestrator; default policyVersion = "v1".

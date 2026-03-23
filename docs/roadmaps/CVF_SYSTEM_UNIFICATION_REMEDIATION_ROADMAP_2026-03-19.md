@@ -1392,3 +1392,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T68_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T69_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T70 (2026-03-23)
+
+**Tranche:** W6-T70 — Safety Runtime Policy Hash, Executor & Kernel Entrypoint Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for generatePolicyHash (64-char hex/deterministic/version-diff/rules-diff), executePolicy (first-match/all-null→pending/skip-null-take-second), KernelRuntimeEntrypoint (construct/getPolicyVersion/getTelemetry/custom-version): `COMPLETED`
+- 11 new tests in dedicated `safety-runtime-policy-hash-executor.test.ts` (GC-023 compliant, 143 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 422→433 tests (+11). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T70_AUTHORIZATION_DELTA_2026-03-23.md`
+

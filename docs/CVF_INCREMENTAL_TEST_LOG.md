@@ -2990,3 +2990,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (313 tests, 5 files)
 - Notes:
   - CPF: 285→313 tests (+28). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T27 CPF Design & Design Consumer Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF DesignContract and DesignConsumerContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/design.consumer.test.ts` (329 lines, 34 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (347 tests, 6 files)
+- Notes:
+  - CPF: 313→347 tests (+34). Risk R0 (test-only). GC-023 compliant.

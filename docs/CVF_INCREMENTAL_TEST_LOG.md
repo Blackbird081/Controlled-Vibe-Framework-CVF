@@ -73,6 +73,24 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-23] Batch: W1-T13 CP1 — ControlPlaneConsumerPipelineContract
+- Scope:
+  - implement `ControlPlaneConsumerPipelineContract` — chains `KnowledgeRankingContract.rank()` → `ContextPackagerContract.pack()` → `ControlPlaneConsumerPackage`
+  - closes W1-T12 implied gap: consumer path proof wiring `RankedKnowledgeResult → TypedContextPackage`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T13_CONTROL_PLANE_CONSUMER_PIPELINE_EXECUTION_PLAN_2026-03-23.md`
+- Authorization chain:
+  - `GC-018` (10/10) → Full Lane audit + review (CP1) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/consumer.pipeline.test.ts` (new, 10 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CPF Consumer Pipeline partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (677 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-23] Batch: W2-T9 CP2 — MultiAgentCoordinationSummaryContract
 - Scope:
   - implement `MultiAgentCoordinationSummaryContract` — aggregates coordination outcomes with FAILED > PARTIAL > COORDINATED dominant status

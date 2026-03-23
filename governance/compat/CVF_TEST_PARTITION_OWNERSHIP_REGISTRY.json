@@ -12,6 +12,17 @@
       ]
     },
     {
+      "scope": "CPF Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ControlPlaneConsumerPipelineContract",
+        "createControlPlaneConsumerPipelineContract"
+      ]
+    },
+    {
       "scope": "EPF Multi-Agent Coordination Summary",
       "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.multi.agent.coordination.summary.test.ts",
       "forbiddenFiles": [

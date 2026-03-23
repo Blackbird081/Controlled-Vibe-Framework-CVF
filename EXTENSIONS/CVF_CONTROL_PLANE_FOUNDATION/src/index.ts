@@ -1,3 +1,14 @@
+// W1-T13 — Control Plane Consumer Pipeline Slice (CP1)
+export {
+  ControlPlaneConsumerPipelineContract,
+  createControlPlaneConsumerPipelineContract,
+} from "./consumer.pipeline.contract";
+export type {
+  ControlPlaneConsumerRequest,
+  ControlPlaneConsumerPackage,
+  ControlPlaneConsumerPipelineContractDependencies,
+} from "./consumer.pipeline.contract";
+
 // W1-T11 — Context Builder Foundation Slice (CP1–CP2)
 export {
   ContextBuildContract,

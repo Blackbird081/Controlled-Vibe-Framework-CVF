@@ -3270,3 +3270,16 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (364 tests, 18 files)
 - Notes:
   - CVF_v1.7: 336→364 (+28). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T51 Controlled Intelligence Lessons Registry Tests (2026-03-23)
+
+- Scope:
+  - close 5 dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE learning/lessons_registry
+  - contracts: detectConflict, signLesson/verifyLesson/signAndAttach/verifySignedLesson, rule.versioning, lesson.store
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/learning/lessons_registry/lessons.registry.test.ts` (242 lines, 25 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (389 tests, 19 files)
+- Notes:
+  - CVF_v1.7: 364→389 (+25). Risk R0 (test-only). GC-023 compliant.
+  - Used timestamp-based unique IDs in lesson.store tests to prevent disk persistence collisions.

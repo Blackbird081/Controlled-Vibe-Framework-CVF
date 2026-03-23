@@ -1136,3 +1136,14 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T50):
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T50_AUTHORIZATION_DELTA_2026-03-23.md`
 
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T51):
+
+- W6-T51 (Controlled Intelligence Lessons Registry Dedicated Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated tests for detectConflict, signLesson/verifyLesson/signAndAttach/verifySignedLesson, registerRuleVersion/getRuleHistory, lesson.store: `COMPLETED`
+- 25 new tests in dedicated `lessons.registry.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7_CONTROLLED_INTELLIGENCE: 389 tests (+25). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T51_AUTHORIZATION_DELTA_2026-03-23.md`
+

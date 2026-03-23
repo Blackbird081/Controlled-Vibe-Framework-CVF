@@ -1252,3 +1252,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T58_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T59_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T60 (2026-03-23)
+
+**Tranche:** W6-T60 — Safety Runtime Contract Runtime Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for ContractValidator (validateDefinition/validateIOContract), IOContractRegistry (register/get/upsert), OutputValidator (6 guard branches), TransformationGuard (allow/deny), ConsumerAuthorityMatrix (default/explicit consumers): `COMPLETED`
+- 22 new tests in dedicated `safety-runtime-contract-runtime.test.ts` (GC-023 compliant, 194 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 261→283 tests (+22). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T60_AUTHORIZATION_DELTA_2026-03-23.md`
+

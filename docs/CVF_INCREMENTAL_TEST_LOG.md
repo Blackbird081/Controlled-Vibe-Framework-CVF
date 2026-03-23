@@ -3405,3 +3405,20 @@ Utility and guard:
   - CVF_v1.7.1_SAFETY_RUNTIME: 242→261 (+19). Risk R0 (test-only). GC-023 compliant.
   - Covered 6 contracts: CreativeProvenanceTagger, AuditLogger, TraceReporter, DomainClassifier, BoundaryRules, ScopeResolver.
   - DomainClassifier tests use Vietnamese keywords matching the source implementation.
+
+---
+
+## Batch W6-T60 — 2026-03-23
+
+### Entry W6-T60
+
+- Tranche: W6-T60 — Safety Runtime Contract Runtime Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-contract-runtime.test.ts` (194 lines, 22 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (283 tests, 34 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 261→283 (+22). Risk R0 (test-only). GC-023 compliant.
+  - Covered 5 kernel/02_contract_runtime contracts: ContractValidator, IOContractRegistry, OutputValidator, TransformationGuard, ConsumerAuthorityMatrix.
+  - OutputValidator tests verified all 6 guard branches (empty/code-block/link/tokens/json/valid).

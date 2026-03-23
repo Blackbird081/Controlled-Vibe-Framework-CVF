@@ -1308,3 +1308,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T62_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T63_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T64 (2026-03-23)
+
+**Tranche:** W6-T64 — Safety Runtime Adapters, Simulation & Bootstrap Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for DirectProviderAdapter (no-client-throws/with-mock-delegates), LLMAdapter (wrong-token-blocked/correct-token+message/correct+empty), SimulationEngine (no-snapshot-throws/with-snapshot+mock-CVF), ReplayService (replay wraps simulate with simulateOnly=true), createLifecycleEngine (returns instance with submit method): `COMPLETED`
+- 9 new tests in dedicated `safety-runtime-adapters-simulation.test.ts` (GC-023 compliant, 138 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 328→337 tests (+9). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T64_AUTHORIZATION_DELTA_2026-03-23.md`
+

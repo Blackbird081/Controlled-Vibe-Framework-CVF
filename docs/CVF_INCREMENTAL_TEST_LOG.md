@@ -3473,3 +3473,21 @@ Utility and guard:
   - CVF_v1.7.1_SAFETY_RUNTIME: 313→328 (+15). Risk R0 (test-only). GC-023 compliant.
   - Covered 6 contracts: ai/audit.logger, ai/ai.governance, roles, system.guard, transitionApproval, telemetry.hook.
   - Used afterAll hook to reset systemPolicy.emergencyStop=false after emergency-stop test.
+
+---
+
+## Batch W6-T64 — 2026-03-23
+
+### Entry W6-T64
+
+- Tranche: W6-T64 — Safety Runtime Adapters, Simulation & Bootstrap Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-adapters-simulation.test.ts` (138 lines, 9 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (337 tests, 38 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 328→337 (+9). Risk R0 (test-only). GC-023 compliant.
+  - Covered 5 contracts: DirectProviderAdapter, LLMAdapter, SimulationEngine, ReplayService, createLifecycleEngine.
+  - LLMAdapter uses custom Symbol as executionToken; wrong symbol → "Direct LLM access blocked".
+  - SimulationEngine uses saveSnapshot() to pre-populate module state + inline mock CVF API.

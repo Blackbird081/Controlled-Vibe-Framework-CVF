@@ -1217,3 +1217,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T19):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T19_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T20):
+
+- W6-T20 (EPF Observer & Feedback Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for ExecutionObserverContract (5 outcomeClass branches; confidenceSignal per class; 4 note categories; counts propagated; custom classifyOutcome; determinism): `COMPLETED`
+- Dedicated test coverage for ExecutionFeedbackContract (5 feedbackClass mappings; priority derivation; confidenceBoost for ACCEPT; rationale content; custom mapFeedbackClass; determinism): `COMPLETED`
+- 47 new tests in dedicated `observer.feedback.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- EPF: 297 tests (+47). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T20_AUTHORIZATION_DELTA_2026-03-23.md`

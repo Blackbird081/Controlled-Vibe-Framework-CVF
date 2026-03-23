@@ -2913,3 +2913,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (250 tests, 5 files)
 - Notes:
   - EPF: 211→250 tests (+39). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T20 EPF Observer & Feedback Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for EPF ExecutionObserverContract and ExecutionFeedbackContract (W2-T4 era)
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/observer.feedback.test.ts` (412 lines, 47 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (297 tests, 6 files)
+- Notes:
+  - EPF: 250→297 tests (+47). Risk R0 (test-only). GC-023 compliant.

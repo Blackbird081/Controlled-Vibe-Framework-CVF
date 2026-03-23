@@ -3034,3 +3034,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (440 tests, 9 files)
 - Notes:
   - CPF: 412→440 tests (+28). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T31 CPF Route Match & Route Match Log Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF RouteMatchContract + RouteMatchLogContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/route.match.log.test.ts` (285 lines, 35 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (475 tests, 10 files)
+- Notes:
+  - CPF: 440→475 tests (+35). Risk R0 (test-only). GC-023 compliant.

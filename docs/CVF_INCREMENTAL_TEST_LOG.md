@@ -3067,3 +3067,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (547 tests, 12 files)
 - Notes:
   - CPF: 509→547 tests (+38). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T34 CPF Gateway Consumer Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF GatewayConsumerContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.consumer.test.ts` (155 lines, 21 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (568 tests, 13 files)
+- Notes:
+  - CPF: 547→568 tests (+21). Risk R0 (test-only). GC-023 compliant.

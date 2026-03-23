@@ -1381,3 +1381,14 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T33):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T33_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T34):
+
+- W6-T34 (CPF Gateway Consumer Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for GatewayConsumerContract (3-stage pipeline; SIGNAL_PROCESSED/INTAKE_EXECUTED/RECEIPT_ISSUED; consumerId/sessionId propagation; gateway/intake warning prefixes; consumptionHash determinism): `COMPLETED`
+- 21 new tests in dedicated `gateway.consumer.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CPF: 568 tests (+21). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T34_AUTHORIZATION_DELTA_2026-03-23.md`

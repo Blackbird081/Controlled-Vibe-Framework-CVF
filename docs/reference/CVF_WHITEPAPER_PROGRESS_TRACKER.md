@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Purpose: simple visual tracker for progress against `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-24` (W2-T10 closed delivered)
+> Last refreshed: `2026-03-24` (W3-T5 authorized, IN PROGRESS)
 
 ---
 
@@ -17,7 +17,7 @@ Memory class: POINTER_RECORD
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + W1-T11 + W3-T4 + W1-T12 + W2-T9 + W1-T13 + W1-T14 + W2-T10 POST-CYCLE CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `NONE — LAST CANONICAL CLOSURE W2-T10` |
+| Current active tranche | `W3-T5 — Watchdog Escalation Pipeline Slice (IN PROGRESS)` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -69,6 +69,7 @@ Memory class: POINTER_RECORD
 | `W3-T4` governance consensus slice | `DONE` |
 | `W1-T14` gateway knowledge pipeline integration | `DONE` |
 | `W2-T10` execution consumer result bridge | `DONE` |
+| `W3-T5` watchdog escalation pipeline | `IN PROGRESS` |
 
 ---
 
@@ -79,7 +80,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `NO AUTHORIZED ACTIVE TRANCHE — LAST CLOSED W2-T10` |
+| Current canonical validation posture | `W3-T5 AUTHORIZED — IN PROGRESS` |
 
 ---
 

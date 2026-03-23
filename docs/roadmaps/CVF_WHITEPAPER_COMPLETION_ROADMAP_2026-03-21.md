@@ -169,6 +169,10 @@ Current authorization state:
   - `W1-T14 / CP1` — GatewayConsumerPipelineContract (`GatewaySignalRequest → GatewayProcessedRequest + ControlPlaneConsumerPackage`) — Full Lane
   - `W1-T14 / CP2` — GatewayConsumerPipelineBatchContract (`GatewayConsumerPipelineResult[] → GatewayConsumerPipelineBatch`) — Fast Lane (GC-021)
   - `W1-T14 / CP3` — Tranche closure review — Full Lane
+- `W3-T5 — Watchdog Escalation Pipeline Slice` is now authorized (GC-018: 10/10 depth audit) as the next bounded realization-first governance-plane tranche; closes W6-T7 implied gap (no end-to-end escalation pipeline) and W3-T2 implied gap (watchdog pulse has no governed escalation path)
+  - `W3-T5 / CP1` — WatchdogEscalationPipelineContract (`(obs, exec)` → `WatchdogPulse → WatchdogAlertLog → WatchdogEscalationDecision → WatchdogEscalationPipelineResult`) — Full Lane
+  - `W3-T5 / CP2` — WatchdogEscalationPipelineBatchContract (`WatchdogEscalationPipelineResult[] → WatchdogEscalationPipelineBatch`) — Fast Lane (GC-021)
+  - `W3-T5 / CP3` — Tranche closure review — Full Lane
 
 Nothing beyond `W0` in this roadmap may execute until:
 

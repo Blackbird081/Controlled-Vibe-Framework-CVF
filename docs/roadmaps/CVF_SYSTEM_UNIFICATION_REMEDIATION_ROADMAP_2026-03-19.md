@@ -1152,3 +1152,16 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T14):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T14_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T15):
+
+- W6-T15 (LPF Feedback Loop Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for LearningReinjectionContract (4 signal mappings, custom override): `COMPLETED`
+- Dedicated test coverage for LearningLoopContract (severity-first dominant, mapping via reinjector): `COMPLETED`
+- Dedicated test coverage for FeedbackLedgerContract (record building, counts, determinism): `COMPLETED`
+- 37 new tests in dedicated `learning.feedback.loop.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- LPF: 330 tests (+37). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T15_AUTHORIZATION_DELTA_2026-03-23.md`

@@ -130,3 +130,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T82_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T83_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T84 (2026-03-23)
+
+**Tranche:** W6-T84 — DomainRegistry, DomainGuard & ContractEnforcer Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for DomainRegistry (6-domain-bootstrap/get/exists/list/duplicate-throws), DomainGuard.validate (no-domain/unknown/wrong-type/valid), DomainGuard.enforce (valid/invalid-throws), ContractEnforcer.validateInput (no-contract/missing-field/wrong-type), ContractEnforcer.validateOutput (no-contract/wrong-type), ContractEnforcer.enforce (valid/exceeds-limit): `COMPLETED`
+- 19 new tests in dedicated `safety-runtime-domain-registry-guard-contract-enforcer.test.ts` (GC-023 compliant, 173 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 689→708 tests (+19). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T84_AUTHORIZATION_DELTA_2026-03-23.md`
+

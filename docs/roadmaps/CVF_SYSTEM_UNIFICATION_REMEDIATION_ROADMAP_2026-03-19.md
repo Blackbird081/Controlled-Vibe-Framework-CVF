@@ -1069,3 +1069,14 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T4 through W6-T7):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T7_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T8):
+
+- W6-T8 (Truth Model Scoring Slice) delivered and closed: `COMPLETED`
+- `TruthScoreContract` produces numeric 0–100 composite score with 4 dimensions: `COMPLETED`
+- `TruthScoreLogContract` aggregates scores with severity-first dominantClass: `COMPLETED`
+- 33 new tests in dedicated `truth.score.test.ts` (GC-023 compliant): `COMPLETED`
+- Whitepaper "truth upgrades (W5 continuation)" gap SUBSTANTIALLY DELIVERED: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T8_AUTHORIZATION_DELTA_2026-03-23.md`

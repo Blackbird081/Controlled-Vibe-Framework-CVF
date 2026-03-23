@@ -1,3 +1,23 @@
+// W6-T8 — Truth Model Scoring Slice (CP1–CP2)
+export {
+  TruthScoreContract,
+  createTruthScoreContract,
+} from "./truth.score.contract";
+export type {
+  TruthScoreClass,
+  TruthScoreDimensions,
+  TruthScore,
+  TruthScoreContractDependencies,
+} from "./truth.score.contract";
+export {
+  TruthScoreLogContract,
+  createTruthScoreLogContract,
+} from "./truth.score.log.contract";
+export type {
+  TruthScoreLog,
+  TruthScoreLogContractDependencies,
+} from "./truth.score.log.contract";
+
 // W6-T6 — Pattern Drift Detection Slice (CP1–CP2)
 export {
   PatternDriftContract,

@@ -3234,3 +3234,15 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (296 tests, 15 files)
 - Notes:
   - CVF_v1.7: 263→296 (+33). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T48 Controlled Intelligence Role Guard Internals Tests (2026-03-23)
+
+- Scope:
+  - close 2 pure-logic dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE role_transition_guard
+  - contracts: checkTransitionDepth, detectRoleLoop
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/role_transition_guard/role.guard.internals.test.ts` (120 lines, 18 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (314 tests, 16 files)
+- Notes:
+  - CVF_v1.7: 296→314 (+18). Risk R0 (test-only). GC-023 compliant.

@@ -3655,3 +3655,22 @@ Utility and guard:
   - proposal.controller/execution.controller share module-level proposalStore; saved ids across describe blocks via let variables.
   - CreativePermissionPolicy: allows only R0/R1 when creative_allowed=true.
   - CreativeController.adjust: returns [creative:controlled] tagged output when enabled + permission passes.
+
+---
+
+## Batch W6-T74 — 2026-03-23
+
+### Entry W6-T74
+
+- Tranche: W6-T74 — Safety Runtime Invariant Checker, Internal Ledger, Session State, Pricing & Checkpoint Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-invariant-ledger-session-pricing.test.ts` (211 lines, 19 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (522 tests, 48 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 503→522 (+19). Risk R0 (test-only). GC-023 compliant.
+  - Covered 8 contracts: InvariantChecker, TraceReporter, BoundarySnapshot, LineageTracker, RiskEvolution, SessionState, calculateUsdCost, checkpoint.store.
+  - InvariantChecker: cross-domain reuse throws with both domain names in message.
+  - checkpoint.store uses _clearAllCheckpoints in beforeEach for test isolation.
+  - calculateUsdCost: (inputTokens/1000)*inputPer1k + (outputTokens/1000)*outputPer1k.

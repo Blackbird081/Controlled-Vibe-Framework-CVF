@@ -1448,3 +1448,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T72_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T73_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T74 (2026-03-23)
+
+**Tranche:** W6-T74 — Safety Runtime Invariant Checker, Internal Ledger, Session State, Pricing & Checkpoint Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for InvariantChecker (no-cross-domain/cross-domain-throws), TraceReporter (generateReport), BoundarySnapshot, LineageTracker, RiskEvolution (internal ledger stores), SessionState (setDomain/getDomain/setRisk/getRisk), calculateUsdCost (gpt-4o/claude-3-opus/unknown-throws), checkpoint.store (save/get/has/_clear): `COMPLETED`
+- 19 new tests in dedicated `safety-runtime-invariant-ledger-session-pricing.test.ts` (GC-023 compliant, 211 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 503→522 tests (+19). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T74_AUTHORIZATION_DELTA_2026-03-23.md`
+

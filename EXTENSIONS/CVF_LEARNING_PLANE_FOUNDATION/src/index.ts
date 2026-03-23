@@ -1,3 +1,22 @@
+// W6-T6 — Pattern Drift Detection Slice (CP1–CP2)
+export {
+  PatternDriftContract,
+  createPatternDriftContract,
+} from "./pattern.drift.contract";
+export type {
+  DriftClass,
+  PatternDriftSignal,
+  PatternDriftContractDependencies,
+} from "./pattern.drift.contract";
+export {
+  PatternDriftLogContract,
+  createPatternDriftLogContract,
+} from "./pattern.drift.log.contract";
+export type {
+  PatternDriftLog,
+  PatternDriftLogContractDependencies,
+} from "./pattern.drift.log.contract";
+
 // W4-T7 — Learning Plane Observability Slice (CP1–CP2)
 export {
   LearningObservabilityContract,

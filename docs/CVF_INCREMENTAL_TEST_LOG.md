@@ -3636,3 +3636,22 @@ Utility and guard:
   - safety.guard uses module-level state (tokenUsage, providerBudgets); used beforeEach(resetTokenUsage) for isolation.
   - intent.parser: deterministicFallback on JSON parse error — Vietnamese "tạo nhân sự" → create_hr_module; generic → unknown.
   - proposal.builder: confidence>0.8→low, 0.5–0.8→medium, <0.5→high; crypto.randomUUID() available in Node.js test env.
+
+---
+
+## Batch W6-T73 — 2026-03-23
+
+### Entry W6-T73
+
+- Tranche: W6-T73 — Safety Runtime CVF-UI API Controllers & Creative Control Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-cvfui-api-creative-control.test.ts` (232 lines, 25 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (503 tests, 47 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 478→503 (+25). Risk R0 (test-only). GC-023 compliant.
+  - Covered 10 contracts: 4 CVF-UI API controllers + 6 kernel/05_creative_control classes.
+  - proposal.controller/execution.controller share module-level proposalStore; saved ids across describe blocks via let variables.
+  - CreativePermissionPolicy: allows only R0/R1 when creative_allowed=true.
+  - CreativeController.adjust: returns [creative:controlled] tagged output when enabled + permission passes.

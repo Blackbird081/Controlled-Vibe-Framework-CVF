@@ -1434,3 +1434,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T71_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T72_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T73 (2026-03-23)
+
+**Tranche:** W6-T73 — Safety Runtime CVF-UI API Controllers & Creative Control Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for ai-settings.controller, audit.controller, proposal.controller, execution.controller (CVF-UI API), AuditLogger, LineageStore, RefusalRegistry, CreativePermissionPolicy, CreativeProvenanceTagger, CreativeController (kernel/05_creative_control): `COMPLETED`
+- 25 new tests in dedicated `safety-runtime-cvfui-api-creative-control.test.ts` (GC-023 compliant, 232 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 478→503 tests (+25). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T73_AUTHORIZATION_DELTA_2026-03-23.md`
+

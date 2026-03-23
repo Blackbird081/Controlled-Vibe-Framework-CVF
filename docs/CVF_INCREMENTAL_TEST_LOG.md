@@ -3712,3 +3712,22 @@ Utility and guard:
   - RiskGate: safe text→R0→passthrough; "kill myself"→R4→block; "legal advice"→R3→needs_approval.
   - LineageGraph.getSnapshot uses spread ([...nodes]) → returns copy, not reference.
   - Roadmap archived after this tranche (reached 1492/1500 line limit).
+
+---
+
+## Batch W6-T77 — 2026-03-23
+
+### Entry W6-T77
+
+- Tranche: W6-T77 — Safety Runtime Contract Validator, Domain Lock Engine & Dev-Automation Risk Scorer Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-contract-validator-domain-lock-engine-risk.test.ts` (148 lines, 14 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (579 tests, 51 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 565→579 (+14). Risk R0 (test-only). GC-023 compliant.
+  - Covered 3 contracts: ContractValidator, DomainLockEngine, scoreRisk.
+  - DomainLockEngine.lock: chains Classifier+ScopeResolver+BoundaryRules; classifier mismatch throws.
+  - scoreRisk: totalScore = keywordRisk + lengthRisk + roleRisk + devAutomationRisk (pure function).
+  - Roadmap archived at W6-T76; W6-T77+ appended to reset roadmap file.

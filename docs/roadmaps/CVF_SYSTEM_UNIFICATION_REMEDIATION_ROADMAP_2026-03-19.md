@@ -32,3 +32,17 @@ The archive contains all GC-018 checkpoint blocks from W1-T1 through W6-T76 (149
 
 > Checkpoints below continue from the archive. Next tranche: W6-T77.
 
+---
+
+### GC-018 Checkpoint — W6-T77 (2026-03-23)
+
+**Tranche:** W6-T77 — Safety Runtime Contract Validator, Domain Lock Engine & Dev-Automation Risk Scorer Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for ContractValidator (validateDefinition: undefined/empty/valid; validateIOContract: missing-ids/mismatch/valid), DomainLockEngine.lock (analytical/creative/unknown-domain/classifier-mismatch), scoreRisk (clean-ADMIN/delete-keyword/long-instruction/devMode): `COMPLETED`
+- 14 new tests in dedicated `safety-runtime-contract-validator-domain-lock-engine-risk.test.ts` (GC-023 compliant, 148 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 565→579 tests (+14). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T77_AUTHORIZATION_DELTA_2026-03-23.md`
+

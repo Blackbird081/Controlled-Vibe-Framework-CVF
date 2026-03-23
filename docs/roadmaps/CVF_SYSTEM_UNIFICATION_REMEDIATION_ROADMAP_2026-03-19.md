@@ -1406,3 +1406,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T69_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T70_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T71 (2026-03-23)
+
+**Tranche:** W6-T71 — Safety Runtime Sandbox, Snapshot, Provider Policy, Usage Tracker, PolicyDiff & GovernedGenerate Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for sandbox.mode (enable/disable/isSandbox), provider.policy (enforceProviderPolicy: maxTokens/temperature/keywords), usage.tracker (recordUsage/getUsageHistory), proposal.snapshot (save/get/list/unknown), policy.diff (diffPolicyImpact: empty/changed/from-to), ai.governance (governedGenerate: success/policy-blocks/provider-throws): `COMPLETED`
+- 21 new tests in dedicated `safety-runtime-sandbox-snapshot-policy-diff.test.ts` (GC-023 compliant, 213 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 433→454 tests (+21). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T71_AUTHORIZATION_DELTA_2026-03-23.md`
+

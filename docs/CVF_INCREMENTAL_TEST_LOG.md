@@ -3599,3 +3599,21 @@ Utility and guard:
   - Covered 3 contracts: generatePolicyHash, executePolicy, KernelRuntimeEntrypoint.
   - Fix: registerPolicy(version, rules) takes 2 args, not an object; ProposalPayload = { [key: string]: unknown }.
   - KernelRuntimeEntrypoint wraps ExecutionOrchestrator; default policyVersion = "v1".
+
+---
+
+## Batch W6-T71 — 2026-03-23
+
+### Entry W6-T71
+
+- Tranche: W6-T71 — Safety Runtime Sandbox, Snapshot, Provider Policy, Usage Tracker, PolicyDiff & GovernedGenerate Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-sandbox-snapshot-policy-diff.test.ts` (213 lines, 21 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (454 tests, 45 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 433→454 (+21). Risk R0 (test-only). GC-023 compliant.
+  - Covered 6 contracts: sandbox.mode, provider.policy, usage.tracker, proposal.snapshot, policy.diff, ai.governance (governedGenerate).
+  - policy.diff depends on proposal.snapshot's module-level store — test ordering arranged so snapshot describe runs before policy.diff describe.
+  - governedGenerate calls enforceProviderPolicy before provider.generate; mock provider validated.

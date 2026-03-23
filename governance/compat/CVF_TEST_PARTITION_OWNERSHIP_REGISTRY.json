@@ -1,6 +1,17 @@
 {
   "partitions": [
     {
+      "scope": "CPF Knowledge Ranking",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.ranking.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeRankingContract",
+        "createKnowledgeRankingContract"
+      ]
+    },
+    {
       "scope": "CPF Context Builder",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.builder.test.ts",
       "forbiddenFiles": [

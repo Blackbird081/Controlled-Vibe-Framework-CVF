@@ -44,6 +44,19 @@ export type {
   KnowledgeQueryContractDependencies,
 } from "./knowledge.query.contract";
 export {
+  KnowledgeRankingContract,
+  createKnowledgeRankingContract,
+} from "./knowledge.ranking.contract";
+export type {
+  RankableKnowledgeItem,
+  ScoringWeights,
+  ScoreBreakdown,
+  RankedKnowledgeItem,
+  KnowledgeRankingRequest,
+  RankedKnowledgeResult,
+  KnowledgeRankingContractDependencies,
+} from "./knowledge.ranking.contract";
+export {
   KnowledgeQueryBatchContract,
   createKnowledgeQueryBatchContract,
 } from "./knowledge.query.batch.contract";

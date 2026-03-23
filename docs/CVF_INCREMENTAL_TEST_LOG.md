@@ -73,6 +73,27 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-23] Batch: W1-T12 CP1 — Richer Knowledge Ranking Contract
+- Scope:
+  - implement `KnowledgeRankingContract` — multi-criteria scoring: relevance, tier priority, recency bias
+  - `KnowledgeRankingRequest + ScoringWeights → RankedKnowledgeResult`
+  - closes W1-T10 defer: advanced scoring/ranking
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T12_RICHER_KNOWLEDGE_CONTEXT_PACKAGER_EXECUTION_PLAN_2026-03-23.md`
+- Authorization chain:
+  - `GC-018` W1-T12 continuation candidate (9/10) → AUTHORIZED; Full Lane CP
+- Files created / updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.ranking.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.ranking.test.ts` (new, 11 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CPF Knowledge Ranking partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (655 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+- Notes/Risks:
+  - pre-existing intermittent flake in gateway.consumer deterministic test (passes in isolation); not caused by CP1
+
 ## [2026-03-22] Batch: W1-T3 CP4 — Design-to-Orchestration Consumer Path Proof
 - Scope:
   - implement `DesignConsumerContract` as Fast Lane additive contract inside W1-T3

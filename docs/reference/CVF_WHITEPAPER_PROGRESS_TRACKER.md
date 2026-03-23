@@ -16,7 +16,8 @@ Memory class: POINTER_RECORD
 | Whitepaper target-state | `PARTIALLY DELIVERED` |
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + W1-T11 + W3-T4 POST-CYCLE CLOSED` |
-| Current active tranche | `NONE - LAST CANONICAL CLOSURE W3-T4` |
+| Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
+| Current active tranche | `NONE - LAST CANONICAL CLOSURE W6-T44` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -67,11 +68,23 @@ Memory class: POINTER_RECORD
 
 ---
 
+## Post-Cycle Validation Tracker
+
+| Validation line | State |
+|---|---|
+| `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
+| `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
+| `W6-T44` controlled-intelligence verification policy tests | `DONE` |
+| Current canonical validation posture | `NO AUTHORIZED ACTIVE TRANCHE - LAST CLOSED W6-T44` |
+
+---
+
 ## Quick Interpretation
 
 - If a tranche is `DONE`, its approved tranche boundary is already closed.
 - If no tranche is currently active, the currently authorized line is canonically closed and any further work needs a new `GC-018` decision.
 - If an area is `PARTIAL`, CVF already has usable delivered slices there, but not the full whitepaper target-state.
+- This tracker only reflects canonically committed closures; worktree-only slices do not count until their governed packet chain is committed.
 
 ---
 
@@ -82,3 +95,4 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Current closure anchor: `docs/reviews/CVF_W3_T4_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-23.md`
+- Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

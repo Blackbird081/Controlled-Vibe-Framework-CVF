@@ -40,7 +40,14 @@ Lane: `Full Lane`
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
+
+Implementation receipt:
+
+- audit: `docs/audits/CVF_W2_T10_CP1_EXECUTION_CONSUMER_RESULT_AUDIT_2026-03-24.md`
+- review: `docs/reviews/CVF_GC019_W2_T10_CP1_EXECUTION_CONSUMER_RESULT_REVIEW_2026-03-24.md`
+- delta: `docs/baselines/CVF_W2_T10_CP1_EXECUTION_CONSUMER_RESULT_DELTA_2026-03-24.md`
+- tests: `tests/execution.consumer.result.test.ts` — 11 new tests; 448 EPF total, 0 failures
 
 ### CP2 — ExecutionConsumerResultBatchContract
 
@@ -102,4 +109,4 @@ All artifacts follow `GC-022` memory classification.
 
 ## 5. Final Readout
 
-> `W2-T10` authorized. `CP1`–`CP3` PLANNED.
+> `W2-T10` in progress. `CP1` IMPLEMENTED (11 tests, 448 EPF). `CP2`–`CP3` PLANNED.

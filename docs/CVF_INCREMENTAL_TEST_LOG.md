@@ -73,6 +73,24 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W2-T10 CP1 — ExecutionConsumerResultContract
+- Scope:
+  - implement `ExecutionConsumerResultContract` — chains `MultiAgentCoordinationResult` → `ControlPlaneConsumerPipeline.execute()` → `ExecutionConsumerResult`
+  - closes W2-T9 + W1-T13 implied execution→consumer pipeline gap
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W2_T10_EXECUTION_CONSUMER_RESULT_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-018` Full Lane audit + review (CP1) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.consumer.result.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (barrel exports W2-T10 CP1)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.consumer.result.test.ts` (new, 11 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (EPF Execution Consumer Result partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (448 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-24] Batch: W1-T14 CP2 — GatewayConsumerPipelineBatchContract
 - Scope:
   - implement `GatewayConsumerPipelineBatchContract` — aggregates `GatewayConsumerPipelineResult[]` → `GatewayConsumerPipelineBatch`

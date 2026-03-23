@@ -12,6 +12,17 @@
       ]
     },
     {
+      "scope": "EPF Execution Consumer Result",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.consumer.result.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionConsumerResultContract",
+        "createExecutionConsumerResultContract"
+      ]
+    },
+    {
       "scope": "CPF Gateway Consumer Pipeline Batch",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.consumer.pipeline.batch.test.ts",
       "forbiddenFiles": [

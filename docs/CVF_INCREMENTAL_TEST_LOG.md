@@ -73,6 +73,24 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W1-T14 CP1 — GatewayConsumerPipelineContract
+- Scope:
+  - implement `GatewayConsumerPipelineContract` — chains `AIGateway.process()` → `ControlPlaneConsumerPipeline.execute()` → `GatewayConsumerPipelineResult`
+  - closes W1-T4 + W1-T13 implied gateway→enriched-pipeline gap
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T14_GATEWAY_KNOWLEDGE_PIPELINE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-018` Full Lane audit + review (CP1) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports W1-T14 CP1)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.consumer.pipeline.test.ts` (new, 11 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CPF Gateway Consumer Pipeline partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (697 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-23] Batch: W1-T13 CP2 — ControlPlaneConsumerPipelineBatchContract
 - Scope:
   - implement `ControlPlaneConsumerPipelineBatchContract` — aggregates `ControlPlaneConsumerPackage[]` → `ControlPlaneConsumerPipelineBatch`

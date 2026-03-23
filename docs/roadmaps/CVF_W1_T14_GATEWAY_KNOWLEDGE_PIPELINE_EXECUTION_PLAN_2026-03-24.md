@@ -38,7 +38,14 @@ Lane: `Full Lane`
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
+
+Implementation receipt:
+
+- audit: `docs/audits/CVF_W1_T14_CP1_GATEWAY_CONSUMER_PIPELINE_AUDIT_2026-03-24.md`
+- review: `docs/reviews/CVF_GC019_W1_T14_CP1_GATEWAY_CONSUMER_PIPELINE_REVIEW_2026-03-24.md`
+- delta: `docs/baselines/CVF_W1_T14_CP1_GATEWAY_CONSUMER_PIPELINE_DELTA_2026-03-24.md`
+- tests: `tests/gateway.consumer.pipeline.test.ts` — 11 new tests; 697 CPF total, 0 failures
 
 ### CP2 — GatewayConsumerPipelineBatchContract
 
@@ -100,4 +107,4 @@ All artifacts follow `GC-022` memory classification.
 
 ## 5. Final Readout
 
-> `W1-T14` authorized. `CP1`–`CP3` PLANNED.
+> `W1-T14` in progress. `CP1` IMPLEMENTED (11 tests, 697 CPF). `CP2`–`CP3` PLANNED.

@@ -3137,4 +3137,16 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE` -> PASS (65 tests, 7 files)
 - Notes:
   - CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE: 32→65 (+33). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T40 Skill Governance Engine Spec & Runtime Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gaps for 4 spec/runtime contracts in CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE
+  - contracts: SkillRegistry(spec), SkillValidator(spec), SkillDiscovery, CreativeController
+- Files created:
+  - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/tests/skill.engine.spec.test.ts` (224 lines, 24 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE` -> PASS (89 tests, 8 files)
+- Notes:
+  - CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE: 65→89 (+24). Risk R0 (test-only). GC-023 compliant.
   - All CPF dedicated test gaps FULLY CLOSED (W6-T25 through W6-T36).

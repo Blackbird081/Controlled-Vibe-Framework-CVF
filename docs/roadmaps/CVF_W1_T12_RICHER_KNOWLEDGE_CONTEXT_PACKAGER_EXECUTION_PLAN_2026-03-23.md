@@ -97,7 +97,11 @@ Lane: `Full Lane`
 
 Status:
 
-- `PLANNED`
+- `CLOSED — DELIVERED`
+
+Implementation receipt:
+
+- closure review: `docs/reviews/CVF_W1_T12_TRANCHE_CLOSURE_REVIEW_2026-03-23.md`
 
 ---
 
@@ -120,4 +124,4 @@ All artifacts follow `GC-022` memory classification.
 
 ## 5. Final Readout
 
-> `W1-T12` in progress. `CP1` IMPLEMENTED (11 new tests, 655 total). `CP2` IMPLEMENTED (12 new tests, 667 total, 0 failures). `CP3` PLANNED.
+> `W1-T12` is **CLOSED — DELIVERED**. All 3 control points completed: CP1–CP2 IMPLEMENTED (23 new tests, 667 total, 0 failures), CP3 closure review filed. Tranche closed W1-T10 defer (advanced ranking) and W1-T11 defer (richer packager semantics).

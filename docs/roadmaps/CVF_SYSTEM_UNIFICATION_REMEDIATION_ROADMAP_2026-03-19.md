@@ -1048,3 +1048,14 @@ This keeps the roadmap reviewable, reduces regression risk, and makes future ind
 > Guard Contract: 212 | v1.2.2 SGE: 89 | v1.8.1 AOR: 39 | v1.7.2 SD: 71
 > Last baseline: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T42_AUTHORIZATION_DELTA_2026-03-23.md`
 
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T43):
+
+- W6-T43 (Controlled Intelligence Bugfix Protocol Dedicated Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated tests for classifyBug, evaluateAutonomy, evaluateFixScope, evaluateEscalation, calculateEleganceScore: `COMPLETED`
+- 36 new tests in dedicated `bugfix.protocol.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7_CONTROLLED_INTELLIGENCE: 174 tests (+36). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T43_AUTHORIZATION_DELTA_2026-03-23.md`
+

@@ -3173,4 +3173,16 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD` -> PASS (71 tests, 3 files)
 - Notes:
   - CVF_v1.7.2_SAFETY_DASHBOARD: 49→71 (+22). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T43 Controlled Intelligence Bugfix Protocol Tests (2026-03-23)
+
+- Scope:
+  - close 5 pure-logic dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE bugfix_protocol + elegance_policy
+  - contracts: classifyBug, evaluateAutonomy, evaluateFixScope, evaluateEscalation, calculateEleganceScore
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/core/governance/bugfix_protocol/bugfix.protocol.test.ts` (317 lines, 36 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (174 tests, 11 files)
+- Notes:
+  - CVF_v1.7: 138→174 (+36). Risk R0 (test-only). GC-023 compliant.
   - All CPF dedicated test gaps FULLY CLOSED (W6-T25 through W6-T36).

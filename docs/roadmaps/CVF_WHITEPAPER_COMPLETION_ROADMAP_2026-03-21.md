@@ -153,6 +153,10 @@ Current authorization state:
   - `W1-T12 / CP1` — Richer Knowledge Ranking contract (`KnowledgeQueryRequest + ScoringWeights → RankedKnowledgeResult`; multi-criteria: relevance, tier priority, recency bias) — Full Lane
   - `W1-T12 / CP2` — Enhanced Context Packager contract (`ContextBuildRequest + SegmentTypeConstraints → TypedContextPackage`; CODE/TEXT/STRUCTURED/METADATA segment types; type-aware token budgeting) — Fast Lane (GC-021)
   - `W1-T12 / CP3` — Tranche closure review — Full Lane
+- `W2-T9 — Execution Multi-Agent Coordination Slice` is now authorized (GC-018: 9/10 depth audit) as the next bounded realization-first execution-plane tranche; closes W2-T7 defer "multi-agent execution remain deferred" and W2-T8 defer "multi-agent MCP execution remain deferred"
+  - `W2-T9 / CP1` — MultiAgentCoordinationContract (`CommandRuntimeResult[] + CoordinationPolicy -> MultiAgentCoordinationResult`; agent assignment, task distribution, COORDINATED/PARTIAL/FAILED status) — Full Lane
+  - `W2-T9 / CP2` — MultiAgentCoordinationSummaryContract (`MultiAgentCoordinationResult[] -> MultiAgentCoordinationSummary`; dominant status, agent count) — Fast Lane (GC-021)
+  - `W2-T9 / CP3` — Tranche closure review — Full Lane
 
 Nothing beyond `W0` in this roadmap may execute until:
 

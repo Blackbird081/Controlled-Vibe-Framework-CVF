@@ -1476,3 +1476,18 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T74_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T75_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T76 (2026-03-23)
+
+**Tranche:** W6-T76 — Safety Runtime Refusal Router Utilities, Risk Gate, Rollback Controller & Lineage Graph Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for AlternativeRouteEngine, ClarificationGenerator, SafeRewriteEngine (case-insensitive redaction), AuthorityPolicy (DefaultCapabilityProfile), CapabilityGuard (read/execute), RiskGate.evaluate (R0→passthrough/R4→block/R3→needs_approval), RollbackController.plan (R4/drift/clean), LineageGraph (nodes/edges/snapshot-immutability): `COMPLETED`
+- 18 new tests in dedicated `safety-runtime-refusal-router-rollback-lineage.test.ts` (GC-023 compliant, 199 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 547→565 tests (+18). All planes green: `COMPLETED`
+- **NOTE:** Roadmap approaching 1500-line limit — archive triggered after this checkpoint.
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T76_AUTHORIZATION_DELTA_2026-03-23.md`
+

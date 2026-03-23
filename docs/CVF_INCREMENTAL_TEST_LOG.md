@@ -3693,3 +3693,22 @@ Utility and guard:
   - DomainClassifier uses Vietnamese keyword detection (sáng tác/phân tích/hướng dẫn/nhạy cảm).
   - OutputValidator: max_tokens check is output.length > max_tokens * 4 (character approximation).
   - TransformationGuard throws error including contract_id when transform is blocked.
+
+---
+
+## Batch W6-T76 — 2026-03-23
+
+### Entry W6-T76
+
+- Tranche: W6-T76 — Safety Runtime Refusal Router Utilities, Risk Gate, Rollback Controller & Lineage Graph Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-refusal-router-rollback-lineage.test.ts` (199 lines, 18 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (565 tests, 50 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 547→565 (+18). Risk R0 (test-only). GC-023 compliant.
+  - Covered 8 contracts: AlternativeRouteEngine, ClarificationGenerator, SafeRewriteEngine, AuthorityPolicy, CapabilityGuard, RiskGate, RollbackController, LineageGraph.
+  - RiskGate: safe text→R0→passthrough; "kill myself"→R4→block; "legal advice"→R3→needs_approval.
+  - LineageGraph.getSnapshot uses spread ([...nodes]) → returns copy, not reference.
+  - Roadmap archived after this tranche (reached 1492/1500 line limit).

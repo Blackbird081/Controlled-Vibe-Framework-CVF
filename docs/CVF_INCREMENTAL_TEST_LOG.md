@@ -3056,3 +3056,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (509 tests, 11 files)
 - Notes:
   - CPF: 475→509 tests (+34). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T33 CPF Gateway PII Detection & PII Detection Log Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF GatewayPIIDetectionContract + GatewayPIIDetectionLogContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.log.test.ts` (325 lines, 38 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (547 tests, 12 files)
+- Notes:
+  - CPF: 509→547 tests (+38). Risk R0 (test-only). GC-023 compliant.

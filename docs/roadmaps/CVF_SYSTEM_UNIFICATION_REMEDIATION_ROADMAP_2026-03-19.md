@@ -1370,3 +1370,14 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T32):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T32_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T33):
+
+- W6-T33 (CPF Gateway PII Detection & PII Detection Log Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for GatewayPIIDetectionContract (EMAIL/PHONE/SSN/CREDIT_CARD/CUSTOM detection; enabledTypes restriction; redactedSignal; invalid regex handling) and GatewayPIIDetectionLogContract (dominantPIIType=null when no PII; frequency-first with sensitivity tiebreak): `COMPLETED`
+- 38 new tests in dedicated `gateway.pii.detection.log.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CPF: 547 tests (+38). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T33_AUTHORIZATION_DELTA_2026-03-23.md`

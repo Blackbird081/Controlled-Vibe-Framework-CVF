@@ -3294,4 +3294,16 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (436 tests, 20 files)
 - Notes:
   - CVF_v1.7: 389→436 (+47). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T53 Controlled Intelligence Registry + Policy + Rollback Tests (2026-03-23)
+
+- Scope:
+  - close 4 dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE
+  - contracts: evaluatePolicy, bindPolicy, skill.registry, rollback.manager
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/core/registry/registry.rollback.test.ts` (185 lines, 23 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (459 tests, 21 files)
+- Notes:
+  - CVF_v1.7: 436→459 (+23). Risk R0 (test-only). GC-023 compliant.
   - Used timestamp-based unique IDs in lesson.store tests to prevent disk persistence collisions.

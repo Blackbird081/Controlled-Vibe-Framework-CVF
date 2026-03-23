@@ -102,3 +102,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T80_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T81_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T82 (2026-03-23)
+
+**Tranche:** W6-T82 — Blueprint Generator, Test Generator, Telemetry Hook & OpenClaw Config Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for generateBlueprint (no-client/register+generate/empty-modules-throws), generateTestsForArtifact (no-client/merge-fileChanges/metrics-updated), logAIInteraction/getAILogs (timestamp/accumulate), defaultOpenClawConfig (safe defaults): `COMPLETED`
+- 9 new tests in dedicated `safety-runtime-blueprint-testgen-telemetry-config.test.ts` (GC-023 compliant, 169 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 662→671 tests (+9). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T82_AUTHORIZATION_DELTA_2026-03-23.md`
+

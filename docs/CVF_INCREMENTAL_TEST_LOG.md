@@ -2924,3 +2924,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (297 tests, 6 files)
 - Notes:
   - EPF: 250→297 tests (+47). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T21 EPF Feedback Routing & Resolution Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for EPF FeedbackRoutingContract and FeedbackResolutionContract (W2-T5 era)
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.routing.resolution.test.ts` (288 lines, 34 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (331 tests, 7 files)
+- Notes:
+  - EPF: 297→331 tests (+34). Risk R0 (test-only). GC-023 compliant.

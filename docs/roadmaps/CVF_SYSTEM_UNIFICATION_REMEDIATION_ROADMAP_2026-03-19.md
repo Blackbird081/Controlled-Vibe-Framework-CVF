@@ -1128,3 +1128,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T12):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T12_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T13):
+
+- W6-T13 (LPF Learning Observability Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for LearningObservabilityContract (UNKNOWN/CRITICAL/DEGRADED/HEALTHY): `COMPLETED`
+- Dedicated test coverage for LearningObservabilitySnapshotContract (counts, dominant, trend): `COMPLETED`
+- 32 new tests in dedicated `learning.observability.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- LPF: 265 tests (+32). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T13_AUTHORIZATION_DELTA_2026-03-23.md`

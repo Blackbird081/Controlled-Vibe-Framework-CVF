@@ -90,7 +90,12 @@ Lane: `Full Lane`
 
 Status:
 
-- `PLANNED`
+- `CLOSED`
+
+Implementation receipt:
+
+- review: `docs/reviews/CVF_W1_T13_TRANCHE_CLOSURE_REVIEW_2026-03-23.md`
+- tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T13_CLOSURE_2026-03-23.md`
 
 ---
 
@@ -120,4 +125,4 @@ All artifacts follow `GC-022` memory classification.
 
 ## 5. Final Readout
 
-> `W1-T13` in progress. `CP1` IMPLEMENTED (10 tests, 677 CPF). `CP2` IMPLEMENTED (9 tests, 686 CPF). `CP3` PLANNED.
+> `W1-T13` CLOSED DELIVERED. `CP1` (10 tests, 677 CPF) + `CP2` (9 tests, 686 CPF) + `CP3` (closure). Final CPF: 686 tests, 0 failures.

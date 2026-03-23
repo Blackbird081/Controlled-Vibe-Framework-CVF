@@ -1336,3 +1336,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T64_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T65_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T66 (2026-03-23)
+
+**Tranche:** W6-T66 — Safety Runtime Contract Enforcer, Runtime Engine & Execution Boundary Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for ContractEnforcer (validateInput/validateOutput/enforce branches), ContractRuntimeEngine (valid/disallowed consumer), provider.registry (register+get/unknown-throws), runWithinBoundary (success/failure-rethrows/suppressError→undefined): `COMPLETED`
+- 15 new tests in dedicated `safety-runtime-contract-enforcer-boundary.test.ts` (GC-023 compliant, 148 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 364→379 tests (+15). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T66_AUTHORIZATION_DELTA_2026-03-23.md`
+

@@ -3509,3 +3509,21 @@ Utility and guard:
   - Covered 6 contracts: RiskScorer, AssumptionTracker, DriftDetector, RiskPropagationEngine, RefusalPolicyRegistry, RefusalPolicy.
   - RiskScorer uses DefaultRiskMatrix scores: self_harm=95→R4, legal=75→R3, financial=70→R2.
   - RefusalPolicy.decide R4+FREEZE phase → needs_approval (freezeR4Action override).
+
+---
+
+## Batch W6-T66 — 2026-03-23
+
+### Entry W6-T66
+
+- Tranche: W6-T66 — Safety Runtime Contract Enforcer, Runtime Engine & Execution Boundary Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-contract-enforcer-boundary.test.ts` (148 lines, 15 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (379 tests, 40 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 364→379 (+15). Risk R0 (test-only). GC-023 compliant.
+  - Covered 4 contracts: ContractEnforcer, ContractRuntimeEngine, provider.registry, runWithinBoundary.
+  - ContractEnforcer.enforce calls OutputValidator.validate internally — uses allow_code_blocks=false + ``` to trigger violation.
+  - runWithinBoundary.suppressError=true swallows error and returns undefined (as T cast).

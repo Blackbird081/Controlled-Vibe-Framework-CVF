@@ -3282,4 +3282,16 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (389 tests, 19 files)
 - Notes:
   - CVF_v1.7: 364→389 (+25). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T52 Controlled Intelligence Governance Mapping + Entropy + Prompt Sanitizer Tests (2026-03-23)
+
+- Scope:
+  - close 5 pure-logic dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE
+  - contracts: risk.labels, risk.mapping, role.mapping, entropy.guard, prompt.sanitizer
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/core/governance/governance.mapping.test.ts` (244 lines, 47 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (436 tests, 20 files)
+- Notes:
+  - CVF_v1.7: 389→436 (+47). Risk R0 (test-only). GC-023 compliant.
   - Used timestamp-based unique IDs in lesson.store tests to prevent disk persistence collisions.

@@ -89,6 +89,14 @@
       "status": "ACTIVE_EXCEPTION",
       "rationale": "The system unification remediation roadmap is the canonical living checkpoint record for all W6 tranches. GC-018 continuation checkpoints are appended per tranche and cannot be separated without breaking the audit chain.",
       "requiredFollowup": "Archive completed wave checkpoints into a separate historical record once W6 wave is fully closed. Do not expand beyond 1500 lines without a new exception."
+    },
+    {
+      "path": "docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_ARCHIVE_W1-W6T76_2026-03-19_TO_2026-03-23.md",
+      "fileClass": "active_markdown",
+      "approvedMaxLines": 1500,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Immutable archive of all GC-018 checkpoint blocks from W1-T1 through W6-T76 (76 tranches, 1493 lines). Archive files cannot be split without breaking the audit chain integrity. File is frozen — no further additions permitted.",
+      "requiredFollowup": "No further expansion permitted. This is a sealed archive. Create a new archive file if a second archive is needed."
     }
   ]
 }

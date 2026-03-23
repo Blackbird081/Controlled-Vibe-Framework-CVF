@@ -1294,3 +1294,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T61_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T62_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T63 (2026-03-23)
+
+**Tranche:** W6-T63 — Safety Runtime AI Governance, Roles & Approval Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for ai/audit.logger (logAIGeneration/getAuditLog cumulative), ai/ai.governance (setActiveProvider/getActiveProvider/no-provider-throws), roles (canExecute/canApprove), system.guard (emergencyStop default+throw), transitionApproval (PENDING→APPROVED/REJECTED/throws), telemetry.hook (logAIInteraction/getAILogs): `COMPLETED`
+- 15 new tests in dedicated `safety-runtime-ai-governance.test.ts` (GC-023 compliant, 154 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 313→328 tests (+15). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T63_AUTHORIZATION_DELTA_2026-03-23.md`
+

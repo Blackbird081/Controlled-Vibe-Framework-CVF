@@ -3337,3 +3337,20 @@ Utility and guard:
   - CVF_v1.7.1_SAFETY_RUNTIME: 157→188 (+31). Risk R0 (test-only). GC-023 compliant.
   - Covered 6 pure-logic contracts: risk.scorer, pricing.registry, sandbox.mode, response.formatter, proposal.builder, provider.policy.
   - All 6 contracts have zero external I/O — pure function or module-level state managed within single test file.
+
+---
+
+## Batch W6-T56 — 2026-03-23
+
+### Entry W6-T56
+
+- Tranche: W6-T56 — Safety Runtime Registry & Store Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-registry-stores.test.ts` (213 lines, 21 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (209 tests, 30 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 188→209 (+21). Risk R0 (test-only). GC-023 compliant.
+  - Covered 5 contracts: policy.registry, proposal.store, usage.tracker, proposal.snapshot, openclaw.config defaults.
+  - All use Vitest per-file module isolation (fresh in-memory state per test file).

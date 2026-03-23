@@ -1196,3 +1196,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T54_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T55_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T56 (2026-03-23)
+
+**Tranche:** W6-T56 — Safety Runtime Registry & Store Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for policy.registry (immutable/hash/getPolicy/listPolicies), proposal.store (saveProposal/getProposal/hasProposal/clear), usage.tracker (recordUsage/history), proposal.snapshot (save/get/list), openclaw.config defaults: `COMPLETED`
+- 21 new tests in dedicated `safety-runtime-registry-stores.test.ts` (GC-023 compliant, 213 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 188→209 tests (+21). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T56_AUTHORIZATION_DELTA_2026-03-23.md`
+

@@ -3306,4 +3306,17 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (459 tests, 21 files)
 - Notes:
   - CVF_v1.7: 436→459 (+23). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T54 Controlled Intelligence Binding Registry Tests (2026-03-23)
+
+- Scope:
+  - close 1 pure-logic dedicated test coverage gap in CVF_v1.7_CONTROLLED_INTELLIGENCE
+  - contract: binding.registry (getSkillsForRole, getBindingsForRole, isSkillAvailableForRole)
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/core/registry/binding.registry.test.ts` (87 lines, 9 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (468 tests, 22 files)
+- Notes:
+  - CVF_v1.7: 459→468 (+9). Risk R0 (test-only). GC-023 compliant.
+  - CVF_v1.7 deep-audit COMPLETE: 138→468 tests (+330) across 22 test files.
   - Used timestamp-based unique IDs in lesson.store tests to prevent disk persistence collisions.

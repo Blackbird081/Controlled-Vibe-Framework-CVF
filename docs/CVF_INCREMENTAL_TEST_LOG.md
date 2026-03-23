@@ -2867,3 +2867,38 @@ Utility and guard:
   - `GC-024` does not replace `GC-023`
   - `GC-024` ensures the `ContextBuildContract` / `ContextBuildBatchContract` surface stays owned by `tests/context.builder.test.ts`
   - the legacy `tests/index.test.ts` file now carries a visible do-not-add note for this scope
+
+### Batch: W6-T16 LPF Truth Model & Pattern Detection Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for LPF PatternDetectionContract, TruthModelContract, TruthModelUpdateContract (W4-T7/W4-T8 era)
+  - all LPF source contracts now have dedicated test file coverage
+- Files created:
+  - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.model.detection.test.ts` (454 lines, 47 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION` -> PASS (377 tests, 9 files)
+- Notes:
+  - LPF: 330→377 tests (+47). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T17 GEF Governance Consensus Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for GEF GovernanceConsensusContract and GovernanceConsensusSummaryContract (W3-T4 era)
+  - all GEF source contracts now have dedicated test file coverage
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.test.ts` (290 lines, 28 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION` -> PASS (185 tests, 6 files)
+- Notes:
+  - GEF: 157→185 tests (+28). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T18 EPF Dispatch & Policy Gate Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for EPF DispatchContract and PolicyGateContract (W2-T2 era)
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/dispatch.policy.gate.test.ts` (360 lines, 30 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (211 tests, 4 files)
+- Notes:
+  - EPF: 181→211 tests (+30). Risk R0 (test-only). GC-023 compliant.

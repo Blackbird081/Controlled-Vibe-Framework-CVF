@@ -1192,3 +1192,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T17):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T17_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T18):
+
+- W6-T18 (EPF Dispatch & Policy Gate Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for DispatchContract (zero-assignment warning; counts; dispatchAuthorized; determinism): `COMPLETED`
+- Dedicated test coverage for PolicyGateContract (BLOCK→deny; ESCALATE→review; ALLOW+R3→sandbox; ALLOW+R2→review; R0/R1→allow; mixed counts; rationale content): `COMPLETED`
+- 30 new tests in dedicated `dispatch.policy.gate.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- EPF: 211 tests (+30). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T18_AUTHORIZATION_DELTA_2026-03-23.md`

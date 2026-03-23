@@ -81,6 +81,14 @@
       "status": "ACTIVE_EXCEPTION",
       "rationale": "The VS Code guide is a legacy dense active reference that still concentrates setup, workflow, and troubleshooting in one place.",
       "requiredFollowup": "Split the guide into narrower linked references before the next substantive VS Code guide expansion."
+    },
+    {
+      "path": "docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md",
+      "fileClass": "active_markdown",
+      "approvedMaxLines": 1500,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "The system unification remediation roadmap is the canonical living checkpoint record for all W6 tranches. GC-018 continuation checkpoints are appended per tranche and cannot be separated without breaking the audit chain.",
+      "requiredFollowup": "Archive completed wave checkpoints into a separate historical record once W6 wave is fully closed. Do not expand beyond 1500 lines without a new exception."
     }
   ]
 }

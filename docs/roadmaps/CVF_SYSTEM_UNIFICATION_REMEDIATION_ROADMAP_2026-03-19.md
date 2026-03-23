@@ -1165,3 +1165,17 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T15):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T15_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T16):
+
+- W6-T16 (LPF Truth Model & Pattern Detection Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for PatternDetectionContract (empty→EMPTY/HEALTHY; dominantPattern count-wins with MIXED on tie; health CRITICAL/DEGRADED/HEALTHY from rates; custom classifyHealth override): `COMPLETED`
+- Dedicated test coverage for TruthModelContract (confidence=min(total/10,1.0); MIXED/EMPTY skipped in dominant; trajectory IMPROVING/DEGRADING/STABLE/INSUFFICIENT_DATA; custom computeConfidence override): `COMPLETED`
+- Dedicated test coverage for TruthModelUpdateContract (version++; totalInsights++; new entry appended; currentHealth updated; modelId/modelHash change): `COMPLETED`
+- 47 new tests in dedicated `truth.model.detection.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- LPF: 377 tests (+47). All planes green: `COMPLETED`
+- All LPF source contracts now have dedicated test file coverage: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T16_AUTHORIZATION_DELTA_2026-03-23.md`

@@ -3012,3 +3012,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (374 tests, 7 files)
 - Notes:
   - CPF: 347→374 tests (+27). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T29 CPF Boardroom Multi-Round & Orchestration Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF BoardroomMultiRoundContract and OrchestrationContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/multi.round.orchestration.test.ts` (381 lines, 38 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (412 tests, 8 files)
+- Notes:
+  - CPF: 374→412 tests (+38). Risk R0 (test-only). GC-023 compliant.

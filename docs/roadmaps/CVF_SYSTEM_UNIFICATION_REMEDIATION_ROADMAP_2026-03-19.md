@@ -1364,3 +1364,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T66_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T67_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T68 (2026-03-23)
+
+**Tranche:** W6-T68 — Safety Runtime Domain Guard, Refusal Router & Execution Gateway Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for DomainGuard (validate: no-domain/unknown/disallowed/valid; enforce: missing-throws/valid-passes), RefusalRouter (R0→allow/R3→needs_approval/R4→block+alternative/R2+drift→clarify/policyVersion), ExecutionGate (read-allowed/execute-denied/network-denied): `COMPLETED`
+- 14 new tests in dedicated `safety-runtime-domain-refusal-gateway.test.ts` (GC-023 compliant, 135 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 390→404 tests (+14). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T68_AUTHORIZATION_DELTA_2026-03-23.md`
+

@@ -3545,3 +3545,21 @@ Utility and guard:
   - Covered 3 contracts: blueprint.generator, test.generator, cvf-ui/lib/auth.
   - blueprint.generator module-level state: first test runs before any registration (client=null), subsequent tests re-register fresh mocks.
   - cvf-ui/lib/auth uses simple base64+secret stub (distinct from security/auth.ts which uses HMAC-SHA256).
+
+---
+
+## Batch W6-T68 — 2026-03-23
+
+### Entry W6-T68
+
+- Tranche: W6-T68 — Safety Runtime Domain Guard, Refusal Router & Execution Gateway Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-domain-refusal-gateway.test.ts` (135 lines, 14 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (404 tests, 42 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 390→404 (+14). Risk R0 (test-only). GC-023 compliant.
+  - Covered 3 contracts: DomainGuard, RefusalRouter, ExecutionGate.
+  - DomainGuard fix: kernel-architecture/kernel/01_domain_lock/domain.registry.ts uses allowedInputTypes: ["question","clarification"] (not "text") for informational domain.
+  - RefusalRouter.evaluate wraps RefusalPolicy + SafeRewriteEngine + ClarificationGenerator + AlternativeRouteEngine.

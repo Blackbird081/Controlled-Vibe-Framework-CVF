@@ -3222,3 +3222,15 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (263 tests, 14 files)
 - Notes:
   - CVF_v1.7: 238→263 (+25). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T47 Controlled Intelligence Introspection Tests (2026-03-23)
+
+- Scope:
+  - close 3 pure-logic dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE introspection
+  - contracts: runSelfCheck, checkReasoningConsistency, generateDeviationReport, proposeCorrection
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/introspection/introspection.test.ts` (222 lines, 33 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (296 tests, 15 files)
+- Notes:
+  - CVF_v1.7: 263→296 (+33). Risk R0 (test-only). GC-023 compliant.

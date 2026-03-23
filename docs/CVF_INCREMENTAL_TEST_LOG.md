@@ -3674,3 +3674,22 @@ Utility and guard:
   - InvariantChecker: cross-domain reuse throws with both domain names in message.
   - checkpoint.store uses _clearAllCheckpoints in beforeEach for test isolation.
   - calculateUsdCost: (inputTokens/1000)*inputPer1k + (outputTokens/1000)*outputPer1k.
+
+---
+
+## Batch W6-T75 — 2026-03-23
+
+### Entry W6-T75
+
+- Tranche: W6-T75 — Safety Runtime Domain Lock & Contract Runtime Layer Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-domain-lock-contract-runtime.test.ts` (220 lines, 25 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (547 tests, 49 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 522→547 (+25). Risk R0 (test-only). GC-023 compliant.
+  - Covered 7 contracts: ScopeResolver, DomainClassifier, BoundaryRules, ConsumerAuthorityMatrix, OutputValidator, TransformationGuard, IOContractRegistry.
+  - DomainClassifier uses Vietnamese keyword detection (sáng tác/phân tích/hướng dẫn/nhạy cảm).
+  - OutputValidator: max_tokens check is output.length > max_tokens * 4 (character approximation).
+  - TransformationGuard throws error including contract_id when transform is blocked.

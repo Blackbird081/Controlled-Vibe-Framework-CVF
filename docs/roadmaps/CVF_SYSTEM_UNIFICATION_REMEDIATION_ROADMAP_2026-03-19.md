@@ -1462,3 +1462,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T73_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T74_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T75 (2026-03-23)
+
+**Tranche:** W6-T75 — Safety Runtime Domain Lock & Contract Runtime Layer Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for ScopeResolver (domain-type→risk/creative mapping), DomainClassifier (Vietnamese keywords→domain type), BoundaryRules (restricted/empty/valid), ConsumerAuthorityMatrix (default-list/override), OutputValidator (6 validation rules), TransformationGuard (allow_transform=false), IOContractRegistry (register/get/duplicate/upsert): `COMPLETED`
+- 25 new tests in dedicated `safety-runtime-domain-lock-contract-runtime.test.ts` (GC-023 compliant, 220 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 522→547 tests (+25). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T75_AUTHORIZATION_DELTA_2026-03-23.md`
+

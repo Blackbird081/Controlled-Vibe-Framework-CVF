@@ -3246,3 +3246,15 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (314 tests, 16 files)
 - Notes:
   - CVF_v1.7: 296→314 (+18). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T49 Controlled Intelligence Telemetry Internals Tests (2026-03-23)
+
+- Scope:
+  - close 5 telemetry dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE
+  - contracts: governance_audit_log, elegance_score_tracker, mistake_rate_tracker, verification_metrics
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/telemetry/telemetry.internals.test.ts` (180 lines, 22 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (336 tests, 17 files)
+- Notes:
+  - CVF_v1.7: 314→336 (+22). Risk R0 (test-only). GC-023 compliant.

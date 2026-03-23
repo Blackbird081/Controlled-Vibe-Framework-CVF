@@ -1,3 +1,23 @@
+// W6-T5 — Checkpoint-Driven Control Reintake Slice (CP1–CP2)
+export {
+  GovernanceCheckpointReintakeContract,
+  createGovernanceCheckpointReintakeContract,
+} from "./governance.checkpoint.reintake.contract";
+export type {
+  ReintakeTrigger,
+  ReintakeScope,
+  CheckpointReintakeRequest,
+  GovernanceCheckpointReintakeContractDependencies,
+} from "./governance.checkpoint.reintake.contract";
+export {
+  GovernanceCheckpointReintakeSummaryContract,
+  createGovernanceCheckpointReintakeSummaryContract,
+} from "./governance.checkpoint.reintake.summary.contract";
+export type {
+  CheckpointReintakeSummary,
+  GovernanceCheckpointReintakeSummaryContractDependencies,
+} from "./governance.checkpoint.reintake.summary.contract";
+
 // W6-T4 — Governance-Execution Checkpoint Slice (CP1–CP2)
 export {
   GovernanceCheckpointContract,

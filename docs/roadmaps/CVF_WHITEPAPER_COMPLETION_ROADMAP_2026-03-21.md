@@ -161,6 +161,10 @@ Current authorization state:
   - `W1-T13 / CP1` — ControlPlaneConsumerPipelineContract (`KnowledgeQueryRequest + ScoringWeights + SegmentTypeConstraints → ControlPlaneConsumerPackage`) — Full Lane
   - `W1-T13 / CP2` — ControlPlaneConsumerPipelineBatchContract (`ControlPlaneConsumerPackage[] → ControlPlaneConsumerPipelineBatch`) — Fast Lane (GC-021)
   - `W1-T13 / CP3` — Tranche closure review — Full Lane
+- `W2-T10 — Execution Consumer Result Bridge Slice` is now authorized (GC-018: 10/10 depth audit) as the next bounded realization-first execution-plane tranche; closes W2-T9 implied gap (coordination has no consumer-visible enriched output) and W1-T13 implied gap (consumer pipeline needs execution-plane entry point)
+  - `W2-T10 / CP1` — ExecutionConsumerResultContract (`MultiAgentCoordinationResult + candidateItems → MultiAgentCoordinationResult + ControlPlaneConsumerPackage`) — Full Lane
+  - `W2-T10 / CP2` — ExecutionConsumerResultBatchContract (`ExecutionConsumerResult[] → ExecutionConsumerResultBatch`) — Fast Lane (GC-021)
+  - `W2-T10 / CP3` — Tranche closure review — Full Lane
 - `W1-T14 — Gateway Knowledge Pipeline Integration Slice` is now authorized (GC-018: 10/10 depth audit) as the next bounded realization-first control-plane tranche; closes W1-T4 implied gap (gateway→basic intake vs gateway→enriched pipeline) and W1-T13 implied gap (consumer pipeline needs governed gateway entry point)
   - `W1-T14 / CP1` — GatewayConsumerPipelineContract (`GatewaySignalRequest → GatewayProcessedRequest + ControlPlaneConsumerPackage`) — Full Lane
   - `W1-T14 / CP2` — GatewayConsumerPipelineBatchContract (`GatewayConsumerPipelineResult[] → GatewayConsumerPipelineBatch`) — Fast Lane (GC-021)

@@ -1289,3 +1289,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T25):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T25_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T26):
+
+- W6-T26 (CPF Intake & Consumer Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for ControlPlaneIntakeContract (createdAt; consumerId; requestId determinism; retrieval.query; empty-chunk warnings; intent field) + packageIntakeContext helper: `COMPLETED`
+- Dedicated test coverage for ConsumerContract (consumerId/consumedAt; requestId/evidenceHash; freeze presence; getContext) + buildPipelineStages helper (intent-validation/context-packaging always; knowledge-retrieval/deterministic-hashing conditional): `COMPLETED`
+- 28 new tests in dedicated `intake.consumer.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CPF: 313 tests (+28). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T26_AUTHORIZATION_DELTA_2026-03-23.md`

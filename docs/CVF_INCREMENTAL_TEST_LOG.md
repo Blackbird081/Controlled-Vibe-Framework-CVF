@@ -3354,3 +3354,20 @@ Utility and guard:
   - CVF_v1.7.1_SAFETY_RUNTIME: 188→209 (+21). Risk R0 (test-only). GC-023 compliant.
   - Covered 5 contracts: policy.registry, proposal.store, usage.tracker, proposal.snapshot, openclaw.config defaults.
   - All use Vitest per-file module isolation (fresh in-memory state per test file).
+
+---
+
+## Batch W6-T57 — 2026-03-23
+
+### Entry W6-T57
+
+- Tranche: W6-T57 — Safety Runtime State, Journal & Kernel Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-state-kernel.test.ts` (181 lines, 19 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (228 tests, 31 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 209→228 (+19). Risk R0 (test-only). GC-023 compliant.
+  - Covered 5 contracts: state.store, execution.journal, AuthorityPolicy, CreativePermissionPolicy, SessionState.
+  - Kernel-architecture contracts use relative imports — all resolve correctly from tests/ root.

@@ -1210,3 +1210,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T55_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T56_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T57 (2026-03-23)
+
+**Tranche:** W6-T57 — Safety Runtime State, Journal & Kernel Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for state.store (setState/getState/clear), execution.journal (recordExecution/getJournal/clear), AuthorityPolicy (capability allow/deny), CreativePermissionPolicy (R0/R1 allowed, R2+ blocked), SessionState (domain/risk per-instance): `COMPLETED`
+- 19 new tests in dedicated `safety-runtime-state-kernel.test.ts` (GC-023 compliant, 181 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 209→228 tests (+19). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T57_AUTHORIZATION_DELTA_2026-03-23.md`
+

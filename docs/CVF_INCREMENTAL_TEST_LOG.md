@@ -3422,3 +3422,20 @@ Utility and guard:
   - CVF_v1.7.1_SAFETY_RUNTIME: 261→283 (+22). Risk R0 (test-only). GC-023 compliant.
   - Covered 5 kernel/02_contract_runtime contracts: ContractValidator, IOContractRegistry, OutputValidator, TransformationGuard, ConsumerAuthorityMatrix.
   - OutputValidator tests verified all 6 guard branches (empty/code-block/link/tokens/json/valid).
+
+---
+
+## Batch W6-T61 — 2026-03-23
+
+### Entry W6-T61
+
+- Tranche: W6-T61 — Safety Runtime Domain Registry, Ledger & Refusal Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-domain-ledger.test.ts` (183 lines, 18 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (301 tests, 35 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 283→301 (+18). Risk R0 (test-only). GC-023 compliant.
+  - Covered 6 contracts: DomainRegistry, RiskDetector, RollbackController, LineageGraph, BoundarySnapshot, ClarificationGenerator.
+  - DomainRegistry bootstrap test verified all 6 CVF safety domains are present by default.

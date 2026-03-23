@@ -1266,3 +1266,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T59_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T60_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T61 (2026-03-23)
+
+**Tranche:** W6-T61 — Safety Runtime Domain Registry, Ledger & Refusal Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for DomainRegistry (6 bootstrap domains/get/exists/list/dup-throws), RiskDetector (self_harm/legal/financial/clean), RollbackController (R4/drift/normal), LineageGraph (addNode/addEdge/getSnapshot), BoundarySnapshot (capture/getAll), ClarificationGenerator (message string): `COMPLETED`
+- 18 new tests in dedicated `safety-runtime-domain-ledger.test.ts` (GC-023 compliant, 183 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 283→301 tests (+18). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T61_AUTHORIZATION_DELTA_2026-03-23.md`
+

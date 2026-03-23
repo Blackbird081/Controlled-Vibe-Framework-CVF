@@ -116,3 +116,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T81_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T82_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T83 (2026-03-23)
+
+**Tranche:** W6-T83 — AssumptionTracker, DriftDetector, RiskPropagationEngine & Risk Matrix Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for AssumptionTracker.track (clean/assuming/not-sure/both), DriftDetector.detect (matching/domain-mismatch/risk-jump/jump-of-1/both), RiskPropagationEngine.propagate (no-signals/assumption+1/drift+1/both+2/R4-capped), DefaultRiskMatrix (self_harm+weapons=95/medical/misinformation=lowest): `COMPLETED`
+- 18 new tests in dedicated `safety-runtime-assumption-drift-propagation-matrix.test.ts` (GC-023 compliant, 186 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 671→689 tests (+18). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T83_AUTHORIZATION_DELTA_2026-03-23.md`
+

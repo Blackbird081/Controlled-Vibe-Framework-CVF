@@ -68,7 +68,14 @@ Lane: `Fast Lane` (GC-021)
 
 Status:
 
-- `PLANNED`
+- `IMPLEMENTED`
+
+Implementation receipt:
+
+- audit: `docs/audits/CVF_W1_T13_CP2_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-23.md`
+- review: `docs/reviews/CVF_GC021_W1_T13_CP2_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-23.md`
+- delta: `docs/baselines/CVF_W1_T13_CP2_CONSUMER_PIPELINE_BATCH_DELTA_2026-03-23.md`
+- tests: `tests/consumer.pipeline.batch.test.ts` — 9 new tests; 686 CPF total, 0 failures
 
 ### CP3 — Tranche Closure Review
 
@@ -113,4 +120,4 @@ All artifacts follow `GC-022` memory classification.
 
 ## 5. Final Readout
 
-> `W1-T13` in progress. `CP1` IMPLEMENTED (10 tests, 677 CPF). `CP2`–`CP3` PLANNED.
+> `W1-T13` in progress. `CP1` IMPLEMENTED (10 tests, 677 CPF). `CP2` IMPLEMENTED (9 tests, 686 CPF). `CP3` PLANNED.

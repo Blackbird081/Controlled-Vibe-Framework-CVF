@@ -12,6 +12,17 @@
       ]
     },
     {
+      "scope": "CPF Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ControlPlaneConsumerPipelineBatchContract",
+        "createControlPlaneConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "CPF Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/consumer.pipeline.test.ts",
       "forbiddenFiles": [

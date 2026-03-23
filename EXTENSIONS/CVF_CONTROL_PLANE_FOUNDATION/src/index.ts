@@ -1,4 +1,4 @@
-// W1-T13 — Control Plane Consumer Pipeline Slice (CP1)
+// W1-T13 — Control Plane Consumer Pipeline Slice (CP1–CP2)
 export {
   ControlPlaneConsumerPipelineContract,
   createControlPlaneConsumerPipelineContract,
@@ -8,6 +8,14 @@ export type {
   ControlPlaneConsumerPackage,
   ControlPlaneConsumerPipelineContractDependencies,
 } from "./consumer.pipeline.contract";
+export {
+  ControlPlaneConsumerPipelineBatchContract,
+  createControlPlaneConsumerPipelineBatchContract,
+} from "./consumer.pipeline.batch.contract";
+export type {
+  ControlPlaneConsumerPipelineBatch,
+  ControlPlaneConsumerPipelineBatchContractDependencies,
+} from "./consumer.pipeline.batch.contract";
 
 // W1-T11 — Context Builder Foundation Slice (CP1–CP2)
 export {

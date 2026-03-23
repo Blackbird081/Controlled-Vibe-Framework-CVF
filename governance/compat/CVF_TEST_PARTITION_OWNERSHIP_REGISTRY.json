@@ -12,6 +12,17 @@
       ]
     },
     {
+      "scope": "CPF Context Packager",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextPackagerContract",
+        "createContextPackagerContract"
+      ]
+    },
+    {
       "scope": "CPF Context Builder",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.builder.test.ts",
       "forbiddenFiles": [

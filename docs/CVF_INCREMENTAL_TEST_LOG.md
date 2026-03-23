@@ -73,6 +73,25 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-23] Batch: W1-T12 CP2 — Enhanced Context Packager Contract
+- Scope:
+  - implement `ContextPackagerContract` — typed segment packaging with `CODE/STRUCTURED` types
+  - `ContextPackagerRequest + SegmentTypeConstraints → TypedContextPackage`
+  - closes W1-T11 defer: richer packager semantics
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T12_RICHER_KNOWLEDGE_CONTEXT_PACKAGER_EXECUTION_PLAN_2026-03-23.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP2) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/context.packager.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.test.ts` (new, 12 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CPF Context Packager partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (667 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-23] Batch: W1-T12 CP1 — Richer Knowledge Ranking Contract
 - Scope:
   - implement `KnowledgeRankingContract` — multi-criteria scoring: relevance, tier priority, recency bias

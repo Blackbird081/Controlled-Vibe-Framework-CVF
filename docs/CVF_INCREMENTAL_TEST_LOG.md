@@ -3023,3 +3023,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (412 tests, 8 files)
 - Notes:
   - CPF: 374→412 tests (+38). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T30 CPF AI Gateway Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF AIGatewayContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/ai.gateway.test.ts` (225 lines, 28 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (440 tests, 9 files)
+- Notes:
+  - CPF: 412→440 tests (+28). Risk R0 (test-only). GC-023 compliant.

@@ -2902,3 +2902,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (211 tests, 4 files)
 - Notes:
   - EPF: 181→211 tests (+30). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T19 EPF Bridge, Command Runtime & Pipeline Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for EPF CommandRuntimeContract, ExecutionBridgeConsumerContract, ExecutionPipelineContract (W2-T2/W2-T3 era)
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/bridge.runtime.pipeline.test.ts` (410 lines, 39 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (250 tests, 5 files)
+- Notes:
+  - EPF: 211→250 tests (+39). Risk R0 (test-only). GC-023 compliant.

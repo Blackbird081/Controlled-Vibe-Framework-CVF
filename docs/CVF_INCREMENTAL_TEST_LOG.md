@@ -2957,3 +2957,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (390 tests, 9 files)
 - Notes:
   - EPF: 359→390 tests (+31). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T24 EPF MCP Invocation & Batch Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for EPF MCPInvocationContract and MCPInvocationBatchContract (W2-T8 era)
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.batch.test.ts` (251 lines, 26 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (416 tests, 10 files)
+- Notes:
+  - EPF: 390→416 tests (+26). Risk R0 (test-only). GC-023 compliant.

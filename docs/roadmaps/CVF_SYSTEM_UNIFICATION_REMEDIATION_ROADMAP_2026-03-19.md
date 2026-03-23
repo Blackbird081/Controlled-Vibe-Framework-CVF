@@ -1265,3 +1265,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T23):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T23_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T24):
+
+- W6-T24 (EPF MCP Invocation & Batch Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for MCPInvocationContract (fields propagated; all 4 statuses; responsePayload; determinism): `COMPLETED`
+- Dedicated test coverage for MCPInvocationBatchContract (frequency-first dominant; FAILURE>TIMEOUT>REJECTED>SUCCESS tiebreak; empty→FAILURE; counts; determinism): `COMPLETED`
+- 26 new tests in dedicated `mcp.invocation.batch.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- EPF: 416 tests (+26). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T24_AUTHORIZATION_DELTA_2026-03-23.md`

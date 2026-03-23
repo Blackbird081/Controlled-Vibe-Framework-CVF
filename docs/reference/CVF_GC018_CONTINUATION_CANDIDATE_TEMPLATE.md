@@ -1,5 +1,7 @@
 # CVF GC-018 Continuation Candidate Template
 
+Memory class: POINTER_RECORD
+
 Status: reusable template for any future attempt to reopen a materially delivered roadmap under `GC-018`.
 
 ## Purpose
@@ -37,9 +39,13 @@ GC-018 Continuation Candidate
 - Date: <YYYY-MM-DD>
 - Parent roadmap / wave: <path>
 - Proposed scope: <short description>
+- Continuation class: VALIDATION_TEST | PACKAGING_ONLY | TRUTH_CLAIM | REALIZATION | STRUCTURAL | MIXED | OTHER
 - Why now: <short justification>
 - Active-path impact: NONE | LIMITED | MATERIAL
 - Risk if deferred: <short description>
+- Lateral alternative considered: YES | NO
+- Why not lateral shift: <short justification>
+- Real decision boundary improved: YES | NO
 - Expected enforcement class:
   - RUNTIME_GUARD | GATEWAY_PRECONDITION | APPROVAL_CHECKPOINT | CI_REPO_GATE | GOVERNANCE_DECISION_GATE
 - Required evidence if approved:
@@ -67,6 +73,7 @@ Authorization Boundary
 - `Authorized now: YES` should only appear if the score satisfies the current `GC-018` threshold and no hard-stop override is triggered.
 - any `0` in `Risk reduction`, `Decision value`, or `Machine enforceability` should force `Decision: DEFER`
 - if the proposed step changes active-path implementation, the resulting packet must remain reviewable by the repository continuation gate
+- low-yield continuation classes (`VALIDATION_TEST`, `PACKAGING_ONLY`, `TRUTH_CLAIM`) must record a lateral alternative and may continue only if they improve a real decision boundary in a reviewable way
 
 ## Preferred Placement
 

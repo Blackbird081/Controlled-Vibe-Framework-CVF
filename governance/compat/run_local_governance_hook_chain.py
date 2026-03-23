@@ -67,6 +67,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_depth_audit_continuation_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
         (
+            "gc-018 stop-boundary semantics compatibility",
+            ["python", "governance/compat/check_gc018_stop_boundary_semantics.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
             "governed file size compatibility",
             ["python", "governance/compat/check_governed_file_size.py", "--enforce"],
         ),

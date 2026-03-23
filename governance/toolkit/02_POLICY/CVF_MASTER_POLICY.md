@@ -72,8 +72,10 @@ Personal AI usage unrelated to company work is excluded.
    - This rule applies to all phases, not only deep policy branches.
    - Any new semantic layer, `CF-*` expansion, or comparable roadmap deepening must be justified by explicit depth-audit scoring.
    - The default should be `defer` unless the proposal demonstrates real risk reduction, decision value, and machine-enforceable closure.
+   - Low-yield continuation classes such as validation/test-only breadth, packaging-only continuation, and truth/claim-expansion continuation must also record why a lateral shift is not better and what real decision boundary still improves.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`.
    - Automated continuation gate reference: `governance/compat/check_depth_audit_continuation_compat.py`.
+   - Automated stop-boundary semantics reference: `governance/compat/check_gc018_stop_boundary_semantics.py`.
 12. Baseline update is mandatory after every accepted fix/update:
    - Every real fix/update must produce a baseline update artifact, not only a normal log entry.
    - Acceptable forms: new baseline snapshot, baseline delta/addendum, or post-fix assessment linked to the prior baseline.

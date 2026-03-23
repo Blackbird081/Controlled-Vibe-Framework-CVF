@@ -93,9 +93,17 @@ Standard continuation packet template:
 
 - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
 
+For low-yield continuation classes, the packet must also make the stop-boundary explicit:
+
+- `Continuation class: VALIDATION_TEST | PACKAGING_ONLY | TRUTH_CLAIM | REALIZATION | STRUCTURAL | MIXED | OTHER`
+- `Lateral alternative considered: YES | NO`
+- `Why not lateral shift: <short justification>`
+- `Real decision boundary improved: YES | NO`
+
 Automated continuation enforcement reference:
 
 - `governance/compat/check_depth_audit_continuation_compat.py`
+- `governance/compat/check_gc018_stop_boundary_semantics.py`
 - local hook chain: `governance/compat/run_local_governance_hook_chain.py --hook pre-push`
 - CI workflow: `.github/workflows/documentation-testing.yml`
 

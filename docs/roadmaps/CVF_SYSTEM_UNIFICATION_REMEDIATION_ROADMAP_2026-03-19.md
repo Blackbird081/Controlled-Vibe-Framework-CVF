@@ -60,3 +60,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T77_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T78_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T79 (2026-03-23)
+
+**Tranche:** W6-T79 — Validation Schemas & RefusalPolicyRegistry Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for validate() helper (valid→success+data/invalid→success=false+errors/path:message format/null input), ProposalEnvelopeSchema (uuid/source/confidence/action), LoginRequestSchema (username-min3/password-min8), RegisterPolicySchema (version regex/empty-rules), LifecycleInputSchema (simulateOnly default), AISettingsSchema (temperature/maxTokens bounds), RefusalPolicyRegistry (latestVersion/get-v1-baseline/get-unknown-throws): `COMPLETED`
+- 25 new tests in dedicated `safety-runtime-validation-schemas-refusal-policy-registry.test.ts` (GC-023 compliant, 205 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 591→616 tests (+25). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T79_AUTHORIZATION_DELTA_2026-03-23.md`
+

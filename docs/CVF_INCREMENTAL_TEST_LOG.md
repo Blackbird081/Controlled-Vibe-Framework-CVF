@@ -3114,4 +3114,15 @@ Utility and guard:
   - ECO v1.0: PASS (61 tests). ECO v2.0: PASS (62 tests). ECO v2.4: PASS (42 tests).
 - Notes:
   - ECO v1.0: 41→61 (+20). ECO v2.0: 43→62 (+19). ECO v2.4: 27→42 (+15). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T38 Guard Contract Action Intent Dedicated Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CVF_GUARD_CONTRACT action-intent.ts helpers
+- Files created:
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/action-intent.test.ts` (251 lines, 40 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_GUARD_CONTRACT` -> PASS (212 tests, 14 files)
+- Notes:
+  - CVF_GUARD_CONTRACT: 172→212 (+40). Risk R0 (test-only). GC-023 compliant.
   - All CPF dedicated test gaps FULLY CLOSED (W6-T25 through W6-T36).

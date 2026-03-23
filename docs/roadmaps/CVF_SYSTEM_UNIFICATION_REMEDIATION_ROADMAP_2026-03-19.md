@@ -1427,4 +1427,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T37):
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T37_AUTHORIZATION_DELTA_2026-03-23.md`
 
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T38):
+
+- W6-T38 (Guard Contract Action Intent Dedicated Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated tests for action-intent helpers (tokenizeAction, isPhaseTransitionAction, hasModifyIntent, isReadOnlyAction) and constant arrays (READ_ONLY_ACTIONS, MODIFY_ACTIONS): `COMPLETED`
+- 40 new tests in dedicated `action-intent.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_GUARD_CONTRACT: 212 tests (+40). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T38_AUTHORIZATION_DELTA_2026-03-23.md`
+
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T36_AUTHORIZATION_DELTA_2026-03-23.md`

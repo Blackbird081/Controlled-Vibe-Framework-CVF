@@ -3089,3 +3089,16 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (599 tests, 14 files)
 - Notes:
   - CPF: 568→599 tests (+31). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T36 CPF Reverse Prompting & Clarification Refinement Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF ReversePromptingContract + ClarificationRefinementContract
+  - all CPF dedicated test coverage gaps now FULLY CLOSED
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.refinement.test.ts` (348 lines, 45 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (644 tests, 15 files)
+- Notes:
+  - CPF: 599→644 tests (+45). Risk R0 (test-only). GC-023 compliant.
+  - All CPF dedicated test gaps FULLY CLOSED (W6-T25 through W6-T36).

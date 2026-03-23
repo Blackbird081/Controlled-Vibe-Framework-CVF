@@ -1403,3 +1403,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T35):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T35_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T36):
+
+- W6-T36 (CPF Reverse Prompting & Clarification Refinement Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for ReversePromptingContract (all 5 question triggers; highPriorityCount; custom analyzeSignals) and ClarificationRefinementContract (empty/whitespace not applied; confidenceBoost default scorer; custom scoreConfidence): `COMPLETED`
+- 45 new tests in dedicated `reverse.prompting.refinement.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CPF: 644 tests (+45). All planes green: `COMPLETED`
+- All CPF dedicated test coverage gaps FULLY CLOSED: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T36_AUTHORIZATION_DELTA_2026-03-23.md`

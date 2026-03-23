@@ -3258,3 +3258,15 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (336 tests, 17 files)
 - Notes:
   - CVF_v1.7: 314→336 (+22). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T50 Controlled Intelligence Elegance Guard + Risk Core Tests (2026-03-23)
+
+- Scope:
+  - close 4 pure-logic dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE
+  - contracts: DefaultRefactorThresholds, evaluateEleganceGuard, mapScoreToCategory, calculateRisk
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/core/governance/elegance_policy/elegance.guard.internals.test.ts` (177 lines, 28 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (364 tests, 18 files)
+- Notes:
+  - CVF_v1.7: 336→364 (+28). Risk R0 (test-only). GC-023 compliant.

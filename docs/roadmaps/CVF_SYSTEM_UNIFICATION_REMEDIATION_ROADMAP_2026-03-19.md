@@ -1125,3 +1125,14 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T49):
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T49_AUTHORIZATION_DELTA_2026-03-23.md`
 
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T50):
+
+- W6-T50 (Controlled Intelligence Elegance Guard + Risk Core Dedicated Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated tests for DefaultRefactorThresholds, evaluateEleganceGuard, mapScoreToCategory, calculateRisk: `COMPLETED`
+- 28 new tests in dedicated `elegance.guard.internals.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7_CONTROLLED_INTELLIGENCE: 364 tests (+28). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T50_AUTHORIZATION_DELTA_2026-03-23.md`
+

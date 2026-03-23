@@ -19,6 +19,19 @@ export type {
   ContextBuildBatchContractDependencies,
 } from "./context.build.batch.contract";
 
+// W6-T3 — Richer Context-Packager Semantics
+export {
+  ContextEnrichmentContract,
+  createContextEnrichmentContract,
+} from "./context.enrichment.contract";
+export type {
+  ContextValidationConstraints,
+  ContextValidationStatus,
+  ContextValidationViolation,
+  ContextValidationResult,
+  ContextEnrichmentContractDependencies,
+} from "./context.enrichment.contract";
+
 // W1-T10 — Knowledge Layer Foundation Slice (CP1–CP2)
 export {
   KnowledgeQueryContract,

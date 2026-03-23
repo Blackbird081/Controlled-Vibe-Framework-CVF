@@ -1047,3 +1047,13 @@ GC-018 continuation checkpoint executed on `2026-03-23`:
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T2_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T3):
+
+- W6-T3 (Richer Context-Packager Semantics Slice) delivered and closed: `COMPLETED`
+- `ContextEnrichmentContract` now provides addSystemSegment, merge, validate operations at CPF: `COMPLETED`
+- SYSTEM segment type (previously unused) is now fully operational via enrichment contract: `COMPLETED`
+- 23 new tests added in dedicated `context.enrichment.test.ts` (GC-023 compliant): `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T3_AUTHORIZATION_DELTA_2026-03-23.md`

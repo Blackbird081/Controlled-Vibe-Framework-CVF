@@ -3078,3 +3078,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (568 tests, 13 files)
 - Notes:
   - CPF: 547→568 tests (+21). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T35 CPF Knowledge Query & Knowledge Query Batch Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF KnowledgeQueryContract + KnowledgeQueryBatchContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.batch.test.ts` (270 lines, 31 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (599 tests, 14 files)
+- Notes:
+  - CPF: 568→599 tests (+31). Risk R0 (test-only). GC-023 compliant.

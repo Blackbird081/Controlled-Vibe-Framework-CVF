@@ -1392,3 +1392,14 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T34):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T34_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T35):
+
+- W6-T35 (CPF Knowledge Query & Knowledge Query Batch Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for KnowledgeQueryContract (filtering/sorting/maxItems cap; contextId/query propagation; queryHash determinism) and KnowledgeQueryBatchContract (totalItemsFound sum; queriesWithResults; emptyQueryCount; avgItemsPerQuery rounding): `COMPLETED`
+- 31 new tests in dedicated `knowledge.query.batch.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CPF: 599 tests (+31). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T35_AUTHORIZATION_DELTA_2026-03-23.md`

@@ -43,6 +43,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_test_doc_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
         (
+            "incremental test log rotation compatibility",
+            ["python", "governance/compat/check_incremental_test_log_rotation.py", "--enforce"],
+        ),
+        (
             "baseline update compatibility",
             ["python", "governance/compat/check_baseline_update_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),

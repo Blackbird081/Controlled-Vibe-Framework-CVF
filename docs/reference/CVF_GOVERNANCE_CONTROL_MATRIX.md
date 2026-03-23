@@ -65,6 +65,7 @@ Status: canonical ownership map for critical governance controls in the active C
 - `GC-022` gives operational meaning to the memory side of context continuity by distinguishing full durable evidence from summary records and pointer-only navigation records.
 - `GC-021` and `GC-022` are intentionally separate: lane selection sets evidence burden, while memory governance sets durable storage class for each artifact.
 - `GC-023` complements, but does not replace, dedicated rotation guards such as the incremental test log and conformance trace guards.
+- The incremental test log rotation guard is enforced both in CI and in the local pre-push hook chain so append-only test evidence cannot silently outgrow the active review window.
 - `GC-024` complements `GC-023`: one controls overall file size, the other keeps an intentional test split from silently collapsing back into the legacy file.
 
 ## Current Closure Statement

@@ -23,6 +23,16 @@ export type {
   MultiAgentCoordinationContractDependencies,
 } from "./execution.multi.agent.coordination.contract";
 
+// W2-T9 — Execution Multi-Agent Coordination Slice (CP2)
+export {
+  MultiAgentCoordinationSummaryContract,
+  createMultiAgentCoordinationSummaryContract,
+} from "./execution.multi.agent.coordination.summary.contract";
+export type {
+  MultiAgentCoordinationSummary,
+  MultiAgentCoordinationSummaryContractDependencies,
+} from "./execution.multi.agent.coordination.summary.contract";
+
 // W6-T1 — Streaming Execution Slice (CP1–CP2)
 export {
   StreamingExecutionContract,

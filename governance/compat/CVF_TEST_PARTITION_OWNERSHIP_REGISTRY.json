@@ -12,6 +12,17 @@
       ]
     },
     {
+      "scope": "EPF Multi-Agent Coordination Summary",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.multi.agent.coordination.summary.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "MultiAgentCoordinationSummaryContract",
+        "createMultiAgentCoordinationSummaryContract"
+      ]
+    },
+    {
       "scope": "EPF Multi-Agent Coordination",
       "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.multi.agent.coordination.test.ts",
       "forbiddenFiles": [

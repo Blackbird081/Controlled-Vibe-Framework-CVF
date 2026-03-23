@@ -95,6 +95,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_MODULE_INVENTORY.md`
 - `reference/CVF_MATURITY_MATRIX.md`
 - `reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+- `reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
 - `reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
 - `reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`

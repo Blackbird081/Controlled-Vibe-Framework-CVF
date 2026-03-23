@@ -124,6 +124,13 @@ Personal AI usage unrelated to company work is excluded.
    - Canonical ownership and forbidden legacy files must be recorded in a machine-readable registry.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`.
    - Automated enforcement reference: `governance/compat/check_test_partition_ownership.py`.
+19. Session governance bootstrap is mandatory before governed work starts or resumes in a fresh session:
+   - Workers must first load the canonical bootstrap reference instead of rereading every governance guard by default.
+   - The bootstrap must route workers to the relevant controls based on task class and transition state.
+   - In CVF, `memory` preserves durable truth, `handoff` preserves transition truth, and `bootstrap` preserves minimal governance routing truth.
+   - The canonical bootstrap reference is `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`.
+   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`.
+   - Automated enforcement reference: `governance/compat/check_session_governance_bootstrap.py`.
 
 ---
 

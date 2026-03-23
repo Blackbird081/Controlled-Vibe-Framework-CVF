@@ -1181,3 +1181,18 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T54):
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T54_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T55 (2026-03-23)
+
+**Tranche:** W6-T55 — Safety Runtime Pure-Logic Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Survey CVF_v1.7.1_SAFETY_RUNTIME: 154 src files, 28 test files, 157 tests — identified 6 untested pure-logic contracts: `COMPLETED`
+- Dedicated tests for risk.scorer (keyword/length/role/devMode), pricing.registry (usd cost math), sandbox.mode (flag lifecycle), response.formatter (status switch), proposal.builder (confidence tiers), provider.policy (token/temp/keyword guards): `COMPLETED`
+- 31 new tests in dedicated `safety-runtime-pure-logic.test.ts` (GC-023 compliant, 244 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 188 tests (+31). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T55_AUTHORIZATION_DELTA_2026-03-23.md`
+

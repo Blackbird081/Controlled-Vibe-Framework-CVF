@@ -88,3 +88,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T79_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T80_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T81 (2026-03-23)
+
+**Tranche:** W6-T81 — RiskEngine, StateStore, Policy Registry, Execution Boundary & Approval State Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for RiskEngine.assess (CODE/POLICY-CRITICAL/INFRA-diff/dependency/migration-core), setState/getState/_clearAllStates (round-trip/unknown/clear), registerPolicy/getPolicy/listPolicies (hash/duplicate-throws/unknown-throws/list), runWithinBoundary (success/rethrow/suppress/eventBus-error), transitionApproval (PENDING→APPROVED/REJECTED/non-PENDING-throws): `COMPLETED`
+- 19 new tests in dedicated `safety-runtime-risk-engine-state-store-policy-registry-boundary.test.ts` (GC-023 compliant, 198 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 643→662 tests (+19). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T81_AUTHORIZATION_DELTA_2026-03-23.md`
+

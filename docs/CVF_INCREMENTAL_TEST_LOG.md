@@ -3161,4 +3161,16 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME` -> PASS (39 tests, 2 files)
 - Notes:
   - CVF_v1.8.1: 8→39 (+31). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T42 Safety Dashboard Session Serializer & i18n Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gaps for 2 contracts in CVF_v1.7.2_SAFETY_DASHBOARD
+  - contracts: sessionSerializer (serializeSession + toSessionSummary), i18n index (setLocale/getLocale/t)
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/__tests__/session.serializer.i18n.test.ts` (225 lines, 22 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD` -> PASS (71 tests, 3 files)
+- Notes:
+  - CVF_v1.7.2_SAFETY_DASHBOARD: 49→71 (+22). Risk R0 (test-only). GC-023 compliant.
   - All CPF dedicated test gaps FULLY CLOSED (W6-T25 through W6-T36).

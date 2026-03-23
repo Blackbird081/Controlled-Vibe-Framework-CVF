@@ -1,3 +1,23 @@
+// W6-T7 — Watchdog-Governance Bridge Slice (CP1–CP2)
+export {
+  WatchdogEscalationContract,
+  createWatchdogEscalationContract,
+} from "./watchdog.escalation.contract";
+export type {
+  WatchdogEscalationAction,
+  WatchdogEscalationPolicy,
+  WatchdogEscalationDecision,
+  WatchdogEscalationContractDependencies,
+} from "./watchdog.escalation.contract";
+export {
+  WatchdogEscalationLogContract,
+  createWatchdogEscalationLogContract,
+} from "./watchdog.escalation.log.contract";
+export type {
+  WatchdogEscalationLog,
+  WatchdogEscalationLogContractDependencies,
+} from "./watchdog.escalation.log.contract";
+
 // W6-T5 — Checkpoint-Driven Control Reintake Slice (CP1–CP2)
 export {
   GovernanceCheckpointReintakeContract,

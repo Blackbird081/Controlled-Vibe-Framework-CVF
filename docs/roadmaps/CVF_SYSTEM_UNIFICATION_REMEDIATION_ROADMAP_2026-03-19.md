@@ -1059,3 +1059,14 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T43):
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T43_AUTHORIZATION_DELTA_2026-03-23.md`
 
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T44):
+
+- W6-T44 (Controlled Intelligence Verification Policy Dedicated Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated tests for evaluatePhaseExit, validateProofArtifact, runVerification, DefaultVerificationRules + VerificationRuleType enum: `COMPLETED`
+- 35 new tests in dedicated `verification.policy.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7_CONTROLLED_INTELLIGENCE: 209 tests (+35). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T44_AUTHORIZATION_DELTA_2026-03-23.md`
+

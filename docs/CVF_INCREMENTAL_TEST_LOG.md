@@ -3186,3 +3186,15 @@ Utility and guard:
 - Notes:
   - CVF_v1.7: 138→174 (+36). Risk R0 (test-only). GC-023 compliant.
   - All CPF dedicated test gaps FULLY CLOSED (W6-T25 through W6-T36).
+
+### Batch: W6-T44 Controlled Intelligence Verification Policy Tests (2026-03-23)
+
+- Scope:
+  - close 4 pure-logic dedicated test coverage gaps in CVF_v1.7_CONTROLLED_INTELLIGENCE verification_policy
+  - contracts: evaluatePhaseExit, validateProofArtifact, runVerification, DefaultVerificationRules + VerificationRuleType
+- Files created:
+  - `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/core/governance/verification_policy/verification.policy.test.ts` (243 lines, 35 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE` -> PASS (209 tests, 12 files)
+- Notes:
+  - CVF_v1.7: 174→209 (+35). Risk R0 (test-only). GC-023 compliant.

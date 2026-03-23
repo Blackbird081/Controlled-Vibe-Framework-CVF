@@ -3045,3 +3045,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (475 tests, 10 files)
 - Notes:
   - CPF: 440→475 tests (+35). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T32 CPF Gateway Auth & Auth Log Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for CPF GatewayAuthContract + GatewayAuthLogContract
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.log.test.ts` (276 lines, 34 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (509 tests, 11 files)
+- Notes:
+  - CPF: 475→509 tests (+34). Risk R0 (test-only). GC-023 compliant.

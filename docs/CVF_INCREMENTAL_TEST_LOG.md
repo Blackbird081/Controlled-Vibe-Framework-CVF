@@ -3491,3 +3491,21 @@ Utility and guard:
   - Covered 5 contracts: DirectProviderAdapter, LLMAdapter, SimulationEngine, ReplayService, createLifecycleEngine.
   - LLMAdapter uses custom Symbol as executionToken; wrong symbol → "Direct LLM access blocked".
   - SimulationEngine uses saveSnapshot() to pre-populate module state + inline mock CVF API.
+
+---
+
+## Batch W6-T65 — 2026-03-23
+
+### Entry W6-T65
+
+- Tranche: W6-T65 — Safety Runtime Contamination Guard & Refusal Policy Dedicated Tests Slice
+- Extension: CVF_v1.7.1_SAFETY_RUNTIME
+- Files created:
+  - `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/tests/safety-runtime-contamination-refusal.test.ts` (222 lines, 27 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME` -> PASS (364 tests, 39 files)
+- Notes:
+  - CVF_v1.7.1_SAFETY_RUNTIME: 337→364 (+27). Risk R0 (test-only). GC-023 compliant.
+  - Covered 6 contracts: RiskScorer, AssumptionTracker, DriftDetector, RiskPropagationEngine, RefusalPolicyRegistry, RefusalPolicy.
+  - RiskScorer uses DefaultRiskMatrix scores: self_harm=95→R4, legal=75→R3, financial=70→R2.
+  - RefusalPolicy.decide R4+FREEZE phase → needs_approval (freezeR4Action override).

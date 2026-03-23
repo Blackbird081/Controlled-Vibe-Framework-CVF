@@ -1322,3 +1322,17 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T63_AUT
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T64_AUTHORIZATION_DELTA_2026-03-23.md`
 
+---
+
+### GC-018 Checkpoint — W6-T65 (2026-03-23)
+
+**Tranche:** W6-T65 — Safety Runtime Contamination Guard & Refusal Policy Dedicated Tests Slice
+**Branch:** cvf-next | **Risk:** R0 | **Lane:** Full Lane
+
+- Dedicated tests for RiskScorer (scoreText/score with self_harm/legal/financial/clean/multi-flag), AssumptionTracker (implicit_assumption/confidence_uncertainty/combined/clean), DriftDetector (no-drift/domain_drift/risk_jump/combined), RiskPropagationEngine (passthrough/assumption-escalate/drift-escalate/both→R4), RefusalPolicyRegistry (latestVersion/get-v1/get-unknown-throws), RefusalPolicy (R0→allow/R3→needs_approval/R4→block/FREEZE/R2-drift/R2-clean): `COMPLETED`
+- 27 new tests in dedicated `safety-runtime-contamination-refusal.test.ts` (GC-023 compliant, 222 lines): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- CVF_v1.7.1_SAFETY_RUNTIME: 337→364 tests (+27). All planes green: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T65_AUTHORIZATION_DELTA_2026-03-23.md`
+

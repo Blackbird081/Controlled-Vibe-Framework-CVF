@@ -1253,3 +1253,15 @@ GC-018 continuation checkpoint executed on `2026-03-23` (W6-T22):
 - active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
 
 Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T22_AUTHORIZATION_DELTA_2026-03-23.md`
+
+GC-018 continuation checkpoint executed on `2026-03-23` (W6-T23):
+
+- W6-T23 (EPF Async Runtime & Status Tests Slice) delivered and closed: `COMPLETED`
+- Dedicated test coverage for AsyncCommandRuntimeContract (asyncStatus always PENDING; estimatedTimeoutMs=max(1000,executedCount*1000); fields propagated; custom override; determinism): `COMPLETED`
+- Dedicated test coverage for AsyncExecutionStatusContract (severity-first dominant FAILED>RUNNING>PENDING>COMPLETED; empty→COMPLETED; counts; summary content; determinism): `COMPLETED`
+- 31 new tests in dedicated `async.runtime.status.test.ts` (GC-023 compliant): `COMPLETED`
+- Test-only tranche — no source modifications: `COMPLETED`
+- EPF: 390 tests (+31). All planes green: `COMPLETED`
+- active-path status remains `MATERIALLY DELIVERED` and `SUBSTANTIALLY ALIGNED`: `COMPLETED`
+
+Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T23_AUTHORIZATION_DELTA_2026-03-23.md`

@@ -2946,3 +2946,14 @@ Utility and guard:
   - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (359 tests, 8 files)
 - Notes:
   - EPF: 331→359 tests (+28). Risk R0 (test-only). GC-023 compliant.
+
+### Batch: W6-T23 EPF Async Runtime & Status Tests (2026-03-23)
+
+- Scope:
+  - close dedicated test coverage gap for EPF AsyncCommandRuntimeContract and AsyncExecutionStatusContract (W2-T7 era)
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/async.runtime.status.test.ts` (306 lines, 31 tests)
+- Tests executed:
+  - `npm test --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (390 tests, 9 files)
+- Notes:
+  - EPF: 359→390 tests (+31). Risk R0 (test-only). GC-023 compliant.

@@ -73,6 +73,42 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W1-T19 CP2 — KnowledgeRankingConsumerPipelineBatchContract
+- Scope:
+  - implement `KnowledgeRankingConsumerPipelineBatchContract` — aggregates `KnowledgeRankingConsumerPipelineResult[]` → `KnowledgeRankingConsumerPipelineBatch`
+  - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`; 0 for empty
+  - `emptyRankingCount` = results where `totalRanked === 0`
+  - `batchId ≠ batchHash`
+- Change reference: `feat(W1-T19/CP2): KnowledgeRankingConsumerPipelineBatchContract + 13 tests (Fast Lane GC-021)`
+- Impacted scope: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` (new batch contract + test)
+- Files changed:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.ranking.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.ranking.consumer.pipeline.batch.test.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (W1-T19 CP1–CP2 exports)
+- Tests executed:
+  - `npx vitest run EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.ranking.consumer.pipeline.batch.test.ts` → 13 passed, 0 failed
+- Skip scope:
+  - EPF, GEF: skipped because unchanged from baseline
+- Notes/Risks: none
+
+## [2026-03-24] Batch: W1-T19 CP1 — KnowledgeRankingConsumerPipelineContract
+- Scope:
+  - implement `KnowledgeRankingConsumerPipelineContract` — CPF-internal consumer bridge
+  - chain: `KnowledgeRankingContract.rank()` → `RankedKnowledgeResult` → query derivation → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query = `"${request.query}:ranked:${totalRanked}".slice(0, 120)`; contextId = `rankedResult.resultId`
+  - Warning: totalRanked === 0 → `[knowledge] no ranked items returned — query may need broadening`
+- Change reference: `feat(W1-T19/CP1): KnowledgeRankingConsumerPipelineContract + 22 tests (Full Lane GC-019)`
+- Impacted scope: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` (new contract + test)
+- Files changed:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.ranking.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.ranking.consumer.pipeline.test.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (W1-T19 CP1 exports)
+- Tests executed:
+  - `npx vitest run EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.ranking.consumer.pipeline.test.ts` → 22 passed, 0 failed
+- Skip scope:
+  - EPF, GEF: skipped because unchanged from baseline
+- Notes/Risks: none
+
 ## [2026-03-24] Batch: W2-T15 CP2 — ExecutionAuditSummaryConsumerPipelineBatchContract
 - Scope:
   - implement `ExecutionAuditSummaryConsumerPipelineBatchContract` — aggregates `ExecutionAuditSummaryConsumerPipelineResult[]` → `ExecutionAuditSummaryConsumerPipelineBatch`

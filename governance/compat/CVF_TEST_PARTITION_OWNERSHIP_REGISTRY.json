@@ -1,52 +1,70 @@
 {
   "partitions": [
     {
-      "tranche": "W2-T13",
-      "controlPoint": "CP1",
-      "contract": "MCPInvocationConsumerPipelineContract",
-      "testFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.test.ts",
-      "owner": "EPF",
-      "status": "ACTIVE"
+      "scope": "EPF MCP Invocation Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "MCPInvocationConsumerPipelineContract",
+        "createMCPInvocationConsumerPipelineContract"
+      ]
     },
     {
-      "tranche": "W2-T13",
-      "controlPoint": "CP2",
-      "contract": "MCPInvocationConsumerPipelineBatchContract",
-      "testFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.batch.test.ts",
-      "owner": "EPF",
-      "status": "ACTIVE"
+      "scope": "EPF MCP Invocation Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "MCPInvocationConsumerPipelineBatchContract",
+        "createMCPInvocationConsumerPipelineBatchContract"
+      ]
     },
     {
-      "tranche": "W1-T17",
-      "controlPoint": "CP1",
-      "contract": "ReversePromptingConsumerPipelineContract",
-      "testFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.test.ts",
-      "owner": "CPF",
-      "status": "ACTIVE"
+      "scope": "CPF Reverse Prompting Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ReversePromptingConsumerPipelineContract",
+        "createReversePromptingConsumerPipelineContract"
+      ]
     },
     {
-      "tranche": "W1-T17",
-      "controlPoint": "CP2",
-      "contract": "ReversePromptingConsumerPipelineBatchContract",
-      "testFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.batch.test.ts",
-      "owner": "CPF",
-      "status": "ACTIVE"
+      "scope": "CPF Reverse Prompting Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ReversePromptingConsumerPipelineBatchContract",
+        "createReversePromptingConsumerPipelineBatchContract"
+      ]
     },
     {
-      "tranche": "W3-T7",
-      "controlPoint": "CP1",
-      "contract": "GovernanceCheckpointConsumerPipelineContract",
-      "testFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.consumer.pipeline.test.ts",
-      "owner": "GEF",
-      "status": "ACTIVE"
+      "scope": "GEF Governance Checkpoint Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointConsumerPipelineContract",
+        "createGovernanceCheckpointConsumerPipelineContract"
+      ]
     },
     {
-      "tranche": "W3-T7",
-      "controlPoint": "CP2",
-      "contract": "GovernanceCheckpointConsumerPipelineBatchContract",
-      "testFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.consumer.pipeline.batch.test.ts",
-      "owner": "GEF",
-      "status": "ACTIVE"
+      "scope": "GEF Governance Checkpoint Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointConsumerPipelineBatchContract",
+        "createGovernanceCheckpointConsumerPipelineBatchContract"
+      ]
     },
     {
       "scope": "EPF Reintake Consumer Pipeline Batch",

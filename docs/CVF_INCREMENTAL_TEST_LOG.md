@@ -3120,3 +3120,35 @@ Utility and guard:
 - Notes:
   - CPF: 751→761 (+10). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Batch pattern: dominantTokenBudget, rejectCount, escalateCount, batchId ≠ batchHash.
+
+---
+
+## Batch W2-T12 — 2026-03-24
+
+### Entry W2-T12/CP1
+
+- Tranche: W2-T12 — Execution Re-intake Consumer Bridge
+- Extension: CVF_EXECUTION_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.reintake.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.consumer.pipeline.test.ts` (17 tests)
+- Tests executed:
+  - `npm test` (EPF) → PASS (502 tests, 0 failures)
+- Notes:
+  - EPF: 485→502 (+17). CP1 Full Lane. GC-023 compliant (dedicated test file).
+  - Cross-plane bridge: EPF → CPF. ExecutionReintakeContract → ControlPlaneConsumerPipelineContract.
+  - REPLAN (CRITICAL) → `[reintake] full replanning required — new design authorization needed`
+  - RETRY (HIGH) → `[reintake] execution retry requested — revised orchestration required`
+
+### Entry W2-T12/CP2
+
+- Tranche: W2-T12 — Execution Re-intake Consumer Bridge
+- Extension: CVF_EXECUTION_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.reintake.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.consumer.pipeline.batch.test.ts` (10 tests)
+- Tests executed:
+  - `npm test` (EPF) → PASS (512 tests, 0 failures)
+- Notes:
+  - EPF: 502→512 (+10). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch pattern: dominantTokenBudget, replanCount, retryCount, batchId ≠ batchHash.

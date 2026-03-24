@@ -189,6 +189,10 @@ Current authorization state:
   - `W1-T16 / CP1` — BoardroomConsumerPipelineContract (`BoardroomRound[] → BoardroomMultiRoundSummary + ControlPlaneConsumerPackage`; query from summary text max 120 chars; contextId = summaryId) — Full Lane
   - `W1-T16 / CP2` — BoardroomConsumerPipelineBatchContract (`BoardroomConsumerPipelineResult[] → batch with dominantTokenBudget, rejectCount, escalateCount`) — Fast Lane (GC-021)
   - `W1-T16 / CP3` — Tranche closure review — Full Lane
+- `W2-T12 — Execution Re-intake Consumer Bridge` is now authorized (GC-018: 10/10 depth audit) and canonically closed as a bounded EPF→CPF cross-plane re-intake consumer bridge tranche; closes W2-T5/W2-T6 implied gap (ExecutionReintakeRequest has no governed consumer-visible enriched output path)
+  - `W2-T12 / CP1` — ExecutionReintakeConsumerPipelineContract (`FeedbackResolutionSummary → ExecutionReintakeRequest + ControlPlaneConsumerPackage`; query from reintakeVibe max 120 chars; contextId = reintakeId) — Full Lane
+  - `W2-T12 / CP2` — ExecutionReintakeConsumerPipelineBatchContract (`ExecutionReintakeConsumerPipelineResult[] → batch with dominantTokenBudget, replanCount, retryCount`) — Fast Lane (GC-021)
+  - `W2-T12 / CP3` — Tranche closure review — Full Lane
 
 Nothing beyond `W0` in this roadmap may execute until:
 

@@ -73,6 +73,45 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W2-T13 CP2 — MCPInvocationConsumerPipelineBatchContract
+- Scope:
+  - implement `MCPInvocationConsumerPipelineBatchContract` — aggregates `MCPInvocationConsumerPipelineResult[]` → `MCPInvocationConsumerPipelineBatch`
+  - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`
+  - `successCount` = SUCCESS; `failureCount` = FAILURE | TIMEOUT | REJECTED
+  - empty batch → `dominantTokenBudget = 0`; `batchId ≠ batchHash`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W2_T13_MCP_INVOCATION_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP2) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/mcp.invocation.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (barrel exports CP1+CP2)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.batch.test.ts` (new, 11 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (EPF MCP Invocation Consumer Pipeline Batch partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (538 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
+## [2026-03-24] Batch: W2-T13 CP1 — MCPInvocationConsumerPipelineContract
+- Scope:
+  - implement `MCPInvocationConsumerPipelineContract` — EPF→CPF cross-plane consumer bridge
+  - chains `MCPInvocationContract.invoke()` → `MCPInvocationResult` → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query = `toolName:invocationStatus` (max 120 chars); contextId = `result.resultId`
+  - warnings: FAILURE → `[mcp] invocation failed`; TIMEOUT → `[mcp] invocation timed out`; REJECTED → `[mcp] invocation rejected`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W2_T13_MCP_INVOCATION_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-018` Full Lane audit + review (CP1) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/mcp.invocation.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.test.ts` (new, 15 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (EPF MCP Invocation Consumer Pipeline partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (527 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-24] Batch: W2-T11 CP2 — ExecutionFeedbackConsumerPipelineBatchContract
 - Scope:
   - implement `ExecutionFeedbackConsumerPipelineBatchContract` — aggregates `ExecutionFeedbackConsumerPipelineResult[]` → `ExecutionFeedbackConsumerPipelineBatch`

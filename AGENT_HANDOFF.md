@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-24
 
 > Branch: `cvf-next`
-> Last push: `W1-T17-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W1-T17
+> Last push: `W2-T13-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T13
 
 ---
 
@@ -10,20 +10,20 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **790 tests, 0 failures**
-- EPF (Execution Plane Foundation): **512 tests, 0 failures**
+- EPF (Execution Plane Foundation): **538 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **265 tests, 0 failures**
 
 ### Last Two Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W3-T7 | Governance Checkpoint Consumer Bridge | CP1, CP2, CP3 | 265 GEF |
 | W1-T17 | Reverse Prompting Consumer Bridge | CP1, CP2, CP3 | 790 CPF |
+| W2-T13 | MCP Invocation Consumer Bridge | CP1, CP2, CP3 | 538 EPF |
 
 ### Key Contracts Delivered (last 4 tranches)
+- `CVF_EXECUTION_PLANE_FOUNDATION/src/mcp.invocation.consumer.pipeline.contract.ts` — MCPInvocationConsumerPipelineContract (W2-T13)
+- `CVF_EXECUTION_PLANE_FOUNDATION/src/mcp.invocation.consumer.pipeline.batch.contract.ts` — MCPInvocationConsumerPipelineBatchContract (W2-T13)
 - `CVF_CONTROL_PLANE_FOUNDATION/src/reverse.prompting.consumer.pipeline.contract.ts` — ReversePromptingConsumerPipelineContract (W1-T17)
 - `CVF_CONTROL_PLANE_FOUNDATION/src/reverse.prompting.consumer.pipeline.batch.contract.ts` — ReversePromptingConsumerPipelineBatchContract (W1-T17)
-- `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.checkpoint.consumer.pipeline.contract.ts` — GovernanceCheckpointConsumerPipelineContract (W3-T7)
-- `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.checkpoint.consumer.pipeline.batch.contract.ts` — GovernanceCheckpointConsumerPipelineBatchContract (W3-T7)
 - `CVF_EXECUTION_PLANE_FOUNDATION/src/execution.reintake.consumer.pipeline.contract.ts` — ExecutionReintakeConsumerPipelineContract (W2-T12)
 - `CVF_EXECUTION_PLANE_FOUNDATION/src/execution.reintake.consumer.pipeline.batch.contract.ts` — ExecutionReintakeConsumerPipelineBatchContract (W2-T12)
 
@@ -34,9 +34,9 @@
 **Must issue a fresh GC-018 before any implementation work.**
 
 Candidate next tranche (from roadmap analysis):
-- **W2-T13** — next EPF consumer bridge (e.g. MCP invocation consumer bridge or multi-agent coordination consumer bridge)
 - **W3-T8** — next GEF governance slice (e.g. checkpoint reintake consumer bridge or audit log consumer bridge)
 - **W1-T18** — next CPF consumer bridge (e.g. design consumer bridge or PII detection consumer bridge)
+- **W2-T14** — next EPF consumer bridge (e.g. multi-agent coordination consumer bridge or streaming consumer bridge)
 
 Any of the above requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

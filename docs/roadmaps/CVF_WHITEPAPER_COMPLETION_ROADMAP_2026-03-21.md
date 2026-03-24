@@ -1211,3 +1211,17 @@ This roadmap means:
 - Warnings: ESCALATE → immediate governance escalation required; PAUSE → governance pause required
 - Gap closed: W3-T4 CP2 implied — `GovernanceConsensusSummary` had no governed consumer-visible enriched output path
 - Closure anchor: `docs/reviews/CVF_W3_T13_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+
+---
+
+## Post-Cycle Closure Record — W3-T14
+
+> Tranche: W3-T14 — Governance Checkpoint Log Consumer Bridge
+> Closed: 2026-03-24
+> GEF: 490 tests (+31 from 459)
+
+- `GovernanceCheckpointLogConsumerPipelineContract` — GEF→CPF cross-plane bridge: `GovernanceCheckpointDecision[] → GovernanceCheckpointLogContract.log() → GovernanceCheckpointLog → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `[checkpoint-log] ${dominantCheckpointAction} — ${totalCheckpoints} checkpoint(s)`.slice(0, 120); contextId = `log.logId`
+- `GovernanceCheckpointLogConsumerPipelineBatchContract` — batch aggregation with `escalateResultCount` (dominantCheckpointAction === "ESCALATE") and `haltResultCount` (dominantCheckpointAction === "HALT")
+- Warnings: ESCALATE → immediate checkpoint escalation required; HALT → checkpoint halt required; Dominance: ESCALATE > HALT > PROCEED (severity-first)
+- Gap closed: W6-T4 CP2 implied — `GovernanceCheckpointLog` had no governed consumer-visible enriched output path
+- Closure anchor: `docs/reviews/CVF_W3_T14_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`

@@ -3028,3 +3028,31 @@ Utility and guard:
 - Notes:
   - GEF: 445→459 (+14). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Batch aggregation: escalateResultCount (dominantVerdict === "ESCALATE") + pauseResultCount (dominantVerdict === "PAUSE") + dominantTokenBudget.
+
+### Entry W3-T14/CP1
+
+- Tranche: W3-T14 — Governance Checkpoint Log Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.checkpoint.log.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.log.consumer.pipeline.test.ts` (17 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (476 tests, 0 failures)
+- Notes:
+  - GEF: 459→476 (+17). Full Lane. GC-023 compliant (dedicated test file).
+  - Gap closed: W6-T4 CP2 implied — GovernanceCheckpointLog had no governed consumer-visible enriched output path.
+  - Query = `[checkpoint-log] ${dominantCheckpointAction} — ${totalCheckpoints} checkpoint(s)`.slice(0, 120); contextId = log.logId.
+  - Severity-first dominance: ESCALATE > HALT > PROCEED.
+
+### Entry W3-T14/CP2
+
+- Tranche: W3-T14 — Governance Checkpoint Log Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.checkpoint.log.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.log.consumer.pipeline.batch.test.ts` (14 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (490 tests, 0 failures)
+- Notes:
+  - GEF: 476→490 (+14). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch aggregation: escalateResultCount (dominantCheckpointAction === "ESCALATE") + haltResultCount (dominantCheckpointAction === "HALT") + dominantTokenBudget.

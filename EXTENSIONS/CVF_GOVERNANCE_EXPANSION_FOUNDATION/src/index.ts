@@ -1,3 +1,22 @@
+// W3-T14 — Governance Checkpoint Log Consumer Bridge (CP1–CP2)
+export {
+  GovernanceCheckpointLogConsumerPipelineContract,
+  createGovernanceCheckpointLogConsumerPipelineContract,
+} from "./governance.checkpoint.log.consumer.pipeline.contract";
+export type {
+  GovernanceCheckpointLogConsumerPipelineRequest,
+  GovernanceCheckpointLogConsumerPipelineResult,
+  GovernanceCheckpointLogConsumerPipelineContractDependencies,
+} from "./governance.checkpoint.log.consumer.pipeline.contract";
+export {
+  GovernanceCheckpointLogConsumerPipelineBatchContract,
+  createGovernanceCheckpointLogConsumerPipelineBatchContract,
+} from "./governance.checkpoint.log.consumer.pipeline.batch.contract";
+export type {
+  GovernanceCheckpointLogConsumerPipelineBatch,
+  GovernanceCheckpointLogConsumerPipelineBatchContractDependencies,
+} from "./governance.checkpoint.log.consumer.pipeline.batch.contract";
+
 // W3-T13 — Governance Consensus Summary Consumer Bridge (CP1–CP2)
 export {
   GovernanceConsensusSummaryConsumerPipelineContract,

@@ -73,6 +73,49 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W2-T15 CP2 — ExecutionAuditSummaryConsumerPipelineBatchContract
+- Scope:
+  - implement `ExecutionAuditSummaryConsumerPipelineBatchContract` — aggregates `ExecutionAuditSummaryConsumerPipelineResult[]` → `ExecutionAuditSummaryConsumerPipelineBatch`
+  - `highRiskResultCount` = HIGH overallRisk results; `mediumRiskResultCount` = MEDIUM overallRisk results
+  - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`
+  - empty batch → `dominantTokenBudget = 0`; `batchId ≠ batchHash`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W2_T15_EXECUTION_AUDIT_SUMMARY_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP2) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.audit.summary.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.audit.summary.consumer.pipeline.batch.test.ts` (new)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CP2 partition entry)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (W2-T15 CP1–CP2 exports)
+- Tests executed:
+  - `npm test` (EPF) → 595 passed, 0 failed
+- Skip scope:
+  - CPF, GEF: skipped because unchanged from baseline
+- Notes/Risks: none
+
+## [2026-03-24] Batch: W2-T15 CP1 — ExecutionAuditSummaryConsumerPipelineContract
+- Scope:
+  - implement `ExecutionAuditSummaryConsumerPipelineContract` — cross-plane EPF→CPF bridge
+  - `ExecutionObservation[]` → `ExecutionAuditSummaryContract.summarize()` → `ExecutionAuditSummary` → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query: `${dominantOutcome}:risk:${overallRisk}:observations:${totalObservations}` (≤120 chars)
+  - contextId: `auditSummary.summaryId`
+  - Warnings: HIGH → `[audit] high execution risk — failed observations detected`; MEDIUM → `[audit] medium execution risk — gated or sandboxed observations detected`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W2_T15_EXECUTION_AUDIT_SUMMARY_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-018` authorization (50/50) → `GC-019` Full Lane audit + review (CP1) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.audit.summary.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.audit.summary.consumer.pipeline.test.ts` (new)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CP1 partition entry)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (W2-T15 CP1 exports)
+- Tests executed:
+  - `npm test` (EPF) → 582 passed, 0 failed
+- Skip scope:
+  - CPF, GEF: skipped because unchanged from baseline
+- Notes/Risks: none
+
 ## [2026-03-24] Batch: W3-T10 CP2 — WatchdogAlertLogConsumerPipelineBatchContract
 - Scope:
   - implement `WatchdogAlertLogConsumerPipelineBatchContract` — aggregates `WatchdogAlertLogConsumerPipelineResult[]` → `WatchdogAlertLogConsumerPipelineBatch`

@@ -106,6 +106,6 @@ Warnings: ESCALATE → `[feedback] escalation signal — governance review requi
 
 | CP | Status |
 |---|---|
-| CP1 | PENDING |
+| CP1 | DONE |
 | CP2 | PENDING |
 | CP3 | PENDING |

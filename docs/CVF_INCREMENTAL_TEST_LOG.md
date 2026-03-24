@@ -73,6 +73,22 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W2-T11 CP1 — ExecutionFeedbackConsumerPipelineContract
+- Scope:
+  - implement `ExecutionFeedbackConsumerPipelineContract` — EPF→CPF cross-plane bridge
+  - chains `ExecutionObservation` → `ExecutionFeedbackSignal` → `ControlPlaneConsumerPackage`
+  - query = `feedbackSignal.rationale` (max 120 chars); contextId = `feedbackSignal.feedbackId`
+  - warnings: ESCALATE → `[feedback] escalation signal`; REJECT → `[feedback] rejection signal`
+- Files created / updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.feedback.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (barrel exports W2-T11 CP1)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.feedback.consumer.pipeline.test.ts` (new, 18 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (EPF Feedback Consumer Pipeline partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (475 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-24] Batch: W1-T15 CP2 — OrchestrationConsumerPipelineBatchContract
 - Scope:
   - implement `OrchestrationConsumerPipelineBatchContract` — aggregates `OrchestrationConsumerPipelineResult[]` → `OrchestrationConsumerPipelineBatch`

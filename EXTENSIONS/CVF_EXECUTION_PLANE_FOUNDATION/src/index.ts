@@ -1,3 +1,14 @@
+// W2-T11 — Execution Feedback Consumer Bridge (CP1–CP2)
+export {
+  ExecutionFeedbackConsumerPipelineContract,
+  createExecutionFeedbackConsumerPipelineContract,
+} from "./execution.feedback.consumer.pipeline.contract";
+export type {
+  ExecutionFeedbackConsumerPipelineRequest,
+  ExecutionFeedbackConsumerPipelineResult,
+  ExecutionFeedbackConsumerPipelineContractDependencies,
+} from "./execution.feedback.consumer.pipeline.contract";
+
 // W6-T9 — Execution Audit Summary Slice (CP1)
 export {
   ExecutionAuditSummaryContract,

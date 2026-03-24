@@ -12,6 +12,17 @@
       ]
     },
     {
+      "scope": "GEF Watchdog Alert Log Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.alert.log.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogAlertLogConsumerPipelineBatchContract",
+        "createWatchdogAlertLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "GEF Governance Checkpoint Reintake Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.consumer.pipeline.test.ts",
       "forbiddenFiles": [

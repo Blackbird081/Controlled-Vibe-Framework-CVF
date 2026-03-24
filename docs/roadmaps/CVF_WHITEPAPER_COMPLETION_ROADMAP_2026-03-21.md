@@ -1043,6 +1043,19 @@ This roadmap means:
 
 ---
 
+## Post-Cycle Candidate — W1-T19
+
+> Tranche: W1-T19 — Knowledge Ranking Consumer Bridge
+> Status: IN PROGRESS (authorized 2026-03-24)
+> Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T19_KNOWLEDGE_RANKING_CONSUMER_BRIDGE_2026-03-24.md`
+
+- `KnowledgeRankingConsumerPipelineContract` — CPF-internal bridge: `KnowledgeRankingRequest → KnowledgeRankingContract.rank() → RankedKnowledgeResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `KnowledgeRankingConsumerPipelineBatchContract` — batch aggregation with `dominantTokenBudget`
+- Warning: empty ranking → `[knowledge] no ranked items returned — query may need broadening`
+- Gap closed: W1-T12 implied — `RankedKnowledgeResult` had no governed consumer-visible enriched output path
+
+---
+
 ## Post-Cycle Closure Record — W2-T15
 
 > Tranche: W2-T15 — Execution Audit Summary Consumer Bridge

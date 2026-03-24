@@ -1,4 +1,4 @@
-// W1-T19 — Knowledge Ranking Consumer Bridge (CP1)
+// W1-T19 — Knowledge Ranking Consumer Bridge (CP1–CP2)
 export {
   KnowledgeRankingConsumerPipelineContract,
   createKnowledgeRankingConsumerPipelineContract,
@@ -8,6 +8,14 @@ export type {
   KnowledgeRankingConsumerPipelineResult,
   KnowledgeRankingConsumerPipelineContractDependencies,
 } from "./knowledge.ranking.consumer.pipeline.contract";
+export {
+  KnowledgeRankingConsumerPipelineBatchContract,
+  createKnowledgeRankingConsumerPipelineBatchContract,
+} from "./knowledge.ranking.consumer.pipeline.batch.contract";
+export type {
+  KnowledgeRankingConsumerPipelineBatch,
+  KnowledgeRankingConsumerPipelineBatchContractDependencies,
+} from "./knowledge.ranking.consumer.pipeline.batch.contract";
 
 // W1-T18 — Gateway PII Detection Consumer Bridge (CP1–CP2)
 export {

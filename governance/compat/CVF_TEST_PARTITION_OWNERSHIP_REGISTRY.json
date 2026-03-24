@@ -1,6 +1,17 @@
 {
   "partitions": [
     {
+      "scope": "CPF Orchestration Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/orchestration.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "OrchestrationConsumerPipelineContract",
+        "createOrchestrationConsumerPipelineContract"
+      ]
+    },
+    {
       "scope": "GEF Watchdog Escalation Pipeline Batch",
       "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.batch.test.ts",
       "forbiddenFiles": [

@@ -1,3 +1,14 @@
+// W1-T15 — Control Plane Orchestration Consumer Bridge (CP1–CP2)
+export {
+  OrchestrationConsumerPipelineContract,
+  createOrchestrationConsumerPipelineContract,
+} from "./orchestration.consumer.pipeline.contract";
+export type {
+  OrchestrationConsumerPipelineRequest,
+  OrchestrationConsumerPipelineResult,
+  OrchestrationConsumerPipelineContractDependencies,
+} from "./orchestration.consumer.pipeline.contract";
+
 // W1-T14 — Gateway Knowledge Pipeline Integration Slice (CP1–CP2)
 export {
   GatewayConsumerPipelineContract,

@@ -73,6 +73,21 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W1-T15 CP1 — OrchestrationConsumerPipelineContract
+- Scope:
+  - implement `OrchestrationConsumerPipelineContract` — chains `DesignPlan` → `OrchestrationResult` → `ControlPlaneConsumerPackage`
+  - query derived from `plan.vibeOriginal` (max 120 chars) or falls back to `plan.planId`
+  - contextId = `orchestrationResult.orchestrationId`; warnings prefixed with `[orchestration]`
+- Files created / updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/orchestration.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports W1-T15 CP1)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/orchestration.consumer.pipeline.test.ts` (new, 17 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CPF Orchestration Consumer Pipeline partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (722 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-24] Batch: W3-T5 CP2 — WatchdogEscalationPipelineBatchContract
 - Scope:
   - implement `WatchdogEscalationPipelineBatchContract` — aggregates `WatchdogEscalationPipelineResult[]` → `WatchdogEscalationPipelineBatch`

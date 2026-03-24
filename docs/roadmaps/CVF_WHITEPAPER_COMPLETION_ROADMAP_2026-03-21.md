@@ -1043,6 +1043,19 @@ This roadmap means:
 
 ---
 
+## Post-Cycle Candidate — W3-T8
+
+> Tranche: W3-T8 — Governance Checkpoint Reintake Consumer Bridge
+> Status: IN PROGRESS (authorized 2026-03-24)
+> Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T8_CHECKPOINT_REINTAKE_CONSUMER_BRIDGE_2026-03-24.md`
+
+- `GovernanceCheckpointReintakeConsumerPipelineContract` — GEF→CPF cross-plane bridge: `GovernanceCheckpointDecision → GovernanceCheckpointReintakeContract.reintake() → CheckpointReintakeRequest → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `GovernanceCheckpointReintakeConsumerPipelineBatchContract` — batch aggregation with `immediateCount` + `deferredCount` + `noReintakeCount`
+- Warnings: ESCALATION_REQUIRED → immediate re-intake triggered; HALT_REVIEW_PENDING → deferred re-intake pending review
+- Gap closed: W3-T5 implied — `CheckpointReintakeRequest` had no governed consumer-visible enriched output path
+
+---
+
 ## Post-Cycle Closure Record — W2-T14
 
 > Tranche: W2-T14 — Multi-Agent Coordination Consumer Bridge

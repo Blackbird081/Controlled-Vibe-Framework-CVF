@@ -73,6 +73,41 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W2-T14 CP2 — MultiAgentCoordinationConsumerPipelineBatchContract
+- Scope:
+  - implement `MultiAgentCoordinationConsumerPipelineBatchContract` — aggregates `MultiAgentCoordinationConsumerPipelineResult[]` → `MultiAgentCoordinationConsumerPipelineBatch`
+  - `coordinatedCount` = COORDINATED; `failedCount` = FAILED; `partialCount` = PARTIAL
+  - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`
+  - empty batch → `dominantTokenBudget = 0`; `batchId ≠ batchHash`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W2_T14_MULTI_AGENT_COORDINATION_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP2) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.multi.agent.coordination.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.multi.agent.coordination.consumer.pipeline.batch.test.ts` (new)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CP2 partition entry)
+- Tests executed:
+  - `npm test` (CVF_EXECUTION_PLANE_FOUNDATION) → PASS (10 new tests, EPF 564 total, 0 failures)
+- Skip scope:
+  - CPF, GEF, all other modules: unchanged from previous passing batch
+
+## [2026-03-24] Batch: W2-T14 CP1 — MultiAgentCoordinationConsumerPipelineContract
+- Scope:
+  - implement `MultiAgentCoordinationConsumerPipelineContract` — EPF→CPF cross-plane bridge
+  - chain: `MultiAgentCoordinationContract.coordinate()` → `MultiAgentCoordinationResult` → query derivation → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query = `${coordinationStatus}:agents:${agents.length}:tasks:${totalTasksDistributed}` (max 120 chars)
+  - warnings: FAILED → `[coordination] coordination failed`; PARTIAL → `[coordination] partial agent assignment detected`
+- Files changed:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.multi.agent.coordination.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.multi.agent.coordination.consumer.pipeline.test.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (barrel exports)
+- Tests executed:
+  - `npm test` (CVF_EXECUTION_PLANE_FOUNDATION) → PASS (16 new tests, EPF 554 after CP1, 0 failures)
+- Authorization chain: GC-018 384d719 → CP1 840857b
+- Skip scope:
+  - CPF, GEF, all other modules: unchanged from previous passing batch
+
 ## [2026-03-24] Batch: W1-T18 CP2 — GatewayPIIDetectionConsumerPipelineBatchContract
 - Scope:
   - implement `GatewayPIIDetectionConsumerPipelineBatchContract` — aggregates `GatewayPIIDetectionConsumerPipelineResult[]` → `GatewayPIIDetectionConsumerPipelineBatch`

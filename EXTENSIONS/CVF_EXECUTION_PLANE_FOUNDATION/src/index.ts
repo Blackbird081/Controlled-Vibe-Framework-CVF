@@ -1,3 +1,14 @@
+// W2-T20 — Execution Observation Consumer Bridge (CP1)
+export {
+  ExecutionObservationConsumerPipelineContract,
+  createExecutionObservationConsumerPipelineContract,
+} from "./execution.observation.consumer.pipeline.contract";
+export type {
+  ExecutionObservationConsumerPipelineRequest,
+  ExecutionObservationConsumerPipelineResult,
+  ExecutionObservationConsumerPipelineContractDependencies,
+} from "./execution.observation.consumer.pipeline.contract";
+
 // W2-T19 — Streaming Execution Summary Consumer Bridge (CP1–CP2)
 export {
   StreamingExecutionSummaryConsumerPipelineBatchContract,

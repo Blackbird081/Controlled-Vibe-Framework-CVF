@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Purpose: simple visual tracker for progress against `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-24` (W2-T15 closed)
+> Last refreshed: `2026-03-24` (W2-T16 closed delivered)
 
 ---
 
@@ -17,7 +17,7 @@ Memory class: POINTER_RECORD
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + W1-T11 + W3-T4 + W1-T12 + W2-T9 + W1-T13 + W1-T14 + W2-T10 + W3-T5 + W1-T15 + W2-T11 + W3-T6 + W1-T16 + W2-T12 + W3-T7 + W1-T17 POST-CYCLE CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `NONE — W2-T15 CLOSED DELIVERED — EPF 595 tests` |
+| Current active tranche | `NONE — W2-T16 CLOSED DELIVERED — EPF 625 tests` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -78,6 +78,13 @@ Memory class: POINTER_RECORD
 | `W3-T7` governance checkpoint consumer bridge | `DONE` |
 | `W1-T17` reverse prompting consumer bridge | `DONE` |
 | `W2-T13` MCP invocation consumer bridge | `DONE` |
+| `W1-T18` gateway PII detection consumer bridge | `DONE` |
+| `W3-T8` governance checkpoint reintake consumer bridge | `DONE` |
+| `W3-T9` governance audit log consumer bridge | `DONE` |
+| `W2-T14` execution multi-agent coordination consumer bridge | `DONE` |
+| `W3-T10` watchdog alert log consumer bridge | `DONE` |
+| `W2-T15` execution audit summary consumer bridge | `DONE` |
+| `W2-T16` feedback resolution consumer bridge | `DONE` |
 
 ---
 
@@ -88,7 +95,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `W3-T9 AUTHORIZED — GC-018 score 10/10` |
+| Current canonical validation posture | `NO AUTHORIZED ACTIVE TRANCHE — LAST CLOSED W2-T16` |
 
 ---
 
@@ -107,6 +114,6 @@ Memory class: POINTER_RECORD
 - Detailed status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
-- Current closure anchor: `docs/reviews/CVF_W2_T14_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
-- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T9_AUDIT_LOG_CONSUMER_BRIDGE_2026-03-24.md` (W3-T9 authorized; execution plan: `docs/roadmaps/CVF_W3_T9_AUDIT_LOG_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-24.md`)
+- Current closure anchor: `docs/reviews/CVF_W2_T16_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T16_FEEDBACK_RESOLUTION_CONSUMER_BRIDGE_2026-03-24.md` (W2-T16 now closed; next requires fresh GC-018)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

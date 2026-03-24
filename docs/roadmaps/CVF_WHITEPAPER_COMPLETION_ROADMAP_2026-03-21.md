@@ -1155,4 +1155,18 @@ This roadmap means:
 - `ReversePromptingConsumerPipelineBatchContract` — batch aggregation with `highPriorityResultCount` + `totalQuestionsCount`
 - Warning: high-priority clarification questions require response (when `highPriorityCount > 0`)
 - Closure anchor: `docs/reviews/CVF_W1_T17_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+
+---
+
+## Post-Cycle Closure Record — W2-T16
+
+> Tranche: W2-T16 — Feedback Resolution Consumer Bridge
+> Closed: 2026-03-24
+> EPF: 625 tests (+30 from 595)
+
+- `FeedbackResolutionConsumerPipelineContract` — EPF → CPF cross-plane bridge: `FeedbackRoutingDecision[] → FeedbackResolutionContract.resolve() → FeedbackResolutionSummary → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `FeedbackResolutionConsumerPipelineBatchContract` — batch aggregation with `criticalUrgencyResultCount` + `highUrgencyResultCount`
+- Warnings: CRITICAL urgency → escalated/rejected decisions; HIGH urgency → retry decisions require attention
+- Closure anchor: `docs/reviews/CVF_W2_T16_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+
 > **Updated readout:** `W0` is complete, all authorized tranches through `W5-T1` are canonically closed, and the first whitepaper-completion verification cycle is finished. `W1-T1` through `W1-T11` now substantially deliver the control-plane line, `W2-T1` through `W2-T8` substantially deliver the execution-plane line, `W3-T1` through `W3-T3` substantially deliver the governance-expansion line, `W4-T1` through `W4-T7` substantially deliver the learning-plane line, and `W5-T1` closes the first evidence-backed truth reconciliation cycle. `W1-T11` is a scoped post-cycle continuation tranche that adds the first operational Context Builder path without reopening the entire roadmap. Any continuation beyond the currently closed line still requires a fresh `GC-018` decision.

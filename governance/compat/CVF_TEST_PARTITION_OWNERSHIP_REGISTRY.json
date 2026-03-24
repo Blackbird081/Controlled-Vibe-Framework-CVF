@@ -1,6 +1,22 @@
 {
   "partitions": [
     {
+      "tranche": "W3-T7",
+      "controlPoint": "CP1",
+      "contract": "GovernanceCheckpointConsumerPipelineContract",
+      "testFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.consumer.pipeline.test.ts",
+      "owner": "GEF",
+      "status": "ACTIVE"
+    },
+    {
+      "tranche": "W3-T7",
+      "controlPoint": "CP2",
+      "contract": "GovernanceCheckpointConsumerPipelineBatchContract",
+      "testFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.consumer.pipeline.batch.test.ts",
+      "owner": "GEF",
+      "status": "ACTIVE"
+    },
+    {
       "scope": "EPF Reintake Consumer Pipeline Batch",
       "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.consumer.pipeline.batch.test.ts",
       "forbiddenFiles": [

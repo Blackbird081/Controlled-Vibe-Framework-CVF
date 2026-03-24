@@ -1,3 +1,14 @@
+// W3-T7 — Governance Checkpoint Consumer Bridge (CP1–CP2)
+export {
+  GovernanceCheckpointConsumerPipelineContract,
+  createGovernanceCheckpointConsumerPipelineContract,
+} from "./governance.checkpoint.consumer.pipeline.contract";
+export type {
+  GovernanceCheckpointConsumerPipelineRequest,
+  GovernanceCheckpointConsumerPipelineResult,
+  GovernanceCheckpointConsumerPipelineContractDependencies,
+} from "./governance.checkpoint.consumer.pipeline.contract";
+
 // W3-T6 — Governance Consensus Consumer Bridge (CP1–CP2)
 export {
   GovernanceConsensusConsumerPipelineContract,

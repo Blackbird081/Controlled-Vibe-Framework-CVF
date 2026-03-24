@@ -1,4 +1,14 @@
-// W2-T19 — Streaming Execution Summary Consumer Bridge (CP1)
+// W2-T19 — Streaming Execution Summary Consumer Bridge (CP1–CP2)
+export {
+  StreamingExecutionSummaryConsumerPipelineBatchContract,
+  createStreamingExecutionSummaryConsumerPipelineBatchContract,
+} from "./execution.streaming.summary.consumer.pipeline.batch.contract";
+export type {
+  StreamingExecutionSummaryConsumerPipelineBatch,
+  StreamingExecutionSummaryConsumerPipelineBatchContractDependencies,
+} from "./execution.streaming.summary.consumer.pipeline.batch.contract";
+
+// W2-T19 CP1
 export {
   StreamingExecutionSummaryConsumerPipelineContract,
   createStreamingExecutionSummaryConsumerPipelineContract,

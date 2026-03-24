@@ -1,3 +1,14 @@
+// W2-T18 — MultiAgent Coordination Summary Consumer Bridge (CP1)
+export {
+  MultiAgentCoordinationSummaryConsumerPipelineContract,
+  createMultiAgentCoordinationSummaryConsumerPipelineContract,
+} from "./execution.multi.agent.coordination.summary.consumer.pipeline.contract";
+export type {
+  MultiAgentCoordinationSummaryConsumerPipelineRequest,
+  MultiAgentCoordinationSummaryConsumerPipelineResult,
+  MultiAgentCoordinationSummaryConsumerPipelineContractDependencies,
+} from "./execution.multi.agent.coordination.summary.consumer.pipeline.contract";
+
 // W2-T17 — Execution Reintake Summary Consumer Bridge (CP1)
 export {
   ExecutionReintakeSummaryConsumerPipelineContract,

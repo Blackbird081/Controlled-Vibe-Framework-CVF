@@ -1058,11 +1058,18 @@ This roadmap means:
 
 ---
 
-## Post-Cycle Candidate — W2-T18
+## Post-Cycle Closure Record — W2-T18
 
 > Tranche: W2-T18 — MultiAgent Coordination Summary Consumer Bridge
-> Status: IN PROGRESS (authorized 2026-03-24)
+> Closed: 2026-03-24
+> EPF: 693 tests (+37 from 656)
+> Closure review: `docs/reviews/CVF_W2_T18_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
 > Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T18_MULTIAGENT_COORDINATION_SUMMARY_CONSUMER_BRIDGE_2026-03-24.md`
+
+- `MultiAgentCoordinationSummaryConsumerPipelineContract` — EPF→CPF bridge: `MultiAgentCoordinationResult[] → MultiAgentCoordinationSummaryContract.summarize() → MultiAgentCoordinationSummary → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `MultiAgentCoordinationSummaryConsumerPipelineBatchContract` — batch aggregation with `failedResultCount` + `partialResultCount`
+- Warnings: FAILED → failed agent coordination; PARTIAL → partial agent coordination
+- Gap closed: W2-T9 implied — `MultiAgentCoordinationSummary` had no governed consumer-visible enriched output path
 
 ---
 

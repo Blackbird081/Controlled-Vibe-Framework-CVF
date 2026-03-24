@@ -1043,6 +1043,19 @@ This roadmap means:
 
 ---
 
+## Post-Cycle Closure Record — W2-T13
+
+> Tranche: W2-T13 — MCP Invocation Consumer Bridge
+> Status: IN PROGRESS (authorized 2026-03-24)
+> Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T13_MCP_INVOCATION_CONSUMER_BRIDGE_2026-03-24.md`
+
+- `MCPInvocationConsumerPipelineContract` — cross-plane bridge: `MCPInvocationRequest + status + payload → MCPInvocationResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `MCPInvocationConsumerPipelineBatchContract` — batch aggregation with `successCount` + `failureCount`
+- Warnings: FAILURE → mcp tool unavailable; TIMEOUT → invocation timed out; REJECTED → policy gate
+- Gap closed: W2-T8 implied gap — `MCPInvocationResult` has no governed consumer-visible enriched output path
+
+---
+
 ## Post-Cycle Closure Record — W1-T17
 
 > Tranche: W1-T17 — Reverse Prompting Consumer Bridge

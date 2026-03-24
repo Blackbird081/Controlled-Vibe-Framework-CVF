@@ -1073,11 +1073,18 @@ This roadmap means:
 
 ---
 
-## Post-Cycle Candidate — W2-T20
+## Post-Cycle Closure Record — W2-T20
 
 > Tranche: W2-T20 — Execution Observation Consumer Bridge
-> Status: IN PROGRESS (authorized 2026-03-24)
+> Closed: 2026-03-24
+> EPF: 774 tests (+42 from 732)
+> Closure review: `docs/reviews/CVF_W2_T20_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
 > Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T20_EXECUTION_OBSERVATION_CONSUMER_BRIDGE_2026-03-24.md`
+
+- `ExecutionObservationConsumerPipelineContract` — EPF→CPF bridge: `ExecutionPipelineReceipt → ExecutionObserverContract.observe() → ExecutionObservation → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `ExecutionObservationConsumerPipelineBatchContract` — batch aggregation with `failedResultCount` + `gatedResultCount`
+- Warnings: FAILED → review execution pipeline; GATED → review policy gate; SANDBOXED → review sandbox policy; PARTIAL → some entries did not complete
+- Gap closed: W2-T4 implied — `ExecutionObservation` had no governed consumer-visible enriched output path
 
 ---
 

@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-24
 
 > Branch: `cvf-next`
-> Last push: `W2-T19-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T19
+> Last push: `W2-T20-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T20
 
 ---
 
@@ -10,7 +10,7 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **856 tests, 0 failures**
-- EPF (Execution Plane Foundation): **732 tests, 0 failures**
+- EPF (Execution Plane Foundation): **774 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **557 tests, 0 failures**
 
 ### Last Two Tranches Closed
@@ -18,8 +18,11 @@
 |---------|-------------|---------|-------|
 | W3-T16 | Governance Audit Signal Consumer Bridge | CP1, CP2, CP3 | 557 GEF |
 | W2-T19 | Streaming Execution Summary Consumer Bridge | CP1, CP2, CP3 | 732 EPF |
+| W2-T20 | Execution Observation Consumer Bridge | CP1, CP2, CP3 | 774 EPF |
 
 ### Key Contracts Delivered (last 4 tranches)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.observation.consumer.pipeline.contract.ts` — ExecutionObservationConsumerPipelineContract (W2-T20)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.observation.consumer.pipeline.batch.contract.ts` — ExecutionObservationConsumerPipelineBatchContract (W2-T20)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.streaming.summary.consumer.pipeline.contract.ts` — StreamingExecutionSummaryConsumerPipelineContract (W2-T19)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.streaming.summary.consumer.pipeline.batch.contract.ts` — StreamingExecutionSummaryConsumerPipelineBatchContract (W2-T19)
 - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.audit.signal.consumer.pipeline.contract.ts` — GovernanceAuditSignalConsumerPipelineContract (W3-T16)
@@ -38,7 +41,7 @@
 
 Current guidance:
 - no tranche is currently active
-- `W2-T19` is now closed and no longer a candidate
+- `W2-T20` is now closed and no longer a candidate
 - next move should favor the highest-value capability gap under `GC-018` stop-boundary rules rather than continuing low-yield validation or packaging-only work
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`

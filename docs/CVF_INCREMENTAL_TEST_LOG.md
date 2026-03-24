@@ -73,6 +73,45 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W2-T20 CP2 — ExecutionObservationConsumerPipelineBatchContract
+- Scope:
+  - implement `ExecutionObservationConsumerPipelineBatchContract` — aggregates `ExecutionObservationConsumerPipelineResult[]` → `ExecutionObservationConsumerPipelineBatch`
+  - `dominantTokenBudget` = max `typedContextPackage.estimatedTokens`; 0 for empty
+  - `failedResultCount` = results where `outcomeClass === "FAILED"`; `gatedResultCount` = results where `outcomeClass === "GATED"`
+  - `batchId ≠ batchHash`
+- Change reference: `feat(W2-T20/CP2): ExecutionObservationConsumerPipelineBatchContract + 17 tests (Fast Lane GC-021)`
+- Impacted scope: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` (new batch contract + test)
+- Files changed:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.observation.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.observation.consumer.pipeline.batch.test.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (W2-T20 CP1–CP2 exports)
+- Tests executed:
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.observation.consumer.pipeline.batch.test.ts` → 17 passed, 0 failed
+- Skip scope:
+  - CPF, GEF: skipped because unchanged from baseline
+- Notes/Risks: none
+
+## [2026-03-24] Batch: W2-T20 CP1 — ExecutionObservationConsumerPipelineContract
+- Scope:
+  - implement `ExecutionObservationConsumerPipelineContract` — EPF→CPF cross-plane bridge
+  - chain: `ExecutionPipelineReceipt` → `ExecutionObserverContract.observe()` → `ExecutionObservation` → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query = `"${outcomeClass}:observation:${totalEntries}:failed:${failedCount}".slice(0, 120)`; contextId = `observation.observationId`
+  - Warning FAILED: `[observation] failed execution outcome — review execution pipeline`
+  - Warning GATED: `[observation] gated execution outcome — review policy gate`
+  - Warning SANDBOXED: `[observation] sandboxed execution outcome — review sandbox policy`
+  - Warning PARTIAL: `[observation] partial execution outcome — some entries did not complete`
+- Change reference: `feat(W2-T20/CP1): ExecutionObservationConsumerPipelineContract + 25 tests (Full Lane GC-019)`
+- Impacted scope: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` (new contract + test)
+- Files changed:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.observation.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.observation.consumer.pipeline.test.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (W2-T20 CP1 exports)
+- Tests executed:
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.observation.consumer.pipeline.test.ts` → 25 passed, 0 failed
+- Skip scope:
+  - CPF, GEF: skipped because unchanged from baseline
+- Notes/Risks: none
+
 ## [2026-03-24] Batch: W2-T19 CP2 — StreamingExecutionSummaryConsumerPipelineBatchContract
 - Scope:
   - implement `StreamingExecutionSummaryConsumerPipelineBatchContract` — aggregates `StreamingExecutionSummaryConsumerPipelineResult[]` → `StreamingExecutionSummaryConsumerPipelineBatch`

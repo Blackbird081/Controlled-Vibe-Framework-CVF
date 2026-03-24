@@ -2932,4 +2932,17 @@ Utility and guard:
   - EPF cross-plane bridge. FeedbackResolutionContract.resolve(decisions[]) → FeedbackResolutionSummary → CPF consumer pipeline.
   - CRITICAL urgency → `[feedback-resolution] critical urgency — escalated or rejected decisions require immediate attention`
   - HIGH urgency → `[feedback-resolution] high urgency — retry decisions require attention`
+
+### Entry W2-T16/CP2
+
+- Tranche: W2-T16 — Feedback Resolution Consumer Bridge
+- Extension: CVF_EXECUTION_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/feedback.resolution.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.resolution.consumer.pipeline.batch.test.ts` (12 tests)
+- Tests executed:
+  - `npm test` (EPF) → PASS (625 tests, 0 failures)
+- Notes:
+  - EPF: 613→625 (+12). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch aggregation: criticalUrgencyResultCount + highUrgencyResultCount + dominantTokenBudget.
   - Batch pattern: dominantTokenBudget, highPriorityResultCount, totalQuestionsCount, batchId ≠ batchHash.

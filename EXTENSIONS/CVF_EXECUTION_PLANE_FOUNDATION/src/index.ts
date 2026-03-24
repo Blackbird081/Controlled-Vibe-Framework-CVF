@@ -1,4 +1,4 @@
-// W2-T16 — Feedback Resolution Consumer Bridge (CP1)
+// W2-T16 — Feedback Resolution Consumer Bridge (CP1–CP2)
 export {
   FeedbackResolutionConsumerPipelineContract,
   createFeedbackResolutionConsumerPipelineContract,
@@ -8,6 +8,14 @@ export type {
   FeedbackResolutionConsumerPipelineResult,
   FeedbackResolutionConsumerPipelineContractDependencies,
 } from "./feedback.resolution.consumer.pipeline.contract";
+export {
+  FeedbackResolutionConsumerPipelineBatchContract,
+  createFeedbackResolutionConsumerPipelineBatchContract,
+} from "./feedback.resolution.consumer.pipeline.batch.contract";
+export type {
+  FeedbackResolutionConsumerPipelineBatch,
+  FeedbackResolutionConsumerPipelineBatchContractDependencies,
+} from "./feedback.resolution.consumer.pipeline.batch.contract";
 
 // W2-T15 — Execution Audit Summary Consumer Bridge (CP1–CP2)
 export {

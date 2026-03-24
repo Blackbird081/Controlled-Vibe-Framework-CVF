@@ -1,3 +1,14 @@
+// W1-T17 — Reverse Prompting Consumer Bridge (CP1–CP2)
+export {
+  ReversePromptingConsumerPipelineContract,
+  createReversePromptingConsumerPipelineContract,
+} from "./reverse.prompting.consumer.pipeline.contract";
+export type {
+  ReversePromptingConsumerPipelineRequest,
+  ReversePromptingConsumerPipelineResult,
+  ReversePromptingConsumerPipelineContractDependencies,
+} from "./reverse.prompting.consumer.pipeline.contract";
+
 // W1-T16 — Boardroom Consumer Bridge (CP1–CP2)
 export {
   BoardroomConsumerPipelineContract,

@@ -8,6 +8,14 @@ export type {
   GovernanceCheckpointConsumerPipelineResult,
   GovernanceCheckpointConsumerPipelineContractDependencies,
 } from "./governance.checkpoint.consumer.pipeline.contract";
+export {
+  GovernanceCheckpointConsumerPipelineBatchContract,
+  createGovernanceCheckpointConsumerPipelineBatchContract,
+} from "./governance.checkpoint.consumer.pipeline.batch.contract";
+export type {
+  GovernanceCheckpointConsumerPipelineBatch,
+  GovernanceCheckpointConsumerPipelineBatchContractDependencies,
+} from "./governance.checkpoint.consumer.pipeline.batch.contract";
 
 // W3-T6 — Governance Consensus Consumer Bridge (CP1–CP2)
 export {

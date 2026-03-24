@@ -1,3 +1,14 @@
+// W3-T10 — Watchdog Alert Log Consumer Bridge (CP1)
+export {
+  WatchdogAlertLogConsumerPipelineContract,
+  createWatchdogAlertLogConsumerPipelineContract,
+} from "./watchdog.alert.log.consumer.pipeline.contract";
+export type {
+  WatchdogAlertLogConsumerPipelineRequest,
+  WatchdogAlertLogConsumerPipelineResult,
+  WatchdogAlertLogConsumerPipelineContractDependencies,
+} from "./watchdog.alert.log.consumer.pipeline.contract";
+
 // W3-T9 — Governance Audit Log Consumer Bridge (CP1–CP2)
 export {
   GovernanceAuditLogConsumerPipelineContract,

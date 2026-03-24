@@ -181,6 +181,10 @@ Current authorization state:
   - `W2-T11 / CP1` — ExecutionFeedbackConsumerPipelineContract (`ExecutionObservation → ExecutionFeedbackSignal + ControlPlaneConsumerPackage`; query from rationale max 120 chars; contextId = feedbackId) — Full Lane
   - `W2-T11 / CP2` — ExecutionFeedbackConsumerPipelineBatchContract (`ExecutionFeedbackConsumerPipelineResult[] → batch with dominantTokenBudget`) — Fast Lane (GC-021)
   - `W2-T11 / CP3` — Tranche closure review — Full Lane
+- `W3-T6 — Governance Consensus Consumer Bridge` is now authorized (GC-018: 10/10 depth audit) and canonically closed as a bounded GEF→CPF cross-plane consensus consumer bridge tranche; closes W3-T4 implied gap (ConsensusDecision has no governed consumer-visible enriched output path); GEF becomes the third plane with a consumer bridge
+  - `W3-T6 / CP1` — GovernanceConsensusConsumerPipelineContract (`GovernanceAuditSignal[] → ConsensusDecision + ControlPlaneConsumerPackage`; query from verdict+score max 120 chars; contextId = decisionId) — Full Lane
+  - `W3-T6 / CP2` — GovernanceConsensusConsumerPipelineBatchContract (`GovernanceConsensusConsumerPipelineResult[] → batch with dominantTokenBudget, escalationCount, pauseCount`) — Fast Lane (GC-021)
+  - `W3-T6 / CP3` — Tranche closure review — Full Lane
 
 Nothing beyond `W0` in this roadmap may execute until:
 

@@ -1043,6 +1043,19 @@ This roadmap means:
 
 ---
 
+## Post-Cycle Candidate — W2-T15
+
+> Tranche: W2-T15 — Execution Audit Summary Consumer Bridge
+> Status: IN PROGRESS (authorized 2026-03-24)
+> Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T15_EXECUTION_AUDIT_SUMMARY_CONSUMER_BRIDGE_2026-03-24.md`
+
+- `ExecutionAuditSummaryConsumerPipelineContract` — GEF→CPF cross-plane bridge: `ExecutionObservation[] → ExecutionAuditSummaryContract.summarize() → ExecutionAuditSummary → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `ExecutionAuditSummaryConsumerPipelineBatchContract` — batch aggregation with `highRiskResultCount` + `mediumRiskResultCount`
+- Warnings: HIGH → failed observations detected; MEDIUM → gated or sandboxed observations detected
+- Gap closed: W6-T9 implied — `ExecutionAuditSummary` had no governed consumer-visible enriched output path
+
+---
+
 ## Post-Cycle Closure Record — W3-T10
 
 > Tranche: W3-T10 — Watchdog Alert Log Consumer Bridge

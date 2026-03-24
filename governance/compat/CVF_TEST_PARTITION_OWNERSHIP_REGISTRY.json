@@ -485,6 +485,17 @@
         "WatchdogEscalationLogConsumerPipelineContract",
         "createWatchdogEscalationLogConsumerPipelineContract"
       ]
+    },
+    {
+      "scope": "GEF Watchdog Escalation Log Consumer Pipeline Batch (W3-T11 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.log.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationLogConsumerPipelineBatchContract",
+        "createWatchdogEscalationLogConsumerPipelineBatchContract"
+      ]
     }
   ]
 }

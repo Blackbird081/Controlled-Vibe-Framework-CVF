@@ -2961,3 +2961,16 @@ Utility and guard:
   - ESCALATE → `[watchdog-escalation] active escalation — immediate watchdog intervention required`
   - MONITOR → `[watchdog-escalation] monitor active — watchdog monitoring in progress`
   - Batch pattern: dominantTokenBudget, highPriorityResultCount, totalQuestionsCount, batchId ≠ batchHash.
+
+### Entry W3-T11/CP2
+
+- Tranche: W3-T11 — Watchdog Escalation Log Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.log.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.log.consumer.pipeline.batch.test.ts` (12 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (398 tests, 0 failures)
+- Notes:
+  - GEF: 386→398 (+12). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch aggregation: escalationActiveResultCount + dominantTokenBudget.

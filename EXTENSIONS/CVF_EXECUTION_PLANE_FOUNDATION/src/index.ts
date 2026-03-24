@@ -1,3 +1,22 @@
+// W2-T14 — Multi-Agent Coordination Consumer Bridge (CP1–CP2)
+export {
+  MultiAgentCoordinationConsumerPipelineContract,
+  createMultiAgentCoordinationConsumerPipelineContract,
+} from "./execution.multi.agent.coordination.consumer.pipeline.contract";
+export type {
+  MultiAgentCoordinationConsumerPipelineRequest,
+  MultiAgentCoordinationConsumerPipelineResult,
+  MultiAgentCoordinationConsumerPipelineContractDependencies,
+} from "./execution.multi.agent.coordination.consumer.pipeline.contract";
+export {
+  MultiAgentCoordinationConsumerPipelineBatchContract,
+  createMultiAgentCoordinationConsumerPipelineBatchContract,
+} from "./execution.multi.agent.coordination.consumer.pipeline.batch.contract";
+export type {
+  MultiAgentCoordinationConsumerPipelineBatch,
+  MultiAgentCoordinationConsumerPipelineBatchContractDependencies,
+} from "./execution.multi.agent.coordination.consumer.pipeline.batch.contract";
+
 // W2-T13 — MCP Invocation Consumer Bridge (CP1–CP2)
 export {
   MCPInvocationConsumerPipelineContract,

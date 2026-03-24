@@ -221,6 +221,28 @@
       ]
     },
     {
+      "scope": "EPF Reintake Summary Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.summary.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionReintakeSummaryConsumerPipelineContract",
+        "createExecutionReintakeSummaryConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Reintake Summary Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.summary.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionReintakeSummaryConsumerPipelineBatchContract",
+        "createExecutionReintakeSummaryConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "CPF Boardroom Consumer Pipeline Batch",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.batch.test.ts",
       "forbiddenFiles": [

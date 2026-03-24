@@ -32,6 +32,7 @@ function mapDesignPhaseToGuardPhase(phase: DesignTaskPhase): CVFPhase {
 export interface DispatchEntry {
   assignmentId: string;
   taskId: string;
+  riskLevel: DesignTaskRisk;
   dispatchedAt: string;
   guardDecision: GuardDecision;
   pipelineResult: GuardPipelineResult;
@@ -83,11 +84,11 @@ export class DispatchContract {
         action: assignment.title,
         scope: assignment.scopeConstraints.join("; "),
         traceHash: assignment.executionAuthorizationHash,
-        dependencies: assignment.dependencies,
         metadata: {
           taskId: assignment.taskId,
           assignmentId: assignment.assignmentId,
           tranche: "W2-T2",
+          dependencies: assignment.dependencies,
         },
       };
 
@@ -96,6 +97,7 @@ export class DispatchContract {
       return {
         assignmentId: assignment.assignmentId,
         taskId: assignment.taskId,
+        riskLevel: assignment.riskLevel as DesignTaskRisk,
         dispatchedAt,
         guardDecision: pipelineResult.finalDecision,
         pipelineResult,

@@ -1,3 +1,22 @@
+// W2-T17 — Execution Reintake Summary Consumer Bridge (CP1)
+export {
+  ExecutionReintakeSummaryConsumerPipelineContract,
+  createExecutionReintakeSummaryConsumerPipelineContract,
+} from "./execution.reintake.summary.consumer.pipeline.contract";
+export type {
+  ExecutionReintakeSummaryConsumerPipelineRequest,
+  ExecutionReintakeSummaryConsumerPipelineResult,
+  ExecutionReintakeSummaryConsumerPipelineContractDependencies,
+} from "./execution.reintake.summary.consumer.pipeline.contract";
+export {
+  ExecutionReintakeSummaryConsumerPipelineBatchContract,
+  createExecutionReintakeSummaryConsumerPipelineBatchContract,
+} from "./execution.reintake.summary.consumer.pipeline.batch.contract";
+export type {
+  ExecutionReintakeSummaryConsumerPipelineBatch,
+  ExecutionReintakeSummaryConsumerPipelineBatchContractDependencies,
+} from "./execution.reintake.summary.consumer.pipeline.batch.contract";
+
 // W2-T16 — Feedback Resolution Consumer Bridge (CP1–CP2)
 export {
   FeedbackResolutionConsumerPipelineContract,

@@ -390,12 +390,13 @@ describe("W2-T2 CP2 — PolicyGateContract", () => {
     const dispatchEntries = entries.map((e) => ({
       assignmentId: e.assignmentId,
       taskId: e.taskId,
+      riskLevel: e.riskLevel,
       dispatchedAt: "2026-03-22T10:00:00.000Z",
       guardDecision: e.guardDecision as any,
       pipelineResult: {
         requestId: e.assignmentId,
         finalDecision: e.guardDecision as any,
-        results: [{ context: { riskLevel: e.riskLevel } } as any],
+        results: [],
         executedAt: "2026-03-22T10:00:00.000Z",
         durationMs: 1,
       },

@@ -82,9 +82,7 @@ export class PolicyGateContract {
     const evaluatedAt = this.now();
 
     const entries: PolicyGateEntry[] = dispatchResult.entries.map((entry) => {
-      // Extract riskLevel from pipelineResult context metadata
-      const riskLevel = (entry.pipelineResult.results[0]?.context as any)?.riskLevel
-        ?? this.inferRiskFromEntry(entry);
+      const riskLevel = entry.riskLevel ?? this.inferRiskFromEntry(entry);
 
       const gateDecision = deriveGateDecision(entry.guardDecision, riskLevel);
       const rationale = buildRationale(entry.guardDecision, riskLevel, gateDecision);
@@ -130,7 +128,7 @@ export class PolicyGateContract {
   }
 
   private inferRiskFromEntry(entry: DispatchEntry): string {
-    // Fallback: infer risk from warnings if context metadata unavailable
+    // Fallback: infer risk from decision if no explicit entry risk survives.
     if (entry.guardDecision === "BLOCK") return "R3";
     if (entry.guardDecision === "ESCALATE") return "R2";
     return "R1";

@@ -1169,7 +1169,20 @@ This roadmap means:
 - Warnings: CRITICAL urgency → escalated/rejected decisions; HIGH urgency → retry decisions require attention
 - Closure anchor: `docs/reviews/CVF_W2_T16_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
 
-> **Updated readout:** `W0` is complete, all authorized tranches through `W5-T1` are canonically closed, and the first whitepaper-completion verification cycle is finished. `W1-T1` through `W1-T11` now substantially deliver the control-plane line, `W2-T1` through `W2-T8` substantially deliver the execution-plane line, `W3-T1` through `W3-T3` substantially deliver the governance-expansion line, `W4-T1` through `W4-T7` substantially deliver the learning-plane line, and `W5-T1` closes the first evidence-backed truth reconciliation cycle. `W1-T11` is a scoped post-cycle continuation tranche that adds the first operational Context Builder path without reopening the entire roadmap. Any continuation beyond the currently closed line still requires a fresh `GC-018` decision.
+---
+
+## Post-Cycle Closure Record — W2-T17
+
+> Tranche: W2-T17 — Execution Reintake Summary Consumer Bridge
+> Closed: 2026-03-24
+> EPF: 656 tests (+31 from 625)
+
+- `ExecutionReintakeSummaryConsumerPipelineContract` — EPF → CPF cross-plane bridge: `FeedbackResolutionSummary[] → ExecutionReintakeSummaryContract.summarize() → ExecutionReintakeSummary → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `ExecutionReintakeSummaryConsumerPipelineBatchContract` — batch aggregation with `replanResultCount` + `retryResultCount`
+- Warnings: REPLAN → full replanning required; RETRY → retry queued
+- Closure anchor: `docs/reviews/CVF_W2_T17_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+
+> **Updated readout:** `W0` is complete, all authorized tranches through `W5-T1` are canonically closed, and the first whitepaper-completion verification cycle is finished. Post-cycle continuation is now closed through `W1-T18`, `W2-T17`, and `W3-T15`. `W1` substantially delivers the control-plane line, `W2` substantially delivers the execution-plane line, `W3` substantially delivers the governance-expansion line, `W4` substantially delivers the learning-plane line, and `W5-T1` closes the first evidence-backed truth reconciliation cycle. No tranche is currently active, and any continuation beyond the currently closed line still requires a fresh `GC-018` decision.
 
 ---
 

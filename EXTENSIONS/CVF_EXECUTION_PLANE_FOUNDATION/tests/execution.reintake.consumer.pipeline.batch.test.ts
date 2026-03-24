@@ -43,6 +43,8 @@ function makePipelineResult(urgency: FeedbackResolutionSummary["urgencyLevel"], 
     candidateItems: [
       {
         itemId: `item-${idx}`,
+        title: `Item ${idx}`,
+        source: "epf-test",
         content: `content-${idx}`,
         relevanceScore: 0.5 + idx * 0.1,
       },

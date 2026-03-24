@@ -138,7 +138,13 @@ describe("ExecutionReintakeConsumerPipelineContract", () => {
     const result = makeContract().execute({
       resolutionSummary: makeSummary("NORMAL"),
       candidateItems: [
-        { itemId: "item-1", content: "reintake item", relevanceScore: 0.7 },
+        {
+          itemId: "item-1",
+          title: "Reintake Item",
+          source: "epf-test",
+          content: "reintake item",
+          relevanceScore: 0.7,
+        },
       ],
     });
     expect(result.consumerPackage.rankedKnowledgeResult.totalRanked).toBe(1);

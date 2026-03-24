@@ -90,12 +90,13 @@ function makeDispatchResult(
   const dispatchEntries = entries.map((e) => ({
     assignmentId: e.assignmentId,
     taskId: e.taskId,
+    riskLevel: e.riskLevel,
     dispatchedAt: FIXED_NOW,
     guardDecision: e.guardDecision,
     pipelineResult: {
       requestId: e.assignmentId,
       finalDecision: e.guardDecision,
-      results: [{ context: { riskLevel: e.riskLevel } } as unknown as never],
+      results: [],
       executedAt: FIXED_NOW,
       durationMs: 1,
     },

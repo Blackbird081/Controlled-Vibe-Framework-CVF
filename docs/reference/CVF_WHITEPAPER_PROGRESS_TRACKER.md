@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Purpose: simple visual tracker for progress against `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-24` (W3-T15 closed delivered)
+> Last refreshed: `2026-03-24` (W2-T17 closed delivered)
 
 ---
 
@@ -15,9 +15,9 @@ Memory class: POINTER_RECORD
 |---|---|
 | Whitepaper target-state | `PARTIALLY DELIVERED` |
 | Current-cycle restructuring | `DONE` |
-| Whitepaper completion wave | `FIRST CYCLE COMPLETE + W1-T11 + W3-T4 + W1-T12 + W2-T9 + W1-T13 + W1-T14 + W2-T10 + W3-T5 + W1-T15 + W2-T11 + W3-T6 + W1-T16 + W2-T12 + W3-T7 + W1-T17 POST-CYCLE CLOSED` |
+| Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T18 / W2-T17 / W3-T15 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `NONE — W3-T15 CLOSED DELIVERED — GEF 521 tests` |
+| Current active tranche | `NONE — W2-T17 CLOSED DELIVERED — EPF 656 tests` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -26,9 +26,9 @@ Memory class: POINTER_RECORD
 
 | Area | Whitepaper target | Current state | Status | Next governed move |
 |---|---|---|---|---|
-| Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T12` closed; gateway, boardroom, richer knowledge ranking (`KnowledgeRankingContract`) and typed context packaging (`ContextPackagerContract`) delivered | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
-| Execution Plane | Model Gateway, Command Runtime, MCP Bridge, observer/feedback loop | `W2-T1` to `W2-T8` closed; async runtime, re-intake loop, and MCP bridge slices delivered; streaming/multi-agent execution still future-facing | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
-| Governance Layer | Policy, Trust, Guard Engine, Audit/Consensus, Watchdog | `W3-T1` to `W3-T4` closed; watchdog, audit-signal, and consensus decision slices now exist; both "Audit" and "Consensus" targets have first operational slices | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
+| Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T18` closed; gateway, boardroom, richer knowledge ranking (`KnowledgeRankingContract`), typed context packaging (`ContextPackagerContract`), and gateway PII consumer bridge are delivered | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
+| Execution Plane | Model Gateway, Command Runtime, MCP Bridge, observer/feedback loop | `W2-T1` to `W2-T17` closed; async runtime, re-intake loop, MCP bridge, audit summary, feedback resolution, and re-intake summary consumer bridges are delivered; streaming/multi-agent execution still future-facing | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
+| Governance Layer | Policy, Trust, Guard Engine, Audit/Consensus, Watchdog | `W3-T1` to `W3-T15` closed; watchdog, audit-signal, consensus, checkpoint-log, and checkpoint-reintake-summary consumer bridges now exist | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Learning Plane | Feedback Ledger, Pattern Insight, Truth Model, Evaluation, Governance feedback, storage, observability | `W4-T1` to `W4-T7` closed; governance signal bridge, re-injection, storage, and observability delivered | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Final Whitepaper Truth Reconciliation | convert concept document into evidence-backed truth layers | `W5-T1` closed; whitepaper re-labeled to evidence-backed partial delivery | `DONE FOR CURRENT CYCLE` | future truth upgrades require a new wave |
 
@@ -85,6 +85,7 @@ Memory class: POINTER_RECORD
 | `W3-T10` watchdog alert log consumer bridge | `DONE` |
 | `W2-T15` execution audit summary consumer bridge | `DONE` |
 | `W2-T16` feedback resolution consumer bridge | `DONE` |
+| `W2-T17` execution reintake summary consumer bridge | `DONE` |
 | `W3-T11` watchdog escalation log consumer bridge | `DONE` |
 | `W3-T12` watchdog escalation pipeline consumer bridge | `DONE` |
 | `W3-T13` governance consensus summary consumer bridge | `DONE` |
@@ -100,7 +101,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `NO AUTHORIZED ACTIVE TRANCHE — LAST CLOSED W3-T15` |
+| Current canonical validation posture | `NO AUTHORIZED ACTIVE TRANCHE — LAST CLOSED W2-T17` |
 
 ---
 
@@ -119,6 +120,6 @@ Memory class: POINTER_RECORD
 - Detailed status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
-- Current closure anchor: `docs/reviews/CVF_W3_T11_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
-- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T11_WATCHDOG_ESCALATION_LOG_CONSUMER_BRIDGE_2026-03-24.md` (W3-T11 now closed; next requires fresh GC-018)
+- Current closure anchor: `docs/reviews/CVF_W2_T17_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T17_EXECUTION_REINTAKE_SUMMARY_CONSUMER_BRIDGE_2026-03-24.md` (W2-T17 now closed; next requires fresh GC-018)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

@@ -1,3 +1,22 @@
+// W3-T15 — Governance Checkpoint Reintake Summary Consumer Bridge (CP1–CP2)
+export {
+  GovernanceCheckpointReintakeSummaryConsumerPipelineContract,
+  createGovernanceCheckpointReintakeSummaryConsumerPipelineContract,
+} from "./governance.checkpoint.reintake.summary.consumer.pipeline.contract";
+export type {
+  GovernanceCheckpointReintakeSummaryConsumerPipelineRequest,
+  GovernanceCheckpointReintakeSummaryConsumerPipelineResult,
+  GovernanceCheckpointReintakeSummaryConsumerPipelineContractDependencies,
+} from "./governance.checkpoint.reintake.summary.consumer.pipeline.contract";
+export {
+  GovernanceCheckpointReintakeSummaryConsumerPipelineBatchContract,
+  createGovernanceCheckpointReintakeSummaryConsumerPipelineBatchContract,
+} from "./governance.checkpoint.reintake.summary.consumer.pipeline.batch.contract";
+export type {
+  GovernanceCheckpointReintakeSummaryConsumerPipelineBatch,
+  GovernanceCheckpointReintakeSummaryConsumerPipelineBatchContractDependencies,
+} from "./governance.checkpoint.reintake.summary.consumer.pipeline.batch.contract";
+
 // W3-T14 — Governance Checkpoint Log Consumer Bridge (CP1–CP2)
 export {
   GovernanceCheckpointLogConsumerPipelineContract,

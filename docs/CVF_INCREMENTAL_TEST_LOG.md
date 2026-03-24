@@ -3056,3 +3056,31 @@ Utility and guard:
 - Notes:
   - GEF: 476→490 (+14). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Batch aggregation: escalateResultCount (dominantCheckpointAction === "ESCALATE") + haltResultCount (dominantCheckpointAction === "HALT") + dominantTokenBudget.
+
+### Entry W3-T15/CP1
+
+- Tranche: W3-T15 — Governance Checkpoint Reintake Summary Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.checkpoint.reintake.summary.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.summary.consumer.pipeline.test.ts` (17 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (507 tests, 0 failures)
+- Notes:
+  - GEF: 490→507 (+17). Full Lane. GC-023 compliant (dedicated test file).
+  - Gap closed: W6-T5 CP2 implied — CheckpointReintakeSummary had no governed consumer-visible enriched output path.
+  - Query = `[reintake-summary] ${dominantScope} — ${totalRequests} request(s)`.slice(0, 120); contextId = summary.summaryId.
+  - Severity-first dominance: IMMEDIATE > DEFERRED > NONE.
+
+### Entry W3-T15/CP2
+
+- Tranche: W3-T15 — Governance Checkpoint Reintake Summary Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.checkpoint.reintake.summary.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.summary.consumer.pipeline.batch.test.ts` (14 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (521 tests, 0 failures)
+- Notes:
+  - GEF: 507→521 (+14). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch aggregation: immediateResultCount (dominantScope === "IMMEDIATE") + deferredResultCount (dominantScope === "DEFERRED") + dominantTokenBudget.

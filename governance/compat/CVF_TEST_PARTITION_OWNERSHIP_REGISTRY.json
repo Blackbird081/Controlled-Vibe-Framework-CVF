@@ -562,6 +562,28 @@
         "GovernanceCheckpointLogConsumerPipelineBatchContract",
         "createGovernanceCheckpointLogConsumerPipelineBatchContract"
       ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Reintake Summary Consumer Pipeline (W3-T15 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.summary.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointReintakeSummaryConsumerPipelineContract",
+        "createGovernanceCheckpointReintakeSummaryConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Reintake Summary Consumer Pipeline Batch (W3-T15 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.summary.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointReintakeSummaryConsumerPipelineBatchContract",
+        "createGovernanceCheckpointReintakeSummaryConsumerPipelineBatchContract"
+      ]
     }
   ]
 }

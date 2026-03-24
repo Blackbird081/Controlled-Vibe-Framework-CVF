@@ -1225,3 +1225,17 @@ This roadmap means:
 - Warnings: ESCALATE → immediate checkpoint escalation required; HALT → checkpoint halt required; Dominance: ESCALATE > HALT > PROCEED (severity-first)
 - Gap closed: W6-T4 CP2 implied — `GovernanceCheckpointLog` had no governed consumer-visible enriched output path
 - Closure anchor: `docs/reviews/CVF_W3_T14_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+
+---
+
+## Post-Cycle Closure Record — W3-T15
+
+> Tranche: W3-T15 — Governance Checkpoint Reintake Summary Consumer Bridge
+> Closed: 2026-03-24
+> GEF: 521 tests (+31 from 490)
+
+- `GovernanceCheckpointReintakeSummaryConsumerPipelineContract` — GEF→CPF cross-plane bridge: `CheckpointReintakeRequest[] → GovernanceCheckpointReintakeSummaryContract.summarize() → CheckpointReintakeSummary → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `[reintake-summary] ${dominantScope} — ${totalRequests} request(s)`.slice(0, 120); contextId = `summary.summaryId`
+- `GovernanceCheckpointReintakeSummaryConsumerPipelineBatchContract` — batch aggregation with `immediateResultCount` (dominantScope === "IMMEDIATE") and `deferredResultCount` (dominantScope === "DEFERRED")
+- Warnings: IMMEDIATE → immediate reintake required; DEFERRED → deferred reintake scheduled; Dominance: IMMEDIATE > DEFERRED > NONE (severity-first)
+- Gap closed: W6-T5 CP2 implied — `CheckpointReintakeSummary` had no governed consumer-visible enriched output path
+- Closure anchor: `docs/reviews/CVF_W3_T15_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`

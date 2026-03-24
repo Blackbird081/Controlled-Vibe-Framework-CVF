@@ -518,6 +518,28 @@
         "WatchdogEscalationPipelineConsumerPipelineBatchContract",
         "createWatchdogEscalationPipelineConsumerPipelineBatchContract"
       ]
+    },
+    {
+      "scope": "GEF Governance Consensus Summary Consumer Pipeline (W3-T13 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.summary.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceConsensusSummaryConsumerPipelineContract",
+        "createGovernanceConsensusSummaryConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Consensus Summary Consumer Pipeline Batch (W3-T13 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.summary.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceConsensusSummaryConsumerPipelineBatchContract",
+        "createGovernanceConsensusSummaryConsumerPipelineBatchContract"
+      ]
     }
   ]
 }

@@ -3001,3 +3001,30 @@ Utility and guard:
 - Notes:
   - GEF: 415→428 (+13). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Batch aggregation: escalationActiveResultCount (pipelineResult.escalationActive) + dominantTokenBudget.
+
+### Entry W3-T13/CP1
+
+- Tranche: W3-T13 — Governance Consensus Summary Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.consensus.summary.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.summary.consumer.pipeline.test.ts` (17 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (445 tests, 0 failures)
+- Notes:
+  - GEF: 428→445 (+17). Full Lane. GC-023 compliant (dedicated test file).
+  - Gap closed: W3-T4 CP2 implied — GovernanceConsensusSummary had no governed consumer-visible enriched output path.
+  - Query = `[consensus] ${dominantVerdict} — ${totalDecisions} decision(s)`.slice(0, 120); contextId = summaryId.
+
+### Entry W3-T13/CP2
+
+- Tranche: W3-T13 — Governance Consensus Summary Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.consensus.summary.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.summary.consumer.pipeline.batch.test.ts` (14 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (459 tests, 0 failures)
+- Notes:
+  - GEF: 445→459 (+14). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch aggregation: escalateResultCount (dominantVerdict === "ESCALATE") + pauseResultCount (dominantVerdict === "PAUSE") + dominantTokenBudget.

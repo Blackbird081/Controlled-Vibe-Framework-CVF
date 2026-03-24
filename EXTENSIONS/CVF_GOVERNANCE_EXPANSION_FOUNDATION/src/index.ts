@@ -1,3 +1,22 @@
+// W3-T13 — Governance Consensus Summary Consumer Bridge (CP1–CP2)
+export {
+  GovernanceConsensusSummaryConsumerPipelineContract,
+  createGovernanceConsensusSummaryConsumerPipelineContract,
+} from "./governance.consensus.summary.consumer.pipeline.contract";
+export type {
+  GovernanceConsensusSummaryConsumerPipelineRequest,
+  GovernanceConsensusSummaryConsumerPipelineResult,
+  GovernanceConsensusSummaryConsumerPipelineContractDependencies,
+} from "./governance.consensus.summary.consumer.pipeline.contract";
+export {
+  GovernanceConsensusSummaryConsumerPipelineBatchContract,
+  createGovernanceConsensusSummaryConsumerPipelineBatchContract,
+} from "./governance.consensus.summary.consumer.pipeline.batch.contract";
+export type {
+  GovernanceConsensusSummaryConsumerPipelineBatch,
+  GovernanceConsensusSummaryConsumerPipelineBatchContractDependencies,
+} from "./governance.consensus.summary.consumer.pipeline.batch.contract";
+
 // W3-T12 — Watchdog Escalation Pipeline Consumer Bridge (CP1–CP2)
 export {
   WatchdogEscalationPipelineConsumerPipelineContract,

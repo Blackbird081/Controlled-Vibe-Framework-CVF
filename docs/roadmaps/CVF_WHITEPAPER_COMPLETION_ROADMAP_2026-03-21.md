@@ -1197,3 +1197,17 @@ This roadmap means:
 - Warnings: ESCALATE → immediate pipeline intervention required; MONITOR → pipeline monitoring in progress
 - Gap closed: W3-T5 implied — `WatchdogEscalationPipelineResult` had no governed consumer-visible enriched output path
 - Closure anchor: `docs/reviews/CVF_W3_T12_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+
+---
+
+## Post-Cycle Closure Record — W3-T13
+
+> Tranche: W3-T13 — Governance Consensus Summary Consumer Bridge
+> Closed: 2026-03-24
+> GEF: 459 tests (+31 from 428)
+
+- `GovernanceConsensusSummaryConsumerPipelineContract` — GEF→CPF cross-plane bridge: `ConsensusDecision[] → GovernanceConsensusSummaryContract.summarize() → GovernanceConsensusSummary → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `[consensus] ${dominantVerdict} — ${totalDecisions} decision(s)`.slice(0, 120); contextId = `summary.summaryId`
+- `GovernanceConsensusSummaryConsumerPipelineBatchContract` — batch aggregation with `escalateResultCount` (dominantVerdict === "ESCALATE") and `pauseResultCount` (dominantVerdict === "PAUSE")
+- Warnings: ESCALATE → immediate governance escalation required; PAUSE → governance pause required
+- Gap closed: W3-T4 CP2 implied — `GovernanceConsensusSummary` had no governed consumer-visible enriched output path
+- Closure anchor: `docs/reviews/CVF_W3_T13_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`

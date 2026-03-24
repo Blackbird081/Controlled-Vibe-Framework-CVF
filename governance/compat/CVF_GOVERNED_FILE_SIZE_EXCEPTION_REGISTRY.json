@@ -97,6 +97,14 @@
       "status": "ACTIVE_EXCEPTION",
       "rationale": "Immutable archive of all GC-018 checkpoint blocks from W1-T1 through W6-T76 (76 tranches, 1493 lines). Archive files cannot be split without breaking the audit chain integrity. File is frozen \u00e2\u20ac\u201d no further additions permitted.",
       "requiredFollowup": "No further expansion permitted. This is a sealed archive. Create a new archive file if a second archive is needed."
+    },
+    {
+      "path": "docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md",
+      "fileClass": "active_markdown",
+      "approvedMaxLines": 1400,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Canonical roadmap accumulates post-cycle closure records for every delivered tranche. Growth is governed and append-only; each post-cycle record is ~15-20 lines.",
+      "requiredFollowup": "Archive older post-cycle records into a separate archive file when file exceeds 1400 lines."
     }
   ]
 }

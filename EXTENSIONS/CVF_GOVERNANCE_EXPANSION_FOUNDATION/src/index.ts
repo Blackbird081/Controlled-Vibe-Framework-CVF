@@ -1,3 +1,22 @@
+// W3-T6 — Governance Consensus Consumer Bridge (CP1–CP2)
+export {
+  GovernanceConsensusConsumerPipelineContract,
+  createGovernanceConsensusConsumerPipelineContract,
+} from "./governance.consensus.consumer.pipeline.contract";
+export type {
+  GovernanceConsensusConsumerPipelineRequest,
+  GovernanceConsensusConsumerPipelineResult,
+  GovernanceConsensusConsumerPipelineContractDependencies,
+} from "./governance.consensus.consumer.pipeline.contract";
+export {
+  GovernanceConsensusConsumerPipelineBatchContract,
+  createGovernanceConsensusConsumerPipelineBatchContract,
+} from "./governance.consensus.consumer.pipeline.batch.contract";
+export type {
+  GovernanceConsensusConsumerPipelineBatch,
+  GovernanceConsensusConsumerPipelineBatchContractDependencies,
+} from "./governance.consensus.consumer.pipeline.batch.contract";
+
 // W3-T5 — Watchdog Escalation Pipeline Slice (CP1–CP2)
 export {
   WatchdogEscalationPipelineContract,

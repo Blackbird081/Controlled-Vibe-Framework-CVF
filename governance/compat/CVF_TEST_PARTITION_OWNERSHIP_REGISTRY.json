@@ -1,6 +1,28 @@
 {
   "partitions": [
     {
+      "scope": "GEF Consensus Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceConsensusConsumerPipelineBatchContract",
+        "createGovernanceConsensusConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Consensus Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceConsensusConsumerPipelineContract",
+        "createGovernanceConsensusConsumerPipelineContract"
+      ]
+    },
+    {
       "scope": "EPF Feedback Consumer Pipeline Batch",
       "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.feedback.consumer.pipeline.batch.test.ts",
       "forbiddenFiles": [

@@ -3055,3 +3055,35 @@ Utility and guard:
   - LLMAdapter uses Symbol-based execution token gating; correct symbol must be passed for access.
   - RefusalRouter.evaluate: R2+driftDetected→clarify (clarifyOnSignalsAtR2=true in default profile).
   - deploy.gateway/pr.gateway: module-level null client — "no client" tests run before registration.
+
+---
+
+## Batch W3-T6 — 2026-03-24
+
+### Entry W3-T6/CP1
+
+- Tranche: W3-T6 — Governance Consensus Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.consensus.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.consumer.pipeline.test.ts` (18 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (226 tests, 0 failures)
+- Notes:
+  - GEF: 208→226 (+18). CP1 Full Lane. GC-023 compliant (dedicated test file).
+  - Cross-plane bridge: GEF → CPF. GovernanceConsensusContract → ControlPlaneConsumerPipelineContract.
+  - ESCALATE → `[consensus] escalation verdict — governance review required`
+  - PAUSE → `[consensus] pause verdict — audit recommended`
+
+### Entry W3-T6/CP2
+
+- Tranche: W3-T6 — Governance Consensus Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.consensus.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.consumer.pipeline.batch.test.ts` (10 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (236 tests, 0 failures)
+- Notes:
+  - GEF: 226→236 (+10). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch pattern: dominantTokenBudget, escalationCount, pauseCount, batchId ≠ batchHash.

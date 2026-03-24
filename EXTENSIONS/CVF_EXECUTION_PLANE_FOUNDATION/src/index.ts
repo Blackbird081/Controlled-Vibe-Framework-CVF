@@ -1,3 +1,14 @@
+// W2-T15 — Execution Audit Summary Consumer Bridge (CP1)
+export {
+  ExecutionAuditSummaryConsumerPipelineContract,
+  createExecutionAuditSummaryConsumerPipelineContract,
+} from "./execution.audit.summary.consumer.pipeline.contract";
+export type {
+  ExecutionAuditSummaryConsumerPipelineRequest,
+  ExecutionAuditSummaryConsumerPipelineResult,
+  ExecutionAuditSummaryConsumerPipelineContractDependencies,
+} from "./execution.audit.summary.consumer.pipeline.contract";
+
 // W2-T14 — Multi-Agent Coordination Consumer Bridge (CP1–CP2)
 export {
   MultiAgentCoordinationConsumerPipelineContract,

@@ -1,6 +1,17 @@
 {
   "partitions": [
     {
+      "scope": "EPF Execution Audit Summary Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.audit.summary.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionAuditSummaryConsumerPipelineContract",
+        "createExecutionAuditSummaryConsumerPipelineContract"
+      ]
+    },
+    {
       "scope": "GEF Watchdog Alert Log Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.alert.log.consumer.pipeline.test.ts",
       "forbiddenFiles": [

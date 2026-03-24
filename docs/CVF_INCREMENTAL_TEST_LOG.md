@@ -73,6 +73,21 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W1-T15 CP2 — OrchestrationConsumerPipelineBatchContract
+- Scope:
+  - implement `OrchestrationConsumerPipelineBatchContract` — aggregates `OrchestrationConsumerPipelineResult[]` → `OrchestrationConsumerPipelineBatch`
+  - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`
+  - empty batch → `dominantTokenBudget = 0`, valid hash; `batchId ≠ batchHash`
+- Files created / updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/orchestration.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports W1-T15 CP2)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/orchestration.consumer.pipeline.batch.test.ts` (new, 10 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CPF Orchestration Consumer Pipeline Batch partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` -> PASS (732 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-24] Batch: W1-T15 CP1 — OrchestrationConsumerPipelineContract
 - Scope:
   - implement `OrchestrationConsumerPipelineContract` — chains `DesignPlan` → `OrchestrationResult` → `ControlPlaneConsumerPackage`

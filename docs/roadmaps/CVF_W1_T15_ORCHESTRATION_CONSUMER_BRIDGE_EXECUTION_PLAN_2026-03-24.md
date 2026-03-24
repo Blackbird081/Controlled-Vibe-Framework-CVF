@@ -118,5 +118,5 @@ Gap closed: W1-T3 implied gap — orchestration assignments have no consumer-enr
 | CP | Status |
 |---|---|
 | CP1 | DONE |
-| CP2 | PENDING |
+| CP2 | DONE |
 | CP3 | PENDING |

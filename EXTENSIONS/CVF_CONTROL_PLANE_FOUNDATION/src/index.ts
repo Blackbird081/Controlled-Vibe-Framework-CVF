@@ -8,6 +8,14 @@ export type {
   OrchestrationConsumerPipelineResult,
   OrchestrationConsumerPipelineContractDependencies,
 } from "./orchestration.consumer.pipeline.contract";
+export {
+  OrchestrationConsumerPipelineBatchContract,
+  createOrchestrationConsumerPipelineBatchContract,
+} from "./orchestration.consumer.pipeline.batch.contract";
+export type {
+  OrchestrationConsumerPipelineBatch,
+  OrchestrationConsumerPipelineBatchContractDependencies,
+} from "./orchestration.consumer.pipeline.batch.contract";
 
 // W1-T14 — Gateway Knowledge Pipeline Integration Slice (CP1–CP2)
 export {

@@ -173,6 +173,10 @@ Current authorization state:
   - `W3-T5 / CP1` — WatchdogEscalationPipelineContract (`(obs, exec)` → `WatchdogPulse → WatchdogAlertLog → WatchdogEscalationDecision → WatchdogEscalationPipelineResult`) — Full Lane
   - `W3-T5 / CP2` — WatchdogEscalationPipelineBatchContract (`WatchdogEscalationPipelineResult[] → WatchdogEscalationPipelineBatch`) — Fast Lane (GC-021)
   - `W3-T5 / CP3` — Tranche closure review — Full Lane
+- `W1-T15 — Control Plane Orchestration Consumer Bridge` is now authorized (GC-018: 10/10 depth audit) and canonically closed as a bounded CPF-internal orchestration consumer bridge tranche; closes W1-T3 implied gap (orchestration assignments have no governed consumer-visible enriched output path)
+  - `W1-T15 / CP1` — OrchestrationConsumerPipelineContract (`DesignPlan → OrchestrationResult + ControlPlaneConsumerPackage`; query from vibeOriginal max 120 chars; contextId = orchestrationId) — Full Lane
+  - `W1-T15 / CP2` — OrchestrationConsumerPipelineBatchContract (`OrchestrationConsumerPipelineResult[] → OrchestrationConsumerPipelineBatch`; dominantTokenBudget) — Fast Lane (GC-021)
+  - `W1-T15 / CP3` — Tranche closure review — Full Lane
 
 Nothing beyond `W0` in this roadmap may execute until:
 

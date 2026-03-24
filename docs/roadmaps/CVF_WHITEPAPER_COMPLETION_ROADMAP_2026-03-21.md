@@ -1043,15 +1043,17 @@ This roadmap means:
 
 ---
 
-## Post-Cycle Candidate — W3-T10
+## Post-Cycle Closure Record — W3-T10
 
 > Tranche: W3-T10 — Watchdog Alert Log Consumer Bridge
-> Status: IN PROGRESS (authorized 2026-03-24)
+> Closed: 2026-03-24
+> GEF: 368 tests (+33 from 335)
+> Closure review: `docs/reviews/CVF_W3_T10_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
 > Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T10_WATCHDOG_ALERT_LOG_CONSUMER_BRIDGE_2026-03-24.md`
 
 - `WatchdogAlertLogConsumerPipelineContract` — GEF→CPF cross-plane bridge: `WatchdogPulse[] → WatchdogAlertLogContract.log() → WatchdogAlertLog → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
 - `WatchdogAlertLogConsumerPipelineBatchContract` — batch aggregation with `criticalAlertResultCount` + `warningAlertResultCount`
-- Warnings: CRITICAL → immediate escalation required; WARNING → watchdog alert log review required
+- Warnings: CRITICAL → `[watchdog] critical alert — immediate escalation required`; WARNING → `[watchdog] warning alert — watchdog alert log review required`
 - Gap closed: W3-T1/T2 implied — `WatchdogAlertLog` had no governed consumer-visible enriched output path
 
 ---

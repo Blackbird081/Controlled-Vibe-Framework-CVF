@@ -73,6 +73,49 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W3-T10 CP2 — WatchdogAlertLogConsumerPipelineBatchContract
+- Scope:
+  - implement `WatchdogAlertLogConsumerPipelineBatchContract` — aggregates `WatchdogAlertLogConsumerPipelineResult[]` → `WatchdogAlertLogConsumerPipelineBatch`
+  - `criticalAlertResultCount` = CRITICAL dominantStatus results; `warningAlertResultCount` = WARNING dominantStatus results
+  - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`
+  - empty batch → `dominantTokenBudget = 0`; `batchId ≠ batchHash`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W3_T10_WATCHDOG_ALERT_LOG_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP2) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.alert.log.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.alert.log.consumer.pipeline.batch.test.ts` (new)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CP2 partition entry)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/index.ts` (W3-T10 CP1–CP2 exports)
+- Tests executed:
+  - `npm test` (GEF) → 368 passed, 0 failed
+- Skip scope:
+  - CPF, EPF: skipped because unchanged from baseline
+- Notes/Risks: none
+
+## [2026-03-24] Batch: W3-T10 CP1 — WatchdogAlertLogConsumerPipelineContract
+- Scope:
+  - implement `WatchdogAlertLogConsumerPipelineContract` — cross-plane GEF→CPF bridge
+  - `WatchdogPulse[]` → `WatchdogAlertLogContract.log()` → `WatchdogAlertLog` → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query: `${dominantStatus}:alert:${alertActive}:pulses:${totalPulses}` (≤120 chars)
+  - contextId: `alertLog.logId`
+  - Warnings: CRITICAL → immediate escalation required; WARNING → review required
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W3_T10_WATCHDOG_ALERT_LOG_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-018` authorization (10/10) → `GC-019` Full Lane audit + review (CP1) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.alert.log.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.alert.log.consumer.pipeline.test.ts` (new)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CP1 partition entry)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/index.ts` (W3-T10 CP1 exports)
+- Tests executed:
+  - `npm test` (GEF) → 355 passed, 0 failed
+- Skip scope:
+  - CPF, EPF: skipped because unchanged from baseline
+- Notes/Risks: none
+
 ## [2026-03-24] Batch: W3-T9 CP2 — GovernanceAuditLogConsumerPipelineBatchContract
 - Scope:
   - implement `GovernanceAuditLogConsumerPipelineBatchContract` — aggregates `GovernanceAuditLogConsumerPipelineResult[]` → `GovernanceAuditLogConsumerPipelineBatch`

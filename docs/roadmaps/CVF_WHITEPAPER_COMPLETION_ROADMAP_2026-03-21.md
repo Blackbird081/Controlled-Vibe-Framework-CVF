@@ -177,6 +177,10 @@ Current authorization state:
   - `W1-T15 / CP1` — OrchestrationConsumerPipelineContract (`DesignPlan → OrchestrationResult + ControlPlaneConsumerPackage`; query from vibeOriginal max 120 chars; contextId = orchestrationId) — Full Lane
   - `W1-T15 / CP2` — OrchestrationConsumerPipelineBatchContract (`OrchestrationConsumerPipelineResult[] → OrchestrationConsumerPipelineBatch`; dominantTokenBudget) — Fast Lane (GC-021)
   - `W1-T15 / CP3` — Tranche closure review — Full Lane
+- `W2-T11 — Execution Feedback Consumer Bridge` is now authorized (GC-018: 10/10 depth audit) and canonically closed as a bounded EPF→CPF cross-plane feedback consumer bridge tranche; closes W2-T4 implied gap (ExecutionFeedbackSignal has no governed consumer-visible enriched output path)
+  - `W2-T11 / CP1` — ExecutionFeedbackConsumerPipelineContract (`ExecutionObservation → ExecutionFeedbackSignal + ControlPlaneConsumerPackage`; query from rationale max 120 chars; contextId = feedbackId) — Full Lane
+  - `W2-T11 / CP2` — ExecutionFeedbackConsumerPipelineBatchContract (`ExecutionFeedbackConsumerPipelineResult[] → batch with dominantTokenBudget`) — Fast Lane (GC-021)
+  - `W2-T11 / CP3` — Tranche closure review — Full Lane
 
 Nothing beyond `W0` in this roadmap may execute until:
 

@@ -1043,6 +1043,19 @@ This roadmap means:
 
 ---
 
+## Post-Cycle Candidate — W1-T18
+
+> Tranche: W1-T18 — Gateway PII Detection Consumer Bridge
+> Status: IN PROGRESS (authorized 2026-03-24)
+> Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T18_GATEWAY_PII_DETECTION_CONSUMER_BRIDGE_2026-03-24.md`
+
+- `GatewayPIIDetectionConsumerPipelineContract` — CPF-internal bridge: `GatewayPIIDetectionRequest → GatewayPIIDetectionResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `GatewayPIIDetectionConsumerPipelineBatchContract` — batch aggregation with `detectedCount` + `cleanCount`
+- Warnings: piiDetected → redact before consumer use; CUSTOM types → custom pattern match detected
+- Gap closed: W1-T9 implied — `GatewayPIIDetectionResult` has no governed consumer-visible enriched output path
+
+---
+
 ## Post-Cycle Closure Record — W2-T13
 
 > Tranche: W2-T13 — MCP Invocation Consumer Bridge

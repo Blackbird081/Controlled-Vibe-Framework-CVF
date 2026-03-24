@@ -1073,11 +1073,18 @@ This roadmap means:
 
 ---
 
-## Post-Cycle Candidate — W2-T19
+## Post-Cycle Closure Record — W2-T19
 
 > Tranche: W2-T19 — Streaming Execution Summary Consumer Bridge
-> Status: IN PROGRESS (authorized 2026-03-24)
+> Closed: 2026-03-24
+> EPF: 732 tests (+39 from 693)
+> Closure review: `docs/reviews/CVF_W2_T19_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
 > Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T19_STREAMING_EXECUTION_SUMMARY_CONSUMER_BRIDGE_2026-03-24.md`
+
+- `StreamingExecutionSummaryConsumerPipelineContract` — EPF→CPF bridge: `StreamingExecutionChunk[] → StreamingExecutionAggregatorContract.aggregate() → StreamingExecutionSummary → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `StreamingExecutionSummaryConsumerPipelineBatchContract` — batch aggregation with `failedResultCount` + `skippedResultCount`
+- Warnings: FAILED → review execution pipeline; SKIPPED → review execution policy
+- Gap closed: W6-T1 implied — `StreamingExecutionSummary` had no governed consumer-visible enriched output path
 
 ---
 

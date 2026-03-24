@@ -73,6 +73,43 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W2-T19 CP2 — StreamingExecutionSummaryConsumerPipelineBatchContract
+- Scope:
+  - implement `StreamingExecutionSummaryConsumerPipelineBatchContract` — aggregates `StreamingExecutionSummaryConsumerPipelineResult[]` → `StreamingExecutionSummaryConsumerPipelineBatch`
+  - `dominantTokenBudget` = max `typedContextPackage.estimatedTokens`; 0 for empty
+  - `failedResultCount` = results where `dominantChunkStatus === "FAILED"`; `skippedResultCount` = results where `dominantChunkStatus === "SKIPPED"`
+  - `batchId ≠ batchHash`
+- Change reference: `feat(W2-T19/CP2): StreamingExecutionSummaryConsumerPipelineBatchContract + 16 tests (Fast Lane GC-021)`
+- Impacted scope: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` (new batch contract + test)
+- Files changed:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.streaming.summary.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.streaming.summary.consumer.pipeline.batch.test.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (W2-T19 CP1–CP2 exports)
+- Tests executed:
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.streaming.summary.consumer.pipeline.batch.test.ts` → 16 passed, 0 failed
+- Skip scope:
+  - CPF, GEF: skipped because unchanged from baseline
+- Notes/Risks: none
+
+## [2026-03-24] Batch: W2-T19 CP1 — StreamingExecutionSummaryConsumerPipelineContract
+- Scope:
+  - implement `StreamingExecutionSummaryConsumerPipelineContract` — EPF→CPF cross-plane bridge
+  - chain: `StreamingExecutionChunk[]` → `StreamingExecutionAggregatorContract.aggregate()` → `StreamingExecutionSummary` → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query = `"${dominantChunkStatus}:streaming:${totalChunks}:failed:${failedCount}".slice(0, 120)`; contextId = `summary.summaryId`
+  - Warning FAILED: `[streaming] failed execution chunks — review execution pipeline`
+  - Warning SKIPPED: `[streaming] skipped execution chunks — review execution policy`
+- Change reference: `feat(W2-T19/CP1): StreamingExecutionSummaryConsumerPipelineContract + 23 tests (Full Lane GC-019)`
+- Impacted scope: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` (new contract + test)
+- Files changed:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.streaming.summary.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.streaming.summary.consumer.pipeline.test.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (W2-T19 CP1 exports)
+- Tests executed:
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.streaming.summary.consumer.pipeline.test.ts` → 23 passed, 0 failed
+- Skip scope:
+  - CPF, GEF: skipped because unchanged from baseline
+- Notes/Risks: none
+
 ## [2026-03-24] Batch: W3-T16 CP2 — GovernanceAuditSignalConsumerPipelineBatchContract
 - Scope:
   - implement `GovernanceAuditSignalConsumerPipelineBatchContract` — aggregates `GovernanceAuditSignalConsumerPipelineResult[]` → `GovernanceAuditSignalConsumerPipelineBatch`

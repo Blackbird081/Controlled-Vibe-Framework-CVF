@@ -1,6 +1,22 @@
 {
   "partitions": [
     {
+      "tranche": "W2-T13",
+      "controlPoint": "CP1",
+      "contract": "MCPInvocationConsumerPipelineContract",
+      "testFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.test.ts",
+      "owner": "EPF",
+      "status": "ACTIVE"
+    },
+    {
+      "tranche": "W2-T13",
+      "controlPoint": "CP2",
+      "contract": "MCPInvocationConsumerPipelineBatchContract",
+      "testFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.batch.test.ts",
+      "owner": "EPF",
+      "status": "ACTIVE"
+    },
+    {
       "tranche": "W1-T17",
       "controlPoint": "CP1",
       "contract": "ReversePromptingConsumerPipelineContract",

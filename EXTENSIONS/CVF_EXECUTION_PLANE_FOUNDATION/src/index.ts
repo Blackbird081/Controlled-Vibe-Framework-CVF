@@ -1,3 +1,22 @@
+// W2-T13 — MCP Invocation Consumer Bridge (CP1–CP2)
+export {
+  MCPInvocationConsumerPipelineContract,
+  createMCPInvocationConsumerPipelineContract,
+} from "./mcp.invocation.consumer.pipeline.contract";
+export type {
+  MCPInvocationConsumerPipelineRequest,
+  MCPInvocationConsumerPipelineResult,
+  MCPInvocationConsumerPipelineContractDependencies,
+} from "./mcp.invocation.consumer.pipeline.contract";
+export {
+  MCPInvocationConsumerPipelineBatchContract,
+  createMCPInvocationConsumerPipelineBatchContract,
+} from "./mcp.invocation.consumer.pipeline.batch.contract";
+export type {
+  MCPInvocationConsumerPipelineBatch,
+  MCPInvocationConsumerPipelineBatchContractDependencies,
+} from "./mcp.invocation.consumer.pipeline.batch.contract";
+
 // W2-T12 — Execution Re-intake Consumer Bridge (CP1–CP2)
 export {
   ExecutionReintakeConsumerPipelineContract,

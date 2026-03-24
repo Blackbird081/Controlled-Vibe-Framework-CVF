@@ -1,4 +1,14 @@
-// W2-T20 — Execution Observation Consumer Bridge (CP1)
+// W2-T20 — Execution Observation Consumer Bridge (CP1–CP2)
+export {
+  ExecutionObservationConsumerPipelineBatchContract,
+  createExecutionObservationConsumerPipelineBatchContract,
+} from "./execution.observation.consumer.pipeline.batch.contract";
+export type {
+  ExecutionObservationConsumerPipelineBatch,
+  ExecutionObservationConsumerPipelineBatchContractDependencies,
+} from "./execution.observation.consumer.pipeline.batch.contract";
+
+// W2-T20 CP1
 export {
   ExecutionObservationConsumerPipelineContract,
   createExecutionObservationConsumerPipelineContract,

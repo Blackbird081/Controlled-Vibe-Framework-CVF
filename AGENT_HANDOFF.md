@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-24
 
 > Branch: `cvf-next`
-> Last push: `W3-T10-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W3-T10
+> Last push: `W2-T15-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T15
 
 ---
 
@@ -10,20 +10,20 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **821 tests, 0 failures**
-- EPF (Execution Plane Foundation): **564 tests, 0 failures**
+- EPF (Execution Plane Foundation): **595 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **368 tests, 0 failures**
 
 ### Last Two Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
+| W2-T15 | Execution Audit Summary Consumer Bridge | CP1, CP2, CP3 | 595 EPF |
 | W3-T10 | Watchdog Alert Log Consumer Bridge | CP1, CP2, CP3 | 368 GEF |
-| W3-T9 | Governance Audit Log Consumer Bridge | CP1, CP2, CP3 | 335 GEF |
 
 ### Key Contracts Delivered (last 4 tranches)
+- `CVF_EXECUTION_PLANE_FOUNDATION/src/execution.audit.summary.consumer.pipeline.contract.ts` — ExecutionAuditSummaryConsumerPipelineContract (W2-T15)
+- `CVF_EXECUTION_PLANE_FOUNDATION/src/execution.audit.summary.consumer.pipeline.batch.contract.ts` — ExecutionAuditSummaryConsumerPipelineBatchContract (W2-T15)
 - `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.alert.log.consumer.pipeline.contract.ts` — WatchdogAlertLogConsumerPipelineContract (W3-T10)
 - `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.alert.log.consumer.pipeline.batch.contract.ts` — WatchdogAlertLogConsumerPipelineBatchContract (W3-T10)
-- `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.audit.log.consumer.pipeline.contract.ts` — GovernanceAuditLogConsumerPipelineContract (W3-T9)
-- `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.audit.log.consumer.pipeline.batch.contract.ts` — GovernanceAuditLogConsumerPipelineBatchContract (W3-T9)
 - `CVF_EXECUTION_PLANE_FOUNDATION/src/execution.multi.agent.coordination.consumer.pipeline.contract.ts` — MultiAgentCoordinationConsumerPipelineContract (W2-T14)
 - `CVF_EXECUTION_PLANE_FOUNDATION/src/execution.multi.agent.coordination.consumer.pipeline.batch.contract.ts` — MultiAgentCoordinationConsumerPipelineBatchContract (W2-T14)
 

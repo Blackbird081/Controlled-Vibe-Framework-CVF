@@ -1043,10 +1043,12 @@ This roadmap means:
 
 ---
 
-## Post-Cycle Candidate — W3-T8
+## Post-Cycle Closure Record — W3-T8
 
 > Tranche: W3-T8 — Governance Checkpoint Reintake Consumer Bridge
-> Status: IN PROGRESS (authorized 2026-03-24)
+> Closed: 2026-03-24
+> GEF: 301 tests (+36 from 265)
+> Closure review: `docs/reviews/CVF_W3_T8_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
 > Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T8_CHECKPOINT_REINTAKE_CONSUMER_BRIDGE_2026-03-24.md`
 
 - `GovernanceCheckpointReintakeConsumerPipelineContract` — GEF→CPF cross-plane bridge: `GovernanceCheckpointDecision → GovernanceCheckpointReintakeContract.reintake() → CheckpointReintakeRequest → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`

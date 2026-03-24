@@ -73,6 +73,41 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W3-T8 CP2 — GovernanceCheckpointReintakeConsumerPipelineBatchContract
+- Scope:
+  - implement `GovernanceCheckpointReintakeConsumerPipelineBatchContract` — aggregates `GovernanceCheckpointReintakeConsumerPipelineResult[]` → `GovernanceCheckpointReintakeConsumerPipelineBatch`
+  - `immediateCount` = ESCALATION_REQUIRED; `deferredCount` = HALT_REVIEW_PENDING; `noReintakeCount` = NO_REINTAKE
+  - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`
+  - empty batch → `dominantTokenBudget = 0`; `batchId ≠ batchHash`
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W3_T8_CHECKPOINT_REINTAKE_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-24.md`
+- Authorization chain:
+  - `GC-021` Fast Lane audit + review (CP2) → APPROVE
+- Files created / updated:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.checkpoint.reintake.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.consumer.pipeline.batch.test.ts` (new)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (CP2 partition entry)
+- Tests executed:
+  - `npm test` (CVF_GOVERNANCE_EXPANSION_FOUNDATION) → PASS (13 new tests, GEF 301 total, 0 failures)
+- Skip scope:
+  - CPF, EPF, all other modules: unchanged from previous passing batch
+
+## [2026-03-24] Batch: W3-T8 CP1 — GovernanceCheckpointReintakeConsumerPipelineContract
+- Scope:
+  - implement `GovernanceCheckpointReintakeConsumerPipelineContract` — GEF→CPF cross-plane bridge
+  - chain: `GovernanceCheckpointReintakeContract.reintake(decision)` → `CheckpointReintakeRequest` → query derivation → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query = `${reintakeTrigger}:scope:${reintakeScope}:src:${sourceCheckpointId}` (max 120 chars)
+  - warnings: ESCALATION_REQUIRED → `[reintake] governance escalation required — immediate control re-intake triggered`; HALT_REVIEW_PENDING → `[reintake] governance halt — deferred control re-intake pending review`
+- Files changed:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.checkpoint.reintake.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.consumer.pipeline.test.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/index.ts` (barrel exports)
+- Tests executed:
+  - `npm test` (CVF_GOVERNANCE_EXPANSION_FOUNDATION) → PASS (23 new tests, GEF 288 after CP1, 0 failures)
+- Authorization chain: GC-018 6b1f448 → CP1 4198743
+- Skip scope:
+  - CPF, EPF, all other modules: unchanged from previous passing batch
+
 ## [2026-03-24] Batch: W2-T14 CP2 — MultiAgentCoordinationConsumerPipelineBatchContract
 - Scope:
   - implement `MultiAgentCoordinationConsumerPipelineBatchContract` — aggregates `MultiAgentCoordinationConsumerPipelineResult[]` → `MultiAgentCoordinationConsumerPipelineBatch`

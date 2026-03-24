@@ -1,4 +1,14 @@
-// W3-T16 — Governance Audit Signal Consumer Bridge (CP1)
+// W3-T16 — Governance Audit Signal Consumer Bridge (CP1–CP2)
+export {
+  GovernanceAuditSignalConsumerPipelineBatchContract,
+  createGovernanceAuditSignalConsumerPipelineBatchContract,
+} from "./governance.audit.signal.consumer.pipeline.batch.contract";
+export type {
+  GovernanceAuditSignalConsumerPipelineBatch,
+  GovernanceAuditSignalConsumerPipelineBatchContractDependencies,
+} from "./governance.audit.signal.consumer.pipeline.batch.contract";
+
+// W3-T16 CP1
 export {
   GovernanceAuditSignalConsumerPipelineContract,
   createGovernanceAuditSignalConsumerPipelineContract,

@@ -73,6 +73,39 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W1-T18 CP2 — GatewayPIIDetectionConsumerPipelineBatchContract
+- Scope:
+  - implement `GatewayPIIDetectionConsumerPipelineBatchContract` — aggregates `GatewayPIIDetectionConsumerPipelineResult[]` → `GatewayPIIDetectionConsumerPipelineBatch`
+  - `detectedCount` = results where `piiDetected === true`; `cleanCount` = results where `piiDetected === false`
+  - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`
+  - `batchId ≠ batchHash`
+- Files changed:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.pii.detection.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.consumer.pipeline.batch.test.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (partition entries)
+- Tests executed:
+  - `npm test` (CVF_CONTROL_PLANE_FOUNDATION) → PASS (12 new tests, CPF 821 total, 0 failures)
+- Authorization chain: GC-018 cfaa5f8 → CP1 bd605fd → CP2 bd605fd
+- Skip scope:
+  - EPF, GEF, all other modules: unchanged from previous passing batch
+
+## [2026-03-24] Batch: W1-T18 CP1 — GatewayPIIDetectionConsumerPipelineContract
+- Scope:
+  - implement `GatewayPIIDetectionConsumerPipelineContract` — CPF-internal bridge
+  - chain: `GatewayPIIDetectionContract.detect()` → `GatewayPIIDetectionResult` → query derivation → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query = `${tenantId}:pii:${piiDetected}:${piiTypes.join(",")}` (max 120 chars)
+  - warnings: `piiDetected` → `[pii] detected in signal: redact before consumer use`; CUSTOM → `[pii] custom pattern match detected`
+- Files changed:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.pii.detection.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.consumer.pipeline.test.ts` (new)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (barrel exports)
+- Tests executed:
+  - `npm test` (CVF_CONTROL_PLANE_FOUNDATION) → PASS (19 new tests, CPF 809 after CP1, 0 failures)
+- Authorization chain: GC-018 cfaa5f8 → CP1 bd605fd
+- Skip scope:
+  - EPF, GEF, all other modules: unchanged from previous passing batch
+
 ## [2026-03-24] Batch: W2-T13 CP2 — MCPInvocationConsumerPipelineBatchContract
 - Scope:
   - implement `MCPInvocationConsumerPipelineBatchContract` — aggregates `MCPInvocationConsumerPipelineResult[]` → `MCPInvocationConsumerPipelineBatch`

@@ -23,6 +23,28 @@
       ]
     },
     {
+      "scope": "CPF Gateway PII Detection Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayPIIDetectionConsumerPipelineContract",
+        "createGatewayPIIDetectionConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Gateway PII Detection Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayPIIDetectionConsumerPipelineBatchContract",
+        "createGatewayPIIDetectionConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "CPF Reverse Prompting Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.test.ts",
       "forbiddenFiles": [

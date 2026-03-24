@@ -1,3 +1,22 @@
+// W1-T18 — Gateway PII Detection Consumer Bridge (CP1–CP2)
+export {
+  GatewayPIIDetectionConsumerPipelineContract,
+  createGatewayPIIDetectionConsumerPipelineContract,
+} from "./gateway.pii.detection.consumer.pipeline.contract";
+export type {
+  GatewayPIIDetectionConsumerPipelineRequest,
+  GatewayPIIDetectionConsumerPipelineResult,
+  GatewayPIIDetectionConsumerPipelineContractDependencies,
+} from "./gateway.pii.detection.consumer.pipeline.contract";
+export {
+  GatewayPIIDetectionConsumerPipelineBatchContract,
+  createGatewayPIIDetectionConsumerPipelineBatchContract,
+} from "./gateway.pii.detection.consumer.pipeline.batch.contract";
+export type {
+  GatewayPIIDetectionConsumerPipelineBatch,
+  GatewayPIIDetectionConsumerPipelineBatchContractDependencies,
+} from "./gateway.pii.detection.consumer.pipeline.batch.contract";
+
 // W1-T17 — Reverse Prompting Consumer Bridge (CP1–CP2)
 export {
   ReversePromptingConsumerPipelineContract,

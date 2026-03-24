@@ -23,6 +23,17 @@
       ]
     },
     {
+      "scope": "GEF Governance Audit Log Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.audit.log.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceAuditLogConsumerPipelineBatchContract",
+        "createGovernanceAuditLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "GEF Governance Checkpoint Reintake Consumer Pipeline Batch",
       "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.consumer.pipeline.batch.test.ts",
       "forbiddenFiles": [

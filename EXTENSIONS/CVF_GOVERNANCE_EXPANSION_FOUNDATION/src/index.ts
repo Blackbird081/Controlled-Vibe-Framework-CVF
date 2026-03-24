@@ -1,4 +1,4 @@
-// W3-T9 — Governance Audit Log Consumer Bridge (CP1)
+// W3-T9 — Governance Audit Log Consumer Bridge (CP1–CP2)
 export {
   GovernanceAuditLogConsumerPipelineContract,
   createGovernanceAuditLogConsumerPipelineContract,
@@ -8,6 +8,14 @@ export type {
   GovernanceAuditLogConsumerPipelineResult,
   GovernanceAuditLogConsumerPipelineContractDependencies,
 } from "./governance.audit.log.consumer.pipeline.contract";
+export {
+  GovernanceAuditLogConsumerPipelineBatchContract,
+  createGovernanceAuditLogConsumerPipelineBatchContract,
+} from "./governance.audit.log.consumer.pipeline.batch.contract";
+export type {
+  GovernanceAuditLogConsumerPipelineBatch,
+  GovernanceAuditLogConsumerPipelineBatchContractDependencies,
+} from "./governance.audit.log.consumer.pipeline.batch.contract";
 
 // W3-T8 — Governance Checkpoint Reintake Consumer Bridge (CP1–CP2)
 export {

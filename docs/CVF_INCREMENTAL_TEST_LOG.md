@@ -3087,3 +3087,36 @@ Utility and guard:
 - Notes:
   - GEF: 226→236 (+10). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Batch pattern: dominantTokenBudget, escalationCount, pauseCount, batchId ≠ batchHash.
+
+---
+
+## Batch W1-T16 — 2026-03-24
+
+### Entry W1-T16/CP1
+
+- Tranche: W1-T16 — Boardroom Consumer Bridge
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.test.ts` (19 tests)
+- Tests executed:
+  - `npm test` (CPF) → PASS (751 tests, 0 failures)
+- Notes:
+  - CPF: 732→751 (+19). CP1 Full Lane. GC-023 compliant (dedicated test file).
+  - CPF-internal bridge: BoardroomMultiRoundContract → ControlPlaneConsumerPipelineContract.
+  - REJECT → `[boardroom] reject verdict — risk review required`
+  - ESCALATE → `[boardroom] escalation verdict — governance review required`
+  - AMEND_PLAN → `[boardroom] amend verdict — plan amendment required`
+
+### Entry W1-T16/CP2
+
+- Tranche: W1-T16 — Boardroom Consumer Bridge
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.batch.test.ts` (10 tests)
+- Tests executed:
+  - `npm test` (CPF) → PASS (761 tests, 0 failures)
+- Notes:
+  - CPF: 751→761 (+10). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch pattern: dominantTokenBudget, rejectCount, escalateCount, batchId ≠ batchHash.

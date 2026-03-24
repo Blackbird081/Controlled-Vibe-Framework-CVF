@@ -1,3 +1,22 @@
+// W1-T16 — Boardroom Consumer Bridge (CP1–CP2)
+export {
+  BoardroomConsumerPipelineContract,
+  createBoardroomConsumerPipelineContract,
+} from "./boardroom.consumer.pipeline.contract";
+export type {
+  BoardroomConsumerPipelineRequest,
+  BoardroomConsumerPipelineResult,
+  BoardroomConsumerPipelineContractDependencies,
+} from "./boardroom.consumer.pipeline.contract";
+export {
+  BoardroomConsumerPipelineBatchContract,
+  createBoardroomConsumerPipelineBatchContract,
+} from "./boardroom.consumer.pipeline.batch.contract";
+export type {
+  BoardroomConsumerPipelineBatch,
+  BoardroomConsumerPipelineBatchContractDependencies,
+} from "./boardroom.consumer.pipeline.batch.contract";
+
 // W1-T15 — Control Plane Orchestration Consumer Bridge (CP1–CP2)
 export {
   OrchestrationConsumerPipelineContract,

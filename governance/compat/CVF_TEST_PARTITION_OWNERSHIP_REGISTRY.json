@@ -1,6 +1,28 @@
 {
   "partitions": [
     {
+      "scope": "CPF Boardroom Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomConsumerPipelineBatchContract",
+        "createBoardroomConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomConsumerPipelineContract",
+        "createBoardroomConsumerPipelineContract"
+      ]
+    },
+    {
       "scope": "GEF Consensus Consumer Pipeline Batch",
       "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.consumer.pipeline.batch.test.ts",
       "forbiddenFiles": [

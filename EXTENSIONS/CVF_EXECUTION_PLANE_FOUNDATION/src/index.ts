@@ -1,3 +1,14 @@
+// W2-T19 — Streaming Execution Summary Consumer Bridge (CP1)
+export {
+  StreamingExecutionSummaryConsumerPipelineContract,
+  createStreamingExecutionSummaryConsumerPipelineContract,
+} from "./execution.streaming.summary.consumer.pipeline.contract";
+export type {
+  StreamingExecutionSummaryConsumerPipelineRequest,
+  StreamingExecutionSummaryConsumerPipelineResult,
+  StreamingExecutionSummaryConsumerPipelineContractDependencies,
+} from "./execution.streaming.summary.consumer.pipeline.contract";
+
 // W2-T18 — MultiAgent Coordination Summary Consumer Bridge (CP1–CP2)
 export {
   MultiAgentCoordinationSummaryConsumerPipelineBatchContract,

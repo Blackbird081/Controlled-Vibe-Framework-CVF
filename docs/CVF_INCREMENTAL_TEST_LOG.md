@@ -2917,4 +2917,19 @@ Utility and guard:
   - `npm test` (CPF) → PASS (790 tests, 0 failures)
 - Notes:
   - CPF: 779→790 (+11). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+
+### Entry W2-T16/CP1
+
+- Tranche: W2-T16 — Feedback Resolution Consumer Bridge
+- Extension: CVF_EXECUTION_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/feedback.resolution.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.resolution.consumer.pipeline.test.ts` (18 tests)
+- Tests executed:
+  - `npm test` (EPF) → PASS (613 tests, 0 failures)
+- Notes:
+  - EPF: 595→613 (+18). CP1 Full Lane. GC-023 compliant (dedicated test file).
+  - EPF cross-plane bridge. FeedbackResolutionContract.resolve(decisions[]) → FeedbackResolutionSummary → CPF consumer pipeline.
+  - CRITICAL urgency → `[feedback-resolution] critical urgency — escalated or rejected decisions require immediate attention`
+  - HIGH urgency → `[feedback-resolution] high urgency — retry decisions require attention`
   - Batch pattern: dominantTokenBudget, highPriorityResultCount, totalQuestionsCount, batchId ≠ batchHash.

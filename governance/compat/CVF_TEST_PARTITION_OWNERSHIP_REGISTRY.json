@@ -452,6 +452,17 @@
         "ContextBuildBatchContract",
         "createContextBuildBatchContract"
       ]
+    },
+    {
+      "scope": "EPF Feedback Resolution Consumer Pipeline (W2-T16 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.resolution.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackResolutionConsumerPipelineContract",
+        "createFeedbackResolutionConsumerPipelineContract"
+      ]
     }
   ]
 }

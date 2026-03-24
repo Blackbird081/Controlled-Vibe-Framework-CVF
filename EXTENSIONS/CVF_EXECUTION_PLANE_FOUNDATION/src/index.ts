@@ -1,3 +1,14 @@
+// W2-T16 — Feedback Resolution Consumer Bridge (CP1)
+export {
+  FeedbackResolutionConsumerPipelineContract,
+  createFeedbackResolutionConsumerPipelineContract,
+} from "./feedback.resolution.consumer.pipeline.contract";
+export type {
+  FeedbackResolutionConsumerPipelineRequest,
+  FeedbackResolutionConsumerPipelineResult,
+  FeedbackResolutionConsumerPipelineContractDependencies,
+} from "./feedback.resolution.consumer.pipeline.contract";
+
 // W2-T15 — Execution Audit Summary Consumer Bridge (CP1–CP2)
 export {
   ExecutionAuditSummaryConsumerPipelineContract,

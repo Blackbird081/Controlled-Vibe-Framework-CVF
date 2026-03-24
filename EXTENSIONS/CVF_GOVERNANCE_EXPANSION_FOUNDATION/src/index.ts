@@ -1,3 +1,14 @@
+// W3-T16 — Governance Audit Signal Consumer Bridge (CP1)
+export {
+  GovernanceAuditSignalConsumerPipelineContract,
+  createGovernanceAuditSignalConsumerPipelineContract,
+} from "./governance.audit.signal.consumer.pipeline.contract";
+export type {
+  GovernanceAuditSignalConsumerPipelineRequest,
+  GovernanceAuditSignalConsumerPipelineResult,
+  GovernanceAuditSignalConsumerPipelineContractDependencies,
+} from "./governance.audit.signal.consumer.pipeline.contract";
+
 // W3-T15 — Governance Checkpoint Reintake Summary Consumer Bridge (CP1–CP2)
 export {
   GovernanceCheckpointReintakeSummaryConsumerPipelineContract,

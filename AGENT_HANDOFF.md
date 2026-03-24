@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-24
 
 > Branch: `cvf-next`
-> Last push: `W2-T18-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T18
+> Last push: `W3-T16-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W3-T16
 
 ---
 
@@ -11,18 +11,19 @@
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **856 tests, 0 failures**
 - EPF (Execution Plane Foundation): **693 tests, 0 failures**
-- GEF (Governance Expansion Foundation): **521 tests, 0 failures**
+- GEF (Governance Expansion Foundation): **557 tests, 0 failures**
 
 ### Last Two Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W1-T19 | Knowledge Ranking Consumer Bridge | CP1, CP2, CP3 | 856 CPF |
 | W2-T18 | MultiAgent Coordination Summary Consumer Bridge | CP1, CP2, CP3 | 693 EPF |
+| W3-T16 | Governance Audit Signal Consumer Bridge | CP1, CP2, CP3 | 557 GEF |
 
 ### Key Contracts Delivered (last 4 tranches)
+- `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.audit.signal.consumer.pipeline.contract.ts` — GovernanceAuditSignalConsumerPipelineContract (W3-T16)
+- `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.audit.signal.consumer.pipeline.batch.contract.ts` — GovernanceAuditSignalConsumerPipelineBatchContract (W3-T16)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.multi.agent.coordination.summary.consumer.pipeline.contract.ts` — MultiAgentCoordinationSummaryConsumerPipelineContract (W2-T18)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.multi.agent.coordination.summary.consumer.pipeline.batch.contract.ts` — MultiAgentCoordinationSummaryConsumerPipelineBatchContract (W2-T18)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.ranking.consumer.pipeline.contract.ts` — KnowledgeRankingConsumerPipelineContract (W1-T19)
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.ranking.consumer.pipeline.batch.contract.ts` — KnowledgeRankingConsumerPipelineBatchContract (W1-T19)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.audit.summary.consumer.pipeline.contract.ts` — ExecutionAuditSummaryConsumerPipelineContract (W2-T15)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.audit.summary.consumer.pipeline.batch.contract.ts` — ExecutionAuditSummaryConsumerPipelineBatchContract (W2-T15)
@@ -35,7 +36,7 @@
 
 Current guidance:
 - no tranche is currently active
-- `W2-T18` is now closed and no longer a candidate
+- `W3-T16` is now closed and no longer a candidate
 - next move should favor the highest-value capability gap under `GC-018` stop-boundary rules rather than continuing low-yield validation or packaging-only work
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`

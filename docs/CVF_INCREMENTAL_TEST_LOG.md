@@ -73,6 +73,44 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W3-T16 CP2 — GovernanceAuditSignalConsumerPipelineBatchContract
+- Scope:
+  - implement `GovernanceAuditSignalConsumerPipelineBatchContract` — aggregates `GovernanceAuditSignalConsumerPipelineResult[]` → `GovernanceAuditSignalConsumerPipelineBatch`
+  - `dominantTokenBudget` = max estimatedTokens; 0 for empty
+  - `criticalResultCount` = results where `auditTrigger === "CRITICAL_THRESHOLD"`
+  - `alertActiveResultCount` = results where `auditTrigger === "ALERT_ACTIVE"`
+  - `batchId ≠ batchHash`
+- Change reference: `feat(W3-T16/CP2): GovernanceAuditSignalConsumerPipelineBatchContract + 13 tests (Fast Lane GC-021)`
+- Impacted scope: `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION` (new batch contract + test)
+- Files changed:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.audit.signal.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.audit.signal.consumer.pipeline.batch.test.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/index.ts` (W3-T16 CP1–CP2 exports)
+- Tests executed:
+  - `npx vitest run EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.audit.signal.consumer.pipeline.batch.test.ts` → 13 passed, 0 failed
+- Skip scope:
+  - CPF, EPF: skipped because unchanged from baseline
+- Notes/Risks: none
+
+## [2026-03-24] Batch: W3-T16 CP1 — GovernanceAuditSignalConsumerPipelineContract
+- Scope:
+  - implement `GovernanceAuditSignalConsumerPipelineContract` — GEF→CPF cross-plane bridge
+  - chain: `WatchdogAlertLog` → `GovernanceAuditSignalContract.signal()` → `GovernanceAuditSignal` → `ControlPlaneConsumerPipelineContract` → `ControlPlaneConsumerPackage`
+  - query = `"${auditTrigger}:alert:${signal.sourceAlertLogId}".slice(0, 120)`; contextId = `signal.signalId`
+  - Warning CRITICAL_THRESHOLD: `[audit-signal] critical threshold breached — immediate governance audit required`
+  - Warning ALERT_ACTIVE: `[audit-signal] alert active — governance audit recommended`
+- Change reference: `feat(W3-T16/CP1): GovernanceAuditSignalConsumerPipelineContract + 23 tests (Full Lane GC-019)`
+- Impacted scope: `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION` (new contract + test)
+- Files changed:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.audit.signal.consumer.pipeline.contract.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.audit.signal.consumer.pipeline.test.ts` (new)
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/index.ts` (W3-T16 CP1 exports)
+- Tests executed:
+  - `npx vitest run EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.audit.signal.consumer.pipeline.test.ts` → 23 passed, 0 failed
+- Skip scope:
+  - CPF, EPF: skipped because unchanged from baseline
+- Notes/Risks: none
+
 ## [2026-03-24] Batch: W2-T18 CP2 — MultiAgentCoordinationSummaryConsumerPipelineBatchContract
 - Scope:
   - implement `MultiAgentCoordinationSummaryConsumerPipelineBatchContract` — aggregates `MultiAgentCoordinationSummaryConsumerPipelineResult[]` → `MultiAgentCoordinationSummaryConsumerPipelineBatch`

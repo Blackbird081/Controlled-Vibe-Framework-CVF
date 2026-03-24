@@ -1073,11 +1073,18 @@ This roadmap means:
 
 ---
 
-## Post-Cycle Candidate — W3-T16
+## Post-Cycle Closure Record — W3-T16
 
 > Tranche: W3-T16 — Governance Audit Signal Consumer Bridge
-> Status: IN PROGRESS (authorized 2026-03-24)
+> Closed: 2026-03-24
+> GEF: 557 tests (+36 from 521)
+> Closure review: `docs/reviews/CVF_W3_T16_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
 > Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T16_GOVERNANCE_AUDIT_SIGNAL_CONSUMER_BRIDGE_2026-03-24.md`
+
+- `GovernanceAuditSignalConsumerPipelineContract` — GEF→CPF bridge: `WatchdogAlertLog → GovernanceAuditSignalContract.signal() → GovernanceAuditSignal → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`
+- `GovernanceAuditSignalConsumerPipelineBatchContract` — batch aggregation with `criticalResultCount` + `alertActiveResultCount`
+- Warnings: CRITICAL_THRESHOLD → immediate governance audit; ALERT_ACTIVE → audit recommended
+- Gap closed: W3-T3 implied — `GovernanceAuditSignal` had no governed consumer-visible enriched output path
 
 ---
 

@@ -1073,6 +1073,14 @@ This roadmap means:
 
 ---
 
+## Post-Cycle Candidate — W3-T16
+
+> Tranche: W3-T16 — Governance Audit Signal Consumer Bridge
+> Status: IN PROGRESS (authorized 2026-03-24)
+> Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T16_GOVERNANCE_AUDIT_SIGNAL_CONSUMER_BRIDGE_2026-03-24.md`
+
+---
+
 ## Post-Cycle Closure Record — W2-T15
 
 > Tranche: W2-T15 — Execution Audit Summary Consumer Bridge

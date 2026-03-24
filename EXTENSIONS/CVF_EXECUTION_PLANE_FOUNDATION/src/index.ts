@@ -8,6 +8,14 @@ export type {
   ExecutionFeedbackConsumerPipelineResult,
   ExecutionFeedbackConsumerPipelineContractDependencies,
 } from "./execution.feedback.consumer.pipeline.contract";
+export {
+  ExecutionFeedbackConsumerPipelineBatchContract,
+  createExecutionFeedbackConsumerPipelineBatchContract,
+} from "./execution.feedback.consumer.pipeline.batch.contract";
+export type {
+  ExecutionFeedbackConsumerPipelineBatch,
+  ExecutionFeedbackConsumerPipelineBatchContractDependencies,
+} from "./execution.feedback.consumer.pipeline.batch.contract";
 
 // W6-T9 — Execution Audit Summary Slice (CP1)
 export {

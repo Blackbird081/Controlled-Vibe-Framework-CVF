@@ -1,6 +1,17 @@
 {
   "partitions": [
     {
+      "scope": "EPF Feedback Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.feedback.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionFeedbackConsumerPipelineBatchContract",
+        "createExecutionFeedbackConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "EPF Feedback Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.feedback.consumer.pipeline.test.ts",
       "forbiddenFiles": [

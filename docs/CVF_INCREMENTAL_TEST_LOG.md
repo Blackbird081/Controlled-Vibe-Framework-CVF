@@ -73,6 +73,21 @@ Template:
 - Notes/Risks:
 ```
 
+## [2026-03-24] Batch: W2-T11 CP2 — ExecutionFeedbackConsumerPipelineBatchContract
+- Scope:
+  - implement `ExecutionFeedbackConsumerPipelineBatchContract` — aggregates `ExecutionFeedbackConsumerPipelineResult[]` → `ExecutionFeedbackConsumerPipelineBatch`
+  - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`
+  - empty batch → `dominantTokenBudget = 0`; `batchId ≠ batchHash`
+- Files created / updated:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.feedback.consumer.pipeline.batch.contract.ts` (new)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (barrel exports W2-T11 CP2)
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.feedback.consumer.pipeline.batch.test.ts` (new, 10 tests)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (EPF Feedback Consumer Pipeline Batch partition)
+- Tests executed:
+  - `npm test` in `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` -> PASS (485 tests, 0 failures)
+- Skip scope:
+  - all other modules — unchanged
+
 ## [2026-03-24] Batch: W2-T11 CP1 — ExecutionFeedbackConsumerPipelineContract
 - Scope:
   - implement `ExecutionFeedbackConsumerPipelineContract` — EPF→CPF cross-plane bridge

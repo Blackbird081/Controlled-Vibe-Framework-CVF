@@ -185,6 +185,10 @@ Current authorization state:
   - `W3-T6 / CP1` — GovernanceConsensusConsumerPipelineContract (`GovernanceAuditSignal[] → ConsensusDecision + ControlPlaneConsumerPackage`; query from verdict+score max 120 chars; contextId = decisionId) — Full Lane
   - `W3-T6 / CP2` — GovernanceConsensusConsumerPipelineBatchContract (`GovernanceConsensusConsumerPipelineResult[] → batch with dominantTokenBudget, escalationCount, pauseCount`) — Fast Lane (GC-021)
   - `W3-T6 / CP3` — Tranche closure review — Full Lane
+- `W1-T16 — Boardroom Consumer Bridge` is now authorized (GC-018: 10/10 depth audit) and canonically closed as a bounded CPF-internal boardroom consumer bridge tranche; closes W1-T6 implied gap (BoardroomMultiRoundSummary has no governed consumer-visible enriched output path)
+  - `W1-T16 / CP1` — BoardroomConsumerPipelineContract (`BoardroomRound[] → BoardroomMultiRoundSummary + ControlPlaneConsumerPackage`; query from summary text max 120 chars; contextId = summaryId) — Full Lane
+  - `W1-T16 / CP2` — BoardroomConsumerPipelineBatchContract (`BoardroomConsumerPipelineResult[] → batch with dominantTokenBudget, rejectCount, escalateCount`) — Fast Lane (GC-021)
+  - `W1-T16 / CP3` — Tranche closure review — Full Lane
 
 Nothing beyond `W0` in this roadmap may execute until:
 

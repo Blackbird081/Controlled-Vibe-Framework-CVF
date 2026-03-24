@@ -1,3 +1,14 @@
+// W3-T9 — Governance Audit Log Consumer Bridge (CP1)
+export {
+  GovernanceAuditLogConsumerPipelineContract,
+  createGovernanceAuditLogConsumerPipelineContract,
+} from "./governance.audit.log.consumer.pipeline.contract";
+export type {
+  GovernanceAuditLogConsumerPipelineRequest,
+  GovernanceAuditLogConsumerPipelineResult,
+  GovernanceAuditLogConsumerPipelineContractDependencies,
+} from "./governance.audit.log.consumer.pipeline.contract";
+
 // W3-T8 — Governance Checkpoint Reintake Consumer Bridge (CP1–CP2)
 export {
   GovernanceCheckpointReintakeConsumerPipelineContract,

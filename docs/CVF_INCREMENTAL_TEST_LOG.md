@@ -3198,3 +3198,16 @@ Utility and guard:
   - CPF: 761→779 (+18). CP1 Full Lane. GC-023 compliant (dedicated test file).
   - CPF-internal bridge. ReversePromptingContract → ControlPlaneConsumerPipelineContract.
   - highPriorityCount > 0 → `[reverse-prompting] high-priority clarification questions require response`
+
+### Entry W1-T17/CP2
+
+- Tranche: W1-T17 — Reverse Prompting Consumer Bridge
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/reverse.prompting.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.batch.test.ts` (11 tests)
+- Tests executed:
+  - `npm test` (CPF) → PASS (790 tests, 0 failures)
+- Notes:
+  - CPF: 779→790 (+11). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch pattern: dominantTokenBudget, highPriorityResultCount, totalQuestionsCount, batchId ≠ batchHash.

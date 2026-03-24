@@ -8,6 +8,14 @@ export type {
   ReversePromptingConsumerPipelineResult,
   ReversePromptingConsumerPipelineContractDependencies,
 } from "./reverse.prompting.consumer.pipeline.contract";
+export {
+  ReversePromptingConsumerPipelineBatchContract,
+  createReversePromptingConsumerPipelineBatchContract,
+} from "./reverse.prompting.consumer.pipeline.batch.contract";
+export type {
+  ReversePromptingConsumerPipelineBatch,
+  ReversePromptingConsumerPipelineBatchContractDependencies,
+} from "./reverse.prompting.consumer.pipeline.batch.contract";
 
 // W1-T16 — Boardroom Consumer Bridge (CP1–CP2)
 export {

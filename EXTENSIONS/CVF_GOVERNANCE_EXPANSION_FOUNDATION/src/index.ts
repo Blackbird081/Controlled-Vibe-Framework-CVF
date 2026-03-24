@@ -1,4 +1,4 @@
-// W3-T8 — Governance Checkpoint Reintake Consumer Bridge (CP1)
+// W3-T8 — Governance Checkpoint Reintake Consumer Bridge (CP1–CP2)
 export {
   GovernanceCheckpointReintakeConsumerPipelineContract,
   createGovernanceCheckpointReintakeConsumerPipelineContract,
@@ -8,6 +8,15 @@ export type {
   GovernanceCheckpointReintakeConsumerPipelineResult,
   GovernanceCheckpointReintakeConsumerPipelineContractDependencies,
 } from "./governance.checkpoint.reintake.consumer.pipeline.contract";
+
+export {
+  GovernanceCheckpointReintakeConsumerPipelineBatchContract,
+  createGovernanceCheckpointReintakeConsumerPipelineBatchContract,
+} from "./governance.checkpoint.reintake.consumer.pipeline.batch.contract";
+export type {
+  GovernanceCheckpointReintakeConsumerPipelineBatch,
+  GovernanceCheckpointReintakeConsumerPipelineBatchContractDependencies,
+} from "./governance.checkpoint.reintake.consumer.pipeline.batch.contract";
 
 // W3-T7 — Governance Checkpoint Consumer Bridge (CP1–CP2)
 export {

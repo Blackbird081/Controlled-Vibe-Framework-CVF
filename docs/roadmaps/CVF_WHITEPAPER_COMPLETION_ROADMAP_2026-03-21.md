@@ -1183,3 +1183,17 @@ This roadmap means:
 - `WatchdogEscalationLogConsumerPipelineBatchContract` — batch aggregation with `escalationActiveResultCount` (only ESCALATE action sets `escalationActive`)
 - Warnings: ESCALATE → active escalation; MONITOR → monitoring in progress
 - Closure anchor: `docs/reviews/CVF_W3_T11_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+
+---
+
+## Post-Cycle Closure Record — W3-T12
+
+> Tranche: W3-T12 — Watchdog Escalation Pipeline Consumer Bridge
+> Closed: 2026-03-24
+> GEF: 428 tests (+30 from 398)
+
+- `WatchdogEscalationPipelineConsumerPipelineContract` — GEF→CPF cross-plane bridge (full pipeline): `WatchdogEscalationPipelineRequest → WatchdogEscalationPipelineContract.execute() → WatchdogEscalationPipelineResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `escalationLog.summary.slice(0, 120)`; contextId = `pipelineResult.resultId`
+- `WatchdogEscalationPipelineConsumerPipelineBatchContract` — batch aggregation with `escalationActiveResultCount` (count of results where `pipelineResult.escalationActive === true`)
+- Warnings: ESCALATE → immediate pipeline intervention required; MONITOR → pipeline monitoring in progress
+- Gap closed: W3-T5 implied — `WatchdogEscalationPipelineResult` had no governed consumer-visible enriched output path
+- Closure anchor: `docs/reviews/CVF_W3_T12_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`

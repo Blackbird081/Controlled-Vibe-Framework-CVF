@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-24
 
 > Branch: `cvf-next`
-> Last push: `W3-T11-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W3-T11
+> Last push: `W3-T12-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W3-T12
 
 ---
 
@@ -11,21 +11,21 @@
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **821 tests, 0 failures**
 - EPF (Execution Plane Foundation): **625 tests, 0 failures**
-- GEF (Governance Expansion Foundation): **398 tests, 0 failures**
+- GEF (Governance Expansion Foundation): **428 tests, 0 failures**
 
 ### Last Two Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W2-T16 | Feedback Resolution Consumer Bridge | CP1, CP2, CP3 | 625 EPF |
 | W3-T11 | Watchdog Escalation Log Consumer Bridge | CP1, CP2, CP3 | 398 GEF |
+| W3-T12 | Watchdog Escalation Pipeline Consumer Bridge | CP1, CP2, CP3 | 428 GEF |
 
 ### Key Contracts Delivered (last 4 tranches)
+- `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.pipeline.consumer.pipeline.contract.ts` — WatchdogEscalationPipelineConsumerPipelineContract (W3-T12)
+- `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.pipeline.consumer.pipeline.batch.contract.ts` — WatchdogEscalationPipelineConsumerPipelineBatchContract (W3-T12)
 - `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.log.consumer.pipeline.contract.ts` — WatchdogEscalationLogConsumerPipelineContract (W3-T11)
 - `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.log.consumer.pipeline.batch.contract.ts` — WatchdogEscalationLogConsumerPipelineBatchContract (W3-T11)
 - `CVF_EXECUTION_PLANE_FOUNDATION/src/feedback.resolution.consumer.pipeline.contract.ts` — FeedbackResolutionConsumerPipelineContract (W2-T16)
 - `CVF_EXECUTION_PLANE_FOUNDATION/src/feedback.resolution.consumer.pipeline.batch.contract.ts` — FeedbackResolutionConsumerPipelineBatchContract (W2-T16)
-- `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.alert.log.consumer.pipeline.contract.ts` — WatchdogAlertLogConsumerPipelineContract (W3-T10)
-- `CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.alert.log.consumer.pipeline.batch.contract.ts` — WatchdogAlertLogConsumerPipelineBatchContract (W3-T10)
 
 ---
 
@@ -34,9 +34,9 @@
 **Must issue a fresh GC-018 before any implementation work.**
 
 Candidate next tranche (from roadmap analysis):
-- **W3-T12** — next GEF governance slice (e.g. GovernancePolicyConsumerBridge or GovernanceAuditConsumerBridge)
-- **W2-T17** — next EPF consumer bridge (e.g. ExecutionStreamingAggregatorConsumerBridge or FeedbackRoutingConsumerBridge)
-- **W1-T19** — next CPF consumer bridge (e.g. GatewayAuthConsumerPipelineContract)
+- **W3-T13** — next GEF consumer bridge (e.g. `GovernanceConsensusSummaryConsumerBridge` or `GovernanceCheckpointLogConsumerBridge`)
+- **W2-T17** — next EPF consumer bridge (e.g. `ExecutionStreamingAggregatorConsumerBridge` or `FeedbackRoutingConsumerBridge`)
+- **W1-T19** — next CPF consumer bridge (e.g. `GatewayAuthConsumerPipelineContract`)
 
 Any of the above requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 
@@ -75,6 +75,11 @@ Any of the above requires: `GC-018 authorization → execution plan → CP1 Full
 - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`
 - empty batch → `dominantTokenBudget = 0`, valid hash
 - `batchId` ≠ `batchHash` (batchId = hash of batchHash only)
+
+### WatchdogObservabilityInput / WatchdogExecutionInput (correct field names)
+- `WatchdogObservabilityInput`: `snapshotId`, `dominantHealth` ("HEALTHY"|"DEGRADED"|"CRITICAL"|"UNKNOWN"), `criticalCount`, `degradedCount`
+- `WatchdogExecutionInput`: `summaryId`, `dominantStatus` ("PENDING"|"RUNNING"|"COMPLETED"|"FAILED"), `failedCount`, `runningCount`
+- CRITICAL triggers when: `dominantHealth === "CRITICAL"` OR `dominantStatus === "FAILED"`
 
 ---
 

@@ -496,6 +496,28 @@
         "WatchdogEscalationLogConsumerPipelineBatchContract",
         "createWatchdogEscalationLogConsumerPipelineBatchContract"
       ]
+    },
+    {
+      "scope": "GEF Watchdog Escalation Pipeline Consumer Pipeline (W3-T12 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationPipelineConsumerPipelineContract",
+        "createWatchdogEscalationPipelineConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Watchdog Escalation Pipeline Consumer Pipeline Batch (W3-T12 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationPipelineConsumerPipelineBatchContract",
+        "createWatchdogEscalationPipelineConsumerPipelineBatchContract"
+      ]
     }
   ]
 }

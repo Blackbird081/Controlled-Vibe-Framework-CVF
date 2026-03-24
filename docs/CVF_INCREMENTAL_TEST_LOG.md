@@ -2974,3 +2974,30 @@ Utility and guard:
 - Notes:
   - GEF: 386→398 (+12). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Batch aggregation: escalationActiveResultCount + dominantTokenBudget.
+
+### Entry W3-T12/CP1
+
+- Tranche: W3-T12 — Watchdog Escalation Pipeline Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.pipeline.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.consumer.pipeline.test.ts` (15 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (415 tests, 0 failures)
+- Notes:
+  - GEF: 398→415 (+17). Full Lane. GC-023 compliant (dedicated test file).
+  - Gap closed: W3-T5 implied — WatchdogEscalationPipelineResult had no governed consumer-visible enriched output path.
+  - Query = escalationLog.summary.slice(0, 120); contextId = pipelineResult.resultId.
+
+### Entry W3-T12/CP2
+
+- Tranche: W3-T12 — Watchdog Escalation Pipeline Consumer Bridge
+- Extension: CVF_GOVERNANCE_EXPANSION_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.pipeline.consumer.pipeline.batch.contract.ts`
+  - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.consumer.pipeline.batch.test.ts` (13 tests)
+- Tests executed:
+  - `npm test` (GEF) → PASS (428 tests, 0 failures)
+- Notes:
+  - GEF: 415→428 (+13). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
+  - Batch aggregation: escalationActiveResultCount (pipelineResult.escalationActive) + dominantTokenBudget.

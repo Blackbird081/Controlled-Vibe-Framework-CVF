@@ -29,6 +29,15 @@ export type {
   TruthScoreConsumerPipelineContractDependencies,
 } from "./truth.score.consumer.pipeline.contract";
 
+// W4-T9 — TruthScore Consumer Pipeline Bridge (CP2)
+export {
+  TruthScoreConsumerPipelineBatchContract,
+  createTruthScoreConsumerPipelineBatchContract,
+} from "./truth.score.consumer.pipeline.batch.contract";
+export type {
+  TruthScoreConsumerPipelineBatch,
+} from "./truth.score.consumer.pipeline.batch.contract";
+
 // W6-T8 — Truth Model Scoring Slice (CP1–CP2)
 export {
   TruthScoreContract,

@@ -1347,12 +1347,15 @@ This roadmap means:
 
 ---
 
-## W4-T11 — GovernanceSignal Consumer Pipeline Bridge (IN EXECUTION)
+## W4-T11 Post-Cycle Record
 
-> Authorization: GC-018 score 9/10 — 2026-03-25
-> LPF baseline: 557 tests
+> Tranche: W4-T11 — GovernanceSignal Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> Final LPF: 622 tests, 0 failures (+65 from 557)
 
-Planned deliverables:
-- `W4-T11 / CP1` — GovernanceSignalConsumerPipelineContract (`ThresholdAssessment → GovernanceSignalContract.signal() → GovernanceSignal → CPF`) — Full Lane (GC-019)
-- `W4-T11 / CP2` — GovernanceSignalConsumerPipelineBatchContract (`GovernanceSignalConsumerPipelineResult[] → batch with dominantTokenBudget, escalateCount, reviewCount`) — Fast Lane (GC-021)
-- `W4-T11 / CP3` — Tranche closure review — Full Lane
+- `GovernanceSignalConsumerPipelineContract` — LPF-internal bridge: `ThresholdAssessment → GovernanceSignalContract.signal() → GovernanceSignal → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `governance-signal:type:${signalType}:urgency:${urgency}:assessment:${sourceAssessmentId}`.slice(0, 120); contextId = `signalResult.signalId`
+- `GovernanceSignalConsumerPipelineBatchContract` — batch aggregation with `escalateCount` (signalType === "ESCALATE"), `reviewCount` (signalType === "TRIGGER_REVIEW"), `dominantTokenBudget`
+- Warnings: `ESCALATE` → "[governance-signal] escalation required — governed intervention triggered"; `TRIGGER_REVIEW` → "[governance-signal] review triggered — governance threshold breached"; MONITOR/NO_ACTION → no warning
+- **Gap closed**: `GovernanceSignalContract` (W4-T4, LPF governance action contract) now has a governed consumer-visible enriched output path
+- **Fourth LPF consumer bridge delivered** — ThresholdAssessment → GovernanceSignal chain now consumer-visible
+- Closure anchor: `docs/reviews/CVF_W4_T11_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

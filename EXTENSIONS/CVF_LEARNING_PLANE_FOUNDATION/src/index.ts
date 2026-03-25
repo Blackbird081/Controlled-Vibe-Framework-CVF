@@ -1,3 +1,14 @@
+// W4-T8 — Evaluation Engine Consumer Pipeline Bridge (CP1)
+export {
+  EvaluationEngineConsumerPipelineContract,
+  createEvaluationEngineConsumerPipelineContract,
+} from "./evaluation.engine.consumer.pipeline.contract";
+export type {
+  EvaluationEngineConsumerPipelineRequest,
+  EvaluationEngineConsumerPipelineResult,
+  EvaluationEngineConsumerPipelineContractDependencies,
+} from "./evaluation.engine.consumer.pipeline.contract";
+
 // W6-T8 — Truth Model Scoring Slice (CP1–CP2)
 export {
   TruthScoreContract,

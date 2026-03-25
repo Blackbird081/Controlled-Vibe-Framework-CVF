@@ -1,4 +1,4 @@
-// W1-T21 — Clarification Refinement Consumer Bridge (CP1)
+// W1-T21 — Clarification Refinement Consumer Bridge (CP1–CP2)
 export {
   ClarificationRefinementConsumerPipelineContract,
   createClarificationRefinementConsumerPipelineContract,
@@ -8,6 +8,14 @@ export type {
   ClarificationRefinementConsumerPipelineResult,
   ClarificationRefinementConsumerPipelineContractDependencies,
 } from "./clarification.refinement.consumer.pipeline.contract";
+export {
+  ClarificationRefinementConsumerPipelineBatchContract,
+  createClarificationRefinementConsumerPipelineBatchContract,
+} from "./clarification.refinement.consumer.pipeline.batch.contract";
+export type {
+  ClarificationRefinementConsumerPipelineBatch,
+  ClarificationRefinementConsumerPipelineBatchContractDependencies,
+} from "./clarification.refinement.consumer.pipeline.batch.contract";
 
 // W1-T20 — GatewayAuth Consumer Bridge (CP1–CP2)
 export {

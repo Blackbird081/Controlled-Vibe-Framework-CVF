@@ -144,6 +144,17 @@
       ]
     },
     {
+      "scope": "CPF ClarificationRefinement Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/clarification.refinement.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ClarificationRefinementConsumerPipelineBatchContract",
+        "createClarificationRefinementConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "CPF GatewayAuth Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.consumer.pipeline.test.ts",
       "forbiddenFiles": [

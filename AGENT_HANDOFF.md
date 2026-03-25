@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-25
 
 > Branch: `cvf-next`
-> Last push: `W2-T24-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T24
+> Last push: `W3-T17-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W3-T17
 
 ---
 
@@ -11,22 +11,19 @@
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **856 tests, 0 failures**
 - EPF (Execution Plane Foundation): **902 tests, 0 failures**
-- GEF (Governance Expansion Foundation): **557 tests, 0 failures**
+- GEF (Governance Expansion Foundation): **590 tests, 0 failures**
 
 ### Last Three Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W2-T22 | Execution Pipeline Consumer Bridge | CP1, CP2, CP3 | 838 EPF |
-| W2-T23 | PolicyGate Consumer Pipeline Bridge | CP1, CP2, CP3 | 870 EPF |
 | W2-T24 | FeedbackRouting Consumer Pipeline Bridge | CP1, CP2, CP3 | 902 EPF |
+| W3-T17 | WatchdogEscalation Consumer Pipeline Bridge | CP1, CP2, CP3 | 590 GEF |
 
-### Key Contracts Delivered (last 3 tranches)
+### Key Contracts Delivered (last 2 tranches)
+- `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.consumer.pipeline.contract.ts` — WatchdogEscalationConsumerPipelineContract (W3-T17)
+- `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.consumer.pipeline.batch.contract.ts` — WatchdogEscalationConsumerPipelineBatchContract (W3-T17)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/feedback.routing.consumer.pipeline.contract.ts` — FeedbackRoutingConsumerPipelineContract (W2-T24)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/feedback.routing.consumer.pipeline.batch.contract.ts` — FeedbackRoutingConsumerPipelineBatchContract (W2-T24)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/policy.gate.consumer.pipeline.contract.ts` — PolicyGateConsumerPipelineContract (W2-T23)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/policy.gate.consumer.pipeline.batch.contract.ts` — PolicyGateConsumerPipelineBatchContract (W2-T23)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.pipeline.consumer.pipeline.contract.ts` — ExecutionPipelineConsumerPipelineContract (W2-T22)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.pipeline.consumer.pipeline.batch.contract.ts` — ExecutionPipelineConsumerPipelineBatchContract (W2-T22)
 
 ---
 

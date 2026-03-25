@@ -169,7 +169,13 @@ describe("BoardroomConsumerPipelineContract", () => {
     const result = makeContract().execute({
       rounds: [makeRound("PROCEED", 1)],
       candidateItems: [
-        { itemId: "item-1", content: "boardroom item", relevanceScore: 0.8 },
+        {
+          itemId: "item-1",
+          title: "Boardroom Item",
+          content: "boardroom item",
+          source: "boardroom-test",
+          relevanceScore: 0.8,
+        },
       ],
     });
     expect(result.consumerPackage.rankedKnowledgeResult.totalRanked).toBe(1);

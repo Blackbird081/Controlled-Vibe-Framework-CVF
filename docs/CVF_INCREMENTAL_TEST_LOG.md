@@ -49,6 +49,29 @@ If none of the above is true, run focused tests only.
 
 ---
 
+## [2026-03-26] Batch: CPF legacy typecheck cleanup
+- Scope:
+  - clean legacy `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` typecheck drift so package-level `npm run check` is green
+  - load `vitest/globals` through CPF `tsconfig.json`
+  - fix stale `RankableKnowledgeItem` fixtures in boardroom and reverse-prompting tests
+- Change reference: `chore(test): clean CPF legacy typecheck drift`
+- Impacted scope: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION`
+- Files changed:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tsconfig.json`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.batch.test.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.test.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.test.ts`
+- Tests executed:
+  - `npm run check` (workdir `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION`) -> PASS
+  - `npm test -- tests/boardroom.consumer.pipeline.test.ts tests/boardroom.consumer.pipeline.batch.test.ts tests/reverse.prompting.consumer.pipeline.test.ts tests/clarification.refinement.consumer.pipeline.test.ts tests/clarification.refinement.consumer.pipeline.batch.test.ts tests/knowledge.query.consumer.pipeline.test.ts tests/knowledge.query.consumer.pipeline.batch.test.ts` (workdir `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION`) -> PASS, 141 passed
+- Skip scope:
+  - full CPF test suite: skipped because impacted legacy failures were bounded to the repaired typecheck/test surfaces and the focused batch passed
+  - non-CPF extensions: skipped because unchanged
+- Notes/Risks:
+  - cleanup is config-and-fixture scoped; no production contract logic changed
+
+---
+
 ## 4) Logging Standard
 
 For each testing batch, log:

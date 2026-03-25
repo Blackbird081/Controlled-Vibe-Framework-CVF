@@ -202,7 +202,13 @@ describe("ReversePromptingConsumerPipelineContract", () => {
     const result = makeContract().execute({
       intakeResult: makeIntakeResult(),
       candidateItems: [
-        { itemId: "item-1", content: "prompting item", relevanceScore: 0.9 },
+        {
+          itemId: "item-1",
+          title: "Prompting Item",
+          content: "prompting item",
+          source: "reverse-prompting-test",
+          relevanceScore: 0.9,
+        },
       ],
     });
     expect(result.consumerPackage.rankedKnowledgeResult.totalRanked).toBe(1);

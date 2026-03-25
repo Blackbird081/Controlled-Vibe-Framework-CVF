@@ -40,7 +40,9 @@ function makePipelineResult(decision: BoardroomDecision, idx = 0) {
     candidateItems: [
       {
         itemId: `item-${idx}`,
+        title: `title-${idx}`,
         content: `content-${idx}`,
+        source: `source-${idx}`,
         relevanceScore: 0.5 + idx * 0.1,
       },
     ],

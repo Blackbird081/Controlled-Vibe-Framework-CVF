@@ -17,3 +17,5 @@ GC-026 Progress Tracker Sync Note
 - Current active tranche: NONE — W4-T11 CLOSED DELIVERED — LPF 622 tests — FOURTH LPF CONSUMER BRIDGE COMPLETE
 - Next governed move: fresh GC-018 survey — next highest-value unbridged LPF aggregate contract (PatternDriftContract, LearningObservabilityContract) or highest-value unbridged EPF aggregate contract
 - Canonical tracker updated: YES
+- Canonical status review updated: YES
+- Canonical roadmap updated: YES

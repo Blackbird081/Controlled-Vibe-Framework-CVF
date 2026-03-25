@@ -6,7 +6,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-25` (W4-T11 closed)
+> Last refreshed: `2026-03-25` (W4-T11 closed, GC-026 sync reconfirmed for remote lock)
 
 ---
 
@@ -133,6 +133,7 @@ Memory class: POINTER_RECORD
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes post-cycle records through `W4-T11`)
+- Latest GC-026 tracker sync note: `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T11_CLOSURE_2026-03-25.md`
 - Current closure anchor: `docs/reviews/CVF_W4_T11_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
 - Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T11_GOVERNANCE_SIGNAL_CONSUMER_BRIDGE_2026-03-25.md` (`W4-T11` now closed; next requires fresh `GC-018`)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

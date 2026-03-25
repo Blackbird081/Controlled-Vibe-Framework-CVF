@@ -661,6 +661,17 @@
         "PolicyGateConsumerPipelineContract",
         "createPolicyGateConsumerPipelineContract"
       ]
+    },
+    {
+      "scope": "EPF PolicyGate Consumer Pipeline Batch (W2-T23 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/policy.gate.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PolicyGateConsumerPipelineBatchContract",
+        "createPolicyGateConsumerPipelineBatchContract"
+      ]
     }
   ]
 }

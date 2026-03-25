@@ -639,6 +639,17 @@
         "GovernanceCheckpointReintakeSummaryConsumerPipelineBatchContract",
         "createGovernanceCheckpointReintakeSummaryConsumerPipelineBatchContract"
       ]
+    },
+    {
+      "scope": "EPF Execution Pipeline Consumer Pipeline Batch (W2-T22 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.pipeline.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionPipelineConsumerPipelineBatchContract",
+        "createExecutionPipelineConsumerPipelineBatchContract"
+      ]
     }
   ]
 }

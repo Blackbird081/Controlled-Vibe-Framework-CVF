@@ -1,3 +1,14 @@
+// W1-T20 — GatewayAuth Consumer Bridge (CP1)
+export {
+  GatewayAuthConsumerPipelineContract,
+  createGatewayAuthConsumerPipelineContract,
+} from "./gateway.auth.consumer.pipeline.contract";
+export type {
+  GatewayAuthConsumerPipelineRequest,
+  GatewayAuthConsumerPipelineResult,
+  GatewayAuthConsumerPipelineContractDependencies,
+} from "./gateway.auth.consumer.pipeline.contract";
+
 // W1-T19 — Knowledge Ranking Consumer Bridge (CP1–CP2)
 export {
   KnowledgeRankingConsumerPipelineContract,

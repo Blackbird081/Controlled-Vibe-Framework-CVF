@@ -586,6 +586,17 @@
       ]
     },
     {
+      "scope": "EPF Async Execution Status Consumer Pipeline (W2-T21 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.async.status.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AsyncExecutionStatusConsumerPipelineContract",
+        "createAsyncExecutionStatusConsumerPipelineContract"
+      ]
+    },
+    {
       "scope": "GEF Governance Checkpoint Reintake Summary Consumer Pipeline (W3-T15 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.summary.consumer.pipeline.test.ts",
       "forbiddenFiles": [

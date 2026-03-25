@@ -1213,3 +1213,18 @@ This roadmap means:
   - `W1-T21 / CP1` — ClarificationRefinementConsumerPipelineContract (`ReversePromptPacket + ClarificationAnswer[] → ClarificationRefinementContract.refine() → RefinedIntakeRequest → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from confidenceBoost + answeredCount; contextId = refinedRequest.refinedId; warnings for zero and low confidence) — Full Lane
   - `W1-T21 / CP2` — ClarificationRefinementConsumerPipelineBatchContract (`ClarificationRefinementConsumerPipelineResult[] → batch with dominantTokenBudget, lowConfidenceCount`) — Fast Lane (GC-021)
   - `W1-T21 / CP3` — Tranche closure review — Full Lane
+
+---
+
+## Post-Cycle Record — W1-T21
+
+> Tranche: W1-T21 — Clarification Refinement Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> Final CPF: 945 tests, 0 failures (+48 from 897)
+
+- `ClarificationRefinementConsumerPipelineContract` — CPF-internal bridge: `ReversePromptPacket + ClarificationAnswer[] → ClarificationRefinementContract.refine() → RefinedIntakeRequest → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `clarification-refinement:confidence:${confidenceBoost.toFixed(2)}:answered:${answeredCount}`.slice(0, 120); contextId = `refinedRequest.refinedId`
+- `ClarificationRefinementConsumerPipelineBatchContract` — batch aggregation with `lowConfidenceCount` (confidenceBoost < 0.5)
+- Warnings: confidenceBoost === 0 → "[clarification] no answers applied — refinement yielded no confidence boost"; 0 < confidenceBoost < 0.5 → "[clarification] low confidence refinement — insufficient answers applied"; confidenceBoost >= 0.5 → no warning
+- Gap closed: `ClarificationRefinementContract` (W1-T5 CP2) had no governed consumer-visible enriched output path; reverse-prompting loop (W1-T17 + W1-T21) now fully governed
+- `KnowledgeQueryContract` is the sole remaining unbridged CPF aggregate contract
+- Closure anchor: `docs/reviews/CVF_W1_T21_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

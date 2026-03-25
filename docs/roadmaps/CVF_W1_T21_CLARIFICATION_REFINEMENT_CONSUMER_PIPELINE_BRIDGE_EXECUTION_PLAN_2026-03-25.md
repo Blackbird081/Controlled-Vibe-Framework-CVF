@@ -79,6 +79,6 @@ Output:  ClarificationRefinementConsumerPipelineBatch { batchId, createdAt, resu
 | CP | Status |
 |---|---|
 | GC-018 + GC-026 auth | DONE |
-| CP1 | PENDING |
-| CP2 | PENDING |
-| CP3 | PENDING |
+| CP1 | DONE — 29 tests, CPF 926 |
+| CP2 | DONE — 19 tests, CPF 945 |
+| CP3 | DONE — tranche closed |

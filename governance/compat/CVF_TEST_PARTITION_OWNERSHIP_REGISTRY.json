@@ -652,6 +652,17 @@
       ]
     },
     {
+      "scope": "EPF FeedbackRouting Consumer Pipeline (W2-T24 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.routing.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackRoutingConsumerPipelineContract",
+        "createFeedbackRoutingConsumerPipelineContract"
+      ]
+    },
+    {
       "scope": "EPF PolicyGate Consumer Pipeline (W2-T23 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/policy.gate.consumer.pipeline.test.ts",
       "forbiddenFiles": [

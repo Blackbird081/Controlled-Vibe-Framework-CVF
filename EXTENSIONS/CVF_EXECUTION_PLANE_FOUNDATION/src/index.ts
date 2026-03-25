@@ -1,3 +1,14 @@
+// W2-T24 — FeedbackRouting Consumer Pipeline Bridge (CP1)
+export {
+  FeedbackRoutingConsumerPipelineContract,
+  createFeedbackRoutingConsumerPipelineContract,
+} from "./feedback.routing.consumer.pipeline.contract";
+export type {
+  FeedbackRoutingConsumerPipelineRequest,
+  FeedbackRoutingConsumerPipelineResult,
+  FeedbackRoutingConsumerPipelineContractDependencies,
+} from "./feedback.routing.consumer.pipeline.contract";
+
 // W2-T23 — PolicyGate Consumer Pipeline Bridge (CP2)
 export {
   PolicyGateConsumerPipelineBatchContract,

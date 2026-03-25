@@ -1242,3 +1242,18 @@ This roadmap means:
   - `W1-T22 / CP1` — KnowledgeQueryConsumerPipelineContract (`KnowledgeQueryRequest → KnowledgeQueryContract.query() → KnowledgeResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from totalFound + relevanceThreshold; contextId = queryResult.contextId; warnings for empty result and zero threshold) — Full Lane
   - `W1-T22 / CP2` — KnowledgeQueryConsumerPipelineBatchContract (`KnowledgeQueryConsumerPipelineResult[] → batch with dominantTokenBudget, emptyResultCount`) — Fast Lane (GC-021)
   - `W1-T22 / CP3` — Tranche closure review — Full Lane
+
+---
+
+## W1-T22 Post-Cycle Record
+
+> Tranche: W1-T22 — Knowledge Query Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> Final CPF: 991 tests, 0 failures (+46 from 945)
+
+- `KnowledgeQueryConsumerPipelineContract` — CPF-internal bridge: `KnowledgeQueryRequest → KnowledgeQueryContract.query() → KnowledgeResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `knowledge-query:found:${totalFound}:threshold:${relevanceThreshold.toFixed(2)}`.slice(0, 120); contextId = `queryResult.contextId`
+- `KnowledgeQueryConsumerPipelineBatchContract` — batch aggregation with `emptyResultCount` (totalFound === 0)
+- Warnings: `totalFound === 0` → "[knowledge-query] no results found — query returned empty set"; `relevanceThreshold === 0.0` → "[knowledge-query] zero relevance threshold — all items included regardless of quality"; both can apply simultaneously; neither → no warnings
+- **Gap closed**: `KnowledgeQueryContract` (W1-T10 CP1) now has a governed consumer-visible enriched output path
+- **ALL known CPF aggregate contracts are now bridged** — no remaining unbridged CPF consumer bridge gaps
+- Closure anchor: `docs/reviews/CVF_W1_T22_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

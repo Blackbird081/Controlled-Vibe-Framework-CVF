@@ -1341,3 +1341,18 @@ This roadmap means:
 - Warnings: FAILED → failed tickets require immediate intervention; RUNNING → execution in progress; Dominance: FAILED > RUNNING > PENDING > COMPLETED (severity-first)
 - Gap closed: AsyncExecutionStatusContract (W2-T7 CP2) had no governed consumer-visible enriched output path
 - Closure anchor: `docs/reviews/CVF_W2_T21_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## Post-Cycle Closure Record — W2-T22
+
+> Tranche: W2-T22 — Execution Pipeline Consumer Bridge
+> Closed: 2026-03-25
+> EPF: 838 tests (+31 from 807)
+
+- `ExecutionPipelineConsumerPipelineContract` — EPF → CPF cross-plane bridge: `ExecutionBridgeReceipt → ExecutionPipelineContract.run() → ExecutionPipelineReceipt → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `[pipeline] failed:${failedCount} sandboxed:${sandboxedCount} total:${totalEntries}`.slice(0, 120); contextId = `pipelineReceipt.pipelineReceiptId`
+- `ExecutionPipelineConsumerPipelineBatchContract` — batch aggregation with `failedResultCount` (pipelineReceipt.failedCount > 0) and `sandboxedResultCount` (pipelineReceipt.sandboxedCount > 0)
+- Warnings: failedCount > 0 → "[pipeline] execution failures detected — review pipeline receipt"; sandboxedCount > 0 → "[pipeline] sandboxed executions present — review required"
+- Determinism fix: `commandRuntimeDependencies.now` threaded into `ExecutionPipelineContract` to ensure CommandRuntimeContract uses the shared clock
+- Gap closed: `ExecutionPipelineContract` (EPF full-pipeline receipt) had no governed consumer-visible enriched output path
+- Closure anchor: `docs/reviews/CVF_W2_T22_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

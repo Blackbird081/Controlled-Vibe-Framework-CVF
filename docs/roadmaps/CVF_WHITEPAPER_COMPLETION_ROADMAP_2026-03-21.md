@@ -1199,3 +1199,17 @@ This roadmap means:
 - Warnings: DENIED → "[gateway-auth] access denied — tenant authentication failed"; EXPIRED → "[gateway-auth] credential expired — tenant session requires renewal"; REVOKED → "[gateway-auth] credential revoked — tenant access has been revoked"; AUTHENTICATED → no warning
 - Gap closed: `GatewayAuthContract` (CPF governance-critical tenant auth decision contract — W1-T8 CP1) had no governed consumer-visible enriched output path
 - Closure anchor: `docs/reviews/CVF_W1_T20_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## W1-T21 — Clarification Refinement Consumer Pipeline Bridge
+
+> Tranche: W1-T21
+> Authorized: 2026-03-25
+> Authorization source: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T21_CLARIFICATION_REFINEMENT_CONSUMER_BRIDGE_2026-03-25.md`
+> GC-018 score: 10/10
+
+- `W1-T21 — Clarification Refinement Consumer Pipeline Bridge` is now authorized (GC-018: 10/10) as the next bounded CPF consumer bridge tranche; closes the reverse-prompting loop — `ClarificationRefinementContract` (W1-T5 CP2) produces `RefinedIntakeRequest` with `confidenceBoost` (0.0–1.0), the governance-critical clarification quality signal with no governed consumer-visible enriched output path
+  - `W1-T21 / CP1` — ClarificationRefinementConsumerPipelineContract (`ReversePromptPacket + ClarificationAnswer[] → ClarificationRefinementContract.refine() → RefinedIntakeRequest → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from confidenceBoost + answeredCount; contextId = refinedRequest.refinedId; warnings for zero and low confidence) — Full Lane
+  - `W1-T21 / CP2` — ClarificationRefinementConsumerPipelineBatchContract (`ClarificationRefinementConsumerPipelineResult[] → batch with dominantTokenBudget, lowConfidenceCount`) — Fast Lane (GC-021)
+  - `W1-T21 / CP3` — Tranche closure review — Full Lane

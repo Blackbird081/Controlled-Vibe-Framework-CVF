@@ -1,3 +1,14 @@
+// W2-T23 — PolicyGate Consumer Pipeline Bridge (CP1)
+export {
+  PolicyGateConsumerPipelineContract,
+  createPolicyGateConsumerPipelineContract,
+} from "./policy.gate.consumer.pipeline.contract";
+export type {
+  PolicyGateConsumerPipelineRequest,
+  PolicyGateConsumerPipelineResult,
+  PolicyGateConsumerPipelineContractDependencies,
+} from "./policy.gate.consumer.pipeline.contract";
+
 // W2-T22 — Execution Pipeline Consumer Bridge (CP2)
 export {
   ExecutionPipelineConsumerPipelineBatchContract,

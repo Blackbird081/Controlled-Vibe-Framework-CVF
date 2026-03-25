@@ -144,6 +144,17 @@
       ]
     },
     {
+      "scope": "CPF GatewayAuth Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayAuthConsumerPipelineBatchContract",
+        "createGatewayAuthConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "CPF Gateway PII Detection Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.consumer.pipeline.test.ts",
       "forbiddenFiles": [

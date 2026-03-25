@@ -1300,3 +1300,18 @@ This roadmap means:
   - `W4-T9 / CP1` — TruthScoreConsumerPipelineContract (`TruthModel → TruthScoreContract.score() → TruthScore → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from scoreClass + compositeScore + sourceTruthModelId; contextId = scoreResult.scoreId; warnings for INSUFFICIENT and WEAK) — Full Lane
   - `W4-T9 / CP2` — TruthScoreConsumerPipelineBatchContract (`TruthScoreConsumerPipelineResult[] → batch with dominantTokenBudget, insufficientCount, weakCount`) — Fast Lane (GC-021)
   - `W4-T9 / CP3` — Tranche closure review — Full Lane
+
+---
+
+## W4-T9 Post-Cycle Record
+
+> Tranche: W4-T9 — TruthScore Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> Final LPF: 496 tests, 0 failures (+60 from 436)
+
+- `TruthScoreConsumerPipelineContract` — LPF-internal bridge: `TruthModel → TruthScoreContract.score() → TruthScore → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `truth-score:class:${scoreClass}:score:${compositeScore}:model:${sourceTruthModelId}`.slice(0, 120); contextId = `scoreResult.scoreId`
+- `TruthScoreConsumerPipelineBatchContract` — batch aggregation with `insufficientCount` (scoreClass === "INSUFFICIENT"), `weakCount` (scoreClass === "WEAK"), `dominantTokenBudget`
+- Warnings: `scoreClass === "INSUFFICIENT"` → "[truth-score] insufficient truth data — model not actionable"; `scoreClass === "WEAK"` → "[truth-score] weak truth signal — model quality degraded"; STRONG/ADEQUATE → no warning
+- **Gap closed**: `TruthScoreContract` (W6-T8 CP1) now has a governed consumer-visible enriched output path
+- **Second LPF consumer bridge delivered** — composite truth score (0–100) and qualitative class now consumer-visible
+- Closure anchor: `docs/reviews/CVF_W4_T9_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

@@ -104,6 +104,6 @@ Artifacts:
 | CP | Status |
 |---|---|
 | GC-018 + GC-026 auth | DONE |
-| CP1 | PENDING |
-| CP2 | PENDING |
-| CP3 | PENDING |
+| CP1 | DONE |
+| CP2 | DONE |
+| CP3 | DONE |

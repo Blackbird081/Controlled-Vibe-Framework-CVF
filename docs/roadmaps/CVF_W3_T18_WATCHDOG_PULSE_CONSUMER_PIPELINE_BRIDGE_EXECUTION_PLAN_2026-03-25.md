@@ -79,6 +79,6 @@ batchId = hash("w3-t18-cp2-batch-id", batchHash)
 | CP | Status |
 |---|---|
 | GC-018 + GC-026 auth | DONE |
-| CP1 | IN PROGRESS |
-| CP2 | PENDING |
-| CP3 | PENDING |
+| CP1 | DONE — 22 tests, 612 GEF |
+| CP2 | DONE — 13 tests, 625 GEF |
+| CP3 | DONE — CLOSED DELIVERED |

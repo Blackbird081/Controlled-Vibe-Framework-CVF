@@ -120,6 +120,19 @@ Primary references:
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.round.contract.ts`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.transition.gate.contract.ts`
 
+### `GC-029` — Extension Package Check
+
+Use when:
+
+- extension-local source, test, or package-config changes are being made under `EXTENSIONS/`
+- a touched extension package has its own `package.json` and `scripts.check`
+- focused tests are green but package-level verification still must be proven before push
+
+Primary references:
+
+- `governance/toolkit/05_OPERATION/CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`
+- `governance/compat/check_extension_package_check.py`
+
 ### `GC-024` — Test Partition Ownership
 
 Use when:
@@ -143,6 +156,7 @@ Use this routing table after reading the always-on bootstrap:
 | pause, resume, shift handoff, agent transfer | `GC-020` |
 | multi-agent intake review, rebuttal, or decision-pack drafting | `GC-027` |
 | live boardroom deliberation in intake/design flow | `GC-028` + `AI Boardroom` protocol + active roadmap |
+| extension-local source, test, or package-config changes | `GC-029` |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |
 | ordinary tranche-local implementation already authorized | active roadmap + tranche packet only |

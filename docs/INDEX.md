@@ -108,6 +108,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
 - `reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`
 - `reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`
+- `../governance/toolkit/05_OPERATION/CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`

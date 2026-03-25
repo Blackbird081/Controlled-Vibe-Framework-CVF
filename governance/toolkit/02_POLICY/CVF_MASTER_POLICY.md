@@ -147,13 +147,19 @@ Personal AI usage unrelated to company work is excluded.
     - This rule governs canonical documentation only; it does not replace live `AI Boardroom` deliberation inside the Control Plane.
     - The separate canonical runtime/reference boundary for boardroom deliberation is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
  22. Live `AI Boardroom` deliberation is a separate high-criticality control and must truthfully gate downstream work:
-    - This rule applies when multiple agents or perspectives deliberate inside the live Control Plane before downstream design or orchestration continues.
-    - The canonical sequence is: boardroom session packet -> dissent log when needed -> transition decision -> only then the next allowed runtime stage.
-    - Canonical templates: `docs/reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md`, `docs/reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`, and `docs/reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`.
-    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_BOARDROOM_RUNTIME_GUARD.md`.
-    - Automated enforcement reference: `governance/compat/check_boardroom_runtime_governance_compat.py`.
-    - The canonical runtime/reference protocol is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
-    - Downstream orchestration must remain blocked unless the boardroom transition gate returns `PROCEED_TO_ORCHESTRATION`.
+     - This rule applies when multiple agents or perspectives deliberate inside the live Control Plane before downstream design or orchestration continues.
+     - The canonical sequence is: boardroom session packet -> dissent log when needed -> transition decision -> only then the next allowed runtime stage.
+     - Canonical templates: `docs/reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md`, `docs/reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`, and `docs/reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_BOARDROOM_RUNTIME_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_boardroom_runtime_governance_compat.py`.
+     - The canonical runtime/reference protocol is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
+     - Downstream orchestration must remain blocked unless the boardroom transition gate returns `PROCEED_TO_ORCHESTRATION`.
+ 23. Touched extension packages under `EXTENSIONS/` must pass their own package-level `check` script before push when governed changes affect source, test, or package config files:
+     - This rule applies to extension packages with `package.json` and `scripts.check`.
+     - The package-level `check` script is mandatory even when focused tests or repo-level governance checks already pass.
+     - Touched packages must not rely on “green local test files” as a substitute for package-level verification.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_extension_package_check.py`.
 
 ---
 

@@ -1,3 +1,14 @@
+// W1-T21 — Clarification Refinement Consumer Bridge (CP1)
+export {
+  ClarificationRefinementConsumerPipelineContract,
+  createClarificationRefinementConsumerPipelineContract,
+} from "./clarification.refinement.consumer.pipeline.contract";
+export type {
+  ClarificationRefinementConsumerPipelineRequest,
+  ClarificationRefinementConsumerPipelineResult,
+  ClarificationRefinementConsumerPipelineContractDependencies,
+} from "./clarification.refinement.consumer.pipeline.contract";
+
 // W1-T20 — GatewayAuth Consumer Bridge (CP1–CP2)
 export {
   GatewayAuthConsumerPipelineContract,

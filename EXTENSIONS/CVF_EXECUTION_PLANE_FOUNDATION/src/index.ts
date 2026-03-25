@@ -1,3 +1,14 @@
+// W2-T22 — Execution Pipeline Consumer Bridge (CP1)
+export {
+  ExecutionPipelineConsumerPipelineContract,
+  createExecutionPipelineConsumerPipelineContract,
+} from "./execution.pipeline.consumer.pipeline.contract";
+export type {
+  ExecutionPipelineConsumerPipelineRequest,
+  ExecutionPipelineConsumerPipelineResult,
+  ExecutionPipelineConsumerPipelineContractDependencies,
+} from "./execution.pipeline.consumer.pipeline.contract";
+
 // W2-T21 — Async Execution Status Consumer Bridge (CP1–CP2)
 export {
   AsyncExecutionStatusConsumerPipelineBatchContract,

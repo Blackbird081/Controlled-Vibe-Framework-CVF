@@ -1,8 +1,8 @@
-# CVF Agent Handoff — 2026-03-24
+# CVF Agent Handoff — 2026-03-25
 
 > Branch: `cvf-next`
-> Last push: `W2-T20-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T20
+> Last push: `W2-T21-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T21
 
 ---
 
@@ -10,28 +10,23 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **856 tests, 0 failures**
-- EPF (Execution Plane Foundation): **774 tests, 0 failures**
+- EPF (Execution Plane Foundation): **807 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **557 tests, 0 failures**
 
-### Last Two Tranches Closed
+### Last Three Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W3-T16 | Governance Audit Signal Consumer Bridge | CP1, CP2, CP3 | 557 GEF |
 | W2-T19 | Streaming Execution Summary Consumer Bridge | CP1, CP2, CP3 | 732 EPF |
 | W2-T20 | Execution Observation Consumer Bridge | CP1, CP2, CP3 | 774 EPF |
+| W2-T21 | Async Execution Status Consumer Bridge | CP1, CP2, CP3 | 807 EPF |
 
 ### Key Contracts Delivered (last 4 tranches)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.async.status.consumer.pipeline.contract.ts` — AsyncExecutionStatusConsumerPipelineContract (W2-T21)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.async.status.consumer.pipeline.batch.contract.ts` — AsyncExecutionStatusConsumerPipelineBatchContract (W2-T21)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.observation.consumer.pipeline.contract.ts` — ExecutionObservationConsumerPipelineContract (W2-T20)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.observation.consumer.pipeline.batch.contract.ts` — ExecutionObservationConsumerPipelineBatchContract (W2-T20)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.streaming.summary.consumer.pipeline.contract.ts` — StreamingExecutionSummaryConsumerPipelineContract (W2-T19)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.streaming.summary.consumer.pipeline.batch.contract.ts` — StreamingExecutionSummaryConsumerPipelineBatchContract (W2-T19)
-- `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.audit.signal.consumer.pipeline.contract.ts` — GovernanceAuditSignalConsumerPipelineContract (W3-T16)
-- `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/governance.audit.signal.consumer.pipeline.batch.contract.ts` — GovernanceAuditSignalConsumerPipelineBatchContract (W3-T16)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.multi.agent.coordination.summary.consumer.pipeline.contract.ts` — MultiAgentCoordinationSummaryConsumerPipelineContract (W2-T18)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.multi.agent.coordination.summary.consumer.pipeline.batch.contract.ts` — MultiAgentCoordinationSummaryConsumerPipelineBatchContract (W2-T18)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.ranking.consumer.pipeline.batch.contract.ts` — KnowledgeRankingConsumerPipelineBatchContract (W1-T19)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.audit.summary.consumer.pipeline.contract.ts` — ExecutionAuditSummaryConsumerPipelineContract (W2-T15)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.audit.summary.consumer.pipeline.batch.contract.ts` — ExecutionAuditSummaryConsumerPipelineBatchContract (W2-T15)
 
 ---
 
@@ -41,8 +36,18 @@
 
 Current guidance:
 - no tranche is currently active
-- `W2-T20` is now closed and no longer a candidate
-- next move should favor the highest-value capability gap under `GC-018` stop-boundary rules rather than continuing low-yield validation or packaging-only work
+- `W2-T21` is now closed and no longer a candidate
+- next move should favor the highest-value capability gap under `GC-018` stop-boundary rules
+
+**Remaining EPF unbridged aggregate contracts (surveyed 2026-03-25):**
+- `ExecutionPipelineContract.run(ExecutionBridgeReceipt) → ExecutionPipelineReceipt` — `pipelineReceiptId`, `failedCount`, `sandboxedCount`, `executedCount`, `totalEntries`, `warnings`
+- `PolicyGateContract.evaluate(DispatchResult) → PolicyGateResult` — `gateId`, `allowedCount`, `deniedCount`, `reviewRequiredCount`, `sandboxedCount`
+- `FeedbackRoutingContract.route(ExecutionFeedbackSignal) → FeedbackRoutingDecision` — individual routing (single item, not aggregate — lower priority)
+
+**W2-T22 recommended**: `ExecutionPipelineReceipt` consumer bridge — bridges `ExecutionPipelineContract.run()` which is the main full-pipeline execution receipt.
+- Query: `` `[pipeline] failed:${failedCount} sandboxed:${sandboxedCount} total:${totalEntries}`.slice(0, 120) ``
+- contextId: `receipt.pipelineReceiptId`
+- Warnings: failedCount > 0 → "[pipeline] execution failures detected — review pipeline receipt"
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

@@ -1327,3 +1327,17 @@ This roadmap means:
 - Warnings: IMMEDIATE → immediate reintake required; DEFERRED → deferred reintake scheduled; Dominance: IMMEDIATE > DEFERRED > NONE (severity-first)
 - Gap closed: W6-T5 CP2 implied — `CheckpointReintakeSummary` had no governed consumer-visible enriched output path
 - Closure anchor: `docs/reviews/CVF_W3_T15_TRANCHE_CLOSURE_REVIEW_2026-03-24.md`
+
+---
+
+## Post-Cycle Closure Record — W2-T21
+
+> Tranche: W2-T21 — Async Execution Status Consumer Bridge
+> Closed: 2026-03-25
+> EPF: 807 tests (+33 from 774)
+
+- `AsyncExecutionStatusConsumerPipelineContract` — EPF → CPF cross-plane bridge: `AsyncCommandRuntimeTicket[] → AsyncExecutionStatusContract.assess() → AsyncExecutionStatusSummary → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `[async-status] ${dominantStatus} — ${totalTickets} ticket(s)`.slice(0, 120); contextId = `summary.summaryId`
+- `AsyncExecutionStatusConsumerPipelineBatchContract` — batch aggregation with `failedResultCount` (dominantStatus === "FAILED") and `runningResultCount` (dominantStatus === "RUNNING")
+- Warnings: FAILED → failed tickets require immediate intervention; RUNNING → execution in progress; Dominance: FAILED > RUNNING > PENDING > COMPLETED (severity-first)
+- Gap closed: AsyncExecutionStatusContract (W2-T7 CP2) had no governed consumer-visible enriched output path
+- Closure anchor: `docs/reviews/CVF_W2_T21_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

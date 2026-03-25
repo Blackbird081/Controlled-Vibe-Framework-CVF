@@ -133,6 +133,17 @@
       ]
     },
     {
+      "scope": "CPF KnowledgeQuery Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeQueryConsumerPipelineContract",
+        "createKnowledgeQueryConsumerPipelineContract"
+      ]
+    },
+    {
       "scope": "CPF ClarificationRefinement Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/clarification.refinement.consumer.pipeline.test.ts",
       "forbiddenFiles": [

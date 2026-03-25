@@ -1,3 +1,14 @@
+// W1-T22 — Knowledge Query Consumer Bridge (CP1)
+export {
+  KnowledgeQueryConsumerPipelineContract,
+  createKnowledgeQueryConsumerPipelineContract,
+} from "./knowledge.query.consumer.pipeline.contract";
+export type {
+  KnowledgeQueryConsumerPipelineRequest,
+  KnowledgeQueryConsumerPipelineResult,
+  KnowledgeQueryConsumerPipelineContractDependencies,
+} from "./knowledge.query.consumer.pipeline.contract";
+
 // W1-T21 — Clarification Refinement Consumer Bridge (CP1–CP2)
 export {
   ClarificationRefinementConsumerPipelineContract,

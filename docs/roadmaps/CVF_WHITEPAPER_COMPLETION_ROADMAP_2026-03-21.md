@@ -1315,3 +1315,17 @@ This roadmap means:
 - **Gap closed**: `TruthScoreContract` (W6-T8 CP1) now has a governed consumer-visible enriched output path
 - **Second LPF consumer bridge delivered** — composite truth score (0–100) and qualitative class now consumer-visible
 - Closure anchor: `docs/reviews/CVF_W4_T9_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## W4-T10 Authorized Tranche
+
+> Tranche: W4-T10
+> Authorized: 2026-03-25
+> Authorization source: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T10_PATTERN_DETECTION_CONSUMER_BRIDGE_2026-03-25.md`
+> GC-018 score: 9/10
+
+- `W4-T10 — PatternDetection Consumer Pipeline Bridge` is now authorized (GC-018: 9/10); `PatternDetectionContract` produces `PatternInsight` (dominantPattern, healthSignal, rates) with no governed consumer-visible enriched output path
+  - `W4-T10 / CP1` — PatternDetectionConsumerPipelineContract (`FeedbackLedger → PatternDetectionContract.analyze() → PatternInsight → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from dominantPattern + healthSignal + sourceLedgerId; contextId = insightResult.insightId; warnings for CRITICAL and DEGRADED) — Full Lane
+  - `W4-T10 / CP2` — PatternDetectionConsumerPipelineBatchContract (`PatternDetectionConsumerPipelineResult[] → batch with dominantTokenBudget, criticalCount, degradedCount`) — Fast Lane (GC-021)
+  - `W4-T10 / CP3` — Tranche closure review — Full Lane

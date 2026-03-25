@@ -1329,3 +1329,18 @@ This roadmap means:
   - `W4-T10 / CP1` — PatternDetectionConsumerPipelineContract (`FeedbackLedger → PatternDetectionContract.analyze() → PatternInsight → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from dominantPattern + healthSignal + sourceLedgerId; contextId = insightResult.insightId; warnings for CRITICAL and DEGRADED) — Full Lane
   - `W4-T10 / CP2` — PatternDetectionConsumerPipelineBatchContract (`PatternDetectionConsumerPipelineResult[] → batch with dominantTokenBudget, criticalCount, degradedCount`) — Fast Lane (GC-021)
   - `W4-T10 / CP3` — Tranche closure review — Full Lane
+
+---
+
+## W4-T10 Post-Cycle Record
+
+> Tranche: W4-T10 — PatternDetection Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> Final LPF: 557 tests, 0 failures (+61 from 496)
+
+- `PatternDetectionConsumerPipelineContract` — LPF-internal bridge: `FeedbackLedger → PatternDetectionContract.analyze() → PatternInsight → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `pattern-detection:dominant:${dominantPattern}:health:${healthSignal}:ledger:${sourceLedgerId}`.slice(0, 120); contextId = `insightResult.insightId`
+- `PatternDetectionConsumerPipelineBatchContract` — batch aggregation with `criticalCount` (healthSignal === "CRITICAL"), `degradedCount` (healthSignal === "DEGRADED"), `dominantTokenBudget`
+- Warnings: `CRITICAL` → "[pattern-detection] critical health signal — governed intervention required"; `DEGRADED` → "[pattern-detection] degraded health signal — pattern quality at risk"; HEALTHY → no warning
+- **Gap closed**: `PatternDetectionContract` (earliest LPF aggregate contract) now has a governed consumer-visible enriched output path
+- **Third LPF consumer bridge delivered** — FeedbackLedger → PatternInsight chain now consumer-visible
+- Closure anchor: `docs/reviews/CVF_W4_T10_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

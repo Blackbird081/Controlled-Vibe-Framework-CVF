@@ -652,6 +652,17 @@
       ]
     },
     {
+      "scope": "EPF FeedbackRouting Consumer Pipeline Batch (W2-T24 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.routing.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackRoutingConsumerPipelineBatchContract",
+        "createFeedbackRoutingConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "EPF FeedbackRouting Consumer Pipeline (W2-T24 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.routing.consumer.pipeline.test.ts",
       "forbiddenFiles": [

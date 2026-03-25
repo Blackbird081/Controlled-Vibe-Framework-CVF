@@ -1,3 +1,13 @@
+// W2-T24 — FeedbackRouting Consumer Pipeline Bridge (CP2)
+export {
+  FeedbackRoutingConsumerPipelineBatchContract,
+  createFeedbackRoutingConsumerPipelineBatchContract,
+} from "./feedback.routing.consumer.pipeline.batch.contract";
+export type {
+  FeedbackRoutingConsumerPipelineBatch,
+  FeedbackRoutingConsumerPipelineBatchContractDependencies,
+} from "./feedback.routing.consumer.pipeline.batch.contract";
+
 // W2-T24 — FeedbackRouting Consumer Pipeline Bridge (CP1)
 export {
   FeedbackRoutingConsumerPipelineContract,

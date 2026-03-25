@@ -1143,3 +1143,17 @@ This roadmap means:
 - Warnings: ESCALATE → "[watchdog] escalation triggered — immediate governance checkpoint required"; MONITOR/CLEAR → no warning
 - Gap closed: `WatchdogEscalationContract` (GEF watchdog escalation decision) had no governed consumer-visible enriched output path
 - Closure anchor: `docs/reviews/CVF_W3_T17_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## Authorization Record — W3-T18
+
+> Tranche: W3-T18 — WatchdogPulse Consumer Pipeline Bridge
+> Authorized: 2026-03-25
+> Authorization source: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T18_WATCHDOG_PULSE_CONSUMER_BRIDGE_2026-03-25.md`
+> GC-018 score: 10/10
+
+- `W3-T18 — WatchdogPulse Consumer Pipeline Bridge` is now authorized (GC-018: 10/10) as the next bounded GEF consumer bridge tranche; closes the last GEF consumer visibility gap — `WatchdogPulseContract` (W3-T2 CP1) has no governed consumer-visible enriched output path
+  - `W3-T18 / CP1` — WatchdogPulseConsumerPipelineContract (`WatchdogObservabilityInput + WatchdogExecutionInput → WatchdogPulse + ControlPlaneConsumerPackage`; query from pulse status + health; contextId = pulseId; warnings for CRITICAL and WARNING) — Full Lane
+  - `W3-T18 / CP2` — WatchdogPulseConsumerPipelineBatchContract (`WatchdogPulseConsumerPipelineResult[] → batch with dominantTokenBudget, criticalPulseCount`) — Fast Lane (GC-021)
+  - `W3-T18 / CP3` — Tranche closure review — Full Lane

@@ -1,4 +1,4 @@
-// W1-T22 — Knowledge Query Consumer Bridge (CP1)
+// W1-T22 — Knowledge Query Consumer Bridge (CP1–CP2)
 export {
   KnowledgeQueryConsumerPipelineContract,
   createKnowledgeQueryConsumerPipelineContract,
@@ -8,6 +8,14 @@ export type {
   KnowledgeQueryConsumerPipelineResult,
   KnowledgeQueryConsumerPipelineContractDependencies,
 } from "./knowledge.query.consumer.pipeline.contract";
+export {
+  KnowledgeQueryConsumerPipelineBatchContract,
+  createKnowledgeQueryConsumerPipelineBatchContract,
+} from "./knowledge.query.consumer.pipeline.batch.contract";
+export type {
+  KnowledgeQueryConsumerPipelineBatch,
+  KnowledgeQueryConsumerPipelineBatchContractDependencies,
+} from "./knowledge.query.consumer.pipeline.batch.contract";
 
 // W1-T21 — Clarification Refinement Consumer Bridge (CP1–CP2)
 export {

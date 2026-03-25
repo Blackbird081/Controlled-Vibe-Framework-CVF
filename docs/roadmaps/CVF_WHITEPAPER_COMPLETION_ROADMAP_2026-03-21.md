@@ -1228,3 +1228,17 @@ This roadmap means:
 - Gap closed: `ClarificationRefinementContract` (W1-T5 CP2) had no governed consumer-visible enriched output path; reverse-prompting loop (W1-T17 + W1-T21) now fully governed
 - `KnowledgeQueryContract` is the sole remaining unbridged CPF aggregate contract
 - Closure anchor: `docs/reviews/CVF_W1_T21_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## W1-T22 — Knowledge Query Consumer Pipeline Bridge
+
+> Tranche: W1-T22
+> Authorized: 2026-03-25
+> Authorization source: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T22_KNOWLEDGE_QUERY_CONSUMER_BRIDGE_2026-03-25.md`
+> GC-018 score: 10/10
+
+- `W1-T22 — Knowledge Query Consumer Pipeline Bridge` is now authorized (GC-018: 10/10) as the next bounded CPF consumer bridge tranche; closes the final known unbridged CPF aggregate contract gap — `KnowledgeQueryContract` (W1-T10 CP1) produces `KnowledgeResult` with `totalFound` and `relevanceThreshold` governance-critical signals with no governed consumer-visible enriched output path
+  - `W1-T22 / CP1` — KnowledgeQueryConsumerPipelineContract (`KnowledgeQueryRequest → KnowledgeQueryContract.query() → KnowledgeResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from totalFound + relevanceThreshold; contextId = queryResult.contextId; warnings for empty result and zero threshold) — Full Lane
+  - `W1-T22 / CP2` — KnowledgeQueryConsumerPipelineBatchContract (`KnowledgeQueryConsumerPipelineResult[] → batch with dominantTokenBudget, emptyResultCount`) — Fast Lane (GC-021)
+  - `W1-T22 / CP3` — Tranche closure review — Full Lane

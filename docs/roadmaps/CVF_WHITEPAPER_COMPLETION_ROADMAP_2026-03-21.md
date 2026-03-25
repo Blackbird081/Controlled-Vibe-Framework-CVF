@@ -1271,3 +1271,18 @@ This roadmap means:
   - `W4-T8 / CP1` — EvaluationEngineConsumerPipelineContract (`TruthModel → EvaluationEngineContract.evaluate() → EvaluationResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from verdict + severity + confidence; contextId = evaluationResult.sourceTruthModelId; warnings for FAIL and INCONCLUSIVE verdicts) — Full Lane
   - `W4-T8 / CP2` — EvaluationEngineConsumerPipelineBatchContract (`EvaluationEngineConsumerPipelineResult[] → batch with dominantTokenBudget, failCount, inconclusiveCount`) — Fast Lane (GC-021)
   - `W4-T8 / CP3` — Tranche closure review — Full Lane
+
+---
+
+## W4-T8 Post-Cycle Record
+
+> Tranche: W4-T8 — Evaluation Engine Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> Final LPF: 436 tests, 0 failures (+59 from 377)
+
+- `EvaluationEngineConsumerPipelineContract` — LPF-internal bridge: `TruthModel → EvaluationEngineContract.evaluate() → EvaluationResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `evaluation-engine:verdict:${verdict}:severity:${severity}:confidence:${confidenceLevel.toFixed(2)}`.slice(0, 120); contextId = `evaluationResult.sourceTruthModelId`
+- `EvaluationEngineConsumerPipelineBatchContract` — batch aggregation with `failCount` (verdict === "FAIL"), `inconclusiveCount` (verdict === "INCONCLUSIVE"), `dominantTokenBudget`
+- Warnings: `verdict === "FAIL"` → "[evaluation-engine] evaluation failed — governed intervention required"; `verdict === "INCONCLUSIVE"` → "[evaluation-engine] evaluation inconclusive — insufficient learning data"; PASS/WARN → no warning
+- **Gap closed**: `EvaluationEngineContract` (W4-T3 CP1) now has a governed consumer-visible enriched output path
+- **First LPF consumer bridge delivered** — follows same cross-foundation pattern as W3 GEF bridges
+- Closure anchor: `docs/reviews/CVF_W4_T8_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

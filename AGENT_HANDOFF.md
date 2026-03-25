@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-25
 
 > Branch: `cvf-next`
-> Last push: `W1-T22-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W1-T22 — **ALL CPF CONSUMER BRIDGE TRANCHES COMPLETE**
+> Last push: `W4-T8-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W4-T8 — **FIRST LPF CONSUMER BRIDGE COMPLETE**
 
 ---
 
@@ -12,20 +12,20 @@
 - CPF (Control Plane Foundation): **991 tests, 0 failures**
 - EPF (Execution Plane Foundation): **902 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
+- LPF (Learning Plane Foundation): **436 tests, 0 failures**
 
 ### Last Three Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W3-T17 | WatchdogEscalation Consumer Pipeline Bridge | CP1, CP2, CP3 | 590 GEF |
-| W1-T20 | GatewayAuth Consumer Pipeline Bridge | CP1, CP2, CP3 | 897 CPF |
 | W1-T21 | Clarification Refinement Consumer Pipeline Bridge | CP1, CP2, CP3 | 945 CPF |
 | W1-T22 | Knowledge Query Consumer Pipeline Bridge | CP1, CP2, CP3 | 991 CPF |
+| W4-T8 | Evaluation Engine Consumer Pipeline Bridge | CP1, CP2, CP3 | 436 LPF |
 
 ### Key Contracts Delivered (last 2 tranches)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/evaluation.engine.consumer.pipeline.contract.ts` — EvaluationEngineConsumerPipelineContract (W4-T8)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/evaluation.engine.consumer.pipeline.batch.contract.ts` — EvaluationEngineConsumerPipelineBatchContract (W4-T8)
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.query.consumer.pipeline.contract.ts` — KnowledgeQueryConsumerPipelineContract (W1-T22)
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.query.consumer.pipeline.batch.contract.ts` — KnowledgeQueryConsumerPipelineBatchContract (W1-T22)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/clarification.refinement.consumer.pipeline.contract.ts` — ClarificationRefinementConsumerPipelineContract (W1-T21)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/clarification.refinement.consumer.pipeline.batch.contract.ts` — ClarificationRefinementConsumerPipelineBatchContract (W1-T21)
 
 ---
 
@@ -35,10 +35,11 @@
 
 Current guidance:
 - no tranche is currently active
-- `W1-T22` is now closed and no longer a candidate
-- `KnowledgeQueryContract` consumer visibility gap is **CLOSED**
+- `W4-T8` is now closed and no longer a candidate
+- `EvaluationEngineContract` consumer visibility gap is **CLOSED**
+- **First LPF consumer bridge delivered** — `EvaluationEngineConsumerPipelineContract` is the inaugural LPF bridge
 - **ALL known CPF aggregate contracts are now bridged — no remaining unbridged CPF consumer bridge gaps**
-- next move requires a fresh `GC-018` survey — look beyond CPF consumer bridges for the next highest-value gap
+- next move requires a fresh `GC-018` survey — look for the next highest-value unbridged LPF aggregate contract (e.g., `TruthScoreContract`, `PatternDetectionContract`), or the highest-value unbridged EPF aggregate contract
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

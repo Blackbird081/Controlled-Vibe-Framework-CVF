@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-25
 
 > Branch: `cvf-next`
-> Last push: `W2-T23-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T23
+> Last push: `W2-T24-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T24
 
 ---
 
@@ -10,23 +10,23 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **856 tests, 0 failures**
-- EPF (Execution Plane Foundation): **870 tests, 0 failures**
+- EPF (Execution Plane Foundation): **902 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **557 tests, 0 failures**
 
 ### Last Three Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W2-T21 | Async Execution Status Consumer Bridge | CP1, CP2, CP3 | 807 EPF |
 | W2-T22 | Execution Pipeline Consumer Bridge | CP1, CP2, CP3 | 838 EPF |
 | W2-T23 | PolicyGate Consumer Pipeline Bridge | CP1, CP2, CP3 | 870 EPF |
+| W2-T24 | FeedbackRouting Consumer Pipeline Bridge | CP1, CP2, CP3 | 902 EPF |
 
 ### Key Contracts Delivered (last 3 tranches)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/feedback.routing.consumer.pipeline.contract.ts` — FeedbackRoutingConsumerPipelineContract (W2-T24)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/feedback.routing.consumer.pipeline.batch.contract.ts` — FeedbackRoutingConsumerPipelineBatchContract (W2-T24)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/policy.gate.consumer.pipeline.contract.ts` — PolicyGateConsumerPipelineContract (W2-T23)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/policy.gate.consumer.pipeline.batch.contract.ts` — PolicyGateConsumerPipelineBatchContract (W2-T23)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.pipeline.consumer.pipeline.contract.ts` — ExecutionPipelineConsumerPipelineContract (W2-T22)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.pipeline.consumer.pipeline.batch.contract.ts` — ExecutionPipelineConsumerPipelineBatchContract (W2-T22)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.async.status.consumer.pipeline.contract.ts` — AsyncExecutionStatusConsumerPipelineContract (W2-T21)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.async.status.consumer.pipeline.batch.contract.ts` — AsyncExecutionStatusConsumerPipelineBatchContract (W2-T21)
 
 ---
 
@@ -36,18 +36,11 @@
 
 Current guidance:
 - no tranche is currently active
-- `W2-T23` is now closed and no longer a candidate
-- next move should favor the highest-value capability gap under `GC-018` stop-boundary rules
+- `W2-T24` is now closed and no longer a candidate
+- **W2 EPF consumer bridge wave is complete** — all identified EPF aggregate consumer visibility gaps have been closed
+- next move should survey GEF or CPF for the highest-value remaining unbridged gap under GC-018 stop-boundary rules
 
-**Remaining EPF unbridged contracts (surveyed 2026-03-25, post W2-T23):**
-- `FeedbackRoutingContract.route(ExecutionFeedbackSignal) → FeedbackRoutingDecision` — routes feedback signals by class (ACCEPT/RETRY/ESCALATE/REJECT) and priority (critical/high/medium/low); no consumer bridge exists — nominated as W2-T24
-
-**W2-T24 recommended**: `FeedbackRoutingDecision` consumer bridge
-- Input: single `ExecutionFeedbackSignal` → `FeedbackRoutingContract.route()` → `FeedbackRoutingDecision`
-- Query: `` `[feedback-routing] action:${routingAction} priority:${routingPriority}`.slice(0, 120) ``
-- contextId: `routingDecision.decisionId`
-- Warnings: `routingAction === "REJECT"` → "[feedback] rejection decision — immediate intervention required"; `routingAction === "ESCALATE"` → "[feedback] escalation decision — human review required"
-- Batch fields: `rejectedResultCount` (routingDecision.routingAction === "REJECT"), `escalatedResultCount` (routingDecision.routingAction === "ESCALATE")
+**Survey needed**: check GEF and CPF source files for unbridged aggregate contracts that have no corresponding consumer pipeline bridge. The W2 wave covered the full EPF surface.
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 
@@ -81,7 +74,7 @@ Any future tranche still requires: `GC-018 authorization → execution plan → 
 - default: `() => new Date().toISOString()`
 - propagate to all sub-contracts via `now: this.now`
 - hash IDs with `computeDeterministicHash()` from `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY`
-- **Critical**: when inner contracts create their own sub-contracts (e.g. `ExecutionPipelineContract` creates `CommandRuntimeContract` internally), thread `now` explicitly into `commandRuntimeDependencies.now` from the consumer bridge constructor
+- **Critical**: when inner contracts create their own sub-contracts internally, thread `now` explicitly into nested dependencies from the consumer bridge constructor
 
 ### Batch Contract Pattern
 - `dominantTokenBudget` = `Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))`

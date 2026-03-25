@@ -1371,3 +1371,17 @@ This roadmap means:
 - Warnings: deniedCount > 0 → "policy gate denials detected — review required"; reviewRequiredCount > 0 → "policy gate reviews pending — human review required"
 - Gap closed: `PolicyGateContract` (EPF per-assignment governance gate) had no governed consumer-visible enriched output path
 - Closure anchor: `docs/reviews/CVF_W2_T23_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## Post-Cycle Closure Record — W2-T24
+
+> Tranche: W2-T24 — FeedbackRouting Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> EPF: 902 tests (+32 from 870)
+
+- `FeedbackRoutingConsumerPipelineContract` — EPF → CPF cross-plane bridge: `ExecutionFeedbackSignal → FeedbackRoutingContract.route() → FeedbackRoutingDecision → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `[feedback-routing] action:${routingAction} priority:${routingPriority}`.slice(0, 120); contextId = `routingDecision.decisionId`
+- `FeedbackRoutingConsumerPipelineBatchContract` — batch aggregation with `rejectedResultCount` (routingAction === "REJECT") and `escalatedResultCount` (routingAction === "ESCALATE")
+- Warnings: REJECT → "[feedback] rejection decision — immediate intervention required"; ESCALATE → "[feedback] escalation decision — human review required"
+- Gap closed: last remaining EPF consumer bridge gap in the W2 wave — `FeedbackRoutingContract` routing decisions had no governed consumer-visible enriched output path
+- Closure anchor: `docs/reviews/CVF_W2_T24_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

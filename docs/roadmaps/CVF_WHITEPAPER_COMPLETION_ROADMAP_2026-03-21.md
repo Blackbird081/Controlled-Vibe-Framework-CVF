@@ -1357,3 +1357,17 @@ This roadmap means:
 - Determinism fix: `commandRuntimeDependencies.now` threaded into `ExecutionPipelineContract` to ensure CommandRuntimeContract uses the shared clock
 - Gap closed: `ExecutionPipelineContract` (EPF full-pipeline receipt) had no governed consumer-visible enriched output path
 - Closure anchor: `docs/reviews/CVF_W2_T22_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## Post-Cycle Closure Record — W2-T23
+
+> Tranche: W2-T23 — PolicyGate Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> EPF: 870 tests (+32 from 838)
+
+- `PolicyGateConsumerPipelineContract` — EPF → CPF cross-plane bridge: `DispatchResult → PolicyGateContract.evaluate() → PolicyGateResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `[policy-gate] denied:${deniedCount} review:${reviewRequiredCount} sandbox:${sandboxedCount} total:${entries.length}`.slice(0, 120); contextId = `gateResult.gateId`
+- `PolicyGateConsumerPipelineBatchContract` — batch aggregation with `deniedResultCount` (gateResult.deniedCount > 0) and `reviewResultCount` (gateResult.reviewRequiredCount > 0)
+- Warnings: deniedCount > 0 → "policy gate denials detected — review required"; reviewRequiredCount > 0 → "policy gate reviews pending — human review required"
+- Gap closed: `PolicyGateContract` (EPF per-assignment governance gate) had no governed consumer-visible enriched output path
+- Closure anchor: `docs/reviews/CVF_W2_T23_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

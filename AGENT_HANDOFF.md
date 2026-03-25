@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-25
 
 > Branch: `cvf-next`
-> Last push: `W2-T22-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T22
+> Last push: `W2-T23-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T23
 
 ---
 
@@ -10,23 +10,23 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **856 tests, 0 failures**
-- EPF (Execution Plane Foundation): **838 tests, 0 failures**
+- EPF (Execution Plane Foundation): **870 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **557 tests, 0 failures**
 
 ### Last Three Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W2-T20 | Execution Observation Consumer Bridge | CP1, CP2, CP3 | 774 EPF |
 | W2-T21 | Async Execution Status Consumer Bridge | CP1, CP2, CP3 | 807 EPF |
 | W2-T22 | Execution Pipeline Consumer Bridge | CP1, CP2, CP3 | 838 EPF |
+| W2-T23 | PolicyGate Consumer Pipeline Bridge | CP1, CP2, CP3 | 870 EPF |
 
 ### Key Contracts Delivered (last 3 tranches)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/policy.gate.consumer.pipeline.contract.ts` — PolicyGateConsumerPipelineContract (W2-T23)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/policy.gate.consumer.pipeline.batch.contract.ts` — PolicyGateConsumerPipelineBatchContract (W2-T23)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.pipeline.consumer.pipeline.contract.ts` — ExecutionPipelineConsumerPipelineContract (W2-T22)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.pipeline.consumer.pipeline.batch.contract.ts` — ExecutionPipelineConsumerPipelineBatchContract (W2-T22)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.async.status.consumer.pipeline.contract.ts` — AsyncExecutionStatusConsumerPipelineContract (W2-T21)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.async.status.consumer.pipeline.batch.contract.ts` — AsyncExecutionStatusConsumerPipelineBatchContract (W2-T21)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.observation.consumer.pipeline.contract.ts` — ExecutionObservationConsumerPipelineContract (W2-T20)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.observation.consumer.pipeline.batch.contract.ts` — ExecutionObservationConsumerPipelineBatchContract (W2-T20)
 
 ---
 
@@ -36,17 +36,18 @@
 
 Current guidance:
 - no tranche is currently active
-- `W2-T22` is now closed and no longer a candidate
+- `W2-T23` is now closed and no longer a candidate
 - next move should favor the highest-value capability gap under `GC-018` stop-boundary rules
 
-**Remaining EPF unbridged aggregate contracts (surveyed 2026-03-25):**
-- `PolicyGateContract.evaluate(DispatchResult) → PolicyGateResult` — `gateId`, `allowedCount`, `deniedCount`, `reviewRequiredCount`, `sandboxedCount` — high-value: every dispatch is gated through policy; no consumer bridge exists
-- `FeedbackRoutingContract.route(ExecutionFeedbackSignal) → FeedbackRoutingDecision` — individual routing (single item, not aggregate — lower priority)
+**Remaining EPF unbridged contracts (surveyed 2026-03-25, post W2-T23):**
+- `FeedbackRoutingContract.route(ExecutionFeedbackSignal) → FeedbackRoutingDecision` — routes feedback signals by class (ACCEPT/RETRY/ESCALATE/REJECT) and priority (critical/high/medium/low); no consumer bridge exists — nominated as W2-T24
 
-**W2-T23 recommended**: `PolicyGateResult` consumer bridge — bridges `PolicyGateContract.evaluate()` which is the gating step before all dispatches.
-- Query: `` `[policy-gate] allowed:${allowedCount} denied:${deniedCount} review:${reviewRequiredCount}`.slice(0, 120) ``
-- contextId: `policyGateResult.gateId`
-- Warnings: deniedCount > 0 → "[policy-gate] entries blocked from execution — review gate result"; reviewRequiredCount > 0 → "[policy-gate] entries require review — manual intervention needed"
+**W2-T24 recommended**: `FeedbackRoutingDecision` consumer bridge
+- Input: single `ExecutionFeedbackSignal` → `FeedbackRoutingContract.route()` → `FeedbackRoutingDecision`
+- Query: `` `[feedback-routing] action:${routingAction} priority:${routingPriority}`.slice(0, 120) ``
+- contextId: `routingDecision.decisionId`
+- Warnings: `routingAction === "REJECT"` → "[feedback] rejection decision — immediate intervention required"; `routingAction === "ESCALATE"` → "[feedback] escalation decision — human review required"
+- Batch fields: `rejectedResultCount` (routingDecision.routingAction === "REJECT"), `escalatedResultCount` (routingDecision.routingAction === "ESCALATE")
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

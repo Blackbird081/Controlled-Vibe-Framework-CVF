@@ -17,7 +17,7 @@ Memory class: POINTER_RECORD
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T18 / W2-T17 / W3-T15 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `NONE — W1-T22 CLOSED DELIVERED — CPF 991 tests — ALL CPF CONSUMER BRIDGE TRANCHES COMPLETE` |
+| Current active tranche | `W4-T8 — AUTHORIZED — LPF 377 tests baseline` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -97,6 +97,7 @@ Memory class: POINTER_RECORD
 | `W1-T20` gateway auth consumer pipeline bridge | `DONE` |
 | `W1-T21` clarification refinement consumer pipeline bridge | `DONE` |
 | `W1-T22` knowledge query consumer pipeline bridge | `DONE` |
+| `W4-T8` evaluation engine consumer pipeline bridge | `IN EXECUTION` |
 
 ---
 
@@ -107,7 +108,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `W1-T22 CLOSED DELIVERED — LAST CLOSED W1-T22 — ALL CPF CONSUMER BRIDGE TRANCHES COMPLETE` |
+| Current canonical validation posture | `W4-T8 IN EXECUTION — LAST CLOSED W1-T22` |
 
 ---
 

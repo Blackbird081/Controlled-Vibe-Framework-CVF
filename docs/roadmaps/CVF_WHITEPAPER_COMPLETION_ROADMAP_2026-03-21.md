@@ -1257,3 +1257,17 @@ This roadmap means:
 - **Gap closed**: `KnowledgeQueryContract` (W1-T10 CP1) now has a governed consumer-visible enriched output path
 - **ALL known CPF aggregate contracts are now bridged** — no remaining unbridged CPF consumer bridge gaps
 - Closure anchor: `docs/reviews/CVF_W1_T22_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## W4-T8 Authorized Tranche
+
+> Tranche: W4-T8
+> Authorized: 2026-03-25
+> Authorization source: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T8_EVALUATION_ENGINE_CONSUMER_BRIDGE_2026-03-25.md`
+> GC-018 score: 10/10
+
+- `W4-T8 — Evaluation Engine Consumer Pipeline Bridge` is now authorized (GC-018: 10/10) as the next bounded LPF consumer bridge tranche; `EvaluationEngineContract` (W4-T3 CP1) produces `EvaluationResult` with `verdict` (PASS/WARN/FAIL/INCONCLUSIVE) and `severity` (CRITICAL/HIGH/MEDIUM/LOW/NONE) — the highest-stakes LPF governance signals — with no governed consumer-visible enriched output path
+  - `W4-T8 / CP1` — EvaluationEngineConsumerPipelineContract (`TruthModel → EvaluationEngineContract.evaluate() → EvaluationResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from verdict + severity + confidence; contextId = evaluationResult.sourceTruthModelId; warnings for FAIL and INCONCLUSIVE verdicts) — Full Lane
+  - `W4-T8 / CP2` — EvaluationEngineConsumerPipelineBatchContract (`EvaluationEngineConsumerPipelineResult[] → batch with dominantTokenBudget, failCount, inconclusiveCount`) — Fast Lane (GC-021)
+  - `W4-T8 / CP3` — Tranche closure review — Full Lane

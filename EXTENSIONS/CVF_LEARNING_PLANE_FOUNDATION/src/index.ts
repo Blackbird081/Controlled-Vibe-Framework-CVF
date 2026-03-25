@@ -69,6 +69,15 @@ export type {
   GovernanceSignalConsumerPipelineContractDependencies,
 } from "./governance.signal.consumer.pipeline.contract";
 
+// W4-T11 — GovernanceSignal Consumer Pipeline Bridge (CP2)
+export {
+  GovernanceSignalConsumerPipelineBatchContract,
+  createGovernanceSignalConsumerPipelineBatchContract,
+} from "./governance.signal.consumer.pipeline.batch.contract";
+export type {
+  GovernanceSignalConsumerPipelineBatch,
+} from "./governance.signal.consumer.pipeline.batch.contract";
+
 // W6-T8 — Truth Model Scoring Slice (CP1–CP2)
 export {
   TruthScoreContract,

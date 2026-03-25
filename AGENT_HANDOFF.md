@@ -3,6 +3,7 @@
 > Branch: `cvf-next`
 > Last push: `W4-T11-CP3 → cvf-next`
 > State: **NO ACTIVE TRANCHE** — last canonical closure W4-T11 — **FOURTH LPF CONSUMER BRIDGE COMPLETE**
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
 
@@ -14,7 +15,7 @@
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **622 tests, 0 failures**
 
-### Last Three Tranches Closed
+### Last Four Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
 | W1-T22 | Knowledge Query Consumer Pipeline Bridge | CP1, CP2, CP3 | 991 CPF |
@@ -22,7 +23,7 @@
 | W4-T10 | PatternDetection Consumer Pipeline Bridge | CP1, CP2, CP3 | 557 LPF |
 | W4-T11 | GovernanceSignal Consumer Pipeline Bridge | CP1, CP2, CP3 | 622 LPF |
 
-### Key Contracts Delivered (last 2 tranches)
+### Key Contracts Delivered (last 2 LPF tranches)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/pattern.detection.consumer.pipeline.contract.ts` — PatternDetectionConsumerPipelineContract (W4-T10)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/pattern.detection.consumer.pipeline.batch.contract.ts` — PatternDetectionConsumerPipelineBatchContract (W4-T10)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/governance.signal.consumer.pipeline.contract.ts` — GovernanceSignalConsumerPipelineContract (W4-T11)
@@ -36,6 +37,7 @@
 
 Current guidance:
 - no tranche is currently active
+- baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
 - `W4-T11` is now closed and no longer a candidate
 - `GovernanceSignalContract` consumer visibility gap is **CLOSED**
 - **Fourth LPF consumer bridge delivered** — `GovernanceSignalConsumerPipelineContract` exposes governance signals (ESCALATE/TRIGGER_REVIEW/MONITOR/NO_ACTION) consumer-visibly
@@ -87,6 +89,7 @@ Any future tranche still requires: `GC-018 authorization → execution plan → 
 
 | Purpose | Path |
 |---------|------|
+| Architecture baseline snapshot | `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` |
 | Progress tracker | `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` |
 | Completion roadmap | `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` |
 | Test log | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
@@ -127,6 +130,9 @@ cd EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION && npm test
 
 # GEF tests
 cd EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION && npm test
+
+# LPF tests
+cd EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION && npm test
 ```
 
 ---

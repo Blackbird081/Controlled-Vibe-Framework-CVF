@@ -77,9 +77,9 @@ cat CVF_MANIFESTO.md
 ```
 
 **Next Steps:**
-1. Đọc [CVF_MANIFESTO.md](../v1.0/CVF_MANIFESTO.md)
-2. Follow [4-Phase Process](../v1.0/phases/)
-3. Use [Checklists](../v1.0/governance/)
+1. Đọc [CVF_MANIFESTO.md](../../v1.0/CVF_MANIFESTO.md)
+2. Follow [4-Phase Process](../../v1.0/phases/)
+3. Use [Checklists](../../v1.0/governance/)
 4. Build 1-2 small projects
 5. Sau đó upgrade lên v1.1 nếu cần
 
@@ -226,10 +226,10 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 5. **v1.6** - Platform architecture
 
 **Resources:**
-- [Developer Guide](../docs/reference/developer-guide.md)
-- [Skill Spec](../docs/reference/skill-spec.md)
-- [API Reference](../docs/reference/api/)
-- [Contributing Guide](../v1.0/CONTRIBUTING.md)
+- [Developer Guide](../reference/CVF_DEVELOPER_GUIDE.md)
+- [Skill Spec](../reference/CVF_SKILL_SPEC.md)
+- [API Reference](../reference/api/)
+- [Contributing Guide](../../v1.0/CONTRIBUTING.md)
 
 ---
 
@@ -244,9 +244,9 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 
 **How:**
 1. Keep v1.0 process
-2. Add [contracts](../v1.1/architecture/CONTRACT_SPECIFICATION.md)
-3. Define [agent archetypes](../v1.1/agents/)
-4. Use [execution spine](../v1.1/execution/)
+2. Add [contracts](../../v1.1/architecture/README.md)
+3. Define [agent archetypes](../../v1.1/agents/)
+4. Use [execution spine](../../v1.1/execution/)
 
 **Effort:** 2-4 hours
 
@@ -261,7 +261,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 
 **How:**
 1. Keep v1.1 architecture
-2. Add [v1.6 Web UI](../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/)
+2. Add [v1.6 Web UI](../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/)
 3. Map your workflows to templates
 4. Train team on UI
 
@@ -277,9 +277,9 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 - Need CI/CD
 
 **How:**
-1. Install [Python SDK](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk/)
+1. Install [Python SDK](../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk/)
 2. Write automation scripts
-3. Add [CI/CD templates](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd/)
+3. Add [CI/CD templates](../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci_cd/)
 4. Integrate with existing tools
 
 **Effort:** 2-3 days
@@ -322,9 +322,9 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 
 ### v1.0 Learning Path (2-3 hours)
 
-1. Read [Manifesto](../v1.0/CVF_MANIFESTO.md) - 15 mins
-2. Understand [4 Phases](../v1.0/phases/) - 30 mins
-3. Study [Governance](../v1.0/governance/) - 30 mins
+1. Read [Manifesto](../../v1.0/CVF_MANIFESTO.md) - 15 mins
+2. Understand [4 Phases](../../v1.0/phases/) - 30 mins
+3. Study [Governance](../../v1.0/governance/) - 30 mins
 4. Practice with 1 small project - 60 mins
 
 **Output:** You understand CVF principles
@@ -334,10 +334,10 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### v1.1 Learning Path (4-6 hours)
 
 1. Review v1.0 first
-2. Read [QUICK_START](../v1.1/QUICK_START.md) - 20 mins
-3. Study [Architecture](../v1.1/architecture/) - 60 mins
-4. Learn [Agents](../v1.1/agents/) - 30 mins
-5. Practice [Execution Spine](../v1.1/execution/) - 90 mins
+2. Read [QUICK_START](../../v1.1/QUICK_START.md) - 20 mins
+3. Study [Architecture](../../v1.1/architecture/) - 60 mins
+4. Learn [Agents](../../v1.1/agents/) - 30 mins
+5. Practice [Execution Spine](../../v1.1/execution/) - 90 mins
 6. Build 1 team project - 120 mins
 
 **Output:** You can run controlled team projects
@@ -454,9 +454,9 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 
 Before deciding, ask yourself:
 
-- [ ] Đã đọc [Core Philosophy](../docs/concepts/core-philosophy.md)?
-- [ ] Hiểu [Controlled Execution Loop](../docs/concepts/controlled-execution-loop.md)?
-- [ ] Biết [4-Phase Process](../docs/concepts/4-phase-process.md) chỉ là historical foundation?
+- [ ] Đã đọc [Core Philosophy](../concepts/core-philosophy.md)?
+- [ ] Hiểu [Controlled Execution Loop](../concepts/controlled-execution-loop.md)?
+- [ ] Biết [4-Phase Process](../concepts/4-phase-process.md) chỉ là historical foundation?
 - [ ] Biết team size & complexity của project?
 - [ ] Có time để setup không?
 - [ ] Cần governance không?
@@ -472,6 +472,6 @@ Before deciding, ask yourself:
 
 **Nhớ:** Bạn có thể bắt đầu đơn giản và upgrade sau!
 
-[⬅️ Back to Get Started](../docs/GET_STARTED.md)
+[⬅️ Back to Get Started](../GET_STARTED.md)
 
 </div>

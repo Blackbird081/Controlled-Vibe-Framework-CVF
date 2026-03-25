@@ -1,0 +1,13 @@
+{
+  "id": "sample-governance-hook",
+  "version": "1.0.0",
+  "description": "Minimal hook template for CVF events",
+  "triggers": [
+    "execution.completed",
+    "governance.review_required"
+  ],
+  "action": {
+    "type": "log",
+    "level": "info"
+  }
+}

@@ -157,7 +157,7 @@ Every Friday:
 ## 🎓 Quick Learning Path
 
 **Day 1:** Read this cheat sheet (5 min)  
-**Day 2:** Read [INTERNAL_USER_GUIDE.md](../docs/INTERNAL_USER_GUIDE.md) (10 min)  
+**Day 2:** Read [CVF_INTERNAL_USER_GUIDE.md](./reference/CVF_INTERNAL_USER_GUIDE.md) (10 min)  
 **Day 3:** Copy example & create first skill (15 min)  
 **Week 1:** Use for 1-2 real tasks  
 **Week 2:** Share with team & help others  

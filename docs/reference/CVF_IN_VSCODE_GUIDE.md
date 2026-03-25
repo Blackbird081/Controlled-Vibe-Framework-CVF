@@ -31,12 +31,12 @@ Only governance + execution? -> v1.1
 
 ### Option A: Minimal (Governance-first)
 1. Open repo in VS Code.
-2. Read [START_HERE.md](../START_HERE.md).
-3. Use core docs in [v1.0/](../v1.0/) and [v1.1/](../v1.1/).
+2. Read [START_HERE.md](../../START_HERE.md).
+3. Use core docs in [v1.0/](../../v1.0/) and [v1.1/](../../v1.1/).
 
 ### Option B: With templates and skills
 1. Open repo in VS Code.
-2. Browse skills in [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/).
+2. Browse skills in [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/).
 3. Use a skill spec as input to your prompt.
 
 ### Option C: Full UI
@@ -55,7 +55,7 @@ npm run dev
 
 If you want syntax highlighting or validation for CVF contracts, use the VS Code extension:
 
-See: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md)
+See: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md)
 
 ---
 
@@ -238,7 +238,7 @@ Guardrails:
 ## 7) Version-by-Version Practical Tips
 
 ### v1.0 / v1.1 (Core + Execution)
-- Use docs in [v1.0/](../v1.0/) and [v1.1/](../v1.1/)
+- Use docs in [v1.0/](../../v1.0/) and [v1.1/](../../v1.1/)
 - Always run the 5-phase controlled loop
 - Use checklists under v1.0/governance or v1.1/execution
 
@@ -315,10 +315,10 @@ Begin Phase A only. Do not propose solutions in Phase A.
 
 ## 10) Recommended Reading Order
 
-1. [START_HERE.md](../START_HERE.md)
-2. [docs/CVF_LITE.md](./CVF_LITE.md)
-3. [v1.1/QUICK_START.md](../v1.1/QUICK_START.md)
-4. [docs/HOW_TO_APPLY_CVF.md](./HOW_TO_APPLY_CVF.md)
+1. [START_HERE.md](../../START_HERE.md)
+2. [docs/CVF_LITE.md](../../CVF_LITE.md)
+3. [v1.1/QUICK_START.md](../../v1.1/QUICK_START.md)
+4. [docs/HOW_TO_APPLY_CVF.md](../HOW_TO_APPLY_CVF.md)
 5. [CVF_VSCODE_PLAYBOOK.md](./CVF_VSCODE_PLAYBOOK.md)
 
 ---
@@ -665,12 +665,12 @@ Chi can governance + execution? -> v1.1
 
 ### A) Toi thieu (Governance-first)
 1. Mo repo trong VS Code.
-2. Doc [START_HERE.md](../START_HERE.md).
-3. Dung docs: [v1.0/](../v1.0/) va [v1.1/](../v1.1/).
+2. Doc [START_HERE.md](../../START_HERE.md).
+3. Dung docs: [v1.0/](../../v1.0/) va [v1.1/](../../v1.1/).
 
 ### B) Co templates va skills
 1. Mo repo trong VS Code.
-2. Chon skill: [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/).
+2. Chon skill: [EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/).
 3. Dung spec cua skill lam prompt cho agent.
 
 ### C) Full UI
@@ -689,7 +689,7 @@ npm run dev
 
 Neu muon syntax highlight/validation cho CVF contracts:
 
-Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md)
+Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md)
 
 ---
 
@@ -847,7 +847,7 @@ Guardrails:
 ## 7) Tips theo version
 
 ### v1.0 / v1.1 (Core + Execution)
-- Dung docs: [v1.0/](../v1.0/) va [v1.1/](../v1.1/)
+- Dung docs: [v1.0/](../../v1.0/) va [v1.1/](../../v1.1/)
 - Luon chay 5-phase controlled loop
 - Dung checklist trong v1.0/governance hoac v1.1/execution
 
@@ -923,10 +923,10 @@ Bat dau Phase A thoi. Khong de xuat giai phap o Phase A.
 
 ## 10) Thu tu doc khuyen nghi
 
-1. [START_HERE.md](../START_HERE.md)
-2. [docs/CVF_LITE.md](./CVF_LITE.md)
-3. [v1.1/QUICK_START.md](../v1.1/QUICK_START.md)
-4. [docs/HOW_TO_APPLY_CVF.md](./HOW_TO_APPLY_CVF.md)
+1. [START_HERE.md](../../START_HERE.md)
+2. [docs/CVF_LITE.md](../../CVF_LITE.md)
+3. [v1.1/QUICK_START.md](../../v1.1/QUICK_START.md)
+4. [docs/HOW_TO_APPLY_CVF.md](../HOW_TO_APPLY_CVF.md)
 5. [CVF_VSCODE_PLAYBOOK.md](./CVF_VSCODE_PLAYBOOK.md)
 
 ---

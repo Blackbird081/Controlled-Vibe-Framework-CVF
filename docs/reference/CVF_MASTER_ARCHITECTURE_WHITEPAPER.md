@@ -1,21 +1,24 @@
 # 🏛️ CVF Master Architecture Whitepaper
 Memory class: POINTER_RECORD
 
-> **Version:** 2.1-RECONCILED
-> **Date:** 2026-03-23
-> **Document Type:** PARTIALLY DELIVERED ARCHITECTURE WHITEPAPER — evidence-backed truth reconciliation complete as of 2026-03-22
-> **Authorization Status:** First whitepaper-completion cycle through `W5-T1` is canonically closed. Any further continuation requires a new `GC-018` wave decision.
+> **Version:** 2.2-W4T11
+> **Date:** 2026-03-25
+> **Document Type:** PARTIALLY DELIVERED ARCHITECTURE WHITEPAPER — evidence-backed truth reconciliation complete as of 2026-03-22, post-cycle continuation canonically closed through `W4-T11`
+> **Authorization Status:** First whitepaper-completion cycle through `W5-T1` is canonically closed. Post-cycle continuation is canonically closed through `W1-T22 / W2-T24 / W3-T18 / W4-T11`. Any further continuation requires a new `GC-018` wave decision.
 > **Clean Baseline References:**
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts` (phases, risk model)
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts` (shared default guard stack)
 > - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts` (full runtime preset)
-> - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md` (current evidence-backed status)
-> - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (canonical delivered wave line)
+> - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` (current quick status through `W4-T11`)
+> - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (canonical delivered wave line with post-cycle records through `W4-T11`)
+> - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md` (historical reconciliation snapshot through `W5-T1`)
 
 > **Status Note:** this document now contains a reconciled mix of:
 > - delivered current truth already evidenced in code and tranche packets
 > - partially delivered target-state areas
 > - future-facing design principles that still require later governed waves
+
+> **Baseline Tracking Note:** as of `2026-03-25`, this whitepaper is the canonical architecture snapshot to freeze posture before the next development wave. Use it as the architectural baseline; use the progress tracker for quick readout, the roadmap for tranche history, and the handoff for execution rules.
 
 > **Core Principle:** *"Agents may execute tasks, but they cannot control the system that governs them."*
 
@@ -93,62 +96,73 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ---
 
-## 4. Sơ đồ Kiến trúc Đề xuất (TARGET-STATE / PARTIALLY DELIVERED)
+## 4. Sơ đồ Kiến trúc Hiện hành (CURRENT CANONICAL ARCHITECTURE — W4-T11)
 
 > [!WARNING]
-> Sơ đồ bên dưới là kiến trúc mục tiêu đã được hiện thực hóa một phần. Không phải mọi khối trong sơ đồ đều đã fully delivered ở runtime hiện tại; continuation lớn hơn vẫn cần GC-018.
+> Sơ đồ bên dưới không còn chỉ là target-state. Đây là kiến trúc canon hiện hành ở mốc `W4-T11`, trong đó từng khối được gắn maturity rõ ràng: cái gì đã delivered, cái gì mới partial, và cái gì vẫn còn future-facing.
+
+**Legend maturity**
+
+- `DONE`: đã có governed delivery và closure canon
+- `SUBSTANTIALLY DELIVERED`: đã có usable governed path và nhiều bridge quan trọng, nhưng chưa phải full target-state
+- `PARTIAL`: mới có slice vận hành đầu tiên hoặc một phần chuỗi giá trị
+- `PROPOSAL ONLY`: vẫn là ý định kiến trúc, chưa được mở thành wave canon
 
 ```
                          USER / External Signal
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│               🛡️  CONTROL PLANE (Đề xuất)                      │
+│       🛡️  CONTROL PLANE [SUBSTANTIALLY DELIVERED]              │
 │                                                                 │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────────┐  │
-│  │ AI Gateway   │───▶│ Knowledge    │───▶│ Context Builder  │  │
-│  │ (Env Signals)│    │ Layer        │    │ & Packager       │  │
-│  │ + Privacy    │    │ (Unified:    │    │ (Token Bounding, │  │
-│  │   Filter     │    │  RAG+Memory  │    │  Deterministic)  │  │
-│  │              │    │  +Graph)     │    │  [Nâng cấp v1.9] │  │
-│  └──────────────┘    │ [Nâng cấp   │    └────────┬─────────┘  │
-│                      │  v1.4 RAG]  │             │            │
-│                      └──────────────┘             │            │
-│                                                   ▼            │
-│  PHASE: INTAKE ──────────────────────────────────────────────  │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐ │
+│  │ AI Gateway      │─▶│ Knowledge Layer │─▶│ Context Builder│ │
+│  │ [SUBSTANTIALLY  │  │ [PARTIAL]       │  │ & Packager     │ │
+│  │  DELIVERED]     │  │                 │  │                │ │
+│  │ auth/routing/   │  │ query + ranking │  │ [PARTIAL]      │ │
+│  │ pii/gateway     │  │ + consumer path │  │ deterministic  │ │
+│  │ consumer paths  │  │                 │  │ context paths  │ │
+│  └─────────────────┘  └─────────────────┘  └───────┬────────┘ │
+│                                                     │          │
+│  PHASE: INTAKE ─────────────────────────────────────▼────────  │
 │                                                                 │
-│                      ┌───────────────────────────────────┐     │
-│                      │ AI Boardroom / Reverse Prompting   │     │
-│                      │ [Nâng cấp Canvas v2.1+Intent v1.0] │     │
-│                      └───────────────┬───────────────────┘     │
-│                                      ▼                         │
+│                 ┌──────────────────────────────────────┐      │
+│                 │ AI Boardroom / Reverse Prompting     │      │
+│                 │ [SUBSTANTIALLY DELIVERED]            │      │
+│                 │ orchestration + reverse prompting +  │      │
+│                 │ clarification refinement + boardroom │      │
+│                 │ consumer paths                       │      │
+│                 └────────────────┬─────────────────────┘      │
+│                                  ▼                            │
 │  PHASE: DESIGN ──────────────────────────────────────────────  │
 │                                                                 │
-│                      ┌───────────────────────────────────┐     │
-│                      │ CEO Orchestrator Agent             │     │
-│                      │ [Nâng cấp Controlled Intel. v1.7]  │     │
-│                      └───────────────┬───────────────────┘     │
-│                                      ▼                         │
+│                 ┌──────────────────────────────────────┐      │
+│                 │ CEO / Orchestrator Surface           │      │
+│                 │ [PARTIAL]                            │      │
+│                 │ governed orchestration surfaces       │      │
+│                 │ exist; richer target-state control    │      │
+│                 │ intelligence remains future-facing    │      │
+│                 └────────────────┬─────────────────────┘      │
+│                                  ▼                            │
 │  ┌───────────────────────────────────────────────────────────┐ │
-│  │           ⚖️  GOVERNANCE LAYER                            │ │
+│  │  ⚖️  GOVERNANCE LAYER [SUBSTANTIALLY DELIVERED]           │ │
 │  │                                                           │ │
 │  │  ┌─────────────┐  ┌────────────────┐  ┌──────────────┐   │ │
 │  │  │ Policy      │  │ Trust &        │  │ Audit /      │   │ │
 │  │  │ Engine      │  │ Isolation      │  │ Consensus    │   │ │
-│  │  │ (R0-R3      │  │ Layer          │  │ Engine       │   │ │
-│  │  │  current)   │  │ [Nâng cấp     │  │ (Multi-LLM,  │   │ │
-│  │  │ [Nâng cấp   │  │  Safety v1.7.1 │  │  R2+ only)   │   │ │
-│  │  │  Gov v1.6.1] │  │  +Guard SDK]  │  │              │   │ │
+│  │  │ [DONE /     │  │ [PARTIAL]      │  │ [PARTIAL]    │   │ │
+│  │  │ INVARIANT]  │  │ safety + guard │  │ audit signal │   │ │
+│  │  │ R0-R3       │  │ boundary exists│  │ and consensus│   │ │
+│  │  │ current     │  │                │  │ bridges exist│   │ │
 │  │  └─────────────┘  └────────────────┘  └──────────────┘   │ │
 │  │                                                           │ │
 │  │  ┌─────────────┐  ┌────────────────┐  ┌──────────────┐   │ │
 │  │  │ CVF         │  │ Guard Engine   │  │ Agent Def &  │   │ │
 │  │  │ Watchdog    │  │ Shared: 8      │  │ Capability   │   │ │
-│  │  │             │  │ Runtime: 15    │  │ Registry     │   │ │
-│  │  │             │  │ [GUARD_CONTRACT│  │ [Nâng cấp    │   │ │
-│  │  │             │  │  giữ nguyên]   │  │  Identity    │   │ │
-│  │  │             │  │               │  │  v2.3+Cap    │   │ │
-│  │  │             │  │               │  │  Ext v1.2]   │   │ │
+│  │  │ [PARTIAL]   │  │ Runtime: 15    │  │ Registry     │   │ │
+│  │  │ escalation +│  │ [DONE /        │  │ [PARTIAL /   │   │ │
+│  │  │ pulse + log │  │ INVARIANT]     │  │ PROPOSAL]    │   │ │
+│  │  │ bridges     │  │                │  │              │   │ │
 │  │  └─────────────┘  └────────────────┘  └──────────────┘   │ │
 │  └───────────────────────────────────────────────────────────┘ │
 │                                                                 │
@@ -157,40 +171,35 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│               ⚡  EXECUTION PLANE (Đề xuất)                     │
+│         ⚡  EXECUTION PLANE [SUBSTANTIALLY DELIVERED]           │
 │                                                                 │
 │  PHASE: BUILD ───────────────────────────────────────────────  │
 │                                                                 │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │ Command Runtime  [MỚI — từ System Reality Layer]         │  │
-│  │ (Action → JSON Command → Queue → Dispatch)               │  │
-│  └───────────────────────┬──────────────────────────────────┘  │
-│                          │                                      │
-│    ┌─────────────────────┼──────────────────────┐              │
-│    ▼                     ▼                      ▼              │
-│  ┌──────────┐  ┌──────────────────┐  ┌──────────────────┐     │
-│  │ Process  │  │ CVF Model        │  │ MCP Tool         │     │
-│  │ Manager  │  │ Gateway (HỢP     │  │ Bridge           │     │
-│  │ [MỚI]    │  │ NHẤT R7+R8+R9)   │  │ [Nâng cấp MCP   │     │
-│  │          │  │ ┌──────────────┐ │  │  Server v2.5]    │     │
-│  │          │  │ │Routing Layer │ │  └──────────────────┘     │
-│  │          │  │ │(R0→CHEAP,    │ │                            │
-│  │          │  │ │ R3→REASONING)│ │                            │
-│  │          │  │ ├──────────────┤ │                            │
-│  │          │  │ │Strategy Layer│ │                            │
-│  │          │  │ ├──────────────┤ │                            │
-│  │          │  │ │Adapter Layer │ │                            │
-│  │          │  │ │[Nâng cấp Ext│ │                            │
-│  │          │  │ │ v1.2.1+Hub  │ │                            │
-│  │          │  │ │ v1.7.3]     │ │                            │
-│  │          │  │ ├──────────────┤ │                            │
-│  │          │  │ │Telemetry    │ │                            │
-│  │          │  │ └──────────────┘ │                            │
-│  └──────────┘  └──────────────────┘                            │
+│  ┌────────────────┐    ┌────────────────┐   ┌───────────────┐ │
+│  │ Command Runtime│───▶│ Execution      │──▶│ Feedback /    │ │
+│  │ [SUBSTANTIALLY │    │ Pipeline       │   │ Re-intake     │ │
+│  │  DELIVERED]    │    │ [SUBSTANTIALLY │   │ [SUBSTANTIALLY│ │
+│  │ dispatch +     │    │  DELIVERED]    │   │  DELIVERED]   │ │
+│  │ async ticket   │    │ execution      │   │ observer,     │ │
+│  │ surfaces       │    │ pipeline +     │   │ routing,      │ │
+│  └────────────────┘    │ status + batch │   │ resolution,   │ │
+│                        └────────┬───────┘   │ summary loops │ │
+│                                 │           └──────┬────────┘ │
+│    ┌────────────────────────────┼──────────────────┐│          │
+│    ▼                            ▼                  ▼│          │
+│  ┌──────────────┐        ┌──────────────┐   ┌────────────────┐│
+│  │ Model Gateway│        │ MCP Bridge   │   │ Policy Gate    ││
+│  │ [PARTIAL]    │        │ [SUBSTANTIALLY│   │ [SUBSTANTIALLY││
+│  │              │        │  DELIVERED]  │   │  DELIVERED]   ││
+│  │ provider/rte │        │ invocation + │   │ execution      ││
+│  │ convergence  │        │ batch paths  │   │ authorization  ││
+│  │ future-facing│        │ delivered    │   │ + feedback rtg ││
+│  └──────────────┘        └──────────────┘   └────────────────┘│
 │                                                                 │
 │  ┌──────────────────────────────────────────────────────────┐  │
 │  │ Sandbox Runtime (Worker Agents)                          │  │
-│  │ [Nâng cấp Agent Platform v1.6 + Safety Runtime v1.7.1]   │  │
+│  │ [PARTIAL] worker execution remains governed, but full     │  │
+│  │ target-state convergence is still not closed              │  │
 │  └──────────────────────────┬───────────────────────────────┘  │
 │                              │                                  │
 │  PHASE: REVIEW ──── Audit ── │ ──────────────────────────────  │
@@ -202,25 +211,60 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│          🧠  LEARNING PLANE (Đề xuất — Triển khai cuối cùng)    │
+│       🧠  LEARNING PLANE [SUBSTANTIALLY DELIVERED]              │
 │                                                                 │
-│  Artifacts ──▶ Truth Model ──▶ Evaluation Engine                │
-│                        │                                        │
-│               Immutable Ledger [Nâng cấp Task Mkt v3.0]        │
-│                        │                                        │
-│               Reputation Model [Nâng cấp Reputation v3.1]      │
-│                        │                                        │
-│               ◄── Feedback → Governance Layer                   │
+│  Artifacts / Results                                            │
+│      │                                                          │
+│      ▼                                                          │
+│  FeedbackLedger → PatternInsight → TruthModel                   │
 │                                                                 │
-│  Observability [Nâng cấp Adaptive Observability v1.8.1]         │
+│  Storage / TruthScore / Evaluation Engine                       │
+│  [SUBSTANTIALLY DELIVERED]                                      │
+│                                                                 │
+│  Observability [SUBSTANTIALLY DELIVERED]                        │
+│                                                                 │
+│  ThresholdAssessment [DONE]                                     │
+│      → GovernanceSignal [SUBSTANTIALLY DELIVERED]               │
+│      → Re-injection [DONE]                                      │
+│      → Governance Layer                                         │
 └─────────────────────────────────────────────────────────────────┘
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│          👤  UX / NON-CODER LAYER (Giữ nguyên — Không ảnh hưởng)│
-│  9 Governed Wizards, SDK, CLI, Graph UI                         │
+│              👤  UX / NON-CODER LAYER [DONE ON ACTIVE PATH]     │
+│  governed wizards, SDK, CLI, graph/UI surfaces remain usable    │
+│  and are not the current architectural bottleneck               │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+### 4.1 Maturity Snapshot by Plane
+
+| Plane | Current posture at `W4-T11` | What is already true |
+|---|---|---|
+| Control Plane | `SUBSTANTIALLY DELIVERED` | AI Gateway, Boardroom/Reverse Prompting, typed context packaging, knowledge ranking/query, gateway auth, clarification refinement, and knowledge-query consumer pipelines are canonically closed through `W1-T22` |
+| Execution Plane | `SUBSTANTIALLY DELIVERED` | command runtime, observer/feedback, re-intake, MCP invocation, async status, execution pipeline, policy gate, and feedback-routing consumer bridges are canonically closed through `W2-T24` |
+| Governance Layer | `SUBSTANTIALLY DELIVERED` | watchdog, governance checkpoint/consensus/audit lines, watchdog escalation, and watchdog pulse consumer bridges are canonically closed through `W3-T18` |
+| Learning Plane | `SUBSTANTIALLY DELIVERED` | learning storage, observability, evaluation engine, truth score, pattern detection, and governance signal consumer pipelines are canonically closed through `W4-T11` |
+| Whitepaper Truth Reconciliation | `DONE FOR CURRENT CYCLE` | whitepaper was re-labeled from pure target-state concept to evidence-backed partial delivery in `W5-T1` |
+
+### 4.2 What This Diagram No Longer Claims
+
+- It no longer claims that the entire architecture is only future-state.
+- It no longer implies the Learning Plane is merely a final proposal; at `W4-T11` it already has a governed closed chain from `FeedbackLedger` through `GovernanceSignalConsumerPipeline`.
+- It no longer treats Watchdog, Policy Gate, Evaluation Engine, Truth Score, or Pattern Detection as conceptual-only blocks.
+- It still does **not** claim full target-state convergence for unified RAG, full trust/isolation consolidation, full model-gateway convergence, or a fully consolidated agent-definition registry.
+
+### 4.3 Baseline Freeze Before Next Development
+
+| Baseline field | Value |
+|---|---|
+| Snapshot date | `2026-03-25` |
+| Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v2.2-W4T11`) |
+| Last canonical closure | `W4-T11 CLOSED DELIVERED` |
+| Current active tranche | `NONE` |
+| Current posture | `PARTIALLY DELIVERED` with all four planes `SUBSTANTIALLY DELIVERED` on active governed paths |
+| Required gate before any new implementation | fresh `GC-018` authorization |
+| Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `AGENT_HANDOFF.md` |
 
 ---
 
@@ -230,22 +274,22 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 > - các anchor đã được delivered trong current-cycle và whitepaper-completion cycle
 > - các merge/upgrade target vẫn future-facing và chỉ được mở lại qua GC-018
 
-| Module CVF hiện có | Đề xuất mới | Hành động | Vị trí đề xuất |
-|---|---|---|---|
-| `CVF_ECO_v2.3_AGENT_IDENTITY` + `CVF_v1.2_CAPABILITY_EXTENSION` | ADDING_AGENT DEFINITION | **MERGE** | Governance: Agent Def |
-| `CVF_ECO_v1.4_RAG_PIPELINE` | ADDING_RAG ARCHITECTURE | **UPGRADE** | Control: Knowledge Layer |
-| `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` | ADDING_CONTEXT ENGINE | **MERGE** | Control: Context Packager |
-| `CVF_v1.6.1_GOVERNANCE_ENGINE` + `CVF_ECO_v1.1_NL_POLICY` | ADDING_AI CONSTITUTIONAL | **MERGE** | Governance: Policy Engine |
-| `CVF_ECO_v2.0_AGENT_GUARD_SDK` + `CVF_v1.7.1_SAFETY_RUNTIME` | ADDING_TRUST & ISOLATION | **MERGE** | Governance: Trust Layer |
-| `CVF_v1.2.1_EXTERNAL_INTEGRATION` + `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` | ADDING_MODEL GATEWAY (gộp R7+R8+R9) | **MERGE** | Execution: Model Gateway |
-| `CVF_ECO_v2.5_MCP_SERVER` | ADDING_SYSTEM REALITY | **MERGE** | Execution: MCP Bridge |
-| `CVF_ECO_v3.1_REPUTATION` + `CVF_ECO_v3.0_TASK_MARKETPLACE` | ADDING_LEARNING PLANE | **MERGE** | Learning: Reputation+Ledger |
-| `CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME` | Learning Observability | **MERGE** | Learning: Observability |
-| `CVF_GUARD_CONTRACT` | — | **GIỮ NGUYÊN** | Governance: Guard Engine |
+| Module CVF hiện có | Đề xuất mới | Hành động | Vị trí đề xuất | Posture hiện tại |
+|---|---|---|---|---|
+| `CVF_ECO_v2.3_AGENT_IDENTITY` + `CVF_v1.2_CAPABILITY_EXTENSION` | ADDING_AGENT DEFINITION | **MERGE** | Governance: Agent Def | `PARTIAL / PROPOSAL` |
+| `CVF_ECO_v1.4_RAG_PIPELINE` | ADDING_RAG ARCHITECTURE | **UPGRADE** | Control: Knowledge Layer | `PARTIAL` — knowledge query/ranking paths đã có, unified RAG vẫn future-facing |
+| `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` | ADDING_CONTEXT ENGINE | **MERGE** | Control: Context Packager | `PARTIAL` — deterministic context packaging đã là anchor canon |
+| `CVF_v1.6.1_GOVERNANCE_ENGINE` + `CVF_ECO_v1.1_NL_POLICY` | ADDING_AI CONSTITUTIONAL | **MERGE** | Governance: Policy Engine | `DONE / INVARIANT` ở lớp policy baseline hiện hành |
+| `CVF_ECO_v2.0_AGENT_GUARD_SDK` + `CVF_v1.7.1_SAFETY_RUNTIME` | ADDING_TRUST & ISOLATION | **MERGE** | Governance: Trust Layer | `PARTIAL` — guard/safety boundary mạnh hơn nhưng chưa fully consolidated |
+| `CVF_v1.2.1_EXTERNAL_INTEGRATION` + `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` | ADDING_MODEL GATEWAY (gộp R7+R8+R9) | **MERGE** | Execution: Model Gateway | `PARTIAL` — execution gateway path có thật, convergence target chưa đóng |
+| `CVF_ECO_v2.5_MCP_SERVER` | ADDING_SYSTEM REALITY | **MERGE** | Execution: MCP Bridge | `SUBSTANTIALLY DELIVERED` — MCP invocation + batch bridges đã canonically closed |
+| `CVF_ECO_v3.1_REPUTATION` + `CVF_ECO_v3.0_TASK_MARKETPLACE` | ADDING_LEARNING PLANE | **MERGE** | Learning: Reputation+Ledger | `PROPOSAL / PARTIAL` — learning plane đã hình thành mạnh, nhưng merge map này chưa được fully realized theo đúng target merge |
+| `CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME` | Learning Observability | **MERGE** | Learning: Observability | `SUBSTANTIALLY DELIVERED` — observability slice và consumer pipelines đã canonically closed |
+| `CVF_GUARD_CONTRACT` | — | **GIỮ NGUYÊN** | Governance: Guard Engine | `DONE / INVARIANT` |
 
 ---
 
-## 6. Performance Constraints (Đề xuất — Chưa benchmark)
+## 6. Performance Targets (PROPOSAL ONLY — Chưa benchmark, không phải baseline hiện hành)
 
 | Đường đi | Guard Pipeline | Target Latency |
 |----------|----------------|----------------|
@@ -277,7 +321,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 4. **Continuation Governance**
    - Mọi mở rộng hoặc tái cấu trúc cần GC-018 Continuation authorization
-   - Source: `CVF_GC018_CONTINUATION_CANDIDATE_N1_2026-03-20.md`
+   - Source: `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` + `docs/reviews/CVF_W4_T11_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
 
 5. **Marginal-Value Stop Boundary**
    - validation/test-only breadth, packaging-only continuation, và truth-label/claim expansion không được tiếp tục theo quán tính

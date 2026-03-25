@@ -248,7 +248,7 @@ Configuration is already in `netlify.toml`.
 
 ### Docker
 
-See the [Hosted Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) for Docker, self-hosted, and advanced deployment options.
+See the [Hosted Deployment Guide](../guides/CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) for Docker, self-hosted, and advanced deployment options.
 
 ---
 
@@ -273,7 +273,7 @@ See the [Hosted Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) for Do
 |-------------|---------|
 | Use multi-agent workflows | [Agent Platform Tutorial](agent-platform.md) |
 | Create custom skills | [Custom Skills Tutorial](custom-skills.md) |
-| Deploy for my team | [Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) |
+| Deploy for my team | [Deployment Guide](../guides/CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) |
 | Understand governance modes | [Governance Model](../concepts/governance-model.md) |
 | Learn CVF from scratch | [First Project Tutorial](first-project.md) |
 

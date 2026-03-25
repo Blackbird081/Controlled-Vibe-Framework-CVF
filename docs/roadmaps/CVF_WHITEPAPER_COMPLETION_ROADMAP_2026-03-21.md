@@ -1286,3 +1286,17 @@ This roadmap means:
 - **Gap closed**: `EvaluationEngineContract` (W4-T3 CP1) now has a governed consumer-visible enriched output path
 - **First LPF consumer bridge delivered** — follows same cross-foundation pattern as W3 GEF bridges
 - Closure anchor: `docs/reviews/CVF_W4_T8_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## W4-T9 Authorized Tranche
+
+> Tranche: W4-T9
+> Authorized: 2026-03-25
+> Authorization source: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T9_TRUTH_SCORE_CONSUMER_BRIDGE_2026-03-25.md`
+> GC-018 score: 10/10
+
+- `W4-T9 — TruthScore Consumer Pipeline Bridge` is now authorized (GC-018: 10/10); `TruthScoreContract` produces composite truth score (0–100) and `scoreClass` (STRONG/ADEQUATE/WEAK/INSUFFICIENT) with no governed consumer-visible enriched output path
+  - `W4-T9 / CP1` — TruthScoreConsumerPipelineContract (`TruthModel → TruthScoreContract.score() → TruthScore → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from scoreClass + compositeScore + sourceTruthModelId; contextId = scoreResult.scoreId; warnings for INSUFFICIENT and WEAK) — Full Lane
+  - `W4-T9 / CP2` — TruthScoreConsumerPipelineBatchContract (`TruthScoreConsumerPipelineResult[] → batch with dominantTokenBudget, insufficientCount, weakCount`) — Fast Lane (GC-021)
+  - `W4-T9 / CP3` — Tranche closure review — Full Lane

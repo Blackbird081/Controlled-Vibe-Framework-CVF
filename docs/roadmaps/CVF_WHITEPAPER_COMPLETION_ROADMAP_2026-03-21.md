@@ -1157,3 +1157,31 @@ This roadmap means:
   - `W3-T18 / CP1` — WatchdogPulseConsumerPipelineContract (`WatchdogObservabilityInput + WatchdogExecutionInput → WatchdogPulse + ControlPlaneConsumerPackage`; query from pulse status + health; contextId = pulseId; warnings for CRITICAL and WARNING) — Full Lane
   - `W3-T18 / CP2` — WatchdogPulseConsumerPipelineBatchContract (`WatchdogPulseConsumerPipelineResult[] → batch with dominantTokenBudget, criticalPulseCount`) — Fast Lane (GC-021)
   - `W3-T18 / CP3` — Tranche closure review — Full Lane
+
+---
+
+## Post-Cycle Record — W3-T18
+
+> Tranche: W3-T18 — WatchdogPulse Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> Final GEF: 625 tests, 0 failures (+35 from 590)
+
+- `WatchdogPulseConsumerPipelineContract` — GEF → CPF cross-plane bridge: `WatchdogObservabilityInput + WatchdogExecutionInput → WatchdogPulseContract.pulse() → WatchdogPulse → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `[watchdog-pulse] status:${watchdogStatus} obs:${dominantHealth} exec:${dominantStatus}`.slice(0, 120); contextId = `pulse.pulseId`
+- `WatchdogPulseConsumerPipelineBatchContract` — batch aggregation with `criticalPulseCount` (watchdogStatus === "CRITICAL")
+- Warnings: CRITICAL → "[watchdog-pulse] critical pulse detected — immediate governance review required"; WARNING → "[watchdog-pulse] warning pulse detected — system health degraded"; NOMINAL/UNKNOWN → no warning
+- Gap closed: `WatchdogPulseContract` (GEF foundational cross-plane health signal — W3-T2 CP1) had no governed consumer-visible enriched output path; **W3 GEF consumer bridge wave complete**
+- Closure anchor: `docs/reviews/CVF_W3_T18_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## Authorization Record — W1-T20
+
+> Tranche: W1-T20 — GatewayAuth Consumer Pipeline Bridge
+> Authorized: 2026-03-25
+> Authorization source: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T20_GATEWAY_AUTH_CONSUMER_BRIDGE_2026-03-25.md`
+> GC-018 score: 10/10
+
+- `W1-T20 — GatewayAuth Consumer Pipeline Bridge` is now authorized (GC-018: 10/10) as the next bounded CPF consumer bridge tranche; closes the highest-value CPF consumer visibility gap — `GatewayAuthContract` (W1-T8 CP1) produces governance-critical auth decisions (AUTHENTICATED/DENIED/EXPIRED/REVOKED) with no governed consumer-visible enriched output path
+  - `W1-T20 / CP1` — GatewayAuthConsumerPipelineContract (`GatewayAuthRequest → GatewayAuthContract.evaluate() → GatewayAuthResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from authStatus + tenantId; contextId = resultId; warnings for DENIED/EXPIRED/REVOKED) — Full Lane
+  - `W1-T20 / CP2` — GatewayAuthConsumerPipelineBatchContract (`GatewayAuthConsumerPipelineResult[] → batch with dominantTokenBudget, nonAuthenticatedCount`) — Fast Lane (GC-021)
+  - `W1-T20 / CP3` — Tranche closure review — Full Lane

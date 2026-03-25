@@ -101,6 +101,19 @@ Primary references:
 - `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
 - `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`
 
+### `AI Boardroom` — Live Control-Plane Deliberation
+
+Use when:
+
+- live intake debate, clarification, rebuttal, or convergence is happening inside the Control Plane
+- the system must choose the best governed result before downstream design/orchestration continues
+
+Primary references:
+
+- `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.contract.ts`
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.round.contract.ts`
+
 ### `GC-024` — Test Partition Ownership
 
 Use when:
@@ -123,6 +136,7 @@ Use this routing table after reading the always-on bootstrap:
 | structural merge or package move | `GC-019` |
 | pause, resume, shift handoff, agent transfer | `GC-020` |
 | multi-agent intake review, rebuttal, or decision-pack drafting | `GC-027` |
+| live boardroom deliberation in intake/design flow | `AI Boardroom` protocol + active roadmap |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |
 | ordinary tranche-local implementation already authorized | active roadmap + tranche packet only |

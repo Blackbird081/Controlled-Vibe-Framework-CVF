@@ -6,6 +6,8 @@ Control ID: GC-027
 **Applies to:** Humans and AI agents creating canonical multi-agent intake reviews, rebuttals, and decision packs  
 **Purpose:** Standardize how CVF evaluates new proposal sets across multiple agents so intake, rebuttal, and final decision records stay comparable, reviewable, and machine-checkable.
 
+Scope boundary: this guard governs canonical documentation only. It does not replace the live `AI Boardroom` deliberation path in the Control Plane.
+
 ---
 
 ## 1. Mandatory Rule
@@ -36,6 +38,14 @@ Recommended canonical placement:
 - `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_*.md`
 
 Historical or exploratory drafts may exist elsewhere, but they do not replace the canonical `docs/reviews/` chain.
+
+This guard does not govern:
+
+- live `INTAKE -> AI Boardroom -> DESIGN` runtime deliberation
+- boardroom session decision logic
+- boardroom round progression inside the Control Plane
+
+For that higher-priority runtime surface, see `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
 
 ---
 
@@ -108,6 +118,8 @@ This guard is intentionally stricter than an informal discussion note.
 
 `GC-027` governs the canonical documentation quality for multi-agent evaluation before those later controls are invoked for implementation.
 
+It does not replace `AI Boardroom` runtime deliberation, which remains a separate and higher-criticality control-plane concern.
+
 ---
 
 ## 8. Required Templates
@@ -144,4 +156,5 @@ This enforcement checks:
 - `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
 - `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
 - `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`
+- `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`
 - `governance/compat/check_multi_agent_review_governance_compat.py`

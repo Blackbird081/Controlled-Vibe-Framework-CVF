@@ -100,6 +100,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
 - `reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
 - `reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`
+- `reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`
 - `reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
 - `reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`

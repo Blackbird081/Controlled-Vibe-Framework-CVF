@@ -258,6 +258,8 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 | Baseline field | Value |
 |---|---|
+| Multi-agent repo/docs convergence | `GC-027` canonical review-doc chain |
+| Highest-priority live multi-agent deliberation surface | `AI Boardroom` in Control Plane; see `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md` |
 | Snapshot date | `2026-03-25` |
 | Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v2.2-W4T11`) |
 | Last canonical closure | `W4-T11 CLOSED DELIVERED` |
@@ -265,6 +267,17 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 | Current posture | `PARTIALLY DELIVERED` with all four planes `SUBSTANTIALLY DELIVERED` on active governed paths |
 | Required gate before any new implementation | fresh `GC-018` authorization |
 | Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `AGENT_HANDOFF.md` |
+
+### 4.4 Two Multi-Agent Scope Boundaries
+
+CVF now distinguishes two different multi-agent scopes on purpose:
+
+- `GC-027` covers canonical repository documentation for intake review, rebuttal, and decision-pack convergence before roadmap intake or implementation selection.
+- `AI Boardroom` covers live Control Plane deliberation during `INTAKE -> DESIGN`, where the system must choose the best governed path before downstream orchestration continues.
+
+These two scopes are related, but not interchangeable.
+
+The Boardroom scope is the more critical runtime decision surface because it sits above downstream design/orchestration and therefore shapes what the system is allowed to build next.
 
 ---
 

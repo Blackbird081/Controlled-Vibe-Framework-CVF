@@ -144,6 +144,8 @@ Personal AI usage unrelated to company work is excluded.
    - Canonical templates: `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`, `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`, and `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`.
    - Automated enforcement reference: `governance/compat/check_multi_agent_review_governance_compat.py`.
+   - This rule governs canonical documentation only; it does not replace live `AI Boardroom` deliberation inside the Control Plane.
+   - The separate canonical runtime/reference boundary for boardroom deliberation is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
 
 ---
 

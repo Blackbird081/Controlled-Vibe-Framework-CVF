@@ -20,6 +20,11 @@ CVF now has a canonical docs-governance chain for multi-agent proposal evaluatio
 
 This closes the gap where multiple agents could review the same proposal set using inconsistent formats before roadmap intake.
 
+This delta also clarifies the scope boundary:
+
+- `GC-027` governs canonical documentation and review convergence in the repository
+- `AI Boardroom` deliberation remains a separate, higher-priority runtime/control-plane concern
+
 ---
 
 ## Canonical Truth
@@ -29,6 +34,7 @@ This closes the gap where multiple agents could review the same proposal set usi
 - Rebuttal template: `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
 - Decision pack template: `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`
 - Compat gate: `governance/compat/check_multi_agent_review_governance_compat.py`
+- Boardroom runtime reference: `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`
 
 ---
 
@@ -46,4 +52,3 @@ This closes the gap where multiple agents could review the same proposal set usi
 ## Operational Effect
 
 From this delta onward, canonical multi-agent evaluation in `docs/reviews/` should use the GC-027 templates and pass the GC-027 compatibility gate before roadmap intake or implementation selection proceeds.
-

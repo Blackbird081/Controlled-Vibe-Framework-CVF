@@ -1,3 +1,14 @@
+// W3-T18 — WatchdogPulse Consumer Pipeline Bridge (CP1)
+export {
+  WatchdogPulseConsumerPipelineContract,
+  createWatchdogPulseConsumerPipelineContract,
+} from "./watchdog.pulse.consumer.pipeline.contract";
+export type {
+  WatchdogPulseConsumerPipelineRequest,
+  WatchdogPulseConsumerPipelineResult,
+  WatchdogPulseConsumerPipelineContractDependencies,
+} from "./watchdog.pulse.consumer.pipeline.contract";
+
 // W3-T17 — WatchdogEscalation Consumer Pipeline Bridge (CP2)
 export {
   WatchdogEscalationConsumerPipelineBatchContract,

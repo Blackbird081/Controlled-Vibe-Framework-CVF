@@ -1,3 +1,13 @@
+// W3-T17 — WatchdogEscalation Consumer Pipeline Bridge (CP2)
+export {
+  WatchdogEscalationConsumerPipelineBatchContract,
+  createWatchdogEscalationConsumerPipelineBatchContract,
+} from "./watchdog.escalation.consumer.pipeline.batch.contract";
+export type {
+  WatchdogEscalationConsumerPipelineBatch,
+  WatchdogEscalationConsumerPipelineBatchContractDependencies,
+} from "./watchdog.escalation.consumer.pipeline.batch.contract";
+
 // W3-T17 — WatchdogEscalation Consumer Pipeline Bridge (CP1)
 export {
   WatchdogEscalationConsumerPipelineContract,

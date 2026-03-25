@@ -652,6 +652,17 @@
       ]
     },
     {
+      "scope": "GEF WatchdogEscalation Consumer Pipeline Batch (W3-T17 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationConsumerPipelineBatchContract",
+        "createWatchdogEscalationConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "GEF WatchdogEscalation Consumer Pipeline (W3-T17 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.consumer.pipeline.test.ts",
       "forbiddenFiles": [

@@ -80,6 +80,6 @@ Output:  GatewayAuthConsumerPipelineBatch { batchId, createdAt, results, totalRe
 | CP | Status |
 |---|---|
 | GC-018 + GC-026 auth | DONE |
-| CP1 | PENDING |
-| CP2 | PENDING |
-| CP3 | PENDING |
+| CP1 | DONE — 27 tests, CPF 883 |
+| CP2 | DONE — 14 tests, CPF 897 |
+| CP3 | DONE — tranche closed |

@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Purpose: simple visual tracker for progress against `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-25` (W1-T20 authorized)
+> Last refreshed: `2026-03-25` (W1-T20 closed)
 
 ---
 
@@ -17,7 +17,7 @@ Memory class: POINTER_RECORD
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T18 / W2-T17 / W3-T15 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `W1-T20 — AUTHORIZED — CPF 856 tests baseline` |
+| Current active tranche | `NONE — W1-T20 CLOSED DELIVERED — CPF 897 tests` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -94,7 +94,7 @@ Memory class: POINTER_RECORD
 | `W3-T16` governance audit signal consumer bridge | `DONE` |
 | `W3-T17` watchdog escalation consumer bridge | `DONE` |
 | `W3-T18` watchdog pulse consumer pipeline bridge | `DONE` |
-| `W1-T20` gateway auth consumer pipeline bridge | `IN EXECUTION` |
+| `W1-T20` gateway auth consumer pipeline bridge | `DONE` |
 
 ---
 
@@ -105,7 +105,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `W1-T20 IN EXECUTION — LAST CLOSED W3-T18` |
+| Current canonical validation posture | `W1-T20 CLOSED DELIVERED — LAST CLOSED W1-T20` |
 
 ---
 

@@ -1,30 +1,30 @@
 # CVF Agent Handoff — 2026-03-25
 
 > Branch: `cvf-next`
-> Last push: `W3-T18-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W3-T18
+> Last push: `W1-T20-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W1-T20
 
 ---
 
 ## Current State
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **856 tests, 0 failures**
+- CPF (Control Plane Foundation): **897 tests, 0 failures**
 - EPF (Execution Plane Foundation): **902 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 
 ### Last Three Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W2-T24 | FeedbackRouting Consumer Pipeline Bridge | CP1, CP2, CP3 | 902 EPF |
 | W3-T17 | WatchdogEscalation Consumer Pipeline Bridge | CP1, CP2, CP3 | 590 GEF |
 | W3-T18 | WatchdogPulse Consumer Pipeline Bridge | CP1, CP2, CP3 | 625 GEF |
+| W1-T20 | GatewayAuth Consumer Pipeline Bridge | CP1, CP2, CP3 | 897 CPF |
 
 ### Key Contracts Delivered (last 2 tranches)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.auth.consumer.pipeline.contract.ts` — GatewayAuthConsumerPipelineContract (W1-T20)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.auth.consumer.pipeline.batch.contract.ts` — GatewayAuthConsumerPipelineBatchContract (W1-T20)
 - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.pulse.consumer.pipeline.contract.ts` — WatchdogPulseConsumerPipelineContract (W3-T18)
 - `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.pulse.consumer.pipeline.batch.contract.ts` — WatchdogPulseConsumerPipelineBatchContract (W3-T18)
-- `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.consumer.pipeline.contract.ts` — WatchdogEscalationConsumerPipelineContract (W3-T17)
-- `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.consumer.pipeline.batch.contract.ts` — WatchdogEscalationConsumerPipelineBatchContract (W3-T17)
 
 ---
 
@@ -34,11 +34,10 @@
 
 Current guidance:
 - no tranche is currently active
-- `W3-T18` is now closed and no longer a candidate
-- **W3 GEF consumer bridge wave is complete** — all identified GEF aggregate consumer visibility gaps have been closed
+- `W1-T20` is now closed and no longer a candidate
+- `GatewayAuthContract` consumer visibility gap is **CLOSED**
+- remaining CPF candidates for next survey: `ClarificationRefinementContract`, `KnowledgeQueryContract`
 - next move should survey CPF for the highest-value remaining unbridged gap under GC-018 stop-boundary rules
-
-**Survey needed**: check CPF source files for unbridged aggregate contracts that have no corresponding consumer pipeline bridge. The W3 wave covered the full GEF surface.
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

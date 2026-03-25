@@ -1185,3 +1185,17 @@ This roadmap means:
   - `W1-T20 / CP1` — GatewayAuthConsumerPipelineContract (`GatewayAuthRequest → GatewayAuthContract.evaluate() → GatewayAuthResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query from authStatus + tenantId; contextId = resultId; warnings for DENIED/EXPIRED/REVOKED) — Full Lane
   - `W1-T20 / CP2` — GatewayAuthConsumerPipelineBatchContract (`GatewayAuthConsumerPipelineResult[] → batch with dominantTokenBudget, nonAuthenticatedCount`) — Fast Lane (GC-021)
   - `W1-T20 / CP3` — Tranche closure review — Full Lane
+
+---
+
+## Post-Cycle Record — W1-T20
+
+> Tranche: W1-T20 — GatewayAuth Consumer Pipeline Bridge
+> Closed: 2026-03-25
+> Final CPF: 897 tests, 0 failures (+41 from 856)
+
+- `GatewayAuthConsumerPipelineContract` — CPF-internal bridge: `GatewayAuthRequest → GatewayAuthContract.evaluate() → GatewayAuthResult → ControlPlaneConsumerPipelineContract → ControlPlaneConsumerPackage`; query = `gateway-auth:${authStatus}:tenant:${tenantId}`.slice(0, 120); contextId = `authResult.resultId`
+- `GatewayAuthConsumerPipelineBatchContract` — batch aggregation with `nonAuthenticatedCount` (authenticated === false)
+- Warnings: DENIED → "[gateway-auth] access denied — tenant authentication failed"; EXPIRED → "[gateway-auth] credential expired — tenant session requires renewal"; REVOKED → "[gateway-auth] credential revoked — tenant access has been revoked"; AUTHENTICATED → no warning
+- Gap closed: `GatewayAuthContract` (CPF governance-critical tenant auth decision contract — W1-T8 CP1) had no governed consumer-visible enriched output path
+- Closure anchor: `docs/reviews/CVF_W1_T20_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`

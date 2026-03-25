@@ -817,6 +817,17 @@
       ]
     },
     {
+      "scope": "LPF TruthScore Consumer Pipeline (W4-T9 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.score.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TruthScoreConsumerPipelineContract",
+        "createTruthScoreConsumerPipelineContract"
+      ]
+    },
+    {
       "scope": "LPF EvaluationEngine Consumer Pipeline (W4-T8 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/evaluation.engine.consumer.pipeline.test.ts",
       "forbiddenFiles": [

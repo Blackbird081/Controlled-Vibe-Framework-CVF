@@ -727,6 +727,17 @@
         "WatchdogPulseConsumerPipelineContract",
         "createWatchdogPulseConsumerPipelineContract"
       ]
+    },
+    {
+      "scope": "GEF WatchdogPulse Consumer Pipeline Batch (W3-T18 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.pulse.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogPulseConsumerPipelineBatchContract",
+        "createWatchdogPulseConsumerPipelineBatchContract"
+      ]
     }
   ]
 }

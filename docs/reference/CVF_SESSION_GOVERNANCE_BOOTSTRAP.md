@@ -86,6 +86,21 @@ Primary references:
 - `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`
 - `governance/compat/CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json`
 
+### `GC-027` — Multi-Agent Intake / Rebuttal / Decision-Pack Standard
+
+Use when:
+
+- multi-agent intake review, rebuttal, or decision-pack drafting is starting
+- multiple agents are evaluating the same proposal set
+- roadmap intake must choose one reconciled decision rather than parallel ad-hoc review formats
+
+Primary references:
+
+- `governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`
+- `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
+- `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
+- `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`
+
 ### `GC-024` — Test Partition Ownership
 
 Use when:
@@ -107,6 +122,7 @@ Use this routing table after reading the always-on bootstrap:
 | continuation or breadth/deepening proposal | `GC-018` |
 | structural merge or package move | `GC-019` |
 | pause, resume, shift handoff, agent transfer | `GC-020` |
+| multi-agent intake review, rebuttal, or decision-pack drafting | `GC-027` |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |
 | ordinary tranche-local implementation already authorized | active roadmap + tranche packet only |

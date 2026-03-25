@@ -97,6 +97,9 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
 - `reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
 - `reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`
+- `reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
+- `reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
+- `reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`
 - `reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
 - `reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`
@@ -105,6 +108,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `../governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`
+- `../governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`
 - `reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
 - `reference/CVF_REFERENCE_GOVERNED_LOOP.md`
 - `reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`

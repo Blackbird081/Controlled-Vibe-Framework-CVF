@@ -138,6 +138,12 @@ Personal AI usage unrelated to company work is excluded.
    - Canonical template: `docs/reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PROGRESS_TRACKER_SYNC_GUARD.md`.
    - Automated enforcement reference: `governance/compat/check_progress_tracker_sync.py`.
+21. Canonical multi-agent intake/rebuttal/decision documentation is mandatory before roadmap intake or implementation selection when multiple agents evaluate the same proposal set:
+   - This rule applies when CVF uses separate agents or review passes to evaluate, rebut, and reconcile the same new module, layer, architecture addition, or roadmap candidate.
+   - The canonical sequence is: intake review -> cross-agent rebuttal -> pre-integration decision pack -> only then roadmap intake or implementation authorization.
+   - Canonical templates: `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`, `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`, and `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`.
+   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`.
+   - Automated enforcement reference: `governance/compat/check_multi_agent_review_governance_compat.py`.
 
 ---
 

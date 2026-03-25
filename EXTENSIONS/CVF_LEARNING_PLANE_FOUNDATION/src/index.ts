@@ -38,6 +38,17 @@ export type {
   TruthScoreConsumerPipelineBatch,
 } from "./truth.score.consumer.pipeline.batch.contract";
 
+// W4-T10 — PatternDetection Consumer Pipeline Bridge (CP1)
+export {
+  PatternDetectionConsumerPipelineContract,
+  createPatternDetectionConsumerPipelineContract,
+} from "./pattern.detection.consumer.pipeline.contract";
+export type {
+  PatternDetectionConsumerPipelineRequest,
+  PatternDetectionConsumerPipelineResult,
+  PatternDetectionConsumerPipelineContractDependencies,
+} from "./pattern.detection.consumer.pipeline.contract";
+
 // W6-T8 — Truth Model Scoring Slice (CP1–CP2)
 export {
   TruthScoreContract,

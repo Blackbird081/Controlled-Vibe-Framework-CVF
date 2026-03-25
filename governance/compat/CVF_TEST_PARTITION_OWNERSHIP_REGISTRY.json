@@ -828,6 +828,17 @@
       ]
     },
     {
+      "scope": "LPF PatternDetection Consumer Pipeline Batch (W4-T10 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.detection.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDetectionConsumerPipelineBatchContract",
+        "createPatternDetectionConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "LPF TruthScore Consumer Pipeline Batch (W4-T9 CP2)",
       "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.score.consumer.pipeline.batch.test.ts",
       "forbiddenFiles": [

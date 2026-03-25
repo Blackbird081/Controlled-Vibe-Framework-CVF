@@ -29,6 +29,9 @@
  *     - createdAt set to injected now()
  *     - pipelineStages.length = 4
  *     - pipelineStages includes INTAKE, DESIGN, BOARDROOM, ORCHESTRATION stages
+ *     - boardroomTransition result recorded on the receipt
+ *     - orchestrationBlocked = false on PROCEED path
+ *     - orchestrationBlocked = true and totalAssignments = 0 when boardroom blocks continuation
  *     - consumerId = intake.consumerId
  *     - receiptId = evidenceHash
  *     - designPlan, boardroomSession, orchestrationResult all present
@@ -313,11 +316,38 @@ describe("DesignConsumerContract.consume", () => {
     const receipt = contract.consume(intake);
     expect(receipt.designPlan).toBeDefined();
     expect(receipt.boardroomSession).toBeDefined();
+    expect(receipt.boardroomTransition).toBeDefined();
     expect(receipt.orchestrationResult).toBeDefined();
   });
 
   it("evidenceHash is truthy", () => {
     expect(contract.consume(intake).evidenceHash.length).toBeGreaterThan(0);
+  });
+
+  it("PROCEED path records boardroomTransition and keeps orchestration unblocked", () => {
+    const receipt = contract.consume(intake);
+    expect(receipt.boardroomTransition.action).toBe("PROCEED_TO_ORCHESTRATION");
+    expect(receipt.orchestrationBlocked).toBe(false);
+    expect(receipt.orchestrationResult.totalAssignments).toBe(
+      receipt.designPlan.totalTasks,
+    );
+  });
+
+  it("blocked boardroom path returns orchestrationBlocked = true and zero assignments", () => {
+    const blockedReceipt = createDesignConsumerContract({
+      now: fixedNow,
+      clarifications: [{ question: "Missing answer" }],
+    }).consume(intake);
+
+    expect(blockedReceipt.boardroomSession.decision.decision).toBe("AMEND_PLAN");
+    expect(blockedReceipt.boardroomTransition.action).toBe("RETURN_TO_DESIGN");
+    expect(blockedReceipt.orchestrationBlocked).toBe(true);
+    expect(blockedReceipt.orchestrationResult.totalAssignments).toBe(0);
+    expect(
+      blockedReceipt.orchestrationResult.warnings.some((warning) =>
+        warning.includes("Orchestration blocked by boardroom transition gate"),
+      ),
+    ).toBe(true);
   });
 
   it("factory createDesignConsumerContract returns working instance", () => {

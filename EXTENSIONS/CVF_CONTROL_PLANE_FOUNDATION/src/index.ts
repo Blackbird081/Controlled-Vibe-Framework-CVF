@@ -594,6 +594,16 @@ export type {
   BoardroomContractDependencies,
 } from "./boardroom.contract";
 export {
+  BoardroomTransitionGateContract,
+  createBoardroomTransitionGateContract,
+} from "./boardroom.transition.gate.contract";
+export type {
+  BoardroomTransitionAction,
+  BoardroomTransitionNextStage,
+  BoardroomTransitionGateResult,
+  BoardroomTransitionGateContractDependencies,
+} from "./boardroom.transition.gate.contract";
+export {
   OrchestrationContract,
   createOrchestrationContract,
 } from "./orchestration.contract";

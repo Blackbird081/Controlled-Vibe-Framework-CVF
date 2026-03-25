@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: canonical runtime/control-plane reference for live multi-agent deliberation inside the AI Boardroom path.
+Status: canonical runtime/control-plane reference for live multi-agent deliberation inside the AI Boardroom path, now governed by `GC-028`.
 
 ## Purpose
 
@@ -26,6 +26,7 @@ Current code-backed boardroom anchors already exist here:
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.contract.ts`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.round.contract.ts`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/design.consumer.contract.ts`
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.transition.gate.contract.ts`
 
 Current decision outputs:
 
@@ -44,6 +45,14 @@ The boardroom sequence should be read as:
 4. record rationale, warnings, and dissent-worthy concerns
 5. converge on one governed decision
 6. pass only the governed result into the downstream design/orchestration path
+
+Architectural note:
+
+- whitepaper authority still belongs to the `INTAKE -> DESIGN` boundary
+- current delivered runtime may materialize an intake-shaped design candidate before downstream orchestration
+- `GC-028` governs the decision surface regardless of that internal packaging detail
+
+In plain terms: GC-028 governs the decision surface regardless of that internal packaging detail.
 
 ## Required Deliberation Properties
 
@@ -85,16 +94,23 @@ This means Boardroom quality matters more than later rebuttal formatting alone.
 
 ## Current Governance Posture
 
-This protocol is canonical reference truth now.
+This protocol is canonical runtime truth now.
 
-Repo-level compatibility enforcement for `GC-027` exists today.
-Dedicated runtime enforcement expansion for boardroom deliberation may be introduced later, but this document should already be treated as the canonical scope boundary.
+Dedicated boardroom runtime governance now exists through:
+
+- `governance/toolkit/05_OPERATION/CVF_BOARDROOM_RUNTIME_GUARD.md`
+- `governance/compat/check_boardroom_runtime_governance_compat.py`
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.transition.gate.contract.ts`
 
 ## Related References
 
 - `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `docs/reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md`
+- `docs/reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`
+- `docs/reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`
 - `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
 - `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
 - `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`
 - `governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_BOARDROOM_RUNTIME_GUARD.md`

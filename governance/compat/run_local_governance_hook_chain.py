@@ -67,6 +67,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_multi_agent_review_governance_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
         (
+            "boardroom runtime governance compatibility",
+            ["python", "governance/compat/check_boardroom_runtime_governance_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
             "fast-lane governance compatibility",
             ["python", "governance/compat/check_fast_lane_governance_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),

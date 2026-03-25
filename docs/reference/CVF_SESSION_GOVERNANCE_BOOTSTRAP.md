@@ -107,12 +107,18 @@ Use when:
 
 - live intake debate, clarification, rebuttal, or convergence is happening inside the Control Plane
 - the system must choose the best governed result before downstream design/orchestration continues
+- downstream orchestration must stay blocked until the live boardroom transition gate permits continuation
 
 Primary references:
 
+- `governance/toolkit/05_OPERATION/CVF_BOARDROOM_RUNTIME_GUARD.md`
 - `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`
+- `docs/reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md`
+- `docs/reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`
+- `docs/reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.contract.ts`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.round.contract.ts`
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.transition.gate.contract.ts`
 
 ### `GC-024` — Test Partition Ownership
 
@@ -136,7 +142,7 @@ Use this routing table after reading the always-on bootstrap:
 | structural merge or package move | `GC-019` |
 | pause, resume, shift handoff, agent transfer | `GC-020` |
 | multi-agent intake review, rebuttal, or decision-pack drafting | `GC-027` |
-| live boardroom deliberation in intake/design flow | `AI Boardroom` protocol + active roadmap |
+| live boardroom deliberation in intake/design flow | `GC-028` + `AI Boardroom` protocol + active roadmap |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |
 | ordinary tranche-local implementation already authorized | active roadmap + tranche packet only |

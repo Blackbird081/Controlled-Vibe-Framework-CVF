@@ -139,13 +139,21 @@ Personal AI usage unrelated to company work is excluded.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PROGRESS_TRACKER_SYNC_GUARD.md`.
    - Automated enforcement reference: `governance/compat/check_progress_tracker_sync.py`.
 21. Canonical multi-agent intake/rebuttal/decision documentation is mandatory before roadmap intake or implementation selection when multiple agents evaluate the same proposal set:
-   - This rule applies when CVF uses separate agents or review passes to evaluate, rebut, and reconcile the same new module, layer, architecture addition, or roadmap candidate.
-   - The canonical sequence is: intake review -> cross-agent rebuttal -> pre-integration decision pack -> only then roadmap intake or implementation authorization.
+    - This rule applies when CVF uses separate agents or review passes to evaluate, rebut, and reconcile the same new module, layer, architecture addition, or roadmap candidate.
+    - The canonical sequence is: intake review -> cross-agent rebuttal -> pre-integration decision pack -> only then roadmap intake or implementation authorization.
    - Canonical templates: `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`, `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`, and `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`.
-   - Automated enforcement reference: `governance/compat/check_multi_agent_review_governance_compat.py`.
-   - This rule governs canonical documentation only; it does not replace live `AI Boardroom` deliberation inside the Control Plane.
-   - The separate canonical runtime/reference boundary for boardroom deliberation is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
+    - Automated enforcement reference: `governance/compat/check_multi_agent_review_governance_compat.py`.
+    - This rule governs canonical documentation only; it does not replace live `AI Boardroom` deliberation inside the Control Plane.
+    - The separate canonical runtime/reference boundary for boardroom deliberation is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
+ 22. Live `AI Boardroom` deliberation is a separate high-criticality control and must truthfully gate downstream work:
+    - This rule applies when multiple agents or perspectives deliberate inside the live Control Plane before downstream design or orchestration continues.
+    - The canonical sequence is: boardroom session packet -> dissent log when needed -> transition decision -> only then the next allowed runtime stage.
+    - Canonical templates: `docs/reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md`, `docs/reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`, and `docs/reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`.
+    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_BOARDROOM_RUNTIME_GUARD.md`.
+    - Automated enforcement reference: `governance/compat/check_boardroom_runtime_governance_compat.py`.
+    - The canonical runtime/reference protocol is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
+    - Downstream orchestration must remain blocked unless the boardroom transition gate returns `PROCEED_TO_ORCHESTRATION`.
 
 ---
 

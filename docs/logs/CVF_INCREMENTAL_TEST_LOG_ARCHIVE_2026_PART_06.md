@@ -1,0 +1,163 @@
+# CVF Incremental Test Log Archive
+
+Memory class: SUMMARY_RECORD
+
+- Canonical entrypoint: `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Archive file: `docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_06.md`
+- Archived entry count: `5`
+- Archive window: `[2026-03-22] Batch: W1-T2 usable intake slice planning + CP1 packet opening` -> `[2026-03-22] Batch: Agent handoff transition semantics and automation`
+
+---
+
+## [2026-03-22] Batch: W1-T2 usable intake slice planning + CP1 packet opening
+- Scope:
+  - open the tranche-local execution plan for `W1-T2`
+  - issue the first `GC-019` packet chain for `CP1`
+  - keep `CP1` explicitly centered on one usable intake contract baseline rather than another shell package
+- Policy / roadmap references:
+  - `docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_PACKET_2026-03-22.md`
+  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T2_2026-03-22.md`
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/audits/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T2_USABLE_INTAKE_SLICE_PLANNING_DELTA_2026-03-22.md`
+- Files updated:
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/audits/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T2_USABLE_INTAKE_SLICE_PLANNING_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch is planning/review only; it does not execute `CP1`.
+  - `CP1` is intentionally bounded as a usable contract baseline and must not be relabeled as full `AI Gateway` realization.
+  - later `W1-T2` packets still need to prove deterministic packaged output and one real consumer path before the tranche can close.
+## [2026-03-22] Batch: W1-T2 CP1 usable intake contract baseline implementation
+- Scope:
+  - implement `W1-T2 / CP1` as one bounded usable intake contract baseline
+  - connect intent validation, source-backed retrieval, and deterministic context packaging behind one callable contract
+  - expose the same contract through `CVF_PLANE_FACADES` so callers have one usable entrypoint immediately
+- Policy / roadmap references:
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/audits/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_AUDIT_2026-03-22.md`
+  - `docs/reviews/CVF_GC019_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_REVIEW_2026-03-22.md`
+  - `docs/baselines/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/README.md`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/intake.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts`
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/index.ts`
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/knowledge.facade.ts`
+  - `EXTENSIONS/CVF_PLANE_FACADES/src/index.test.ts`
+  - `docs/baselines/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+  - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
+  - `docs/reference/CVF_MODULE_INVENTORY.md`
+  - `docs/reference/CVF_RELEASE_MANIFEST.md`
+  - `docs/reference/CVF_MATURITY_MATRIX.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- Tests executed:
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run check` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_PLANE_FACADES && npm run test:coverage` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE && npm run test` -> PASS
+  - `cd EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY && npm run test` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch intentionally stops at a bounded intake baseline and does not claim full `AI Gateway` completion.
+  - `CP2+` still need to deepen retrieval unification, packaging semantics, and one real downstream consumer path before tranche closure.
+## [2026-03-22] Batch: Agent handoff template canonicalization
+- Scope:
+  - store one canonical handoff template for pause and agent-transfer events
+  - make the template durable under `docs/reference/` instead of leaving it as chat-only guidance
+  - index the template so future users and agents can reuse the same truthful handoff pattern
+- Policy / roadmap references:
+  - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+  - `docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md`
+  - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+- Files updated:
+  - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+  - `docs/reference/README.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_AGENT_HANDOFF_TEMPLATE_CANONICALIZATION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch adds a canonical documentation artifact only; it does not change runtime behavior.
+  - future handoffs should still be updated per tranche truth rather than copied blindly.
+## [2026-03-22] Batch: Agent handoff guard adoption
+- Scope:
+  - promote agent handoff from a canonical template into an explicit governance guard requirement
+  - connect the new guard to the master policy and governance control matrix
+  - treat pause/transfer between agents as a real governed checkpoint rather than informal courtesy
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- Files updated:
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_AGENT_HANDOFF_GUARD_ADOPTION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this batch changes governance posture and documentation only; it does not yet add a dedicated automated compat gate for missing handoff artifacts.
+  - until automation exists, compliance depends on policy discipline plus review-time enforcement.
+## [2026-03-22] Batch: Agent handoff transition semantics and automation
+- Scope:
+  - define transition semantics for `continue`, `break`, `pause`, `shift handoff`, `agent transfer`, `escalation handoff`, and `closure`
+  - require transition classification before the handoff template is used
+  - add an automated compat gate so `GC-020` alignment is checked without waiting for prompt-time reminders
+- Policy / roadmap references:
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- Files updated:
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
+  - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+  - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
+  - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+  - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+  - `governance/compat/check_agent_handoff_guard_compat.py`
+  - `governance/compat/run_local_governance_hook_chain.py`
+  - `docs/INDEX.md`
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/baselines/CVF_AGENT_HANDOFF_TRANSITION_AUTOMATION_DELTA_2026-03-22.md`
+- Tests executed:
+  - `python governance/compat/check_agent_handoff_guard_compat.py --enforce` -> PASS
+  - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
+  - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
+  - `python governance/compat/check_release_manifest_consistency.py --enforce` -> PASS
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push` -> PASS
+- Notes/Risks:
+  - this gate enforces repo-level alignment for `GC-020`; it does not yet detect live chat pauses by itself because that needs session/runtime signals.
+  - the automation is still valuable because it stops the handoff standard from silently drifting out of policy, docs, and hook-chain alignment.

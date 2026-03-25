@@ -3,6 +3,12 @@ import { DesignContract } from "./design.contract";
 import type { DesignPlan } from "./design.contract";
 import { BoardroomContract } from "./boardroom.contract";
 import type { BoardroomSession, BoardroomRequest } from "./boardroom.contract";
+import {
+  BoardroomTransitionGateContract,
+} from "./boardroom.transition.gate.contract";
+import type {
+  BoardroomTransitionGateResult,
+} from "./boardroom.transition.gate.contract";
 import { OrchestrationContract } from "./orchestration.contract";
 import type { OrchestrationResult } from "./orchestration.contract";
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
@@ -27,6 +33,8 @@ export interface DesignConsumptionReceipt {
   consumerId?: string;
   designPlan: DesignPlan;
   boardroomSession: BoardroomSession;
+  boardroomTransition: BoardroomTransitionGateResult;
+  orchestrationBlocked: boolean;
   orchestrationResult: OrchestrationResult;
   pipelineStages: DesignPipelineStageEntry[];
   evidenceHash: string;
@@ -80,6 +88,9 @@ export class DesignConsumerContract {
       plan: designPlan,
       clarifications: this.clarifications,
     });
+    const boardroomTransition = new BoardroomTransitionGateContract({
+      now: this.now,
+    }).evaluate(boardroomSession);
     const boardroomEnd = Date.now();
     stages.push({
       stage: "BOARDROOM",
@@ -89,10 +100,15 @@ export class DesignConsumerContract {
 
     // Stage 4: ORCHESTRATION
     const orchestrationStart = Date.now();
-    const orchestrationContract = new OrchestrationContract({ now: this.now });
-    const orchestrationResult = orchestrationContract.orchestrate(
-      boardroomSession.finalPlan,
-    );
+    const orchestrationBlocked = !boardroomTransition.allowOrchestration;
+    const orchestrationResult = orchestrationBlocked
+      ? this.buildBlockedOrchestrationResult(
+          boardroomSession.finalPlan,
+          boardroomTransition,
+        )
+      : new OrchestrationContract({ now: this.now }).orchestrate(
+          boardroomSession.finalPlan,
+        );
     const orchestrationEnd = Date.now();
     stages.push({
       stage: "ORCHESTRATION",
@@ -111,6 +127,11 @@ export class DesignConsumerContract {
         `Boardroom phase produced ${boardroomSession.warnings.length} warning(s).`,
       );
     }
+    if (boardroomTransition.blockingConditions.length > 0) {
+      warnings.push(
+        `Boardroom transition gate recorded ${boardroomTransition.blockingConditions.length} blocking condition(s).`,
+      );
+    }
     if (orchestrationResult.warnings.length > 0) {
       warnings.push(
         `Orchestration phase produced ${orchestrationResult.warnings.length} warning(s).`,
@@ -119,14 +140,19 @@ export class DesignConsumerContract {
 
     if (boardroomSession.decision.decision !== "PROCEED") {
       warnings.push(
-        `Boardroom did not PROCEED — decision was ${boardroomSession.decision.decision}. Orchestration ran on potentially amended plan.`,
+        `Boardroom did not PROCEED — decision was ${boardroomSession.decision.decision}. Transition action is ${boardroomTransition.action}.`,
+      );
+    }
+    if (orchestrationBlocked) {
+      warnings.push(
+        `Downstream orchestration blocked by boardroom transition gate; next allowed stage is ${boardroomTransition.nextStage}.`,
       );
     }
 
     const evidenceHash = computeDeterministicHash(
       "w1-t3-cp4-design-consumer",
       `${createdAt}:${intake.requestId}`,
-      `plan:${designPlan.planHash}:session:${boardroomSession.sessionHash}`,
+      `plan:${designPlan.planHash}:session:${boardroomSession.sessionHash}:gate:${boardroomTransition.gateHash}`,
       orchestrationResult.orchestrationHash,
     );
 
@@ -136,10 +162,56 @@ export class DesignConsumerContract {
       consumerId: intake.consumerId,
       designPlan,
       boardroomSession,
+      boardroomTransition,
+      orchestrationBlocked,
       orchestrationResult,
       pipelineStages: stages,
       evidenceHash,
       warnings,
+    };
+  }
+
+  private buildBlockedOrchestrationResult(
+    plan: DesignPlan,
+    boardroomTransition: BoardroomTransitionGateResult,
+  ): OrchestrationResult {
+    const createdAt = this.now();
+    const orchestrationHash = computeDeterministicHash(
+      "gc028-orchestration-blocked",
+      `${createdAt}:${plan.planId}`,
+      boardroomTransition.gateHash,
+      boardroomTransition.action,
+    );
+
+    return {
+      orchestrationId: orchestrationHash,
+      createdAt,
+      planId: plan.planId,
+      consumerId: plan.consumerId,
+      assignments: [],
+      totalAssignments: 0,
+      phaseBreakdown: {
+        DESIGN: 0,
+        BUILD: 0,
+        REVIEW: 0,
+      },
+      roleBreakdown: {
+        orchestrator: 0,
+        architect: 0,
+        builder: 0,
+        reviewer: 0,
+      },
+      riskBreakdown: {
+        R0: 0,
+        R1: 0,
+        R2: 0,
+        R3: 0,
+      },
+      orchestrationHash,
+      warnings: [
+        `Orchestration blocked by boardroom transition gate: ${boardroomTransition.action}.`,
+        ...boardroomTransition.blockingConditions,
+      ],
     };
   }
 }

@@ -477,3 +477,313 @@ describe("FeedbackLedgerConsumerPipelineContract (W4-T17 CP1)", () => {
     expect(result.feedbackLedger.retryCount).toBe(50);
   });
 });
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// W4-T17 CP2 — FeedbackLedgerConsumerPipelineBatchContract
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import {
+  FeedbackLedgerConsumerPipelineBatchContract,
+  createFeedbackLedgerConsumerPipelineBatchContract,
+} from "../src/feedback.ledger.consumer.pipeline.batch.contract";
+
+describe("FeedbackLedgerConsumerPipelineBatchContract (W4-T17 CP2)", () => {
+  const fixedNow = "2026-03-27T12:00:00.000Z";
+  const mockNow = () => fixedNow;
+
+  const createSignal = (
+    feedbackClass: FeedbackClass,
+    overrides?: Partial<LearningFeedbackInput>,
+  ): LearningFeedbackInput => ({
+    feedbackId: `feedback-${Math.random()}`,
+    sourcePipelineId: "pipeline-1",
+    feedbackClass,
+    priority: "medium",
+    confidenceBoost: 0.1,
+    ...overrides,
+  });
+
+  // ─── Instantiation ──────────────────────────────────────────────────────────
+
+  it("should instantiate with default dependencies", () => {
+    const contract = new FeedbackLedgerConsumerPipelineBatchContract();
+    expect(contract).toBeInstanceOf(FeedbackLedgerConsumerPipelineBatchContract);
+  });
+
+  it("should instantiate with custom dependencies", () => {
+    const contract = new FeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+    expect(contract).toBeInstanceOf(FeedbackLedgerConsumerPipelineBatchContract);
+  });
+
+  it("should instantiate via factory", () => {
+    const contract = createFeedbackLedgerConsumerPipelineBatchContract();
+    expect(contract).toBeInstanceOf(FeedbackLedgerConsumerPipelineBatchContract);
+  });
+
+  it("should instantiate via factory with dependencies", () => {
+    const contract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+    expect(contract).toBeInstanceOf(FeedbackLedgerConsumerPipelineBatchContract);
+  });
+
+  // ─── Output Shape ───────────────────────────────────────────────────────────
+
+  it("should return batch result with all required fields", () => {
+    const batchContract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const pipelineContract = createFeedbackLedgerConsumerPipelineContract({
+      now: mockNow,
+    });
+
+    const result1 = pipelineContract.execute({
+      signals: [createSignal("ACCEPT")],
+    });
+
+    const batchResult = batchContract.execute([result1]);
+
+    expect(batchResult).toHaveProperty("batchId");
+    expect(batchResult).toHaveProperty("createdAt");
+    expect(batchResult).toHaveProperty("totalResults");
+    expect(batchResult).toHaveProperty("dominantTokenBudget");
+    expect(batchResult).toHaveProperty("totalFeedbackCount");
+    expect(batchResult).toHaveProperty("feedbackClassCounts");
+    expect(batchResult).toHaveProperty("batchHash");
+  });
+
+  // ─── Empty Batch ────────────────────────────────────────────────────────────
+
+  it("should handle empty batch", () => {
+    const contract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const batchResult = contract.execute([]);
+
+    expect(batchResult.totalResults).toBe(0);
+    expect(batchResult.dominantTokenBudget).toBe(0);
+    expect(batchResult.totalFeedbackCount).toBe(0);
+    expect(batchResult.batchHash).toBeTruthy();
+  });
+
+  // ─── totalResults ───────────────────────────────────────────────────────────
+
+  it("should count totalResults correctly", () => {
+    const batchContract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const pipelineContract = createFeedbackLedgerConsumerPipelineContract({
+      now: mockNow,
+    });
+
+    const results = [
+      pipelineContract.execute({ signals: [createSignal("ACCEPT")] }),
+      pipelineContract.execute({ signals: [createSignal("RETRY")] }),
+      pipelineContract.execute({ signals: [createSignal("ESCALATE")] }),
+    ];
+
+    const batchResult = batchContract.execute(results);
+
+    expect(batchResult.totalResults).toBe(3);
+  });
+
+  // ─── dominantTokenBudget ────────────────────────────────────────────────────
+
+  it("should calculate dominantTokenBudget as max estimatedTokens", () => {
+    const batchContract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const pipelineContract = createFeedbackLedgerConsumerPipelineContract({
+      now: mockNow,
+    });
+
+    const results = [
+      pipelineContract.execute({ signals: [createSignal("ACCEPT")] }),
+      pipelineContract.execute({ signals: Array.from({ length: 10 }, () => createSignal("RETRY")) }),
+      pipelineContract.execute({ signals: [createSignal("ESCALATE")] }),
+    ];
+
+    const batchResult = batchContract.execute(results);
+
+    const maxTokens = Math.max(
+      ...results.map((r) => r.consumerPackage.typedContextPackage.estimatedTokens),
+    );
+
+    expect(batchResult.dominantTokenBudget).toBe(maxTokens);
+  });
+
+  // ─── totalFeedbackCount ─────────────────────────────────────────────────────
+
+  it("should sum totalFeedbackCount from all results", () => {
+    const batchContract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const pipelineContract = createFeedbackLedgerConsumerPipelineContract({
+      now: mockNow,
+    });
+
+    const results = [
+      pipelineContract.execute({ signals: [createSignal("ACCEPT"), createSignal("ACCEPT")] }),
+      pipelineContract.execute({ signals: [createSignal("RETRY")] }),
+      pipelineContract.execute({ signals: [createSignal("ESCALATE"), createSignal("REJECT")] }),
+    ];
+
+    const batchResult = batchContract.execute(results);
+
+    const expectedTotal = results.reduce(
+      (sum, r) => sum + r.feedbackLedger.totalRecords,
+      0,
+    );
+
+    expect(batchResult.totalFeedbackCount).toBe(expectedTotal);
+    expect(batchResult.totalFeedbackCount).toBe(5);
+  });
+
+  it("should have totalFeedbackCount of 0 for empty batch", () => {
+    const contract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const batchResult = contract.execute([]);
+
+    expect(batchResult.totalFeedbackCount).toBe(0);
+  });
+
+  // ─── feedbackClassCounts ────────────────────────────────────────────────────
+
+  it("should aggregate feedbackClassCounts correctly", () => {
+    const batchContract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const pipelineContract = createFeedbackLedgerConsumerPipelineContract({
+      now: mockNow,
+    });
+
+    const results = [
+      pipelineContract.execute({ signals: [createSignal("ACCEPT"), createSignal("ACCEPT")] }),
+      pipelineContract.execute({ signals: [createSignal("RETRY")] }),
+      pipelineContract.execute({ signals: [createSignal("ESCALATE"), createSignal("REJECT")] }),
+    ];
+
+    const batchResult = batchContract.execute(results);
+
+    expect(batchResult.feedbackClassCounts.acceptCount).toBe(2);
+    expect(batchResult.feedbackClassCounts.retryCount).toBe(1);
+    expect(batchResult.feedbackClassCounts.escalateCount).toBe(1);
+    expect(batchResult.feedbackClassCounts.rejectCount).toBe(1);
+  });
+
+  it("should initialize all feedbackClassCounts to 0 for empty batch", () => {
+    const contract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const batchResult = contract.execute([]);
+
+    expect(batchResult.feedbackClassCounts.acceptCount).toBe(0);
+    expect(batchResult.feedbackClassCounts.retryCount).toBe(0);
+    expect(batchResult.feedbackClassCounts.escalateCount).toBe(0);
+    expect(batchResult.feedbackClassCounts.rejectCount).toBe(0);
+  });
+
+  // ─── Deterministic Hashing ──────────────────────────────────────────────────
+
+  it("should produce deterministic batchHash for same inputs", () => {
+    const batchContract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const pipelineContract = createFeedbackLedgerConsumerPipelineContract({
+      now: mockNow,
+    });
+
+    const signal = createSignal("ACCEPT", { feedbackId: "fixed-id" });
+    const results = [
+      pipelineContract.execute({ signals: [signal] }),
+    ];
+
+    const batchResult1 = batchContract.execute(results);
+    const batchResult2 = batchContract.execute(results);
+
+    expect(batchResult1.batchHash).toBe(batchResult2.batchHash);
+  });
+
+  it("should produce different batchHash for different results", () => {
+    const batchContract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const pipelineContract = createFeedbackLedgerConsumerPipelineContract({
+      now: mockNow,
+    });
+
+    const results1 = [
+      pipelineContract.execute({ signals: [createSignal("ACCEPT", { feedbackId: "id-1" })] }),
+    ];
+
+    const results2 = [
+      pipelineContract.execute({ signals: [createSignal("RETRY", { feedbackId: "id-2" })] }),
+    ];
+
+    const batchResult1 = batchContract.execute(results1);
+    const batchResult2 = batchContract.execute(results2);
+
+    expect(batchResult1.batchHash).not.toBe(batchResult2.batchHash);
+  });
+
+  // ─── Mixed Scenarios ────────────────────────────────────────────────────────
+
+  it("should handle single result batch", () => {
+    const batchContract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const pipelineContract = createFeedbackLedgerConsumerPipelineContract({
+      now: mockNow,
+    });
+
+    const result = pipelineContract.execute({
+      signals: [createSignal("ACCEPT")],
+    });
+
+    const batchResult = batchContract.execute([result]);
+
+    expect(batchResult.totalResults).toBe(1);
+    expect(batchResult.dominantTokenBudget).toBe(
+      result.consumerPackage.typedContextPackage.estimatedTokens,
+    );
+    expect(batchResult.totalFeedbackCount).toBe(result.feedbackLedger.totalRecords);
+    expect(batchResult.feedbackClassCounts.acceptCount).toBe(1);
+  });
+
+  it("should handle large batch", () => {
+    const batchContract = createFeedbackLedgerConsumerPipelineBatchContract({
+      now: mockNow,
+    });
+
+    const pipelineContract = createFeedbackLedgerConsumerPipelineContract({
+      now: mockNow,
+    });
+
+    const results = Array.from({ length: 50 }, (_, i) =>
+      pipelineContract.execute({
+        signals: [createSignal(i % 2 === 0 ? "ACCEPT" : "RETRY")],
+      }),
+    );
+
+    const batchResult = batchContract.execute(results);
+
+    expect(batchResult.totalResults).toBe(50);
+    expect(batchResult.feedbackClassCounts.acceptCount).toBe(25);
+    expect(batchResult.feedbackClassCounts.retryCount).toBe(25);
+  });
+});

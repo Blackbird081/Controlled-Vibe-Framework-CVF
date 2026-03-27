@@ -171,6 +171,16 @@ export type {
   FeedbackLedgerConsumerPipelineContractDependencies,
 } from "./feedback.ledger.consumer.pipeline.contract";
 
+// W4-T17 — FeedbackLedger Consumer Pipeline Batch (CP2)
+export {
+  FeedbackLedgerConsumerPipelineBatchContract,
+  createFeedbackLedgerConsumerPipelineBatchContract,
+} from "./feedback.ledger.consumer.pipeline.batch.contract";
+export type {
+  FeedbackLedgerConsumerPipelineBatchResult,
+  FeedbackLedgerConsumerPipelineBatchContractDependencies,
+} from "./feedback.ledger.consumer.pipeline.batch.contract";
+
 // W4-T14 — LearningLoop Consumer Pipeline Bridge (CP1)
 export {
   LearningLoopConsumerPipelineContract,

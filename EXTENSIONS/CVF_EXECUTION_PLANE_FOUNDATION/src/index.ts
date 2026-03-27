@@ -9,6 +9,16 @@ export type {
   CommandRuntimeConsumerPipelineContractDependencies,
 } from "./command.runtime.consumer.pipeline.contract";
 
+// W2-T25 — CommandRuntime Consumer Pipeline Batch (CP2)
+export {
+  CommandRuntimeConsumerPipelineBatchContract,
+  createCommandRuntimeConsumerPipelineBatchContract,
+} from "./command.runtime.consumer.pipeline.batch.contract";
+export type {
+  CommandRuntimeConsumerPipelineBatchResult,
+  CommandRuntimeConsumerPipelineBatchContractDependencies,
+} from "./command.runtime.consumer.pipeline.batch.contract";
+
 // W2-T24 — FeedbackRouting Consumer Pipeline Bridge (CP2)
 export {
   FeedbackRoutingConsumerPipelineBatchContract,

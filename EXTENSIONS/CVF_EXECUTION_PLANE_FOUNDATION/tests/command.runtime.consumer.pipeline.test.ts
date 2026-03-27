@@ -365,3 +365,247 @@ describe("CommandRuntimeConsumerPipelineContract", () => {
     });
   });
 });
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BATCH CONTRACT TESTS (W2-T25 CP2)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import {
+  CommandRuntimeConsumerPipelineBatchContract,
+  createCommandRuntimeConsumerPipelineBatchContract,
+} from "../src/command.runtime.consumer.pipeline.batch.contract";
+import type { CommandRuntimeConsumerPipelineResult } from "../src/command.runtime.consumer.pipeline.contract";
+
+describe("CommandRuntimeConsumerPipelineBatchContract", () => {
+
+  // ── Instantiation ──────────────────────────────────────────────────────────
+
+  describe("instantiation", () => {
+    it("should instantiate with no dependencies", () => {
+      const contract = new CommandRuntimeConsumerPipelineBatchContract();
+      expect(contract).toBeDefined();
+    });
+
+    it("should instantiate via factory function", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      expect(contract).toBeDefined();
+    });
+
+    it("should instantiate with custom now function", () => {
+      const contract = new CommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const result = pipelineContract.execute(makeRequest());
+      const batchResult = contract.execute([result]);
+      expect(batchResult.createdAt).toBe(FIXED_TS);
+    });
+  });
+
+  // ── Output shape ───────────────────────────────────────────────────────────
+
+  describe("output shape", () => {
+    it("should return a defined result", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result).toBeDefined();
+    });
+
+    it("should have a non-empty batchId", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.batchId).toBeTruthy();
+    });
+
+    it("should have createdAt matching the fixed timestamp", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.createdAt).toBe(FIXED_TS);
+    });
+
+    it("should have a non-empty batchHash", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.batchHash).toBeTruthy();
+    });
+
+    it("batchHash should differ from batchId", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.batchHash).not.toBe(result.batchId);
+    });
+  });
+
+  // ── Empty batch ────────────────────────────────────────────────────────────
+
+  describe("empty batch", () => {
+    it("should handle empty batch", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.totalResults).toBe(0);
+    });
+
+    it("should have dominantTokenBudget of 0 for empty batch", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.dominantTokenBudget).toBe(0);
+    });
+
+    it("should have all counts at 0 for empty batch", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.executedCount).toBe(0);
+      expect(result.sandboxedCount).toBe(0);
+      expect(result.skippedCount).toBe(0);
+      expect(result.failedCount).toBe(0);
+    });
+
+    it("should produce valid hash for empty batch", () => {
+      const contract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.batchHash).toBeTruthy();
+    });
+  });
+
+  // ── Single result ──────────────────────────────────────────────────────────
+
+  describe("single result", () => {
+    it("should handle single result", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const pipelineResult = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([pipelineResult]);
+      expect(batchResult.totalResults).toBe(1);
+    });
+
+    it("should have dominantTokenBudget from single result", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const pipelineResult = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([pipelineResult]);
+      expect(batchResult.dominantTokenBudget).toBe(pipelineResult.consumerPackage.typedContextPackage.estimatedTokens);
+    });
+
+    it("should have executedCount from single result", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const pipelineResult = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([pipelineResult]);
+      expect(batchResult.executedCount).toBe(1);
+    });
+  });
+
+  // ── Multiple results ───────────────────────────────────────────────────────
+
+  describe("multiple results", () => {
+    it("should handle multiple results", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow")]));
+      const r2 = pipelineContract.execute(makeRequest([makeGateEntry("a2", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.totalResults).toBe(2);
+    });
+
+    it("should compute dominantTokenBudget as max across results", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow")]));
+      const r2 = pipelineContract.execute(makeRequest([makeGateEntry("a2", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      const expectedMax = Math.max(
+        r1.consumerPackage.typedContextPackage.estimatedTokens,
+        r2.consumerPackage.typedContextPackage.estimatedTokens,
+      );
+      expect(batchResult.dominantTokenBudget).toBe(expectedMax);
+    });
+
+    it("should sum executedCount across results", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow"), makeGateEntry("a2", "allow")]));
+      const r2 = pipelineContract.execute(makeRequest([makeGateEntry("a3", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.executedCount).toBe(3);
+    });
+
+    it("should sum sandboxedCount across results", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([makeGateEntry("a1", "sandbox")]));
+      const r2 = pipelineContract.execute(makeRequest([makeGateEntry("a2", "sandbox")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.sandboxedCount).toBe(2);
+    });
+
+    it("should sum skippedCount across results", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([makeGateEntry("a1", "deny")]));
+      const r2 = pipelineContract.execute(makeRequest([makeGateEntry("a2", "review")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.skippedCount).toBe(2);
+    });
+
+    it("should sum failedCount across results", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow")]));
+      const r2 = pipelineContract.execute(makeRequest([makeGateEntry("a2", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.failedCount).toBe(0);
+    });
+  });
+
+  // ── Deterministic hashing ──────────────────────────────────────────────────
+
+  describe("deterministic hashing", () => {
+    it("should produce the same batchId for identical inputs", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const b1 = batchContract.execute([r1]);
+      const b2 = batchContract.execute([r1]);
+      expect(b1.batchId).toBe(b2.batchId);
+    });
+
+    it("should produce different batchId for different inputs", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow")]));
+      const r2 = pipelineContract.execute(makeRequest([makeGateEntry("a2", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const b1 = batchContract.execute([r1]);
+      const b2 = batchContract.execute([r2]);
+      expect(b1.batchId).not.toBe(b2.batchId);
+    });
+
+    it("should produce the same batchHash for identical inputs", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([makeGateEntry("a1", "allow")]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const b1 = batchContract.execute([r1]);
+      const b2 = batchContract.execute([r1]);
+      expect(b1.batchHash).toBe(b2.batchHash);
+    });
+  });
+
+  // ── Mixed execution counts ─────────────────────────────────────────────────
+
+  describe("mixed execution counts", () => {
+    it("should aggregate mixed execution counts correctly", () => {
+      const pipelineContract = createCommandRuntimeConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest([
+        makeGateEntry("a1", "allow"),
+        makeGateEntry("a2", "sandbox"),
+      ]));
+      const r2 = pipelineContract.execute(makeRequest([
+        makeGateEntry("a3", "deny"),
+        makeGateEntry("a4", "allow"),
+      ]));
+      const batchContract = createCommandRuntimeConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.executedCount).toBe(2);
+      expect(batchResult.sandboxedCount).toBe(1);
+      expect(batchResult.skippedCount).toBe(1);
+      expect(batchResult.failedCount).toBe(0);
+    });
+  });
+});

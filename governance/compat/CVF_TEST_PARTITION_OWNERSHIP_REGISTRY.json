@@ -969,6 +969,17 @@
         "CommandRuntimeConsumerPipelineContract",
         "createCommandRuntimeConsumerPipelineContract"
       ]
+    },
+    {
+      "scope": "EPF CommandRuntime Consumer Pipeline Batch (W2-T25 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/command.runtime.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "CommandRuntimeConsumerPipelineBatchContract",
+        "createCommandRuntimeConsumerPipelineBatchContract"
+      ]
     }
   ]
 }

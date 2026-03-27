@@ -6,7 +6,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-27` (W4-T24 COMPLETE, Learning Storage Log Consumer Pipeline Bridge)
+> Last refreshed: `2026-03-27` (W4-T25 COMPLETE, Pattern Drift Log Consumer Pipeline Bridge — FINAL LPF CONSUMER BRIDGE)
 
 ---
 
@@ -19,7 +19,7 @@ Memory class: POINTER_RECORD
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T22 / W2-T24 / W3-T18 / W4-T13 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `NO ACTIVE TRANCHE — last canonical closure W4-T24` |
+| Current active tranche | `NO ACTIVE TRANCHE — last canonical closure W4-T25 — ALL LPF CONSUMER BRIDGES COMPLETE` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -113,10 +113,10 @@ Memory class: POINTER_RECORD
 | `W4-T18` truth model update consumer pipeline bridge | `DONE` |
 | `W4-T19` truth model consumer pipeline bridge | `DONE` |
 | `W4-T20` evaluation threshold consumer pipeline bridge | `DONE` |
-| `W4-T21` truth score log consumer pipeline bridge | `DONE` |
 | `W4-T22` governance signal log consumer pipeline bridge | `DONE` |
 | `W4-T23` learning observability snapshot consumer pipeline bridge | `DONE` |
 | `W4-T24` learning storage log consumer pipeline bridge | `DONE` |
+| `W4-T25` pattern drift log consumer pipeline bridge | `DONE` |
 
 ---
 
@@ -127,7 +127,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `W4-T24 COMPLETE — SEVENTEENTH LPF CONSUMER BRIDGE DELIVERED` |
+| Current canonical validation posture | `W4-T25 COMPLETE — EIGHTEENTH and FINAL LPF CONSUMER BRIDGE DELIVERED — ALL LPF CORE CONTRACTS NOW CONSUMER-VISIBLE` |
 
 ---
 
@@ -147,7 +147,7 @@ Memory class: POINTER_RECORD
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes post-cycle records through `W4-T11`)
-- Latest GC-026 tracker sync note: `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T24_COMPLETION_2026-03-27.md`
-- Current closure anchor: `docs/reviews/CVF_W4_T24_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
+- Latest GC-026 tracker sync note: `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T25_COMPLETION_2026-03-27.md`
+- Current closure anchor: `docs/reviews/CVF_W4_T25_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
 - Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T24_LEARNING_STORAGE_LOG_CONSUMER_BRIDGE_2026-03-27.md` (10/10 — W4-T24 ACTIVE)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

@@ -17,6 +17,25 @@ export type {
   KnowledgeQueryConsumerPipelineBatchContractDependencies,
 } from "./knowledge.query.consumer.pipeline.batch.contract";
 
+// W1-T23 — Gateway Auth Log Consumer Bridge (CP1–CP2)
+export {
+  GatewayAuthLogConsumerPipelineContract,
+  createGatewayAuthLogConsumerPipelineContract,
+} from "./gateway.auth.log.consumer.pipeline.contract";
+export type {
+  GatewayAuthLogConsumerPipelineRequest,
+  GatewayAuthLogConsumerPipelineResult,
+  GatewayAuthLogConsumerPipelineContractDependencies,
+} from "./gateway.auth.log.consumer.pipeline.contract";
+export {
+  GatewayAuthLogConsumerPipelineBatchContract,
+  createGatewayAuthLogConsumerPipelineBatchContract,
+} from "./gateway.auth.log.consumer.pipeline.batch.contract";
+export type {
+  GatewayAuthLogConsumerPipelineBatchResult,
+  GatewayAuthLogConsumerPipelineBatchContractDependencies,
+} from "./gateway.auth.log.consumer.pipeline.batch.contract";
+
 // W1-T21 — Clarification Refinement Consumer Bridge (CP1–CP2)
 export {
   ClarificationRefinementConsumerPipelineContract,

@@ -861,6 +861,17 @@
       ]
     },
     {
+      "scope": "LPF PatternDrift Consumer Pipeline Batch (W4-T12 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.drift.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDriftConsumerPipelineBatchContract",
+        "createPatternDriftConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "LPF GovernanceSignal Consumer Pipeline Batch (W4-T11 CP2)",
       "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/governance.signal.consumer.pipeline.batch.test.ts",
       "forbiddenFiles": [

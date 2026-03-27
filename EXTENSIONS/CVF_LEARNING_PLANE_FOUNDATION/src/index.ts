@@ -89,6 +89,15 @@ export type {
   PatternDriftConsumerPipelineContractDependencies,
 } from "./pattern.drift.consumer.pipeline.contract";
 
+// W4-T12 — PatternDrift Consumer Pipeline Bridge (CP2)
+export {
+  PatternDriftConsumerPipelineBatchContract,
+  createPatternDriftConsumerPipelineBatchContract,
+} from "./pattern.drift.consumer.pipeline.batch.contract";
+export type {
+  PatternDriftConsumerPipelineBatch,
+} from "./pattern.drift.consumer.pipeline.batch.contract";
+
 // W6-T8 — Truth Model Scoring Slice (CP1–CP2)
 export {
   TruthScoreContract,

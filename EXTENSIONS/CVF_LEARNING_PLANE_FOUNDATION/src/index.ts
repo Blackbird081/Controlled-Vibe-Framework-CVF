@@ -129,6 +129,16 @@ export type {
   LearningReinjectionConsumerPipelineContractDependencies,
 } from "./learning.reinjection.consumer.pipeline.contract";
 
+// W4-T15 — LearningReinjection Consumer Pipeline Batch (CP2)
+export {
+  LearningReinjectionConsumerPipelineBatchContract,
+  createLearningReinjectionConsumerPipelineBatchContract,
+} from "./learning.reinjection.consumer.pipeline.batch.contract";
+export type {
+  LearningReinjectionConsumerPipelineBatchResult,
+  LearningReinjectionConsumerPipelineBatchContractDependencies,
+} from "./learning.reinjection.consumer.pipeline.batch.contract";
+
 // W4-T14 — LearningLoop Consumer Pipeline Bridge (CP1)
 export {
   LearningLoopConsumerPipelineContract,

@@ -285,3 +285,253 @@ describe("LearningReinjectionConsumerPipelineContract", () => {
     });
   });
 });
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BATCH CONTRACT TESTS (W4-T15 CP2)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import {
+  LearningReinjectionConsumerPipelineBatchContract,
+  createLearningReinjectionConsumerPipelineBatchContract,
+} from "../src/learning.reinjection.consumer.pipeline.batch.contract";
+
+describe("LearningReinjectionConsumerPipelineBatchContract", () => {
+
+  // ── Instantiation ──────────────────────────────────────────────────────────
+
+  describe("instantiation", () => {
+    it("should instantiate with no dependencies", () => {
+      const contract = new LearningReinjectionConsumerPipelineBatchContract();
+      expect(contract).toBeDefined();
+    });
+
+    it("should instantiate via factory function", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      expect(contract).toBeDefined();
+    });
+
+    it("should instantiate with custom now function", () => {
+      const contract = new LearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const result = pipelineContract.execute(makeRequest("ESCALATE"));
+      const batchResult = contract.execute([result]);
+      expect(batchResult.createdAt).toBe(FIXED_TS);
+    });
+  });
+
+  // ── Output shape ───────────────────────────────────────────────────────────
+
+  describe("output shape", () => {
+    it("should return a defined result", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result).toBeDefined();
+    });
+
+    it("should have a non-empty batchId", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.batchId).toBeTruthy();
+    });
+
+    it("should have createdAt matching the fixed timestamp", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.createdAt).toBe(FIXED_TS);
+    });
+
+    it("should have a non-empty batchHash", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.batchHash).toBeTruthy();
+    });
+
+    it("batchHash should differ from batchId", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.batchHash).not.toBe(result.batchId);
+    });
+  });
+
+  // ── Empty batch ────────────────────────────────────────────────────────────
+
+  describe("empty batch", () => {
+    it("should handle empty batch", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.totalResults).toBe(0);
+    });
+
+    it("should have dominantTokenBudget of 0 for empty batch", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.dominantTokenBudget).toBe(0);
+    });
+
+    it("should have all counts at 0 for empty batch", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.rejectCount).toBe(0);
+      expect(result.escalateCount).toBe(0);
+      expect(result.retryCount).toBe(0);
+      expect(result.acceptCount).toBe(0);
+    });
+
+    it("should produce valid hash for empty batch", () => {
+      const contract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const result = contract.execute([]);
+      expect(result.batchHash).toBeTruthy();
+    });
+  });
+
+  // ── Single result ──────────────────────────────────────────────────────────
+
+  describe("single result", () => {
+    it("should handle single result", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const pipelineResult = pipelineContract.execute(makeRequest("ESCALATE"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([pipelineResult]);
+      expect(batchResult.totalResults).toBe(1);
+    });
+
+    it("should have dominantTokenBudget from single result", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const pipelineResult = pipelineContract.execute(makeRequest("ESCALATE"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([pipelineResult]);
+      expect(batchResult.dominantTokenBudget).toBe(pipelineResult.consumerPackage.typedContextPackage.estimatedTokens);
+    });
+
+    it("should count REJECT feedback from ESCALATE signal", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const pipelineResult = pipelineContract.execute(makeRequest("ESCALATE"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([pipelineResult]);
+      expect(batchResult.rejectCount).toBe(1);
+    });
+  });
+
+  // ── Multiple results ───────────────────────────────────────────────────────
+
+  describe("multiple results", () => {
+    it("should handle multiple results", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const r2 = pipelineContract.execute(makeRequest("MONITOR"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.totalResults).toBe(2);
+    });
+
+    it("should compute dominantTokenBudget as max across results", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const r2 = pipelineContract.execute(makeRequest("MONITOR"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      const expectedMax = Math.max(
+        r1.consumerPackage.typedContextPackage.estimatedTokens,
+        r2.consumerPackage.typedContextPackage.estimatedTokens,
+      );
+      expect(batchResult.dominantTokenBudget).toBe(expectedMax);
+    });
+
+    it("should count REJECT feedback correctly", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const r2 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.rejectCount).toBe(2);
+    });
+
+    it("should count ESCALATE feedback correctly", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("TRIGGER_REVIEW"));
+      const r2 = pipelineContract.execute(makeRequest("TRIGGER_REVIEW"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.escalateCount).toBe(2);
+    });
+
+    it("should count RETRY feedback correctly", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("MONITOR"));
+      const r2 = pipelineContract.execute(makeRequest("MONITOR"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.retryCount).toBe(2);
+    });
+
+    it("should count ACCEPT feedback correctly", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("NO_ACTION"));
+      const r2 = pipelineContract.execute(makeRequest("NO_ACTION"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2]);
+      expect(batchResult.acceptCount).toBe(2);
+    });
+  });
+
+  // ── Deterministic hashing ──────────────────────────────────────────────────
+
+  describe("deterministic hashing", () => {
+    it("should produce the same batchId for identical inputs", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const b1 = batchContract.execute([r1]);
+      const b2 = batchContract.execute([r1]);
+      expect(b1.batchId).toBe(b2.batchId);
+    });
+
+    it("should produce different batchId for different inputs", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const r2 = pipelineContract.execute(makeRequest("MONITOR"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const b1 = batchContract.execute([r1]);
+      const b2 = batchContract.execute([r2]);
+      expect(b1.batchId).not.toBe(b2.batchId);
+    });
+
+    it("should produce the same batchHash for identical inputs", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const b1 = batchContract.execute([r1]);
+      const b2 = batchContract.execute([r1]);
+      expect(b1.batchHash).toBe(b2.batchHash);
+    });
+  });
+
+  // ── Mixed feedback classes ─────────────────────────────────────────────────
+
+  describe("mixed feedback classes", () => {
+    it("should aggregate mixed feedback classes correctly", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const r2 = pipelineContract.execute(makeRequest("TRIGGER_REVIEW"));
+      const r3 = pipelineContract.execute(makeRequest("MONITOR"));
+      const r4 = pipelineContract.execute(makeRequest("NO_ACTION"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2, r3, r4]);
+      expect(batchResult.rejectCount).toBe(1);
+      expect(batchResult.escalateCount).toBe(1);
+      expect(batchResult.retryCount).toBe(1);
+      expect(batchResult.acceptCount).toBe(1);
+    });
+
+    it("should handle multiple of each feedback class", () => {
+      const pipelineContract = createLearningReinjectionConsumerPipelineContract({ now: fixedNow() });
+      const r1 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const r2 = pipelineContract.execute(makeRequest("ESCALATE"));
+      const r3 = pipelineContract.execute(makeRequest("MONITOR"));
+      const batchContract = createLearningReinjectionConsumerPipelineBatchContract({ now: fixedNow() });
+      const batchResult = batchContract.execute([r1, r2, r3]);
+      expect(batchResult.rejectCount).toBe(2);
+      expect(batchResult.retryCount).toBe(1);
+    });
+  });
+});

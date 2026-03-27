@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-27
 
 > Branch: `cvf-next`
-> Last push: `W2-T30-CP1+CP2+CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T30 — **FIRST CPF MULTI-ROUND GOVERNANCE BRIDGE COMPLETE**
+> Last push: `W2-T32-CP1+CP2+CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T32 — **CONTEXT BUILD CONSUMER BRIDGE COMPLETE**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
@@ -10,7 +10,7 @@
 ## Current State
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **1475 tests, 0 failures**
+- CPF (Control Plane Foundation): **1583 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1325 tests, 0 failures**
@@ -23,12 +23,14 @@
 | W2-T28 | Async Runtime Consumer Pipeline Bridge | CP1, CP2, CP3 | 1065 EPF |
 | W2-T29 | Streaming Execution Consumer Pipeline Bridge | CP1, CP2, CP3 | 1123 EPF |
 | W2-T30 | Boardroom Multi-Round Consumer Pipeline Bridge | CP1, CP2, CP3 | 1475 CPF |
+| W2-T31 | Boardroom Transition Gate Consumer Pipeline Bridge | CP1, CP2, CP3 | 1532 CPF |
+| W2-T32 | Context Build Consumer Pipeline Bridge | CP1, CP2, CP3 | 1583 CPF |
 
 ### Key Contracts Delivered (last 2 tranches)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/streaming.execution.consumer.pipeline.contract.ts` — StreamingExecutionConsumerPipelineContract (W2-T29)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/streaming.execution.consumer.pipeline.batch.contract.ts` — StreamingExecutionConsumerPipelineBatchContract (W2-T29)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.multi.round.consumer.pipeline.contract.ts` — BoardroomMultiRoundConsumerPipelineContract (W2-T30)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.multi.round.consumer.pipeline.batch.contract.ts` — BoardroomMultiRoundConsumerPipelineBatchContract (W2-T30)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.transition.gate.consumer.pipeline.contract.ts` — BoardroomTransitionGateConsumerPipelineContract (W2-T31)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.transition.gate.consumer.pipeline.batch.contract.ts` — BoardroomTransitionGateConsumerPipelineBatchContract (W2-T31)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/context.build.consumer.pipeline.contract.ts` — ContextBuildConsumerPipelineContract (W2-T32)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/context.build.consumer.pipeline.batch.contract.ts` — ContextBuildConsumerPipelineBatchContract (W2-T32)
 
 ---
 
@@ -39,12 +41,10 @@
 Current guidance:
 - no tranche is currently active
 - baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
-- `W2-T30` is now closed and no longer a candidate
-- `BoardroomMultiRoundContract` consumer visibility gap is **CLOSED**
-- **First CPF multi-round governance bridge delivered** — `BoardroomMultiRoundConsumerPipelineContract` exposes boardroom deliberation arcs consumer-visibly
-- BoardroomMultiRound chain: BoardroomMultiRoundContract → BoardroomMultiRoundConsumerPipelineContract → BoardroomMultiRoundConsumerPipelineBatchContract
-- **Notable design**: CP2 uses severity-first dominant decision (REJECT dominates regardless of count) — intentional boardroom governance semantics
-- next move requires a fresh `GC-018` survey — candidates: `BoardroomTransitionGateContract` (MEDIUM), `ContextBuildContract` (MEDIUM), `BoardroomRoundContract` (LOW)
+- `W2-T32` is now closed
+- `ContextBuildContract` consumer visibility gap is **CLOSED**
+- ContextBuild chain: ContextBuildContract → ContextBuildConsumerPipelineContract → ContextBuildConsumerPipelineBatchContract
+- next move requires a fresh `GC-018` survey — candidate: `BoardroomRoundContract` (LOW) — or conduct a broader CPF/EPF/GEF gap audit
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

@@ -1,3 +1,45 @@
+// W2-T32 — Context Build Consumer Pipeline Bridge (CP1)
+export {
+  ContextBuildConsumerPipelineContract,
+  createContextBuildConsumerPipelineContract,
+} from "./context.build.consumer.pipeline.contract";
+export type {
+  ContextBuildConsumerPipelineRequest,
+  ContextBuildConsumerPipelineResult,
+  ContextBuildConsumerPipelineContractDependencies,
+} from "./context.build.consumer.pipeline.contract";
+
+// W2-T32 — Context Build Consumer Pipeline Batch (CP2)
+export {
+  ContextBuildConsumerPipelineBatchContract,
+  createContextBuildConsumerPipelineBatchContract,
+} from "./context.build.consumer.pipeline.batch.contract";
+export type {
+  ContextBuildConsumerPipelineBatchResult,
+  ContextBuildConsumerPipelineBatchContractDependencies,
+} from "./context.build.consumer.pipeline.batch.contract";
+
+// W2-T31 — Boardroom Transition Gate Consumer Pipeline Bridge (CP1)
+export {
+  BoardroomTransitionGateConsumerPipelineContract,
+  createBoardroomTransitionGateConsumerPipelineContract,
+} from "./boardroom.transition.gate.consumer.pipeline.contract";
+export type {
+  BoardroomTransitionGateConsumerPipelineRequest,
+  BoardroomTransitionGateConsumerPipelineResult,
+  BoardroomTransitionGateConsumerPipelineContractDependencies,
+} from "./boardroom.transition.gate.consumer.pipeline.contract";
+
+// W2-T31 — Boardroom Transition Gate Consumer Pipeline Batch (CP2)
+export {
+  BoardroomTransitionGateConsumerPipelineBatchContract,
+  createBoardroomTransitionGateConsumerPipelineBatchContract,
+} from "./boardroom.transition.gate.consumer.pipeline.batch.contract";
+export type {
+  BoardroomTransitionGateConsumerPipelineBatchResult,
+  BoardroomTransitionGateConsumerPipelineBatchContractDependencies,
+} from "./boardroom.transition.gate.consumer.pipeline.batch.contract";
+
 // W2-T30 — Boardroom Multi-Round Consumer Pipeline Bridge (CP1)
 export {
   BoardroomMultiRoundConsumerPipelineContract,

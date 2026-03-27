@@ -1,0 +1,17 @@
+feat(W2-T31+W2-T32/CP1+CP2+CP3): Boardroom Transition Gate & Context Build Consumer Bridges
+
+Tranche: W2-T31 — Boardroom Transition Gate Consumer Bridge
+Control points: CP1 (Full Lane), CP2 (Fast Lane GC-021), CP3 (Closure)
+Contract: BoardroomTransitionGateConsumerPipelineContract bridges BoardroomTransitionGateContract into consumer visibility. Exposes gate routing decision (action, nextStage, allowOrchestration, escalationRequired, blockingConditions) for audit and routing coordination.
+Warnings (severity-ordered): 1. WARNING_EXECUTION_STOPPED 2. WARNING_ESCALATION_REQUIRED 3. WARNING_ORCHESTRATION_BLOCKED 4. WARNING_BLOCKING_CONDITIONS
+Batch: severity-first dominantAction + allowedCount/blockedCount/escalationRequiredCount
+
+Tranche: W2-T32 — Context Build Consumer Pipeline Bridge
+Control points: CP1 (Full Lane), CP2 (Fast Lane GC-021), CP3 (Closure)
+Contract: ContextBuildConsumerPipelineContract bridges ContextBuildContract into consumer visibility — exposes segment composition (QUERY/KNOWLEDGE/METADATA), total token budget, and context construction lifecycle.
+Warnings: WARNING_NO_SEGMENTS, WARNING_NO_KNOWLEDGE, WARNING_TOKEN_BUDGET_ZERO
+Batch: totalPackages, totalSegments, totalTokens, dominantTokenBudget
+
+Tests: +108 new combined (1583 CPF total, 0 failures)
+All governance documents (GC-018, GC-026, CP1/CP2 audit/review/delta, CP3 closure) created.
+AGENT_HANDOFF updated.

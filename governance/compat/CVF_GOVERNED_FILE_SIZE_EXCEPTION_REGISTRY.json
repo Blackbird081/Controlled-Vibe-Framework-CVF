@@ -105,6 +105,14 @@
       "status": "ACTIVE_EXCEPTION",
       "rationale": "Canonical roadmap accumulates post-cycle closure records for every delivered tranche. Growth is governed and append-only; each post-cycle record is ~15-20 lines. Cap extended 1400→1500 on 2026-03-27 to accommodate W4-T13+ post-cycle records.",
       "requiredFollowup": "Archive older post-cycle records into a separate archive file when file exceeds 1500 lines."
+    },
+    {
+      "path": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts",
+      "fileClass": "general_source",
+      "approvedMaxLines": 1100,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Control plane foundation barrel aggregates multiple contract exports in one compatibility surface. W2-T31 and W2-T32 extended the governed CPF consumer-bridge export line.",
+      "requiredFollowup": "Split the barrel into tranche-local or domain-local export files before the next substantive control-plane surface expansion beyond the current W2-T32 bridge line."
     }
   ]
 }

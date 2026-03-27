@@ -1,6 +1,50 @@
 {
   "partitions": [
     {
+      \"scope\": \"CPF Context Build Consumer Pipeline (W2-T32 CP1)\",
+      \"canonicalFile\": \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.consumer.pipeline.test.ts\",
+      \"forbiddenFiles\": [
+        \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts\"
+      ],
+      \"forbiddenPatterns\": [
+        \"ContextBuildConsumerPipelineContract\",
+        \"createContextBuildConsumerPipelineContract\"
+      ]
+    },
+    {
+      \"scope\": \"CPF Context Build Consumer Pipeline Batch (W2-T32 CP2)\",
+      \"canonicalFile\": \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.consumer.pipeline.test.ts\",
+      \"forbiddenFiles\": [
+        \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts\"
+      ],
+      \"forbiddenPatterns\": [
+        \"ContextBuildConsumerPipelineBatchContract\",
+        \"createContextBuildConsumerPipelineBatchContract\"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Transition Gate Consumer Pipeline (W2-T31 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.transition.gate.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomTransitionGateConsumerPipelineContract",
+        "createBoardroomTransitionGateConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Transition Gate Consumer Pipeline Batch (W2-T31 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.transition.gate.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomTransitionGateConsumerPipelineBatchContract",
+        "createBoardroomTransitionGateConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "CPF Boardroom Multi-Round Consumer Pipeline (W2-T30 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.multi.round.consumer.pipeline.test.ts",
       "forbiddenFiles": [

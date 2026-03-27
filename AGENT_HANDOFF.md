@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-27
 
 > Branch: `cvf-next`
-> Last push: `W4-T16-CP2 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W4-T16 — **NINTH LPF CONSUMER BRIDGE COMPLETE**
+> Last push: `W4-T17-CP2 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W4-T17 — **TENTH LPF CONSUMER BRIDGE COMPLETE**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
@@ -13,21 +13,21 @@
 - CPF (Control Plane Foundation): **991 tests, 0 failures**
 - EPF (Execution Plane Foundation): **966 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
-- LPF (Learning Plane Foundation): **937 tests, 0 failures**
+- LPF (Learning Plane Foundation): **979 tests, 0 failures**
 
 ### Last Four Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W4-T14 | LearningLoop Consumer Pipeline Bridge | CP1, CP2, CP3 | 835 LPF |
 | W2-T25 | CommandRuntime Consumer Pipeline Bridge | CP1, CP2, CP3 | 966 EPF |
 | W4-T15 | LearningReinjection Consumer Pipeline Bridge | CP1, CP2, CP3 | 896 LPF |
 | W4-T16 | LearningStorage Consumer Pipeline Bridge | CP1, CP2, CP3 | 937 LPF |
+| W4-T17 | FeedbackLedger Consumer Pipeline Bridge | CP1, CP2, CP3 | 979 LPF |
 
 ### Key Contracts Delivered (last 2 tranches)
-- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.reinjection.consumer.pipeline.contract.ts` — LearningReinjectionConsumerPipelineContract (W4-T15)
-- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.reinjection.consumer.pipeline.batch.contract.ts` — LearningReinjectionConsumerPipelineBatchContract (W4-T15)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.storage.consumer.pipeline.contract.ts` — LearningStorageConsumerPipelineContract (W4-T16)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.storage.consumer.pipeline.batch.contract.ts` — LearningStorageConsumerPipelineBatchContract (W4-T16)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/feedback.ledger.consumer.pipeline.contract.ts` — FeedbackLedgerConsumerPipelineContract (W4-T17)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/feedback.ledger.consumer.pipeline.batch.contract.ts` — FeedbackLedgerConsumerPipelineBatchContract (W4-T17)
 
 ---
 
@@ -38,10 +38,10 @@
 Current guidance:
 - no tranche is currently active
 - baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
-- `W4-T16` is now closed and no longer a candidate
-- `LearningStorageContract` consumer visibility gap is **CLOSED**
-- **Ninth LPF consumer bridge delivered** — `LearningStorageConsumerPipelineContract` exposes artifact storage → consumer pipeline mapping consumer-visibly
-- next move requires a fresh `GC-018` survey — look for the next highest-value unbridged contract (LPF `FeedbackLedgerContract`, or other high-value unbridged core contracts)
+- `W4-T17` is now closed and no longer a candidate
+- `FeedbackLedgerContract` consumer visibility gap is **CLOSED**
+- **Tenth LPF consumer bridge delivered** — `FeedbackLedgerConsumerPipelineContract` exposes feedback ledger aggregation consumer-visibly
+- next move requires a fresh `GC-018` survey — look for the next highest-value unbridged contract (LPF or other plane core contracts)
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

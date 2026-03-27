@@ -6,7 +6,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-27` (W4-T17 authorized, Feedback Ledger Consumer Pipeline Bridge)
+> Last refreshed: `2026-03-27` (W4-T17 closed, Feedback Ledger Consumer Pipeline Bridge)
 
 ---
 
@@ -19,7 +19,7 @@ Memory class: POINTER_RECORD
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T22 / W2-T24 / W3-T18 / W4-T13 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `W4-T17 — Feedback Ledger Consumer Pipeline Bridge AUTHORIZED` |
+| Current active tranche | `W4-T17 — Feedback Ledger Consumer Pipeline Bridge CLOSED` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -109,7 +109,7 @@ Memory class: POINTER_RECORD
 | `W2-T25` command runtime consumer pipeline bridge | `DONE` |
 | `W4-T15` learning reinjection consumer pipeline bridge | `DONE` |
 | `W4-T16` learning storage consumer pipeline bridge | `DONE` |
-| `W4-T17` feedback ledger consumer pipeline bridge | `AUTHORIZED` |
+| `W4-T17` feedback ledger consumer pipeline bridge | `DONE` |
 
 ---
 
@@ -141,6 +141,6 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes post-cycle records through `W4-T11`)
 - Latest GC-026 tracker sync note: `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T17_AUTHORIZATION_2026-03-27.md`
-- Current closure anchor: `docs/reviews/CVF_W4_T16_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
-- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T17_FEEDBACK_LEDGER_CONSUMER_BRIDGE_2026-03-27.md` (10/10 — W4-T17 AUTHORIZED)
+- Current closure anchor: `docs/reviews/CVF_W4_T17_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
+- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T17_FEEDBACK_LEDGER_CONSUMER_BRIDGE_2026-03-27.md` (10/10 — W4-T17 CLOSED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

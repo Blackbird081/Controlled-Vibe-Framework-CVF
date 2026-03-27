@@ -98,6 +98,17 @@ export type {
   PatternDriftConsumerPipelineBatch,
 } from "./pattern.drift.consumer.pipeline.batch.contract";
 
+// W4-T13 — LearningObservability Consumer Pipeline Bridge (CP1)
+export {
+  LearningObservabilityConsumerPipelineContract,
+  createLearningObservabilityConsumerPipelineContract,
+} from "./learning.observability.consumer.pipeline.contract";
+export type {
+  LearningObservabilityConsumerPipelineRequest,
+  LearningObservabilityConsumerPipelineResult,
+  LearningObservabilityConsumerPipelineContractDependencies,
+} from "./learning.observability.consumer.pipeline.contract";
+
 // W6-T8 — Truth Model Scoring Slice (CP1–CP2)
 export {
   TruthScoreContract,

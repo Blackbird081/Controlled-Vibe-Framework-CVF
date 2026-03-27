@@ -2,15 +2,15 @@
 Memory class: POINTER_RECORD
 
 > **Version:** 2.2-W4T11
-> **Date:** 2026-03-25
-> **Document Type:** PARTIALLY DELIVERED ARCHITECTURE WHITEPAPER — evidence-backed truth reconciliation complete as of 2026-03-22, post-cycle continuation canonically closed through `W4-T11`
-> **Authorization Status:** First whitepaper-completion cycle through `W5-T1` is canonically closed. Post-cycle continuation is canonically closed through `W1-T22 / W2-T24 / W3-T18 / W4-T11`. Any further continuation requires a new `GC-018` wave decision.
+> **Date:** 2026-03-27
+> **Document Type:** PARTIALLY DELIVERED ARCHITECTURE WHITEPAPER — evidence-backed truth reconciliation complete as of 2026-03-22; canonical architecture baseline remains `v2.2-W4T11`, with post-baseline continuation refreshed through `W1-T30 / W2-T29 / W3-T18 / W4-T13`
+> **Authorization Status:** First whitepaper-completion cycle through `W5-T1` is canonically closed. Post-baseline continuation is canonically closed through `W1-T30 / W2-T29 / W3-T18 / W4-T13`. Current active tranche is `NONE`; any further continuation requires a new `GC-018` wave decision.
 > **Clean Baseline References:**
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts` (phases, risk model)
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts` (shared default guard stack)
 > - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts` (full runtime preset)
-> - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` (current quick status through `W4-T11`)
-> - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (canonical delivered wave line with post-cycle records through `W4-T11`)
+> - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` (current quick status through `W2-T29`, with tranche tracker records beyond the baseline snapshot)
+> - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (canonical delivered wave line and post-cycle continuation history)
 > - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md` (historical reconciliation snapshot through `W5-T1`)
 
 > **Status Note:** this document now contains a reconciled mix of:
@@ -18,7 +18,7 @@ Memory class: POINTER_RECORD
 > - partially delivered target-state areas
 > - future-facing design principles that still require later governed waves
 
-> **Baseline Tracking Note:** as of `2026-03-25`, this whitepaper is the canonical architecture snapshot to freeze posture before the next development wave. Use it as the architectural baseline; use the progress tracker for quick readout, the roadmap for tranche history, and the handoff for execution rules.
+> **Baseline Tracking Note:** as of `2026-03-27`, this whitepaper remains the canonical architecture snapshot anchored at `v2.2-W4T11`, but its progress readout is refreshed to the latest governed continuation. Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, and the handoff for execution rules.
 
 > **Core Principle:** *"Agents may execute tasks, but they cannot control the system that governs them."*
 
@@ -96,10 +96,10 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ---
 
-## 4. Sơ đồ Kiến trúc Hiện hành (CURRENT CANONICAL ARCHITECTURE — W4-T11)
+## 4. Sơ đồ Kiến trúc Hiện hành (CURRENT CANONICAL ARCHITECTURE — BASELINE W4-T11, REFRESHED 2026-03-27)
 
 > [!WARNING]
-> Sơ đồ bên dưới không còn chỉ là target-state. Đây là kiến trúc canon hiện hành ở mốc `W4-T11`, trong đó từng khối được gắn maturity rõ ràng: cái gì đã delivered, cái gì mới partial, và cái gì vẫn còn future-facing.
+> Sơ đồ bên dưới giữ nguyên anchor kiến trúc canon ở mốc `W4-T11`, nhưng phần readout đã được refresh theo continuation packet mới nhất. Nó cho thấy cái gì đã delivered ở baseline, cái gì đã tiến thêm sau baseline, và cái gì vẫn còn future-facing.
 
 **Legend maturity**
 
@@ -239,18 +239,29 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ### 4.1 Maturity Snapshot by Plane
 
-| Plane | Current posture at `W4-T11` | What is already true |
+> Read this table as: `baseline architecture shape = W4-T11`, `governed progress readout = refreshed through 2026-03-27`.
+
+| Plane | Current posture | What is already true |
 |---|---|---|
-| Control Plane | `SUBSTANTIALLY DELIVERED` | AI Gateway, Boardroom/Reverse Prompting, typed context packaging, knowledge ranking/query, gateway auth, clarification refinement, and knowledge-query consumer pipelines are canonically closed through `W1-T22` |
-| Execution Plane | `SUBSTANTIALLY DELIVERED` | command runtime, observer/feedback, re-intake, MCP invocation, async status, execution pipeline, policy gate, and feedback-routing consumer bridges are canonically closed through `W2-T24` |
+| Control Plane | `SUBSTANTIALLY DELIVERED` | AI Gateway, Boardroom/Reverse Prompting, typed context packaging, knowledge ranking/query, gateway auth, clarification refinement, gateway/log, intake, and route-match consumer pipeline bridges are canonically closed through `W1-T30` |
+| Execution Plane | `SUBSTANTIALLY DELIVERED` | command runtime, observer/feedback, re-intake, MCP invocation, async status, execution pipeline, policy gate, feedback routing, dispatch, async runtime, and streaming execution consumer bridges are canonically closed through `W2-T29` |
 | Governance Layer | `SUBSTANTIALLY DELIVERED` | watchdog, governance checkpoint/consensus/audit lines, watchdog escalation, and watchdog pulse consumer bridges are canonically closed through `W3-T18` |
-| Learning Plane | `SUBSTANTIALLY DELIVERED` | learning storage, observability, evaluation engine, truth score, pattern detection, and governance signal consumer pipelines are canonically closed through `W4-T11` |
+| Learning Plane | `SUBSTANTIALLY DELIVERED` | learning storage, observability, evaluation engine, truth score, pattern detection, governance signal, and learning observability consumer pipelines are canonically closed through `W4-T13` |
 | Whitepaper Truth Reconciliation | `DONE FOR CURRENT CYCLE` | whitepaper was re-labeled from pure target-state concept to evidence-backed partial delivery in `W5-T1` |
+
+### 4.1A Post-Baseline Continuation Delta
+
+| Plane | Added closure beyond original whitepaper freeze |
+|---|---|
+| Control Plane | `W1-T23` to `W1-T30` added gateway auth log, gateway pii log, route match log, design, boardroom, AI gateway, intake, and route-match consumer pipeline continuations |
+| Execution Plane | `W2-T25` to `W2-T29` added command runtime, dispatch, async runtime, and streaming execution consumer pipeline continuations |
+| Governance Layer | no newer governed continuation beyond `W3-T18` is currently reflected in the active readout |
+| Learning Plane | `W4-T12` to `W4-T13` added pattern drift and learning observability consumer pipeline continuations in the current quick readout |
 
 ### 4.2 What This Diagram No Longer Claims
 
 - It no longer claims that the entire architecture is only future-state.
-- It no longer implies the Learning Plane is merely a final proposal; at `W4-T11` it already has a governed closed chain from `FeedbackLedger` through `GovernanceSignalConsumerPipeline`.
+- It no longer implies the Learning Plane is merely a final proposal; at baseline `W4-T11` it already had a governed closed chain from `FeedbackLedger` through `GovernanceSignalConsumerPipeline`, and the refreshed readout now extends that line through `LearningObservabilityConsumerPipeline`.
 - It no longer treats Watchdog, Policy Gate, Evaluation Engine, Truth Score, or Pattern Detection as conceptual-only blocks.
 - It still does **not** claim full target-state convergence for unified RAG, full trust/isolation consolidation, full model-gateway convergence, or a fully consolidated agent-definition registry.
 
@@ -260,11 +271,11 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 |---|---|
 | Multi-agent repo/docs convergence | `GC-027` canonical review-doc chain |
 | Highest-priority live multi-agent deliberation surface | `AI Boardroom` in Control Plane, governed by `GC-028`; see `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md` |
-| Snapshot date | `2026-03-25` |
+| Snapshot date | `2026-03-27` |
 | Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v2.2-W4T11`) |
-| Last canonical closure | `W4-T11 CLOSED DELIVERED` |
+| Last canonical closure | `W2-T29 CLOSED DELIVERED` |
 | Current active tranche | `NONE` |
-| Current posture | `PARTIALLY DELIVERED` with all four planes `SUBSTANTIALLY DELIVERED` on active governed paths |
+| Current posture | `PARTIALLY DELIVERED` with all four planes `SUBSTANTIALLY DELIVERED`; refreshed continuation readout now reaches `W1-T30 / W2-T29 / W3-T18 / W4-T13` |
 | Required gate before any new implementation | fresh `GC-018` authorization |
 | Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `AGENT_HANDOFF.md` |
 
@@ -334,7 +345,7 @@ The Boardroom scope is the more critical runtime decision surface because it sit
 
 4. **Continuation Governance**
    - Mọi mở rộng hoặc tái cấu trúc cần GC-018 Continuation authorization
-   - Source: `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` + `docs/reviews/CVF_W4_T11_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+   - Source: `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` + `docs/reviews/CVF_W2_T29_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
 
 5. **Marginal-Value Stop Boundary**
    - validation/test-only breadth, packaging-only continuation, và truth-label/claim expansion không được tiếp tục theo quán tính

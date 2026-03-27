@@ -1,3 +1,24 @@
+// W2-T29 — Streaming Execution Consumer Pipeline Bridge (CP1)
+export {
+  StreamingExecutionConsumerPipelineContract,
+  createStreamingExecutionConsumerPipelineContract,
+} from "./streaming.execution.consumer.pipeline.contract";
+export type {
+  StreamingExecutionConsumerPipelineRequest,
+  StreamingExecutionConsumerPipelineResult,
+  StreamingExecutionConsumerPipelineContractDependencies,
+} from "./streaming.execution.consumer.pipeline.contract";
+
+// W2-T29 — Streaming Execution Consumer Pipeline Batch (CP2)
+export {
+  StreamingExecutionConsumerPipelineBatchContract,
+  createStreamingExecutionConsumerPipelineBatchContract,
+} from "./streaming.execution.consumer.pipeline.batch.contract";
+export type {
+  StreamingExecutionConsumerPipelineBatchResult,
+  StreamingExecutionConsumerPipelineBatchContractDependencies,
+} from "./streaming.execution.consumer.pipeline.batch.contract";
+
 // W2-T28 — AsyncRuntime Consumer Pipeline Bridge (CP1)
 export {
   AsyncRuntimeConsumerPipelineContract,

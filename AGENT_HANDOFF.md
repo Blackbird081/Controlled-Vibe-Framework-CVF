@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-27
 
 > Branch: `cvf-next`
-> Last push: `W2-T28-CP1+CP2 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T28 — **SECOND EPF CONSUMER BRIDGE COMPLETE**
+> Last push: `W2-T29-CP1+CP2+CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T29 — **THIRD EPF CONSUMER BRIDGE COMPLETE**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
@@ -11,23 +11,23 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **1421 tests, 0 failures**
-- EPF (Execution Plane Foundation): **1065 tests, 0 failures**
+- EPF (Execution Plane Foundation): **1120 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1325 tests, 0 failures**
 
 ### Last Four Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W1-T29 | Intake Consumer Pipeline Bridge | CP1, CP2, CP3 | 1373 CPF |
 | W1-T30 | Route Match Consumer Pipeline Bridge | CP1, CP2, CP3 | 1421 CPF |
 | W2-T27 | Dispatch Consumer Pipeline Bridge | CP1, CP2, CP3 | 1010 EPF |
 | W2-T28 | Async Runtime Consumer Pipeline Bridge | CP1, CP2, CP3 | 1065 EPF |
+| W2-T29 | Streaming Execution Consumer Pipeline Bridge | CP1, CP2, CP3 | 1120 EPF |
 
 ### Key Contracts Delivered (last 2 tranches)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/dispatch.consumer.pipeline.contract.ts` — DispatchConsumerPipelineContract (W2-T27)
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/dispatch.consumer.pipeline.batch.contract.ts` — DispatchConsumerPipelineBatchContract (W2-T27)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/async.runtime.consumer.pipeline.contract.ts` — AsyncRuntimeConsumerPipelineContract (W2-T28)
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/async.runtime.consumer.pipeline.batch.contract.ts` — AsyncRuntimeConsumerPipelineBatchContract (W2-T28)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/streaming.execution.consumer.pipeline.contract.ts` — StreamingExecutionConsumerPipelineContract (W2-T29)
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/streaming.execution.consumer.pipeline.batch.contract.ts` — StreamingExecutionConsumerPipelineBatchContract (W2-T29)
 
 ---
 
@@ -38,10 +38,10 @@
 Current guidance:
 - no tranche is currently active
 - baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
-- `W2-T28` is now closed and no longer a candidate
-- `AsyncCommandRuntimeContract` consumer visibility gap is **CLOSED**
-- **Second EPF consumer bridge delivered** — `AsyncRuntimeConsumerPipelineContract` exposes async execution tickets consumer-visibly
-- Async runtime chain complete: AsyncCommandRuntimeContract → AsyncRuntimeConsumerPipelineContract → AsyncRuntimeConsumerPipelineBatchContract
+- `W2-T29` is now closed and no longer a candidate
+- `StreamingExecutionContract` consumer visibility gap is **CLOSED**
+- **Third EPF consumer bridge delivered** — `StreamingExecutionConsumerPipelineContract` exposes streaming execution chunks consumer-visibly
+- Streaming chain complete: StreamingExecutionContract → StreamingExecutionConsumerPipelineContract → StreamingExecutionConsumerPipelineBatchContract
 - next move requires a fresh `GC-018` survey — look for the next highest-value unbridged contract in CPF, EPF, or GEF
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`

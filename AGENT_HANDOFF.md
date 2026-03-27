@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-27
 
 > Branch: `cvf-next`
-> Last push: `W4-T21-CP2 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W4-T21 — **FOURTEENTH LPF CONSUMER BRIDGE COMPLETE**
+> Last push: `W4-T24-CP2 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W4-T24 — **SEVENTEENTH LPF CONSUMER BRIDGE COMPLETE**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
@@ -13,21 +13,21 @@
 - CPF (Control Plane Foundation): **991 tests, 0 failures**
 - EPF (Execution Plane Foundation): **966 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
-- LPF (Learning Plane Foundation): **1162 tests, 0 failures**
+- LPF (Learning Plane Foundation): **1273 tests, 0 failures**
 
 ### Last Four Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W4-T18 | TruthModelUpdate Consumer Pipeline Bridge | CP1, CP2, CP3 | 1019 LPF |
-| W4-T19 | TruthModel Consumer Pipeline Bridge | CP1, CP2, CP3 | 1063 LPF |
-| W4-T20 | EvaluationThreshold Consumer Pipeline Bridge | CP1, CP2, CP3 | 1107 LPF |
-| W4-T21 | TruthScoreLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1162 LPF |
+| W4-T21 | TruthScoreLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1149 LPF |
+| W4-T22 | GovernanceSignalLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1185 LPF |
+| W4-T23 | LearningObservabilitySnapshot Consumer Pipeline Bridge | CP1, CP2, CP3 | 1235 LPF |
+| W4-T24 | LearningStorageLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1273 LPF |
 
 ### Key Contracts Delivered (last 2 tranches)
-- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/evaluation.threshold.consumer.pipeline.contract.ts` — EvaluationThresholdConsumerPipelineContract (W4-T20)
-- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/evaluation.threshold.consumer.pipeline.batch.contract.ts` — EvaluationThresholdConsumerPipelineBatchContract (W4-T20)
-- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/truth.score.log.consumer.pipeline.contract.ts` — TruthScoreLogConsumerPipelineContract (W4-T21)
-- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/truth.score.log.consumer.pipeline.batch.contract.ts` — TruthScoreLogConsumerPipelineBatchContract (W4-T21)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.observability.snapshot.consumer.pipeline.contract.ts` — LearningObservabilitySnapshotConsumerPipelineContract (W4-T23)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.observability.snapshot.consumer.pipeline.batch.contract.ts` — LearningObservabilitySnapshotConsumerPipelineBatchContract (W4-T23)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.storage.log.consumer.pipeline.contract.ts` — LearningStorageLogConsumerPipelineContract (W4-T24)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.storage.log.consumer.pipeline.batch.contract.ts` — LearningStorageLogConsumerPipelineBatchContract (W4-T24)
 
 ---
 
@@ -38,10 +38,10 @@
 Current guidance:
 - no tranche is currently active
 - baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
-- `W4-T21` is now closed and no longer a candidate
-- `TruthScoreLogContract` consumer visibility gap is **CLOSED**
-- **Fourteenth LPF consumer bridge delivered** — `TruthScoreLogConsumerPipelineContract` exposes truth score log consumer-visibly
-- Truth score aggregation (score → log) is now fully consumer-visible
+- `W4-T24` is now closed and no longer a candidate
+- `LearningStorageLogContract` consumer visibility gap is **CLOSED**
+- **Seventeenth LPF consumer bridge delivered** — `LearningStorageLogConsumerPipelineContract` exposes storage log consumer-visibly
+- Storage record tracking (record type analysis) is now fully consumer-visible
 - next move requires a fresh `GC-018` survey — look for the next highest-value unbridged contract (LPF or other plane core contracts)
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`

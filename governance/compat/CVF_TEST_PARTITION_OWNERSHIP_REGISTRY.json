@@ -1134,6 +1134,94 @@
         "TruthScoreLogConsumerPipelineBatchContract",
         "createTruthScoreLogConsumerPipelineBatchContract"
       ]
+    },
+    {
+      "scope": "LPF GovernanceSignalLog Consumer Pipeline (W4-T22 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/governance.signal.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceSignalLogConsumerPipelineContract",
+        "createGovernanceSignalLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF GovernanceSignalLog Consumer Pipeline Batch (W4-T22 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/governance.signal.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceSignalLogConsumerPipelineBatchContract",
+        "createGovernanceSignalLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningObservabilitySnapshot Consumer Pipeline (W4-T23 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.observability.snapshot.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningObservabilitySnapshotConsumerPipelineContract",
+        "createLearningObservabilitySnapshotConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningObservabilitySnapshot Consumer Pipeline Batch (W4-T23 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.observability.snapshot.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningObservabilitySnapshotConsumerPipelineBatchContract",
+        "createLearningObservabilitySnapshotConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningStorageLog Consumer Pipeline (W4-T24 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.storage.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningStorageLogConsumerPipelineContract",
+        "createLearningStorageLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningStorageLog Consumer Pipeline Batch (W4-T24 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.storage.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningStorageLogConsumerPipelineBatchContract",
+        "createLearningStorageLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF PatternDriftLog Consumer Pipeline (W4-T25 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.drift.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDriftLogConsumerPipelineContract",
+        "createPatternDriftLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF PatternDriftLog Consumer Pipeline Batch (W4-T25 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.drift.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDriftLogConsumerPipelineBatchContract",
+        "createPatternDriftLogConsumerPipelineBatchContract"
+      ]
     }
   ]
 }

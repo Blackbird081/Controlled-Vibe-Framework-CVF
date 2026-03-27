@@ -265,6 +265,90 @@ export type {
   TruthScoreLogConsumerPipelineBatchContractDependencies,
 } from "./truth.score.log.consumer.pipeline.batch.contract";
 
+// W4-T22 — GovernanceSignalLog Consumer Pipeline Bridge (CP1)
+export {
+  GovernanceSignalLogConsumerPipelineContract,
+  createGovernanceSignalLogConsumerPipelineContract,
+} from "./governance.signal.log.consumer.pipeline.contract";
+export type {
+  GovernanceSignalLogConsumerPipelineRequest,
+  GovernanceSignalLogConsumerPipelineResult,
+  GovernanceSignalLogConsumerPipelineContractDependencies,
+} from "./governance.signal.log.consumer.pipeline.contract";
+
+// W4-T22 — GovernanceSignalLog Consumer Pipeline Batch (CP2)
+export {
+  GovernanceSignalLogConsumerPipelineBatchContract,
+  createGovernanceSignalLogConsumerPipelineBatchContract,
+} from "./governance.signal.log.consumer.pipeline.batch.contract";
+export type {
+  GovernanceSignalLogConsumerPipelineBatchResult,
+  GovernanceSignalLogConsumerPipelineBatchContractDependencies,
+} from "./governance.signal.log.consumer.pipeline.batch.contract";
+
+// W4-T23 — LearningObservabilitySnapshot Consumer Pipeline Bridge (CP1)
+export {
+  LearningObservabilitySnapshotConsumerPipelineContract,
+  createLearningObservabilitySnapshotConsumerPipelineContract,
+} from "./learning.observability.snapshot.consumer.pipeline.contract";
+export type {
+  LearningObservabilitySnapshotConsumerPipelineRequest,
+  LearningObservabilitySnapshotConsumerPipelineResult,
+  LearningObservabilitySnapshotConsumerPipelineContractDependencies,
+} from "./learning.observability.snapshot.consumer.pipeline.contract";
+
+// W4-T23 — LearningObservabilitySnapshot Consumer Pipeline Batch (CP2)
+export {
+  LearningObservabilitySnapshotConsumerPipelineBatchContract,
+  createLearningObservabilitySnapshotConsumerPipelineBatchContract,
+} from "./learning.observability.snapshot.consumer.pipeline.batch.contract";
+export type {
+  LearningObservabilitySnapshotConsumerPipelineBatchResult,
+  LearningObservabilitySnapshotConsumerPipelineBatchContractDependencies,
+} from "./learning.observability.snapshot.consumer.pipeline.batch.contract";
+
+// W4-T24 — LearningStorageLog Consumer Pipeline Bridge (CP1)
+export {
+  LearningStorageLogConsumerPipelineContract,
+  createLearningStorageLogConsumerPipelineContract,
+} from "./learning.storage.log.consumer.pipeline.contract";
+export type {
+  LearningStorageLogConsumerPipelineRequest,
+  LearningStorageLogConsumerPipelineResult,
+  LearningStorageLogConsumerPipelineContractDependencies,
+} from "./learning.storage.log.consumer.pipeline.contract";
+
+// W4-T24 — LearningStorageLog Consumer Pipeline Batch (CP2)
+export {
+  LearningStorageLogConsumerPipelineBatchContract,
+  createLearningStorageLogConsumerPipelineBatchContract,
+} from "./learning.storage.log.consumer.pipeline.batch.contract";
+export type {
+  LearningStorageLogConsumerPipelineBatchResult,
+  LearningStorageLogConsumerPipelineBatchContractDependencies,
+} from "./learning.storage.log.consumer.pipeline.batch.contract";
+
+// W4-T25 — PatternDriftLog Consumer Pipeline Bridge (CP1)
+export {
+  PatternDriftLogConsumerPipelineContract,
+  createPatternDriftLogConsumerPipelineContract,
+} from "./pattern.drift.log.consumer.pipeline.contract";
+export type {
+  PatternDriftLogConsumerPipelineRequest,
+  PatternDriftLogConsumerPipelineResult,
+  PatternDriftLogConsumerPipelineContractDependencies,
+} from "./pattern.drift.log.consumer.pipeline.contract";
+
+// W4-T25 — PatternDriftLog Consumer Pipeline Batch (CP2)
+export {
+  PatternDriftLogConsumerPipelineBatchContract,
+  createPatternDriftLogConsumerPipelineBatchContract,
+} from "./pattern.drift.log.consumer.pipeline.batch.contract";
+export type {
+  PatternDriftLogConsumerPipelineBatchResult,
+  PatternDriftLogConsumerPipelineBatchContractDependencies,
+} from "./pattern.drift.log.consumer.pipeline.batch.contract";
+
 // W4-T14 — LearningLoop Consumer Pipeline Bridge (CP1)
 export {
   LearningLoopConsumerPipelineContract,

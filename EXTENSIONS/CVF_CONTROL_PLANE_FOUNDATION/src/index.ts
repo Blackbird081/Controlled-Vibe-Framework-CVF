@@ -1,3 +1,22 @@
+// W1-T29 — Intake Consumer Bridge (CP1–CP2)
+export {
+  IntakeConsumerPipelineContract,
+  createIntakeConsumerPipelineContract,
+} from "./intake.consumer.pipeline.contract";
+export type {
+  IntakeConsumerPipelineRequest,
+  IntakeConsumerPipelineResult,
+  IntakeConsumerPipelineContractDependencies,
+} from "./intake.consumer.pipeline.contract";
+export {
+  IntakeConsumerPipelineBatchContract,
+  createIntakeConsumerPipelineBatchContract,
+} from "./intake.consumer.pipeline.batch.contract";
+export type {
+  IntakeConsumerPipelineBatchResult,
+  IntakeConsumerPipelineBatchContractDependencies,
+} from "./intake.consumer.pipeline.batch.contract";
+
 // W1-T28 — AI Gateway Consumer Bridge (CP1–CP2)
 export {
   AIGatewayConsumerPipelineContract,

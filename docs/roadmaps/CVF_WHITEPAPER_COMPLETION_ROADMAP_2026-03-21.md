@@ -1362,3 +1362,15 @@ This roadmap means:
 - **Gap closed**: `GovernanceSignalContract` (W4-T4, LPF governance action contract) now has a governed consumer-visible enriched output path
 - **Fourth LPF consumer bridge delivered** — ThresholdAssessment → GovernanceSignal chain now consumer-visible
 - Closure anchor: `docs/reviews/CVF_W4_T11_TRANCHE_CLOSURE_REVIEW_2026-03-25.md`
+
+---
+
+## W4-T12 — PatternDrift Consumer Pipeline Bridge (IN EXECUTION)
+
+> Authorization: GC-018 score 9/10 — 2026-03-27
+> LPF baseline: 622 tests
+
+Planned deliverables:
+- `W4-T12 / CP1` — PatternDriftConsumerPipelineContract (`TruthModel (baseline) + TruthModel (current) → PatternDriftContract.detect() → PatternDriftSignal → CPF`) — Full Lane (GC-019)
+- `W4-T12 / CP2` — PatternDriftConsumerPipelineBatchContract (`PatternDriftConsumerPipelineResult[] → batch with dominantTokenBudget, criticalDriftCount, driftingCount`) — Fast Lane (GC-021)
+- `W4-T12 / CP3` — Tranche closure review — Full Lane

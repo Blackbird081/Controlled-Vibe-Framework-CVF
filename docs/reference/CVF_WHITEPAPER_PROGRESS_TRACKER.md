@@ -6,7 +6,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-27` (W2-T29 COMPLETE, Streaming Execution Consumer Pipeline Bridge — THIRD EPF CONSUMER BRIDGE, post-closure cleanup synced)
+> Last refreshed: `2026-03-27` (W2-T29 COMPLETE, Streaming Execution Consumer Pipeline Bridge — THIRD EPF CONSUMER BRIDGE, post-closure cleanup synced canonically)
 
 ---
 

@@ -1,3 +1,24 @@
+// W2-T28 — AsyncRuntime Consumer Pipeline Bridge (CP1)
+export {
+  AsyncRuntimeConsumerPipelineContract,
+  createAsyncRuntimeConsumerPipelineContract,
+} from "./async.runtime.consumer.pipeline.contract";
+export type {
+  AsyncRuntimeConsumerPipelineRequest,
+  AsyncRuntimeConsumerPipelineResult,
+  AsyncRuntimeConsumerPipelineContractDependencies,
+} from "./async.runtime.consumer.pipeline.contract";
+
+// W2-T28 — AsyncRuntime Consumer Pipeline Batch (CP2)
+export {
+  AsyncRuntimeConsumerPipelineBatchContract,
+  createAsyncRuntimeConsumerPipelineBatchContract,
+} from "./async.runtime.consumer.pipeline.batch.contract";
+export type {
+  AsyncRuntimeConsumerPipelineBatchResult,
+  AsyncRuntimeConsumerPipelineBatchContractDependencies,
+} from "./async.runtime.consumer.pipeline.batch.contract";
+
 // W2-T27 — Dispatch Consumer Pipeline Bridge (CP1)
 export {
   DispatchConsumerPipelineContract,

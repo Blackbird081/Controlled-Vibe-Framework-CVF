@@ -181,6 +181,90 @@ export type {
   FeedbackLedgerConsumerPipelineBatchContractDependencies,
 } from "./feedback.ledger.consumer.pipeline.batch.contract";
 
+// W4-T18 — TruthModelUpdate Consumer Pipeline Bridge (CP1)
+export {
+  TruthModelUpdateConsumerPipelineContract,
+  createTruthModelUpdateConsumerPipelineContract,
+} from "./truth.model.update.consumer.pipeline.contract";
+export type {
+  TruthModelUpdateConsumerPipelineRequest,
+  TruthModelUpdateConsumerPipelineResult,
+  TruthModelUpdateConsumerPipelineContractDependencies,
+} from "./truth.model.update.consumer.pipeline.contract";
+
+// W4-T18 — TruthModelUpdate Consumer Pipeline Batch (CP2)
+export {
+  TruthModelUpdateConsumerPipelineBatchContract,
+  createTruthModelUpdateConsumerPipelineBatchContract,
+} from "./truth.model.update.consumer.pipeline.batch.contract";
+export type {
+  TruthModelUpdateConsumerPipelineBatchResult,
+  TruthModelUpdateConsumerPipelineBatchContractDependencies,
+} from "./truth.model.update.consumer.pipeline.batch.contract";
+
+// W4-T19 — TruthModel Consumer Pipeline Bridge (CP1)
+export {
+  TruthModelConsumerPipelineContract,
+  createTruthModelConsumerPipelineContract,
+} from "./truth.model.consumer.pipeline.contract";
+export type {
+  TruthModelConsumerPipelineRequest,
+  TruthModelConsumerPipelineResult,
+  TruthModelConsumerPipelineContractDependencies,
+} from "./truth.model.consumer.pipeline.contract";
+
+// W4-T19 — TruthModel Consumer Pipeline Batch (CP2)
+export {
+  TruthModelConsumerPipelineBatchContract,
+  createTruthModelConsumerPipelineBatchContract,
+} from "./truth.model.consumer.pipeline.batch.contract";
+export type {
+  TruthModelConsumerPipelineBatchResult,
+  TruthModelConsumerPipelineBatchContractDependencies,
+} from "./truth.model.consumer.pipeline.batch.contract";
+
+// W4-T20 — EvaluationThreshold Consumer Pipeline Bridge (CP1)
+export {
+  EvaluationThresholdConsumerPipelineContract,
+  createEvaluationThresholdConsumerPipelineContract,
+} from "./evaluation.threshold.consumer.pipeline.contract";
+export type {
+  EvaluationThresholdConsumerPipelineRequest,
+  EvaluationThresholdConsumerPipelineResult,
+  EvaluationThresholdConsumerPipelineContractDependencies,
+} from "./evaluation.threshold.consumer.pipeline.contract";
+
+// W4-T20 — EvaluationThreshold Consumer Pipeline Batch (CP2)
+export {
+  EvaluationThresholdConsumerPipelineBatchContract,
+  createEvaluationThresholdConsumerPipelineBatchContract,
+} from "./evaluation.threshold.consumer.pipeline.batch.contract";
+export type {
+  EvaluationThresholdConsumerPipelineBatchResult,
+  EvaluationThresholdConsumerPipelineBatchContractDependencies,
+} from "./evaluation.threshold.consumer.pipeline.batch.contract";
+
+// W4-T21 — TruthScoreLog Consumer Pipeline Bridge (CP1)
+export {
+  TruthScoreLogConsumerPipelineContract,
+  createTruthScoreLogConsumerPipelineContract,
+} from "./truth.score.log.consumer.pipeline.contract";
+export type {
+  TruthScoreLogConsumerPipelineRequest,
+  TruthScoreLogConsumerPipelineResult,
+  TruthScoreLogConsumerPipelineContractDependencies,
+} from "./truth.score.log.consumer.pipeline.contract";
+
+// W4-T21 — TruthScoreLog Consumer Pipeline Batch (CP2)
+export {
+  TruthScoreLogConsumerPipelineBatchContract,
+  createTruthScoreLogConsumerPipelineBatchContract,
+} from "./truth.score.log.consumer.pipeline.batch.contract";
+export type {
+  TruthScoreLogConsumerPipelineBatchResult,
+  TruthScoreLogConsumerPipelineBatchContractDependencies,
+} from "./truth.score.log.consumer.pipeline.batch.contract";
+
 // W4-T14 — LearningLoop Consumer Pipeline Bridge (CP1)
 export {
   LearningLoopConsumerPipelineContract,

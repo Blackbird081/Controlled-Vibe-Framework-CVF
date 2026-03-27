@@ -19,7 +19,7 @@ Memory class: POINTER_RECORD
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T22 / W2-T24 / W3-T18 / W4-T11 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `W4-T12 — PatternDrift Consumer Pipeline Bridge — IN EXECUTION` |
+| Current active tranche | `NONE — W4-T12 CLOSED DELIVERED — LPF 685 tests — FIFTH LPF CONSUMER BRIDGE COMPLETE` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -103,7 +103,7 @@ Memory class: POINTER_RECORD
 | `W4-T9` truth score consumer pipeline bridge | `DONE` |
 | `W4-T10` pattern detection consumer pipeline bridge | `DONE` |
 | `W4-T11` governance signal consumer pipeline bridge | `DONE` |
-| `W4-T12` pattern drift consumer pipeline bridge | `IN EXECUTION` |
+| `W4-T12` pattern drift consumer pipeline bridge | `DONE` |
 
 ---
 
@@ -114,7 +114,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `W4-T12 AUTHORIZED — LAST CLOSED W4-T11 — LPF 622 tests baseline` |
+| Current canonical validation posture | `W4-T12 CLOSED DELIVERED — LAST CLOSED W4-T12 — FIFTH LPF CONSUMER BRIDGE COMPLETE` |
 
 ---
 

@@ -1374,3 +1374,19 @@ Planned deliverables:
 - `W4-T12 / CP1` — PatternDriftConsumerPipelineContract (`TruthModel (baseline) + TruthModel (current) → PatternDriftContract.detect() → PatternDriftSignal → CPF`) — Full Lane (GC-019)
 - `W4-T12 / CP2` — PatternDriftConsumerPipelineBatchContract (`PatternDriftConsumerPipelineResult[] → batch with dominantTokenBudget, criticalDriftCount, driftingCount`) — Fast Lane (GC-021)
 - `W4-T12 / CP3` — Tranche closure review — Full Lane
+
+---
+
+### POST-CYCLE RECORD — W4-T12 — PatternDrift Consumer Pipeline Bridge — CLOSED DELIVERED
+
+> Closed: 2026-03-27
+> LPF at closure: 685 tests, 0 failures (+63 from 622)
+
+Contracts delivered:
+- `W4-T12 / CP1` — PatternDriftConsumerPipelineContract — Full Lane (GC-019) — +37 tests — commit d1fc671
+- `W4-T12 / CP2` — PatternDriftConsumerPipelineBatchContract — Fast Lane (GC-021) — +26 tests — commit 3630b52
+
+Gap closed: PatternDriftContract (W6-T6) now has a governed consumer-visible enriched output path.
+Fifth LPF consumer bridge delivered — TruthModel (baseline + current) → PatternDriftSignal chain now consumer-visible.
+
+Next: fresh GC-018 survey — LearningObservabilityContract or highest-value EPF aggregate contract.

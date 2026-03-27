@@ -420,7 +420,7 @@
     },
     {
       "scope": "CPF Boardroom Consumer Pipeline Batch",
-      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.batch.test.ts",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.test.ts",
       "forbiddenFiles": [
         "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
       ],

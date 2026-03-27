@@ -1,9 +1,9 @@
 # CVF Agent Handoff — 2026-03-27
 
 > Branch: `cvf-next`
-> Last push: `W4-T12-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W4-T12 — **FIFTH LPF CONSUMER BRIDGE COMPLETE**
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T12`)
+> Last push: `W4-T13-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W4-T13 — **SIXTH LPF CONSUMER BRIDGE COMPLETE**
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
 
@@ -13,21 +13,23 @@
 - CPF (Control Plane Foundation): **991 tests, 0 failures**
 - EPF (Execution Plane Foundation): **902 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
-- LPF (Learning Plane Foundation): **685 tests, 0 failures**
+- LPF (Learning Plane Foundation): **751 tests, 0 failures**
 
 ### Last Four Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W4-T9 | TruthScore Consumer Pipeline Bridge | CP1, CP2, CP3 | 496 LPF |
 | W4-T10 | PatternDetection Consumer Pipeline Bridge | CP1, CP2, CP3 | 557 LPF |
 | W4-T11 | GovernanceSignal Consumer Pipeline Bridge | CP1, CP2, CP3 | 622 LPF |
 | W4-T12 | PatternDrift Consumer Pipeline Bridge | CP1, CP2, CP3 | 685 LPF |
+| W4-T13 | LearningObservability Consumer Pipeline Bridge | CP1, CP2, CP3 | 751 LPF |
 
 ### Key Contracts Delivered (last 2 LPF tranches)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/governance.signal.consumer.pipeline.contract.ts` — GovernanceSignalConsumerPipelineContract (W4-T11)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/governance.signal.consumer.pipeline.batch.contract.ts` — GovernanceSignalConsumerPipelineBatchContract (W4-T11)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/pattern.drift.consumer.pipeline.contract.ts` — PatternDriftConsumerPipelineContract (W4-T12)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/pattern.drift.consumer.pipeline.batch.contract.ts` — PatternDriftConsumerPipelineBatchContract (W4-T12)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.observability.consumer.pipeline.contract.ts` — LearningObservabilityConsumerPipelineContract (W4-T13)
+- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning.observability.consumer.pipeline.batch.contract.ts` — LearningObservabilityConsumerPipelineBatchContract (W4-T13)
 
 ---
 
@@ -37,12 +39,11 @@
 
 Current guidance:
 - no tranche is currently active
-- baseline architecture snapshot is frozen at `W4-T12`; treat the whitepaper as the pre-next-wave architectural anchor
-- `W4-T12` is now closed and no longer a candidate
-- `PatternDriftContract` consumer visibility gap is **CLOSED**
-- **Fifth LPF consumer bridge delivered** — `PatternDriftConsumerPipelineContract` exposes drift class (CRITICAL_DRIFT/DRIFTING/STABLE) consumer-visibly
-- **ALL known CPF aggregate contracts are now bridged — no remaining unbridged CPF consumer bridge gaps**
-- next move requires a fresh `GC-018` survey — look for the next highest-value unbridged LPF aggregate contract (e.g., `LearningObservabilityContract`), or the highest-value unbridged EPF aggregate contract
+- baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
+- `W4-T13` is now closed and no longer a candidate
+- `LearningObservabilityContract` consumer visibility gap is **CLOSED**
+- **Sixth LPF consumer bridge delivered** — `LearningObservabilityConsumerPipelineContract` exposes observability health (CRITICAL/DEGRADED/HEALTHY/UNKNOWN) consumer-visibly
+- next move requires a fresh `GC-018` survey — look for the next highest-value unbridged LPF aggregate contract (`LearningLoopContract`, `LearningReinjectionContract`), or the highest-value unbridged EPF aggregate contract
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

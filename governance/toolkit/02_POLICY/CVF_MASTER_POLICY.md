@@ -90,7 +90,7 @@ Personal AI usage unrelated to company work is excluded.
      4. only then execute the structural change.
    - Each audit must classify the proposed change as `coordination package`, `wrapper/re-export merge`, or `physical merge`.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`.
-14. Agent handoff is mandatory whenever governed work pauses or transfers before closure:
+14. `GC-020` Agent handoff is mandatory whenever governed work pauses or transfers before closure:
    - This rule applies to pause/resume, agent-to-agent transfer, and mid-tranche stop states.
    - Transition classification must be determined first using `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`.
    - The governing context-continuity model is `memory = repository of facts, history, and durable evidence`, `handoff = governance-filtered summary and transfer checkpoint`, and `context loading = phase-bounded loading of only what the current step needs`.
@@ -99,7 +99,7 @@ Personal AI usage unrelated to company work is excluded.
    - The canonical handoff template is `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`.
    - The canonical context-continuity reference is `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`.
-15. Fast-lane governance is allowed only for low-risk additive work inside an already-authorized tranche:
+15. `GC-021` Fast-lane governance is allowed only for low-risk additive work inside an already-authorized tranche:
    - `GC-018` still opens the wave or tranche.
    - `GC-019` full-lane handling remains mandatory for physical merges, ownership transfer, target-state claim expansion, runtime-authority changes, or concept-to-module work.
    - Fast lane is allowed only when the change stays additive, remains inside the approved tranche scope, and keeps rollback bounded.
@@ -124,21 +124,21 @@ Personal AI usage unrelated to company work is excluded.
    - Canonical ownership and forbidden legacy files must be recorded in a machine-readable registry.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`.
    - Automated enforcement reference: `governance/compat/check_test_partition_ownership.py`.
-19. Session governance bootstrap is mandatory before governed work starts or resumes in a fresh session:
+19. `GC-025` Session governance bootstrap is mandatory before governed work starts or resumes in a fresh session:
    - Workers must first load the canonical bootstrap reference instead of rereading every governance guard by default.
    - The bootstrap must route workers to the relevant controls based on task class and transition state.
    - In CVF, `memory` preserves durable truth, `handoff` preserves transition truth, and `bootstrap` preserves minimal governance routing truth.
    - The canonical bootstrap reference is `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`.
    - Automated enforcement reference: `governance/compat/check_session_governance_bootstrap.py`.
-20. Progress tracker sync is mandatory after any governed tranche or authorization state change that alters canonical progress posture:
+20. `GC-026` Progress tracker sync is mandatory after any governed tranche or authorization state change that alters canonical progress posture:
    - Workers must update the canonical tracker for the affected workline so session bootstrap does not read stale progress truth.
    - Workers must also leave one short standardized sync note instead of relying on tracker edits alone.
    - This rule is intentionally lighter than a full status-review rewrite, but stronger than an optional tracker refresh.
    - Canonical template: `docs/reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`.
    - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PROGRESS_TRACKER_SYNC_GUARD.md`.
    - Automated enforcement reference: `governance/compat/check_progress_tracker_sync.py`.
-21. Canonical multi-agent intake/rebuttal/decision documentation is mandatory before roadmap intake or implementation selection when multiple agents evaluate the same proposal set:
+21. `GC-027` Canonical multi-agent intake/rebuttal/decision documentation is mandatory before roadmap intake or implementation selection when multiple agents evaluate the same proposal set:
     - This rule applies when CVF uses separate agents or review passes to evaluate, rebut, and reconcile the same new module, layer, architecture addition, or roadmap candidate.
     - The canonical sequence is: intake review -> cross-agent rebuttal -> pre-integration decision pack -> only then roadmap intake or implementation authorization.
    - Canonical templates: `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`, `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`, and `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`.
@@ -146,7 +146,7 @@ Personal AI usage unrelated to company work is excluded.
     - Automated enforcement reference: `governance/compat/check_multi_agent_review_governance_compat.py`.
     - This rule governs canonical documentation only; it does not replace live `AI Boardroom` deliberation inside the Control Plane.
     - The separate canonical runtime/reference boundary for boardroom deliberation is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
- 22. Live `AI Boardroom` deliberation is a separate high-criticality control and must truthfully gate downstream work:
+ 22. `GC-028` Live `AI Boardroom` deliberation is a separate high-criticality control and must truthfully gate downstream work:
      - This rule applies when multiple agents or perspectives deliberate inside the live Control Plane before downstream design or orchestration continues.
      - The canonical sequence is: boardroom session packet -> dissent log when needed -> transition decision -> only then the next allowed runtime stage.
      - Canonical templates: `docs/reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md`, `docs/reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`, and `docs/reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`.

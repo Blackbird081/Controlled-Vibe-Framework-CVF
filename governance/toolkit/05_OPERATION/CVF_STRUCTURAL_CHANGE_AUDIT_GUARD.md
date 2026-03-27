@@ -1,31 +1,35 @@
-# CVF STRUCTURAL CHANGE AUDIT GUARD
+# CVF Structural Change Audit Guard
 
-**Type:** Governance Operation Guard  
-**Applies to:** Major structural changes, restructuring waves, humans, and AI agents  
-**Purpose:** Prevent unsafe structural merges, physical moves, or boundary-changing consolidation by requiring evidence, cross-check review, and explicit approval before execution.
+**Control ID:** `GC-019`
+**Guard Class:** `CONTINUITY_AND_DECISION_GUARD`
+**Status:** Active structural execution gate for major merges, physical moves, and boundary-changing consolidation.
+**Applies to:** major structural changes, restructuring waves, humans, and AI agents proposing a merge, move, ownership transfer, or replacement package.
+**Enforced by:** `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`, `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_REVIEW_TEMPLATE.md`
 
----
+## Purpose
 
-## 1. Mandatory Rule
+- prevent unsafe structural merges, physical moves, or boundary-changing consolidation
+- require evidence, independent review, and explicit approval before execution
+- keep conceptual overlap from being mistaken for proof that physical consolidation is better
 
-Before any major structural change is executed, the proposer MUST complete a structural audit packet and an independent review packet.
+## Rule
 
-Execution MUST follow this exact order:
+Before any major structural change is executed, the proposer must complete a structural audit packet and an independent review packet.
+
+Execution must follow this exact order:
 
 1. `Audit`
 2. `Independent review`
 3. `Explicit user / authority decision`
 4. `Execution`
 
-The default assumption is:
+Default assumption:
 
-- do **not** merge structurally on intuition
-- do **not** move directories because of naming discomfort alone
-- do **not** treat conceptual overlap as proof that physical consolidation is better
+- do not merge structurally on intuition
+- do not move directories because of naming discomfort alone
+- do not treat conceptual overlap as proof that physical consolidation is better
 
----
-
-## 2. When This Guard Is Mandatory
+### When This Guard Is Mandatory
 
 This guard is mandatory when a proposed change does at least one of the following:
 
@@ -36,15 +40,13 @@ This guard is mandatory when a proposed change does at least one of the followin
 - changes public entrypoints or import boundaries for active-path consumers
 - restructures a subsystem in a way that changes rollback, dependency, or ownership behavior
 
-This guard is usually **not** required for:
+This guard is usually not required for:
 
 - documentation-only changes
 - test-only changes
 - internal refactors that do not change ownership, boundaries, entrypoints, or filesystem lineage
 
----
-
-## 3. Required Classification
+### Required Classification
 
 Every structural proposal must classify itself as exactly one of:
 
@@ -56,21 +58,14 @@ Every structural proposal must classify itself as exactly one of:
 
 If the class is `physical merge`, the burden of proof is highest.
 
----
-
-## 4. Required Audit Packet
-
-The audit packet must be explicit and reviewable.
+### Required Audit Packet
 
 Minimum required sections:
 
 - proposal identity and scope
 - source module profiles
 - consumer analysis
-- overlap classification:
-  - conceptual overlap
-  - interface overlap
-  - implementation overlap
+- overlap classification
 - active-path impact
 - risk assessment
 - recommended change class
@@ -81,18 +76,14 @@ Standard template:
 
 - `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`
 
----
-
-## 5. Required Independent Review
-
-The structural audit alone is not sufficient for execution.
+### Required Independent Review
 
 A second packet must independently review the audit and answer:
 
-- Is the audit factually sound?
-- Is the recommended change class correct?
-- Is the risk framing complete?
-- Should the user approve execution, request revision, or defer?
+- is the audit factually sound
+- is the recommended change class correct
+- is the risk framing complete
+- should the user approve execution, request revision, or defer
 
 The review must produce one of:
 
@@ -104,9 +95,7 @@ Standard template:
 
 - `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_REVIEW_TEMPLATE.md`
 
----
-
-## 6. Decision Rule
+### Decision Rule
 
 Execution is allowed only when all of the following are true:
 
@@ -115,39 +104,30 @@ Execution is allowed only when all of the following are true:
 - both artifacts are linked from the active roadmap or implementation packet
 - the final decision is explicitly recorded as approved by the user or delegated authority
 
-If any of these is missing, execution MUST stop.
+If any of these is missing, execution must stop.
 
----
+### Default Guidance
 
-## 7. Default Guidance
+Prefer `coordination package` when overlap is mostly conceptual or physical movement would create high rollback cost with little runtime gain.
 
-Prefer `coordination package` when:
+Prefer `wrapper/re-export merge` when a unified public surface is valuable and consumer simplification is the main benefit.
 
-- overlap is mostly conceptual
-- modules are in different languages
-- current physical layout has strong test/dependency stability
-- physical movement would create high rollback cost with little runtime gain
+Prefer `physical merge` only when implementation overlap is real, ownership ambiguity remains harmful after lighter options, and rollback stays bounded.
 
-Prefer `wrapper/re-export merge` when:
+## Enforcement Surface
 
-- a unified public surface is valuable
-- underlying modules can remain stable
-- consumer simplification is the main benefit
+- this guard is primarily enforced through the audit and review packet sequence
+- `GC-019` works in tandem with roadmap and packet review checkpoints before execution begins
+- `GC-019` complements `GC-018`: one decides whether a wave should open, the other decides whether a structural move inside that wave is safe to execute
 
-Prefer `physical merge` only when:
+## Related Artifacts
 
-- implementation overlap is real
-- ownership ambiguity remains harmful after coordination/wrapper options
-- rollback is still bounded and independently reversible
-- evidence shows physical consolidation is materially better than preserving lineage
+- `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`
+- `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_REVIEW_TEMPLATE.md`
+- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- `docs/roadmaps/CVF_RESTRUCTURING_ROADMAP_2026-03-21.md`
+- `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
 
----
+## Final Clause
 
-## 8. Governance Position
-
-This guard complements `GC-018`.
-
-- `GC-018` decides whether a new restructuring or deepening wave should open.
-- This guard decides whether a specific structural change inside an authorized wave is safe enough to execute.
-
-Both controls may apply at the same time.
+Structural change is not governed by elegance alone. It is governed by evidence, reversibility, and explicit approval.

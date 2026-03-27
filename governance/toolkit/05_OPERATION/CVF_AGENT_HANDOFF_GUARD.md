@@ -1,14 +1,28 @@
-# CVF AGENT HANDOFF GUARD
+# CVF Agent Handoff Guard
 
-**Type:** Governance Operation Guard  
-**Applies to:** All humans, all AI agents, all governed implementation tranches  
-**Purpose:** Prevent ambiguous pause/transfer states by requiring one truthful, reviewable handoff whenever work stops before closure or moves between agents.
+**Control ID:** `GC-020`
+**Guard Class:** `CONTINUITY_AND_DECISION_GUARD`
+**Status:** Active truth-preservation rule for pause, transfer, and resume checkpoints in governed work.
+**Applies to:** all humans, all AI agents, and all governed implementation tranches that stop before closure or move to another worker.
+**Enforced by:** `governance/compat/check_agent_handoff_guard_compat.py`
 
----
+## Purpose
 
-## 1. Mandatory Rule
+- prevent ambiguous pause and transfer states
+- require one truthful, reviewable handoff whenever work stops before closure or moves between agents
+- preserve the CVF context-continuity model without depending on hidden memory
 
-Whenever governed work pauses or is transferred, the current worker MUST leave one explicit handoff artifact in the conversation or record chain.
+This guard is part of the wider CVF context-continuity model:
+
+- `memory = repository of facts, history, and durable evidence`
+- `handoff = governance-filtered summary and transfer checkpoint`
+- `context loading = phase-bounded loading of only what the current step needs`
+
+In CVF, handoff is context quality control by phase for multi-agent continuation, not only work transfer.
+
+## Rule
+
+Whenever governed work pauses or is transferred, the current worker must leave one explicit handoff artifact in the conversation or record chain.
 
 The current state transition must first be classified using:
 
@@ -21,38 +35,26 @@ This rule applies when:
 - the user wants to pause and resume later
 - the worker is taking a break while the governed thread remains open
 
-The default assumption is:
+Default assumption:
 
 - no silent stop
 - no memory-only transfer
 - no resume based on guesswork
 
-This guard is part of the wider CVF context-continuity model:
-
-- `memory = repository of facts, history, and durable evidence`
-- `handoff = governance-filtered summary and transfer checkpoint`
-- `context loading = phase-bounded loading of only what the current step needs`
-
-In CVF, handoff is context quality control by phase for multi-agent continuation, not only work transfer.
-
----
-
-## 2. Required Handoff Truth
+### Required Handoff Truth
 
 Every handoff must truthfully state:
 
 - latest completed commit
 - whether the working tree is clean or dirty
-- what is implemented vs what is only planned
-- the active tranche / packet truth
+- what is implemented versus what is only planned
+- the active tranche or packet truth
 - what remains out of scope
 - the next governed move
 
 If any of the above is unknown, the handoff must say so explicitly instead of filling the gap with optimistic wording.
 
----
-
-## 3. Minimum Required Fields
+### Minimum Required Fields
 
 Every governed handoff must include:
 
@@ -72,9 +74,7 @@ Canonical template:
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
 - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 
----
-
-## 4. Required Usage Pattern
+### Required Usage Pattern
 
 Use the canonical handoff template whenever possible.
 
@@ -88,11 +88,9 @@ Not allowed:
 
 - reusing stale tranche language from an older wave without updating it
 - claiming target-state completion when only a bounded slice landed
-- handing off with no commit/reference state when a clean commit exists
+- handing off with no commit or reference state when a clean commit exists
 
----
-
-## 5. Pause / Resume Interpretation
+### Pause / Resume Interpretation
 
 For governance purposes, an agent handoff should be treated like a human work handoff or a short break checkpoint:
 
@@ -100,64 +98,29 @@ For governance purposes, an agent handoff should be treated like a human work ha
 - the user should not have to rediscover scope boundaries already decided
 - the repo truth at handoff time must be preserved
 
-This guard exists because governed continuation quality depends not only on code and docs, but also on truthful transfer of execution state.
-
-It also exists because token efficiency and context quality improve when:
-
-- durable facts stay in memory/reference artifacts
-- transition truth is compressed into one governed handoff
-- the next phase loads only the bounded context it actually needs
-
----
-
-## 6. Recommended Evidence Placement
-
-The handoff itself may live in conversation output, but it should point to canonical repo artifacts first:
-
-- current execution plan
-- latest packet audit / review
-- latest implementation delta
-- current roadmap and completion status
-
-When a pause/transfer pattern becomes durable process guidance, the canonical source must be:
-
-- `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
-
----
-
-## 7. Failure Modes This Guard Prevents
-
-This guard is specifically intended to prevent:
-
-- scope drift after an agent switch
-- overclaiming tranche completion
-- loss of the next governed move
-- restart from a dirty tree with no warning
-- “pretty architecture” continuation after a realization-first decision
-
----
-
-## 8. Enforcement Posture
-
-Current enforcement posture:
+## Enforcement Surface
 
 - mandatory by policy
 - reviewable by repo artifacts and conversation truth
 - machine-enforced at repo level by `governance/compat/check_agent_handoff_guard_compat.py`
-- partially surfaced at runtime through active helper/orchestrator pause and approval-required handoff checkpoints
+- partially surfaced at runtime through active helper and orchestrator pause and approval-required handoff checkpoints
 
-Until universal session/runtime interception exists, reviewers and workers should still treat missing handoff state as a governance quality defect.
+Recommended evidence placement:
 
----
+- current execution plan
+- latest packet audit or review
+- latest implementation delta
+- current roadmap and completion status
 
-## 9. Related Controls
+## Related Artifacts
 
-- `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
-- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
 - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-handoff.ts`
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
-- `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
-- `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`
+- `governance/compat/check_agent_handoff_guard_compat.py`
+
+## Final Clause
+
+If governed continuation depends on hidden memory, the handoff already failed.

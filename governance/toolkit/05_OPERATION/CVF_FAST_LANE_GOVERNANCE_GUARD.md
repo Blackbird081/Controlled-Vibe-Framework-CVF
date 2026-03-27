@@ -1,33 +1,35 @@
-# CVF FAST LANE GOVERNANCE GUARD
+# CVF Fast Lane Governance Guard
 
-**Type:** Governance Operation Guard  
-**Applies to:** Humans, AI agents, and additive implementation work inside an already-authorized tranche  
-**Purpose:** Speed up low-risk implementation work without losing structural control, tranche truth, or token discipline.
+**Control ID:** `GC-021`
+**Guard Class:** `CONTINUITY_AND_DECISION_GUARD`
+**Status:** Active lightweight governance path for additive work inside an already-authorized tranche.
+**Applies to:** humans, AI agents, and additive implementation work that stays inside an already-authorized tranche.
+**Enforced by:** `governance/compat/check_fast_lane_governance_compat.py`
 
----
+## Purpose
 
-## 1. Mandatory Rule
+- speed up low-risk implementation work without losing structural control, tranche truth, or token discipline
+- keep full-lane governance reserved for structural, boundary-changing, or scope-expanding work
+- make lane choice explicit instead of ad hoc
 
-CVF may use `Fast Lane` governance only for low-risk, additive work inside an already-authorized tranche.
+## Rule
 
-The default split is:
+CVF may use `Fast Lane` governance only for low-risk additive work inside an already-authorized tranche.
+
+Default split:
 
 - `Fast Lane` for low-risk additive work
 - `Full Lane` for structural, boundary-changing, or scope-expanding work
 
-This guard exists so CVF does not pay full-packet cost on every small control point when the tranche boundary is already settled.
+### Fast Lane Eligibility
 
----
-
-## 2. Fast Lane Eligibility
-
-`Fast Lane` is allowed only when **all** of the following are true:
+`Fast Lane` is allowed only when all of the following are true:
 
 1. the tranche or wave is already authorized through `GC-018`
-2. the work stays inside the already-approved tranche scope
+2. the work stays inside the already-authorized tranche scope
 3. the change is additive, not a physical merge
 4. primary ownership does not move between planes or modules
-5. no active runtime authority or control boundary changes
+5. no runtime authority or control boundary changes
 6. no target-state claim is widened
 7. no concept-only module is being turned into a new standalone line
 8. rollback stays bounded to the touched package or local slice
@@ -40,11 +42,9 @@ Typical `Fast Lane` examples:
 - deterministic packaging
 - additive runtime helper
 
----
+### Full Lane Triggers
 
-## 3. Full Lane Triggers
-
-`Full Lane` is mandatory whenever **any** of the following is true:
+`Full Lane` is mandatory whenever any of the following is true:
 
 - no physical merge is no longer true because a physical merge or filesystem lineage move is proposed
 - module created from concept-only target
@@ -55,12 +55,10 @@ Typical `Fast Lane` examples:
 
 In short:
 
-- `high-risk / boundary-changing => Full Lane`
-- `low-risk / additive / already-authorized => Fast Lane`
+- high-risk or boundary-changing => `Full Lane`
+- low-risk, additive, already-authorized => `Fast Lane`
 
----
-
-## 4. Required Fast Lane Evidence
+### Required Fast Lane Evidence
 
 Each `Fast Lane` control point must still produce:
 
@@ -71,24 +69,15 @@ Each `Fast Lane` control point must still produce:
 5. test log update
 6. clean classified commit
 
-Top-level roadmap/status/inventory/manifest refresh is required only when one of the following changes:
+Top-level roadmap, status, inventory, or manifest refresh is required only when tranche state or top-level truth changes.
 
-- tranche state
-- release or module truth
-- maturity or readiness claim
+### Lane Selection Is Not Memory Classification
 
-## 5. Lane Selection Is Not Memory Classification
+`Fast Lane` decides the minimum governed evidence burden for one additive control point.
 
-`Fast Lane` decides the **minimum governed evidence burden** for one additive control point.
-
-It does **not** decide the durable memory class of every artifact produced by that control point.
+It does not decide the durable memory class of every artifact produced by that control point.
 
 `GC-022` still governs the memory class.
-
-This means:
-
-- `short` does not automatically mean `SUMMARY_RECORD`
-- `full lane` does not automatically mean every artifact becomes `FULL_RECORD`
 
 Typical default mapping:
 
@@ -101,11 +90,7 @@ Typical default mapping:
 | test log update | `SUMMARY_RECORD` |
 | index or README navigation refresh | `POINTER_RECORD` |
 
-If one artifact needs a different class, that exception must be justified truthfully by `GC-022`.
-
----
-
-## 6. Required Fast Lane Content
+### Required Fast Lane Content
 
 The short audit must still state:
 
@@ -121,52 +106,31 @@ The short review must still answer:
 - does it stay inside tranche scope
 - should it proceed as `APPROVE`, `REVISE`, or `ESCALATE TO FULL LANE`
 
----
-
-## 7. Token Discipline
+### Token Discipline
 
 `Fast Lane` should reduce token cost by:
 
 - reusing the tranche packet and execution plan as the main context anchor
-- linking to canonical tranche docs instead of rewriting them in full for every additive CP
-- keeping audit/review wording short and tranche-local
+- linking to canonical tranche docs instead of rewriting them in full for every additive control point
+- keeping audit and review wording short and tranche-local
 - avoiding top-level doc churn unless top-level truth actually changes
 
-This means `Fast Lane` is not only a speed rule.
+## Enforcement Surface
 
-It is also a context-discipline rule aligned with the CVF context-continuity model.
+- repo-level alignment is enforced by `governance/compat/check_fast_lane_governance_compat.py`
+- canonical templates are `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md` and `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`
+- `GC-018` still governs tranche authorization
+- `GC-019` still governs major structural or boundary-changing work
+- `GC-022` still governs how resulting records are stored for durable memory
 
----
+## Related Artifacts
 
-## 8. Required Templates
-
-Use these templates for `Fast Lane` work:
-
-- `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`
-- `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`
-
-Do **not** use `Fast Lane` templates to hide work that should have been escalated to `GC-019` full-lane handling.
-
----
-
-## 9. Relationship To Existing Controls
-
-- `GC-018` still governs whether a new wave or tranche may open
-- `GC-019` full-lane flow still governs major structural or boundary-changing work
-- this guard adds a lightweight governed path for additive work after the tranche boundary is already approved
-- `GC-022` still governs how the resulting records are stored for durable memory
-
-`Fast Lane` does not replace `GC-018` or `GC-019`.
-
-It narrows when full-packet heaviness is necessary.
-
----
-
-## 10. Related References
-
-- `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
-- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`
 - `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`
 - `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
+- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `governance/compat/check_fast_lane_governance_compat.py`
+
+## Final Clause
+
+Fast Lane is not a shortcut around governance. It is the governed way to stay light only when the tranche boundary is already settled.

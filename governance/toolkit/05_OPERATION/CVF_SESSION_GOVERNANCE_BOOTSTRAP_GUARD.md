@@ -1,8 +1,10 @@
 # CVF Session Governance Bootstrap Guard
 
-**Control ID:** `GC-025`  
-**Memory class:** `POINTER_RECORD`  
-**Status:** canonical session-start routing rule for governance loading.
+**Control ID:** `GC-025`
+**Guard Class:** `CONTINUITY_AND_DECISION_GUARD`
+**Status:** Active session-start routing rule for governance loading.
+**Applies to:** all new or resumed governed sessions, new chats, and resumed threads where work continues from existing governance state.
+**Enforced by:** `governance/compat/check_session_governance_bootstrap.py`
 
 ## Purpose
 
@@ -12,7 +14,7 @@
 
 ## Rule
 
-Before governed work continues in a new session, new chat, or resumed thread, the worker MUST:
+Before governed work continues in a new session, new chat, or resumed thread, the worker must:
 
 1. load the canonical session bootstrap reference
 2. determine the active task class and transition state
@@ -23,7 +25,7 @@ Canonical bootstrap reference:
 
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
 
-## Why This Exists
+### Why This Exists
 
 CVF already distinguishes:
 
@@ -35,19 +37,17 @@ Session bootstrap extends the same principle:
 
 - `bootstrap = minimal governance front door for a fresh or resumed session`
 
-This reduces context overload and keeps attention on the controls that actually govern the current task.
-
-## Bootstrap Loading Model
+### Bootstrap Loading Model
 
 Every new or resumed governed session should load:
 
-### Always-On Bootstrap
+#### Always-On Bootstrap
 
 - current canonical bootstrap reference
 - current canonical control matrix
 - current active roadmap or tracker for the active workline
 
-### Trigger-Based Controls
+#### Trigger-Based Controls
 
 Load only if the task or state triggers them:
 
@@ -57,17 +57,17 @@ Load only if the task or state triggers them:
 - `GC-023` for file-size maintainability pressure
 - `GC-024` for already-split governed test ownership
 
-### Task-Class Routing
+#### Task-Class Routing
 
 Workers must classify the active task first and then route into the relevant controls instead of broad rereading.
 
-### Current Status First
+#### Current Status First
 
 Workers should read the current active tracker, roadmap, or closure packet before loading deeper historical packets.
 
-## Prohibited Session-Start Pattern
+### Prohibited Session-Start Pattern
 
-Workers MUST NOT treat session start as a reason to read every governance guard in full by default.
+Workers must not treat session start as a reason to read every governance guard in full by default.
 
 In other words: Do not read every governance guard in full by default.
 
@@ -77,21 +77,7 @@ This includes:
 - re-reading guards unrelated to the current task just because a new chat started
 - substituting broad guard rereads for truthful handoff or current-status routing
 
-## Relationship To Other Controls
-
-- `GC-020` governs truthful transition state when work pauses or transfers
-- `GC-022` governs what should be durable memory
-- `GC-025` governs what should be loaded first at session start
-
-These controls are complementary:
-
-- memory keeps durable truth
-- handoff compresses transition truth
-- bootstrap routes the next worker to the minimum correct governance surface
-
-## Automation Posture
-
-`GC-025` is:
+## Enforcement Surface
 
 - mandatory by policy
 - reviewable through the canonical bootstrap reference and control matrix
@@ -106,3 +92,7 @@ This guard enforces canonical bootstrap structure and routing references. It doe
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `governance/compat/check_session_governance_bootstrap.py`
+
+## Final Clause
+
+Session start is not permission to reload everything. It is permission to route correctly.

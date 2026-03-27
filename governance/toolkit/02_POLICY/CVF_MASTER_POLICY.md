@@ -76,7 +76,7 @@ Personal AI usage unrelated to company work is excluded.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`.
    - Automated continuation gate reference: `governance/compat/check_depth_audit_continuation_compat.py`.
    - Automated stop-boundary semantics reference: `governance/compat/check_gc018_stop_boundary_semantics.py`.
-12. Baseline update is mandatory after every accepted fix/update:
+12. `GC-015` Baseline update is mandatory after every accepted fix/update:
    - Every real fix/update must produce a baseline update artifact, not only a normal log entry.
    - Acceptable forms: new baseline snapshot, baseline delta/addendum, or post-fix assessment linked to the prior baseline.
    - `docs/CVF_INCREMENTAL_TEST_LOG.md` does not replace this requirement.

@@ -1,67 +1,68 @@
-# CVF CONFORMANCE EXECUTION PERFORMANCE GUARD
+# CVF Conformance Execution Performance Guard
 
-> **Type:** Operational Policy  
-> **Effective:** 2026-03-07  
-> **Status:** Active  
-> **Enforcement:** Partial (workflow + runner behavior)
+**Guard Class:** `QUALITY_AND_CONFORMANCE_GUARD`
+**Status:** Active performance and determinism rule for canonical Wave 1 conformance closure.
+**Applies to:** Humans and AI agents running or extending the authoritative Wave 1 conformance sequence and related packet-posture wrappers.
+**Enforced by:** `scripts/run_cvf_wave1_authoritative_sequence.py`, `scripts/run_cvf_runtime_evidence_release_gate.py`
 
----
+## Purpose
 
-## 1. PURPOSE
+- keep Wave 1 conformance deterministic and operationally reviewable
+- reduce avoidable latency from repeated bootstrap and release-gate work
+- preserve sequential correctness without accepting wasteful duplication
 
-Wave conformance must remain deterministic and operationally reviewable.
+## Rule
 
-This guard exists because:
-- authoritative sequences can become slow as Wave 1 grows
-- repeated nested bootstrap/export work creates avoidable latency
-- race-free sequential verification is required, but sequential should not mean wasteful duplication
+Wave conformance must stay deterministic, reuse shared bootstrap state where possible, and expose enough timing data to support evidence-based optimization.
 
----
+### Mandatory Execution Rules
 
-## 2. RULE
+- use `scripts/run_cvf_wave1_authoritative_sequence.py` for canonical Wave 1 closure
+- do not replace the authoritative sequential path with parallel reruns that can reintroduce report or summary mismatch
+- sibling packet wrappers must reuse shared bootstrap state whenever they validate the same runtime evidence set in one batch
 
-### Mandatory execution rules
+### Mandatory Optimization Rule
 
-- Use `scripts/run_cvf_wave1_authoritative_sequence.py` for canonical Wave 1 closure.
-- Do not replace the authoritative sequential path with parallel reruns that can reintroduce report/summary mismatch.
-- Sibling packet wrappers MUST reuse shared bootstrap state whenever they validate the same runtime evidence set in one batch.
+If a wrapper is only validating alternate packet postures over the same runtime-evidence baseline:
 
-### Mandatory optimization rule
-
-If a wrapper is only validating alternate packet postures over the same runtime evidence baseline:
 - shared runtime-evidence bootstrap must run once
 - child packet wrappers must not regenerate the same release-gate state redundantly inside the same parent wrapper
 
-### Mandatory observability rule
+### Mandatory Observability Rule
 
-Wave conformance output must record per-scenario duration so future optimization is evidence-based, not guessed.
+Wave conformance output must record per-scenario duration so future optimization is evidence-based instead of guessed.
 
----
+### Current Baseline Decision
 
-## 3. CURRENT BASELINE DECISION
+As of `2026-03-07`:
 
-As of 2026-03-07:
-- the primary avoidable hotspot identified was repeated invocation of `run_cvf_runtime_evidence_release_gate.py` across secondary packet posture wrappers
-- this hotspot has been reduced by shared bootstrap reuse in the secondary packet posture aggregation wrapper
+- the primary avoidable hotspot was repeated invocation of `run_cvf_runtime_evidence_release_gate.py` across secondary packet-posture wrappers
+- that hotspot was reduced by shared bootstrap reuse in the secondary packet-posture aggregation wrapper
 
----
-
-## 4. FOLLOW-UP RULE
+### Follow-Up Rule
 
 If authoritative Wave 1 closure remains operationally expensive after shared-bootstrap reuse:
 
-1. inspect scenario duration data first
+1. inspect scenario-duration data first
 2. optimize the slowest repeated bootstrap chain
-3. only then add new packet/evidence layers
+3. only then add new packet or evidence layers
 
-Do not keep extending Wave 1 blindly while runtime cost is rising without visibility.
+Do not keep extending Wave 1 blindly while runtime cost rises without visibility.
 
----
+## Enforcement Surface
 
-## 5. RELATED GOVERNANCE
+- the canonical execution surface is `scripts/run_cvf_wave1_authoritative_sequence.py`
+- shared runtime-evidence gating behavior is anchored by `scripts/run_cvf_runtime_evidence_release_gate.py`
+- reviewer and runner maintenance must reject changes that trade deterministic sequence truth for ad hoc parallel speedups
 
-- `CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`
-- `CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`
-- `CVF_PYTHON_AUTOMATION_SIZE_GUARD.md`
+## Related Artifacts
 
-End of Conformance Execution Performance Guard.
+- `scripts/run_cvf_wave1_authoritative_sequence.py`
+- `scripts/run_cvf_runtime_evidence_release_gate.py`
+- `governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_PYTHON_AUTOMATION_SIZE_GUARD.md`
+
+## Final Clause
+
+Wave conformance is allowed to be sequential. It is not allowed to be wasteful, opaque, or nondeterministic.

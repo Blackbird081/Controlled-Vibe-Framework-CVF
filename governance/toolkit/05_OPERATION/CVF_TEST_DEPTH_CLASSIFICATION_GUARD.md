@@ -1,125 +1,102 @@
 # CVF Test Depth Classification Guard
 
-> **Loại:** Governance Guard (Mandatory khi report test metrics)
-> **Trigger:** Bất kỳ báo cáo test count nào trong baseline review, assessment, release gate, hoặc conformance report.
-> **Mục đích:** Phân loại tests theo depth để tăng độ tin cậy cho số liệu và giúp người đánh giá phân biệt được "test nhiều" vs "test có nghĩa".
+**Guard Class:** `QUALITY_AND_CONFORMANCE_GUARD`
+**Status:** Active reporting rule for test-depth truth whenever CVF publishes test metrics.
+**Applies to:** Any human or AI-generated baseline review, assessment, release gate, or conformance report that includes test-count claims.
+**Enforced by:** `docs/CVF_CORE_KNOWLEDGE_BASE.md`
 
----
+## Purpose
 
-## 1. Bốn tầng phân loại (Test Tiers)
+- keep test-count reporting truthful instead of inflated by shallow structural checks
+- help reviewers distinguish raw test volume from meaningful control coverage
+- make baseline and release-readiness reports more comparable across waves and modules
 
-| Tier | Tên | Ý nghĩa | Ví dụ |
+## Rule
+
+Any report that claims CVF test counts must classify those tests by depth and expose the meaningful-assertion posture of the suite.
+
+### Test Tiers
+
+| Tier | Name | Meaning | Example |
 |---|---|---|---|
-| **T1** | **Structural** | Kiểm cấu trúc, schema, import, types, barrel export | `index.test.ts` (barrel), type shape check, import resolve |
-| **T2** | **Behavioral** | Kiểm logic nghiệp vụ chính, happy path, state transition | `advanceStage()` success, policy PASS, state A→B |
-| **T3** | **Boundary** | Kiểm edge case, error path, guard clause, rejection | null input, invalid state, overflow, skill revoked → blocked |
-| **T4** | **Integration** | Kiểm cross-module, cross-extension, pipeline xuyên suốt | GovernanceExecutor pipeline, cross-extension conformance, remediation chain |
+| `T1` | Structural | schema, import, type, or barrel-export checks | `index.test.ts`, type-shape check, import resolve |
+| `T2` | Behavioral | main business logic, happy path, or state transition checks | `advanceStage()` success, policy pass, state `A -> B` |
+| `T3` | Boundary | edge case, rejection, error path, or guard-clause checks | null input, invalid state, overflow, revoked skill blocked |
+| `T4` | Integration | cross-module, cross-extension, or pipeline-wide checks | governance executor pipeline, remediation chain, cross-extension conformance |
 
-### Phân loại nhanh
+Quick rule of thumb:
 
-```
-Test chỉ check "import X thành công"?        → T1
-Test check "function X trả kết quả đúng"?    → T2
-Test check "function X reject input sai"?     → T3
-Test check "X gọi Y gọi Z đúng thứ tự"?     → T4
-```
+- import or existence only -> `T1`
+- concrete output correctness -> `T2`
+- rejection, throw, or boundary handling -> `T3`
+- two or more modules or extensions working together -> `T4`
 
----
+### Reporting Rules
 
-## 2. Quy tắc báo cáo
+Every test-count report must include a tier breakdown.
 
-### 2.1 Báo cáo test count phải kèm tier breakdown
+Correct example:
 
-**Đúng:**
-```
+```text
 Tests: 341/341 PASS
   T1 (Structural):   42  (12%)
   T2 (Behavioral):  148  (43%)
-  T3 (Boundary):    98   (29%)
-  T4 (Integration): 53   (16%)
+  T3 (Boundary):     98  (29%)
+  T4 (Integration):  53  (16%)
   Meaningful (T2+T3+T4): 299/341 (88%)
 ```
 
-**Sai:**
-```
-Tests: 341 PASS    ← không có breakdown, không biết depth
-```
+Incomplete example:
 
-### 2.2 Chỉ số chính: "Meaningful Assertion Rate"
-
-```
-Meaningful Assertion Rate = (T2 + T3 + T4) / Total Tests × 100%
+```text
+Tests: 341 PASS
 ```
 
-- **≥ 70%:** Healthy — phần lớn tests kiểm logic thật
-- **50–69%:** Acceptable — nhưng nên bổ sung T3/T4
-- **< 50%:** Cần review — quá nhiều structural tests, ít giá trị kiểm soát
+### Meaningful Assertion Rate
 
-### 2.3 T1 không nên vượt 30% tổng test count
+Use this metric:
 
-- T1 có giá trị (đảm bảo exports, schemas đúng) nhưng không phải meaningful assertion
-- Nếu T1 > 30%, cần đặt câu hỏi: "có đang pad test count không?"
-
----
-
-## 3. Quy tắc áp dụng
-
-### 3.1 Khi nào bắt buộc phân loại?
-
-| Ngữ cảnh | Bắt buộc? |
-|---|---|
-| Baseline review / independent assessment | ✅ Bắt buộc |
-| Release gate report | ✅ Bắt buộc |
-| Conformance report (Wave 1+) | ✅ Đã tự động — conformance scenarios = T4 |
-| PR / commit message | ❌ Không bắt buộc (recommended khi > 10 tests) |
-| Incremental test log entry | 🟡 Recommended — ghi tier nếu biết |
-
-### 3.2 Cách phân loại khi không chắc tier
-
-1. Đọc assertion cuối cùng trong test
-2. Nếu assertion chỉ check `toBeDefined()`, `toBeInstanceOf()`, `toHaveProperty()` → **T1**
-3. Nếu assertion check giá trị cụ thể của output → **T2**
-4. Nếu assertion check `toThrow()`, reject, error message, boundary value → **T3**
-5. Nếu test setup gọi >= 2 modules/extensions để tạo input → **T4**
-
-### 3.3 Conformance scenarios luôn là T4
-
-Mọi scenario trong `CVF_CONFORMANCE_SCENARIOS.json` tự động thuộc T4 (Integration) vì chúng kiểm cross-extension behavior.
-
----
-
-## 4. Ví dụ phân loại thực tế (CVF hiện tại)
-
-| Module | T1 | T2 | T3 | T4 | Total |
-|---|---:|---:|---:|---:|---:|
-| CVF Core v3.0 | ~5 | ~25 | ~19 | 0 | 49 |
-| Phase Governance v1.1.1 | ~3 | ~14 | ~8 | ~6 | 31 |
-| Skill Governance v1.2.2 | ~2 | ~15 | ~12 | 0 | ~29 |
-| Conformance Wave 1 | 0 | 0 | 0 | 84 | 84 |
-
-> **Ghi chú:** Các con số ở bảng trên là ước lượng đại diện. Bản phân loại chính xác nên được thực hiện khi chạy full assessment.
-
----
-
-## 5. Guard enforcement
-
-### Pre-publish check
-
-Trước khi publish bất kỳ assessment/review/report nào có test count:
-
-```
-[ ] Test count có kèm tier breakdown không?
-[ ] Meaningful Assertion Rate có được tính không?
-[ ] T1 ratio có vượt 30% không? Nếu có, đã giải thích chưa?
+```text
+Meaningful Assertion Rate = (T2 + T3 + T4) / Total Tests * 100%
 ```
 
-### Lưu ý
+Interpretation:
 
-- Guard này **không yêu cầu chạy lại tests** — chỉ yêu cầu *phân loại* tests khi report
-- Nếu chưa phân loại đủ chính xác, ghi rõ "estimated tier breakdown" và đánh dấu cần audit
-- Guard này bổ sung cho `CVF_TEST_DOCUMENTATION_GUARD.md`, không thay thế
+- `>= 70%` healthy
+- `50-69%` acceptable but should improve `T3` or `T4`
+- `< 50%` needs review because structural tests dominate
 
----
+`T1` should not exceed `30%` of total test count without explanation.
 
-> **Cập nhật:** 2026-03-08
-> **ADR:** Không cần ADR riêng — đây là governance guard bổ sung, không thay đổi kiến trúc.
+### Application Rules
+
+Classification is mandatory for:
+
+- baseline reviews
+- independent assessments
+- release gate reports
+- conformance reports
+
+Classification is recommended, but not mandatory, for:
+
+- PR or commit messages
+- incremental test log entries when the tier is known
+
+Every conformance scenario in `CVF_CONFORMANCE_SCENARIOS.json` is treated as `T4`.
+
+## Enforcement Surface
+
+- reporting truth is enforced through review discipline anchored in `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+- before publishing a test-count report, reviewers should confirm the tier breakdown, the meaningful assertion rate, and whether `T1` exceeds `30%`
+- the guard does not require rerunning tests; it requires honest classification when reporting them
+
+## Related Artifacts
+
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+- `governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md`
+
+## Final Clause
+
+If a report says only that CVF has "many tests" without showing what those tests actually prove, the number is not governance evidence yet.

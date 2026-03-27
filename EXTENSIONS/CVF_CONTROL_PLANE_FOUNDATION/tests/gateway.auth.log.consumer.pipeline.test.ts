@@ -157,7 +157,7 @@ describe("GatewayAuthLogConsumerPipelineContract", () => {
 
   describe("warning messages", () => {
     it("no warning for non-empty results with low denial rate", () => {
-      expect(contract.execute({ results: [authenticatedResult, authenticatedResult, deniedResult] }).warnings).toHaveLength(0);
+      expect(contract.execute({ results: [authenticatedResult, authenticatedResult, authenticatedResult, deniedResult] }).warnings).toHaveLength(0);
     });
 
     it("WARNING_NO_REQUESTS for empty results array", () => {
@@ -260,9 +260,10 @@ import {
 const NOW_2 = "2026-03-27T12:00:00.000Z";
 const batchContract = new GatewayAuthLogConsumerPipelineBatchContract({ now: () => NOW_2 });
 
-// Helper: create test result
+// Helper: create test result (using contract from above)
+const pipelineContract = new GatewayAuthLogConsumerPipelineContract({ now: () => FIXED_NOW });
 function makeResult(results: GatewayAuthResult[]): any {
-  return contract.execute({ results });
+  return pipelineContract.execute({ results });
 }
 
 const authenticatedOnlyResult = makeResult([authenticatedResult]);

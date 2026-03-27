@@ -118,6 +118,17 @@ export type {
   LearningObservabilityConsumerPipelineBatch,
 } from "./learning.observability.consumer.pipeline.batch.contract";
 
+// W4-T14 — LearningLoop Consumer Pipeline Bridge (CP1)
+export {
+  LearningLoopConsumerPipelineContract,
+  createLearningLoopConsumerPipelineContract,
+} from "./learning.loop.consumer.pipeline.contract";
+export type {
+  LearningLoopConsumerPipelineRequest,
+  LearningLoopConsumerPipelineResult,
+  LearningLoopConsumerPipelineContractDependencies,
+} from "./learning.loop.consumer.pipeline.contract";
+
 // W6-T8 — Truth Model Scoring Slice (CP1–CP2)
 export {
   TruthScoreContract,

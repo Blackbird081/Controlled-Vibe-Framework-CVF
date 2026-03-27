@@ -2,19 +2,29 @@
   "thresholds": {
     "test_code": {
       "softThresholdLines": 800,
-      "hardThresholdLines": 1200
+      "hardThresholdLines": 1200,
+      "maxApprovableLines": 4000,
+      "maxAllowedBumpPercent": 300,
+      "_note_test_code": "Higher bump tolerance: test files can legitimately reach 3x hard threshold from cumulative tranche history. Suspicious bump check still fires above 300%."
     },
     "frontend_component": {
       "softThresholdLines": 700,
-      "hardThresholdLines": 1000
+      "hardThresholdLines": 1000,
+      "maxApprovableLines": 2000,
+      "maxAllowedBumpPercent": 65
     },
     "general_source": {
       "softThresholdLines": 700,
-      "hardThresholdLines": 1000
+      "hardThresholdLines": 1000,
+      "maxApprovableLines": 2000,
+      "maxAllowedBumpPercent": 65,
+      "_note_general_source": "maxApprovableLines=2000 covers grandfathered UX templates.ts at 1650 lines. maxAllowedBumpPercent=65% catches fresh illegitimate bumps (1000 * 1.65 = 1650 max before suspicious_bump fires)."
     },
     "active_markdown": {
       "softThresholdLines": 900,
-      "hardThresholdLines": 1200
+      "hardThresholdLines": 1200,
+      "maxApprovableLines": 2000,
+      "maxAllowedBumpPercent": 50
     }
   },
   "exceptions": [

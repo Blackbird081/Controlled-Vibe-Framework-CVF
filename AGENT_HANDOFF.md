@@ -11,7 +11,7 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **1421 tests, 0 failures**
-- EPF (Execution Plane Foundation): **1120 tests, 0 failures**
+- EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1325 tests, 0 failures**
 

@@ -233,6 +233,38 @@ describe("StreamingExecutionConsumerPipelineContract", () => {
       const r2 = contract.execute({ streamingChunks: allStreamed });
       expect(r1.resultId).toBe(r2.resultId);
     });
+
+    it("pipelineHash changes when chunk identities differ despite identical counts", () => {
+      const variantA = [
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 0 }),
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 1 }),
+      ];
+      const variantB = [
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 7 }),
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 8 }),
+      ];
+
+      const r1 = contract.execute({ streamingChunks: variantA });
+      const r2 = contract.execute({ streamingChunks: variantB });
+
+      expect(r1.pipelineHash).not.toBe(r2.pipelineHash);
+    });
+
+    it("resultId changes when chunk identities differ despite identical counts", () => {
+      const variantA = [
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 2 }),
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 3 }),
+      ];
+      const variantB = [
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 9 }),
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 10 }),
+      ];
+
+      const r1 = contract.execute({ streamingChunks: variantA });
+      const r2 = contract.execute({ streamingChunks: variantB });
+
+      expect(r1.resultId).not.toBe(r2.resultId);
+    });
   });
 });
 
@@ -374,6 +406,22 @@ describe("StreamingExecutionConsumerPipelineBatchContract", () => {
       const b1 = batchContract.batch(results);
       const b2 = batchContract.batch(results);
       expect(b1.batchId).toBe(b2.batchId);
+    });
+
+    it("batchHash changes when constituent pipeline identities change", () => {
+      const variantA = [
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 4 }),
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 5 }),
+      ];
+      const variantB = [
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 11 }),
+        makeChunk({ sourceRuntimeId: "runtime-dup", sequenceNumber: 12 }),
+      ];
+
+      const b1 = batchContract.batch([makeResult(variantA)]);
+      const b2 = batchContract.batch([makeResult(variantB)]);
+
+      expect(b1.batchHash).not.toBe(b2.batchHash);
     });
   });
 });

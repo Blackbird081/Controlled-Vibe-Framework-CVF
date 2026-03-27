@@ -92,6 +92,10 @@ export class StreamingExecutionConsumerPipelineContract {
       segmentTypeConstraints: request.segmentTypeConstraints,
     });
 
+    // Preserve per-chunk identity to avoid collisions across distinct chunk sets
+    // that happen to share the same runtime and aggregate counts.
+    const chunkIdentityHashes = streamingChunks.map((chunk) => chunk.chunkHash);
+
     // Compute pipeline hash
     const pipelineHash = computeDeterministicHash(
       "w2-t29-cp1-streaming-execution-consumer-pipeline",
@@ -99,8 +103,10 @@ export class StreamingExecutionConsumerPipelineContract {
       consumerPackage.pipelineHash,
       `chunks=${chunkCount}`,
       `streamed=${streamedCount}`,
+      `skipped=${skippedCount}`,
       `failed=${failedCount}`,
       `warnings=${warnings.length}`,
+      ...chunkIdentityHashes,
       createdAt,
     );
 

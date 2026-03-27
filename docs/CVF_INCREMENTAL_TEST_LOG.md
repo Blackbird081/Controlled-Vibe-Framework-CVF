@@ -49,6 +49,30 @@ If none of the above is true, run focused tests only.
 
 ---
 
+## [2026-03-27] Batch: W2-T29 post-closure hash identity + tracker cleanup
+- Scope:
+  - harden `StreamingExecutionConsumerPipelineContract` hash derivation with ordered `chunkHash` identities so different chunk sets cannot collide when aggregate counts match
+  - add regression coverage for pipeline/result/batch hash divergence when chunk identity changes
+  - sync `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` from W2-T28 to W2-T29 closure pointers
+  - refresh `AGENT_HANDOFF.md` EPF clean-count after the added regression coverage
+- Change reference: `fix: harden W2-T29 streaming hash identity + tracker sync`
+- Impacted scope: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION`, `docs/reference`, `AGENT_HANDOFF.md`
+- Files changed:
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/streaming.execution.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/streaming.execution.consumer.pipeline.test.ts`
+  - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
+  - `AGENT_HANDOFF.md`
+- Tests executed:
+  - `npm test -- streaming.execution.consumer.pipeline.test.ts` (workdir `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION`) -> PASS
+  - `npm test` (workdir `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION`) -> PASS
+- Skip scope:
+  - CPF, GEF, LPF regressions: skipped because unchanged
+  - full repository regression: skipped because impact is bounded to EPF streaming consumer hash semantics plus documentation sync
+- Notes/Risks:
+  - deterministic IDs for W2-T29 consumer results now include per-chunk identity, so newly generated `pipelineHash`/`resultId` values will differ from pre-fix outputs for the same aggregate counts
+
+---
+
 ## [2026-03-26] Batch: CPF legacy typecheck cleanup
 - Scope:
   - clean legacy `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION` typecheck drift so package-level `npm run check` is green

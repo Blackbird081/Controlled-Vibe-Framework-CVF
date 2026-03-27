@@ -71,10 +71,30 @@ Output: {
 
 **Success Criteria**: LPF 896 → ~960 tests (+~65 tests, 0 failures)
 
-**Status**: PENDING
+**Actual**: LPF 896 → 937 tests (+41 tests, 0 failures)
+
+**Status**: COMPLETE
+
+---
+
+## Tranche Closure
+
+**Status**: ✅ COMPLETE
+
+**Commits**:
+- CP1: `7c695f1` (feat(lpf): W4-T16 CP1 — LearningStorage Consumer Pipeline Bridge)
+- CP2: `05fe806` (feat(lpf): W4-T16 CP2 — LearningStorage Consumer Pipeline Batch)
+- CP3: pending (closure artifacts)
+
+**Governance**:
+- Closure review: `docs/reviews/CVF_W4_T16_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
+- Progress tracker updated
+- AGENT_HANDOFF updated
+
+**Result**: NINTH LPF CONSUMER BRIDGE COMPLETE
 
 ---
 
 ## Next Immediate Action
 
-Execute CP1 — LearningStorageConsumerPipelineContract (Full Lane)
+Execute CP3 commit and push to cvf-next.

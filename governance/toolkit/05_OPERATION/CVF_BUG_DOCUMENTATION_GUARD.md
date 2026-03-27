@@ -1,134 +1,85 @@
-# CVF BUG DOCUMENTATION GUARD
+# CVF Bug Documentation Guard
 
-> **Type:** Governance Policy  
-> **Effective:** 2026-02-26  
-> **Status:** Active  
-> **Enforced by:** `governance/compat/check_bug_doc_compat.py`
+**Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
+**Status:** Active bug-history documentation contract for fix-bearing commits.
+**Applies to:** All humans and AI agents pushing bug-fix commits into CVF repositories.
+**Enforced by:** `governance/compat/check_bug_doc_compat.py`
 
----
+## Purpose
 
-## 1. PURPOSE
+- make bug-fix history searchable instead of oral or ad hoc
+- reduce repeat debugging by preserving root cause, solution, and prevention context
+- keep fix evidence paired with the commit batch that introduced it
 
-Every bug fix MUST be documented in `docs/BUG_HISTORY.md` before pushing to the repository.
+## Rule
 
-This reduces **debug loop repetition** — when the same or similar bug appears again, the team can search the history for root cause, solution, and prevention strategies instead of debugging from scratch.
+Any commit containing a bug fix pattern such as `fix:`, `bugfix:`, `hotfix:`, or a `BUG-XXX` token MUST have a corresponding entry in `docs/BUG_HISTORY.md` within the same push.
 
----
-
-## 2. RULE
-
-> ⚠️ **NON-NEGOTIABLE:**  
-> Any commit containing a bug fix (`fix:`, `bugfix:`, `hotfix:`) **MUST** have a corresponding entry in `docs/BUG_HISTORY.md` within the same push.
-
-### What Constitutes a "Bug Fix"?
+### Trigger Patterns
 
 | Commit Message Pattern | Triggers Guard? |
-|----------------------|:-:|
-| `fix: ...` | ✅ |
-| `bugfix: ...` | ✅ |
-| `hotfix: ...` | ✅ |
-| Message contains `BUG-XXX` | ✅ |
-| `feat: ...` | ❌ |
-| `docs: ...` | ❌ |
-| `refactor: ...` | ❌ |
-| `chore: ...` | ❌ |
+|---|:---:|
+| `fix: ...` | Yes |
+| `bugfix: ...` | Yes |
+| `hotfix: ...` | Yes |
+| message contains `BUG-XXX` | Yes |
+| `feat: ...` | No |
+| `docs: ...` | No |
+| `refactor: ...` | No |
+| `chore: ...` | No |
 
----
-
-## 3. REQUIRED DOCUMENTATION FORMAT
+### Required Documentation Format
 
 Each bug entry in `BUG_HISTORY.md` MUST include:
 
 | Field | Required? | Description |
-|-------|:---------:|-------------|
-| **Bug ID** | ✅ | Sequential: `BUG-001`, `BUG-002`, ... |
-| **Date** | ✅ | When the bug was discovered |
-| **Severity** | ✅ | 🔴 Critical / 🟠 High / 🟡 Medium / 🟢 Low |
-| **Component** | ✅ | Which module/component is affected |
-| **File(s)** | ✅ | Paths to affected files |
-| **Error Message** | ✅ | Exact error text for searchability |
-| **Root Cause** | ✅ | WHY the bug happened (not just WHAT) |
-| **Solution** | ✅ | Step-by-step fix with code diff |
-| **Prevention** | ✅ | How to avoid similar bugs in the future |
-| **Related Commits** | ✅ | Git commit hash of the fix |
+|---|:---:|---|
+| `Bug ID` | Yes | Sequential such as `BUG-001`, `BUG-002` |
+| `Date` | Yes | When the bug was discovered |
+| `Severity` | Yes | Critical, High, Medium, or Low |
+| `Component` | Yes | Which module or component is affected |
+| `File(s)` | Yes | Paths to affected files |
+| `Error Message` | Yes | Exact error text for searchability |
+| `Root Cause` | Yes | Why the bug happened |
+| `Solution` | Yes | Step-by-step fix with code diff context |
+| `Prevention` | Yes | How to avoid similar bugs in the future |
+| `Related Commits` | Yes | Git commit hash of the fix |
 
----
+### Workflow
 
-## 4. WORKFLOW
+1. detect and debug the bug
+2. fix the code
+3. add the entry to `docs/BUG_HISTORY.md` before committing
+4. commit and push
+5. let the compat gate validate the matching history entry
 
-```
-BUG DETECTED
-    ↓
-DEBUG & FIX THE CODE
-    ↓
-ADD ENTRY TO docs/BUG_HISTORY.md    ← BEFORE committing
-    ↓
-COMMIT (fix: ...)
-    ↓
-PUSH
-    ↓
-COMPAT GATE VALIDATES              ← Automated check
-    ↓
-✅ PASS or ❌ FAIL
-```
+## Enforcement Surface
 
----
+- repo-level enforcement runs through `governance/compat/check_bug_doc_compat.py`
+- local and CI usage should run the checker in `--enforce` mode before merge or push
+- undocumented bug fixes are treated as governance drift and must be corrected before the push proceeds
 
-## 5. ENFORCEMENT
-
-### Automated Check
+Strict command:
 
 ```bash
-# Standard check (advisory)
-python governance/compat/check_bug_doc_compat.py
-
-# Strict enforcement (blocks push on failure)
 python governance/compat/check_bug_doc_compat.py --enforce
 ```
 
-### Exit Codes
+Exit codes:
 
 | Code | Meaning |
-|:----:|---------|
-| 0 | All bug fixes are documented |
-| 1 | Script error (git failure, etc.) |
-| 2 | Bug fix found WITHOUT documentation (VIOLATION) |
+|---|---|
+| `0` | all bug fixes are documented |
+| `1` | script or git error |
+| `2` | bug fix found without documentation |
 
-### Integration Points
+## Related Artifacts
 
-- **Pre-push hook** (recommended): Run with `--enforce`
-- **CI/CD pipeline**: Run as gate before merge
-- **Agent governance loop**: Include as drift trigger
+- `governance/compat/check_bug_doc_compat.py`
+- `docs/BUG_HISTORY.md`
+- `governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md`
 
----
+## Final Clause
 
-## 6. DRIFT TRIGGER
-
-If the compat check detects an undocumented bug fix:
-
-1. Agent state → `REVALIDATING`
-2. Developer must add the missing BUG_HISTORY entry
-3. Re-run compat check to verify
-4. Only then can the push proceed
-
----
-
-## 7. BENEFITS
-
-| Metric | Without Guard | With Guard |
-|--------|:------------:|:----------:|
-| Repeated debug time | High | **Near zero** |
-| Knowledge transfer | Oral/ad hoc | **Documented & searchable** |
-| Onboarding speed | Slow | **Fast** (read history) |
-| Pattern detection | Manual | **Quick reference tables** |
-
----
-
-## 8. RELATION TO EXISTING GOVERNANCE
-
-This guard complements:
-- `CVF_INCIDENT_REPORT_TEMPLATE.md` — For production incidents (broader scope)
-- `CONTINUOUS_GOVERNANCE_LOOP.md` — Bug doc is a new drift trigger
-- `check_core_compat.py` — Bug doc check runs alongside core compat
-
-End of Bug Documentation Guard.
+If a bug fix is important enough to ship, it is important enough to leave a durable explanation behind.

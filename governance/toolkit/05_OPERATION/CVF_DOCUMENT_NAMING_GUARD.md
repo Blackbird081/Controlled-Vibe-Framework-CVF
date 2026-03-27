@@ -1,44 +1,32 @@
-# CVF DOCUMENT NAMING GUARD
+# CVF Document Naming Guard
 
-> **Type:** Governance Guard  
-> **Effective:** 2026-03-06  
-> **Status:** Active  
-> **Applies to:** All humans and all AI agents working in CVF repositories
-> **Enforced by:** `governance/compat/check_docs_governance_compat.py` (current automated scope: `docs/**/*.md`)
+**Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
+**Status:** Active naming contract for long-lived governance and evidence documents stored in CVF repositories.
+**Applies to:** All humans and AI agents creating, migrating, or normalizing long-lived markdown records under `docs/` or `governance/`.
+**Enforced by:** `governance/compat/check_docs_governance_compat.py`
 
----
+## Purpose
 
-## 1. PURPOSE
+- keep durable records recognizable, searchable, and auditable
+- stop naming drift from turning important documents into arbitrary one-off files
+- preserve a stable document shape across review, baseline, roadmap, and governance evidence flows
 
-This guard standardizes document naming across CVF so repository records remain:
+Naming discipline is a governance control, not a style preference.
 
-- recognizable,
-- searchable,
-- auditable,
-- non-arbitrary.
+## Rule
 
-Naming inconsistency creates governance drift.  
-From this point forward, document naming is a **mandatory control**, not a style preference.
+Any governance, review, assessment, decision, roadmap, baseline, audit, protocol, policy, checklist, report, or framework record stored in `docs/` or `governance/` MUST use the `CVF_` prefix unless it belongs to the approved exception list below.
 
----
+This applies equally to:
 
-## 2. RULE
+- human authors
+- AI agents
+- migration and cleanup batches
+- newly created archives under `docs/`
 
-> **NON-NEGOTIABLE:**  
-> Any governance, review, assessment, decision, roadmap, baseline, audit, protocol, policy, checklist, report, or framework record stored in `docs/` or `governance/` MUST use the `CVF_` prefix unless it belongs to the approved exception list in Section 4.
+### Standard Format
 
-This rule applies equally to:
-
-- human authors,
-- AI agents,
-- migration/cleanup work,
-- newly created archives under `docs/`.
-
----
-
-## 3. STANDARD FORMAT
-
-### 3.1 Required prefix
+Required pattern:
 
 ```text
 CVF_<DOCUMENT_PURPOSE>[_<SCOPE>][_YYYY-MM-DD].md
@@ -51,17 +39,14 @@ Examples:
 - `CVF_EXECUTIVE_REVIEW_BASELINE_2026-03-06.md`
 - `CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md`
 
-### 3.2 Naming rules
+### Naming Rules
 
-- Prefix MUST be `CVF_`
-- Use uppercase snake case after prefix
-- Date suffix SHOULD use `YYYY-MM-DD` when document is snapshot/baseline/review specific
-- Do not invent vague names such as:
-  - `new_review.md`
-  - `final_decision_v2.md`
-  - `roadmap_latest.md`
+- prefix MUST be `CVF_`
+- use uppercase snake case after the prefix
+- date suffix SHOULD use `YYYY-MM-DD` when the record is snapshot, baseline, or review specific
+- do not invent vague names such as `new_review.md`, `final_decision_v2.md`, or `roadmap_latest.md`
 
-### 3.3 Scope-specific examples
+### Scope-Specific Examples
 
 | Document Type | Correct |
 |---|---|
@@ -70,13 +55,11 @@ Examples:
 | Assessment | `CVF_<SCOPE>_ASSESSMENT_<DATE>.md` |
 | Roadmap | `CVF_ROADMAP_<SCOPE>[_<DATE>].md` |
 | Decision matrix | `CVF_IMPLEMENT_DECISION_MATRIX_<DATE>.md` |
-| Audit/control guard | `CVF_<PURPOSE>_GUARD.md` |
+| Audit or control guard | `CVF_<PURPOSE>_GUARD.md` |
 
----
+### Approved Exceptions
 
-## 4. APPROVED EXCEPTIONS
-
-The following filenames are allowed without `CVF_` because they are standard repository entrypoints or already-canonical cross-ecosystem names:
+The following filenames are allowed without `CVF_` because they are already canonical repository entrypoints or cross-ecosystem names:
 
 - `README.md`
 - `INDEX.md`
@@ -89,63 +72,41 @@ The following filenames are allowed without `CVF_` because they are standard rep
 - `VERSIONING.md`
 - `VERSION_COMPARISON.md`
 
-Exception rule:
+Do not create new exceptions casually. Any new exception requires ADR or explicit governance approval.
 
-- Do not create new exceptions casually
-- Any new exception requires ADR or explicit governance approval
+### Storage And Migration Rule
 
----
+- long-term governance records belong in `docs/`
+- working proposals may exist elsewhere temporarily
+- once a review, assessment, or roadmap becomes long-term evidence, it MUST move into `docs/`
+- after moving into `docs/`, the filename MUST comply with this guard
+- when normalizing historical files, rename and update references in the same batch
 
-## 5. STORAGE RULE
+## Enforcement Surface
 
-- Long-term governance records belong in `docs/`
-- Working proposals may exist elsewhere temporarily
-- Once a review/assessment/roadmap becomes baseline or long-term evidence, it MUST be moved into `docs/`
-- After moving into `docs/`, the filename MUST comply with this guard
+- repo-level enforcement runs through `governance/compat/check_docs_governance_compat.py`
+- the active automated scope is `docs/**/*.md`
+- violation handling requires stopping the naming drift, renaming to a compliant form, updating references, and documenting the normalization batch when required
 
----
-
-## 6. MIGRATION RULE
-
-For pre-existing non-compliant documents:
-
-- rename when touched for governance normalization,
-- update references in the same batch,
-- log the change if it is part of a reviewed baseline/evidence flow.
-
-Do not leave mixed naming after a normalization batch.
-
----
-
-## 7. ENFORCEMENT
-
-Violations include:
-
-- creating new non-exempt docs in `docs/` without `CVF_` prefix,
-- moving long-term review artifacts into `docs/` while keeping arbitrary names,
-- introducing duplicate naming patterns for the same document class.
-
-Required action on violation:
-
-1. stop the naming drift,
-2. rename to compliant form,
-3. update references,
-4. document in the same governance batch when required.
-
-### Automated Check
+Strict command:
 
 ```bash
-# Standard check (advisory)
-python governance/compat/check_docs_governance_compat.py
-
-# Strict enforcement (blocks on violation)
 python governance/compat/check_docs_governance_compat.py --enforce
 ```
 
----
+Violations include:
 
-## 8. FINAL CLAUSE
+- creating new non-exempt docs in `docs/` without the `CVF_` prefix
+- moving long-term review artifacts into `docs/` while keeping arbitrary names
+- introducing duplicate naming patterns for the same document class
 
-Document naming under CVF is part of governance discipline.
+## Related Artifacts
+
+- `governance/compat/check_docs_governance_compat.py`
+- `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`
+- `docs/INDEX.md`
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+
+## Final Clause
 
 If a document is important enough to keep, it is important enough to name correctly.

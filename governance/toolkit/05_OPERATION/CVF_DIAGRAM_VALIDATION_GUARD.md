@@ -1,51 +1,64 @@
-# CVF DIAGRAM VALIDATION GUARD
+# CVF Diagram Validation Guard
 
-> **Guard ID:** GOV-OP-016
-> **Layer:** 05_OPERATION
-> **Status:** ACTIVE
-> **Enforcement:** Automated via CI/CD + Manual Review
+**Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
+**Status:** Active diagram-to-implementation consistency contract for governed state machines and workflow diagrams.
+**Applies to:** All humans and AI agents introducing or changing state-machine or workflow logic that should be represented by a Mermaid diagram.
+**Enforced by:** `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/diagram_validation/diagram.validator.ts`
 
-## 1. Mục đích (Purpose)
+## Purpose
 
-CVF áp dụng triết lý "Documentation is Code". Nếu Sơ đồ luồng (State Machine Diagram) và Code thực thi bị sai lệch (Documentation Drift), hệ thống quản trị sẽ mất tính toàn vẹn. 
+- preserve the CVF principle that documentation is code
+- stop state-machine diagrams from drifting away from the implementation
+- block merges where the declared workflow and executable workflow no longer match
 
-Guard này đảm bảo: **100% Sơ đồ State Machine và TypeScript/Python Implementation phải khớp nhau và được validate tự động.**
+## Rule
 
-## 2. Phạm vi áp dụng (Scope)
+Every governed state machine or workflow implementation MUST ship with a matching Mermaid diagram and the diagram MUST stay consistent with the implementation.
 
-**Áp dụng CẤP BÁCH** đối với:
-- Tất cả các nâng cấp (upgrades).
-- Tất cả các Extention/Module mới.
-- Bất kỳ Folder/Files mới nào có chứa logic State Machine / Governance Pipeline.
+### Scope
 
-## 3. Quy định Bắt buộc (The Rule)
+This applies urgently to:
 
-1. **Phải có Sơ đồ (Must Have Diagram):** 
-   Mọi State Machine hoặc Workflow được lập trình BẮT BUỘC phải đi kèm 1 file Markdown chứa biểu đồ `mermaid` (loại `stateDiagram-v2`).
+- all upgrades
+- all new extensions or modules
+- any new folder or file that contains state-machine or governance-pipeline logic
 
-2. **Phải đồng nhất (Must Be Consistent):**
-   Biểu đồ cấu trúc sơ đồ Mermaid KHÔNG ĐƯỢC CHỨA:
-   - `missingStates` (Trạng thái có trong code nhưng sơ đồ thiếu).
-   - `extraStates` (Trạng thái có trên sơ đồ nhưng code không hỗ trợ).
-   - `missingTransitions` (Code có logic chuyển nhưng sơ đồ vẽ thiếu mũi tên).
-   - `extraTransitions` (Sơ đồ vẽ mũi tên sai, code không có luồng này).
+### Required Diagram Contract
 
-3. **Phải báo cáo trong Commit/PR:**
-   Không một Developer hay AI Agent nào được quyền Merge Code nếu hệ thống Diagram Validator (tại `governance/diagram_validation/diagram.validator.ts`) báo lỗi.
+1. every state machine or workflow implementation MUST have a Markdown file containing a Mermaid `stateDiagram-v2`
+2. the diagram MUST NOT contain:
+   - `missingStates`
+   - `extraStates`
+   - `missingTransitions`
+   - `extraTransitions`
+3. no developer or AI agent may merge code while the diagram validator reports inconsistency
 
-## 4. Hành động (Triggering Action)
+### Triggering Action
 
-**Agent Process:**
-1. Khi Agent xây dựng 1 StateMachine, nó phải gọi Tool/Skill vẽ Mermaid.
-2. Agent phải tự gọi file `diagram.validator.ts` của Node.js (tồn tại trong `CVF_v1.1.1`) để tự kiểm tra đối chiếu.
-3. Nếu phát hiện sai, Agent phải tự fix cấu trúc Mermaid HOẶC fix Code cho khớp.
+Agent process:
 
-**Pipeline Process:**
-- Hệ thống CI/CD phải được bổ sung script tương đương `governance/compat/check_diagram_validation.py` để quét tự động tất cả các file state machine / mermaid trong project.
+1. when building a state machine, generate or update the Mermaid diagram
+2. run the validator against the implementation and the diagram
+3. fix the Mermaid structure or the code until they match
 
-## 5. Vi phạm (Violation Handling)
+Pipeline process:
 
-Bất cứ nhánh (branch) hoặc tính năng nào vi phạm quy tắc này sẽ lập tức bị **BLOCK** khỏi quy trình Deploy.
+- CI or equivalent validation should run the diagram validator for the governed surface
+- future repo-level automation may add a dedicated `check_diagram_validation.py`, but the current guard already requires the validator path above to be treated as authoritative
 
----
-*Verified against: CVF Unified Roadmap 2026 (Track I - Hardening CVF)*
+## Enforcement Surface
+
+- implementation-side validation runs through `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/diagram_validation/diagram.validator.ts`
+- manual review must block any branch or feature where state-machine code and Mermaid diagram disagree
+- remediation requires updating the diagram or the code until the validator no longer reports structural mismatch
+
+## Related Artifacts
+
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/diagram_validation/diagram.validator.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/diagram_validation/diagram.consistency.check.ts`
+- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/diagram_validation/state.diagram.generator.ts`
+- `docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md`
+
+## Final Clause
+
+If the code says one workflow and the diagram says another, governance truth is already broken even before runtime fails.

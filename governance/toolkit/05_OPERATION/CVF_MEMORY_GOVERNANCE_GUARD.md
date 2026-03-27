@@ -1,29 +1,24 @@
-# CVF MEMORY GOVERNANCE GUARD
+# CVF Memory Governance Guard
 
-> **Type:** Governance Guard
-> **Effective:** 2026-03-22
-> **Status:** Active
-> **Applies to:** All humans and all AI agents creating or updating evidence-bearing records for later CVF memory use
-> **Enforced by:** `governance/compat/check_memory_governance_compat.py`
+**Control ID:** `GC-022`
+**Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
+**Status:** Active durable-memory classification contract for evidence-bearing CVF records.
+**Applies to:** All humans and AI agents creating or materially updating evidence-bearing records intended for later CVF memory use.
+**Enforced by:** `governance/compat/check_memory_governance_compat.py`
 
----
+## Purpose
 
-## 1. PURPOSE
+- keep durable facts recoverable without bloating memory with repetition
+- ensure storage granularity matches document role
+- preserve reliable handoff and context loading for later workers
 
-This guard standardizes how CVF stores durable memory evidence.
+This guard governs the memory side of the model, not just generic traceability.
 
-The goal is not only traceability.
+## Rule
 
-The goal is to keep later memory useful, bounded, and economical:
+Any new or materially updated evidence-bearing document intended to support later CVF memory MUST declare the correct memory class.
 
-- durable facts must stay recoverable
-- low-value repetition must not bloat memory
-- storage granularity must match the role of the document
-- later handoff and context loading must be able to rely on this structure
-
----
-
-## 2. CANONICAL MEMORY MODEL
+### Canonical Memory Model
 
 CVF uses the following model:
 
@@ -31,13 +26,9 @@ CVF uses the following model:
 - `handoff = governance-filtered summary and transfer checkpoint`
 - `context loading = phase-bounded loading of only what the current step needs`
 
-This guard governs the **memory** side of that model.
+This guard governs the memory side of that model.
 
----
-
-## 3. NON-NEGOTIABLE RULE
-
-> Any new or materially updated evidence-bearing document intended to support later CVF memory MUST declare the correct memory class.
+### Canonical Classes
 
 The canonical classes are:
 
@@ -53,11 +44,9 @@ Memory class: FULL_RECORD
 
 Place it near the top of the document after the title block or status header.
 
----
+### Memory Classes
 
-## 4. MEMORY CLASSES
-
-### `FULL_RECORD`
+#### `FULL_RECORD`
 
 Use when durable reconstruction of the event or decision matters.
 
@@ -69,7 +58,7 @@ Typical use:
 - tranche closure reviews
 - scope or boundary decisions that later workers must be able to reconstruct faithfully
 
-### `SUMMARY_RECORD`
+#### `SUMMARY_RECORD`
 
 Use when durable memory needs the outcome, not every intermediate detail.
 
@@ -81,7 +70,7 @@ Typical use:
 - active test-log batches
 - roadmap progress snapshots
 
-### `POINTER_RECORD`
+#### `POINTER_RECORD`
 
 Use when the file exists mainly to route later readers to canonical facts elsewhere.
 
@@ -92,9 +81,7 @@ Typical use:
 - canonical navigation maps
 - summary pages that should point to evidence rather than repeat it
 
----
-
-## 5. DEFAULT TAXONOMY MAPPING
+### DEFAULT TAXONOMY MAPPING
 
 Unless a narrower rule is explicitly approved, the default mapping is:
 
@@ -115,9 +102,7 @@ Unless a narrower rule is explicitly approved, the default mapping is:
 
 `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md` is the canonical memory-class map.
 
----
-
-## 6. FULL VS SUMMARY VS POINTER DECISION RULE
+### Full Vs Summary Vs Pointer Decision Rule
 
 Choose the lightest class that still preserves truthful future use.
 
@@ -143,11 +128,9 @@ Do not duplicate full evidence into `SUMMARY_RECORD` or `POINTER_RECORD` files.
 
 Lane selection does not decide memory class by itself.
 
-`GC-021 Fast Lane` reduces procedural burden, but the resulting audit/review artifacts can still be `FULL_RECORD` while deltas remain `SUMMARY_RECORD`.
+`GC-021 Fast Lane` reduces procedural burden, but the resulting audit and review artifacts can still be `FULL_RECORD` while deltas remain `SUMMARY_RECORD`.
 
----
-
-## 7. VIOLATIONS
+### Violations
 
 Violations include:
 
@@ -163,31 +146,26 @@ Required action:
 3. reduce or expand detail to match that class
 4. point to canonical evidence instead of duplicating it when `SUMMARY_RECORD` or `POINTER_RECORD` is sufficient
 
----
+## Enforcement Surface
 
-## 8. AUTOMATED ENFORCEMENT
+- repo-level enforcement runs through `governance/compat/check_memory_governance_compat.py`
+- the compat gate checks guard, policy, control-matrix, and hook-chain alignment
+- enforcement also checks linkage with document-storage classification and required `Memory class:` markers on changed memory-bearing records
+
+Strict command:
 
 ```bash
-# Standard check
-python governance/compat/check_memory_governance_compat.py
-
-# Strict enforcement
 python governance/compat/check_memory_governance_compat.py --enforce
 ```
 
-The compat gate checks:
+## Related Artifacts
 
-- guard + policy + control-matrix + hook-chain alignment
-- linkage with document-storage classification
-- required `Memory class:` markers on changed memory-bearing records
+- `governance/compat/check_memory_governance_compat.py`
+- `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`
+- `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
+- `docs/INDEX.md`
+- `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
 
----
+## Final Clause
 
-## 9. FINAL CLAUSE
-
-Traceability alone is not enough.
-
-CVF memory must stay truthful **and** economical.
-
-The right record is not the longest one.
-The right record is the one stored at the right granularity for later governed reuse.
+Traceability alone is not enough. CVF memory must stay truthful and economical. The right record is the one stored at the right granularity for later governed reuse.

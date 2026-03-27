@@ -1,51 +1,41 @@
-# CVF GOVERNED FILE SIZE GUARD
+# CVF Governed File Size Guard
 
-> **Control ID:** `GC-023`  
-> **Type:** Governance Guard  
-> **Effective:** 2026-03-23  
-> **Status:** Active  
-> **Applies to:** governed source, test, frontend, and active markdown files across CVF  
-> **Enforced by:** `governance/compat/check_governed_file_size.py`
+**Control ID:** `GC-023`
+**Guard Class:** `SIZE_AND_OWNERSHIP_GUARD`
+**Status:** Active global maintainability boundary for governed source, test, frontend, and active markdown files.
+**Applies to:** governed source, test, frontend, and active markdown files across CVF, excluding surfaces that already have their own dedicated rotation or archive guards.
+**Enforced by:** `governance/compat/check_governed_file_size.py`
 
----
+## Purpose
 
-## 1. PURPOSE
+- keep governed files reviewable by humans
+- preserve split-by-responsibility discipline across waves and tranches
+- stop oversized files from growing through silent drift instead of intentional exception tracking
 
-CVF requires files that remain:
-
-- reviewable by humans,
-- maintainable across waves,
-- split by responsibility,
-- safe to change without excessive regression surface.
-
-Some CVF artifacts already use dedicated rotation guards, such as:
+Some CVF artifacts already use dedicated rotation or archive controls, such as:
 
 - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-- governed conformance traces
-- governed Python automation size control
+- governed conformance trace logs
+- governed Python automation covered by `check_python_automation_size.py`
 
-This guard covers the remaining governed files that would otherwise grow without a global maintainability boundary.
+`GC-023` covers the remaining governed file surface that would otherwise lack a global maintainability boundary.
 
----
+## Rule
 
-## 2. CANONICAL PRINCIPLE
+Large governed files are allowed only when one of these conditions is true:
 
-Large files are allowed only when one of the following is true:
+1. the file stays below the active hard threshold for its class
+2. the file has an approved exception entry with explicit rationale and follow-up
 
-1. the file is still below the active hard threshold for its class, or
-2. the file has an approved exception entry with explicit rationale and follow-up.
+Default operating rule:
 
-The default rule is:
+- split before the file becomes a maintenance liability
+- do not keep adding new tranche logic into an already oversized file without an exception trail
+- preserve exceptions as tracked debt, never as silent drift
 
-- split before the file becomes a maintenance liability,
-- do not keep adding new tranche logic into an already oversized file,
-- preserve current exceptions only as tracked debt, never as silent drift.
+### File Classes And Thresholds
 
----
-
-## 3. FILE CLASSES AND THRESHOLDS
-
-### `test_code`
+#### `test_code`
 
 Applies to:
 
@@ -60,7 +50,7 @@ Thresholds:
 - advisory threshold: `> 800` lines
 - hard threshold: `> 1200` lines
 
-### `frontend_component`
+#### `frontend_component`
 
 Applies to:
 
@@ -73,7 +63,7 @@ Thresholds:
 - advisory threshold: `> 700` lines
 - hard threshold: `> 1000` lines
 
-### `general_source`
+#### `general_source`
 
 Applies to:
 
@@ -86,7 +76,7 @@ Thresholds:
 - advisory threshold: `> 700` lines
 - hard threshold: `> 1000` lines
 
-### `active_markdown`
+#### `active_markdown`
 
 Applies to:
 
@@ -97,11 +87,9 @@ Thresholds:
 - advisory threshold: `> 900` lines
 - hard threshold: `> 1200` lines
 
----
+### Exclusions
 
-## 4. EXCLUSIONS
-
-This guard does **not** govern files already controlled by dedicated rotation or archive rules:
+This guard does not govern files already controlled by dedicated rotation or archive rules:
 
 - `docs/CVF_INCREMENTAL_TEST_LOG.md`
 - `docs/logs/**`
@@ -111,80 +99,69 @@ This guard does **not** govern files already controlled by dedicated rotation or
 
 These exclusions exist to avoid double-enforcement and conflicting thresholds.
 
----
-
-## 5. REQUIRED WORKFLOW
+### Required Workflow
 
 When a governed file exceeds the hard threshold:
 
-1. split the file by responsibility, scope, or tranche, **or**
-2. add an approved exception entry to:
-   - `governance/compat/CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json`
-3. include:
-   - rationale,
-   - approved maximum,
-   - required follow-up split plan
-4. run:
-   - `python governance/compat/check_governed_file_size.py --enforce`
+1. split the file by responsibility, scope, or tranche, or
+2. add an approved exception entry to `governance/compat/CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json`
+3. include rationale, approved maximum, and required follow-up split plan
+4. run `python governance/compat/check_governed_file_size.py --enforce`
 
 If a file is already above threshold and is touched in a new batch:
 
-- prefer reducing or extracting from it in that same batch,
-- do not append new tranche logic into the oversized file unless the exception still truthfully covers that usage.
+- prefer reducing or extracting from it in the same batch
+- do not append new tranche logic into the oversized file unless the exception still truthfully covers that usage
 
----
-
-## 6. EXCEPTION MODEL
+### Exception Model
 
 Approved exceptions are allowed only for:
 
-- legacy debt already present before the guard,
-- temporary compatibility surfaces,
-- deliberate monoliths that are being phased out or actively split.
+- legacy debt already present before the guard
+- temporary compatibility surfaces
+- deliberate monoliths that are being phased out or actively split
 
 Each exception must declare:
 
-- file path,
-- file class,
-- approved maximum lines,
-- status,
-- rationale,
-- required follow-up.
+- file path
+- file class
+- approved maximum lines
+- status
+- rationale
+- required follow-up
 
 Exception entries are governance debt records, not blanket approvals.
 
----
+## Enforcement Surface
 
-## 7. ENFORCEMENT
+- repo-level enforcement runs through `governance/compat/check_governed_file_size.py`
+- local pre-commit and pre-push enforcement runs through `governance/compat/run_local_governance_hook_chain.py`
+- exception trail integrity is paired with `governance/compat/check_governed_exception_registry.py`
+- CI enforcement runs through `.github/workflows/documentation-testing.yml`
 
-### Automated Check
+Strict command:
 
 ```bash
-# Advisory
-python governance/compat/check_governed_file_size.py
-
-# Strict
 python governance/compat/check_governed_file_size.py --enforce
 ```
 
-### Violation Conditions
-
 Violations include:
 
-- a governed file exceeding its hard threshold without approved exception,
-- a file exceeding its exception maximum,
-- an incomplete exception entry,
-- growing an oversized file without maintaining the exception trail.
+- a governed file exceeding its hard threshold without approved exception
+- a file exceeding its exception maximum
+- an incomplete exception entry
+- growing an oversized file without maintaining the exception trail
 
----
+## Related Artifacts
 
-## 8. FINAL CLAUSE
+- `governance/compat/CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json`
+- `governance/compat/check_governed_file_size.py`
+- `governance/compat/check_governed_exception_registry.py`
+- `governance/toolkit/05_OPERATION/CVF_PYTHON_AUTOMATION_SIZE_GUARD.md`
+- `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
+
+## Final Clause
 
 CVF does not require every file to be tiny.
 
-CVF **does** require every large file to be:
-
-- intentional,
-- reviewable,
-- justified,
-- and on a path toward cleaner ownership.
+CVF does require every large governed file to be intentional, reviewable, justified, and on a path toward cleaner ownership.

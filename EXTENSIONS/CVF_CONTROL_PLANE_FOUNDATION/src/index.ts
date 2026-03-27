@@ -1,3 +1,24 @@
+// W2-T34 — Context Enrichment Consumer Pipeline Bridge (CP1)
+export {
+  ContextEnrichmentConsumerPipelineContract,
+  createContextEnrichmentConsumerPipelineContract,
+} from "./context.enrichment.consumer.pipeline.contract";
+export type {
+  ContextEnrichmentConsumerPipelineRequest,
+  ContextEnrichmentConsumerPipelineResult,
+  ContextEnrichmentConsumerPipelineContractDependencies,
+} from "./context.enrichment.consumer.pipeline.contract";
+
+// W2-T34 — Context Enrichment Consumer Pipeline Batch (CP2)
+export {
+  ContextEnrichmentConsumerPipelineBatchContract,
+  createContextEnrichmentConsumerPipelineBatchContract,
+} from "./context.enrichment.consumer.pipeline.batch.contract";
+export type {
+  ContextEnrichmentConsumerPipelineBatchResult,
+  ContextEnrichmentConsumerPipelineBatchContractDependencies,
+} from "./context.enrichment.consumer.pipeline.batch.contract";
+
 // W2-T33 — Boardroom Round Consumer Pipeline Bridge (CP1)
 export {
   BoardroomRoundConsumerPipelineContract,

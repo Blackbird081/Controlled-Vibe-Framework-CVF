@@ -1,18 +1,18 @@
-feat(W2-T33/CP1+CP2+CP3): Boardroom Round Consumer Pipeline Bridge
+feat(W2-T34/CP1+CP2+CP3): Context Enrichment Consumer Pipeline Bridge
 
-Tranche: W2-T33 — Boardroom Round Consumer Pipeline Bridge
+Tranche: W2-T34 — Context Enrichment Consumer Pipeline Bridge
 Control points: CP1 (Full Lane), CP2 (Fast Lane GC-021), CP3 (Closure)
 
-Contract: BoardroomRoundConsumerPipelineContract bridges BoardroomRoundContract
-  into consumer visibility — exposes round refinementFocus, sourceDecision,
-  roundNumber, and refinementNote for consumer audit.
+GC-018 gap audit: 5 unbridged CPF contracts identified. ContextEnrichmentContract
+selected as highest-value candidate (rich ContextValidationResult output).
 
-Warnings (per round, 1 max): WARNING_RISK_REVIEW, WARNING_ESCALATION_REVIEW,
-  WARNING_TASK_AMENDMENT; CLARIFICATION emits 0 warnings.
+Contract: ContextEnrichmentConsumerPipelineContract bridges
+  ContextValidationResult (from ContextEnrichmentContract.validate()) into
+  consumer visibility — exposes VALID/INVALID status and violations list.
 
-Batch: severity-first dominantFocus (RISK_REVIEW > ESCALATION_REVIEW >
-  TASK_AMENDMENT > CLARIFICATION) + per-focus counts (focusCounts).
+Warnings: WARNING_VALIDATION_INVALID, WARNING_VIOLATIONS_PRESENT (severity-ordered)
+Batch: validCount, invalidCount, totalViolations, dominantStatus (INVALID dominates)
 
-Tests: +55 new (1638 CPF total, 0 failures)
-Size guard: COMPLIANT (verified before commit)
+Tests: +52 new (1690 CPF total, 0 failures)
+Size guard: COMPLIANT
 AGENT_HANDOFF updated

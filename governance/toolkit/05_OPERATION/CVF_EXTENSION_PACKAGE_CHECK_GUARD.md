@@ -1,8 +1,10 @@
 # CVF Extension Package Check Guard
 
-**Control ID:** `GC-029`  
-**Memory class:** `POINTER_RECORD`  
-**Status:** canonical extension-level package verification rule for touched `EXTENSIONS/*` packages.
+**Control ID:** `GC-029`
+**Guard Class:** `PACKAGE_AND_RUNTIME_ALIGNMENT_GUARD`
+**Status:** Active extension-level package verification rule for touched `EXTENSIONS/*` packages.
+**Applies to:** Humans and AI agents making governed source, test, or package-config changes inside extension packages under `EXTENSIONS/`.
+**Enforced by:** `governance/compat/check_extension_package_check.py`
 
 Control ID: `GC-029`
 
@@ -10,9 +12,9 @@ Control ID: `GC-029`
 
 - prevent extension-level technical debt from slipping through when focused tests are green but package-level verification is stale
 - make `npm run check` a mandatory gate for touched extension packages instead of an optional habit
-- stop small compile/type/config drift from accumulating into later cross-tranche friction
+- stop small compile, type, config, or build drift from accumulating into later cross-tranche friction
 
-## Mandatory Rule
+## Rule
 
 Whenever governed work changes substantive files inside an extension package under `EXTENSIONS/`, the package MUST pass its package-level `check` script before push.
 
@@ -24,7 +26,7 @@ For this control, a touched extension package means:
 
 If those conditions are true, `npm run check` is mandatory.
 
-## Scope
+### Scope
 
 `GC-029` applies to extension-local package verification for touched packages, including:
 
@@ -33,17 +35,15 @@ If those conditions are true, `npm run check` is mandatory.
 - `package.json`
 - `tsconfig*.json`
 - `vitest.config.*`
-- other package-level runtime/build/test config files
+- other package-level runtime, build, or test config files
 
-This control is about extension package verification.
-
-It does not replace:
+This control is about extension package verification. It does not replace:
 
 - focused test selection and test-log requirements
 - tranche-local governance or roadmap authorization
 - higher-level release readiness checks
 
-## Required Enforcement Behavior
+### Required Enforcement Behavior
 
 The package-check guard must:
 
@@ -53,7 +53,7 @@ The package-check guard must:
 4. run `npm run check` for every touched package with the script
 5. fail the push if any touched package fails package-level verification
 
-## Why This Exists
+### Why This Exists
 
 CVF has already seen the failure mode where:
 
@@ -63,30 +63,21 @@ CVF has already seen the failure mode where:
 
 That gap is no longer acceptable once the cause is known.
 
-## Automation Posture
+## Enforcement Surface
 
-`GC-029` is enforced through:
+- repo-level enforcement runs through `governance/compat/check_extension_package_check.py`
+- local pre-push enforcement runs through `governance/compat/run_local_governance_hook_chain.py`
+- CI enforcement runs through `.github/workflows/documentation-testing.yml`
+- session routing and discoverability remain aligned through `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md` and `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 
-- this guard
-- `governance/compat/check_extension_package_check.py`
-- the local governance hook chain
-- GitHub Actions documentation/testing workflow
-
-## Relationship To Other Controls
-
-- `GC-016` keeps docs/bug/test evidence historically truthful
-- `GC-024` protects split governed test ownership
-- `GC-029` adds package-level verification so touched extension packages cannot bypass their own `check` contract
-
-In short:
-
-- `test log` says what was tested
-- `GC-029` says the touched package must also pass its package-level verification contract
-
-## Related References
+## Related Artifacts
 
 - `governance/compat/check_extension_package_check.py`
 - `governance/compat/run_local_governance_hook_chain.py`
 - `.github/workflows/documentation-testing.yml`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+
+## Final Clause
+
+If a touched extension package cannot pass its own declared `check` contract, it is not ready to rely on the rest of the governance chain for cover.

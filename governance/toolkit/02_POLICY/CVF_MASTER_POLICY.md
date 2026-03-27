@@ -154,7 +154,7 @@ Personal AI usage unrelated to company work is excluded.
      - Automated enforcement reference: `governance/compat/check_boardroom_runtime_governance_compat.py`.
      - The canonical runtime/reference protocol is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
      - Downstream orchestration must remain blocked unless the boardroom transition gate returns `PROCEED_TO_ORCHESTRATION`.
- 23. Touched extension packages under `EXTENSIONS/` must pass their own package-level `check` script before push when governed changes affect source, test, or package config files:
+ 23. `GC-029` Touched extension packages under `EXTENSIONS/` must pass their own package-level `check` script before push when governed changes affect source, test, or package config files:
      - This rule applies to extension packages with `package.json` and `scripts.check`.
      - The package-level `check` script is mandatory even when focused tests or repo-level governance checks already pass.
      - Touched packages must not rely on “green local test files” as a substitute for package-level verification.

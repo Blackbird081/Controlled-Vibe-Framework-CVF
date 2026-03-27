@@ -6,7 +6,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-27` (W2-T27 COMPLETE, Dispatch Consumer Pipeline Bridge — FIRST EPF CONSUMER BRIDGE)
+> Last refreshed: `2026-03-27` (W2-T28 COMPLETE, Async Runtime Consumer Pipeline Bridge — SECOND EPF CONSUMER BRIDGE)
 
 ---
 
@@ -17,9 +17,9 @@ Memory class: POINTER_RECORD
 | Whitepaper target-state | `PARTIALLY DELIVERED` |
 | Architecture baseline snapshot | `CVF_MASTER_ARCHITECTURE_WHITEPAPER v2.2-W4T11` |
 | Current-cycle restructuring | `DONE` |
-| Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T22 / W2-T27 / W3-T18 / W4-T13 CLOSED` |
+| Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T22 / W2-T28 / W3-T18 / W4-T13 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `NO ACTIVE TRANCHE — last canonical closure W2-T27` |
+| Current active tranche | `NO ACTIVE TRANCHE — last canonical closure W2-T28` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -29,7 +29,7 @@ Memory class: POINTER_RECORD
 | Area | Whitepaper target | Current state | Status | Next governed move |
 |---|---|---|---|---|
 | Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T22` closed; gateway, boardroom, typed context packaging, knowledge ranking, gateway auth, clarification refinement, and knowledge query consumer pipelines are delivered | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
-| Execution Plane | Model Gateway, Command Runtime, MCP Bridge, observer/feedback loop | `W2-T1` to `W2-T27` closed; async runtime, re-intake loop, MCP bridge, audit summary, feedback resolution, streaming/execution status, policy gate, execution pipeline, feedback routing, and dispatch consumer bridges are delivered | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
+| Execution Plane | Model Gateway, Command Runtime, MCP Bridge, observer/feedback loop | `W2-T1` to `W2-T28` closed; async runtime, re-intake loop, MCP bridge, audit summary, feedback resolution, streaming/execution status, policy gate, execution pipeline, feedback routing, dispatch, and async runtime consumer bridges are delivered | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Governance Layer | Policy, Trust, Guard Engine, Audit/Consensus, Watchdog | `W3-T1` to `W3-T18` closed; watchdog, audit-signal, consensus, checkpoint-log, checkpoint-reintake-summary, watchdog escalation, and watchdog pulse consumer bridges now exist | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Learning Plane | Feedback Ledger, Pattern Insight, Truth Model, Evaluation, Governance feedback, storage, observability | `W4-T1` to `W4-T11` closed; evaluation engine, truth score, pattern detection, governance signal consumer pipelines, re-injection, storage, and observability are delivered | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Final Whitepaper Truth Reconciliation | convert concept document into evidence-backed truth layers | `W5-T1` closed; whitepaper re-labeled to evidence-backed partial delivery | `DONE FOR CURRENT CYCLE` | future truth upgrades require a new wave |
@@ -125,6 +125,7 @@ Memory class: POINTER_RECORD
 | `W1-T29` intake consumer pipeline bridge | `DONE` |
 | `W1-T30` route match consumer pipeline bridge | `DONE` |
 | `W2-T27` dispatch consumer pipeline bridge | `DONE` |
+| `W2-T28` async runtime consumer pipeline bridge | `DONE` |
 
 ---
 
@@ -135,7 +136,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `W2-T27 COMPLETE — FIRST EPF CONSUMER BRIDGE DELIVERED` |
+| Current canonical validation posture | `W2-T28 COMPLETE — SECOND EPF CONSUMER BRIDGE DELIVERED` |
 
 ---
 

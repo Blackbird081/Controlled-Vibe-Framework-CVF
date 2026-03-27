@@ -305,6 +305,20 @@ Output (Allow / Strip & Allow / Block)
 | CVF_ARCHITECTURE_CHECK_GUARD.md | Any new version/layer/extension/module proposal | `docs/CVF_CORE_KNOWLEDGE_BASE.md` ← file này |
 | CVF_EXTENSION_VERSIONING_GUARD.md | New extension folder in `EXTENSIONS/` | `CVF_{STREAM}_v{major}.{minor}_{NAME}/` format |
 | CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
+| CVF_ACTIVE_ARCHIVE_GUARD.md | Active archive maintenance | Keep active/archive split truthful and append-only |
+| CVF_AGENT_HANDOFF_GUARD.md | Governed pause/resume transfer | Canonical handoff packet before another worker continues |
+| CVF_AGENT_HANDOFF_TRANSITION_GUARD.md | Pause/resume classification | Transition class chosen before handoff is written |
+| CVF_BASELINE_UPDATE_GUARD.md | Substantive repo change | Matching baseline/review artifact required |
+| CVF_BOARDROOM_RUNTIME_GUARD.md | Live boardroom decisions | Canonical boardroom runtime convergence packet |
+| CVF_EXTENSION_PACKAGE_CHECK_GUARD.md | Touched extension package changes | Package-level `check` script must pass before push |
+| CVF_FAST_LANE_GOVERNANCE_GUARD.md | Low-risk additive tranche work | Fast-lane packet and limits must remain truthful |
+| CVF_GOVERNED_FILE_SIZE_GUARD.md | Governed source/test/frontend/docs growth | File stays under threshold or carries approved exception |
+| CVF_MEMORY_GOVERNANCE_GUARD.md | Durable governance records | Correct memory class markers required |
+| CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md | Multi-agent intake/rebuttal/decision docs | Canonical review doc chain must be standardized |
+| CVF_PROGRESS_TRACKER_SYNC_GUARD.md | Tranche posture change | Canonical tracker and sync note must stay aligned |
+| CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md | New/resumed governed sessions | Canonical bootstrap must load first |
+| CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md | Major structural merge or move | Audit -> review -> decision path required |
+| CVF_TEST_PARTITION_OWNERSHIP_GUARD.md | Extracted governed test surfaces | Canonical test home must remain exclusive |
 
 
 ### Compatibility Gates (Chạy trước khi merge):

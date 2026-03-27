@@ -24,5 +24,5 @@ if (-not $LocalOnly) {
     }
     Write-Host "Hook roles:"
     Write-Host " - pre-commit: governance hook chain wrapper (file size + exception registry + docs governance)"
-    Write-Host " - pre-push: governance hook chain wrapper (docs + bug doc + test doc + baseline update + package/test ownership checks)"
+    Write-Host " - pre-push: governance hook chain wrapper (docs + tracker/handoff compat + size/ownership guards + guard registry/contract checks)"
 }

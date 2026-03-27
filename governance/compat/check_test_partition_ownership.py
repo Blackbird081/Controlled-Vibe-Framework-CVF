@@ -14,8 +14,13 @@ import sys
 from pathlib import Path
 from typing import Any
 
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
+COMPAT_DIR = Path(__file__).resolve().parent
+if str(COMPAT_DIR) not in sys.path:
+    sys.path.insert(0, str(COMPAT_DIR))
+
+from policy_baseline import load_json_policy_baseline
+
 DEFAULT_REGISTRY = REPO_ROOT / "governance" / "compat" / "CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json"
 POLICY_PATH = "governance/toolkit/05_OPERATION/CVF_TEST_PARTITION_OWNERSHIP_GUARD.md"
 
@@ -50,12 +55,31 @@ def build_report(registry_path: Path) -> dict[str, Any]:
 
     registry = _read_json(registry_path)
     partitions = registry.get("partitions", [])
+    baseline_registry, baseline_source = load_json_policy_baseline(registry_path)
+    baseline_partitions = {
+        entry["scope"]: entry
+        for entry in baseline_registry.get("partitions", [])
+        if isinstance(entry, dict) and entry.get("scope")
+    } if baseline_registry else {}
+    current_partitions_by_scope: dict[str, dict[str, Any]] = {}
+    seen_scopes: set[str] = set()
 
     for partition in partitions:
         scope = partition.get("scope", "")
         canonical_file = partition.get("canonicalFile", "")
         forbidden_files = partition.get("forbiddenFiles", [])
         forbidden_patterns = partition.get("forbiddenPatterns", [])
+
+        if scope:
+            if scope in seen_scopes:
+                violations.append(
+                    {
+                        "type": "duplicate_scope",
+                        "path": canonical_file or "<missing>",
+                        "message": f"Duplicate partition scope `{scope}` in ownership registry.",
+                    }
+                )
+            seen_scopes.add(scope)
 
         missing_fields = [
             field
@@ -76,6 +100,21 @@ def build_report(registry_path: Path) -> dict[str, Any]:
                 }
             )
             continue
+
+        current_partitions_by_scope[scope] = partition
+
+        baseline_entry = baseline_partitions.get(scope)
+        if baseline_entry is not None and partition != baseline_entry:
+            violations.append(
+                {
+                    "type": "partition_mutated_from_baseline",
+                    "path": canonical_file,
+                    "message": (
+                        f"Ownership partition `{scope}` differs from the protected baseline. "
+                        "Existing partition rules may not be self-authorized in the normal commit path."
+                    ),
+                }
+            )
 
         canonical_path = REPO_ROOT / canonical_file
         if not canonical_path.exists():
@@ -130,9 +169,20 @@ def build_report(registry_path: Path) -> dict[str, Any]:
             }
         )
 
+    for scope, baseline_entry in baseline_partitions.items():
+        if scope not in current_partitions_by_scope:
+            violations.append(
+                {
+                    "type": "partition_removed_from_baseline",
+                    "path": baseline_entry.get("canonicalFile", "<missing>"),
+                    "message": f"Ownership partition `{scope}` was removed from the protected baseline.",
+                }
+            )
+
     return {
         "policyPath": POLICY_PATH,
         "registryPath": _rel(registry_path),
+        "baselineSource": baseline_source,
         "partitionCount": len(partitions_report),
         "violationCount": len(violations),
         "violations": violations,
@@ -144,6 +194,7 @@ def build_report(registry_path: Path) -> dict[str, Any]:
 def _print_report(report: dict[str, Any]) -> None:
     print("=== CVF Test Partition Ownership Guard ===")
     print(f"Registry: {report['registryPath']}")
+    print(f"Protected baseline: {report.get('baselineSource') or 'none'}")
     print(f"Policy: {report['policyPath']}")
     print(f"Partitions checked: {report.get('partitionCount', 0)}")
     print(f"Violations: {report['violationCount']}")

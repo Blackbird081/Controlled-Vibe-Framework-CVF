@@ -308,6 +308,21 @@ jobs:
         run: |
           python governance/compat/check_guard_contract_compat.py --enforce
 
+  guard-registry-compat:
+    name: Guard Registry Compat
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce guard registry compatibility
+        run: |
+          python governance/compat/check_guard_registry.py --enforce
+
   enterprise-evidence-pack:
     name: Enterprise Evidence Pack
     runs-on: ubuntu-latest

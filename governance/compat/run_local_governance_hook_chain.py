@@ -102,6 +102,14 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             "test partition ownership compatibility",
             ["python", "governance/compat/check_test_partition_ownership.py", "--enforce"],
         ),
+        (
+            "guard registry compatibility",
+            ["python", "governance/compat/check_guard_registry.py", "--enforce"],
+        ),
+        (
+            "cross-channel guard contract compatibility",
+            ["python", "governance/compat/check_guard_contract_compat.py", "--enforce"],
+        ),
     ]
 }
 

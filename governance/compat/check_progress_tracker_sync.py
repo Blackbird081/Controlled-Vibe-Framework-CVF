@@ -19,8 +19,13 @@ import sys
 from pathlib import Path
 from typing import Any
 
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
+COMPAT_DIR = Path(__file__).resolve().parent
+if str(COMPAT_DIR) not in sys.path:
+    sys.path.insert(0, str(COMPAT_DIR))
+
+from policy_baseline import load_json_policy_baseline
+
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_PROGRESS_TRACKER_SYNC_GUARD.md"
@@ -103,6 +108,8 @@ SYNC_NOTE_MARKERS = (
     "- Next governed move:",
     "- Canonical tracker updated:",
 )
+
+REQUIRED_WORKLINE_FIELDS = ("id", "tracker", "triggerRegexes", "commitRegexes")
 
 
 def _run_git(args: list[str]) -> tuple[int, str, str]:
@@ -234,6 +241,90 @@ def _load_registry() -> dict[str, Any]:
     return json.loads(_read_text(REGISTRY_PATH))
 
 
+def _validate_registry_contract(registry: dict[str, Any], baseline_registry: dict[str, Any] | None) -> list[dict[str, str]]:
+    violations: list[dict[str, str]] = []
+    seen_ids: set[str] = set()
+    current_worklines: dict[str, dict[str, Any]] = {}
+
+    for entry in registry.get("worklines", []):
+        if not isinstance(entry, dict):
+            violations.append(
+                {
+                    "type": "malformed_workline",
+                    "path": REGISTRY_PATH,
+                    "message": "Progress tracker registry contains a non-object workline entry.",
+                }
+            )
+            continue
+
+        workline_id = entry.get("id", "")
+        label = workline_id or "<missing-id>"
+        missing_fields = [field for field in REQUIRED_WORKLINE_FIELDS if not entry.get(field)]
+        if missing_fields:
+            violations.append(
+                {
+                    "type": "missing_required_field",
+                    "path": label,
+                    "message": f"Workline `{label}` is missing required fields: {', '.join(missing_fields)}.",
+                }
+            )
+            continue
+
+        if workline_id in seen_ids:
+            violations.append(
+                {
+                    "type": "duplicate_workline_id",
+                    "path": label,
+                    "message": f"Duplicate workline id `{workline_id}` in progress tracker registry.",
+                }
+            )
+        seen_ids.add(workline_id)
+        current_worklines[workline_id] = entry
+
+        for field_name in ("triggerRegexes", "commitRegexes"):
+            for pattern in entry.get(field_name, []):
+                try:
+                    re.compile(pattern)
+                except re.error as exc:
+                    violations.append(
+                        {
+                            "type": "invalid_regex",
+                            "path": label,
+                            "message": f"Workline `{label}` has invalid regex `{pattern}` in `{field_name}`: {exc}.",
+                        }
+                    )
+
+    if baseline_registry:
+        baseline_worklines = {
+            entry["id"]: entry
+            for entry in baseline_registry.get("worklines", [])
+            if isinstance(entry, dict) and entry.get("id")
+        }
+        for workline_id, baseline_entry in baseline_worklines.items():
+            current_entry = current_worklines.get(workline_id)
+            if current_entry is None:
+                violations.append(
+                    {
+                        "type": "workline_removed_from_baseline",
+                        "path": workline_id,
+                        "message": f"Workline `{workline_id}` was removed from the protected baseline registry.",
+                    }
+                )
+            elif current_entry != baseline_entry:
+                violations.append(
+                    {
+                        "type": "workline_mutated_from_baseline",
+                        "path": workline_id,
+                        "message": (
+                            f"Workline `{workline_id}` differs from the protected baseline. "
+                            "Existing GC-026 workline routing must not be self-authorized."
+                        ),
+                    }
+                )
+
+    return violations
+
+
 def _baseline_has_sync_note(path: str) -> bool:
     if not path.startswith("docs/baselines/"):
         return False
@@ -252,6 +343,8 @@ def _classify(commits: list[dict[str, str]], changed_paths: dict[str, list[str]]
             marker_violations[path] = missing_markers
 
     registry = _load_registry()
+    baseline_registry, baseline_source = load_json_policy_baseline(REPO_ROOT / REGISTRY_PATH)
+    registry_violations = _validate_registry_contract(registry, baseline_registry)
     workline_reports: list[dict[str, Any]] = []
     for entry in registry.get("worklines", []):
         trigger_patterns = [re.compile(pattern) for pattern in entry.get("triggerRegexes", [])]
@@ -283,7 +376,12 @@ def _classify(commits: list[dict[str, str]], changed_paths: dict[str, list[str]]
         }
         workline_reports.append(workline_report)
 
-    compliant = not missing_files and not marker_violations and all(item["compliant"] for item in workline_reports)
+    compliant = (
+        not missing_files
+        and not marker_violations
+        and not registry_violations
+        and all(item["compliant"] for item in workline_reports)
+    )
 
     return {
         "requiredFileCount": len(REQUIRED_FILES),
@@ -291,6 +389,9 @@ def _classify(commits: list[dict[str, str]], changed_paths: dict[str, list[str]]
         "missingFileCount": len(missing_files),
         "markerViolations": marker_violations,
         "markerViolationCount": len(marker_violations),
+        "registryViolations": registry_violations,
+        "registryViolationCount": len(registry_violations),
+        "registryBaselineSource": baseline_source,
         "worklines": workline_reports,
         "compliant": compliant,
         "changedFiles": list(changed_paths.keys()),
@@ -305,6 +406,8 @@ def _print_report(report: dict[str, Any], base: str, head: str, base_source: str
     print(f"Required files checked: {report['requiredFileCount']}")
     print(f"Missing files: {report['missingFileCount']}")
     print(f"Marker violations: {report['markerViolationCount']}")
+    print(f"Registry violations: {report['registryViolationCount']}")
+    print(f"Protected registry baseline: {report.get('registryBaselineSource') or 'none'}")
     print(f"Worklines checked: {len(report['worklines'])}")
 
     if report["missingFiles"]:
@@ -318,6 +421,11 @@ def _print_report(report: dict[str, Any], base: str, head: str, base_source: str
             print(f"  - {path}")
             for marker in markers:
                 print(f"    missing: {marker}")
+
+    if report["registryViolations"]:
+        print("\nRegistry violations:")
+        for violation in report["registryViolations"]:
+            print(f"  - {violation['path']}: {violation['message']}")
 
     for workline in report["worklines"]:
         print(f"\nWorkline: {workline['id']}")

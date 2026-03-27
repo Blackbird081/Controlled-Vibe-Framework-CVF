@@ -1,3 +1,22 @@
+// W1-T30 — Route Match Consumer Bridge (CP1–CP2)
+export {
+  RouteMatchConsumerPipelineContract,
+  createRouteMatchConsumerPipelineContract,
+} from "./route.match.consumer.pipeline.contract";
+export type {
+  RouteMatchConsumerPipelineRequest,
+  RouteMatchConsumerPipelineResult,
+  RouteMatchConsumerPipelineContractDependencies,
+} from "./route.match.consumer.pipeline.contract";
+export {
+  RouteMatchConsumerPipelineBatchContract,
+  createRouteMatchConsumerPipelineBatchContract,
+} from "./route.match.consumer.pipeline.batch.contract";
+export type {
+  RouteMatchConsumerPipelineBatchResult,
+  RouteMatchConsumerPipelineBatchContractDependencies,
+} from "./route.match.consumer.pipeline.batch.contract";
+
 // W1-T29 — Intake Consumer Bridge (CP1–CP2)
 export {
   IntakeConsumerPipelineContract,

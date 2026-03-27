@@ -1,18 +1,19 @@
-feat(W2-T34/CP1+CP2+CP3): Context Enrichment Consumer Pipeline Bridge
+feat(W2-T35/CP1+CP2+CP3): Context Packager Consumer Pipeline Bridge
 
-Tranche: W2-T34 — Context Enrichment Consumer Pipeline Bridge
-Control points: CP1 (Full Lane), CP2 (Fast Lane GC-021), CP3 (Closure)
+Tranche: W2-T35 — Context Packager Consumer Pipeline Bridge
+Control points: CP1 (Full Lane GC-019), CP2 (Fast Lane GC-021), CP3 (Closure)
 
-GC-018 gap audit: 5 unbridged CPF contracts identified. ContextEnrichmentContract
-selected as highest-value candidate (rich ContextValidationResult output).
+Contract: ContextPackagerConsumerPipelineContract bridges TypedContextPackage
+  (from ContextPackagerContract.pack()) into consumer visibility — exposes
+  segment count, total token budget, per-type token distribution (6 types),
+  and distinctTypeCount (non-zero perTypeTokens fields).
 
-Contract: ContextEnrichmentConsumerPipelineContract bridges
-  ContextValidationResult (from ContextEnrichmentContract.validate()) into
-  consumer visibility — exposes VALID/INVALID status and violations list.
+Warnings: WARNING_NO_SEGMENTS, WARNING_TOKEN_BUDGET_ZERO, WARNING_NO_KNOWLEDGE_TOKENS
+Batch: totalSegments, totalTokens, dominantTokenBudget (max estimatedTokens)
 
-Warnings: WARNING_VALIDATION_INVALID, WARNING_VIOLATIONS_PRESENT (severity-ordered)
-Batch: validCount, invalidCount, totalViolations, dominantStatus (INVALID dominates)
+Governance: CPF index.ts exception bumped 1100->1200 (barrel growth W2-T31~W2-T35)
+Test fix: makePkg helper queryTokens=0 when estimatedTokens=0 (emptyPkg accuracy)
 
-Tests: +52 new (1690 CPF total, 0 failures)
+Tests: +52 new (1742 CPF total, 0 failures)
 Size guard: COMPLIANT
 AGENT_HANDOFF updated

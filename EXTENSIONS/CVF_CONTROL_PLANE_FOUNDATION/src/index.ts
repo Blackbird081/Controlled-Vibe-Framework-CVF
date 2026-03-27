@@ -1,3 +1,24 @@
+// W2-T35 — Context Packager Consumer Pipeline Bridge (CP1)
+export {
+  ContextPackagerConsumerPipelineContract,
+  createContextPackagerConsumerPipelineContract,
+} from "./context.packager.consumer.pipeline.contract";
+export type {
+  ContextPackagerConsumerPipelineRequest,
+  ContextPackagerConsumerPipelineResult,
+  ContextPackagerConsumerPipelineContractDependencies,
+} from "./context.packager.consumer.pipeline.contract";
+
+// W2-T35 — Context Packager Consumer Pipeline Batch (CP2)
+export {
+  ContextPackagerConsumerPipelineBatchContract,
+  createContextPackagerConsumerPipelineBatchContract,
+} from "./context.packager.consumer.pipeline.batch.contract";
+export type {
+  ContextPackagerConsumerPipelineBatchResult,
+  ContextPackagerConsumerPipelineBatchContractDependencies,
+} from "./context.packager.consumer.pipeline.batch.contract";
+
 // W2-T34 — Context Enrichment Consumer Pipeline Bridge (CP1)
 export {
   ContextEnrichmentConsumerPipelineContract,

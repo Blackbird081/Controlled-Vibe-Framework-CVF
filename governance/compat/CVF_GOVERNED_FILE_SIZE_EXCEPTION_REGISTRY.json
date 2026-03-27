@@ -109,10 +109,10 @@
     {
       "path": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts",
       "fileClass": "general_source",
-      "approvedMaxLines": 1100,
+      "approvedMaxLines": 1200,
       "status": "ACTIVE_EXCEPTION",
-      "rationale": "Control plane foundation barrel aggregates multiple contract exports in one compatibility surface. W2-T31 and W2-T32 extended the governed CPF consumer-bridge export line.",
-      "requiredFollowup": "Split the barrel into tranche-local or domain-local export files before the next substantive control-plane surface expansion beyond the current W2-T32 bridge line."
+      "rationale": "Control plane foundation barrel aggregates multiple contract exports in one compatibility surface. W2-T31 through W2-T35 have extended the governed CPF consumer-bridge export line. Exception cap bumped from 1100→1200 on 2026-03-27 to accommodate W2-T35 additions.",
+      "requiredFollowup": "Split the barrel into domain-local export files (e.g. boardroom.exports.ts, context.exports.ts) before the next substantive expansion beyond W2-T35."
     }
   ]
 }

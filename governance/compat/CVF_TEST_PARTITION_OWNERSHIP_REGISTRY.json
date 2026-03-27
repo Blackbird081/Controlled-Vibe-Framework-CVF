@@ -1,6 +1,18 @@
 {
   "partitions": [
     {
+      "scope": "CPF Context Packager Consumer Pipeline (W2-T35 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.consumer.pipeline.test.ts",
+      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
+      "forbiddenPatterns": ["ContextPackagerConsumerPipelineContract", "createContextPackagerConsumerPipelineContract"]
+    },
+    {
+      "scope": "CPF Context Packager Consumer Pipeline Batch (W2-T35 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.consumer.pipeline.test.ts",
+      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
+      "forbiddenPatterns": ["ContextPackagerConsumerPipelineBatchContract", "createContextPackagerConsumerPipelineBatchContract"]
+    },
+    {
       \"scope\": \"CPF Context Enrichment Consumer Pipeline (W2-T34 CP1)\",
       \"canonicalFile\": \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.enrichment.consumer.pipeline.test.ts\",
       \"forbiddenFiles\": [

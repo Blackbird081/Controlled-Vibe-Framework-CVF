@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-27
 
 > Branch: `cvf-next`
-> Last push: `W1-T23-CP2 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W1-T23 — **FIRST CPF LOG CONSUMER BRIDGE COMPLETE**
+> Last push: `W1-T24-CP1+CP2 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W1-T24 — **SECOND CPF LOG CONSUMER BRIDGE COMPLETE**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
@@ -10,7 +10,7 @@
 ## Current State
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **1045 tests, 0 failures**
+- CPF (Control Plane Foundation): **1124 tests, 0 failures**
 - EPF (Execution Plane Foundation): **966 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1325 tests, 0 failures**
@@ -18,16 +18,16 @@
 ### Last Four Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W4-T23 | LearningObservabilitySnapshot Consumer Pipeline Bridge | CP1, CP2, CP3 | 1235 LPF |
 | W4-T24 | LearningStorageLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1273 LPF |
 | W4-T25 | PatternDriftLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1325 LPF |
 | W1-T23 | GatewayAuthLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1045 CPF |
+| W1-T24 | GatewayPIIDetectionLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1124 CPF |
 
 ### Key Contracts Delivered (last 2 tranches)
-- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/pattern.drift.log.consumer.pipeline.contract.ts` — PatternDriftLogConsumerPipelineContract (W4-T25)
-- `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/pattern.drift.log.consumer.pipeline.batch.contract.ts` — PatternDriftLogConsumerPipelineBatchContract (W4-T25)
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.auth.log.consumer.pipeline.contract.ts` — GatewayAuthLogConsumerPipelineContract (W1-T23)
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.auth.log.consumer.pipeline.batch.contract.ts` — GatewayAuthLogConsumerPipelineBatchContract (W1-T23)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.pii.detection.log.consumer.pipeline.contract.ts` — GatewayPIIDetectionLogConsumerPipelineContract (W1-T24)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.pii.detection.log.consumer.pipeline.batch.contract.ts` — GatewayPIIDetectionLogConsumerPipelineBatchContract (W1-T24)
 
 ---
 
@@ -38,10 +38,10 @@
 Current guidance:
 - no tranche is currently active
 - baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
-- `W1-T23` is now closed and no longer a candidate
-- `GatewayAuthLogContract` consumer visibility gap is **CLOSED**
-- **First CPF log consumer bridge delivered** — `GatewayAuthLogConsumerPipelineContract` exposes auth log consumer-visibly
-- Auth observability chain complete: GatewayAuthContract → GatewayAuthLogContract → GatewayAuthLogConsumerPipelineContract
+- `W1-T24` is now closed and no longer a candidate
+- `GatewayPIIDetectionLogContract` consumer visibility gap is **CLOSED**
+- **Second CPF log consumer bridge delivered** — `GatewayPIIDetectionLogConsumerPipelineContract` exposes PII detection log consumer-visibly
+- PII detection observability chain complete: GatewayPIIDetectionContract → GatewayPIIDetectionLogContract → GatewayPIIDetectionLogConsumerPipelineContract
 - next move requires a fresh `GC-018` survey — look for the next highest-value unbridged contract in CPF, EPF, or GEF
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`

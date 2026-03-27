@@ -1390,3 +1390,15 @@ Gap closed: PatternDriftContract (W6-T6) now has a governed consumer-visible enr
 Fifth LPF consumer bridge delivered — TruthModel (baseline + current) → PatternDriftSignal chain now consumer-visible.
 
 Next: fresh GC-018 survey — LearningObservabilityContract or highest-value EPF aggregate contract.
+
+---
+
+## W4-T13 — LearningObservability Consumer Pipeline Bridge (IN EXECUTION)
+
+> Authorization: GC-018 score 9/10 — 2026-03-27
+> LPF baseline: 685 tests
+
+Planned deliverables:
+- `W4-T13 / CP1` — LearningObservabilityConsumerPipelineContract (`LearningStorageLog + LearningLoopSummary → LearningObservabilityContract.report() → LearningObservabilityReport → CPF`) — Full Lane (GC-019)
+- `W4-T13 / CP2` — LearningObservabilityConsumerPipelineBatchContract (`LearningObservabilityConsumerPipelineResult[] → batch with dominantTokenBudget, criticalCount, degradedCount`) — Fast Lane (GC-021)
+- `W4-T13 / CP3` — Tranche closure review — Full Lane

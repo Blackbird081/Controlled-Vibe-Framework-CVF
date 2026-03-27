@@ -1,3 +1,22 @@
+// W1-T28 — AI Gateway Consumer Bridge (CP1–CP2)
+export {
+  AIGatewayConsumerPipelineContract,
+  createAIGatewayConsumerPipelineContract,
+} from "./ai.gateway.consumer.pipeline.contract";
+export type {
+  AIGatewayConsumerPipelineRequest,
+  AIGatewayConsumerPipelineResult,
+  AIGatewayConsumerPipelineContractDependencies,
+} from "./ai.gateway.consumer.pipeline.contract";
+export {
+  AIGatewayConsumerPipelineBatchContract,
+  createAIGatewayConsumerPipelineBatchContract,
+} from "./ai.gateway.consumer.pipeline.batch.contract";
+export type {
+  AIGatewayConsumerPipelineBatchResult,
+  AIGatewayConsumerPipelineBatchContractDependencies,
+} from "./ai.gateway.consumer.pipeline.batch.contract";
+
 // W1-T22 — Knowledge Query Consumer Bridge (CP1–CP2)
 export {
   KnowledgeQueryConsumerPipelineContract,

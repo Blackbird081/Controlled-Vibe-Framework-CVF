@@ -429,3 +429,289 @@ describe("LearningLoopConsumerPipelineContract", () => {
     });
   });
 });
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BATCH CONTRACT TESTS (W4-T14 CP2 — Fast Lane GC-021)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import {
+  LearningLoopConsumerPipelineBatchContract,
+  createLearningLoopConsumerPipelineBatchContract,
+} from "../src/learning.loop.consumer.pipeline.batch.contract";
+import type { LearningLoopConsumerPipelineBatch } from "../src/learning.loop.consumer.pipeline.batch.contract";
+
+function makeBatchContract() {
+  return new LearningLoopConsumerPipelineBatchContract({
+    now: () => FIXED_TS,
+  });
+}
+
+describe("LearningLoopConsumerPipelineBatchContract", () => {
+
+  // ── Instantiation ──────────────────────────────────────────────────────────
+
+  describe("instantiation", () => {
+    it("should instantiate with no dependencies", () => {
+      const contract = new LearningLoopConsumerPipelineBatchContract();
+      expect(contract).toBeDefined();
+    });
+
+    it("should instantiate via factory function", () => {
+      const contract = createLearningLoopConsumerPipelineBatchContract({
+        now: () => FIXED_TS,
+      });
+      expect(contract).toBeDefined();
+    });
+
+    it("should instantiate with custom now function", () => {
+      const contract = new LearningLoopConsumerPipelineBatchContract({
+        now: () => FIXED_TS,
+      });
+      const batch = contract.batch([]);
+      expect(batch.createdAt).toBe(FIXED_TS);
+    });
+  });
+
+  // ── Output shape ───────────────────────────────────────────────────────────
+
+  describe("output shape", () => {
+    it("should return a defined batch", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch).toBeDefined();
+    });
+
+    it("should have a non-empty batchId", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.batchId).toBeTruthy();
+    });
+
+    it("should have createdAt matching the fixed timestamp", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.createdAt).toBe(FIXED_TS);
+    });
+
+    it("should have resultCount", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.resultCount).toBe(0);
+    });
+
+    it("should have rejectCount", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.rejectCount).toBe(0);
+    });
+
+    it("should have escalateCount", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.escalateCount).toBe(0);
+    });
+
+    it("should have retryCount", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.retryCount).toBe(0);
+    });
+
+    it("should have acceptCount", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.acceptCount).toBe(0);
+    });
+
+    it("should have dominantTokenBudget", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.dominantTokenBudget).toBe(0);
+    });
+
+    it("should have a non-empty batchHash", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.batchHash).toBeTruthy();
+    });
+  });
+
+  // ── Empty batch ────────────────────────────────────────────────────────────
+
+  describe("empty batch", () => {
+    it("should have resultCount 0 for empty batch", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.resultCount).toBe(0);
+    });
+
+    it("should have dominantTokenBudget 0 for empty batch", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.dominantTokenBudget).toBe(0);
+    });
+
+    it("should have all feedback counts 0 for empty batch", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.rejectCount).toBe(0);
+      expect(batch.escalateCount).toBe(0);
+      expect(batch.retryCount).toBe(0);
+      expect(batch.acceptCount).toBe(0);
+    });
+
+    it("should have a valid batchHash for empty batch", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.batchHash).toBeTruthy();
+    });
+  });
+
+  // ── Single result ──────────────────────────────────────────────────────────
+
+  describe("single result", () => {
+    it("should have resultCount 1 for single result", () => {
+      const result = makeContract().execute(makeRequest());
+      const batch = makeBatchContract().batch([result]);
+      expect(batch.resultCount).toBe(1);
+    });
+
+    it("should aggregate feedback counts from single result", () => {
+      const result = makeContract().execute(
+        makeRequest({ signals: [makeGovernanceSignal({ signalType: "ESCALATE" })] }),
+      );
+      const batch = makeBatchContract().batch([result]);
+      expect(batch.rejectCount).toBe(1);
+      expect(batch.escalateCount).toBe(0);
+      expect(batch.retryCount).toBe(0);
+      expect(batch.acceptCount).toBe(0);
+    });
+
+    it("should set dominantTokenBudget from single result", () => {
+      const result = makeContract().execute(makeRequest());
+      const batch = makeBatchContract().batch([result]);
+      expect(batch.dominantTokenBudget).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  // ── Multiple results ───────────────────────────────────────────────────────
+
+  describe("multiple results", () => {
+    it("should have correct resultCount for multiple results", () => {
+      const r1 = makeContract().execute(makeRequest({ signals: [makeGovernanceSignal({ signalId: "s1" })] }));
+      const r2 = makeContract().execute(makeRequest({ signals: [makeGovernanceSignal({ signalId: "s2" })] }));
+      const batch = makeBatchContract().batch([r1, r2]);
+      expect(batch.resultCount).toBe(2);
+    });
+
+    it("should aggregate rejectCount across multiple results", () => {
+      const r1 = makeContract().execute(
+        makeRequest({ signals: [makeGovernanceSignal({ signalId: "s1", signalType: "ESCALATE" })] }),
+      );
+      const r2 = makeContract().execute(
+        makeRequest({ signals: [makeGovernanceSignal({ signalId: "s2", signalType: "ESCALATE" })] }),
+      );
+      const batch = makeBatchContract().batch([r1, r2]);
+      expect(batch.rejectCount).toBe(2);
+    });
+
+    it("should aggregate escalateCount across multiple results", () => {
+      const r1 = makeContract().execute(
+        makeRequest({ signals: [makeGovernanceSignal({ signalId: "s1", signalType: "TRIGGER_REVIEW" })] }),
+      );
+      const r2 = makeContract().execute(
+        makeRequest({ signals: [makeGovernanceSignal({ signalId: "s2", signalType: "TRIGGER_REVIEW" })] }),
+      );
+      const batch = makeBatchContract().batch([r1, r2]);
+      expect(batch.escalateCount).toBe(2);
+    });
+
+    it("should aggregate retryCount across multiple results", () => {
+      const r1 = makeContract().execute(
+        makeRequest({ signals: [makeGovernanceSignal({ signalId: "s1", signalType: "MONITOR" })] }),
+      );
+      const r2 = makeContract().execute(
+        makeRequest({ signals: [makeGovernanceSignal({ signalId: "s2", signalType: "MONITOR" })] }),
+      );
+      const batch = makeBatchContract().batch([r1, r2]);
+      expect(batch.retryCount).toBe(2);
+    });
+
+    it("should aggregate acceptCount across multiple results", () => {
+      const r1 = makeContract().execute(
+        makeRequest({ signals: [makeGovernanceSignal({ signalId: "s1", signalType: "NO_ACTION" })] }),
+      );
+      const r2 = makeContract().execute(
+        makeRequest({ signals: [makeGovernanceSignal({ signalId: "s2", signalType: "NO_ACTION" })] }),
+      );
+      const batch = makeBatchContract().batch([r1, r2]);
+      expect(batch.acceptCount).toBe(2);
+    });
+
+    it("should aggregate mixed feedback counts correctly", () => {
+      const r1 = makeContract().execute(
+        makeRequest({
+          signals: [
+            makeGovernanceSignal({ signalId: "s1", signalType: "ESCALATE" }),
+            makeGovernanceSignal({ signalId: "s2", signalType: "TRIGGER_REVIEW" }),
+          ],
+        }),
+      );
+      const r2 = makeContract().execute(
+        makeRequest({
+          signals: [
+            makeGovernanceSignal({ signalId: "s3", signalType: "MONITOR" }),
+            makeGovernanceSignal({ signalId: "s4", signalType: "NO_ACTION" }),
+          ],
+        }),
+      );
+      const batch = makeBatchContract().batch([r1, r2]);
+      expect(batch.rejectCount).toBe(1);
+      expect(batch.escalateCount).toBe(1);
+      expect(batch.retryCount).toBe(1);
+      expect(batch.acceptCount).toBe(1);
+    });
+  });
+
+  // ── Deterministic hashing ──────────────────────────────────────────────────
+
+  describe("deterministic hashing", () => {
+    it("should produce the same batchId for identical inputs", () => {
+      const r1 = makeContract().execute(makeRequest());
+      const b1 = makeBatchContract().batch([r1]);
+      const b2 = makeBatchContract().batch([r1]);
+      expect(b1.batchId).toBe(b2.batchId);
+    });
+
+    it("should produce different batchId for different results", () => {
+      const r1 = makeContract().execute(makeRequest({ signals: [makeGovernanceSignal({ signalType: "ESCALATE" })] }));
+      const r2 = makeContract().execute(makeRequest({ signals: [makeGovernanceSignal({ signalType: "MONITOR" })] }));
+      const b1 = makeBatchContract().batch([r1]);
+      const b2 = makeBatchContract().batch([r2]);
+      expect(b1.batchId).not.toBe(b2.batchId);
+    });
+
+    it("batchId should differ from batchHash", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.batchId).not.toBe(batch.batchHash);
+    });
+
+    it("should produce the same batchHash for identical inputs", () => {
+      const r1 = makeContract().execute(makeRequest());
+      const b1 = makeBatchContract().batch([r1]);
+      const b2 = makeBatchContract().batch([r1]);
+      expect(b1.batchHash).toBe(b2.batchHash);
+    });
+  });
+
+  // ── dominantTokenBudget derivation ─────────────────────────────────────────
+
+  describe("dominantTokenBudget derivation", () => {
+    it("should be 0 for empty batch", () => {
+      const batch = makeBatchContract().batch([]);
+      expect(batch.dominantTokenBudget).toBe(0);
+    });
+
+    it("should be non-negative for single result", () => {
+      const result = makeContract().execute(makeRequest());
+      const batch = makeBatchContract().batch([result]);
+      expect(batch.dominantTokenBudget).toBeGreaterThanOrEqual(0);
+    });
+
+    it("should be the max estimatedTokens across multiple results", () => {
+      const r1 = makeContract().execute(makeRequest({ signals: [makeGovernanceSignal({ signalId: "s1" })] }));
+      const r2 = makeContract().execute(makeRequest({ signals: [makeGovernanceSignal({ signalId: "s2" })] }));
+      const batch = makeBatchContract().batch([r1, r2]);
+      const tokens1 = r1.consumerPackage.typedContextPackage?.estimatedTokens ?? 0;
+      const tokens2 = r2.consumerPackage.typedContextPackage?.estimatedTokens ?? 0;
+      expect(batch.dominantTokenBudget).toBe(Math.max(tokens1, tokens2));
+    });
+  });
+});

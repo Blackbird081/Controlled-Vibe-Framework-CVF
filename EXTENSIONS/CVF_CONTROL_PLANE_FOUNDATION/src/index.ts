@@ -17,6 +17,25 @@ export type {
   KnowledgeQueryConsumerPipelineBatchContractDependencies,
 } from "./knowledge.query.consumer.pipeline.batch.contract";
 
+// W1-T25 — Route Match Log Consumer Bridge (CP1–CP2)
+export {
+  RouteMatchLogConsumerPipelineContract,
+  createRouteMatchLogConsumerPipelineContract,
+} from "./route.match.log.consumer.pipeline.contract";
+export type {
+  RouteMatchLogConsumerPipelineRequest,
+  RouteMatchLogConsumerPipelineResult,
+  RouteMatchLogConsumerPipelineContractDependencies,
+} from "./route.match.log.consumer.pipeline.contract";
+export {
+  RouteMatchLogConsumerPipelineBatchContract,
+  createRouteMatchLogConsumerPipelineBatchContract,
+} from "./route.match.log.consumer.pipeline.batch.contract";
+export type {
+  RouteMatchLogConsumerPipelineBatchResult,
+  RouteMatchLogConsumerPipelineBatchContractDependencies,
+} from "./route.match.log.consumer.pipeline.batch.contract";
+
 // W1-T24 — Gateway PII Detection Log Consumer Bridge (CP1–CP2)
 export {
   GatewayPIIDetectionLogConsumerPipelineContract,

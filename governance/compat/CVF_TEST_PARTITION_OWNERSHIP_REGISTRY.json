@@ -265,6 +265,28 @@
       ]
     },
     {
+      "scope": "CPF Route Match Log Consumer Pipeline (W1-T25 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/route.match.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RouteMatchLogConsumerPipelineContract",
+        "createRouteMatchLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Route Match Log Consumer Pipeline Batch (W1-T25 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/route.match.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RouteMatchLogConsumerPipelineBatchContract",
+        "createRouteMatchLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "CPF Reverse Prompting Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.test.ts",
       "forbiddenFiles": [

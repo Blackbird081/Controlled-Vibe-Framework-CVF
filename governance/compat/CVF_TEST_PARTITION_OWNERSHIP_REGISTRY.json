@@ -287,6 +287,28 @@
       ]
     },
     {
+      "scope": "CPF Design Consumer Pipeline (W2-T26 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/design.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "DesignConsumerPipelineContract",
+        "createDesignConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Design Consumer Pipeline Batch (W2-T26 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/design.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "DesignConsumerPipelineBatchContract",
+        "createDesignConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "CPF Reverse Prompting Consumer Pipeline",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.test.ts",
       "forbiddenFiles": [

@@ -17,6 +17,25 @@ export type {
   KnowledgeQueryConsumerPipelineBatchContractDependencies,
 } from "./knowledge.query.consumer.pipeline.batch.contract";
 
+// W2-T26 — Design Consumer Bridge (CP1–CP2)
+export {
+  DesignConsumerPipelineContract,
+  createDesignConsumerPipelineContract,
+} from "./design.consumer.pipeline.contract";
+export type {
+  DesignConsumerPipelineRequest,
+  DesignConsumerPipelineResult,
+  DesignConsumerPipelineContractDependencies,
+} from "./design.consumer.pipeline.contract";
+export {
+  DesignConsumerPipelineBatchContract,
+  createDesignConsumerPipelineBatchContract,
+} from "./design.consumer.pipeline.batch.contract";
+export type {
+  DesignConsumerPipelineBatchResult,
+  DesignConsumerPipelineBatchContractDependencies,
+} from "./design.consumer.pipeline.batch.contract";
+
 // W1-T25 — Route Match Log Consumer Bridge (CP1–CP2)
 export {
   RouteMatchLogConsumerPipelineContract,

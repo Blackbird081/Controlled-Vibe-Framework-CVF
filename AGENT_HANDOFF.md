@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-27
 
 > Branch: `cvf-next`
-> Last push: `W1-T25-CP1+CP2 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W1-T25 — **THIRD CPF LOG CONSUMER BRIDGE COMPLETE**
+> Last push: `W2-T26-CP1+CP2 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T26 — **FOURTH CPF CONSUMER BRIDGE COMPLETE**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
@@ -10,7 +10,7 @@
 ## Current State
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **1189 tests, 0 failures**
+- CPF (Control Plane Foundation): **1256 tests, 0 failures**
 - EPF (Execution Plane Foundation): **966 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1325 tests, 0 failures**
@@ -18,16 +18,16 @@
 ### Last Four Tranches Closed
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W4-T25 | PatternDriftLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1325 LPF |
-| W1-T23 | GatewayAuthLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1045 CPF |
 | W1-T24 | GatewayPIIDetectionLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1124 CPF |
 | W1-T25 | RouteMatchLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1189 CPF |
+| W2-T26 | Design Consumer Pipeline Bridge | CP1, CP2, CP3 | 1256 CPF |
+| W4-T25 | PatternDriftLog Consumer Pipeline Bridge | CP1, CP2, CP3 | 1325 LPF |
 
 ### Key Contracts Delivered (last 2 tranches)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.pii.detection.log.consumer.pipeline.contract.ts` — GatewayPIIDetectionLogConsumerPipelineContract (W1-T24)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.pii.detection.log.consumer.pipeline.batch.contract.ts` — GatewayPIIDetectionLogConsumerPipelineBatchContract (W1-T24)
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/route.match.log.consumer.pipeline.contract.ts` — RouteMatchLogConsumerPipelineContract (W1-T25)
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/route.match.log.consumer.pipeline.batch.contract.ts` — RouteMatchLogConsumerPipelineBatchContract (W1-T25)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/design.consumer.pipeline.contract.ts` — DesignConsumerPipelineContract (W2-T26)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/design.consumer.pipeline.batch.contract.ts` — DesignConsumerPipelineBatchContract (W2-T26)
 
 ---
 
@@ -38,10 +38,10 @@
 Current guidance:
 - no tranche is currently active
 - baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
-- `W1-T25` is now closed and no longer a candidate
-- `RouteMatchLogContract` consumer visibility gap is **CLOSED**
-- **Third CPF log consumer bridge delivered** — `RouteMatchLogConsumerPipelineContract` exposes route matching log consumer-visibly
-- Routing observability chain complete: RouteMatchContract → RouteMatchLogContract → RouteMatchLogConsumerPipelineContract
+- `W2-T26` is now closed and no longer a candidate
+- `DesignContract` consumer visibility gap is **CLOSED**
+- **Fourth CPF consumer bridge delivered** — `DesignConsumerPipelineContract` exposes design plan consumer-visibly
+- Design orchestration chain complete: DesignContract → DesignConsumerPipelineContract → DesignConsumerPipelineBatchContract
 - next move requires a fresh `GC-018` survey — look for the next highest-value unbridged contract in CPF, EPF, or GEF
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`

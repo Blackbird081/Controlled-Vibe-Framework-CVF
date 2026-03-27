@@ -1024,6 +1024,17 @@
         "LearningStorageConsumerPipelineBatchContract",
         "createLearningStorageConsumerPipelineBatchContract"
       ]
+    },
+    {
+      "scope": "LPF FeedbackLedger Consumer Pipeline (W4-T17 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/feedback.ledger.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackLedgerConsumerPipelineContract",
+        "createFeedbackLedgerConsumerPipelineContract"
+      ]
     }
   ]
 }

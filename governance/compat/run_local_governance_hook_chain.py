@@ -25,6 +25,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_governed_file_size.py", "--enforce"],
         ),
         (
+            "governed exception registry integrity",
+            ["python", "governance/compat/check_governed_exception_registry.py", "--enforce"],
+        ),
+        (
             "docs governance compatibility",
             ["python", "governance/compat/check_docs_governance_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),

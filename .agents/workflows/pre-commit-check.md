@@ -5,7 +5,7 @@ description: Run CVF governed file size check before committing a tranche
 ## Pre-Commit Governance Size Check
 
 Run this workflow **before** every `git commit`.
-The git pre-commit hook now runs both checks automatically — this workflow is for early detection before staging.
+The repo-managed git pre-commit hook (`.githooks/pre-commit`) now runs the guard chain automatically once `core.hooksPath` is pointed at `.githooks` — this workflow is for early detection before staging.
 
 ### Step 1: File size advisory
 
@@ -32,6 +32,8 @@ python governance/compat/check_governed_exception_registry.py --enforce
 This guard catches **unauthorized modifications** to the exception registry:
 - `approvedMaxLines` bumped beyond `maxApprovableLines` ceiling → **BLOCKED**
 - `approvedMaxLines` bumped > `maxAllowedBumpPercent` above hard threshold → **BLOCKED**
+- existing `approvedMaxLines` changed from `HEAD` → **BLOCKED**
+- new exception entry added in the normal commit path → **BLOCKED**
 - Missing required fields, duplicate paths, invalid status → **BLOCKED**
 
 If exits non-zero → the registry was modified incorrectly. See Fix section.
@@ -48,9 +50,9 @@ If exits non-zero → the registry was modified incorrectly. See Fix section.
 - Required fields: `path`, `fileClass`, `approvedMaxLines`, `status: "ACTIVE_EXCEPTION"`, `rationale`, `requiredFollowup`
 - `approvedMaxLines` MUST stay within `maxApprovableLines` ceiling AND within `maxAllowedBumpPercent` of `hardThresholdLines`
 - Run Step 3 to confirm the registry is internally consistent
-- If Step 3 blocks → the bump is too large, requires human review and schema change
+- If Step 3 blocks because the entry is new or `approvedMaxLines` changed from `HEAD` → stop. Exception creation/bump now requires explicit human review and a deliberate override path; agents must not self-authorize it.
 
-> ⚠️ **Do NOT bump `approvedMaxLines` as a quick fix for a growing file.** The registry guard is enforced at pre-commit and will reject illegitimate bumps automatically.
+> ⚠️ **Do NOT bump `approvedMaxLines` as a quick fix for a growing file.** Existing exception caps are frozen in the normal pre-commit path, and the guard will reject self-authorized bumps automatically.
 
 ### Step 4: Commit
 
@@ -59,6 +61,6 @@ git add -A
 git commit -F .git_commit_msg.txt
 ```
 
-> The pre-commit hook (`.git/hooks/pre-commit`) now runs both guards automatically. A commit will be blocked if either guard fails.
+> The pre-commit hook (`.githooks/pre-commit`, installed via `scripts/install-cvf-git-hooks.ps1`) now runs the hook chain automatically. A commit will be blocked if either GC-023 guard fails.
 
 > ⚠️ Always write the commit message to `.git_commit_msg.txt` and use `git commit -F` to avoid PowerShell multi-line string issues.

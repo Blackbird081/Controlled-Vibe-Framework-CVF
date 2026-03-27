@@ -13,69 +13,69 @@
       "forbiddenPatterns": ["ContextPackagerConsumerPipelineBatchContract", "createContextPackagerConsumerPipelineBatchContract"]
     },
     {
-      \"scope\": \"CPF Context Enrichment Consumer Pipeline (W2-T34 CP1)\",
-      \"canonicalFile\": \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.enrichment.consumer.pipeline.test.ts\",
-      \"forbiddenFiles\": [
-        \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts\"
+      "scope": "CPF Context Enrichment Consumer Pipeline (W2-T34 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.enrichment.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
       ],
-      \"forbiddenPatterns\": [
-        \"ContextEnrichmentConsumerPipelineContract\",
-        \"createContextEnrichmentConsumerPipelineContract\"
+      "forbiddenPatterns": [
+        "ContextEnrichmentConsumerPipelineContract",
+        "createContextEnrichmentConsumerPipelineContract"
       ]
     },
     {
-      \"scope\": \"CPF Context Enrichment Consumer Pipeline Batch (W2-T34 CP2)\",
-      \"canonicalFile\": \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.enrichment.consumer.pipeline.test.ts\",
-      \"forbiddenFiles\": [
-        \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts\"
+      "scope": "CPF Context Enrichment Consumer Pipeline Batch (W2-T34 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.enrichment.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
       ],
-      \"forbiddenPatterns\": [
-        \"ContextEnrichmentConsumerPipelineBatchContract\",
-        \"createContextEnrichmentConsumerPipelineBatchContract\"
+      "forbiddenPatterns": [
+        "ContextEnrichmentConsumerPipelineBatchContract",
+        "createContextEnrichmentConsumerPipelineBatchContract"
       ]
     },
     {
-      \"scope\": \"CPF Boardroom Round Consumer Pipeline (W2-T33 CP1)\",
-      \"canonicalFile\": \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.round.consumer.pipeline.test.ts\",
-      \"forbiddenFiles\": [
-        \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts\"
+      "scope": "CPF Boardroom Round Consumer Pipeline (W2-T33 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.round.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
       ],
-      \"forbiddenPatterns\": [
-        \"BoardroomRoundConsumerPipelineContract\",
-        \"createBoardroomRoundConsumerPipelineContract\"
+      "forbiddenPatterns": [
+        "BoardroomRoundConsumerPipelineContract",
+        "createBoardroomRoundConsumerPipelineContract"
       ]
     },
     {
-      \"scope\": \"CPF Boardroom Round Consumer Pipeline Batch (W2-T33 CP2)\",
-      \"canonicalFile\": \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.round.consumer.pipeline.test.ts\",
-      \"forbiddenFiles\": [
-        \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts\"
+      "scope": "CPF Boardroom Round Consumer Pipeline Batch (W2-T33 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.round.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
       ],
-      \"forbiddenPatterns\": [
-        \"BoardroomRoundConsumerPipelineBatchContract\",
-        \"createBoardroomRoundConsumerPipelineBatchContract\"
+      "forbiddenPatterns": [
+        "BoardroomRoundConsumerPipelineBatchContract",
+        "createBoardroomRoundConsumerPipelineBatchContract"
       ]
     },
     {
-      \"scope\": \"CPF Context Build Consumer Pipeline (W2-T32 CP1)\",
-      \"canonicalFile\": \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.consumer.pipeline.test.ts\",
-      \"forbiddenFiles\": [
-        \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts\"
+      "scope": "CPF Context Build Consumer Pipeline (W2-T32 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
       ],
-      \"forbiddenPatterns\": [
-        \"ContextBuildConsumerPipelineContract\",
-        \"createContextBuildConsumerPipelineContract\"
+      "forbiddenPatterns": [
+        "ContextBuildConsumerPipelineContract",
+        "createContextBuildConsumerPipelineContract"
       ]
     },
     {
-      \"scope\": \"CPF Context Build Consumer Pipeline Batch (W2-T32 CP2)\",
-      \"canonicalFile\": \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.consumer.pipeline.test.ts\",
-      \"forbiddenFiles\": [
-        \"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts\"
+      "scope": "CPF Context Build Consumer Pipeline Batch (W2-T32 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
       ],
-      \"forbiddenPatterns\": [
-        \"ContextBuildConsumerPipelineBatchContract\",
-        \"createContextBuildConsumerPipelineBatchContract\"
+      "forbiddenPatterns": [
+        "ContextBuildConsumerPipelineBatchContract",
+        "createContextBuildConsumerPipelineBatchContract"
       ]
     },
     {
@@ -1457,3 +1457,4 @@
     }
   ]
 }
+

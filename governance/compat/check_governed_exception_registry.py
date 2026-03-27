@@ -4,11 +4,16 @@ CVF Exception Registry Integrity Guard (GC-023 companion).
 
 Validates that the CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json
 is internally consistent and that no entry exceeds the per-class
-maxApprovableLines ceiling.
+maxApprovableLines ceiling. Existing exception entries are treated as
+governed records and may not be self-authorized through the normal
+commit path.
 
 Catches:
   - approvedMaxLines > maxApprovableLines (bump cap exceeded)
   - approvedMaxLines <= hardThresholdLines (exception not needed)
+  - missing maxAllowedBumpPercent on a threshold class
+  - new exception entries added without manual review
+  - approvedMaxLines changed from the committed baseline
   - missing required fields
   - duplicate path entries
   - status not in allowed values
@@ -21,6 +26,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -37,6 +43,30 @@ def _read_registry(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _read_head_registry(registry_path: Path) -> dict[str, Any] | None:
+    try:
+        rel_path = registry_path.resolve().relative_to(REPO_ROOT)
+    except ValueError:
+        return None
+
+    proc = subprocess.run(
+        ["git", "show", f"HEAD:{rel_path.as_posix()}"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+    if proc.returncode != 0:
+        return None
+
+    try:
+        return json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        return None
+
+
 def validate(registry_path: Path) -> dict[str, Any]:
     violations: list[dict[str, Any]] = []
 
@@ -49,10 +79,17 @@ def validate(registry_path: Path) -> dict[str, Any]:
         }
 
     registry = _read_registry(registry_path)
+    head_registry = _read_head_registry(registry_path)
     thresholds: dict[str, Any] = registry.get("thresholds", {})
     exceptions: list[Any] = registry.get("exceptions", [])
+    head_exceptions: dict[str, Any] = {}
 
-    # ----- Check schema has maxApprovableLines for each class -----
+    if head_registry:
+        for entry in head_registry.get("exceptions", []):
+            if isinstance(entry, dict) and entry.get("path"):
+                head_exceptions[entry["path"]] = entry
+
+    # ----- Check schema has required governance controls for each class -----
     for cls, cfg in thresholds.items():
         if "maxApprovableLines" not in cfg:
             violations.append({
@@ -60,6 +97,14 @@ def validate(registry_path: Path) -> dict[str, Any]:
                 "message": (
                     f"Threshold class '{cls}' is missing 'maxApprovableLines'. "
                     "All threshold classes must define this ceiling."
+                ),
+            })
+        if "maxAllowedBumpPercent" not in cfg:
+            violations.append({
+                "type": "schema_missing_max_bump_percent",
+                "message": (
+                    f"Threshold class '{cls}' is missing 'maxAllowedBumpPercent'. "
+                    "All threshold classes must define this ceiling so GC-023 fails closed."
                 ),
             })
 
@@ -130,6 +175,30 @@ def validate(registry_path: Path) -> dict[str, Any]:
                 "message": f"Exception entry references unknown fileClass '{file_class}'.",
             })
             continue
+
+        baseline_entry = head_exceptions.get(path_val)
+        if head_registry and path_val and baseline_entry is None:
+            violations.append({
+                "type": "new_exception_requires_manual_review",
+                "path": label,
+                "message": (
+                    "This exception entry does not exist in HEAD. Adding a governed file-size "
+                    "exception requires explicit human review and must not be self-authorized "
+                    "through the normal pre-commit path."
+                ),
+            })
+        elif baseline_entry is not None:
+            baseline_approved_max = baseline_entry.get("approvedMaxLines")
+            if baseline_approved_max != approved_max:
+                violations.append({
+                    "type": "approved_max_changed_from_head",
+                    "path": label,
+                    "message": (
+                        f"approvedMaxLines changed from HEAD value {baseline_approved_max} "
+                        f"to {approved_max}. Existing governed exceptions are frozen in the "
+                        "normal commit path and require explicit human-approved override."
+                    ),
+                })
 
         # Hard ceiling check: approvedMaxLines must not exceed maxApprovableLines
         if max_approvable and approved_max > max_approvable:

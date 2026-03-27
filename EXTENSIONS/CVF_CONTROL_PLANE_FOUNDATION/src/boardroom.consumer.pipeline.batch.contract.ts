@@ -1,49 +1,60 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
+import type {
+  BoardroomConsumerPipelineResult,
+} from "./boardroom.consumer.pipeline.contract";
 import type { BoardroomDecision } from "./boardroom.contract";
-import type { BoardroomConsumerPipelineResult } from "./boardroom.consumer.pipeline.contract";
+import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// --- Types ---
 
-export interface BoardroomConsumerPipelineBatch {
+export interface BoardroomConsumerPipelineBatchResult {
   batchId: string;
-  createdAt: string;
-  results: BoardroomConsumerPipelineResult[];
-  totalResults: number;
-  dominantTokenBudget: number;
-  rejectCount: number;
-  escalateCount: number;
   batchHash: string;
+  createdAt: string;
+  totalSessions: number;
+  totalRounds: number;
+  overallDominantDecision: BoardroomDecision;
+  totalClarifications: number;
+  dominantTokenBudget: number;
+  results: BoardroomConsumerPipelineResult[];
 }
 
 export interface BoardroomConsumerPipelineBatchContractDependencies {
   now?: () => string;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// --- Helpers ---
 
-function countDecision(
-  results: BoardroomConsumerPipelineResult[],
-  decision: BoardroomDecision,
-): number {
-  return results.filter(
-    (r) => r.multiRoundSummary.dominantDecision === decision,
-  ).length;
+const DECISION_PRIORITY: Record<BoardroomDecision, number> = {
+  PROCEED: 4,
+  REJECT: 3,
+  AMEND_PLAN: 2,
+  ESCALATE: 1,
+};
+
+function selectDominantDecision(
+  decisionCounts: Map<BoardroomDecision, number>,
+): BoardroomDecision {
+  if (decisionCounts.size === 0) return "PROCEED";
+
+  let maxCount = 0;
+  let dominantDecision: BoardroomDecision = "PROCEED";
+
+  for (const [decision, count] of decisionCounts.entries()) {
+    if (
+      count > maxCount ||
+      (count === maxCount &&
+        DECISION_PRIORITY[decision] > DECISION_PRIORITY[dominantDecision])
+    ) {
+      maxCount = count;
+      dominantDecision = decision;
+    }
+  }
+
+  return dominantDecision;
 }
 
-// ─── Contract ─────────────────────────────────────────────────────────────────
+// --- Contract ---
 
-/**
- * BoardroomConsumerPipelineBatchContract (W1-T16 CP2 — Fast Lane)
- * ---------------------------------------------------------------
- * Aggregates BoardroomConsumerPipelineResult[] into a governed batch.
- *
- * Pattern:
- *   dominantTokenBudget = Math.max(...results.map(r => r.consumerPackage.typedContextPackage.estimatedTokens))
- *   empty batch → dominantTokenBudget = 0, valid hash
- *   batchId ≠ batchHash  (batchId = hash of batchHash only)
- *   rejectCount = count of REJECT dominant decisions
- *   escalateCount = count of ESCALATE dominant decisions
- */
 export class BoardroomConsumerPipelineBatchContract {
   private readonly now: () => string;
 
@@ -55,9 +66,26 @@ export class BoardroomConsumerPipelineBatchContract {
 
   batch(
     results: BoardroomConsumerPipelineResult[],
-  ): BoardroomConsumerPipelineBatch {
+  ): BoardroomConsumerPipelineBatchResult {
     const createdAt = this.now();
 
+    // Aggregate metrics
+    const totalSessions = results.length;
+    const totalRounds = results.length; // Each session = 1 round
+    const totalClarifications = results.reduce(
+      (sum, r) => sum + r.boardroomSession.clarifications.length,
+      0,
+    );
+
+    // Compute dominant decision (frequency-based with tie-break)
+    const decisionCounts = new Map<BoardroomDecision, number>();
+    results.forEach((r) => {
+      const decision = r.boardroomSession.decision.decision;
+      decisionCounts.set(decision, (decisionCounts.get(decision) ?? 0) + 1);
+    });
+    const overallDominantDecision = selectDominantDecision(decisionCounts);
+
+    // Compute dominant token budget
     const dominantTokenBudget =
       results.length === 0
         ? 0
@@ -67,34 +95,36 @@ export class BoardroomConsumerPipelineBatchContract {
             ),
           );
 
-    const rejectCount = countDecision(results, "REJECT");
-    const escalateCount = countDecision(results, "ESCALATE");
-
+    // Compute batch hash
     const batchHash = computeDeterministicHash(
-      "w1-t16-cp2-boardroom-consumer-pipeline-batch",
-      ...results.map((r) => r.pipelineHash),
+      "w1-t27-cp2-boardroom-batch",
+      totalSessions.toString(),
+      totalRounds.toString(),
+      overallDominantDecision,
+      totalClarifications.toString(),
+      dominantTokenBudget.toString(),
       createdAt,
     );
 
+    // Compute batch ID
     const batchId = computeDeterministicHash(
-      "w1-t16-cp2-batch-id",
+      "w1-t27-cp2-boardroom-batch-id",
       batchHash,
     );
 
     return {
       batchId,
-      createdAt,
-      results,
-      totalResults: results.length,
-      dominantTokenBudget,
-      rejectCount,
-      escalateCount,
       batchHash,
+      createdAt,
+      totalSessions,
+      totalRounds,
+      overallDominantDecision,
+      totalClarifications,
+      dominantTokenBudget,
+      results,
     };
   }
 }
-
-// ─── Factory ──────────────────────────────────────────────────────────────────
 
 export function createBoardroomConsumerPipelineBatchContract(
   dependencies?: BoardroomConsumerPipelineBatchContractDependencies,

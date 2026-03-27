@@ -1,14 +1,4 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
-import {
-  BoardroomMultiRoundContract,
-  createBoardroomMultiRoundContract,
-} from "./boardroom.multi.round.contract";
-import type {
-  BoardroomMultiRoundSummary,
-  BoardroomMultiRoundContractDependencies,
-} from "./boardroom.multi.round.contract";
-import type { BoardroomRound } from "./boardroom.round.contract";
-import type { BoardroomDecision } from "./boardroom.contract";
+import type { BoardroomSession } from "./boardroom.contract";
 import {
   ControlPlaneConsumerPipelineContract,
   createControlPlaneConsumerPipelineContract,
@@ -19,11 +9,12 @@ import type {
 } from "./consumer.pipeline.contract";
 import type { RankableKnowledgeItem, ScoringWeights } from "./knowledge.ranking.contract";
 import type { SegmentTypeConstraints } from "./context.packager.contract";
+import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// --- Types ---
 
 export interface BoardroomConsumerPipelineRequest {
-  rounds: BoardroomRound[];
+  boardroomSession: BoardroomSession;
   candidateItems?: RankableKnowledgeItem[];
   scoringWeights?: ScoringWeights;
   segmentTypeConstraints?: SegmentTypeConstraints;
@@ -33,119 +24,100 @@ export interface BoardroomConsumerPipelineRequest {
 export interface BoardroomConsumerPipelineResult {
   resultId: string;
   createdAt: string;
-  consumerId?: string;
-  multiRoundSummary: BoardroomMultiRoundSummary;
+  boardroomSession: BoardroomSession;
   consumerPackage: ControlPlaneConsumerPackage;
-  pipelineHash: string;
+  query: string;
+  contextId: string;
   warnings: string[];
+  consumerId: string | undefined;
+  pipelineHash: string;
 }
 
 export interface BoardroomConsumerPipelineContractDependencies {
   now?: () => string;
-  multiRoundContractDeps?: BoardroomMultiRoundContractDependencies;
-  consumerPipelineDeps?: ControlPlaneConsumerPipelineContractDependencies;
 }
 
-// ─── Warning Builder ──────────────────────────────────────────────────────────
+// --- Contract ---
 
-function buildBoardroomWarnings(decision: BoardroomDecision): string[] {
-  if (decision === "REJECT") {
-    return ["[boardroom] reject verdict — risk review required"];
-  }
-  if (decision === "ESCALATE") {
-    return ["[boardroom] escalation verdict — governance review required"];
-  }
-  if (decision === "AMEND_PLAN") {
-    return ["[boardroom] amend verdict — plan amendment required"];
-  }
-  return [];
-}
-
-// ─── Contract ─────────────────────────────────────────────────────────────────
-
-/**
- * BoardroomConsumerPipelineContract (W1-T16)
- * ------------------------------------------
- * CPF-internal consumer bridge.
- *
- * Internal chain (single execute call):
- *   BoardroomMultiRoundContract.summarize(rounds)       → BoardroomMultiRoundSummary
- *   ControlPlaneConsumerPipelineContract.execute(...)   → ControlPlaneConsumerPackage
- *   → BoardroomConsumerPipelineResult
- *
- * Determinism: all sub-contracts share the same injected now().
- * Warnings: REJECT → risk review; ESCALATE → governance review; AMEND_PLAN → plan amendment.
- */
 export class BoardroomConsumerPipelineContract {
+  private readonly consumerPipelineContract: ControlPlaneConsumerPipelineContract;
   private readonly now: () => string;
-  private readonly multiRoundContract: BoardroomMultiRoundContract;
-  private readonly consumerPipeline: ControlPlaneConsumerPipelineContract;
 
   constructor(
     dependencies: BoardroomConsumerPipelineContractDependencies = {},
   ) {
     this.now = dependencies.now ?? (() => new Date().toISOString());
-    this.multiRoundContract = createBoardroomMultiRoundContract({
-      ...dependencies.multiRoundContractDeps,
+    const consumerDeps: ControlPlaneConsumerPipelineContractDependencies = {
       now: this.now,
-    });
-    this.consumerPipeline = createControlPlaneConsumerPipelineContract({
-      ...dependencies.consumerPipelineDeps,
-      now: this.now,
-    });
+    };
+    this.consumerPipelineContract = createControlPlaneConsumerPipelineContract(consumerDeps);
   }
 
   execute(
     request: BoardroomConsumerPipelineRequest,
   ): BoardroomConsumerPipelineResult {
     const createdAt = this.now();
+    const { boardroomSession } = request;
 
-    // Step 1: summarize boardroom rounds
-    const multiRoundSummary: BoardroomMultiRoundSummary =
-      this.multiRoundContract.summarize(request.rounds);
+    // Derive query from boardroom session
+    const totalRounds = 1; // BoardroomSession represents a single session/round
+    const decision = boardroomSession.decision.decision;
+    const clarificationCount = boardroomSession.clarifications.length;
+    const query = `BoardroomSession: ${totalRounds} rounds, decision=${decision}, clarifications=${clarificationCount}`;
 
-    // Step 2: derive query from summary text and build consumer package
-    const query = multiRoundSummary.summary.slice(0, 120);
-    const consumerPackage: ControlPlaneConsumerPackage =
-      this.consumerPipeline.execute({
-        rankingRequest: {
-          query,
-          contextId: multiRoundSummary.summaryId,
-          candidateItems: request.candidateItems ?? [],
-          scoringWeights: request.scoringWeights,
-        },
-        segmentTypeConstraints: request.segmentTypeConstraints,
-      });
+    // Extract contextId
+    const contextId = boardroomSession.sessionId;
 
-    // Step 3: build warnings based on dominant decision
-    const warnings = buildBoardroomWarnings(multiRoundSummary.dominantDecision);
+    // Build warnings
+    const warnings: string[] = [];
+    if (totalRounds === 0) {
+      warnings.push("WARNING_NO_ROUNDS");
+    }
+    const pendingClarifications = boardroomSession.clarifications.filter(
+      (c) => c.status === "pending",
+    );
+    if (pendingClarifications.length > 0) {
+      warnings.push("WARNING_PENDING_CLARIFICATIONS");
+    }
 
-    // Step 4: deterministic hash + resultId
+    // Build consumer package
+    const consumerPackage = this.consumerPipelineContract.execute({
+      rankingRequest: {
+        query,
+        contextId,
+        candidateItems: request.candidateItems ?? [],
+        scoringWeights: request.scoringWeights,
+      },
+      segmentTypeConstraints: request.segmentTypeConstraints,
+    });
+
+    // Compute pipeline hash
     const pipelineHash = computeDeterministicHash(
-      "w1-t16-cp1-boardroom-consumer-pipeline",
-      multiRoundSummary.summaryHash,
+      "w1-t27-cp1-boardroom-consumer-pipeline",
+      boardroomSession.sessionHash,
       consumerPackage.pipelineHash,
+      `warnings=${warnings.length}`,
       createdAt,
     );
 
     const resultId = computeDeterministicHash(
-      "w1-t16-cp1-result-id",
+      "w1-t27-cp1-result-id",
       pipelineHash,
     );
 
     return {
       resultId,
       createdAt,
-      consumerId: request.consumerId,
-      multiRoundSummary,
+      boardroomSession,
       consumerPackage,
-      pipelineHash,
+      query,
+      contextId,
       warnings,
+      consumerId: request.consumerId,
+      pipelineHash,
     };
   }
 }
-
-// ─── Factory ──────────────────────────────────────────────────────────────────
 
 export function createBoardroomConsumerPipelineContract(
   dependencies?: BoardroomConsumerPipelineContractDependencies,

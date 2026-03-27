@@ -203,7 +203,7 @@ export {
   createBoardroomConsumerPipelineBatchContract,
 } from "./boardroom.consumer.pipeline.batch.contract";
 export type {
-  BoardroomConsumerPipelineBatch,
+  BoardroomConsumerPipelineBatchResult,
   BoardroomConsumerPipelineBatchContractDependencies,
 } from "./boardroom.consumer.pipeline.batch.contract";
 

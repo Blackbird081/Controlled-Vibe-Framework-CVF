@@ -1,3 +1,24 @@
+// W2-T30 — Boardroom Multi-Round Consumer Pipeline Bridge (CP1)
+export {
+  BoardroomMultiRoundConsumerPipelineContract,
+  createBoardroomMultiRoundConsumerPipelineContract,
+} from "./boardroom.multi.round.consumer.pipeline.contract";
+export type {
+  BoardroomMultiRoundConsumerPipelineRequest,
+  BoardroomMultiRoundConsumerPipelineResult,
+  BoardroomMultiRoundConsumerPipelineContractDependencies,
+} from "./boardroom.multi.round.consumer.pipeline.contract";
+
+// W2-T30 — Boardroom Multi-Round Consumer Pipeline Batch (CP2)
+export {
+  BoardroomMultiRoundConsumerPipelineBatchContract,
+  createBoardroomMultiRoundConsumerPipelineBatchContract,
+} from "./boardroom.multi.round.consumer.pipeline.batch.contract";
+export type {
+  BoardroomMultiRoundConsumerPipelineBatchResult,
+  BoardroomMultiRoundConsumerPipelineBatchContractDependencies,
+} from "./boardroom.multi.round.consumer.pipeline.batch.contract";
+
 // W1-T30 — Route Match Consumer Bridge (CP1–CP2)
 export {
   RouteMatchConsumerPipelineContract,

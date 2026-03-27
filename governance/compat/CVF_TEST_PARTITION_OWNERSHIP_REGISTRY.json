@@ -1,6 +1,28 @@
 {
   "partitions": [
     {
+      "scope": "CPF Boardroom Multi-Round Consumer Pipeline (W2-T30 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.multi.round.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomMultiRoundConsumerPipelineContract",
+        "createBoardroomMultiRoundConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Multi-Round Consumer Pipeline Batch (W2-T30 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.multi.round.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomMultiRoundConsumerPipelineBatchContract",
+        "createBoardroomMultiRoundConsumerPipelineBatchContract"
+      ]
+    },
+    {
       "scope": "EPF Streaming Execution Consumer Pipeline (W2-T29 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/streaming.execution.consumer.pipeline.test.ts",
       "forbiddenFiles": [

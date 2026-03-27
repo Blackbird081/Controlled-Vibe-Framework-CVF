@@ -6,7 +6,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-27` (W1-T28 COMPLETE, AI Gateway Consumer Pipeline Bridge — SIXTH CPF CONSUMER BRIDGE)
+> Last refreshed: `2026-03-27` (W1-T29 COMPLETE, Intake Consumer Pipeline Bridge — SEVENTH CPF CONSUMER BRIDGE)
 
 ---
 
@@ -19,7 +19,7 @@ Memory class: POINTER_RECORD
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T22 / W2-T24 / W3-T18 / W4-T13 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
-| Current active tranche | `NO ACTIVE TRANCHE — last canonical closure W1-T28` |
+| Current active tranche | `NO ACTIVE TRANCHE — last canonical closure W1-T29` |
 | Final reconciliation `W5` | `DONE FOR CURRENT CYCLE` |
 
 ---
@@ -122,6 +122,7 @@ Memory class: POINTER_RECORD
 | `W2-T26` design consumer pipeline bridge | `DONE` |
 | `W1-T27` boardroom consumer pipeline bridge | `DONE` |
 | `W1-T28` ai gateway consumer pipeline bridge | `DONE` |
+| `W1-T29` intake consumer pipeline bridge | `DONE` |
 
 ---
 
@@ -132,7 +133,7 @@ Memory class: POINTER_RECORD
 | `W6-T1` to `W6-T42` checkpoint archive | `DONE / ARCHIVED` |
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
-| Current canonical validation posture | `W1-T28 COMPLETE — SIXTH CPF CONSUMER BRIDGE DELIVERED` |
+| Current canonical validation posture | `W1-T29 COMPLETE — SEVENTH CPF CONSUMER BRIDGE DELIVERED` |
 
 ---
 
@@ -152,7 +153,7 @@ Memory class: POINTER_RECORD
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes post-cycle records through `W4-T11`)
-- Latest GC-026 tracker sync note: `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T28_COMPLETION_2026-03-27.md`
-- Current closure anchor: `docs/reviews/CVF_W1_T28_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
-- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T28_AI_GATEWAY_CONSUMER_BRIDGE_2026-03-27.md` (10/10 — W1-T28 CLOSED)
+- Latest GC-026 tracker sync note: `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T29_COMPLETION_2026-03-27.md`
+- Current closure anchor: `docs/reviews/CVF_W1_T29_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
+- Current continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T29_INTAKE_CONSUMER_BRIDGE_2026-03-27.md` (10/10 — W1-T29 CLOSED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

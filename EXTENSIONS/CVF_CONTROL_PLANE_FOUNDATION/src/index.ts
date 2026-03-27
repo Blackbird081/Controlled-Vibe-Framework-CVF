@@ -1,3 +1,26 @@
+// W2-T33 — Boardroom Round Consumer Pipeline Bridge (CP1)
+export {
+  BoardroomRoundConsumerPipelineContract,
+  createBoardroomRoundConsumerPipelineContract,
+} from "./boardroom.round.consumer.pipeline.contract";
+export type {
+  BoardroomRoundConsumerPipelineRequest,
+  BoardroomRoundConsumerPipelineResult,
+  BoardroomRoundConsumerPipelineContractDependencies,
+} from "./boardroom.round.consumer.pipeline.contract";
+
+// W2-T33 — Boardroom Round Consumer Pipeline Batch (CP2)
+export {
+  BoardroomRoundConsumerPipelineBatchContract,
+  createBoardroomRoundConsumerPipelineBatchContract,
+} from "./boardroom.round.consumer.pipeline.batch.contract";
+export type {
+  BoardroomRoundConsumerPipelineBatchResult,
+  BoardroomRoundConsumerPipelineBatchContractDependencies,
+  BoardroomRoundFocusCounts,
+  DominantRefinementFocus,
+} from "./boardroom.round.consumer.pipeline.batch.contract";
+
 // W2-T32 — Context Build Consumer Pipeline Bridge (CP1)
 export {
   ContextBuildConsumerPipelineContract,

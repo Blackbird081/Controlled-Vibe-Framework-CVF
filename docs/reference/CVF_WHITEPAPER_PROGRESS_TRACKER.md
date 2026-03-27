@@ -6,7 +6,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-27` (W2-T29 COMPLETE, Streaming Execution Consumer Pipeline Bridge — THIRD EPF CONSUMER BRIDGE)
+> Last refreshed: `2026-03-27` (W2-T29 COMPLETE, Streaming Execution Consumer Pipeline Bridge — THIRD EPF CONSUMER BRIDGE, post-closure cleanup synced)
 
 ---
 
@@ -157,7 +157,7 @@ Memory class: POINTER_RECORD
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes post-cycle records through `W4-T11`)
-- Latest GC-026 tracker sync note: `docs/baselines/CVF_GC026_TRACKER_SYNC_W2_T29_CLOSURE_2026-03-27.md`
+- Latest GC-026 tracker sync note: `docs/baselines/CVF_GC026_TRACKER_SYNC_W2_T29_CLOSURE_2026-03-27.md` (includes post-closure tracker cleanup supplement)
 - Current closure anchor: `docs/reviews/CVF_W2_T29_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
 - Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T29_STREAMING_EXECUTION_CONSUMER_BRIDGE_2026-03-27.md` (10/10 — W2-T29 CLOSED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

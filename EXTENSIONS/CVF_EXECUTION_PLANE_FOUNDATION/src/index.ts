@@ -1,3 +1,14 @@
+// W2-T25 — CommandRuntime Consumer Pipeline Bridge (CP1)
+export {
+  CommandRuntimeConsumerPipelineContract,
+  createCommandRuntimeConsumerPipelineContract,
+} from "./command.runtime.consumer.pipeline.contract";
+export type {
+  CommandRuntimeConsumerPipelineRequest,
+  CommandRuntimeConsumerPipelineResult,
+  CommandRuntimeConsumerPipelineContractDependencies,
+} from "./command.runtime.consumer.pipeline.contract";
+
 // W2-T24 — FeedbackRouting Consumer Pipeline Bridge (CP2)
 export {
   FeedbackRoutingConsumerPipelineBatchContract,

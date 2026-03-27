@@ -105,6 +105,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`
 - `reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`
 - `reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
+- `reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
 - `reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
 - `reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`
 - `reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`

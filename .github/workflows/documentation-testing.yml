@@ -323,6 +323,26 @@ jobs:
         run: |
           python governance/compat/check_guard_registry.py --enforce
 
+  guard-authoring-standard:
+    name: Guard Authoring Standard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-030 guard authoring standard
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_guard_authoring_standard.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
   enterprise-evidence-pack:
     name: Enterprise Evidence Pack
     runs-on: ubuntu-latest
@@ -506,7 +526,7 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [docs-governance-compat, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, release-manifest-consistency, cross-channel-guard-compat, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
+    needs: [docs-governance-compat, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
     if: always()
     
     steps:
@@ -525,8 +545,12 @@ jobs:
           echo "Incremental test log rotation: ${{ needs.incremental-test-log-rotation.result }}"
           echo "Conformance trace rotation: ${{ needs.conformance-trace-rotation.result }}"
           echo "Python automation size: ${{ needs.python-automation-size.result }}"
+          echo "Governed file size: ${{ needs.governed-file-size.result }}"
+          echo "Test partition ownership: ${{ needs.test-partition-ownership.result }}"
           echo "Release manifest consistency: ${{ needs.release-manifest-consistency.result }}"
           echo "Cross-channel guard compat: ${{ needs.cross-channel-guard-compat.result }}"
+          echo "Guard registry compat: ${{ needs.guard-registry-compat.result }}"
+          echo "Guard authoring standard: ${{ needs.guard-authoring-standard.result }}"
           echo "Enterprise evidence pack: ${{ needs.enterprise-evidence-pack.result }}"
           echo "Conformance artifact consistency: ${{ needs.conformance-artifact-consistency.result }}"
           echo "Conformance golden diff: ${{ needs.conformance-golden-diff.result }}"

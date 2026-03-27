@@ -107,6 +107,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_guard_registry.py", "--enforce"],
         ),
         (
+            "guard authoring standard compatibility",
+            ["python", "governance/compat/check_guard_authoring_standard.py", "--enforce"],
+        ),
+        (
             "cross-channel guard contract compatibility",
             ["python", "governance/compat/check_guard_contract_compat.py", "--enforce"],
         ),

@@ -160,6 +160,13 @@ Personal AI usage unrelated to company work is excluded.
      - Touched packages must not rely on “green local test files” as a substitute for package-level verification.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_extension_package_check.py`.
+ 24. `GC-030` new or materially revised governance guards must satisfy the canonical authoring standard before commit:
+     - This rule applies to any new guard and any existing guard whose rule or enforcement surface is materially revised.
+     - Required metadata: `Guard Class`, `Status`, `Applies to`, and `Enforced by`.
+     - Required sections: `Purpose`, `Rule`, `Enforcement Surface`, `Related Artifacts`, and `Final Clause`.
+     - If a guard claims a `GC-*` control ID, that ID must be synchronized with the control matrix and master policy in the same change batch.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GUARD_AUTHORING_STANDARD_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_guard_authoring_standard.py`.
 
 ---
 

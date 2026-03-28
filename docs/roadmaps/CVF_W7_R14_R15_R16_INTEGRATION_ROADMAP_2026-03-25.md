@@ -114,4 +114,5 @@ Canonical draft packets created:
 | W7-T4 Skill Formation Integration | CLOSED DELIVERED 2026-03-28 — GO WITH FIXES applied |
 | W7-T5 Autonomy Lock (P6) + Spec Inference Integration | CLOSED DELIVERED 2026-03-28 — P6 + P8 SATISFIED |
 | W7-T6 Dependency Order (P5) + Runtime/Artifact/Trace | CLOSED DELIVERED 2026-03-28 — P5 SATISFIED, ALL P1-P8 COMPLETE |
-| W7-T7..W7-T10 execution | PENDING — W7-T7+T8 FULLY UNBLOCKED |
+| W7-T7 Planner + Decision Engine | IN EXECUTION — 2026-03-28 |
+| W7-T8..W7-T10 execution | PENDING |

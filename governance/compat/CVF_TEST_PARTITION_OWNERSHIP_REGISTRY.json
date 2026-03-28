@@ -1,6 +1,18 @@
 {
   "partitions": [
     {
+      "scope": "CPF Knowledge Query Batch Consumer Pipeline (W2-T37 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.batch.consumer.pipeline.test.ts",
+      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
+      "forbiddenPatterns": ["KnowledgeQueryBatchConsumerPipelineContract", "createKnowledgeQueryBatchConsumerPipelineContract"]
+    },
+    {
+      "scope": "CPF Knowledge Query Batch Consumer Pipeline Batch (W2-T37 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.batch.consumer.pipeline.test.ts",
+      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
+      "forbiddenPatterns": ["KnowledgeQueryBatchConsumerPipelineBatchContract", "createKnowledgeQueryBatchConsumerPipelineBatchContract"]
+    },
+    {
       "scope": "CPF Context Build Batch Consumer Pipeline (W2-T36 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.batch.consumer.pipeline.test.ts",
       "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],

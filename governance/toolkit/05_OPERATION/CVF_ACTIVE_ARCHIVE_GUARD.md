@@ -3,7 +3,7 @@
 **Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
 **Status:** Active archive-maintenance contract for dated operational documents.
 **Applies to:** Managed roots such as `docs/` and `ECOSYSTEM/strategy/` plus their local `archive/` subdirectories.
-**Enforced by:** `scripts/cvf_active_archive.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
+**Enforced by:** `scripts/cvf_active_archive.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`
 
 ## Purpose
 
@@ -90,12 +90,31 @@ Before archive move, each candidate is scanned for reference impact:
 - the candidate is blocked if inbound active reference count exceeds threshold
 - the candidate is blocked if active markdown links resolve directly to that file
 
+### Baseline Rule
+
+Archive cleanup MUST use the latest archive baseline as the default comparison point.
+
+- `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json` is the canonical baseline written by the last successful archive sync
+- default archive review modes (`--dry-run`, `--status`, `--impact-scan`) use incremental scope against that baseline
+- if no baseline exists yet, the script performs a lightweight bootstrap snapshot and freezes the current active set as the initial comparison point without requiring a full-repository scan
+- incremental scope re-checks:
+  - files changed since the baseline
+  - files newly old enough to become archive candidates
+  - previously blocked candidates whose blocking sources changed
+- full-repository archive screening is reserved for bootstrap, recovery, or explicit `--full-scan`
+
 ### Automation Required
 
 Archive management is performed by running:
 
 ```bash
 python scripts/cvf_active_archive.py --execute
+```
+
+To refresh the baseline without moving files:
+
+```bash
+python scripts/cvf_active_archive.py --refresh-baseline
 ```
 
 This script should be run:
@@ -108,6 +127,7 @@ This script should be run:
 
 - active/archive maintenance runs through `scripts/cvf_active_archive.py`
 - active-window classification and protected-set sync run through `governance/compat/check_active_window_registry.py`
+- latest archive baseline is stored in `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`
 - governance drift exists when safe-to-archive files remain active without reason or when archive moves break references
 - remediation requires running the archive script, verifying `CVF_ARCHIVE_INDEX.md`, and resolving `BROKEN-ARCHIVED` findings before more cleanup proceeds
 
@@ -120,12 +140,15 @@ Useful commands:
 | `python scripts/cvf_active_archive.py --link-audit` | detect broken local markdown links |
 | `python scripts/cvf_active_archive.py --repair-broken-archive-links` | restore files still needed by active docs |
 | `python scripts/cvf_active_archive.py --execute` | execute archive migration |
+| `python scripts/cvf_active_archive.py --refresh-baseline` | update the archive baseline without moving files |
 | `python scripts/cvf_active_archive.py --restore` | restore all files from archive |
 | `python scripts/cvf_active_archive.py --status` | show current active vs archive counts |
+| `python scripts/cvf_active_archive.py --dry-run --full-scan` | force one full-repository screening pass |
 
 ## Related Artifacts
 
 - `scripts/cvf_active_archive.py`
+- `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`
 - `governance/compat/check_active_window_registry.py`
 - `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 - `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`

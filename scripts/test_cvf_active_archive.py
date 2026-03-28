@@ -27,6 +27,10 @@ class CvfActiveArchiveTests(unittest.TestCase):
         (self.repo_root / "docs" / "reviews" / "cvf_phase_governance").mkdir(parents=True, exist_ok=True)
         (self.repo_root / "docs" / "logs").mkdir(parents=True, exist_ok=True)
         (self.repo_root / "governance" / "compat").mkdir(parents=True, exist_ok=True)
+        (self.repo_root / "AGENT_HANDOFF.md").write_text(
+            "# handoff\n",
+            encoding="utf-8",
+        )
 
         (self.repo_root / "docs" / "CVF_INCREMENTAL_TEST_LOG.md").write_text(
             "active log\n",
@@ -132,6 +136,145 @@ class CvfActiveArchiveTests(unittest.TestCase):
 
         self.assertNotIn("docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_01.md", archive_candidates)
         self.assertNotIn("docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_01.md", permanent_paths)
+
+    def test_refresh_baseline_writes_incremental_snapshot_file(self) -> None:
+        cutoff = datetime(2026, 3, 25)
+        baseline_path = self.repo_root / "governance" / "compat" / "CVF_ACTIVE_ARCHIVE_BASELINE.json"
+
+        with patch.object(MODULE, "PROJECT_ROOT", self.repo_root):
+            with patch.object(MODULE, "ACTIVE_WINDOW_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_ACTIVE_WINDOW_REGISTRY.json"):
+                MODULE.load_active_window_paths.cache_clear()
+                MODULE.iter_link_scan_source_rel_paths.cache_clear()
+                MODULE.extract_resolved_markdown_targets_for_source.cache_clear()
+                written_path = MODULE.write_archive_baseline(cutoff, full_scan=True)
+
+        self.assertEqual(written_path, baseline_path)
+        self.assertTrue(baseline_path.exists())
+        baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+        self.assertEqual(baseline["scopeMode"], "full")
+        self.assertIn("docs/CVF_OLD_REVIEW_2026-03-01.md", baseline["files"])
+        self.assertEqual(
+            baseline["files"]["docs/CVF_OLD_REVIEW_2026-03-01.md"]["bucket"],
+            "archive_candidate",
+        )
+
+    def test_refresh_baseline_without_prior_state_uses_bootstrap_scope(self) -> None:
+        cutoff = datetime(2026, 3, 25)
+        baseline_path = self.repo_root / "governance" / "compat" / "CVF_ACTIVE_ARCHIVE_BASELINE.json"
+
+        with patch.object(MODULE, "PROJECT_ROOT", self.repo_root):
+            with patch.object(MODULE, "ACTIVE_WINDOW_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_ACTIVE_WINDOW_REGISTRY.json"):
+                MODULE.load_active_window_paths.cache_clear()
+                MODULE.iter_link_scan_source_rel_paths.cache_clear()
+                MODULE.extract_resolved_markdown_targets_for_source.cache_clear()
+                written_path = MODULE.write_archive_baseline(cutoff, full_scan=False)
+
+        self.assertEqual(written_path, baseline_path)
+        baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+        self.assertEqual(baseline["scopeMode"], "bootstrap")
+        self.assertEqual(
+            baseline["files"]["docs/CVF_OLD_REVIEW_2026-03-01.md"]["reason"],
+            "baseline_frozen_keep",
+        )
+
+    def test_incremental_plan_reuses_unchanged_blocked_candidate_from_baseline(self) -> None:
+        cutoff = datetime(2026, 3, 25)
+        baseline_path = self.repo_root / "governance" / "compat" / "CVF_ACTIVE_ARCHIVE_BASELINE.json"
+        baseline_path.write_text(
+            json.dumps(
+                {
+                    "version": 1,
+                    "generatedAt": "2026-03-28T10:00:00",
+                    "gitHead": None,
+                    "cutoffDate": "2026-03-25",
+                    "ageThresholdDays": 3,
+                    "scopeMode": "incremental",
+                    "managedRoots": ["docs", "ECOSYSTEM/strategy"],
+                    "files": {
+                        "docs/CVF_OLD_REVIEW_2026-03-01.md": {
+                            "bucket": "archive_candidate",
+                            "date": "2026-03-01",
+                            "signature": MODULE.compute_file_signature(self.repo_root / "docs" / "CVF_OLD_REVIEW_2026-03-01.md"),
+                            "blocked": True,
+                            "reason": "protected_reference",
+                            "liveReferenceSources": ["AGENT_HANDOFF.md"],
+                            "markdownLinkSources": [],
+                            "protectedReferenceSources": ["AGENT_HANDOFF.md"],
+                        }
+                    },
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+        with patch.object(MODULE, "PROJECT_ROOT", self.repo_root):
+            with patch.object(MODULE, "ACTIVE_WINDOW_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_ACTIVE_WINDOW_REGISTRY.json"):
+                MODULE.load_active_window_paths.cache_clear()
+                MODULE.iter_link_scan_source_rel_paths.cache_clear()
+                MODULE.extract_resolved_markdown_targets_for_source.cache_clear()
+                with patch.object(MODULE, "collect_incremental_changed_paths", return_value=set()):
+                    with patch.object(MODULE, "evaluate_candidate_risk", side_effect=AssertionError("should reuse baseline result")):
+                        scans, risks, metadata = MODULE.build_plan(cutoff, full_scan=False)
+
+        self.assertEqual(metadata.scope_mode, "incremental")
+        self.assertEqual(metadata.reused_candidate_count, 1)
+        self.assertEqual(metadata.evaluated_candidate_count, 0)
+        self.assertTrue(risks["docs/CVF_OLD_REVIEW_2026-03-01.md"].blocked)
+
+    def test_incremental_plan_rechecks_newly_aged_candidate(self) -> None:
+        cutoff = datetime(2026, 3, 25)
+        baseline_path = self.repo_root / "governance" / "compat" / "CVF_ACTIVE_ARCHIVE_BASELINE.json"
+        baseline_path.write_text(
+            json.dumps(
+                {
+                    "version": 1,
+                    "generatedAt": "2026-03-24T10:00:00",
+                    "gitHead": None,
+                    "cutoffDate": "2026-03-24",
+                    "ageThresholdDays": 3,
+                    "scopeMode": "incremental",
+                    "managedRoots": ["docs", "ECOSYSTEM/strategy"],
+                    "files": {
+                        "docs/CVF_OLD_REVIEW_2026-03-01.md": {
+                            "bucket": "active_dated",
+                            "date": "2026-03-01",
+                            "signature": MODULE.compute_file_signature(self.repo_root / "docs" / "CVF_OLD_REVIEW_2026-03-01.md"),
+                        }
+                    },
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+        with patch.object(MODULE, "PROJECT_ROOT", self.repo_root):
+            with patch.object(MODULE, "ACTIVE_WINDOW_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_ACTIVE_WINDOW_REGISTRY.json"):
+                MODULE.load_active_window_paths.cache_clear()
+                MODULE.iter_link_scan_source_rel_paths.cache_clear()
+                MODULE.extract_resolved_markdown_targets_for_source.cache_clear()
+                with patch.object(MODULE, "collect_incremental_changed_paths", return_value=set()):
+                    with patch.object(
+                        MODULE,
+                        "evaluate_candidate_risk",
+                        return_value=MODULE.CandidateRisk(
+                            info=MODULE.FileInfo(
+                                path=self.repo_root / "docs" / "CVF_OLD_REVIEW_2026-03-01.md",
+                                rel_path="docs/CVF_OLD_REVIEW_2026-03-01.md",
+                                date=datetime(2026, 3, 1),
+                                size=(self.repo_root / "docs" / "CVF_OLD_REVIEW_2026-03-01.md").stat().st_size,
+                            ),
+                            blocked=False,
+                            reason=None,
+                        ),
+                    ) as mock_eval:
+                        scans, risks, metadata = MODULE.build_plan(cutoff, full_scan=False)
+
+        self.assertEqual(metadata.scope_mode, "incremental")
+        self.assertEqual(metadata.reused_candidate_count, 0)
+        self.assertEqual(metadata.evaluated_candidate_count, 1)
+        self.assertEqual(mock_eval.call_count, 1)
+        self.assertFalse(risks["docs/CVF_OLD_REVIEW_2026-03-01.md"].blocked)
 
 
 if __name__ == "__main__":

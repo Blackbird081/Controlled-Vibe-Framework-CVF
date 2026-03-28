@@ -13,11 +13,13 @@ Safety upgrade:
 Usage:
     python scripts/cvf_active_archive.py --dry-run
     python scripts/cvf_active_archive.py --execute
+    python scripts/cvf_active_archive.py --refresh-baseline
     python scripts/cvf_active_archive.py --restore
     python scripts/cvf_active_archive.py --status
     python scripts/cvf_active_archive.py --impact-scan
     python scripts/cvf_active_archive.py --link-audit
     python scripts/cvf_active_archive.py --repair-broken-archive-links
+    python scripts/cvf_active_archive.py --dry-run --full-scan
 """
 
 from __future__ import annotations
@@ -49,6 +51,7 @@ LEGACY_ARCHIVE_INDEX_FILENAME = "ARCHIVE_INDEX.md"
 AGE_THRESHOLD_DAYS = 3
 MANAGED_EXTENSIONS = {".md", ".json"}
 ACTIVE_WINDOW_REGISTRY_PATH = PROJECT_ROOT / "governance" / "compat" / "CVF_ACTIVE_WINDOW_REGISTRY.json"
+ARCHIVE_BASELINE_FILENAME = "CVF_ACTIVE_ARCHIVE_BASELINE.json"
 
 # Keep existing permanent names.
 PERMANENT_FILES = {
@@ -150,8 +153,23 @@ class ScanResult:
     already_archived: list[Path] = field(default_factory=list)
 
 
+@dataclass
+class PlanMetadata:
+    scope_mode: str
+    baseline_found: bool
+    baseline_path: Optional[str] = None
+    baseline_git_head: Optional[str] = None
+    changed_rel_paths: set[str] = field(default_factory=set)
+    reused_candidate_count: int = 0
+    evaluated_candidate_count: int = 0
+
+
 def to_rel_path(path: Path) -> str:
     return path.relative_to(PROJECT_ROOT).as_posix()
+
+
+def get_archive_baseline_path() -> Path:
+    return PROJECT_ROOT / "governance" / "compat" / ARCHIVE_BASELINE_FILENAME
 
 
 def is_archive_path(path: Path) -> bool:
@@ -173,6 +191,11 @@ def extract_date_from_filename(filename: str) -> Optional[datetime]:
         except ValueError:
             continue
     return None
+
+
+def compute_file_signature(path: Path) -> str:
+    stat = path.stat()
+    return f"{stat.st_size}:{stat.st_mtime_ns}"
 
 
 def is_permanent(filepath: Path, rel_path: str) -> bool:
@@ -201,6 +224,21 @@ def load_active_window_paths() -> set[str]:
         and entry.get("protectionMode") == "PERMANENT_ACTIVE_WINDOW"
         and entry.get("activePath")
     }
+
+
+def load_archive_baseline() -> Optional[dict]:
+    baseline_path = get_archive_baseline_path()
+    if not baseline_path.exists():
+        return None
+    try:
+        data = json.loads(baseline_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    if not isinstance(data.get("files"), dict):
+        return None
+    return data
 
 
 def iter_managed_files(root_path: Path) -> list[Path]:
@@ -306,10 +344,35 @@ def iter_link_scan_sources() -> list[Path]:
     return sources
 
 
+@lru_cache(maxsize=1)
+def iter_link_scan_source_rel_paths() -> tuple[str, ...]:
+    return tuple(to_rel_path(path) for path in iter_link_scan_sources())
+
+
 def extract_markdown_targets(content: str) -> list[str]:
     targets = [match.group(1).strip() for match in MARKDOWN_LINK_PATTERN.finditer(content)]
     targets.extend(match.group(1).strip() for match in AUTOLINK_PATTERN.finditer(content))
     return targets
+
+
+@lru_cache(maxsize=4096)
+def extract_resolved_markdown_targets_for_source(source_rel_path: str) -> tuple[str, ...]:
+    source_path = PROJECT_ROOT / Path(source_rel_path)
+    try:
+        content = source_path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return tuple()
+
+    resolved_targets: list[str] = []
+    for raw_target in extract_markdown_targets(content):
+        normalized = normalize_local_link_target(raw_target)
+        if normalized is None:
+            continue
+        resolved = resolve_local_link(source_rel_path, normalized)
+        if resolved is None or is_excluded_path(resolved):
+            continue
+        resolved_targets.append(resolved)
+    return tuple(resolved_targets)
 
 
 def normalize_local_link_target(raw_target: str) -> Optional[str]:
@@ -392,6 +455,29 @@ def build_markdown_link_index() -> tuple[dict[str, set[str]], list[LinkIssue]]:
     return inbound_index, broken_issues
 
 
+def collect_markdown_link_sources_for_candidate(
+    candidate: FileInfo,
+    moving_rel_paths: set[str],
+    source_rel_paths: Optional[tuple[str, ...]] = None,
+) -> set[str]:
+    filtered: set[str] = set()
+    sources = source_rel_paths if source_rel_paths is not None else iter_link_scan_source_rel_paths()
+
+    for source_rel in sources:
+        if source_rel == candidate.rel_path:
+            continue
+        if "/archive/" in source_rel:
+            continue
+        if is_excluded_path(source_rel):
+            continue
+        if source_rel in moving_rel_paths:
+            continue
+        if candidate.rel_path in extract_resolved_markdown_targets_for_source(source_rel):
+            filtered.add(source_rel)
+
+    return filtered
+
+
 def collect_live_reference_sources(candidate: FileInfo, moving_rel_paths: set[str]) -> set[str]:
     # Query by full relative path and filename (for relative links in nearby docs).
     queries = [candidate.rel_path, candidate.path.name]
@@ -440,10 +526,13 @@ def collect_markdown_link_sources(
 def evaluate_candidate_risk(
     candidate: FileInfo,
     moving_rel_paths: set[str],
-    markdown_link_index: dict[str, set[str]],
+    markdown_link_index: Optional[dict[str, set[str]]] = None,
 ) -> CandidateRisk:
     live_sources = collect_live_reference_sources(candidate, moving_rel_paths)
-    markdown_link_sources = collect_markdown_link_sources(candidate, moving_rel_paths, markdown_link_index)
+    if markdown_link_index is None:
+        markdown_link_sources = collect_markdown_link_sources_for_candidate(candidate, moving_rel_paths)
+    else:
+        markdown_link_sources = collect_markdown_link_sources(candidate, moving_rel_paths, markdown_link_index)
     protected_sources = sorted(source for source in live_sources if source in PROTECTED_REFERENCE_FILES)
 
     if protected_sources:
@@ -486,6 +575,90 @@ def evaluate_candidate_risk(
     )
 
 
+def run_git_command(args: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", *args],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="ignore",
+        check=False,
+    )
+
+
+def get_git_head() -> Optional[str]:
+    proc = run_git_command(["rev-parse", "HEAD"])
+    if proc.returncode != 0:
+        return None
+    value = proc.stdout.strip()
+    return value or None
+
+
+def collect_incremental_changed_paths(base_head: Optional[str]) -> set[str]:
+    changed: set[str] = set()
+    scoped_paths = ["docs", "ECOSYSTEM/strategy", "AGENT_HANDOFF.md"]
+
+    if base_head:
+        diff_proc = run_git_command(["diff", "--name-only", "--relative", base_head, "--", *scoped_paths])
+        if diff_proc.returncode in (0, 1):
+            changed.update(
+                line.strip().replace("\\", "/")
+                for line in diff_proc.stdout.splitlines()
+                if line.strip()
+            )
+
+    for extra_args in (
+        ["diff", "--name-only", "--relative", "--", *scoped_paths],
+        ["diff", "--name-only", "--relative", "--cached", "--", *scoped_paths],
+        ["ls-files", "--others", "--exclude-standard", "--", *scoped_paths],
+    ):
+        proc = run_git_command(extra_args)
+        if proc.returncode not in (0, 1):
+            continue
+        changed.update(
+            line.strip().replace("\\", "/")
+            for line in proc.stdout.splitlines()
+            if line.strip()
+        )
+
+    return changed
+
+
+def candidate_needs_re_evaluation(
+    candidate: FileInfo,
+    previous_record: Optional[dict],
+    changed_rel_paths: set[str],
+) -> bool:
+    if previous_record is None:
+        return True
+    if previous_record.get("bucket") != "archive_candidate":
+        return True
+    if previous_record.get("signature") != compute_file_signature(candidate.path):
+        return True
+    if not previous_record.get("blocked", False):
+        return True
+
+    blocking_sources = set(previous_record.get("liveReferenceSources", []))
+    blocking_sources.update(previous_record.get("markdownLinkSources", []))
+    blocking_sources.update(previous_record.get("protectedReferenceSources", []))
+    if blocking_sources.intersection(changed_rel_paths):
+        return True
+
+    return False
+
+
+def reuse_candidate_risk(candidate: FileInfo, previous_record: dict) -> CandidateRisk:
+    return CandidateRisk(
+        info=candidate,
+        blocked=bool(previous_record.get("blocked", False)),
+        reason=previous_record.get("reason"),
+        live_reference_sources=list(previous_record.get("liveReferenceSources", [])),
+        protected_reference_sources=list(previous_record.get("protectedReferenceSources", [])),
+        markdown_link_sources=list(previous_record.get("markdownLinkSources", [])),
+    )
+
+
 def generate_archive_index(archive_dir: Path) -> Path:
     index_path = archive_dir / ARCHIVE_INDEX_FILENAME
     legacy_index_path = archive_dir / LEGACY_ARCHIVE_INDEX_FILENAME
@@ -516,20 +689,12 @@ def generate_archive_index(archive_dir: Path) -> Path:
     return index_path
 
 
-def build_plan(cutoff_date: datetime) -> tuple[dict[str, ScanResult], dict[str, CandidateRisk]]:
-    scans: dict[str, ScanResult] = {}
-    all_candidates: list[FileInfo] = []
-
-    for root in MANAGED_ROOTS:
-        root_path = PROJECT_ROOT / root
-        scan = scan_root(root_path, cutoff_date)
-        scans[root] = scan
-        all_candidates.extend(scan.archive_candidates)
-
+def build_full_plan(
+    cutoff_date: datetime,
+    scans: dict[str, ScanResult],
+    all_candidates: list[FileInfo],
+) -> tuple[dict[str, CandidateRisk], int]:
     markdown_link_index, _ = build_markdown_link_index()
-    # Fixed-point screening:
-    # start optimistic (all candidates move), then iteratively remove blocked files.
-    # This prevents blocked candidates from being incorrectly treated as moving sources.
     moving_rel_paths = {candidate.rel_path for candidate in all_candidates}
     risks: dict[str, CandidateRisk] = {}
 
@@ -553,12 +718,175 @@ def build_plan(cutoff_date: datetime) -> tuple[dict[str, ScanResult], dict[str, 
             break
         moving_rel_paths = next_moving
 
-    return scans, risks
+    return risks, len(all_candidates)
 
 
-def do_archive(cutoff_date: datetime, execute: bool = False) -> None:
+def build_bootstrap_plan(
+    scans: dict[str, ScanResult],
+    all_candidates: list[FileInfo],
+) -> tuple[dict[str, CandidateRisk], PlanMetadata]:
+    risks: dict[str, CandidateRisk] = {}
+    for candidate in all_candidates:
+        risks[candidate.rel_path] = CandidateRisk(
+            info=candidate,
+            blocked=True,
+            reason="baseline_frozen_keep",
+            live_reference_sources=[],
+            protected_reference_sources=[],
+            markdown_link_sources=[],
+        )
+
+    metadata = PlanMetadata(
+        scope_mode="bootstrap",
+        baseline_found=False,
+        baseline_path=to_rel_path(get_archive_baseline_path()),
+        baseline_git_head=None,
+        changed_rel_paths=set(),
+        reused_candidate_count=0,
+        evaluated_candidate_count=len(all_candidates),
+    )
+    return risks, metadata
+
+
+def build_incremental_plan(
+    scans: dict[str, ScanResult],
+    all_candidates: list[FileInfo],
+    baseline: dict,
+) -> tuple[dict[str, CandidateRisk], PlanMetadata]:
+    changed_rel_paths = collect_incremental_changed_paths(baseline.get("gitHead"))
+    previous_files = baseline.get("files", {})
+
+    pending_candidates: list[FileInfo] = []
+    reused_risks: dict[str, CandidateRisk] = {}
+
+    for candidate in all_candidates:
+        previous_record = previous_files.get(candidate.rel_path)
+        if candidate_needs_re_evaluation(candidate, previous_record, changed_rel_paths):
+            pending_candidates.append(candidate)
+            continue
+        reused_risks[candidate.rel_path] = reuse_candidate_risk(candidate, previous_record)
+
+    moving_rel_paths = {candidate.rel_path for candidate in pending_candidates}
+    evaluated_risks: dict[str, CandidateRisk] = {}
+
+    for _ in range(8):
+        next_evaluated: dict[str, CandidateRisk] = {}
+        for candidate in pending_candidates:
+            next_evaluated[candidate.rel_path] = evaluate_candidate_risk(
+                candidate,
+                moving_rel_paths,
+                None,
+            )
+
+        next_moving = {
+            rel_path
+            for rel_path, risk in next_evaluated.items()
+            if not risk.blocked
+        }
+        evaluated_risks = next_evaluated
+
+        if next_moving == moving_rel_paths:
+            break
+        moving_rel_paths = next_moving
+
+    risks = dict(reused_risks)
+    risks.update(evaluated_risks)
+    metadata = PlanMetadata(
+        scope_mode="incremental",
+        baseline_found=True,
+        baseline_path=to_rel_path(get_archive_baseline_path()),
+        baseline_git_head=baseline.get("gitHead"),
+        changed_rel_paths=changed_rel_paths,
+        reused_candidate_count=len(reused_risks),
+        evaluated_candidate_count=len(pending_candidates),
+    )
+    return risks, metadata
+
+
+def build_plan(cutoff_date: datetime, full_scan: bool = False) -> tuple[dict[str, ScanResult], dict[str, CandidateRisk], PlanMetadata]:
+    scans: dict[str, ScanResult] = {}
+    all_candidates: list[FileInfo] = []
+
+    for root in MANAGED_ROOTS:
+        root_path = PROJECT_ROOT / root
+        scan = scan_root(root_path, cutoff_date)
+        scans[root] = scan
+        all_candidates.extend(scan.archive_candidates)
+
+    baseline = None if full_scan else load_archive_baseline()
+    if baseline is None and full_scan:
+        risks, evaluated_count = build_full_plan(cutoff_date, scans, all_candidates)
+        metadata = PlanMetadata(
+            scope_mode="full",
+            baseline_found=False,
+            baseline_path=to_rel_path(get_archive_baseline_path()),
+            baseline_git_head=None,
+            changed_rel_paths=set(),
+            reused_candidate_count=0,
+            evaluated_candidate_count=evaluated_count,
+        )
+        return scans, risks, metadata
+
+    if baseline is None:
+        risks, metadata = build_bootstrap_plan(scans, all_candidates)
+        return scans, risks, metadata
+
+    risks, metadata = build_incremental_plan(scans, all_candidates, baseline)
+    return scans, risks, metadata
+
+
+def serialize_archive_baseline(
+    cutoff_date: datetime,
+    scans: dict[str, ScanResult],
+    risks: dict[str, CandidateRisk],
+    scope_mode: str,
+) -> dict:
+    files: dict[str, dict] = {}
+
+    for scan in scans.values():
+        for info in scan.active:
+            files[info.rel_path] = {
+                "bucket": "active_dated",
+                "date": info.date.strftime("%Y-%m-%d"),
+                "signature": compute_file_signature(info.path),
+            }
+        for candidate in scan.archive_candidates:
+            risk = risks[candidate.rel_path]
+            files[candidate.rel_path] = {
+                "bucket": "archive_candidate",
+                "date": candidate.date.strftime("%Y-%m-%d"),
+                "signature": compute_file_signature(candidate.path),
+                "blocked": risk.blocked,
+                "reason": risk.reason,
+                "liveReferenceSources": risk.live_reference_sources,
+                "markdownLinkSources": risk.markdown_link_sources,
+                "protectedReferenceSources": risk.protected_reference_sources,
+            }
+
+    return {
+        "version": 1,
+        "generatedAt": datetime.now().isoformat(),
+        "gitHead": get_git_head(),
+        "cutoffDate": cutoff_date.strftime("%Y-%m-%d"),
+        "ageThresholdDays": AGE_THRESHOLD_DAYS,
+        "scopeMode": scope_mode,
+        "managedRoots": MANAGED_ROOTS,
+        "files": files,
+    }
+
+
+def write_archive_baseline(cutoff_date: datetime, full_scan: bool = False) -> Path:
+    scans, risks, metadata = build_plan(cutoff_date, full_scan=full_scan)
+    baseline_data = serialize_archive_baseline(cutoff_date, scans, risks, metadata.scope_mode)
+    baseline_path = get_archive_baseline_path()
+    baseline_path.parent.mkdir(parents=True, exist_ok=True)
+    baseline_path.write_text(json.dumps(baseline_data, indent=2), encoding="utf-8")
+    return baseline_path
+
+
+def do_archive(cutoff_date: datetime, execute: bool = False, full_scan: bool = False) -> None:
     mode_str = "EXECUTE" if execute else "DRY-RUN"
-    scans, risks = build_plan(cutoff_date)
+    scans, risks, metadata = build_plan(cutoff_date, full_scan=full_scan)
 
     moved_count = 0
     total_active = 0
@@ -571,7 +899,18 @@ def do_archive(cutoff_date: datetime, execute: bool = False) -> None:
     print("\n" + "=" * 60)
     print("CVF Active-Archive Report")
     print(f"Mode: {mode_str}")
+    print(f"Scope mode: {metadata.scope_mode.upper()}")
     print(f"Cutoff date: {cutoff_date.strftime('%Y-%m-%d')} (files before this -> candidate)")
+    if metadata.baseline_path:
+        baseline_state = "found" if metadata.baseline_found else "not found"
+        print(f"Baseline: {metadata.baseline_path} ({baseline_state})")
+    if metadata.scope_mode == "incremental":
+        print(
+            "Incremental delta: "
+            f"{len(metadata.changed_rel_paths)} changed paths, "
+            f"{metadata.reused_candidate_count} reused candidate decisions, "
+            f"{metadata.evaluated_candidate_count} re-evaluated candidates"
+        )
     print("=" * 60)
 
     log_dirs: dict[str, dict] = {}
@@ -698,6 +1037,10 @@ def do_archive(cutoff_date: datetime, execute: bool = False) -> None:
         json.dump(log_data, file, indent=2, default=str)
     print(f"Log saved to: {log_path.relative_to(PROJECT_ROOT)}")
 
+    if execute:
+        baseline_path = write_archive_baseline(cutoff_date, full_scan=full_scan)
+        print(f"Archive baseline updated: {baseline_path.relative_to(PROJECT_ROOT)}")
+
     if not execute:
         print("\nTo execute, run: python scripts/cvf_active_archive.py --execute\n")
 
@@ -736,11 +1079,17 @@ def do_restore() -> None:
     print(f"Restored {total_restored} files total.")
 
 
-def do_status(cutoff_date: datetime) -> None:
-    scans, risks = build_plan(cutoff_date)
+def do_status(cutoff_date: datetime, full_scan: bool = False) -> None:
+    scans, risks, metadata = build_plan(cutoff_date, full_scan=full_scan)
 
     print("\n" + "=" * 60)
     print(f"CVF Active-Archive Status (cutoff: {cutoff_date.strftime('%Y-%m-%d')})")
+    print(f"Scope mode: {metadata.scope_mode.upper()}")
+    if metadata.scope_mode == "incremental":
+        print(
+            f"Baseline: {metadata.baseline_path} | changed paths: {len(metadata.changed_rel_paths)} | "
+            f"reused: {metadata.reused_candidate_count} | re-evaluated: {metadata.evaluated_candidate_count}"
+        )
     print("=" * 60)
 
     for root in MANAGED_ROOTS:
@@ -765,8 +1114,8 @@ def do_status(cutoff_date: datetime) -> None:
     print()
 
 
-def do_impact_scan(cutoff_date: datetime) -> None:
-    scans, risks = build_plan(cutoff_date)
+def do_impact_scan(cutoff_date: datetime, full_scan: bool = False) -> None:
+    scans, risks, metadata = build_plan(cutoff_date, full_scan=full_scan)
     rows: list[CandidateRisk] = []
     for scan in scans.values():
         for candidate in scan.archive_candidates:
@@ -782,6 +1131,12 @@ def do_impact_scan(cutoff_date: datetime) -> None:
 
     print("\n" + "=" * 60)
     print(f"CVF Archive Impact Scan (cutoff: {cutoff_date.strftime('%Y-%m-%d')})")
+    print(f"Scope mode: {metadata.scope_mode.upper()}")
+    if metadata.scope_mode == "incremental":
+        print(
+            f"Baseline: {metadata.baseline_path} | changed paths: {len(metadata.changed_rel_paths)} | "
+            f"reused: {metadata.reused_candidate_count} | re-evaluated: {metadata.evaluated_candidate_count}"
+        )
     print("=" * 60)
     if not rows:
         print("No dated >3-day candidates found.")
@@ -892,39 +1247,56 @@ def do_repair_broken_archive_links() -> None:
     print(f"Restored {moved} files from archive based on BROKEN-ARCHIVED findings.")
 
 
+def do_refresh_baseline(cutoff_date: datetime, full_scan: bool = False) -> None:
+    baseline_path = write_archive_baseline(cutoff_date, full_scan=full_scan)
+    print(f"Archive baseline refreshed: {baseline_path.relative_to(PROJECT_ROOT)}")
+
+
 def main() -> None:
     valid_modes = {
         "--dry-run",
         "--execute",
+        "--refresh-baseline",
         "--restore",
         "--status",
         "--impact-scan",
         "--link-audit",
         "--repair-broken-archive-links",
     }
-    if len(sys.argv) < 2 or sys.argv[1] not in valid_modes:
+    args = sys.argv[1:]
+    if not args or args[0] not in valid_modes:
         print("Usage:")
         print("  python scripts/cvf_active_archive.py --dry-run")
         print("  python scripts/cvf_active_archive.py --execute")
+        print("  python scripts/cvf_active_archive.py --refresh-baseline")
         print("  python scripts/cvf_active_archive.py --restore")
         print("  python scripts/cvf_active_archive.py --status")
         print("  python scripts/cvf_active_archive.py --impact-scan")
         print("  python scripts/cvf_active_archive.py --link-audit")
         print("  python scripts/cvf_active_archive.py --repair-broken-archive-links")
+        print("  python scripts/cvf_active_archive.py --dry-run --full-scan")
         sys.exit(1)
 
-    mode = sys.argv[1]
+    mode = args[0]
+    extra_flags = set(args[1:])
+    allowed_extra_flags = {"--full-scan"}
+    invalid_flags = extra_flags - allowed_extra_flags
+    if invalid_flags:
+        print(f"Unknown flags: {', '.join(sorted(invalid_flags))}")
+        sys.exit(1)
+
+    full_scan = "--full-scan" in extra_flags
     today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
     cutoff_date = today - timedelta(days=AGE_THRESHOLD_DAYS)
 
     if mode == "--status":
-        do_status(cutoff_date)
+        do_status(cutoff_date, full_scan=full_scan)
         return
     if mode == "--restore":
         do_restore()
         return
     if mode == "--impact-scan":
-        do_impact_scan(cutoff_date)
+        do_impact_scan(cutoff_date, full_scan=full_scan)
         return
     if mode == "--link-audit":
         do_link_audit()
@@ -932,8 +1304,11 @@ def main() -> None:
     if mode == "--repair-broken-archive-links":
         do_repair_broken_archive_links()
         return
+    if mode == "--refresh-baseline":
+        do_refresh_baseline(cutoff_date, full_scan=full_scan)
+        return
 
-    do_archive(cutoff_date, execute=(mode == "--execute"))
+    do_archive(cutoff_date, execute=(mode == "--execute"), full_scan=full_scan)
 
 
 if __name__ == "__main__":

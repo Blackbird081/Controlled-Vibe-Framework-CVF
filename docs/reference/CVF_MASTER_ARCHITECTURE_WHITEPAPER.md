@@ -288,7 +288,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 | Current active tranche | `NONE` |
 | Current posture | `SUBSTANTIALLY DELIVERED` — all four planes `SUBSTANTIALLY DELIVERED`; W7 Governance Integration `DONE`; continuation readout `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10` |
 | Required gate before any new implementation | fresh `GC-018` authorization |
-| Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `AGENT_HANDOFF.md` |
+| Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`, `AGENT_HANDOFF.md` |
 
 ### 4.4 Two Multi-Agent Scope Boundaries
 

@@ -42,7 +42,9 @@ Current guidance:
 - **W5-T2 CLOSED DELIVERED** — whitepaper now at v3.0-W7T10; progress tracker fully synchronized
 - **ALL known coverage gaps are closed**: CPF W2-T38, EPF all bridges, GEF all bridges, LPF W4-T25 (all 18 base contracts bridged)
 - **Next**: await fresh authorization for next wave; survey Review 19+ proposals if any exist; any extension requires fresh GC-018
-- Governance artifacts for W7 integration: `docs/reviews/CVF_W7_*`, `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`
+- official planning baseline for post-W7 upgrades: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
+- W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
+- W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`
 - Architecture boundary lock: `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`
 - W5-T2 closure: `docs/reviews/CVF_W5_T2_TRANCHE_CLOSURE_REVIEW_2026-03-28.md`
@@ -95,6 +97,7 @@ Any future tranche still requires: `GC-018 authorization → execution plan → 
 | Architecture baseline snapshot | `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` |
 | Progress tracker | `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` |
 | Completion roadmap | `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` |
+| Post-W7 upgrade baseline | `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md` |
 | Test log | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
 | Test partition registry | `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` |
 | CPF barrel exports | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` |

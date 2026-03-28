@@ -111,8 +111,16 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_guard_authoring_standard.py", "--enforce"],
         ),
         (
+            "foundational guard surfaces compatibility",
+            ["python", "governance/compat/check_foundational_guard_surfaces.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
             "cross-channel guard contract compatibility",
             ["python", "governance/compat/check_guard_contract_compat.py", "--enforce"],
+        ),
+        (
+            "conformance trace rotation compatibility",
+            ["python", "governance/compat/check_conformance_trace_rotation.py", "--enforce"],
         ),
     ]
 }

@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: grouped management map for the active governance guard surface after `GC-023` hardening batches and `GC-030` adoption.
+Status: grouped management map for the active governance guard surface after `GC-023` hardening, full `GC-030` cleanup, and foundational guard automation closure.
 
 ## Purpose
 
@@ -12,23 +12,25 @@ Status: grouped management map for the active governance guard surface after `GC
 
 ## Current Hardening Posture
 
-Short answer: not every historical guard document is fully standardized yet, but the active hardening surface is now in a much safer state.
+Short answer: all active guard documents are now standardized and the remaining priority is enforcement depth, not legacy format cleanup.
 
 What is already hardened:
 
 - the high-risk mutable-registry family now has baseline-protection patterns where needed
 - local pre-push and CI now cover the main active guard chain more completely
 - `GC-030` now blocks new or materially revised guards from shipping without a minimum authoring contract
+- the formerly policy-only foundational family is now automated through `check_foundational_guard_surfaces.py`
 
-What remains as legacy debt:
+What remains as future hardening work:
 
-- many older guard documents still predate the `GC-030` metadata/section shape
-- those legacy guards are not blocked retroactively unless they are materially revised
+- increase test depth for automation gates that still rely on broad diff heuristics
+- keep hook and CI aggregation aligned whenever a new compat gate is added
+- continue converting manual review guidance into deterministic repo gates where false-positive risk stays acceptable
 
 Management rule going forward:
 
 - every new guard must be assigned to one group below
-- every materially revised legacy guard must be upgraded to `GC-030`
+- every materially revised guard must remain on the `GC-030` contract
 - if a guard introduces a mutable policy, registry, or exception surface, baseline protection must be evaluated explicitly before merge
 
 ## Group Map

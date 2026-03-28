@@ -3,7 +3,7 @@
 **Guard Class:** `PACKAGE_AND_RUNTIME_ALIGNMENT_GUARD`
 **Status:** Active naming and version-space contract for extension folders under `EXTENSIONS/`.
 **Applies to:** All humans and AI agents creating, renaming, or migrating extension folders in CVF repositories.
-**Enforced by:** `docs/CVF_CORE_KNOWLEDGE_BASE.md`, `docs/CVF_ARCHITECTURE_DECISIONS.md`
+**Enforced by:** `governance/compat/check_foundational_guard_surfaces.py`, `docs/CVF_CORE_KNOWLEDGE_BASE.md`, `docs/CVF_ARCHITECTURE_DECISIONS.md`
 
 ## Purpose
 
@@ -95,6 +95,7 @@ The engineering stream keeps the legacy `CVF_v*` format without a stream prefix 
 
 ## Enforcement Surface
 
+- repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
 - architecture and governance review must reject extension folders that break the registered naming convention
 - ADR-backed stream registration is required before a new stream becomes active
 - remediation requires renaming the folder, updating internal references, and documenting the correction in the same batch

@@ -3,7 +3,7 @@
 **Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
 **Status:** Active architecture-decision recording contract for strategic and structural changes.
 **Applies to:** All humans and AI agents making architectural or strategic decisions that affect CVF and must be recorded in `docs/CVF_ARCHITECTURE_DECISIONS.md`.
-**Enforced by:** `docs/CVF_ARCHITECTURE_DECISIONS.md`
+**Enforced by:** `governance/compat/check_foundational_guard_surfaces.py`, `docs/CVF_ARCHITECTURE_DECISIONS.md`
 
 ## Purpose
 
@@ -70,9 +70,9 @@ Never delete an ADR entry. Mark it as superseded or revoked instead.
 
 ## Enforcement Surface
 
-- the canonical enforcement surface is the required ADR entry in `docs/CVF_ARCHITECTURE_DECISIONS.md`
-- reviewer and governance validation must reject a structural change that lacks the matching ADR
-- architecture decisions made without an ADR are drift triggers and require retroactive documentation before continuing
+- repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
+- the canonical durable record remains the required ADR entry in `docs/CVF_ARCHITECTURE_DECISIONS.md`
+- local pre-push and CI must reject a triggered architectural or policy change that lacks the matching ADR update
 
 ## Related Artifacts
 

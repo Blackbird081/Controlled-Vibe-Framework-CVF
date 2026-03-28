@@ -3,7 +3,7 @@
 **Guard Class:** `PACKAGE_AND_RUNTIME_ALIGNMENT_GUARD`
 **Status:** Active structure-review contract before adding a new version, layer, extension, module, or major architectural change to CVF.
 **Applies to:** Humans and AI agents proposing a new CVF version, layer, extension, module, structural refactor, or governance surface that changes architecture truth.
-**Enforced by:** `docs/CVF_CORE_KNOWLEDGE_BASE.md`, `docs/CVF_ARCHITECTURE_DECISIONS.md`
+**Enforced by:** `governance/compat/check_foundational_guard_surfaces.py`, `docs/CVF_CORE_KNOWLEDGE_BASE.md`, `docs/CVF_ARCHITECTURE_DECISIONS.md`
 
 ## Purpose
 
@@ -89,9 +89,10 @@ If `docs/CVF_CORE_KNOWLEDGE_BASE.md` is outdated:
 
 ## Enforcement Surface
 
-- the canonical structural baseline is `docs/CVF_CORE_KNOWLEDGE_BASE.md`
-- architecture decisions must be recorded in `docs/CVF_ARCHITECTURE_DECISIONS.md`
-- reviewer or governance validation must reject proposals that skip the checklist, hide overlap, or rely on an outdated Knowledge Base
+- repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
+- the canonical structural baseline remains `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+- architecture decisions must still be recorded in `docs/CVF_ARCHITECTURE_DECISIONS.md`
+- local pre-push and CI must reject proposals that skip the checklist, hide overlap, or rely on an outdated Knowledge Base
 
 ## Related Artifacts
 

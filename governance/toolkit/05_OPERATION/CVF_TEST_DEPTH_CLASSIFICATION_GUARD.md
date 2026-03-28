@@ -3,7 +3,7 @@
 **Guard Class:** `QUALITY_AND_CONFORMANCE_GUARD`
 **Status:** Active reporting rule for test-depth truth whenever CVF publishes test metrics.
 **Applies to:** Any human or AI-generated baseline review, assessment, release gate, or conformance report that includes test-count claims.
-**Enforced by:** `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+**Enforced by:** `governance/compat/check_foundational_guard_surfaces.py`, `docs/CVF_CORE_KNOWLEDGE_BASE.md`
 
 ## Purpose
 
@@ -86,7 +86,8 @@ Every conformance scenario in `CVF_CONFORMANCE_SCENARIOS.json` is treated as `T4
 
 ## Enforcement Surface
 
-- reporting truth is enforced through review discipline anchored in `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+- repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
+- reporting truth remains anchored in `docs/CVF_CORE_KNOWLEDGE_BASE.md`
 - before publishing a test-count report, reviewers should confirm the tier breakdown, the meaningful assertion rate, and whether `T1` exceeds `30%`
 - the guard does not require rerunning tests; it requires honest classification when reporting them
 

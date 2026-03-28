@@ -4,7 +4,7 @@
 **Guard Class:** `CONTINUITY_AND_DECISION_GUARD`
 **Status:** Active structural execution gate for major merges, physical moves, and boundary-changing consolidation.
 **Applies to:** major structural changes, restructuring waves, humans, and AI agents proposing a merge, move, ownership transfer, or replacement package.
-**Enforced by:** `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`, `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_REVIEW_TEMPLATE.md`
+**Enforced by:** `governance/compat/check_foundational_guard_surfaces.py`, `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md`, `docs/reference/CVF_GC019_STRUCTURAL_CHANGE_REVIEW_TEMPLATE.md`
 
 ## Purpose
 
@@ -116,6 +116,7 @@ Prefer `physical merge` only when implementation overlap is real, ownership ambi
 
 ## Enforcement Surface
 
+- repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
 - this guard is primarily enforced through the audit and review packet sequence
 - `GC-019` works in tandem with roadmap and packet review checkpoints before execution begins
 - `GC-019` complements `GC-018`: one decides whether a wave should open, the other decides whether a structural move inside that wave is safe to execute

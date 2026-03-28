@@ -3,7 +3,7 @@
 **Guard Class:** `PACKAGE_AND_RUNTIME_ALIGNMENT_GUARD`
 **Status:** Active workspace-boundary rule protecting CVF core from downstream project contamination.
 **Applies to:** Humans and AI agents opening, building, or developing downstream projects that use CVF as a framework.
-**Enforced by:** `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`, `README.md`
+**Enforced by:** `governance/compat/check_foundational_guard_surfaces.py`, `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`, `README.md`
 
 ## Purpose
 
@@ -55,6 +55,7 @@ Notes:
 
 ## Enforcement Surface
 
+- repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
 - the canonical policy requirement lives in `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
 - onboarding and governance notices in `README.md` reinforce the rule at repository entry
 - if workspace isolation is violated, stop development, move the downstream artifacts into an isolated project workspace, and rerun governance checks before continuing

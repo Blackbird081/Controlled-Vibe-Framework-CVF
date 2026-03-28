@@ -1112,3 +1112,69 @@ Phase 1 of the CVF Edit Integration Roadmap mandated strict Governance Runtime H
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guard.runtime.types.ts`
 - `docs/roadmaps/archive/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md`
+
+---
+
+## ADR-022: Foundational Guard Surfaces Must Be Machine-Enforced
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-28 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current automation batch)* |
+
+### Context
+
+Recent guard-hardening work closed several registry-driven bypass patterns and brought every active guard document onto the `GC-030` authoring contract. That work exposed one remaining weakness: a small but important set of foundational guards still depended mostly on reviewer discipline or policy references, not on deterministic machine enforcement.
+
+The affected family was:
+
+- `CVF_ADR_GUARD`
+- `CVF_ARCHITECTURE_CHECK_GUARD`
+- `CVF_EXTENSION_VERSIONING_GUARD`
+- `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD`
+- `CVF_TEST_DEPTH_CLASSIFICATION_GUARD`
+- `CVF_WORKSPACE_ISOLATION_GUARD`
+
+These guards protect the most strategic surfaces in CVF. If they remain advisory, autonomous agents can drift architecture truth, naming discipline, structural evidence, test-report quality, or workspace boundaries without an immediate blocking signal.
+
+### Decision
+
+**Automate the remaining foundational guard family through a dedicated compatibility gate and wire that gate into both local pre-push and CI.**
+
+The enforcement surface is now centered on:
+
+- `governance/compat/check_foundational_guard_surfaces.py`
+
+This gate blocks triggered changes that fail to carry the required supporting artifacts or repo-shape discipline, including:
+
+- missing ADR updates for architectural or policy changes
+- missing Knowledge Base refresh for architecture-changing proposals
+- invalid new extension root naming
+- missing GC-019-style structural audit/review evidence for structural moves
+- test-count reports without T1/T2/T3/T4 plus Meaningful classification markers
+- suspicious downstream-app or workspace-isolation violations at repo root
+
+### Rationale
+
+- foundational guards are too important to remain “review if someone notices”
+- the same philosophy used for runtime guard hardening should apply to governance documentation and repo-shape boundaries: important controls need chokepoints
+- one shared diff-range gate is preferable to leaving six critical controls fragmented across policy text and reviewer memory
+- wiring the new gate into both pre-push and CI keeps enforcement symmetric for local agent execution and shared-branch validation
+
+### Consequences
+
+- CVF governance is now closer to a fully executable repo-governance perimeter, not a mixed policy-plus-manual-review model
+- future changes to architectural truth, extension topology, structural packets, test-depth claims, and workspace boundaries will fail faster and more visibly
+- false-positive risk is now concentrated in one gate and should be managed with regression tests plus careful trigger refinement
+- further hardening should prioritize deeper automation or better test coverage, not legacy guard-format cleanup
+
+### Related Files
+
+- `governance/compat/check_foundational_guard_surfaces.py`
+- `governance/compat/run_local_governance_hook_chain.py`
+- `.github/workflows/documentation-testing.yml`
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+- `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`

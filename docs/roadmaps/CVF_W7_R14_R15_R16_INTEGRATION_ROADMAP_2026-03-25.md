@@ -109,4 +109,5 @@ Canonical draft packets created:
 | W7-T0 authorization packet | COMMITTED (3081ab13) |
 | W7-T1 execution plan | COMMITTED (3081ab13) |
 | W7-T1 canonical ownership map + merge blueprint | CLOSED DELIVERED 2026-03-28 — P1 SATISFIED |
-| W7-T2..W7-T10 execution | PENDING |
+| W7-T2 unified risk contract (R0-R3) | IN EXECUTION — 2026-03-28 |
+| W7-T3..W7-T10 execution | PENDING |

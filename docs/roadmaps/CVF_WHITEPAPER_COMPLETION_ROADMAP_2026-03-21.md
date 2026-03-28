@@ -1487,3 +1487,7 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W7-T1 — Canonical Ownership Merge Blueprint ✓ CLOSED 2026-03-28
 
 > P1 gate satisfied. 10 concepts from Review 14/15/16 mapped (KEEP/RETIRE). Planner→CPF DESIGN, Runtime→EPF BUILD, Skill→GEF, Eval→LPF, Memory Loop gated (P5). Merge blueprint: fixed 8-step dependency chain. W7-T2 (Unified Risk Contract) now unblocked. See: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`
+
+## W7-T2 — Unified Risk Contract (R0-R3) ✓ CLOSED 2026-03-28
+
+> P3 gate satisfied. R0-R3 canonical definitions + W7RiskFields schema for Skill/Capability/PlannedAction/StructuredSpec. All R3 enforcement routes through existing EPF policy.gate + GEF escalation. W7-T3 (Guard Binding + Boundary Lock) now unblocked.

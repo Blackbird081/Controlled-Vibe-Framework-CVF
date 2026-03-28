@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-28
 
 > Branch: `cvf-next`
-> Last push: `W7-T1-CP1+CP2+CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W7-T1 — **W7 WAVE OPENED, P1 GATE SATISFIED**
+> Last push: `W7-T2-CP1+CP2+CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W7-T2 — **P1+P3 SATISFIED, W7-T3 UNBLOCKED**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---

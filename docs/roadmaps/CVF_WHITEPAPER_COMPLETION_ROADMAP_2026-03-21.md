@@ -1477,3 +1477,16 @@ Gap closed: KnowledgeQueryBatchContract (W1-T10) now has a governed consumer-vis
 All MEDIUM-priority unbridged CPF candidates closed. Remaining: retrieval.contract.ts (LOW).
 
 Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
+
+---
+
+## W2-T38 — Retrieval Consumer Pipeline Bridge (IN EXECUTION)
+
+> Authorization: GC-018 score 9/10 — 2026-03-28
+> CPF baseline: 1842 tests
+
+Planned deliverables:
+
+- `W2-T38 / CP1` — RetrievalConsumerPipelineContract (`RetrievalResultSurface → CPF consumer pipeline`) — Full Lane (GC-019)
+- `W2-T38 / CP2` — RetrievalConsumerPipelineBatchContract (`RetrievalConsumerPipelineResult[] → batch`) — Fast Lane (GC-021)
+- `W2-T38 / CP3` — Tranche closure review — Full Lane

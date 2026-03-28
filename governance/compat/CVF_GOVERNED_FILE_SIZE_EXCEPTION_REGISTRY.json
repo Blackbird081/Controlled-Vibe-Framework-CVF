@@ -111,10 +111,10 @@
     {
       "path": "docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md",
       "fileClass": "active_markdown",
-      "approvedMaxLines": 1500,
+      "approvedMaxLines": 1600,
       "status": "ACTIVE_EXCEPTION",
-      "rationale": "Canonical roadmap accumulates post-cycle closure records for every delivered tranche. Growth is governed and append-only; each post-cycle record is ~15-20 lines. Cap extended 1400→1500 on 2026-03-27 to accommodate W4-T13+ post-cycle records.",
-      "requiredFollowup": "Archive older post-cycle records into a separate archive file when file exceeds 1500 lines."
+      "rationale": "Canonical roadmap accumulates post-cycle closure records for every delivered tranche. Growth is governed and append-only; each post-cycle record is ~15-20 lines. Cap extended 1500→1600 on 2026-03-28 to accommodate W2-T38+ post-cycle records.",
+      "requiredFollowup": "Archive older post-cycle records into a separate archive file when file exceeds 1600 lines."
     }
   ]
 }

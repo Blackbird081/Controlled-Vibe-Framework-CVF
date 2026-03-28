@@ -6,7 +6,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-28` (W5-T2 COMPLETE, Whitepaper updated to v3.0-W7T10 — full post-baseline delta reconciled; W7 Integration Wave COMPLETE)
+> Last refreshed: `2026-03-28` (W5-T2 COMPLETE, Whitepaper updated to v3.0-W7T10 — full post-baseline delta reconciled; W7 Integration Wave COMPLETE; GC-026 closure sync recorded)
 
 ---
 
@@ -183,7 +183,7 @@ Memory class: POINTER_RECORD
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W5_T2_AUTHORIZATION_2026-03-28.md`
-- Current closure anchor: `docs/reviews/CVF_W7_T10_CP1_WAVE_INTEGRATION_CLOSURE_REVIEW_2026-03-28.md`
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W5_T2_CLOSURE_2026-03-28.md`
+- Current closure anchor: `docs/reviews/CVF_W5_T2_TRANCHE_CLOSURE_REVIEW_2026-03-28.md`
 - Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W5_T2_WHITEPAPER_UPDATE_2026-03-28.md` (W5-T2 CLOSED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

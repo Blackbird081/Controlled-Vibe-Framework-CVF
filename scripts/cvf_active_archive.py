@@ -57,11 +57,19 @@ PERMANENT_FILES = {
     "CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md",
 }
 
+# Canonical active windows owned by dedicated rotation guards are never eligible
+# for generic active/archive cleanup.
+DEDICATED_ACTIVE_WINDOWS = {
+    "docs/CVF_INCREMENTAL_TEST_LOG.md",
+    "docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md",
+}
+
 # Protect canonical anchors by full relative path.
 PERMANENT_PATHS = {
     "docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md",
     "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
     "AGENT_HANDOFF.md",
+    *DEDICATED_ACTIVE_WINDOWS,
 }
 
 # Dedicated-rotation zones excluded from this guard to avoid policy overlap.

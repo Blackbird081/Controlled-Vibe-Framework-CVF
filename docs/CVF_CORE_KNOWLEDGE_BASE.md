@@ -324,6 +324,11 @@ Automated foundational surface gate:
 
 - `governance/compat/check_foundational_guard_surfaces.py` now enforces ADR update truth, architecture-baseline refresh, extension naming/versioning, GC-019 packet presence, test-depth reporting markers, and workspace-isolation drift within the same change range
 - local pre-push and CI both run this gate so these six foundational guards are no longer policy-only review checkpoints
+
+Archive protection note:
+
+- generic archive cleanup must never auto-archive canonical active windows owned by dedicated rotation guards
+- current protected active windows are `docs/CVF_INCREMENTAL_TEST_LOG.md` and `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
 | CVF_TEST_PARTITION_OWNERSHIP_GUARD.md | Extracted governed test surfaces | Canonical test home must remain exclusive |
 
 Guard management map:

@@ -27,6 +27,7 @@ This guard applies to managed roots:
 Policy overlap control:
 
 - paths that already have dedicated rotation guards are excluded from this guard, such as `docs/logs/` and `docs/reviews/cvf_phase_governance/logs/`
+- canonical active windows owned by dedicated rotation guards are never auto-archived by this generic cleanup flow
 - archive folders (`*/archive/`) are never re-scanned as active candidates
 
 ### File Naming Rule
@@ -76,6 +77,9 @@ The following files are never archived:
 - `CVF_UNIFIED_ROADMAP_2026.md`
 - `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - `CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+- canonical active windows owned by dedicated rotation guards, including:
+  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
+  - `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
 - architecture and baseline anchors explicitly marked permanent in script config
 
 ### Impact Screening
@@ -84,6 +88,7 @@ Before archive move, each candidate is scanned for reference impact:
 
 - inbound references from active docs are counted
 - the candidate is blocked if referenced by protected anchor files such as whitepaper, tracker, handoff, or index
+- dedicated active-window protection is evaluated before normal date-based archive eligibility
 - the candidate is blocked if inbound active reference count exceeds threshold
 - the candidate is blocked if active markdown links resolve directly to that file
 

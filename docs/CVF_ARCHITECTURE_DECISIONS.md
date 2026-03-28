@@ -1127,49 +1127,23 @@ Phase 1 of the CVF Edit Integration Roadmap mandated strict Governance Runtime H
 
 ### Context
 
-Recent guard-hardening work closed several registry-driven bypass patterns and brought every active guard document onto the `GC-030` authoring contract. That work exposed one remaining weakness: a small but important set of foundational guards still depended mostly on reviewer discipline or policy references, not on deterministic machine enforcement.
-
-The affected family was:
-
-- `CVF_ADR_GUARD`
-- `CVF_ARCHITECTURE_CHECK_GUARD`
-- `CVF_EXTENSION_VERSIONING_GUARD`
-- `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD`
-- `CVF_TEST_DEPTH_CLASSIFICATION_GUARD`
-- `CVF_WORKSPACE_ISOLATION_GUARD`
-
-These guards protect the most strategic surfaces in CVF. If they remain advisory, autonomous agents can drift architecture truth, naming discipline, structural evidence, test-report quality, or workspace boundaries without an immediate blocking signal.
+Recent hardening closed registry-driven bypasses and standardized all guard docs under `GC-030`, but six foundational guards still depended too heavily on reviewer discipline: `CVF_ADR_GUARD`, `CVF_ARCHITECTURE_CHECK_GUARD`, `CVF_EXTENSION_VERSIONING_GUARD`, `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD`, `CVF_TEST_DEPTH_CLASSIFICATION_GUARD`, and `CVF_WORKSPACE_ISOLATION_GUARD`. That left architecture truth, naming, structural evidence, test-depth reporting, and workspace boundaries too advisory for an automated agent environment.
 
 ### Decision
 
-**Automate the remaining foundational guard family through a dedicated compatibility gate and wire that gate into both local pre-push and CI.**
-
-The enforcement surface is now centered on:
-
-- `governance/compat/check_foundational_guard_surfaces.py`
-
-This gate blocks triggered changes that fail to carry the required supporting artifacts or repo-shape discipline, including:
-
-- missing ADR updates for architectural or policy changes
-- missing Knowledge Base refresh for architecture-changing proposals
-- invalid new extension root naming
-- missing GC-019-style structural audit/review evidence for structural moves
-- test-count reports without T1/T2/T3/T4 plus Meaningful classification markers
-- suspicious downstream-app or workspace-isolation violations at repo root
+**Automate the remaining foundational guard family through `governance/compat/check_foundational_guard_surfaces.py`, enforced in both local pre-push and CI.** The gate blocks missing ADR updates, missing Knowledge Base refresh, invalid extension naming, missing GC-019 evidence, incomplete test-depth reporting, and suspicious workspace-isolation violations.
 
 ### Rationale
 
 - foundational guards are too important to remain “review if someone notices”
-- the same philosophy used for runtime guard hardening should apply to governance documentation and repo-shape boundaries: important controls need chokepoints
-- one shared diff-range gate is preferable to leaving six critical controls fragmented across policy text and reviewer memory
-- wiring the new gate into both pre-push and CI keeps enforcement symmetric for local agent execution and shared-branch validation
+- one shared diff-range gate is preferable to fragmented reviewer-memory enforcement
+- pre-push plus CI keeps enforcement symmetric for local agents and shared branches
 
 ### Consequences
 
-- CVF governance is now closer to a fully executable repo-governance perimeter, not a mixed policy-plus-manual-review model
-- future changes to architectural truth, extension topology, structural packets, test-depth claims, and workspace boundaries will fail faster and more visibly
-- false-positive risk is now concentrated in one gate and should be managed with regression tests plus careful trigger refinement
-- further hardening should prioritize deeper automation or better test coverage, not legacy guard-format cleanup
+- CVF governance is now closer to an executable repo-governance perimeter
+- future changes in these surfaces fail faster and more visibly
+- remaining hardening should focus on automation precision and regression depth, not legacy guard format
 
 ### Related Files
 
@@ -1178,3 +1152,41 @@ This gate blocks triggered changes that fail to carry the required supporting ar
 - `.github/workflows/documentation-testing.yml`
 - `docs/CVF_CORE_KNOWLEDGE_BASE.md`
 - `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
+
+---
+
+## ADR-023: Dedicated Active Trace Windows Are Permanent Inputs To Generic Archive Cleanup
+
+| Field | Value |
+|---|---|
+| Date | 2026-03-28 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current archive-hardening batch)* |
+
+### Context
+
+CVF already governs long-lived active evidence windows through dedicated rotation guards, but generic archive cleanup still treated them like ordinary dated documents unless screening happened to save them. That meant a canonical active trace could look old enough to archive even while still being the current working window.
+
+### Decision
+
+**Treat every canonical active window owned by a dedicated rotation guard as a permanent protected path in generic archive cleanup.** The current protected set is `docs/CVF_INCREMENTAL_TEST_LOG.md` and `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`. These files are now excluded up front from generic archive eligibility, not merely rescued later by reference screening.
+
+### Rationale
+
+- canonical active windows are operational inputs, not ordinary dated historical documents
+- a generic archive utility should not be allowed to reinterpret the lifecycle of a file that already has a dedicated rotation policy
+
+### Consequences
+
+- archive cleanup is easier to trust because the highest-value active windows are protected by rule, not by side effects
+- future dedicated rotation guards should register their active window in the same permanent-protection set
+
+### Related Files
+
+- `scripts/cvf_active_archive.py`
+- `scripts/test_cvf_active_archive.py`
+- `governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`

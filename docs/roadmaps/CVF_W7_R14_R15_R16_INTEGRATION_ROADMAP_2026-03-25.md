@@ -116,5 +116,5 @@ Canonical draft packets created:
 | W7-T6 Dependency Order (P5) + Runtime/Artifact/Trace | CLOSED DELIVERED 2026-03-28 — P5 SATISFIED, ALL P1-P8 COMPLETE |
 | W7-T7 Planner + Decision Engine | CLOSED DELIVERED 2026-03-28 |
 | W7-T8 Agent Builder + Eval Loop | CLOSED DELIVERED 2026-03-28 |
-| W7-T9 Memory Loop activation | IN EXECUTION — GC-018 authorized 2026-03-28 |
-| W7-T10 Wave Closure | PENDING — follows W7-T9 |
+| W7-T9 Memory Loop activation | CLOSED DELIVERED 2026-03-28 |
+| W7-T10 Wave Closure | PENDING — W7-T9 closed; all prior tranches complete |

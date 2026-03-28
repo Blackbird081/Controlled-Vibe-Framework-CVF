@@ -1515,3 +1515,7 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W7-T8 — Agent Builder + Eval Loop Integration ✓ CLOSED 2026-03-28
 
 > HOLD→GO (Decision✓). W7AgentBuilderRecord (assisted-default P6; B-01→B-05 presets; GEF registry distribution) + W7EvalRecord (G7-blocked on Decision.status:resolved; 5 no-fake-learning invariants; 4 LPF signal types; observational-only). Dependency chain: Runtime✓→Artifact✓→Trace✓→Planner✓→Decision✓→Eval/Builder✓→Memory(T9).
+
+## W7-T9 — Memory Loop Activation ✓ CLOSED 2026-03-28
+
+> HOLD→GO (Eval/Builder✓). W7MemoryRecord (G7+G6 mandatory all presets; M-01→M-04 guard presets; 5 no-fake-learning invariants; evalRef anchored to real W7EvalRecord.status:complete) + Memory LPF Feed Protocol (signal routing 4 types; loop-back proposals/flags only; G3/G5 enforced). Full W7 dependency chain complete: Runtime✓→Artifact✓→Trace✓→Planner✓→Decision✓→Eval/Builder✓→Memory✓.

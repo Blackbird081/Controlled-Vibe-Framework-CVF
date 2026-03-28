@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-28
 
 > Branch: `cvf-next`
-> Last push: `W7-T8-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W7-T8 — **Agent Builder+Eval Loop closed, W7-T9 (Memory Loop) next**
+> Last push: `W7-T9-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W7-T9 — **Memory Loop closed, W7-T10 (Wave Closure) next**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
@@ -46,8 +46,7 @@ Current guidance:
 - next candidates: W7-T4 (Review 14 Skill Formation), W7-T5 (Review 16 Spec Inference), W7-T6 (Review 15 Runtime+Artifact+Trace)
 - ALL P1-P8 gates satisfied (W7-T1 through W7-T8 CLOSED DELIVERED)
 - execution dependency order: `Runtime✓ → Artifact✓ → Trace✓ → Planner✓ → Decision✓ → Eval/Builder✓ → Memory (W7-T9 next)`
-- **W7-T9** (Memory Loop): UNBLOCKED — real Eval outputs available (W7EvalRecord with status:complete); no fake-learning path
-- **W7-T10** (Wave Closure): follows W7-T9
+- **W7-T10** (Wave Closure): UNBLOCKED — all prior tranches closed (T1→T9 CLOSED DELIVERED); scope: closure review, GC-026 final sync, W7 roadmap finalized, tracker update
 - Governance artifacts for W7 integration: `docs/reviews/CVF_W7_*`, `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`
 - Architecture boundary lock: `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`

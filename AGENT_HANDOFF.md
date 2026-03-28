@@ -1,9 +1,9 @@
 # CVF Agent Handoff — 2026-03-28
 
 > Branch: `cvf-next`
-> Last push: `W7-T10-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — **W7 Integration Wave COMPLETE** (T0-T10 all CLOSED DELIVERED 2026-03-28)
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
+> Last push: `W5-T2-CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — **W5-T2 CLOSED DELIVERED** (Whitepaper updated to v3.0-W7T10, 2026-03-28)
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
 
 ---
 
@@ -13,26 +13,22 @@
 - CPF (Control Plane Foundation): **1893 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
-- LPF (Learning Plane Foundation): **1325 tests, 0 failures**
+- LPF (Learning Plane Foundation): **1333 tests, 0 failures**
 
 ### Last Tranches Closed
 
-| Tranche | Description | Commits | Tests |
-|---------|-------------|---------|-------|
-| W2-T32 | Context Build Consumer Pipeline Bridge | CP1, CP2, CP3 | 1583 CPF |
-| W2-T33 | Boardroom Round Consumer Pipeline Bridge | CP1, CP2, CP3 | 1638 CPF |
-| W2-T34 | Context Enrichment Consumer Pipeline Bridge | CP1, CP2, CP3 | 1690 CPF |
-| W2-T35 | Context Packager Consumer Pipeline Bridge | CP1, CP2, CP3 | 1742 CPF |
-| W2-T36 | Context Build Batch Consumer Pipeline Bridge | CP1, CP2, CP3 | 1791 CPF |
-| W2-T37 | Knowledge Query Batch Consumer Pipeline Bridge | CP1, CP2, CP3 | 1842 CPF |
-| W2-T38 | Retrieval Consumer Pipeline Bridge | CP1, CP2, CP3 | 1893 CPF |
+| Tranche | Description | Status |
+|---------|-------------|--------|
+| W7-T9 | Memory Loop Activation | CLOSED DELIVERED 2026-03-28 |
+| W7-T10 | W7 Wave Integration Closure | CLOSED DELIVERED 2026-03-28 |
+| W5-T2 | Post-W7 Architecture Whitepaper Update (v3.0-W7T10) | CLOSED DELIVERED 2026-03-28 |
 
-### Key Contracts Delivered (last 2 tranches)
+### Architecture Baseline
 
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.query.batch.consumer.pipeline.contract.ts` — KnowledgeQueryBatchConsumerPipelineContract (W2-T37)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.query.batch.consumer.pipeline.batch.contract.ts` — KnowledgeQueryBatchConsumerPipelineBatchContract (W2-T37)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/retrieval.consumer.pipeline.contract.ts` — RetrievalConsumerPipelineContract (W2-T38)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/retrieval.consumer.pipeline.batch.contract.ts` — RetrievalConsumerPipelineBatchContract (W2-T38)
+- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
+- Posture: `SUBSTANTIALLY DELIVERED`
+- All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10`
 
 ---
 
@@ -42,15 +38,14 @@
 
 Current guidance:
 - no tranche is currently active
-- W7 prerequisites P1+P2+P3+P4 are ALL SATISFIED — **W7-T4+ implementation tranches are fully unblocked**
-- next candidates: W7-T4 (Review 14 Skill Formation), W7-T5 (Review 16 Spec Inference), W7-T6 (Review 15 Runtime+Artifact+Trace)
-- ALL P1-P8 gates satisfied (W7-T1 through W7-T8 CLOSED DELIVERED)
-- execution dependency order: `Runtime✓ → Artifact✓ → Trace✓ → Planner✓ → Decision✓ → Eval/Builder✓ → Memory (W7-T9 next)`
 - **W7 Integration Wave COMPLETE** — all T0-T10 CLOSED DELIVERED; all P1-P8 gates SATISFIED; 11 schemas across 4 planes; 32 guard/preset definitions; 0 violations
-- **Next**: survey post-W7 gaps (EPF/GEF/CPF coverage, any Review 19+ proposals) or await fresh authorization for next wave
+- **W5-T2 CLOSED DELIVERED** — whitepaper now at v3.0-W7T10; progress tracker fully synchronized
+- **ALL known coverage gaps are closed**: CPF W2-T38, EPF all bridges, GEF all bridges, LPF W4-T25 (all 18 base contracts bridged)
+- **Next**: await fresh authorization for next wave; survey Review 19+ proposals if any exist; any extension requires fresh GC-018
 - Governance artifacts for W7 integration: `docs/reviews/CVF_W7_*`, `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`
 - Architecture boundary lock: `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`
+- W5-T2 closure: `docs/reviews/CVF_W5_T2_TRANCHE_CLOSURE_REVIEW_2026-03-28.md`
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

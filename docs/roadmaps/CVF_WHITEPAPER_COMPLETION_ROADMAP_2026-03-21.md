@@ -1523,3 +1523,7 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W7-T10 — Wave Closure ✓ CLOSED 2026-03-28
 
 > Wave Integration Complete. 11 tranches T0-T10 CLOSED DELIVERED; all P1-P8 gates SATISFIED; 11 schemas across 4 planes; 32 guard/preset definitions; 10 no-fake-learning invariants; 0 governance violations. W7 Integration Wave COMPLETE 2026-03-28.
+
+## W5-T2 — Post-W7 Architecture Whitepaper Update ✓ CLOSED 2026-03-28
+
+> Whitepaper updated v2.2-W4T11 → v3.0-W7T10. Full post-baseline delta reconciled: CPF W2-T32→T38, EPF W6-T1, GEF W6-T4/T5/T6, LPF W4-T14→T25, W7-T0→T10. Architecture diagram, §4.1, §4.1A, §4.3 all updated. Progress tracker synchronized. Posture: SUBSTANTIALLY DELIVERED. R0 risk; documentation only. CPF 1893 / EPF 1123 / GEF 625 / LPF 1333, all 0 failures.

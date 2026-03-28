@@ -4,6 +4,27 @@
 // Split rationale: index.ts exceeded 1000-line hard threshold; consumer bridge block extracted
 //   to domain barrel. index.ts now re-exports via: export * from "./consumer.pipeline.bridges.barrel"
 
+// W2-T36 — Context Build Batch Consumer Pipeline Bridge (CP1)
+export {
+  ContextBuildBatchConsumerPipelineContract,
+  createContextBuildBatchConsumerPipelineContract,
+} from "./context.build.batch.consumer.pipeline.contract";
+export type {
+  ContextBuildBatchConsumerPipelineRequest,
+  ContextBuildBatchConsumerPipelineResult,
+  ContextBuildBatchConsumerPipelineContractDependencies,
+} from "./context.build.batch.consumer.pipeline.contract";
+
+// W2-T36 — Context Build Batch Consumer Pipeline Batch (CP2)
+export {
+  ContextBuildBatchConsumerPipelineBatchContract,
+  createContextBuildBatchConsumerPipelineBatchContract,
+} from "./context.build.batch.consumer.pipeline.batch.contract";
+export type {
+  ContextBuildBatchConsumerPipelineBatchResult,
+  ContextBuildBatchConsumerPipelineBatchContractDependencies,
+} from "./context.build.batch.consumer.pipeline.batch.contract";
+
 // W2-T35 — Context Packager Consumer Pipeline Bridge (CP1)
 export {
   ContextPackagerConsumerPipelineContract,

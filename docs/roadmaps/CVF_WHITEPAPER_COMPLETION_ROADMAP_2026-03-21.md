@@ -1418,3 +1418,16 @@ Gap closed: LearningObservabilityContract (W4-T7) now has a governed consumer-vi
 Sixth LPF consumer bridge delivered — LearningStorageLog + LearningLoopSummary → LearningObservabilityReport chain now consumer-visible.
 
 Next: fresh GC-018 survey — next highest-value unbridged LPF or EPF aggregate contract.
+
+---
+
+## W2-T36 — Context Build Batch Consumer Pipeline Bridge (IN EXECUTION)
+
+> Authorization: GC-018 score 9/10 — 2026-03-28
+> CPF baseline: 1742 tests
+
+Planned deliverables:
+
+- `W2-T36 / CP1` — ContextBuildBatchConsumerPipelineContract (`ContextBuildBatch → CPF consumer pipeline`) — Full Lane (GC-019)
+- `W2-T36 / CP2` — ContextBuildBatchConsumerPipelineBatchContract (`ContextBuildBatchConsumerPipelineResult[] → batch with dominantTokenBudget`) — Fast Lane (GC-021)
+- `W2-T36 / CP3` — Tranche closure review — Full Lane

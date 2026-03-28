@@ -51,7 +51,7 @@ If any required gate is missing, tranche status remains `HOLD`.
 | `W7-T6` | Review 15 phase 1 integration (Runtime + Artifact + Trace) | `GO WITH FIXES` | `P2`, `P3`, `P4`, `P5` | Runtime path stable with trace/artifact outputs; no Planner/Decision/Memory yet |
 | `W7-T7` | Review 15 phase 2 integration (Planner + Decision Engine) | `HOLD -> GO` | `P2`, `P3`, `P4`, `P5` | Planner contracts finalized in Control Plane; Decision engine risk-aware and guard-compatible |
 | `W7-T8` | Review 16 remaining integration (Builder + Eval Loop + Registry distribution) | `HOLD -> GO` | `P1`, `P2`, `P3`, `P6` | Builder remains assisted-by-default; registry distribution merged with Governance registry model |
-| `W7-T9` | Memory Loop activation | `HOLD` | `P5` | Real trace + decision logs available; no synthetic/fake learning path |
+| `W7-T9` | Memory Loop activation | `HOLD -> GO` | `P5` | Real trace + decision logs available; no synthetic/fake learning path |
 | `W7-T10` | Wave closure + tracker synchronization | `GO` | all prior tranches closed | closure review, GC-026 sync note, tracker update, roadmap status log finalized |
 
 ---
@@ -116,4 +116,5 @@ Canonical draft packets created:
 | W7-T6 Dependency Order (P5) + Runtime/Artifact/Trace | CLOSED DELIVERED 2026-03-28 — P5 SATISFIED, ALL P1-P8 COMPLETE |
 | W7-T7 Planner + Decision Engine | CLOSED DELIVERED 2026-03-28 |
 | W7-T8 Agent Builder + Eval Loop | CLOSED DELIVERED 2026-03-28 |
-| W7-T9..W7-T10 execution | PENDING — W7-T9 UNBLOCKED (real Eval outputs available) |
+| W7-T9 Memory Loop activation | IN EXECUTION — GC-018 authorized 2026-03-28 |
+| W7-T10 Wave Closure | PENDING — follows W7-T9 |

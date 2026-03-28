@@ -1503,3 +1503,7 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W7-T5 — Autonomy Lock (P6) + Spec Inference Integration ✓ CLOSED 2026-03-28
 
 > P6 + P8 gates satisfied. Autonomy Lock: assisted mode canonical default; autonomous requires 5 preconditions + G5 release. StructuredSpec schema + DESIGN-phase-only inference + P8 isolation (no Runtime/Model touch). W7-T8 (Agent Builder) now fully unblocked.
+
+## W7-T6 — Dependency Order Enforcement (P5) + Runtime/Artifact/Trace Integration ✓ CLOSED 2026-03-28
+
+> P5 SATISFIED + ALL P1-P8 COMPLETE. W7RuntimeRecord/W7ArtifactRecord/W7TraceRecord schemas; BUILD-phase locked; trace-emission mandatory (G6); artifacts schema-validated; G7 blocking conditions per transition. W7-T7+T8 fully unblocked.

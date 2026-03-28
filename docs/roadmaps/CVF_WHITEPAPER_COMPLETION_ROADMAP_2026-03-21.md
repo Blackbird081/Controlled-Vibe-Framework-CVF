@@ -1491,3 +1491,7 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W7-T2 — Unified Risk Contract (R0-R3) ✓ CLOSED 2026-03-28
 
 > P3 gate satisfied. R0-R3 canonical definitions + W7RiskFields schema for Skill/Capability/PlannedAction/StructuredSpec. All R3 enforcement routes through existing EPF policy.gate + GEF escalation. W7-T3 (Guard Binding + Boundary Lock) now unblocked.
+
+## W7-T3 — Guard Binding + Architecture Boundary Lock ✓ CLOSED 2026-03-28
+
+> P2 + P4 gates satisfied. 8 shared guards (G1-G8) + 15 runtime preset mappings for all 4 W7 concepts. Architecture boundary locked: Planner→CPF DESIGN, Runtime→EPF BUILD, Skill→GEF, Eval+Memory→LPF. W7-T4+ (Skill/Spec/Runtime integration) now unblocked (P1+P2+P3+P4 all satisfied).

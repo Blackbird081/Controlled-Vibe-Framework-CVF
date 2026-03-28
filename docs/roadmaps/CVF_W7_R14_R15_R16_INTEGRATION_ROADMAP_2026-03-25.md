@@ -110,5 +110,5 @@ Canonical draft packets created:
 | W7-T1 execution plan | COMMITTED (3081ab13) |
 | W7-T1 canonical ownership map + merge blueprint | CLOSED DELIVERED 2026-03-28 — P1 SATISFIED |
 | W7-T2 unified risk contract (R0-R3) | CLOSED DELIVERED 2026-03-28 — P3 SATISFIED |
-| W7-T3 guard binding + architecture boundary lock | IN EXECUTION — 2026-03-28 |
-| W7-T4..W7-T10 execution | PENDING |
+| W7-T3 guard binding + architecture boundary lock | CLOSED DELIVERED 2026-03-28 — P2 + P4 SATISFIED |
+| W7-T4..W7-T10 execution | PENDING — W7-T4+ UNBLOCKED (P1+P2+P3+P4 all satisfied) |

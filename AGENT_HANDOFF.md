@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-28
 
 > Branch: `cvf-next`
-> Last push: `W7-T2-CP1+CP2+CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W7-T2 — **P1+P3 SATISFIED, W7-T3 UNBLOCKED**
+> Last push: `W7-T3-CP1+CP2+CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W7-T3 — **P1+P2+P3+P4 SATISFIED, W7-T4+ UNBLOCKED**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
@@ -42,13 +42,14 @@
 
 Current guidance:
 - no tranche is currently active
-- baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
-- `W2-T38` is now closed — **ALL CPF consumer pipeline bridge candidates (W2-T13 through W2-T38) are CLOSED**
-- `RetrievalResultSurface` consumer visibility gap is **CLOSED**
-- Notable: W2-T38 introduced `deriveContextId()` helper — `RetrievalResultSurface` has no natural ID field; contextId computed from query/chunkCount/totalCandidates
-- CPF barrel exports are in `consumer.pipeline.bridges.barrel.ts` (W2-T38 exports prepended); CPF index.ts barrel exception frozen
-- **Remaining unbridged CPF candidates**: NONE identified — survey required before next wave
-- next move: fresh `GC-018` survey — identify cross-plane or new domain candidates, or begin EPF/GEF/LPF gap survey
+- W7 prerequisites P1+P2+P3+P4 are ALL SATISFIED — **W7-T4+ implementation tranches are fully unblocked**
+- next candidates: W7-T4 (Review 14 Skill Formation), W7-T5 (Review 16 Spec Inference), W7-T6 (Review 15 Runtime+Artifact+Trace)
+- W7-T6/T7 also require P4 (now satisfied); W7-T5 also requires P6/P8 (pending)
+- execution dependency order: `Runtime → Artifact → Trace → Planner → Decision → Eval/Builder → Memory`
+- W7-T4 can begin independently (P1+P2+P3 sufficient); recommended first next tranche
+- Governance artifacts for W7 integration: `docs/reviews/CVF_W7_*`, `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`
+- Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`
+- Architecture boundary lock: `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

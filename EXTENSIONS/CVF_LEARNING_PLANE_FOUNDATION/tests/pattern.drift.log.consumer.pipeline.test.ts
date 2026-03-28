@@ -221,6 +221,7 @@ import {
 
 const NOW_2 = "2026-03-27T12:00:00.000Z";
 const batchContract = new PatternDriftLogConsumerPipelineBatchContract({ now: () => NOW_2 });
+const contract = new PatternDriftLogConsumerPipelineContract({ now: () => FIXED_NOW });
 
 // Helper: create test result
 function makeResult(signals: PatternDriftSignal[]): any {

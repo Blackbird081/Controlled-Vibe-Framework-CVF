@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-28
 
 > Branch: `cvf-next`
-> Last push: `W2-T37-CP1+CP2+CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T37 — **KNOWLEDGE QUERY BATCH CONSUMER BRIDGE COMPLETE**
+> Last push: `W2-T38-CP1+CP2+CP3 → cvf-next`
+> State: **NO ACTIVE TRANCHE** — last canonical closure W2-T38 — **ALL CPF CONSUMER PIPELINE BRIDGE CANDIDATES CLOSED**
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v2.2-W4T11`)
 
 ---
@@ -10,7 +10,7 @@
 ## Current State
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **1842 tests, 0 failures**
+- CPF (Control Plane Foundation): **1893 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1325 tests, 0 failures**
@@ -19,22 +19,20 @@
 
 | Tranche | Description | Commits | Tests |
 |---------|-------------|---------|-------|
-| W2-T31 | Boardroom Transition Gate Consumer Pipeline Bridge | CP1, CP2, CP3 | 1532 CPF |
 | W2-T32 | Context Build Consumer Pipeline Bridge | CP1, CP2, CP3 | 1583 CPF |
 | W2-T33 | Boardroom Round Consumer Pipeline Bridge | CP1, CP2, CP3 | 1638 CPF |
 | W2-T34 | Context Enrichment Consumer Pipeline Bridge | CP1, CP2, CP3 | 1690 CPF |
 | W2-T35 | Context Packager Consumer Pipeline Bridge | CP1, CP2, CP3 | 1742 CPF |
 | W2-T36 | Context Build Batch Consumer Pipeline Bridge | CP1, CP2, CP3 | 1791 CPF |
 | W2-T37 | Knowledge Query Batch Consumer Pipeline Bridge | CP1, CP2, CP3 | 1842 CPF |
+| W2-T38 | Retrieval Consumer Pipeline Bridge | CP1, CP2, CP3 | 1893 CPF |
 
 ### Key Contracts Delivered (last 2 tranches)
 
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/context.packager.consumer.pipeline.contract.ts` — ContextPackagerConsumerPipelineContract (W2-T35)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/context.packager.consumer.pipeline.batch.contract.ts` — ContextPackagerConsumerPipelineBatchContract (W2-T35)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/context.build.batch.consumer.pipeline.contract.ts` — ContextBuildBatchConsumerPipelineContract (W2-T36)
-- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/context.build.batch.consumer.pipeline.batch.contract.ts` — ContextBuildBatchConsumerPipelineBatchContract (W2-T36)
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.query.batch.consumer.pipeline.contract.ts` — KnowledgeQueryBatchConsumerPipelineContract (W2-T37)
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.query.batch.consumer.pipeline.batch.contract.ts` — KnowledgeQueryBatchConsumerPipelineBatchContract (W2-T37)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/retrieval.consumer.pipeline.contract.ts` — RetrievalConsumerPipelineContract (W2-T38)
+- `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/retrieval.consumer.pipeline.batch.contract.ts` — RetrievalConsumerPipelineBatchContract (W2-T38)
 
 ---
 
@@ -45,12 +43,12 @@
 Current guidance:
 - no tranche is currently active
 - baseline architecture snapshot is frozen at `W4-T11`; treat the whitepaper as the pre-next-wave architectural anchor
-- `W2-T37` is now closed — all MEDIUM-priority CPF candidates are **CLOSED**
-- `KnowledgeQueryBatchContract` consumer visibility gap is **CLOSED**
-- Notable: CP1 warnings expose empty-batch vs no-results distinction; CP2 aggregates totalQueries, totalItemsFound across results
-- CPF barrel exports are in `consumer.pipeline.bridges.barrel.ts` (W2-T37 exports prepended); CPF index.ts barrel exception at 1200 lines
-- **Remaining unbridged CPF candidates**: `retrieval.contract.ts` (LOW — RAGPipeline runtime dep)
-- next move: fresh `GC-018` survey — retrieval.contract.ts (LOW) or begin cross-plane wave
+- `W2-T38` is now closed — **ALL CPF consumer pipeline bridge candidates (W2-T13 through W2-T38) are CLOSED**
+- `RetrievalResultSurface` consumer visibility gap is **CLOSED**
+- Notable: W2-T38 introduced `deriveContextId()` helper — `RetrievalResultSurface` has no natural ID field; contextId computed from query/chunkCount/totalCandidates
+- CPF barrel exports are in `consumer.pipeline.bridges.barrel.ts` (W2-T38 exports prepended); CPF index.ts barrel exception frozen
+- **Remaining unbridged CPF candidates**: NONE identified — survey required before next wave
+- next move: fresh `GC-018` survey — identify cross-plane or new domain candidates, or begin EPF/GEF/LPF gap survey
 
 Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 

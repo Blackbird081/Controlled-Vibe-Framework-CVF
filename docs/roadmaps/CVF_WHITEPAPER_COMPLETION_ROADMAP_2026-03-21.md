@@ -1480,13 +1480,6 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 
 ---
 
-## W2-T38 — Retrieval Consumer Pipeline Bridge (IN EXECUTION)
+## W2-T38 — Retrieval Consumer Pipeline Bridge ✓ CLOSED 2026-03-28
 
-> Authorization: GC-018 score 9/10 — 2026-03-28
-> CPF baseline: 1842 tests
-
-Planned deliverables:
-
-- `W2-T38 / CP1` — RetrievalConsumerPipelineContract (`RetrievalResultSurface → CPF consumer pipeline`) — Full Lane (GC-019)
-- `W2-T38 / CP2` — RetrievalConsumerPipelineBatchContract (`RetrievalConsumerPipelineResult[] → batch`) — Fast Lane (GC-021)
-- `W2-T38 / CP3` — Tranche closure review — Full Lane
+> CPF: 1842 → 1893 tests (+51). RetrievalResultSurface → CPF consumer pipeline bridge. contextId derived (no natural ID field). Warnings: WARNING_NO_CHUNKS, WARNING_NO_TIERS_SEARCHED. All CPF bridge candidates (W2-T13–W2-T38) now CLOSED.

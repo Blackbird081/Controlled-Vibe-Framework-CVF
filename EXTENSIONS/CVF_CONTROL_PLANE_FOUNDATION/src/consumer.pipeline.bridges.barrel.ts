@@ -4,6 +4,27 @@
 // Split rationale: index.ts exceeded 1000-line hard threshold; consumer bridge block extracted
 //   to domain barrel. index.ts now re-exports via: export * from "./consumer.pipeline.bridges.barrel"
 
+// W2-T38 — Retrieval Consumer Pipeline Bridge (CP1)
+export {
+  RetrievalConsumerPipelineContract,
+  createRetrievalConsumerPipelineContract,
+} from "./retrieval.consumer.pipeline.contract";
+export type {
+  RetrievalConsumerPipelineRequest,
+  RetrievalConsumerPipelineResult,
+  RetrievalConsumerPipelineContractDependencies,
+} from "./retrieval.consumer.pipeline.contract";
+
+// W2-T38 — Retrieval Consumer Pipeline Batch (CP2)
+export {
+  RetrievalConsumerPipelineBatchContract,
+  createRetrievalConsumerPipelineBatchContract,
+} from "./retrieval.consumer.pipeline.batch.contract";
+export type {
+  RetrievalConsumerPipelineBatchResult,
+  RetrievalConsumerPipelineBatchContractDependencies,
+} from "./retrieval.consumer.pipeline.batch.contract";
+
 // W2-T37 — Knowledge Query Batch Consumer Pipeline Bridge (CP1)
 export {
   KnowledgeQueryBatchConsumerPipelineContract,

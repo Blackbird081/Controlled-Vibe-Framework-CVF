@@ -1499,3 +1499,7 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W7-T4 — Skill Formation Integration ✓ CLOSED 2026-03-28
 
 > GO WITH FIXES applied. SkillFormationRecord schema + REVIEW-phase-only extraction protocol + guard-bound usage (P-01→P-04) + GEF registry mutation protocol (.skill.md lifecycle). Skill model anchor ready for W7-T8 (Agent Builder).
+
+## W7-T5 — Autonomy Lock (P6) + Spec Inference Integration ✓ CLOSED 2026-03-28
+
+> P6 + P8 gates satisfied. Autonomy Lock: assisted mode canonical default; autonomous requires 5 preconditions + G5 release. StructuredSpec schema + DESIGN-phase-only inference + P8 isolation (no Runtime/Model touch). W7-T8 (Agent Builder) now fully unblocked.

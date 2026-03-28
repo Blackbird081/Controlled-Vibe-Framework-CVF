@@ -1450,7 +1450,7 @@ Next: fresh GC-018 survey — W2-T37 Knowledge Query Batch Consumer Pipeline Bri
 
 ---
 
-## W2-T37 — Knowledge Query Batch Consumer Pipeline Bridge (IN EXECUTION)
+## W2-T37 — Knowledge Query Batch Consumer Pipeline Bridge (CLOSED DELIVERED)
 
 > Authorization: GC-018 score 9/10 — 2026-03-28
 > CPF baseline: 1791 tests
@@ -1460,3 +1460,20 @@ Planned deliverables:
 - `W2-T37 / CP1` — KnowledgeQueryBatchConsumerPipelineContract (`KnowledgeQueryBatch → CPF consumer pipeline`) — Full Lane (GC-019)
 - `W2-T37 / CP2` — KnowledgeQueryBatchConsumerPipelineBatchContract (`KnowledgeQueryBatchConsumerPipelineResult[] → batch`) — Fast Lane (GC-021)
 - `W2-T37 / CP3` — Tranche closure review — Full Lane
+
+---
+
+### POST-CYCLE RECORD — W2-T37 — Knowledge Query Batch Consumer Pipeline Bridge — CLOSED DELIVERED
+
+> Closed: 2026-03-28
+> CPF at closure: 1842 tests, 0 failures (+51 from 1791)
+
+Contracts delivered:
+
+- `W2-T37 / CP1` — KnowledgeQueryBatchConsumerPipelineContract — Full Lane (GC-019) — +33 tests — commit 4d6ef39f
+- `W2-T37 / CP2` — KnowledgeQueryBatchConsumerPipelineBatchContract — Fast Lane (GC-021) — +18 tests — commit 4d6ef39f
+
+Gap closed: KnowledgeQueryBatchContract (W1-T10) now has a governed consumer-visible enriched output path.
+All MEDIUM-priority unbridged CPF candidates closed. Remaining: retrieval.contract.ts (LOW).
+
+Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.

@@ -1,7 +1,6 @@
 # CVF W1-T27 Tranche Closure Review — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Tranche: W1-T27 — Boardroom Consumer Pipeline Bridge
 > Control points: CP1 (Full Lane), CP2 (Fast Lane GC-021), CP3 (Closure)
 > Closure date: 2026-03-27
@@ -89,10 +88,10 @@ W1-T27 delivers consumer pipeline visibility for `BoardroomContract`, completing
 | Artifact | Path |
 |----------|------|
 | GC-018 authorization | `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T27_BOARDROOM_CONSUMER_BRIDGE_2026-03-27.md` |
-| GC-026 authorization sync | `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T27_AUTHORIZATION_2026-03-27.md` |
+| GC-026 authorization sync | `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T27_AUTHORIZATION_2026-03-27.md` |
 | Execution plan | `docs/roadmaps/CVF_W1_T27_BOARDROOM_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md` |
 | Closure review | `docs/reviews/CVF_W1_T27_TRANCHE_CLOSURE_REVIEW_2026-03-27.md` (this document) |
-| GC-026 completion sync | `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T27_COMPLETION_2026-03-27.md` |
+| GC-026 completion sync | `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T27_COMPLETION_2026-03-27.md` |
 
 ---
 

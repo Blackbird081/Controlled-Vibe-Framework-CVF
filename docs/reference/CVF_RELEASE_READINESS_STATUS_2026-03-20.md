@@ -1,4 +1,6 @@
-# CVF Release Readiness Status 2026-03-20
+
+Memory class: POINTER_RECORD
+
 
 Status: release-readiness checkpoint for the current local remediation baseline.
 
@@ -73,28 +75,28 @@ Claims to avoid for now:
 - [Post-Closure Reassessment Trigger Hold](../reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md)
 - [System Unification Roadmap](../roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md)
 - [Governance Control Matrix](./CVF_GOVERNANCE_CONTROL_MATRIX.md)
-- [Phase 1 Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md)
-- [Web Alignment Delta](../baselines/CVF_SYSTEM_UNIFICATION_WEB_ALIGNMENT_DELTA_2026-03-20.md)
-- [Workflow Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE3_WORKFLOW_DELTA_2026-03-20.md)
-- [Handler Binding Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md)
-- [Governance Ownership Delta](../baselines/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md)
-- [System Unification Closure Delta](../baselines/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md)
-- [Legacy Boundary Delta](../baselines/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md)
-- [Docs Canonicalization Delta](../baselines/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md)
+- [Phase 1 Delta](../baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md)
+- [Web Alignment Delta](../baselines/archive/CVF_SYSTEM_UNIFICATION_WEB_ALIGNMENT_DELTA_2026-03-20.md)
+- [Workflow Delta](../baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE3_WORKFLOW_DELTA_2026-03-20.md)
+- [Handler Binding Delta](../baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE3_HANDLER_BINDING_DELTA_2026-03-20.md)
+- [Governance Ownership Delta](../baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md)
+- [System Unification Closure Delta](../baselines/archive/CVF_SYSTEM_UNIFICATION_CLOSURE_DELTA_2026-03-20.md)
+- [Legacy Boundary Delta](../baselines/archive/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md)
+- [Docs Canonicalization Delta](../baselines/archive/CVF_DOCS_USER_FACING_CANONICALIZATION_DELTA_2026-03-20.md)
 - [Reference Governed Loop](./CVF_REFERENCE_GOVERNED_LOOP.md)
-- [Reference Governed Loop Delta](../baselines/CVF_REFERENCE_GOVERNED_LOOP_DELTA_2026-03-20.md)
+- [Reference Governed Loop Delta](../baselines/archive/CVF_REFERENCE_GOVERNED_LOOP_DELTA_2026-03-20.md)
 - [Non-Coder Governed Packet](./CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md)
-- [Onboarding Governed Starter Path Delta](../baselines/CVF_ONBOARDING_GOVERNED_STARTER_PATH_DELTA_2026-03-20.md)
-- [Web Build Blocker Closure Delta](../baselines/CVF_WEB_BUILD_BLOCKER_CLOSURE_DELTA_2026-03-20.md)
-- [Depth Audit Continuation Automation Delta](../baselines/CVF_DEPTH_AUDIT_CONTINUATION_AUTOMATION_DELTA_2026-03-20.md)
-- [GC-020 Runtime Handoff Enforcement Delta](../baselines/CVF_GC020_RUNTIME_HANDOFF_ENFORCEMENT_DELTA_2026-03-22.md)
+- [Onboarding Governed Starter Path Delta](../baselines/archive/CVF_ONBOARDING_GOVERNED_STARTER_PATH_DELTA_2026-03-20.md)
+- [Web Build Blocker Closure Delta](../baselines/archive/CVF_WEB_BUILD_BLOCKER_CLOSURE_DELTA_2026-03-20.md)
+- [Depth Audit Continuation Automation Delta](../baselines/archive/CVF_DEPTH_AUDIT_CONTINUATION_AUTOMATION_DELTA_2026-03-20.md)
+- [GC-020 Runtime Handoff Enforcement Delta](../baselines/archive/CVF_GC020_RUNTIME_HANDOFF_ENFORCEMENT_DELTA_2026-03-22.md)
 - [GC-018 Continuation Candidate P3](../reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md)
-- [GC-018 P3 Continuation Packet Delta](../baselines/CVF_GC018_P3_CONTINUATION_PACKET_DELTA_2026-03-20.md)
-- [Non-Coder Live Path Evidence Delta](../baselines/CVF_NONCODER_LIVE_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md)
-- [Non-Coder Breadth Expansion Delta](../baselines/CVF_NONCODER_BREADTH_EXPANSION_DELTA_2026-03-20.md)
-- [Non-Coder Research Breadth Expansion Delta](../baselines/CVF_NONCODER_RESEARCH_BREADTH_EXPANSION_DELTA_2026-03-20.md)
-- [Non-Coder Product Breadth Expansion Delta](../baselines/CVF_NONCODER_PRODUCT_BREADTH_EXPANSION_DELTA_2026-03-20.md)
-- [Non-Coder Marketing Breadth Expansion Delta](../baselines/CVF_NONCODER_MARKETING_BREADTH_EXPANSION_DELTA_2026-03-20.md)
+- [GC-018 P3 Continuation Packet Delta](../baselines/archive/CVF_GC018_P3_CONTINUATION_PACKET_DELTA_2026-03-20.md)
+- [Non-Coder Live Path Evidence Delta](../baselines/archive/CVF_NONCODER_LIVE_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md)
+- [Non-Coder Breadth Expansion Delta](../baselines/archive/CVF_NONCODER_BREADTH_EXPANSION_DELTA_2026-03-20.md)
+- [Non-Coder Research Breadth Expansion Delta](../baselines/archive/CVF_NONCODER_RESEARCH_BREADTH_EXPANSION_DELTA_2026-03-20.md)
+- [Non-Coder Product Breadth Expansion Delta](../baselines/archive/CVF_NONCODER_PRODUCT_BREADTH_EXPANSION_DELTA_2026-03-20.md)
+- [Non-Coder Marketing Breadth Expansion Delta](../baselines/archive/CVF_NONCODER_MARKETING_BREADTH_EXPANSION_DELTA_2026-03-20.md)
 
 ## Verdict
 

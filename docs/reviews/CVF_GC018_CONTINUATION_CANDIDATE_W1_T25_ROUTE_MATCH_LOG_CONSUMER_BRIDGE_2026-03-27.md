@@ -1,12 +1,46 @@
 # CVF GC-018 Continuation Candidate — W1-T25 Route Match Log Consumer Bridge — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Protocol: GC-018 (Continuation Authorization)
 > Candidate tranche: W1-T25 — Route Match Log Consumer Pipeline Bridge
 > Survey date: 2026-03-27
 > Surveyor: CVF Agent
 > Authorization status: **AUTHORIZED** (10/10 audit score)
+
+---
+
+GC-018 Continuation Candidate
+- Candidate ID: W1-T25
+- Date: 2026-03-27
+- Parent roadmap / wave: docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md
+- Proposed scope: close the CPF gateway observability gap for `RouteMatchLogContract` with one consumer bridge tranche
+- Continuation class: REALIZATION
+- Why now: `RouteMatchLogContract` is the only remaining unbridged CPF log aggregate after W1-T24 and is the highest-value next step for governed gateway routing observability
+- Active-path impact: LIMITED
+- Risk if deferred: route-match action distribution, mismatch rates, and routing drift remain invisible to governed consumer packaging and downstream analysis
+- Lateral alternative considered: YES
+- Why not lateral shift: broader CPF surfaces like `BoardroomContract`, `AIGatewayContract`, and `IntakeContract` are still open, but `RouteMatchLogContract` is the cleanest high-signal gateway observability gap and completes the CPF gateway log chain before broader orchestration work
+- Real decision boundary improved: YES
+- Expected enforcement class:
+  - GATEWAY_PRECONDITION
+- Required evidence if approved:
+  - CP1 audit/review/delta plus dedicated CPF consumer-pipeline tests
+  - CP2 batch audit/review/delta plus tracker sync and closure packet
+
+Depth Audit
+- Risk reduction: 2
+- Decision value: 2
+- Machine enforceability: 2
+- Operational efficiency: 2
+- Portfolio priority: 2
+- Total: 10
+- Decision: CONTINUE
+- Reason: W1-T25 closes the highest-value remaining CPF gateway log visibility gap and turns routing observability into a governed consumer-visible decision surface.
+
+Authorization Boundary
+- Authorized now: YES
+- If YES, next batch name: W1-T25 — Route Match Log Consumer Pipeline Bridge
+- If NO, reopen trigger: fresh GC-018 candidate
 
 ---
 
@@ -117,7 +151,7 @@ Following W1-T24 completion (second CPF log consumer bridge), performed fresh GC
 ## Next Steps
 
 1. Create execution plan (`docs/roadmaps/CVF_W1_T25_ROUTE_MATCH_LOG_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`)
-2. Create GC-026 authorization sync (`docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T25_AUTHORIZATION_2026-03-27.md`)
+2. Create GC-026 authorization sync (`docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T25_AUTHORIZATION_2026-03-27.md`)
 3. Implement CP1 (Full Lane)
 4. Implement CP2 (Fast Lane GC-021)
 5. Execute CP3 (Closure)

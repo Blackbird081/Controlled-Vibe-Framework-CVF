@@ -1,7 +1,6 @@
 # CVF W2-T5 Execution Feedback Routing Slice — Tranche Closure Review
 
 Memory class: FULL_RECORD
-
 > Decision type: `Full Lane` tranche closure review
 > Date: `2026-03-22`
 > Tranche: `W2-T5 — Execution Feedback Routing Slice`
@@ -50,16 +49,16 @@ Note: 2 pre-existing test flakiness bugs in W2-T2/W2-T3 (hash equality across se
 |----------|-------------|-----|
 | `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T5_2026-03-22.md` | FULL_RECORD | Pre-tranche |
 | `docs/roadmaps/CVF_W2_T5_FEEDBACK_ROUTING_EXECUTION_PLAN_2026-03-22.md` | SUMMARY_RECORD | Pre-tranche |
-| `docs/baselines/CVF_WHITEPAPER_GC018_W2_T5_AUTHORIZATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | Pre-tranche |
+| `docs/baselines/archive/CVF_WHITEPAPER_GC018_W2_T5_AUTHORIZATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | Pre-tranche |
 | `docs/audits/CVF_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_AUDIT_2026-03-22.md` | FULL_RECORD | CP1 |
 | `docs/reviews/CVF_GC019_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_REVIEW_2026-03-22.md` | FULL_RECORD | CP1 |
-| `docs/baselines/CVF_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP1 |
+| `docs/baselines/archive/CVF_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP1 |
 | `docs/audits/CVF_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_AUDIT_2026-03-22.md` | FULL_RECORD | CP2 |
 | `docs/reviews/CVF_GC019_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_REVIEW_2026-03-22.md` | FULL_RECORD | CP2 |
-| `docs/baselines/CVF_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP2 |
+| `docs/baselines/archive/CVF_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP2 |
 | `docs/audits/CVF_W2_T5_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md` | FULL_RECORD | CP3 |
 | `docs/reviews/CVF_GC019_W2_T5_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md` | FULL_RECORD | CP3 |
-| `docs/baselines/CVF_W2_T5_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP3 |
+| `docs/baselines/archive/CVF_W2_T5_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP3 |
 
 ## 6. Remaining Gaps vs. Whitepaper Target-State
 

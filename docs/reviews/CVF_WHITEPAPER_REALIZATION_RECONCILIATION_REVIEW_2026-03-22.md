@@ -1,4 +1,6 @@
-# CVF Whitepaper Realization Reconciliation Review — 2026-03-22
+
+Memory class: FULL_RECORD
+
 
 > Date: 2026-03-22  
 > Scope: independently assess whether the post-`W0` whitepaper-completion work is only `grouping / re-export`, or whether it also contains real uplift / concept realization work  
@@ -59,7 +61,7 @@ The more accurate statement is:
 
 The following repository evidence is stronger than a pure `barrel export`:
 
-- `W1-T1 / CP3` is explicitly described as reporting integration rather than wrapper-only work in `docs/baselines/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_IMPLEMENTATION_DELTA_2026-03-22.md`
+- `W1-T1 / CP3` is explicitly described as reporting integration rather than wrapper-only work in `docs/baselines/archive/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_IMPLEMENTATION_DELTA_2026-03-22.md`
 - `W2-T1 / CP3` adds:
   - `createExecutionAdapterEvidenceSurface()`
   - `describeExecutionAdapterEvidence()`

@@ -1,11 +1,45 @@
 # CVF GC-018 Continuation Candidate — W1-T29 — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Candidate tranche: W1-T29 — Intake Consumer Pipeline Bridge
 > Survey date: 2026-03-27
 > Survey scope: CPF unbridged contracts
 > Authorization decision: PENDING AUDIT
+
+---
+
+GC-018 Continuation Candidate
+- Candidate ID: W1-T29
+- Date: 2026-03-27
+- Parent roadmap / wave: docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md
+- Proposed scope: close the CPF intake classification visibility gap for `IntakeContract` with one consumer bridge tranche
+- Continuation class: REALIZATION
+- Why now: `IntakeContract` is the canonical control-plane entry contract after gateway processing and is the highest-value remaining aggregate for domain classification, task extraction, and risk summarization
+- Active-path impact: LIMITED
+- Risk if deferred: intake domain detection, task planning, and risk summaries remain unavailable to governed consumer packaging, leaving the CPF intake decision boundary opaque downstream
+- Lateral alternative considered: YES
+- Why not lateral shift: `RouteMatchContract` is important but narrower; `IntakeContract` is the more decisive classification and task-shaping boundary immediately after gateway handling
+- Real decision boundary improved: YES
+- Expected enforcement class:
+  - APPROVAL_CHECKPOINT
+- Required evidence if approved:
+  - CP1 audit/review/delta plus dedicated CPF consumer-pipeline tests
+  - CP2 batch audit/review/delta plus tracker sync and closure packet
+
+Depth Audit
+- Risk reduction: 2
+- Decision value: 2
+- Machine enforceability: 2
+- Operational efficiency: 2
+- Portfolio priority: 2
+- Total: 10
+- Decision: CONTINUE
+- Reason: W1-T29 closes the CPF intake decision boundary by making domain, task, and risk extraction consumer-visible and reviewable across downstream governed flows.
+
+Authorization Boundary
+- Authorized now: YES
+- If YES, next batch name: W1-T29 — Intake Consumer Pipeline Bridge
+- If NO, reopen trigger: fresh GC-018 candidate
 
 ---
 
@@ -135,7 +169,7 @@ This tranche delivers consumer pipeline visibility for `IntakeContract`, complet
 
 ## Execution Plan Requirements
 
-1. Create GC-026 authorization sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T29_AUTHORIZATION_2026-03-27.md`
+1. Create GC-026 authorization sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T29_AUTHORIZATION_2026-03-27.md`
 2. CP1 Full Lane: `IntakeConsumerPipelineContract` with ~35 tests
 3. CP2 Fast Lane (GC-021): `IntakeConsumerPipelineBatchContract` with ~28 tests
 4. CP3 Closure: closure review, GC-026 completion sync, tracker update, handoff update

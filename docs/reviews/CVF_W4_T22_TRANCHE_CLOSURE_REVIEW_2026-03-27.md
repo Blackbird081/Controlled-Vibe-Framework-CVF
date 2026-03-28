@@ -1,4 +1,6 @@
-# CVF W4-T22 Tranche Closure Review
+
+Memory class: FULL_RECORD
+
 
 Memory class: CLOSURE_RECORD
 
@@ -97,7 +99,7 @@ The discrepancy is due to test file integration where batch tests are in the sam
 3. `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/governance.signal.log.consumer.pipeline.test.ts` (CP1 + CP2)
 4. `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T22_GOVERNANCE_SIGNAL_LOG_CONSUMER_BRIDGE_2026-03-27.md`
 5. `docs/roadmaps/CVF_W4_T22_GOVERNANCE_SIGNAL_LOG_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`
-6. `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T22_AUTHORIZATION_2026-03-27.md`
+6. `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W4_T22_AUTHORIZATION_2026-03-27.md`
 7. `docs/audits/CVF_W4_T22_CP1_GOVERNANCE_SIGNAL_LOG_CONSUMER_PIPELINE_AUDIT_2026-03-27.md`
 8. `docs/audits/CVF_W4_T22_CP2_GOVERNANCE_SIGNAL_LOG_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md`
 9. `docs/reviews/CVF_W4_T22_TRANCHE_CLOSURE_REVIEW_2026-03-27.md` (this file)

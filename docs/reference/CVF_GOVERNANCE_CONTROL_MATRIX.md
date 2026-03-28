@@ -1,7 +1,6 @@
 # CVF Governance Control Matrix
 
 Memory class: POINTER_RECORD
-
 Status: canonical ownership map for critical governance controls in the active CVF baseline.
 
 ## Purpose
@@ -36,7 +35,7 @@ Status: canonical ownership map for critical governance controls in the active C
 | `GC-010` | governed helper runtime must stop on approval-required escalations | `AgentExecutionRuntime` | `GATEWAY_PRECONDITION` | guard contract runtime helpers, governed helper sessions | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`, `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts` |
 | `GC-011` | governed `BUILD` requires plan evidence before execution proceeds | `PipelineOrchestrator` | `APPROVAL_CHECKPOINT` | runtime orchestrator, SDK bridge workflows | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`, `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/pipeline.orchestrator.test.ts` |
 | `GC-012` | governed `BUILD` and `FREEZE` checkpoints require explicit approval when risk or metadata demands it | `PipelineOrchestrator` | `APPROVAL_CHECKPOINT` | runtime orchestrator, SDK bridge workflows | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/sdk.test.ts`, `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/pipeline.orchestrator.test.ts` |
-| `GC-013` | governed `FREEZE` requires execution and review evidence before closure | `PipelineOrchestrator` | `APPROVAL_CHECKPOINT` | runtime orchestrator, SDK bridge workflows | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`, `docs/baselines/CVF_SYSTEM_UNIFICATION_PHASE2_CONTROL_LOOP_DELTA_2026-03-20.md` |
+| `GC-013` | governed `FREEZE` requires execution and review evidence before closure | `PipelineOrchestrator` | `APPROVAL_CHECKPOINT` | runtime orchestrator, SDK bridge workflows | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`, `docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE2_CONTROL_LOOP_DELTA_2026-03-20.md` |
 | `GC-014` | rollback actions must preserve failure reason and rollback evidence | `ExtensionBridge` | `APPROVAL_CHECKPOINT` | cross-extension workflow runtime | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/wiring/extension.bridge.ts`, `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/extension.bridge.test.ts` |
 | `GC-015` | baseline artifact must be updated after every substantive change | `check_baseline_update_compat.py` | `CI_REPO_GATE` | CI, local pre-push hook chain | `governance/compat/check_baseline_update_compat.py`, `governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md` |
 | `GC-016` | docs, bug, and test evidence must remain historically consistent | `docs governance + bug/test compat gates` | `CI_REPO_GATE` | CI, local hooks | `governance/compat/check_docs_governance_compat.py`, `governance/compat/check_bug_doc_compat.py`, `governance/compat/check_test_doc_compat.py` |

@@ -1,7 +1,6 @@
 # CVF GC-018 Continuation Candidate — W4-T14 Learning Loop Consumer Bridge
 
 Memory class: FULL_RECORD
-
 > Date: 2026-03-27
 > Tranche: W4-T14 — Learning Loop Consumer Pipeline Bridge
 > Authorization gate: GC-018 (10/10 depth audit required)
@@ -9,6 +8,41 @@ Memory class: FULL_RECORD
 > Architecture baseline: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (v2.2-W4T11)
 > Last canonical closure: `docs/reviews/CVF_W4_T13_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
 > Current test baseline: CPF 991, EPF 902, GEF 625, LPF 751 (all 0 failures)
+
+---
+
+GC-018 Continuation Candidate
+- Candidate ID: W4-T14
+- Date: 2026-03-27
+- Parent roadmap / wave: docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md
+- Proposed scope: close the LPF aggregate consumer visibility gap for `LearningLoopContract` with one consumer bridge tranche
+- Continuation class: REALIZATION
+- Why now: `LearningLoopContract` is the highest-value remaining LPF aggregate after W4-T13 because it converts multiple governance signals into the actionable loop summary that the rest of the learning plane depends on
+- Active-path impact: LIMITED
+- Risk if deferred: the canonical learning feedback summary remains invisible to consumers, leaving the post-observability learning loop unable to surface its main decision artifact downstream
+- Lateral alternative considered: YES
+- Why not lateral shift: `LearningReinjectionContract` is a lower-value transformer and EPF continuations can follow after the LPF aggregate layer is complete; the loop summary is the stronger cross-plane decision surface right now
+- Real decision boundary improved: YES
+- Expected enforcement class:
+  - GOVERNANCE_DECISION_GATE
+- Required evidence if approved:
+  - CP1 audit/review/delta plus dedicated LPF consumer-pipeline tests
+  - CP2 batch audit/review/delta plus tracker sync and closure packet
+
+Depth Audit
+- Risk reduction: 2
+- Decision value: 2
+- Machine enforceability: 2
+- Operational efficiency: 2
+- Portfolio priority: 2
+- Total: 10
+- Decision: CONTINUE
+- Reason: W4-T14 exposes the LPF loop-summary decision boundary, making governance feedback actionable through the governed consumer path instead of keeping it trapped inside the learning loop.
+
+Authorization Boundary
+- Authorized now: YES
+- If YES, next batch name: W4-T14 — Learning Loop Consumer Pipeline Bridge
+- If NO, reopen trigger: fresh GC-018 candidate
 
 ---
 
@@ -295,7 +329,7 @@ GovernanceSignal[] → LearningLoopConsumerPipelineContract
 
 ### If Authorized
 1. Create execution plan: `docs/roadmaps/CVF_W4_T14_LEARNING_LOOP_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`
-2. GC-026 authorization sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T14_AUTHORIZATION_2026-03-27.md`
+2. GC-026 authorization sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W4_T14_AUTHORIZATION_2026-03-27.md`
 3. Execute CP1 (Full Lane)
 4. Execute CP2 (Fast Lane)
 5. Execute CP3 (Closure)

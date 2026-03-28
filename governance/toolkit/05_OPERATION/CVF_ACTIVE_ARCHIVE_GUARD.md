@@ -3,7 +3,7 @@
 **Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
 **Status:** Active archive-maintenance contract for dated operational documents.
 **Applies to:** Managed roots such as `docs/` and `ECOSYSTEM/strategy/` plus their local `archive/` subdirectories.
-**Enforced by:** `scripts/cvf_active_archive.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`
+**Enforced by:** `scripts/cvf_active_archive.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/check_audit_retention_registry.py`, `governance/compat/check_review_retention_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`, `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`, `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`
 
 ## Purpose
 
@@ -29,6 +29,7 @@ Policy overlap control:
 - paths that already have dedicated rotation guards are excluded from this guard, such as `docs/logs/` and `docs/reviews/cvf_phase_governance/logs/`
 - canonical active windows owned by dedicated rotation guards are never auto-archived by this generic cleanup flow and must be registered in `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 - archive folders (`*/archive/`) are never re-scanned as active candidates
+- `docs/audits/` uses stricter retention classification through `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`
 
 ### File Naming Rule
 
@@ -86,6 +87,7 @@ Before archive move, each candidate is scanned for reference impact:
 
 - inbound references from active docs are counted
 - the candidate is blocked if referenced by protected anchor files such as whitepaper, tracker, handoff, or index
+- audit candidates explicitly listed in `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json` as retain-evidence stay active even when old
 - dedicated active-window protection is evaluated before normal date-based archive eligibility
 - the candidate is blocked if inbound active reference count exceeds threshold
 - the candidate is blocked if active markdown links resolve directly to that file
@@ -127,6 +129,8 @@ This script should be run:
 
 - active/archive maintenance runs through `scripts/cvf_active_archive.py`
 - active-window classification and protected-set sync run through `governance/compat/check_active_window_registry.py`
+- audit retention classification completeness runs through `governance/compat/check_audit_retention_registry.py`
+- review retention classification completeness runs through `governance/compat/check_review_retention_registry.py`
 - latest archive baseline is stored in `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`
 - governance drift exists when safe-to-archive files remain active without reason or when archive moves break references
 - remediation requires running the archive script, verifying `CVF_ARCHIVE_INDEX.md`, and resolving `BROKEN-ARCHIVED` findings before more cleanup proceeds
@@ -149,9 +153,14 @@ Useful commands:
 
 - `scripts/cvf_active_archive.py`
 - `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`
+- `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`
+- `governance/compat/check_audit_retention_registry.py`
+- `governance/compat/check_review_retention_registry.py`
 - `governance/compat/check_active_window_registry.py`
 - `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 - `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
+- `docs/reference/CVF_AUDIT_RETENTION_CLASSIFICATION.md`
+- `docs/reference/CVF_REVIEW_RETENTION_CLASSIFICATION.md`
 - `governance/toolkit/05_OPERATION/CVF_DOCUMENT_NAMING_GUARD.md`
 - `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`
 - `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`

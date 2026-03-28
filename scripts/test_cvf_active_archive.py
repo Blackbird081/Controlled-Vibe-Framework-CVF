@@ -24,6 +24,7 @@ class CvfActiveArchiveTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temp_dir = tempfile.TemporaryDirectory()
         self.repo_root = Path(self.temp_dir.name)
+        self.original_audit_registry_path = MODULE.AUDIT_RETENTION_REGISTRY_PATH
         (self.repo_root / "docs" / "reviews" / "cvf_phase_governance").mkdir(parents=True, exist_ok=True)
         (self.repo_root / "docs" / "logs").mkdir(parents=True, exist_ok=True)
         (self.repo_root / "governance" / "compat").mkdir(parents=True, exist_ok=True)
@@ -42,6 +43,32 @@ class CvfActiveArchiveTests(unittest.TestCase):
         )
         (self.repo_root / "docs" / "CVF_OLD_REVIEW_2026-03-01.md").write_text(
             "old dated file\n",
+            encoding="utf-8",
+        )
+        (self.repo_root / "docs" / "audits").mkdir(parents=True, exist_ok=True)
+        (self.repo_root / "docs" / "audits" / "CVF_W1_T1_CP1_FOUNDATION_AUDIT_2026-03-26.md").write_text(
+            "foundation audit\n",
+            encoding="utf-8",
+        )
+        (self.repo_root / "docs" / "audits" / "CVF_W1_T2_CP1_COMPONENT_AUDIT_2026-03-26.md").write_text(
+            "component audit\n",
+            encoding="utf-8",
+        )
+        (self.repo_root / "docs" / "baselines").mkdir(parents=True, exist_ok=True)
+        (self.repo_root / "docs" / "baselines" / "CVF_CORE_COMPAT_BASELINE.md").write_text(
+            "core baseline\n",
+            encoding="utf-8",
+        )
+        (self.repo_root / "docs" / "baselines" / "CVF_TESTER_BASELINE_2026-02-25.md").write_text(
+            "tester baseline\n",
+            encoding="utf-8",
+        )
+        (self.repo_root / "docs" / "baselines" / "CVF_CONFORMANCE_GOLDEN_BASELINE_2026-03-07.json").write_text(
+            "{}\n",
+            encoding="utf-8",
+        )
+        (self.repo_root / "docs" / "baselines" / "README.md").write_text(
+            "# baselines\n",
             encoding="utf-8",
         )
         (self.repo_root / "docs" / "logs" / "CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_01.md").write_text(
@@ -86,8 +113,25 @@ class CvfActiveArchiveTests(unittest.TestCase):
             ),
             encoding="utf-8",
         )
+        (self.repo_root / "governance" / "compat" / "CVF_AUDIT_RETENTION_REGISTRY.json").write_text(
+            json.dumps(
+                {
+                    "version": 1,
+                    "lastReviewed": "2026-03-28",
+                    "retainEvidencePaths": [
+                        "docs/audits/CVF_W1_T1_CP1_FOUNDATION_AUDIT_2026-03-26.md"
+                    ],
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+        MODULE.AUDIT_RETENTION_REGISTRY_PATH = self.repo_root / "governance" / "compat" / "CVF_AUDIT_RETENTION_REGISTRY.json"
+        MODULE.load_audit_retain_evidence_paths.cache_clear()
 
     def tearDown(self) -> None:
+        MODULE.AUDIT_RETENTION_REGISTRY_PATH = self.original_audit_registry_path
+        MODULE.load_audit_retain_evidence_paths.cache_clear()
         self.temp_dir.cleanup()
 
     def test_scan_root_keeps_dedicated_active_windows_permanent(self) -> None:
@@ -122,6 +166,50 @@ class CvfActiveArchiveTests(unittest.TestCase):
 
         archive_candidates = {info.rel_path for info in result.archive_candidates}
         self.assertIn("docs/CVF_OLD_REVIEW_2026-03-01.md", archive_candidates)
+
+    def test_scan_root_keeps_foundational_baselines_permanent(self) -> None:
+        cutoff = datetime(2026, 3, 25)
+
+        with patch.object(MODULE, "PROJECT_ROOT", self.repo_root):
+            with patch.object(MODULE, "ACTIVE_WINDOW_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_ACTIVE_WINDOW_REGISTRY.json"):
+                MODULE.load_active_window_paths.cache_clear()
+                result = MODULE.scan_root(self.repo_root / "docs", cutoff)
+
+        permanent_paths = {path.relative_to(self.repo_root).as_posix() for path in result.permanent}
+        self.assertIn("docs/baselines/CVF_CORE_COMPAT_BASELINE.md", permanent_paths)
+        self.assertIn("docs/baselines/CVF_TESTER_BASELINE_2026-02-25.md", permanent_paths)
+        self.assertIn("docs/baselines/CVF_CONFORMANCE_GOLDEN_BASELINE_2026-03-07.json", permanent_paths)
+
+    def test_audit_retention_registry_blocks_retain_evidence_audit(self) -> None:
+        audit_info = MODULE.FileInfo(
+            path=self.repo_root / "docs" / "audits" / "CVF_W1_T1_CP1_FOUNDATION_AUDIT_2026-03-26.md",
+            rel_path="docs/audits/CVF_W1_T1_CP1_FOUNDATION_AUDIT_2026-03-26.md",
+            date=datetime(2026, 3, 21),
+            size=(self.repo_root / "docs" / "audits" / "CVF_W1_T1_CP1_FOUNDATION_AUDIT_2026-03-26.md").stat().st_size,
+        )
+
+        with patch.object(MODULE, "PROJECT_ROOT", self.repo_root):
+            with patch.object(MODULE, "AUDIT_RETENTION_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_AUDIT_RETENTION_REGISTRY.json"):
+                MODULE.load_audit_retain_evidence_paths.cache_clear()
+                risk = MODULE.evaluate_candidate_risk(audit_info, moving_rel_paths=set(), markdown_link_index={})
+
+        self.assertTrue(risk.blocked)
+        self.assertEqual(risk.reason, "audit_retain_evidence")
+
+    def test_unregistered_old_audit_can_remain_archive_safe(self) -> None:
+        audit_info = MODULE.FileInfo(
+            path=self.repo_root / "docs" / "audits" / "CVF_W1_T2_CP1_COMPONENT_AUDIT_2026-03-26.md",
+            rel_path="docs/audits/CVF_W1_T2_CP1_COMPONENT_AUDIT_2026-03-26.md",
+            date=datetime(2026, 3, 21),
+            size=(self.repo_root / "docs" / "audits" / "CVF_W1_T2_CP1_COMPONENT_AUDIT_2026-03-26.md").stat().st_size,
+        )
+
+        with patch.object(MODULE, "PROJECT_ROOT", self.repo_root):
+            with patch.object(MODULE, "AUDIT_RETENTION_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_AUDIT_RETENTION_REGISTRY.json"):
+                MODULE.load_audit_retain_evidence_paths.cache_clear()
+                risk = MODULE.evaluate_candidate_risk(audit_info, moving_rel_paths=set(), markdown_link_index={})
+
+        self.assertFalse(risk.blocked)
 
     def test_scan_root_excludes_dedicated_archive_zones(self) -> None:
         cutoff = datetime(2026, 3, 25)
@@ -275,6 +363,46 @@ class CvfActiveArchiveTests(unittest.TestCase):
         self.assertEqual(metadata.evaluated_candidate_count, 1)
         self.assertEqual(mock_eval.call_count, 1)
         self.assertFalse(risks["docs/CVF_OLD_REVIEW_2026-03-01.md"].blocked)
+
+    def test_rewrite_active_references_for_moves_updates_exact_path_mentions(self) -> None:
+        source_path = self.repo_root / "docs" / "reference_note.md"
+        source_path.write_text(
+            "see docs/baselines/CVF_SAMPLE_DELTA_2026-03-01.md for details\n",
+            encoding="utf-8",
+        )
+
+        with patch.object(MODULE, "PROJECT_ROOT", self.repo_root):
+            changed = MODULE.rewrite_active_references_for_moves(
+                {
+                    "docs/baselines/CVF_SAMPLE_DELTA_2026-03-01.md": "docs/baselines/archive/CVF_SAMPLE_DELTA_2026-03-01.md"
+                }
+            )
+
+        self.assertEqual(changed, 1)
+        self.assertIn(
+            "docs/baselines/archive/CVF_SAMPLE_DELTA_2026-03-01.md",
+            source_path.read_text(encoding="utf-8"),
+        )
+
+    def test_rewrite_active_references_for_moves_updates_relative_markdown_links(self) -> None:
+        source_path = self.repo_root / "docs" / "reference_link_note.md"
+        source_path.write_text(
+            "[delta](../docs/baselines/CVF_SAMPLE_DELTA_2026-03-01.md)\n",
+            encoding="utf-8",
+        )
+
+        with patch.object(MODULE, "PROJECT_ROOT", self.repo_root):
+            changed = MODULE.rewrite_active_references_for_moves(
+                {
+                    "docs/baselines/CVF_SAMPLE_DELTA_2026-03-01.md": "docs/baselines/archive/CVF_SAMPLE_DELTA_2026-03-01.md"
+                }
+            )
+
+        self.assertEqual(changed, 1)
+        self.assertIn(
+            "[delta](baselines/archive/CVF_SAMPLE_DELTA_2026-03-01.md)",
+            source_path.read_text(encoding="utf-8"),
+        )
 
 
 if __name__ == "__main__":

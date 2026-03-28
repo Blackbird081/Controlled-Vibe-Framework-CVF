@@ -423,6 +423,8 @@ def _check_test_depth_classification_guard(changed_paths: dict[str, list[str]]) 
             continue
         if not any(path.startswith(prefix) for prefix in TEST_REPORT_FILE_PREFIXES):
             continue
+        if "/archive/" in path:
+            continue
         text = _read_text(path)
         if re.search(r"(?im)^tests?\s*:|\b\d+/\d+\s+PASS\b", text):
             candidate_docs.append(path)

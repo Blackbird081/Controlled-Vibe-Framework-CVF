@@ -1,7 +1,6 @@
 # CVF Whitepaper Completion Roadmap
 
 Memory class: SUMMARY_RECORD
-
 > Date: 2026-03-21  
 > Parent concept: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`  
 > Quick tracker: `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`  
@@ -439,47 +438,47 @@ Current authorized scope:
 
 - `W1-T1 — Control-Plane Foundation` only
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
+  - `docs/roadmaps/archive/CVF_W1_T1_CONTROL_PLANE_EXECUTION_PLAN_2026-03-21.md`
 - first structural packet:
   - `docs/audits/CVF_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_AUDIT_2026-03-21.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_REVIEW_2026-03-21.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W1_T1_CP1_CONTROL_PLANE_IMPLEMENTATION_DELTA_2026-03-21.md`
+  - `docs/baselines/archive/CVF_W1_T1_CP1_CONTROL_PLANE_IMPLEMENTATION_DELTA_2026-03-21.md`
 - second structural packet:
   - `docs/audits/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_WRAPPER_ALIGNMENT_AUDIT_2026-03-21.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W1_T1_CP2_KNOWLEDGE_CONTEXT_WRAPPER_ALIGNMENT_REVIEW_2026-03-21.md`
 - second packet delta:
-  - `docs/baselines/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_PACKET_DELTA_2026-03-21.md`
+  - `docs/baselines/archive/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_PACKET_DELTA_2026-03-21.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_IMPLEMENTATION_DELTA_2026-03-21.md`
+  - `docs/baselines/archive/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_IMPLEMENTATION_DELTA_2026-03-21.md`
 - third structural packet:
   - `docs/audits/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_REPORTING_INTEGRATION_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W1_T1_CP3_GOVERNANCE_CANVAS_REPORTING_INTEGRATION_REVIEW_2026-03-22.md`
 - third packet delta:
-  - `docs/baselines/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_PACKET_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_PACKET_DELTA_2026-03-22.md`
 - third implementation delta:
-  - `docs/baselines/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_IMPLEMENTATION_DELTA_2026-03-22.md`
 - fourth structural packet:
   - `docs/audits/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_SURFACE_ALIGNMENT_AUDIT_2026-03-22.md`
 - fourth independent review:
   - `docs/reviews/CVF_GC019_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_SURFACE_ALIGNMENT_REVIEW_2026-03-22.md`
 - fourth packet delta:
-  - `docs/baselines/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_PACKET_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_PACKET_DELTA_2026-03-22.md`
 - fourth implementation delta:
-  - `docs/baselines/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_IMPLEMENTATION_DELTA_2026-03-22.md`
 - fifth closure packet:
   - `docs/audits/CVF_W1_T1_CP5_TRANCHE_CLOSURE_REVIEW_AUDIT_2026-03-22.md`
 - fifth independent review:
   - `docs/reviews/CVF_GC019_W1_T1_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - fifth packet delta:
-  - `docs/baselines/CVF_W1_T1_CP5_TRANCHE_CLOSURE_PACKET_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T1_CP5_TRANCHE_CLOSURE_PACKET_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - canonical tranche closure delta:
-  - `docs/baselines/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - next authorized tranche:
   - `W1-T2 — Usable Intake Slice`
 - continuation candidate:
@@ -487,35 +486,35 @@ Current authorized scope:
 - tranche packet:
   - `docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_PACKET_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W1_T2_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W1_T2_AUTHORIZATION_DELTA_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W1_T2_USABLE_INTAKE_SLICE_EXECUTION_PLAN_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_REVIEW_2026-03-22.md`
 - planning delta:
-  - `docs/baselines/CVF_W1_T2_USABLE_INTAKE_SLICE_PLANNING_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T2_USABLE_INTAKE_SLICE_PLANNING_DELTA_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third structural packet:
   - `docs/audits/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_REVIEW_2026-03-22.md`
 - third implementation delta:
-  - `docs/baselines/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_IMPLEMENTATION_DELTA_2026-03-22.md`
 - fourth structural packet:
   - `docs/audits/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_AUDIT_2026-03-22.md`
 - fourth independent review:
   - `docs/reviews/CVF_GC019_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_REVIEW_2026-03-22.md`
 - fourth implementation delta:
-  - `docs/baselines/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_IMPLEMENTATION_DELTA_2026-03-22.md`
 - every major structural change inside `W1-T2` still requires `GC-019`
 - fifth structural packet:
   - `docs/audits/CVF_W1_T2_CP5_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
@@ -532,35 +531,35 @@ Current authorized scope:
 - tranche packet:
   - `docs/reviews/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_PACKET_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_EXECUTION_PLAN_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W1_T3_CP1_DESIGN_CONTRACT_BASELINE_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W1_T3_CP1_DESIGN_CONTRACT_BASELINE_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W1_T3_CP1_DESIGN_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T3_CP1_DESIGN_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W1_T3_CP2_BOARDROOM_SESSION_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W1_T3_CP2_BOARDROOM_SESSION_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W1_T3_CP2_BOARDROOM_SESSION_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T3_CP2_BOARDROOM_SESSION_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third structural packet:
   - `docs/audits/CVF_W1_T3_CP3_ORCHESTRATION_CONTRACT_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W1_T3_CP3_ORCHESTRATION_CONTRACT_REVIEW_2026-03-22.md`
 - third implementation delta:
-  - `docs/baselines/CVF_W1_T3_CP3_ORCHESTRATION_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T3_CP3_ORCHESTRATION_IMPLEMENTATION_DELTA_2026-03-22.md`
 - fourth structural packet:
   - `docs/audits/CVF_W1_T3_CP4_DESIGN_CONSUMER_PATH_PROOF_AUDIT_2026-03-22.md`
 - fourth independent review:
   - `docs/reviews/CVF_GC019_W1_T3_CP4_DESIGN_CONSUMER_PATH_PROOF_REVIEW_2026-03-22.md`
 - fourth implementation delta:
-  - `docs/baselines/CVF_W1_T3_CP4_DESIGN_CONSUMER_PATH_PROOF_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T3_CP4_DESIGN_CONSUMER_PATH_PROOF_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W1_T3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - reconciliation delta:
-  - `docs/baselines/CVF_W1_T3_CANONICAL_RECONCILIATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T3_CANONICAL_RECONCILIATION_DELTA_2026-03-22.md`
 - `W1-T3` is now canonically closed through `CP5` with `CP1` + `CP2` + `CP3` + `CP4` implemented
 - next authorized tranche:
   - `W2-T2 — Execution Dispatch Bridge`
@@ -569,33 +568,33 @@ Current authorized scope:
 - tranche packet:
   - `docs/reviews/CVF_W2_T2_EXECUTION_DISPATCH_BRIDGE_TRANCHE_PACKET_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W2_T2_EXECUTION_DISPATCH_BRIDGE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W2_T2_EXECUTION_DISPATCH_BRIDGE_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T2_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W2_T2_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W2_T2_CP1_DISPATCH_CONTRACT_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W2_T2_CP1_DISPATCH_CONTRACT_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W2_T2_CP1_DISPATCH_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T2_CP1_DISPATCH_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W2_T2_CP2_POLICY_GATE_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W2_T2_CP2_POLICY_GATE_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W2_T2_CP2_POLICY_GATE_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T2_CP2_POLICY_GATE_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third structural packet:
   - `docs/audits/CVF_W2_T2_CP3_EXECUTION_BRIDGE_CONSUMER_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W2_T2_CP3_EXECUTION_BRIDGE_CONSUMER_REVIEW_2026-03-22.md`
 - third implementation delta:
-  - `docs/baselines/CVF_W2_T2_CP3_EXECUTION_BRIDGE_CONSUMER_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T2_CP3_EXECUTION_BRIDGE_CONSUMER_IMPLEMENTATION_DELTA_2026-03-22.md`
 - fourth closure packet:
   - `docs/audits/CVF_W2_T2_CP4_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
 - fourth independent review:
   - `docs/reviews/CVF_GC019_W2_T2_CP4_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - fourth closure delta:
-  - `docs/baselines/CVF_W2_T2_CP4_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T2_CP4_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W2_T2_EXECUTION_DISPATCH_BRIDGE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `W2-T2` is now canonically closed through `CP4` with `CP1` + `CP2` + `CP3` implemented; full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE cross-plane path delivered
@@ -604,27 +603,27 @@ Current authorized scope:
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T3_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W2_T3_EXECUTION_COMMAND_RUNTIME_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W2_T3_EXECUTION_COMMAND_RUNTIME_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T3_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W2_T3_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W2_T3_CP1_COMMAND_RUNTIME_CONTRACT_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W2_T3_CP1_COMMAND_RUNTIME_CONTRACT_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W2_T3_CP1_COMMAND_RUNTIME_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T3_CP1_COMMAND_RUNTIME_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W2_T3_CP2_EXECUTION_PIPELINE_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W2_T3_CP2_EXECUTION_PIPELINE_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W2_T3_CP2_EXECUTION_PIPELINE_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T3_CP2_EXECUTION_PIPELINE_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/audits/CVF_W2_T3_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W2_T3_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W2_T3_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T3_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W2_T3_EXECUTION_COMMAND_RUNTIME_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `W2-T3` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; full INTAKE→DESIGN→ORCHESTRATION→DISPATCH→POLICY-GATE→EXECUTION cross-plane path delivered
@@ -633,27 +632,27 @@ Current authorized scope:
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T4_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W2_T4_EXECUTION_OBSERVER_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W2_T4_EXECUTION_OBSERVER_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T4_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W2_T4_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W2_T4_CP1_EXECUTION_OBSERVER_CONTRACT_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W2_T4_CP1_EXECUTION_OBSERVER_CONTRACT_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W2_T4_CP1_EXECUTION_OBSERVER_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T4_CP1_EXECUTION_OBSERVER_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W2_T4_CP2_EXECUTION_FEEDBACK_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W2_T4_CP2_EXECUTION_FEEDBACK_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W2_T4_CP2_EXECUTION_FEEDBACK_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T4_CP2_EXECUTION_FEEDBACK_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/audits/CVF_W2_T4_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W2_T4_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W2_T4_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T4_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W2_T4_EXECUTION_OBSERVER_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `W2-T4` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `ExecutionPipelineReceipt → ExecutionObservation → ExecutionFeedbackSignal` consumer path delivered; execution observer gap closes; W4 learning-plane prerequisite surface established
@@ -662,27 +661,27 @@ Current authorized scope:
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T5_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W2_T5_FEEDBACK_ROUTING_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W2_T5_FEEDBACK_ROUTING_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T5_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W2_T5_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/audits/CVF_W2_T5_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W2_T5_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W2_T5_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T5_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W2_T5_FEEDBACK_ROUTING_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `W2-T5` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `ExecutionFeedbackSignal → FeedbackRoutingDecision → FeedbackResolutionSummary` consumer path delivered; execution self-correction loop closed
@@ -691,27 +690,27 @@ Current authorized scope:
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T4_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W1_T4_AI_GATEWAY_SLICE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W1_T4_AI_GATEWAY_SLICE_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W1_T4_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W1_T4_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W1_T4_CP1_AI_GATEWAY_CONTRACT_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W1_T4_CP1_AI_GATEWAY_CONTRACT_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W1_T4_CP1_AI_GATEWAY_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T4_CP1_AI_GATEWAY_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W1_T4_CP2_GATEWAY_CONSUMER_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W1_T4_CP2_GATEWAY_CONSUMER_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W1_T4_CP2_GATEWAY_CONSUMER_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T4_CP2_GATEWAY_CONSUMER_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/audits/CVF_W1_T4_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W1_T4_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W1_T4_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T4_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W1_T4_AI_GATEWAY_SLICE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `W1-T4` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; EXTERNAL SIGNAL → GATEWAY → INTAKE consumer path delivered; control-plane AI Gateway whitepaper gap closed
@@ -720,27 +719,27 @@ Current authorized scope:
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T5_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W1_T5_REVERSE_PROMPTING_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W1_T5_REVERSE_PROMPTING_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W1_T5_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W1_T5_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W1_T5_CP1_REVERSE_PROMPTING_CONTRACT_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W1_T5_CP1_REVERSE_PROMPTING_CONTRACT_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W1_T5_CP1_REVERSE_PROMPTING_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T5_CP1_REVERSE_PROMPTING_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W1_T5_CP2_CLARIFICATION_REFINEMENT_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W1_T5_CP2_CLARIFICATION_REFINEMENT_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W1_T5_CP2_CLARIFICATION_REFINEMENT_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T5_CP2_CLARIFICATION_REFINEMENT_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/audits/CVF_W1_T5_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W1_T5_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W1_T5_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T5_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W1_T5_REVERSE_PROMPTING_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `W1-T5` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `ControlPlaneIntakeResult → ReversePromptPacket → RefinedIntakeRequest` consumer path delivered; first question-generating contract in the control plane
@@ -749,27 +748,27 @@ Current authorized scope:
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T1_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W4_T1_LEARNING_PLANE_FOUNDATION_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W4_T1_LEARNING_PLANE_FOUNDATION_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W4_T1_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W4_T1_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/audits/CVF_W4_T1_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W4_T1_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W4_T1_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T1_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W4_T1_LEARNING_PLANE_FOUNDATION_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `W4-T1` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `LearningFeedbackInput[] → FeedbackLedger → PatternInsight` consumer path delivered; W4 gate opened; full architecture loop: EXTERNAL SIGNAL → GATEWAY → INTAKE → DESIGN → ORCHESTRATION → DISPATCH → POLICY-GATE → EXECUTION → OBSERVATION → FEEDBACK → LEARNING → PATTERN INSIGHT
@@ -778,27 +777,27 @@ Current authorized scope:
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T2_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W4_T2_TRUTH_MODEL_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W4_T2_TRUTH_MODEL_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W4_T2_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W4_T2_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W4_T2_CP1_TRUTH_MODEL_CONTRACT_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W4_T2_CP1_TRUTH_MODEL_CONTRACT_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W4_T2_CP1_TRUTH_MODEL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T2_CP1_TRUTH_MODEL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/audits/CVF_W4_T2_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W4_T2_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W4_T2_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T2_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W4_T2_TRUTH_MODEL_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - `W4-T2` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `PatternInsight[] → TruthModel` and `TruthModel + PatternInsight → TruthModel` consumer paths delivered; first durable versioned accumulated learning state in CVF; full architecture loop: EXTERNAL SIGNAL → GATEWAY → INTAKE → DESIGN → ORCHESTRATION → DISPATCH → POLICY-GATE → EXECUTION → OBSERVATION → FEEDBACK → LEARNING → PATTERN INSIGHT → TRUTH MODEL
@@ -807,81 +806,81 @@ Current authorized scope:
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T3_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W4_T3_EVALUATION_ENGINE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W4_T3_EVALUATION_ENGINE_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W4_T3_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W4_T3_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/reviews/CVF_W4_T3_CP1_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_W4_T3_CP1_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W4_T3_CP1_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T3_CP1_DELTA_2026-03-22.md`
 - second structural packet (Fast Lane):
   - `docs/reviews/CVF_W4_T3_CP2_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_W4_T3_CP2_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W4_T3_CP2_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T3_CP2_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/reviews/CVF_W4_T3_CP3_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_W4_T3_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W4_T3_CP3_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T3_CP3_DELTA_2026-03-22.md`
 - `W4-T3` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `TruthModel → EvaluationResult` and `EvaluationResult[] → ThresholdAssessment` consumer paths delivered; first learning-plane governance signal (EvaluationVerdict) actionable by governance; full evaluation chain from raw insight through threshold assessment
 - next authorized tranche:
   - `W4-T4 — Learning Plane Governance Signal Bridge`
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T4_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W4_T4_GOVERNANCE_SIGNAL_BRIDGE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W4_T4_GOVERNANCE_SIGNAL_BRIDGE_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W4_T4_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W4_T4_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/reviews/CVF_W4_T4_CP1_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_W4_T4_CP1_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W4_T4_CP1_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T4_CP1_DELTA_2026-03-22.md`
 - second structural packet (Fast Lane):
   - `docs/reviews/CVF_W4_T4_CP2_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_W4_T4_CP2_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W4_T4_CP2_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T4_CP2_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/reviews/CVF_W4_T4_CP3_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_W4_T4_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W4_T4_CP3_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T4_CP3_DELTA_2026-03-22.md`
 - `W4-T4` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `ThresholdAssessment → GovernanceSignal` and `GovernanceSignal[] → GovernanceSignalLog` consumer paths delivered; first cross-plane signal from learning plane to governance; W4 deferred scope "governance action surface" delivered
 - next authorized tranche:
   - `W4-T5 — Learning Plane Re-injection Loop`
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T5_2026-03-22.md`
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W4_T5_REINJECTION_LOOP_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W4_T5_REINJECTION_LOOP_EXECUTION_PLAN_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W4_T5_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W4_T5_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/reviews/CVF_W4_T5_CP1_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_W4_T5_CP1_REVIEW_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W4_T5_CP1_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T5_CP1_DELTA_2026-03-22.md`
 - second structural packet (Fast Lane):
   - `docs/reviews/CVF_W4_T5_CP2_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_W4_T5_CP2_REVIEW_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W4_T5_CP2_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T5_CP2_DELTA_2026-03-22.md`
 - third closure packet:
   - `docs/reviews/CVF_W4_T5_CP3_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_W4_T5_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md`
 - third closure delta:
-  - `docs/baselines/CVF_W4_T5_CP3_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W4_T5_CP3_DELTA_2026-03-22.md`
 - `W4-T5` is now canonically closed through `CP3` with `CP1` + `CP2` implemented; `GovernanceSignal → LearningFeedbackInput` and `GovernanceSignal[] → LearningLoopSummary` consumer paths delivered; W4 feedback re-injection loop closed; W4 deferred scope exhausted
 
 ### Phase W2 — Execution Plane (continued)
@@ -893,51 +892,51 @@ Current authorized scope:
 
 - `W2-T1 — Execution-Plane Foundation` only
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W2_T1_EXECUTION_PLANE_EXECUTION_PLAN_2026-03-22.md`
 - tranche packet:
   - `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md`
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W2_T1_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W2_T1_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_REVIEW_2026-03-22.md`
 - first planning delta:
-  - `docs/baselines/CVF_W2_T1_EXECUTION_PLANE_PLANNING_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T1_EXECUTION_PLANE_PLANNING_DELTA_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W2_T1_CP1_EXECUTION_PLANE_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T1_CP1_EXECUTION_PLANE_IMPLEMENTATION_DELTA_2026-03-22.md`
 - second structural packet:
   - `docs/audits/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_AUDIT_2026-03-22.md`
 - second independent review:
   - `docs/reviews/CVF_GC019_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_REVIEW_2026-03-22.md`
 - second packet delta:
-  - `docs/baselines/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_PACKET_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_PACKET_DELTA_2026-03-22.md`
 - second implementation delta:
-  - `docs/baselines/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - third structural packet:
   - `docs/audits/CVF_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_AUDIT_2026-03-22.md`
 - third independent review:
   - `docs/reviews/CVF_GC019_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_REVIEW_2026-03-22.md`
 - third implementation delta:
-  - `docs/baselines/CVF_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_IMPLEMENTATION_DELTA_2026-03-22.md`
 - fourth structural packet:
   - `docs/audits/CVF_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_AUDIT_2026-03-22.md`
 - fourth independent review:
   - `docs/reviews/CVF_GC019_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_REVIEW_2026-03-22.md`
 - fourth implementation delta:
-  - `docs/baselines/CVF_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - fifth closure packet:
   - `docs/audits/CVF_W2_T1_CP5_TRANCHE_CLOSURE_REVIEW_AUDIT_2026-03-22.md`
 - fifth independent review:
   - `docs/reviews/CVF_GC019_W2_T1_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - fifth packet delta:
-  - `docs/baselines/CVF_W2_T1_CP5_TRANCHE_CLOSURE_PACKET_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T1_CP5_TRANCHE_CLOSURE_PACKET_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - canonical tranche closure delta:
-  - `docs/baselines/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - `W2-T1` is now closed
 
 ### Phase W3 — Governance Expansion
@@ -948,25 +947,25 @@ Current authorized scope:
 
 - `W3-T1 — Governance Expansion Foundation` only
 - tranche-local execution plan:
-  - `docs/roadmaps/CVF_W3_T1_GOVERNANCE_EXPANSION_EXECUTION_PLAN_2026-03-22.md`
+  - `docs/roadmaps/archive/CVF_W3_T1_GOVERNANCE_EXPANSION_EXECUTION_PLAN_2026-03-22.md`
 - tranche packet:
   - `docs/reviews/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_PACKET_2026-03-22.md`
 - continuation candidate:
   - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T1_2026-03-22.md`
 - authorization delta:
-  - `docs/baselines/CVF_WHITEPAPER_GC018_W3_T1_AUTHORIZATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_WHITEPAPER_GC018_W3_T1_AUTHORIZATION_DELTA_2026-03-22.md`
 - first structural packet:
   - `docs/audits/CVF_W3_T1_CP1_GOVERNANCE_EXPANSION_FOUNDATION_AUDIT_2026-03-22.md`
 - first independent review:
   - `docs/reviews/CVF_GC019_W3_T1_CP1_GOVERNANCE_EXPANSION_FOUNDATION_REVIEW_2026-03-22.md`
 - planning delta:
-  - `docs/baselines/CVF_W3_T1_GOVERNANCE_EXPANSION_PLANNING_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W3_T1_GOVERNANCE_EXPANSION_PLANNING_DELTA_2026-03-22.md`
 - first implementation delta:
-  - `docs/baselines/CVF_W3_T1_CP1_GOVERNANCE_EXPANSION_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W3_T1_CP1_GOVERNANCE_EXPANSION_IMPLEMENTATION_DELTA_2026-03-22.md`
 - canonical tranche closure review:
   - `docs/reviews/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
 - canonical tranche closure delta:
-  - `docs/baselines/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_CLOSURE_DELTA_2026-03-22.md`
 - explicit defer posture:
   - `Watchdog` and `Audit / Consensus` remain concept-only and not implemented as standalone modules
 
@@ -1527,3 +1526,4 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W5-T2 — Post-W7 Architecture Whitepaper Update ✓ CLOSED 2026-03-28
 
 > Whitepaper updated v2.2-W4T11 → v3.0-W7T10. Full post-baseline delta reconciled: CPF W2-T32→T38, EPF W6-T1, GEF W6-T4/T5/T6, LPF W4-T14→T25, W7-T0→T10. Architecture diagram, §4.1, §4.1A, §4.3 all updated. Progress tracker synchronized. Posture: SUBSTANTIALLY DELIVERED. R0 risk; documentation only. CPF 1893 / EPF 1123 / GEF 625 / LPF 1333, all 0 failures.
+

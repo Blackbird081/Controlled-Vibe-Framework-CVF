@@ -1,10 +1,9 @@
 # CVF System Unification Remediation Roadmap
 
 Memory class: SUMMARY_RECORD
-
 > Date: `2026-03-19`
 > Source review: `docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md`
-> Comparison anchor: `docs/baselines/CVF_SYSTEM_STATUS_ASSESSMENT_DELTA_2026-03-19.md`
+> Comparison anchor: `docs/baselines/archive/CVF_SYSTEM_STATUS_ASSESSMENT_DELTA_2026-03-19.md`
 > Goal: Close the major whole-system weaknesses identified in the independent system review
 > Scope: Shared guard contract, governance execution model, workflow runtime, Web UI, cross-extension execution, and documentation alignment
 > Priority bands: `P0-P2`
@@ -44,7 +43,7 @@ The archive contains all GC-018 checkpoint blocks from W1-T1 through W6-T76 (149
 - Test-only tranche — no source modifications: `COMPLETED`
 - CVF_v1.7.1_SAFETY_RUNTIME: 565→579 tests (+14). All planes green: `COMPLETED`
 
-Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T77_AUTHORIZATION_DELTA_2026-03-23.md`
+Baseline authorization artifact: `docs/baselines/archive/CVF_WHITEPAPER_GC018_W6_T77_AUTHORIZATION_DELTA_2026-03-23.md`
 
 ---
 
@@ -58,7 +57,7 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T77_AUT
 - Test-only tranche — no source modifications: `COMPLETED`
 - CVF_v1.7.1_SAFETY_RUNTIME: 579→591 tests (+12). All planes green: `COMPLETED`
 
-Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T78_AUTHORIZATION_DELTA_2026-03-23.md`
+Baseline authorization artifact: `docs/baselines/archive/CVF_WHITEPAPER_GC018_W6_T78_AUTHORIZATION_DELTA_2026-03-23.md`
 
 ---
 
@@ -72,7 +71,7 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T78_AUT
 - Test-only tranche — no source modifications: `COMPLETED`
 - CVF_v1.7.1_SAFETY_RUNTIME: 591→616 tests (+25). All planes green: `COMPLETED`
 
-Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T79_AUTHORIZATION_DELTA_2026-03-23.md`
+Baseline authorization artifact: `docs/baselines/archive/CVF_WHITEPAPER_GC018_W6_T79_AUTHORIZATION_DELTA_2026-03-23.md`
 
 ---
 
@@ -86,7 +85,7 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T79_AUT
 - Test-only tranche — no source modifications: `COMPLETED`
 - CVF_v1.7.1_SAFETY_RUNTIME: 616→643 tests (+27). All planes green: `COMPLETED`
 
-Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T80_AUTHORIZATION_DELTA_2026-03-23.md`
+Baseline authorization artifact: `docs/baselines/archive/CVF_WHITEPAPER_GC018_W6_T80_AUTHORIZATION_DELTA_2026-03-23.md`
 
 ---
 
@@ -100,7 +99,7 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T80_AUT
 - Test-only tranche — no source modifications: `COMPLETED`
 - CVF_v1.7.1_SAFETY_RUNTIME: 643→662 tests (+19). All planes green: `COMPLETED`
 
-Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T81_AUTHORIZATION_DELTA_2026-03-23.md`
+Baseline authorization artifact: `docs/baselines/archive/CVF_WHITEPAPER_GC018_W6_T81_AUTHORIZATION_DELTA_2026-03-23.md`
 
 ---
 
@@ -114,7 +113,7 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T81_AUT
 - Test-only tranche — no source modifications: `COMPLETED`
 - CVF_v1.7.1_SAFETY_RUNTIME: 662→671 tests (+9). All planes green: `COMPLETED`
 
-Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T82_AUTHORIZATION_DELTA_2026-03-23.md`
+Baseline authorization artifact: `docs/baselines/archive/CVF_WHITEPAPER_GC018_W6_T82_AUTHORIZATION_DELTA_2026-03-23.md`
 
 ---
 
@@ -128,7 +127,7 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T82_AUT
 - Test-only tranche — no source modifications: `COMPLETED`
 - CVF_v1.7.1_SAFETY_RUNTIME: 671→689 tests (+18). All planes green: `COMPLETED`
 
-Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T83_AUTHORIZATION_DELTA_2026-03-23.md`
+Baseline authorization artifact: `docs/baselines/archive/CVF_WHITEPAPER_GC018_W6_T83_AUTHORIZATION_DELTA_2026-03-23.md`
 
 ---
 
@@ -142,5 +141,5 @@ Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T83_AUT
 - Test-only tranche — no source modifications: `COMPLETED`
 - CVF_v1.7.1_SAFETY_RUNTIME: 689→708 tests (+19). All planes green: `COMPLETED`
 
-Baseline authorization artifact: `docs/baselines/CVF_WHITEPAPER_GC018_W6_T84_AUTHORIZATION_DELTA_2026-03-23.md`
+Baseline authorization artifact: `docs/baselines/archive/CVF_WHITEPAPER_GC018_W6_T84_AUTHORIZATION_DELTA_2026-03-23.md`
 

@@ -360,6 +360,40 @@ jobs:
         run: |
           python governance/compat/check_active_window_registry.py --enforce
 
+  audit-retention-registry:
+    name: Audit Retention Registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce audit retention registry compatibility
+        run: |
+          python governance/compat/check_audit_retention_registry.py --enforce
+
+  review-retention-registry:
+    name: Review Retention Registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce review retention registry compatibility
+        run: |
+          python governance/compat/check_review_retention_registry.py --enforce
+
   foundational-guard-surfaces:
     name: Foundational Guard Surfaces
     runs-on: ubuntu-latest

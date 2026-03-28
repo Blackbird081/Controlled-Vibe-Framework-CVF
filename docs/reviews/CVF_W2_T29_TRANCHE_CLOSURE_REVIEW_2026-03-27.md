@@ -1,7 +1,6 @@
 # CVF W2-T29 Tranche Closure Review — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Tranche: W2-T29 — Streaming Execution Consumer Pipeline Bridge
 > Closure date: 2026-03-27
 > Branch: cvf-next
@@ -19,7 +18,7 @@ EPF consumer bridge #3 delivered. `StreamingExecutionContract` is now consumer-v
 ## Deliverables Checklist
 
 ### GC-026 Authorization Sync
-- ✅ `docs/baselines/CVF_GC026_TRACKER_SYNC_W2_T29_AUTHORIZATION_2026-03-27.md`
+- ✅ `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W2_T29_AUTHORIZATION_2026-03-27.md`
 
 ### Execution Plan
 - ✅ `docs/roadmaps/CVF_W2_T29_STREAMING_EXECUTION_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`
@@ -31,13 +30,13 @@ EPF consumer bridge #3 delivered. `StreamingExecutionContract` is now consumer-v
 - ✅ Partition registry updated
 - ✅ `docs/audits/CVF_W2_T29_CP1_STREAMING_EXECUTION_CONSUMER_BRIDGE_AUDIT_2026-03-27.md`
 - ✅ `docs/reviews/CVF_GC019_W2_T29_CP1_STREAMING_EXECUTION_CONSUMER_BRIDGE_REVIEW_2026-03-27.md`
-- ✅ `docs/baselines/CVF_W2_T29_CP1_STREAMING_EXECUTION_CONSUMER_BRIDGE_DELTA_2026-03-27.md`
+- ✅ `docs/baselines/archive/CVF_W2_T29_CP1_STREAMING_EXECUTION_CONSUMER_BRIDGE_DELTA_2026-03-27.md`
 
 ### CP2 — Fast Lane (GC-021): StreamingExecutionConsumerPipelineBatchContract
 - ✅ `src/streaming.execution.consumer.pipeline.batch.contract.ts`
 - ✅ `docs/audits/CVF_W2_T29_CP2_STREAMING_EXECUTION_CONSUMER_BRIDGE_AUDIT_2026-03-27.md`
 - ✅ `docs/reviews/CVF_GC021_W2_T29_CP2_STREAMING_EXECUTION_CONSUMER_BRIDGE_REVIEW_2026-03-27.md`
-- ✅ `docs/baselines/CVF_W2_T29_CP2_STREAMING_EXECUTION_CONSUMER_BRIDGE_DELTA_2026-03-27.md`
+- ✅ `docs/baselines/archive/CVF_W2_T29_CP2_STREAMING_EXECUTION_CONSUMER_BRIDGE_DELTA_2026-03-27.md`
 
 ### CP3 — Closure
 - ✅ Closure review (this document)

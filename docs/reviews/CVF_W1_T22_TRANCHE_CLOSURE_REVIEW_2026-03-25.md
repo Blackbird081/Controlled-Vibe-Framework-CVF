@@ -1,7 +1,6 @@
 # CVF W1-T22 Tranche Closure Review — Knowledge Query Consumer Pipeline Bridge
 
 Memory class: FULL_RECORD
-
 > Date: 2026-03-25
 > Tranche: W1-T22 — Knowledge Query Consumer Pipeline Bridge
 > Reviewer: Cascade
@@ -30,16 +29,16 @@ W1-T22 bridges `KnowledgeQueryContract` (W1-T10 CP1) into the CPF consumer pipel
 | Artifact | File |
 |---|---|
 | GC-018 review | `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T22_KNOWLEDGE_QUERY_CONSUMER_BRIDGE_2026-03-25.md` |
-| GC-026 auth sync | `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T22_AUTHORIZATION_2026-03-25.md` |
+| GC-026 auth sync | `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T22_AUTHORIZATION_2026-03-25.md` |
 | Execution plan | `docs/roadmaps/CVF_W1_T22_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_BRIDGE_EXECUTION_PLAN_2026-03-25.md` |
-| CP1 audit | `docs/audits/CVF_W1_T22_CP1_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_AUDIT_2026-03-25.md` |
-| CP1 review | `docs/reviews/CVF_GC019_W1_T22_CP1_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_REVIEW_2026-03-25.md` |
-| CP1 delta | `docs/baselines/CVF_W1_T22_CP1_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_DELTA_2026-03-25.md` |
-| CP2 audit | `docs/audits/CVF_W1_T22_CP2_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-25.md` |
-| CP2 review | `docs/reviews/CVF_GC021_W1_T22_CP2_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-25.md` |
-| CP2 delta | `docs/baselines/CVF_W1_T22_CP2_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_BATCH_DELTA_2026-03-25.md` |
+| CP1 audit | `docs/audits/archive/CVF_W1_T22_CP1_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_AUDIT_2026-03-25.md` |
+| CP1 review | `docs/reviews/archive/CVF_GC019_W1_T22_CP1_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_REVIEW_2026-03-25.md` |
+| CP1 delta | `docs/baselines/archive/CVF_W1_T22_CP1_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_DELTA_2026-03-25.md` |
+| CP2 audit | `docs/audits/archive/CVF_W1_T22_CP2_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-25.md` |
+| CP2 review | `docs/reviews/archive/CVF_GC021_W1_T22_CP2_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-25.md` |
+| CP2 delta | `docs/baselines/archive/CVF_W1_T22_CP2_KNOWLEDGE_QUERY_CONSUMER_PIPELINE_BATCH_DELTA_2026-03-25.md` |
 | CP3 closure review | This document |
-| GC-026 closure sync | `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T22_CLOSURE_2026-03-25.md` |
+| GC-026 closure sync | `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T22_CLOSURE_2026-03-25.md` |
 
 ---
 

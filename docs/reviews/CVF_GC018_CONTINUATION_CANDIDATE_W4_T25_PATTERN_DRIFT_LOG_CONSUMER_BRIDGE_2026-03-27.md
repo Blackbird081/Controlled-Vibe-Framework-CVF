@@ -1,11 +1,45 @@
 # CVF GC-018 Continuation Candidate — W4-T25 Pattern Drift Log Consumer Bridge
 
 Memory class: FULL_RECORD
-
 > Date: 2026-03-27
 > Candidate: W4-T25 — Pattern Drift Log Consumer Pipeline Bridge
 > Survey scope: LPF unbridged core contracts
 > Authorization decision: APPROVED (10/10)
+
+---
+
+GC-018 Continuation Candidate
+- Candidate ID: W4-T25
+- Date: 2026-03-27
+- Parent roadmap / wave: docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md
+- Proposed scope: close the final LPF consumer visibility gap for `PatternDriftLogContract` with one consumer bridge tranche
+- Continuation class: REALIZATION
+- Why now: `PatternDriftLogContract` is the last unbridged LPF core contract and completes consumer visibility for the full learning-plane foundation after the W4-T24 sequence
+- Active-path impact: LIMITED
+- Risk if deferred: pattern-drift aggregation remains the lone hidden learning observability surface, leaving LPF plane completeness and downstream drift analysis unfinished
+- Lateral alternative considered: YES
+- Why not lateral shift: EPF continuations remain available, but closing the final LPF gap yields a cleaner and more reviewable plane-completion boundary than switching planes with one contract still hidden
+- Real decision boundary improved: YES
+- Expected enforcement class:
+  - APPROVAL_CHECKPOINT
+- Required evidence if approved:
+  - CP1 audit/review/delta plus dedicated LPF consumer-pipeline tests
+  - CP2 batch audit/review/delta plus tracker sync and closure packet
+
+Depth Audit
+- Risk reduction: 2
+- Decision value: 2
+- Machine enforceability: 2
+- Operational efficiency: 2
+- Portfolio priority: 2
+- Total: 10
+- Decision: CONTINUE
+- Reason: W4-T25 closes the final LPF contract-level visibility gap and creates a clean, governed completion boundary for the learning-plane consumer bridge program.
+
+Authorization Boundary
+- Authorized now: YES
+- If YES, next batch name: W4-T25 — Pattern Drift Log Consumer Pipeline Bridge
+- If NO, reopen trigger: fresh GC-018 candidate
 
 ---
 
@@ -146,7 +180,7 @@ Memory class: FULL_RECORD
 ## Next Steps
 
 1. Create execution plan: `docs/roadmaps/CVF_W4_T25_PATTERN_DRIFT_LOG_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`
-2. Create GC-026 authorization sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T25_AUTHORIZATION_2026-03-27.md`
+2. Create GC-026 authorization sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W4_T25_AUTHORIZATION_2026-03-27.md`
 3. Update progress tracker to mark W4-T25 ACTIVE
 4. Proceed with CP1 implementation
 

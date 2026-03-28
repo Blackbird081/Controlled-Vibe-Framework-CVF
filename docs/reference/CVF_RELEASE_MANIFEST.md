@@ -1,4 +1,6 @@
-# CVF Release Manifest
+
+Memory class: POINTER_RECORD
+
 
 Status: authoritative operational release manifest for the current local baseline.
 
@@ -71,7 +73,7 @@ Status: authoritative operational release manifest for the current local baselin
 | readiness checkpoint | `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md` |
 | test evidence chain | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
 | enterprise evidence pack | `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md` |
-| baseline delta chain | `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md` |
+| baseline delta chain | `docs/baselines/archive/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md` |
 | release/module inventory | `docs/reference/CVF_MODULE_INVENTORY.md` |
 
 ## Operational Notes

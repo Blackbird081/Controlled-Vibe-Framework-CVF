@@ -1,7 +1,6 @@
 # CVF W1-T29 Tranche Closure Review — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Tranche: W1-T29 — Intake Consumer Pipeline Bridge
 > Closure date: 2026-03-27
 > Branch: cvf-next
@@ -68,8 +67,8 @@ W1-T29 delivers consumer pipeline visibility for `IntakeContract`, completing th
 - **Authorization**: AUTHORIZED
 
 ### GC-026 Tracker Sync
-- **Authorization sync**: `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T29_AUTHORIZATION_2026-03-27.md`
-- **Completion sync**: `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T29_COMPLETION_2026-03-27.md` (pending)
+- **Authorization sync**: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T29_AUTHORIZATION_2026-03-27.md`
+- **Completion sync**: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T29_COMPLETION_2026-03-27.md` (pending)
 
 ### GC-021 Fast Lane
 - **CP2 eligibility**: ✅ ELIGIBLE (additive batch contract, no restructuring)
@@ -101,9 +100,9 @@ W1-T29 delivers consumer pipeline visibility for `IntakeContract`, completing th
 
 ### Governance Artifacts
 1. `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T29_INTAKE_CONSUMER_BRIDGE_2026-03-27.md`
-2. `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T29_AUTHORIZATION_2026-03-27.md`
+2. `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T29_AUTHORIZATION_2026-03-27.md`
 3. `docs/reviews/CVF_W1_T29_TRANCHE_CLOSURE_REVIEW_2026-03-27.md` (this document)
-4. `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T29_COMPLETION_2026-03-27.md` (pending)
+4. `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T29_COMPLETION_2026-03-27.md` (pending)
 
 ---
 

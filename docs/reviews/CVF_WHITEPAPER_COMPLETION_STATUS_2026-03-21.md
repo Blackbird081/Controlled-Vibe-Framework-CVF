@@ -142,8 +142,8 @@ Canonical closure packet:
 - `docs/reviews/CVF_W4_T3_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md`
 - `docs/reviews/CVF_W4_T4_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md`
 - `docs/reviews/CVF_W4_T5_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md`
-- `docs/reviews/CVF_W5_T1_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md`
-- `docs/reviews/CVF_W1_T11_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-23.md`
+- `docs/reviews/archive/CVF_W5_T1_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md`
+- `docs/reviews/archive/CVF_W1_T11_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-23.md`
 
 ---
 

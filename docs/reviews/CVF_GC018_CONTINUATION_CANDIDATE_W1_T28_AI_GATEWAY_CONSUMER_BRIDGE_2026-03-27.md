@@ -1,11 +1,45 @@
 # CVF GC-018 Continuation Candidate — W1-T28 — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Candidate tranche: W1-T28 — AI Gateway Consumer Pipeline Bridge
 > Survey date: 2026-03-27
 > Survey scope: CPF unbridged contracts
 > Authorization decision: PENDING AUDIT
+
+---
+
+GC-018 Continuation Candidate
+- Candidate ID: W1-T28
+- Date: 2026-03-27
+- Parent roadmap / wave: docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md
+- Proposed scope: close the CPF entry-surface visibility gap for `AIGatewayContract` with one consumer bridge tranche
+- Continuation class: REALIZATION
+- Why now: `AIGatewayContract` is the primary gateway entry point for all control-plane requests and is the highest-value remaining upstream aggregate after Boardroom because it carries signal classification, privacy analysis, and environment context
+- Active-path impact: LIMITED
+- Risk if deferred: gateway signal typing, privacy detection, and environment metadata remain hidden from governed consumer packaging, weakening request-entry observability across the CPF chain
+- Lateral alternative considered: YES
+- Why not lateral shift: `IntakeContract` is downstream and `RouteMatchContract` is narrower; `AIGatewayContract` is the broader upstream boundary that improves the real entry decision surface for all subsequent CPF processing
+- Real decision boundary improved: YES
+- Expected enforcement class:
+  - GATEWAY_PRECONDITION
+- Required evidence if approved:
+  - CP1 audit/review/delta plus dedicated CPF consumer-pipeline tests
+  - CP2 batch audit/review/delta plus tracker sync and closure packet
+
+Depth Audit
+- Risk reduction: 2
+- Decision value: 2
+- Machine enforceability: 2
+- Operational efficiency: 2
+- Portfolio priority: 2
+- Total: 10
+- Decision: CONTINUE
+- Reason: W1-T28 exposes the canonical CPF gateway entry artifact to consumers and closes the strongest remaining upstream visibility gap after W1-T27.
+
+Authorization Boundary
+- Authorized now: YES
+- If YES, next batch name: W1-T28 — AI Gateway Consumer Pipeline Bridge
+- If NO, reopen trigger: fresh GC-018 candidate
 
 ---
 
@@ -136,7 +170,7 @@ This tranche delivers consumer pipeline visibility for `AIGatewayContract`, comp
 ## Execution Plan Requirements
 
 1. Create execution plan: `docs/roadmaps/CVF_W1_T28_AI_GATEWAY_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`
-2. Create GC-026 authorization sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T28_AUTHORIZATION_2026-03-27.md`
+2. Create GC-026 authorization sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T28_AUTHORIZATION_2026-03-27.md`
 3. CP1 Full Lane: `AIGatewayConsumerPipelineContract` with ~35 tests
 4. CP2 Fast Lane (GC-021): `AIGatewayConsumerPipelineBatchContract` with ~28 tests
 5. CP3 Closure: closure review, GC-026 completion sync, tracker update, handoff update

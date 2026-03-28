@@ -1,7 +1,6 @@
 # CVF W2-T30 Tranche Closure Review — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Tranche: W2-T30 — Boardroom Multi-Round Consumer Pipeline Bridge
 > Closure date: 2026-03-27
 > Branch: cvf-next
@@ -22,7 +21,7 @@ First CPF multi-round governance bridge delivered. `BoardroomMultiRoundContract`
 - ✅ `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T30_BOARDROOM_MULTI_ROUND_CONSUMER_BRIDGE_2026-03-27.md`
 
 ### GC-026 Authorization Sync
-- ✅ `docs/baselines/CVF_GC026_TRACKER_SYNC_W2_T30_AUTHORIZATION_2026-03-27.md`
+- ✅ `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W2_T30_AUTHORIZATION_2026-03-27.md`
 
 ### CP1 — Full Lane
 - ✅ `src/boardroom.multi.round.consumer.pipeline.contract.ts`

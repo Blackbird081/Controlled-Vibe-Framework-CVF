@@ -1,11 +1,45 @@
 # CVF GC-018 Continuation Candidate — W1-T30 — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Candidate tranche: W1-T30 — Route Match Consumer Pipeline Bridge
 > Survey date: 2026-03-27
 > Survey scope: CPF unbridged contracts
 > Authorization decision: PENDING AUDIT
+
+---
+
+GC-018 Continuation Candidate
+- Candidate ID: W1-T30
+- Date: 2026-03-27
+- Parent roadmap / wave: docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md
+- Proposed scope: close the CPF routing decision visibility gap for `RouteMatchContract` with one consumer bridge tranche
+- Continuation class: REALIZATION
+- Why now: `RouteMatchContract` is the highest-value remaining gateway decision aggregate after W1-T29 and complements the already-bridged `RouteMatchLogContract` by exposing the primary routing verdict itself
+- Active-path impact: LIMITED
+- Risk if deferred: core route-selection outcomes, confidence, and parameter extraction remain outside the governed consumer path even though the downstream routing log is already visible
+- Lateral alternative considered: YES
+- Why not lateral shift: most remaining CPF gaps are internal subcomponents or narrower surfaces; `RouteMatchContract` closes the actual routing decision boundary and completes the main gateway routing chain more cleanly than a lateral move
+- Real decision boundary improved: YES
+- Expected enforcement class:
+  - GATEWAY_PRECONDITION
+- Required evidence if approved:
+  - CP1 audit/review/delta plus dedicated CPF consumer-pipeline tests
+  - CP2 batch audit/review/delta plus tracker sync and closure packet
+
+Depth Audit
+- Risk reduction: 2
+- Decision value: 2
+- Machine enforceability: 2
+- Operational efficiency: 2
+- Portfolio priority: 2
+- Total: 10
+- Decision: CONTINUE
+- Reason: W1-T30 closes the canonical CPF routing decision boundary and pairs the routing verdict with the already delivered routing-log observability surface.
+
+Authorization Boundary
+- Authorized now: YES
+- If YES, next batch name: W1-T30 — Route Match Consumer Pipeline Bridge
+- If NO, reopen trigger: fresh GC-018 candidate
 
 ---
 
@@ -136,7 +170,7 @@ This tranche delivers consumer pipeline visibility for `RouteMatchContract`, com
 
 ## Execution Plan Requirements
 
-1. Create GC-026 authorization sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T30_AUTHORIZATION_2026-03-27.md`
+1. Create GC-026 authorization sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T30_AUTHORIZATION_2026-03-27.md`
 2. CP1 Full Lane: `RouteMatchConsumerPipelineContract` with ~35 tests
 3. CP2 Fast Lane (GC-021): `RouteMatchConsumerPipelineBatchContract` with ~28 tests
 4. CP3 Closure: closure review, GC-026 completion sync, tracker update, handoff update

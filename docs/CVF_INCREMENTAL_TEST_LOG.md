@@ -1,7 +1,6 @@
 # CVF Incremental Test Log
 
 Memory class: SUMMARY_RECORD
-
 ## 1) Purpose
 
 This file is the canonical entrypoint and active window for incremental testing decisions.
@@ -915,7 +914,7 @@ Template:
 - Policy / roadmap references:
   - `docs/reviews/CVF_W1_T3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md`
   - `docs/roadmaps/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_EXECUTION_PLAN_2026-03-22.md`
-  - `docs/baselines/CVF_W1_T3_CANONICAL_RECONCILIATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T3_CANONICAL_RECONCILIATION_DELTA_2026-03-22.md`
 - Files created / updated:
   - `docs/roadmaps/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_EXECUTION_PLAN_2026-03-22.md`
   - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
@@ -923,7 +922,7 @@ Template:
   - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/README.md`
   - `docs/INDEX.md`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-  - `docs/baselines/CVF_W1_T3_CANONICAL_RECONCILIATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T3_CANONICAL_RECONCILIATION_DELTA_2026-03-22.md`
 - Tests executed:
   - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
   - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
@@ -999,7 +998,7 @@ Template:
 ## [2026-03-22] Batch: GC-022 memory governance adoption
 - Change reference:
   - local working tree `GC-022` memory governance adoption batch
-  - baseline receipt: `docs/baselines/CVF_GC022_MEMORY_GOVERNANCE_ADOPTION_DELTA_2026-03-22.md`
+  - baseline receipt: `docs/baselines/archive/CVF_GC022_MEMORY_GOVERNANCE_ADOPTION_DELTA_2026-03-22.md`
 - Impacted scope:
   - `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`
   - `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`
@@ -1012,7 +1011,7 @@ Template:
   - `docs/reference/README.md`
   - `docs/INDEX.md`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-  - `docs/baselines/CVF_GC022_MEMORY_GOVERNANCE_ADOPTION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_GC022_MEMORY_GOVERNANCE_ADOPTION_DELTA_2026-03-22.md`
 - Tests executed:
   - `python governance/compat/check_memory_governance_compat.py --enforce`
   - `python governance/compat/check_docs_governance_compat.py --enforce`
@@ -1028,7 +1027,7 @@ Template:
 ## [2026-03-22] Batch: GC-021 / GC-022 role clarification
 - Change reference:
   - local working tree clarification batch for `GC-021` fast-lane governance and `GC-022` memory governance
-  - baseline receipt: `docs/baselines/CVF_GC021_GC022_ROLE_CLARIFICATION_DELTA_2026-03-22.md`
+  - baseline receipt: `docs/baselines/archive/CVF_GC021_GC022_ROLE_CLARIFICATION_DELTA_2026-03-22.md`
 - Impacted scope:
   - `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`
   - `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`
@@ -1040,7 +1039,7 @@ Template:
   - `governance/compat/check_fast_lane_governance_compat.py`
   - `governance/compat/check_memory_governance_compat.py`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-  - `docs/baselines/CVF_GC021_GC022_ROLE_CLARIFICATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_GC021_GC022_ROLE_CLARIFICATION_DELTA_2026-03-22.md`
 - Tests executed:
   - `python governance/compat/check_fast_lane_governance_compat.py --enforce`
   - `python governance/compat/check_memory_governance_compat.py --enforce`
@@ -1057,12 +1056,12 @@ Template:
 ## [2026-03-22] Batch: README governance front-door sync
 - Change reference:
   - local working tree front-door sync batch for repository `README.md`
-  - baseline receipt: `docs/baselines/CVF_README_GOVERNANCE_FRONTDOOR_SYNC_DELTA_2026-03-22.md`
+  - baseline receipt: `docs/baselines/archive/CVF_README_GOVERNANCE_FRONTDOOR_SYNC_DELTA_2026-03-22.md`
 - Impacted scope:
   - `README.md`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
   - `docs/INDEX.md`
-  - `docs/baselines/CVF_README_GOVERNANCE_FRONTDOOR_SYNC_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_README_GOVERNANCE_FRONTDOOR_SYNC_DELTA_2026-03-22.md`
 - Tests executed:
   - `python governance/compat/check_docs_governance_compat.py --enforce`
   - `python governance/compat/check_baseline_update_compat.py --enforce`
@@ -1105,12 +1104,12 @@ Template:
 ## [2026-03-20] Batch: GitHub architecture front-door diagram
 - Change reference:
   - local working tree architecture front-door visualization batch
-  - baseline receipt: `docs/baselines/CVF_GITHUB_ARCHITECTURE_FRONTDOOR_DELTA_2026-03-20.md`
+  - baseline receipt: `docs/baselines/archive/CVF_GITHUB_ARCHITECTURE_FRONTDOOR_DELTA_2026-03-20.md`
 - Impacted scope:
   - `ARCHITECTURE.md`
   - `README.md`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-  - `docs/baselines/CVF_GITHUB_ARCHITECTURE_FRONTDOOR_DELTA_2026-03-20.md`
+  - `docs/baselines/archive/CVF_GITHUB_ARCHITECTURE_FRONTDOOR_DELTA_2026-03-20.md`
 - Tests executed:
   - `python governance/compat/check_docs_governance_compat.py --enforce`
   - `python governance/compat/check_baseline_update_compat.py --enforce`
@@ -1125,11 +1124,11 @@ Template:
 ## [2026-03-20] Batch: GitHub front-door README simplification
 - Change reference:
   - local working tree README front-door cleanup batch
-  - baseline receipt: `docs/baselines/CVF_GITHUB_FRONTDOOR_README_REDUCTION_DELTA_2026-03-20.md`
+  - baseline receipt: `docs/baselines/archive/CVF_GITHUB_FRONTDOOR_README_REDUCTION_DELTA_2026-03-20.md`
 - Impacted scope:
   - `README.md`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-  - `docs/baselines/CVF_GITHUB_FRONTDOOR_README_REDUCTION_DELTA_2026-03-20.md`
+  - `docs/baselines/archive/CVF_GITHUB_FRONTDOOR_README_REDUCTION_DELTA_2026-03-20.md`
 - Tests executed:
   - `python governance/compat/check_docs_governance_compat.py --enforce` -> `PASS`
   - `python governance/compat/check_baseline_update_compat.py --enforce` -> `PASS`
@@ -1145,7 +1144,7 @@ Template:
 - Change reference:
   - local working tree Data Analysis Wizard governed breadth-expansion batch
   - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - baseline receipt: `docs/baselines/CVF_NONCODER_DATA_ANALYSIS_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+  - baseline receipt: `docs/baselines/archive/CVF_NONCODER_DATA_ANALYSIS_BREADTH_EXPANSION_DELTA_2026-03-20.md`
 - Impacted scope:
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/DataAnalysisWizard.tsx`
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/DataAnalysisWizard.test.tsx`
@@ -1153,7 +1152,7 @@ Template:
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/research.ts`
   - `docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
   - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - `docs/baselines/CVF_NONCODER_DATA_ANALYSIS_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+  - `docs/baselines/archive/CVF_NONCODER_DATA_ANALYSIS_BREADTH_EXPANSION_DELTA_2026-03-20.md`
 - Tests executed:
   - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/DataAnalysisWizard.test.tsx` -> `PASS`
   - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/template-recommender.test.ts` -> `PASS`
@@ -1171,7 +1170,7 @@ Template:
 - Change reference:
   - local working tree Content Strategy Wizard governed breadth-expansion batch
   - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - baseline receipt: `docs/baselines/CVF_NONCODER_CONTENT_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+  - baseline receipt: `docs/baselines/archive/CVF_NONCODER_CONTENT_BREADTH_EXPANSION_DELTA_2026-03-20.md`
 - Impacted scope:
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/ContentStrategyWizard.tsx`
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/ContentStrategyWizard.test.tsx`
@@ -1179,7 +1178,7 @@ Template:
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/content.ts`
   - `docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
   - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - `docs/baselines/CVF_NONCODER_CONTENT_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+  - `docs/baselines/archive/CVF_NONCODER_CONTENT_BREADTH_EXPANSION_DELTA_2026-03-20.md`
 - Tests executed:
   - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/ContentStrategyWizard.test.tsx` -> `PASS`
   - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/template-recommender.test.ts` -> `PASS`
@@ -1197,12 +1196,12 @@ Template:
 - Change reference:
   - local working tree non-coder six-path evidence reconciliation batch
   - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - baseline receipt: `docs/baselines/CVF_NONCODER_SIX_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+  - baseline receipt: `docs/baselines/archive/CVF_NONCODER_SIX_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
 - Impacted scope:
   - `docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md`
   - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
   - `README.md`
-  - `docs/baselines/CVF_NONCODER_SIX_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+  - `docs/baselines/archive/CVF_NONCODER_SIX_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
 - Tests executed:
   - `python governance/compat/check_docs_governance_compat.py --enforce` -> `PASS`
   - `python governance/compat/check_baseline_update_compat.py --enforce` -> `PASS`
@@ -1219,7 +1218,7 @@ Template:
 - Change reference:
   - local working tree Marketing Campaign Wizard governed breadth-expansion batch
   - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - baseline receipt: `docs/baselines/CVF_NONCODER_MARKETING_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+  - baseline receipt: `docs/baselines/archive/CVF_NONCODER_MARKETING_BREADTH_EXPANSION_DELTA_2026-03-20.md`
 - Impacted scope:
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/MarketingCampaignWizard.tsx`
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/MarketingCampaignWizard.test.tsx`
@@ -1227,7 +1226,7 @@ Template:
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/marketing.ts`
   - `docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
   - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - `docs/baselines/CVF_NONCODER_MARKETING_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+  - `docs/baselines/archive/CVF_NONCODER_MARKETING_BREADTH_EXPANSION_DELTA_2026-03-20.md`
 - Tests executed:
   - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/MarketingCampaignWizard.test.tsx` -> `PASS`
   - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/template-recommender.test.ts` -> `PASS`
@@ -1245,12 +1244,12 @@ Template:
 - Change reference:
   - local working tree non-coder seven-path evidence reconciliation batch
   - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - baseline receipt: `docs/baselines/CVF_NONCODER_SEVEN_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+  - baseline receipt: `docs/baselines/archive/CVF_NONCODER_SEVEN_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
 - Impacted scope:
   - `docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md`
   - `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
   - `README.md`
-  - `docs/baselines/CVF_NONCODER_SEVEN_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
+  - `docs/baselines/archive/CVF_NONCODER_SEVEN_PATH_EVIDENCE_RECONCILIATION_DELTA_2026-03-20.md`
 - Tests executed:
   - `python governance/compat/check_docs_governance_compat.py --enforce` -> `PASS`
   - `python governance/compat/check_baseline_update_compat.py --enforce` -> `PASS`
@@ -1267,7 +1266,7 @@ Template:
 - Change reference:
   - local working tree System Design Wizard governed breadth-expansion batch
   - source roadmap: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - baseline receipt: `docs/baselines/CVF_NONCODER_SYSTEM_DESIGN_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+  - baseline receipt: `docs/baselines/archive/CVF_NONCODER_SYSTEM_DESIGN_BREADTH_EXPANSION_DELTA_2026-03-20.md`
 - Impacted scope:
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SystemDesignWizard.tsx`
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SystemDesignWizard.test.tsx`
@@ -1275,7 +1274,7 @@ Template:
   - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/technical.ts`
   - `docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
   - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-  - `docs/baselines/CVF_NONCODER_SYSTEM_DESIGN_BREADTH_EXPANSION_DELTA_2026-03-20.md`
+  - `docs/baselines/archive/CVF_NONCODER_SYSTEM_DESIGN_BREADTH_EXPANSION_DELTA_2026-03-20.md`
 - Tests executed:
   - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/components/SystemDesignWizard.test.tsx` -> `PASS`
   - `cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx vitest run src/lib/template-recommender.test.ts` -> `PASS`
@@ -1354,7 +1353,7 @@ Utility and guard:
   - `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
   - `docs/INDEX.md`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-  - `docs/baselines/CVF_GC020_RUNTIME_HANDOFF_ENFORCEMENT_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_GC020_RUNTIME_HANDOFF_ENFORCEMENT_DELTA_2026-03-22.md`
 - Tests executed:
   - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run check` -> PASS
   - `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm run test` -> PASS
@@ -1393,7 +1392,7 @@ Utility and guard:
   - `governance/compat/check_agent_handoff_guard_compat.py`
   - `docs/INDEX.md`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-  - `docs/baselines/CVF_GC020_CONTEXT_CONTINUITY_PRINCIPLE_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_GC020_CONTEXT_CONTINUITY_PRINCIPLE_DELTA_2026-03-22.md`
 - Tests executed:
   - `python governance/compat/check_agent_handoff_guard_compat.py --enforce` -> PASS
   - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
@@ -1416,7 +1415,7 @@ Utility and guard:
   - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/README.md`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
   - `docs/INDEX.md`
-  - `docs/baselines/CVF_W1_T2_CLOSURE_DOC_RECONCILIATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T2_CLOSURE_DOC_RECONCILIATION_DELTA_2026-03-22.md`
 - Tests executed:
   - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
   - `python governance/compat/check_baseline_update_compat.py --enforce` -> PASS
@@ -1445,7 +1444,7 @@ Utility and guard:
   - `docs/reference/README.md`
   - `docs/INDEX.md`
   - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-  - `docs/baselines/CVF_GC021_FAST_LANE_GOVERNANCE_ADOPTION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_GC021_FAST_LANE_GOVERNANCE_ADOPTION_DELTA_2026-03-22.md`
 - Tests executed:
   - `python governance/compat/check_fast_lane_governance_compat.py --enforce` -> PASS
   - `python governance/compat/check_docs_governance_compat.py --enforce` -> PASS
@@ -1469,7 +1468,7 @@ Utility and guard:
   - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/retrieval.contract.ts`
   - `docs/audits/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_AUDIT_2026-03-22.md`
   - `docs/reviews/CVF_GC019_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_REVIEW_2026-03-22.md`
-  - `docs/baselines/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+  - `docs/baselines/archive/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 - Files updated:
   - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/intake.contract.ts`
   - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts`
@@ -1594,17 +1593,17 @@ Utility and guard:
   - split `W1-T11` tests into dedicated `context.builder.test.ts` to reduce `tests/index.test.ts` size
   - restore deterministic hash helper compatibility and gateway clock propagation needed to keep CPF package green
 - References:
-  - `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T11_2026-03-22.md`
+  - `docs/reviews/archive/CVF_GC018_CONTINUATION_CANDIDATE_W1_T11_2026-03-22.md`
   - `docs/roadmaps/CVF_W1_T11_CONTEXT_BUILDER_EXECUTION_PLAN_2026-03-22.md`
-  - `docs/reviews/CVF_W1_T11_CP1_AUDIT_2026-03-23.md`
-  - `docs/reviews/CVF_W1_T11_CP1_REVIEW_2026-03-23.md`
-  - `docs/reviews/CVF_W1_T11_CP2_AUDIT_2026-03-23.md`
-  - `docs/reviews/CVF_W1_T11_CP2_REVIEW_2026-03-23.md`
-  - `docs/reviews/CVF_W1_T11_CP3_AUDIT_2026-03-23.md`
-  - `docs/reviews/CVF_W1_T11_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-23.md`
-  - `docs/baselines/CVF_W1_T11_CP1_DELTA_2026-03-23.md`
-  - `docs/baselines/CVF_W1_T11_CP2_DELTA_2026-03-23.md`
-  - `docs/baselines/CVF_W1_T11_CP3_DELTA_2026-03-23.md`
+  - `docs/reviews/archive/CVF_W1_T11_CP1_AUDIT_2026-03-23.md`
+  - `docs/reviews/archive/CVF_W1_T11_CP1_REVIEW_2026-03-23.md`
+  - `docs/reviews/archive/CVF_W1_T11_CP2_AUDIT_2026-03-23.md`
+  - `docs/reviews/archive/CVF_W1_T11_CP2_REVIEW_2026-03-23.md`
+  - `docs/reviews/archive/CVF_W1_T11_CP3_AUDIT_2026-03-23.md`
+  - `docs/reviews/archive/CVF_W1_T11_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-23.md`
+  - `docs/baselines/archive/CVF_W1_T11_CP1_DELTA_2026-03-23.md`
+  - `docs/baselines/archive/CVF_W1_T11_CP2_DELTA_2026-03-23.md`
+  - `docs/baselines/archive/CVF_W1_T11_CP3_DELTA_2026-03-23.md`
 - Tests executed:
   - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run check` -> PASS
   - `cd EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION && npm run test` -> PASS (`2 test files, 213 passed`)

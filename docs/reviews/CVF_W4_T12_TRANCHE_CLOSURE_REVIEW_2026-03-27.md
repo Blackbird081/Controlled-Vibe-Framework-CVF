@@ -1,7 +1,6 @@
 # CVF Tranche Closure Review — W4-T12 PatternDrift Consumer Pipeline Bridge
 
 Memory class: FULL_RECORD
-
 > Date: 2026-03-27
 > Tranche: W4-T12 — PatternDrift Consumer Pipeline Bridge
 > Reviewer: Cascade
@@ -51,14 +50,14 @@ CP1:
 - Tests: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.drift.consumer.pipeline.test.ts`
 - Audit: `docs/audits/CVF_W4_T12_CP1_PATTERN_DRIFT_CONSUMER_PIPELINE_AUDIT_2026-03-27.md`
 - Review: `docs/reviews/CVF_GC019_W4_T12_CP1_PATTERN_DRIFT_CONSUMER_PIPELINE_REVIEW_2026-03-27.md`
-- Delta: `docs/baselines/CVF_W4_T12_CP1_PATTERN_DRIFT_CONSUMER_PIPELINE_DELTA_2026-03-27.md`
+- Delta: `docs/baselines/archive/CVF_W4_T12_CP1_PATTERN_DRIFT_CONSUMER_PIPELINE_DELTA_2026-03-27.md`
 
 CP2:
 - Contract: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/pattern.drift.consumer.pipeline.batch.contract.ts`
 - Tests: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.drift.consumer.pipeline.batch.test.ts`
 - Audit: `docs/audits/CVF_W4_T12_CP2_PATTERN_DRIFT_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md`
 - Review: `docs/reviews/CVF_GC021_W4_T12_CP2_PATTERN_DRIFT_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-27.md`
-- Delta: `docs/baselines/CVF_W4_T12_CP2_PATTERN_DRIFT_CONSUMER_PIPELINE_BATCH_DELTA_2026-03-27.md`
+- Delta: `docs/baselines/archive/CVF_W4_T12_CP2_PATTERN_DRIFT_CONSUMER_PIPELINE_BATCH_DELTA_2026-03-27.md`
 
 ---
 

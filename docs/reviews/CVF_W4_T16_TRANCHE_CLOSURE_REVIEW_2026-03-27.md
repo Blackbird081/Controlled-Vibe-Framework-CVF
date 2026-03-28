@@ -1,4 +1,6 @@
-# CVF W4-T16 Tranche Closure Review — Learning Storage Consumer Pipeline Bridge
+
+Memory class: FULL_RECORD
+
 
 Memory class: CLOSURE_RECORD
 
@@ -123,10 +125,10 @@ artifact + recordType
 
 4. `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T16_LEARNING_STORAGE_CONSUMER_BRIDGE_2026-03-27.md` (authorization)
 5. `docs/roadmaps/CVF_W4_T16_LEARNING_STORAGE_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md` (execution plan)
-6. `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T16_AUTHORIZATION_2026-03-27.md` (tracker sync)
+6. `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W4_T16_AUTHORIZATION_2026-03-27.md` (tracker sync)
 7. `docs/audits/CVF_W4_T16_CP1_LEARNING_STORAGE_CONSUMER_PIPELINE_AUDIT_2026-03-27.md` (CP1 audit)
 8. `docs/reviews/CVF_GC019_W4_T16_CP1_LEARNING_STORAGE_CONSUMER_PIPELINE_REVIEW_2026-03-27.md` (CP1 review)
-9. `docs/baselines/CVF_W4_T16_CP1_LEARNING_STORAGE_CONSUMER_PIPELINE_DELTA_2026-03-27.md` (CP1 delta)
+9. `docs/baselines/archive/CVF_W4_T16_CP1_LEARNING_STORAGE_CONSUMER_PIPELINE_DELTA_2026-03-27.md` (CP1 delta)
 10. `docs/audits/CVF_W4_T16_CP2_LEARNING_STORAGE_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md` (CP2 audit)
 11. `docs/reviews/CVF_W4_T16_TRANCHE_CLOSURE_REVIEW_2026-03-27.md` (this file)
 

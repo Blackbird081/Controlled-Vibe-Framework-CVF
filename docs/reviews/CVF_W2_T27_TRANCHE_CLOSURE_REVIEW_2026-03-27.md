@@ -1,7 +1,6 @@
 # CVF W2-T27 Tranche Closure Review — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Tranche: W2-T27 — Dispatch Consumer Pipeline Bridge
 > Closure date: 2026-03-27
 > Branch: cvf-next
@@ -69,7 +68,7 @@ W2-T27 delivers the first EPF consumer bridge, exposing `DispatchContract` throu
 ### GC-018 Authorization
 - ✅ Authorization doc: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T27_DISPATCH_CONSUMER_BRIDGE_2026-03-27.md`
 - ✅ Audit score: 10/10
-- ✅ GC-026 authorization sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W2_T27_AUTHORIZATION_2026-03-27.md`
+- ✅ GC-026 authorization sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W2_T27_AUTHORIZATION_2026-03-27.md`
 
 ### GC-019 Full Lane (CP1)
 - ✅ New contract: DispatchConsumerPipelineContract
@@ -143,9 +142,9 @@ Consumer visibility (execution plane dispatch logic)
 
 ### Governance Docs
 4. `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T27_DISPATCH_CONSUMER_BRIDGE_2026-03-27.md`
-5. `docs/baselines/CVF_GC026_TRACKER_SYNC_W2_T27_AUTHORIZATION_2026-03-27.md`
+5. `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W2_T27_AUTHORIZATION_2026-03-27.md`
 6. `docs/reviews/CVF_W2_T27_TRANCHE_CLOSURE_REVIEW_2026-03-27.md` (this document)
-7. `docs/baselines/CVF_GC026_TRACKER_SYNC_W2_T27_COMPLETION_2026-03-27.md` (pending)
+7. `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W2_T27_COMPLETION_2026-03-27.md` (pending)
 
 ### Updated Files
 8. `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/index.ts` (barrel exports)

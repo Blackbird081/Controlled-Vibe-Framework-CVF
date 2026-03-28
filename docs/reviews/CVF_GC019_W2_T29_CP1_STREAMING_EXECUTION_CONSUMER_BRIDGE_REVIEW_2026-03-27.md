@@ -1,7 +1,6 @@
 # CVF GC-019 Review — W2-T29 CP1 Streaming Execution Consumer Pipeline Bridge — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Tranche: W2-T29 — Streaming Execution Consumer Pipeline Bridge
 > Control Point: CP1 — StreamingExecutionConsumerPipelineContract
 > Review type: Full Lane (GC-019)
@@ -23,7 +22,7 @@ Memory class: FULL_RECORD
 | `src/index.ts` barrel update | ✅ Done |
 | `CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` update | ✅ Done |
 | CP1 Audit | ✅ `docs/audits/CVF_W2_T29_CP1_STREAMING_EXECUTION_CONSUMER_BRIDGE_AUDIT_2026-03-27.md` |
-| CP1 Delta | ✅ `docs/baselines/CVF_W2_T29_CP1_STREAMING_EXECUTION_CONSUMER_BRIDGE_DELTA_2026-03-27.md` |
+| CP1 Delta | ✅ `docs/baselines/archive/CVF_W2_T29_CP1_STREAMING_EXECUTION_CONSUMER_BRIDGE_DELTA_2026-03-27.md` |
 
 ---
 

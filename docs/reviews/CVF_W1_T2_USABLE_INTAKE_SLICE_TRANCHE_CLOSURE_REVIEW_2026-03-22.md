@@ -1,4 +1,6 @@
-# CVF W1-T2 Usable Intake Slice — Tranche Closure Review
+
+Memory class: FULL_RECORD
+
 
 > Governance control: `GC-019 / CP5`
 > Date: `2026-03-22`
@@ -30,7 +32,7 @@ All five control points have been implemented and verified.
 - **Tests:** 8 foundation tests
 - **Audit:** `docs/audits/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_AUDIT_2026-03-22.md`
 - **Review:** `docs/reviews/CVF_GC019_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_REVIEW_2026-03-22.md`
-- **Delta:** `docs/baselines/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`
+- **Delta:** `docs/baselines/archive/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_IMPLEMENTATION_DELTA_2026-03-22.md`
 
 ### CP2 — Unified Knowledge Retrieval Contract
 
@@ -39,7 +41,7 @@ All five control points have been implemented and verified.
 - **Tests:** 15 retrieval contract tests
 - **Audit:** `docs/audits/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_AUDIT_2026-03-22.md`
 - **Review:** `docs/reviews/CVF_GC019_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_REVIEW_2026-03-22.md`
-- **Delta:** `docs/baselines/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
+- **Delta:** `docs/baselines/archive/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md`
 
 ### CP3 — Deterministic Context Packaging
 
@@ -48,7 +50,7 @@ All five control points have been implemented and verified.
 - **Tests:** 15 packaging contract tests
 - **Audit:** `docs/audits/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_AUDIT_2026-03-22.md`
 - **Review:** `docs/reviews/CVF_GC019_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_REVIEW_2026-03-22.md`
-- **Delta:** `docs/baselines/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_IMPLEMENTATION_DELTA_2026-03-22.md`
+- **Delta:** `docs/baselines/archive/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_IMPLEMENTATION_DELTA_2026-03-22.md`
 
 ### CP4 — Real Consumer Path Proof
 
@@ -57,7 +59,7 @@ All five control points have been implemented and verified.
 - **Tests:** 9 consumer contract tests
 - **Audit:** `docs/audits/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_AUDIT_2026-03-22.md`
 - **Review:** `docs/reviews/CVF_GC019_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_REVIEW_2026-03-22.md`
-- **Delta:** `docs/baselines/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_IMPLEMENTATION_DELTA_2026-03-22.md`
+- **Delta:** `docs/baselines/archive/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_IMPLEMENTATION_DELTA_2026-03-22.md`
 
 ### CP5 — Tranche Closure Review
 

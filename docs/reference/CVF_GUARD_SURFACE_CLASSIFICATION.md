@@ -1,7 +1,6 @@
 # CVF Guard Surface Classification
 
 Memory class: POINTER_RECORD
-
 Status: grouped management map for the active governance guard surface after `GC-023` hardening, full `GC-030` cleanup, and foundational guard automation closure.
 
 ## Purpose
@@ -100,5 +99,5 @@ When a new guard is proposed, hardening review should happen in this order:
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
 - `governance/toolkit/05_OPERATION/CVF_GUARD_AUTHORING_STANDARD_GUARD.md`
 - `governance/toolkit/05_OPERATION/CVF_GUARD_REGISTRY_GUARD.md`
-- `docs/baselines/CVF_GUARD_HARDENING_BATCH2_RAPID_AUDIT_DELTA_2026-03-27.md`
-- `docs/baselines/CVF_GUARD_HARDENING_BATCH3_META_STANDARD_DELTA_2026-03-27.md`
+- `docs/baselines/archive/CVF_GUARD_HARDENING_BATCH2_RAPID_AUDIT_DELTA_2026-03-27.md`
+- `docs/baselines/archive/CVF_GUARD_HARDENING_BATCH3_META_STANDARD_DELTA_2026-03-27.md`

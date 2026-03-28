@@ -93,7 +93,7 @@ Exit codes:
 - `governance/compat/CVF_PYTHON_AUTOMATION_SIZE_EXCEPTION_REGISTRY.json`
 - `governance/compat/check_python_automation_size.py`
 - `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`
-- `docs/baselines/CVF_GUARD_HARDENING_BATCH2_RAPID_AUDIT_DELTA_2026-03-27.md`
+- `docs/baselines/archive/CVF_GUARD_HARDENING_BATCH2_RAPID_AUDIT_DELTA_2026-03-27.md`
 - `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
 
 ## Final Clause

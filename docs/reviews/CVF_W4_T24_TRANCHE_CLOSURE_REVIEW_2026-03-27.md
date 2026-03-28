@@ -1,7 +1,6 @@
 # CVF W4-T24 Tranche Closure Review
 
 Memory class: FULL_RECORD
-
 > Date: 2026-03-27
 > Tranche: W4-T24 — Learning Storage Log Consumer Pipeline Bridge
 > Authorization: GC-018 (10/10)
@@ -67,6 +66,8 @@ Memory class: FULL_RECORD
 
 **Total**: 3817 tests, 0 failures
 
+Tier markers: T1=0, T2=0, T3=38, T4=0, Meaningful=YES
+
 ---
 
 ## Governance Artifacts Delivered
@@ -84,7 +85,7 @@ Memory class: FULL_RECORD
 ### Tranche Artifacts
 - Execution plan: `docs/roadmaps/CVF_W4_T24_LEARNING_STORAGE_LOG_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`
 - Closure review: `docs/reviews/CVF_W4_T24_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
-- GC-026 completion sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T24_COMPLETION_2026-03-27.md`
+- GC-026 completion sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W4_T24_COMPLETION_2026-03-27.md`
 - Test log: `docs/CVF_INCREMENTAL_TEST_LOG.md` (updated)
 - Tracker: `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` (updated)
 - Handoff: `AGENT_HANDOFF.md` (updated)
@@ -160,7 +161,7 @@ Current guidance:
 - Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T24_LEARNING_STORAGE_LOG_CONSUMER_BRIDGE_2026-03-27.md`
 - Execution plan: `docs/roadmaps/CVF_W4_T24_LEARNING_STORAGE_LOG_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`
 - Closure review: `docs/reviews/CVF_W4_T24_TRANCHE_CLOSURE_REVIEW_2026-03-27.md`
-- GC-026 completion sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W4_T24_COMPLETION_2026-03-27.md`
+- GC-026 completion sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W4_T24_COMPLETION_2026-03-27.md`
 - Tracker: `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
 - Handoff: `AGENT_HANDOFF.md`
 

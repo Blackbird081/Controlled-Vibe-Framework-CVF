@@ -1,7 +1,6 @@
-﻿# CVF Whitepaper Progress Tracker
+# CVF Whitepaper Progress Tracker
 
 Memory class: POINTER_RECORD
-
 > Purpose: simple visual tracker for progress against `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
@@ -184,7 +183,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W5_T2_CLOSURE_2026-03-28.md`
+- Latest GC-026 tracker sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W5_T2_CLOSURE_2026-03-28.md`
 - Current closure anchor: `docs/reviews/CVF_W5_T2_TRANCHE_CLOSURE_REVIEW_2026-03-28.md`
 - Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W5_T2_WHITEPAPER_UPDATE_2026-03-28.md` (W5-T2 CLOSED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

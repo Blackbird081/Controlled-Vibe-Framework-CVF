@@ -1,7 +1,6 @@
 # CVF W4-T2 Truth Model Slice — Tranche Closure Review
 
 Memory class: FULL_RECORD
-
 > Decision type: `Full Lane` tranche closure review
 > Date: `2026-03-22`
 > Tranche: `W4-T2 — Learning Plane Truth Model Slice`
@@ -50,16 +49,16 @@ The `TruthModel` is the first CVF learning surface that persists across multiple
 |----------|-------------|-----|
 | `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T2_2026-03-22.md` | FULL_RECORD | Pre-tranche |
 | `docs/roadmaps/CVF_W4_T2_TRUTH_MODEL_EXECUTION_PLAN_2026-03-22.md` | SUMMARY_RECORD | Pre-tranche |
-| `docs/baselines/CVF_WHITEPAPER_GC018_W4_T2_AUTHORIZATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | Pre-tranche |
+| `docs/baselines/archive/CVF_WHITEPAPER_GC018_W4_T2_AUTHORIZATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | Pre-tranche |
 | `docs/audits/CVF_W4_T2_CP1_TRUTH_MODEL_CONTRACT_AUDIT_2026-03-22.md` | FULL_RECORD | CP1 |
 | `docs/reviews/CVF_GC019_W4_T2_CP1_TRUTH_MODEL_CONTRACT_REVIEW_2026-03-22.md` | FULL_RECORD | CP1 |
-| `docs/baselines/CVF_W4_T2_CP1_TRUTH_MODEL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP1 |
+| `docs/baselines/archive/CVF_W4_T2_CP1_TRUTH_MODEL_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP1 |
 | `docs/audits/CVF_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_AUDIT_2026-03-22.md` | FULL_RECORD | CP2 |
 | `docs/reviews/CVF_GC019_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_REVIEW_2026-03-22.md` | FULL_RECORD | CP2 |
-| `docs/baselines/CVF_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP2 |
+| `docs/baselines/archive/CVF_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP2 |
 | `docs/audits/CVF_W4_T2_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md` | FULL_RECORD | CP3 |
 | `docs/reviews/CVF_GC019_W4_T2_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md` | FULL_RECORD | CP3 |
-| `docs/baselines/CVF_W4_T2_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP3 |
+| `docs/baselines/archive/CVF_W4_T2_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP3 |
 
 ## 6. Remaining Gaps vs. Whitepaper Target-State
 

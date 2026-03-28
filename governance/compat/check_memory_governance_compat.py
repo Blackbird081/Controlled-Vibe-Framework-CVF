@@ -218,6 +218,9 @@ def _memory_marker_violations(changed_files: list[str]) -> dict[str, str]:
         expected = _expected_memory_class(path)
         if expected is None:
             continue
+        abs_path = REPO_ROOT / path
+        if not abs_path.exists() or abs_path.is_dir():
+            continue
         text = _read_text(path)
         if not text:
             violations[path] = "missing file contents"

@@ -1,7 +1,6 @@
 # CVF W2-T25 Tranche Closure Review
 
 Memory class: FULL_RECORD
-
 > Date: 2026-03-27
 > Tranche: W2-T25 — Command Runtime Consumer Pipeline Bridge
 > Status: ✅ COMPLETE
@@ -79,7 +78,7 @@ Memory class: FULL_RECORD
 - [x] GC-018 survey completed
 - [x] Audit score: 10/10
 - [x] Authorization doc: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T25_COMMAND_RUNTIME_CONSUMER_BRIDGE_2026-03-27.md`
-- [x] GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W2_T25_AUTHORIZATION_2026-03-27.md`
+- [x] GC-026 tracker sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W2_T25_AUTHORIZATION_2026-03-27.md`
 - [x] Execution plan: `docs/roadmaps/CVF_W2_T25_COMMAND_RUNTIME_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`
 
 ### GC-019 Full Lane (CP1)

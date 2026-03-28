@@ -331,6 +331,9 @@ Archive protection note:
 - generic archive cleanup must never auto-archive canonical active windows owned by dedicated rotation guards
 - canonical source of truth is `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 - grouped management map is `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
+- historical `docs/audits/` and `docs/reviews/` now use explicit retain-evidence registries instead of one-off manual exceptions
+- canonical retention sources are `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json` and `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`
+- generic archive cleanup runs incrementally from `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`; full scans are bootstrap/recovery only
 | CVF_TEST_PARTITION_OWNERSHIP_GUARD.md | Extracted governed test surfaces | Canonical test home must remain exclusive |
 
 Guard management map:

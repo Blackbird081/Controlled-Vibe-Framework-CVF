@@ -1,7 +1,6 @@
 # CVF W1-T20 Tranche Closure Review — GatewayAuth Consumer Pipeline Bridge
 
 Memory class: FULL_RECORD
-
 > Date: 2026-03-25
 > Tranche: W1-T20 — GatewayAuth Consumer Pipeline Bridge
 > Verdict: CLOSED DELIVERED
@@ -32,12 +31,12 @@ Memory class: FULL_RECORD
 | Tests CP1 | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.consumer.pipeline.test.ts` |
 | Source CP2 | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.auth.consumer.pipeline.batch.contract.ts` |
 | Tests CP2 | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.consumer.pipeline.batch.test.ts` |
-| CP1 Audit | `docs/audits/CVF_W1_T20_CP1_GATEWAY_AUTH_CONSUMER_PIPELINE_AUDIT_2026-03-25.md` |
-| CP1 Review | `docs/reviews/CVF_GC019_W1_T20_CP1_GATEWAY_AUTH_CONSUMER_PIPELINE_REVIEW_2026-03-25.md` |
-| CP1 Delta | `docs/baselines/CVF_W1_T20_CP1_GATEWAY_AUTH_CONSUMER_PIPELINE_DELTA_2026-03-25.md` |
-| CP2 Audit | `docs/audits/CVF_W1_T20_CP2_GATEWAY_AUTH_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-25.md` |
-| CP2 Review | `docs/reviews/CVF_GC021_W1_T20_CP2_GATEWAY_AUTH_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-25.md` |
-| CP2 Delta | `docs/baselines/CVF_W1_T20_CP2_GATEWAY_AUTH_CONSUMER_PIPELINE_BATCH_DELTA_2026-03-25.md` |
+| CP1 Audit | `docs/audits/archive/CVF_W1_T20_CP1_GATEWAY_AUTH_CONSUMER_PIPELINE_AUDIT_2026-03-25.md` |
+| CP1 Review | `docs/reviews/archive/CVF_GC019_W1_T20_CP1_GATEWAY_AUTH_CONSUMER_PIPELINE_REVIEW_2026-03-25.md` |
+| CP1 Delta | `docs/baselines/archive/CVF_W1_T20_CP1_GATEWAY_AUTH_CONSUMER_PIPELINE_DELTA_2026-03-25.md` |
+| CP2 Audit | `docs/audits/archive/CVF_W1_T20_CP2_GATEWAY_AUTH_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-25.md` |
+| CP2 Review | `docs/reviews/archive/CVF_GC021_W1_T20_CP2_GATEWAY_AUTH_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-25.md` |
+| CP2 Delta | `docs/baselines/archive/CVF_W1_T20_CP2_GATEWAY_AUTH_CONSUMER_PIPELINE_BATCH_DELTA_2026-03-25.md` |
 
 ---
 

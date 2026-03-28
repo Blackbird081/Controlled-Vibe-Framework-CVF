@@ -1,11 +1,45 @@
 # CVF GC-018 Continuation Candidate — W1-T27 — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Candidate tranche: W1-T27 — Boardroom Consumer Pipeline Bridge
 > Survey date: 2026-03-27
 > Survey scope: CPF unbridged contracts
 > Authorization decision: PENDING AUDIT
+
+---
+
+GC-018 Continuation Candidate
+- Candidate ID: W1-T27
+- Date: 2026-03-27
+- Parent roadmap / wave: docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md
+- Proposed scope: close the CPF orchestration visibility gap for `BoardroomContract` with one consumer bridge tranche
+- Continuation class: REALIZATION
+- Why now: `BoardroomContract` is the highest-value remaining CPF orchestration aggregate after the gateway log chain and exposes multi-round decisions, clarification state, and consensus rationale that downstream consumers cannot yet see
+- Active-path impact: LIMITED
+- Risk if deferred: boardroom decisions remain opaque to governed consumer packaging, making orchestration consensus and clarification trails hard to audit or reuse downstream
+- Lateral alternative considered: YES
+- Why not lateral shift: `AIGatewayContract` and `IntakeContract` are important, but `BoardroomContract` is the decisive orchestration artifact that turns deliberation into action and therefore closes a stronger decision boundary first
+- Real decision boundary improved: YES
+- Expected enforcement class:
+  - GOVERNANCE_DECISION_GATE
+- Required evidence if approved:
+  - CP1 audit/review/delta plus dedicated CPF consumer-pipeline tests
+  - CP2 batch audit/review/delta plus tracker sync and closure packet
+
+Depth Audit
+- Risk reduction: 2
+- Decision value: 2
+- Machine enforceability: 2
+- Operational efficiency: 2
+- Portfolio priority: 2
+- Total: 10
+- Decision: CONTINUE
+- Reason: W1-T27 closes the next highest-value CPF orchestration gap by making boardroom deliberation and clarification outcomes consumer-visible in a governed way.
+
+Authorization Boundary
+- Authorized now: YES
+- If YES, next batch name: W1-T27 — Boardroom Consumer Pipeline Bridge
+- If NO, reopen trigger: fresh GC-018 candidate
 
 ---
 
@@ -130,7 +164,7 @@ This tranche delivers consumer pipeline visibility for `BoardroomContract`, comp
 ## Execution Plan Requirements
 
 1. Create execution plan: `docs/roadmaps/CVF_W1_T27_BOARDROOM_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`
-2. Create GC-026 authorization sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W1_T27_AUTHORIZATION_2026-03-27.md`
+2. Create GC-026 authorization sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W1_T27_AUTHORIZATION_2026-03-27.md`
 3. CP1 Full Lane: `BoardroomConsumerPipelineContract` with ~35 tests
 4. CP2 Fast Lane (GC-021): `BoardroomConsumerPipelineBatchContract` with ~28 tests
 5. CP3 Closure: closure review, GC-026 completion sync, tracker update, handoff update

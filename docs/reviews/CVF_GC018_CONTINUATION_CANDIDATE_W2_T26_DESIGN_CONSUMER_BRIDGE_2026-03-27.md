@@ -1,12 +1,46 @@
 # CVF GC-018 Continuation Candidate — W2-T26 Design Consumer Bridge — 2026-03-27
 
 Memory class: FULL_RECORD
-
 > Protocol: GC-018 (Continuation Authorization)
 > Candidate tranche: W2-T26 — Design Consumer Pipeline Bridge
 > Survey date: 2026-03-27
 > Surveyor: CVF Agent
 > Authorization status: **AUTHORIZED** (10/10 audit score)
+
+---
+
+GC-018 Continuation Candidate
+- Candidate ID: W2-T26
+- Date: 2026-03-27
+- Parent roadmap / wave: docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md
+- Proposed scope: close the CPF design-orchestration visibility gap for `DesignContract` with one consumer bridge tranche
+- Continuation class: REALIZATION
+- Why now: `DesignContract` is the highest-value unbridged orchestration artifact discovered in the post-W1-T25 survey and carries task breakdown, risk, phase, and role assignment signals across planes
+- Active-path impact: LIMITED
+- Risk if deferred: design plans remain trapped inside orchestration without a governed consumer-visible path, weakening cross-plane planning transparency and reuse
+- Lateral alternative considered: YES
+- Why not lateral shift: other remaining CPF gaps existed, but `DesignContract` is the strongest cross-plane planning surface and closes a more consequential orchestration boundary than another lateral gateway-only move
+- Real decision boundary improved: YES
+- Expected enforcement class:
+  - APPROVAL_CHECKPOINT
+- Required evidence if approved:
+  - CP1 audit/review/delta plus dedicated CPF consumer-pipeline tests
+  - CP2 batch audit/review/delta plus tracker sync and closure packet
+
+Depth Audit
+- Risk reduction: 2
+- Decision value: 2
+- Machine enforceability: 2
+- Operational efficiency: 2
+- Portfolio priority: 2
+- Total: 10
+- Decision: CONTINUE
+- Reason: W2-T26 exposes the CPF design plan as a governed consumer artifact and closes a cross-plane planning boundary that materially improves downstream execution and review decisions.
+
+Authorization Boundary
+- Authorized now: YES
+- If YES, next batch name: W2-T26 — Design Consumer Pipeline Bridge
+- If NO, reopen trigger: fresh GC-018 candidate
 
 ---
 
@@ -118,7 +152,7 @@ Following W1-T25 completion (third CPF log consumer bridge), performed fresh GC-
 ## Next Steps
 
 1. Create execution plan (`docs/roadmaps/CVF_W2_T26_DESIGN_CONSUMER_BRIDGE_EXECUTION_PLAN_2026-03-27.md`)
-2. Create GC-026 authorization sync (`docs/baselines/CVF_GC026_TRACKER_SYNC_W2_T26_AUTHORIZATION_2026-03-27.md`)
+2. Create GC-026 authorization sync (`docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W2_T26_AUTHORIZATION_2026-03-27.md`)
 3. Implement CP1 (Full Lane)
 4. Implement CP2 (Fast Lane GC-021)
 5. Execute CP3 (Closure)

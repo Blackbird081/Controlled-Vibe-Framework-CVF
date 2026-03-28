@@ -1,7 +1,6 @@
 # CVF W4-T1 Learning Plane Foundation Slice — Tranche Closure Review
 
 Memory class: FULL_RECORD
-
 > Decision type: `Full Lane` tranche closure review
 > Date: `2026-03-22`
 > Tranche: `W4-T1 — Learning Plane Foundation Slice`
@@ -51,16 +50,16 @@ W4-T1 opened the W4 gate and delivered the **Learning Plane Foundation slice** �
 |----------|-------------|-----|
 | `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T1_2026-03-22.md` | FULL_RECORD | Pre-tranche |
 | `docs/roadmaps/CVF_W4_T1_LEARNING_PLANE_FOUNDATION_EXECUTION_PLAN_2026-03-22.md` | SUMMARY_RECORD | Pre-tranche |
-| `docs/baselines/CVF_WHITEPAPER_GC018_W4_T1_AUTHORIZATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | Pre-tranche |
+| `docs/baselines/archive/CVF_WHITEPAPER_GC018_W4_T1_AUTHORIZATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | Pre-tranche |
 | `docs/audits/CVF_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_AUDIT_2026-03-22.md` | FULL_RECORD | CP1 |
 | `docs/reviews/CVF_GC019_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_REVIEW_2026-03-22.md` | FULL_RECORD | CP1 |
-| `docs/baselines/CVF_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP1 |
+| `docs/baselines/archive/CVF_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP1 |
 | `docs/audits/CVF_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_AUDIT_2026-03-22.md` | FULL_RECORD | CP2 |
 | `docs/reviews/CVF_GC019_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_REVIEW_2026-03-22.md` | FULL_RECORD | CP2 |
-| `docs/baselines/CVF_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP2 |
+| `docs/baselines/archive/CVF_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_IMPLEMENTATION_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP2 |
 | `docs/audits/CVF_W4_T1_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md` | FULL_RECORD | CP3 |
 | `docs/reviews/CVF_GC019_W4_T1_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md` | FULL_RECORD | CP3 |
-| `docs/baselines/CVF_W4_T1_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP3 |
+| `docs/baselines/archive/CVF_W4_T1_CP3_TRANCHE_CLOSURE_DELTA_2026-03-22.md` | SUMMARY_RECORD | CP3 |
 
 ## 6. Remaining Gaps vs. Whitepaper Target-State
 

@@ -59,4 +59,3 @@ Memory class: FULL_RECORD
 
 **APPROVED — CP1 delivery complete and compliant with GC-019 Full Lane requirements.**
 
-</content>

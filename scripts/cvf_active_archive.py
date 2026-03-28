@@ -25,6 +25,7 @@ Usage:
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -51,6 +52,8 @@ LEGACY_ARCHIVE_INDEX_FILENAME = "ARCHIVE_INDEX.md"
 AGE_THRESHOLD_DAYS = 3
 MANAGED_EXTENSIONS = {".md", ".json"}
 ACTIVE_WINDOW_REGISTRY_PATH = PROJECT_ROOT / "governance" / "compat" / "CVF_ACTIVE_WINDOW_REGISTRY.json"
+AUDIT_RETENTION_REGISTRY_PATH = PROJECT_ROOT / "governance" / "compat" / "CVF_AUDIT_RETENTION_REGISTRY.json"
+REVIEW_RETENTION_REGISTRY_PATH = PROJECT_ROOT / "governance" / "compat" / "CVF_REVIEW_RETENTION_REGISTRY.json"
 ARCHIVE_BASELINE_FILENAME = "CVF_ACTIVE_ARCHIVE_BASELINE.json"
 
 # Keep existing permanent names.
@@ -66,6 +69,10 @@ PERMANENT_FILES = {
 PERMANENT_PATHS = {
     "docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md",
     "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
+    "docs/baselines/CVF_CORE_COMPAT_BASELINE.md",
+    "docs/baselines/CVF_CONFORMANCE_GOLDEN_BASELINE_2026-03-07.json",
+    "docs/baselines/CVF_TESTER_BASELINE_2026-02-25.md",
+    "docs/baselines/README.md",
     "AGENT_HANDOFF.md",
 }
 
@@ -86,7 +93,18 @@ PROTECTED_REFERENCE_FILES = {
     "docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md",
     "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
     "docs/reference/CVF_RELEASE_MANIFEST.md",
+    "docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md",
+    "docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md",
+    "docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md",
+    "docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md",
 }
+AUTO_REWRITE_REFERENCE_TARGETS = [
+    "docs",
+    "governance",
+    "README.md",
+    "AGENT_HANDOFF.md",
+    "ECOSYSTEM/strategy",
+]
 LIVE_REFERENCE_BLOCK_THRESHOLD = 3
 MAX_LINK_AUDIT_PRINT_ROWS = 200
 
@@ -223,6 +241,38 @@ def load_active_window_paths() -> set[str]:
         and entry.get("status") == "ACTIVE"
         and entry.get("protectionMode") == "PERMANENT_ACTIVE_WINDOW"
         and entry.get("activePath")
+    }
+
+
+@lru_cache(maxsize=1)
+def load_audit_retain_evidence_paths() -> set[str]:
+    if not AUDIT_RETENTION_REGISTRY_PATH.exists():
+        raise RuntimeError(
+            "Audit retention registry is missing. Expected: "
+            f"{AUDIT_RETENTION_REGISTRY_PATH.relative_to(PROJECT_ROOT).as_posix()}"
+        )
+    registry = json.loads(AUDIT_RETENTION_REGISTRY_PATH.read_text(encoding="utf-8"))
+    return {
+        path
+        for path in registry.get("retainEvidencePaths", [])
+        if isinstance(path, str) and path
+    }
+
+
+@lru_cache(maxsize=None)
+def load_review_retain_evidence_paths() -> set[str]:
+    if not REVIEW_RETENTION_REGISTRY_PATH.exists():
+        return set()
+    try:
+        registry = json.loads(REVIEW_RETENTION_REGISTRY_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(
+            f"Unable to read review retention registry: {REVIEW_RETENTION_REGISTRY_PATH}"
+        ) from exc
+    return {
+        path
+        for path in registry.get("retainEvidencePaths", [])
+        if isinstance(path, str) and path
     }
 
 
@@ -406,6 +456,12 @@ def resolve_local_link(source_rel_path: str, target: str) -> Optional[str]:
         return None
 
 
+def build_relative_link_target(source_rel_path: str, target_rel_path: str) -> str:
+    source_abs = PROJECT_ROOT / Path(source_rel_path)
+    target_abs = PROJECT_ROOT / Path(target_rel_path)
+    return Path(os.path.relpath(target_abs, source_abs.parent)).as_posix()
+
+
 def detect_archive_relocation_target(resolved_target: str) -> Optional[str]:
     parts = Path(resolved_target).parts
     if len(parts) < 2 or ARCHIVE_FOLDER in parts:
@@ -415,6 +471,40 @@ def detect_archive_relocation_target(resolved_target: str) -> Optional[str]:
     if archive_abs.exists():
         return archive_rel.as_posix()
     return None
+
+
+def rewrite_markdown_links_for_moves(content: str, source_rel_path: str, move_map: dict[str, str]) -> str:
+    def replace_markdown(match: re.Match[str]) -> str:
+        raw_target = match.group(1).strip()
+        normalized = normalize_local_link_target(raw_target)
+        if normalized is None:
+            return match.group(0)
+        resolved = resolve_local_link(source_rel_path, normalized)
+        if resolved is None:
+            return match.group(0)
+        moved_target = move_map.get(resolved)
+        if not moved_target:
+            return match.group(0)
+        new_target = build_relative_link_target(source_rel_path, moved_target)
+        return match.group(0).replace(raw_target, new_target, 1)
+
+    def replace_autolink(match: re.Match[str]) -> str:
+        raw_target = match.group(1).strip()
+        normalized = normalize_local_link_target(raw_target)
+        if normalized is None:
+            return match.group(0)
+        resolved = resolve_local_link(source_rel_path, normalized)
+        if resolved is None:
+            return match.group(0)
+        moved_target = move_map.get(resolved)
+        if not moved_target:
+            return match.group(0)
+        new_target = build_relative_link_target(source_rel_path, moved_target)
+        return f"<{new_target}>"
+
+    updated = MARKDOWN_LINK_PATTERN.sub(replace_markdown, content)
+    updated = AUTOLINK_PATTERN.sub(replace_autolink, updated)
+    return updated
 
 
 def build_markdown_link_index() -> tuple[dict[str, set[str]], list[LinkIssue]]:
@@ -503,6 +593,24 @@ def collect_live_reference_sources(candidate: FileInfo, moving_rel_paths: set[st
     return filtered
 
 
+def collect_exact_path_reference_sources(candidate: FileInfo, moving_rel_paths: set[str]) -> set[str]:
+    hits = run_rg_fixed(candidate.rel_path)
+    filtered: set[str] = set()
+
+    for hit in hits:
+        if hit == candidate.rel_path:
+            continue
+        if "/archive/" in hit:
+            continue
+        if is_excluded_path(hit):
+            continue
+        if hit in moving_rel_paths:
+            continue
+        filtered.add(hit)
+
+    return filtered
+
+
 def collect_markdown_link_sources(
     candidate: FileInfo,
     moving_rel_paths: set[str],
@@ -528,7 +636,29 @@ def evaluate_candidate_risk(
     moving_rel_paths: set[str],
     markdown_link_index: Optional[dict[str, set[str]]] = None,
 ) -> CandidateRisk:
+    if candidate.rel_path.startswith("docs/reviews/") and candidate.rel_path in load_review_retain_evidence_paths():
+        return CandidateRisk(
+            info=candidate,
+            blocked=True,
+            reason="review_retain_evidence",
+            live_reference_sources=[],
+            protected_reference_sources=[],
+            markdown_link_sources=[],
+        )
+
+    if candidate.rel_path.startswith("docs/audits/") and candidate.rel_path in load_audit_retain_evidence_paths():
+        return CandidateRisk(
+            info=candidate,
+            blocked=True,
+            reason="audit_retain_evidence",
+            live_reference_sources=[],
+            protected_reference_sources=[],
+            markdown_link_sources=[],
+        )
+
     live_sources = collect_live_reference_sources(candidate, moving_rel_paths)
+    exact_path_sources = collect_exact_path_reference_sources(candidate, moving_rel_paths)
+    filename_only_sources = live_sources - exact_path_sources
     if markdown_link_index is None:
         markdown_link_sources = collect_markdown_link_sources_for_candidate(candidate, moving_rel_paths)
     else:
@@ -555,11 +685,11 @@ def evaluate_candidate_risk(
             markdown_link_sources=sorted(markdown_link_sources),
         )
 
-    if len(live_sources) >= LIVE_REFERENCE_BLOCK_THRESHOLD:
+    if filename_only_sources:
         return CandidateRisk(
             info=candidate,
             blocked=True,
-            reason=f"high_reference_count({len(live_sources)})",
+            reason=f"filename_reference_dependency({len(filename_only_sources)})",
             live_reference_sources=sorted(live_sources),
             protected_reference_sources=[],
             markdown_link_sources=sorted(markdown_link_sources),
@@ -895,6 +1025,7 @@ def do_archive(cutoff_date: datetime, execute: bool = False, full_scan: bool = F
     total_already_archived = 0
     total_blocked = 0
     total_safe_candidates = 0
+    move_map: dict[str, str] = {}
 
     print("\n" + "=" * 60)
     print("CVF Active-Archive Report")
@@ -983,6 +1114,7 @@ def do_archive(cutoff_date: datetime, execute: bool = False, full_scan: bool = F
             if execute:
                 target_dir.mkdir(exist_ok=True)
                 shutil.move(str(info.path), str(target_path))
+                move_map[info.rel_path] = to_rel_path(target_path)
                 moved_count += 1
                 touched_archive_dirs.add(target_dir)
 
@@ -1011,38 +1143,71 @@ def do_archive(cutoff_date: datetime, execute: bool = False, full_scan: bool = F
     print(f"  Already archived:    {total_already_archived}")
     print("=" * 60 + "\n")
 
-    log_data = {
-        "timestamp": datetime.now().isoformat(),
-        "cutoff_date": cutoff_date.strftime("%Y-%m-%d"),
-        "mode": "execute" if execute else "dry-run",
-        "configuration": {
-            "managedRoots": MANAGED_ROOTS,
-            "ageThresholdDays": AGE_THRESHOLD_DAYS,
-            "referenceBlockThreshold": LIVE_REFERENCE_BLOCK_THRESHOLD,
-        },
-        "directories": log_dirs,
-        "totals": {
-            "moved": moved_count if execute else 0,
-            "wouldMove": total_safe_candidates if not execute else moved_count,
-            "blocked": total_blocked,
-            "active": total_active,
-            "nonDated": total_non_dated,
-            "permanent": total_permanent,
-            "alreadyArchived": total_already_archived,
-        },
-    }
-
-    log_path = SCRIPT_DIR / f"cvf_archive_log_{datetime.now().strftime('%Y-%m-%d_%H%M%S')}.json"
-    with open(log_path, "w", encoding="utf-8") as file:
-        json.dump(log_data, file, indent=2, default=str)
-    print(f"Log saved to: {log_path.relative_to(PROJECT_ROOT)}")
-
     if execute:
+        rewrite_active_references_for_moves(move_map)
         baseline_path = write_archive_baseline(cutoff_date, full_scan=full_scan)
         print(f"Archive baseline updated: {baseline_path.relative_to(PROJECT_ROOT)}")
 
     if not execute:
         print("\nTo execute, run: python scripts/cvf_active_archive.py --execute\n")
+
+
+def iter_auto_rewrite_sources() -> list[Path]:
+    sources: list[Path] = []
+    seen: set[str] = set()
+
+    for target in AUTO_REWRITE_REFERENCE_TARGETS:
+        target_path = PROJECT_ROOT / target
+        if not target_path.exists():
+            continue
+        if target_path.is_file():
+            rel_path = to_rel_path(target_path)
+            if rel_path not in seen:
+                sources.append(target_path)
+                seen.add(rel_path)
+            continue
+
+        for suffix in ("*.md", "*.json"):
+            for item in target_path.rglob(suffix):
+                if not item.is_file() or is_archive_path(item):
+                    continue
+                rel_path = to_rel_path(item)
+                if is_excluded_path(rel_path):
+                    continue
+                if rel_path in seen:
+                    continue
+                sources.append(item)
+                seen.add(rel_path)
+
+    return sources
+
+
+def rewrite_active_references_for_moves(move_map: dict[str, str]) -> int:
+    if not move_map:
+        return 0
+
+    replacements = sorted(move_map.items(), key=lambda item: len(item[0]), reverse=True)
+    changed_files = 0
+
+    for source_path in iter_auto_rewrite_sources():
+        try:
+            original = source_path.read_text(encoding="utf-8")
+        except OSError:
+            continue
+
+        updated = rewrite_markdown_links_for_moves(original, to_rel_path(source_path), move_map)
+        for old_rel, new_rel in replacements:
+            updated = updated.replace(old_rel, new_rel)
+
+        if updated == original:
+            continue
+
+        source_path.write_text(updated, encoding="utf-8")
+        changed_files += 1
+
+    if changed_files:
+        print(f"Rewrote exact-path archive references in {changed_files} active files.")
+    return changed_files
 
 
 def do_restore() -> None:

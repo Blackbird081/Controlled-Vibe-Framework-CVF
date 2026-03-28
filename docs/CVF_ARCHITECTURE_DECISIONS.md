@@ -1116,7 +1116,6 @@ Phase 1 of the CVF Edit Integration Roadmap mandated strict Governance Runtime H
 ---
 
 ## ADR-022: Foundational Guard Surfaces Must Be Machine-Enforced
-
 | Field | Value |
 |---|---|
 | Date | 2026-03-28 |
@@ -1124,39 +1123,20 @@ Phase 1 of the CVF Edit Integration Roadmap mandated strict Governance Runtime H
 | Branch | `cvf-next` |
 | Layer | Governance Platform |
 | Related commits | *(local, current automation batch)* |
-
 ### Context
-
 Recent hardening closed registry-driven bypasses and standardized all guard docs under `GC-030`, but six foundational guards still depended too heavily on reviewer discipline: `CVF_ADR_GUARD`, `CVF_ARCHITECTURE_CHECK_GUARD`, `CVF_EXTENSION_VERSIONING_GUARD`, `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD`, `CVF_TEST_DEPTH_CLASSIFICATION_GUARD`, and `CVF_WORKSPACE_ISOLATION_GUARD`. That left architecture truth, naming, structural evidence, test-depth reporting, and workspace boundaries too advisory for an automated agent environment.
-
 ### Decision
-
 **Automate the remaining foundational guard family through `governance/compat/check_foundational_guard_surfaces.py`, enforced in both local pre-push and CI.** The gate blocks missing ADR updates, missing Knowledge Base refresh, invalid extension naming, missing GC-019 evidence, incomplete test-depth reporting, and suspicious workspace-isolation violations.
-
 ### Rationale
-
-- foundational guards are too important to remain “review if someone notices”
-- one shared diff-range gate is preferable to fragmented reviewer-memory enforcement
-- pre-push plus CI keeps enforcement symmetric for local agents and shared branches
-
+Foundational guards are too important to remain review-by-memory, one shared diff-range gate is more reliable than fragmented manual checks, and pre-push plus CI keeps enforcement symmetric for local agents and shared branches.
 ### Consequences
-
-- CVF governance is now closer to an executable repo-governance perimeter
-- future changes in these surfaces fail faster and more visibly
-- remaining hardening should focus on automation precision and regression depth, not legacy guard format
-
+CVF governance is closer to an executable repo-governance perimeter, future changes in these surfaces fail faster and more visibly, and remaining hardening can focus on automation precision and regression depth instead of legacy format cleanup.
 ### Related Files
-
-- `governance/compat/check_foundational_guard_surfaces.py`
-- `governance/compat/run_local_governance_hook_chain.py`
-- `.github/workflows/documentation-testing.yml`
-- `docs/CVF_CORE_KNOWLEDGE_BASE.md`
-- `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
+`governance/compat/check_foundational_guard_surfaces.py`, `governance/compat/run_local_governance_hook_chain.py`, `.github/workflows/documentation-testing.yml`, `docs/CVF_CORE_KNOWLEDGE_BASE.md`, `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
 
 ---
 
 ## ADR-023: Dedicated Active Trace Windows Are Permanent Inputs To Generic Archive Cleanup
-
 | Field | Value |
 |---|---|
 | Date | 2026-03-28 |
@@ -1164,34 +1144,37 @@ Recent hardening closed registry-driven bypasses and standardized all guard docs
 | Branch | `cvf-next` |
 | Layer | Governance Platform |
 | Related commits | *(local, current archive-hardening batch)* |
-
 ### Context
-
 CVF already governs long-lived active evidence windows through dedicated rotation guards, but generic archive cleanup still treated them like ordinary dated documents unless screening happened to save them. That meant a canonical active trace could look old enough to archive even while still being the current working window.
-
 ### Decision
-
 **Treat every canonical active window owned by a dedicated rotation guard as a registered, classified, and permanently protected path in generic archive cleanup.** The protected set is no longer maintained as ad-hoc hard-coded paths; it is governed through `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`, and `governance/compat/check_active_window_registry.py`.
-
 Current registered active windows: `docs/CVF_INCREMENTAL_TEST_LOG.md` and `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`.
-
 These files are excluded up front from generic archive eligibility, and future dedicated rotation guards must register their own active windows in the same model.
-
 ### Rationale
-
-- canonical active windows are operational inputs, not ordinary dated historical documents
-- a generic archive utility should not be allowed to reinterpret the lifecycle of a file that already has a dedicated rotation policy
-
+Canonical active windows are operational inputs, not ordinary dated historical documents, and a generic archive utility must not reinterpret the lifecycle of a file that already has a dedicated rotation policy.
 ### Consequences
-
-- archive cleanup is easier to trust because high-value active windows are protected by rule, not by side effects
-- active windows are now grouped canonically instead of managed as a one-off list
-- future dedicated rotation guards must register their active window in the same registry-and-classification model
-
+Archive cleanup is easier to trust because high-value active windows are protected by rule, active windows are grouped canonically instead of managed as a one-off list, and future dedicated rotation guards must register their active window in the same model.
 ### Related Files
+`scripts/cvf_active_archive.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `governance/compat/check_active_window_registry.py`, `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`, `scripts/test_cvf_active_archive.py`, `governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`
 
-- `scripts/cvf_active_archive.py`
-- `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
-- `governance/compat/check_active_window_registry.py`
-- `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
-- `scripts/test_cvf_active_archive.py`, `governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`
+---
+
+## ADR-024: Archive Cleanup Must Be Registry-Driven And Incremental
+| Field | Value |
+|---|---|
+| Date | 2026-03-28 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current cleanup batch)* |
+### Context
+CVF had already introduced active-window protection for generic archive cleanup, but the broader archive workflow still depended too much on broad repo scans and ad-hoc judgement about which historical `audits` and `reviews` should stay live. Once the repository accumulated hundreds of dated evidence documents, "scan everything every time" became both expensive and easier to get wrong.
+### Decision
+**Move archive cleanup to a registry-driven, incremental model.** `scripts/cvf_active_archive.py` now uses `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json` as the canonical checkpoint for normal runs, while audit/review evidence retention is governed by explicit registries:
+Normal cleanup re-evaluates only incremental deltas and registry-protected candidates; full scans remain bootstrap/recovery only. Audit and review evidence retention is governed by `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json` and `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`.
+### Rationale
+Archive safety should be determined by explicit governance state, incremental cleanup is the right default once historical backlog has been classified, and archive automation must preserve evidence-bearing documents without forcing a full-repo sweep every run.
+### Consequences
+`docs/audits/` and `docs/reviews/` can now be cleaned without losing protected evidence chains, pre-push and CI enforce retention-registry truth before archive moves are valid, and foundational test-depth enforcement now applies to active report surfaces instead of archived historical records.
+### Related Files
+`scripts/cvf_active_archive.py`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`, `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`, `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`, `governance/compat/check_audit_retention_registry.py`, `governance/compat/check_review_retention_registry.py`, `governance/compat/check_foundational_guard_surfaces.py`

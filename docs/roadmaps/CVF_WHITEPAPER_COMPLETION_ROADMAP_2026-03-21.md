@@ -1511,3 +1511,7 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W7-T7 — Planner + Decision Engine Integration ✓ CLOSED 2026-03-28
 
 > HOLD→GO (P5 satisfied). W7PlannerRecord (DESIGN-phase, reads Trace only, outputs CPF package) + W7DecisionRecord (risk-aware, 4 outcomes, R3→ESCALATED mandatory, G2/G5/G7 bound). Dependency chain: Runtime✓→Artifact✓→Trace✓→Planner✓→Decision✓→Eval/Builder(T8)→Memory(T9).
+
+## W7-T8 — Agent Builder + Eval Loop Integration ✓ CLOSED 2026-03-28
+
+> HOLD→GO (Decision✓). W7AgentBuilderRecord (assisted-default P6; B-01→B-05 presets; GEF registry distribution) + W7EvalRecord (G7-blocked on Decision.status:resolved; 5 no-fake-learning invariants; 4 LPF signal types; observational-only). Dependency chain: Runtime✓→Artifact✓→Trace✓→Planner✓→Decision✓→Eval/Builder✓→Memory(T9).

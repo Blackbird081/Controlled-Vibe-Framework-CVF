@@ -1,10 +1,10 @@
 # 🏛️ CVF Master Architecture Whitepaper
 Memory class: POINTER_RECORD
 
-> **Version:** 2.2-W4T11
-> **Date:** 2026-03-27
-> **Document Type:** PARTIALLY DELIVERED ARCHITECTURE WHITEPAPER — evidence-backed truth reconciliation complete as of 2026-03-22; canonical architecture baseline remains `v2.2-W4T11`, with post-baseline continuation refreshed through `W1-T30 / W2-T29 / W3-T18 / W4-T13`
-> **Authorization Status:** First whitepaper-completion cycle through `W5-T1` is canonically closed. Post-baseline continuation is canonically closed through `W1-T30 / W2-T29 / W3-T18 / W4-T13`. Current active tranche is `NONE`; any further continuation requires a new `GC-018` wave decision.
+> **Version:** 3.0-W7T10
+> **Date:** 2026-03-28
+> **Document Type:** SUBSTANTIALLY DELIVERED ARCHITECTURE WHITEPAPER — all four planes fully bridged; W7 Governance Integration Wave complete 2026-03-28; canonical architecture baseline updated to `v3.0-W7T10`, with post-baseline continuation reconciled through `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10`
+> **Authorization Status:** W5-T1 whitepaper-completion cycle is canonically closed. W5-T2 whitepaper update is canonically closed 2026-03-28. Post-baseline continuation is canonically closed through `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10`. Current active tranche is `NONE`; any further continuation requires a new `GC-018` wave decision.
 > **Clean Baseline References:**
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts` (phases, risk model)
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts` (shared default guard stack)
@@ -18,7 +18,7 @@ Memory class: POINTER_RECORD
 > - partially delivered target-state areas
 > - future-facing design principles that still require later governed waves
 
-> **Baseline Tracking Note:** as of `2026-03-27`, this whitepaper remains the canonical architecture snapshot anchored at `v2.2-W4T11`, but its progress readout is refreshed to the latest governed continuation. Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, and the handoff for execution rules.
+> **Baseline Tracking Note:** as of `2026-03-28`, this whitepaper is updated to `v3.0-W7T10` — reflecting complete consumer pipeline bridge coverage across all four planes and the W7 Governance Integration Wave. Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, and the handoff for execution rules.
 
 > **Core Principle:** *"Agents may execute tasks, but they cannot control the system that governs them."*
 
@@ -138,10 +138,10 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 │                                                                 │
 │                 ┌──────────────────────────────────────┐      │
 │                 │ CEO / Orchestrator Surface           │      │
-│                 │ [PARTIAL]                            │      │
-│                 │ governed orchestration surfaces       │      │
-│                 │ exist; richer target-state control    │      │
-│                 │ intelligence remains future-facing    │      │
+│                 │ [SUBSTANTIALLY DELIVERED]            │      │
+│                 │ orchestration + boardroom + reverse  │      │
+│                 │ prompting + clarification refinement │      │
+│                 │ consumer bridges canonically closed  │      │
 │                 └────────────────┬─────────────────────┘      │
 │                                  ▼                            │
 │  ┌───────────────────────────────────────────────────────────┐ │
@@ -150,22 +150,31 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 │  │  ┌─────────────┐  ┌────────────────┐  ┌──────────────┐   │ │
 │  │  │ Policy      │  │ Trust &        │  │ Audit /      │   │ │
 │  │  │ Engine      │  │ Isolation      │  │ Consensus    │   │ │
-│  │  │ [DONE /     │  │ [PARTIAL]      │  │ [PARTIAL]    │   │ │
-│  │  │ INVARIANT]  │  │ safety + guard │  │ audit signal │   │ │
-│  │  │ R0-R3       │  │ boundary exists│  │ and consensus│   │ │
-│  │  │ current     │  │                │  │ bridges exist│   │ │
+│  │  │ [DONE /     │  │ [PARTIAL]      │  │ [DONE]       │   │ │
+│  │  │ INVARIANT]  │  │ safety + guard │  │ all audit +  │   │ │
+│  │  │ R0-R3       │  │ boundary exists│  │ consensus    │   │ │
+│  │  │ current     │  │                │  │ bridges done │   │ │
 │  │  └─────────────┘  └────────────────┘  └──────────────┘   │ │
 │  │                                                           │ │
 │  │  ┌─────────────┐  ┌────────────────┐  ┌──────────────┐   │ │
-│  │  │ CVF         │  │ Guard Engine   │  │ Agent Def &  │   │ │
-│  │  │ Watchdog    │  │ Shared: 8      │  │ Capability   │   │ │
-│  │  │ [PARTIAL]   │  │ Runtime: 15    │  │ Registry     │   │ │
-│  │  │ escalation +│  │ [DONE /        │  │ [PARTIAL /   │   │ │
-│  │  │ pulse + log │  │ INVARIANT]     │  │ PROPOSAL]    │   │ │
-│  │  │ bridges     │  │                │  │              │   │ │
+│  │  │ CVF         │  │ Guard Engine   │  │ Skill/Agent  │   │ │
+│  │  │ Watchdog    │  │ Shared: 8      │  │ Registry     │   │ │
+│  │  │ [DONE]      │  │ Runtime: 15    │  │ [W7 DONE]    │   │ │
+│  │  │ all watch-  │  │ [DONE /        │  │ SkillForm +  │   │ │
+│  │  │ dog bridges │  │ INVARIANT]     │  │ StructSpec   │   │ │
+│  │  │ canonically │  │                │  │ + W7 guards  │   │ │
 │  │  └─────────────┘  └────────────────┘  └──────────────┘   │ │
 │  └───────────────────────────────────────────────────────────┘ │
 │                                                                 │
+│  ┌───────────────────────────────────────────────────────────┐ │
+│  │  🔗  W7 GOVERNANCE INTEGRATION LAYER [DONE — 2026-03-28]  │ │
+│  │  SkillFormationRecord · StructuredSpec · W7RuntimeRecord  │ │
+│  │  W7ArtifactRecord · W7TraceRecord · W7PlannerRecord       │ │
+│  │  W7DecisionRecord · W7AgentBuilderRecord · W7EvalRecord   │ │
+│  │  W7MemoryRecord — 8 guards G1-G8 · 32 presets · P1-P8    │ │
+│  │  Dependency chain: Runtime→Artifact→Trace→Planner→        │ │
+│  │  Decision→Eval/Builder→Memory — no fake-learning path     │ │
+│  └───────────────────────────────────────────────────────────┘ │
 │  Execution Authorization (Scope-Bounded Command)               │
 └──────────────────────────────┬──────────────────────────────────┘
                                │
@@ -239,24 +248,26 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ### 4.1 Maturity Snapshot by Plane
 
-> Read this table as: `baseline architecture shape = W4-T11`, `governed progress readout = refreshed through 2026-03-27`.
+> Read this table as: `baseline architecture shape = W7-T10`, `governed progress readout = refreshed through 2026-03-28`.
 
 | Plane | Current posture | What is already true |
 |---|---|---|
-| Control Plane | `SUBSTANTIALLY DELIVERED` | AI Gateway, Boardroom/Reverse Prompting, typed context packaging, knowledge ranking/query, gateway auth, clarification refinement, gateway/log, intake, and route-match consumer pipeline bridges are canonically closed through `W1-T30` |
-| Execution Plane | `SUBSTANTIALLY DELIVERED` | command runtime, observer/feedback, re-intake, MCP invocation, async status, execution pipeline, policy gate, feedback routing, dispatch, async runtime, and streaming execution consumer bridges are canonically closed through `W2-T29` |
-| Governance Layer | `SUBSTANTIALLY DELIVERED` | watchdog, governance checkpoint/consensus/audit lines, watchdog escalation, and watchdog pulse consumer bridges are canonically closed through `W3-T18` |
-| Learning Plane | `SUBSTANTIALLY DELIVERED` | learning storage, observability, evaluation engine, truth score, pattern detection, governance signal, and learning observability consumer pipelines are canonically closed through `W4-T13` |
-| Whitepaper Truth Reconciliation | `DONE FOR CURRENT CYCLE` | whitepaper was re-labeled from pure target-state concept to evidence-backed partial delivery in `W5-T1` |
+| Control Plane | `SUBSTANTIALLY DELIVERED` | AI Gateway, Boardroom/Reverse Prompting, typed context packaging, knowledge ranking/query, gateway auth, clarification refinement, gateway/log, intake, route-match, context build batch, knowledge query batch, retrieval consumer pipeline bridges — ALL canonically closed through `W2-T38` / `W1-T30` |
+| Execution Plane | `SUBSTANTIALLY DELIVERED` | all EPF consumer pipeline bridges canonically closed through `W2-T29`; W6-T1 (streaming execution + aggregator), W6-T4/T5 (governance checkpoint/reintake) added post-baseline |
+| Governance Layer | `SUBSTANTIALLY DELIVERED` | all GEF consumer pipeline bridges canonically closed through `W3-T18`; W6-T6 (pattern drift); W7 governance integration: SkillFormationRecord, StructuredSpec, 8 guards G1-G8, 32 presets |
+| Learning Plane | `SUBSTANTIALLY DELIVERED` | ALL 18 LPF base contracts fully bridged — consumer pipeline bridges canonically closed through `W4-T25`; 1333 tests, 0 failures |
+| W7 Governance Integration | `DONE` | 11 schemas across 4 planes, 32 guard presets, all P1-P8 gates satisfied, full dependency chain Runtime→Memory, 10 no-fake-learning invariants, 0 governance violations — W7-T10 CLOSED 2026-03-28 |
+| Whitepaper Truth Reconciliation | `DONE` | W5-T1 evidence-backed partial delivery; W5-T2 updated to v3.0-W7T10 reflecting full bridge coverage and W7 wave |
 
 ### 4.1A Post-Baseline Continuation Delta
 
 | Plane | Added closure beyond original whitepaper freeze |
 |---|---|
-| Control Plane | `W1-T23` to `W1-T30` added gateway auth log, gateway pii log, route match log, design, boardroom, AI gateway, intake, and route-match consumer pipeline continuations |
-| Execution Plane | `W2-T25` to `W2-T29` added command runtime, dispatch, async runtime, and streaming execution consumer pipeline continuations |
-| Governance Layer | no newer governed continuation beyond `W3-T18` is currently reflected in the active readout |
-| Learning Plane | `W4-T12` to `W4-T13` added pattern drift and learning observability consumer pipeline continuations in the current quick readout |
+| Control Plane | `W1-T23` to `W1-T30` added gateway auth log, gateway pii log, route match log, design, boardroom, AI gateway, intake, and route-match consumer pipeline continuations; `W2-T36` to `W2-T38` added context build batch, knowledge query batch, and retrieval consumer pipeline bridges — ALL CPF bridges canonically closed through `W2-T38` |
+| Execution Plane | `W2-T25` to `W2-T29` added command runtime, dispatch, async runtime, and streaming execution consumer pipeline continuations; `W6-T1` added streaming execution contract + aggregator — ALL EPF bridges canonically closed |
+| Governance Layer | `W6-T4` (governance checkpoint), `W6-T5` (checkpoint reintake), `W6-T6` (pattern drift) added post-baseline GEF contracts — ALL GEF bridges canonically closed through `W3-T18` + `W6-T6`; `W7-T0` to `W7-T10` added full governance integration wave: 11 schemas, 32 guard presets (G1-G8, P-01→P-15, B-01→B-05, M-01→M-04), 10 no-fake-learning invariants |
+| Learning Plane | `W4-T12` to `W4-T13` added pattern drift and learning observability consumer pipeline continuations; `W4-T14` to `W4-T25` closed all 12 remaining LPF consumer pipeline bridges — ALL 18 LPF base contracts fully bridged through `W4-T25`; 1333 tests, 0 failures |
+| W7 Governance Integration | `W7-T0` to `W7-T10` (2026-03-25 to 2026-03-28) closed the full W7 Integration Wave — SkillFormation (T4), StructuredSpec (T5), Runtime/Artifact/Trace/Planner/Decision/Eval/Builder/Memory schemas (T0-T3, T6-T9), Wave Closure (T10); all P1-P8 gates satisfied; dependency chain Runtime→Artifact→Trace→Planner→Decision→Eval/Builder→Memory fully closed |
 
 ### 4.2 What This Diagram No Longer Claims
 
@@ -271,11 +282,11 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 |---|---|
 | Multi-agent repo/docs convergence | `GC-027` canonical review-doc chain |
 | Highest-priority live multi-agent deliberation surface | `AI Boardroom` in Control Plane, governed by `GC-028`; see `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md` |
-| Snapshot date | `2026-03-27` |
-| Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v2.2-W4T11`) |
-| Last canonical closure | `W2-T29 CLOSED DELIVERED` |
+| Snapshot date | `2026-03-28` |
+| Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v3.0-W7T10`) |
+| Last canonical closure | `W7-T10 CLOSED DELIVERED` |
 | Current active tranche | `NONE` |
-| Current posture | `PARTIALLY DELIVERED` with all four planes `SUBSTANTIALLY DELIVERED`; refreshed continuation readout now reaches `W1-T30 / W2-T29 / W3-T18 / W4-T13` |
+| Current posture | `SUBSTANTIALLY DELIVERED` — all four planes `SUBSTANTIALLY DELIVERED`; W7 Governance Integration `DONE`; continuation readout `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10` |
 | Required gate before any new implementation | fresh `GC-018` authorization |
 | Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `AGENT_HANDOFF.md` |
 

@@ -106,6 +106,7 @@ Canonical draft packets created:
 |---|---|
 | Review 18 rebuttal outcome consumed | DONE |
 | W7 roadmap drafted | DONE |
-| W7-T0 authorization packet | DRAFTED |
-| W7-T1 execution plan | DRAFTED |
+| W7-T0 authorization packet | COMMITTED (3081ab13) |
+| W7-T1 execution plan | COMMITTED (3081ab13) |
+| W7-T1 canonical ownership map + merge blueprint | IN EXECUTION — 2026-03-28 |
 | W7-T2..W7-T10 execution | PENDING |

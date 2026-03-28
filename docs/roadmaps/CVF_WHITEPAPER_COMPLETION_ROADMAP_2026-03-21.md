@@ -1483,3 +1483,7 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W2-T38 — Retrieval Consumer Pipeline Bridge ✓ CLOSED 2026-03-28
 
 > CPF: 1842 → 1893 tests (+51). RetrievalResultSurface → CPF consumer pipeline bridge. contextId derived (no natural ID field). Warnings: WARNING_NO_CHUNKS, WARNING_NO_TIERS_SEARCHED. All CPF bridge candidates (W2-T13–W2-T38) now CLOSED.
+
+## W7-T1 — Canonical Ownership Merge Blueprint ✓ CLOSED 2026-03-28
+
+> P1 gate satisfied. 10 concepts from Review 14/15/16 mapped (KEEP/RETIRE). Planner→CPF DESIGN, Runtime→EPF BUILD, Skill→GEF, Eval→LPF, Memory Loop gated (P5). Merge blueprint: fixed 8-step dependency chain. W7-T2 (Unified Risk Contract) now unblocked. See: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`

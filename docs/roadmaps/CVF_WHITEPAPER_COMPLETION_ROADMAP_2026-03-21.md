@@ -1507,3 +1507,7 @@ Next: fresh GC-018 survey — retrieval.contract.ts (LOW) or cross-plane wave.
 ## W7-T6 — Dependency Order Enforcement (P5) + Runtime/Artifact/Trace Integration ✓ CLOSED 2026-03-28
 
 > P5 SATISFIED + ALL P1-P8 COMPLETE. W7RuntimeRecord/W7ArtifactRecord/W7TraceRecord schemas; BUILD-phase locked; trace-emission mandatory (G6); artifacts schema-validated; G7 blocking conditions per transition. W7-T7+T8 fully unblocked.
+
+## W7-T7 — Planner + Decision Engine Integration ✓ CLOSED 2026-03-28
+
+> HOLD→GO (P5 satisfied). W7PlannerRecord (DESIGN-phase, reads Trace only, outputs CPF package) + W7DecisionRecord (risk-aware, 4 outcomes, R3→ESCALATED mandatory, G2/G5/G7 bound). Dependency chain: Runtime✓→Artifact✓→Trace✓→Planner✓→Decision✓→Eval/Builder(T8)→Memory(T9).

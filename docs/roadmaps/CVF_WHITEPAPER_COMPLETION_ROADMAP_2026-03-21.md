@@ -1421,7 +1421,7 @@ Next: fresh GC-018 survey — next highest-value unbridged LPF or EPF aggregate 
 
 ---
 
-## W2-T36 — Context Build Batch Consumer Pipeline Bridge (IN EXECUTION)
+## W2-T36 — Context Build Batch Consumer Pipeline Bridge (CLOSED DELIVERED)
 
 > Authorization: GC-018 score 9/10 — 2026-03-28
 > CPF baseline: 1742 tests
@@ -1431,3 +1431,19 @@ Planned deliverables:
 - `W2-T36 / CP1` — ContextBuildBatchConsumerPipelineContract (`ContextBuildBatch → CPF consumer pipeline`) — Full Lane (GC-019)
 - `W2-T36 / CP2` — ContextBuildBatchConsumerPipelineBatchContract (`ContextBuildBatchConsumerPipelineResult[] → batch with dominantTokenBudget`) — Fast Lane (GC-021)
 - `W2-T36 / CP3` — Tranche closure review — Full Lane
+
+---
+
+### POST-CYCLE RECORD — W2-T36 — Context Build Batch Consumer Pipeline Bridge — CLOSED DELIVERED
+
+> Closed: 2026-03-28
+> CPF at closure: 1791 tests, 0 failures (+49 from 1742)
+
+Contracts delivered:
+
+- `W2-T36 / CP1` — ContextBuildBatchConsumerPipelineContract — Full Lane (GC-019) — +31 tests — commit cfe10058
+- `W2-T36 / CP2` — ContextBuildBatchConsumerPipelineBatchContract — Fast Lane (GC-021) — +18 tests — commit cfe10058
+
+Gap closed: ContextBuildBatchContract (W1-T11) now has a governed consumer-visible enriched output path.
+
+Next: fresh GC-018 survey — W2-T37 Knowledge Query Batch Consumer Pipeline Bridge.

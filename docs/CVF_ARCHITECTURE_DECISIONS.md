@@ -1171,7 +1171,11 @@ CVF already governs long-lived active evidence windows through dedicated rotatio
 
 ### Decision
 
-**Treat every canonical active window owned by a dedicated rotation guard as a permanent protected path in generic archive cleanup.** The current protected set is `docs/CVF_INCREMENTAL_TEST_LOG.md` and `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`. These files are now excluded up front from generic archive eligibility, not merely rescued later by reference screening.
+**Treat every canonical active window owned by a dedicated rotation guard as a registered, classified, and permanently protected path in generic archive cleanup.** The protected set is no longer maintained as ad-hoc hard-coded paths; it is governed through `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`, and `governance/compat/check_active_window_registry.py`.
+
+Current registered active windows: `docs/CVF_INCREMENTAL_TEST_LOG.md` and `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`.
+
+These files are excluded up front from generic archive eligibility, and future dedicated rotation guards must register their own active windows in the same model.
 
 ### Rationale
 
@@ -1180,13 +1184,14 @@ CVF already governs long-lived active evidence windows through dedicated rotatio
 
 ### Consequences
 
-- archive cleanup is easier to trust because the highest-value active windows are protected by rule, not by side effects
-- future dedicated rotation guards should register their active window in the same permanent-protection set
+- archive cleanup is easier to trust because high-value active windows are protected by rule, not by side effects
+- active windows are now grouped canonically instead of managed as a one-off list
+- future dedicated rotation guards must register their active window in the same registry-and-classification model
 
 ### Related Files
 
 - `scripts/cvf_active_archive.py`
-- `scripts/test_cvf_active_archive.py`
-- `governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md`
-- `governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`
-- `governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`
+- `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
+- `governance/compat/check_active_window_registry.py`
+- `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
+- `scripts/test_cvf_active_archive.py`, `governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`

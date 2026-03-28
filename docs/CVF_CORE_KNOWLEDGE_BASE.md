@@ -307,6 +307,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_GUARD_AUTHORING_STANDARD_GUARD.md | New or materially revised governance guard | Guard must satisfy the mandatory authoring contract before commit |
 | CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
 | CVF_ACTIVE_ARCHIVE_GUARD.md | Active archive maintenance | Keep active/archive split truthful and append-only |
+| CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md | New or revised active trace/log window with dedicated rotation guard | Register canonical active window + class + archive protection |
 | CVF_AGENT_HANDOFF_GUARD.md | Governed pause/resume transfer | Canonical handoff packet before another worker continues |
 | CVF_AGENT_HANDOFF_TRANSITION_GUARD.md | Pause/resume classification | Transition class chosen before handoff is written |
 | CVF_BASELINE_UPDATE_GUARD.md | Substantive repo change | Matching baseline/review artifact required |
@@ -328,7 +329,8 @@ Automated foundational surface gate:
 Archive protection note:
 
 - generic archive cleanup must never auto-archive canonical active windows owned by dedicated rotation guards
-- current protected active windows are `docs/CVF_INCREMENTAL_TEST_LOG.md` and `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+- canonical source of truth is `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
+- grouped management map is `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
 | CVF_TEST_PARTITION_OWNERSHIP_GUARD.md | Extracted governed test surfaces | Canonical test home must remain exclusive |
 
 Guard management map:

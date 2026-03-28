@@ -167,6 +167,12 @@ Personal AI usage unrelated to company work is excluded.
      - If a guard claims a `GC-*` control ID, that ID must be synchronized with the control matrix and master policy in the same change batch.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GUARD_AUTHORING_STANDARD_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_guard_authoring_standard.py`.
+ 25. `GC-031` canonical active trace/log windows owned by dedicated rotation guards must be registered by class before archive tooling may rely on them:
+     - Every dedicated rotation guard that defines a canonical active window must register that window in `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`.
+     - The registry is the source of truth for grouped active-window classification and generic archive protection.
+     - Existing protected active-window entries are governed state and must not be silently mutated or removed in the normal commit path.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_active_window_registry.py`.
 
 ---
 

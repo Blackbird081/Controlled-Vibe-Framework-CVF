@@ -343,6 +343,23 @@ jobs:
         run: |
           python governance/compat/check_guard_authoring_standard.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
+  active-window-registry:
+    name: Active Window Registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce active window registry compatibility
+        run: |
+          python governance/compat/check_active_window_registry.py --enforce
+
   foundational-guard-surfaces:
     name: Foundational Guard Surfaces
     runs-on: ubuntu-latest
@@ -546,7 +563,7 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [docs-governance-compat, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
+    needs: [docs-governance-compat, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, active-window-registry, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
     if: always()
     
     steps:
@@ -571,6 +588,7 @@ jobs:
           echo "Cross-channel guard compat: ${{ needs.cross-channel-guard-compat.result }}"
           echo "Guard registry compat: ${{ needs.guard-registry-compat.result }}"
           echo "Guard authoring standard: ${{ needs.guard-authoring-standard.result }}"
+          echo "Active window registry: ${{ needs.active-window-registry.result }}"
           echo "Foundational guard surfaces: ${{ needs.foundational-guard-surfaces.result }}"
           echo "Enterprise evidence pack: ${{ needs.enterprise-evidence-pack.result }}"
           echo "Conformance artifact consistency: ${{ needs.conformance-artifact-consistency.result }}"

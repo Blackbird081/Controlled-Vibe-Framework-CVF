@@ -187,6 +187,7 @@ Foundational governance surfaces that used to depend mainly on reviewer discipli
 Mandatory guard index:
 
 - `CVF_ACTIVE_ARCHIVE_GUARD.md`
+- `CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md`
 - `CVF_ADR_GUARD.md`
 - `CVF_AGENT_HANDOFF_GUARD.md`
 - `CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`

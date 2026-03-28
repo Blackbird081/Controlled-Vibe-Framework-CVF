@@ -3,7 +3,7 @@
 **Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
 **Status:** Active archive-maintenance contract for dated operational documents.
 **Applies to:** Managed roots such as `docs/` and `ECOSYSTEM/strategy/` plus their local `archive/` subdirectories.
-**Enforced by:** `scripts/cvf_active_archive.py`
+**Enforced by:** `scripts/cvf_active_archive.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 
 ## Purpose
 
@@ -27,7 +27,7 @@ This guard applies to managed roots:
 Policy overlap control:
 
 - paths that already have dedicated rotation guards are excluded from this guard, such as `docs/logs/` and `docs/reviews/cvf_phase_governance/logs/`
-- canonical active windows owned by dedicated rotation guards are never auto-archived by this generic cleanup flow
+- canonical active windows owned by dedicated rotation guards are never auto-archived by this generic cleanup flow and must be registered in `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 - archive folders (`*/archive/`) are never re-scanned as active candidates
 
 ### File Naming Rule
@@ -77,9 +77,7 @@ The following files are never archived:
 - `CVF_UNIFIED_ROADMAP_2026.md`
 - `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - `CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
-- canonical active windows owned by dedicated rotation guards, including:
-  - `docs/CVF_INCREMENTAL_TEST_LOG.md`
-  - `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+- canonical active windows owned by dedicated rotation guards and registered in `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 - architecture and baseline anchors explicitly marked permanent in script config
 
 ### Impact Screening
@@ -109,6 +107,7 @@ This script should be run:
 ## Enforcement Surface
 
 - active/archive maintenance runs through `scripts/cvf_active_archive.py`
+- active-window classification and protected-set sync run through `governance/compat/check_active_window_registry.py`
 - governance drift exists when safe-to-archive files remain active without reason or when archive moves break references
 - remediation requires running the archive script, verifying `CVF_ARCHIVE_INDEX.md`, and resolving `BROKEN-ARCHIVED` findings before more cleanup proceeds
 
@@ -127,6 +126,9 @@ Useful commands:
 ## Related Artifacts
 
 - `scripts/cvf_active_archive.py`
+- `governance/compat/check_active_window_registry.py`
+- `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
+- `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
 - `governance/toolkit/05_OPERATION/CVF_DOCUMENT_NAMING_GUARD.md`
 - `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`
 - `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`

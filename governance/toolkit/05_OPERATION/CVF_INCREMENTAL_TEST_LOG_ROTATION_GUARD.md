@@ -3,7 +3,7 @@
 **Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
 **Status:** Active rotation contract for the canonical incremental test log window.
 **Applies to:** `docs/CVF_INCREMENTAL_TEST_LOG.md` and `docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_*.md`.
-**Enforced by:** `governance/compat/check_incremental_test_log_rotation.py`
+**Enforced by:** `governance/compat/check_incremental_test_log_rotation.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 
 ## Purpose
 
@@ -61,6 +61,7 @@ Do not create ad-hoc filenames such as `old_test_log.md`, `test_log_backup.md`, 
 ## Enforcement Surface
 
 - repo-level enforcement runs through `governance/compat/check_incremental_test_log_rotation.py`
+- active-window registration and archive-protection sync are enforced through `governance/compat/check_active_window_registry.py`
 - the guard blocks unrotated oversized active logs, broken archive placement, and non-canonical archive naming
 - remediation requires rotating the log, preserving the archive index, and keeping the active window reviewable
 
@@ -80,6 +81,8 @@ Violations include:
 ## Related Artifacts
 
 - `governance/compat/check_incremental_test_log_rotation.py`
+- `governance/compat/check_active_window_registry.py`
+- `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 - `scripts/rotate_cvf_incremental_test_log.py`
 - `docs/CVF_INCREMENTAL_TEST_LOG.md`
 - `docs/logs/`

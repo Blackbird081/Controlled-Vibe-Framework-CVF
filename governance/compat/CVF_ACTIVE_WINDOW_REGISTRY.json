@@ -1,0 +1,38 @@
+{
+  "classes": [
+    {
+      "id": "GLOBAL_APPEND_ONLY_LOG_WINDOW",
+      "description": "Cross-cutting canonical active logs that live at docs root and rotate into a shared global archive chain."
+    },
+    {
+      "id": "SCOPED_APPEND_ONLY_TRACE_WINDOW",
+      "description": "Scope-local canonical active traces that stay beside their review scope and rotate into scope-local log chains."
+    }
+  ],
+  "windows": [
+    {
+      "id": "incremental_test_log_active_window",
+      "windowClass": "GLOBAL_APPEND_ONLY_LOG_WINDOW",
+      "activePath": "docs/CVF_INCREMENTAL_TEST_LOG.md",
+      "archiveDir": "docs/logs",
+      "archivePattern": "^CVF_INCREMENTAL_TEST_LOG_ARCHIVE_\\d{4}_PART_\\d{2}\\.md$",
+      "rotationGuard": "governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md",
+      "rotationCheck": "governance/compat/check_incremental_test_log_rotation.py",
+      "rotationScript": "scripts/rotate_cvf_incremental_test_log.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "phase_governance_conformance_trace_active_window",
+      "windowClass": "SCOPED_APPEND_ONLY_TRACE_WINDOW",
+      "activePath": "docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md",
+      "archiveDir": "docs/reviews/cvf_phase_governance/logs",
+      "archivePattern": "^CVF_CONFORMANCE_TRACE_ARCHIVE_\\d{4}_PART_\\d{2}\\.md$",
+      "rotationGuard": "governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md",
+      "rotationCheck": "governance/compat/check_conformance_trace_rotation.py",
+      "rotationScript": "scripts/rotate_cvf_conformance_trace.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    }
+  ]
+}

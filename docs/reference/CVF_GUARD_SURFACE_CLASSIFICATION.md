@@ -37,7 +37,7 @@ Management rule going forward:
 
 | Group | Purpose | Current guards | Primary hardening concern |
 |---|---|---|---|
-| `META_GUARDS` | govern how guards themselves are authored and registered | `CVF_GUARD_REGISTRY_GUARD`, `CVF_GUARD_AUTHORING_STANDARD_GUARD` | orphaned or under-specified guard creation |
+| `META_GUARDS` | govern how guards, guard-owned registries, and governance discovery surfaces are authored and registered | `CVF_GUARD_REGISTRY_GUARD`, `CVF_GUARD_AUTHORING_STANDARD_GUARD`, `CVF_ACTIVE_WINDOW_REGISTRY_GUARD` | orphaned or under-specified governance surfaces |
 | `CONTINUITY_AND_DECISION` | govern tranche continuation, handoff truth, lane choice, session routing, tracker freshness, structural execution boundaries | `CVF_DEPTH_AUDIT_GUARD`, `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD`, `CVF_AGENT_HANDOFF_GUARD`, `CVF_AGENT_HANDOFF_TRANSITION_GUARD`, `CVF_FAST_LANE_GOVERNANCE_GUARD`, `CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD`, `CVF_PROGRESS_TRACKER_SYNC_GUARD`, `CVF_MULTI_AGENT_REVIEW_DOC_GUARD`, `CVF_BOARDROOM_RUNTIME_GUARD` | drift between policy, templates, hook chain, and runtime checkpoints |
 | `DOCS_AND_MEMORY_HYGIENE` | keep long-lived docs, naming, storage, memory class, bug/test history, and archive behavior truthful | `CVF_DOCUMENT_NAMING_GUARD`, `CVF_DOCUMENT_STORAGE_GUARD`, `CVF_MEMORY_GOVERNANCE_GUARD`, `CVF_BUG_DOCUMENTATION_GUARD`, `CVF_TEST_DOCUMENTATION_GUARD`, `CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD`, `CVF_ACTIVE_ARCHIVE_GUARD`, `CVF_ADR_GUARD`, `CVF_DIAGRAM_VALIDATION_GUARD` | stale reference docs or incomplete durable evidence chains |
 | `SIZE_AND_OWNERSHIP` | keep governed files maintainable and stop split surfaces from silently collapsing back together | `CVF_GOVERNED_FILE_SIZE_GUARD`, `CVF_PYTHON_AUTOMATION_SIZE_GUARD`, `CVF_TEST_PARTITION_OWNERSHIP_GUARD` | mutable exception or ownership registries self-authorizing their own drift |
@@ -50,6 +50,7 @@ Management rule going forward:
 
 - every new guard starts here first
 - no new guard is considered active until both discoverability and authoring-standard requirements pass
+- grouped registries that feed other guards or cleanup tooling also start here
 - if a future guard family adds its own registry, pair it with a baseline-protection review before activation
 
 ### `CONTINUITY_AND_DECISION`

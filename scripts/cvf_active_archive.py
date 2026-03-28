@@ -29,6 +29,7 @@ import subprocess
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
@@ -47,6 +48,7 @@ ARCHIVE_INDEX_FILENAME = "CVF_ARCHIVE_INDEX.md"
 LEGACY_ARCHIVE_INDEX_FILENAME = "ARCHIVE_INDEX.md"
 AGE_THRESHOLD_DAYS = 3
 MANAGED_EXTENSIONS = {".md", ".json"}
+ACTIVE_WINDOW_REGISTRY_PATH = PROJECT_ROOT / "governance" / "compat" / "CVF_ACTIVE_WINDOW_REGISTRY.json"
 
 # Keep existing permanent names.
 PERMANENT_FILES = {
@@ -57,19 +59,11 @@ PERMANENT_FILES = {
     "CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md",
 }
 
-# Canonical active windows owned by dedicated rotation guards are never eligible
-# for generic active/archive cleanup.
-DEDICATED_ACTIVE_WINDOWS = {
-    "docs/CVF_INCREMENTAL_TEST_LOG.md",
-    "docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md",
-}
-
 # Protect canonical anchors by full relative path.
 PERMANENT_PATHS = {
     "docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md",
     "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
     "AGENT_HANDOFF.md",
-    *DEDICATED_ACTIVE_WINDOWS,
 }
 
 # Dedicated-rotation zones excluded from this guard to avoid policy overlap.
@@ -186,7 +180,27 @@ def is_permanent(filepath: Path, rel_path: str) -> bool:
         return True
     if rel_path in PERMANENT_PATHS:
         return True
+    if rel_path in load_active_window_paths():
+        return True
     return False
+
+
+@lru_cache(maxsize=1)
+def load_active_window_paths() -> set[str]:
+    if not ACTIVE_WINDOW_REGISTRY_PATH.exists():
+        raise RuntimeError(
+            "Active window registry is missing. Expected: "
+            f"{ACTIVE_WINDOW_REGISTRY_PATH.relative_to(PROJECT_ROOT).as_posix()}"
+        )
+    registry = json.loads(ACTIVE_WINDOW_REGISTRY_PATH.read_text(encoding="utf-8"))
+    return {
+        entry["activePath"]
+        for entry in registry.get("windows", [])
+        if isinstance(entry, dict)
+        and entry.get("status") == "ACTIVE"
+        and entry.get("protectionMode") == "PERMANENT_ACTIVE_WINDOW"
+        and entry.get("activePath")
+    }
 
 
 def iter_managed_files(root_path: Path) -> list[Path]:

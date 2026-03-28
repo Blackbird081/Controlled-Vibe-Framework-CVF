@@ -111,6 +111,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_guard_authoring_standard.py", "--enforce"],
         ),
         (
+            "active window registry compatibility",
+            ["python", "governance/compat/check_active_window_registry.py", "--enforce"],
+        ),
+        (
             "foundational guard surfaces compatibility",
             ["python", "governance/compat/check_foundational_guard_surfaces.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),

@@ -1447,3 +1447,16 @@ Contracts delivered:
 Gap closed: ContextBuildBatchContract (W1-T11) now has a governed consumer-visible enriched output path.
 
 Next: fresh GC-018 survey — W2-T37 Knowledge Query Batch Consumer Pipeline Bridge.
+
+---
+
+## W2-T37 — Knowledge Query Batch Consumer Pipeline Bridge (IN EXECUTION)
+
+> Authorization: GC-018 score 9/10 — 2026-03-28
+> CPF baseline: 1791 tests
+
+Planned deliverables:
+
+- `W2-T37 / CP1` — KnowledgeQueryBatchConsumerPipelineContract (`KnowledgeQueryBatch → CPF consumer pipeline`) — Full Lane (GC-019)
+- `W2-T37 / CP2` — KnowledgeQueryBatchConsumerPipelineBatchContract (`KnowledgeQueryBatchConsumerPipelineResult[] → batch`) — Fast Lane (GC-021)
+- `W2-T37 / CP3` — Tranche closure review — Full Lane

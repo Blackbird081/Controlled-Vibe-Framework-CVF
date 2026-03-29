@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W9-T1 CP3 Tranche Closure — W9-T1 CLOSED DELIVERED → cvf-next`
-> State: **W8-T1 CLOSED DELIVERED** | **W8-T2 CLOSED DELIVERED** | **W9-T1 CLOSED DELIVERED** — CPF 2110 tests, 0 failures; all 7 pass conditions satisfied; P5 Candidate D entry condition now satisfied
+> Last push: `W10-T1 GC-018 Authorization — Reputation Signal and Task Marketplace Learning Expansion → cvf-next`
+> State: **W9-T1 CLOSED DELIVERED** | **W10-T1 GC-018 AUTHORIZED** — Candidate D (P5); depth audit 7/10 CONTINUE; CPF 2110 tests; next: W10-T1 CP1 Full Lane
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
 
 ---
@@ -19,6 +19,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W10-T1 | Reputation Signal and Task Marketplace Learning Expansion (Candidate D) | GC-018 AUTHORIZED 2026-03-29 — depth audit 7/10 CONTINUE |
 | W9-T1 | RAG and Context Engine Convergence (Candidate B) | CLOSED DELIVERED 2026-03-29 — all 7 pass conditions satisfied |
 | W8-T2 | Candidate C Performance Benchmark Harness + Acceptance-Policy Baseline | CLOSED DELIVERED 2026-03-29 |
 | W8-T1 | Trust Isolation and Model Gateway Boundary Convergence | CLOSED DELIVERED 2026-03-29 |
@@ -36,20 +37,20 @@
 
 ## Immediate Next Action Required
 
-**W9-T1 CLOSED DELIVERED. No active tranche. Fresh GC-018 required for next wave.**
+**W10-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — ReputationSignalContract.**
 
 Current guidance:
-- **W9-T1 CLOSED DELIVERED** — 27 surfaces classified (25 FIXED_INPUT + 2 IN_SCOPE); RAG retrieval authority + deterministic context packaging API declared canonical; CPF 2110 tests, 0 failures (+83 from W9-T1)
-- Closure review: `docs/reviews/CVF_W9_T1_TRANCHE_CLOSURE_REVIEW_2026-03-29.md` (all 7 pass conditions SATISFIED)
-- Execution plan: `docs/roadmaps/CVF_W9_T1_RAG_CONTEXT_ENGINE_CONVERGENCE_EXECUTION_PLAN_2026-03-29.md` (CP1 DONE, CP2 DONE, CP3 DONE)
-- GC-018 packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W9_T1_RAG_CONTEXT_ENGINE_CONVERGENCE_2026-03-29.md`
-- **W7 Integration Wave COMPLETE** — all T0-T10 CLOSED DELIVERED; all P1-P8 gates SATISFIED; 11 schemas across 4 planes; 32 guard/preset definitions; 0 violations
-- **W5-T2 CLOSED DELIVERED** — whitepaper now at v3.0-W7T10; progress tracker fully synchronized
-- **ALL known coverage gaps are closed**: CPF W2-T38, EPF all bridges, GEF all bridges, LPF W4-T25 (all 18 base contracts bridged)
-- **W8-T1 CLOSED DELIVERED** — trust/isolation and model-gateway boundary convergence committed
-- **W8-T2 CLOSED DELIVERED** — benchmark harness, acceptance-policy baseline, and first evidence batch committed; performance thresholds remain `PROPOSAL ONLY`
-- **P5 Candidate D entry condition now satisfied** — P3 and P4 both in motion or closed; fresh GC-018 for Candidate D is now eligible
-- **Next**: fresh `GC-018` continuation candidate packet for next wave (P5 Candidate D or new post-W9 candidate)
+- **W10-T1 GC-018 AUTHORIZED** — Candidate D (P5); depth audit 7/10 CONTINUE; Candidate ID: W10-T1-CANDIDATE-D
+- GC-018 packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W10_T1_REPUTATION_TASK_MARKETPLACE_2026-03-29.md`
+- Scope: ReputationSignalContract (CP1 Full Lane) + TaskMarketplaceContract (CP2 Full Lane) + batch aggregation (CP3 Fast Lane) + Tranche Closure (CP4)
+- Fixed inputs: TruthScore (W6-T8), FeedbackLedger (W4-T1), EvaluationEngine, GovernanceSignal — all FIXED INPUT; no LPF restructuring
+- W7 chain: Runtime READ_ONLY, Artifact ADDITIVE, Trace READ_ONLY, Planner READ_ONLY, Decision ADDITIVE, Eval/Builder READ_ONLY, Memory READ_ONLY
+- G8 satisfied: W8-T1 (P3) + W8-T2 (P2) + W9-T1 (P4) all CLOSED DELIVERED
+- **W9-T1 CLOSED DELIVERED** — 27 surfaces classified; RAG retrieval authority + deterministic packaging API canonical; CPF 2110 tests (+83)
+- **W8-T1 CLOSED DELIVERED** — trust/isolation and model-gateway boundary committed; gateway surfaces FIXED INPUT for W10-T1
+- **W8-T2 CLOSED DELIVERED** — benchmark harness + acceptance-policy baseline; performance thresholds remain `PROPOSAL ONLY`
+- **W7 Integration Wave COMPLETE** — all T0-T10 CLOSED DELIVERED; v3.0-W7T10 baseline frozen
+- **Next**: W10-T1 CP1 Full Lane — ReputationSignalContract in LPF; execution plan required before CP1 begins
 - official planning baseline for post-W7 upgrades: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

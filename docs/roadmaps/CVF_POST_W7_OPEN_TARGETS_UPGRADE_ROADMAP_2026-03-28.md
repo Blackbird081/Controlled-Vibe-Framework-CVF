@@ -75,7 +75,7 @@ If any required gate is missing, the affected phase remains `HOLD`.
 | `P2` | `Candidate C` instrumentation-only performance baseline workstream | `GO WITH FIXES` | `G1`, `G4`, `G6` | benchmark harness, acceptance-policy baseline, first governed evidence batch, and closure review are committed without promoting baseline truth |
 | `P3` | `Candidate A` first-wave execution if authorized | `GO WITH FIXES` | `P1 closed`, `G5`, `G7` | boundary contracts are clarified without destabilizing the W7 chain; closure review complete |
 | `P4` | `Candidate B` authorization and execution planning | `GC-018 AUTHORIZED — W9-T1` | `P2 in motion or closed`, `P3 closed or formally deferred`, `G1-G4`, `G7` | one bounded `GC-018` candidate for RAG + Context convergence is review-ready with declared gateway assumptions |
-| `P5` | `Candidate D` later-wave intake | `HOLD -> GO` | `P3` and `P4` in motion or closed, `G1-G4`, `G8` | learning expansion may be evaluated as a later governed wave |
+| `P5` | `Candidate D` later-wave intake | `GC-018 AUTHORIZED — W10-T1` | `P3` and `P4` in motion or closed, `G1-G4`, `G8` | learning expansion may be evaluated as a later governed wave |
 
 ---
 
@@ -235,4 +235,4 @@ Canonical source packet chain for this roadmap:
 | `P2` Candidate C performance baseline workstream | CLOSED DELIVERED — W8-T2 |
 | `P3` Candidate A execution wave | CLOSED DELIVERED — W8-T1 |
 | `P4` Candidate B structural follow-on | READY FOR FRESH `GC-018` — upstream posture satisfied |
-| `P5` Candidate D learning expansion | HOLD — later wave only |
+| `P5` Candidate D learning expansion | `GC-018 AUTHORIZED — W10-T1 Reputation Signal and Task Marketplace Learning Expansion; depth audit 7/10 CONTINUE` |

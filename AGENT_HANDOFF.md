@@ -1,9 +1,9 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W14-T1 CLOSED DELIVERED — AgentScopeResolutionBatchContract → cvf-next`
-> Remote tracking: `origin/cvf-next @ 8ff39b25`
-> State: **W14-T1 CLOSED DELIVERED** — AgentScopeResolutionBatchContract canonical; CPF 2196 tests; no active tranche
+> Last push: `W15-T1 CLOSED DELIVERED — AgentDefinitionAuditBatchContract → cvf-next`
+> Remote tracking: `origin/cvf-next @ (pending push)`
+> State: **W15-T1 CLOSED DELIVERED** — AgentDefinitionAuditBatchContract canonical; CPF 2222 tests; W12-T1 family complete; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.2-W12T1`)
 
 ---
@@ -13,7 +13,7 @@
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2196 tests, 0 failures**
+- CPF (Control Plane Foundation): **2222 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -22,6 +22,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W15-T1 | Agent Definition Audit Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-03-30 — AgentDefinitionAuditBatchContract canonical; CPF 2222 tests (+26); all 7 pass conditions satisfied; W12-T1 family complete |
 | W14-T1 | Agent Scope Resolution Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-03-30 — AgentScopeResolutionBatchContract canonical; CPF 2196 tests (+26); all 7 pass conditions satisfied; tranche complete |
 | W13-T1 | Agent Definition Capability Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-03-30 — AgentDefinitionCapabilityBatchContract canonical; CPF 2170 tests (+26); all 7 pass conditions satisfied |
 | W12-T1 | Agent Definition Boundary Convergence (REALIZATION class) | CLOSED DELIVERED 2026-03-29 — AgentDefinitionBoundaryContract canonical; CPF current suite 2144 tests, 0 failures; 9/9 pass |
@@ -44,13 +45,13 @@
 
 ## Immediate Next Action Required
 
-**W14-T1 CLOSED DELIVERED. No active tranche — fresh GC-018 required for next wave.**
+**W15-T1 CLOSED DELIVERED. No active tranche — fresh GC-018 required for next wave.**
 
 Current guidance:
 
-- **W14-T1 CLOSED DELIVERED** — `AgentScopeResolutionBatchContract` canonical; CPF 2196 tests (+26); all 7 pass conditions satisfied
-- Closure review: `docs/reviews/CVF_W14_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
-- GC-026 closure sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W14_T1_CLOSED_DELIVERED_2026-03-30.md`
+- **W15-T1 CLOSED DELIVERED** — `AgentDefinitionAuditBatchContract` canonical; CPF 2222 tests (+26); all 7 pass conditions satisfied; W12-T1 agent definition family complete (W12→W13→W14→W15)
+- Closure review: `docs/reviews/CVF_W15_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
+- GC-026 closure sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W15_T1_CLOSURE_2026-03-30.md`
 - Post-W7 upgrade roadmap: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - **Next**: fresh GC-018 continuation candidate packet for next authorized tranche
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`

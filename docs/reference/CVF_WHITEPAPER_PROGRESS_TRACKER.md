@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-30` (W15-T1 GC-018 AUTHORIZED — AgentDefinitionAuditBatchContract; W14-T1 last closure: AgentScopeResolutionBatchContract canonical; CPF 2196 / EPF 1123 / GEF 625 / LPF 1465 tests, 0 failures; W15-T1 active tranche)
+> Last refreshed: `2026-03-30` (W15-T1 CLOSED DELIVERED — AgentDefinitionAuditBatchContract canonical; CPF 2222 / EPF 1123 / GEF 625 / LPF 1465 tests, 0 failures; W12-T1 agent definition family complete; no active tranche)
 
 ---
 
@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1` ALL CLOSED DELIVERED; W11-T1 whitepaper update CLOSED DELIVERED 2026-03-29 |
-| Current active tranche | `W15-T1 GC-018 AUTHORIZED 2026-03-30 — AgentDefinitionAuditBatchContract; depth audit 9.0/10 CONTINUE; CP1 Full Lane next` |
+| Current active tranche | `NONE — W15-T1 CLOSED DELIVERED 2026-03-30; AgentDefinitionAuditBatchContract canonical; W12-T1 agent definition family complete; any further continuation requires a new GC-018 wave decision` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 whitepaper updated to v3.1-W10T1 (2026-03-29); current synchronized baseline is v3.2-W12T1` |
 
 ---
@@ -160,7 +160,7 @@ Memory class: POINTER_RECORD
 | `W12-T1` Agent Definition Boundary Convergence (REALIZATION class) | `CLOSED DELIVERED 2026-03-29 — AgentDefinitionBoundaryContract canonical; current CPF suite 2144 tests, 0 failures; all 9 pass conditions satisfied; last PARTIAL item in merge map closed` |
 | `W13-T1` Agent Definition Capability Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — AgentDefinitionCapabilityBatchContract canonical; CPF 2170 tests (+26); all 7 pass conditions satisfied; tranche complete` |
 | `W14-T1` Agent Scope Resolution Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — AgentScopeResolutionBatchContract canonical; CPF 2196 tests (+26); all 7 pass conditions satisfied; tranche complete` |
-| `W15-T1` Agent Definition Audit Batch Contract (REALIZATION class) | `CP1 DONE 2026-03-30 — AgentDefinitionAuditBatchContract canonical; CPF 2222 (+26); all 7 pass conditions satisfied; CP2 closure next` |
+| `W15-T1` Agent Definition Audit Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — AgentDefinitionAuditBatchContract canonical; CPF 2222 tests (+26); all 7 pass conditions satisfied; W12-T1 agent definition family complete` |
 
 ---
 
@@ -193,7 +193,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W15_T1_AUTHORIZATION_2026-03-30.md`
-- Current closure anchor: `docs/reviews/CVF_W14_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W15_T1_AGENT_DEFINITION_AUDIT_BATCH_2026-03-30.md` (W15-T1 GC-018 AUTHORIZED)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W15_T1_CLOSURE_2026-03-30.md`
+- Current closure anchor: `docs/reviews/CVF_W15_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W15_T1_AGENT_DEFINITION_AUDIT_BATCH_2026-03-30.md` (W15-T1 CLOSED DELIVERED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

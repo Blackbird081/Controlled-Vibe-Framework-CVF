@@ -158,7 +158,7 @@ Memory class: POINTER_RECORD
 | `W10-T1` Reputation Signal and Task Marketplace Learning Expansion (Candidate D) | `CLOSED DELIVERED 2026-03-29 — 4 contracts canonical (ReputationSignal + TaskMarketplace + 2 batches); LPF 1333→1465 (+132); all 7 pass conditions satisfied` |
 | `W11-T1` Whitepaper Update v3.1-W10T1 (DOCUMENTATION class) | `CLOSED DELIVERED 2026-03-29 — whitepaper updated to v3.1-W10T1; all 9 pass conditions satisfied; documentation-to-implementation gap closed` |
 | `W12-T1` Agent Definition Boundary Convergence (REALIZATION class) | `CLOSED DELIVERED 2026-03-29 — AgentDefinitionBoundaryContract canonical; current CPF suite 2144 tests, 0 failures; all 9 pass conditions satisfied; last PARTIAL item in merge map closed` |
-| `W13-T1` Agent Definition Capability Batch Contract (REALIZATION class) | `CP1 DONE 2026-03-30 — AgentDefinitionCapabilityBatchContract canonical; CPF 2170 tests (+26); all 7 pass conditions satisfied; ready for CP2 Tranche Closure` |
+| `W13-T1` Agent Definition Capability Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — AgentDefinitionCapabilityBatchContract canonical; CPF 2170 tests (+26); all 7 pass conditions satisfied; tranche complete` |
 
 ---
 
@@ -191,7 +191,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W13_T1_CP1_DONE_2026-03-30.md`
-- Current closure anchor: `docs/reviews/CVF_W12_T1_TRANCHE_CLOSURE_REVIEW_2026-03-29.md`
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W13_T1_CLOSED_DELIVERED_2026-03-30.md`
+- Current closure anchor: `docs/reviews/CVF_W13_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
 - Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W13_T1_AGENT_DEFINITION_CAPABILITY_BATCH_2026-03-30.md` (W13-T1 AUTHORIZED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

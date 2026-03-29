@@ -2964,3 +2964,19 @@ Utility and guard:
 - Notes:
   - EPF: 644→656 (+12). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Batch aggregation: `replanResultCount` + `retryResultCount` + `dominantTokenBudget`.
+
+## Batch W9-T1 — 2026-03-29
+
+### Entry W9-T1/CP1
+
+- Tranche: W9-T1 — RAG and Context Engine Convergence (Candidate B)
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/rag.context.engine.convergence.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/rag.context.engine.convergence.contract.test.ts` (59 tests)
+- Tests executed:
+  - `npm test` (CPF) → PASS (2086 tests, 0 failures)
+- Notes:
+  - CPF: 2027→2086 (+59). CP1 Full Lane (GC-019). GC-023 compliant (dedicated test file).
+  - Classifies all 27 RAG/context surfaces: 25 FIXED_INPUT + 2 IN_SCOPE. Declares canonical RAG retrieval path (KnowledgeQueryContract → KnowledgeRankingContract → RetrievalContract → ContextPackagerContract). Declares deterministic context packaging API (pack() → packageHash → packageId) as canonical with frozen seeds. W8-T1 gateway boundary classified FIXED_INPUT — gateway freeze intact. Pass condition 5 SATISFIED.
+  - W7 chain: READ_ONLY + ADDITIVE only. No STRUCTURAL impacts.

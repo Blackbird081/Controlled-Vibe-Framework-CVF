@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W9-T1 GC-018 authorization → cvf-next`
-> State: **W8-T1 CLOSED DELIVERED** | **W8-T2 CLOSED DELIVERED (parallel prerequisite)** | **W9-T1 GC-018 AUTHORIZED** — CPF 2027 tests, 0 failures; Candidate B (RAG + Context Engine) authorized and ready for CP1 execution; performance thresholds still PROPOSAL ONLY
+> Last push: `W9-T1 CP1 Full Lane — RAG and Context Engine Convergence Contract → cvf-next`
+> State: **W8-T1 CLOSED DELIVERED** | **W8-T2 CLOSED DELIVERED (parallel prerequisite)** | **W9-T1 CP1 DONE** — CPF 2086 tests, 0 failures; RAG retrieval authority and deterministic context packaging API declared canonical; W9-T1 CP2 Fast Lane next
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
 
 ---
@@ -10,7 +10,7 @@
 ## Current State
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2027 tests, 0 failures**
+- CPF (Control Plane Foundation): **2086 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1333 tests, 0 failures**
@@ -19,7 +19,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
-| W9-T1 | RAG and Context Engine Convergence (Candidate B) | GC-018 AUTHORIZED 2026-03-29 — ready for CP1 |
+| W9-T1 | RAG and Context Engine Convergence (Candidate B) | CP1 DONE 2026-03-29 — CP2 Fast Lane next |
 | W8-T2 | Candidate C Performance Benchmark Harness + Acceptance-Policy Baseline | CLOSED DELIVERED 2026-03-29 |
 | W8-T1 | Trust Isolation and Model Gateway Boundary Convergence | CLOSED DELIVERED 2026-03-29 |
 | W7-T9 | Memory Loop Activation | CLOSED DELIVERED 2026-03-28 |
@@ -36,19 +36,22 @@
 
 ## Immediate Next Action Required
 
-**W9-T1 GC-018 is now AUTHORIZED. Proceed directly to CP1 (Full Lane) execution.**
+**W9-T1 CP1 is DONE. Proceed directly to CP2 (Fast Lane) — convergence report batch contract.**
 
 Current guidance:
-- **W9-T1 GC-018 AUTHORIZED** — `W9-T1-CANDIDATE-B` packet committed; Candidate B (RAG + Context Engine) is the active authorized tranche
+- **W9-T1 CP1 DONE** — `RagContextEngineConvergenceContract` committed; 27 surfaces classified (25 FIXED_INPUT + 2 IN_SCOPE); RAG retrieval authority and deterministic context packaging API declared canonical; CPF 2086 tests, 0 failures
+- Execution plan: `docs/roadmaps/CVF_W9_T1_RAG_CONTEXT_ENGINE_CONVERGENCE_EXECUTION_PLAN_2026-03-29.md`
+- CP1 audit: `docs/audits/CVF_W9_T1_CP1_RAG_CONTEXT_ENGINE_CONVERGENCE_AUDIT_2026-03-29.md`
+- CP1 review: `docs/reviews/CVF_GC019_W9_T1_CP1_RAG_CONTEXT_ENGINE_CONVERGENCE_REVIEW_2026-03-29.md`
+- CP1 delta: `docs/baselines/CVF_W9_T1_CP1_RAG_CONTEXT_ENGINE_CONVERGENCE_DELTA_2026-03-29.md`
 - GC-018 packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W9_T1_RAG_CONTEXT_ENGINE_CONVERGENCE_2026-03-29.md`
-- Scope: RAG convergence, Context Engine convergence, deterministic context packaging normalization, gateway-assumption alignment against frozen W8-T1 boundary output
-- Gateway fixed inputs (from W8-T1): model-gateway execution authority scope (frozen), trust/isolation boundary between AI Gateway and Knowledge Layer (declared)
+- Gateway fixed inputs (from W8-T1): model-gateway execution authority scope (frozen), trust/isolation boundary between AI Gateway and Knowledge Layer (declared) — `model-gateway-boundary` classified FIXED_INPUT in convergence registry
 - **W7 Integration Wave COMPLETE** — all T0-T10 CLOSED DELIVERED; all P1-P8 gates SATISFIED; 11 schemas across 4 planes; 32 guard/preset definitions; 0 violations
 - **W5-T2 CLOSED DELIVERED** — whitepaper now at v3.0-W7T10; progress tracker fully synchronized
 - **ALL known coverage gaps are closed**: CPF W2-T38, EPF all bridges, GEF all bridges, LPF W4-T25 (all 18 base contracts bridged)
 - **W8-T1 CLOSED DELIVERED** — trust/isolation and model-gateway boundary convergence committed; W9-T1 gateway-stability inputs now frozen
 - **W8-T2 CLOSED DELIVERED** — benchmark harness, acceptance-policy baseline, and first evidence batch committed; performance thresholds remain `PROPOSAL ONLY`
-- **Next**: W9-T1 CP1 — Full Lane execution for RAG and Context Engine convergence contracts
+- **Next**: W9-T1 CP2 — Fast Lane (GC-021) batch contract for convergence report aggregation
 - official planning baseline for post-W7 upgrades: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

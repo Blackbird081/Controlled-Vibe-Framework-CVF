@@ -1541,6 +1541,17 @@
         "PerformanceBenchmarkHarnessContract",
         "createPerformanceBenchmarkHarnessContract"
       ]
+    },
+    {
+      "scope": "CPF RAG and Context Engine Convergence (W9-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/rag.context.engine.convergence.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RagContextEngineConvergenceContract",
+        "createRagContextEngineConvergenceContract"
+      ]
     }
   ]
 }

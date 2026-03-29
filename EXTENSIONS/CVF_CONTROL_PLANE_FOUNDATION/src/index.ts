@@ -711,3 +711,17 @@ export type {
   BenchmarkRunInit,
   PerformanceBenchmarkHarnessContractDependencies,
 } from "./performance.benchmark.harness.contract";
+
+// W9-T1 CP1 — RAG and Context Engine Convergence Contract
+export {
+  RagContextEngineConvergenceContract,
+  createRagContextEngineConvergenceContract,
+} from "./rag.context.engine.convergence.contract";
+export type {
+  RagContextSurfaceStatus,
+  RagContextSurfaceEntry,
+  RagRetrievalAuthorityDeclaration,
+  DeterministicContextPackagingDeclaration,
+  RagContextEngineConvergenceReport,
+  RagContextEngineConvergenceContractDependencies,
+} from "./rag.context.engine.convergence.contract";

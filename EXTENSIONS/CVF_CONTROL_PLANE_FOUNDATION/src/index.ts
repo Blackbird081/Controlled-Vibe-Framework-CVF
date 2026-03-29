@@ -725,3 +725,13 @@ export type {
   RagContextEngineConvergenceReport,
   RagContextEngineConvergenceContractDependencies,
 } from "./rag.context.engine.convergence.contract";
+
+// W9-T1 CP2 — RAG and Context Engine Convergence Batch Contract
+export {
+  RagContextEngineConvergenceBatchContract,
+  createRagContextEngineConvergenceBatchContract,
+} from "./rag.context.engine.convergence.batch.contract";
+export type {
+  RagContextEngineConvergenceBatch,
+  RagContextEngineConvergenceBatchContractDependencies,
+} from "./rag.context.engine.convergence.batch.contract";

@@ -14,8 +14,8 @@ Memory class: SUMMARY_RECORD
 
 | CP | Scope | Lane | Status |
 |---|---|---|---|
-| CP1 | RAG and Context Engine Convergence Contract | Full Lane (GC-019) | IN PROGRESS |
-| CP2 | Convergence Report Batch Contract | Fast Lane (GC-021) | PENDING |
+| CP1 | RAG and Context Engine Convergence Contract | Full Lane (GC-019) | DONE |
+| CP2 | Convergence Report Batch Contract | Fast Lane (GC-021) | DONE |
 | CP3 | Tranche Closure Review | — | PENDING |
 
 ---

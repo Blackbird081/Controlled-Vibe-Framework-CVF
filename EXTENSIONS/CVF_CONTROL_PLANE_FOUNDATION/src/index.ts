@@ -765,3 +765,14 @@ export type {
   AgentDefinitionCapabilityBatch,
   AgentDefinitionCapabilityBatchContractDependencies,
 } from "./agent.definition.capability.batch.contract";
+
+// W14-T1 CP1 — Agent Scope Resolution Batch Contract
+export {
+  AgentScopeResolutionBatchContract,
+  createAgentScopeResolutionBatchContract,
+} from "./agent.scope.resolution.batch.contract";
+export type {
+  ScopeResolutionBatchDominantStatus,
+  AgentScopeResolutionBatch,
+  AgentScopeResolutionBatchContractDependencies,
+} from "./agent.scope.resolution.batch.contract";

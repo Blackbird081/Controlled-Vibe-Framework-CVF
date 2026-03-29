@@ -1629,6 +1629,17 @@
         "AgentDefinitionCapabilityBatchContract",
         "createAgentDefinitionCapabilityBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Agent Scope Resolution Batch (W14-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.scope.resolution.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AgentScopeResolutionBatchContract",
+        "createAgentScopeResolutionBatchContract"
+      ]
     }
   ]
 }

@@ -2963,3 +2963,26 @@ Utility and guard:
   - Deterministic `batchHash` + distinct `batchId`; `now` dependency injection
   - 26 new tests across 6 describe groups; no additions to `index.test.ts` (GC-023 compliant)
   - CPF: 2144 → 2170 (+26); delta: `docs/baselines/CVF_W13_T1_CP1_AGENT_DEF_CAP_BATCH_DELTA_2026-03-30.md`
+
+---
+
+## Batch 315 — W14-T1 CP1: AgentScopeResolutionBatchContract (2026-03-30)
+
+- Tranche: W14-T1 — Agent Scope Resolution Batch Contract
+- Control point: CP1 — Full Lane (GC-019)
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files added:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.scope.resolution.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.scope.resolution.batch.contract.test.ts`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (W14-T1 export block added)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (W14-T1 partition entry added)
+- Tests executed:
+  - `npm run check` (CPF) → PASS
+  - `npm test` (CPF) → PASS (2196 tests, 0 failures)
+- Notes:
+  - New contract: aggregates `AgentScopeResolution[]` → `AgentScopeResolutionBatch`
+  - Counts by `ScopeResolutionStatus` (RESOLVED / EMPTY_SCOPE / UNDECLARED_AGENT) + `dominantStatus` with tie-break (RESOLVED > EMPTY_SCOPE > UNDECLARED_AGENT); "EMPTY" for empty batch
+  - Deterministic `batchHash` + distinct `batchId`; `now` dependency injection
+  - 26 new tests across 6 describe groups; no additions to `index.test.ts` (GC-023 compliant)
+  - CPF: 2170 → 2196 (+26); delta: `docs/baselines/CVF_W14_T1_CP1_AGENT_SCOPE_RESOLUTION_BATCH_DELTA_2026-03-30.md`

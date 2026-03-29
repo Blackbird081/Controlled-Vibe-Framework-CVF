@@ -1,8 +1,8 @@
-# CVF Agent Handoff — 2026-03-28
+# CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W5-T2-CP3 → cvf-next`
-> State: **NO ACTIVE TRANCHE** — **W5-T2 CLOSED DELIVERED** (Whitepaper updated to v3.0-W7T10, 2026-03-28)
+> Last push: `P0 + W8-T1/T2 GC-018 → cvf-next`
+> State: **W8-T1 AUTHORIZED** | **W8-T2 AUTHORIZED (parallel)** — GC-018 issued 2026-03-29; P0 governance hardening COMPLETE
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
 
 ---

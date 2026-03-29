@@ -348,17 +348,40 @@ def scan_root(root_path: Path, cutoff_date: datetime) -> ScanResult:
     return result
 
 
+def _run_python_fixed(query: str) -> set[str]:
+    """Pure-Python fallback for run_rg_fixed when rg is not available."""
+    hits: set[str] = []
+    for target in REFERENCE_SCAN_TARGETS:
+        target_path = PROJECT_ROOT / target
+        if not target_path.exists():
+            continue
+        candidates = [target_path] if target_path.is_file() else list(target_path.rglob("*.md"))
+        for path in candidates:
+            if not path.is_file():
+                continue
+            try:
+                text = path.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                continue
+            if query in text:
+                hits.append(to_rel_path(path).replace("\\", "/"))
+    return set(hits)
+
+
 def run_rg_fixed(query: str) -> set[str]:
     cmd = ["rg", "-l", "--fixed-strings", query, *REFERENCE_SCAN_TARGETS]
-    proc = subprocess.run(
-        cmd,
-        cwd=PROJECT_ROOT,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="ignore",
-        check=False,
-    )
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="ignore",
+            check=False,
+        )
+    except FileNotFoundError:
+        return _run_python_fixed(query)
     if proc.returncode not in (0, 1):
         return set()
     lines = [line.strip().replace("\\", "/") for line in proc.stdout.splitlines() if line.strip()]

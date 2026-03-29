@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W8-T1 CP1+CP2+CP3 → cvf-next`
-> State: **W8-T1 CLOSED DELIVERED** | **W8-T2 CLOSED DELIVERED (parallel prerequisite)** — CPF 2027 tests, 0 failures; Candidate B GC-018 now unblocked; performance thresholds still PROPOSAL ONLY
+> Last push: `W9-T1 GC-018 authorization → cvf-next`
+> State: **W8-T1 CLOSED DELIVERED** | **W8-T2 CLOSED DELIVERED (parallel prerequisite)** | **W9-T1 GC-018 AUTHORIZED** — CPF 2027 tests, 0 failures; Candidate B (RAG + Context Engine) authorized and ready for CP1 execution; performance thresholds still PROPOSAL ONLY
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
 
 ---
@@ -19,6 +19,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W9-T1 | RAG and Context Engine Convergence (Candidate B) | GC-018 AUTHORIZED 2026-03-29 — ready for CP1 |
 | W8-T2 | Candidate C Performance Benchmark Harness + Acceptance-Policy Baseline | CLOSED DELIVERED 2026-03-29 |
 | W8-T1 | Trust Isolation and Model Gateway Boundary Convergence | CLOSED DELIVERED 2026-03-29 |
 | W7-T9 | Memory Loop Activation | CLOSED DELIVERED 2026-03-28 |
@@ -35,21 +36,19 @@
 
 ## Immediate Next Action Required
 
-**Must issue a fresh GC-018 before any further implementation work.**
-
-Before drafting that next `GC-018`, load `GC-032` first:
-- `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
-- `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
-- `docs/reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md`
+**W9-T1 GC-018 is now AUTHORIZED. Proceed directly to CP1 (Full Lane) execution.**
 
 Current guidance:
-- no tranche is currently active
+- **W9-T1 GC-018 AUTHORIZED** — `W9-T1-CANDIDATE-B` packet committed; Candidate B (RAG + Context Engine) is the active authorized tranche
+- GC-018 packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W9_T1_RAG_CONTEXT_ENGINE_CONVERGENCE_2026-03-29.md`
+- Scope: RAG convergence, Context Engine convergence, deterministic context packaging normalization, gateway-assumption alignment against frozen W8-T1 boundary output
+- Gateway fixed inputs (from W8-T1): model-gateway execution authority scope (frozen), trust/isolation boundary between AI Gateway and Knowledge Layer (declared)
 - **W7 Integration Wave COMPLETE** — all T0-T10 CLOSED DELIVERED; all P1-P8 gates SATISFIED; 11 schemas across 4 planes; 32 guard/preset definitions; 0 violations
 - **W5-T2 CLOSED DELIVERED** — whitepaper now at v3.0-W7T10; progress tracker fully synchronized
 - **ALL known coverage gaps are closed**: CPF W2-T38, EPF all bridges, GEF all bridges, LPF W4-T25 (all 18 base contracts bridged)
-- **W8-T1 CLOSED DELIVERED** — trust/isolation and model-gateway boundary convergence committed; Candidate B gateway-stability input unblocked
+- **W8-T1 CLOSED DELIVERED** — trust/isolation and model-gateway boundary convergence committed; W9-T1 gateway-stability inputs now frozen
 - **W8-T2 CLOSED DELIVERED** — benchmark harness, acceptance-policy baseline, and first evidence batch committed; performance thresholds remain `PROPOSAL ONLY`
-- **Next**: fresh `GC-018` for the next governed wave, with `W9-T1 / Candidate B` now the default follow-on candidate unless a different authorized family supersedes it
+- **Next**: W9-T1 CP1 — Full Lane execution for RAG and Context Engine convergence contracts
 - official planning baseline for post-W7 upgrades: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
@@ -57,7 +56,7 @@ Current guidance:
 - Architecture boundary lock: `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`
 - W5-T2 closure: `docs/reviews/CVF_W5_T2_TRANCHE_CLOSURE_REVIEW_2026-03-28.md`
 
-Any future tranche still requires: `GC-018 authorization → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
+W9-T1 tranche protocol: `GC-018 AUTHORIZED → execution plan → CP1 Full Lane → CP2 Fast Lane → CP3 Closure`
 
 ---
 

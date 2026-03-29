@@ -74,7 +74,7 @@ If any required gate is missing, the affected phase remains `HOLD`.
 | `P1` | `Candidate A` authorization packet drafting | `GO WITH FIXES` | `G1-G5`, `G7` | one bounded `GC-018` candidate for Trust / Isolation + Model Gateway boundary convergence is review-ready |
 | `P2` | `Candidate C` instrumentation-only performance baseline workstream | `GO WITH FIXES` | `G1`, `G4`, `G6` | benchmark harness, acceptance-policy baseline, first governed evidence batch, and closure review are committed without promoting baseline truth |
 | `P3` | `Candidate A` first-wave execution if authorized | `GO WITH FIXES` | `P1 closed`, `G5`, `G7` | boundary contracts are clarified without destabilizing the W7 chain; closure review complete |
-| `P4` | `Candidate B` authorization and execution planning | `GO WITH FIXES` | `P2 in motion or closed`, `P3 closed or formally deferred`, `G1-G4`, `G7` | one bounded `GC-018` candidate for RAG + Context convergence is review-ready with declared gateway assumptions |
+| `P4` | `Candidate B` authorization and execution planning | `GC-018 AUTHORIZED — W9-T1` | `P2 in motion or closed`, `P3 closed or formally deferred`, `G1-G4`, `G7` | one bounded `GC-018` candidate for RAG + Context convergence is review-ready with declared gateway assumptions |
 | `P5` | `Candidate D` later-wave intake | `HOLD -> GO` | `P3` and `P4` in motion or closed, `G1-G4`, `G8` | learning expansion may be evaluated as a later governed wave |
 
 ---

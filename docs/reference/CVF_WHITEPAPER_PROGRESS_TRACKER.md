@@ -153,7 +153,7 @@ Memory class: POINTER_RECORD
 | `W5-T2` post-W7 architecture whitepaper update | `DONE` |
 | `W8-T1` trust isolation and model gateway boundary convergence | `DONE` |
 | `W8-T2` performance benchmark harness (Candidate C, parallel) | `CLOSED DELIVERED — benchmark harness, acceptance-policy baseline, first evidence batch committed; thresholds remain PROPOSAL ONLY` |
-| `W9-T1` RAG and Context Engine Convergence (Candidate B) | `CP2 DONE 2026-03-29 — RagContextEngineConvergenceBatchContract committed; CPF 2110 tests; CP3 Tranche Closure next` |
+| `W9-T1` RAG and Context Engine Convergence (Candidate B) | `CLOSED DELIVERED 2026-03-29 — 27 surfaces classified; RAG retrieval authority + deterministic packaging API canonical; CPF 2110 tests (+83); all 7 pass conditions satisfied` |
 
 ---
 
@@ -186,7 +186,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W9_T1_CP2_DONE_2026-03-29.md`
-- Current closure anchor: `docs/reviews/CVF_W8_T2_TRANCHE_CLOSURE_REVIEW_2026-03-29.md`
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W9_T1_CLOSED_DELIVERED_2026-03-29.md`
+- Current closure anchor: `docs/reviews/CVF_W9_T1_TRANCHE_CLOSURE_REVIEW_2026-03-29.md`
 - Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W9_T1_RAG_CONTEXT_ENGINE_CONVERGENCE_2026-03-29.md` (W9-T1 AUTHORIZED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

@@ -2,7 +2,7 @@
 
 > Branch: `cvf-next`
 > Last push: `W13-T1 CP1 DONE — AgentDefinitionCapabilityBatchContract → cvf-next`
-> Remote tracking: `origin/cvf-next @ bbb41b2e`
+> Remote tracking: `origin/cvf-next @ a7db3e93`
 > State: **W13-T1 CP1 DONE** — AgentDefinitionCapabilityBatchContract canonical; CPF 2170 tests (+26); ready for CP2 Tranche Closure
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.2-W12T1`)
 

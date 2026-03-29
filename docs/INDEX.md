@@ -48,6 +48,7 @@ Từ nay về sau:
   - `CVF_DOCUMENT_STORAGE_GUARD.md`
   - `CVF_MEMORY_GOVERNANCE_GUARD.md` khi tài liệu đó phục vụ durable memory sau này
   - `reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md` khi file đó là governed packet, evidence doc, closure doc, handoff/tracker sync, hoặc artifact claim có source truth rõ ràng
+  - `reference/CVF_QUALITY_ASSESSMENT_STANDARD.md` khi file đó là tranche, wave, hoặc architecture quality scorecard
 
 ## Approved Root-Level Files
 
@@ -99,6 +100,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
 - `reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`
 - `reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
+- `reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
 - `reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
 - `reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
 - `reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`
@@ -129,6 +131,13 @@ Nếu cần đóng gói bằng chứng cho audit/release/onboarding:
 - `reference/CVF_ENTERPRISE_EVIDENCE_PACK.md`
 - `reference/CVF_CONTROL_TO_ARTIFACT_MAPPING.md`
 - `reference/CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md`
+
+## Quality Navigation
+
+Nếu cần đánh giá chất lượng theo cùng một chuẩn qua nhiều wave:
+
+- `reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
+- `assessments/CVF_POST_W7_CONTINUATION_QUALITY_ASSESSMENT_2026-03-30.md`
 
 ## Restructuring Navigation
 

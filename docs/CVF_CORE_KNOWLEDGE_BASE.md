@@ -751,3 +751,29 @@ reviews/      = review archives by module or scope
 > **Cập nhật file này khi:** CVF có major structural change hoặc new layer/version được chính thức release. **(Rule 4: BẮT BUỘC)**
 > **Không cập nhật khi:** Chỉ thêm skills, fix bugs, hoặc update docs thông thường.
 > **Vị trí cố định:** `docs/CVF_CORE_KNOWLEDGE_BASE.md` — không được di chuyển hay đổi tên.
+
+---
+
+## XV. QUALITY ASSESSMENT CANON
+
+> Từ nay mọi quality review cấp tranche, wave, hoặc architecture phải dùng chung một rubric, không chấm cảm tính theo từng agent.
+
+- Canonical rubric:
+  - `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
+- Current active quality snapshot for the post-W7 continuation line:
+  - `docs/assessments/CVF_POST_W7_CONTINUATION_QUALITY_ASSESSMENT_2026-03-30.md`
+
+Rubric cố định gồm 6 chiều:
+
+- Governance Discipline
+- Contract / Architecture Quality
+- Evidence and Traceability
+- Test and Verification Confidence
+- Maintainability
+- Canonical Documentation Quality
+
+Quy tắc cứng:
+
+- quality claim phải bám governed evidence, không bám note riêng của agent
+- nếu bất kỳ dimension nào `< 6.0`, scope đó phải chuyển sang remediation-first
+- nếu Governance Discipline, Test and Verification Confidence, hoặc Canonical Documentation Quality `< 8.0`, không được coi scope đó là strong mà không có follow-up bắt buộc

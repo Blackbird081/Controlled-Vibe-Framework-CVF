@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `P0 + W8-T1/T2 GC-018 → cvf-next`
-> State: **W8-T1 AUTHORIZED** | **W8-T2 AUTHORIZED (parallel)** — GC-018 issued 2026-03-29; P0 governance hardening COMPLETE
+> Last push: `W8-T1 CP1+CP2+CP3 → cvf-next`
+> State: **W8-T1 CLOSED DELIVERED** | **W8-T2 AUTHORIZED (parallel)** — CPF 1985 tests, 0 failures; Candidate B GC-018 now unblocked
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
 
 ---

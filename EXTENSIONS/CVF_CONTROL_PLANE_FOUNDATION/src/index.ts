@@ -659,6 +659,21 @@ function buildLineageList(): string[] {
   ];
 }
 
+// W8-T1 CP2 — Model Gateway Boundary Contract
+export {
+  ModelGatewayBoundaryContract,
+  createModelGatewayBoundaryContract,
+} from "./model.gateway.boundary.contract";
+export type {
+  GatewaySurfaceStatus,
+  ExecutionPlane,
+  ModelGatewayBoundaryEntry,
+  KnowledgeLayerEntrypointDeclaration,
+  ModelGatewayExecutionAuthority,
+  ModelGatewayBoundaryReport,
+  ModelGatewayBoundaryContractDependencies,
+} from "./model.gateway.boundary.contract";
+
 // W8-T1 CP1 — Trust/Isolation Boundary Contract
 export {
   TrustIsolationBoundaryContract,

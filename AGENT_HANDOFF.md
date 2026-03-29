@@ -2,7 +2,7 @@
 
 > Branch: `cvf-next`
 > Last push: `W15-T1 CLOSED DELIVERED — AgentDefinitionAuditBatchContract → cvf-next`
-> Remote tracking: `origin/cvf-next @ 4111ca59`
+> Remote tracking: `origin/cvf-next @ a7de1b4f`
 > State: **W15-T1 CLOSED DELIVERED** — AgentDefinitionAuditBatchContract canonical; CPF 2222 tests; W12-T1 family complete; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.2-W12T1`)
 

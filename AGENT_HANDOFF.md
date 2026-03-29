@@ -2,7 +2,7 @@
 
 > Branch: `cvf-next`
 > Last push: `W16-T1 CLOSED DELIVERED — Whitepaper v3.3-W15T1 → cvf-next`
-> Remote tracking: `origin/cvf-next @ 81ac621d`
+> Remote tracking: `origin/cvf-next @ 2370a506`
 > State: **W16-T1 CLOSED DELIVERED** — whitepaper v3.3-W15T1 canonical; CPF 2222 tests; W12-T1 family fully documented; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.3-W15T1`)
 

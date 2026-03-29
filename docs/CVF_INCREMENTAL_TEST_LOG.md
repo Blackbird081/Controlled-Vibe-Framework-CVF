@@ -2874,6 +2874,36 @@ Utility and guard:
   - GEF: 507→521 (+14). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Batch aggregation: immediateResultCount (dominantScope === "IMMEDIATE") + deferredResultCount (dominantScope === "DEFERRED") + dominantTokenBudget.
 
+## Batch W8-T1 — 2026-03-29
+
+### Entry W8-T1/CP1
+
+- Tranche: W8-T1 — Trust Isolation and Model Gateway Boundary Convergence
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/trust.isolation.boundary.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/trust.isolation.boundary.contract.test.ts` (40 tests)
+- Tests executed:
+  - `npm test` (CPF) → PASS (1933 tests, 0 failures)
+- Notes:
+  - CPF: 1893→1933 (+40). CP1 Full Lane. GC-023 compliant (dedicated test file).
+  - New consolidated trust/isolation boundary surface: declareTrustDomain (FULL_RUNTIME vs LIGHTWEIGHT_SDK), evaluateIsolationScope (HARD_BLOCK/ESCALATE/PASS per scope+risk), decideTrustPropagation (DIRECT/GRAPH_GATED/BLOCKED).
+  - W7 chain: READ_ONLY + ADDITIVE only.
+
+### Entry W8-T1/CP2
+
+- Tranche: W8-T1 — Trust Isolation and Model Gateway Boundary Convergence
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/model.gateway.boundary.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/model.gateway.boundary.contract.test.ts` (52 tests)
+- Tests executed:
+  - `npm test` (CPF) → PASS (1985 tests, 0 failures)
+- Notes:
+  - CPF: 1933→1985 (+52). CP2 Full Lane. GC-023 compliant (dedicated test file).
+  - Classifies all 20 gateway surfaces: 18 FIXED_INPUT + 2 IN_SCOPE. Declares Knowledge Layer entrypoint (ContextPackage→GatewaySignalRequest, owner=CONTROL_PLANE). Freezes CPF=design-time / EPF=build-time execution authority. Candidate B gateway stability output delivered.
+  - W7 chain: READ_ONLY + ADDITIVE only. CPF→EPF canonical handoff unchanged.
+
 ## Batch W2-T17 — 2026-03-24
 
 ### Entry W2-T17/CP1

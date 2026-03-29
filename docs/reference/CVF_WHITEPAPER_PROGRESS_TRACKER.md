@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-28` (W5-T2 COMPLETE, Whitepaper updated to v3.0-W7T10 — full post-baseline delta reconciled; W7 Integration Wave COMPLETE; GC-026 closure sync recorded)
+> Last refreshed: `2026-03-29` (W8-T1 CLOSED DELIVERED — Trust Isolation and Model Gateway Boundary Convergence; CPF 1985 tests, 0 failures; Candidate B GC-018 now unblocked; W8-T2 active)
 
 ---
 
@@ -19,7 +19,7 @@ Memory class: POINTER_RECORD
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
-| Current active tranche | `NO ACTIVE TRANCHE — last canonical closure W7-T10` |
+| Current active tranche | `W8-T2 — Candidate C Performance Benchmark Harness (parallel prerequisite, AUTHORIZED)` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28)` |
 
 ---
@@ -151,6 +151,8 @@ Memory class: POINTER_RECORD
 | `W7-T9` memory loop activation | `DONE` |
 | `W7-T10` wave integration closure | `DONE` |
 | `W5-T2` post-W7 architecture whitepaper update | `DONE` |
+| `W8-T1` trust isolation and model gateway boundary convergence | `DONE` |
+| `W8-T2` performance benchmark harness (Candidate C, parallel) | `AUTHORIZED — execution plan pending` |
 
 ---
 
@@ -183,7 +185,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W5_T2_CLOSURE_2026-03-28.md`
-- Current closure anchor: `docs/reviews/CVF_W5_T2_TRANCHE_CLOSURE_REVIEW_2026-03-28.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W5_T2_WHITEPAPER_UPDATE_2026-03-28.md` (W5-T2 CLOSED)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W8_T1_CLOSURE_2026-03-29.md`
+- Current closure anchor: `docs/reviews/CVF_W8_T1_TRANCHE_CLOSURE_REVIEW_2026-03-29.md`
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W8_T1_TRUST_ISOLATION_MODEL_GATEWAY_BOUNDARY_2026-03-29.md` (W8-T1 CLOSED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

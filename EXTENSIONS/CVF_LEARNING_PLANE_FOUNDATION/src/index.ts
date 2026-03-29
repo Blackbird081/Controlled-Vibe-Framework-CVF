@@ -547,6 +547,19 @@ export type {
   PatternDetectionContractDependencies,
 } from "./pattern.detection.contract";
 
+// W10-T1 CP1 — Reputation Signal Contract
+export {
+  ReputationSignalContract,
+  createReputationSignalContract,
+} from "./reputation.signal.contract";
+export type {
+  ReputationClass,
+  ReputationSignalDimensions,
+  ReputationSignalInput,
+  ReputationSignal,
+  ReputationSignalContractDependencies,
+} from "./reputation.signal.contract";
+
 export const LEARNING_PLANE_FOUNDATION_COORDINATION = {
   executionClass: "realization-first learning-plane slice",
   tranche: "W4-T1",

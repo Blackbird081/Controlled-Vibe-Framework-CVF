@@ -2993,3 +2993,14 @@ Utility and guard:
 - Notes:
   - CPF: 2086→2110 (+24). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Aggregates RagContextEngineConvergenceReport[] into governed batch. dominantSurfaceCount=max(surfaces.length); totalFixedInputCount=sum(fixedInputCount); totalInScopeCount=sum(inScopeCount). batchId≠batchHash by construction. Standard CPF batch pattern.
+
+## Batch W10-T1-CP1 — 2026-03-29
+
+- Tranche: W10-T1 CP1 (Full Lane GC-019)
+- Test files:
+  - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/reputation.signal.contract.test.ts` (43 tests)
+- Tests executed:
+  - `npx vitest run` (LPF reputation signal test) → PASS (43 tests, 0 failures)
+- Notes:
+  - LPF: 1333→1376 (+43). CP1 Full Lane (GC-019). GC-023 compliant (dedicated test file).
+  - New LPF surface: ReputationSignalContract. Composites TruthScore (W6-T8) + FeedbackLedger (W4-T1) + EvaluationResult (W4-T3) + GovernanceSignal (W4-T4) as FIXED_INPUT. compositeReputationScore 0–100; class TRUSTED/RELIABLE/PROVISIONAL/UNTRUSTED. Four scoring dimensions: truth(0–40)+feedback(0–35)+evaluation(0–15)+governance(0–10). reputationHash deterministic; signalId≠reputationHash. All class boundary values tested.

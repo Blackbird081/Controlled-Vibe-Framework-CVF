@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W10-T1 GC-018 Authorization — Reputation Signal and Task Marketplace Learning Expansion → cvf-next`
-> State: **W9-T1 CLOSED DELIVERED** | **W10-T1 GC-018 AUTHORIZED** — Candidate D (P5); depth audit 7/10 CONTINUE; CPF 2110 tests; next: W10-T1 CP1 Full Lane
+> Last push: `W10-T1 CP1 DONE — ReputationSignalContract → cvf-next`
+> State: **W10-T1 CP1 DONE** — LPF 1376 tests (+43); reputationClass TRUSTED/RELIABLE/PROVISIONAL/UNTRUSTED; next: W10-T1 CP2 TaskMarketplaceContract
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
 
 ---
@@ -19,7 +19,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
-| W10-T1 | Reputation Signal and Task Marketplace Learning Expansion (Candidate D) | GC-018 AUTHORIZED 2026-03-29 — depth audit 7/10 CONTINUE |
+| W10-T1 | Reputation Signal and Task Marketplace Learning Expansion (Candidate D) | CP1 DONE 2026-03-29 — ReputationSignalContract canonical; LPF 1376 tests (+43) |
 | W9-T1 | RAG and Context Engine Convergence (Candidate B) | CLOSED DELIVERED 2026-03-29 — all 7 pass conditions satisfied |
 | W8-T2 | Candidate C Performance Benchmark Harness + Acceptance-Policy Baseline | CLOSED DELIVERED 2026-03-29 |
 | W8-T1 | Trust Isolation and Model Gateway Boundary Convergence | CLOSED DELIVERED 2026-03-29 |
@@ -37,20 +37,14 @@
 
 ## Immediate Next Action Required
 
-**W10-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — ReputationSignalContract.**
+**W10-T1 CP1 DONE. Proceed to CP2 Full Lane — TaskMarketplaceContract.**
 
 Current guidance:
-- **W10-T1 GC-018 AUTHORIZED** — Candidate D (P5); depth audit 7/10 CONTINUE; Candidate ID: W10-T1-CANDIDATE-D
-- GC-018 packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W10_T1_REPUTATION_TASK_MARKETPLACE_2026-03-29.md`
-- Scope: ReputationSignalContract (CP1 Full Lane) + TaskMarketplaceContract (CP2 Full Lane) + batch aggregation (CP3 Fast Lane) + Tranche Closure (CP4)
-- Fixed inputs: TruthScore (W6-T8), FeedbackLedger (W4-T1), EvaluationEngine, GovernanceSignal — all FIXED INPUT; no LPF restructuring
-- W7 chain: Runtime READ_ONLY, Artifact ADDITIVE, Trace READ_ONLY, Planner READ_ONLY, Decision ADDITIVE, Eval/Builder READ_ONLY, Memory READ_ONLY
-- G8 satisfied: W8-T1 (P3) + W8-T2 (P2) + W9-T1 (P4) all CLOSED DELIVERED
-- **W9-T1 CLOSED DELIVERED** — 27 surfaces classified; RAG retrieval authority + deterministic packaging API canonical; CPF 2110 tests (+83)
-- **W8-T1 CLOSED DELIVERED** — trust/isolation and model-gateway boundary committed; gateway surfaces FIXED INPUT for W10-T1
-- **W8-T2 CLOSED DELIVERED** — benchmark harness + acceptance-policy baseline; performance thresholds remain `PROPOSAL ONLY`
-- **W7 Integration Wave COMPLETE** — all T0-T10 CLOSED DELIVERED; v3.0-W7T10 baseline frozen
-- **Next**: W10-T1 CP1 Full Lane — ReputationSignalContract in LPF; execution plan required before CP1 begins
+- **W10-T1 CP1 DONE** — ReputationSignalContract canonical; LPF 1376 tests (+43, 0 failures)
+- CP1 contract: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/reputation.signal.contract.ts`
+- CP1 scoring: truth(0–40, 40%) + feedback(0–35, 35%) + evaluation(0–15, 15%) + governance(0–10, 10%) = 0–100; TRUSTED≥80 · RELIABLE≥55 · PROVISIONAL≥30 · UNTRUSTED<30
+- Execution plan: `docs/roadmaps/CVF_W10_T1_REPUTATION_TASK_MARKETPLACE_EXECUTION_PLAN_2026-03-29.md`
+- **Next**: W10-T1 CP2 Full Lane — TaskMarketplaceContract in LPF; routes task allocation by ReputationSignal + declaredCapacity (ASSIGN/DEFER/REJECT)
 - official planning baseline for post-W7 upgrades: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

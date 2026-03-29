@@ -694,3 +694,20 @@ export type {
   TrustPropagationDecision,
   TrustIsolationBoundaryContractDependencies,
 } from "./trust.isolation.boundary.contract";
+
+// W8-T2 CP1 — Performance Benchmark Harness Contract
+export {
+  PerformanceBenchmarkHarnessContract,
+  createPerformanceBenchmarkHarnessContract,
+} from "./performance.benchmark.harness.contract";
+export type {
+  BenchmarkTarget,
+  PerformanceClass,
+  BenchmarkStatus,
+  EvidenceClass,
+  BenchmarkMeasurement,
+  BenchmarkRun,
+  BenchmarkReport,
+  BenchmarkRunInit,
+  PerformanceBenchmarkHarnessContractDependencies,
+} from "./performance.benchmark.harness.contract";

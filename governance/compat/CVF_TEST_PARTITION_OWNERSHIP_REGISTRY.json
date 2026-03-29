@@ -3,50 +3,90 @@
     {
       "scope": "CPF Retrieval Consumer Pipeline (W2-T38 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/retrieval.consumer.pipeline.test.ts",
-      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
-      "forbiddenPatterns": ["RetrievalConsumerPipelineContract", "createRetrievalConsumerPipelineContract"]
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RetrievalConsumerPipelineContract",
+        "createRetrievalConsumerPipelineContract"
+      ]
     },
     {
       "scope": "CPF Retrieval Consumer Pipeline Batch (W2-T38 CP2)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/retrieval.consumer.pipeline.test.ts",
-      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
-      "forbiddenPatterns": ["RetrievalConsumerPipelineBatchContract", "createRetrievalConsumerPipelineBatchContract"]
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RetrievalConsumerPipelineBatchContract",
+        "createRetrievalConsumerPipelineBatchContract"
+      ]
     },
     {
       "scope": "CPF Knowledge Query Batch Consumer Pipeline (W2-T37 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.batch.consumer.pipeline.test.ts",
-      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
-      "forbiddenPatterns": ["KnowledgeQueryBatchConsumerPipelineContract", "createKnowledgeQueryBatchConsumerPipelineContract"]
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeQueryBatchConsumerPipelineContract",
+        "createKnowledgeQueryBatchConsumerPipelineContract"
+      ]
     },
     {
       "scope": "CPF Knowledge Query Batch Consumer Pipeline Batch (W2-T37 CP2)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.batch.consumer.pipeline.test.ts",
-      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
-      "forbiddenPatterns": ["KnowledgeQueryBatchConsumerPipelineBatchContract", "createKnowledgeQueryBatchConsumerPipelineBatchContract"]
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeQueryBatchConsumerPipelineBatchContract",
+        "createKnowledgeQueryBatchConsumerPipelineBatchContract"
+      ]
     },
     {
       "scope": "CPF Context Build Batch Consumer Pipeline (W2-T36 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.batch.consumer.pipeline.test.ts",
-      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
-      "forbiddenPatterns": ["ContextBuildBatchConsumerPipelineContract", "createContextBuildBatchConsumerPipelineContract"]
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextBuildBatchConsumerPipelineContract",
+        "createContextBuildBatchConsumerPipelineContract"
+      ]
     },
     {
       "scope": "CPF Context Build Batch Consumer Pipeline Batch (W2-T36 CP2)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.batch.consumer.pipeline.test.ts",
-      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
-      "forbiddenPatterns": ["ContextBuildBatchConsumerPipelineBatchContract", "createContextBuildBatchConsumerPipelineBatchContract"]
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextBuildBatchConsumerPipelineBatchContract",
+        "createContextBuildBatchConsumerPipelineBatchContract"
+      ]
     },
     {
       "scope": "CPF Context Packager Consumer Pipeline (W2-T35 CP1)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.consumer.pipeline.test.ts",
-      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
-      "forbiddenPatterns": ["ContextPackagerConsumerPipelineContract", "createContextPackagerConsumerPipelineContract"]
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextPackagerConsumerPipelineContract",
+        "createContextPackagerConsumerPipelineContract"
+      ]
     },
     {
       "scope": "CPF Context Packager Consumer Pipeline Batch (W2-T35 CP2)",
       "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.consumer.pipeline.test.ts",
-      "forbiddenFiles": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"],
-      "forbiddenPatterns": ["ContextPackagerConsumerPipelineBatchContract", "createContextPackagerConsumerPipelineBatchContract"]
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextPackagerConsumerPipelineBatchContract",
+        "createContextPackagerConsumerPipelineBatchContract"
+      ]
     },
     {
       "scope": "CPF Context Enrichment Consumer Pipeline (W2-T34 CP1)",
@@ -1490,7 +1530,17 @@
         "PatternDriftLogConsumerPipelineBatchContract",
         "createPatternDriftLogConsumerPipelineBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Performance Benchmark Harness (W8-T2 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/performance.benchmark.harness.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PerformanceBenchmarkHarnessContract",
+        "createPerformanceBenchmarkHarnessContract"
+      ]
     }
   ]
 }
-

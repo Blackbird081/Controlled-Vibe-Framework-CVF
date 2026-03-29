@@ -2874,6 +2874,22 @@ Utility and guard:
   - GEF: 507→521 (+14). CP2 Fast Lane (GC-021). GC-023 compliant (dedicated test file).
   - Batch aggregation: immediateResultCount (dominantScope === "IMMEDIATE") + deferredResultCount (dominantScope === "DEFERRED") + dominantTokenBudget.
 
+## Batch W8-T2 — 2026-03-29
+
+### Entry W8-T2/CP1
+
+- Tranche: W8-T2 — Candidate C Performance Benchmark Harness (parallel prerequisite)
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files created:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/performance.benchmark.harness.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/performance.benchmark.harness.contract.test.ts` (42 tests)
+- Tests executed:
+  - `npm test` (CPF) → PASS (2027 tests, 0 failures)
+- Notes:
+  - CPF: 1985→2027 (+42). CP1 Full Lane. GC-023 compliant (dedicated test file).
+  - Cross-plane instrumentation harness. Run lifecycle: PENDING→RUNNING→COMPLETE/FAILED. All reports carry evidenceClass="PROPOSAL_ONLY" hard-coded — no path to promote performance numbers to baseline truth.
+  - W7 chain: ADDITIVE (new contract only). No structural modification to existing contracts.
+
 ## Batch W8-T1 — 2026-03-29
 
 ### Entry W8-T1/CP1

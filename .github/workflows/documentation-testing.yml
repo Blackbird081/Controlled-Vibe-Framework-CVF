@@ -394,8 +394,11 @@ jobs:
           python-version: '3.11'
 
       - name: Enforce audit retention registry compatibility
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_audit_retention_registry.py --enforce
+          python governance/compat/check_audit_retention_registry.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   review-retention-registry:
     name: Review Retention Registry
@@ -411,8 +414,11 @@ jobs:
           python-version: '3.11'
 
       - name: Enforce review retention registry compatibility
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_review_retention_registry.py --enforce
+          python governance/compat/check_review_retention_registry.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   foundational-guard-surfaces:
     name: Foundational Guard Surfaces

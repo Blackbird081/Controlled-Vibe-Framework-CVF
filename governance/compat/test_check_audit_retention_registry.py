@@ -126,16 +126,27 @@ class AuditRetentionRegistryTests(unittest.TestCase):
         self._write_registry([self.retain_path])
 
         with patch.object(MODULE, "REPO_ROOT", self.repo_root):
-            report = MODULE.build_report()
+            report = MODULE.build_report(
+                changed_paths={
+                    self.retain_path: ["M"],
+                    "docs/reference/CVF_RELEASE_MANIFEST.md": ["M"],
+                }
+            )
 
         self.assertTrue(report["compliant"])
         self.assertEqual(report["violationCount"], 0)
+        self.assertEqual(report["dynamicScanMode"], "full")
 
     def test_build_report_fails_when_dynamic_blocked_audit_is_missing(self) -> None:
         self._write_registry([])
 
         with patch.object(MODULE, "REPO_ROOT", self.repo_root):
-            report = MODULE.build_report()
+            report = MODULE.build_report(
+                changed_paths={
+                    self.retain_path: ["M"],
+                    "docs/reference/CVF_RELEASE_MANIFEST.md": ["M"],
+                }
+            )
 
         self.assertFalse(report["compliant"])
         violation_types = {entry["type"] for entry in report["violations"]}
@@ -145,11 +156,21 @@ class AuditRetentionRegistryTests(unittest.TestCase):
         self._write_registry(["docs/audits/CVF_MISSING_AUDIT_2026-03-21.md"])
 
         with patch.object(MODULE, "REPO_ROOT", self.repo_root):
-            report = MODULE.build_report()
+            report = MODULE.build_report(changed_paths={self.retain_path: ["M"]})
 
         self.assertFalse(report["compliant"])
         violation_types = {entry["type"] for entry in report["violations"]}
         self.assertIn("missing_retain_evidence_file", violation_types)
+
+    def test_build_report_skips_dynamic_scan_without_retention_affecting_changes(self) -> None:
+        self._write_registry([])
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            report = MODULE.build_report(changed_paths={"EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/example.ts": ["M"]})
+
+        self.assertTrue(report["compliant"])
+        self.assertEqual(report["dynamicScanMode"], "skipped_no_retention_affecting_changes")
+        self.assertEqual(report["dynamicCounts"]["status"], "skipped")
 
 
 if __name__ == "__main__":

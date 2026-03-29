@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-29` (W8-T1 CLOSED DELIVERED — Trust Isolation and Model Gateway Boundary Convergence; CPF 1985 tests, 0 failures; Candidate B GC-018 now unblocked; W8-T2 active)
+> Last refreshed: `2026-03-29` (W8-T1 CLOSED DELIVERED — Trust Isolation and Model Gateway Boundary Convergence; CPF 1985 tests, 0 failures; Candidate B GC-018 now unblocked; W8-T2 AUTHORIZED — GC-026 auth sync committed)
 
 ---
 

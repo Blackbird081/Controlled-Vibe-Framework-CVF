@@ -309,7 +309,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
 | CVF_ACTIVE_ARCHIVE_GUARD.md | Active archive maintenance | Keep active/archive split truthful and append-only |
 | CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md | New or revised active trace/log window with dedicated rotation guard | Register canonical active window + class + archive protection |
-| CVF_AGENT_HANDOFF_GUARD.md | Governed pause/resume transfer | Canonical handoff packet before another worker continues |
+| CVF_AGENT_HANDOFF_GUARD.md | Governed pause/resume transfer | Canonical handoff packet before another worker continues; record tracked remote branch and derive exact remote SHA live when needed |
 | CVF_AGENT_HANDOFF_TRANSITION_GUARD.md | Pause/resume classification | Transition class chosen before handoff is written |
 | CVF_BASELINE_UPDATE_GUARD.md | Substantive repo change | Matching baseline/review artifact required |
 | CVF_BOARDROOM_RUNTIME_GUARD.md | Live boardroom decisions | Canonical boardroom runtime convergence packet |
@@ -340,6 +340,13 @@ Archive protection note:
 Guard management map:
 
 - `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
+
+Continuity truth note:
+
+- `GC-020` handoff stores stable transition truth, not volatile push-boundary trivia
+- record the tracked remote branch in `AGENT_HANDOFF.md` when the branch has an upstream
+- derive exact remote SHA live from git when a resume, comparison, or push decision depends on it
+- external memory remains convenience-only and must not override repo truth or handoff truth
 
 
 ### Compatibility Gates (Chạy trước khi merge):

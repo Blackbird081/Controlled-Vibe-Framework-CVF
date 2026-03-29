@@ -46,11 +46,14 @@ Default assumption:
 Every handoff must truthfully state:
 
 - latest completed commit
+- tracked remote branch when available
 - whether the working tree is clean or dirty
 - what is implemented versus what is only planned
 - the active tranche or packet truth
 - what remains out of scope
 - the next governed move
+
+Exact remote SHA may be cited when useful, but it is not a required hand-maintained handoff field because that value changes at the push boundary.
 
 If any of the above is unknown, the handoff must say so explicitly instead of filling the gap with optimistic wording.
 

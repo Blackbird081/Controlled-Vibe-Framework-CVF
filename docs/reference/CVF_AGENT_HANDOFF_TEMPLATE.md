@@ -43,12 +43,17 @@ Do not use this template for:
 Every handoff must be truthful about:
 
 - latest completed commit
-- latest pushed remote commit when the branch tracks a remote
+- tracked remote branch when the branch tracks a remote
 - whether the working tree is clean or dirty
 - what is actually implemented vs merely planned
 - what remains out of scope
 - what the next governed move is
 - whether any external agent memory was used only as convenience rather than canonical truth
+
+Important stability rule:
+
+- exact remote SHA must be derived live from git when needed
+- do not hand-maintain exact remote tip SHA inside `AGENT_HANDOFF.md` as a required truth field, because that value changes at the push boundary and creates a false self-update loop
 
 Never write a handoff that:
 
@@ -62,7 +67,7 @@ Every handoff should include:
 
 - current repo state
 - latest completed commit
-- latest pushed remote commit / tracked remote truth when available
+- tracked remote branch when available
 - canonical docs the next agent must read first
 - the minimal phase-bounded context the next worker should load first
 - current tranche truth
@@ -79,7 +84,8 @@ Every handoff should include:
 Handoff context:
 - Repo state: <clean | dirty>
 - Latest completed commit: `<sha> <message>`
-- Latest pushed remote commit: `<remote> @ <sha>` | `<none>`
+- Tracked remote branch: `<remote>/<branch>` | `<none>`
+- Exact remote SHA: derive live from git when needed; do not hand-maintain it as a required handoff field
 - External agent memory files: `<non-canonical convenience only | not used>`
 
 Read these first:
@@ -147,7 +153,7 @@ Do not:
 Prefer this shape:
 
 1. start with repo truth
-2. state tracked remote truth if available
+2. state tracked remote branch if available
 3. point to canonical docs
 4. state the active tranche truth in one short block
 5. state the next governed move

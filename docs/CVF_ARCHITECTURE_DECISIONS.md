@@ -1158,7 +1158,6 @@ Archive cleanup is easier to trust because high-value active windows are protect
 `scripts/cvf_active_archive.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `governance/compat/check_active_window_registry.py`, `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`, `scripts/test_cvf_active_archive.py`, `governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`
 
 ---
-
 ## ADR-024: Archive Cleanup Must Be Registry-Driven And Incremental
 | Field | Value |
 |---|---|
@@ -1167,17 +1166,11 @@ Archive cleanup is easier to trust because high-value active windows are protect
 | Branch | `cvf-next` |
 | Layer | Governance Platform |
 | Related commits | *(local, current cleanup batch)* |
-### Context
-CVF had already introduced active-window protection for generic archive cleanup, but the broader archive workflow still depended too much on broad repo scans and ad-hoc judgement about which historical `audits` and `reviews` should stay live. Once the repository accumulated hundreds of dated evidence documents, "scan everything every time" became both expensive and easier to get wrong.
-### Decision
-**Move archive cleanup to a registry-driven, incremental model.** `scripts/cvf_active_archive.py` now uses `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json` as the canonical checkpoint for normal runs, while audit/review evidence retention is governed by explicit registries:
-Normal cleanup re-evaluates only incremental deltas and registry-protected candidates; full scans remain bootstrap/recovery only. Audit and review evidence retention is governed by `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json` and `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`.
-### Rationale
-Archive safety should be determined by explicit governance state, incremental cleanup is the right default once historical backlog has been classified, and archive automation must preserve evidence-bearing documents without forcing a full-repo sweep every run.
-### Consequences
-`docs/audits/` and `docs/reviews/` can now be cleaned without losing protected evidence chains, pre-push and CI enforce retention-registry truth before archive moves are valid, and foundational test-depth enforcement now applies to active report surfaces instead of archived historical records.
-### Related Files
-`scripts/cvf_active_archive.py`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`, `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`, `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`, `governance/compat/check_audit_retention_registry.py`, `governance/compat/check_review_retention_registry.py`, `governance/compat/check_foundational_guard_surfaces.py`
+**Context** CVF had already introduced active-window protection for generic archive cleanup, but the broader archive workflow still depended too much on broad repo scans and ad-hoc judgement about which historical `audits` and `reviews` should stay live. Once the repository accumulated hundreds of dated evidence documents, "scan everything every time" became both expensive and easier to get wrong.
+**Decision** Move archive cleanup to a registry-driven, incremental model. `scripts/cvf_active_archive.py` now uses `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json` as the canonical checkpoint for normal runs, while audit/review evidence retention is governed by `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json` and `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`. Normal cleanup re-evaluates only incremental deltas and registry-protected candidates; full scans remain bootstrap/recovery only.
+**Rationale** Archive safety should be determined by explicit governance state, incremental cleanup is the right default once historical backlog has been classified, and archive automation must preserve evidence-bearing documents without forcing a full-repo sweep every run.
+**Consequences** `docs/audits/` and `docs/reviews/` can now be cleaned without losing protected evidence chains, pre-push and CI enforce retention-registry truth before archive moves are valid, and foundational test-depth enforcement now applies to active report surfaces instead of archived historical records.
+**Related Files** `scripts/cvf_active_archive.py`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`, `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`, `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`, `governance/compat/check_audit_retention_registry.py`, `governance/compat/check_review_retention_registry.py`, `governance/compat/check_foundational_guard_surfaces.py`
 ---
 ## ADR-025: Governed Artifact Writing Must Be Source-Truth-First And Machine-Enforced
 | Field | Value |
@@ -1187,14 +1180,21 @@ Archive safety should be determined by explicit governance state, incremental cl
 | Branch | `cvf-next` |
 | Layer | Governance Platform |
 | Related commits | *(local, current GC-032 hardening batch)* |
-### Context
-Post-W7 planning had already stated that performance evidence could not be promoted into baseline truth before real measurement evidence existed, and the drafting discipline for the next wave had been documented in roadmap/checklist form. In practice, that still left too much room for governed artifacts to be written as plausible narrative instead of contract-shaped truth, especially when an agent was translating roadmap intent or harness output into reviews, baselines, and continuity records.
-### Decision
-**Adopt one canonical governed-artifact authoring standard and enforce it through bootstrap, policy, CI, and local hooks.** `GC-032` now requires source-truth-first writing, forbids summary substitution for typed evidence, keeps planning/execution/evidence/continuity artifact roles separate, and requires continuity surfaces to move together when tranche posture changes.
-Typed evidence enforcement remains layered: `governance/compat/check_governed_artifact_authoring.py` keeps the chain aligned, while `governance/compat/check_docs_governance_compat.py` blocks symbolic shorthand in governed evidence batches when the harness contract requires explicit provenance fields.
-### Rationale
-If governed writing is not constrained like code, agents can silently drift away from roadmap truth even while the surrounding governance system looks complete. Source-truth-first writing turns documentation quality into an executable part of CVF rather than a reviewer expectation.
-### Consequences
-Future agents must route through a shared writing standard before drafting governed artifacts, post-W7 packets now have an explicit authoring front door in session bootstrap, and evidence-bearing docs are harder to degrade into ambiguous shorthand without tripping a repo gate.
-### Related Files
-`docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`, `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`, `governance/compat/check_governed_artifact_authoring.py`, `governance/compat/check_docs_governance_compat.py`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`, `docs/reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md`
+**Context** Post-W7 planning had already stated that performance evidence could not be promoted into baseline truth before real measurement evidence existed, and the drafting discipline for the next wave had been documented in roadmap/checklist form. In practice, that still left too much room for governed artifacts to be written as plausible narrative instead of contract-shaped truth, especially when an agent was translating roadmap intent or harness output into reviews, baselines, and continuity records.
+**Decision** Adopt one canonical governed-artifact authoring standard and enforce it through bootstrap, policy, CI, and local hooks. `GC-032` now requires source-truth-first writing, forbids summary substitution for typed evidence, keeps planning/execution/evidence/continuity artifact roles separate, and requires continuity surfaces to move together when tranche posture changes. Typed evidence enforcement remains layered: `governance/compat/check_governed_artifact_authoring.py` keeps the chain aligned, while `governance/compat/check_docs_governance_compat.py` blocks symbolic shorthand in governed evidence batches when the harness contract requires explicit provenance fields.
+**Rationale** If governed writing is not constrained like code, agents can silently drift away from roadmap truth even while the surrounding governance system looks complete. Source-truth-first writing turns documentation quality into an executable part of CVF rather than a reviewer expectation.
+**Consequences** Future agents must route through a shared writing standard before drafting governed artifacts, post-W7 packets now have an explicit authoring front door in session bootstrap, and evidence-bearing docs are harder to degrade into ambiguous shorthand without tripping a repo gate.
+**Related Files** `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`, `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`, `governance/compat/check_governed_artifact_authoring.py`, `governance/compat/check_docs_governance_compat.py`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`, `docs/reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md`
+## ADR-026: GC-020 Handoff Must Track The Remote Branch, Not Chase The Remote Tip SHA
+| Field | Value |
+|---|---|
+| Date | 2026-03-30 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current GC-020 loop-fix batch)* |
+**Context** `GC-020` already required governed pause/resume truth, and the handoff template had drifted into recording the exact latest pushed remote SHA inside `AGENT_HANDOFF.md`. In practice that created a self-update loop: a commit that updated handoff to match the current remote tip would itself move the remote tip again after push, immediately making the newly committed handoff stale by one step.
+**Decision** Treat the tracked remote branch as the required handoff truth, and treat the exact remote tip SHA as live git state that must be derived when needed rather than hand-maintained inside the handoff packet. `AGENT_HANDOFF.md` must now record the tracked upstream ref such as `origin/cvf-next`, while `check_agent_handoff_guard_compat.py` enforces tracked remote branch presence instead of exact tip equality.
+**Rationale** An exact remote tip SHA is not a stable continuity field at the push boundary, because the commit carrying that field changes the very value it is trying to freeze. Continuity docs should store stable routing truth, while volatile live state should be derived from the authoritative tool that owns it.
+**Consequences** Governed handoff remains strict, but now has a fixed point that can stay true across pushes. Agents must stop treating external memory or hand-edited SHA strings as a substitute for live git inspection. Resume and push decisions still depend on exact remote SHA when relevant, but they must derive that value live from git rather than requiring it as a durable handoff field.
+**Related Files** `AGENT_HANDOFF.md`, `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`, `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`, `governance/compat/check_agent_handoff_guard_compat.py`, `governance/compat/test_check_agent_handoff_guard_compat.py`

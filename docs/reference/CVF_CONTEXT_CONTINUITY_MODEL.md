@@ -39,6 +39,11 @@ When continuity is resumed, treat truth sources in this order:
 2. canonical continuity artifacts inside the repo such as handoff, tracker, closure review, and sync notes
 3. external agent memory files, scratch notes, and tool-specific summaries
 
+For handoff-writing specifically:
+
+- exact remote tip SHA is live git truth, not a hand-maintained continuity field
+- handoff should record the tracked remote branch, while exact remote SHA should be derived live when resume or push decisions depend on it
+
 External memory outside the repo is non-canonical convenience only.
 
 It may help navigation, but it must not override repo truth.

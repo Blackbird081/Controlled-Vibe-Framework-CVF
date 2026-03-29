@@ -76,6 +76,11 @@ Primary references:
 - `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
 
+Operational note:
+
+- write the tracked remote branch into handoff when an upstream exists
+- derive exact remote SHA live from git when push or resume logic depends on it
+
 ### `GC-023` — Governed File Size
 
 Use when:

@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-29` (W9-T1 GC-018 AUTHORIZED — Candidate B RAG + Context Engine Convergence; W8-T1 CLOSED DELIVERED; W8-T2 CLOSED DELIVERED; CPF 2027 tests, 0 failures; performance baseline remains PROPOSAL ONLY)
+> Last refreshed: `2026-03-29` (W10-T1 CLOSED DELIVERED — Reputation Signal + Task Marketplace Learning Expansion; CPF 2110 / EPF 1123 / GEF 625 / LPF 1465 tests, 0 failures; all post-W7 upgrade candidates delivered; no active tranche)
 
 ---
 
@@ -19,7 +19,7 @@ Memory class: POINTER_RECORD
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
-| Current active tranche | `W9-T1 — GC-018 AUTHORIZED 2026-03-29; Candidate B RAG + Context Engine Convergence; ready for CP1 Full Lane` |
+| Current active tranche | `NONE — all post-W7 upgrade candidates delivered (W8-T1, W8-T2, W9-T1, W10-T1); W10-T1 CLOSED DELIVERED 2026-03-29; await W11-T1 GC-018` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28)` |
 
 ---

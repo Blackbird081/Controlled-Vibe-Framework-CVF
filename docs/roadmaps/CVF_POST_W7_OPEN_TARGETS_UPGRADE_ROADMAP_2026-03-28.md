@@ -61,6 +61,7 @@ All phases below are gated by these conditions:
 - `G6` no benchmark numbers promoted into baseline truth before measurement evidence exists
 - `G7` any gateway-facing family must state which AI Gateway / Knowledge Layer contracts are fixed inputs and which are in scope
 - `G8` any later-wave learning expansion must remain downstream of the first structural family and the performance baseline
+- `G9` every fresh `GC-018` must pass the quality-first decision gate using the active canonical quality assessment; remediation-first is the default when active quality posture is below threshold
 
 If any required gate is missing, the affected phase remains `HOLD`.
 
@@ -71,11 +72,11 @@ If any required gate is missing, the affected phase remains `HOLD`.
 | Phase | Scope | Initial Decision | Required Gates | Exit Criteria |
 |---|---|---|---|---|
 | `P0` | Governance hardening for next-wave drafting | `GO` | `G1-G4` | exclusion template, dependency declaration pattern, and drafting rules are committed as reusable canon |
-| `P1` | `Candidate A` authorization packet drafting | `GO WITH FIXES` | `G1-G5`, `G7` | one bounded `GC-018` candidate for Trust / Isolation + Model Gateway boundary convergence is review-ready |
-| `P2` | `Candidate C` instrumentation-only performance baseline workstream | `GO WITH FIXES` | `G1`, `G4`, `G6` | benchmark harness, acceptance-policy baseline, first governed evidence batch, and closure review are committed without promoting baseline truth |
+| `P1` | `Candidate A` authorization packet drafting | `GO WITH FIXES` | `G1-G5`, `G7`, `G9` | one bounded `GC-018` candidate for Trust / Isolation + Model Gateway boundary convergence is review-ready |
+| `P2` | `Candidate C` instrumentation-only performance baseline workstream | `GO WITH FIXES` | `G1`, `G4`, `G6`, `G9` | benchmark harness, acceptance-policy baseline, first governed evidence batch, and closure review are committed without promoting baseline truth |
 | `P3` | `Candidate A` first-wave execution if authorized | `GO WITH FIXES` | `P1 closed`, `G5`, `G7` | boundary contracts are clarified without destabilizing the W7 chain; closure review complete |
-| `P4` | `Candidate B` authorization and execution planning | `GC-018 AUTHORIZED — W9-T1` | `P2 in motion or closed`, `P3 closed or formally deferred`, `G1-G4`, `G7` | one bounded `GC-018` candidate for RAG + Context convergence is review-ready with declared gateway assumptions |
-| `P5` | `Candidate D` later-wave intake | `GC-018 AUTHORIZED — W10-T1` | `P3` and `P4` in motion or closed, `G1-G4`, `G8` | learning expansion may be evaluated as a later governed wave |
+| `P4` | `Candidate B` authorization and execution planning | `GC-018 AUTHORIZED — W9-T1` | `P2 in motion or closed`, `P3 closed or formally deferred`, `G1-G4`, `G7`, `G9` | one bounded `GC-018` candidate for RAG + Context convergence is review-ready with declared gateway assumptions |
+| `P5` | `Candidate D` later-wave intake | `GC-018 AUTHORIZED — W10-T1` | `P3` and `P4` in motion or closed, `G1-G4`, `G8`, `G9` | learning expansion may be evaluated as a later governed wave |
 
 ---
 
@@ -93,6 +94,7 @@ Deliverables:
 Success rule:
 
 - future `GC-018` packets can be written without ambiguity about exclusions, dependencies, ownership transfer, or typed-evidence discipline
+- future `GC-018` packets must also record whether CVF should remediate quality first or expand now
 
 ### 6.2 Phase `P1` — Candidate A Authorization Preparation
 
@@ -208,9 +210,10 @@ Minimum verification set:
 ## 9. Immediate Start Packet
 
 1. Execute `P0` first so future `GC-018` packets inherit consistent exclusion and dependency discipline.
-2. Draft the first bounded `GC-018` packet for `Candidate A`.
-3. Draft the instrumentation-only `GC-018` packet for `Candidate C` in parallel.
-4. Re-open `Candidate B` only after the `Candidate A` impact posture is known.
+2. Read the active quality assessment and decide `REMEDIATE_FIRST` vs `EXPAND_NOW` before drafting any fresh `GC-018`.
+3. Draft the first bounded `GC-018` packet for `Candidate A`.
+4. Draft the instrumentation-only `GC-018` packet for `Candidate C` in parallel.
+5. Re-open `Candidate B` only after the `Candidate A` impact posture is known.
 
 Canonical source packet chain for this roadmap:
 

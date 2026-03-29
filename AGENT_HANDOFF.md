@@ -47,9 +47,11 @@
 Current guidance:
 
 - **W12-T1 CLOSED DELIVERED** — `AgentDefinitionBoundaryContract` canonical; CPF 2144 tests; all merge map surfaces now `SUBSTANTIALLY DELIVERED`; no further continuation without fresh GC-018
+- **Before any fresh GC-018**: read the active quality assessment first and decide `REMEDIATE_FIRST` vs `EXPAND_NOW` from repo truth, not habit
 - Closure review: `docs/reviews/CVF_W12_T1_TRANCHE_CLOSURE_REVIEW_2026-03-29.md`
 - GC-026 closure sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W12_T1_CLOSURE_2026-03-29.md`
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
+- Active quality assessment: `docs/assessments/CVF_POST_W7_CONTINUATION_QUALITY_ASSESSMENT_2026-03-30.md`
 - **Next**: fresh GC-018 authorization required for any new wave; all known post-W7 upgrade candidates delivered
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
@@ -64,10 +66,11 @@ Current guidance:
 ### Tranche Protocol
 1. **GC-018** (10/10 audit score) → commits roadmap + tracker + GC-026 sync + execution plan
 2. **GC-032 first** before writing governed packets → source truth first, typed evidence stays explicit, continuity surfaces move together
-3. **Per CP**: Full Lane = new concept/module/cross-plane; Fast Lane (GC-021) = additive batch/summary
-4. **Per CP artifacts**: audit doc + review doc + delta doc + exec plan update + test log update + commit
-5. **No implementation without GC-018 authorization**
-6. **No push to main** — work on `cvf-next` only
+3. **Quality-first before expansion** → read the active quality assessment and explicitly decide `REMEDIATE_FIRST` or `EXPAND_NOW` before drafting any fresh GC-018 packet
+4. **Per CP**: Full Lane = new concept/module/cross-plane; Fast Lane (GC-021) = additive batch/summary
+5. **Per CP artifacts**: audit doc + review doc + delta doc + exec plan update + test log update + commit
+6. **No implementation without GC-018 authorization**
+7. **No push to main** — work on `cvf-next` only
 
 ### Fast Lane (GC-021) — eligible when:
 - additive only, no restructuring

@@ -82,6 +82,17 @@ Governed writing must preserve artifact roles:
 
 One artifact class must not silently stand in for another.
 
+### Quality-First Before Expansion
+
+Before any fresh `GC-018` continuation packet is drafted, the author must read the active quality assessment and decide explicitly whether CVF should:
+
+- improve quality first
+- or expand scope now because the next move has higher governed value
+
+No agent may assume that opening a new tranche is automatically better than strengthening quality on the current realized line.
+
+If quality debt is materially adjacent to the proposed scope, the default posture is remediation-first unless the packet proves why expansion is still the better governed move.
+
 ### Continuity Surfaces Move Together
 
 When tranche posture or canonical status changes, all affected continuity surfaces must move in the same governed batch when applicable:

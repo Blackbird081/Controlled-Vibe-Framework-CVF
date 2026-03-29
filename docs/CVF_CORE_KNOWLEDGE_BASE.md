@@ -777,3 +777,4 @@ Quy tắc cứng:
 - quality claim phải bám governed evidence, không bám note riêng của agent
 - nếu bất kỳ dimension nào `< 6.0`, scope đó phải chuyển sang remediation-first
 - nếu Governance Discipline, Test and Verification Confidence, hoặc Canonical Documentation Quality `< 8.0`, không được coi scope đó là strong mà không có follow-up bắt buộc
+- trước mọi fresh `GC-018`, phải đọc active quality assessment và chốt rõ `REMEDIATE_FIRST` hoặc `EXPAND_NOW`

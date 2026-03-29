@@ -46,6 +46,8 @@ Primary references:
 
 - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
 - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+- `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
+- active quality assessment for the current workline before deciding remediation-first vs expansion-now
 
 ### `GC-019` — Structural Change Audit Gate
 

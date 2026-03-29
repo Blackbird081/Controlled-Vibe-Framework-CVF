@@ -14,6 +14,8 @@ Before writing any GC-018 packet, confirm all of the following:
 
 - [ ] GC-027 decision chain is complete: intake review → rebuttal → EA counter-review → decision pack
 - [ ] `GC-032` governed artifact authoring standard is loaded before drafting begins
+- [ ] Active quality assessment is loaded before drafting begins
+- [ ] Quality-first posture is decided before scope drafting starts: `REMEDIATE_FIRST` or `EXPAND_NOW`
 - [ ] Parent roadmap exists and is at SUMMARY_RECORD status
 - [ ] Candidate family designation is confirmed (A | B | C | D)
 - [ ] Wave and tranche numbers are assigned (W{N}-T{N})
@@ -33,6 +35,13 @@ Every GC-018 packet for a post-W7 wave MUST include all sections below. Missing 
 - [ ] Continuation class: STRUCTURAL | VALIDATION_TEST | PACKAGING_ONLY | TRUTH_CLAIM | REALIZATION | MIXED | OTHER
 
 ### Justification Block (always required)
+- [ ] Active quality assessment path declared
+- [ ] Weighted total declared
+- [ ] Lowest dimension declared
+- [ ] Quality-first decision declared: `REMEDIATE_FIRST` | `EXPAND_NOW`
+- [ ] If `EXPAND_NOW`: higher-value reason declared
+- [ ] If `EXPAND_NOW`: quality protection commitments declared
+- [ ] If `REMEDIATE_FIRST`: remediation target declared
 - [ ] Why now — short justification referencing the canonical decision pack
 - [ ] Active-path impact — NONE | LIMITED | MATERIAL
 - [ ] Risk if deferred
@@ -105,6 +114,7 @@ Before submitting the GC-018 packet for authorization:
 - `docs/reference/CVF_POST_W7_EXCLUSION_TEMPLATE.md` — G3
 - `docs/reference/CVF_POST_W7_DEPENDENCY_DECLARATION_PATTERN.md` — G4, G5
 - `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md` — authoring and evidence discipline
+- `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md` — quality-first decision gate before fresh expansion
 - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md` — base template
 - `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md` — gates G1–G8
 - `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_POST_W7_OPEN_TARGETS_2026-03-28.md` — pass conditions 1–9

@@ -36,6 +36,10 @@ PACKET_SUFFIX = ".md"
 
 REQUIRED_TEMPLATE_MARKERS = (
     "Continuation class:",
+    "Active quality assessment:",
+    "Weighted total:",
+    "Lowest dimension:",
+    "Quality-first decision:",
     "Lateral alternative considered:",
     "Why not lateral shift:",
     "Real decision boundary improved:",
@@ -43,6 +47,14 @@ REQUIRED_TEMPLATE_MARKERS = (
 
 FIELD_PATTERNS = {
     "continuationClass": re.compile(r"^- Continuation class:\s*(.+?)\s*$", re.MULTILINE),
+    "activeQualityAssessment": re.compile(r"^- Active quality assessment:\s*(.+?)\s*$", re.MULTILINE),
+    "assessmentDate": re.compile(r"^- Assessment date:\s*(.+?)\s*$", re.MULTILINE),
+    "weightedTotal": re.compile(r"^- Weighted total:\s*(.+?)\s*$", re.MULTILINE),
+    "lowestDimension": re.compile(r"^- Lowest dimension:\s*(.+?)\s*$", re.MULTILINE),
+    "qualityFirstDecision": re.compile(r"^- Quality-first decision:\s*(REMEDIATE_FIRST|EXPAND_NOW)\s*$", re.MULTILINE),
+    "whyExpansionBetterNow": re.compile(r"^- Why expansion is still the better move now:\s*(.+?)\s*$", re.MULTILINE),
+    "qualityProtectionCommitments": re.compile(r"^- Quality protection commitments:\s*(.+?)\s*$", re.MULTILINE),
+    "remediationTargetIfNotExpanding": re.compile(r"^- Remediation target if not expanding:\s*(.+?)\s*$", re.MULTILINE),
     "lateralAlternativeConsidered": re.compile(r"^- Lateral alternative considered:\s*(YES|NO)\s*$", re.MULTILINE),
     "whyNotLateralShift": re.compile(r"^- Why not lateral shift:\s*(.+?)\s*$", re.MULTILINE),
     "realDecisionBoundaryImproved": re.compile(r"^- Real decision boundary improved:\s*(YES|NO)\s*$", re.MULTILINE),
@@ -65,6 +77,8 @@ LOW_YIELD_CLASSES = {
     "PACKAGING_ONLY",
     "TRUTH_CLAIM",
 }
+
+WEIGHTED_TOTAL_RE = re.compile(r"^(10(?:\.0+)?|[0-9](?:\.\d+)?)/10$")
 
 
 def _run_git(args: list[str]) -> tuple[int, str, str]:
@@ -258,11 +272,68 @@ def _validate_packet(path: str) -> list[dict[str, str]]:
             "message": f"`{path}` must provide a real `Why not lateral shift` justification.",
         })
 
+    active_quality_assessment = extracted["activeQualityAssessment"]
+    if active_quality_assessment is not None and _is_placeholder(active_quality_assessment):
+        violations.append({
+            "path": path,
+            "type": "placeholder_active_quality_assessment",
+            "message": f"`{path}` must cite the active quality assessment before opening a fresh GC-018.",
+        })
+
+    weighted_total = extracted["weightedTotal"]
+    if weighted_total is not None and not WEIGHTED_TOTAL_RE.match(weighted_total):
+        violations.append({
+            "path": path,
+            "type": "invalid_weighted_total",
+            "message": (
+                f"`{path}` must record `Weighted total` in `<score>/10` form based on the active quality assessment."
+            ),
+        })
+
+    lowest_dimension = extracted["lowestDimension"]
+    if lowest_dimension is not None and _is_placeholder(lowest_dimension):
+        violations.append({
+            "path": path,
+            "type": "placeholder_lowest_dimension",
+            "message": f"`{path}` must declare the current lowest quality dimension before expansion is considered.",
+        })
+
     low_yield = continuation_class in LOW_YIELD_CLASSES if continuation_class else False
     decision = extracted["decision"]
     authorized_now = extracted["authorizedNow"]
     real_boundary = extracted["realDecisionBoundaryImproved"]
     lateral_considered = extracted["lateralAlternativeConsidered"]
+    quality_first_decision = extracted["qualityFirstDecision"]
+    why_expansion_better_now = extracted["whyExpansionBetterNow"]
+    quality_protection_commitments = extracted["qualityProtectionCommitments"]
+    remediation_target = extracted["remediationTargetIfNotExpanding"]
+
+    if quality_first_decision == "EXPAND_NOW":
+        if _is_placeholder(why_expansion_better_now):
+            violations.append({
+                "path": path,
+                "type": "missing_expand_now_justification",
+                "message": (
+                    f"`{path}` chooses `EXPAND_NOW` but does not explain why expansion is still the better move now."
+                ),
+            })
+        if _is_placeholder(quality_protection_commitments):
+            violations.append({
+                "path": path,
+                "type": "missing_quality_protection_commitments",
+                "message": (
+                    f"`{path}` chooses `EXPAND_NOW` but does not record quality protection commitments."
+                ),
+            })
+
+    if quality_first_decision == "REMEDIATE_FIRST" and _is_placeholder(remediation_target):
+        violations.append({
+            "path": path,
+            "type": "missing_remediation_target",
+            "message": (
+                f"`{path}` chooses `REMEDIATE_FIRST` but does not name the remediation target."
+            ),
+        })
 
     if low_yield:
         if lateral_considered != "YES":

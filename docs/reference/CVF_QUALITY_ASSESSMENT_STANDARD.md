@@ -80,6 +80,28 @@ If any dimension drops below threshold, action is mandatory:
 | Canonical Documentation Quality `< 8.0` | whitepaper/tracker/handoff sync required in same batch |
 | Maintainability `< 7.0` | open cleanup follow-up or record governed debt explicitly |
 
+## Pre-GC-018 Quality-First Decision Gate
+
+Before drafting or authorizing any fresh `GC-018` continuation packet, the proposer MUST read the current active quality assessment first and record one explicit decision:
+
+- `REMEDIATE_FIRST`
+- `EXPAND_NOW`
+
+Default posture:
+
+- if weighted total `< 8.0`, default to `REMEDIATE_FIRST`
+- if any low-score action policy above is triggered, default to `REMEDIATE_FIRST`
+- if the lowest-scoring dimension is directly adjacent to the proposed new tranche scope, default to `REMEDIATE_FIRST`
+
+`EXPAND_NOW` is allowed only when the packet states all of the following:
+
+- which active quality assessment was used
+- the current weighted total and lowest dimension
+- why expansion is still the higher-value move now
+- which quality protections or same-batch cleanup commitments will prevent further drift
+
+This gate exists to stop expansion-by-momentum when quality debt should be tightened first.
+
 ## Quality Lift Playbook
 
 Use this table when a score is too low.

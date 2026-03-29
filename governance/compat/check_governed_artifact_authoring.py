@@ -35,9 +35,11 @@ DOCS_INDEX_PATH = "docs/INDEX.md"
 README_PATH = "README.md"
 KB_PATH = "docs/CVF_CORE_KNOWLEDGE_BASE.md"
 POST_W7_CHECKLIST_PATH = "docs/reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md"
+QUALITY_STANDARD_PATH = "docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md"
 HOOK_CHAIN_PATH = "governance/compat/run_local_governance_hook_chain.py"
 WORKFLOW_PATH = ".github/workflows/documentation-testing.yml"
 DOCS_GOV_COMPAT_PATH = "governance/compat/check_docs_governance_compat.py"
+GC018_SEMANTICS_PATH = "governance/compat/check_gc018_stop_boundary_semantics.py"
 THIS_SCRIPT_PATH = "governance/compat/check_governed_artifact_authoring.py"
 
 REQUIRED_FILES = (
@@ -50,15 +52,18 @@ REQUIRED_FILES = (
     DOCS_INDEX_PATH,
     README_PATH,
     KB_PATH,
+    QUALITY_STANDARD_PATH,
     POST_W7_CHECKLIST_PATH,
     HOOK_CHAIN_PATH,
     WORKFLOW_PATH,
     DOCS_GOV_COMPAT_PATH,
+    GC018_SEMANTICS_PATH,
 )
 
 REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
     STANDARD_PATH: (
         "Source-Truth First",
+        "Quality-First Before Expansion",
         "No Summary Substitution for Typed Evidence",
         "Planning / Execution / Evidence / Continuity Separation",
         "Continuity Surfaces Move Together",
@@ -96,6 +101,7 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         "GC-032",
         STANDARD_PATH,
         "drafting or materially revising governed artifacts",
+        "active quality assessment for the current workline",
     ),
     BOOTSTRAP_GUARD_PATH: (
         "GC-032",
@@ -110,11 +116,20 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
     ),
     KB_PATH: (
         Path(GUARD_PATH).name,
+        "trước mọi fresh `GC-018`, phải đọc active quality assessment",
+    ),
+    QUALITY_STANDARD_PATH: (
+        "Pre-GC-018 Quality-First Decision Gate",
+        "REMEDIATE_FIRST",
+        "EXPAND_NOW",
     ),
     POST_W7_CHECKLIST_PATH: (
         "GC-032",
         STANDARD_PATH,
         "typed evidence",
+        "Active quality assessment is loaded before drafting begins",
+        "Quality-first posture is decided before scope drafting starts",
+        "Quality-first decision declared",
     ),
     HOOK_CHAIN_PATH: (
         THIS_SCRIPT_PATH,
@@ -129,6 +144,13 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         "performance_evidence_symbolic_value",
         "Report Hash",
         "Trace ID",
+    ),
+    GC018_SEMANTICS_PATH: (
+        "Active quality assessment:",
+        "Quality-first decision:",
+        "missing_expand_now_justification",
+        "missing_quality_protection_commitments",
+        "missing_remediation_target",
     ),
 }
 

@@ -42,8 +42,23 @@ Before drafting a governed artifact, the author MUST read the governing source t
 - contract/schema before typed evidence claims
 - test output or harness report before benchmark claims
 - tracker, handoff, and closure packet before continuity claims
+- current repository and tracked remote state before making push, branch, or “already synced” claims
 
 If the source truth is not read first, the artifact is not ready to assert governed truth.
+
+### Repo Truth Beats External Memory
+
+External agent memory files, local scratch notes, and tool-specific conversation summaries are convenience aids only.
+
+They are not canonical CVF truth.
+
+When they disagree with repository state, tracked remote state, handoff, tracker, or closure docs, the canonical order is:
+
+1. repository + tracked remote truth
+2. canonical continuity docs inside the repo
+3. external memory or private notes
+
+Never promote external memory into governed truth without reconciling it against the repo first.
 
 ### No Summary Substitution for Typed Evidence
 

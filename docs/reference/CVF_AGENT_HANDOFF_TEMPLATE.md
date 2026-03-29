@@ -1,5 +1,7 @@
 # CVF Agent Handoff Template
 
+Memory class: POINTER_RECORD
+
 Status: canonical handoff template for pause, session stop, and agent-to-agent transfer.
 
 ## Purpose
@@ -41,10 +43,12 @@ Do not use this template for:
 Every handoff must be truthful about:
 
 - latest completed commit
+- latest pushed remote commit when the branch tracks a remote
 - whether the working tree is clean or dirty
 - what is actually implemented vs merely planned
 - what remains out of scope
 - what the next governed move is
+- whether any external agent memory was used only as convenience rather than canonical truth
 
 Never write a handoff that:
 
@@ -58,6 +62,7 @@ Every handoff should include:
 
 - current repo state
 - latest completed commit
+- latest pushed remote commit / tracked remote truth when available
 - canonical docs the next agent must read first
 - the minimal phase-bounded context the next worker should load first
 - current tranche truth
@@ -74,6 +79,8 @@ Every handoff should include:
 Handoff context:
 - Repo state: <clean | dirty>
 - Latest completed commit: `<sha> <message>`
+- Latest pushed remote commit: `<remote> @ <sha>` | `<none>`
+- External agent memory files: `<non-canonical convenience only | not used>`
 
 Read these first:
 - `<canonical doc path 1>`
@@ -140,10 +147,11 @@ Do not:
 Prefer this shape:
 
 1. start with repo truth
-2. point to canonical docs
-3. state the active tranche truth in one short block
-4. state the next governed move
-5. end with clear prohibitions against scope drift or overclaiming
+2. state tracked remote truth if available
+3. point to canonical docs
+4. state the active tranche truth in one short block
+5. state the next governed move
+6. end with clear prohibitions against scope drift or overclaiming
 
 ## Current Canonical Example
 

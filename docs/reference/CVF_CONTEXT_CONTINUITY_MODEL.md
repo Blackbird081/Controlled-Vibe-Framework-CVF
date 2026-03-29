@@ -31,6 +31,18 @@ The CVF model avoids both problems:
 - handoff extracts the truthful bounded state needed at a transition
 - context loading keeps each phase focused on only the material inputs it actually needs
 
+## Canonical Truth Precedence
+
+When continuity is resumed, treat truth sources in this order:
+
+1. repository state and tracked remote state
+2. canonical continuity artifacts inside the repo such as handoff, tracker, closure review, and sync notes
+3. external agent memory files, scratch notes, and tool-specific summaries
+
+External memory outside the repo is non-canonical convenience only.
+
+It may help navigation, but it must not override repo truth.
+
 ## Operational Principle
 
 In CVF, handoff is not only work transfer.
@@ -49,6 +61,7 @@ This means every governed handoff should help the next worker answer:
 - do treat handoff as a governed compression layer between one phase and the next
 - do not load whole histories by default when a bounded handoff plus canonical references is enough
 - do preserve the line between durable memory, transition summary, and active working context
+- do reconcile external memory against repo truth before treating it as continuation input
 
 ## Relationship To GC-020
 

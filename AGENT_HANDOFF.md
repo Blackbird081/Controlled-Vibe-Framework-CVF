@@ -2,12 +2,15 @@
 
 > Branch: `cvf-next`
 > Last push: `W12-T1 CLOSED DELIVERED — Agent Definition Boundary Convergence → cvf-next`
+> Remote tracking: `origin/cvf-next @ 9a05c0f1`
 > State: **W12-T1 CLOSED DELIVERED** — AgentDefinitionBoundaryContract canonical; CPF 2146 tests (+36); all merge map surfaces SUBSTANTIALLY DELIVERED; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.1-W10T1`)
 
 ---
 
 ## Current State
+
+- External agent memory files: non-canonical convenience only; resume from repo truth first
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **2146 tests, 0 failures**

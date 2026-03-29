@@ -2940,3 +2940,26 @@ Utility and guard:
   - Normalized stale CPF fixtures to current contract truth for gateway auth, PII detection, route-match, intake, design, and barrel role exports.
   - Added missing `declarationHash` to W9-T1 convergence declaration return surface and removed impossible literal-guard warning in boardroom consumer pipeline.
   - Current synchronized CPF suite count is `2144`, and current whitepaper/tracker/handoff readouts were aligned to that live result.
+
+---
+
+## Batch 314 — W13-T1 CP1: AgentDefinitionCapabilityBatchContract (2026-03-30)
+
+- Tranche: W13-T1 — Agent Definition Capability Batch Contract
+- Control point: CP1 — Full Lane (GC-019)
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files added:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.definition.capability.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.definition.capability.batch.contract.test.ts`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (W13-T1 export block added)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (W13-T1 partition entry added)
+- Tests executed:
+  - `npm run check` (CPF) → PASS
+  - `npm test` (CPF) → PASS (2170 tests, 0 failures)
+- Notes:
+  - New contract: aggregates `CapabilityValidationResult[]` → `AgentDefinitionCapabilityBatch`
+  - Counts by `CapabilityValidationStatus` (WITHIN_SCOPE / OUT_OF_SCOPE / UNDECLARED_AGENT) + `dominantStatus` with tie-break (WITHIN_SCOPE > OUT_OF_SCOPE > UNDECLARED_AGENT); "EMPTY" for empty batch
+  - Deterministic `batchHash` + distinct `batchId`; `now` dependency injection
+  - 26 new tests across 6 describe groups; no additions to `index.test.ts` (GC-023 compliant)
+  - CPF: 2144 → 2170 (+26); delta: `docs/baselines/CVF_W13_T1_CP1_AGENT_DEF_CAP_BATCH_DELTA_2026-03-30.md`

@@ -754,3 +754,14 @@ export type {
   AgentDefinitionAudit,
   AgentDefinitionBoundaryContractDependencies,
 } from "./agent.definition.boundary.contract";
+
+// W13-T1 CP1 — Agent Definition Capability Batch Contract
+export {
+  AgentDefinitionCapabilityBatchContract,
+  createAgentDefinitionCapabilityBatchContract,
+} from "./agent.definition.capability.batch.contract";
+export type {
+  CapabilityBatchDominantStatus,
+  AgentDefinitionCapabilityBatch,
+  AgentDefinitionCapabilityBatchContractDependencies,
+} from "./agent.definition.capability.batch.contract";

@@ -1618,6 +1618,17 @@
         "AgentDefinitionBoundaryContract",
         "createAgentDefinitionBoundaryContract"
       ]
+    },
+    {
+      "scope": "CPF Agent Definition Capability Batch (W13-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.definition.capability.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AgentDefinitionCapabilityBatchContract",
+        "createAgentDefinitionCapabilityBatchContract"
+      ]
     }
   ]
 }

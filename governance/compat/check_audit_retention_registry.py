@@ -31,20 +31,28 @@ REQUIRED_CLASS_IDS = {
     "RETAIN_EVIDENCE_AUDIT",
     "SAFE_TO_ARCHIVE_AUDIT",
 }
-RETENTION_AFFECTING_PREFIXES = (
+RETENTION_ALWAYS_FULL_PREFIXES = (
+    "docs/audits/",
+)
+RETENTION_ALWAYS_FULL_EXACT = {
+    "governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json",
+    "governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json",
+    "governance/compat/check_audit_retention_registry.py",
+    "scripts/cvf_active_archive.py",
+}
+RETENTION_REFERENCE_CANDIDATE_PREFIXES = (
     "docs/audits/",
     "docs/reference/",
     "docs/roadmaps/",
     "docs/baselines/",
 )
-RETENTION_AFFECTING_EXACT = {
+RETENTION_REFERENCE_CANDIDATE_EXACT = {
     "AGENT_HANDOFF.md",
     "docs/INDEX.md",
     "docs/CVF_CORE_KNOWLEDGE_BASE.md",
     "docs/CVF_INCREMENTAL_TEST_LOG.md",
-    "governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json",
-    "governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json",
 }
+RETENTION_TARGET_MARKERS = ("docs/audits/", "docs/audits/archive/")
 
 
 def _load_archive_module():
@@ -184,14 +192,55 @@ def _merge_changed_maps(*maps: dict[str, set[str]]) -> dict[str, list[str]]:
     return {path: sorted(statuses) for path, statuses in sorted(merged.items())}
 
 
-def _retention_affecting_changes_present(changed_paths: dict[str, list[str]]) -> bool:
+def _current_file_mentions(path: str, markers: tuple[str, ...]) -> bool:
+    candidate = REPO_ROOT / Path(path)
+    if not candidate.exists() or candidate.is_dir():
+        return False
+    try:
+        text = candidate.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False
+    return any(marker in text for marker in markers)
+
+
+def _diff_mentions(path: str, base: str, head: str, markers: tuple[str, ...]) -> bool:
+    diff_commands = [
+        ["diff", "--unified=0", f"{base}..{head}", "--", path],
+        ["diff", "--unified=0", "--", path],
+        ["diff", "--cached", "--unified=0", "--", path],
+    ]
+    for args in diff_commands:
+        code, out, _ = _run_git(args)
+        if code not in (0, 1):
+            continue
+        if out and any(marker in out for marker in markers):
+            return True
+    return False
+
+
+def _can_use_diff_range(base: str, head: str) -> bool:
+    return bool(base and head and base != "N/A" and head != "N/A")
+
+
+def _retention_affecting_changes_present(
+    changed_paths: dict[str, list[str]],
+    base: str,
+    head: str,
+) -> bool:
     for path, statuses in changed_paths.items():
         if all(status.startswith("D") for status in statuses):
             continue
-        if path in RETENTION_AFFECTING_EXACT:
+        if path in RETENTION_ALWAYS_FULL_EXACT:
             return True
-        if any(path.startswith(prefix) for prefix in RETENTION_AFFECTING_PREFIXES):
+        if any(path.startswith(prefix) for prefix in RETENTION_ALWAYS_FULL_PREFIXES):
             return True
+        if path in RETENTION_REFERENCE_CANDIDATE_EXACT or any(
+            path.startswith(prefix) for prefix in RETENTION_REFERENCE_CANDIDATE_PREFIXES
+        ):
+            if _diff_mentions(path, base, head, RETENTION_TARGET_MARKERS):
+                return True
+            if not _can_use_diff_range(base, head) and _current_file_mentions(path, RETENTION_TARGET_MARKERS):
+                return True
     return False
 
 
@@ -389,7 +438,7 @@ def build_report(
                 }
             )
 
-    retention_affecting = _retention_affecting_changes_present(changed_paths)
+    retention_affecting = _retention_affecting_changes_present(changed_paths, resolved_base, resolved_head)
     dynamic_scan_mode = "full" if retention_affecting else "skipped_no_retention_affecting_changes"
     dynamic_counts: dict[str, int] | dict[str, str]
     missing_registry_paths: list[str] = []

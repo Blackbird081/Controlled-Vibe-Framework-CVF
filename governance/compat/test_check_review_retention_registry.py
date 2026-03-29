@@ -156,6 +156,15 @@ class ReviewRetentionRegistryTests(unittest.TestCase):
         self.assertEqual(report["dynamicScanMode"], "skipped_no_retention_affecting_changes")
         self.assertEqual(report["dynamicCounts"]["status"], "skipped")
 
+    def test_build_report_skips_dynamic_scan_for_handoff_change_without_review_refs(self) -> None:
+        self._write_registry([])
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            report = MODULE.build_report(changed_paths={"AGENT_HANDOFF.md": ["M"]})
+
+        self.assertTrue(report["compliant"])
+        self.assertEqual(report["dynamicScanMode"], "skipped_no_retention_affecting_changes")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -160,7 +160,7 @@ Memory class: POINTER_RECORD
 | `W12-T1` Agent Definition Boundary Convergence (REALIZATION class) | `CLOSED DELIVERED 2026-03-29 — AgentDefinitionBoundaryContract canonical; current CPF suite 2144 tests, 0 failures; all 9 pass conditions satisfied; last PARTIAL item in merge map closed` |
 | `W13-T1` Agent Definition Capability Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — AgentDefinitionCapabilityBatchContract canonical; CPF 2170 tests (+26); all 7 pass conditions satisfied; tranche complete` |
 | `W14-T1` Agent Scope Resolution Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — AgentScopeResolutionBatchContract canonical; CPF 2196 tests (+26); all 7 pass conditions satisfied; tranche complete` |
-| `W15-T1` Agent Definition Audit Batch Contract (REALIZATION class) | `GC-018 AUTHORIZED 2026-03-30 — AgentDefinitionAuditBatchContract; depth audit 9.0/10 CONTINUE; CP1 Full Lane next` |
+| `W15-T1` Agent Definition Audit Batch Contract (REALIZATION class) | `CP1 DONE 2026-03-30 — AgentDefinitionAuditBatchContract canonical; CPF 2222 (+26); all 7 pass conditions satisfied; CP2 closure next` |
 
 ---
 

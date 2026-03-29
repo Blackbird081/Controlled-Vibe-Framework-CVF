@@ -776,3 +776,13 @@ export type {
   AgentScopeResolutionBatch,
   AgentScopeResolutionBatchContractDependencies,
 } from "./agent.scope.resolution.batch.contract";
+
+// W15-T1 CP1 — Agent Definition Audit Batch Contract
+export {
+  AgentDefinitionAuditBatchContract,
+  createAgentDefinitionAuditBatchContract,
+} from "./agent.definition.audit.batch.contract";
+export type {
+  AgentDefinitionAuditBatch,
+  AgentDefinitionAuditBatchContractDependencies,
+} from "./agent.definition.audit.batch.contract";

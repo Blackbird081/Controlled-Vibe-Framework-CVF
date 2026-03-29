@@ -2986,3 +2986,25 @@ Utility and guard:
   - Deterministic `batchHash` + distinct `batchId`; `now` dependency injection
   - 26 new tests across 6 describe groups; no additions to `index.test.ts` (GC-023 compliant)
   - CPF: 2170 → 2196 (+26); delta: `docs/baselines/CVF_W14_T1_CP1_AGENT_SCOPE_RESOLUTION_BATCH_DELTA_2026-03-30.md`
+
+## Batch 316 — W15-T1 CP1: AgentDefinitionAuditBatchContract (2026-03-30)
+
+- Tranche: W15-T1 — Agent Definition Audit Batch Contract
+- Control point: CP1 — Full Lane (GC-019)
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files added:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.definition.audit.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.definition.audit.batch.contract.test.ts`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (W15-T1 export block added)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (W15-T1 partition entry added)
+- Tests executed:
+  - `npm run check` (CPF) → PASS
+  - `npm test` (CPF) → PASS (2222 tests, 0 failures)
+- Notes:
+  - New contract: aggregates `AgentDefinitionAudit[]` → `AgentDefinitionAuditBatch`
+  - No status enum — aggregate by `totalAgentsAcrossAudits` (sum of audit.totalAgents); no dominant status
+  - Deterministic `batchHash` + distinct `batchId`; `now` dependency injection
+  - 26 new tests across 6 describe groups; no additions to `index.test.ts` (GC-024 compliant)
+  - CPF: 2196 → 2222 (+26); delta: `docs/baselines/CVF_W15_T1_CP1_AGENT_DEF_AUDIT_BATCH_DELTA_2026-03-30.md`
+  - Closes the final batch gap in the W12-T1 agent definition family (W12→W13→W14→W15 complete)

@@ -1574,6 +1574,17 @@
         "ReputationSignalContract",
         "createReputationSignalContract"
       ]
+    },
+    {
+      "scope": "LPF Task Marketplace (W10-T1 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/task.marketplace.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TaskMarketplaceContract",
+        "createTaskMarketplaceContract"
+      ]
     }
   ]
 }

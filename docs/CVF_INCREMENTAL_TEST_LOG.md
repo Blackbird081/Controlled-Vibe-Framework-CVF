@@ -2888,3 +2888,14 @@ Utility and guard:
 - Notes:
   - LPF: 1333→1376 (+43). CP1 Full Lane (GC-019). GC-023 compliant (dedicated test file).
   - New LPF surface: ReputationSignalContract. Composites TruthScore (W6-T8) + FeedbackLedger (W4-T1) + EvaluationResult (W4-T3) + GovernanceSignal (W4-T4) as FIXED_INPUT. compositeReputationScore 0–100; class TRUSTED/RELIABLE/PROVISIONAL/UNTRUSTED. Four scoring dimensions: truth(0–40)+feedback(0–35)+evaluation(0–15)+governance(0–10). reputationHash deterministic; signalId≠reputationHash. All class boundary values tested.
+
+## Batch W10-T1-CP2 — 2026-03-29
+
+- Tranche: W10-T1 CP2 (Full Lane GC-019)
+- Test files:
+  - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/task.marketplace.contract.test.ts` (42 tests)
+- Tests executed:
+  - `npx vitest run` (LPF task marketplace test) → PASS (42 tests, 0 failures)
+- Notes:
+  - LPF: 1376→1418 (+42). CP2 Full Lane (GC-019). GC-023 compliant (dedicated test file).
+  - New LPF surface: TaskMarketplaceContract. Routes TaskAllocationRequest → TaskAllocationRecord using ReputationSignal (CP1 FIXED_INPUT) + declaredCapacity. Six allocation rules: TRUSTED(any)→ASSIGN, RELIABLE(≥0.3)→ASSIGN, RELIABLE(<0.3)→DEFER, PROVISIONAL(≥0.5)→DEFER, PROVISIONAL(<0.5)→REJECT, UNTRUSTED(any)→REJECT. Priority ceiling: TRUSTED→critical, RELIABLE→high, PROVISIONAL→medium, UNTRUSTED→none. allocationHash deterministic; recordId≠allocationHash. All six allocation cases tested including exact boundary values (0.3, 0.5).

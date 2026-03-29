@@ -560,6 +560,20 @@ export type {
   ReputationSignalContractDependencies,
 } from "./reputation.signal.contract";
 
+// W10-T1 CP2 — Task Marketplace Contract
+export {
+  TaskMarketplaceContract,
+  createTaskMarketplaceContract,
+} from "./task.marketplace.contract";
+export type {
+  TaskPriority,
+  PriorityCeiling,
+  AllocationDecision,
+  TaskAllocationRequest,
+  TaskAllocationRecord,
+  TaskMarketplaceContractDependencies,
+} from "./task.marketplace.contract";
+
 export const LEARNING_PLANE_FOUNDATION_COORDINATION = {
   executionClass: "realization-first learning-plane slice",
   tranche: "W4-T1",

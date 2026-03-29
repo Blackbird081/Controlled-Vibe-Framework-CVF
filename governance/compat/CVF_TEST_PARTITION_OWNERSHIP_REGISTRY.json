@@ -1585,6 +1585,28 @@
         "TaskMarketplaceContract",
         "createTaskMarketplaceContract"
       ]
+    },
+    {
+      "scope": "LPF Reputation Signal Batch (W10-T1 CP3)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/reputation.signal.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ReputationSignalBatchContract",
+        "createReputationSignalBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF Task Marketplace Batch (W10-T1 CP3)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/task.marketplace.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TaskMarketplaceBatchContract",
+        "createTaskMarketplaceBatchContract"
+      ]
     }
   ]
 }

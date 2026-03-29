@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W10-T1 CP2 DONE — TaskMarketplaceContract → cvf-next`
-> State: **W10-T1 CP2 DONE** — LPF 1418 tests (+42); ASSIGN/DEFER/REJECT routing; priority ceiling critical/high/medium/none; next: W10-T1 CP3 batch contracts
+> Last push: `W10-T1 CP3 DONE — Batch contracts → cvf-next`
+> State: **W10-T1 CP3 DONE** — LPF 1465 tests (+47); ReputationSignalBatch + TaskMarketplaceBatch complete; next: W10-T1 CP4 Tranche Closure Review
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
 
 ---
@@ -13,13 +13,13 @@
 - CPF (Control Plane Foundation): **2110 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
-- LPF (Learning Plane Foundation): **1418 tests, 0 failures**
+- LPF (Learning Plane Foundation): **1465 tests, 0 failures**
 
 ### Last Tranches Closed
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
-| W10-T1 | Reputation Signal and Task Marketplace Learning Expansion (Candidate D) | CP2 DONE 2026-03-29 — TaskMarketplaceContract canonical; LPF 1418 tests (+42) |
+| W10-T1 | Reputation Signal and Task Marketplace Learning Expansion (Candidate D) | CP3 DONE 2026-03-29 — batch contracts canonical; LPF 1465 tests (+47) |
 | W9-T1 | RAG and Context Engine Convergence (Candidate B) | CLOSED DELIVERED 2026-03-29 — all 7 pass conditions satisfied |
 | W8-T2 | Candidate C Performance Benchmark Harness + Acceptance-Policy Baseline | CLOSED DELIVERED 2026-03-29 |
 | W8-T1 | Trust Isolation and Model Gateway Boundary Convergence | CLOSED DELIVERED 2026-03-29 |
@@ -37,15 +37,15 @@
 
 ## Immediate Next Action Required
 
-**W10-T1 CP2 DONE. Proceed to CP3 Fast Lane — ReputationSignal batch + TaskMarketplace batch contracts.**
+**W10-T1 CP3 DONE. Proceed to CP4 — Tranche Closure Review.**
 
 Current guidance:
-- **W10-T1 CP2 DONE** — TaskMarketplaceContract canonical; LPF 1418 tests (+42, 0 failures)
-- CP1 contract: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/reputation.signal.contract.ts`
-- CP2 contract: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/task.marketplace.contract.ts`
-- CP2 routing: TRUSTED(any)→ASSIGN, RELIABLE(≥0.3)→ASSIGN, RELIABLE(<0.3)→DEFER, PROVISIONAL(≥0.5)→DEFER, PROVISIONAL(<0.5)→REJECT, UNTRUSTED(any)→REJECT
+- **W10-T1 CP3 DONE** — batch contracts canonical; LPF 1465 tests (+47, 0 failures)
+- CP1: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/reputation.signal.contract.ts`
+- CP2: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/task.marketplace.contract.ts`
+- CP3: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/reputation.signal.batch.contract.ts` + `task.marketplace.batch.contract.ts`
 - Execution plan: `docs/roadmaps/CVF_W10_T1_REPUTATION_TASK_MARKETPLACE_EXECUTION_PLAN_2026-03-29.md`
-- **Next**: W10-T1 CP3 Fast Lane — `reputation.signal.batch.contract.ts` + `task.marketplace.batch.contract.ts` in LPF
+- **Next**: W10-T1 CP4 — Tranche Closure Review + GC-026 closed sync + tracker/handoff CLOSED DELIVERED update
 - official planning baseline for post-W7 upgrades: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

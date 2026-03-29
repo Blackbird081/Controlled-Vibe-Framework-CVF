@@ -574,6 +574,26 @@ export type {
   TaskMarketplaceContractDependencies,
 } from "./task.marketplace.contract";
 
+// W10-T1 CP3 — Reputation Signal Batch Contract
+export {
+  ReputationSignalBatchContract,
+  createReputationSignalBatchContract,
+} from "./reputation.signal.batch.contract";
+export type {
+  ReputationSignalBatch,
+  ReputationSignalBatchContractDependencies,
+} from "./reputation.signal.batch.contract";
+
+// W10-T1 CP3 — Task Marketplace Batch Contract
+export {
+  TaskMarketplaceBatchContract,
+  createTaskMarketplaceBatchContract,
+} from "./task.marketplace.batch.contract";
+export type {
+  TaskMarketplaceBatch,
+  TaskMarketplaceBatchContractDependencies,
+} from "./task.marketplace.batch.contract";
+
 export const LEARNING_PLANE_FOUNDATION_COORDINATION = {
   executionClass: "realization-first learning-plane slice",
   tranche: "W4-T1",

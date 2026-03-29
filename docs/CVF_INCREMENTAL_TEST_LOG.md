@@ -2899,3 +2899,16 @@ Utility and guard:
 - Notes:
   - LPF: 1376→1418 (+42). CP2 Full Lane (GC-019). GC-023 compliant (dedicated test file).
   - New LPF surface: TaskMarketplaceContract. Routes TaskAllocationRequest → TaskAllocationRecord using ReputationSignal (CP1 FIXED_INPUT) + declaredCapacity. Six allocation rules: TRUSTED(any)→ASSIGN, RELIABLE(≥0.3)→ASSIGN, RELIABLE(<0.3)→DEFER, PROVISIONAL(≥0.5)→DEFER, PROVISIONAL(<0.5)→REJECT, UNTRUSTED(any)→REJECT. Priority ceiling: TRUSTED→critical, RELIABLE→high, PROVISIONAL→medium, UNTRUSTED→none. allocationHash deterministic; recordId≠allocationHash. All six allocation cases tested including exact boundary values (0.3, 0.5).
+
+## Batch W10-T1-CP3 — 2026-03-29
+
+- Tranche: W10-T1 CP3 (Fast Lane GC-021)
+- Test files:
+  - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/reputation.signal.batch.contract.test.ts` (23 tests)
+  - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/task.marketplace.batch.contract.test.ts` (24 tests)
+- Tests executed:
+  - `npx vitest run` (LPF batch contract tests) → PASS (47 tests, 0 failures)
+- Notes:
+  - LPF: 1418→1465 (+47). CP3 Fast Lane (GC-021). GC-023 compliant (2 dedicated test files).
+  - New LPF surface: ReputationSignalBatchContract. Aggregates ReputationSignal[] → ReputationSignalBatch (trustedCount, reliableCount, provisionalCount, untrustedCount, averageScore). averageScore=0 for empty batch; rounded for non-empty. batchId≠batchHash.
+  - New LPF surface: TaskMarketplaceBatchContract. Aggregates TaskAllocationRecord[] → TaskMarketplaceBatch (assignCount, deferCount, rejectCount, dominantPriorityCeiling). dominantPriorityCeiling derived from ASSIGN records only; "none" if no ASSIGN records. batchId≠batchHash.

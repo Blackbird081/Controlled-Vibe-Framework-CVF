@@ -658,3 +658,24 @@ function buildLineageList(): string[] {
     CONTROL_PLANE_FOUNDATION_COORDINATION.deterministicReproducibility,
   ];
 }
+
+// W8-T1 CP1 — Trust/Isolation Boundary Contract
+export {
+  TrustIsolationBoundaryContract,
+  createTrustIsolationBoundaryContract,
+} from "./trust.isolation.boundary.contract";
+export type {
+  TrustDomainClass,
+  IsolationScopeClass,
+  IsolationEnforcementMode,
+  TrustPropagationMode,
+  TrustBoundaryStatus,
+  RiskLevel,
+  TrustDomainCriteria,
+  TrustDomainDeclaration,
+  IsolationScopeRequest,
+  IsolationScopeResult,
+  TrustPropagationRequest,
+  TrustPropagationDecision,
+  TrustIsolationBoundaryContractDependencies,
+} from "./trust.isolation.boundary.contract";

@@ -19,7 +19,7 @@ Memory class: POINTER_RECORD
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
-| Current active tranche | `NONE — all post-W7 upgrade candidates delivered (W8-T1, W8-T2, W9-T1, W10-T1); W10-T1 CLOSED DELIVERED 2026-03-29; await W11-T1 GC-018` |
+| Current active tranche | `W11-T1 — GC-018 AUTHORIZED 2026-03-29; Whitepaper Update v3.1-W10T1 (DOCUMENTATION class); ready for CP1 Fast Lane` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28)` |
 
 ---
@@ -155,6 +155,7 @@ Memory class: POINTER_RECORD
 | `W8-T2` performance benchmark harness (Candidate C, parallel) | `CLOSED DELIVERED — benchmark harness, acceptance-policy baseline, first evidence batch committed; thresholds remain PROPOSAL ONLY` |
 | `W9-T1` RAG and Context Engine Convergence (Candidate B) | `CLOSED DELIVERED 2026-03-29 — 27 surfaces classified; RAG retrieval authority + deterministic packaging API canonical; CPF 2110 tests (+83); all 7 pass conditions satisfied` |
 | `W10-T1` Reputation Signal and Task Marketplace Learning Expansion (Candidate D) | `CLOSED DELIVERED 2026-03-29 — 4 contracts canonical (ReputationSignal + TaskMarketplace + 2 batches); LPF 1333→1465 (+132); all 7 pass conditions satisfied` |
+| `W11-T1` Whitepaper Update v3.1-W10T1 (DOCUMENTATION class) | `GC-018 AUTHORIZED 2026-03-29 — execution plan committed; CP1 Fast Lane pending` |
 
 ---
 
@@ -189,5 +190,5 @@ Memory class: POINTER_RECORD
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W10_T1_CLOSED_DELIVERED_2026-03-29.md`
 - Current closure anchor: `docs/reviews/CVF_W10_T1_TRANCHE_CLOSURE_REVIEW_2026-03-29.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W10_T1_REPUTATION_TASK_MARKETPLACE_2026-03-29.md` (W10-T1 AUTHORIZED)
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W11_T1_WHITEPAPER_UPDATE_V31_2026-03-29.md` (W11-T1 AUTHORIZED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

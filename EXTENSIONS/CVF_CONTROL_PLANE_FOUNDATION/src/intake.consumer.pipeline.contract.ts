@@ -70,7 +70,7 @@ export class IntakeConsumerPipelineContract {
 
     // Build warnings
     const warnings: string[] = [];
-    if (!domain || domain === "unknown" || domain === "general") {
+    if (domain === "general") {
       warnings.push("WARNING_NO_DOMAIN");
     }
     if (chunkCount === 0) {

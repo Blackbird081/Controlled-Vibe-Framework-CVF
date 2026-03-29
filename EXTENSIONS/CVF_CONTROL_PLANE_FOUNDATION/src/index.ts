@@ -313,7 +313,9 @@ export type {
   MemoryBoundary,
   ForkedSession,
 } from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/context_segmentation/context.types";
-export { AgentRole } from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/role_transition_guard/role.types";
+export {
+  AgentRole as ControlledIntelligenceAgentRole,
+} from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/role_transition_guard/role.types";
 export {
   ReasoningMode,
   resolveTemperature,

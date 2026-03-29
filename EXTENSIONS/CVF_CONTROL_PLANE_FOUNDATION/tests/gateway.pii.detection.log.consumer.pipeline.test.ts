@@ -10,34 +10,45 @@ const FIXED_NOW = "2026-03-27T10:00:00.000Z";
 // Helper: create test PII detection result
 function makePIIResult(overrides: Partial<GatewayPIIDetectionResult> = {}): GatewayPIIDetectionResult {
   return {
-    detectionId: overrides.detectionId ?? "detection-1",
-    scannedAt: overrides.scannedAt ?? FIXED_NOW,
+    resultId: overrides.resultId ?? "detection-result-1",
+    detectedAt: overrides.detectedAt ?? FIXED_NOW,
+    tenantId: overrides.tenantId ?? "tenant-1",
     piiDetected: overrides.piiDetected ?? false,
+    piiTypes: overrides.piiTypes ?? [],
     matches: overrides.matches ?? [],
+    redactedSignal: overrides.redactedSignal ?? "clean signal",
     detectionHash: overrides.detectionHash ?? "hash-1",
   };
 }
 
-const cleanResult = makePIIResult({ detectionId: "clean-1", piiDetected: false, matches: [] });
+const cleanResult = makePIIResult({ resultId: "clean-1", piiDetected: false, piiTypes: [], matches: [] });
 const ssnResult = makePIIResult({
-  detectionId: "ssn-1",
+  resultId: "ssn-1",
   piiDetected: true,
-  matches: [{ piiType: "SSN", matchCount: 1, confidence: 0.95 }],
+  piiTypes: ["SSN"],
+  matches: [{ piiType: "SSN", matchCount: 1 }],
+  redactedSignal: "[PII_SSN]",
 });
 const emailResult = makePIIResult({
-  detectionId: "email-1",
+  resultId: "email-1",
   piiDetected: true,
-  matches: [{ piiType: "EMAIL", matchCount: 2, confidence: 0.9 }],
+  piiTypes: ["EMAIL"],
+  matches: [{ piiType: "EMAIL", matchCount: 2 }],
+  redactedSignal: "[PII_EMAIL] [PII_EMAIL]",
 });
 const phoneResult = makePIIResult({
-  detectionId: "phone-1",
+  resultId: "phone-1",
   piiDetected: true,
-  matches: [{ piiType: "PHONE", matchCount: 1, confidence: 0.85 }],
+  piiTypes: ["PHONE"],
+  matches: [{ piiType: "PHONE", matchCount: 1 }],
+  redactedSignal: "[PII_PHONE]",
 });
 const creditCardResult = makePIIResult({
-  detectionId: "cc-1",
+  resultId: "cc-1",
   piiDetected: true,
-  matches: [{ piiType: "CREDIT_CARD", matchCount: 1, confidence: 0.98 }],
+  piiTypes: ["CREDIT_CARD"],
+  matches: [{ piiType: "CREDIT_CARD", matchCount: 1 }],
+  redactedSignal: "[PII_CC]",
 });
 
 describe("GatewayPIIDetectionLogConsumerPipelineContract", () => {

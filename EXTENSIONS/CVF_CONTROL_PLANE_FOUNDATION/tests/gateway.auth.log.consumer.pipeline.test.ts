@@ -10,19 +10,20 @@ const FIXED_NOW = "2026-03-27T10:00:00.000Z";
 // Helper: create test auth result
 function makeAuthResult(overrides: Partial<GatewayAuthResult> = {}): GatewayAuthResult {
   return {
-    authId: overrides.authId ?? "auth-1",
-    requestedAt: overrides.requestedAt ?? FIXED_NOW,
+    resultId: overrides.resultId ?? "auth-result-1",
+    evaluatedAt: overrides.evaluatedAt ?? FIXED_NOW,
+    tenantId: overrides.tenantId ?? "tenant-1",
+    authenticated: overrides.authenticated ?? true,
     authStatus: overrides.authStatus ?? "AUTHENTICATED",
-    userId: overrides.userId ?? "user-1",
-    sessionId: overrides.sessionId ?? "session-1",
+    scopeGranted: overrides.scopeGranted ?? ["gateway:invoke"],
     authHash: overrides.authHash ?? "hash-1",
   };
 }
 
-const authenticatedResult = makeAuthResult({ authId: "auth-authenticated", authStatus: "AUTHENTICATED" });
-const deniedResult = makeAuthResult({ authId: "auth-denied", authStatus: "DENIED" });
-const expiredResult = makeAuthResult({ authId: "auth-expired", authStatus: "EXPIRED" });
-const revokedResult = makeAuthResult({ authId: "auth-revoked", authStatus: "REVOKED" });
+const authenticatedResult = makeAuthResult({ resultId: "auth-authenticated", authStatus: "AUTHENTICATED", authenticated: true });
+const deniedResult = makeAuthResult({ resultId: "auth-denied", authStatus: "DENIED", authenticated: false, scopeGranted: [] });
+const expiredResult = makeAuthResult({ resultId: "auth-expired", authStatus: "EXPIRED", authenticated: false, scopeGranted: [] });
+const revokedResult = makeAuthResult({ resultId: "auth-revoked", authStatus: "REVOKED", authenticated: false, scopeGranted: [] });
 
 describe("GatewayAuthLogConsumerPipelineContract", () => {
   const contract = new GatewayAuthLogConsumerPipelineContract({ now: () => FIXED_NOW });

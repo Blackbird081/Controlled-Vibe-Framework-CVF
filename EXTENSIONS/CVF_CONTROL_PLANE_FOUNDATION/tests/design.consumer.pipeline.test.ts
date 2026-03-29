@@ -4,13 +4,13 @@ import {
   createDesignConsumerPipelineContract,
 } from "../src/design.consumer.pipeline.contract";
 import type { ControlPlaneIntakeResult } from "../src/intake.contract";
-import type { ValidatedIntent } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/types";
+import type { Domain, ValidatedIntent } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/types";
 
 const FIXED_NOW = "2026-03-27T10:00:00.000Z";
 
 // Helper: create test intake result
 function makeIntakeResult(options: {
-  domain?: string;
+  domain?: Domain;
   action?: string;
   valid?: boolean;
   hasChunks?: boolean;
@@ -35,12 +35,17 @@ function makeIntakeResult(options: {
     intent: {
       domain,
       action,
+      object: "artifact",
+      limits: {},
+      requireApproval: domain === "finance",
+      confidence: valid ? 0.9 : 0.4,
       rawVibe: `${action} for ${domain}`,
-      constraints: [],
     },
     rules: [],
     constraints: [],
-    confidence: valid ? 0.9 : 0.4,
+    timestamp: Date.parse(FIXED_NOW),
+    pipelineVersion: "test-pipeline",
+    errors: valid ? [] : ["INVALID_INTENT"],
   };
 
   return {
@@ -48,14 +53,33 @@ function makeIntakeResult(options: {
     createdAt: FIXED_NOW,
     consumerId,
     intent,
+    retrieval: {
+      query: `${action} ${domain}`,
+      chunkCount: chunks.length,
+      totalCandidates: chunks.length,
+      retrievalTimeMs: 5,
+      tiersSearched: ["T1_DOCTRINE"],
+      chunks: chunks.map((chunk, index) => ({
+        id: `chunk-${index}`,
+        source: chunk.source,
+        content: chunk.content,
+        relevanceScore: 0.8,
+      })),
+    },
     packagedContext: {
-      chunks,
+      chunks: chunks.map((chunk, index) => ({
+        id: `chunk-${index}`,
+        source: chunk.source,
+        content: chunk.content,
+        relevanceScore: 0.8,
+      })),
       totalTokens: chunks.reduce((sum, c) => sum + c.tokens, 0),
-      frozenAt: FIXED_NOW,
+      tokenBudget: 256,
+      truncated: false,
       snapshotHash: "hash-1",
     },
     warnings,
-  } as ControlPlaneIntakeResult;
+  };
 }
 
 const generalIntake = makeIntakeResult({ domain: "general", action: "build" });

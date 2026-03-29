@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-03-29` (W12-T1 CLOSED DELIVERED — Agent Definition Boundary Convergence; CPF 2146 / EPF 1123 / GEF 625 / LPF 1465 tests, 0 failures; AgentDefinitionBoundaryContract canonical; all merge map surfaces SUBSTANTIALLY DELIVERED; no active tranche)
+> Last refreshed: `2026-03-29` (W12-T1 CLOSED DELIVERED — Agent Definition Boundary Convergence; whitepaper synchronized to `v3.2-W12T1`; CPF 2144 / EPF 1123 / GEF 625 / LPF 1465 tests, 0 failures; AgentDefinitionBoundaryContract canonical; all merge map surfaces SUBSTANTIALLY DELIVERED; no active tranche)
 
 ---
 
@@ -14,14 +14,14 @@ Memory class: POINTER_RECORD
 | Scope | Current readout |
 |---|---|
 | Whitepaper target-state | `SUBSTANTIALLY DELIVERED` |
-| Architecture baseline snapshot | `CVF_MASTER_ARCHITECTURE_WHITEPAPER v3.1-W10T1` |
+| Architecture baseline snapshot | `CVF_MASTER_ARCHITECTURE_WHITEPAPER v3.2-W12T1` |
 | Current-cycle restructuring | `DONE` |
-| Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 CLOSED + post-W7 continuation W8-T1 / W8-T2 / W9-T1 / W10-T1 CLOSED + W11-T1 whitepaper update CLOSED` |
+| Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 CLOSED + post-W7 continuation W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 CLOSED + W11-T1 whitepaper update CLOSED` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
-| Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1` ALL CLOSED DELIVERED 2026-03-29; W11-T1 whitepaper update CLOSED DELIVERED 2026-03-29 |
+| Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1` ALL CLOSED DELIVERED 2026-03-29; W11-T1 whitepaper update CLOSED DELIVERED 2026-03-29 |
 | Current active tranche | `NONE — W12-T1 CLOSED DELIVERED 2026-03-29; AgentDefinitionBoundaryContract canonical; all merge map surfaces SUBSTANTIALLY DELIVERED; any further continuation requires a new GC-018 wave decision` |
-| Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 whitepaper updated to v3.1-W10T1 (2026-03-29)` |
+| Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 whitepaper updated to v3.1-W10T1 (2026-03-29); current synchronized baseline is v3.2-W12T1` |
 
 ---
 
@@ -29,12 +29,12 @@ Memory class: POINTER_RECORD
 
 | Area | Whitepaper target | Current state | Status | Next governed move |
 |---|---|---|---|---|
-| Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T30` + `W2-T36` to `W2-T38` closed; ALL CPF consumer pipeline bridges canonically closed — gateway, boardroom, typed context packaging, knowledge ranking, gateway auth, clarification refinement, knowledge query, context build batch, knowledge query batch, retrieval | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
+| Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T30` + `W2-T36` to `W2-T38` closed; ALL CPF consumer pipeline bridges canonically closed — gateway, boardroom, typed context packaging, knowledge ranking, gateway auth, clarification refinement, knowledge query, context build batch, knowledge query batch, retrieval; post-W7 CPF closures delivered through `W8-T1` (TrustIsolation + ModelGateway boundary), `W9-T1` (RAG + Context Engine convergence), and `W12-T1` (AgentDefinitionBoundaryContract); CPF 2144 tests, 0 failures | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Execution Plane | Model Gateway, Command Runtime, MCP Bridge, observer/feedback loop | `W2-T1` to `W2-T29` + `W6-T1` closed; ALL EPF consumer pipeline bridges canonically closed — async runtime, re-intake loop, MCP bridge, audit summary, feedback resolution, streaming/execution status, policy gate, execution pipeline, feedback routing, dispatch, async runtime, streaming execution, aggregator | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Governance Layer | Policy, Trust, Guard Engine, Audit/Consensus, Watchdog | `W3-T1` to `W3-T18` + `W6-T4/T5/T6` closed; ALL GEF consumer pipeline bridges canonically closed — watchdog, audit-signal, consensus, checkpoint-log, checkpoint-reintake-summary, watchdog escalation, watchdog pulse, governance checkpoint, reintake, pattern drift | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
-| Learning Plane | Feedback Ledger, Pattern Insight, Truth Model, Evaluation, Governance feedback, storage, observability | `W4-T1` to `W4-T25` closed; ALL 18 LPF base contracts fully bridged — evaluation engine, truth score, pattern detection, governance signal, re-injection, storage, observability, and all 12 remaining consumer pipeline bridges; 1465 tests, 0 failures | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
+| Learning Plane | Feedback Ledger, Pattern Insight, Truth Model, Evaluation, Governance feedback, storage, observability | `W4-T1` to `W4-T25` closed; ALL 18 LPF base contracts fully bridged — evaluation engine, truth score, pattern detection, governance signal, re-injection, storage, observability, and all 12 remaining consumer pipeline bridges; `W10-T1` added `ReputationSignalContract`, `TaskMarketplaceContract`, and 2 batch contracts; 1465 tests, 0 failures | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | W7 Governance Integration | SkillFormation, StructuredSpec, Runtime/Artifact/Trace/Planner/Decision/Eval/Builder/Memory schemas; 8 guards G1-G8; 32 presets | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — all P1-P8 gates satisfied; dependency chain Runtime→Memory fully closed; 10 no-fake-learning invariants; 0 governance violations | `DONE` | wave closed; any extension requires fresh `GC-018` |
-| Final Whitepaper Truth Reconciliation | convert concept document into evidence-backed truth layers | `W5-T1` closed; `W5-T2` closed — whitepaper updated to `v3.0-W7T10` reflecting full post-baseline delta and W7 wave | `DONE` | future truth upgrades require a new wave |
+| Final Whitepaper Truth Reconciliation | convert concept document into evidence-backed truth layers | `W5-T1` closed; `W5-T2` closed — whitepaper updated to `v3.0-W7T10` reflecting full post-baseline delta and W7 wave; `W11-T1` closed — whitepaper updated to `v3.1-W10T1`; current synchronized baseline is `v3.2-W12T1` | `DONE` | future truth upgrades require a new wave |
 
 ---
 
@@ -157,7 +157,7 @@ Memory class: POINTER_RECORD
 | `W9-T1` RAG and Context Engine Convergence (Candidate B) | `CLOSED DELIVERED 2026-03-29 — 27 surfaces classified; RAG retrieval authority + deterministic packaging API canonical; CPF 2110 tests (+83); all 7 pass conditions satisfied` |
 | `W10-T1` Reputation Signal and Task Marketplace Learning Expansion (Candidate D) | `CLOSED DELIVERED 2026-03-29 — 4 contracts canonical (ReputationSignal + TaskMarketplace + 2 batches); LPF 1333→1465 (+132); all 7 pass conditions satisfied` |
 | `W11-T1` Whitepaper Update v3.1-W10T1 (DOCUMENTATION class) | `CLOSED DELIVERED 2026-03-29 — whitepaper updated to v3.1-W10T1; all 9 pass conditions satisfied; documentation-to-implementation gap closed` |
-| `W12-T1` Agent Definition Boundary Convergence (REALIZATION class) | `CLOSED DELIVERED 2026-03-29 — AgentDefinitionBoundaryContract canonical; CPF 2146 tests (+36); all 9 pass conditions satisfied; last PARTIAL item in merge map closed` |
+| `W12-T1` Agent Definition Boundary Convergence (REALIZATION class) | `CLOSED DELIVERED 2026-03-29 — AgentDefinitionBoundaryContract canonical; current CPF suite 2144 tests, 0 failures; all 9 pass conditions satisfied; last PARTIAL item in merge map closed` |
 
 ---
 
@@ -169,7 +169,7 @@ Memory class: POINTER_RECORD
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
 | W7 Governance Integration Wave | `ALL W7-T0 through W7-T10 CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates satisfied` |
-| Current canonical validation posture | `W7-T10 COMPLETE — W7 INTEGRATION WAVE CLOSED; whitepaper updated to v3.0-W7T10` |
+| Current canonical validation posture | `W7-T10 COMPLETE — W7 INTEGRATION WAVE CLOSED; current whitepaper baseline synchronized to v3.2-W12T1` |
 
 ---
 
@@ -185,7 +185,7 @@ Memory class: POINTER_RECORD
 ## Canonical Pointers
 
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
-- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.1-W10T1`)
+- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.2-W12T1`)
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)

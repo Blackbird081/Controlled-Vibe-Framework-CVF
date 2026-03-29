@@ -3,7 +3,7 @@ Memory class: POINTER_RECORD
 
 > Status: active classification reference for `docs/reviews/`
 > Canonical registry: `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`
-> Last reviewed: `2026-03-28`
+> Last reviewed: `2026-03-30`
 
 ## Purpose
 
@@ -20,13 +20,13 @@ Standardize how `docs/reviews/` is retained or archived so the active-archive fl
 
 ## Current Summary
 
-Current snapshot after the archive migration completed on `2026-03-28`:
+Current snapshot after the registry refresh completed on `2026-03-30`:
 
 | Bucket | Count | Basis |
 |---|---|---|
-| `ACTIVE_DECISION_REVIEW` | `120` | dated reviews still inside the active window |
-| `RETAIN_EVIDENCE_REVIEW` | `136` | explicit registry entries tied to protected-reference evidence chains |
-| `SAFE_TO_ARCHIVE_REVIEW` | `0` | no remaining historical reviews are currently eligible after the archive run |
+| `ACTIVE_DECISION_REVIEW` | `50` | dated reviews still inside the active window |
+| `RETAIN_EVIDENCE_REVIEW` | `137` | explicit registry entries tied to protected-reference evidence chains, including W2-T29 closure evidence |
+| `SAFE_TO_ARCHIVE_REVIEW` | `92` | historical reviews currently eligible if a later archive run chooses to move them |
 | `ARCHIVED_REVIEW` | `335` | historical reviews already moved under `docs/reviews/archive/` |
 
 ## Retain-Evidence Rule

@@ -8,6 +8,7 @@ import {
   createBoardroomConsumerPipelineBatchContract,
 } from "../src/boardroom.consumer.pipeline.batch.contract";
 import type { BoardroomSession, BoardroomDecision } from "../src/boardroom.contract";
+import type { GovernanceMetrics } from "../../CVF_ECO_v2.1_GOVERNANCE_CANVAS/src/types";
 
 const FIXED_NOW = "2026-03-27T10:00:00.000Z";
 
@@ -26,6 +27,22 @@ function makeBoardroomSession(options: {
   } = options;
 
   const clarificationEntries = [];
+  const governanceSnapshot: GovernanceMetrics = {
+    totalSessions: 1,
+    totalActions: 5,
+    totalBlocks: 0,
+    totalEscalations: decision === "ESCALATE" ? 1 : 0,
+    avgRiskScore: 2,
+    riskDistribution: { R0: 0, R1: 1, R2: 0, R3: 0 },
+    verdictDistribution: {
+      ALLOW: decision === "PROCEED" ? 1 : 0,
+      WARN: decision === "AMEND_PLAN" ? 1 : 0,
+      ESCALATE: decision === "ESCALATE" ? 1 : 0,
+      BLOCK: decision === "REJECT" ? 1 : 0,
+    },
+    domainActivity: { "test-domain": 1 },
+    topViolations: [],
+  };
   for (let i = 0; i < clarifications; i++) {
     clarificationEntries.push({
       questionId: `q${i}`,
@@ -45,22 +62,19 @@ function makeBoardroomSession(options: {
       decision,
       rationale: `Decision: ${decision}`,
     },
-    governanceSnapshot: {
-      totalSessions: 1,
-      totalActions: 5,
-      cumulativeRisk: 10,
-      highestRisk: "R2",
-      verdictBreakdown: { ALLOW: 1, WARN: 0, ESCALATE: 0, BLOCK: 0 },
-      domainBreakdown: { "test-domain": 1 },
-    },
+    governanceSnapshot,
     finalPlan: {
       planId: "plan-456",
+      createdAt: FIXED_NOW,
+      intakeRequestId: "intake-123",
       planHash: "hash-789",
       consumerId: "consumer-789",
+      vibeOriginal: "test vibe",
       domainDetected: "test-domain",
       totalTasks: 5,
       tasks: [],
       riskSummary: { R0: 3, R1: 2, R2: 0, R3: 0 },
+      roleSummary: { orchestrator: 0, architect: 2, builder: 2, reviewer: 1 },
       warnings: [],
     },
     sessionHash: "session-hash-123",

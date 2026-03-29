@@ -1,15 +1,15 @@
 # 🏛️ CVF Master Architecture Whitepaper
 Memory class: POINTER_RECORD
 
-> **Version:** 3.1-W10T1
+> **Version:** 3.2-W12T1
 > **Date:** 2026-03-29
-> **Document Type:** SUBSTANTIALLY DELIVERED ARCHITECTURE WHITEPAPER — all four planes fully bridged; W7 Governance Integration Wave complete 2026-03-28; post-W7 continuation complete through W10-T1 2026-03-29; canonical architecture baseline updated to `v3.1-W10T1`
-> **Authorization Status:** W5-T2 whitepaper update canonically closed 2026-03-28 (v3.0-W7T10). W11-T1 whitepaper update canonically closed 2026-03-29 (v3.1-W10T1). Post-baseline continuation reconciled through `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1`. Current active tranche is `NONE`; any further continuation requires a new `GC-018` wave decision.
+> **Document Type:** SUBSTANTIALLY DELIVERED ARCHITECTURE WHITEPAPER — all four planes fully bridged; W7 Governance Integration Wave complete 2026-03-28; post-W7 continuation complete through W12-T1 2026-03-29; canonical architecture baseline updated to `v3.2-W12T1`
+> **Authorization Status:** W5-T2 whitepaper update canonically closed 2026-03-28 (v3.0-W7T10). W11-T1 whitepaper update canonically closed 2026-03-29 (v3.1-W10T1). W12-T1 closure canonically closed 2026-03-29 and now reflected in this synchronized baseline (`v3.2-W12T1`). Post-baseline continuation reconciled through `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1`. Current active tranche is `NONE`; any further continuation requires a new `GC-018` wave decision.
 > **Clean Baseline References:**
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts` (phases, risk model)
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts` (shared default guard stack)
 > - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts` (full runtime preset)
-> - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` (current quick status through `W2-T29`, with tranche tracker records beyond the baseline snapshot)
+> - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` (current quick status through `W12-T1`)
 > - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (canonical delivered wave line and post-cycle continuation history)
 > - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md` (historical reconciliation snapshot through `W5-T1`)
 
@@ -18,7 +18,7 @@ Memory class: POINTER_RECORD
 > - partially delivered target-state areas
 > - future-facing design principles that still require later governed waves
 
-> **Baseline Tracking Note:** as of `2026-03-29`, this whitepaper is updated to `v3.1-W10T1` — reflecting complete consumer pipeline bridge coverage across all four planes, the W7 Governance Integration Wave, and all post-W7 continuation deliveries (W8-T1: TrustIsolation + ModelGateway; W8-T2: PerformanceBenchmarkHarness; W9-T1: RagContextEngineConvergence; W10-T1: ReputationSignal + TaskMarketplace). Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, and the handoff for execution rules.
+> **Baseline Tracking Note:** as of `2026-03-29`, this whitepaper is updated to `v3.2-W12T1` — reflecting complete consumer pipeline bridge coverage across all four planes, the W7 Governance Integration Wave, and all post-W7 continuation deliveries (W8-T1: TrustIsolation + ModelGateway; W8-T2: PerformanceBenchmarkHarness; W9-T1: RagContextEngineConvergence; W10-T1: ReputationSignal + TaskMarketplace; W12-T1: AgentDefinitionBoundary). Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, and the handoff for execution rules.
 
 > **Core Principle:** *"Agents may execute tasks, but they cannot control the system that governs them."*
 
@@ -96,7 +96,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ---
 
-## 4. Sơ đồ Kiến trúc Hiện hành (CURRENT CANONICAL ARCHITECTURE — BASELINE W4-T11, REFRESHED 2026-03-27)
+## 4. Sơ đồ Kiến trúc Hiện hành (CURRENT CANONICAL ARCHITECTURE — BASELINE W4-T11, REFRESHED THROUGH W12-T1 ON 2026-03-29)
 
 > [!WARNING]
 > Sơ đồ bên dưới giữ nguyên anchor kiến trúc canon ở mốc `W4-T11`, nhưng phần readout đã được refresh theo continuation packet mới nhất. Nó cho thấy cái gì đã delivered ở baseline, cái gì đã tiến thêm sau baseline, và cái gì vẫn còn future-facing.
@@ -248,17 +248,17 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ### 4.1 Maturity Snapshot by Plane
 
-> Read this table as: `baseline architecture shape = W10-T1`, `governed progress readout = refreshed through 2026-03-29`.
+> Read this table as: `baseline architecture shape = W12-T1`, `governed progress readout = refreshed through 2026-03-29`.
 
 | Plane | Current posture | What is already true |
 |---|---|---|
-| Control Plane | `SUBSTANTIALLY DELIVERED` | AI Gateway, Boardroom/Reverse Prompting, typed context packaging, knowledge ranking/query, gateway auth, clarification refinement, gateway/log, intake, route-match, context build batch, knowledge query batch, retrieval consumer pipeline bridges — ALL canonically closed through `W2-T38` / `W1-T30`; W8-T1: `TrustIsolationBoundaryContract`, `ModelGatewayBoundaryContract` canonically closed; W9-T1: `RagContextEngineConvergenceContract` + batch contract canonically closed — CPF 2110 tests, 0 failures |
+| Control Plane | `SUBSTANTIALLY DELIVERED` | AI Gateway, Boardroom/Reverse Prompting, typed context packaging, knowledge ranking/query, gateway auth, clarification refinement, gateway/log, intake, route-match, context build batch, knowledge query batch, retrieval consumer pipeline bridges — ALL canonically closed through `W2-T38` / `W1-T30`; W8-T1: `TrustIsolationBoundaryContract`, `ModelGatewayBoundaryContract` canonically closed; W9-T1: `RagContextEngineConvergenceContract` + batch contract canonically closed; W12-T1: `AgentDefinitionBoundaryContract` canonically closed — CPF 2144 tests, 0 failures |
 | Execution Plane | `SUBSTANTIALLY DELIVERED` | all EPF consumer pipeline bridges canonically closed through `W2-T29`; W6-T1 (streaming execution + aggregator), W6-T4/T5 (governance checkpoint/reintake) added post-baseline — EPF 1123 tests, 0 failures |
 | Governance Layer | `SUBSTANTIALLY DELIVERED` | all GEF consumer pipeline bridges canonically closed through `W3-T18`; W6-T6 (pattern drift); W7 governance integration: SkillFormationRecord, StructuredSpec, 8 guards G1-G8, 32 presets — GEF 625 tests, 0 failures |
 | Learning Plane | `SUBSTANTIALLY DELIVERED` | ALL 18 LPF base contracts fully bridged — consumer pipeline bridges canonically closed through `W4-T25`; W10-T1: `ReputationSignalContract`, `TaskMarketplaceContract` + 2 batch contracts canonically closed — LPF 1465 tests, 0 failures |
 | W7 Governance Integration | `DONE` | 11 schemas across 4 planes, 32 guard presets, all P1-P8 gates satisfied, full dependency chain Runtime→Memory, 10 no-fake-learning invariants, 0 governance violations — W7-T10 CLOSED 2026-03-28 |
-| Post-W7 Continuation (W8–W10) | `DONE` | W8-T1: TrustIsolation + ModelGateway boundary convergence; W8-T2: PerformanceBenchmarkHarness (acceptance-policy PROPOSAL ONLY); W9-T1: RAG + Context Engine convergence; W10-T1: ReputationSignal + TaskMarketplace Learning Expansion — all four candidates CLOSED DELIVERED 2026-03-29 |
-| Whitepaper Truth Reconciliation | `DONE` | W5-T1 evidence-backed partial delivery; W5-T2 updated to v3.0-W7T10 (W7 wave); W11-T1 updated to v3.1-W10T1 (post-W7 continuation) |
+| Post-W7 Continuation (W8–W12) | `DONE` | W8-T1: TrustIsolation + ModelGateway boundary convergence; W8-T2: PerformanceBenchmarkHarness (acceptance-policy PROPOSAL ONLY); W9-T1: RAG + Context Engine convergence; W10-T1: ReputationSignal + TaskMarketplace Learning Expansion; W12-T1: Agent Definition boundary convergence — all post-W7 realization candidates CLOSED DELIVERED 2026-03-29 |
+| Whitepaper Truth Reconciliation | `DONE` | W5-T1 evidence-backed partial delivery; W5-T2 updated to v3.0-W7T10 (W7 wave); W11-T1 updated to v3.1-W10T1 (post-W7 continuation); current synchronized baseline refreshed to v3.2-W12T1 after W12-T1 closure |
 
 ### 4.1A Post-Baseline Continuation Delta
 
@@ -269,7 +269,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 | Governance Layer | `W6-T4` (governance checkpoint), `W6-T5` (checkpoint reintake), `W6-T6` (pattern drift) added post-baseline GEF contracts — ALL GEF bridges canonically closed through `W3-T18` + `W6-T6`; `W7-T0` to `W7-T10` added full governance integration wave: 11 schemas, 32 guard presets (G1-G8, P-01→P-15, B-01→B-05, M-01→M-04), 10 no-fake-learning invariants |
 | Learning Plane | `W4-T12` to `W4-T13` added pattern drift and learning observability consumer pipeline continuations; `W4-T14` to `W4-T25` closed all 12 remaining LPF consumer pipeline bridges — ALL 18 LPF base contracts fully bridged through `W4-T25`; 1465 tests, 0 failures |
 | W7 Governance Integration | `W7-T0` to `W7-T10` (2026-03-25 to 2026-03-28) closed the full W7 Integration Wave — SkillFormation (T4), StructuredSpec (T5), Runtime/Artifact/Trace/Planner/Decision/Eval/Builder/Memory schemas (T0-T3, T6-T9), Wave Closure (T10); all P1-P8 gates satisfied; dependency chain Runtime→Artifact→Trace→Planner→Decision→Eval/Builder→Memory fully closed |
-| Post-W7 Continuation (W8–W10) | `W8-T1` (2026-03-29): `TrustIsolationBoundaryContract` + `ModelGatewayBoundaryContract` — CPF trust/model-gateway boundary convergence, +83 CPF tests; `W8-T2` (2026-03-29): `PerformanceBenchmarkHarnessContract` — benchmark harness + acceptance-policy baseline (PROPOSAL ONLY), +42 CPF tests; `W9-T1` (2026-03-29): `RagContextEngineConvergenceContract` + batch contract — RAG retrieval authority + deterministic packaging API canonical, +83 CPF tests; `W10-T1` (2026-03-29): `ReputationSignalContract` + `TaskMarketplaceContract` + 2 batch contracts — reputation/learning plane expansion, +132 LPF tests; total delivery: CPF 2110, LPF 1465, all 4 candidates CLOSED DELIVERED |
+| Post-W7 Continuation (W8–W12) | `W8-T1` (2026-03-29): `TrustIsolationBoundaryContract` + `ModelGatewayBoundaryContract` — CPF trust/model-gateway boundary convergence, +83 CPF tests; `W8-T2` (2026-03-29): `PerformanceBenchmarkHarnessContract` — benchmark harness + acceptance-policy baseline (PROPOSAL ONLY), +42 CPF tests; `W9-T1` (2026-03-29): `RagContextEngineConvergenceContract` + batch contract — RAG retrieval authority + deterministic packaging API canonical, +83 CPF tests; `W10-T1` (2026-03-29): `ReputationSignalContract` + `TaskMarketplaceContract` + 2 batch contracts — reputation/learning plane expansion, +132 LPF tests; `W12-T1` (2026-03-29): `AgentDefinitionBoundaryContract` — governed agent-definition authority boundary canonical, +36 CPF tests; current CPF suite normalized to 2144, LPF 1465, all post-W7 realization candidates CLOSED DELIVERED |
 
 ### 4.2 What This Diagram No Longer Claims
 
@@ -288,10 +288,10 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 | Multi-agent repo/docs convergence | `GC-027` canonical review-doc chain |
 | Highest-priority live multi-agent deliberation surface | `AI Boardroom` in Control Plane, governed by `GC-028`; see `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md` |
 | Snapshot date | `2026-03-29` |
-| Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v3.1-W10T1`) |
-| Last canonical closure | `W10-T1 CLOSED DELIVERED — Reputation Signal + Task Marketplace Learning Expansion` |
+| Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v3.2-W12T1`) |
+| Last canonical closure | `W12-T1 CLOSED DELIVERED — Agent Definition Boundary Convergence` |
 | Current active tranche | `NONE` |
-| Current posture | `SUBSTANTIALLY DELIVERED` — all four planes `SUBSTANTIALLY DELIVERED`; W7 Governance Integration `DONE`; post-W7 continuation `DONE` (W8-T1 / W8-T2 / W9-T1 / W10-T1); continuation readout `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1` |
+| Current posture | `SUBSTANTIALLY DELIVERED` — all four planes `SUBSTANTIALLY DELIVERED`; W7 Governance Integration `DONE`; post-W7 continuation `DONE` (W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1); continuation readout `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1` |
 | Required gate before any new implementation | fresh `GC-018` authorization |
 | Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`, `AGENT_HANDOFF.md` |
 
@@ -318,7 +318,7 @@ The Boardroom scope is the more critical runtime decision surface because it sit
 |---|---|---|---|---|
 | `CVF_ECO_v2.3_AGENT_IDENTITY` + `CVF_v1.2_CAPABILITY_EXTENSION` | ADDING_AGENT DEFINITION | **MERGE** | Governance: Agent Def | `SUBSTANTIALLY DELIVERED` — `AgentDefinitionBoundaryContract` canonically closed W12-T1 2026-03-29; agent definition registration, capability scope validation, scope resolution, and governance audit delivered |
 | `CVF_ECO_v1.4_RAG_PIPELINE` | ADDING_RAG ARCHITECTURE | **UPGRADE** | Control: Knowledge Layer | `SUBSTANTIALLY DELIVERED` — `RagContextEngineConvergenceContract` + batch contract canonically closed W9-T1 2026-03-29; RAG retrieval authority + deterministic packaging API canonical |
-| `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` | ADDING_CONTEXT ENGINE | **MERGE** | Control: Context Packager | `PARTIAL` — deterministic context packaging đã là anchor canon |
+| `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` | ADDING_CONTEXT ENGINE | **MERGE** | Control: Context Packager | `SUBSTANTIALLY DELIVERED` — deterministic context packaging API canonically closed via W9-T1; `pack() -> packageHash -> packageId` declared canonical with frozen seeds |
 | `CVF_v1.6.1_GOVERNANCE_ENGINE` + `CVF_ECO_v1.1_NL_POLICY` | ADDING_AI CONSTITUTIONAL | **MERGE** | Governance: Policy Engine | `DONE / INVARIANT` ở lớp policy baseline hiện hành |
 | `CVF_ECO_v2.0_AGENT_GUARD_SDK` + `CVF_v1.7.1_SAFETY_RUNTIME` | ADDING_TRUST & ISOLATION | **MERGE** | Governance: Trust Layer | `SUBSTANTIALLY DELIVERED` — `TrustIsolationBoundaryContract` canonically closed W8-T1 2026-03-29; trust isolation boundary convergence delivered |
 | `CVF_v1.2.1_EXTERNAL_INTEGRATION` + `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` | ADDING_MODEL GATEWAY (gộp R7+R8+R9) | **MERGE** | Execution: Model Gateway | `SUBSTANTIALLY DELIVERED` — `ModelGatewayBoundaryContract` canonically closed W8-T1 2026-03-29; model gateway boundary convergence delivered |

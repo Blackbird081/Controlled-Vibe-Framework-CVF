@@ -4,7 +4,7 @@ Memory class: POINTER_RECORD
 
 > Status: active classification reference for `docs/audits/`
 > Canonical registry: `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`
-> Last reviewed: `2026-03-28`
+> Last reviewed: `2026-03-30`
 
 ## Purpose
 
@@ -20,13 +20,13 @@ Standardize how `docs/audits/` is retained or archived so the active-archive flo
 
 ## Current Summary
 
-Current snapshot after the archive migration completed on `2026-03-28`:
+Current snapshot after the registry refresh completed on `2026-03-30`:
 
 | Bucket | Count | Basis |
 |---|---|---|
-| `ACTIVE_RECENT_AUDIT` | `40` | dated audits still inside the active window |
-| `RETAIN_EVIDENCE_AUDIT` | `45` | explicit registry entries tied to protected-reference evidence chains |
-| `SAFE_TO_ARCHIVE_AUDIT` | `0` | no remaining historical audits are currently eligible after the archive run |
+| `ACTIVE_RECENT_AUDIT` | `16` | dated audits still inside the active window |
+| `RETAIN_EVIDENCE_AUDIT` | `52` | explicit registry entries tied to protected-reference evidence chains, including live-referenced W4 learning audits |
+| `SAFE_TO_ARCHIVE_AUDIT` | `28` | historical audits currently eligible if a later archive run chooses to move them |
 | `ARCHIVED_AUDIT` | `96` | historical audits already moved under `docs/audits/archive/` |
 
 ## Retain-Evidence Rule

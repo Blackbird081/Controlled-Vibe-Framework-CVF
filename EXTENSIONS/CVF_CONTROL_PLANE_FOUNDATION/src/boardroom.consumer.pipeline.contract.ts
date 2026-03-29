@@ -70,9 +70,6 @@ export class BoardroomConsumerPipelineContract {
 
     // Build warnings
     const warnings: string[] = [];
-    if (totalRounds === 0) {
-      warnings.push("WARNING_NO_ROUNDS");
-    }
     const pendingClarifications = boardroomSession.clarifications.filter(
       (c) => c.status === "pending",
     );

@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import {
   CONTROL_PLANE_FOUNDATION_COORDINATION,
   CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT,
-  AgentRole,
+  ControlledIntelligenceAgentRole,
   createControlPlaneIntakeContract,
   createRetrievalContract,
   createPackagingContract,
@@ -311,8 +311,8 @@ describe("CVF_CONTROL_PLANE_FOUNDATION", () => {
     expect(CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT.deferredSurfaces).toContain(
       "intelligence/reasoning_gate/controlled.reasoning"
     );
-    expect(resolveReasoningMode(AgentRole.REVIEW)).toBe(ReasoningMode.STRICT);
-    expect(resolveReasoningMode(AgentRole.DESIGN)).toBe(ReasoningMode.CONTROLLED);
+    expect(resolveReasoningMode(ControlledIntelligenceAgentRole.REVIEW)).toBe(ReasoningMode.STRICT);
+    expect(resolveReasoningMode(ControlledIntelligenceAgentRole.DESIGN)).toBe(ReasoningMode.CONTROLLED);
   });
 });
 

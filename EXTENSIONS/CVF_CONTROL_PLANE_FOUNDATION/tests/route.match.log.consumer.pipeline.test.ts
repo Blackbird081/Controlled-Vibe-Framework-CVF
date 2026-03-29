@@ -11,17 +11,20 @@ const FIXED_NOW = "2026-03-27T10:00:00.000Z";
 function makeRouteResult(overrides: Partial<RouteMatchResult> = {}): RouteMatchResult {
   return {
     matchId: overrides.matchId ?? "match-1",
-    requestedAt: overrides.requestedAt ?? FIXED_NOW,
+    resolvedAt: overrides.resolvedAt ?? FIXED_NOW,
+    sourceGatewayId: overrides.sourceGatewayId ?? "gateway-1",
     matched: overrides.matched ?? true,
+    routeId: overrides.routeId ?? "route-1",
+    matchedPattern: overrides.matchedPattern ?? "/api/*",
     gatewayAction: overrides.gatewayAction ?? "FORWARD",
     matchHash: overrides.matchHash ?? "hash-1",
   };
 }
 
-const forwardResult = makeRouteResult({ matchId: "forward-1", matched: true, gatewayAction: "FORWARD" });
-const rejectResult = makeRouteResult({ matchId: "reject-1", matched: false, gatewayAction: "REJECT" });
-const rerouteResult = makeRouteResult({ matchId: "reroute-1", matched: true, gatewayAction: "REROUTE" });
-const passthroughResult = makeRouteResult({ matchId: "passthrough-1", matched: true, gatewayAction: "PASSTHROUGH" });
+const forwardResult = makeRouteResult({ matchId: "forward-1", matched: true, gatewayAction: "FORWARD", routeId: "route-forward", matchedPattern: "/forward/*" });
+const rejectResult = makeRouteResult({ matchId: "reject-1", matched: false, gatewayAction: "REJECT", routeId: null, matchedPattern: null });
+const rerouteResult = makeRouteResult({ matchId: "reroute-1", matched: true, gatewayAction: "REROUTE", routeId: "route-reroute", matchedPattern: "/reroute/*" });
+const passthroughResult = makeRouteResult({ matchId: "passthrough-1", matched: true, gatewayAction: "PASSTHROUGH", routeId: "route-default", matchedPattern: "*" });
 
 describe("RouteMatchLogConsumerPipelineContract", () => {
   const contract = new RouteMatchLogConsumerPipelineContract({ now: () => FIXED_NOW });

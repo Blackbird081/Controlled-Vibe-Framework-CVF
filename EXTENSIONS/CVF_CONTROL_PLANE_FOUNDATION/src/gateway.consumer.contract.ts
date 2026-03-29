@@ -5,7 +5,10 @@ import type {
   AIGatewayContractDependencies,
 } from "./ai.gateway.contract";
 import { ControlPlaneIntakeContract, createControlPlaneIntakeContract } from "./intake.contract";
-import type { ControlPlaneIntakeResult } from "./intake.contract";
+import type {
+  ControlPlaneIntakeContractDependencies,
+  ControlPlaneIntakeResult,
+} from "./intake.contract";
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 
 // --- Types ---
@@ -37,6 +40,7 @@ export interface GatewayConsumerContractDependencies {
   gateway?: AIGatewayContract;
   gatewayDependencies?: AIGatewayContractDependencies;
   intake?: ControlPlaneIntakeContract;
+  intakeDependencies?: ControlPlaneIntakeContractDependencies;
   now?: () => string;
 }
 
@@ -54,7 +58,11 @@ export class GatewayConsumerContract {
         ...dependencies.gatewayDependencies,
         now: dependencies.gatewayDependencies?.now ?? this.now,
       });
-    this.intake = dependencies.intake ?? createControlPlaneIntakeContract();
+    this.intake = dependencies.intake
+      ?? createControlPlaneIntakeContract({
+        ...dependencies.intakeDependencies,
+        now: dependencies.intakeDependencies?.now ?? this.now,
+      });
   }
 
   consume(signal: GatewaySignalRequest): GatewayConsumptionReceipt {

@@ -371,6 +371,7 @@ export class RagContextEngineConvergenceContract {
         "builtAt" +
         ") — packageId is always derived from packageHash + builtAt; " +
         "packageId != packageHash by construction",
+      declarationHash,
     };
   }
 

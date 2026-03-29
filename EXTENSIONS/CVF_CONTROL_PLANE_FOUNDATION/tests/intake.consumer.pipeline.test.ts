@@ -8,20 +8,20 @@ import {
   createIntakeConsumerPipelineBatchContract,
 } from "../src/intake.consumer.pipeline.batch.contract";
 import type { ControlPlaneIntakeResult } from "../src/intake.contract";
-import type { ValidatedIntent } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/types";
+import type { Domain, ValidatedIntent } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/types";
 
 const FIXED_NOW = "2026-03-27T10:00:00.000Z";
 
 // Helper: create test intake result
 function makeIntakeResult(options: {
-  domain?: string;
+  domain?: Domain;
   chunkCount?: number;
   totalTokens?: number;
   valid?: boolean;
   requestId?: string;
 } = {}): ControlPlaneIntakeResult {
   const {
-    domain = "test-domain",
+    domain = "finance",
     chunkCount = 3,
     totalTokens = 150,
     valid = true,
@@ -34,10 +34,15 @@ function makeIntakeResult(options: {
       domain,
       action: "test-action",
       object: "test-object",
+      limits: {},
+      requireApproval: domain === "finance",
+      confidence: valid ? 0.95 : 0.4,
       rawVibe: "test vibe",
     },
     rules: [],
     constraints: [],
+    timestamp: Date.parse(FIXED_NOW),
+    pipelineVersion: "test-pipeline",
     errors: valid ? [] : ["Invalid intent"],
   };
 
@@ -51,7 +56,7 @@ function makeIntakeResult(options: {
       chunkCount,
       totalCandidates: 10,
       retrievalTimeMs: 50,
-      tiersSearched: ["tier1"],
+      tiersSearched: ["T1_DOCTRINE"],
       chunks: Array.from({ length: chunkCount }, (_, i) => ({
         id: `chunk-${i}`,
         source: `source-${i}`,
@@ -75,8 +80,7 @@ function makeIntakeResult(options: {
   };
 }
 
-const validIntake = makeIntakeResult({ domain: "test-domain" });
-const unknownDomainIntake = makeIntakeResult({ domain: "unknown" });
+const validIntake = makeIntakeResult({ domain: "finance" });
 const generalDomainIntake = makeIntakeResult({ domain: "general" });
 const noChunksIntake = makeIntakeResult({ chunkCount: 0 });
 const invalidIntentIntake = makeIntakeResult({ valid: false });
@@ -156,17 +160,12 @@ describe("IntakeConsumerPipelineContract", () => {
   describe("query derivation", () => {
     it("derives query with valid intake", () => {
       const result = contract.execute({ intakeResult: validIntake });
-      expect(result.query).toBe("Intake: domain=test-domain, chunks=3, tokens=150");
-    });
-
-    it("derives query with unknown domain", () => {
-      const result = contract.execute({ intakeResult: unknownDomainIntake });
-      expect(result.query).toBe("Intake: domain=unknown, chunks=3, tokens=150");
+      expect(result.query).toBe("Intake: domain=finance, chunks=3, tokens=150");
     });
 
     it("derives query with no chunks", () => {
       const result = contract.execute({ intakeResult: noChunksIntake });
-      expect(result.query).toBe("Intake: domain=test-domain, chunks=0, tokens=150");
+      expect(result.query).toBe("Intake: domain=finance, chunks=0, tokens=150");
     });
 
     it("derives query with different token count", () => {
@@ -185,11 +184,6 @@ describe("IntakeConsumerPipelineContract", () => {
   });
 
   describe("warnings", () => {
-    it("emits WARNING_NO_DOMAIN when domain is unknown", () => {
-      const result = contract.execute({ intakeResult: unknownDomainIntake });
-      expect(result.warnings).toContain("WARNING_NO_DOMAIN");
-    });
-
     it("emits WARNING_NO_DOMAIN when domain is general", () => {
       const result = contract.execute({ intakeResult: generalDomainIntake });
       expect(result.warnings).toContain("WARNING_NO_DOMAIN");
@@ -245,7 +239,7 @@ describe("IntakeConsumerPipelineBatchContract", () => {
   const pipelineContract = new IntakeConsumerPipelineContract({ now: () => FIXED_NOW });
   const batchContract = new IntakeConsumerPipelineBatchContract({ now: () => FIXED_NOW });
 
-  function makeResult(domain: string, chunkCount = 3, totalTokens = 150) {
+  function makeResult(domain: Domain, chunkCount = 3, totalTokens = 150) {
     const intake = makeIntakeResult({ domain, chunkCount, totalTokens });
     return pipelineContract.execute({ intakeResult: intake });
   }
@@ -262,7 +256,7 @@ describe("IntakeConsumerPipelineBatchContract", () => {
   });
 
   describe("output shape", () => {
-    const results = [makeResult("test-domain")];
+    const results = [makeResult("finance")];
     const batch = batchContract.batch(results);
 
     it("has batchId", () => {
@@ -312,37 +306,37 @@ describe("IntakeConsumerPipelineBatchContract", () => {
 
   describe("aggregation", () => {
     it("calculates totalIntakes correctly", () => {
-      const results = [makeResult("domain1"), makeResult("domain2"), makeResult("domain3")];
+      const results = [makeResult("finance"), makeResult("privacy"), makeResult("data")];
       const batch = batchContract.batch(results);
       expect(batch.totalIntakes).toBe(3);
     });
 
     it("calculates totalChunks correctly", () => {
-      const results = [makeResult("domain1", 2), makeResult("domain2", 3), makeResult("domain3", 5)];
+      const results = [makeResult("finance", 2), makeResult("privacy", 3), makeResult("data", 5)];
       const batch = batchContract.batch(results);
       expect(batch.totalChunks).toBe(10);
     });
 
     it("calculates totalTokens correctly", () => {
-      const results = [makeResult("domain1", 3, 100), makeResult("domain2", 3, 200), makeResult("domain3", 3, 300)];
+      const results = [makeResult("finance", 3, 100), makeResult("privacy", 3, 200), makeResult("data", 3, 300)];
       const batch = batchContract.batch(results);
       expect(batch.totalTokens).toBe(600);
     });
 
     it("selects dominant domain based on frequency", () => {
-      const results = [makeResult("domain1"), makeResult("domain1"), makeResult("domain2")];
+      const results = [makeResult("finance"), makeResult("finance"), makeResult("privacy")];
       const batch = batchContract.batch(results);
-      expect(batch.overallDominantDomain).toBe("domain1");
+      expect(batch.overallDominantDomain).toBe("finance");
     });
 
     it("selects dominant domain based on frequency (different domain)", () => {
-      const results = [makeResult("domain2"), makeResult("domain2"), makeResult("domain1")];
+      const results = [makeResult("privacy"), makeResult("privacy"), makeResult("finance")];
       const batch = batchContract.batch(results);
-      expect(batch.overallDominantDomain).toBe("domain2");
+      expect(batch.overallDominantDomain).toBe("privacy");
     });
 
     it("calculates dominantTokenBudget as max", () => {
-      const results = [makeResult("domain1"), makeResult("domain2"), makeResult("domain3")];
+      const results = [makeResult("finance"), makeResult("privacy"), makeResult("data")];
       const batch = batchContract.batch(results);
       expect(batch.dominantTokenBudget).toBeGreaterThan(0);
     });
@@ -359,14 +353,14 @@ describe("IntakeConsumerPipelineBatchContract", () => {
 
   describe("deterministic hashing", () => {
     it("batchHash is deterministic for same input", () => {
-      const results = [makeResult("test-domain")];
+      const results = [makeResult("finance")];
       const b1 = batchContract.batch(results);
       const b2 = batchContract.batch(results);
       expect(b1.batchHash).toBe(b2.batchHash);
     });
 
     it("batchId is deterministic for same input", () => {
-      const results = [makeResult("test-domain")];
+      const results = [makeResult("finance")];
       const b1 = batchContract.batch(results);
       const b2 = batchContract.batch(results);
       expect(b1.batchId).toBe(b2.batchId);

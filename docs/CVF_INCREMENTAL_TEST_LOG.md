@@ -2912,3 +2912,31 @@ Utility and guard:
   - LPF: 1418→1465 (+47). CP3 Fast Lane (GC-021). GC-023 compliant (2 dedicated test files).
   - New LPF surface: ReputationSignalBatchContract. Aggregates ReputationSignal[] → ReputationSignalBatch (trustedCount, reliableCount, provisionalCount, untrustedCount, averageScore). averageScore=0 for empty batch; rounded for non-empty. batchId≠batchHash.
   - New LPF surface: TaskMarketplaceBatchContract. Aggregates TaskAllocationRecord[] → TaskMarketplaceBatch (assignCount, deferCount, rejectCount, dominantPriorityCeiling). dominantPriorityCeiling derived from ASSIGN records only; "none" if no ASSIGN records. batchId≠batchHash.
+
+## Batch CPF Post-W12 Normalization — 2026-03-30
+
+### Entry CPF-TypeDebt-Normalization
+
+- Tranche: Post-W12 CPF type-debt normalization and canonical truth sync
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.consumer.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/rag.context.engine.convergence.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/boardroom.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/intake.consumer.pipeline.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.test.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/design.consumer.pipeline.test.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.log.consumer.pipeline.test.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.log.consumer.pipeline.test.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/intake.consumer.pipeline.test.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/route.match.log.consumer.pipeline.test.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts`
+- Tests executed:
+  - `npm run check` (CPF) → PASS
+  - `npm test` (CPF) → PASS (2144 tests, 0 failures)
+- Notes:
+  - Fixed nondeterministic `GatewayConsumerContract` intake timestamp threading by propagating `now` into `ControlPlaneIntakeContract`.
+  - Normalized stale CPF fixtures to current contract truth for gateway auth, PII detection, route-match, intake, design, and barrel role exports.
+  - Added missing `declarationHash` to W9-T1 convergence declaration return surface and removed impossible literal-guard warning in boardroom consumer pipeline.
+  - Current synchronized CPF suite count is `2144`, and current whitepaper/tracker/handoff readouts were aligned to that live result.

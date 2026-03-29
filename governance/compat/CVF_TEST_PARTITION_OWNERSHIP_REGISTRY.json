@@ -1607,6 +1607,17 @@
         "TaskMarketplaceBatchContract",
         "createTaskMarketplaceBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Agent Definition Boundary (W12-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.definition.boundary.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AgentDefinitionBoundaryContract",
+        "createAgentDefinitionBoundaryContract"
+      ]
     }
   ]
 }

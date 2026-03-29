@@ -735,3 +735,20 @@ export type {
   RagContextEngineConvergenceBatch,
   RagContextEngineConvergenceBatchContractDependencies,
 } from "./rag.context.engine.convergence.batch.contract";
+
+// W12-T1 CP1 — Agent Definition Boundary Contract
+export {
+  AgentDefinitionBoundaryContract,
+  createAgentDefinitionBoundaryContract,
+} from "./agent.definition.boundary.contract";
+export type {
+  AgentRole,
+  CapabilityValidationStatus,
+  ScopeResolutionStatus,
+  AgentDefinitionInput,
+  AgentDefinitionRecord,
+  CapabilityValidationResult,
+  AgentScopeResolution,
+  AgentDefinitionAudit,
+  AgentDefinitionBoundaryContractDependencies,
+} from "./agent.definition.boundary.contract";

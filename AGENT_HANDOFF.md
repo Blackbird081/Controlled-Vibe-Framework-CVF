@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W11-T1 CLOSED DELIVERED — Whitepaper Update v3.1-W10T1 → cvf-next`
-> State: **W11-T1 CLOSED DELIVERED** — whitepaper updated to v3.1-W10T1; all 9 pass conditions satisfied; documentation-to-implementation gap closed; no active tranche
+> Last push: `W12-T1 CLOSED DELIVERED — Agent Definition Boundary Convergence → cvf-next`
+> State: **W12-T1 CLOSED DELIVERED** — AgentDefinitionBoundaryContract canonical; CPF 2146 tests (+36); all merge map surfaces SUBSTANTIALLY DELIVERED; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.1-W10T1`)
 
 ---
@@ -10,7 +10,7 @@
 ## Current State
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2110 tests, 0 failures**
+- CPF (Control Plane Foundation): **2146 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -19,6 +19,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W12-T1 | Agent Definition Boundary Convergence (REALIZATION class) | CLOSED DELIVERED 2026-03-29 — AgentDefinitionBoundaryContract canonical; CPF 2146 (+36); 9/9 pass |
 | W11-T1 | Whitepaper Update v3.1-W10T1 (DOCUMENTATION class) | CLOSED DELIVERED 2026-03-29 — whitepaper updated v3.0-W7T10 → v3.1-W10T1; 9/9 pass conditions |
 | W10-T1 | Reputation Signal and Task Marketplace Learning Expansion (Candidate D) | CLOSED DELIVERED 2026-03-29 — 4 contracts canonical; LPF 1465 tests (+132) |
 | W9-T1 | RAG and Context Engine Convergence (Candidate B) | CLOSED DELIVERED 2026-03-29 — all 7 pass conditions satisfied |
@@ -38,13 +39,13 @@
 
 ## Immediate Next Action Required
 
-**W11-T1 CLOSED DELIVERED. No active tranche. Await next GC-018 authorization.**
+**W12-T1 CLOSED DELIVERED. No active tranche. Await next GC-018 authorization.**
 
 Current guidance:
 
-- **W11-T1 CLOSED DELIVERED** — whitepaper v3.1-W10T1; all post-W7 deliveries now documented in canonical architecture source; no further continuation without fresh GC-018
-- Closure review: `docs/reviews/CVF_W11_T1_TRANCHE_CLOSURE_REVIEW_2026-03-29.md`
-- GC-026 closure sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W11_T1_CLOSURE_2026-03-29.md`
+- **W12-T1 CLOSED DELIVERED** — `AgentDefinitionBoundaryContract` canonical; CPF 2146 tests; all merge map surfaces now `SUBSTANTIALLY DELIVERED`; no further continuation without fresh GC-018
+- Closure review: `docs/reviews/CVF_W12_T1_TRANCHE_CLOSURE_REVIEW_2026-03-29.md`
+- GC-026 closure sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W12_T1_CLOSURE_2026-03-29.md`
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - **Next**: fresh GC-018 authorization required for any new wave; all known post-W7 upgrade candidates delivered
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`

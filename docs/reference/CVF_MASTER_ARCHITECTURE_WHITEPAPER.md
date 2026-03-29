@@ -316,7 +316,7 @@ The Boardroom scope is the more critical runtime decision surface because it sit
 
 | Module CVF hiện có | Đề xuất mới | Hành động | Vị trí đề xuất | Posture hiện tại |
 |---|---|---|---|---|
-| `CVF_ECO_v2.3_AGENT_IDENTITY` + `CVF_v1.2_CAPABILITY_EXTENSION` | ADDING_AGENT DEFINITION | **MERGE** | Governance: Agent Def | `PARTIAL / PROPOSAL` |
+| `CVF_ECO_v2.3_AGENT_IDENTITY` + `CVF_v1.2_CAPABILITY_EXTENSION` | ADDING_AGENT DEFINITION | **MERGE** | Governance: Agent Def | `SUBSTANTIALLY DELIVERED` — `AgentDefinitionBoundaryContract` canonically closed W12-T1 2026-03-29; agent definition registration, capability scope validation, scope resolution, and governance audit delivered |
 | `CVF_ECO_v1.4_RAG_PIPELINE` | ADDING_RAG ARCHITECTURE | **UPGRADE** | Control: Knowledge Layer | `SUBSTANTIALLY DELIVERED` — `RagContextEngineConvergenceContract` + batch contract canonically closed W9-T1 2026-03-29; RAG retrieval authority + deterministic packaging API canonical |
 | `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY` | ADDING_CONTEXT ENGINE | **MERGE** | Control: Context Packager | `PARTIAL` — deterministic context packaging đã là anchor canon |
 | `CVF_v1.6.1_GOVERNANCE_ENGINE` + `CVF_ECO_v1.1_NL_POLICY` | ADDING_AI CONSTITUTIONAL | **MERGE** | Governance: Policy Engine | `DONE / INVARIANT` ở lớp policy baseline hiện hành |

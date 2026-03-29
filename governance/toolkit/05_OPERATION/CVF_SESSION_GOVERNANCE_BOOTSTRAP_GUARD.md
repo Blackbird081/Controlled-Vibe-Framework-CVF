@@ -54,6 +54,7 @@ Load only if the task or state triggers them:
 - `GC-018` for continuation, breadth expansion, semantic deepening, or validation/test continuation
 - `GC-019` for structural change, merge, ownership transfer, or physical consolidation
 - `GC-020` for pause, shift handoff, agent transfer, or escalation handoff
+- `GC-032` for governed artifact authoring, typed evidence drafting, or continuity-surface updates
 - `GC-023` for file-size maintainability pressure
 - `GC-024` for already-split governed test ownership
 
@@ -89,6 +90,7 @@ This guard enforces canonical bootstrap structure and routing references. It doe
 ## Related Artifacts
 
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `governance/compat/check_session_governance_bootstrap.py`

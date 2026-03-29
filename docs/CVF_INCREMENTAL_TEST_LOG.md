@@ -2890,6 +2890,21 @@ Utility and guard:
   - Cross-plane instrumentation harness. Run lifecycle: PENDING→RUNNING→COMPLETE/FAILED. All reports carry evidenceClass="PROPOSAL_ONLY" hard-coded — no path to promote performance numbers to baseline truth.
   - W7 chain: ADDITIVE (new contract only). No structural modification to existing contracts.
 
+### Entry W8-T2/CP2
+
+- Tranche: W8-T2 — Candidate C Performance Benchmark Harness (parallel prerequisite)
+- Extension: governance/reference baseline packet only
+- Files created:
+  - `docs/reference/CVF_PERFORMANCE_ACCEPTANCE_POLICY_BASELINE_2026-03-29.md`
+  - `docs/baselines/CVF_W8_T2_CP2_FIRST_EVIDENCE_BATCH_2026-03-29.md`
+- Tests executed:
+  - none new; CP2 is governance-only and preserves CPF baseline at 2027 tests, 0 failures
+- Notes:
+  - CP2 Fast Lane (GC-021). No runtime or contract modifications.
+  - Acceptance-policy baseline committed with all thresholds still `PROPOSAL ONLY`.
+  - First evidence batch now records `reportId`, `reportHash`, `runId`, `measurementId`, `traceId`, and numeric `value:number` fields (`1` report / `5` runs / `8` measurements).
+  - No performance number promoted to baseline truth; future promotion still requires trace-backed evidence + GC-026 sync.
+
 ## Batch W8-T1 — 2026-03-29
 
 ### Entry W8-T1/CP1

@@ -72,7 +72,7 @@ If any required gate is missing, the affected phase remains `HOLD`.
 |---|---|---|---|---|
 | `P0` | Governance hardening for next-wave drafting | `GO` | `G1-G4` | exclusion template, dependency declaration pattern, and drafting rules are committed as reusable canon |
 | `P1` | `Candidate A` authorization packet drafting | `GO WITH FIXES` | `G1-G5`, `G7` | one bounded `GC-018` candidate for Trust / Isolation + Model Gateway boundary convergence is review-ready |
-| `P2` | `Candidate C` instrumentation-only authorization packet drafting | `GO WITH FIXES` | `G1`, `G4`, `G6` | one bounded `GC-018` candidate for measurement / benchmark harness is review-ready |
+| `P2` | `Candidate C` instrumentation-only performance baseline workstream | `GO WITH FIXES` | `G1`, `G4`, `G6` | benchmark harness, acceptance-policy baseline, first governed evidence batch, and closure review are committed without promoting baseline truth |
 | `P3` | `Candidate A` first-wave execution if authorized | `GO WITH FIXES` | `P1 closed`, `G5`, `G7` | boundary contracts are clarified without destabilizing the W7 chain; closure review complete |
 | `P4` | `Candidate B` authorization and execution planning | `GO WITH FIXES` | `P2 in motion or closed`, `P3 closed or formally deferred`, `G1-G4`, `G7` | one bounded `GC-018` candidate for RAG + Context convergence is review-ready with declared gateway assumptions |
 | `P5` | `Candidate D` later-wave intake | `HOLD -> GO` | `P3` and `P4` in motion or closed, `G1-G4`, `G8` | learning expansion may be evaluated as a later governed wave |
@@ -88,10 +88,11 @@ Deliverables:
 - canonical exclusion template for `not in this wave`
 - canonical dependency declaration pattern for future `GC-018` packets
 - roadmap-to-authorization drafting checklist for post-W7 families
+- `GC-032` governed artifact authoring standard wired into bootstrap, policy, and repo gates
 
 Success rule:
 
-- future `GC-018` packets can be written without ambiguity about exclusions, dependencies, or ownership transfer
+- future `GC-018` packets can be written without ambiguity about exclusions, dependencies, ownership transfer, or typed-evidence discipline
 
 ### 6.2 Phase `P1` — Candidate A Authorization Preparation
 
@@ -121,11 +122,12 @@ Scope:
 - instrumentation hooks
 - benchmark harness
 - acceptance-policy baseline
-- trace-backed latency / throughput evidence
+- first governed evidence batch with harness-derived provenance (`reportId`, `reportHash`, `runId`, `measurementId`, `traceId`)
 
 Hard boundary:
 
 - this phase does not change whitepaper performance numbers into current truth by itself
+- trace-backed production evidence and any promotion to `BASELINE TRUTH` remain a future governed wave
 
 ### 6.4 Phase `P3` — Candidate A Execution Wave
 
@@ -228,9 +230,9 @@ Canonical source packet chain for this roadmap:
 | GC-027 canonical decision pack | DONE |
 | EA validation and sign-off convergence | DONE |
 | Post-W7 upgrade roadmap baseline drafted | DONE |
-| `P0` governance hardening tranche | PENDING |
-| `P1` Candidate A authorization packet | PENDING |
-| `P2` Candidate C authorization packet | PENDING |
-| `P3` Candidate A execution wave | HOLD — requires fresh `GC-018` |
-| `P4` Candidate B structural follow-on | HOLD — depends on `Candidate A` posture |
+| `P0` governance hardening tranche | DONE |
+| `P1` Candidate A authorization packet | DONE — W8-T1 GC-018 committed |
+| `P2` Candidate C performance baseline workstream | CLOSED DELIVERED — W8-T2 |
+| `P3` Candidate A execution wave | CLOSED DELIVERED — W8-T1 |
+| `P4` Candidate B structural follow-on | READY FOR FRESH `GC-018` — upstream posture satisfied |
 | `P5` Candidate D learning expansion | HOLD — later wave only |

@@ -1178,3 +1178,23 @@ Archive safety should be determined by explicit governance state, incremental cl
 `docs/audits/` and `docs/reviews/` can now be cleaned without losing protected evidence chains, pre-push and CI enforce retention-registry truth before archive moves are valid, and foundational test-depth enforcement now applies to active report surfaces instead of archived historical records.
 ### Related Files
 `scripts/cvf_active_archive.py`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`, `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`, `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`, `governance/compat/check_audit_retention_registry.py`, `governance/compat/check_review_retention_registry.py`, `governance/compat/check_foundational_guard_surfaces.py`
+---
+## ADR-025: Governed Artifact Writing Must Be Source-Truth-First And Machine-Enforced
+| Field | Value |
+|---|---|
+| Date | 2026-03-29 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current GC-032 hardening batch)* |
+### Context
+Post-W7 planning had already stated that performance evidence could not be promoted into baseline truth before real measurement evidence existed, and the drafting discipline for the next wave had been documented in roadmap/checklist form. In practice, that still left too much room for governed artifacts to be written as plausible narrative instead of contract-shaped truth, especially when an agent was translating roadmap intent or harness output into reviews, baselines, and continuity records.
+### Decision
+**Adopt one canonical governed-artifact authoring standard and enforce it through bootstrap, policy, CI, and local hooks.** `GC-032` now requires source-truth-first writing, forbids summary substitution for typed evidence, keeps planning/execution/evidence/continuity artifact roles separate, and requires continuity surfaces to move together when tranche posture changes.
+Typed evidence enforcement remains layered: `governance/compat/check_governed_artifact_authoring.py` keeps the chain aligned, while `governance/compat/check_docs_governance_compat.py` blocks symbolic shorthand in governed evidence batches when the harness contract requires explicit provenance fields.
+### Rationale
+If governed writing is not constrained like code, agents can silently drift away from roadmap truth even while the surrounding governance system looks complete. Source-truth-first writing turns documentation quality into an executable part of CVF rather than a reviewer expectation.
+### Consequences
+Future agents must route through a shared writing standard before drafting governed artifacts, post-W7 packets now have an explicit authoring front door in session bootstrap, and evidence-bearing docs are harder to degrade into ambiguous shorthand without tripping a repo gate.
+### Related Files
+`docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`, `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`, `governance/compat/check_governed_artifact_authoring.py`, `governance/compat/check_docs_governance_compat.py`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`, `docs/reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md`

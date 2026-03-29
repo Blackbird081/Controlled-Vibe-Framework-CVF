@@ -304,6 +304,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_PYTHON_AUTOMATION_SIZE_GUARD.md | Scripts in `scripts/`, `governance/compat/` | Stay within size thresholds |
 | CVF_ARCHITECTURE_CHECK_GUARD.md | Any new version/layer/extension/module proposal | `docs/CVF_CORE_KNOWLEDGE_BASE.md` ← file này |
 | CVF_EXTENSION_VERSIONING_GUARD.md | New extension folder in `EXTENSIONS/` | `CVF_{STREAM}_v{major}.{minor}_{NAME}/` format |
+| CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md | Governed packets, evidence docs, or continuity docs being written | Source-truth first + typed evidence stays explicit + continuity surfaces move together |
 | CVF_GUARD_AUTHORING_STANDARD_GUARD.md | New or materially revised governance guard | Guard must satisfy the mandatory authoring contract before commit |
 | CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
 | CVF_ACTIVE_ARCHIVE_GUARD.md | Active archive maintenance | Keep active/archive split truthful and append-only |

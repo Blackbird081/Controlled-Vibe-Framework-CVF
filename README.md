@@ -181,6 +181,7 @@ Important current continuity controls:
 - `GC-020` keeps pause/resume and agent transfer truthful through governed handoff and phase-bounded context continuity
 - `GC-021` allows `Fast Lane` for low-risk additive work inside an already-authorized tranche
 - `GC-022` classifies durable memory records as `FULL_RECORD`, `SUMMARY_RECORD`, or `POINTER_RECORD` so future memory stays useful without over-recording
+- `GC-032` requires governed artifact writing to stay source-truth-first, keep typed evidence explicit, and move continuity surfaces together when tranche posture changes
 
 Foundational governance surfaces that used to depend mainly on reviewer discipline are now also blocked by `governance/compat/check_foundational_guard_surfaces.py`, covering ADR updates, architecture-baseline refresh, extension naming, structural audit packets, test-depth reporting, and workspace isolation.
 
@@ -205,6 +206,7 @@ Mandatory guard index:
 - `CVF_EXTENSION_VERSIONING_GUARD.md`
 - `CVF_FAST_LANE_GOVERNANCE_GUARD.md`
 - `CVF_GOVERNED_FILE_SIZE_GUARD.md`
+- `CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`
 - `CVF_GUARD_AUTHORING_STANDARD_GUARD.md`
 - `CVF_GUARD_REGISTRY_GUARD.md`
 - `CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`

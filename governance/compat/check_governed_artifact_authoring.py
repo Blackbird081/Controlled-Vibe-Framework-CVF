@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-CVF Session Governance Bootstrap Compatibility Gate
+CVF Governed Artifact Authoring Compatibility Gate
 
-Ensures that the GC-025 session-start routing chain stays aligned:
-- bootstrap guard exists
-- canonical bootstrap reference exists
-- policy and control matrix reference GC-025 consistently
-- docs index points to the bootstrap reference
-- local hook chain and CI workflow enforce this compatibility gate
+Ensures the GC-032 governed artifact authoring chain stays aligned:
+- standard and guard exist
+- policy and control matrix reference GC-032 consistently
+- bootstrap and drafting checklist route writers into the standard
+- docs governance compatibility keeps typed evidence enforcement active
+- local hook and CI both enforce the guard
 """
 
 from __future__ import annotations
@@ -25,78 +25,110 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
-BOOTSTRAP_GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md"
-BOOTSTRAP_REFERENCE_PATH = "docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md"
-ARTIFACT_AUTHORING_STANDARD_PATH = "docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md"
+STANDARD_PATH = "docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md"
+GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md"
 MASTER_POLICY_PATH = "governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md"
 CONTROL_MATRIX_PATH = "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
+BOOTSTRAP_REFERENCE_PATH = "docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md"
+BOOTSTRAP_GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md"
 DOCS_INDEX_PATH = "docs/INDEX.md"
+README_PATH = "README.md"
+KB_PATH = "docs/CVF_CORE_KNOWLEDGE_BASE.md"
+POST_W7_CHECKLIST_PATH = "docs/reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md"
 HOOK_CHAIN_PATH = "governance/compat/run_local_governance_hook_chain.py"
 WORKFLOW_PATH = ".github/workflows/documentation-testing.yml"
-THIS_SCRIPT_PATH = "governance/compat/check_session_governance_bootstrap.py"
+DOCS_GOV_COMPAT_PATH = "governance/compat/check_docs_governance_compat.py"
+THIS_SCRIPT_PATH = "governance/compat/check_governed_artifact_authoring.py"
 
 REQUIRED_FILES = (
-    BOOTSTRAP_GUARD_PATH,
-    BOOTSTRAP_REFERENCE_PATH,
+    STANDARD_PATH,
+    GUARD_PATH,
     MASTER_POLICY_PATH,
     CONTROL_MATRIX_PATH,
+    BOOTSTRAP_REFERENCE_PATH,
+    BOOTSTRAP_GUARD_PATH,
     DOCS_INDEX_PATH,
+    README_PATH,
+    KB_PATH,
+    POST_W7_CHECKLIST_PATH,
     HOOK_CHAIN_PATH,
     WORKFLOW_PATH,
+    DOCS_GOV_COMPAT_PATH,
 )
 
 REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
-    BOOTSTRAP_GUARD_PATH: (
-        "Control ID:",
-        "GC-025",
-        BOOTSTRAP_REFERENCE_PATH,
-        "GC-032",
-        ARTIFACT_AUTHORING_STANDARD_PATH,
-        "Always-On Bootstrap",
-        "Trigger-Based Controls",
-        "Task-Class Routing",
-        "Do not read every governance guard in full by default",
-        THIS_SCRIPT_PATH,
+    STANDARD_PATH: (
+        "Source-Truth First",
+        "No Summary Substitution for Typed Evidence",
+        "Planning / Execution / Evidence / Continuity Separation",
+        "Continuity Surfaces Move Together",
+        "Stop When Source Truth Is Missing",
+        "Layered Machine Enforcement",
+        "docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_POST_W7_OPEN_TARGETS_2026-03-28.md",
+        "docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md",
+        GUARD_PATH,
+        DOCS_GOV_COMPAT_PATH,
     ),
-    BOOTSTRAP_REFERENCE_PATH: (
-        "Always-On Bootstrap",
-        "Current Canonical Status First",
-        "Trigger-Based Controls",
-        "Task-Class Routing",
-        "Memory / Handoff / Bootstrap Separation",
-        "If Unsure",
-        "GC-018",
-        "GC-019",
-        "GC-020",
-        "GC-023",
-        "GC-024",
+    GUARD_PATH: (
+        "Control ID:",
         "GC-032",
-        ARTIFACT_AUTHORING_STANDARD_PATH,
-        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
-        "docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md",
+        STANDARD_PATH,
+        THIS_SCRIPT_PATH,
+        "source-truth",
+        "typed evidence",
+        "continuity surfaces",
     ),
     MASTER_POLICY_PATH: (
-        "Session governance bootstrap is mandatory before governed work starts or resumes in a fresh session",
-        BOOTSTRAP_GUARD_PATH,
-        BOOTSTRAP_REFERENCE_PATH,
+        "GC-032",
+        "governed artifact authoring is mandatory",
+        STANDARD_PATH,
+        GUARD_PATH,
         THIS_SCRIPT_PATH,
     ),
     CONTROL_MATRIX_PATH: (
-        "GC-025",
-        BOOTSTRAP_GUARD_PATH,
-        BOOTSTRAP_REFERENCE_PATH,
+        "GC-032",
+        STANDARD_PATH,
+        GUARD_PATH,
         THIS_SCRIPT_PATH,
+        DOCS_GOV_COMPAT_PATH,
+    ),
+    BOOTSTRAP_REFERENCE_PATH: (
+        "GC-032",
+        STANDARD_PATH,
+        "drafting or materially revising governed artifacts",
+    ),
+    BOOTSTRAP_GUARD_PATH: (
+        "GC-032",
+        STANDARD_PATH,
+        "governed artifact authoring",
     ),
     DOCS_INDEX_PATH: (
-        "reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md",
+        "reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md",
+    ),
+    README_PATH: (
+        Path(GUARD_PATH).name,
+    ),
+    KB_PATH: (
+        Path(GUARD_PATH).name,
+    ),
+    POST_W7_CHECKLIST_PATH: (
+        "GC-032",
+        STANDARD_PATH,
+        "typed evidence",
     ),
     HOOK_CHAIN_PATH: (
         THIS_SCRIPT_PATH,
     ),
     WORKFLOW_PATH: (
         THIS_SCRIPT_PATH,
-        "session-governance-bootstrap",
-        "Session Governance Bootstrap",
+        "governed-artifact-authoring",
+        "Governed Artifact Authoring",
+    ),
+    DOCS_GOV_COMPAT_PATH: (
+        "performance_evidence_provenance",
+        "performance_evidence_symbolic_value",
+        "Report Hash",
+        "Trace ID",
     ),
 }
 
@@ -183,12 +215,10 @@ def _classify(changed_files: list[str]) -> dict[str, Any]:
             marker_violations[path] = missing_markers
 
     relevant_changed_files = [
-        path for path in changed_files
-        if path in REQUIRED_FILES or path == THIS_SCRIPT_PATH
+        path for path in changed_files if path in REQUIRED_FILES or path == THIS_SCRIPT_PATH
     ]
 
     compliant = not missing_files and not marker_violations
-
     return {
         "requiredFileCount": len(REQUIRED_FILES),
         "missingFiles": missing_files,
@@ -203,16 +233,16 @@ def _classify(changed_files: list[str]) -> dict[str, Any]:
 
 
 def _print_report(report: dict[str, Any], base: str, head: str, base_source: str) -> None:
-    print("=== CVF Session Governance Bootstrap Compatibility Gate ===")
+    print("=== CVF Governed Artifact Authoring Compatibility Gate ===")
     print(f"Range: {base}..{head}")
     print(f"Base source: {base_source}")
     print(f"Required files checked: {report['requiredFileCount']}")
-    print(f"Relevant GC-025 files changed: {report['relevantChangedFileCount']}")
+    print(f"Relevant GC-032 files changed: {report['relevantChangedFileCount']}")
     print(f"Missing files: {report['missingFileCount']}")
     print(f"Marker violations: {report['markerViolationCount']}")
 
     if report["relevantChangedFiles"]:
-        print("\nRelevant GC-025 files changed:")
+        print("\nRelevant GC-032 files changed:")
         for path in report["relevantChangedFiles"]:
             print(f"  - {path}")
 
@@ -229,15 +259,15 @@ def _print_report(report: dict[str, Any], base: str, head: str, base_source: str
                 print(f"    missing: {marker}")
 
     if report["compliant"]:
-        print("\n✅ COMPLIANT — GC-025 session bootstrap, routing references, policy, docs index, hook-chain, and CI alignment is intact.")
+        print("\n✅ COMPLIANT — GC-032 governed artifact authoring, bootstrap routing, drafting checklist, and enforcement-chain alignment is intact.")
         return
 
-    print("\n❌ VIOLATION — GC-025 session bootstrap chain is incomplete or misaligned.")
+    print("\n❌ VIOLATION — GC-032 governed artifact authoring chain is incomplete or misaligned.")
     print("   Action required:")
-    print(f"   1. Ensure {BOOTSTRAP_GUARD_PATH} exists and defines the canonical bootstrap-loading rule.")
-    print(f"   2. Ensure {BOOTSTRAP_REFERENCE_PATH} defines the canonical always-on bootstrap and trigger-based routing.")
-    print(f"   3. Ensure {MASTER_POLICY_PATH}, {CONTROL_MATRIX_PATH}, and {DOCS_INDEX_PATH} reference the same GC-025 chain.")
-    print(f"   4. Ensure {HOOK_CHAIN_PATH} and {WORKFLOW_PATH} run {THIS_SCRIPT_PATH}.")
+    print(f"   1. Ensure {STANDARD_PATH} defines the canonical source-truth-first authoring rules.")
+    print(f"   2. Ensure {GUARD_PATH}, {MASTER_POLICY_PATH}, and {CONTROL_MATRIX_PATH} reference the same GC-032 chain.")
+    print(f"   3. Ensure {BOOTSTRAP_REFERENCE_PATH}, {BOOTSTRAP_GUARD_PATH}, and {POST_W7_CHECKLIST_PATH} route writers into the standard.")
+    print(f"   4. Ensure {DOCS_GOV_COMPAT_PATH}, {HOOK_CHAIN_PATH}, and {WORKFLOW_PATH} keep machine enforcement active.")
 
 
 def main() -> int:
@@ -246,10 +276,10 @@ def main() -> int:
     if hasattr(sys.stderr, "reconfigure"):
         sys.stderr.reconfigure(errors="replace")
 
-    parser = argparse.ArgumentParser(description="CVF Session Governance Bootstrap compatibility gate")
+    parser = argparse.ArgumentParser(description="CVF governed artifact authoring compatibility gate")
     parser.add_argument("--base", default=None, help="Git base ref (default: auto-detect merge-base, then fallback HEAD~1)")
     parser.add_argument("--head", default=None, help="Git head ref (default: HEAD)")
-    parser.add_argument("--enforce", action="store_true", help="Return non-zero (exit 2) when the GC-025 chain is incomplete or misaligned")
+    parser.add_argument("--enforce", action="store_true", help="Return non-zero (exit 2) when the GC-032 chain is incomplete or misaligned")
     parser.add_argument("--json", action="store_true", help="Print JSON report to stdout instead of text")
     parser.add_argument("--write-report", default=None, help="Optional output path for JSON report file")
     args = parser.parse_args()
@@ -284,7 +314,7 @@ def main() -> int:
     report = {
         "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "range": {"base": base, "head": head, "baseSource": base_source},
-        "policy": BOOTSTRAP_GUARD_PATH,
+        "policy": GUARD_PATH,
         **classified,
     }
 

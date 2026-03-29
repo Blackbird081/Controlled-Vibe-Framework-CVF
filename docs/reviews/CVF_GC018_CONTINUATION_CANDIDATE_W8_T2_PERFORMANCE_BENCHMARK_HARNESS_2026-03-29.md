@@ -17,20 +17,21 @@ Memory class: FULL_RECORD
 - Date: `2026-03-29`
 - Parent roadmap / wave: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - Proposed scope: instrumentation-only performance benchmark harness + acceptance-policy baseline — parallel prerequisite workstream; does NOT claim performance targets as current baseline truth
-- Continuation class: `VALIDATION_TEST`
+- Continuation class: VALIDATION_TEST
 - Why now: canonical decision pack designates Candidate C as a parallel prerequisite workstream that may run alongside W8-T1; without a measurement harness and acceptance policy, all performance claims in the whitepaper remain PROPOSAL ONLY and no future wave can promote performance numbers to baseline truth
 - Active-path impact: `NONE` — instrumentation-only; no restructuring of existing contracts or governance authority
 - Risk if deferred: performance claims remain permanently unverifiable; Candidate B and later waves cannot establish performance baseline; acceptance policy cannot be enforced by CI
-- Lateral alternative considered: `YES`
+- Lateral alternative considered: YES
 - Why not lateral shift: no lateral alternative exists for establishing measurement truth; manually asserting performance numbers without a harness is the exact failure mode this workstream prevents
-- Real decision boundary improved: `YES` — acceptance-policy baseline is a real decision boundary (what constitutes acceptable performance is enforced by policy, not assumption)
+- Real decision boundary improved: YES
+- Boundary improvement note: acceptance-policy baseline is a real decision boundary because acceptable performance is declared by policy rather than left implicit
 - Expected enforcement class: `CI_REPO_GATE` | `GOVERNANCE_DECISION_GATE`
 - Required evidence if approved:
   - representative execution paths defined
   - instrumentation hooks committed (additive only — no contract restructuring)
   - benchmark harness running against real execution paths
   - acceptance-policy baseline document
-  - trace-backed latency / throughput evidence (first batch)
+  - first governed evidence batch with harness-derived provenance (`reportId`, `reportHash`, `runId`, `measurementId`, `traceId`, numeric `value`)
   - explicit statement that whitepaper performance numbers remain PROPOSAL ONLY until this workstream closes
 
 ---
@@ -43,14 +44,14 @@ Memory class: FULL_RECORD
 - Operational efficiency: `2` — measurement harness directly enables faster performance decision cycles across all future waves
 - Portfolio priority: `1` — parallel prerequisite, not the first structural family
 - Total: `7`
-- Decision: `CONTINUE`
+- Decision: CONTINUE
 - Reason: no zero in critical dimensions (Risk reduction = 1, Decision value = 1, Machine enforceability = 2); lateral alternative recorded; real decision boundary improved (acceptance policy); VALIDATION_TEST class continuation justified
 
 ---
 
 ## Authorization Boundary
 
-- Authorized now: `YES`
+- Authorized now: YES
 - Next batch name: `W8-T2 — Performance Benchmark Harness and Acceptance-Policy Baseline`
 - Reopen trigger: N/A
 

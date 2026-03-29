@@ -147,6 +147,20 @@ Primary references:
 - `governance/toolkit/05_OPERATION/CVF_GUARD_REGISTRY_GUARD.md`
 - `governance/compat/check_guard_authoring_standard.py`
 
+### `GC-032` — Governed Artifact Authoring
+
+Use when:
+
+- drafting or materially revising governed artifacts
+- translating contract, test, or harness output into baseline, review, audit, or evidence docs
+- updating tracker, handoff, closure, or other continuity surfaces after tranche posture changes
+
+Primary references:
+
+- `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
+- `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`
+- `governance/compat/check_governed_artifact_authoring.py`
+
 ### `GC-024` — Test Partition Ownership
 
 Use when:
@@ -172,6 +186,7 @@ Use this routing table after reading the always-on bootstrap:
 | live boardroom deliberation in intake/design flow | `GC-028` + `AI Boardroom` protocol + active roadmap |
 | extension-local source, test, or package-config changes | `GC-029` |
 | creating or materially revising governance guards | `GC-030` + guard registry |
+| drafting or materially revising governed artifacts | `GC-032` + source truth + active roadmap/tranche packet |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |
 | ordinary tranche-local implementation already authorized | active roadmap + tranche packet only |
@@ -196,6 +211,7 @@ If routing is uncertain:
 ## Related Controls
 
 - `governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`
+- `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
 - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `GC-026` keeps bootstrap depends on tracker freshness rather than stale progress pointers

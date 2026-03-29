@@ -173,6 +173,13 @@ Personal AI usage unrelated to company work is excluded.
      - Existing protected active-window entries are governed state and must not be silently mutated or removed in the normal commit path.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_active_window_registry.py`.
+ 26. `GC-032` governed artifact authoring is mandatory whenever humans or AI agents write governed packets, evidence docs, or canonical continuity records:
+     - Authors must read source truth first and may not replace typed evidence with narrative shorthand when upstream contracts define explicit fields.
+     - Planning, execution, evidence, and continuity artifacts must remain role-separated; one artifact class may not silently stand in for another.
+     - Tranche posture changes must move the relevant continuity surfaces together instead of leaving tracker, handoff, and closure truth out of sync.
+     - Canonical authoring standard: `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_governed_artifact_authoring.py`.
 
 ---
 

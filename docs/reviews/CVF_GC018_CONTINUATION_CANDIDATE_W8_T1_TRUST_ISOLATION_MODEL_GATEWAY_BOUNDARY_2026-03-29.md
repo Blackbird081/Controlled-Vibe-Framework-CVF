@@ -16,13 +16,14 @@ Memory class: FULL_RECORD
 - Date: `2026-03-29`
 - Parent roadmap / wave: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - Proposed scope: Trust / Isolation boundary clarification + Model Gateway contract surface convergence — first structural family post-W7
-- Continuation class: `STRUCTURAL`
+- Continuation class: STRUCTURAL
 - Why now: canonical decision pack `POST_W7_OPEN_TARGETS_DECISION_PACK_2026-03-28` designates Candidate A as the first structural family; it addresses the highest-value unresolved boundary problem and is the prerequisite for all downstream family work (Candidate B cannot declare gateway assumptions until Candidate A freezes the relevant surfaces)
 - Active-path impact: `LIMITED` — scope is boundary clarification and contract surface freeze; no omnibus restructuring
 - Risk if deferred: boundary ambiguity between governance authority and model-gateway execution surfaces persists indefinitely; Candidate B and later waves cannot proceed with declared inputs; downstream architectural drift compounds
-- Lateral alternative considered: `YES`
+- Lateral alternative considered: YES
 - Why not lateral shift: Candidate B (RAG + Context Engine) is the only lateral alternative; it explicitly requires stable gateway assumptions that only Candidate A can establish; lateral shift to Candidate B first would violate the declared dependency order
-- Real decision boundary improved: `YES` — gateway contract surfaces facing the Knowledge Layer will be declared as FIXED or IN SCOPE; trust / isolation ownership will be consolidated; ambiguity between governance authority and model-gateway execution is a live architectural decision boundary
+- Real decision boundary improved: YES
+- Boundary improvement note: gateway contract surfaces facing the Knowledge Layer are declared as FIXED or IN SCOPE, and trust / isolation ownership is consolidated into an explicit architectural boundary
 - Expected enforcement class: `GOVERNANCE_DECISION_GATE` | `RUNTIME_GUARD`
 - Required evidence if approved:
   - W7 dependency-chain impact assessment (all 7 links: Runtime → Artifact → Trace → Planner → Decision → Eval/Builder → Memory)
@@ -42,14 +43,14 @@ Memory class: FULL_RECORD
 - Operational efficiency: `1` — boundary clarification is not an operational bottleneck but reduces future ambiguity cost
 - Portfolio priority: `2` — first structural family per canonical decision pack; prerequisite for all downstream families
 - Total: `9`
-- Decision: `CONTINUE`
+- Decision: CONTINUE
 - Reason: highest-value first structural family; no zero scores in critical dimensions; direct reduction of architectural risk with machine-enforceable output; prerequisite-chain position mandates first-wave priority
 
 ---
 
 ## Authorization Boundary
 
-- Authorized now: `YES`
+- Authorized now: YES
 - Next batch name: `W8-T1 — Trust Isolation and Model Gateway Boundary Convergence`
 - Reopen trigger: N/A
 

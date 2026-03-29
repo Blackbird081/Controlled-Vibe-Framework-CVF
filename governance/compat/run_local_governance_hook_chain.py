@@ -39,6 +39,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_docs_governance_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
         (
+            "governed artifact authoring compatibility",
+            ["python", "governance/compat/check_governed_artifact_authoring.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
             "bug documentation compatibility",
             ["python", "governance/compat/check_bug_doc_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),

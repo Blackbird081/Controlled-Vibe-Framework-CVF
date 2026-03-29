@@ -2,7 +2,7 @@
 
 > Branch: `cvf-next`
 > Last push: `W8-T1 CP1+CP2+CP3 → cvf-next`
-> State: **W8-T1 CLOSED DELIVERED** | **W8-T2 AUTHORIZED (parallel)** — CPF 1985 tests, 0 failures; Candidate B GC-018 now unblocked
+> State: **W8-T1 CLOSED DELIVERED** | **W8-T2 CLOSED DELIVERED (parallel prerequisite)** — CPF 2027 tests, 0 failures; Candidate B GC-018 now unblocked; performance thresholds still PROPOSAL ONLY
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.0-W7T10`)
 
 ---
@@ -10,7 +10,7 @@
 ## Current State
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **1893 tests, 0 failures**
+- CPF (Control Plane Foundation): **2027 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1333 tests, 0 failures**
@@ -19,9 +19,10 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W8-T2 | Candidate C Performance Benchmark Harness + Acceptance-Policy Baseline | CLOSED DELIVERED 2026-03-29 |
+| W8-T1 | Trust Isolation and Model Gateway Boundary Convergence | CLOSED DELIVERED 2026-03-29 |
 | W7-T9 | Memory Loop Activation | CLOSED DELIVERED 2026-03-28 |
 | W7-T10 | W7 Wave Integration Closure | CLOSED DELIVERED 2026-03-28 |
-| W5-T2 | Post-W7 Architecture Whitepaper Update (v3.0-W7T10) | CLOSED DELIVERED 2026-03-28 |
 
 ### Architecture Baseline
 
@@ -34,14 +35,21 @@
 
 ## Immediate Next Action Required
 
-**Must issue a fresh GC-018 before any implementation work.**
+**Must issue a fresh GC-018 before any further implementation work.**
+
+Before drafting that next `GC-018`, load `GC-032` first:
+- `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
+- `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `docs/reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md`
 
 Current guidance:
 - no tranche is currently active
 - **W7 Integration Wave COMPLETE** — all T0-T10 CLOSED DELIVERED; all P1-P8 gates SATISFIED; 11 schemas across 4 planes; 32 guard/preset definitions; 0 violations
 - **W5-T2 CLOSED DELIVERED** — whitepaper now at v3.0-W7T10; progress tracker fully synchronized
 - **ALL known coverage gaps are closed**: CPF W2-T38, EPF all bridges, GEF all bridges, LPF W4-T25 (all 18 base contracts bridged)
-- **Next**: await fresh authorization for next wave; survey Review 19+ proposals if any exist; any extension requires fresh GC-018
+- **W8-T1 CLOSED DELIVERED** — trust/isolation and model-gateway boundary convergence committed; Candidate B gateway-stability input unblocked
+- **W8-T2 CLOSED DELIVERED** — benchmark harness, acceptance-policy baseline, and first evidence batch committed; performance thresholds remain `PROPOSAL ONLY`
+- **Next**: fresh `GC-018` for the next governed wave, with `W9-T1 / Candidate B` now the default follow-on candidate unless a different authorized family supersedes it
 - official planning baseline for post-W7 upgrades: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
@@ -57,10 +65,11 @@ Any future tranche still requires: `GC-018 authorization → execution plan → 
 
 ### Tranche Protocol
 1. **GC-018** (10/10 audit score) → commits roadmap + tracker + GC-026 sync + execution plan
-2. **Per CP**: Full Lane = new concept/module/cross-plane; Fast Lane (GC-021) = additive batch/summary
-3. **Per CP artifacts**: audit doc + review doc + delta doc + exec plan update + test log update + commit
-4. **No implementation without GC-018 authorization**
-5. **No push to main** — work on `cvf-next` only
+2. **GC-032 first** before writing governed packets → source truth first, typed evidence stays explicit, continuity surfaces move together
+3. **Per CP**: Full Lane = new concept/module/cross-plane; Fast Lane (GC-021) = additive batch/summary
+4. **Per CP artifacts**: audit doc + review doc + delta doc + exec plan update + test log update + commit
+5. **No implementation without GC-018 authorization**
+6. **No push to main** — work on `cvf-next` only
 
 ### Fast Lane (GC-021) — eligible when:
 - additive only, no restructuring
@@ -98,6 +107,7 @@ Any future tranche still requires: `GC-018 authorization → execution plan → 
 | Progress tracker | `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` |
 | Completion roadmap | `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` |
 | Post-W7 upgrade baseline | `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md` |
+| Governed artifact authoring standard | `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md` |
 | Test log | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
 | Test partition registry | `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` |
 | CPF barrel exports | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` |

@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W15-T1 CLOSED DELIVERED — AgentDefinitionAuditBatchContract → cvf-next`
-> Remote tracking: `origin/cvf-next @ a7de1b4f`
-> State: **W15-T1 CLOSED DELIVERED** — AgentDefinitionAuditBatchContract canonical; CPF 2222 tests; W12-T1 family complete; no active tranche
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.2-W12T1`)
+> Last push: `W16-T1 CLOSED DELIVERED — Whitepaper v3.3-W15T1 → cvf-next`
+> Remote tracking: `origin/cvf-next @ (pending push)`
+> State: **W16-T1 CLOSED DELIVERED** — whitepaper v3.3-W15T1 canonical; CPF 2222 tests; W12-T1 family fully documented; no active tranche
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.3-W15T1`)
 
 ---
 
@@ -22,6 +22,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W16-T1 | Whitepaper Update v3.3-W15T1 (DOCUMENTATION class) | CLOSED DELIVERED 2026-03-30 — whitepaper v3.3-W15T1 canonical; W13-T1/W14-T1/W15-T1 reflected; CPF 2144→2222; all 7 pass conditions satisfied |
 | W15-T1 | Agent Definition Audit Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-03-30 — AgentDefinitionAuditBatchContract canonical; CPF 2222 tests (+26); all 7 pass conditions satisfied; W12-T1 family complete |
 | W14-T1 | Agent Scope Resolution Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-03-30 — AgentScopeResolutionBatchContract canonical; CPF 2196 tests (+26); all 7 pass conditions satisfied; tranche complete |
 | W13-T1 | Agent Definition Capability Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-03-30 — AgentDefinitionCapabilityBatchContract canonical; CPF 2170 tests (+26); all 7 pass conditions satisfied |
@@ -35,23 +36,23 @@
 
 ### Architecture Baseline
 
-- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.2-W12T1`)
+- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.3-W15T1`)
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1`
-- Documentation-to-implementation gap: CLOSED (v3.2-W12T1)
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1`
+- Documentation-to-implementation gap: CLOSED (v3.3-W15T1)
 
 ---
 
 ## Immediate Next Action Required
 
-**W15-T1 CLOSED DELIVERED. No active tranche — fresh GC-018 required for next wave.**
+**W16-T1 CLOSED DELIVERED. No active tranche — fresh GC-018 required for next wave.**
 
 Current guidance:
 
-- **W15-T1 CLOSED DELIVERED** — `AgentDefinitionAuditBatchContract` canonical; CPF 2222 tests (+26); all 7 pass conditions satisfied; W12-T1 agent definition family complete (W12→W13→W14→W15)
-- Closure review: `docs/reviews/CVF_W15_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
-- GC-026 closure sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W15_T1_CLOSURE_2026-03-30.md`
+- **W16-T1 CLOSED DELIVERED** — whitepaper `v3.3-W15T1` canonical; W13-T1/W14-T1/W15-T1 batch contracts reflected; CPF 2144→2222; all 7 pass conditions satisfied
+- Closure review: `docs/reviews/CVF_W16_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
+- GC-026 closure sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W16_T1_CLOSURE_2026-03-30.md`
 - Post-W7 upgrade roadmap: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
 - **Next**: fresh GC-018 continuation candidate packet for next authorized tranche
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`

@@ -238,4 +238,9 @@ Canonical source packet chain for this roadmap:
 | `P2` Candidate C performance baseline workstream | CLOSED DELIVERED — W8-T2 |
 | `P3` Candidate A execution wave | CLOSED DELIVERED — W8-T1 |
 | `P4` Candidate B structural follow-on | READY FOR FRESH `GC-018` — upstream posture satisfied |
-| `P5` Candidate D learning expansion | `GC-018 AUTHORIZED — W10-T1 Reputation Signal and Task Marketplace Learning Expansion; depth audit 7/10 CONTINUE` |
+| `P5` Candidate D learning expansion | `CLOSED DELIVERED — W10-T1 Reputation Signal and Task Marketplace Learning Expansion; LPF 1333→1465 (+132 tests); all 7 pass conditions satisfied 2026-03-29` |
+| `Post-P5` Whitepaper update (DOCUMENTATION class) | `CLOSED DELIVERED — W11-T1 whitepaper updated v3.0-W7T10 → v3.1-W10T1; all 9 pass conditions satisfied 2026-03-29` |
+| `Post-P5` Agent Definition Boundary Convergence (REALIZATION class) | `CLOSED DELIVERED — W12-T1 AgentDefinitionBoundaryContract canonical; CPF 2144 tests; all 9 pass conditions satisfied 2026-03-29` |
+| `Post-P5` Agent Definition Capability Batch (REALIZATION class) | `CLOSED DELIVERED — W13-T1 AgentDefinitionCapabilityBatchContract canonical; CPF 2170 tests (+26); all 7 pass conditions satisfied 2026-03-30` |
+| `Post-P5` Agent Scope Resolution Batch (REALIZATION class) | `CLOSED DELIVERED — W14-T1 AgentScopeResolutionBatchContract canonical; CPF 2196 tests (+26); all 7 pass conditions satisfied 2026-03-30` |
+| `Post-P5` Agent Definition Audit Batch (REALIZATION class — next candidate) | `PENDING GC-018 — W15-T1 candidate; auditDefinitions() batch surface from W12-T1; requires fresh GC-018 authorization` |

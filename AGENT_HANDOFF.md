@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W17-T1 CLOSED DELIVERED — tranche closure → cvf-next`
+> Last push: `W18-T1 GC-018 AUTHORIZED — Whitepaper Update v3.4-W17T1 → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W17-T1 CLOSED DELIVERED** — AgentRegistrationBatchContract canonical; CPF 2252 tests; no active tranche
+> State: **W18-T1 GC-018 AUTHORIZED** — Whitepaper Update v3.4-W17T1; CPF 2252; CP1 Full Lane next
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.3-W15T1`)
 
 ---
@@ -47,14 +47,16 @@
 
 ## Immediate Next Action Required
 
-**W17-T1 CLOSED DELIVERED. No active tranche. Start fresh quality assessment for next P5+ candidate.**
+**W18-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — Whitepaper Update v3.4-W17T1.**
 
 Current guidance:
 
-- **W17-T1 CLOSED DELIVERED** — `AgentRegistrationBatchContract` canonical; CPF 2252 tests (+30); all 7 pass conditions satisfied
-- Closure review: `docs/reviews/CVF_W17_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W17_T1_CLOSED_DELIVERED_2026-03-30.md`
-- **Next**: fresh quality assessment + GC-018 continuation candidate for next P5+ target
+- **W18-T1 GC-018 AUTHORIZED** — Whitepaper Update v3.4-W17T1 (DOCUMENTATION class); whitepaper at v3.3-W15T1; W16-T1/W17-T1 not yet reflected; CPF 2252
+- Quality assessment: `docs/assessments/CVF_POST_W17_CONTINUATION_QUALITY_ASSESSMENT_2026-03-30.md` (9.67/10 EXCELLENT)
+- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W18_T1_WHITEPAPER_UPDATE_V3_4_2026-03-30.md`
+- Execution plan: `docs/roadmaps/CVF_W18_T1_WHITEPAPER_UPDATE_V3_4_EXECUTION_PLAN_2026-03-30.md`
+- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W18_T1_AUTHORIZATION_2026-03-30.md`
+- **Next**: W18-T1 CP1 Full Lane — whitepaper v3.4-W17T1 edits + audit + review + delta + GC-026 sync + push
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

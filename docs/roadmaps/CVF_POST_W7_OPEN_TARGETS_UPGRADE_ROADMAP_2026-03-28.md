@@ -245,3 +245,5 @@ Canonical source packet chain for this roadmap:
 | `Post-P5` Agent Scope Resolution Batch (REALIZATION class) | `CLOSED DELIVERED — W14-T1 AgentScopeResolutionBatchContract canonical; CPF 2196 tests (+26); all 7 pass conditions satisfied 2026-03-30` |
 | `Post-P5` Agent Definition Audit Batch (REALIZATION class) | `CLOSED DELIVERED — W15-T1 AgentDefinitionAuditBatchContract canonical; CPF 2222 tests (+26); all 7 pass conditions satisfied; W12-T1 agent definition family complete 2026-03-30` |
 | `Post-P5` Whitepaper update v3.3-W15T1 (DOCUMENTATION class) | `CLOSED DELIVERED — W16-T1 whitepaper v3.3-W15T1 canonical; W13-T1/W14-T1/W15-T1 batch contracts reflected; CPF 2144→2222; all 7 pass conditions satisfied 2026-03-30` |
+| `Post-P5` Agent Registration Batch (REALIZATION class) | `CLOSED DELIVERED — W17-T1 AgentRegistrationBatchContract canonical; CPF 2252 tests (+30); all 7 pass conditions satisfied; final W12-T1 registration surface closed 2026-03-30` |
+| `Post-P5` Whitepaper update v3.4-W17T1 (DOCUMENTATION class) | `GC-018 AUTHORIZED 2026-03-30 — W18-T1; v3.3-W15T1 stale vs W17-T1; documentation gap to close; CP1 Full Lane next` |

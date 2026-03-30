@@ -810,3 +810,14 @@ export type {
   IsolationScopeBatch,
   IsolationScopeBatchContractDependencies,
 } from "./isolation.scope.batch.contract";
+
+// W20-T1 CP1 — Trust Propagation Batch Contract
+export {
+  TrustPropagationBatchContract,
+  createTrustPropagationBatchContract,
+} from "./trust.propagation.batch.contract";
+export type {
+  TrustPropagationBatchDominantMode,
+  TrustPropagationBatch,
+  TrustPropagationBatchContractDependencies,
+} from "./trust.propagation.batch.contract";

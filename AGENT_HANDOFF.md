@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W20-T1 GC-018 AUTHORIZED — TrustPropagationBatchContract → cvf-next`
+> Last push: `W20-T1 CP1 DONE — TrustPropagationBatchContract + 26 tests → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W20-T1 GC-018 AUTHORIZED** — TrustPropagationBatchContract; CPF 2278; CP1 Full Lane next
+> State: **W20-T1 CP1 DONE** — TrustPropagationBatchContract canonical; CPF 2304; CP2 tranche closure next
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.4-W17T1`)
 
 ---
@@ -14,7 +14,7 @@
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2278 tests, 0 failures**
+- CPF (Control Plane Foundation): **2304 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -47,16 +47,18 @@
 
 ## Immediate Next Action Required
 
-**W20-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — TrustPropagationBatchContract.**
+**W20-T1 CP1 DONE. Proceed to CP2 — tranche closure review + GC-026 closed sync + push.**
 
 Current guidance:
 
-- **W20-T1 GC-018 AUTHORIZED** — TrustPropagationBatchContract (REALIZATION class); batches `decideTrustPropagation()`; BLOCKED > GRAPH_GATED > DIRECT dominant precedence; CPF +~26 tests projected
-- Quality assessment: `docs/assessments/CVF_POST_W19_CONTINUATION_QUALITY_ASSESSMENT_2026-03-30.md` (9.83/10 EXCELLENT)
-- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W20_T1_TRUST_PROPAGATION_BATCH_2026-03-30.md`
-- Execution plan: `docs/roadmaps/CVF_W20_T1_TRUST_PROPAGATION_BATCH_EXECUTION_PLAN_2026-03-30.md`
-- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W20_T1_AUTHORIZATION_2026-03-30.md`
-- **Next**: W20-T1 CP1 Full Lane — TrustPropagationBatchContract + ~26 tests + audit + review + delta + GC-026 sync + push
+- **W20-T1 CP1 DONE** — TrustPropagationBatchContract canonical; CPF 2304 (+26); 0 failures; all 7 pass conditions SATISFIED
+- Contract: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/trust.propagation.batch.contract.ts`
+- Tests: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/trust.propagation.batch.contract.test.ts` (26 tests, 26 pass)
+- Audit: `docs/audits/CVF_W20_T1_CP1_TRUST_PROPAGATION_BATCH_AUDIT_2026-03-30.md`
+- Review: `docs/reviews/CVF_GC019_W20_T1_CP1_TRUST_PROPAGATION_BATCH_REVIEW_2026-03-30.md`
+- Delta: `docs/baselines/CVF_W20_T1_CP1_TRUST_PROPAGATION_BATCH_DELTA_2026-03-30.md`
+- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W20_T1_CP1_DONE_2026-03-30.md`
+- **Next**: W20-T1 CP2 — tranche closure review + GC-026 closed sync + tracker/handoff + push
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

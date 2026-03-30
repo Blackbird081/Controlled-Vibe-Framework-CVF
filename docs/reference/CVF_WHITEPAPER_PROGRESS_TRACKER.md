@@ -165,7 +165,7 @@ Memory class: POINTER_RECORD
 | `W17-T1` Agent Registration Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — AgentRegistrationBatchContract canonical; CPF 2252 tests (+30); all 7 pass conditions satisfied; final W12-T1 registration surface closed` |
 | `W18-T1` Whitepaper Update v3.4-W17T1 (DOCUMENTATION class) | `CLOSED DELIVERED 2026-03-30 — whitepaper v3.4-W17T1 canonical; W16-T1/W17-T1 reflected; CPF 2252; documentation-to-implementation gap closed; all 7 pass conditions satisfied` |
 | `W19-T1` Isolation Scope Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — IsolationScopeBatchContract canonical; CPF 2278 tests (+26); all 7 pass conditions satisfied; W8-T1 trust isolation batch surface complete` |
-| `W20-T1` Trust Propagation Batch Contract (REALIZATION class) | `CP1 DONE 2026-03-30 — TrustPropagationBatchContract canonical; CPF 2304 tests (+26); all 7 pass conditions satisfied; CP2 tranche closure next` |
+| `W20-T1` Trust Propagation Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — TrustPropagationBatchContract canonical; CPF 2304 tests (+26); all 7 pass conditions satisfied; W8-T1 trust propagation batch surface closed` |
 
 ---
 
@@ -198,7 +198,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W20_T1_CP1_DONE_2026-03-30.md`
-- Current closure anchor: `docs/reviews/CVF_W19_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W20_T1_TRUST_PROPAGATION_BATCH_2026-03-30.md` (W20-T1 CP1 DONE)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W20_T1_CLOSED_2026-03-30.md`
+- Current closure anchor: `docs/reviews/CVF_W20_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W20_T1_TRUST_PROPAGATION_BATCH_2026-03-30.md` (W20-T1 CLOSED DELIVERED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

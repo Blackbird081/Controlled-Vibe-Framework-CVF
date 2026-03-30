@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W16-T1 CLOSED DELIVERED — Whitepaper v3.3-W15T1 → cvf-next`
+> Last push: `W17-T1 GC-018 AUTHORIZED — AgentRegistrationBatchContract → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W16-T1 CLOSED DELIVERED** — whitepaper v3.3-W15T1 canonical; CPF 2222 tests; W12-T1 family fully documented; no active tranche
+> State: **W17-T1 GC-018 AUTHORIZED** — AgentRegistrationBatchContract; final W12-T1 batch surface; CPF 2222 tests; CP1 Full Lane next
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.3-W15T1`)
 
 ---
@@ -47,15 +47,16 @@
 
 ## Immediate Next Action Required
 
-**W16-T1 CLOSED DELIVERED. No active tranche — fresh GC-018 required for next wave.**
+**W17-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — AgentRegistrationBatchContract.**
 
 Current guidance:
 
-- **W16-T1 CLOSED DELIVERED** — whitepaper `v3.3-W15T1` canonical; W13-T1/W14-T1/W15-T1 batch contracts reflected; CPF 2144→2222; all 7 pass conditions satisfied
-- Closure review: `docs/reviews/CVF_W16_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
-- GC-026 closure sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W16_T1_CLOSURE_2026-03-30.md`
-- Post-W7 upgrade roadmap: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- **Next**: fresh GC-018 continuation candidate packet for next authorized tranche
+- **W17-T1 GC-018 AUTHORIZED** — `AgentRegistrationBatchContract`; final unbatched surface of W12-T1; `RegistrationStatus: "REGISTERED" | "DUPLICATE"`; dominant: `REGISTERED > DUPLICATE`
+- Quality assessment: `docs/assessments/CVF_POST_W16_CONTINUATION_QUALITY_ASSESSMENT_2026-03-30.md` (9.67/10 EXCELLENT — EXPAND_NOW)
+- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W17_T1_AGENT_REGISTRATION_BATCH_2026-03-30.md`
+- Execution plan: `docs/roadmaps/CVF_W17_T1_AGENT_REGISTRATION_BATCH_EXECUTION_PLAN_2026-03-30.md`
+- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W17_T1_AUTHORIZATION_2026-03-30.md`
+- **Next**: W17-T1 CP1 Full Lane — `AgentRegistrationBatchContract` + 26 tests + audit + review + delta + GC-026 sync + push
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

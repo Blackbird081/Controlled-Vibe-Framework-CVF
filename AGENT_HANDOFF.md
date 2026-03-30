@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W18-T1 CP1 DONE — Whitepaper v3.4-W17T1 canonical → cvf-next`
+> Last push: `W18-T1 CLOSED DELIVERED — tranche closure → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W18-T1 CP1 DONE** — whitepaper v3.4-W17T1 canonical; CPF 2252; tranche closure CP2 next
+> State: **W18-T1 CLOSED DELIVERED** — whitepaper v3.4-W17T1 canonical; CPF 2252; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.4-W17T1`)
 
 ---
@@ -41,22 +41,20 @@
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
 - Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1`
-- Documentation-to-implementation gap: CLOSED (v3.3-W15T1)
+- Documentation-to-implementation gap: CLOSED (v3.4-W17T1)
 
 ---
 
 ## Immediate Next Action Required
 
-**W18-T1 CP1 DONE. Proceed to CP2 tranche closure.**
+**W18-T1 CLOSED DELIVERED. No active tranche. Start fresh quality assessment for next P5+ candidate.**
 
 Current guidance:
 
-- **W18-T1 CP1 DONE** — whitepaper v3.4-W17T1 canonical; W16-T1/W17-T1 reflected; CPF 2252; all 7 pass conditions satisfied
-- Audit: `docs/audits/CVF_W18_T1_CP1_WHITEPAPER_UPDATE_V3_4_AUDIT_2026-03-30.md`
-- Review: `docs/reviews/CVF_GC019_W18_T1_CP1_WHITEPAPER_UPDATE_V3_4_REVIEW_2026-03-30.md`
-- Delta: `docs/baselines/CVF_W18_T1_CP1_WHITEPAPER_UPDATE_V3_4_DELTA_2026-03-30.md`
-- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W18_T1_CP1_DONE_2026-03-30.md`
-- **Next**: W18-T1 CP2 — tranche closure review + GC-026 closed sync + tracker/handoff update + push
+- **W18-T1 CLOSED DELIVERED** — whitepaper v3.4-W17T1 canonical; W16-T1/W17-T1 reflected; CPF 2252; documentation-to-implementation gap closed; all 7 pass conditions satisfied
+- Closure review: `docs/reviews/CVF_W18_T1_TRANCHE_CLOSURE_REVIEW_2026-03-30.md`
+- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W18_T1_CLOSED_DELIVERED_2026-03-30.md`
+- **Next**: fresh quality assessment + GC-018 continuation candidate for next P5+ target
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

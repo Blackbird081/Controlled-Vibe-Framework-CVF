@@ -786,3 +786,16 @@ export type {
   AgentDefinitionAuditBatch,
   AgentDefinitionAuditBatchContractDependencies,
 } from "./agent.definition.audit.batch.contract";
+
+// W17-T1 CP1 — Agent Registration Batch Contract
+export {
+  AgentRegistrationBatchContract,
+  createAgentRegistrationBatchContract,
+} from "./agent.registration.batch.contract";
+export type {
+  RegistrationStatus,
+  RegistrationBatchDominantStatus,
+  AgentRegistrationResult,
+  AgentRegistrationBatch,
+  AgentRegistrationBatchContractDependencies,
+} from "./agent.registration.batch.contract";

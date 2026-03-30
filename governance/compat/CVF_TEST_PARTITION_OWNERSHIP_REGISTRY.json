@@ -1651,6 +1651,17 @@
         "AgentDefinitionAuditBatchContract",
         "createAgentDefinitionAuditBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Agent Registration Batch (W17-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.registration.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AgentRegistrationBatchContract",
+        "createAgentRegistrationBatchContract"
+      ]
     }
   ]
 }

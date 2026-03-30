@@ -243,4 +243,5 @@ Canonical source packet chain for this roadmap:
 | `Post-P5` Agent Definition Boundary Convergence (REALIZATION class) | `CLOSED DELIVERED — W12-T1 AgentDefinitionBoundaryContract canonical; CPF 2144 tests; all 9 pass conditions satisfied 2026-03-29` |
 | `Post-P5` Agent Definition Capability Batch (REALIZATION class) | `CLOSED DELIVERED — W13-T1 AgentDefinitionCapabilityBatchContract canonical; CPF 2170 tests (+26); all 7 pass conditions satisfied 2026-03-30` |
 | `Post-P5` Agent Scope Resolution Batch (REALIZATION class) | `CLOSED DELIVERED — W14-T1 AgentScopeResolutionBatchContract canonical; CPF 2196 tests (+26); all 7 pass conditions satisfied 2026-03-30` |
-| `Post-P5` Agent Definition Audit Batch (REALIZATION class — next candidate) | `PENDING GC-018 — W15-T1 candidate; auditDefinitions() batch surface from W12-T1; requires fresh GC-018 authorization` |
+| `Post-P5` Agent Definition Audit Batch (REALIZATION class) | `CLOSED DELIVERED — W15-T1 AgentDefinitionAuditBatchContract canonical; CPF 2222 tests (+26); all 7 pass conditions satisfied; W12-T1 agent definition family complete 2026-03-30` |
+| `Post-P5` Whitepaper update v3.3-W15T1 (DOCUMENTATION class) | `CLOSED DELIVERED — W16-T1 whitepaper v3.3-W15T1 canonical; W13-T1/W14-T1/W15-T1 batch contracts reflected; CPF 2144→2222; all 7 pass conditions satisfied 2026-03-30` |

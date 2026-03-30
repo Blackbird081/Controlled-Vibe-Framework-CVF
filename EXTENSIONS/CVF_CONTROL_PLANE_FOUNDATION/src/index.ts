@@ -799,3 +799,14 @@ export type {
   AgentRegistrationBatch,
   AgentRegistrationBatchContractDependencies,
 } from "./agent.registration.batch.contract";
+
+// W19-T1 CP1 — Isolation Scope Batch Contract
+export {
+  IsolationScopeBatchContract,
+  createIsolationScopeBatchContract,
+} from "./isolation.scope.batch.contract";
+export type {
+  IsolationBatchDominantEnforcementMode,
+  IsolationScopeBatch,
+  IsolationScopeBatchContractDependencies,
+} from "./isolation.scope.batch.contract";

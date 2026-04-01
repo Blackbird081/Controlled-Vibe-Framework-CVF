@@ -14,14 +14,14 @@ Memory class: POINTER_RECORD
 | Scope | Current readout |
 |---|---|
 | Whitepaper target-state | `SUBSTANTIALLY DELIVERED` |
-| Architecture baseline snapshot | `CVF_MASTER_ARCHITECTURE_WHITEPAPER v3.5-W30T1` |
+| Architecture baseline snapshot | `CVF_MASTER_ARCHITECTURE_WHITEPAPER v3.6-W32T1` |
 | Current-cycle restructuring | `DONE` |
-| Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 CLOSED + post-W7 continuation W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 CLOSED + W11-T1 / W16-T1 / W18-T1 whitepaper updates CLOSED + current synchronized baseline v3.5-W30T1` |
+| Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 CLOSED + post-W7 continuation W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 CLOSED + W11-T1 / W16-T1 / W18-T1 whitepaper updates CLOSED + current synchronized baseline v3.6-W32T1` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
-| Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1` ALL CLOSED DELIVERED; W11-T1 / W16-T1 / W18-T1 documentation updates closed; synchronized baseline now `v3.5-W30T1` |
-| Current active tranche | `NONE — W30-T1 CLOSED DELIVERED 2026-04-01; whitepaper v3.5-W30T1 synchronized; next move is fresh quality assessment + bounded GC-018 decision for the next candidate` |
-| Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); current continuity sync refresh aligns the architecture baseline to v3.5-W30T1 (2026-04-01)` |
+| Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1` ALL CLOSED DELIVERED; W11-T1 / W16-T1 / W18-T1 documentation updates closed; synchronized baseline now `v3.6-W32T1` |
+| Current active tranche | `NONE — W32-T1 CLOSED DELIVERED 2026-04-01; whitepaper v3.6-W32T1 synchronized; next move is fresh quality assessment + bounded GC-018 decision for the next candidate` |
+| Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); current continuity sync refresh aligns the architecture baseline to v3.6-W32T1 (2026-04-01)` |
 
 ---
 
@@ -29,12 +29,12 @@ Memory class: POINTER_RECORD
 
 | Area | Whitepaper target | Current state | Status | Next governed move |
 |---|---|---|---|---|
-| Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T30` + `W2-T36` to `W2-T38` closed; ALL CPF consumer pipeline bridges canonically closed — gateway, boardroom, typed context packaging, knowledge ranking, gateway auth, clarification refinement, knowledge query, context build batch, knowledge query batch, retrieval; post-W7 CPF closures delivered through `W8-T1` (TrustIsolation + ModelGateway boundary), `W9-T1` (RAG + Context Engine convergence), `W12-T1` (AgentDefinitionBoundaryContract), `W17-T1` (AgentRegistrationBatchContract), and `W19-T1` to `W30-T1` trust/gateway/orchestration/boardroom batch closures; CPF 2615 tests, 0 failures | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
+| Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T30` + `W2-T36` to `W2-T38` closed; ALL CPF consumer pipeline bridges canonically closed — gateway, boardroom, typed context packaging, knowledge ranking, gateway auth, clarification refinement, knowledge query, context build batch, knowledge query batch, retrieval; post-W7 CPF closures delivered through `W8-T1` (TrustIsolation + ModelGateway boundary), `W9-T1` (RAG + Context Engine convergence), `W12-T1` (AgentDefinitionBoundaryContract), `W17-T1` (AgentRegistrationBatchContract), and `W19-T1` to `W32-T1` trust/gateway/orchestration/boardroom batch closures; CPF 2691 tests, 0 failures | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Execution Plane | Model Gateway, Command Runtime, MCP Bridge, observer/feedback loop | `W2-T1` to `W2-T29` + `W6-T1` closed; ALL EPF consumer pipeline bridges canonically closed — async runtime, re-intake loop, MCP bridge, audit summary, feedback resolution, streaming/execution status, policy gate, execution pipeline, feedback routing, dispatch, async runtime, streaming execution, aggregator | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Governance Layer | Policy, Trust, Guard Engine, Audit/Consensus, Watchdog | `W3-T1` to `W3-T18` + `W6-T4/T5/T6` closed; ALL GEF consumer pipeline bridges canonically closed — watchdog, audit-signal, consensus, checkpoint-log, checkpoint-reintake-summary, watchdog escalation, watchdog pulse, governance checkpoint, reintake, pattern drift | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | Learning Plane | Feedback Ledger, Pattern Insight, Truth Model, Evaluation, Governance feedback, storage, observability | `W4-T1` to `W4-T25` closed; ALL 18 LPF base contracts fully bridged — evaluation engine, truth score, pattern detection, governance signal, re-injection, storage, observability, and all 12 remaining consumer pipeline bridges; `W10-T1` added `ReputationSignalContract`, `TaskMarketplaceContract`, and 2 batch contracts; 1465 tests, 0 failures | `SUBSTANTIALLY DELIVERED` | next continuation only through fresh `GC-018` |
 | W7 Governance Integration | SkillFormation, StructuredSpec, Runtime/Artifact/Trace/Planner/Decision/Eval/Builder/Memory schemas; 8 guards G1-G8; 32 presets | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — all P1-P8 gates satisfied; dependency chain Runtime→Memory fully closed; 10 no-fake-learning invariants; 0 governance violations | `DONE` | wave closed; any extension requires fresh `GC-018` |
-| Final Whitepaper Truth Reconciliation | convert concept document into evidence-backed truth layers | `W5-T1` closed; `W5-T2` closed — whitepaper updated to `v3.0-W7T10`; `W11-T1` updated to `v3.1-W10T1`; `W12-T1` synchronized baseline `v3.2-W12T1`; `W16-T1` updated to `v3.3-W15T1`; `W18-T1` updated to `v3.4-W17T1`; current continuity sync refresh aligns the architecture baseline to `v3.5-W30T1` (W19-T1 through W30-T1, CPF 2615) | `DONE` | future truth upgrades require a new wave |
+| Final Whitepaper Truth Reconciliation | convert concept document into evidence-backed truth layers | `W5-T1` closed; `W5-T2` closed — whitepaper updated to `v3.0-W7T10`; `W11-T1` updated to `v3.1-W10T1`; `W12-T1` synchronized baseline `v3.2-W12T1`; `W16-T1` updated to `v3.3-W15T1`; `W18-T1` updated to `v3.4-W17T1`; current continuity sync refresh aligns the architecture baseline to `v3.6-W32T1` (W19-T1 through W32-T1, CPF 2691) | `DONE` | future truth upgrades require a new wave |
 
 ---
 
@@ -189,7 +189,7 @@ Memory class: POINTER_RECORD
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
 | W7 Governance Integration Wave | `ALL W7-T0 through W7-T10 CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates satisfied` |
-| Current canonical validation posture | `W7-T10 COMPLETE — W7 INTEGRATION WAVE CLOSED; current architecture baseline synchronized to v3.5-W30T1` |
+| Current canonical validation posture | `W7-T10 COMPLETE — W7 INTEGRATION WAVE CLOSED; current architecture baseline synchronized to v3.6-W32T1` |
 
 ---
 
@@ -205,7 +205,7 @@ Memory class: POINTER_RECORD
 ## Canonical Pointers
 
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
-- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.5-W30T1`)
+- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)

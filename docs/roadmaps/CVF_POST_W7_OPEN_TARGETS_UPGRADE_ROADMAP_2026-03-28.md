@@ -26,7 +26,7 @@ Turn the remaining post-W7 open architecture targets into a controlled upgrade s
 
 The following are fixed for this roadmap and may not be re-opened implicitly:
 
-- current authoritative baseline remains `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` at `v3.5-W30T1`
+- current authoritative baseline remains `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` at `v3.6-W32T1`
 - current active tranche remains `NONE`
 - no implementation work starts without fresh `GC-018`
 - no omnibus post-W7 continuation candidate is allowed
@@ -259,6 +259,6 @@ Canonical source packet chain for this roadmap:
 | `Post-P5` Reverse Prompting Batch (REALIZATION class) | `CLOSED DELIVERED — W28-T1 ReversePromptingBatchContract canonical; CPF 2538 tests (+31); all 7 pass conditions satisfied 2026-04-01` |
 | `Post-P5` Boardroom Batch (REALIZATION class) | `CLOSED DELIVERED — W29-T1 BoardroomBatchContract canonical; CPF 2575 tests (+37); all 7 pass conditions satisfied 2026-04-01` |
 | `Post-P5` Boardroom Transition Gate Batch (REALIZATION class) | `CLOSED DELIVERED — W30-T1 BoardroomTransitionGateBatchContract canonical; CPF 2615 tests (+40); all 7 pass conditions satisfied; GC-028 boardroom transition gate batch surface closed 2026-04-01` |
-| `Post-P5` Architecture baseline sync refresh | `DONE — synchronized continuity refresh aligns whitepaper, tracker, handoff, roadmap, and quality-first baseline to W30-T1 / v3.5-W30T1 on 2026-04-01` |
+| `Post-P5` Architecture baseline sync refresh | `DONE — synchronized continuity refresh aligns whitepaper, tracker, handoff, roadmap, and quality-first baseline to W32-T1 / v3.6-W32T1 on 2026-04-01` |
 | `Post-P5` Boardroom Round Batch (REALIZATION class) | `CLOSED DELIVERED — W31-T1 BoardroomRoundBatchContract canonical; CPF 2654 tests (+39); all 7 pass conditions satisfied; W1-T6 CP1 BoardroomRoundContract.openRound() batch surface closed 2026-04-01` |
 | `Post-P5` Boardroom Multi-Round Batch (REALIZATION class) | `CLOSED DELIVERED — W32-T1 BoardroomMultiRoundBatchContract canonical; CPF 2691 tests (+37); all 7 pass conditions satisfied; W1-T6 CP2 BoardroomMultiRoundContract.summarize() batch surface closed 2026-04-01` |

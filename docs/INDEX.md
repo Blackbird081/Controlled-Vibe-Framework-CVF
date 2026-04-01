@@ -137,7 +137,7 @@ Nếu cần đóng gói bằng chứng cho audit/release/onboarding:
 Nếu cần đánh giá chất lượng theo cùng một chuẩn qua nhiều wave:
 
 - `reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
-- `assessments/CVF_POST_W30_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
+- `assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
 
 ## Restructuring Navigation
 

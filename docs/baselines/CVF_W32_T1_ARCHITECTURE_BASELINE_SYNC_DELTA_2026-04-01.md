@@ -23,7 +23,7 @@ Memory class: SUMMARY_RECORD
 
 ## Result
 
-- Architecture baseline unchanged at `v3.5-W30T1` (W32-T1 is additive batch surface; no whitepaper structural change)
+- Architecture baseline synchronized to `v3.6-W32T1` so whitepaper, tracker, handoff, roadmap, and active quality assessment share the same W32 truth line
 - Active tranche: NONE
 - Clean package truth preserved: CPF `2691`, EPF `1123`, GEF `625`, LPF `1465`
 - W1-T6 boardroom family batch surfaces fully closed: W31-T1 (round) + W32-T1 (multi-round)

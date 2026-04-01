@@ -5,7 +5,7 @@
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
 > State: **W32-T1 CLOSED DELIVERED** — BoardroomMultiRoundBatchContract canonical; CPF 2691 (+37); W1-T6 CP2 boardroom multi-round batch surface closed; no active tranche
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.5-W30T1`)
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
 
@@ -37,11 +37,11 @@
 
 ### Architecture Baseline
 
-- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.5-W30T1`)
+- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
 - Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1`
-- Documentation-to-implementation gap: CLOSED (`v3.5-W30T1`)
+- Documentation-to-implementation gap: CLOSED (`v3.6-W32T1`)
 
 ---
 

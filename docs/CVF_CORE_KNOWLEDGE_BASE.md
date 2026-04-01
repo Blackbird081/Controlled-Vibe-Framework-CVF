@@ -768,7 +768,7 @@ reviews/      = review archives by module or scope
 - Canonical rubric:
   - `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
 - Current active quality snapshot for the post-W7 continuation line:
-  - `docs/assessments/CVF_POST_W30_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
+  - `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
 
 Rubric cố định gồm 6 chiều:
 

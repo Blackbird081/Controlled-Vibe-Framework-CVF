@@ -7,6 +7,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 
@@ -180,6 +181,18 @@ class AuditRetentionRegistryTests(unittest.TestCase):
 
         self.assertTrue(report["compliant"])
         self.assertEqual(report["dynamicScanMode"], "skipped_no_retention_affecting_changes")
+
+    def test_run_git_handles_none_stdout_and_stderr(self) -> None:
+        with patch.object(
+            MODULE.subprocess,
+            "run",
+            return_value=SimpleNamespace(returncode=0, stdout=None, stderr=None),
+        ):
+            code, out, err = MODULE._run_git(["status"])
+
+        self.assertEqual(code, 0)
+        self.assertEqual(out, "")
+        self.assertEqual(err, "")
 
 
 if __name__ == "__main__":

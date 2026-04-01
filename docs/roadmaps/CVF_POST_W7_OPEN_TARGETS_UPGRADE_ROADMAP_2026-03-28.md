@@ -26,7 +26,7 @@ Turn the remaining post-W7 open architecture targets into a controlled upgrade s
 
 The following are fixed for this roadmap and may not be re-opened implicitly:
 
-- current authoritative baseline remains `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` at `v3.0-W7T10`
+- current authoritative baseline remains `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` at `v3.5-W30T1`
 - current active tranche remains `NONE`
 - no implementation work starts without fresh `GC-018`
 - no omnibus post-W7 continuation candidate is allowed
@@ -249,4 +249,14 @@ Canonical source packet chain for this roadmap:
 | `Post-P5` Whitepaper update v3.4-W17T1 (DOCUMENTATION class) | `CLOSED DELIVERED — W18-T1 whitepaper v3.4-W17T1 canonical; W16-T1/W17-T1 reflected; CPF 2252; documentation-to-implementation gap closed; all 7 pass conditions satisfied 2026-03-30` |
 | `Post-P5` Isolation Scope Batch (REALIZATION class) | `CLOSED DELIVERED — W19-T1 IsolationScopeBatchContract canonical; CPF 2278 tests (+26); all 7 pass conditions satisfied; W8-T1 trust isolation batch surface complete 2026-03-30` |
 | `Post-P5` Trust Propagation Batch (REALIZATION class) | `CLOSED DELIVERED — W20-T1 TrustPropagationBatchContract canonical; CPF 2304 (+26); all 7 pass conditions satisfied; W8-T1 trust propagation batch surface closed 2026-03-30` |
-| `Post-P5` Declare Trust Domain Batch (REALIZATION class) | `GC-018 AUTHORIZED — W21-T1 DeclareTrustDomainBatchContract; batches TrustIsolationBoundaryContract.declareTrustDomain(); CPF 2304; CP1 Full Lane next 2026-03-30` |
+| `Post-P5` Declare Trust Domain Batch (REALIZATION class) | `CLOSED DELIVERED — W21-T1 DeclareTrustDomainBatchContract canonical; CPF 2330 tests (+26); all 7 pass conditions satisfied; W8-T1 trust-isolation batch surface fully closed 2026-04-01` |
+| `Post-P5` Gateway Auth Batch (REALIZATION class) | `CLOSED DELIVERED — W22-T1 GatewayAuthBatchContract canonical; CPF 2357 tests (+27); all 7 pass conditions satisfied 2026-04-01` |
+| `Post-P5` AI Gateway Batch (REALIZATION class) | `CLOSED DELIVERED — W23-T1 AIGatewayBatchContract canonical; CPF 2385 tests (+28); all 7 pass conditions satisfied 2026-04-01` |
+| `Post-P5` Gateway PII Detection Batch (REALIZATION class) | `CLOSED DELIVERED — W24-T1 GatewayPIIDetectionBatchContract canonical; CPF 2413 tests (+28); all 7 pass conditions satisfied 2026-04-01` |
+| `Post-P5` Route Match Batch (REALIZATION class) | `CLOSED DELIVERED — W25-T1 RouteMatchBatchContract canonical; CPF 2440 tests (+27); all 7 pass conditions satisfied 2026-04-01` |
+| `Post-P5` Orchestration Batch (REALIZATION class) | `CLOSED DELIVERED — W26-T1 OrchestrationBatchContract canonical; CPF 2473 tests (+33); all 7 pass conditions satisfied 2026-04-01` |
+| `Post-P5` Design Batch (REALIZATION class) | `CLOSED DELIVERED — W27-T1 DesignBatchContract canonical; CPF 2507 tests (+34); all 7 pass conditions satisfied 2026-04-01` |
+| `Post-P5` Reverse Prompting Batch (REALIZATION class) | `CLOSED DELIVERED — W28-T1 ReversePromptingBatchContract canonical; CPF 2538 tests (+31); all 7 pass conditions satisfied 2026-04-01` |
+| `Post-P5` Boardroom Batch (REALIZATION class) | `CLOSED DELIVERED — W29-T1 BoardroomBatchContract canonical; CPF 2575 tests (+37); all 7 pass conditions satisfied 2026-04-01` |
+| `Post-P5` Boardroom Transition Gate Batch (REALIZATION class) | `CLOSED DELIVERED — W30-T1 BoardroomTransitionGateBatchContract canonical; CPF 2615 tests (+40); all 7 pass conditions satisfied; GC-028 boardroom transition gate batch surface closed 2026-04-01` |
+| `Post-P5` Architecture baseline sync refresh | `DONE — synchronized continuity refresh aligns whitepaper, tracker, handoff, roadmap, and quality-first baseline to W30-T1 / v3.5-W30T1 on 2026-04-01` |

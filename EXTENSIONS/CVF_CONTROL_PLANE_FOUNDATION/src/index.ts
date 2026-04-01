@@ -821,3 +821,14 @@ export type {
   TrustPropagationBatch,
   TrustPropagationBatchContractDependencies,
 } from "./trust.propagation.batch.contract";
+
+// W21-T1 CP1 — Declare Trust Domain Batch Contract
+export {
+  DeclareTrustDomainBatchContract,
+  createDeclareTrustDomainBatchContract,
+} from "./declare.trust.domain.batch.contract";
+export type {
+  DeclareTrustDomainBatchDominantDomain,
+  DeclareTrustDomainBatch,
+  DeclareTrustDomainBatchContractDependencies,
+} from "./declare.trust.domain.batch.contract";

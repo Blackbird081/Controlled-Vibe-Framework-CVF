@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W21-T1 GC-018 AUTHORIZED — DeclareTrustDomainBatchContract → cvf-next`
+> Last push: `W21-T1 CP1 DONE — DeclareTrustDomainBatchContract + 26 tests → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W21-T1 GC-018 AUTHORIZED** — DeclareTrustDomainBatchContract; CPF 2304; CP1 Full Lane next
+> State: **W21-T1 CP1 DONE** — DeclareTrustDomainBatchContract canonical; CPF 2330; CP2 tranche closure next
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.4-W17T1`)
 
 ---
@@ -14,7 +14,7 @@
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2304 tests, 0 failures**
+- CPF (Control Plane Foundation): **2330 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -47,16 +47,18 @@
 
 ## Immediate Next Action Required
 
-**W21-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — DeclareTrustDomainBatchContract.**
+**W21-T1 CP1 DONE. Proceed to CP2 — tranche closure review + GC-026 closed sync + push.**
 
 Current guidance:
 
-- **W21-T1 GC-018 AUTHORIZED** — DeclareTrustDomainBatchContract (REALIZATION class); batches `declareTrustDomain()`; FULL_RUNTIME > LIGHTWEIGHT_SDK dominant precedence; CPF +~26 tests projected
-- Quality assessment: `docs/assessments/CVF_POST_W20_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md` (9.86/10 EXCELLENT)
-- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W21_T1_DECLARE_TRUST_DOMAIN_BATCH_2026-04-01.md`
-- Execution plan: `docs/roadmaps/CVF_W21_T1_DECLARE_TRUST_DOMAIN_BATCH_EXECUTION_PLAN_2026-04-01.md`
-- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W21_T1_AUTHORIZATION_2026-04-01.md`
-- **Next**: W21-T1 CP1 Full Lane — DeclareTrustDomainBatchContract + ~26 tests + audit + review + delta + GC-026 sync + push
+- **W21-T1 CP1 DONE** — DeclareTrustDomainBatchContract canonical; CPF 2330 (+26); 0 failures; all 7 pass conditions SATISFIED
+- Contract: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/declare.trust.domain.batch.contract.ts`
+- Tests: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/declare.trust.domain.batch.contract.test.ts` (26 tests, 26 pass)
+- Audit: `docs/audits/CVF_W21_T1_CP1_DECLARE_TRUST_DOMAIN_BATCH_AUDIT_2026-04-01.md`
+- Review: `docs/reviews/CVF_GC019_W21_T1_CP1_DECLARE_TRUST_DOMAIN_BATCH_REVIEW_2026-04-01.md`
+- Delta: `docs/baselines/CVF_W21_T1_CP1_DECLARE_TRUST_DOMAIN_BATCH_DELTA_2026-04-01.md`
+- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W21_T1_CP1_DONE_2026-04-01.md`
+- **Next**: W21-T1 CP2 — tranche closure review + GC-026 closed sync + tracker/handoff + push
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

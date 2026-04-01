@@ -854,3 +854,14 @@ export type {
   AIGatewayBatch,
   AIGatewayBatchContractDependencies,
 } from "./ai.gateway.batch.contract";
+
+// W24-T1 CP1 — Gateway PII Detection Batch Contract
+export {
+  GatewayPIIDetectionBatchContract,
+  createGatewayPIIDetectionBatchContract,
+} from "./gateway.pii.detection.batch.contract";
+export type {
+  DominantPIIType,
+  GatewayPIIDetectionBatch,
+  GatewayPIIDetectionBatchContractDependencies,
+} from "./gateway.pii.detection.batch.contract";

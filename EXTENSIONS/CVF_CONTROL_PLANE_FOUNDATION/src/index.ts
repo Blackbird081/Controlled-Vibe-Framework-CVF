@@ -832,3 +832,14 @@ export type {
   DeclareTrustDomainBatch,
   DeclareTrustDomainBatchContractDependencies,
 } from "./declare.trust.domain.batch.contract";
+
+// W22-T1 CP1 — Gateway Auth Batch Contract
+export {
+  GatewayAuthBatchContract,
+  createGatewayAuthBatchContract,
+} from "./gateway.auth.batch.contract";
+export type {
+  GatewayAuthBatchDominantStatus,
+  GatewayAuthBatch,
+  GatewayAuthBatchContractDependencies,
+} from "./gateway.auth.batch.contract";

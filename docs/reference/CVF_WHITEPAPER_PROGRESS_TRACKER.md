@@ -167,7 +167,7 @@ Memory class: POINTER_RECORD
 | `W19-T1` Isolation Scope Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — IsolationScopeBatchContract canonical; CPF 2278 tests (+26); all 7 pass conditions satisfied; W8-T1 trust isolation batch surface complete` |
 | `W20-T1` Trust Propagation Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-03-30 — TrustPropagationBatchContract canonical; CPF 2304 tests (+26); all 7 pass conditions satisfied; W8-T1 trust propagation batch surface closed` |
 | `W21-T1` Declare Trust Domain Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — DeclareTrustDomainBatchContract canonical; CPF 2330 tests (+26); all 7 pass conditions satisfied; W8-T1 TrustIsolationBoundaryContract batch surface fully closed` |
-| `W22-T1` Gateway Auth Batch Contract (REALIZATION class) | `GC-018 AUTHORIZED 2026-04-01 — GatewayAuthBatchContract; batches GatewayAuthContract.evaluate(); AuthStatus dominant REVOKED > EXPIRED > DENIED > AUTHENTICATED; CPF 2330; ready for CP1 Full Lane` |
+| `W22-T1` Gateway Auth Batch Contract (REALIZATION class) | `CP1 DONE 2026-04-01 — GatewayAuthBatchContract canonical; CPF 2357 tests (+27); all 7 pass conditions satisfied; GC-019 APPROVED; CP2 tranche closure next` |
 
 ---
 
@@ -200,7 +200,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W22_T1_AUTHORIZATION_2026-04-01.md`
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W22_T1_CP1_DONE_2026-04-01.md`
 - Current closure anchor: `docs/reviews/CVF_W21_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
 - Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W22_T1_GATEWAY_AUTH_BATCH_2026-04-01.md` (W22-T1 GC-018 AUTHORIZED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

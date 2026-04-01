@@ -179,7 +179,7 @@ Memory class: POINTER_RECORD
 | `W31-T1` Boardroom Round Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — BoardroomRoundBatchContract canonical; CPF 2654 tests (+39); all 7 pass conditions satisfied; W1-T6 CP1 BoardroomRoundContract.openRound() batch surface closed` |
 | `W32-T1` Boardroom Multi-Round Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — BoardroomMultiRoundBatchContract canonical; CPF 2691 tests (+37); all 7 pass conditions satisfied; W1-T6 CP2 BoardroomMultiRoundContract.summarize() batch surface closed` |
 | `W33-T1` Knowledge Ranking Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — KnowledgeRankingBatchContract canonical; CPF 2531 tests (+30); all 7 pass conditions satisfied; W1-T12 KnowledgeRankingContract.rank() batch surface closed` |
-| `W34-T1` Clarification Refinement Batch Contract (REALIZATION class) | `GC-018 AUTHORIZED 2026-04-01 — ClarificationRefinementBatchContract; W1-T5 CP2 ClarificationRefinementContract.refine() batch surface; implementation pending` |
+| `W34-T1` Clarification Refinement Batch Contract (REALIZATION class) | `CP1 DELIVERED 2026-04-01 — ClarificationRefinementBatchContract canonical; CPF 2561 tests (+30); all 7 pass conditions satisfied; W1-T5 CP2 ClarificationRefinementContract.refine() batch surface implemented` |
 
 ---
 
@@ -212,7 +212,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_AUTHORIZATION_2026-04-01.md`
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_CP1_DELIVERED_2026-04-01.md`
 - Latest continuity sync delta: `docs/baselines/CVF_W32_T1_ARCHITECTURE_BASELINE_SYNC_DELTA_2026-04-01.md`
 - Current closure anchor: `docs/reviews/CVF_W33_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
 - Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`

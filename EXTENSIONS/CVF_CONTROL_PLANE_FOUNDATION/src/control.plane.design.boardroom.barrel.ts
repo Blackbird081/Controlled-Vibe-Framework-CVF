@@ -171,3 +171,14 @@ export type {
   BoardroomMultiRoundBatch,
   BoardroomMultiRoundBatchContractDependencies,
 } from "./boardroom.multi.round.batch.contract";
+
+// W34-T1 — ClarificationRefinementBatchContract
+export {
+  ClarificationRefinementBatchContract,
+  createClarificationRefinementBatchContract,
+} from "./clarification.refinement.batch.contract";
+export type {
+  ClarificationRefinementRequest,
+  ClarificationRefinementBatch,
+  ClarificationRefinementBatchContractDependencies,
+} from "./clarification.refinement.batch.contract";

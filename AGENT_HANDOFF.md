@@ -4,7 +4,7 @@
 > Last push: `W33-T1 CLOSED DELIVERED — KnowledgeRankingBatchContract CP1 + tranche closure → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W34-T1 GC-018 AUTHORIZED** — ClarificationRefinementBatchContract; W1-T5 CP2 batch surface; awaiting CP1 implementation
+> State: **W34-T1 CP1 DELIVERED** — ClarificationRefinementBatchContract canonical; CPF 2561 (+30); W1-T5 CP2 batch surface implemented; awaiting CP2 closure
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -14,7 +14,7 @@
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2531 tests, 0 failures**
+- CPF (Control Plane Foundation): **2561 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -47,18 +47,16 @@
 
 ## Immediate Next Action Required
 
-**W34-T1 GC-018 AUTHORIZED. Proceed with CP1 Full Lane implementation.**
+**W34-T1 CP1 DELIVERED. Proceed with CP2 tranche closure.**
 
 Current guidance:
 
-- **W34-T1 GC-018 AUTHORIZED** — ClarificationRefinementBatchContract (REALIZATION class); batches `ClarificationRefinementContract.refine(packet, answers)`; W1-T5 CP2 batch surface
-- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W34_T1_CLARIFICATION_REFINEMENT_BATCH_2026-04-01.md`
-- Execution plan: `docs/roadmaps/CVF_W34_T1_CLARIFICATION_REFINEMENT_BATCH_EXECUTION_PLAN_2026-04-01.md`
-- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_AUTHORIZATION_2026-04-01.md`
-- Batch hash salt: `"w34-t1-cp1-clarification-refinement-batch"`
-- Batch ID salt: `"w34-t1-cp1-clarification-refinement-batch-id"`
-- `dominantConfidenceBoost = Math.max(...results.map(r => r.confidenceBoost))`; `0` for empty
-- **Next**: implement `clarification.refinement.batch.contract.ts` + tests + barrel exports + registry entry; run CPF tests; create CP1 artifacts
+- **W34-T1 CP1 DELIVERED** — ClarificationRefinementBatchContract (REALIZATION class); CPF 2561 (+30); all 7 pass conditions satisfied; W1-T5 CP2 batch surface implemented
+- CP1 audit: `docs/audits/CVF_W34_T1_CP1_CLARIFICATION_REFINEMENT_BATCH_AUDIT_2026-04-01.md`
+- CP1 review: `docs/reviews/CVF_GC019_W34_T1_CP1_CLARIFICATION_REFINEMENT_BATCH_REVIEW_2026-04-01.md`
+- CP1 delta: `docs/baselines/CVF_W34_T1_CP1_CLARIFICATION_REFINEMENT_BATCH_DELTA_2026-04-01.md`
+- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_CP1_DELIVERED_2026-04-01.md`
+- **Next**: create tranche closure review + GC-026 closed sync; update tracker/handoff to CLOSED DELIVERED; commit + push
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

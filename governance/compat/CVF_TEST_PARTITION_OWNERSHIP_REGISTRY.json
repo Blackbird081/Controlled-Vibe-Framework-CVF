@@ -1673,6 +1673,17 @@
         "KnowledgeRankingBatchContract",
         "createKnowledgeRankingBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Clarification Refinement Batch (W34-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/clarification.refinement.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ClarificationRefinementBatchContract",
+        "createClarificationRefinementBatchContract"
+      ]
     }
   ]
 }

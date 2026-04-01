@@ -843,3 +843,14 @@ export type {
   GatewayAuthBatch,
   GatewayAuthBatchContractDependencies,
 } from "./gateway.auth.batch.contract";
+
+// W23-T1 CP1 — AI Gateway Batch Contract
+export {
+  AIGatewayBatchContract,
+  createAIGatewayBatchContract,
+} from "./ai.gateway.batch.contract";
+export type {
+  AIGatewayBatchDominantSignalType,
+  AIGatewayBatch,
+  AIGatewayBatchContractDependencies,
+} from "./ai.gateway.batch.contract";

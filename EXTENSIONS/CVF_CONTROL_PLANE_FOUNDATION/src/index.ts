@@ -943,3 +943,15 @@ export type {
   BoardroomRoundBatch,
   BoardroomRoundBatchContractDependencies,
 } from "./boardroom.round.batch.contract";
+
+// W32-T1 CP1 — Boardroom Multi-Round Batch Contract
+export {
+  BoardroomMultiRoundBatchContract,
+  createBoardroomMultiRoundBatchContract,
+  resolveDominantMultiRoundDecision,
+} from "./boardroom.multi.round.batch.contract";
+export type {
+  BoardroomMultiRoundSummaryRequest,
+  BoardroomMultiRoundBatch,
+  BoardroomMultiRoundBatchContractDependencies,
+} from "./boardroom.multi.round.batch.contract";

@@ -31,3 +31,13 @@ export type {
   KnowledgeQueryBatch,
   KnowledgeQueryBatchContractDependencies,
 } from "./knowledge.query.batch.contract";
+
+// W33-T1 — KnowledgeRankingBatchContract
+export {
+  KnowledgeRankingBatchContract,
+  createKnowledgeRankingBatchContract,
+} from "./knowledge.ranking.batch.contract";
+export type {
+  KnowledgeRankingBatch,
+  KnowledgeRankingBatchContractDependencies,
+} from "./knowledge.ranking.batch.contract";

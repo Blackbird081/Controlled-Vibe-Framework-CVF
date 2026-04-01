@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-04-01
 
 > Branch: `cvf-next`
-> Last push: `W33-T1 GC-018 AUTHORIZED — KnowledgeRankingBatchContract authorization artifacts → cvf-next`
+> Last push: `W33-T1 CP1 DELIVERED — KnowledgeRankingBatchContract implementation + CP1 governance artifacts → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W33-T1 GC-018 AUTHORIZED** — KnowledgeRankingBatchContract; batches KnowledgeRankingContract.rank(); W1-T12 knowledge ranking batch surface; CPF 2691; ready for CP1 Full Lane
+> State: **W33-T1 CP1 DELIVERED** — KnowledgeRankingBatchContract canonical; CPF 2531 (+30); all 7 pass conditions satisfied; W1-T12 batch surface implemented
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -14,7 +14,7 @@
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2691 tests, 0 failures**
+- CPF (Control Plane Foundation): **2531 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -47,24 +47,16 @@
 
 ## Immediate Next Action Required
 
-**W33-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — KnowledgeRankingBatchContract.**
+**W33-T1 CP1 DELIVERED. Proceed to CP2 Tranche Closure.**
 
 Current guidance:
 
-- **W33-T1 GC-018 AUTHORIZED** — KnowledgeRankingBatchContract (REALIZATION class); batches `KnowledgeRankingContract.rank(request: KnowledgeRankingRequest)`; W1-T12 knowledge ranking batch surface; CPF 2691; ready for CP1 Full Lane
-- Quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md` (9.17/10 EXCELLENT — EXPAND_NOW)
-- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W33_T1_KNOWLEDGE_RANKING_BATCH_2026-04-01.md`
-- Execution plan: `docs/roadmaps/CVF_W33_T1_KNOWLEDGE_RANKING_BATCH_EXECUTION_PLAN_2026-04-01.md`
-- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W33_T1_AUTHORIZATION_2026-04-01.md`
-- Batch hash salt: `"w33-t1-cp1-knowledge-ranking-batch"`; Batch ID salt: `"w33-t1-cp1-knowledge-ranking-batch-id"`
-- `dominantRankedCount` = `Math.max(...results.map(r => r.totalRanked))`; `0` for empty batch
-- **Next**: W33-T1 CP1 Full Lane — KnowledgeRankingBatchContract + tests + barrel exports + audit + review + delta + GC-026 sync + push
-- **CPF maintainability**: reuse `batch.contract.shared.ts` (`createDeterministicBatchIdentity`); reuse `tests/helpers/cpf.batch.contract.fixtures.ts`
-- If touching CPF public-surface/testing/docs canon, run:
-  - `python governance/compat/check_cpf_public_surface_maintainability.py --enforce`
-  - `python governance/compat/check_cpf_batch_helper_adoption.py --enforce`
-  - `python governance/compat/check_canon_summary_evidence_separation.py --enforce`
-  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+- **W33-T1 CP1 DELIVERED** — KnowledgeRankingBatchContract (REALIZATION class); CPF 2531 (+30); all 7 pass conditions satisfied; W1-T12 KnowledgeRankingContract.rank() batch surface implemented
+- CP1 audit: `docs/audits/CVF_W33_T1_CP1_KNOWLEDGE_RANKING_BATCH_AUDIT_2026-04-01.md`
+- GC-019 review: `docs/reviews/CVF_GC019_W33_T1_CP1_KNOWLEDGE_RANKING_BATCH_REVIEW_2026-04-01.md`
+- Delta: `docs/baselines/CVF_W33_T1_CP1_KNOWLEDGE_RANKING_BATCH_DELTA_2026-04-01.md`
+- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W33_T1_CP1_DELIVERED_2026-04-01.md`
+- **Next**: W33-T1 CP2 Tranche Closure
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

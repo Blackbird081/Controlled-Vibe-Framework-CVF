@@ -260,3 +260,4 @@ Canonical source packet chain for this roadmap:
 | `Post-P5` Boardroom Batch (REALIZATION class) | `CLOSED DELIVERED — W29-T1 BoardroomBatchContract canonical; CPF 2575 tests (+37); all 7 pass conditions satisfied 2026-04-01` |
 | `Post-P5` Boardroom Transition Gate Batch (REALIZATION class) | `CLOSED DELIVERED — W30-T1 BoardroomTransitionGateBatchContract canonical; CPF 2615 tests (+40); all 7 pass conditions satisfied; GC-028 boardroom transition gate batch surface closed 2026-04-01` |
 | `Post-P5` Architecture baseline sync refresh | `DONE — synchronized continuity refresh aligns whitepaper, tracker, handoff, roadmap, and quality-first baseline to W30-T1 / v3.5-W30T1 on 2026-04-01` |
+| `Post-P5` Boardroom Round Batch (REALIZATION class) | `CLOSED DELIVERED — W31-T1 BoardroomRoundBatchContract canonical; CPF 2654 tests (+39); all 7 pass conditions satisfied; W1-T6 CP1 BoardroomRoundContract.openRound() batch surface closed 2026-04-01` |

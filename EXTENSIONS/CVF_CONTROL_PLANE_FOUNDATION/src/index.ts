@@ -931,3 +931,15 @@ export type {
   BoardroomTransitionGateBatch,
   BoardroomTransitionGateBatchContractDependencies,
 } from "./boardroom.transition.gate.batch.contract";
+
+// W31-T1 CP1 — Boardroom Round Batch Contract
+export {
+  BoardroomRoundBatchContract,
+  createBoardroomRoundBatchContract,
+  resolveDominantRefinementFocus,
+} from "./boardroom.round.batch.contract";
+export type {
+  BoardroomRoundRequest,
+  BoardroomRoundBatch,
+  BoardroomRoundBatchContractDependencies,
+} from "./boardroom.round.batch.contract";

@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-01` (W30-T1 CLOSED DELIVERED — Whitepaper `v3.5-W30T1` synchronized; CPF 2615 / EPF 1123 / GEF 625 / LPF 1465 tests, 0 failures; no active tranche; next move is quality-first reassessment before fresh `GC-018`)
+> Last refreshed: `2026-04-01` (W31-T1 CLOSED DELIVERED — BoardroomRoundBatchContract; CPF 2654 / EPF 1123 / GEF 625 / LPF 1465 tests, 0 failures; no active tranche; next move is quality-first reassessment before fresh `GC-018`)
 
 ---
 
@@ -176,6 +176,7 @@ Memory class: POINTER_RECORD
 | `W28-T1` Reverse Prompting Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — ReversePromptingBatchContract canonical; CPF 2538 tests (+31); all 7 pass conditions satisfied; W1-T5 ReversePromptingContract.generate() batch surface closed` |
 | `W29-T1` Boardroom Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — BoardroomBatchContract canonical; CPF 2575 tests (+37); all 7 pass conditions satisfied; W1-T2 BoardroomContract.review() batch surface closed` |
 | `W30-T1` Boardroom Transition Gate Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — BoardroomTransitionGateBatchContract canonical; CPF 2615 tests (+40); all 7 pass conditions satisfied; GC-028 BoardroomTransitionGateContract.evaluate() batch surface closed` |
+| `W31-T1` Boardroom Round Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — BoardroomRoundBatchContract canonical; CPF 2654 tests (+39); all 7 pass conditions satisfied; W1-T6 CP1 BoardroomRoundContract.openRound() batch surface closed` |
 
 ---
 
@@ -208,9 +209,9 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W30_T1_CLOSED_2026-04-01.md`
-- Latest continuity sync delta: `docs/baselines/CVF_W30_T1_ARCHITECTURE_BASELINE_SYNC_DELTA_2026-04-01.md`
-- Current closure anchor: `docs/reviews/CVF_W30_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W30_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W30_T1_BOARDROOM_TRANSITION_GATE_BATCH_2026-04-01.md` (W30-T1 CLOSED DELIVERED)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W31_T1_CLOSED_2026-04-01.md`
+- Latest continuity sync delta: `docs/baselines/CVF_W31_T1_ARCHITECTURE_BASELINE_SYNC_DELTA_2026-04-01.md`
+- Current closure anchor: `docs/reviews/CVF_W31_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
+- Active quality assessment: `docs/assessments/CVF_POST_W31_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W31_T1_BOARDROOM_ROUND_BATCH_2026-04-01.md` (W31-T1 CLOSED DELIVERED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

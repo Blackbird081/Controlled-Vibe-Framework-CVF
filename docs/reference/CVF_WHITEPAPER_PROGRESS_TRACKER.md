@@ -174,7 +174,7 @@ Memory class: POINTER_RECORD
 | `W26-T1` Orchestration Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — OrchestrationBatchContract canonical; CPF 2473 tests (+33); all 7 pass conditions satisfied; W1-T3 OrchestrationContract.orchestrate() batch surface closed` |
 | `W27-T1` Design Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — DesignBatchContract canonical; CPF 2507 tests (+34); all 7 pass conditions satisfied; W1-T3 DesignContract.design() batch surface closed` |
 | `W28-T1` Reverse Prompting Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — ReversePromptingBatchContract canonical; CPF 2538 tests (+31); all 7 pass conditions satisfied; W1-T5 ReversePromptingContract.generate() batch surface closed` |
-| `W29-T1` Boardroom Batch Contract (REALIZATION class) | `CP1 DELIVERED 2026-04-01 — BoardroomBatchContract canonical; CPF 2575 tests (+37); all 7 pass conditions satisfied; W1-T2 BoardroomContract.review() batch surface implemented` |
+| `W29-T1` Boardroom Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — BoardroomBatchContract canonical; CPF 2575 tests (+37); all 7 pass conditions satisfied; W1-T2 BoardroomContract.review() batch surface closed` |
 
 ---
 
@@ -207,7 +207,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W29_T1_CP1_DELIVERED_2026-04-01.md`
-- Current closure anchor: `docs/reviews/CVF_W28_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W29_T1_BOARDROOM_BATCH_2026-04-01.md` (W29-T1 CP1 DELIVERED)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W29_T1_CLOSED_2026-04-01.md`
+- Current closure anchor: `docs/reviews/CVF_W29_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W29_T1_BOARDROOM_BATCH_2026-04-01.md` (W29-T1 CLOSED DELIVERED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

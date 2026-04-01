@@ -1,7 +1,7 @@
 # CVF Agent Handoff — 2026-04-01
 
 > Branch: `cvf-next`
-> Last push: `W31-T1 CLOSED DELIVERED — BoardroomRoundBatchContract tranche closure + GC-026 closed sync → cvf-next`
+> Last push: `W31-T1 CLOSED DELIVERED — BoardroomRoundBatchContract CP1 + tranche closure + continuity sync → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
 > State: **W31-T1 CLOSED DELIVERED** — BoardroomRoundBatchContract canonical; CPF 2654 (+39); W1-T6 CP1 boardroom round batch surface closed; no active tranche

@@ -4,7 +4,7 @@
 > Last push: `W33-T1 CLOSED DELIVERED — KnowledgeRankingBatchContract CP1 + tranche closure → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W33-T1 CLOSED DELIVERED** — KnowledgeRankingBatchContract canonical; CPF 2531 (+30); W1-T12 batch surface closed; no active tranche
+> State: **W34-T1 GC-018 AUTHORIZED** — ClarificationRefinementBatchContract; W1-T5 CP2 batch surface; awaiting CP1 implementation
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -47,22 +47,18 @@
 
 ## Immediate Next Action Required
 
-**W33-T1 CLOSED DELIVERED. No active tranche. Proceed with fresh quality assessment for next candidate.**
+**W34-T1 GC-018 AUTHORIZED. Proceed with CP1 Full Lane implementation.**
 
 Current guidance:
 
-- **W33-T1 CLOSED DELIVERED** — KnowledgeRankingBatchContract (REALIZATION class); CPF 2531 (+30); all 7 pass conditions satisfied; W1-T12 KnowledgeRankingContract.rank() batch surface closed
-- Closure review: `docs/reviews/CVF_W33_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W33_T1_CLOSED_2026-04-01.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
-- **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W34-T1)
-- **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
-- If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
-- If touching CPF public-surface/testing/docs canon, run:
-  - `python governance/compat/check_cpf_public_surface_maintainability.py --enforce`
-  - `python governance/compat/check_cpf_batch_helper_adoption.py --enforce`
-  - `python governance/compat/check_canon_summary_evidence_separation.py --enforce`
-  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+- **W34-T1 GC-018 AUTHORIZED** — ClarificationRefinementBatchContract (REALIZATION class); batches `ClarificationRefinementContract.refine(packet, answers)`; W1-T5 CP2 batch surface
+- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W34_T1_CLARIFICATION_REFINEMENT_BATCH_2026-04-01.md`
+- Execution plan: `docs/roadmaps/CVF_W34_T1_CLARIFICATION_REFINEMENT_BATCH_EXECUTION_PLAN_2026-04-01.md`
+- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_AUTHORIZATION_2026-04-01.md`
+- Batch hash salt: `"w34-t1-cp1-clarification-refinement-batch"`
+- Batch ID salt: `"w34-t1-cp1-clarification-refinement-batch-id"`
+- `dominantConfidenceBoost = Math.max(...results.map(r => r.confidenceBoost))`; `0` for empty
+- **Next**: implement `clarification.refinement.batch.contract.ts` + tests + barrel exports + registry entry; run CPF tests; create CP1 artifacts
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

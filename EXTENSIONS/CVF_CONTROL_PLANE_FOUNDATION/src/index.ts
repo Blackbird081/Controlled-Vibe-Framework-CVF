@@ -876,3 +876,14 @@ export type {
   RouteMatchBatch,
   RouteMatchBatchContractDependencies,
 } from "./route.match.batch.contract";
+
+// W26-T1 CP1 — Orchestration Batch Contract
+export {
+  OrchestrationBatchContract,
+  createOrchestrationBatchContract,
+} from "./orchestration.batch.contract";
+export type {
+  DominantRiskLevel,
+  OrchestrationBatchResult,
+  OrchestrationBatchContractDependencies,
+} from "./orchestration.batch.contract";

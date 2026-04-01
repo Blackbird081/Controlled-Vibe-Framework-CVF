@@ -920,3 +920,14 @@ export type {
   BoardroomBatchResult,
   BoardroomBatchContractDependencies,
 } from "./boardroom.batch.contract";
+
+// W30-T1 CP1 — Boardroom Transition Gate Batch Contract
+export {
+  BoardroomTransitionGateBatchContract,
+  createBoardroomTransitionGateBatchContract,
+  resolveDominantTransitionAction,
+} from "./boardroom.transition.gate.batch.contract";
+export type {
+  BoardroomTransitionGateBatch,
+  BoardroomTransitionGateBatchContractDependencies,
+} from "./boardroom.transition.gate.batch.contract";

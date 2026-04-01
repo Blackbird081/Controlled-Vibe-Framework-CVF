@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W30-T1 GC-018 AUTHORIZED — BoardroomTransitionGateBatchContract authorization artifacts → cvf-next`
+> Last push: `W30-T1 CP1 DELIVERED — BoardroomTransitionGateBatchContract implementation + CP1 governance artifacts → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W30-T1 GC-018 AUTHORIZED** — BoardroomTransitionGateBatchContract; batches BoardroomTransitionGateContract.evaluate(); BoardroomTransitionAction STOP_EXECUTION>ESCALATE_FOR_REVIEW>RETURN_TO_DESIGN>PROCEED_TO_ORCHESTRATION dominant; CPF 2575; ready for CP1 Full Lane
+> State: **W30-T1 CP1 DELIVERED** — BoardroomTransitionGateBatchContract canonical; CPF 2615 (+40); all 7 pass conditions satisfied; GC-028 batch surface implemented
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.4-W17T1`)
 
 ---
@@ -14,7 +14,7 @@
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2575 tests, 0 failures**
+- CPF (Control Plane Foundation): **2615 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -47,17 +47,16 @@
 
 ## Immediate Next Action Required
 
-**W30-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — BoardroomTransitionGateBatchContract.**
+**W30-T1 CP1 DELIVERED. Proceed to CP2 Tranche Closure.**
 
 Current guidance:
 
-- **W30-T1 GC-018 AUTHORIZED** — BoardroomTransitionGateBatchContract (REALIZATION class); batches `BoardroomTransitionGateContract.evaluate(session: BoardroomSession)`; BoardroomTransitionAction STOP_EXECUTION>ESCALATE_FOR_REVIEW>RETURN_TO_DESIGN>PROCEED_TO_ORCHESTRATION dominant; NONE sentinel for empty batch; CPF +~28-35 tests projected
-- Quality assessment: `docs/assessments/CVF_POST_W29_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md` (9.86/10 EXCELLENT)
-- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W30_T1_BOARDROOM_TRANSITION_GATE_BATCH_2026-04-01.md`
-- Execution plan: `docs/roadmaps/CVF_W30_T1_BOARDROOM_TRANSITION_GATE_BATCH_EXECUTION_PLAN_2026-04-01.md`
-- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W30_T1_AUTHORIZATION_2026-04-01.md`
-- Batch hash salt: `"w30-t1-cp1-boardroom-transition-gate-batch"`; Batch ID salt: `"w30-t1-cp1-boardroom-transition-gate-batch-id"`
-- **Next**: W30-T1 CP1 Full Lane — BoardroomTransitionGateBatchContract + tests + barrel exports + audit + review + delta + GC-026 sync + push
+- **W30-T1 CP1 DELIVERED** — BoardroomTransitionGateBatchContract (REALIZATION class); CPF 2615 (+40); all 7 pass conditions satisfied; GC-028 BoardroomTransitionGateContract.evaluate() batch surface implemented
+- CP1 audit: `docs/audits/CVF_W30_T1_CP1_BOARDROOM_TRANSITION_GATE_BATCH_AUDIT_2026-04-01.md`
+- GC-019 review: `docs/reviews/CVF_GC019_W30_T1_CP1_BOARDROOM_TRANSITION_GATE_BATCH_REVIEW_2026-04-01.md`
+- Delta: `docs/baselines/CVF_W30_T1_CP1_BOARDROOM_TRANSITION_GATE_BATCH_DELTA_2026-04-01.md`
+- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W30_T1_CP1_DELIVERED_2026-04-01.md`
+- **Next**: W30-T1 CP2 Tranche Closure
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W27-T1 CP1 DONE — DesignBatchContract + 34 tests + barrel exports + CP1 governance artifacts → cvf-next`
+> Last push: `W27-T1 CLOSED DELIVERED — DesignBatchContract tranche closure + GC-026 closed sync → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W27-T1 CP1 DONE** — DesignBatchContract; CPF 2507 (+34); all 7 pass conditions met; ready for CP2 tranche closure
+> State: **W27-T1 CLOSED DELIVERED** — DesignBatchContract canonical; CPF 2507 (+34); W1-T3 design surface closed; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.4-W17T1`)
 
 ---
@@ -47,16 +47,14 @@
 
 ## Immediate Next Action Required
 
-**W27-T1 CP1 DONE. Proceed to CP2 tranche closure.**
+**W27-T1 CLOSED DELIVERED. No active tranche. Proceed with fresh quality assessment for next candidate.**
 
 Current guidance:
 
-- **W27-T1 CP1 DONE** — DesignBatchContract (REALIZATION class); batches `DesignContract.design(intakeResult: ControlPlaneIntakeResult)`; R3>R2>R1>R0 dominant; 34 tests added; CPF 2507 (+34); 0 failures
-- CP1 audit: `docs/audits/CVF_W27_T1_CP1_DESIGN_BATCH_AUDIT_2026-04-01.md`
-- CP1 review: `docs/reviews/CVF_GC019_W27_T1_CP1_DESIGN_BATCH_REVIEW_2026-04-01.md`
-- CP1 delta: `docs/baselines/CVF_W27_T1_CP1_DESIGN_BATCH_DELTA_2026-04-01.md`
-- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W27_T1_CP1_DONE_2026-04-01.md`
-- **Next**: W27-T1 CP2 — tranche closure review + GC-026 closed sync + update tracker/handoff + commit + push
+- **W27-T1 CLOSED DELIVERED** — DesignBatchContract (REALIZATION class); CPF 2507 (+34); W1-T3 DesignContract.design() batch surface closed
+- Closure review: `docs/reviews/CVF_W27_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
+- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W27_T1_CLOSED_2026-04-01.md`
+- **Next**: fresh quality assessment + GC-018 authorization for next tranche candidate
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

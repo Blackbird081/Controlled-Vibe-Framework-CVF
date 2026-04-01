@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-04-01
 
 > Branch: `cvf-next`
-> Last push: `W33-T1 CLOSED DELIVERED — KnowledgeRankingBatchContract CP1 + tranche closure → cvf-next`
+> Last push: `W34-T1 CLOSED DELIVERED — ClarificationRefinementBatchContract CP1 + tranche closure → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W34-T1 CP1 DELIVERED** — ClarificationRefinementBatchContract canonical; CPF 2561 (+30); W1-T5 CP2 batch surface implemented; awaiting CP2 closure
+> State: **W34-T1 CLOSED DELIVERED** — ClarificationRefinementBatchContract canonical; CPF 2561 (+30); W1-T5 CP2 batch surface closed; W1-T5 full family FULLY CLOSED; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -47,16 +47,17 @@
 
 ## Immediate Next Action Required
 
-**W34-T1 CP1 DELIVERED. Proceed with CP2 tranche closure.**
+**W34-T1 CLOSED DELIVERED. No active tranche. Proceed with fresh quality assessment for next candidate.**
 
 Current guidance:
 
-- **W34-T1 CP1 DELIVERED** — ClarificationRefinementBatchContract (REALIZATION class); CPF 2561 (+30); all 7 pass conditions satisfied; W1-T5 CP2 batch surface implemented
-- CP1 audit: `docs/audits/CVF_W34_T1_CP1_CLARIFICATION_REFINEMENT_BATCH_AUDIT_2026-04-01.md`
-- CP1 review: `docs/reviews/CVF_GC019_W34_T1_CP1_CLARIFICATION_REFINEMENT_BATCH_REVIEW_2026-04-01.md`
-- CP1 delta: `docs/baselines/CVF_W34_T1_CP1_CLARIFICATION_REFINEMENT_BATCH_DELTA_2026-04-01.md`
-- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_CP1_DELIVERED_2026-04-01.md`
-- **Next**: create tranche closure review + GC-026 closed sync; update tracker/handoff to CLOSED DELIVERED; commit + push
+- **W34-T1 CLOSED DELIVERED** — ClarificationRefinementBatchContract (REALIZATION class); CPF 2561 (+30); all 7 pass conditions satisfied; W1-T5 CP2 ClarificationRefinementContract.refine() batch surface closed; W1-T5 full family FULLY CLOSED
+- Closure review: `docs/reviews/CVF_W34_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
+- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_CLOSED_2026-04-01.md`
+- Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
+- **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W35-T1)
+- **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
+- If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W21-T1 CP1 DONE — DeclareTrustDomainBatchContract + 26 tests → cvf-next`
+> Last push: `W21-T1 CLOSED DELIVERED — DeclareTrustDomainBatchContract → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W21-T1 CP1 DONE** — DeclareTrustDomainBatchContract canonical; CPF 2330; CP2 tranche closure next
+> State: **W21-T1 CLOSED DELIVERED** — DeclareTrustDomainBatchContract; CPF 2330; W8-T1 batch surface fully closed; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.4-W17T1`)
 
 ---
@@ -47,18 +47,15 @@
 
 ## Immediate Next Action Required
 
-**W21-T1 CP1 DONE. Proceed to CP2 — tranche closure review + GC-026 closed sync + push.**
+**W21-T1 CLOSED DELIVERED. No active tranche. Fresh GC-018 authorization required for next work.**
 
 Current guidance:
 
-- **W21-T1 CP1 DONE** — DeclareTrustDomainBatchContract canonical; CPF 2330 (+26); 0 failures; all 7 pass conditions SATISFIED
-- Contract: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/declare.trust.domain.batch.contract.ts`
-- Tests: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/declare.trust.domain.batch.contract.test.ts` (26 tests, 26 pass)
-- Audit: `docs/audits/CVF_W21_T1_CP1_DECLARE_TRUST_DOMAIN_BATCH_AUDIT_2026-04-01.md`
-- Review: `docs/reviews/CVF_GC019_W21_T1_CP1_DECLARE_TRUST_DOMAIN_BATCH_REVIEW_2026-04-01.md`
-- Delta: `docs/baselines/CVF_W21_T1_CP1_DECLARE_TRUST_DOMAIN_BATCH_DELTA_2026-04-01.md`
-- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W21_T1_CP1_DONE_2026-04-01.md`
-- **Next**: W21-T1 CP2 — tranche closure review + GC-026 closed sync + tracker/handoff + push
+- **W21-T1 CLOSED DELIVERED** — DeclareTrustDomainBatchContract canonical; CPF 2330 (+26); W8-T1 TrustIsolationBoundaryContract batch surface FULLY CLOSED
+- W8-T1 batch surface coverage: evaluateIsolationScope (W19-T1) + decideTrustPropagation (W20-T1) + declareTrustDomain (W21-T1) — all three methods batched
+- Closure review: `docs/reviews/CVF_W21_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
+- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W21_T1_CLOSED_2026-04-01.md`
+- **Next**: Fresh quality assessment + GC-018 continuation candidate review for next tranche candidate
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

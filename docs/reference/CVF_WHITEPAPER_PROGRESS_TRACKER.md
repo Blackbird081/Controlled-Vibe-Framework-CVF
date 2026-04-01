@@ -173,6 +173,7 @@ Memory class: POINTER_RECORD
 | `W25-T1` Route Match Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — RouteMatchBatchContract canonical; CPF 2440 tests (+27); all 7 pass conditions satisfied; W1-T7 RouteMatchContract.match() batch surface closed` |
 | `W26-T1` Orchestration Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — OrchestrationBatchContract canonical; CPF 2473 tests (+33); all 7 pass conditions satisfied; W1-T3 OrchestrationContract.orchestrate() batch surface closed` |
 | `W27-T1` Design Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-01 — DesignBatchContract canonical; CPF 2507 tests (+34); all 7 pass conditions satisfied; W1-T3 DesignContract.design() batch surface closed` |
+| `W28-T1` Reverse Prompting Batch Contract (REALIZATION class) | `GC-018 AUTHORIZED 2026-04-01 — ReversePromptingBatchContract; batches ReversePromptingContract.generate(); QuestionPriority high>medium>low dominant; CPF 2507; ready for CP1 Full Lane` |
 
 ---
 
@@ -205,7 +206,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W27_T1_CLOSED_2026-04-01.md`
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W28_T1_AUTHORIZATION_2026-04-01.md`
 - Current closure anchor: `docs/reviews/CVF_W27_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W27_T1_DESIGN_BATCH_2026-04-01.md` (W27-T1 GC-018 AUTHORIZED)
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W28_T1_REVERSE_PROMPTING_BATCH_2026-04-01.md` (W28-T1 GC-018 AUTHORIZED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

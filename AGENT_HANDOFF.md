@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-03-29
 
 > Branch: `cvf-next`
-> Last push: `W27-T1 CLOSED DELIVERED — DesignBatchContract tranche closure + GC-026 closed sync → cvf-next`
+> Last push: `W28-T1 GC-018 AUTHORIZED — ReversePromptingBatchContract authorization artifacts → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W27-T1 CLOSED DELIVERED** — DesignBatchContract canonical; CPF 2507 (+34); W1-T3 design surface closed; no active tranche
+> State: **W28-T1 GC-018 AUTHORIZED** — ReversePromptingBatchContract; batches ReversePromptingContract.generate(); QuestionPriority high>medium>low dominant; CPF 2507; ready for CP1 Full Lane
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.4-W17T1`)
 
 ---
@@ -14,7 +14,7 @@
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2473 tests, 0 failures**
+- CPF (Control Plane Foundation): **2507 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -47,14 +47,16 @@
 
 ## Immediate Next Action Required
 
-**W27-T1 CLOSED DELIVERED. No active tranche. Proceed with fresh quality assessment for next candidate.**
+**W28-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — ReversePromptingBatchContract.**
 
 Current guidance:
 
-- **W27-T1 CLOSED DELIVERED** — DesignBatchContract (REALIZATION class); CPF 2507 (+34); W1-T3 DesignContract.design() batch surface closed
-- Closure review: `docs/reviews/CVF_W27_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W27_T1_CLOSED_2026-04-01.md`
-- **Next**: fresh quality assessment + GC-018 authorization for next tranche candidate
+- **W28-T1 GC-018 AUTHORIZED** — ReversePromptingBatchContract (REALIZATION class); batches `ReversePromptingContract.generate(intakeResult: ControlPlaneIntakeResult)`; QuestionPriority high>medium>low dominant; NONE sentinel for empty batch; CPF +~27 tests projected
+- Quality assessment: `docs/assessments/CVF_POST_W27_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md` (9.86/10 EXCELLENT)
+- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W28_T1_REVERSE_PROMPTING_BATCH_2026-04-01.md`
+- Execution plan: `docs/roadmaps/CVF_W28_T1_REVERSE_PROMPTING_BATCH_EXECUTION_PLAN_2026-04-01.md`
+- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W28_T1_AUTHORIZATION_2026-04-01.md`
+- **Next**: W28-T1 CP1 Full Lane — ReversePromptingBatchContract + ~27 tests + audit + review + delta + GC-026 sync + push
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`

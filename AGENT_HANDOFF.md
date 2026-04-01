@@ -57,6 +57,13 @@ Current guidance:
 - Architecture baseline sync delta: `docs/baselines/CVF_W32_T1_ARCHITECTURE_BASELINE_SYNC_DELTA_2026-04-01.md`
 - Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
 - **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W33-T1)
+- **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the new maintainability perimeter adopted in `GC-033` through `GC-036`
+- If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts` instead of reintroducing local copy-paste logic or ad-hoc fixtures
+- If touching CPF public-surface/testing/docs canon, run:
+  - `python governance/compat/check_cpf_public_surface_maintainability.py --enforce`
+  - `python governance/compat/check_cpf_batch_helper_adoption.py --enforce`
+  - `python governance/compat/check_canon_summary_evidence_separation.py --enforce`
+  - `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`
@@ -71,10 +78,11 @@ Current guidance:
 1. **GC-018** (10/10 audit score) → commits roadmap + tracker + GC-026 sync + execution plan
 2. **GC-032 first** before writing governed packets → source truth first, typed evidence stays explicit, continuity surfaces move together
 3. **Quality-first before expansion** → read the active quality assessment and explicitly decide `REMEDIATE_FIRST` or `EXPAND_NOW` before drafting any fresh GC-018 packet
-4. **Per CP**: Full Lane = new concept/module/cross-plane; Fast Lane (GC-021) = additive batch/summary
-5. **Per CP artifacts**: audit doc + review doc + delta doc + exec plan update + test log update + commit
-6. **No implementation without GC-018 authorization**
-7. **No push to main** — work on `cvf-next` only
+4. **GC-033 to GC-036 enforced for CPF maintainability** → thin public barrel, smoke-only `tests/index.test.ts`, shared batch helpers/builders, and no typed evidence payload drift into canon summary docs
+5. **Per CP**: Full Lane = new concept/module/cross-plane; Fast Lane (GC-021) = additive batch/summary
+6. **Per CP artifacts**: audit doc + review doc + delta doc + exec plan update + test log update + commit
+7. **No implementation without GC-018 authorization**
+8. **No push to main** — work on `cvf-next` only
 
 ### Fast Lane (GC-021) — eligible when:
 - additive only, no restructuring

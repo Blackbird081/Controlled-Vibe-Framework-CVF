@@ -305,6 +305,10 @@ Output (Allow / Strip & Allow / Block)
 | CVF_ARCHITECTURE_CHECK_GUARD.md | Any new version/layer/extension/module proposal | `docs/CVF_CORE_KNOWLEDGE_BASE.md` ← file này |
 | CVF_EXTENSION_VERSIONING_GUARD.md | New extension folder in `EXTENSIONS/` | `CVF_{STREAM}_v{major}.{minor}_{NAME}/` format |
 | CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md | Governed packets, evidence docs, or continuity docs being written | Source-truth first + typed evidence stays explicit + continuity surfaces move together |
+| CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md | CPF public barrel changes | Keep `src/index.ts` thin and re-export-only |
+| CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md | CPF barrel smoke changes | Keep `tests/index.test.ts` smoke-only and ownership-clean |
+| CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md | Governed CPF batch family changes | Shared batch helper + shared fixture adoption required |
+| CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md | Canon summary doc changes | Summary docs must cite evidence, not inline typed evidence payloads |
 | CVF_GUARD_AUTHORING_STANDARD_GUARD.md | New or materially revised governance guard | Guard must satisfy the mandatory authoring contract before commit |
 | CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
 | CVF_ACTIVE_ARCHIVE_GUARD.md | Active archive maintenance | Keep active/archive split truthful and append-only |
@@ -346,6 +350,7 @@ Continuity truth note:
 - `GC-020` handoff stores stable transition truth, not volatile push-boundary trivia
 - record the tracked remote branch in `AGENT_HANDOFF.md` when the branch has an upstream
 - derive exact remote SHA live from git when a resume, comparison, or push decision depends on it
+- `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` is the canonical rule for thin barrels, smoke ownership, shared batch helpers, shared test builders, and summary-vs-evidence separation
 - external memory remains convenience-only and must not override repo truth or handoff truth
 
 

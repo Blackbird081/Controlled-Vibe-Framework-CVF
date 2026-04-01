@@ -43,6 +43,18 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_governed_artifact_authoring.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
         (
+            "cpf public surface maintainability",
+            ["python", "governance/compat/check_cpf_public_surface_maintainability.py", "--enforce"],
+        ),
+        (
+            "cpf shared batch helper adoption",
+            ["python", "governance/compat/check_cpf_batch_helper_adoption.py", "--enforce"],
+        ),
+        (
+            "canon summary evidence separation",
+            ["python", "governance/compat/check_canon_summary_evidence_separation.py", "--enforce"],
+        ),
+        (
             "bug documentation compatibility",
             ["python", "governance/compat/check_bug_doc_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),

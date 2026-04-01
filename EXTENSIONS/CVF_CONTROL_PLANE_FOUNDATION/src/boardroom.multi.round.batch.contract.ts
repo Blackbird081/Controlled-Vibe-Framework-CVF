@@ -1,4 +1,3 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import {
   BoardroomMultiRoundContract,
   type BoardroomMultiRoundSummary,
@@ -6,6 +5,10 @@ import {
 } from "./boardroom.multi.round.contract";
 import type { BoardroomRound } from "./boardroom.round.contract";
 import type { BoardroomDecision } from "./boardroom.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantBySeverity,
+} from "./batch.contract.shared";
 
 // --- Types ---
 
@@ -43,18 +46,12 @@ const DECISION_SEVERITY: Record<BoardroomDecision, number> = {
 export function resolveDominantMultiRoundDecision(
   summaries: BoardroomMultiRoundSummary[],
 ): BoardroomDecision | "NONE" {
-  if (summaries.length === 0) return "NONE";
-
-  let dominant: BoardroomDecision = "PROCEED";
-  for (const summary of summaries) {
-    if (
-      DECISION_SEVERITY[summary.dominantDecision] >
-      DECISION_SEVERITY[dominant]
-    ) {
-      dominant = summary.dominantDecision;
-    }
-  }
-  return dominant;
+  return resolveDominantBySeverity(
+    summaries.map((summary) => summary.dominantDecision),
+    DECISION_SEVERITY,
+    "NONE",
+    "PROCEED",
+  );
 }
 
 // --- Contract ---
@@ -95,19 +92,17 @@ export class BoardroomMultiRoundBatchContract {
 
     const dominantDecision = resolveDominantMultiRoundDecision(summaries);
 
-    const batchHash = computeDeterministicHash(
-      "w32-t1-cp1-boardroom-multi-round-batch",
-      `${createdAt}:total:${summaries.length}`,
-      `proceed:${proceedCount}:amend:${amendCount}`,
-      `escalate:${escalateCount}:reject:${rejectCount}`,
-      `dominant:${dominantDecision}`,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w32-t1-cp1-boardroom-multi-round-batch-id",
-      batchHash,
-      createdAt,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w32-t1-cp1-boardroom-multi-round-batch",
+      batchIdSeed: "w32-t1-cp1-boardroom-multi-round-batch-id",
+      hashParts: [
+        `${createdAt}:total:${summaries.length}`,
+        `proceed:${proceedCount}:amend:${amendCount}`,
+        `escalate:${escalateCount}:reject:${rejectCount}`,
+        `dominant:${dominantDecision}`,
+      ],
+      batchIdParts: [createdAt],
+    });
 
     return {
       batchId,

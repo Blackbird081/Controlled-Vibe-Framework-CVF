@@ -1,7 +1,10 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type { DesignPlan, DesignTaskRisk } from "./design.contract";
 import type { OrchestrationResult } from "./orchestration.contract";
 import { OrchestrationContract } from "./orchestration.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantByCount,
+} from "./batch.contract.shared";
 
 // --- Types ---
 
@@ -38,34 +41,22 @@ export interface OrchestrationBatchContractDependencies {
  *   R1 — moderate risk; standard review applies
  *   R0 — no significant risk; lowest governance weight
  */
-const RISK_PRIORITY: DesignTaskRisk[] = ["R3", "R2", "R1", "R0"];
-
 function resolveDominantRiskLevel(
   r0Count: number,
   r1Count: number,
   r2Count: number,
   r3Count: number,
 ): DominantRiskLevel {
-  const total = r0Count + r1Count + r2Count + r3Count;
-  if (total === 0) return "NONE";
-
-  const counts: Record<DesignTaskRisk, number> = {
-    R0: r0Count,
-    R1: r1Count,
-    R2: r2Count,
-    R3: r3Count,
-  };
-
-  let dominant: DesignTaskRisk = "R0";
-  let maxCount = -1;
-  for (const risk of RISK_PRIORITY) {
-    if (counts[risk] > maxCount) {
-      maxCount = counts[risk];
-      dominant = risk;
-    }
-  }
-
-  return dominant;
+  return resolveDominantByCount<DesignTaskRisk, "NONE">(
+    {
+      R3: r3Count,
+      R2: r2Count,
+      R1: r1Count,
+      R0: r0Count,
+    },
+    ["R3", "R2", "R1", "R0"],
+    "NONE",
+  );
 }
 
 // --- Contract ---
@@ -96,16 +87,11 @@ export class OrchestrationBatchContract {
 
     const dominantRiskLevel = resolveDominantRiskLevel(r0Count, r1Count, r2Count, r3Count);
 
-    const batchHash = computeDeterministicHash(
-      "w26-t1-cp1-orchestration-batch",
-      ...results.map((r) => r.orchestrationHash),
-      createdAt,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w26-t1-cp1-orchestration-batch-id",
-      batchHash,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w26-t1-cp1-orchestration-batch",
+      batchIdSeed: "w26-t1-cp1-orchestration-batch-id",
+      hashParts: [...results.map((result) => result.orchestrationHash), createdAt],
+    });
 
     return {
       batchId,

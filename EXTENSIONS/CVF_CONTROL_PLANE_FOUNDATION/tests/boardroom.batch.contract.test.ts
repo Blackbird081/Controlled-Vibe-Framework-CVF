@@ -5,132 +5,32 @@ import {
   resolveDominantBoardroomDecision,
   type BoardroomBatchResult,
 } from "../src/boardroom.batch.contract";
-import { BoardroomContract } from "../src/boardroom.contract";
 import type { BoardroomRequest, BoardroomSession } from "../src/boardroom.contract";
-import type { DesignPlan } from "../src/design.contract";
 import { GovernanceCanvas } from "../../CVF_ECO_v2.1_GOVERNANCE_CANVAS/src/canvas";
+import {
+  FIXED_BATCH_NOW,
+  makeBoardroomRequest,
+  makeBoardroomSession,
+} from "./helpers/cpf.batch.contract.fixtures";
 
 // --- Helpers ---
 
-const FIXED_NOW = "2026-04-01T00:00:00.000Z";
-
-function makePlan(
-  id: string,
-  opts: {
-    r3Count?: number;
-    r2Count?: number;
-    r1Count?: number;
-    r0Count?: number;
-    warnings?: string[];
-    domain?: string;
-    empty?: boolean;
-  } = {},
-): DesignPlan {
-  const r3 = opts.r3Count ?? 0;
-  const r2 = opts.r2Count ?? 0;
-  const r1 = opts.r1Count ?? 0;
-  const r0 = opts.r0Count ?? 0;
-  const warnings = opts.warnings ?? [];
-  const domain = opts.domain ?? "general";
-  const empty = opts.empty ?? false;
-
-  const tasks = empty
-    ? []
-    : [
-        ...Array.from({ length: r3 }, (_, i) => ({
-          taskId: `task-r3-${i}`,
-          title: `R3 Task ${i}`,
-          description: `R3 task ${i}`,
-          assignedRole: "architect" as const,
-          riskLevel: "R3" as const,
-          targetPhase: "DESIGN" as const,
-          estimatedComplexity: "high" as const,
-          dependencies: [],
-        })),
-        ...Array.from({ length: r2 }, (_, i) => ({
-          taskId: `task-r2-${i}`,
-          title: `R2 Task ${i}`,
-          description: `R2 task ${i}`,
-          assignedRole: "builder" as const,
-          riskLevel: "R2" as const,
-          targetPhase: "BUILD" as const,
-          estimatedComplexity: "medium" as const,
-          dependencies: [],
-        })),
-        ...Array.from({ length: r1 }, (_, i) => ({
-          taskId: `task-r1-${i}`,
-          title: `R1 Task ${i}`,
-          description: `R1 task ${i}`,
-          assignedRole: "builder" as const,
-          riskLevel: "R1" as const,
-          targetPhase: "BUILD" as const,
-          estimatedComplexity: "low" as const,
-          dependencies: [],
-        })),
-        ...Array.from({ length: r0 }, (_, i) => ({
-          taskId: `task-r0-${i}`,
-          title: `R0 Task ${i}`,
-          description: `R0 task ${i}`,
-          assignedRole: "reviewer" as const,
-          riskLevel: "R0" as const,
-          targetPhase: "REVIEW" as const,
-          estimatedComplexity: "low" as const,
-          dependencies: [],
-        })),
-      ];
-
-  const totalTasks = tasks.length;
-
-  return {
-    planId: empty ? "" : id,
-    createdAt: FIXED_NOW,
-    intakeRequestId: `intake-${id}`,
-    consumerId: "test-consumer",
-    vibeOriginal: `vibe for ${id}`,
-    tasks,
-    totalTasks,
-    riskSummary: { R3: r3, R2: r2, R1: r1, R0: r0 },
-    roleSummary: {
-      orchestrator: 0,
-      architect: r3,
-      builder: r2 + r1,
-      reviewer: r0,
-    },
-    domainDetected: domain,
-    planHash: `hash-${id}`,
-    warnings,
-  };
-}
+const FIXED_NOW = FIXED_BATCH_NOW;
 
 function makeProceedRequest(): BoardroomRequest {
-  return {
-    plan: makePlan("plan-proceed", { r0Count: 2 }),
-    clarifications: [],
-  };
+  return makeBoardroomRequest("PROCEED");
 }
 
 function makeAmendRequest(): BoardroomRequest {
-  return {
-    plan: makePlan("plan-amend", { r1Count: 1 }),
-    clarifications: [{ question: "What is the timeline?", answer: undefined }],
-  };
+  return makeBoardroomRequest("AMEND_PLAN");
 }
 
 function makeEscalateRequest(): BoardroomRequest {
-  return {
-    plan: makePlan("plan-escalate", {
-      r3Count: 1,
-      warnings: ["Intake had low confidence."],
-    }),
-    clarifications: [],
-  };
+  return makeBoardroomRequest("ESCALATE");
 }
 
 function makeRejectRequest(): BoardroomRequest {
-  return {
-    plan: makePlan("plan-reject", { empty: true }),
-    clarifications: [],
-  };
+  return makeBoardroomRequest("REJECT");
 }
 
 function makeCanvas(): GovernanceCanvas {
@@ -139,22 +39,13 @@ function makeCanvas(): GovernanceCanvas {
 
 function makeBatchContract(): BoardroomBatchContract {
   return new BoardroomBatchContract({
-    contractDependencies: { canvas: makeCanvas(), now: () => FIXED_NOW },
-    now: () => FIXED_NOW,
+    contractDependencies: { canvas: makeCanvas(), now: () => FIXED_BATCH_NOW },
+    now: () => FIXED_BATCH_NOW,
   });
 }
 
 function makeSession(decision: "PROCEED" | "AMEND_PLAN" | "ESCALATE" | "REJECT"): BoardroomSession {
-  const contract = new BoardroomContract({
-    canvas: makeCanvas(),
-    now: () => FIXED_NOW,
-  });
-  let request: BoardroomRequest;
-  if (decision === "PROCEED") request = makeProceedRequest();
-  else if (decision === "AMEND_PLAN") request = makeAmendRequest();
-  else if (decision === "ESCALATE") request = makeEscalateRequest();
-  else request = makeRejectRequest();
-  return contract.review(request);
+  return makeBoardroomSession(decision);
 }
 
 // --- Tests ---

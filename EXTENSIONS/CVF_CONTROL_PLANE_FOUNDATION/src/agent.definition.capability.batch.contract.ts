@@ -1,8 +1,11 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type {
   CapabilityValidationResult,
   CapabilityValidationStatus,
 } from "./agent.definition.boundary.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantByCount,
+} from "./batch.contract.shared";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -25,35 +28,20 @@ export interface AgentDefinitionCapabilityBatchContractDependencies {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const STATUS_PRECEDENCE: Record<CapabilityValidationStatus, number> = {
-  WITHIN_SCOPE: 3,
-  OUT_OF_SCOPE: 2,
-  UNDECLARED_AGENT: 1,
-};
-
 function resolveDominantStatus(
   withinScopeCount: number,
   outOfScopeCount: number,
   undeclaredAgentCount: number,
 ): CapabilityBatchDominantStatus {
-  const total = withinScopeCount + outOfScopeCount + undeclaredAgentCount;
-  if (total === 0) return "EMPTY";
-
-  const candidates: Array<{ status: CapabilityValidationStatus; count: number }> = [
-    { status: "WITHIN_SCOPE", count: withinScopeCount },
-    { status: "OUT_OF_SCOPE", count: outOfScopeCount },
-    { status: "UNDECLARED_AGENT", count: undeclaredAgentCount },
-  ];
-
-  return candidates.reduce((best, candidate) => {
-    if (candidate.count > best.count) return candidate;
-    if (
-      candidate.count === best.count &&
-      STATUS_PRECEDENCE[candidate.status] > STATUS_PRECEDENCE[best.status]
-    )
-      return candidate;
-    return best;
-  }).status;
+  return resolveDominantByCount<CapabilityValidationStatus, "EMPTY">(
+    {
+      WITHIN_SCOPE: withinScopeCount,
+      OUT_OF_SCOPE: outOfScopeCount,
+      UNDECLARED_AGENT: undeclaredAgentCount,
+    },
+    ["WITHIN_SCOPE", "OUT_OF_SCOPE", "UNDECLARED_AGENT"],
+    "EMPTY",
+  );
 }
 
 // ─── Contract ─────────────────────────────────────────────────────────────────
@@ -95,16 +83,11 @@ export class AgentDefinitionCapabilityBatchContract {
       undeclaredAgentCount,
     );
 
-    const batchHash = computeDeterministicHash(
-      "w13-t1-cp1-agent-def-cap-batch",
-      ...results.map((r) => r.resultHash),
-      createdAt,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w13-t1-cp1-agent-def-cap-batch-id",
-      batchHash,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w13-t1-cp1-agent-def-cap-batch",
+      batchIdSeed: "w13-t1-cp1-agent-def-cap-batch-id",
+      hashParts: [...results.map((result) => result.resultHash), createdAt],
+    });
 
     return {
       batchId,

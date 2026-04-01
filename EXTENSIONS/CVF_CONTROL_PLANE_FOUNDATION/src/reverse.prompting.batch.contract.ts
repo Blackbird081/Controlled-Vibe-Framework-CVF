@@ -1,7 +1,10 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type { ReversePromptPacket, QuestionPriority } from "./reverse.prompting.contract";
 import { ReversePromptingContract } from "./reverse.prompting.contract";
 import type { ControlPlaneIntakeResult } from "./intake.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantByCount,
+} from "./batch.contract.shared";
 
 // --- Types ---
 
@@ -36,32 +39,20 @@ export interface ReversePromptingBatchContractDependencies {
  *   "medium" — elevated gap; should address before proceeding
  *   "low"    — minor gap; can proceed but improvement recommended
  */
-const PRIORITY_ORDER: QuestionPriority[] = ["high", "medium", "low"];
-
 function resolveDominantPriority(
   highCount: number,
   mediumCount: number,
   lowCount: number,
 ): DominantQuestionPriority {
-  const total = highCount + mediumCount + lowCount;
-  if (total === 0) return "NONE";
-
-  const counts: Record<QuestionPriority, number> = {
-    high: highCount,
-    medium: mediumCount,
-    low: lowCount,
-  };
-
-  let dominant: QuestionPriority = "low";
-  let maxCount = -1;
-  for (const priority of PRIORITY_ORDER) {
-    if (counts[priority] > maxCount) {
-      maxCount = counts[priority];
-      dominant = priority;
-    }
-  }
-
-  return dominant;
+  return resolveDominantByCount<QuestionPriority, "NONE">(
+    {
+      high: highCount,
+      medium: mediumCount,
+      low: lowCount,
+    },
+    ["high", "medium", "low"],
+    "NONE",
+  );
 }
 
 // --- Contract ---
@@ -100,16 +91,11 @@ export class ReversePromptingBatchContract {
 
     const dominantPriority = resolveDominantPriority(highCount, mediumCount, lowCount);
 
-    const batchHash = computeDeterministicHash(
-      "w28-t1-cp1-reverse-prompting-batch",
-      ...results.map((r) => r.packetId),
-      createdAt,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w28-t1-cp1-reverse-prompting-batch-id",
-      batchHash,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w28-t1-cp1-reverse-prompting-batch",
+      batchIdSeed: "w28-t1-cp1-reverse-prompting-batch-id",
+      hashParts: [...results.map((result) => result.packetId), createdAt],
+    });
 
     return {
       batchId,

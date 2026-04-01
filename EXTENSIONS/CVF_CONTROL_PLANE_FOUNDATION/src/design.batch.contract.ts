@@ -1,7 +1,10 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type { DesignPlan, DesignTaskRisk } from "./design.contract";
 import { DesignContract } from "./design.contract";
 import type { ControlPlaneIntakeResult } from "./intake.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantByCount,
+} from "./batch.contract.shared";
 
 // --- Types ---
 
@@ -39,34 +42,22 @@ export interface DesignBatchContractDependencies {
  *   R1 — moderate risk; standard review applies
  *   R0 — no significant risk; lowest governance weight
  */
-const RISK_PRIORITY: DesignTaskRisk[] = ["R3", "R2", "R1", "R0"];
-
 function resolveDominantDesignRisk(
   r0Count: number,
   r1Count: number,
   r2Count: number,
   r3Count: number,
 ): DominantDesignRisk {
-  const total = r0Count + r1Count + r2Count + r3Count;
-  if (total === 0) return "NONE";
-
-  const counts: Record<DesignTaskRisk, number> = {
-    R0: r0Count,
-    R1: r1Count,
-    R2: r2Count,
-    R3: r3Count,
-  };
-
-  let dominant: DesignTaskRisk = "R0";
-  let maxCount = -1;
-  for (const risk of RISK_PRIORITY) {
-    if (counts[risk] > maxCount) {
-      maxCount = counts[risk];
-      dominant = risk;
-    }
-  }
-
-  return dominant;
+  return resolveDominantByCount<DesignTaskRisk, "NONE">(
+    {
+      R3: r3Count,
+      R2: r2Count,
+      R1: r1Count,
+      R0: r0Count,
+    },
+    ["R3", "R2", "R1", "R0"],
+    "NONE",
+  );
 }
 
 // --- Contract ---
@@ -97,16 +88,11 @@ export class DesignBatchContract {
 
     const dominantRisk = resolveDominantDesignRisk(r0Count, r1Count, r2Count, r3Count);
 
-    const batchHash = computeDeterministicHash(
-      "w27-t1-cp1-design-batch",
-      ...plans.map((p) => p.planHash),
-      createdAt,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w27-t1-cp1-design-batch-id",
-      batchHash,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w27-t1-cp1-design-batch",
+      batchIdSeed: "w27-t1-cp1-design-batch-id",
+      hashParts: [...plans.map((plan) => plan.planHash), createdAt],
+    });
 
     return {
       batchId,

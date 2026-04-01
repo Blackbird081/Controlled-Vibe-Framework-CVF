@@ -1,4 +1,3 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import {
   BoardroomTransitionGateContract,
   type BoardroomTransitionAction,
@@ -6,6 +5,10 @@ import {
   type BoardroomTransitionGateContractDependencies,
 } from "./boardroom.transition.gate.contract";
 import type { BoardroomSession } from "./boardroom.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantBySeverity,
+} from "./batch.contract.shared";
 
 // --- Types ---
 
@@ -40,15 +43,12 @@ const ACTION_SEVERITY: Record<BoardroomTransitionAction, number> = {
 export function resolveDominantTransitionAction(
   gates: BoardroomTransitionGateResult[],
 ): BoardroomTransitionAction | "NONE" {
-  if (gates.length === 0) return "NONE";
-
-  let dominant: BoardroomTransitionAction = "PROCEED_TO_ORCHESTRATION";
-  for (const gate of gates) {
-    if (ACTION_SEVERITY[gate.action] > ACTION_SEVERITY[dominant]) {
-      dominant = gate.action;
-    }
-  }
-  return dominant;
+  return resolveDominantBySeverity(
+    gates.map((gate) => gate.action),
+    ACTION_SEVERITY,
+    "NONE",
+    "PROCEED_TO_ORCHESTRATION",
+  );
 }
 
 // --- Contract ---
@@ -89,18 +89,16 @@ export class BoardroomTransitionGateBatchContract {
     const allowOrchestration =
       gates.length > 0 && gates.every((g) => g.allowOrchestration);
 
-    const batchHash = computeDeterministicHash(
-      "w30-t1-cp1-boardroom-transition-gate-batch",
-      `${createdAt}:total:${gates.length}`,
-      `proceed:${proceedCount}:return:${returnToDesignCount}:escalate:${escalateCount}:stop:${stopCount}`,
-      `dominant:${dominantAction}:allowOrchestration:${allowOrchestration}`,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w30-t1-cp1-boardroom-transition-gate-batch-id",
-      batchHash,
-      createdAt,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w30-t1-cp1-boardroom-transition-gate-batch",
+      batchIdSeed: "w30-t1-cp1-boardroom-transition-gate-batch-id",
+      hashParts: [
+        `${createdAt}:total:${gates.length}`,
+        `proceed:${proceedCount}:return:${returnToDesignCount}:escalate:${escalateCount}:stop:${stopCount}`,
+        `dominant:${dominantAction}:allowOrchestration:${allowOrchestration}`,
+      ],
+      batchIdParts: [createdAt],
+    });
 
     return {
       batchId,

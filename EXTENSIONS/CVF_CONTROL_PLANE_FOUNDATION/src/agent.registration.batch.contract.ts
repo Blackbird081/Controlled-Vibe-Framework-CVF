@@ -1,6 +1,9 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type { AgentDefinitionInput, AgentDefinitionRecord } from "./agent.definition.boundary.contract";
 import { AgentDefinitionBoundaryContract } from "./agent.definition.boundary.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantByCount,
+} from "./batch.contract.shared";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -35,32 +38,18 @@ export interface AgentRegistrationBatchContractDependencies {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const STATUS_PRECEDENCE: Record<RegistrationStatus, number> = {
-  REGISTERED: 2,
-  DUPLICATE: 1,
-};
-
 function resolveDominantStatus(
   registeredCount: number,
   duplicateCount: number,
 ): RegistrationBatchDominantStatus {
-  const total = registeredCount + duplicateCount;
-  if (total === 0) return "EMPTY";
-
-  const candidates: Array<{ status: RegistrationStatus; count: number }> = [
-    { status: "REGISTERED", count: registeredCount },
-    { status: "DUPLICATE", count: duplicateCount },
-  ];
-
-  return candidates.reduce((best, candidate) => {
-    if (candidate.count > best.count) return candidate;
-    if (
-      candidate.count === best.count &&
-      STATUS_PRECEDENCE[candidate.status] > STATUS_PRECEDENCE[best.status]
-    )
-      return candidate;
-    return best;
-  }).status;
+  return resolveDominantByCount<RegistrationStatus, "EMPTY">(
+    {
+      REGISTERED: registeredCount,
+      DUPLICATE: duplicateCount,
+    },
+    ["REGISTERED", "DUPLICATE"],
+    "EMPTY",
+  );
 }
 
 function computeInputContentKey(input: AgentDefinitionInput): string {
@@ -123,20 +112,19 @@ export class AgentRegistrationBatchContract {
         seenContentKeys.add(contentKey);
       }
 
-      const resultHash = computeDeterministicHash(
-        "w17-t1-cp1-reg-batch-result",
-        processedAt,
-        `agent:${record.agentId}`,
-        `name:${record.name}`,
-        `status:${status}`,
-        `defHash:${record.definitionHash}`,
-      );
-
-      const resultId = computeDeterministicHash(
-        "w17-t1-cp1-reg-batch-result-id",
-        resultHash,
-        processedAt,
-      );
+      const { batchHash: resultHash, batchId: resultId } =
+        createDeterministicBatchIdentity({
+          batchSeed: "w17-t1-cp1-reg-batch-result",
+          batchIdSeed: "w17-t1-cp1-reg-batch-result-id",
+          hashParts: [
+            processedAt,
+            `agent:${record.agentId}`,
+            `name:${record.name}`,
+            `status:${status}`,
+            `defHash:${record.definitionHash}`,
+          ],
+          batchIdParts: [processedAt],
+        });
 
       results.push({
         resultId,
@@ -155,16 +143,11 @@ export class AgentRegistrationBatchContract {
 
     const dominantStatus = resolveDominantStatus(registeredCount, duplicateCount);
 
-    const batchHash = computeDeterministicHash(
-      "w17-t1-cp1-reg-batch",
-      ...results.map((r) => r.resultHash),
-      createdAt,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w17-t1-cp1-reg-batch-id",
-      batchHash,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w17-t1-cp1-reg-batch",
+      batchIdSeed: "w17-t1-cp1-reg-batch-id",
+      hashParts: [...results.map((result) => result.resultHash), createdAt],
+    });
 
     return {
       batchId,

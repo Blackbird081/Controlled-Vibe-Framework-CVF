@@ -1,10 +1,13 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type {
   AuthStatus,
   GatewayAuthRequest,
   GatewayAuthResult,
 } from "./gateway.auth.contract";
 import { GatewayAuthContract } from "./gateway.auth.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantByCount,
+} from "./batch.contract.shared";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -29,39 +32,22 @@ export interface GatewayAuthBatchContractDependencies {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const STATUS_PRECEDENCE: Record<AuthStatus, number> = {
-  REVOKED: 4,
-  EXPIRED: 3,
-  DENIED: 2,
-  AUTHENTICATED: 1,
-};
-
 function resolveDominantAuthStatus(
   authenticatedCount: number,
   deniedCount: number,
   expiredCount: number,
   revokedCount: number,
 ): GatewayAuthBatchDominantStatus {
-  const total =
-    authenticatedCount + deniedCount + expiredCount + revokedCount;
-  if (total === 0) return "EMPTY";
-
-  const candidates: Array<{ status: AuthStatus; count: number }> = [
-    { status: "AUTHENTICATED", count: authenticatedCount },
-    { status: "DENIED", count: deniedCount },
-    { status: "EXPIRED", count: expiredCount },
-    { status: "REVOKED", count: revokedCount },
-  ];
-
-  return candidates.reduce((best, candidate) => {
-    if (candidate.count > best.count) return candidate;
-    if (
-      candidate.count === best.count &&
-      STATUS_PRECEDENCE[candidate.status] > STATUS_PRECEDENCE[best.status]
-    )
-      return candidate;
-    return best;
-  }).status;
+  return resolveDominantByCount<AuthStatus, "EMPTY">(
+    {
+      REVOKED: revokedCount,
+      EXPIRED: expiredCount,
+      DENIED: deniedCount,
+      AUTHENTICATED: authenticatedCount,
+    },
+    ["REVOKED", "EXPIRED", "DENIED", "AUTHENTICATED"],
+    "EMPTY",
+  );
 }
 
 // ─── Contract ─────────────────────────────────────────────────────────────────
@@ -122,16 +108,11 @@ export class GatewayAuthBatchContract {
       revokedCount,
     );
 
-    const batchHash = computeDeterministicHash(
-      "w22-t1-cp1-gateway-auth-batch",
-      ...results.map((r) => r.authHash),
-      createdAt,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w22-t1-cp1-gateway-auth-batch-id",
-      batchHash,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w22-t1-cp1-gateway-auth-batch",
+      batchIdSeed: "w22-t1-cp1-gateway-auth-batch-id",
+      hashParts: [...results.map((result) => result.authHash), createdAt],
+    });
 
     return {
       batchId,

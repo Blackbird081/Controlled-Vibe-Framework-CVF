@@ -180,6 +180,29 @@ Personal AI usage unrelated to company work is excluded.
      - Canonical authoring standard: `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_governed_artifact_authoring.py`.
+ 27. `GC-033` governed package public barrels must remain thin routing surfaces once an intentional split has been made:
+     - Public barrels such as `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` must stay re-export-oriented and must not grow back into implementation hotspots.
+     - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_cpf_public_surface_maintainability.py`.
+ 28. `GC-034` governed barrel smoke tests must remain ownership-clean after canonical test surfaces are split:
+     - `tests/index.test.ts` style barrel smoke files may cover public-surface reachability, but they must not re-own tranche-local behavior already assigned to dedicated files.
+     - Imports must route through the public barrel and approved helpers instead of local tranche contracts.
+     - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_cpf_public_surface_maintainability.py`.
+ 29. `GC-035` governed CPF batch families must adopt shared batch helpers and shared fixture builders once those helpers exist:
+     - Stable repeated batch logic such as deterministic batch identity and dominant-resolution patterns must route through the shared helper instead of being copied into new tranche files.
+     - Stable repeated batch-test fixtures must route through shared builders under `tests/helpers/` instead of being redefined in every file.
+     - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_cpf_batch_helper_adoption.py`.
+ 30. `GC-036` canonical summary docs must stay separate from typed evidence payloads:
+     - Whitepaper, tracker, handoff, index, and active roadmap summary surfaces may cite evidence but must not inline evidence-owned typed fields such as trace/report IDs and hashes.
+     - Summary canon should point to baselines, reviews, audits, and assessments rather than duplicating them.
+     - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_canon_summary_evidence_separation.py`.
 
 ---
 

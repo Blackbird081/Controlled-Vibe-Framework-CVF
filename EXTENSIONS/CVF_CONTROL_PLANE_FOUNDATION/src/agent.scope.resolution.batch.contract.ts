@@ -1,8 +1,11 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type {
   AgentScopeResolution,
   ScopeResolutionStatus,
 } from "./agent.definition.boundary.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantByCount,
+} from "./batch.contract.shared";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -25,35 +28,20 @@ export interface AgentScopeResolutionBatchContractDependencies {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const STATUS_PRECEDENCE: Record<ScopeResolutionStatus, number> = {
-  RESOLVED: 3,
-  EMPTY_SCOPE: 2,
-  UNDECLARED_AGENT: 1,
-};
-
 function resolveDominantStatus(
   resolvedCount: number,
   emptyScopeCount: number,
   undeclaredAgentCount: number,
 ): ScopeResolutionBatchDominantStatus {
-  const total = resolvedCount + emptyScopeCount + undeclaredAgentCount;
-  if (total === 0) return "EMPTY";
-
-  const candidates: Array<{ status: ScopeResolutionStatus; count: number }> = [
-    { status: "RESOLVED", count: resolvedCount },
-    { status: "EMPTY_SCOPE", count: emptyScopeCount },
-    { status: "UNDECLARED_AGENT", count: undeclaredAgentCount },
-  ];
-
-  return candidates.reduce((best, candidate) => {
-    if (candidate.count > best.count) return candidate;
-    if (
-      candidate.count === best.count &&
-      STATUS_PRECEDENCE[candidate.status] > STATUS_PRECEDENCE[best.status]
-    )
-      return candidate;
-    return best;
-  }).status;
+  return resolveDominantByCount<ScopeResolutionStatus, "EMPTY">(
+    {
+      RESOLVED: resolvedCount,
+      EMPTY_SCOPE: emptyScopeCount,
+      UNDECLARED_AGENT: undeclaredAgentCount,
+    },
+    ["RESOLVED", "EMPTY_SCOPE", "UNDECLARED_AGENT"],
+    "EMPTY",
+  );
 }
 
 // ─── Contract ─────────────────────────────────────────────────────────────────
@@ -95,16 +83,11 @@ export class AgentScopeResolutionBatchContract {
       undeclaredAgentCount,
     );
 
-    const batchHash = computeDeterministicHash(
-      "w14-t1-cp1-agent-scope-res-batch",
-      ...results.map((r) => r.resolutionHash),
-      createdAt,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w14-t1-cp1-agent-scope-res-batch-id",
-      batchHash,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w14-t1-cp1-agent-scope-res-batch",
+      batchIdSeed: "w14-t1-cp1-agent-scope-res-batch-id",
+      hashParts: [...results.map((result) => result.resolutionHash), createdAt],
+    });
 
     return {
       batchId,

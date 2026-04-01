@@ -47,6 +47,7 @@ Primary references:
 - `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`
 - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
 - `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
+- `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` when touching governed public barrels, barrel smoke, shared batch helpers, or canonical summary surfaces
 - active quality assessment for the current workline before deciding remediation-first vs expansion-now
 
 ### `GC-019` — Structural Change Audit Gate
@@ -194,6 +195,7 @@ Use this routing table after reading the always-on bootstrap:
 | extension-local source, test, or package-config changes | `GC-029` |
 | creating or materially revising governance guards | `GC-030` + guard registry |
 | drafting or materially revising governed artifacts | `GC-032` + source truth + active roadmap/tranche packet |
+| touching governed public barrels, barrel smoke tests, shared batch helpers, or canonical summary surfaces | `GC-033` + `GC-034` + `GC-035` + `GC-036` + `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |
 | ordinary tranche-local implementation already authorized | active roadmap + tranche packet only |

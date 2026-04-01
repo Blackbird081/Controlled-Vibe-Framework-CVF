@@ -1,4 +1,3 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type {
   GatewayAction,
   RouteDefinition,
@@ -6,6 +5,10 @@ import type {
 } from "./route.match.contract";
 import { RouteMatchContract } from "./route.match.contract";
 import type { GatewayProcessedRequest } from "./ai.gateway.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantByCount,
+} from "./batch.contract.shared";
 
 // --- Types ---
 
@@ -49,16 +52,16 @@ function resolveDominantGatewayAction(
   rerouteCount: number,
   passthroughCount: number,
 ): DominantGatewayAction {
-  const total = forwardCount + rejectCount + rerouteCount + passthroughCount;
-  if (total === 0) return "NONE";
-
-  const maxCount = Math.max(forwardCount, rejectCount, rerouteCount, passthroughCount);
-
-  // Tie-breaking: REJECT > REROUTE > FORWARD > PASSTHROUGH
-  if (rejectCount === maxCount) return "REJECT";
-  if (rerouteCount === maxCount) return "REROUTE";
-  if (forwardCount === maxCount) return "FORWARD";
-  return "PASSTHROUGH";
+  return resolveDominantByCount<GatewayAction, "NONE">(
+    {
+      REJECT: rejectCount,
+      REROUTE: rerouteCount,
+      FORWARD: forwardCount,
+      PASSTHROUGH: passthroughCount,
+    },
+    ["REJECT", "REROUTE", "FORWARD", "PASSTHROUGH"],
+    "NONE",
+  );
 }
 
 // --- Contract ---
@@ -96,16 +99,11 @@ export class RouteMatchBatchContract {
       passthroughCount,
     );
 
-    const batchHash = computeDeterministicHash(
-      "w25-t1-cp1-route-match-batch",
-      ...results.map((r) => r.matchHash),
-      createdAt,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w25-t1-cp1-route-match-batch-id",
-      batchHash,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w25-t1-cp1-route-match-batch",
+      batchIdSeed: "w25-t1-cp1-route-match-batch-id",
+      hashParts: [...results.map((result) => result.matchHash), createdAt],
+    });
 
     return {
       batchId,

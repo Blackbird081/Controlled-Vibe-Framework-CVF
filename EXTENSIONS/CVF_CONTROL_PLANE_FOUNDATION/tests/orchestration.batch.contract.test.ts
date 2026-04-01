@@ -7,59 +7,19 @@ import {
 } from "../src/orchestration.batch.contract";
 import { OrchestrationContract } from "../src/orchestration.contract";
 import type { DesignPlan, DesignTask, DesignTaskRisk, DesignAgentRole, DesignTaskPhase } from "../src/design.contract";
+import {
+  FIXED_BATCH_NOW,
+  makeDesignPlan as makePlan,
+  makeDesignTask as makeTask,
+} from "./helpers/cpf.batch.contract.fixtures";
 
 // --- Helpers ---
 
-const FIXED_NOW = "2026-04-01T00:00:00.000Z";
-
-function makeTask(
-  id: string,
-  riskLevel: DesignTaskRisk,
-  role: DesignAgentRole = "builder",
-  phase: DesignTaskPhase = "BUILD",
-): DesignTask {
-  return {
-    taskId: id,
-    title: `Task ${id}`,
-    description: "Test task",
-    assignedRole: role,
-    riskLevel,
-    targetPhase: phase,
-    estimatedComplexity: "low",
-    dependencies: [],
-  };
-}
-
-function makePlan(planId: string, tasks: DesignTask[]): DesignPlan {
-  const riskSummary: Record<DesignTaskRisk, number> = { R0: 0, R1: 0, R2: 0, R3: 0 };
-  const roleSummary: Record<DesignAgentRole, number> = {
-    orchestrator: 0,
-    architect: 0,
-    builder: 0,
-    reviewer: 0,
-  };
-  for (const task of tasks) {
-    riskSummary[task.riskLevel]++;
-    roleSummary[task.assignedRole]++;
-  }
-  return {
-    planId,
-    createdAt: FIXED_NOW,
-    intakeRequestId: `intake-${planId}`,
-    vibeOriginal: "test vibe",
-    domainDetected: "general",
-    tasks,
-    totalTasks: tasks.length,
-    riskSummary,
-    roleSummary,
-    planHash: `hash-${planId}`,
-    warnings: [],
-  };
-}
+const FIXED_NOW = FIXED_BATCH_NOW;
 
 function makeContract(): { contract: OrchestrationContract; batchContract: OrchestrationBatchContract } {
-  const contract = new OrchestrationContract({ now: () => FIXED_NOW });
-  const batchContract = new OrchestrationBatchContract({ now: () => FIXED_NOW });
+  const contract = new OrchestrationContract({ now: () => FIXED_BATCH_NOW });
+  const batchContract = new OrchestrationBatchContract({ now: () => FIXED_BATCH_NOW });
   return { contract, batchContract };
 }
 

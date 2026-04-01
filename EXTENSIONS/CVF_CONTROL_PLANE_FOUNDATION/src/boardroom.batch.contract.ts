@@ -1,4 +1,3 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import {
   BoardroomContract,
   type BoardroomRequest,
@@ -6,6 +5,10 @@ import {
   type BoardroomDecision,
   type BoardroomContractDependencies,
 } from "./boardroom.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantBySeverity,
+} from "./batch.contract.shared";
 
 // --- Types ---
 
@@ -39,16 +42,12 @@ const DECISION_SEVERITY: Record<BoardroomDecision, number> = {
 export function resolveDominantBoardroomDecision(
   sessions: BoardroomSession[],
 ): BoardroomDecision | "NONE" {
-  if (sessions.length === 0) return "NONE";
-
-  let dominant: BoardroomDecision = "PROCEED";
-  for (const session of sessions) {
-    const decision = session.decision.decision;
-    if (DECISION_SEVERITY[decision] > DECISION_SEVERITY[dominant]) {
-      dominant = decision;
-    }
-  }
-  return dominant;
+  return resolveDominantBySeverity(
+    sessions.map((session) => session.decision.decision),
+    DECISION_SEVERITY,
+    "NONE",
+    "PROCEED",
+  );
 }
 
 // --- Contract ---
@@ -85,18 +84,16 @@ export class BoardroomBatchContract {
 
     const dominantDecision = resolveDominantBoardroomDecision(sessions);
 
-    const batchHash = computeDeterministicHash(
-      "w29-t1-cp1-boardroom-batch",
-      `${createdAt}:total:${sessions.length}`,
-      `proceed:${proceedCount}:amend:${amendCount}:escalate:${escalateCount}:reject:${rejectCount}`,
-      `dominant:${dominantDecision}`,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w29-t1-cp1-boardroom-batch-id",
-      batchHash,
-      createdAt,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w29-t1-cp1-boardroom-batch",
+      batchIdSeed: "w29-t1-cp1-boardroom-batch-id",
+      hashParts: [
+        `${createdAt}:total:${sessions.length}`,
+        `proceed:${proceedCount}:amend:${amendCount}:escalate:${escalateCount}:reject:${rejectCount}`,
+        `dominant:${dominantDecision}`,
+      ],
+      batchIdParts: [createdAt],
+    });
 
     return {
       batchId,

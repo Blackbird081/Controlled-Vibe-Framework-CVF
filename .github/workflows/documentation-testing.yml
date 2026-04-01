@@ -58,6 +58,57 @@ jobs:
         run: |
           python governance/compat/check_governed_artifact_authoring.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
+  cpf-public-surface-maintainability:
+    name: CPF Public Surface Maintainability
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-033 / GC-034 maintainability
+        run: |
+          python governance/compat/check_cpf_public_surface_maintainability.py --enforce
+
+  cpf-shared-batch-helper-adoption:
+    name: CPF Shared Batch Helper Adoption
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-035 shared batch helper adoption
+        run: |
+          python governance/compat/check_cpf_batch_helper_adoption.py --enforce
+
+  canon-summary-evidence-separation:
+    name: Canon Summary Evidence Separation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-036 summary/evidence separation
+        run: |
+          python governance/compat/check_canon_summary_evidence_separation.py --enforce
+
   baseline-update-compat:
     name: Baseline Update Compat
     runs-on: ubuntu-latest

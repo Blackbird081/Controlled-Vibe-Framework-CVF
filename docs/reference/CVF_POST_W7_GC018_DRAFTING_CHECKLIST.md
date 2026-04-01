@@ -14,6 +14,7 @@ Before writing any GC-018 packet, confirm all of the following:
 
 - [ ] GC-027 decision chain is complete: intake review → rebuttal → EA counter-review → decision pack
 - [ ] `GC-032` governed artifact authoring standard is loaded before drafting begins
+- [ ] `CVF_MAINTAINABILITY_STANDARD.md` is loaded if the proposed family touches public barrels, barrel smoke, shared batch helpers, or canonical summary surfaces
 - [ ] Active quality assessment is loaded before drafting begins
 - [ ] Quality-first posture is decided before scope drafting starts: `REMEDIATE_FIRST` or `EXPAND_NOW`
 - [ ] Parent roadmap exists and is at SUMMARY_RECORD status

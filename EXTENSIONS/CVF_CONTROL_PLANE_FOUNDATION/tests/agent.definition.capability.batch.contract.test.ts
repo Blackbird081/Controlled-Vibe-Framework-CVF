@@ -5,11 +5,14 @@ import {
   type AgentDefinitionCapabilityBatch,
 } from "../src/agent.definition.capability.batch.contract";
 import type { CapabilityValidationResult } from "../src/agent.definition.boundary.contract";
+import {
+  FIXED_BATCH_NOW,
+  makeCapabilityValidationResult,
+} from "./helpers/cpf.batch.contract.fixtures";
 
 // --- Helpers ---
 
-const FIXED_NOW = "2026-03-30T00:00:00.000Z";
-const fixed = () => FIXED_NOW;
+const fixed = () => FIXED_BATCH_NOW;
 
 function makeContract() {
   return createAgentDefinitionCapabilityBatchContract({ now: fixed });
@@ -19,17 +22,7 @@ function makeResult(
   status: CapabilityValidationResult["status"],
   overrides: Partial<CapabilityValidationResult> = {},
 ): CapabilityValidationResult {
-  const base = status === "WITHIN_SCOPE" ? "within" : status === "OUT_OF_SCOPE" ? "out" : "undeclared";
-  return {
-    resultId: `id-${base}-${Math.random().toString(36).slice(2)}`,
-    evaluatedAt: FIXED_NOW,
-    agentId: "agent-001",
-    capability: "read:knowledge",
-    status,
-    reason: `reason for ${status}`,
-    resultHash: `hash-${base}-${Math.random().toString(36).slice(2)}`,
-    ...overrides,
-  };
+  return makeCapabilityValidationResult(status, overrides);
 }
 
 // --- empty batch ---
@@ -63,7 +56,7 @@ describe("AgentDefinitionCapabilityBatchContract.batch — empty", () => {
   it("createdAt is injected from now()", () => {
     const contract = makeContract();
     const result = contract.batch([]);
-    expect(result.createdAt).toBe(FIXED_NOW);
+    expect(result.createdAt).toBe(FIXED_BATCH_NOW);
   });
 });
 
@@ -243,8 +236,8 @@ describe("AgentDefinitionCapabilityBatchContract.batch — determinism", () => {
 
   it("produces different batchHash when createdAt differs", () => {
     const r = makeResult("WITHIN_SCOPE", { resultHash: "hash-SAME" });
-    const c1 = createAgentDefinitionCapabilityBatchContract({ now: () => "2026-03-30T00:00:00.000Z" });
-    const c2 = createAgentDefinitionCapabilityBatchContract({ now: () => "2026-03-30T01:00:00.000Z" });
+    const c1 = createAgentDefinitionCapabilityBatchContract({ now: () => FIXED_BATCH_NOW });
+    const c2 = createAgentDefinitionCapabilityBatchContract({ now: () => "2026-04-01T01:00:00.000Z" });
     const b1 = c1.batch([r]);
     const b2 = c2.batch([r]);
     expect(b1.batchHash).not.toBe(b2.batchHash);

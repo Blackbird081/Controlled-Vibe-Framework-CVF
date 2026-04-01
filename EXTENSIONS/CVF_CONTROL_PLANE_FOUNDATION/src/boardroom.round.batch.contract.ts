@@ -1,4 +1,3 @@
-import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import {
   BoardroomRoundContract,
   type BoardroomRound,
@@ -6,6 +5,10 @@ import {
   type BoardroomRoundContractDependencies,
 } from "./boardroom.round.contract";
 import type { BoardroomSession } from "./boardroom.contract";
+import {
+  createDeterministicBatchIdentity,
+  resolveDominantBySeverity,
+} from "./batch.contract.shared";
 
 // --- Types ---
 
@@ -44,15 +47,12 @@ const FOCUS_SEVERITY: Record<RefinementFocus, number> = {
 export function resolveDominantRefinementFocus(
   rounds: BoardroomRound[],
 ): RefinementFocus | "NONE" {
-  if (rounds.length === 0) return "NONE";
-
-  let dominant: RefinementFocus = "CLARIFICATION";
-  for (const round of rounds) {
-    if (FOCUS_SEVERITY[round.refinementFocus] > FOCUS_SEVERITY[dominant]) {
-      dominant = round.refinementFocus;
-    }
-  }
-  return dominant;
+  return resolveDominantBySeverity(
+    rounds.map((round) => round.refinementFocus),
+    FOCUS_SEVERITY,
+    "NONE",
+    "CLARIFICATION",
+  );
 }
 
 // --- Contract ---
@@ -89,19 +89,17 @@ export class BoardroomRoundBatchContract {
 
     const dominantFocus = resolveDominantRefinementFocus(rounds);
 
-    const batchHash = computeDeterministicHash(
-      "w31-t1-cp1-boardroom-round-batch",
-      `${createdAt}:total:${rounds.length}`,
-      `taskAmendment:${taskAmendmentCount}:escalationReview:${escalationReviewCount}`,
-      `riskReview:${riskReviewCount}:clarification:${clarificationCount}`,
-      `dominant:${dominantFocus}`,
-    );
-
-    const batchId = computeDeterministicHash(
-      "w31-t1-cp1-boardroom-round-batch-id",
-      batchHash,
-      createdAt,
-    );
+    const { batchHash, batchId } = createDeterministicBatchIdentity({
+      batchSeed: "w31-t1-cp1-boardroom-round-batch",
+      batchIdSeed: "w31-t1-cp1-boardroom-round-batch-id",
+      hashParts: [
+        `${createdAt}:total:${rounds.length}`,
+        `taskAmendment:${taskAmendmentCount}:escalationReview:${escalationReviewCount}`,
+        `riskReview:${riskReviewCount}:clarification:${clarificationCount}`,
+        `dominant:${dominantFocus}`,
+      ],
+      batchIdParts: [createdAt],
+    });
 
     return {
       batchId,

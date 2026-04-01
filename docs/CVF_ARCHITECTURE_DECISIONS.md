@@ -1024,30 +1024,21 @@ Bản cũ trên origin không bị xóa — Git chỉ thêm lịch sử mới, k
 ---
 
 ## ADR-020: Workspace Restructuring — Downstream Projects out of CVF Root
-
 | Field | Value |
 |---|---|
 | Date | 2026-03-08 |
 | Status | Active |
 | Related commits | *(local, not yet pushed)* |
-
 ### Context
-
 CVF root chứa 2 folders `Mini_Game/` và `XD_App/` — đây là 2 app thử nghiệm để đánh giá hiệu quả áp dụng quy tắc CVF. Tuy nhiên, theo Workspace Isolation Guard (đã ghi trong `CVF_CORE_KNOWLEDGE_BASE.md` Section VII), **không nên phát triển project trong CVF root**. CVF là governance layer, không phải monorepo cho downstream projects.
-
 Independent Review (ADR-019 reference) xác nhận CVF cần phân biệt rõ hơn giữa "governance cho CVF contributors" vs "governance cho downstream project dùng CVF".
-
 ### Decision
-
 **Di chuyển `Mini_Game/` và `XD_App/` ra khỏi CVF root vào `CVF-Workspace`.**
-
 | Folder | Source | Destination |
 |---|---|---|
 | `Mini_Game/` | `CVF root/Mini_Game/` | `D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\Mini_Game` |
 | `XD_App/` | `CVF root/XD_App/` | `D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\XD_App` |
-
 **Workspace layout sau di chuyển:**
-
 ```
 D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
 ├── .Controlled-Vibe-Framework-CVF/   ← CVF clone (dot prefix = governance layer ưu tiên)
@@ -1055,22 +1046,16 @@ D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
 ├── XD_App/                            ← Downstream project 2
 └── Trading-Tools/                     ← Downstream project 3
 ```
-
 ### Rationale
-
 - **Workspace Isolation Guard compliance:** CVF root phải chứa governance code, không phải application code.
 - **Dot-prefix convention:** `.Controlled-Vibe-Framework-CVF` có dấu `.` → Agent đọc CVF trước khi đọc project → CVF trở thành tầng kiểm soát cao nhất.
 - **Evidence preservation:** Các app này vẫn dùng làm bằng chứng đánh giá hiệu quả CVF, chỉ thay đổi vị trí lưu trữ.
 - **Giảm complexity cho CVF repo:** Bớt folders không liên quan trong CVF root → onboarding dễ hơn.
-
 ### Consequences
-
 - `Mini_Game/` và `XD_App/` không còn trong CVF git repo (đã có trong `.gitignore` từ trước).
 - Future downstream projects phải nằm trong `CVF-Workspace/`, không phải CVF root.
 - CVF-Workspace trở thành reference workspace layout cho adoption guide (`docs/guides/CVF_QUICK_ORIENTATION.md`).
-
 ### Related Files
-
 - `docs/guides/CVF_QUICK_ORIENTATION.md` (references workspace layout)
 - `governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md`
 - `docs/CVF_CORE_KNOWLEDGE_BASE.md` (Section VII — Workspace Isolation Guard)
@@ -1078,7 +1063,6 @@ D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
 ---
 
 ## ADR-021: Phase 1 Governance Runtime Hardening Integration
-
 | Field | Value |
 |---|---|
 | Date | 2026-03-19 |
@@ -1086,27 +1070,21 @@ D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
 | Branch | `cvf-next` (then merged to `main`) |
 | Layer | Layer 1 / 1.5 — Governance Platform |
 | Related commits | `0d1937a` |
-
 ### Context
 Phase 1 of the CVF Edit Integration Roadmap mandated strict Governance Runtime Hardening. Before this, CVF had theoretical governance guards, but lacked an enforceable strict perimeter at runtime. Agents could bypass phase conditions if the simulator wasn't called manually. A strict `PipelineOrchestrator` and a set of `MANDATORY_GUARD_IDS` needed to be anchored into the runtime.
-
 ### Decision
 **Implement a centralized `GuardRuntimeEngine` with unbypassable `MANDATORY_GUARD_IDS` and a `PipelineOrchestrator` that enforces state machine rules.**
-
 - Included 15 distinct guards (including ContextFreeze, AuthorityGate, ConceptAlignment).
 - Defined `authority_gate`, `phase_gate`, and `ai_commit` as non-bypassable even in "permissive" settings.
 - Integrated SDK (`cvf.evaluate()`) to expose this runtime engine to external tools.
-
 ### Rationale
 - Theoretical governance is insufficient for achieving Governance Level 4.0. Without unbypassable chokepoints in the runtime, the framework acts only as an advisory linter.
 - The `PipelineOrchestrator` guarantees that transition phases completely rollback if any single mandatory guard fails.
 - Consolidating into the `GuardRuntimeEngine` prevents distributed, brittle checks spread across different agent prompt logic.
-
 ### Consequences
 - CVF immediately shifts to **Governance Level 4.0 (Enforceable Framework)**.
 - Any tool missing `authority` context or attempting illegal phase transitions will systematically crash rather than proceed silently.
 - 602 tests explicitly validate these chokepoints across scenarios.
-
 ### Related Files
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guard.runtime.engine.ts`
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
@@ -1198,3 +1176,18 @@ Archive cleanup is easier to trust because high-value active windows are protect
 **Rationale** An exact remote tip SHA is not a stable continuity field at the push boundary, because the commit carrying that field changes the very value it is trying to freeze. Continuity docs should store stable routing truth, while volatile live state should be derived from the authoritative tool that owns it.
 **Consequences** Governed handoff remains strict, but now has a fixed point that can stay true across pushes. Agents must stop treating external memory or hand-edited SHA strings as a substitute for live git inspection. Resume and push decisions still depend on exact remote SHA when relevant, but they must derive that value live from git rather than requiring it as a durable handoff field.
 **Related Files** `AGENT_HANDOFF.md`, `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`, `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`, `governance/compat/check_agent_handoff_guard_compat.py`, `governance/compat/test_check_agent_handoff_guard_compat.py`
+
+---
+## ADR-027: CPF Public Surface Must Stay Thin And Shared Batch Semantics Must Stay Centralized
+| Field | Value |
+|---|---|
+| Date | 2026-04-01 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Control Plane Foundation |
+| Related commits | *(local, current maintainability hardening batch)* |
+**Context** CPF continuation delivery has expanded the public barrel, barrel smoke suite, and batch-contract family steadily through `W13-T1` to `W32-T1`. That growth improved coverage, but it also created a maintainability hotspot: public exports, smoke coverage, and repeated batch identity/tie-break logic were starting to drift toward copy-heavy maintenance and a larger blast radius for every new tranche.
+**Decision** Keep CPF public entry surfaces intentionally thin, centralize repeated batch identity/tie-break mechanics in shared helpers, and keep detailed behavior in owned tranche/domain tests rather than letting `index.test.ts` become a second behavioral test surface. This decision is enforced through `GC-033` through `GC-036` and anchored by the canonical maintainability standard.
+**Rationale** A large barrel and smoke suite create hidden coordination tax even when correctness remains high. Central helpers and ownership boundaries reduce duplication, make tranche additions cheaper, and preserve the readability of public-surface review.
+**Consequences** New CPF batch work must adopt shared batch helpers and shared fixtures where governed, barrel smoke must stay shallow, and summary canon docs must not absorb typed evidence payload responsibilities. Maintainability becomes an enforced architectural property instead of a one-off cleanup.
+**Related Files** `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts`, `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`, `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`, `governance/compat/check_cpf_public_surface_maintainability.py`, `governance/compat/check_cpf_batch_helper_adoption.py`, `governance/compat/check_canon_summary_evidence_separation.py`

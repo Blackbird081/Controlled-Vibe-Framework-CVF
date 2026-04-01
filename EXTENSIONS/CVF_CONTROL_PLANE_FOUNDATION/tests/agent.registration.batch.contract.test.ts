@@ -8,11 +8,14 @@ import {
   AgentDefinitionBoundaryContract,
 } from "../src/agent.definition.boundary.contract";
 import type { AgentDefinitionInput } from "../src/agent.definition.boundary.contract";
+import {
+  FIXED_BATCH_NOW,
+  makeAgentDefinitionInput,
+} from "./helpers/cpf.batch.contract.fixtures";
 
 // --- Helpers ---
 
-const FIXED_NOW = "2026-03-30T00:00:00.000Z";
-const fixed = () => FIXED_NOW;
+const fixed = () => FIXED_BATCH_NOW;
 
 function makeBoundary() {
   return new AgentDefinitionBoundaryContract({ now: fixed });
@@ -23,13 +26,7 @@ function makeContract() {
 }
 
 function makeInput(overrides: Partial<AgentDefinitionInput> = {}): AgentDefinitionInput {
-  return {
-    name: "agent-alpha",
-    role: "executor",
-    declaredCapabilities: ["read:knowledge"],
-    declaredDomains: ["operations"],
-    ...overrides,
-  };
+  return makeAgentDefinitionInput(overrides);
 }
 
 // --- empty batch ---
@@ -62,7 +59,7 @@ describe("AgentRegistrationBatchContract.batch — empty", () => {
   it("createdAt is injected from now()", () => {
     const contract = makeContract();
     const result = contract.batch([], makeBoundary());
-    expect(result.createdAt).toBe(FIXED_NOW);
+    expect(result.createdAt).toBe(FIXED_BATCH_NOW);
   });
 });
 
@@ -246,8 +243,8 @@ describe("AgentRegistrationBatchContract.batch — determinism", () => {
   });
 
   it("produces different batchHash when now() differs", () => {
-    const c1 = createAgentRegistrationBatchContract({ now: () => "2026-03-30T00:00:00.000Z" });
-    const c2 = createAgentRegistrationBatchContract({ now: () => "2026-03-30T01:00:00.000Z" });
+    const c1 = createAgentRegistrationBatchContract({ now: () => FIXED_BATCH_NOW });
+    const c2 = createAgentRegistrationBatchContract({ now: () => "2026-04-01T01:00:00.000Z" });
     const inputs = [makeInput({ name: "agent-det3" })];
     expect(c1.batch(inputs, makeBoundary()).batchHash).not.toBe(
       c2.batch(inputs, makeBoundary()).batchHash,

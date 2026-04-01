@@ -59,139 +59,27 @@ import {
   type BoardroomMultiRoundBatch,
   type BoardroomMultiRoundSummaryRequest,
 } from "../src/boardroom.multi.round.batch.contract";
-import { BoardroomRoundContract } from "../src/boardroom.round.contract";
 import type { BoardroomRound } from "../src/boardroom.round.contract";
-import { BoardroomContract } from "../src/boardroom.contract";
-import type { BoardroomRequest, BoardroomSession } from "../src/boardroom.contract";
-import type { DesignPlan } from "../src/design.contract";
-import { GovernanceCanvas } from "../../CVF_ECO_v2.1_GOVERNANCE_CANVAS/src/canvas";
+import {
+  FIXED_BATCH_NOW,
+  makeBoardroomRound,
+} from "./helpers/cpf.batch.contract.fixtures";
 
 // --- Helpers ---
 
-const FIXED_NOW = "2026-04-01T00:00:00.000Z";
-
-function makePlan(
-  id: string,
-  opts: {
-    r3Count?: number;
-    r2Count?: number;
-    r1Count?: number;
-    r0Count?: number;
-    warnings?: string[];
-    empty?: boolean;
-  } = {},
-): DesignPlan {
-  const r3 = opts.r3Count ?? 0;
-  const r2 = opts.r2Count ?? 0;
-  const r1 = opts.r1Count ?? 0;
-  const r0 = opts.r0Count ?? 0;
-  const warnings = opts.warnings ?? [];
-  const empty = opts.empty ?? false;
-
-  const tasks = empty
-    ? []
-    : [
-        ...Array.from({ length: r3 }, (_, i) => ({
-          taskId: `task-r3-${i}`,
-          title: `R3 Task ${i}`,
-          description: `R3 task ${i}`,
-          assignedRole: "architect" as const,
-          riskLevel: "R3" as const,
-          targetPhase: "DESIGN" as const,
-          estimatedComplexity: "high" as const,
-          dependencies: [],
-        })),
-        ...Array.from({ length: r2 }, (_, i) => ({
-          taskId: `task-r2-${i}`,
-          title: `R2 Task ${i}`,
-          description: `R2 task ${i}`,
-          assignedRole: "builder" as const,
-          riskLevel: "R2" as const,
-          targetPhase: "BUILD" as const,
-          estimatedComplexity: "medium" as const,
-          dependencies: [],
-        })),
-        ...Array.from({ length: r1 }, (_, i) => ({
-          taskId: `task-r1-${i}`,
-          title: `R1 Task ${i}`,
-          description: `R1 task ${i}`,
-          assignedRole: "builder" as const,
-          riskLevel: "R1" as const,
-          targetPhase: "BUILD" as const,
-          estimatedComplexity: "low" as const,
-          dependencies: [],
-        })),
-        ...Array.from({ length: r0 }, (_, i) => ({
-          taskId: `task-r0-${i}`,
-          title: `R0 Task ${i}`,
-          description: `R0 task ${i}`,
-          assignedRole: "reviewer" as const,
-          riskLevel: "R0" as const,
-          targetPhase: "REVIEW" as const,
-          estimatedComplexity: "low" as const,
-          dependencies: [],
-        })),
-      ];
-
-  return {
-    planId: empty ? "" : id,
-    createdAt: FIXED_NOW,
-    intakeRequestId: `intake-${id}`,
-    consumerId: "test-consumer",
-    vibeOriginal: `vibe for ${id}`,
-    tasks,
-    totalTasks: tasks.length,
-    riskSummary: { R3: r3, R2: r2, R1: r1, R0: r0 },
-    roleSummary: {
-      orchestrator: 0,
-      architect: r3,
-      builder: r2 + r1,
-      reviewer: r0,
-    },
-    domainDetected: "general",
-    planHash: `hash-${id}`,
-    warnings,
-  };
-}
-
-function makeSession(
-  decision: "PROCEED" | "AMEND_PLAN" | "ESCALATE" | "REJECT",
-): BoardroomSession {
-  const contract = new BoardroomContract({
-    canvas: new GovernanceCanvas(),
-    now: () => FIXED_NOW,
-  });
-  let request: BoardroomRequest;
-  if (decision === "PROCEED") {
-    request = { plan: makePlan("plan-proceed", { r0Count: 2 }), clarifications: [] };
-  } else if (decision === "AMEND_PLAN") {
-    request = {
-      plan: makePlan("plan-amend", { r1Count: 1 }),
-      clarifications: [{ question: "What is the timeline?", answer: undefined }],
-    };
-  } else if (decision === "ESCALATE") {
-    request = {
-      plan: makePlan("plan-escalate", { r3Count: 1, warnings: ["Intake had low confidence."] }),
-      clarifications: [],
-    };
-  } else {
-    request = { plan: makePlan("plan-reject", { empty: true }), clarifications: [] };
-  }
-  return contract.review(request);
-}
+const FIXED_NOW = FIXED_BATCH_NOW;
 
 function makeRound(
   decision: "PROCEED" | "AMEND_PLAN" | "ESCALATE" | "REJECT",
   roundNumber = 1,
 ): BoardroomRound {
-  const roundContract = new BoardroomRoundContract({ now: () => FIXED_NOW });
-  return roundContract.openRound(makeSession(decision), roundNumber);
+  return makeBoardroomRound(decision, roundNumber);
 }
 
 function makeBatchContract(): BoardroomMultiRoundBatchContract {
   return new BoardroomMultiRoundBatchContract({
-    contractDependencies: { now: () => FIXED_NOW },
-    now: () => FIXED_NOW,
+    contractDependencies: { now: () => FIXED_BATCH_NOW },
+    now: () => FIXED_BATCH_NOW,
   });
 }
 

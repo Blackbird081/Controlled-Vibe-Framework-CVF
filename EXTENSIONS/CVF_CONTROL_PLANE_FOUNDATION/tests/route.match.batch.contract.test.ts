@@ -6,10 +6,15 @@ import {
 import { RouteMatchContract } from "../src/route.match.contract";
 import type { RouteDefinition } from "../src/route.match.contract";
 import type { GatewayProcessedRequest } from "../src/ai.gateway.contract";
+import {
+  FIXED_BATCH_NOW,
+  MIXED_ROUTE_DEFINITIONS,
+  makeGatewayProcessedRequest,
+} from "./helpers/cpf.batch.contract.fixtures";
 
 // --- Helpers ---
 
-const FIXED_TS = "2026-04-01T00:00:00.000Z";
+const FIXED_TS = FIXED_BATCH_NOW;
 
 function makeContract(): RouteMatchContract {
   return new RouteMatchContract({ now: () => FIXED_TS });
@@ -20,26 +25,10 @@ function makeBatch(): RouteMatchBatchContract {
 }
 
 function makeRequest(id: string, signal: string): GatewayProcessedRequest {
-  return {
-    gatewayId: `gw-${id}`,
-    processedAt: FIXED_TS,
-    rawSignal: signal,
-    normalizedSignal: signal,
-    signalType: "command",
-    envMetadata: { platform: "test", phase: "test", riskLevel: "low", locale: "en", tags: [] },
-    privacyReport: { filtered: false, maskedTokenCount: 0, appliedPatterns: [] },
-    gatewayHash: `hash-${id}`,
-    warnings: [],
-  };
+  return makeGatewayProcessedRequest(id, signal);
 }
 
-// Shared route table used across tests
-const MIXED_ROUTES: RouteDefinition[] = [
-  { routeId: "r-reject", pathPattern: "reject*", gatewayAction: "REJECT", priority: 1 },
-  { routeId: "r-reroute", pathPattern: "reroute*", gatewayAction: "REROUTE", priority: 2 },
-  { routeId: "r-forward", pathPattern: "forward*", gatewayAction: "FORWARD", priority: 3 },
-  { routeId: "r-pass", pathPattern: "pass*", gatewayAction: "PASSTHROUGH", priority: 4 },
-];
+const MIXED_ROUTES: RouteDefinition[] = MIXED_ROUTE_DEFINITIONS;
 
 function forwardRequest(id = "f1"): GatewayProcessedRequest {
   return makeRequest(id, "forward-signal");

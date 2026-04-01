@@ -898,3 +898,14 @@ export type {
   DesignBatchResult,
   DesignBatchContractDependencies,
 } from "./design.batch.contract";
+
+// W28-T1 CP1 — Reverse Prompting Batch Contract
+export {
+  ReversePromptingBatchContract,
+  createReversePromptingBatchContract,
+} from "./reverse.prompting.batch.contract";
+export type {
+  DominantQuestionPriority,
+  ReversePromptingBatchResult,
+  ReversePromptingBatchContractDependencies,
+} from "./reverse.prompting.batch.contract";

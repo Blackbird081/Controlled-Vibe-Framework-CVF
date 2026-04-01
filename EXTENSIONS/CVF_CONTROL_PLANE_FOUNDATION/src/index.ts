@@ -865,3 +865,14 @@ export type {
   GatewayPIIDetectionBatch,
   GatewayPIIDetectionBatchContractDependencies,
 } from "./gateway.pii.detection.batch.contract";
+
+// W25-T1 CP1 — Route Match Batch Contract
+export {
+  RouteMatchBatchContract,
+  createRouteMatchBatchContract,
+} from "./route.match.batch.contract";
+export type {
+  DominantGatewayAction,
+  RouteMatchBatch,
+  RouteMatchBatchContractDependencies,
+} from "./route.match.batch.contract";

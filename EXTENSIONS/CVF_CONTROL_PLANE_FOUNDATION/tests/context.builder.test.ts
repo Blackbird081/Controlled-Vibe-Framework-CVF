@@ -10,7 +10,8 @@ import {
   createContextBuildBatchContract,
   createContextBuildContract,
 } from "../src/index";
-import type { ContextPackage, KnowledgeItem } from "../src/index";
+import type { ContextPackage } from "../src/index";
+import { makeKnowledgeItem } from "./helpers/control.plane.foundation.fixtures";
 
 function makeContextPackage(totalSegments: number, id: string): ContextPackage {
   return {
@@ -47,9 +48,9 @@ describe("CVF_CONTROL_PLANE_FOUNDATION W1-T11", () => {
       const contract = createContextBuildContract({
         now: () => "2026-03-22T10:00:00.000Z",
       });
-      const knowledgeItems: KnowledgeItem[] = [
-        { itemId: "k1", title: "Doc1", content: "body1", relevanceScore: 0.9, source: "src1" },
-        { itemId: "k2", title: "Doc2", content: "body2", relevanceScore: 0.7, source: "src2" },
+      const knowledgeItems = [
+        makeKnowledgeItem("k1", 0.9, { title: "Doc1", content: "body1", source: "src1" }),
+        makeKnowledgeItem("k2", 0.7, { title: "Doc2", content: "body2", source: "src2" }),
       ];
       const result = contract.build({ query: "q", contextId: "ctx-2", knowledgeItems });
 
@@ -79,9 +80,9 @@ describe("CVF_CONTROL_PLANE_FOUNDATION W1-T11", () => {
         now: () => "2026-03-22T10:00:00.000Z",
         estimateTokens: () => 10,
       });
-      const knowledgeItems: KnowledgeItem[] = [
-        { itemId: "k1", title: "A", content: "a", relevanceScore: 1, source: "s" },
-        { itemId: "k2", title: "B", content: "b", relevanceScore: 1, source: "s" },
+      const knowledgeItems = [
+        makeKnowledgeItem("k1", 1, { title: "A", content: "a", source: "s" }),
+        makeKnowledgeItem("k2", 1, { title: "B", content: "b", source: "s" }),
       ];
       const result = contract.build({
         query: "q",
@@ -126,7 +127,7 @@ describe("CVF_CONTROL_PLANE_FOUNDATION W1-T11", () => {
       const result = contract.build({
         query: "q",
         contextId: "ctx-6",
-        knowledgeItems: [{ itemId: "k1", title: "T", content: "C", relevanceScore: 1, source: "my-source" }],
+        knowledgeItems: [makeKnowledgeItem("k1", 1, { title: "T", content: "C", source: "my-source" })],
       });
 
       expect(result.segments[1]?.source).toBe("my-source");
@@ -139,7 +140,7 @@ describe("CVF_CONTROL_PLANE_FOUNDATION W1-T11", () => {
       const result = contract.build({
         query: "q",
         contextId: "ctx-7",
-        knowledgeItems: [{ itemId: "k1", title: "T", content: "C", relevanceScore: 1, source: "s" }],
+        knowledgeItems: [makeKnowledgeItem("k1", 1, { title: "T", content: "C", source: "s" })],
         metadata: { a: "b" },
       });
 

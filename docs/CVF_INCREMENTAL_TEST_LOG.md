@@ -2964,3 +2964,33 @@ Utility and guard:
   - 26 new tests across 6 describe groups; no additions to `index.test.ts` (GC-024 compliant)
   - CPF: 2196 → 2222 (+26); delta: `docs/baselines/CVF_W15_T1_CP1_AGENT_DEF_AUDIT_BATCH_DELTA_2026-03-30.md`
   - Closes the final batch gap in the W12-T1 agent definition family (W12→W13→W14→W15 complete)
+
+---
+
+## Batch CPF Maintainability Refactor — 2026-04-01
+
+- Tranche: Maintainability remediation — CPF public surface + test entropy reduction
+- Control point: Quality-first remediation
+- Extension: CVF_CONTROL_PLANE_FOUNDATION
+- Files added:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.coordination.barrel.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.workflow.barrel.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.context.barrel.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.knowledge.barrel.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.gateway.barrel.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.design.boardroom.barrel.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.continuation.barrel.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/control.plane.foundation.fixtures.ts`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` (collapsed to barrel-only public surface)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts` (reduced to public-surface smoke coverage)
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.builder.test.ts` (shared fixture adoption)
+- Tests executed:
+  - `npm run check` (CPF) → PASS
+  - `npx vitest run tests/index.test.ts tests/context.builder.test.ts` (CPF) → PASS
+  - `npm test` (CPF) → PASS (2501 tests, 0 failures)
+- Notes:
+  - Reduced `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` from a large monolithic export file to a 10-line barrel router with domain-specific barrel modules.
+  - Reduced `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts` to 300 lines and moved it to public-surface smoke coverage, relying on dedicated tranche/domain test files for contract detail coverage.
+  - Introduced shared CPF test fixtures for `KnowledgeItem` and `SessionSnapshot` to reduce future fixture drift when contract shapes evolve.
+  - Maintains behavior while lowering the maintenance cost of adding new CPF tranche surfaces.

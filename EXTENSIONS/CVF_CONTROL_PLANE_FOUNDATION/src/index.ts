@@ -887,3 +887,14 @@ export type {
   OrchestrationBatchResult,
   OrchestrationBatchContractDependencies,
 } from "./orchestration.batch.contract";
+
+// W27-T1 CP1 — Design Batch Contract
+export {
+  DesignBatchContract,
+  createDesignBatchContract,
+} from "./design.batch.contract";
+export type {
+  DominantDesignRisk,
+  DesignBatchResult,
+  DesignBatchContractDependencies,
+} from "./design.batch.contract";

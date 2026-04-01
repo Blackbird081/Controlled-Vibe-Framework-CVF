@@ -909,3 +909,14 @@ export type {
   ReversePromptingBatchResult,
   ReversePromptingBatchContractDependencies,
 } from "./reverse.prompting.batch.contract";
+
+// W29-T1 CP1 — Boardroom Batch Contract
+export {
+  BoardroomBatchContract,
+  createBoardroomBatchContract,
+  resolveDominantBoardroomDecision,
+} from "./boardroom.batch.contract";
+export type {
+  BoardroomBatchResult,
+  BoardroomBatchContractDependencies,
+} from "./boardroom.batch.contract";

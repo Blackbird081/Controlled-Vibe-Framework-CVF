@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-04-01
 
 > Branch: `cvf-next`
-> Last push: `W32-T1 CLOSED DELIVERED — BoardroomMultiRoundBatchContract CP1 + tranche closure + continuity sync → cvf-next`
+> Last push: `W33-T1 GC-018 AUTHORIZED — KnowledgeRankingBatchContract authorization artifacts → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W32-T1 CLOSED DELIVERED** — BoardroomMultiRoundBatchContract canonical; CPF 2691 (+37); W1-T6 CP2 boardroom multi-round batch surface closed; no active tranche
+> State: **W33-T1 GC-018 AUTHORIZED** — KnowledgeRankingBatchContract; batches KnowledgeRankingContract.rank(); W1-T12 knowledge ranking batch surface; CPF 2691; ready for CP1 Full Lane
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -47,18 +47,19 @@
 
 ## Immediate Next Action Required
 
-**W32-T1 CLOSED DELIVERED. No active tranche. Proceed with fresh quality assessment for next candidate.**
+**W33-T1 GC-018 AUTHORIZED. Proceed to CP1 Full Lane — KnowledgeRankingBatchContract.**
 
 Current guidance:
 
-- **W32-T1 CLOSED DELIVERED** — BoardroomMultiRoundBatchContract (REALIZATION class); CPF 2691 (+37); W1-T6 CP2 BoardroomMultiRoundContract.summarize() batch surface closed
-- Closure review: `docs/reviews/CVF_W32_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W32_T1_CLOSED_2026-04-01.md`
-- Architecture baseline sync delta: `docs/baselines/CVF_W32_T1_ARCHITECTURE_BASELINE_SYNC_DELTA_2026-04-01.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
-- **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W33-T1)
-- **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the new maintainability perimeter adopted in `GC-033` through `GC-036`
-- If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts` instead of reintroducing local copy-paste logic or ad-hoc fixtures
+- **W33-T1 GC-018 AUTHORIZED** — KnowledgeRankingBatchContract (REALIZATION class); batches `KnowledgeRankingContract.rank(request: KnowledgeRankingRequest)`; W1-T12 knowledge ranking batch surface; CPF 2691; ready for CP1 Full Lane
+- Quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md` (9.17/10 EXCELLENT — EXPAND_NOW)
+- Authorization packet: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W33_T1_KNOWLEDGE_RANKING_BATCH_2026-04-01.md`
+- Execution plan: `docs/roadmaps/CVF_W33_T1_KNOWLEDGE_RANKING_BATCH_EXECUTION_PLAN_2026-04-01.md`
+- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W33_T1_AUTHORIZATION_2026-04-01.md`
+- Batch hash salt: `"w33-t1-cp1-knowledge-ranking-batch"`; Batch ID salt: `"w33-t1-cp1-knowledge-ranking-batch-id"`
+- `dominantRankedCount` = `Math.max(...results.map(r => r.totalRanked))`; `0` for empty batch
+- **Next**: W33-T1 CP1 Full Lane — KnowledgeRankingBatchContract + tests + barrel exports + audit + review + delta + GC-026 sync + push
+- **CPF maintainability**: reuse `batch.contract.shared.ts` (`createDeterministicBatchIdentity`); reuse `tests/helpers/cpf.batch.contract.fixtures.ts`
 - If touching CPF public-surface/testing/docs canon, run:
   - `python governance/compat/check_cpf_public_surface_maintainability.py --enforce`
   - `python governance/compat/check_cpf_batch_helper_adoption.py --enforce`

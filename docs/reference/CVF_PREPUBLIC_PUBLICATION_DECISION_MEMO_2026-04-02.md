@@ -121,6 +121,7 @@ Strengths:
 - good balance between protection and ecosystem growth
 - allows controlled adoption of useful CVF building blocks
 - aligns well with the `PUBLIC_EXPORT_CANDIDATE` exposure class
+- can be staged through a very small first-wave shortlist instead of treating all candidates as equally near-term
 
 Weaknesses:
 
@@ -269,6 +270,10 @@ Most likely best first publication move:
 - `PRIVATE_CORE + PUBLIC_DOCS_MIRROR`
   or
 - `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`
+
+Current first-wave export shortlist reference:
+
+- `docs/reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md`
 
 ## Re-Assessment Boundary
 

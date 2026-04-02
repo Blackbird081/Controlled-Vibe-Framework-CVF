@@ -192,6 +192,15 @@ If the current task is repository cleanup before public packaging:
   - future `PUBLIC_DOCS_MIRROR` là curated subset, không phải mirror toàn bộ `docs/`
   - `audits / reviews / baselines / logs / roadmaps` và docs dense vẫn ở private core
   - export-candidate shortlist vẫn là packet riêng tiếp theo
+- `P4/CP3` export shortlist đã define:
+  - `audits/CVF_P4_CP3_EXPORT_SHORTLIST_DEFINITION_AUDIT_2026-04-02.md`
+  - `reviews/CVF_GC019_P4_CP3_EXPORT_SHORTLIST_DEFINITION_REVIEW_2026-04-02.md`
+  - `baselines/CVF_P4_CP3_EXPORT_SHORTLIST_DEFINITION_DELTA_2026-04-02.md`
+  - `reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md`
+- current export posture:
+  - first bounded shortlist: `CVF_GUARD_CONTRACT`, `CVF_v3.0_CORE_GIT_FOR_AI`, `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - broad foundations và `CVF_PLANE_FACADES` chưa vào first wave
+  - shortlist vẫn chưa phải publication approval
 
 ## Enterprise Audit Navigation
 

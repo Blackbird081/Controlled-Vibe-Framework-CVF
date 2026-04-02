@@ -213,6 +213,22 @@ P4 docs-mirror boundary status:
   - the future `PUBLIC_DOCS_MIRROR` must be a curated subset
   - evidence-dense and governance-dense docs remain private-core only
 
+P4 export-shortlist status:
+
+- `P4 / CP3` export-shortlist packet:
+  - `docs/audits/CVF_P4_CP3_EXPORT_SHORTLIST_DEFINITION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P4_CP3_EXPORT_SHORTLIST_DEFINITION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P4_CP3_EXPORT_SHORTLIST_DEFINITION_DELTA_2026-04-02.md`
+  - `docs/reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md`
+- result:
+  - `APPROVED - FIRST WAVE PRIORITIZED`
+- rationale summary:
+  - first bounded shortlist is:
+    - `CVF_GUARD_CONTRACT`
+    - `CVF_v3.0_CORE_GIT_FOR_AI`
+    - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - broader foundations and concept-only facades stay out of the first wave
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -241,6 +257,15 @@ Exit condition:
     - selected explanatory `docs/reference/` files after per-file review
   - excluded zone:
     - audits, reviews, baselines, logs, roadmaps, and dense internal memory docs
+- current export-shortlist result:
+  - first-wave shortlist:
+    - `CVF_GUARD_CONTRACT`
+    - `CVF_v3.0_CORE_GIT_FOR_AI`
+    - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - deferred:
+    - broad plane foundations
+    - medium candidates needing more boundary work
+    - `CVF_PLANE_FACADES` because current truth is `CONCEPT_ONLY`
 - hard non-goals:
   - no public mirror push
   - no package publication
@@ -259,7 +284,8 @@ Current execution boundary:
 - `P0-P2` may proceed now
 - `P3` future physical relocation still requires later explicit authorization
 - `P4/CP1` planning-only work may proceed now
-- `P4/CP2` docs-mirror boundary is defined; next preferred packet is export-candidate shortlist / packaging boundary planning
+- `P4/CP2` docs-mirror boundary is defined
+- `P4/CP3` export shortlist is defined; next preferred packet is packaging-boundary planning for that shortlist
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

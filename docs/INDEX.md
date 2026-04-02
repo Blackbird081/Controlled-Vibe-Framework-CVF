@@ -255,6 +255,15 @@ If the current task is repository cleanup before public packaging:
   - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` now has a canonical root `index.ts` barrel
   - package manifest now exposes named subpaths for `contracts`, `adapters`, `policy`, `explainability`, and four explicit risk-model assets
   - candidate still remains `NEEDS_PACKAGING`; packet này chưa phải publication approval
+- `P4/CP10` shortlist-wave consolidation đã deliver:
+  - `audits/CVF_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_AUDIT_2026-04-03.md`
+  - `reviews/CVF_GC019_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_REVIEW_2026-04-03.md`
+  - `baselines/CVF_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_DELTA_2026-04-03.md`
+  - `reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
+- current first-wave status:
+  - whole shortlist implementation wave is now complete across all 3 candidates
+  - cả 3 vẫn là `NEEDS_PACKAGING`, chưa có candidate nào được uplift thành `READY_FOR_EXPORT`
+  - next safe lane là readiness reassessment packet riêng, không phải publication step
 
 ## Enterprise Audit Navigation
 

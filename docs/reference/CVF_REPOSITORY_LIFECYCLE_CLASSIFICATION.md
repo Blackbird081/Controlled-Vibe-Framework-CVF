@@ -26,9 +26,9 @@ The machine-readable source of truth is:
 
 Summary:
 
-- `ACTIVE_CANONICAL`: `.agents`, `.claude`, `.githooks`, `.github`, `.vscode`, `docs`, `EXTENSIONS`, `governance`, `public`, `scripts`, `tools`
+- `ACTIVE_CANONICAL`: `.agents`, `.githooks`, `.github`, `docs`, `EXTENSIONS`, `governance`, `scripts`, `tools`
 - `MERGED_RETAINED`: `CVF_SKILL_LIBRARY`, `ECOSYSTEM`, `ui_governance_engine`
-- `FROZEN_REFERENCE`: `REVIEW`, `v1.0`, `v1.1`
+- `FROZEN_REFERENCE`: `v1.0`, `v1.1`
 
 Retired from the visible repository root in `P3/CP1`:
 
@@ -37,6 +37,10 @@ Retired from the visible repository root in `P3/CP1`:
 - `CVF_Restructure`
 
 If local historical payload must be retained temporarily, it belongs under `.private_reference/legacy/` and is not part of the canonical visible-root inventory.
+
+Local-only workspace metadata such as `.claude/` and `.vscode/` are intentionally excluded from the canonical visible-root inventory because they may exist on some machines and not others.
+
+Historical `REVIEW/...` references remain part of lineage evidence only; `REVIEW/` is no longer treated as a visible repository root.
 
 ## Extension-Level Classification
 

@@ -20,6 +20,7 @@ Status: current readiness reference that must be consulted before any `P3` struc
 5. the publication decision memo still has a live re-assessment date
 6. any future physical relocation wave executes on a dedicated `restructuring/p3-*` branch
 7. any future physical relocation wave executes from a secondary git worktree, not the canonical `cvf-next` working tree
+8. local-only workspace metadata and git transport artifacts must not be mistaken for canonical visible roots or governed root files
 
 ## Current Phase-Gate Status
 
@@ -49,7 +50,6 @@ Implication:
 Current root audit posture:
 
 - `docs`: `CURATION_REQUIRED`
-- `public`: `CURATION_REQUIRED`
 
 Meaning:
 
@@ -91,6 +91,13 @@ Executed move set:
   - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
+- `P3 / CP2` reconciled visible-root truth without authorizing any additional physical relocation
+  - stale root claims for `.claude/`, `.vscode/`, `public/`, and `REVIEW/` were removed from active classification canon
+  - the git-worktree `.git` pointer is explicitly excluded from governed root-file exposure inventory
+  - evidence chain:
+    - `docs/audits/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_AUDIT_2026-04-02.md`
+    - `docs/reviews/CVF_GC019_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_REVIEW_2026-04-02.md`
+    - `docs/baselines/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_DELTA_2026-04-02.md`
 
 ## Required Next Step Before Any Further P3 Move
 
@@ -101,6 +108,7 @@ Before any further `P3` authorization:
 - confirm the target publication model that the relocation wave is trying to support
 - execute on a dedicated branch matching `restructuring/p3-*`
 - use a dedicated secondary worktree for that branch so relocation changes stay isolated from the canonical workspace
+- keep git worktree transport artifacts such as the `.git` pointer out of the governed root-file exposure inventory
 
 ## Related Artifacts
 
@@ -111,6 +119,9 @@ Before any further `P3` authorization:
 - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
 - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
 - `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
+- `docs/audits/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_AUDIT_2026-04-02.md`
+- `docs/reviews/CVF_GC019_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_REVIEW_2026-04-02.md`
+- `docs/baselines/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_DELTA_2026-04-02.md`
 - `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`

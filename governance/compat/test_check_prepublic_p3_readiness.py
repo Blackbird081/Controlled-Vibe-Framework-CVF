@@ -30,6 +30,7 @@ class CheckPrepublicP3ReadinessTests(unittest.TestCase):
 
         (self.repo_root / "README.md").write_text("readme\n", encoding="utf-8")
         (self.repo_root / "ARCHITECTURE.md").write_text("arch\n", encoding="utf-8")
+        (self.repo_root / ".git").write_text("gitdir: /tmp/worktree/.git\n", encoding="utf-8")
 
         (self.repo_root / "docs" / "reference" / "CVF_PREPUBLIC_P3_READINESS.md").write_text(
             "`P3` must stay blocked\nrestructuring/p3-\nsecondary git worktree\n",
@@ -162,6 +163,10 @@ class CheckPrepublicP3ReadinessTests(unittest.TestCase):
         self.root_file_registry.write_text(json.dumps(current, indent=2), encoding="utf-8")
         report = self._build_report()
         self.assertTrue(any(v["type"] == "unclassified_root_file" for v in report["violations"]))
+
+    def test_ignores_git_worktree_pointer_file(self) -> None:
+        report = self._build_report()
+        self.assertFalse(any(v["path"] == ".git" for v in report["violations"]))
 
     def test_flags_relocation_wave_on_canonical_branch(self) -> None:
         with patch.object(MODULE, "REPO_ROOT", self.repo_root):

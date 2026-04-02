@@ -36,16 +36,16 @@
     }
   ],
   "ignoredRoots": [
+    ".claude",
     ".private_reference",
+    ".vscode",
     ".git",
     "node_modules"
   ],
   "roots": [
     { "path": ".agents", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": ".claude", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".githooks", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".github", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": ".vscode", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": "CVF_SKILL_LIBRARY", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
     {
       "path": "docs",
@@ -57,14 +57,6 @@
     { "path": "ECOSYSTEM", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "INTERNAL_ONLY" },
     { "path": "EXTENSIONS", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": "governance", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    {
-      "path": "public",
-      "lifecycleClass": "ACTIVE_CANONICAL",
-      "exposureClass": "PUBLIC_DOCS_ONLY",
-      "publicContentAuditStatus": "CURATION_REQUIRED",
-      "publicContentAuditEvidence": "docs/reference/CVF_PREPUBLIC_P3_READINESS.md"
-    },
-    { "path": "REVIEW", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
     { "path": "scripts", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": "tools", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": "ui_governance_engine", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },

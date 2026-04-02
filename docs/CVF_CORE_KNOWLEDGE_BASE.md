@@ -465,8 +465,8 @@ Controlled-Vibe-Framework-CVF/
 └── CVF_LITE.md                  ← 5-min quick start
 ```
 
-> **REVIEW/ folder:** Chứa các review tạm thời về extensions đang được đánh giá.
-> Không có giá trị dài hạn — xóa sau khi extension được tích hợp vào CVF chính thức.
+> **Historical `REVIEW/...` namespace:** Chỉ còn giá trị lineage trong một số hồ sơ cũ; `REVIEW/` không còn là visible repository root canon.
+> Các review active/canonical hiện được quản lý dưới `docs/reviews/` và hệ archive tương ứng.
 
 ---
 

@@ -34,14 +34,18 @@ The machine-readable source of truth is:
 
 Current summary:
 
-- `PUBLIC_DOCS_ONLY`: `docs`, `public`
-- `INTERNAL_ONLY`: `.agents`, `.claude`, `.githooks`, `.github`, `.vscode`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `REVIEW`, `v1.0`, `v1.1`, `ECOSYSTEM`
+- `PUBLIC_DOCS_ONLY`: `docs`
+- `INTERNAL_ONLY`: `.agents`, `.githooks`, `.github`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `v1.0`, `v1.1`, `ECOSYSTEM`
 - `PRIVATE_ENTERPRISE_ONLY`: `CVF_SKILL_LIBRARY`, `ui_governance_engine`
 
 Retired local-only reference roots:
 
 - `CVF Edit`, `CVF_Important`, and `CVF_Restructure` are no longer part of the visible root exposure map after `P3/CP1`
 - if retained locally, they belong under `.private_reference/legacy/` and remain non-canonical
+
+Local-only workspace metadata such as `.claude/`, `.vscode/`, and the git-worktree `.git` pointer are intentionally excluded from the visible-root exposure map.
+
+Historical `REVIEW/...` references remain lineage-only; they do not imply that `REVIEW/` is still a visible repository root.
 
 Root-file implication:
 

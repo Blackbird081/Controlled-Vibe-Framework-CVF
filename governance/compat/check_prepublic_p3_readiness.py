@@ -34,6 +34,7 @@ ALLOWED_EXPOSURE_CLASSES = {
 }
 ALLOWED_PUBLIC_DOCS_AUDIT_STATUSES = {"CURATION_REQUIRED", "READY_FOR_PUBLIC_MIRROR"}
 ALLOWED_EXPORT_READINESS = {"READY_FOR_EXPORT", "NEEDS_PACKAGING", "CONCEPT_ONLY"}
+DEFAULT_IGNORED_ROOT_FILES = {".git"}
 P3_BRANCH_PREFIX = "restructuring/p3-"
 CANONICAL_BRANCH = "cvf-next"
 RELOCATION_DOC_PREFIXES = (
@@ -196,7 +197,7 @@ def build_report() -> dict[str, Any]:
 
     phase_entries = phase_registry.get("phases", [])
     root_file_entries = root_file_registry.get("files", [])
-    ignored_root_files = set(root_file_registry.get("ignoredRootFiles", []))
+    ignored_root_files = set(root_file_registry.get("ignoredRootFiles", [])) | DEFAULT_IGNORED_ROOT_FILES
     root_entries = root_registry.get("roots", [])
     extension_entries = extension_registry.get("extensions", [])
 

@@ -468,7 +468,7 @@ All content in `CVF_AI Runtime/` is governance specification (no production code
 - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` (new, this commit)
 - `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/` (new, this commit)
 - `governance/compat/risk_level_mapping.md` (new, this commit)
-- `REVIEW/COMPAT_AI_Runtime.md` (compatibility assessment baseline)
+- historical `REVIEW/COMPAT_AI_Runtime.md` path (compatibility assessment baseline; no longer a visible repo root)
 
 ---
 
@@ -516,11 +516,11 @@ Architecture Check Guard (9 questions) was completed. Results: 6/9 PASS, 3 neede
 - `CVF_external_integration/` folder at root is deleted after migration.
 - External skill ingestion now has a formal governance pipeline with 29 passing tests.
 - Future skill imports must go through this pipeline — no direct insertion into Skill Library.
-- `REVIEW/CVF_EXTERNAL_INTEGRATION_REVIEW.md` contains the full Architecture Check Guard assessment.
+- historical `REVIEW/CVF_EXTERNAL_INTEGRATION_REVIEW.md` path contains the full Architecture Check Guard assessment lineage.
 
 ### Related Files
 - `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/` (new, this commit)
-- `REVIEW/CVF_EXTERNAL_INTEGRATION_REVIEW.md` (Architecture Check Guard assessment)
+- historical `REVIEW/CVF_EXTERNAL_INTEGRATION_REVIEW.md` path (Architecture Check Guard assessment)
 
 ---
 

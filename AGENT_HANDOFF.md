@@ -1,8 +1,8 @@
 # CVF Agent Handoff — 2026-04-01
 
-> Branch: `cvf-next`
-> Last push: `W34-T1 CLOSED DELIVERED — ClarificationRefinementBatchContract CP1 + tranche closure → cvf-next`
-> Remote tracking branch: `origin/cvf-next`
+> Branch: `restructuring/p3-layout-wave-2`
+> Last push: `P3 execution isolation baseline pushed to restructuring/p3-layout-wave-2`
+> Remote tracking branch: `origin/restructuring/p3-layout-wave-2`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
 > State: **W34-T1 CLOSED DELIVERED** — ClarificationRefinementBatchContract canonical; CPF 2561 (+30); W1-T5 CP2 batch surface closed; W1-T5 full family FULLY CLOSED; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
@@ -64,6 +64,7 @@ Current guidance:
 - **For any future physical `P3` relocation wave**: prefer smaller bounded move sets, keep migration notes explicit, and stop immediately if runtime paths, docs canon, registries, or packaging assumptions become ambiguous
 - **Default P3 decision rule**: if there is a tradeoff between moving faster and preserving recovery/traceability, choose recovery/traceability
 - **P3/CP1 completed**: `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` were retired from the visible repo root through `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md` and `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`; if local recovery copies are retained they must live only under `.private_reference/legacy/`
+- **P3/CP2 completed**: visible-root truth was reconciled so `.claude/`, `.vscode/`, and the git-worktree `.git` pointer are treated as local/worktree metadata rather than canonical root inventory, and stale `REVIEW/` / `public/` root claims were removed from active pre-public classification canon; this did not authorize any additional physical relocation
 - If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

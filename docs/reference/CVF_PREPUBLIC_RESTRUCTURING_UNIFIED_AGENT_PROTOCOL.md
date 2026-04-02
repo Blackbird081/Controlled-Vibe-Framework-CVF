@@ -51,6 +51,10 @@ Executed move set already in canon:
 - audit/review chain:
   - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
+- `P3 / CP2` — reconcile visible-root truth and worktree metadata handling without authorizing any additional physical relocation
+  - `docs/audits/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_DELTA_2026-04-02.md`
 
 ## Rule 2: Private by Default
 
@@ -105,7 +109,6 @@ No extension is currently `READY_FOR_EXPORT`. The tag `PUBLIC_EXPORT_CANDIDATE` 
 Roots tagged `PUBLIC_DOCS_ONLY` are **not** mirror-safe as-is:
 
 - `docs`: `CURATION_REQUIRED` — contains internal test logs (173KB), dense ADRs, governance records
-- `public`: `CURATION_REQUIRED`
 
 Before any public docs mirror is created, a content audit pass must confirm that only appropriate material goes into the mirror.
 
@@ -136,6 +139,7 @@ All three run in:
 8. decide publication model without reading `CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 9. execute future `P3` physical relocation directly on `cvf-next`
 10. execute future `P3` physical relocation without a dedicated secondary git worktree
+11. treat `.claude/`, `.vscode/`, or a git-worktree `.git` pointer as if they were canonical visible roots to relocate or expose
 
 ## Rule 8: Re-assessment Timeline
 

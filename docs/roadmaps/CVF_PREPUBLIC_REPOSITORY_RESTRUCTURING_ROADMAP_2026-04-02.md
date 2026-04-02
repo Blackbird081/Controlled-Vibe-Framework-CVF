@@ -144,6 +144,10 @@ Current executed move set:
   - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
+- `P3 / CP2` — reconcile visible-root truth so future relocation waves do not mistake local/worktree metadata for canonical structure; no additional physical relocation is authorized in this step
+  - `docs/audits/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_DELTA_2026-04-02.md`
 
 Exit condition:
 

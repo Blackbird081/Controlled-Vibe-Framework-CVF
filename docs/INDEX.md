@@ -211,6 +211,15 @@ If the current task is repository cleanup before public packaging:
   - `CVF_v3.0_CORE_GIT_FOR_AI` boundary centers on the root barrel plus `ai_commit`, `artifact_staging`, `artifact_ledger`, `process_model`, and `skill_lifecycle`
   - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` boundary centers on `contracts`, `adapters`, `policy`, `explainability`, and `risk_models`
   - cả ba vẫn là `NEEDS_PACKAGING`, chưa phải package publication
+- `P4/CP5` curated front-door navigation đã define:
+  - `audits/CVF_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_AUDIT_2026-04-02.md`
+  - `reviews/CVF_GC019_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_REVIEW_2026-04-02.md`
+  - `baselines/CVF_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_DELTA_2026-04-02.md`
+  - `reference/CVF_PREPUBLIC_CURATED_FRONT_DOOR_NAVIGATION_2026-04-02.md`
+- current front-door posture:
+  - Ring 1 root entrypoints: `README.md`, `START_HERE.md`, `ARCHITECTURE.md`
+  - Ring 2 guided docs paths are audience-based, không để reader mới rơi thẳng vào evidence-heavy zones
+  - `v1.0/` và `v1.1/` vẫn visible nhưng được đẩy xuống intentional depth navigation, không còn là first-click emphasis
 
 ## Enterprise Audit Navigation
 

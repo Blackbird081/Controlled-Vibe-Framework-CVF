@@ -77,6 +77,9 @@ Current `P4` opening status:
 - `P4 / CP2` now defines the docs-mirror boundary:
   - use `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
   - treat a future docs mirror as a curated subset, not a copy of the whole `docs/` root
+- `P4 / CP3` now defines the first bounded export shortlist:
+  - use `docs/reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md`
+  - treat shortlist membership as planning priority, not export approval
 
 ## Rule 2: Private by Default
 
@@ -99,6 +102,10 @@ Canonical source: `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-0
 Current docs-mirror boundary source:
 
 - `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
+
+Current export-shortlist source:
+
+- `docs/reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md`
 
 ## Rule 3: Classification Must Be Respected
 

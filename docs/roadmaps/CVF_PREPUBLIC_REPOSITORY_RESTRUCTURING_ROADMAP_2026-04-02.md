@@ -19,6 +19,10 @@ Before any pre-public repository relocation wave:
 
 This roadmap does not authorize physical relocation by itself.
 
+Current progress tracker:
+
+- `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_PHASE_TRACKER.md`
+
 ## Public Exposure Model
 
 Pre-public restructuring must assume a later product-facing distribution decision, not only an internal cleanup decision.

@@ -78,6 +78,7 @@ Exit condition:
 - every meaningful top-level repository root is lifecycle-classified
 - every extension root is lifecycle-classified
 - every meaningful root and extension root is also exposure-classified
+- `P0` is formally closed in `governance/compat/CVF_PREPUBLIC_PHASE_GATE_REGISTRY.json`
 
 ### `P1` Root-Level Hygiene
 
@@ -95,6 +96,9 @@ Exit condition:
 
 - root-level lifecycle posture is explicit enough to support later relocation decisions
 - visible roots are also tagged by likely public exposure role
+- visible root files are also exposure-classified
+- every `PUBLIC_DOCS_ONLY` root declares public-content audit status
+- `P1` is formally closed in `governance/compat/CVF_PREPUBLIC_PHASE_GATE_REGISTRY.json`
 
 ### `P2` Extension Lifecycle Cleanup
 
@@ -111,17 +115,23 @@ Exit condition:
 
 - `EXTENSIONS/` has a canonical lifecycle map that can support later structural relocation
 - extension families are tagged for future public distribution posture
+- every `PUBLIC_EXPORT_CANDIDATE` extension declares export-readiness status
+- `P2` is formally closed in `governance/compat/CVF_PREPUBLIC_PHASE_GATE_REGISTRY.json`
 
 Canonical exposure authority:
 
 - `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
+- `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
+- `docs/reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
+- `docs/reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
 - `governance/toolkit/05_OPERATION/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`
 
 ### `P3` Structural Relocation Wave
 
 - physically move approved roots or families only after `P0-P2` are complete
 - require `GC-019` structural audit/review/decision before execution
+- require `GC-039` pre-public `P3` readiness verification before execution
 - preserve backwards path recovery and packaging integrity while relocating
 
 Exit condition:

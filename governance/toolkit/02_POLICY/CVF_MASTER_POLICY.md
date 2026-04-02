@@ -210,10 +210,15 @@ Personal AI usage unrelated to company work is excluded.
      - Canonical reference: `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_repository_lifecycle_classification.py`.
- 32. `GC-038` visible repository roots and extension roots must be exposure-classified before any public, mirror, package-export, or selective-distribution decision proceeds:
-     - This rule applies to pre-public planning, selective module export planning, and any attempt to decide what CVF should expose externally.
-     - Public-by-accident is forbidden; the default model is `private-by-default, selective-publication-only`.
-     - Canonical exposure classes are `PUBLIC_DOCS_ONLY`, `PUBLIC_EXPORT_CANDIDATE`, `INTERNAL_ONLY`, and `PRIVATE_ENTERPRISE_ONLY`.
+32. `GC-038` visible repository roots and extension roots must be exposure-classified before any public, mirror, package-export, or selective-distribution decision proceeds:
+       - This rule applies to pre-public planning, selective module export planning, and any attempt to decide what CVF should expose externally.
+       - Public-by-accident is forbidden; the default model is `private-by-default, selective-publication-only`.
+       - Canonical exposure classes are `PUBLIC_DOCS_ONLY`, `PUBLIC_EXPORT_CANDIDATE`, `INTERNAL_ONLY`, and `PRIVATE_ENTERPRISE_ONLY`.
+33. `GC-039` no `P3` structural relocation authorization may proceed until pre-public readiness truth is explicit:
+       - `P0`, `P1`, and `P2` must be formally closed in a phase-gate registry.
+       - Visible root files must be exposure-classified; directory tags alone are insufficient.
+       - `PUBLIC_DOCS_ONLY` roots must declare public-content audit status, and `PUBLIC_EXPORT_CANDIDATE` extensions must declare export-readiness status.
+       - The publication decision memo must carry a live re-assessment boundary before `P3` may be considered.
      - Canonical reference: `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_repository_exposure_classification.py`.

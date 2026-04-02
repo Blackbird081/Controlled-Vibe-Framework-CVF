@@ -30,12 +30,19 @@ Exposure classification is independent from lifecycle classification.
 The machine-readable source of truth is:
 
 - `governance/compat/CVF_ROOT_FOLDER_LIFECYCLE_REGISTRY.json`
+- `governance/compat/CVF_ROOT_FILE_EXPOSURE_REGISTRY.json` for root-level files
 
 Current summary:
 
 - `PUBLIC_DOCS_ONLY`: `docs`, `public`
 - `INTERNAL_ONLY`: `.agents`, `.claude`, `.githooks`, `.github`, `.vscode`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `CVF Edit`, `CVF_Important`, `CVF_Restructure`, `REVIEW`, `v1.0`, `v1.1`, `ECOSYSTEM`
 - `PRIVATE_ENTERPRISE_ONLY`: `CVF_SKILL_LIBRARY`, `ui_governance_engine`
+
+Root-file implication:
+
+- root files such as `README.md`, `LICENSE`, `ARCHITECTURE.md`, and `START_HERE.md` are governed separately from root directories
+- internal handoff/workflow scratch files must not rely on directory-level exposure tags as a substitute for file-level classification
+- before any `P3` relocation wave, root-file exposure truth must be explicit through `GC-039`
 
 ## Extension Exposure Classification
 
@@ -50,6 +57,12 @@ Current summary:
 - `PRIVATE_ENTERPRISE_ONLY`: end-user platform, enterprise delivery, UX/product surfaces, or commercially sensitive families that should remain closed unless a separate product decision says otherwise
 - `PUBLIC_DOCS_ONLY`: not used for extension roots by default
 
+Export-readiness rule:
+
+- `PUBLIC_EXPORT_CANDIDATE` is not the same thing as “ready to publish now”
+- each candidate must also declare `exportReadiness` before any real export packaging wave proceeds
+- current export-readiness truth is part of `GC-039` pre-public `P3` readiness
+
 ## Public GitHub Implication
 
 If one GitHub repository is public, the repository contents can be cloned as a whole.
@@ -59,6 +72,7 @@ Therefore:
 - folder regrouping alone does not create selective download control
 - public docs and public modules should normally be published through separate mirrors, packages, or reduced public repos
 - the main CVF core should remain private by default unless an explicit full-public decision is made
+- `PUBLIC_DOCS_ONLY` roots such as `docs/` may still require curation before public mirroring, even if they are the right target class
 
 ## Management Rule
 
@@ -67,6 +81,7 @@ No visible repository root and no extension root may remain exposure-unclassifie
 ## Related Artifacts
 
 - `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
+- `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
 - `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `governance/toolkit/05_OPERATION/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`
 - `governance/compat/check_repository_exposure_classification.py`

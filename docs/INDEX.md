@@ -53,6 +53,7 @@ Từ nay về sau:
   - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md` khi file đó liên quan tới pre-public repository cleanup, root lifecycle posture, hoặc extension lifecycle posture
   - `reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md` khi file đó liên quan tới public/private publication posture, module export posture, hoặc selective public distribution
   - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md` khi cần cân nhắc mô hình public/private phù hợp trước khi quyết định publication
+  - `reference/CVF_PREPUBLIC_P3_READINESS.md` khi chuẩn bị mở `P3`, đánh giá readiness trước relocation, hoặc đối chiếu phase-gate/exposure/export-readiness
 
 ## Approved Root-Level Files
 
@@ -108,6 +109,9 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
+- `reference/CVF_PREPUBLIC_P3_READINESS.md`
+- `reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
+- `reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
 - `reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
 - `reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
 - `reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
@@ -134,6 +138,9 @@ If the current task is repository cleanup before public packaging:
 - `roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
 - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
+- `reference/CVF_PREPUBLIC_P3_READINESS.md`
+- `reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
+- `reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
 - `../governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`

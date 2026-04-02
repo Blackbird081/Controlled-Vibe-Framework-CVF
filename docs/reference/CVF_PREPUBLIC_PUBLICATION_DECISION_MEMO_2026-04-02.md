@@ -1,6 +1,6 @@
 # CVF Pre-Public Publication Decision Memo — 2026-04-02
 
-Memory class: SUMMARY_RECORD
+Memory class: POINTER_RECORD
 Status: decision-support memo for choosing a later CVF publication model after `P0-P2` lifecycle and exposure classification.
 
 ## Purpose
@@ -243,9 +243,16 @@ Most likely best first publication move:
   or
 - `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`
 
+## Re-Assessment Boundary
+
+Re-assessment-By: `2026-05-01`
+
+If a concrete `P3` authorization packet is drafted before `2026-05-01`, this memo must be re-read and revalidated at that time instead of waiting for the date boundary.
+
 ## Related Artifacts
 
 - `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
+- `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
 - `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `governance/toolkit/05_OPERATION/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md`

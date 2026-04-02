@@ -311,6 +311,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md | Canon summary doc changes | Summary docs must cite evidence, not inline typed evidence payloads |
 | CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md | Pre-public repository cleanup or root/extension lifecycle review | Visible roots and extension roots must be lifecycle-classified before relocation |
 | CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md | Pre-public publication or selective-distribution planning | Visible roots and extension roots must declare public/private exposure posture before publication decisions |
+| CVF_PREPUBLIC_P3_READINESS_GUARD.md | Pre-public `P3` relocation readiness review | `P3` stays blocked until phase-gates, root-file exposure, docs-root curation, export-readiness, and memo freshness are explicit |
 | CVF_GUARD_AUTHORING_STANDARD_GUARD.md | New or materially revised governance guard | Guard must satisfy the mandatory authoring contract before commit |
 | CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
 | CVF_ACTIVE_ARCHIVE_GUARD.md | Active archive maintenance | Keep active/archive split truthful and append-only |

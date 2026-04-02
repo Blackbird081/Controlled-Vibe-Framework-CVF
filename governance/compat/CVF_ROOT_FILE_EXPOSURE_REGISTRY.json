@@ -1,0 +1,41 @@
+{
+  "exposureClasses": [
+    {
+      "id": "PUBLIC_DOCS_ONLY",
+      "description": "May appear in public-facing docs/navigation material, but not as a full source delivery promise."
+    },
+    {
+      "id": "PUBLIC_EXPORT_CANDIDATE",
+      "description": "Candidate for curated public package/repo/release export after separate approval."
+    },
+    {
+      "id": "INTERNAL_ONLY",
+      "description": "Internal working surface; not intended for direct public release."
+    },
+    {
+      "id": "PRIVATE_ENTERPRISE_ONLY",
+      "description": "Enterprise-private or commercially sensitive surface that should remain non-public by default."
+    }
+  ],
+  "ignoredRootFiles": [],
+  "files": [
+    { "path": ".dt.log", "exposureClass": "INTERNAL_ONLY" },
+    { "path": ".git_commit_error.log", "exposureClass": "INTERNAL_ONLY" },
+    { "path": ".git_commit_msg.txt", "exposureClass": "INTERNAL_ONLY" },
+    { "path": ".gitignore", "exposureClass": "INTERNAL_ONLY" },
+    { "path": ".markdownlintrc", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "AGENT_HANDOFF.md", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "AGENT_PLATFORM_PROGRESS_2026-02-06.md", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "ARCHITECTURE.md", "exposureClass": "PUBLIC_DOCS_ONLY" },
+    { "path": "CHANGELOG.md", "exposureClass": "PUBLIC_DOCS_ONLY" },
+    { "path": "CLAUDE.md", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "CVF_ECOSYSTEM_ARCHITECTURE.md", "exposureClass": "PUBLIC_DOCS_ONLY" },
+    { "path": "CVF_LITE.md", "exposureClass": "PUBLIC_DOCS_ONLY" },
+    { "path": "LICENSE", "exposureClass": "PUBLIC_DOCS_ONLY" },
+    { "path": "netlify.toml", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "package-lock.json", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "package.json", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "README.md", "exposureClass": "PUBLIC_DOCS_ONLY" },
+    { "path": "START_HERE.md", "exposureClass": "PUBLIC_DOCS_ONLY" }
+  ]
+}

@@ -158,6 +158,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             "repository exposure classification compatibility",
             ["python", "governance/compat/check_repository_exposure_classification.py", "--enforce"],
         ),
+        (
+            "pre-public p3 readiness compatibility",
+            ["python", "governance/compat/check_prepublic_p3_readiness.py", "--enforce"],
+        ),
     ]
 }
 

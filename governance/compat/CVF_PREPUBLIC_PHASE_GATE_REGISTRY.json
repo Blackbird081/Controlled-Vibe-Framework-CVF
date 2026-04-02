@@ -1,0 +1,49 @@
+{
+  "allowedStatuses": [
+    {
+      "id": "OPEN",
+      "description": "Phase is not yet complete and should not be used as downstream readiness evidence."
+    },
+    {
+      "id": "BLOCKED",
+      "description": "Phase cannot progress until prerequisite work is resolved."
+    },
+    {
+      "id": "CLOSED",
+      "description": "Phase exit conditions are satisfied and may be cited by later phases."
+    }
+  ],
+  "phases": [
+    {
+      "phase": "P0",
+      "status": "CLOSED",
+      "lastReviewedAt": "2026-04-02",
+      "evidence": [
+        "docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md",
+        "docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md",
+        "docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md",
+        "governance/compat/CVF_ROOT_FOLDER_LIFECYCLE_REGISTRY.json",
+        "governance/compat/CVF_EXTENSION_LIFECYCLE_REGISTRY.json"
+      ]
+    },
+    {
+      "phase": "P1",
+      "status": "CLOSED",
+      "lastReviewedAt": "2026-04-02",
+      "evidence": [
+        "docs/reference/CVF_PREPUBLIC_P3_READINESS.md",
+        "governance/compat/CVF_ROOT_FOLDER_LIFECYCLE_REGISTRY.json",
+        "governance/compat/CVF_ROOT_FILE_EXPOSURE_REGISTRY.json"
+      ]
+    },
+    {
+      "phase": "P2",
+      "status": "CLOSED",
+      "lastReviewedAt": "2026-04-02",
+      "evidence": [
+        "docs/reference/CVF_PREPUBLIC_P3_READINESS.md",
+        "governance/compat/CVF_EXTENSION_LIFECYCLE_REGISTRY.json"
+      ]
+    }
+  ]
+}

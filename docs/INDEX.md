@@ -183,6 +183,15 @@ If the current task is repository cleanup before public packaging:
   - planning-only cho curated front-door navigation
   - define docs mirror boundary + selective export candidates
   - chưa authorize public release, public mirror, hoặc move vật lý mới
+- `P4/CP2` docs mirror boundary đã define:
+  - `audits/CVF_P4_CP2_DOCS_MIRROR_BOUNDARY_DEFINITION_AUDIT_2026-04-02.md`
+  - `reviews/CVF_GC019_P4_CP2_DOCS_MIRROR_BOUNDARY_DEFINITION_REVIEW_2026-04-02.md`
+  - `baselines/CVF_P4_CP2_DOCS_MIRROR_BOUNDARY_DEFINITION_DELTA_2026-04-02.md`
+  - `reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
+- practical implication mới:
+  - future `PUBLIC_DOCS_MIRROR` là curated subset, không phải mirror toàn bộ `docs/`
+  - `audits / reviews / baselines / logs / roadmaps` và docs dense vẫn ở private core
+  - export-candidate shortlist vẫn là packet riêng tiếp theo
 
 ## Enterprise Audit Navigation
 

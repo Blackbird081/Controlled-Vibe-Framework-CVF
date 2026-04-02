@@ -200,6 +200,19 @@ P4 opening status:
 - rationale summary:
   - after `P3/CP5`, the safest next step is to define curated navigation and publication boundaries without changing private-core ownership or filesystem layout
 
+P4 docs-mirror boundary status:
+
+- `P4 / CP2` docs-mirror boundary packet:
+  - `docs/audits/CVF_P4_CP2_DOCS_MIRROR_BOUNDARY_DEFINITION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P4_CP2_DOCS_MIRROR_BOUNDARY_DEFINITION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P4_CP2_DOCS_MIRROR_BOUNDARY_DEFINITION_DELTA_2026-04-02.md`
+  - `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
+- result:
+  - `APPROVED - BOUNDARY DEFINED`
+- rationale summary:
+  - the future `PUBLIC_DOCS_MIRROR` must be a curated subset
+  - evidence-dense and governance-dense docs remain private-core only
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -221,6 +234,13 @@ Exit condition:
   - docs mirror boundary definition
   - selective public export candidate shortlist
   - explicit private-core-visible foundation-anchor policy
+- current docs-mirror result:
+  - direct candidates:
+    - root front-door files + learning-oriented docs zones
+  - conditional zone:
+    - selected explanatory `docs/reference/` files after per-file review
+  - excluded zone:
+    - audits, reviews, baselines, logs, roadmaps, and dense internal memory docs
 - hard non-goals:
   - no public mirror push
   - no package publication
@@ -239,6 +259,7 @@ Current execution boundary:
 - `P0-P2` may proceed now
 - `P3` future physical relocation still requires later explicit authorization
 - `P4/CP1` planning-only work may proceed now
+- `P4/CP2` docs-mirror boundary is defined; next preferred packet is export-candidate shortlist / packaging boundary planning
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

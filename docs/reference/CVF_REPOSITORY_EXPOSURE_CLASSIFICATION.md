@@ -89,6 +89,7 @@ Therefore:
 - public docs and public modules should normally be published through separate mirrors, packages, or reduced public repos
 - the main CVF core should remain private by default unless an explicit full-public decision is made
 - `PUBLIC_DOCS_ONLY` roots such as `docs/` may still require curation before public mirroring, even if they are the right target class
+- the active docs-mirror boundary reference is `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
 
 ## Management Rule
 

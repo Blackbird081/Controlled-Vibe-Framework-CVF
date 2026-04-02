@@ -42,7 +42,7 @@
     "guard",
     "contract"
   ],
-  "dependencies": {
+  "optionalDependencies": {
     "better-sqlite3": "^12.6.2"
   },
   "license": "CC-BY-NC-ND-4.0"

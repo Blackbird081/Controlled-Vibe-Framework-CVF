@@ -12,6 +12,34 @@
 ## Current State
 
 - External agent memory files: non-canonical convenience only; resume from repo truth first
+- This handoff is for the isolated restructuring lane, not for canonical tranche execution on `cvf-next`
+- Execution workspace for this lane: `D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF-P3-CP2`
+- Current branch state at handoff time: clean working tree on `restructuring/p3-cp2-retained-internal-root-relocation`, tracking `origin/restructuring/p3-cp2-retained-internal-root-relocation`
+- Last delivered commit on this lane before agent transfer: `8bf05fc5` (`docs(P4/CP10): consolidate shortlist wave status - Full Lane`)
+
+### Agent Transfer Briefing
+
+- Resume from this worktree and this branch; do not continue pre-public restructuring work from the root `cvf-next` workspace
+- Read in this order before acting:
+  - `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
+  - `docs/INDEX.md`
+  - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
+  - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
+  - `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
+- Repo truth after `P4/CP10`:
+  - `P3/CP2` is the only delivered physical relocation wave
+  - `v1.0/` and `v1.1/` remain visible frozen foundation anchors
+  - first-wave shortlist implementation is complete for `CVF_v3.0_CORE_GIT_FOR_AI`, `CVF_GUARD_CONTRACT`, and `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
+  - all three shortlisted candidates still remain `exportReadiness: NEEDS_PACKAGING`
+- Default next lane:
+  - prepare a bounded `P4/CP11` readiness re-assessment packet for the first-wave shortlist
+  - reassess readiness only; do not assume any candidate will be uplifted
+- Hard stop boundaries for the next agent:
+  - no package publication
+  - no public docs mirror execution
+  - no new physical `P3` relocation
+  - no landing-path override back onto `cvf-next`
+  - no `READY_FOR_EXPORT` change unless a new bounded packet explicitly proves and records it
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **2561 tests, 0 failures**
@@ -47,15 +75,28 @@
 
 ## Immediate Next Action Required
 
-**W34-T1 CLOSED DELIVERED. No active tranche. Proceed with fresh quality assessment for next candidate.**
+**This worktree is currently positioned for `P4/CP11`, not for a fresh whitepaper tranche.**
 
 Current guidance:
 
-- **W34-T1 CLOSED DELIVERED** — ClarificationRefinementBatchContract (REALIZATION class); CPF 2561 (+30); all 7 pass conditions satisfied; W1-T5 CP2 ClarificationRefinementContract.refine() batch surface closed; W1-T5 full family FULLY CLOSED
-- Closure review: `docs/reviews/CVF_W34_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_CLOSED_2026-04-01.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
-- **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W35-T1)
+- **Next preferred packet**: bounded `P4/CP11` readiness re-assessment for the first-wave shortlist
+- **Primary question for `P4/CP11`**: does any first-wave candidate now have enough evidence to move beyond `NEEDS_PACKAGING`, or does repo truth still support no uplift for all three
+- **Minimum read set before drafting `P4/CP11`**:
+  - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
+  - `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
+  - `docs/reference/CVF_PREPUBLIC_CORE_GIT_EXPORT_SURFACE_2026-04-03.md`
+  - `docs/reference/CVF_PREPUBLIC_GUARD_CONTRACT_EXPORT_SURFACE_2026-04-03.md`
+  - `docs/reference/CVF_PREPUBLIC_RUNTIME_ADAPTER_HUB_EXPORT_SURFACE_2026-04-03.md`
+- **Default posture for `P4/CP11`**: conservative reassessment; if readiness evidence is ambiguous, keep `NEEDS_PACKAGING`
+- **Required output shape for `P4/CP11`**:
+  - one bounded audit
+  - one bounded review
+  - one delta
+  - canon sync in `AGENT_HANDOFF.md`, `docs/INDEX.md`, roadmap, and phase registry if status changes or a new packet is delivered
+- **Required verification before push**:
+  - targeted governance guards relevant to changed files
+  - full `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+- **If switching back to tranche work instead of pre-public work**: leave this worktree untouched and resume from the canonical `cvf-next` workspace separately
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
 - **Before any future pre-public `P3` relocation discussion**: read `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`, `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`, `docs/reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md`, and `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md`; `P3` remains blocked until a fresh `GC-019` packet is approved and `GC-039` passes for the proposed move set
 - **Before any future physical `P3` relocation execution**: create and use a dedicated branch matching `restructuring/p3-*`; do not execute relocation directly on `cvf-next`
@@ -110,7 +151,7 @@ Current guidance:
 5. **Per CP**: Full Lane = new concept/module/cross-plane; Fast Lane (GC-021) = additive batch/summary
 6. **Per CP artifacts**: audit doc + review doc + delta doc + exec plan update + test log update + commit
 7. **No implementation without GC-018 authorization**
-8. **No push to main** — work on `cvf-next` only
+8. **No push to main** — canonical tranche work stays on `cvf-next`, but pre-public restructuring work must stay on a dedicated `restructuring/p3-*` branch and secondary worktree until governance explicitly defines a landing path
 
 ### Fast Lane (GC-021) — eligible when:
 - additive only, no restructuring

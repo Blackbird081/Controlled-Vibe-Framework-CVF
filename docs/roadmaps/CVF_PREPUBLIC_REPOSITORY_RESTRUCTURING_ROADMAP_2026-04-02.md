@@ -284,6 +284,20 @@ P4 candidate-scoped export implementation status:
   - the package now declares explicit root-barrel-first manifest metadata instead of leaving the public surface implicit
   - the candidate still remains `NEEDS_PACKAGING`, so this packet improves package clarity without authorizing publication
 
+P4 second candidate-scoped export implementation status:
+
+- `P4 / CP8` guard-contract-export-boundary-tightening packet:
+  - `docs/audits/CVF_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_AUDIT_2026-04-03.md`
+  - `docs/reviews/CVF_GC019_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_REVIEW_2026-04-03.md`
+  - `docs/baselines/CVF_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_DELTA_2026-04-03.md`
+  - `docs/reference/CVF_PREPUBLIC_GUARD_CONTRACT_EXPORT_SURFACE_2026-04-03.md`
+- result:
+  - `APPROVED - SECOND CANDIDATE IMPLEMENTATION DELIVERED`
+- rationale summary:
+  - `CVF_GUARD_CONTRACT` already had a narrow root-barrel story, but its manifest still overexposed runtime and enterprise subpaths
+  - this packet narrows the export map to the selected first-wave guard surface only
+  - the candidate still remains `NEEDS_PACKAGING`, so publication posture does not change
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -329,6 +343,10 @@ Exit condition:
     - now has explicit `main`, `types`, root-only `exports`, and a bounded `files` allowlist
     - now has a package-local README that documents the root entry and five primitive families
     - still remains `NEEDS_PACKAGING`; no readiness uplift or package release is implied
+  - `CVF_GUARD_CONTRACT`:
+    - now exposes `types`, `engine`, `guards/*`, and only the two selected runtime helper subpaths
+    - no longer exposes wildcard runtime or `enterprise` subpaths at the manifest level
+    - still remains `NEEDS_PACKAGING`; no provider-runtime or enterprise publication is implied
 - current docs-mirror result:
   - direct candidates:
     - root front-door files + learning-oriented docs zones
@@ -378,7 +396,8 @@ Current execution boundary:
 - `P4/CP4` shortlist packaging boundary is defined
 - `P4/CP5` curated front-door navigation is defined
 - `P4/CP6` root front-door content sync is delivered
-- `P4/CP7` core-git export boundary implementation is delivered; next preferred packet is another single-candidate implementation packet, likely `CVF_GUARD_CONTRACT` root-surface tightening under the same bounded export lane
+- `P4/CP7` core-git export boundary implementation is delivered
+- `P4/CP8` guard-contract export boundary tightening is delivered; next preferred packet is a final single-candidate implementation packet for `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`, focused on canonical root entrypoint/export-map formalization
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

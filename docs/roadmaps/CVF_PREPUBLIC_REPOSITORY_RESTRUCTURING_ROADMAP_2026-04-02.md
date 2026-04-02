@@ -165,6 +165,18 @@ Re-assessed next-candidate status:
   - `REVIEW/` is currently a local placeholder rather than a tracked relocation unit
   - `v1.0/` and `v1.1/` remain too documentation-dense for the current slow-and-safe posture
 
+Canonical landing-path status:
+
+- `P3 / CP4` canonical landing-path re-assessment packet:
+  - `docs/audits/CVF_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_DELTA_2026-04-02.md`
+- result:
+  - `HOLD`
+- rationale summary:
+  - current canon defines isolated `P3` execution clearly
+  - current `GC-039` semantics do not yet provide an explicit machine-compatible landing path for bringing a delivered relocation branch back onto `cvf-next`
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation

@@ -18,6 +18,8 @@ Status: current readiness reference that must be consulted before any `P3` struc
 3. every `PUBLIC_DOCS_ONLY` root declares an explicit public-content audit status
 4. every `PUBLIC_EXPORT_CANDIDATE` extension declares an explicit export-readiness status
 5. the publication decision memo still has a live re-assessment date
+6. any future physical relocation wave executes on a dedicated `restructuring/p3-*` branch
+7. any future physical relocation wave executes from a secondary git worktree, not the canonical `cvf-next` working tree
 
 ## Current Phase-Gate Status
 
@@ -97,6 +99,8 @@ Before any further `P3` authorization:
 - run `GC-019` structural audit/review for the proposed relocation wave
 - run `GC-039` pre-public `P3` readiness guard
 - confirm the target publication model that the relocation wave is trying to support
+- execute on a dedicated branch matching `restructuring/p3-*`
+- use a dedicated secondary worktree for that branch so relocation changes stay isolated from the canonical workspace
 
 ## Related Artifacts
 

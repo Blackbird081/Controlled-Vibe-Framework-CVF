@@ -133,6 +133,8 @@ Canonical exposure authority:
 - physically move approved roots or families only after `P0-P2` are complete
 - require `GC-019` structural audit/review/decision before execution
 - require `GC-039` pre-public `P3` readiness verification before execution
+- require a dedicated branch matching `restructuring/p3-*` for each future relocation wave
+- require a dedicated secondary git worktree for each future relocation wave
 - preserve backwards path recovery and packaging integrity while relocating
 
 Current executed move set:
@@ -169,6 +171,7 @@ Current execution boundary:
 
 - `P0-P2` may proceed now
 - `P3-P5` require later explicit authorization
+- any future `P3` relocation beyond delivered `P3/CP1` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree
 
 ## Non-Goals For `P0-P2`
 

@@ -32,7 +32,7 @@ class CheckPrepublicP3ReadinessTests(unittest.TestCase):
         (self.repo_root / "ARCHITECTURE.md").write_text("arch\n", encoding="utf-8")
 
         (self.repo_root / "docs" / "reference" / "CVF_PREPUBLIC_P3_READINESS.md").write_text(
-            "`P3` must stay blocked\n",
+            "`P3` must stay blocked\nrestructuring/p3-\nsecondary git worktree\n",
             encoding="utf-8",
         )
         (self.repo_root / "docs" / "reference" / "CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md").write_text(
@@ -40,7 +40,7 @@ class CheckPrepublicP3ReadinessTests(unittest.TestCase):
             encoding="utf-8",
         )
         (self.repo_root / "governance" / "toolkit" / "05_OPERATION" / "CVF_PREPUBLIC_P3_READINESS_GUARD.md").write_text(
-            "This guard does not itself authorize `P3`.\n",
+            "This guard does not itself authorize `P3`.\nrestructuring/p3-\nsecondary git worktree\n",
             encoding="utf-8",
         )
         (self.repo_root / "governance" / "compat" / "run_local_governance_hook_chain.py").write_text(
@@ -132,7 +132,18 @@ class CheckPrepublicP3ReadinessTests(unittest.TestCase):
                                     with patch.object(MODULE, "GUARD_DOC_PATH", self.repo_root / "governance" / "toolkit" / "05_OPERATION" / "CVF_PREPUBLIC_P3_READINESS_GUARD.md"):
                                         with patch.object(MODULE, "HOOK_CHAIN_PATH", self.repo_root / "governance" / "compat" / "run_local_governance_hook_chain.py"):
                                             with patch.object(MODULE, "WORKFLOW_PATH", self.repo_root / ".github" / "workflows" / "documentation-testing.yml"):
-                                                return MODULE.build_report()
+                                                with patch.object(
+                                                    MODULE,
+                                                    "_detect_relocation_wave",
+                                                    return_value={
+                                                        "detected": False,
+                                                        "currentBranch": "cvf-next",
+                                                        "worktreeCount": 1,
+                                                        "structuralPaths": [],
+                                                        "governanceMarkers": [],
+                                                    },
+                                                ):
+                                                    return MODULE.build_report()
 
     def test_accepts_compliant_p3_readiness(self) -> None:
         report = self._build_report()
@@ -151,6 +162,34 @@ class CheckPrepublicP3ReadinessTests(unittest.TestCase):
         self.root_file_registry.write_text(json.dumps(current, indent=2), encoding="utf-8")
         report = self._build_report()
         self.assertTrue(any(v["type"] == "unclassified_root_file" for v in report["violations"]))
+
+    def test_flags_relocation_wave_on_canonical_branch(self) -> None:
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            with patch.object(MODULE, "PHASE_GATE_REGISTRY_PATH", self.phase_gate_registry):
+                with patch.object(MODULE, "ROOT_FILE_REGISTRY_PATH", self.root_file_registry):
+                    with patch.object(MODULE, "ROOT_REGISTRY_PATH", self.root_registry):
+                        with patch.object(MODULE, "EXTENSION_REGISTRY_PATH", self.extension_registry):
+                            with patch.object(MODULE, "READINESS_DOC_PATH", self.repo_root / "docs" / "reference" / "CVF_PREPUBLIC_P3_READINESS.md"):
+                                with patch.object(MODULE, "DECISION_MEMO_PATH", self.repo_root / "docs" / "reference" / "CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md"):
+                                    with patch.object(MODULE, "GUARD_DOC_PATH", self.repo_root / "governance" / "toolkit" / "05_OPERATION" / "CVF_PREPUBLIC_P3_READINESS_GUARD.md"):
+                                        with patch.object(MODULE, "HOOK_CHAIN_PATH", self.repo_root / "governance" / "compat" / "run_local_governance_hook_chain.py"):
+                                            with patch.object(MODULE, "WORKFLOW_PATH", self.repo_root / ".github" / "workflows" / "documentation-testing.yml"):
+                                                with patch.object(
+                                                    MODULE,
+                                                    "_detect_relocation_wave",
+                                                    return_value={
+                                                        "detected": True,
+                                                        "currentBranch": "cvf-next",
+                                                        "worktreeCount": 1,
+                                                        "structuralPaths": ["EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE/file.ts"],
+                                                        "governanceMarkers": ["docs/audits/CVF_P3_TEST.md"],
+                                                    },
+                                                ):
+                                                    report = MODULE.build_report()
+        violation_types = {v["type"] for v in report["violations"]}
+        self.assertIn("p3_relocation_requires_dedicated_branch", violation_types)
+        self.assertIn("p3_relocation_on_canonical_branch", violation_types)
+        self.assertIn("p3_relocation_requires_secondary_worktree", violation_types)
 
 
 if __name__ == "__main__":

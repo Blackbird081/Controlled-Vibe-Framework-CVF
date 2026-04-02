@@ -21,6 +21,8 @@ Before any `P3` structural relocation authorization proceeds:
 - every `PUBLIC_DOCS_ONLY` root must declare public-content audit status
 - every `PUBLIC_EXPORT_CANDIDATE` extension must declare export-readiness status
 - the publication decision memo must carry a live re-assessment boundary
+- any future physical relocation wave must execute on a dedicated `restructuring/p3-*` branch, not directly on `cvf-next`
+- any future physical relocation wave must use a secondary git worktree so structural changes are isolated from the canonical working tree
 
 This guard does not itself authorize `P3`.
 

@@ -22,6 +22,7 @@ Decision summary:
 - `GO` for `P0-P2` preparation baseline and `GC-039` readiness baseline
 - `GO` for one bounded `P3/CP1` retired-reference-root cleanup wave
 - `HOLD` for any further `P3` physical relocation until a fresh `GC-019` packet is opened and `GC-039` passes for that concrete move set
+- `HOLD` for any further `P3` physical relocation unless it also runs on a dedicated `restructuring/p3-*` branch and secondary git worktree
 
 Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically governed by the artifacts above.
 
@@ -42,6 +43,7 @@ Machine-readable source of truth:
 
 No agent may authorize further P3 physical moves without a separate `GC-019` approval packet.
 `GC-039` is also required, but it verifies readiness; it does not replace `GC-019`.
+No agent may execute a further P3 physical move directly on `cvf-next`.
 
 Executed move set already in canon:
 
@@ -132,6 +134,8 @@ All three run in:
 6. create new root directories without lifecycle + exposure classification
 7. skip governance checks when changing root or extension structure
 8. decide publication model without reading `CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
+9. execute future `P3` physical relocation directly on `cvf-next`
+10. execute future `P3` physical relocation without a dedicated secondary git worktree
 
 ## Rule 8: Re-assessment Timeline
 

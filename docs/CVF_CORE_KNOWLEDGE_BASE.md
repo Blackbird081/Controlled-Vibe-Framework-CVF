@@ -795,3 +795,28 @@ Quy tắc cứng:
 - nếu bất kỳ dimension nào `< 6.0`, scope đó phải chuyển sang remediation-first
 - nếu Governance Discipline, Test and Verification Confidence, hoặc Canonical Documentation Quality `< 8.0`, không được coi scope đó là strong mà không có follow-up bắt buộc
 - trước mọi fresh `GC-018`, phải đọc active quality assessment và chốt rõ `REMEDIATE_FIRST` hoặc `EXPAND_NOW`
+
+---
+
+## XVI. PRE-PUBLIC P3 EXECUTION ISOLATION
+
+> `P3` pre-public relocation is not allowed to execute directly on `cvf-next`.
+
+Canonical rule:
+
+- future physical `P3` relocation waves must run on a dedicated branch matching `restructuring/p3-*`
+- future physical `P3` relocation waves must run from a secondary git worktree
+- `cvf-next` remains the canonical integration branch; relocation work merges back only after the move set is reviewed and clean
+
+This rule is additive to, not a replacement for:
+
+- fresh `GC-019` structural audit/review for the concrete move set
+- `GC-039` readiness pass for the same move set
+
+Canonical references:
+
+- `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
+- `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`
+- `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
+- `governance/toolkit/05_OPERATION/CVF_PREPUBLIC_P3_READINESS_GUARD.md`
+- `governance/compat/check_prepublic_p3_readiness.py`

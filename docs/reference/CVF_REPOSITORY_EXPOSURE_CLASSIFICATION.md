@@ -42,6 +42,7 @@ Foundation-anchor implication:
 
 - `v1.0` and `v1.1` may remain visible inside the private monorepo without changing their exposure class
 - reducing public/noise risk for these roots is primarily a publication-navigation problem, not automatically a relocation problem
+- the active curated-navigation reference for that reduction is `docs/reference/CVF_PREPUBLIC_CURATED_FRONT_DOOR_NAVIGATION_2026-04-02.md`
 
 Retired local-only reference roots:
 

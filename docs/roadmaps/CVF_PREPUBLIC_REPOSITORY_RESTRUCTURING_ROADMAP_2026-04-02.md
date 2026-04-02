@@ -243,6 +243,20 @@ P4 shortlist packaging-boundary status:
   - `CVF_v3.0_CORE_GIT_FOR_AI` now has a bounded first-wave package story centered on the root barrel plus the primitive families it already groups
   - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` is confirmed as shortlist-worthy but still needs canonical entrypoint/export-map work before any later implementation packet
 
+P4 curated front-door navigation status:
+
+- `P4 / CP5` curated-front-door-navigation packet:
+  - `docs/audits/CVF_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_DELTA_2026-04-02.md`
+  - `docs/reference/CVF_PREPUBLIC_CURATED_FRONT_DOOR_NAVIGATION_2026-04-02.md`
+- result:
+  - `APPROVED - NAVIGATION MAP DEFINED`
+- rationale summary:
+  - `README.md`, `START_HERE.md`, and `ARCHITECTURE.md` are now canonized as the preferred first-click ring
+  - guided next-click paths are now explicit by audience rather than ad hoc
+  - `v1.0/` and `v1.1/` remain visible, but are intentionally pushed below the first-click navigation ring
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -265,6 +279,17 @@ Exit condition:
   - selective public export candidate shortlist
   - shortlist packaging-boundary definition
   - explicit private-core-visible foundation-anchor policy
+- current curated front-door result:
+  - Ring 1 root entry:
+    - `README.md`
+    - `START_HERE.md`
+    - `ARCHITECTURE.md`
+  - Ring 2 guided orientation:
+    - audience-based routes for general evaluators, builders, non-coders, and architecture readers
+  - Ring 3 support surfaces:
+    - `CVF_LITE.md`, `CVF_ECOSYSTEM_ARCHITECTURE.md`, `CHANGELOG.md`, `LICENSE`, and learning-zone docs
+  - private-core depth ring:
+    - evidence-heavy and governance-heavy surfaces remain reachable, but not first-click
 - current docs-mirror result:
   - direct candidates:
     - root front-door files + learning-oriented docs zones
@@ -311,7 +336,8 @@ Current execution boundary:
 - `P4/CP1` planning-only work may proceed now
 - `P4/CP2` docs-mirror boundary is defined
 - `P4/CP3` export shortlist is defined
-- `P4/CP4` shortlist packaging boundary is defined; next preferred packet is curated front-door navigation definition or a later bounded implementation packet for one shortlisted candidate
+- `P4/CP4` shortlist packaging boundary is defined
+- `P4/CP5` curated front-door navigation is defined; next preferred packet is a bounded front-door content sync packet or a later bounded implementation packet for one shortlisted candidate
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

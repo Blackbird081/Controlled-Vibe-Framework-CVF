@@ -83,6 +83,9 @@ Current `P4` opening status:
 - `P4 / CP4` now defines the first shortlist packaging boundary:
   - use `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
   - treat the boundary as planning scope, not packaging completion or release approval
+- `P4 / CP5` now defines the curated front-door navigation map:
+  - use `docs/reference/CVF_PREPUBLIC_CURATED_FRONT_DOOR_NAVIGATION_2026-04-02.md`
+  - treat the map as navigation planning, not front-door content execution
 
 ## Rule 2: Private by Default
 
@@ -113,6 +116,10 @@ Current export-shortlist source:
 Current shortlist packaging-boundary source:
 
 - `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
+
+Current curated front-door navigation source:
+
+- `docs/reference/CVF_PREPUBLIC_CURATED_FRONT_DOOR_NAVIGATION_2026-04-02.md`
 
 ## Rule 3: Classification Must Be Respected
 

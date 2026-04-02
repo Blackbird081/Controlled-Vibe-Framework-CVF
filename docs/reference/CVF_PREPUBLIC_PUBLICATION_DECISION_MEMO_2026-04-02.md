@@ -271,6 +271,10 @@ Current shortlist packaging-boundary reference:
 
 - `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
 
+Current curated front-door navigation reference:
+
+- `docs/reference/CVF_PREPUBLIC_CURATED_FRONT_DOOR_NAVIGATION_2026-04-02.md`
+
 ## Re-Assessment Boundary
 
 Re-assessment-By: `2026-05-01`

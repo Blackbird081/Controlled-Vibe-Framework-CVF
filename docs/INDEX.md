@@ -273,6 +273,15 @@ If the current task is repository cleanup before public packaging:
   - gap inventory đã được ghi nhận chính thức: external-consumer docs, support obligations, license posture acknowledgment
   - `CVF_GUARD_CONTRACT` có thêm blocker: `better-sqlite3` runtime dependency cần resolve trước khi uplift
   - next safe lane: documentation-completion packet cho shortlist
+- `P4/CP12` documentation-completion đã deliver:
+  - `audits/CVF_P4_CP12_SHORTLIST_DOCUMENTATION_COMPLETION_AUDIT_2026-04-03.md`
+  - `reviews/CVF_GC019_P4_CP12_SHORTLIST_DOCUMENTATION_COMPLETION_REVIEW_2026-04-03.md`
+  - `baselines/CVF_P4_CP12_SHORTLIST_DOCUMENTATION_COMPLETION_DELTA_2026-04-03.md`
+- documentation-completion result:
+  - cả 3 READMEs đã được rewrite cho external-consumer audience: pre-public status, prerequisites, installation, usage, export map, support statement, license
+  - `CVF_GUARD_CONTRACT`: `better-sqlite3` moved từ `dependencies` sang `optionalDependencies`
+  - tất cả 4 gaps từ P4/CP11 đã closed; cả 3 vẫn là `NEEDS_PACKAGING`
+  - next safe lane: second readiness re-assessment packet (P4/CP13)
 
 ## Enterprise Audit Navigation
 

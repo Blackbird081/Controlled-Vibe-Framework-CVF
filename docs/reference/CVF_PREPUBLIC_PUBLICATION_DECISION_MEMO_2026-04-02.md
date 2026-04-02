@@ -101,6 +101,7 @@ Weaknesses:
 
 - no direct public code download of core modules
 - requires separate curation pipeline for docs/public examples
+- a public docs mirror should be treated as a curated subset boundary, not as a wholesale copy of the private `docs/` tree
 
 Best when:
 
@@ -241,6 +242,7 @@ Implication:
 
 - better publication isolation can come from selective mirrors, curated docs front-doors, and package boundaries
 - it does not always require additional physical relocation of the private-core foundation roots
+- if CVF chooses `PRIVATE_CORE + PUBLIC_DOCS_MIRROR`, the active boundary reference is `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
 
 ## What Should Not Happen
 

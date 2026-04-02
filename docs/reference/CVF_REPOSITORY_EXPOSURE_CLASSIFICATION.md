@@ -36,13 +36,7 @@ Current summary:
 
 - `PUBLIC_DOCS_ONLY`: `docs`, `public`
 - `INTERNAL_ONLY`: `.agents`, `.claude`, `.githooks`, `.github`, `.vscode`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `REVIEW`, `v1.0`, `v1.1`, `ECOSYSTEM`
-- `PRIVATE_ENTERPRISE_ONLY`: `CVF_SKILL_LIBRARY`, `ui_governance_engine`
-
-Frozen-reference exposure note:
-
-- `v1.0` and `v1.1` remain `INTERNAL_ONLY` even though they are important historical references
-- the current strategy is to explain them through extracted structure/orientation docs, not to mirror or relocate them directly
-- this reduces disclosure risk while preserving the original payload in place
+- `PRIVATE_ENTERPRISE_ONLY`: none at the visible repo root after `P3/CP2`
 
 Foundation-anchor implication:
 
@@ -53,6 +47,12 @@ Retired local-only reference roots:
 
 - `CVF Edit`, `CVF_Important`, and `CVF_Restructure` are no longer part of the visible root exposure map after `P3/CP1`
 - if retained locally, they belong under `.private_reference/legacy/` and remain non-canonical
+
+Relocated retained/internal roots:
+
+- `CVF_SKILL_LIBRARY` and `ui_governance_engine` were removed from the visible root exposure map in `P3/CP2`
+- they now live under `ECOSYSTEM/reference-roots/retained-internal/`
+- their exposure posture remains private/internal rather than public-facing
 
 Root-file implication:
 
@@ -89,7 +89,7 @@ Therefore:
 - public docs and public modules should normally be published through separate mirrors, packages, or reduced public repos
 - the main CVF core should remain private by default unless an explicit full-public decision is made
 - `PUBLIC_DOCS_ONLY` roots such as `docs/` may still require curation before public mirroring, even if they are the right target class
-- frozen-reference roots such as `v1.0/` and `v1.1/` should normally be represented by extracted summary docs rather than direct public exposure
+- the active docs-mirror boundary reference is `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
 
 ## Management Rule
 

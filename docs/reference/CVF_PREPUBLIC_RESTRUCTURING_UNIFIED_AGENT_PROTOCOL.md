@@ -74,6 +74,9 @@ Current `P4` opening status:
   - public mirror publication
   - package publication
   - new filesystem relocation
+- `P4 / CP2` now defines the docs-mirror boundary:
+  - use `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
+  - treat a future docs mirror as a curated subset, not a copy of the whole `docs/` root
 
 ## Rule 2: Private by Default
 
@@ -92,6 +95,10 @@ Four publication models are ranked in priority order:
 4. `FULL_PUBLIC_MONOREPO` — highest risk, avoid as default
 
 Canonical source: `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
+
+Current docs-mirror boundary source:
+
+- `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
 
 ## Rule 3: Classification Must Be Respected
 

@@ -3,6 +3,8 @@
 > Front-door architecture view for GitHub readers.
 >
 > Current readout: the active system-unification wave is complete on the active reference path, while future expansion is gated by reassessment and `GC-018`.
+>
+> This page is one of the three root front-door entrypoints alongside `README.md` and `START_HERE.md`.
 
 ## 1. System Shape
 
@@ -150,13 +152,23 @@ The architecture should be read this way:
 - the control plane is the point of coherence
 - Web UI, SDK flows, and multi-agent paths are valuable only when they stay under the same governed semantics
 - baselines, reviews, and continuation gates are part of the system boundary, not just project paperwork
+- deeper governance and evidence records matter, but they are not the preferred first-click path from the repository front door
 
 ## 6. Read Next
 
+### General Orientation
+
 - [README](README.md)
-- [Release Readiness](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md)
-- [System Checkpoint](docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md)
-- [System Unification Roadmap](docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md)
-- [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
+- [Getting Started](docs/GET_STARTED.md)
+- [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md)
+
+### Architecture Depth
+
 - [Detailed Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md)
-- [Architecture Separation Diagram](EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md)
+- [Ecosystem Architecture](CVF_ECOSYSTEM_ARCHITECTURE.md)
+- [Reference Governed Loop](docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md)
+
+### Status And Governance Context
+
+- [Release Readiness](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md)
+- [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)

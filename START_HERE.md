@@ -1,24 +1,25 @@
-# 🚀 START HERE
+# START HERE
 
-> **This file has been replaced by the comprehensive Getting Started Guide.**
+> Shortest root-level entrypoint for first-time CVF readers.
+>
+> Canonical default first stop: [Getting Started](docs/GET_STARTED.md)
 
-**→ [📖 Go to Getting Started Guide](docs/GET_STARTED.md)**
+## Quick Routes
 
----
+| If you are... | Open this next |
+|---|---|
+| New reader / General evaluator | [Getting Started](docs/GET_STARTED.md) and [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) |
+| Builder / Integrator | [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md) and [Reference Governed Loop](docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md) |
+| Non-coder / Operator | [Getting Started](docs/GET_STARTED.md) and [Non-Coder Governed Packet](docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md) |
+| Architecture reader | [Architecture](ARCHITECTURE.md) and [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md) |
 
-## Quick Links
+## Front-Door Rule
 
-| You are | Go to |
-|---------|-------|
-| 🆕 **New to CVF?** | [5-Minute Intro](docs/GET_STARTED.md#cvf-in-5-minutes) |
-| 🗺️ **Repo Structure** | [Public Structure Overview](docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md) |
-| 📚 **124 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
-| 🚀 **Web UI** | [v1.6 Agent Platform](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
-| 🛡️ **Safety Dashboard** | [Non-Coder Dashboard](EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/) |
-| 🛠️ **Contribute** | [Contributing Guide](v1.0/CONTRIBUTING.md) |
+- use this file as a redirect, not as the full explanation
+- use `README.md` for role-based triage
+- use `ARCHITECTURE.md` for the system-shape view
+- use [Docs Index](docs/INDEX.md) only after the initial front-door path when you need the deeper private-core chain
 
----
+**If you only pick one page, open [docs/GET_STARTED.md](docs/GET_STARTED.md).**
 
-**➡️ [Go to GET_STARTED.md now](docs/GET_STARTED.md)**
-
-*Last updated: April 4, 2026*
+*Last updated: 2026-04-03*

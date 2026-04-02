@@ -1,0 +1,64 @@
+{
+  "lifecycleClasses": [
+    {
+      "id": "ACTIVE_CANONICAL",
+      "description": "Active architectural or operational root that remains part of the primary visible structure."
+    },
+    {
+      "id": "MERGED_RETAINED",
+      "description": "Ownership has shifted or converged elsewhere, but the root still carries lineage, runtime, or compatibility value."
+    },
+    {
+      "id": "FROZEN_REFERENCE",
+      "description": "Historical or reference-only root retained for evidence, comparison, or migration context."
+    },
+    {
+      "id": "RETIRE_CANDIDATE",
+      "description": "Low-value root that may be archived or retired later after explicit review."
+    }
+  ],
+  "exposureClasses": [
+    {
+      "id": "PUBLIC_DOCS_ONLY",
+      "description": "May appear in public-facing docs/navigation material, but not as a full source delivery promise."
+    },
+    {
+      "id": "PUBLIC_EXPORT_CANDIDATE",
+      "description": "Candidate for curated public package/repo/release export after separate approval."
+    },
+    {
+      "id": "INTERNAL_ONLY",
+      "description": "Internal working surface; not intended for direct public release."
+    },
+    {
+      "id": "PRIVATE_ENTERPRISE_ONLY",
+      "description": "Enterprise-private or commercially sensitive surface that should remain non-public by default."
+    }
+  ],
+  "ignoredRoots": [
+    ".git",
+    "node_modules"
+  ],
+  "roots": [
+    { "path": ".agents", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
+    { "path": ".claude", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
+    { "path": ".githooks", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
+    { "path": ".github", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
+    { "path": ".vscode", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "CVF Edit", "lifecycleClass": "RETIRE_CANDIDATE", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "CVF_Important", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "CVF_Restructure", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "CVF_SKILL_LIBRARY", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
+    { "path": "docs", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PUBLIC_DOCS_ONLY" },
+    { "path": "ECOSYSTEM", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "EXTENSIONS", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "governance", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "public", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PUBLIC_DOCS_ONLY" },
+    { "path": "REVIEW", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "scripts", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "tools", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "ui_governance_engine", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
+    { "path": "v1.0", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "v1.1", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" }
+  ]
+}

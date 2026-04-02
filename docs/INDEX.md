@@ -50,6 +50,9 @@ Từ nay về sau:
   - `reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md` khi file đó là governed packet, evidence doc, closure doc, handoff/tracker sync, hoặc artifact claim có source truth rõ ràng
   - `reference/CVF_QUALITY_ASSESSMENT_STANDARD.md` khi file đó là tranche, wave, hoặc architecture quality scorecard
   - `reference/CVF_MAINTAINABILITY_STANDARD.md` khi file đó đụng hotspot public barrel, barrel smoke test, shared batch helper, shared fixture builder, hoặc summary/evidence layering
+  - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md` khi file đó liên quan tới pre-public repository cleanup, root lifecycle posture, hoặc extension lifecycle posture
+  - `reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md` khi file đó liên quan tới public/private publication posture, module export posture, hoặc selective public distribution
+  - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md` khi cần cân nhắc mô hình public/private phù hợp trước khi quyết định publication
 
 ## Approved Root-Level Files
 
@@ -102,6 +105,9 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`
 - `reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
 - `reference/CVF_MAINTAINABILITY_STANDARD.md`
+- `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
+- `reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
+- `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 - `reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
 - `reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
 - `reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
@@ -116,8 +122,18 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md`
 - `reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`
 - `../governance/toolkit/05_OPERATION/CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`
+- `../governance/toolkit/05_OPERATION/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md`
+- `../governance/toolkit/05_OPERATION/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`
+
+## Pre-Public Restructuring
+
+If the current task is repository cleanup before public packaging:
+
+- `roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
+- `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
+- `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 - `../governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`

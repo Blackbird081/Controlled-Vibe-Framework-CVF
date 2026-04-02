@@ -309,10 +309,14 @@ Output (Allow / Strip & Allow / Block)
 | CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md | CPF barrel smoke changes | Keep `tests/index.test.ts` smoke-only and ownership-clean |
 | CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md | Governed CPF batch family changes | Shared batch helper + shared fixture adoption required |
 | CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md | Canon summary doc changes | Summary docs must cite evidence, not inline typed evidence payloads |
+| CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md | Pre-public repository cleanup or root/extension lifecycle review | Visible roots and extension roots must be lifecycle-classified before relocation |
+| CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md | Pre-public publication or selective-distribution planning | Visible roots and extension roots must declare public/private exposure posture before publication decisions |
 | CVF_GUARD_AUTHORING_STANDARD_GUARD.md | New or materially revised governance guard | Guard must satisfy the mandatory authoring contract before commit |
 | CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
 | CVF_ACTIVE_ARCHIVE_GUARD.md | Active archive maintenance | Keep active/archive split truthful and append-only |
 | CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md | New or revised active trace/log window with dedicated rotation guard | Register canonical active window + class + archive protection |
+| check_repository_lifecycle_classification.py | Pre-public restructure planning | Enforces lifecycle coverage before publish-facing folder cleanup |
+| check_repository_exposure_classification.py | Pre-public publication planning | Enforces private-by-default exposure coverage before any public-facing release posture is assumed |
 | CVF_AGENT_HANDOFF_GUARD.md | Governed pause/resume transfer | Canonical handoff packet before another worker continues; record tracked remote branch and derive exact remote SHA live when needed |
 | CVF_AGENT_HANDOFF_TRANSITION_GUARD.md | Pause/resume classification | Transition class chosen before handoff is written |
 | CVF_BASELINE_UPDATE_GUARD.md | Substantive repo change | Matching baseline/review artifact required |

@@ -431,6 +431,40 @@ jobs:
         run: |
           python governance/compat/check_active_window_registry.py --enforce
 
+  repository-lifecycle-classification:
+    name: Repository Lifecycle Classification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-037 repository lifecycle classification
+        run: |
+          python governance/compat/check_repository_lifecycle_classification.py --enforce
+
+  repository-exposure-classification:
+    name: Repository Exposure Classification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-038 repository exposure classification
+        run: |
+          python governance/compat/check_repository_exposure_classification.py --enforce
+
   audit-retention-registry:
     name: Audit Retention Registry
     runs-on: ubuntu-latest
@@ -674,7 +708,7 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [docs-governance-compat, governed-artifact-authoring, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, active-window-registry, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
+    needs: [docs-governance-compat, governed-artifact-authoring, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, active-window-registry, repository-lifecycle-classification, repository-exposure-classification, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
     if: always()
     
     steps:

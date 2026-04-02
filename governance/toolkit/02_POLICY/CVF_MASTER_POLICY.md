@@ -203,6 +203,20 @@ Personal AI usage unrelated to company work is excluded.
      - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_canon_summary_evidence_separation.py`.
+ 31. `GC-037` visible repository roots and extension roots must be lifecycle-classified before any pre-public relocation or retirement wave begins:
+     - This rule applies to repository cleanup work meant to improve public architectural clarity before packaging or external rollout.
+     - Lifecycle classification must precede structural movement; do not infer deletion or retirement from legacy-looking names alone.
+     - Canonical lifecycle classes are `ACTIVE_CANONICAL`, `MERGED_RETAINED`, `FROZEN_REFERENCE`, and `RETIRE_CANDIDATE`.
+     - Canonical reference: `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_repository_lifecycle_classification.py`.
+ 32. `GC-038` visible repository roots and extension roots must be exposure-classified before any public, mirror, package-export, or selective-distribution decision proceeds:
+     - This rule applies to pre-public planning, selective module export planning, and any attempt to decide what CVF should expose externally.
+     - Public-by-accident is forbidden; the default model is `private-by-default, selective-publication-only`.
+     - Canonical exposure classes are `PUBLIC_DOCS_ONLY`, `PUBLIC_EXPORT_CANDIDATE`, `INTERNAL_ONLY`, and `PRIVATE_ENTERPRISE_ONLY`.
+     - Canonical reference: `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_repository_exposure_classification.py`.
 
 ---
 

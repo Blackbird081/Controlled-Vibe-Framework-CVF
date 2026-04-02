@@ -150,6 +150,14 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             "conformance trace rotation compatibility",
             ["python", "governance/compat/check_conformance_trace_rotation.py", "--enforce"],
         ),
+        (
+            "repository lifecycle classification compatibility",
+            ["python", "governance/compat/check_repository_lifecycle_classification.py", "--enforce"],
+        ),
+        (
+            "repository exposure classification compatibility",
+            ["python", "governance/compat/check_repository_exposure_classification.py", "--enforce"],
+        ),
     ]
 }
 

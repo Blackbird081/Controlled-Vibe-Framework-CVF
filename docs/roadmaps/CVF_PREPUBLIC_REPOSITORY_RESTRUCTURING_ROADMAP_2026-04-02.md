@@ -312,6 +312,20 @@ P4 third candidate-scoped export implementation status:
   - this packet adds a root-barrel-first entry plus named subpaths for support layers and risk-model assets
   - the candidate still remains `NEEDS_PACKAGING`, so publication posture does not change
 
+P4 shortlist-wave consolidation status:
+
+- `P4 / CP10` shortlist-wave-consolidation packet:
+  - `docs/audits/CVF_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_AUDIT_2026-04-03.md`
+  - `docs/reviews/CVF_GC019_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_REVIEW_2026-04-03.md`
+  - `docs/baselines/CVF_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_DELTA_2026-04-03.md`
+  - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
+- result:
+  - `APPROVED - FIRST WAVE CONSOLIDATED`
+- rationale summary:
+  - `P4/CP7-CP9` now form one completed first-wave shortlist implementation chain
+  - all three candidates still remain `NEEDS_PACKAGING`
+  - the next safe packet is a separate readiness re-assessment rather than an implicit uplift
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -365,6 +379,10 @@ Exit condition:
     - now has a canonical root barrel and explicit named export map
     - names all four shipped JSON risk-model assets explicitly instead of hiding them behind a wildcard
     - still remains `NEEDS_PACKAGING`; no readiness uplift or package release is implied
+- current first-wave consolidation result:
+  - the shortlist implementation wave is complete for all three prioritized candidates
+  - no candidate changed `exportReadiness`
+  - future readiness-uplift discussion remains separately gated
 - current docs-mirror result:
   - direct candidates:
     - root front-door files + learning-oriented docs zones
@@ -416,7 +434,8 @@ Current execution boundary:
 - `P4/CP6` root front-door content sync is delivered
 - `P4/CP7` core-git export boundary implementation is delivered
 - `P4/CP8` guard-contract export boundary tightening is delivered
-- `P4/CP9` runtime-adapter-hub export-map implementation is delivered; the first shortlist implementation wave is now complete, and the next preferred packet is a consolidation/re-assessment packet before any readiness uplift discussion
+- `P4/CP9` runtime-adapter-hub export-map implementation is delivered
+- `P4/CP10` shortlist wave consolidation is delivered; the next preferred packet is a bounded readiness re-assessment packet before any readiness uplift discussion
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

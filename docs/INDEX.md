@@ -163,6 +163,11 @@ If the current task is repository cleanup before public packaging:
   - `baselines/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_DELTA_2026-04-02.md`
 - `v1.0/` và `v1.1/` vẫn blocked vì reference density và onboarding coupling còn cao
 - `REVIEW/` hiện không được coi là next tracked relocation unit
+- `P3/CP4` re-assessment cũng đang `HOLD`; xem:
+  - `audits/CVF_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_AUDIT_2026-04-02.md`
+  - `reviews/CVF_GC019_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_REVIEW_2026-04-02.md`
+  - `baselines/CVF_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_DELTA_2026-04-02.md`
+- current unresolved point: isolated `P3` execution path đã rõ, nhưng landing path hợp lệ về `cvf-next` chưa được canon hóa rõ ràng
 
 ## Enterprise Audit Navigation
 

@@ -806,7 +806,7 @@ Canonical rule:
 
 - future physical `P3` relocation waves must run on a dedicated branch matching `restructuring/p3-*`
 - future physical `P3` relocation waves must run from a secondary git worktree
-- `cvf-next` remains the canonical integration branch; relocation work merges back only after the move set is reviewed and clean
+- `cvf-next` remains the canonical integration branch; however, post-review landing semantics for isolated `P3` relocation branches remain unresolved under current `GC-039` until a separate governance clarification is approved
 
 This rule is additive to, not a replacement for:
 

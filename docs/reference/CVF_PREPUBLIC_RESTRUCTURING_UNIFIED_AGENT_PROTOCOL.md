@@ -67,6 +67,12 @@ Lane-closure intent:
 - close the restructuring lane after sufficient extracted orientation and curated entrypoints exist
 - return primary focus to master architecture completion
 
+Current planning interpretation after `P3/CP3` through `P3/CP5`:
+
+- no further low-risk physical `P3` move is currently preferred
+- `v1.0/` and `v1.1/` should be treated as visible frozen foundation anchors, not default relocation targets
+- for those roots, prefer `P4` navigation/packaging/docs-mirror curation over forced path movement
+
 ## Rule 2: Private by Default
 
 CVF publication posture is `private-by-default, selective-publication-only`.

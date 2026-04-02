@@ -44,6 +44,11 @@ Frozen-reference exposure note:
 - the current strategy is to explain them through extracted structure/orientation docs, not to mirror or relocate them directly
 - this reduces disclosure risk while preserving the original payload in place
 
+Foundation-anchor implication:
+
+- `v1.0` and `v1.1` may remain visible inside the private monorepo without changing their exposure class
+- reducing public/noise risk for these roots is primarily a publication-navigation problem, not automatically a relocation problem
+
 Retired local-only reference roots:
 
 - `CVF Edit`, `CVF_Important`, and `CVF_Restructure` are no longer part of the visible root exposure map after `P3/CP1`

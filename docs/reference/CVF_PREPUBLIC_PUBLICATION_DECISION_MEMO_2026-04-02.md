@@ -198,6 +198,7 @@ Practical recommendation for the next decision wave:
   - public understanding
   - selective technical adoption
   - or open-core productization
+- do not assume that every visible frozen foundation root must be physically relocated first; for roots such as `v1.0/` and `v1.1/`, curated navigation and mirror/package boundaries may be safer than path movement
 
 ## Decision Criteria
 
@@ -225,6 +226,21 @@ Use this sequence before any publication move:
 3. only then authorize `P3` relocation with that target model in mind
 4. prepare `P4` public navigation + packaging around that chosen model
 5. leave `P5` retirement/archive work as cleanup after the packaging structure stabilizes
+
+## Foundation Anchor Note
+
+Some visible roots can be architecturally noisy while still being strategically correct to keep in place inside a private core.
+
+Current planning interpretation:
+
+- `v1.0/` and `v1.1/` are frozen foundation anchors with active onboarding/reference value
+- their visibility inside the private monorepo does not by itself create public exposure
+- if CVF adopts `PRIVATE_CORE + PUBLIC_DOCS_MIRROR` or `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`, these anchors can remain in the private core while public-facing navigation is curated elsewhere
+
+Implication:
+
+- better publication isolation can come from selective mirrors, curated docs front-doors, and package boundaries
+- it does not always require additional physical relocation of the private-core foundation roots
 
 ## What Should Not Happen
 

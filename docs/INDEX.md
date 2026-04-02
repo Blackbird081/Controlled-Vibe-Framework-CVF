@@ -237,6 +237,15 @@ If the current task is repository cleanup before public packaging:
   - `CVF_v3.0_CORE_GIT_FOR_AI` now has explicit `main`, `types`, root-only `exports`, and bounded `files`
   - package-local README now names the canonical root entry and the five in-scope primitive families
   - candidate still remains `NEEDS_PACKAGING`; packet này chưa phải publication approval
+- `P4/CP8` second shortlist implementation packet đã deliver:
+  - `audits/CVF_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_AUDIT_2026-04-03.md`
+  - `reviews/CVF_GC019_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_REVIEW_2026-04-03.md`
+  - `baselines/CVF_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_DELTA_2026-04-03.md`
+  - `reference/CVF_PREPUBLIC_GUARD_CONTRACT_EXPORT_SURFACE_2026-04-03.md`
+- current guard-surface implementation result:
+  - `CVF_GUARD_CONTRACT` no longer publishes wildcard runtime exports or the `enterprise` subpath
+  - package surface now matches root barrel + `types` + `engine` + `guards/*` + selected runtime helpers only
+  - candidate still remains `NEEDS_PACKAGING`; packet này chưa phải provider/runtime publication approval
 
 ## Enterprise Audit Navigation
 

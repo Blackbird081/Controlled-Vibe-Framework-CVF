@@ -1,4 +1,7 @@
 # EA Cross-Check Reconciliation Against Cleaned Baseline
+
+Memory class: FULL_RECORD
+
 > **Date:** 2026-03-21
 > **Source Under Review:** `EA_CROSS_CHECK_ASSESSMENT.md`
 > **Reference Baseline:** Current repo source-of-truth on 2026-03-21
@@ -173,7 +176,7 @@ Before reviewing source proposal folders, use the following order:
 2. `CVF_BASELINE_ERRATA_MATRIX_2026-03-21.md`
 3. `CVF_BASELINE_ASSERTION_CLASSIFICATION_2026-03-21.md`
 4. `CVF_EA_CROSS_CHECK_RECONCILIATION_2026-03-21.md`
-5. only then audit each source folder in `CVF_Important`
+5. only then audit each source folder in the historical `CVF_Important` material (after `P3/CP1`, only via optional local recovery under `.private_reference/legacy/CVF_Important/`)
 
 This preserves the correct logic:
 

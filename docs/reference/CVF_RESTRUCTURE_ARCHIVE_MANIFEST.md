@@ -1,5 +1,7 @@
 # CVF_Restructure Archive Manifest
 
+Memory class: POINTER_RECORD
+
 > **Status:** ARCHIVED
 > **Date:** 2026-03-09
 > **Task:** Track II, Section 1.6 — Archive CVF_Restructure
@@ -9,7 +11,7 @@
 
 ## 1. Purpose
 
-This manifest documents the integration and archive status of all files in the `CVF_Restructure/` folder. The folder is `.gitignored` (private, not published) and serves as the historical origin of the ECOSYSTEM restructure.
+This manifest documents the integration and archive status of the former `CVF_Restructure/` root. The visible root was retired in `P3/CP1`; if a local recovery copy is retained, it now belongs under `.private_reference/legacy/CVF_Restructure/`. The material remains private, not published, and serves only as historical origin for the ECOSYSTEM restructure.
 
 ---
 
@@ -33,7 +35,7 @@ This manifest documents the integration and archive status of all files in the `
 
 ### 2.2 Independent Reviews (Referenced, not moved)
 
-These documents remain in `CVF_Restructure/Independent Review/` as audit records. They are referenced by the Unified Roadmap.
+These documents belonged to `CVF_Restructure/Independent Review/` and may remain only in a local recovery copy under `.private_reference/legacy/CVF_Restructure/Independent Review/`. They are referenced historically by the Unified Roadmap.
 
 | File | Role | Status |
 |---|---|---|
@@ -46,7 +48,7 @@ These documents remain in `CVF_Restructure/Independent Review/` as audit records
 
 ### 2.3 Archived as Historical Reference
 
-These files contain strategic vision material (Phase 3-5, 2028+) that is not yet actionable. They remain in `CVF_Restructure/` for future reference.
+These files contain strategic vision material (Phase 3-5, 2028+) that is not yet actionable. They may remain only in a local recovery copy under `.private_reference/legacy/CVF_Restructure/`.
 
 | Category | Files | Reason |
 |---|---|---|
@@ -62,17 +64,17 @@ These files contain strategic vision material (Phase 3-5, 2028+) that is not yet
 ## 3. .gitignore Status
 
 ```
-# CVF_Restructure (archived — integration complete, kept as historical reference)
-CVF_Restructure/
+# local recovery path (optional, non-canonical)
+.private_reference/legacy/CVF_Restructure/
 ```
 
-The folder remains `.gitignored`. It is NOT deleted — it serves as the historical origin and audit trail for the ECOSYSTEM restructure decision (ADR-021).
+The payload remains local-only if retained. It is no longer expected at the repository root and is not part of the canonical GitHub-visible structure.
 
 ---
 
 ## 4. Archive Decision Rules
 
-- **Do NOT delete** `CVF_Restructure/` — it contains audit records referenced by the roadmap
+- visible-root retirement is complete; do not recreate `CVF_Restructure/` at repository root
 - **Do NOT publish** — contains draft material and private strategy
 - **Future integration** — when Track III begins, revisit `CVF_ECOSYSTEM/` placeholder structure for implementation guidance
 - **Key innovations** from `CVF_AI Systems/Thong_tin/` (Intent Validation, NL Policy, LLM Risk Engine, Domain Guards) are captured in the Unified Roadmap Phase 2-5
@@ -89,5 +91,5 @@ The folder remains `.gitignored`. It is NOT deleted — it serves as the histori
 - [x] MVGS → `docs/reference/` ✅
 - [x] Build Prompt v0.1 → `docs/reference/` ✅
 - [x] Independent Reviews → Referenced in roadmap ✅
-- [x] .gitignore updated → Comment clarified ✅
+- [x] visible-root retirement completed → local recovery path clarified ✅
 - [x] Archive manifest created → This file ✅

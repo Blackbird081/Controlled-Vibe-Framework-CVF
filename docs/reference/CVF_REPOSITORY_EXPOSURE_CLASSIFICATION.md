@@ -35,8 +35,13 @@ The machine-readable source of truth is:
 Current summary:
 
 - `PUBLIC_DOCS_ONLY`: `docs`, `public`
-- `INTERNAL_ONLY`: `.agents`, `.claude`, `.githooks`, `.github`, `.vscode`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `CVF Edit`, `CVF_Important`, `CVF_Restructure`, `REVIEW`, `v1.0`, `v1.1`, `ECOSYSTEM`
+- `INTERNAL_ONLY`: `.agents`, `.claude`, `.githooks`, `.github`, `.vscode`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `REVIEW`, `v1.0`, `v1.1`, `ECOSYSTEM`
 - `PRIVATE_ENTERPRISE_ONLY`: `CVF_SKILL_LIBRARY`, `ui_governance_engine`
+
+Retired local-only reference roots:
+
+- `CVF Edit`, `CVF_Important`, and `CVF_Restructure` are no longer part of the visible root exposure map after `P3/CP1`
+- if retained locally, they belong under `.private_reference/legacy/` and remain non-canonical
 
 Root-file implication:
 

@@ -135,6 +135,14 @@ Canonical exposure authority:
 - require `GC-039` pre-public `P3` readiness verification before execution
 - preserve backwards path recovery and packaging integrity while relocating
 
+Current executed move set:
+
+- `P3 / CP1` — retire `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` from the visible repo root; optional local recovery may live under `.private_reference/legacy/`
+- governing packet chain:
+  - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation

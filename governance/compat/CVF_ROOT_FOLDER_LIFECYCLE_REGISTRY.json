@@ -36,6 +36,7 @@
     }
   ],
   "ignoredRoots": [
+    ".private_reference",
     ".git",
     "node_modules"
   ],
@@ -45,9 +46,6 @@
     { "path": ".githooks", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".github", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".vscode", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "CVF Edit", "lifecycleClass": "RETIRE_CANDIDATE", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "CVF_Important", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "CVF_Restructure", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
     { "path": "CVF_SKILL_LIBRARY", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
     {
       "path": "docs",

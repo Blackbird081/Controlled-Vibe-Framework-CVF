@@ -80,9 +80,19 @@ Current re-assessment boundary:
 - `Re-assessment-By: 2026-05-01`
 - or earlier if a concrete `P3` authorization proposal is drafted before that date
 
-## Required Next Step Before P3
+## Current P3 Execution Note
 
-Before any `P3` authorization:
+Executed move set:
+
+- `P3 / CP1` retired `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` from the visible repo root
+- governing packet chain:
+  - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
+
+## Required Next Step Before Any Further P3 Move
+
+Before any further `P3` authorization:
 
 - run `GC-019` structural audit/review for the proposed relocation wave
 - run `GC-039` pre-public `P3` readiness guard
@@ -94,6 +104,9 @@ Before any `P3` authorization:
 - `docs/reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
 - `docs/reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
 - `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
+- `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
+- `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
+- `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
 - `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`

@@ -20,7 +20,8 @@ This protocol was established through the canonical GC-027 multi-agent review ch
 Decision summary:
 
 - `GO` for `P0-P2` preparation baseline and `GC-039` readiness baseline
-- `HOLD` for `P3` physical relocation until a fresh `GC-019` packet is opened and `GC-039` passes for that concrete move set
+- `GO` for one bounded `P3/CP1` retired-reference-root cleanup wave
+- `HOLD` for any further `P3` physical relocation until a fresh `GC-019` packet is opened and `GC-039` passes for that concrete move set
 
 Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically governed by the artifacts above.
 
@@ -31,7 +32,7 @@ Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically govern
 | `P0` | `CLOSED` | Inventory and lifecycle/exposure registry creation |
 | `P1` | `CLOSED` | Root-level folder review and lifecycle posture |
 | `P2` | `CLOSED` | Extension lifecycle cleanup and exposure tagging |
-| `P3` | **BLOCKED** | Physical folder relocation — requires `GC-019` structural audit |
+| `P3` | `PER-MOVE ONLY` | `P3/CP1` retired-root wave is delivered; any further relocation still requires fresh `GC-019` + `GC-039` |
 | `P4` | **BLOCKED** | Public navigation + packaging + publication model selection |
 | `P5` | **BLOCKED** | Retirement and archive closure |
 
@@ -39,8 +40,15 @@ Machine-readable source of truth:
 
 - `governance/compat/CVF_PREPUBLIC_PHASE_GATE_REGISTRY.json`
 
-No agent may authorize P3 physical moves without a separate `GC-019` approval packet.
+No agent may authorize further P3 physical moves without a separate `GC-019` approval packet.
 `GC-039` is also required, but it verifies readiness; it does not replace `GC-019`.
+
+Executed move set already in canon:
+
+- `P3 / CP1` — retire `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` from the visible repo root while preserving optional local recovery under `.private_reference/legacy/`
+- audit/review chain:
+  - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
 
 ## Rule 2: Private by Default
 

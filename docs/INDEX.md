@@ -50,6 +50,7 @@ Từ nay về sau:
   - `reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md` khi file đó là governed packet, evidence doc, closure doc, handoff/tracker sync, hoặc artifact claim có source truth rõ ràng
   - `reference/CVF_QUALITY_ASSESSMENT_STANDARD.md` khi file đó là tranche, wave, hoặc architecture quality scorecard
   - `reference/CVF_MAINTAINABILITY_STANDARD.md` khi file đó đụng hotspot public barrel, barrel smoke test, shared batch helper, shared fixture builder, hoặc summary/evidence layering
+  - `reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md` khi task liên quan repository structure, folder cleanup, pre-public packaging, hoặc publication decisions (quy tắc bắt buộc đọc)
   - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md` khi file đó liên quan tới pre-public repository cleanup, root lifecycle posture, hoặc extension lifecycle posture
   - `reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md` khi file đó liên quan tới public/private publication posture, module export posture, hoặc selective public distribution
   - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md` khi cần cân nhắc mô hình public/private phù hợp trước khi quyết định publication
@@ -112,6 +113,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_PREPUBLIC_P3_READINESS.md`
 - `reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
 - `reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
+- `reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`
 - `reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
 - `reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
 - `reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
@@ -135,6 +137,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 
 If the current task is repository cleanup before public packaging:
 
+- `reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md` — **binding protocol: read first**
 - `roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
 - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`

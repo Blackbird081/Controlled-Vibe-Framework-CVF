@@ -98,6 +98,13 @@ Executed move set:
     - `docs/audits/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_AUDIT_2026-04-02.md`
     - `docs/reviews/CVF_GC019_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_REVIEW_2026-04-02.md`
     - `docs/baselines/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_DELTA_2026-04-02.md`
+- `P3 / CP3` audited `v1.0/` and `v1.1/` relocation readiness and explicitly kept both blocked from the next physical move set
+  - both roots remain `FROZEN_REFERENCE / INTERNAL_ONLY`
+  - both still have high active reference density across docs/onboarding and some tooling/runtime scope surfaces
+  - evidence chain:
+    - `docs/audits/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_AUDIT_2026-04-02.md`
+    - `docs/reviews/CVF_GC019_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_REVIEW_2026-04-02.md`
+    - `docs/baselines/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_DELTA_2026-04-02.md`
 
 ## Required Next Step Before Any Further P3 Move
 
@@ -109,6 +116,7 @@ Before any further `P3` authorization:
 - execute on a dedicated branch matching `restructuring/p3-*`
 - use a dedicated secondary worktree for that branch so relocation changes stay isolated from the canonical workspace
 - keep git worktree transport artifacts such as the `.git` pointer out of the governed root-file exposure inventory
+- do not include `v1.0/` or `v1.1/` in the next physical move set unless a later curation wave first reduces their live dependency footprint
 
 ## Related Artifacts
 
@@ -122,6 +130,9 @@ Before any further `P3` authorization:
 - `docs/audits/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_AUDIT_2026-04-02.md`
 - `docs/reviews/CVF_GC019_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_REVIEW_2026-04-02.md`
 - `docs/baselines/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_DELTA_2026-04-02.md`
+- `docs/audits/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_AUDIT_2026-04-02.md`
+- `docs/reviews/CVF_GC019_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_REVIEW_2026-04-02.md`
+- `docs/baselines/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_DELTA_2026-04-02.md`
 - `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`

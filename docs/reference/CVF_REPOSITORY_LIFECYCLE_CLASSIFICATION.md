@@ -30,6 +30,12 @@ Summary:
 - `MERGED_RETAINED`: `CVF_SKILL_LIBRARY`, `ECOSYSTEM`, `ui_governance_engine`
 - `FROZEN_REFERENCE`: `v1.0`, `v1.1`
 
+Current `P3` dependency readout for frozen roots:
+
+- `v1.0/` and `v1.1/` are intentionally frozen visible roots, not near-term retire/move targets
+- both still carry high live reference density across onboarding, architecture guidance, version navigation, and some tooling/runtime scope surfaces
+- `P3/CP3` therefore keeps both roots in place until a later curation wave materially reduces active dependency footprint
+
 Retired from the visible repository root in `P3/CP1`:
 
 - `CVF Edit`

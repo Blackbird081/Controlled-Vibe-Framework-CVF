@@ -38,6 +38,11 @@ Current summary:
 - `INTERNAL_ONLY`: `.agents`, `.githooks`, `.github`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `v1.0`, `v1.1`, `ECOSYSTEM`
 - `PRIVATE_ENTERPRISE_ONLY`: `CVF_SKILL_LIBRARY`, `ui_governance_engine`
 
+Near-term `P3` implication for frozen roots:
+
+- `v1.0/` and `v1.1/` remain `INTERNAL_ONLY` and are not considered ready for relocation into a public-navigation regrouping wave
+- before any later move discussion, CVF needs replacement navigation and dependency reduction across docs/onboarding/tooling surfaces that still point to these roots
+
 Retired local-only reference roots:
 
 - `CVF Edit`, `CVF_Important`, and `CVF_Restructure` are no longer part of the visible root exposure map after `P3/CP1`

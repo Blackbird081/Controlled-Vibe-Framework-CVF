@@ -55,6 +55,10 @@ Executed move set already in canon:
   - `docs/audits/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP2_VISIBLE_ROOT_TRUTH_RECONCILIATION_DELTA_2026-04-02.md`
+- `P3 / CP3` — audit `v1.0/` and `v1.1/` relocation readiness and keep both blocked from the near-term move set because live dependency density remains too high
+  - `docs/audits/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_DELTA_2026-04-02.md`
 
 ## Rule 2: Private by Default
 
@@ -140,6 +144,7 @@ All three run in:
 9. execute future `P3` physical relocation directly on `cvf-next`
 10. execute future `P3` physical relocation without a dedicated secondary git worktree
 11. treat `.claude/`, `.vscode/`, or a git-worktree `.git` pointer as if they were canonical visible roots to relocate or expose
+12. treat `v1.0/` or `v1.1/` as low-value legacy clutter just because they are frozen; current canon keeps them in place until a later curation wave lowers dependency density
 
 ## Rule 8: Re-assessment Timeline
 

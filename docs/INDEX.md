@@ -168,6 +168,13 @@ If the current task is repository cleanup before public packaging:
   - `reviews/CVF_GC019_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_REVIEW_2026-04-02.md`
   - `baselines/CVF_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_DELTA_2026-04-02.md`
 - current unresolved point: isolated `P3` execution path đã rõ, nhưng landing path hợp lệ về `cvf-next` chưa được canon hóa rõ ràng
+- `P3/CP5` strategy pivot đã approve:
+  - `audits/CVF_P3_CP5_FOUNDATION_ANCHOR_PRESERVATION_AUDIT_2026-04-02.md`
+  - `reviews/CVF_GC019_P3_CP5_FOUNDATION_ANCHOR_PRESERVATION_REVIEW_2026-04-02.md`
+  - `baselines/CVF_P3_CP5_FOUNDATION_ANCHOR_PRESERVATION_DELTA_2026-04-02.md`
+- practical posture mới:
+  - giữ `v1.0/` và `v1.1/` như visible frozen foundation anchors
+  - giảm lộ diện bằng navigation / docs mirror / packaging curation, không mặc định ép move vật lý
 
 ## Enterprise Audit Navigation
 

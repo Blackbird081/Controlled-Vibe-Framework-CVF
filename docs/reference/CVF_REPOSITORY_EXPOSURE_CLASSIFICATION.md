@@ -38,6 +38,11 @@ Current summary:
 - `INTERNAL_ONLY`: `.agents`, `.claude`, `.githooks`, `.github`, `.vscode`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `REVIEW`, `v1.0`, `v1.1`, `ECOSYSTEM`
 - `PRIVATE_ENTERPRISE_ONLY`: none at the visible repo root after `P3/CP2`
 
+Foundation-anchor implication:
+
+- `v1.0` and `v1.1` may remain visible inside the private monorepo without changing their exposure class
+- reducing public/noise risk for these roots is primarily a publication-navigation problem, not automatically a relocation problem
+
 Retired local-only reference roots:
 
 - `CVF Edit`, `CVF_Important`, and `CVF_Restructure` are no longer part of the visible root exposure map after `P3/CP1`

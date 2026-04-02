@@ -177,6 +177,18 @@ Canonical landing-path status:
   - current canon defines isolated `P3` execution clearly
   - current `GC-039` semantics do not yet provide an explicit machine-compatible landing path for bringing a delivered relocation branch back onto `cvf-next`
 
+Foundation-anchor strategy pivot:
+
+- `P3 / CP5` foundation-anchor preservation packet:
+  - `docs/audits/CVF_P3_CP5_FOUNDATION_ANCHOR_PRESERVATION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP5_FOUNDATION_ANCHOR_PRESERVATION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP5_FOUNDATION_ANCHOR_PRESERVATION_DELTA_2026-04-02.md`
+- result:
+  - `APPROVED STRATEGY PIVOT`
+- rationale summary:
+  - `v1.0/` and `v1.1/` are foundational frozen anchors with ongoing onboarding/reference value
+  - for these roots, safer reduction now comes from `P4` navigation/packaging/docs curation rather than additional `P3` physical relocation
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -204,6 +216,7 @@ Current execution boundary:
 - `P0-P2` may proceed now
 - `P3-P5` require later explicit authorization
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree
+- current preferred next lane is `P4` planning for curated navigation, docs mirror boundaries, and packaging, not additional forced relocation of `v1.0/` or `v1.1/`
 
 ## Non-Goals For `P0-P2`
 

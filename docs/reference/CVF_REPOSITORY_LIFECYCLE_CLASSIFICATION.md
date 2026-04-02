@@ -30,6 +30,12 @@ Summary:
 - `MERGED_RETAINED`: `ECOSYSTEM`
 - `FROZEN_REFERENCE`: `REVIEW`, `v1.0`, `v1.1`
 
+Foundation-anchor note:
+
+- `v1.0` and `v1.1` are not merely frozen leftovers
+- current planning treats them as visible foundation anchors because they still support onboarding, doctrine, and version-lineage comprehension
+- therefore, `FROZEN_REFERENCE` does not automatically imply “should be physically relocated next”
+
 Retired from the visible repository root in `P3/CP1`:
 
 - `CVF Edit`

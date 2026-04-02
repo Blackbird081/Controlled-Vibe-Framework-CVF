@@ -57,6 +57,12 @@ Executed move set already in canon:
   - `docs/reviews/CVF_GC019_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_DELTA_2026-04-02.md`
 
+Current planning interpretation after `P3/CP3` through `P3/CP5`:
+
+- no further low-risk physical `P3` move is currently preferred
+- `v1.0/` and `v1.1/` should be treated as visible frozen foundation anchors, not default relocation targets
+- for those roots, prefer `P4` navigation/packaging/docs-mirror curation over forced path movement
+
 ## Rule 2: Private by Default
 
 CVF publication posture is `private-by-default, selective-publication-only`.

@@ -264,6 +264,15 @@ If the current task is repository cleanup before public packaging:
   - whole shortlist implementation wave is now complete across all 3 candidates
   - cả 3 vẫn là `NEEDS_PACKAGING`, chưa có candidate nào được uplift thành `READY_FOR_EXPORT`
   - next safe lane là readiness reassessment packet riêng, không phải publication step
+- `P4/CP11` readiness re-assessment đã deliver:
+  - `audits/CVF_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_AUDIT_2026-04-03.md`
+  - `reviews/CVF_GC019_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_REVIEW_2026-04-03.md`
+  - `baselines/CVF_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_DELTA_2026-04-03.md`
+- re-assessment result:
+  - tất cả 3 candidates vẫn là `NEEDS_PACKAGING` — không có uplift
+  - gap inventory đã được ghi nhận chính thức: external-consumer docs, support obligations, license posture acknowledgment
+  - `CVF_GUARD_CONTRACT` có thêm blocker: `better-sqlite3` runtime dependency cần resolve trước khi uplift
+  - next safe lane: documentation-completion packet cho shortlist
 
 ## Enterprise Audit Navigation
 

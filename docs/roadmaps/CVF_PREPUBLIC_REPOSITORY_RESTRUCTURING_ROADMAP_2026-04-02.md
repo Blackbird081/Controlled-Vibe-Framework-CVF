@@ -312,6 +312,20 @@ P4 third candidate-scoped export implementation status:
   - this packet adds a root-barrel-first entry plus named subpaths for support layers and risk-model assets
   - the candidate still remains `NEEDS_PACKAGING`, so publication posture does not change
 
+P4 readiness re-assessment status:
+
+- `P4 / CP11` shortlist-readiness-re-assessment packet:
+  - `docs/audits/CVF_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_AUDIT_2026-04-03.md`
+  - `docs/reviews/CVF_GC019_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_REVIEW_2026-04-03.md`
+  - `docs/baselines/CVF_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_DELTA_2026-04-03.md`
+- result:
+  - `APPROVED — NO UPLIFT`
+- rationale summary:
+  - all three first-wave shortlist candidates remain `NEEDS_PACKAGING` after conservative re-assessment
+  - cross-cutting gaps identified: external-consumer documentation, support obligations, license posture acknowledgment
+  - `CVF_GUARD_CONTRACT` has additional blocker: `better-sqlite3` runtime dependency must be resolved before readiness uplift
+  - next safe packet is a documentation-completion packet for the shortlist
+
 P4 shortlist-wave consolidation status:
 
 - `P4 / CP10` shortlist-wave-consolidation packet:
@@ -383,6 +397,10 @@ Exit condition:
   - the shortlist implementation wave is complete for all three prioritized candidates
   - no candidate changed `exportReadiness`
   - future readiness-uplift discussion remains separately gated
+- current readiness re-assessment result:
+  - `CVF_v3.0_CORE_GIT_FOR_AI`: `NEEDS_PACKAGING` confirmed — gaps: external-consumer docs, support commitment, license posture acknowledgment
+  - `CVF_GUARD_CONTRACT`: `NEEDS_PACKAGING` confirmed — gaps: external-consumer docs, `better-sqlite3` runtime dependency resolution, support commitment, license posture acknowledgment
+  - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`: `NEEDS_PACKAGING` confirmed — gaps: external-consumer docs including capability level differentiation, support commitment, license posture acknowledgment
 - current docs-mirror result:
   - direct candidates:
     - root front-door files + learning-oriented docs zones
@@ -435,7 +453,8 @@ Current execution boundary:
 - `P4/CP7` core-git export boundary implementation is delivered
 - `P4/CP8` guard-contract export boundary tightening is delivered
 - `P4/CP9` runtime-adapter-hub export-map implementation is delivered
-- `P4/CP10` shortlist wave consolidation is delivered; the next preferred packet is a bounded readiness re-assessment packet before any readiness uplift discussion
+- `P4/CP10` shortlist wave consolidation is delivered
+- `P4/CP11` readiness re-assessment is delivered; all three candidates remain `NEEDS_PACKAGING`; next safe packet is a documentation-completion packet for the shortlist
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

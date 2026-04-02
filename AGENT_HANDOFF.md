@@ -4,7 +4,7 @@
 > Last push: `P4/CP10 shortlist wave consolidation delivered on isolated restructuring branch/worktree`
 > Remote tracking branch: `origin/restructuring/p3-cp2-retained-internal-root-relocation`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **P4 PLANNING + SHORTLIST WAVE CONSOLIDATION ON ISOLATED BRANCH** — retained/internal root relocation is complete; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` strategy pivot is active; `P4/CP1-CP10` planning/content-sync/export-boundary/consolidation chain is delivered; no further physical `P3` wave is approved; no export-readiness uplift is approved
+> State: **P4 READINESS RE-ASSESSMENT DELIVERED ON ISOLATED BRANCH** — retained/internal root relocation is complete; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` strategy pivot is active; `P4/CP1-CP11` planning/content-sync/export-boundary/consolidation/re-assessment chain is delivered; all three first-wave shortlist candidates remain `NEEDS_PACKAGING`; next safe packet is documentation-completion for the shortlist
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -75,24 +75,29 @@
 
 ## Immediate Next Action Required
 
-**This worktree is currently positioned for `P4/CP11`, not for a fresh whitepaper tranche.**
+**`P4/CP11` is delivered. This worktree is now positioned for `P4/CP12`, not for a fresh whitepaper tranche.**
 
 Current guidance:
 
-- **Next preferred packet**: bounded `P4/CP11` readiness re-assessment for the first-wave shortlist
-- **Primary question for `P4/CP11`**: does any first-wave candidate now have enough evidence to move beyond `NEEDS_PACKAGING`, or does repo truth still support no uplift for all three
-- **Minimum read set before drafting `P4/CP11`**:
-  - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
-  - `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
-  - `docs/reference/CVF_PREPUBLIC_CORE_GIT_EXPORT_SURFACE_2026-04-03.md`
-  - `docs/reference/CVF_PREPUBLIC_GUARD_CONTRACT_EXPORT_SURFACE_2026-04-03.md`
-  - `docs/reference/CVF_PREPUBLIC_RUNTIME_ADAPTER_HUB_EXPORT_SURFACE_2026-04-03.md`
-- **Default posture for `P4/CP11`**: conservative reassessment; if readiness evidence is ambiguous, keep `NEEDS_PACKAGING`
-- **Required output shape for `P4/CP11`**:
+- **Next preferred packet**: bounded `P4/CP12` documentation-completion packet for the first-wave shortlist
+- **Primary goal for `P4/CP12`**: close the external-consumer documentation gap for all three candidates; do not conflate documentation completion with readiness uplift
+- **Minimum read set before drafting `P4/CP12`**:
+  - `docs/baselines/CVF_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_DELTA_2026-04-03.md` (gap inventory)
+  - `docs/audits/CVF_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_AUDIT_2026-04-03.md` (per-candidate findings)
+  - `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/README.md`
+  - `EXTENSIONS/CVF_GUARD_CONTRACT/README.md`
+  - `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/README.md`
+- **Gap inventory from `P4/CP11`** (must be addressed before any future readiness uplift):
+  - all three: external-consumer documentation (install, usage, API reference)
+  - all three: explicit public support commitment
+  - all three: license posture acknowledgment (`CC-BY-NC-ND-4.0`) for publication context
+  - `CVF_GUARD_CONTRACT` only: `better-sqlite3` runtime dependency resolution before uplift
+- **Default posture for `P4/CP12`**: documentation rewrite only; do not change `exportReadiness`; do not change export maps
+- **Required output shape for `P4/CP12`**:
   - one bounded audit
   - one bounded review
   - one delta
-  - canon sync in `AGENT_HANDOFF.md`, `docs/INDEX.md`, roadmap, and phase registry if status changes or a new packet is delivered
+  - canon sync in `AGENT_HANDOFF.md`, `docs/INDEX.md`, roadmap, and phase registry
 - **Required verification before push**:
   - targeted governance guards relevant to changed files
   - full `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`
@@ -119,6 +124,7 @@ Current guidance:
 - **P4/CP8 guard-contract export boundary tightening approved**: `docs/audits/CVF_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_AUDIT_2026-04-03.md`, `docs/reviews/CVF_GC019_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_REVIEW_2026-04-03.md`, `docs/baselines/CVF_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_DELTA_2026-04-03.md`, and `docs/reference/CVF_PREPUBLIC_GUARD_CONTRACT_EXPORT_SURFACE_2026-04-03.md` narrow `CVF_GUARD_CONTRACT` to the approved first-wave guard surface while preserving `exportReadiness: NEEDS_PACKAGING`
 - **P4/CP9 runtime-adapter-hub export-map implementation approved**: `docs/audits/CVF_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_AUDIT_2026-04-03.md`, `docs/reviews/CVF_GC019_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_REVIEW_2026-04-03.md`, `docs/baselines/CVF_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_DELTA_2026-04-03.md`, and `docs/reference/CVF_PREPUBLIC_RUNTIME_ADAPTER_HUB_EXPORT_SURFACE_2026-04-03.md` formalize the canonical root entrypoint and explicit named export map for `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` while preserving `exportReadiness: NEEDS_PACKAGING`
 - **P4/CP10 shortlist wave consolidation approved**: `docs/audits/CVF_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_AUDIT_2026-04-03.md`, `docs/reviews/CVF_GC019_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_REVIEW_2026-04-03.md`, `docs/baselines/CVF_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_DELTA_2026-04-03.md`, and `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md` consolidate `P4/CP7-CP9` into one completed first-wave package-boundary lane while preserving `exportReadiness: NEEDS_PACKAGING` for all three shortlisted candidates
+- **P4/CP11 readiness re-assessment approved — no uplift**: `docs/audits/CVF_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_AUDIT_2026-04-03.md`, `docs/reviews/CVF_GC019_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_REVIEW_2026-04-03.md`, and `docs/baselines/CVF_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_DELTA_2026-04-03.md` confirm all three candidates remain `NEEDS_PACKAGING`; gap inventory documented: external-consumer docs, support obligations, license posture acknowledgment for all three; `CVF_GUARD_CONTRACT` has additional blocker (`better-sqlite3` runtime dependency resolution)
 - **Keep `v1.0/` and `v1.1/` blocked for later waves**: both remain materially denser than the retained/internal pair and still anchor active onboarding/reference surfaces
 - **Do not treat `REVIEW/` as the next relocation unit**: current repo truth shows it as a local placeholder rather than a tracked payload root
 - **Do not assume `P3/CP2` can merge back to `cvf-next` under current rules**: `GC-039` currently blocks relocation diffs on the canonical branch even after isolated execution; separate governance clarification is required
@@ -132,6 +138,7 @@ Current guidance:
 - **Do not misread `P4/CP8` as provider-runtime approval**: it narrows `CVF_GUARD_CONTRACT` to the selected helper/runtime surface only; provider adapters, enterprise subpaths, and audit persistence remain outside the approved first-wave package promise
 - **Do not misread `P4/CP9` as adapter-hub publication approval**: it adds a canonical root barrel and explicit named export map only; `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` still remains `NEEDS_PACKAGING`, and explicit capability boundaries remain part of the package story
 - **Do not misread `P4/CP10` as readiness uplift**: it consolidates first-wave completion only; any future `READY_FOR_EXPORT` discussion still requires a separate bounded reassessment packet
+- **Do not misread `P4/CP11` as a green light for publication**: it is a conservative re-assessment that found no uplift evidence; all three candidates remain `NEEDS_PACKAGING`; `P4/CP12` documentation-completion does not automatically authorize readiness uplift either
 - If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

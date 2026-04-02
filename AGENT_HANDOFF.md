@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-04-02
 
 > Branch: `restructuring/p3-cp2-retained-internal-root-relocation`
-> Last push: `P3/CP2 delivered on isolated restructuring branch/worktree; P3/CP3 re-assessment recorded as HOLD`
+> Last push: `P4/CP5 curated front-door navigation delivered on isolated restructuring branch/worktree`
 > Remote tracking branch: `origin/restructuring/p3-cp2-retained-internal-root-relocation`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **P3/CP2 DELIVERED ON ISOLATED BRANCH** — retained/internal root relocation complete; `P3/CP3` frozen-reference re-assessment concluded `HOLD`; no further physical `P3` wave approved
+> State: **P4 PLANNING + FRONT-DOOR SYNC ON ISOLATED BRANCH** — retained/internal root relocation is complete; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` strategy pivot is active; `P4/CP1-CP6` planning/content-sync chain is delivered; no further physical `P3` wave is approved
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -73,6 +73,7 @@ Current guidance:
 - **P4/CP3 export shortlist approved**: `docs/audits/CVF_P4_CP3_EXPORT_SHORTLIST_DEFINITION_AUDIT_2026-04-02.md`, `docs/reviews/CVF_GC019_P4_CP3_EXPORT_SHORTLIST_DEFINITION_REVIEW_2026-04-02.md`, `docs/baselines/CVF_P4_CP3_EXPORT_SHORTLIST_DEFINITION_DELTA_2026-04-02.md`, and `docs/reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md` prioritize `CVF_GUARD_CONTRACT`, `CVF_v3.0_CORE_GIT_FOR_AI`, and `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` as the first bounded export-planning wave
 - **P4/CP4 shortlist packaging boundary approved**: `docs/audits/CVF_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_AUDIT_2026-04-02.md`, `docs/reviews/CVF_GC019_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_REVIEW_2026-04-02.md`, `docs/baselines/CVF_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_DELTA_2026-04-02.md`, and `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md` define the first candidate-scoped packaging boundary for that shortlist while preserving `NEEDS_PACKAGING`
 - **P4/CP5 curated front-door navigation approved**: `docs/audits/CVF_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_AUDIT_2026-04-02.md`, `docs/reviews/CVF_GC019_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_REVIEW_2026-04-02.md`, `docs/baselines/CVF_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_DELTA_2026-04-02.md`, and `docs/reference/CVF_PREPUBLIC_CURATED_FRONT_DOOR_NAVIGATION_2026-04-02.md` define the current ring-based entry flow for root front-door files, guided docs paths, and private-core depth surfaces
+- **P4/CP6 root front-door content sync approved**: `docs/audits/CVF_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_AUDIT_2026-04-03.md`, `docs/reviews/CVF_GC019_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_REVIEW_2026-04-03.md`, and `docs/baselines/CVF_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_DELTA_2026-04-03.md` synchronize `README.md`, `START_HERE.md`, and `ARCHITECTURE.md` to the current curated front-door navigation map without widening public posture
 - **Keep `v1.0/` and `v1.1/` blocked for later waves**: both remain materially denser than the retained/internal pair and still anchor active onboarding/reference surfaces
 - **Do not treat `REVIEW/` as the next relocation unit**: current repo truth shows it as a local placeholder rather than a tracked payload root
 - **Do not assume `P3/CP2` can merge back to `cvf-next` under current rules**: `GC-039` currently blocks relocation diffs on the canonical branch even after isolated execution; separate governance clarification is required
@@ -81,6 +82,7 @@ Current guidance:
 - **Do not misread `P4/CP3` as export approval**: shortlist priority is not the same thing as `READY_FOR_EXPORT` or package release authorization
 - **Do not misread `P4/CP4` as packaging completion**: it defines the first package boundary only; explicit entrypoints, export maps, and release mechanics still require a later bounded implementation packet
 - **Do not misread `P4/CP5` as front-door rewrite completion**: it defines the navigation map only; actual `README.md` / `START_HERE.md` / `ARCHITECTURE.md` sync still requires a later bounded implementation packet
+- **Do not misread `P4/CP6` as docs-mirror execution**: it syncs the private root front door only; public mirror publication and mirror-safe link replacement remain separate future work
 - If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

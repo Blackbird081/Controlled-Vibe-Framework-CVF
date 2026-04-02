@@ -31,6 +31,16 @@
   </tr>
 </table>
 
+## Front-Door Path
+
+Use the root front door in this order:
+
+1. `README.md` for role-based triage and current posture
+2. `START_HERE.md` for the shortest audience-routed redirect
+3. `ARCHITECTURE.md` for the system-shape view before deeper internal references
+
+If you want the deeper private-core chain after that, use [Docs Index](docs/INDEX.md).
+
 ## What CVF Is
 
 CVF is a governance-first control plane for AI-assisted execution. Its active reference path is built around one canonical controlled loop:
@@ -60,10 +70,10 @@ Choose the shortest path for your role:
 
 | Role | Best Starting Point |
 |---|---|
-| New to CVF | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) |
-| Non-coder | [Getting Started](docs/GET_STARTED.md) and [Non-Coder Governed Packet](docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md) |
-| Coder / Integrator | [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md) and [Reference Governed Loop](docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md) |
-| Auditor / Reviewer | [Independent System Checkpoint](docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md) |
+| New reader / General evaluator | [Getting Started](docs/GET_STARTED.md) and [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) |
+| Builder / Integrator | [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md) and [Reference Governed Loop](docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md) |
+| Non-coder / Operator | [Getting Started](docs/GET_STARTED.md) and [Non-Coder Governed Packet](docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md) |
+| Architecture reader | [Architecture](ARCHITECTURE.md), [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md), and [Ecosystem Architecture](CVF_ECOSYSTEM_ARCHITECTURE.md) |
 
 ### Quick Run: Web UI
 
@@ -239,7 +249,15 @@ For future roadmap deepening:
 - continuation is not default-open after closure
 - substantive active-path expansion must carry an explicit scored packet before implementation
 
-For the current canonical chain, start from:
+For the current front-door chain, start from:
+
+- [README](README.md)
+- [Start Here](START_HERE.md)
+- [Architecture](ARCHITECTURE.md)
+- [Getting Started](docs/GET_STARTED.md)
+- [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md)
+
+For the deeper private-core chain, continue with:
 
 - [Docs Index](docs/INDEX.md)
 - [Reference README](docs/reference/README.md)

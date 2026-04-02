@@ -257,6 +257,19 @@ P4 curated front-door navigation status:
   - guided next-click paths are now explicit by audience rather than ad hoc
   - `v1.0/` and `v1.1/` remain visible, but are intentionally pushed below the first-click navigation ring
 
+P4 root front-door content sync status:
+
+- `P4 / CP6` root-front-door-content-sync packet:
+  - `docs/audits/CVF_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_AUDIT_2026-04-03.md`
+  - `docs/reviews/CVF_GC019_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_REVIEW_2026-04-03.md`
+  - `docs/baselines/CVF_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_DELTA_2026-04-03.md`
+- result:
+  - `APPROVED - CONTENT SYNC DELIVERED`
+- rationale summary:
+  - `README.md` now triages audiences before deeper evidence chains
+  - `START_HERE.md` now acts as a short front-door redirect aligned to ring-2 destinations
+  - `ARCHITECTURE.md` now routes toward architecture depth instead of sending readers directly into review-heavy surfaces
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -290,6 +303,13 @@ Exit condition:
     - `CVF_LITE.md`, `CVF_ECOSYSTEM_ARCHITECTURE.md`, `CHANGELOG.md`, `LICENSE`, and learning-zone docs
   - private-core depth ring:
     - evidence-heavy and governance-heavy surfaces remain reachable, but not first-click
+- current root front-door content result:
+  - `README.md`:
+    - now exposes an explicit front-door path before the deeper private-core chain
+  - `START_HERE.md`:
+    - now routes by audience and removes stale count / extension-first default links
+  - `ARCHITECTURE.md`:
+    - now keeps its follow-up links inside guided orientation, architecture depth, and status context
 - current docs-mirror result:
   - direct candidates:
     - root front-door files + learning-oriented docs zones
@@ -337,7 +357,8 @@ Current execution boundary:
 - `P4/CP2` docs-mirror boundary is defined
 - `P4/CP3` export shortlist is defined
 - `P4/CP4` shortlist packaging boundary is defined
-- `P4/CP5` curated front-door navigation is defined; next preferred packet is a bounded front-door content sync packet or a later bounded implementation packet for one shortlisted candidate
+- `P4/CP5` curated front-door navigation is defined
+- `P4/CP6` root front-door content sync is delivered; next preferred packet is a later bounded implementation packet for one shortlisted export candidate
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

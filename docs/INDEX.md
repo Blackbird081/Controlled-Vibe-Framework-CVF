@@ -220,6 +220,14 @@ If the current task is repository cleanup before public packaging:
   - Ring 1 root entrypoints: `README.md`, `START_HERE.md`, `ARCHITECTURE.md`
   - Ring 2 guided docs paths are audience-based, không để reader mới rơi thẳng vào evidence-heavy zones
   - `v1.0/` và `v1.1/` vẫn visible nhưng được đẩy xuống intentional depth navigation, không còn là first-click emphasis
+- `P4/CP6` root front-door content sync đã deliver:
+  - `audits/CVF_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_AUDIT_2026-04-03.md`
+  - `reviews/CVF_GC019_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_REVIEW_2026-04-03.md`
+  - `baselines/CVF_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_DELTA_2026-04-03.md`
+- current root front-door content result:
+  - `README.md` now separates first-click navigation from the deeper private-core chain
+  - `START_HERE.md` is now a short audience-routed redirect instead of an outdated extension-first stub
+  - `ARCHITECTURE.md` now routes readers toward architecture depth before review-heavy surfaces
 
 ## Enterprise Audit Navigation
 

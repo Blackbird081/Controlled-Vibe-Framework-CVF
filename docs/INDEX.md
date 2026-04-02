@@ -201,6 +201,16 @@ If the current task is repository cleanup before public packaging:
   - first bounded shortlist: `CVF_GUARD_CONTRACT`, `CVF_v3.0_CORE_GIT_FOR_AI`, `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
   - broad foundations và `CVF_PLANE_FACADES` chưa vào first wave
   - shortlist vẫn chưa phải publication approval
+- `P4/CP4` shortlist packaging boundary đã define:
+  - `audits/CVF_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_AUDIT_2026-04-02.md`
+  - `reviews/CVF_GC019_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_REVIEW_2026-04-02.md`
+  - `baselines/CVF_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_DELTA_2026-04-02.md`
+  - `reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
+- current export-packaging posture:
+  - `CVF_GUARD_CONTRACT` boundary centers on root guard barrel, typed contracts, engine, explicit guards, and selected runtime helpers
+  - `CVF_v3.0_CORE_GIT_FOR_AI` boundary centers on the root barrel plus `ai_commit`, `artifact_staging`, `artifact_ledger`, `process_model`, and `skill_lifecycle`
+  - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` boundary centers on `contracts`, `adapters`, `policy`, `explainability`, and `risk_models`
+  - cả ba vẫn là `NEEDS_PACKAGING`, chưa phải package publication
 
 ## Enterprise Audit Navigation
 

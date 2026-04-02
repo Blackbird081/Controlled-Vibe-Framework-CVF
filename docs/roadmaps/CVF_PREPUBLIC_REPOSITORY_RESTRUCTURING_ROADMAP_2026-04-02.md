@@ -186,6 +186,18 @@ Current intent for `P3`:
 - treat `P3/CP1` as the only delivered physical move set required for the present lane
 - only reopen root-level movement if a later preservation-safe case is stronger than the churn and disclosure risk
 
+Re-assessed next-candidate status:
+
+- `P3 / CP3` frozen-reference re-assessment packet:
+  - `docs/audits/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_DELTA_2026-04-02.md`
+- result:
+  - `HOLD`
+- rationale summary:
+  - `REVIEW/` is currently a local placeholder rather than a tracked relocation unit
+  - `v1.0/` and `v1.1/` remain too documentation-dense for the current slow-and-safe posture
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation

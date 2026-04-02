@@ -107,7 +107,6 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`
 - `reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
 - `reference/CVF_MAINTAINABILITY_STANDARD.md`
-- `reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`
 - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
@@ -140,7 +139,6 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 If the current task is repository cleanup before public packaging:
 
 - `reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md` — **binding protocol: read first**
-- `reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` — extracted orientation layer for explaining repo structure without opening internal-only roots
 - `roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
 - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
@@ -155,6 +153,16 @@ If the current task is repository cleanup before public packaging:
 - `reference/CVF_REFERENCE_GOVERNED_LOOP.md`
 - `reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
 - `../governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md` — rule bắt buộc cập nhật baseline sau mỗi fix/update
+- delivered move sets:
+  - `P3/CP1` retired-reference-root cleanup
+  - `P3/CP2` retained-internal-root relocation
+- `CVF_SKILL_LIBRARY/` và `ui_governance_engine/` không còn ở visible repo root; chúng đã được relocate sang `../ECOSYSTEM/reference-roots/retained-internal/`
+- `P3/CP3` re-assessment hiện đang `HOLD`; xem:
+  - `audits/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_AUDIT_2026-04-02.md`
+  - `reviews/CVF_GC019_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_REVIEW_2026-04-02.md`
+  - `baselines/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_DELTA_2026-04-02.md`
+- `v1.0/` và `v1.1/` vẫn blocked vì reference density và onboarding coupling còn cao
+- `REVIEW/` hiện không được coi là next tracked relocation unit
 
 ## Enterprise Audit Navigation
 
@@ -306,6 +314,8 @@ Nếu cần đọc bộ tài liệu chốt cuối cho restructuring thay vì đ�
 - `baselines/CVF_W1_T1_CONTROL_PLANE_PLANNING_DELTA_2026-03-21.md`
 
 `CVF_Important/`, `CVF_Restructure/`, và `CVF Edit/` đã được retire khỏi visible repo root ở `P3/CP1`. Nếu local recovery copy còn tồn tại thì nó chỉ thuộc `.private_reference/legacy/`, không còn là canonical storage path.
+
+`CVF_SKILL_LIBRARY/` và `ui_governance_engine/` đã được relocate khỏi visible repo root ở `P3/CP2` sang `../ECOSYSTEM/reference-roots/retained-internal/`. Chúng vẫn là retained/internal lineage, không phải visible canonical roots.
 
 ## Conformance Navigation
 

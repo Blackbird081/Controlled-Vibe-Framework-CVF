@@ -1,10 +1,10 @@
-import { detectPII } from "./pii.detector"
-import { detectSecrets } from "./secret.detector"
-import { precheckInjection } from "./injection.precheck"
-import { VaultStore } from "./vault.store"
-import { rehydrateResponse } from "./rehydrator"
-import { logSecurityEvent } from "./security.audit.log"
-import { defaultEdgeSecurityConfig } from "./edge.config"
+import { detectPII } from "./pii.detector.js"
+import { detectSecrets } from "./secret.detector.js"
+import { precheckInjection } from "./injection.precheck.js"
+import { VaultStore } from "./vault.store.js"
+import { rehydrateResponse } from "./rehydrator.js"
+import { logSecurityEvent } from "./security.audit.log.js"
+import { defaultEdgeSecurityConfig } from "./edge.config.js"
 
 export class SecurityProxy {
   private vault = new VaultStore()

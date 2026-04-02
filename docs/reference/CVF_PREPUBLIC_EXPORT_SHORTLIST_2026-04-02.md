@@ -77,9 +77,11 @@ Reason:
 - do not change `exportReadiness` without a separate packet
 - do not use the shortlist to imply that the private monorepo is becoming public
 - keep docs-mirror planning and export-packaging planning as separate lanes
+- use `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md` when later export-planning work needs the current candidate-scoped packaging boundary
 
 ## Related Artifacts
 
+- `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 - `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`
 - `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`

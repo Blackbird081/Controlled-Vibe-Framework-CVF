@@ -116,6 +116,7 @@ Strengths:
 - allows controlled adoption of useful CVF building blocks
 - aligns well with the `PUBLIC_EXPORT_CANDIDATE` exposure class
 - can be staged through a very small first-wave shortlist instead of treating all candidates as equally near-term
+- can now be discussed through a candidate-scoped packaging-boundary reference instead of a vague export backlog
 
 Weaknesses:
 
@@ -265,6 +266,10 @@ Most likely best first publication move:
 Current first-wave export shortlist reference:
 
 - `docs/reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md`
+
+Current shortlist packaging-boundary reference:
+
+- `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
 
 ## Re-Assessment Boundary
 

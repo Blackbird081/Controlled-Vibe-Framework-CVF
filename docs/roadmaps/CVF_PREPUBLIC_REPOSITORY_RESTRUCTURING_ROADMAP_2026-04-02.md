@@ -229,6 +229,20 @@ P4 export-shortlist status:
     - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
   - broader foundations and concept-only facades stay out of the first wave
 
+P4 shortlist packaging-boundary status:
+
+- `P4 / CP4` shortlist-packaging-boundary packet:
+  - `docs/audits/CVF_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_DELTA_2026-04-02.md`
+  - `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
+- result:
+  - `APPROVED - PACKAGING BOUNDARY DEFINED`
+- rationale summary:
+  - `CVF_GUARD_CONTRACT` now has a bounded first-wave package story centered on the guard barrel, types, engine, explicit guards, and selected runtime helpers
+  - `CVF_v3.0_CORE_GIT_FOR_AI` now has a bounded first-wave package story centered on the root barrel plus the primitive families it already groups
+  - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` is confirmed as shortlist-worthy but still needs canonical entrypoint/export-map work before any later implementation packet
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -249,6 +263,7 @@ Exit condition:
   - curated front-door navigation map
   - docs mirror boundary definition
   - selective public export candidate shortlist
+  - shortlist packaging-boundary definition
   - explicit private-core-visible foundation-anchor policy
 - current docs-mirror result:
   - direct candidates:
@@ -266,6 +281,16 @@ Exit condition:
     - broad plane foundations
     - medium candidates needing more boundary work
     - `CVF_PLANE_FACADES` because current truth is `CONCEPT_ONLY`
+- current shortlist packaging-boundary result:
+  - `CVF_GUARD_CONTRACT`:
+    - boundary is centered on root barrel, types, engine, explicit guards, and selected runtime helpers
+    - provider-specific runtime integrations and SQLite persistence remain packaging-cautioned
+  - `CVF_v3.0_CORE_GIT_FOR_AI`:
+    - boundary is centered on root barrel plus `ai_commit`, `artifact_staging`, `artifact_ledger`, `process_model`, and `skill_lifecycle`
+    - explicit export-map formalization remains future work
+  - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`:
+    - boundary is centered on `contracts`, `adapters`, `policy`, `explainability`, and `risk_models`
+    - canonical root entrypoint/export-map work remains future work
 - hard non-goals:
   - no public mirror push
   - no package publication
@@ -285,7 +310,8 @@ Current execution boundary:
 - `P3` future physical relocation still requires later explicit authorization
 - `P4/CP1` planning-only work may proceed now
 - `P4/CP2` docs-mirror boundary is defined
-- `P4/CP3` export shortlist is defined; next preferred packet is packaging-boundary planning for that shortlist
+- `P4/CP3` export shortlist is defined
+- `P4/CP4` shortlist packaging boundary is defined; next preferred packet is curated front-door navigation definition or a later bounded implementation packet for one shortlisted candidate
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

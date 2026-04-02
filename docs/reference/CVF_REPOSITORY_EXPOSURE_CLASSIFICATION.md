@@ -79,6 +79,7 @@ Export-readiness rule:
 - each candidate must also declare `exportReadiness` before any real export packaging wave proceeds
 - current export-readiness truth is part of `GC-039` pre-public `P3` readiness
 - current first-wave prioritization truth is tracked separately in `docs/reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md`
+- current shortlist packaging-boundary truth is tracked separately in `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
 
 ## Public GitHub Implication
 

@@ -80,6 +80,9 @@ Current `P4` opening status:
 - `P4 / CP3` now defines the first bounded export shortlist:
   - use `docs/reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md`
   - treat shortlist membership as planning priority, not export approval
+- `P4 / CP4` now defines the first shortlist packaging boundary:
+  - use `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
+  - treat the boundary as planning scope, not packaging completion or release approval
 
 ## Rule 2: Private by Default
 
@@ -106,6 +109,10 @@ Current docs-mirror boundary source:
 Current export-shortlist source:
 
 - `docs/reference/CVF_PREPUBLIC_EXPORT_SHORTLIST_2026-04-02.md`
+
+Current shortlist packaging-boundary source:
+
+- `docs/reference/CVF_PREPUBLIC_SHORTLIST_PACKAGING_BOUNDARY_2026-04-02.md`
 
 ## Rule 3: Classification Must Be Respected
 
@@ -136,6 +143,7 @@ Extensions tagged `PUBLIC_EXPORT_CANDIDATE` have a secondary `exportReadiness` f
 | `CONCEPT_ONLY` | Thin facade or concept-level only | `1` |
 
 No extension is currently `READY_FOR_EXPORT`. The tag `PUBLIC_EXPORT_CANDIDATE` means "possible candidate later", not "ship now".
+The shortlist packaging-boundary reference narrows future packaging scope, but it still does not upgrade readiness by itself.
 
 ## Rule 5: PUBLIC_DOCS_ONLY Requires Curation
 

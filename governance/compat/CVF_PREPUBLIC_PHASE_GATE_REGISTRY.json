@@ -44,6 +44,40 @@
         "docs/reference/CVF_PREPUBLIC_P3_READINESS.md",
         "governance/compat/CVF_EXTENSION_LIFECYCLE_REGISTRY.json"
       ]
+    },
+    {
+      "phase": "P3",
+      "status": "OPEN",
+      "lastReviewedAt": "2026-04-02",
+      "evidence": [
+        "docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md",
+        "docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md",
+        "docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md",
+        "docs/audits/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_AUDIT_2026-04-02.md",
+        "docs/audits/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_AUDIT_2026-04-02.md",
+        "docs/audits/CVF_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_AUDIT_2026-04-02.md",
+        "docs/audits/CVF_P3_CP5_FOUNDATION_ANCHOR_PRESERVATION_AUDIT_2026-04-02.md"
+      ]
+    },
+    {
+      "phase": "P4",
+      "status": "OPEN",
+      "lastReviewedAt": "2026-04-02",
+      "evidence": [
+        "docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md",
+        "docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md",
+        "docs/audits/CVF_P4_CP1_CURATED_FRONT_DOOR_PLANNING_AUDIT_2026-04-02.md",
+        "docs/reviews/CVF_GC019_P4_CP1_CURATED_FRONT_DOOR_PLANNING_REVIEW_2026-04-02.md"
+      ]
+    },
+    {
+      "phase": "P5",
+      "status": "BLOCKED",
+      "lastReviewedAt": "2026-04-02",
+      "evidence": [
+        "docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md",
+        "docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md"
+      ]
     }
   ]
 }

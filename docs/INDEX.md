@@ -175,6 +175,14 @@ If the current task is repository cleanup before public packaging:
 - practical posture mới:
   - giữ `v1.0/` và `v1.1/` như visible frozen foundation anchors
   - giảm lộ diện bằng navigation / docs mirror / packaging curation, không mặc định ép move vật lý
+- `P4/CP1` planning lane đã open:
+  - `audits/CVF_P4_CP1_CURATED_FRONT_DOOR_PLANNING_AUDIT_2026-04-02.md`
+  - `reviews/CVF_GC019_P4_CP1_CURATED_FRONT_DOOR_PLANNING_REVIEW_2026-04-02.md`
+  - `baselines/CVF_P4_CP1_CURATED_FRONT_DOOR_PLANNING_DELTA_2026-04-02.md`
+- practical next step mới:
+  - planning-only cho curated front-door navigation
+  - define docs mirror boundary + selective export candidates
+  - chưa authorize public release, public mirror, hoặc move vật lý mới
 
 ## Enterprise Audit Navigation
 

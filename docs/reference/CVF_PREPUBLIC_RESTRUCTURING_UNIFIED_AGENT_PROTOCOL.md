@@ -23,8 +23,6 @@ Decision summary:
 - `GO` for one bounded `P3/CP1` retired-reference-root cleanup wave
 - `HOLD` for any further `P3` physical relocation until a fresh `GC-019` packet is opened and `GC-039` passes for that concrete move set
 - `HOLD` for any further `P3` physical relocation unless it also runs on a dedicated `restructuring/p3-*` branch and secondary git worktree
-- `HOLD` for relocating `v1.0/` or `v1.1/`; current operator posture is to keep those dense frozen-reference roots in place
-- `HOLD` for relocating `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, or `ui_governance_engine/`; current operator posture is to finish this lane through extracted orientation and curation instead of more root churn
 
 Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically governed by the artifacts above.
 
@@ -35,8 +33,8 @@ Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically govern
 | `P0` | `CLOSED` | Inventory and lifecycle/exposure registry creation |
 | `P1` | `CLOSED` | Root-level folder review and lifecycle posture |
 | `P2` | `CLOSED` | Extension lifecycle cleanup and exposure tagging |
-| `P3` | `PER-MOVE ONLY` | `P3/CP1` retired-root wave is delivered; default posture is no further root-level movement unless a preservation override wins |
-| `P4` | **NARROWED** | Public navigation + packaging now emphasizes extracted orientation and curation over root relocation |
+| `P3` | `PER-MOVE ONLY` | `P3/CP1` retired-root wave and `P3/CP2` retained-internal wave are delivered; any further relocation still requires fresh `GC-019` + `GC-039` |
+| `P4` | `OPEN (PLANNING ONLY)` | Curated front-door navigation, docs-mirror boundaries, export-boundary definition, and publication-boundary planning |
 | `P5` | **BLOCKED** | Retirement and archive closure |
 
 Machine-readable source of truth:
@@ -53,25 +51,29 @@ Executed move set already in canon:
 - audit/review chain:
   - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
-- explicit freeze-in-place exclusions:
-  - `v1.0/`
-  - `v1.1/`
-  - `REVIEW/`
-  - `ECOSYSTEM/`
-  - `CVF_SKILL_LIBRARY/`
-  - `ui_governance_engine/`
-
-Lane-closure intent:
-
-- do not open another broad root-level relocation wave just to improve appearances
-- close the restructuring lane after sufficient extracted orientation and curated entrypoints exist
-- return primary focus to master architecture completion
+- `P3 / CP2` — relocate `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` into `ECOSYSTEM/reference-roots/retained-internal/` on a dedicated `restructuring/p3-*` branch and secondary git worktree
+- audit/review chain:
+  - `docs/audits/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_DELTA_2026-04-02.md`
 
 Current planning interpretation after `P3/CP3` through `P3/CP5`:
 
 - no further low-risk physical `P3` move is currently preferred
 - `v1.0/` and `v1.1/` should be treated as visible frozen foundation anchors, not default relocation targets
 - for those roots, prefer `P4` navigation/packaging/docs-mirror curation over forced path movement
+
+Current `P4` opening status:
+
+- `P4 / CP1` is approved as a planning-only packet
+- it authorizes:
+  - curated front-door navigation planning
+  - docs-mirror boundary definition
+  - selective export-boundary planning
+- it does not authorize:
+  - public mirror publication
+  - package publication
+  - new filesystem relocation
 
 ## Rule 2: Private by Default
 
@@ -130,11 +132,6 @@ Roots tagged `PUBLIC_DOCS_ONLY` are **not** mirror-safe as-is:
 
 Before any public docs mirror is created, a content audit pass must confirm that only appropriate material goes into the mirror.
 
-For dense frozen-reference roots:
-
-- do not mirror `v1.0/` or `v1.1/` directly as public-orientation material
-- use extracted docs such as `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`
-
 ## Rule 6: Governance Enforcement Chain
 
 Three controls enforce restructuring governance:
@@ -162,8 +159,6 @@ All three run in:
 8. decide publication model without reading `CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 9. execute future `P3` physical relocation directly on `cvf-next`
 10. execute future `P3` physical relocation without a dedicated secondary git worktree
-11. propose relocation of `v1.0/` or `v1.1/` under the current posture; these roots are freeze-in-place unless a separate preservation override is approved
-12. propose relocation of `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, or `ui_governance_engine/` under the current posture; these roots are also freeze-in-place unless separately reopened
 
 ## Rule 8: Re-assessment Timeline
 

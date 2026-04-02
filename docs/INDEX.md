@@ -228,6 +228,15 @@ If the current task is repository cleanup before public packaging:
   - `README.md` now separates first-click navigation from the deeper private-core chain
   - `START_HERE.md` is now a short audience-routed redirect instead of an outdated extension-first stub
   - `ARCHITECTURE.md` now routes readers toward architecture depth before review-heavy surfaces
+- `P4/CP7` first shortlist implementation packet đã deliver:
+  - `audits/CVF_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_AUDIT_2026-04-03.md`
+  - `reviews/CVF_GC019_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_REVIEW_2026-04-03.md`
+  - `baselines/CVF_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_DELTA_2026-04-03.md`
+  - `reference/CVF_PREPUBLIC_CORE_GIT_EXPORT_SURFACE_2026-04-03.md`
+- current export implementation result:
+  - `CVF_v3.0_CORE_GIT_FOR_AI` now has explicit `main`, `types`, root-only `exports`, and bounded `files`
+  - package-local README now names the canonical root entry and the five in-scope primitive families
+  - candidate still remains `NEEDS_PACKAGING`; packet này chưa phải publication approval
 
 ## Enterprise Audit Navigation
 

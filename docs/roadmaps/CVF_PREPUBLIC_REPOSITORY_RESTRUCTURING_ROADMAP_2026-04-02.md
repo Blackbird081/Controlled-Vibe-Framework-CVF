@@ -270,6 +270,20 @@ P4 root front-door content sync status:
   - `START_HERE.md` now acts as a short front-door redirect aligned to ring-2 destinations
   - `ARCHITECTURE.md` now routes toward architecture depth instead of sending readers directly into review-heavy surfaces
 
+P4 candidate-scoped export implementation status:
+
+- `P4 / CP7` core-git-export-boundary-implementation packet:
+  - `docs/audits/CVF_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_AUDIT_2026-04-03.md`
+  - `docs/reviews/CVF_GC019_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_REVIEW_2026-04-03.md`
+  - `docs/baselines/CVF_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_DELTA_2026-04-03.md`
+  - `docs/reference/CVF_PREPUBLIC_CORE_GIT_EXPORT_SURFACE_2026-04-03.md`
+- result:
+  - `APPROVED - FIRST CANDIDATE IMPLEMENTATION DELIVERED`
+- rationale summary:
+  - `CVF_v3.0_CORE_GIT_FOR_AI` is the lowest-blast-radius shortlist member for the first implementation packet
+  - the package now declares explicit root-barrel-first manifest metadata instead of leaving the public surface implicit
+  - the candidate still remains `NEEDS_PACKAGING`, so this packet improves package clarity without authorizing publication
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -310,6 +324,11 @@ Exit condition:
     - now routes by audience and removes stale count / extension-first default links
   - `ARCHITECTURE.md`:
     - now keeps its follow-up links inside guided orientation, architecture depth, and status context
+- current candidate-scoped export implementation result:
+  - `CVF_v3.0_CORE_GIT_FOR_AI`:
+    - now has explicit `main`, `types`, root-only `exports`, and a bounded `files` allowlist
+    - now has a package-local README that documents the root entry and five primitive families
+    - still remains `NEEDS_PACKAGING`; no readiness uplift or package release is implied
 - current docs-mirror result:
   - direct candidates:
     - root front-door files + learning-oriented docs zones
@@ -358,7 +377,8 @@ Current execution boundary:
 - `P4/CP3` export shortlist is defined
 - `P4/CP4` shortlist packaging boundary is defined
 - `P4/CP5` curated front-door navigation is defined
-- `P4/CP6` root front-door content sync is delivered; next preferred packet is a later bounded implementation packet for one shortlisted export candidate
+- `P4/CP6` root front-door content sync is delivered
+- `P4/CP7` core-git export boundary implementation is delivered; next preferred packet is another single-candidate implementation packet, likely `CVF_GUARD_CONTRACT` root-surface tightening under the same bounded export lane
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

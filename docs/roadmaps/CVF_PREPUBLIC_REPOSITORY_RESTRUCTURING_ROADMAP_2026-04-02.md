@@ -298,6 +298,20 @@ P4 second candidate-scoped export implementation status:
   - this packet narrows the export map to the selected first-wave guard surface only
   - the candidate still remains `NEEDS_PACKAGING`, so publication posture does not change
 
+P4 third candidate-scoped export implementation status:
+
+- `P4 / CP9` runtime-adapter-hub-export-map-implementation packet:
+  - `docs/audits/CVF_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_AUDIT_2026-04-03.md`
+  - `docs/reviews/CVF_GC019_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_REVIEW_2026-04-03.md`
+  - `docs/baselines/CVF_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_DELTA_2026-04-03.md`
+  - `docs/reference/CVF_PREPUBLIC_RUNTIME_ADAPTER_HUB_EXPORT_SURFACE_2026-04-03.md`
+- result:
+  - `APPROVED - THIRD CANDIDATE IMPLEMENTATION DELIVERED`
+- rationale summary:
+  - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` was the last shortlist candidate still missing a canonical root barrel and explicit export map
+  - this packet adds a root-barrel-first entry plus named subpaths for support layers and risk-model assets
+  - the candidate still remains `NEEDS_PACKAGING`, so publication posture does not change
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -347,6 +361,10 @@ Exit condition:
     - now exposes `types`, `engine`, `guards/*`, and only the two selected runtime helper subpaths
     - no longer exposes wildcard runtime or `enterprise` subpaths at the manifest level
     - still remains `NEEDS_PACKAGING`; no provider-runtime or enterprise publication is implied
+  - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`:
+    - now has a canonical root barrel and explicit named export map
+    - names all four shipped JSON risk-model assets explicitly instead of hiding them behind a wildcard
+    - still remains `NEEDS_PACKAGING`; no readiness uplift or package release is implied
 - current docs-mirror result:
   - direct candidates:
     - root front-door files + learning-oriented docs zones
@@ -397,7 +415,8 @@ Current execution boundary:
 - `P4/CP5` curated front-door navigation is defined
 - `P4/CP6` root front-door content sync is delivered
 - `P4/CP7` core-git export boundary implementation is delivered
-- `P4/CP8` guard-contract export boundary tightening is delivered; next preferred packet is a final single-candidate implementation packet for `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`, focused on canonical root entrypoint/export-map formalization
+- `P4/CP8` guard-contract export boundary tightening is delivered
+- `P4/CP9` runtime-adapter-hub export-map implementation is delivered; the first shortlist implementation wave is now complete, and the next preferred packet is a consolidation/re-assessment packet before any readiness uplift discussion
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

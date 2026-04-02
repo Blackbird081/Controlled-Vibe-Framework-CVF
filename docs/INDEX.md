@@ -246,6 +246,15 @@ If the current task is repository cleanup before public packaging:
   - `CVF_GUARD_CONTRACT` no longer publishes wildcard runtime exports or the `enterprise` subpath
   - package surface now matches root barrel + `types` + `engine` + `guards/*` + selected runtime helpers only
   - candidate still remains `NEEDS_PACKAGING`; packet này chưa phải provider/runtime publication approval
+- `P4/CP9` third shortlist implementation packet đã deliver:
+  - `audits/CVF_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_AUDIT_2026-04-03.md`
+  - `reviews/CVF_GC019_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_REVIEW_2026-04-03.md`
+  - `baselines/CVF_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_DELTA_2026-04-03.md`
+  - `reference/CVF_PREPUBLIC_RUNTIME_ADAPTER_HUB_EXPORT_SURFACE_2026-04-03.md`
+- current adapter-hub implementation result:
+  - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` now has a canonical root `index.ts` barrel
+  - package manifest now exposes named subpaths for `contracts`, `adapters`, `policy`, `explainability`, and four explicit risk-model assets
+  - candidate still remains `NEEDS_PACKAGING`; packet này chưa phải publication approval
 
 ## Enterprise Audit Navigation
 

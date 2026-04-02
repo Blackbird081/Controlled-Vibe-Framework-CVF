@@ -1,10 +1,10 @@
 # CVF Agent Handoff — 2026-04-03
 
 > Branch: `restructuring/p3-cp2-retained-internal-root-relocation`
-> Last push: `P4/CP8 guard-contract export boundary tightening delivered on isolated restructuring branch/worktree`
+> Last push: `P4/CP9 runtime-adapter-hub export-map implementation delivered on isolated restructuring branch/worktree`
 > Remote tracking branch: `origin/restructuring/p3-cp2-retained-internal-root-relocation`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **P4 PLANNING + TARGETED EXPORT IMPLEMENTATION ON ISOLATED BRANCH** — retained/internal root relocation is complete; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` strategy pivot is active; `P4/CP1-CP8` planning/content-sync/export-boundary chain is delivered; no further physical `P3` wave is approved; no export-readiness uplift is approved
+> State: **P4 PLANNING + TARGETED EXPORT IMPLEMENTATION ON ISOLATED BRANCH** — retained/internal root relocation is complete; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` strategy pivot is active; `P4/CP1-CP9` planning/content-sync/export-boundary chain is delivered; no further physical `P3` wave is approved; no export-readiness uplift is approved
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -76,6 +76,7 @@ Current guidance:
 - **P4/CP6 root front-door content sync approved**: `docs/audits/CVF_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_AUDIT_2026-04-03.md`, `docs/reviews/CVF_GC019_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_REVIEW_2026-04-03.md`, and `docs/baselines/CVF_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_DELTA_2026-04-03.md` synchronize `README.md`, `START_HERE.md`, and `ARCHITECTURE.md` to the current curated front-door navigation map without widening public posture
 - **P4/CP7 core-git export boundary implementation approved**: `docs/audits/CVF_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_AUDIT_2026-04-03.md`, `docs/reviews/CVF_GC019_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_REVIEW_2026-04-03.md`, `docs/baselines/CVF_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_DELTA_2026-04-03.md`, and `docs/reference/CVF_PREPUBLIC_CORE_GIT_EXPORT_SURFACE_2026-04-03.md` formalize `CVF_v3.0_CORE_GIT_FOR_AI` as a root-barrel-first package surface while preserving `exportReadiness: NEEDS_PACKAGING`
 - **P4/CP8 guard-contract export boundary tightening approved**: `docs/audits/CVF_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_AUDIT_2026-04-03.md`, `docs/reviews/CVF_GC019_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_REVIEW_2026-04-03.md`, `docs/baselines/CVF_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_DELTA_2026-04-03.md`, and `docs/reference/CVF_PREPUBLIC_GUARD_CONTRACT_EXPORT_SURFACE_2026-04-03.md` narrow `CVF_GUARD_CONTRACT` to the approved first-wave guard surface while preserving `exportReadiness: NEEDS_PACKAGING`
+- **P4/CP9 runtime-adapter-hub export-map implementation approved**: `docs/audits/CVF_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_AUDIT_2026-04-03.md`, `docs/reviews/CVF_GC019_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_REVIEW_2026-04-03.md`, `docs/baselines/CVF_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_DELTA_2026-04-03.md`, and `docs/reference/CVF_PREPUBLIC_RUNTIME_ADAPTER_HUB_EXPORT_SURFACE_2026-04-03.md` formalize the canonical root entrypoint and explicit named export map for `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` while preserving `exportReadiness: NEEDS_PACKAGING`
 - **Keep `v1.0/` and `v1.1/` blocked for later waves**: both remain materially denser than the retained/internal pair and still anchor active onboarding/reference surfaces
 - **Do not treat `REVIEW/` as the next relocation unit**: current repo truth shows it as a local placeholder rather than a tracked payload root
 - **Do not assume `P3/CP2` can merge back to `cvf-next` under current rules**: `GC-039` currently blocks relocation diffs on the canonical branch even after isolated execution; separate governance clarification is required
@@ -87,6 +88,7 @@ Current guidance:
 - **Do not misread `P4/CP6` as docs-mirror execution**: it syncs the private root front door only; public mirror publication and mirror-safe link replacement remain separate future work
 - **Do not misread `P4/CP7` as export approval**: it formalizes one shortlist candidate surface only; `CVF_v3.0_CORE_GIT_FOR_AI` still remains `NEEDS_PACKAGING`, and no package publication is authorized
 - **Do not misread `P4/CP8` as provider-runtime approval**: it narrows `CVF_GUARD_CONTRACT` to the selected helper/runtime surface only; provider adapters, enterprise subpaths, and audit persistence remain outside the approved first-wave package promise
+- **Do not misread `P4/CP9` as adapter-hub publication approval**: it adds a canonical root barrel and explicit named export map only; `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` still remains `NEEDS_PACKAGING`, and explicit capability boundaries remain part of the package story
 - If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

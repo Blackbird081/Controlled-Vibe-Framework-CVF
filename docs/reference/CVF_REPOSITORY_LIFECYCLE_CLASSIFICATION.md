@@ -27,7 +27,7 @@ The machine-readable source of truth is:
 Summary:
 
 - `ACTIVE_CANONICAL`: `.agents`, `.githooks`, `.github`, `docs`, `EXTENSIONS`, `governance`, `scripts`, `tools`
-- `MERGED_RETAINED`: `CVF_SKILL_LIBRARY`, `ECOSYSTEM`, `ui_governance_engine`
+- `MERGED_RETAINED`: `ECOSYSTEM`
 - `FROZEN_REFERENCE`: `v1.0`, `v1.1`
 
 Current `P3` dependency readout for frozen roots:
@@ -41,6 +41,17 @@ Retired from the visible repository root in `P3/CP1`:
 - `CVF Edit`
 - `CVF_Important`
 - `CVF_Restructure`
+
+Relocated from the visible repository root in `P3/CP4`:
+
+- `CVF_SKILL_LIBRARY` -> `ECOSYSTEM/reference-roots/CVF_SKILL_LIBRARY/`
+- `ui_governance_engine` -> `ECOSYSTEM/reference-roots/ui_governance_engine/`
+
+Interpretation:
+
+- both roots were small `MERGED_RETAINED / PRIVATE_ENTERPRISE_ONLY` surfaces
+- both now remain inside the repository as internal retained lineage, but no longer consume top-level root attention
+- `ECOSYSTEM/` is now the only visible `MERGED_RETAINED` root and serves as the retained/internal container for these relocated private reference surfaces
 
 If local historical payload must be retained temporarily, it belongs under `.private_reference/legacy/` and is not part of the canonical visible-root inventory.
 

@@ -156,6 +156,12 @@ Current executed move set:
   - `docs/audits/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_DELTA_2026-04-02.md`
+- `P3 / CP4` — relocate two small private retained roots out of the visible root and into `ECOSYSTEM/reference-roots/`
+  - `CVF_SKILL_LIBRARY/` -> `ECOSYSTEM/reference-roots/CVF_SKILL_LIBRARY/`
+  - `ui_governance_engine/` -> `ECOSYSTEM/reference-roots/ui_governance_engine/`
+  - `docs/audits/CVF_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_DELTA_2026-04-02.md`
 
 Exit condition:
 

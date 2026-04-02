@@ -36,7 +36,13 @@ Current summary:
 
 - `PUBLIC_DOCS_ONLY`: `docs`
 - `INTERNAL_ONLY`: `.agents`, `.githooks`, `.github`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `v1.0`, `v1.1`, `ECOSYSTEM`
-- `PRIVATE_ENTERPRISE_ONLY`: `CVF_SKILL_LIBRARY`, `ui_governance_engine`
+- `PRIVATE_ENTERPRISE_ONLY`: no current visible roots
+
+Retained private-reference implication:
+
+- `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` are no longer visible roots after `P3/CP4`
+- both now live under `ECOSYSTEM/reference-roots/` as internal retained lineage
+- this keeps enterprise-private material out of the visible root without implying that the content became public-safe
 
 Near-term `P3` implication for frozen roots:
 

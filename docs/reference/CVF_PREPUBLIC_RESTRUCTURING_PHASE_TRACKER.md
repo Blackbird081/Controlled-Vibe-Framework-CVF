@@ -27,7 +27,7 @@ Canonical split of responsibility:
 | `P0` | `CLOSED` | Delivered | Lifecycle/exposure inventory and registries are in place and may be cited as readiness evidence. |
 | `P1` | `CLOSED` | Delivered | Root-level hygiene and root-file exposure posture are canonically classified. |
 | `P2` | `CLOSED` | Delivered | Extension lifecycle and export-readiness posture are canonically classified. |
-| `P3` | `PER-MOVE / BLOCKED BY DEFAULT` | `CP1-CP3 delivered` | Small bounded `P3` batches are possible, but every further physical move still requires fresh `GC-019` plus `GC-039`. |
+| `P3` | `PER-MOVE / BLOCKED BY DEFAULT` | `CP1-CP4 delivered` | Small bounded `P3` batches are possible, but every further physical move still requires fresh `GC-019` plus `GC-039`. |
 | `P4` | `BLOCKED` | Not started | Public navigation, packaging, and publication-model execution remain blocked behind later authorization. |
 | `P5` | `BLOCKED` | Not started | Retirement/archive closure remains downstream of a stable `P3/P4` outcome. |
 
@@ -38,6 +38,7 @@ Canonical split of responsibility:
 | `P3/CP1` | Delivered | Retired `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` from the visible root. |
 | `P3/CP2` | Delivered | Reconciled visible-root truth; `.claude/`, `.vscode/`, and worktree `.git` are treated as local/worktree metadata, and stale `REVIEW/` / `public/` root claims were removed from active canon. |
 | `P3/CP3` | Delivered | Audited `v1.0/` and `v1.1/`; both remain blocked from the near-term move set because dependency footprint is still too high. |
+| `P3/CP4` | Delivered | Relocated `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` under `ECOSYSTEM/reference-roots/`, removing two small private retained roots from the visible root while preserving lineage. |
 
 ## What P3 Is Allowed To Do Next
 
@@ -59,7 +60,8 @@ Near-term focus should stay in this order:
 
 1. keep `P3` truth accurate and low-blast-radius
 2. identify smaller relocate-safe roots or families that do not carry `v1.0/` / `v1.1/` style reference density
-3. delay any `P4` packaging/public-navigation execution until a later explicit authorization wave chooses the target publication model
+3. continue preferring relocation into retained/internal containers over delete-or-public ambiguity when lineage still matters
+4. delay any `P4` packaging/public-navigation execution until a later explicit authorization wave chooses the target publication model
 
 ## Canonical Sources
 

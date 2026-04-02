@@ -33,7 +33,7 @@ Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically govern
 | `P0` | `CLOSED` | Inventory and lifecycle/exposure registry creation |
 | `P1` | `CLOSED` | Root-level folder review and lifecycle posture |
 | `P2` | `CLOSED` | Extension lifecycle cleanup and exposure tagging |
-| `P3` | `PER-MOVE ONLY` | `P3/CP1` retired-root wave is delivered; any further relocation still requires fresh `GC-019` + `GC-039` |
+| `P3` | `PER-MOVE ONLY` | `P3/CP1-CP4` are delivered; any further relocation still requires fresh `GC-019` + `GC-039` |
 | `P4` | **BLOCKED** | Public navigation + packaging + publication model selection |
 | `P5` | **BLOCKED** | Retirement and archive closure |
 
@@ -59,6 +59,10 @@ Executed move set already in canon:
   - `docs/audits/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_DELTA_2026-04-02.md`
+- `P3 / CP4` — relocate `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` out of the visible root and into `ECOSYSTEM/reference-roots/` as internal retained lineage
+  - `docs/audits/CVF_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_DELTA_2026-04-02.md`
 
 ## Rule 2: Private by Default
 

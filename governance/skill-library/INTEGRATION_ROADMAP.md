@@ -8,7 +8,7 @@
 
 ## 🎯 Objective
 
-Tích hợp `CVF_SKILL_LIBRARY` như **Governance Layer** để kiểm soát:
+Tích hợp historical `CVF_SKILL_LIBRARY` lineage vào **Governance Layer** để kiểm soát:
 1. **User Skills** (v1.5.2 SKILL_LIBRARY_FOR_END_USERS - 131 skills)
 2. **Agent Skills** (v1.6 AGENT_PLATFORM - 8 tools)
 3. **Agent Output Quality** (UAT framework)
@@ -18,7 +18,7 @@ Tích hợp `CVF_SKILL_LIBRARY` như **Governance Layer** để kiểm soát:
 ## 📐 Architecture
 
 ```
-governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
+governance/skill-library/          ← canonical governance layer
 ├── specs/                         ← Governance specifications
 │   ├── CVF_SKILL_SPEC.md
 │   ├── CVF_RISK_AUTHORITY_MAPPING.md
@@ -91,7 +91,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 1.1 | Create `governance/skill-library/` folder | 5 min | ⬜ |
-| 1.2 | Move CVF_SKILL_LIBRARY files → `governance/skill-library/specs/` | 10 min | ⬜ |
+| 1.2 | Keep historical `CVF_SKILL_LIBRARY` lineage retained while canonical governance content lives in `governance/skill-library/specs/` | 10 min | ☑ |
 | 1.3 | Create `registry/user-skills/` folder | 2 min | ⬜ |
 | 1.4 | Create `registry/agent-skills/` folder | 2 min | ⬜ |
 | 1.5 | Create `uat/` folder structure | 5 min | ⬜ |

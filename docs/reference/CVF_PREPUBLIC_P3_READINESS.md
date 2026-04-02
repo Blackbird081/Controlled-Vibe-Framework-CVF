@@ -105,6 +105,18 @@ Executed move set:
     - `docs/audits/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_AUDIT_2026-04-02.md`
     - `docs/reviews/CVF_GC019_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_REVIEW_2026-04-02.md`
     - `docs/baselines/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_DELTA_2026-04-02.md`
+- `P3 / CP4` relocated two small private retained roots into an internal retained subtree under `ECOSYSTEM/`
+  - moved:
+    - `CVF_SKILL_LIBRARY/` -> `ECOSYSTEM/reference-roots/CVF_SKILL_LIBRARY/`
+    - `ui_governance_engine/` -> `ECOSYSTEM/reference-roots/ui_governance_engine/`
+  - why this was allowed:
+    - both roots had low active dependency footprint
+    - neither root carried live runtime/package entrypoints
+    - relocation reduced visible-root noise without forcing delete-or-public decisions
+  - evidence chain:
+    - `docs/audits/CVF_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_AUDIT_2026-04-02.md`
+    - `docs/reviews/CVF_GC019_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_REVIEW_2026-04-02.md`
+    - `docs/baselines/CVF_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_DELTA_2026-04-02.md`
 
 ## Required Next Step Before Any Further P3 Move
 
@@ -117,6 +129,7 @@ Before any further `P3` authorization:
 - use a dedicated secondary worktree for that branch so relocation changes stay isolated from the canonical workspace
 - keep git worktree transport artifacts such as the `.git` pointer out of the governed root-file exposure inventory
 - do not include `v1.0/` or `v1.1/` in the next physical move set unless a later curation wave first reduces their live dependency footprint
+- do not treat the `ECOSYSTEM/reference-roots/` container as a blanket authorization to sweep more roots there without another bounded `GC-019` packet
 
 ## Related Artifacts
 
@@ -133,6 +146,9 @@ Before any further `P3` authorization:
 - `docs/audits/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_AUDIT_2026-04-02.md`
 - `docs/reviews/CVF_GC019_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_REVIEW_2026-04-02.md`
 - `docs/baselines/CVF_P3_CP3_FROZEN_VERSION_ROOT_DEPENDENCY_DELTA_2026-04-02.md`
+- `docs/audits/CVF_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_AUDIT_2026-04-02.md`
+- `docs/reviews/CVF_GC019_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_REVIEW_2026-04-02.md`
+- `docs/baselines/CVF_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_DELTA_2026-04-02.md`
 - `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`

@@ -25,6 +25,10 @@ ECOSYSTEM/
 │   ├── CVF_STRATEGIC_SUMMARY.md
 │   └── CVF_UNIFIED_ROADMAP_2026.md
 │
+├── reference-roots/       ← Internal retained roots moved out of visible repo root
+│   ├── CVF_SKILL_LIBRARY/
+│   └── ui_governance_engine/
+│
 └── README.md              ← This file
 ```
 
@@ -36,6 +40,8 @@ ECOSYSTEM/
 | **Engineering** | `docs/`, `EXTENSIONS/`, `governance/` | Specifications, code, guards — HOW |
 
 Doctrine defines the rules. Engineering implements them. They must not be mixed.
+
+`ECOSYSTEM/reference-roots/` is an internal retained subtree used by pre-public `P3` cleanup to keep low-footprint lineage roots out of the visible repository root without deleting their historical payload.
 
 ## Authority Hierarchy
 
@@ -53,6 +59,6 @@ docs/ + EXTENSIONS/ + governance/      ← Engineering implementation
 
 | Document | Location |
 |----------|----------|
-| ADR-021 (Restructure Decision) | `CVF_Restructure/Independent Review/ADR-021_CVF_ECOSYSTEM_RESTRUCTURE.md` |
+| P3 CP1 retired-root review | `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md` |
 | Hierarchical Governance Pipeline | `docs/concepts/CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md` |
-| Consolidation Audit | `CVF_Restructure/Independent Review/CVF_ROADMAP_CONSOLIDATION_AUDIT_2026-03-09.md` |
+| P3 CP4 private-retained-root review | `docs/reviews/CVF_GC019_P3_CP4_PRIVATE_RETAINED_ROOT_RELOCATION_REVIEW_2026-04-02.md` |

@@ -153,6 +153,18 @@ Current executed move set:
   - delivered on dedicated branch `restructuring/p3-cp2-retained-internal-root-relocation`
   - delivered from a secondary git worktree, not the canonical `cvf-next` workspace
 
+Re-assessed next-candidate status:
+
+- `P3 / CP3` frozen-reference re-assessment packet:
+  - `docs/audits/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_DELTA_2026-04-02.md`
+- result:
+  - `HOLD`
+- rationale summary:
+  - `REVIEW/` is currently a local placeholder rather than a tracked relocation unit
+  - `v1.0/` and `v1.1/` remain too documentation-dense for the current slow-and-safe posture
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation

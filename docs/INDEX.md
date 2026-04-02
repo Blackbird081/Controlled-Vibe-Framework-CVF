@@ -157,7 +157,12 @@ If the current task is repository cleanup before public packaging:
   - `P3/CP1` retired-reference-root cleanup
   - `P3/CP2` retained-internal-root relocation
 - `CVF_SKILL_LIBRARY/` và `ui_governance_engine/` không còn ở visible repo root; chúng đã được relocate sang `../ECOSYSTEM/reference-roots/retained-internal/`
-- `v1.0/`, `v1.1/`, và `REVIEW/` vẫn thuộc wave sau vì active reference density còn cao hơn
+- `P3/CP3` re-assessment hiện đang `HOLD`; xem:
+  - `audits/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_AUDIT_2026-04-02.md`
+  - `reviews/CVF_GC019_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_REVIEW_2026-04-02.md`
+  - `baselines/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_DELTA_2026-04-02.md`
+- `v1.0/` và `v1.1/` vẫn blocked vì reference density và onboarding coupling còn cao
+- `REVIEW/` hiện không được coi là next tracked relocation unit
 
 ## Enterprise Audit Navigation
 

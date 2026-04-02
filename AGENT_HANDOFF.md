@@ -1,10 +1,10 @@
-# CVF Agent Handoff — 2026-04-01
+# CVF Agent Handoff — 2026-04-02
 
-> Branch: `cvf-next`
-> Last push: `W34-T1 CLOSED DELIVERED — ClarificationRefinementBatchContract CP1 + tranche closure → cvf-next`
-> Remote tracking branch: `origin/cvf-next`
+> Branch: `restructuring/p3-cp2-retained-internal-root-relocation`
+> Last push: `P3/CP2 delivered on isolated restructuring branch/worktree; P3/CP3 re-assessment recorded as HOLD`
+> Remote tracking branch: `origin/restructuring/p3-cp2-retained-internal-root-relocation`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W34-T1 CLOSED DELIVERED** — ClarificationRefinementBatchContract canonical; CPF 2561 (+30); W1-T5 CP2 batch surface closed; W1-T5 full family FULLY CLOSED; no active tranche
+> State: **P3/CP2 DELIVERED ON ISOLATED BRANCH** — retained/internal root relocation complete; `P3/CP3` frozen-reference re-assessment concluded `HOLD`; no further physical `P3` wave approved
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -65,7 +65,9 @@ Current guidance:
 - **Default P3 decision rule**: if there is a tradeoff between moving faster and preserving recovery/traceability, choose recovery/traceability
 - **P3/CP1 completed**: `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` were retired from the visible repo root through `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md` and `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`; if local recovery copies are retained they must live only under `.private_reference/legacy/`
 - **P3/CP2 completed on isolated restructuring branch/worktree**: `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` were relocated from the visible repo root into `ECOSYSTEM/reference-roots/retained-internal/` through `docs/audits/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_AUDIT_2026-04-02.md`, `docs/reviews/CVF_GC019_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_REVIEW_2026-04-02.md`, and `docs/baselines/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_DELTA_2026-04-02.md`
-- **Keep `v1.0/`, `v1.1/`, and `REVIEW/` blocked for later waves**: their active documentation footprint remains materially higher than the retained/internal pair; do not combine them into the same relocation batch
+- **P3/CP3 re-assessment concluded `HOLD`**: `docs/audits/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_AUDIT_2026-04-02.md`, `docs/reviews/CVF_GC019_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_REVIEW_2026-04-02.md`, and `docs/baselines/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_DELTA_2026-04-02.md` confirm that no next physical wave is currently approved
+- **Keep `v1.0/` and `v1.1/` blocked for later waves**: both remain materially denser than the retained/internal pair and still anchor active onboarding/reference surfaces
+- **Do not treat `REVIEW/` as the next relocation unit**: current repo truth shows it as a local placeholder rather than a tracked payload root
 - If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

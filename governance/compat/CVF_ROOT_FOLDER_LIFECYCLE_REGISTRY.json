@@ -46,7 +46,6 @@
     { "path": ".githooks", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".github", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".vscode", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "CVF_SKILL_LIBRARY", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
     {
       "path": "docs",
       "lifecycleClass": "ACTIVE_CANONICAL",
@@ -67,7 +66,6 @@
     { "path": "REVIEW", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
     { "path": "scripts", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": "tools", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "ui_governance_engine", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
     { "path": "v1.0", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
     { "path": "v1.1", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" }
   ]

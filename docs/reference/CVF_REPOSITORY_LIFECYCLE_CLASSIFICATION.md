@@ -27,7 +27,7 @@ The machine-readable source of truth is:
 Summary:
 
 - `ACTIVE_CANONICAL`: `.agents`, `.claude`, `.githooks`, `.github`, `.vscode`, `docs`, `EXTENSIONS`, `governance`, `public`, `scripts`, `tools`
-- `MERGED_RETAINED`: `CVF_SKILL_LIBRARY`, `ECOSYSTEM`, `ui_governance_engine`
+- `MERGED_RETAINED`: `ECOSYSTEM`
 - `FROZEN_REFERENCE`: `REVIEW`, `v1.0`, `v1.1`
 
 Retired from the visible repository root in `P3/CP1`:
@@ -37,6 +37,13 @@ Retired from the visible repository root in `P3/CP1`:
 - `CVF_Restructure`
 
 If local historical payload must be retained temporarily, it belongs under `.private_reference/legacy/` and is not part of the canonical visible-root inventory.
+
+Relocated from the visible repository root in `P3/CP2`:
+
+- `CVF_SKILL_LIBRARY` → `ECOSYSTEM/reference-roots/retained-internal/CVF_SKILL_LIBRARY`
+- `ui_governance_engine` → `ECOSYSTEM/reference-roots/retained-internal/ui_governance_engine`
+
+These retained/internal roots are no longer part of the visible-root lifecycle inventory.
 
 ## Extension-Level Classification
 

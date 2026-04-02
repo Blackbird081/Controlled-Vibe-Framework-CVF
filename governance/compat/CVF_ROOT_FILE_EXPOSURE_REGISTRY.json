@@ -17,7 +17,9 @@
       "description": "Enterprise-private or commercially sensitive surface that should remain non-public by default."
     }
   ],
-  "ignoredRootFiles": [],
+  "ignoredRootFiles": [
+    ".git"
+  ],
   "files": [
     { "path": ".dt.log", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".git_commit_error.log", "exposureClass": "INTERNAL_ONLY" },

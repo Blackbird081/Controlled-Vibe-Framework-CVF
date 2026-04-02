@@ -91,7 +91,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 1.1 | Create `governance/skill-library/` folder | 5 min | ⬜ |
-| 1.2 | Move CVF_SKILL_LIBRARY files → `governance/skill-library/specs/` | 10 min | ⬜ |
+| 1.2 | Move CVF_SKILL_LIBRARY files → `governance/skill-library/specs/` | 10 min | superseded — root stub retained under `ECOSYSTEM/reference-roots/retained-internal/CVF_SKILL_LIBRARY/` |
 | 1.3 | Create `registry/user-skills/` folder | 2 min | ⬜ |
 | 1.4 | Create `registry/agent-skills/` folder | 2 min | ⬜ |
 | 1.5 | Create `uat/` folder structure | 5 min | ⬜ |

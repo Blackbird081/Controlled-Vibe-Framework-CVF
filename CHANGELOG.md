@@ -303,7 +303,7 @@
 
 ### Added
 - **Security headers** in `next.config.ts` — 7 headers (HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, X-XSS-Protection, X-DNS-Prefetch-Control)
-- **CVF_SKILL_LIBRARY/README.md** — Redirect to canonical skill library location
+- **ECOSYSTEM/reference-roots/retained-internal/CVF_SKILL_LIBRARY/README.md** — Retained-internal redirect to canonical skill library location
 - **44 new tests** across 7 test files (i18n, Settings, ResultViewer, SkillLibrary, useAgentChat, AgentChatHeader, AgentChatMessageBubble, AnalyticsDashboard, auth/login)
 - **Independent Assessment Report** (`docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-16.md`)
 

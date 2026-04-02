@@ -139,6 +139,12 @@ CVF_SKILL_LIBRARY (Governance)
 CVF v1.5.2 Skill Library (Content)
 ```
 
+Retained lineage note:
+
+- the former visible-root `CVF_SKILL_LIBRARY/` placeholder was relocated in `P3/CP2`
+- retained path: `ECOSYSTEM/reference-roots/retained-internal/CVF_SKILL_LIBRARY/`
+- canonical governance implementation remains `governance/skill-library/`
+
 ---
 
 ## ⚠️ Non-Negotiable Rules

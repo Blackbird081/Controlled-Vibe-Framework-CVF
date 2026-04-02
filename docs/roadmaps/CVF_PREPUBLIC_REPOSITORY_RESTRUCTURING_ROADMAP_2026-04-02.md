@@ -144,6 +144,14 @@ Current executed move set:
   - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
+- `P3 / CP2` — relocate `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` into `ECOSYSTEM/reference-roots/retained-internal/`
+- governing packet chain:
+  - `docs/audits/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_DELTA_2026-04-02.md`
+- execution status:
+  - delivered on dedicated branch `restructuring/p3-cp2-retained-internal-root-relocation`
+  - delivered from a secondary git worktree, not the canonical `cvf-next` workspace
 
 Exit condition:
 
@@ -171,7 +179,7 @@ Current execution boundary:
 
 - `P0-P2` may proceed now
 - `P3-P5` require later explicit authorization
-- any future `P3` relocation beyond delivered `P3/CP1` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree
+- any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree
 
 ## Non-Goals For `P0-P2`
 

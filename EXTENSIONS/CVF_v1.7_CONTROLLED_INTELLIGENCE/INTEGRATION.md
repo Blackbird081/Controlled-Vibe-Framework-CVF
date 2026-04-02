@@ -79,7 +79,7 @@ const role = getPrimaryRoleForPhase("C")  // → AgentRole.BUILD
 
 ## 4. Skill System Mapping
 
-CVF gốc có **124 skills** trong `CVF_SKILL_LIBRARY/`. Extension registry phục vụ việc lookup skill theo tên và phase:
+CVF gốc có hệ skill canonical ở `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/`; retained lineage stub hiện ở `ECOSYSTEM/reference-roots/retained-internal/CVF_SKILL_LIBRARY/`. Extension registry phục vụ việc lookup skill theo tên và phase:
 
 ```ts
 import { registerSkill, getSkillsByPhase } from "./core/registry/skill.registry"

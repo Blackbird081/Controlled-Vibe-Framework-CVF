@@ -36,12 +36,18 @@ Current summary:
 
 - `PUBLIC_DOCS_ONLY`: `docs`, `public`
 - `INTERNAL_ONLY`: `.agents`, `.claude`, `.githooks`, `.github`, `.vscode`, `EXTENSIONS`, `governance`, `scripts`, `tools`, `REVIEW`, `v1.0`, `v1.1`, `ECOSYSTEM`
-- `PRIVATE_ENTERPRISE_ONLY`: `CVF_SKILL_LIBRARY`, `ui_governance_engine`
+- `PRIVATE_ENTERPRISE_ONLY`: none at the visible repo root after `P3/CP2`
 
 Retired local-only reference roots:
 
 - `CVF Edit`, `CVF_Important`, and `CVF_Restructure` are no longer part of the visible root exposure map after `P3/CP1`
 - if retained locally, they belong under `.private_reference/legacy/` and remain non-canonical
+
+Relocated retained/internal roots:
+
+- `CVF_SKILL_LIBRARY` and `ui_governance_engine` were removed from the visible root exposure map in `P3/CP2`
+- they now live under `ECOSYSTEM/reference-roots/retained-internal/`
+- their exposure posture remains private/internal rather than public-facing
 
 Root-file implication:
 

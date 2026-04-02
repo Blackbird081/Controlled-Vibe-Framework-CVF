@@ -153,6 +153,11 @@ If the current task is repository cleanup before public packaging:
 - `reference/CVF_REFERENCE_GOVERNED_LOOP.md`
 - `reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md`
 - `../governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md` — rule bắt buộc cập nhật baseline sau mỗi fix/update
+- delivered move sets:
+  - `P3/CP1` retired-reference-root cleanup
+  - `P3/CP2` retained-internal-root relocation
+- `CVF_SKILL_LIBRARY/` và `ui_governance_engine/` không còn ở visible repo root; chúng đã được relocate sang `../ECOSYSTEM/reference-roots/retained-internal/`
+- `v1.0/`, `v1.1/`, và `REVIEW/` vẫn thuộc wave sau vì active reference density còn cao hơn
 
 ## Enterprise Audit Navigation
 
@@ -304,6 +309,8 @@ Nếu cần đọc bộ tài liệu chốt cuối cho restructuring thay vì đ�
 - `baselines/CVF_W1_T1_CONTROL_PLANE_PLANNING_DELTA_2026-03-21.md`
 
 `CVF_Important/`, `CVF_Restructure/`, và `CVF Edit/` đã được retire khỏi visible repo root ở `P3/CP1`. Nếu local recovery copy còn tồn tại thì nó chỉ thuộc `.private_reference/legacy/`, không còn là canonical storage path.
+
+`CVF_SKILL_LIBRARY/` và `ui_governance_engine/` đã được relocate khỏi visible repo root ở `P3/CP2` sang `../ECOSYSTEM/reference-roots/retained-internal/`. Chúng vẫn là retained/internal lineage, không phải visible canonical roots.
 
 ## Conformance Navigation
 

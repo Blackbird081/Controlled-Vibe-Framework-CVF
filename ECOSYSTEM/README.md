@@ -25,6 +25,11 @@ ECOSYSTEM/
 │   ├── CVF_STRATEGIC_SUMMARY.md
 │   └── CVF_UNIFIED_ROADMAP_2026.md
 │
+├── reference-roots/       ← retained non-canonical root lineage
+│   └── retained-internal/
+│       ├── CVF_SKILL_LIBRARY/
+│       └── ui_governance_engine/
+│
 └── README.md              ← This file
 ```
 
@@ -36,6 +41,11 @@ ECOSYSTEM/
 | **Engineering** | `docs/`, `EXTENSIONS/`, `governance/` | Specifications, code, guards — HOW |
 
 Doctrine defines the rules. Engineering implements them. They must not be mixed.
+
+Retained/internal note:
+
+- `reference-roots/retained-internal/` stores roots that were removed from the visible repository root in pre-public restructuring waves
+- these paths preserve lineage and rollback clarity without re-promoting them as visible canonical roots
 
 ## Authority Hierarchy
 

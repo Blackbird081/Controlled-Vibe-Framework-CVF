@@ -189,6 +189,17 @@ Foundation-anchor strategy pivot:
   - `v1.0/` and `v1.1/` are foundational frozen anchors with ongoing onboarding/reference value
   - for these roots, safer reduction now comes from `P4` navigation/packaging/docs curation rather than additional `P3` physical relocation
 
+P4 opening status:
+
+- `P4 / CP1` curated front-door planning packet:
+  - `docs/audits/CVF_P4_CP1_CURATED_FRONT_DOOR_PLANNING_AUDIT_2026-04-02.md`
+  - `docs/reviews/CVF_GC019_P4_CP1_CURATED_FRONT_DOOR_PLANNING_REVIEW_2026-04-02.md`
+  - `docs/baselines/CVF_P4_CP1_CURATED_FRONT_DOOR_PLANNING_DELTA_2026-04-02.md`
+- result:
+  - `APPROVED - PLANNING OPEN`
+- rationale summary:
+  - after `P3/CP5`, the safest next step is to define curated navigation and publication boundaries without changing private-core ownership or filesystem layout
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -203,6 +214,18 @@ Exit condition:
   - reduced public core
   - or full public monorepo
 - ensure the chosen model is supported by the repository structure created in `P3`
+- current active packet:
+  - `P4 / CP1` planning-only front-door packet is approved
+- current bounded outputs:
+  - curated front-door navigation map
+  - docs mirror boundary definition
+  - selective public export candidate shortlist
+  - explicit private-core-visible foundation-anchor policy
+- hard non-goals:
+  - no public mirror push
+  - no package publication
+  - no further `P3` physical relocation
+  - no `cvf-next` landing-path override
 
 ### `P5` Retirement / Archive Closure
 
@@ -214,7 +237,10 @@ Exit condition:
 Current execution boundary:
 
 - `P0-P2` may proceed now
-- `P3-P5` require later explicit authorization
+- `P3` future physical relocation still requires later explicit authorization
+- `P4/CP1` planning-only work may proceed now
+- any later `P4` implementation beyond planning still requires a fresh bounded packet
+- `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree
 - current preferred next lane is `P4` planning for curated navigation, docs mirror boundaries, and packaging, not additional forced relocation of `v1.0/` or `v1.1/`
 

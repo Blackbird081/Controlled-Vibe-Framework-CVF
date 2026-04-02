@@ -34,7 +34,7 @@ Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically govern
 | `P1` | `CLOSED` | Root-level folder review and lifecycle posture |
 | `P2` | `CLOSED` | Extension lifecycle cleanup and exposure tagging |
 | `P3` | `PER-MOVE ONLY` | `P3/CP1` retired-root wave and `P3/CP2` retained-internal wave are delivered; any further relocation still requires fresh `GC-019` + `GC-039` |
-| `P4` | **BLOCKED** | Public navigation + packaging + publication model selection |
+| `P4` | `OPEN (PLANNING ONLY)` | Curated front-door navigation, docs-mirror boundaries, export-boundary definition, and publication-boundary planning |
 | `P5` | **BLOCKED** | Retirement and archive closure |
 
 Machine-readable source of truth:
@@ -62,6 +62,18 @@ Current planning interpretation after `P3/CP3` through `P3/CP5`:
 - no further low-risk physical `P3` move is currently preferred
 - `v1.0/` and `v1.1/` should be treated as visible frozen foundation anchors, not default relocation targets
 - for those roots, prefer `P4` navigation/packaging/docs-mirror curation over forced path movement
+
+Current `P4` opening status:
+
+- `P4 / CP1` is approved as a planning-only packet
+- it authorizes:
+  - curated front-door navigation planning
+  - docs-mirror boundary definition
+  - selective export-boundary planning
+- it does not authorize:
+  - public mirror publication
+  - package publication
+  - new filesystem relocation
 
 ## Rule 2: Private by Default
 

@@ -7,7 +7,7 @@ Status: binding restructuring governance protocol — all agents must follow whe
 
 - unify restructuring rules into one canonical reference that all agents read before restructuring-related work
 - prevent governance drift when different agents handle different sessions
-- ensure the GC-027 intake review → rebuttal → acceptance chain is respected as settled canon
+- ensure the GC-027 intake review → rebuttal → decision-pack chain is respected as settled canon
 
 ## Binding Authority
 
@@ -15,9 +15,14 @@ This protocol was established through the canonical GC-027 multi-agent review ch
 
 1. Intake Review: `docs/reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
 2. Rebuttal: `docs/reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
-3. Decision: `GO` — all five findings (C1-C5) accepted and incorporated into canon
+3. Decision Pack: `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
 
-Commit: `65a73a62` on `cvf-next`
+Decision summary:
+
+- `GO` for `P0-P2` preparation baseline and `GC-039` readiness baseline
+- `HOLD` for `P3` physical relocation until a fresh `GC-019` packet is opened and `GC-039` passes for that concrete move set
+
+Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically governed by the artifacts above.
 
 ## Rule 1: Phased Approach — No Skipping
 
@@ -35,6 +40,7 @@ Machine-readable source of truth:
 - `governance/compat/CVF_PREPUBLIC_PHASE_GATE_REGISTRY.json`
 
 No agent may authorize P3 physical moves without a separate `GC-019` approval packet.
+`GC-039` is also required, but it verifies readiness; it does not replace `GC-019`.
 
 ## Rule 2: Private by Default
 
@@ -147,6 +153,7 @@ Read this protocol when the current task involves:
 | P3 Readiness | `docs/reference/CVF_PREPUBLIC_P3_READINESS.md` |
 | GC-027 Intake Review | `docs/reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_PREPUBLIC_RESTRUCTURING_2026-04-02.md` |
 | GC-027 Rebuttal | `docs/reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md` |
+| GC-027 Decision Pack | `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md` |
 | This Protocol | `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md` |
 
 ## Final Clause

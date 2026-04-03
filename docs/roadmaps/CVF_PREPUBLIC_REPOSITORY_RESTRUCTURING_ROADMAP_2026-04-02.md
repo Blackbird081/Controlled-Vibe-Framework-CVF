@@ -419,6 +419,16 @@ Exit condition:
   - all three READMEs rewritten for external-consumer audience
   - `CVF_GUARD_CONTRACT` `better-sqlite3` moved to `optionalDependencies`
   - all four P4/CP11 gaps closed; all three remain `NEEDS_PACKAGING`
+- current second readiness re-assessment result (P4/CP13):
+  - all three candidates uplifted to `READY_FOR_EXPORT`
+  - all three criteria passed: documentation clarity, support obligations, capability boundaries
+- current publication decision result (P4/CP14):
+  - distribution model: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`
+  - registry: npm public registry
+  - package names: `cvf-core-git-for-ai`, `cvf-guard-contract`, `cvf-runtime-adapter-hub`
+  - versioning: semver `0.x`, initial `0.1.0`
+  - GC-039 landing path: HOLD
+  - decision record: `docs/reference/CVF_PUBLICATION_DECISION_RECORD_2026-04-03.md`
 - current docs-mirror result:
   - direct candidates:
     - root front-door files + learning-oriented docs zones
@@ -474,6 +484,8 @@ Current execution boundary:
 - `P4/CP10` shortlist wave consolidation is delivered
 - `P4/CP11` readiness re-assessment is delivered; all three candidates remain `NEEDS_PACKAGING`
 - `P4/CP12` documentation-completion is delivered; all P4/CP11 gaps closed; all three remain `NEEDS_PACKAGING`; next safe packet is a second readiness re-assessment (P4/CP13)
+- `P4/CP13` second readiness re-assessment is delivered; all three candidates uplifted to `READY_FOR_EXPORT`; first positive uplift in the P4 lane
+- `P4/CP14` publication decision is delivered; distribution model: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`; registry: npm; versioning: semver `0.x`; initial version `0.1.0`; GC-039 landing path: HOLD; next packet is `P4/CP15` publication implementation
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
 - any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree

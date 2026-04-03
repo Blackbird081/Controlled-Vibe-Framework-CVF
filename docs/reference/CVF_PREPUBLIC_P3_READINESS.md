@@ -61,15 +61,29 @@ Meaning:
 
 Current readiness summary:
 
-- `READY_FOR_EXPORT`: `0`
-- `NEEDS_PACKAGING`: `13`
+- `READY_FOR_EXPORT`: `3` (uplifted by P4/CP13 — second readiness re-assessment)
+- `NEEDS_PACKAGING`: `10`
 - `CONCEPT_ONLY`: `1`
+
+Candidates uplifted to `READY_FOR_EXPORT` (P4/CP13):
+
+- `CVF_v3.0_CORE_GIT_FOR_AI` (`cvf-core-git-for-ai`)
+- `CVF_GUARD_CONTRACT` (`cvf-guard-contract`)
+- `CVF_v1.7.3_RUNTIME_ADAPTER_HUB` (`cvf-runtime-adapter-hub`)
+
+Publication decision (P4/CP14):
+
+- distribution model: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`
+- registry: npm public registry
+- versioning: semver `0.x`, initial `0.1.0`
+- decision record: `docs/reference/CVF_PUBLICATION_DECISION_RECORD_2026-04-03.md`
 
 Interpretation:
 
 - `PUBLIC_EXPORT_CANDIDATE` means “possible candidate later”
-- it does **not** mean the module is public-ready right now
-- today, no extension should be treated as immediately exportable without separate packaging work
+- `READY_FOR_EXPORT` means the package has cleared the readiness re-assessment threshold
+- `READY_FOR_EXPORT` does **not** mean publication has occurred; a publication implementation packet is still required
+- the 10 remaining `NEEDS_PACKAGING` extensions still require separate packaging work before any publication discussion
 
 ## Publication Decision Timeline
 

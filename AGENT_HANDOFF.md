@@ -6,7 +6,7 @@
 > Workspace: `D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF-P3-CP2`
 > Current local HEAD: `5b287c46`
 > Current remote checkpoint: `4369a231`
-> State: **P4/CP13 COMMITTED LOCALLY ON ISOLATED RELOCATION LANE** — `P3/CP2` remains the only delivered physical relocation wave; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` foundation-anchor pivot remains active; `P4/CP1-P4/CP13` are complete on this lane; all three shortlisted candidates uplifted to `READY_FOR_EXPORT`
+> State: **P4/CP14 COMMITTED LOCALLY ON ISOLATED RELOCATION LANE** — `P3/CP2` remains the only delivered physical relocation wave; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` foundation-anchor pivot remains active; `P4/CP1-P4/CP14` are complete on this lane; all three shortlisted candidates `READY_FOR_EXPORT`; publication decision made: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`, npm, semver `0.x`; GC-039 landing path: HOLD
 
 ---
 
@@ -60,16 +60,23 @@
   - second bounded readiness re-assessment completed
   - all three shortlisted candidates uplifted to `READY_FOR_EXPORT`
   - all three criteria passed: documentation clarity, support obligations, capability boundaries
+- `P4/CP14`
+  - publication decision committed
+  - distribution model: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`
+  - registry: npm public; packages: `cvf-core-git-for-ai`, `cvf-guard-contract`, `cvf-runtime-adapter-hub`
+  - versioning: semver `0.x`, initial `0.1.0`
+  - GC-039 landing path: HOLD (pending GC-039 extension packet on `cvf-next`)
 
 ## Current Assessment
 
 - the low-risk physical relocation objective succeeded once, for the retained/internal pair
 - forcing additional physical relocation after that was correctly stopped
 - `v1.0/` and `v1.1/` are now treated as architecture-significant anchors, not as obvious next move targets
-- the readiness evaluation objective is now complete: all three shortlisted candidates are `READY_FOR_EXPORT`
-- the remaining unresolved issue is:
-  - how to handle the publication decision (registry target, versioning policy, distribution model)
-  - how to handle canonical landing back to `cvf-next` under `GC-039`
+- the readiness evaluation objective is complete: all three shortlisted candidates are `READY_FOR_EXPORT`
+- the publication decision is now made: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`, npm, semver `0.x`
+- the remaining unresolved issues are:
+  - publication implementation (pre-publish verification checklist + actual npm publish steps)
+  - canonical landing back to `cvf-next` under `GC-039` (still HOLD)
 
 ## Hard Boundaries
 
@@ -87,18 +94,19 @@
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 - `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
 - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
-- `docs/baselines/CVF_P4_CP13_SHORTLIST_SECOND_READINESS_REASSESSMENT_DELTA_2026-04-03.md`
+- `docs/baselines/CVF_P4_CP14_PUBLICATION_DECISION_DELTA_2026-04-03.md`
+- `docs/reference/CVF_PUBLICATION_DECISION_RECORD_2026-04-03.md`
 
 ## Default Next Step
 
 - if continuing locally in this worktree:
-  - start from `P4/CP13`
-  - all three candidates are now `READY_FOR_EXPORT`
-  - next bounded packet is a publication decision packet (`P4/CP14`)
-  - that packet must address: registry target, versioning policy, distribution model, and GC-039 landing path to `cvf-next`
+  - start from `P4/CP14`
+  - publication decision is made; all three candidates are `READY_FOR_EXPORT`
+  - next bounded packet is `P4/CP15` — publication implementation
+  - that packet must: run pre-publish verification checklist (npm name availability, CC-BY-NC-ND acknowledgment, `better-sqlite3` optional install test), define concrete npm publishing steps, produce governance artifacts
 - if remote parity is required before more work:
-  - push all local checkpoints (`P4/CP12` + relocation handoff split + `P4/CP13`) first
-  - then open the publication decision packet
+  - push all local checkpoints first
+  - then open `P4/CP15`
 
 ## Verification Pattern
 

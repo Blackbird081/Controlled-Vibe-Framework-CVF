@@ -6,7 +6,7 @@
 > Workspace: `D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF-P3-CP2`
 > Current local HEAD: `5b287c46`
 > Current remote checkpoint: `4369a231`
-> State: **P4/CP12 COMMITTED LOCALLY ON ISOLATED RELOCATION LANE** — `P3/CP2` remains the only delivered physical relocation wave; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` foundation-anchor pivot remains active; `P4/CP1-P4/CP12` are complete on this lane; all three shortlisted candidates still remain `NEEDS_PACKAGING`
+> State: **P4/CP13 COMMITTED LOCALLY ON ISOLATED RELOCATION LANE** — `P3/CP2` remains the only delivered physical relocation wave; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` foundation-anchor pivot remains active; `P4/CP1-P4/CP13` are complete on this lane; all three shortlisted candidates uplifted to `READY_FOR_EXPORT`
 
 ---
 
@@ -20,10 +20,10 @@
 
 ## Current Branch Posture
 
-- working tree is clean
-- branch is ahead of remote by one committed checkpoint:
-  - local-only checkpoint: `P4/CP12`
-- no uncommitted `P4/CP13+` WIP remains in this worktree
+- working tree is clean after commit
+- branch is ahead of remote by multiple committed checkpoints:
+  - local-only checkpoints: `P4/CP12`, relocation handoff split, `P4/CP13`
+- no uncommitted `P4/CP14+` WIP remains in this worktree
 
 ## Stable Delivered Record
 
@@ -54,16 +54,21 @@
   - all three shortlisted candidates remained `NEEDS_PACKAGING`
 - `P4/CP12`
   - documentation and packaging-gap cleanup committed locally
+  - all four P4/CP11 gaps closed (READMEs rewritten + `better-sqlite3` moved to optionalDependencies)
   - all three shortlisted candidates still remained `NEEDS_PACKAGING`
+- `P4/CP13`
+  - second bounded readiness re-assessment completed
+  - all three shortlisted candidates uplifted to `READY_FOR_EXPORT`
+  - all three criteria passed: documentation clarity, support obligations, capability boundaries
 
 ## Current Assessment
 
 - the low-risk physical relocation objective succeeded once, for the retained/internal pair
 - forcing additional physical relocation after that was correctly stopped
 - `v1.0/` and `v1.1/` are now treated as architecture-significant anchors, not as obvious next move targets
-- the main unresolved issue is not “what else can be moved”
-- the main unresolved issue is:
-  - how to evaluate readiness and publication posture safely
+- the readiness evaluation objective is now complete: all three shortlisted candidates are `READY_FOR_EXPORT`
+- the remaining unresolved issue is:
+  - how to handle the publication decision (registry target, versioning policy, distribution model)
   - how to handle canonical landing back to `cvf-next` under `GC-039`
 
 ## Hard Boundaries
@@ -82,16 +87,18 @@
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 - `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
 - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
-- `docs/baselines/CVF_P4_CP12_SHORTLIST_DOCUMENTATION_COMPLETION_DELTA_2026-04-03.md`
+- `docs/baselines/CVF_P4_CP13_SHORTLIST_SECOND_READINESS_REASSESSMENT_DELTA_2026-04-03.md`
 
 ## Default Next Step
 
 - if continuing locally in this worktree:
-  - start from `P4/CP12`
-  - next bounded packet is a second readiness re-assessment
+  - start from `P4/CP13`
+  - all three candidates are now `READY_FOR_EXPORT`
+  - next bounded packet is a publication decision packet (`P4/CP14`)
+  - that packet must address: registry target, versioning policy, distribution model, and GC-039 landing path to `cvf-next`
 - if remote parity is required before more work:
-  - push the local `P4/CP12` checkpoint first
-  - then open the next bounded packet
+  - push all local checkpoints (`P4/CP12` + relocation handoff split + `P4/CP13`) first
+  - then open the publication decision packet
 
 ## Verification Pattern
 

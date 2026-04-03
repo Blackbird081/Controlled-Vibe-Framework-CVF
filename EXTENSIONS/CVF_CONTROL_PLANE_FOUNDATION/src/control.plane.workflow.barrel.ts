@@ -55,3 +55,25 @@ export type {
   ConsumptionReceipt,
   ConsumerContractDependencies,
 } from "./consumer.contract";
+
+// W35-T1 — IntakeBatchContract
+export {
+  IntakeBatchContract,
+  createIntakeBatchContract,
+} from "./intake.batch.contract";
+export type {
+  IntakeBatchStatus,
+  IntakeBatch,
+  IntakeBatchContractDependencies,
+} from "./intake.batch.contract";
+
+// W36-T1 — RetrievalBatchContract
+export {
+  RetrievalBatchContract,
+  createRetrievalBatchContract,
+} from "./retrieval.batch.contract";
+export type {
+  RetrievalBatchStatus,
+  RetrievalBatch,
+  RetrievalBatchContractDependencies,
+} from "./retrieval.batch.contract";

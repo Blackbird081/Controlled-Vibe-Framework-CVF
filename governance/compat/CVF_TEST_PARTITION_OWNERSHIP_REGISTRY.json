@@ -1684,6 +1684,28 @@
         "ClarificationRefinementBatchContract",
         "createClarificationRefinementBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Intake Batch (W35-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/intake.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "IntakeBatchContract",
+        "createIntakeBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Retrieval Batch (W36-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/retrieval.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RetrievalBatchContract",
+        "createRetrievalBatchContract"
+      ]
     }
   ]
 }

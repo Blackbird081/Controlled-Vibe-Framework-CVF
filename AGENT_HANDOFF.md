@@ -1,10 +1,10 @@
-# CVF Agent Handoff — 2026-04-01
+# CVF Agent Handoff — 2026-04-03
 
 > Branch: `cvf-next`
-> Last push: `W34-T1 CLOSED DELIVERED — ClarificationRefinementBatchContract CP1 + tranche closure → cvf-next`
+> Last push: `W36-T1 CLOSED DELIVERED — RetrievalBatchContract CP1 + tranche closure → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W34-T1 CLOSED DELIVERED** — ClarificationRefinementBatchContract canonical; CPF 2561 (+30); W1-T5 CP2 batch surface closed; W1-T5 full family FULLY CLOSED; no active tranche
+> State: **W36-T1 CLOSED DELIVERED** — RetrievalBatchContract canonical; CPF 2624 (+31); W1-T2 retrieval batch surface closed; no active tranche
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -14,7 +14,7 @@
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2561 tests, 0 failures**
+- CPF (Control Plane Foundation): **2624 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -23,6 +23,10 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W36-T1 | Retrieval Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-03 — RetrievalBatchContract canonical; CPF 2624 tests (+31); W1-T2 RetrievalContract.retrieve() batch surface closed |
+| W35-T1 | Intake Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-03 — IntakeBatchContract canonical; CPF 2594 tests (+33); W1-T2 intake batch surface closed |
+| W34-T1 | Clarification Refinement Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-01 — ClarificationRefinementBatchContract canonical; CPF 2561 tests (+30); W1-T5 CP2 batch surface closed; W1-T5 full family FULLY CLOSED |
+| W33-T1 | Knowledge Ranking Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-01 — KnowledgeRankingBatchContract canonical; CPF 2531 tests (+30) |
 | W32-T1 | Boardroom Multi-Round Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-01 — BoardroomMultiRoundBatchContract canonical; CPF 2691 tests (+37); W1-T6 CP2 boardroom multi-round batch surface closed |
 | W31-T1 | Boardroom Round Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-01 — BoardroomRoundBatchContract canonical; CPF 2654 tests (+39); W1-T6 CP1 boardroom round batch surface closed |
 | W30-T1 | Boardroom Transition Gate Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-01 — BoardroomTransitionGateBatchContract canonical; CPF 2615 tests (+40); GC-028 batch surface closed |
@@ -40,22 +44,22 @@
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1`
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1`
 - Documentation-to-implementation gap: CLOSED (`v3.6-W32T1`)
 
 ---
 
 ## Immediate Next Action Required
 
-**W34-T1 CLOSED DELIVERED. No active tranche. Proceed with fresh quality assessment for next candidate.**
+**W36-T1 CLOSED DELIVERED. No active tranche. Proceed with fresh quality assessment for next candidate.**
 
 Current guidance:
 
-- **W34-T1 CLOSED DELIVERED** — ClarificationRefinementBatchContract (REALIZATION class); CPF 2561 (+30); all 7 pass conditions satisfied; W1-T5 CP2 ClarificationRefinementContract.refine() batch surface closed; W1-T5 full family FULLY CLOSED
-- Closure review: `docs/reviews/CVF_W34_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_CLOSED_2026-04-01.md`
+- **W36-T1 CLOSED DELIVERED** — RetrievalBatchContract (REALIZATION class); CPF 2624 (+31); all 8 pass conditions satisfied; W1-T2 RetrievalContract.retrieve() batch surface closed
+- Closure review: `docs/reviews/CVF_W36_T1_TRANCHE_CLOSURE_REVIEW_2026-04-03.md`
+- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W36_T1_CP1_DELIVERED_2026-04-03.md`
 - Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
-- **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W35-T1)
+- **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W36-T1)
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
 - **Before any future pre-public `P3` relocation discussion**: read `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`, `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`, `docs/reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md`, and `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md`; `P3` remains blocked until a fresh `GC-019` packet is approved and `GC-039` passes for the proposed move set
 - **Before any future physical `P3` relocation execution**: create and use a dedicated branch matching `restructuring/p3-*`; do not execute relocation directly on `cvf-next`

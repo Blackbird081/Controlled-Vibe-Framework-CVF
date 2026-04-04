@@ -6,7 +6,7 @@
 > Workspace: `D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF-P3-CP2`
 > Current local HEAD: `5b287c46`
 > Current remote checkpoint: `4369a231`
-> State: **P4/CP15 COMMITTED LOCALLY ON ISOLATED RELOCATION LANE** — `P3/CP2` remains the only delivered physical relocation wave; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` foundation-anchor pivot remains active; `P4/CP1-P4/CP15` are complete on this lane; all three at `0.1.0`; pre-publish checklist 3/3 PASS; sole blocker: TypeScript packaging decision (CP16)
+> State: **P4/CP16 COMMITTED — npm publish AUTHORIZED** — `P4/CP1-P4/CP16` complete; all three packages at `0.1.0`, packaging posture Option A (TypeScript source); all pre-publish gates cleared; `npm publish` authorized, awaiting human execution; GC-039 landing path still HOLD
 
 ---
 
@@ -69,8 +69,13 @@
 - `P4/CP15`
   - pre-publish checklist complete: 3/3 PASS (npm names available, CC-BY-NC-ND-4.0 present, `better-sqlite3` optional)
   - version fix delivered: all three `package.json` files set to `0.1.0`
-  - TypeScript packaging gap identified: all exports point to `.ts` source; requires CP16 decision (Option A: ship source vs Option B: compile-to-JS)
-  - concrete publish steps documented; gated on CP16
+  - TypeScript packaging gap identified: all exports point to `.ts` source; gated on CP16
+  - concrete publish steps documented
+- `P4/CP16`
+  - packaging architecture decision: Option A (TypeScript source shipping) for `0.1.0`
+  - rationale: `moduleResolution: "bundler"` in two of three packages — designed for bundler environments, not standalone `tsc`
+  - all five pre-publish gates cleared; `npm publish` AUTHORIZED
+  - Option B (compile-to-JS) deferred to `0.2.0`
 
 ## Current Assessment
 
@@ -79,9 +84,10 @@
 - `v1.0/` and `v1.1/` are now treated as architecture-significant anchors, not as obvious next move targets
 - the readiness evaluation objective is complete: all three shortlisted candidates are `READY_FOR_EXPORT`
 - the publication decision is made: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`, npm, semver `0.x`
-- pre-publish checklist complete (3/3); version fix delivered (all at `0.1.0`)
+- pre-publish checklist complete (3/3); version fix done; packaging posture decided (Option A — TypeScript source)
+- `npm publish` is AUTHORIZED — all five gates cleared
 - the remaining unresolved issues are:
-  - TypeScript packaging architecture decision (Option A vs Option B) — CP16 blocker for `npm publish`
+  - actual `npm publish` execution (requires human npm authentication + trigger)
   - canonical landing back to `cvf-next` under `GC-039` (still HOLD)
 
 ## Hard Boundaries
@@ -100,18 +106,19 @@
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 - `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
 - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
-- `docs/baselines/CVF_P4_CP15_PUBLISH_IMPLEMENTATION_DELTA_2026-04-03.md`
+- `docs/baselines/CVF_P4_CP16_PACKAGING_ARCHITECTURE_DECISION_DELTA_2026-04-03.md`
 
 ## Default Next Step
 
-- if continuing locally in this worktree:
-  - start from `P4/CP15`
-  - pre-publish checklist done; version fix done; sole blocker is TypeScript packaging decision
-  - next bounded packet is `P4/CP16` — packaging architecture decision
-  - that packet must: choose Option A (ship TypeScript source) or Option B (compile-to-JS), implement the result, and authorize the `npm publish` step
-- if remote parity is required before more work:
-  - push all local checkpoints first
-  - then open `P4/CP16`
+- `npm publish` is AUTHORIZED — execute the steps in the CP16 audit:
+  1. `npm whoami` — verify authentication
+  2. `cd EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI && npm publish --access public`
+  3. `cd ../CVF_GUARD_CONTRACT && npm publish --access public`
+  4. `cd ../CVF_v1.7.3_RUNTIME_ADAPTER_HUB && npm publish --access public`
+  5. Verify each: `npm view <name>@0.1.0 --json`
+  6. `git tag v0.1.0-publish`
+- after publish: record the publish event in a post-publish governance doc (P4/CP17)
+- GC-039 landing path to `cvf-next` remains HOLD; address in a separate canonical-lane packet
 
 ## Verification Pattern
 

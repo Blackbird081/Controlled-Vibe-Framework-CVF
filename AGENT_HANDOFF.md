@@ -64,7 +64,7 @@ Current guidance:
 - Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
 - **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W38-T1)
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
-- **Non-canonical side lanes are out of scope for this handoff**: do not continue isolated restructuring or publication-boundary work from `cvf-next`
+- **Relocation lane landing path AUTHORIZED (2026-04-04)**: GC-039 extension packet issued — `docs/baselines/CVF_GC039_P4_PACKAGING_LANDING_PATH_DELTA_2026-04-04.md`. Cherry-pick of P4/CP1–CP17 governance artifacts + module export boundary changes from `restructuring/p3-cp2-retained-internal-root-relocation` is authorized. P3/CP2 physical move (`CVF_SKILL_LIBRARY/`, `ui_governance_engine/`) is EXCLUDED. See delta doc for cherry-pick instructions.
 - **Pre-public restructuring lane is intentionally narrowed**: treat root-level relocation as materially complete after `P3/CP1` plus extracted orientation coverage; do not open another broad relocation wave by default
 - **Freeze-in-place root set**: `v1.0/`, `v1.1/`, `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, `ui_governance_engine/`
 - **Why**: protection, lower churn, and faster closure matter more than cosmetic tree cleanup; explain structure through curated docs instead of moving sensitive or reference-heavy roots

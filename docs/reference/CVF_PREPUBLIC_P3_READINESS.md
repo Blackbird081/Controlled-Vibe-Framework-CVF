@@ -104,6 +104,23 @@ Current freeze-in-place roots:
 
 These roots stay where they are under the current posture. Public understanding should rely on extracted docs, not direct relocation of these paths.
 
+## Landing Path Resolution
+
+Status: **AUTHORIZED** — GC-039 extension packet issued 2026-04-04.
+
+Source authority: `docs/baselines/CVF_GC039_P4_PACKAGING_LANDING_PATH_DELTA_2026-04-04.md`
+
+| Item | Decision |
+| --- | --- |
+| P3/CP2 physical move (`CVF_SKILL_LIBRARY/`, `ui_governance_engine/`) | **EXCLUDED** — freeze-in-place posture maintained on `cvf-next` |
+| P3/CP3–CP5 governance artifacts | **AUTHORIZED** to land via cherry-pick |
+| P4/CP1–CP17 governance artifacts | **AUTHORIZED** to land via cherry-pick |
+| P4/CP7–CP9 module export boundary changes | **AUTHORIZED** to land via cherry-pick |
+
+Cherry-pick instructions: see `docs/baselines/CVF_GC039_P4_PACKAGING_LANDING_PATH_DELTA_2026-04-04.md`.
+
+---
+
 ## Required Next Step Before Any Further P3 Move
 
 Before any further `P3` authorization:

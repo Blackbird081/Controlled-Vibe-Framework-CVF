@@ -11,7 +11,7 @@ GC-026 Progress Tracker Sync Note
 - Last canonical closure: W34-T1 (ClarificationRefinementBatchContract, CLOSED DELIVERED 2026-04-01)
 - Current active tranche: NONE (relocation branch — canonical tranche state lives on cvf-next)
 - Next governed move: GC-039 landing path authorization on cvf-next before this branch merges back
-- Canonical tracker updated: NO — tranche posture is unchanged; this note satisfies the hook trigger only
+- Canonical tracker updated: YES — latest GC-026 sync pointer updated in CVF_WHITEPAPER_PROGRESS_TRACKER.md
 - Canonical status review updated: NO
 - Canonical roadmap updated: NO
 ```

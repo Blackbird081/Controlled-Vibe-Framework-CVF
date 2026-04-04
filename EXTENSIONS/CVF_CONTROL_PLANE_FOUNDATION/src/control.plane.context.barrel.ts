@@ -54,3 +54,14 @@ export type {
   ContextValidationResult,
   ContextEnrichmentContractDependencies,
 } from "./context.enrichment.contract";
+
+export {
+  ContextEnrichmentBatchContract,
+  createContextEnrichmentBatchContract,
+} from "./context.enrichment.batch.contract";
+export type {
+  ContextEnrichmentBatchRequest,
+  ContextEnrichmentBatchStatus,
+  ContextEnrichmentBatch,
+  ContextEnrichmentBatchContractDependencies,
+} from "./context.enrichment.batch.contract";

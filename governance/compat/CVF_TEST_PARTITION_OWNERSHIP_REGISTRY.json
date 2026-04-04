@@ -1717,6 +1717,17 @@
         "ContextPackagerBatchContract",
         "createContextPackagerBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Context Enrichment Batch (W38-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.enrichment.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextEnrichmentBatchContract",
+        "createContextEnrichmentBatchContract"
+      ]
     }
   ]
 }

@@ -107,6 +107,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`
 - `reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
 - `reference/CVF_MAINTAINABILITY_STANDARD.md`
+- `reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`
 - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
@@ -139,6 +140,7 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 If the current task is repository cleanup before public packaging:
 
 - `reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md` — **binding protocol: read first**
+- `reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` — extracted orientation layer for explaining repo structure without opening internal-only roots
 - `roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
 - `reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`
 - `reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`

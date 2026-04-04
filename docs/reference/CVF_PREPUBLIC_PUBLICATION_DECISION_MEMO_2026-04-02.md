@@ -26,6 +26,12 @@ Default posture recommendation:
 - treat public exposure as a selective product decision, not a cleanup side effect
 - prefer a model that separates public docs and/or curated public exports from the private core
 
+Current operator decision update (`2026-04-04`):
+
+- keep `v1.0/` and `v1.1/` at their current paths
+- do not use pre-public relocation as a reason to move dense legacy/reference roots
+- explain repository structure through extracted orientation docs before considering any broader root movement
+
 ## Core Reality
 
 If one GitHub repository is public, the repository contents can be cloned as a whole.
@@ -187,6 +193,7 @@ Practical recommendation for the next decision wave:
 
 - do not choose `FULL_PUBLIC_MONOREPO` as the first publication step
 - finish repository restructuring preparation first
+- keep `v1.0/` and `v1.1/` freeze-in-place unless a separate preservation override is justified later
 - decide whether CVF’s near-term priority is:
   - public understanding
   - selective technical adoption
@@ -235,6 +242,8 @@ Near-term recommendation:
 
 - keep `private-by-default`
 - complete classification and governance preparation
+- publish an extracted repository-structure explanation layer for outside readers
+- keep high-density frozen-reference roots in place instead of relocating them for appearance alone
 - delay any full-public decision until after repository restructuring planning is mature enough to support selective publication cleanly
 
 Most likely best first publication move:

@@ -11,6 +11,7 @@
 | You are | Go to |
 |---------|-------|
 | 🆕 **New to CVF?** | [5-Minute Intro](docs/GET_STARTED.md#cvf-in-5-minutes) |
+| 🗺️ **Repo Structure** | [Public Structure Overview](docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md) |
 | 📚 **124 Skills** | [Skill Library](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
 | 🚀 **Web UI** | [v1.6 Agent Platform](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
 | 🛡️ **Safety Dashboard** | [Non-Coder Dashboard](EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/) |
@@ -20,4 +21,4 @@
 
 **➡️ [Go to GET_STARTED.md now](docs/GET_STARTED.md)**
 
-*Last updated: February 24, 2026*
+*Last updated: April 4, 2026*

@@ -23,6 +23,7 @@ Decision summary:
 - `GO` for one bounded `P3/CP1` retired-reference-root cleanup wave
 - `HOLD` for any further `P3` physical relocation until a fresh `GC-019` packet is opened and `GC-039` passes for that concrete move set
 - `HOLD` for any further `P3` physical relocation unless it also runs on a dedicated `restructuring/p3-*` branch and secondary git worktree
+- `HOLD` for relocating `v1.0/` or `v1.1/`; current operator posture is to keep those dense frozen-reference roots in place
 
 Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically governed by the artifacts above.
 
@@ -51,6 +52,9 @@ Executed move set already in canon:
 - audit/review chain:
   - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
+- explicit freeze-in-place exclusions:
+  - `v1.0/`
+  - `v1.1/`
 
 ## Rule 2: Private by Default
 
@@ -109,6 +113,11 @@ Roots tagged `PUBLIC_DOCS_ONLY` are **not** mirror-safe as-is:
 
 Before any public docs mirror is created, a content audit pass must confirm that only appropriate material goes into the mirror.
 
+For dense frozen-reference roots:
+
+- do not mirror `v1.0/` or `v1.1/` directly as public-orientation material
+- use extracted docs such as `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`
+
 ## Rule 6: Governance Enforcement Chain
 
 Three controls enforce restructuring governance:
@@ -136,6 +145,7 @@ All three run in:
 8. decide publication model without reading `CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 9. execute future `P3` physical relocation directly on `cvf-next`
 10. execute future `P3` physical relocation without a dedicated secondary git worktree
+11. propose relocation of `v1.0/` or `v1.1/` under the current posture; these roots are freeze-in-place unless a separate preservation override is approved
 
 ## Rule 8: Re-assessment Timeline
 

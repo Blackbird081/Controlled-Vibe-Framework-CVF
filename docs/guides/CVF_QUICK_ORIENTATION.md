@@ -97,6 +97,7 @@ Quick glance vào trạng thái hệ thống hiện tại:
 
 | Bạn muốn gì? | Đọc gì? |
 |---|---|
+| Hiểu cấu trúc repo đúng và nhanh | [`CVF_PUBLIC_STRUCTURE_OVERVIEW.md`](../reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md) |
 | Hiểu kiến trúc CVF đầy đủ | [`CVF_CORE_KNOWLEDGE_BASE.md`](../CVF_CORE_KNOWLEDGE_BASE.md) |
 | Bắt đầu dùng CVF cho project | [`GET_STARTED.md`](../GET_STARTED.md) |
 | Hướng dẫn chi tiết solo/team/enterprise | [`docs/guides/`](./) |

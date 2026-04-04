@@ -20,6 +20,7 @@ Status: current readiness reference that must be consulted before any `P3` struc
 5. the publication decision memo still has a live re-assessment date
 6. any future physical relocation wave executes on a dedicated `restructuring/p3-*` branch
 7. any future physical relocation wave executes from a secondary git worktree, not the canonical `cvf-next` working tree
+8. roots explicitly held `freeze in place` remain out of scope unless a separate preservation override packet reopens them
 
 ## Current Phase-Gate Status
 
@@ -92,6 +93,13 @@ Executed move set:
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
 
+Current freeze-in-place roots:
+
+- `v1.0/`
+- `v1.1/`
+
+These roots stay where they are under the current posture. Public understanding should rely on extracted docs, not direct relocation of these paths.
+
 ## Required Next Step Before Any Further P3 Move
 
 Before any further `P3` authorization:
@@ -101,6 +109,7 @@ Before any further `P3` authorization:
 - confirm the target publication model that the relocation wave is trying to support
 - execute on a dedicated branch matching `restructuring/p3-*`
 - use a dedicated secondary worktree for that branch so relocation changes stay isolated from the canonical workspace
+- exclude `v1.0/` and `v1.1/` unless a separate preservation review explicitly reopens them
 
 ## Related Artifacts
 

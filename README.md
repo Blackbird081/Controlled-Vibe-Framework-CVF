@@ -64,6 +64,7 @@ Choose the shortest path for your role:
 | Non-coder | [Getting Started](docs/GET_STARTED.md) and [Non-Coder Governed Packet](docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md) |
 | Coder / Integrator | [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md) and [Reference Governed Loop](docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md) |
 | Auditor / Reviewer | [Independent System Checkpoint](docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md) |
+| Need the real repo map first | [Public Structure Overview](docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md) |
 
 ### Quick Run: Web UI
 
@@ -123,6 +124,8 @@ Primary status anchors:
 | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/` | Web UI, non-coder flows, guard APIs, governed execute path |
 | `governance/` | governance toolkit, policy, operations guards, compat gates |
 | `docs/` | canonical docs, baselines, roadmaps, reviews, release records |
+
+For a curated explanation of which roots are safe orientation surfaces and which stay internal or frozen in place, read [Public Structure Overview](docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md).
 
 ## Key Docs
 

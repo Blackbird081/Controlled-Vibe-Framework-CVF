@@ -8,6 +8,7 @@ Status: planning-only roadmap for pre-public repository hygiene and structural c
 - prepare CVF for broader public presentation without rushing physical moves
 - classify repository roots and extension roots before any relocation wave starts
 - separate lifecycle planning from structural execution so future folder moves remain governed
+- keep dense frozen-reference roots in place unless a separate preservation review explicitly approves movement
 
 ## Guiding Rule
 
@@ -145,6 +146,12 @@ Current executed move set:
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
 
+Current freeze-in-place exclusions:
+
+- `v1.0/` and `v1.1/` stay at their current paths under the present relocation posture
+- reason: these roots carry too many important files and too much historical/reference density to justify path churn during pre-public cleanup
+- external understanding should come from extracted orientation docs rather than moving these roots directly
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
@@ -153,6 +160,7 @@ Exit condition:
 
 - align docs navigation, product packaging, release-facing structure, and onboarding paths
 - reduce visible structural noise for external evaluators
+- publish extracted structure/orientation material that explains CVF correctly without mirroring internal-only or sensitive payloads
 - decide whether CVF will ship as:
   - public docs only
   - curated public modules
@@ -172,6 +180,7 @@ Current execution boundary:
 - `P0-P2` may proceed now
 - `P3-P5` require later explicit authorization
 - any future `P3` relocation beyond delivered `P3/CP1` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree
+- dense frozen-reference roots such as `v1.0/` and `v1.1/` default to `freeze in place`; do not move them unless a separate preservation override packet says otherwise
 
 ## Non-Goals For `P0-P2`
 

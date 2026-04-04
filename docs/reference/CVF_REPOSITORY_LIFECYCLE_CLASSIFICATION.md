@@ -30,6 +30,12 @@ Summary:
 - `MERGED_RETAINED`: `CVF_SKILL_LIBRARY`, `ECOSYSTEM`, `ui_governance_engine`
 - `FROZEN_REFERENCE`: `REVIEW`, `v1.0`, `v1.1`
 
+Freeze-in-place note:
+
+- `v1.0` and `v1.1` are not current relocation targets
+- under the current pre-public posture, these roots stay at their existing paths to preserve high-density reference value and avoid accidental data loss
+- if outside readers need orientation, use extracted docs such as `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` instead of moving or flattening these roots
+
 Retired from the visible repository root in `P3/CP1`:
 
 - `CVF Edit`
@@ -73,6 +79,7 @@ Because of that:
 - `P0-P2` classify only
 - `P3` is the first phase where physical moves may happen
 - every relocation wave should assume path compatibility work is required even if the folder name remains the same
+- frozen-reference roots with unusually high file density may still be intentionally kept in place even after `P3` is available
 
 ## Public GitHub Implication
 

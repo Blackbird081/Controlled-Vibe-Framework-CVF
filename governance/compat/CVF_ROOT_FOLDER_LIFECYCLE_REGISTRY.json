@@ -68,7 +68,21 @@
     { "path": "scripts", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": "tools", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": "ui_governance_engine", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
-    { "path": "v1.0", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "v1.1", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" }
+    {
+      "path": "v1.0",
+      "lifecycleClass": "FROZEN_REFERENCE",
+      "exposureClass": "INTERNAL_ONLY",
+      "retentionPolicy": "FREEZE_IN_PLACE",
+      "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
+      "rationale": "High-density frozen reference root. Preserve path stability and data retention; explain structure through extracted docs instead of relocation."
+    },
+    {
+      "path": "v1.1",
+      "lifecycleClass": "FROZEN_REFERENCE",
+      "exposureClass": "INTERNAL_ONLY",
+      "retentionPolicy": "FREEZE_IN_PLACE",
+      "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
+      "rationale": "High-density frozen reference root. Preserve path stability and data retention; explain structure through extracted docs instead of relocation."
+    }
   ]
 }

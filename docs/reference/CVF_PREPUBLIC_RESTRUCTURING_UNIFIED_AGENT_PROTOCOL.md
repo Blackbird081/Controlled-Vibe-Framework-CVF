@@ -45,6 +45,12 @@ No agent may authorize further P3 physical moves without a separate `GC-019` app
 `GC-039` is also required, but it verifies readiness; it does not replace `GC-019`.
 No agent may execute a further P3 physical move directly on `cvf-next`.
 
+Relocation closure rule:
+
+- treat the relocation lane as `closed-by-default` after the landed `P3/CP1` cleanup and the freeze-in-place canonization
+- do not reopen root-level relocation because of cosmetic cleanup pressure
+- reopen only through a preservation-override path that re-satisfies `GC-019`, `GC-039`, dedicated-branch isolation, and secondary-worktree isolation
+
 Canonical physical move set landed on `cvf-next`:
 
 - `P3 / CP1` — retire `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` from the visible repo root while preserving optional local recovery under `.private_reference/legacy/`
@@ -69,6 +75,8 @@ Current planning interpretation after `P3/CP3` through `P3/CP5`:
 - no further low-risk physical `P3` move is currently preferred
 - `v1.0/` and `v1.1/` should be treated as visible frozen foundation anchors, not default relocation targets
 - for those roots, prefer `P4` navigation/packaging/docs-mirror curation over forced path movement
+- the same freeze-first logic also applies to `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, and `ui_governance_engine/`
+- master architecture completion now outranks any new relocation proposal by default
 
 Current `P4` status:
 

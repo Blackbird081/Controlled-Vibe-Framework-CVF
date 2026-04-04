@@ -181,6 +181,12 @@ Canonical landing-path status:
   - `GC-039` now defines the landing path explicitly
   - `P3/CP2` physical move remains excluded while `P3/CP3-P3/CP5` governance artifacts and `P4` governance artifacts are authorized on `cvf-next`
 
+Current lane posture:
+
+- relocation is now `CLOSED-BY-DEFAULT`
+- no further root-level `P3` move should be treated as pending work
+- future reopening requires an explicit preservation override plus fresh `GC-019` + `GC-039`
+
 Foundation-anchor strategy pivot:
 
 - `P3 / CP5` foundation-anchor preservation packet:

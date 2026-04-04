@@ -121,6 +121,30 @@ Cherry-pick instructions: see `docs/baselines/CVF_GC039_P4_PACKAGING_LANDING_PAT
 
 ---
 
+## Relocation Closure Notice
+
+Status: **CLOSED-BY-DEFAULT** on the canonical branch state as of 2026-04-04.
+
+Meaning:
+
+- the relocation lane is no longer an active delivery priority
+- `P3/CP1` is the only landed physical move set
+- `P3/CP2` remains evidence only and must not be treated as pending canon work
+- default next priority is master architecture completion, not more root motion
+
+Reopen only if all of the following are explicitly true:
+
+1. a new preservation override packet explains why path movement is safer than continued freeze-in-place retention
+2. `GC-019` approves the concrete relocation scope
+3. `GC-039` passes again for that concrete proposal
+4. execution happens on a dedicated `restructuring/p3-*` branch
+5. execution uses a secondary git worktree
+6. the affected freeze-in-place roots are individually reopened in canon docs and registries before execution
+
+Without that chain, agents must treat relocation as closed and out of scope.
+
+---
+
 ## Required Next Step Before Any Further P3 Move
 
 Before any further `P3` authorization:

@@ -13,7 +13,7 @@
 
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 - Non-canonical side lanes are separate from this handoff; use this file for `cvf-next` continuation only
-- Pre-public restructuring posture is now narrowed and canonized: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
+- Pre-public restructuring posture is now narrowed, canonized, and closed-by-default: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **2696 tests, 0 failures**
@@ -65,8 +65,8 @@ Current guidance:
 - W38-T1 closure review: `docs/reviews/CVF_W38_T1_TRANCHE_CLOSURE_REVIEW_2026-04-04.md`
 - GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W38_T1_CLOSED_2026-04-04.md`
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
-- **Relocation lane landing EXECUTED (2026-04-04)**: P3/CP3–CP5 + P4/CP1–CP17 cherry-picked onto `cvf-next` (27 commits). Module export boundaries live: `cvf-core-git-for-ai v0.1.0`, `cvf-guard-contract v0.1.0`, `cvf-runtime-adapter-hub v0.1.0`. P3/CP2 physical move excluded (freeze-in-place maintained). Only remaining item: `npm publish` (requires human `npm login`; steps in `docs/audits/CVF_P4_CP16_PACKAGING_ARCHITECTURE_DECISION_AUDIT_2026-04-03.md`).
-- **Pre-public restructuring lane is intentionally narrowed**: treat root-level relocation as materially complete after `P3/CP1` plus extracted orientation coverage; do not open another broad relocation wave by default
+- **Relocation lane CLOSED-BY-DEFAULT (2026-04-04)**: `P3/CP1` is the only landed physical move. `P3/CP3–CP5` + `P4/CP1–CP17` are landed governance/package-boundary canon. `P3/CP2` physical move remains excluded under freeze-in-place posture. Remaining human-gated item is `npm publish` and it is not a relocation task.
+- **Reopen rule**: do not open another broad relocation wave by default. Reopen only through preservation override + fresh `GC-019` + fresh `GC-039` + dedicated `restructuring/p3-*` branch + secondary worktree.
 - **Freeze-in-place root set**: `v1.0/`, `v1.1/`, `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, `ui_governance_engine/`
 - **Why**: protection, lower churn, and faster closure matter more than cosmetic tree cleanup; explain structure through curated docs instead of moving sensitive or reference-heavy roots
 - **Allowed next work on this lane**: docs curation, extracted orientation, publication-boundary clarification, and handoff alignment only

@@ -47,10 +47,11 @@
     },
     {
       "phase": "P3",
-      "status": "OPEN",
-      "lastReviewedAt": "2026-04-02",
+      "status": "BLOCKED",
+      "lastReviewedAt": "2026-04-04",
       "evidence": [
         "docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md",
+        "docs/reference/CVF_PREPUBLIC_P3_READINESS.md",
         "docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md",
         "docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md",
         "docs/audits/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_AUDIT_2026-04-02.md",

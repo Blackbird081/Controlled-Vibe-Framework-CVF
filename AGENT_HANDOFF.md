@@ -6,7 +6,7 @@
 > Workspace: `D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF-P3-CP2`
 > Current local HEAD: `5b287c46`
 > Current remote checkpoint: `4369a231`
-> State: **P4/CP14 COMMITTED LOCALLY ON ISOLATED RELOCATION LANE** — `P3/CP2` remains the only delivered physical relocation wave; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` foundation-anchor pivot remains active; `P4/CP1-P4/CP14` are complete on this lane; all three shortlisted candidates `READY_FOR_EXPORT`; publication decision made: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`, npm, semver `0.x`; GC-039 landing path: HOLD
+> State: **P4/CP15 COMMITTED LOCALLY ON ISOLATED RELOCATION LANE** — `P3/CP2` remains the only delivered physical relocation wave; `P3/CP3` and `P3/CP4` remain `HOLD`; `P3/CP5` foundation-anchor pivot remains active; `P4/CP1-P4/CP15` are complete on this lane; all three at `0.1.0`; pre-publish checklist 3/3 PASS; sole blocker: TypeScript packaging decision (CP16)
 
 ---
 
@@ -66,6 +66,11 @@
   - registry: npm public; packages: `cvf-core-git-for-ai`, `cvf-guard-contract`, `cvf-runtime-adapter-hub`
   - versioning: semver `0.x`, initial `0.1.0`
   - GC-039 landing path: HOLD (pending GC-039 extension packet on `cvf-next`)
+- `P4/CP15`
+  - pre-publish checklist complete: 3/3 PASS (npm names available, CC-BY-NC-ND-4.0 present, `better-sqlite3` optional)
+  - version fix delivered: all three `package.json` files set to `0.1.0`
+  - TypeScript packaging gap identified: all exports point to `.ts` source; requires CP16 decision (Option A: ship source vs Option B: compile-to-JS)
+  - concrete publish steps documented; gated on CP16
 
 ## Current Assessment
 
@@ -73,9 +78,10 @@
 - forcing additional physical relocation after that was correctly stopped
 - `v1.0/` and `v1.1/` are now treated as architecture-significant anchors, not as obvious next move targets
 - the readiness evaluation objective is complete: all three shortlisted candidates are `READY_FOR_EXPORT`
-- the publication decision is now made: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`, npm, semver `0.x`
+- the publication decision is made: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`, npm, semver `0.x`
+- pre-publish checklist complete (3/3); version fix delivered (all at `0.1.0`)
 - the remaining unresolved issues are:
-  - publication implementation (pre-publish verification checklist + actual npm publish steps)
+  - TypeScript packaging architecture decision (Option A vs Option B) — CP16 blocker for `npm publish`
   - canonical landing back to `cvf-next` under `GC-039` (still HOLD)
 
 ## Hard Boundaries
@@ -94,19 +100,18 @@
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 - `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
 - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
-- `docs/baselines/CVF_P4_CP14_PUBLICATION_DECISION_DELTA_2026-04-03.md`
-- `docs/reference/CVF_PUBLICATION_DECISION_RECORD_2026-04-03.md`
+- `docs/baselines/CVF_P4_CP15_PUBLISH_IMPLEMENTATION_DELTA_2026-04-03.md`
 
 ## Default Next Step
 
 - if continuing locally in this worktree:
-  - start from `P4/CP14`
-  - publication decision is made; all three candidates are `READY_FOR_EXPORT`
-  - next bounded packet is `P4/CP15` — publication implementation
-  - that packet must: run pre-publish verification checklist (npm name availability, CC-BY-NC-ND acknowledgment, `better-sqlite3` optional install test), define concrete npm publishing steps, produce governance artifacts
+  - start from `P4/CP15`
+  - pre-publish checklist done; version fix done; sole blocker is TypeScript packaging decision
+  - next bounded packet is `P4/CP16` — packaging architecture decision
+  - that packet must: choose Option A (ship TypeScript source) or Option B (compile-to-JS), implement the result, and authorize the `npm publish` step
 - if remote parity is required before more work:
   - push all local checkpoints first
-  - then open `P4/CP15`
+  - then open `P4/CP16`
 
 ## Verification Pattern
 

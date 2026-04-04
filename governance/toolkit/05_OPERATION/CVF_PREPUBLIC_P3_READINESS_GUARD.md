@@ -24,6 +24,12 @@ Before any `P3` structural relocation authorization proceeds:
 - any future physical relocation wave must execute on a dedicated `restructuring/p3-*` branch, not directly on `cvf-next`
 - any future physical relocation wave must use a secondary git worktree so structural changes are isolated from the canonical working tree
 
+GC-039 landing-path exception:
+
+- this guard blocks future physical relocation execution
+- it does not treat unrelated feature work, or GC-039-authorized `P4` governance/module-boundary landing, as a `P3` relocation wave by itself
+- while freeze-in-place posture is active, `P3/CP2` physical landing onto `cvf-next` remains forbidden
+
 This guard does not itself authorize `P3`.
 
 ## Enforcement Surface

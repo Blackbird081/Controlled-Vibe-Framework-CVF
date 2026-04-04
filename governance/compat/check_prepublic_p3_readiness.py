@@ -49,6 +49,11 @@ RELOCATION_GOVERNANCE_PATHS = {
     "governance/compat/CVF_ROOT_FILE_EXPOSURE_REGISTRY.json",
     "governance/compat/CVF_PREPUBLIC_PHASE_GATE_REGISTRY.json",
 }
+RETIRED_REFERENCE_ROOTS = {
+    "CVF Edit",
+    "CVF_Important",
+    "CVF_Restructure",
+}
 
 
 def _rel(path: Path) -> str:
@@ -116,16 +121,40 @@ def _changed_entries() -> list[tuple[str, list[str]]]:
     return entries
 
 
-def _is_structural_path(path: str) -> bool:
+def _relocation_sensitive_roots(root_entries: list[dict[str, Any]]) -> set[str]:
+    sensitive: set[str] = set(RETIRED_REFERENCE_ROOTS)
+    for entry in root_entries:
+        path = entry.get("path")
+        if not path:
+            continue
+        lifecycle_class = entry.get("lifecycleClass")
+        exposure_class = entry.get("exposureClass")
+        retention_policy = entry.get("retentionPolicy")
+        if (
+            retention_policy == "FREEZE_IN_PLACE"
+            or lifecycle_class in {"MERGED_RETAINED", "FROZEN_REFERENCE", "RETIRE_CANDIDATE"}
+            or exposure_class == "PRIVATE_ENTERPRISE_ONLY"
+        ):
+            sensitive.add(path)
+    return sensitive
+
+
+def _is_structural_path(path: str, visible_roots: set[str], sensitive_roots: set[str]) -> bool:
     if not path:
         return False
     top = path.split("/", 1)[0]
     if top in {"docs", "governance", ".github"}:
         return False
-    return True
+    # Root-level directory add/delete/rename is always structural.
+    if "/" not in path:
+        return path in visible_roots or path in RETIRED_REFERENCE_ROOTS
+    # Nested file churn only counts as relocation activity when it touches
+    # relocation-sensitive roots. This avoids misclassifying unrelated feature
+    # work or authorized P4 packaging/module-boundary changes as P3 relocation.
+    return top in sensitive_roots
 
 
-def _detect_relocation_wave() -> dict[str, Any]:
+def _detect_relocation_wave(root_entries: list[dict[str, Any]]) -> dict[str, Any]:
     entries = _changed_entries()
     if not entries:
         return {
@@ -136,12 +165,14 @@ def _detect_relocation_wave() -> dict[str, Any]:
             "governanceMarkers": [],
         }
 
+    visible_roots = {entry.get("path") for entry in root_entries if entry.get("path")}
+    sensitive_roots = _relocation_sensitive_roots(root_entries)
     structural_paths: list[str] = []
     governance_markers: list[str] = []
     for status, paths in entries:
         normalized_status = status[:1]
         for path in paths:
-            if normalized_status in {"A", "D", "R"} and _is_structural_path(path):
+            if normalized_status in {"A", "D", "R"} and _is_structural_path(path, visible_roots, sensitive_roots):
                 structural_paths.append(path)
             if path.startswith(RELOCATION_DOC_PREFIXES) or path in RELOCATION_GOVERNANCE_PATHS:
                 governance_markers.append(path)
@@ -286,7 +317,7 @@ def build_report() -> dict[str, Any]:
     if "check_prepublic_p3_readiness.py" not in workflow_text:
         violations.append({"type": "workflow_missing_enforcement", "path": _rel(WORKFLOW_PATH), "message": "CI workflow does not run pre-public P3 readiness."})
 
-    relocation_wave = _detect_relocation_wave()
+    relocation_wave = _detect_relocation_wave(root_entries)
     if relocation_wave["detected"]:
         current_branch = relocation_wave["currentBranch"]
         worktree_count = relocation_wave["worktreeCount"]

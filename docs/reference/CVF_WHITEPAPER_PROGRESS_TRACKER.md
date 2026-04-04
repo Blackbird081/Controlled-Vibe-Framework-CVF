@@ -183,7 +183,7 @@ Memory class: POINTER_RECORD
 | `W35-T1` Intake Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-03 — IntakeBatchContract canonical; CPF 2594 tests (+33); all pass conditions satisfied; W1-T2 intake batch surface closed` |
 | `W36-T1` Retrieval Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-03 — RetrievalBatchContract canonical; CPF 2624 tests (+31); all pass conditions satisfied; W1-T2 RetrievalContract.retrieve() batch surface closed` |
 | `W37-T1` Context Packager Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-04 — ContextPackagerBatchContract canonical; CPF 2660 tests (+36); all 9 pass conditions satisfied; W1-T12 ContextPackagerContract.pack() batch surface closed` |
-| `W38-T1` Context Enrichment Batch Contract (REALIZATION class) | `CP1 DELIVERED 2026-04-04 — ContextEnrichmentBatchContract canonical; CPF 2696 tests (+36); all 9 pass conditions satisfied; W1-T11 context builder enrichment batch surface; awaiting CP2 tranche closure` |
+| `W38-T1` Context Enrichment Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-04 — ContextEnrichmentBatchContract canonical; CPF 2696 tests (+36); all 9 pass conditions satisfied; W1-T11 context builder enrichment batch surface closed` |
 
 ---
 
@@ -216,9 +216,9 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W38_T1_CP1_DELIVERED_2026-04-04.md` (W38-T1 CP1 DELIVERED 2026-04-04 — ContextEnrichmentBatchContract canonical; CPF 2696 (+36))
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W38_T1_CLOSED_2026-04-04.md` (W38-T1 CLOSED DELIVERED 2026-04-04 — ContextEnrichmentBatchContract canonical; CPF 2696 (+36); W1-T11 enrichment batch surface closed)
 - Latest continuity sync delta: `docs/baselines/CVF_W32_T1_ARCHITECTURE_BASELINE_SYNC_DELTA_2026-04-01.md`
-- Current closure anchor: `docs/reviews/CVF_W37_T1_TRANCHE_CLOSURE_REVIEW_2026-04-04.md`
+- Current closure anchor: `docs/reviews/CVF_W38_T1_TRANCHE_CLOSURE_REVIEW_2026-04-04.md`
 - Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W38_T1_CONTEXT_ENRICHMENT_BATCH_2026-04-04.md` (W38-T1 GC-018 AUTHORIZED)
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W38_T1_CONTEXT_ENRICHMENT_BATCH_2026-04-04.md` (W38-T1 GC-018 AUTHORIZED — CLOSED DELIVERED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

@@ -25,6 +25,7 @@ Decision summary:
 - `HOLD` for any further `P3` physical relocation unless it also runs on a dedicated `restructuring/p3-*` branch and secondary git worktree
 
 Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically governed by the artifacts above.
+As of 2026-04-04, that canon has been converged into `main`; `cvf-next` is retained as a synchronized compatibility mirror, not a separate forward-moving restructuring lane.
 
 ## Rule 1: Phased Approach — No Skipping
 
@@ -33,7 +34,7 @@ Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically govern
 | `P0` | `CLOSED` | Inventory and lifecycle/exposure registry creation |
 | `P1` | `CLOSED` | Root-level folder review and lifecycle posture |
 | `P2` | `CLOSED` | Extension lifecycle cleanup and exposure tagging |
-| `P3` | `PER-MOVE ONLY` | `P3/CP1` is the only landed physical move on `cvf-next`; isolated `P3/CP2` evidence exists but is excluded from canonical landing while freeze-in-place posture is active; any reopened move still requires fresh `GC-019` + `GC-039` |
+| `P3` | `PER-MOVE ONLY` | `P3/CP1` is the only landed physical move on canon; isolated `P3/CP2` evidence exists but is excluded from canonical landing while freeze-in-place posture is active; any reopened move still requires fresh `GC-019` + `GC-039` |
 | `P4` | `OPEN` | Curated front-door navigation, docs-mirror boundaries, export-boundary implementation, and publication-boundary governance are landed on canon; publication remains selective and human-gated |
 | `P5` | **BLOCKED** | Retirement and archive closure |
 
@@ -43,7 +44,7 @@ Machine-readable source of truth:
 
 No agent may authorize further P3 physical moves without a separate `GC-019` approval packet.
 `GC-039` is also required, but it verifies readiness; it does not replace `GC-019`.
-No agent may execute a further P3 physical move directly on `cvf-next`.
+No agent may execute a further P3 physical move directly on canonical branches (`main` or synchronized `cvf-next`).
 
 Relocation closure rule:
 
@@ -51,7 +52,7 @@ Relocation closure rule:
 - do not reopen root-level relocation because of cosmetic cleanup pressure
 - reopen only through a preservation-override path that re-satisfies `GC-019`, `GC-039`, dedicated-branch isolation, and secondary-worktree isolation
 
-Canonical physical move set landed on `cvf-next`:
+Canonical physical move set landed on canon:
 
 - `P3 / CP1` — retire `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` from the visible repo root while preserving optional local recovery under `.private_reference/legacy/`
 - audit/review chain:
@@ -67,7 +68,7 @@ Isolated relocation evidence retained but not landed on canon:
 - landing authority:
   - `docs/baselines/CVF_GC039_P4_PACKAGING_LANDING_PATH_DELTA_2026-04-04.md`
 - canonical result:
-  - `P3/CP2` physical move is excluded from `cvf-next`
+  - `P3/CP2` physical move is excluded from canonical branches
   - `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` remain freeze-in-place at the visible repo root
 
 Current planning interpretation after `P3/CP3` through `P3/CP5`:
@@ -81,7 +82,7 @@ Current planning interpretation after `P3/CP3` through `P3/CP5`:
 Current `P4` status:
 
 - `P4 / CP1` began as a planning-only packet
-- `P4 / CP1` through `P4 / CP17` governance artifacts are now landed on `cvf-next`
+- `P4 / CP1` through `P4 / CP17` governance artifacts are now landed on canon
 - the lane authorizes and records:
   - curated front-door navigation planning
   - docs-mirror boundary definition
@@ -198,11 +199,11 @@ All three run in:
 2. assume the repository will become public
 3. treat `PUBLIC_EXPORT_CANDIDATE` as "ready to export"
 4. treat `PUBLIC_DOCS_ONLY` as "safe to mirror as-is"
-5. push to `main` — work on `cvf-next` only
+5. perform relocation work directly on canonical branches (`main` or synchronized `cvf-next`)
 6. create new root directories without lifecycle + exposure classification
 7. skip governance checks when changing root or extension structure
 8. decide publication model without reading `CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
-9. execute future `P3` physical relocation directly on `cvf-next`
+9. execute future `P3` physical relocation directly on `main` or synchronized `cvf-next`
 10. execute future `P3` physical relocation without a dedicated secondary git worktree
 
 ## Rule 8: Re-assessment Timeline

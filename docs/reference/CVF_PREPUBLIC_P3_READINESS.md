@@ -19,7 +19,7 @@ Status: current readiness reference that must be consulted before any `P3` struc
 4. every `PUBLIC_EXPORT_CANDIDATE` extension declares an explicit export-readiness status
 5. the publication decision memo still has a live re-assessment date
 6. any future physical relocation wave executes on a dedicated `restructuring/p3-*` branch
-7. any future physical relocation wave executes from a secondary git worktree, not the canonical `cvf-next` working tree
+7. any future physical relocation wave executes from a secondary git worktree, not the canonical `main` working tree or its synchronized `cvf-next` mirror
 8. roots explicitly held `freeze in place` remain out of scope unless a separate preservation override packet reopens them
 
 ## Current Phase-Gate Status
@@ -112,7 +112,7 @@ Source authority: `docs/baselines/CVF_GC039_P4_PACKAGING_LANDING_PATH_DELTA_2026
 
 | Item | Decision |
 | --- | --- |
-| P3/CP2 physical move (`CVF_SKILL_LIBRARY/`, `ui_governance_engine/`) | **EXCLUDED** — freeze-in-place posture maintained on `cvf-next` |
+| P3/CP2 physical move (`CVF_SKILL_LIBRARY/`, `ui_governance_engine/`) | **EXCLUDED** — freeze-in-place posture maintained on canonical branches after convergence |
 | P3/CP3–CP5 governance artifacts | **AUTHORIZED** to land via cherry-pick |
 | P4/CP1–CP17 governance artifacts | **AUTHORIZED** to land via cherry-pick |
 | P4/CP7–CP9 module export boundary changes | **AUTHORIZED** to land via cherry-pick |
@@ -130,6 +130,7 @@ Meaning:
 - the relocation lane is no longer an active delivery priority
 - `P3/CP1` is the only landed physical move set
 - `P3/CP2` remains evidence only and must not be treated as pending canon work
+- the closure remains in force after `main` / `cvf-next` convergence
 - default next priority is master architecture completion, not more root motion
 
 Reopen only if all of the following are explicitly true:
@@ -140,6 +141,7 @@ Reopen only if all of the following are explicitly true:
 4. execution happens on a dedicated `restructuring/p3-*` branch
 5. execution uses a secondary git worktree
 6. the affected freeze-in-place roots are individually reopened in canon docs and registries before execution
+7. reopened relocation work is kept off `main` and off synchronized `cvf-next` until a separate landing decision is authorized
 
 Without that chain, agents must treat relocation as closed and out of scope.
 

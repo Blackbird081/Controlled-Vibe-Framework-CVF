@@ -54,15 +54,15 @@
 
 ## Immediate Next Action Required
 
-**W37-T1 CLOSED DELIVERED. No active tranche. Restructuring lane is narrowed for fast closure; proceed with quality assessment and master-architecture-following next candidate work.**
+**W38-T1 AUTHORIZED. Active tranche: ContextEnrichmentBatchContract (REALIZATION class). Proceed with CP1 implementation.**
 
 Current guidance:
 
 - **W37-T1 CLOSED DELIVERED** — ContextPackagerBatchContract (REALIZATION class); CPF 2660 (+36); all 9 pass conditions satisfied; W1-T12 ContextPackagerContract.pack() batch surface closed
-- Closure review: `docs/reviews/CVF_W37_T1_TRANCHE_CLOSURE_REVIEW_2026-04-04.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W37_T1_CLOSED_2026-04-04.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
-- **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W38-T1)
+- **W38-T1 AUTHORIZED** — GC-018 issued 2026-04-04; ContextEnrichmentBatchContract; batches `addSystemSegment(pkg, systemContent)`; W1-T11 context builder enrichment batch surface; CPF target: 2660 + ≥28
+- GC-018 auth: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W38_T1_CONTEXT_ENRICHMENT_BATCH_2026-04-04.md`
+- GC-026 auth sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W38_T1_AUTHORIZATION_2026-04-04.md`
+- **Next**: implement CP1 — create `context.enrichment.batch.contract.ts` + `context.enrichment.batch.contract.test.ts` (≥28 tests) + barrel exports + partition registry entry + governance artifacts
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
 - **Relocation lane landing EXECUTED (2026-04-04)**: P3/CP3–CP5 + P4/CP1–CP17 cherry-picked onto `cvf-next` (27 commits). Module export boundaries live: `cvf-core-git-for-ai v0.1.0`, `cvf-guard-contract v0.1.0`, `cvf-runtime-adapter-hub v0.1.0`. P3/CP2 physical move excluded (freeze-in-place maintained). Only remaining item: `npm publish` (requires human `npm login`; steps in `docs/audits/CVF_P4_CP16_PACKAGING_ARCHITECTURE_DECISION_AUDIT_2026-04-03.md`).
 - **Pre-public restructuring lane is intentionally narrowed**: treat root-level relocation as materially complete after `P3/CP1` plus extracted orientation coverage; do not open another broad relocation wave by default

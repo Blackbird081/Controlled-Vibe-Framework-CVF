@@ -1706,6 +1706,17 @@
         "RetrievalBatchContract",
         "createRetrievalBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Context Packager Batch (W37-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextPackagerBatchContract",
+        "createContextPackagerBatchContract"
+      ]
     }
   ]
 }

@@ -4,7 +4,7 @@
 > Last push: `W36-T1 CLOSED DELIVERED — RetrievalBatchContract CP1 + tranche closure → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **W37-T1 GC-018 AUTHORIZED** — ContextPackagerBatchContract (REALIZATION class); W1-T12 context packager batch surface; CPF 2624 baseline; implementation pending
+> State: **W37-T1 CP1 DELIVERED** — ContextPackagerBatchContract canonical; CPF 2660 (+36); W1-T12 context packager batch surface CP1 complete; awaiting CP2 tranche closure
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -15,7 +15,7 @@
 - Non-canonical side lanes are separate from this handoff; use this file for `cvf-next` continuation only
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2624 tests, 0 failures**
+- CPF (Control Plane Foundation): **2660 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -52,16 +52,16 @@
 
 ## Immediate Next Action Required
 
-**W37-T1 GC-018 AUTHORIZED. Implement ContextPackagerBatchContract — W1-T12 context packager batch surface.**
+**W37-T1 CP1 DELIVERED. Execute CP2 — tranche closure.**
 
 Current guidance:
 
-- **W37-T1 GC-018 AUTHORIZED** — ContextPackagerBatchContract (REALIZATION class); W1-T12 context packager batch surface; Full Lane; CPF 2624 baseline
-- GC-018 authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W37_T1_CONTEXT_PACKAGER_BATCH_2026-04-04.md`
-- GC-026 authorization sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W37_T1_AUTHORIZATION_2026-04-04.md`
-- Execution plan: `docs/roadmaps/CVF_W37_T1_CONTEXT_PACKAGER_BATCH_EXECUTION_PLAN_2026-04-04.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
-- **Next**: implement CP1 Full Lane for W37-T1 — create `context.packager.batch.contract.ts` and `context.packager.batch.contract.test.ts` (≥ 28 tests), add exports to `control.plane.context.barrel.ts`, add partition registry entry, run CPF tests, create CP1 governance artifacts
+- **W37-T1 CP1 DELIVERED** — ContextPackagerBatchContract (REALIZATION class); CPF 2660 (+36); all 9 pass conditions satisfied; W1-T12 context packager batch surface CP1 complete
+- CP1 audit: `docs/audits/CVF_W37_T1_CP1_CONTEXT_PACKAGER_BATCH_AUDIT_2026-04-04.md`
+- CP1 review: `docs/reviews/CVF_GC019_W37_T1_CP1_CONTEXT_PACKAGER_BATCH_REVIEW_2026-04-04.md`
+- CP1 delta: `docs/baselines/CVF_W37_T1_CP1_CONTEXT_PACKAGER_BATCH_DELTA_2026-04-04.md`
+- GC-026 CP1 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W37_T1_CP1_DELIVERED_2026-04-04.md`
+- **Next**: create W37-T1 tranche closure review + GC-026 closed sync; update tracker (W37-T1 CLOSED DELIVERED); update AGENT_HANDOFF; commit CP2 + push
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
 - **Non-canonical side lanes are out of scope for this handoff**: do not continue isolated restructuring or publication-boundary work from `cvf-next`
 - If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`

@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-04` (W37-T1 GC-018 AUTHORIZED — ContextPackagerBatchContract; CPF 2624 / EPF 1123 / GEF 625 / LPF 1465 tests, 0 failures; active tranche: W37-T1 implementation pending)
+> Last refreshed: `2026-04-04` (W37-T1 CP1 DELIVERED — ContextPackagerBatchContract; CPF 2660 / EPF 1123 / GEF 625 / LPF 1465 tests, 0 failures; active tranche: W37-T1 awaiting CP2 closure)
 
 ---
 

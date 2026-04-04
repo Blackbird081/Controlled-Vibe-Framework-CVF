@@ -25,6 +25,16 @@ export type {
 } from "./context.packager.contract";
 
 export {
+  ContextPackagerBatchContract,
+  createContextPackagerBatchContract,
+} from "./context.packager.batch.contract";
+export type {
+  ContextPackagerBatchStatus,
+  ContextPackagerBatch,
+  ContextPackagerBatchContractDependencies,
+} from "./context.packager.batch.contract";
+
+export {
   ContextBuildBatchContract,
   createContextBuildBatchContract,
 } from "./context.build.batch.contract";

@@ -1,6 +1,6 @@
 {
     "name": "cvf-core-git-for-ai",
-    "version": "3.0.0",
+    "version": "0.1.0",
     "description": "CVF Core — Git for AI Development. Foundation Primitives: Commit, Artifact, Process, Staging.",
     "type": "module",
     "main": "./index.ts",

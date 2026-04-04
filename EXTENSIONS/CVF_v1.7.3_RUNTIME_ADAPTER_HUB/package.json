@@ -1,6 +1,6 @@
 {
     "name": "cvf-runtime-adapter-hub",
-    "version": "1.7.3",
+    "version": "0.1.0",
     "description": "CVF v1.7.3 — Runtime Adapter Hub: Universal adapter layer for multi-runtime AI safety",
     "type": "module",
     "main": "./index.ts",

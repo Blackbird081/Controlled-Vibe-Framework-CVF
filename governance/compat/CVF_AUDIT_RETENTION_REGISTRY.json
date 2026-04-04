@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastReviewed": "2026-03-30",
+  "lastReviewed": "2026-04-04",
   "classes": [
     {
       "id": "ACTIVE_RECENT_AUDIT",
@@ -17,7 +17,7 @@
   ],
   "summary": {
     "activeRecentCount": 16,
-    "retainEvidenceCount": 52,
+    "retainEvidenceCount": 54,
     "safeToArchiveCount": 28,
     "archivedCount": 96,
     "derivedAt": "2026-03-30",
@@ -75,6 +75,8 @@
     "docs/audits/CVF_W4_T14_CP2_LEARNING_LOOP_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md",
     "docs/audits/CVF_W4_T18_CP1_TRUTH_MODEL_UPDATE_CONSUMER_PIPELINE_AUDIT_2026-03-27.md",
     "docs/audits/CVF_W4_T18_CP2_TRUTH_MODEL_UPDATE_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md",
-    "docs/audits/CVF_W4_T19_CP1_TRUTH_MODEL_CONSUMER_PIPELINE_AUDIT_2026-03-27.md"
+    "docs/audits/CVF_W4_T19_CP1_TRUTH_MODEL_CONSUMER_PIPELINE_AUDIT_2026-03-27.md",
+    "docs/audits/CVF_W31_T1_CP1_BOARDROOM_ROUND_BATCH_AUDIT_2026-04-01.md",
+    "docs/audits/CVF_W32_T1_CP1_BOARDROOM_MULTI_ROUND_BATCH_AUDIT_2026-04-01.md"
   ]
 }

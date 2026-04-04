@@ -1,114 +1,79 @@
-# CVF CONFORMANCE TRACE ROTATION GUARD
+# CVF Conformance Trace Rotation Guard
 
-> **Type:** Governance Guard  
-> **Effective:** 2026-03-07  
-> **Status:** Active  
-> **Applies to:** `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md` and its scoped archive chain  
-> **Enforced by:** `governance/compat/check_conformance_trace_rotation.py`
+**Guard Class:** `QUALITY_AND_CONFORMANCE_GUARD`
+**Status:** Active rotation rule for the scoped Wave 1 conformance trace and its archive chain.
+**Applies to:** `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md` and the scoped archive chain under `docs/reviews/cvf_phase_governance/logs/`.
+**Enforced by:** `governance/compat/check_conformance_trace_rotation.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
 
----
+## Purpose
 
-## 1. PURPOSE
+- keep the active conformance trace readable enough for humans to review before extending the baseline
+- preserve append-only evidence without forcing all conformance history into one oversized file
+- maintain a recoverable archive chain for older conformance windows
 
-`CVF_CONFORMANCE_TRACE_2026-03-07.md` is a scoped append-only evidence chain for Wave 1 conformance work.
+## Rule
 
-It must stay:
-
-- readable by humans,
-- easy to diff,
-- easy to audit by batch,
-- small enough to review before extending the conformance baseline.
-
-This guard prevents the active scoped trace from becoming too large while preserving append-only recovery through an archive chain.
-
----
-
-## 2. CANONICAL MODEL
-
-The canonical active file remains:
-
-- `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
-
-Historical windows move to:
-
-- `docs/reviews/cvf_phase_governance/logs/CVF_CONFORMANCE_TRACE_ARCHIVE_<YYYY>_PART_<NN>.md`
-
-The active scoped trace remains the entrypoint and current working window.
-
----
-
-## 3. ROTATION THRESHOLDS
-
-> **NON-NEGOTIABLE:**  
-> Rotate the active conformance trace when either threshold is exceeded:
+The active conformance trace remains the canonical entrypoint and current working window. Rotate it when either threshold is exceeded:
 
 - active file line count `> 1200`
 - active batch count `> 60`
 
-These values are lower than the incremental test log thresholds because scoped conformance traces are expected to be narrower and reviewed more frequently by humans.
+These thresholds are lower than the incremental test log because scoped conformance traces are narrower and are expected to be reviewed more frequently.
 
----
+### Canonical Model
 
-## 4. POST-ROTATION TARGET
+Active file:
+
+- `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+
+Archive files:
+
+- `docs/reviews/cvf_phase_governance/logs/CVF_CONFORMANCE_TRACE_ARCHIVE_<YYYY>_PART_<NN>.md`
+
+### Post-Rotation Target
 
 After rotation:
 
 - the active file MUST retain the trace header, archive index, and newest active batches
-- the retained active window SHOULD be at most `20` recent batches unless a different keep window is explicitly chosen in the rotation utility
+- the retained active window SHOULD stay at or below `20` recent batches unless the rotation utility deliberately uses another keep window
 
----
-
-## 5. ARCHIVE LOCATION AND NAMING
-
-Approved archive location:
-
-- `docs/reviews/cvf_phase_governance/logs/`
-
-Required archive filename pattern:
-
-```text
-CVF_CONFORMANCE_TRACE_ARCHIVE_<YYYY>_PART_<NN>.md
-```
-
----
-
-## 6. REQUIRED WORKFLOW
+### Required Workflow
 
 When threshold is reached:
 
-1. run:
-   - `python scripts/rotate_cvf_conformance_trace.py`
-2. verify the active trace still contains:
-   - trace header,
-   - archive index,
-   - newest active batches
+1. run `python scripts/rotate_cvf_conformance_trace.py`
+2. verify the active trace still contains the trace header, archive index, and newest active batches
 3. verify the archive landed under the scoped `logs/` folder
-4. run:
-   - `python governance/compat/check_conformance_trace_rotation.py --enforce`
+4. run `python governance/compat/check_conformance_trace_rotation.py --enforce`
 
----
+## Enforcement Surface
 
-## 7. ENFORCEMENT
+- repo-level enforcement runs through `governance/compat/check_conformance_trace_rotation.py`
+- active-window registration and archive-protection sync are enforced through `governance/compat/check_active_window_registry.py`
+- the guard blocks oversized active traces, invalid archive placement, invalid archive naming, and active traces that lost their archive index
 
-Violations include:
-
-- active conformance trace exceeds threshold without rotation,
-- archive created outside the scoped review `logs/` folder,
-- archive filename does not match the required CVF pattern,
-- active trace loses its archive index after rotation.
-
-### Automated Check
+Strict command:
 
 ```bash
-python governance/compat/check_conformance_trace_rotation.py
 python governance/compat/check_conformance_trace_rotation.py --enforce
 ```
 
----
+Violations include:
 
-## 8. FINAL CLAUSE
+- active conformance trace exceeds threshold without rotation
+- archive created outside the scoped review `logs/` folder
+- archive filename does not match the required pattern
+- active trace loses its archive index after rotation
 
-Scoped conformance evidence must stay append-only by chain, not by unlimited growth in one file.
+## Related Artifacts
 
-The active trace must stay reviewable.
-The archive must stay recoverable.
+- `governance/compat/check_conformance_trace_rotation.py`
+- `governance/compat/check_active_window_registry.py`
+- `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
+- `scripts/rotate_cvf_conformance_trace.py`
+- `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`
+- `docs/reviews/cvf_phase_governance/logs/`
+
+## Final Clause
+
+Scoped conformance evidence must stay append-only by chain, not by unlimited growth in one file. The active trace must stay reviewable and the archive must stay recoverable.

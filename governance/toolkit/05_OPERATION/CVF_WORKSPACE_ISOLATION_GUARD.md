@@ -1,96 +1,72 @@
-# CVF WORKSPACE ISOLATION GUARD
+# CVF Workspace Isolation Guard
 
-> **Type:** Governance Policy  
-> **Effective:** 2026-03-02  
-> **Status:** Active  
-> **Enforced by:** `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md` (Core Requirement #8)
+**Guard Class:** `PACKAGE_AND_RUNTIME_ALIGNMENT_GUARD`
+**Status:** Active workspace-boundary rule protecting CVF core from downstream project contamination.
+**Applies to:** Humans and AI agents opening, building, or developing downstream projects that use CVF as a framework.
+**Enforced by:** `governance/compat/check_foundational_guard_surfaces.py`, `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`, `README.md`
 
----
+## Purpose
 
-## 1. PURPOSE
+- protect CVF core from unintended edits caused by downstream product development
+- prevent cross-project contamination and mixed workspace drift
+- keep framework maintenance separate from downstream app execution and secrets
 
-Protect CVF core from unintended edits caused by downstream product development.
+## Rule
 
-This guard prevents:
-- Cross-project contamination
-- Accidental modification of framework files
-- Governance drift caused by mixed workspaces
-
----
-
-## 2. RULE
-
-> ⚠️ **NON-NEGOTIABLE:**  
-> Downstream projects MUST NOT be opened, built, or developed directly inside the CVF repository root.
+Downstream projects MUST NOT be opened, built, or developed directly inside the CVF repository root.
 
 CVF root is reserved for framework maintenance only.
 
----
-
-## 3. REQUIRED WORKSPACE PATTERN
+### Required Workspace Pattern
 
 Use isolated sibling workspaces:
 
 ```text
 D:\Work\
-  .Controlled-Vibe-Framework-CVF\   # CVF core (shared or cloned)
+  .Controlled-Vibe-Framework-CVF\   # CVF core
   <Project-A>\                      # downstream app
   <Project-B>\                      # downstream app
 ```
 
 Notes:
-- Leading `.` in CVF folder name is an isolation convention.
-- Hidden attribute is optional; naming convention is enough.
 
----
+- the leading `.` in the CVF folder name is an isolation convention
+- hidden attribute is optional; the naming convention is enough
 
-## 4. ALLOWED VS FORBIDDEN
+### Allowed In CVF Root
 
-### Allowed in CVF root
+- update CVF governance and policy documents
+- improve CVF core, runtime, or extensions
+- run CVF core tests and release tasks
 
-- Update CVF governance/policy documents
-- Improve CVF core/runtime/extensions
-- Run CVF core tests and release tasks
+### Forbidden In CVF Root
 
-### Forbidden in CVF root
+- creating a new product app directly under CVF root
+- running downstream app build pipelines from CVF root
+- storing downstream env files, app data, or secrets in CVF root
 
-- Creating a new product app directly under CVF root
-- Running downstream app build pipelines from CVF root
-- Storing downstream env files, data, or secrets in CVF root
+### Mandatory Workflow
 
----
+1. prepare isolated directories for CVF core and the downstream project
+2. clone or link CVF core into its dedicated folder
+3. open the IDE at the project workspace, not the CVF root
+4. use CVF as a framework reference, not as the downstream app workspace
+5. store a bootstrap record in downstream project docs using `governance/toolkit/05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`
 
-## 5. MANDATORY WORKFLOW
+## Enforcement Surface
 
-1. Prepare isolated directories (`CVF core` + `project workspace`)
-2. Clone/link CVF core into its dedicated folder
-3. Open IDE at project workspace folder, not CVF root
-4. Use CVF as framework reference, not as downstream app workspace
-5. Create and store a bootstrap record in downstream project docs using:
-   - `governance/toolkit/05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`
-   - recommended file: `<Project>/docs/CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
+- repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
+- the canonical policy requirement lives in `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
+- onboarding and governance notices in `README.md` reinforce the rule at repository entry
+- if workspace isolation is violated, stop development, move the downstream artifacts into an isolated project workspace, and rerun governance checks before continuing
 
----
-
-## 6. DRIFT TRIGGER & ENFORCEMENT
-
-If workspace isolation is violated:
-
-1. Agent state -> `REVALIDATING`
-2. Stop development activity immediately
-3. Move downstream artifacts to isolated project workspace
-4. Re-run governance checks before continuing
-
-Violation is considered governance drift and must be corrected before normal operation.
-
----
-
-## 7. RELATED GOVERNANCE ARTIFACTS
+## Related Artifacts
 
 - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
-- `governance/toolkit/05_OPERATION/CONTINUOUS_GOVERNANCE_LOOP.md`
+- `README.md`
+- `docs/GET_STARTED.md`
 - `governance/toolkit/05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`
-- `README.md` (mandatory governance notice)
-- `docs/GET_STARTED.md` (onboarding rule)
 
-End of Workspace Isolation Guard.
+## Final Clause
+
+CVF cannot remain a trustworthy framework if downstream work is allowed to blur the boundary between core maintenance and product development.

@@ -13,9 +13,11 @@ import type {
   CVFPhase,
   CVFRiskLevel,
   CVFRole,
+  HandoffCheckpoint,
 } from '../types';
 import { GuardRuntimeEngine } from '../engine';
 import type { SkillDefinition } from './skill-registry';
+import { createHandoffCheckpoint } from './agent-handoff';
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -51,6 +53,7 @@ export interface ExecutionGovernanceState {
   controlMode: RuntimeControlMode;
   artifacts: ExecutionArtifact[];
   approvalCheckpoint?: ExecutionApprovalCheckpoint;
+  handoffCheckpoint?: HandoffCheckpoint;
   lineageStatus: 'INCOMPLETE' | 'READY_FOR_REVIEW' | 'READY_FOR_FREEZE';
   acceptanceStatus: 'NOT_EVALUATED' | 'PENDING_APPROVAL' | 'ACCEPTED' | 'REJECTED';
 }
@@ -242,6 +245,20 @@ export class AgentExecutionRuntime {
     // Governed ESCALATE check — do not execute until approval is granted.
     if (guardResult.finalDecision === 'ESCALATE' && this.getControlMode() === 'governed') {
       const approvalCheckpoint = this.createApprovalCheckpoint(guardResult, startedAt);
+      const handoffCheckpoint = createHandoffCheckpoint({
+        transition: 'ESCALATION_HANDOFF',
+        reason: guardResult.agentGuidance ?? 'Human approval is required before governed execution can continue.',
+        createdAt: startedAt,
+        currentOwnerId: this.config.agentId,
+        nextOwnerType: 'REVIEWER',
+        nextGovernedMove: 'Approve or reject the execution checkpoint before retrying this request.',
+        scopeHint: `${this.config.phase}:${intent.action}`,
+        metadata: {
+          requestId: guardResult.requestId,
+          approvalCheckpointId: approvalCheckpoint.id,
+          controlMode: this.getControlMode(),
+        },
+      });
       const result: ExecutionResult = {
         requestId: guardResult.requestId,
         status: 'NEEDS_APPROVAL',
@@ -254,6 +271,7 @@ export class AgentExecutionRuntime {
           governance: {
             ...governance,
             approvalCheckpoint,
+            handoffCheckpoint,
             acceptanceStatus: 'PENDING_APPROVAL',
           },
         },

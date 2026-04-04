@@ -1,0 +1,18 @@
+{
+  "worklines": [
+    {
+      "id": "whitepaper_completion",
+      "tracker": "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
+      "triggerRegexes": [
+        "^docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W\\d+(?:_T\\d+)?_\\d{4}-\\d{2}-\\d{2}\\.md$",
+        "^docs/reviews/CVF_W\\d+-T\\d+.*\\.md$",
+        "^docs/roadmaps/CVF_W\\d+-T\\d+.*\\.md$",
+        "^docs/baselines/CVF_W\\d+-T\\d+.*\\.md$",
+        "^docs/baselines/CVF_WHITEPAPER_.*(?:AUTHORIZATION|CLOSURE|RECONCILIATION|SCOPE_CLARIFICATION|PROGRESS_TRACKER).*\\.md$"
+      ],
+      "commitRegexes": [
+        "\\bW\\d+-T\\d+\\b"
+      ]
+    }
+  ]
+}

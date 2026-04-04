@@ -1,151 +1,49 @@
-# CVF GUARD REGISTRY GUARD
+# CVF Guard Registry Guard
 
-> **Type:** Governance Guard (Meta-Guard)
-> **Effective:** 2026-03-08
-> **Status:** Active
-> **Applies to:** All humans and all AI agents creating or modifying governance guards
-> **Enforced by:** `governance/compat/check_guard_registry.py`
+**Guard Class:** `META_GUARD`
+**Status:** Active mandatory discoverability rule for governance guard surfaces.
+**Applies to:** All humans and AI agents creating, renaming, deleting, or materially revising guard files in `governance/toolkit/05_OPERATION/`.
+**Enforced by:** `governance/compat/check_guard_registry.py`
 
----
+## Purpose
 
-## 1. PURPOSE
+- keep every active guard discoverable from the repo front door
+- prevent orphaned guard files that exist on disk but are invisible in README or the knowledge base
+- ensure guard creation and maintenance stay synchronized with the human-readable guard index
 
-This is a **meta-guard** — a guard that governs the creation of other guards.
+## Rule
 
-As CVF expands into an ecosystem, new guards will be created for new development streams, new modules, and new governance requirements. Without a registry mechanism, guards may exist in the filesystem but not be discoverable by humans or AI agents reading the README or Knowledge Base.
+When a guard file is created, renamed, deleted, or materially revised in `governance/toolkit/05_OPERATION/`, the same change batch MUST keep registration truthful in both of these locations:
 
-This guard ensures:
+- `README.md`
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md`
 
-- Every guard is **discoverable** (listed in README.md and CVF_CORE_KNOWLEDGE_BASE.md)
-- Every guard is **consistent** (same information across all registration points)
-- No guard is **orphaned** (exists on disk but unknown to the rest of the system)
+Minimum registration checklist:
 
----
+1. the guard file exists with its final filename
+2. the filename appears in `README.md`
+3. the filename appears in `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+4. registration changes ship in the same commit batch as the guard change
 
-## 2. RULE
+This registry rule governs discoverability only. It complements, but does not replace, the stronger guard authoring contract in `GC-030`.
 
-> **NON-NEGOTIABLE:**
-> When a new guard file is created in `governance/toolkit/05_OPERATION/`, the author (human or AI) MUST register it in **ALL** of the following locations before the commit is finalized:
+## Enforcement Surface
 
-### 2.1 Registration checklist
+- repo-level enforcement runs through `governance/compat/check_guard_registry.py`
+- local pre-push enforcement runs through `governance/compat/run_local_governance_hook_chain.py`
+- CI enforcement runs through `.github/workflows/documentation-testing.yml`
 
-```
-✅ 1. Guard file created in governance/toolkit/05_OPERATION/CVF_*_GUARD.md
-✅ 2. Row added to README.md → "Mandatory Guards" table
-✅ 3. Row added to docs/CVF_CORE_KNOWLEDGE_BASE.md → "Governance Guards" table
-✅ 4. Committed together in the SAME commit batch
-```
+The registry gate intentionally checks the complete on-disk guard inventory instead of trusting a hand-maintained count inside this document.
 
-### 2.2 Applies equally to
+## Related Artifacts
 
-- human authors,
-- AI agents,
-- migration/cleanup work.
+- `README.md`
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+- `governance/toolkit/05_OPERATION/CVF_GUARD_AUTHORING_STANDARD_GUARD.md`
+- `governance/compat/check_guard_registry.py`
 
----
+## Final Clause
 
-## 3. REGISTRATION FORMAT
+A guard that cannot be discovered cannot be relied on.
 
-### 3.1 README.md format
-
-Add a row to the `### Mandatory Guards` table:
-
-```markdown
-| [Guard Name](governance/toolkit/05_OPERATION/CVF_*_GUARD.md) | Trigger condition | Required action/file |
-```
-
-### 3.2 CVF_CORE_KNOWLEDGE_BASE.md format
-
-Add a row to the `### Governance Guards (Mandatory):` table:
-
-```markdown
-| Guard Name Guard | Trigger condition | Required action/file |
-```
-
-### 3.3 Guard file naming
-
-Guard files MUST follow:
-
-```
-CVF_<PURPOSE>_GUARD.md
-```
-
-- Prefix: `CVF_`
-- Purpose: UPPERCASE_SNAKE_CASE describing what the guard controls
-- Suffix: `_GUARD.md`
-
----
-
-## 4. AUTOMATED ENFORCEMENT
-
-### 4.1 Registry check script
-
-```bash
-# Advisory mode — shows status
-python governance/compat/check_guard_registry.py
-
-# Strict enforcement — blocks on violation (exit code 2)
-python governance/compat/check_guard_registry.py --enforce
-
-# JSON output for CI/CD
-python governance/compat/check_guard_registry.py --json
-```
-
-### 4.2 What the script checks
-
-The script:
-
-1. Scans `governance/toolkit/05_OPERATION/` for all `*_GUARD.md` files
-2. Checks each guard's filename appears in `README.md`
-3. Checks each guard's filename appears in `docs/CVF_CORE_KNOWLEDGE_BASE.md`
-4. Reports violations for any guard missing from either file
-
-### 4.3 When to run
-
-- After creating any new guard
-- After renaming or deleting a guard
-- Before committing governance changes
-- In CI/CD pipeline (optional)
-
----
-
-## 5. CURRENT GUARD INVENTORY
-
-As of 2026-03-08, CVF has **14 guards**:
-
-| # | Guard | Since |
-|---|---|---|
-| 1 | CVF_ADR_GUARD | 2026-03-06 |
-| 2 | CVF_ARCHITECTURE_CHECK_GUARD | 2026-03-06 |
-| 3 | CVF_BUG_DOCUMENTATION_GUARD | 2026-03-06 |
-| 4 | CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD | 2026-03-07 |
-| 5 | CVF_CONFORMANCE_TRACE_ROTATION_GUARD | 2026-03-07 |
-| 6 | CVF_DEPTH_AUDIT_GUARD | 2026-03-06 |
-| 7 | CVF_DOCUMENT_NAMING_GUARD | 2026-03-06 |
-| 8 | CVF_DOCUMENT_STORAGE_GUARD | 2026-03-06 |
-| 9 | CVF_EXTENSION_VERSIONING_GUARD | 2026-03-08 |
-| 10 | CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD | 2026-03-06 |
-| 11 | CVF_PYTHON_AUTOMATION_SIZE_GUARD | 2026-03-07 |
-| 12 | CVF_TEST_DEPTH_CLASSIFICATION_GUARD | 2026-03-07 |
-| 13 | CVF_TEST_DOCUMENTATION_GUARD | 2026-03-06 |
-| 14 | CVF_WORKSPACE_ISOLATION_GUARD | 2026-03-06 |
-
-> **Note:** This guard (CVF_GUARD_REGISTRY_GUARD) is #15, making the total 15 guards.
-
----
-
-## 6. INTERACTION WITH OTHER GUARDS
-
-| Guard | Relationship |
-|---|---|
-| All other guards | Downstream — this guard governs their registration |
-| `CVF_DOCUMENT_NAMING_GUARD` | Complementary — naming convention for the guard file itself |
-| `CVF_ADR_GUARD` | Upstream — new guard categories may require ADR |
-
----
-
-## 7. FINAL CLAUSE
-
-A guard that nobody knows about is a guard that nobody follows.
-
-Registration is not bureaucracy — it is discoverability. If every AI agent and every human contributor can find the complete list of active guards in README.md and CVF_CORE_KNOWLEDGE_BASE.md, governance becomes automatic instead of accidental.
+Registration is the minimum truth layer for every guard: if a worker cannot find it from the repo front door, governance has already drifted.

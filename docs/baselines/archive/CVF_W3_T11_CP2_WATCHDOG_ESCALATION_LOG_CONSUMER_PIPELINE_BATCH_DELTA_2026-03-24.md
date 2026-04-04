@@ -1,0 +1,21 @@
+# CVF W3-T11 CP2 Delta — Watchdog Escalation Log Consumer Pipeline Batch
+
+Memory class: SUMMARY_RECORD
+> Tranche: W3-T11 — Watchdog Escalation Log Consumer Bridge
+> Control point: CP2
+> Date: 2026-03-24
+
+## Files Changed
+
+| File | Change |
+|------|--------|
+| `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/watchdog.escalation.log.consumer.pipeline.batch.contract.ts` | NEW |
+| `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.log.consumer.pipeline.batch.test.ts` | NEW |
+| `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/src/index.ts` | MODIFIED (W3-T11 CP2 exports added) |
+| `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` | MODIFIED (CP2 entry added) |
+
+## Test Count Delta
+
+| Module | Before | After |
+|--------|--------|-------|
+| GEF | 386 | 398 |

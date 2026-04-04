@@ -11,10 +11,16 @@ import sys
 from pathlib import Path
 from typing import Any
 
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
+COMPAT_DIR = Path(__file__).resolve().parent
+if str(COMPAT_DIR) not in sys.path:
+    sys.path.insert(0, str(COMPAT_DIR))
+
+from policy_baseline import load_json_policy_baseline
+
 DEFAULT_REGISTRY = REPO_ROOT / "governance" / "compat" / "CVF_PYTHON_AUTOMATION_SIZE_EXCEPTION_REGISTRY.json"
 SCOPES = ("scripts", "governance/compat")
+ALLOWED_STATUSES = {"ACTIVE_EXCEPTION", "SUPERSEDED", "RESOLVED"}
 
 
 def _rel(path: Path) -> str:
@@ -58,13 +64,96 @@ def build_report(registry_path: Path) -> dict[str, Any]:
         }
 
     registry = _read_json(registry_path)
+    baseline_registry, baseline_source = load_json_policy_baseline(registry_path)
     soft_threshold = int(registry.get("softThresholdLines", 600))
     hard_threshold = int(registry.get("hardThresholdLines", 1200))
-    exception_map = {
-        entry["path"]: entry
+    raw_exceptions = [
+        entry
         for entry in registry.get("exceptions", [])
         if isinstance(entry, dict) and entry.get("path")
-    }
+    ]
+    exception_map = {entry["path"]: entry for entry in raw_exceptions}
+    seen_paths: set[str] = set()
+
+    for exception in raw_exceptions:
+        path_key = exception["path"]
+        if path_key in seen_paths:
+            violations.append(
+                {
+                    "type": "duplicate_exception_path",
+                    "path": path_key,
+                    "message": f"Duplicate Python automation size exception entry for `{path_key}`.",
+                }
+            )
+        seen_paths.add(path_key)
+        status = exception.get("status", "")
+        if status and status not in ALLOWED_STATUSES:
+            violations.append(
+                {
+                    "type": "invalid_exception_status",
+                    "path": path_key,
+                    "message": f"Exception entry uses invalid status `{status}`.",
+                }
+            )
+
+    if baseline_registry:
+        for threshold_field, current_value in (
+            ("softThresholdLines", soft_threshold),
+            ("hardThresholdLines", hard_threshold),
+        ):
+            baseline_value = int(baseline_registry.get(threshold_field, current_value))
+            if baseline_value != current_value:
+                violations.append(
+                    {
+                        "type": "threshold_changed_from_baseline",
+                        "path": _rel(registry_path),
+                        "message": (
+                            f"`{threshold_field}` changed from baseline value {baseline_value} "
+                            f"to {current_value}. Python automation size policy thresholds require "
+                            "explicit human-reviewed governance change."
+                        ),
+                    }
+                )
+
+        baseline_exceptions = {
+            entry["path"]: entry
+            for entry in baseline_registry.get("exceptions", [])
+            if isinstance(entry, dict) and entry.get("path")
+        }
+        for path_key, baseline_entry in baseline_exceptions.items():
+            current_entry = exception_map.get(path_key)
+            if current_entry is None:
+                violations.append(
+                    {
+                        "type": "exception_removed_from_baseline",
+                        "path": path_key,
+                        "message": "Python automation size exception was removed from the protected baseline.",
+                    }
+                )
+            elif current_entry != baseline_entry:
+                violations.append(
+                    {
+                        "type": "exception_mutated_from_baseline",
+                        "path": path_key,
+                        "message": (
+                            "Python automation size exception differs from the protected baseline. "
+                            "Registry mutations require explicit human review."
+                        ),
+                    }
+                )
+
+        for path_key in exception_map:
+            if path_key not in baseline_exceptions:
+                violations.append(
+                    {
+                        "type": "new_exception_requires_manual_review",
+                        "path": path_key,
+                        "message": (
+                            "New Python automation size exceptions may not be self-authorized in the "
+                            "normal commit path."
+                        ),
+                    }
+                )
 
     files_report: list[dict[str, Any]] = []
 
@@ -139,6 +228,7 @@ def build_report(registry_path: Path) -> dict[str, Any]:
 
     return {
         "registryPath": _rel(registry_path),
+        "baselineSource": baseline_source,
         "softThresholdLines": soft_threshold,
         "hardThresholdLines": hard_threshold,
         "fileCount": len(files_report),
@@ -154,6 +244,7 @@ def build_report(registry_path: Path) -> dict[str, Any]:
 def _print_report(report: dict[str, Any]) -> None:
     print("=== CVF Python Automation Size Guard ===")
     print(f"Registry: {report['registryPath']}")
+    print(f"Protected baseline: {report.get('baselineSource') or 'none'}")
     print(f"Governed files: {report.get('fileCount', 0)}")
     print(f"Soft threshold: {report.get('softThresholdLines', 'n/a')}")
     print(f"Hard threshold: {report.get('hardThresholdLines', 'n/a')}")

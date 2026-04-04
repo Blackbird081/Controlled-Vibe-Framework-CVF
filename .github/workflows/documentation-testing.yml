@@ -38,6 +38,77 @@ jobs:
         run: |
           python governance/compat/check_docs_governance_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
+  governed-artifact-authoring:
+    name: Governed Artifact Authoring
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-032 governed artifact authoring
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_governed_artifact_authoring.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  cpf-public-surface-maintainability:
+    name: CPF Public Surface Maintainability
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-033 / GC-034 maintainability
+        run: |
+          python governance/compat/check_cpf_public_surface_maintainability.py --enforce
+
+  cpf-shared-batch-helper-adoption:
+    name: CPF Shared Batch Helper Adoption
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-035 shared batch helper adoption
+        run: |
+          python governance/compat/check_cpf_batch_helper_adoption.py --enforce
+
+  canon-summary-evidence-separation:
+    name: Canon Summary Evidence Separation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-036 summary/evidence separation
+        run: |
+          python governance/compat/check_canon_summary_evidence_separation.py --enforce
+
   baseline-update-compat:
     name: Baseline Update Compat
     runs-on: ubuntu-latest
@@ -77,6 +148,131 @@ jobs:
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_depth_audit_continuation_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  gc018-stop-boundary-semantics:
+    name: GC-018 Stop-Boundary Semantics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-018 stop-boundary semantics
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_gc018_stop_boundary_semantics.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  session-governance-bootstrap:
+    name: Session Governance Bootstrap
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-025 session governance bootstrap
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_session_governance_bootstrap.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  progress-tracker-sync:
+    name: Progress Tracker Sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-026 progress tracker sync
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_progress_tracker_sync.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  multi-agent-review-governance:
+    name: Multi-Agent Review Governance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-027 multi-agent review governance
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_multi_agent_review_governance_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  boardroom-runtime-governance:
+    name: Boardroom Runtime Governance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-028 boardroom runtime governance
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_boardroom_runtime_governance_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  extension-package-check:
+    name: Extension Package Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Enforce GC-029 extension package check
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_extension_package_check.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   incremental-test-log-rotation:
     name: Incremental Test Log Rotation
@@ -123,6 +319,36 @@ jobs:
         run: |
           python governance/compat/check_python_automation_size.py --enforce
 
+  governed-file-size:
+    name: Governed File Size
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce governed file size guard
+        run: |
+          python governance/compat/check_governed_file_size.py --enforce
+
+  test-partition-ownership:
+    name: Test Partition Ownership
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce test partition ownership guard
+        run: |
+          python governance/compat/check_test_partition_ownership.py --enforce
+
   release-manifest-consistency:
     name: Release Manifest Consistency
     runs-on: ubuntu-latest
@@ -152,6 +378,169 @@ jobs:
       - name: Enforce cross-channel guard contract compat
         run: |
           python governance/compat/check_guard_contract_compat.py --enforce
+
+  guard-registry-compat:
+    name: Guard Registry Compat
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce guard registry compatibility
+        run: |
+          python governance/compat/check_guard_registry.py --enforce
+
+  guard-authoring-standard:
+    name: Guard Authoring Standard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-030 guard authoring standard
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_guard_authoring_standard.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  active-window-registry:
+    name: Active Window Registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce active window registry compatibility
+        run: |
+          python governance/compat/check_active_window_registry.py --enforce
+
+  repository-lifecycle-classification:
+    name: Repository Lifecycle Classification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-037 repository lifecycle classification
+        run: |
+          python governance/compat/check_repository_lifecycle_classification.py --enforce
+
+    repository-exposure-classification:
+      name: Repository Exposure Classification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+        - name: Enforce GC-038 repository exposure classification
+          run: |
+            python governance/compat/check_repository_exposure_classification.py --enforce
+
+    prepublic-p3-readiness:
+      name: Pre-Public P3 Readiness
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+
+        - name: Set up Python
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.11'
+
+        - name: Enforce GC-039 pre-public p3 readiness
+          run: |
+            python governance/compat/check_prepublic_p3_readiness.py --enforce
+
+    audit-retention-registry:
+    name: Audit Retention Registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce audit retention registry compatibility
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_audit_retention_registry.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  review-retention-registry:
+    name: Review Retention Registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce review retention registry compatibility
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_review_retention_registry.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  foundational-guard-surfaces:
+    name: Foundational Guard Surfaces
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce foundational guard surfaces
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_foundational_guard_surfaces.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   enterprise-evidence-pack:
     name: Enterprise Evidence Pack
@@ -336,7 +725,7 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [docs-governance-compat, baseline-update-compat, depth-audit-continuation-compat, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, release-manifest-consistency, cross-channel-guard-compat, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
+    needs: [docs-governance-compat, governed-artifact-authoring, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, active-window-registry, repository-lifecycle-classification, repository-exposure-classification, prepublic-p3-readiness, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
     if: always()
     
     steps:
@@ -344,13 +733,29 @@ jobs:
         run: |
           echo "All checks completed"
           echo "Docs governance compat: ${{ needs.docs-governance-compat.result }}"
+          echo "Governed artifact authoring: ${{ needs.governed-artifact-authoring.result }}"
           echo "Baseline update compat: ${{ needs.baseline-update-compat.result }}"
           echo "Depth-audit continuation compat: ${{ needs.depth-audit-continuation-compat.result }}"
+          echo "GC-018 stop-boundary semantics: ${{ needs.gc018-stop-boundary-semantics.result }}"
+          echo "Session governance bootstrap: ${{ needs.session-governance-bootstrap.result }}"
+          echo "Progress tracker sync: ${{ needs.progress-tracker-sync.result }}"
+          echo "Multi-agent review governance: ${{ needs.multi-agent-review-governance.result }}"
+          echo "Boardroom runtime governance: ${{ needs.boardroom-runtime-governance.result }}"
+          echo "Extension package check: ${{ needs.extension-package-check.result }}"
           echo "Incremental test log rotation: ${{ needs.incremental-test-log-rotation.result }}"
           echo "Conformance trace rotation: ${{ needs.conformance-trace-rotation.result }}"
           echo "Python automation size: ${{ needs.python-automation-size.result }}"
+          echo "Governed file size: ${{ needs.governed-file-size.result }}"
+          echo "Test partition ownership: ${{ needs.test-partition-ownership.result }}"
           echo "Release manifest consistency: ${{ needs.release-manifest-consistency.result }}"
           echo "Cross-channel guard compat: ${{ needs.cross-channel-guard-compat.result }}"
+          echo "Guard registry compat: ${{ needs.guard-registry-compat.result }}"
+          echo "Guard authoring standard: ${{ needs.guard-authoring-standard.result }}"
+          echo "Active window registry: ${{ needs.active-window-registry.result }}"
+          echo "Repository lifecycle classification: ${{ needs.repository-lifecycle-classification.result }}"
+          echo "Repository exposure classification: ${{ needs.repository-exposure-classification.result }}"
+          echo "Pre-public P3 readiness: ${{ needs.prepublic-p3-readiness.result }}"
+          echo "Foundational guard surfaces: ${{ needs.foundational-guard-surfaces.result }}"
           echo "Enterprise evidence pack: ${{ needs.enterprise-evidence-pack.result }}"
           echo "Conformance artifact consistency: ${{ needs.conformance-artifact-consistency.result }}"
           echo "Conformance golden diff: ${{ needs.conformance-golden-diff.result }}"

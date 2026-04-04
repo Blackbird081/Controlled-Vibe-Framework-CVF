@@ -31,6 +31,16 @@
   </tr>
 </table>
 
+## Front-Door Path
+
+Use the root front door in this order:
+
+1. `README.md` for role-based triage and current posture
+2. `START_HERE.md` for the shortest audience-routed redirect
+3. `ARCHITECTURE.md` for the system-shape view before deeper internal references
+
+If you want the deeper private-core chain after that, use [Docs Index](docs/INDEX.md).
+
 ## What CVF Is
 
 CVF is a governance-first control plane for AI-assisted execution. Its active reference path is built around one canonical controlled loop:
@@ -60,10 +70,10 @@ Choose the shortest path for your role:
 
 | Role | Best Starting Point |
 |---|---|
-| New to CVF | [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) |
-| Non-coder | [Getting Started](docs/GET_STARTED.md) and [Non-Coder Governed Packet](docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md) |
-| Coder / Integrator | [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md) and [Reference Governed Loop](docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md) |
-| Auditor / Reviewer | [Independent System Checkpoint](docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md) |
+| New reader / General evaluator | [Getting Started](docs/GET_STARTED.md) and [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) |
+| Builder / Integrator | [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md) and [Reference Governed Loop](docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md) |
+| Non-coder / Operator | [Getting Started](docs/GET_STARTED.md) and [Non-Coder Governed Packet](docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md) |
+| Architecture reader | [Architecture](ARCHITECTURE.md), [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md), and [Ecosystem Architecture](CVF_ECOSYSTEM_ARCHITECTURE.md) |
 
 ### Quick Run: Web UI
 
@@ -149,12 +159,16 @@ Primary status anchors:
 - [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md)
 - [Release Readiness](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md)
 - [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
+- [Context Continuity Model](docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md)
+- [Memory Record Classification](docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md)
 - [Independent System Checkpoint](docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md)
 - [Active-Wave Closure Review](docs/reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md)
 
 ### Govern future changes
 
 - [GC-018 Continuation Candidate Template](docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md)
+- [Fast Lane Audit Template](docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md)
+- [Fast Lane Review Template](docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md)
 - [GC-018 Continuation Candidate N1](docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_N1_2026-03-20.md)
 - [Post-Closure Reassessment Trigger Template](docs/reference/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md)
 - [Post-Closure Reassessment Hold](docs/reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md)
@@ -168,14 +182,87 @@ CVF treats governance as an executable system, not just documentation. Critical 
 - approval checkpoint
 - CI compatibility gate
 - governance decision gate
+- foundational guard surface gate
 
 The authoritative mapping lives in [CVF_GOVERNANCE_CONTROL_MATRIX.md](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md).
+
+Important current continuity controls:
+
+- `GC-020` keeps pause/resume and agent transfer truthful through governed handoff and phase-bounded context continuity
+- `GC-020` records the tracked remote branch in handoff; exact remote SHA must be derived live from git when needed rather than hand-maintained as a moving target
+- `GC-021` allows `Fast Lane` for low-risk additive work inside an already-authorized tranche
+- `GC-022` classifies durable memory records as `FULL_RECORD`, `SUMMARY_RECORD`, or `POINTER_RECORD` so future memory stays useful without over-recording
+- `GC-032` requires governed artifact writing to stay source-truth-first, keep typed evidence explicit, and move continuity surfaces together when tranche posture changes
+
+Foundational governance surfaces that used to depend mainly on reviewer discipline are now also blocked by `governance/compat/check_foundational_guard_surfaces.py`, covering ADR updates, architecture-baseline refresh, extension naming, structural audit packets, test-depth reporting, and workspace isolation.
+
+Mandatory guard index:
+
+- `CVF_ACTIVE_ARCHIVE_GUARD.md`
+- `CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md`
+- `CVF_ADR_GUARD.md`
+- `CVF_AGENT_HANDOFF_GUARD.md`
+- `CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`
+- `CVF_ARCHITECTURE_CHECK_GUARD.md`
+- `CVF_BASELINE_UPDATE_GUARD.md`
+- `CVF_BOARDROOM_RUNTIME_GUARD.md`
+- `CVF_BUG_DOCUMENTATION_GUARD.md`
+- `CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md`
+- `CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`
+- `CVF_DEPTH_AUDIT_GUARD.md`
+- `CVF_DIAGRAM_VALIDATION_GUARD.md`
+- `CVF_DOCUMENT_NAMING_GUARD.md`
+- `CVF_DOCUMENT_STORAGE_GUARD.md`
+- `CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`
+- `CVF_EXTENSION_VERSIONING_GUARD.md`
+- `CVF_FAST_LANE_GOVERNANCE_GUARD.md`
+- `CVF_GOVERNED_FILE_SIZE_GUARD.md`
+- `CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`
+- `CVF_GUARD_AUTHORING_STANDARD_GUARD.md`
+- `CVF_GUARD_REGISTRY_GUARD.md`
+- `CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`
+- `CVF_MEMORY_GOVERNANCE_GUARD.md`
+- `CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`
+- `CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md`
+- `CVF_PROGRESS_TRACKER_SYNC_GUARD.md`
+- `CVF_PYTHON_AUTOMATION_SIZE_GUARD.md`
+- `CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md`
+- `CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`
+- `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`
+- `CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md`
+- `CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md`
+- `CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`
+- `CVF_PREPUBLIC_P3_READINESS_GUARD.md`
+- `CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md`
+- `CVF_TEST_DEPTH_CLASSIFICATION_GUARD.md`
+- `CVF_TEST_DOCUMENTATION_GUARD.md`
+- `CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`
+- `CVF_WORKSPACE_ISOLATION_GUARD.md`
+
+Grouped management map:
+
+- [CVF Guard Surface Classification](docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md)
 
 For future roadmap deepening:
 
 - active-wave continuation is gated by `GC-018`
 - continuation is not default-open after closure
 - substantive active-path expansion must carry an explicit scored packet before implementation
+
+For the current front-door chain, start from:
+
+- [README](README.md)
+- [Start Here](START_HERE.md)
+- [Architecture](ARCHITECTURE.md)
+- [Getting Started](docs/GET_STARTED.md)
+- [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md)
+
+For the deeper private-core chain, continue with:
+
+- [Docs Index](docs/INDEX.md)
+- [Reference README](docs/reference/README.md)
+- [Context Continuity Model](docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md)
+- [Memory Record Classification](docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md)
 
 ## Contributing
 

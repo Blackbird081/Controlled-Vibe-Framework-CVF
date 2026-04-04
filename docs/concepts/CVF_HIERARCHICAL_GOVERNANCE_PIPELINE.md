@@ -3,7 +3,7 @@
 > **Type:** Concept Document
 > **Date:** 2026-03-08
 > **Status:** Active — Blueprint for Phase 2-3
-> **Origin:** Formalized from `CVF_Restructure/Information for non_coder.md`
+> **Origin:** Formalized from historical `CVF_Restructure/Information for non_coder.md` notes; after `P3/CP1`, any local recovery copy belongs under `.private_reference/legacy/CVF_Restructure/`
 
 ---
 
@@ -392,4 +392,4 @@ Pre-built schemas that Non-Coders can activate immediately:
 | v1.7.1 Safety Runtime Pipeline | Tier 4 execution enforcement |
 | v3.0 artifact_ledger | Tier 5 audit implementation |
 | `CVF_EXTENSION_VERSIONING_GUARD.md` | Naming convention for new Phase 2-3 modules |
-| `CVF_Restructure/Information for non coder.md` | Original raw notes (historical reference) |
+| historical `CVF_Restructure/Information for non coder.md` (if locally retained: `.private_reference/legacy/CVF_Restructure/Information for non coder.md`) | Original raw notes (historical reference) |

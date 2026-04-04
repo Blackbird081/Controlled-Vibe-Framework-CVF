@@ -1,8 +1,34 @@
 {
     "name": "cvf-runtime-adapter-hub",
-    "version": "1.7.3",
+    "version": "0.1.0",
     "description": "CVF v1.7.3 — Runtime Adapter Hub: Universal adapter layer for multi-runtime AI safety",
-    "main": "index.ts",
+    "type": "module",
+    "main": "./index.ts",
+    "types": "./index.ts",
+    "exports": {
+        ".": "./index.ts",
+        "./contracts": "./contracts/index.ts",
+        "./adapters": "./adapters/index.ts",
+        "./policy": "./policy/natural.policy.parser.ts",
+        "./explainability": "./explainability/explainability.layer.ts",
+        "./risk-models/risk-matrix": "./risk_models/risk.matrix.json",
+        "./risk-models/destructive-rules": "./risk_models/destructive.rules.json",
+        "./risk-models/external-comm-rules": "./risk_models/external.comm.rules.json",
+        "./risk-models/escalation-thresholds": "./risk_models/escalation.thresholds.json"
+    },
+    "files": [
+        "README.md",
+        "index.ts",
+        "contracts",
+        "adapters",
+        "policy/natural.policy.parser.ts",
+        "explainability/explainability.layer.ts",
+        "risk_models/risk.matrix.json",
+        "risk_models/destructive.rules.json",
+        "risk_models/external.comm.rules.json",
+        "risk_models/escalation.thresholds.json"
+    ],
+    "sideEffects": false,
     "scripts": {
         "check": "npm run typecheck && npm run test",
         "typecheck": "tsc --noEmit",

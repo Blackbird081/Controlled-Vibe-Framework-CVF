@@ -15,6 +15,21 @@ export * from './types';
 // Engine
 export { GuardRuntimeEngine } from './engine';
 
+// Runtime helpers
+export {
+  classifyHandoffTransition,
+  requiresFormalHandoff,
+  createHandoffCheckpoint,
+  resolveHandoffCheckpoint,
+} from './runtime/agent-handoff';
+
+// Multi-agent coordination (W6-T2)
+export {
+  AgentCoordinationBus,
+  createCoordinationBus,
+  buildCoordinationMessage,
+} from './runtime/agent-coordination';
+
 // Guards
 export { PhaseGateGuard, PHASE_ROLE_MATRIX, PHASE_DESCRIPTIONS } from './guards/phase-gate.guard';
 export { RiskGateGuard, RISK_DESCRIPTIONS } from './guards/risk-gate.guard';

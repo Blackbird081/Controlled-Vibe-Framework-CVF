@@ -14,7 +14,7 @@ import type {
   GuardAuditEntry,
   GuardRuntimeConfig,
 } from './types';
-import { DEFAULT_GUARD_RUNTIME_CONFIG } from './types';
+import { DEFAULT_GUARD_RUNTIME_CONFIG, MANDATORY_GUARD_IDS } from './types';
 
 export class GuardRuntimeEngine {
   private guards: Map<string, Guard> = new Map();
@@ -37,8 +37,34 @@ export class GuardRuntimeEngine {
     this.guards.set(guard.id, guard);
   }
 
+  /**
+   * Prevents unregistering mandatory guards (ai_commit, authority_gate, phase_gate).
+   * These guards form the non-bypassable governance core.
+   */
   unregisterGuard(guardId: string): boolean {
+    if ((MANDATORY_GUARD_IDS as readonly string[]).includes(guardId)) {
+      throw new Error(
+        `Cannot unregister mandatory guard "${guardId}". ` +
+        `Mandatory guards: [${MANDATORY_GUARD_IDS.join(', ')}].`
+      );
+    }
     return this.guards.delete(guardId);
+  }
+
+  /**
+   * Disables a guard by ID. Mandatory guards cannot be disabled.
+   */
+  disableGuard(guardId: string): void {
+    if ((MANDATORY_GUARD_IDS as readonly string[]).includes(guardId)) {
+      throw new Error(
+        `Cannot disable mandatory guard "${guardId}". ` +
+        `Mandatory guards: [${MANDATORY_GUARD_IDS.join(', ')}].`
+      );
+    }
+    const guard = this.guards.get(guardId);
+    if (guard) {
+      guard.enabled = false;
+    }
   }
 
   getGuard(guardId: string): Guard | undefined {

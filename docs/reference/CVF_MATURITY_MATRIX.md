@@ -12,12 +12,12 @@ Status: operational maturity view for current CVF lines.
 | `local-implemented` | implemented and locally verified, but still under current upgrade discipline |
 | `draft` | exploratory or branch track, not current baseline |
 
-## Matrix (2026-03-20)
+## Matrix (2026-03-22)
 
 | Version / Family | Maturity | Test / evidence posture | Release posture |
 |---|---|---|---|
 | v1.0 / v1.1 | baseline | historical baseline docs | frozen |
-| v1.1.1 | candidate | integrated runtime + workflow realism hardening evidence | stable |
+| v1.1.1 | candidate | integrated runtime + workflow realism hardening evidence including pause/approval handoff checkpoints | stable |
 | v1.1.2 | local-implemented | focused remediation tests + delta chain | local-ready |
 | v1.2 | baseline | policy lineage baseline | frozen |
 | v1.2.1 | candidate | reassessed on 2026-03-06 | active |
@@ -28,8 +28,11 @@ Status: operational maturity view for current CVF lines.
 | v1.6 / v1.6.1 | candidate | active app/runtime line with canonical phase alignment evidence | active |
 | v1.7 / v1.7.1 / v1.7.2 / v1.7.3 | candidate | stable safety family with test evidence | stable/active |
 | v1.8 / v1.8.1 / v1.9 / v2.0 | local-implemented | implemented locally, not yet normalized into a single release narrative | local-ready |
+| W1-T1 / W1-T2 control-plane line | local-implemented | both control-plane tranches now canonically closed through CP5; W1-T2 delivered intake, retrieval, packaging, and consumer-path contracts with local verification and regression receipts | local-ready |
+| W2-T1 shell line | local-implemented | closed tranche with shell, wrapper, adapter-evidence, authorization-boundary, and closure receipts | local-ready |
+| W3-T1 governance-expansion line | local-implemented | closed tranche for operational governance packaging with explicit defer receipts for concept-only targets | local-ready |
 | v2.5 | candidate | 476 tests across 14 files, 0 failures | active |
-| v2.5.1 | candidate | 49 tests passed, unified governance types | active |
+| v2.5.1 | candidate | 147 tests passed, unified governance types + handoff checkpoint helpers | active |
 | v2.5.2 | candidate | 49 tests passed, programmatic enforcement | active |
 | v3.0 | draft | branch-track evidence only | draft |
 

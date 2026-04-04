@@ -170,10 +170,8 @@ Controlled-Vibe-Framework-CVF/
 │══════════════════════════════════════════════════════
 │  LOCAL / PRIVATE
 │══════════════════════════════════════════════════════
-├── CVF_Restructure/                    ← .gitignored — local planning workspace
-│   ├── Independent Review/             Audits, ADR-021, Ecosystem Roadmap
-│   ├── CVF_ECOSYSTEM/                  Original doctrine source (archived)
-│   └── CVF_AI Systems/                 Original strategy source (archived)
+├── .private_reference/                 ← ignored local recovery space (non-canonical)
+│   └── legacy/CVF_Restructure/         Optional historical recovery copy only
 │
 └── .github/workflows/                  ← CI/CD
 ```
@@ -243,9 +241,9 @@ governance/compat/                         governance/compat/
 
 ```
 EXPECTED:                              ACTUAL:
-CVF_Restructure/                      ← .gitignored (local only)
-├── ARCHIVED_README.md                ├── ARCHIVED_README.md              ✅
-└── (files stay local for reference)   └── (archived locally)              ✅
+visible root retired                   visible root retired                ✅
+optional local copy under              .private_reference/legacy/          ✅
+.private_reference/legacy/             (local-only if retained)
 ```
 
 ---

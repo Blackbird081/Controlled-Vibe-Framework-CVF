@@ -1,0 +1,19 @@
+{
+  "name": "cvf-trust-sandbox",
+  "version": "0.1.0",
+  "description": "CVF Trust Sandbox — Coordination package unifying trust-runtime positioning and lightweight guard SDK entrypoints",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "private": true,
+  "scripts": {
+    "test": "vitest run --config vitest.config.ts",
+    "test:coverage": "vitest run --coverage --config vitest.config.ts",
+    "check": "tsc -p tsconfig.json --noEmit"
+  },
+  "keywords": ["cvf", "trust-sandbox", "safety-runtime", "guard-sdk"],
+  "devDependencies": {
+    "@vitest/coverage-v8": "^1.6.1",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.1"
+  }
+}

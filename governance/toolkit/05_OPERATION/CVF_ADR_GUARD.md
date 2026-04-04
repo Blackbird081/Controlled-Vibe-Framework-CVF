@@ -1,154 +1,86 @@
-# CVF ADR GUARD — Architecture Decision Records Policy
+# CVF ADR Guard
 
-> **Type:** Governance Policy
-> **Effective:** 2026-02-27
-> **Status:** Active
-> **Enforced by:** Convention + PR review (automated check: future roadmap)
+**Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
+**Status:** Active architecture-decision recording contract for strategic and structural changes.
+**Applies to:** All humans and AI agents making architectural or strategic decisions that affect CVF and must be recorded in `docs/CVF_ARCHITECTURE_DECISIONS.md`.
+**Enforced by:** `governance/compat/check_foundational_guard_surfaces.py`, `docs/CVF_ARCHITECTURE_DECISIONS.md`
 
----
+## Purpose
 
-## 1. PURPOSE
+- preserve the why behind major architectural and strategic changes
+- prevent context loss when later contributors revisit a decision
+- keep a durable audit trail for decisions that bug and test logs do not cover
 
-Every **architectural or strategic decision** affecting CVF must be recorded in `docs/CVF_ARCHITECTURE_DECISIONS.md` before or within the same push.
+Bug and test guards explain what broke and what was tested. The ADR guard explains why the architecture changed.
 
-This ensures:
-- **Full traceability** — every major change has a documented *why*, not just *what*
-- **No context loss** — future contributors understand the reasoning behind each design choice
-- **Audit trail** — governance decisions can be reviewed, challenged, or reversed with full context
+## Rule
 
-> This guard fills the gap that Bug Guard and Test Guard do NOT cover:
-> those guards handle *what broke* and *what was tested*.
-> **ADR Guard handles *why we changed the architecture*.**
+Any commit with an architectural or strategic change pattern listed below MUST have a corresponding ADR entry in `docs/CVF_ARCHITECTURE_DECISIONS.md` within the same push.
 
----
-
-## 2. RULE
-
-> ⚠️ **NON-NEGOTIABLE:**
-> Any commit with a scope or message pattern listed below **MUST** have a corresponding ADR entry in `docs/CVF_ARCHITECTURE_DECISIONS.md` within the same push.
-
-### What Triggers This Guard?
+### Trigger Patterns
 
 | Commit Pattern | Example | Triggers ADR? |
-|---|---|---|
-| `feat(core-value): ...` | Core value correction | ✅ |
-| `feat(governance): ...` | New governance policy | ✅ |
-| `feat(domain): ...` | Domain added / renamed / removed | ✅ |
-| `feat(skills): ...` (batch) | Multiple skills migrated / restructured | ✅ |
-| `refactor(arch): ...` | Architecture restructuring | ✅ |
-| `docs(policy): ...` | New or revised policy document | ✅ |
-| `chore(remove): ...` (major) | Removing a major component or folder | ✅ |
-| `feat: ...` (single template/bugfix) | Minor feature addition | ❌ |
-| `fix: ...` | Bug fix (covered by Bug Guard) | ❌ |
-| `test: ...` | Test (covered by Test Guard) | ❌ |
-| `chore: ...` (minor) | Dependency update, formatting | ❌ |
+|---|---|:---:|
+| `feat(core-value): ...` | core value correction | Yes |
+| `feat(governance): ...` | new governance policy | Yes |
+| `feat(domain): ...` | domain added, renamed, or removed | Yes |
+| `feat(skills): ...` | multiple skills migrated or restructured | Yes |
+| `refactor(arch): ...` | architecture restructuring | Yes |
+| `docs(policy): ...` | new or revised policy document | Yes |
+| `chore(remove): ...` major | removing a major component or folder | Yes |
+| `feat: ...` minor | single template or minor feature addition | No |
+| `fix: ...` | bug fix covered by bug guard | No |
+| `test: ...` | test work covered by test guard | No |
+| `chore: ...` minor | dependency update or formatting | No |
 
----
-
-## 3. REQUIRED ADR FORMAT
+### Required ADR Format
 
 Each entry in `docs/CVF_ARCHITECTURE_DECISIONS.md` MUST include:
 
-| Field | Required | Description |
+| Field | Required? | Description |
 |---|:---:|---|
-| **ADR-ID** | ✅ | Sequential: `ADR-001`, `ADR-002`, ... |
-| **Date** | ✅ | `YYYY-MM-DD` |
-| **Title** | ✅ | Short decision title |
-| **Status** | ✅ | `Active` / `Superseded by ADR-XXX` / `Revoked` |
-| **Context** | ✅ | What situation triggered this decision? |
-| **Decision** | ✅ | What was decided? (concrete, specific) |
-| **Rationale** | ✅ | WHY this decision over alternatives |
-| **Consequences** | ✅ | What does this change? What are the trade-offs? |
-| **Related commits** | ✅ | Git commit hash(es) |
-| **Related files** | ✅ | Key files affected by this decision |
+| `ADR-ID` | Yes | Sequential such as `ADR-001`, `ADR-002` |
+| `Date` | Yes | `YYYY-MM-DD` |
+| `Title` | Yes | Short decision title |
+| `Status` | Yes | `Active`, `Superseded by ADR-XXX`, or `Revoked` |
+| `Context` | Yes | Situation that triggered the decision |
+| `Decision` | Yes | What was decided |
+| `Rationale` | Yes | Why this decision was chosen |
+| `Consequences` | Yes | What changes and what trade-offs exist |
+| `Related commits` | Yes | Git hash references |
+| `Related files` | Yes | Key affected files |
 
-Template:
-```markdown
-## ADR-NNN: [Title]
+### Workflow
 
-| Field | Value |
-|---|---|
-| Date | YYYY-MM-DD |
-| Status | Active |
-| Related commits | `abc1234` |
+1. identify the architectural or strategic change
+2. make the code, policy, or domain change
+3. write the ADR entry in `docs/CVF_ARCHITECTURE_DECISIONS.md` before committing
+4. commit and push with the triggering scope
+5. validate the ADR exists before merge
 
-### Context
-[What situation or problem prompted this decision?]
-
-### Decision
-[What was decided — specific and concrete]
-
-### Rationale
-[Why this decision? What alternatives were considered and rejected?]
-
-### Consequences
-[What changes as a result? Any trade-offs or risks?]
-
-### Related Files
-- `path/to/file.md`
-```
-
----
-
-## 4. WORKFLOW
-
-```
-ARCHITECTURAL CHANGE IDENTIFIED
-    ↓
-MAKE THE CHANGE (code / policy / domain)
-    ↓
-WRITE ADR ENTRY in docs/CVF_ARCHITECTURE_DECISIONS.md   ← BEFORE committing
-    ↓
-COMMIT with scope trigger (feat(governance):, feat(domain):, etc.)
-    ↓
-PUSH
-    ↓
-REVIEWER / GOVERNANCE CHECK validates ADR exists
-    ↓
-✅ PASS or ❌ FAIL (missing ADR = push rejected by reviewer)
-```
-
----
-
-## 5. ADR LIFECYCLE
+### ADR Lifecycle
 
 | Status | Meaning |
 |---|---|
-| **Active** | Decision currently in effect |
-| **Superseded by ADR-XXX** | Replaced by a newer decision — keep for history |
-| **Revoked** | Decision reversed — document why |
+| `Active` | decision currently in effect |
+| `Superseded by ADR-XXX` | replaced by a newer decision and kept for history |
+| `Revoked` | reversed, with the reason preserved |
 
-> Never delete an ADR entry. Mark it as Superseded or Revoked and add the reason.
+Never delete an ADR entry. Mark it as superseded or revoked instead.
 
----
+## Enforcement Surface
 
-## 6. RELATION TO EXISTING GOVERNANCE
+- repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
+- the canonical durable record remains the required ADR entry in `docs/CVF_ARCHITECTURE_DECISIONS.md`
+- local pre-push and CI must reject a triggered architectural or policy change that lacks the matching ADR update
 
-| Guard | Covers | Does NOT cover |
-|---|---|---|
-| **Bug Guard** | What broke + how fixed | *Why* architecture changed |
-| **Test Guard** | What was tested + results | *Why* design changed |
-| **Skill Intake Record** | What skills were added | *Why* domain mapping was chosen |
-| **ADR Guard** ← **THIS** | *Why* every architecture/strategy decision | Code-level bugs or tests |
+## Related Artifacts
 
-All four guards together form **complete traceability** for CVF:
+- `docs/CVF_ARCHITECTURE_DECISIONS.md`
+- `governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_TEST_DOCUMENTATION_GUARD.md`
+- `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
 
-```
-Bug → Bug Guard
-Test → Test Guard
-Skill added → Skill Intake Record
-Architecture/Strategy decision → ADR Guard
-```
+## Final Clause
 
----
-
-## 7. INTEGRATION WITH CONTINUOUS GOVERNANCE LOOP
-
-Architecture decision made WITHOUT a corresponding ADR entry is a **drift trigger**:
-- Agent state → `REVALIDATING`
-- ADR entry must be added retroactively
-- Re-validation required before continuing
-
----
-
-End of ADR Guard Policy.
+If CVF changes architecture without recording the rationale, it invites the same debate and the same mistakes to return later.

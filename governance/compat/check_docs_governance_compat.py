@@ -22,6 +22,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -37,6 +38,7 @@ DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 ALLOWED_DOCS_FOLDERS = {
     "reference",
     "assessments",
+    "audits",
     "baselines",
     "roadmaps",
     "reviews",
@@ -47,7 +49,7 @@ ALLOWED_DOCS_FOLDERS = {
     "cheatsheets",
     "case-studies",
 }
-GOVERNANCE_FOLDERS = {"reference", "assessments", "baselines", "roadmaps", "reviews", "logs"}
+GOVERNANCE_FOLDERS = {"reference", "assessments", "audits", "baselines", "roadmaps", "reviews", "logs"}
 APPROVED_ROOT_FILES = {
     "BUG_HISTORY.md",
     "CHEAT_SHEET.md",
@@ -61,6 +63,10 @@ APPROVED_ROOT_FILES = {
     "VERSION_COMPARISON.md",
 }
 APPROVED_GENERIC_FILENAMES = {"README.md", "INDEX.md"}
+PERFORMANCE_EVIDENCE_BATCH_RE = re.compile(
+    r"^docs/baselines/CVF_W\d+_T\d+_CP\d+_FIRST_EVIDENCE_BATCH_\d{4}-\d{2}-\d{2}\.md$"
+)
+SYMBOLIC_VALUE_RE = re.compile(r"\|\s*[<>]\s*\d")
 
 
 def _run_git(args: list[str]) -> tuple[int, str, str]:
@@ -226,6 +232,55 @@ def _validate_docs_path(path: str) -> list[dict[str, str]]:
     return violations
 
 
+def _validate_docs_content(path: str) -> list[dict[str, str]]:
+    violations: list[dict[str, str]] = []
+    normalized = path.replace("\\", "/")
+
+    if not PERFORMANCE_EVIDENCE_BATCH_RE.match(normalized):
+        return violations
+
+    file_path = REPO_ROOT / normalized
+    if not file_path.exists():
+        return violations
+
+    text = file_path.read_text(encoding="utf-8", errors="replace")
+    required_tokens = [
+        "Report ID",
+        "Report Hash",
+        "Run ID",
+        "Measurement ID",
+        "Trace ID",
+        "Total Measurements",
+    ]
+    missing_tokens = [token for token in required_tokens if token not in text]
+    if missing_tokens:
+        violations.append(
+            {
+                "path": normalized,
+                "type": "performance_evidence_provenance",
+                "message": (
+                    f"`{normalized}` is missing required provenance fields: "
+                    + ", ".join(missing_tokens)
+                    + "."
+                ),
+            }
+        )
+
+    if SYMBOLIC_VALUE_RE.search(text):
+        violations.append(
+            {
+                "path": normalized,
+                "type": "performance_evidence_symbolic_value",
+                "message": (
+                    f"`{normalized}` contains symbolic placeholder values such as `< 1` or `> 1000`. "
+                    "Evidence batches must record numeric measurement values from the harness contract."
+                ),
+            }
+        )
+
+    return violations
+
+
 def _classify(
     commits: list[dict[str, str]],
     changed_paths: dict[str, list[str]],
@@ -242,6 +297,7 @@ def _classify(
     violations: list[dict[str, str]] = []
     for path in docs_files:
         violations.extend(_validate_docs_path(path))
+        violations.extend(_validate_docs_content(path))
 
     return {
         "totalCommits": len(commits),

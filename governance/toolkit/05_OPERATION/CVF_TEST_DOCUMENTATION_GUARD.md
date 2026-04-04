@@ -1,60 +1,50 @@
-# CVF TEST DOCUMENTATION GUARD
+# CVF Test Documentation Guard
 
-> **Type:** Governance Policy  
-> **Effective:** 2026-02-26  
-> **Status:** Active  
-> **Enforced by:** `governance/compat/check_test_doc_compat.py`
+**Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
+**Status:** Active incremental-test-log documentation contract for test-bearing changes.
+**Applies to:** All humans and AI agents running tests or changing governed test files in CVF repositories.
+**Enforced by:** `governance/compat/check_test_doc_compat.py`
 
----
+## Purpose
 
-## 1. PURPOSE
+- keep every test execution batch traceable in the active window at `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- prevent repeated testing or silent skip-scope decisions
+- preserve a durable explanation of what was verified, what was not, and why
 
-Every test execution batch MUST be logged in the active window at `docs/CVF_INCREMENTAL_TEST_LOG.md`.
+Historical windows may rotate into `docs/logs/`, but the active root file remains the canonical entrypoint and current working log.
 
-Historical windows may be rotated into `docs/logs/`, but the active root file remains the canonical entrypoint and current working log.
+## Rule
 
-This ensures:
-- **No blind spots**: every test decision is traceable
-- **No wasted cycles**: future testers know what was already verified
-- **Drift prevention**: skipped scope is explicitly justified, not silently ignored
+Any commit that runs tests, carries a test-oriented commit pattern, or changes governed test files MUST have a corresponding batch entry in the active incremental test log window `docs/CVF_INCREMENTAL_TEST_LOG.md` within the same push.
 
----
+### Trigger Patterns
 
-## 2. RULE
+| Commit Message Pattern Or Change Type | Triggers Guard? |
+|---|:---:|
+| `test: ...` | Yes |
+| `test(scope): ...` | Yes |
+| `chore(test): ...` | Yes |
+| message contains `test`, `coverage`, or `regression` | Yes |
+| changed `*.test.ts`, `*.test.tsx`, or `*.spec.ts` files | Yes |
+| `feat: ...` with no governed test change | No |
+| `docs: ...` with no governed test change | No |
+| `fix: ...` with no governed test change | No |
 
-> ⚠️ **NON-NEGOTIABLE:**  
-> Any commit that runs tests (`test:`, `test(`, `chore(test)`) or changes test files (`*.test.ts`, `*.test.tsx`, `*.spec.ts`) **MUST** have a corresponding batch entry in the active incremental test log window `docs/CVF_INCREMENTAL_TEST_LOG.md` within the same push.
-
-### What Triggers This Guard?
-
-| Commit Message Pattern | Triggers Guard? |
-|----------------------|:-:|
-| `test: ...` | ✅ |
-| `test(scope): ...` | ✅ |
-| `chore(test): ...` | ✅ |
-| Message contains `test`, `coverage`, `regression` | ✅ |
-| Changed `*.test.ts` / `*.test.tsx` / `*.spec.ts` files | ✅ |
-| `feat: ...` (no test files changed) | ❌ |
-| `docs: ...` (no test files changed) | ❌ |
-| `fix: ...` (no test files changed) | ❌ |
-
----
-
-## 3. REQUIRED LOG FORMAT
+### Required Log Format
 
 Each batch entry in the active incremental test log chain MUST include:
 
 | Field | Required? | Description |
-|-------|:---------:|-------------|
-| **Date** | ✅ | `[YYYY-MM-DD]` format |
-| **Batch Name** | ✅ | Short descriptive name |
-| **Change Reference** | ✅ | Commit hash, range, or PR |
-| **Impacted Scope** | ✅ | Files/modules affected |
-| **Tests Executed** | ✅ | Commands + PASS/FAIL result |
-| **Skip Scope** | ✅ | What was NOT tested and WHY |
-| **Notes/Risks** | 📋 Optional | Edge cases, known issues |
+|---|:---:|---|
+| `Date` | Yes | `[YYYY-MM-DD]` format |
+| `Batch Name` | Yes | Short descriptive name |
+| `Change Reference` | Yes | Commit hash, range, or PR |
+| `Impacted Scope` | Yes | Files or modules affected |
+| `Tests Executed` | Yes | Commands plus pass or fail result |
+| `Skip Scope` | Yes | What was not tested and why |
+| `Notes/Risks` | Optional | Edge cases or known issues |
 
-Template (from Section 4 of the test log):
+Template:
 
 ```md
 ## [YYYY-MM-DD] Batch: <name>
@@ -67,76 +57,42 @@ Template (from Section 4 of the test log):
 - Notes/Risks:
 ```
 
----
+### Workflow
 
-## 4. WORKFLOW
+1. determine the test scope
+2. run the needed tests
+3. log the result in `docs/CVF_INCREMENTAL_TEST_LOG.md` before committing
+4. commit and push
+5. let the compat gate validate the matching batch entry
 
-```
-CODE CHANGE MADE
-    ↓
-DETERMINE TEST SCOPE
-    ↓
-RUN compatibility gate:
-    python governance/compat/check_core_compat.py
-    ↓
-EXECUTE TESTS (focused or full)
-    ↓
-LOG RESULTS in docs/CVF_INCREMENTAL_TEST_LOG.md    ← BEFORE committing
-    ↓
-COMMIT (test: ...)
-    ↓
-PUSH
-    ↓
-COMPAT GATE VALIDATES                               ← Automated check
-    ↓
-✅ PASS or ❌ FAIL
-```
+## Enforcement Surface
 
----
+- repo-level enforcement runs through `governance/compat/check_test_doc_compat.py`
+- this guard works together with `check_core_compat.py`, `check_bug_doc_compat.py`, and `check_incremental_test_log_rotation.py`
+- test activity without documentation is governance drift and must be corrected before push or merge
 
-## 5. ENFORCEMENT
-
-### Automated Check
+Strict command:
 
 ```bash
-# Standard check (advisory)
-python governance/compat/check_test_doc_compat.py
-
-# Strict enforcement (blocks push on failure)
 python governance/compat/check_test_doc_compat.py --enforce
 ```
 
-### Exit Codes
+Exit codes:
 
 | Code | Meaning |
-|:----:|---------|
-| 0 | All test activities are documented |
-| 1 | Script error (git failure, etc.) |
-| 2 | Test activity found WITHOUT log entry (VIOLATION) |
+|---|---|
+| `0` | all test activities are documented |
+| `1` | script or git error |
+| `2` | test activity found without log entry |
 
----
+## Related Artifacts
 
-## 6. RELATION TO EXISTING GOVERNANCE
+- `governance/compat/check_test_doc_compat.py`
+- `governance/compat/check_incremental_test_log_rotation.py`
+- `docs/CVF_INCREMENTAL_TEST_LOG.md`
+- `docs/logs/`
+- `governance/toolkit/05_OPERATION/CVF_BUG_DOCUMENTATION_GUARD.md`
 
-This guard works in tandem with:
-- `check_core_compat.py` — Decides WHAT to test (focused vs full)
-- `check_bug_doc_compat.py` — Ensures bug fixes are documented
-- `check_test_doc_compat.py` — Ensures test results are logged ← **THIS GUARD**
-- `check_incremental_test_log_rotation.py` — Ensures the active test log window stays reviewable
-- `CONTINUOUS_GOVERNANCE_LOOP.md` — Test without documentation is a drift trigger
-- `docs/baselines/CVF_CORE_COMPAT_BASELINE.md` — Baseline reference for test decisions
+## Final Clause
 
-### Complete Compat Gate Pipeline
-
-```bash
-# 1. Core compatibility (what scope to test)
-python governance/compat/check_core_compat.py --base <BASE> --head <HEAD>
-
-# 2. Bug documentation (fix commits must have BUG_HISTORY entry)
-python governance/compat/check_bug_doc_compat.py --enforce
-
-# 3. Test documentation (test commits must have TEST_LOG entry)
-python governance/compat/check_test_doc_compat.py --enforce
-```
-
-End of Test Documentation Guard.
+Running tests without leaving a governed record behind creates false confidence. CVF requires the result and the rationale for any skipped scope to be durable.

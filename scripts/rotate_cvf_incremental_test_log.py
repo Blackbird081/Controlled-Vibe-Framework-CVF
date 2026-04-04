@@ -55,6 +55,8 @@ def _build_archive_content(archive_path: Path, archived_entries: list[str], sour
         [
             "# CVF Incremental Test Log Archive",
             "",
+            "Memory class: SUMMARY_RECORD",
+            "",
             f"- Canonical entrypoint: `{source_path.relative_to(REPO_ROOT).as_posix()}`",
             f"- Archive file: `{archive_path.relative_to(REPO_ROOT).as_posix()}`",
             f"- Archived entry count: `{len(archived_entries)}`",

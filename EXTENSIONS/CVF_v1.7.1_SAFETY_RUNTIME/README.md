@@ -1,5 +1,9 @@
 # Controlled Vibe Framework (CVF) v1.7.0
 
+> This source module now participates in the approved `B* Merge 4` trust umbrella:
+> canonical coordination package: `EXTENSIONS/CVF_TRUST_SANDBOX/`
+> execution class: `coordination package`
+
 > **AI Governance Framework** — Policy-driven controls for AI-generated proposals with full audit trail, risk management, and simulation capabilities.
 
 ## Quick Start

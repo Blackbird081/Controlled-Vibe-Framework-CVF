@@ -1,4 +1,6 @@
-# CVF Independent System Review
+
+Memory class: FULL_RECORD
+
 
 > Date: `2026-03-19`
 > Reviewer stance: Independent expert review
@@ -44,7 +46,7 @@ This assessment is based on direct repository inspection of the current branch s
 
 Comparison anchor created for this review:
 
-- `docs/baselines/CVF_SYSTEM_STATUS_ASSESSMENT_DELTA_2026-03-19.md`
+- `docs/baselines/archive/CVF_SYSTEM_STATUS_ASSESSMENT_DELTA_2026-03-19.md`
 
 Primary evidence reviewed:
 

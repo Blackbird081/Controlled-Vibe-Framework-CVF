@@ -8,16 +8,13 @@ import { createHash } from 'crypto'
  * Compute a deterministic commit hash.
  * Identical to v1.8 computeCommitHash — v1.9 formalizes this as the canonical formula.
  *
- * Formula: SHA-256(executionId:riskHash:mutationFingerprint:snapshotId)
+ * Formula: SHA-256(part1:part2:part3:...)
  * Truncated to 32 hex chars.
  */
 export function computeDeterministicHash(
-    executionId: string,
-    riskHash: string,
-    mutationFingerprint: string,
-    snapshotId: string
+    ...parts: string[]
 ): string {
-    const payload = `${executionId}:${riskHash}:${mutationFingerprint}:${snapshotId}`
+    const payload = parts.join(':')
     return createHash('sha256').update(payload).digest('hex').slice(0, 32)
 }
 

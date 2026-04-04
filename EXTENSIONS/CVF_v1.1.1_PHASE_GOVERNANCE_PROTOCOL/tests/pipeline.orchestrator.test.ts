@@ -298,6 +298,28 @@ describe('PipelineOrchestrator', () => {
       orchestrator.pause('p1');
       expect(orchestrator.pause('p1')).toBe(false);
     });
+
+    it('creates a formal pause handoff checkpoint', () => {
+      orchestrator.createPipeline({ id: 'p-handoff', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
+      orchestrator.advancePhase('p-handoff');
+
+      expect(orchestrator.pause('p-handoff')).toBe(true);
+
+      const pending = orchestrator.getPendingHandoffs('p-handoff');
+      expect(pending).toHaveLength(1);
+      expect(pending[0]?.transition).toBe('PAUSE');
+      expect(pending[0]?.formalHandoffRequired).toBe(true);
+    });
+
+    it('resolves the pause handoff when the pipeline resumes', () => {
+      orchestrator.createPipeline({ id: 'p-resume', intent: 'A', riskLevel: 'R0', role: 'HUMAN' });
+      orchestrator.advancePhase('p-resume');
+      orchestrator.pause('p-resume');
+
+      expect(orchestrator.resume('p-resume')).toBe(true);
+      expect(orchestrator.getPendingHandoffs('p-resume')).toHaveLength(0);
+      expect(orchestrator.getPipeline('p-resume')!.handoffCheckpoints[0]?.resolution).toBe('RESUMED');
+    });
   });
 
   describe('fail pipeline', () => {
@@ -454,6 +476,8 @@ describe('PipelineOrchestrator', () => {
       expect(result.error).toContain('waiting for approval');
       expect(orchestrator.getPendingApprovals('gov-2')).toHaveLength(1);
       expect(orchestrator.getPendingApprovals('gov-2')[0]?.phase).toBe('BUILD');
+      expect(orchestrator.getPendingHandoffs('gov-2')).toHaveLength(1);
+      expect(orchestrator.getPendingHandoffs('gov-2')[0]?.transition).toBe('ESCALATION_HANDOFF');
     });
 
     it('allows BUILD after approval checkpoint is approved', () => {
@@ -482,6 +506,7 @@ describe('PipelineOrchestrator', () => {
       const advanced = orchestrator.advancePhase('gov-3');
       expect(advanced.success).toBe(true);
       expect(orchestrator.getPipeline('gov-3')!.status).toBe('BUILD');
+      expect(orchestrator.getPendingHandoffs('gov-3')).toHaveLength(0);
     });
 
     it('requires EXECUTION and REVIEW evidence before FREEZE in governed mode', () => {

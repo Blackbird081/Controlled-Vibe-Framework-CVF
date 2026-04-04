@@ -212,6 +212,8 @@ describe('AgentExecutionRuntime.execute', () => {
     expect(result.status).toBe('NEEDS_APPROVAL');
     expect(result.metadata?.governance).toBeDefined();
     expect((result.metadata?.governance as any).approvalCheckpoint.status).toBe('PENDING');
+    expect((result.metadata?.governance as any).handoffCheckpoint.transition).toBe('ESCALATION_HANDOFF');
+    expect((result.metadata?.governance as any).handoffCheckpoint.formalHandoffRequired).toBe(true);
   });
 
   it('fails when provider throws', async () => {

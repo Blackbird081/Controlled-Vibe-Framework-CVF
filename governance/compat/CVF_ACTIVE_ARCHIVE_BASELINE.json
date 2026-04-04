@@ -1,0 +1,2709 @@
+{
+  "version": 1,
+  "generatedAt": "2026-03-28T22:56:34.333834",
+  "gitHead": "9ca87ac99207a19dbcf7aaf7bd978a97443c31a3",
+  "cutoffDate": "2026-03-25",
+  "ageThresholdDays": 3,
+  "scopeMode": "incremental",
+  "managedRoots": [
+    "docs",
+    "ECOSYSTEM/strategy"
+  ],
+  "files": {
+    "docs/audits/CVF_W2_T25_CP1_COMMAND_RUNTIME_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5013:1774584070892132400"
+    },
+    "docs/audits/CVF_W2_T25_CP2_COMMAND_RUNTIME_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "4500:1774585027093899400"
+    },
+    "docs/audits/CVF_W2_T29_CP1_STREAMING_EXECUTION_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1943:1774619414216346600"
+    },
+    "docs/audits/CVF_W2_T29_CP2_STREAMING_EXECUTION_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1783:1774619455175642700"
+    },
+    "docs/audits/CVF_W2_T30_CP1_BOARDROOM_MULTI_ROUND_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1850:1774622878646812400"
+    },
+    "docs/audits/CVF_W2_T30_CP2_BOARDROOM_MULTI_ROUND_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1533:1774622924930401900"
+    },
+    "docs/audits/CVF_W2_T31_CP1_BOARDROOM_TRANSITION_GATE_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1154:1774623951695014300"
+    },
+    "docs/audits/CVF_W2_T31_CP2_BOARDROOM_TRANSITION_GATE_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "690:1774624017721700600"
+    },
+    "docs/audits/CVF_W2_T32_CP1_CONTEXT_BUILD_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "612:1774624672740973100"
+    },
+    "docs/audits/CVF_W2_T33_CP1_BOARDROOM_ROUND_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "730:1774626895854208200"
+    },
+    "docs/audits/CVF_W2_T34_CP1_CONTEXT_ENRICHMENT_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "747:1774627324455286600"
+    },
+    "docs/audits/CVF_W2_T35_CP1_CONTEXT_PACKAGER_CONSUMER_BRIDGE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "937:1774627777736727000"
+    },
+    "docs/audits/CVF_W2_T36_CP1_CONTEXT_BUILD_BATCH_CONSUMER_PIPELINE_AUDIT_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1885:1774664565206260100"
+    },
+    "docs/audits/CVF_W2_T36_CP2_CONTEXT_BUILD_BATCH_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1542:1774664583788927700"
+    },
+    "docs/audits/CVF_W2_T37_CP1_KNOWLEDGE_QUERY_BATCH_CONSUMER_PIPELINE_AUDIT_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1853:1774665099751404900"
+    },
+    "docs/audits/CVF_W2_T37_CP2_KNOWLEDGE_QUERY_BATCH_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1510:1774665118247373300"
+    },
+    "docs/audits/CVF_W4_T12_CP1_PATTERN_DRIFT_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2047:1774578003963373600"
+    },
+    "docs/audits/CVF_W4_T12_CP2_PATTERN_DRIFT_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1856:1774578162207741700"
+    },
+    "docs/audits/CVF_W4_T13_CP1_LEARNING_OBSERVABILITY_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1662:1774579654514304900"
+    },
+    "docs/audits/CVF_W4_T13_CP2_LEARNING_OBSERVABILITY_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1430:1774579808200395500"
+    },
+    "docs/audits/CVF_W4_T14_CP1_LEARNING_LOOP_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1745:1774582399564052000"
+    },
+    "docs/audits/CVF_W4_T14_CP2_LEARNING_LOOP_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1781:1774582719532421300"
+    },
+    "docs/audits/CVF_W4_T15_CP1_LEARNING_REINJECTION_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5785:1774586224264538000"
+    },
+    "docs/audits/CVF_W4_T15_CP2_LEARNING_REINJECTION_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1100:1774586905759044500"
+    },
+    "docs/audits/CVF_W4_T16_CP1_LEARNING_STORAGE_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5893:1774587959197633600"
+    },
+    "docs/audits/CVF_W4_T16_CP2_LEARNING_STORAGE_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5308:1774588699950523900"
+    },
+    "docs/audits/CVF_W4_T17_CP1_FEEDBACK_LEDGER_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6184:1774589806664123200"
+    },
+    "docs/audits/CVF_W4_T17_CP2_FEEDBACK_LEDGER_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "3027:1774589985043699100"
+    },
+    "docs/audits/CVF_W4_T18_CP1_TRUTH_MODEL_UPDATE_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1976:1774590498018022000"
+    },
+    "docs/audits/CVF_W4_T18_CP2_TRUTH_MODEL_UPDATE_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2049:1774590644393554000"
+    },
+    "docs/audits/CVF_W4_T19_CP1_TRUTH_MODEL_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1963:1774591147993337500"
+    },
+    "docs/audits/CVF_W4_T21_CP1_TRUTH_SCORE_LOG_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5653:1774594246288601500"
+    },
+    "docs/audits/CVF_W4_T21_CP2_TRUTH_SCORE_LOG_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "4773:1774594516346150900"
+    },
+    "docs/audits/CVF_W4_T22_CP1_GOVERNANCE_SIGNAL_LOG_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5869:1774596598420814500"
+    },
+    "docs/audits/CVF_W4_T22_CP2_GOVERNANCE_SIGNAL_LOG_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "3475:1774599021036855200"
+    },
+    "docs/audits/CVF_W4_T23_CP1_LEARNING_OBSERVABILITY_SNAPSHOT_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "3524:1774599583392321100"
+    },
+    "docs/audits/CVF_W4_T23_CP2_LEARNING_OBSERVABILITY_SNAPSHOT_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "3451:1774599828153985000"
+    },
+    "docs/audits/CVF_W4_T24_CP1_LEARNING_STORAGE_LOG_CONSUMER_PIPELINE_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "3554:1774600381593608800"
+    },
+    "docs/audits/CVF_W4_T24_CP2_LEARNING_STORAGE_LOG_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "3565:1774600394660101100"
+    },
+    "docs/audits/CVF_W5_T2_CP2_PROGRESS_TRACKER_UPDATE_AUDIT_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1597:1774697074431149300"
+    },
+    "docs/reviews/CVF_CP1_AUDIT_W2_T38_RETRIEVAL_CONSUMER_PIPELINE_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "2376:1774667828875451500"
+    },
+    "docs/reviews/CVF_CP2_FAST_LANE_AUDIT_W2_T38_RETRIEVAL_CONSUMER_PIPELINE_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1519:1774667849249920200"
+    },
+    "docs/reviews/CVF_DELTA_W2_T38_RETRIEVAL_CONSUMER_PIPELINE_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1407:1774667860713294700"
+    },
+    "docs/reviews/CVF_EA_DECISION_PACK_VALIDATION_POST_W7_OPEN_TARGETS_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "22539:1774701592065913400"
+    },
+    "docs/reviews/CVF_EA_INDEPENDENT_COUNTER_REVIEW_POST_W7_OPEN_TARGETS_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "18085:1774700008780667800"
+    },
+    "docs/reviews/CVF_GC018_CLOSURE_REVIEW_W2_T38_RETRIEVAL_CONSUMER_PIPELINE_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1630:1774668988014896600"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T23_GATEWAY_AUTH_LOG_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2694:1774601691860049200"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T24_GATEWAY_PII_DETECTION_LOG_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1603:1774606825736912600"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T25_ROUTE_MATCH_LOG_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5377:1774710676637017300"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T27_BOARDROOM_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6987:1774710676639634500"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T28_AI_GATEWAY_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "7118:1774710676641651800"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T29_INTAKE_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6794:1774710676644167900"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T30_ROUTE_MATCH_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6846:1774710676646166100"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T25_COMMAND_RUNTIME_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "9338:1774583609757702700"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T26_DESIGN_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5375:1774710676648166700"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T27_DISPATCH_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5432:1774617276050719100"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T28_ASYNC_RUNTIME_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6065:1774617956726760300"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T29_STREAMING_EXECUTION_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6079:1774618471726600800"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T30_BOARDROOM_MULTI_ROUND_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5192:1774621764918856300"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T31_BOARDROOM_TRANSITION_GATE_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2163:1774623550993595600"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T32_CONTEXT_BUILD_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1360:1774624190905794500"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T33_BOARDROOM_ROUND_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1566:1774626262521964200"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T34_CONTEXT_ENRICHMENT_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1878:1774627133467688700"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T35_CONTEXT_PACKAGER_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1365:1774627519312483900"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T36_CONTEXT_BUILD_BATCH_CONSUMER_BRIDGE_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1478:1774664297297622300"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T37_KNOWLEDGE_QUERY_BATCH_CONSUMER_BRIDGE_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1587:1774664885498296200"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T38_RETRIEVAL_CONSUMER_BRIDGE_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1688:1774666417119050900"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T12_PATTERN_DRIFT_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "3071:1774577770302221900"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T13_LEARNING_OBSERVABILITY_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2283:1774579345241841200"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T14_LEARNING_LOOP_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "12161:1774710676652166400"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T15_LEARNING_REINJECTION_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "9391:1774585681692207400"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T16_LEARNING_STORAGE_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2412:1774587207014331100"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T17_FEEDBACK_LEDGER_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6821:1774589301064787400"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T18_TRUTH_MODEL_UPDATE_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1529:1774590307036521500"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T19_TRUTH_MODEL_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "4202:1774590942449963400"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T20_EVALUATION_THRESHOLD_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "4296:1774591425832572500"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T21_TRUTH_SCORE_LOG_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "4056:1774593716219896800"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T22_GOVERNANCE_SIGNAL_LOG_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6435:1774596332442069500"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T23_LEARNING_OBSERVABILITY_SNAPSHOT_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5301:1774599243661957900"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T24_LEARNING_STORAGE_LOG_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "4580:1774600011674524800"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T25_PATTERN_DRIFT_LOG_CONSUMER_BRIDGE_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5621:1774710676654168900"
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W5_T2_WHITEPAPER_UPDATE_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1955:1774696673587362300"
+    },
+    "docs/reviews/CVF_GC019_REVIEW_W2_T38_RETRIEVAL_CONSUMER_PIPELINE_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "758:1774667837354289200"
+    },
+    "docs/reviews/CVF_GC019_W2_T25_CP1_COMMAND_RUNTIME_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6304:1774584104004526900"
+    },
+    "docs/reviews/CVF_GC019_W2_T29_CP1_STREAMING_EXECUTION_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2117:1774710676655939600"
+    },
+    "docs/reviews/CVF_GC019_W2_T30_CP1_BOARDROOM_MULTI_ROUND_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1957:1774622884733210900"
+    },
+    "docs/reviews/CVF_GC019_W2_T31_CP1_BOARDROOM_TRANSITION_GATE_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "594:1774623953711239600"
+    },
+    "docs/reviews/CVF_GC019_W2_T32_CP1_CONTEXT_BUILD_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "526:1774624677071129700"
+    },
+    "docs/reviews/CVF_GC019_W2_T33_CP1_BOARDROOM_ROUND_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "509:1774626904024230900"
+    },
+    "docs/reviews/CVF_GC019_W2_T34_CP1_CONTEXT_ENRICHMENT_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "386:1774627327351859500"
+    },
+    "docs/reviews/CVF_GC019_W2_T36_CP1_CONTEXT_BUILD_BATCH_CONSUMER_PIPELINE_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "864:1774664573514013400"
+    },
+    "docs/reviews/CVF_GC019_W2_T37_CP1_KNOWLEDGE_QUERY_BATCH_CONSUMER_PIPELINE_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "877:1774665108036034300"
+    },
+    "docs/reviews/CVF_GC019_W4_T12_CP1_PATTERN_DRIFT_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1685:1774578013336941800"
+    },
+    "docs/reviews/CVF_GC019_W4_T13_CP1_LEARNING_OBSERVABILITY_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1654:1774579663551478700"
+    },
+    "docs/reviews/CVF_GC019_W4_T14_CP1_LEARNING_LOOP_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1837:1774582415519978800"
+    },
+    "docs/reviews/CVF_GC019_W4_T15_CP1_LEARNING_REINJECTION_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2056:1774586239222676100"
+    },
+    "docs/reviews/CVF_GC019_W4_T16_CP1_LEARNING_STORAGE_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "8303:1774587993885638900"
+    },
+    "docs/reviews/CVF_GC019_W4_T17_CP1_FEEDBACK_LEDGER_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1752:1774589819569959300"
+    },
+    "docs/reviews/CVF_GC019_W4_T18_CP1_TRUTH_MODEL_UPDATE_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1933:1774590511224863300"
+    },
+    "docs/reviews/CVF_GC019_W4_T19_CP1_TRUTH_MODEL_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1939:1774591157136756900"
+    },
+    "docs/reviews/CVF_GC019_W4_T21_CP1_TRUTH_SCORE_LOG_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6400:1774594277607522100"
+    },
+    "docs/reviews/CVF_GC019_W4_T22_CP1_GOVERNANCE_SIGNAL_LOG_CONSUMER_PIPELINE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6764:1774596633120495100"
+    },
+    "docs/reviews/CVF_GC019_W5_T2_CP1_WHITEPAPER_UPDATE_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "2918:1774696960421834900"
+    },
+    "docs/reviews/CVF_GC021_W2_T25_CP2_COMMAND_RUNTIME_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5063:1774585053794134100"
+    },
+    "docs/reviews/CVF_GC021_W2_T29_CP2_STREAMING_EXECUTION_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1495:1774619459787044400"
+    },
+    "docs/reviews/CVF_GC021_W2_T30_CP2_BOARDROOM_MULTI_ROUND_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1236:1774622931809612900"
+    },
+    "docs/reviews/CVF_GC021_W2_T31_CP2_BOARDROOM_TRANSITION_GATE_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "926:1774624016833327000"
+    },
+    "docs/reviews/CVF_GC021_W2_T32_CP2_CONTEXT_BUILD_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "719:1774624687936962400"
+    },
+    "docs/reviews/CVF_GC021_W2_T33_CP2_BOARDROOM_ROUND_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "698:1774626910807106400"
+    },
+    "docs/reviews/CVF_GC021_W2_T34_CP2_CONTEXT_ENRICHMENT_CONSUMER_BRIDGE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "197:1774627332179515300"
+    },
+    "docs/reviews/CVF_GC021_W2_T36_CP2_CONTEXT_BUILD_BATCH_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1011:1774664593594853900"
+    },
+    "docs/reviews/CVF_GC021_W2_T37_CP2_KNOWLEDGE_QUERY_BATCH_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "930:1774665127590567700"
+    },
+    "docs/reviews/CVF_GC021_W4_T12_CP2_PATTERN_DRIFT_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1369:1774578169836979800"
+    },
+    "docs/reviews/CVF_GC021_W4_T13_CP2_LEARNING_OBSERVABILITY_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1803:1774579820104650000"
+    },
+    "docs/reviews/CVF_GC021_W4_T14_CP2_LEARNING_LOOP_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1430:1774582732126013400"
+    },
+    "docs/reviews/CVF_GC021_W4_T15_CP2_LEARNING_REINJECTION_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "480:1774586912972024600"
+    },
+    "docs/reviews/CVF_GC021_W4_T18_CP2_TRUTH_MODEL_UPDATE_CONSUMER_PIPELINE_BATCH_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1817:1774590657919884500"
+    },
+    "docs/reviews/CVF_GC021_W5_T2_CP2_PROGRESS_TRACKER_UPDATE_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1001:1774697083915059600"
+    },
+    "docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_POST_W7_OPEN_TARGETS_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "9576:1774700544431467500"
+    },
+    "docs/reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_POST_W7_OPEN_TARGETS_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "10199:1774698507686828500"
+    },
+    "docs/reviews/CVF_MULTI_AGENT_REBUTTAL_POST_W7_OPEN_TARGETS_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "10373:1774698868049063400"
+    },
+    "docs/reviews/CVF_W1_T23_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2187:1774606734845225500"
+    },
+    "docs/reviews/CVF_W1_T24_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "7257:1774710676672637300"
+    },
+    "docs/reviews/CVF_W1_T25_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "7026:1774710676674632000"
+    },
+    "docs/reviews/CVF_W1_T27_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "7351:1774710676676916100"
+    },
+    "docs/reviews/CVF_W1_T28_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "7127:1774710676678903700"
+    },
+    "docs/reviews/CVF_W1_T29_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6814:1774710676679920600"
+    },
+    "docs/reviews/CVF_W1_T30_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1631:1774617051246709000"
+    },
+    "docs/reviews/CVF_W2_T25_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "7138:1774710676691861200"
+    },
+    "docs/reviews/CVF_W2_T26_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6867:1774710676694893200"
+    },
+    "docs/reviews/CVF_W2_T27_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6774:1774710676696898100"
+    },
+    "docs/reviews/CVF_W2_T28_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "7297:1774710676698896500"
+    },
+    "docs/reviews/CVF_W2_T29_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2691:1774710676699898800"
+    },
+    "docs/reviews/CVF_W2_T30_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2179:1774710676702899900"
+    },
+    "docs/reviews/CVF_W2_T31_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "960:1774624044419760700"
+    },
+    "docs/reviews/CVF_W2_T32_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "695:1774624691696805700"
+    },
+    "docs/reviews/CVF_W2_T33_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "802:1774626921415805400"
+    },
+    "docs/reviews/CVF_W2_T34_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "457:1774627334192335800"
+    },
+    "docs/reviews/CVF_W2_T35_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "974:1774627779758162900"
+    },
+    "docs/reviews/CVF_W2_T36_TRANCHE_CLOSURE_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1414:1774664656655838000"
+    },
+    "docs/reviews/CVF_W2_T37_TRANCHE_CLOSURE_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1486:1774665370666712600"
+    },
+    "docs/reviews/CVF_W4_T12_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2892:1774710676718127000"
+    },
+    "docs/reviews/CVF_W4_T13_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2974:1774579886676326200"
+    },
+    "docs/reviews/CVF_W4_T14_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2518:1774582816931404600"
+    },
+    "docs/reviews/CVF_W4_T15_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "1028:1774587007878956600"
+    },
+    "docs/reviews/CVF_W4_T16_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "8323:1774710676719168400"
+    },
+    "docs/reviews/CVF_W4_T17_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2310:1774590054309974600"
+    },
+    "docs/reviews/CVF_W4_T18_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "3511:1774590704899973600"
+    },
+    "docs/reviews/CVF_W4_T19_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "3413:1774591270029759400"
+    },
+    "docs/reviews/CVF_W4_T20_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "2004:1774593524744498300"
+    },
+    "docs/reviews/CVF_W4_T21_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "9076:1774594599082278400"
+    },
+    "docs/reviews/CVF_W4_T22_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5531:1774710676733569500"
+    },
+    "docs/reviews/CVF_W4_T23_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5401:1774710676736580300"
+    },
+    "docs/reviews/CVF_W4_T24_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "5973:1774710676738602500"
+    },
+    "docs/reviews/CVF_W4_T25_TRANCHE_CLOSURE_REVIEW_2026-03-27.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-27",
+      "signature": "6139:1774710676741660100"
+    },
+    "docs/reviews/CVF_W5_T2_TRANCHE_CLOSURE_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "2339:1774697210324357400"
+    },
+    "docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "3182:1774694280991038500"
+    },
+    "docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "1506:1774694377335621400"
+    },
+    "docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "5602:1774670852903590200"
+    },
+    "docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "3160:1774670892518023900"
+    },
+    "docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md": {
+      "bucket": "active_dated",
+      "date": "2026-03-28",
+      "signature": "9706:1774701592064915500"
+    },
+    "docs/audits/CVF_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_AUDIT_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "7560:1774110865588649900",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T1_CP2_KNOWLEDGE_CONTEXT_WRAPPER_ALIGNMENT_AUDIT_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "8883:1774112211985973700",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T1_CP3_GOVERNANCE_CANVAS_REPORTING_INTEGRATION_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "8427:1774113519825145800",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_SURFACE_ALIGNMENT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "7722:1774114410933968600",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T1_CP5_TRANCHE_CLOSURE_REVIEW_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4407:1774141166970369100",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "6966:1774158695710865500",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "9946:1774165003345967500",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "5093:1774166001877220700",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3386:1774166644377207600",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T2_CP5_TRANCHE_CLOSURE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1802:1774167143766199800",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T3_CP1_DESIGN_CONTRACT_BASELINE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2189:1774174480791890100",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T3_CP2_BOARDROOM_SESSION_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1388:1774174864816068500",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T3_CP3_ORCHESTRATION_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1363:1774175086437945000",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T3_CP4_DESIGN_CONSUMER_PATH_PROOF_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1520:1774175275897446100",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T4_CP1_AI_GATEWAY_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3466:1774179992669486600",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T4_CP2_GATEWAY_CONSUMER_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2404:1774180032085233300",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T4_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3191:1774710676416407600",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T5_CP1_REVERSE_PROMPTING_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2686:1774181175008642500",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T5_CP2_CLARIFICATION_REFINEMENT_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2616:1774181207030760500",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W1_T5_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2286:1774181240320513000",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "7075:1774142321168684600",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "8276:1774144027392583200",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3516:1774145331075686500",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "983:1774146450654432200",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T1_CP5_TRANCHE_CLOSURE_REVIEW_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4658:1774154674495766000",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T2_CP1_DISPATCH_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2828:1774178109151076300",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T2_CP2_POLICY_GATE_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1743:1774178170022769100",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T2_CP3_EXECUTION_BRIDGE_CONSUMER_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2584:1774178220299820400",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T2_CP4_TRANCHE_CLOSURE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2830:1774178409230110300",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T3_CP1_COMMAND_RUNTIME_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3190:1774179183717938800",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T3_CP2_EXECUTION_PIPELINE_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3164:1774179223888166600",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T3_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3303:1774710676418407500",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T4_CP1_EXECUTION_OBSERVER_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2839:1774181854027341000",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T4_CP2_EXECUTION_FEEDBACK_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2870:1774181886469623600",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T4_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2257:1774181920473918500",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2753:1774184723506657100",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1811:1774184754798166800",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W2_T5_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2495:1774184788726071100",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W3_T1_CP1_GOVERNANCE_EXPANSION_FOUNDATION_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2936:1774154789719206200",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2579:1774182791136774400",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2553:1774182825729461400",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W4_T1_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2482:1774182858636988500",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W4_T2_CP1_TRUTH_MODEL_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2766:1774183827522177000",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2218:1774183854622143200",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/audits/CVF_W4_T2_CP3_TRANCHE_CLOSURE_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2510:1774183889290994600",
+      "blocked": true,
+      "reason": "audit_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reference/CVF_CANONICAL_PATH_MAP_2026-03-06.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-06",
+      "signature": "5488:1774708073787680900",
+      "blocked": true,
+      "reason": "protected_reference",
+      "liveReferenceSources": [
+        "docs/INDEX.md",
+        "docs/reference/README.md"
+      ],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": [
+        "docs/INDEX.md"
+      ]
+    },
+    "docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-20",
+      "signature": "9978:1774710676627743300",
+      "blocked": true,
+      "reason": "protected_reference",
+      "liveReferenceSources": [
+        "docs/CVF_INCREMENTAL_TEST_LOG.md",
+        "docs/INDEX.md",
+        "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+        "docs/reference/CVF_RELEASE_MANIFEST.md",
+        "docs/reference/README.md",
+        "docs/reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md",
+        "docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md",
+        "docs/reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md",
+        "docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md"
+      ],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": [
+        "docs/INDEX.md",
+        "docs/reference/CVF_RELEASE_MANIFEST.md"
+      ]
+    },
+    "docs/reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "11309:1774088633824861500",
+      "blocked": true,
+      "reason": "protected_reference",
+      "liveReferenceSources": [
+        "docs/INDEX.md",
+        "docs/reviews/CVF_EA_CROSS_CHECK_RECONCILIATION_2026-03-21.md"
+      ],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": [
+        "docs/INDEX.md"
+      ]
+    },
+    "docs/reviews/CVF_EA_CROSS_CHECK_RECONCILIATION_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "5178:1774088633824861500",
+      "blocked": true,
+      "reason": "protected_reference",
+      "liveReferenceSources": [
+        "docs/INDEX.md",
+        "docs/reviews/CVF_EA_INDEPENDENT_COUNTER_REVIEW_POST_W7_OPEN_TARGETS_2026-03-28.md",
+        "docs/reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_POST_W7_OPEN_TARGETS_2026-03-28.md",
+        "docs/reviews/CVF_MULTI_AGENT_REBUTTAL_POST_W7_OPEN_TARGETS_2026-03-28.md"
+      ],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": [
+        "docs/INDEX.md"
+      ]
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_P3_2026-03-20.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-20",
+      "signature": "2539:1773986491911342200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "3115:1774109974036779300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T1_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "3887:1774110555162357600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T20_GATEWAY_AUTH_CONSUMER_BRIDGE_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "4256:1774441717829135100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T21_CLARIFICATION_REFINEMENT_CONSUMER_BRIDGE_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "4794:1774442443373635100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T22_KNOWLEDGE_QUERY_CONSUMER_BRIDGE_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "2982:1774443466523661000",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T2_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2537:1774158117150973800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T3_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "5199:1774174400394426900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T4_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4588:1774179748531591500",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W1_T5_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4897:1774180869923662000",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T1_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4061:1774141916044059300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T23_POLICY_GATE_CONSUMER_BRIDGE_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "3972:1774435382472754300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T2_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "6970:1774178033737778200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T3_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4720:1774178840979872700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T4_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4792:1774181652950461600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W2_T5_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3063:1774184366213058400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T18_WATCHDOG_PULSE_CONSUMER_BRIDGE_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "4220:1774438966458291200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W3_T1_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2318:1774154723882937900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T10_PATTERN_DETECTION_CONSUMER_BRIDGE_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "3184:1774446179053593100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T1_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "5764:1774182479477869800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T2_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3095:1774183691534783300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T3_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2901:1774185240915519200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T4_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3251:1774186432116289900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T5_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3434:1774192088429154800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T8_EVALUATION_ENGINE_CONSUMER_BRIDGE_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "4052:1774444423467691900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W4_T9_TRUTH_SCORE_CONSUMER_BRIDGE_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "3384:1774445326943267300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_REVIEW_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "2963:1774110865588649900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T1_CP2_KNOWLEDGE_CONTEXT_WRAPPER_ALIGNMENT_REVIEW_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "3362:1774112211985973700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T1_CP3_GOVERNANCE_CANVAS_REPORTING_INTEGRATION_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3273:1774113519825876500",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T1_CP4_SELECTED_CONTROLLED_INTELLIGENCE_SURFACE_ALIGNMENT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3294:1774114410935048100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T1_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2775:1774141166970369100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T2_CP1_USABLE_INTAKE_CONTRACT_BASELINE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2969:1774158695710865500",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T2_CP2_UNIFIED_KNOWLEDGE_RETRIEVAL_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "5606:1774165038945956100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T2_CP3_DETERMINISTIC_CONTEXT_PACKAGING_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2983:1774166029770338700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T2_CP4_REAL_CONSUMER_PATH_PROOF_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1937:1774166661306870200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T2_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1349:1774167151442074800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T3_CP1_DESIGN_CONTRACT_BASELINE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1501:1774174489837282900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T3_CP2_BOARDROOM_SESSION_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "753:1774174869617525900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T3_CP3_ORCHESTRATION_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "784:1774175091751114200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T3_CP4_DESIGN_CONSUMER_PATH_PROOF_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "804:1774175280933740800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T4_CP1_AI_GATEWAY_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2614:1774180007699220200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T4_CP2_GATEWAY_CONSUMER_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1284:1774180040838324300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T4_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1452:1774180089577876300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T5_CP1_REVERSE_PROMPTING_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2131:1774181185645061600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T5_CP2_CLARIFICATION_REFINEMENT_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1667:1774181213292531000",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W1_T5_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1084:1774181243604384600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T1_CP1_EXECUTION_PLANE_FOUNDATION_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3037:1774142321170750400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T1_CP2_MCP_GATEWAY_WRAPPER_ALIGNMENT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3413:1774144027392583200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T1_CP3_ADAPTER_EVIDENCE_EXPLAINABILITY_INTEGRATION_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3212:1774154602290318500",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T1_CP4_AUTHORIZATION_BOUNDARY_ALIGNMENT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2952:1774154602290929200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T1_CP5_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2849:1774154674496111300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T2_CP1_DISPATCH_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2777:1774178129239667100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T2_CP2_POLICY_GATE_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1400:1774178179298216200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T2_CP3_EXECUTION_BRIDGE_CONSUMER_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1725:1774178232974199400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T2_CP4_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1758:1774178418818407100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T3_CP1_COMMAND_RUNTIME_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2390:1774179197419965300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T3_CP2_EXECUTION_PIPELINE_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2083:1774179238393370000",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T3_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1605:1774179286165366700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T4_CP1_EXECUTION_OBSERVER_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2135:1774181865954300200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T4_CP2_EXECUTION_FEEDBACK_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1796:1774181894938510200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T4_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1068:1774181934720946400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T5_CP1_FEEDBACK_ROUTING_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "916:1774184733630185800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T5_CP2_FEEDBACK_RESOLUTION_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "888:1774184763163194400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W2_T5_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "953:1774184796092836400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W3_T1_CP1_GOVERNANCE_EXPANSION_FOUNDATION_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3009:1774154789719206200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W4_T1_CP1_FEEDBACK_LEDGER_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1918:1774182801515899700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W4_T1_CP2_PATTERN_DETECTION_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1793:1774182836861236600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W4_T1_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1259:1774182865847200600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W4_T2_CP1_TRUTH_MODEL_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1002:1774183834953113400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W4_T2_CP2_TRUTH_MODEL_UPDATE_CONTRACT_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "973:1774183861817409100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_GC019_W4_T2_CP3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "945:1774183897685422300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-20",
+      "signature": "5128:1773991503205318100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-19",
+      "signature": "15131:1774710676659028600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_HOLD_2026-03-20.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-20",
+      "signature": "2554:1773988374916306200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_RESTRUCTURING_CURRENT_CYCLE_CLOSURE_REVIEW_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "2432:1774109211352097800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_SYSTEM_UNIFICATION_ACTIVE_WAVE_CLOSURE_REVIEW_2026-03-20.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-20",
+      "signature": "2998:1773988374918355100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-20",
+      "signature": "8870:1773987344684052100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T1_CONTROL_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3028:1774141468208586600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T20_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "2948:1774713390959551100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T21_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "3220:1774713390959551100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T22_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "3050:1774713390959551100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_PACKET_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3133:1774158117150973800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T2_USABLE_INTAKE_SLICE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "6349:1774710676681918000",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T3_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4136:1774710676683917700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T3_USABLE_DESIGN_ORCHESTRATION_SLICE_PACKET_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2259:1774174416223136500",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T4_AI_GATEWAY_SLICE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4297:1774710676684918900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W1_T5_REVERSE_PROMPTING_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4824:1774710676686917500",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3371:1774154674496111300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T1_EXECUTION_PLANE_TRANCHE_PACKET_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2946:1774141916044059300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T21_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "1558:1774432893360501700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T22_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "2082:1774434173707360400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T23_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "1800:1774435937247074200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T24_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "1850:1774436895209370000",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T2_EXECUTION_DISPATCH_BRIDGE_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4657:1774710676701899200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T2_EXECUTION_DISPATCH_BRIDGE_TRANCHE_PACKET_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2580:1774178033769578500",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T3_EXECUTION_COMMAND_RUNTIME_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4161:1774710676704875300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T4_EXECUTION_OBSERVER_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4836:1774710676706048900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W2_T5_FEEDBACK_ROUTING_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "4593:1774710676708028400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W3_T13_TRANCHE_CLOSURE_REVIEW_2026-03-24.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-24",
+      "signature": "1341:1774713390983134500",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W3_T14_TRANCHE_CLOSURE_REVIEW_2026-03-24.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-24",
+      "signature": "1317:1774713390984031100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W3_T15_TRANCHE_CLOSURE_REVIEW_2026-03-24.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-24",
+      "signature": "1408:1774713390984934000",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W3_T17_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "1621:1774438063428311200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W3_T18_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "2593:1774713390986930200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2779:1774154815597176600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W3_T1_GOVERNANCE_EXPANSION_TRANCHE_PACKET_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "3186:1774154723882937900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T10_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "2660:1774446636912224300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T11_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "2597:1774450225089543900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T1_LEARNING_PLANE_FOUNDATION_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "5092:1774710676730581700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T2_TRUTH_MODEL_TRANCHE_CLOSURE_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "5038:1774710676744242700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T3_CP1_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1881:1774185623281136300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T3_CP1_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1566:1774185631855845100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T3_CP2_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1843:1774185661727504000",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T3_CP2_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1512:1774185668949800800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T3_CP3_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1870:1774710676746648200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T3_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2174:1774185696981370100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T4_CP1_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1735:1774191792474793100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T4_CP1_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1813:1774191802186632600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T4_CP2_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1829:1774191815486434300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T4_CP2_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1511:1774191821715483900",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T4_CP3_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1916:1774710676748653800",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T4_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2457:1774191849910098400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T5_CP1_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2046:1774192212176437600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T5_CP1_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1723:1774192221930868100",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T5_CP2_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1869:1774192235843526300",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T5_CP2_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1489:1774192242761456000",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T5_CP3_AUDIT_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "1986:1774710676750545600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T5_CP3_REVIEW_TRANCHE_CLOSURE_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "2697:1774192267206522400",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T8_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "3255:1774444981451382700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_W4_T9_TRANCHE_CLOSURE_REVIEW_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "2968:1774445842523358600",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "33621:1774713391013562700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-21",
+      "signature": "3092:1774110865589560700",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/CVF_WHITEPAPER_REALIZATION_RECONCILIATION_REVIEW_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "7369:1774710676755857000",
+      "blocked": true,
+      "reason": "protected_reference",
+      "liveReferenceSources": [
+        "docs/INDEX.md",
+        "docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md"
+      ],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": [
+        "docs/INDEX.md"
+      ]
+    },
+    "docs/reviews/CVF_WHITEPAPER_SCOPE_CLARIFICATION_PACKET_2026-03-22.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-22",
+      "signature": "8635:1774164227742536200",
+      "blocked": true,
+      "reason": "review_retain_evidence",
+      "liveReferenceSources": [],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": []
+    },
+    "docs/reviews/cvf_phase_governance/CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-06",
+      "signature": "59203:1774708074113586300",
+      "blocked": true,
+      "reason": "markdown_link_dependency(1)",
+      "liveReferenceSources": [
+        "docs/CVF_ARCHITECTURE_DECISIONS.md",
+        "docs/CVF_CORE_KNOWLEDGE_BASE.md",
+        "docs/guides/CVF_QUICK_ORIENTATION.md",
+        "docs/reference/CVF_CANONICAL_PATH_MAP_2026-03-06.md",
+        "docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md",
+        "docs/reviews/cvf_phase_governance/README.md"
+      ],
+      "markdownLinkSources": [
+        "docs/guides/CVF_QUICK_ORIENTATION.md"
+      ],
+      "protectedReferenceSources": []
+    },
+    "docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md": {
+      "bucket": "archive_candidate",
+      "date": "2026-03-25",
+      "signature": "6451:1774694393065573500",
+      "blocked": true,
+      "reason": "protected_reference",
+      "liveReferenceSources": [
+        "AGENT_HANDOFF.md",
+        "docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md"
+      ],
+      "markdownLinkSources": [],
+      "protectedReferenceSources": [
+        "AGENT_HANDOFF.md",
+        "docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md"
+      ]
+    }
+  }
+}

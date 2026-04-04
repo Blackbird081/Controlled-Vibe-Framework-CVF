@@ -19,6 +19,8 @@ import {
   ScopeGuard,
   AuditTrailGuard,
   PHASE_ORDER,
+  classifyHandoffTransition,
+  createHandoffCheckpoint,
   type GuardRequestContext,
 } from './index';
 
@@ -255,6 +257,22 @@ describe('ScopeGuard', () => {
   it('escalates builder-class roles touching root files', () => {
     const result = guard.evaluate(ctx({ role: 'AI_AGENT', targetFiles: ['README.md'] }));
     expect(result.decision).toBe('ESCALATE');
+  });
+});
+
+describe('handoff runtime exports', () => {
+  it('exports runtime handoff helpers from the canonical barrel', () => {
+    const transition = classifyHandoffTransition({
+      approvalOrDecisionPending: true,
+      meaningfulStatePresent: true,
+    });
+    expect(transition).toBe('ESCALATION_HANDOFF');
+
+    const checkpoint = createHandoffCheckpoint({
+      transition,
+      reason: 'Approval required before execution continues.',
+    });
+    expect(checkpoint.formalHandoffRequired).toBe(true);
   });
 });
 

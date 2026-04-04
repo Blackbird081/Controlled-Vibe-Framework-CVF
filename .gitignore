@@ -17,6 +17,7 @@ dev.db
 # IDE
 .idea/
 .vscode/
+.claude/
 *.swp
 *.swo
 
@@ -61,8 +62,22 @@ Xd_App/
 # REVIEW folder (local temporary review workspace)
 REVIEW/
 
-# CVF_Restructure (ARCHIVED — integration complete 2026-03-09, kept as historical reference)
+# Local-only hidden recovery space for retired pre-public roots
+.private_reference/
+
+# CVF_Restructure (retired from visible repo root; if retained locally it must live under .private_reference/)
 CVF_Restructure/
 
-# CVF Edit (Locked — do not push)
+# CVF Edit (retired from visible repo root; if retained locally it must live under .private_reference/)
 CVF Edit/
+
+# CVF_Important (retired from visible repo root; if retained locally it must live under .private_reference/)
+CVF_Important/
+
+# CVF v1.7 generated runtime telemetry / audit artifacts
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_audit.jsonl
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_lessons.json
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_rollback.jsonl
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_telemetry_elegance.jsonl
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_telemetry_mistakes.jsonl
+EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/cvf_telemetry_verification.jsonl

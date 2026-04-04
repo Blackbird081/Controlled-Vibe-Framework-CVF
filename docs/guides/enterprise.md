@@ -117,7 +117,7 @@ npm run build
 npm start
 ```
 
-Deploy to internal infrastructure (see [Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) for Vercel/Netlify/Docker options).
+Deploy to internal infrastructure (see [Deployment Guide](./CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) for Vercel/Netlify/Docker options).
 
 3. **Customize Authority Matrix**
 

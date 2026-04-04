@@ -1,8 +1,23 @@
 {
     "name": "cvf-core-git-for-ai",
-    "version": "3.0.0",
+    "version": "0.1.0",
     "description": "CVF Core — Git for AI Development. Foundation Primitives: Commit, Artifact, Process, Staging.",
     "type": "module",
+    "main": "./index.ts",
+    "types": "./index.ts",
+    "exports": {
+        ".": "./index.ts"
+    },
+    "files": [
+        "README.md",
+        "index.ts",
+        "ai_commit",
+        "artifact_staging",
+        "artifact_ledger",
+        "process_model",
+        "skill_lifecycle"
+    ],
+    "sideEffects": false,
     "scripts": {
         "check": "tsc --noEmit",
         "test": "vitest run",
@@ -13,5 +28,13 @@
         "typescript": "^5.0.0",
         "vitest": "^1.0.0",
         "@vitest/coverage-v8": "^1.0.0"
-    }
+    },
+    "keywords": [
+        "cvf",
+        "git-for-ai",
+        "core-primitives",
+        "artifact-ledger",
+        "skill-lifecycle"
+    ],
+    "license": "CC-BY-NC-ND-4.0"
 }

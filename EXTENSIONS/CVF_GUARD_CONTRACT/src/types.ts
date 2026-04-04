@@ -44,6 +44,25 @@ export type GuardDecision = 'ALLOW' | 'BLOCK' | 'ESCALATE';
 
 export type GuardSeverity = 'INFO' | 'WARN' | 'ERROR' | 'CRITICAL';
 
+export type HandoffTransitionKind =
+  | 'CONTINUE'
+  | 'BREAK'
+  | 'PAUSE'
+  | 'SHIFT_HANDOFF'
+  | 'AGENT_TRANSFER'
+  | 'ESCALATION_HANDOFF'
+  | 'CLOSURE';
+
+export type HandoffNextOwnerType = 'HUMAN' | 'AGENT' | 'REVIEWER';
+
+export type HandoffCheckpointStatus = 'OPEN' | 'RESOLVED';
+
+export type HandoffCheckpointResolution =
+  | 'RESUMED'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'CANCELLED';
+
 // ─── Core Interfaces ──────────────────────────────────────────────────
 
 /**
@@ -114,6 +133,33 @@ export interface GuardPipelineResult {
   agentGuidance?: string;
 }
 
+export interface HandoffTransitionContext {
+  workActuallyClosed?: boolean;
+  sameWorkerContinuesImmediately?: boolean;
+  sameWorkerWillResumeLater?: boolean;
+  ownershipChanges?: boolean;
+  nextOwnerType?: HandoffNextOwnerType;
+  approvalOrDecisionPending?: boolean;
+  meaningfulStatePresent?: boolean;
+}
+
+export interface HandoffCheckpoint {
+  id: string;
+  transition: HandoffTransitionKind;
+  formalHandoffRequired: boolean;
+  reason: string;
+  createdAt: string;
+  currentOwnerId?: string;
+  nextOwnerId?: string;
+  nextOwnerType?: HandoffNextOwnerType;
+  nextGovernedMove?: string;
+  scopeHint?: string;
+  status: HandoffCheckpointStatus;
+  resolvedAt?: string;
+  resolution?: HandoffCheckpointResolution;
+  metadata?: Record<string, unknown>;
+}
+
 /**
  * Audit log entry — stored for each pipeline evaluation.
  */
@@ -161,3 +207,51 @@ export const DEFAULT_GUARD_RUNTIME_CONFIG: GuardRuntimeConfig = {
 export const MANDATORY_GUARD_IDS = ['authority_gate', 'phase_gate', 'ai_commit'] as const;
 
 export type MandatoryGuardId = (typeof MANDATORY_GUARD_IDS)[number];
+
+// ─── Multi-Agent Coordination (W6-T2) ─────────────────────────────────
+
+export type AgentCoordinationMessageType =
+  | 'BROADCAST'
+  | 'DIRECT'
+  | 'QUORUM_REQUEST'
+  | 'QUORUM_RESPONSE';
+
+export type AgentCoordinationStatus =
+  | 'PENDING'
+  | 'DELIVERED'
+  | 'BLOCKED'
+  | 'QUORUM_MET'
+  | 'QUORUM_FAILED';
+
+export interface AgentRegistration {
+  agentId: string;
+  role: CVFRole;
+  phase: CVFPhase;
+  registeredAt: string;
+  capabilities?: string[];
+}
+
+export interface AgentCoordinationMessage {
+  id: string;
+  type: AgentCoordinationMessageType;
+  fromAgentId: string;
+  /** undefined = broadcast to all registered agents */
+  toAgentIds?: string[];
+  payload: Record<string, unknown>;
+  sentAt: string;
+  phase: CVFPhase;
+  riskLevel: CVFRiskLevel;
+  /** Required acknowledgement count for QUORUM_REQUEST */
+  quorumRequired?: number;
+}
+
+export interface AgentCoordinationResult {
+  messageId: string;
+  status: AgentCoordinationStatus;
+  deliveredTo: string[];
+  blockedBy?: string;
+  guardDecision?: GuardDecision;
+  quorumAcks?: number;
+  quorumRequired?: number;
+  processedAt: string;
+}

@@ -1,26 +1,30 @@
-# CVF DEPTH AUDIT GUARD
+# CVF Depth Audit Guard
 
-**Type:** Governance Operation Guard  
-**Applies to:** All roadmap phases, all humans, all AI agents  
-**Purpose:** Prevent uncontrolled semantic deepening when the added layer does not materially improve risk reduction, decision quality, or machine-enforceable closure.
+**Control ID:** `GC-018`
+**Guard Class:** `CONTINUITY_AND_DECISION_GUARD`
+**Status:** Active continuation stop-boundary rule for semantic deepening and marginal-value follow-on work.
+**Applies to:** all roadmap phases, all humans, and all AI agents proposing a new semantic layer, continuation wave, or materially deeper governance branch.
+**Enforced by:** `governance/compat/check_depth_audit_continuation_compat.py`, `governance/compat/check_gc018_stop_boundary_semantics.py`
 
----
+## Purpose
 
-## 1. Mandatory Rule
+- prevent uncontrolled semantic deepening when the added layer does not materially improve risk reduction, decision quality, or machine-enforceable closure
+- bias the system toward stopping or shifting laterally when a wave is already substantially delivered
+- require a reviewable `Depth Audit` instead of intuition-driven continuation
 
-Before any phase is deepened with a new semantic layer, policy layer, or `CF-*` batch, the proposer MUST complete a Depth Audit.
+## Rule
 
-This rule applies to **all phases**, not only Phase 6.
+Before any phase is deepened with a new semantic layer, policy layer, or `CF-*` batch, the proposer must complete a `Depth Audit`.
 
-The default assumption is:
+This rule applies to all phases, not only Phase 6.
 
-- do **not** deepen a phase automatically
-- do **not** chase detail for its own sake
-- do **not** trade broad system progress for low-yield semantic refinement
+Default assumption:
 
----
+- do not deepen a phase automatically
+- do not chase detail for its own sake
+- do not trade broad system progress for low-yield semantic refinement
 
-## 2. Scoring Model
+### Scoring Model
 
 Every proposed deepening step must be scored across 5 criteria.
 
@@ -34,11 +38,9 @@ Each criterion is scored `0..2`.
 | `Operational efficiency` | Adds cost with little offset | Neutral or mixed | Reuses existing paths or improves maintainability/perf |
 | `Portfolio priority` | Lower priority than open weaknesses elsewhere | Comparable priority | Clearly worth doing before other open work |
 
-**Maximum score:** `10`
+Maximum score: `10`
 
----
-
-## 3. Thresholds
+### Thresholds
 
 | Total score | Decision |
 |---|---|
@@ -46,25 +48,15 @@ Each criterion is scored `0..2`.
 | `6-7` | `REVIEW REQUIRED` |
 | `0-5` | `DEFER` |
 
-### Hard-stop override
+Hard-stop override:
 
-The proposal MUST be treated as `DEFER` if any of the following is `0`:
+- if `Risk reduction` is `0`, treat the proposal as `DEFER`
+- if `Decision value` is `0`, treat the proposal as `DEFER`
+- if `Machine enforceability` is `0`, treat the proposal as `DEFER`
 
-- `Risk reduction`
-- `Decision value`
-- `Machine enforceability`
+If the step does not reduce a real risk, improve a real decision, or become machine-enforceable, it is semantic expansion rather than governance hardening.
 
-Rationale:
-
-- if the step does not reduce a real risk,
-- or does not improve a real decision,
-- or cannot be enforced by machine,
-
-then the step is not governance hardening; it is only semantic expansion.
-
----
-
-## 4. Required Output Format
+### Required Output Format
 
 Any proposal that goes deeper than the current roadmap state must record:
 
@@ -82,33 +74,36 @@ Depth Audit
 
 This record may live in:
 
-- the roadmap,
-- an upgrade trace,
-- a decision matrix,
-- or a dedicated ADR / governance note,
-
-but it must be explicit and reviewable.
+- the roadmap
+- an upgrade trace
+- a decision matrix
+- a dedicated ADR or governance note
 
 Standard continuation packet template:
 
 - `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
 
-Automated continuation enforcement reference:
+For low-yield continuation classes, the packet must also make the stop-boundary explicit:
 
-- `governance/compat/check_depth_audit_continuation_compat.py`
-- local hook chain: `governance/compat/run_local_governance_hook_chain.py --hook pre-push`
-- CI workflow: `.github/workflows/documentation-testing.yml`
+- `Continuation class: VALIDATION_TEST | PACKAGING_ONLY | TRUTH_CLAIM | REALIZATION | STRUCTURAL | MIXED | OTHER`
+- `Lateral alternative considered: YES | NO`
+- `Why not lateral shift: <short justification>`
+- `Real decision boundary improved: YES | NO`
 
----
-
-## 5. Default Guidance
+### Default Guidance
 
 Prefer stopping when:
 
 - the next layer mainly renames or re-partitions an existing signal
 - the new layer is hard to explain in operational terms
-- the gate/evidence cost grows faster than the trust gain
+- the gate and evidence cost grows faster than the trust gain
 - another phase has a broader unresolved weakness
+
+Special stop-boundary guidance:
+
+- validation/test waves should default toward `DEFER` once tranche-local confidence is already strong
+- packaging/wrapper/facade-only continuation should default toward `DEFER` unless it unlocks a real consumer path or retires a real legacy boundary
+- target-state claim expansion or status-marketing continuation should default toward `DEFER` unless new evidence changes the canonical posture in a reviewable way
 
 Prefer continuing when:
 
@@ -116,9 +111,12 @@ Prefer continuing when:
 - the result can be expressed as a clear gate or canonical artifact
 - the added complexity is small relative to the risk removed
 
----
+## Enforcement Surface
 
-## 6. Current Governance Direction
+- repo-level continuation enforcement runs through `governance/compat/check_depth_audit_continuation_compat.py`
+- stop-boundary semantics enforcement runs through `governance/compat/check_gc018_stop_boundary_semantics.py`
+- local pre-push enforcement runs through `governance/compat/run_local_governance_hook_chain.py --hook pre-push`
+- CI enforcement runs through `.github/workflows/documentation-testing.yml`
 
 At the current baseline:
 
@@ -126,8 +124,14 @@ At the current baseline:
 - `Phase 2` and `Phase 6` are still active, but must justify every new layer through this guard
 - once a phase enters diminishing returns, the burden of proof shifts toward `DEFER`
 
-This guard is analogous to a coverage threshold:
+## Related Artifacts
 
-- not every theoretical edge must be implemented
-- the goal is sufficient, defensible control quality
-- not semantic perfection
+- `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+- `governance/compat/check_depth_audit_continuation_compat.py`
+- `governance/compat/check_gc018_stop_boundary_semantics.py`
+- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+
+## Final Clause
+
+CVF seeks sufficient, defensible control quality, not semantic perfection.

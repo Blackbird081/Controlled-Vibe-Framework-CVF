@@ -316,10 +316,10 @@ PWA: Installable, offline-capable
 
 ## 📖 Related Documentation
 
-- [CVF Framework Assessment](../../docs/CVF_FRAMEWORK_ASSESSMENT.md) - v1.0-v1.3 deep dive
+- [CVF Framework Assessment](../../docs/reference/CVF_FRAMEWORK_ASSESSMENT.md) - v1.0-v1.3 deep dive
 - [How to Apply CVF](../../docs/HOW_TO_APPLY_CVF.md) - SDK guide
 - [Agent Platform Progress](../../AGENT_PLATFORM_PROGRESS_2026-02-06.md) - Development log
-- [Roadmap](./ROADMAP.md) - v1.6 feature roadmap
+- [Roadmap](./CVF_ROADMAP.md) - v1.6 feature roadmap
 
 ---
 

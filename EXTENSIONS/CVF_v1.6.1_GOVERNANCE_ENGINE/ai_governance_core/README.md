@@ -1,5 +1,17 @@
 # CVF v1.6.1 — Governance Engine
 
+> This module is now part of the coordination package [`CVF_POLICY_ENGINE`](../../CVF_POLICY_ENGINE/).
+
+Current role:
+
+- canonical Python governance enforcement engine
+- enterprise enforcement, approval, ledger, and CI/CD governance plane
+
+Related source:
+
+- TypeScript natural-language policy authoring:
+  - [`CVF_ECO_v1.1_NL_POLICY`](../../CVF_ECO_v1.1_NL_POLICY/)
+
 > **Version:** 1.6.1  
 > **Status:** Production-ready  
 > **Assessment Score:** 8.2/10  

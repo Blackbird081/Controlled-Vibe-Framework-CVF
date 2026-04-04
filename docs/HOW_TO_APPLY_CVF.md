@@ -408,7 +408,7 @@ Với mỗi task:
 ### v1.1 Guides
 - [Quick Start](../v1.1/QUICK_START.md) — Bắt đầu trong 5 phút
 - [CVF Commands](../v1.1/interface/CVF_COMMANDS.md) — Danh sách commands
-- [Agent Archetypes](../v1.1/agents/AGENT_ARCHETYPES.md) — Roles cho AI
+- [Agent Archetypes](../v1.1/agents/CVF_AGENT_ARCHETYPE.md) — Roles cho AI
 
 ### v1.2/v1.3 Guides
 - [Skill Contract Spec](../EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/SKILL_CONTRACT_SPEC.md) — Contract structure
@@ -426,7 +426,7 @@ Với mỗi task:
 - [Starter Template Reference](../EXTENSIONS/CVF_STARTER_TEMPLATE_REFERENCE/) — Express.js + AI chat server template
 
 ### Expert Analysis
-- [CVF Expert Review](./CVF_EXPERT_REVIEW_v1.2.md) — Đánh giá chuyên gia & Roadmap
+- [CVF Expert Review](./reference/CVF_EXPERT_REVIEW_v1.2.md) — Đánh giá chuyên gia & Roadmap
 
 ---
 

@@ -1,209 +1,106 @@
-# CVF ARCHITECTURE CHECK GUARD — Mandatory Structure Review Before Adding to CVF
+# CVF Architecture Check Guard
 
-> **Type:** Governance Policy
-> **Effective:** 2026-03-05
-> **Status:** Active
-> **Enforced by:** Convention + AI Agent System Prompt + PR review
+**Guard Class:** `PACKAGE_AND_RUNTIME_ALIGNMENT_GUARD`
+**Status:** Active structure-review contract before adding a new version, layer, extension, module, or major architectural change to CVF.
+**Applies to:** Humans and AI agents proposing a new CVF version, layer, extension, module, structural refactor, or governance surface that changes architecture truth.
+**Enforced by:** `governance/compat/check_foundational_guard_surfaces.py`, `docs/CVF_CORE_KNOWLEDGE_BASE.md`, `docs/CVF_ARCHITECTURE_DECISIONS.md`
 
----
+## Purpose
 
-## 0. CVF EXTENSION RULES — ƯỨU TIÊN CAO NHẤT
+- stop duplication, overlap, or structural contradiction before implementation begins
+- ensure every new addition lands in the right layer and builds on the right prior surface
+- protect backward compatibility and architectural coherence as CVF grows
 
-Ba quy tắc này áp dụng cho **mọi thứ** được thêm vào CVF. Chúng có ưu tiên cao hơn mọi quy tắc khác.
+## Rule
 
-| # | Rule | Nội dung |
-|---|------|----------|
-| **R1** | **Cấu trúc hiện tại luôn là chuẩn** | CVF hiện tại là ground truth. Không được redefine hay replace cấu trúc cũ — phải viết ADR + approval nếu muốn thay đổi |
-| **R2** | **Addition phải tương thích, không thay thế** | Mọi version mới interoperate với version cũ. Không silent-replace. Test backward compat trước khi propose |
-| **R3** | **Naming và Governance theo chuẩn CVF** | Version: `CVF_v[x.y]_[TEN]`. Layer: `LAYER [N] — [MÔ_TẢ]`. Guard: `CVF_[MỤC_ĐÍCH]_GUARD.md`. Không tùy tiện đặt tên |
+Before proposing or implementing a new feature, version, layer, extension, module, or structural refactor in CVF, read `docs/CVF_CORE_KNOWLEDGE_BASE.md` and explicitly state:
 
-> **Vi phạm bất kỳ rule nào → proposal bị reject ngay, không cần review tiếp.**
-> Xem full detail: `docs/CVF_CORE_KNOWLEDGE_BASE.md` Section XIV.
+1. which layer the proposal belongs to
+2. whether it overlaps with any existing version or module
+3. which existing parts it builds upon or extends
+4. which principles from the Knowledge Base it must not violate
 
----
+### CVF Extension Rules
 
-## 1. PURPOSE
+These three rules apply to everything added to CVF and take priority over other structural preferences:
 
-**Before proposing or implementing anything new in CVF** — a new version, layer, extension, module, or feature — you MUST first read and understand the current CVF architecture through `docs/CVF_CORE_KNOWLEDGE_BASE.md`.
+| Rule | Meaning |
+|---|---|
+| `R1` | the current CVF structure is the ground truth unless an ADR plus approval changes it |
+| `R2` | additions must interoperate with existing versions instead of silently replacing them |
+| `R3` | naming and governance must follow the active CVF standards |
 
-This ensures:
-- **No duplication** — new additions don't overlap with existing features already implemented
-- **Correct layer placement** — every addition lands in the right architectural layer (1 → 5)
-- **Backward compatibility** — new layers do not break or bypass existing layers below them
-- **Structural coherence** — CVF grows in a planned, non-contradictory way
+Violation of any of these rules is enough to reject the proposal immediately.
 
-> **Why this matters:**
-> CVF has 5 layers and 13+ versions. Without reading the Knowledge Base first,
-> it is easy to propose something that already exists, conflicts with an existing layer,
-> or violates a core principle established in a prior version.
-
----
-
-## 2. THE MANDATORY RULE
-
-> 🚨 **NON-NEGOTIABLE:**
-> Every proposal for a **new feature, version, layer, extension, or module** MUST begin by reading `docs/CVF_CORE_KNOWLEDGE_BASE.md` and explicitly stating:
-> 1. **Which Layer** it belongs to (Layer 1–5)
-> 2. **Whether it overlaps** with any existing version/module
-> 3. **Which existing parts** it builds upon or extends
-> 4. **Which principles** from Section XI it must not violate
-
-### What Triggers This Guard?
+### Trigger Conditions
 
 | Action | Triggers Check? |
-|--------|:--------------:|
-| Proposing a new CVF version (e.g., v1.8, v2.0) | ✅ |
-| Adding a new layer, module, or component | ✅ |
-| Creating a new extension folder under `EXTENSIONS/` | ✅ |
-| Adding a new governance guard or policy | ✅ |
-| Refactoring an existing layer's architecture | ✅ |
-| Adding individual skills to an existing domain | ❌ |
-| Fixing a bug in existing code | ❌ |
-| Updating documentation for existing feature | ❌ |
-| Adding tests for existing features | ❌ |
+|---|:---:|
+| proposing a new CVF version | Yes |
+| adding a new layer, module, or component | Yes |
+| creating a new extension folder under `EXTENSIONS/` | Yes |
+| adding a new governance guard or policy | Yes |
+| refactoring an existing layer's architecture | Yes |
+| adding individual skills to an existing domain | No |
+| fixing a bug in existing code | No |
+| updating documentation for an existing feature | No |
+| adding tests for existing features | No |
 
----
+### Required Checklist
 
-## 3. REQUIRED CHECKLIST (Fill Before Proposing)
+Before implementation, answer all of these:
 
-Before submitting any proposal, explicitly answer all 9 questions from `docs/CVF_CORE_KNOWLEDGE_BASE.md` Section XII:
+1. layer placement
+2. principle compliance
+3. overlap check against existing versions or modules
+4. risk-model compatibility
+5. safety-kernel compatibility
+6. governance guard coverage
+7. compatibility-gate expectations
+8. ADR requirement
+9. Knowledge Base update requirement
 
-```
-ARCHITECTURE CHECK CHECKLIST
-══════════════════════════════════════════════════════════════════
-[ ] 1. Layer placement: This belongs to Layer ___
-        (1=Core | 2=Tools | 2.5=Safety Runtime | 3=Platform | 4=Safety UI | 5=Adapter)
+### Mandatory AI-Agent Preamble
 
-[ ] 2. Principle compliance: Does NOT violate any of the 9 principles in Section XI
-        Specifically, I checked: _______________________
+When an AI agent is asked to add something new to CVF, it must begin with:
 
-[ ] 3. Overlap check: Compared with existing versions in Section III
-        No overlap found with: ________________________
-        OR: Intentionally EXTENDS (not duplicates): _______
-
-[ ] 4. Risk model: Uses R0–R3 notation OR provides mapping if using different notation
-
-[ ] 5. Safety Kernel: Does NOT bypass the 5-layer Safety Kernel described in Section VI
-
-[ ] 6. Governance: Will call appropriate Governance Guards (Section VII)
-
-[ ] 7. Compatibility: Will pass compatibility gates
-        (governance/compat/check_core_compat.py)
-
-[ ] 8. ADR: Will create ADR entry in docs/CVF_ARCHITECTURE_DECISIONS.md
-
-[ ] 9. KB Update: If architecture changes, will update docs/CVF_CORE_KNOWLEDGE_BASE.md
-══════════════════════════════════════════════════════════════════
-All 9 boxes must be checked before implementation begins.
-```
-
----
-
-## 4. WORKFLOW
-
-```
-INTENT: Add something new to CVF
-    ↓
-STEP 1: READ docs/CVF_CORE_KNOWLEDGE_BASE.md (entire document)
-    ↓
-STEP 2: FILL ARCHITECTURE CHECK CHECKLIST (9 questions above)
-    ↓
-STEP 3: PROPOSE with explicit answers to all 9 questions
-    ↓
-STEP 4: REVIEW (human or governance agent validates checklist)
-    ↓
-    ├── ✅ All 9 checked → PROCEED to implement
-    └── ❌ Any unchecked → RETURN to Step 1
-    ↓
-STEP 5: IMPLEMENT
-    ↓
-STEP 6: CREATE ADR ENTRY (ADR Guard)
-    ↓
-STEP 7: UPDATE docs/CVF_CORE_KNOWLEDGE_BASE.md if architecture changed
-    ↓
-STEP 8: COMMIT + PUSH
-```
-
----
-
-## 5. MANDATORY PREAMBLE FOR AI AGENTS
-
-When an AI agent (Antigravity or any other) is asked to add something new to CVF, it MUST begin its response with this preamble before proposing anything:
-
-```
+```text
 ## Architecture Check (CVF_ARCHITECTURE_CHECK_GUARD)
 
 I have read docs/CVF_CORE_KNOWLEDGE_BASE.md.
 
-**Layer placement:** Layer [N] — [Layer name]
-**Existing overlap check:** [what I compared against and found]
-**Extends/builds upon:** [specific existing version or module]
-**Principles verified:** [which of the 9 principles apply and how respected]
-**Compat gate:** [will/won't need to run check_core_compat.py]
+Layer placement: Layer [N] — [Layer name]
+Existing overlap check: [what was compared]
+Extends/builds upon: [specific existing version or module]
+Principles verified: [which principles apply and how they are respected]
+Compat gate: [will or will not need to run check_core_compat.py]
 ```
 
-If the AI agent cannot provide this preamble, the proposal is **invalid** and must be rejected.
+If the preamble cannot be provided truthfully, the proposal is invalid.
 
----
+### Outdated Knowledge Base Rule
 
-## 6. WHAT TO DO WHEN KNOWLEDGE BASE IS OUTDATED
+If `docs/CVF_CORE_KNOWLEDGE_BASE.md` is outdated:
 
-If you discover that `docs/CVF_CORE_KNOWLEDGE_BASE.md` does not reflect the current state of CVF:
+1. stop
+2. update the Knowledge Base first
+3. rerun the architecture check against the updated baseline
+4. document the discrepancy in `docs/CVF_ARCHITECTURE_DECISIONS.md`
 
-1. **STOP** — do not proceed with the new addition
-2. **UPDATE** `docs/CVF_CORE_KNOWLEDGE_BASE.md` first
-3. **THEN** re-run the Architecture Check Checklist against the updated baseline
-4. **DOCUMENT** the discrepancy in `docs/CVF_ARCHITECTURE_DECISIONS.md`
+## Enforcement Surface
 
-> The Knowledge Base must always reflect reality, not aspirations.
-> Outdated Knowledge Base = invalid baseline = unreliable guard.
+- repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
+- the canonical structural baseline remains `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+- architecture decisions must still be recorded in `docs/CVF_ARCHITECTURE_DECISIONS.md`
+- local pre-push and CI must reject proposals that skip the checklist, hide overlap, or rely on an outdated Knowledge Base
 
----
+## Related Artifacts
 
-## 7. RELATION TO EXISTING GUARDS
+- `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+- `docs/CVF_ARCHITECTURE_DECISIONS.md`
+- `governance/toolkit/05_OPERATION/CVF_ADR_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_EXTENSION_VERSIONING_GUARD.md`
 
-| Guard | Covers | Does NOT cover |
-|-------|--------|----------------|
-| **Bug Guard** | What broke + how fixed | Structural placement of new additions |
-| **Test Guard** | What was tested + results | Whether new addition fits architecture |
-| **ADR Guard** | Why architecture decisions were made | Whether addition overlaps with existing |
-| **Skill Intake Record** | What skills were added | Layer placement or structural compatibility |
-| **Architecture Check Guard** ← **THIS** | **Structure review before ANY new addition** | Bug fixes, skill additions, doc updates |
+## Final Clause
 
-All five guards together form **complete traceability** for CVF:
-
-```
-Bug fix               → Bug Guard
-Test run              → Test Guard
-Skill added           → Skill Intake Record
-Architecture decision → ADR Guard
-NEW addition proposed → Architecture Check Guard  ← THIS
-```
-
----
-
-## 8. KNOWLEDGE BASE MAINTENANCE RULE
-
-`docs/CVF_CORE_KNOWLEDGE_BASE.md` is a **permanent governance document**.
-Its location (`docs/`) is fixed and must NOT be moved or renamed.
-
-It MUST be updated when:
-
-| Event | Action required |
-|-------|----------------|
-| New CVF version released | Update version table (Section III) |
-| New layer added | Update architecture diagram (Section II) |
-| Risk model changes | Update Section V |
-| New governance guard added | Update Section VII |
-| File structure changes | Update Section IX |
-| Quality metrics updated | Update Section X |
-
-It does NOT need updating for:
-- Individual skill additions
-- Bug fixes
-- Documentation updates for existing features
-- Test additions
-
----
-
-End of Architecture Check Guard Policy.
+If a proposal has not first proven where it fits in CVF, it has not yet earned the right to be implemented.

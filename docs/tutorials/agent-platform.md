@@ -292,7 +292,7 @@ Multi-agent uses 3–4x more tokens than single-agent. Monitor the usage tracker
 | Understand the canonical control loop deeper | [Controlled Execution Loop](../concepts/controlled-execution-loop.md) |
 | Understand the historical 4-phase foundation | [4-Phase Process](../concepts/4-phase-process.md) |
 | Learn about risk levels | [Risk Model](../concepts/risk-model.md) |
-| Deploy the web UI for my team | [Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) |
+| Deploy the web UI for my team | [Deployment Guide](../guides/CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) |
 | Set up team governance | [Team Setup Guide](../guides/team-setup.md) |
 
 ---

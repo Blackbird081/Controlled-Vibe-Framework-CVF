@@ -304,7 +304,59 @@ Output (Allow / Strip & Allow / Block)
 | CVF_PYTHON_AUTOMATION_SIZE_GUARD.md | Scripts in `scripts/`, `governance/compat/` | Stay within size thresholds |
 | CVF_ARCHITECTURE_CHECK_GUARD.md | Any new version/layer/extension/module proposal | `docs/CVF_CORE_KNOWLEDGE_BASE.md` ← file này |
 | CVF_EXTENSION_VERSIONING_GUARD.md | New extension folder in `EXTENSIONS/` | `CVF_{STREAM}_v{major}.{minor}_{NAME}/` format |
+| CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md | Governed packets, evidence docs, or continuity docs being written | Source-truth first + typed evidence stays explicit + continuity surfaces move together |
+| CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md | CPF public barrel changes | Keep `src/index.ts` thin and re-export-only |
+| CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md | CPF barrel smoke changes | Keep `tests/index.test.ts` smoke-only and ownership-clean |
+| CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md | Governed CPF batch family changes | Shared batch helper + shared fixture adoption required |
+| CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md | Canon summary doc changes | Summary docs must cite evidence, not inline typed evidence payloads |
+| CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md | Pre-public repository cleanup or root/extension lifecycle review | Visible roots and extension roots must be lifecycle-classified before relocation |
+| CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md | Pre-public publication or selective-distribution planning | Visible roots and extension roots must declare public/private exposure posture before publication decisions |
+| CVF_PREPUBLIC_P3_READINESS_GUARD.md | Pre-public `P3` relocation readiness review | `P3` stays blocked until phase-gates, root-file exposure, docs-root curation, export-readiness, and memo freshness are explicit |
+| CVF_GUARD_AUTHORING_STANDARD_GUARD.md | New or materially revised governance guard | Guard must satisfy the mandatory authoring contract before commit |
 | CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
+| CVF_ACTIVE_ARCHIVE_GUARD.md | Active archive maintenance | Keep active/archive split truthful and append-only |
+| CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md | New or revised active trace/log window with dedicated rotation guard | Register canonical active window + class + archive protection |
+| check_repository_lifecycle_classification.py | Pre-public restructure planning | Enforces lifecycle coverage before publish-facing folder cleanup |
+| check_repository_exposure_classification.py | Pre-public publication planning | Enforces private-by-default exposure coverage before any public-facing release posture is assumed |
+| CVF_AGENT_HANDOFF_GUARD.md | Governed pause/resume transfer | Canonical handoff packet before another worker continues; record tracked remote branch and derive exact remote SHA live when needed |
+| CVF_AGENT_HANDOFF_TRANSITION_GUARD.md | Pause/resume classification | Transition class chosen before handoff is written |
+| CVF_BASELINE_UPDATE_GUARD.md | Substantive repo change | Matching baseline/review artifact required |
+| CVF_BOARDROOM_RUNTIME_GUARD.md | Live boardroom decisions | Canonical boardroom runtime convergence packet |
+| CVF_EXTENSION_PACKAGE_CHECK_GUARD.md | Touched extension package changes | Package-level `check` script must pass before push |
+| CVF_FAST_LANE_GOVERNANCE_GUARD.md | Low-risk additive tranche work | Fast-lane packet and limits must remain truthful |
+| CVF_GOVERNED_FILE_SIZE_GUARD.md | Governed source/test/frontend/docs growth | File stays under threshold or carries approved exception |
+| CVF_MEMORY_GOVERNANCE_GUARD.md | Durable governance records | Correct memory class markers required |
+| CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md | Multi-agent intake/rebuttal/decision docs | Canonical review doc chain must be standardized |
+| CVF_PROGRESS_TRACKER_SYNC_GUARD.md | Tranche posture change | Canonical tracker and sync note must stay aligned |
+| CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md | New/resumed governed sessions | Canonical bootstrap must load first |
+| CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md | Major structural merge or move | Audit -> review -> decision path required |
+
+Automated foundational surface gate:
+
+- `governance/compat/check_foundational_guard_surfaces.py` now enforces ADR update truth, architecture-baseline refresh, extension naming/versioning, GC-019 packet presence, test-depth reporting markers, and workspace-isolation drift within the same change range
+- local pre-push and CI both run this gate so these six foundational guards are no longer policy-only review checkpoints
+
+Archive protection note:
+
+- generic archive cleanup must never auto-archive canonical active windows owned by dedicated rotation guards
+- canonical source of truth is `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
+- grouped management map is `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
+- historical `docs/audits/` and `docs/reviews/` now use explicit retain-evidence registries instead of one-off manual exceptions
+- canonical retention sources are `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json` and `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`
+- generic archive cleanup runs incrementally from `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`; full scans are bootstrap/recovery only
+| CVF_TEST_PARTITION_OWNERSHIP_GUARD.md | Extracted governed test surfaces | Canonical test home must remain exclusive |
+
+Guard management map:
+
+- `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
+
+Continuity truth note:
+
+- `GC-020` handoff stores stable transition truth, not volatile push-boundary trivia
+- record the tracked remote branch in `AGENT_HANDOFF.md` when the branch has an upstream
+- derive exact remote SHA live from git when a resume, comparison, or push decision depends on it
+- `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` is the canonical rule for thin barrels, smoke ownership, shared batch helpers, shared test builders, and summary-vs-evidence separation
+- external memory remains convenience-only and must not override repo truth or handoff truth
 
 
 ### Compatibility Gates (Chạy trước khi merge):
@@ -716,3 +768,55 @@ reviews/      = review archives by module or scope
 > **Cập nhật file này khi:** CVF có major structural change hoặc new layer/version được chính thức release. **(Rule 4: BẮT BUỘC)**
 > **Không cập nhật khi:** Chỉ thêm skills, fix bugs, hoặc update docs thông thường.
 > **Vị trí cố định:** `docs/CVF_CORE_KNOWLEDGE_BASE.md` — không được di chuyển hay đổi tên.
+
+---
+
+## XV. QUALITY ASSESSMENT CANON
+
+> Từ nay mọi quality review cấp tranche, wave, hoặc architecture phải dùng chung một rubric, không chấm cảm tính theo từng agent.
+
+- Canonical rubric:
+  - `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
+- Current active quality snapshot for the post-W7 continuation line:
+  - `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
+
+Rubric cố định gồm 6 chiều:
+
+- Governance Discipline
+- Contract / Architecture Quality
+- Evidence and Traceability
+- Test and Verification Confidence
+- Maintainability
+- Canonical Documentation Quality
+
+Quy tắc cứng:
+
+- quality claim phải bám governed evidence, không bám note riêng của agent
+- nếu bất kỳ dimension nào `< 6.0`, scope đó phải chuyển sang remediation-first
+- nếu Governance Discipline, Test and Verification Confidence, hoặc Canonical Documentation Quality `< 8.0`, không được coi scope đó là strong mà không có follow-up bắt buộc
+- trước mọi fresh `GC-018`, phải đọc active quality assessment và chốt rõ `REMEDIATE_FIRST` hoặc `EXPAND_NOW`
+
+---
+
+## XVI. PRE-PUBLIC P3 EXECUTION ISOLATION
+
+> `P3` pre-public relocation is not allowed to execute directly on `cvf-next`.
+
+Canonical rule:
+
+- future physical `P3` relocation waves must run on a dedicated branch matching `restructuring/p3-*`
+- future physical `P3` relocation waves must run from a secondary git worktree
+- `cvf-next` remains the canonical integration branch; however, post-review landing semantics for isolated `P3` relocation branches remain unresolved under current `GC-039` until a separate governance clarification is approved
+
+This rule is additive to, not a replacement for:
+
+- fresh `GC-019` structural audit/review for the concrete move set
+- `GC-039` readiness pass for the same move set
+
+Canonical references:
+
+- `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
+- `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`
+- `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
+- `governance/toolkit/05_OPERATION/CVF_PREPUBLIC_P3_READINESS_GUARD.md`
+- `governance/compat/check_prepublic_p3_readiness.py`

@@ -113,7 +113,7 @@ Use for ANY automation trigger setup:
 [secret-scanner-example.ts](./resources/secret-scanner-example.ts)
 
 ### Reference: Event Types
-[event-types.md](./resources/event-types.md)
+[CVF_EVENT_TYPES.md](./resources/CVF_EVENT_TYPES.md)
 ```
 
 ### Layer 4: Scripts (Execute Without Loading)

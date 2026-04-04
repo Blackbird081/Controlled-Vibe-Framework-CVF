@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "declaration": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "cvf-control-plane-foundation": ["../CVF_CONTROL_PLANE_FOUNDATION/src/index.ts"],
+      "cvf-guard-contract": ["../CVF_GUARD_CONTRACT/src/index.ts"],
+      "cvf-guard-contract/*": ["../CVF_GUARD_CONTRACT/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts"]
+}

@@ -1,4 +1,6 @@
-# CVF Release Manifest
+
+Memory class: POINTER_RECORD
+
 
 Status: authoritative operational release manifest for the current local baseline.
 
@@ -25,13 +27,13 @@ Status: authoritative operational release manifest for the current local baselin
 | `draft` | design/branch track, not mainline baseline |
 | `legacy-reference` | retained for historical/reference use, not current upgrade focus |
 
-## Current Operational Manifest (2026-03-20)
+## Current Operational Manifest (2026-03-22)
 
 | Version | Module / Line | Release line | Maturity | Evidence anchor | Notes |
 |---|---|---|---|---|---|
 | v1.0 | Foundation | frozen | baseline-reference | `v1.0/` | original framework baseline |
 | v1.1 | Governance Refinement | frozen | baseline-reference | `v1.1/` | policy/governance lineage root |
-| v1.1.1 | Phase Governance Protocol | stable | production-candidate | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` | stable governance runtime line with active workflow realism hardening |
+| v1.1.1 | Phase Governance Protocol | stable | production-candidate | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` | stable governance runtime line with active workflow realism hardening and explicit pause/approval handoff checkpoints |
 | v1.1.2 | Phase Governance Hardening | local-ready | hardening-active | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` | local remediation wave aligned to canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` semantics |
 | v1.2 | Capability Extension | frozen | baseline-reference | `EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/` | capability governance root |
 | v1.2.1 | External Integration | active | production-candidate | `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/` | independently reassessed 2026-03-06 |
@@ -50,8 +52,11 @@ Status: authoritative operational release manifest for the current local baselin
 | v1.8.1 | Adaptive Observability Runtime | local-ready | implemented-local | `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` | added in Mar 2026 wave |
 | v1.9 | Deterministic Reproducibility | local-ready | implemented-local | `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` | reproducibility line referenced in root README |
 | v2.0 | Non-Coder Safety Runtime | local-ready | implemented-local | `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/` | current local implementation line |
+| W1-T1 / W1-T2 | Control Plane Foundation | local-ready | implemented-local | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/` | both control-plane tranches now canonically closed; `W1-T2` delivered usable-intake (`CP1`), unified-retrieval (`CP2`), deterministic-packaging (`CP3`), consumer-path proof (`CP4`), and tranche closure (`CP5`) |
+| W2-T1 | Execution Plane Foundation Shell | local-ready | implemented-local | `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/` | closed first execution-plane tranche for whitepaper completion, preserving gateway and MCP lineage with explicit wrapper, evidence, and authorization-boundary surfaces |
+| W3-T1 | Governance Expansion Foundation | local-ready | implemented-local | `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/` | closed governance-expansion tranche for operational governance modules with explicit defer of concept-only `Watchdog` and `Audit / Consensus` targets |
 | v2.5 | Ecosystem MCP Server | active | production-candidate | `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/` | 476 tests passed, renamed from v1.7 |
-| v2.5.1 | Cross-Channel Guard Contract | active | production-candidate | `governance/contracts/` | 49 tests passed, unified governance types |
+| v2.5.1 | Cross-Channel Guard Contract | active | production-candidate | `EXTENSIONS/CVF_GUARD_CONTRACT/` | 147 tests passed, unified governance types plus `GC-020` transition and escalation-handoff helpers |
 | v2.5.2 | VS Code Governance Adapter | active | production-candidate | `governance/contracts/adapters/` | 49 tests passed, programmatic enforcement |
 | v3.0 | Core Foundation Primitives / Git for AI | draft | branch-track | `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/` | draft track under ADR-016 |
 
@@ -68,7 +73,7 @@ Status: authoritative operational release manifest for the current local baselin
 | readiness checkpoint | `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md` |
 | test evidence chain | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
 | enterprise evidence pack | `docs/reference/CVF_ENTERPRISE_EVIDENCE_PACK.md` |
-| baseline delta chain | `docs/baselines/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md` |
+| baseline delta chain | `docs/baselines/archive/CVF_PHASE4_DOCS_READINESS_DELTA_2026-03-20.md` |
 | release/module inventory | `docs/reference/CVF_MODULE_INVENTORY.md` |
 
 ## Operational Notes

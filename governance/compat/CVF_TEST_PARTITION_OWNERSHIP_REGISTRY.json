@@ -1,0 +1,1733 @@
+{
+  "partitions": [
+    {
+      "scope": "CPF Retrieval Consumer Pipeline (W2-T38 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/retrieval.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RetrievalConsumerPipelineContract",
+        "createRetrievalConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Retrieval Consumer Pipeline Batch (W2-T38 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/retrieval.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RetrievalConsumerPipelineBatchContract",
+        "createRetrievalConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Knowledge Query Batch Consumer Pipeline (W2-T37 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.batch.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeQueryBatchConsumerPipelineContract",
+        "createKnowledgeQueryBatchConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Knowledge Query Batch Consumer Pipeline Batch (W2-T37 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.batch.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeQueryBatchConsumerPipelineBatchContract",
+        "createKnowledgeQueryBatchConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Build Batch Consumer Pipeline (W2-T36 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.batch.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextBuildBatchConsumerPipelineContract",
+        "createContextBuildBatchConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Build Batch Consumer Pipeline Batch (W2-T36 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.batch.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextBuildBatchConsumerPipelineBatchContract",
+        "createContextBuildBatchConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Packager Consumer Pipeline (W2-T35 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextPackagerConsumerPipelineContract",
+        "createContextPackagerConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Packager Consumer Pipeline Batch (W2-T35 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextPackagerConsumerPipelineBatchContract",
+        "createContextPackagerConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Enrichment Consumer Pipeline (W2-T34 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.enrichment.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextEnrichmentConsumerPipelineContract",
+        "createContextEnrichmentConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Enrichment Consumer Pipeline Batch (W2-T34 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.enrichment.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextEnrichmentConsumerPipelineBatchContract",
+        "createContextEnrichmentConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Round Consumer Pipeline (W2-T33 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.round.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomRoundConsumerPipelineContract",
+        "createBoardroomRoundConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Round Consumer Pipeline Batch (W2-T33 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.round.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomRoundConsumerPipelineBatchContract",
+        "createBoardroomRoundConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Build Consumer Pipeline (W2-T32 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextBuildConsumerPipelineContract",
+        "createContextBuildConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Build Consumer Pipeline Batch (W2-T32 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.build.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextBuildConsumerPipelineBatchContract",
+        "createContextBuildConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Transition Gate Consumer Pipeline (W2-T31 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.transition.gate.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomTransitionGateConsumerPipelineContract",
+        "createBoardroomTransitionGateConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Transition Gate Consumer Pipeline Batch (W2-T31 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.transition.gate.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomTransitionGateConsumerPipelineBatchContract",
+        "createBoardroomTransitionGateConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Multi-Round Consumer Pipeline (W2-T30 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.multi.round.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomMultiRoundConsumerPipelineContract",
+        "createBoardroomMultiRoundConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Multi-Round Consumer Pipeline Batch (W2-T30 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.multi.round.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomMultiRoundConsumerPipelineBatchContract",
+        "createBoardroomMultiRoundConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Streaming Execution Consumer Pipeline (W2-T29 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/streaming.execution.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "StreamingExecutionConsumerPipelineContract",
+        "createStreamingExecutionConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Streaming Execution Consumer Pipeline Batch (W2-T29 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/streaming.execution.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "StreamingExecutionConsumerPipelineBatchContract",
+        "createStreamingExecutionConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Execution Audit Summary Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.audit.summary.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionAuditSummaryConsumerPipelineContract",
+        "createExecutionAuditSummaryConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Execution Audit Summary Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.audit.summary.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionAuditSummaryConsumerPipelineBatchContract",
+        "createExecutionAuditSummaryConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Watchdog Alert Log Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.alert.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogAlertLogConsumerPipelineContract",
+        "createWatchdogAlertLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Watchdog Alert Log Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.alert.log.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogAlertLogConsumerPipelineBatchContract",
+        "createWatchdogAlertLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Reintake Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointReintakeConsumerPipelineContract",
+        "createGovernanceCheckpointReintakeConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Audit Log Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.audit.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceAuditLogConsumerPipelineContract",
+        "createGovernanceAuditLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Audit Log Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.audit.log.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceAuditLogConsumerPipelineBatchContract",
+        "createGovernanceAuditLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Reintake Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointReintakeConsumerPipelineBatchContract",
+        "createGovernanceCheckpointReintakeConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Multi-Agent Coordination Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.multi.agent.coordination.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "MultiAgentCoordinationConsumerPipelineContract",
+        "createMultiAgentCoordinationConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Multi-Agent Coordination Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.multi.agent.coordination.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "MultiAgentCoordinationConsumerPipelineBatchContract",
+        "createMultiAgentCoordinationConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF MCP Invocation Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "MCPInvocationConsumerPipelineContract",
+        "createMCPInvocationConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF MCP Invocation Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mcp.invocation.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "MCPInvocationConsumerPipelineBatchContract",
+        "createMCPInvocationConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF KnowledgeQuery Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeQueryConsumerPipelineContract",
+        "createKnowledgeQueryConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF KnowledgeQuery Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.query.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeQueryConsumerPipelineBatchContract",
+        "createKnowledgeQueryConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF ClarificationRefinement Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/clarification.refinement.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ClarificationRefinementConsumerPipelineContract",
+        "createClarificationRefinementConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF ClarificationRefinement Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/clarification.refinement.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ClarificationRefinementConsumerPipelineBatchContract",
+        "createClarificationRefinementConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF GatewayAuth Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayAuthConsumerPipelineContract",
+        "createGatewayAuthConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF GatewayAuth Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayAuthConsumerPipelineBatchContract",
+        "createGatewayAuthConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Gateway PII Detection Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayPIIDetectionConsumerPipelineContract",
+        "createGatewayPIIDetectionConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Gateway PII Detection Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayPIIDetectionConsumerPipelineBatchContract",
+        "createGatewayPIIDetectionConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Gateway Auth Log Consumer Pipeline (W1-T23 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayAuthLogConsumerPipelineContract",
+        "createGatewayAuthLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Gateway Auth Log Consumer Pipeline Batch (W1-T23 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayAuthLogConsumerPipelineBatchContract",
+        "createGatewayAuthLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Gateway PII Detection Log Consumer Pipeline (W1-T24 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayPIIDetectionLogConsumerPipelineContract",
+        "createGatewayPIIDetectionLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Gateway PII Detection Log Consumer Pipeline Batch (W1-T24 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayPIIDetectionLogConsumerPipelineBatchContract",
+        "createGatewayPIIDetectionLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Route Match Log Consumer Pipeline (W1-T25 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/route.match.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RouteMatchLogConsumerPipelineContract",
+        "createRouteMatchLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Route Match Log Consumer Pipeline Batch (W1-T25 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/route.match.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RouteMatchLogConsumerPipelineBatchContract",
+        "createRouteMatchLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Design Consumer Pipeline (W2-T26 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/design.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "DesignConsumerPipelineContract",
+        "createDesignConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Design Consumer Pipeline Batch (W2-T26 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/design.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "DesignConsumerPipelineBatchContract",
+        "createDesignConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Reverse Prompting Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ReversePromptingConsumerPipelineContract",
+        "createReversePromptingConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Reverse Prompting Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/reverse.prompting.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ReversePromptingConsumerPipelineBatchContract",
+        "createReversePromptingConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointConsumerPipelineContract",
+        "createGovernanceCheckpointConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointConsumerPipelineBatchContract",
+        "createGovernanceCheckpointConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Reintake Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionReintakeConsumerPipelineBatchContract",
+        "createExecutionReintakeConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Reintake Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionReintakeConsumerPipelineContract",
+        "createExecutionReintakeConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Reintake Summary Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.summary.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionReintakeSummaryConsumerPipelineContract",
+        "createExecutionReintakeSummaryConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Reintake Summary Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.summary.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionReintakeSummaryConsumerPipelineBatchContract",
+        "createExecutionReintakeSummaryConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomConsumerPipelineBatchContract",
+        "createBoardroomConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Boardroom Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/boardroom.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "BoardroomConsumerPipelineContract",
+        "createBoardroomConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Consensus Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceConsensusConsumerPipelineBatchContract",
+        "createGovernanceConsensusConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Consensus Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceConsensusConsumerPipelineContract",
+        "createGovernanceConsensusConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Feedback Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.feedback.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionFeedbackConsumerPipelineBatchContract",
+        "createExecutionFeedbackConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Feedback Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.feedback.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionFeedbackConsumerPipelineContract",
+        "createExecutionFeedbackConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Orchestration Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/orchestration.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "OrchestrationConsumerPipelineBatchContract",
+        "createOrchestrationConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Orchestration Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/orchestration.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "OrchestrationConsumerPipelineContract",
+        "createOrchestrationConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Watchdog Escalation Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationPipelineBatchContract",
+        "createWatchdogEscalationPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Watchdog Escalation Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationPipelineContract",
+        "createWatchdogEscalationPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Knowledge Ranking",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.ranking.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeRankingContract",
+        "createKnowledgeRankingContract"
+      ]
+    },
+    {
+      "scope": "EPF Execution Consumer Result Batch",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.consumer.result.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionConsumerResultBatchContract",
+        "createExecutionConsumerResultBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Execution Consumer Result",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.consumer.result.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionConsumerResultContract",
+        "createExecutionConsumerResultContract"
+      ]
+    },
+    {
+      "scope": "CPF Gateway Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayConsumerPipelineBatchContract",
+        "createGatewayConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Gateway Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayConsumerPipelineContract",
+        "createGatewayConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "CPF Consumer Pipeline Batch",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ControlPlaneConsumerPipelineBatchContract",
+        "createControlPlaneConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Consumer Pipeline",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ControlPlaneConsumerPipelineContract",
+        "createControlPlaneConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Multi-Agent Coordination Summary",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.multi.agent.coordination.summary.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "MultiAgentCoordinationSummaryContract",
+        "createMultiAgentCoordinationSummaryContract"
+      ]
+    },
+    {
+      "scope": "EPF Multi-Agent Coordination",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.multi.agent.coordination.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "MultiAgentCoordinationContract",
+        "createMultiAgentCoordinationContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Packager",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextPackagerContract",
+        "createContextPackagerContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Builder",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.builder.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextBuildContract",
+        "createContextBuildContract",
+        "ContextBuildBatchContract",
+        "createContextBuildBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Feedback Resolution Consumer Pipeline (W2-T16 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.resolution.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackResolutionConsumerPipelineContract",
+        "createFeedbackResolutionConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Feedback Resolution Consumer Pipeline Batch (W2-T16 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.resolution.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackResolutionConsumerPipelineBatchContract",
+        "createFeedbackResolutionConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Watchdog Escalation Log Consumer Pipeline (W3-T11 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationLogConsumerPipelineContract",
+        "createWatchdogEscalationLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Watchdog Escalation Log Consumer Pipeline Batch (W3-T11 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.log.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationLogConsumerPipelineBatchContract",
+        "createWatchdogEscalationLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Watchdog Escalation Pipeline Consumer Pipeline (W3-T12 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationPipelineConsumerPipelineContract",
+        "createWatchdogEscalationPipelineConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Watchdog Escalation Pipeline Consumer Pipeline Batch (W3-T12 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.pipeline.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationPipelineConsumerPipelineBatchContract",
+        "createWatchdogEscalationPipelineConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Consensus Summary Consumer Pipeline (W3-T13 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.summary.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceConsensusSummaryConsumerPipelineContract",
+        "createGovernanceConsensusSummaryConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Consensus Summary Consumer Pipeline Batch (W3-T13 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.consensus.summary.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceConsensusSummaryConsumerPipelineBatchContract",
+        "createGovernanceConsensusSummaryConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Log Consumer Pipeline (W3-T14 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointLogConsumerPipelineContract",
+        "createGovernanceCheckpointLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Log Consumer Pipeline Batch (W3-T14 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.log.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointLogConsumerPipelineBatchContract",
+        "createGovernanceCheckpointLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Execution Pipeline Consumer Pipeline (W2-T22 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.pipeline.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionPipelineConsumerPipelineContract",
+        "createExecutionPipelineConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF Async Execution Status Consumer Pipeline Batch (W2-T21 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.async.status.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AsyncExecutionStatusConsumerPipelineBatchContract",
+        "createAsyncExecutionStatusConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Async Execution Status Consumer Pipeline (W2-T21 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.async.status.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AsyncExecutionStatusConsumerPipelineContract",
+        "createAsyncExecutionStatusConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Reintake Summary Consumer Pipeline (W3-T15 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.summary.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointReintakeSummaryConsumerPipelineContract",
+        "createGovernanceCheckpointReintakeSummaryConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF Governance Checkpoint Reintake Summary Consumer Pipeline Batch (W3-T15 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/governance.checkpoint.reintake.summary.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceCheckpointReintakeSummaryConsumerPipelineBatchContract",
+        "createGovernanceCheckpointReintakeSummaryConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF Execution Pipeline Consumer Pipeline Batch (W2-T22 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.pipeline.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionPipelineConsumerPipelineBatchContract",
+        "createExecutionPipelineConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF WatchdogEscalation Consumer Pipeline Batch (W3-T17 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationConsumerPipelineBatchContract",
+        "createWatchdogEscalationConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF WatchdogEscalation Consumer Pipeline (W3-T17 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.escalation.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogEscalationConsumerPipelineContract",
+        "createWatchdogEscalationConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF FeedbackRouting Consumer Pipeline Batch (W2-T24 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.routing.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackRoutingConsumerPipelineBatchContract",
+        "createFeedbackRoutingConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "EPF FeedbackRouting Consumer Pipeline (W2-T24 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/feedback.routing.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackRoutingConsumerPipelineContract",
+        "createFeedbackRoutingConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF PolicyGate Consumer Pipeline (W2-T23 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/policy.gate.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PolicyGateConsumerPipelineContract",
+        "createPolicyGateConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF PolicyGate Consumer Pipeline Batch (W2-T23 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/policy.gate.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PolicyGateConsumerPipelineBatchContract",
+        "createPolicyGateConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "GEF WatchdogPulse Consumer Pipeline (W3-T18 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.pulse.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogPulseConsumerPipelineContract",
+        "createWatchdogPulseConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "GEF WatchdogPulse Consumer Pipeline Batch (W3-T18 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/watchdog.pulse.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "WatchdogPulseConsumerPipelineBatchContract",
+        "createWatchdogPulseConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF EvaluationEngine Consumer Pipeline Batch (W4-T8 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/evaluation.engine.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "EvaluationEngineConsumerPipelineBatchContract",
+        "createEvaluationEngineConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF PatternDetection Consumer Pipeline (W4-T10 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.detection.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDetectionConsumerPipelineContract",
+        "createPatternDetectionConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF PatternDetection Consumer Pipeline Batch (W4-T10 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.detection.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDetectionConsumerPipelineBatchContract",
+        "createPatternDetectionConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF GovernanceSignal Consumer Pipeline (W4-T11 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/governance.signal.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceSignalConsumerPipelineContract",
+        "createGovernanceSignalConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF PatternDrift Consumer Pipeline (W4-T12 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.drift.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDriftConsumerPipelineContract",
+        "createPatternDriftConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF PatternDrift Consumer Pipeline Batch (W4-T12 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.drift.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDriftConsumerPipelineBatchContract",
+        "createPatternDriftConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningObservability Consumer Pipeline (W4-T13 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.observability.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningObservabilityConsumerPipelineContract",
+        "createLearningObservabilityConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningObservability Consumer Pipeline Batch (W4-T13 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.observability.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningObservabilityConsumerPipelineBatchContract",
+        "createLearningObservabilityConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningLoop Consumer Pipeline (W4-T14 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.loop.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningLoopConsumerPipelineContract",
+        "createLearningLoopConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningLoop Consumer Pipeline Batch (W4-T14 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.loop.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningLoopConsumerPipelineBatchContract",
+        "createLearningLoopConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF GovernanceSignal Consumer Pipeline Batch (W4-T11 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/governance.signal.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceSignalConsumerPipelineBatchContract",
+        "createGovernanceSignalConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF TruthScore Consumer Pipeline Batch (W4-T9 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.score.consumer.pipeline.batch.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TruthScoreConsumerPipelineBatchContract",
+        "createTruthScoreConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF TruthScore Consumer Pipeline (W4-T9 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.score.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TruthScoreConsumerPipelineContract",
+        "createTruthScoreConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF EvaluationEngine Consumer Pipeline (W4-T8 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/evaluation.engine.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "EvaluationEngineConsumerPipelineContract",
+        "createEvaluationEngineConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF CommandRuntime Consumer Pipeline (W2-T25 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/command.runtime.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "CommandRuntimeConsumerPipelineContract",
+        "createCommandRuntimeConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "EPF CommandRuntime Consumer Pipeline Batch (W2-T25 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/command.runtime.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "CommandRuntimeConsumerPipelineBatchContract",
+        "createCommandRuntimeConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningReinjection Consumer Pipeline (W4-T15 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.reinjection.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningReinjectionConsumerPipelineContract",
+        "createLearningReinjectionConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningReinjection Consumer Pipeline Batch (W4-T15 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.reinjection.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningReinjectionConsumerPipelineBatchContract",
+        "createLearningReinjectionConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningStorage Consumer Pipeline (W4-T16 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.storage.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningStorageConsumerPipelineContract",
+        "createLearningStorageConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningStorage Consumer Pipeline Batch (W4-T16 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.storage.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningStorageConsumerPipelineBatchContract",
+        "createLearningStorageConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF FeedbackLedger Consumer Pipeline (W4-T17 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/feedback.ledger.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackLedgerConsumerPipelineContract",
+        "createFeedbackLedgerConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF FeedbackLedger Consumer Pipeline Batch (W4-T17 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/feedback.ledger.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "FeedbackLedgerConsumerPipelineBatchContract",
+        "createFeedbackLedgerConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF TruthModelUpdate Consumer Pipeline (W4-T18 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.model.update.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TruthModelUpdateConsumerPipelineContract",
+        "createTruthModelUpdateConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF TruthModelUpdate Consumer Pipeline Batch (W4-T18 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.model.update.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TruthModelUpdateConsumerPipelineBatchContract",
+        "createTruthModelUpdateConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF TruthModel Consumer Pipeline (W4-T19 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.model.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TruthModelConsumerPipelineContract",
+        "createTruthModelConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF TruthModel Consumer Pipeline Batch (W4-T19 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.model.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TruthModelConsumerPipelineBatchContract",
+        "createTruthModelConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF EvaluationThreshold Consumer Pipeline (W4-T20 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/evaluation.threshold.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "EvaluationThresholdConsumerPipelineContract",
+        "createEvaluationThresholdConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF EvaluationThreshold Consumer Pipeline Batch (W4-T20 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/evaluation.threshold.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "EvaluationThresholdConsumerPipelineBatchContract",
+        "createEvaluationThresholdConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF TruthScoreLog Consumer Pipeline (W4-T21 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.score.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TruthScoreLogConsumerPipelineContract",
+        "createTruthScoreLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF TruthScoreLog Consumer Pipeline Batch (W4-T21 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/truth.score.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TruthScoreLogConsumerPipelineBatchContract",
+        "createTruthScoreLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF GovernanceSignalLog Consumer Pipeline (W4-T22 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/governance.signal.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceSignalLogConsumerPipelineContract",
+        "createGovernanceSignalLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF GovernanceSignalLog Consumer Pipeline Batch (W4-T22 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/governance.signal.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GovernanceSignalLogConsumerPipelineBatchContract",
+        "createGovernanceSignalLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningObservabilitySnapshot Consumer Pipeline (W4-T23 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.observability.snapshot.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningObservabilitySnapshotConsumerPipelineContract",
+        "createLearningObservabilitySnapshotConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningObservabilitySnapshot Consumer Pipeline Batch (W4-T23 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.observability.snapshot.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningObservabilitySnapshotConsumerPipelineBatchContract",
+        "createLearningObservabilitySnapshotConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningStorageLog Consumer Pipeline (W4-T24 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.storage.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningStorageLogConsumerPipelineContract",
+        "createLearningStorageLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF LearningStorageLog Consumer Pipeline Batch (W4-T24 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/learning.storage.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "LearningStorageLogConsumerPipelineBatchContract",
+        "createLearningStorageLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF PatternDriftLog Consumer Pipeline (W4-T25 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.drift.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDriftLogConsumerPipelineContract",
+        "createPatternDriftLogConsumerPipelineContract"
+      ]
+    },
+    {
+      "scope": "LPF PatternDriftLog Consumer Pipeline Batch (W4-T25 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/pattern.drift.log.consumer.pipeline.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PatternDriftLogConsumerPipelineBatchContract",
+        "createPatternDriftLogConsumerPipelineBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Performance Benchmark Harness (W8-T2 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/performance.benchmark.harness.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PerformanceBenchmarkHarnessContract",
+        "createPerformanceBenchmarkHarnessContract"
+      ]
+    },
+    {
+      "scope": "CPF RAG and Context Engine Convergence (W9-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/rag.context.engine.convergence.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RagContextEngineConvergenceContract",
+        "createRagContextEngineConvergenceContract"
+      ]
+    },
+    {
+      "scope": "CPF RAG and Context Engine Convergence Batch (W9-T1 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/rag.context.engine.convergence.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RagContextEngineConvergenceBatchContract",
+        "createRagContextEngineConvergenceBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF Reputation Signal (W10-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/reputation.signal.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ReputationSignalContract",
+        "createReputationSignalContract"
+      ]
+    },
+    {
+      "scope": "LPF Task Marketplace (W10-T1 CP2)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/task.marketplace.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TaskMarketplaceContract",
+        "createTaskMarketplaceContract"
+      ]
+    },
+    {
+      "scope": "LPF Reputation Signal Batch (W10-T1 CP3)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/reputation.signal.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ReputationSignalBatchContract",
+        "createReputationSignalBatchContract"
+      ]
+    },
+    {
+      "scope": "LPF Task Marketplace Batch (W10-T1 CP3)",
+      "canonicalFile": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/task.marketplace.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "TaskMarketplaceBatchContract",
+        "createTaskMarketplaceBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Agent Definition Boundary (W12-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.definition.boundary.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AgentDefinitionBoundaryContract",
+        "createAgentDefinitionBoundaryContract"
+      ]
+    },
+    {
+      "scope": "CPF Agent Definition Capability Batch (W13-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.definition.capability.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AgentDefinitionCapabilityBatchContract",
+        "createAgentDefinitionCapabilityBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Agent Scope Resolution Batch (W14-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.scope.resolution.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AgentScopeResolutionBatchContract",
+        "createAgentScopeResolutionBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Agent Definition Audit Batch (W15-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.definition.audit.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AgentDefinitionAuditBatchContract",
+        "createAgentDefinitionAuditBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Agent Registration Batch (W17-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.registration.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "AgentRegistrationBatchContract",
+        "createAgentRegistrationBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Knowledge Ranking Batch (W33-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/knowledge.ranking.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "KnowledgeRankingBatchContract",
+        "createKnowledgeRankingBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Clarification Refinement Batch (W34-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/clarification.refinement.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ClarificationRefinementBatchContract",
+        "createClarificationRefinementBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Intake Batch (W35-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/intake.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "IntakeBatchContract",
+        "createIntakeBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Retrieval Batch (W36-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/retrieval.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "RetrievalBatchContract",
+        "createRetrievalBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Packager Batch (W37-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.packager.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextPackagerBatchContract",
+        "createContextPackagerBatchContract"
+      ]
+    },
+    {
+      "scope": "CPF Context Enrichment Batch (W38-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/context.enrichment.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ContextEnrichmentBatchContract",
+        "createContextEnrichmentBatchContract"
+      ]
+    }
+  ]
+}

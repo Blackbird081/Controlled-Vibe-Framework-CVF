@@ -1,101 +1,170 @@
-# CVF ACTIVE-ARCHIVE GUARD
+# CVF Active Archive Guard
 
-> **Type:** Governance Policy  
-> **Effective:** 2026-03-11  
-> **Status:** Active  
-> **Enforced by:** `scripts/cvf_active_archive.py`
+**Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
+**Status:** Active archive-maintenance contract for dated operational documents.
+**Applies to:** Managed roots such as `docs/` and `ECOSYSTEM/strategy/` plus their local `archive/` subdirectories.
+**Enforced by:** `scripts/cvf_active_archive.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/check_audit_retention_registry.py`, `governance/compat/check_review_retention_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`, `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`, `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`
 
----
+## Purpose
 
-## 1. PURPOSE
+- keep working directories focused on current data
+- separate active documents from historical archives without losing auditability
+- prevent archive moves that silently break live references or baseline anchors
 
-Maintain clean, focused working directories by separating active files (≤3 days) from historical archives (>3 days). Prevents confusion during audits and ensures teams work with current data only.
+## Rule
 
----
+Maintain clean active zones for dated operational artifacts while preserving truthful archives.
 
-## 2. SCOPE
+### Scope
 
-This guard applies to 4 managed directories:
+This guard applies to managed roots:
 
-| Directory | Content Type |
+| Root | Content Type |
 |---|---|
-| `docs/assessments/` | Independent assessments, expert reviews |
-| `docs/reviews/cvf_phase_governance/` | Conformance reports, audit traces, evidence packets |
-| `docs/roadmaps/` | Roadmaps, migration plans, fix plans |
-| `ECOSYSTEM/strategy/` | Strategic docs, roadmaps, evaluation reports |
+| `docs/` | full CVF docs tree including reference, reviews, roadmaps, baselines, guides, concepts, and support docs |
+| `ECOSYSTEM/strategy/` | strategic docs, roadmaps, and evaluation reports |
 
----
+Policy overlap control:
 
-## 3. RULES
+- paths that already have dedicated rotation guards are excluded from this guard, such as `docs/logs/` and `docs/reviews/cvf_phase_governance/logs/`
+- canonical active windows owned by dedicated rotation guards are never auto-archived by this generic cleanup flow and must be registered in `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
+- archive folders (`*/archive/`) are never re-scanned as active candidates
+- `docs/audits/` uses stricter retention classification through `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`
 
-### R1 — File Naming (NON-NEGOTIABLE)
+### File Naming Rule
 
-> ⚠️ All files in managed directories **MUST** include date suffix in filename.
+Files intended for automated active/archive rotation MUST include a date suffix in the filename.
 
-**Required format:** `CVF_<DESCRIPTIVE_NAME>_YYYY-MM-DD.md`
+Required pattern:
+
+```text
+CVF_<DESCRIPTIVE_NAME>_YYYY-MM-DD.md
+```
 
 Examples:
-- ✅ `CVF_INDEPENDENT_EXPERT_ASSESSMENT_2026-03-09.md`
-- ✅ `CVF_ROADMAP_FIXES_2026-03-10.md`
-- ❌ `CVF_ROADMAP_NANG_CAP.md` (no date)
-- ❌ `assessment_final_v2.md` (no CVF_ prefix, no date)
 
-### R2 — Active Zone (≤3 days)
+- `CVF_INDEPENDENT_EXPERT_ASSESSMENT_2026-03-09.md`
+- `CVF_ROADMAP_FIXES_2026-03-10.md`
 
-Only files with dates within the last 3 calendar days remain in the active directory. All older files must be in `archive/` subdirectory.
+Non-compliant examples:
 
-### R3 — Archive Zone (>3 days)
+- `CVF_ROADMAP_NANG_CAP.md`
+- `assessment_final_v2.md`
 
-Each managed directory has an `archive/` subdirectory containing:
-- All files older than 3 days
-- `ARCHIVE_INDEX.md` — auto-generated index of all archived files
+### Active Zone
 
-### R4 — Permanent Files (Exempt)
+- only files with a date suffix are eligible for auto-archive
+- dated files in the last 3 calendar days stay active
+- dated files older than 3 days become archive candidates and then pass screening rules before move
+- non-dated files are treated as evergreen docs and remain active unless explicitly refactored
 
-The following files are **never archived**:
-- `README.md` (in any managed directory)
+### Archive Zone
+
+Each local doc area keeps a sibling `archive/` subdirectory. Only candidates that pass impact screening are moved:
+
+- no protected-reference dependency
+- no high inbound reference risk from active docs
+- no live markdown-link dependency from active docs
+- no dedicated-rotation overlap
+
+`CVF_ARCHIVE_INDEX.md` is auto-generated or updated for each archive folder.
+
+### Permanent Files
+
+The following files are never archived:
+
+- `README.md` in any managed directory
 - `CVF_STRATEGIC_SUMMARY.md`
 - `CVF_UNIFIED_ROADMAP_2026.md`
+- `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+- `CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`
+- canonical active windows owned by dedicated rotation guards and registered in `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
+- architecture and baseline anchors explicitly marked permanent in script config
 
-### R5 — Automation Required
+### Impact Screening
+
+Before archive move, each candidate is scanned for reference impact:
+
+- inbound references from active docs are counted
+- the candidate is blocked if referenced by protected anchor files such as whitepaper, tracker, handoff, or index
+- audit candidates explicitly listed in `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json` as retain-evidence stay active even when old
+- dedicated active-window protection is evaluated before normal date-based archive eligibility
+- the candidate is blocked if inbound active reference count exceeds threshold
+- the candidate is blocked if active markdown links resolve directly to that file
+
+### Baseline Rule
+
+Archive cleanup MUST use the latest archive baseline as the default comparison point.
+
+- `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json` is the canonical baseline written by the last successful archive sync
+- default archive review modes (`--dry-run`, `--status`, `--impact-scan`) use incremental scope against that baseline
+- if no baseline exists yet, the script performs a lightweight bootstrap snapshot and freezes the current active set as the initial comparison point without requiring a full-repository scan
+- incremental scope re-checks:
+  - files changed since the baseline
+  - files newly old enough to become archive candidates
+  - previously blocked candidates whose blocking sources changed
+- full-repository archive screening is reserved for bootstrap, recovery, or explicit `--full-scan`
+
+### Automation Required
 
 Archive management is performed by running:
+
 ```bash
 python scripts/cvf_active_archive.py --execute
 ```
 
-This script must be run:
-- Before any major review or assessment session
-- After completing a sprint or upgrade wave
-- When active zone file count exceeds 10 files
+To refresh the baseline without moving files:
 
----
+```bash
+python scripts/cvf_active_archive.py --refresh-baseline
+```
 
-## 4. AUTOMATION COMMANDS
+This script should be run:
+
+- before any major review or assessment session
+- after completing a sprint or upgrade wave
+- when safe-to-archive candidate count exceeds `10` files
+
+## Enforcement Surface
+
+- active/archive maintenance runs through `scripts/cvf_active_archive.py`
+- active-window classification and protected-set sync run through `governance/compat/check_active_window_registry.py`
+- audit retention classification completeness runs through `governance/compat/check_audit_retention_registry.py`
+- review retention classification completeness runs through `governance/compat/check_review_retention_registry.py`
+- latest archive baseline is stored in `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`
+- governance drift exists when safe-to-archive files remain active without reason or when archive moves break references
+- remediation requires running the archive script, verifying `CVF_ARCHIVE_INDEX.md`, and resolving `BROKEN-ARCHIVED` findings before more cleanup proceeds
+
+Useful commands:
 
 | Command | Purpose |
 |---|---|
-| `python scripts/cvf_active_archive.py --dry-run` | Preview what would be archived |
-| `python scripts/cvf_active_archive.py --execute` | Execute archive migration |
-| `python scripts/cvf_active_archive.py --restore` | Restore all files from archive |
-| `python scripts/cvf_active_archive.py --status` | Show current active/archive counts |
+| `python scripts/cvf_active_archive.py --dry-run` | preview archive candidates |
+| `python scripts/cvf_active_archive.py --impact-scan` | inspect blocked vs safe candidates |
+| `python scripts/cvf_active_archive.py --link-audit` | detect broken local markdown links |
+| `python scripts/cvf_active_archive.py --repair-broken-archive-links` | restore files still needed by active docs |
+| `python scripts/cvf_active_archive.py --execute` | execute archive migration |
+| `python scripts/cvf_active_archive.py --refresh-baseline` | update the archive baseline without moving files |
+| `python scripts/cvf_active_archive.py --restore` | restore all files from archive |
+| `python scripts/cvf_active_archive.py --status` | show current active vs archive counts |
+| `python scripts/cvf_active_archive.py --dry-run --full-scan` | force one full-repository screening pass |
 
----
+## Related Artifacts
 
-## 5. DRIFT TRIGGER
+- `scripts/cvf_active_archive.py`
+- `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`
+- `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`
+- `governance/compat/check_audit_retention_registry.py`
+- `governance/compat/check_review_retention_registry.py`
+- `governance/compat/check_active_window_registry.py`
+- `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
+- `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
+- `docs/reference/CVF_AUDIT_RETENTION_CLASSIFICATION.md`
+- `docs/reference/CVF_REVIEW_RETENTION_CLASSIFICATION.md`
+- `governance/toolkit/05_OPERATION/CVF_DOCUMENT_NAMING_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`
+- `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
 
-If a managed directory contains files older than 3 days (excluding permanent files):
+## Final Clause
 
-1. Agent/reviewer flags governance drift
-2. Run archive script before continuing work
-3. Verify `ARCHIVE_INDEX.md` is up to date
-
----
-
-## 6. RELATED ARTIFACTS
-
-- `scripts/cvf_active_archive.py` — Automation script
-- `governance/toolkit/05_OPERATION/CVF_DOCUMENT_NAMING_GUARD.md` — Naming convention (includes date requirement)
-- `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md` — Storage taxonomy
-
-End of Active-Archive Guard.
+Archive hygiene is only useful when it preserves truth. CVF never archives first and asks questions later.

@@ -1024,30 +1024,21 @@ Bản cũ trên origin không bị xóa — Git chỉ thêm lịch sử mới, k
 ---
 
 ## ADR-020: Workspace Restructuring — Downstream Projects out of CVF Root
-
 | Field | Value |
 |---|---|
 | Date | 2026-03-08 |
 | Status | Active |
 | Related commits | *(local, not yet pushed)* |
-
 ### Context
-
 CVF root chứa 2 folders `Mini_Game/` và `XD_App/` — đây là 2 app thử nghiệm để đánh giá hiệu quả áp dụng quy tắc CVF. Tuy nhiên, theo Workspace Isolation Guard (đã ghi trong `CVF_CORE_KNOWLEDGE_BASE.md` Section VII), **không nên phát triển project trong CVF root**. CVF là governance layer, không phải monorepo cho downstream projects.
-
 Independent Review (ADR-019 reference) xác nhận CVF cần phân biệt rõ hơn giữa "governance cho CVF contributors" vs "governance cho downstream project dùng CVF".
-
 ### Decision
-
 **Di chuyển `Mini_Game/` và `XD_App/` ra khỏi CVF root vào `CVF-Workspace`.**
-
 | Folder | Source | Destination |
 |---|---|---|
 | `Mini_Game/` | `CVF root/Mini_Game/` | `D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\Mini_Game` |
 | `XD_App/` | `CVF root/XD_App/` | `D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\XD_App` |
-
 **Workspace layout sau di chuyển:**
-
 ```
 D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
 ├── .Controlled-Vibe-Framework-CVF/   ← CVF clone (dot prefix = governance layer ưu tiên)
@@ -1055,22 +1046,16 @@ D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
 ├── XD_App/                            ← Downstream project 2
 └── Trading-Tools/                     ← Downstream project 3
 ```
-
 ### Rationale
-
 - **Workspace Isolation Guard compliance:** CVF root phải chứa governance code, không phải application code.
 - **Dot-prefix convention:** `.Controlled-Vibe-Framework-CVF` có dấu `.` → Agent đọc CVF trước khi đọc project → CVF trở thành tầng kiểm soát cao nhất.
 - **Evidence preservation:** Các app này vẫn dùng làm bằng chứng đánh giá hiệu quả CVF, chỉ thay đổi vị trí lưu trữ.
 - **Giảm complexity cho CVF repo:** Bớt folders không liên quan trong CVF root → onboarding dễ hơn.
-
 ### Consequences
-
 - `Mini_Game/` và `XD_App/` không còn trong CVF git repo (đã có trong `.gitignore` từ trước).
 - Future downstream projects phải nằm trong `CVF-Workspace/`, không phải CVF root.
 - CVF-Workspace trở thành reference workspace layout cho adoption guide (`docs/guides/CVF_QUICK_ORIENTATION.md`).
-
 ### Related Files
-
 - `docs/guides/CVF_QUICK_ORIENTATION.md` (references workspace layout)
 - `governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md`
 - `docs/CVF_CORE_KNOWLEDGE_BASE.md` (Section VII — Workspace Isolation Guard)
@@ -1078,7 +1063,6 @@ D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
 ---
 
 ## ADR-021: Phase 1 Governance Runtime Hardening Integration
-
 | Field | Value |
 |---|---|
 | Date | 2026-03-19 |
@@ -1086,29 +1070,131 @@ D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace\
 | Branch | `cvf-next` (then merged to `main`) |
 | Layer | Layer 1 / 1.5 — Governance Platform |
 | Related commits | `0d1937a` |
-
 ### Context
 Phase 1 of the CVF Edit Integration Roadmap mandated strict Governance Runtime Hardening. Before this, CVF had theoretical governance guards, but lacked an enforceable strict perimeter at runtime. Agents could bypass phase conditions if the simulator wasn't called manually. A strict `PipelineOrchestrator` and a set of `MANDATORY_GUARD_IDS` needed to be anchored into the runtime.
-
 ### Decision
 **Implement a centralized `GuardRuntimeEngine` with unbypassable `MANDATORY_GUARD_IDS` and a `PipelineOrchestrator` that enforces state machine rules.**
-
 - Included 15 distinct guards (including ContextFreeze, AuthorityGate, ConceptAlignment).
 - Defined `authority_gate`, `phase_gate`, and `ai_commit` as non-bypassable even in "permissive" settings.
 - Integrated SDK (`cvf.evaluate()`) to expose this runtime engine to external tools.
-
 ### Rationale
 - Theoretical governance is insufficient for achieving Governance Level 4.0. Without unbypassable chokepoints in the runtime, the framework acts only as an advisory linter.
 - The `PipelineOrchestrator` guarantees that transition phases completely rollback if any single mandatory guard fails.
 - Consolidating into the `GuardRuntimeEngine` prevents distributed, brittle checks spread across different agent prompt logic.
-
 ### Consequences
 - CVF immediately shifts to **Governance Level 4.0 (Enforceable Framework)**.
 - Any tool missing `authority` context or attempting illegal phase transitions will systematically crash rather than proceed silently.
 - 602 tests explicitly validate these chokepoints across scenarios.
-
 ### Related Files
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guard.runtime.engine.ts`
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts`
 - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/guard.runtime.types.ts`
 - `docs/roadmaps/archive/CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md`
+
+---
+
+## ADR-022: Foundational Guard Surfaces Must Be Machine-Enforced
+| Field | Value |
+|---|---|
+| Date | 2026-03-28 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current automation batch)* |
+### Context
+Recent hardening closed registry-driven bypasses and standardized all guard docs under `GC-030`, but six foundational guards still depended too heavily on reviewer discipline: `CVF_ADR_GUARD`, `CVF_ARCHITECTURE_CHECK_GUARD`, `CVF_EXTENSION_VERSIONING_GUARD`, `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD`, `CVF_TEST_DEPTH_CLASSIFICATION_GUARD`, and `CVF_WORKSPACE_ISOLATION_GUARD`. That left architecture truth, naming, structural evidence, test-depth reporting, and workspace boundaries too advisory for an automated agent environment.
+### Decision
+**Automate the remaining foundational guard family through `governance/compat/check_foundational_guard_surfaces.py`, enforced in both local pre-push and CI.** The gate blocks missing ADR updates, missing Knowledge Base refresh, invalid extension naming, missing GC-019 evidence, incomplete test-depth reporting, and suspicious workspace-isolation violations.
+### Rationale
+Foundational guards are too important to remain review-by-memory, one shared diff-range gate is more reliable than fragmented manual checks, and pre-push plus CI keeps enforcement symmetric for local agents and shared branches.
+### Consequences
+CVF governance is closer to an executable repo-governance perimeter, future changes in these surfaces fail faster and more visibly, and remaining hardening can focus on automation precision and regression depth instead of legacy format cleanup.
+### Related Files
+`governance/compat/check_foundational_guard_surfaces.py`, `governance/compat/run_local_governance_hook_chain.py`, `.github/workflows/documentation-testing.yml`, `docs/CVF_CORE_KNOWLEDGE_BASE.md`, `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
+
+---
+
+## ADR-023: Dedicated Active Trace Windows Are Permanent Inputs To Generic Archive Cleanup
+| Field | Value |
+|---|---|
+| Date | 2026-03-28 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current archive-hardening batch)* |
+### Context
+CVF already governs long-lived active evidence windows through dedicated rotation guards, but generic archive cleanup still treated them like ordinary dated documents unless screening happened to save them. That meant a canonical active trace could look old enough to archive even while still being the current working window.
+### Decision
+**Treat every canonical active window owned by a dedicated rotation guard as a registered, classified, and permanently protected path in generic archive cleanup.** The protected set is no longer maintained as ad-hoc hard-coded paths; it is governed through `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`, and `governance/compat/check_active_window_registry.py`.
+Current registered active windows: `docs/CVF_INCREMENTAL_TEST_LOG.md` and `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md`.
+These files are excluded up front from generic archive eligibility, and future dedicated rotation guards must register their own active windows in the same model.
+### Rationale
+Canonical active windows are operational inputs, not ordinary dated historical documents, and a generic archive utility must not reinterpret the lifecycle of a file that already has a dedicated rotation policy.
+### Consequences
+Archive cleanup is easier to trust because high-value active windows are protected by rule, active windows are grouped canonically instead of managed as a one-off list, and future dedicated rotation guards must register their active window in the same model.
+### Related Files
+`scripts/cvf_active_archive.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `governance/compat/check_active_window_registry.py`, `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`, `scripts/test_cvf_active_archive.py`, `governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`, `governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`
+
+---
+## ADR-024: Archive Cleanup Must Be Registry-Driven And Incremental
+| Field | Value |
+|---|---|
+| Date | 2026-03-28 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current cleanup batch)* |
+**Context** CVF had already introduced active-window protection for generic archive cleanup, but the broader archive workflow still depended too much on broad repo scans and ad-hoc judgement about which historical `audits` and `reviews` should stay live. Once the repository accumulated hundreds of dated evidence documents, "scan everything every time" became both expensive and easier to get wrong.
+**Decision** Move archive cleanup to a registry-driven, incremental model. `scripts/cvf_active_archive.py` now uses `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json` as the canonical checkpoint for normal runs, while audit/review evidence retention is governed by `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json` and `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`. Normal cleanup re-evaluates only incremental deltas and registry-protected candidates; full scans remain bootstrap/recovery only.
+**Rationale** Archive safety should be determined by explicit governance state, incremental cleanup is the right default once historical backlog has been classified, and archive automation must preserve evidence-bearing documents without forcing a full-repo sweep every run.
+**Consequences** `docs/audits/` and `docs/reviews/` can now be cleaned without losing protected evidence chains, pre-push and CI enforce retention-registry truth before archive moves are valid, and foundational test-depth enforcement now applies to active report surfaces instead of archived historical records.
+**Related Files** `scripts/cvf_active_archive.py`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`, `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`, `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`, `governance/compat/check_audit_retention_registry.py`, `governance/compat/check_review_retention_registry.py`, `governance/compat/check_foundational_guard_surfaces.py`
+---
+## ADR-025: Governed Artifact Writing Must Be Source-Truth-First And Machine-Enforced
+| Field | Value |
+|---|---|
+| Date | 2026-03-29 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current GC-032 hardening batch)* |
+**Context** Post-W7 planning had already stated that performance evidence could not be promoted into baseline truth before real measurement evidence existed, and the drafting discipline for the next wave had been documented in roadmap/checklist form. In practice, that still left too much room for governed artifacts to be written as plausible narrative instead of contract-shaped truth, especially when an agent was translating roadmap intent or harness output into reviews, baselines, and continuity records.
+**Decision** Adopt one canonical governed-artifact authoring standard and enforce it through bootstrap, policy, CI, and local hooks. `GC-032` now requires source-truth-first writing, forbids summary substitution for typed evidence, keeps planning/execution/evidence/continuity artifact roles separate, and requires continuity surfaces to move together when tranche posture changes. Typed evidence enforcement remains layered: `governance/compat/check_governed_artifact_authoring.py` keeps the chain aligned, while `governance/compat/check_docs_governance_compat.py` blocks symbolic shorthand in governed evidence batches when the harness contract requires explicit provenance fields.
+**Rationale** If governed writing is not constrained like code, agents can silently drift away from roadmap truth even while the surrounding governance system looks complete. Source-truth-first writing turns documentation quality into an executable part of CVF rather than a reviewer expectation.
+**Consequences** Future agents must route through a shared writing standard before drafting governed artifacts, post-W7 packets now have an explicit authoring front door in session bootstrap, and evidence-bearing docs are harder to degrade into ambiguous shorthand without tripping a repo gate.
+**Related Files** `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`, `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`, `governance/compat/check_governed_artifact_authoring.py`, `governance/compat/check_docs_governance_compat.py`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`, `docs/reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md`
+## ADR-026: GC-020 Handoff Must Track The Remote Branch, Not Chase The Remote Tip SHA
+| Field | Value |
+|---|---|
+| Date | 2026-03-30 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current GC-020 loop-fix batch)* |
+**Context** `GC-020` already required governed pause/resume truth, and the handoff template had drifted into recording the exact latest pushed remote SHA inside `AGENT_HANDOFF.md`. In practice that created a self-update loop: a commit that updated handoff to match the current remote tip would itself move the remote tip again after push, immediately making the newly committed handoff stale by one step.
+**Decision** Treat the tracked remote branch as the required handoff truth, and treat the exact remote tip SHA as live git state that must be derived when needed rather than hand-maintained inside the handoff packet. `AGENT_HANDOFF.md` must now record the tracked upstream ref such as `origin/cvf-next`, while `check_agent_handoff_guard_compat.py` enforces tracked remote branch presence instead of exact tip equality.
+**Rationale** An exact remote tip SHA is not a stable continuity field at the push boundary, because the commit carrying that field changes the very value it is trying to freeze. Continuity docs should store stable routing truth, while volatile live state should be derived from the authoritative tool that owns it.
+**Consequences** Governed handoff remains strict, but now has a fixed point that can stay true across pushes. Agents must stop treating external memory or hand-edited SHA strings as a substitute for live git inspection. Resume and push decisions still depend on exact remote SHA when relevant, but they must derive that value live from git rather than requiring it as a durable handoff field.
+**Related Files** `AGENT_HANDOFF.md`, `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`, `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`, `governance/compat/check_agent_handoff_guard_compat.py`, `governance/compat/test_check_agent_handoff_guard_compat.py`
+## ADR-027: CPF Public Surface Must Stay Thin And Shared Batch Semantics Must Stay Centralized
+Date: `2026-04-01` | Status: `Active` | Branch: `cvf-next` | Layer: `Control Plane Foundation` | Related commits: *(local, current maintainability hardening batch)*
+**Context** CPF continuation delivery has expanded the public barrel, barrel smoke suite, and batch-contract family steadily through `W13-T1` to `W32-T1`. That growth improved coverage, but it also created a maintainability hotspot: public exports, smoke coverage, and repeated batch identity/tie-break logic were starting to drift toward copy-heavy maintenance and a larger blast radius for every new tranche.
+**Decision** Keep CPF public entry surfaces intentionally thin, centralize repeated batch identity/tie-break mechanics in shared helpers, and keep detailed behavior in owned tranche/domain tests rather than letting `index.test.ts` become a second behavioral test surface. This decision is enforced through `GC-033` through `GC-036` and anchored by the canonical maintainability standard.
+**Rationale** A large barrel and smoke suite create hidden coordination tax even when correctness remains high. Central helpers and ownership boundaries reduce duplication, make tranche additions cheaper, and preserve the readability of public-surface review.
+**Consequences** New CPF batch work must adopt shared batch helpers and shared fixtures where governed, barrel smoke must stay shallow, and summary canon docs must not absorb typed evidence payload responsibilities. Maintainability becomes an enforced architectural property instead of a one-off cleanup.
+**Related Files** `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts`, `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`, `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`, `governance/compat/check_cpf_public_surface_maintainability.py`, `governance/compat/check_cpf_batch_helper_adoption.py`, `governance/compat/check_canon_summary_evidence_separation.py`
+## ADR-028: Pre-Public Repository Cleanup Must Be Lifecycle-Classified Before Relocation
+Date: `2026-04-02` | Status: `Active` | Branch: `cvf-next` | Layer: `Governance Platform` | Related commits: *(local, current pre-public classification batch)*
+**Context** CVF is moving toward a pre-public packaging phase where repository structure needs to become easier to read from the outside. The visible root contains a mix of active architectural roots, lineage-retained roots, frozen references, and likely retirement candidates. Without an explicit classification layer, any cleanup wave would risk moving or retiring folders based only on appearance rather than architectural ownership truth.
+**Decision** Introduce lifecycle classification as a mandatory precondition for any pre-public repository restructuring wave. Visible repository roots and extension roots must first be classified as `ACTIVE_CANONICAL`, `MERGED_RETAINED`, `FROZEN_REFERENCE`, or `RETIRE_CANDIDATE`, and that classification is enforced by `GC-037` before any later relocation decision proceeds.
+**Rationale** Physical movement is a structural act, not a naming cleanup. Even when folder names stay unchanged, path changes can affect imports, package/workspace resolution, scripts, hooks, CI, docs links, release manifests, registries, and public packaging.
+**Consequences** `P0-P2` can proceed safely as classification-only work, while `P3` remains the earliest phase where folder relocation may happen. Legacy-looking roots such as `CVF_ECO*` are no longer presumed delete candidates; they must be evaluated against lifecycle truth first.
+**Related Files** `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`, `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`, `governance/compat/CVF_ROOT_FOLDER_LIFECYCLE_REGISTRY.json`, `governance/compat/CVF_EXTENSION_LIFECYCLE_REGISTRY.json`, `governance/toolkit/05_OPERATION/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md`, `governance/compat/check_repository_lifecycle_classification.py`
+## ADR-029: Pre-Public Repository Planning Must Stay Private-By-Default Until Selective Publication Is Explicitly Authorized
+Date: `2026-04-02` | Status: `Active` | Branch: `cvf-next` | Layer: `Governance Platform`
+Lifecycle cleanup alone cannot control publication exposure. CVF therefore adopts explicit exposure classification (`GC-038`) and `GC-039` readiness as mandatory preconditions before any `P3` relocation is even discussable, keeping the repository private-by-default until a later distribution decision explicitly authorizes something narrower or broader.
+Related Files: `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`, `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`, `governance/compat/CVF_ROOT_FOLDER_LIFECYCLE_REGISTRY.json`, `governance/compat/CVF_EXTENSION_LIFECYCLE_REGISTRY.json`, `governance/toolkit/05_OPERATION/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`, `governance/compat/check_repository_exposure_classification.py`
+## ADR-030: Future P3 Relocation Waves Must Execute On Dedicated Branches And Secondary Worktrees
+Date: `2026-04-02` | Status: `Active` | Branch: `cvf-next` | Layer: `Governance Platform`
+After `P3/CP1`, future physical `P3` relocation waves must execute on a dedicated `restructuring/p3-*` branch and from a secondary git worktree. This is now a machine-enforced addition to fresh `GC-019` and `GC-039`, keeping `cvf-next` as the canonical integration branch while large path moves remain isolated and reviewable.
+Related Files: `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`, `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`, `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`, `governance/toolkit/05_OPERATION/CVF_PREPUBLIC_P3_READINESS_GUARD.md`, `governance/compat/check_prepublic_p3_readiness.py`, `AGENT_HANDOFF.md`

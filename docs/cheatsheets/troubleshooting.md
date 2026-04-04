@@ -369,7 +369,7 @@ Missing required field: risk_level
    ```
 
 3. **See risk guide:**
-   - [Governance Model](../docs/concepts/governance-model.md#risk-model)
+   - [Governance Model](../concepts/governance-model.md#risk-model)
 
 ---
 
@@ -563,7 +563,7 @@ Access to fetch at '...' has been blocked by CORS policy
 ## 🆘 Still Need Help?
 
 ### Step 1: Search Documentation
-- 🔍 [Full docs](../docs/GET_STARTED.md)
+- 🔍 [Full docs](../GET_STARTED.md)
 - ❓ [FAQ](faq.md)
 
 ### Step 2: Check Existing Issues
@@ -612,9 +612,9 @@ Access to fetch at '...' has been blocked by CORS policy
 
 ## 📚 More Resources
 
-- [Getting Started](../docs/GET_STARTED.md)
+- [Getting Started](../GET_STARTED.md)
 - [Version Picker](version-picker.md)
-- [Quick Reference](cheatsheets/quick-reference.md)
+- [Quick Reference](quick-reference.md)
 - [FAQ](faq.md)
 
 ---
@@ -623,6 +623,6 @@ Access to fetch at '...' has been blocked by CORS policy
 
 **Vẫn stuck?** [💬 Hỏi trên Discord](https://discord.gg/cvf)
 
-[⬅️ Back to Docs](../docs/GET_STARTED.md)
+[⬅️ Back to Docs](../GET_STARTED.md)
 
 </div>

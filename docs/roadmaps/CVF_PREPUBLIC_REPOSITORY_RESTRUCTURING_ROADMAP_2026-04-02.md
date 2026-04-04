@@ -1,7 +1,7 @@
 # CVF Pre-Public Repository Restructuring Roadmap — 2026-04-02
 
 Memory class: SUMMARY_RECORD
-Status: planning-only roadmap for pre-public repository hygiene and structural clarity before broad external packaging.
+Status: canonical roadmap and execution record for pre-public repository hygiene, freeze-in-place relocation posture, and selective-publication preparation.
 
 ## Purpose
 
@@ -17,7 +17,7 @@ Before any pre-public repository relocation wave:
 2. decide what is active, merged-but-retained, frozen-reference, or retire-candidate
 3. only then authorize physical moves under `GC-019`
 
-This roadmap does not authorize physical relocation by itself.
+This roadmap does not authorize new physical relocation by itself. Any executed status cited here must still be backed by the referenced audit/review/delta chain.
 
 ## Public Exposure Model
 
@@ -137,14 +137,16 @@ Canonical exposure authority:
 - require a dedicated secondary git worktree for each future relocation wave
 - preserve backwards path recovery and packaging integrity while relocating
 
-Current executed move set:
+Canonical physical move set landed on `cvf-next`:
 
 - `P3 / CP1` — retire `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` from the visible repo root; optional local recovery may live under `.private_reference/legacy/`
 - governing packet chain:
   - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_DELTA_2026-04-02.md`
-- `P3 / CP2` — relocate `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` into `ECOSYSTEM/reference-roots/retained-internal/`
+Isolated branch execution retained as evidence but excluded from canonical landing:
+
+- `P3 / CP2` proposed relocating `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` into `ECOSYSTEM/reference-roots/retained-internal/`
 - governing packet chain:
   - `docs/audits/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_REVIEW_2026-04-02.md`
@@ -152,6 +154,8 @@ Current executed move set:
 - execution status:
   - delivered on dedicated branch `restructuring/p3-cp2-retained-internal-root-relocation`
   - delivered from a secondary git worktree, not the canonical `cvf-next` workspace
+  - excluded from canonical landing by `docs/baselines/CVF_GC039_P4_PACKAGING_LANDING_PATH_DELTA_2026-04-04.md`
+  - `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` remain freeze-in-place on `cvf-next`
 
 Re-assessed next-candidate status:
 
@@ -172,10 +176,10 @@ Canonical landing-path status:
   - `docs/reviews/CVF_GC019_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_DELTA_2026-04-02.md`
 - result:
-  - `HOLD`
+  - `RESOLVED BY GC-039`
 - rationale summary:
-  - current canon defines isolated `P3` execution clearly
-  - current `GC-039` semantics do not yet provide an explicit machine-compatible landing path for bringing a delivered relocation branch back onto `cvf-next`
+  - `GC-039` now defines the landing path explicitly
+  - `P3/CP2` physical move remains excluded while `P3/CP3-P3/CP5` governance artifacts and `P4` governance artifacts are authorized on `cvf-next`
 
 Foundation-anchor strategy pivot:
 
@@ -427,7 +431,7 @@ Exit condition:
   - registry: npm public registry
   - package names: `cvf-core-git-for-ai`, `cvf-guard-contract`, `cvf-runtime-adapter-hub`
   - versioning: semver `0.x`, initial `0.1.0`
-  - GC-039 landing path: HOLD
+  - GC-039 landing path: RESOLVED (`P3/CP2` excluded; `P3/CP3-P3/CP5` + `P4/CP1-P4/CP17` authorized)
   - decision record: `docs/reference/CVF_PUBLICATION_DECISION_RECORD_2026-04-03.md`
 - current docs-mirror result:
   - direct candidates:
@@ -485,14 +489,14 @@ Current execution boundary:
 - `P4/CP11` readiness re-assessment is delivered; all three candidates remain `NEEDS_PACKAGING`
 - `P4/CP12` documentation-completion is delivered; all P4/CP11 gaps closed; all three remain `NEEDS_PACKAGING`; next safe packet is a second readiness re-assessment (P4/CP13)
 - `P4/CP13` second readiness re-assessment is delivered; all three candidates uplifted to `READY_FOR_EXPORT`; first positive uplift in the P4 lane
-- `P4/CP14` publication decision is delivered; distribution model: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`; registry: npm; versioning: semver `0.x`; initial version `0.1.0`; GC-039 landing path: HOLD
+- `P4/CP14` publication decision is delivered; distribution model: `PRIVATE_MONOREPO + PUBLIC_MODULE_EXPORTS`; registry: npm; versioning: semver `0.x`; initial version `0.1.0`; GC-039 landing path resolved with `P3/CP2` excluded from canon
 - `P4/CP15` publish implementation is delivered; pre-publish checklist 3/3 PASS; version fix (`3.0.0`/`1.0.0`/`1.7.3` → `0.1.0`); TypeScript packaging gap identified; concrete publish steps documented
 - `P4/CP16` packaging architecture decision is delivered; Option A (TypeScript source shipping) chosen for `0.1.0`; `moduleResolution: "bundler"` confirms bundler-pipeline target; all 5 pre-publish gates cleared; `npm publish` AUTHORIZED pending human execution; Option B deferred to `0.2.0`
 - `P4/CP17` publish readiness record delivered; governance lane closed; post-publish confirmation pending npm execution
 - any later `P4` implementation beyond planning still requires a fresh bounded packet
 - `P5` remains blocked
-- any future `P3` relocation beyond delivered `P3/CP2` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree
-- current preferred next lane is `P4` planning for curated navigation, docs mirror boundaries, and packaging, not additional forced relocation of `v1.0/` or `v1.1/`
+- any future reopened `P3` relocation beyond landed `P3/CP1` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree
+- current relocation posture is operationally complete for now: preserve the freeze-in-place root set, finish human-gated packaging tasks when needed, then return priority to master architecture completion
 
 ## Non-Goals For `P0-P2`
 

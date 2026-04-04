@@ -46,7 +46,14 @@
     { "path": ".githooks", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".github", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".vscode", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "CVF_SKILL_LIBRARY", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
+    {
+      "path": "CVF_SKILL_LIBRARY",
+      "lifecycleClass": "MERGED_RETAINED",
+      "exposureClass": "PRIVATE_ENTERPRISE_ONLY",
+      "retentionPolicy": "FREEZE_IN_PLACE",
+      "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
+      "rationale": "Enterprise-private retained root. Preserve the current path on cvf-next; explain boundaries through curated docs instead of relocation."
+    },
     {
       "path": "docs",
       "lifecycleClass": "ACTIVE_CANONICAL",
@@ -54,7 +61,14 @@
       "publicContentAuditStatus": "CURATION_REQUIRED",
       "publicContentAuditEvidence": "docs/reference/CVF_PREPUBLIC_P3_READINESS.md"
     },
-    { "path": "ECOSYSTEM", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "INTERNAL_ONLY" },
+    {
+      "path": "ECOSYSTEM",
+      "lifecycleClass": "MERGED_RETAINED",
+      "exposureClass": "INTERNAL_ONLY",
+      "retentionPolicy": "FREEZE_IN_PLACE",
+      "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
+      "rationale": "Retained strategy and lineage root. Current posture reduces exposure through curation, not path churn."
+    },
     { "path": "EXTENSIONS", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": "governance", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     {
@@ -64,10 +78,24 @@
       "publicContentAuditStatus": "CURATION_REQUIRED",
       "publicContentAuditEvidence": "docs/reference/CVF_PREPUBLIC_P3_READINESS.md"
     },
-    { "path": "REVIEW", "lifecycleClass": "FROZEN_REFERENCE", "exposureClass": "INTERNAL_ONLY" },
+    {
+      "path": "REVIEW",
+      "lifecycleClass": "FROZEN_REFERENCE",
+      "exposureClass": "INTERNAL_ONLY",
+      "retentionPolicy": "FREEZE_IN_PLACE",
+      "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
+      "rationale": "Reference-dense review root. Keep location stable and rely on extracted orientation for public-safe navigation."
+    },
     { "path": "scripts", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     { "path": "tools", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "ui_governance_engine", "lifecycleClass": "MERGED_RETAINED", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
+    {
+      "path": "ui_governance_engine",
+      "lifecycleClass": "MERGED_RETAINED",
+      "exposureClass": "PRIVATE_ENTERPRISE_ONLY",
+      "retentionPolicy": "FREEZE_IN_PLACE",
+      "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
+      "rationale": "Enterprise-private retained root. Preserve the current path on cvf-next; explain boundaries through curated docs instead of relocation."
+    },
     {
       "path": "v1.0",
       "lifecycleClass": "FROZEN_REFERENCE",

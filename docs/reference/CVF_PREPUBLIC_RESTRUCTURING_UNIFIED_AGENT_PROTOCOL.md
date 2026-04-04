@@ -33,8 +33,8 @@ Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically govern
 | `P0` | `CLOSED` | Inventory and lifecycle/exposure registry creation |
 | `P1` | `CLOSED` | Root-level folder review and lifecycle posture |
 | `P2` | `CLOSED` | Extension lifecycle cleanup and exposure tagging |
-| `P3` | `PER-MOVE ONLY` | `P3/CP1` retired-root wave and `P3/CP2` retained-internal wave are delivered; any further relocation still requires fresh `GC-019` + `GC-039` |
-| `P4` | `OPEN (PLANNING ONLY)` | Curated front-door navigation, docs-mirror boundaries, export-boundary definition, and publication-boundary planning |
+| `P3` | `PER-MOVE ONLY` | `P3/CP1` is the only landed physical move on `cvf-next`; isolated `P3/CP2` evidence exists but is excluded from canonical landing while freeze-in-place posture is active; any reopened move still requires fresh `GC-019` + `GC-039` |
+| `P4` | `OPEN` | Curated front-door navigation, docs-mirror boundaries, export-boundary implementation, and publication-boundary governance are landed on canon; publication remains selective and human-gated |
 | `P5` | **BLOCKED** | Retirement and archive closure |
 
 Machine-readable source of truth:
@@ -45,17 +45,24 @@ No agent may authorize further P3 physical moves without a separate `GC-019` app
 `GC-039` is also required, but it verifies readiness; it does not replace `GC-019`.
 No agent may execute a further P3 physical move directly on `cvf-next`.
 
-Executed move set already in canon:
+Canonical physical move set landed on `cvf-next`:
 
 - `P3 / CP1` — retire `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` from the visible repo root while preserving optional local recovery under `.private_reference/legacy/`
 - audit/review chain:
   - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
-- `P3 / CP2` — relocate `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` into `ECOSYSTEM/reference-roots/retained-internal/` on a dedicated `restructuring/p3-*` branch and secondary git worktree
+Isolated relocation evidence retained but not landed on canon:
+
+- `P3 / CP2` proposed relocating `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` into `ECOSYSTEM/reference-roots/retained-internal/` on a dedicated `restructuring/p3-*` branch and secondary git worktree
 - audit/review chain:
   - `docs/audits/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_AUDIT_2026-04-02.md`
   - `docs/reviews/CVF_GC019_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_REVIEW_2026-04-02.md`
   - `docs/baselines/CVF_P3_CP2_RETAINED_INTERNAL_ROOT_RELOCATION_DELTA_2026-04-02.md`
+- landing authority:
+  - `docs/baselines/CVF_GC039_P4_PACKAGING_LANDING_PATH_DELTA_2026-04-04.md`
+- canonical result:
+  - `P3/CP2` physical move is excluded from `cvf-next`
+  - `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` remain freeze-in-place at the visible repo root
 
 Current planning interpretation after `P3/CP3` through `P3/CP5`:
 
@@ -63,16 +70,17 @@ Current planning interpretation after `P3/CP3` through `P3/CP5`:
 - `v1.0/` and `v1.1/` should be treated as visible frozen foundation anchors, not default relocation targets
 - for those roots, prefer `P4` navigation/packaging/docs-mirror curation over forced path movement
 
-Current `P4` opening status:
+Current `P4` status:
 
-- `P4 / CP1` is approved as a planning-only packet
-- it authorizes:
+- `P4 / CP1` began as a planning-only packet
+- `P4 / CP1` through `P4 / CP17` governance artifacts are now landed on `cvf-next`
+- the lane authorizes and records:
   - curated front-door navigation planning
   - docs-mirror boundary definition
-  - selective export-boundary planning
-- it does not authorize:
+  - selective export-boundary planning and implementation for the approved shortlist
+- the lane still does not auto-authorize:
   - public mirror publication
-  - package publication
+  - package publication without the documented human release step
   - new filesystem relocation
 - `P4 / CP2` now defines the docs-mirror boundary:
   - use `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`

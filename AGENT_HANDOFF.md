@@ -1,7 +1,7 @@
 # CVF Agent Handoff — 2026-04-04
 
 > Branch: `cvf-next`
-> Last push: `docs(governance): freeze dense reference roots in place → cvf-next`
+> Last restructuring-canon push: `docs(governance): narrow relocation lane for fast closure → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
 > State: **W38-T1 CLOSED DELIVERED** — ContextEnrichmentBatchContract canonical; CPF 2696 (+36); W1-T11 context builder enrichment batch surface closed; no active tranche

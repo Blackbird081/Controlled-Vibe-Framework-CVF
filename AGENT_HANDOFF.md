@@ -6,7 +6,7 @@
 > Workspace: `D:/UNG DUNG AI/TOOL AI 2026/Controlled-Vibe-Framework-CVF-P3-CP2`
 > Current local HEAD: `5b287c46`
 > Current remote checkpoint: `4369a231`
-> State: **P4/CP16 COMMITTED — npm publish AUTHORIZED** — `P4/CP1-P4/CP16` complete; all three packages at `0.1.0`, packaging posture Option A (TypeScript source); all pre-publish gates cleared; `npm publish` authorized, awaiting human execution; GC-039 landing path still HOLD
+> State: **P4 GOVERNANCE LANE CLOSED — npm publish AUTHORIZED, PENDING EXECUTION** — `P4/CP1-P4/CP17` complete; all three packages at `0.1.0`; all gates cleared; GC-039 landing path HOLD; publish requires `npm login` then execute steps in CP16 audit
 
 ---
 
@@ -73,9 +73,11 @@
   - concrete publish steps documented
 - `P4/CP16`
   - packaging architecture decision: Option A (TypeScript source shipping) for `0.1.0`
-  - rationale: `moduleResolution: "bundler"` in two of three packages — designed for bundler environments, not standalone `tsc`
   - all five pre-publish gates cleared; `npm publish` AUTHORIZED
-  - Option B (compile-to-JS) deferred to `0.2.0`
+  - Option B deferred to `0.2.0`
+- `P4/CP17`
+  - publish readiness record committed; P4 governance lane closed
+  - post-publish confirmation checklist ready to fill in after execution
 
 ## Current Assessment
 
@@ -106,19 +108,17 @@
 - `docs/reference/CVF_PREPUBLIC_PUBLICATION_DECISION_MEMO_2026-04-02.md`
 - `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
 - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
-- `docs/baselines/CVF_P4_CP16_PACKAGING_ARCHITECTURE_DECISION_DELTA_2026-04-03.md`
+- `docs/baselines/CVF_P4_CP17_PUBLISH_READINESS_RECORD_2026-04-03.md`
 
 ## Default Next Step
 
-- `npm publish` is AUTHORIZED — execute the steps in the CP16 audit:
-  1. `npm whoami` — verify authentication
-  2. `cd EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI && npm publish --access public`
-  3. `cd ../CVF_GUARD_CONTRACT && npm publish --access public`
-  4. `cd ../CVF_v1.7.3_RUNTIME_ADAPTER_HUB && npm publish --access public`
-  5. Verify each: `npm view <name>@0.1.0 --json`
-  6. `git tag v0.1.0-publish`
-- after publish: record the publish event in a post-publish governance doc (P4/CP17)
-- GC-039 landing path to `cvf-next` remains HOLD; address in a separate canonical-lane packet
+**P4 governance lane is CLOSED.** Two items remain:
+
+1. **Execute `npm publish`** (human action — requires `npm login` first):
+   - steps in `docs/audits/CVF_P4_CP16_PACKAGING_ARCHITECTURE_DECISION_AUDIT_2026-04-03.md`
+   - fill in post-publish confirmation checklist in `docs/baselines/CVF_P4_CP17_PUBLISH_READINESS_RECORD_2026-04-03.md`
+
+2. **GC-039 landing path**: HOLD — requires a GC-039 extension packet on the canonical `cvf-next` lane before this restructuring branch can be merged back
 
 ## Verification Pattern
 

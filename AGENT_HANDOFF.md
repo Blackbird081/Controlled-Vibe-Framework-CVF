@@ -3,7 +3,8 @@
 > Branch: `main`
 > Branch posture: `main` is the canonical continuation branch after 2026-04-04 convergence; `cvf-next` is kept as a synchronized mirror for compatibility
 > Latest branch-governance posture: relocation closed-by-default; canon converged to `main`
-> Remote tracking branch: `origin/main`
+> Remote tracking branch: `origin/main` (canonical continuation)
+> Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
 > State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W38-T1 closed delivered; relocation lane closed-by-default; repo canon converged into `main`; next default focus is master architecture continuation
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)

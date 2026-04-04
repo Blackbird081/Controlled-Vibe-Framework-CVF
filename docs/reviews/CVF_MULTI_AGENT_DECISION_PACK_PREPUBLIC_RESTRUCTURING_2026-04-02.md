@@ -6,6 +6,12 @@ Memory class: FULL_RECORD
 > Purpose: final canonical decision pack for pre-public restructuring preparation after intake review and rebuttal are complete
 > Decision posture: accept `P0-P2 + GC-039` as the current governed preparation baseline while keeping `P3-P5` blocked pending later authorization
 
+Operator posture update (`2026-04-04`):
+
+- keep dense or sensitive root-level references in place rather than reopening broad relocation
+- treat extracted orientation and curated docs as the preferred completion path for this lane
+- return priority to master architecture completion once that narrower path is sufficient
+
 ---
 
 ## 1. Decision Scope
@@ -112,6 +118,12 @@ Scope note:
   - when the user decides timing is right, draft one bounded `GC-019` packet for the proposed `P3` move set
 - step 5:
   - re-run `GC-039` and re-read the publication memo against that concrete move set before any execution begins
+
+Accelerated-close preference:
+
+- do not draft another broad root-level `GC-019` by default
+- prefer curation and extracted orientation unless a later move has a stronger preservation-safe justification
+- once that narrower target is satisfied, treat this restructuring lane as complete enough to hand priority back to master architecture work
 
 ## 6. Next Recommended Tranche
 

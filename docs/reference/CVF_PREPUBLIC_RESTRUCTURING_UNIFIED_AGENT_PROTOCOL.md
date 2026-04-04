@@ -24,6 +24,7 @@ Decision summary:
 - `HOLD` for any further `P3` physical relocation until a fresh `GC-019` packet is opened and `GC-039` passes for that concrete move set
 - `HOLD` for any further `P3` physical relocation unless it also runs on a dedicated `restructuring/p3-*` branch and secondary git worktree
 - `HOLD` for relocating `v1.0/` or `v1.1/`; current operator posture is to keep those dense frozen-reference roots in place
+- `HOLD` for relocating `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, or `ui_governance_engine/`; current operator posture is to finish this lane through extracted orientation and curation instead of more root churn
 
 Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically governed by the artifacts above.
 
@@ -34,8 +35,8 @@ Commit lineage begins at `65a73a62` on `cvf-next` and remains canonically govern
 | `P0` | `CLOSED` | Inventory and lifecycle/exposure registry creation |
 | `P1` | `CLOSED` | Root-level folder review and lifecycle posture |
 | `P2` | `CLOSED` | Extension lifecycle cleanup and exposure tagging |
-| `P3` | `PER-MOVE ONLY` | `P3/CP1` retired-root wave is delivered; any further relocation still requires fresh `GC-019` + `GC-039` |
-| `P4` | **BLOCKED** | Public navigation + packaging + publication model selection |
+| `P3` | `PER-MOVE ONLY` | `P3/CP1` retired-root wave is delivered; default posture is no further root-level movement unless a preservation override wins |
+| `P4` | **NARROWED** | Public navigation + packaging now emphasizes extracted orientation and curation over root relocation |
 | `P5` | **BLOCKED** | Retirement and archive closure |
 
 Machine-readable source of truth:
@@ -55,6 +56,16 @@ Executed move set already in canon:
 - explicit freeze-in-place exclusions:
   - `v1.0/`
   - `v1.1/`
+  - `REVIEW/`
+  - `ECOSYSTEM/`
+  - `CVF_SKILL_LIBRARY/`
+  - `ui_governance_engine/`
+
+Lane-closure intent:
+
+- do not open another broad root-level relocation wave just to improve appearances
+- close the restructuring lane after sufficient extracted orientation and curated entrypoints exist
+- return primary focus to master architecture completion
 
 ## Rule 2: Private by Default
 
@@ -146,6 +157,7 @@ All three run in:
 9. execute future `P3` physical relocation directly on `cvf-next`
 10. execute future `P3` physical relocation without a dedicated secondary git worktree
 11. propose relocation of `v1.0/` or `v1.1/` under the current posture; these roots are freeze-in-place unless a separate preservation override is approved
+12. propose relocation of `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, or `ui_governance_engine/` under the current posture; these roots are also freeze-in-place unless separately reopened
 
 ## Rule 8: Re-assessment Timeline
 

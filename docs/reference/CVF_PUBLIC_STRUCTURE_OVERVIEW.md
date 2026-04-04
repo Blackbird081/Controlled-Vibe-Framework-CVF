@@ -54,6 +54,24 @@ Current rule:
 
 This preserves data retention while avoiding unnecessary path churn.
 
+## Roots Intentionally Kept In Place
+
+The current relocation posture also keeps the following roots at their existing paths:
+
+- `REVIEW/`
+- `ECOSYSTEM/`
+- `CVF_SKILL_LIBRARY/`
+- `ui_governance_engine/`
+
+Reason:
+
+- they are either reference-heavy, doctrine-heavy, or enterprise/private enough that moving them would add churn without improving safe outside understanding
+
+Preferred strategy:
+
+- explain them through curated docs and extracted structure summaries
+- avoid using relocation as a substitute for publication control
+
 ## What Outside Readers Should Usually Open
 
 Good first-stop surfaces:

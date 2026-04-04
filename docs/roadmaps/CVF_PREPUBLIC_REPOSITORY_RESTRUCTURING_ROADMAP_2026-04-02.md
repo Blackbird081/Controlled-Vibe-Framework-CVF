@@ -1,7 +1,7 @@
 # CVF Pre-Public Repository Restructuring Roadmap — 2026-04-02
 
 Memory class: SUMMARY_RECORD
-Status: planning-only roadmap for pre-public repository hygiene and structural clarity before broad external packaging.
+Status: narrowed completion roadmap for pre-public repository hygiene and structural clarity before broad external packaging.
 
 ## Purpose
 
@@ -9,6 +9,7 @@ Status: planning-only roadmap for pre-public repository hygiene and structural c
 - classify repository roots and extension roots before any relocation wave starts
 - separate lifecycle planning from structural execution so future folder moves remain governed
 - keep dense frozen-reference roots in place unless a separate preservation review explicitly approves movement
+- close the relocation lane quickly once safe root-level cleanup and extracted orientation coverage are sufficient
 
 ## Guiding Rule
 
@@ -19,6 +20,26 @@ Before any pre-public repository relocation wave:
 3. only then authorize physical moves under `GC-019`
 
 This roadmap does not authorize physical relocation by itself.
+
+## Accelerated Completion Posture
+
+Current operator direction:
+
+- prioritize repository safety, publication control, and reduced relocation complexity over cosmetic tree cleanup
+- treat extracted docs and curated navigation as the main way to explain CVF to outside readers
+- finish the relocation lane quickly after the smallest sufficient cleanup set
+- return focus to master architecture completion once the remaining restructuring work is reduced to documentation curation
+
+Default freeze-in-place root set:
+
+- `v1.0/`
+- `v1.1/`
+- `REVIEW/`
+- `ECOSYSTEM/`
+- `CVF_SKILL_LIBRARY/`
+- `ui_governance_engine/`
+
+These roots stay at their current paths under the current posture unless a separate preservation override packet explicitly reopens one of them.
 
 ## Public Exposure Model
 
@@ -152,21 +173,41 @@ Current freeze-in-place exclusions:
 - reason: these roots carry too many important files and too much historical/reference density to justify path churn during pre-public cleanup
 - external understanding should come from extracted orientation docs rather than moving these roots directly
 
+Expanded freeze-in-place root set for rapid closure:
+
+- `REVIEW/` stays in place because its review/evidence footprint is still materially active in canonical references
+- `ECOSYSTEM/` stays in place because it carries doctrine/strategy authority and should be explained, not churned
+- `CVF_SKILL_LIBRARY/` stays in place because it is enterprise-private and not a public-navigation target
+- `ui_governance_engine/` stays in place because it is enterprise-heavy and not needed for external orientation
+
+Current intent for `P3`:
+
+- no new broad root-level relocation wave is planned
+- treat `P3/CP1` as the only delivered physical move set required for the present lane
+- only reopen root-level movement if a later preservation-safe case is stronger than the churn and disclosure risk
+
 Exit condition:
 
 - approved folder moves land with migration notes, path recovery, and packaging validation
+- or the relocation lane is intentionally capped with root-level freeze decisions and extracted orientation coverage, allowing focus to move back to master architecture
 
 ### `P4` Public Navigation + Packaging
 
 - align docs navigation, product packaging, release-facing structure, and onboarding paths
 - reduce visible structural noise for external evaluators
 - publish extracted structure/orientation material that explains CVF correctly without mirroring internal-only or sensitive payloads
+- treat public-safe explanation as the default completion path for this lane, not additional root movement
 - decide whether CVF will ship as:
   - public docs only
   - curated public modules
   - reduced public core
   - or full public monorepo
 - ensure the chosen model is supported by the repository structure created in `P3`
+
+Fast-close target for `P4`:
+
+- enough curated entrypoints exist that an outside reader can understand CVF without being pushed into internal-only roots
+- no additional sensitive or enterprise-heavy root must move to achieve that understanding
 
 ### `P5` Retirement / Archive Closure
 
@@ -181,6 +222,8 @@ Current execution boundary:
 - `P3-P5` require later explicit authorization
 - any future `P3` relocation beyond delivered `P3/CP1` must run on a dedicated `restructuring/p3-*` branch and secondary git worktree
 - dense frozen-reference roots such as `v1.0/` and `v1.1/` default to `freeze in place`; do not move them unless a separate preservation override packet says otherwise
+- under the current accelerated-close posture, root-level relocation is considered materially complete once extracted orientation and docs curation are sufficient
+- after that point, priority returns to master architecture completion rather than more folder movement
 
 ## Non-Goals For `P0-P2`
 

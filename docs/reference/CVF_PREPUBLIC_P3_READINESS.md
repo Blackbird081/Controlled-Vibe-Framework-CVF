@@ -97,6 +97,10 @@ Current freeze-in-place roots:
 
 - `v1.0/`
 - `v1.1/`
+- `REVIEW/`
+- `ECOSYSTEM/`
+- `CVF_SKILL_LIBRARY/`
+- `ui_governance_engine/`
 
 These roots stay where they are under the current posture. Public understanding should rely on extracted docs, not direct relocation of these paths.
 
@@ -109,7 +113,13 @@ Before any further `P3` authorization:
 - confirm the target publication model that the relocation wave is trying to support
 - execute on a dedicated branch matching `restructuring/p3-*`
 - use a dedicated secondary worktree for that branch so relocation changes stay isolated from the canonical workspace
-- exclude `v1.0/` and `v1.1/` unless a separate preservation review explicitly reopens them
+- exclude the current freeze-in-place root set unless a separate preservation review explicitly reopens one of them
+
+Accelerated-close note:
+
+- the preferred path is to avoid opening any further root-level `P3` move set
+- if extracted orientation coverage and docs curation are sufficient, the restructuring lane should be treated as operationally complete for now
+- master architecture completion should then regain priority
 
 ## Related Artifacts
 

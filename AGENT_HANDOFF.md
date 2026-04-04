@@ -1,7 +1,7 @@
-# CVF Agent Handoff — 2026-04-03
+# CVF Agent Handoff — 2026-04-04
 
 > Branch: `cvf-next`
-> Last push: `W37-T1 CLOSED DELIVERED — ContextPackagerBatchContract CP1 + tranche closure → cvf-next`
+> Last push: `docs(governance): freeze dense reference roots in place → cvf-next`
 > Remote tracking branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
 > State: **W37-T1 CLOSED DELIVERED** — ContextPackagerBatchContract canonical; CPF 2660 (+36); W1-T12 context packager batch surface closed; no active tranche
@@ -13,6 +13,7 @@
 
 - External agent memory files: non-canonical convenience only; resume from repo truth first
 - Non-canonical side lanes are separate from this handoff; use this file for `cvf-next` continuation only
+- Pre-public restructuring posture is now narrowed and canonized: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **2660 tests, 0 failures**
@@ -53,7 +54,7 @@
 
 ## Immediate Next Action Required
 
-**W37-T1 CLOSED DELIVERED. No active tranche. Proceed with fresh quality assessment for next candidate.**
+**W37-T1 CLOSED DELIVERED. No active tranche. Restructuring lane is narrowed for fast closure; proceed with quality assessment and master-architecture-following next candidate work.**
 
 Current guidance:
 
@@ -64,6 +65,12 @@ Current guidance:
 - **Next**: read the active quality assessment, then draft bounded `GC-018` authorization for the next tranche candidate (W38-T1)
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
 - **Non-canonical side lanes are out of scope for this handoff**: do not continue isolated restructuring or publication-boundary work from `cvf-next`
+- **Pre-public restructuring lane is intentionally narrowed**: treat root-level relocation as materially complete after `P3/CP1` plus extracted orientation coverage; do not open another broad relocation wave by default
+- **Freeze-in-place root set**: `v1.0/`, `v1.1/`, `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, `ui_governance_engine/`
+- **Why**: protection, lower churn, and faster closure matter more than cosmetic tree cleanup; explain structure through curated docs instead of moving sensitive or reference-heavy roots
+- **Allowed next work on this lane**: docs curation, extracted orientation, publication-boundary clarification, and handoff alignment only
+- **Preferred repo-level priority after that**: return focus to `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` and architecture-following continuation work
+- Canonical restructuring refs: `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`, `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`, `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`, `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
 - If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

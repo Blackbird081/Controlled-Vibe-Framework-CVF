@@ -212,7 +212,7 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_CLOSED_2026-04-01.md`
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_RETAIN_EVIDENCE_FIX_2026-04-04.md` (registry maintenance — no tranche posture change; prior: `docs/baselines/CVF_GC026_TRACKER_SYNC_W34_T1_CLOSED_2026-04-01.md`)
 - Latest continuity sync delta: `docs/baselines/CVF_W32_T1_ARCHITECTURE_BASELINE_SYNC_DELTA_2026-04-01.md`
 - Current closure anchor: `docs/reviews/CVF_W34_T1_TRANCHE_CLOSURE_REVIEW_2026-04-01.md`
 - Active quality assessment: `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`

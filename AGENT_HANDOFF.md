@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W52-T1 closed delivered; `AsyncCommandRuntimeBatchContract` canonical; EPF 1249 (+27); `AsyncCommandRuntimeContract.issue()` batch surface FULLY CLOSED; Phase C: AsyncCommandRuntime exports moved from `index.ts` → `epf.dispatch.barrel.ts` (now ~120 lines); `index.ts` ~1393 lines; dispatch-gate-runtime-async barrel family complete; next: fresh quality assessment for next EPF standalone batch surface (AsyncExecutionStatusContract.check())
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W53-T1 closed delivered; `AsyncExecutionStatusBatchContract` canonical; EPF 1275 (+26); `AsyncExecutionStatusContract.assess()` batch surface FULLY CLOSED; Phase D: AsyncExecutionStatus exports moved from `index.ts` → `epf.dispatch.barrel.ts` (now ~139 lines); `index.ts` ~1386 lines; dispatch-gate-runtime-async-status barrel family complete; next: fresh quality assessment for next EPF standalone batch surface (ExecutionReintakeContract.resolve())
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`)
 
 ---
@@ -20,7 +20,7 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **2929 tests, 0 failures**
-- EPF (Execution Plane Foundation): **1249 tests, 0 failures** (isolated; pre-existing ordering-sensitive flakiness in `bridge.runtime.pipeline.test.ts` in full-suite runs)
+- EPF (Execution Plane Foundation): **1275 tests, 0 failures** (isolated; pre-existing ordering-sensitive flakiness in `bridge.runtime.pipeline.test.ts` in full-suite runs)
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
 
@@ -28,6 +28,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W53-T1 | AsyncExecutionStatusBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `AsyncExecutionStatusBatchContract` canonical; EPF 1301 (+26); `AsyncExecutionStatusContract.assess()` batch surface FULLY CLOSED; Phase D: AsyncExecutionStatus exports moved to `epf.dispatch.barrel.ts` (~139 lines); dispatch-gate-runtime-async-status barrel family complete |
 | W52-T1 | AsyncCommandRuntimeBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `AsyncCommandRuntimeBatchContract` canonical; EPF 1249 (+27); `AsyncCommandRuntimeContract.issue()` batch surface FULLY CLOSED; Phase C: AsyncCommandRuntime exports moved to `epf.dispatch.barrel.ts` (~120 lines); dispatch-gate-runtime-async barrel family complete |
 | W51-T1 | CommandRuntimeBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `CommandRuntimeBatchContract` canonical; EPF 1222 (+23); `CommandRuntimeContract.execute()` batch surface FULLY CLOSED; Phase B: CommandRuntime exports moved to `epf.dispatch.barrel.ts` (94 lines); dispatch-gate-runtime barrel family complete |
 | W50-T1 | PolicyGateBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `PolicyGateBatchContract` canonical; EPF 1199 (+23); `PolicyGateContract.evaluate()` batch surface FULLY CLOSED; Phase A: PolicyGate exports moved to `epf.dispatch.barrel.ts`; dispatch-gate barrel family complete |

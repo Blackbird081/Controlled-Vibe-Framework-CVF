@@ -1,4 +1,4 @@
-// EPF Dispatch-Gate-Runtime-Async Family Barrel — W49-T1 (extracted); W50-T1 (PolicyGate + PolicyGateBatch); W51-T1 (CommandRuntime + CommandRuntimeBatch); W52-T1 (AsyncCommandRuntime + AsyncCommandRuntimeBatch)
+// EPF Dispatch-Gate-Runtime-Async-Status Family Barrel — W49-T1 (extracted); W50-T1 (PolicyGate + PolicyGateBatch); W51-T1 (CommandRuntime + CommandRuntimeBatch); W52-T1 (AsyncCommandRuntime + AsyncCommandRuntimeBatch); W53-T1 (AsyncExecutionStatus + AsyncExecutionStatusBatch)
 
 // W2-T27 — Dispatch Consumer Pipeline Bridge (CP1)
 export {
@@ -114,3 +114,25 @@ export type {
   AsyncCommandRuntimeBatchContractDependencies,
 } from "./execution.async.runtime.batch.contract";
 export type { AsyncCommandRuntimeBatchStatus } from "./execution.async.runtime.batch.contract";
+
+// W2-T7 — Async Execution Status Contract (Phase D barrel move from index.ts)
+export {
+  AsyncExecutionStatusContract,
+  createAsyncExecutionStatusContract,
+} from "./execution.async.status.contract";
+export type {
+  AsyncExecutionStatusSummary,
+  AsyncExecutionStatusContractDependencies,
+} from "./execution.async.status.contract";
+
+// W53-T1 — Async Execution Status Batch Contract (CP1)
+export {
+  AsyncExecutionStatusBatchContract,
+  createAsyncExecutionStatusBatchContract,
+} from "./execution.async.status.batch.contract";
+export type {
+  AsyncExecutionStatusBatchInput,
+  AsyncExecutionStatusBatchResult,
+  AsyncExecutionStatusBatchContractDependencies,
+  AsyncExecutionStatusBatchDominant,
+} from "./execution.async.status.batch.contract";

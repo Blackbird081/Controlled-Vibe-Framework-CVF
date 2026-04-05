@@ -3148,3 +3148,21 @@ Utility and guard:
   - Phase C: AsyncCommandRuntime exports moved from `index.ts:440-449` → `epf.dispatch.barrel.ts`; index.ts ~1403 → ~1393 lines
   - Inner `now` forwarded to AsyncCommandRuntimeContract for deterministic ticketId under injectable clock
   - `AsyncCommandRuntimeContract.issue()` batch surface FULLY CLOSED; dispatch-gate-runtime-async barrel family complete
+
+## W53-T1 CP1 — AsyncExecutionStatusBatchContract (2026-04-05)
+- Tranche: W53-T1 | Class: REALIZATION | Control Point: CP1 (Full Lane)
+- Contract: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.async.status.batch.contract.ts`
+- Barrel: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/epf.dispatch.barrel.ts` (Phase D: AsyncExecutionStatus exports moved here from index.ts; barrel now ~139 lines)
+- Tests: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.async.status.batch.contract.test.ts`
+- Test delta: EPF 1249 → 1275 (+26); 26 tests, 26 pass
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.async.status.batch.contract.test.ts` → 26 tests, 0 failures
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` → 1275 tests, 0 failures (full suite, no regressions)
+- Notes:
+  - `AsyncExecutionStatusBatchContract.batch(inputs)` calls `AsyncExecutionStatusContract.assess()` per `AsyncExecutionStatusBatchInput`
+  - Input: `{ tickets: AsyncCommandRuntimeTicket[] }[]`
+  - dominantStatus: `FAILED` (any failed) > `RUNNING` (any running) > `PENDING` (any pending) > `COMPLETED` (all complete) > `"NONE"` (empty)
+  - `totalSummaries` = inputs.length; `totalTickets` = sum of summary.totalTickets; `warnedCount` = summaries with failedCount > 0
+  - Batch hash salt: `"w53-t1-cp1-async-execution-status-batch"`; batch ID salt: `"w53-t1-cp1-async-execution-status-batch-id"`
+  - Phase D: AsyncExecutionStatus exports moved from `index.ts:440-448` → `epf.dispatch.barrel.ts`; index.ts ~1393 → ~1386 lines
+  - Inner `now` forwarded to AsyncExecutionStatusContract for deterministic summaryId under injectable clock
+  - `AsyncExecutionStatusContract.assess()` batch surface FULLY CLOSED; dispatch-gate-runtime-async-status barrel family complete

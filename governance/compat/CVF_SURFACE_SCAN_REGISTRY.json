@@ -57,12 +57,14 @@
         "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION",
         "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
       ],
-      "canonicalSource": "docs/reviews/CVF_GC019_W56_T1_CP1_GEF_CLOSURE_ASSESSMENT_REVIEW_2026-04-05.md",
-      "nextAction": "Promote GEF from SUBSTANTIALLY DELIVERED to DONE in MC5 whitepaper pass. Trust & Isolation is cross-plane aspiration — deferred, non-blocking.",
-      "reopenCondition": "N/A — assessment complete DONE-ready. Reopen only through fresh GC-018 if a new whitepaper target introduces a genuinely unclosed GEF surface.",
+      "canonicalSource": "docs/reviews/CVF_GC019_W56_T1_CP2_TRUST_ISOLATION_CLOSURE_DECISION_REVIEW_2026-04-05.md",
+      "nextAction": "GEF is DONE (6/6) — Trust & Isolation upgraded to DONE by W56-T1 CP2. Promote GEF plane row and Trust & Isolation box from SUBSTANTIALLY DELIVERED to DONE in MC5 whitepaper pass.",
+      "reopenCondition": "N/A — GEF DONE (6/6), all components closed. Reopen only through fresh GC-018 if a new whitepaper target introduces a genuinely unclosed GEF surface.",
       "evidenceRefs": [
         "docs/reviews/CVF_W56_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md",
         "docs/audits/CVF_W56_T1_CP1_GEF_CLOSURE_ASSESSMENT_AUDIT_2026-04-05.md",
+        "docs/audits/CVF_W56_T1_CP2_TRUST_ISOLATION_CLOSURE_DECISION_AUDIT_2026-04-05.md",
+        "docs/reviews/CVF_GC019_W56_T1_CP2_TRUST_ISOLATION_CLOSURE_DECISION_REVIEW_2026-04-05.md",
         "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
       ]
     },

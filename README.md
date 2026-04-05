@@ -46,6 +46,7 @@ If you need the current canonical continuation posture after `W54-T1`, use:
 - [Agent Handoff](AGENT_HANDOFF.md)
 - [Whitepaper Progress Tracker](docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md)
 - [Master Architecture Closure Roadmap](docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md)
+- [New Machine Setup Checklist](docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md)
 
 ## What CVF Is
 
@@ -101,6 +102,11 @@ powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
 ```
 
 See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
+
+### Moving To A New Machine
+
+Use [New Machine Setup Checklist](docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md).
+The default CVF rule is: clone first, then run `npm ci` only inside the extension you are actively using.
 
 ## Current Status
 

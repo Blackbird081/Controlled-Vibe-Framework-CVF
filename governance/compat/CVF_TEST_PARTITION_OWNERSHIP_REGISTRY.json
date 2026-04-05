@@ -1728,6 +1728,17 @@
         "ContextEnrichmentBatchContract",
         "createContextEnrichmentBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Model Gateway Boundary Batch (W39-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/model.gateway.boundary.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ModelGatewayBoundaryBatchContract",
+        "createModelGatewayBoundaryBatchContract"
+      ]
     }
   ]
 }

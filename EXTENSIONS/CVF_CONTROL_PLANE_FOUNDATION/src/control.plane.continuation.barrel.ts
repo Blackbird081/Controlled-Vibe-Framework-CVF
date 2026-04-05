@@ -156,3 +156,12 @@ export type {
   DeclareTrustDomainBatch,
   DeclareTrustDomainBatchContractDependencies,
 } from "./declare.trust.domain.batch.contract";
+
+export {
+  ModelGatewayBoundaryBatchContract,
+  createModelGatewayBoundaryBatchContract,
+} from "./model.gateway.boundary.batch.contract";
+export type {
+  ModelGatewayBoundaryBatch,
+  ModelGatewayBoundaryBatchContractDependencies,
+} from "./model.gateway.boundary.batch.contract";

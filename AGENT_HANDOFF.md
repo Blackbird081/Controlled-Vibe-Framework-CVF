@@ -75,24 +75,26 @@
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. Next: read `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`, then open a fresh quality assessment only for a surface still marked open-candidate or not-yet-scanned.**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. Follow the canonical master-architecture closure route: read `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`, then `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`, then open only the next bounded assessment that roadmap names.**
 
 Current guidance:
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
 - **W54-T1 CLOSED DELIVERED** — ExecutionReintakeBatchContract (REALIZATION class); EPF 1301 (+26); dispatch-gate-runtime-async-status-reintake barrel family FULLY CLOSED
 - **W47-T1 CLOSED DELIVERED** — Whitepaper Update v3.7-W46T1 (DOCUMENTATION class); documentation-to-implementation gap CLOSED
-- **Next**: read `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`, and the latest continuation assessments; if a fresh `GC-018` is needed, scope it around master architecture completion rather than another relocation or default root cleanup wave
+- **Next**: read `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`, and `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`; if a fresh `GC-018` is needed, scope it around the next phase in that closure roadmap rather than another relocation or default root cleanup wave
 - W54-T1 closure review: `docs/reviews/CVF_W54_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
 - GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W54_T1_CLOSED_2026-04-05.md`
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
 - **Do not open a fresh tranche before consulting the canonical scan continuity registry.**
+- **Canonical closure sequence after W54-T1**: `MC1 CPF closure assessment -> MC2 GEF closure assessment -> MC3 LPF closure assessment -> MC4 EPF closure focus (Model Gateway + Sandbox Runtime) -> MC5 whitepaper/tracker promotion pass`
 - **Relocation lane CLOSED-BY-DEFAULT (2026-04-04)**: `P3/CP1` is the only landed physical move. `P3/CP3–CP5` + `P4/CP1–CP17` are landed governance/package-boundary canon. `P3/CP2` physical move remains excluded under freeze-in-place posture. This closure remains in force after `main` / `cvf-next` convergence. Remaining human-gated item is `npm publish` and it is not a relocation task.
 - **Reopen rule**: do not open another broad relocation wave by default. Reopen only through preservation override + fresh `GC-019` + fresh `GC-039` + dedicated `restructuring/p3-*` branch + secondary worktree. Do not perform reopened relocation work directly on `main` or synchronized `cvf-next`.
 - **Freeze-in-place root set**: `v1.0/`, `v1.1/`, `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, `ui_governance_engine/`
 - **Why**: protection, lower churn, and faster closure matter more than cosmetic tree cleanup; explain structure through curated docs instead of moving sensitive or reference-heavy roots
 - **Allowed next work on this lane**: docs curation, extracted orientation, publication-boundary clarification, and handoff alignment only
 - Canonical restructuring refs: `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`, `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`, `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`, `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
+- Canonical master-architecture closure route: `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`
 - If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

@@ -58,7 +58,6 @@ export class AsyncExecutionStatusBatchContract {
       const batchId = computeDeterministicHash(
         "w53-t1-cp1-async-execution-status-batch-id",
         batchHash,
-        processedAt,
       );
       return {
         batchId,
@@ -104,7 +103,6 @@ export class AsyncExecutionStatusBatchContract {
     const batchId = computeDeterministicHash(
       "w53-t1-cp1-async-execution-status-batch-id",
       batchHash,
-      processedAt,
     );
 
     return {

@@ -115,6 +115,14 @@
       "status": "ACTIVE_EXCEPTION",
       "rationale": "Canonical roadmap accumulates post-cycle closure records for every delivered tranche. Growth is governed and append-only; each post-cycle record is ~15-20 lines. Cap extended 1500→1600 on 2026-03-28 to accommodate W2-T38+ post-cycle records.",
       "requiredFollowup": "Archive older post-cycle records into a separate archive file when file exceeds 1600 lines."
+    },
+    {
+      "path": "docs/CVF_ARCHITECTURE_DECISIONS.md",
+      "fileClass": "active_markdown",
+      "approvedMaxLines": 1500,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "The ADR ledger is a canonical append-only architecture decision surface. Current governance hardening adds mandatory ADR records faster than the historical backlog can be split into archived volumes without disrupting one-file decision lookup.",
+      "requiredFollowup": "Split older superseded or pre-governance-era ADR history into an ADR archive volume before the file exceeds 1500 lines, while keeping the active ledger as the canonical entrypoint."
     }
   ]
 }

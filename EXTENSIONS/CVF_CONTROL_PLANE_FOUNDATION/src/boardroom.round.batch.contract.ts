@@ -62,10 +62,11 @@ export class BoardroomRoundBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: BoardroomRoundBatchContractDependencies = {}) {
-    this.contract = new BoardroomRoundContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new BoardroomRoundContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: BoardroomRoundRequest[]): BoardroomRoundBatch {
@@ -98,7 +99,6 @@ export class BoardroomRoundBatchContract {
         `riskReview:${riskReviewCount}:clarification:${clarificationCount}`,
         `dominant:${dominantFocus}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

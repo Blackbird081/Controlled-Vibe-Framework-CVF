@@ -17,6 +17,7 @@ Read these first:
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
 - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
+- `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` before opening a fresh quality assessment or choosing the next tranche by scan state
 
 If the active workline is not the whitepaper completion line, replace the roadmap/tracker pair above with the canonical tracker and roadmap for that workline.
 
@@ -169,6 +170,20 @@ Primary references:
 - `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`
 - `governance/compat/check_governed_artifact_authoring.py`
 
+### `GC-041` — Surface Scan Continuity
+
+Use when:
+
+- opening a fresh quality assessment or choosing the next tranche candidate
+- deciding whether a repo surface is already closed, not yet scanned, or closed-by-default
+- updating inherited scan state after a governed scan or closure changes the canonical posture
+
+Primary references:
+
+- `governance/toolkit/05_OPERATION/CVF_SURFACE_SCAN_CONTINUITY_GUARD.md`
+- `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
+- `AGENT_HANDOFF.md`
+
 ### `GC-024` — Test Partition Ownership
 
 Use when:
@@ -195,6 +210,7 @@ Use this routing table after reading the always-on bootstrap:
 | extension-local source, test, or package-config changes | `GC-029` |
 | creating or materially revising governance guards | `GC-030` + guard registry |
 | drafting or materially revising governed artifacts | `GC-032` + source truth + active roadmap/tranche packet |
+| fresh quality assessment or next-surface selection | `GC-041` + canonical scan registry + active tracker |
 | touching governed public barrels, barrel smoke tests, shared batch helpers, or canonical summary surfaces | `GC-033` + `GC-034` + `GC-035` + `GC-036` + `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |

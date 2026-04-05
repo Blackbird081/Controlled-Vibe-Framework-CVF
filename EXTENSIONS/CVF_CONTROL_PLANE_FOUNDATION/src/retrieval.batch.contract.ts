@@ -34,10 +34,11 @@ export class RetrievalBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: RetrievalBatchContractDependencies = {}) {
-    this.contract = new RetrievalContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new RetrievalContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: RetrievalRequest[]): RetrievalBatch {
@@ -76,7 +77,6 @@ export class RetrievalBatchContract {
         `empty:${emptyCount}`,
         `chunks:${totalChunkCount}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

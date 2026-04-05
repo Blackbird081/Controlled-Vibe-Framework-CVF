@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W54-T1 closed delivered; `ExecutionReintakeBatchContract` canonical; EPF 1301 (+26); `ExecutionReintakeContract.reinject()` batch surface FULLY CLOSED; Phase E: ExecutionReintake + ExecutionReintakeSummary exports moved from `index.ts` → `epf.dispatch.barrel.ts` (now ~170 lines); `index.ts` ~1370 lines; dispatch-gate-runtime-async-status-reintake barrel family complete; EPF standalone batch wave W49–W54 ALL CLOSED; next: fresh quality assessment for next open EPF surface
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W54-T1 closed delivered; `ExecutionReintakeBatchContract` canonical; EPF 1301 (+26); `ExecutionReintakeContract.reinject()` batch surface FULLY CLOSED; Phase E: ExecutionReintake + ExecutionReintakeSummary exports moved from `index.ts` → `epf.dispatch.barrel.ts` (now ~170 lines); `index.ts` ~1370 lines; dispatch-gate-runtime-async-status-reintake barrel family complete; EPF standalone batch wave W49–W54 ALL CLOSED; next: fresh quality assessment guided by the canonical scan continuity registry
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`)
 
 ---
@@ -17,6 +17,7 @@
 - Non-canonical side lanes are separate from this handoff; use this file for canonical continuation on `main`
 - `cvf-next` is now a synchronized compatibility mirror and should not drift ahead of `main` without an explicit branch strategy change
 - Pre-public restructuring posture is now narrowed, canonized, and closed-by-default: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
+- Canonical scan continuity registry: `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **2929 tests, 0 failures**
@@ -64,27 +65,28 @@
 
 ### Architecture Baseline
 
-- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
+- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`)
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1`
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1`
 - Documentation-to-implementation gap: CLOSED (`v3.7-W46T1`)
 
 ---
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. Next: fresh quality assessment for next wave — W48-T1 CLOSED DELIVERED; EPF bridge consumer batch surface FULLY CLOSED; consumer batch wave W44–W48 complete; consider next EPF/GEF/LPF open surface per roadmap.**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. Next: read `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`, then open a fresh quality assessment only for a surface still marked open-candidate or not-yet-scanned.**
 
 Current guidance:
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
-- **W44-T1 CLOSED DELIVERED** — ConsumerBatchContract (REALIZATION class); CPF 2870 (+30); all 9 pass conditions satisfied; `control.plane.workflow.barrel.ts` workflow batch family FULLY CLOSED (Intake+Retrieval+Packaging+Consumer)
-- **W43-T1 CLOSED DELIVERED** — RouteMatchLogBatchContract (REALIZATION class); CPF 2840 (+27); all 9 pass conditions satisfied; gateway log batch family FULLY CLOSED
-- **Next**: read `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`, and the latest continuation assessments; if a fresh `GC-018` is needed, scope it around master architecture completion rather than another relocation or default root cleanup wave
-- W44-T1 closure review: `docs/reviews/CVF_W44_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W44_T1_CLOSED_2026-04-05.md`
+- **W54-T1 CLOSED DELIVERED** — ExecutionReintakeBatchContract (REALIZATION class); EPF 1301 (+26); dispatch-gate-runtime-async-status-reintake barrel family FULLY CLOSED
+- **W47-T1 CLOSED DELIVERED** — Whitepaper Update v3.7-W46T1 (DOCUMENTATION class); documentation-to-implementation gap CLOSED
+- **Next**: read `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`, and the latest continuation assessments; if a fresh `GC-018` is needed, scope it around master architecture completion rather than another relocation or default root cleanup wave
+- W54-T1 closure review: `docs/reviews/CVF_W54_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
+- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W54_T1_CLOSED_2026-04-05.md`
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
+- **Do not open a fresh tranche before consulting the canonical scan continuity registry.**
 - **Relocation lane CLOSED-BY-DEFAULT (2026-04-04)**: `P3/CP1` is the only landed physical move. `P3/CP3–CP5` + `P4/CP1–CP17` are landed governance/package-boundary canon. `P3/CP2` physical move remains excluded under freeze-in-place posture. This closure remains in force after `main` / `cvf-next` convergence. Remaining human-gated item is `npm publish` and it is not a relocation task.
 - **Reopen rule**: do not open another broad relocation wave by default. Reopen only through preservation override + fresh `GC-019` + fresh `GC-039` + dedicated `restructuring/p3-*` branch + secondary worktree. Do not perform reopened relocation work directly on `main` or synchronized `cvf-next`.
 - **Freeze-in-place root set**: `v1.0/`, `v1.1/`, `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, `ui_governance_engine/`
@@ -139,18 +141,14 @@ All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every
 
 ---
 
-## EPF Batch Surface State — Post-W48-T1 Scan
+## EPF Batch Surface State — Canonical Scan Continuity
 
-> Scanned 2026-04-05 as part of W48-T1 quality assessment. Use this before starting next EPF tranche.
+> The authoritative inherited scan state now lives in `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`. Use that registry before starting any next EPF tranche.
 
-### `execution.bridge.consumer.barrel` — FULLY CLOSED
-- `ExecutionBridgeConsumerContract.bridge()` single-receipt surface — CLOSED (W2-T2-CP3)
-- `ExecutionBridgeConsumerBatchContract.batch()` batch surface — **CLOSED W48-T1 (2026-04-05)**
-- Consumer batch wave W44–W48 complete. No open surface remains in the bridge consumer family.
-
-### EPF Other Surfaces — NOT YET SCANNED IN W48 WAVE
-- `CommandRuntimeContract`, `ExecutionPipelineContract`, `DispatchContract`, `PolicyGateContract` — present in EPF, no batch contract exists for these. **Not scanned for batch readiness.** Consult `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` and `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` before claiming these as open surfaces.
-- Run `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` (isolated) to baseline before any EPF work.
+### `epf.dispatch.barrel.ts` family — FULLY CLOSED
+- `DispatchContract`, `PolicyGateContract`, `CommandRuntimeContract`, `AsyncCommandRuntimeContract`, `AsyncExecutionStatusContract`, and `ExecutionReintakeContract` now have canonical governed batch surfaces through W49–W54.
+- Treat the full dispatch-gate-runtime-async-status-reintake family as CLOSED unless a fresh `GC-018` explicitly authorizes another EPF surface outside that family.
+- Run `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` (isolated) to baseline before any new EPF work.
 
 ### Known EPF Flakiness — Pre-Existing
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/bridge.runtime.pipeline.test.ts` — hash determinism test fails **only when full EPF suite runs** due to ordering-sensitive state interaction. Passes in isolation and together with W48-T1 tests. **Do not spend time fixing this without isolating the root cause first.** Run the specific test file in isolation to verify your work, not the full suite.
@@ -159,7 +157,7 @@ All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every
 
 ## GEF / LPF Surface State — Not Yet Scanned
 
-> These planes were not scanned during the W44–W48 CPF+EPF batch wave. Next agent must assess before starting work.
+> These planes remain `NOT_YET_SCANNED` in the canonical scan continuity registry as of 2026-04-05. Next agent must assess before starting work.
 
 - **GEF (Governance Expansion Foundation)**: 625 tests, 0 failures. No batch surfaces were opened or closed in W44–W48. Scan required — read `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` GEF section.
 - **LPF (Learning Plane Foundation)**: 1465 tests, 0 failures. No batch surfaces were opened or closed in W44–W48. Scan required — read `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` LPF section.
@@ -244,6 +242,7 @@ All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every
 |---------|------|
 | Architecture baseline snapshot | `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` |
 | Progress tracker | `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` |
+| Scan continuity registry | `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` |
 | Completion roadmap | `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` |
 | Post-W7 upgrade baseline | `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md` |
 | Governed artifact authoring standard | `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md` |

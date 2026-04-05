@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastReviewed": "2026-04-04",
+  "lastReviewed": "2026-04-05",
   "classes": [
     {
       "id": "ACTIVE_RECENT_AUDIT",
@@ -17,11 +17,11 @@
   ],
   "summary": {
     "activeRecentCount": 16,
-    "retainEvidenceCount": 54,
+    "retainEvidenceCount": 62,
     "safeToArchiveCount": 28,
     "archivedCount": 96,
-    "derivedAt": "2026-03-30",
-    "derivationMethod": "Derived from scripts/cvf_active_archive.py screening and refreshed after live-reference reclassification for historical W4 learning audits."
+    "derivedAt": "2026-04-05",
+    "derivationMethod": "Derived from scripts/cvf_active_archive.py screening and refreshed after live-reference reclassification for historical W4 learning audits plus relocation/publication canon audits still blocked by active references."
   },
   "retainEvidencePaths": [
     "docs/audits/CVF_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_AUDIT_2026-03-21.md",
@@ -77,6 +77,14 @@
     "docs/audits/CVF_W4_T18_CP2_TRUTH_MODEL_UPDATE_CONSUMER_PIPELINE_BATCH_AUDIT_2026-03-27.md",
     "docs/audits/CVF_W4_T19_CP1_TRUTH_MODEL_CONSUMER_PIPELINE_AUDIT_2026-03-27.md",
     "docs/audits/CVF_W31_T1_CP1_BOARDROOM_ROUND_BATCH_AUDIT_2026-04-01.md",
-    "docs/audits/CVF_W32_T1_CP1_BOARDROOM_MULTI_ROUND_BATCH_AUDIT_2026-04-01.md"
+    "docs/audits/CVF_W32_T1_CP1_BOARDROOM_MULTI_ROUND_BATCH_AUDIT_2026-04-01.md",
+    "docs/audits/CVF_P3_CP3_FROZEN_REFERENCE_REASSESSMENT_AUDIT_2026-04-02.md",
+    "docs/audits/CVF_P3_CP4_CANONICAL_LANDING_PATH_REASSESSMENT_AUDIT_2026-04-02.md",
+    "docs/audits/CVF_P3_CP5_FOUNDATION_ANCHOR_PRESERVATION_AUDIT_2026-04-02.md",
+    "docs/audits/CVF_P4_CP1_CURATED_FRONT_DOOR_PLANNING_AUDIT_2026-04-02.md",
+    "docs/audits/CVF_P4_CP2_DOCS_MIRROR_BOUNDARY_DEFINITION_AUDIT_2026-04-02.md",
+    "docs/audits/CVF_P4_CP3_EXPORT_SHORTLIST_DEFINITION_AUDIT_2026-04-02.md",
+    "docs/audits/CVF_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_AUDIT_2026-04-02.md",
+    "docs/audits/CVF_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_AUDIT_2026-04-02.md"
   ]
 }

@@ -73,10 +73,11 @@ export class ExecutionBridgeConsumerBatchContract {
   constructor(
     dependencies: ExecutionBridgeConsumerBatchContractDependencies = {},
   ) {
-    this.contract = createExecutionBridgeConsumerContract(
-      dependencies.contractDependencies,
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = createExecutionBridgeConsumerContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(

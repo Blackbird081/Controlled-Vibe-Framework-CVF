@@ -35,10 +35,11 @@ export class PackagingBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: PackagingBatchContractDependencies = {}) {
-    this.contract = new PackagingContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new PackagingContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: PackagingRequest[]): PackagingBatch {
@@ -82,7 +83,6 @@ export class PackagingBatchContract {
         `truncated:${truncatedCount}`,
         `tokens:${totalTokens}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

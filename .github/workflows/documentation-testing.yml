@@ -92,6 +92,23 @@ jobs:
         run: |
           python governance/compat/check_cpf_batch_helper_adoption.py --enforce
 
+  batch-contract-determinism:
+    name: Batch Contract Determinism
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-040 batch contract determinism
+        run: |
+          python governance/compat/check_batch_contract_determinism.py --enforce
+
   canon-summary-evidence-separation:
     name: Canon Summary Evidence Separation
     runs-on: ubuntu-latest
@@ -208,6 +225,23 @@ jobs:
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_progress_tracker_sync.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  surface-scan-continuity:
+    name: Surface Scan Continuity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-041 surface scan continuity
+        run: |
+          python governance/compat/check_surface_scan_registry.py --enforce
 
   multi-agent-review-governance:
     name: Multi-Agent Review Governance

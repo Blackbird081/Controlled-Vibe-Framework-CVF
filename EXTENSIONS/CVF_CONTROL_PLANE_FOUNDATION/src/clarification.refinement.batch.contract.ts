@@ -37,10 +37,11 @@ export class ClarificationRefinementBatchContract {
   constructor(
     dependencies: ClarificationRefinementBatchContractDependencies = {},
   ) {
-    this.contract = new ClarificationRefinementContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new ClarificationRefinementContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: ClarificationRefinementRequest[]): ClarificationRefinementBatch {
@@ -62,7 +63,6 @@ export class ClarificationRefinementBatchContract {
         `${createdAt}:total:${totalRefinements}`,
         `dominantConfidenceBoost:${dominantConfidenceBoost}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

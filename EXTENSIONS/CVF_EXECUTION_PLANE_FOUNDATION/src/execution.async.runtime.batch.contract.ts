@@ -60,7 +60,6 @@ export class AsyncCommandRuntimeBatchContract {
       const batchId = computeDeterministicHash(
         "w52-t1-cp1-async-command-runtime-batch-id",
         batchHash,
-        processedAt,
       );
       return {
         batchId,
@@ -98,7 +97,6 @@ export class AsyncCommandRuntimeBatchContract {
     const batchId = computeDeterministicHash(
       "w52-t1-cp1-async-command-runtime-batch-id",
       batchHash,
-      processedAt,
     );
 
     return {

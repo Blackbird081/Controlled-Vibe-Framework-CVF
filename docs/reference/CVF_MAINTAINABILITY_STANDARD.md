@@ -52,6 +52,8 @@ When a batch-contract family repeats the same maintainability-sensitive pattern 
 In CPF this includes:
 
 - deterministic batch identity construction
+- `batchId = hash(batchHash)` only for governed batch outputs
+- explicit `now: this.now` propagation into nested contracts when a batch wrapper owns the clock
 - dominant-status / dominant-severity resolution
 - shared batch-test fixtures and builders for repeated request / plan / result shapes
 

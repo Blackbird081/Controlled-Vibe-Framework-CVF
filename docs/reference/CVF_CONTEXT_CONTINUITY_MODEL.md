@@ -37,6 +37,7 @@ When continuity is resumed, treat truth sources in this order:
 
 1. repository state and tracked remote state
 2. canonical continuity artifacts inside the repo such as handoff, tracker, closure review, and sync notes
+   - when next-tranche selection depends on prior scan state, this layer also includes the canonical scan continuity registry at `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
 3. external agent memory files, scratch notes, and tool-specific summaries
 
 For handoff-writing specifically:
@@ -65,6 +66,7 @@ This means every governed handoff should help the next worker answer:
 - do not treat handoff as a courtesy note or conversational convenience
 - do treat handoff as a governed compression layer between one phase and the next
 - do not load whole histories by default when a bounded handoff plus canonical references is enough
+- do consult the canonical scan continuity registry before re-scanning repo surfaces that may already have an inherited state
 - do preserve the line between durable memory, transition summary, and active working context
 - do reconcile external memory against repo truth before treating it as continuation input
 

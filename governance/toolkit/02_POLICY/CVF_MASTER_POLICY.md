@@ -222,6 +222,18 @@ Personal AI usage unrelated to company work is excluded.
      - Canonical reference: `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_repository_exposure_classification.py`.
+34. `GC-040` governed CPF and EPF batch contracts must preserve deterministic identity and nested clock propagation:
+     - `batchId` must be derived from `batchHash` only; volatile post-`batchHash` suffixes are forbidden in governed batch identity.
+     - batch wrappers that own `now` and instantiate nested non-batch contracts internally must thread `now: this.now` into those nested dependencies.
+     - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_BATCH_CONTRACT_DETERMINISM_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_batch_contract_determinism.py`.
+35. `GC-041` tranche-opening scan inheritance is mandatory before a fresh quality assessment or next-surface selection proceeds:
+     - workers must consult `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` before re-scanning by default
+     - the same registry must be updated when scan posture materially changes so later agents inherit current surface-state truth
+     - `AGENT_HANDOFF.md` and `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` must keep pointing to the canonical scan continuity registry
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SURFACE_SCAN_CONTINUITY_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_surface_scan_registry.py`.
 
 ---
 

@@ -63,10 +63,11 @@ export class BoardroomMultiRoundBatchContract {
   constructor(
     dependencies: BoardroomMultiRoundBatchContractDependencies = {},
   ) {
-    this.contract = new BoardroomMultiRoundContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new BoardroomMultiRoundContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(
@@ -101,7 +102,6 @@ export class BoardroomMultiRoundBatchContract {
         `escalate:${escalateCount}:reject:${rejectCount}`,
         `dominant:${dominantDecision}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

@@ -57,7 +57,6 @@ export class ExecutionReintakeBatchContract {
       const batchId = computeDeterministicHash(
         "w54-t1-cp1-execution-reintake-batch-id",
         batchHash,
-        processedAt,
       );
       return {
         batchId,
@@ -95,7 +94,6 @@ export class ExecutionReintakeBatchContract {
     const batchId = computeDeterministicHash(
       "w54-t1-cp1-execution-reintake-batch-id",
       batchHash,
-      processedAt,
     );
 
     return {

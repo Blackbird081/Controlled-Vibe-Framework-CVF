@@ -123,7 +123,6 @@ export class AgentRegistrationBatchContract {
             `status:${status}`,
             `defHash:${record.definitionHash}`,
           ],
-          batchIdParts: [processedAt],
         });
 
       results.push({

@@ -53,9 +53,9 @@ export class ExecutionBridgeConsumerContract {
   private readonly now: () => string;
 
   constructor(dependencies: ExecutionBridgeConsumerContractDependencies = {}) {
-    this.dispatch = dependencies.dispatch ?? createDispatchContract();
-    this.policyGate = dependencies.policyGate ?? createPolicyGateContract();
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.dispatch = dependencies.dispatch ?? createDispatchContract({ now: this.now });
+    this.policyGate = dependencies.policyGate ?? createPolicyGateContract({ now: this.now });
   }
 
   bridge(receipt: DesignConsumptionReceipt): ExecutionBridgeReceipt {

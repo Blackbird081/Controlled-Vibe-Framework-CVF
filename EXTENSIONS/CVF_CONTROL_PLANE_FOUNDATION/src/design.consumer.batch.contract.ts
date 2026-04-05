@@ -54,10 +54,11 @@ export class DesignConsumerBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: DesignConsumerBatchContractDependencies = {}) {
-    this.contract = new DesignConsumerContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new DesignConsumerContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(intakes: ControlPlaneIntakeResult[]): DesignConsumptionBatchResult {
@@ -108,7 +109,6 @@ export class DesignConsumerBatchContract {
         `partial:${partialCount}`,
         `degraded:${degradedCount}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

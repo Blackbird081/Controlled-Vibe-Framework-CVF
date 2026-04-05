@@ -54,10 +54,11 @@ export class ConsumerBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: ConsumerBatchContractDependencies = {}) {
-    this.contract = new ConsumerContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new ConsumerContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: ConsumerRequest[]): ConsumerBatch {
@@ -107,7 +108,6 @@ export class ConsumerBatchContract {
         `partial:${partialCount}`,
         `degraded:${degradedCount}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

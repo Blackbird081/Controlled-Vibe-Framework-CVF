@@ -31,10 +31,11 @@ export class KnowledgeRankingBatchContract {
   constructor(
     dependencies: KnowledgeRankingBatchContractDependencies = {},
   ) {
-    this.contract = new KnowledgeRankingContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new KnowledgeRankingContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: KnowledgeRankingRequest[]): KnowledgeRankingBatch {
@@ -56,7 +57,6 @@ export class KnowledgeRankingBatchContract {
         `${createdAt}:total:${totalRankings}`,
         `dominantRankedCount:${dominantRankedCount}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

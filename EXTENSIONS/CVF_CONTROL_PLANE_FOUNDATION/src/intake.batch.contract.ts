@@ -34,10 +34,11 @@ export class IntakeBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: IntakeBatchContractDependencies = {}) {
-    this.contract = new ControlPlaneIntakeContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new ControlPlaneIntakeContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: ControlPlaneIntakeRequest[]): IntakeBatch {
@@ -79,7 +80,6 @@ export class IntakeBatchContract {
         `partial:${partialCount}`,
         `degraded:${degradedCount}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

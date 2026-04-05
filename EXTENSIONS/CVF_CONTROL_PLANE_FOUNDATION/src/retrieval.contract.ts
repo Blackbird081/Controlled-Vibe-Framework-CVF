@@ -37,6 +37,7 @@ export interface RetrievalResultSurface {
 
 export interface RetrievalContractDependencies {
   knowledge?: RAGPipeline;
+  now?: () => string;
 }
 
 // ─── Unified Retrieval Contract ───────────────────────────────────────
@@ -45,6 +46,7 @@ export class RetrievalContract {
   private readonly knowledge: RAGPipeline;
 
   constructor(dependencies: RetrievalContractDependencies = {}) {
+    void dependencies.now;
     this.knowledge = dependencies.knowledge ?? new RAGPipeline();
   }
 

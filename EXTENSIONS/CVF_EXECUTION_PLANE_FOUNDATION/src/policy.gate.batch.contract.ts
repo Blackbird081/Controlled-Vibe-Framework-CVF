@@ -60,8 +60,8 @@ export class PolicyGateBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: PolicyGateBatchContractDependencies = {}) {
-    this.gate = dependencies.policyGateContract ?? new PolicyGateContract();
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.gate = dependencies.policyGateContract ?? new PolicyGateContract({ now: this.now });
   }
 
   batch(inputs: PolicyGateBatchInput[]): PolicyGateBatchResult {
@@ -99,8 +99,7 @@ export class PolicyGateBatchContract {
 
     const batchId = computeDeterministicHash(
       "w50-t1-cp1-policy-gate-batch-id",
-      `${evaluatedAt}:${inputs.length}`,
-      results.map((r) => r.dispatchId).join(":"),
+      batchHash,
     );
 
     return {

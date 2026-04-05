@@ -1198,3 +1198,52 @@ Related Files: `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_202
 Date: `2026-04-02` | Status: `Active` | Branch: `cvf-next` | Layer: `Governance Platform`
 After `P3/CP1`, future physical `P3` relocation waves must execute on a dedicated `restructuring/p3-*` branch and from a secondary git worktree. This is now a machine-enforced addition to fresh `GC-019` and `GC-039`, keeping `cvf-next` as the canonical integration branch while large path moves remain isolated and reviewable.
 Related Files: `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`, `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`, `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`, `governance/toolkit/05_OPERATION/CVF_PREPUBLIC_P3_READINESS_GUARD.md`, `governance/compat/check_prepublic_p3_readiness.py`, `AGENT_HANDOFF.md`
+
+---
+
+## ADR-031: Batch Determinism And Surface Scan Continuity Must Be Canonical Guarded Inputs
+| Field | Value |
+|---|---|
+| Date | 2026-04-05 |
+| Status | Active |
+| Branch | `cvf-next` |
+| Layer | Governance Platform |
+| Related commits | *(local, current governance hardening batch)* |
+
+### Context
+Recent quality review exposed two recurring failure modes that were still too dependent on reviewer memory. First, governed `*.batch.contract.ts` surfaces could drift on deterministic identity semantics or stop threading the same injectable clock into nested contract creation, even while tests still looked green. Second, tranche-opening and repo-scan work had no canonical machine-readable inheritance layer, which meant a later agent could reopen broad repo scans or reclassify already-scanned surfaces without first loading prior scan state.
+
+### Decision
+**Promote both concerns into mandatory canonical governance inputs.**
+
+1. `GC-040` now enforces batch determinism across governed CPF and EPF batch contracts:
+   - `batchId` must derive from `batchHash` only
+   - legacy `batchIdParts` semantics are disallowed on governed batch surfaces
+   - batch wrappers that own `now` must propagate the same clock into nested governed contract creation where supported
+2. `GC-041` now establishes `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` as the canonical continuity surface for tranche and repo-scan inheritance:
+   - agents must consult the registry before opening a fresh tranche or repeating broad scan work
+   - scan continuity is carried as machine-readable state, not informal handoff memory
+   - bootstrap, handoff, progress tracking, and guard routing must all point to the same registry truth
+
+### Rationale
+- Deterministic contract semantics should be machine-enforced, not inferred from style or reviewer familiarity.
+- Shared injectable clocks lose value if nested contract paths silently fall back to real time.
+- Repo-scan continuity is part of governance state, not disposable exploration context.
+- A canonical scan registry lowers token cost and reduces accidental re-scan churn for later agents.
+
+### Consequences
+- Governed batch work now fails fast if it deviates from the canonical identity or nested-clock rules.
+- Later agents inherit already-scanned tranche and surface state through one registry instead of re-walking the repo by default.
+- Session bootstrap, handoff, maintainability canon, and progress tracking all treat scan continuity as a first-class governed input.
+- Incremental test-log rotation became part of the same hardening wave because the active testing window must remain readable when continuity records expand.
+
+### Related Files
+- `governance/toolkit/05_OPERATION/CVF_BATCH_CONTRACT_DETERMINISM_GUARD.md`
+- `governance/toolkit/05_OPERATION/CVF_SURFACE_SCAN_CONTINUITY_GUARD.md`
+- `governance/compat/check_batch_contract_determinism.py`
+- `governance/compat/check_surface_scan_registry.py`
+- `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
+- `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`
+- `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `AGENT_HANDOFF.md`
+- `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`

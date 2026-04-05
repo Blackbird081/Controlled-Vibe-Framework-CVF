@@ -69,6 +69,7 @@ Every handoff should include:
 - latest completed commit
 - tracked remote branch when available
 - canonical docs the next agent must read first
+- canonical scan continuity registry when next-tranche selection depends on prior scan state
 - the minimal phase-bounded context the next worker should load first
 - current tranche truth
 - what was actually delivered in the last batch
@@ -93,6 +94,7 @@ Read these first:
 - `<canonical doc path 2>`
 - `<canonical doc path 3>`
 - `<canonical doc path 4>`
+- `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` when the next move depends on what was already scanned
 
 Phase-bounded context to load first:
 - `<fact/history source that should stay as reference memory>`

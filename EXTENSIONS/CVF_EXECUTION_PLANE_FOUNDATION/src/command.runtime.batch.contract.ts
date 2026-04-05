@@ -41,8 +41,11 @@ export class CommandRuntimeBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: CommandRuntimeBatchContractDependencies = {}) {
-    this.commandRuntime = new CommandRuntimeContract(dependencies.commandRuntime ?? {});
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.commandRuntime = new CommandRuntimeContract({
+      ...(dependencies.commandRuntime ?? {}),
+      now: dependencies.commandRuntime?.now ?? this.now,
+    });
   }
 
   batch(inputs: CommandRuntimeBatchInput[]): CommandRuntimeBatchResult {
@@ -57,7 +60,6 @@ export class CommandRuntimeBatchContract {
       const batchId = computeDeterministicHash(
         "w51-t1-cp1-command-runtime-batch-id",
         batchHash,
-        processedAt,
       );
       return {
         batchId,
@@ -102,7 +104,6 @@ export class CommandRuntimeBatchContract {
     const batchId = computeDeterministicHash(
       "w51-t1-cp1-command-runtime-batch-id",
       batchHash,
-      processedAt,
     );
 
     return {

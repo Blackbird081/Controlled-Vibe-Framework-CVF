@@ -35,10 +35,11 @@ export class ContextPackagerBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: ContextPackagerBatchContractDependencies = {}) {
-    this.contract = new ContextPackagerContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new ContextPackagerContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: ContextPackagerRequest[]): ContextPackagerBatch {
@@ -82,7 +83,6 @@ export class ContextPackagerBatchContract {
         `empty:${emptyCount}`,
         `segments:${totalSegments}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

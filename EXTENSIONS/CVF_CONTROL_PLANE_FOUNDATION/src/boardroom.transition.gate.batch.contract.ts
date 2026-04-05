@@ -60,10 +60,11 @@ export class BoardroomTransitionGateBatchContract {
   constructor(
     dependencies: BoardroomTransitionGateBatchContractDependencies = {},
   ) {
-    this.contract = new BoardroomTransitionGateContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new BoardroomTransitionGateContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(sessions: BoardroomSession[]): BoardroomTransitionGateBatch {
@@ -97,7 +98,6 @@ export class BoardroomTransitionGateBatchContract {
         `proceed:${proceedCount}:return:${returnToDesignCount}:escalate:${escalateCount}:stop:${stopCount}`,
         `dominant:${dominantAction}:allowOrchestration:${allowOrchestration}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

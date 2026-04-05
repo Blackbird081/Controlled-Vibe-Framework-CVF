@@ -39,10 +39,11 @@ export class ContextEnrichmentBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: ContextEnrichmentBatchContractDependencies = {}) {
-    this.contract = new ContextEnrichmentContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new ContextEnrichmentContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: ContextEnrichmentBatchRequest[]): ContextEnrichmentBatch {
@@ -86,7 +87,6 @@ export class ContextEnrichmentBatchContract {
         `empty:${emptyCount}`,
         `segments:${totalSegments}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

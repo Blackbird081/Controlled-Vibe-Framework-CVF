@@ -1,0 +1,110 @@
+{
+  "classes": [
+    {
+      "id": "BATCH_BARREL_FAMILY",
+      "description": "closed or partially scanned governed batch-contract families used during tranche selection"
+    },
+    {
+      "id": "PLANE_SCAN",
+      "description": "whole-plane scan state used to decide whether a fresh quality assessment is still required"
+    },
+    {
+      "id": "POSTURE_LANE",
+      "description": "closed-by-default governance or relocation lanes that should not be reopened casually"
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "cpf_batch_barrel_families",
+      "surfaceClass": "BATCH_BARREL_FAMILY",
+      "status": "FULLY_CLOSED",
+      "lastScannedAt": "2026-04-05",
+      "scopePaths": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src",
+        "AGENT_HANDOFF.md"
+      ],
+      "canonicalSource": "AGENT_HANDOFF.md",
+      "nextAction": "Skip CPF batch barrel families during fresh tranche selection unless master architecture scope expands.",
+      "reopenCondition": "Reopen only through fresh GC-018 when a new whitepaper target introduces a genuinely unclosed CPF surface.",
+      "evidenceRefs": [
+        "AGENT_HANDOFF.md",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ]
+    },
+    {
+      "id": "epf_dispatch_batch_wave",
+      "surfaceClass": "BATCH_BARREL_FAMILY",
+      "status": "FULLY_CLOSED",
+      "lastScannedAt": "2026-04-05",
+      "scopePaths": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/epf.dispatch.barrel.ts",
+        "AGENT_HANDOFF.md"
+      ],
+      "canonicalSource": "AGENT_HANDOFF.md",
+      "nextAction": "Treat the dispatch-gate-runtime-async-status-reintake family as closed and move to fresh quality assessment elsewhere.",
+      "reopenCondition": "Reopen only through fresh GC-018 when a new EPF surface outside the closed dispatch family is explicitly authorized.",
+      "evidenceRefs": [
+        "AGENT_HANDOFF.md",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ]
+    },
+    {
+      "id": "gef_plane_scan",
+      "surfaceClass": "PLANE_SCAN",
+      "status": "NOT_YET_SCANNED",
+      "lastScannedAt": "2026-04-05",
+      "scopePaths": [
+        "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ],
+      "canonicalSource": "AGENT_HANDOFF.md",
+      "nextAction": "Fresh tranche selection may assess GEF before implementation starts; do not assume closed state from CPF or EPF evidence.",
+      "reopenCondition": "N/A until a governed GEF scan or tranche authorization records closure or open-candidate posture.",
+      "evidenceRefs": [
+        "AGENT_HANDOFF.md",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ]
+    },
+    {
+      "id": "lpf_plane_scan",
+      "surfaceClass": "PLANE_SCAN",
+      "status": "NOT_YET_SCANNED",
+      "lastScannedAt": "2026-04-05",
+      "scopePaths": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ],
+      "canonicalSource": "AGENT_HANDOFF.md",
+      "nextAction": "Fresh tranche selection may assess LPF before implementation starts; do not assume closed state from CPF or EPF evidence.",
+      "reopenCondition": "N/A until a governed LPF scan or tranche authorization records closure or open-candidate posture.",
+      "evidenceRefs": [
+        "AGENT_HANDOFF.md",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ]
+    },
+    {
+      "id": "relocation_lane",
+      "surfaceClass": "POSTURE_LANE",
+      "status": "CLOSED_BY_DEFAULT",
+      "lastScannedAt": "2026-04-05",
+      "scopePaths": [
+        "docs/reference/CVF_PREPUBLIC_P3_READINESS.md",
+        "docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md",
+        "v1.0",
+        "v1.1",
+        "REVIEW",
+        "ECOSYSTEM",
+        "CVF_SKILL_LIBRARY",
+        "ui_governance_engine"
+      ],
+      "canonicalSource": "AGENT_HANDOFF.md",
+      "nextAction": "Do not open another broad relocation wave; use docs curation and publication-boundary clarification only.",
+      "reopenCondition": "Reopen only through preservation override plus fresh GC-019 and GC-039 on a dedicated restructuring branch and secondary worktree.",
+      "evidenceRefs": [
+        "AGENT_HANDOFF.md",
+        "docs/reference/CVF_PREPUBLIC_P3_READINESS.md",
+        "docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md"
+      ]
+    }
+  ]
+}

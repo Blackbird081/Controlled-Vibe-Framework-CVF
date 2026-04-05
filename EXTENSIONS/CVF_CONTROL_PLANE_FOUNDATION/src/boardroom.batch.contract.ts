@@ -57,10 +57,11 @@ export class BoardroomBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: BoardroomBatchContractDependencies = {}) {
-    this.contract = new BoardroomContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new BoardroomContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(requests: BoardroomRequest[]): BoardroomBatchResult {
@@ -92,7 +93,6 @@ export class BoardroomBatchContract {
         `proceed:${proceedCount}:amend:${amendCount}:escalate:${escalateCount}:reject:${rejectCount}`,
         `dominant:${dominantDecision}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

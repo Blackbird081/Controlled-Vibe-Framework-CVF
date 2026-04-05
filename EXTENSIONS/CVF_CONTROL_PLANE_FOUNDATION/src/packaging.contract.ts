@@ -33,6 +33,7 @@ export interface PackagingResultSurface {
 
 export interface PackagingContractDependencies {
   context?: ContextFreezer;
+  now?: () => string;
 }
 
 // ─── Packaging Contract ──────────────────────────────────────────────
@@ -41,6 +42,7 @@ export class PackagingContract {
   private readonly context: ContextFreezer;
 
   constructor(dependencies: PackagingContractDependencies = {}) {
+    void dependencies.now;
     this.context = dependencies.context ?? new ContextFreezer();
   }
 

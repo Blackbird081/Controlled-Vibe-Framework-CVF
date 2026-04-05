@@ -51,6 +51,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_cpf_batch_helper_adoption.py", "--enforce"],
         ),
         (
+            "batch contract determinism",
+            ["python", "governance/compat/check_batch_contract_determinism.py", "--enforce"],
+        ),
+        (
             "canon summary evidence separation",
             ["python", "governance/compat/check_canon_summary_evidence_separation.py", "--enforce"],
         ),
@@ -81,6 +85,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
         (
             "progress tracker sync compatibility",
             ["python", "governance/compat/check_progress_tracker_sync.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
+            "surface scan continuity compatibility",
+            ["python", "governance/compat/check_surface_scan_registry.py", "--enforce"],
         ),
         (
             "multi-agent review governance compatibility",

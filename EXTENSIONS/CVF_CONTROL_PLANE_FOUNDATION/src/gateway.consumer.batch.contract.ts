@@ -54,10 +54,11 @@ export class GatewayConsumerBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: GatewayConsumerBatchContractDependencies = {}) {
-    this.contract = new GatewayConsumerContract(
-      dependencies.contractDependencies ?? {},
-    );
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.contract = new GatewayConsumerContract({
+      ...(dependencies.contractDependencies ?? {}),
+      now: dependencies.contractDependencies?.now ?? this.now,
+    });
   }
 
   batch(signals: GatewaySignalRequest[]): GatewayConsumptionBatchResult {
@@ -107,7 +108,6 @@ export class GatewayConsumerBatchContract {
         `partial:${partialCount}`,
         `degraded:${degradedCount}`,
       ],
-      batchIdParts: [createdAt],
     });
 
     return {

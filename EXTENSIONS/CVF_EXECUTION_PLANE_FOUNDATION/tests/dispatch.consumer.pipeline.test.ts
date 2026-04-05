@@ -39,7 +39,9 @@ function makeDispatchResult(options: {
       pipelineResult: {
         requestId: `request-${i}`,
         finalDecision: isAuthorized ? "ALLOW" : "BLOCK",
-        pipelineHash: `hash-${i}`,
+        results: [],
+        executedAt: FIXED_NOW,
+        durationMs: 0,
         blockedBy: isAuthorized ? undefined : "test-policy",
         escalatedBy: undefined,
         agentGuidance: undefined,

@@ -56,8 +56,8 @@ export class DispatchBatchContract {
   private readonly now: () => string;
 
   constructor(dependencies: DispatchBatchContractDependencies = {}) {
-    this.dispatch = dependencies.dispatch ?? createDispatchContract();
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.dispatch = dependencies.dispatch ?? createDispatchContract({ now: this.now });
   }
 
   batch(inputs: DispatchBatchInput[]): DispatchBatchResult {
@@ -101,7 +101,6 @@ export class DispatchBatchContract {
     const batchId = computeDeterministicHash(
       "w49-t1-cp1-dispatch-batch-id",
       batchHash,
-      createdAt,
     );
 
     return {

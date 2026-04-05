@@ -308,6 +308,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md | CPF public barrel changes | Keep `src/index.ts` thin and re-export-only |
 | CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md | CPF barrel smoke changes | Keep `tests/index.test.ts` smoke-only and ownership-clean |
 | CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md | Governed CPF batch family changes | Shared batch helper + shared fixture adoption required |
+| CVF_BATCH_CONTRACT_DETERMINISM_GUARD.md | Governed CPF/EPF batch contract changes | `batchId = hash(batchHash)` only + nested `now` propagation mandatory |
 | CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md | Canon summary doc changes | Summary docs must cite evidence, not inline typed evidence payloads |
 | CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md | Pre-public repository cleanup or root/extension lifecycle review | Visible roots and extension roots must be lifecycle-classified before relocation |
 | CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md | Pre-public publication or selective-distribution planning | Visible roots and extension roots must declare public/private exposure posture before publication decisions |
@@ -328,6 +329,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_MEMORY_GOVERNANCE_GUARD.md | Durable governance records | Correct memory class markers required |
 | CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md | Multi-agent intake/rebuttal/decision docs | Canonical review doc chain must be standardized |
 | CVF_PROGRESS_TRACKER_SYNC_GUARD.md | Tranche posture change | Canonical tracker and sync note must stay aligned |
+| CVF_SURFACE_SCAN_CONTINUITY_GUARD.md | Fresh tranche selection or scan-state change | Canonical scan registry must preserve what was already scanned |
 | CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md | New/resumed governed sessions | Canonical bootstrap must load first |
 | CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md | Major structural merge or move | Audit -> review -> decision path required |
 

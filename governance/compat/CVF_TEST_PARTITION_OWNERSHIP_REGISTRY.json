@@ -1816,6 +1816,17 @@
         "DesignConsumerBatchContract",
         "createDesignConsumerBatchContract"
       ]
+    },
+    {
+      "scope": "EPF Execution Bridge Consumer Batch (W48-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.bridge.consumer.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionBridgeConsumerBatchContract",
+        "createExecutionBridgeConsumerBatchContract"
+      ]
     }
   ]
 }

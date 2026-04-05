@@ -590,6 +590,15 @@ export type {
   ExecutionBridgeConsumerContractDependencies,
 } from "./execution.bridge.consumer.contract";
 
+export {
+  ExecutionBridgeConsumerBatchContract,
+  createExecutionBridgeConsumerBatchContract,
+} from "./execution.bridge.consumer.batch.contract";
+export type {
+  ExecutionBridgeBatchStatus,
+  ExecutionBridgeConsumptionBatchResult,
+  ExecutionBridgeConsumerBatchContractDependencies,
+} from "./execution.bridge.consumer.batch.contract";
 export type {
   LLMRequest,
   LLMUsage,

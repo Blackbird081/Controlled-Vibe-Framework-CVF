@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W47-T1 closed delivered; whitepaper `v3.7-W46T1` canonical; documentation-to-implementation gap CLOSED for W33–W46; all CPF barrel families FULLY CLOSED; relocation lane closed-by-default; repo canon converged into `main`; next: fresh quality assessment for next wave
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W48-T1 closed delivered; `ExecutionBridgeConsumerBatchContract` canonical; EPF 1154 (+31); `ExecutionBridgeConsumerContract.bridge()` batch surface FULLY CLOSED; consumer batch wave W44–W48 complete; whitepaper `v3.7-W46T1` canonical; all CPF barrel families FULLY CLOSED; next: fresh quality assessment for next wave
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`)
 
 ---
@@ -20,7 +20,7 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **2929 tests, 0 failures**
-- EPF (Execution Plane Foundation): **1123 tests, 0 failures**
+- EPF (Execution Plane Foundation): **1154 tests, 0 failures** (isolated; pre-existing ordering-sensitive flakiness in `bridge.runtime.pipeline.test.ts` in full-suite runs)
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
 
@@ -28,6 +28,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W48-T1 | ExecutionBridgeConsumerBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `ExecutionBridgeConsumerBatchContract` canonical; EPF 1154 (+31); `ExecutionBridgeConsumerContract.bridge()` batch surface FULLY CLOSED; consumer batch wave W44–W48 complete |
 | W47-T1 | Whitepaper Update v3.7-W46T1 (DOCUMENTATION class) | CLOSED DELIVERED 2026-04-05 — whitepaper bumped `v3.6-W32T1` → `v3.7-W46T1`; W33–W46 REALIZATION tranches recorded; CPF 2929 unchanged; documentation-to-implementation gap CLOSED |
 | W46-T1 | Design Consumer Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — DesignConsumerBatchContract canonical; CPF 2929 tests (+29); all 9 pass conditions satisfied; DesignConsumerContract.consume() batch surface closed; `control.plane.design.boardroom.barrel.ts` FULLY CLOSED |
 | W45-T1 | Gateway Consumer Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — GatewayConsumerBatchContract canonical; CPF 2900 tests (+30); all 9 pass conditions satisfied; GatewayConsumerContract.consume() batch surface closed; `control.plane.gateway.barrel.ts` FULLY CLOSED |
@@ -60,14 +61,14 @@
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1`
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1`
 - Documentation-to-implementation gap: CLOSED (`v3.7-W46T1`)
 
 ---
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. Next: fresh quality assessment against `v3.7-W46T1` whitepaper — all CPF barrel families FULLY CLOSED; whitepaper synchronized; architecture baseline canonical.**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. Next: fresh quality assessment for next wave — W48-T1 CLOSED DELIVERED; EPF bridge consumer batch surface FULLY CLOSED; consumer batch wave W44–W48 complete; consider next EPF/GEF/LPF open surface per roadmap.**
 
 Current guidance:
 
@@ -78,6 +79,7 @@ Current guidance:
 - W44-T1 closure review: `docs/reviews/CVF_W44_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
 - GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W44_T1_CLOSED_2026-04-05.md`
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
+<<<<<<< Updated upstream
 - **Relocation lane CLOSED-BY-DEFAULT (2026-04-04)**: `P3/CP1` is the only landed physical move. `P3/CP3–CP5` + `P4/CP1–CP17` are landed governance/package-boundary canon. `P3/CP2` physical move remains excluded under freeze-in-place posture. This closure remains in force after `main` / `cvf-next` convergence. Remaining human-gated item is `npm publish` and it is not a relocation task.
 - **Reopen rule**: do not open another broad relocation wave by default. Reopen only through preservation override + fresh `GC-019` + fresh `GC-039` + dedicated `restructuring/p3-*` branch + secondary worktree. Do not perform reopened relocation work directly on `main` or synchronized `cvf-next`.
 - **Freeze-in-place root set**: `v1.0/`, `v1.1/`, `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, `ui_governance_engine/`
@@ -85,6 +87,9 @@ Current guidance:
 - **Allowed next work on this lane**: docs curation, extracted orientation, publication-boundary clarification, and handoff alignment only
 - **Preferred repo-level priority after that**: continue from `main` and return focus to `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` and architecture-following continuation work
 - Canonical restructuring refs: `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`, `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`, `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`, `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md`
+=======
+- **Non-canonical side lanes are out of scope for this handoff**: do not continue isolated restructuring or publication-boundary work from `cvf-next`
+>>>>>>> Stashed changes
 - If touching CPF batch-contract surfaces, reuse `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/batch.contract.shared.ts` and `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/helpers/cpf.batch.contract.fixtures.ts`
 - W7 retained active anchors: `docs/roadmaps/CVF_W7_R14_R15_R16_INTEGRATION_ROADMAP_2026-03-25.md`, `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md`, `docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md`
 - W7 detailed tranche packet archive indexes: `docs/reviews/archive/CVF_ARCHIVE_INDEX.md`, `docs/roadmaps/archive/CVF_ARCHIVE_INDEX.md`

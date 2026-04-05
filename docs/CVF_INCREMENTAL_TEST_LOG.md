@@ -3064,3 +3064,17 @@ Utility and guard:
   - DEGRADED triggered by ESCALATE (finance domain + no-context/R3 plan warnings); PARTIAL triggered by injected unanswered clarifications → AMEND_PLAN
   - `warnedCount` = receipts with `warnings.length > 0`; `blockedCount` = receipts with `orchestrationBlocked === true`
   - `DesignConsumerContract.consume()` batch surface closed; `control.plane.design.boardroom.barrel.ts` FULLY CLOSED (W26-W34 + W46; all 9 batch surfaces)
+
+## W48-T1 CP1 — ExecutionBridgeConsumerBatchContract (2026-04-05)
+- Tranche: W48-T1 | Class: REALIZATION | Control Point: CP1 (Full Lane)
+- Contract: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.bridge.consumer.batch.contract.ts`
+- Tests: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.bridge.consumer.batch.contract.test.ts`
+- Test delta: EPF 1123 → 1154 (+31); 31 tests, 31 pass
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.bridge.consumer.batch.contract.test.ts` → 31 tests, 0 failures
+- Notes:
+  - `ExecutionBridgeConsumerBatchContract.batch(receipts)` calls `ExecutionBridgeConsumerContract.bridge()` per `DesignConsumptionReceipt`
+  - Status: `FULLY_AUTHORIZED` (allowedCount > 0, deniedCount=0, sandboxedCount=0) | `PARTIALLY_AUTHORIZED` (allowedCount > 0, denied/sandboxed > 0) | `BLOCKED` (allowedCount=0); `"NONE"` for empty
+  - Dominance: `BLOCKED > PARTIALLY_AUTHORIZED > FULLY_AUTHORIZED`
+  - `warnedCount` = receipts with `warnings.length > 0`; `totalAuthorizedForExecution` = sum of `policyGateResult.allowedCount`
+  - Batch hash salt: `"w48-t1-cp1-execution-bridge-consumer-batch"`; batch ID salt: `"w48-t1-cp1-execution-bridge-consumer-batch-id"`
+  - `ExecutionBridgeConsumerContract.bridge()` batch surface FULLY CLOSED; consumer batch wave W44–W48 complete

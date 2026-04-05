@@ -4,7 +4,7 @@ Memory class: SUMMARY_RECORD
 
 > Date: 2026-04-05
 > Scope: convert the current `SUBSTANTIALLY DELIVERED` master architecture posture into one canonical closure path that future agents can follow without re-scanning already-closed lanes
-> Canonical baseline: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; operational readout refreshed through `W54-T1`)
+> Canonical baseline: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; operational readout refreshed through `W56-T1`)
 > Entry condition: no active tranche; current-cycle restructuring is `DONE`; relocation remains closed-by-default
 > Authorization posture: planning-only until a fresh bounded `GC-018` is opened for one closure family at a time
 
@@ -12,7 +12,7 @@ Memory class: SUMMARY_RECORD
 
 ## 1. Objective
 
-Turn the current post-`W54-T1` architecture state into a single closure sequence that:
+Turn the current post-`W56-T1` architecture state into a single closure sequence that:
 
 - preserves the delivered CPF and EPF closure work already recorded as canon
 - prevents future agents from re-scanning already-closed surfaces by default
@@ -40,9 +40,9 @@ The following are treated as fixed unless a new governed wave explicitly reopens
 
 | Area | Current posture | What is already settled | What still blocks `DONE` |
 |---|---|---|---|
-| Control Plane | `SUBSTANTIALLY DELIVERED` | CPF consumer bridges closed; post-W7 CPF closures delivered through `W46-T1`; CPF batch barrel families fully closed | explicit plane-level closure decision has not yet been recorded in canon |
+| Control Plane | `SUBSTANTIALLY DELIVERED` -> `DONE-ready` | CPF consumer bridges closed; post-W7 CPF closures delivered through `W46-T1`; CPF batch barrel families fully closed; `W55-T1 MC1` closure assessment is canonically closed | promotion to `DONE` is deferred to `MC5` canon pass |
 | Execution Plane | `SUBSTANTIALLY DELIVERED` | EPF consumer bridges closed; dispatch family through `W54-T1` fully closed | `Model Gateway` and `Sandbox Runtime` still represent the most visible unresolved target-state gap |
-| Governance Layer | `SUBSTANTIALLY DELIVERED` | GEF bridges and W6/W7 governance surfaces are delivered | no governed closure scan has yet promoted GEF from delivered state to closure-ready plane posture |
+| Governance Layer | `SUBSTANTIALLY DELIVERED` -> `DONE (6/6)` | GEF bridges and W6/W7 governance surfaces are delivered; `W56-T1 MC2 CP1+CP2` is canonically closed; Trust & Isolation label currency gap is resolved | promotion to whitepaper `DONE` wording is deferred to `MC5` canon pass |
 | Learning Plane | `SUBSTANTIALLY DELIVERED` | LPF bridges and learning expansion through `W10-T1` are delivered | no governed closure scan has yet promoted LPF from delivered state to closure-ready plane posture |
 | Cross-cutting architecture claims | mixed | whitepaper truth reconciliation is done; current baseline is synchronized | whitepaper still does not claim a fully consolidated agent-definition registry or `L0-L4` physical source-tree consolidation |
 
@@ -67,8 +67,8 @@ Do not start by re-scanning the whole repo.
 | Phase | Scope | Type | Why this phase exists | Exit criteria |
 |---|---|---|---|---|
 | `MC0` | Closure routing lock | `CANON ALIGNMENT` | freeze one successor path so future agents stop guessing | handoff, tracker, whitepaper, and this roadmap point to the same closure path |
-| `MC1` | CPF closure assessment | `ASSESSMENT / DECISION` | CPF appears closest to `DONE`, so verify whether only a status-promotion decision is missing | one governed assessment records either `DONE-ready` or a bounded remaining gap |
-| `MC2` | GEF closure assessment | `ASSESSMENT` | scan continuity registry says GEF is `NOT_YET_SCANNED` | governed GEF assessment records `DONE-ready`, `open-candidate`, or `defer-with-reason` |
+| `MC1` | CPF closure assessment | `ASSESSMENT / DECISION` | closed canonically at `W55-T1`; establishes whether CPF is already closure-complete without reopening implementation | outcome recorded as `DONE-ready`; final promotion deferred to `MC5` |
+| `MC2` | GEF closure assessment | `ASSESSMENT / DECISION` | closed canonically at `W56-T1 CP1+CP2`; resolves plane closure posture plus Trust & Isolation label currency | outcome recorded as `DONE (6/6)`; final whitepaper promotion deferred to `MC5` |
 | `MC3` | LPF closure assessment | `ASSESSMENT` | scan continuity registry says LPF is `NOT_YET_SCANNED` | governed LPF assessment records `DONE-ready`, `open-candidate`, or `defer-with-reason` |
 | `MC4` | EPF closure focus | `ASSESSMENT / POSSIBLE IMPLEMENTATION` | EPF has the clearest visible residual gap in whitepaper topology | one bounded decision clarifies whether `Model Gateway` and `Sandbox Runtime` require code, wording refinement, or formal deferment |
 | `MC5` | Whitepaper promotion pass | `DOCUMENTATION / DECISION` | after per-plane posture is known, canon must be upgraded in one truth pass | whitepaper/tracker/handoff are updated to reflect the new closure posture without reopening unrelated lanes |
@@ -97,12 +97,12 @@ Reopen rule:
 
 Default assumption:
 
-- GEF is not reopened for implementation before a governed scan exists
+- GEF is closed for implementation in the current cycle unless a future whitepaper target introduces a genuinely new open surface
 
 What to verify:
 
-- whether the already-delivered GEF surfaces are sufficient for plane-level closure
-- whether any missing item is a true architecture gap or only a missing closure decision
+- `W56-T1 CP1+CP2` already verified plane-level closure and resolved the Trust & Isolation label currency gap
+- no new GEF implementation is required before `MC5`
 
 ### 6.3 `MC3` Learning Plane
 
@@ -173,11 +173,11 @@ This closure roadmap is considered complete when:
 
 ## 9. Immediate Default Next Steps
 
-1. Execute `MC1` first for CPF because it is the most likely `DONE-ready` plane.
-2. Execute `MC2` for GEF because it is explicitly `NOT_YET_SCANNED`.
-3. Execute `MC3` for LPF because it is explicitly `NOT_YET_SCANNED`.
+1. Treat `MC1` as canonically closed with outcome `DONE-ready`; do not reopen CPF by default.
+2. Treat `MC2` as canonically closed with outcome `DONE (6/6)`; do not reopen GEF by default.
+3. Execute `MC3` for LPF because it remains explicitly `NOT_YET_SCANNED`.
 4. Execute `MC4` for EPF with focus limited to `Model Gateway` and `Sandbox Runtime`.
-5. Execute `MC5` only after the above closure posture is known.
+5. Execute `MC5` after `MC3` and `MC4` finalize the remaining plane postures.
 
 ---
 

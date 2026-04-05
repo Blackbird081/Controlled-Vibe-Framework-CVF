@@ -163,7 +163,7 @@ All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every
 
 ## GEF / LPF Surface State
 
-- **GEF (Governance Expansion Foundation)**: 625 tests, 0 failures. Scan status: `ASSESSED_DONE_READY` (W56-T1 CP1+CP2). GEF is **DONE (6/6)** — all 13 base contracts + all consumer pipeline batch contracts + standalone `watchdog.escalation.pipeline.batch.contract.ts` present; Trust & Isolation DONE (CP2). No further GEF implementation needed before MC5.
+- **GEF (Governance Expansion Foundation)**: 625 tests, 0 failures. Scan status: `FULLY_CLOSED` (W56-T1 CP1+CP2). GEF is **DONE (6/6)** — all 13 base contracts + all consumer pipeline batch contracts + standalone `watchdog.escalation.pipeline.batch.contract.ts` present; Trust & Isolation DONE (CP2). No further GEF implementation needed before MC5.
 - **LPF (Learning Plane Foundation)**: 1465 tests, 0 failures. Scan status: `NOT_YET_SCANNED` — do not assume LPF closed state from GEF/CPF evidence. Read `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` before starting W57-T1 MC3.
 
 ---

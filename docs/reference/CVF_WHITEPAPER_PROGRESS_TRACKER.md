@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-05` (W54-T1 CLOSED DELIVERED — ExecutionReintakeBatchContract; CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 tests, 0 failures; no active tranche; CPF batch barrel families FULLY CLOSED; EPF standalone batch wave W49–W54 FULLY CLOSED; next step is fresh quality assessment guided by canonical scan continuity registry)
+> Last refreshed: `2026-04-05` (W55-T1 CLOSED DELIVERED — MC1: CPF Plane Closure Assessment; CPF DONE-ready; agent-definition registry + L0-L4 consolidation deferred (CLOSED-BY-DEFAULT); CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 tests, 0 failures; no active tranche; canonical next step: W56-T1 MC2 GEF Closure Assessment)
 
 ---
 
@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W54-T1 CLOSED DELIVERED 2026-04-05; CPF 2929; EPF 1301; CPF batch barrel families FULLY CLOSED; EPF standalone batch wave W49–W54 FULLY CLOSED; next: follow the canonical master-architecture closure roadmap using the scan continuity registry before opening a new tranche` |
+| Current active tranche | `NONE — W55-T1 CLOSED DELIVERED 2026-04-05; MC1 CPF Plane Closure Assessment DONE-ready; agent-definition registry + L0-L4 consolidation deferred (CLOSED-BY-DEFAULT); CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 tests unchanged; next: W56-T1 MC2 GEF Closure Assessment` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05)` |
 
 ---
@@ -29,7 +29,7 @@ Memory class: POINTER_RECORD
 
 | Area | Whitepaper target | Current state | Status | Next governed move |
 |---|---|---|---|---|
-| Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T30` + `W2-T36` to `W2-T38` closed; ALL CPF consumer pipeline bridges canonically closed; post-W7 CPF closures delivered through `W46-T1`; all CPF batch barrel families are now FULLY CLOSED; CPF 2929 tests, 0 failures | `SUBSTANTIALLY DELIVERED` | execute `MC1` first: governed CPF closure assessment; do not reopen CPF by default unless a genuinely unclosed surface appears |
+| Control Plane | AI Gateway, Knowledge Layer, Context Builder, Boardroom | `W1-T1` to `W1-T30` + `W2-T36` to `W2-T38` closed; ALL CPF consumer pipeline bridges canonically closed; post-W7 CPF closures delivered through `W46-T1`; all CPF batch barrel families are now FULLY CLOSED; CPF 2929 tests, 0 failures; **W55-T1 MC1 assessment: DONE-ready** — agent-definition registry + L0-L4 consolidation deferred (relocation-class, CLOSED-BY-DEFAULT) | `SUBSTANTIALLY DELIVERED` → **DONE-ready** | no new CPF implementation needed; promote to DONE in MC5 whitepaper pass |
 | Execution Plane | Model Gateway, Command Runtime, MCP Bridge, observer/feedback loop | `W2-T1` to `W2-T29` + `W6-T1` closed; ALL EPF consumer pipeline bridges canonically closed; EPF standalone batch wave `W49-T1` through `W54-T1` is now FULLY CLOSED for the dispatch-gate-runtime-async-status-reintake family; EPF 1301 tests, 0 failures | `SUBSTANTIALLY DELIVERED` | execute `MC4` after CPF/GEF/LPF assessment; focus only on `Model Gateway` and `Sandbox Runtime` before proposing any new EPF code |
 | Governance Layer | Policy, Trust, Guard Engine, Audit/Consensus, Watchdog | `W3-T1` to `W3-T18` + `W6-T4/T5/T6` closed; ALL GEF consumer pipeline bridges canonically closed — watchdog, audit-signal, consensus, checkpoint-log, checkpoint-reintake-summary, watchdog escalation, watchdog pulse, governance checkpoint, reintake, pattern drift | `SUBSTANTIALLY DELIVERED` | execute `MC2`: fresh governed GEF closure assessment because scan continuity still marks this plane `NOT_YET_SCANNED` |
 | Learning Plane | Feedback Ledger, Pattern Insight, Truth Model, Evaluation, Governance feedback, storage, observability | `W4-T1` to `W4-T25` closed; ALL 18 LPF base contracts fully bridged — evaluation engine, truth score, pattern detection, governance signal, re-injection, storage, observability, and all 12 remaining consumer pipeline bridges; `W10-T1` added `ReputationSignalContract`, `TaskMarketplaceContract`, and 2 batch contracts; 1465 tests, 0 failures | `SUBSTANTIALLY DELIVERED` | execute `MC3`: fresh governed LPF closure assessment because scan continuity still marks this plane `NOT_YET_SCANNED` |
@@ -193,6 +193,14 @@ Memory class: POINTER_RECORD
 | `W45-T1` Gateway Consumer Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — GatewayConsumerBatchContract canonical; CPF 2900 tests (+30); all 9 pass conditions satisfied; GatewayConsumerContract.consume() batch surface closed; control.plane.gateway.barrel.ts FULLY CLOSED (all 8 batch surfaces)` |
 | `W46-T1` Design Consumer Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — DesignConsumerBatchContract canonical; CPF 2929 tests (+29); all 9 pass conditions satisfied; DesignConsumerContract.consume() batch surface closed; control.plane.design.boardroom.barrel.ts FULLY CLOSED (all 9 batch surfaces: W26–W34 + W46)` |
 | `W47-T1` Whitepaper Update v3.7-W46T1 (DOCUMENTATION class) | `CLOSED DELIVERED 2026-04-05 — whitepaper bumped v3.6-W32T1 → v3.7-W46T1; W33–W46 REALIZATION tranches recorded; CPF 2929 unchanged; documentation-to-implementation gap CLOSED; all CPF barrel families FULLY CLOSED` |
+| `W48-T1` Execution Bridge Consumer Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — ExecutionBridgeConsumerBatchContract canonical; EPF 1154 (+31); ExecutionBridgeConsumerContract.bridge() batch surface FULLY CLOSED; consumer batch wave W44–W48 complete` |
+| `W49-T1` Dispatch Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — DispatchBatchContract canonical; EPF 1176 (+22); DispatchContract.dispatch() batch surface FULLY CLOSED; EPF index.ts barrel split (1450→1423); epf.dispatch.barrel.ts introduced; EPF standalone batch wave open` |
+| `W50-T1` Policy Gate Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — PolicyGateBatchContract canonical; EPF 1199 (+23); PolicyGateContract.evaluate() batch surface FULLY CLOSED; Phase A: PolicyGate exports moved to epf.dispatch.barrel.ts; dispatch-gate barrel family complete` |
+| `W51-T1` Command Runtime Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — CommandRuntimeBatchContract canonical; EPF 1222 (+23); CommandRuntimeContract.execute() batch surface FULLY CLOSED; Phase B: CommandRuntime exports moved to epf.dispatch.barrel.ts (~94 lines); dispatch-gate-runtime barrel family complete` |
+| `W52-T1` Async Command Runtime Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — AsyncCommandRuntimeBatchContract canonical; EPF 1249 (+27); AsyncCommandRuntimeContract.issue() batch surface FULLY CLOSED; Phase C: AsyncCommandRuntime exports moved to epf.dispatch.barrel.ts (~120 lines); dispatch-gate-runtime-async barrel family complete` |
+| `W53-T1` Async Execution Status Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — AsyncExecutionStatusBatchContract canonical; EPF 1275 (+26); AsyncExecutionStatusContract.assess() batch surface FULLY CLOSED; Phase D: AsyncExecutionStatus exports moved to epf.dispatch.barrel.ts (~139 lines); dispatch-gate-runtime-async-status barrel family complete` |
+| `W54-T1` Execution Reintake Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — ExecutionReintakeBatchContract canonical; EPF 1301 (+26); ExecutionReintakeContract.reinject() batch surface FULLY CLOSED; Phase E: ExecutionReintake + ExecutionReintakeSummary exports moved to epf.dispatch.barrel.ts (~170 lines); dispatch-gate-runtime-async-status-reintake barrel family FULLY CLOSED; EPF standalone batch wave W49–W54 ALL CLOSED` |
+| `W55-T1` MC1: CPF Plane Closure Assessment (ASSESSMENT / DECISION class) | `CLOSED DELIVERED 2026-04-05 — MC1 CPF Plane Closure Assessment complete; outcome: DONE-ready; all CPF batch barrel families verified FULLY CLOSED; all CPF consumer bridges closed; CPF 2929 tests 0 failures; agent-definition registry + L0-L4 consolidation deferred (relocation-class, CLOSED-BY-DEFAULT); no new CPF implementation needed; promote to DONE in MC5` |
 
 ---
 
@@ -220,15 +228,16 @@ Memory class: POINTER_RECORD
 ## Canonical Pointers
 
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
-- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; operational readout refreshed through `W54-T1`)
+- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; operational readout refreshed through `W55-T1`)
 - Canonical scan continuity registry: `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
+- Canonical closure roadmap: `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W47_T1_CLOSED_2026-04-05.md` (W47-T1 CLOSED DELIVERED 2026-04-05 — whitepaper v3.7-W46T1 canonical; documentation-to-implementation gap CLOSED)
-- Latest continuity sync delta: `docs/baselines/CVF_W32_T1_ARCHITECTURE_BASELINE_SYNC_DELTA_2026-04-01.md`
-- Current closure anchor: `docs/reviews/CVF_W47_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W46_CONTINUATION_QUALITY_ASSESSMENT_2026-04-05.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W47_T1_WHITEPAPER_UPDATE_V3_7_2026-04-05.md` (W47-T1 GC-018 AUTHORIZED — CLOSED DELIVERED)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W55_T1_CLOSED_2026-04-05.md` (W55-T1 CLOSED DELIVERED 2026-04-05 — MC1 CPF Plane Closure Assessment; CPF DONE-ready)
+- Latest continuity sync delta: `docs/baselines/CVF_W55_T1_CP1_CPF_CLOSURE_ASSESSMENT_DELTA_2026-04-05.md`
+- Current closure anchor: `docs/reviews/CVF_W55_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
+- Active quality assessment: `docs/assessments/CVF_POST_W54_CONTINUATION_QUALITY_ASSESSMENT_2026-04-05.md`
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W55_T1_CPF_CLOSURE_ASSESSMENT_2026-04-05.md` (W55-T1 GC-018 AUTHORIZED — CLOSED DELIVERED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

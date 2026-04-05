@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W48-T1 closed delivered; `ExecutionBridgeConsumerBatchContract` canonical; EPF 1154 (+31); `ExecutionBridgeConsumerContract.bridge()` batch surface FULLY CLOSED; consumer batch wave W44–W48 complete; whitepaper `v3.7-W46T1` canonical; all CPF barrel families FULLY CLOSED; next: fresh quality assessment for next wave
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W49-T1 closed delivered; `DispatchBatchContract` canonical; EPF 1176 (+22); `DispatchContract.dispatch()` batch surface FULLY CLOSED; EPF `index.ts` barrel split complete (1423/1450 lines); `epf.dispatch.barrel.ts` introduced; whitepaper `v3.7-W46T1` canonical; all CPF barrel families FULLY CLOSED; EPF standalone batch wave open; next: fresh quality assessment for next EPF standalone batch surface
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`)
 
 ---
@@ -20,7 +20,7 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **2929 tests, 0 failures**
-- EPF (Execution Plane Foundation): **1154 tests, 0 failures** (isolated; pre-existing ordering-sensitive flakiness in `bridge.runtime.pipeline.test.ts` in full-suite runs)
+- EPF (Execution Plane Foundation): **1176 tests, 0 failures** (isolated; pre-existing ordering-sensitive flakiness in `bridge.runtime.pipeline.test.ts` in full-suite runs)
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
 
@@ -28,6 +28,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W49-T1 | DispatchBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `DispatchBatchContract` canonical; EPF 1176 (+22); `DispatchContract.dispatch()` batch surface FULLY CLOSED; EPF `index.ts` barrel split (1450→1423); `epf.dispatch.barrel.ts` introduced; EPF standalone batch wave open |
 | W48-T1 | ExecutionBridgeConsumerBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `ExecutionBridgeConsumerBatchContract` canonical; EPF 1154 (+31); `ExecutionBridgeConsumerContract.bridge()` batch surface FULLY CLOSED; consumer batch wave W44–W48 complete |
 | W47-T1 | Whitepaper Update v3.7-W46T1 (DOCUMENTATION class) | CLOSED DELIVERED 2026-04-05 — whitepaper bumped `v3.6-W32T1` → `v3.7-W46T1`; W33–W46 REALIZATION tranches recorded; CPF 2929 unchanged; documentation-to-implementation gap CLOSED |
 | W46-T1 | Design Consumer Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — DesignConsumerBatchContract canonical; CPF 2929 tests (+29); all 9 pass conditions satisfied; DesignConsumerContract.consume() batch surface closed; `control.plane.design.boardroom.barrel.ts` FULLY CLOSED |
@@ -177,7 +178,7 @@ All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every
 **Your options before adding exports to EPF `index.ts`**:
 1. **Preferred**: Split `index.ts` into domain-local sub-barrels (e.g., per plane-section or per contract family). This removes the exception need entirely.
 2. **Fallback**: Ask the user to manually approve a registry bump (modify `approvedMaxLines` and commit via a separate human-approved override commit outside the normal pre-commit chain).
-3. **Workaround used in W48-T1**: Removed the comment line and one blank line from the export block to trim the 11-line addition to 9 lines and land exactly at 1450. This is not repeatable — there is **no margin left**.
+3. **Resolved in W49-T1**: Barrel split extracted dispatch family exports to `epf.dispatch.barrel.ts`. `index.ts` is now at **1423/1450 lines** (−27). New dispatch-family exports must go to `epf.dispatch.barrel.ts`. Other families near capacity should follow the same split pattern.
 
 **Do not attempt**: `git commit --no-verify` or bypass of the hook chain without explicit user direction.
 

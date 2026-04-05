@@ -1827,6 +1827,17 @@
         "ExecutionBridgeConsumerBatchContract",
         "createExecutionBridgeConsumerBatchContract"
       ]
+    },
+    {
+      "scope": "EPF Dispatch Batch (W49-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/dispatch.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "DispatchBatchContract",
+        "createDispatchBatchContract"
+      ]
     }
   ]
 }

@@ -3078,3 +3078,20 @@ Utility and guard:
   - `warnedCount` = receipts with `warnings.length > 0`; `totalAuthorizedForExecution` = sum of `policyGateResult.allowedCount`
   - Batch hash salt: `"w48-t1-cp1-execution-bridge-consumer-batch"`; batch ID salt: `"w48-t1-cp1-execution-bridge-consumer-batch-id"`
   - `ExecutionBridgeConsumerContract.bridge()` batch surface FULLY CLOSED; consumer batch wave W44–W48 complete
+
+## W49-T1 CP1 — DispatchBatchContract (2026-04-05)
+- Tranche: W49-T1 | Class: REALIZATION | Control Point: CP1 (Full Lane)
+- Contract: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/dispatch.batch.contract.ts`
+- Barrel: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/epf.dispatch.barrel.ts` (barrel split prerequisite)
+- Tests: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/dispatch.batch.contract.test.ts`
+- Test delta: EPF 1154 → 1176 (+22); 22 tests, 22 pass
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/dispatch.batch.contract.test.ts` → 22 tests, 0 failures
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` → 1176 tests, 0 failures (full suite, no regressions from barrel split)
+- Notes:
+  - `DispatchBatchContract.batch(inputs)` calls `DispatchContract.dispatch()` per `DispatchBatchInput`
+  - Input: `{ orchestrationId: string; assignments: TaskAssignment[] }[]`
+  - Status: `FULLY_AUTHORIZED` (totalAuthorized > 0, totalBlocked=0, totalEscalated=0) | `PARTIALLY_AUTHORIZED` (totalAuthorized > 0, blocked/escalated > 0) | `FULLY_BLOCKED` (totalAuthorized=0, non-empty) | `"NONE"` (empty)
+  - `totalAssignments` = sum of all `assignments.length` across inputs; `warnedCount` = results with `warnings.length > 0`
+  - Batch hash salt: `"w49-t1-cp1-dispatch-batch"`; batch ID salt: `"w49-t1-cp1-dispatch-batch-id"`
+  - EPF `index.ts` barrel split: 1450 → 1423 lines (−27); dispatch family extracted to `epf.dispatch.barrel.ts`
+  - `DispatchContract.dispatch()` batch surface FULLY CLOSED; EPF standalone batch wave open

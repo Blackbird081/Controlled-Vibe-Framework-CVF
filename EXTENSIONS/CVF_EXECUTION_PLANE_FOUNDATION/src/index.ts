@@ -40,26 +40,8 @@ export type {
   AsyncRuntimeConsumerPipelineBatchContractDependencies,
 } from "./async.runtime.consumer.pipeline.batch.contract";
 
-// W2-T27 — Dispatch Consumer Pipeline Bridge (CP1)
-export {
-  DispatchConsumerPipelineContract,
-  createDispatchConsumerPipelineContract,
-} from "./dispatch.consumer.pipeline.contract";
-export type {
-  DispatchConsumerPipelineRequest,
-  DispatchConsumerPipelineResult,
-  DispatchConsumerPipelineContractDependencies,
-} from "./dispatch.consumer.pipeline.contract";
-
-// W2-T27 — Dispatch Consumer Pipeline Batch (CP2)
-export {
-  DispatchConsumerPipelineBatchContract,
-  createDispatchConsumerPipelineBatchContract,
-} from "./dispatch.consumer.pipeline.batch.contract";
-export type {
-  DispatchConsumerPipelineBatchResult,
-  DispatchConsumerPipelineBatchContractDependencies,
-} from "./dispatch.consumer.pipeline.batch.contract";
+// W2-T27 + W2-T2 + W49-T1 — Dispatch family (consumer pipeline, contract, batch)
+export * from "./epf.dispatch.barrel";
 
 // W2-T25 — CommandRuntime Consumer Pipeline Bridge (CP1)
 export {
@@ -559,16 +541,7 @@ export type {
   ExecutionPipelineContractDependencies,
 } from "./execution.pipeline.contract";
 
-// W2-T2 — Execution Dispatch Bridge (CP1–CP3)
-export {
-  DispatchContract,
-  createDispatchContract,
-} from "./dispatch.contract";
-export type {
-  DispatchEntry,
-  DispatchResult,
-  DispatchContractDependencies,
-} from "./dispatch.contract";
+// W2-T2 — Execution Dispatch Bridge (CP2–CP3)
 export {
   PolicyGateContract,
   createPolicyGateContract,

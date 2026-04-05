@@ -239,6 +239,6 @@ Memory class: POINTER_RECORD
 - Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W56_T1_CLOSED_2026-04-05.md` (W56-T1 CP1+CP2 CLOSED DELIVERED 2026-04-05 — MC2 GEF fully DONE; 6/6 GEF components DONE)
 - Latest continuity sync delta: `docs/baselines/CVF_W56_T1_CP1_GEF_CLOSURE_ASSESSMENT_DELTA_2026-04-05.md`
 - Current closure anchor: `docs/reviews/CVF_W56_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W55_CONTINUATION_QUALITY_ASSESSMENT_2026-04-05.md`
+- Active quality assessment: `docs/assessments/CVF_POST_W56_CONTINUATION_QUALITY_ASSESSMENT_2026-04-05.md`
 - Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W56_T1_GEF_CLOSURE_ASSESSMENT_2026-04-05.md` (W56-T1 GC-018 AUTHORIZED — CLOSED DELIVERED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

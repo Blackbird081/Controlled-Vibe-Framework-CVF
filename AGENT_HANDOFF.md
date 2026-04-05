@@ -77,7 +77,7 @@
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. Canonical next step: W56-T1 MC2 GEF Closure Assessment.**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. Canonical next step: W57-T1 MC3 LPF Closure Assessment.**
 
 Current guidance:
 

@@ -1783,6 +1783,17 @@
         "RouteMatchLogBatchContract",
         "createRouteMatchLogBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Consumer Batch (W44-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/consumer.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ConsumerBatchContract",
+        "createConsumerBatchContract"
+      ]
     }
   ]
 }

@@ -88,3 +88,14 @@ export type {
   PackagingBatch,
   PackagingBatchContractDependencies,
 } from "./packaging.batch.contract";
+
+// W44-T1 — ConsumerBatchContract
+export {
+  ConsumerBatchContract,
+  createConsumerBatchContract,
+} from "./consumer.batch.contract";
+export type {
+  ConsumptionBatchStatus,
+  ConsumerBatch,
+  ConsumerBatchContractDependencies,
+} from "./consumer.batch.contract";

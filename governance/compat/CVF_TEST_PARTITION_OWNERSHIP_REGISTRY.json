@@ -1849,6 +1849,17 @@
         "PolicyGateBatchContract",
         "createPolicyGateBatchContract"
       ]
+    },
+    {
+      "scope": "EPF Command Runtime Batch (W51-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/command.runtime.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "CommandRuntimeBatchContract",
+        "createCommandRuntimeBatchContract"
+      ]
     }
   ]
 }

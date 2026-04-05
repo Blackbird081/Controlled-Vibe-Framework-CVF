@@ -3112,3 +3112,20 @@ Utility and guard:
   - Batch hash salt: `"w50-t1-cp1-policy-gate-batch"`; batch ID salt: `"w50-t1-cp1-policy-gate-batch-id"`
   - Phase A: PolicyGate exports moved from `index.ts` → `epf.dispatch.barrel.ts`; index.ts ~1423 → ~1413 lines
   - `PolicyGateContract.evaluate()` batch surface FULLY CLOSED; EPF standalone batch wave open (CommandRuntime next)
+
+## W51-T1 CP1 — CommandRuntimeBatchContract (2026-04-05)
+- Tranche: W51-T1 | Class: REALIZATION | Control Point: CP1 (Full Lane)
+- Contract: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/command.runtime.batch.contract.ts`
+- Barrel: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/epf.dispatch.barrel.ts` (Phase B: CommandRuntime exports moved here from index.ts; barrel now 94 lines)
+- Tests: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/command.runtime.batch.contract.test.ts`
+- Test delta: EPF 1199 → 1222 (+23); 23 tests, 23 pass
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/command.runtime.batch.contract.test.ts` → 23 tests, 0 failures
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` → 1222 tests, 0 failures (full suite, no regressions)
+- Notes:
+  - `CommandRuntimeBatchContract.batch(inputs)` calls `CommandRuntimeContract.execute()` per `CommandRuntimeBatchInput`
+  - Input: `{ policyGateResult: PolicyGateResult }[]`
+  - Status: `FULLY_EXECUTED` (totalExecuted > 0, sandboxed=0, skipped=0, failed=0) | `PARTIALLY_EXECUTED` (executed > 0, any restriction) | `FULLY_BLOCKED` (executed=0, non-empty) | `"NONE"` (empty)
+  - `totalRecords` = sum of `records.length` across all results; `warnedCount` = results with `failedCount > 0`
+  - Batch hash salt: `"w51-t1-cp1-command-runtime-batch"`; batch ID salt: `"w51-t1-cp1-command-runtime-batch-id"`
+  - Phase B: CommandRuntime exports moved from `index.ts:522-532` → `epf.dispatch.barrel.ts`; index.ts ~1413 → ~1403 lines
+  - `CommandRuntimeContract.execute()` batch surface FULLY CLOSED; dispatch-gate-runtime barrel family complete

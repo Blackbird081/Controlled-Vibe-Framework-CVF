@@ -1,4 +1,4 @@
-// EPF Dispatch-Gate Family Barrel — W49-T1 (extracted from index.ts to resolve line-limit constraint); W50-T1 (PolicyGate + PolicyGateBatch added)
+// EPF Dispatch-Gate-Runtime Family Barrel — W49-T1 (extracted from index.ts); W50-T1 (PolicyGate + PolicyGateBatch); W51-T1 (CommandRuntime + CommandRuntimeBatch)
 
 // W2-T27 — Dispatch Consumer Pipeline Bridge (CP1)
 export {
@@ -67,3 +67,27 @@ export type {
   PolicyGateBatchContractDependencies,
 } from "./policy.gate.batch.contract";
 export type { PolicyGateBatchStatus } from "./policy.gate.batch.contract";
+
+// W2-T3 — Command Runtime Contract (Phase B barrel move from index.ts)
+export {
+  CommandRuntimeContract,
+  createCommandRuntimeContract,
+} from "./command.runtime.contract";
+export type {
+  RuntimeExecutionStatus,
+  RuntimeExecutionRecord,
+  CommandRuntimeResult,
+  CommandRuntimeContractDependencies,
+} from "./command.runtime.contract";
+
+// W51-T1 — Command Runtime Batch Contract (CP1)
+export {
+  CommandRuntimeBatchContract,
+  createCommandRuntimeBatchContract,
+} from "./command.runtime.batch.contract";
+export type {
+  CommandRuntimeBatchInput,
+  CommandRuntimeBatchResult,
+  CommandRuntimeBatchContractDependencies,
+} from "./command.runtime.batch.contract";
+export type { CommandRuntimeBatchStatus } from "./command.runtime.batch.contract";

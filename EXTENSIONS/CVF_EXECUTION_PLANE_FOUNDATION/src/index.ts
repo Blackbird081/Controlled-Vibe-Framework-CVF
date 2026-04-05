@@ -519,17 +519,8 @@ export type {
   ExecutionFeedbackContractDependencies,
 } from "./execution.feedback.contract";
 
-// W2-T3 — Bounded Execution Command Runtime (CP1–CP2)
-export {
-  CommandRuntimeContract,
-  createCommandRuntimeContract,
-} from "./command.runtime.contract";
-export type {
-  RuntimeExecutionStatus,
-  RuntimeExecutionRecord,
-  CommandRuntimeResult,
-  CommandRuntimeContractDependencies,
-} from "./command.runtime.contract";
+// W2-T3 — Bounded Execution Command Runtime: now exported via epf.dispatch.barrel (W51-T1 Phase B)
+
 export {
   ExecutionPipelineContract,
   createExecutionPipelineContract,

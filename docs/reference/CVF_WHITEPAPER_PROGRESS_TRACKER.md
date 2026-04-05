@@ -192,6 +192,7 @@ Memory class: POINTER_RECORD
 | `W44-T1` Consumer Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — ConsumerBatchContract canonical; CPF 2870 tests (+30); all 9 pass conditions satisfied; ConsumerContract.consume() batch surface closed; control.plane.workflow.barrel.ts workflow batch family FULLY CLOSED` |
 | `W45-T1` Gateway Consumer Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — GatewayConsumerBatchContract canonical; CPF 2900 tests (+30); all 9 pass conditions satisfied; GatewayConsumerContract.consume() batch surface closed; control.plane.gateway.barrel.ts FULLY CLOSED (all 8 batch surfaces)` |
 | `W46-T1` Design Consumer Batch Contract (REALIZATION class) | `CLOSED DELIVERED 2026-04-05 — DesignConsumerBatchContract canonical; CPF 2929 tests (+29); all 9 pass conditions satisfied; DesignConsumerContract.consume() batch surface closed; control.plane.design.boardroom.barrel.ts FULLY CLOSED (all 9 batch surfaces: W26–W34 + W46)` |
+| `W47-T1` Whitepaper Update v3.7-W46T1 (DOCUMENTATION class) | `CLOSED DELIVERED 2026-04-05 — whitepaper bumped v3.6-W32T1 → v3.7-W46T1; W33–W46 REALIZATION tranches recorded; CPF 2929 unchanged; documentation-to-implementation gap CLOSED; all CPF barrel families FULLY CLOSED` |
 
 ---
 
@@ -219,14 +220,14 @@ Memory class: POINTER_RECORD
 ## Canonical Pointers
 
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
-- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
+- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`)
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W46_T1_CLOSED_2026-04-05.md` (W46-T1 CLOSED DELIVERED 2026-04-05 — DesignConsumerBatchContract canonical; CPF 2929 (+29); design.boardroom.barrel FULLY CLOSED)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W47_T1_CLOSED_2026-04-05.md` (W47-T1 CLOSED DELIVERED 2026-04-05 — whitepaper v3.7-W46T1 canonical; documentation-to-implementation gap CLOSED)
 - Latest continuity sync delta: `docs/baselines/CVF_W32_T1_ARCHITECTURE_BASELINE_SYNC_DELTA_2026-04-01.md`
-- Current closure anchor: `docs/reviews/CVF_W46_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W45_CONTINUATION_QUALITY_ASSESSMENT_2026-04-05.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W46_T1_DESIGN_CONSUMER_BATCH_2026-04-05.md` (W46-T1 GC-018 AUTHORIZED — CLOSED DELIVERED)
+- Current closure anchor: `docs/reviews/CVF_W47_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
+- Active quality assessment: `docs/assessments/CVF_POST_W46_CONTINUATION_QUALITY_ASSESSMENT_2026-04-05.md`
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W47_T1_WHITEPAPER_UPDATE_V3_7_2026-04-05.md` (W47-T1 GC-018 AUTHORIZED — CLOSED DELIVERED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

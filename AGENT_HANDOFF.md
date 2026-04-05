@@ -6,8 +6,8 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W46-T1 closed delivered; `control.plane.design.boardroom.barrel.ts` design.boardroom barrel FULLY CLOSED (all 9 batch surfaces: W26–W34 + W46); `control.plane.gateway.barrel.ts` gateway barrel FULLY CLOSED (all 8 batch surfaces: W22–W25 + W41–W45); relocation lane closed-by-default; repo canon converged into `main`; next: consult whitepaper for next open CPF batch surface
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W47-T1 closed delivered; whitepaper `v3.7-W46T1` canonical; documentation-to-implementation gap CLOSED for W33–W46; all CPF barrel families FULLY CLOSED; relocation lane closed-by-default; repo canon converged into `main`; next: fresh quality assessment for next wave
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`)
 
 ---
 
@@ -28,6 +28,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W47-T1 | Whitepaper Update v3.7-W46T1 (DOCUMENTATION class) | CLOSED DELIVERED 2026-04-05 — whitepaper bumped `v3.6-W32T1` → `v3.7-W46T1`; W33–W46 REALIZATION tranches recorded; CPF 2929 unchanged; documentation-to-implementation gap CLOSED |
 | W46-T1 | Design Consumer Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — DesignConsumerBatchContract canonical; CPF 2929 tests (+29); all 9 pass conditions satisfied; DesignConsumerContract.consume() batch surface closed; `control.plane.design.boardroom.barrel.ts` FULLY CLOSED |
 | W45-T1 | Gateway Consumer Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — GatewayConsumerBatchContract canonical; CPF 2900 tests (+30); all 9 pass conditions satisfied; GatewayConsumerContract.consume() batch surface closed; `control.plane.gateway.barrel.ts` FULLY CLOSED |
 | W44-T1 | Consumer Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — ConsumerBatchContract canonical; CPF 2870 tests (+30); all 9 pass conditions satisfied; ConsumerContract.consume() batch surface closed; workflow batch family FULLY CLOSED |
@@ -59,14 +60,14 @@
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1`
-- Documentation-to-implementation gap: CLOSED (`v3.6-W32T1`)
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1`
+- Documentation-to-implementation gap: CLOSED (`v3.7-W46T1`)
 
 ---
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. Next: consult master architecture whitepaper for next open CPF batch surface — `control.plane.design.boardroom.barrel.ts` and `control.plane.gateway.barrel.ts` both FULLY CLOSED.**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. Next: fresh quality assessment against `v3.7-W46T1` whitepaper — all CPF barrel families FULLY CLOSED; whitepaper synchronized; architecture baseline canonical.**
 
 Current guidance:
 

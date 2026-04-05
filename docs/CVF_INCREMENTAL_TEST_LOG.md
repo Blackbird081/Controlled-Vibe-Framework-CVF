@@ -2885,6 +2885,31 @@ Utility and guard:
 
 ---
 
+## W42-T1 CPF GatewayPIIDetectionLogBatchContract — 2026-04-05
+
+- Tranche: W42-T1 — GatewayPIIDetectionLogBatchContract (REALIZATION class)
+- Control point: CP1 — Full Lane
+- Extension: `CVF_CONTROL_PLANE_FOUNDATION`
+- Files added:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.pii.detection.log.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.log.batch.contract.test.ts`
+- Files modified:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.gateway.barrel.ts` (W42-T1 exports added)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (W42-T1 entry added)
+- Tests executed:
+  - `npx vitest run tests/gateway.pii.detection.log.batch.contract.test.ts` (CPF) → PASS (27 tests, 0 failures)
+  - `npm test` (CPF) → PASS (2813 tests, 0 failures)
+- Notes:
+  - `GatewayPIIDetectionLogBatchContract.batch(entries: GatewayPIIDetectionResult[][], log: GatewayPIIDetectionLogContract)` calls `log.log(entry)` for each entry
+  - `overallDominantPIIType: PIIType | null` — most severe non-null dominantPIIType; severity: SSN(5) > CREDIT_CARD(4) > EMAIL(3) > PHONE(2) > CUSTOM(1); `null` when all logs have no PII
+  - Aggregates `totalScanned`, `piiDetectedCount`, `cleanCount` as sums across all logs
+  - Uses `resolveDominantBySeverity` + `createDeterministicBatchIdentity` from `batch.contract.shared.ts` (GC-036)
+  - 27 new tests across 6 describe groups; no additions to `index.test.ts` (GC-024 compliant)
+  - CPF: 2786 → 2813 (+27); delta: `docs/baselines/CVF_W42_T1_CP1_GATEWAY_PII_DETECTION_LOG_BATCH_DELTA_2026-04-05.md`
+  - Closes `GatewayPIIDetectionLogContract.log()` batch surface — W1-T9 gateway PII detection log family
+
+---
+
 ## W41-T1 CPF GatewayAuthLogBatchContract — 2026-04-05
 
 - Tranche: W41-T1 — GatewayAuthLogBatchContract (REALIZATION class)

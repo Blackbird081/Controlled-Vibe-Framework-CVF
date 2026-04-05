@@ -136,3 +136,12 @@ export type {
   GatewayAuthLogBatch,
   GatewayAuthLogBatchContractDependencies,
 } from "./gateway.auth.log.batch.contract";
+
+export {
+  GatewayPIIDetectionLogBatchContract,
+  createGatewayPIIDetectionLogBatchContract,
+} from "./gateway.pii.detection.log.batch.contract";
+export type {
+  GatewayPIIDetectionLogBatch,
+  GatewayPIIDetectionLogBatchContractDependencies,
+} from "./gateway.pii.detection.log.batch.contract";

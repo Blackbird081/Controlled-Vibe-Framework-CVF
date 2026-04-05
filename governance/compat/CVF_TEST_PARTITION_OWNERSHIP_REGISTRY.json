@@ -1761,6 +1761,17 @@
         "GatewayAuthLogBatchContract",
         "createGatewayAuthLogBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Gateway PII Detection Log Batch (W42-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.pii.detection.log.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "GatewayPIIDetectionLogBatchContract",
+        "createGatewayPIIDetectionLogBatchContract"
+      ]
     }
   ]
 }

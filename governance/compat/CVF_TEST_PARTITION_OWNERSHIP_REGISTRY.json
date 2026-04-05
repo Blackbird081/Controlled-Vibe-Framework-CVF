@@ -1739,6 +1739,17 @@
         "ModelGatewayBoundaryBatchContract",
         "createModelGatewayBoundaryBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Packaging Batch (W40-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/packaging.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PackagingBatchContract",
+        "createPackagingBatchContract"
+      ]
     }
   ]
 }

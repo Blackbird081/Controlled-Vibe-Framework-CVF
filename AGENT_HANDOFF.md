@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W39-T1 closed delivered; relocation lane closed-by-default; repo canon converged into `main`; next default focus is master architecture continuation
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W40-T1 closed delivered; relocation lane closed-by-default; repo canon converged into `main`; next default focus is master architecture continuation
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -19,7 +19,7 @@
 - Pre-public restructuring posture is now narrowed, canonized, and closed-by-default: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2723 tests, 0 failures**
+- CPF (Control Plane Foundation): **2759 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -28,6 +28,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W40-T1 | Packaging Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — PackagingBatchContract canonical; CPF 2759 tests (+36); all 9 pass conditions satisfied; packaging batch surface closed |
 | W39-T1 | Model Gateway Boundary Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — ModelGatewayBoundaryBatchContract canonical; CPF 2723 tests (+27); all 9 pass conditions satisfied; W8-T1 model gateway boundary batch surface closed |
 | W38-T1 | Context Enrichment Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-04 — ContextEnrichmentBatchContract canonical; CPF 2696 tests (+36); W1-T11 context builder enrichment batch surface closed |
 | W37-T1 | Context Packager Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-04 — ContextPackagerBatchContract canonical; CPF 2660 tests (+36); W1-T12 ContextPackagerContract.pack() batch surface closed |
@@ -52,7 +53,7 @@
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1`
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1`
 - Documentation-to-implementation gap: CLOSED (`v3.6-W32T1`)
 
 ---
@@ -64,11 +65,11 @@
 Current guidance:
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
+- **W40-T1 CLOSED DELIVERED** — PackagingBatchContract (REALIZATION class); CPF 2759 (+36); all 9 pass conditions satisfied; packaging batch surface closed
 - **W39-T1 CLOSED DELIVERED** — ModelGatewayBoundaryBatchContract (REALIZATION class); CPF 2723 (+27); all 9 pass conditions satisfied; W8-T1 model gateway boundary batch surface closed
-- **W38-T1 CLOSED DELIVERED** — ContextEnrichmentBatchContract (REALIZATION class); CPF 2696 (+36); all 9 pass conditions satisfied; W1-T11 context builder enrichment batch surface closed
 - **Next**: read `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`, and the latest continuation assessments; if a fresh `GC-018` is needed, scope it around master architecture completion rather than another relocation or default root cleanup wave
-- W39-T1 closure review: `docs/reviews/CVF_W39_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W39_T1_CLOSED_2026-04-05.md`
+- W40-T1 closure review: `docs/reviews/CVF_W40_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md`
+- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W40_T1_CLOSED_2026-04-05.md`
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
 - **Relocation lane CLOSED-BY-DEFAULT (2026-04-04)**: `P3/CP1` is the only landed physical move. `P3/CP3–CP5` + `P4/CP1–CP17` are landed governance/package-boundary canon. `P3/CP2` physical move remains excluded under freeze-in-place posture. This closure remains in force after `main` / `cvf-next` convergence. Remaining human-gated item is `npm publish` and it is not a relocation task.
 - **Reopen rule**: do not open another broad relocation wave by default. Reopen only through preservation override + fresh `GC-019` + fresh `GC-039` + dedicated `restructuring/p3-*` branch + secondary worktree. Do not perform reopened relocation work directly on `main` or synchronized `cvf-next`.

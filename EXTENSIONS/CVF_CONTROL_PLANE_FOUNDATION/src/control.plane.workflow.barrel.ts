@@ -77,3 +77,14 @@ export type {
   RetrievalBatch,
   RetrievalBatchContractDependencies,
 } from "./retrieval.batch.contract";
+
+// W40-T1 — PackagingBatchContract
+export {
+  PackagingBatchContract,
+  createPackagingBatchContract,
+} from "./packaging.batch.contract";
+export type {
+  PackagingBatchStatus,
+  PackagingBatch,
+  PackagingBatchContractDependencies,
+} from "./packaging.batch.contract";

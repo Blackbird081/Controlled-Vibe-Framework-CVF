@@ -14,7 +14,7 @@ Memory class: POINTER_RECORD
 | Scope | Current readout |
 |---|---|
 | Whitepaper target-state | `SUBSTANTIALLY DELIVERED` |
-| Architecture baseline snapshot | `CVF_MASTER_ARCHITECTURE_WHITEPAPER v3.7-W46T1` |
+| Architecture baseline snapshot | `CVF_MASTER_ARCHITECTURE_WHITEPAPER v3.7-W46T1` (operational readout refreshed through `W54-T1`) |
 | Current-cycle restructuring | `DONE` |
 | Whitepaper completion wave | `FIRST CYCLE COMPLETE + post-cycle continuation through W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 CLOSED + post-W7 continuation through W54-T1 CLOSED + documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 CLOSED + current synchronized baseline v3.7-W46T1` |
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
@@ -220,7 +220,7 @@ Memory class: POINTER_RECORD
 ## Canonical Pointers
 
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
-- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`)
+- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; operational readout refreshed through `W54-T1`)
 - Canonical scan continuity registry: `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`

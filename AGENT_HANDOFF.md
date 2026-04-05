@@ -91,6 +91,43 @@ Current guidance:
 
 ---
 
+## Fully Closed CPF Barrel Families — Do Not Re-Examine
+
+> When searching for the next open tranche, skip every barrel listed here. All batch surfaces in these barrels are canonically closed and committed. No open surface remains.
+
+### `consumer.pipeline.bridges.barrel.ts` — FULLY CLOSED
+All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every plane (Control / Execution / Governance / Learning) has all bridges canonically closed.
+
+### `control.plane.gateway.barrel.ts` — FULLY CLOSED
+- Gateway batch family (W22–W25): GatewayAuth, AIGateway, GatewayPIIDetection, RouteMatch batch contracts
+- Gateway log batch family (W41–W43): GatewayAuthLog, GatewayPIIDetectionLog, RouteMatchLog batch contracts
+- All 7 batch surfaces closed. Nothing to open in this barrel.
+
+### `control.plane.design.boardroom.barrel.ts` — FULLY CLOSED
+- Orchestration (W26), Design (W27), ReversePrompting (W28), Boardroom (W29), BoardroomTransitionGate (W30), BoardroomRound (W31), BoardroomMultiRound (W32), ClarificationRefinement (W34)
+- All 8 batch surfaces closed. Nothing to open in this barrel.
+
+### `control.plane.knowledge.barrel.ts` — FULLY CLOSED
+- KnowledgeRanking (W33)
+- All knowledge batch surfaces closed.
+
+### `control.plane.context.barrel.ts` — FULLY CLOSED
+- ContextPackager (W37), ContextEnrichment (W38)
+- All context batch surfaces closed.
+
+### `control.plane.coordination.barrel.ts` — FULLY CLOSED
+- TrustIsolation scope/propagation/declare (W19/W20/W21), AgentDefinitionCapability (W13), AgentScopeResolution (W14), AgentDefinitionAudit (W15), AgentRegistration (W17), ModelGatewayBoundary (W39)
+- All coordination + trust + agent-definition batch surfaces closed.
+
+### `control.plane.continuation.barrel.ts` — FULLY CLOSED
+- All continuation-related contracts and batch surfaces closed. No open surface.
+
+### `control.plane.workflow.barrel.ts` — FULLY CLOSED
+- Intake (W35), Retrieval (W36), Packaging (W40), Consumer (W44)
+- All 4 workflow batch surfaces closed. **Last batch surface closed 2026-04-05 (W44-T1).**
+
+---
+
 ## Governance Rules (must follow strictly)
 
 ### Tranche Protocol

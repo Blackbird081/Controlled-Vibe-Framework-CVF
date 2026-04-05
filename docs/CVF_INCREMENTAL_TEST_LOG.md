@@ -3129,3 +3129,22 @@ Utility and guard:
   - Batch hash salt: `"w51-t1-cp1-command-runtime-batch"`; batch ID salt: `"w51-t1-cp1-command-runtime-batch-id"`
   - Phase B: CommandRuntime exports moved from `index.ts:522-532` → `epf.dispatch.barrel.ts`; index.ts ~1413 → ~1403 lines
   - `CommandRuntimeContract.execute()` batch surface FULLY CLOSED; dispatch-gate-runtime barrel family complete
+
+## W52-T1 CP1 — AsyncCommandRuntimeBatchContract (2026-04-05)
+- Tranche: W52-T1 | Class: REALIZATION | Control Point: CP1 (Full Lane)
+- Contract: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.async.runtime.batch.contract.ts`
+- Barrel: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/epf.dispatch.barrel.ts` (Phase C: AsyncCommandRuntime exports moved here from index.ts; barrel now ~120 lines)
+- Tests: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.async.runtime.batch.contract.test.ts`
+- Test delta: EPF 1222 → 1249 (+27); 27 tests, 27 pass
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.async.runtime.batch.contract.test.ts` → 27 tests, 0 failures
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` → 1249 tests, 0 failures (full suite, no regressions)
+- Notes:
+  - `AsyncCommandRuntimeBatchContract.batch(inputs)` calls `AsyncCommandRuntimeContract.issue()` per `AsyncCommandRuntimeBatchInput`
+  - Input: `{ runtimeResult: CommandRuntimeResult }[]`
+  - Status: `FULLY_QUEUED` (totalExecuted > 0, totalFailed=0) | `PARTIALLY_QUEUED` (executed > 0, failed > 0) | `FAILED` (executed=0, non-empty) | `"NONE"` (empty)
+  - `totalRecords` = sum of `recordCount` across all tickets; `warnedCount` = tickets with `failedCount > 0`
+  - All tickets issued with `asyncStatus: "PENDING"`
+  - Batch hash salt: `"w52-t1-cp1-async-command-runtime-batch"`; batch ID salt: `"w52-t1-cp1-async-command-runtime-batch-id"`
+  - Phase C: AsyncCommandRuntime exports moved from `index.ts:440-449` → `epf.dispatch.barrel.ts`; index.ts ~1403 → ~1393 lines
+  - Inner `now` forwarded to AsyncCommandRuntimeContract for deterministic ticketId under injectable clock
+  - `AsyncCommandRuntimeContract.issue()` batch surface FULLY CLOSED; dispatch-gate-runtime-async barrel family complete

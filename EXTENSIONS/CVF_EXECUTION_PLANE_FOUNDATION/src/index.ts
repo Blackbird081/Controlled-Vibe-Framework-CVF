@@ -437,16 +437,7 @@ export type {
   MCPInvocationBatchContractDependencies,
 } from "./mcp.invocation.batch.contract";
 
-// W2-T7 — Execution Command Runtime Async Slice (CP1–CP2)
-export {
-  AsyncCommandRuntimeContract,
-  createAsyncCommandRuntimeContract,
-} from "./execution.async.runtime.contract";
-export type {
-  AsyncExecutionStatus,
-  AsyncCommandRuntimeTicket,
-  AsyncCommandRuntimeContractDependencies,
-} from "./execution.async.runtime.contract";
+// W2-T7 — Execution Command Runtime Async Slice: re-exported via epf.dispatch.barrel.ts (W52-T1 Phase C)
 export {
   AsyncExecutionStatusContract,
   createAsyncExecutionStatusContract,

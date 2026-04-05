@@ -51,7 +51,7 @@
     {
       "id": "gef_plane_scan",
       "surfaceClass": "PLANE_SCAN",
-      "status": "ASSESSED_DONE_READY",
+      "status": "FULLY_CLOSED",
       "lastScannedAt": "2026-04-05",
       "scopePaths": [
         "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION",

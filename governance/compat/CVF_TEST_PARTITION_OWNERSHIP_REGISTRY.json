@@ -1838,6 +1838,17 @@
         "DispatchBatchContract",
         "createDispatchBatchContract"
       ]
+    },
+    {
+      "scope": "EPF Policy Gate Batch (W50-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/policy.gate.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "PolicyGateBatchContract",
+        "createPolicyGateBatchContract"
+      ]
     }
   ]
 }

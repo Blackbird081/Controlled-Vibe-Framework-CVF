@@ -541,17 +541,7 @@ export type {
   ExecutionPipelineContractDependencies,
 } from "./execution.pipeline.contract";
 
-// W2-T2 — Execution Dispatch Bridge (CP2–CP3)
-export {
-  PolicyGateContract,
-  createPolicyGateContract,
-} from "./policy.gate.contract";
-export type {
-  PolicyGateDecision,
-  PolicyGateEntry,
-  PolicyGateResult,
-  PolicyGateContractDependencies,
-} from "./policy.gate.contract";
+// W2-T2 — Execution Dispatch Bridge (CP2–CP3): PolicyGateContract now in epf.dispatch.barrel.ts
 export {
   ExecutionBridgeConsumerContract,
   createExecutionBridgeConsumerContract,

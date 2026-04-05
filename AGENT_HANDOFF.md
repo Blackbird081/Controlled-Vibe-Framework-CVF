@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W49-T1 closed delivered; `DispatchBatchContract` canonical; EPF 1176 (+22); `DispatchContract.dispatch()` batch surface FULLY CLOSED; EPF `index.ts` barrel split complete (1423/1450 lines); `epf.dispatch.barrel.ts` introduced; whitepaper `v3.7-W46T1` canonical; all CPF barrel families FULLY CLOSED; EPF standalone batch wave open; next: fresh quality assessment for next EPF standalone batch surface
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W50-T1 closed delivered; `PolicyGateBatchContract` canonical; EPF 1199 (+23); `PolicyGateContract.evaluate()` batch surface FULLY CLOSED; Phase A: PolicyGate exports moved from `index.ts` → `epf.dispatch.barrel.ts` (now 70 lines); `index.ts` ~1413 lines; dispatch-gate barrel family complete; next: fresh quality assessment for next EPF standalone batch surface (CommandRuntimeBatchContract)
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`)
 
 ---
@@ -20,7 +20,7 @@
 
 ### Test Counts (last verified clean)
 - CPF (Control Plane Foundation): **2929 tests, 0 failures**
-- EPF (Execution Plane Foundation): **1176 tests, 0 failures** (isolated; pre-existing ordering-sensitive flakiness in `bridge.runtime.pipeline.test.ts` in full-suite runs)
+- EPF (Execution Plane Foundation): **1199 tests, 0 failures** (isolated; pre-existing ordering-sensitive flakiness in `bridge.runtime.pipeline.test.ts` in full-suite runs)
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
 
@@ -28,6 +28,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W50-T1 | PolicyGateBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `PolicyGateBatchContract` canonical; EPF 1199 (+23); `PolicyGateContract.evaluate()` batch surface FULLY CLOSED; Phase A: PolicyGate exports moved to `epf.dispatch.barrel.ts`; dispatch-gate barrel family complete |
 | W49-T1 | DispatchBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `DispatchBatchContract` canonical; EPF 1176 (+22); `DispatchContract.dispatch()` batch surface FULLY CLOSED; EPF `index.ts` barrel split (1450→1423); `epf.dispatch.barrel.ts` introduced; EPF standalone batch wave open |
 | W48-T1 | ExecutionBridgeConsumerBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `ExecutionBridgeConsumerBatchContract` canonical; EPF 1154 (+31); `ExecutionBridgeConsumerContract.bridge()` batch surface FULLY CLOSED; consumer batch wave W44–W48 complete |
 | W47-T1 | Whitepaper Update v3.7-W46T1 (DOCUMENTATION class) | CLOSED DELIVERED 2026-04-05 — whitepaper bumped `v3.6-W32T1` → `v3.7-W46T1`; W33–W46 REALIZATION tranches recorded; CPF 2929 unchanged; documentation-to-implementation gap CLOSED |

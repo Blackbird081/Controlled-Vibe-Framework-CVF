@@ -3095,3 +3095,20 @@ Utility and guard:
   - Batch hash salt: `"w49-t1-cp1-dispatch-batch"`; batch ID salt: `"w49-t1-cp1-dispatch-batch-id"`
   - EPF `index.ts` barrel split: 1450 → 1423 lines (−27); dispatch family extracted to `epf.dispatch.barrel.ts`
   - `DispatchContract.dispatch()` batch surface FULLY CLOSED; EPF standalone batch wave open
+
+## W50-T1 CP1 — PolicyGateBatchContract (2026-04-05)
+- Tranche: W50-T1 | Class: REALIZATION | Control Point: CP1 (Full Lane)
+- Contract: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/policy.gate.batch.contract.ts`
+- Barrel: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/epf.dispatch.barrel.ts` (Phase A: PolicyGate exports moved here from index.ts)
+- Tests: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/policy.gate.batch.contract.test.ts`
+- Test delta: EPF 1176 → 1199 (+23); 23 tests, 23 pass
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/policy.gate.batch.contract.test.ts` → 23 tests, 0 failures
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` → 1199 tests, 0 failures (full suite, no regressions)
+- Notes:
+  - `PolicyGateBatchContract.batch(inputs)` calls `PolicyGateContract.evaluate()` per `PolicyGateBatchInput`
+  - Input: `{ dispatchResult: DispatchResult }[]`
+  - Status: `FULLY_ALLOWED` (totalAllowed > 0, no restrictions) | `PARTIALLY_ALLOWED` (totalAllowed > 0, any restriction > 0) | `FULLY_BLOCKED` (totalAllowed=0, non-empty) | `"NONE"` (empty)
+  - `totalEntries` = sum of `entries.length` across all results; `warnedCount` = results with denied/review/sandbox > 0
+  - Batch hash salt: `"w50-t1-cp1-policy-gate-batch"`; batch ID salt: `"w50-t1-cp1-policy-gate-batch-id"`
+  - Phase A: PolicyGate exports moved from `index.ts` → `epf.dispatch.barrel.ts`; index.ts ~1423 → ~1413 lines
+  - `PolicyGateContract.evaluate()` batch surface FULLY CLOSED; EPF standalone batch wave open (CommandRuntime next)

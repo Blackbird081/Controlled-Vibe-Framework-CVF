@@ -41,6 +41,12 @@ Use the root front door in this order:
 
 If you want the deeper private-core chain after that, use [Docs Index](docs/INDEX.md).
 
+If you need the current canonical continuation posture after `W54-T1`, use:
+
+- [Agent Handoff](AGENT_HANDOFF.md)
+- [Whitepaper Progress Tracker](docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md)
+- [Master Architecture Closure Roadmap](docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md)
+
 ## What CVF Is
 
 CVF is a governance-first control plane for AI-assisted execution. Its active reference path is built around one canonical controlled loop:
@@ -112,12 +118,18 @@ Current posture on the active reference path:
 
 Read this status as:
 
-- the current system-unification wave is complete for the active path
-- the active path is materially delivered and depth-frozen
-- future expansion must go through reassessment or `GC-018`
+- the current-cycle restructuring lane is complete for the active path
+- the active path has no open tranche and remains `SUBSTANTIALLY DELIVERED`
+- relocation is closed-by-default; next work should follow the master-architecture closure route
+- future expansion must go through scan continuity review, reassessment, or a fresh bounded `GC-018`
 
 Primary status anchors:
 
+- [Agent Handoff](AGENT_HANDOFF.md)
+- [Whitepaper Progress Tracker](docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md)
+- [Master Architecture Whitepaper](docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md)
+- [Master Architecture Closure Roadmap](docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md)
+- [Surface Scan Continuity Registry](governance/compat/CVF_SURFACE_SCAN_REGISTRY.json)
 - [Release Readiness Status](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md)
 - [Independent System Checkpoint](docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md)
 - [System Unification Reassessment](docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md)

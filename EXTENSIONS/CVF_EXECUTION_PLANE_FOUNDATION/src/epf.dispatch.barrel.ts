@@ -1,4 +1,4 @@
-// EPF Dispatch-Gate-Runtime-Async-Status Family Barrel — W49-T1 (extracted); W50-T1 (PolicyGate + PolicyGateBatch); W51-T1 (CommandRuntime + CommandRuntimeBatch); W52-T1 (AsyncCommandRuntime + AsyncCommandRuntimeBatch); W53-T1 (AsyncExecutionStatus + AsyncExecutionStatusBatch)
+// EPF Dispatch-Gate-Runtime-Async-Status-Reintake Family Barrel — W49-T1 (extracted); W50-T1 (PolicyGate + PolicyGateBatch); W51-T1 (CommandRuntime + CommandRuntimeBatch); W52-T1 (AsyncCommandRuntime + AsyncCommandRuntimeBatch); W53-T1 (AsyncExecutionStatus + AsyncExecutionStatusBatch); W54-T1 (ExecutionReintake + ExecutionReintakeBatch)
 
 // W2-T27 — Dispatch Consumer Pipeline Bridge (CP1)
 export {
@@ -136,3 +136,34 @@ export type {
   AsyncExecutionStatusBatchContractDependencies,
   AsyncExecutionStatusBatchDominant,
 } from "./execution.async.status.batch.contract";
+
+// W2-T6 — Execution Re-intake Loop (Phase E barrel move from index.ts)
+export {
+  ExecutionReintakeContract,
+  createExecutionReintakeContract,
+} from "./execution.reintake.contract";
+export type {
+  ReintakeAction,
+  ExecutionReintakeRequest,
+  ExecutionReintakeContractDependencies,
+} from "./execution.reintake.contract";
+export {
+  ExecutionReintakeSummaryContract,
+  createExecutionReintakeSummaryContract,
+} from "./execution.reintake.summary.contract";
+export type {
+  ExecutionReintakeSummary,
+  ExecutionReintakeSummaryContractDependencies,
+} from "./execution.reintake.summary.contract";
+
+// W54-T1 — Execution Reintake Batch Contract (CP1)
+export {
+  ExecutionReintakeBatchContract,
+  createExecutionReintakeBatchContract,
+} from "./execution.reintake.batch.contract";
+export type {
+  ExecutionReintakeBatchInput,
+  ExecutionReintakeBatchResult,
+  ExecutionReintakeBatchContractDependencies,
+  ExecutionReintakeBatchDominant,
+} from "./execution.reintake.batch.contract";

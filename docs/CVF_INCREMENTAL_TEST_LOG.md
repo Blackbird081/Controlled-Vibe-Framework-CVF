@@ -3166,3 +3166,22 @@ Utility and guard:
   - Phase D: AsyncExecutionStatus exports moved from `index.ts:440-448` → `epf.dispatch.barrel.ts`; index.ts ~1393 → ~1386 lines
   - Inner `now` forwarded to AsyncExecutionStatusContract for deterministic summaryId under injectable clock
   - `AsyncExecutionStatusContract.assess()` batch surface FULLY CLOSED; dispatch-gate-runtime-async-status barrel family complete
+
+## W54-T1 CP1 — ExecutionReintakeBatchContract (2026-04-05)
+- Tranche: W54-T1 | Class: REALIZATION | Control Point: CP1 (Full Lane)
+- Contract: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/execution.reintake.batch.contract.ts`
+- Barrel: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/epf.dispatch.barrel.ts` (Phase E: ExecutionReintake + ExecutionReintakeSummary exports moved here from index.ts:442-459; barrel now ~170 lines)
+- Tests: `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.batch.contract.test.ts`
+- Test delta: EPF 1275 → 1301 (+26); 26 tests, 26 pass
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.batch.contract.test.ts` → 26 tests, 0 failures
+  - `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` → 1301 pass (1 pre-existing ordering flake in policy.gate.batch.contract.test.ts), 0 regressions
+- Notes:
+  - `ExecutionReintakeBatchContract.batch(inputs)` calls `ExecutionReintakeContract.reinject()` per `ExecutionReintakeBatchInput`
+  - Input: `{ summary: FeedbackResolutionSummary }[]`
+  - dominantAction: `REPLAN` (any CRITICAL) > `RETRY` (any HIGH) > `ACCEPT` (all NORMAL) > `"NONE"` (empty)
+  - `totalRequests` = inputs.length; `warnedCount` = requests where reintakeAction !== "ACCEPT"
+  - Batch hash salt: `"w54-t1-cp1-execution-reintake-batch"`; batch ID salt: `"w54-t1-cp1-execution-reintake-batch-id"`
+  - Phase E: ExecutionReintake + ExecutionReintakeSummary exports moved from `index.ts:442-459` → `epf.dispatch.barrel.ts`; index.ts ~1386 → ~1370 lines
+  - Inner `now` forwarded to ExecutionReintakeContract for deterministic reintakeId under injectable clock
+  - `ExecutionReintakeContract.reinject()` batch surface FULLY CLOSED; dispatch-gate-runtime-async-status-reintake barrel family complete
+  - EPF standalone batch wave W49–W54: ALL CLOSED

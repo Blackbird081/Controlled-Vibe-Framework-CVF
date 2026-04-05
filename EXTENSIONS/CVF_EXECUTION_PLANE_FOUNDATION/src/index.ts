@@ -439,24 +439,7 @@ export type {
 
 // W2-T7 — Execution Async Status Slice: re-exported via epf.dispatch.barrel.ts (W53-T1 Phase D)
 
-// W2-T6 — Execution Re-intake Loop (CP1–CP2)
-export {
-  ExecutionReintakeContract,
-  createExecutionReintakeContract,
-} from "./execution.reintake.contract";
-export type {
-  ReintakeAction,
-  ExecutionReintakeRequest,
-  ExecutionReintakeContractDependencies,
-} from "./execution.reintake.contract";
-export {
-  ExecutionReintakeSummaryContract,
-  createExecutionReintakeSummaryContract,
-} from "./execution.reintake.summary.contract";
-export type {
-  ExecutionReintakeSummary,
-  ExecutionReintakeSummaryContractDependencies,
-} from "./execution.reintake.summary.contract";
+// W2-T6 — Execution Re-intake Loop: re-exported via epf.dispatch.barrel.ts (W54-T1 Phase E)
 
 // W2-T5 — Execution Feedback Routing Slice (CP1–CP2)
 export {

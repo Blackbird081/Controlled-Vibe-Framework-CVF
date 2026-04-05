@@ -1882,6 +1882,17 @@
         "AsyncExecutionStatusBatchContract",
         "createAsyncExecutionStatusBatchContract"
       ]
+    },
+    {
+      "scope": "EPF Execution Reintake Batch (W54-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/execution.reintake.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "ExecutionReintakeBatchContract",
+        "createExecutionReintakeBatchContract"
+      ]
     }
   ]
 }

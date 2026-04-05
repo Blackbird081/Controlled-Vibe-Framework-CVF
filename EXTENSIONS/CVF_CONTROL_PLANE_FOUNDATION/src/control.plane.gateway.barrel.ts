@@ -145,3 +145,13 @@ export type {
   GatewayPIIDetectionLogBatch,
   GatewayPIIDetectionLogBatchContractDependencies,
 } from "./gateway.pii.detection.log.batch.contract";
+
+export {
+  RouteMatchLogBatchContract,
+  createRouteMatchLogBatchContract,
+} from "./route.match.log.batch.contract";
+export type {
+  RouteMatchLogBatchDominantAction,
+  RouteMatchLogBatch,
+  RouteMatchLogBatchContractDependencies,
+} from "./route.match.log.batch.contract";

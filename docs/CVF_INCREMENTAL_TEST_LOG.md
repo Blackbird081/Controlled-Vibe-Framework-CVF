@@ -2885,6 +2885,32 @@ Utility and guard:
 
 ---
 
+## W43-T1 CPF RouteMatchLogBatchContract — 2026-04-05
+
+- Tranche: W43-T1 — RouteMatchLogBatchContract (REALIZATION class)
+- Control point: CP1 — Full Lane
+- Extension: `CVF_CONTROL_PLANE_FOUNDATION`
+- Files added:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/route.match.log.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/route.match.log.batch.contract.test.ts`
+- Files modified:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.gateway.barrel.ts` (W43-T1 exports added)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (W43-T1 entry added)
+- Tests executed:
+  - `npx vitest run tests/route.match.log.batch.contract.test.ts` (CPF) → PASS (27 tests, 0 failures)
+  - `npm test` (CPF) → PASS (2840 tests, 0 failures)
+- Notes:
+  - `RouteMatchLogBatchContract.batch(entries: RouteMatchResult[][], log: RouteMatchLogContract)` calls `log.log(entry)` for each entry
+  - `overallDominantAction: GatewayAction | "EMPTY"` — `resolveDominantByCount` with precedence REJECT > REROUTE > FORWARD > PASSTHROUGH; `"EMPTY"` when all counts zero
+  - Aggregates `totalRequests`, `matchedCount`, `unmatchedCount`, `forwardCount`, `rejectCount`, `rerouteCount`, `passthroughCount` as sums across all logs
+  - Uses `resolveDominantByCount` + `createDeterministicBatchIdentity` from `batch.contract.shared.ts` (GC-036)
+  - 27 new tests across 6 describe groups; no additions to `index.test.ts` (GC-024 compliant)
+  - CPF: 2813 → 2840 (+27); delta: `docs/baselines/CVF_W43_T1_CP1_ROUTE_MATCH_LOG_BATCH_DELTA_2026-04-05.md`
+  - Closes `RouteMatchLogContract.log()` batch surface — W1-T7 gateway route match log family
+  - **Gateway log batch family (W41/W42/W43) FULLY CLOSED**
+
+---
+
 ## W42-T1 CPF GatewayPIIDetectionLogBatchContract — 2026-04-05
 
 - Tranche: W42-T1 — GatewayPIIDetectionLogBatchContract (REALIZATION class)

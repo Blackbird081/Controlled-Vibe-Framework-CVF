@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W44-T1 closed delivered; `control.plane.workflow.barrel.ts` workflow batch family (Intake+Retrieval+Packaging+Consumer) fully closed; relocation lane closed-by-default; repo canon converged into `main`; next default focus is master architecture continuation
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W45-T1 closed delivered; `control.plane.gateway.barrel.ts` gateway barrel FULLY CLOSED (all 8 batch surfaces: W22–W25 gateway family + W41–W43 log family + W45 consumer); relocation lane closed-by-default; repo canon converged into `main`; next: W46-T1 DesignConsumerBatchContract
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -19,7 +19,7 @@
 - Pre-public restructuring posture is now narrowed, canonized, and closed-by-default: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2870 tests, 0 failures**
+- CPF (Control Plane Foundation): **2900 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -28,6 +28,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W45-T1 | Gateway Consumer Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — GatewayConsumerBatchContract canonical; CPF 2900 tests (+30); all 9 pass conditions satisfied; GatewayConsumerContract.consume() batch surface closed; `control.plane.gateway.barrel.ts` FULLY CLOSED |
 | W44-T1 | Consumer Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — ConsumerBatchContract canonical; CPF 2870 tests (+30); all 9 pass conditions satisfied; ConsumerContract.consume() batch surface closed; workflow batch family FULLY CLOSED |
 | W43-T1 | Route Match Log Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — RouteMatchLogBatchContract canonical; CPF 2840 tests (+27); all 9 pass conditions satisfied; RouteMatchLogContract.log() batch surface closed; gateway log batch family FULLY CLOSED |
 | W42-T1 | Gateway PII Detection Log Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — GatewayPIIDetectionLogBatchContract canonical; CPF 2813 tests (+27); all 9 pass conditions satisfied; GatewayPIIDetectionLogContract.log() batch surface closed |
@@ -57,14 +58,14 @@
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1`
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1`
 - Documentation-to-implementation gap: CLOSED (`v3.6-W32T1`)
 
 ---
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. Open the next governed wave only if it directly advances master architecture completion.**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. Next: W46-T1 DesignConsumerBatchContract — the final open batch surface in `control.plane.design.boardroom.barrel.ts`.**
 
 Current guidance:
 
@@ -99,13 +100,14 @@ Current guidance:
 All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every plane (Control / Execution / Governance / Learning) has all bridges canonically closed.
 
 ### `control.plane.gateway.barrel.ts` — FULLY CLOSED
-- Gateway batch family (W22–W25): GatewayAuth, AIGateway, GatewayPIIDetection, RouteMatch batch contracts
-- Gateway log batch family (W41–W43): GatewayAuthLog, GatewayPIIDetectionLog, RouteMatchLog batch contracts
-- All 7 batch surfaces closed. Nothing to open in this barrel.
-
-### `control.plane.design.boardroom.barrel.ts` — FULLY CLOSED
-- Orchestration (W26), Design (W27), ReversePrompting (W28), Boardroom (W29), BoardroomTransitionGate (W30), BoardroomRound (W31), BoardroomMultiRound (W32), ClarificationRefinement (W34)
+- Gateway batch family (W22–W25): GatewayAuth, AIGateway, GatewayPIIDetection, RouteMatch batch contracts — CLOSED
+- Gateway log batch family (W41–W43): GatewayAuthLog, GatewayPIIDetectionLog, RouteMatchLog batch contracts — CLOSED
+- GatewayConsumer batch (W45): GatewayConsumerBatchContract — CLOSED 2026-04-05
 - All 8 batch surfaces closed. Nothing to open in this barrel.
+
+### `control.plane.design.boardroom.barrel.ts` — OPEN (1 surface remaining)
+- Orchestration (W26), Design (W27), ReversePrompting (W28), Boardroom (W29), BoardroomTransitionGate (W30), BoardroomRound (W31), BoardroomMultiRound (W32), ClarificationRefinement (W34) — CLOSED
+- **OPEN: `DesignConsumerContract.consume(ControlPlaneIntakeResult)` → no `design.consumer.batch.contract.ts` yet** — W46-T1 candidate (after W45)
 
 ### `control.plane.knowledge.barrel.ts` — FULLY CLOSED
 - KnowledgeRanking (W33)

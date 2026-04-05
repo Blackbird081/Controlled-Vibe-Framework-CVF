@@ -155,3 +155,13 @@ export type {
   RouteMatchLogBatch,
   RouteMatchLogBatchContractDependencies,
 } from "./route.match.log.batch.contract";
+
+export {
+  GatewayConsumerBatchContract,
+  createGatewayConsumerBatchContract,
+} from "./gateway.consumer.batch.contract";
+export type {
+  GatewayConsumptionBatchStatus,
+  GatewayConsumptionBatchResult,
+  GatewayConsumerBatchContractDependencies,
+} from "./gateway.consumer.batch.contract";

@@ -3021,3 +3021,24 @@ Utility and guard:
   - Status: DEGRADED (!intent.valid) > PARTIAL (valid + chunkCount=0) > COMPLETE (valid + chunkCount>0); NONE for empty
   - `frozenCount` = receipts with `freeze` defined; `totalChunksRetrieved` = sum of `intake.retrieval.chunkCount`
   - `ConsumerContract.consume()` batch surface closed; `control.plane.workflow.barrel.ts` workflow batch family FULLY CLOSED (Intake W35 + Retrieval W36 + Packaging W40 + Consumer W44)
+
+---
+
+## W45-T1 CP1 — GatewayConsumerBatchContract (2026-04-05)
+
+- Tranche: W45-T1 — GatewayConsumerBatchContract (REALIZATION class)
+- Control point: CP1
+- Lane: Full Lane
+- Files added:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.consumer.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.consumer.batch.contract.test.ts`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.gateway.barrel.ts`
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json`
+- Tests executed:
+  - `npx vitest run` (CPF) -> 2900 tests, 0 failures (+30 from W45-T1)
+- Notes:
+  - `GatewayConsumerBatchContract.batch(signals)` calls `GatewayConsumerContract.consume()` per signal
+  - Status: DEGRADED (!intakeResult.intent.valid) > PARTIAL (valid + chunkCount=0) > COMPLETE (valid + chunkCount>0); NONE for empty
+  - `warnedCount` = receipts with `warnings.length > 0`; `totalChunksRetrieved` = sum of `intakeResult.retrieval.chunkCount`
+  - `GatewayConsumerContract.consume()` batch surface closed; `control.plane.gateway.barrel.ts` FULLY CLOSED (W22-W25 gateway family + W41-W43 log family + W45 consumer; all 8 batch surfaces)

@@ -1,4 +1,4 @@
-# CVF Agent Handoff — 2026-04-04
+# CVF Agent Handoff — 2026-04-05
 
 > Branch: `main`
 > Branch posture: `main` is the canonical continuation branch after 2026-04-04 convergence; `cvf-next` is kept as a synchronized mirror for compatibility
@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W40-T1 closed delivered; relocation lane closed-by-default; repo canon converged into `main`; next default focus is master architecture continuation
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W41-T1 closed delivered; relocation lane closed-by-default; repo canon converged into `main`; next default focus is master architecture continuation
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 
 ---
@@ -19,7 +19,7 @@
 - Pre-public restructuring posture is now narrowed, canonized, and closed-by-default: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
 
 ### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2759 tests, 0 failures**
+- CPF (Control Plane Foundation): **2786 tests, 0 failures**
 - EPF (Execution Plane Foundation): **1123 tests, 0 failures**
 - GEF (Governance Expansion Foundation): **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): **1465 tests, 0 failures**
@@ -28,6 +28,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W41-T1 | Gateway Auth Log Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — GatewayAuthLogBatchContract canonical; CPF 2786 tests (+27); all 9 pass conditions satisfied; GatewayAuthLogContract.log() batch surface closed |
 | W40-T1 | Packaging Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — PackagingBatchContract canonical; CPF 2759 tests (+36); all 9 pass conditions satisfied; packaging batch surface closed |
 | W39-T1 | Model Gateway Boundary Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — ModelGatewayBoundaryBatchContract canonical; CPF 2723 tests (+27); all 9 pass conditions satisfied; W8-T1 model gateway boundary batch surface closed |
 | W38-T1 | Context Enrichment Batch Contract (REALIZATION class) | CLOSED DELIVERED 2026-04-04 — ContextEnrichmentBatchContract canonical; CPF 2696 tests (+36); W1-T11 context builder enrichment batch surface closed |
@@ -53,7 +54,7 @@
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.6-W32T1`)
 - Posture: `SUBSTANTIALLY DELIVERED`
 - All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1`
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1`
 - Documentation-to-implementation gap: CLOSED (`v3.6-W32T1`)
 
 ---

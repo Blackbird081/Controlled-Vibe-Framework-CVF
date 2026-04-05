@@ -2885,6 +2885,31 @@ Utility and guard:
 
 ---
 
+## W41-T1 CPF GatewayAuthLogBatchContract — 2026-04-05
+
+- Tranche: W41-T1 — GatewayAuthLogBatchContract (REALIZATION class)
+- Control point: CP1 — Full Lane
+- Extension: `CVF_CONTROL_PLANE_FOUNDATION`
+- Files added:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/gateway.auth.log.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/gateway.auth.log.batch.contract.test.ts`
+- Files modified:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.gateway.barrel.ts` (W41-T1 exports added)
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json` (W41-T1 entry added)
+- Tests executed:
+  - `npx vitest run tests/gateway.auth.log.batch.contract.test.ts` (CPF) → PASS (27 tests, 0 failures)
+  - `npm test` (CPF) → PASS (2786 tests, 0 failures)
+- Notes:
+  - `GatewayAuthLogBatchContract.batch(entries: GatewayAuthResult[][], log: GatewayAuthLogContract)` calls `log.log(entry)` for each entry
+  - `dominantAuthStatus: GatewayAuthLogBatchDominantStatus` = `AuthStatus | "EMPTY"`; precedence REVOKED > EXPIRED > DENIED > AUTHENTICATED; `"EMPTY"` when all counts zero
+  - Aggregates `totalRequests`, `authenticatedCount`, `deniedCount`, `expiredCount`, `revokedCount` as sums across all logs
+  - Uses `resolveDominantByCount` + `createDeterministicBatchIdentity` from `batch.contract.shared.ts` (GC-036)
+  - 27 new tests across 6 describe groups; no additions to `index.test.ts` (GC-024 compliant)
+  - CPF: 2759 → 2786 (+27); delta: `docs/baselines/CVF_W41_T1_CP1_GATEWAY_AUTH_LOG_BATCH_DELTA_2026-04-05.md`
+  - Closes `GatewayAuthLogContract.log()` batch surface — W1-T8 gateway auth log family
+
+---
+
 ## Batch CPF Maintainability Hardening — 2026-04-01
 
 - Tranche: Maintainability remediation — shared batch helper adoption + maintainability guard closure

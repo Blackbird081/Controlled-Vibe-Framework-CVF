@@ -1805,6 +1805,17 @@
         "GatewayConsumerBatchContract",
         "createGatewayConsumerBatchContract"
       ]
+    },
+    {
+      "scope": "CPF Design Consumer Batch (W46-T1 CP1)",
+      "canonicalFile": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/design.consumer.batch.contract.test.ts",
+      "forbiddenFiles": [
+        "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts"
+      ],
+      "forbiddenPatterns": [
+        "DesignConsumerBatchContract",
+        "createDesignConsumerBatchContract"
+      ]
     }
   ]
 }

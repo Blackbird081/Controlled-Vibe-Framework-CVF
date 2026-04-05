@@ -3042,3 +3042,25 @@ Utility and guard:
   - Status: DEGRADED (!intakeResult.intent.valid) > PARTIAL (valid + chunkCount=0) > COMPLETE (valid + chunkCount>0); NONE for empty
   - `warnedCount` = receipts with `warnings.length > 0`; `totalChunksRetrieved` = sum of `intakeResult.retrieval.chunkCount`
   - `GatewayConsumerContract.consume()` batch surface closed; `control.plane.gateway.barrel.ts` FULLY CLOSED (W22-W25 gateway family + W41-W43 log family + W45 consumer; all 8 batch surfaces)
+
+---
+
+## W46-T1 CP1 — DesignConsumerBatchContract (2026-04-05)
+
+- Tranche: W46-T1 — DesignConsumerBatchContract (REALIZATION class)
+- Control point: CP1
+- Lane: Full Lane
+- Files added:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/design.consumer.batch.contract.ts`
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/design.consumer.batch.contract.test.ts`
+- Files updated:
+  - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/control.plane.design.boardroom.barrel.ts`
+  - `governance/compat/CVF_TEST_PARTITION_OWNERSHIP_REGISTRY.json`
+- Tests executed:
+  - `npx vitest run` (CPF) -> 2929 tests, 0 failures (+29 from W46-T1)
+- Notes:
+  - `DesignConsumerBatchContract.batch(intakes)` calls `DesignConsumerContract.consume()` per intake
+  - Status: DEGRADED (orchestrationBlocked + decision !== AMEND_PLAN) > PARTIAL (orchestrationBlocked + decision === AMEND_PLAN) > COMPLETE (!orchestrationBlocked); NONE for empty
+  - DEGRADED triggered by ESCALATE (finance domain + no-context/R3 plan warnings); PARTIAL triggered by injected unanswered clarifications → AMEND_PLAN
+  - `warnedCount` = receipts with `warnings.length > 0`; `blockedCount` = receipts with `orchestrationBlocked === true`
+  - `DesignConsumerContract.consume()` batch surface closed; `control.plane.design.boardroom.barrel.ts` FULLY CLOSED (W26-W34 + W46; all 9 batch surfaces)

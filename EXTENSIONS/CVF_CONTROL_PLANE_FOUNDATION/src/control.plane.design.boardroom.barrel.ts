@@ -182,3 +182,13 @@ export type {
   ClarificationRefinementBatch,
   ClarificationRefinementBatchContractDependencies,
 } from "./clarification.refinement.batch.contract";
+
+export {
+  DesignConsumerBatchContract,
+  createDesignConsumerBatchContract,
+} from "./design.consumer.batch.contract";
+export type {
+  DesignConsumptionBatchStatus,
+  DesignConsumptionBatchResult,
+  DesignConsumerBatchContractDependencies,
+} from "./design.consumer.batch.contract";

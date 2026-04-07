@@ -1,6 +1,8 @@
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type { WatchdogPulse, WatchdogStatus } from "./watchdog.pulse.contract";
 
+export type { WatchdogStatus } from "./watchdog.pulse.contract";
+
 // --- Types ---
 
 export interface WatchdogAlertLog {

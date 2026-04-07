@@ -42,8 +42,10 @@ function makePipelineResult(
     candidateItems: [
       {
         itemId: `item-${idx}`,
+        title: `title-${idx}`,
         content: `content-${idx}`,
         relevanceScore: 0.5 + idx * 0.1,
+        source: "test",
       },
     ],
   });

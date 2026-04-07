@@ -51,10 +51,17 @@ Use this rule instead:
 
 - clone the whole repo
 - open the exact extension you need to work on
-- run `npm ci` only inside that extension
+- if that extension already has `package-lock.json`, run `npm ci`
+- otherwise run `npm install`
 - if you switch to another extension later, install that one then
 
 This keeps setup lighter, faster, and less fragile.
+
+Install decision rule:
+
+- `npm ci` is preferred when the package already has a committed `package-lock.json`
+- `npm install` is the fallback when a package does not ship a lockfile
+- the 4 foundation packages now ship lockfiles, so fresh clones can use `npm ci` there immediately
 
 ---
 
@@ -66,7 +73,8 @@ Go into that extension and install only there:
 
 ```powershell
 cd EXTENSIONS/<target-extension>
-npm ci
+npm ci   # if package-lock.json exists
+# or: npm install   # if that package has no lockfile
 ```
 
 Then run the package commands you need, usually:
@@ -113,6 +121,7 @@ npm run test
 ```powershell
 cd EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION
 npm ci
+npm run check
 npm run test
 ```
 
@@ -134,7 +143,8 @@ Agents should follow this default behavior:
 - do not install the whole repo up front
 - do not install every package in `EXTENSIONS/` preemptively
 - install dependencies only for the package they are actively touching
-- if a command fails because a local package dependency is missing, run `npm ci` in that package at that time
+- if the touched package has `package-lock.json`, run `npm ci`
+- if the touched package has no lockfile, run `npm install`
 
 This is the preferred default for CVF.
 
@@ -149,6 +159,22 @@ A broader install is only reasonable when:
 - you intentionally need several UIs/runtimes at once
 
 Even then, install package-by-package, not by copying old `node_modules/`.
+
+### Convenience Script
+
+If you need all 4 foundations installed at once:
+
+```powershell
+.\scripts\bootstrap_foundations.ps1
+```
+
+Or in shell environments:
+
+```bash
+./scripts/bootstrap_foundations.sh
+```
+
+These scripts use `npm ci` when a package lockfile already exists, otherwise `npm install`. The canonical install policy (per-extension) remains unchanged.
 
 ---
 
@@ -173,7 +199,7 @@ git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 cd Controlled-Vibe-Framework-CVF
 git checkout main
 cd EXTENSIONS/<target-extension>
-npm ci
+npm ci   # if package-lock.json exists
 ```
 
 Then run only the commands needed for that package.

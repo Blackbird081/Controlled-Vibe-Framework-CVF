@@ -22,4 +22,26 @@
 
 **If you only pick one page, open [docs/GET_STARTED.md](docs/GET_STARTED.md).**
 
-*Last updated: 2026-04-03*
+## New Machine Quick Start
+
+If this repo was freshly cloned and you only need one extension:
+
+```bash
+cd EXTENSIONS/<target-extension>
+npm ci   # if package-lock.json exists
+# or: npm install   # if that package has no lockfile
+```
+
+If you need all 4 foundations ready at once:
+
+```powershell
+.\scripts\bootstrap_foundations.ps1
+```
+
+```bash
+./scripts/bootstrap_foundations.sh
+```
+
+Use [CVF New Machine Setup Checklist](docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md) for the canonical flow.
+
+*Last updated: 2026-04-07*

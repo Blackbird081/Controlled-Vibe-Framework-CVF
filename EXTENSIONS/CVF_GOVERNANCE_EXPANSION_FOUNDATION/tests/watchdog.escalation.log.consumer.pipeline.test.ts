@@ -18,7 +18,7 @@ function makeDecision(
     sourceLogId: "log-001",
     action,
     rationale: "test rationale",
-    dominantStatus: action === "ESCALATE" ? "CRITICAL" : action === "MONITOR" ? "WARNING" : "OK",
+    dominantStatus: action === "ESCALATE" ? "CRITICAL" : action === "MONITOR" ? "WARNING" : "NOMINAL",
     criticalCount: action === "ESCALATE" ? 1 : 0,
     warningCount: action === "MONITOR" ? 1 : 0,
     alertWasActive: action !== "CLEAR",

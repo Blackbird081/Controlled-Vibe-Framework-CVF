@@ -87,7 +87,7 @@ Choose the shortest path for your role:
 ```bash
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 cd Controlled-Vibe-Framework-CVF/EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npm install
+npm ci
 npm run dev
 ```
 
@@ -106,7 +106,29 @@ See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_IS
 ### Moving To A New Machine
 
 Use [New Machine Setup Checklist](docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md).
-The default CVF rule is: clone first, then run `npm ci` only inside the extension you are actively using.
+The default CVF rule is: clone first, then install only inside the extension you are actively using.
+Use `npm ci` when that package already has `package-lock.json`; otherwise use `npm install`.
+
+### New Machine Quick Start
+
+Fresh clone, one extension only:
+
+```bash
+git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
+cd Controlled-Vibe-Framework-CVF/EXTENSIONS/<target-extension>
+npm ci   # if package-lock.json exists
+# or: npm install   # if that package has no lockfile
+```
+
+If you need all 4 foundations ready at once, use:
+
+```powershell
+.\scripts\bootstrap_foundations.ps1
+```
+
+```bash
+./scripts/bootstrap_foundations.sh
+```
 
 ## Current Status
 

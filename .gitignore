@@ -47,6 +47,10 @@ __pycache__/
 
 # Large lock files in extension modules (regenerate via npm install)
 EXTENSIONS/**/package-lock.json
+!EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/package-lock.json
+!EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/package-lock.json
+!EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/package-lock.json
+!EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/package-lock.json
 
 # AI Research (external reference)
 AI-Research-SKILLs/

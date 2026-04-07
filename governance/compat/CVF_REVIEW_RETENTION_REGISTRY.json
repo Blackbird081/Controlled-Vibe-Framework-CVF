@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastReviewed": "2026-04-05",
+  "lastReviewed": "2026-04-07",
   "classes": [
     {
       "id": "ACTIVE_DECISION_REVIEW",
@@ -17,11 +17,11 @@
   ],
   "summary": {
     "activeRecentCount": 50,
-    "retainEvidenceCount": 160,
-    "safeToArchiveCount": 92,
+    "retainEvidenceCount": 167,
+    "safeToArchiveCount": 85,
     "archivedCount": 335,
-    "derivedAt": "2026-04-05",
-    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references."
+    "derivedAt": "2026-04-07",
+    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references, including P4 CP6-CP12 review documents still pinned by live references."
   },
   "retainEvidencePaths": [
     "docs/reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md",
@@ -181,6 +181,13 @@
     "docs/reviews/CVF_GC019_P4_CP3_EXPORT_SHORTLIST_DEFINITION_REVIEW_2026-04-02.md",
     "docs/reviews/CVF_GC019_P4_CP4_SHORTLIST_PACKAGING_BOUNDARY_DEFINITION_REVIEW_2026-04-02.md",
     "docs/reviews/CVF_GC019_P4_CP5_CURATED_FRONT_DOOR_NAVIGATION_DEFINITION_REVIEW_2026-04-02.md",
+    "docs/reviews/CVF_GC019_P4_CP6_ROOT_FRONT_DOOR_CONTENT_SYNC_REVIEW_2026-04-03.md",
+    "docs/reviews/CVF_GC019_P4_CP7_CORE_GIT_EXPORT_BOUNDARY_IMPLEMENTATION_REVIEW_2026-04-03.md",
+    "docs/reviews/CVF_GC019_P4_CP8_GUARD_CONTRACT_EXPORT_BOUNDARY_TIGHTENING_REVIEW_2026-04-03.md",
+    "docs/reviews/CVF_GC019_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_REVIEW_2026-04-03.md",
+    "docs/reviews/CVF_GC019_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_REVIEW_2026-04-03.md",
+    "docs/reviews/CVF_GC019_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_REVIEW_2026-04-03.md",
+    "docs/reviews/CVF_GC019_P4_CP12_SHORTLIST_DOCUMENTATION_COMPLETION_REVIEW_2026-04-03.md",
     "docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md",
     "docs/reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_PREPUBLIC_RESTRUCTURING_2026-04-02.md",
     "docs/reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md"

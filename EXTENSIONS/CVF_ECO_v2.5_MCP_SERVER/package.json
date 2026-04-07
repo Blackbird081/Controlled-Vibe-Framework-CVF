@@ -25,5 +25,12 @@
     "vitest": "^4.0.18"
   },
   "keywords": ["cvf", "mcp", "governance", "guard", "ai-safety"],
-  "license": "MIT"
+  "license": "MIT",
+  "exportReadiness": {
+    "status": "CANDIDATE",
+    "phase": "A",
+    "targetDate": "2026-05-01",
+    "blockers": [],
+    "documentation": "docs/reference/CVF_PREPUBLIC_MCP_SERVER_EXPORT_SURFACE_2026-04-08.md"
+  }
 }

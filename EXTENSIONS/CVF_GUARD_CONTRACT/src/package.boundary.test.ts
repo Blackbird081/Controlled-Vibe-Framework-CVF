@@ -17,6 +17,7 @@ describe('package boundary', () => {
       '.': './src/index.ts',
       './types': './src/types.ts',
       './engine': './src/engine.ts',
+      './enterprise': './src/enterprise/enterprise.ts',
       './guards/*': './src/guards/*.ts',
       './runtime/agent-handoff': './src/runtime/agent-handoff.ts',
       './runtime/agent-coordination': './src/runtime/agent-coordination.ts',
@@ -32,6 +33,7 @@ describe('package boundary', () => {
       'src/types.ts',
       'src/engine.ts',
       'src/guards',
+      'src/enterprise',
       'src/runtime/agent-handoff.ts',
       'src/runtime/agent-coordination.ts',
     ]);

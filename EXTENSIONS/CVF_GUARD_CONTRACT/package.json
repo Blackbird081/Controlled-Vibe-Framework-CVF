@@ -47,5 +47,12 @@
   "optionalDependencies": {
     "better-sqlite3": "^12.6.2"
   },
-  "license": "CC-BY-NC-ND-4.0"
+  "license": "CC-BY-NC-ND-4.0",
+  "exportReadiness": {
+    "status": "CANDIDATE",
+    "phase": "A",
+    "targetDate": "2026-05-01",
+    "blockers": [],
+    "documentation": "docs/reference/CVF_PREPUBLIC_GUARD_CONTRACT_EXPORT_SURFACE_2026-04-03.md"
+  }
 }

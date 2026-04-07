@@ -2,9 +2,24 @@
 
 Unified guard contracts, a hardened default runtime engine, and governed helpers for cross-channel governance enforcement in AI systems. Provides typed request context evaluation, pluggable guard modules, and runtime coordination helpers for agent-based workflows.
 
-## Pre-Public Status
+## Export Readiness
+
+**Status**: CANDIDATE (Phase A)  
+**Target Date**: 2026-05-01  
+**Blockers**: None  
+**Documentation**: [Export Surface Definition](../../docs/reference/CVF_PREPUBLIC_GUARD_CONTRACT_EXPORT_SURFACE_2026-04-03.md)
 
 This package is part of the CVF pre-public packaging lane. It is not yet published to a public registry. Availability outside the CVF monorepo requires a future publication decision.
+
+### Installation (Future)
+
+Once published to npm:
+
+```bash
+npm install cvf-guard-contract
+```
+
+For now, reference as a local workspace dependency within the CVF monorepo.
 
 ## Prerequisites
 

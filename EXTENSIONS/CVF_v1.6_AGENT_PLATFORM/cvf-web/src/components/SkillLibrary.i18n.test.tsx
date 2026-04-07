@@ -23,7 +23,6 @@ const setFetchPayload = (payload: unknown) => {
         ok: true,
         json: async () => payload,
     });
-    // @ts-expect-error — assign test fetch
     global.fetch = fetchMock;
 };
 

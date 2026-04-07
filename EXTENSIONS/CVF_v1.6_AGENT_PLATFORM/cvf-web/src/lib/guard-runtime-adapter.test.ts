@@ -83,8 +83,9 @@ describe('WebGuardRuntimeEngine', () => {
   });
 
   test('unregisters guard', () => {
-    engine.registerGuard(new PhaseGateGuard());
-    expect(engine.unregisterGuard('phase_gate')).toBe(true);
+    // PhaseGateGuard is mandatory and cannot be unregistered, use a non-mandatory guard instead
+    engine.registerGuard(new MutationBudgetGuard());
+    expect(engine.unregisterGuard('mutation_budget')).toBe(true);
     expect(engine.getGuardCount()).toBe(0);
   });
 

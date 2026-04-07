@@ -17,6 +17,7 @@ describe('AgentChatMessageBubble', () => {
             role: 'system',
             content: 'System message',
             status: 'complete',
+            timestamp: new Date('2026-01-01T00:00:00Z'),
         };
 
         render(<AgentChatMessageBubble message={message} />);
@@ -32,9 +33,10 @@ describe('AgentChatMessageBubble', () => {
             role: 'assistant',
             content: 'PHASE B: Design\n\n```ts\nconsole.log(\"ok\");\n```',
             status: 'complete',
+            timestamp: new Date('2026-01-01T00:00:00Z'),
             metadata: {
                 phase: 'DESIGN',
-                qualityScore: 88,
+                qualityScore: { overall: 88, completeness: 85, clarity: 90, actionability: 88, compliance: 87 },
                 acceptanceStatus: 'pending',
                 model: 'gpt-4o',
                 tokens: 2000,
@@ -70,6 +72,7 @@ describe('AgentChatMessageBubble', () => {
             role: 'assistant',
             content: 'Done',
             status: 'complete',
+            timestamp: new Date('2026-01-01T00:00:00Z'),
             metadata: {
                 acceptanceStatus: 'accepted',
             },
@@ -85,6 +88,7 @@ describe('AgentChatMessageBubble', () => {
             role: 'assistant',
             content: '```ts\nconsole.log(\"hi\");\n```',
             status: 'complete',
+            timestamp: new Date('2026-01-01T00:00:00Z'),
         };
 
         render(<AgentChatMessageBubble message={message} language="en" />);
@@ -99,6 +103,7 @@ describe('AgentChatMessageBubble', () => {
             role: 'assistant',
             content: 'Use `useState` hook. See [React docs](https://react.dev).',
             status: 'complete',
+            timestamp: new Date('2026-01-01T00:00:00Z'),
         };
 
         render(<AgentChatMessageBubble message={message} language="en" />);

@@ -276,7 +276,7 @@ describe('SpecExport', () => {
 
     it('shows Spec Gate FAIL when required fields are missing', async () => {
         vi.mocked(evaluateEnforcement).mockReturnValue({
-            status: 'active',
+            status: 'BLOCK',
             specGate: {
                 status: 'FAIL',
                 missing: [{ id: 'goal', label: 'Goal' }],
@@ -284,8 +284,7 @@ describe('SpecExport', () => {
                 total: 2,
             },
             reasons: [],
-            mode: 'governance',
-        } as ReturnType<typeof evaluateEnforcement>);
+        } as unknown as ReturnType<typeof evaluateEnforcement>);
 
         render(<SpecExport {...defaultProps} values={{}} />);
         const allText = document.body.textContent || '';

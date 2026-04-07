@@ -9,7 +9,7 @@ describe('usePhaseDetection', () => {
     it('detects phases and returns compliance', () => {
         const { result } = renderHook(() => usePhaseDetection());
         const phase = result.current.detectPhase('PHASE B: Design');
-        expect(phase).toBe('Design');
+        expect(phase).toBe('DESIGN');
 
         const compliance = result.current.getCompliance(phase, 'PHASE B: Design\nGoal: ...\nConstraints: ...');
         expect(compliance).not.toBeNull();

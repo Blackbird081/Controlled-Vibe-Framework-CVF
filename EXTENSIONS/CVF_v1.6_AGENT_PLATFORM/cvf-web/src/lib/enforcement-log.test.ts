@@ -24,8 +24,8 @@ describe('enforcement-log', () => {
                 status: 'BLOCK',
                 reasons: ['Budget exceeded'],
                 riskGate: { status: 'BLOCK', riskLevel: 'R4', reason: 'R4 blocked' },
-                specGate: { status: 'FAIL', completeness: 0, missing: [{ key: 'goal', label: 'Goal', required: true }] },
-            };
+                specGate: { status: 'FAIL', missing: [{ id: 'goal', label: 'Goal', required: true }] },
+            } as unknown as EnforcementResult;
 
             logEnforcementDecision({
                 source: 'agent_chat',
@@ -50,7 +50,7 @@ describe('enforcement-log', () => {
             const enforcement: EnforcementResult = {
                 status: 'ALLOW',
                 reasons: [],
-            };
+            } as unknown as EnforcementResult;
 
             logEnforcementDecision({
                 source: 'spec_export',
@@ -70,7 +70,10 @@ describe('enforcement-log', () => {
         });
 
         it('uses different source types', () => {
-            const enforcement: EnforcementResult = { status: 'CLARIFY', reasons: ['Needs more info'] };
+            const enforcement: EnforcementResult = { 
+                status: 'CLARIFY', 
+                reasons: ['Needs more info'],
+            } as unknown as EnforcementResult;
             
             logEnforcementDecision({ source: 'multi_agent', mode: 'full', enforcement });
             expect(trackEventMock).toHaveBeenCalledWith('enforcement_decision', expect.objectContaining({ source: 'multi_agent' }));
@@ -104,7 +107,10 @@ describe('enforcement-log', () => {
                 logEnforcementDecision({
                     source: 'agent_chat',
                     mode: 'simple',
-                    enforcement: { status: 'ALLOW', reasons: [] },
+                    enforcement: { 
+                        status: 'ALLOW', 
+                        reasons: [],
+                    } as unknown as EnforcementResult,
                 });
                 expect(trackEventMock).not.toHaveBeenCalled();
             } finally {

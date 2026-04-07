@@ -22,7 +22,6 @@ const setFetchPayload = (payload: unknown) => {
         ok: true,
         json: async () => payload,
     });
-    // @ts-expect-error — assign test fetch
     global.fetch = fetchMock;
 };
 
@@ -197,7 +196,6 @@ describe('SkillLibrary', () => {
             ok: true,
             json: async () => promise,
         });
-        // @ts-expect-error — assign test fetch
         global.fetch = fetchMock;
 
         const { container } = render(<SkillLibrary />);
@@ -261,7 +259,6 @@ describe('SkillLibrary', () => {
         getSkillCategoriesMock.mockRejectedValue(new Error('fail'));
         fetchMock.mockReset();
         fetchMock.mockRejectedValue(new Error('fetch failed'));
-        // @ts-expect-error — assign test fetch
         global.fetch = fetchMock;
 
         render(<SkillLibrary />);
@@ -660,7 +657,6 @@ describe('SkillLibrary', () => {
                 ],
             }),
         });
-        // @ts-expect-error — assign test fetch
         global.fetch = fetchMock;
 
         render(<SkillLibrary />);

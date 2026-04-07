@@ -158,7 +158,6 @@ describe('SkillPlanner', () => {
         skill_id: 'skill-1',
         skill_name: 'Requirements',
         domain: 'business_analysis',
-        category: 'analysis',
         difficulty: 'Medium',
         risk_level: 'R1',
         phases: 'discovery',

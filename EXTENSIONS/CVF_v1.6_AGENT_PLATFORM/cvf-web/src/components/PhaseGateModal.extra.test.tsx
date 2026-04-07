@@ -13,7 +13,7 @@ describe('PhaseGateModal extra', () => {
 
         render(
             <PhaseGateModal
-                phase="Discovery"
+                phase="INTAKE"
                 response="No required items here"
                 language="en"
                 onApprove={onApprove}
@@ -40,7 +40,7 @@ describe('PhaseGateModal extra', () => {
 
         render(
             <PhaseGateModal
-                phase="Design"
+                phase="DESIGN"
                 response="No auto checks"
                 language="vi"
                 onApprove={onApprove}

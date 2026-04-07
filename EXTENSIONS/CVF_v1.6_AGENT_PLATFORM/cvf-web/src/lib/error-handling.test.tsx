@@ -45,7 +45,7 @@ describe('ErrorBoundary', () => {
     it('renders custom fallback when provided', () => {
         const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
-        function Boom() {
+        function Boom(): React.ReactNode {
             throw new Error('boom');
         }
 
@@ -61,10 +61,9 @@ describe('ErrorBoundary', () => {
 
     it('shows stack trace in development mode', () => {
         const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
-        const originalEnv = process.env.NODE_ENV;
-        process.env.NODE_ENV = 'development';
+        vi.stubEnv('NODE_ENV', 'development');
 
-        function Boom() {
+        function Boom(): React.ReactNode {
             throw new Error('dev boom');
         }
 
@@ -76,7 +75,7 @@ describe('ErrorBoundary', () => {
 
         expect(screen.getByText(/Stack Trace/i)).toBeTruthy();
 
-        process.env.NODE_ENV = originalEnv;
+        vi.unstubAllEnvs();
         consoleSpy.mockRestore();
     });
 

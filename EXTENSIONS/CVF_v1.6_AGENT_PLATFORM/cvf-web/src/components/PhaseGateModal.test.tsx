@@ -15,7 +15,7 @@ describe('PhaseGateModal', () => {
 
         render(
             <PhaseGateModal
-                phase="Discovery"
+                phase="INTAKE"
                 response={response}
                 language="en"
                 onApprove={onApprove}
@@ -34,7 +34,7 @@ describe('PhaseGateModal', () => {
     it('disables approve when required items are missing', () => {
         render(
             <PhaseGateModal
-                phase="Design"
+                phase="DESIGN"
                 response="Partial response"
                 language="en"
                 onApprove={vi.fn()}
@@ -52,7 +52,7 @@ describe('PhaseGateModal', () => {
         const onReject = vi.fn();
         render(
             <PhaseGateModal
-                phase="Discovery"
+                phase="INTAKE"
                 response="test"
                 language="en"
                 onApprove={vi.fn()}
@@ -69,7 +69,7 @@ describe('PhaseGateModal', () => {
         const onClose = vi.fn();
         render(
             <PhaseGateModal
-                phase="Discovery"
+                phase="INTAKE"
                 response="test"
                 language="en"
                 onApprove={vi.fn()}
@@ -86,7 +86,7 @@ describe('PhaseGateModal', () => {
     it('toggles checkbox item on and off', async () => {
         render(
             <PhaseGateModal
-                phase="Discovery"
+                phase="INTAKE"
                 response="Understanding..."
                 language="en"
                 onApprove={vi.fn()}
@@ -114,7 +114,7 @@ describe('PhaseGateModal', () => {
     it('renders Vietnamese labels when language is vi', () => {
         render(
             <PhaseGateModal
-                phase="Design"
+                phase="DESIGN"
                 response="test"
                 language="vi"
                 onApprove={vi.fn()}
@@ -131,7 +131,7 @@ describe('PhaseGateModal', () => {
         const onClose = vi.fn();
         render(
             <PhaseGateModal
-                phase="Discovery"
+                phase="INTAKE"
                 response="test"
                 language="vi"
                 onApprove={vi.fn()}
@@ -148,7 +148,7 @@ describe('PhaseGateModal', () => {
         const response = 'Understanding Assumption IN SCOPE OUT SCOPE Risk';
         render(
             <PhaseGateModal
-                phase="Discovery"
+                phase="INTAKE"
                 response={response}
                 language="en"
                 onApprove={vi.fn()}

@@ -127,7 +127,7 @@ describe('templates/index', () => {
         });
 
         it('handles template without outputExpected', () => {
-            const template = { ...templates[0], outputExpected: undefined, outputTemplate: undefined };
+            const template = { ...templates[0], outputExpected: [], outputTemplate: undefined };
             const spec = generateCompleteSpec(template, {});
             expect(spec).toContain('Comprehensive analysis');
         });

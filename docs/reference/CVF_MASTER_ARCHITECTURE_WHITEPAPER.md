@@ -3,13 +3,13 @@ Memory class: POINTER_RECORD
 
 > **Version:** 3.7-W46T1
 > **Date:** 2026-04-05
-> **Document Type:** SUBSTANTIALLY DELIVERED ARCHITECTURE WHITEPAPER — all four planes fully bridged; W7 Governance Integration Wave complete 2026-03-28; post-W7 continuation closures delivered through W54-T1 2026-04-05; all CPF barrel families FULLY CLOSED; EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; canonical architecture snapshot remains `v3.7-W46T1`; operational readout refreshed through `W58-T1` (MC4 EPF Plane Closure Assessment: DONE-ready; Model Gateway + Sandbox Runtime formally deferred as intentionally future-facing)
+> **Document Type:** CLOSURE-ASSESSED ARCHITECTURE WHITEPAPER — all four planes fully bridged and assessed; W7 Governance Integration Wave complete 2026-03-28; post-W7 continuation closures delivered through W54-T1 2026-04-05; all CPF barrel families FULLY CLOSED; EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; canonical architecture snapshot remains `v3.7-W46T1`; operational readout refreshed through `W59-T1` (MC5 Whitepaper Canon Promotion Pass: CPF DONE-ready / GEF DONE 6/6 / LPF DONE-ready 7/7 / EPF DONE-ready; MC sequence MC1-MC5 fully complete)
 > **Authorization Status:** W5-T2 whitepaper update canonically closed 2026-03-28 (v3.0-W7T10). W11-T1 whitepaper update canonically closed 2026-03-29 (v3.1-W10T1). W12-T1 closure canonically closed 2026-03-29 and reflected in `v3.2-W12T1`. W13-T1 (`AgentDefinitionCapabilityBatchContract`) canonically closed 2026-03-30. W14-T1 (`AgentScopeResolutionBatchContract`) canonically closed 2026-03-30. W15-T1 (`AgentDefinitionAuditBatchContract`) canonically closed 2026-03-30 and reflected in `v3.3-W15T1`. W16-T1 whitepaper update canonically closed 2026-03-30 (v3.3-W15T1). W17-T1 (`AgentRegistrationBatchContract`) canonically closed 2026-03-30. W18-T1 whitepaper update canonically closed 2026-03-30 (`v3.4-W17T1`). W19-T1 through W30-T1 canonically closed 2026-03-30 to 2026-04-01 across trust isolation, gateway, orchestration, and boardroom batch surfaces. W31-T1 (`BoardroomRoundBatchContract`) and W32-T1 (`BoardroomMultiRoundBatchContract`) canonically closed 2026-04-01 and reflected in `v3.6-W32T1`. W33-T1 (`KnowledgeRankingBatchContract`) canonically closed 2026-04-01. W34-T1 (`ClarificationRefinementBatchContract`) canonically closed 2026-04-01. W35-T1 (`IntakeBatchContract`) canonically closed 2026-04-03. W36-T1 (`RetrievalBatchContract`) canonically closed 2026-04-03. W37-T1 (`ContextPackagerBatchContract`) canonically closed 2026-04-04. W38-T1 (`ContextEnrichmentBatchContract`) canonically closed 2026-04-04. W39-T1 (`ModelGatewayBoundaryBatchContract`) canonically closed 2026-04-05. W40-T1 (`PackagingBatchContract`) canonically closed 2026-04-05. W41-T1 (`GatewayAuthLogBatchContract`) canonically closed 2026-04-05. W42-T1 (`GatewayPIIDetectionLogBatchContract`) canonically closed 2026-04-05. W43-T1 (`RouteMatchLogBatchContract`) canonically closed 2026-04-05. W44-T1 (`ConsumerBatchContract`) canonically closed 2026-04-05; `control.plane.workflow.barrel.ts` FULLY CLOSED. W45-T1 (`GatewayConsumerBatchContract`) canonically closed 2026-04-05; `control.plane.gateway.barrel.ts` FULLY CLOSED. W46-T1 (`DesignConsumerBatchContract`) canonically closed 2026-04-05; `control.plane.design.boardroom.barrel.ts` FULLY CLOSED. W47-T1 whitepaper update canonically closed 2026-04-05 (`v3.7-W46T1`); all CPF barrel families FULLY CLOSED. W48-T1 (`ExecutionBridgeConsumerBatchContract`) through W54-T1 (`ExecutionReintakeBatchContract`) canonically closed 2026-04-05; EPF standalone batch wave W49-T1 through W54-T1 is now FULLY CLOSED. Post-baseline continuation is reconciled through `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1`. Current active tranche is `NONE`; any further continuation requires a new `GC-018` wave decision.
 > **Clean Baseline References:**
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts` (phases, risk model)
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts` (shared default guard stack)
 > - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts` (full runtime preset)
-> - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` (current quick status through `W54-T1`)
+> - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` (current quick status through `W59-T1`)
 > - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (canonical delivered wave line and post-cycle continuation history)
 > - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md` (historical reconciliation snapshot through `W5-T1`)
 
@@ -18,7 +18,7 @@ Memory class: POINTER_RECORD
 > - partially delivered target-state areas
 > - future-facing design principles that still require later governed waves
 
-> **Baseline Tracking Note:** as of `2026-04-05`, this whitepaper keeps the canonical architecture snapshot at `v3.7-W46T1` and refreshes the operational readout through `W54-T1` — reflecting complete consumer pipeline bridge coverage across all four planes, the W7 Governance Integration Wave, all post-W7 continuation deliveries from `W8-T1` through `W54-T1`, all CPF barrel families FULLY CLOSED, the EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED, and the latest CPF/EPF/GEF/LPF clean truth (`2929 / 1301 / 625 / 1465`). Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, the quality assessment for go/no-go expansion posture, and the handoff for execution rules.
+> **Baseline Tracking Note:** as of `2026-04-07`, this whitepaper keeps the canonical architecture snapshot at `v3.7-W46T1` and refreshes the operational readout through `W59-T1` — reflecting complete consumer pipeline bridge coverage across all four planes, the W7 Governance Integration Wave, all post-W7 continuation deliveries from `W8-T1` through `W54-T1`, all CPF barrel families FULLY CLOSED, the EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED, the MC1-MC5 closure sequence now fully complete, and the latest CPF/EPF/GEF/LPF clean truth (`2929 / 1301 / 625 / 1465`). Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, the quality assessment for post-closure posture, and the handoff for execution rules.
 
 > **Core Principle:** *"Agents may execute tasks, but they cannot control the system that governs them."*
 
@@ -96,7 +96,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ---
 
-## 4. Sơ đồ Kiến trúc Hiện hành (CURRENT CANONICAL ARCHITECTURE — BASELINE W4-T11, REFRESHED THROUGH W54-T1 ON 2026-04-05)
+## 4. Sơ đồ Kiến trúc Hiện hành (CURRENT CANONICAL ARCHITECTURE — BASELINE W4-T11, REFRESHED THROUGH W59-T1 ON 2026-04-07)
 
 > [!WARNING]
 > Sơ đồ bên dưới giữ nguyên anchor kiến trúc canon ở mốc `W4-T11`, nhưng phần readout đã được refresh theo continuation packet mới nhất. Nó cho thấy cái gì đã delivered ở baseline, cái gì đã tiến thêm sau baseline, và cái gì vẫn còn future-facing.
@@ -113,14 +113,14 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│       🛡️  CONTROL PLANE [SUBSTANTIALLY DELIVERED]              │
+│       🛡️  CONTROL PLANE [DONE-ready]                           │
 │                                                                 │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐ │
 │  │ AI Gateway      │─▶│ Knowledge Layer │─▶│ Context Builder│ │
-│  │ [SUBSTANTIALLY  │  │ [SUBSTANTIALLY  │  │ & Packager     │ │
-│  │  DELIVERED]     │  │  DELIVERED]     │  │                │ │
-│  │ auth/routing/   │  │ query + ranking │  │ [SUBSTANTIALLY │ │
-│  │ pii/gateway     │  │ + consumer path │  │  DELIVERED]    │ │
+│  │ [DONE]          │  │ [DONE]          │  │ & Packager     │ │
+│  │                 │  │                 │  │                │ │
+│  │ auth/routing/   │  │ query + ranking │  │ [DONE]         │ │
+│  │ pii/gateway     │  │ + consumer path │  │                │ │
 │  │ consumer paths  │  │                 │  │ context paths  │ │
 │  └─────────────────┘  └─────────────────┘  └───────┬────────┘ │
 │                                                     │          │
@@ -128,7 +128,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 │                                                                 │
 │                 ┌──────────────────────────────────────┐      │
 │                 │ AI Boardroom / Reverse Prompting     │      │
-│                 │ [SUBSTANTIALLY DELIVERED]            │      │
+│                 │ [DONE]                               │      │
 │                 │ orchestration + reverse prompting +  │      │
 │                 │ clarification refinement + boardroom │      │
 │                 │ consumer paths                       │      │
@@ -138,20 +138,20 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 │                                                                 │
 │                 ┌──────────────────────────────────────┐      │
 │                 │ CEO / Orchestrator Surface           │      │
-│                 │ [SUBSTANTIALLY DELIVERED]            │      │
+│                 │ [DONE]                               │      │
 │                 │ orchestration + boardroom + reverse  │      │
 │                 │ prompting + clarification refinement │      │
 │                 │ consumer bridges canonically closed  │      │
 │                 └────────────────┬─────────────────────┘      │
 │                                  ▼                            │
 │  ┌───────────────────────────────────────────────────────────┐ │
-│  │  ⚖️  GOVERNANCE LAYER [SUBSTANTIALLY DELIVERED]           │ │
+│  │  ⚖️  GOVERNANCE LAYER [DONE (6/6)]                        │ │
 │  │                                                           │ │
 │  │  ┌─────────────┐  ┌────────────────┐  ┌──────────────┐   │ │
 │  │  │ Policy      │  │ Trust &        │  │ Audit /      │   │ │
 │  │  │ Engine      │  │ Isolation      │  │ Consensus    │   │ │
-│  │  │ [DONE /     │  │ [SUBSTANTIALLY │  │ [DONE]       │   │ │
-│  │  │ INVARIANT]  │  │  DELIVERED]    │  │ all audit +  │   │ │
+│  │  │ [DONE /     │  │ [DONE]         │  │ [DONE]       │   │ │
+│  │  │ INVARIANT]  │  │                │  │ all audit +  │   │ │
 │  │  │ R0-R3       │  │ safety + guard │  │ consensus    │   │ │
 │  │  │ current     │  │ boundary exists│  │ bridges done │   │ │
 │  │  └─────────────┘  └────────────────┘  └──────────────┘   │ │
@@ -180,15 +180,15 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│         ⚡  EXECUTION PLANE [SUBSTANTIALLY DELIVERED]           │
+│         ⚡  EXECUTION PLANE [DONE-ready]                         │
 │                                                                 │
 │  PHASE: BUILD ───────────────────────────────────────────────  │
 │                                                                 │
 │  ┌────────────────┐    ┌────────────────┐   ┌───────────────┐ │
 │  │ Command Runtime│───▶│ Execution      │──▶│ Feedback /    │ │
-│  │ [SUBSTANTIALLY │    │ Pipeline       │   │ Re-intake     │ │
-│  │  DELIVERED]    │    │ [SUBSTANTIALLY │   │ [SUBSTANTIALLY│ │
-│  │ dispatch +     │    │  DELIVERED]    │   │  DELIVERED]   │ │
+│  │ [DONE]         │    │ Pipeline       │   │ Re-intake     │ │
+│  │                │    │ [DONE]         │   │ [DONE]        │ │
+│  │ dispatch +     │    │                │   │               │ │
 │  │ async ticket   │    │ execution      │   │ observer,     │ │
 │  │ surfaces       │    │ pipeline +     │   │ routing,      │ │
 │  └────────────────┘    │ status + batch │   │ resolution,   │ │
@@ -198,8 +198,8 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 │    ▼                            ▼                  ▼│          │
 │  ┌──────────────┐        ┌──────────────┐   ┌────────────────┐│
 │  │ Model Gateway│        │ MCP Bridge   │   │ Policy Gate    ││
-│  │ [DEFERRED]   │        │ [SUBSTANTIALLY│   │ [SUBSTANTIALLY││
-│  │              │        │  DELIVERED]  │   │  DELIVERED]   ││
+│  │ [DEFERRED]   │        │ [DONE]        │   │ [DONE]        ││
+│  │              │        │               │   │               ││
 │  │ boundary gov │        │ invocation + │   │ execution      ││
 │  │ in CPF W8-T1;│        │ batch paths  │   │ authorization  ││
 │  │ EPF provider │        │ delivered    │   │ + feedback rtg ││
@@ -222,7 +222,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│       🧠  LEARNING PLANE [SUBSTANTIALLY DELIVERED]              │
+│       🧠  LEARNING PLANE [DONE-ready]                           │
 │                                                                 │
 │  Artifacts / Results                                            │
 │      │                                                          │
@@ -230,12 +230,12 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 │  FeedbackLedger → PatternInsight → TruthModel                   │
 │                                                                 │
 │  Storage / TruthScore / Evaluation Engine                       │
-│  [SUBSTANTIALLY DELIVERED]                                      │
+│  [DONE] — label currency gap closed by W57-T1 MC3              │
 │                                                                 │
-│  Observability [SUBSTANTIALLY DELIVERED]                        │
+│  Observability [DONE] — label currency gap closed by W57-T1 MC3│
 │                                                                 │
 │  ThresholdAssessment [DONE]                                     │
-│      → GovernanceSignal [SUBSTANTIALLY DELIVERED]               │
+│      → GovernanceSignal [DONE] — label currency gap closed MC3 │
 │      → Re-injection [DONE]                                      │
 │      → Governance Layer                                         │
 └─────────────────────────────────────────────────────────────────┘
@@ -250,17 +250,17 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 
 ### 4.1 Maturity Snapshot by Plane
 
-> Read this table as: `baseline architecture shape = W4-T11 anchor`, `governed progress readout = synchronized through W54-T1 on 2026-04-05`.
+> Read this table as: `baseline architecture shape = W4-T11 anchor`, `governed progress readout = synchronized through W59-T1 on 2026-04-07`.
 
 | Plane | Current posture | What is already true |
 |---|---|---|
-| Control Plane | `SUBSTANTIALLY DELIVERED` | AI Gateway, Boardroom/Reverse Prompting, typed context packaging, knowledge ranking/query, gateway auth, clarification refinement, gateway/log, intake, route-match, context build batch, knowledge query batch, retrieval consumer pipeline bridges — ALL canonically closed through `W2-T38` / `W1-T30`; W8-T1: `TrustIsolationBoundaryContract`, `ModelGatewayBoundaryContract` canonically closed; W9-T1: `RagContextEngineConvergenceContract` + batch contract canonically closed; W12-T1: `AgentDefinitionBoundaryContract` canonically closed; W13-T1: `AgentDefinitionCapabilityBatchContract` canonically closed; W14-T1: `AgentScopeResolutionBatchContract` canonically closed; W15-T1: `AgentDefinitionAuditBatchContract` canonically closed; W17-T1: `AgentRegistrationBatchContract` canonically closed; W19-T1: `IsolationScopeBatchContract`; W20-T1: `TrustPropagationBatchContract`; W21-T1: `DeclareTrustDomainBatchContract`; W22-T1: `GatewayAuthBatchContract`; W23-T1: `AIGatewayBatchContract`; W24-T1: `GatewayPIIDetectionBatchContract`; W25-T1: `RouteMatchBatchContract`; W26-T1: `OrchestrationBatchContract`; W27-T1: `DesignBatchContract`; W28-T1: `ReversePromptingBatchContract`; W29-T1: `BoardroomBatchContract`; W30-T1: `BoardroomTransitionGateBatchContract`; W31-T1: `BoardroomRoundBatchContract`; W32-T1: `BoardroomMultiRoundBatchContract`; W33-T1: `KnowledgeRankingBatchContract`; W34-T1: `ClarificationRefinementBatchContract`; W35-T1: `IntakeBatchContract`; W36-T1: `RetrievalBatchContract`; W37-T1: `ContextPackagerBatchContract`; W38-T1: `ContextEnrichmentBatchContract`; W39-T1: `ModelGatewayBoundaryBatchContract`; W40-T1: `PackagingBatchContract`; W41-T1: `GatewayAuthLogBatchContract`; W42-T1: `GatewayPIIDetectionLogBatchContract`; W43-T1: `RouteMatchLogBatchContract`; W44-T1: `ConsumerBatchContract` (`control.plane.workflow.barrel.ts` FULLY CLOSED); W45-T1: `GatewayConsumerBatchContract` (`control.plane.gateway.barrel.ts` FULLY CLOSED); W46-T1: `DesignConsumerBatchContract` (`control.plane.design.boardroom.barrel.ts` FULLY CLOSED) — all CPF barrel families FULLY CLOSED; CPF 2929 tests, 0 failures |
+| Control Plane | `SUBSTANTIALLY DELIVERED` → **DONE-ready** (MC1) | AI Gateway, Boardroom/Reverse Prompting, typed context packaging, knowledge ranking/query, gateway auth, clarification refinement, gateway/log, intake, route-match, context build batch, knowledge query batch, retrieval consumer pipeline bridges — ALL canonically closed through `W2-T38` / `W1-T30`; W8-T1: `TrustIsolationBoundaryContract`, `ModelGatewayBoundaryContract` canonically closed; W9-T1: `RagContextEngineConvergenceContract` + batch contract canonically closed; W12-T1: `AgentDefinitionBoundaryContract` canonically closed; W13-T1: `AgentDefinitionCapabilityBatchContract` canonically closed; W14-T1: `AgentScopeResolutionBatchContract` canonically closed; W15-T1: `AgentDefinitionAuditBatchContract` canonically closed; W17-T1: `AgentRegistrationBatchContract` canonically closed; W19-T1: `IsolationScopeBatchContract`; W20-T1: `TrustPropagationBatchContract`; W21-T1: `DeclareTrustDomainBatchContract`; W22-T1: `GatewayAuthBatchContract`; W23-T1: `AIGatewayBatchContract`; W24-T1: `GatewayPIIDetectionBatchContract`; W25-T1: `RouteMatchBatchContract`; W26-T1: `OrchestrationBatchContract`; W27-T1: `DesignBatchContract`; W28-T1: `ReversePromptingBatchContract`; W29-T1: `BoardroomBatchContract`; W30-T1: `BoardroomTransitionGateBatchContract`; W31-T1: `BoardroomRoundBatchContract`; W32-T1: `BoardroomMultiRoundBatchContract`; W33-T1: `KnowledgeRankingBatchContract`; W34-T1: `ClarificationRefinementBatchContract`; W35-T1: `IntakeBatchContract`; W36-T1: `RetrievalBatchContract`; W37-T1: `ContextPackagerBatchContract`; W38-T1: `ContextEnrichmentBatchContract`; W39-T1: `ModelGatewayBoundaryBatchContract`; W40-T1: `PackagingBatchContract`; W41-T1: `GatewayAuthLogBatchContract`; W42-T1: `GatewayPIIDetectionLogBatchContract`; W43-T1: `RouteMatchLogBatchContract`; W44-T1: `ConsumerBatchContract` (`control.plane.workflow.barrel.ts` FULLY CLOSED); W45-T1: `GatewayConsumerBatchContract` (`control.plane.gateway.barrel.ts` FULLY CLOSED); W46-T1: `DesignConsumerBatchContract` (`control.plane.design.boardroom.barrel.ts` FULLY CLOSED) — all CPF barrel families FULLY CLOSED; CPF 2929 tests, 0 failures |
 | Execution Plane | `SUBSTANTIALLY DELIVERED` → **DONE-ready** | all EPF consumer pipeline bridges canonically closed through `W2-T29`; W6-T1 (streaming execution + aggregator), W6-T4/T5 (governance checkpoint/reintake) added post-baseline; W48-T1: `ExecutionBridgeConsumerBatchContract` (EPF +31; consumer batch wave W44–W48 complete); W49-T1: `DispatchBatchContract` + `epf.dispatch.barrel.ts` barrel split (EPF +22; index.ts 1450→1423); W50-T1: `PolicyGateBatchContract` (+23 EPF); W51-T1: `CommandRuntimeBatchContract` (+23 EPF); W52-T1: `AsyncCommandRuntimeBatchContract` (+27 EPF); W53-T1: `AsyncExecutionStatusBatchContract` (+26 EPF); W54-T1: `ExecutionReintakeBatchContract` (+26 EPF) — EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; EPF 1301 tests, 0 failures; **W58-T1 MC4 assessment: DONE-ready** — all 20 base contracts + 18 consumer pipelines + 18 consumer pipeline batches + 9 standalone batches present; Model Gateway [DEFERRED] (boundary governance in CPF W8-T1 + W39-T1; EPF provider routing intentionally future-facing); Sandbox Runtime [DEFERRED] (worker agents governed via Dispatch/PolicyGate/CommandRuntime; full physical isolation intentionally future-facing) |
-| Governance Layer | `SUBSTANTIALLY DELIVERED` | all GEF consumer pipeline bridges canonically closed through `W3-T18`; W6-T6 (pattern drift); W7 governance integration: SkillFormationRecord, StructuredSpec, 8 guards G1-G8, 32 presets — GEF 625 tests, 0 failures |
-| Learning Plane | `SUBSTANTIALLY DELIVERED` | ALL 18 LPF base contracts fully bridged — consumer pipeline bridges canonically closed through `W4-T25`; W10-T1: `ReputationSignalContract`, `TaskMarketplaceContract` + 2 batch contracts canonically closed — LPF 1465 tests, 0 failures |
+| Governance Layer | `SUBSTANTIALLY DELIVERED` → **DONE (6/6)** (MC2) | all GEF consumer pipeline bridges canonically closed through `W3-T18`; W6-T6 (pattern drift); W7 governance integration: SkillFormationRecord, StructuredSpec, 8 guards G1-G8, 32 presets — GEF 625 tests, 0 failures; Trust & Isolation DONE (W56-T1 CP2: label currency gap closed) |
+| Learning Plane | `SUBSTANTIALLY DELIVERED` → **DONE-ready (7/7)** (MC3) | ALL 18 LPF base contracts fully bridged — consumer pipeline bridges canonically closed through `W4-T25`; W10-T1: `ReputationSignalContract`, `TaskMarketplaceContract` + 2 batch contracts canonically closed — LPF 1465 tests, 0 failures; Storage/Eval Engine + Observability + GovernanceSignal DONE (W57-T1 MC3: label currency gaps closed) |
 | W7 Governance Integration | `DONE` | 11 schemas across 4 planes, 32 guard presets, all P1-P8 gates satisfied, full dependency chain Runtime→Memory, 10 no-fake-learning invariants, 0 governance violations — W7-T10 CLOSED 2026-03-28 |
 | Post-W7 Continuation (W8–W54) | `DONE` | W8-T1: TrustIsolation + ModelGateway boundary convergence; W8-T2: PerformanceBenchmarkHarness (acceptance-policy PROPOSAL ONLY); W9-T1: RAG + Context Engine convergence; W10-T1: ReputationSignal + TaskMarketplace Learning Expansion; W12-T1: Agent Definition boundary convergence; W13-T1: AgentDefinitionCapabilityBatch (CPF +26); W14-T1: AgentScopeResolutionBatch (CPF +26); W15-T1: AgentDefinitionAuditBatch (CPF +26); W17-T1: AgentRegistrationBatch (CPF +30); W19-T1 to W21-T1: trust-isolation batch surface completion; W22-T1 to W32-T1: gateway, orchestration, design, reverse prompting, boardroom, boardroom-round, and multi-round batch closures; W33-T1: KnowledgeRankingBatch (CPF +30); W34-T1: ClarificationRefinementBatch (CPF +30); W35-T1: IntakeBatch (CPF +33); W36-T1: RetrievalBatch (CPF +31); W37-T1: ContextPackagerBatch (CPF +36); W38-T1: ContextEnrichmentBatch (CPF +36); W39-T1: ModelGatewayBoundaryBatch (CPF +27); W40-T1: PackagingBatch (CPF +36); W41-T1: GatewayAuthLogBatch (CPF +27); W42-T1: GatewayPIIDetectionLogBatch (CPF +27); W43-T1: RouteMatchLogBatch (CPF +27); W44-T1: ConsumerBatch (CPF +30); W45-T1: GatewayConsumerBatch (CPF +30); W46-T1: DesignConsumerBatch (CPF +29); W48-T1: `ExecutionBridgeConsumerBatchContract` (EPF +31; W44–W48 consumer batch wave complete); W49-T1: `DispatchBatchContract` + `epf.dispatch.barrel.ts` (EPF +22; EPF `index.ts` barrel split 1450→1423); W50-T1: `PolicyGateBatchContract` (+23 EPF); W51-T1: `CommandRuntimeBatchContract` (+23 EPF); W52-T1: `AsyncCommandRuntimeBatchContract` (+27 EPF); W53-T1: `AsyncExecutionStatusBatchContract` (+26 EPF); W54-T1: `ExecutionReintakeBatchContract` (+26 EPF) — CPF 2929, EPF 1301 tests, all 0 failures; all CPF barrel families FULLY CLOSED; EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; all post-W7 realization candidates CLOSED DELIVERED through 2026-04-05 |
-| Whitepaper Truth Reconciliation | `DONE` | W5-T1 evidence-backed partial delivery; W5-T2 updated to v3.0-W7T10 (W7 wave); W11-T1 updated to v3.1-W10T1 (post-W7 continuation through W10-T1); W12-T1 synchronized baseline refreshed to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (W13-T1/W14-T1/W15-T1 batch contracts; CPF 2222); W18-T1 updated to v3.4-W17T1 (W17-T1 AgentRegistrationBatchContract; CPF 2252); continuity sync refresh at v3.6-W32T1 (W19-T1 through W32-T1; CPF 2691); W47-T1 updated to v3.7-W46T1 (W33-T1 through W46-T1; CPF 2929) — documentation-to-implementation gap canonically closed through W47-T1; operational readout now refreshed through W54-T1 without changing the snapshot version |
+| Whitepaper Truth Reconciliation | `DONE` | W5-T1 evidence-backed partial delivery; W5-T2 updated to v3.0-W7T10 (W7 wave); W11-T1 updated to v3.1-W10T1 (post-W7 continuation through W10-T1); W12-T1 synchronized baseline refreshed to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (W13-T1/W14-T1/W15-T1 batch contracts; CPF 2222); W18-T1 updated to v3.4-W17T1 (W17-T1 AgentRegistrationBatchContract; CPF 2252); continuity sync refresh at v3.6-W32T1 (W19-T1 through W32-T1; CPF 2691); W47-T1 updated to v3.7-W46T1 (W33-T1 through W46-T1; CPF 2929); W59-T1 promoted the operational readout to `CLOSURE-ASSESSED` without changing the snapshot version — documentation-to-implementation gap remains closed |
 
 ### 4.1A Post-Baseline Continuation Delta
 
@@ -293,10 +293,10 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 | Multi-agent repo/docs convergence | `GC-027` canonical review-doc chain |
 | Highest-priority live multi-agent deliberation surface | `AI Boardroom` in Control Plane, governed by `GC-028`; see `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md` |
 | Snapshot date | `2026-04-05` |
-| Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v3.7-W46T1`; operational readout refreshed through `W58-T1`) |
-| Last canonical closure | `W58-T1 CLOSED DELIVERED — MC4 EPF Plane Closure Assessment; EPF DONE-ready; Model Gateway + Sandbox Runtime formally deferred as intentionally future-facing; no new EPF contracts; EPF 1301 tests unchanged`; previous: `W57-T1 CLOSED DELIVERED — MC3 LPF Plane Closure Assessment; LPF DONE-ready 7/7; 3 label currency gaps closed` |
-| Current active tranche | `NONE — W58-T1 CP1 CLOSED DELIVERED 2026-04-07; EPF DONE-ready; next: W59-T1 MC5 Whitepaper + Tracker Canon Promotion Pass` |
-| Current posture | `SUBSTANTIALLY DELIVERED` — CPF **DONE-ready** (MC1); GEF **DONE (6/6)** (MC2); LPF **DONE-ready (7/7)** (MC3); EPF **DONE-ready** (MC4); W7 Governance Integration `DONE`; post-W7 continuation `DONE`; all CPF barrel families FULLY CLOSED; EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; all four MC assessments complete; MC5 whitepaper promotion pass unblocked; continuation readout `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1` |
+| Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v3.7-W46T1`; operational readout refreshed through `W59-T1`) |
+| Last canonical closure | `W59-T1 CLOSED DELIVERED — MC5 Whitepaper + Tracker Canon Promotion Pass; CPF DONE-ready / GEF DONE 6/6 / LPF DONE-ready 7/7 / EPF DONE-ready; all plane banners and component labels promoted; MC1-MC5 sequence fully complete`; previous: `W58-T1 CLOSED DELIVERED — MC4 EPF Plane Closure Assessment; EPF DONE-ready` |
+| Current active tranche | `NONE — W59-T1 CP1 CLOSED DELIVERED 2026-04-07; MC5 whitepaper canon promotion complete; MC1-MC5 sequence fully complete; no further MC steps; any new work requires fresh GC-018` |
+| Current posture | `CLOSURE-ASSESSED` — CPF **DONE-ready** (MC1); GEF **DONE (6/6)** (MC2); LPF **DONE-ready (7/7)** (MC3); EPF **DONE-ready** (MC4); MC5 whitepaper canon promotion **COMPLETE**; W7 Governance Integration `DONE`; post-W7 continuation `DONE`; all CPF barrel families FULLY CLOSED; EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; EPF Model Gateway + Sandbox Runtime formally deferred (future waves); MC1-MC5 sequence fully complete; continuation readout `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1 / W59-T1` |
 | Required gate before any new implementation | fresh `GC-018` authorization |
 | Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`, `CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`, `AGENT_HANDOFF.md` |
 

@@ -276,6 +276,32 @@ All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every
 - Delta: `docs/baselines/CVF_W{W}_T{T}_CP{N}_{SLUG}_DELTA_{DATE}.md`
 - Closure review: `docs/reviews/CVF_W{W}_T{T}_TRANCHE_CLOSURE_REVIEW_{DATE}.md`
 
+## New Machine Minimum Bootstrap
+
+If this repo was freshly cloned on a new machine:
+
+- read `docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md` first
+- do not preinstall every extension by default
+- if you are touching one extension only:
+  - run `npm ci` when that package already has `package-lock.json`
+  - otherwise run `npm install`
+- the 4 foundations now ship lockfiles, so fresh clones can run `npm ci` there immediately
+- if you need all 4 foundations ready at once, run `.\scripts\bootstrap_foundations.ps1` or `./scripts/bootstrap_foundations.sh`
+
+Examples:
+
+```powershell
+# single foundation on a fresh clone
+cd EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION
+npm ci
+npm run check
+npm run test
+
+# all 4 foundations
+.\scripts\bootstrap_foundations.ps1
+./scripts/bootstrap_foundations.sh
+```
+
 ---
 
 ## Test Commands

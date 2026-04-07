@@ -1,6 +1,8 @@
 import type { ConsensusDecision, ConsensusVerdict } from "./governance.consensus.contract";
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 
+export type { ConsensusVerdict } from "./governance.consensus.contract";
+
 // --- Types ---
 
 export interface GovernanceConsensusSummary {

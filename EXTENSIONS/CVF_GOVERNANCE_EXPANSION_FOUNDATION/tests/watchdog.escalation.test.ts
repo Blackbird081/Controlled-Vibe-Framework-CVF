@@ -35,7 +35,10 @@ import {
   createWatchdogEscalationLogContract,
 } from "../src/watchdog.escalation.log.contract";
 import type { WatchdogAlertLog, WatchdogStatus } from "../src/watchdog.alert.log.contract";
-import type { WatchdogEscalationDecision } from "../src/watchdog.escalation.contract";
+import type {
+  WatchdogEscalationDecision,
+  WatchdogEscalationPolicy,
+} from "../src/watchdog.escalation.contract";
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -66,7 +69,7 @@ function makeAlertLog(overrides: Partial<WatchdogAlertLog> & { logId: string }):
   };
 }
 
-function makeContract(policy?: ConstructorParameters<typeof WatchdogEscalationContract>[0]["policy"]) {
+function makeContract(policy?: WatchdogEscalationPolicy) {
   return new WatchdogEscalationContract({ now: fixedNow, policy });
 }
 

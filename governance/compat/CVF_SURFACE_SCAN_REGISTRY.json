@@ -88,6 +88,25 @@
       ]
     },
     {
+      "id": "epf_plane_scan",
+      "surfaceClass": "PLANE_SCAN",
+      "status": "FULLY_CLOSED",
+      "lastScannedAt": "2026-04-07",
+      "scopePaths": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ],
+      "canonicalSource": "docs/reviews/CVF_GC019_W58_T1_CP1_EPF_CLOSURE_ASSESSMENT_REVIEW_2026-04-07.md",
+      "nextAction": "EPF is DONE-ready — Model Gateway (EPF provider routing) and Sandbox Runtime (full isolation) formally deferred as intentionally future-facing beyond current closure baseline. Promote EPF plane row and remove [PARTIAL] diagram labels in MC5 whitepaper pass.",
+      "reopenCondition": "N/A — EPF DONE-ready, no implementation gap within current closure baseline. Reopen only through fresh GC-018 if a new whitepaper target introduces a genuinely unclosed EPF surface (e.g., CVF_v1.7.3_RUNTIME_ADAPTER_HUB merge is authorized).",
+      "evidenceRefs": [
+        "docs/reviews/CVF_W58_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md",
+        "docs/audits/CVF_W58_T1_CP1_EPF_CLOSURE_ASSESSMENT_AUDIT_2026-04-07.md",
+        "docs/reviews/CVF_GC019_W58_T1_CP1_EPF_CLOSURE_ASSESSMENT_REVIEW_2026-04-07.md",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ]
+    },
+    {
       "id": "relocation_lane",
       "surfaceClass": "POSTURE_LANE",
       "status": "CLOSED_BY_DEFAULT",

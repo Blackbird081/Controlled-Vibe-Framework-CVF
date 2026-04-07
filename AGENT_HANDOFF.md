@@ -1,4 +1,4 @@
-# CVF Agent Handoff — 2026-04-05
+# CVF Agent Handoff — 2026-04-07
 
 > Branch: `main`
 > Branch posture: `main` is the canonical continuation branch after 2026-04-04 convergence; `cvf-next` is kept as a synchronized mirror for compatibility
@@ -6,8 +6,8 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W57-T1 CP1 closed delivered; MC3 LPF Plane Closure Assessment: **DONE-ready (7/7)**; Storage/Eval Engine + Observability + GovernanceSignal label currency gaps closed; CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 tests unchanged; canonical next step: W58-T1 MC4 EPF Closure Focus (Model Gateway + Sandbox Runtime)
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; operational readout refreshed through `W56-T1`)
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W59-T1 CP1 closed delivered; MC5 Whitepaper + Tracker Canon Promotion Pass: **COMPLETE**; MC sequence MC1-MC5 FULLY COMPLETE; all plane banners and component labels promoted; CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 tests unchanged; no further MC steps; any new work requires fresh GC-018
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W59-T1`)
 
 ---
 
@@ -29,9 +29,11 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W59-T1 | MC5: Whitepaper + Tracker Canon Promotion Pass (DOCUMENTATION / DECISION class) | CLOSED DELIVERED 2026-04-07 — MC5 Whitepaper + Tracker Canon Promotion Pass complete; whitepaper document type promoted to **CLOSURE-ASSESSED**; all four plane banners promoted (`CPF DONE-ready`, `GEF DONE (6/6)`, `LPF DONE-ready (7/7)`, `EPF DONE-ready`); component labels promoted per MC1-MC4 evidence; no code changes; MC sequence **MC1-MC5 FULLY COMPLETE** |
+| W58-T1 | MC4: EPF Plane Closure Assessment (ASSESSMENT / DECISION class) | CLOSED DELIVERED 2026-04-07 — EPF plane-level posture: **DONE-ready**; all 20 base contracts + 18 consumer pipelines + 18 consumer pipeline batches + 9 standalone batches present; EPF 1301 tests 0 failures; Model Gateway **DEFERRED** (boundary governance in CPF W8-T1 + W39-T1; EPF provider routing intentionally future-facing — requires CVF_v1.7.3_RUNTIME_ADAPTER_HUB in future wave); Sandbox Runtime **DEFERRED** (worker agents governed via Dispatch/PolicyGate/CommandRuntime; full physical isolation intentionally future-facing); epf_plane_scan: FULLY_CLOSED; no new EPF implementation needed; whitepaper promotion later landed in W59-T1 MC5 |
 | W57-T1 | MC3: LPF Plane Closure Assessment (ASSESSMENT / DECISION class) | CLOSED DELIVERED 2026-04-07 — LPF plane-level posture: **DONE-ready (7/7)**; all 20 base contracts + 18 consumer pipelines + 18 consumer pipeline batches + 2 standalone batches present; LPF 1465 tests 0 failures; Storage/Eval Engine **DONE** (label currency gap closed); Observability **DONE** (label currency gap closed); GovernanceSignal **DONE** (label currency gap closed); no implementation gap remains; MC3 fully complete |
 | W56-T1 | MC2: GEF Plane Closure Assessment CP1+CP2 (ASSESSMENT / DECISION class) | CLOSED DELIVERED 2026-04-05 — GEF plane-level posture: **DONE (6/6)**; all 13 base contracts + consumer pipeline batch contracts present; `watchdog.escalation.pipeline.batch.contract.ts` present; GEF 625 tests 0 failures; Trust & Isolation **DONE** (CP2: label currency gap closed — W8-T1/W19-T1/W20-T1/W21-T1 all closed, GEF checkpoint + watchdog enforce trust, 7/7 DONE criteria satisfied); no implementation gap remains; MC2 fully complete |
-| W55-T1 | MC1: CPF Plane Closure Assessment (ASSESSMENT / DECISION class) | CLOSED DELIVERED 2026-04-05 — CPF plane-level posture: **DONE-ready**; all CPF batch barrel families verified FULLY CLOSED; all CPF consumer bridges closed; CPF 2929 tests 0 failures; agent-definition registry + L0-L4 consolidation deferred (relocation-class, CLOSED-BY-DEFAULT); no new CPF implementation needed; promote to DONE in MC5 |
+| W55-T1 | MC1: CPF Plane Closure Assessment (ASSESSMENT / DECISION class) | CLOSED DELIVERED 2026-04-05 — CPF plane-level posture: **DONE-ready**; all CPF batch barrel families verified FULLY CLOSED; all CPF consumer bridges closed; CPF 2929 tests 0 failures; agent-definition registry + L0-L4 consolidation deferred (relocation-class, CLOSED-BY-DEFAULT); no new CPF implementation needed; whitepaper banner later aligned to DONE-ready in MC5 |
 | W54-T1 | ExecutionReintakeBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `ExecutionReintakeBatchContract` canonical; EPF 1301 (+26); `ExecutionReintakeContract.reinject()` batch surface FULLY CLOSED; Phase E: ExecutionReintake + ExecutionReintakeSummary exports moved to `epf.dispatch.barrel.ts` (~170 lines); dispatch-gate-runtime-async-status-reintake barrel family complete; EPF standalone batch wave W49–W54 ALL CLOSED |
 | W53-T1 | AsyncExecutionStatusBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `AsyncExecutionStatusBatchContract` canonical; EPF 1275 (+26); `AsyncExecutionStatusContract.assess()` batch surface FULLY CLOSED; Phase D: AsyncExecutionStatus exports moved to `epf.dispatch.barrel.ts` (~139 lines); dispatch-gate-runtime-async-status barrel family complete |
 | W52-T1 | AsyncCommandRuntimeBatchContract (REALIZATION class) | CLOSED DELIVERED 2026-04-05 — `AsyncCommandRuntimeBatchContract` canonical; EPF 1249 (+27); `AsyncCommandRuntimeContract.issue()` batch surface FULLY CLOSED; Phase C: AsyncCommandRuntime exports moved to `epf.dispatch.barrel.ts` (~120 lines); dispatch-gate-runtime-async barrel family complete |
@@ -68,32 +70,38 @@
 
 ### Architecture Baseline
 
-- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; operational readout refreshed through `W56-T1`)
-- Posture: `SUBSTANTIALLY DELIVERED` (CPF: **DONE-ready**; GEF: **DONE (6/6)**; LPF: **DONE-ready (7/7)**; EPF: assessment pending MC4)
-- All four planes: `SUBSTANTIALLY DELIVERED`; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`; MC1 CPF: `DONE-ready`; MC2 GEF: **DONE (6/6)**; MC3 LPF: **DONE-ready (7/7)** — Storage/Eval Engine + Observability + GovernanceSignal label currency gaps closed by W57-T1 CP1
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1`
+- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `W59-T1`)
+- Posture: `CLOSURE-ASSESSED` (CPF: **DONE-ready**; GEF: **DONE (6/6)**; LPF: **DONE-ready (7/7)**; EPF: **DONE-ready** — Model Gateway + Sandbox Runtime formally deferred as future-facing, not as current closure gaps)
+- All four planes: plane-banner promotion pass complete; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`; MC1 CPF: `DONE-ready`; MC2 GEF: **DONE (6/6)**; MC3 LPF: **DONE-ready (7/7)**; MC4 EPF: **DONE-ready**; MC5 whitepaper canon promotion: **COMPLETE**
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1 / W59-T1`
 - Documentation-to-implementation gap: CLOSED (`v3.7-W46T1`)
 
 ---
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. Canonical next step: W58-T1 MC4 EPF Closure Focus (Model Gateway + Sandbox Runtime).**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. MC1-MC5 is complete; any new work requires a fresh `GC-018`.**
 
 Current guidance:
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
-- **W57-T1 CP1 CLOSED DELIVERED** — MC3: LPF Plane Closure Assessment (ASSESSMENT / DECISION class); LPF **DONE-ready (7/7)**; Storage/Eval Engine + Observability + GovernanceSignal label currency gaps closed; no new LPF code needed before MC5
+- **W59-T1 CP1 CLOSED DELIVERED** — MC5: Whitepaper + Tracker Canon Promotion Pass (DOCUMENTATION / DECISION class); whitepaper is now the authoritative closure truth source; MC1-MC5 is fully complete; no remaining MC step exists
+- **No active tranche** — any new implementation, capability expansion, CI widening, or product-surface remediation requires a fresh bounded `GC-018`
+- **Current closure anchor**: `docs/reviews/CVF_W59_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`
+- **Current post-closure quality assessment**: `docs/assessments/CVF_POST_W59_CONTINUATION_QUALITY_ASSESSMENT_2026-04-07.md`
+- **Latest GC-026 closure sync**: `docs/baselines/CVF_GC026_TRACKER_SYNC_W59_T1_CLOSED_2026-04-07.md`
+- **W58-T1 CP1 CLOSED DELIVERED** — MC4: EPF Plane Closure Assessment (ASSESSMENT / DECISION class); EPF **DONE-ready**; Model Gateway + Sandbox Runtime formally deferred as intentionally future-facing; no new EPF code needed
+- **W57-T1 CP1 CLOSED DELIVERED** — MC3: LPF Plane Closure Assessment (ASSESSMENT / DECISION class); LPF **DONE-ready (7/7)**; Storage/Eval Engine + Observability + GovernanceSignal label currency gaps closed; no new LPF code needed
 - **W56-T1 CP2 CLOSED DELIVERED** — MC2: GEF Plane Closure Assessment CP1+CP2 (ASSESSMENT / DECISION class); GEF **DONE (6/6)**; Trust & Isolation **DONE** (label currency gap closed by CP2)
 - **W55-T1 CLOSED DELIVERED** — MC1: CPF Plane Closure Assessment (ASSESSMENT / DECISION class); CPF **DONE-ready**; agent-definition registry + L0-L4 consolidation deferred (CLOSED-BY-DEFAULT)
 - **W47-T1 CLOSED DELIVERED** — Whitepaper Update v3.7-W46T1 (DOCUMENTATION class); documentation-to-implementation gap CLOSED
-- **Next**: open W58-T1 — MC4 EPF Closure Focus; scope bounded to `Model Gateway` and `Sandbox Runtime (Worker Agents)` only; EPF dispatch family stays FULLY CLOSED; read `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md §6.4` before starting
-- W57-T1 closure review: `docs/reviews/CVF_W57_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`
-- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W57_T1_CLOSED_2026-04-07.md`
+- W59-T1 closure review: `docs/reviews/CVF_W59_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`
+- W59-T1 CP1 review: `docs/reviews/CVF_GC019_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_REVIEW_2026-04-07.md`
+- W59-T1 CP1 audit: `docs/audits/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_AUDIT_2026-04-07.md`
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
 - **Do not open a fresh tranche before consulting the canonical scan continuity registry.**
-- **W57-T1 MC3 reference**: closure review `docs/reviews/CVF_W57_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`; GC-026 closed sync `docs/baselines/CVF_GC026_TRACKER_SYNC_W57_T1_CLOSED_2026-04-07.md`
-- **Canonical closure sequence — MC1 DONE, MC2 DONE, MC3 DONE; remaining**: `MC4 EPF closure focus (Model Gateway + Sandbox Runtime) -> MC5 whitepaper/tracker promotion pass`
+- **W59-T1 MC5 reference**: closure review `docs/reviews/CVF_W59_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`; GC-026 closed sync `docs/baselines/CVF_GC026_TRACKER_SYNC_W59_T1_CLOSED_2026-04-07.md`; audit `docs/audits/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_AUDIT_2026-04-07.md`
+- **Canonical closure sequence — MC1 CPF DONE-ready, MC2 GEF DONE (6/6), MC3 LPF DONE-ready (7/7), MC4 EPF DONE-ready, MC5 COMPLETE** — no remaining MC step
 - **Relocation lane CLOSED-BY-DEFAULT (2026-04-04)**: `P3/CP1` is the only landed physical move. `P3/CP3–CP5` + `P4/CP1–CP17` are landed governance/package-boundary canon. `P3/CP2` physical move remains excluded under freeze-in-place posture. This closure remains in force after `main` / `cvf-next` convergence. Remaining human-gated item is `npm publish` and it is not a relocation task.
 - **Reopen rule**: do not open another broad relocation wave by default. Reopen only through preservation override + fresh `GC-019` + fresh `GC-039` + dedicated `restructuring/p3-*` branch + secondary worktree. Do not perform reopened relocation work directly on `main` or synchronized `cvf-next`.
 - **Freeze-in-place root set**: `v1.0/`, `v1.1/`, `REVIEW/`, `ECOSYSTEM/`, `CVF_SKILL_LIBRARY/`, `ui_governance_engine/`
@@ -165,8 +173,8 @@ All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every
 
 ## GEF / LPF Surface State
 
-- **GEF (Governance Expansion Foundation)**: 625 tests, 0 failures. Scan status: `FULLY_CLOSED` (W56-T1 CP1+CP2). GEF is **DONE (6/6)** — all 13 base contracts + all consumer pipeline batch contracts + standalone `watchdog.escalation.pipeline.batch.contract.ts` present; Trust & Isolation DONE (CP2). No further GEF implementation needed before MC5.
-- **LPF (Learning Plane Foundation)**: 1465 tests, 0 failures. Scan status: `FULLY_CLOSED` (W57-T1 CP1). LPF is **DONE-ready (7/7)** — all 20 base contracts + 18 consumer pipeline contracts + 18 consumer pipeline batch contracts + 2 standalone batch contracts present; Storage/Eval Engine + Observability + GovernanceSignal label currency gaps closed (W57-T1 CP1). No further LPF implementation needed before MC5.
+- **GEF (Governance Expansion Foundation)**: 625 tests, 0 failures. Scan status: `FULLY_CLOSED` (W56-T1 CP1+CP2). GEF is **DONE (6/6)** — all 13 base contracts + all consumer pipeline batch contracts + standalone `watchdog.escalation.pipeline.batch.contract.ts` present; Trust & Isolation DONE (CP2). No further GEF implementation is needed within the current closure baseline.
+- **LPF (Learning Plane Foundation)**: 1465 tests, 0 failures. Scan status: `FULLY_CLOSED` (W57-T1 CP1). LPF is **DONE-ready (7/7)** — all 20 base contracts + 18 consumer pipeline contracts + 18 consumer pipeline batch contracts + 2 standalone batch contracts present; Storage/Eval Engine + Observability + GovernanceSignal label currency gaps closed (W57-T1 CP1). No further LPF implementation is needed within the current closure baseline.
 
 ---
 

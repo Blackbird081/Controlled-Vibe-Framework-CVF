@@ -58,7 +58,7 @@
         "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
       ],
       "canonicalSource": "docs/reviews/CVF_GC019_W56_T1_CP2_TRUST_ISOLATION_CLOSURE_DECISION_REVIEW_2026-04-05.md",
-      "nextAction": "GEF is DONE (6/6) — Trust & Isolation upgraded to DONE by W56-T1 CP2. Promote GEF plane row and Trust & Isolation box from SUBSTANTIALLY DELIVERED to DONE in MC5 whitepaper pass.",
+      "nextAction": "GEF is DONE (6/6) — whitepaper promotion completed by W59-T1 MC5. Treat GEF as closed within the current closure baseline and reopen only through fresh GC-018 if a new target introduces a genuinely unclosed GEF surface.",
       "reopenCondition": "N/A — GEF DONE (6/6), all components closed. Reopen only through fresh GC-018 if a new whitepaper target introduces a genuinely unclosed GEF surface.",
       "evidenceRefs": [
         "docs/reviews/CVF_W56_T1_TRANCHE_CLOSURE_REVIEW_2026-04-05.md",
@@ -78,12 +78,31 @@
         "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
       ],
       "canonicalSource": "docs/reviews/CVF_GC019_W57_T1_CP1_LPF_CLOSURE_ASSESSMENT_REVIEW_2026-04-07.md",
-      "nextAction": "LPF is DONE-ready (7/7) — all 3 SUBSTANTIALLY DELIVERED labels classified as label currency gaps. Promote LPF plane row and Storage/Evaluation Engine, Observability, GovernanceSignal labels from SUBSTANTIALLY DELIVERED to DONE in MC5 whitepaper pass.",
+      "nextAction": "LPF is DONE-ready (7/7) — whitepaper promotion completed by W59-T1 MC5. Treat LPF as closed within the current closure baseline and reopen only through fresh GC-018 if a new target introduces a genuinely unclosed LPF surface.",
       "reopenCondition": "N/A — LPF DONE-ready (7/7), no implementation gap. Reopen only through fresh GC-018 if a new whitepaper target introduces a genuinely unclosed LPF surface.",
       "evidenceRefs": [
         "docs/reviews/CVF_W57_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md",
         "docs/audits/CVF_W57_T1_CP1_LPF_CLOSURE_ASSESSMENT_AUDIT_2026-04-07.md",
         "docs/reviews/CVF_GC019_W57_T1_CP1_LPF_CLOSURE_ASSESSMENT_REVIEW_2026-04-07.md",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ]
+    },
+    {
+      "id": "epf_plane_scan",
+      "surfaceClass": "PLANE_SCAN",
+      "status": "FULLY_CLOSED",
+      "lastScannedAt": "2026-04-07",
+      "scopePaths": [
+        "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION",
+        "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
+      ],
+      "canonicalSource": "docs/reviews/CVF_GC019_W58_T1_CP1_EPF_CLOSURE_ASSESSMENT_REVIEW_2026-04-07.md",
+      "nextAction": "EPF is DONE-ready — whitepaper promotion completed by W59-T1 MC5. Model Gateway (EPF provider routing) and Sandbox Runtime (full isolation) remain formally deferred as intentionally future-facing beyond the current closure baseline.",
+      "reopenCondition": "N/A — EPF DONE-ready, no implementation gap within current closure baseline. Reopen only through fresh GC-018 if a new whitepaper target introduces a genuinely unclosed EPF surface (e.g., CVF_v1.7.3_RUNTIME_ADAPTER_HUB merge is authorized).",
+      "evidenceRefs": [
+        "docs/reviews/CVF_W58_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md",
+        "docs/audits/CVF_W58_T1_CP1_EPF_CLOSURE_ASSESSMENT_AUDIT_2026-04-07.md",
+        "docs/reviews/CVF_GC019_W58_T1_CP1_EPF_CLOSURE_ASSESSMENT_REVIEW_2026-04-07.md",
         "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
       ]
     },

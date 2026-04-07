@@ -1,4 +1,4 @@
-# CVF Agent Handoff — 2026-04-07
+# CVF Agent Handoff — 2026-04-08
 
 > Branch: `main`
 > Branch posture: `main` is the canonical continuation branch after 2026-04-04 convergence; `cvf-next` is kept as a synchronized mirror for compatibility
@@ -6,8 +6,8 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W61-T1 closed delivered; CI/CD expansion: **COMPLETE**; CI coverage 100% (8294 tests); CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 / cvf-web 1853 tests in CI; build verification added; MC sequence MC1-MC5 FULLY COMPLETE; any new work requires fresh GC-018
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W61-T1`)
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W62-T1 closed delivered; Documentation curation: **COMPLETE**; Sensitivity classification complete; PUBLIC_DOCS_MIRROR boundary finalized; Root docs refreshed; MC sequence MC1-MC5 FULLY COMPLETE; CI coverage 100% (8294 tests); any new work requires fresh GC-018
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W62-T1`)
 
 ---
 
@@ -29,6 +29,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W62-T1 | Documentation Curation (DOCUMENTATION class) | CLOSED DELIVERED 2026-04-08 — Sensitivity classification complete (PUBLIC_READY 60 files, NEEDS_REVIEW 15 files, PRIVATE_ONLY 2325 files); PUBLIC_DOCS_MIRROR boundary finalized with explicit file lists; .publicignore created; Root docs refreshed (README.md, START_HERE.md); POST_MC5_ORIENTATION.md created in docs/guides/; Track 4 from Post-MC5 Continuation Strategy complete; No GC-018 required (DOCUMENTATION class); commit pending |
 | W61-T1 | CI/CD Expansion + Product Hardening (INFRA class) | CLOSED DELIVERED 2026-04-08 — Added 5 new CI jobs for foundation tests (test-cpf 2929, test-epf 1301, test-gef 625, test-lpf 1465, test-web-ui 1853); added build verification for cvf-web; CI coverage: **1.5% → 100%** (+8173 tests); CP3 (pre-push hook fix) deferred; Full Lane (GC-019); commit `92a3a946` |
 | W60-T1 | cvf-web Typecheck Stabilization (REMEDIATION class) | CLOSED DELIVERED 2026-04-07 — Resolved 97 TypeScript errors across cvf-web (CP1: Guard Contract export 9 errors; CP2: Provider set expansion 17 errors; CP3: Schema drift fixtures 53 errors; CP4: Error-handling test refactor 4 errors; CP5: Unused @ts-expect-error cleanup 5 errors); Bonus: fixed 3 pre-existing test failures; TypeScript: **0 errors**; Tests: **1853 passed**; 17 files modified (1 production, 16 test); Fast Lane (GC-021); commit `c15aa4c5` |
 | W59-T1 | MC5: Whitepaper + Tracker Canon Promotion Pass (DOCUMENTATION / DECISION class) | CLOSED DELIVERED 2026-04-07 — MC5 Whitepaper + Tracker Canon Promotion Pass complete; whitepaper document type promoted to **CLOSURE-ASSESSED**; all four plane banners promoted (`CPF DONE-ready`, `GEF DONE (6/6)`, `LPF DONE-ready (7/7)`, `EPF DONE-ready`); component labels promoted per MC1-MC4 evidence; no code changes; MC sequence **MC1-MC5 FULLY COMPLETE** |
@@ -72,10 +73,10 @@
 
 ### Architecture Baseline
 
-- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `W59-T1`)
+- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `W62-T1`)
 - Posture: `CLOSURE-ASSESSED` (CPF: **DONE-ready**; GEF: **DONE (6/6)**; LPF: **DONE-ready (7/7)**; EPF: **DONE-ready** — Model Gateway + Sandbox Runtime formally deferred as future-facing, not as current closure gaps)
 - All four planes: plane-banner promotion pass complete; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`; MC1 CPF: `DONE-ready`; MC2 GEF: **DONE (6/6)**; MC3 LPF: **DONE-ready (7/7)**; MC4 EPF: **DONE-ready**; MC5 whitepaper canon promotion: **COMPLETE**
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1 / W59-T1 / W60-T1 / W61-T1`
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1 / W59-T1 / W60-T1 / W61-T1 / W62-T1`
 - Documentation-to-implementation gap: CLOSED (`v3.7-W46T1`)
 
 ---
@@ -87,13 +88,15 @@
 Current guidance:
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
+- **W62-T1 CLOSED DELIVERED** — Documentation Curation (DOCUMENTATION class); Sensitivity classification complete; PUBLIC_DOCS_MIRROR boundary finalized; Root docs refreshed; Track 4 from Post-MC5 Continuation Strategy complete; No GC-018 required; commit pending
 - **W61-T1 CLOSED DELIVERED** — CI/CD Expansion + Product Hardening (INFRA class); CI coverage 1.5% → 100%; 5 new test jobs (CPF, EPF, GEF, LPF, cvf-web); build verification added; Full Lane (GC-019); commit `92a3a946`
 - **No active tranche** — any new implementation, capability expansion, CI widening, or product-surface remediation requires a fresh bounded `GC-018`
-- **Current closure anchor**: `docs/reviews/CVF_W61_T1_TRANCHE_CLOSURE_REVIEW_2026-04-08.md`
-- **Current post-closure quality assessment**: `docs/assessments/CVF_POST_W61_CONTINUATION_QUALITY_ASSESSMENT_2026-04-08.md`
-- **W61-T1 roadmap**: `docs/roadmaps/CVF_GC018_W61_T1_CI_EXPANSION_ROADMAP_2026-04-08.md`
+- **Current closure anchor**: `docs/reviews/CVF_W62_T1_TRANCHE_CLOSURE_REVIEW_2026-04-08.md`
+- **Current post-closure quality assessment**: `docs/assessments/CVF_POST_W62_CONTINUATION_QUALITY_ASSESSMENT_2026-04-08.md`
+- **W62-T1 roadmap**: `docs/roadmaps/CVF_GC018_W62_T1_DOCS_CURATION_ROADMAP_2026-04-08.md`
 - **Post-MC5 strategy**: `docs/roadmaps/CVF_POST_MC5_CONTINUATION_STRATEGY_ROADMAP_2026-04-08.md`
-- **Next recommended**: Track 3 (Pre-Public Packaging) or Track 4 (Documentation Curation)
+- **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
+- **Next recommended**: Track 3 (Pre-Public Packaging) - requires fresh GC-018 authorization
 - **W60-T1 CLOSED DELIVERED** — cvf-web Typecheck Stabilization (REMEDIATION class); TypeScript 0 errors; cvf-web 1853 tests pass; 3 pre-existing test failures fixed; Fast Lane (GC-021); commit `c15aa4c5`
 - **W58-T1 CP1 CLOSED DELIVERED** — MC4: EPF Plane Closure Assessment (ASSESSMENT / DECISION class); EPF **DONE-ready**; Model Gateway + Sandbox Runtime formally deferred as intentionally future-facing; no new EPF code needed
 - **W57-T1 CP1 CLOSED DELIVERED** — MC3: LPF Plane Closure Assessment (ASSESSMENT / DECISION class); LPF **DONE-ready (7/7)**; Storage/Eval Engine + Observability + GovernanceSignal label currency gaps closed; no new LPF code needed

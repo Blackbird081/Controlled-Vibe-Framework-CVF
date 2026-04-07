@@ -71,17 +71,19 @@
     {
       "id": "lpf_plane_scan",
       "surfaceClass": "PLANE_SCAN",
-      "status": "NOT_YET_SCANNED",
-      "lastScannedAt": "2026-04-05",
+      "status": "FULLY_CLOSED",
+      "lastScannedAt": "2026-04-07",
       "scopePaths": [
         "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION",
         "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
       ],
-      "canonicalSource": "AGENT_HANDOFF.md",
-      "nextAction": "Fresh tranche selection may assess LPF before implementation starts; do not assume closed state from CPF or EPF evidence.",
-      "reopenCondition": "N/A until a governed LPF scan or tranche authorization records closure or open-candidate posture.",
+      "canonicalSource": "docs/reviews/CVF_GC019_W57_T1_CP1_LPF_CLOSURE_ASSESSMENT_REVIEW_2026-04-07.md",
+      "nextAction": "LPF is DONE-ready (7/7) — all 3 SUBSTANTIALLY DELIVERED labels classified as label currency gaps. Promote LPF plane row and Storage/Evaluation Engine, Observability, GovernanceSignal labels from SUBSTANTIALLY DELIVERED to DONE in MC5 whitepaper pass.",
+      "reopenCondition": "N/A — LPF DONE-ready (7/7), no implementation gap. Reopen only through fresh GC-018 if a new whitepaper target introduces a genuinely unclosed LPF surface.",
       "evidenceRefs": [
-        "AGENT_HANDOFF.md",
+        "docs/reviews/CVF_W57_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md",
+        "docs/audits/CVF_W57_T1_CP1_LPF_CLOSURE_ASSESSMENT_AUDIT_2026-04-07.md",
+        "docs/reviews/CVF_GC019_W57_T1_CP1_LPF_CLOSURE_ASSESSMENT_REVIEW_2026-04-07.md",
         "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"
       ]
     },

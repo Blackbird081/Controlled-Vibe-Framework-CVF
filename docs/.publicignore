@@ -1,0 +1,152 @@
+# CVF Public Docs Mirror Exclusion Patterns
+# Gitignore-style patterns for future public docs mirror tooling
+# Created: 2026-04-08 (W62-T1 CP2)
+# Purpose: Prevent accidental exposure of PRIVATE_ONLY documentation
+
+# ============================================================================
+# GOVERNANCE ARTIFACTS (PRIVATE_ONLY)
+# ============================================================================
+
+# Audit documents (W1-W61, P3-P4)
+audits/
+
+# Review documents (GC-018, GC-019, GC-021, tranche closures)
+reviews/
+
+# Baseline and delta documents (GC-026 tracker sync)
+baselines/
+
+# Execution plans and roadmaps
+roadmaps/
+
+# Quality assessments (W7-W61)
+assessments/
+
+# Incremental test logs
+logs/
+
+# Proposals
+proposals/
+
+# ============================================================================
+# INTERNAL WORKFLOW AND HANDOFF (PRIVATE_ONLY)
+# ============================================================================
+
+# Internal navigation
+INDEX.md
+
+# Internal bug tracking
+BUG_HISTORY.md
+
+# Internal test evidence
+CVF_INCREMENTAL_TEST_LOG.md
+
+# Internal ADR log
+CVF_ARCHITECTURE_DECISIONS.md
+
+# ============================================================================
+# INTERNAL STANDARDS AND CONTROLS (PRIVATE_ONLY)
+# ============================================================================
+
+# Governance standards
+reference/CVF_GOVERNANCE_CONTROL_MATRIX.md
+reference/CVF_CONTEXT_CONTINUITY_MODEL.md
+reference/CVF_MEMORY_RECORD_CLASSIFICATION.md
+reference/CVF_CONTROL_TO_ARTIFACT_MAPPING.md
+reference/CVF_GOVERNANCE_STATE_REGISTRY.md
+reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md
+reference/CVF_GUARD_SURFACE_CLASSIFICATION.md
+reference/CVF_MAINTAINABILITY_STANDARD.md
+reference/CVF_QUALITY_ASSESSMENT_STANDARD.md
+
+# Internal templates
+reference/CVF_AGENT_HANDOFF_TEMPLATE.md
+reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md
+reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md
+reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md
+reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md
+reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md
+reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md
+reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md
+reference/CVF_GC019_STRUCTURAL_CHANGE_AUDIT_TEMPLATE.md
+reference/CVF_GC019_STRUCTURAL_CHANGE_REVIEW_TEMPLATE.md
+reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md
+reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md
+reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md
+reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md
+reference/CVF_POST_CLOSURE_REASSESSMENT_TRIGGER_TEMPLATE.md
+reference/CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md
+reference/CVF_POST_W7_DEPENDENCY_DECLARATION_PATTERN.md
+reference/CVF_POST_W7_EXCLUSION_TEMPLATE.md
+reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md
+
+# Internal classifications
+reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md
+reference/CVF_AUDIT_RETENTION_CLASSIFICATION.md
+reference/CVF_REVIEW_RETENTION_CLASSIFICATION.md
+reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md
+reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md
+reference/CVF_DOCS_SENSITIVITY_CLASSIFICATION.md
+
+# ============================================================================
+# INTERNAL PLANNING AND BASELINES (PRIVATE_ONLY)
+# ============================================================================
+
+# Architecture baselines
+reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md
+reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md
+reference/CVF_WHITEPAPER_GIT_FOR_AI.md
+
+# Pre-public planning (all CVF_PREPUBLIC_* files)
+reference/CVF_PREPUBLIC_*.md
+
+# Internal workflow
+reference/CVF_CANONICAL_PATH_MAP_*.md
+reference/CVF_RESTRUCTURE_ARCHIVE_MANIFEST.md
+reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md
+reference/CVF_HYPERVISOR_STRATEGY.md
+reference/CVF_INTERNAL_USER_GUIDE.md
+reference/CVF_BUILD_PROMPT_*.md
+reference/CVF_PERFORMANCE_ACCEPTANCE_POLICY_BASELINE_*.md
+reference/CVF_PUBLICATION_DECISION_RECORD_*.md
+
+# Archives and resources (needs per-file review)
+reference/archive/
+reference/api/
+reference/resources/
+
+# Conformance scenarios (internal test details)
+reference/CVF_CONFORMANCE_SCENARIOS.json
+reference/CVF_CONFORMANCE_SCENARIOS_WAVE2.json
+
+# ============================================================================
+# NEEDS REVIEW (Conditional - requires per-file review before exposure)
+# ============================================================================
+
+# Root-level files requiring review
+../CLAUDE.md
+
+# Docs root files requiring review
+CVF_CORE_KNOWLEDGE_BASE.md
+
+# Concepts requiring review
+concepts/CVF_HIERARCHICAL_GOVERNANCE_PIPELINE.md
+
+# Reference files requiring review
+reference/CVF_ENTERPRISE_EVIDENCE_PACK.md
+reference/CVF_EXPERT_REVIEW_*.md
+reference/CVF_RELEASE_READINESS_STATUS_*.md
+reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md
+reference/CVF_CONFORMANCE_SCENARIOS.md
+
+# ============================================================================
+# NOTES
+# ============================================================================
+
+# This file defines exclusion patterns for a future public docs mirror.
+# Files NOT listed here are candidates for public exposure (PUBLIC_READY).
+# See docs/reference/CVF_DOCS_SENSITIVITY_CLASSIFICATION.md for full classification.
+# See docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md for boundary definition.
+
+# Usage: Future mirror tooling should respect these patterns when creating public docs mirror.
+# Format: Standard gitignore syntax (directories end with /, wildcards supported)

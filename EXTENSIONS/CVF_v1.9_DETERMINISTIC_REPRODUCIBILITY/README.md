@@ -5,6 +5,48 @@
 > **Extends:** v1.8 (Safety Hardening) — additive, does NOT modify v1.8
 > **Folder:** `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/`
 
+## Export Readiness
+
+**Status**: CANDIDATE (Phase A)  
+**Target Date**: 2026-05-01  
+**Blockers**: None  
+**Documentation**: [Export Surface Definition](../../docs/reference/CVF_PREPUBLIC_DETERMINISTIC_REPRODUCIBILITY_EXPORT_SURFACE_2026-04-08.md)
+
+This package is part of the CVF pre-public packaging lane. It is not yet published to a public registry.
+
+### Installation (Future)
+
+Once published to npm:
+
+```bash
+npm install cvf-deterministic-reproducibility
+```
+
+For now, reference as a local workspace dependency within the CVF monorepo.
+
+### Usage Example
+
+```typescript
+import { computeDeterministicHash, ReplayEngine } from 'cvf-deterministic-reproducibility';
+
+// Compute deterministic hash
+const commitHash = computeDeterministicHash(
+  executionId,
+  riskHash,
+  mutationFingerprint,
+  snapshotId
+);
+
+// Replay execution for forensic audit
+const replayEngine = new ReplayEngine();
+const result = replayEngine.replay(executionId, {
+  currentFileHashes: { 'file.ts': 'abc123...' },
+  currentRiskScore: 0.5
+});
+
+console.log(result.status); // 'EXACT' | 'DRIFT' | 'FAILED'
+```
+
 ---
 
 ## What is CVF v1.9?

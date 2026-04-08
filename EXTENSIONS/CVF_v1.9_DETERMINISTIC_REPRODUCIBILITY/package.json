@@ -15,5 +15,12 @@
         "@vitest/coverage-v8": "^3.2.4",
         "typescript": "^5.7.0",
         "vitest": "^3.0.0"
+    },
+    "exportReadiness": {
+        "status": "CANDIDATE",
+        "phase": "A",
+        "targetDate": "2026-05-01",
+        "blockers": [],
+        "documentation": "docs/reference/CVF_PREPUBLIC_DETERMINISTIC_REPRODUCIBILITY_EXPORT_SURFACE_2026-04-08.md"
     }
 }

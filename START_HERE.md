@@ -44,4 +44,4 @@ If you need all 4 foundations ready at once:
 
 Use [CVF New Machine Setup Checklist](docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md) for the canonical flow.
 
-*Last updated: 2026-04-07*
+*Last updated: 2026-04-08 (W62-T1 - Post-MC5 documentation curation)*

@@ -1,6 +1,25 @@
-# CVF MCP Server — v1.7
+# CVF MCP Server — v2.5
 
 CVF Guard Runtime exposed as MCP (Model Context Protocol) tools for IDE integration.
+
+## Export Readiness
+
+**Status**: CANDIDATE (Phase A)  
+**Target Date**: 2026-05-01  
+**Blockers**: None  
+**Documentation**: [Export Surface Definition](../../docs/reference/CVF_PREPUBLIC_MCP_SERVER_EXPORT_SURFACE_2026-04-08.md)
+
+This package is part of the CVF pre-public packaging lane. It is not yet published to a public registry.
+
+### Installation (Future)
+
+Once published to npm:
+
+```bash
+npm install -g @cvf/eco-mcp-server
+```
+
+For now, use within the CVF monorepo.
 
 ## Overview
 

@@ -12,7 +12,8 @@
 [![MCP Bridge](https://img.shields.io/badge/MCP%20Bridge-4%20endpoints%20active-blue.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/)
 [![Skills](https://img.shields.io/badge/skills-141%20%C3%97%2012%20domains-blue.svg)](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
 [![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
-[![CI](https://img.shields.io/badge/CI-GitHub%20Actions%20ready-blue.svg)](.github/workflows/cvf-ci.yml)
+[![CI](https://img.shields.io/badge/CI-8294%20tests%20%7C%20100%25%20coverage-brightgreen.svg)](.github/workflows/cvf-ci.yml)
+[![Architecture](https://img.shields.io/badge/Architecture-v3.7--W46T1%20CLOSURE--ASSESSED-blue.svg)](docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md)
 
 ---
 
@@ -136,6 +137,10 @@ Current posture on the active reference path:
 
 | Area | Status |
 |---|---|
+| Architecture baseline | `v3.7-W46T1 CLOSURE-ASSESSED` |
+| MC sequence | `MC1-MC5 FULLY COMPLETE` |
+| CI coverage | `100% (8294 tests)` |
+| Test counts | CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 / cvf-web 1853 |
 | Canonical phase model | `ALIGNED` |
 | Hardened default guard path | `ALIGNED` |
 | Web non-coder semantics | `SUBSTANTIALLY ALIGNED` |
@@ -146,14 +151,17 @@ Current posture on the active reference path:
 
 Read this status as:
 
-- the current-cycle restructuring lane is complete for the active path
+- the MC1-MC5 architecture baseline is complete and CLOSURE-ASSESSED
+- CI/CD coverage expanded to 100% (W61-T1) with all foundation tests running
 - the active path has no open tranche and remains `SUBSTANTIALLY DELIVERED`
-- relocation is closed-by-default; next work should follow the master-architecture closure route
+- relocation is closed-by-default; next work should follow the Post-MC5 Continuation Strategy
 - future expansion must go through scan continuity review, reassessment, or a fresh bounded `GC-018`
 
 Primary status anchors:
 
 - [Agent Handoff](AGENT_HANDOFF.md)
+- [Post-MC5 Orientation](docs/guides/POST_MC5_ORIENTATION.md)
+- [Post-MC5 Continuation Strategy](docs/roadmaps/CVF_POST_MC5_CONTINUATION_STRATEGY_ROADMAP_2026-04-08.md)
 - [Whitepaper Progress Tracker](docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md)
 - [Master Architecture Whitepaper](docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md)
 - [Master Architecture Closure Roadmap](docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md)
@@ -162,7 +170,6 @@ Primary status anchors:
 - [Independent System Checkpoint](docs/reviews/CVF_INDEPENDENT_SYSTEM_CHECKPOINT_2026-03-20.md)
 - [System Unification Reassessment](docs/reviews/CVF_SYSTEM_UNIFICATION_REASSESSMENT_2026-03-20.md)
 - [System Unification Roadmap](docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md)
-- [Next-Wave Proposal](docs/roadmaps/CVF_NEXT_WAVE_PLATFORM_COMPLETION_ROADMAP_2026-03-20.md)
 
 ## Repository Map
 

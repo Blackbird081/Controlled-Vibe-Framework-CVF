@@ -165,3 +165,15 @@ export type {
   GatewayConsumptionBatchResult,
   GatewayConsumerBatchContractDependencies,
 } from "./gateway.consumer.batch.contract";
+
+export {
+  ProviderRouterContract,
+  createProviderRouterContract,
+} from "./provider.router.contract";
+export type {
+  ProviderDecision,
+  ProviderDefinition,
+  ProviderPolicy,
+  ProviderSelection,
+  ProviderRouterContractDependencies,
+} from "./provider.router.contract";

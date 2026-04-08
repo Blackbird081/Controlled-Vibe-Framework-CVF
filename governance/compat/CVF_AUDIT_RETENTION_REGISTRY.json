@@ -17,8 +17,8 @@
   ],
   "summary": {
     "activeRecentCount": 16,
-    "retainEvidenceCount": 69,
-    "safeToArchiveCount": 28,
+    "retainEvidenceCount": 72,
+    "safeToArchiveCount": 89,
     "archivedCount": 96,
     "derivedAt": "2026-04-07",
     "derivationMethod": "Derived from scripts/cvf_active_archive.py screening and refreshed after live-reference reclassification for historical W4 learning audits plus relocation/publication canon audits still blocked by active references, including P4 CP6-CP12 audits still anchored by active docs."
@@ -92,6 +92,9 @@
     "docs/audits/CVF_P4_CP9_RUNTIME_ADAPTER_HUB_EXPORT_MAP_IMPLEMENTATION_AUDIT_2026-04-03.md",
     "docs/audits/CVF_P4_CP10_SHORTLIST_WAVE_CONSOLIDATION_AUDIT_2026-04-03.md",
     "docs/audits/CVF_P4_CP11_SHORTLIST_READINESS_REASSESSMENT_AUDIT_2026-04-03.md",
-    "docs/audits/CVF_P4_CP12_SHORTLIST_DOCUMENTATION_COMPLETION_AUDIT_2026-04-03.md"
+    "docs/audits/CVF_P4_CP12_SHORTLIST_DOCUMENTATION_COMPLETION_AUDIT_2026-04-03.md",
+    "docs/audits/CVF_W55_T1_CP1_CPF_CLOSURE_ASSESSMENT_AUDIT_2026-04-05.md",
+    "docs/audits/CVF_W56_T1_CP1_GEF_CLOSURE_ASSESSMENT_AUDIT_2026-04-05.md",
+    "docs/audits/CVF_W56_T1_CP2_TRUST_ISOLATION_CLOSURE_DECISION_AUDIT_2026-04-05.md"
   ]
 }

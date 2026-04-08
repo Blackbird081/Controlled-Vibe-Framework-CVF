@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W59-T1 CP1 CLOSED DELIVERED 2026-04-07; MC5 complete; whitepaper canon promotion complete; CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 tests unchanged; any new work requires fresh GC-018` |
+| Current active tranche | `NONE — W63-T1 CLOSED DELIVERED 2026-04-08; Pre-Public Packaging complete; Post-MC5 Continuation Strategy ALL 4 TRACKS COMPLETE; CI coverage 100%; any new work requires fresh GC-018` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05); W59-T1 promotes the closure readout to CLOSURE-ASSESSED (2026-04-07)` |
 
 ---
@@ -205,6 +205,10 @@ Memory class: POINTER_RECORD
 | `W57-T1` MC3: LPF Plane Closure Assessment (ASSESSMENT / DECISION class, CP1) | `CLOSED DELIVERED 2026-04-07 — MC3 LPF complete (CP1); LPF DONE-ready 7/7; all 20 base contracts + 18 consumer pipelines + 18 consumer pipeline batches + 2 standalone batches present; LPF 1465 tests 0 failures; 3 label currency gaps closed (Storage/Eval Engine, Observability, GovernanceSignal SUBSTANTIALLY DELIVERED → DONE); no new LPF implementation needed; whitepaper banner later aligned to DONE-ready (7/7) in MC5` |
 | `W58-T1` MC4: EPF Plane Closure Assessment (ASSESSMENT / DECISION class, CP1) | `CLOSED DELIVERED 2026-04-07 — MC4 EPF complete (CP1); EPF DONE-ready; all 20 base contracts + 18 consumer pipelines + 18 consumer pipeline batches + 9 standalone batches present; EPF 1301 tests 0 failures; Model Gateway [DEFERRED] (boundary governance in CPF W8-T1 + W39-T1; EPF provider routing intentionally future-facing); Sandbox Runtime [DEFERRED] (worker agents governed via Dispatch/PolicyGate/CommandRuntime; full physical isolation intentionally future-facing); epf_plane_scan: FULLY_CLOSED added to scan registry; no new EPF implementation needed; whitepaper promotion landed in W59-T1 MC5` |
 | `W59-T1` MC5: Whitepaper + Tracker Canon Promotion Pass (DOCUMENTATION / DECISION class, CP1) | `CLOSED DELIVERED 2026-04-07 — MC5 complete; whitepaper document type promoted to CLOSURE-ASSESSED; all four plane banners promoted to post-MC5 closure labels; component labels promoted per MC1-MC4 evidence; AGENT_HANDOFF + tracker + closure roadmap aligned; no code changes; MC sequence MC1-MC5 fully complete` |
+| `W60-T1` cvf-web Typecheck Stabilization (REMEDIATION class) | `CLOSED DELIVERED 2026-04-07 — Resolved 97 TypeScript errors across cvf-web; Fast Lane (GC-021)` |
+| `W61-T1` CI/CD Expansion + Product Hardening (INFRA class) | `CLOSED DELIVERED 2026-04-08 — Added 5 new CI jobs for foundation tests; build verification added; CI coverage 100%; Full Lane (GC-019)` |
+| `W62-T1` Documentation Curation (DOCUMENTATION class) | `CLOSED DELIVERED 2026-04-08 — Sensitivity classification complete; PUBLIC_DOCS_MIRROR boundary finalized; Root docs refreshed` |
+| `W63-T1` Pre-Public Packaging (PACKAGING class) | `CLOSED DELIVERED 2026-04-08 — Phase A modules prepared for export readiness; Export boundaries defined; Post-MC5 Continuation Strategy ALL 4 TRACKS COMPLETE` |
 
 ---
 
@@ -239,9 +243,9 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W59_T1_CLOSED_2026-04-07.md` (W59-T1 CP1 CLOSED DELIVERED 2026-04-07 — MC5 complete; MC1-MC5 fully complete)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W60_W63_2026-04-08.md` (W60-W63 closures synced)
 - Latest continuity sync delta: `docs/baselines/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_DELTA_2026-04-07.md`
-- Current closure anchor: `docs/reviews/CVF_W59_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`
-- Active quality assessment: `docs/assessments/CVF_POST_W59_CONTINUATION_QUALITY_ASSESSMENT_2026-04-07.md`
-- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W59_T1_MC5_WHITEPAPER_PROMOTION_2026-04-07.md` (W59-T1 GC-018 AUTHORIZED — CLOSED DELIVERED)
+- Current closure anchor: `docs/reviews/CVF_W63_T1_TRANCHE_CLOSURE_REVIEW_2026-04-08.md`
+- Active quality assessment: `docs/assessments/CVF_W60_W63_INDEPENDENT_EVALUATION_2026-04-08.md`
+- Most recent continuation authorization: `docs/roadmaps/CVF_GC018_W63_T1_PRE_PUBLIC_PACKAGING_ROADMAP_2026-04-08.md` (W63-T1 GC-018 AUTHORIZED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

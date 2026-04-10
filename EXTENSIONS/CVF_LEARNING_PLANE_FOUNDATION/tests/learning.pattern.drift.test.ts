@@ -100,7 +100,7 @@ describe("W6-T6 CP1 — PatternDriftContract", () => {
     const contract = createPatternDriftContract({
       now: () => "2026-03-23T10:00:00.000Z",
     });
-    const baseline = makeTruthModel({ dominantPattern: "ACCEPTED" });
+    const baseline = makeTruthModel({ dominantPattern: "ACCEPT" });
     const current = makeTruthModel({ modelId: "model-002", dominantPattern: "ESCALATE" });
     const signal = contract.detect(baseline, current);
 

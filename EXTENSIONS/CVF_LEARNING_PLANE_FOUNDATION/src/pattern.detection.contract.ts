@@ -5,7 +5,7 @@ import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCI
 
 export type HealthSignal = "HEALTHY" | "DEGRADED" | "CRITICAL";
 
-export type DominantPattern = FeedbackClass | "MIXED" | "EMPTY";
+export type DominantPattern = FeedbackClass | "PROCEED" | "MONITOR" | "MIXED" | "EMPTY";
 
 export interface PatternInsight {
   insightId: string;

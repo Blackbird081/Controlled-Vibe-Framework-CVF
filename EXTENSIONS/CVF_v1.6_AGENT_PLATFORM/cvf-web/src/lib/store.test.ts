@@ -3,6 +3,7 @@
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useExecutionStore } from './store';
+import type { Execution } from '@/types';
 
 const trackEventMock = vi.hoisted(() => vi.fn());
 const validateChainMock = vi.hoisted(() => vi.fn());
@@ -39,7 +40,7 @@ describe('Execution store', () => {
     });
 
     it('adds execution and sets current execution', () => {
-        const execution = {
+        const execution: Execution = {
             id: 'exec_1',
             templateId: 'tpl_1',
             templateName: 'Template 1',
@@ -62,7 +63,7 @@ describe('Execution store', () => {
     });
 
     it('updates execution and tracks completion/accept/reject', () => {
-        const execution = {
+        const execution: Execution = {
             id: 'exec_2',
             templateId: 'tpl_2',
             templateName: 'Template 2',
@@ -91,7 +92,7 @@ describe('Execution store', () => {
     });
 
     it('gets execution by id', () => {
-        const execution = {
+        const execution: Execution = {
             id: 'exec_3',
             templateId: 'tpl_3',
             templateName: 'Template 3',
@@ -116,7 +117,7 @@ describe('Execution store', () => {
     });
 
     it('updateExecution does not overwrite currentExecution when id differs (lines 59-61)', () => {
-        const exec1 = {
+        const exec1: Execution = {
             id: 'exec_a',
             templateId: 'tpl_a',
             templateName: 'Template A',
@@ -126,7 +127,7 @@ describe('Execution store', () => {
             status: 'pending' as const,
             createdAt: new Date(),
         };
-        const exec2 = {
+        const exec2: Execution = {
             id: 'exec_b',
             templateId: 'tpl_b',
             templateName: 'Template B',

@@ -71,8 +71,8 @@ const baseSettings = {
         gemini: { apiKey: '', selectedModel: 'gemini-2.5-flash' },
         openai: { apiKey: '', selectedModel: 'gpt-4o' },
         anthropic: { apiKey: '', selectedModel: 'claude-sonnet-4-20250514' },
-        alibaba: { apiKey: '', selectedModel: 'qwen-turbo' },
-        openrouter: { apiKey: '', selectedModel: 'meta-llama/llama-4-maverick' },
+        alibaba: { apiKey: '', selectedModel: 'qwen-plus' },
+        openrouter: { apiKey: '', selectedModel: 'openai/gpt-4o-mini' },
     },
 };
 

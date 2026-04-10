@@ -12,6 +12,7 @@ vi.mock('@/lib/analytics', () => ({
 import { trackEvent } from '@/lib/analytics';
 const trackEventMock = vi.mocked(trackEvent);
 const globalWithOptionalWindow = globalThis as typeof globalThis & { window?: Window & typeof globalThis };
+const governanceStateSnapshot = {} as EnforcementResult['governanceStateSnapshot'];
 
 describe('enforcement-log', () => {
     beforeEach(() => {
@@ -24,8 +25,10 @@ describe('enforcement-log', () => {
                 status: 'BLOCK',
                 reasons: ['Budget exceeded'],
                 riskGate: { status: 'BLOCK', riskLevel: 'R4', reason: 'R4 blocked' },
-                specGate: { status: 'FAIL', missing: [{ id: 'goal', label: 'Goal', required: true }] },
-            } as unknown as EnforcementResult;
+                specGate: { status: 'FAIL', missing: [{ id: 'goal', label: 'Goal', required: true }], providedCount: 0, requiredCount: 1 },
+                governanceStateSnapshot,
+                source: 'client',
+            };
 
             logEnforcementDecision({
                 source: 'agent_chat',
@@ -50,7 +53,9 @@ describe('enforcement-log', () => {
             const enforcement: EnforcementResult = {
                 status: 'ALLOW',
                 reasons: [],
-            } as unknown as EnforcementResult;
+                governanceStateSnapshot,
+                source: 'client',
+            };
 
             logEnforcementDecision({
                 source: 'spec_export',
@@ -70,10 +75,7 @@ describe('enforcement-log', () => {
         });
 
         it('uses different source types', () => {
-            const enforcement: EnforcementResult = { 
-                status: 'CLARIFY', 
-                reasons: ['Needs more info'],
-            } as unknown as EnforcementResult;
+            const enforcement: EnforcementResult = { status: 'CLARIFY', reasons: ['Needs more info'], governanceStateSnapshot, source: 'client' };
             
             logEnforcementDecision({ source: 'multi_agent', mode: 'full', enforcement });
             expect(trackEventMock).toHaveBeenCalledWith('enforcement_decision', expect.objectContaining({ source: 'multi_agent' }));
@@ -107,10 +109,7 @@ describe('enforcement-log', () => {
                 logEnforcementDecision({
                     source: 'agent_chat',
                     mode: 'simple',
-                    enforcement: { 
-                        status: 'ALLOW', 
-                        reasons: [],
-                    } as unknown as EnforcementResult,
+                    enforcement: { status: 'ALLOW', reasons: [], governanceStateSnapshot, source: 'client' },
                 });
                 expect(trackEventMock).not.toHaveBeenCalled();
             } finally {

@@ -34,9 +34,9 @@ vi.mock('jspdf', () => {
 // Mock docx dynamic import
 const mockPackerToBlob = vi.fn().mockResolvedValue(new Blob(['test']));
 vi.mock('docx', () => {
-    function DocCtor(this: any, opts: Record<string, unknown>) { Object.assign(this, opts); }
-    function ParaCtor(this: any, opts: Record<string, unknown>) { Object.assign(this, opts); }
-    function TRCtor(this: any, opts: Record<string, unknown>) { Object.assign(this, opts); }
+    function DocCtor(this: Record<string, unknown>, opts: Record<string, unknown>) { Object.assign(this, opts); }
+    function ParaCtor(this: Record<string, unknown>, opts: Record<string, unknown>) { Object.assign(this, opts); }
+    function TRCtor(this: Record<string, unknown>, opts: Record<string, unknown>) { Object.assign(this, opts); }
     return {
         Document: DocCtor,
         Packer: { toBlob: mockPackerToBlob },
@@ -58,10 +58,10 @@ const mockExecution = {
     id: 'exec-test-1',
     templateId: 'business_plan',
     templateName: 'Business Plan',
-    intent: 'Create a comprehensive business plan',
+    intent: 'Create a business plan',
     status: 'completed' as const,
     createdAt: new Date('2026-02-15T10:00:00Z'),
-    qualityScore: 8.5,
+    qualityScore: 85,
     input: { prompt: 'Test' },
 };
 

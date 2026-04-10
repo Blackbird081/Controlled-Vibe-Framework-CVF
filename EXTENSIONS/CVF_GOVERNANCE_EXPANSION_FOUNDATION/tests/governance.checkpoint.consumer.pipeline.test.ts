@@ -143,13 +143,7 @@ describe("GovernanceCheckpointConsumerPipelineContract", () => {
     const result = makeContract().execute({
       summary: makeSummary("PROCEED"),
       candidateItems: [
-        {
-          itemId: "item-1",
-          title: "Checkpoint item",
-          content: "checkpoint item",
-          relevanceScore: 0.9,
-          source: "test",
-        },
+        { itemId: "item-1", title: "Checkpoint Item", content: "checkpoint item", relevanceScore: 0.9, source: "test" },
       ],
     });
     expect(result.consumerPackage.rankedKnowledgeResult.totalRanked).toBe(1);

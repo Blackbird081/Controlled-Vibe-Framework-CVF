@@ -142,7 +142,7 @@ export class EvaluationEngineContract {
 
     const evaluationHash = computeDeterministicHash(
       "w4-t3-cp1-evaluation-engine",
-      `${evaluatedAt}:${model.modelId}:v${model.sourceTruthModelVersion ?? model.version}`,
+      `${evaluatedAt}:${model.modelId}:v${model.version}`,
       `verdict:${verdict}:severity:${severity}`,
       `confidence:${model.confidenceLevel.toFixed(2)}:health:${model.currentHealthSignal}`,
     );

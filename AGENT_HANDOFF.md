@@ -1,4 +1,4 @@
-# CVF Agent Handoff — 2026-04-08
+# CVF Agent Handoff — 2026-04-10
 
 > Branch: `main`
 > Branch posture: `main` is the canonical continuation branch after 2026-04-04 convergence; `cvf-next` is kept as a synchronized mirror for compatibility
@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W63-T1 closed delivered; Pre-Public Packaging: **COMPLETE**; Phase A modules (Guard Contract, MCP Server, Deterministic Reproducibility) prepared for export readiness; Post-MC5 Continuation Strategy: **ALL 4 TRACKS COMPLETE**; MC sequence MC1-MC5 FULLY COMPLETE; CI coverage 100% (8294 tests); any new work requires fresh GC-018
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W63-T1 closed delivered; Pre-Public Packaging: **COMPLETE**; Phase A modules (Guard Contract, MCP Server, Deterministic Reproducibility) prepared for export readiness; Post-MC5 Continuation Strategy: **ALL 4 TRACKS COMPLETE**; local verification baseline refreshed `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass on `check + test`; `cvf-web` passes `tsc + full vitest + production build`; CI coverage remains 100% in workflow config; any new work requires fresh GC-018
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W62-T1`)
 
 ---
@@ -19,11 +19,19 @@
 - Pre-public restructuring posture is now narrowed, canonized, and closed-by-default: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
 - Canonical scan continuity registry: `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
 
-### Test Counts (last verified clean)
-- CPF (Control Plane Foundation): **2929 tests, 0 failures**
-- EPF (Execution Plane Foundation): **1301 tests, 0 failures** (isolated; pre-existing ordering-sensitive flakiness in `policy.gate.batch.contract.test.ts` in full-suite runs)
-- GEF (Governance Expansion Foundation): **625 tests, 0 failures**
-- LPF (Learning Plane Foundation): **1465 tests, 0 failures**
+### Local Verify Baseline (2026-04-10)
+- CPF (Control Plane Foundation): `npm run check` + `npm test` clean; **2929 tests, 0 failures**
+- EPF (Execution Plane Foundation): `npm run check` + `npm test` clean; **1301 tests, 0 failures**
+- GEF (Governance Expansion Foundation): `npm run check` + `npm test` clean; **625 tests, 0 failures**
+- LPF (Learning Plane Foundation): `npm run check` + `npm test` clean; **1465 tests, 0 failures**
+- `cvf-web`: `npx tsc --noEmit` clean; `npm run test:run` clean; **1853 passed / 3 skipped**; `npm run build` clean
+- `.github/workflows/cvf-ci.yml` now mirrors this local baseline across Guard Contract, MCP server, 4 foundation packages, and `cvf-web`; first hosted GitHub Actions confirmation is still pending
+
+### Reuse Rule For Future Agents
+- Treat the `2026-04-10` local verification set as the current shared baseline.
+- Do **not** rerun the full foundation suites or full `cvf-web` baseline by default when your work does not touch those verified surfaces.
+- Rerun only if at least one of these changes: package manifests or lockfiles, test/build config, shared contract exports, dependency install state, runtime/toolchain version, or files inside the surfaces you modify.
+- If your change is tightly scoped, run the smallest proving command that covers your touched surface and inherit the remaining baseline from this handoff.
 
 ### Last Tranches Closed
 
@@ -109,6 +117,9 @@ Current guidance:
 - W59-T1 closure review: `docs/reviews/CVF_W59_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`
 - W59-T1 CP1 review: `docs/reviews/CVF_GC019_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_REVIEW_2026-04-07.md`
 - W59-T1 CP1 audit: `docs/audits/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_AUDIT_2026-04-07.md`
+- **Verification baseline is already refreshed** — use the `2026-04-10` local baseline in this handoff and the quality readout in `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`; do not spend time re-running the same full suites unless your change invalidates that baseline
+- W57-T1 closure review: `docs/reviews/CVF_W57_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`
+- GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W57_T1_CLOSED_2026-04-07.md`
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
 - **Do not open a fresh tranche before consulting the canonical scan continuity registry.**
 - **W59-T1 MC5 reference**: closure review `docs/reviews/CVF_W59_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`; GC-026 closed sync `docs/baselines/CVF_GC026_TRACKER_SYNC_W59_T1_CLOSED_2026-04-07.md`; audit `docs/audits/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_AUDIT_2026-04-07.md`
@@ -175,10 +186,11 @@ All W1-Txx / W2-Txx / W3-Txx / W4-Txx consumer pipeline bridges delivered. Every
 ### `epf.dispatch.barrel.ts` family — FULLY CLOSED
 - `DispatchContract`, `PolicyGateContract`, `CommandRuntimeContract`, `AsyncCommandRuntimeContract`, `AsyncExecutionStatusContract`, and `ExecutionReintakeContract` now have canonical governed batch surfaces through W49–W54.
 - Treat the full dispatch-gate-runtime-async-status-reintake family as CLOSED unless a fresh `GC-018` explicitly authorizes another EPF surface outside that family.
-- Run `npx vitest run EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` (isolated) to baseline before any new EPF work.
+- Full EPF local baseline was re-verified clean on `2026-04-10`; do not rerun the entire suite before new EPF work unless your touched surface invalidates that baseline.
 
-### Known EPF Flakiness — Pre-Existing
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/bridge.runtime.pipeline.test.ts` — hash determinism test fails **only when full EPF suite runs** due to ordering-sensitive state interaction. Passes in isolation and together with W48-T1 tests. **Do not spend time fixing this without isolating the root cause first.** Run the specific test file in isolation to verify your work, not the full suite.
+### EPF Determinism Note
+- The prior local failure in `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/bridge.runtime.pipeline.test.ts` is resolved in the current workspace baseline by threading `now` into nested `CommandRuntimeContract` creation from `ExecutionPipelineContract`.
+- No known EPF full-suite blocker remains in the current local baseline; only the first hosted CI run of the expanded workflow is still pending.
 
 ---
 
@@ -337,6 +349,11 @@ cd EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION && npm test
 
 # LPF tests
 cd EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION && npm test
+
+# Web baseline
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npx tsc --noEmit
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run test:run
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run build
 ```
 
 ---

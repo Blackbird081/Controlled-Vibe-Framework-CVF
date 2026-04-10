@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-07` (W59-T1 CP1 CLOSED DELIVERED — MC5 Whitepaper + Tracker Canon Promotion Pass; MC sequence MC1-MC5 FULLY COMPLETE; all plane banners and component labels promoted to their post-MC5 closure labels; document type: CLOSURE-ASSESSED; CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 tests unchanged; no active tranche; no further MC steps; any new work requires fresh GC-018)
+> Last refreshed: `2026-04-10` (latest governed closure remains `W63-T1`; MC sequence MC1-MC5 stays fully complete; local verification baseline refreshed: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass on `check + test`; `cvf-web` passes `tsc + full vitest + production build`; no active tranche; any new work requires fresh GC-018)
 
 ---
 
@@ -20,7 +20,8 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W63-T1 CLOSED DELIVERED 2026-04-08; Pre-Public Packaging complete; Post-MC5 Continuation Strategy ALL 4 TRACKS COMPLETE; CI coverage 100%; any new work requires fresh GC-018` |
+| Current active tranche | `NONE — W63-T1 CLOSED DELIVERED 2026-04-08; Pre-Public Packaging complete; Post-MC5 Continuation Strategy ALL 4 TRACKS COMPLETE; local baseline refreshed 2026-04-10 with CPF / EPF / GEF / LPF clean on check+test and cvf-web clean on tsc + full vitest + build; any new work requires fresh GC-018` |
+| Shared verification baseline | `ADOPT 2026-04-10 LOCAL BASELINE — future agents should inherit this verification state and rerun only when their touched scope, dependency state, or build/test configuration invalidates it` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05); W59-T1 promotes the closure readout to CLOSURE-ASSESSED (2026-04-07)` |
 
 ---
@@ -230,6 +231,7 @@ Memory class: POINTER_RECORD
 - If no tranche is currently active, the currently authorized line is canonically closed and any further work needs a new `GC-018` decision.
 - If an area is `PARTIAL`, CVF already has usable delivered slices there, but not the full whitepaper target-state.
 - This tracker only reflects canonically committed closures; worktree-only slices do not count until their governed packet chain is committed.
+- The `2026-04-10` verification baseline is an operational handoff baseline, not a new governed tranche. Future agents should inherit it instead of re-running all suites unless their work invalidates it.
 
 ---
 

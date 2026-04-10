@@ -23,7 +23,7 @@ const setFetchPayload = (payload: unknown) => {
         ok: true,
         json: async () => payload,
     });
-    global.fetch = fetchMock;
+    vi.stubGlobal('fetch', fetchMock);
 };
 
 const setCategories = (categories: unknown) => {

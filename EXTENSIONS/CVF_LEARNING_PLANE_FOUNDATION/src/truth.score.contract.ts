@@ -78,10 +78,11 @@ function scoreTrajectory(model: TruthModel): number {
 
 /**
  * Maps dominantPattern to 0–25.
- * PROCEED → 25, MONITOR → 15, RETRY → 8, ESCALATE → 3, REJECT → 0.
+ * ACCEPT/PROCEED → 25, MONITOR → 15, RETRY → 8, ESCALATE → 3, REJECT → 0.
  */
 function scorePattern(model: TruthModel): number {
   switch (model.dominantPattern) {
+    case "ACCEPT":
     case "PROCEED":  return 25;
     case "MONITOR":  return 15;
     case "RETRY":    return 8;

@@ -16,11 +16,12 @@ const FIXED_TS = "2026-03-27T18:00:00.000Z";
 function makeGovernanceSignal(overrides: Partial<GovernanceSignal> = {}): GovernanceSignal {
   return {
     signalId: "test-signal-id",
-    createdAt: "2026-01-01T00:00:00.000Z",
+    issuedAt: "2026-01-01T00:00:00.000Z",
     sourceAssessmentId: "test-assessment-id",
+    sourceOverallStatus: "FAILING",
     signalType: "ESCALATE",
-    urgency: "critical",
-    summary: "Test governance signal",
+    urgency: "CRITICAL",
+    recommendation: "Test governance signal",
     signalHash: "test-signal-hash",
     ...overrides,
   };

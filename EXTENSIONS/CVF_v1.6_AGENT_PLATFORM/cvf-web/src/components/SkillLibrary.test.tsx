@@ -22,7 +22,7 @@ const setFetchPayload = (payload: unknown) => {
         ok: true,
         json: async () => payload,
     });
-    global.fetch = fetchMock;
+    vi.stubGlobal('fetch', fetchMock);
 };
 
 const setCategories = (categories: unknown) => {
@@ -196,7 +196,7 @@ describe('SkillLibrary', () => {
             ok: true,
             json: async () => promise,
         });
-        global.fetch = fetchMock;
+        vi.stubGlobal('fetch', fetchMock);
 
         const { container } = render(<SkillLibrary />);
         expect(container.querySelector('.animate-spin')).toBeTruthy();
@@ -259,7 +259,7 @@ describe('SkillLibrary', () => {
         getSkillCategoriesMock.mockRejectedValue(new Error('fail'));
         fetchMock.mockReset();
         fetchMock.mockRejectedValue(new Error('fetch failed'));
-        global.fetch = fetchMock;
+        vi.stubGlobal('fetch', fetchMock);
 
         render(<SkillLibrary />);
         await waitFor(() => expect(screen.getByText(/No skills found matching/i)).toBeTruthy());
@@ -657,7 +657,7 @@ describe('SkillLibrary', () => {
                 ],
             }),
         });
-        global.fetch = fetchMock;
+        vi.stubGlobal('fetch', fetchMock);
 
         render(<SkillLibrary />);
         await waitFor(() => {

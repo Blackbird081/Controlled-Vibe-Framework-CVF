@@ -61,7 +61,7 @@ export class LearningObservabilityConsumerPipelineBatchContract {
         degradedCount++;
       }
       const estimatedTokens =
-        result.consumerPackage.rankedKnowledgeResult?.estimatedTokens ?? 0;
+        result.consumerPackage.typedContextPackage.estimatedTokens;
       tokenBudgets.push(estimatedTokens);
     }
 

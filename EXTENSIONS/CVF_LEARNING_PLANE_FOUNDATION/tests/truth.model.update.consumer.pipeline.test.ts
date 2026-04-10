@@ -29,13 +29,15 @@ describe("TruthModelUpdateConsumerPipelineContract (W4-T18 CP1)", () => {
 
   const createInsight = (overrides?: Partial<PatternInsight>): PatternInsight => ({
     insightId: `insight-${Math.random()}`,
-    detectedAt: fixedNow,
-    dominantPattern: "ACCEPT_HEAVY",
+    analyzedAt: fixedNow,
+    sourceLedgerId: "ledger-123",
+    dominantPattern: "ACCEPT",
     healthSignal: "HEALTHY",
     escalateRate: 0.1,
     rejectRate: 0.05,
     retryRate: 0.15,
     acceptRate: 0.7,
+    summary: "Stable ACCEPT pattern",
     insightHash: "hash-123",
     ...overrides,
   });
@@ -165,14 +167,14 @@ describe("TruthModelUpdateConsumerPipelineContract (W4-T18 CP1)", () => {
 
     const request: TruthModelUpdateConsumerPipelineRequest = {
       model: createBaseModel(),
-      insight: createInsight({ dominantPattern: "ESCALATE_HEAVY" }),
+      insight: createInsight({ dominantPattern: "ESCALATE" }),
     };
 
     const result = contract.execute(request);
 
     expect(result.consumerPackage.query).toContain("Update:");
     expect(result.consumerPackage.query).toContain("v2"); // v1 base model → v2 after update
-    expect(result.consumerPackage.query).toContain("ESCALATE_HEAVY");
+    expect(result.consumerPackage.query).toContain("ESCALATE");
   });
 
   it("should truncate query to 120 characters", () => {
@@ -204,8 +206,8 @@ describe("TruthModelUpdateConsumerPipelineContract (W4-T18 CP1)", () => {
     
     // Add insights that degrade health
     model = updateContract.update(model, createInsight({ healthSignal: "HEALTHY" }));
-    model = updateContract.update(model, createInsight({ healthSignal: "AT_RISK" }));
-    model = updateContract.update(model, createInsight({ healthSignal: "UNHEALTHY" }));
+    model = updateContract.update(model, createInsight({ healthSignal: "DEGRADED" }));
+    model = updateContract.update(model, createInsight({ healthSignal: "CRITICAL" }));
 
     const request: TruthModelUpdateConsumerPipelineRequest = {
       model,
@@ -260,7 +262,7 @@ describe("TruthModelUpdateConsumerPipelineContract (W4-T18 CP1)", () => {
     });
 
     const baseModel = createBaseModel();
-    const insight = createInsight({ dominantPattern: "RETRY_HEAVY" });
+    const insight = createInsight({ dominantPattern: "RETRY" });
 
     const request: TruthModelUpdateConsumerPipelineRequest = {
       model: baseModel,
@@ -335,7 +337,7 @@ describe("TruthModelUpdateConsumerPipelineContract (W4-T18 CP1)", () => {
       now: mockNow,
     });
 
-    const patterns = ["ACCEPT_HEAVY", "RETRY_HEAVY", "ESCALATE_HEAVY", "REJECT_HEAVY", "BALANCED"];
+    const patterns = ["ACCEPT", "RETRY", "ESCALATE", "REJECT", "MIXED"];
 
     patterns.forEach((pattern) => {
       const request: TruthModelUpdateConsumerPipelineRequest = {
@@ -388,13 +390,15 @@ describe("TruthModelUpdateConsumerPipelineBatchContract (W4-T18 CP2)", () => {
 
   const createInsight = (overrides?: Partial<PatternInsight>): PatternInsight => ({
     insightId: `insight-${Math.random()}`,
-    detectedAt: fixedNow,
-    dominantPattern: "ACCEPT_HEAVY",
+    analyzedAt: fixedNow,
+    sourceLedgerId: "ledger-123",
+    dominantPattern: "ACCEPT",
     healthSignal: "HEALTHY",
     escalateRate: 0.1,
     rejectRate: 0.05,
     retryRate: 0.15,
     acceptRate: 0.7,
+    summary: "Stable ACCEPT pattern",
     insightHash: "hash-123",
     ...overrides,
   });
@@ -579,8 +583,8 @@ describe("TruthModelUpdateConsumerPipelineBatchContract (W4-T18 CP2)", () => {
     
     let model2 = modelContract.build([]);
     model2 = updateContract.update(model2, createInsight({ healthSignal: "HEALTHY" }));
-    model2 = updateContract.update(model2, createInsight({ healthSignal: "AT_RISK" }));
-    model2 = updateContract.update(model2, createInsight({ healthSignal: "UNHEALTHY" }));
+    model2 = updateContract.update(model2, createInsight({ healthSignal: "DEGRADED" }));
+    model2 = updateContract.update(model2, createInsight({ healthSignal: "CRITICAL" }));
 
     const pipelineContract = createTruthModelUpdateConsumerPipelineContract({
       now: mockNow,

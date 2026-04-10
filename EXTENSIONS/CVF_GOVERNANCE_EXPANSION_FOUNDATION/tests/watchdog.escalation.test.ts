@@ -69,8 +69,10 @@ function makeAlertLog(overrides: Partial<WatchdogAlertLog> & { logId: string }):
   };
 }
 
-function makeContract(policy?: WatchdogEscalationPolicy) {
-  return new WatchdogEscalationContract({ now: fixedNow, policy });
+function makeContract(
+  policy?: WatchdogEscalationPolicy,
+) {
+  return new WatchdogEscalationContract({ now: fixedNow, ...(policy ? { policy } : {}) });
 }
 
 function makeDecision(action: WatchdogEscalationDecision["action"]): WatchdogEscalationDecision {

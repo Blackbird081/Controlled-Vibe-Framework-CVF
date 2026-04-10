@@ -16,8 +16,8 @@ describe('AgentChatMessageBubble', () => {
             id: 'sys-1',
             role: 'system',
             content: 'System message',
-            status: 'complete',
             timestamp: new Date('2026-01-01T00:00:00Z'),
+            status: 'complete',
         };
 
         render(<AgentChatMessageBubble message={message} />);
@@ -32,11 +32,17 @@ describe('AgentChatMessageBubble', () => {
             id: 'a-1',
             role: 'assistant',
             content: 'PHASE B: Design\n\n```ts\nconsole.log(\"ok\");\n```',
-            status: 'complete',
             timestamp: new Date('2026-01-01T00:00:00Z'),
+            status: 'complete',
             metadata: {
                 phase: 'DESIGN',
-                qualityScore: { overall: 88, completeness: 85, clarity: 90, actionability: 88, compliance: 87 },
+                qualityScore: {
+                    overall: 88,
+                    completeness: 84,
+                    clarity: 86,
+                    actionability: 90,
+                    compliance: 92,
+                },
                 acceptanceStatus: 'pending',
                 model: 'gpt-4o',
                 tokens: 2000,
@@ -71,8 +77,8 @@ describe('AgentChatMessageBubble', () => {
             id: 'a-2',
             role: 'assistant',
             content: 'Done',
-            status: 'complete',
             timestamp: new Date('2026-01-01T00:00:00Z'),
+            status: 'complete',
             metadata: {
                 acceptanceStatus: 'accepted',
             },
@@ -87,8 +93,8 @@ describe('AgentChatMessageBubble', () => {
             id: 'a-3',
             role: 'assistant',
             content: '```ts\nconsole.log(\"hi\");\n```',
-            status: 'complete',
             timestamp: new Date('2026-01-01T00:00:00Z'),
+            status: 'complete',
         };
 
         render(<AgentChatMessageBubble message={message} language="en" />);
@@ -102,8 +108,8 @@ describe('AgentChatMessageBubble', () => {
             id: 'a-4',
             role: 'assistant',
             content: 'Use `useState` hook. See [React docs](https://react.dev).',
-            status: 'complete',
             timestamp: new Date('2026-01-01T00:00:00Z'),
+            status: 'complete',
         };
 
         render(<AgentChatMessageBubble message={message} language="en" />);

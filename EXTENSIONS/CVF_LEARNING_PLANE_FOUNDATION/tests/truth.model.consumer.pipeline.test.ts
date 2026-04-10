@@ -14,13 +14,15 @@ describe("TruthModelConsumerPipelineContract (W4-T19 CP1)", () => {
 
   const createInsight = (overrides?: Partial<PatternInsight>): PatternInsight => ({
     insightId: `insight-${Math.random()}`,
-    detectedAt: fixedNow,
-    dominantPattern: "ACCEPT_HEAVY",
+    analyzedAt: fixedNow,
+    sourceLedgerId: "ledger-123",
+    dominantPattern: "ACCEPT",
     healthSignal: "HEALTHY",
     escalateRate: 0.1,
     rejectRate: 0.05,
     retryRate: 0.15,
     acceptRate: 0.7,
+    summary: "Stable ACCEPT pattern",
     insightHash: "hash-123",
     ...overrides,
   });
@@ -140,14 +142,14 @@ describe("TruthModelConsumerPipelineContract (W4-T19 CP1)", () => {
     });
 
     const request: TruthModelConsumerPipelineRequest = {
-      insights: [createInsight({ dominantPattern: "ESCALATE_HEAVY" })],
+      insights: [createInsight({ dominantPattern: "ESCALATE" })],
     };
 
     const result = contract.execute(request);
 
     expect(result.consumerPackage.query).toContain("Model:");
     expect(result.consumerPackage.query).toContain("v1");
-    expect(result.consumerPackage.query).toContain("ESCALATE_HEAVY");
+    expect(result.consumerPackage.query).toContain("ESCALATE");
     expect(result.consumerPackage.query).toContain("1 insights");
   });
 
@@ -262,8 +264,8 @@ describe("TruthModelConsumerPipelineContract (W4-T19 CP1)", () => {
     });
 
     const insights = [
-      createInsight({ dominantPattern: "RETRY_HEAVY" }),
-      createInsight({ dominantPattern: "RETRY_HEAVY" }),
+      createInsight({ dominantPattern: "RETRY" }),
+      createInsight({ dominantPattern: "RETRY" }),
     ];
 
     const request: TruthModelConsumerPipelineRequest = { insights };
@@ -332,7 +334,7 @@ describe("TruthModelConsumerPipelineContract (W4-T19 CP1)", () => {
       now: mockNow,
     });
 
-    const patterns = ["ACCEPT_HEAVY", "RETRY_HEAVY", "ESCALATE_HEAVY", "REJECT_HEAVY", "BALANCED"];
+    const patterns = ["ACCEPT", "RETRY", "ESCALATE", "REJECT", "MIXED"];
 
     patterns.forEach((pattern) => {
       const request: TruthModelConsumerPipelineRequest = {
@@ -430,13 +432,15 @@ describe("TruthModelConsumerPipelineBatchContract (W4-T19 CP2)", () => {
 
   const createInsight = (overrides?: Partial<PatternInsight>): PatternInsight => ({
     insightId: `insight-${Math.random()}`,
-    detectedAt: fixedNow,
-    dominantPattern: "ACCEPT_HEAVY",
+    analyzedAt: fixedNow,
+    sourceLedgerId: "ledger-123",
+    dominantPattern: "ACCEPT",
     healthSignal: "HEALTHY",
     escalateRate: 0.1,
     rejectRate: 0.05,
     retryRate: 0.15,
     acceptRate: 0.7,
+    summary: "Stable ACCEPT pattern",
     insightHash: "hash-123",
     ...overrides,
   });
@@ -566,14 +570,14 @@ describe("TruthModelConsumerPipelineBatchContract (W4-T19 CP2)", () => {
     });
 
     const results = [
-      createResult({ insights: [createInsight({ dominantPattern: "ACCEPT_HEAVY" })] }),
-      createResult({ insights: [createInsight({ dominantPattern: "ACCEPT_HEAVY" })] }),
-      createResult({ insights: [createInsight({ dominantPattern: "RETRY_HEAVY" })] }),
+      createResult({ insights: [createInsight({ dominantPattern: "ACCEPT" })] }),
+      createResult({ insights: [createInsight({ dominantPattern: "ACCEPT" })] }),
+      createResult({ insights: [createInsight({ dominantPattern: "RETRY" })] }),
     ];
 
     const batchResult = contract.execute(results);
 
-    expect(batchResult.dominantPattern).toBe("ACCEPT_HEAVY");
+    expect(batchResult.dominantPattern).toBe("ACCEPT");
   });
 
   it("should aggregate trajectoryDistribution correctly", () => {
@@ -618,8 +622,8 @@ describe("TruthModelConsumerPipelineBatchContract (W4-T19 CP2)", () => {
     });
 
     const results = [
-      createResult({ insights: [createInsight({ dominantPattern: "ACCEPT_HEAVY" })] }),
-      createResult({ insights: [createInsight({ dominantPattern: "RETRY_HEAVY" })] }),
+      createResult({ insights: [createInsight({ dominantPattern: "ACCEPT" })] }),
+      createResult({ insights: [createInsight({ dominantPattern: "RETRY" })] }),
     ];
 
     const batchResult = contract.execute(results);

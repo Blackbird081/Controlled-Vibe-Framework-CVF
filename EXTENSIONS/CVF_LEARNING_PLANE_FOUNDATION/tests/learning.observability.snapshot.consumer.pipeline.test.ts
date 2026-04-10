@@ -18,14 +18,13 @@ describe("LearningObservabilitySnapshotConsumerPipelineContract (W4-T23 CP1)", (
 
   const createReport = (overrides?: Partial<LearningObservabilityReport>): LearningObservabilityReport => ({
     reportId: `report-${Math.random()}`,
-    createdAt: fixedNow,
+    generatedAt: fixedNow,
+    sourceStorageLogId: "storage-log-1",
+    sourceLoopSummaryId: "loop-summary-1",
     observabilityHealth: "HEALTHY",
-    totalMetrics: 5,
-    healthyMetrics: 5,
-    degradedMetrics: 0,
-    criticalMetrics: 0,
-    unknownMetrics: 0,
-    summary: "All metrics healthy",
+    storageRecordCount: 5,
+    loopSignalCount: 5,
+    healthRationale: "All metrics healthy",
     reportHash: "hash-123",
     ...overrides,
   });
@@ -505,14 +504,13 @@ describe("LearningObservabilitySnapshotConsumerPipelineBatchContract (W4-T23 CP2
 
   const createReport = (overrides?: Partial<LearningObservabilityReport>): LearningObservabilityReport => ({
     reportId: `report-${Math.random()}`,
-    createdAt: fixedNow,
+    generatedAt: fixedNow,
+    sourceStorageLogId: "storage-log-1",
+    sourceLoopSummaryId: "loop-summary-1",
     observabilityHealth: "HEALTHY",
-    totalMetrics: 5,
-    healthyMetrics: 5,
-    degradedMetrics: 0,
-    criticalMetrics: 0,
-    unknownMetrics: 0,
-    summary: "All metrics healthy",
+    storageRecordCount: 5,
+    loopSignalCount: 5,
+    healthRationale: "All metrics healthy",
     reportHash: "hash-123",
     ...overrides,
   });

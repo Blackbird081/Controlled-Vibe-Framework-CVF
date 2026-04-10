@@ -121,6 +121,7 @@ Current guidance:
 - W59-T1 CP1 audit: `docs/audits/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_AUDIT_2026-04-07.md`
 - **Verification baseline is already refreshed** — use the `2026-04-10` local baseline in this handoff and the quality readout in `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`; do not spend time re-running the same full suites unless your change invalidates that baseline
 - **Web inheritance assessment**: `docs/assessments/CVF_WEB_W64_INHERITANCE_GAP_ASSESSMENT_2026-04-10.md`
+- **W64 follow-up review findings recorded below** — if reopened, treat as a bounded remediation/security tranche rather than architecture rediscovery
 - W57-T1 closure review: `docs/reviews/CVF_W57_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`
 - GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W57_T1_CLOSED_2026-04-07.md`
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`
@@ -140,6 +141,44 @@ Current guidance:
 - Guard binding matrix (G1-G8 + P-01–P-15): `docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md`
 - Architecture boundary lock: `docs/reviews/CVF_W7_T3_CP2_ARCHITECTURE_BOUNDARY_LOCK_2026-03-28.md`
 - W5-T2 closure: `docs/reviews/CVF_W5_T2_TRANCHE_CLOSURE_REVIEW_2026-03-28.md`
+
+---
+
+## W64 Follow-Up Findings — Static Review 2026-04-10 — ALL CLOSED
+
+> Review scope: `W64-T1` delivered code (`ProviderRouterContract`, `SandboxIsolationContract`, `WorkerThreadSandboxAdapter`)
+> Review method: static code review → remediation → test verification
+> Closure: all 3 findings remediated in commit `ae64a095` follow-up; no outstanding items
+
+### Finding 1 — `WorkerThreadSandboxAdapter` isolation claim — **CLOSED**
+
+- Severity: `CRITICAL` → **REMEDIATED**
+- Fix applied:
+  - Header comment narrowed from "physical isolation" to "best-effort delegated execution"
+  - Explicit note added: `worker_threads` are NOT a security boundary; real containment requires docker/v8_isolate
+  - Pre-execution policy checks expanded: empty command rejection, workingDir-vs-filesystem-denied check, broader write-indicator detection (`--output`, `-o`, `>`, `>>`, `tee`)
+  - 4 new adapter tests verify CONTAINMENT_VIOLATION for each pre-check path
+- Verification: Adapter Hub 71 tests passed (8 files)
+
+### Finding 2 — shell-injection in command construction — **CLOSED**
+
+- Severity: `HIGH` → **REMEDIATED**
+- Fix applied:
+  - Replaced `execSync(command + ' ' + args.join(' '))` with `execFileSync(command, args)` — non-shell execution path
+  - Command and args are now passed as separate array elements to the worker, never concatenated into a shell string
+  - Shell metacharacters (`&`, `|`, `;`, `>`, quotes, spaces, globs) can no longer alter command meaning
+  - New adapter test verifies real echo command execution with args passed safely
+- Verification: Adapter Hub 71 tests passed (8 files)
+
+### Finding 3 — `SandboxIsolationContract.execute()` config validation — **CLOSED**
+
+- Severity: `MEDIUM` → **REMEDIATED**
+- Fix applied:
+  - `execute()` now calls `validateConfig()` before delegating to executor
+  - Invalid configs return `status: "FAILED"` with validation errors in `stderr` — executor is never reached
+  - Failed-closed result is recorded in audit log for traceability
+  - 5 new tests: zero timeout, negative limits, unrestricted egress, audit log recording, executor-not-called assertion
+- Verification: Safety Runtime 739 tests passed (59 files)
 
 ---
 

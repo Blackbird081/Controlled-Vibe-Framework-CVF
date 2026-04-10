@@ -179,6 +179,83 @@ describe('SandboxIsolationContract', () => {
       expect(result.sandboxId).toBe('custom-id')
     })
 
+    it('fails closed when config has zero timeout', async () => {
+      const contract = createSandboxIsolationContract({
+        executor: createTestExecutor(),
+      })
+
+      const result = await contract.execute(testCommand, { timeoutMs: 0 })
+
+      expect(result.status).toBe('FAILED')
+      expect(result.exitCode).toBe(-1)
+      expect(result.stderr).toContain('Config validation failed')
+      expect(result.stderr).toContain('timeoutMs must be positive')
+    })
+
+    it('fails closed when config has negative resource limits', async () => {
+      const contract = createSandboxIsolationContract({
+        executor: createTestExecutor(),
+      })
+
+      const result = await contract.execute(testCommand, {
+        resourceLimits: { maxCpuTimeMs: -1, maxMemoryMb: 0, maxOutputBytes: -5 },
+      })
+
+      expect(result.status).toBe('FAILED')
+      expect(result.stderr).toContain('maxCpuTimeMs must be positive')
+    })
+
+    it('fails closed when config has unrestricted egress', async () => {
+      const contract = createSandboxIsolationContract({
+        executor: createTestExecutor(),
+      })
+
+      const result = await contract.execute(testCommand, {
+        networkPolicy: { allowEgress: true, allowedHosts: [] },
+      })
+
+      expect(result.status).toBe('FAILED')
+      expect(result.stderr).toContain('allowEgress')
+    })
+
+    it('records failed-closed result in audit log', async () => {
+      const contract = createSandboxIsolationContract({
+        executor: createTestExecutor(),
+      })
+
+      await contract.execute(testCommand, { timeoutMs: -1 })
+
+      expect(contract.getAuditLog()).toHaveLength(1)
+      expect(contract.getAuditLog()[0].status).toBe('FAILED')
+    })
+
+    it('does not call executor when config is invalid', async () => {
+      let executorCalled = false
+      const trackingExecutor: SandboxExecutor = {
+        platform: 'stub',
+        async execute(): Promise<SandboxResult> {
+          executorCalled = true
+          return {
+            sandboxId: 'should-not-reach',
+            status: 'COMPLETED',
+            startedAt: '2026-04-10T00:00:00.000Z',
+            completedAt: '2026-04-10T00:00:00.100Z',
+            exitCode: 0,
+            stdout: '',
+            stderr: '',
+            containmentViolations: [],
+            resourceUsage: { cpuTimeMs: 0, memoryPeakMb: 0, outputBytes: 0 },
+            platform: 'stub',
+          }
+        },
+      }
+
+      const contract = createSandboxIsolationContract({ executor: trackingExecutor })
+      await contract.execute(testCommand, { timeoutMs: 0 })
+
+      expect(executorCalled).toBe(false)
+    })
+
     it('passes command args and env through', async () => {
       let capturedCommand: SandboxCommand | null = null
       const executor: SandboxExecutor = {

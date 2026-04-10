@@ -198,6 +198,26 @@ export class SandboxIsolationContract {
       ...config,
     };
 
+    // Fail closed: reject invalid configs before delegating to executor
+    const validation = this.validateConfig(fullConfig);
+    if (!validation.valid) {
+      const now = this.now();
+      const failedResult: SandboxResult = {
+        sandboxId: this.generateId(),
+        status: "FAILED",
+        startedAt: now,
+        completedAt: now,
+        exitCode: -1,
+        stdout: "",
+        stderr: `Config validation failed: ${validation.errors.join("; ")}`,
+        containmentViolations: [],
+        resourceUsage: { cpuTimeMs: 0, memoryPeakMb: 0, outputBytes: 0 },
+        platform: fullConfig.platform,
+      };
+      this.auditLog.push(failedResult);
+      return failedResult;
+    }
+
     const result = await this.executor.execute(command, fullConfig);
 
     const enrichedResult: SandboxResult = {

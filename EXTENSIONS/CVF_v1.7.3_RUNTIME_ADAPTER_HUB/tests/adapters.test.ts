@@ -12,6 +12,9 @@ import { NanoAdapter } from '../adapters/nano.adapter.js'
 import { ReleaseEvidenceAdapter } from '../adapters/release.evidence.adapter.js'
 import { executeFilesystemAction, executeHttpAction } from '../adapters/base.adapter.js'
 import type { RuntimeRequest } from '../contracts/runtime.adapter.interface.js'
+import { WorkerThreadSandboxAdapter } from '../adapters/worker.thread.sandbox.adapter.js'
+import { createDefaultSandboxConfig } from '../../CVF_v1.7.1_SAFETY_RUNTIME/simulation/sandbox.isolation.contract.js'
+import type { SandboxCommand, SandboxConfig } from '../../CVF_v1.7.1_SAFETY_RUNTIME/simulation/sandbox.isolation.contract.js'
 
 describe('Base Adapter Helpers', () => {
 
@@ -233,6 +236,107 @@ describe('NanoAdapter', () => {
         })
         expect(result.success).toBe(true)
         expect((result.data as any).status).toBe('DELEGATED_TO_SANDBOX')
+    })
+})
+
+describe('WorkerThreadSandboxAdapter', () => {
+    const adapter = new WorkerThreadSandboxAdapter()
+
+    it('has worker_threads platform', () => {
+        expect(adapter.platform).toBe('worker_threads')
+    })
+
+    it('blocks unrestricted network egress as CONTAINMENT_VIOLATION', async () => {
+        const config: SandboxConfig = {
+            ...createDefaultSandboxConfig('worker_threads'),
+            networkPolicy: { allowEgress: true, allowedHosts: [] },
+        }
+        const command: SandboxCommand = { taskId: 'net-test', command: 'curl' }
+
+        const result = await adapter.execute(command, config)
+
+        expect(result.status).toBe('CONTAINMENT_VIOLATION')
+        expect(result.containmentViolations.length).toBeGreaterThan(0)
+        expect(result.containmentViolations[0].type).toBe('NETWORK_EGRESS')
+    })
+
+    it('blocks write args when allowWrite=false', async () => {
+        const config: SandboxConfig = {
+            ...createDefaultSandboxConfig('worker_threads'),
+            filesystemPolicy: {
+                allowRead: true, readPaths: [],
+                allowWrite: false, writePaths: [],
+                allowTempDir: true,
+            },
+        }
+        const command: SandboxCommand = {
+            taskId: 'write-test', command: 'node',
+            args: ['script.js', '--write', 'out.txt'],
+        }
+
+        const result = await adapter.execute(command, config)
+
+        expect(result.status).toBe('CONTAINMENT_VIOLATION')
+        expect(result.containmentViolations.some(v => v.type === 'FILESYSTEM_BREACH')).toBe(true)
+    })
+
+    it('blocks empty command as UNAUTHORIZED_SYSCALL', async () => {
+        const config = createDefaultSandboxConfig('worker_threads')
+        const command: SandboxCommand = { taskId: 'empty-test', command: '' }
+
+        const result = await adapter.execute(command, config)
+
+        expect(result.status).toBe('CONTAINMENT_VIOLATION')
+        expect(result.containmentViolations.some(v => v.type === 'UNAUTHORIZED_SYSCALL')).toBe(true)
+    })
+
+    it('blocks workingDir when filesystem access is fully denied', async () => {
+        const config: SandboxConfig = {
+            ...createDefaultSandboxConfig('worker_threads'),
+            filesystemPolicy: {
+                allowRead: false, readPaths: [],
+                allowWrite: false, writePaths: [],
+                allowTempDir: false,
+            },
+        }
+        const command: SandboxCommand = {
+            taskId: 'cwd-test', command: 'ls',
+            workingDir: '/tmp/sensitive',
+        }
+
+        const result = await adapter.execute(command, config)
+
+        expect(result.status).toBe('CONTAINMENT_VIOLATION')
+        expect(result.containmentViolations.some(v => v.type === 'FILESYSTEM_BREACH')).toBe(true)
+    })
+
+    it('executes a valid echo command successfully', async () => {
+        const config = createDefaultSandboxConfig('worker_threads')
+        const isWindows = process.platform === 'win32'
+        const command: SandboxCommand = {
+            taskId: 'echo-test',
+            command: isWindows ? 'cmd' : 'echo',
+            args: isWindows ? ['/c', 'echo', 'hello sandbox'] : ['hello sandbox'],
+        }
+
+        const result = await adapter.execute(command, config)
+
+        expect(result.status).toBe('COMPLETED')
+        expect(result.exitCode).toBe(0)
+        expect(result.stdout).toContain('hello sandbox')
+        expect(result.platform).toBe('worker_threads')
+    })
+
+    it('returns FAILED for non-existent command', async () => {
+        const config = createDefaultSandboxConfig('worker_threads')
+        const command: SandboxCommand = {
+            taskId: 'bad-cmd', command: 'nonexistent_binary_xyz_123',
+        }
+
+        const result = await adapter.execute(command, config)
+
+        expect(['FAILED', 'TIMEOUT']).toContain(result.status)
+        expect(result.exitCode).not.toBe(0)
     })
 })
 

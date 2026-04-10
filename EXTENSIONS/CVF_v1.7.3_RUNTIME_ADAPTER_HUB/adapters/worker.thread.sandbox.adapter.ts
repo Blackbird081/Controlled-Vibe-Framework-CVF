@@ -1,6 +1,10 @@
 // adapters/worker.thread.sandbox.adapter.ts
 // CVF v1.7.3 — WorkerThread Sandbox Adapter
-// Track 5B: First concrete sandbox executor using Node.js worker_threads.
+// Track 5B: Best-effort delegated execution using Node.js worker_threads.
+// NOTE: worker_threads provide thread isolation but NOT a security boundary
+// for filesystem/network/process containment. Pre-execution policy checks
+// enforce governance constraints; physical containment requires a real
+// sandbox platform (docker, v8_isolate) behind the SandboxExecutor interface.
 // Doctrine basis: CVF_ARCHITECTURE_PRINCIPLES.md §7 (Isolation), §11 (Composability)
 // Wiring target: SandboxIsolationContract executor interface
 
@@ -33,10 +37,33 @@ export class WorkerThreadSandboxAdapter implements SandboxExecutor {
             })
         }
 
-        if (!config.filesystemPolicy.allowWrite && command.args?.some(a => a.includes('--write') || a.includes('-w'))) {
+        if (!config.filesystemPolicy.allowRead && !config.filesystemPolicy.allowWrite) {
+            // No filesystem access at all — block commands that reference paths
+            if (command.workingDir) {
+                violations.push({
+                    type: 'FILESYSTEM_BREACH' as ContainmentViolationType,
+                    detail: 'workingDir specified but filesystem access is fully denied',
+                    detectedAt: startedAt,
+                })
+            }
+        }
+
+        if (!config.filesystemPolicy.allowWrite) {
+            const writeIndicators = ['--write', '-w', '--output', '-o', '>', '>>', 'tee ']
+            if (command.args?.some(a => writeIndicators.some(ind => a.includes(ind)))) {
+                violations.push({
+                    type: 'FILESYSTEM_BREACH' as ContainmentViolationType,
+                    detail: 'Write operation attempted with allowWrite=false',
+                    detectedAt: startedAt,
+                })
+            }
+        }
+
+        // Reject empty or whitespace-only commands
+        if (!command.command || command.command.trim().length === 0) {
             violations.push({
-                type: 'FILESYSTEM_BREACH' as ContainmentViolationType,
-                detail: 'Write operation attempted with allowWrite=false',
+                type: 'UNAUTHORIZED_SYSCALL' as ContainmentViolationType,
+                detail: 'Empty command rejected',
                 detectedAt: startedAt,
             })
         }
@@ -115,16 +142,14 @@ export class WorkerThreadSandboxAdapter implements SandboxExecutor {
             const startTime = Date.now()
             const startedAt = new Date().toISOString()
 
-            // Worker inline script: executes the command in an isolated thread
+            // Worker inline script: executes command in an isolated thread
+            // Uses execFileSync (non-shell) to prevent shell injection.
+            // Command and args are passed as separate array elements, never concatenated.
             const workerCode = `
                 const { parentPort, workerData } = require('worker_threads');
-                const { execSync } = require('child_process');
+                const { execFileSync } = require('child_process');
 
                 try {
-                    const cmd = workerData.args && workerData.args.length > 0
-                        ? workerData.command + ' ' + workerData.args.join(' ')
-                        : workerData.command;
-
                     const options = {
                         timeout: workerData.timeoutMs,
                         maxBuffer: workerData.maxOutputBytes,
@@ -135,7 +160,11 @@ export class WorkerThreadSandboxAdapter implements SandboxExecutor {
                         options.cwd = workerData.workingDir;
                     }
 
-                    const stdout = execSync(cmd, options);
+                    const stdout = execFileSync(
+                        workerData.command,
+                        workerData.args || [],
+                        options
+                    );
                     parentPort.postMessage({
                         exitCode: 0,
                         stdout: stdout ? stdout.toString() : '',

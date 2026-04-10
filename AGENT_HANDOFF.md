@@ -124,7 +124,7 @@ Current guidance:
 - **Product value rule**: all future value-proof packets and any Docker-sandbox justification must run through the `GC-042` frozen evidence chain (`corpus -> rubric -> run manifest -> assessment`), not demos or score vanity
 - **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
 - **Post-MC5 Continuation Strategy**: **ALL 6 ACTIONABLE TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅, Track 5A: Model Gateway ✅, Track 5B: Sandbox Runtime ✅)
-- **Next recommended**: authorize W66-T1 CP2 (Run Harness) when execution infrastructure and reviewer pool are confirmed; PVV Wave CP1 is closed and the evidence chain foundation is ready
+- **Next recommended**: W66-T1 CP3 (Blind Comparative Evaluation — 540 runs) — NOT agent-openable; human operator must confirm all 6 prerequisites listed above before a fresh GC-018 can be issued
 - **Docker sandbox posture**: keep deferred-by-default unless a fresh bounded `GC-018` is justified by a real trigger
 - **Docker sandbox open triggers**:
   - a live product surface must execute user-controlled code / plugins / bounded runtime tasks as a first-class use case

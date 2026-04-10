@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastReviewed": "2026-04-07",
+  "lastReviewed": "2026-04-11",
   "classes": [
     {
       "id": "ACTIVE_DECISION_REVIEW",
@@ -17,11 +17,11 @@
   ],
   "summary": {
     "activeRecentCount": 50,
-    "retainEvidenceCount": 167,
-    "safeToArchiveCount": 85,
+    "retainEvidenceCount": 175,
+    "safeToArchiveCount": 77,
     "archivedCount": 335,
-    "derivedAt": "2026-04-07",
-    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references, including P4 CP6-CP12 review documents still pinned by live references."
+    "derivedAt": "2026-04-11",
+    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references, including P4 CP6-CP12 review documents still pinned by live references and W57-T1/W59-T1/W61-T1/W64-T1 review artifacts still anchored by active execution plans, audits, baselines, and orientation docs."
   },
   "retainEvidencePaths": [
     "docs/reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md",
@@ -190,6 +190,14 @@
     "docs/reviews/CVF_GC019_P4_CP12_SHORTLIST_DOCUMENTATION_COMPLETION_REVIEW_2026-04-03.md",
     "docs/reviews/CVF_MULTI_AGENT_DECISION_PACK_PREPUBLIC_RESTRUCTURING_2026-04-02.md",
     "docs/reviews/CVF_MULTI_AGENT_INTAKE_REVIEW_PREPUBLIC_RESTRUCTURING_2026-04-02.md",
-    "docs/reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md"
+    "docs/reviews/CVF_MULTI_AGENT_REBUTTAL_PREPUBLIC_RESTRUCTURING_2026-04-02.md",
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W57_T1_LPF_CLOSURE_ASSESSMENT_2026-04-07.md",
+    "docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W59_T1_MC5_WHITEPAPER_PROMOTION_2026-04-07.md",
+    "docs/reviews/CVF_GC019_W57_T1_CP1_LPF_CLOSURE_ASSESSMENT_REVIEW_2026-04-07.md",
+    "docs/reviews/CVF_GC019_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_REVIEW_2026-04-07.md",
+    "docs/reviews/CVF_W57_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md",
+    "docs/reviews/CVF_W59_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md",
+    "docs/reviews/CVF_W61_T1_TRANCHE_CLOSURE_REVIEW_2026-04-08.md",
+    "docs/reviews/CVF_W64_T1_TRANCHE_CLOSURE_REVIEW_2026-04-08.md"
   ]
 }

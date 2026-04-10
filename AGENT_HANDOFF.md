@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W66-T1 CP1 closed delivered; Product Value Validation Wave CP1 (Corpus + Rubric Freeze): **COMPLETE** — 90-task corpus FROZEN (Corpus A1×30 FAM-001/002/003 + A2×20 FAM-004/005 + B×20 real product + C×20 governance stress); rubric FROZEN; run manifest PLANNED (CP2 requires fresh GC-018 + confirmed reviewer pool); GC-042 evidence chain foundation established; W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`; W66-T1 CP1 test delta = 0; any new work requires fresh GC-018
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W66-T1 CP2 closed delivered; Product Value Validation Wave CP2 (Run Harness Setup): **COMPLETE** — CFG-A/CFG-B configuration specs FROZEN; evidence capture schema FROZEN; reviewer calibration set (5 tasks: CAL-001 NORMAL / CAL-002 AMBIGUOUS / CAL-003 HIGH_RISK / CAL-004 ADVERSARIAL / CAL-005 MULTI_STEP) FROZEN; evidence completeness checklist (7-item pre-CP3 gate) FROZEN; test delta 0; code delta 0; W66-T1 CP1 (Corpus + Rubric Freeze): **COMPLETE** — 90-task corpus FROZEN; rubric FROZEN; GC-042 evidence chain foundation established; W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`; W66-T1 CP1+CP2 test delta = 0; CP3 requires human operator confirmation before fresh GC-018
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W64-T1`)
 
 ---
@@ -37,6 +37,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W66-T1 CP2 | Product Value Validation Wave — Run Harness Setup (DOCUMENTATION / VALIDATION_TEST class) | CLOSED DELIVERED 2026-04-11 — CFG-A/CFG-B configuration specs FROZEN (`claude-sonnet-4-6`; CFG-A: direct API, temp 0.3, max_tokens 2048; CFG-B: cvf-web governed path, same parity); evidence capture schema FROZEN; reviewer calibration set (5 tasks, 1 per class) FROZEN; 7-item pre-CP3 evidence completeness checklist FROZEN; test delta 0; code delta 0; Fast Lane (GC-021) |
 | W66-T1 CP1 | Product Value Validation Wave — Corpus and Rubric Freeze (DOCUMENTATION / VALIDATION_TEST class) | CLOSED DELIVERED 2026-04-11 — 90-task corpus FROZEN (A1×30 FAM-001/002/003 + A2×20 FAM-004/005 + B×20 real product + C×20 governance stress); rubric FROZEN; run manifest PLANNED; GC-042 evidence chain foundation established; test delta 0; code delta 0; Fast Lane (GC-021) |
 | W65-T1 | Pre-Public Packaging Phase B (PACKAGING class) | CLOSED DELIVERED 2026-04-10 — 4 packages processed; `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`: `exportReadiness CANDIDATE`; `CVF_GOVERNANCE_EXPANSION_FOUNDATION`: `exports/files/license/keywords/README + CANDIDATE`; `CVF_LEARNING_PLANE_FOUNDATION`: `exports/files/license/keywords/README (new) + CANDIDATE`; `CVF_v1.7.1_SAFETY_RUNTIME`: `REVIEW_REQUIRED` + 4 blockers documented; test delta 0; Fast Lane (GC-021) |
 | W64-T1 | Track 5 Deferred Architecture (DEFERRED ARCHITECTURE class) | CLOSED DELIVERED 2026-04-08 — Track 5A: `ProviderRouterContract` delivered in CPF using Option B governance routing; Track 5B: `SandboxIsolationContract` + `WorkerThreadSandboxAdapter` delivered using `worker_threads`; doctrine audit closed; Track 5A + 5B complete; Post-W64 quality assessment: **100%**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; commit `2160c4d5` |
@@ -95,15 +96,19 @@
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. MC1-MC5 is complete; W66-T1 CP1 closed; any new work requires a fresh `GC-018`.**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. MC1-MC5 is complete; W66-T1 CP1+CP2 closed; CP3 requires human operator confirmation before fresh GC-018.**
 
 Current guidance:
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
-- **W66-T1 CP1 CLOSED DELIVERED** — Product Value Validation Wave CP1 (DOCUMENTATION / VALIDATION_TEST class); 90-task corpus FROZEN across 5 families + Corpus B (20 real product) + Corpus C (20 governance stress); rubric FROZEN; run manifest PLANNED; GC-042 evidence chain foundation established; test delta 0; code delta 0; Fast Lane (GC-021)
-- **W66-T1 CP2 (Run Harness)**: next step — requires fresh GC-018 authorization with: execution infrastructure confirmed, reviewer pool confirmed (≥3 reviewers), model versions for CFG-A and CFG-B specified, evidence retention path declared; human freeze confirmation of corpus + rubric also required before CP3 scored runs begin
+- **W66-T1 CP2 CLOSED DELIVERED** — Product Value Validation Wave CP2 (DOCUMENTATION / VALIDATION_TEST class); CFG-A/CFG-B specs FROZEN; evidence schema FROZEN; reviewer calibration set (5 tasks) FROZEN; 7-item pre-CP3 gate checklist FROZEN; test delta 0; code delta 0; Fast Lane (GC-021)
+- **W66-T1 CP1 CLOSED DELIVERED** — 90-task corpus FROZEN (A1×30 FAM-001/002/003 + A2×20 FAM-004/005 + B×20 real product + C×20 governance stress); rubric FROZEN; run manifest PLANNED; GC-042 evidence chain foundation established
+- **W66-T1 CP3 (Blind Comparative Evaluation Runs)**: NOT YET AUTHORIZED — requires human operator to confirm all of the following before a fresh GC-018 can be opened: (1) execution infrastructure live (API keys, cvf-web instance, evidence storage), (2) 5 calibration pilot tasks run through CFG-A + CFG-B, (3) all 7 evidence completeness items confirmed, (4) reviewer pool assigned (≥ 3 reviewers), (5) reviewer calibration session complete (κ ≥ 0.70), (6) human freeze of corpus + rubric confirmed in writing
 - **No active tranche** — any new implementation, capability expansion, CI widening, or product-surface remediation requires a fresh bounded `GC-018`
-- **Current closure anchor**: `docs/reviews/CVF_W66_T1_CP1_PVV_CORPUS_RUBRIC_FREEZE_REVIEW_2026-04-11.md`
+- **Current CP2 closure anchor**: `docs/reviews/CVF_W66_T1_CP2_RUN_HARNESS_SETUP_REVIEW_2026-04-11.md`
+- **Current CP2 authorization**: `docs/baselines/CVF_GC018_W66_T1_CP2_RUN_HARNESS_AUTHORIZATION_2026-04-11.md`
+- **Current calibration set**: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_REVIEWER_CALIBRATION_W66_T1_CP2_2026-04-11.md`
+- **Current CP1 closure anchor**: `docs/reviews/CVF_W66_T1_CP1_PVV_CORPUS_RUBRIC_FREEZE_REVIEW_2026-04-11.md`
 - **Current corpus index**: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_INDEX_W66_T1_CP1_2026-04-11.md`
 - **Current rubric**: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_W66_T1_CP1_2026-04-11.md`
 - **Current run manifest (PLANNED)**: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_W66_T1_CP2_2026-04-11.md`

@@ -6,8 +6,8 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W63-T1 closed delivered; Pre-Public Packaging: **COMPLETE**; Phase A modules (Guard Contract, MCP Server, Deterministic Reproducibility) prepared for export readiness; Post-MC5 Continuation Strategy: **ALL 4 TRACKS COMPLETE**; local verification baseline refreshed `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass on `check + test`; `cvf-web` passes `tsc + full vitest + production build`; CI coverage remains 100% in workflow config; any new work requires fresh GC-018
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W62-T1`)
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W64-T1 closed delivered; Track 5 Deferred Architecture (Provider Router + Sandbox Isolation): **COMPLETE**; **W64 Web Inheritance Gap: CLOSED** — `cvf-web` now inherits Track 5A (ProviderRouterContract via `provider-router-adapter.ts`) and Track 5B (SandboxIsolationContract via `sandbox-contract-adapter.ts`); Pre-Public Packaging Phase A remains **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline refreshed `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass on `check + test`; `cvf-web` passes `tsc + full vitest (116 files / 1853 tests)`; architecture canon and tranche docs now also record W64-T1 delivery and web inheritance closure; CI coverage remains 100% in workflow config; any new work requires fresh GC-018
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W64-T1`)
 
 ---
 
@@ -37,6 +37,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W64-T1 | Track 5 Deferred Architecture (DEFERRED ARCHITECTURE class) | CLOSED DELIVERED 2026-04-08 — Track 5A: `ProviderRouterContract` delivered in CPF using Option B governance routing; Track 5B: `SandboxIsolationContract` + `WorkerThreadSandboxAdapter` delivered using `worker_threads`; doctrine audit closed; Track 5A + 5B complete; Post-W64 quality assessment: **100%**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; commit `2160c4d5` |
 | W63-T1 | Pre-Public Packaging (PACKAGING class) | CLOSED DELIVERED 2026-04-08 — Phase A modules prepared for export readiness (Guard Contract, MCP Server, Deterministic Reproducibility); Export boundaries defined (2 new + 1 verified); `exportReadiness` metadata added to 3 package.json files; Packaging documentation complete (3 README.md updated); No internal dependency leakage; Track 3 from Post-MC5 Continuation Strategy complete; Post-MC5 Continuation Strategy: **ALL 4 TRACKS COMPLETE**; GC-018 authorization; commit pending |
 | W62-T1 | Documentation Curation (DOCUMENTATION class) | CLOSED DELIVERED 2026-04-08 — Sensitivity classification complete (PUBLIC_READY 61 files, NEEDS_REVIEW 15 files, PRIVATE_ONLY 2325 files); PUBLIC_DOCS_MIRROR boundary finalized with explicit file lists; .publicignore created; Root docs refreshed (README.md, START_HERE.md); POST_MC5_ORIENTATION.md created in docs/guides/; Track 4 from Post-MC5 Continuation Strategy complete; No GC-018 required (DOCUMENTATION class); commit `a5af2c1b` |
 | W61-T1 | CI/CD Expansion + Product Hardening (INFRA class) | CLOSED DELIVERED 2026-04-08 — Added 5 new CI jobs for foundation tests (test-cpf 2929, test-epf 1301, test-gef 625, test-lpf 1465, test-web-ui 1853); added build verification for cvf-web; CI coverage: **1.5% → 100%** (+8173 tests); CP3 (pre-push hook fix) deferred; Full Lane (GC-019); commit `92a3a946` |
@@ -82,10 +83,10 @@
 
 ### Architecture Baseline
 
-- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `W62-T1`)
-- Posture: `CLOSURE-ASSESSED` (CPF: **DONE-ready**; GEF: **DONE (6/6)**; LPF: **DONE-ready (7/7)**; EPF: **DONE-ready** — Model Gateway + Sandbox Runtime formally deferred as future-facing, not as current closure gaps)
+- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `W64-T1`)
+- Posture: `CLOSURE-ASSESSED` (CPF: **DONE-ready**; GEF: **DONE (6/6)**; LPF: **DONE-ready (7/7)**; EPF: **DONE-ready** — Track 5 deferred items are now delivered: Model Gateway Provider Router in CPF and Sandbox Runtime Physical Isolation via `SandboxIsolationContract` + `WorkerThreadSandboxAdapter`)
 - All four planes: plane-banner promotion pass complete; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`; MC1 CPF: `DONE-ready`; MC2 GEF: **DONE (6/6)**; MC3 LPF: **DONE-ready (7/7)**; MC4 EPF: **DONE-ready**; MC5 whitepaper canon promotion: **COMPLETE**
-- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1 / W59-T1 / W60-T1 / W61-T1 / W62-T1 / W63-T1`
+- Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1 / W59-T1 / W60-T1 / W61-T1 / W62-T1 / W63-T1 / W64-T1`
 - Documentation-to-implementation gap: CLOSED (`v3.7-W46T1`)
 
 ---
@@ -97,19 +98,20 @@
 Current guidance:
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
+- **W64-T1 CLOSED DELIVERED** — Track 5 Deferred Architecture (DEFERRED ARCHITECTURE class); `ProviderRouterContract` delivered in CPF with Option B governance routing; `SandboxIsolationContract` + `WorkerThreadSandboxAdapter` delivered for physical isolation; doctrine audit complete; commit `2160c4d5`
 - **W63-T1 CLOSED DELIVERED** — Pre-Public Packaging (PACKAGING class); Phase A modules prepared for export readiness; Export boundaries defined; `exportReadiness` metadata added; Packaging documentation complete; Track 3 from Post-MC5 Continuation Strategy complete; Post-MC5 Continuation Strategy: **ALL 4 TRACKS COMPLETE**; GC-018 authorization; commit pending
 - **W62-T1 CLOSED DELIVERED** — Documentation Curation (DOCUMENTATION class); Sensitivity classification complete; PUBLIC_DOCS_MIRROR boundary finalized; Root docs refreshed; Track 4 from Post-MC5 Continuation Strategy complete; No GC-018 required; commit `a5af2c1b`
 - **W61-T1 CLOSED DELIVERED** — CI/CD Expansion + Product Hardening (INFRA class); CI coverage 1.5% → 100%; 5 new test jobs (CPF, EPF, GEF, LPF, cvf-web); build verification added; Full Lane (GC-019); commit `92a3a946`
 - **No active tranche** — any new implementation, capability expansion, CI widening, or product-surface remediation requires a fresh bounded `GC-018`
-- **Current closure anchor**: `docs/reviews/CVF_W63_T1_TRANCHE_CLOSURE_REVIEW_2026-04-08.md`
-- **Current post-closure quality assessment**: `docs/assessments/CVF_POST_W63_CONTINUATION_QUALITY_ASSESSMENT_2026-04-08.md`
-- **W63-T1 roadmap**: `docs/roadmaps/CVF_GC018_W63_T1_PRE_PUBLIC_PACKAGING_ROADMAP_2026-04-08.md`
+- **Current closure anchor**: `docs/reviews/CVF_W64_T1_TRANCHE_CLOSURE_REVIEW_2026-04-08.md`
+- **Current post-closure quality assessment**: `docs/assessments/CVF_POST_W64_CONTINUATION_QUALITY_ASSESSMENT_2026-04-08.md`
+- **W64-T1 roadmap**: `docs/roadmaps/CVF_W64_T1_TRACK5_DEFERRED_ARCHITECTURE_EXECUTION_PLAN_2026-04-08.md`
 - **Post-MC5 strategy**: `docs/roadmaps/CVF_POST_MC5_CONTINUATION_STRATEGY_ROADMAP_2026-04-08.md`
 - **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
-- **Post-MC5 Continuation Strategy**: **ALL 4 TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅)
-- **Next recommended**: Phase B modules (additional foundations, web UI) for pre-public packaging - requires fresh GC-018 authorization
+- **Post-MC5 Continuation Strategy**: **ALL 6 ACTIONABLE TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅, Track 5A: Model Gateway ✅, Track 5B: Sandbox Runtime ✅)
+- **Next recommended**: no immediate continuation tranche is required; treat Phase B packaging and any `cvf-web` inheritance work as new bounded follow-up scopes under a fresh `GC-018`
 - **W60-T1 CLOSED DELIVERED** — cvf-web Typecheck Stabilization (REMEDIATION class); TypeScript 0 errors; cvf-web 1853 tests pass; 3 pre-existing test failures fixed; Fast Lane (GC-021); commit `c15aa4c5`
-- **W58-T1 CP1 CLOSED DELIVERED** — MC4: EPF Plane Closure Assessment (ASSESSMENT / DECISION class); EPF **DONE-ready**; Model Gateway + Sandbox Runtime formally deferred as intentionally future-facing; no new EPF code needed
+- **W58-T1 CP1 CLOSED DELIVERED** — MC4: EPF Plane Closure Assessment (ASSESSMENT / DECISION class); EPF **DONE-ready**; historical deferred readout later superseded by W64-T1 delivery of Model Gateway + Sandbox Runtime
 - **W57-T1 CP1 CLOSED DELIVERED** — MC3: LPF Plane Closure Assessment (ASSESSMENT / DECISION class); LPF **DONE-ready (7/7)**; Storage/Eval Engine + Observability + GovernanceSignal label currency gaps closed; no new LPF code needed
 - **W56-T1 CP2 CLOSED DELIVERED** — MC2: GEF Plane Closure Assessment CP1+CP2 (ASSESSMENT / DECISION class); GEF **DONE (6/6)**; Trust & Isolation **DONE** (label currency gap closed by CP2)
 - **W55-T1 CLOSED DELIVERED** — MC1: CPF Plane Closure Assessment (ASSESSMENT / DECISION class); CPF **DONE-ready**; agent-definition registry + L0-L4 consolidation deferred (CLOSED-BY-DEFAULT)
@@ -118,6 +120,7 @@ Current guidance:
 - W59-T1 CP1 review: `docs/reviews/CVF_GC019_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_REVIEW_2026-04-07.md`
 - W59-T1 CP1 audit: `docs/audits/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_AUDIT_2026-04-07.md`
 - **Verification baseline is already refreshed** — use the `2026-04-10` local baseline in this handoff and the quality readout in `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`; do not spend time re-running the same full suites unless your change invalidates that baseline
+- **Web inheritance assessment**: `docs/assessments/CVF_WEB_W64_INHERITANCE_GAP_ASSESSMENT_2026-04-10.md`
 - W57-T1 closure review: `docs/reviews/CVF_W57_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`
 - GC-026 closed sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W57_T1_CLOSED_2026-04-07.md`
 - **Before any fresh GC-018 on CPF**: read `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` and preserve the maintainability perimeter adopted in `GC-033` through `GC-036`

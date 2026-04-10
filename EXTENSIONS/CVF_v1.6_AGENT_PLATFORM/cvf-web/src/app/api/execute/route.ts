@@ -9,6 +9,7 @@ import { checkBudget } from '@/lib/budget';
 import { buildWebGuardContext, type GuardPipelineResult } from '@/lib/guard-runtime-adapter';
 import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
 import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
+import { routeWebProvider } from '@/lib/ai/provider-router-adapter';
 
 function isBuildPhase(phase?: string): boolean {
     if (!phase) return false;
@@ -216,8 +217,59 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // ── PROVIDER ROUTER: Consult Track 5A canonical governance routing ──
+        const configuredProviders = (Object.keys(apiKeyMap) as AIProvider[]).filter(
+            p => !!apiKeyMap[p]
+        );
+        const routingResult = routeWebProvider({
+            requestedProvider: provider,
+            riskLevel: body.cvfRiskLevel,
+            phase: body.cvfPhase,
+            configuredProviders,
+        });
+
+        if (routingResult.decision === 'DENY') {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: routingResult.deniedReason || 'Provider denied by governance routing policy.',
+                    provider,
+                    model: 'router-denied',
+                    enforcement,
+                    guardResult,
+                    providerRouting: {
+                        decision: routingResult.decision,
+                        rationale: routingResult.rationale,
+                    },
+                },
+                { status: 403 }
+            );
+        }
+
+        if (routingResult.decision === 'ESCALATE') {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Provider selection requires explicit approval.',
+                    provider,
+                    model: 'router-escalated',
+                    enforcement,
+                    guardResult,
+                    providerRouting: {
+                        decision: routingResult.decision,
+                        rationale: routingResult.rationale,
+                    },
+                },
+                { status: 409 }
+            );
+        }
+
+        // Use router-selected provider (may differ from requested if default was ineligible)
+        const routedProvider: AIProvider = routingResult.selectedProvider ?? provider;
+        const routedApiKey = apiKeyMap[routedProvider] ?? apiKey;
+
         // ── EXECUTE AI with auto-retry on output validation failure ──
-        let aiResult = await executeAI(provider, apiKey, userPrompt);
+        let aiResult = await executeAI(routedProvider, routedApiKey, userPrompt);
         let outputValidation: ValidationResult | undefined;
         const retryState: RetryState = { attempt: 0, previousIssues: [] };
 
@@ -241,7 +293,7 @@ export async function POST(request: NextRequest) {
                     ? `${userPrompt}\n\n[Improvement note: ${retryDecision.adjustedHint}]`
                     : userPrompt;
 
-                aiResult = await executeAI(provider, apiKey, retryPrompt);
+                aiResult = await executeAI(routedProvider, routedApiKey, retryPrompt);
                 if (!aiResult.success || !aiResult.output) break;
 
                 outputValidation = validateOutput({
@@ -257,6 +309,11 @@ export async function POST(request: NextRequest) {
             ...aiResult,
             enforcement,
             guardResult,
+            providerRouting: {
+                decision: routingResult.decision,
+                selectedProvider: routingResult.selectedProvider,
+                rationale: routingResult.rationale,
+            },
             outputValidation: outputValidation ? {
                 qualityHint: outputValidation.qualityHint,
                 issues: outputValidation.issues,

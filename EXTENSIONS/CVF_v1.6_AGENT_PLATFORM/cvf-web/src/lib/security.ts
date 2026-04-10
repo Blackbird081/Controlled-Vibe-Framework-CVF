@@ -171,7 +171,10 @@ export function decryptData(encrypted: string, salt?: string): string {
     }
 }
 
-// Safe code execution sandbox
+// Safe code execution sandbox (CLIENT-SIDE only — browser worker isolation)
+// For SERVER-SIDE sandbox execution, use the canonical Track 5B contract:
+//   import { executeInSandbox } from '@/lib/sandbox-contract-adapter';
+// That adapter delegates to SandboxIsolationContract (CVF_v1.7.1_SAFETY_RUNTIME).
 type SandboxExecutionResult = { result: unknown; error?: string };
 
 export function createSandbox() {

@@ -48,5 +48,12 @@
         "runtime-adapter",
         "hypervisor"
     ],
-    "license": "CC-BY-NC-ND-4.0"
+    "license": "CC-BY-NC-ND-4.0",
+    "exportReadiness": {
+        "status": "CANDIDATE",
+        "phase": "B",
+        "targetDate": "2026-06-01",
+        "blockers": [],
+        "documentation": "docs/reference/CVF_PREPUBLIC_RUNTIME_ADAPTER_HUB_EXPORT_SURFACE_2026-04-10.md"
+    }
 }

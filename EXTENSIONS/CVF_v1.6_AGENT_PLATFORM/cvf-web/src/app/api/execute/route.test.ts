@@ -56,7 +56,7 @@ describe('/api/execute', () => {
         expect(data.error).toMatch(/Missing required fields/);
     });
 
-    it('returns 400 when provider key is not configured', async () => {
+    it('returns 403 (router deny) when no providers are configured', async () => {
         const req = new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
@@ -69,9 +69,35 @@ describe('/api/execute', () => {
 
         const res = await POST(req as never);
         const data = await res.json();
-        expect(res.status).toBe(400);
+        expect(res.status).toBe(403);
+        expect(data.success).toBe(false);
         expect(data.provider).toBe('openai');
-        expect(data.error).toMatch(/API key not configured/);
+    });
+
+    it('router selects fallback provider when requested provider has no key', async () => {
+        process.env.ANTHROPIC_API_KEY = 'claude-key';
+        executeAIMock.mockResolvedValue({
+            success: true,
+            output: 'fallback response',
+            provider: 'claude',
+            model: 'claude-3-5-sonnet',
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Strategy',
+                intent: 'Analyze the market',
+                inputs: { goal: 'Test' },
+                provider: 'openai',
+            }),
+        });
+
+        const res = await POST(req as never);
+        const data = await res.json();
+        expect(res.status).toBe(200);
+        expect(data.success).toBe(true);
+        expect(executeAIMock).toHaveBeenCalledWith('claude', 'claude-key', expect.any(String));
     });
 
     it('executes AI and returns response when configured', async () => {

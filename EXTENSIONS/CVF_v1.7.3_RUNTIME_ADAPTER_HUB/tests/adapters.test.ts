@@ -13,8 +13,8 @@ import { ReleaseEvidenceAdapter } from '../adapters/release.evidence.adapter.js'
 import { executeFilesystemAction, executeHttpAction } from '../adapters/base.adapter.js'
 import type { RuntimeRequest } from '../contracts/runtime.adapter.interface.js'
 import { WorkerThreadSandboxAdapter } from '../adapters/worker.thread.sandbox.adapter.js'
-import { createDefaultSandboxConfig } from '../../CVF_v1.7.1_SAFETY_RUNTIME/simulation/sandbox.isolation.contract.js'
-import type { SandboxCommand, SandboxConfig } from '../../CVF_v1.7.1_SAFETY_RUNTIME/simulation/sandbox.isolation.contract.js'
+import { createDefaultSandboxConfig } from '../adapters/sandbox.types.js'
+import type { SandboxCommand, SandboxConfig } from '../adapters/sandbox.types.js'
 
 describe('Base Adapter Helpers', () => {
 

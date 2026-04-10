@@ -148,6 +148,33 @@ export async function executeInSandbox(request: WebSandboxRequest): Promise<WebS
     labels: { source: 'cvf-web', ...request.labels },
   };
 
+  const validation = validateConfig(config);
+  if (!validation.valid) {
+    const now = new Date().toISOString();
+    const failedResult: SandboxResult = {
+      sandboxId: `web-stub-${taskId}`,
+      status: 'FAILED',
+      startedAt: now,
+      completedAt: now,
+      exitCode: 1,
+      stdout: '',
+      stderr: validation.errors.join('; '),
+      containmentViolations: [],
+      resourceUsage: { cpuTimeMs: 0, memoryPeakMb: 0, outputBytes: 0 },
+      platform: config.platform,
+    };
+    auditLog.push(failedResult);
+    return {
+      success: false,
+      output: '',
+      error: `Invalid sandbox config: ${validation.errors.join('; ')}`,
+      sandboxId: failedResult.sandboxId,
+      platform: config.platform,
+      executionTimeMs: 0,
+      violations: [],
+    };
+  }
+
   const startTime = Date.now();
   const result = stubExecute(taskId, request.code, config);
   auditLog.push(result);

@@ -36,5 +36,17 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zod": "^4.3.6"
+  },
+  "exportReadiness": {
+    "status": "REVIEW_REQUIRED",
+    "phase": "B",
+    "blockers": [
+      "Mixed package: contains UI layer (cvf-ui/), Express server, Prisma, React, Next.js — not suitable for library export as-is",
+      "Heavy runtime dependencies (express, next, react, react-dom, zod) create consumer burden",
+      "Export surface should be scoped to simulation/ subdirectory only (sandbox.isolation.contract.ts)",
+      "Requires package boundary split before publication: separate simulation/ into standalone package"
+    ],
+    "exportSurface": "simulation/sandbox.isolation.contract.ts only (not whole package)",
+    "documentation": "docs/reference/CVF_PREPUBLIC_SAFETY_RUNTIME_EXPORT_SURFACE_2026-04-10.md"
   }
 }

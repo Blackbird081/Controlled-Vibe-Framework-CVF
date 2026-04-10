@@ -1,27 +1,46 @@
 # CVF Governance Expansion Foundation
 
-> Coordination package shell for the closed `W3-T1 / CP1` tranche in the whitepaper-completion roadmap.
-> Part of the CVF Whitepaper Completion Roadmap.
+Operational governance module contracts for the CVF ecosystem. Provides watchdog pulse and escalation consumer pipeline bridges with batch processing support.
 
-## Source Lineage
+## Pre-Public Status
 
-- `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/` — governance CLI interface
-- `EXTENSIONS/CVF_ECO_v2.4_GRAPH_GOVERNANCE/` — governance dependency graph + trust propagation
-- `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` — governance pipeline executor
-- `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` — governance kernel + constitution
+This package is part of the CVF pre-public packaging lane (Phase B). It is not yet published to a public registry. The `exportReadiness` field in `package.json` reflects the current publication posture.
 
-## Already Consolidated (not in this package)
+## Prerequisites
 
-- `CVF_v1.6.1_GOVERNANCE_ENGINE` → B* `CVF_POLICY_ENGINE`
-- `CVF_ECO_v2.1_GOVERNANCE_CANVAS` → W1-T1 `CVF_CONTROL_PLANE_FOUNDATION`
+- Node.js 18 or higher
+- TypeScript 5 or higher
 
-## Deferred Targets
+## Installation
 
-- **Watchdog** — concept-only, no operational source exists
-- **Consensus** — concept-only, no operational source exists
+Within the CVF monorepo, reference this package as a local workspace dependency.
 
-## Tranche Closure Checkpoint
+## Modules
 
-- `W3-T1` is closed as a bounded governance-expansion tranche for operational governance modules only
-- this package does **not** claim that `Watchdog` or `Audit / Consensus` are implemented modules
-- any later governance target-state completion work requires a new governed packet
+- **WatchdogPulseConsumerPipelineContract** — contract for consuming watchdog pulse signals through a pipeline
+- **WatchdogPulseConsumerPipelineBatchContract** — batch variant for processing multiple pulse signals
+- **WatchdogEscalationConsumerPipelineContract** — contract for consuming watchdog escalation events
+- **WatchdogEscalationConsumerPipelineBatchContract** — batch variant for processing multiple escalation events
+
+## Export Surface
+
+All contracts are exported from the package root:
+
+```ts
+import {
+  WatchdogPulseConsumerPipelineContract,
+  WatchdogEscalationConsumerPipelineContract,
+} from "cvf-governance-expansion-foundation";
+```
+
+## Tests
+
+```sh
+npm test
+```
+
+625 tests, 0 failures (GEF DONE 6/6 — 2026-04-05).
+
+## License
+
+CC-BY-NC-ND-4.0

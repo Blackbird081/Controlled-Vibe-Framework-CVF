@@ -87,20 +87,6 @@ export async function POST(request: NextRequest) {
             openrouter: process.env.OPENROUTER_API_KEY,
         };
 
-        const apiKey = apiKeyMap[provider];
-
-        if (!apiKey) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: `API key not configured for provider: ${provider}. Please set the corresponding environment variable.`,
-                    provider,
-                    model: 'not configured',
-                },
-                { status: 400 }
-            );
-        }
-
         // Build the prompt from template inputs
         const userPrompt = buildPromptFromInputs(body as ExecutionRequest);
 
@@ -266,7 +252,19 @@ export async function POST(request: NextRequest) {
 
         // Use router-selected provider (may differ from requested if default was ineligible)
         const routedProvider: AIProvider = routingResult.selectedProvider ?? provider;
-        const routedApiKey = apiKeyMap[routedProvider] ?? apiKey;
+        const routedApiKey = apiKeyMap[routedProvider];
+
+        if (!routedApiKey) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: `API key not configured for provider: ${routedProvider}. Please set the corresponding environment variable.`,
+                    provider: routedProvider,
+                    model: 'not configured',
+                },
+                { status: 400 }
+            );
+        }
 
         // ── EXECUTE AI with auto-retry on output validation failure ──
         let aiResult = await executeAI(routedProvider, routedApiKey, userPrompt);

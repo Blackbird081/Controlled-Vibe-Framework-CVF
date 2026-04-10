@@ -16,7 +16,7 @@ import type {
     SandboxResult,
     ContainmentViolation,
     ContainmentViolationType,
-} from '../../CVF_v1.7.1_SAFETY_RUNTIME/simulation/sandbox.isolation.contract.js'
+} from './sandbox.types.js'
 
 let workerIdCounter = 0
 

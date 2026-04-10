@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W64-T1 closed delivered; Track 5 Deferred Architecture (Provider Router + Sandbox Isolation): **COMPLETE**; **W64 Web Inheritance Gap: CLOSED** — `cvf-web` now inherits Track 5A (ProviderRouterContract via `provider-router-adapter.ts`) and Track 5B (SandboxIsolationContract via `sandbox-contract-adapter.ts`); Pre-Public Packaging Phase A remains **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline refreshed `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass on `check + test`; `cvf-web` passes `tsc + full vitest (116 files / 1853 tests)`; architecture canon and tranche docs now also record W64-T1 delivery and web inheritance closure; CI coverage remains 100% in workflow config; any new work requires fresh GC-018
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W65-T1 closed delivered; Pre-Public Packaging Phase B: **COMPLETE** — 3 packages `CANDIDATE` (Runtime Adapter Hub, GEF, LPF) + 1 package `REVIEW_REQUIRED` (Safety Runtime, 4 blockers documented); Pre-Public Packaging Phase A remains **COMPLETE**; W64-T1 Track 5 Deferred Architecture (Provider Router + Sandbox Isolation): **COMPLETE**; **W64 Web Inheritance Gap: CLOSED** — `cvf-web` now inherits Track 5A (ProviderRouterContract via `provider-router-adapter.ts`) and is Track 5B **contract-aligned only** (SandboxIsolationContract-shaped stub via `sandbox-contract-adapter.ts`, not physical runtime isolation); Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass on `check + test`; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`; any new work requires fresh GC-018
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W64-T1`)
 
 ---
@@ -24,7 +24,7 @@
 - EPF (Execution Plane Foundation): `npm run check` + `npm test` clean; **1301 tests, 0 failures**
 - GEF (Governance Expansion Foundation): `npm run check` + `npm test` clean; **625 tests, 0 failures**
 - LPF (Learning Plane Foundation): `npm run check` + `npm test` clean; **1465 tests, 0 failures**
-- `cvf-web`: `npx tsc --noEmit` clean; `npm run test:run` clean; **1853 passed / 3 skipped**; `npm run build` clean
+- `cvf-web`: `npx tsc --noEmit` clean; `npm run test:run` clean; **1865 passed / 3 skipped**; `npm run build` clean
 - `.github/workflows/cvf-ci.yml` now mirrors this local baseline across Guard Contract, MCP server, 4 foundation packages, and `cvf-web`; first hosted GitHub Actions confirmation is still pending
 
 ### Reuse Rule For Future Agents
@@ -37,6 +37,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W65-T1 | Pre-Public Packaging Phase B (PACKAGING class) | CLOSED DELIVERED 2026-04-10 — 4 packages processed; `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`: `exportReadiness CANDIDATE`; `CVF_GOVERNANCE_EXPANSION_FOUNDATION`: `exports/files/license/keywords/README + CANDIDATE`; `CVF_LEARNING_PLANE_FOUNDATION`: `exports/files/license/keywords/README (new) + CANDIDATE`; `CVF_v1.7.1_SAFETY_RUNTIME`: `REVIEW_REQUIRED` + 4 blockers documented; test delta 0; Fast Lane (GC-021) |
 | W64-T1 | Track 5 Deferred Architecture (DEFERRED ARCHITECTURE class) | CLOSED DELIVERED 2026-04-08 — Track 5A: `ProviderRouterContract` delivered in CPF using Option B governance routing; Track 5B: `SandboxIsolationContract` + `WorkerThreadSandboxAdapter` delivered using `worker_threads`; doctrine audit closed; Track 5A + 5B complete; Post-W64 quality assessment: **100%**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; commit `2160c4d5` |
 | W63-T1 | Pre-Public Packaging (PACKAGING class) | CLOSED DELIVERED 2026-04-08 — Phase A modules prepared for export readiness (Guard Contract, MCP Server, Deterministic Reproducibility); Export boundaries defined (2 new + 1 verified); `exportReadiness` metadata added to 3 package.json files; Packaging documentation complete (3 README.md updated); No internal dependency leakage; Track 3 from Post-MC5 Continuation Strategy complete; Post-MC5 Continuation Strategy: **ALL 4 TRACKS COMPLETE**; GC-018 authorization; commit pending |
 | W62-T1 | Documentation Curation (DOCUMENTATION class) | CLOSED DELIVERED 2026-04-08 — Sensitivity classification complete (PUBLIC_READY 61 files, NEEDS_REVIEW 15 files, PRIVATE_ONLY 2325 files); PUBLIC_DOCS_MIRROR boundary finalized with explicit file lists; .publicignore created; Root docs refreshed (README.md, START_HERE.md); POST_MC5_ORIENTATION.md created in docs/guides/; Track 4 from Post-MC5 Continuation Strategy complete; No GC-018 required (DOCUMENTATION class); commit `a5af2c1b` |
@@ -107,6 +108,7 @@ Current guidance:
 - **Current post-closure quality assessment**: `docs/assessments/CVF_POST_W64_CONTINUATION_QUALITY_ASSESSMENT_2026-04-08.md`
 - **W64-T1 roadmap**: `docs/roadmaps/CVF_W64_T1_TRACK5_DEFERRED_ARCHITECTURE_EXECUTION_PLAN_2026-04-08.md`
 - **Post-MC5 strategy**: `docs/roadmaps/CVF_POST_MC5_CONTINUATION_STRATEGY_ROADMAP_2026-04-08.md`
+- **Next capability-wave roadmap**: `docs/roadmaps/CVF_POST_W64_NEXT_CAPABILITY_WAVE_ROADMAP_2026-04-10.md`
 - **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
 - **Post-MC5 Continuation Strategy**: **ALL 6 ACTIONABLE TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅, Track 5A: Model Gateway ✅, Track 5B: Sandbox Runtime ✅)
 - **Next recommended**: no immediate continuation tranche is required; treat Phase B packaging and any `cvf-web` inheritance work as new bounded follow-up scopes under a fresh `GC-018`
@@ -179,6 +181,49 @@ Current guidance:
   - Failed-closed result is recorded in audit log for traceability
   - 5 new tests: zero timeout, negative limits, unrestricted egress, audit log recording, executor-not-called assertion
 - Verification: Safety Runtime 739 tests passed (59 files)
+
+---
+
+## W64 Web Inheritance Re-Review — 2026-04-10 — ALL CLOSED
+
+> Re-review scope: post-remediation `main` after `217313a7` and web inheritance closure commit `ae64a095`
+> Review method: static code review + targeted test rerun + remediation applied 2026-04-10
+> Verification rerun on this pass:
+> - `CVF_v1.7.1_SAFETY_RUNTIME`: 739/739 pass
+> - `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`: 71/71 pass
+> - `cvf-web`: 116 files / 1853 tests pass, 3 skipped
+> Conclusion: original W64 sandbox findings closed in foundation packages; web re-review findings remediated and closed — see below
+
+### Finding 1 — `cvf-web` Track 5B inheritance claim is overstated — **CLOSED**
+
+- Severity: `HIGH` → **REMEDIATED** (claim narrowed)
+- Disposition: `sandbox-contract-adapter.ts` is intentionally contract-aligned only (stub mode). The web execute API (`/api/execute`) calls AI provider APIs — it does not run user code in a process sandbox. Wiring the stub into that path would add no security value. Track 5B web status is correctly described as **contract-aligned only**.
+- Canon: `cvf-web` mirrors the `SandboxIsolationContract` API surface (types, validation logic, audit log) but does not claim physical execution isolation. Physical isolation (docker/v8_isolate) remains a future-facing item outside the current closure baseline.
+- `security.ts` browser-side sandbox is a separate, unrelated concern.
+
+### Finding 2 — Provider Router fallback can be bypassed by early API-key failure — **CLOSED**
+
+- Severity: `MEDIUM` → **REMEDIATED**
+- Fix applied:
+  - Removed early `if (!apiKey)` return that ran before provider routing
+  - Provider router now runs with `configuredProviders` first; `routedProvider` is resolved from router result
+  - API key validation now runs after routing, bound to `routedApiKey = apiKeyMap[routedProvider]`
+  - When no providers are configured, router returns DENY (403) instead of a spurious 400
+- Files modified:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.test.ts` (updated 1 test + added fallback coverage test)
+
+### Finding 3 — web sandbox adapter execute path still does not enforce config validation — **CLOSED**
+
+- Severity: `MEDIUM` → **REMEDIATED**
+- Fix applied:
+  - `executeInSandbox()` now calls `validateConfig(config)` before `stubExecute()`
+  - Invalid config returns `success: false` with structured error and `FAILED` audit log entry
+  - Executor (`stubExecute`) is never reached on invalid config
+- Files modified:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/sandbox-contract-adapter.ts`
+- Tests added:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/sandbox-contract-adapter.test.ts` (new file — 11 tests covering valid path, zero timeout, negative memory, audit log recording, executor-not-called)
 
 ---
 

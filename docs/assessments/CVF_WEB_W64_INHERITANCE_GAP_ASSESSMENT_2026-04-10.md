@@ -179,14 +179,15 @@ Both gaps identified in §4 have been resolved in the same session:
 ### 7.3 Verification
 
 - TypeScript typecheck: **clean**
-- Vitest: **116 files / 1853 tests passed**
+- Vitest: **117 files / 1865 tests passed**
 - Build errors: **pre-existing only** (cvf-guard-contract module resolution, unrelated)
 
 ### 7.4 Final Verdict
 
-`cvf-web` is now **aligned with the master architecture at both the governance layer AND
-the Track 5 runtime layer**.
+`cvf-web` is now **aligned with the master architecture at the governance layer and
+contract-aligned with the Track 5 runtime surface**.
 
-Both Track 5A (ProviderRouterContract) and Track 5B (SandboxIsolationContract) are
-inherited through self-contained adapters within the web build boundary, conforming
-to the canonical contract APIs from CVF_CONTROL_PLANE_FOUNDATION and CVF_v1.7.1_SAFETY_RUNTIME.
+Track 5A (ProviderRouterContract) is inherited in the live execute path through a
+self-contained adapter within the web build boundary. Track 5B (SandboxIsolationContract)
+is mirrored as a self-contained contract-aligned stub adapter for typed config,
+validation, and audit behavior, but it does not provide physical runtime isolation.

@@ -91,6 +91,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_surface_scan_registry.py", "--enforce"],
         ),
         (
+            "product value validation guard compatibility",
+            ["python", "governance/compat/check_product_value_validation_guard_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
             "multi-agent review governance compatibility",
             ["python", "governance/compat/check_multi_agent_review_governance_compat.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),

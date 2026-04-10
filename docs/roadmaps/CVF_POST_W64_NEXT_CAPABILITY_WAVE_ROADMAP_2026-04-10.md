@@ -18,6 +18,7 @@ Define the next bounded development roadmap after `W64-T1`, focused on:
 1. `Phase B packaging` for additional public-export candidates
 2. `Sandbox Runtime Wave 2` with a real physical sandbox path
 3. `cvf-web` uplift from contract-aligned sandbox stub to a true physical isolation execution path
+4. `Product Value Validation Wave` to prove user-facing value before opening new heavy capability tranches by default; canonical control now governed by `GC-042`
 
 This roadmap does **not** reopen the core architecture closure lane. It proposes the next capability waves that may be authorized after closure.
 
@@ -45,11 +46,12 @@ not as another repo-wide closure scan.
 
 ## 3. Why A New Roadmap Is Needed
 
-The post-closure docs now point to three future-facing pressures:
+The post-closure docs now point to four future-facing pressures:
 
 1. `Phase B packaging` is the cleanest continuation of the pre-public lane once Phase A targets are ready for publication.
 2. `SandboxIsolationContract` has a second-wave adapter opportunity (`docker`) that was explicitly left out of `W64-T1`.
 3. `cvf-web` still stops at a typed sandbox stub. If the product needs to execute user-controlled code with real containment guarantees, web must be wired to a true physical sandbox backend.
+4. CVF has a strong correctness/governance baseline, but current evidence still does not prove product value at the same standard. That gap should be closed before treating every future-facing capability as urgent by default.
 
 These are related enough to plan together, but they should still execute as bounded sub-tracks with separate entry decisions if needed.
 
@@ -109,6 +111,22 @@ These are related enough to plan together, but they should still execute as boun
 **Core outcome**
 
 Introduce a second concrete `SandboxExecutor` path using a real containment technology, with `docker` as the default candidate.
+
+**Authorization trigger**
+
+Open this track only if at least one of the following becomes true:
+
+- `cvf-web` or another active product surface must execute user-controlled code, scripts, plugins, or bounded runtime tasks as a first-class use case
+- an external requirement appears for stronger isolation guarantees than `worker_threads` / stub semantics can honestly provide
+- `Product Value Validation Wave` evidence shows bounded code execution is materially required for user value in live scenarios under the `GC-042` evidence chain
+- a compliance, enterprise, or operational review explicitly rejects the current contract-aligned / best-effort posture
+
+**Do not authorize this track just because**
+
+- the architecture "looks incomplete" without docker
+- physical isolation sounds cleaner on paper
+- a browser worker or process wrapper is being mistaken for real containment
+- the repo wants another technical milestone without a product or policy trigger
 
 **Candidate scope**
 
@@ -188,6 +206,10 @@ Introduce a second concrete `SandboxExecutor` path using a real containment tech
 
 Do **not** pretend all `/api/execute` traffic belongs in a sandbox. Only code-execution workloads should flow into the sandbox path. General AI prompting should remain on the provider-routing path.
 
+**Dependency rule**
+
+Do not authorize this track ahead of `Track 2` unless a tranche explicitly chooses a different shared backend and documents why. `cvf-web` should consume a canonical shared sandbox backend, not invent a product-local isolation model.
+
 **Exit criteria**
 
 - web no longer over-relies on a stub for server-side sandbox semantics
@@ -219,14 +241,17 @@ Do **not** pretend all `/api/execute` traffic belongs in a sandbox. Only code-ex
 
 If the user wants the smallest-risk progression after `W65-T1`, the recommended order is:
 
-1. `Track 2` — Docker-backed sandbox runtime realization
-2. `Track 3` — `cvf-web` physical sandbox integration on top of the realized backend
-3. publication follow-up for the existing Phase A + B candidate packages
-4. `Track 4` — Agent Definition Registry reassessment only if still needed
+1. run `Product Value Validation Wave` first under `GC-042` and decide whether a new heavy capability tranche is actually justified
+2. `Track 2` — Docker-backed sandbox runtime realization, but only if validation or external requirements create a real trigger
+3. `Track 3` — `cvf-web` physical sandbox integration on top of the realized backend
+4. publication follow-up for the existing Phase A + B candidate packages
+5. `Track 4` — Agent Definition Registry reassessment only if still needed
 
 Reasoning:
 
-- Packaging Phase B itself is already complete, so the next real capability pressure shifts to physical sandbox realization.
+- Packaging Phase B itself is already complete.
+- CVF currently proves technical health more strongly than product value.
+- If `GC-042` value validation does not show code execution as a first-class need, Docker sandbox should remain deferred.
 - `cvf-web` should not invent its own physical isolation layer before the shared runtime backend exists.
 - The shared backend should become canonical first, then the product surface should consume it.
 
@@ -310,11 +335,14 @@ Do not combine all tracks into one oversized tranche unless there is a strong re
 
 If one next roadmap candidate must be chosen now, the cleanest sequence is:
 
-1. authorize a `Docker sandbox` tranche first
-2. follow with a dedicated `cvf-web physical sandbox` integration tranche that consumes the shared backend
-3. treat packaging as a publication follow-up lane for the existing candidate set, not as the next capability implementation wave
+1. authorize `Product Value Validation Wave` first and keep it on the `GC-042` chain
+2. authorize a `Docker sandbox` tranche only if value-validation evidence or external requirements create a real trigger
+3. follow with a dedicated `cvf-web physical sandbox` integration tranche that consumes the shared backend if code-execution value is confirmed
+4. treat packaging as a publication follow-up lane for the existing candidate set, not as the default next capability implementation wave
 
-This keeps the shared runtime canon ahead of the product integration layer and avoids teaching `cvf-web` a one-off sandbox architecture.
+This keeps product evidence ahead of heavyweight capability work, keeps the shared runtime canon ahead of the product integration layer, and avoids teaching `cvf-web` a one-off sandbox architecture without a proven need.
+
+Cross-reference: `docs/roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md`
 
 ---
 

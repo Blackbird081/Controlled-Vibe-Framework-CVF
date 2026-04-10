@@ -184,6 +184,23 @@ Primary references:
 - `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
 - `AGENT_HANDOFF.md`
 
+### `GC-042` — Product Value Validation
+
+Use when:
+
+- claiming that CVF has proven user-facing product value
+- drafting comparative validation evidence against a simpler baseline
+- deciding whether Docker sandbox or another heavyweight capability is justified by measured need
+
+Primary references:
+
+- `governance/toolkit/05_OPERATION/CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`
+- `docs/roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_TEMPLATE.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_TEMPLATE.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`
+
 ### `GC-024` — Test Partition Ownership
 
 Use when:
@@ -211,6 +228,7 @@ Use this routing table after reading the always-on bootstrap:
 | creating or materially revising governance guards | `GC-030` + guard registry |
 | drafting or materially revising governed artifacts | `GC-032` + source truth + active roadmap/tranche packet |
 | fresh quality assessment or next-surface selection | `GC-041` + canonical scan registry + active tracker |
+| product-value validation, comparative value proof, or Docker-trigger justification | `GC-042` + frozen corpus/rubric/run-manifest/assessment chain |
 | touching governed public barrels, barrel smoke tests, shared batch helpers, or canonical summary surfaces | `GC-033` + `GC-034` + `GC-035` + `GC-036` + `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |
@@ -232,6 +250,7 @@ If routing is uncertain:
 2. choose the likely triggered control
 3. if pause/transfer ambiguity exists, default to `GC-020`
 4. if continuation/deepening ambiguity exists, default to `GC-018`
+5. if value-proof or Docker-justification ambiguity exists, default to `GC-042`
 
 ## Related Controls
 

@@ -234,6 +234,13 @@ Personal AI usage unrelated to company work is excluded.
      - `AGENT_HANDOFF.md` and `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` must keep pointing to the canonical scan continuity registry
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SURFACE_SCAN_CONTINUITY_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_surface_scan_registry.py`.
+36. `GC-042` product-value claims and Docker-sandbox justification must use one frozen comparative evidence chain:
+     - product value may not be claimed from code volume, benchmark-harness existence, self-scoring, or cherry-picked demos alone
+     - comparative validation must freeze corpus, rubric, configuration set, and hard gates before scored runs begin
+     - the canonical evidence chain is `corpus -> rubric -> run manifest -> final assessment`
+     - Docker sandbox remains deferred-by-default unless this evidence chain or an explicit external requirement produces a real trigger
+     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`.
+     - Automated enforcement reference: `governance/compat/check_product_value_validation_guard_compat.py`.
 
 ---
 

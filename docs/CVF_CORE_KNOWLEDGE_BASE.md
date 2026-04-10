@@ -328,6 +328,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_GOVERNED_FILE_SIZE_GUARD.md | Governed source/test/frontend/docs growth | File stays under threshold or carries approved exception |
 | CVF_MEMORY_GOVERNANCE_GUARD.md | Durable governance records | Correct memory class markers required |
 | CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md | Multi-agent intake/rebuttal/decision docs | Canonical review doc chain must be standardized |
+| CVF_PRODUCT_VALUE_VALIDATION_GUARD.md | Product-value proof, comparative validation, or Docker-sandbox justification claims | Frozen corpus + rubric + run manifest + no-spin assessment required |
 | CVF_PROGRESS_TRACKER_SYNC_GUARD.md | Tranche posture change | Canonical tracker and sync note must stay aligned |
 | CVF_SURFACE_SCAN_CONTINUITY_GUARD.md | Fresh tranche selection or scan-state change | Canonical scan registry must preserve what was already scanned |
 | CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md | New/resumed governed sessions | Canonical bootstrap must load first |

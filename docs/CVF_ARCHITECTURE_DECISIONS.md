@@ -1247,3 +1247,49 @@ Recent quality review exposed two recurring failure modes that were still too de
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
 - `AGENT_HANDOFF.md`
 - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
+
+---
+
+## ADR-032: Product Value Proof Must Be Governed Before Heavy Capability Expansion
+| Field | Value |
+|---|---|
+| Date | 2026-04-11 |
+| Status | Active |
+| Branch | `main` |
+| Layer | Governance Platform |
+| Related commits | *(local, current GC-042 adoption batch)* |
+
+### Context
+CVF had accumulated strong correctness and governance evidence, but product-value claims still lived mainly in roadmap/planning language. That left two recurring risks: agents could improvise their own scoring formats when asked to "prove value", and heavyweight capability ideas such as Docker sandbox could start feeling urgent because the architecture looked incomplete rather than because evidence showed they were needed.
+
+### Decision
+Promote product-value proof into a governed control. `GC-042` now requires one canonical comparative evidence chain before CVF may claim user-facing value or use that claim to justify heavyweight capability work:
+
+1. frozen corpus
+2. frozen rubric
+3. governed run manifest
+4. final no-spin assessment
+
+`Docker sandbox` remains deferred-by-default unless this chain or an explicit external requirement shows a real trigger.
+
+### Rationale
+- Value proof should be comparable, falsifiable, and skeptical by default.
+- Technical depth is not the same thing as user value.
+- Heavy capability work should be opened because evidence demands it, not because roadmap symmetry feels attractive.
+- A shared guard makes future value-validation waves reusable across later CVF expansion.
+
+### Consequences
+- Future agents should not create ad hoc value-score packets or demo-led proof narratives.
+- Product-value validation now has a single bootstrap route, hook-chain gate, CI job, and template family.
+- Docker-trigger decisions become easier to audit because they now depend on one governed evidence model.
+
+### Related Files
+- `governance/toolkit/05_OPERATION/CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`
+- `governance/compat/check_product_value_validation_guard_compat.py`
+- `docs/roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_TEMPLATE.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_TEMPLATE.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`
+- `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`

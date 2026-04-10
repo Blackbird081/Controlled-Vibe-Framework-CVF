@@ -1,4 +1,4 @@
-# CVF Agent Handoff — 2026-04-10
+# CVF Agent Handoff — 2026-04-11
 
 > Branch: `main`
 > Branch posture: `main` is the canonical continuation branch after 2026-04-04 convergence; `cvf-next` is kept as a synchronized mirror for compatibility
@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W65-T1 closed delivered; Pre-Public Packaging Phase B: **COMPLETE** — 3 packages `CANDIDATE` (Runtime Adapter Hub, GEF, LPF) + 1 package `REVIEW_REQUIRED` (Safety Runtime, 4 blockers documented); Pre-Public Packaging Phase A remains **COMPLETE**; W64-T1 Track 5 Deferred Architecture (Provider Router + Sandbox Isolation): **COMPLETE**; **W64 Web Inheritance Gap: CLOSED** — `cvf-web` now inherits Track 5A (ProviderRouterContract via `provider-router-adapter.ts`) and is Track 5B **contract-aligned only** (SandboxIsolationContract-shaped stub via `sandbox-contract-adapter.ts`, not physical runtime isolation); Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass on `check + test`; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`; any new work requires fresh GC-018
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W66-T1 CP1 closed delivered; Product Value Validation Wave CP1 (Corpus + Rubric Freeze): **COMPLETE** — 90-task corpus FROZEN (Corpus A1×30 FAM-001/002/003 + A2×20 FAM-004/005 + B×20 real product + C×20 governance stress); rubric FROZEN; run manifest PLANNED (CP2 requires fresh GC-018 + confirmed reviewer pool); GC-042 evidence chain foundation established; W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`; W66-T1 CP1 test delta = 0; any new work requires fresh GC-018
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W64-T1`)
 
 ---
@@ -37,6 +37,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
+| W66-T1 CP1 | Product Value Validation Wave — Corpus and Rubric Freeze (DOCUMENTATION / VALIDATION_TEST class) | CLOSED DELIVERED 2026-04-11 — 90-task corpus FROZEN (A1×30 FAM-001/002/003 + A2×20 FAM-004/005 + B×20 real product + C×20 governance stress); rubric FROZEN; run manifest PLANNED; GC-042 evidence chain foundation established; test delta 0; code delta 0; Fast Lane (GC-021) |
 | W65-T1 | Pre-Public Packaging Phase B (PACKAGING class) | CLOSED DELIVERED 2026-04-10 — 4 packages processed; `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`: `exportReadiness CANDIDATE`; `CVF_GOVERNANCE_EXPANSION_FOUNDATION`: `exports/files/license/keywords/README + CANDIDATE`; `CVF_LEARNING_PLANE_FOUNDATION`: `exports/files/license/keywords/README (new) + CANDIDATE`; `CVF_v1.7.1_SAFETY_RUNTIME`: `REVIEW_REQUIRED` + 4 blockers documented; test delta 0; Fast Lane (GC-021) |
 | W64-T1 | Track 5 Deferred Architecture (DEFERRED ARCHITECTURE class) | CLOSED DELIVERED 2026-04-08 — Track 5A: `ProviderRouterContract` delivered in CPF using Option B governance routing; Track 5B: `SandboxIsolationContract` + `WorkerThreadSandboxAdapter` delivered using `worker_threads`; doctrine audit closed; Track 5A + 5B complete; Post-W64 quality assessment: **100%**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; commit `2160c4d5` |
 | W63-T1 | Pre-Public Packaging (PACKAGING class) | CLOSED DELIVERED 2026-04-08 — Phase A modules prepared for export readiness (Guard Contract, MCP Server, Deterministic Reproducibility); Export boundaries defined (2 new + 1 verified); `exportReadiness` metadata added to 3 package.json files; Packaging documentation complete (3 README.md updated); No internal dependency leakage; Track 3 from Post-MC5 Continuation Strategy complete; Post-MC5 Continuation Strategy: **ALL 4 TRACKS COMPLETE**; GC-018 authorization; commit pending |
@@ -94,24 +95,40 @@
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. MC1-MC5 is complete; any new work requires a fresh `GC-018`.**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. MC1-MC5 is complete; W66-T1 CP1 closed; any new work requires a fresh `GC-018`.**
 
 Current guidance:
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
-- **W64-T1 CLOSED DELIVERED** — Track 5 Deferred Architecture (DEFERRED ARCHITECTURE class); `ProviderRouterContract` delivered in CPF with Option B governance routing; `SandboxIsolationContract` + `WorkerThreadSandboxAdapter` delivered for physical isolation; doctrine audit complete; commit `2160c4d5`
-- **W63-T1 CLOSED DELIVERED** — Pre-Public Packaging (PACKAGING class); Phase A modules prepared for export readiness; Export boundaries defined; `exportReadiness` metadata added; Packaging documentation complete; Track 3 from Post-MC5 Continuation Strategy complete; Post-MC5 Continuation Strategy: **ALL 4 TRACKS COMPLETE**; GC-018 authorization; commit pending
-- **W62-T1 CLOSED DELIVERED** — Documentation Curation (DOCUMENTATION class); Sensitivity classification complete; PUBLIC_DOCS_MIRROR boundary finalized; Root docs refreshed; Track 4 from Post-MC5 Continuation Strategy complete; No GC-018 required; commit `a5af2c1b`
-- **W61-T1 CLOSED DELIVERED** — CI/CD Expansion + Product Hardening (INFRA class); CI coverage 1.5% → 100%; 5 new test jobs (CPF, EPF, GEF, LPF, cvf-web); build verification added; Full Lane (GC-019); commit `92a3a946`
+- **W66-T1 CP1 CLOSED DELIVERED** — Product Value Validation Wave CP1 (DOCUMENTATION / VALIDATION_TEST class); 90-task corpus FROZEN across 5 families + Corpus B (20 real product) + Corpus C (20 governance stress); rubric FROZEN; run manifest PLANNED; GC-042 evidence chain foundation established; test delta 0; code delta 0; Fast Lane (GC-021)
+- **W66-T1 CP2 (Run Harness)**: next step — requires fresh GC-018 authorization with: execution infrastructure confirmed, reviewer pool confirmed (≥3 reviewers), model versions for CFG-A and CFG-B specified, evidence retention path declared; human freeze confirmation of corpus + rubric also required before CP3 scored runs begin
 - **No active tranche** — any new implementation, capability expansion, CI widening, or product-surface remediation requires a fresh bounded `GC-018`
-- **Current closure anchor**: `docs/reviews/CVF_W64_T1_TRANCHE_CLOSURE_REVIEW_2026-04-08.md`
-- **Current post-closure quality assessment**: `docs/assessments/CVF_POST_W64_CONTINUATION_QUALITY_ASSESSMENT_2026-04-08.md`
-- **W64-T1 roadmap**: `docs/roadmaps/CVF_W64_T1_TRACK5_DEFERRED_ARCHITECTURE_EXECUTION_PLAN_2026-04-08.md`
-- **Post-MC5 strategy**: `docs/roadmaps/CVF_POST_MC5_CONTINUATION_STRATEGY_ROADMAP_2026-04-08.md`
-- **Next capability-wave roadmap**: `docs/roadmaps/CVF_POST_W64_NEXT_CAPABILITY_WAVE_ROADMAP_2026-04-10.md`
+- **Current closure anchor**: `docs/reviews/CVF_W66_T1_CP1_PVV_CORPUS_RUBRIC_FREEZE_REVIEW_2026-04-11.md`
+- **Current corpus index**: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_INDEX_W66_T1_CP1_2026-04-11.md`
+- **Current rubric**: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_W66_T1_CP1_2026-04-11.md`
+- **Current run manifest (PLANNED)**: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_W66_T1_CP2_2026-04-11.md`
+- **W64-T1 CLOSED DELIVERED** — Track 5 Deferred Architecture (DEFERRED ARCHITECTURE class); `ProviderRouterContract` delivered in CPF with Option B governance routing; `SandboxIsolationContract` + `WorkerThreadSandboxAdapter` delivered for physical isolation; doctrine audit complete; commit `2160c4d5`
+- **W65-T1 CLOSED DELIVERED** — Pre-Public Packaging Phase B (PACKAGING class); 4 packages processed; `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`: `CANDIDATE`; `CVF_GOVERNANCE_EXPANSION_FOUNDATION`: `CANDIDATE`; `CVF_LEARNING_PLANE_FOUNDATION`: `CANDIDATE`; `CVF_v1.7.1_SAFETY_RUNTIME`: `REVIEW_REQUIRED` + 4 blockers documented; test delta 0; Fast Lane (GC-021)
+- **Product value validation roadmap**: `docs/roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md`
+- **Product value validation guard (GC-042)**: `governance/toolkit/05_OPERATION/CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`
+- **Product value validation starter templates**:
+  - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_TEMPLATE.md`
+  - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_TEMPLATE.md`
+  - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`
+  - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`
+- **Product value rule**: all future value-proof packets and any Docker-sandbox justification must run through the `GC-042` frozen evidence chain (`corpus -> rubric -> run manifest -> assessment`), not demos or score vanity
 - **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
 - **Post-MC5 Continuation Strategy**: **ALL 6 ACTIONABLE TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅, Track 5A: Model Gateway ✅, Track 5B: Sandbox Runtime ✅)
-- **Next recommended**: no immediate continuation tranche is required; treat Phase B packaging and any `cvf-web` inheritance work as new bounded follow-up scopes under a fresh `GC-018`
+- **Next recommended**: authorize W66-T1 CP2 (Run Harness) when execution infrastructure and reviewer pool are confirmed; PVV Wave CP1 is closed and the evidence chain foundation is ready
+- **Docker sandbox posture**: keep deferred-by-default unless a fresh bounded `GC-018` is justified by a real trigger
+- **Docker sandbox open triggers**:
+  - a live product surface must execute user-controlled code / plugins / bounded runtime tasks as a first-class use case
+  - an external compliance, enterprise, or operational requirement rejects the current `worker_threads` / contract-aligned posture
+  - product-value validation evidence shows bounded code execution is materially required for user value
+- **Do not open Docker sandbox just because**:
+  - the architecture feels incomplete on paper
+  - physical isolation sounds cleaner than the current posture
+  - a browser worker or process wrapper is being mistaken for true containment
 - **W60-T1 CLOSED DELIVERED** — cvf-web Typecheck Stabilization (REMEDIATION class); TypeScript 0 errors; cvf-web 1853 tests pass; 3 pre-existing test failures fixed; Fast Lane (GC-021); commit `c15aa4c5`
 - **W58-T1 CP1 CLOSED DELIVERED** — MC4: EPF Plane Closure Assessment (ASSESSMENT / DECISION class); EPF **DONE-ready**; historical deferred readout later superseded by W64-T1 delivery of Model Gateway + Sandbox Runtime
 - **W57-T1 CP1 CLOSED DELIVERED** — MC3: LPF Plane Closure Assessment (ASSESSMENT / DECISION class); LPF **DONE-ready (7/7)**; Storage/Eval Engine + Observability + GovernanceSignal label currency gaps closed; no new LPF code needed

@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-10` (latest governed closure remains `W63-T1`; MC sequence MC1-MC5 stays fully complete; local verification baseline refreshed: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass on `check + test`; `cvf-web` passes `tsc + full vitest + production build`; no active tranche; any new work requires fresh GC-018)
+> Last refreshed: `2026-04-11` (latest governed closure `W65-T1`; MC sequence MC1-MC5 stays fully complete; Pre-Public Packaging Phase A + B complete; 6 packages now `CANDIDATE` and `CVF_v1.7.1_SAFETY_RUNTIME` remains `REVIEW_REQUIRED`; local verification baseline refreshed: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass on `check + test`; `cvf-web` passes `tsc + full vitest + production build`; no active tranche; any new work requires fresh GC-018)
 
 ---
 
@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W63-T1 CLOSED DELIVERED 2026-04-08; Pre-Public Packaging complete; Post-MC5 Continuation Strategy ALL 4 TRACKS COMPLETE; local baseline refreshed 2026-04-10 with CPF / EPF / GEF / LPF clean on check+test and cvf-web clean on tsc + full vitest + build; any new work requires fresh GC-018` |
+| Current active tranche | `NONE — W65-T1 CLOSED DELIVERED 2026-04-10; Pre-Public Packaging Phase A + B complete; Post-MC5 Continuation Strategy ALL 6 ACTIONABLE TRACKS COMPLETE; local baseline refreshed 2026-04-10 with CPF / EPF / GEF / LPF clean on check+test and cvf-web clean on tsc + full vitest + build; any new work requires fresh GC-018` |
 | Shared verification baseline | `ADOPT 2026-04-10 LOCAL BASELINE — future agents should inherit this verification state and rerun only when their touched scope, dependency state, or build/test configuration invalidates it` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05); W59-T1 promotes the closure readout to CLOSURE-ASSESSED (2026-04-07)` |
 
@@ -211,6 +211,7 @@ Memory class: POINTER_RECORD
 | `W62-T1` Documentation Curation (DOCUMENTATION class) | `CLOSED DELIVERED 2026-04-08 — Sensitivity classification complete; PUBLIC_DOCS_MIRROR boundary finalized; Root docs refreshed` |
 | `W63-T1` Pre-Public Packaging (PACKAGING class) | `CLOSED DELIVERED 2026-04-08 — Phase A modules prepared for export readiness; Export boundaries defined; Post-MC5 Continuation Strategy ALL 4 TRACKS COMPLETE` |
 | `W64-T1` Track 5: Model Gateway + Sandbox Runtime (DEFERRED ARCHITECTURE class) | `CLOSED DELIVERED 2026-04-08 — Track 5A: ProviderRouterContract (Option B governance routing per doctrine §2/§9/§10; CPF +26 tests; barrel export wired); Track 5B: SandboxIsolationContract + WorkerThreadSandboxAdapter (worker_threads platform per doctrine §7/§11; EPF +26 tests; adapter hub wired); doctrine-based decision audit with 11 evidence sources; GC-018 W64-T1 authorized; CPF 2955 EPF 734 tests 0 failures; Post-MC5 Continuation Strategy ALL 5 TRACKS COMPLETE` |
+| `W65-T1` Pre-Public Packaging Phase B (PACKAGING class) | `CLOSED DELIVERED 2026-04-10 — 4 packages processed; CVF_v1.7.3_RUNTIME_ADAPTER_HUB / CVF_GOVERNANCE_EXPANSION_FOUNDATION / CVF_LEARNING_PLANE_FOUNDATION promoted to CANDIDATE; CVF_v1.7.1_SAFETY_RUNTIME remains REVIEW_REQUIRED with 4 blockers documented; test delta 0; Fast Lane (GC-021); Post-MC5 Continuation Strategy ALL 6 ACTIONABLE TRACKS COMPLETE` |
 
 ---
 
@@ -246,9 +247,9 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W60_W63_2026-04-08.md` (W60-W63 closures synced)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W65_T1_CLOSED_2026-04-10.md` (W65-T1 closure synced)
 - Latest continuity sync delta: `docs/baselines/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_DELTA_2026-04-07.md`
-- Current closure anchor: `docs/reviews/CVF_W63_T1_TRANCHE_CLOSURE_REVIEW_2026-04-08.md`
-- Active quality assessment: `docs/assessments/CVF_W60_W63_INDEPENDENT_EVALUATION_2026-04-08.md`
-- Most recent continuation authorization: `docs/roadmaps/CVF_GC018_W63_T1_PRE_PUBLIC_PACKAGING_ROADMAP_2026-04-08.md` (W63-T1 GC-018 AUTHORIZED)
+- Current closure anchor: `docs/reviews/CVF_W65_T1_TRANCHE_CLOSURE_REVIEW_2026-04-10.md`
+- Active quality assessment: `docs/assessments/CVF_POST_W64_CONTINUATION_QUALITY_ASSESSMENT_2026-04-10.md`
+- Most recent continuation authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W65_T1_PHASE_B_PACKAGING_2026-04-10.md` (W65-T1 GC-018 AUTHORIZED)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

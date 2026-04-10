@@ -3,8 +3,8 @@
 Memory class: SUMMARY_RECORD
 
 > Date: 2026-04-05
-> Last refreshed: 2026-04-07 (`W59-T1 CP1` closed delivered; `MC5` whitepaper canon promotion complete)
-> Scope: record the canonical closure path completed through `W59-T1`, so future agents can follow post-closure posture without re-scanning already-closed lanes
+> Last refreshed: 2026-04-10 (post-closure operational revalidation: `W59-T1` remains the canonical MC completion point; `W60-T1` through `W63-T1` are closed; local verification baseline refreshed clean)
+> Scope: record the canonical closure path completed through `W59-T1`, then preserve the post-closure operating posture so future agents can follow it without re-scanning already-closed lanes
 > Canonical baseline: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `W59-T1`)
 > Entry condition: no active tranche; current-cycle restructuring is `DONE`; relocation remains closed-by-default
 > Authorization posture: planning-only until a fresh bounded `GC-018` is opened for one closure family at a time
@@ -53,26 +53,26 @@ The following are treated as fixed unless a new governed wave explicitly reopens
 
 | Dimension | Current readout | Evidence / basis | Quality implication |
 |---|---|---|---|
-| Architecture continuity | `STRONG` | `AGENT_HANDOFF.md`, `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`, and `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` all agree that `MC1`/`MC2`/`MC3`/`MC4` are closed, `MC5` is complete, and there is no active tranche | future work no longer needs repo-wide rediscovery before selecting the next bounded tranche |
+| Architecture continuity | `STRONG` | `AGENT_HANDOFF.md`, `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`, and `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` all agree that `MC1` through `MC5` are closed, `W60-T1` through `W63-T1` are closed, and there is no active tranche | future work no longer needs repo-wide rediscovery before selecting the next bounded tranche |
 | Canonical plane closure evidence | `STRONG` | documented clean counts remain CPF `2929`, EPF `1301`, GEF `625`, LPF `1465`; MC1-MC5 is fully complete and whitepaper promotion is landed | plane-level quality is high at the architecture-governance layer and closure decisions are evidence-backed |
-| Local reproducibility in this workspace | `MIXED` | live reruns for CPF / EPF / GEF / LPF were blocked because local `vitest` / `tsc` devDependencies are not installed in those package folders | canon says the foundations are healthy, but this checkout is not immediately self-verifying without package-local install/setup |
-| Product-surface integration | `AT RISK` | live `npx tsc --noEmit` in `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` fails with missing local package resolution plus internal type drift across tests and app types | web platform quality is below the current architecture-doc quality and should not be treated as release-clean based on docs alone |
-| CI coverage breadth | `MODERATE` | `.github/workflows/cvf-ci.yml` currently covers `CVF_GUARD_CONTRACT`, `CVF_ECO_v2.5_MCP_SERVER`, and Web UI typecheck only | CI is present and useful, but it does not yet continuously verify the full core-foundation surface area |
+| Local reproducibility in this workspace | `STRONG` | package-local dependencies were installed for CPF / EPF / GEF / LPF and live `npm run check` + `npm test` now pass in all four packages on `2026-04-10` | the core foundations are self-verifying in this checkout and can be used as a credible local closure baseline |
+| Product-surface integration | `STRONG (LOCAL)` | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` passes live `npx tsc --noEmit`, full `npm run test:run` (`1853` passed / `3` skipped), and `npm run build` on `2026-04-10` after fixing local package resolution and fixture/type drift | the active web surface is locally release-clean on the current checkout rather than merely type-clean |
+| CI coverage breadth | `STRONG (CONFIG)` | `.github/workflows/cvf-ci.yml` covers `CVF_GUARD_CONTRACT`, `CVF_ECO_v2.5_MCP_SERVER`, web typecheck/build, foundation tests, and now includes foundation `check` gates plus full `cvf-web` test + build verification | CI scope now matches the repaired local baseline more closely, but quality should still treat the exact combined workflow revision as pending until the first hosted run confirms it |
 
 ### Quality Summary
 
 Current CVF quality is best described as:
 
 - `HIGH` for architecture closure discipline, governance continuity, and evidence-backed tranche history
-- `MEDIUM` for day-to-day local reproducibility because package-local toolchains are not uniformly ready in this workspace
-- `MEDIUM-LOW` for product integration readiness because the active Web UI type surface currently fails local type-checking
+- `HIGH` for local core-foundation reproducibility in this workspace because CPF / EPF / GEF / LPF now pass package-local `check`
+- `HIGH` for local product integration readiness because `cvf-web` now passes typecheck, full local suite, and production build in the current checkout
+- `MODERATE-HIGH` for continuous verification because CI scope is now broadened in config, but the expanded hosted run has not yet been observed live
 
 ### Concrete Quality Risks Seen Live
 
-- Core package live verification is blocked until package-local dependencies are installed (`vitest`, `typescript`)
-- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` currently shows missing local dependency resolution for `cvf-guard-contract`, `cvf-guard-contract/enterprise`, and `next-auth`
-- Web UI tests/types also show schema drift, including required `timestamp` / `intent` fields, uppercase `CVFPhase` values, and provider-set expansion (`alibaba`, `openrouter`) not reflected in older fixtures
-- EPF still carries a known ordering-sensitive full-suite flakiness note in canon; do not treat isolated success as full-suite determinism
+- The `2026-04-10` verification refresh is an operational baseline, not a new governed tranche; canon still closes at `W63-T1` until a fresh `GC-018` opens
+- The merged CI workflow revision still needs its first hosted pass before this exact config can be treated as fully confirmed
+- Any future capability expansion, packaging wave, or closure-lane reopen still requires a fresh bounded `GC-018`; do not treat the clean local baseline as blanket authorization
 
 ---
 

@@ -37,17 +37,18 @@ vi.mock('@/lib/spec-gate', () => ({
     evaluateSpecGate: vi.fn(() => ({
         status: 'PASS',
         missing: [],
-        provided: 3,
-        total: 3,
+        providedCount: 3,
+        requiredCount: 3,
     })),
 }));
 
 vi.mock('@/lib/enforcement', () => ({
     evaluateEnforcement: vi.fn(() => ({
-        status: 'active',
-        specGate: { status: 'PASS', missing: [], provided: 3, total: 3 },
+        status: 'ALLOW',
+        specGate: { status: 'PASS', missing: [], providedCount: 3, requiredCount: 3 },
         reasons: [],
-        mode: 'governance',
+        governanceStateSnapshot: {},
+        source: 'client',
     })),
 }));
 
@@ -276,15 +277,17 @@ describe('SpecExport', () => {
 
     it('shows Spec Gate FAIL when required fields are missing', async () => {
         vi.mocked(evaluateEnforcement).mockReturnValue({
-            status: 'BLOCK',
+            status: 'ALLOW',
             specGate: {
                 status: 'FAIL',
-                missing: [{ id: 'goal', label: 'Goal' }],
-                provided: 1,
-                total: 2,
+                missing: [{ id: 'goal', label: 'Goal', required: true }],
+                providedCount: 1,
+                requiredCount: 2,
             },
             reasons: [],
-        } as unknown as ReturnType<typeof evaluateEnforcement>);
+            governanceStateSnapshot: {} as unknown as ReturnType<typeof evaluateEnforcement>['governanceStateSnapshot'],
+            source: 'client',
+        } as ReturnType<typeof evaluateEnforcement>);
 
         render(<SpecExport {...defaultProps} values={{}} />);
         const allText = document.body.textContent || '';

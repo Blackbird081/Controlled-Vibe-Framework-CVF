@@ -117,6 +117,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Type check
+        run: npm run check
+
       - name: Run tests
         run: npm test
 
@@ -140,6 +143,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Type check
+        run: npm run check
 
       - name: Run tests
         run: npm test
@@ -165,6 +171,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Type check
+        run: npm run check
+
       - name: Run tests
         run: npm test
 
@@ -188,6 +197,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Type check
+        run: npm run check
 
       - name: Run tests
         run: npm test
@@ -218,7 +230,10 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npx vitest run
+        run: npm run test:run
+
+      - name: Build verification
+        run: npm run build
 
   # ─── Summary gate ────────────────────────────────────────────────────
   ci-passed:

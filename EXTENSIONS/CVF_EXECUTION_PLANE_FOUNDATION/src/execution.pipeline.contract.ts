@@ -49,9 +49,12 @@ export class ExecutionPipelineContract {
   private readonly now: () => string;
 
   constructor(dependencies: ExecutionPipelineContractDependencies = {}) {
-    this.commandRuntime = dependencies.commandRuntime
-      ?? createCommandRuntimeContract(dependencies.commandRuntimeDependencies);
     this.now = dependencies.now ?? (() => new Date().toISOString());
+    this.commandRuntime = dependencies.commandRuntime
+      ?? createCommandRuntimeContract({
+        ...dependencies.commandRuntimeDependencies,
+        now: this.now,
+      });
   }
 
   run(bridgeReceipt: ExecutionBridgeReceipt): ExecutionPipelineReceipt {

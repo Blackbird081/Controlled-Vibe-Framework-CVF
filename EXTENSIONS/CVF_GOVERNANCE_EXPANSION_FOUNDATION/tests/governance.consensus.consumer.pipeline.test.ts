@@ -166,13 +166,7 @@ describe("GovernanceConsensusConsumerPipelineContract", () => {
     const result = makeContract().execute({
       signals: [makeSignal("ROUTINE", 0)],
       candidateItems: [
-        {
-          itemId: "item-1",
-          title: "Consensus item",
-          content: "consensus item",
-          relevanceScore: 0.9,
-          source: "test",
-        },
+        { itemId: "item-1", title: "Consensus Item", content: "consensus item", relevanceScore: 0.9, source: "test" },
       ],
     });
     expect(result.consumerPackage.rankedKnowledgeResult.totalRanked).toBe(1);

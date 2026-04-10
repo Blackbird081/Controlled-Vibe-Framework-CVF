@@ -13,11 +13,14 @@ describe("EvaluationThresholdConsumerPipelineContract (W4-T20 CP1)", () => {
   const mockNow = () => fixedNow;
 
   const createEvalResult = (overrides?: Partial<EvaluationResult>): EvaluationResult => ({
-    evaluationId: `eval-${Math.random()}`,
+    resultId: `eval-${Math.random()}`,
     evaluatedAt: fixedNow,
+    sourceTruthModelId: "model-123",
+    sourceTruthModelVersion: 1,
     verdict: "PASS",
-    severity: "INFO",
-    message: "Test message",
+    severity: "NONE",
+    confidenceLevel: 0.9,
+    rationale: "Test rationale",
     evaluationHash: "hash-123",
     ...overrides,
   });
@@ -125,7 +128,7 @@ describe("EvaluationThresholdConsumerPipelineContract (W4-T20 CP1)", () => {
       now: mockNow,
     });
 
-    const results = [createEvalResult({ evaluationId: "fixed-id" })];
+    const results = [createEvalResult({ resultId: "fixed-id" })];
     const request: EvaluationThresholdConsumerPipelineRequest = { results };
 
     const result1 = contract.execute(request);
@@ -470,11 +473,14 @@ describe("EvaluationThresholdConsumerPipelineBatchContract (W4-T20 CP2)", () => 
   const mockNow = () => fixedNow;
 
   const createEvalResult = (overrides?: Partial<EvaluationResult>): EvaluationResult => ({
-    evaluationId: `eval-${Math.random()}`,
+    resultId: `eval-${Math.random()}`,
     evaluatedAt: fixedNow,
+    sourceTruthModelId: "model-123",
+    sourceTruthModelVersion: 1,
     verdict: "PASS",
-    severity: "INFO",
-    message: "Test message",
+    severity: "NONE",
+    confidenceLevel: 0.9,
+    rationale: "Test rationale",
     evaluationHash: "hash-123",
     ...overrides,
   });
@@ -656,7 +662,7 @@ describe("EvaluationThresholdConsumerPipelineBatchContract (W4-T20 CP2)", () => 
       now: mockNow,
     });
 
-    const results = [createResult({ results: [createEvalResult({ evaluationId: "fixed-1" })] })];
+    const results = [createResult({ results: [createEvalResult({ resultId: "fixed-1" })] })];
 
     const batch1 = contract.execute(results);
     const batch2 = contract.execute(results);

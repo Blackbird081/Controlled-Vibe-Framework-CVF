@@ -62,6 +62,7 @@ Explicit export surface:
 | `.` | Root barrel — primary entry point |
 | `./types` | Shared typed contracts and interfaces |
 | `./engine` | Runtime evaluation engine |
+| `./enterprise` | Team roles, approval workflow, and compliance report helpers |
 | `./guards/*` | Individual guard modules |
 | `./runtime/agent-handoff` | Agent handoff coordination helper |
 | `./runtime/agent-coordination` | Multi-agent coordination helper |
@@ -69,7 +70,6 @@ Explicit export surface:
 ## What Is NOT Included
 
 - provider-specific runtime integrations (`src/runtime/providers/`)
-- enterprise subpath promises
 - SQLite-backed audit persistence as a default package contract surface
 - release/publication automation
 
@@ -88,9 +88,9 @@ npm run test
 
 This package is in a pre-public state. There is no public support commitment, SLA, or issue tracking surface defined at this time. Breaking changes may occur before any publication decision.
 
-Supported first-wave surface: root barrel, typed contracts, runtime engine, explicit guard modules, agent-handoff and agent-coordination helpers.
+Supported first-wave surface: root barrel, typed contracts, runtime engine, enterprise helpers, explicit guard modules, agent-handoff and agent-coordination helpers.
 
-Not supported in this wave: provider-specific runtime adapters, enterprise subpath, SQLite audit persistence.
+Not supported in this wave: provider-specific runtime adapters, SQLite audit persistence.
 
 ## License
 

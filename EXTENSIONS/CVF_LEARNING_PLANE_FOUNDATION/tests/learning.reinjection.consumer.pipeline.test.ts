@@ -18,9 +18,11 @@ function makeGovernanceSignal(signalType: GovernanceSignalType): GovernanceSigna
   return {
     signalId: `signal-${signalType}`,
     sourceAssessmentId: "assessment-001",
-    evaluatedAt: FIXED_TS,
+    issuedAt: FIXED_TS,
+    sourceOverallStatus: "FAILING",
     signalType,
-    rationale: `Test rationale for ${signalType}`,
+    urgency: signalType === "ESCALATE" ? "CRITICAL" : signalType === "TRIGGER_REVIEW" ? "HIGH" : "LOW",
+    recommendation: `Test rationale for ${signalType}`,
     signalHash: `hash-${signalType}`,
   };
 }

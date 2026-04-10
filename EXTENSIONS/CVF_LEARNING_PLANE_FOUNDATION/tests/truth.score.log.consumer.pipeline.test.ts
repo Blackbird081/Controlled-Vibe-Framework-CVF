@@ -15,13 +15,17 @@ describe("TruthScoreLogConsumerPipelineContract (W4-T21 CP1)", () => {
   const createScore = (overrides?: Partial<TruthScore>): TruthScore => ({
     scoreId: `score-${Math.random()}`,
     scoredAt: fixedNow,
-    compositeScore: 0.8,
+    sourceTruthModelId: "model-123",
+    sourceTruthModelVersion: 1,
+    compositeScore: 80,
     scoreClass: "STRONG",
     dimensions: {
-      consistency: 0.9,
-      coherence: 0.8,
-      completeness: 0.7,
+      confidenceScore: 20,
+      healthScore: 25,
+      trajectoryScore: 18,
+      patternScore: 17,
     },
+    rationale: "Strong truth score",
     scoreHash: "hash-123",
     ...overrides,
   });
@@ -434,54 +438,42 @@ describe("TruthScoreLogConsumerPipelineBatchContract (W4-T21 CP2)", () => {
   const fixedNow = "2026-03-27T16:30:00.000Z";
   const mockNow = () => fixedNow;
 
-  const createResult = (
-    overrides?: Partial<TruthScoreLogConsumerPipelineResult>,
-  ): TruthScoreLogConsumerPipelineResult => ({
-    resultId: `result-${Math.random()}`,
-    createdAt: fixedNow,
-    log: {
-      logId: `log-${Math.random()}`,
-      createdAt: fixedNow,
-      totalScores: 3,
-      averageComposite: 0.75,
-      minComposite: 0.6,
-      maxComposite: 0.9,
-      dominantClass: "STRONG",
-      strongCount: 2,
-      adequateCount: 1,
-      weakCount: 0,
-      insufficientCount: 0,
-      summary: "3 score(s): strong=2, adequate=1, weak=0, insufficient=0. avg=0.75, min=0.6, max=0.9. DominantClass=STRONG.",
-      logHash: "hash-123",
+  const createScore = (overrides?: Partial<TruthScore>): TruthScore => ({
+    scoreId: `score-${Math.random()}`,
+    scoredAt: fixedNow,
+    sourceTruthModelId: "model-123",
+    sourceTruthModelVersion: 1,
+    compositeScore: 80,
+    scoreClass: "STRONG",
+    dimensions: {
+      confidenceScore: 20,
+      healthScore: 25,
+      trajectoryScore: 18,
+      patternScore: 17,
     },
-    consumerPackage: {
-      packageId: `pkg-${Math.random()}`,
-      createdAt: fixedNow,
-      query: "ScoreLog: 3 scores, avg=0.75, dominant=STRONG",
-      contextId: `log-${Math.random()}`,
-      rankedKnowledgeResult: {
-        resultId: `ranked-${Math.random()}`,
-        createdAt: fixedNow,
-        query: "ScoreLog: 3 scores, avg=0.75, dominant=STRONG",
-        contextId: `log-${Math.random()}`,
-        items: [],
-        totalItems: 0,
-        resultHash: "hash-456",
-      },
-      typedContextPackage: {
-        packageId: `typed-${Math.random()}`,
-        createdAt: fixedNow,
-        segments: [],
-        estimatedTokens: 100,
-        packageHash: "hash-789",
-      },
-      pipelineHash: "hash-pipeline",
-    },
-    pipelineHash: "hash-pipeline",
-    warnings: [],
-    consumerId: undefined,
+    rationale: "Strong truth score",
+    scoreHash: "hash-123",
     ...overrides,
   });
+
+  const createResult = (
+    overrides?: Partial<TruthScoreLogConsumerPipelineResult>,
+  ): TruthScoreLogConsumerPipelineResult => {
+    const contract = createTruthScoreLogConsumerPipelineContract({
+      now: mockNow,
+    });
+    const base = contract.execute({
+      scores: [
+        createScore({ scoreClass: "STRONG", compositeScore: 90 }),
+        createScore({ scoreClass: "STRONG", compositeScore: 80 }),
+        createScore({ scoreClass: "ADEQUATE", compositeScore: 55 }),
+      ],
+    });
+    return {
+      ...base,
+      ...overrides,
+    };
+  };
 
   // ─── Instantiation ──────────────────────────────────────────────────────────
 

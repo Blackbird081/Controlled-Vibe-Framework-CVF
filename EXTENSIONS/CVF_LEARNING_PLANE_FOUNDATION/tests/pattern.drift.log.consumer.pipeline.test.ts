@@ -10,18 +10,22 @@ const FIXED_NOW = "2026-03-27T10:00:00.000Z";
 // Helper: create test signal
 function makeSignal(overrides: Partial<PatternDriftSignal> = {}): PatternDriftSignal {
   return {
-    signalId: overrides.signalId ?? "sig-1",
+    driftId: overrides.driftId ?? "sig-1",
     detectedAt: overrides.detectedAt ?? FIXED_NOW,
+    baselineModelId: overrides.baselineModelId ?? "baseline-1",
+    currentModelId: overrides.currentModelId ?? "current-1",
     driftClass: overrides.driftClass ?? "STABLE",
-    driftMagnitude: overrides.driftMagnitude ?? 0.1,
-    affectedPatterns: overrides.affectedPatterns ?? [],
-    signalHash: overrides.signalHash ?? "hash-1",
+    driftRationale: overrides.driftRationale ?? "No significant drift detected",
+    patternChanged: overrides.patternChanged ?? false,
+    healthSignalChanged: overrides.healthSignalChanged ?? false,
+    confidenceDelta: overrides.confidenceDelta ?? 0.1,
+    driftHash: overrides.driftHash ?? "hash-1",
   };
 }
 
-const stableSignal = makeSignal({ signalId: "sig-stable", driftClass: "STABLE" });
-const driftingSignal = makeSignal({ signalId: "sig-drifting", driftClass: "DRIFTING" });
-const criticalSignal = makeSignal({ signalId: "sig-critical", driftClass: "CRITICAL_DRIFT" });
+const stableSignal = makeSignal({ driftId: "sig-stable", driftClass: "STABLE" });
+const driftingSignal = makeSignal({ driftId: "sig-drifting", driftClass: "DRIFTING" });
+const criticalSignal = makeSignal({ driftId: "sig-critical", driftClass: "CRITICAL_DRIFT" });
 
 describe("PatternDriftLogConsumerPipelineContract", () => {
   const contract = new PatternDriftLogConsumerPipelineContract({ now: () => FIXED_NOW });

@@ -45,7 +45,7 @@ describe('ErrorBoundary', () => {
     it('renders custom fallback when provided', () => {
         const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
-        function Boom(): React.ReactNode {
+        function Boom(): never {
             throw new Error('boom');
         }
 
@@ -63,7 +63,7 @@ describe('ErrorBoundary', () => {
         const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
         vi.stubEnv('NODE_ENV', 'development');
 
-        function Boom(): React.ReactNode {
+        function Boom(): never {
             throw new Error('dev boom');
         }
 

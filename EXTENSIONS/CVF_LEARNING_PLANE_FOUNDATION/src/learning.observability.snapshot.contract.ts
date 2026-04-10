@@ -1,5 +1,6 @@
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
 import type { LearningObservabilityReport, ObservabilityHealth } from "./learning.observability.contract";
+export type { ObservabilityHealth } from "./learning.observability.contract";
 
 // --- Types ---
 

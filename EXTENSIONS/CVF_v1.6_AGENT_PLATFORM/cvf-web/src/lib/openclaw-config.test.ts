@@ -41,7 +41,7 @@ describe('openclaw-config API helpers', () => {
             apiKey: 'gemini-key',
             model: 'gemini-2.5-flash',
         });
-        expect((result as { decision: { status: string } }).decision.status).toBe('approved');
+        expect((result.decision as { status: string }).status).toBe('approved');
     });
 
     it('throws an API error when submitToOpenClaw receives a non-ok response', async () => {

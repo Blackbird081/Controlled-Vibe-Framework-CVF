@@ -1,5 +1,3 @@
-'use client';
-
 import {
     DEFAULT_GOVERNANCE_STATE,
     PHASE_AUTHORITY_MATRIX,

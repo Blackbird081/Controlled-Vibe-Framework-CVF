@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * CVF Governance Context
  * Manages Phase/Role/Risk state and builds governance system prompts

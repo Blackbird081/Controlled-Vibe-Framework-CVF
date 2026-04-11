@@ -697,16 +697,22 @@ export class AlibabaDashScopeWebProvider {
         this.language = config.language || 'vi';
     }
 
+    private isStreamingOnlyModel(): boolean {
+        return /^qvq-/i.test(this.model);
+    }
+
     async chat(messages: AIMessage[], onStream?: (chunk: AIStreamChunk) => void): Promise<AIResponse> {
         const systemMessage: AIMessage = { role: 'system', content: getCVFSystemPrompt(this.language) };
         const allMessages = [systemMessage, ...messages];
+        const isStreamingOnly = this.isStreamingOnlyModel();
 
         const body = {
             model: this.model,
             messages: allMessages.map(m => ({ role: m.role, content: m.content })),
             temperature: 0.7,
             max_tokens: 4096,
-            stream: !!onStream,
+            stream: !!onStream || isStreamingOnly,
+            ...((!!onStream || isStreamingOnly) ? { stream_options: { include_usage: true } } : {}),
         };
 
         try {
@@ -721,10 +727,16 @@ export class AlibabaDashScopeWebProvider {
 
             if (!response.ok) {
                 const error = await response.json();
+                if (isStreamingOnly && error.error?.code === 'model_not_supported') {
+                    throw new Error(
+                        `Alibaba model ${this.model} is not supported on the current compatible-mode endpoint. ` +
+                        'Try qvq-max or use a provider-specific endpoint/adapter that supports this snapshot model.'
+                    );
+                }
                 throw new Error(error.error?.message || `HTTP ${response.status}`);
             }
 
-            if (onStream) {
+            if (onStream || isStreamingOnly) {
                 return await this.handleStream(response, onStream);
             } else {
                 const data = await response.json();
@@ -745,13 +757,16 @@ export class AlibabaDashScopeWebProvider {
         }
     }
 
-    private async handleStream(response: Response, onStream: (chunk: AIStreamChunk) => void): Promise<AIResponse> {
+    private async handleStream(response: Response, onStream?: (chunk: AIStreamChunk) => void): Promise<AIResponse> {
         const reader = response.body?.getReader();
         if (!reader) throw new Error('No response body');
 
         const decoder = new TextDecoder();
         let fullText = '';
+        let reasoningText = '';
         let buffer = '';
+        let usage: AIResponse['usage'] | undefined;
+        let finishReason: string | undefined;
 
         while (true) {
             const { done, value } = await reader.read();
@@ -766,9 +781,23 @@ export class AlibabaDashScopeWebProvider {
                     try {
                         const data = JSON.parse(line.slice(6));
                         const text = data.choices?.[0]?.delta?.content || '';
+                        const reasoning = data.choices?.[0]?.delta?.reasoning_content || '';
                         if (text) {
                             fullText += text;
-                            onStream({ text, isComplete: false });
+                            onStream?.({ text, isComplete: false });
+                        }
+                        if (reasoning) {
+                            reasoningText += reasoning;
+                        }
+                        if (typeof data.choices?.[0]?.finish_reason === 'string') {
+                            finishReason = data.choices[0].finish_reason;
+                        }
+                        if (data.usage) {
+                            usage = {
+                                promptTokens: data.usage?.prompt_tokens || 0,
+                                completionTokens: data.usage?.completion_tokens || 0,
+                                totalTokens: data.usage?.total_tokens || 0,
+                            };
                         }
                     } catch {
                         // Skip invalid JSON
@@ -777,12 +806,13 @@ export class AlibabaDashScopeWebProvider {
             }
         }
 
-        onStream({ text: '', isComplete: true });
+        onStream?.({ text: '', isComplete: true });
 
         return {
-            text: fullText,
+            text: fullText || reasoningText,
             model: this.model,
-            finishReason: 'stop',
+            usage,
+            finishReason: finishReason || 'stop',
         };
     }
 }

@@ -41,6 +41,18 @@ This manifest governs the CP2 (Instrumented Run Harness) and CP3 (Blind Comparat
 | `CFG-B` | CVF governed path | Full CVF product flow: governance routing, policy gates, skill contracts, evidence capture, audit log | Current CVF main branch | Primary validation target |
 | `CFG-C` | CVF reduced-control diagnostic | CVF with selected controls disabled for isolation analysis | Optional — requires separate CP2 auth scope | Only if needed to isolate control value |
 
+### Lane parity note (post-CP3A bootstrap evidence)
+
+Direct provider probes may validate a model that is **not** the current governed-path default.
+
+Current known example:
+
+- Alibaba direct validated model: `qwen3.5-122b-a10b`
+- Current `cvf-web` Alibaba runtime default: `qwen-turbo`
+- Additional QVQ-family governed test lane now available through explicit `model` override: `qvq-max`
+
+Therefore any future CFG-A vs CFG-B comparison must freeze explicit model parity before scoring. A direct run on `qwen3.5-122b-a10b` must not be compared against a governed run on `qwen-turbo` as if they were the same lane.
+
 ---
 
 ## 3. Freeze Checklist

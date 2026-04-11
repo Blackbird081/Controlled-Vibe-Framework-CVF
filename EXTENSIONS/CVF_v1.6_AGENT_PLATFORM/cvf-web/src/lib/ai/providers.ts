@@ -1,5 +1,56 @@
 import { AIConfig, ExecutionResponse, AIProvider, DEFAULT_MODELS, CVF_SYSTEM_PROMPT } from './types';
 
+function isAlibabaStreamingOnlyModel(model: string): boolean {
+    return /^qvq-/i.test(model);
+}
+
+async function parseAlibabaStreamingResponse(response: Response): Promise<{
+    output: string;
+    tokensUsed?: number;
+    finishReason?: string;
+}> {
+    const raw = await response.text();
+    const lines = raw
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.startsWith('data: '));
+
+    let output = '';
+    let reasoning = '';
+    let tokensUsed: number | undefined;
+    let finishReason: string | undefined;
+
+    for (const line of lines) {
+        const payload = line.slice(6);
+        if (payload === '[DONE]') continue;
+
+        try {
+            const data = JSON.parse(payload);
+            const delta = data.choices?.[0]?.delta;
+            if (typeof delta?.content === 'string') {
+                output += delta.content;
+            }
+            if (typeof delta?.reasoning_content === 'string') {
+                reasoning += delta.reasoning_content;
+            }
+            if (typeof data.choices?.[0]?.finish_reason === 'string') {
+                finishReason = data.choices[0].finish_reason;
+            }
+            if (typeof data.usage?.total_tokens === 'number') {
+                tokensUsed = data.usage.total_tokens;
+            }
+        } catch {
+            // Ignore malformed SSE chunks and preserve the parsable output.
+        }
+    }
+
+    return {
+        output: output || reasoning,
+        tokensUsed,
+        finishReason,
+    };
+}
+
 // OpenAI Client
 async function executeOpenAI(
     config: AIConfig,
@@ -166,6 +217,7 @@ async function executeAlibaba(
     userPrompt: string
 ): Promise<ExecutionResponse> {
     const startTime = Date.now();
+    const isStreamingOnly = isAlibabaStreamingOnlyModel(config.model);
 
     try {
         const response = await fetch('https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions', {
@@ -182,12 +234,37 @@ async function executeAlibaba(
                 ],
                 max_tokens: config.maxTokens || 4096,
                 temperature: config.temperature || 0.7,
+                ...(isStreamingOnly
+                    ? {
+                        stream: true,
+                        stream_options: { include_usage: true },
+                    }
+                    : {}),
             }),
         });
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.error?.message || 'Alibaba DashScope API error');
+            const message = error.error?.message || 'Alibaba DashScope API error';
+            if (isStreamingOnly && error.error?.code === 'model_not_supported') {
+                throw new Error(
+                    `Alibaba model ${config.model} is not supported on the current compatible-mode endpoint. ` +
+                    'Try qvq-max or use a provider-specific endpoint/adapter that supports this snapshot model.'
+                );
+            }
+            throw new Error(message);
+        }
+
+        if (isStreamingOnly) {
+            const data = await parseAlibabaStreamingResponse(response);
+            return {
+                success: true,
+                output: data.output,
+                provider: 'alibaba',
+                model: config.model,
+                tokensUsed: data.tokensUsed,
+                executionTime: Date.now() - startTime,
+            };
         }
 
         const data = await response.json();
@@ -302,4 +379,3 @@ export async function executeAI(
 }
 
 export { CVF_SYSTEM_PROMPT, DEFAULT_MODELS };
-

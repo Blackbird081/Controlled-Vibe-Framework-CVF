@@ -292,6 +292,51 @@ describe('ai/providers', () => {
             expect(body.max_tokens).toBe(1234);
             expect(body.temperature).toBe(0.2);
         });
+
+        it('supports QVQ streaming-only models on the compatible endpoint', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                text: async () => [
+                    'data: {"choices":[{"delta":{"content":"","role":"assistant","reasoning_content":"Thinking"},"index":0,"finish_reason":null}],"usage":null}',
+                    'data: {"choices":[{"delta":{"content":"OK"},"index":0,"finish_reason":"stop"}],"usage":null}',
+                    'data: {"choices":[],"usage":{"total_tokens":105}}',
+                    'data: [DONE]',
+                ].join('\n'),
+            });
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello', {
+                model: 'qvq-max',
+            });
+
+            expect(result.success).toBe(true);
+            expect(result.output).toBe('OK');
+            expect(result.tokensUsed).toBe(105);
+
+            const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+            expect(body.model).toBe('qvq-max');
+            expect(body.stream).toBe(true);
+            expect(body.stream_options).toEqual({ include_usage: true });
+        });
+
+        it('surfaces explicit compatibility guidance for unsupported QVQ snapshots', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: false,
+                json: async () => ({
+                    error: {
+                        message: 'Unsupported model `qvq-max-2025-03-25` for OpenAI compatibility mode.',
+                        code: 'model_not_supported',
+                    },
+                }),
+            });
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello', {
+                model: 'qvq-max-2025-03-25',
+            });
+
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('not supported on the current compatible-mode endpoint');
+            expect(result.error).toContain('qvq-max');
+        });
     });
 
     describe('executeAI — OpenRouter', () => {

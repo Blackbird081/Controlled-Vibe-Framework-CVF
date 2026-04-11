@@ -17,6 +17,7 @@ export interface ExecutionRequest {
     inputs: Record<string, string>;
     intent: string;
     provider?: AIProvider;
+    model?: string;
     mode?: 'simple' | 'governance' | 'full';
     cvfPhase?: string;
     cvfRiskLevel?: string;

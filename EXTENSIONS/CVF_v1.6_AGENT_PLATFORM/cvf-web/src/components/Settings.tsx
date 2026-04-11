@@ -29,8 +29,11 @@ export const AVAILABLE_MODELS: Record<ProviderKey, { id: string; name: string; r
     ],
     alibaba: [
         { id: 'qwen-turbo', name: 'Qwen Turbo', recommended: true },
+        { id: 'qwen3.5-122b-a10b', name: 'Qwen 3.5 122B A10B' },
         { id: 'qwen-plus', name: 'Qwen Plus' },
         { id: 'qwen-max', name: 'Qwen Max' },
+        { id: 'qvq-max', name: 'QVQ Max (Streaming Only)' },
+        { id: 'qvq-max-2025-03-25', name: 'QVQ Max 2025-03-25 (Endpoint Check Needed)' },
     ],
     openrouter: [
         { id: 'meta-llama/llama-4-maverick', name: 'Llama 4 Maverick', recommended: true },

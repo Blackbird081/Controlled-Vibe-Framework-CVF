@@ -97,7 +97,9 @@ describe('/api/execute', () => {
         const data = await res.json();
         expect(res.status).toBe(200);
         expect(data.success).toBe(true);
-        expect(executeAIMock).toHaveBeenCalledWith('claude', 'claude-key', expect.any(String));
+        expect(executeAIMock).toHaveBeenCalledWith('claude', 'claude-key', expect.any(String), {
+            model: undefined,
+        });
     });
 
     it('executes AI and returns response when configured', async () => {
@@ -131,6 +133,37 @@ describe('/api/execute', () => {
         expect(prompt).toContain('Analyze the market');
         expect(prompt).toContain('Target Market');
         expect(prompt).not.toContain('Empty Field');
+        expect(executeAIMock.mock.calls[0][3]).toEqual({ model: undefined });
+    });
+
+    it('passes explicit model override into executeAI', async () => {
+        process.env.ALIBABA_API_KEY = 'ali-key';
+        process.env.CVF_SERVICE_TOKEN = 'svc';
+        verifySessionCookieMock.mockResolvedValueOnce(null);
+        executeAIMock.mockResolvedValue({
+            success: true,
+            output: 'ok',
+            provider: 'alibaba',
+            model: 'qvq-max',
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Strategy',
+                intent: 'Analyze the market',
+                inputs: { targetMarket: 'SMBs' },
+                provider: 'alibaba',
+                model: 'qvq-max',
+            }),
+            headers: { 'x-cvf-service-token': 'svc' },
+        });
+
+        const res = await POST(req as never);
+        expect(res.status).toBe(200);
+        expect(executeAIMock).toHaveBeenCalledWith('alibaba', 'ali-key', expect.any(String), {
+            model: 'qvq-max',
+        });
     });
 
     it('returns 500 when execution throws', async () => {

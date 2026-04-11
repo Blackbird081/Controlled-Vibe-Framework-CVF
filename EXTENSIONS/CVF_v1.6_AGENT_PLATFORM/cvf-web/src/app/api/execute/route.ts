@@ -55,6 +55,9 @@ export async function POST(request: NextRequest) {
         body.inputs = Object.fromEntries(
             Object.entries(body.inputs || {}).map(([k, v]) => [k, String(v ?? '').trim()])
         );
+        if (typeof body.model === 'string') {
+            body.model = body.model.trim() || undefined;
+        }
 
         // Rate limit by session + IP (after provider known)
         const limiter = getRateLimiter();
@@ -267,7 +270,9 @@ export async function POST(request: NextRequest) {
         }
 
         // ── EXECUTE AI with auto-retry on output validation failure ──
-        let aiResult = await executeAI(routedProvider, routedApiKey, userPrompt);
+        let aiResult = await executeAI(routedProvider, routedApiKey, userPrompt, {
+            model: body.model,
+        });
         let outputValidation: ValidationResult | undefined;
         const retryState: RetryState = { attempt: 0, previousIssues: [] };
 
@@ -291,7 +296,9 @@ export async function POST(request: NextRequest) {
                     ? `${userPrompt}\n\n[Improvement note: ${retryDecision.adjustedHint}]`
                     : userPrompt;
 
-                aiResult = await executeAI(routedProvider, routedApiKey, retryPrompt);
+                aiResult = await executeAI(routedProvider, routedApiKey, retryPrompt, {
+                    model: body.model,
+                });
                 if (!aiResult.success || !aiResult.output) break;
 
                 outputValidation = validateOutput({

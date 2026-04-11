@@ -96,7 +96,7 @@
 
 ## Immediate Next Action Required
 
-**W66-T1 CP3A Lane Bootstrap — operator confirmed 2026-04-11. Work from `main`. DOCUMENTATION class, Fast Lane (GC-021). No code changes required. Next: (1) freeze `gemini` + `alibaba` lane IDs and model IDs in run manifest, (2) boot cvf-web with `GOOGLE_AI_API_KEY` + `ALIBABA_API_KEY` in server env (out-of-band, never commit values), (3) run 5 calibration pilot tasks (CAL-001–CAL-005) through both lanes, (4) verify all 7 evidence completeness items, (5) then open fresh GC-018 for full CP3A scored batch. W66-T1 CP3B follows after at least one stable CP3A lane confirms evidence complete.**
+**W66-T1 CP3A Lane Bootstrap — GEMINI PILOT COMPLETE (2026-04-11). Lane manifest FROZEN. Gemini-2.5-flash pilot (5 calibration tasks, direct API) DONE — lane connectivity confirmed; CAL-004 ADVERSARIAL: CATASTROPHIC MISS on direct model (CFG-A behavior — approved deployment bypass without governance overlay); CAL-002/CAL-003/CAL-005 TRUNCATED (raise max_tokens → 4096). Next: (1) provide `ALIBABA_API_KEY` → run alibaba lane pilot, (2) run both lanes through cvf-web governed path (`/api/execute`, mode: governance) — this is the CP3A proper test, (3) open fresh GC-018 for full CP3A batch after governed-path evidence confirmed. Lane manifest: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_LANE_MANIFEST_W66_T1_CP3A_2026-04-11.md`. Pilot evidence: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_PILOT_EVIDENCE_W66_T1_CP3A_2026-04-11.md`.**
 
 Current guidance:
 

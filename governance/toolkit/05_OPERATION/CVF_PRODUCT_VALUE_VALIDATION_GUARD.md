@@ -49,6 +49,9 @@ The canonical product-value chain must preserve these rules:
 
 - comparison is mandatory; CVF cannot be judged in isolation
 - at least one simpler direct baseline must be included
+- provider-hub validation and controlled value attribution must be distinguished, not blended into one vague score
+- when scope includes multiple enabled providers, each admitted `provider + model` configuration should be treated as a governed run lane
+- any claim that CVF is a model-agnostic hub must be supported by evidence across multiple run lanes; a single-lane result is scope-limited only
 - corpus and rubric must be frozen before scored runs begin
 - difficult or embarrassing tasks may not be removed after results are seen
 - human-reviewed scoring outranks self-scoring
@@ -75,6 +78,7 @@ The following are forbidden as primary proof of product value:
 - external compliance, enterprise, or operational requirements reject the current posture
 
 Architectural neatness alone is not a sufficient trigger.
+Ordinary provider-hub validation does not require Docker by default.
 
 ## Enforcement Surface
 

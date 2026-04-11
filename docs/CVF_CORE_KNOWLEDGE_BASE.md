@@ -7,7 +7,7 @@
 > Dùng để **định vị nhanh** bất kỳ extension/version/layer mới vào đúng chỗ trong cấu trúc,
 > kiểm tra overlap và backward compatibility — **không cần đọc lại codebase CVF mỗi lần**.
 >
-> **Phiên bản hiện tại:** v2.0.0 | **Cập nhật:** 2026-03-05
+> **Phiên bản hiện tại:** v2.0.0 | **Cập nhật:** 2026-04-11
 > **Nguồn xác minh:** GitHub repo + README.md + CVF_POSITIONING.md + CVF_ARCHITECTURE_DIAGRAMS.md
 
 ---
@@ -37,6 +37,21 @@ CVF = Governance Framework (Rules + Process + Tools)
 | Human + AI collaboration | Pure AI automation |
 | Rules, specs, checklists | App / Software product |
 | Agent-agnostic | Tied to specific AI |
+
+### Product Value Doctrine — Governed Provider Hub
+
+Khi đánh giá giá trị sản phẩm hiện tại của CVF, mặc định hiểu như sau:
+
+- CVF **không** được định nghĩa như wrapper cho một provider duy nhất
+- `cvf-web` và master architecture đi theo hướng **provider-agnostic governed hub**
+- user/operator có thể bật provider keys khác nhau; CVF giữ phần routing, policy, trace, evidence trong cùng một governed path
+
+**Run lane** là đơn vị chuẩn để chứng minh giá trị:
+
+- `run lane = provider + model` configuration đã được CVF admit vào governed flow
+- đổi API key / provider / model hợp lệ sẽ sinh ra lane mới trong validation matrix
+- muốn chứng minh CVF là model-agnostic hub, phải có evidence trên nhiều lanes
+- muốn chứng minh giá trị do governance của CVF, phải so direct vs governed trong cùng một lane
 
 ---
 

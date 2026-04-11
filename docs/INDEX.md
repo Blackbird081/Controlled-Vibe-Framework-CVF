@@ -144,6 +144,8 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 If the current task is proving or rejecting CVF user-facing value:
 
 - `roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md`
+  - canonical doctrine now distinguishes `CP3A` provider-hub validation from `CP3B` controlled value testing
+  - canonical unit is a governed `run lane` = one admitted `provider + model` configuration
 - `reference/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_TEMPLATE.md`
 - `reference/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_TEMPLATE.md`
 - `reference/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`

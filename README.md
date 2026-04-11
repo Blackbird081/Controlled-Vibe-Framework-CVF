@@ -60,7 +60,26 @@ What CVF is good at:
 - keeping human approval and audit evidence inside the delivery loop
 - enforcing phase, role, risk, scope, and mutation boundaries
 - giving both coder-facing and non-coder paths a governed execution model
+- keeping provider choice user-owned while routing, policy, and evidence stay CVF-governed
 - preserving reconciliation records so future audits are faster and cheaper
+
+## Core Value: Governed Provider Hub
+
+CVF is not meant to be a wrapper for one model vendor. The product-level value is a **governed provider hub**:
+
+- users can enable the provider keys they actually want to use
+- CVF keeps routing, policy, trace capture, and evidence discipline consistent across those providers
+- provider choice stays flexible, while governance stays centralized
+
+For product-value proof, CVF uses the concept of a **run lane**:
+
+- a run lane is one governed `provider + model` configuration admitted by the CVF hub
+- when a user enables `Gemini`, `Alibaba`, `OpenAI`, `Claude`, or another supported provider, that configuration can become a separate validation lane
+- CVF should prove value in two ways:
+  - across multiple run lanes, to show the hub is truly model-agnostic in real use
+  - within a matched run lane, to show the extra value comes from CVF governance rather than from switching to a different model
+
+This is the key distinction between "CVF looks well-architected" and "CVF has proven product value."
 
 What CVF is not claiming today:
 
@@ -93,6 +112,8 @@ npm run dev
 ```
 
 Then open `http://localhost:3000`.
+
+In `Settings`, enable the provider keys you want to use. Each admitted `provider + model` pair is treated as a governed run lane for future Product Value Validation.
 
 ### Quick Run: Workspace Bootstrap
 
@@ -160,6 +181,7 @@ Read this status as:
 Primary status anchors:
 
 - [Agent Handoff](AGENT_HANDOFF.md)
+- [Product Value Validation Wave Roadmap](docs/roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md)
 - [Post-MC5 Orientation](docs/guides/POST_MC5_ORIENTATION.md)
 - [Post-MC5 Continuation Strategy](docs/roadmaps/CVF_POST_MC5_CONTINUATION_STRATEGY_ROADMAP_2026-04-08.md)
 - [Whitepaper Progress Tracker](docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md)

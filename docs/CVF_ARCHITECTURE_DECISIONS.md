@@ -1293,3 +1293,47 @@ Promote product-value proof into a governed control. `GC-042` now requires one c
 - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+
+---
+
+## ADR-033: CVF Product Value Must Be Proven As A Governed Provider Hub
+| Field | Value |
+|---|---|
+| Date | 2026-04-11 |
+| Status | Active |
+| Branch | `main` |
+| Layer | Product / Architecture Doctrine |
+| Related commits | *(local documentation alignment batch)* |
+
+### Context
+The web product and the master architecture already point toward a provider-agnostic model gateway, but Product Value Validation was still easy to misread as a single-provider experiment. That created a mismatch between the real CVF proposition and the way future agents might design proof packets.
+
+### Decision
+CVF product-value proof must distinguish two surfaces:
+
+1. **Provider-Hub Validation (`CP3A`)**
+   - prove that CVF remains governable and useful across governed `provider + model` run lanes derived from enabled user/operator keys
+2. **Controlled Value Test (`CP3B`)**
+   - prove that the value delta comes from CVF governance by comparing direct vs governed execution inside the same matched run lane
+
+A **run lane** is now the canonical product-truth unit for validation: one admitted governed `provider + model` configuration.
+
+### Rationale
+- CVF is not supposed to win by binding users to one model vendor.
+- User-controlled provider choice and CVF-controlled governance are separate responsibilities and should stay separate in the proof model too.
+- Multi-lane validation is the honest way to support a model-agnostic hub claim.
+- Same-lane comparison is still required so provider switching does not masquerade as CVF value.
+
+### Consequences
+- Future product-value packets must not market a single-provider result as full hub truth.
+- Existing controlled-lane packets remain useful, but only as `CP3B` evidence unless multiple governed lanes are also validated.
+- README, handoff, roadmap, guard, and architecture references should all use the same `run lane` vocabulary.
+- Docker sandbox decisions remain downstream of measured need; provider-hub validation alone does not require Docker.
+
+### Related Files
+- `README.md`
+- `AGENT_HANDOFF.md`
+- `docs/roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md`
+- `docs/roadmaps/CVF_POST_W64_NEXT_CAPABILITY_WAVE_ROADMAP_2026-04-10.md`
+- `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
+- `governance/toolkit/05_OPERATION/CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`

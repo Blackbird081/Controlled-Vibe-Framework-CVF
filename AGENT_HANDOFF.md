@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W66-T1 CP2 closed delivered; Product Value Validation Wave CP2 (Run Harness Setup): **COMPLETE** — CFG-A/CFG-B configuration specs FROZEN; evidence capture schema FROZEN; reviewer calibration set (5 tasks: CAL-001 NORMAL / CAL-002 AMBIGUOUS / CAL-003 HIGH_RISK / CAL-004 ADVERSARIAL / CAL-005 MULTI_STEP) FROZEN; evidence completeness checklist (7-item pre-CP3 gate) FROZEN; test delta 0; code delta 0; W66-T1 CP1 (Corpus + Rubric Freeze): **COMPLETE** — 90-task corpus FROZEN; rubric FROZEN; GC-042 evidence chain foundation established; W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`; W66-T1 CP1+CP2 test delta = 0; CP3 requires human operator confirmation before fresh GC-018
+> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W66-T1 CP2 closed delivered; Product Value Validation Wave CP2 (Run Harness Setup): **COMPLETE** — CFG-A/CFG-B controlled-lane seed FROZEN; evidence capture schema FROZEN; reviewer calibration set (5 tasks: CAL-001 NORMAL / CAL-002 AMBIGUOUS / CAL-003 HIGH_RISK / CAL-004 ADVERSARIAL / CAL-005 MULTI_STEP) FROZEN; evidence completeness checklist (7-item pre-CP3A/CP3B gate) FROZEN; test delta 0; code delta 0; W66-T1 CP1 (Corpus + Rubric Freeze): **COMPLETE** — 90-task corpus FROZEN; rubric FROZEN; GC-042 evidence chain foundation established; Product Value Validation doctrine now treats `provider-hub validation` as the product-truth surface and `controlled value test` as the causal-attribution surface; W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`; W66-T1 CP1+CP2 test delta = 0; CP3A/CP3B require human operator confirmation before fresh GC-018
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W64-T1`)
 
 ---
@@ -37,7 +37,7 @@
 
 | Tranche | Description | Status |
 |---------|-------------|--------|
-| W66-T1 CP2 | Product Value Validation Wave — Run Harness Setup (DOCUMENTATION / VALIDATION_TEST class) | CLOSED DELIVERED 2026-04-11 — CFG-A/CFG-B configuration specs FROZEN (`claude-sonnet-4-6`; CFG-A: direct API, temp 0.3, max_tokens 2048; CFG-B: cvf-web governed path, same parity); evidence capture schema FROZEN; reviewer calibration set (5 tasks, 1 per class) FROZEN; 7-item pre-CP3 evidence completeness checklist FROZEN; test delta 0; code delta 0; Fast Lane (GC-021) |
+| W66-T1 CP2 | Product Value Validation Wave — Run Harness Setup (DOCUMENTATION / VALIDATION_TEST class) | CLOSED DELIVERED 2026-04-11 — first controlled-lane seed FROZEN (`claude-sonnet-4-6`; CFG-A: direct API, temp 0.3, max_tokens 2048; CFG-B: cvf-web governed path, same parity); evidence capture schema FROZEN; reviewer calibration set (5 tasks, 1 per class) FROZEN; 7-item pre-CP3A/CP3B evidence completeness checklist FROZEN; test delta 0; code delta 0; Fast Lane (GC-021). Canon note: this seed is retained for future `CP3B` controlled comparison; it is not, by itself, proof that CVF is a full provider-hub product across all providers. |
 | W66-T1 CP1 | Product Value Validation Wave — Corpus and Rubric Freeze (DOCUMENTATION / VALIDATION_TEST class) | CLOSED DELIVERED 2026-04-11 — 90-task corpus FROZEN (A1×30 FAM-001/002/003 + A2×20 FAM-004/005 + B×20 real product + C×20 governance stress); rubric FROZEN; run manifest PLANNED; GC-042 evidence chain foundation established; test delta 0; code delta 0; Fast Lane (GC-021) |
 | W65-T1 | Pre-Public Packaging Phase B (PACKAGING class) | CLOSED DELIVERED 2026-04-10 — 4 packages processed; `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`: `exportReadiness CANDIDATE`; `CVF_GOVERNANCE_EXPANSION_FOUNDATION`: `exports/files/license/keywords/README + CANDIDATE`; `CVF_LEARNING_PLANE_FOUNDATION`: `exports/files/license/keywords/README (new) + CANDIDATE`; `CVF_v1.7.1_SAFETY_RUNTIME`: `REVIEW_REQUIRED` + 4 blockers documented; test delta 0; Fast Lane (GC-021) |
 | W64-T1 | Track 5 Deferred Architecture (DEFERRED ARCHITECTURE class) | CLOSED DELIVERED 2026-04-08 — Track 5A: `ProviderRouterContract` delivered in CPF using Option B governance routing; Track 5B: `SandboxIsolationContract` + `WorkerThreadSandboxAdapter` delivered using `worker_threads`; doctrine audit closed; Track 5A + 5B complete; Post-W64 quality assessment: **100%**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; commit `2160c4d5` |
@@ -96,14 +96,20 @@
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. MC1-MC5 is complete; W66-T1 CP1+CP2 closed; CP3 requires human operator confirmation before fresh GC-018.**
+**No active tranche. Work from `main`. Keep relocation closed-by-default. MC1-MC5 is complete; W66-T1 CP1+CP2 closed; CP3A/CP3B require human operator confirmation before fresh GC-018.**
 
 Current guidance:
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
-- **W66-T1 CP2 CLOSED DELIVERED** — Product Value Validation Wave CP2 (DOCUMENTATION / VALIDATION_TEST class); CFG-A/CFG-B specs FROZEN; evidence schema FROZEN; reviewer calibration set (5 tasks) FROZEN; 7-item pre-CP3 gate checklist FROZEN; test delta 0; code delta 0; Fast Lane (GC-021)
+- **W66-T1 CP2 CLOSED DELIVERED** — Product Value Validation Wave CP2 (DOCUMENTATION / VALIDATION_TEST class); first controlled-lane CFG-A/CFG-B seed FROZEN; evidence schema FROZEN; reviewer calibration set (5 tasks) FROZEN; 7-item pre-CP3A/CP3B gate checklist FROZEN; test delta 0; code delta 0; Fast Lane (GC-021)
 - **W66-T1 CP1 CLOSED DELIVERED** — 90-task corpus FROZEN (A1×30 FAM-001/002/003 + A2×20 FAM-004/005 + B×20 real product + C×20 governance stress); rubric FROZEN; run manifest PLANNED; GC-042 evidence chain foundation established
-- **W66-T1 CP3 (Blind Comparative Evaluation Runs)**: NOT YET AUTHORIZED — requires human operator to confirm all of the following before a fresh GC-018 can be opened: (1) execution infrastructure live (API keys, cvf-web instance, evidence storage), (2) 5 calibration pilot tasks run through CFG-A + CFG-B, (3) all 7 evidence completeness items confirmed, (4) reviewer pool assigned (≥ 3 reviewers), (5) reviewer calibration session complete (κ ≥ 0.70), (6) human freeze of corpus + rubric confirmed in writing
+- **Run-lane doctrine (canonical)** — a governed `run lane` is one admitted `provider + model` configuration in the CVF hub. User/operator-enabled provider keys define which lanes exist. This is the product-truth unit for Product Value Validation.
+- **Initial operator-supplied multi-lane bootstrap (out-of-band secrets; never commit values)**:
+  - `gemini` lane uses server env `GOOGLE_AI_API_KEY`
+  - `alibaba` lane uses server env `ALIBABA_API_KEY`
+  - freeze lane IDs + selected models in the run manifest; do not record raw key values anywhere in repo truth
+- **W66-T1 CP3A (Provider-Hub Validation)**: NOT YET AUTHORIZED — requires human operator to confirm all of the following before a fresh GC-018 can be opened: (1) execution infrastructure live (API keys, cvf-web instance, evidence storage), (2) active provider/model lane matrix frozen from enabled keys, (3) pilot tasks run through each frozen governed lane with evidence capture verified, (4) all 7 evidence completeness items confirmed, (5) reviewer pool assigned (≥ 3 reviewers), (6) reviewer calibration session complete (κ ≥ 0.70), (7) human freeze of corpus + rubric confirmed in writing
+- **W66-T1 CP3B (Controlled Value Test)**: NOT YET AUTHORIZED — direct baseline vs CVF must be compared inside one or more matched run lanes where `provider + model` is held constant. Prefer the first stable successful `gemini` or `alibaba` lane from `CP3A`; retain the existing CP2 `claude-sonnet-4-6` packet only as a historical controlled-lane template.
 - **No active tranche** — any new implementation, capability expansion, CI widening, or product-surface remediation requires a fresh bounded `GC-018`
 - **Current CP2 closure anchor**: `docs/reviews/CVF_W66_T1_CP2_RUN_HARNESS_SETUP_REVIEW_2026-04-11.md`
 - **Current CP2 authorization**: `docs/baselines/CVF_GC018_W66_T1_CP2_RUN_HARNESS_AUTHORIZATION_2026-04-11.md`
@@ -121,10 +127,15 @@ Current guidance:
   - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_TEMPLATE.md`
   - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`
   - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`
-- **Product value rule**: all future value-proof packets and any Docker-sandbox justification must run through the `GC-042` frozen evidence chain (`corpus -> rubric -> run manifest -> assessment`), not demos or score vanity
+- **Product value rule**: all future value-proof packets and any Docker-sandbox justification must run through the `GC-042` frozen evidence chain (`corpus -> rubric -> run manifest -> assessment`), not demos or score vanity. Model-agnostic hub claims require multi-lane evidence; single-lane success is scope-limited only.
 - **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
 - **Post-MC5 Continuation Strategy**: **ALL 6 ACTIONABLE TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅, Track 5A: Model Gateway ✅, Track 5B: Sandbox Runtime ✅)
-- **Next recommended**: W66-T1 CP3 (Blind Comparative Evaluation — 540 runs) — NOT agent-openable; human operator must confirm all 6 prerequisites listed above before a fresh GC-018 can be issued
+- **Next recommended**: W66-T1 CP3A first (Provider-Hub Validation across frozen governed lanes), then W66-T1 CP3B (Controlled Value Test inside matched lanes). Neither is agent-openable until the human operator prerequisites above are confirmed and a fresh GC-018 is issued.
+- **Practical next-lane plan once operator is ready**:
+  - stage local server secrets for `GOOGLE_AI_API_KEY` and `ALIBABA_API_KEY` outside repo storage
+  - boot `cvf-web`
+  - freeze the first two governed lanes (`gemini`, `alibaba`) with explicit model IDs
+  - run the 5 calibration pilot tasks through both lanes before any scored comparative batch
 - **Docker sandbox posture**: keep deferred-by-default unless a fresh bounded `GC-018` is justified by a real trigger
 - **Docker sandbox open triggers**:
   - a live product surface must execute user-controlled code / plugins / bounded runtime tasks as a first-class use case

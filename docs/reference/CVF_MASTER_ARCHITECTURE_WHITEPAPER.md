@@ -414,6 +414,8 @@ The Boardroom scope is the more critical runtime decision surface because it sit
 
 4. **Agents do not call AI providers directly**
    - Provider access qua governed Model Gateway
+   - Gateway này phải giữ posture provider-agnostic; user/operator có thể bật provider keys khác nhau, nhưng mọi lane đều phải đi qua cùng boundary governance
+   - So sánh giá trị sản phẩm phải tách bạch giữa `provider-hub validation` (nhiều lane) và `controlled value test` (cùng provider/model)
 
 5. **Agents do not access knowledge stores directly**
    - Knowledge access qua governed knowledge interfaces

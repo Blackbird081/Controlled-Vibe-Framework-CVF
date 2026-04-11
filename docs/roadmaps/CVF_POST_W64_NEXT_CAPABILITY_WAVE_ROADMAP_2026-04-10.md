@@ -20,6 +20,11 @@ Define the next bounded development roadmap after `W64-T1`, focused on:
 3. `cvf-web` uplift from contract-aligned sandbox stub to a true physical isolation execution path
 4. `Product Value Validation Wave` to prove user-facing value before opening new heavy capability tranches by default; canonical control now governed by `GC-042`
 
+Within that validation wave, the canonical proof shape is now:
+
+- `CP3A` = provider-hub validation across frozen governed run lanes derived from enabled provider keys
+- `CP3B` = controlled value test inside matched `provider + model` lanes
+
 This roadmap does **not** reopen the core architecture closure lane. It proposes the next capability waves that may be authorized after closure.
 
 ---
@@ -242,6 +247,8 @@ Do not authorize this track ahead of `Track 2` unless a tranche explicitly choos
 If the user wants the smallest-risk progression after `W65-T1`, the recommended order is:
 
 1. run `Product Value Validation Wave` first under `GC-042` and decide whether a new heavy capability tranche is actually justified
+   - `CP3A` first for product-truth across provider-hub lanes
+   - `CP3B` next for causal attribution inside matched lanes
 2. `Track 2` — Docker-backed sandbox runtime realization, but only if validation or external requirements create a real trigger
 3. `Track 3` — `cvf-web` physical sandbox integration on top of the realized backend
 4. publication follow-up for the existing Phase A + B candidate packages
@@ -252,6 +259,7 @@ Reasoning:
 - Packaging Phase B itself is already complete.
 - CVF currently proves technical health more strongly than product value.
 - If `GC-042` value validation does not show code execution as a first-class need, Docker sandbox should remain deferred.
+- If `GC-042` only proves one provider lane, CVF may claim scoped value for that lane, not broad model-agnostic hub proof.
 - `cvf-web` should not invent its own physical isolation layer before the shared runtime backend exists.
 - The shared backend should become canonical first, then the product surface should consume it.
 

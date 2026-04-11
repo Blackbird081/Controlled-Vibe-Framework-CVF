@@ -18,6 +18,14 @@ Establish a governed validation wave that answers one hard question:
 
 **Does CVF create materially better user outcomes than a simpler non-CVF baseline, under realistic workloads, with evidence strong enough to survive skeptical review?**
 
+For current canon, that question must be answered in a way that matches the real product shape of `cvf-web` and the master architecture:
+
+- CVF is a governed provider hub, not a single-vendor wrapper
+- user/operator provider choice may vary by available API keys and preferred models
+- value proof therefore has to measure both:
+  - **provider-hub truth**: can CVF stay governable and useful across multiple provider/model lanes?
+  - **controlled causal truth**: does CVF add value when the provider/model is held constant?
+
 This wave exists to prevent three bad decisions:
 
 - opening heavyweight capability tranches because the architecture feels incomplete
@@ -153,9 +161,41 @@ The full wave is invalid if the frozen corpus is below:
 
 ---
 
-## 6. Compared Configurations
+## 6. Compared Configurations And Run Lanes
 
-At minimum, every frozen task must be run in these two configurations:
+### Run lane definition
+
+A **run lane** is one governed `provider + model` configuration admitted by the CVF hub for the validation batch.
+
+Examples:
+
+- `gemini + gemini-2.5-flash`
+- `alibaba + qwen-plus`
+- `claude + claude-sonnet-4-6`
+
+Run lanes are the correct product-level unit because they reflect what the user actually controls in `cvf-web`: enabled provider keys plus selected models. They also let CVF prove that governance stays stable even when provider preference changes.
+
+### Lane creation rule
+
+For `provider-hub validation`, the operator freezes an active lane matrix before scored runs begin:
+
+- each enabled provider key that is admitted by CVF routing may contribute one or more lanes
+- each frozen lane must name `provider`, `model`, `credential source`, and `governed path`
+- no lane may be silently excluded after results are seen because it performed poorly
+
+### Validation surfaces
+
+This wave now distinguishes two required validation surfaces:
+
+1. **CP3A — Provider-Hub Validation**
+   Run CVF on the frozen corpus across the active governed run lanes created from user/operator-enabled provider keys.
+
+2. **CP3B — Controlled Value Test**
+   Compare direct baseline vs CVF within one or more matched run lanes where the `provider + model` is kept constant.
+
+### Minimum compared configurations
+
+At minimum, every frozen task must still include these two configurations inside a matched lane:
 
 1. **Direct baseline**
    LLM or product baseline without CVF orchestration/governance value-add, beyond minimal safety defaults already required by the provider.
@@ -170,13 +210,19 @@ Optional third configuration:
 
 Rules:
 
-- same model family and version where feasible
+- same model family and version where feasible inside a controlled lane
 - same task wording
 - same output budget class
 - same evaluator rubric
 - same run window for both sides
 
 If the comparison is not kept reasonably aligned, the batch is invalid.
+
+### Claim-scope rule
+
+- `CP3A` proves whether CVF behaves like a usable governed provider hub for the tested lanes.
+- `CP3B` proves whether CVF governance adds value beyond a simpler direct path when the model is held constant.
+- A single-provider result may prove value for that lane, but it may **not** be promoted as full model-agnostic hub proof.
 
 ---
 
@@ -189,6 +235,7 @@ Before the first scored run:
 - freeze the corpus
 - freeze the rubric
 - freeze the compared configurations
+- freeze the active run-lane matrix for any provider-hub batch
 - freeze success/failure thresholds
 - assign stable task IDs
 
@@ -200,9 +247,15 @@ Minimum:
 
 - `3` runs per task per configuration for reproducibility checks
 
-This implies a minimum of:
+For any single matched controlled lane, this implies a minimum of:
 
 - `90 tasks x 2 configurations x 3 runs = 540 runs`
+
+For provider-hub validation, the governed-path run count scales by lane count:
+
+- `90 tasks x active governed lanes x 3 runs`
+
+This means total batch volume must be declared explicitly in the run manifest. CVF should not hide weak lanes by omitting them from the published count.
 
 ### Evidence captured per run
 
@@ -275,6 +328,17 @@ This wave treats `100% audit completeness` as a hard gate, not a nice-to-have.
 | Reviewer agreement | inter-rater agreement on overlapping tasks | `kappa >= 0.70` | `0.60-0.69` | `< 0.60` |
 | Corpus integrity | frozen corpus/rubric unchanged except approved corrections | `PASS` | none | `FAIL` |
 
+### Scope qualifier — Provider-Hub Breadth
+
+This qualifier does not replace the four gates above. It constrains how broad the final claim is allowed to be.
+
+| Scope qualifier | How measured | Strong claim | Limited claim | Invalid claim |
+|---|---|---|---|---|
+| Provider-family breadth | distinct provider families represented in frozen governed lanes | `>= 2` families | `1` family only | hidden or post-hoc-pruned lanes |
+| Lane completion integrity | `%` frozen governed lanes fully reported in final packet | `100%` | none | `< 100%` |
+
+If provider breadth is limited to one family, the verdict may still be valid for that lane, but it must not be described as proof that CVF is model-agnostic across providers.
+
 ---
 
 ## 9. Pass / Fail Decision Rules
@@ -288,6 +352,12 @@ The wave may be called `VALUE PROVEN FOR CURRENT SCOPE` only if:
 - at least `3` of the `4` gate groups are fully `Pass`
 - any remaining `Warning` has a documented rationale and remediation plan
 
+If the final packet also claims `provider-hub / model-agnostic value proven`, then `CP3A` must show:
+
+- at least `2` provider families
+- `100%` lane completion integrity
+- no hidden or post-hoc-removed governed lanes
+
 ### PARTIAL
 
 The wave result is `PARTIAL / INCONCLUSIVE` if:
@@ -300,6 +370,8 @@ This outcome means:
 
 - no strong product-value claim yet
 - remediate and rerun
+
+A single-provider success commonly lands here as `scope-limited partial truth`: useful evidence for one lane, not enough to market CVF as a model-agnostic hub.
 
 ### FAIL
 
@@ -342,6 +414,8 @@ A future `Docker sandbox` tranche becomes justified only if at least one of thes
 2. the direct/provider-only path cannot satisfy safety or usefulness requirements for code-execution workloads
 3. evaluators repeatedly identify "safe bounded execution" as the missing capability behind otherwise fixable failures
 
+`Provider-hub validation` by itself does not require Docker. Docker only becomes relevant when the missing value is specifically bounded execution, not ordinary provider choice.
+
 ### Docker should stay deferred if
 
 - value is already proven on non-code workflows
@@ -366,17 +440,64 @@ A future `Docker sandbox` tranche becomes justified only if at least one of thes
 - ensure run IDs and reviewer packets are stable
 - verify that evidence completeness can hit `100%`
 
-### CP3 — Blind Comparative Evaluation Run
+### CP3A — Provider-Hub Validation
 
-- execute baseline vs CVF on the frozen corpus
-- collect all run artifacts
+- freeze the active governed run-lane matrix from enabled provider keys and selected models
+- execute the CVF governed path across every frozen lane on the corpus
+- collect full run artifacts per lane
+- determine whether CVF behaves as a real model-agnostic hub for the tested scope
+
+#### Initial multi-lane bootstrap
+
+For the first practical multi-lane pass, CVF should prefer an operator-supplied lane set over a docs-only hypothetical lane set.
+
+Current recommended bootstrap order:
+
+1. `gemini` lane using server-side `GOOGLE_AI_API_KEY`
+2. `alibaba` lane using server-side `ALIBABA_API_KEY`
+3. optional extra lanes later (`openai`, `claude`, `openrouter`) when operator keys are available
+
+Rules:
+
+- raw API keys must stay out of repo artifacts, commits, screenshots, and governed docs
+- secrets are operator-supplied runtime inputs only
+- the frozen lane matrix should record `provider`, `model`, `credential source label`, and `lane ID`, but never the secret value itself
+- `cvf-web` execution truth for these lanes is the server env map in `/api/execute`:
+  - `gemini` -> `GOOGLE_AI_API_KEY`
+  - `alibaba` -> `ALIBABA_API_KEY`
+
+Practical first-pass sequence:
+
+1. set local runtime secrets outside the repo
+2. start `cvf-web`
+3. freeze lane IDs and selected models for `gemini` and `alibaba`
+4. run the 5 calibration pilot tasks through each frozen governed lane
+5. verify all 7 evidence-completeness items for each lane
+6. record reviewer calibration and corpus/rubric freeze confirmations
+7. only then open fresh `GC-018` for scored `CP3A`
+
+### CP3B — Controlled Value Test
+
+- choose one or more matched lanes and run direct baseline vs CVF with the same `provider + model`
 - score blind where possible
+- attribute the delta to CVF governance rather than to provider switching
+
+#### Initial controlled-lane preference
+
+For the next bounded run after `CP3A`, freeze at least one matched lane from the operator-supplied provider set.
+
+Recommended order:
+
+1. choose the most stable successful `gemini` or `alibaba` lane from `CP3A`
+2. run `Direct baseline` vs `CVF governed path` on that same `provider + model`
+3. keep the existing historical `claude-sonnet-4-6` seed only as a reusable template, not as the mandatory first real lane
 
 ### CP4 — Failure Adjudication And Stress Rerun
 
 - investigate every catastrophic or ambiguous failure
 - rerun a targeted stress subset if needed
 - classify whether the gap is:
+  - provider-hub interoperability
   - product design
   - governance tuning
   - prompt/routing

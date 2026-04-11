@@ -154,25 +154,38 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
 }
 
 DOC_PATTERNS: dict[str, re.Pattern[str]] = {
-    "corpus": re.compile(r"^docs/reference/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_(?!TEMPLATE).+\.md$"),
-    "rubric": re.compile(r"^docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_(?!TEMPLATE).+\.md$"),
+    # Corpus: only the INDEX file carries the metadata sections checked below.
+    # Slice files (CORPUS_A1, CORPUS_B, CORPUS_C, etc.) are supporting artifacts
+    # whose presence is implied by the INDEX; they are not section-checked individually.
+    # Template lives in docs/reference/; filled index lives in docs/baselines/.
+    "corpus": re.compile(
+        r"^docs/(reference|baselines)/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_INDEX_.+\.md$"
+    ),
+    # Rubric: template lives in docs/reference/; filled artifact lives in docs/baselines/
+    "rubric": re.compile(
+        r"^docs/(reference|baselines)/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_(?!TEMPLATE).+\.md$"
+    ),
     "run_manifest": re.compile(r"^docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_.+\.md$"),
     "assessment": re.compile(r"^docs/assessments/CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_.+\.md$"),
 }
 
+# Section markers for corpus INDEX files (docs/baselines/..._CORPUS_INDEX_*.md).
+# Individual corpus slice files (CORPUS_A1, CORPUS_B, etc.) are validated by the index
+# presence check; they do not need separate marker checks.
+# Rubric markers match the filled W66 rubric (docs/baselines/..._RUBRIC_*.md).
 DOC_REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
     "corpus": (
-        "## 1. Corpus Metadata",
-        "## 5. Task Record Template",
-        "## 6. Corpus Coverage Checks",
+        "## 1. Corpus Composition Summary",
+        "## 5. Corpus Integrity Rules",
+        "## 6. Coverage Checklist",
     ),
     "rubric": (
-        "## 3. Outcome Quality Scoring",
-        "## 6. Failure Taxonomy",
+        "## 2. Outcome Quality Scoring",
+        "## 5. Failure Taxonomy",
         "## 8. Run-Level Verdict Template",
     ),
     "run_manifest": (
-        "## 1. Run Set Metadata",
+        "## 1. Run Set Overview",
         "## 4. Execution Rules",
         "## 6. Run Record Template",
     ),

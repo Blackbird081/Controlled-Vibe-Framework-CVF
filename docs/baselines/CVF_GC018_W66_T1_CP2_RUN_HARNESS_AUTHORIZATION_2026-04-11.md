@@ -137,24 +137,39 @@ Context: {required_context}
 | Reviewer packet | Raw output + governance event summary (reviewers are blinded to configuration label for quality scoring) |
 
 **Input template for CFG-B:**
+
+HTTP headers (required):
+
+```http
+POST /api/execute
+Content-Type: application/json
+x-cvf-service-token: {CVF_SERVICE_TOKEN}
+```
+
+Request body:
 ```json
 {
-  "task_id": "{task_id}",
-  "run_number": {run_number},
-  "configuration": "CFG-B",
-  "provider": "anthropic",
-  "model": "claude-sonnet-4-6",
-  "system_context": "governance_enabled",
-  "messages": [
-    {
-      "role": "user",
-      "content": "Task: {task_title}\n\nContext: {required_context}\n\n{prompt_input}"
-    }
-  ],
-  "max_tokens": 2048,
-  "temperature": 0.3
+  "templateName": "PVV Task Execution",
+  "inputs": {
+    "task_title": "{task_title}",
+    "required_context": "{required_context}",
+    "prompt_input": "{prompt_input}"
+  },
+  "intent": "{task_title}",
+  "provider": "claude",
+  "mode": "governance"
 }
 ```
+
+Run-level tracking fields (`task_id`, `run_number`, `configuration`) are maintained by
+the run harness outside the request body and recorded in the evidence capture schema.
+`model` and `temperature` are controlled via cvf-web environment configuration
+(`ANTHROPIC_API_KEY`, `DEFAULT_AI_PROVIDER=claude`); do not pass them in the body.
+
+> Correction note (2026-04-11): original spec used `provider: "anthropic"` and a
+> `messages`-array format. The actual `/api/execute` route requires `provider: "claude"`,
+> and body fields `templateName`, `inputs` (Record<string, string>), and `intent`.
+> The `messages` field is not part of `ExecutionRequest`. See `src/lib/ai/types.ts`.
 
 ### Parity Rules
 

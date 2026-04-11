@@ -30,9 +30,11 @@ revealed in the calibration session debrief — not before.
 2. Calibration session is convened. Scores are collected and compared.
 3. Disagreements ≥ 2 points on any quality dimension are resolved via discussion,
    referencing rubric anchors below.
-4. Kappa is calculated. If κ ≥ 0.70: calibration passes, CP3 authorized.
-   If κ < 0.70: second calibration round with targeted anchor clarification.
-5. CP3 is not authorized until κ ≥ 0.70 is confirmed in writing.
+4. Kappa is calculated. If κ ≥ 0.70: reviewer calibration gate is satisfied (one of six
+   prerequisites for CP3). If κ < 0.70: second calibration round with targeted anchor
+   clarification.
+5. CP3 requires a fresh GC-018 and all six human operator confirmations — kappa alone
+   does not authorize CP3. See AGENT_HANDOFF.md "Immediate Next Action Required".
 
 ## Blinding Protocol
 

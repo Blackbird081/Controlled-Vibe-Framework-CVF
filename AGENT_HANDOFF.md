@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / NO ACTIVE TRANCHE** — W66-T1 CP2 closed delivered; Product Value Validation Wave CP2 (Run Harness Setup): **COMPLETE** — CFG-A/CFG-B controlled-lane seed FROZEN; evidence capture schema FROZEN; reviewer calibration set (5 tasks: CAL-001 NORMAL / CAL-002 AMBIGUOUS / CAL-003 HIGH_RISK / CAL-004 ADVERSARIAL / CAL-005 MULTI_STEP) FROZEN; evidence completeness checklist (7-item pre-CP3A/CP3B gate) FROZEN; test delta 0; code delta 0; W66-T1 CP1 (Corpus + Rubric Freeze): **COMPLETE** — 90-task corpus FROZEN; rubric FROZEN; GC-042 evidence chain foundation established; Product Value Validation doctrine now treats `provider-hub validation` as the product-truth surface and `controlled value test` as the causal-attribution surface; W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`; W66-T1 CP1+CP2 test delta = 0; CP3A/CP3B require human operator confirmation before fresh GC-018
+> State: **UNIFIED ON MAIN / CP3A LANE BOOTSTRAP OPERATOR-CONFIRMED** — W66-T1 CP2 closed delivered; Product Value Validation Wave CP2 (Run Harness Setup): **COMPLETE** — CFG-A/CFG-B controlled-lane seed FROZEN; evidence capture schema FROZEN; reviewer calibration set (5 tasks: CAL-001 NORMAL / CAL-002 AMBIGUOUS / CAL-003 HIGH_RISK / CAL-004 ADVERSARIAL / CAL-005 MULTI_STEP) FROZEN; evidence completeness checklist (7-item pre-CP3A/CP3B gate) FROZEN; test delta 0; code delta 0; W66-T1 CP1 (Corpus + Rubric Freeze): **COMPLETE** — 90-task corpus FROZEN; rubric FROZEN; GC-042 evidence chain foundation established; Product Value Validation doctrine now treats `provider-hub validation` as the product-truth surface and `controlled value test` as the causal-attribution surface; W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`; W66-T1 CP1+CP2 test delta = 0; **CP3A lane bootstrap OPERATOR-CONFIRMED 2026-04-11** — gemini + alibaba lanes; freeze lane IDs + model IDs in run manifest, then run 5 calibration pilot tasks through both lanes before full scored CP3A GC-018
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W64-T1`)
 
 ---
@@ -96,7 +96,7 @@
 
 ## Immediate Next Action Required
 
-**No active tranche. Work from `main`. Keep relocation closed-by-default. MC1-MC5 is complete; W66-T1 CP1+CP2 closed; CP3A/CP3B require human operator confirmation before fresh GC-018.**
+**W66-T1 CP3A Lane Bootstrap — operator confirmed 2026-04-11. Work from `main`. DOCUMENTATION class, Fast Lane (GC-021). No code changes required. Next: (1) freeze `gemini` + `alibaba` lane IDs and model IDs in run manifest, (2) boot cvf-web with `GOOGLE_AI_API_KEY` + `ALIBABA_API_KEY` in server env (out-of-band, never commit values), (3) run 5 calibration pilot tasks (CAL-001–CAL-005) through both lanes, (4) verify all 7 evidence completeness items, (5) then open fresh GC-018 for full CP3A scored batch. W66-T1 CP3B follows after at least one stable CP3A lane confirms evidence complete.**
 
 Current guidance:
 
@@ -108,7 +108,7 @@ Current guidance:
   - `gemini` lane uses server env `GOOGLE_AI_API_KEY`
   - `alibaba` lane uses server env `ALIBABA_API_KEY`
   - freeze lane IDs + selected models in the run manifest; do not record raw key values anywhere in repo truth
-- **W66-T1 CP3A (Provider-Hub Validation)**: NOT YET AUTHORIZED — requires human operator to confirm all of the following before a fresh GC-018 can be opened: (1) execution infrastructure live (API keys, cvf-web instance, evidence storage), (2) active provider/model lane matrix frozen from enabled keys, (3) pilot tasks run through each frozen governed lane with evidence capture verified, (4) all 7 evidence completeness items confirmed, (5) reviewer pool assigned (≥ 3 reviewers), (6) reviewer calibration session complete (κ ≥ 0.70), (7) human freeze of corpus + rubric confirmed in writing
+- **W66-T1 CP3A (Provider-Hub Validation)**: LANE BOOTSTRAP OPERATOR-CONFIRMED (2026-04-11) — operator has confirmed intent to begin gemini + alibaba run-lane testing. Bootstrap steps (DOCUMENTATION class, Fast Lane GC-021; no scored runs yet): (1) freeze lane IDs + model IDs for `gemini` lane (env `GOOGLE_AI_API_KEY`) and `alibaba` lane (env `ALIBABA_API_KEY`) in run manifest, (2) boot cvf-web with provider keys in server env, (3) run CAL-001 through CAL-005 calibration pilot tasks through both lanes, (4) verify all 7 evidence completeness items. Full scored CP3A (90 tasks × all lanes × 3 runs) requires a fresh GC-018 after: evidence completeness confirmed, reviewer pool assigned (≥ 3), κ ≥ 0.70, human freeze of corpus + rubric confirmed in writing.
 - **W66-T1 CP3B (Controlled Value Test)**: NOT YET AUTHORIZED — direct baseline vs CVF must be compared inside one or more matched run lanes where `provider + model` is held constant. Prefer the first stable successful `gemini` or `alibaba` lane from `CP3A`; retain the existing CP2 `claude-sonnet-4-6` packet only as a historical controlled-lane template.
 - **No active tranche** — any new implementation, capability expansion, CI widening, or product-surface remediation requires a fresh bounded `GC-018`
 - **Current CP2 closure anchor**: `docs/reviews/CVF_W66_T1_CP2_RUN_HARNESS_SETUP_REVIEW_2026-04-11.md`
@@ -130,12 +130,13 @@ Current guidance:
 - **Product value rule**: all future value-proof packets and any Docker-sandbox justification must run through the `GC-042` frozen evidence chain (`corpus -> rubric -> run manifest -> assessment`), not demos or score vanity. Model-agnostic hub claims require multi-lane evidence; single-lane success is scope-limited only.
 - **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
 - **Post-MC5 Continuation Strategy**: **ALL 6 ACTIONABLE TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅, Track 5A: Model Gateway ✅, Track 5B: Sandbox Runtime ✅)
-- **Next recommended**: W66-T1 CP3A first (Provider-Hub Validation across frozen governed lanes), then W66-T1 CP3B (Controlled Value Test inside matched lanes). Neither is agent-openable until the human operator prerequisites above are confirmed and a fresh GC-018 is issued.
-- **Practical next-lane plan once operator is ready**:
-  - stage local server secrets for `GOOGLE_AI_API_KEY` and `ALIBABA_API_KEY` outside repo storage
-  - boot `cvf-web`
-  - freeze the first two governed lanes (`gemini`, `alibaba`) with explicit model IDs
-  - run the 5 calibration pilot tasks through both lanes before any scored comparative batch
+- **Next recommended**: W66-T1 CP3A Lane Bootstrap (DOCUMENTATION class, Fast Lane GC-021) — **OPERATOR-CONFIRMED 2026-04-11**. Execute the active lane bootstrap sequence below, then open a fresh GC-018 for the full CP3A scored run batch. W66-T1 CP3B (Controlled Value Test) follows after at least one stable CP3A lane yields results.
+- **Active lane bootstrap sequence (operator-confirmed 2026-04-11)**:
+  1. Update run manifest (`docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_W66_T1_CP2_2026-04-11.md`) — add `gemini` lane (lane ID, model ID, env var `GOOGLE_AI_API_KEY`) and `alibaba` lane (lane ID, model ID, env var `ALIBABA_API_KEY`) to the Compared Configurations table; mark lane matrix as FROZEN
+  2. Boot cvf-web dev server with `GOOGLE_AI_API_KEY` and `ALIBABA_API_KEY` set in local `.env.local` (out-of-band secrets; never commit values to repo)
+  3. Run CAL-001 through CAL-005 calibration pilot tasks through the `gemini` lane; capture evidence record per run; verify `evidence_complete: YES` for all 5
+  4. Run CAL-001 through CAL-005 calibration pilot tasks through the `alibaba` lane; capture evidence record per run; verify `evidence_complete: YES` for all 5
+  5. After both lane pilots confirm evidence complete, open fresh GC-018 for W66-T1 CP3A full scored run batch (90 tasks × all confirmed lanes × 3 runs)
 - **Docker sandbox posture**: keep deferred-by-default unless a fresh bounded `GC-018` is justified by a real trigger
 - **Docker sandbox open triggers**:
   - a live product surface must execute user-controlled code / plugins / bounded runtime tasks as a first-class use case

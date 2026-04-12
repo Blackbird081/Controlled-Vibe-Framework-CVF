@@ -52,6 +52,56 @@ export type {
 } from "./semantic.policy.intent.registry.batch.contract";
 
 export {
+  W7NormalizedAssetCandidateContract,
+  createW7NormalizedAssetCandidateContract,
+} from "./w7.normalized.asset.candidate.contract";
+export type {
+  W7RoutingPhaseHint,
+  W7NormalizedAssetCandidateHeader,
+  W7NormalizedAssetCandidateRoutingMetadata,
+  W7NormalizedAssetInstructionPayload,
+  W7NormalizedAssetCandidateEnrichment,
+  W7NormalizedAssetCandidate,
+  W7NormalizedAssetCandidateCompileIssue,
+  W7NormalizedAssetCandidateCompileRequest,
+  W7NormalizedAssetCandidateCompileResult,
+} from "./w7.normalized.asset.candidate.contract";
+
+export {
+  W7NormalizedAssetCandidateBatchContract,
+  createW7NormalizedAssetCandidateBatchContract,
+} from "./w7.normalized.asset.candidate.batch.contract";
+export type {
+  W7NormalizedAssetCandidateBatchItem,
+  W7NormalizedAssetCandidateBatchEntry,
+  W7NormalizedAssetCandidateBatchResult,
+  W7NormalizedAssetCandidateBatchContractDependencies,
+} from "./w7.normalized.asset.candidate.batch.contract";
+
+export {
+  RegistryReadyGovernedAssetContract,
+  createRegistryReadyGovernedAssetContract,
+} from "./registry.ready.governed.asset.contract";
+export type {
+  RegistryReadyApprovalState,
+  RegistryReadyGovernedAsset,
+  RegistryReadyGovernedAssetIssue,
+  RegistryReadyGovernedAssetRequest,
+  RegistryReadyGovernedAssetResult,
+} from "./registry.ready.governed.asset.contract";
+
+export {
+  RegistryReadyGovernedAssetBatchContract,
+  createRegistryReadyGovernedAssetBatchContract,
+} from "./registry.ready.governed.asset.batch.contract";
+export type {
+  RegistryReadyGovernedAssetBatchItem,
+  RegistryReadyGovernedAssetBatchEntry,
+  RegistryReadyGovernedAssetBatchResult,
+  RegistryReadyGovernedAssetBatchContractDependencies,
+} from "./registry.ready.governed.asset.batch.contract";
+
+export {
   ExternalAssetIntakeConsumerPipelineContract,
   createExternalAssetIntakeConsumerPipelineContract,
 } from "./external.asset.intake.consumer.pipeline.contract";

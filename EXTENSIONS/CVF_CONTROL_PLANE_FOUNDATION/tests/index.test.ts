@@ -14,8 +14,12 @@ import {
   DesignConsumerContract,
   DesignContract,
   ExternalAssetIntakeProfileContract,
+  RegistryReadyGovernedAssetBatchContract,
+  RegistryReadyGovernedAssetContract,
   SemanticPolicyIntentRegistryBatchContract,
   SemanticPolicyIntentRegistryContract,
+  W7NormalizedAssetCandidateBatchContract,
+  W7NormalizedAssetCandidateContract,
   WindowsCompatibilityConsumerPipelineBatchContract,
   WindowsCompatibilityConsumerPipelineContract,
   WindowsCompatibilityEvaluationBatchContract,
@@ -50,8 +54,12 @@ import {
   createControlPlaneFoundationShell,
   createControlPlaneIntakeContract,
   createExternalAssetIntakeProfileContract,
+  createRegistryReadyGovernedAssetBatchContract,
+  createRegistryReadyGovernedAssetContract,
   createSemanticPolicyIntentRegistryBatchContract,
   createSemanticPolicyIntentRegistryContract,
+  createW7NormalizedAssetCandidateBatchContract,
+  createW7NormalizedAssetCandidateContract,
   createWindowsCompatibilityConsumerPipelineBatchContract,
   createWindowsCompatibilityConsumerPipelineContract,
   createWindowsCompatibilityEvaluationBatchContract,
@@ -279,6 +287,18 @@ describe("CVF_CONTROL_PLANE_FOUNDATION public barrel workflow smoke", () => {
     );
     expect(createExternalAssetIntakeProfileContract()).toBeInstanceOf(
       ExternalAssetIntakeProfileContract,
+    );
+    expect(createW7NormalizedAssetCandidateContract()).toBeInstanceOf(
+      W7NormalizedAssetCandidateContract,
+    );
+    expect(createW7NormalizedAssetCandidateBatchContract()).toBeInstanceOf(
+      W7NormalizedAssetCandidateBatchContract,
+    );
+    expect(createRegistryReadyGovernedAssetContract()).toBeInstanceOf(
+      RegistryReadyGovernedAssetContract,
+    );
+    expect(createRegistryReadyGovernedAssetBatchContract()).toBeInstanceOf(
+      RegistryReadyGovernedAssetBatchContract,
     );
     expect(createSemanticPolicyIntentRegistryContract()).toBeInstanceOf(
       SemanticPolicyIntentRegistryContract,

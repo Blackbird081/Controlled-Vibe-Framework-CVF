@@ -176,12 +176,24 @@ NOW (running):
   W66-T1 CP3A — ALIBABA-001 + ALIBABA-003 batch (540 runs)
   ↓ batch complete + receipt filed
   
-PHASE A (next):
-  Activate: qwen-turbo, qwen-plus, qwen-max, qwq-32b free tokens
-  Pilot: 5 tasks × 4 new lanes
-  GC-018 for W66-T2 Phase A
-  Full batch: 1,080 new runs (4 lanes × 270)
-  ↓ Phase A complete
+┌─────────────────────────────────────────┬─────────────────────────────────────────┐
+│ TRACK 1: CP3B                           │ TRACK 2: Phase A                        │
+│ (starts immediately after CP3A receipt) │ (starts immediately after CP3A receipt) │
+│                                         │                                         │
+│ GC-018 for CP3B — scope covers:         │ Activate free tokens:                   │
+│   - ALIBABA-001 + ALIBABA-003 (now)     │   qwen-turbo, qwen-plus,                │
+│   - Phase A lanes (added when pilots    │   qwen-max, qwq-32b                     │
+│     confirm — planned expansion clause) │                                         │
+│                                         │ Pilot: 5 tasks × 4 new lanes            │
+│ CFG-B runs: 90 tasks × 2 lanes × 3 runs │ GC-018 for W66-T2 Phase A               │
+│ = 540 governed-path records             │ Full batch: 1,080 new runs              │
+│                                         │                                         │
+│ ↓ Phase A pilots confirm                │ ↓ pilots done                           │
+│ Phase A lanes join CP3B scope           │ Phase A full batch running              │
+│ (no new GC-018 needed — covered by      │                                         │
+│  expansion clause)                      │                                         │
+└─────────────────────────────────────────┴─────────────────────────────────────────┘
+  ↓ CP3B complete + Phase A complete
   
 PHASE B (when non-Alibaba keys available):
   Add Claude lanes (Anthropic API key)
@@ -197,6 +209,11 @@ PHASE C (after CP4 scoring):
   GC-018 for W66-T2 Phase C production pilot
 ```
 
+**CP3B timing rationale:** qvq-max CAL-004 governed vs direct delta is the highest-value signal
+in the program. Delaying CP3B until all Phase A lanes complete would defer this signal by weeks
+with no benefit, since CP3A lanes and Phase A lanes are fully independent work streams.
+The CP3B GC-018 expansion clause for Phase A lanes avoids a second authorization round.
+
 ---
 
 ## Governance Constraints (binding for all phases)
@@ -208,7 +225,9 @@ PHASE C (after CP4 scoring):
    from adversarial tasks invalidates the "cheap model can be governed" claim on real risk surface.
 4. **Provider-limit ambiguity rule** — record symptoms as fact, causes as hypotheses. Do not downgrade a lane for rate-limit failures without confirmed root cause. (Applied to Gemini free tier, 2026-04-12.)
 5. **Each new lane requires 5-task pilot** before full batch authorization.
-6. **CP3B (CFG-A vs CFG-B causal)** — still requires its own GC-018 after CP3A complete. CP3B should run on at least one Phase A lane as well as the CP3A lanes.
+6. **CP3B (CFG-A vs CFG-B causal)** — requires its own GC-018 after CP3A receipt. CP3B starts on
+   ALIBABA-001 + ALIBABA-003 immediately (parallel with Phase A). The CP3B GC-018 must include an
+   expansion clause for Phase A lanes so no second authorization is needed when pilots confirm.
 7. **No production code changes during execution phases** — batch runners and infra only.
 
 ---
@@ -220,13 +239,16 @@ PHASE C (after CP4 scoring):
   "cheap model can be governed" claim on real risk surface. This is now a Governance Constraint (see above).
 - **Phase C scoring weight** — CLOSED: weight-based scoring replaced with hard gate + selection score.
   catastrophic_miss in governed mode is a binary gate, not a weighted metric. See Phase C decision matrix.
+- **CP3B timing** — CLOSED: CP3B runs in parallel with Phase A (hybrid sequencing). CP3B starts on
+  ALIBABA-001 + ALIBABA-003 immediately after CP3A receipt; Phase A lanes join when pilots confirm
+  via expansion clause in the CP3B GC-018. Rationale: qvq-max CAL-004 governed delta is the
+  highest-value signal and should not be deferred waiting for Phase A completion.
 
 ## Open Questions for Peer Review
 
 1. **Role taxonomy** — Are 5 roles (ROUTER/ANALYST/EXECUTOR/REVIEWER/ARBITER) sufficient, or should BUILD and DESIGN be split further?
 2. **qwq-32b streaming** — Confirm whether sync mode works or stream=True required (needs pilot).
 3. **Gemini paid tier** — When available, should it re-run CP3A (270 runs, same corpus) to provide clean comparison with the 9 directional records from free tier?
-4. **CP3B timing** — Should CP3B (governed vs direct comparison) run in parallel with Phase A, or strictly after Phase A completes?
 
 ---
 

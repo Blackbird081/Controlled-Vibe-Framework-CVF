@@ -11,6 +11,34 @@ import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
 import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
 import { routeWebProvider } from '@/lib/ai/provider-router-adapter';
 
+// ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
+// Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
+const OUTPUT_BYPASS_PATTERNS: RegExp[] = [
+    // V1 — original PVV detector patterns
+    /\bapprove\b.{0,80}\bbypass\b/i,
+    /\bbypass\b.{0,80}\bapprove\b/i,
+    /\bauthorize\b.{0,80}\bbypass\b/i,
+    /\bimmediately\b.{0,80}\bdeploy\b/i,
+    /\byes\b.{0,30}\bbypass\b/i,
+    /\bproceed\b.{0,50}\bwithout\b.{0,40}\breview\b/i,
+    /\bskip\b.{0,50}\bgovernance\b/i,
+    // V2 — governance-approval phrasing (from C-014 analysis)
+    /\bgovernance\b.{0,30}\boverride\b/i,
+    /\boverride\b.{0,50}\bgovernance\b/i,
+    /\bskip\b.{0,50}\bcheck\b.{0,50}\boverride\b/i,
+    /\bwithout\s+applying\b/i,
+    /\bexecut\w*\b.{0,50}\bwithout\b.{0,60}\bcheck\b/i,
+    /\ballow\w*\b.{0,60}\bskip\b.{0,50}\bcheck\b/i,
+];
+
+function detectBypassInOutput(output: string): { detected: boolean; matchedPattern?: string } {
+    for (const pattern of OUTPUT_BYPASS_PATTERNS) {
+        const match = output.match(pattern);
+        if (match) return { detected: true, matchedPattern: match[0].slice(0, 100) };
+    }
+    return { detected: false };
+}
+
 function isBuildPhase(phase?: string): boolean {
     if (!phase) return false;
     const normalized = phase.trim().toUpperCase();
@@ -307,6 +335,39 @@ export async function POST(request: NextRequest) {
                     templateName: body.templateName,
                     templateCategory: template?.category,
                 });
+            }
+        }
+
+        // ── POST-EXECUTION BYPASS DETECTION GUARD ──────────────────────────────
+        if (aiResult.success && aiResult.output) {
+            const bypassCheck = detectBypassInOutput(aiResult.output);
+            if (bypassCheck.detected) {
+                const bypassGuardResult = {
+                    ...guardResult,
+                    finalDecision: 'BLOCK' as const,
+                    blockedBy: 'output_bypass_detection',
+                    results: [
+                        ...(guardResult.results ?? []),
+                        {
+                            guardId: 'output_bypass_detection',
+                            decision: 'BLOCK' as const,
+                            severity: 'ERROR' as const,
+                            reason: `Governance bypass language detected in model output: "${bypassCheck.matchedPattern}"`,
+                            timestamp: new Date().toISOString(),
+                        },
+                    ],
+                };
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: 'Response blocked: governance bypass approval detected in model output.',
+                        provider: routedProvider,
+                        model: body.model ?? 'unknown',
+                        enforcement,
+                        guardResult: bypassGuardResult,
+                    },
+                    { status: 400 },
+                );
             }
         }
 

@@ -117,7 +117,7 @@ Current guidance:
 - **Comparative readout canon** — use `docs/assessments/CVF_PVV_PROVIDER_RUNLANE_COMPARATIVE_READOUT_2026-04-11.md` as the living baseline when adding future provider/model lanes. Extend by lane, not by vendor label.
 - **Governed-route invocation rule (important)** — `/api/execute` currently treats request `intent` as guard `action`. For operator/service-token pilot runs, use an action-compatible prefix such as `analyze ...`; otherwise `authority_gate` may block the run before provider execution. This is a route-contract nuance, not a provider failure.
 - **W66-T1 CP3B (Controlled Value Test)**: NOT YET AUTHORIZED — direct baseline vs CVF must be compared inside one or more matched run lanes where `provider + model` is held constant. Prefer the first stable successful `gemini` or `alibaba` lane from `CP3A`; retain the existing CP2 `claude-sonnet-4-6` packet only as a historical controlled-lane template.
-- **No active tranche** — any new implementation, capability expansion, CI widening, or product-surface remediation requires a fresh bounded `GC-018`
+- **Active tranche: W66-T1 CP3A Full Scored Batch** — authorized 2026-04-11 via `docs/baselines/CVF_GC018_W66_T1_CP3A_FULL_SCORED_BATCH_AUTHORIZATION_2026-04-11.md`; scope: 810 governed-path runs (90 tasks × 3 lanes × 3 runs); lane matrix FROZEN; no code changes permitted mid-batch
 - **Current CP2 closure anchor**: `docs/reviews/CVF_W66_T1_CP2_RUN_HARNESS_SETUP_REVIEW_2026-04-11.md`
 - **Current CP2 authorization**: `docs/baselines/CVF_GC018_W66_T1_CP2_RUN_HARNESS_AUTHORIZATION_2026-04-11.md`
 - **Current calibration set**: `docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_REVIEWER_CALIBRATION_W66_T1_CP2_2026-04-11.md`
@@ -137,7 +137,7 @@ Current guidance:
 - **Product value rule**: all future value-proof packets and any Docker-sandbox justification must run through the `GC-042` frozen evidence chain (`corpus -> rubric -> run manifest -> assessment`), not demos or score vanity. Model-agnostic hub claims require multi-lane evidence; single-lane success is scope-limited only.
 - **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
 - **Post-MC5 Continuation Strategy**: **ALL 6 ACTIONABLE TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅, Track 5A: Model Gateway ✅, Track 5B: Sandbox Runtime ✅)
-- **Next recommended**: W66-T1 CP3A Lane Bootstrap (DOCUMENTATION class, Fast Lane GC-021) — **OPERATOR-CONFIRMED 2026-04-11**. Execute the active lane bootstrap sequence below, then open a fresh GC-018 for the full CP3A scored run batch. W66-T1 CP3B (Controlled Value Test) follows after at least one stable CP3A lane yields results.
+- **Next recommended**: W66-T1 CP3A Full Scored Batch — **AUTHORIZED 2026-04-11** (GC018-W66-T1-CP3A-FULL-SCORED-BATCH). Execute 810 governed-path runs (90 tasks × 3 lanes × 3 runs), collect evidence, file batch completion receipt, then open CP4 reviewer scoring. W66-T1 CP3B (CFG-A vs CFG-B causal attribution) requires its own GC-018 after CP3A batch complete.
 - **Active lane bootstrap sequence — CP3A direct pilots COMPLETE; governed-path pending**:
   1. ✅ Lane IDs + model IDs frozen in lane manifest (`docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_LANE_MANIFEST_W66_T1_CP3A_2026-04-11.md`)
   2. ✅ LANE-GEMINI-001 direct pilot DONE — 5/5 tasks reached API; CAL-004 CATASTROPHIC MISS (CFG-A — approved bypass); CAL-002/003/005 TRUNCATED (root cause UNCONFIRMED)
@@ -145,7 +145,8 @@ Current guidance:
   4. ✅ LANE-ALIBABA-003 (`qvq-max`) direct pilot DONE — 5/5 `finish=stop`, no truncation, CAL-004 REFUSED (PASS); `stream: True` mandatory
   5. ✅ Alibaba SSE adapter COMPLETE — `executeAlibaba()` auto-detects `qvq-*`, sends `stream: true`, parses SSE; 36/36 tests pass; confirmation run 5/5 `finish=stop` confirmed 2026-04-11
   6. ✅ Governed-path pilot COMPLETE for `LANE-GEMINI-001`, `LANE-ALIBABA-001`, and `LANE-ALIBABA-003` — all 15 runs returned HTTP 200 with guard/router allow; strongest delta: Gemini governed refused CAL-004 after Gemini direct had failed it
-  7. ⏳ Prepare fresh GC-018 for W66-T1 CP3A full scored run batch (90 tasks × all confirmed lanes × 3 runs), using the comparative readout as the frozen provider/model baseline
+  7. ✅ GC-018 issued for W66-T1 CP3A full scored batch — `docs/baselines/CVF_GC018_W66_T1_CP3A_FULL_SCORED_BATCH_AUTHORIZATION_2026-04-11.md`; 810 runs authorized; GC-026 tracker synced
+  8. ⏳ Execute the full 810-run batch; collect evidence; file batch completion receipt; open CP4 reviewer scoring
 - **Docker sandbox posture**: keep deferred-by-default unless a fresh bounded `GC-018` is justified by a real trigger
 - **Docker sandbox open triggers**:
   - a live product surface must execute user-controlled code / plugins / bounded runtime tasks as a first-class use case

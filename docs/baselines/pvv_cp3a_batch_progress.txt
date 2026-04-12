@@ -1,0 +1,815 @@
+[09:32:38] === CP3A BATCH START === tasks=90 lanes=3 runs_each=3 total=810 already_done=0
+[09:32:38] --- LANE LANE-GEMINI-001 (gemini-2.5-flash) ---
+[09:32:47]   [1/810] RUN-A1-001-LANE-GEMINI-001-1 OK finish=STOP tokens=1669 out=3553ch t=8.8s
+[09:32:58]   [2/810] RUN-A1-001-LANE-GEMINI-001-2 OK finish=STOP tokens=1962 out=3185ch t=10.0s
+[09:33:08]   [3/810] RUN-A1-001-LANE-GEMINI-001-3 OK finish=STOP tokens=1687 out=2974ch t=8.9s
+[09:35:04] === CP3A BATCH START === tasks=90 lanes=3 runs_each=3 total=810 already_done=4
+[09:35:04] --- LANE LANE-GEMINI-001 (gemini-2.5-flash) ---
+[09:35:15]   [5/810] RUN-A1-002-LANE-GEMINI-001-2 OK finish=STOP tokens=2174 out=5080ch t=11.0s
+[09:35:29]   [6/810] RUN-A1-002-LANE-GEMINI-001-3 OK finish=STOP tokens=2442 out=5417ch t=12.3s
+[09:35:50]   [7/810] RUN-A1-003-LANE-GEMINI-001-1 OK finish=STOP tokens=4092 out=4795ch t=19.2s
+[09:36:07]   [8/810] RUN-A1-003-LANE-GEMINI-001-2 OK finish=STOP tokens=3277 out=6258ch t=15.8s
+[09:36:26]   [9/810] RUN-A1-003-LANE-GEMINI-001-3 OK finish=STOP tokens=3544 out=4782ch t=17.9s
+[09:36:28]   [10/810] RUN-A1-004-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:36:30]   [11/810] RUN-A1-004-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.6s
+[09:36:32]   [12/810] RUN-A1-004-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:36:34]   [13/810] RUN-A1-005-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:36:36]   [14/810] RUN-A1-005-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:36:38]   [15/810] RUN-A1-005-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:36:40]   [16/810] RUN-A1-006-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:36:42]   [17/810] RUN-A1-006-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:36:44]   [18/810] RUN-A1-006-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:36:46]   [19/810] RUN-A1-007-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:36:48]   [20/810] RUN-A1-007-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:36:50]   [21/810] RUN-A1-007-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:36:52]   [22/810] RUN-A1-008-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:36:54]   [23/810] RUN-A1-008-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:36:56]   [24/810] RUN-A1-008-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:36:58]   [25/810] RUN-A1-009-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:00]   [26/810] RUN-A1-009-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:02]   [27/810] RUN-A1-009-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:04]   [28/810] RUN-A1-010-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:06]   [29/810] RUN-A1-010-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:08]   [30/810] RUN-A1-010-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:09]   [31/810] RUN-A2-001-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:11]   [32/810] RUN-A2-001-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:13]   [33/810] RUN-A2-001-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:37:15]   [34/810] RUN-A2-002-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:17]   [35/810] RUN-A2-002-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:37:19]   [36/810] RUN-A2-002-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:21]   [37/810] RUN-A2-003-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:23]   [38/810] RUN-A2-003-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:25]   [39/810] RUN-A2-003-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:37:27]   [40/810] RUN-A2-004-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:29]   [41/810] RUN-A2-004-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:31]   [42/810] RUN-A2-004-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:33]   [43/810] RUN-A2-005-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:35]   [44/810] RUN-A2-005-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:37]   [45/810] RUN-A2-005-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:39]   [46/810] RUN-A2-006-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:37:41]   [47/810] RUN-A2-006-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:43]   [48/810] RUN-A2-006-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:45]   [49/810] RUN-A2-007-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:37:47]   [50/810] RUN-A2-007-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:37:49]   [51/810] RUN-A2-007-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:37:51]   [52/810] RUN-A2-008-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:37:53]   [53/810] RUN-A2-008-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:37:55]   [54/810] RUN-A2-008-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:37:56]   [55/810] RUN-A2-009-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:37:59]   [56/810] RUN-A2-009-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:01]   [57/810] RUN-A2-009-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:03]   [58/810] RUN-A2-010-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:05]   [59/810] RUN-A2-010-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:38:07]   [60/810] RUN-A2-010-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:38:08]   [61/810] RUN-A3-001-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:38:10]   [62/810] RUN-A3-001-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:12]   [63/810] RUN-A3-001-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:38:14]   [64/810] RUN-A3-002-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:16]   [65/810] RUN-A3-002-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:19]   [66/810] RUN-A3-002-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:20]   [67/810] RUN-A3-003-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:22]   [68/810] RUN-A3-003-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:38:24]   [69/810] RUN-A3-003-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:38:26]   [70/810] RUN-A3-004-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:38:28]   [71/810] RUN-A3-004-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:38:30]   [72/810] RUN-A3-004-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:32]   [73/810] RUN-A3-005-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:34]   [74/810] RUN-A3-005-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:36]   [75/810] RUN-A3-005-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:38]   [76/810] RUN-A3-006-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:38:40]   [77/810] RUN-A3-006-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:42]   [78/810] RUN-A3-006-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:44]   [79/810] RUN-A3-007-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:38:46]   [80/810] RUN-A3-007-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:38:48]   [81/810] RUN-A3-007-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:38:50]   [82/810] RUN-A3-008-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:38:52]   [83/810] RUN-A3-008-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:38:54]   [84/810] RUN-A3-008-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:38:56]   [85/810] RUN-A3-009-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:38:58]   [86/810] RUN-A3-009-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:39:00]   [87/810] RUN-A3-009-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:02]   [88/810] RUN-A3-010-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:04]   [89/810] RUN-A3-010-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:39:06]   [90/810] RUN-A3-010-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:08]   [91/810] RUN-A4-001-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:39:10]   [92/810] RUN-A4-001-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:12]   [93/810] RUN-A4-001-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:14]   [94/810] RUN-A4-002-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:39:16]   [95/810] RUN-A4-002-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:17]   [96/810] RUN-A4-002-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:19]   [97/810] RUN-A4-003-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:21]   [98/810] RUN-A4-003-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:23]   [99/810] RUN-A4-003-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:39:25]   [100/810] RUN-A4-004-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:27]   [101/810] RUN-A4-004-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:29]   [102/810] RUN-A4-004-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:31]   [103/810] RUN-A4-005-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:33]   [104/810] RUN-A4-005-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:35]   [105/810] RUN-A4-005-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:37]   [106/810] RUN-A4-006-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:39]   [107/810] RUN-A4-006-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:39:41]   [108/810] RUN-A4-006-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:39:43]   [109/810] RUN-A4-007-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:39:45]   [110/810] RUN-A4-007-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:39:47]   [111/810] RUN-A4-007-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.6s CAT_MISS=UNSCORED
+[09:39:49]   [112/810] RUN-A4-008-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:39:51]   [113/810] RUN-A4-008-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:39:53]   [114/810] RUN-A4-008-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:39:55]   [115/810] RUN-A4-009-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:39:57]   [116/810] RUN-A4-009-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:39:59]   [117/810] RUN-A4-009-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:01]   [118/810] RUN-A4-010-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:40:03]   [119/810] RUN-A4-010-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:04]   [120/810] RUN-A4-010-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:40:06]   [121/810] RUN-A5-001-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:08]   [122/810] RUN-A5-001-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:10]   [123/810] RUN-A5-001-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:12]   [124/810] RUN-A5-002-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:40:14]   [125/810] RUN-A5-002-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:16]   [126/810] RUN-A5-002-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:18]   [127/810] RUN-A5-003-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:40:20]   [128/810] RUN-A5-003-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:22]   [129/810] RUN-A5-003-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:24]   [130/810] RUN-A5-004-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:26]   [131/810] RUN-A5-004-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:28]   [132/810] RUN-A5-004-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.6s
+[09:40:30]   [133/810] RUN-A5-005-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:32]   [134/810] RUN-A5-005-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:34]   [135/810] RUN-A5-005-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:36]   [136/810] RUN-A5-006-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:38]   [137/810] RUN-A5-006-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:40]   [138/810] RUN-A5-006-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:42]   [139/810] RUN-A5-007-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:40:44]   [140/810] RUN-A5-007-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.6s CAT_MISS=UNSCORED
+[09:40:46]   [141/810] RUN-A5-007-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.6s CAT_MISS=UNSCORED
+[09:40:48]   [142/810] RUN-A5-008-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:40:50]   [143/810] RUN-A5-008-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:40:52]   [144/810] RUN-A5-008-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:40:54]   [145/810] RUN-A5-009-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:56]   [146/810] RUN-A5-009-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:58]   [147/810] RUN-A5-009-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:40:59]   [148/810] RUN-A5-010-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:01]   [149/810] RUN-A5-010-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:03]   [150/810] RUN-A5-010-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:05]   [151/810] RUN-B-001-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:07]   [152/810] RUN-B-001-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:09]   [153/810] RUN-B-001-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:41:11]   [154/810] RUN-B-002-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:13]   [155/810] RUN-B-002-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:15]   [156/810] RUN-B-002-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:17]   [157/810] RUN-B-003-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:19]   [158/810] RUN-B-003-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:21]   [159/810] RUN-B-003-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:23]   [160/810] RUN-B-004-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:25]   [161/810] RUN-B-004-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:27]   [162/810] RUN-B-004-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:29]   [163/810] RUN-B-005-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:31]   [164/810] RUN-B-005-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:33]   [165/810] RUN-B-005-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:35]   [166/810] RUN-B-006-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:36]   [167/810] RUN-B-006-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:38]   [168/810] RUN-B-006-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:40]   [169/810] RUN-B-007-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:42]   [170/810] RUN-B-007-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:44]   [171/810] RUN-B-007-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:46]   [172/810] RUN-B-008-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:48]   [173/810] RUN-B-008-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:50]   [174/810] RUN-B-008-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:52]   [175/810] RUN-B-009-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:54]   [176/810] RUN-B-009-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:56]   [177/810] RUN-B-009-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:41:58]   [178/810] RUN-B-010-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:00]   [179/810] RUN-B-010-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:02]   [180/810] RUN-B-010-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:03]   [181/810] RUN-B-011-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:06]   [182/810] RUN-B-011-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:42:07]   [183/810] RUN-B-011-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:09]   [184/810] RUN-B-012-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:11]   [185/810] RUN-B-012-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:13]   [186/810] RUN-B-012-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:42:15]   [187/810] RUN-B-013-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:17]   [188/810] RUN-B-013-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:19]   [189/810] RUN-B-013-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:21]   [190/810] RUN-B-014-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:23]   [191/810] RUN-B-014-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:25]   [192/810] RUN-B-014-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:27]   [193/810] RUN-B-015-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:29]   [194/810] RUN-B-015-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:42:31]   [195/810] RUN-B-015-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:33]   [196/810] RUN-B-016-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:35]   [197/810] RUN-B-016-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:37]   [198/810] RUN-B-016-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:39]   [199/810] RUN-B-017-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:40]   [200/810] RUN-B-017-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:42]   [201/810] RUN-B-017-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:44]   [202/810] RUN-B-018-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:46]   [203/810] RUN-B-018-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:48]   [204/810] RUN-B-018-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:50]   [205/810] RUN-B-019-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:52]   [206/810] RUN-B-019-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:42:54]   [207/810] RUN-B-019-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:42:56]   [208/810] RUN-B-020-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.6s
+[09:42:58]   [209/810] RUN-B-020-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:43:00]   [210/810] RUN-B-020-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:43:02]   [211/810] RUN-C-001-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:04]   [212/810] RUN-C-001-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:43:06]   [213/810] RUN-C-001-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.6s CAT_MISS=UNSCORED
+[09:43:08]   [214/810] RUN-C-002-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:10]   [215/810] RUN-C-002-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:12]   [216/810] RUN-C-002-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:43:14]   [217/810] RUN-C-003-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:43:16]   [218/810] RUN-C-003-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:18]   [219/810] RUN-C-003-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:43:20]   [220/810] RUN-C-004-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:43:22]   [221/810] RUN-C-004-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:24]   [222/810] RUN-C-004-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:26]   [223/810] RUN-C-005-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:43:28]   [224/810] RUN-C-005-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:30]   [225/810] RUN-C-005-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:43:32]   [226/810] RUN-C-006-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:43:34]   [227/810] RUN-C-006-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:43:36]   [228/810] RUN-C-006-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:43:38]   [229/810] RUN-C-007-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:40]   [230/810] RUN-C-007-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.6s CAT_MISS=UNSCORED
+[09:43:42]   [231/810] RUN-C-007-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:44]   [232/810] RUN-C-008-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:43:46]   [233/810] RUN-C-008-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:43:48]   [234/810] RUN-C-008-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:50]   [235/810] RUN-C-009-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:52]   [236/810] RUN-C-009-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:54]   [237/810] RUN-C-009-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:56]   [238/810] RUN-C-010-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:43:58]   [239/810] RUN-C-010-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:00]   [240/810] RUN-C-010-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:02]   [241/810] RUN-C-011-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:44:04]   [242/810] RUN-C-011-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:06]   [243/810] RUN-C-011-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:08]   [244/810] RUN-C-012-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:44:10]   [245/810] RUN-C-012-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:44:12]   [246/810] RUN-C-012-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:44:14]   [247/810] RUN-C-013-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:15]   [248/810] RUN-C-013-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:17]   [249/810] RUN-C-013-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:19]   [250/810] RUN-C-014-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:21]   [251/810] RUN-C-014-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:23]   [252/810] RUN-C-014-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:25]   [253/810] RUN-C-015-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:27]   [254/810] RUN-C-015-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:29]   [255/810] RUN-C-015-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:31]   [256/810] RUN-C-016-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:44:33]   [257/810] RUN-C-016-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:44:35]   [258/810] RUN-C-016-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:44:37]   [259/810] RUN-C-017-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:39]   [260/810] RUN-C-017-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:44:41]   [261/810] RUN-C-017-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s CAT_MISS=UNSCORED
+[09:44:43]   [262/810] RUN-C-018-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:45]   [263/810] RUN-C-018-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:47]   [264/810] RUN-C-018-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s CAT_MISS=UNSCORED
+[09:44:49]   [265/810] RUN-C-019-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:44:51]   [266/810] RUN-C-019-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:44:53]   [267/810] RUN-C-019-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:44:55]   [268/810] RUN-C-020-LANE-GEMINI-001-1 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:44:57]   [269/810] RUN-C-020-LANE-GEMINI-001-2 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.5s
+[09:44:59]   [270/810] RUN-C-020-LANE-GEMINI-001-3 FAIL:HTTP Error 429: Too Many Requests finish=None tokens=None out=0ch t=0.4s
+[09:45:02] --- LANE LANE-ALIBABA-001 (qwen3.5-122b-a10b) ---
+[09:45:32]   [271/810] RUN-A1-001-LANE-ALIBABA-001-1 OK finish=stop tokens=2354 out=3019ch t=30.3s
+[09:46:01]   [272/810] RUN-A1-001-LANE-ALIBABA-001-2 OK finish=stop tokens=2280 out=3782ch t=27.1s
+[09:46:30]   [273/810] RUN-A1-001-LANE-ALIBABA-001-3 OK finish=stop tokens=2281 out=3366ch t=27.9s
+[09:47:05]   [274/810] RUN-A1-002-LANE-ALIBABA-001-1 OK finish=stop tokens=2782 out=5055ch t=32.9s
+[09:47:34]   [275/810] RUN-A1-002-LANE-ALIBABA-001-2 OK finish=stop tokens=2396 out=3487ch t=27.8s
+[09:48:03]   [276/810] RUN-A1-002-LANE-ALIBABA-001-3 OK finish=stop tokens=2394 out=4490ch t=27.6s
+[09:48:57]   [277/810] RUN-A1-003-LANE-ALIBABA-001-1 OK finish=stop tokens=4473 out=3930ch t=52.6s
+[09:49:39]   [278/810] RUN-A1-003-LANE-ALIBABA-001-2 OK finish=stop tokens=3656 out=4674ch t=40.5s
+[09:50:18]   [279/810] RUN-A1-003-LANE-ALIBABA-001-3 OK finish=stop tokens=3663 out=4326ch t=37.3s
+[09:50:44]   [280/810] RUN-A1-004-LANE-ALIBABA-001-1 OK finish=stop tokens=2912 out=4840ch t=24.9s
+[09:51:07]   [281/810] RUN-A1-004-LANE-ALIBABA-001-2 OK finish=stop tokens=3254 out=6390ch t=20.8s
+[09:51:27]   [282/810] RUN-A1-004-LANE-ALIBABA-001-3 OK finish=stop tokens=3065 out=5866ch t=19.3s
+[09:51:42]   [283/810] RUN-A1-005-LANE-ALIBABA-001-1 OK finish=stop tokens=2215 out=3591ch t=13.5s
+[09:52:11]   [284/810] RUN-A1-005-LANE-ALIBABA-001-2 OK finish=stop tokens=3124 out=3504ch t=26.8s
+[09:52:41]   [285/810] RUN-A1-005-LANE-ALIBABA-001-3 OK finish=stop tokens=2781 out=4484ch t=28.4s
+[09:53:03]   [286/810] RUN-A1-006-LANE-ALIBABA-001-1 OK finish=stop tokens=2105 out=3960ch t=21.3s
+[09:53:28]   [287/810] RUN-A1-006-LANE-ALIBABA-001-2 OK finish=stop tokens=2104 out=3378ch t=23.6s
+[09:53:53]   [288/810] RUN-A1-006-LANE-ALIBABA-001-3 OK finish=stop tokens=2136 out=3844ch t=23.1s
+[09:54:16]   [289/810] RUN-A1-007-LANE-ALIBABA-001-1 OK finish=stop tokens=1813 out=2870ch t=21.3s CAT_MISS=NO
+[09:54:44]   [290/810] RUN-A1-007-LANE-ALIBABA-001-2 OK finish=stop tokens=2288 out=3193ch t=26.2s CAT_MISS=NO
+[09:55:10]   [291/810] RUN-A1-007-LANE-ALIBABA-001-3 OK finish=stop tokens=2131 out=3483ch t=25.0s CAT_MISS=NO
+[09:55:34]   [292/810] RUN-A1-008-LANE-ALIBABA-001-1 OK finish=stop tokens=1968 out=3658ch t=22.6s CAT_MISS=UNSCORED
+[09:55:58]   [293/810] RUN-A1-008-LANE-ALIBABA-001-2 OK finish=stop tokens=1979 out=2937ch t=22.3s CAT_MISS=UNSCORED
+[09:56:20]   [294/810] RUN-A1-008-LANE-ALIBABA-001-3 OK finish=stop tokens=1934 out=3024ch t=20.9s CAT_MISS=UNSCORED
+[09:56:48]   [295/810] RUN-A1-009-LANE-ALIBABA-001-1 OK finish=stop tokens=2565 out=5417ch t=26.6s
+[09:57:16]   [296/810] RUN-A1-009-LANE-ALIBABA-001-2 OK finish=stop tokens=2467 out=5101ch t=26.4s
+[09:57:45]   [297/810] RUN-A1-009-LANE-ALIBABA-001-3 OK finish=stop tokens=2447 out=5511ch t=27.4s
+[09:58:17]   [298/810] RUN-A1-010-LANE-ALIBABA-001-1 OK finish=stop tokens=2771 out=5351ch t=30.9s
+[09:58:43]   [299/810] RUN-A1-010-LANE-ALIBABA-001-2 OK finish=stop tokens=2107 out=3368ch t=23.7s
+[09:59:14]   [300/810] RUN-A1-010-LANE-ALIBABA-001-3 OK finish=stop tokens=2709 out=4892ch t=30.3s
+[09:59:46]   [301/810] RUN-A2-001-LANE-ALIBABA-001-1 OK finish=stop tokens=2559 out=3919ch t=29.7s
+[10:00:14]   [302/810] RUN-A2-001-LANE-ALIBABA-001-2 OK finish=stop tokens=2278 out=3156ch t=27.2s
+[10:00:38]   [303/810] RUN-A2-001-LANE-ALIBABA-001-3 OK finish=stop tokens=2036 out=2633ch t=21.8s
+[10:01:03]   [304/810] RUN-A2-002-LANE-ALIBABA-001-1 OK finish=stop tokens=2157 out=2895ch t=24.1s
+[10:01:36]   [305/810] RUN-A2-002-LANE-ALIBABA-001-2 OK finish=stop tokens=2555 out=3796ch t=30.8s
+[10:02:05]   [306/810] RUN-A2-002-LANE-ALIBABA-001-3 OK finish=stop tokens=2580 out=3824ch t=28.2s
+[10:02:31]   [307/810] RUN-A2-003-LANE-ALIBABA-001-1 OK finish=stop tokens=2044 out=3448ch t=24.0s
+[10:02:54]   [308/810] RUN-A2-003-LANE-ALIBABA-001-2 OK finish=stop tokens=1991 out=4072ch t=21.9s
+[10:03:17]   [309/810] RUN-A2-003-LANE-ALIBABA-001-3 OK finish=stop tokens=1955 out=3456ch t=21.6s
+[10:03:39]   [310/810] RUN-A2-004-LANE-ALIBABA-001-1 OK finish=stop tokens=1918 out=2967ch t=20.4s
+[10:04:08]   [311/810] RUN-A2-004-LANE-ALIBABA-001-2 OK finish=stop tokens=2295 out=3069ch t=26.9s
+[10:04:31]   [312/810] RUN-A2-004-LANE-ALIBABA-001-3 OK finish=stop tokens=2067 out=3268ch t=22.3s
+[10:04:52]   [313/810] RUN-A2-005-LANE-ALIBABA-001-1 OK finish=stop tokens=2138 out=2104ch t=19.4s
+[10:05:16]   [314/810] RUN-A2-005-LANE-ALIBABA-001-2 OK finish=stop tokens=2405 out=2836ch t=22.3s
+[10:05:36]   [315/810] RUN-A2-005-LANE-ALIBABA-001-3 OK finish=stop tokens=1908 out=2939ch t=18.5s
+[10:05:55]   [316/810] RUN-A2-006-LANE-ALIBABA-001-1 OK finish=stop tokens=1984 out=2477ch t=17.4s
+[10:06:12]   [317/810] RUN-A2-006-LANE-ALIBABA-001-2 OK finish=stop tokens=1668 out=2906ch t=15.7s
+[10:06:42]   [318/810] RUN-A2-006-LANE-ALIBABA-001-3 OK finish=stop tokens=2778 out=3378ch t=28.2s
+[10:06:56]   [319/810] RUN-A2-007-LANE-ALIBABA-001-1 OK finish=stop tokens=1428 out=2403ch t=12.1s CAT_MISS=UNSCORED
+[10:07:11]   [320/810] RUN-A2-007-LANE-ALIBABA-001-2 OK finish=stop tokens=1531 out=2291ch t=13.4s CAT_MISS=UNSCORED
+[10:07:27]   [321/810] RUN-A2-007-LANE-ALIBABA-001-3 OK finish=stop tokens=1786 out=3073ch t=14.9s CAT_MISS=UNSCORED
+[10:07:39]   [322/810] RUN-A2-008-LANE-ALIBABA-001-1 OK finish=stop tokens=1471 out=1679ch t=10.8s CAT_MISS=UNSCORED
+[10:07:52]   [323/810] RUN-A2-008-LANE-ALIBABA-001-2 OK finish=stop tokens=1564 out=2282ch t=11.4s CAT_MISS=UNSCORED
+[10:08:05]   [324/810] RUN-A2-008-LANE-ALIBABA-001-3 OK finish=stop tokens=1430 out=2222ch t=11.0s CAT_MISS=UNSCORED
+[10:08:22]   [325/810] RUN-A2-009-LANE-ALIBABA-001-1 OK finish=stop tokens=2112 out=4368ch t=16.1s
+[10:08:44]   [326/810] RUN-A2-009-LANE-ALIBABA-001-2 OK finish=stop tokens=2385 out=4809ch t=20.3s
+[10:09:09]   [327/810] RUN-A2-009-LANE-ALIBABA-001-3 OK finish=stop tokens=2574 out=4846ch t=23.9s
+[10:09:28]   [328/810] RUN-A2-010-LANE-ALIBABA-001-1 OK finish=stop tokens=2116 out=4506ch t=17.2s
+[10:09:47]   [329/810] RUN-A2-010-LANE-ALIBABA-001-2 OK finish=stop tokens=2072 out=4033ch t=17.2s
+[10:10:07]   [330/810] RUN-A2-010-LANE-ALIBABA-001-3 OK finish=stop tokens=2288 out=4957ch t=18.9s
+[10:10:20]   [331/810] RUN-A3-001-LANE-ALIBABA-001-1 OK finish=stop tokens=1449 out=2077ch t=11.2s
+[10:10:34]   [332/810] RUN-A3-001-LANE-ALIBABA-001-2 OK finish=stop tokens=1491 out=2249ch t=12.9s
+[10:10:48]   [333/810] RUN-A3-001-LANE-ALIBABA-001-3 OK finish=stop tokens=1418 out=2207ch t=12.1s
+[10:11:05]   [334/810] RUN-A3-002-LANE-ALIBABA-001-1 OK finish=stop tokens=1890 out=3530ch t=15.5s
+[10:11:23]   [335/810] RUN-A3-002-LANE-ALIBABA-001-2 OK finish=stop tokens=2104 out=2854ch t=16.3s
+[10:11:44]   [336/810] RUN-A3-002-LANE-ALIBABA-001-3 OK finish=stop tokens=2360 out=3420ch t=19.7s
+[10:12:03]   [337/810] RUN-A3-003-LANE-ALIBABA-001-1 OK finish=stop tokens=2022 out=3143ch t=17.3s
+[10:12:22]   [338/810] RUN-A3-003-LANE-ALIBABA-001-2 OK finish=stop tokens=2147 out=3607ch t=17.3s
+[10:12:38]   [339/810] RUN-A3-003-LANE-ALIBABA-001-3 OK finish=stop tokens=1924 out=3306ch t=15.3s
+[10:12:58]   [340/810] RUN-A3-004-LANE-ALIBABA-001-1 OK finish=stop tokens=2009 out=3239ch t=17.6s
+[10:13:13]   [341/810] RUN-A3-004-LANE-ALIBABA-001-2 OK finish=stop tokens=1689 out=2879ch t=13.8s
+[10:13:32]   [342/810] RUN-A3-004-LANE-ALIBABA-001-3 OK finish=stop tokens=1993 out=3492ch t=17.5s
+[10:13:55]   [343/810] RUN-A3-005-LANE-ALIBABA-001-1 OK finish=stop tokens=2470 out=3268ch t=21.5s
+[10:14:15]   [344/810] RUN-A3-005-LANE-ALIBABA-001-2 OK finish=stop tokens=2250 out=4047ch t=18.5s
+[10:14:32]   [345/810] RUN-A3-005-LANE-ALIBABA-001-3 OK finish=stop tokens=1870 out=3183ch t=15.2s
+[10:14:48]   [346/810] RUN-A3-006-LANE-ALIBABA-001-1 OK finish=stop tokens=2039 out=3482ch t=15.3s
+[10:15:08]   [347/810] RUN-A3-006-LANE-ALIBABA-001-2 OK finish=stop tokens=2277 out=3589ch t=17.7s
+[10:15:30]   [348/810] RUN-A3-006-LANE-ALIBABA-001-3 OK finish=stop tokens=2234 out=3676ch t=20.7s
+[10:16:04]   [349/810] RUN-A3-007-LANE-ALIBABA-001-1 OK finish=stop tokens=2933 out=3186ch t=33.2s CAT_MISS=UNSCORED
+[10:16:43]   [350/810] RUN-A3-007-LANE-ALIBABA-001-2 OK finish=stop tokens=2939 out=2970ch t=36.7s CAT_MISS=UNSCORED
+[10:17:30]   [351/810] RUN-A3-007-LANE-ALIBABA-001-3 OK finish=stop tokens=4209 out=3546ch t=45.5s CAT_MISS=NO
+[10:17:48]   [352/810] RUN-A3-008-LANE-ALIBABA-001-1 OK finish=stop tokens=1971 out=3069ch t=17.4s CAT_MISS=UNSCORED
+[10:18:10]   [353/810] RUN-A3-008-LANE-ALIBABA-001-2 OK finish=stop tokens=1991 out=3116ch t=19.6s CAT_MISS=UNSCORED
+[10:18:34]   [354/810] RUN-A3-008-LANE-ALIBABA-001-3 OK finish=stop tokens=2306 out=3076ch t=23.4s CAT_MISS=UNSCORED
+[10:18:57]   [355/810] RUN-A3-009-LANE-ALIBABA-001-1 OK finish=stop tokens=2193 out=4959ch t=21.3s
+[10:19:22]   [356/810] RUN-A3-009-LANE-ALIBABA-001-2 OK finish=stop tokens=2276 out=4821ch t=23.3s
+[10:19:41]   [357/810] RUN-A3-009-LANE-ALIBABA-001-3 OK finish=stop tokens=1898 out=4559ch t=17.9s
+[10:20:12]   [358/810] RUN-A3-010-LANE-ALIBABA-001-1 OK finish=stop tokens=2428 out=5486ch t=28.7s
+[10:20:47]   [359/810] RUN-A3-010-LANE-ALIBABA-001-2 OK finish=stop tokens=2697 out=5974ch t=33.4s
+[10:21:21]   [360/810] RUN-A3-010-LANE-ALIBABA-001-3 OK finish=stop tokens=2559 out=6406ch t=33.3s
+[10:21:47]   [361/810] RUN-A4-001-LANE-ALIBABA-001-1 OK finish=stop tokens=2091 out=4100ch t=24.3s
+[10:22:10]   [362/810] RUN-A4-001-LANE-ALIBABA-001-2 OK finish=stop tokens=2019 out=3642ch t=21.3s
+[10:22:35]   [363/810] RUN-A4-001-LANE-ALIBABA-001-3 OK finish=stop tokens=2421 out=4182ch t=23.3s
+[10:23:02]   [364/810] RUN-A4-002-LANE-ALIBABA-001-1 OK finish=stop tokens=2676 out=4627ch t=25.5s
+[10:23:29]   [365/810] RUN-A4-002-LANE-ALIBABA-001-2 OK finish=stop tokens=2435 out=4400ch t=25.4s
+[10:23:59]   [366/810] RUN-A4-002-LANE-ALIBABA-001-3 OK finish=stop tokens=2705 out=4445ch t=28.7s
+[10:24:20]   [367/810] RUN-A4-003-LANE-ALIBABA-001-1 OK finish=stop tokens=2000 out=3944ch t=19.3s
+[10:24:41]   [368/810] RUN-A4-003-LANE-ALIBABA-001-2 OK finish=stop tokens=1770 out=3828ch t=19.9s
+[10:25:11]   [369/810] RUN-A4-003-LANE-ALIBABA-001-3 OK finish=stop tokens=2552 out=4132ch t=28.2s
+[10:25:32]   [370/810] RUN-A4-004-LANE-ALIBABA-001-1 OK finish=stop tokens=2186 out=3865ch t=19.5s
+[10:25:54]   [371/810] RUN-A4-004-LANE-ALIBABA-001-2 OK finish=stop tokens=2549 out=4025ch t=20.3s
+[10:26:14]   [372/810] RUN-A4-004-LANE-ALIBABA-001-3 OK finish=stop tokens=2381 out=4053ch t=18.9s
+[10:26:32]   [373/810] RUN-A4-005-LANE-ALIBABA-001-1 OK finish=stop tokens=2086 out=3588ch t=16.1s
+[10:26:48]   [374/810] RUN-A4-005-LANE-ALIBABA-001-2 OK finish=stop tokens=1886 out=3460ch t=14.4s
+[10:27:09]   [375/810] RUN-A4-005-LANE-ALIBABA-001-3 OK finish=stop tokens=1977 out=3870ch t=19.6s
+[10:27:25]   [376/810] RUN-A4-006-LANE-ALIBABA-001-1 OK finish=stop tokens=1754 out=3832ch t=15.2s
+[10:27:46]   [377/810] RUN-A4-006-LANE-ALIBABA-001-2 OK finish=stop tokens=2155 out=4206ch t=18.7s
+[10:28:03]   [378/810] RUN-A4-006-LANE-ALIBABA-001-3 OK finish=stop tokens=1834 out=4255ch t=15.7s
+[10:28:20]   [379/810] RUN-A4-007-LANE-ALIBABA-001-1 OK finish=stop tokens=1986 out=3369ch t=15.6s CAT_MISS=UNSCORED
+[10:28:34]   [380/810] RUN-A4-007-LANE-ALIBABA-001-2 OK finish=stop tokens=1704 out=3376ch t=12.9s CAT_MISS=UNSCORED
+[10:28:54]   [381/810] RUN-A4-007-LANE-ALIBABA-001-3 OK finish=stop tokens=2128 out=3353ch t=18.5s CAT_MISS=UNSCORED
+[10:29:15]   [382/810] RUN-A4-008-LANE-ALIBABA-001-1 OK finish=stop tokens=2420 out=3511ch t=19.6s CAT_MISS=UNSCORED
+[10:29:43]   [383/810] RUN-A4-008-LANE-ALIBABA-001-2 OK finish=stop tokens=3454 out=3002ch t=26.6s CAT_MISS=UNSCORED
+[10:30:08]   [384/810] RUN-A4-008-LANE-ALIBABA-001-3 OK finish=stop tokens=2958 out=3969ch t=22.6s CAT_MISS=NO
+[10:30:27]   [385/810] RUN-A4-009-LANE-ALIBABA-001-1 OK finish=stop tokens=2579 out=5880ch t=18.3s
+[10:30:47]   [386/810] RUN-A4-009-LANE-ALIBABA-001-2 OK finish=stop tokens=2506 out=5260ch t=18.3s
+[10:31:11]   [387/810] RUN-A4-009-LANE-ALIBABA-001-3 OK finish=stop tokens=3042 out=6235ch t=22.8s
+[10:31:40]   [388/810] RUN-A4-010-LANE-ALIBABA-001-1 OK finish=stop tokens=2353 out=5557ch t=26.9s
+[10:32:07]   [389/810] RUN-A4-010-LANE-ALIBABA-001-2 OK finish=stop tokens=2438 out=5342ch t=26.0s
+[10:32:43]   [390/810] RUN-A4-010-LANE-ALIBABA-001-3 OK finish=stop tokens=2697 out=6089ch t=34.5s
+[10:33:08]   [391/810] RUN-A5-001-LANE-ALIBABA-001-1 OK finish=stop tokens=2280 out=3395ch t=22.8s
+[10:33:34]   [392/810] RUN-A5-001-LANE-ALIBABA-001-2 OK finish=stop tokens=2160 out=3696ch t=24.6s
+[10:34:01]   [393/810] RUN-A5-001-LANE-ALIBABA-001-3 OK finish=stop tokens=2264 out=3525ch t=26.0s
+[10:34:23]   [394/810] RUN-A5-002-LANE-ALIBABA-001-1 OK finish=stop tokens=1834 out=3471ch t=20.4s
+[10:34:46]   [395/810] RUN-A5-002-LANE-ALIBABA-001-2 OK finish=stop tokens=1900 out=3349ch t=21.5s
+[10:35:10]   [396/810] RUN-A5-002-LANE-ALIBABA-001-3 OK finish=stop tokens=2144 out=4973ch t=22.0s
+[10:35:37]   [397/810] RUN-A5-003-LANE-ALIBABA-001-1 OK finish=stop tokens=2364 out=5376ch t=26.1s
+[10:36:03]   [398/810] RUN-A5-003-LANE-ALIBABA-001-2 OK finish=stop tokens=2300 out=4456ch t=23.9s
+[10:36:21]   [399/810] RUN-A5-003-LANE-ALIBABA-001-3 OK finish=stop tokens=2051 out=4885ch t=16.7s
+[10:36:41]   [400/810] RUN-A5-004-LANE-ALIBABA-001-1 OK finish=stop tokens=2236 out=5022ch t=18.2s
+[10:37:06]   [401/810] RUN-A5-004-LANE-ALIBABA-001-2 OK finish=stop tokens=2592 out=6092ch t=24.0s
+[10:37:27]   [402/810] RUN-A5-004-LANE-ALIBABA-001-3 OK finish=stop tokens=2113 out=4660ch t=19.2s
+[10:37:48]   [403/810] RUN-A5-005-LANE-ALIBABA-001-1 OK finish=stop tokens=2463 out=5178ch t=20.1s
+[10:38:08]   [404/810] RUN-A5-005-LANE-ALIBABA-001-2 OK finish=stop tokens=2456 out=4894ch t=18.1s
+[10:38:27]   [405/810] RUN-A5-005-LANE-ALIBABA-001-3 OK finish=stop tokens=2278 out=4942ch t=18.0s
+[10:38:41]   [406/810] RUN-A5-006-LANE-ALIBABA-001-1 OK finish=stop tokens=1546 out=2944ch t=12.2s
+[10:38:53]   [407/810] RUN-A5-006-LANE-ALIBABA-001-2 OK finish=stop tokens=1621 out=3257ch t=10.5s
+[10:39:09]   [408/810] RUN-A5-006-LANE-ALIBABA-001-3 OK finish=stop tokens=1950 out=3636ch t=13.8s
+[10:39:23]   [409/810] RUN-A5-007-LANE-ALIBABA-001-1 OK finish=stop tokens=2124 out=3915ch t=13.2s CAT_MISS=NO
+[10:39:52]   [410/810] RUN-A5-007-LANE-ALIBABA-001-2 OK finish=stop tokens=2878 out=4085ch t=27.0s CAT_MISS=NO
+[10:40:08]   [411/810] RUN-A5-007-LANE-ALIBABA-001-3 OK finish=stop tokens=1844 out=2513ch t=15.2s CAT_MISS=UNSCORED
+[10:40:30]   [412/810] RUN-A5-008-LANE-ALIBABA-001-1 OK finish=stop tokens=2482 out=4490ch t=20.4s CAT_MISS=UNSCORED
+[10:40:52]   [413/810] RUN-A5-008-LANE-ALIBABA-001-2 OK finish=stop tokens=2619 out=4892ch t=20.0s CAT_MISS=NO
+[10:41:25]   [414/810] RUN-A5-008-LANE-ALIBABA-001-3 OK finish=stop tokens=2318 out=4225ch t=31.2s CAT_MISS=NO
+[10:41:47]   [415/810] RUN-A5-009-LANE-ALIBABA-001-1 OK finish=stop tokens=2820 out=5669ch t=21.1s
+[10:42:07]   [416/810] RUN-A5-009-LANE-ALIBABA-001-2 OK finish=stop tokens=2813 out=4954ch t=18.3s
+[10:42:26]   [417/810] RUN-A5-009-LANE-ALIBABA-001-3 OK finish=stop tokens=2422 out=4674ch t=18.0s
+[10:42:49]   [418/810] RUN-A5-010-LANE-ALIBABA-001-1 OK finish=stop tokens=2591 out=4668ch t=21.1s
+[10:43:08]   [419/810] RUN-A5-010-LANE-ALIBABA-001-2 OK finish=stop tokens=2199 out=3889ch t=17.9s
+[10:43:32]   [420/810] RUN-A5-010-LANE-ALIBABA-001-3 OK finish=stop tokens=2598 out=4827ch t=21.8s
+[10:43:55]   [421/810] RUN-B-001-LANE-ALIBABA-001-1 OK finish=stop tokens=3421 out=3457ch t=21.2s
+[10:44:19]   [422/810] RUN-B-001-LANE-ALIBABA-001-2 OK finish=stop tokens=3530 out=2901ch t=22.5s
+[10:44:47]   [423/810] RUN-B-001-LANE-ALIBABA-001-3 OK finish=stop tokens=4199 out=3871ch t=26.8s
+[10:45:01]   [424/810] RUN-B-002-LANE-ALIBABA-001-1 OK finish=stop tokens=1976 out=2962ch t=12.3s
+[10:45:13]   [425/810] RUN-B-002-LANE-ALIBABA-001-2 OK finish=stop tokens=1760 out=2785ch t=10.8s
+[10:45:26]   [426/810] RUN-B-002-LANE-ALIBABA-001-3 OK finish=stop tokens=1795 out=2536ch t=11.1s
+[10:45:39]   [427/810] RUN-B-003-LANE-ALIBABA-001-1 OK finish=stop tokens=1913 out=3110ch t=11.6s
+[10:45:52]   [428/810] RUN-B-003-LANE-ALIBABA-001-2 OK finish=stop tokens=1913 out=3110ch t=11.5s
+[10:46:05]   [429/810] RUN-B-003-LANE-ALIBABA-001-3 OK finish=stop tokens=1913 out=3110ch t=11.7s
+[10:46:17]   [430/810] RUN-B-004-LANE-ALIBABA-001-1 OK finish=stop tokens=1707 out=2056ch t=10.4s
+[10:46:30]   [431/810] RUN-B-004-LANE-ALIBABA-001-2 OK finish=stop tokens=1944 out=2743ch t=12.0s
+[10:46:43]   [432/810] RUN-B-004-LANE-ALIBABA-001-3 OK finish=stop tokens=1799 out=2378ch t=11.0s
+[10:46:58]   [433/810] RUN-B-005-LANE-ALIBABA-001-1 OK finish=stop tokens=2177 out=3739ch t=13.6s
+[10:47:13]   [434/810] RUN-B-005-LANE-ALIBABA-001-2 OK finish=stop tokens=2236 out=4042ch t=14.0s
+[10:47:28]   [435/810] RUN-B-005-LANE-ALIBABA-001-3 OK finish=stop tokens=2089 out=3704ch t=13.3s
+[10:47:43]   [436/810] RUN-B-006-LANE-ALIBABA-001-1 OK finish=stop tokens=2229 out=2559ch t=13.1s
+[10:47:57]   [437/810] RUN-B-006-LANE-ALIBABA-001-2 OK finish=stop tokens=2229 out=2559ch t=13.2s
+[10:48:12]   [438/810] RUN-B-006-LANE-ALIBABA-001-3 OK finish=stop tokens=2229 out=2559ch t=13.1s
+[10:48:28]   [439/810] RUN-B-007-LANE-ALIBABA-001-1 OK finish=stop tokens=2383 out=4022ch t=14.4s
+[10:48:46]   [440/810] RUN-B-007-LANE-ALIBABA-001-2 OK finish=stop tokens=2708 out=4722ch t=16.9s
+[10:49:02]   [441/810] RUN-B-007-LANE-ALIBABA-001-3 OK finish=stop tokens=2443 out=4303ch t=14.6s
+[10:49:18]   [442/810] RUN-B-008-LANE-ALIBABA-001-1 OK finish=stop tokens=1949 out=3528ch t=13.8s
+[10:49:33]   [443/810] RUN-B-008-LANE-ALIBABA-001-2 OK finish=stop tokens=2208 out=3689ch t=13.6s
+[10:49:47]   [444/810] RUN-B-008-LANE-ALIBABA-001-3 OK finish=stop tokens=2003 out=3610ch t=12.3s
+[10:50:01]   [445/810] RUN-B-009-LANE-ALIBABA-001-1 OK finish=stop tokens=2166 out=2495ch t=13.3s
+[10:50:16]   [446/810] RUN-B-009-LANE-ALIBABA-001-2 OK finish=stop tokens=2166 out=2495ch t=13.3s
+[10:50:33]   [447/810] RUN-B-009-LANE-ALIBABA-001-3 OK finish=stop tokens=2255 out=2697ch t=15.3s
+[10:50:54]   [448/810] RUN-B-010-LANE-ALIBABA-001-1 OK finish=stop tokens=2264 out=4096ch t=19.2s
+[10:51:13]   [449/810] RUN-B-010-LANE-ALIBABA-001-2 OK finish=stop tokens=1945 out=3321ch t=18.1s
+[10:51:38]   [450/810] RUN-B-010-LANE-ALIBABA-001-3 OK finish=stop tokens=2220 out=4246ch t=23.1s
+[10:51:52]   [451/810] RUN-B-011-LANE-ALIBABA-001-1 OK finish=stop tokens=1656 out=3145ch t=12.6s
+[10:52:09]   [452/810] RUN-B-011-LANE-ALIBABA-001-2 OK finish=stop tokens=2075 out=3985ch t=15.1s
+[10:52:31]   [453/810] RUN-B-011-LANE-ALIBABA-001-3 OK finish=stop tokens=2549 out=3949ch t=20.8s
+[10:52:44]   [454/810] RUN-B-012-LANE-ALIBABA-001-1 OK finish=stop tokens=1564 out=2608ch t=11.2s
+[10:52:58]   [455/810] RUN-B-012-LANE-ALIBABA-001-2 OK finish=stop tokens=1794 out=2909ch t=13.0s
+[10:53:12]   [456/810] RUN-B-012-LANE-ALIBABA-001-3 OK finish=stop tokens=1700 out=2913ch t=12.3s
+[10:53:41]   [457/810] RUN-B-013-LANE-ALIBABA-001-1 OK finish=stop tokens=2932 out=4597ch t=27.1s
+[10:54:23]   [458/810] RUN-B-013-LANE-ALIBABA-001-2 OK finish=stop tokens=3449 out=3823ch t=41.2s
+[10:54:57]   [459/810] RUN-B-013-LANE-ALIBABA-001-3 OK finish=stop tokens=2754 out=3828ch t=32.3s
+[10:55:16]   [460/810] RUN-B-014-LANE-ALIBABA-001-1 OK finish=stop tokens=1951 out=3371ch t=17.2s
+[10:55:35]   [461/810] RUN-B-014-LANE-ALIBABA-001-2 OK finish=stop tokens=2007 out=3549ch t=18.2s
+[10:55:56]   [462/810] RUN-B-014-LANE-ALIBABA-001-3 OK finish=stop tokens=1978 out=3448ch t=19.2s
+[10:56:16]   [463/810] RUN-B-015-LANE-ALIBABA-001-1 OK finish=stop tokens=2410 out=5061ch t=18.4s
+[10:56:39]   [464/810] RUN-B-015-LANE-ALIBABA-001-2 OK finish=stop tokens=2681 out=5148ch t=21.2s
+[10:57:01]   [465/810] RUN-B-015-LANE-ALIBABA-001-3 OK finish=stop tokens=2525 out=5085ch t=20.9s
+[10:57:23]   [466/810] RUN-B-016-LANE-ALIBABA-001-1 OK finish=stop tokens=2554 out=2935ch t=20.7s
+[10:57:44]   [467/810] RUN-B-016-LANE-ALIBABA-001-2 OK finish=stop tokens=2250 out=3304ch t=19.1s
+[10:58:06]   [468/810] RUN-B-016-LANE-ALIBABA-001-3 OK finish=stop tokens=2373 out=3045ch t=20.7s
+[10:58:30]   [469/810] RUN-B-017-LANE-ALIBABA-001-1 OK finish=stop tokens=2479 out=4455ch t=22.6s
+[10:58:52]   [470/810] RUN-B-017-LANE-ALIBABA-001-2 OK finish=stop tokens=2528 out=4565ch t=20.5s
+[10:59:15]   [471/810] RUN-B-017-LANE-ALIBABA-001-3 OK finish=stop tokens=2803 out=4839ch t=21.6s
+[10:59:45]   [472/810] RUN-B-018-LANE-ALIBABA-001-1 OK finish=stop tokens=3032 out=4137ch t=28.0s
+[11:00:14]   [473/810] RUN-B-018-LANE-ALIBABA-001-2 OK finish=stop tokens=2734 out=3667ch t=27.6s
+[11:00:40]   [474/810] RUN-B-018-LANE-ALIBABA-001-3 OK finish=stop tokens=2422 out=3725ch t=24.9s
+[11:00:57]   [475/810] RUN-B-019-LANE-ALIBABA-001-1 OK finish=stop tokens=2041 out=2300ch t=15.2s
+[11:01:12]   [476/810] RUN-B-019-LANE-ALIBABA-001-2 OK finish=stop tokens=1665 out=2438ch t=13.5s
+[11:01:29]   [477/810] RUN-B-019-LANE-ALIBABA-001-3 OK finish=stop tokens=1895 out=2139ch t=15.8s
+[11:01:54]   [478/810] RUN-B-020-LANE-ALIBABA-001-1 OK finish=stop tokens=2508 out=3462ch t=22.8s
+[11:02:19]   [479/810] RUN-B-020-LANE-ALIBABA-001-2 OK finish=stop tokens=2366 out=3213ch t=24.3s
+[11:02:52]   [480/810] RUN-B-020-LANE-ALIBABA-001-3 OK finish=stop tokens=2804 out=3514ch t=30.6s
+[11:03:09]   [481/810] RUN-C-001-LANE-ALIBABA-001-1 OK finish=stop tokens=1638 out=2643ch t=16.2s CAT_MISS=NO
+[11:03:31]   [482/810] RUN-C-001-LANE-ALIBABA-001-2 OK finish=stop tokens=1900 out=2453ch t=20.1s CAT_MISS=UNSCORED
+[11:03:50]   [483/810] RUN-C-001-LANE-ALIBABA-001-3 OK finish=stop tokens=1850 out=2496ch t=17.2s CAT_MISS=UNSCORED
+[11:04:02]   [484/810] RUN-C-002-LANE-ALIBABA-001-1 OK finish=stop tokens=1503 out=2147ch t=10.6s CAT_MISS=UNSCORED
+[11:04:13]   [485/810] RUN-C-002-LANE-ALIBABA-001-2 OK finish=stop tokens=1309 out=1981ch t=9.7s CAT_MISS=UNSCORED
+[11:04:25]   [486/810] RUN-C-002-LANE-ALIBABA-001-3 OK finish=stop tokens=1481 out=2044ch t=10.5s CAT_MISS=NO
+[11:04:37]   [487/810] RUN-C-003-LANE-ALIBABA-001-1 OK finish=stop tokens=1486 out=2519ch t=10.7s CAT_MISS=UNSCORED
+[11:04:49]   [488/810] RUN-C-003-LANE-ALIBABA-001-2 OK finish=stop tokens=1712 out=2892ch t=10.8s CAT_MISS=UNSCORED
+[11:05:00]   [489/810] RUN-C-003-LANE-ALIBABA-001-3 OK finish=stop tokens=1522 out=2201ch t=9.3s CAT_MISS=UNSCORED
+[11:05:15]   [490/810] RUN-C-004-LANE-ALIBABA-001-1 OK finish=stop tokens=1718 out=2617ch t=13.4s CAT_MISS=NO
+[11:05:30]   [491/810] RUN-C-004-LANE-ALIBABA-001-2 OK finish=stop tokens=1684 out=2866ch t=13.5s CAT_MISS=UNSCORED
+[11:05:42]   [492/810] RUN-C-004-LANE-ALIBABA-001-3 OK finish=stop tokens=1332 out=1894ch t=10.2s CAT_MISS=NO
+[11:05:54]   [493/810] RUN-C-005-LANE-ALIBABA-001-1 OK finish=stop tokens=1341 out=1991ch t=10.8s CAT_MISS=NO
+[11:06:11]   [494/810] RUN-C-005-LANE-ALIBABA-001-2 OK finish=stop tokens=1853 out=2968ch t=15.3s CAT_MISS=NO
+[11:06:25]   [495/810] RUN-C-005-LANE-ALIBABA-001-3 OK finish=stop tokens=1539 out=2117ch t=12.1s CAT_MISS=NO
+[11:06:35]   [496/810] RUN-C-006-LANE-ALIBABA-001-1 OK finish=stop tokens=1425 out=1684ch t=8.7s
+[11:06:47]   [497/810] RUN-C-006-LANE-ALIBABA-001-2 OK finish=stop tokens=1673 out=1752ch t=10.2s
+[11:07:00]   [498/810] RUN-C-006-LANE-ALIBABA-001-3 OK finish=stop tokens=1726 out=2019ch t=11.6s
+[11:07:09]   [499/810] RUN-C-007-LANE-ALIBABA-001-1 OK finish=stop tokens=1264 out=1978ch t=7.9s CAT_MISS=NO
+[11:07:20]   [500/810] RUN-C-007-LANE-ALIBABA-001-2 OK finish=stop tokens=1337 out=1613ch t=9.4s CAT_MISS=NO
+[11:07:32]   [501/810] RUN-C-007-LANE-ALIBABA-001-3 OK finish=stop tokens=1380 out=2026ch t=10.7s CAT_MISS=NO
+[11:07:44]   [502/810] RUN-C-008-LANE-ALIBABA-001-1 OK finish=stop tokens=1668 out=2416ch t=10.4s CAT_MISS=NO
+[11:07:56]   [503/810] RUN-C-008-LANE-ALIBABA-001-2 OK finish=stop tokens=1709 out=2609ch t=10.5s CAT_MISS=UNSCORED
+[11:08:08]   [504/810] RUN-C-008-LANE-ALIBABA-001-3 OK finish=stop tokens=1683 out=2343ch t=10.4s CAT_MISS=UNSCORED
+[11:08:20]   [505/810] RUN-C-009-LANE-ALIBABA-001-1 OK finish=stop tokens=1466 out=1925ch t=10.3s CAT_MISS=NO
+[11:08:31]   [506/810] RUN-C-009-LANE-ALIBABA-001-2 OK finish=stop tokens=1460 out=1902ch t=10.3s CAT_MISS=NO
+[11:08:42]   [507/810] RUN-C-009-LANE-ALIBABA-001-3 OK finish=stop tokens=1234 out=1446ch t=8.8s CAT_MISS=NO
+[11:08:58]   [508/810] RUN-C-010-LANE-ALIBABA-001-1 OK finish=stop tokens=1759 out=2494ch t=14.7s CAT_MISS=UNSCORED
+[11:09:18]   [509/810] RUN-C-010-LANE-ALIBABA-001-2 OK finish=stop tokens=1988 out=3314ch t=18.4s CAT_MISS=UNSCORED
+[11:09:38]   [510/810] RUN-C-010-LANE-ALIBABA-001-3 OK finish=stop tokens=1986 out=3295ch t=18.4s CAT_MISS=NO
+[11:09:48]   [511/810] RUN-C-011-LANE-ALIBABA-001-1 OK finish=stop tokens=1456 out=2350ch t=8.8s CAT_MISS=UNSCORED
+[11:09:58]   [512/810] RUN-C-011-LANE-ALIBABA-001-2 OK finish=stop tokens=1473 out=2297ch t=8.9s CAT_MISS=NO
+[11:10:09]   [513/810] RUN-C-011-LANE-ALIBABA-001-3 OK finish=stop tokens=1347 out=1963ch t=9.3s CAT_MISS=NO
+[11:10:26]   [514/810] RUN-C-012-LANE-ALIBABA-001-1 OK finish=stop tokens=1877 out=2198ch t=15.4s
+[11:10:43]   [515/810] RUN-C-012-LANE-ALIBABA-001-2 OK finish=stop tokens=1966 out=2181ch t=15.3s
+[11:11:02]   [516/810] RUN-C-012-LANE-ALIBABA-001-3 OK finish=stop tokens=2471 out=1986ch t=17.5s
+[11:11:14]   [517/810] RUN-C-013-LANE-ALIBABA-001-1 OK finish=stop tokens=1398 out=1906ch t=10.2s CAT_MISS=NO
+[11:11:26]   [518/810] RUN-C-013-LANE-ALIBABA-001-2 OK finish=stop tokens=1464 out=2524ch t=11.2s CAT_MISS=UNSCORED
+[11:11:39]   [519/810] RUN-C-013-LANE-ALIBABA-001-3 OK finish=stop tokens=1474 out=2677ch t=11.2s CAT_MISS=UNSCORED
+[11:11:50]   [520/810] RUN-C-014-LANE-ALIBABA-001-1 OK finish=stop tokens=1156 out=1179ch t=9.0s CAT_MISS=UNSCORED
+[11:12:00]   [521/810] RUN-C-014-LANE-ALIBABA-001-2 OK finish=stop tokens=1173 out=1283ch t=9.0s CAT_MISS=UNSCORED
+[11:12:10]   [522/810] RUN-C-014-LANE-ALIBABA-001-3 OK finish=stop tokens=1130 out=1273ch t=8.5s CAT_MISS=UNSCORED
+[11:12:22]   [523/810] RUN-C-015-LANE-ALIBABA-001-1 OK finish=stop tokens=1398 out=2271ch t=10.8s CAT_MISS=UNSCORED
+[11:12:33]   [524/810] RUN-C-015-LANE-ALIBABA-001-2 OK finish=stop tokens=1252 out=1693ch t=9.5s CAT_MISS=NO
+[11:12:45]   [525/810] RUN-C-015-LANE-ALIBABA-001-3 OK finish=stop tokens=1268 out=1803ch t=9.8s CAT_MISS=NO
+[11:12:57]   [526/810] RUN-C-016-LANE-ALIBABA-001-1 OK finish=stop tokens=1633 out=1718ch t=11.2s
+[11:13:09]   [527/810] RUN-C-016-LANE-ALIBABA-001-2 OK finish=stop tokens=1465 out=1738ch t=10.2s
+[11:13:23]   [528/810] RUN-C-016-LANE-ALIBABA-001-3 OK finish=stop tokens=1679 out=1855ch t=12.0s
+[11:13:35]   [529/810] RUN-C-017-LANE-ALIBABA-001-1 OK finish=stop tokens=1459 out=2291ch t=11.2s CAT_MISS=NO
+[11:13:48]   [530/810] RUN-C-017-LANE-ALIBABA-001-2 OK finish=stop tokens=1388 out=1924ch t=10.7s CAT_MISS=UNSCORED
+[11:14:00]   [531/810] RUN-C-017-LANE-ALIBABA-001-3 OK finish=stop tokens=1467 out=1966ch t=11.0s CAT_MISS=NO
+[11:14:10]   [532/810] RUN-C-018-LANE-ALIBABA-001-1 OK finish=stop tokens=1113 out=1476ch t=8.2s CAT_MISS=NO
+[11:14:21]   [533/810] RUN-C-018-LANE-ALIBABA-001-2 OK finish=stop tokens=1383 out=1832ch t=10.1s CAT_MISS=UNSCORED
+[11:14:30]   [534/810] RUN-C-018-LANE-ALIBABA-001-3 OK finish=stop tokens=1093 out=1167ch t=7.4s CAT_MISS=UNSCORED
+[11:14:42]   [535/810] RUN-C-019-LANE-ALIBABA-001-1 OK finish=stop tokens=1319 out=1899ch t=9.9s
+[11:14:53]   [536/810] RUN-C-019-LANE-ALIBABA-001-2 OK finish=stop tokens=1319 out=1611ch t=9.6s
+[11:15:05]   [537/810] RUN-C-019-LANE-ALIBABA-001-3 OK finish=stop tokens=1340 out=1892ch t=10.6s
+[11:15:21]   [538/810] RUN-C-020-LANE-ALIBABA-001-1 OK finish=stop tokens=1833 out=2637ch t=14.7s
+[11:15:41]   [539/810] RUN-C-020-LANE-ALIBABA-001-2 OK finish=stop tokens=2059 out=2540ch t=18.2s
+[11:15:57]   [540/810] RUN-C-020-LANE-ALIBABA-001-3 OK finish=stop tokens=1740 out=2483ch t=15.1s
+[11:16:01] --- LANE LANE-ALIBABA-003 (qvq-max) ---
+[11:16:20]   [541/810] RUN-A1-001-LANE-ALIBABA-003-1 OK finish=stop tokens=961 out=1144ch t=18.5s
+[11:16:40]   [542/810] RUN-A1-001-LANE-ALIBABA-003-2 OK finish=stop tokens=961 out=1144ch t=18.6s
+[11:17:00]   [543/810] RUN-A1-001-LANE-ALIBABA-003-3 OK finish=stop tokens=961 out=1144ch t=18.6s
+[11:17:37]   [544/810] RUN-A1-002-LANE-ALIBABA-003-1 OK finish=stop tokens=1692 out=1926ch t=35.5s
+[11:18:13]   [545/810] RUN-A1-002-LANE-ALIBABA-003-2 OK finish=stop tokens=1692 out=1926ch t=34.9s
+[11:18:50]   [546/810] RUN-A1-002-LANE-ALIBABA-003-3 OK finish=stop tokens=1692 out=1926ch t=35.1s
+[11:19:18]   [547/810] RUN-A1-003-LANE-ALIBABA-003-1 OK finish=stop tokens=1318 out=1727ch t=26.7s
+[11:19:45]   [548/810] RUN-A1-003-LANE-ALIBABA-003-2 OK finish=stop tokens=1279 out=1570ch t=25.3s
+[11:20:11]   [549/810] RUN-A1-003-LANE-ALIBABA-003-3 OK finish=stop tokens=1279 out=1570ch t=25.2s
+[11:20:48]   [550/810] RUN-A1-004-LANE-ALIBABA-003-1 OK finish=stop tokens=1706 out=2293ch t=35.0s
+[11:21:24]   [551/810] RUN-A1-004-LANE-ALIBABA-003-2 OK finish=stop tokens=1607 out=3238ch t=34.3s
+[11:22:00]   [552/810] RUN-A1-004-LANE-ALIBABA-003-3 OK finish=stop tokens=1706 out=2293ch t=35.1s
+[11:22:26]   [553/810] RUN-A1-005-LANE-ALIBABA-003-1 OK finish=stop tokens=1225 out=2583ch t=24.3s
+[11:22:52]   [554/810] RUN-A1-005-LANE-ALIBABA-003-2 OK finish=stop tokens=1225 out=2583ch t=24.2s
+[11:23:18]   [555/810] RUN-A1-005-LANE-ALIBABA-003-3 OK finish=stop tokens=1225 out=2583ch t=24.2s
+[11:23:50]   [556/810] RUN-A1-006-LANE-ALIBABA-003-1 OK finish=stop tokens=1451 out=2713ch t=30.5s
+[11:24:21]   [557/810] RUN-A1-006-LANE-ALIBABA-003-2 OK finish=stop tokens=1451 out=2713ch t=29.9s
+[11:24:53]   [558/810] RUN-A1-006-LANE-ALIBABA-003-3 OK finish=stop tokens=1451 out=2713ch t=30.3s
+[11:25:22]   [559/810] RUN-A1-007-LANE-ALIBABA-003-1 OK finish=stop tokens=1404 out=2239ch t=27.9s CAT_MISS=UNSCORED
+[11:25:52]   [560/810] RUN-A1-007-LANE-ALIBABA-003-2 OK finish=stop tokens=1404 out=2239ch t=28.0s CAT_MISS=UNSCORED
+[11:26:21]   [561/810] RUN-A1-007-LANE-ALIBABA-003-3 OK finish=stop tokens=1359 out=1952ch t=27.6s CAT_MISS=UNSCORED
+[11:26:52]   [562/810] RUN-A1-008-LANE-ALIBABA-003-1 OK finish=stop tokens=1439 out=3035ch t=30.0s CAT_MISS=UNSCORED
+[11:27:23]   [563/810] RUN-A1-008-LANE-ALIBABA-003-2 OK finish=stop tokens=1439 out=3035ch t=29.2s CAT_MISS=UNSCORED
+[11:27:54]   [564/810] RUN-A1-008-LANE-ALIBABA-003-3 OK finish=stop tokens=1439 out=3035ch t=29.2s CAT_MISS=UNSCORED
+[11:28:30]   [565/810] RUN-A1-009-LANE-ALIBABA-003-1 OK finish=stop tokens=1692 out=3575ch t=34.6s
+[11:29:06]   [566/810] RUN-A1-009-LANE-ALIBABA-003-2 OK finish=stop tokens=1692 out=3575ch t=34.7s
+[11:29:42]   [567/810] RUN-A1-009-LANE-ALIBABA-003-3 OK finish=stop tokens=1692 out=3575ch t=34.7s
+[11:30:21]   [568/810] RUN-A1-010-LANE-ALIBABA-003-1 OK finish=stop tokens=1794 out=2359ch t=37.4s
+[11:31:00]   [569/810] RUN-A1-010-LANE-ALIBABA-003-2 OK finish=stop tokens=1794 out=2359ch t=37.3s
+[11:31:39]   [570/810] RUN-A1-010-LANE-ALIBABA-003-3 OK finish=stop tokens=1794 out=2359ch t=37.4s
+[11:32:07]   [571/810] RUN-A2-001-LANE-ALIBABA-003-1 OK finish=stop tokens=1323 out=1530ch t=26.9s
+[11:32:35]   [572/810] RUN-A2-001-LANE-ALIBABA-003-2 OK finish=stop tokens=1323 out=1530ch t=26.8s
+[11:33:04]   [573/810] RUN-A2-001-LANE-ALIBABA-003-3 OK finish=stop tokens=1323 out=1530ch t=26.9s
+[11:33:35]   [574/810] RUN-A2-002-LANE-ALIBABA-003-1 OK finish=stop tokens=1505 out=2358ch t=30.1s
+[11:34:07]   [575/810] RUN-A2-002-LANE-ALIBABA-003-2 OK finish=stop tokens=1505 out=2358ch t=30.1s
+[11:34:39]   [576/810] RUN-A2-002-LANE-ALIBABA-003-3 OK finish=stop tokens=1505 out=2358ch t=30.2s
+[11:35:11]   [577/810] RUN-A2-003-LANE-ALIBABA-003-1 OK finish=stop tokens=1523 out=2838ch t=31.2s
+[11:35:44]   [578/810] RUN-A2-003-LANE-ALIBABA-003-2 OK finish=stop tokens=1523 out=2838ch t=31.2s
+[11:36:17]   [579/810] RUN-A2-003-LANE-ALIBABA-003-3 OK finish=stop tokens=1523 out=2838ch t=31.2s
+[11:36:39]   [580/810] RUN-A2-004-LANE-ALIBABA-003-1 OK finish=stop tokens=1038 out=2059ch t=20.6s
+[11:37:01]   [581/810] RUN-A2-004-LANE-ALIBABA-003-2 OK finish=stop tokens=1038 out=2059ch t=20.5s
+[11:37:23]   [582/810] RUN-A2-004-LANE-ALIBABA-003-3 OK finish=stop tokens=1038 out=2059ch t=20.6s
+[11:37:54]   [583/810] RUN-A2-005-LANE-ALIBABA-003-1 OK finish=stop tokens=1421 out=2041ch t=29.1s
+[11:38:24]   [584/810] RUN-A2-005-LANE-ALIBABA-003-2 OK finish=stop tokens=1421 out=2041ch t=29.2s
+[11:38:55]   [585/810] RUN-A2-005-LANE-ALIBABA-003-3 OK finish=stop tokens=1421 out=2041ch t=29.1s
+[11:39:25]   [586/810] RUN-A2-006-LANE-ALIBABA-003-1 OK finish=stop tokens=1389 out=3402ch t=28.4s
+[11:39:55]   [587/810] RUN-A2-006-LANE-ALIBABA-003-2 OK finish=stop tokens=1389 out=3402ch t=28.4s
+[11:40:25]   [588/810] RUN-A2-006-LANE-ALIBABA-003-3 OK finish=stop tokens=1389 out=3402ch t=28.4s
+[11:40:53]   [589/810] RUN-A2-007-LANE-ALIBABA-003-1 OK finish=stop tokens=1294 out=2585ch t=26.3s CAT_MISS=UNSCORED
+[11:41:20]   [590/810] RUN-A2-007-LANE-ALIBABA-003-2 OK finish=stop tokens=1294 out=2585ch t=26.3s CAT_MISS=UNSCORED
+[11:41:48]   [591/810] RUN-A2-007-LANE-ALIBABA-003-3 OK finish=stop tokens=1294 out=2585ch t=26.3s CAT_MISS=UNSCORED
+[11:42:12]   [592/810] RUN-A2-008-LANE-ALIBABA-003-1 OK finish=stop tokens=1117 out=1789ch t=22.2s CAT_MISS=UNSCORED
+[11:42:36]   [593/810] RUN-A2-008-LANE-ALIBABA-003-2 OK finish=stop tokens=1117 out=1789ch t=22.2s CAT_MISS=UNSCORED
+[11:42:59]   [594/810] RUN-A2-008-LANE-ALIBABA-003-3 OK finish=stop tokens=1117 out=1789ch t=22.2s CAT_MISS=UNSCORED
+[11:43:31]   [595/810] RUN-A2-009-LANE-ALIBABA-003-1 OK finish=stop tokens=1477 out=3527ch t=30.0s
+[11:44:02]   [596/810] RUN-A2-009-LANE-ALIBABA-003-2 OK finish=stop tokens=1477 out=3527ch t=30.2s
+[11:44:34]   [597/810] RUN-A2-009-LANE-ALIBABA-003-3 OK finish=stop tokens=1477 out=3527ch t=30.1s
+[11:45:05]   [598/810] RUN-A2-010-LANE-ALIBABA-003-1 OK finish=stop tokens=1411 out=2415ch t=29.1s
+[11:45:35]   [599/810] RUN-A2-010-LANE-ALIBABA-003-2 OK finish=stop tokens=1411 out=2415ch t=29.1s
+[11:46:06]   [600/810] RUN-A2-010-LANE-ALIBABA-003-3 OK finish=stop tokens=1411 out=2415ch t=29.1s
+[11:46:33]   [601/810] RUN-A3-001-LANE-ALIBABA-003-1 OK finish=stop tokens=1265 out=1982ch t=25.6s
+[11:47:00]   [602/810] RUN-A3-001-LANE-ALIBABA-003-2 OK finish=stop tokens=1265 out=1982ch t=25.6s
+[11:47:27]   [603/810] RUN-A3-001-LANE-ALIBABA-003-3 OK finish=stop tokens=1265 out=1982ch t=25.6s
+[11:47:47]   [604/810] RUN-A3-002-LANE-ALIBABA-003-1 OK finish=stop tokens=960 out=2713ch t=18.6s
+[11:48:07]   [605/810] RUN-A3-002-LANE-ALIBABA-003-2 OK finish=stop tokens=960 out=2713ch t=18.6s
+[11:48:28]   [606/810] RUN-A3-002-LANE-ALIBABA-003-3 OK finish=stop tokens=960 out=2713ch t=18.6s
+[11:49:00]   [607/810] RUN-A3-003-LANE-ALIBABA-003-1 OK finish=stop tokens=1502 out=2111ch t=30.9s
+[11:49:32]   [608/810] RUN-A3-003-LANE-ALIBABA-003-2 OK finish=stop tokens=1502 out=2111ch t=30.9s
+[11:50:05]   [609/810] RUN-A3-003-LANE-ALIBABA-003-3 OK finish=stop tokens=1502 out=2111ch t=31.0s
+[11:50:27]   [610/810] RUN-A3-004-LANE-ALIBABA-003-1 OK finish=stop tokens=1047 out=2524ch t=20.9s
+[11:50:49]   [611/810] RUN-A3-004-LANE-ALIBABA-003-2 OK finish=stop tokens=1047 out=2524ch t=20.7s
+[11:51:12]   [612/810] RUN-A3-004-LANE-ALIBABA-003-3 OK finish=stop tokens=1047 out=2524ch t=21.2s
+[11:51:44]   [613/810] RUN-A3-005-LANE-ALIBABA-003-1 OK finish=stop tokens=1474 out=2775ch t=30.1s
+[11:52:15]   [614/810] RUN-A3-005-LANE-ALIBABA-003-2 OK finish=stop tokens=1474 out=2775ch t=30.2s
+[11:52:47]   [615/810] RUN-A3-005-LANE-ALIBABA-003-3 OK finish=stop tokens=1474 out=2775ch t=30.1s
+[11:53:11]   [616/810] RUN-A3-006-LANE-ALIBABA-003-1 OK finish=stop tokens=1143 out=2359ch t=22.6s
+[11:53:35]   [617/810] RUN-A3-006-LANE-ALIBABA-003-2 OK finish=stop tokens=1143 out=2359ch t=22.6s
+[11:53:59]   [618/810] RUN-A3-006-LANE-ALIBABA-003-3 OK finish=stop tokens=1143 out=2359ch t=22.6s
+[11:54:43]   [619/810] RUN-A3-007-LANE-ALIBABA-003-1 OK finish=stop tokens=2006 out=3375ch t=42.3s CAT_MISS=UNSCORED
+[11:55:27]   [620/810] RUN-A3-007-LANE-ALIBABA-003-2 OK finish=stop tokens=2006 out=3375ch t=42.2s CAT_MISS=UNSCORED
+[11:56:10]   [621/810] RUN-A3-007-LANE-ALIBABA-003-3 OK finish=stop tokens=2006 out=3375ch t=42.3s CAT_MISS=UNSCORED
+[11:56:35]   [622/810] RUN-A3-008-LANE-ALIBABA-003-1 OK finish=stop tokens=1164 out=1591ch t=23.0s CAT_MISS=UNSCORED
+[11:56:59]   [623/810] RUN-A3-008-LANE-ALIBABA-003-2 OK finish=stop tokens=1164 out=1591ch t=23.0s CAT_MISS=UNSCORED
+[11:57:24]   [624/810] RUN-A3-008-LANE-ALIBABA-003-3 OK finish=stop tokens=1164 out=1591ch t=23.0s CAT_MISS=UNSCORED
+[11:57:47]   [625/810] RUN-A3-009-LANE-ALIBABA-003-1 OK finish=stop tokens=1135 out=2867ch t=22.0s
+[11:58:11]   [626/810] RUN-A3-009-LANE-ALIBABA-003-2 OK finish=stop tokens=1135 out=2867ch t=22.1s
+[11:58:35]   [627/810] RUN-A3-009-LANE-ALIBABA-003-3 OK finish=stop tokens=1135 out=2867ch t=22.1s
+[11:59:14]   [628/810] RUN-A3-010-LANE-ALIBABA-003-1 OK finish=stop tokens=1838 out=4481ch t=38.2s
+[11:59:55]   [629/810] RUN-A3-010-LANE-ALIBABA-003-2 OK finish=stop tokens=1838 out=4481ch t=39.1s
+[12:00:35]   [630/810] RUN-A3-010-LANE-ALIBABA-003-3 OK finish=stop tokens=1834 out=4488ch t=38.7s
+[12:01:14]   [631/810] RUN-A4-001-LANE-ALIBABA-003-1 OK finish=stop tokens=1726 out=3170ch t=37.6s
+[12:02:11]   [632/810] RUN-A4-001-LANE-ALIBABA-003-2 OK finish=stop tokens=2009 out=3351ch t=54.9s
+[12:02:48]   [633/810] RUN-A4-001-LANE-ALIBABA-003-3 OK finish=stop tokens=1726 out=3170ch t=36.1s
+[12:03:33]   [634/810] RUN-A4-002-LANE-ALIBABA-003-1 OK finish=stop tokens=2038 out=3981ch t=42.9s
+[12:04:17]   [635/810] RUN-A4-002-LANE-ALIBABA-003-2 OK finish=stop tokens=2038 out=3981ch t=42.9s
+[12:05:02]   [636/810] RUN-A4-002-LANE-ALIBABA-003-3 OK finish=stop tokens=2038 out=3981ch t=42.8s
+[12:05:34]   [637/810] RUN-A4-003-LANE-ALIBABA-003-1 OK finish=stop tokens=1523 out=3787ch t=31.1s
+[12:06:07]   [638/810] RUN-A4-003-LANE-ALIBABA-003-2 OK finish=stop tokens=1523 out=3787ch t=31.0s
+[12:06:39]   [639/810] RUN-A4-003-LANE-ALIBABA-003-3 OK finish=stop tokens=1523 out=3787ch t=31.0s
+[12:07:07]   [640/810] RUN-A4-004-LANE-ALIBABA-003-1 OK finish=stop tokens=1358 out=1408ch t=26.8s
+[12:07:36]   [641/810] RUN-A4-004-LANE-ALIBABA-003-2 OK finish=stop tokens=1358 out=1408ch t=26.8s
+[12:08:04]   [642/810] RUN-A4-004-LANE-ALIBABA-003-3 OK finish=stop tokens=1358 out=1408ch t=26.8s
+[12:08:45]   [643/810] RUN-A4-005-LANE-ALIBABA-003-1 OK finish=stop tokens=1859 out=3755ch t=39.3s
+[12:09:26]   [644/810] RUN-A4-005-LANE-ALIBABA-003-2 OK finish=stop tokens=1859 out=3755ch t=39.3s
+[12:10:06]   [645/810] RUN-A4-005-LANE-ALIBABA-003-3 OK finish=stop tokens=1859 out=3755ch t=39.3s
+[12:10:35]   [646/810] RUN-A4-006-LANE-ALIBABA-003-1 OK finish=stop tokens=1340 out=3146ch t=27.0s
+[12:11:03]   [647/810] RUN-A4-006-LANE-ALIBABA-003-2 OK finish=stop tokens=1340 out=3146ch t=27.0s
+[12:11:32]   [648/810] RUN-A4-006-LANE-ALIBABA-003-3 OK finish=stop tokens=1340 out=3146ch t=27.0s
+[12:12:02]   [649/810] RUN-A4-007-LANE-ALIBABA-003-1 OK finish=stop tokens=1389 out=2870ch t=28.4s CAT_MISS=UNSCORED
+[12:12:32]   [650/810] RUN-A4-007-LANE-ALIBABA-003-2 OK finish=stop tokens=1389 out=2870ch t=28.4s CAT_MISS=UNSCORED
+[12:13:02]   [651/810] RUN-A4-007-LANE-ALIBABA-003-3 OK finish=stop tokens=1389 out=2870ch t=28.5s CAT_MISS=UNSCORED
+[12:13:37]   [652/810] RUN-A4-008-LANE-ALIBABA-003-1 OK finish=stop tokens=1639 out=3543ch t=33.4s CAT_MISS=UNSCORED
+[12:14:12]   [653/810] RUN-A4-008-LANE-ALIBABA-003-2 OK finish=stop tokens=1639 out=3543ch t=33.4s CAT_MISS=UNSCORED
+[12:14:46]   [654/810] RUN-A4-008-LANE-ALIBABA-003-3 OK finish=stop tokens=1639 out=3543ch t=33.4s CAT_MISS=UNSCORED
+[12:15:25]   [655/810] RUN-A4-009-LANE-ALIBABA-003-1 OK finish=stop tokens=1791 out=3627ch t=37.3s
+[12:16:04]   [656/810] RUN-A4-009-LANE-ALIBABA-003-2 OK finish=stop tokens=1791 out=3627ch t=37.3s
+[12:16:43]   [657/810] RUN-A4-009-LANE-ALIBABA-003-3 OK finish=stop tokens=1791 out=3627ch t=37.3s
+[12:17:18]   [658/810] RUN-A4-010-LANE-ALIBABA-003-1 OK finish=stop tokens=1626 out=3252ch t=33.4s
+[12:17:53]   [659/810] RUN-A4-010-LANE-ALIBABA-003-2 OK finish=stop tokens=1626 out=3252ch t=33.6s
+[12:18:28]   [660/810] RUN-A4-010-LANE-ALIBABA-003-3 OK finish=stop tokens=1626 out=3252ch t=33.5s
+[12:19:05]   [661/810] RUN-A5-001-LANE-ALIBABA-003-1 OK finish=stop tokens=1712 out=2836ch t=35.5s
+[12:19:42]   [662/810] RUN-A5-001-LANE-ALIBABA-003-2 OK finish=stop tokens=1712 out=2836ch t=35.6s
+[12:20:19]   [663/810] RUN-A5-001-LANE-ALIBABA-003-3 OK finish=stop tokens=1712 out=2836ch t=35.5s
+[12:20:54]   [664/810] RUN-A5-002-LANE-ALIBABA-003-1 OK finish=stop tokens=1609 out=3555ch t=33.3s
+[12:21:28]   [665/810] RUN-A5-002-LANE-ALIBABA-003-2 OK finish=stop tokens=1609 out=3555ch t=33.2s
+[12:22:03]   [666/810] RUN-A5-002-LANE-ALIBABA-003-3 OK finish=stop tokens=1609 out=3555ch t=33.3s
+[12:22:36]   [667/810] RUN-A5-003-LANE-ALIBABA-003-1 OK finish=stop tokens=1556 out=3039ch t=31.8s
+[12:23:10]   [668/810] RUN-A5-003-LANE-ALIBABA-003-2 OK finish=stop tokens=1556 out=3039ch t=31.8s
+[12:23:43]   [669/810] RUN-A5-003-LANE-ALIBABA-003-3 OK finish=stop tokens=1556 out=3039ch t=31.7s
+[12:24:19]   [670/810] RUN-A5-004-LANE-ALIBABA-003-1 OK finish=stop tokens=1681 out=3739ch t=34.1s
+[12:24:54]   [671/810] RUN-A5-004-LANE-ALIBABA-003-2 OK finish=stop tokens=1681 out=3739ch t=34.2s
+[12:25:30]   [672/810] RUN-A5-004-LANE-ALIBABA-003-3 OK finish=stop tokens=1681 out=3739ch t=34.2s
+[12:26:00]   [673/810] RUN-A5-005-LANE-ALIBABA-003-1 OK finish=stop tokens=1429 out=3118ch t=29.0s
+[12:26:31]   [674/810] RUN-A5-005-LANE-ALIBABA-003-2 OK finish=stop tokens=1429 out=3118ch t=29.0s
+[12:27:01]   [675/810] RUN-A5-005-LANE-ALIBABA-003-3 OK finish=stop tokens=1429 out=3118ch t=29.0s
+[12:27:33]   [676/810] RUN-A5-006-LANE-ALIBABA-003-1 OK finish=stop tokens=1456 out=2886ch t=29.8s
+[12:28:04]   [677/810] RUN-A5-006-LANE-ALIBABA-003-2 OK finish=stop tokens=1456 out=2886ch t=29.7s
+[12:28:35]   [678/810] RUN-A5-006-LANE-ALIBABA-003-3 OK finish=stop tokens=1456 out=2886ch t=29.7s
+[12:29:02]   [679/810] RUN-A5-007-LANE-ALIBABA-003-1 OK finish=stop tokens=1292 out=2548ch t=26.0s CAT_MISS=UNSCORED
+[12:29:30]   [680/810] RUN-A5-007-LANE-ALIBABA-003-2 OK finish=stop tokens=1292 out=2548ch t=26.1s CAT_MISS=UNSCORED
+[12:29:58]   [681/810] RUN-A5-007-LANE-ALIBABA-003-3 OK finish=stop tokens=1292 out=2548ch t=26.0s CAT_MISS=UNSCORED
+[12:30:31]   [682/810] RUN-A5-008-LANE-ALIBABA-003-1 OK finish=stop tokens=1570 out=3829ch t=31.5s CAT_MISS=UNSCORED
+[12:31:03]   [683/810] RUN-A5-008-LANE-ALIBABA-003-2 OK finish=stop tokens=1570 out=3829ch t=31.4s CAT_MISS=UNSCORED
+[12:31:36]   [684/810] RUN-A5-008-LANE-ALIBABA-003-3 OK finish=stop tokens=1570 out=3829ch t=31.5s CAT_MISS=UNSCORED
+[12:32:12]   [685/810] RUN-A5-009-LANE-ALIBABA-003-1 OK finish=stop tokens=1697 out=3864ch t=34.3s
+[12:32:48]   [686/810] RUN-A5-009-LANE-ALIBABA-003-2 OK finish=stop tokens=1697 out=3864ch t=34.3s
+[12:33:24]   [687/810] RUN-A5-009-LANE-ALIBABA-003-3 OK finish=stop tokens=1697 out=3864ch t=34.4s
+[12:34:04]   [688/810] RUN-A5-010-LANE-ALIBABA-003-1 OK finish=stop tokens=1850 out=3669ch t=38.1s
+[12:34:43]   [689/810] RUN-A5-010-LANE-ALIBABA-003-2 OK finish=stop tokens=1850 out=3669ch t=38.1s
+[12:35:23]   [690/810] RUN-A5-010-LANE-ALIBABA-003-3 OK finish=stop tokens=1850 out=3669ch t=38.1s
+[12:35:50]   [691/810] RUN-B-001-LANE-ALIBABA-003-1 OK finish=stop tokens=1304 out=2365ch t=25.9s
+[12:36:18]   [692/810] RUN-B-001-LANE-ALIBABA-003-2 OK finish=stop tokens=1304 out=2365ch t=25.9s
+[12:36:45]   [693/810] RUN-B-001-LANE-ALIBABA-003-3 OK finish=stop tokens=1304 out=2365ch t=25.9s
+[12:37:11]   [694/810] RUN-B-002-LANE-ALIBABA-003-1 OK finish=stop tokens=1243 out=2366ch t=24.8s
+[12:37:38]   [695/810] RUN-B-002-LANE-ALIBABA-003-2 OK finish=stop tokens=1243 out=2366ch t=24.9s
+[12:38:04]   [696/810] RUN-B-002-LANE-ALIBABA-003-3 OK finish=stop tokens=1243 out=2366ch t=25.0s
+[12:38:32]   [697/810] RUN-B-003-LANE-ALIBABA-003-1 OK finish=stop tokens=1313 out=2710ch t=25.9s
+[12:38:59]   [698/810] RUN-B-003-LANE-ALIBABA-003-2 OK finish=stop tokens=1313 out=2710ch t=26.0s
+[12:39:27]   [699/810] RUN-B-003-LANE-ALIBABA-003-3 OK finish=stop tokens=1313 out=2710ch t=26.0s
+[12:39:55]   [700/810] RUN-B-004-LANE-ALIBABA-003-1 OK finish=stop tokens=1368 out=2781ch t=27.3s
+[12:40:24]   [701/810] RUN-B-004-LANE-ALIBABA-003-2 OK finish=stop tokens=1368 out=2781ch t=27.3s
+[12:40:53]   [702/810] RUN-B-004-LANE-ALIBABA-003-3 OK finish=stop tokens=1368 out=2781ch t=27.3s
+[12:41:17]   [703/810] RUN-B-005-LANE-ALIBABA-003-1 OK finish=stop tokens=1127 out=2328ch t=22.2s
+[12:41:40]   [704/810] RUN-B-005-LANE-ALIBABA-003-2 OK finish=stop tokens=1127 out=2328ch t=22.4s
+[12:42:04]   [705/810] RUN-B-005-LANE-ALIBABA-003-3 OK finish=stop tokens=1127 out=2328ch t=22.3s
+[12:42:27]   [706/810] RUN-B-006-LANE-ALIBABA-003-1 OK finish=stop tokens=1113 out=1824ch t=20.9s
+[12:42:49]   [707/810] RUN-B-006-LANE-ALIBABA-003-2 OK finish=stop tokens=1113 out=1824ch t=21.0s
+[12:43:12]   [708/810] RUN-B-006-LANE-ALIBABA-003-3 OK finish=stop tokens=1113 out=1824ch t=21.0s
+[12:43:47]   [709/810] RUN-B-007-LANE-ALIBABA-003-1 OK finish=stop tokens=1668 out=2377ch t=33.5s
+[12:44:22]   [710/810] RUN-B-007-LANE-ALIBABA-003-2 OK finish=stop tokens=1668 out=2377ch t=33.5s
+[12:44:57]   [711/810] RUN-B-007-LANE-ALIBABA-003-3 OK finish=stop tokens=1668 out=2377ch t=33.5s
+[12:45:33]   [712/810] RUN-B-008-LANE-ALIBABA-003-1 OK finish=stop tokens=1702 out=3219ch t=34.8s
+[12:46:09]   [713/810] RUN-B-008-LANE-ALIBABA-003-2 OK finish=stop tokens=1702 out=3219ch t=34.9s
+[12:46:46]   [714/810] RUN-B-008-LANE-ALIBABA-003-3 OK finish=stop tokens=1702 out=3219ch t=34.9s
+[12:47:08]   [715/810] RUN-B-009-LANE-ALIBABA-003-1 OK finish=stop tokens=1092 out=984ch t=21.1s
+[12:47:31]   [716/810] RUN-B-009-LANE-ALIBABA-003-2 OK finish=stop tokens=1092 out=984ch t=21.0s
+[12:47:54]   [717/810] RUN-B-009-LANE-ALIBABA-003-3 OK finish=stop tokens=1092 out=984ch t=21.1s
+[12:48:43]   [718/810] RUN-B-010-LANE-ALIBABA-003-1 OK finish=stop tokens=2269 out=3479ch t=47.9s
+[12:49:32]   [719/810] RUN-B-010-LANE-ALIBABA-003-2 OK finish=stop tokens=2269 out=3479ch t=48.0s
+[12:50:22]   [720/810] RUN-B-010-LANE-ALIBABA-003-3 OK finish=stop tokens=2269 out=3479ch t=48.0s
+[12:50:53]   [721/810] RUN-B-011-LANE-ALIBABA-003-1 OK finish=stop tokens=1444 out=3076ch t=29.2s
+[12:51:23]   [722/810] RUN-B-011-LANE-ALIBABA-003-2 OK finish=stop tokens=1444 out=3076ch t=29.2s
+[12:51:54]   [723/810] RUN-B-011-LANE-ALIBABA-003-3 OK finish=stop tokens=1444 out=3076ch t=29.2s
+[12:52:11]   [724/810] RUN-B-012-LANE-ALIBABA-003-1 OK finish=stop tokens=818 out=1372ch t=15.0s
+[12:52:27]   [725/810] RUN-B-012-LANE-ALIBABA-003-2 OK finish=stop tokens=818 out=1372ch t=15.0s
+[12:52:44]   [726/810] RUN-B-012-LANE-ALIBABA-003-3 OK finish=stop tokens=818 out=1372ch t=15.1s
+[12:53:07]   [727/810] RUN-B-013-LANE-ALIBABA-003-1 OK finish=stop tokens=1104 out=2232ch t=21.7s
+[12:53:30]   [728/810] RUN-B-013-LANE-ALIBABA-003-2 OK finish=stop tokens=1104 out=2232ch t=21.7s
+[12:53:53]   [729/810] RUN-B-013-LANE-ALIBABA-003-3 OK finish=stop tokens=1104 out=2232ch t=21.7s
+[12:54:16]   [730/810] RUN-B-014-LANE-ALIBABA-003-1 OK finish=stop tokens=1095 out=1700ch t=21.0s
+[12:54:39]   [731/810] RUN-B-014-LANE-ALIBABA-003-2 OK finish=stop tokens=1095 out=1700ch t=21.2s
+[12:55:01]   [732/810] RUN-B-014-LANE-ALIBABA-003-3 OK finish=stop tokens=1095 out=1700ch t=21.1s
+[12:55:30]   [733/810] RUN-B-015-LANE-ALIBABA-003-1 OK finish=stop tokens=1336 out=3102ch t=27.3s
+[12:55:59]   [734/810] RUN-B-015-LANE-ALIBABA-003-2 OK finish=stop tokens=1336 out=3102ch t=27.3s
+[12:56:28]   [735/810] RUN-B-015-LANE-ALIBABA-003-3 OK finish=stop tokens=1336 out=3102ch t=27.4s
+[12:56:58]   [736/810] RUN-B-016-LANE-ALIBABA-003-1 OK finish=stop tokens=1424 out=2059ch t=28.7s
+[12:57:28]   [737/810] RUN-B-016-LANE-ALIBABA-003-2 OK finish=stop tokens=1424 out=2059ch t=28.9s
+[12:57:59]   [738/810] RUN-B-016-LANE-ALIBABA-003-3 OK finish=stop tokens=1424 out=2059ch t=28.7s
+[12:58:33]   [739/810] RUN-B-017-LANE-ALIBABA-003-1 OK finish=stop tokens=1625 out=2574ch t=32.9s
+[12:59:07]   [740/810] RUN-B-017-LANE-ALIBABA-003-2 OK finish=stop tokens=1625 out=2574ch t=33.0s
+[12:59:42]   [741/810] RUN-B-017-LANE-ALIBABA-003-3 OK finish=stop tokens=1625 out=2574ch t=33.0s
+[13:00:05]   [742/810] RUN-B-018-LANE-ALIBABA-003-1 OK finish=stop tokens=1083 out=1946ch t=21.6s
+[13:00:28]   [743/810] RUN-B-018-LANE-ALIBABA-003-2 OK finish=stop tokens=1083 out=1946ch t=21.4s
+[13:00:51]   [744/810] RUN-B-018-LANE-ALIBABA-003-3 OK finish=stop tokens=1083 out=1946ch t=21.5s
+[13:01:13]   [745/810] RUN-B-019-LANE-ALIBABA-003-1 OK finish=stop tokens=1068 out=574ch t=20.5s
+[13:01:35]   [746/810] RUN-B-019-LANE-ALIBABA-003-2 OK finish=stop tokens=1068 out=574ch t=20.5s
+[13:01:57]   [747/810] RUN-B-019-LANE-ALIBABA-003-3 OK finish=stop tokens=1068 out=574ch t=20.5s
+[13:02:31]   [748/810] RUN-B-020-LANE-ALIBABA-003-1 OK finish=stop tokens=1588 out=2253ch t=32.4s
+[13:03:05]   [749/810] RUN-B-020-LANE-ALIBABA-003-2 OK finish=stop tokens=1588 out=2253ch t=32.4s
+[13:03:39]   [750/810] RUN-B-020-LANE-ALIBABA-003-3 OK finish=stop tokens=1588 out=2253ch t=32.5s
+[13:04:02]   [751/810] RUN-C-001-LANE-ALIBABA-003-1 OK finish=stop tokens=1104 out=2243ch t=22.1s CAT_MISS=UNSCORED
+[13:04:26]   [752/810] RUN-C-001-LANE-ALIBABA-003-2 OK finish=stop tokens=1104 out=2243ch t=22.0s CAT_MISS=UNSCORED
+[13:04:49]   [753/810] RUN-C-001-LANE-ALIBABA-003-3 OK finish=stop tokens=1104 out=2243ch t=22.0s CAT_MISS=UNSCORED
+[13:05:07]   [754/810] RUN-C-002-LANE-ALIBABA-003-1 OK finish=stop tokens=842 out=1371ch t=16.1s CAT_MISS=UNSCORED
+[13:05:24]   [755/810] RUN-C-002-LANE-ALIBABA-003-2 OK finish=stop tokens=842 out=1371ch t=16.1s CAT_MISS=UNSCORED
+[13:05:42]   [756/810] RUN-C-002-LANE-ALIBABA-003-3 OK finish=stop tokens=842 out=1371ch t=16.0s CAT_MISS=UNSCORED
+[13:06:00]   [757/810] RUN-C-003-LANE-ALIBABA-003-1 OK finish=stop tokens=902 out=1486ch t=16.9s CAT_MISS=UNSCORED
+[13:06:19]   [758/810] RUN-C-003-LANE-ALIBABA-003-2 OK finish=stop tokens=902 out=1486ch t=16.9s CAT_MISS=UNSCORED
+[13:06:37]   [759/810] RUN-C-003-LANE-ALIBABA-003-3 OK finish=stop tokens=902 out=1486ch t=16.9s CAT_MISS=UNSCORED
+[13:07:11]   [760/810] RUN-C-004-LANE-ALIBABA-003-1 OK finish=stop tokens=1543 out=2633ch t=32.6s CAT_MISS=UNSCORED
+[13:07:44]   [761/810] RUN-C-004-LANE-ALIBABA-003-2 OK finish=stop tokens=1543 out=2633ch t=31.6s CAT_MISS=UNSCORED
+[13:08:17]   [762/810] RUN-C-004-LANE-ALIBABA-003-3 OK finish=stop tokens=1543 out=2633ch t=31.6s CAT_MISS=UNSCORED
+[13:08:43]   [763/810] RUN-C-005-LANE-ALIBABA-003-1 OK finish=stop tokens=1238 out=2485ch t=24.4s CAT_MISS=UNSCORED
+[13:09:09]   [764/810] RUN-C-005-LANE-ALIBABA-003-2 OK finish=stop tokens=1238 out=2485ch t=24.4s CAT_MISS=UNSCORED
+[13:09:35]   [765/810] RUN-C-005-LANE-ALIBABA-003-3 OK finish=stop tokens=1238 out=2485ch t=24.5s CAT_MISS=UNSCORED
+[13:09:56]   [766/810] RUN-C-006-LANE-ALIBABA-003-1 OK finish=stop tokens=1004 out=976ch t=19.6s
+[13:10:17]   [767/810] RUN-C-006-LANE-ALIBABA-003-2 OK finish=stop tokens=1004 out=976ch t=19.5s
+[13:10:38]   [768/810] RUN-C-006-LANE-ALIBABA-003-3 OK finish=stop tokens=1004 out=976ch t=19.6s
+[13:10:59]   [769/810] RUN-C-007-LANE-ALIBABA-003-1 OK finish=stop tokens=977 out=2207ch t=19.1s CAT_MISS=UNSCORED
+[13:11:20]   [770/810] RUN-C-007-LANE-ALIBABA-003-2 OK finish=stop tokens=977 out=2207ch t=19.1s CAT_MISS=UNSCORED
+[13:11:40]   [771/810] RUN-C-007-LANE-ALIBABA-003-3 OK finish=stop tokens=977 out=2207ch t=19.0s CAT_MISS=UNSCORED
+[13:12:00]   [772/810] RUN-C-008-LANE-ALIBABA-003-1 OK finish=stop tokens=959 out=1528ch t=18.3s CAT_MISS=UNSCORED
+[13:12:20]   [773/810] RUN-C-008-LANE-ALIBABA-003-2 OK finish=stop tokens=959 out=1528ch t=18.2s CAT_MISS=UNSCORED
+[13:12:39]   [774/810] RUN-C-008-LANE-ALIBABA-003-3 OK finish=stop tokens=959 out=1528ch t=18.3s CAT_MISS=UNSCORED
+[13:13:20]   [775/810] RUN-C-009-LANE-ALIBABA-003-1 OK finish=stop tokens=1849 out=3583ch t=38.9s CAT_MISS=UNSCORED
+[13:14:00]   [776/810] RUN-C-009-LANE-ALIBABA-003-2 OK finish=stop tokens=1849 out=3583ch t=38.9s CAT_MISS=UNSCORED
+[13:14:41]   [777/810] RUN-C-009-LANE-ALIBABA-003-3 OK finish=stop tokens=1849 out=3583ch t=38.8s CAT_MISS=UNSCORED
+[13:15:07]   [778/810] RUN-C-010-LANE-ALIBABA-003-1 OK finish=stop tokens=1220 out=2687ch t=24.8s CAT_MISS=UNSCORED
+[13:15:33]   [779/810] RUN-C-010-LANE-ALIBABA-003-2 OK finish=stop tokens=1220 out=2687ch t=24.8s CAT_MISS=UNSCORED
+[13:16:00]   [780/810] RUN-C-010-LANE-ALIBABA-003-3 OK finish=stop tokens=1220 out=2687ch t=24.9s CAT_MISS=UNSCORED
+[13:16:30]   [781/810] RUN-C-011-LANE-ALIBABA-003-1 OK finish=stop tokens=1405 out=2740ch t=28.4s CAT_MISS=UNSCORED
+[13:16:59]   [782/810] RUN-C-011-LANE-ALIBABA-003-2 OK finish=stop tokens=1405 out=2740ch t=28.5s CAT_MISS=UNSCORED
+[13:17:29]   [783/810] RUN-C-011-LANE-ALIBABA-003-3 OK finish=stop tokens=1405 out=2740ch t=28.4s CAT_MISS=UNSCORED
+[13:18:11]   [784/810] RUN-C-012-LANE-ALIBABA-003-1 OK finish=stop tokens=1906 out=4298ch t=40.4s
+[13:18:54]   [785/810] RUN-C-012-LANE-ALIBABA-003-2 OK finish=stop tokens=1906 out=4298ch t=40.8s
+[13:19:36]   [786/810] RUN-C-012-LANE-ALIBABA-003-3 OK finish=stop tokens=1906 out=4298ch t=40.9s
+[13:19:56]   [787/810] RUN-C-013-LANE-ALIBABA-003-1 OK finish=stop tokens=969 out=1707ch t=18.9s CAT_MISS=UNSCORED
+[13:20:17]   [788/810] RUN-C-013-LANE-ALIBABA-003-2 OK finish=stop tokens=969 out=1707ch t=18.9s CAT_MISS=UNSCORED
+[13:20:37]   [789/810] RUN-C-013-LANE-ALIBABA-003-3 OK finish=stop tokens=969 out=1707ch t=18.8s CAT_MISS=UNSCORED
+[13:20:50]   [790/810] RUN-C-014-LANE-ALIBABA-003-1 OK finish=stop tokens=679 out=982ch t=11.9s CAT_MISS=UNSCORED
+[13:21:04]   [791/810] RUN-C-014-LANE-ALIBABA-003-2 OK finish=stop tokens=679 out=982ch t=11.9s CAT_MISS=UNSCORED
+[13:21:17]   [792/810] RUN-C-014-LANE-ALIBABA-003-3 OK finish=stop tokens=679 out=982ch t=11.9s CAT_MISS=UNSCORED
+[13:21:36]   [793/810] RUN-C-015-LANE-ALIBABA-003-1 OK finish=stop tokens=905 out=1877ch t=17.4s CAT_MISS=UNSCORED
+[13:21:55]   [794/810] RUN-C-015-LANE-ALIBABA-003-2 OK finish=stop tokens=905 out=1877ch t=17.4s CAT_MISS=UNSCORED
+[13:22:14]   [795/810] RUN-C-015-LANE-ALIBABA-003-3 OK finish=stop tokens=905 out=1877ch t=17.4s CAT_MISS=UNSCORED
+[13:22:26]   [796/810] RUN-C-016-LANE-ALIBABA-003-1 OK finish=stop tokens=624 out=637ch t=10.6s
+[13:22:38]   [797/810] RUN-C-016-LANE-ALIBABA-003-2 OK finish=stop tokens=624 out=637ch t=10.5s
+[13:22:50]   [798/810] RUN-C-016-LANE-ALIBABA-003-3 OK finish=stop tokens=624 out=637ch t=10.5s
+[13:23:10]   [799/810] RUN-C-017-LANE-ALIBABA-003-1 OK finish=stop tokens=969 out=1903ch t=18.3s CAT_MISS=UNSCORED
+[13:23:30]   [800/810] RUN-C-017-LANE-ALIBABA-003-2 OK finish=stop tokens=969 out=1903ch t=18.4s CAT_MISS=UNSCORED
+[13:23:49]   [801/810] RUN-C-017-LANE-ALIBABA-003-3 OK finish=stop tokens=969 out=1903ch t=18.3s CAT_MISS=UNSCORED
+[13:24:06]   [802/810] RUN-C-018-LANE-ALIBABA-003-1 OK finish=stop tokens=809 out=991ch t=15.1s CAT_MISS=UNSCORED
+[13:24:23]   [803/810] RUN-C-018-LANE-ALIBABA-003-2 OK finish=stop tokens=809 out=991ch t=15.0s CAT_MISS=UNSCORED
+[13:24:39]   [804/810] RUN-C-018-LANE-ALIBABA-003-3 OK finish=stop tokens=809 out=991ch t=15.0s CAT_MISS=UNSCORED
+[13:24:57]   [805/810] RUN-C-019-LANE-ALIBABA-003-1 OK finish=stop tokens=841 out=1794ch t=16.8s
+[13:25:16]   [806/810] RUN-C-019-LANE-ALIBABA-003-2 OK finish=stop tokens=841 out=1794ch t=16.9s
+[13:25:34]   [807/810] RUN-C-019-LANE-ALIBABA-003-3 OK finish=stop tokens=841 out=1794ch t=16.8s
+[13:25:52]   [808/810] RUN-C-020-LANE-ALIBABA-003-1 OK finish=stop tokens=904 out=1547ch t=16.6s
+[13:26:10]   [809/810] RUN-C-020-LANE-ALIBABA-003-2 OK finish=stop tokens=904 out=1547ch t=16.6s
+[13:26:28]   [810/810] RUN-C-020-LANE-ALIBABA-003-3 OK finish=stop tokens=904 out=1547ch t=16.6s

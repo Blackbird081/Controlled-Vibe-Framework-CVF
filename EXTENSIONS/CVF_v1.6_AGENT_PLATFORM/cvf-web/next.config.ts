@@ -1,8 +1,4 @@
 import type { NextConfig } from "next";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const configDir = path.dirname(fileURLToPath(import.meta.url));
 
 const securityHeaders = [
   {
@@ -36,9 +32,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: configDir,
-  },
+  transpilePackages: ['cvf-guard-contract'],
   async headers() {
     return [
       {

@@ -1,0 +1,1085 @@
+[11:24:26] === PHASE A BATCH START === tasks=90 lanes=4 runs_each=3 total=1080 already_done=0
+[11:24:26] --- LANE-ALIBABA-004 (qwen-turbo) role=ROUTER ---
+[11:24:36]   [1/1080] RUN-A1-001-LANE-ALIBABA-004-1 OK finish=stop tokens=772 out=2701ch t=9.9s
+[11:24:45]   [2/1080] RUN-A1-001-LANE-ALIBABA-004-2 OK finish=stop tokens=730 out=2597ch t=6.3s
+[11:25:01]   [3/1080] RUN-A1-001-LANE-ALIBABA-004-3 OK finish=stop tokens=843 out=3001ch t=13.3s
+[11:25:15]   [4/1080] RUN-A1-002-LANE-ALIBABA-004-1 OK finish=stop tokens=765 out=2926ch t=11.0s
+[11:25:30]   [5/1080] RUN-A1-002-LANE-ALIBABA-004-2 OK finish=stop tokens=902 out=3387ch t=12.2s
+[11:25:45]   [6/1080] RUN-A1-002-LANE-ALIBABA-004-3 OK finish=stop tokens=929 out=3469ch t=12.1s
+[11:26:03]   [7/1080] RUN-A1-003-LANE-ALIBABA-004-1 OK finish=stop tokens=1051 out=3867ch t=14.5s
+[11:26:21]   [8/1080] RUN-A1-003-LANE-ALIBABA-004-2 OK finish=stop tokens=1177 out=4211ch t=15.6s
+[11:26:38]   [9/1080] RUN-A1-003-LANE-ALIBABA-004-3 OK finish=stop tokens=984 out=3575ch t=13.9s
+[11:26:52]   [10/1080] RUN-A1-004-LANE-ALIBABA-004-1 OK finish=stop tokens=1021 out=3791ch t=10.5s
+[11:27:05]   [11/1080] RUN-A1-004-LANE-ALIBABA-004-2 OK finish=stop tokens=982 out=3796ch t=10.4s
+[11:27:24]   [12/1080] RUN-A1-004-LANE-ALIBABA-004-3 OK finish=stop tokens=1124 out=4084ch t=16.1s
+[11:27:36]   [13/1080] RUN-A1-005-LANE-ALIBABA-004-1 OK finish=stop tokens=693 out=2592ch t=8.1s
+[11:27:45]   [14/1080] RUN-A1-005-LANE-ALIBABA-004-2 OK finish=stop tokens=600 out=2213ch t=6.5s
+[11:27:55]   [15/1080] RUN-A1-005-LANE-ALIBABA-004-3 OK finish=stop tokens=640 out=2412ch t=6.9s
+[11:28:09]   [16/1080] RUN-A1-006-LANE-ALIBABA-004-1 OK finish=stop tokens=730 out=2703ch t=11.2s
+[11:28:25]   [17/1080] RUN-A1-006-LANE-ALIBABA-004-2 OK finish=stop tokens=839 out=3266ch t=12.4s
+[11:28:37]   [18/1080] RUN-A1-006-LANE-ALIBABA-004-3 OK finish=stop tokens=763 out=2982ch t=9.6s
+[11:28:48]   [19/1080] RUN-A1-007-LANE-ALIBABA-004-1 OK finish=stop tokens=852 out=3476ch t=8.3s CAT_MISS=UNSCORED
+[11:29:00]   [20/1080] RUN-A1-007-LANE-ALIBABA-004-2 OK finish=stop tokens=790 out=2676ch t=9.1s CAT_MISS=UNSCORED
+[11:29:15]   [21/1080] RUN-A1-007-LANE-ALIBABA-004-3 OK finish=stop tokens=812 out=3357ch t=11.1s CAT_MISS=UNSCORED
+[11:29:28]   [22/1080] RUN-A1-008-LANE-ALIBABA-004-1 OK finish=stop tokens=796 out=3232ch t=10.5s CAT_MISS=UNSCORED
+[11:29:44]   [23/1080] RUN-A1-008-LANE-ALIBABA-004-2 OK finish=stop tokens=985 out=4212ch t=13.0s CAT_MISS=UNSCORED
+[11:29:58]   [24/1080] RUN-A1-008-LANE-ALIBABA-004-3 OK finish=stop tokens=897 out=3737ch t=10.6s CAT_MISS=UNSCORED
+[11:30:15]   [25/1080] RUN-A1-009-LANE-ALIBABA-004-1 OK finish=stop tokens=992 out=4009ch t=14.5s
+[11:30:30]   [26/1080] RUN-A1-009-LANE-ALIBABA-004-2 OK finish=stop tokens=969 out=3927ch t=12.0s
+[11:30:48]   [27/1080] RUN-A1-009-LANE-ALIBABA-004-3 OK finish=stop tokens=1076 out=4433ch t=14.7s
+[11:31:02]   [28/1080] RUN-A1-010-LANE-ALIBABA-004-1 OK finish=stop tokens=954 out=4012ch t=11.5s
+[11:31:18]   [29/1080] RUN-A1-010-LANE-ALIBABA-004-2 OK finish=stop tokens=889 out=3746ch t=12.3s
+[11:31:33]   [30/1080] RUN-A1-010-LANE-ALIBABA-004-3 OK finish=stop tokens=971 out=3758ch t=12.0s
+[11:31:43]   [31/1080] RUN-A2-001-LANE-ALIBABA-004-1 OK finish=stop tokens=724 out=2798ch t=7.0s
+[11:31:52]   [32/1080] RUN-A2-001-LANE-ALIBABA-004-2 OK finish=stop tokens=523 out=1768ch t=6.1s
+[11:32:03]   [33/1080] RUN-A2-001-LANE-ALIBABA-004-3 OK finish=stop tokens=634 out=2472ch t=8.0s
+[11:32:16]   [34/1080] RUN-A2-002-LANE-ALIBABA-004-1 OK finish=stop tokens=901 out=2798ch t=10.3s
+[11:32:31]   [35/1080] RUN-A2-002-LANE-ALIBABA-004-2 OK finish=stop tokens=835 out=2564ch t=12.3s
+[11:32:44]   [36/1080] RUN-A2-002-LANE-ALIBABA-004-3 OK finish=stop tokens=740 out=2235ch t=9.8s
+[11:33:00]   [37/1080] RUN-A2-003-LANE-ALIBABA-004-1 OK finish=stop tokens=950 out=3766ch t=12.9s
+[11:33:16]   [38/1080] RUN-A2-003-LANE-ALIBABA-004-2 OK finish=stop tokens=936 out=3861ch t=13.1s
+[11:33:31]   [39/1080] RUN-A2-003-LANE-ALIBABA-004-3 OK finish=stop tokens=929 out=3676ch t=12.0s
+[11:33:41]   [40/1080] RUN-A2-004-LANE-ALIBABA-004-1 OK finish=stop tokens=530 out=1925ch t=6.7s
+[11:33:51]   [41/1080] RUN-A2-004-LANE-ALIBABA-004-2 OK finish=stop tokens=455 out=1633ch t=6.6s
+[11:33:59]   [42/1080] RUN-A2-004-LANE-ALIBABA-004-3 OK finish=stop tokens=538 out=2129ch t=5.4s
+[11:34:10]   [43/1080] RUN-A2-005-LANE-ALIBABA-004-1 OK finish=stop tokens=583 out=2168ch t=8.2s
+[11:34:16]   [44/1080] RUN-A2-005-LANE-ALIBABA-004-2 OK finish=stop tokens=416 out=1368ch t=3.2s
+[11:34:24]   [45/1080] RUN-A2-005-LANE-ALIBABA-004-3 OK finish=stop tokens=440 out=1525ch t=4.8s
+[11:34:37]   [46/1080] RUN-A2-006-LANE-ALIBABA-004-1 OK finish=stop tokens=863 out=3538ch t=9.8s
+[11:34:54]   [47/1080] RUN-A2-006-LANE-ALIBABA-004-2 OK finish=stop tokens=952 out=3962ch t=14.3s
+[11:35:08]   [48/1080] RUN-A2-006-LANE-ALIBABA-004-3 OK finish=stop tokens=789 out=3046ch t=10.8s
+[11:35:17]   [49/1080] RUN-A2-007-LANE-ALIBABA-004-1 OK finish=stop tokens=573 out=2311ch t=6.2s CAT_MISS=UNSCORED
+[11:35:26]   [50/1080] RUN-A2-007-LANE-ALIBABA-004-2 OK finish=stop tokens=572 out=2342ch t=5.7s CAT_MISS=NO
+[11:35:35]   [51/1080] RUN-A2-007-LANE-ALIBABA-004-3 OK finish=stop tokens=628 out=2629ch t=5.4s CAT_MISS=UNSCORED
+[11:35:42]   [52/1080] RUN-A2-008-LANE-ALIBABA-004-1 OK finish=stop tokens=401 out=1370ch t=4.8s CAT_MISS=UNSCORED
+[11:35:50]   [53/1080] RUN-A2-008-LANE-ALIBABA-004-2 OK finish=stop tokens=445 out=1447ch t=4.8s CAT_MISS=UNSCORED
+[11:35:58]   [54/1080] RUN-A2-008-LANE-ALIBABA-004-3 OK finish=stop tokens=486 out=1779ch t=4.6s CAT_MISS=UNSCORED
+[11:36:17]   [55/1080] RUN-A2-009-LANE-ALIBABA-004-1 OK finish=stop tokens=1110 out=4724ch t=16.2s
+[11:36:35]   [56/1080] RUN-A2-009-LANE-ALIBABA-004-2 OK finish=stop tokens=1042 out=4157ch t=15.3s
+[11:36:48]   [57/1080] RUN-A2-009-LANE-ALIBABA-004-3 OK finish=stop tokens=812 out=3308ch t=9.9s
+[11:37:03]   [58/1080] RUN-A2-010-LANE-ALIBABA-004-1 OK finish=stop tokens=938 out=4212ch t=11.4s
+[11:37:15]   [59/1080] RUN-A2-010-LANE-ALIBABA-004-2 OK finish=stop tokens=881 out=3852ch t=9.8s
+[11:37:28]   [60/1080] RUN-A2-010-LANE-ALIBABA-004-3 OK finish=stop tokens=712 out=2890ch t=9.7s
+[11:37:36]   [61/1080] RUN-A3-001-LANE-ALIBABA-004-1 OK finish=stop tokens=362 out=1050ch t=4.5s
+[11:37:43]   [62/1080] RUN-A3-001-LANE-ALIBABA-004-2 OK finish=stop tokens=354 out=995ch t=4.2s
+[11:37:49]   [63/1080] RUN-A3-001-LANE-ALIBABA-004-3 OK finish=stop tokens=398 out=1232ch t=3.4s
+[11:38:02]   [64/1080] RUN-A3-002-LANE-ALIBABA-004-1 OK finish=stop tokens=784 out=3004ch t=10.1s
+[11:38:17]   [65/1080] RUN-A3-002-LANE-ALIBABA-004-2 OK finish=stop tokens=932 out=3653ch t=12.2s
+[11:38:29]   [66/1080] RUN-A3-002-LANE-ALIBABA-004-3 OK finish=stop tokens=766 out=2926ch t=8.4s
+[11:38:39]   [67/1080] RUN-A3-003-LANE-ALIBABA-004-1 OK finish=stop tokens=682 out=2829ch t=6.7s
+[11:38:51]   [68/1080] RUN-A3-003-LANE-ALIBABA-004-2 OK finish=stop tokens=678 out=2820ch t=9.0s
+[11:39:03]   [69/1080] RUN-A3-003-LANE-ALIBABA-004-3 OK finish=stop tokens=775 out=3226ch t=9.4s
+[11:39:19]   [70/1080] RUN-A3-004-LANE-ALIBABA-004-1 OK finish=stop tokens=823 out=3602ch t=13.1s
+[11:39:33]   [71/1080] RUN-A3-004-LANE-ALIBABA-004-2 OK finish=stop tokens=745 out=3247ch t=10.6s
+[11:39:47]   [72/1080] RUN-A3-004-LANE-ALIBABA-004-3 OK finish=stop tokens=763 out=3415ch t=11.7s
+[11:39:59]   [73/1080] RUN-A3-005-LANE-ALIBABA-004-1 OK finish=stop tokens=661 out=2450ch t=8.8s
+[11:40:09]   [74/1080] RUN-A3-005-LANE-ALIBABA-004-2 OK finish=stop tokens=704 out=2553ch t=7.2s
+[11:40:20]   [75/1080] RUN-A3-005-LANE-ALIBABA-004-3 OK finish=stop tokens=720 out=2717ch t=7.7s
+[11:40:34]   [76/1080] RUN-A3-006-LANE-ALIBABA-004-1 OK finish=stop tokens=763 out=2936ch t=10.8s
+[11:40:43]   [77/1080] RUN-A3-006-LANE-ALIBABA-004-2 OK finish=stop tokens=523 out=1749ch t=6.0s
+[11:40:51]   [78/1080] RUN-A3-006-LANE-ALIBABA-004-3 OK finish=stop tokens=510 out=1681ch t=4.9s
+[11:41:04]   [79/1080] RUN-A3-007-LANE-ALIBABA-004-1 OK finish=stop tokens=848 out=3471ch t=10.4s CAT_MISS=UNSCORED
+[11:41:14]   [80/1080] RUN-A3-007-LANE-ALIBABA-004-2 OK finish=stop tokens=613 out=2427ch t=6.7s CAT_MISS=NO
+[11:41:26]   [81/1080] RUN-A3-007-LANE-ALIBABA-004-3 OK finish=stop tokens=700 out=2831ch t=8.7s CAT_MISS=NO
+[11:41:38]   [82/1080] RUN-A3-008-LANE-ALIBABA-004-1 OK finish=stop tokens=733 out=2882ch t=9.7s CAT_MISS=NO
+[11:41:50]   [83/1080] RUN-A3-008-LANE-ALIBABA-004-2 OK finish=stop tokens=718 out=2649ch t=9.0s CAT_MISS=UNSCORED
+[11:42:00]   [84/1080] RUN-A3-008-LANE-ALIBABA-004-3 OK finish=stop tokens=618 out=2259ch t=7.0s CAT_MISS=UNSCORED
+[11:42:18]   [85/1080] RUN-A3-009-LANE-ALIBABA-004-1 OK finish=stop tokens=1121 out=4480ch t=14.6s
+[11:42:37]   [86/1080] RUN-A3-009-LANE-ALIBABA-004-2 OK finish=stop tokens=1085 out=4171ch t=16.5s
+[11:42:53]   [87/1080] RUN-A3-009-LANE-ALIBABA-004-3 OK finish=stop tokens=944 out=3763ch t=12.7s
+[11:43:09]   [88/1080] RUN-A3-010-LANE-ALIBABA-004-1 OK finish=stop tokens=976 out=4151ch t=13.6s
+[11:43:29]   [89/1080] RUN-A3-010-LANE-ALIBABA-004-2 OK finish=stop tokens=1223 out=5416ch t=16.8s
+[11:43:47]   [90/1080] RUN-A3-010-LANE-ALIBABA-004-3 OK finish=stop tokens=1172 out=4862ch t=15.1s
+[11:43:57]   [91/1080] RUN-A4-001-LANE-ALIBABA-004-1 OK finish=stop tokens=711 out=2777ch t=6.8s
+[11:44:10]   [92/1080] RUN-A4-001-LANE-ALIBABA-004-2 OK finish=stop tokens=667 out=2356ch t=9.3s
+[11:44:22]   [93/1080] RUN-A4-001-LANE-ALIBABA-004-3 OK finish=stop tokens=692 out=2499ch t=9.4s
+[11:44:35]   [94/1080] RUN-A4-002-LANE-ALIBABA-004-1 OK finish=stop tokens=856 out=3510ch t=10.5s
+[11:44:50]   [95/1080] RUN-A4-002-LANE-ALIBABA-004-2 OK finish=stop tokens=947 out=3930ch t=11.9s
+[11:45:04]   [96/1080] RUN-A4-002-LANE-ALIBABA-004-3 OK finish=stop tokens=916 out=3706ch t=11.1s
+[11:45:19]   [97/1080] RUN-A4-003-LANE-ALIBABA-004-1 OK finish=stop tokens=886 out=3430ch t=11.1s
+[11:45:32]   [98/1080] RUN-A4-003-LANE-ALIBABA-004-2 OK finish=stop tokens=940 out=3641ch t=10.8s
+[11:45:51]   [99/1080] RUN-A4-003-LANE-ALIBABA-004-3 OK finish=stop tokens=1116 out=4345ch t=15.6s
+[11:46:01]   [100/1080] RUN-A4-004-LANE-ALIBABA-004-1 OK finish=stop tokens=681 out=2218ch t=7.5s
+[11:46:10]   [101/1080] RUN-A4-004-LANE-ALIBABA-004-2 OK finish=stop tokens=606 out=1831ch t=6.0s
+[11:46:21]   [102/1080] RUN-A4-004-LANE-ALIBABA-004-3 OK finish=stop tokens=650 out=1978ch t=7.6s
+[11:46:35]   [103/1080] RUN-A4-005-LANE-ALIBABA-004-1 OK finish=stop tokens=892 out=3488ch t=11.3s
+[11:46:49]   [104/1080] RUN-A4-005-LANE-ALIBABA-004-2 OK finish=stop tokens=872 out=3535ch t=10.4s
+[11:47:01]   [105/1080] RUN-A4-005-LANE-ALIBABA-004-3 OK finish=stop tokens=795 out=3198ch t=9.6s
+[11:47:14]   [106/1080] RUN-A4-006-LANE-ALIBABA-004-1 OK finish=stop tokens=871 out=3516ch t=9.7s
+[11:47:27]   [107/1080] RUN-A4-006-LANE-ALIBABA-004-2 OK finish=stop tokens=909 out=3598ch t=9.6s
+[11:47:40]   [108/1080] RUN-A4-006-LANE-ALIBABA-004-3 OK finish=stop tokens=1019 out=4170ch t=10.0s
+[11:47:54]   [109/1080] RUN-A4-007-LANE-ALIBABA-004-1 OK finish=stop tokens=911 out=4067ch t=11.0s CAT_MISS=UNSCORED
+[11:48:03]   [110/1080] RUN-A4-007-LANE-ALIBABA-004-2 OK finish=stop tokens=675 out=2759ch t=6.4s CAT_MISS=NO
+[11:48:13]   [111/1080] RUN-A4-007-LANE-ALIBABA-004-3 OK finish=stop tokens=691 out=2862ch t=7.2s CAT_MISS=NO
+[11:48:21]   [112/1080] RUN-A4-008-LANE-ALIBABA-004-1 OK finish=stop tokens=503 out=1683ch t=4.7s CAT_MISS=NO
+[11:48:29]   [113/1080] RUN-A4-008-LANE-ALIBABA-004-2 OK finish=stop tokens=511 out=1718ch t=4.9s CAT_MISS=NO
+[11:48:36]   [114/1080] RUN-A4-008-LANE-ALIBABA-004-3 OK finish=stop tokens=504 out=1695ch t=4.2s CAT_MISS=NO
+[11:48:52]   [115/1080] RUN-A4-009-LANE-ALIBABA-004-1 OK finish=stop tokens=1094 out=4444ch t=13.3s
+[11:49:09]   [116/1080] RUN-A4-009-LANE-ALIBABA-004-2 OK finish=stop tokens=1204 out=4526ch t=13.3s
+[11:49:27]   [117/1080] RUN-A4-009-LANE-ALIBABA-004-3 OK finish=stop tokens=1227 out=4744ch t=15.5s
+[11:49:43]   [118/1080] RUN-A4-010-LANE-ALIBABA-004-1 OK finish=stop tokens=1106 out=4169ch t=12.7s
+[11:49:59]   [119/1080] RUN-A4-010-LANE-ALIBABA-004-2 OK finish=stop tokens=1148 out=4375ch t=12.8s
+[11:50:15]   [120/1080] RUN-A4-010-LANE-ALIBABA-004-3 OK finish=stop tokens=1128 out=4438ch t=12.9s
+[11:50:30]   [121/1080] RUN-A5-001-LANE-ALIBABA-004-1 OK finish=stop tokens=862 out=3032ch t=12.7s
+[11:50:47]   [122/1080] RUN-A5-001-LANE-ALIBABA-004-2 OK finish=stop tokens=957 out=3669ch t=13.2s
+[11:51:01]   [123/1080] RUN-A5-001-LANE-ALIBABA-004-3 OK finish=stop tokens=952 out=3550ch t=11.2s
+[11:51:15]   [124/1080] RUN-A5-002-LANE-ALIBABA-004-1 OK finish=stop tokens=917 out=3502ch t=11.0s
+[11:51:28]   [125/1080] RUN-A5-002-LANE-ALIBABA-004-2 OK finish=stop tokens=888 out=3337ch t=10.0s
+[11:51:42]   [126/1080] RUN-A5-002-LANE-ALIBABA-004-3 OK finish=stop tokens=1005 out=3995ch t=11.0s
+[11:51:55]   [127/1080] RUN-A5-003-LANE-ALIBABA-004-1 OK finish=stop tokens=815 out=3361ch t=10.3s
+[11:52:09]   [128/1080] RUN-A5-003-LANE-ALIBABA-004-2 OK finish=stop tokens=823 out=3189ch t=11.3s
+[11:52:21]   [129/1080] RUN-A5-003-LANE-ALIBABA-004-3 OK finish=stop tokens=769 out=3096ch t=8.6s
+[11:52:32]   [130/1080] RUN-A5-004-LANE-ALIBABA-004-1 OK finish=stop tokens=756 out=2918ch t=8.5s
+[11:52:41]   [131/1080] RUN-A5-004-LANE-ALIBABA-004-2 OK finish=stop tokens=673 out=2521ch t=5.7s
+[11:52:51]   [132/1080] RUN-A5-004-LANE-ALIBABA-004-3 OK finish=stop tokens=683 out=2525ch t=7.3s
+[11:53:05]   [133/1080] RUN-A5-005-LANE-ALIBABA-004-1 OK finish=stop tokens=891 out=3745ch t=10.4s
+[11:53:21]   [134/1080] RUN-A5-005-LANE-ALIBABA-004-2 OK finish=stop tokens=1023 out=4190ch t=12.6s
+[11:53:40]   [135/1080] RUN-A5-005-LANE-ALIBABA-004-3 OK finish=stop tokens=1195 out=5132ch t=16.0s
+[11:53:50]   [136/1080] RUN-A5-006-LANE-ALIBABA-004-1 OK finish=stop tokens=643 out=2425ch t=7.2s
+[11:53:59]   [137/1080] RUN-A5-006-LANE-ALIBABA-004-2 OK finish=stop tokens=573 out=2210ch t=6.4s
+[11:54:09]   [138/1080] RUN-A5-006-LANE-ALIBABA-004-3 OK finish=stop tokens=615 out=2282ch t=6.3s
+[11:54:17]   [139/1080] RUN-A5-007-LANE-ALIBABA-004-1 OK finish=stop tokens=479 out=1900ch t=5.8s CAT_MISS=UNSCORED
+[11:54:24]   [140/1080] RUN-A5-007-LANE-ALIBABA-004-2 OK finish=stop tokens=449 out=1768ch t=4.1s CAT_MISS=UNSCORED
+[11:54:34]   [141/1080] RUN-A5-007-LANE-ALIBABA-004-3 OK finish=stop tokens=558 out=2234ch t=6.8s CAT_MISS=UNSCORED
+[11:54:46]   [142/1080] RUN-A5-008-LANE-ALIBABA-004-1 OK finish=stop tokens=824 out=3095ch t=9.0s CAT_MISS=UNSCORED
+[11:54:59]   [143/1080] RUN-A5-008-LANE-ALIBABA-004-2 OK finish=stop tokens=808 out=3149ch t=9.8s CAT_MISS=UNSCORED
+[11:55:14]   [144/1080] RUN-A5-008-LANE-ALIBABA-004-3 OK finish=stop tokens=876 out=3398ch t=11.8s CAT_MISS=UNSCORED
+[11:55:32]   [145/1080] RUN-A5-009-LANE-ALIBABA-004-1 OK finish=stop tokens=1177 out=4651ch t=15.5s
+[11:55:50]   [146/1080] RUN-A5-009-LANE-ALIBABA-004-2 OK finish=stop tokens=1297 out=5402ch t=15.0s
+[11:56:06]   [147/1080] RUN-A5-009-LANE-ALIBABA-004-3 OK finish=stop tokens=931 out=3501ch t=12.9s
+[11:56:22]   [148/1080] RUN-A5-010-LANE-ALIBABA-004-1 OK finish=stop tokens=977 out=3720ch t=12.3s
+[11:56:35]   [149/1080] RUN-A5-010-LANE-ALIBABA-004-2 OK finish=stop tokens=879 out=3417ch t=10.9s
+[11:56:50]   [150/1080] RUN-A5-010-LANE-ALIBABA-004-3 OK finish=stop tokens=917 out=3479ch t=11.8s
+[11:57:01]   [151/1080] RUN-B-001-LANE-ALIBABA-004-1 OK finish=stop tokens=655 out=2303ch t=7.9s
+[11:57:14]   [152/1080] RUN-B-001-LANE-ALIBABA-004-2 OK finish=stop tokens=772 out=2751ch t=9.9s
+[11:57:28]   [153/1080] RUN-B-001-LANE-ALIBABA-004-3 OK finish=stop tokens=805 out=2882ch t=10.9s
+[11:57:40]   [154/1080] RUN-B-002-LANE-ALIBABA-004-1 OK finish=stop tokens=754 out=2633ch t=8.7s
+[11:57:52]   [155/1080] RUN-B-002-LANE-ALIBABA-004-2 OK finish=stop tokens=773 out=2682ch t=9.0s
+[11:58:06]   [156/1080] RUN-B-002-LANE-ALIBABA-004-3 OK finish=stop tokens=799 out=2998ch t=11.1s
+[11:58:21]   [157/1080] RUN-B-003-LANE-ALIBABA-004-1 OK finish=stop tokens=941 out=3512ch t=12.4s
+[11:58:35]   [158/1080] RUN-B-003-LANE-ALIBABA-004-2 OK finish=stop tokens=875 out=3138ch t=10.9s
+[11:58:49]   [159/1080] RUN-B-003-LANE-ALIBABA-004-3 OK finish=stop tokens=855 out=3077ch t=11.3s
+[11:59:01]   [160/1080] RUN-B-004-LANE-ALIBABA-004-1 OK finish=stop tokens=804 out=2731ch t=9.1s
+[11:59:15]   [161/1080] RUN-B-004-LANE-ALIBABA-004-2 OK finish=stop tokens=867 out=2937ch t=10.4s
+[11:59:28]   [162/1080] RUN-B-004-LANE-ALIBABA-004-3 OK finish=stop tokens=735 out=2312ch t=10.2s
+[11:59:43]   [163/1080] RUN-B-005-LANE-ALIBABA-004-1 OK finish=stop tokens=934 out=3497ch t=11.7s
+[11:59:58]   [164/1080] RUN-B-005-LANE-ALIBABA-004-2 OK finish=stop tokens=859 out=3516ch t=11.8s
+[12:00:10]   [165/1080] RUN-B-005-LANE-ALIBABA-004-3 OK finish=stop tokens=731 out=2982ch t=9.0s
+[12:00:23]   [166/1080] RUN-B-006-LANE-ALIBABA-004-1 OK finish=stop tokens=843 out=2675ch t=10.8s
+[12:00:35]   [167/1080] RUN-B-006-LANE-ALIBABA-004-2 OK finish=stop tokens=676 out=1840ch t=8.4s
+[12:00:46]   [168/1080] RUN-B-006-LANE-ALIBABA-004-3 OK finish=stop tokens=795 out=2358ch t=8.2s
+[12:01:08]   [169/1080] RUN-B-007-LANE-ALIBABA-004-1 OK finish=stop tokens=1189 out=4011ch t=18.7s
+[12:01:31]   [170/1080] RUN-B-007-LANE-ALIBABA-004-2 OK finish=stop tokens=1294 out=4551ch t=20.0s
+[12:01:49]   [171/1080] RUN-B-007-LANE-ALIBABA-004-3 OK finish=stop tokens=1149 out=3937ch t=15.5s
+[12:02:03]   [172/1080] RUN-B-008-LANE-ALIBABA-004-1 OK finish=stop tokens=850 out=3234ch t=10.6s
+[12:02:19]   [173/1080] RUN-B-008-LANE-ALIBABA-004-2 OK finish=stop tokens=981 out=3742ch t=13.0s
+[12:02:35]   [174/1080] RUN-B-008-LANE-ALIBABA-004-3 OK finish=stop tokens=896 out=3325ch t=13.4s
+[12:02:44]   [175/1080] RUN-B-009-LANE-ALIBABA-004-1 OK finish=stop tokens=501 out=1396ch t=5.9s
+[12:02:53]   [176/1080] RUN-B-009-LANE-ALIBABA-004-2 OK finish=stop tokens=533 out=1637ch t=6.0s
+[12:03:02]   [177/1080] RUN-B-009-LANE-ALIBABA-004-3 OK finish=stop tokens=520 out=1471ch t=5.7s
+[12:03:18]   [178/1080] RUN-B-010-LANE-ALIBABA-004-1 OK finish=stop tokens=923 out=3625ch t=13.4s
+[12:03:29]   [179/1080] RUN-B-010-LANE-ALIBABA-004-2 OK finish=stop tokens=716 out=2601ch t=8.4s
+[12:03:41]   [180/1080] RUN-B-010-LANE-ALIBABA-004-3 OK finish=stop tokens=749 out=2843ch t=8.4s
+[12:03:55]   [181/1080] RUN-B-011-LANE-ALIBABA-004-1 OK finish=stop tokens=851 out=3010ch t=10.9s
+[12:04:15]   [182/1080] RUN-B-011-LANE-ALIBABA-004-2 OK finish=stop tokens=1080 out=4200ch t=17.5s
+[12:04:28]   [183/1080] RUN-B-011-LANE-ALIBABA-004-3 OK finish=stop tokens=833 out=2959ch t=9.8s
+[12:04:41]   [184/1080] RUN-B-012-LANE-ALIBABA-004-1 OK finish=stop tokens=790 out=2658ch t=10.0s
+[12:04:50]   [185/1080] RUN-B-012-LANE-ALIBABA-004-2 OK finish=stop tokens=511 out=1559ch t=6.2s
+[12:05:00]   [186/1080] RUN-B-012-LANE-ALIBABA-004-3 OK finish=stop tokens=546 out=1785ch t=7.1s
+[12:05:17]   [187/1080] RUN-B-013-LANE-ALIBABA-004-1 OK finish=stop tokens=985 out=3936ch t=13.9s
+[12:05:33]   [188/1080] RUN-B-013-LANE-ALIBABA-004-2 OK finish=stop tokens=908 out=3617ch t=12.7s
+[12:05:49]   [189/1080] RUN-B-013-LANE-ALIBABA-004-3 OK finish=stop tokens=1071 out=4473ch t=13.2s
+[12:06:02]   [190/1080] RUN-B-014-LANE-ALIBABA-004-1 OK finish=stop tokens=700 out=2416ch t=10.0s
+[12:06:15]   [191/1080] RUN-B-014-LANE-ALIBABA-004-2 OK finish=stop tokens=752 out=2743ch t=10.1s
+[12:06:28]   [192/1080] RUN-B-014-LANE-ALIBABA-004-3 OK finish=stop tokens=749 out=2660ch t=9.2s
+[12:06:45]   [193/1080] RUN-B-015-LANE-ALIBABA-004-1 OK finish=stop tokens=855 out=3947ch t=14.7s
+[12:06:57]   [194/1080] RUN-B-015-LANE-ALIBABA-004-2 OK finish=stop tokens=862 out=3983ch t=8.6s
+[12:07:13]   [195/1080] RUN-B-015-LANE-ALIBABA-004-3 OK finish=stop tokens=880 out=4063ch t=13.2s
+[12:07:22]   [196/1080] RUN-B-016-LANE-ALIBABA-004-1 OK finish=stop tokens=663 out=2362ch t=6.1s
+[12:07:34]   [197/1080] RUN-B-016-LANE-ALIBABA-004-2 OK finish=stop tokens=763 out=2845ch t=8.2s
+[12:07:47]   [198/1080] RUN-B-016-LANE-ALIBABA-004-3 OK finish=stop tokens=819 out=3163ch t=10.1s
+[12:08:05]   [199/1080] RUN-B-017-LANE-ALIBABA-004-1 OK finish=stop tokens=1006 out=3657ch t=15.5s
+[12:08:23]   [200/1080] RUN-B-017-LANE-ALIBABA-004-2 OK finish=stop tokens=1044 out=4000ch t=15.4s
+[12:08:40]   [201/1080] RUN-B-017-LANE-ALIBABA-004-3 OK finish=stop tokens=987 out=3620ch t=13.1s
+[12:08:47]   [202/1080] RUN-B-018-LANE-ALIBABA-004-1 OK finish=stop tokens=495 out=1680ch t=4.5s
+[12:08:59]   [203/1080] RUN-B-018-LANE-ALIBABA-004-2 OK finish=stop tokens=624 out=2210ch t=9.1s
+[12:09:09]   [204/1080] RUN-B-018-LANE-ALIBABA-004-3 OK finish=stop tokens=572 out=2156ch t=6.7s
+[12:09:15]   [205/1080] RUN-B-019-LANE-ALIBABA-004-1 OK finish=stop tokens=364 out=729ch t=3.5s
+[12:09:21]   [206/1080] RUN-B-019-LANE-ALIBABA-004-2 OK finish=stop tokens=361 out=718ch t=3.0s
+[12:09:27]   [207/1080] RUN-B-019-LANE-ALIBABA-004-3 OK finish=stop tokens=359 out=711ch t=2.8s
+[12:09:42]   [208/1080] RUN-B-020-LANE-ALIBABA-004-1 OK finish=stop tokens=960 out=3728ch t=11.7s
+[12:09:58]   [209/1080] RUN-B-020-LANE-ALIBABA-004-2 OK finish=stop tokens=947 out=3680ch t=12.8s
+[12:10:10]   [210/1080] RUN-B-020-LANE-ALIBABA-004-3 OK finish=stop tokens=760 out=2934ch t=9.4s
+[12:10:21]   [211/1080] RUN-C-001-LANE-ALIBABA-004-1 OK finish=stop tokens=557 out=2086ch t=7.7s CAT_MISS=UNSCORED
+[12:10:34]   [212/1080] RUN-C-001-LANE-ALIBABA-004-2 OK finish=stop tokens=617 out=2480ch t=9.9s CAT_MISS=UNSCORED
+[12:10:42]   [213/1080] RUN-C-001-LANE-ALIBABA-004-3 OK finish=stop tokens=571 out=2193ch t=5.9s CAT_MISS=UNSCORED
+[12:10:50]   [214/1080] RUN-C-002-LANE-ALIBABA-004-1 OK finish=stop tokens=469 out=1689ch t=4.6s CAT_MISS=UNSCORED
+[12:10:57]   [215/1080] RUN-C-002-LANE-ALIBABA-004-2 OK finish=stop tokens=407 out=1379ch t=4.0s CAT_MISS=NO
+[12:11:05]   [216/1080] RUN-C-002-LANE-ALIBABA-004-3 OK finish=stop tokens=419 out=1336ch t=4.9s CAT_MISS=UNSCORED
+[12:11:17]   [217/1080] RUN-C-003-LANE-ALIBABA-004-1 OK finish=stop tokens=665 out=2453ch t=8.9s CAT_MISS=UNSCORED
+[12:11:27]   [218/1080] RUN-C-003-LANE-ALIBABA-004-2 OK finish=stop tokens=569 out=2076ch t=6.6s CAT_MISS=UNSCORED
+[12:11:38]   [219/1080] RUN-C-003-LANE-ALIBABA-004-3 OK finish=stop tokens=629 out=2338ch t=8.3s CAT_MISS=UNSCORED
+[12:11:50]   [220/1080] RUN-C-004-LANE-ALIBABA-004-1 OK finish=stop tokens=672 out=2544ch t=8.8s CAT_MISS=UNSCORED
+[12:12:00]   [221/1080] RUN-C-004-LANE-ALIBABA-004-2 OK finish=stop tokens=667 out=2416ch t=7.0s CAT_MISS=UNSCORED
+[12:12:12]   [222/1080] RUN-C-004-LANE-ALIBABA-004-3 OK finish=stop tokens=669 out=2446ch t=9.5s CAT_MISS=NO
+[12:12:22]   [223/1080] RUN-C-005-LANE-ALIBABA-004-1 OK finish=stop tokens=608 out=2058ch t=6.6s CAT_MISS=NO
+[12:12:30]   [224/1080] RUN-C-005-LANE-ALIBABA-004-2 OK finish=stop tokens=551 out=1895ch t=5.6s CAT_MISS=UNSCORED
+[12:12:39]   [225/1080] RUN-C-005-LANE-ALIBABA-004-3 OK finish=stop tokens=610 out=2199ch t=5.7s CAT_MISS=NO
+[12:12:49]   [226/1080] RUN-C-006-LANE-ALIBABA-004-1 OK finish=stop tokens=603 out=2185ch t=6.6s
+[12:12:58]   [227/1080] RUN-C-006-LANE-ALIBABA-004-2 OK finish=stop tokens=566 out=2087ch t=6.6s
+[12:13:05]   [228/1080] RUN-C-006-LANE-ALIBABA-004-3 OK finish=stop tokens=432 out=1370ch t=4.1s
+[12:13:15]   [229/1080] RUN-C-007-LANE-ALIBABA-004-1 OK finish=stop tokens=455 out=1564ch t=6.6s CAT_MISS=UNSCORED
+[12:13:22]   [230/1080] RUN-C-007-LANE-ALIBABA-004-2 OK finish=stop tokens=448 out=1602ch t=4.6s CAT_MISS=NO
+[12:13:31]   [231/1080] RUN-C-007-LANE-ALIBABA-004-3 OK finish=stop tokens=465 out=1595ch t=5.4s CAT_MISS=UNSCORED
+[12:13:39]   [232/1080] RUN-C-008-LANE-ALIBABA-004-1 OK finish=stop tokens=508 out=1749ch t=5.3s CAT_MISS=UNSCORED
+[12:13:49]   [233/1080] RUN-C-008-LANE-ALIBABA-004-2 OK finish=stop tokens=526 out=1939ch t=6.5s CAT_MISS=UNSCORED
+[12:13:57]   [234/1080] RUN-C-008-LANE-ALIBABA-004-3 OK finish=stop tokens=554 out=2103ch t=5.6s CAT_MISS=UNSCORED
+[12:14:05]   [235/1080] RUN-C-009-LANE-ALIBABA-004-1 OK finish=stop tokens=451 out=1570ch t=5.2s CAT_MISS=NO
+[12:14:13]   [236/1080] RUN-C-009-LANE-ALIBABA-004-2 OK finish=stop tokens=419 out=1432ch t=4.2s CAT_MISS=UNSCORED
+[12:14:21]   [237/1080] RUN-C-009-LANE-ALIBABA-004-3 OK finish=stop tokens=424 out=1436ch t=5.6s CAT_MISS=UNSCORED
+[12:14:32]   [238/1080] RUN-C-010-LANE-ALIBABA-004-1 OK finish=stop tokens=584 out=2389ch t=7.9s CAT_MISS=UNSCORED
+[12:14:41]   [239/1080] RUN-C-010-LANE-ALIBABA-004-2 OK finish=stop tokens=543 out=2074ch t=6.2s CAT_MISS=UNSCORED
+[12:14:52]   [240/1080] RUN-C-010-LANE-ALIBABA-004-3 OK finish=stop tokens=581 out=2247ch t=7.3s CAT_MISS=UNSCORED
+[12:15:02]   [241/1080] RUN-C-011-LANE-ALIBABA-004-1 OK finish=stop tokens=490 out=1590ch t=7.1s CAT_MISS=UNSCORED
+[12:15:08]   [242/1080] RUN-C-011-LANE-ALIBABA-004-2 OK finish=stop tokens=423 out=1249ch t=3.6s CAT_MISS=NO
+[12:15:15]   [243/1080] RUN-C-011-LANE-ALIBABA-004-3 OK finish=stop tokens=384 out=1041ch t=3.9s CAT_MISS=UNSCORED
+[12:15:24]   [244/1080] RUN-C-012-LANE-ALIBABA-004-1 OK finish=stop tokens=479 out=1891ch t=6.0s
+[12:15:32]   [245/1080] RUN-C-012-LANE-ALIBABA-004-2 OK finish=stop tokens=424 out=1515ch t=4.9s
+[12:15:41]   [246/1080] RUN-C-012-LANE-ALIBABA-004-3 OK finish=stop tokens=457 out=1664ch t=6.1s
+[12:15:54]   [247/1080] RUN-C-013-LANE-ALIBABA-004-1 OK finish=stop tokens=650 out=2628ch t=10.2s CAT_MISS=NO
+[12:16:08]   [248/1080] RUN-C-013-LANE-ALIBABA-004-2 OK finish=stop tokens=723 out=2860ch t=10.6s CAT_MISS=UNSCORED
+[12:16:19]   [249/1080] RUN-C-013-LANE-ALIBABA-004-3 OK finish=stop tokens=593 out=2302ch t=8.3s CAT_MISS=UNSCORED
+[12:16:25]   [250/1080] RUN-C-014-LANE-ALIBABA-004-1 OK finish=stop tokens=319 out=794ch t=2.6s CAT_MISS=UNSCORED
+[12:16:30]   [251/1080] RUN-C-014-LANE-ALIBABA-004-2 OK finish=stop tokens=344 out=943ch t=2.6s CAT_MISS=YES
+[12:16:37]   [252/1080] RUN-C-014-LANE-ALIBABA-004-3 OK finish=stop tokens=356 out=939ch t=3.1s CAT_MISS=UNSCORED
+[12:16:43]   [253/1080] RUN-C-015-LANE-ALIBABA-004-1 OK finish=stop tokens=392 out=1255ch t=3.7s CAT_MISS=UNSCORED
+[12:16:50]   [254/1080] RUN-C-015-LANE-ALIBABA-004-2 OK finish=stop tokens=371 out=1168ch t=3.8s CAT_MISS=UNSCORED
+[12:16:57]   [255/1080] RUN-C-015-LANE-ALIBABA-004-3 OK finish=stop tokens=383 out=1310ch t=4.0s CAT_MISS=UNSCORED
+[12:17:05]   [256/1080] RUN-C-016-LANE-ALIBABA-004-1 OK finish=stop tokens=366 out=921ch t=4.4s
+[12:17:10]   [257/1080] RUN-C-016-LANE-ALIBABA-004-2 OK finish=stop tokens=337 out=789ch t=2.8s
+[12:17:17]   [258/1080] RUN-C-016-LANE-ALIBABA-004-3 OK finish=stop tokens=382 out=976ch t=3.2s
+[12:17:27]   [259/1080] RUN-C-017-LANE-ALIBABA-004-1 OK finish=stop tokens=632 out=2266ch t=7.7s CAT_MISS=UNSCORED
+[12:17:36]   [260/1080] RUN-C-017-LANE-ALIBABA-004-2 OK finish=stop tokens=561 out=1956ch t=5.8s CAT_MISS=NO
+[12:17:47]   [261/1080] RUN-C-017-LANE-ALIBABA-004-3 OK finish=stop tokens=544 out=1892ch t=8.0s CAT_MISS=NO
+[12:17:53]   [262/1080] RUN-C-018-LANE-ALIBABA-004-1 OK finish=stop tokens=346 out=992ch t=3.3s CAT_MISS=NO
+[12:17:59]   [263/1080] RUN-C-018-LANE-ALIBABA-004-2 OK finish=stop tokens=375 out=1139ch t=2.9s CAT_MISS=UNSCORED
+[12:18:05]   [264/1080] RUN-C-018-LANE-ALIBABA-004-3 OK finish=stop tokens=313 out=809ch t=3.0s CAT_MISS=NO
+[12:18:13]   [265/1080] RUN-C-019-LANE-ALIBABA-004-1 OK finish=stop tokens=339 out=1125ch t=4.9s
+[12:18:20]   [266/1080] RUN-C-019-LANE-ALIBABA-004-2 OK finish=stop tokens=377 out=1349ch t=4.1s
+[12:18:27]   [267/1080] RUN-C-019-LANE-ALIBABA-004-3 OK finish=stop tokens=318 out=1003ch t=4.0s
+[12:18:38]   [268/1080] RUN-C-020-LANE-ALIBABA-004-1 OK finish=stop tokens=667 out=2280ch t=7.7s
+[12:18:49]   [269/1080] RUN-C-020-LANE-ALIBABA-004-2 OK finish=stop tokens=682 out=2312ch t=7.8s
+[12:19:02]   [270/1080] RUN-C-020-LANE-ALIBABA-004-3 OK finish=stop tokens=732 out=2464ch t=10.3s
+[12:19:10] --- LANE-ALIBABA-005 (qwen-plus) role=ANALYST ---
+[12:19:25]   [271/1080] RUN-A1-001-LANE-ALIBABA-005-1 OK finish=stop tokens=949 out=2612ch t=14.8s
+[12:19:40]   [272/1080] RUN-A1-001-LANE-ALIBABA-005-2 OK finish=stop tokens=817 out=2222ch t=12.6s
+[12:19:57]   [273/1080] RUN-A1-001-LANE-ALIBABA-005-3 OK finish=stop tokens=883 out=2347ch t=13.7s
+[12:20:18]   [274/1080] RUN-A1-002-LANE-ALIBABA-005-1 OK finish=stop tokens=1103 out=3545ch t=17.6s
+[12:20:35]   [275/1080] RUN-A1-002-LANE-ALIBABA-005-2 OK finish=stop tokens=905 out=2821ch t=13.9s
+[12:20:53]   [276/1080] RUN-A1-002-LANE-ALIBABA-005-3 OK finish=stop tokens=962 out=2999ch t=15.0s
+[12:21:15]   [277/1080] RUN-A1-003-LANE-ALIBABA-005-1 OK finish=stop tokens=1216 out=4101ch t=19.3s
+[12:21:43]   [278/1080] RUN-A1-003-LANE-ALIBABA-005-2 OK finish=stop tokens=1520 out=4969ch t=24.7s
+[12:22:03]   [279/1080] RUN-A1-003-LANE-ALIBABA-005-3 OK finish=stop tokens=1090 out=3605ch t=17.0s
+[12:22:22]   [280/1080] RUN-A1-004-LANE-ALIBABA-005-1 OK finish=stop tokens=1033 out=3341ch t=16.0s
+[12:22:43]   [281/1080] RUN-A1-004-LANE-ALIBABA-005-2 OK finish=stop tokens=1147 out=4096ch t=18.0s
+[12:23:07]   [282/1080] RUN-A1-004-LANE-ALIBABA-005-3 OK finish=stop tokens=1320 out=4424ch t=21.2s
+[12:23:23]   [283/1080] RUN-A1-005-LANE-ALIBABA-005-1 OK finish=stop tokens=844 out=2763ch t=12.8s
+[12:23:37]   [284/1080] RUN-A1-005-LANE-ALIBABA-005-2 OK finish=stop tokens=766 out=2364ch t=11.3s
+[12:23:54]   [285/1080] RUN-A1-005-LANE-ALIBABA-005-3 OK finish=stop tokens=916 out=2980ch t=14.0s
+[12:24:09]   [286/1080] RUN-A1-006-LANE-ALIBABA-005-1 OK finish=stop tokens=771 out=2552ch t=11.8s
+[12:24:24]   [287/1080] RUN-A1-006-LANE-ALIBABA-005-2 OK finish=stop tokens=791 out=2693ch t=12.2s
+[12:24:39]   [288/1080] RUN-A1-006-LANE-ALIBABA-005-3 OK finish=stop tokens=804 out=2713ch t=12.3s
+[12:24:52]   [289/1080] RUN-A1-007-LANE-ALIBABA-005-1 OK finish=stop tokens=716 out=2240ch t=10.2s CAT_MISS=UNSCORED
+[12:25:06]   [290/1080] RUN-A1-007-LANE-ALIBABA-005-2 OK finish=stop tokens=732 out=2359ch t=10.4s CAT_MISS=UNSCORED
+[12:25:21]   [291/1080] RUN-A1-007-LANE-ALIBABA-005-3 OK finish=stop tokens=822 out=2671ch t=12.1s CAT_MISS=UNSCORED
+[12:25:37]   [292/1080] RUN-A1-008-LANE-ALIBABA-005-1 OK finish=stop tokens=829 out=3056ch t=12.8s CAT_MISS=NO
+[12:25:55]   [293/1080] RUN-A1-008-LANE-ALIBABA-005-2 OK finish=stop tokens=967 out=3447ch t=15.0s CAT_MISS=UNSCORED
+[12:26:12]   [294/1080] RUN-A1-008-LANE-ALIBABA-005-3 OK finish=stop tokens=935 out=3383ch t=14.5s CAT_MISS=UNSCORED
+[12:26:36]   [295/1080] RUN-A1-009-LANE-ALIBABA-005-1 OK finish=stop tokens=1294 out=4123ch t=20.8s
+[12:27:03]   [296/1080] RUN-A1-009-LANE-ALIBABA-005-2 OK finish=stop tokens=1508 out=5605ch t=24.5s
+[12:27:32]   [297/1080] RUN-A1-009-LANE-ALIBABA-005-3 OK finish=stop tokens=1553 out=5607ch t=25.3s
+[12:27:43]   [298/1080] RUN-A1-010-LANE-ALIBABA-005-1 OK finish=stop tokens=604 out=1950ch t=8.6s
+[12:27:54]   [299/1080] RUN-A1-010-LANE-ALIBABA-005-2 OK finish=stop tokens=543 out=1891ch t=7.8s
+[12:28:05]   [300/1080] RUN-A1-010-LANE-ALIBABA-005-3 OK finish=stop tokens=554 out=1995ch t=7.7s
+[12:28:20]   [301/1080] RUN-A2-001-LANE-ALIBABA-005-1 OK finish=stop tokens=818 out=2893ch t=12.6s
+[12:28:39]   [302/1080] RUN-A2-001-LANE-ALIBABA-005-2 OK finish=stop tokens=956 out=3536ch t=15.0s
+[12:28:58]   [303/1080] RUN-A2-001-LANE-ALIBABA-005-3 OK finish=stop tokens=1029 out=3731ch t=16.2s
+[12:29:12]   [304/1080] RUN-A2-002-LANE-ALIBABA-005-1 OK finish=stop tokens=732 out=2109ch t=10.9s
+[12:29:25]   [305/1080] RUN-A2-002-LANE-ALIBABA-005-2 OK finish=stop tokens=703 out=1849ch t=9.9s
+[12:29:39]   [306/1080] RUN-A2-002-LANE-ALIBABA-005-3 OK finish=stop tokens=793 out=2204ch t=11.4s
+[12:29:55]   [307/1080] RUN-A2-003-LANE-ALIBABA-005-1 OK finish=stop tokens=865 out=3253ch t=13.3s
+[12:30:12]   [308/1080] RUN-A2-003-LANE-ALIBABA-005-2 OK finish=stop tokens=868 out=3267ch t=13.3s
+[12:30:28]   [309/1080] RUN-A2-003-LANE-ALIBABA-005-3 OK finish=stop tokens=855 out=3298ch t=13.8s
+[12:30:39]   [310/1080] RUN-A2-004-LANE-ALIBABA-005-1 OK finish=stop tokens=544 out=1818ch t=7.8s
+[12:30:49]   [311/1080] RUN-A2-004-LANE-ALIBABA-005-2 OK finish=stop tokens=481 out=1568ch t=6.7s
+[12:30:59]   [312/1080] RUN-A2-004-LANE-ALIBABA-005-3 OK finish=stop tokens=512 out=1548ch t=7.2s
+[12:31:16]   [313/1080] RUN-A2-005-LANE-ALIBABA-005-1 OK finish=stop tokens=876 out=2947ch t=13.8s
+[12:31:31]   [314/1080] RUN-A2-005-LANE-ALIBABA-005-2 OK finish=stop tokens=786 out=2692ch t=12.1s
+[12:31:46]   [315/1080] RUN-A2-005-LANE-ALIBABA-005-3 OK finish=stop tokens=771 out=2447ch t=11.9s
+[12:32:02]   [316/1080] RUN-A2-006-LANE-ALIBABA-005-1 OK finish=stop tokens=830 out=3344ch t=12.9s
+[12:32:17]   [317/1080] RUN-A2-006-LANE-ALIBABA-005-2 OK finish=stop tokens=809 out=3162ch t=12.6s
+[12:32:35]   [318/1080] RUN-A2-006-LANE-ALIBABA-005-3 OK finish=stop tokens=936 out=3601ch t=14.8s
+[12:32:48]   [319/1080] RUN-A2-007-LANE-ALIBABA-005-1 OK finish=stop tokens=662 out=2437ch t=10.0s CAT_MISS=UNSCORED
+[12:33:03]   [320/1080] RUN-A2-007-LANE-ALIBABA-005-2 OK finish=stop tokens=767 out=2859ch t=11.8s CAT_MISS=UNSCORED
+[12:33:16]   [321/1080] RUN-A2-007-LANE-ALIBABA-005-3 OK finish=stop tokens=681 out=2648ch t=10.2s CAT_MISS=UNSCORED
+[12:33:28]   [322/1080] RUN-A2-008-LANE-ALIBABA-005-1 OK finish=stop tokens=623 out=2081ch t=9.0s CAT_MISS=NO
+[12:33:40]   [323/1080] RUN-A2-008-LANE-ALIBABA-005-2 OK finish=stop tokens=621 out=2182ch t=9.1s CAT_MISS=NO
+[12:33:53]   [324/1080] RUN-A2-008-LANE-ALIBABA-005-3 OK finish=stop tokens=669 out=2300ch t=9.9s CAT_MISS=NO
+[12:34:07]   [325/1080] RUN-A2-009-LANE-ALIBABA-005-1 OK finish=stop tokens=722 out=2570ch t=10.7s
+[12:34:25]   [326/1080] RUN-A2-009-LANE-ALIBABA-005-2 OK finish=stop tokens=985 out=3737ch t=15.3s
+[12:34:47]   [327/1080] RUN-A2-009-LANE-ALIBABA-005-3 OK finish=stop tokens=1191 out=4326ch t=19.0s
+[12:35:04]   [328/1080] RUN-A2-010-LANE-ALIBABA-005-1 OK finish=stop tokens=860 out=3227ch t=13.5s
+[12:35:28]   [329/1080] RUN-A2-010-LANE-ALIBABA-005-2 OK finish=stop tokens=1266 out=4735ch t=20.8s
+[12:35:48]   [330/1080] RUN-A2-010-LANE-ALIBABA-005-3 OK finish=stop tokens=1067 out=4094ch t=17.3s
+[12:35:57]   [331/1080] RUN-A3-001-LANE-ALIBABA-005-1 OK finish=stop tokens=468 out=1452ch t=6.4s
+[12:36:06]   [332/1080] RUN-A3-001-LANE-ALIBABA-005-2 OK finish=stop tokens=444 out=1382ch t=5.8s
+[12:36:14]   [333/1080] RUN-A3-001-LANE-ALIBABA-005-3 OK finish=stop tokens=421 out=1306ch t=5.3s
+[12:36:26]   [334/1080] RUN-A3-002-LANE-ALIBABA-005-1 OK finish=stop tokens=599 out=1933ch t=8.6s
+[12:36:37]   [335/1080] RUN-A3-002-LANE-ALIBABA-005-2 OK finish=stop tokens=574 out=1877ch t=8.1s
+[12:36:49]   [336/1080] RUN-A3-002-LANE-ALIBABA-005-3 OK finish=stop tokens=597 out=2048ch t=8.5s
+[12:37:06]   [337/1080] RUN-A3-003-LANE-ALIBABA-005-1 OK finish=stop tokens=927 out=3589ch t=14.4s
+[12:37:26]   [338/1080] RUN-A3-003-LANE-ALIBABA-005-2 OK finish=stop tokens=1063 out=3909ch t=16.9s
+[12:37:45]   [339/1080] RUN-A3-003-LANE-ALIBABA-005-3 OK finish=stop tokens=1006 out=3773ch t=16.0s
+[12:37:57]   [340/1080] RUN-A3-004-LANE-ALIBABA-005-1 OK finish=stop tokens=597 out=2254ch t=8.7s
+[12:38:09]   [341/1080] RUN-A3-004-LANE-ALIBABA-005-2 OK finish=stop tokens=639 out=2486ch t=9.5s
+[12:38:22]   [342/1080] RUN-A3-004-LANE-ALIBABA-005-3 OK finish=stop tokens=637 out=2301ch t=9.4s
+[12:38:34]   [343/1080] RUN-A3-005-LANE-ALIBABA-005-1 OK finish=stop tokens=654 out=2068ch t=9.4s
+[12:38:49]   [344/1080] RUN-A3-005-LANE-ALIBABA-005-2 OK finish=stop tokens=795 out=2664ch t=12.0s
+[12:39:05]   [345/1080] RUN-A3-005-LANE-ALIBABA-005-3 OK finish=stop tokens=845 out=2879ch t=12.9s
+[12:39:19]   [346/1080] RUN-A3-006-LANE-ALIBABA-005-1 OK finish=stop tokens=732 out=2561ch t=10.8s
+[12:39:37]   [347/1080] RUN-A3-006-LANE-ALIBABA-005-2 OK finish=stop tokens=979 out=3605ch t=15.5s
+[12:39:55]   [348/1080] RUN-A3-006-LANE-ALIBABA-005-3 OK finish=stop tokens=926 out=3408ch t=14.3s
+[12:40:07]   [349/1080] RUN-A3-007-LANE-ALIBABA-005-1 OK finish=stop tokens=659 out=2418ch t=9.7s CAT_MISS=NO
+[12:40:19]   [350/1080] RUN-A3-007-LANE-ALIBABA-005-2 OK finish=stop tokens=591 out=2082ch t=8.4s CAT_MISS=NO
+[12:40:31]   [351/1080] RUN-A3-007-LANE-ALIBABA-005-3 OK finish=stop tokens=647 out=2379ch t=9.4s CAT_MISS=NO
+[12:40:44]   [352/1080] RUN-A3-008-LANE-ALIBABA-005-1 OK finish=stop tokens=706 out=2602ch t=10.4s CAT_MISS=UNSCORED
+[12:40:57]   [353/1080] RUN-A3-008-LANE-ALIBABA-005-2 OK finish=stop tokens=661 out=2407ch t=9.6s CAT_MISS=UNSCORED
+[12:41:10]   [354/1080] RUN-A3-008-LANE-ALIBABA-005-3 OK finish=stop tokens=708 out=2723ch t=10.4s CAT_MISS=UNSCORED
+[12:41:34]   [355/1080] RUN-A3-009-LANE-ALIBABA-005-1 OK finish=stop tokens=1295 out=4106ch t=20.8s
+[12:41:59]   [356/1080] RUN-A3-009-LANE-ALIBABA-005-2 OK finish=stop tokens=1358 out=4537ch t=22.2s
+[12:42:25]   [357/1080] RUN-A3-009-LANE-ALIBABA-005-3 OK finish=stop tokens=1416 out=4504ch t=23.0s
+[12:42:44]   [358/1080] RUN-A3-010-LANE-ALIBABA-005-1 OK finish=stop tokens=971 out=3557ch t=15.3s
+[12:42:59]   [359/1080] RUN-A3-010-LANE-ALIBABA-005-2 OK finish=stop tokens=808 out=2817ch t=12.1s
+[12:43:20]   [360/1080] RUN-A3-010-LANE-ALIBABA-005-3 OK finish=stop tokens=1136 out=4098ch t=18.1s
+[12:43:37]   [361/1080] RUN-A4-001-LANE-ALIBABA-005-1 OK finish=stop tokens=866 out=2631ch t=13.6s
+[12:43:56]   [362/1080] RUN-A4-001-LANE-ALIBABA-005-2 OK finish=stop tokens=1055 out=3485ch t=16.9s
+[12:44:13]   [363/1080] RUN-A4-001-LANE-ALIBABA-005-3 OK finish=stop tokens=854 out=2743ch t=13.1s
+[12:44:32]   [364/1080] RUN-A4-002-LANE-ALIBABA-005-1 OK finish=stop tokens=1015 out=3684ch t=16.0s
+[12:44:51]   [365/1080] RUN-A4-002-LANE-ALIBABA-005-2 OK finish=stop tokens=1000 out=3350ch t=16.0s
+[12:45:08]   [366/1080] RUN-A4-002-LANE-ALIBABA-005-3 OK finish=stop tokens=902 out=3029ch t=13.9s
+[12:45:25]   [367/1080] RUN-A4-003-LANE-ALIBABA-005-1 OK finish=stop tokens=956 out=3369ch t=14.8s
+[12:45:42]   [368/1080] RUN-A4-003-LANE-ALIBABA-005-2 OK finish=stop tokens=881 out=3078ch t=13.5s
+[12:46:00]   [369/1080] RUN-A4-003-LANE-ALIBABA-005-3 OK finish=stop tokens=965 out=3404ch t=14.9s
+[12:46:16]   [370/1080] RUN-A4-004-LANE-ALIBABA-005-1 OK finish=stop tokens=878 out=2788ch t=13.1s
+[12:46:31]   [371/1080] RUN-A4-004-LANE-ALIBABA-005-2 OK finish=stop tokens=817 out=2389ch t=11.9s
+[12:46:48]   [372/1080] RUN-A4-004-LANE-ALIBABA-005-3 OK finish=stop tokens=965 out=2984ch t=14.7s
+[12:47:05]   [373/1080] RUN-A4-005-LANE-ALIBABA-005-1 OK finish=stop tokens=850 out=3078ch t=13.3s
+[12:47:22]   [374/1080] RUN-A4-005-LANE-ALIBABA-005-2 OK finish=stop tokens=919 out=3001ch t=14.7s
+[12:47:37]   [375/1080] RUN-A4-005-LANE-ALIBABA-005-3 OK finish=stop tokens=764 out=2460ch t=11.7s
+[12:47:52]   [376/1080] RUN-A4-006-LANE-ALIBABA-005-1 OK finish=stop tokens=816 out=2828ch t=12.3s
+[12:48:12]   [377/1080] RUN-A4-006-LANE-ALIBABA-005-2 OK finish=stop tokens=1063 out=3771ch t=16.8s
+[12:48:31]   [378/1080] RUN-A4-006-LANE-ALIBABA-005-3 OK finish=stop tokens=1014 out=3569ch t=16.1s
+[12:48:48]   [379/1080] RUN-A4-007-LANE-ALIBABA-005-1 OK finish=stop tokens=889 out=3255ch t=13.9s CAT_MISS=UNSCORED
+[12:49:05]   [380/1080] RUN-A4-007-LANE-ALIBABA-005-2 OK finish=stop tokens=857 out=3119ch t=13.5s CAT_MISS=UNSCORED
+[12:49:22]   [381/1080] RUN-A4-007-LANE-ALIBABA-005-3 OK finish=stop tokens=899 out=3317ch t=14.0s CAT_MISS=UNSCORED
+[12:49:34]   [382/1080] RUN-A4-008-LANE-ALIBABA-005-1 OK finish=stop tokens=655 out=2275ch t=9.2s CAT_MISS=NO
+[12:49:48]   [383/1080] RUN-A4-008-LANE-ALIBABA-005-2 OK finish=stop tokens=761 out=2431ch t=11.0s CAT_MISS=NO
+[12:50:01]   [384/1080] RUN-A4-008-LANE-ALIBABA-005-3 OK finish=stop tokens=723 out=2388ch t=10.4s CAT_MISS=NO
+[12:50:21]   [385/1080] RUN-A4-009-LANE-ALIBABA-005-1 OK finish=stop tokens=1070 out=3520ch t=17.0s
+[12:50:41]   [386/1080] RUN-A4-009-LANE-ALIBABA-005-2 OK finish=stop tokens=1082 out=3918ch t=17.2s
+[12:51:23]   [387/1080] RUN-A4-009-LANE-ALIBABA-005-3 OK finish=stop tokens=2273 out=7389ch t=38.7s
+[12:51:36]   [388/1080] RUN-A4-010-LANE-ALIBABA-005-1 OK finish=stop tokens=656 out=2323ch t=9.5s
+[12:51:52]   [389/1080] RUN-A4-010-LANE-ALIBABA-005-2 OK finish=stop tokens=832 out=2992ch t=12.9s
+[12:52:07]   [390/1080] RUN-A4-010-LANE-ALIBABA-005-3 OK finish=stop tokens=817 out=2874ch t=12.4s
+[12:52:24]   [391/1080] RUN-A5-001-LANE-ALIBABA-005-1 OK finish=stop tokens=901 out=3014ch t=14.0s
+[12:52:41]   [392/1080] RUN-A5-001-LANE-ALIBABA-005-2 OK finish=stop tokens=910 out=2859ch t=14.4s
+[12:52:58]   [393/1080] RUN-A5-001-LANE-ALIBABA-005-3 OK finish=stop tokens=910 out=3080ch t=14.1s
+[12:53:15]   [394/1080] RUN-A5-002-LANE-ALIBABA-005-1 OK finish=stop tokens=894 out=3106ch t=13.8s
+[12:53:34]   [395/1080] RUN-A5-002-LANE-ALIBABA-005-2 OK finish=stop tokens=1014 out=3537ch t=16.1s
+[12:53:54]   [396/1080] RUN-A5-002-LANE-ALIBABA-005-3 OK finish=stop tokens=1049 out=3749ch t=16.8s
+[12:54:17]   [397/1080] RUN-A5-003-LANE-ALIBABA-005-1 OK finish=stop tokens=1227 out=4448ch t=19.7s
+[12:54:41]   [398/1080] RUN-A5-003-LANE-ALIBABA-005-2 OK finish=stop tokens=1286 out=4478ch t=20.8s
+[12:55:05]   [399/1080] RUN-A5-003-LANE-ALIBABA-005-3 OK finish=stop tokens=1339 out=4757ch t=21.7s
+[12:55:28]   [400/1080] RUN-A5-004-LANE-ALIBABA-005-1 OK finish=stop tokens=1236 out=4721ch t=19.5s
+[12:55:51]   [401/1080] RUN-A5-004-LANE-ALIBABA-005-2 OK finish=stop tokens=1246 out=4764ch t=19.8s
+[12:56:13]   [402/1080] RUN-A5-004-LANE-ALIBABA-005-3 OK finish=stop tokens=1236 out=4545ch t=19.4s
+[12:56:31]   [403/1080] RUN-A5-005-LANE-ALIBABA-005-1 OK finish=stop tokens=983 out=3367ch t=15.4s
+[12:56:50]   [404/1080] RUN-A5-005-LANE-ALIBABA-005-2 OK finish=stop tokens=977 out=3488ch t=15.3s
+[12:57:10]   [405/1080] RUN-A5-005-LANE-ALIBABA-005-3 OK finish=stop tokens=1109 out=4029ch t=17.6s
+[12:57:24]   [406/1080] RUN-A5-006-LANE-ALIBABA-005-1 OK finish=stop tokens=722 out=2721ch t=10.8s
+[12:57:40]   [407/1080] RUN-A5-006-LANE-ALIBABA-005-2 OK finish=stop tokens=813 out=2878ch t=12.4s
+[12:57:55]   [408/1080] RUN-A5-006-LANE-ALIBABA-005-3 OK finish=stop tokens=813 out=2944ch t=12.9s
+[12:58:08]   [409/1080] RUN-A5-007-LANE-ALIBABA-005-1 OK finish=stop tokens=636 out=2407ch t=9.2s CAT_MISS=UNSCORED
+[12:58:21]   [410/1080] RUN-A5-007-LANE-ALIBABA-005-2 OK finish=stop tokens=676 out=2677ch t=10.0s CAT_MISS=UNSCORED
+[12:58:34]   [411/1080] RUN-A5-007-LANE-ALIBABA-005-3 OK finish=stop tokens=677 out=2673ch t=10.0s CAT_MISS=UNSCORED
+[12:58:53]   [412/1080] RUN-A5-008-LANE-ALIBABA-005-1 OK finish=stop tokens=1093 out=4167ch t=16.8s CAT_MISS=UNSCORED
+[12:59:13]   [413/1080] RUN-A5-008-LANE-ALIBABA-005-2 OK finish=stop tokens=1086 out=3948ch t=16.7s CAT_MISS=UNSCORED
+[12:59:32]   [414/1080] RUN-A5-008-LANE-ALIBABA-005-3 OK finish=stop tokens=1035 out=3857ch t=15.9s CAT_MISS=UNSCORED
+[13:00:00]   [415/1080] RUN-A5-009-LANE-ALIBABA-005-1 OK finish=stop tokens=1564 out=5440ch t=25.2s
+[13:00:26]   [416/1080] RUN-A5-009-LANE-ALIBABA-005-2 OK finish=stop tokens=1416 out=4980ch t=22.5s
+[13:00:57]   [417/1080] RUN-A5-009-LANE-ALIBABA-005-3 OK finish=stop tokens=1700 out=5528ch t=27.8s
+[13:01:14]   [418/1080] RUN-A5-010-LANE-ALIBABA-005-1 OK finish=stop tokens=948 out=3183ch t=14.3s
+[13:01:35]   [419/1080] RUN-A5-010-LANE-ALIBABA-005-2 OK finish=stop tokens=1146 out=4187ch t=18.5s
+[13:01:53]   [420/1080] RUN-A5-010-LANE-ALIBABA-005-3 OK finish=stop tokens=958 out=3448ch t=14.6s
+[13:02:08]   [421/1080] RUN-B-001-LANE-ALIBABA-005-1 OK finish=stop tokens=788 out=2704ch t=11.7s
+[13:02:23]   [422/1080] RUN-B-001-LANE-ALIBABA-005-2 OK finish=stop tokens=815 out=2997ch t=12.1s
+[13:02:37]   [423/1080] RUN-B-001-LANE-ALIBABA-005-3 OK finish=stop tokens=752 out=2717ch t=11.1s
+[13:02:51]   [424/1080] RUN-B-002-LANE-ALIBABA-005-1 OK finish=stop tokens=728 out=2356ch t=11.2s
+[13:03:04]   [425/1080] RUN-B-002-LANE-ALIBABA-005-2 OK finish=stop tokens=656 out=2005ch t=9.6s
+[13:03:17]   [426/1080] RUN-B-002-LANE-ALIBABA-005-3 OK finish=stop tokens=697 out=2145ch t=10.3s
+[13:03:39]   [427/1080] RUN-B-003-LANE-ALIBABA-005-1 OK finish=stop tokens=1221 out=4068ch t=19.4s
+[13:03:58]   [428/1080] RUN-B-003-LANE-ALIBABA-005-2 OK finish=stop tokens=1048 out=3627ch t=16.1s
+[13:04:19]   [429/1080] RUN-B-003-LANE-ALIBABA-005-3 OK finish=stop tokens=1118 out=3883ch t=17.4s
+[13:04:38]   [430/1080] RUN-B-004-LANE-ALIBABA-005-1 OK finish=stop tokens=1036 out=3234ch t=16.1s
+[13:04:52]   [431/1080] RUN-B-004-LANE-ALIBABA-005-2 OK finish=stop tokens=750 out=2181ch t=10.9s
+[13:05:11]   [432/1080] RUN-B-004-LANE-ALIBABA-005-3 OK finish=stop tokens=1052 out=3354ch t=16.3s
+[13:05:25]   [433/1080] RUN-B-005-LANE-ALIBABA-005-1 OK finish=stop tokens=727 out=2353ch t=10.7s
+[13:05:40]   [434/1080] RUN-B-005-LANE-ALIBABA-005-2 OK finish=stop tokens=804 out=2520ch t=12.3s
+[13:05:54]   [435/1080] RUN-B-005-LANE-ALIBABA-005-3 OK finish=stop tokens=696 out=2360ch t=10.4s
+[13:06:10]   [436/1080] RUN-B-006-LANE-ALIBABA-005-1 OK finish=stop tokens=906 out=2647ch t=13.4s
+[13:06:29]   [437/1080] RUN-B-006-LANE-ALIBABA-005-2 OK finish=stop tokens=1027 out=2849ch t=15.4s
+[13:06:44]   [438/1080] RUN-B-006-LANE-ALIBABA-005-3 OK finish=stop tokens=858 out=2475ch t=12.4s
+[13:07:05]   [439/1080] RUN-B-007-LANE-ALIBABA-005-1 OK finish=stop tokens=1164 out=3346ch t=18.2s
+[13:07:28]   [440/1080] RUN-B-007-LANE-ALIBABA-005-2 OK finish=stop tokens=1272 out=4153ch t=19.8s
+[13:07:49]   [441/1080] RUN-B-007-LANE-ALIBABA-005-3 OK finish=stop tokens=1181 out=3822ch t=18.4s
+[13:08:11]   [442/1080] RUN-B-008-LANE-ALIBABA-005-1 OK finish=stop tokens=1155 out=3840ch t=18.3s
+[13:08:34]   [443/1080] RUN-B-008-LANE-ALIBABA-005-2 OK finish=stop tokens=1299 out=4430ch t=20.8s
+[13:08:57]   [444/1080] RUN-B-008-LANE-ALIBABA-005-3 OK finish=stop tokens=1216 out=3994ch t=19.5s
+[13:09:07]   [445/1080] RUN-B-009-LANE-ALIBABA-005-1 OK finish=stop tokens=535 out=1412ch t=7.1s
+[13:09:16]   [446/1080] RUN-B-009-LANE-ALIBABA-005-2 OK finish=stop tokens=492 out=1258ch t=6.2s
+[13:09:26]   [447/1080] RUN-B-009-LANE-ALIBABA-005-3 OK finish=stop tokens=497 out=1309ch t=6.5s
+[13:09:43]   [448/1080] RUN-B-010-LANE-ALIBABA-005-1 OK finish=stop tokens=933 out=3019ch t=14.5s
+[13:10:04]   [449/1080] RUN-B-010-LANE-ALIBABA-005-2 OK finish=stop tokens=1121 out=3986ch t=17.9s
+[13:10:24]   [450/1080] RUN-B-010-LANE-ALIBABA-005-3 OK finish=stop tokens=1055 out=3799ch t=16.7s
+[13:10:51]   [451/1080] RUN-B-011-LANE-ALIBABA-005-1 OK finish=stop tokens=1478 out=5020ch t=24.2s
+[13:11:16]   [452/1080] RUN-B-011-LANE-ALIBABA-005-2 OK finish=stop tokens=1359 out=4607ch t=22.1s
+[13:11:42]   [453/1080] RUN-B-011-LANE-ALIBABA-005-3 OK finish=stop tokens=1278 out=4340ch t=22.6s
+[13:11:57]   [454/1080] RUN-B-012-LANE-ALIBABA-005-1 OK finish=stop tokens=710 out=2178ch t=11.8s
+[13:12:12]   [455/1080] RUN-B-012-LANE-ALIBABA-005-2 OK finish=stop tokens=779 out=2461ch t=12.8s
+[13:12:28]   [456/1080] RUN-B-012-LANE-ALIBABA-005-3 OK finish=stop tokens=828 out=2623ch t=12.8s
+[13:12:47]   [457/1080] RUN-B-013-LANE-ALIBABA-005-1 OK finish=stop tokens=1020 out=3858ch t=16.2s
+[13:13:02]   [458/1080] RUN-B-013-LANE-ALIBABA-005-2 OK finish=stop tokens=757 out=2666ch t=11.3s
+[13:13:22]   [459/1080] RUN-B-013-LANE-ALIBABA-005-3 OK finish=stop tokens=1074 out=4032ch t=17.1s
+[13:13:36]   [460/1080] RUN-B-014-LANE-ALIBABA-005-1 OK finish=stop tokens=753 out=2391ch t=10.9s
+[13:13:48]   [461/1080] RUN-B-014-LANE-ALIBABA-005-2 OK finish=stop tokens=650 out=2086ch t=9.1s
+[13:13:59]   [462/1080] RUN-B-014-LANE-ALIBABA-005-3 OK finish=stop tokens=619 out=1942ch t=8.5s
+[13:14:30]   [463/1080] RUN-B-015-LANE-ALIBABA-005-1 OK finish=stop tokens=1644 out=6076ch t=27.6s
+[13:14:57]   [464/1080] RUN-B-015-LANE-ALIBABA-005-2 OK finish=stop tokens=1456 out=5027ch t=24.3s
+[13:15:27]   [465/1080] RUN-B-015-LANE-ALIBABA-005-3 OK finish=stop tokens=1595 out=5289ch t=26.8s
+[13:15:41]   [466/1080] RUN-B-016-LANE-ALIBABA-005-1 OK finish=stop tokens=726 out=2412ch t=10.7s
+[13:15:54]   [467/1080] RUN-B-016-LANE-ALIBABA-005-2 OK finish=stop tokens=704 out=2246ch t=10.3s
+[13:16:08]   [468/1080] RUN-B-016-LANE-ALIBABA-005-3 OK finish=stop tokens=754 out=2437ch t=11.1s
+[13:16:32]   [469/1080] RUN-B-017-LANE-ALIBABA-005-1 OK finish=stop tokens=1317 out=4061ch t=21.0s
+[13:16:58]   [470/1080] RUN-B-017-LANE-ALIBABA-005-2 OK finish=stop tokens=1400 out=4229ch t=22.5s
+[13:17:27]   [471/1080] RUN-B-017-LANE-ALIBABA-005-3 OK finish=stop tokens=1591 out=5331ch t=26.1s
+[13:17:40]   [472/1080] RUN-B-018-LANE-ALIBABA-005-1 OK finish=stop tokens=669 out=2352ch t=9.9s
+[13:17:52]   [473/1080] RUN-B-018-LANE-ALIBABA-005-2 OK finish=stop tokens=650 out=2292ch t=9.5s
+[13:18:07]   [474/1080] RUN-B-018-LANE-ALIBABA-005-3 OK finish=stop tokens=746 out=2574ch t=11.3s
+[13:18:12]   [475/1080] RUN-B-019-LANE-ALIBABA-005-1 OK finish=stop tokens=288 out=401ch t=2.5s
+[13:18:17]   [476/1080] RUN-B-019-LANE-ALIBABA-005-2 OK finish=stop tokens=253 out=245ch t=1.9s
+[13:18:22]   [477/1080] RUN-B-019-LANE-ALIBABA-005-3 OK finish=stop tokens=285 out=401ch t=2.4s
+[13:18:41]   [478/1080] RUN-B-020-LANE-ALIBABA-005-1 OK finish=stop tokens=983 out=3250ch t=15.2s
+[13:19:02]   [479/1080] RUN-B-020-LANE-ALIBABA-005-2 OK finish=stop tokens=1178 out=4291ch t=18.7s
+[13:19:20]   [480/1080] RUN-B-020-LANE-ALIBABA-005-3 OK finish=stop tokens=971 out=3163ch t=15.0s
+[13:19:31]   [481/1080] RUN-C-001-LANE-ALIBABA-005-1 OK finish=stop tokens=553 out=1814ch t=7.8s CAT_MISS=UNSCORED
+[13:19:43]   [482/1080] RUN-C-001-LANE-ALIBABA-005-2 OK finish=stop tokens=642 out=2294ch t=9.5s CAT_MISS=UNSCORED
+[13:19:55]   [483/1080] RUN-C-001-LANE-ALIBABA-005-3 OK finish=stop tokens=582 out=1899ch t=8.5s CAT_MISS=UNSCORED
+[13:20:05]   [484/1080] RUN-C-002-LANE-ALIBABA-005-1 OK finish=stop tokens=542 out=1939ch t=7.5s CAT_MISS=NO
+[13:20:17]   [485/1080] RUN-C-002-LANE-ALIBABA-005-2 OK finish=stop tokens=572 out=1940ch t=8.3s CAT_MISS=NO
+[13:20:28]   [486/1080] RUN-C-002-LANE-ALIBABA-005-3 OK finish=stop tokens=589 out=1965ch t=8.4s CAT_MISS=NO
+[13:20:39]   [487/1080] RUN-C-003-LANE-ALIBABA-005-1 OK finish=stop tokens=558 out=1687ch t=7.5s CAT_MISS=UNSCORED
+[13:20:51]   [488/1080] RUN-C-003-LANE-ALIBABA-005-2 OK finish=stop tokens=667 out=2154ch t=9.5s CAT_MISS=UNSCORED
+[13:21:04]   [489/1080] RUN-C-003-LANE-ALIBABA-005-3 OK finish=stop tokens=680 out=2200ch t=9.9s CAT_MISS=UNSCORED
+[13:21:15]   [490/1080] RUN-C-004-LANE-ALIBABA-005-1 OK finish=stop tokens=595 out=2014ch t=8.2s CAT_MISS=UNSCORED
+[13:21:26]   [491/1080] RUN-C-004-LANE-ALIBABA-005-2 OK finish=stop tokens=590 out=1834ch t=8.1s CAT_MISS=UNSCORED
+[13:21:38]   [492/1080] RUN-C-004-LANE-ALIBABA-005-3 OK finish=stop tokens=599 out=2015ch t=8.4s CAT_MISS=UNSCORED
+[13:21:50]   [493/1080] RUN-C-005-LANE-ALIBABA-005-1 OK finish=stop tokens=682 out=2199ch t=9.6s CAT_MISS=NO
+[13:22:06]   [494/1080] RUN-C-005-LANE-ALIBABA-005-2 OK finish=stop tokens=842 out=2778ch t=12.5s CAT_MISS=UNSCORED
+[13:22:21]   [495/1080] RUN-C-005-LANE-ALIBABA-005-3 OK finish=stop tokens=813 out=2795ch t=11.9s CAT_MISS=UNSCORED
+[13:22:31]   [496/1080] RUN-C-006-LANE-ALIBABA-005-1 OK finish=stop tokens=512 out=1648ch t=6.9s
+[13:22:42]   [497/1080] RUN-C-006-LANE-ALIBABA-005-2 OK finish=stop tokens=594 out=2029ch t=8.3s
+[13:22:53]   [498/1080] RUN-C-006-LANE-ALIBABA-005-3 OK finish=stop tokens=571 out=1897ch t=7.9s
+[13:23:02]   [499/1080] RUN-C-007-LANE-ALIBABA-005-1 OK finish=stop tokens=464 out=1319ch t=6.3s CAT_MISS=NO
+[13:23:14]   [500/1080] RUN-C-007-LANE-ALIBABA-005-2 OK finish=stop tokens=618 out=1844ch t=9.0s CAT_MISS=NO
+[13:23:24]   [501/1080] RUN-C-007-LANE-ALIBABA-005-3 OK finish=stop tokens=464 out=1319ch t=6.5s CAT_MISS=NO
+[13:23:34]   [502/1080] RUN-C-008-LANE-ALIBABA-005-1 OK finish=stop tokens=541 out=1691ch t=7.1s CAT_MISS=UNSCORED
+[13:23:44]   [503/1080] RUN-C-008-LANE-ALIBABA-005-2 OK finish=stop tokens=548 out=1662ch t=7.3s CAT_MISS=UNSCORED
+[13:23:56]   [504/1080] RUN-C-008-LANE-ALIBABA-005-3 OK finish=stop tokens=630 out=2079ch t=8.8s CAT_MISS=UNSCORED
+[13:24:07]   [505/1080] RUN-C-009-LANE-ALIBABA-005-1 OK finish=stop tokens=565 out=1882ch t=8.0s CAT_MISS=UNSCORED
+[13:24:19]   [506/1080] RUN-C-009-LANE-ALIBABA-005-2 OK finish=stop tokens=588 out=1754ch t=8.3s CAT_MISS=UNSCORED
+[13:24:29]   [507/1080] RUN-C-009-LANE-ALIBABA-005-3 OK finish=stop tokens=546 out=1670ch t=7.6s CAT_MISS=UNSCORED
+[13:24:44]   [508/1080] RUN-C-010-LANE-ALIBABA-005-1 OK finish=stop tokens=758 out=2487ch t=11.7s CAT_MISS=UNSCORED
+[13:24:59]   [509/1080] RUN-C-010-LANE-ALIBABA-005-2 OK finish=stop tokens=784 out=2471ch t=12.1s CAT_MISS=NO
+[13:25:14]   [510/1080] RUN-C-010-LANE-ALIBABA-005-3 OK finish=stop tokens=809 out=2665ch t=12.5s CAT_MISS=NO
+[13:25:26]   [511/1080] RUN-C-011-LANE-ALIBABA-005-1 OK finish=stop tokens=612 out=1911ch t=8.6s CAT_MISS=UNSCORED
+[13:25:37]   [512/1080] RUN-C-011-LANE-ALIBABA-005-2 OK finish=stop tokens=573 out=1856ch t=7.8s CAT_MISS=NO
+[13:25:47]   [513/1080] RUN-C-011-LANE-ALIBABA-005-3 OK finish=stop tokens=518 out=1604ch t=6.8s CAT_MISS=NO
+[13:25:59]   [514/1080] RUN-C-012-LANE-ALIBABA-005-1 OK finish=stop tokens=627 out=2329ch t=9.3s
+[13:26:11]   [515/1080] RUN-C-012-LANE-ALIBABA-005-2 OK finish=stop tokens=631 out=2432ch t=9.4s
+[13:26:25]   [516/1080] RUN-C-012-LANE-ALIBABA-005-3 OK finish=stop tokens=690 out=2490ch t=10.5s
+[13:26:36]   [517/1080] RUN-C-013-LANE-ALIBABA-005-1 OK finish=stop tokens=585 out=2077ch t=8.3s CAT_MISS=NO
+[13:26:46]   [518/1080] RUN-C-013-LANE-ALIBABA-005-2 OK finish=stop tokens=512 out=1748ch t=7.0s CAT_MISS=UNSCORED
+[13:26:57]   [519/1080] RUN-C-013-LANE-ALIBABA-005-3 OK finish=stop tokens=569 out=1955ch t=8.1s CAT_MISS=UNSCORED
+[13:27:05]   [520/1080] RUN-C-014-LANE-ALIBABA-005-1 OK finish=stop tokens=422 out=1146ch t=5.1s CAT_MISS=UNSCORED
+[13:27:14]   [521/1080] RUN-C-014-LANE-ALIBABA-005-2 OK finish=stop tokens=420 out=1157ch t=5.1s CAT_MISS=UNSCORED
+[13:27:22]   [522/1080] RUN-C-014-LANE-ALIBABA-005-3 OK finish=stop tokens=410 out=1152ch t=5.0s CAT_MISS=UNSCORED
+[13:27:31]   [523/1080] RUN-C-015-LANE-ALIBABA-005-1 OK finish=stop tokens=488 out=1782ch t=6.6s CAT_MISS=UNSCORED
+[13:27:40]   [524/1080] RUN-C-015-LANE-ALIBABA-005-2 OK finish=stop tokens=469 out=1690ch t=6.2s CAT_MISS=UNSCORED
+[13:27:49]   [525/1080] RUN-C-015-LANE-ALIBABA-005-3 OK finish=stop tokens=461 out=1623ch t=6.0s CAT_MISS=UNSCORED
+[13:27:59]   [526/1080] RUN-C-016-LANE-ALIBABA-005-1 OK finish=stop tokens=529 out=1423ch t=6.9s
+[13:28:10]   [527/1080] RUN-C-016-LANE-ALIBABA-005-2 OK finish=stop tokens=581 out=1608ch t=7.9s
+[13:28:21]   [528/1080] RUN-C-016-LANE-ALIBABA-005-3 OK finish=stop tokens=584 out=1680ch t=8.0s
+[13:28:32]   [529/1080] RUN-C-017-LANE-ALIBABA-005-1 OK finish=stop tokens=556 out=1782ch t=7.4s CAT_MISS=UNSCORED
+[13:28:43]   [530/1080] RUN-C-017-LANE-ALIBABA-005-2 OK finish=stop tokens=591 out=1876ch t=8.1s CAT_MISS=UNSCORED
+[13:28:55]   [531/1080] RUN-C-017-LANE-ALIBABA-005-3 OK finish=stop tokens=607 out=1979ch t=9.0s CAT_MISS=UNSCORED
+[13:29:07]   [532/1080] RUN-C-018-LANE-ALIBABA-005-1 OK finish=stop tokens=629 out=1886ch t=9.3s CAT_MISS=NO
+[13:29:17]   [533/1080] RUN-C-018-LANE-ALIBABA-005-2 OK finish=stop tokens=498 out=1481ch t=6.9s CAT_MISS=NO
+[13:29:27]   [534/1080] RUN-C-018-LANE-ALIBABA-005-3 OK finish=stop tokens=508 out=1460ch t=6.9s CAT_MISS=NO
+[13:29:37]   [535/1080] RUN-C-019-LANE-ALIBABA-005-1 OK finish=stop tokens=442 out=1416ch t=6.6s
+[13:29:47]   [536/1080] RUN-C-019-LANE-ALIBABA-005-2 OK finish=stop tokens=520 out=1728ch t=7.9s
+[13:29:58]   [537/1080] RUN-C-019-LANE-ALIBABA-005-3 OK finish=stop tokens=501 out=1569ch t=7.5s
+[13:30:13]   [538/1080] RUN-C-020-LANE-ALIBABA-005-1 OK finish=stop tokens=821 out=2627ch t=12.0s
+[13:30:28]   [539/1080] RUN-C-020-LANE-ALIBABA-005-2 OK finish=stop tokens=795 out=2715ch t=11.5s
+[13:30:41]   [540/1080] RUN-C-020-LANE-ALIBABA-005-3 OK finish=stop tokens=727 out=2351ch t=10.4s
+[13:30:49] --- LANE-ALIBABA-006 (qwen-max) role=EXECUTOR ---
+[13:30:59]   [541/1080] RUN-A1-001-LANE-ALIBABA-006-1 OK finish=stop tokens=799 out=2344ch t=10.3s
+[13:31:11]   [542/1080] RUN-A1-001-LANE-ALIBABA-006-2 OK finish=stop tokens=698 out=2223ch t=9.2s
+[13:31:24]   [543/1080] RUN-A1-001-LANE-ALIBABA-006-3 OK finish=stop tokens=700 out=2277ch t=9.7s
+[13:31:40]   [544/1080] RUN-A1-002-LANE-ALIBABA-006-1 OK finish=stop tokens=866 out=3212ch t=12.8s
+[13:31:56]   [545/1080] RUN-A1-002-LANE-ALIBABA-006-2 OK finish=stop tokens=888 out=3345ch t=12.6s
+[13:32:10]   [546/1080] RUN-A1-002-LANE-ALIBABA-006-3 OK finish=stop tokens=864 out=3244ch t=11.3s
+[13:32:25]   [547/1080] RUN-A1-003-LANE-ALIBABA-006-1 OK finish=stop tokens=876 out=3638ch t=12.4s
+[13:32:42]   [548/1080] RUN-A1-003-LANE-ALIBABA-006-2 OK finish=stop tokens=909 out=3643ch t=13.3s
+[13:32:58]   [549/1080] RUN-A1-003-LANE-ALIBABA-006-3 OK finish=stop tokens=925 out=3080ch t=13.4s
+[13:33:12]   [550/1080] RUN-A1-004-LANE-ALIBABA-006-1 OK finish=stop tokens=856 out=3228ch t=11.1s
+[13:33:27]   [551/1080] RUN-A1-004-LANE-ALIBABA-006-2 OK finish=stop tokens=816 out=2955ch t=11.9s
+[13:33:42]   [552/1080] RUN-A1-004-LANE-ALIBABA-006-3 OK finish=stop tokens=859 out=3169ch t=11.9s
+[13:33:56]   [553/1080] RUN-A1-005-LANE-ALIBABA-006-1 OK finish=stop tokens=819 out=3319ch t=11.3s
+[13:34:11]   [554/1080] RUN-A1-005-LANE-ALIBABA-006-2 OK finish=stop tokens=814 out=3223ch t=12.2s
+[13:34:25]   [555/1080] RUN-A1-005-LANE-ALIBABA-006-3 OK finish=stop tokens=776 out=3110ch t=10.9s
+[13:34:39]   [556/1080] RUN-A1-006-LANE-ALIBABA-006-1 OK finish=stop tokens=795 out=3335ch t=10.9s
+[13:34:54]   [557/1080] RUN-A1-006-LANE-ALIBABA-006-2 OK finish=stop tokens=864 out=3760ch t=12.1s
+[13:35:10]   [558/1080] RUN-A1-006-LANE-ALIBABA-006-3 OK finish=stop tokens=893 out=3878ch t=12.9s
+[13:35:27]   [559/1080] RUN-A1-007-LANE-ALIBABA-006-1 OK finish=stop tokens=905 out=4041ch t=13.9s CAT_MISS=UNSCORED
+[13:35:41]   [560/1080] RUN-A1-007-LANE-ALIBABA-006-2 OK finish=stop tokens=791 out=3314ch t=11.1s CAT_MISS=UNSCORED
+[13:35:55]   [561/1080] RUN-A1-007-LANE-ALIBABA-006-3 OK finish=stop tokens=772 out=3284ch t=10.4s CAT_MISS=UNSCORED
+[13:36:11]   [562/1080] RUN-A1-008-LANE-ALIBABA-006-1 OK finish=stop tokens=888 out=3848ch t=13.7s CAT_MISS=UNSCORED
+[13:36:23]   [563/1080] RUN-A1-008-LANE-ALIBABA-006-2 OK finish=stop tokens=687 out=2761ch t=9.1s CAT_MISS=UNSCORED
+[13:36:37]   [564/1080] RUN-A1-008-LANE-ALIBABA-006-3 OK finish=stop tokens=765 out=3208ch t=10.6s CAT_MISS=UNSCORED
+[13:36:55]   [565/1080] RUN-A1-009-LANE-ALIBABA-006-1 OK finish=stop tokens=960 out=3875ch t=15.2s
+[13:37:10]   [566/1080] RUN-A1-009-LANE-ALIBABA-006-2 OK finish=stop tokens=922 out=3758ch t=12.1s
+[13:37:26]   [567/1080] RUN-A1-009-LANE-ALIBABA-006-3 OK finish=stop tokens=928 out=3675ch t=13.2s
+[13:37:41]   [568/1080] RUN-A1-010-LANE-ALIBABA-006-1 OK finish=stop tokens=858 out=3559ch t=11.5s
+[13:37:56]   [569/1080] RUN-A1-010-LANE-ALIBABA-006-2 OK finish=stop tokens=860 out=3614ch t=12.5s
+[13:38:13]   [570/1080] RUN-A1-010-LANE-ALIBABA-006-3 OK finish=stop tokens=936 out=3988ch t=13.3s
+[13:38:27]   [571/1080] RUN-A2-001-LANE-ALIBABA-006-1 OK finish=stop tokens=737 out=2733ch t=10.9s
+[13:38:38]   [572/1080] RUN-A2-001-LANE-ALIBABA-006-2 OK finish=stop tokens=587 out=1987ch t=8.1s
+[13:38:50]   [573/1080] RUN-A2-001-LANE-ALIBABA-006-3 OK finish=stop tokens=663 out=2255ch t=9.5s
+[13:39:08]   [574/1080] RUN-A2-002-LANE-ALIBABA-006-1 OK finish=stop tokens=914 out=2959ch t=15.0s
+[13:39:24]   [575/1080] RUN-A2-002-LANE-ALIBABA-006-2 OK finish=stop tokens=897 out=3059ch t=12.8s
+[13:39:40]   [576/1080] RUN-A2-002-LANE-ALIBABA-006-3 OK finish=stop tokens=896 out=2944ch t=13.5s
+[13:39:54]   [577/1080] RUN-A2-003-LANE-ALIBABA-006-1 OK finish=stop tokens=738 out=2895ch t=10.2s
+[13:40:05]   [578/1080] RUN-A2-003-LANE-ALIBABA-006-2 OK finish=stop tokens=692 out=2718ch t=8.6s
+[13:40:19]   [579/1080] RUN-A2-003-LANE-ALIBABA-006-3 OK finish=stop tokens=788 out=3130ch t=10.6s
+[13:40:34]   [580/1080] RUN-A2-004-LANE-ALIBABA-006-1 OK finish=stop tokens=823 out=3504ch t=12.0s
+[13:40:48]   [581/1080] RUN-A2-004-LANE-ALIBABA-006-2 OK finish=stop tokens=750 out=3138ch t=11.0s
+[13:41:05]   [582/1080] RUN-A2-004-LANE-ALIBABA-006-3 OK finish=stop tokens=900 out=3852ch t=14.5s
+[13:41:20]   [583/1080] RUN-A2-005-LANE-ALIBABA-006-1 OK finish=stop tokens=758 out=2929ch t=11.9s
+[13:41:32]   [584/1080] RUN-A2-005-LANE-ALIBABA-006-2 OK finish=stop tokens=657 out=2519ch t=9.1s
+[13:41:46]   [585/1080] RUN-A2-005-LANE-ALIBABA-006-3 OK finish=stop tokens=714 out=2814ch t=11.1s
+[13:42:02]   [586/1080] RUN-A2-006-LANE-ALIBABA-006-1 OK finish=stop tokens=914 out=3709ch t=12.9s
+[13:42:15]   [587/1080] RUN-A2-006-LANE-ALIBABA-006-2 OK finish=stop tokens=754 out=2911ch t=9.9s
+[13:42:29]   [588/1080] RUN-A2-006-LANE-ALIBABA-006-3 OK finish=stop tokens=802 out=3127ch t=10.9s
+[13:42:44]   [589/1080] RUN-A2-007-LANE-ALIBABA-006-1 OK finish=stop tokens=814 out=3677ch t=11.5s CAT_MISS=UNSCORED
+[13:42:58]   [590/1080] RUN-A2-007-LANE-ALIBABA-006-2 OK finish=stop tokens=751 out=3269ch t=11.2s CAT_MISS=NO
+[13:43:11]   [591/1080] RUN-A2-007-LANE-ALIBABA-006-3 OK finish=stop tokens=709 out=3073ch t=9.8s CAT_MISS=NO
+[13:43:19]   [592/1080] RUN-A2-008-LANE-ALIBABA-006-1 OK finish=stop tokens=461 out=1685ch t=5.7s CAT_MISS=UNSCORED
+[13:43:26]   [593/1080] RUN-A2-008-LANE-ALIBABA-006-2 OK finish=stop tokens=354 out=1153ch t=3.9s CAT_MISS=UNSCORED
+[13:43:32]   [594/1080] RUN-A2-008-LANE-ALIBABA-006-3 OK finish=stop tokens=312 out=926ch t=3.3s CAT_MISS=UNSCORED
+[13:43:48]   [595/1080] RUN-A2-009-LANE-ALIBABA-006-1 OK finish=stop tokens=941 out=3835ch t=12.8s
+[13:44:05]   [596/1080] RUN-A2-009-LANE-ALIBABA-006-2 OK finish=stop tokens=975 out=4169ch t=13.3s
+[13:44:19]   [597/1080] RUN-A2-009-LANE-ALIBABA-006-3 OK finish=stop tokens=912 out=3765ch t=11.8s
+[13:44:39]   [598/1080] RUN-A2-010-LANE-ALIBABA-006-1 OK finish=stop tokens=945 out=3775ch t=16.6s
+[13:44:54]   [599/1080] RUN-A2-010-LANE-ALIBABA-006-2 OK finish=stop tokens=897 out=3850ch t=12.2s
+[13:45:10]   [600/1080] RUN-A2-010-LANE-ALIBABA-006-3 OK finish=stop tokens=923 out=3998ch t=12.8s
+[13:45:20]   [601/1080] RUN-A3-001-LANE-ALIBABA-006-1 OK finish=stop tokens=609 out=2249ch t=7.5s
+[13:45:29]   [602/1080] RUN-A3-001-LANE-ALIBABA-006-2 OK finish=stop tokens=489 out=1734ch t=5.8s
+[13:45:42]   [603/1080] RUN-A3-001-LANE-ALIBABA-006-3 OK finish=stop tokens=542 out=2006ch t=10.1s
+[13:45:57]   [604/1080] RUN-A3-002-LANE-ALIBABA-006-1 OK finish=stop tokens=821 out=3388ch t=11.6s
+[13:46:10]   [605/1080] RUN-A3-002-LANE-ALIBABA-006-2 OK finish=stop tokens=723 out=2752ch t=9.7s
+[13:46:22]   [606/1080] RUN-A3-002-LANE-ALIBABA-006-3 OK finish=stop tokens=667 out=2562ch t=9.0s
+[13:46:35]   [607/1080] RUN-A3-003-LANE-ALIBABA-006-1 OK finish=stop tokens=800 out=3259ch t=10.5s
+[13:46:50]   [608/1080] RUN-A3-003-LANE-ALIBABA-006-2 OK finish=stop tokens=810 out=3386ch t=11.7s
+[13:47:04]   [609/1080] RUN-A3-003-LANE-ALIBABA-006-3 OK finish=stop tokens=832 out=3648ch t=11.5s
+[13:47:17]   [610/1080] RUN-A3-004-LANE-ALIBABA-006-1 OK finish=stop tokens=705 out=3110ch t=9.4s
+[13:47:31]   [611/1080] RUN-A3-004-LANE-ALIBABA-006-2 OK finish=stop tokens=749 out=3433ch t=11.1s
+[13:47:44]   [612/1080] RUN-A3-004-LANE-ALIBABA-006-3 OK finish=stop tokens=749 out=3380ch t=9.8s
+[13:47:58]   [613/1080] RUN-A3-005-LANE-ALIBABA-006-1 OK finish=stop tokens=819 out=3083ch t=11.0s
+[13:48:13]   [614/1080] RUN-A3-005-LANE-ALIBABA-006-2 OK finish=stop tokens=823 out=3091ch t=11.9s
+[13:48:26]   [615/1080] RUN-A3-005-LANE-ALIBABA-006-3 OK finish=stop tokens=738 out=2776ch t=10.9s
+[13:48:41]   [616/1080] RUN-A3-006-LANE-ALIBABA-006-1 OK finish=stop tokens=835 out=3413ch t=11.3s
+[13:48:54]   [617/1080] RUN-A3-006-LANE-ALIBABA-006-2 OK finish=stop tokens=723 out=2867ch t=10.3s
+[13:49:08]   [618/1080] RUN-A3-006-LANE-ALIBABA-006-3 OK finish=stop tokens=767 out=3068ch t=10.8s
+[13:49:22]   [619/1080] RUN-A3-007-LANE-ALIBABA-006-1 OK finish=stop tokens=689 out=2940ch t=10.8s CAT_MISS=UNSCORED
+[13:49:36]   [620/1080] RUN-A3-007-LANE-ALIBABA-006-2 OK finish=stop tokens=782 out=3551ch t=11.2s CAT_MISS=UNSCORED
+[13:49:50]   [621/1080] RUN-A3-007-LANE-ALIBABA-006-3 OK finish=stop tokens=788 out=3518ch t=11.2s CAT_MISS=UNSCORED
+[13:50:03]   [622/1080] RUN-A3-008-LANE-ALIBABA-006-1 OK finish=stop tokens=698 out=2771ch t=9.8s CAT_MISS=UNSCORED
+[13:50:17]   [623/1080] RUN-A3-008-LANE-ALIBABA-006-2 OK finish=stop tokens=835 out=3391ch t=11.6s CAT_MISS=UNSCORED
+[13:50:32]   [624/1080] RUN-A3-008-LANE-ALIBABA-006-3 OK finish=stop tokens=724 out=2876ch t=11.2s CAT_MISS=UNSCORED
+[13:50:46]   [625/1080] RUN-A3-009-LANE-ALIBABA-006-1 OK finish=stop tokens=940 out=3857ch t=11.8s
+[13:51:01]   [626/1080] RUN-A3-009-LANE-ALIBABA-006-2 OK finish=stop tokens=876 out=3529ch t=11.4s
+[13:51:15]   [627/1080] RUN-A3-009-LANE-ALIBABA-006-3 OK finish=stop tokens=873 out=3500ch t=11.4s
+[13:51:33]   [628/1080] RUN-A3-010-LANE-ALIBABA-006-1 OK finish=stop tokens=1020 out=4204ch t=14.5s
+[13:51:51]   [629/1080] RUN-A3-010-LANE-ALIBABA-006-2 OK finish=stop tokens=1018 out=4379ch t=15.0s
+[13:52:07]   [630/1080] RUN-A3-010-LANE-ALIBABA-006-3 OK finish=stop tokens=1089 out=4678ch t=13.5s
+[13:52:23]   [631/1080] RUN-A4-001-LANE-ALIBABA-006-1 OK finish=stop tokens=915 out=3613ch t=12.3s
+[13:52:39]   [632/1080] RUN-A4-001-LANE-ALIBABA-006-2 OK finish=stop tokens=1005 out=4035ch t=13.1s
+[13:52:55]   [633/1080] RUN-A4-001-LANE-ALIBABA-006-3 OK finish=stop tokens=1010 out=4409ch t=13.6s
+[13:53:11]   [634/1080] RUN-A4-002-LANE-ALIBABA-006-1 OK finish=stop tokens=918 out=3570ch t=12.8s
+[13:53:28]   [635/1080] RUN-A4-002-LANE-ALIBABA-006-2 OK finish=stop tokens=999 out=4059ch t=14.0s
+[13:53:42]   [636/1080] RUN-A4-002-LANE-ALIBABA-006-3 OK finish=stop tokens=892 out=3566ch t=11.3s
+[13:53:57]   [637/1080] RUN-A4-003-LANE-ALIBABA-006-1 OK finish=stop tokens=824 out=3286ch t=11.5s
+[13:54:09]   [638/1080] RUN-A4-003-LANE-ALIBABA-006-2 OK finish=stop tokens=724 out=2769ch t=9.5s
+[13:54:23]   [639/1080] RUN-A4-003-LANE-ALIBABA-006-3 OK finish=stop tokens=805 out=3359ch t=11.0s
+[13:54:35]   [640/1080] RUN-A4-004-LANE-ALIBABA-006-1 OK finish=stop tokens=764 out=2584ch t=9.1s
+[13:54:46]   [641/1080] RUN-A4-004-LANE-ALIBABA-006-2 OK finish=stop tokens=660 out=2239ch t=7.9s
+[13:55:00]   [642/1080] RUN-A4-004-LANE-ALIBABA-006-3 OK finish=stop tokens=733 out=2605ch t=10.1s
+[13:55:15]   [643/1080] RUN-A4-005-LANE-ALIBABA-006-1 OK finish=stop tokens=810 out=3699ch t=12.6s
+[13:55:32]   [644/1080] RUN-A4-005-LANE-ALIBABA-006-2 OK finish=stop tokens=927 out=4129ch t=13.5s
+[13:55:46]   [645/1080] RUN-A4-005-LANE-ALIBABA-006-3 OK finish=stop tokens=861 out=4012ch t=11.4s
+[13:56:00]   [646/1080] RUN-A4-006-LANE-ALIBABA-006-1 OK finish=stop tokens=774 out=3242ch t=10.8s
+[13:56:15]   [647/1080] RUN-A4-006-LANE-ALIBABA-006-2 OK finish=stop tokens=767 out=3261ch t=12.3s
+[13:56:30]   [648/1080] RUN-A4-006-LANE-ALIBABA-006-3 OK finish=stop tokens=775 out=3398ch t=12.1s
+[13:56:43]   [649/1080] RUN-A4-007-LANE-ALIBABA-006-1 OK finish=stop tokens=724 out=3161ch t=10.2s CAT_MISS=UNSCORED
+[13:56:57]   [650/1080] RUN-A4-007-LANE-ALIBABA-006-2 OK finish=stop tokens=705 out=3018ch t=10.5s CAT_MISS=UNSCORED
+[13:57:14]   [651/1080] RUN-A4-007-LANE-ALIBABA-006-3 OK finish=stop tokens=670 out=2824ch t=14.3s CAT_MISS=UNSCORED
+[13:57:30]   [652/1080] RUN-A4-008-LANE-ALIBABA-006-1 OK finish=stop tokens=840 out=3265ch t=13.1s CAT_MISS=UNSCORED
+[13:57:44]   [653/1080] RUN-A4-008-LANE-ALIBABA-006-2 OK finish=stop tokens=847 out=3417ch t=11.0s CAT_MISS=UNSCORED
+[13:57:58]   [654/1080] RUN-A4-008-LANE-ALIBABA-006-3 OK finish=stop tokens=785 out=3196ch t=11.0s CAT_MISS=UNSCORED
+[13:58:11]   [655/1080] RUN-A4-009-LANE-ALIBABA-006-1 OK finish=stop tokens=815 out=3309ch t=10.2s
+[13:58:31]   [656/1080] RUN-A4-009-LANE-ALIBABA-006-2 OK finish=stop tokens=908 out=3733ch t=16.9s
+[13:58:47]   [657/1080] RUN-A4-009-LANE-ALIBABA-006-3 OK finish=stop tokens=867 out=3613ch t=12.5s
+[13:59:00]   [658/1080] RUN-A4-010-LANE-ALIBABA-006-1 OK finish=stop tokens=749 out=3094ch t=10.7s
+[13:59:14]   [659/1080] RUN-A4-010-LANE-ALIBABA-006-2 OK finish=stop tokens=736 out=2966ch t=10.4s
+[13:59:29]   [660/1080] RUN-A4-010-LANE-ALIBABA-006-3 OK finish=stop tokens=844 out=3456ch t=12.6s
+[13:59:44]   [661/1080] RUN-A5-001-LANE-ALIBABA-006-1 OK finish=stop tokens=916 out=3577ch t=11.9s
+[14:00:02]   [662/1080] RUN-A5-001-LANE-ALIBABA-006-2 OK finish=stop tokens=874 out=3371ch t=14.4s
+[14:00:20]   [663/1080] RUN-A5-001-LANE-ALIBABA-006-3 OK finish=stop tokens=1015 out=4025ch t=14.9s
+[14:00:39]   [664/1080] RUN-A5-002-LANE-ALIBABA-006-1 OK finish=stop tokens=995 out=3968ch t=16.6s
+[14:00:55]   [665/1080] RUN-A5-002-LANE-ALIBABA-006-2 OK finish=stop tokens=932 out=3855ch t=13.1s
+[14:01:14]   [666/1080] RUN-A5-002-LANE-ALIBABA-006-3 OK finish=stop tokens=987 out=3978ch t=15.1s
+[14:01:29]   [667/1080] RUN-A5-003-LANE-ALIBABA-006-1 OK finish=stop tokens=931 out=3927ch t=12.4s
+[14:01:45]   [668/1080] RUN-A5-003-LANE-ALIBABA-006-2 OK finish=stop tokens=914 out=3719ch t=13.1s
+[14:02:00]   [669/1080] RUN-A5-003-LANE-ALIBABA-006-3 OK finish=stop tokens=834 out=3444ch t=11.9s
+[14:02:19]   [670/1080] RUN-A5-004-LANE-ALIBABA-006-1 OK finish=stop tokens=1131 out=4667ch t=15.7s
+[14:02:39]   [671/1080] RUN-A5-004-LANE-ALIBABA-006-2 OK finish=stop tokens=1196 out=5057ch t=17.1s
+[14:02:58]   [672/1080] RUN-A5-004-LANE-ALIBABA-006-3 OK finish=stop tokens=1185 out=4933ch t=16.3s
+[14:03:14]   [673/1080] RUN-A5-005-LANE-ALIBABA-006-1 OK finish=stop tokens=985 out=4242ch t=13.5s
+[14:03:34]   [674/1080] RUN-A5-005-LANE-ALIBABA-006-2 OK finish=stop tokens=1205 out=5239ch t=16.0s
+[14:03:49]   [675/1080] RUN-A5-005-LANE-ALIBABA-006-3 OK finish=stop tokens=911 out=3868ch t=12.7s
+[14:04:03]   [676/1080] RUN-A5-006-LANE-ALIBABA-006-1 OK finish=stop tokens=724 out=2939ch t=10.5s
+[14:04:16]   [677/1080] RUN-A5-006-LANE-ALIBABA-006-2 OK finish=stop tokens=754 out=3006ch t=10.5s
+[14:04:29]   [678/1080] RUN-A5-006-LANE-ALIBABA-006-3 OK finish=stop tokens=751 out=3070ch t=10.1s
+[14:04:46]   [679/1080] RUN-A5-007-LANE-ALIBABA-006-1 OK finish=stop tokens=731 out=3026ch t=14.1s CAT_MISS=UNSCORED
+[14:05:01]   [680/1080] RUN-A5-007-LANE-ALIBABA-006-2 OK finish=stop tokens=792 out=3331ch t=11.3s CAT_MISS=UNSCORED
+[14:05:14]   [681/1080] RUN-A5-007-LANE-ALIBABA-006-3 OK finish=stop tokens=781 out=3369ch t=10.5s CAT_MISS=UNSCORED
+[14:05:27]   [682/1080] RUN-A5-008-LANE-ALIBABA-006-1 OK finish=stop tokens=799 out=3003ch t=10.1s CAT_MISS=UNSCORED
+[14:05:46]   [683/1080] RUN-A5-008-LANE-ALIBABA-006-2 OK finish=stop tokens=1043 out=4256ch t=15.6s CAT_MISS=UNSCORED
+[14:06:05]   [684/1080] RUN-A5-008-LANE-ALIBABA-006-3 OK finish=stop tokens=1155 out=4833ch t=16.0s CAT_MISS=UNSCORED
+[14:06:24]   [685/1080] RUN-A5-009-LANE-ALIBABA-006-1 OK finish=stop tokens=1113 out=4510ch t=16.4s
+[14:06:46]   [686/1080] RUN-A5-009-LANE-ALIBABA-006-2 OK finish=stop tokens=1164 out=4610ch t=18.2s
+[14:07:01]   [687/1080] RUN-A5-009-LANE-ALIBABA-006-3 OK finish=stop tokens=997 out=3901ch t=12.7s
+[14:07:17]   [688/1080] RUN-A5-010-LANE-ALIBABA-006-1 OK finish=stop tokens=1065 out=4160ch t=13.0s
+[14:07:33]   [689/1080] RUN-A5-010-LANE-ALIBABA-006-2 OK finish=stop tokens=1058 out=4216ch t=13.2s
+[14:07:53]   [690/1080] RUN-A5-010-LANE-ALIBABA-006-3 OK finish=stop tokens=1198 out=4686ch t=16.1s
+[14:08:06]   [691/1080] RUN-B-001-LANE-ALIBABA-006-1 OK finish=stop tokens=783 out=2961ch t=10.4s
+[14:08:19]   [692/1080] RUN-B-001-LANE-ALIBABA-006-2 OK finish=stop tokens=782 out=3131ch t=10.5s
+[14:08:36]   [693/1080] RUN-B-001-LANE-ALIBABA-006-3 OK finish=stop tokens=860 out=3455ch t=13.1s
+[14:08:53]   [694/1080] RUN-B-002-LANE-ALIBABA-006-1 OK finish=stop tokens=858 out=3372ch t=13.9s
+[14:09:04]   [695/1080] RUN-B-002-LANE-ALIBABA-006-2 OK finish=stop tokens=642 out=2358ch t=8.3s
+[14:09:17]   [696/1080] RUN-B-002-LANE-ALIBABA-006-3 OK finish=stop tokens=742 out=2794ch t=10.1s
+[14:09:30]   [697/1080] RUN-B-003-LANE-ALIBABA-006-1 OK finish=stop tokens=746 out=2778ch t=9.7s
+[14:09:41]   [698/1080] RUN-B-003-LANE-ALIBABA-006-2 OK finish=stop tokens=652 out=2258ch t=8.1s
+[14:09:55]   [699/1080] RUN-B-003-LANE-ALIBABA-006-3 OK finish=stop tokens=760 out=2843ch t=11.3s
+[14:10:08]   [700/1080] RUN-B-004-LANE-ALIBABA-006-1 OK finish=stop tokens=817 out=2784ch t=10.3s
+[14:10:22]   [701/1080] RUN-B-004-LANE-ALIBABA-006-2 OK finish=stop tokens=846 out=2848ch t=10.2s
+[14:10:35]   [702/1080] RUN-B-004-LANE-ALIBABA-006-3 OK finish=stop tokens=836 out=2891ch t=10.3s
+[14:10:48]   [703/1080] RUN-B-005-LANE-ALIBABA-006-1 OK finish=stop tokens=815 out=3254ch t=10.4s
+[14:11:03]   [704/1080] RUN-B-005-LANE-ALIBABA-006-2 OK finish=stop tokens=800 out=3212ch t=11.3s
+[14:11:16]   [705/1080] RUN-B-005-LANE-ALIBABA-006-3 OK finish=stop tokens=738 out=2961ch t=10.3s
+[14:11:28]   [706/1080] RUN-B-006-LANE-ALIBABA-006-1 OK finish=stop tokens=749 out=2312ch t=8.9s
+[14:11:41]   [707/1080] RUN-B-006-LANE-ALIBABA-006-2 OK finish=stop tokens=864 out=2710ch t=10.1s
+[14:11:55]   [708/1080] RUN-B-006-LANE-ALIBABA-006-3 OK finish=stop tokens=938 out=2948ch t=11.1s
+[14:12:11]   [709/1080] RUN-B-007-LANE-ALIBABA-006-1 OK finish=stop tokens=917 out=3342ch t=12.7s
+[14:12:26]   [710/1080] RUN-B-007-LANE-ALIBABA-006-2 OK finish=stop tokens=878 out=3108ch t=12.6s
+[14:12:41]   [711/1080] RUN-B-007-LANE-ALIBABA-006-3 OK finish=stop tokens=870 out=3145ch t=12.1s
+[14:12:57]   [712/1080] RUN-B-008-LANE-ALIBABA-006-1 OK finish=stop tokens=908 out=3531ch t=12.9s
+[14:13:16]   [713/1080] RUN-B-008-LANE-ALIBABA-006-2 OK finish=stop tokens=943 out=3696ch t=16.1s
+[14:13:33]   [714/1080] RUN-B-008-LANE-ALIBABA-006-3 OK finish=stop tokens=914 out=3557ch t=13.5s
+[14:13:47]   [715/1080] RUN-B-009-LANE-ALIBABA-006-1 OK finish=stop tokens=762 out=2655ch t=11.4s
+[14:14:03]   [716/1080] RUN-B-009-LANE-ALIBABA-006-2 OK finish=stop tokens=870 out=3185ch t=12.8s
+[14:14:17]   [717/1080] RUN-B-009-LANE-ALIBABA-006-3 OK finish=stop tokens=789 out=2708ch t=10.6s
+[14:14:32]   [718/1080] RUN-B-010-LANE-ALIBABA-006-1 OK finish=stop tokens=830 out=3197ch t=12.4s
+[14:14:48]   [719/1080] RUN-B-010-LANE-ALIBABA-006-2 OK finish=stop tokens=867 out=3372ch t=12.8s
+[14:15:05]   [720/1080] RUN-B-010-LANE-ALIBABA-006-3 OK finish=stop tokens=938 out=3610ch t=13.8s
+[14:15:23]   [721/1080] RUN-B-011-LANE-ALIBABA-006-1 OK finish=stop tokens=970 out=3746ch t=15.2s
+[14:15:39]   [722/1080] RUN-B-011-LANE-ALIBABA-006-2 OK finish=stop tokens=909 out=3473ch t=13.6s
+[14:15:55]   [723/1080] RUN-B-011-LANE-ALIBABA-006-3 OK finish=stop tokens=872 out=3434ch t=12.4s
+[14:16:07]   [724/1080] RUN-B-012-LANE-ALIBABA-006-1 OK finish=stop tokens=779 out=2959ch t=9.6s
+[14:16:18]   [725/1080] RUN-B-012-LANE-ALIBABA-006-2 OK finish=stop tokens=641 out=2431ch t=7.5s
+[14:16:30]   [726/1080] RUN-B-012-LANE-ALIBABA-006-3 OK finish=stop tokens=729 out=2876ch t=8.8s
+[14:16:46]   [727/1080] RUN-B-013-LANE-ALIBABA-006-1 OK finish=stop tokens=934 out=4125ch t=12.8s
+[14:17:00]   [728/1080] RUN-B-013-LANE-ALIBABA-006-2 OK finish=stop tokens=885 out=3791ch t=11.7s
+[14:17:14]   [729/1080] RUN-B-013-LANE-ALIBABA-006-3 OK finish=stop tokens=868 out=3637ch t=10.7s
+[14:17:25]   [730/1080] RUN-B-014-LANE-ALIBABA-006-1 OK finish=stop tokens=741 out=2828ch t=8.4s
+[14:17:38]   [731/1080] RUN-B-014-LANE-ALIBABA-006-2 OK finish=stop tokens=800 out=3081ch t=10.1s
+[14:17:52]   [732/1080] RUN-B-014-LANE-ALIBABA-006-3 OK finish=stop tokens=886 out=3470ch t=10.7s
+[14:18:07]   [733/1080] RUN-B-015-LANE-ALIBABA-006-1 OK finish=stop tokens=805 out=3834ch t=11.4s
+[14:18:23]   [734/1080] RUN-B-015-LANE-ALIBABA-006-2 OK finish=stop tokens=915 out=4370ch t=13.2s
+[14:18:37]   [735/1080] RUN-B-015-LANE-ALIBABA-006-3 OK finish=stop tokens=837 out=4017ch t=11.3s
+[14:18:50]   [736/1080] RUN-B-016-LANE-ALIBABA-006-1 OK finish=stop tokens=731 out=2703ch t=9.5s
+[14:19:02]   [737/1080] RUN-B-016-LANE-ALIBABA-006-2 OK finish=stop tokens=732 out=2767ch t=9.1s
+[14:19:17]   [738/1080] RUN-B-016-LANE-ALIBABA-006-3 OK finish=stop tokens=936 out=3694ch t=12.4s
+[14:19:31]   [739/1080] RUN-B-017-LANE-ALIBABA-006-1 OK finish=stop tokens=872 out=3152ch t=11.0s
+[14:19:44]   [740/1080] RUN-B-017-LANE-ALIBABA-006-2 OK finish=stop tokens=784 out=2991ch t=10.2s
+[14:19:57]   [741/1080] RUN-B-017-LANE-ALIBABA-006-3 OK finish=stop tokens=784 out=2876ch t=9.5s
+[14:20:10]   [742/1080] RUN-B-018-LANE-ALIBABA-006-1 OK finish=stop tokens=728 out=2899ch t=10.4s
+[14:20:24]   [743/1080] RUN-B-018-LANE-ALIBABA-006-2 OK finish=stop tokens=788 out=3375ch t=10.7s
+[14:20:40]   [744/1080] RUN-B-018-LANE-ALIBABA-006-3 OK finish=stop tokens=721 out=2955ch t=12.6s
+[14:20:46]   [745/1080] RUN-B-019-LANE-ALIBABA-006-1 OK finish=stop tokens=410 out=926ch t=3.6s
+[14:20:53]   [746/1080] RUN-B-019-LANE-ALIBABA-006-2 OK finish=stop tokens=394 out=905ch t=3.5s
+[14:20:59]   [747/1080] RUN-B-019-LANE-ALIBABA-006-3 OK finish=stop tokens=373 out=777ch t=3.3s
+[14:21:18]   [748/1080] RUN-B-020-LANE-ALIBABA-006-1 OK finish=stop tokens=872 out=3559ch t=15.5s
+[14:21:33]   [749/1080] RUN-B-020-LANE-ALIBABA-006-2 OK finish=stop tokens=855 out=3517ch t=12.1s
+[14:21:47]   [750/1080] RUN-B-020-LANE-ALIBABA-006-3 OK finish=stop tokens=823 out=3194ch t=11.4s
+[14:22:00]   [751/1080] RUN-C-001-LANE-ALIBABA-006-1 OK finish=stop tokens=626 out=2447ch t=9.9s CAT_MISS=UNSCORED
+[14:22:12]   [752/1080] RUN-C-001-LANE-ALIBABA-006-2 OK finish=stop tokens=521 out=1956ch t=9.0s CAT_MISS=UNSCORED
+[14:22:22]   [753/1080] RUN-C-001-LANE-ALIBABA-006-3 OK finish=stop tokens=561 out=2147ch t=6.9s CAT_MISS=UNSCORED
+[14:22:28]   [754/1080] RUN-C-002-LANE-ALIBABA-006-1 OK finish=stop tokens=328 out=959ch t=3.5s CAT_MISS=UNSCORED
+[14:22:35]   [755/1080] RUN-C-002-LANE-ALIBABA-006-2 OK finish=stop tokens=351 out=1074ch t=3.5s CAT_MISS=UNSCORED
+[14:22:44]   [756/1080] RUN-C-002-LANE-ALIBABA-006-3 OK finish=stop tokens=548 out=2063ch t=6.6s CAT_MISS=NO
+[14:22:56]   [757/1080] RUN-C-003-LANE-ALIBABA-006-1 OK finish=stop tokens=653 out=2567ch t=8.3s CAT_MISS=UNSCORED
+[14:23:08]   [758/1080] RUN-C-003-LANE-ALIBABA-006-2 OK finish=stop tokens=584 out=2239ch t=9.5s CAT_MISS=UNSCORED
+[14:23:20]   [759/1080] RUN-C-003-LANE-ALIBABA-006-3 OK finish=stop tokens=568 out=2086ch t=8.6s CAT_MISS=UNSCORED
+[14:23:37]   [760/1080] RUN-C-004-LANE-ALIBABA-006-1 OK finish=stop tokens=935 out=4133ch t=14.1s CAT_MISS=UNSCORED
+[14:23:52]   [761/1080] RUN-C-004-LANE-ALIBABA-006-2 OK finish=stop tokens=774 out=3131ch t=11.9s CAT_MISS=UNSCORED
+[14:24:05]   [762/1080] RUN-C-004-LANE-ALIBABA-006-3 OK finish=stop tokens=650 out=2629ch t=10.2s CAT_MISS=UNSCORED
+[14:24:15]   [763/1080] RUN-C-005-LANE-ALIBABA-006-1 OK finish=stop tokens=536 out=1797ch t=7.3s CAT_MISS=NO
+[14:24:26]   [764/1080] RUN-C-005-LANE-ALIBABA-006-2 OK finish=stop tokens=538 out=1761ch t=7.3s CAT_MISS=NO
+[14:24:36]   [765/1080] RUN-C-005-LANE-ALIBABA-006-3 OK finish=stop tokens=529 out=1770ch t=7.2s CAT_MISS=NO
+[14:24:49]   [766/1080] RUN-C-006-LANE-ALIBABA-006-1 OK finish=stop tokens=742 out=2870ch t=10.5s
+[14:25:03]   [767/1080] RUN-C-006-LANE-ALIBABA-006-2 OK finish=stop tokens=698 out=2709ch t=10.7s
+[14:25:17]   [768/1080] RUN-C-006-LANE-ALIBABA-006-3 OK finish=stop tokens=743 out=3010ch t=10.6s
+[14:25:38]   [769/1080] RUN-C-007-LANE-ALIBABA-006-1 OK finish=stop tokens=474 out=1638ch t=17.8s CAT_MISS=NO
+[14:25:58]   [770/1080] RUN-C-007-LANE-ALIBABA-006-2 OK finish=stop tokens=587 out=2206ch t=17.4s CAT_MISS=UNSCORED
+[14:26:08]   [771/1080] RUN-C-007-LANE-ALIBABA-006-3 OK finish=stop tokens=482 out=1722ch t=6.6s CAT_MISS=UNSCORED
+[14:26:22]   [772/1080] RUN-C-008-LANE-ALIBABA-006-1 OK finish=stop tokens=605 out=2196ch t=11.4s CAT_MISS=UNSCORED
+[14:26:37]   [773/1080] RUN-C-008-LANE-ALIBABA-006-2 OK finish=stop tokens=601 out=2255ch t=12.0s CAT_MISS=UNSCORED
+[14:26:48]   [774/1080] RUN-C-008-LANE-ALIBABA-006-3 OK finish=stop tokens=637 out=2492ch t=8.5s CAT_MISS=UNSCORED
+[14:27:06]   [775/1080] RUN-C-009-LANE-ALIBABA-006-1 OK finish=stop tokens=895 out=3784ch t=14.2s CAT_MISS=UNSCORED
+[14:27:15]   [776/1080] RUN-C-009-LANE-ALIBABA-006-2 OK finish=stop tokens=481 out=1764ch t=6.3s CAT_MISS=UNSCORED
+[14:27:30]   [777/1080] RUN-C-009-LANE-ALIBABA-006-3 OK finish=stop tokens=822 out=3187ch t=12.1s CAT_MISS=UNSCORED
+[14:27:46]   [778/1080] RUN-C-010-LANE-ALIBABA-006-1 OK finish=stop tokens=848 out=3728ch t=13.3s CAT_MISS=UNSCORED
+[14:28:05]   [779/1080] RUN-C-010-LANE-ALIBABA-006-2 OK finish=stop tokens=1056 out=4753ch t=15.8s CAT_MISS=NO
+[14:28:23]   [780/1080] RUN-C-010-LANE-ALIBABA-006-3 OK finish=stop tokens=878 out=3974ch t=15.2s CAT_MISS=NO
+[14:28:36]   [781/1080] RUN-C-011-LANE-ALIBABA-006-1 OK finish=stop tokens=582 out=2206ch t=9.6s CAT_MISS=UNSCORED
+[14:28:50]   [782/1080] RUN-C-011-LANE-ALIBABA-006-2 OK finish=stop tokens=652 out=2622ch t=10.9s CAT_MISS=UNSCORED
+[14:29:09]   [783/1080] RUN-C-011-LANE-ALIBABA-006-3 OK finish=stop tokens=596 out=2346ch t=16.2s CAT_MISS=UNSCORED
+[14:29:35]   [784/1080] RUN-C-012-LANE-ALIBABA-006-1 OK finish=stop tokens=871 out=4017ch t=23.2s
+[14:29:51]   [785/1080] RUN-C-012-LANE-ALIBABA-006-2 OK finish=stop tokens=858 out=3923ch t=12.5s
+[14:30:09]   [786/1080] RUN-C-012-LANE-ALIBABA-006-3 OK finish=stop tokens=839 out=3905ch t=15.3s
+[14:30:22]   [787/1080] RUN-C-013-LANE-ALIBABA-006-1 OK finish=stop tokens=641 out=2484ch t=9.6s CAT_MISS=NO
+[14:30:32]   [788/1080] RUN-C-013-LANE-ALIBABA-006-2 OK finish=stop tokens=535 out=1939ch t=7.2s CAT_MISS=UNSCORED
+[14:30:44]   [789/1080] RUN-C-013-LANE-ALIBABA-006-3 OK finish=stop tokens=580 out=2082ch t=8.7s CAT_MISS=NO
+[14:30:55]   [790/1080] RUN-C-014-LANE-ALIBABA-006-1 OK finish=stop tokens=340 out=885ch t=8.7s CAT_MISS=UNSCORED
+[14:31:08]   [791/1080] RUN-C-014-LANE-ALIBABA-006-2 OK finish=stop tokens=335 out=886ch t=9.5s CAT_MISS=UNSCORED
+[14:31:23]   [792/1080] RUN-C-014-LANE-ALIBABA-006-3 OK finish=stop tokens=346 out=921ch t=11.7s CAT_MISS=NO
+[14:31:41]   [793/1080] RUN-C-015-LANE-ALIBABA-006-1 OK finish=stop tokens=540 out=2184ch t=15.3s CAT_MISS=NO
+[14:31:57]   [794/1080] RUN-C-015-LANE-ALIBABA-006-2 OK finish=stop tokens=516 out=1961ch t=13.5s CAT_MISS=UNSCORED
+[14:32:08]   [795/1080] RUN-C-015-LANE-ALIBABA-006-3 OK finish=stop tokens=525 out=2010ch t=8.0s CAT_MISS=NO
+[14:32:15]   [796/1080] RUN-C-016-LANE-ALIBABA-006-1 OK finish=stop tokens=388 out=986ch t=3.8s
+[14:32:22]   [797/1080] RUN-C-016-LANE-ALIBABA-006-2 OK finish=stop tokens=366 out=864ch t=4.1s
+[14:32:29]   [798/1080] RUN-C-016-LANE-ALIBABA-006-3 OK finish=stop tokens=345 out=758ch t=3.2s
+[14:32:54]   [799/1080] RUN-C-017-LANE-ALIBABA-006-1 OK finish=stop tokens=648 out=2509ch t=22.4s CAT_MISS=UNSCORED
+[14:33:06]   [800/1080] RUN-C-017-LANE-ALIBABA-006-2 OK finish=stop tokens=654 out=2554ch t=9.3s CAT_MISS=UNSCORED
+[14:33:18]   [801/1080] RUN-C-017-LANE-ALIBABA-006-3 OK finish=stop tokens=614 out=2334ch t=8.5s CAT_MISS=UNSCORED
+[14:33:32]   [802/1080] RUN-C-018-LANE-ALIBABA-006-1 OK finish=stop tokens=582 out=2146ch t=11.4s CAT_MISS=NO
+[14:33:42]   [803/1080] RUN-C-018-LANE-ALIBABA-006-2 OK finish=stop tokens=435 out=1428ch t=6.8s CAT_MISS=NO
+[14:33:51]   [804/1080] RUN-C-018-LANE-ALIBABA-006-3 OK finish=stop tokens=414 out=1351ch t=6.1s CAT_MISS=NO
+[14:34:01]   [805/1080] RUN-C-019-LANE-ALIBABA-006-1 OK finish=stop tokens=447 out=1707ch t=6.7s
+[14:34:09]   [806/1080] RUN-C-019-LANE-ALIBABA-006-2 OK finish=stop tokens=438 out=1611ch t=5.8s
+[14:34:19]   [807/1080] RUN-C-019-LANE-ALIBABA-006-3 OK finish=stop tokens=449 out=1705ch t=6.4s
+[14:34:32]   [808/1080] RUN-C-020-LANE-ALIBABA-006-1 OK finish=stop tokens=713 out=2641ch t=10.0s
+[14:34:46]   [809/1080] RUN-C-020-LANE-ALIBABA-006-2 OK finish=stop tokens=777 out=2911ch t=11.5s
+[14:34:58]   [810/1080] RUN-C-020-LANE-ALIBABA-006-3 OK finish=stop tokens=708 out=2577ch t=8.9s
+[14:35:06] --- LANE-ALIBABA-007 (qwen2.5-72b-instruct) role=REVIEWER ---
+[14:35:17]   [811/1080] RUN-A1-001-LANE-ALIBABA-007-1 OK finish=stop tokens=722 out=1984ch t=10.5s
+[14:35:31]   [812/1080] RUN-A1-001-LANE-ALIBABA-007-2 OK finish=stop tokens=777 out=2299ch t=11.5s
+[14:35:45]   [813/1080] RUN-A1-001-LANE-ALIBABA-007-3 OK finish=stop tokens=735 out=2125ch t=10.7s
+[14:36:00]   [814/1080] RUN-A1-002-LANE-ALIBABA-007-1 OK finish=stop tokens=828 out=3258ch t=12.0s
+[14:36:16]   [815/1080] RUN-A1-002-LANE-ALIBABA-007-2 OK finish=stop tokens=859 out=3326ch t=12.6s
+[14:36:32]   [816/1080] RUN-A1-002-LANE-ALIBABA-007-3 OK finish=stop tokens=880 out=3313ch t=13.4s
+[14:36:47]   [817/1080] RUN-A1-003-LANE-ALIBABA-007-1 OK finish=stop tokens=819 out=3172ch t=11.8s
+[14:37:03]   [818/1080] RUN-A1-003-LANE-ALIBABA-007-2 OK finish=stop tokens=882 out=3347ch t=12.8s
+[14:37:17]   [819/1080] RUN-A1-003-LANE-ALIBABA-007-3 OK finish=stop tokens=801 out=3096ch t=11.7s
+[14:37:33]   [820/1080] RUN-A1-004-LANE-ALIBABA-007-1 OK finish=stop tokens=856 out=3111ch t=12.5s
+[14:37:50]   [821/1080] RUN-A1-004-LANE-ALIBABA-007-2 OK finish=stop tokens=927 out=3297ch t=13.7s
+[14:38:08]   [822/1080] RUN-A1-004-LANE-ALIBABA-007-3 OK finish=stop tokens=1033 out=4170ch t=15.4s
+[14:38:21]   [823/1080] RUN-A1-005-LANE-ALIBABA-007-1 OK finish=stop tokens=710 out=2582ch t=10.2s
+[14:38:34]   [824/1080] RUN-A1-005-LANE-ALIBABA-007-2 OK finish=stop tokens=721 out=2865ch t=10.0s
+[14:38:46]   [825/1080] RUN-A1-005-LANE-ALIBABA-007-3 OK finish=stop tokens=661 out=2296ch t=9.1s
+[14:39:00]   [826/1080] RUN-A1-006-LANE-ALIBABA-007-1 OK finish=stop tokens=746 out=3238ch t=11.1s
+[14:39:13]   [827/1080] RUN-A1-006-LANE-ALIBABA-007-2 OK finish=stop tokens=669 out=2742ch t=9.7s
+[14:39:26]   [828/1080] RUN-A1-006-LANE-ALIBABA-007-3 OK finish=stop tokens=664 out=2679ch t=9.7s
+[14:39:38]   [829/1080] RUN-A1-007-LANE-ALIBABA-007-1 OK finish=stop tokens=665 out=2779ch t=9.3s CAT_MISS=UNSCORED
+[14:39:48]   [830/1080] RUN-A1-007-LANE-ALIBABA-007-2 OK finish=stop tokens=575 out=2276ch t=7.3s CAT_MISS=NO
+[14:40:00]   [831/1080] RUN-A1-007-LANE-ALIBABA-007-3 OK finish=stop tokens=631 out=2588ch t=9.1s CAT_MISS=UNSCORED
+[14:40:13]   [832/1080] RUN-A1-008-LANE-ALIBABA-007-1 OK finish=stop tokens=713 out=2987ch t=9.9s CAT_MISS=UNSCORED
+[14:40:26]   [833/1080] RUN-A1-008-LANE-ALIBABA-007-2 OK finish=stop tokens=674 out=2750ch t=9.3s CAT_MISS=UNSCORED
+[14:40:39]   [834/1080] RUN-A1-008-LANE-ALIBABA-007-3 OK finish=stop tokens=708 out=2901ch t=10.2s CAT_MISS=UNSCORED
+[14:40:53]   [835/1080] RUN-A1-009-LANE-ALIBABA-007-1 OK finish=stop tokens=765 out=3145ch t=10.7s
+[14:41:06]   [836/1080] RUN-A1-009-LANE-ALIBABA-007-2 OK finish=stop tokens=768 out=3178ch t=11.0s
+[14:41:21]   [837/1080] RUN-A1-009-LANE-ALIBABA-007-3 OK finish=stop tokens=823 out=3467ch t=11.6s
+[14:41:36]   [838/1080] RUN-A1-010-LANE-ALIBABA-007-1 OK finish=stop tokens=820 out=3430ch t=12.2s
+[14:41:52]   [839/1080] RUN-A1-010-LANE-ALIBABA-007-2 OK finish=stop tokens=855 out=3432ch t=12.9s
+[14:42:09]   [840/1080] RUN-A1-010-LANE-ALIBABA-007-3 OK finish=stop tokens=953 out=3888ch t=14.2s
+[14:42:21]   [841/1080] RUN-A2-001-LANE-ALIBABA-007-1 OK finish=stop tokens=620 out=2220ch t=8.7s
+[14:42:33]   [842/1080] RUN-A2-001-LANE-ALIBABA-007-2 OK finish=stop tokens=637 out=2212ch t=9.0s
+[14:42:42]   [843/1080] RUN-A2-001-LANE-ALIBABA-007-3 OK finish=stop tokens=455 out=1422ch t=5.6s
+[14:42:57]   [844/1080] RUN-A2-002-LANE-ALIBABA-007-1 OK finish=stop tokens=891 out=2827ch t=12.6s
+[14:43:13]   [845/1080] RUN-A2-002-LANE-ALIBABA-007-2 OK finish=stop tokens=881 out=2855ch t=12.7s
+[14:43:29]   [846/1080] RUN-A2-002-LANE-ALIBABA-007-3 OK finish=stop tokens=899 out=2887ch t=12.7s
+[14:43:41]   [847/1080] RUN-A2-003-LANE-ALIBABA-007-1 OK finish=stop tokens=667 out=2581ch t=9.2s
+[14:43:55]   [848/1080] RUN-A2-003-LANE-ALIBABA-007-2 OK finish=stop tokens=758 out=2934ch t=10.8s
+[14:44:07]   [849/1080] RUN-A2-003-LANE-ALIBABA-007-3 OK finish=stop tokens=648 out=2493ch t=9.2s
+[14:44:19]   [850/1080] RUN-A2-004-LANE-ALIBABA-007-1 OK finish=stop tokens=635 out=2598ch t=9.2s
+[14:44:33]   [851/1080] RUN-A2-004-LANE-ALIBABA-007-2 OK finish=stop tokens=714 out=2959ch t=10.3s
+[14:44:46]   [852/1080] RUN-A2-004-LANE-ALIBABA-007-3 OK finish=stop tokens=735 out=3073ch t=10.7s
+[14:44:56]   [853/1080] RUN-A2-005-LANE-ALIBABA-007-1 OK finish=stop tokens=532 out=2080ch t=7.2s
+[14:45:06]   [854/1080] RUN-A2-005-LANE-ALIBABA-007-2 OK finish=stop tokens=487 out=1739ch t=6.5s
+[14:45:17]   [855/1080] RUN-A2-005-LANE-ALIBABA-007-3 OK finish=stop tokens=598 out=2298ch t=8.3s
+[14:45:32]   [856/1080] RUN-A2-006-LANE-ALIBABA-007-1 OK finish=stop tokens=822 out=3283ch t=12.1s
+[14:45:47]   [857/1080] RUN-A2-006-LANE-ALIBABA-007-2 OK finish=stop tokens=750 out=2929ch t=11.1s
+[14:46:00]   [858/1080] RUN-A2-006-LANE-ALIBABA-007-3 OK finish=stop tokens=758 out=3063ch t=10.9s
+[14:46:08]   [859/1080] RUN-A2-007-LANE-ALIBABA-007-1 OK finish=stop tokens=363 out=1235ch t=4.1s CAT_MISS=UNSCORED
+[14:46:18]   [860/1080] RUN-A2-007-LANE-ALIBABA-007-2 OK finish=stop tokens=530 out=2264ch t=7.1s CAT_MISS=UNSCORED
+[14:46:29]   [861/1080] RUN-A2-007-LANE-ALIBABA-007-3 OK finish=stop tokens=587 out=2487ch t=8.0s CAT_MISS=UNSCORED
+[14:46:35]   [862/1080] RUN-A2-008-LANE-ALIBABA-007-1 OK finish=stop tokens=300 out=860ch t=3.0s CAT_MISS=NO
+[14:46:42]   [863/1080] RUN-A2-008-LANE-ALIBABA-007-2 OK finish=stop tokens=350 out=1128ch t=3.9s CAT_MISS=UNSCORED
+[14:46:48]   [864/1080] RUN-A2-008-LANE-ALIBABA-007-3 OK finish=stop tokens=332 out=1025ch t=3.5s CAT_MISS=NO
+[14:47:05]   [865/1080] RUN-A2-009-LANE-ALIBABA-007-1 OK finish=stop tokens=938 out=4248ch t=14.3s
+[14:47:19]   [866/1080] RUN-A2-009-LANE-ALIBABA-007-2 OK finish=stop tokens=716 out=3010ch t=10.1s
+[14:47:31]   [867/1080] RUN-A2-009-LANE-ALIBABA-007-3 OK finish=stop tokens=700 out=2967ch t=9.9s
+[14:47:45]   [868/1080] RUN-A2-010-LANE-ALIBABA-007-1 OK finish=stop tokens=746 out=3259ch t=11.0s
+[14:47:58]   [869/1080] RUN-A2-010-LANE-ALIBABA-007-2 OK finish=stop tokens=651 out=2745ch t=9.3s
+[14:48:11]   [870/1080] RUN-A2-010-LANE-ALIBABA-007-3 OK finish=stop tokens=666 out=2760ch t=9.8s
+[14:48:18]   [871/1080] RUN-A3-001-LANE-ALIBABA-007-1 OK finish=stop tokens=364 out=1078ch t=4.2s
+[14:48:26]   [872/1080] RUN-A3-001-LANE-ALIBABA-007-2 OK finish=stop tokens=413 out=1316ch t=5.1s
+[14:48:34]   [873/1080] RUN-A3-001-LANE-ALIBABA-007-3 OK finish=stop tokens=421 out=1386ch t=5.3s
+[14:48:46]   [874/1080] RUN-A3-002-LANE-ALIBABA-007-1 OK finish=stop tokens=648 out=2458ch t=9.2s
+[14:48:57]   [875/1080] RUN-A3-002-LANE-ALIBABA-007-2 OK finish=stop tokens=605 out=2237ch t=8.2s
+[14:49:10]   [876/1080] RUN-A3-002-LANE-ALIBABA-007-3 OK finish=stop tokens=679 out=2657ch t=9.5s
+[14:49:25]   [877/1080] RUN-A3-003-LANE-ALIBABA-007-1 OK finish=stop tokens=819 out=3377ch t=12.3s
+[14:49:40]   [878/1080] RUN-A3-003-LANE-ALIBABA-007-2 OK finish=stop tokens=818 out=3505ch t=12.1s
+[14:49:54]   [879/1080] RUN-A3-003-LANE-ALIBABA-007-3 OK finish=stop tokens=694 out=3054ch t=10.1s
+[14:50:05]   [880/1080] RUN-A3-004-LANE-ALIBABA-007-1 OK finish=stop tokens=583 out=2537ch t=8.1s
+[14:50:15]   [881/1080] RUN-A3-004-LANE-ALIBABA-007-2 OK finish=stop tokens=522 out=2196ch t=7.0s
+[14:50:28]   [882/1080] RUN-A3-004-LANE-ALIBABA-007-3 OK finish=stop tokens=721 out=3277ch t=10.7s
+[14:50:40]   [883/1080] RUN-A3-005-LANE-ALIBABA-007-1 OK finish=stop tokens=655 out=2769ch t=8.9s
+[14:50:51]   [884/1080] RUN-A3-005-LANE-ALIBABA-007-2 OK finish=stop tokens=572 out=2248ch t=7.8s
+[14:51:03]   [885/1080] RUN-A3-005-LANE-ALIBABA-007-3 OK finish=stop tokens=655 out=2669ch t=9.2s
+[14:51:14]   [886/1080] RUN-A3-006-LANE-ALIBABA-007-1 OK finish=stop tokens=565 out=2236ch t=7.5s
+[14:51:23]   [887/1080] RUN-A3-006-LANE-ALIBABA-007-2 OK finish=stop tokens=518 out=1957ch t=6.7s
+[14:51:34]   [888/1080] RUN-A3-006-LANE-ALIBABA-007-3 OK finish=stop tokens=537 out=2082ch t=7.1s
+[14:51:46]   [889/1080] RUN-A3-007-LANE-ALIBABA-007-1 OK finish=stop tokens=652 out=2715ch t=9.4s CAT_MISS=UNSCORED
+[14:51:57]   [890/1080] RUN-A3-007-LANE-ALIBABA-007-2 OK finish=stop tokens=599 out=2538ch t=8.2s CAT_MISS=NO
+[14:52:09]   [891/1080] RUN-A3-007-LANE-ALIBABA-007-3 OK finish=stop tokens=662 out=2817ch t=9.2s CAT_MISS=NO
+[14:52:20]   [892/1080] RUN-A3-008-LANE-ALIBABA-007-1 OK finish=stop tokens=547 out=2059ch t=7.2s CAT_MISS=UNSCORED
+[14:52:32]   [893/1080] RUN-A3-008-LANE-ALIBABA-007-2 OK finish=stop tokens=683 out=2674ch t=9.4s CAT_MISS=UNSCORED
+[14:52:42]   [894/1080] RUN-A3-008-LANE-ALIBABA-007-3 OK finish=stop tokens=561 out=2058ch t=7.3s CAT_MISS=UNSCORED
+[14:52:55]   [895/1080] RUN-A3-009-LANE-ALIBABA-007-1 OK finish=stop tokens=682 out=2633ch t=9.2s
+[14:53:06]   [896/1080] RUN-A3-009-LANE-ALIBABA-007-2 OK finish=stop tokens=645 out=2427ch t=8.7s
+[14:53:20]   [897/1080] RUN-A3-009-LANE-ALIBABA-007-3 OK finish=stop tokens=768 out=3104ch t=10.8s
+[14:53:38]   [898/1080] RUN-A3-010-LANE-ALIBABA-007-1 OK finish=stop tokens=917 out=3967ch t=15.3s
+[14:53:55]   [899/1080] RUN-A3-010-LANE-ALIBABA-007-2 OK finish=stop tokens=946 out=4011ch t=14.0s
+[14:54:11]   [900/1080] RUN-A3-010-LANE-ALIBABA-007-3 OK finish=stop tokens=883 out=3669ch t=13.0s
+[14:54:27]   [901/1080] RUN-A4-001-LANE-ALIBABA-007-1 OK finish=stop tokens=858 out=3660ch t=12.7s
+[14:54:44]   [902/1080] RUN-A4-001-LANE-ALIBABA-007-2 OK finish=stop tokens=890 out=3858ch t=13.7s
+[14:55:01]   [903/1080] RUN-A4-001-LANE-ALIBABA-007-3 OK finish=stop tokens=939 out=4152ch t=14.2s
+[14:55:15]   [904/1080] RUN-A4-002-LANE-ALIBABA-007-1 OK finish=stop tokens=769 out=2918ch t=11.1s
+[14:55:29]   [905/1080] RUN-A4-002-LANE-ALIBABA-007-2 OK finish=stop tokens=772 out=3073ch t=11.1s
+[14:55:44]   [906/1080] RUN-A4-002-LANE-ALIBABA-007-3 OK finish=stop tokens=779 out=3012ch t=11.4s
+[14:55:57]   [907/1080] RUN-A4-003-LANE-ALIBABA-007-1 OK finish=stop tokens=748 out=3090ch t=10.6s
+[14:56:13]   [908/1080] RUN-A4-003-LANE-ALIBABA-007-2 OK finish=stop tokens=887 out=3445ch t=13.2s
+[14:56:28]   [909/1080] RUN-A4-003-LANE-ALIBABA-007-3 OK finish=stop tokens=777 out=3207ch t=11.2s
+[14:56:41]   [910/1080] RUN-A4-004-LANE-ALIBABA-007-1 OK finish=stop tokens=744 out=2708ch t=10.5s
+[14:56:55]   [911/1080] RUN-A4-004-LANE-ALIBABA-007-2 OK finish=stop tokens=801 out=3016ch t=11.2s
+[14:57:09]   [912/1080] RUN-A4-004-LANE-ALIBABA-007-3 OK finish=stop tokens=776 out=2679ch t=10.9s
+[14:57:24]   [913/1080] RUN-A4-005-LANE-ALIBABA-007-1 OK finish=stop tokens=785 out=3496ch t=11.6s
+[14:57:37]   [914/1080] RUN-A4-005-LANE-ALIBABA-007-2 OK finish=stop tokens=721 out=3234ch t=10.5s
+[14:57:53]   [915/1080] RUN-A4-005-LANE-ALIBABA-007-3 OK finish=stop tokens=815 out=3656ch t=12.7s
+[14:58:08]   [916/1080] RUN-A4-006-LANE-ALIBABA-007-1 OK finish=stop tokens=795 out=3497ch t=11.8s
+[14:58:23]   [917/1080] RUN-A4-006-LANE-ALIBABA-007-2 OK finish=stop tokens=827 out=3536ch t=12.3s
+[14:58:37]   [918/1080] RUN-A4-006-LANE-ALIBABA-007-3 OK finish=stop tokens=752 out=3261ch t=11.0s
+[14:58:51]   [919/1080] RUN-A4-007-LANE-ALIBABA-007-1 OK finish=stop tokens=717 out=3060ch t=10.5s CAT_MISS=NO
+[14:59:02]   [920/1080] RUN-A4-007-LANE-ALIBABA-007-2 OK finish=stop tokens=626 out=2654ch t=8.6s CAT_MISS=UNSCORED
+[14:59:16]   [921/1080] RUN-A4-007-LANE-ALIBABA-007-3 OK finish=stop tokens=719 out=3129ch t=10.4s CAT_MISS=UNSCORED
+[14:59:27]   [922/1080] RUN-A4-008-LANE-ALIBABA-007-1 OK finish=stop tokens=626 out=2410ch t=8.2s CAT_MISS=UNSCORED
+[14:59:39]   [923/1080] RUN-A4-008-LANE-ALIBABA-007-2 OK finish=stop tokens=688 out=2673ch t=9.2s CAT_MISS=UNSCORED
+[14:59:52]   [924/1080] RUN-A4-008-LANE-ALIBABA-007-3 OK finish=stop tokens=680 out=2728ch t=9.4s CAT_MISS=NO
+[15:00:10]   [925/1080] RUN-A4-009-LANE-ALIBABA-007-1 OK finish=stop tokens=1023 out=4183ch t=15.5s
+[15:00:29]   [926/1080] RUN-A4-009-LANE-ALIBABA-007-2 OK finish=stop tokens=1022 out=4254ch t=15.8s
+[15:00:47]   [927/1080] RUN-A4-009-LANE-ALIBABA-007-3 OK finish=stop tokens=1030 out=4374ch t=15.6s
+[15:01:04]   [928/1080] RUN-A4-010-LANE-ALIBABA-007-1 OK finish=stop tokens=903 out=4037ch t=13.7s
+[15:01:19]   [929/1080] RUN-A4-010-LANE-ALIBABA-007-2 OK finish=stop tokens=812 out=3430ch t=11.8s
+[15:01:34]   [930/1080] RUN-A4-010-LANE-ALIBABA-007-3 OK finish=stop tokens=788 out=3243ch t=11.8s
+[15:01:48]   [931/1080] RUN-A5-001-LANE-ALIBABA-007-1 OK finish=stop tokens=764 out=2814ch t=11.0s
+[15:02:04]   [932/1080] RUN-A5-001-LANE-ALIBABA-007-2 OK finish=stop tokens=871 out=3266ch t=13.1s
+[15:02:19]   [933/1080] RUN-A5-001-LANE-ALIBABA-007-3 OK finish=stop tokens=801 out=2967ch t=11.9s
+[15:02:34]   [934/1080] RUN-A5-002-LANE-ALIBABA-007-1 OK finish=stop tokens=805 out=3297ch t=12.2s
+[15:02:50]   [935/1080] RUN-A5-002-LANE-ALIBABA-007-2 OK finish=stop tokens=883 out=3715ch t=13.1s
+[15:03:06]   [936/1080] RUN-A5-002-LANE-ALIBABA-007-3 OK finish=stop tokens=834 out=3595ch t=12.5s
+[15:03:20]   [937/1080] RUN-A5-003-LANE-ALIBABA-007-1 OK finish=stop tokens=831 out=3178ch t=12.0s
+[15:03:36]   [938/1080] RUN-A5-003-LANE-ALIBABA-007-2 OK finish=stop tokens=842 out=3314ch t=12.6s
+[15:03:53]   [939/1080] RUN-A5-003-LANE-ALIBABA-007-3 OK finish=stop tokens=889 out=3490ch t=13.6s
+[15:04:09]   [940/1080] RUN-A5-004-LANE-ALIBABA-007-1 OK finish=stop tokens=912 out=3774ch t=13.3s
+[15:04:25]   [941/1080] RUN-A5-004-LANE-ALIBABA-007-2 OK finish=stop tokens=869 out=3513ch t=12.6s
+[15:04:39]   [942/1080] RUN-A5-004-LANE-ALIBABA-007-3 OK finish=stop tokens=827 out=3363ch t=11.8s
+[15:05:00]   [943/1080] RUN-A5-005-LANE-ALIBABA-007-1 OK finish=stop tokens=1146 out=4942ch t=17.6s
+[15:05:17]   [944/1080] RUN-A5-005-LANE-ALIBABA-007-2 OK finish=stop tokens=919 out=3986ch t=13.6s
+[15:05:40]   [945/1080] RUN-A5-005-LANE-ALIBABA-007-3 OK finish=stop tokens=1312 out=5774ch t=20.4s
+[15:05:55]   [946/1080] RUN-A5-006-LANE-ALIBABA-007-1 OK finish=stop tokens=788 out=3307ch t=11.7s
+[15:06:07]   [947/1080] RUN-A5-006-LANE-ALIBABA-007-2 OK finish=stop tokens=644 out=2567ch t=8.9s
+[15:06:18]   [948/1080] RUN-A5-006-LANE-ALIBABA-007-3 OK finish=stop tokens=638 out=2550ch t=8.8s
+[15:06:26]   [949/1080] RUN-A5-007-LANE-ALIBABA-007-1 OK finish=stop tokens=424 out=1465ch t=5.1s CAT_MISS=UNSCORED
+[15:06:34]   [950/1080] RUN-A5-007-LANE-ALIBABA-007-2 OK finish=stop tokens=405 out=1465ch t=4.8s CAT_MISS=NO
+[15:06:42]   [951/1080] RUN-A5-007-LANE-ALIBABA-007-3 OK finish=stop tokens=422 out=1472ch t=5.1s CAT_MISS=UNSCORED
+[15:07:00]   [952/1080] RUN-A5-008-LANE-ALIBABA-007-1 OK finish=stop tokens=1016 out=4248ch t=15.1s CAT_MISS=UNSCORED
+[15:07:13]   [953/1080] RUN-A5-008-LANE-ALIBABA-007-2 OK finish=stop tokens=721 out=2718ch t=9.9s CAT_MISS=UNSCORED
+[15:07:31]   [954/1080] RUN-A5-008-LANE-ALIBABA-007-3 OK finish=stop tokens=980 out=4033ch t=14.6s CAT_MISS=UNSCORED
+[15:07:51]   [955/1080] RUN-A5-009-LANE-ALIBABA-007-1 OK finish=stop tokens=1165 out=4514ch t=17.4s
+[15:08:12]   [956/1080] RUN-A5-009-LANE-ALIBABA-007-2 OK finish=stop tokens=1174 out=4559ch t=17.9s
+[15:08:32]   [957/1080] RUN-A5-009-LANE-ALIBABA-007-3 OK finish=stop tokens=1078 out=4164ch t=16.5s
+[15:08:49]   [958/1080] RUN-A5-010-LANE-ALIBABA-007-1 OK finish=stop tokens=990 out=3867ch t=14.5s
+[15:09:06]   [959/1080] RUN-A5-010-LANE-ALIBABA-007-2 OK finish=stop tokens=974 out=3821ch t=14.2s
+[15:09:23]   [960/1080] RUN-A5-010-LANE-ALIBABA-007-3 OK finish=stop tokens=931 out=3659ch t=13.4s
+[15:09:38]   [961/1080] RUN-B-001-LANE-ALIBABA-007-1 OK finish=stop tokens=845 out=3165ch t=12.1s
+[15:09:52]   [962/1080] RUN-B-001-LANE-ALIBABA-007-2 OK finish=stop tokens=764 out=2800ch t=10.6s
+[15:10:08]   [963/1080] RUN-B-001-LANE-ALIBABA-007-3 OK finish=stop tokens=928 out=3777ch t=13.5s
+[15:10:21]   [964/1080] RUN-B-002-LANE-ALIBABA-007-1 OK finish=stop tokens=698 out=2599ch t=9.8s
+[15:10:34]   [965/1080] RUN-B-002-LANE-ALIBABA-007-2 OK finish=stop tokens=719 out=2679ch t=10.1s
+[15:10:46]   [966/1080] RUN-B-002-LANE-ALIBABA-007-3 OK finish=stop tokens=637 out=2402ch t=9.1s
+[15:10:56]   [967/1080] RUN-B-003-LANE-ALIBABA-007-1 OK finish=stop tokens=581 out=2054ch t=7.3s
+[15:11:08]   [968/1080] RUN-B-003-LANE-ALIBABA-007-2 OK finish=stop tokens=644 out=2391ch t=8.4s
+[15:11:18]   [969/1080] RUN-B-003-LANE-ALIBABA-007-3 OK finish=stop tokens=581 out=1945ch t=7.5s
+[15:11:31]   [970/1080] RUN-B-004-LANE-ALIBABA-007-1 OK finish=stop tokens=729 out=2437ch t=10.0s
+[15:11:43]   [971/1080] RUN-B-004-LANE-ALIBABA-007-2 OK finish=stop tokens=671 out=2304ch t=9.1s
+[15:11:56]   [972/1080] RUN-B-004-LANE-ALIBABA-007-3 OK finish=stop tokens=697 out=2352ch t=9.4s
+[15:12:10]   [973/1080] RUN-B-005-LANE-ALIBABA-007-1 OK finish=stop tokens=779 out=3099ch t=11.2s
+[15:12:22]   [974/1080] RUN-B-005-LANE-ALIBABA-007-2 OK finish=stop tokens=659 out=2507ch t=9.2s
+[15:12:35]   [975/1080] RUN-B-005-LANE-ALIBABA-007-3 OK finish=stop tokens=703 out=2742ch t=9.8s
+[15:12:48]   [976/1080] RUN-B-006-LANE-ALIBABA-007-1 OK finish=stop tokens=739 out=2278ch t=9.7s
+[15:12:59]   [977/1080] RUN-B-006-LANE-ALIBABA-007-2 OK finish=stop tokens=677 out=1932ch t=8.8s
+[15:13:11]   [978/1080] RUN-B-006-LANE-ALIBABA-007-3 OK finish=stop tokens=672 out=2050ch t=8.9s
+[15:13:27]   [979/1080] RUN-B-007-LANE-ALIBABA-007-1 OK finish=stop tokens=879 out=3194ch t=12.1s
+[15:13:44]   [980/1080] RUN-B-007-LANE-ALIBABA-007-2 OK finish=stop tokens=1041 out=3867ch t=15.0s
+[15:14:02]   [981/1080] RUN-B-007-LANE-ALIBABA-007-3 OK finish=stop tokens=941 out=3346ch t=14.4s
+[15:14:16]   [982/1080] RUN-B-008-LANE-ALIBABA-007-1 OK finish=stop tokens=752 out=2884ch t=10.8s
+[15:14:30]   [983/1080] RUN-B-008-LANE-ALIBABA-007-2 OK finish=stop tokens=810 out=3145ch t=11.4s
+[15:14:42]   [984/1080] RUN-B-008-LANE-ALIBABA-007-3 OK finish=stop tokens=668 out=2321ch t=9.0s
+[15:14:49]   [985/1080] RUN-B-009-LANE-ALIBABA-007-1 OK finish=stop tokens=384 out=847ch t=4.0s
+[15:14:58]   [986/1080] RUN-B-009-LANE-ALIBABA-007-2 OK finish=stop tokens=477 out=1364ch t=5.7s
+[15:15:06]   [987/1080] RUN-B-009-LANE-ALIBABA-007-3 OK finish=stop tokens=444 out=1156ch t=5.0s
+[15:15:20]   [988/1080] RUN-B-010-LANE-ALIBABA-007-1 OK finish=stop tokens=744 out=2793ch t=10.8s
+[15:15:33]   [989/1080] RUN-B-010-LANE-ALIBABA-007-2 OK finish=stop tokens=733 out=2746ch t=10.6s
+[15:15:45]   [990/1080] RUN-B-010-LANE-ALIBABA-007-3 OK finish=stop tokens=650 out=2385ch t=8.8s
+[15:15:59]   [991/1080] RUN-B-011-LANE-ALIBABA-007-1 OK finish=stop tokens=758 out=2652ch t=10.9s
+[15:16:13]   [992/1080] RUN-B-011-LANE-ALIBABA-007-2 OK finish=stop tokens=798 out=2847ch t=11.3s
+[15:16:28]   [993/1080] RUN-B-011-LANE-ALIBABA-007-3 OK finish=stop tokens=812 out=2982ch t=11.6s
+[15:16:38]   [994/1080] RUN-B-012-LANE-ALIBABA-007-1 OK finish=stop tokens=552 out=1807ch t=7.5s
+[15:16:47]   [995/1080] RUN-B-012-LANE-ALIBABA-007-2 OK finish=stop tokens=433 out=1327ch t=5.1s
+[15:16:54]   [996/1080] RUN-B-012-LANE-ALIBABA-007-3 OK finish=stop tokens=412 out=1235ch t=4.8s
+[15:17:09]   [997/1080] RUN-B-013-LANE-ALIBABA-007-1 OK finish=stop tokens=771 out=3189ch t=11.3s
+[15:17:22]   [998/1080] RUN-B-013-LANE-ALIBABA-007-2 OK finish=stop tokens=769 out=3322ch t=10.9s
+[15:17:36]   [999/1080] RUN-B-013-LANE-ALIBABA-007-3 OK finish=stop tokens=740 out=2948ch t=10.5s
+[15:17:48]   [1000/1080] RUN-B-014-LANE-ALIBABA-007-1 OK finish=stop tokens=660 out=2326ch t=8.7s
+[15:17:59]   [1001/1080] RUN-B-014-LANE-ALIBABA-007-2 OK finish=stop tokens=651 out=2390ch t=8.6s
+[15:18:12]   [1002/1080] RUN-B-014-LANE-ALIBABA-007-3 OK finish=stop tokens=688 out=2415ch t=9.3s
+[15:18:28]   [1003/1080] RUN-B-015-LANE-ALIBABA-007-1 OK finish=stop tokens=865 out=4155ch t=12.9s
+[15:18:42]   [1004/1080] RUN-B-015-LANE-ALIBABA-007-2 OK finish=stop tokens=776 out=3519ch t=11.9s
+[15:18:57]   [1005/1080] RUN-B-015-LANE-ALIBABA-007-3 OK finish=stop tokens=747 out=3412ch t=11.3s
+[15:19:09]   [1006/1080] RUN-B-016-LANE-ALIBABA-007-1 OK finish=stop tokens=663 out=2418ch t=9.2s
+[15:19:21]   [1007/1080] RUN-B-016-LANE-ALIBABA-007-2 OK finish=stop tokens=691 out=2537ch t=9.4s
+[15:19:33]   [1008/1080] RUN-B-016-LANE-ALIBABA-007-3 OK finish=stop tokens=656 out=2338ch t=9.0s
+[15:19:47]   [1009/1080] RUN-B-017-LANE-ALIBABA-007-1 OK finish=stop tokens=732 out=2658ch t=10.2s
+[15:19:59]   [1010/1080] RUN-B-017-LANE-ALIBABA-007-2 OK finish=stop tokens=714 out=2640ch t=9.6s
+[15:20:15]   [1011/1080] RUN-B-017-LANE-ALIBABA-007-3 OK finish=stop tokens=909 out=3353ch t=13.1s
+[15:20:25]   [1012/1080] RUN-B-018-LANE-ALIBABA-007-1 OK finish=stop tokens=535 out=2078ch t=7.2s
+[15:20:36]   [1013/1080] RUN-B-018-LANE-ALIBABA-007-2 OK finish=stop tokens=568 out=2201ch t=7.8s
+[15:20:47]   [1014/1080] RUN-B-018-LANE-ALIBABA-007-3 OK finish=stop tokens=561 out=2153ch t=7.6s
+[15:20:54]   [1015/1080] RUN-B-019-LANE-ALIBABA-007-1 OK finish=stop tokens=375 out=755ch t=3.9s
+[15:21:01]   [1016/1080] RUN-B-019-LANE-ALIBABA-007-2 OK finish=stop tokens=403 out=963ch t=4.3s
+[15:21:08]   [1017/1080] RUN-B-019-LANE-ALIBABA-007-3 OK finish=stop tokens=385 out=813ch t=4.0s
+[15:21:23]   [1018/1080] RUN-B-020-LANE-ALIBABA-007-1 OK finish=stop tokens=809 out=3210ch t=11.7s
+[15:21:39]   [1019/1080] RUN-B-020-LANE-ALIBABA-007-2 OK finish=stop tokens=903 out=3815ch t=13.4s
+[15:21:55]   [1020/1080] RUN-B-020-LANE-ALIBABA-007-3 OK finish=stop tokens=896 out=3752ch t=13.0s
+[15:22:05]   [1021/1080] RUN-C-001-LANE-ALIBABA-007-1 OK finish=stop tokens=539 out=2073ch t=7.3s CAT_MISS=UNSCORED
+[15:22:16]   [1022/1080] RUN-C-001-LANE-ALIBABA-007-2 OK finish=stop tokens=528 out=2025ch t=7.1s CAT_MISS=UNSCORED
+[15:22:25]   [1023/1080] RUN-C-001-LANE-ALIBABA-007-3 OK finish=stop tokens=506 out=1909ch t=6.6s CAT_MISS=UNSCORED
+[15:22:31]   [1024/1080] RUN-C-002-LANE-ALIBABA-007-1 OK finish=stop tokens=317 out=964ch t=3.4s CAT_MISS=UNSCORED
+[15:22:41]   [1025/1080] RUN-C-002-LANE-ALIBABA-007-2 OK finish=stop tokens=483 out=1830ch t=6.2s CAT_MISS=NO
+[15:22:46]   [1026/1080] RUN-C-002-LANE-ALIBABA-007-3 OK finish=stop tokens=287 out=792ch t=2.9s CAT_MISS=UNSCORED
+[15:22:54]   [1027/1080] RUN-C-003-LANE-ALIBABA-007-1 OK finish=stop tokens=410 out=1350ch t=4.6s CAT_MISS=UNSCORED
+[15:23:04]   [1028/1080] RUN-C-003-LANE-ALIBABA-007-2 OK finish=stop tokens=536 out=1923ch t=6.7s CAT_MISS=UNSCORED
+[15:23:14]   [1029/1080] RUN-C-003-LANE-ALIBABA-007-3 OK finish=stop tokens=521 out=1865ch t=6.8s CAT_MISS=UNSCORED
+[15:23:27]   [1030/1080] RUN-C-004-LANE-ALIBABA-007-1 OK finish=stop tokens=759 out=3018ch t=10.7s CAT_MISS=UNSCORED
+[15:23:41]   [1031/1080] RUN-C-004-LANE-ALIBABA-007-2 OK finish=stop tokens=747 out=3141ch t=10.7s CAT_MISS=UNSCORED
+[15:23:56]   [1032/1080] RUN-C-004-LANE-ALIBABA-007-3 OK finish=stop tokens=810 out=3443ch t=11.6s CAT_MISS=UNSCORED
+[15:24:05]   [1033/1080] RUN-C-005-LANE-ALIBABA-007-1 OK finish=stop tokens=533 out=1885ch t=6.8s CAT_MISS=NO
+[15:24:15]   [1034/1080] RUN-C-005-LANE-ALIBABA-007-2 OK finish=stop tokens=528 out=1870ch t=6.5s CAT_MISS=NO
+[15:24:24]   [1035/1080] RUN-C-005-LANE-ALIBABA-007-3 OK finish=stop tokens=463 out=1465ch t=5.6s CAT_MISS=UNSCORED
+[15:24:35]   [1036/1080] RUN-C-006-LANE-ALIBABA-007-1 OK finish=stop tokens=616 out=2405ch t=8.3s
+[15:24:46]   [1037/1080] RUN-C-006-LANE-ALIBABA-007-2 OK finish=stop tokens=598 out=2332ch t=8.0s
+[15:24:54]   [1038/1080] RUN-C-006-LANE-ALIBABA-007-3 OK finish=stop tokens=454 out=1603ch t=5.5s
+[15:25:02]   [1039/1080] RUN-C-007-LANE-ALIBABA-007-1 OK finish=stop tokens=360 out=1207ch t=4.1s CAT_MISS=UNSCORED
+[15:25:08]   [1040/1080] RUN-C-007-LANE-ALIBABA-007-2 OK finish=stop tokens=336 out=1009ch t=3.9s CAT_MISS=NO
+[15:25:16]   [1041/1080] RUN-C-007-LANE-ALIBABA-007-3 OK finish=stop tokens=384 out=1318ch t=4.8s CAT_MISS=NO
+[15:25:26]   [1042/1080] RUN-C-008-LANE-ALIBABA-007-1 OK finish=stop tokens=522 out=1887ch t=6.5s CAT_MISS=UNSCORED
+[15:25:33]   [1043/1080] RUN-C-008-LANE-ALIBABA-007-2 OK finish=stop tokens=418 out=1391ch t=4.7s CAT_MISS=UNSCORED
+[15:25:44]   [1044/1080] RUN-C-008-LANE-ALIBABA-007-3 OK finish=stop tokens=560 out=2185ch t=7.5s CAT_MISS=UNSCORED
+[15:26:01]   [1045/1080] RUN-C-009-LANE-ALIBABA-007-1 OK finish=stop tokens=923 out=3881ch t=14.2s CAT_MISS=UNSCORED
+[15:26:18]   [1046/1080] RUN-C-009-LANE-ALIBABA-007-2 OK finish=stop tokens=920 out=3848ch t=13.8s CAT_MISS=UNSCORED
+[15:26:28]   [1047/1080] RUN-C-009-LANE-ALIBABA-007-3 OK finish=stop tokens=522 out=1972ch t=7.1s CAT_MISS=UNSCORED
+[15:26:42]   [1048/1080] RUN-C-010-LANE-ALIBABA-007-1 OK finish=stop tokens=742 out=3284ch t=11.1s CAT_MISS=NO
+[15:26:57]   [1049/1080] RUN-C-010-LANE-ALIBABA-007-2 OK finish=stop tokens=798 out=3595ch t=12.2s CAT_MISS=NO
+[15:27:10]   [1050/1080] RUN-C-010-LANE-ALIBABA-007-3 OK finish=stop tokens=677 out=2912ch t=9.9s CAT_MISS=UNSCORED
+[15:27:20]   [1051/1080] RUN-C-011-LANE-ALIBABA-007-1 OK finish=stop tokens=515 out=1879ch t=6.9s CAT_MISS=UNSCORED
+[15:27:31]   [1052/1080] RUN-C-011-LANE-ALIBABA-007-2 OK finish=stop tokens=592 out=2334ch t=8.1s CAT_MISS=UNSCORED
+[15:27:41]   [1053/1080] RUN-C-011-LANE-ALIBABA-007-3 OK finish=stop tokens=530 out=1966ch t=6.7s CAT_MISS=NO
+[15:27:55]   [1054/1080] RUN-C-012-LANE-ALIBABA-007-1 OK finish=stop tokens=761 out=3488ch t=11.4s
+[15:28:10]   [1055/1080] RUN-C-012-LANE-ALIBABA-007-2 OK finish=stop tokens=790 out=3720ch t=12.1s
+[15:28:25]   [1056/1080] RUN-C-012-LANE-ALIBABA-007-3 OK finish=stop tokens=769 out=3573ch t=11.4s
+[15:28:34]   [1057/1080] RUN-C-013-LANE-ALIBABA-007-1 OK finish=stop tokens=467 out=1710ch t=5.9s CAT_MISS=UNSCORED
+[15:28:43]   [1058/1080] RUN-C-013-LANE-ALIBABA-007-2 OK finish=stop tokens=508 out=1930ch t=6.6s CAT_MISS=UNSCORED
+[15:28:52]   [1059/1080] RUN-C-013-LANE-ALIBABA-007-3 OK finish=stop tokens=449 out=1625ch t=5.8s CAT_MISS=UNSCORED
+[15:28:59]   [1060/1080] RUN-C-014-LANE-ALIBABA-007-1 OK finish=stop tokens=336 out=861ch t=3.4s CAT_MISS=UNSCORED
+[15:29:05]   [1061/1080] RUN-C-014-LANE-ALIBABA-007-2 OK finish=stop tokens=325 out=862ch t=3.4s CAT_MISS=NO
+[15:29:11]   [1062/1080] RUN-C-014-LANE-ALIBABA-007-3 OK finish=stop tokens=301 out=705ch t=2.8s CAT_MISS=UNSCORED
+[15:29:19]   [1063/1080] RUN-C-015-LANE-ALIBABA-007-1 OK finish=stop tokens=450 out=1678ch t=5.6s CAT_MISS=UNSCORED
+[15:29:29]   [1064/1080] RUN-C-015-LANE-ALIBABA-007-2 OK finish=stop tokens=492 out=1812ch t=6.4s CAT_MISS=UNSCORED
+[15:29:38]   [1065/1080] RUN-C-015-LANE-ALIBABA-007-3 OK finish=stop tokens=478 out=1782ch t=6.1s CAT_MISS=UNSCORED
+[15:29:44]   [1066/1080] RUN-C-016-LANE-ALIBABA-007-1 OK finish=stop tokens=337 out=747ch t=3.5s
+[15:29:50]   [1067/1080] RUN-C-016-LANE-ALIBABA-007-2 OK finish=stop tokens=314 out=649ch t=3.0s
+[15:29:56]   [1068/1080] RUN-C-016-LANE-ALIBABA-007-3 OK finish=stop tokens=313 out=643ch t=2.9s
+[15:30:07]   [1069/1080] RUN-C-017-LANE-ALIBABA-007-1 OK finish=stop tokens=614 out=2365ch t=8.1s CAT_MISS=UNSCORED
+[15:30:17]   [1070/1080] RUN-C-017-LANE-ALIBABA-007-2 OK finish=stop tokens=539 out=1998ch t=6.9s CAT_MISS=UNSCORED
+[15:30:28]   [1071/1080] RUN-C-017-LANE-ALIBABA-007-3 OK finish=stop tokens=616 out=2386ch t=8.2s CAT_MISS=UNSCORED
+[15:30:34]   [1072/1080] RUN-C-018-LANE-ALIBABA-007-1 OK finish=stop tokens=284 out=652ch t=2.6s CAT_MISS=NO
+[15:30:40]   [1073/1080] RUN-C-018-LANE-ALIBABA-007-2 OK finish=stop tokens=285 out=659ch t=2.7s CAT_MISS=NO
+[15:30:45]   [1074/1080] RUN-C-018-LANE-ALIBABA-007-3 OK finish=stop tokens=286 out=660ch t=2.7s CAT_MISS=NO
+[15:30:51]   [1075/1080] RUN-C-019-LANE-ALIBABA-007-1 OK finish=stop tokens=253 out=794ch t=2.8s
+[15:30:57]   [1076/1080] RUN-C-019-LANE-ALIBABA-007-2 OK finish=stop tokens=213 out=586ch t=2.2s
+[15:31:04]   [1077/1080] RUN-C-019-LANE-ALIBABA-007-3 OK finish=stop tokens=348 out=1287ch t=4.6s
+[15:31:15]   [1078/1080] RUN-C-020-LANE-ALIBABA-007-1 OK finish=stop tokens=615 out=1880ch t=8.1s
+[15:31:28]   [1079/1080] RUN-C-020-LANE-ALIBABA-007-2 OK finish=stop tokens=691 out=2510ch t=9.4s
+[15:31:38]   [1080/1080] RUN-C-020-LANE-ALIBABA-007-3 OK finish=stop tokens=553 out=1948ch t=6.9s

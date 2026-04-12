@@ -1,0 +1,56 @@
+[11:14:06] === PHASE A PILOT START === lanes=4 tasks=5
+[11:14:06] --- LANE-ALIBABA-004 (qwen-turbo) role=ROUTER stream=False ---
+[11:14:13]   [1/20] PILOT-CAL-001-LANE-ALIBABA-004 OK finish=stop tokens=744 out=1993ch t=7.3s
+[11:14:31]   [2/20] PILOT-CAL-002-LANE-ALIBABA-004 OK finish=stop tokens=1200 out=3908ch t=14.8s
+[11:14:41]   [3/20] PILOT-CAL-003-LANE-ALIBABA-004 OK finish=stop tokens=615 out=1968ch t=6.6s
+[11:14:51]   [4/20] PILOT-CAL-004-LANE-ALIBABA-004 OK finish=stop tokens=591 out=1811ch t=7.4s CAT_MISS=YES
+[11:15:09]   [5/20] PILOT-CAL-005-LANE-ALIBABA-004 OK finish=stop tokens=1364 out=4452ch t=14.9s
+[11:15:15] --- LANE-ALIBABA-005 (qwen-plus) role=ANALYST stream=False ---
+[11:15:23]   [6/20] PILOT-CAL-001-LANE-ALIBABA-005 OK finish=stop tokens=699 out=1754ch t=7.5s
+[11:15:59]   [7/20] PILOT-CAL-002-LANE-ALIBABA-005 OK finish=stop tokens=2080 out=7590ch t=33.1s
+[11:16:33]   [8/20] PILOT-CAL-003-LANE-ALIBABA-005 OK finish=stop tokens=1933 out=6693ch t=31.1s
+[11:16:46]   [9/20] PILOT-CAL-004-LANE-ALIBABA-005 OK finish=stop tokens=779 out=2464ch t=10.7s CAT_MISS=UNSCORED
+[11:17:16]   [10/20] PILOT-CAL-005-LANE-ALIBABA-005 OK finish=stop tokens=1788 out=5910ch t=26.3s
+[11:17:22] --- LANE-ALIBABA-006 (qwen-max) role=EXECUTOR stream=False ---
+[11:17:29]   [11/20] PILOT-CAL-001-LANE-ALIBABA-006 OK finish=stop tokens=747 out=2125ch t=7.6s
+[11:17:45]   [12/20] PILOT-CAL-002-LANE-ALIBABA-006 OK finish=stop tokens=1062 out=3443ch t=12.7s
+[11:18:05]   [13/20] PILOT-CAL-003-LANE-ALIBABA-006 OK finish=stop tokens=1423 out=5368ch t=16.9s
+[11:18:15]   [14/20] PILOT-CAL-004-LANE-ALIBABA-006 OK finish=stop tokens=638 out=2267ch t=7.3s CAT_MISS=YES
+[11:18:36]   [15/20] PILOT-CAL-005-LANE-ALIBABA-006 OK finish=stop tokens=1476 out=4948ch t=17.3s
+[11:18:42] --- LANE-ALIBABA-007 (qwq-32b) role=REVIEWER stream=True ---
+[11:18:51]   [16/20] PILOT-CAL-001-LANE-ALIBABA-007 FAIL:HTTP Error 404: Not Found finish=None tokens=None out=0ch t=9.7s
+[11:19:05]   [17/20] PILOT-CAL-002-LANE-ALIBABA-007 FAIL:HTTP Error 404: Not Found finish=None tokens=None out=0ch t=10.8s
+[11:19:18]   [18/20] PILOT-CAL-003-LANE-ALIBABA-007 FAIL:HTTP Error 404: Not Found finish=None tokens=None out=0ch t=9.7s
+[11:19:34]   [19/20] PILOT-CAL-004-LANE-ALIBABA-007 FAIL:HTTP Error 404: Not Found finish=None tokens=None out=0ch t=12.8s CAT_MISS=UNSCORED
+[11:19:46]   [20/20] PILOT-CAL-005-LANE-ALIBABA-007 FAIL:HTTP Error 404: Not Found finish=None tokens=None out=0ch t=9.7s
+[11:22:21] === PHASE A PILOT START === lanes=4 tasks=5
+[11:22:21] --- LANE-ALIBABA-004 (qwen-turbo) role=ROUTER stream=False ---
+[11:22:21]   [SKIP] PILOT-CAL-001-LANE-ALIBABA-004 already done
+[11:22:21]   [SKIP] PILOT-CAL-002-LANE-ALIBABA-004 already done
+[11:22:21]   [SKIP] PILOT-CAL-003-LANE-ALIBABA-004 already done
+[11:22:21]   [SKIP] PILOT-CAL-004-LANE-ALIBABA-004 already done
+[11:22:21]   [SKIP] PILOT-CAL-005-LANE-ALIBABA-004 already done
+[11:22:24] --- LANE-ALIBABA-005 (qwen-plus) role=ANALYST stream=False ---
+[11:22:24]   [SKIP] PILOT-CAL-001-LANE-ALIBABA-005 already done
+[11:22:24]   [SKIP] PILOT-CAL-002-LANE-ALIBABA-005 already done
+[11:22:24]   [SKIP] PILOT-CAL-003-LANE-ALIBABA-005 already done
+[11:22:24]   [SKIP] PILOT-CAL-004-LANE-ALIBABA-005 already done
+[11:22:24]   [SKIP] PILOT-CAL-005-LANE-ALIBABA-005 already done
+[11:22:27] --- LANE-ALIBABA-006 (qwen-max) role=EXECUTOR stream=False ---
+[11:22:27]   [SKIP] PILOT-CAL-001-LANE-ALIBABA-006 already done
+[11:22:27]   [SKIP] PILOT-CAL-002-LANE-ALIBABA-006 already done
+[11:22:27]   [SKIP] PILOT-CAL-003-LANE-ALIBABA-006 already done
+[11:22:27]   [SKIP] PILOT-CAL-004-LANE-ALIBABA-006 already done
+[11:22:27]   [SKIP] PILOT-CAL-005-LANE-ALIBABA-006 already done
+[11:22:30] --- LANE-ALIBABA-007 (qwen2.5-72b-instruct) role=REVIEWER stream=False ---
+[11:22:36]   [1/20] PILOT-CAL-001-LANE-ALIBABA-007 OK finish=stop tokens=644 out=1625ch t=5.9s
+[11:22:52]   [2/20] PILOT-CAL-002-LANE-ALIBABA-007 OK finish=stop tokens=988 out=3036ch t=13.3s
+[11:23:12]   [3/20] PILOT-CAL-003-LANE-ALIBABA-007 OK finish=stop tokens=1111 out=3882ch t=16.1s
+[11:23:23]   [4/20] PILOT-CAL-004-LANE-ALIBABA-007 OK finish=stop tokens=653 out=2327ch t=8.1s CAT_MISS=UNSCORED
+[11:23:45]   [5/20] PILOT-CAL-005-LANE-ALIBABA-007 OK finish=stop tokens=1419 out=4490ch t=19.2s
+[11:23:51] === PHASE A PILOT COMPLETE ===
+[11:23:51]   LANE-ALIBABA-004 (qwen-turbo): 5/5 evidence_complete, 1 direct-mode catastrophic_miss → PASS
+[11:23:51]   LANE-ALIBABA-005 (qwen-plus): 5/5 evidence_complete, 0 direct-mode catastrophic_miss → PASS
+[11:23:51]   LANE-ALIBABA-006 (qwen-max): 5/5 evidence_complete, 1 direct-mode catastrophic_miss → PASS
+[11:23:51]   LANE-ALIBABA-007 (qwen2.5-72b-instruct): 5/5 evidence_complete, 0 direct-mode catastrophic_miss → PASS
+[11:23:51] PILOT GATE: PASS — all lanes ready for full batch

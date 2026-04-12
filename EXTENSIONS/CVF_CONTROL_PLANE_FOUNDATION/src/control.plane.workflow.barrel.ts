@@ -28,6 +28,30 @@ export type {
 } from "./external.asset.intake.profile.contract";
 
 export {
+  SemanticPolicyIntentRegistryContract,
+  createSemanticPolicyIntentRegistryContract,
+} from "./semantic.policy.intent.registry.contract";
+export type {
+  SemanticPolicyIntentClass,
+  SemanticPolicyIntentRegistryEntry,
+  SemanticPolicyIntentCandidate,
+  SemanticPolicyIntentClassMismatch,
+  SemanticPolicyIntentRegistryRequest,
+  SemanticPolicyIntentRegistryResult,
+} from "./semantic.policy.intent.registry.contract";
+
+export {
+  SemanticPolicyIntentRegistryBatchContract,
+  createSemanticPolicyIntentRegistryBatchContract,
+} from "./semantic.policy.intent.registry.batch.contract";
+export type {
+  SemanticPolicyIntentRegistryBatchItem,
+  SemanticPolicyIntentRegistryBatchEntry,
+  SemanticPolicyIntentRegistryBatchResult,
+  SemanticPolicyIntentRegistryBatchContractDependencies,
+} from "./semantic.policy.intent.registry.batch.contract";
+
+export {
   ExternalAssetIntakeConsumerPipelineContract,
   createExternalAssetIntakeConsumerPipelineContract,
 } from "./external.asset.intake.consumer.pipeline.contract";

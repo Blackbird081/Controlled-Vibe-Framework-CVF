@@ -14,6 +14,8 @@ import {
   DesignConsumerContract,
   DesignContract,
   ExternalAssetIntakeProfileContract,
+  SemanticPolicyIntentRegistryBatchContract,
+  SemanticPolicyIntentRegistryContract,
   WindowsCompatibilityConsumerPipelineBatchContract,
   WindowsCompatibilityConsumerPipelineContract,
   WindowsCompatibilityEvaluationBatchContract,
@@ -48,6 +50,8 @@ import {
   createControlPlaneFoundationShell,
   createControlPlaneIntakeContract,
   createExternalAssetIntakeProfileContract,
+  createSemanticPolicyIntentRegistryBatchContract,
+  createSemanticPolicyIntentRegistryContract,
   createWindowsCompatibilityConsumerPipelineBatchContract,
   createWindowsCompatibilityConsumerPipelineContract,
   createWindowsCompatibilityEvaluationBatchContract,
@@ -275,6 +279,12 @@ describe("CVF_CONTROL_PLANE_FOUNDATION public barrel workflow smoke", () => {
     );
     expect(createExternalAssetIntakeProfileContract()).toBeInstanceOf(
       ExternalAssetIntakeProfileContract,
+    );
+    expect(createSemanticPolicyIntentRegistryContract()).toBeInstanceOf(
+      SemanticPolicyIntentRegistryContract,
+    );
+    expect(createSemanticPolicyIntentRegistryBatchContract()).toBeInstanceOf(
+      SemanticPolicyIntentRegistryBatchContract,
     );
     expect(createWindowsCompatibilityEvaluationContract()).toBeInstanceOf(
       WindowsCompatibilityEvaluationContract,

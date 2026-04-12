@@ -42,7 +42,9 @@ export class W7NormalizedAssetCandidateBatchContract {
   batch(
     requests: W7NormalizedAssetCandidateBatchItem[],
   ): W7NormalizedAssetCandidateBatchResult {
-    const compiler = createW7NormalizedAssetCandidateContract();
+    const compiler = createW7NormalizedAssetCandidateContract({
+      now: this.now,
+    });
     const createdAt = this.now();
     const results = requests.map((request) => ({
       requestId: request.requestId,

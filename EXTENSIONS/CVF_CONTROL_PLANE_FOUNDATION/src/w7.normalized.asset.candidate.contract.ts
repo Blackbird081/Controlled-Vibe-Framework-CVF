@@ -77,6 +77,10 @@ export interface W7NormalizedAssetCandidateCompileResult {
   normalizedCandidate?: W7NormalizedAssetCandidate;
 }
 
+export interface W7NormalizedAssetCandidateContractDependencies {
+  now?: () => string;
+}
+
 const DEFAULT_PHASE_HINTS: Record<W7CandidateAssetType, W7RoutingPhaseHint[]> = {
   W7CommandAsset: ["INTAKE", "DESIGN"],
   W7PolicyAsset: ["INTAKE", "REVIEW"],
@@ -151,6 +155,10 @@ function deriveVersionHint(sourceQuality: ExternalAssetSourceQuality): string {
 }
 
 export class W7NormalizedAssetCandidateContract {
+  constructor(
+    _dependencies: W7NormalizedAssetCandidateContractDependencies = {},
+  ) {}
+
   compile(
     request: W7NormalizedAssetCandidateCompileRequest,
   ): W7NormalizedAssetCandidateCompileResult {
@@ -275,6 +283,8 @@ export class W7NormalizedAssetCandidateContract {
   }
 }
 
-export function createW7NormalizedAssetCandidateContract(): W7NormalizedAssetCandidateContract {
-  return new W7NormalizedAssetCandidateContract();
+export function createW7NormalizedAssetCandidateContract(
+  dependencies?: W7NormalizedAssetCandidateContractDependencies,
+): W7NormalizedAssetCandidateContract {
+  return new W7NormalizedAssetCandidateContract(dependencies);
 }

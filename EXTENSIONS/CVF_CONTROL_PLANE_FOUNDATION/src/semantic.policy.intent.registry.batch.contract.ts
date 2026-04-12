@@ -44,7 +44,9 @@ export class SemanticPolicyIntentRegistryBatchContract {
   batch(
     requests: SemanticPolicyIntentRegistryBatchItem[],
   ): SemanticPolicyIntentRegistryBatchResult {
-    const registry = createSemanticPolicyIntentRegistryContract();
+    const registry = createSemanticPolicyIntentRegistryContract({
+      now: this.now,
+    });
     const createdAt = this.now();
     const results = requests.map((request) => ({
       requestId: request.requestId,

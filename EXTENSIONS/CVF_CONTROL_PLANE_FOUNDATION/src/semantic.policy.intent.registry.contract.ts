@@ -34,6 +34,10 @@ export interface SemanticPolicyIntentRegistryResult {
   classMismatches: SemanticPolicyIntentClassMismatch[];
 }
 
+export interface SemanticPolicyIntentRegistryContractDependencies {
+  now?: () => string;
+}
+
 const CANONICAL_ENTRIES: SemanticPolicyIntentRegistryEntry[] = [
   {
     semanticItem: "EXPLICIT_APPROVAL_REQUIRED",
@@ -197,6 +201,10 @@ function normalizeCandidate(
 }
 
 export class SemanticPolicyIntentRegistryContract {
+  constructor(
+    _dependencies: SemanticPolicyIntentRegistryContractDependencies = {},
+  ) {}
+
   classify(
     request: SemanticPolicyIntentRegistryRequest,
   ): SemanticPolicyIntentRegistryResult {
@@ -249,6 +257,8 @@ export class SemanticPolicyIntentRegistryContract {
   }
 }
 
-export function createSemanticPolicyIntentRegistryContract(): SemanticPolicyIntentRegistryContract {
-  return new SemanticPolicyIntentRegistryContract();
+export function createSemanticPolicyIntentRegistryContract(
+  dependencies?: SemanticPolicyIntentRegistryContractDependencies,
+): SemanticPolicyIntentRegistryContract {
+  return new SemanticPolicyIntentRegistryContract(dependencies);
 }

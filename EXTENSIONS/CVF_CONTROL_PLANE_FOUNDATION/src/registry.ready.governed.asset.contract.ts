@@ -55,6 +55,10 @@ export interface RegistryReadyGovernedAssetResult {
   governedAsset?: RegistryReadyGovernedAsset;
 }
 
+export interface RegistryReadyGovernedAssetContractDependencies {
+  now?: () => string;
+}
+
 function normalizeText(value: string | undefined): string {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -110,6 +114,10 @@ function buildGovernedAsset(
 }
 
 export class RegistryReadyGovernedAssetContract {
+  constructor(
+    _dependencies: RegistryReadyGovernedAssetContractDependencies = {},
+  ) {}
+
   prepare(
     request: RegistryReadyGovernedAssetRequest,
   ): RegistryReadyGovernedAssetResult {
@@ -171,6 +179,8 @@ export class RegistryReadyGovernedAssetContract {
   }
 }
 
-export function createRegistryReadyGovernedAssetContract(): RegistryReadyGovernedAssetContract {
-  return new RegistryReadyGovernedAssetContract();
+export function createRegistryReadyGovernedAssetContract(
+  dependencies?: RegistryReadyGovernedAssetContractDependencies,
+): RegistryReadyGovernedAssetContract {
+  return new RegistryReadyGovernedAssetContract(dependencies);
 }

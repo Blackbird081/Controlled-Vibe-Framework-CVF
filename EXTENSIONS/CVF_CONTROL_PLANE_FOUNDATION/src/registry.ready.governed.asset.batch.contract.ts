@@ -42,7 +42,9 @@ export class RegistryReadyGovernedAssetBatchContract {
   batch(
     requests: RegistryReadyGovernedAssetBatchItem[],
   ): RegistryReadyGovernedAssetBatchResult {
-    const contract = createRegistryReadyGovernedAssetContract();
+    const contract = createRegistryReadyGovernedAssetContract({
+      now: this.now,
+    });
     const createdAt = this.now();
     const results = requests.map((request) => ({
       requestId: request.requestId,

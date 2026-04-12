@@ -27,7 +27,8 @@ LANES = [
     {'lane_id': 'LANE-ALIBABA-004', 'model': 'qwen-turbo', 'role': 'ROUTER',   'stream': False},
     {'lane_id': 'LANE-ALIBABA-005', 'model': 'qwen-plus',  'role': 'ANALYST',  'stream': False},
     {'lane_id': 'LANE-ALIBABA-006', 'model': 'qwen-max',   'role': 'EXECUTOR', 'stream': False},
-    {'lane_id': 'LANE-ALIBABA-007', 'model': 'qwq-32b',    'role': 'REVIEWER', 'stream': True},
+    # qwq-32b → 404 on dashscope-intl; replaced with qwen2.5-72b-instruct (HTTP 200 confirmed)
+    {'lane_id': 'LANE-ALIBABA-007', 'model': 'qwen2.5-72b-instruct', 'role': 'REVIEWER', 'stream': False},
 ]
 RUNS_PER_TASK    = 3
 INTER_RUN_DELAY  = 3.0

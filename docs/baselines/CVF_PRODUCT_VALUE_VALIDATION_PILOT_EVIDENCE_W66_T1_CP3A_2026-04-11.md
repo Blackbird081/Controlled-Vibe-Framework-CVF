@@ -403,7 +403,7 @@ After the compatibility probe above, `cvf-web` was updated so another agent can 
 Synchronous HTTP (non-streaming) returns `400 "current user api does not support http call"`.
 This was the original integration blocker for `cvf-web`.
 That blocker is now CLOSED: the current Alibaba adapter supports SSE streaming for `qvq-*`
-models, so the next remaining step is the live governed-path run via `/api/execute`.
+models, and the governed-path pilot via `/api/execute` has been completed (5/5 HTTP 200).
 
 ### qvq-max response format
 

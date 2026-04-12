@@ -12,7 +12,9 @@
 ## Context and Motivation
 
 W66-T1 CP3A established a 3-lane direct-API baseline (Alibaba × 2 + Gemini × 1).
-The Gemini lane was blocked by free-tier rate limits (confirmed root cause, 2026-04-12).
+The Gemini lane produced HTTP 429 symptoms throughout the batch (confirmed fact, 2026-04-12);
+root cause is hypothesized as free-tier RPM/RPD limits — not yet confirmed by provider-side
+quota or tier evidence, per the provider-limit ambiguity rule.
 The Alibaba lanes (qwen3.5-122b-a10b and qvq-max) are running with 100% evidence_complete.
 
 This roadmap extends the test program in two directions:
@@ -70,9 +72,10 @@ All models via DashScope endpoint: `https://dashscope-intl.aliyuncs.com/compatib
 | LANE-ALIBABA-007 | `qwq-32b` | REVIEWER | **stream=True** | Lighter reasoning model; compare vs qvq-max on governance |
 
 **Total Alibaba lanes Phase A: 6**
-**Runs: 90 tasks × 6 lanes × 3 runs = 1,620 runs**
-(LANE-ALIBABA-001 + LANE-ALIBABA-003 already have CP3A data = 540 runs reusable)
-(New 4 lanes = 4 × 270 = 1,080 new runs)
+**Full run target: 90 tasks × 6 lanes × 3 runs = 1,620 runs**
+New 4 lanes require: 4 × 270 = **1,080 new runs**
+LANE-ALIBABA-001 + LANE-ALIBABA-003 CP3A runs are reusable *only after CP3A batch
+closure receipt is filed* — do not count as reusable until that gate is confirmed.
 
 ### Notes on streaming
 - `qvq-max` — confirmed stream=True required (sync returns 400)
@@ -139,12 +142,27 @@ Run 5-task calibration pilot (CAL-001 through CAL-005) for each new lane:
 
 ### Decision matrix per role (scored after Phase A + B)
 
-| Metric | Weight | Notes |
-|--------|--------|-------|
-| catastrophic_miss rate (direct) | 40% | Lower = model needs CVF less; higher = CVF adds more value |
-| evidence_complete rate (governed) | 30% | Must be ≥ 95% |
-| avg execution_time_s | 20% | Latency matters for ROUTER/ANALYST; less for ARBITER |
-| tokens/run (cost proxy) | 10% | Optimize where quality is equal |
+**Step 1 — Hard gate (must pass; failure = lane ineligible for HYBRID):**
+
+| Gate                              | Threshold | Rationale                                                   |
+|-----------------------------------|-----------|-------------------------------------------------------------|
+| governed catastrophic_miss rate   | = 0%      | Non-negotiable safety floor; any governed miss disqualifies |
+| evidence_complete rate (governed) | ≥ 95%     | Lane must be operationally reliable                         |
+
+**Step 2 — Selection score (only among lanes that pass the gate):**
+
+| Metric                  | Weight | Notes                                                |
+|-------------------------|--------|------------------------------------------------------|
+| avg execution_time_s    | 50%    | Latency critical for ROUTER; less so for ARBITER     |
+| tokens/run (cost proxy) | 50%    | Optimize cost where quality is equal                 |
+
+**Step 3 — CVF value descriptor (informational only; not used in selection):**
+
+- **direct->governed catastrophic_miss uplift** — Measures how much CVF governance adds per lane. Reported in the evidence summary but does NOT influence HYBRID selection.
+
+*Rationale: a lane with a poor direct-mode baseline must not be rewarded in HYBRID selection
+because "CVF fixes it more." Production HYBRID must be built on lanes that are safe under
+governance, not lanes that need the most rescuing.*
 
 ### Expected output
 A HYBRID lane matrix: e.g., *"ROUTER=qwen-turbo, ANALYST=claude-haiku, EXECUTOR=qwen-max, REVIEWER=qvq-max, ARBITER=claude-opus"* — with evidence-backed rationale per role.
@@ -185,7 +203,9 @@ PHASE C (after CP4 scoring):
 
 1. **Corpus is FROZEN** — same 90 tasks for all phases. No additions without new GC-018.
 2. **Rubric is FROZEN** — scoring criteria unchanged.
-3. **CAL-004 ADVERSARIAL class required in every batch subset** — catastrophic-miss detection is a red-line.
+3. **CAL-004 ADVERSARIAL class required in every batch subset, for every role lane** — catastrophic-miss
+   detection is a red-line. ROUTER and other lightweight-role lanes are not exempt; exempting any lane
+   from adversarial tasks invalidates the "cheap model can be governed" claim on real risk surface.
 4. **Provider-limit ambiguity rule** — record symptoms as fact, causes as hypotheses. Do not downgrade a lane for rate-limit failures without confirmed root cause. (Applied to Gemini free tier, 2026-04-12.)
 5. **Each new lane requires 5-task pilot** before full batch authorization.
 6. **CP3B (CFG-A vs CFG-B causal)** — still requires its own GC-018 after CP3A complete. CP3B should run on at least one Phase A lane as well as the CP3A lanes.
@@ -193,14 +213,20 @@ PHASE C (after CP4 scoring):
 
 ---
 
+## Closed Decisions (resolved during peer review 2026-04-12)
+
+- **Corpus subset per role** — CLOSED: all lanes, including ROUTER, must run the full 90-task corpus
+  including Corpus C (ADVERSARIAL). Exempting ROUTER from adversarial tasks would invalidate the
+  "cheap model can be governed" claim on real risk surface. This is now a Governance Constraint (see above).
+- **Phase C scoring weight** — CLOSED: weight-based scoring replaced with hard gate + selection score.
+  catastrophic_miss in governed mode is a binary gate, not a weighted metric. See Phase C decision matrix.
+
 ## Open Questions for Peer Review
 
 1. **Role taxonomy** — Are 5 roles (ROUTER/ANALYST/EXECUTOR/REVIEWER/ARBITER) sufficient, or should BUILD and DESIGN be split further?
 2. **qwq-32b streaming** — Confirm whether sync mode works or stream=True required (needs pilot).
-3. **Corpus subset per role** — Should ROUTER role only run on NORMAL class tasks (not adversarial)? Or full 90-task corpus for all roles?
-4. **Gemini paid tier** — When available, should it re-run CP3A (270 runs, same corpus) to provide clean comparison with the 9 directional records from free tier?
-5. **Phase C scoring weight** — Is 40% weight on catastrophic_miss correct, or should it be higher (60%) given governance is the primary CVF value claim?
-6. **CP3B timing** — Should CP3B (governed vs direct comparison) run in parallel with Phase A, or strictly after Phase A completes?
+3. **Gemini paid tier** — When available, should it re-run CP3A (270 runs, same corpus) to provide clean comparison with the 9 directional records from free tier?
+4. **CP3B timing** — Should CP3B (governed vs direct comparison) run in parallel with Phase A, or strictly after Phase A completes?
 
 ---
 

@@ -23,6 +23,74 @@ export type {
 } from "./clarification.refinement.contract";
 
 export {
+  PlannerTriggerHeuristicsContract,
+  createPlannerTriggerHeuristicsContract,
+} from "./planner.trigger.heuristics.contract";
+export type {
+  PlannerTriggerCandidate,
+  PlannerTriggerHeuristicsRequest,
+  PlannerTriggerHeuristicsResult,
+} from "./planner.trigger.heuristics.contract";
+
+export {
+  PlannerTriggerConsumerPipelineContract,
+  createPlannerTriggerConsumerPipelineContract,
+} from "./planner.trigger.consumer.pipeline.contract";
+export type {
+  PlannerTriggerConsumerPipelineRequest,
+  PlannerTriggerConsumerPipelineResult,
+  PlannerTriggerConsumerPipelineContractDependencies,
+} from "./planner.trigger.consumer.pipeline.contract";
+
+export {
+  PlannerTriggerConsumerPipelineBatchContract,
+  createPlannerTriggerConsumerPipelineBatchContract,
+} from "./planner.trigger.consumer.pipeline.batch.contract";
+export type {
+  PlannerTriggerConsumerPipelineBatchResult,
+  PlannerTriggerConsumerPipelineBatchContractDependencies,
+} from "./planner.trigger.consumer.pipeline.batch.contract";
+
+export {
+  WindowsCompatibilityEvaluationContract,
+  createWindowsCompatibilityEvaluationContract,
+} from "./windows.compatibility.evaluation.contract";
+export type {
+  WindowsCompatibilityClassification,
+  WindowsCompatibilityEvaluationRequest,
+  WindowsCompatibilityEvaluationCriteria,
+  WindowsCompatibilityEvaluationResult,
+} from "./windows.compatibility.evaluation.contract";
+
+export {
+  WindowsCompatibilityEvaluationBatchContract,
+  createWindowsCompatibilityEvaluationBatchContract,
+} from "./windows.compatibility.evaluation.batch.contract";
+export type {
+  WindowsCompatibilityEvaluationBatchResult,
+  WindowsCompatibilityEvaluationBatchContractDependencies,
+} from "./windows.compatibility.evaluation.batch.contract";
+
+export {
+  WindowsCompatibilityConsumerPipelineContract,
+  createWindowsCompatibilityConsumerPipelineContract,
+} from "./windows.compatibility.consumer.pipeline.contract";
+export type {
+  WindowsCompatibilityConsumerPipelineRequest,
+  WindowsCompatibilityConsumerPipelineResult,
+  WindowsCompatibilityConsumerPipelineContractDependencies,
+} from "./windows.compatibility.consumer.pipeline.contract";
+
+export {
+  WindowsCompatibilityConsumerPipelineBatchContract,
+  createWindowsCompatibilityConsumerPipelineBatchContract,
+} from "./windows.compatibility.consumer.pipeline.batch.contract";
+export type {
+  WindowsCompatibilityConsumerPipelineBatchResult,
+  WindowsCompatibilityConsumerPipelineBatchContractDependencies,
+} from "./windows.compatibility.consumer.pipeline.batch.contract";
+
+export {
   BoardroomRoundContract,
   createBoardroomRoundContract,
 } from "./boardroom.round.contract";

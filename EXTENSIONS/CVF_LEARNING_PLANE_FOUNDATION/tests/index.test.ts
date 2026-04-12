@@ -29,6 +29,16 @@ import {
   createLearningObservabilityContract,
   LearningObservabilitySnapshotContract,
   createLearningObservabilitySnapshotContract,
+  ProvisionalEvaluationSignalContract,
+  createProvisionalEvaluationSignalContract,
+  Stage1DiagnosticInterpretationContract,
+  createStage1DiagnosticInterpretationContract,
+  Stage1DiagnosticInterpretationBatchContract,
+  createStage1DiagnosticInterpretationBatchContract,
+  Stage1DiagnosticPacketContract,
+  createStage1DiagnosticPacketContract,
+  Stage1DiagnosticPacketBatchContract,
+  createStage1DiagnosticPacketBatchContract,
 } from "../src/index";
 import type {
   LearningFeedbackInput,
@@ -57,6 +67,30 @@ describe("CVF_LEARNING_PLANE_FOUNDATION", () => {
     expect(LEARNING_PLANE_FOUNDATION_COORDINATION.tranche).toBe("W4-T1");
     expect(LEARNING_PLANE_FOUNDATION_COORDINATION.crossPlaneIndependence).toBe(true);
     expect(LEARNING_PLANE_FOUNDATION_COORDINATION.prerequisite).toContain("W2-T4");
+  });
+
+  it("exports the provisional evaluation signal helper from the public barrel", () => {
+    expect(createProvisionalEvaluationSignalContract()).toBeInstanceOf(
+      ProvisionalEvaluationSignalContract,
+    );
+  });
+
+  it("exports the stage1 diagnostic interpretation helpers from the public barrel", () => {
+    expect(createStage1DiagnosticInterpretationContract()).toBeInstanceOf(
+      Stage1DiagnosticInterpretationContract,
+    );
+    expect(createStage1DiagnosticInterpretationBatchContract()).toBeInstanceOf(
+      Stage1DiagnosticInterpretationBatchContract,
+    );
+  });
+
+  it("exports the stage1 diagnostic packet helpers from the public barrel", () => {
+    expect(createStage1DiagnosticPacketContract()).toBeInstanceOf(
+      Stage1DiagnosticPacketContract,
+    );
+    expect(createStage1DiagnosticPacketBatchContract()).toBeInstanceOf(
+      Stage1DiagnosticPacketBatchContract,
+    );
   });
 
   // ─── W4-T2 CP1 — TruthModelContract ─────────────────────────────────────

@@ -60,3 +60,17 @@ Current canonical docs:
 - `CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_TEMPLATE.md`
 - `CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`
 - `CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`
+- `CVF_W7_CLI_SCHEMA_CONTRACTS.md` *(internal design draft)*
+- `CVF_W7_CLI_GOVERNANCE_BINDINGS.md` *(internal design draft)*
+- `CVF_W7_CLI_MVP_SCOPE.md` *(internal design draft)*
+- `CVF_W7_CLI_WORKSPACE_AND_STATE.md` *(internal design draft; heavier review pending)*
+- `CVF_W7_CLI_COMMAND_SURFACE.md` *(internal design draft)*
+- `CVF_SEMANTIC_POLICY_INTENT_REGISTRY.md` *(internal design draft)*
+- `CVF_W7_EXTERNAL_ASSET_INTAKE_PROFILE.md` *(internal design draft)*
+- `CVF_W7_EXECUTION_ENVIRONMENT_NORMALIZATION_POLICY.md` *(internal design draft)*
+- `CVF_W7_WINDOWS_COMPATIBILITY_EVALUATION_CHECKLIST.md` *(internal design draft)*
+- `CVF_W7_WINDOWS_POWERSHELL_COMMAND_REFERENCE.md` *(reference appendix)*
+- `CVF_PLANNER_TRIGGER_HEURISTICS.md` *(internal design draft)*
+- `CVF_PROVISIONAL_EVALUATION_SIGNAL_CANDIDATES.md` *(internal design draft)*
+- `CVF_W7_EXTERNAL_ASSET_COMPILER_GUIDE.md` *(internal design draft)*
+- `CVF_STAGE1_DIAGNOSTIC_INTERPRETATION_PACKET_TEMPLATE.md`

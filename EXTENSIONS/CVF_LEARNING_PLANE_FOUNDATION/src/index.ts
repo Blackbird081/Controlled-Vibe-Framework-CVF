@@ -78,6 +78,79 @@ export type {
   GovernanceSignalConsumerPipelineBatch,
 } from "./governance.signal.consumer.pipeline.batch.contract";
 
+export {
+  ProvisionalEvaluationSignalContract,
+  createProvisionalEvaluationSignalContract,
+} from "./provisional.evaluation.signal.contract";
+export type {
+  ProvisionalSignalCategory,
+  ProvisionalSignalEvidenceType,
+  ProvisionalSignalSeverity,
+  WeakTriggerDefinitionCaptureInput,
+  ProvisionalEvaluationSignal,
+  ProvisionalEvaluationSignalContractDependencies,
+} from "./provisional.evaluation.signal.contract";
+
+export {
+  ProvisionalEvaluationSignalConsumerPipelineContract,
+  createProvisionalEvaluationSignalConsumerPipelineContract,
+} from "./provisional.evaluation.signal.consumer.pipeline.contract";
+export type {
+  ProvisionalEvaluationSignalConsumerPipelineRequest,
+  ProvisionalEvaluationSignalConsumerPipelineResult,
+  ProvisionalEvaluationSignalConsumerPipelineContractDependencies,
+} from "./provisional.evaluation.signal.consumer.pipeline.contract";
+
+export {
+  ProvisionalEvaluationSignalConsumerPipelineBatchContract,
+  createProvisionalEvaluationSignalConsumerPipelineBatchContract,
+} from "./provisional.evaluation.signal.consumer.pipeline.batch.contract";
+export type {
+  ProvisionalEvaluationSignalConsumerPipelineBatchResult,
+  ProvisionalEvaluationSignalConsumerPipelineBatchContractDependencies,
+} from "./provisional.evaluation.signal.consumer.pipeline.batch.contract";
+
+export {
+  Stage1DiagnosticInterpretationContract,
+  createStage1DiagnosticInterpretationContract,
+} from "./stage1.diagnostic.interpretation.contract";
+export type {
+  Stage1RuntimeIndicator,
+  Stage1PrimaryAttribution,
+  Stage1DiagnosticInterpretationInput,
+  Stage1DiagnosticInterpretation,
+  Stage1DiagnosticInterpretationContractDependencies,
+} from "./stage1.diagnostic.interpretation.contract";
+
+export {
+  Stage1DiagnosticInterpretationBatchContract,
+  createStage1DiagnosticInterpretationBatchContract,
+} from "./stage1.diagnostic.interpretation.batch.contract";
+export type {
+  Stage1DiagnosticInterpretationBatchResult,
+  Stage1DiagnosticInterpretationBatchContractDependencies,
+} from "./stage1.diagnostic.interpretation.batch.contract";
+
+export {
+  Stage1DiagnosticPacketContract,
+  createStage1DiagnosticPacketContract,
+} from "./stage1.diagnostic.packet.contract";
+export type {
+  Stage1RecommendedNextMove,
+  Stage1DiagnosticPacketInput,
+  Stage1DiagnosticPacket,
+  Stage1DiagnosticPacketContractDependencies,
+} from "./stage1.diagnostic.packet.contract";
+
+export {
+  Stage1DiagnosticPacketBatchContract,
+  createStage1DiagnosticPacketBatchContract,
+} from "./stage1.diagnostic.packet.batch.contract";
+export type {
+  Stage1DiagnosticPacketBatchResult,
+  Stage1DiagnosticPacketBatchContractDependencies,
+} from "./stage1.diagnostic.packet.batch.contract";
+
 // W4-T12 — PatternDrift Consumer Pipeline Bridge (CP1)
 export {
   PatternDriftConsumerPipelineContract,

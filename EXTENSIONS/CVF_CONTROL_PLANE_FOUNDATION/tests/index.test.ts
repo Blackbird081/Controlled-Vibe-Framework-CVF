@@ -13,6 +13,11 @@ import {
   DesignBatchContract,
   DesignConsumerContract,
   DesignContract,
+  ExternalAssetIntakeProfileContract,
+  WindowsCompatibilityConsumerPipelineBatchContract,
+  WindowsCompatibilityConsumerPipelineContract,
+  WindowsCompatibilityEvaluationBatchContract,
+  WindowsCompatibilityEvaluationContract,
   GatewayAuthBatchContract,
   GatewayAuthContract,
   GatewayConsumerContract,
@@ -23,6 +28,7 @@ import {
   ModelGatewayBoundaryContract,
   OrchestrationBatchContract,
   OrchestrationContract,
+  PlannerTriggerHeuristicsContract,
   ReasoningMode,
   ReversePromptingBatchContract,
   ReversePromptingContract,
@@ -41,6 +47,11 @@ import {
   createControlPlaneEvidenceSurface,
   createControlPlaneFoundationShell,
   createControlPlaneIntakeContract,
+  createExternalAssetIntakeProfileContract,
+  createWindowsCompatibilityConsumerPipelineBatchContract,
+  createWindowsCompatibilityConsumerPipelineContract,
+  createWindowsCompatibilityEvaluationBatchContract,
+  createWindowsCompatibilityEvaluationContract,
   createDesignBatchContract,
   createDesignConsumerContract,
   createDesignContract,
@@ -55,6 +66,7 @@ import {
   createOrchestrationBatchContract,
   createOrchestrationContract,
   createPackagingContract,
+  createPlannerTriggerHeuristicsContract,
   createRetrievalContract,
   createReversePromptingBatchContract,
   createReversePromptingContract,
@@ -261,10 +273,28 @@ describe("CVF_CONTROL_PLANE_FOUNDATION public barrel workflow smoke", () => {
     expect(createClarificationRefinementContract()).toBeInstanceOf(
       ClarificationRefinementContract,
     );
+    expect(createExternalAssetIntakeProfileContract()).toBeInstanceOf(
+      ExternalAssetIntakeProfileContract,
+    );
+    expect(createWindowsCompatibilityEvaluationContract()).toBeInstanceOf(
+      WindowsCompatibilityEvaluationContract,
+    );
+    expect(createWindowsCompatibilityEvaluationBatchContract()).toBeInstanceOf(
+      WindowsCompatibilityEvaluationBatchContract,
+    );
+    expect(createWindowsCompatibilityConsumerPipelineContract()).toBeInstanceOf(
+      WindowsCompatibilityConsumerPipelineContract,
+    );
+    expect(
+      createWindowsCompatibilityConsumerPipelineBatchContract(),
+    ).toBeInstanceOf(WindowsCompatibilityConsumerPipelineBatchContract);
     expect(createOrchestrationBatchContract()).toBeInstanceOf(
       OrchestrationBatchContract,
     );
     expect(createDesignBatchContract()).toBeInstanceOf(DesignBatchContract);
+    expect(createPlannerTriggerHeuristicsContract()).toBeInstanceOf(
+      PlannerTriggerHeuristicsContract,
+    );
     expect(createReversePromptingBatchContract()).toBeInstanceOf(
       ReversePromptingBatchContract,
     );

@@ -14,6 +14,78 @@ export type {
 } from "./intake.contract";
 
 export {
+  ExternalAssetIntakeProfileContract,
+  createExternalAssetIntakeProfileContract,
+} from "./external.asset.intake.profile.contract";
+export type {
+  ExternalAssetSourceKind,
+  ExternalAssetSourceQuality,
+  W7CandidateAssetType,
+  ExternalAssetIntakeProfile,
+  ExternalAssetIntakeValidationIssue,
+  ValidatedExternalAssetIntakeProfile,
+  ExternalAssetIntakeValidationResult,
+} from "./external.asset.intake.profile.contract";
+
+export {
+  ExternalAssetIntakeConsumerPipelineContract,
+  createExternalAssetIntakeConsumerPipelineContract,
+} from "./external.asset.intake.consumer.pipeline.contract";
+export type {
+  ExternalAssetIntakeConsumerPipelineRequest,
+  ExternalAssetIntakeConsumerPipelineResult,
+  ExternalAssetIntakeConsumerPipelineContractDependencies,
+} from "./external.asset.intake.consumer.pipeline.contract";
+
+export {
+  ExternalAssetIntakeConsumerPipelineBatchContract,
+  createExternalAssetIntakeConsumerPipelineBatchContract,
+} from "./external.asset.intake.consumer.pipeline.batch.contract";
+export type {
+  ExternalAssetIntakeConsumerPipelineBatchResult,
+  ExternalAssetIntakeConsumerPipelineBatchContractDependencies,
+} from "./external.asset.intake.consumer.pipeline.batch.contract";
+
+export {
+  WindowsCompatibilityEvaluationContract,
+  createWindowsCompatibilityEvaluationContract,
+} from "./windows.compatibility.evaluation.contract";
+export type {
+  WindowsCompatibilityClassification,
+  WindowsCompatibilityEvaluationRequest,
+  WindowsCompatibilityEvaluationCriteria,
+  WindowsCompatibilityEvaluationResult,
+} from "./windows.compatibility.evaluation.contract";
+
+export {
+  WindowsCompatibilityEvaluationBatchContract,
+  createWindowsCompatibilityEvaluationBatchContract,
+} from "./windows.compatibility.evaluation.batch.contract";
+export type {
+  WindowsCompatibilityEvaluationBatchResult,
+  WindowsCompatibilityEvaluationBatchContractDependencies,
+} from "./windows.compatibility.evaluation.batch.contract";
+
+export {
+  WindowsCompatibilityConsumerPipelineContract,
+  createWindowsCompatibilityConsumerPipelineContract,
+} from "./windows.compatibility.consumer.pipeline.contract";
+export type {
+  WindowsCompatibilityConsumerPipelineRequest,
+  WindowsCompatibilityConsumerPipelineResult,
+  WindowsCompatibilityConsumerPipelineContractDependencies,
+} from "./windows.compatibility.consumer.pipeline.contract";
+
+export {
+  WindowsCompatibilityConsumerPipelineBatchContract,
+  createWindowsCompatibilityConsumerPipelineBatchContract,
+} from "./windows.compatibility.consumer.pipeline.batch.contract";
+export type {
+  WindowsCompatibilityConsumerPipelineBatchResult,
+  WindowsCompatibilityConsumerPipelineBatchContractDependencies,
+} from "./windows.compatibility.consumer.pipeline.batch.contract";
+
+export {
   RetrievalContract,
   createRetrievalContract,
   mapDocument,

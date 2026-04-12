@@ -18,7 +18,7 @@ Memory class: POINTER_RECORD
 > - partially delivered target-state areas
 > - future-facing design principles that still require later governed waves
 
-> **Baseline Tracking Note:** as of `2026-04-07`, this whitepaper keeps the canonical architecture snapshot at `v3.7-W46T1` and refreshes the operational readout through `W59-T1` — reflecting complete consumer pipeline bridge coverage across all four planes, the W7 Governance Integration Wave, all post-W7 continuation deliveries from `W8-T1` through `W54-T1`, all CPF barrel families FULLY CLOSED, the EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED, the MC1-MC5 closure sequence now fully complete, and the latest CPF/EPF/GEF/LPF clean truth (`2929 / 1301 / 625 / 1465`). Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, the quality assessment for post-closure posture, and the handoff for execution rules.
+> **Baseline Tracking Note:** as of `2026-04-12`, this whitepaper keeps the canonical architecture snapshot at `v3.7-W46T1` and refreshes the operational readout through `W59-T1` — reflecting complete consumer pipeline bridge coverage across all four planes, the W7 Governance Integration Wave, all post-W7 continuation deliveries from `W8-T1` through `W54-T1`, all CPF barrel families FULLY CLOSED, the EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED, the MC1-MC5 closure sequence now fully complete, and the latest CPF/EPF/GEF/LPF clean truth (`2929 / 1301 / 625 / 1465`). A post-closure design uplift from `CVF ADDING NEW` was promoted on `2026-04-12` into internal design draft references for W7/CLI surfaces, semantic policy intent, external asset intake, planner trigger heuristics, and provisional evaluation signals; this improves architectural clarity and future quality-evaluation readiness, but does not change the frozen architecture snapshot and does not count as runtime delivery. Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, the quality assessment for post-closure posture, and the handoff for execution rules.
 
 > **Core Principle:** *"Agents may execute tasks, but they cannot control the system that governs them."*
 
@@ -298,7 +298,8 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 | Current active tranche | `NONE — W59-T1 CP1 CLOSED DELIVERED 2026-04-07; MC5 whitepaper canon promotion complete; MC1-MC5 sequence fully complete; no further MC steps; any new work requires fresh GC-018` |
 | Current posture | `CLOSURE-ASSESSED` — CPF **DONE-ready** (MC1); GEF **DONE (6/6)** (MC2); LPF **DONE-ready (7/7)** (MC3); EPF **DONE-ready** (MC4); MC5 whitepaper canon promotion **COMPLETE**; W7 Governance Integration `DONE`; post-W7 continuation `DONE`; all CPF barrel families FULLY CLOSED; EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; EPF Model Gateway + Sandbox Runtime formally deferred (future waves); MC1-MC5 sequence fully complete; continuation readout `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1 / W59-T1` |
 | Required gate before any new implementation | fresh `GC-018` authorization |
-| Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`, `CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`, `AGENT_HANDOFF.md` |
+| Post-closure design uplift | `2026-04-12` promotion complete for internal design draft references: `CVF_W7_CLI_SCHEMA_CONTRACTS.md`, `CVF_W7_CLI_GOVERNANCE_BINDINGS.md`, `CVF_W7_CLI_MVP_SCOPE.md`, `CVF_W7_CLI_WORKSPACE_AND_STATE.md`, `CVF_W7_CLI_COMMAND_SURFACE.md`, `CVF_SEMANTIC_POLICY_INTENT_REGISTRY.md`, `CVF_W7_EXTERNAL_ASSET_INTAKE_PROFILE.md`, `CVF_PLANNER_TRIGGER_HEURISTICS.md`, `CVF_PROVISIONAL_EVALUATION_SIGNAL_CANDIDATES.md`, `CVF_W7_EXTERNAL_ASSET_COMPILER_GUIDE.md`; posture = design/governance uplift only, not runtime delivery |
+| Supporting status docs | `CVF_WHITEPAPER_PROGRESS_TRACKER.md`, `CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`, `CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`, `CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`, `CVF_ADDING_NEW_INDEPENDENT_EVALUATION_2026-04-12.md`, `CVF_ADDING_NEW_IMPLEMENTATION_FOLLOWUP_2026-04-12.md`, `AGENT_HANDOFF.md` |
 
 ### 4.4 Two Multi-Agent Scope Boundaries
 
@@ -310,6 +311,8 @@ CVF now distinguishes two different multi-agent scopes on purpose:
 These two scopes are related, but not interchangeable.
 
 The Boardroom scope is the more critical runtime decision surface because it sits above downstream design/orchestration and therefore shapes what the system is allowed to build next.
+
+The `2026-04-12` post-closure design uplift does not create a third multi-agent scope. It strengthens draft operator surfaces and evaluation aids around existing W7/CLI, planner, and intake pathways only. Ongoing provider-quality validation work, including API-key-based multi-role testing, remains a separate execution stream and must not be conflated with these design-draft promotions.
 
 ---
 

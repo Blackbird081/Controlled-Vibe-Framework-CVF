@@ -41,3 +41,28 @@ export type {
   KnowledgeRankingBatch,
   KnowledgeRankingBatchContractDependencies,
 } from "./knowledge.ranking.batch.contract";
+
+// W72-T1 — StructuralIndexContract
+export {
+  StructuralIndexContract,
+  createStructuralIndexContract,
+} from "./knowledge.structural.index.contract";
+export type {
+  StructuralRelationType,
+  StructuralEntity,
+  StructuralRelation,
+  StructuralIndexRequest,
+  StructuralNeighbor,
+  StructuralIndexResult,
+  StructuralIndexContractDependencies,
+} from "./knowledge.structural.index.contract";
+
+// W72-T1 — StructuralIndexBatchContract
+export {
+  StructuralIndexBatchContract,
+  createStructuralIndexBatchContract,
+} from "./knowledge.structural.index.batch.contract";
+export type {
+  StructuralIndexBatch,
+  StructuralIndexBatchContractDependencies,
+} from "./knowledge.structural.index.batch.contract";

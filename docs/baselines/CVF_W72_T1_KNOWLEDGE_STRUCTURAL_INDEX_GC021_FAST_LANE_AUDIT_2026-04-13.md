@@ -1,6 +1,6 @@
 # CVF Fast Lane Audit — W72-T1 Knowledge Structural Index Enhancement
 
-Memory class: FULL_RECORD
+Memory class: SUMMARY_RECORD
 
 > Decision type: `Fast Lane` additive tranche-local audit
 > Date: 2026-04-13

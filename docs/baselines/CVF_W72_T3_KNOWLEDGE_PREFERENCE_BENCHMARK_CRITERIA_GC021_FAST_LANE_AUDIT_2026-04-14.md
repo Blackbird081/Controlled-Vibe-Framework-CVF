@@ -1,6 +1,6 @@
 # CVF Fast Lane Audit — W72-T3 Knowledge Preference Benchmark Criteria + W7 Vocabulary Enrichment
 
-Memory class: FULL_RECORD
+Memory class: SUMMARY_RECORD
 
 > Decision type: `Fast Lane` additive documentation wave
 > Date: 2026-04-14

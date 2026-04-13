@@ -1,6 +1,6 @@
 # CVF W7 Memory Record — Palace Vocabulary Enrichment Note
 
-Memory class: FULL_RECORD
+Memory class: POINTER_RECORD
 
 > Date: 2026-04-14
 > Tranche: W72-T3

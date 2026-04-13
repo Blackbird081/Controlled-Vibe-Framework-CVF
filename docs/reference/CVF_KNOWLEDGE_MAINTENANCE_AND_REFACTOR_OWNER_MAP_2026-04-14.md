@@ -1,6 +1,6 @@
 # CVF Knowledge Maintenance and Refactor Owner Map
 
-Memory class: FULL_RECORD
+Memory class: POINTER_RECORD
 
 > Date: 2026-04-14
 > Tranche: W72-T2

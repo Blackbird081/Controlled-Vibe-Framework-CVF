@@ -1,6 +1,6 @@
 # CVF GC-018 W72-T4 — Knowledge Compiled Artifact Authorization
 
-Memory class: FULL_RECORD
+Memory class: SUMMARY_RECORD
 
 > Date: 2026-04-14
 > Candidate ID: GC018-W72-T4-KNOWLEDGE-COMPILED-ARTIFACT

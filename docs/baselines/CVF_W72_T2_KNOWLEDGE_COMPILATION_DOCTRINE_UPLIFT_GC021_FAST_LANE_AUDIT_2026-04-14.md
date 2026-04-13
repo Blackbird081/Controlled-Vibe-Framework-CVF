@@ -1,6 +1,6 @@
 # CVF Fast Lane Audit — W72-T2 Knowledge Compilation Doctrine Uplift
 
-Memory class: FULL_RECORD
+Memory class: SUMMARY_RECORD
 
 > Decision type: `Fast Lane` additive documentation wave
 > Date: 2026-04-14

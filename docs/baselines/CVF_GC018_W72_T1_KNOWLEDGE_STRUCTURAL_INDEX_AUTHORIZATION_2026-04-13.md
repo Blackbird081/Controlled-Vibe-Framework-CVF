@@ -1,6 +1,6 @@
 # CVF GC-018 W72-T1 — Knowledge Structural Index Authorization
 
-Memory class: FULL_RECORD
+Memory class: SUMMARY_RECORD
 
 > Date: 2026-04-13
 > Candidate ID: GC018-W72-T1-KNOWLEDGE-STRUCTURAL-INDEX

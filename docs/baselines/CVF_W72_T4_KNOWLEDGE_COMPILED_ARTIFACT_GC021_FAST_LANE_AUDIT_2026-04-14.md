@@ -1,6 +1,6 @@
 # CVF Fast Lane Audit — W72-T4 Knowledge Compiled Artifact Implementation
 
-Memory class: FULL_RECORD
+Memory class: SUMMARY_RECORD
 
 > Decision type: `Fast Lane` additive implementation wave
 > Date: 2026-04-14

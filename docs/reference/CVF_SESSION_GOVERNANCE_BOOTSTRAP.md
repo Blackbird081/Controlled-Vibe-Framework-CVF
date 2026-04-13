@@ -201,6 +201,21 @@ Primary references:
 - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`
 - `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`
 
+### `GC-043` — Knowledge Absorption Priority
+
+Use when:
+
+- evaluating new knowledge from external repos, external skill systems, or post-closure knowledge packets
+- preparing a synthesis-first wave from assessed outside materials
+- deciding whether a repo-derived doctrine input should stay documentation/governance-only or reopen implementation
+
+Primary references:
+
+- `governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`
+- `docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md`
+- `docs/assessments/CVF_EXECUTIVE_VALUE_PRIORITIZATION_NOTE_2026-04-13.md`
+- `docs/roadmaps/CVF_GRAPHIFY_LLM_POWERED_PALACE_SYNTHESIS_ONLY_ROADMAP_2026-04-13.md`
+
 ### `GC-024` — Test Partition Ownership
 
 Use when:
@@ -229,6 +244,7 @@ Use this routing table after reading the always-on bootstrap:
 | drafting or materially revising governed artifacts | `GC-032` + source truth + active roadmap/tranche packet |
 | fresh quality assessment or next-surface selection | `GC-041` + canonical scan registry + active tracker |
 | product-value validation, comparative value proof, or Docker-trigger justification | `GC-042` + frozen corpus/rubric/run-manifest/assessment chain |
+| future knowledge absorption, repo-derived skill intake, or post-closure synthesis-first uplift planning | `GC-043` + knowledge-absorption priority standard + active handoff |
 | touching governed public barrels, barrel smoke tests, shared batch helpers, or canonical summary surfaces | `GC-033` + `GC-034` + `GC-035` + `GC-036` + `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |
@@ -251,6 +267,7 @@ If routing is uncertain:
 3. if pause/transfer ambiguity exists, default to `GC-020`
 4. if continuation/deepening ambiguity exists, default to `GC-018`
 5. if value-proof or Docker-justification ambiguity exists, default to `GC-042`
+6. if repo-derived knowledge or skill uplift ambiguity exists, default to `GC-043`
 
 ## Related Controls
 

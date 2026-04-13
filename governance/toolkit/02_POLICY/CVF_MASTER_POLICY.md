@@ -241,6 +241,13 @@ Personal AI usage unrelated to company work is excluded.
      - Docker sandbox remains deferred-by-default unless this evidence chain or an explicit external requirement produces a real trigger
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_product_value_validation_guard_compat.py`.
+37. `GC-043` future knowledge absorption and repo-derived extension planning must default to doctrine-first / governance-first absorption before implementation-first expansion:
+     - this rule applies to external knowledge intake, repo-derived skill or doctrine uplift, post-closure synthesis waves, and similar packets that try to improve CVF by importing outside patterns
+     - the canonical default is `doctrine-first / governance-first absorption` followed by owner-surface mapping into existing CVF canon and existing CVF owner surfaces
+     - `implementation-first expansion` is forbidden by default and may open only after a fresh operator decision and explicit fresh `GC-018` state
+     - canonical priority authority: `docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md`
+     - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`
+     - automated enforcement reference: `governance/compat/check_knowledge_absorption_priority_compat.py`
 
 ---
 

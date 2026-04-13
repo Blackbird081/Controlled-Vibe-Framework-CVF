@@ -342,6 +342,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_FAST_LANE_GOVERNANCE_GUARD.md | Low-risk additive tranche work | Fast-lane packet and limits must remain truthful |
 | CVF_GOVERNED_FILE_SIZE_GUARD.md | Governed source/test/frontend/docs growth | File stays under threshold or carries approved exception |
 | CVF_MEMORY_GOVERNANCE_GUARD.md | Durable governance records | Correct memory class markers required |
+| CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md | Future knowledge absorption, repo-derived skill intake, or post-closure extension planning | Doctrine-first / governance-first absorption must complete before implementation-first expansion |
 | CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md | Multi-agent intake/rebuttal/decision docs | Canonical review doc chain must be standardized |
 | CVF_PRODUCT_VALUE_VALIDATION_GUARD.md | Product-value proof, comparative validation, or Docker-sandbox justification claims | Frozen corpus + rubric + run manifest + no-spin assessment required |
 | CVF_PROGRESS_TRACKER_SYNC_GUARD.md | Tranche posture change | Canonical tracker and sync note must stay aligned |

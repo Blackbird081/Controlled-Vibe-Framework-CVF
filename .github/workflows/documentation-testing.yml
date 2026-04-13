@@ -263,6 +263,26 @@ jobs:
         run: |
           python governance/compat/check_product_value_validation_guard_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
+  knowledge-absorption-priority-guard:
+    name: Knowledge Absorption Priority Guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-043 knowledge absorption priority guard
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_knowledge_absorption_priority_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
   multi-agent-review-governance:
     name: Multi-Agent Review Governance
     runs-on: ubuntu-latest

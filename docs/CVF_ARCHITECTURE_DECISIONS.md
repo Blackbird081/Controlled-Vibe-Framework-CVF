@@ -1337,3 +1337,50 @@ A **run lane** is now the canonical product-truth unit for validation: one admit
 - `docs/roadmaps/CVF_POST_W64_NEXT_CAPABILITY_WAVE_ROADMAP_2026-04-10.md`
 - `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 - `governance/toolkit/05_OPERATION/CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`
+
+---
+
+## ADR-034: Repo-Derived Knowledge Uplift Must Stay Doctrine-First Before Native Expansion
+| Field | Value |
+|---|---|
+| Date | 2026-04-13 |
+| Status | Active |
+| Branch | `main` |
+| Layer | Governance / Knowledge Intake Doctrine |
+| Related commits | *(local, current GC-043 adoption batch)* |
+
+### Context
+CVF now absorbs more useful outside knowledge from external repos, skill systems, and post-closure synthesis packets than earlier baselines. That creates a new scaling risk: future agents may correctly identify valuable doctrine, but still jump too quickly from `accepted design input` to `native implementation`, creating new surfaces before CVF owner mapping and governance fit are explicit.
+
+The recent `Graphify / LLM-Powered / Palace` lane demonstrated the healthier sequence: synthesis and owner-surface mapping produced more value than implementation would have at that point. That pattern needed to become a governed default rather than a one-off good decision.
+
+### Decision
+Promote knowledge-absorption priority into a governed control. `GC-043` now requires future repo-derived knowledge uplift work to default to:
+
+1. doctrine-first absorption
+2. governance-first absorption
+3. owner-surface mapping into existing CVF canon and existing CVF owner surfaces
+4. only then, if freshly justified and explicitly authorized, bounded implementation
+
+`implementation-first expansion` is forbidden by default unless a fresh operator decision and explicit fresh `GC-018` state reopen it.
+
+### Rationale
+- CVF keeps its core value only if outside knowledge is subordinated to CVF doctrine rather than allowed to redefine it by momentum.
+- Absorption discipline produces narrower, safer, higher-leverage implementation waves later.
+- A repo gate is necessary because handoff and policy text alone do not stop future agents from skipping straight to surface creation.
+- The Graphify lane is the strongest current exemplar of the right sequencing discipline.
+
+### Consequences
+- Future knowledge-absorption roadmaps must explicitly cite the priority standard and preserve implementation-blocking boundaries.
+- Hook-chain and CI now fail if this doctrine/governance-first sequencing drifts out of canonical knowledge-uplift roadmaps.
+- `Graphify / LLM-Powered / Palace` remains the exemplar lane, but not an automatic implementation trigger.
+- CVF can keep absorbing outside knowledge aggressively without weakening the rule that CVF itself remains the governing root.
+
+### Related Files
+- `governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`
+- `governance/compat/check_knowledge_absorption_priority_compat.py`
+- `docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md`
+- `docs/assessments/CVF_EXECUTIVE_VALUE_PRIORITIZATION_NOTE_2026-04-13.md`
+- `docs/roadmaps/CVF_GRAPHIFY_LLM_POWERED_PALACE_SYNTHESIS_ONLY_ROADMAP_2026-04-13.md`
+- `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`

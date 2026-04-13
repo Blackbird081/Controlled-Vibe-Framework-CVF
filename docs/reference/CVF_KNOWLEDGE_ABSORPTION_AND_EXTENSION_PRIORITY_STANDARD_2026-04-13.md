@@ -119,6 +119,8 @@ Without all four, the default priority rule remains active.
 
 The repository should treat the `Graphify / LLM-Powered / Palace` lane as the current best-practice example of this standard in action:
 
+- canonical roadmap: `docs/roadmaps/CVF_GRAPHIFY_LLM_POWERED_PALACE_SYNTHESIS_ONLY_ROADMAP_2026-04-13.md`
+
 - broad intake happened first
 - independent evaluation happened
 - rebuttal and synthesis happened
@@ -137,6 +139,7 @@ Use this standard together with:
 - `AGENT_HANDOFF.md`
 - `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 - `docs/assessments/CVF_EXECUTIVE_VALUE_PRIORITIZATION_NOTE_2026-04-13.md`
+- `docs/roadmaps/CVF_GRAPHIFY_LLM_POWERED_PALACE_SYNTHESIS_ONLY_ROADMAP_2026-04-13.md`
 
 The executive note explains **why** this ordering creates the most value.
 This standard defines the ordering as a **binding default rule**.

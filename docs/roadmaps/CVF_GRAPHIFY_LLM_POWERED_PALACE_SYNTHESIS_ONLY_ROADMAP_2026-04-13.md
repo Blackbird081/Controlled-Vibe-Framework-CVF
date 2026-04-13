@@ -7,6 +7,7 @@ Memory class: SUMMARY_RECORD
 > Baseline: `docs/assessments/CVF_GRAPHIFY_LLM_POWERED_PALACE_FOCUSED_REBUTTAL_ROUND2_2026-04-13.md`
 > Supporting packet: `docs/assessments/CVF_GRAPHIFY_LLM_POWERED_PALACE_ARBITRATION_SYNTHESIS_2026-04-13.md`
 > Authorization posture: `PLANNING-READY / SYNTHESIS-ONLY / NO IMPLEMENTATION`
+> Binding priority standard: `docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md`
 
 ---
 
@@ -73,6 +74,7 @@ Reason:
 2. the packet also agrees that Graphify is valuable as a real-gap enhancement input
 3. the packet rejects direct implementation from current materials
 4. the next safe value-creating move is to distill accepted concepts into one CVF-native synthesis note
+5. this is the canonical exemplar for `doctrine-first / governance-first absorption` before any future `implementation-first expansion`
 
 ---
 
@@ -358,4 +360,3 @@ That means:
 2. do not implement
 3. do not canonize
 4. leave a clean handoff for a later human decision
-

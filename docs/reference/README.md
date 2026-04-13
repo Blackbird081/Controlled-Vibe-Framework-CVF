@@ -74,3 +74,9 @@ Current canonical docs:
 - `CVF_PROVISIONAL_EVALUATION_SIGNAL_CANDIDATES.md` *(internal design draft)*
 - `CVF_W7_EXTERNAL_ASSET_COMPILER_GUIDE.md` *(internal design draft)*
 - `CVF_STAGE1_DIAGNOSTIC_INTERPRETATION_PACKET_TEMPLATE.md`
+
+Current readout note:
+
+- the internal design drafts above are no longer docs-only; a bounded runnable inheritance surface now exists in `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` at `POST /api/governance/external-assets/prepare`
+- this route executes external intake, semantic classification, planner heuristics, provisional signal capture, W7 normalization, registry-ready preparation, and optional Windows compatibility review
+- provider-lane PVV remains a separate paused execution stream and must not be conflated with this bounded inheritance path

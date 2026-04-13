@@ -1,22 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifySessionCookie } from '@/lib/middleware-auth';
 import { prepareExternalAssetGovernance } from '@/lib/server/external-asset-governance';
-import { registerAsset, listRegistryEntries } from '@/lib/server/asset-registry';
+import {
+    registerAsset,
+    listRegistryEntries,
+    getRegistryEntry,
+    findDuplicate,
+} from '@/lib/server/asset-registry';
 
 /**
  * POST /api/governance/external-assets/register
  * Persists a registry_ready governed asset into the governed registry.
  *
- * Security: the route independently re-derives workflowStatus by running the
- * full governance pipeline on the submitted profile. Callers cannot self-declare
- * approvalState; the pipeline is the authority. Only assets that the server
- * independently classifies as workflowStatus === 'registry_ready' are persisted.
+ * Security: re-derives workflowStatus server-side via the full governance pipeline.
+ * Callers cannot self-declare approvalState — the pipeline is the authority.
+ *
+ * Duplicate policy: source_ref + candidate_asset_type is the logical identity key.
+ * A second registration of the same logical asset returns 409 with the existing entry.
  *
  * Body: ExternalAssetGovernanceRequest (same shape as /prepare)
  * Returns: { success: true, entry: AssetRegistryEntry }
  *
  * GET /api/governance/external-assets/register
- * Lists all registered governed assets (auditable registry read).
+ * Without query params: list all registered governed assets.
+ * With ?id=<uuid>: return a single entry detail (404 if not found).
  */
 
 function checkServiceToken(request: NextRequest): boolean {
@@ -64,11 +71,23 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // governedAsset is guaranteed present when registryReady.valid === true,
-        // which is required for workflowStatus === 'registry_ready'.
-        const { governedAsset } = result.registryReady;
+        // CP1 — Duplicate gate: source_ref + candidate_asset_type must be unique.
+        // First registration wins; repeat registrations of the same logical asset
+        // are rejected with 409 and the existing entry is returned for reference.
         const profile = result.intake.normalizedProfile;
+        const existing = findDuplicate(profile.source_ref, profile.candidate_asset_type);
+        if (existing) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: `Asset already registered: source_ref "${profile.source_ref}" + candidate_asset_type "${profile.candidate_asset_type}" already exists in the governed registry`,
+                    existingEntry: existing,
+                },
+                { status: 409 },
+            );
+        }
 
+        const { governedAsset } = result.registryReady;
         const entry = registerAsset({
             source_ref: governedAsset?.source_ref ?? profile.source_ref,
             candidate_asset_type: governedAsset?.asset_type ?? profile.candidate_asset_type,
@@ -97,6 +116,21 @@ export async function GET(request: NextRequest) {
                 { success: false, error: 'Unauthorized: please login.' },
                 { status: 401 },
             );
+        }
+
+        // CP2 — Detail query: ?id=<uuid> returns a single entry.
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
+
+        if (id) {
+            const entry = getRegistryEntry(id);
+            if (!entry) {
+                return NextResponse.json(
+                    { success: false, error: `Registry entry not found: ${id}` },
+                    { status: 404 },
+                );
+            }
+            return NextResponse.json({ success: true, entry });
         }
 
         const entries = listRegistryEntries();

@@ -94,3 +94,19 @@ export function listRegistryEntries(): AssetRegistryEntry[] {
 export function getRegistryEntry(id: string): AssetRegistryEntry | null {
     return listRegistryEntries().find((e) => e.id === id) ?? null;
 }
+
+/**
+ * Duplicate detection key: source_ref + candidate_asset_type.
+ * The same logical asset (same source path, same type) may only be registered once.
+ * Returns the existing entry if found, null otherwise.
+ */
+export function findDuplicate(
+    sourceRef: string,
+    candidateAssetType: string,
+): AssetRegistryEntry | null {
+    return (
+        listRegistryEntries().find(
+            (e) => e.source_ref === sourceRef && e.candidate_asset_type === candidateAssetType,
+        ) ?? null
+    );
+}

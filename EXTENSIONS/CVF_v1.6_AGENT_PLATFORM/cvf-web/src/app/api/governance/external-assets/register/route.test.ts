@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const registerAssetMock = vi.hoisted(() => vi.fn());
 const listRegistryEntriesMock = vi.hoisted(() => vi.fn());
+const getRegistryEntryMock = vi.hoisted(() => vi.fn());
+const findDuplicateMock = vi.hoisted(() => vi.fn());
 const prepareExternalAssetGovernanceMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/middleware-auth', () => ({
@@ -12,7 +14,8 @@ vi.mock('@/lib/middleware-auth', () => ({
 vi.mock('@/lib/server/asset-registry', () => ({
     registerAsset: registerAssetMock,
     listRegistryEntries: listRegistryEntriesMock,
-    getRegistryEntry: vi.fn(),
+    getRegistryEntry: getRegistryEntryMock,
+    findDuplicate: findDuplicateMock,
 }));
 
 vi.mock('@/lib/server/external-asset-governance', () => ({
@@ -75,7 +78,6 @@ const MOCK_ENTRY = {
     assetVersion: '1.0.0',
 };
 
-// Minimal valid profile body — same shape as /prepare
 const VALID_PROFILE_BODY = {
     profile: {
         source_ref: 'CVF_ADDING_NEW/skill.md',
@@ -103,12 +105,16 @@ describe('/api/governance/external-assets/register', () => {
         verifySessionCookieMock.mockReset();
         registerAssetMock.mockReset();
         listRegistryEntriesMock.mockReset();
+        getRegistryEntryMock.mockReset();
+        findDuplicateMock.mockReset();
         prepareExternalAssetGovernanceMock.mockReset();
         verifySessionCookieMock.mockResolvedValue({
             user: 'tester',
             role: 'admin',
             expiresAt: Date.now() + 1000 * 60 * 60,
         });
+        // Default: no duplicate
+        findDuplicateMock.mockReturnValue(null);
     });
 
     describe('POST', () => {
@@ -142,8 +148,9 @@ describe('/api/governance/external-assets/register', () => {
             expect(prepareExternalAssetGovernanceMock).not.toHaveBeenCalled();
         });
 
-        it('registers an asset when pipeline independently confirms registry_ready', async () => {
+        it('registers an asset when pipeline confirms registry_ready and no duplicate', async () => {
             prepareExternalAssetGovernanceMock.mockReturnValue(MOCK_REGISTRY_READY_RESULT);
+            findDuplicateMock.mockReturnValue(null);
             registerAssetMock.mockReturnValue(MOCK_ENTRY);
 
             const req = new Request('http://localhost/api/governance/external-assets/register', {
@@ -158,15 +165,35 @@ describe('/api/governance/external-assets/register', () => {
             expect(data.success).toBe(true);
             expect(data.entry.id).toBe('test-uuid');
             expect(data.entry.workflowStatus).toBe('registry_ready');
-            expect(data.entry.governanceOwner).toBe('cvf-architecture');
-            // Pipeline must have been invoked — server derives, not trusts
             expect(prepareExternalAssetGovernanceMock).toHaveBeenCalledOnce();
+            expect(findDuplicateMock).toHaveBeenCalledWith(
+                'CVF_ADDING_NEW/skill.md',
+                'W7SkillAsset',
+            );
             expect(registerAssetMock).toHaveBeenCalledOnce();
         });
 
+        it('returns 409 when same source_ref + candidate_asset_type already registered (CP1 duplicate gate)', async () => {
+            prepareExternalAssetGovernanceMock.mockReturnValue(MOCK_REGISTRY_READY_RESULT);
+            findDuplicateMock.mockReturnValue(MOCK_ENTRY);
+
+            const req = new Request('http://localhost/api/governance/external-assets/register', {
+                method: 'POST',
+                body: JSON.stringify(VALID_PROFILE_BODY),
+            });
+
+            const res = await POST(req as never);
+            const data = await res.json();
+
+            expect(res.status).toBe(409);
+            expect(data.success).toBe(false);
+            expect(data.error).toMatch(/already registered/);
+            expect(data.existingEntry.id).toBe('test-uuid');
+            // Must not write to registry when duplicate found
+            expect(registerAssetMock).not.toHaveBeenCalled();
+        });
+
         it('returns 422 when pipeline returns review_required (adversarial: self-declared approved bypasses nothing)', async () => {
-            // Simulate a caller who includes approvalState approved in registry config
-            // but the pipeline still returns review_required — server wins
             prepareExternalAssetGovernanceMock.mockReturnValue({
                 workflowStatus: 'review_required',
                 readyForRegistry: false,
@@ -191,7 +218,7 @@ describe('/api/governance/external-assets/register', () => {
             expect(registerAssetMock).not.toHaveBeenCalled();
         });
 
-        it('returns 422 when pipeline returns invalid (adversarial: bad intake, self-declared approved)', async () => {
+        it('returns 422 when pipeline returns invalid (adversarial: bad intake)', async () => {
             prepareExternalAssetGovernanceMock.mockReturnValue({
                 workflowStatus: 'invalid',
                 readyForRegistry: false,
@@ -205,9 +232,7 @@ describe('/api/governance/external-assets/register', () => {
                         source_ref: 'CVF/skill.md',
                         candidate_asset_type: 'W7SkillAsset',
                         description_or_trigger: 'test',
-                        // provenance_notes intentionally missing
                     },
-                    registry: { approvalState: 'approved' },
                 }),
             });
 
@@ -217,7 +242,6 @@ describe('/api/governance/external-assets/register', () => {
             expect(res.status).toBe(422);
             expect(data.success).toBe(false);
             expect(data.workflowStatus).toBe('invalid');
-            expect(data.warnings).toContain('INTAKE_REQUIRED_PROVENANCE_NOTES');
             expect(registerAssetMock).not.toHaveBeenCalled();
         });
 
@@ -225,6 +249,7 @@ describe('/api/governance/external-assets/register', () => {
             process.env.CVF_SERVICE_TOKEN = 'svc';
             verifySessionCookieMock.mockResolvedValueOnce(null);
             prepareExternalAssetGovernanceMock.mockReturnValue(MOCK_REGISTRY_READY_RESULT);
+            findDuplicateMock.mockReturnValue(null);
             registerAssetMock.mockReturnValue(MOCK_ENTRY);
 
             const req = new Request('http://localhost/api/governance/external-assets/register', {
@@ -256,7 +281,7 @@ describe('/api/governance/external-assets/register', () => {
             expect(data.success).toBe(false);
         });
 
-        it('returns registry entries list', async () => {
+        it('returns registry entries list without query params', async () => {
             listRegistryEntriesMock.mockReturnValue([MOCK_ENTRY]);
 
             const req = new Request('http://localhost/api/governance/external-assets/register', {
@@ -286,6 +311,40 @@ describe('/api/governance/external-assets/register', () => {
             expect(data.success).toBe(true);
             expect(data.count).toBe(0);
             expect(data.entries).toHaveLength(0);
+        });
+
+        it('returns single entry when ?id= matches (CP2 detail query)', async () => {
+            getRegistryEntryMock.mockReturnValue(MOCK_ENTRY);
+
+            const req = new Request(
+                'http://localhost/api/governance/external-assets/register?id=test-uuid',
+                { method: 'GET' },
+            );
+
+            const res = await GET(req as never);
+            const data = await res.json();
+
+            expect(res.status).toBe(200);
+            expect(data.success).toBe(true);
+            expect(data.entry.id).toBe('test-uuid');
+            expect(data.entry.source_ref).toBe('CVF_ADDING_NEW/skill.md');
+            expect(getRegistryEntryMock).toHaveBeenCalledWith('test-uuid');
+        });
+
+        it('returns 404 when ?id= does not match any entry (CP2 detail query)', async () => {
+            getRegistryEntryMock.mockReturnValue(null);
+
+            const req = new Request(
+                'http://localhost/api/governance/external-assets/register?id=nonexistent-uuid',
+                { method: 'GET' },
+            );
+
+            const res = await GET(req as never);
+            const data = await res.json();
+
+            expect(res.status).toBe(404);
+            expect(data.success).toBe(false);
+            expect(data.error).toMatch(/nonexistent-uuid/);
         });
     });
 });

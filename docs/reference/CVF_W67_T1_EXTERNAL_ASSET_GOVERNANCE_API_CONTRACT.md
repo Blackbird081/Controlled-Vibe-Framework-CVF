@@ -236,13 +236,29 @@ Returned when the server re-derives `workflowStatus !== 'registry_ready'`. The c
 }
 ```
 
+### Response — 409 Conflict (duplicate asset)
+
+Returned when `source_ref` + `candidate_asset_type` already exists in the registry.
+The existing entry is included so the caller can inspect it without re-querying.
+
+```jsonc
+{
+  "success": false,
+  "error": "Asset already registered: source_ref \"CVF_ADDING_NEW/skill.md\" + candidate_asset_type \"W7SkillAsset\" already exists in the governed registry",
+  "existingEntry": { ...AssetRegistryEntry }
+}
+```
+
+**Duplicate policy**: `source_ref` + `candidate_asset_type` is the logical identity key.
+First registration wins. To update, the existing entry must first be retired (future scope).
+
 ---
 
 ## GET `/api/governance/external-assets/register`
 
-Returns all registered governed assets (auditable registry read).
+List all registered governed assets, or fetch a single entry by id.
 
-### Response — 200 OK
+### Without query params — list all
 
 ```jsonc
 {
@@ -253,6 +269,16 @@ Returns all registered governed assets (auditable registry read).
     { ...AssetRegistryEntry }
   ]
 }
+```
+
+### With `?id=<uuid>` — single entry detail
+
+```jsonc
+// 200 OK
+{ "success": true, "entry": { ...AssetRegistryEntry } }
+
+// 404 Not Found
+{ "success": false, "error": "Registry entry not found: <uuid>" }
 ```
 
 ---

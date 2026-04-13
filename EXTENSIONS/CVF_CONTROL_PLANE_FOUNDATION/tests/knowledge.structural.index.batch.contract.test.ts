@@ -7,7 +7,7 @@ import {
 import type { StructuralIndexRequest } from "../src/knowledge.structural.index.contract";
 import { FIXED_BATCH_NOW } from "./helpers/cpf.batch.contract.fixtures";
 
-// ─── W72-T1 CP1: StructuralIndexBatchContract ────────────────────────────────
+// ─── W72-T1 CP2: StructuralIndexBatchContract ────────────────────────────────
 
 function makeRequest(
   contextId: string,
@@ -192,6 +192,43 @@ describe("StructuralIndexBatchContract — determinism", () => {
   it("batchId always differs from batchHash", () => {
     const result = makeBatchContract().batch([makeRequest("ctx-1")]);
     expect(result.batchId).not.toBe(result.batchHash);
+  });
+});
+
+// --- hash variance by structural content ---
+
+describe("StructuralIndexBatchContract — hash variance by structural content", () => {
+  it("produces different batchHash when entity IDs differ (same totalIndexed and dominantNeighborCount)", () => {
+    const reqA = makeRequest("ctx-1");
+    const reqB: StructuralIndexRequest = {
+      contextId: "ctx-1",
+      entities: [
+        { entityId: "X", label: "Label-X" },
+        { entityId: "Y", label: "Label-Y" },
+        { entityId: "Z", label: "Label-Z" },
+      ],
+      relations: [
+        { fromId: "X", toId: "Y", relationType: "depends_on" },
+        { fromId: "Y", toId: "Z", relationType: "related_to" },
+      ],
+      queryEntityId: "X",
+    };
+    const r1 = makeBatchContract().batch([reqA]);
+    const r2 = makeBatchContract().batch([reqB]);
+    expect(r1.totalIndexed).toBe(r2.totalIndexed);
+    expect(r1.dominantNeighborCount).toBe(r2.dominantNeighborCount);
+    expect(r1.batchHash).not.toBe(r2.batchHash);
+  });
+
+  it("produces different batchHash when relation types differ (same totalIndexed and dominantNeighborCount)", () => {
+    const r1 = makeBatchContract().batch([
+      makeRequest("ctx-1", { relations: [{ fromId: "A", toId: "B", relationType: "depends_on" }, { fromId: "B", toId: "C", relationType: "related_to" }] }),
+    ]);
+    const r2 = makeBatchContract().batch([
+      makeRequest("ctx-1", { relations: [{ fromId: "A", toId: "B", relationType: "extends" }, { fromId: "B", toId: "C", relationType: "supersedes" }] }),
+    ]);
+    expect(r1.totalIndexed).toBe(r2.totalIndexed);
+    expect(r1.batchHash).not.toBe(r2.batchHash);
   });
 });
 

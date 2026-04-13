@@ -48,12 +48,14 @@ export class StructuralIndexBatchContract {
         ? 0
         : Math.max(...results.map((r) => r.neighbors.length));
 
+    const resultHashesSig = results.map((r) => r.indexHash).join(",");
     const { batchHash, batchId } = createDeterministicBatchIdentity({
-      batchSeed: "w72-t1-cp1-structural-index-batch",
-      batchIdSeed: "w72-t1-cp1-structural-index-batch-id",
+      batchSeed: "w72-t1-cp2-structural-index-batch",
+      batchIdSeed: "w72-t1-cp2-structural-index-batch-id",
       hashParts: [
         `${createdAt}:total:${totalIndexed}`,
         `dominantNeighborCount:${dominantNeighborCount}`,
+        `resultHashes:[${resultHashesSig}]`,
       ],
     });
 

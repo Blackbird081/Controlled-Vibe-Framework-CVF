@@ -125,16 +125,36 @@ export class StructuralIndexContract {
       a.depth !== b.depth ? a.depth - b.depth : a.entityId.localeCompare(b.entityId),
     );
 
+    // Build deterministic structural content signatures bound to actual graph content
+    const entitiesSig = [...request.entities]
+      .sort((a, b) => a.entityId.localeCompare(b.entityId))
+      .map((e) => e.entityId)
+      .join(",");
+    const relationsSig = [...request.relations]
+      .sort((a, b) => {
+        const c = a.fromId.localeCompare(b.fromId);
+        if (c !== 0) return c;
+        const c2 = a.toId.localeCompare(b.toId);
+        if (c2 !== 0) return c2;
+        return a.relationType.localeCompare(b.relationType);
+      })
+      .map((r) => `${r.fromId}:${r.toId}:${r.relationType}`)
+      .join(",");
+    const neighborsSig = neighbors
+      .map((n) => `${n.entityId}:${n.relationType}:${n.depth}`)
+      .join(",");
+
     const indexHash = computeDeterministicHash(
-      "w72-t1-cp1-structural-index",
+      "w72-t1-cp2-structural-index",
       `${indexedAt}:${request.contextId}`,
       `query:${request.queryEntityId}:depth:${maxDepth}`,
-      `entities:${request.entities.length}:relations:${request.relations.length}`,
-      `neighbors:${neighbors.length}`,
+      `entities:[${entitiesSig}]`,
+      `relations:[${relationsSig}]`,
+      `neighbors:[${neighborsSig}]`,
     );
 
     const resultId = computeDeterministicHash(
-      "w72-t1-cp1-structural-index-result-id",
+      "w72-t1-cp2-structural-index-result-id",
       indexHash,
       indexedAt,
     );

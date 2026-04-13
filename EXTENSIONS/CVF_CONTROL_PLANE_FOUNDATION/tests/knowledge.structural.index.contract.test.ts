@@ -7,7 +7,7 @@ import {
   type StructuralRelation,
 } from "../src/knowledge.structural.index.contract";
 
-// ─── W72-T1 CP1: StructuralIndexContract ─────────────────────────────────────
+// ─── W72-T1 CP2: StructuralIndexContract ─────────────────────────────────────
 
 const FIXED_NOW = "2026-04-13T00:00:00.000Z";
 
@@ -39,7 +39,7 @@ function makeRequest(overrides: Partial<StructuralIndexRequest> = {}): Structura
 
 // --- factory ---
 
-describe("W72-T1 CP1: StructuralIndexContract — factory", () => {
+describe("W72-T1 CP2: StructuralIndexContract — factory", () => {
   it("createStructuralIndexContract returns a StructuralIndexContract instance", () => {
     expect(createStructuralIndexContract()).toBeInstanceOf(StructuralIndexContract);
   });
@@ -53,7 +53,7 @@ describe("W72-T1 CP1: StructuralIndexContract — factory", () => {
 
 // --- output shape ---
 
-describe("W72-T1 CP1: StructuralIndexContract — output shape", () => {
+describe("W72-T1 CP2: StructuralIndexContract — output shape", () => {
   it("result has all required fields", () => {
     const result = makeContract().index(makeRequest());
     expect(result).toHaveProperty("resultId");
@@ -111,7 +111,7 @@ describe("W72-T1 CP1: StructuralIndexContract — output shape", () => {
 
 // --- basic traversal ---
 
-describe("W72-T1 CP1: StructuralIndexContract — basic traversal", () => {
+describe("W72-T1 CP2: StructuralIndexContract — basic traversal", () => {
   it("returns direct neighbor at depth 1 (default)", () => {
     const result = makeContract().index(makeRequest({ queryEntityId: "A" }));
     expect(result.neighbors).toHaveLength(1);
@@ -151,7 +151,7 @@ describe("W72-T1 CP1: StructuralIndexContract — basic traversal", () => {
 
 // --- neighbor fields ---
 
-describe("W72-T1 CP1: StructuralIndexContract — neighbor fields", () => {
+describe("W72-T1 CP2: StructuralIndexContract — neighbor fields", () => {
   it("neighbor includes entityId, label, relationType, depth", () => {
     const result = makeContract().index(makeRequest({ queryEntityId: "A" }));
     const n = result.neighbors[0];
@@ -178,7 +178,7 @@ describe("W72-T1 CP1: StructuralIndexContract — neighbor fields", () => {
 
 // --- relation types ---
 
-describe("W72-T1 CP1: StructuralIndexContract — relation types", () => {
+describe("W72-T1 CP2: StructuralIndexContract — relation types", () => {
   it("supports depends_on relation type", () => {
     const result = makeContract().index(
       makeRequest({ relations: [makeRelation("A", "B", "depends_on")] }),
@@ -210,7 +210,7 @@ describe("W72-T1 CP1: StructuralIndexContract — relation types", () => {
 
 // --- edge cases ---
 
-describe("W72-T1 CP1: StructuralIndexContract — edge cases", () => {
+describe("W72-T1 CP2: StructuralIndexContract — edge cases", () => {
   it("returns empty neighbors for empty entities and relations", () => {
     const result = makeContract().index({
       contextId: "ctx-empty",
@@ -289,7 +289,7 @@ describe("W72-T1 CP1: StructuralIndexContract — edge cases", () => {
 
 // --- determinism ---
 
-describe("W72-T1 CP1: StructuralIndexContract — determinism", () => {
+describe("W72-T1 CP2: StructuralIndexContract — determinism", () => {
   it("produces same indexHash for same request and same timestamp", () => {
     const r1 = makeContract().index(makeRequest());
     const r2 = makeContract().index(makeRequest());
@@ -315,6 +315,52 @@ describe("W72-T1 CP1: StructuralIndexContract — determinism", () => {
     const r2 = makeContract().index(
       makeRequest({ queryEntityId: "B", maxDepth: 2 }),
     );
+    expect(r1.indexHash).not.toBe(r2.indexHash);
+  });
+});
+
+// --- hash variance by structural content ---
+
+describe("W72-T1 CP2: StructuralIndexContract — hash variance by structural content", () => {
+  it("produces different indexHash when entity IDs differ (same counts)", () => {
+    const r1 = makeContract().index(makeRequest());
+    const r2 = makeContract().index({
+      contextId: "ctx-default",
+      entities: makeEntities(["X", "Y", "Z"]),
+      relations: [makeRelation("X", "Y"), makeRelation("Y", "Z")],
+      queryEntityId: "X",
+    });
+    expect(r1.totalEntities).toBe(r2.totalEntities);
+    expect(r1.totalRelations).toBe(r2.totalRelations);
+    expect(r1.indexHash).not.toBe(r2.indexHash);
+  });
+
+  it("produces different indexHash when relation type differs (same entity IDs and counts)", () => {
+    const r1 = makeContract().index(
+      makeRequest({ relations: [makeRelation("A", "B", "depends_on")] }),
+    );
+    const r2 = makeContract().index(
+      makeRequest({ relations: [makeRelation("A", "B", "extends")] }),
+    );
+    expect(r1.totalRelations).toBe(r2.totalRelations);
+    expect(r1.indexHash).not.toBe(r2.indexHash);
+  });
+
+  it("produces different indexHash when neighbor content differs (same neighbor count)", () => {
+    const entities = makeEntities(["A", "B", "C", "D"]);
+    const r1 = makeContract().index({
+      contextId: "ctx-hash-var",
+      entities,
+      relations: [makeRelation("A", "B"), makeRelation("A", "C")],
+      queryEntityId: "A",
+    });
+    const r2 = makeContract().index({
+      contextId: "ctx-hash-var",
+      entities,
+      relations: [makeRelation("A", "C"), makeRelation("A", "D")],
+      queryEntityId: "A",
+    });
+    expect(r1.neighbors.length).toBe(r2.neighbors.length);
     expect(r1.indexHash).not.toBe(r2.indexHash);
   });
 });

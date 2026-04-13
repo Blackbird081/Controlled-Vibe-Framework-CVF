@@ -18,7 +18,9 @@
   "dependencies": {
     "better-sqlite3": "^12.6.2",
     "clsx": "^2.1.1",
+    "cvf-control-plane-foundation": "file:../../CVF_CONTROL_PLANE_FOUNDATION",
     "cvf-guard-contract": "file:../../CVF_GUARD_CONTRACT",
+    "cvf-learning-plane-foundation": "file:../../CVF_LEARNING_PLANE_FOUNDATION",
     "docx": "^9.5.2",
     "driver.js": "^1.4.0",
     "file-saver": "^2.0.5",

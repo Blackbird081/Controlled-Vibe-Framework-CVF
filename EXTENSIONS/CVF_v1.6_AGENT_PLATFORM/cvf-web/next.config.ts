@@ -32,7 +32,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['cvf-guard-contract'],
+  transpilePackages: [
+    'cvf-guard-contract',
+    'cvf-control-plane-foundation',
+    'cvf-learning-plane-foundation',
+  ],
   async headers() {
     return [
       {

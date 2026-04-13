@@ -136,14 +136,24 @@ export default function ExternalAssetsPage() {
     const [registryLoading, setRegistryLoading] = useState(false);
     // W70-T1: filter + retire state
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+    const [sourceRefFilter, setSourceRefFilter] = useState<string>('');
+    const [assetTypeFilter, setAssetTypeFilter] = useState<string>('');
     const [retireLoadingId, setRetireLoadingId] = useState<string | null>(null);
     const [retireError, setRetireError] = useState<string | null>(null);
 
-    const loadRegistry = useCallback(async (filter: StatusFilter = 'all') => {
+    const loadRegistry = useCallback(async (
+        status: StatusFilter = 'all',
+        sourceRef: string = '',
+        assetType: string = '',
+    ) => {
         setRegistryLoading(true);
         setRetireError(null);
         try {
-            const params = filter !== 'all' ? `?status=${filter}` : '';
+            const q = new URLSearchParams();
+            if (status !== 'all') q.set('status', status);
+            if (sourceRef.trim()) q.set('source_ref', sourceRef.trim());
+            if (assetType.trim()) q.set('candidate_asset_type', assetType.trim());
+            const params = q.toString() ? `?${q.toString()}` : '';
             const res = await fetch(`/api/governance/external-assets/register${params}`);
             const json = await res.json();
             if (json.success) setRegistryEntries(json.entries as RegistryEntry[]);
@@ -155,8 +165,8 @@ export default function ExternalAssetsPage() {
     }, []);
 
     useEffect(() => {
-        if (activeTab === 'registry') loadRegistry(statusFilter);
-    }, [activeTab, loadRegistry, statusFilter]);
+        if (activeTab === 'registry') loadRegistry(statusFilter, sourceRefFilter, assetTypeFilter);
+    }, [activeTab, loadRegistry, statusFilter, sourceRefFilter, assetTypeFilter]);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -226,8 +236,8 @@ export default function ExternalAssetsPage() {
             });
             const json = await res.json();
             if (!json.success) throw new Error(json.error ?? 'Retirement failed');
-            // Read-after-write: refresh the list with the current filter
-            await loadRegistry(statusFilter);
+            // Read-after-write: refresh the list with the current filters
+            await loadRegistry(statusFilter, sourceRefFilter, assetTypeFilter);
         } catch (err) {
             setRetireError(err instanceof Error ? err.message : 'Retirement failed');
         } finally {
@@ -531,13 +541,11 @@ export default function ExternalAssetsPage() {
             {activeTab === 'registry' && (
                 <div className="space-y-4">
                     {/* W70-T1: filter + refresh controls */}
-                    <div className="flex items-center justify-between gap-4 flex-wrap">
-                        <div className="flex items-center gap-2">
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                                Governed assets registered through the preparation pipeline.
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-2">
+                    <div className="space-y-2">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Governed assets registered through the preparation pipeline.
+                        </p>
+                        <div className="flex flex-wrap items-center gap-2">
                             <label htmlFor="status_filter" className="text-xs font-medium text-gray-600 dark:text-gray-400 shrink-0">
                                 Status:
                             </label>
@@ -551,9 +559,23 @@ export default function ExternalAssetsPage() {
                                 <option value="active">Active only</option>
                                 <option value="retired">Retired only</option>
                             </select>
+                            <input
+                                type="text"
+                                placeholder="Filter by source ref…"
+                                value={sourceRefFilter}
+                                onChange={(e) => setSourceRefFilter(e.target.value)}
+                                className="rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-2 py-1 text-xs text-gray-900 dark:text-white w-44"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Filter by asset type…"
+                                value={assetTypeFilter}
+                                onChange={(e) => setAssetTypeFilter(e.target.value)}
+                                className="rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-2 py-1 text-xs text-gray-900 dark:text-white w-44"
+                            />
                             <button
                                 type="button"
-                                onClick={() => loadRegistry(statusFilter)}
+                                onClick={() => loadRegistry(statusFilter, sourceRefFilter, assetTypeFilter)}
                                 disabled={registryLoading}
                                 className="text-xs px-3 py-1.5 rounded border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
                             >

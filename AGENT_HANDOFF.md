@@ -144,6 +144,33 @@ Current guidance:
 - **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
 - **Post-MC5 Continuation Strategy**: **ALL 6 ACTIONABLE TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅, Track 5A: Model Gateway ✅, Track 5B: Sandbox Runtime ✅)
 - **Next recommended**: `W71-T1 Post-Closure Knowledge Native Adoption` is **CLOSED DELIVERED 2026-04-13**. The governed registry lane (W67→W71) and the native adoption wave are all fully closed. No further work is queued; the next bounded wave must be defined by a fresh operator decision and explicit GC-018 authorization targeting a new surface.
+- **Executive value-prioritization note for future knowledge uplift**: before opening any fresh post-W71 uplift wave, read `docs/assessments/CVF_EXECUTIVE_VALUE_PRIORITIZATION_NOTE_2026-04-13.md`. Current highest-leverage recommendation: choose one more `doctrine/governance-first` absorption wave for accepted new knowledge before opening new implementation/runtime surfaces.
+- **Graphify / LLM-Powered / Palace assessment lane is now assessment-complete and synthesis-complete at documentation scope**: do not re-audit the 3 source folders by default. Front-door read order for any future agent touching this lane is now:
+  1. `docs/assessments/CVF_GRAPHIFY_LLM_POWERED_PALACE_CVF_NATIVE_SYNTHESIS_NOTE_2026-04-13.md`
+  2. `docs/assessments/CVF_GRAPHIFY_LLM_POWERED_PALACE_PROMOTION_AND_REJECTION_MAP_2026-04-13.md`
+  3. `docs/assessments/CVF_GRAPHIFY_LLM_POWERED_PALACE_FOCUSED_REBUTTAL_ROUND2_2026-04-13.md`
+  4. `docs/roadmaps/CVF_GRAPHIFY_LLM_POWERED_PALACE_SYNTHESIS_ONLY_ROADMAP_2026-04-13.md`
+  Only reopen the older assessment/rebuttal chain if a new factual contradiction appears.
+- **Accepted distilled value from this lane**: `LLM-Powered` contributes the main doctrine (`Ingest -> Compile -> Govern -> Query -> Maintain -> Refactor`), `Graphify` contributes a real `structural index` enhancement candidate for `Knowledge Layer`, and `Palace` contributes governed memory-routing vocabulary only. No new architecture surface, no new guard family, no CLI/runtime surface, and no Palace code promotion were accepted.
+- **Next-agent boundary for this lane**: the next uplift step, if explicitly chosen by the operator, must stay in a **CVF-native doctrine/governance documentation lane first**. Allowed scope:
+  - refine CVF-native docs that absorb the agreed value into existing owner surfaces
+  - prepare a fresh bounded decision packet for a future doctrine/governance wave
+  - sharpen owner mapping, dedup terminology, and future reopen conditions
+  Not allowed without fresh authorization:
+  - code changes
+  - runtime changes
+  - CLI reopening
+  - whitepaper canon edits
+  - new guard families
+  - direct implementation from the 3 source folders
+- **Required sequence if this lane is reopened for real uplift**:
+  1. Use the synthesis note and promotion/rejection map as the intake packet; do not start from the 3 source folders.
+  2. Decide whether the intended wave is `doctrine/governance` or `implementation-capability`.
+  3. For `doctrine/governance` waves, start from `LLM-Powered` policy material first.
+  4. For `implementation-capability` waves, do not proceed unless a fresh `GC-018` is issued; if issued, `Graphify` structural-index enhancement is the first implementation candidate, still as `Knowledge Layer` enhancement only.
+  5. Keep the no-new-surface rule explicit: `Graph Memory Layer`, `Persistent Wiki`, `MemPalace Runtime`, `G-GM-*` guard family, and CLI command families remain rejected/deferred unless a future bounded wave proves otherwise.
+  6. Before any future promotion into canon or implementation, rerun a narrow structural audit against the synthesis note rather than re-litigating the whole packet.
+- **Human decision point retained**: the packet is now ready for either archive-only closure or a future bounded CVF-native uplift decision. Agents must not choose between those paths on their own.
 - **Historical W71 authorization anchor**: `CVF ADDING NEW` Stage 1 helper implementation was explicitly authorized by the operator on `2026-04-12` via `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_ADDING_NEW_STAGE1_IMPLEMENTATION_2026-04-12.md`. This is retained as provenance for the absorbed-knowledge wave; it is not an active tranche anymore.
 - **Windows normalization curation promoted carefully**: `Windows_Skill_Normalization` material was reviewed, rebutted, and partially synthesized on `2026-04-12` into W7 intake/reference docs only. Promoted value is limited to `execution_environment` enrichment, Windows compatibility review, and a PowerShell reference appendix. This does not alter provider lanes, sandbox posture, or the now-paused PVV API-key test stream.
 - **Diagnostic readout bridge retained for future reopen**: if a future API-key-based readout later needs Stage 1 interpretation, use `docs/reference/CVF_STAGE1_DIAGNOSTIC_INTERPRETATION_PACKET_TEMPLATE.md` together with `docs/assessments/CVF_ADDING_NEW_STAGE1_DIAGNOSTIC_BRIDGE_2026-04-12.md`. Runtime/provider evidence still leads; Stage 1 outputs are interpretation aids only.

@@ -60,23 +60,24 @@ Current canonical docs:
 - `CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_TEMPLATE.md`
 - `CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`
 - `CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`
-- `CVF_W7_CLI_SCHEMA_CONTRACTS.md` *(internal design draft)*
-- `CVF_W7_CLI_GOVERNANCE_BINDINGS.md` *(internal design draft)*
-- `CVF_W7_CLI_MVP_SCOPE.md` *(internal design draft)*
-- `CVF_W7_CLI_WORKSPACE_AND_STATE.md` *(internal design draft; heavier review pending)*
-- `CVF_W7_CLI_COMMAND_SURFACE.md` *(internal design draft)*
-- `CVF_SEMANTIC_POLICY_INTENT_REGISTRY.md` *(internal design draft)*
-- `CVF_W7_EXTERNAL_ASSET_INTAKE_PROFILE.md` *(internal design draft)*
-- `CVF_W7_EXECUTION_ENVIRONMENT_NORMALIZATION_POLICY.md` *(internal design draft)*
-- `CVF_W7_WINDOWS_COMPATIBILITY_EVALUATION_CHECKLIST.md` *(internal design draft)*
+- `CVF_W7_CLI_SCHEMA_CONTRACTS.md` *(deferred by design — CLI not yet built)*
+- `CVF_W7_CLI_GOVERNANCE_BINDINGS.md` *(deferred by design — CLI not yet built)*
+- `CVF_W7_CLI_MVP_SCOPE.md` *(deferred by design — CLI not yet built)*
+- `CVF_W7_CLI_WORKSPACE_AND_STATE.md` *(deferred by design — heavier review still required)*
+- `CVF_W7_CLI_COMMAND_SURFACE.md` *(deferred by design — CLI not yet built)*
+- `CVF_SEMANTIC_POLICY_INTENT_REGISTRY.md` *(canonical — CVF-native; W71-T1)*
+- `CVF_W7_EXTERNAL_ASSET_INTAKE_PROFILE.md` *(canonical — CVF-native; W71-T1)*
+- `CVF_W7_EXECUTION_ENVIRONMENT_NORMALIZATION_POLICY.md` *(canonical — CVF-native; W71-T1)*
+- `CVF_W7_WINDOWS_COMPATIBILITY_EVALUATION_CHECKLIST.md` *(canonical — CVF-native; W71-T1)*
 - `CVF_W7_WINDOWS_POWERSHELL_COMMAND_REFERENCE.md` *(reference appendix)*
-- `CVF_PLANNER_TRIGGER_HEURISTICS.md` *(internal design draft)*
-- `CVF_PROVISIONAL_EVALUATION_SIGNAL_CANDIDATES.md` *(internal design draft)*
-- `CVF_W7_EXTERNAL_ASSET_COMPILER_GUIDE.md` *(internal design draft)*
+- `CVF_PLANNER_TRIGGER_HEURISTICS.md` *(canonical — CVF-native; W71-T1)*
+- `CVF_PROVISIONAL_EVALUATION_SIGNAL_CANDIDATES.md` *(bounded invariant — CVF-native; provisional signals stable, weights deferred; W71-T1)*
+- `CVF_W7_EXTERNAL_ASSET_COMPILER_GUIDE.md` *(canonical — CVF-native; W71-T1)*
 - `CVF_STAGE1_DIAGNOSTIC_INTERPRETATION_PACKET_TEMPLATE.md`
 
-Current readout note:
+Current readout note (W71-T1 2026-04-13):
 
-- the internal design drafts above are no longer docs-only; a bounded runnable inheritance surface now exists in `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` at `POST /api/governance/external-assets/prepare`
-- this route executes external intake, semantic classification, planner heuristics, provisional signal capture, W7 normalization, registry-ready preparation, and optional Windows compatibility review
-- provider-lane PVV remains a separate paused execution stream and must not be conflated with this bounded inheritance path
+- the 6 canonical docs above are CVF-native; their semantics are implemented in CPF/LPF contracts and wired to the official CVF external-asset governance surface in `cvf-web`
+- the full external-asset governance surface in `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` covers: `POST /api/governance/external-assets/prepare` (intake → classification → normalization → registry-readiness), `POST/GET /api/governance/external-assets/register` (lifecycle-aware registry), `POST /api/governance/external-assets/retire` (lifecycle retirement), and `/governance/external-assets` operator page
+- this is an official CVF-native governed surface, not a post-closure experiment
+- provider-lane PVV remains a separate paused execution stream and must not be conflated with this governance-preparation surface

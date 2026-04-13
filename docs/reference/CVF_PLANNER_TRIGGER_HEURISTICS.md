@@ -1,7 +1,7 @@
 # CVF Planner Trigger Heuristics
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Promoted from `CVF ADDING NEW` intake after Round 3 rebuttal and human sign-off on 2026-04-12
+> **Document Type:** CANONICAL — CVF-NATIVE
+> **Status:** W71-T1 native adoption complete 2026-04-13; implementation evidence confirmed: `PlannerTriggerHeuristicsContract` + `PlannerTriggerHeuristicsBatchContract` in CPF; wired as planner heuristics step in cvf-web /prepare route; output classified as `confidence` + `clarification_needed` + `negative_matches`
 > **Source Quality:** mixed intake; normalized into CVF control-plane heuristics
 > **Scope:** planner-facing trigger detection, description shaping, and clarification routing
 > **Scope Boundary:** This document governs intake, boardroom, and orchestrator heuristics only. It is unrelated to the Alibaba provider PVV workstream.

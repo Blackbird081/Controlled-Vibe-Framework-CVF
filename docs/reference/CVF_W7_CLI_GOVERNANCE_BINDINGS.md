@@ -1,7 +1,7 @@
 # CVF W7 CLI Governance Bindings
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Promoted from private reference after Round 3 rebuttal on 2026-04-12
+> **Document Type:** DEFERRED BY DESIGN
+> **Status:** W71-T1 posture finalized 2026-04-13; CLI runtime not yet built; no CPF/LPF/cvf-web implementation evidence; intentionally deferred until a future CLI-build wave receives GC-018 authorization
 > **Source Quality:** internal_design_draft
 > **Scope:** Governance bindings for CLI commands into existing CVF modules
 > **Scope Boundary:** This document covers the W7/CLI operator surface only. It does not modify or overlap with the separate PVV Alibaba provider/API-key assessment flow.

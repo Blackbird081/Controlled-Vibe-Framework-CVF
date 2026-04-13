@@ -1,7 +1,7 @@
 # CVF W7 CLI Schema Contracts
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Promoted from private reference after Round 3 rebuttal on 2026-04-12
+> **Document Type:** DEFERRED BY DESIGN
+> **Status:** W71-T1 posture finalized 2026-04-13; CLI runtime not yet built; no CPF/LPF/cvf-web implementation evidence; intentionally deferred until a future CLI-build wave receives GC-018 authorization
 > **Source Quality:** internal_design_draft
 > **Scope:** Request/response, error, trace, artifact, and validation contracts for the CVF W7 CLI
 > **Scope Boundary:** This document governs the W7/CLI intake surface only. It is unrelated to the separate PVV Alibaba provider/API-key evaluation work referenced in `AGENT_HANDOFF.md`.

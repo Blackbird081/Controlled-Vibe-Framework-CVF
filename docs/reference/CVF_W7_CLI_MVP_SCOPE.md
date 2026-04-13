@@ -1,7 +1,7 @@
 # CVF W7 CLI MVP Scope
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Promoted from private reference after Round 3 rebuttal on 2026-04-12
+> **Document Type:** DEFERRED BY DESIGN
+> **Status:** W71-T1 posture finalized 2026-04-13; CLI runtime not yet built; no CPF/LPF/cvf-web implementation evidence; intentionally deferred until a future CLI-build wave receives GC-018 authorization
 > **Source Quality:** internal_design_draft
 > **Scope:** Minimum viable scope for the first production-meaningful version of the CVF W7 CLI
 > **Scope Boundary:** This MVP closes the external repo -> W7 asset -> governed plan/run path only. It is unrelated to the PVV Alibaba provider/API-key workstream.

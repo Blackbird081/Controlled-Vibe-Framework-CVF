@@ -1,7 +1,7 @@
 # CVF W7 External Asset Compiler Guide
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Synthesized from promoted `CVF ADDING NEW` materials on 2026-04-12
+> **Document Type:** CANONICAL — CVF-NATIVE
+> **Status:** W71-T1 native adoption complete 2026-04-13; implementation evidence confirmed: Stage 2 `W7NormalizedAssetCandidateContract` compile helpers and Stage 3 `RegistryReadyGovernedAssetContract` preparation helpers in CPF; wired as W7 normalization and registry-readiness steps in cvf-web /prepare route
 > **Source Quality:** internal_design_draft with mixed-intake rationale
 > **Scope:** component mapping and no-raw-asset rules for compiling external repos into W7 assets
 > **Scope Boundary:** This guide covers external repo -> W7 asset conversion only. It does not overlap with the Alibaba provider PVV workstream.

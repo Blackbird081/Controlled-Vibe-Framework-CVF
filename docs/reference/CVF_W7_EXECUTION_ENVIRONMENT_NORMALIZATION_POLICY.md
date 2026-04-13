@@ -1,7 +1,7 @@
 # CVF W7 Execution Environment Normalization Policy
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Synthesized from curated `Windows_Skill_Normalization` materials on 2026-04-12
+> **Document Type:** CANONICAL — CVF-NATIVE
+> **Status:** W71-T1 native adoption complete 2026-04-13; implementation evidence confirmed: `execution_environment` field adopted as optional intake enrichment in CPF `ExternalAssetIntakeProfileContract`; required for executable W7SkillAsset candidates; validated through Stage 1 intake and surfaced in cvf-web /prepare route
 > **Source Quality:** internal_design_draft
 > **Scope:** execution-environment declaration and normalization for W7 skill-like intake
 > **Scope Boundary:** This policy augments W7 intake and skill-governance review. It does not modify sandbox posture, provider evaluation, or the active PVV API-key evidence chain.

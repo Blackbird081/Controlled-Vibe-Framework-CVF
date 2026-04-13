@@ -1,7 +1,7 @@
 # CVF W7 Windows Compatibility Evaluation Checklist
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Synthesized from curated `Windows_Skill_Normalization` materials on 2026-04-12
+> **Document Type:** CANONICAL — CVF-NATIVE
+> **Status:** W71-T1 native adoption complete 2026-04-13; implementation evidence confirmed: `WindowsCompatibilityEvaluationContract` + `WindowsCompatibilityEvaluationBatchContract` + `WindowsCompatibilityConsumerPipelineContract` in CPF; wired as optional Windows review step in cvf-web /prepare route
 > **Source Quality:** internal_design_draft
 > **Scope:** Windows-oriented compatibility review for external skill and W7 skill-like intake
 > **Scope Boundary:** This checklist is an intake-stage evaluation aid. It does not replace existing risk/authority mapping, skill-governance fit checks, or provider/runtime evidence.

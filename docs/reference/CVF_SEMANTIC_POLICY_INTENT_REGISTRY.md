@@ -1,7 +1,7 @@
 # CVF Semantic Policy Intent Registry
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Promoted from `CVF ADDING NEW` intake after Round 3 rebuttal and human sign-off on 2026-04-12
+> **Document Type:** CANONICAL — CVF-NATIVE
+> **Status:** W71-T1 native adoption complete 2026-04-13; implementation evidence confirmed: `SemanticPolicyIntentRegistryContract` + batch contract in CPF; wired as governance-preparation input to `POST /api/governance/external-assets/prepare` in cvf-web
 > **Source Quality:** mixed intake; canonized into CVF-native registry form
 > **Scope:** semantic intent classification for policy, guard, output-contract, and evaluation surfaces
 > **Scope Boundary:** This registry belongs to CVF governance and learning surfaces only. It is unrelated to the separate PVV Alibaba provider/API-key evaluation workstream.

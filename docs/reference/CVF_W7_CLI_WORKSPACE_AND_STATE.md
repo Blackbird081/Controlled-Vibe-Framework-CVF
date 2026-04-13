@@ -1,9 +1,8 @@
 # CVF W7 CLI Workspace And State
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Promoted for heavier review on 2026-04-12
-> **Source Quality:** internal_design_draft
-> **Review Class:** medium_or_heavy_edit_required before final canon adoption
+> **Document Type:** DEFERRED BY DESIGN
+> **Status:** W71-T1 posture finalized 2026-04-13; explicitly deferred — heavier structural runtime review required; CLI not yet built; intentionally deferred until a future CLI-build wave receives GC-018 authorization
+> **Review Class:** medium_or_heavy_edit_required before final canon adoption — still outstanding
 > **Scope:** Workspace layout, local state model, run state, cache, and persistence behavior for the CVF W7 CLI
 > **Scope Boundary:** This document is part of the W7/CLI intake path only. It does not apply to the separate PVV Alibaba provider/API-key workstream.
 

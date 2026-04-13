@@ -1,7 +1,7 @@
 # CVF W7 External Asset Intake Profile
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Promoted from `CVF ADDING NEW` intake after Round 3 rebuttal and human sign-off on 2026-04-12
+> **Document Type:** CANONICAL — CVF-NATIVE
+> **Status:** W71-T1 native adoption complete 2026-04-13; implementation evidence confirmed: Stage 1/2/3 intake helper contracts in CPF (`ExternalAssetIntakeProfileContract`, `W7NormalizedAssetCandidateContract`, `RegistryReadyGovernedAssetContract`); wired as the authoritative intake schema for `POST /api/governance/external-assets/prepare` in cvf-web
 > **Source Quality:** mixed intake; normalized into CVF-native intake model
 > **Scope:** external repo or asset intake into the W7 asset path
 > **Scope Boundary:** This profile governs external repo -> W7 asset intake only. It does not apply to the Alibaba provider PVV workstream.

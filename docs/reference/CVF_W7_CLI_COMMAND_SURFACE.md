@@ -1,7 +1,7 @@
 # CVF W7 CLI Command Surface
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Synthesized from promoted `CVF ADDING NEW` command/catalog/spec materials on 2026-04-12
+> **Document Type:** DEFERRED BY DESIGN
+> **Status:** W71-T1 posture finalized 2026-04-13; CLI runtime not yet built; no CPF/LPF/cvf-web implementation evidence; intentionally deferred until a future CLI-build wave receives GC-018 authorization
 > **Source Quality:** internal_design_draft
 > **Scope:** operator-visible command surface for the W7 CLI MVP and near-term expansion
 > **Scope Boundary:** This command surface belongs only to the W7/CLI intake and governed execution path. It is unrelated to the Alibaba provider PVV workstream.

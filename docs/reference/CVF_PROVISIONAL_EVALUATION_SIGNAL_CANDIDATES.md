@@ -1,7 +1,7 @@
 # CVF Provisional Evaluation Signal Candidates
 
-> **Document Type:** INTERNAL DESIGN DRAFT
-> **Status:** Promoted from `CVF ADDING NEW` intake after Round 3 rebuttal and human sign-off on 2026-04-12
+> **Document Type:** BOUNDED INVARIANT — CVF-NATIVE
+> **Status:** W71-T1 native adoption complete 2026-04-13; implementation evidence confirmed: `Stage1DiagnosticInterpretationContract` + `Stage1DiagnosticPacketContract` + batch variants in LPF; signal schema stable; TruthScore weights and calibration remain intentionally deferred by design — this is not a closure defect
 > **Source Quality:** mixed intake; normalized into LPF candidate form
 > **Scope:** provisional learning-plane signals derived from prompt, skill, and external asset intake patterns
 > **Scope Boundary:** These are LPF candidate signals only. They do not define fixed TruthScore weights and are unrelated to the Alibaba provider PVV workstream.

@@ -63,7 +63,10 @@ export interface ExternalAssetGovernanceRequest {
   diagnostic?: ExternalAssetGovernanceDiagnosticInput;
 }
 
+export type ExternalAssetWorkflowStatus = 'invalid' | 'review_required' | 'registry_ready';
+
 export interface ExternalAssetGovernanceResult {
+  workflowStatus: ExternalAssetWorkflowStatus;
   readyForRegistry: boolean;
   warnings: string[];
   intake: ReturnType<ReturnType<typeof createExternalAssetIntakeProfileContract>['validate']>;
@@ -129,7 +132,7 @@ function deriveCompileTriggers(
 }
 
 function buildWarnings(
-  result: Omit<ExternalAssetGovernanceResult, 'warnings' | 'readyForRegistry'>,
+  result: Omit<ExternalAssetGovernanceResult, 'warnings' | 'readyForRegistry' | 'workflowStatus'>,
 ): string[] {
   const warnings: string[] = [];
 
@@ -282,7 +285,14 @@ export function prepareExternalAssetGovernance(
     (windowsCompatibility === null ||
       windowsCompatibility.classification !== 'REJECTED_FOR_WINDOWS_TARGET');
 
+  const workflowStatus: ExternalAssetWorkflowStatus = readyForRegistry
+    ? 'registry_ready'
+    : !intake.valid
+      ? 'invalid'
+      : 'review_required';
+
   return {
+    workflowStatus,
     readyForRegistry,
     warnings,
     ...resultWithoutWarnings,

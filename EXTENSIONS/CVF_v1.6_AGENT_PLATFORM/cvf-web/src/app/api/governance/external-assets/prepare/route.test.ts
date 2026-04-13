@@ -111,6 +111,7 @@ describe('/api/governance/external-assets/prepare', () => {
 
     expect(res.status).toBe(200);
     expect(data.success).toBe(true);
+    expect(data.data.workflowStatus).toBe('registry_ready');
     expect(data.data.readyForRegistry).toBe(true);
     expect(data.data.intake.valid).toBe(true);
     expect(data.data.semanticPolicy.valid).toBe(true);
@@ -150,10 +151,44 @@ describe('/api/governance/external-assets/prepare', () => {
 
     expect(res.status).toBe(200);
     expect(data.success).toBe(true);
+    expect(data.data.workflowStatus).toBe('invalid');
     expect(data.data.readyForRegistry).toBe(false);
     expect(data.data.intake.valid).toBe(false);
     expect(data.data.diagnosticPacket.primaryAttribution).toBe('INTAKE_SHAPE');
     expect(data.data.windowsCompatibility.classification).toBe('REJECTED_FOR_WINDOWS_TARGET');
     expect(data.data.warnings).toContain('INTAKE_REQUIRED_PROVENANCE_NOTES');
+  });
+
+  it('returns workflowStatus=review_required when intake valid but semantic policy invalid', async () => {
+    const req = new Request('http://localhost/api/governance/external-assets/prepare', {
+      method: 'POST',
+      body: JSON.stringify({
+        profile: {
+          source_ref: 'CVF_ADDING_NEW/skill.md',
+          source_kind: 'repo',
+          source_quality: 'community_analysis',
+          officially_verified: false,
+          provenance_notes: 'Curated from community analysis.',
+          candidate_asset_type: 'W7SkillAsset',
+          description_or_trigger: 'Convert shell skill into governed CVF asset',
+          instruction_body: 'Use shell script directly.',
+        },
+        // Provide semanticItems with a class mismatch to invalidate semantic policy
+        // while leaving intake valid — this forces review_required not invalid
+        semanticItems: [
+          { semanticItem: 'COMPLETE_OUTPUT_REQUIRED', declaredClass: 'wrong_class' },
+        ],
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.success).toBe(true);
+    expect(data.data.intake.valid).toBe(true);
+    expect(data.data.semanticPolicy).not.toBeNull();
+    expect(data.data.readyForRegistry).toBe(false);
+    expect(data.data.workflowStatus).toBe('review_required');
   });
 });

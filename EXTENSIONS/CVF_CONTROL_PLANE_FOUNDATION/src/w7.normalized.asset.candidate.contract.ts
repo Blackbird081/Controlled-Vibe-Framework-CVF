@@ -34,12 +34,31 @@ export interface W7NormalizedAssetInstructionPayload {
   source_quality: ExternalAssetSourceQuality;
 }
 
+// W72-T6 — Palace vocabulary as optional enrichment fields
+export interface W7PalaceVocabulary {
+  wing?: string;
+  hall?: string;
+  room?: string;
+  drawer?: string;
+  closet_summary?: string;
+  tunnel_links?: string[];
+  contradiction_flag?: boolean;
+}
+
 export interface W7NormalizedAssetCandidateEnrichment {
   references: string[];
   examples: string[];
   tools: string[];
   templates: string[];
   execution_environment?: ExternalAssetExecutionEnvironment;
+  // W72-T6 — Palace vocabulary (all optional, candidate-layer only)
+  wing?: string;
+  hall?: string;
+  room?: string;
+  drawer?: string;
+  closet_summary?: string;
+  tunnel_links?: string[];
+  contradiction_flag?: boolean;
 }
 
 export interface W7NormalizedAssetCandidate {
@@ -68,6 +87,7 @@ export interface W7NormalizedAssetCandidateCompileRequest {
   triggers?: string[];
   domain?: string;
   phaseHints?: W7RoutingPhaseHint[];
+  palaceVocabulary?: W7PalaceVocabulary;
 }
 
 export interface W7NormalizedAssetCandidateCompileResult {
@@ -277,6 +297,7 @@ export class W7NormalizedAssetCandidateContract {
           tools: normalizedProfile.tools,
           templates: normalizedProfile.templates,
           execution_environment: normalizedProfile.execution_environment,
+          ...(request.palaceVocabulary ?? {}),
         },
       },
     };

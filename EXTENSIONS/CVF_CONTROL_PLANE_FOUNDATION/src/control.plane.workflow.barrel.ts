@@ -65,6 +65,8 @@ export type {
   W7NormalizedAssetCandidateCompileIssue,
   W7NormalizedAssetCandidateCompileRequest,
   W7NormalizedAssetCandidateCompileResult,
+  // W72-T6 — Palace vocabulary
+  W7PalaceVocabulary,
 } from "./w7.normalized.asset.candidate.contract";
 
 export {

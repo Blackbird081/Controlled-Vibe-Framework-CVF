@@ -4,6 +4,7 @@ import {
   createExternalAssetIntakeProfileContract,
   createW7NormalizedAssetCandidateContract,
   type ExternalAssetIntakeProfile,
+  type W7PalaceVocabulary,
 } from "../src/index";
 
 function makeProfile(
@@ -83,5 +84,88 @@ describe("W7NormalizedAssetCandidateContract", () => {
         code: "STAGE1_INVALID",
       }),
     );
+  });
+});
+
+// ─── W72-T6: Palace vocabulary enrichment ────────────────────────────────────
+
+function makeValidIntake() {
+  return createExternalAssetIntakeProfileContract().validate(makeProfile());
+}
+
+describe("W7NormalizedAssetCandidateEnrichment — palace vocabulary fields (W72-T6)", () => {
+  it("wing is carried through when provided", () => {
+    const result = createW7NormalizedAssetCandidateContract().compile({
+      intakeValidation: makeValidIntake(),
+      palaceVocabulary: { wing: "knowledge-wing" },
+    });
+    expect(result.valid).toBe(true);
+    expect(result.normalizedCandidate?.enrichment.wing).toBe("knowledge-wing");
+  });
+
+  it("hall is carried through when provided", () => {
+    const result = createW7NormalizedAssetCandidateContract().compile({
+      intakeValidation: makeValidIntake(),
+      palaceVocabulary: { hall: "compilation-hall" },
+    });
+    expect(result.normalizedCandidate?.enrichment.hall).toBe("compilation-hall");
+  });
+
+  it("room is carried through when provided", () => {
+    const result = createW7NormalizedAssetCandidateContract().compile({
+      intakeValidation: makeValidIntake(),
+      palaceVocabulary: { room: "artifact-room" },
+    });
+    expect(result.normalizedCandidate?.enrichment.room).toBe("artifact-room");
+  });
+
+  it("drawer is carried through when provided", () => {
+    const result = createW7NormalizedAssetCandidateContract().compile({
+      intakeValidation: makeValidIntake(),
+      palaceVocabulary: { drawer: "concept-drawer" },
+    });
+    expect(result.normalizedCandidate?.enrichment.drawer).toBe("concept-drawer");
+  });
+
+  it("closet_summary is carried through when provided", () => {
+    const result = createW7NormalizedAssetCandidateContract().compile({
+      intakeValidation: makeValidIntake(),
+      palaceVocabulary: { closet_summary: "Summary of closet items." },
+    });
+    expect(result.normalizedCandidate?.enrichment.closet_summary).toBe(
+      "Summary of closet items.",
+    );
+  });
+
+  it("tunnel_links are carried through when provided", () => {
+    const result = createW7NormalizedAssetCandidateContract().compile({
+      intakeValidation: makeValidIntake(),
+      palaceVocabulary: { tunnel_links: ["room:ctx-a", "room:ctx-b"] },
+    });
+    expect(result.normalizedCandidate?.enrichment.tunnel_links).toEqual([
+      "room:ctx-a",
+      "room:ctx-b",
+    ]);
+  });
+
+  it("contradiction_flag is carried through when true", () => {
+    const result = createW7NormalizedAssetCandidateContract().compile({
+      intakeValidation: makeValidIntake(),
+      palaceVocabulary: { contradiction_flag: true },
+    });
+    expect(result.normalizedCandidate?.enrichment.contradiction_flag).toBe(true);
+  });
+
+  it("palace fields are absent when palaceVocabulary not provided", () => {
+    const result = createW7NormalizedAssetCandidateContract().compile({
+      intakeValidation: makeValidIntake(),
+    });
+    expect(result.normalizedCandidate?.enrichment.wing).toBeUndefined();
+    expect(result.normalizedCandidate?.enrichment.hall).toBeUndefined();
+    expect(result.normalizedCandidate?.enrichment.room).toBeUndefined();
+    expect(result.normalizedCandidate?.enrichment.drawer).toBeUndefined();
+    expect(result.normalizedCandidate?.enrichment.closet_summary).toBeUndefined();
+    expect(result.normalizedCandidate?.enrichment.tunnel_links).toBeUndefined();
+    expect(result.normalizedCandidate?.enrichment.contradiction_flag).toBeUndefined();
   });
 });

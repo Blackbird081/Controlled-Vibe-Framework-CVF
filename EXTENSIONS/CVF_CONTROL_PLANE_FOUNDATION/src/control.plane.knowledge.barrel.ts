@@ -66,3 +66,27 @@ export type {
   StructuralIndexBatch,
   StructuralIndexBatchContractDependencies,
 } from "./knowledge.structural.index.batch.contract";
+
+// W72-T4 — CompiledKnowledgeArtifactContract
+export {
+  CompiledKnowledgeArtifactContract,
+  createCompiledKnowledgeArtifactContract,
+} from "./knowledge.compiled.artifact.contract";
+export type {
+  CompiledArtifactType,
+  GovernanceStatus,
+  CompiledKnowledgeArtifactCompileRequest,
+  CompiledKnowledgeArtifact,
+  GovernDecision,
+  CompiledKnowledgeArtifactContractDependencies,
+} from "./knowledge.compiled.artifact.contract";
+
+// W72-T4 — CompiledKnowledgeArtifactBatchContract
+export {
+  CompiledKnowledgeArtifactBatchContract,
+  createCompiledKnowledgeArtifactBatchContract,
+} from "./knowledge.compiled.artifact.batch.contract";
+export type {
+  CompiledKnowledgeArtifactBatch,
+  CompiledKnowledgeArtifactBatchContractDependencies,
+} from "./knowledge.compiled.artifact.batch.contract";

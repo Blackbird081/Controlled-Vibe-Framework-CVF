@@ -164,31 +164,44 @@ Warnings follow the pattern `{CATEGORY}_{CODE}_{FIELD}`:
 
 ## POST `/api/governance/external-assets/register`
 
-Persists an approved `registry_ready_governed_asset` in the governed registry.
+Persists a governed asset in the governed registry after independently re-running the
+full governance pipeline on the submitted profile. Callers cannot self-declare
+`approvalState` or `workflowStatus` — the server is the authority. Only assets the
+server independently classifies as `workflowStatus === 'registry_ready'` are persisted.
+
 Write path is isolated from `/api/execute` and PVV evidence files.
 Persistence: append-only JSONL at `data/governed-asset-registry.jsonl`.
 
 ### Request Body
 
+Same shape as `POST /prepare` — submit the full governance profile, not a pre-assembled asset record.
+
 ```jsonc
 {
-  "asset": {
-    // REQUIRED
+  // REQUIRED
+  "profile": {
     "source_ref": "CVF_ADDING_NEW/skill.md",
+    "source_kind": "document_bundle",
+    "source_quality": "internal_design_draft",
+    "officially_verified": false,
+    "provenance_notes": "Curated from...",
     "candidate_asset_type": "W7SkillAsset",
     "description_or_trigger": "Normalize PowerShell skills for CVF",
-    // OPTIONAL (defaults shown)
-    "approvalState": "approved",              // default: "approved"
-    "governanceOwner": "cvf-operator",        // default: "cvf-operator"
-    "riskLevel": "R1",                        // default: "R1"
-    "registryRefs": ["cvf://registry/..."],
-    "assetName": "skill.md",                  // default: basename of source_ref
-    "assetVersion": "1.0.0"                   // default: "1.0.0"
-  }
+    "instruction_body": "..."
+  },
+  // OPTIONAL — same optional fields as /prepare
+  "semanticItems": [...],
+  "registry": {
+    "governanceOwner": "cvf-architecture",
+    "riskLevel": "R1",
+    "registryRefs": ["cvf://registry/..."]
+  },
+  "windows": { ... },
+  "planner": { ... }
 }
 ```
 
-### Response — 200 OK
+### Response — 200 OK (registry_ready confirmed by server)
 
 ```jsonc
 {
@@ -207,6 +220,19 @@ Persistence: append-only JSONL at `data/governed-asset-registry.jsonl`.
     "assetName": "skill.md",
     "assetVersion": "1.0.0"
   }
+}
+```
+
+### Response — 422 Unprocessable (pipeline did not reach registry_ready)
+
+Returned when the server re-derives `workflowStatus !== 'registry_ready'`. The caller cannot override this by self-declaring `approvalState`.
+
+```jsonc
+{
+  "success": false,
+  "error": "Asset is not registry_ready (workflowStatus: review_required); resolve all issues via /prepare before registering",
+  "workflowStatus": "review_required",  // or "invalid"
+  "warnings": ["PLANNER_CLARIFICATION_REQUIRED"]
 }
 ```
 

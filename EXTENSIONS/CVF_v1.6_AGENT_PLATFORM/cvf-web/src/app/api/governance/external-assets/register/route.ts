@@ -1,28 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifySessionCookie } from '@/lib/middleware-auth';
-import { registerAsset, listRegistryEntries, type RegisterAssetInput } from '@/lib/server/asset-registry';
+import { prepareExternalAssetGovernance } from '@/lib/server/external-asset-governance';
+import { registerAsset, listRegistryEntries } from '@/lib/server/asset-registry';
 
 /**
  * POST /api/governance/external-assets/register
- * Persists an approved registry_ready_governed_asset into the governed registry.
- * Write path is isolated from /api/execute and PVV evidence files.
+ * Persists a registry_ready governed asset into the governed registry.
  *
- * Body: { asset: RegisterAssetInput }
+ * Security: the route independently re-derives workflowStatus by running the
+ * full governance pipeline on the submitted profile. Callers cannot self-declare
+ * approvalState; the pipeline is the authority. Only assets that the server
+ * independently classifies as workflowStatus === 'registry_ready' are persisted.
+ *
+ * Body: ExternalAssetGovernanceRequest (same shape as /prepare)
  * Returns: { success: true, entry: AssetRegistryEntry }
  *
  * GET /api/governance/external-assets/register
  * Lists all registered governed assets (auditable registry read).
  */
 
+function checkServiceToken(request: NextRequest): boolean {
+    const serviceToken = request.headers.get('x-cvf-service-token');
+    const configuredToken = process.env.CVF_SERVICE_TOKEN;
+    return (
+        configuredToken !== undefined &&
+        configuredToken.length > 0 &&
+        serviceToken === configuredToken
+    );
+}
+
 export async function POST(request: NextRequest) {
     try {
         const session = await verifySessionCookie(request);
-        const serviceToken = request.headers.get('x-cvf-service-token');
-        const configuredToken = process.env.CVF_SERVICE_TOKEN;
-        const isServiceAllowed =
-            configuredToken !== undefined && configuredToken.length > 0 && serviceToken === configuredToken;
-
-        if (!session && !isServiceAllowed) {
+        if (!session && !checkServiceToken(request)) {
             return NextResponse.json(
                 { success: false, error: 'Unauthorized: please login.' },
                 { status: 401 },
@@ -30,47 +40,43 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        if (!body || typeof body !== 'object' || !('asset' in body)) {
+        if (!body || typeof body !== 'object' || !('profile' in body)) {
             return NextResponse.json(
-                { success: false, error: 'Missing required field: asset' },
+                { success: false, error: 'Missing required field: profile' },
                 { status: 400 },
             );
         }
 
-        const asset = body.asset as Partial<RegisterAssetInput>;
+        // Server-side re-derive: run the full governance pipeline on the submitted
+        // profile. The pipeline result is the authority — callers cannot bypass by
+        // self-declaring approvalState or workflowStatus.
+        const result = prepareExternalAssetGovernance(body);
 
-        if (!asset.source_ref || !asset.candidate_asset_type || !asset.description_or_trigger) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: 'asset must include source_ref, candidate_asset_type, description_or_trigger',
-                },
-                { status: 400 },
-            );
-        }
-
-        // Governance gate: only explicitly approved, registry_ready assets may be registered.
-        // Callers must run /prepare first and confirm workflowStatus === 'registry_ready'.
-        if (asset.approvalState !== 'approved') {
+        if (result.workflowStatus !== 'registry_ready') {
             return NextResponse.json(
                 {
                     success: false,
-                    error: 'asset.approvalState must be "approved"; run /prepare first and confirm registry_ready status before registering',
+                    error: `Asset is not registry_ready (workflowStatus: ${result.workflowStatus}); resolve all issues via /prepare before registering`,
+                    workflowStatus: result.workflowStatus,
+                    warnings: result.warnings,
                 },
-                { status: 400 },
+                { status: 422 },
             );
         }
+
+        // governedAsset is guaranteed present when registryReady.valid === true,
+        // which is required for workflowStatus === 'registry_ready'.
+        const { governedAsset } = result.registryReady;
+        const profile = result.intake.normalizedProfile;
 
         const entry = registerAsset({
-            source_ref: String(asset.source_ref),
-            candidate_asset_type: String(asset.candidate_asset_type),
-            description_or_trigger: String(asset.description_or_trigger),
+            source_ref: governedAsset?.source_ref ?? profile.source_ref,
+            candidate_asset_type: governedAsset?.asset_type ?? profile.candidate_asset_type,
+            description_or_trigger: profile.description_or_trigger,
             approvalState: 'approved',
-            governanceOwner: typeof asset.governanceOwner === 'string' ? asset.governanceOwner : 'cvf-operator',
-            riskLevel: typeof asset.riskLevel === 'string' ? asset.riskLevel : 'R1',
-            registryRefs: Array.isArray(asset.registryRefs) ? asset.registryRefs : [],
-            assetName: typeof asset.assetName === 'string' ? asset.assetName : undefined,
-            assetVersion: typeof asset.assetVersion === 'string' ? asset.assetVersion : undefined,
+            governanceOwner: governedAsset?.governance.owner ?? 'cvf-operator',
+            riskLevel: governedAsset?.risk_level ?? 'R1',
+            registryRefs: governedAsset?.registry_refs ?? [],
         });
 
         return NextResponse.json({ success: true, entry });
@@ -86,12 +92,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     try {
         const session = await verifySessionCookie(request);
-        const serviceToken = request.headers.get('x-cvf-service-token');
-        const configuredToken = process.env.CVF_SERVICE_TOKEN;
-        const isServiceAllowed =
-            configuredToken !== undefined && configuredToken.length > 0 && serviceToken === configuredToken;
-
-        if (!session && !isServiceAllowed) {
+        if (!session && !checkServiceToken(request)) {
             return NextResponse.json(
                 { success: false, error: 'Unauthorized: please login.' },
                 { status: 401 },

@@ -160,23 +160,12 @@ export default function ExternalAssetsPage() {
         setRegistering(true);
         setRegisterError(null);
         try {
-            const governance = result.registryReady.governedAsset?.governance;
+            // Send the same profile+registry payload as /prepare so the server
+            // independently re-derives readiness. The server is the authority.
             const res = await fetch('/api/governance/external-assets/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    asset: {
-                        source_ref: form.source_ref,
-                        candidate_asset_type: form.candidate_asset_type,
-                        description_or_trigger: form.description_or_trigger,
-                        approvalState: governance?.approvalState ?? approvalState,
-                        governanceOwner: governance?.owner ?? 'cvf-operator',
-                        riskLevel: governance?.riskLevel ?? 'R1',
-                        registryRefs: governance?.registryRefs ?? [],
-                        assetName: result.registryReady.governedAsset?.name,
-                        assetVersion: result.registryReady.governedAsset?.version,
-                    },
-                }),
+                body: JSON.stringify({ profile: form, registry: { approvalState } }),
             });
             const json = await res.json();
             if (!json.success) throw new Error(json.error ?? 'Registration failed');

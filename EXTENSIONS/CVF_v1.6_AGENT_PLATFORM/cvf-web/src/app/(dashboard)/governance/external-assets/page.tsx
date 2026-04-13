@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 
 type WorkflowStatus = 'invalid' | 'review_required' | 'registry_ready';
+type LifecycleStatus = 'active' | 'retired';
+type StatusFilter = 'all' | 'active' | 'retired';
 
 interface PrepareResult {
     workflowStatus: WorkflowStatus;
@@ -31,6 +33,10 @@ interface RegistryEntry {
     governanceOwner: string;
     riskLevel: string;
     workflowStatus: 'registry_ready';
+    /** W69-T1: lifecycle status — 'active' by default, 'retired' after retire action */
+    lifecycleStatus: LifecycleStatus;
+    /** W69-T1: ISO timestamp; present when lifecycleStatus === 'retired' */
+    retiredAt?: string;
     assetName: string;
     assetVersion: string;
 }
@@ -96,6 +102,18 @@ const BLANK_FORM = {
 
 type PageTab = 'prepare' | 'registry';
 
+// W70-T1: lifecycle badge styles
+const LIFECYCLE_BADGE: Record<LifecycleStatus, { cls: string; label: string }> = {
+    active: {
+        cls: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+        label: 'Active',
+    },
+    retired: {
+        cls: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+        label: 'Retired',
+    },
+};
+
 export default function ExternalAssetsPage() {
     const [activeTab, setActiveTab] = useState<PageTab>('prepare');
 
@@ -110,15 +128,23 @@ export default function ExternalAssetsPage() {
     const [registering, setRegistering] = useState(false);
     const [registeredEntry, setRegisteredEntry] = useState<RegistryEntry | null>(null);
     const [registerError, setRegisterError] = useState<string | null>(null);
+    // W70-T1: existing active entry when 409 is returned
+    const [duplicateEntry, setDuplicateEntry] = useState<RegistryEntry | null>(null);
 
     // Registry list state
     const [registryEntries, setRegistryEntries] = useState<RegistryEntry[]>([]);
     const [registryLoading, setRegistryLoading] = useState(false);
+    // W70-T1: filter + retire state
+    const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+    const [retireLoadingId, setRetireLoadingId] = useState<string | null>(null);
+    const [retireError, setRetireError] = useState<string | null>(null);
 
-    const loadRegistry = useCallback(async () => {
+    const loadRegistry = useCallback(async (filter: StatusFilter = 'all') => {
         setRegistryLoading(true);
+        setRetireError(null);
         try {
-            const res = await fetch('/api/governance/external-assets/register');
+            const params = filter !== 'all' ? `?status=${filter}` : '';
+            const res = await fetch(`/api/governance/external-assets/register${params}`);
             const json = await res.json();
             if (json.success) setRegistryEntries(json.entries as RegistryEntry[]);
         } catch {
@@ -129,8 +155,8 @@ export default function ExternalAssetsPage() {
     }, []);
 
     useEffect(() => {
-        if (activeTab === 'registry') loadRegistry();
-    }, [activeTab, loadRegistry]);
+        if (activeTab === 'registry') loadRegistry(statusFilter);
+    }, [activeTab, loadRegistry, statusFilter]);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -139,6 +165,7 @@ export default function ExternalAssetsPage() {
         setPrepareError(null);
         setRegisteredEntry(null);
         setRegisterError(null);
+        setDuplicateEntry(null);
         try {
             const res = await fetch('/api/governance/external-assets/prepare', {
                 method: 'POST',
@@ -159,6 +186,7 @@ export default function ExternalAssetsPage() {
         if (!result || result.workflowStatus !== 'registry_ready') return;
         setRegistering(true);
         setRegisterError(null);
+        setDuplicateEntry(null);
         try {
             // Send the same profile+registry payload as /prepare so the server
             // independently re-derives readiness. The server is the authority.
@@ -168,12 +196,42 @@ export default function ExternalAssetsPage() {
                 body: JSON.stringify({ profile: form, registry: { approvalState } }),
             });
             const json = await res.json();
-            if (!json.success) throw new Error(json.error ?? 'Registration failed');
+            if (!json.success) {
+                // W70-T1: 409 = active duplicate — surface lifecycle-aware guidance
+                if (res.status === 409 && json.existingEntry) {
+                    setDuplicateEntry(json.existingEntry as RegistryEntry);
+                    throw new Error('duplicate');
+                }
+                throw new Error(json.error ?? 'Registration failed');
+            }
             setRegisteredEntry(json.entry as RegistryEntry);
         } catch (err) {
-            setRegisterError(err instanceof Error ? err.message : 'Registration failed');
+            if (err instanceof Error && err.message !== 'duplicate') {
+                setRegisterError(err instanceof Error ? err.message : 'Registration failed');
+            }
         } finally {
             setRegistering(false);
+        }
+    }
+
+    // W70-T1: retire an active registry entry
+    async function handleRetire(id: string) {
+        setRetireLoadingId(id);
+        setRetireError(null);
+        try {
+            const res = await fetch('/api/governance/external-assets/retire', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id }),
+            });
+            const json = await res.json();
+            if (!json.success) throw new Error(json.error ?? 'Retirement failed');
+            // Read-after-write: refresh the list with the current filter
+            await loadRegistry(statusFilter);
+        } catch (err) {
+            setRetireError(err instanceof Error ? err.message : 'Retirement failed');
+        } finally {
+            setRetireLoadingId(null);
         }
     }
 
@@ -372,17 +430,36 @@ export default function ExternalAssetsPage() {
 
                             {/* Register action (CP2) */}
                             {result.workflowStatus === 'registry_ready' && !registeredEntry && (
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={handleRegister}
-                                        disabled={registering}
-                                        className="px-4 py-2 rounded bg-green-600 text-white text-sm font-medium hover:bg-green-700 disabled:opacity-50"
-                                    >
-                                        {registering ? 'Registering…' : 'Register Asset'}
-                                    </button>
-                                    {registerError && (
-                                        <span className="text-sm text-red-600 dark:text-red-400">{registerError}</span>
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={handleRegister}
+                                            disabled={registering}
+                                            className="px-4 py-2 rounded bg-green-600 text-white text-sm font-medium hover:bg-green-700 disabled:opacity-50"
+                                        >
+                                            {registering ? 'Registering…' : 'Register Asset'}
+                                        </button>
+                                        {registerError && (
+                                            <span className="text-sm text-red-600 dark:text-red-400">{registerError}</span>
+                                        )}
+                                    </div>
+
+                                    {/* W70-T1: 409 duplicate — lifecycle-aware guidance */}
+                                    {duplicateEntry && (
+                                        <div className="rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-900/20 p-4 space-y-2">
+                                            <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
+                                                This logical asset is already registered and active.
+                                            </p>
+                                            <p className="text-xs text-amber-700 dark:text-amber-400">
+                                                The registry enforces one active entry per{' '}
+                                                <code className="bg-amber-100 dark:bg-amber-800 px-1 rounded">source_ref + candidate_asset_type</code>.
+                                                To register a new version: go to the{' '}
+                                                <strong>Registry tab</strong>, retire the existing active entry (ID:{' '}
+                                                <code className="bg-amber-100 dark:bg-amber-800 px-1 rounded text-xs">{duplicateEntry.id}</code>),
+                                                then return here and register again.
+                                            </p>
+                                        </div>
                                     )}
                                 </div>
                             )}
@@ -453,19 +530,44 @@ export default function ExternalAssetsPage() {
             {/* ── REGISTRY TAB ── */}
             {activeTab === 'registry' && (
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                            Governed assets registered through the preparation pipeline.
-                        </p>
-                        <button
-                            type="button"
-                            onClick={loadRegistry}
-                            disabled={registryLoading}
-                            className="text-xs px-3 py-1.5 rounded border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
-                        >
-                            {registryLoading ? 'Loading…' : 'Refresh'}
-                        </button>
+                    {/* W70-T1: filter + refresh controls */}
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                        <div className="flex items-center gap-2">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                Governed assets registered through the preparation pipeline.
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <label htmlFor="status_filter" className="text-xs font-medium text-gray-600 dark:text-gray-400 shrink-0">
+                                Status:
+                            </label>
+                            <select
+                                id="status_filter"
+                                className="rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-2 py-1 text-xs text-gray-900 dark:text-white"
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+                            >
+                                <option value="all">All</option>
+                                <option value="active">Active only</option>
+                                <option value="retired">Retired only</option>
+                            </select>
+                            <button
+                                type="button"
+                                onClick={() => loadRegistry(statusFilter)}
+                                disabled={registryLoading}
+                                className="text-xs px-3 py-1.5 rounded border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
+                            >
+                                {registryLoading ? 'Loading…' : 'Refresh'}
+                            </button>
+                        </div>
                     </div>
+
+                    {/* W70-T1: retire error banner */}
+                    {retireError && (
+                        <div className="rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-700 dark:text-red-300">
+                            Retirement failed: {retireError}
+                        </div>
+                    )}
 
                     {registryEntries.length === 0 && !registryLoading && (
                         <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-8 text-center text-sm text-gray-400">
@@ -475,28 +577,68 @@ export default function ExternalAssetsPage() {
 
                     {registryEntries.length > 0 && (
                         <div className="space-y-2">
-                            {registryEntries.map((entry) => (
-                                <div key={entry.id} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-                                    <div className="flex items-start justify-between gap-4">
-                                        <div className="space-y-1">
-                                            <p className="text-sm font-medium text-gray-900 dark:text-white">{entry.assetName}</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">{entry.source_ref}</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">{entry.description_or_trigger}</p>
+                            {registryEntries.map((entry) => {
+                                const lifecycle = entry.lifecycleStatus ?? 'active';
+                                const badge = LIFECYCLE_BADGE[lifecycle];
+                                const isRetiring = retireLoadingId === entry.id;
+                                return (
+                                    <div
+                                        key={entry.id}
+                                        className={`bg-white dark:bg-gray-800 rounded-lg border p-4 ${
+                                            lifecycle === 'retired'
+                                                ? 'border-gray-200 dark:border-gray-700 opacity-70'
+                                                : 'border-gray-200 dark:border-gray-700'
+                                        }`}
+                                    >
+                                        <div className="flex items-start justify-between gap-4">
+                                            <div className="space-y-1 min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white">{entry.assetName}</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{entry.source_ref}</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">{entry.description_or_trigger}</p>
+                                            </div>
+                                            <div className="text-right space-y-1 shrink-0">
+                                                {/* W70-T1: lifecycle badge (primary) */}
+                                                <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${badge.cls}`}>
+                                                    {badge.label}
+                                                </span>
+                                                <p className="text-xs text-gray-400">{entry.riskLevel} · {entry.approvalState}</p>
+                                                <p className="text-xs text-gray-400">{new Date(entry.registeredAt).toLocaleDateString()}</p>
+                                            </div>
                                         </div>
-                                        <div className="text-right space-y-1 shrink-0">
-                                            <span className="inline-block px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 font-medium">
-                                                {entry.workflowStatus}
-                                            </span>
-                                            <p className="text-xs text-gray-400">{entry.riskLevel} · {entry.approvalState}</p>
-                                            <p className="text-xs text-gray-400">{new Date(entry.registeredAt).toLocaleDateString()}</p>
+
+                                        <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 space-y-1">
+                                            <p className="text-xs text-gray-400 font-mono">ID: {entry.id}</p>
+                                            <p className="text-xs text-gray-400">Owner: {entry.governanceOwner} · v{entry.assetVersion}</p>
+
+                                            {/* W70-T1: retired timestamp */}
+                                            {lifecycle === 'retired' && entry.retiredAt && (
+                                                <p className="text-xs text-gray-400">
+                                                    Retired: {new Date(entry.retiredAt).toLocaleString()}
+                                                </p>
+                                            )}
+
+                                            {/* W70-T1: re-register guidance for retired entries */}
+                                            {lifecycle === 'retired' && (
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                    This entry is retired. You may now re-register the same logical asset via the Prepare Asset tab.
+                                                </p>
+                                            )}
+
+                                            {/* W70-T1: retire action — active entries only */}
+                                            {lifecycle === 'active' && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRetire(entry.id)}
+                                                    disabled={isRetiring || retireLoadingId !== null}
+                                                    className="mt-1 text-xs px-2 py-1 rounded border border-red-300 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 transition-colors"
+                                                >
+                                                    {isRetiring ? 'Retiring…' : 'Retire'}
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
-                                    <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
-                                        <p className="text-xs text-gray-400 font-mono">ID: {entry.id}</p>
-                                        <p className="text-xs text-gray-400">Owner: {entry.governanceOwner} · v{entry.assetVersion}</p>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     )}
                 </div>

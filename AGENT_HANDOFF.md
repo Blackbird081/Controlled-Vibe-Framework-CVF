@@ -1,4 +1,4 @@
-# CVF Agent Handoff — 2026-04-12
+# CVF Agent Handoff — 2026-04-13
 
 > Branch: `main`
 > Branch posture: `main` is the canonical continuation branch after 2026-04-04 convergence; `cvf-next` is kept as a synchronized mirror for compatibility
@@ -6,8 +6,8 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / PVV ALIBABA CHECKPOINT CLOSED / INTEGRATION FOCUS ACTIVE** — W66-T1 CP1 (Corpus + Rubric Freeze): **COMPLETE**; W66-T1 CP2 (Run Harness Setup): **COMPLETE**; W66-T1 CP3B (Controlled Value Test): **COMPLETE 2026-04-12** with `BypassDetectionGuard` verification closing the P1 gap; one-provider / Alibaba / multi-role internal checkpoint is now sufficient for the current pause point; PVV API-key testing is intentionally paused by operator decision and future reopen must be explicit. Current focus is the integration of newly curated CVF additions (`CVF ADDING NEW`, `Windows_Skill_Normalization`, Stage 1 helper surfaces) without reopening provider-lane execution. W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-10`: CPF 2929 / EPF 1301 / GEF 625 / LPF 1465 all pass; `cvf-web` passes `tsc + full vitest (117 files / 1865 tests)`.
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `W64-T1`)
+> State: **UNIFIED ON MAIN / PVV ALIBABA CHECKPOINT CLOSED / EXTERNAL-ASSET PRODUCTIZATION READY** — W66-T1 CP1 (Corpus + Rubric Freeze): **COMPLETE**; W66-T1 CP2 (Run Harness Setup): **COMPLETE**; W66-T1 CP3B (Controlled Value Test): **COMPLETE 2026-04-12** with `BypassDetectionGuard` verification closing the P1 gap; one-provider / Alibaba / multi-role internal checkpoint is now sufficient for the current pause point; PVV API-key testing is intentionally paused by operator decision and future reopen must be explicit. The post-closure integration wave (`CVF ADDING NEW`, `Windows_Skill_Normalization`, Stage 1/2/3 helper surfaces) is integrated, verified, and inherited by `cvf-web`; current focus is a bounded next wave that productizes external-asset governance into a first-class intake-to-registry path without reopening provider-lane execution. W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-13`: CPF 2999 / EPF 1301 / GEF 625 / LPF 1493 all pass; `cvf-web` passes `tsc + full vitest (118 files / 1872 tests)` and build.
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `2026-04-13`)
 
 ---
 
@@ -19,16 +19,16 @@
 - Pre-public restructuring posture is now narrowed, canonized, and closed-by-default: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
 - Canonical scan continuity registry: `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
 
-### Local Verify Baseline (2026-04-10)
-- CPF (Control Plane Foundation): `npm run check` + `npm test` clean; **2929 tests, 0 failures**
+### Local Verify Baseline (2026-04-13)
+- CPF (Control Plane Foundation): `npm run check` + `npm test` clean; **2999 tests, 0 failures**
 - EPF (Execution Plane Foundation): `npm run check` + `npm test` clean; **1301 tests, 0 failures**
 - GEF (Governance Expansion Foundation): `npm run check` + `npm test` clean; **625 tests, 0 failures**
-- LPF (Learning Plane Foundation): `npm run check` + `npm test` clean; **1465 tests, 0 failures**
-- `cvf-web`: `npx tsc --noEmit` clean; `npm run test:run` clean; **1865 passed / 3 skipped**; `npm run build` clean
+- LPF (Learning Plane Foundation): `npm run check` + `npm test` clean; **1493 tests, 0 failures**
+- `cvf-web`: `npx tsc --noEmit` clean; `npm run test:run` clean; **1872 passed / 3 skipped**; `npm run build` clean
 - `.github/workflows/cvf-ci.yml` now mirrors this local baseline across Guard Contract, MCP server, 4 foundation packages, and `cvf-web`; first hosted GitHub Actions confirmation is still pending
 
 ### Reuse Rule For Future Agents
-- Treat the `2026-04-10` local verification set as the current shared baseline.
+- Treat the `2026-04-13` local verification set as the current shared baseline.
 - Do **not** rerun the full foundation suites or full `cvf-web` baseline by default when your work does not touch those verified surfaces.
 - Rerun only if at least one of these changes: package manifests or lockfiles, test/build config, shared contract exports, dependency install state, runtime/toolchain version, or files inside the surfaces you modify.
 - If your change is tightly scoped, run the smallest proving command that covers your touched surface and inherit the remaining baseline from this handoff.
@@ -86,7 +86,7 @@
 
 ### Architecture Baseline
 
-- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `W64-T1`)
+- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `2026-04-13`)
 - Posture: `CLOSURE-ASSESSED` (CPF: **DONE-ready**; GEF: **DONE (6/6)**; LPF: **DONE-ready (7/7)**; EPF: **DONE-ready** — Track 5 deferred items are now delivered: Model Gateway Provider Router in CPF and Sandbox Runtime Physical Isolation via `SandboxIsolationContract` + `WorkerThreadSandboxAdapter`)
 - All four planes: plane-banner promotion pass complete; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`; MC1 CPF: `DONE-ready`; MC2 GEF: **DONE (6/6)**; MC3 LPF: **DONE-ready (7/7)**; MC4 EPF: **DONE-ready**; MC5 whitepaper canon promotion: **COMPLETE**
 - Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1 / W59-T1 / W60-T1 / W61-T1 / W62-T1 / W63-T1 / W64-T1`
@@ -96,7 +96,7 @@
 
 ## Immediate Next Action Required
 
-**W66-T1 CP3A Lane Bootstrap — GOVERNED PILOTS COMPLETE (2026-04-11). Gemini-2.5-flash governed pilot DONE; Alibaba `qwen3.5-122b-a10b` governed pilot DONE; Alibaba `qvq-max` governed pilot DONE. All 3 active lanes completed CAL-001–005 through `POST /api/execute` with `guardResult=ALLOW`, `providerRouting=ALLOW`, and non-empty outputs. Strongest product-value signal: Gemini direct had a CAL-004 catastrophic miss, but Gemini governed refused the bypass; both governed Alibaba lanes also refused. `qvq-max-2025-03-25` remains blocked on endpoint compatibility (`404 model_not_supported`). Immediate next step: prepare fresh GC-018 for the full scored CP3A batch and use `docs/assessments/CVF_PVV_PROVIDER_RUNLANE_COMPARATIVE_READOUT_2026-04-11.md` as the comparison baseline for future provider/model additions.**
+**W66-T1 CP3A Lane Bootstrap — GOVERNED PILOTS COMPLETE (2026-04-11). Gemini-2.5-flash governed pilot DONE; Alibaba `qwen3.5-122b-a10b` governed pilot DONE; Alibaba `qvq-max` governed pilot DONE. All 3 active lanes completed CAL-001–005 through `POST /api/execute` with `guardResult=ALLOW`, `providerRouting=ALLOW`, and non-empty outputs. Strongest product-value signal: Gemini direct had a CAL-004 catastrophic miss, but Gemini governed refused the bypass; both governed Alibaba lanes also refused. `qvq-max-2025-03-25` remains blocked on endpoint compatibility (`404 model_not_supported`). This lane bootstrap is now retained as frozen provenance while PVV/API-key work remains paused; future provider/model additions must start from the pause checkpoint and explicit reopen decision, not from an assumed active CP3A wave.**
 
 Current guidance:
 
@@ -138,7 +138,7 @@ Current guidance:
 - **Product value rule**: all future value-proof packets and any Docker-sandbox justification must run through the `GC-042` frozen evidence chain (`corpus -> rubric -> run manifest -> assessment`), not demos or score vanity. Model-agnostic hub claims require multi-lane evidence; single-lane success is scope-limited only.
 - **Post-MC5 orientation**: `docs/guides/POST_MC5_ORIENTATION.md`
 - **Post-MC5 Continuation Strategy**: **ALL 6 ACTIONABLE TRACKS COMPLETE** (Track 1: CI/CD Expansion ✅, Track 2: Product Hardening ✅, Track 3: Pre-Public Packaging ✅, Track 4: Documentation Curation ✅, Track 5A: Model Gateway ✅, Track 5B: Sandbox Runtime ✅)
-- **Next recommended**: stay inside the active integration wave. Continue promoting and implementing bounded `CVF ADDING NEW` + curated `Windows_Skill_Normalization` surfaces into CVF canon / CPF / LPF. Leave PVV/provider execution frozen except for documentation hygiene and future-readiness packets.
+- **Next recommended**: open the bounded productization wave for the now-runnable external-asset governance path. Use `docs/roadmaps/CVF_W67_T1_EXTERNAL_ASSET_PRODUCTIZATION_EXECUTION_PLAN_2026-04-13.md` as the execution anchor. Focus on operator-facing workflow, contract hardening, and governed registry handoff. Leave PVV/provider execution frozen except for future reopen paperwork.
 - **Active bounded parallel tranche**: `CVF ADDING NEW` Stage 1 helper implementation was explicitly authorized by the operator on `2026-04-12` via `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_ADDING_NEW_STAGE1_IMPLEMENTATION_2026-04-12.md`. Scope is tightly bounded to CPF/LPF helper contracts for external asset intake validation, planner-trigger heuristics, and provisional `weak_trigger_definition` capture. This tranche must not modify PVV/provider corpus, manifests, evidence, routes, adapters, or live lane behavior.
 - **Windows normalization curation promoted carefully**: `Windows_Skill_Normalization` material was reviewed, rebutted, and partially synthesized on `2026-04-12` into W7 intake/reference docs only. Promoted value is limited to `execution_environment` enrichment, Windows compatibility review, and a PowerShell reference appendix. This does not alter provider lanes, sandbox posture, or the now-paused PVV API-key test stream.
 - **Diagnostic readout bridge retained for future reopen**: if a future API-key-based readout later needs Stage 1 interpretation, use `docs/reference/CVF_STAGE1_DIAGNOSTIC_INTERPRETATION_PACKET_TEMPLATE.md` together with `docs/assessments/CVF_ADDING_NEW_STAGE1_DIAGNOSTIC_BRIDGE_2026-04-12.md`. Runtime/provider evidence still leads; Stage 1 outputs are interpretation aids only.
@@ -152,6 +152,8 @@ Current guidance:
 - **CVF ADDING NEW bounded closure complete**: the promoted `CVF ADDING NEW` wave is no longer only a Stage 1 helper packet. CPF now also contains lightweight Stage 2 and Stage 3 helpers for `w7_normalized_asset_candidate` compilation and `registry_ready_governed_asset` preparation. Treat this wave as cleanly integrated for the current cycle; only heavier future-facing items remain deferred. Canon closure note: `docs/assessments/CVF_ADDING_NEW_IMPLEMENTATION_CLOSURE_2026-04-12.md`.
 - **Runnable integration surface now exists in `cvf-web`**: `POST /api/governance/external-assets/prepare` is now the bounded executable path for the curated `CVF ADDING NEW` + `Windows_Skill_Normalization` wave. It runs `external intake -> semantic classification -> planner heuristics -> provisional signal capture -> W7 normalization -> registry-ready preparation`, with optional Windows compatibility review, without touching `/api/execute` or any provider lane.
 - **Runtime verification for the new surface is complete at bounded scope**: `cvf-web` now transpiles `cvf-control-plane-foundation` + `cvf-learning-plane-foundation`; targeted route tests for `/api/governance/external-assets/prepare` pass; `npx tsc -p tsconfig.json --noEmit` passes; `npm run build` passes and includes the new route in the app manifest. This is the main proof that the integration wave now runs for real, not only as docs/contracts.
+- **External-asset productization roadmap is now canonical**: the next bounded wave should follow `docs/roadmaps/CVF_W67_T1_EXTERNAL_ASSET_PRODUCTIZATION_EXECUTION_PLAN_2026-04-13.md`. Correct order: `CP1 contract + operator UX hardening -> CP2 governed registry handoff -> CP3 review visibility + closure`. Do not skip straight to persistence before the route/UI contract is stabilized.
+- **Next-agent boundary for W67-T1**: stay inside canon / CPF / LPF / `cvf-web`; do not modify `/api/execute`, provider adapters, PVV evidence, or the paused provider-lane stream as part of external-asset productization.
 - **Historical PVV lane bootstrap sequence — retained for provenance; not active while PVV/API-key work is paused**:
   1. ✅ Lane IDs + model IDs frozen in lane manifest (`docs/baselines/CVF_PRODUCT_VALUE_VALIDATION_LANE_MANIFEST_W66_T1_CP3A_2026-04-11.md`)
   2. ✅ LANE-GEMINI-001 direct pilot DONE — 5/5 tasks reached API; CAL-004 CATASTROPHIC MISS (CFG-A — approved bypass); CAL-002/003/005 TRUNCATED (root cause UNCONFIRMED)
@@ -179,7 +181,7 @@ Current guidance:
 - W59-T1 closure review: `docs/reviews/CVF_W59_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`
 - W59-T1 CP1 review: `docs/reviews/CVF_GC019_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_REVIEW_2026-04-07.md`
 - W59-T1 CP1 audit: `docs/audits/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_AUDIT_2026-04-07.md`
-- **Verification baseline is already refreshed** — use the `2026-04-10` local baseline in this handoff and the quality readout in `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`; do not spend time re-running the same full suites unless your change invalidates that baseline
+- **Verification baseline is already refreshed** — use the `2026-04-13` local baseline in this handoff and the quality readout in `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`; do not spend time re-running the same full suites unless your change invalidates that baseline
 - **Web inheritance assessment**: `docs/assessments/CVF_WEB_W64_INHERITANCE_GAP_ASSESSMENT_2026-04-10.md`
 - **W64 follow-up review findings recorded below** — if reopened, treat as a bounded remediation/security tranche rather than architecture rediscovery
 - W57-T1 closure review: `docs/reviews/CVF_W57_T1_TRANCHE_CLOSURE_REVIEW_2026-04-07.md`

@@ -5,6 +5,7 @@ const registerAssetMock = vi.hoisted(() => vi.fn());
 const listRegistryEntriesMock = vi.hoisted(() => vi.fn());
 const getRegistryEntryMock = vi.hoisted(() => vi.fn());
 const findDuplicateMock = vi.hoisted(() => vi.fn());
+const filterRegistryEntriesMock = vi.hoisted(() => vi.fn());
 const prepareExternalAssetGovernanceMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/middleware-auth', () => ({
@@ -16,6 +17,7 @@ vi.mock('@/lib/server/asset-registry', () => ({
     listRegistryEntries: listRegistryEntriesMock,
     getRegistryEntry: getRegistryEntryMock,
     findDuplicate: findDuplicateMock,
+    filterRegistryEntries: filterRegistryEntriesMock,
 }));
 
 vi.mock('@/lib/server/external-asset-governance', () => ({
@@ -74,6 +76,7 @@ const MOCK_ENTRY = {
     riskLevel: 'R1',
     registryRefs: ['cvf://registry/w7/test'],
     workflowStatus: 'registry_ready' as const,
+    lifecycleStatus: 'active' as const,
     assetName: 'skill.md',
     assetVersion: '1.0.0',
 };
@@ -107,6 +110,7 @@ describe('/api/governance/external-assets/register', () => {
         listRegistryEntriesMock.mockReset();
         getRegistryEntryMock.mockReset();
         findDuplicateMock.mockReset();
+        filterRegistryEntriesMock.mockReset();
         prepareExternalAssetGovernanceMock.mockReset();
         verifySessionCookieMock.mockResolvedValue({
             user: 'tester',
@@ -345,6 +349,80 @@ describe('/api/governance/external-assets/register', () => {
             expect(res.status).toBe(404);
             expect(data.success).toBe(false);
             expect(data.error).toMatch(/nonexistent-uuid/);
+        });
+
+        it('uses filterRegistryEntries when ?status= param is present (CP2 filter)', async () => {
+            const activeEntry = { ...MOCK_ENTRY, lifecycleStatus: 'active' as const };
+            filterRegistryEntriesMock.mockReturnValue([activeEntry]);
+
+            const req = new Request(
+                'http://localhost/api/governance/external-assets/register?status=active',
+                { method: 'GET' },
+            );
+
+            const res = await GET(req as never);
+            const data = await res.json();
+
+            expect(res.status).toBe(200);
+            expect(data.success).toBe(true);
+            expect(data.count).toBe(1);
+            expect(filterRegistryEntriesMock).toHaveBeenCalledWith({ status: 'active' });
+            expect(listRegistryEntriesMock).not.toHaveBeenCalled();
+        });
+
+        it('uses filterRegistryEntries when ?source_ref= param is present (CP2 filter)', async () => {
+            filterRegistryEntriesMock.mockReturnValue([MOCK_ENTRY]);
+
+            const req = new Request(
+                'http://localhost/api/governance/external-assets/register?source_ref=CVF_ADDING_NEW%2Fskill.md',
+                { method: 'GET' },
+            );
+
+            const res = await GET(req as never);
+            const data = await res.json();
+
+            expect(res.status).toBe(200);
+            expect(filterRegistryEntriesMock).toHaveBeenCalledWith({
+                source_ref: 'CVF_ADDING_NEW/skill.md',
+            });
+        });
+
+        it('uses filterRegistryEntries with ANDed params when multiple filters present', async () => {
+            filterRegistryEntriesMock.mockReturnValue([]);
+
+            const req = new Request(
+                'http://localhost/api/governance/external-assets/register?status=retired&candidate_asset_type=W7SkillAsset',
+                { method: 'GET' },
+            );
+
+            const res = await GET(req as never);
+            const data = await res.json();
+
+            expect(res.status).toBe(200);
+            expect(data.count).toBe(0);
+            expect(filterRegistryEntriesMock).toHaveBeenCalledWith({
+                status: 'retired',
+                candidate_asset_type: 'W7SkillAsset',
+            });
+        });
+
+        it('ignores unknown status values — filter called with no status field', async () => {
+            filterRegistryEntriesMock.mockReturnValue([MOCK_ENTRY]);
+
+            const req = new Request(
+                'http://localhost/api/governance/external-assets/register?status=invalid-value',
+                { method: 'GET' },
+            );
+
+            const res = await GET(req as never);
+            const data = await res.json();
+
+            // status=invalid-value fails the 'active'|'retired' check;
+            // hasFilter is truthy so filterRegistryEntries is called with empty filter object
+            expect(res.status).toBe(200);
+            expect(data.success).toBe(true);
+            expect(filterRegistryEntriesMock).toHaveBeenCalledWith({});
+            expect(listRegistryEntriesMock).not.toHaveBeenCalled();
         });
     });
 });

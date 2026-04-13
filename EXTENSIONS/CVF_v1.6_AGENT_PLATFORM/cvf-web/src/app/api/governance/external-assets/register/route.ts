@@ -6,6 +6,7 @@ import {
     listRegistryEntries,
     getRegistryEntry,
     findDuplicate,
+    filterRegistryEntries,
 } from '@/lib/server/asset-registry';
 
 /**
@@ -17,6 +18,7 @@ import {
  *
  * Duplicate policy: source_ref + candidate_asset_type is the logical identity key.
  * A second registration of the same logical asset returns 409 with the existing entry.
+ * The duplicate gate is lifecycle-aware: only ACTIVE entries block registration.
  *
  * Body: ExternalAssetGovernanceRequest (same shape as /prepare)
  * Returns: { success: true, entry: AssetRegistryEntry }
@@ -24,6 +26,10 @@ import {
  * GET /api/governance/external-assets/register
  * Without query params: list all registered governed assets.
  * With ?id=<uuid>: return a single entry detail (404 if not found).
+ * Filter params (ANDed, applied when no ?id):
+ *   ?status=active|retired
+ *   ?source_ref=<str>
+ *   ?candidate_asset_type=<str>
  */
 
 function checkServiceToken(request: NextRequest): boolean {
@@ -71,9 +77,10 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // CP1 — Duplicate gate: source_ref + candidate_asset_type must be unique.
+        // CP1 — Duplicate gate: source_ref + candidate_asset_type must be unique (active entries only).
         // First registration wins; repeat registrations of the same logical asset
         // are rejected with 409 and the existing entry is returned for reference.
+        // Lifecycle-aware: retired entries do not block re-registration.
         const profile = result.intake.normalizedProfile;
         const existing = findDuplicate(profile.source_ref, profile.candidate_asset_type);
         if (existing) {
@@ -131,6 +138,23 @@ export async function GET(request: NextRequest) {
                 );
             }
             return NextResponse.json({ success: true, entry });
+        }
+
+        // CP2 — Filtered list: ?status, ?source_ref, ?candidate_asset_type are ANDed.
+        const statusParam = searchParams.get('status');
+        const sourceRefParam = searchParams.get('source_ref');
+        const candidateAssetTypeParam = searchParams.get('candidate_asset_type');
+        const hasFilter = statusParam || sourceRefParam || candidateAssetTypeParam;
+
+        if (hasFilter) {
+            const filter: Parameters<typeof filterRegistryEntries>[0] = {};
+            if (statusParam === 'active' || statusParam === 'retired') {
+                filter.status = statusParam;
+            }
+            if (sourceRefParam) filter.source_ref = sourceRefParam;
+            if (candidateAssetTypeParam) filter.candidate_asset_type = candidateAssetTypeParam;
+            const entries = filterRegistryEntries(filter);
+            return NextResponse.json({ success: true, entries, count: entries.length });
         }
 
         const entries = listRegistryEntries();

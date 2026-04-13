@@ -2,9 +2,10 @@
 
 Memory class: FULL_RECORD
 
-> Wave: W67-T1 External Asset Productization
-> Status: ACTIVE — CP1+CP2+CP3 DELIVERED 2026-04-13
+> Wave: W67-T1 External Asset Productization + W69-T1 Governed Registry Lifecycle + Read Model
+> Status: ACTIVE — W67-T1 CP1+CP2+CP3 DELIVERED 2026-04-13 | W69-T1 CP1+CP2+CP3 DELIVERED 2026-04-13
 > Authorization: `docs/baselines/CVF_GC018_W67_T1_EXTERNAL_ASSET_PRODUCTIZATION_AUTHORIZATION_2026-04-13.md`
+> Authorization: `docs/baselines/CVF_GC018_W69_T1_GOVERNED_REGISTRY_LIFECYCLE_READMODEL_AUTHORIZATION_2026-04-13.md`
 
 ---
 
@@ -17,7 +18,8 @@ Both routes are isolated from `/api/execute`, provider adapters, and PVV evidenc
 |-------|--------|---------|
 | `/api/governance/external-assets/prepare` | POST | Run governance pipeline; return workflowStatus + review data |
 | `/api/governance/external-assets/register` | POST | Persist an approved asset in the governed registry |
-| `/api/governance/external-assets/register` | GET | List all registered governed assets |
+| `/api/governance/external-assets/register` | GET | List or query registered governed assets (filter-capable) |
+| `/api/governance/external-assets/retire` | POST | Retire an active registry entry (append-only, lifecycle-aware) |
 
 ---
 
@@ -210,6 +212,8 @@ Same shape as `POST /prepare` — submit the full governance profile, not a pre-
     "id": "uuid-v4",
     "registeredAt": "2026-04-13T10:00:00.000Z",
     "workflowStatus": "registry_ready",
+    "lifecycleStatus": "active",          // W69-T1: 'active' | 'retired'
+    "retiredAt": null,                    // W69-T1: ISO timestamp when retired, else absent
     "source_ref": "CVF_ADDING_NEW/skill.md",
     "candidate_asset_type": "W7SkillAsset",
     "description_or_trigger": "...",
@@ -249,26 +253,20 @@ The existing entry is included so the caller can inspect it without re-querying.
 }
 ```
 
-**Duplicate policy**: `source_ref` + `candidate_asset_type` is the logical identity key.
-First registration wins. To update, the existing entry must first be retired (future scope).
+**Duplicate policy (W69-T1 lifecycle-aware)**: `source_ref` + `candidate_asset_type` is the logical identity key.
+Only ACTIVE entries block re-registration. A retired entry does NOT block re-registration.
+To replace an asset: retire the active entry via `POST /retire`, then register the new version.
 
 ---
 
 ## GET `/api/governance/external-assets/register`
 
-List all registered governed assets, or fetch a single entry by id.
+List, filter, or fetch a single governed registry entry.
 
 ### Without query params — list all
 
 ```jsonc
-{
-  "success": true,
-  "count": 2,
-  "entries": [
-    { ...AssetRegistryEntry },
-    { ...AssetRegistryEntry }
-  ]
-}
+{ "success": true, "count": 2, "entries": [ { ...AssetRegistryEntry }, ... ] }
 ```
 
 ### With `?id=<uuid>` — single entry detail
@@ -280,6 +278,58 @@ List all registered governed assets, or fetch a single entry by id.
 // 404 Not Found
 { "success": false, "error": "Registry entry not found: <uuid>" }
 ```
+
+### Filter params (W69-T1) — ANDed, applied when no `?id`
+
+| Param | Values | Effect |
+|-------|--------|--------|
+| `?status=` | `active` \| `retired` | Filter by lifecycle status |
+| `?source_ref=` | URL-encoded string | Filter by source ref |
+| `?candidate_asset_type=` | string | Filter by asset type |
+
+```jsonc
+// ?status=active
+{ "success": true, "count": 1, "entries": [ { "lifecycleStatus": "active", ... } ] }
+
+// ?status=retired&candidate_asset_type=W7SkillAsset
+{ "success": true, "count": 0, "entries": [] }
+```
+
+---
+
+## POST `/api/governance/external-assets/retire`
+
+Retires an active registry entry (W69-T1). The original JSONL line is never mutated;
+a retirement record is appended. Re-registration of the same logical asset is allowed
+after retirement.
+
+### Request Body
+
+```jsonc
+{ "id": "uuid-v4" }  // uuid of the active entry to retire
+```
+
+### Response — 200 OK
+
+```jsonc
+{
+  "success": true,
+  "entry": {
+    "id": "uuid-v4",
+    "lifecycleStatus": "retired",
+    "retiredAt": "2026-04-13T11:00:00.000Z",
+    ...  // all other AssetRegistryEntry fields preserved
+  }
+}
+```
+
+### Error Responses
+
+| Status | Condition |
+|--------|-----------|
+| 400 | Missing or empty `id` field |
+| 401 | Unauthenticated |
+| 404 | Entry not found or already retired |
 
 ---
 

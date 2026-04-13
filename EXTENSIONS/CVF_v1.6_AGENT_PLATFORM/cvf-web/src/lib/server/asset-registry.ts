@@ -1,14 +1,23 @@
 /**
- * CVF W67-T1 CP2 — Governed Asset Registry
+ * CVF W67-T1 CP2 / W69-T1 — Governed Asset Registry
  *
- * Bounded file-based registry sink for approved `registry_ready_governed_asset` outputs.
+ * Bounded file-based registry with lifecycle semantics.
  * Write path is completely isolated from /api/execute and PVV evidence files.
  *
  * Persistence: JSONL at data/governed-asset-registry.jsonl (relative to cvf-web root).
- * Each line is one AssetRegistryEntry (append-only, auditable).
+ * Append-only — two record types coexist in the file:
+ *   - AssetRegistryEntry lines (registration records)
+ *   - RegistryRetirementRecord lines (retirement events, identified by _type: 'retirement')
+ *
+ * Lifecycle rule (W69-T1):
+ *   - source_ref + candidate_asset_type is the logical identity key
+ *   - at most one ACTIVE entry may exist per logical identity
+ *   - retirement is append-only: a retirement record marks a prior entry as retired
+ *   - re-registration is allowed only after the prior active entry has been retired
+ *   - historical lines are never mutated
  *
  * MVP note: local-server persistence only. Serverless deployment requires an
- * external store; that is a future concern outside W67-T1 scope.
+ * external store; that is a future concern outside W67-T1/W68-T1/W69-T1 scope.
  */
 
 import fs from 'fs';
@@ -29,6 +38,10 @@ export interface AssetRegistryEntry {
     riskLevel: string;
     registryRefs: string[];
     workflowStatus: 'registry_ready';
+    /** Lifecycle status — 'active' on registration; 'retired' after retireEntry(). */
+    lifecycleStatus: 'active' | 'retired';
+    /** ISO timestamp; present when lifecycleStatus === 'retired'. */
+    retiredAt?: string;
     assetName: string;
     assetVersion: string;
 }
@@ -45,10 +58,76 @@ export interface RegisterAssetInput {
     assetVersion?: string;
 }
 
+export interface RegistryFilter {
+    status?: 'active' | 'retired';
+    source_ref?: string;
+    candidate_asset_type?: string;
+}
+
+/** Internal type for retirement events written into the JSONL file. */
+interface RegistryRetirementRecord {
+    _type: 'retirement';
+    targetId: string;
+    retiredAt: string;
+}
+
 function ensureRegistryDir(): void {
     if (!fs.existsSync(REGISTRY_DIR)) {
         fs.mkdirSync(REGISTRY_DIR, { recursive: true });
     }
+}
+
+/**
+ * Reads all JSONL lines; separates entry records from retirement records.
+ * Returns entries annotated with their effective lifecycle status.
+ */
+function readAllLines(): AssetRegistryEntry[] {
+    if (!fs.existsSync(REGISTRY_FILE)) return [];
+
+    const lines = fs
+        .readFileSync(REGISTRY_FILE, 'utf-8')
+        .split('\n')
+        .filter((line) => line.trim().length > 0);
+
+    const entryMap = new Map<string, AssetRegistryEntry>();
+    const retirements = new Map<string, string>(); // targetId → retiredAt
+
+    for (const line of lines) {
+        try {
+            const parsed = JSON.parse(line) as
+                | RegistryRetirementRecord
+                | Partial<AssetRegistryEntry>;
+            if ('_type' in parsed && parsed._type === 'retirement') {
+                const r = parsed as RegistryRetirementRecord;
+                retirements.set(r.targetId, r.retiredAt);
+            } else {
+                // Default legacy entries (pre-W69) to 'active' if field absent
+                const raw = parsed as Omit<AssetRegistryEntry, 'lifecycleStatus'> &
+                    Partial<Pick<AssetRegistryEntry, 'lifecycleStatus'>>;
+                entryMap.set(raw.id, {
+                    ...raw,
+                    lifecycleStatus: raw.lifecycleStatus ?? 'active',
+                } as AssetRegistryEntry);
+            }
+        } catch {
+            // skip malformed lines — registry is append-only; bad lines are inert
+        }
+    }
+
+    // Apply retirement markers to entries
+    const result: AssetRegistryEntry[] = [];
+    for (const entry of entryMap.values()) {
+        if (retirements.has(entry.id)) {
+            result.push({
+                ...entry,
+                lifecycleStatus: 'retired',
+                retiredAt: retirements.get(entry.id),
+            });
+        } else {
+            result.push(entry);
+        }
+    }
+    return result;
 }
 
 export function registerAsset(input: RegisterAssetInput): AssetRegistryEntry {
@@ -65,6 +144,7 @@ export function registerAsset(input: RegisterAssetInput): AssetRegistryEntry {
         riskLevel: input.riskLevel,
         registryRefs: input.registryRefs ?? [],
         workflowStatus: 'registry_ready',
+        lifecycleStatus: 'active',
         assetName: input.assetName ?? input.source_ref.split('/').pop() ?? input.source_ref,
         assetVersion: input.assetVersion ?? '1.0.0',
     };
@@ -74,39 +154,60 @@ export function registerAsset(input: RegisterAssetInput): AssetRegistryEntry {
 }
 
 export function listRegistryEntries(): AssetRegistryEntry[] {
-    if (!fs.existsSync(REGISTRY_FILE)) return [];
-
-    const lines = fs.readFileSync(REGISTRY_FILE, 'utf-8')
-        .split('\n')
-        .filter((line) => line.trim().length > 0);
-
-    const entries: AssetRegistryEntry[] = [];
-    for (const line of lines) {
-        try {
-            entries.push(JSON.parse(line) as AssetRegistryEntry);
-        } catch {
-            // skip malformed lines — registry is append-only; bad lines are inert
-        }
-    }
-    return entries;
+    return readAllLines();
 }
 
 export function getRegistryEntry(id: string): AssetRegistryEntry | null {
-    return listRegistryEntries().find((e) => e.id === id) ?? null;
+    return readAllLines().find((e) => e.id === id) ?? null;
 }
 
 /**
- * Duplicate detection key: source_ref + candidate_asset_type.
- * The same logical asset (same source path, same type) may only be registered once.
- * Returns the existing entry if found, null otherwise.
+ * Retires an active registry entry (append-only).
+ * Appends a retirement record; the original entry line is not mutated.
+ * Returns the entry with lifecycleStatus='retired', or null if not found or already retired.
+ */
+export function retireEntry(id: string): AssetRegistryEntry | null {
+    const entry = readAllLines().find((e) => e.id === id && e.lifecycleStatus === 'active');
+    if (!entry) return null;
+
+    const retiredAt = new Date().toISOString();
+    const record: RegistryRetirementRecord = { _type: 'retirement', targetId: id, retiredAt };
+
+    ensureRegistryDir();
+    fs.appendFileSync(REGISTRY_FILE, JSON.stringify(record) + '\n', 'utf-8');
+    return { ...entry, lifecycleStatus: 'retired', retiredAt };
+}
+
+/**
+ * Duplicate detection: source_ref + candidate_asset_type, ACTIVE entries only.
+ * Returns the active entry if found; null if the logical asset is unregistered or retired.
+ * Re-registration is allowed only when this returns null.
  */
 export function findDuplicate(
     sourceRef: string,
     candidateAssetType: string,
 ): AssetRegistryEntry | null {
     return (
-        listRegistryEntries().find(
-            (e) => e.source_ref === sourceRef && e.candidate_asset_type === candidateAssetType,
+        readAllLines().find(
+            (e) =>
+                e.source_ref === sourceRef &&
+                e.candidate_asset_type === candidateAssetType &&
+                e.lifecycleStatus === 'active',
         ) ?? null
     );
+}
+
+/** Filtered read for operator use. All filter fields are optional and ANDed. */
+export function filterRegistryEntries(filter: RegistryFilter): AssetRegistryEntry[] {
+    let entries = readAllLines();
+    if (filter.status !== undefined) {
+        entries = entries.filter((e) => e.lifecycleStatus === filter.status);
+    }
+    if (filter.source_ref !== undefined) {
+        entries = entries.filter((e) => e.source_ref === filter.source_ref);
+    }
+    if (filter.candidate_asset_type !== undefined) {
+        entries = entries.filter((e) => e.candidate_asset_type === filter.candidate_asset_type);
+    }
+    return entries;
 }

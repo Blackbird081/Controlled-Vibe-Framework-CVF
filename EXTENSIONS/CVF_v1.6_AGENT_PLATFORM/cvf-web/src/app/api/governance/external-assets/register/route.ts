@@ -49,11 +49,23 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // Governance gate: only explicitly approved, registry_ready assets may be registered.
+        // Callers must run /prepare first and confirm workflowStatus === 'registry_ready'.
+        if (asset.approvalState !== 'approved') {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'asset.approvalState must be "approved"; run /prepare first and confirm registry_ready status before registering',
+                },
+                { status: 400 },
+            );
+        }
+
         const entry = registerAsset({
             source_ref: String(asset.source_ref),
             candidate_asset_type: String(asset.candidate_asset_type),
             description_or_trigger: String(asset.description_or_trigger),
-            approvalState: typeof asset.approvalState === 'string' ? asset.approvalState : 'approved',
+            approvalState: 'approved',
             governanceOwner: typeof asset.governanceOwner === 'string' ? asset.governanceOwner : 'cvf-operator',
             riskLevel: typeof asset.riskLevel === 'string' ? asset.riskLevel : 'R1',
             registryRefs: Array.isArray(asset.registryRefs) ? asset.registryRefs : [],

@@ -159,6 +159,49 @@ describe('/api/governance/external-assets/prepare', () => {
     expect(data.data.warnings).toContain('INTAKE_REQUIRED_PROVENANCE_NOTES');
   });
 
+  it('returns workflowStatus=review_required when planner needs clarification (missing prerequisites)', async () => {
+    const req = new Request('http://localhost/api/governance/external-assets/prepare', {
+      method: 'POST',
+      body: JSON.stringify({
+        profile: {
+          source_ref: 'CVF_ADDING_NEW/skill.md',
+          source_kind: 'repo',
+          source_quality: 'community_analysis',
+          officially_verified: false,
+          provenance_notes: 'Curated from community analysis.',
+          candidate_asset_type: 'W7SkillAsset',
+          description_or_trigger: 'Convert shell skill into governed CVF asset',
+          instruction_body: 'Use shell script directly.',
+        },
+        // Provide candidates with prerequisites not in availableInputs — forces
+        // clarification_needed=true and provisionalSignal!=null, blocking registry_ready
+        planner: {
+          candidates: [
+            {
+              candidateRef: 'source:CVF_ADDING_NEW/skill.md',
+              triggerPhrases: ['Convert shell skill into governed CVF asset'],
+              prerequisites: ['APPROVED_REVIEW'],
+              riskLevel: 'R1',
+            },
+          ],
+          availableInputs: [],
+        },
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.success).toBe(true);
+    expect(data.data.intake.valid).toBe(true);
+    expect(data.data.plannerTrigger.clarification_needed).toBe(true);
+    expect(data.data.provisionalSignal).not.toBeNull();
+    expect(data.data.readyForRegistry).toBe(false);
+    expect(data.data.workflowStatus).toBe('review_required');
+    expect(data.data.warnings).toContain('PLANNER_CLARIFICATION_REQUIRED');
+  });
+
   it('returns workflowStatus=review_required when intake valid but semantic policy invalid', async () => {
     const req = new Request('http://localhost/api/governance/external-assets/prepare', {
       method: 'POST',

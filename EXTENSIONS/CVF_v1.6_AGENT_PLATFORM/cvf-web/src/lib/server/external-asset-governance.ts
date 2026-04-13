@@ -282,6 +282,8 @@ export function prepareExternalAssetGovernance(
     normalizedCandidate.valid &&
     registryReady.valid &&
     (semanticPolicy === null || semanticPolicy.valid) &&
+    !plannerTrigger.clarification_needed &&
+    provisionalSignal === null &&
     (windowsCompatibility === null ||
       windowsCompatibility.classification !== 'REJECTED_FOR_WINDOWS_TARGET');
 

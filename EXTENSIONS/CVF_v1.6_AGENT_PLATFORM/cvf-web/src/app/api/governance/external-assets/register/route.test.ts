@@ -133,6 +133,7 @@ describe('/api/governance/external-assets/register', () => {
                         source_ref: 'CVF_ADDING_NEW/skill.md',
                         candidate_asset_type: 'W7SkillAsset',
                         description_or_trigger: 'Test',
+                        approvalState: 'approved',
                     },
                 }),
             });
@@ -142,6 +143,50 @@ describe('/api/governance/external-assets/register', () => {
 
             expect(res.status).toBe(200);
             expect(data.success).toBe(true);
+        });
+
+        it('returns 400 when approvalState is not approved (adversarial: draft)', async () => {
+            const req = new Request('http://localhost/api/governance/external-assets/register', {
+                method: 'POST',
+                body: JSON.stringify({
+                    asset: {
+                        source_ref: 'CVF_ADDING_NEW/skill.md',
+                        candidate_asset_type: 'W7SkillAsset',
+                        description_or_trigger: 'Convert shell skill into governed CVF asset',
+                        approvalState: 'draft',
+                    },
+                }),
+            });
+
+            const res = await POST(req as never);
+            const data = await res.json();
+
+            expect(res.status).toBe(400);
+            expect(data.success).toBe(false);
+            expect(data.error).toMatch(/approvalState/);
+            expect(registerAssetMock).not.toHaveBeenCalled();
+        });
+
+        it('returns 400 when approvalState is missing (adversarial: 3-field minimal payload)', async () => {
+            const req = new Request('http://localhost/api/governance/external-assets/register', {
+                method: 'POST',
+                body: JSON.stringify({
+                    asset: {
+                        source_ref: 'CVF_ADDING_NEW/skill.md',
+                        candidate_asset_type: 'W7SkillAsset',
+                        description_or_trigger: 'Convert shell skill into governed CVF asset',
+                        // approvalState intentionally omitted — callers must run /prepare first
+                    },
+                }),
+            });
+
+            const res = await POST(req as never);
+            const data = await res.json();
+
+            expect(res.status).toBe(400);
+            expect(data.success).toBe(false);
+            expect(data.error).toMatch(/approvalState/);
+            expect(registerAssetMock).not.toHaveBeenCalled();
         });
     });
 

@@ -492,3 +492,37 @@ describe("createPerformanceBenchmarkHarnessContract", () => {
     expect(h).toBeInstanceOf(PerformanceBenchmarkHarnessContract);
   });
 });
+
+// ---------------------------------------------------------------------------
+// W72-T5 — BenchmarkTarget: Knowledge Layer extensions
+// ---------------------------------------------------------------------------
+
+describe("BenchmarkTarget — knowledge layer extensions (W72-T5)", () => {
+  it("KNOWLEDGE_QUERY: initRun accepts and returns correct target", () => {
+    const h = createPerformanceBenchmarkHarnessContract({ now: fixed });
+    const run = h.initRun("KNOWLEDGE_QUERY");
+    expect(run.target).toBe("KNOWLEDGE_QUERY");
+    expect(run.status).toBe("PENDING");
+  });
+
+  it("KNOWLEDGE_RANKING: initRun accepts and returns correct target", () => {
+    const h = createPerformanceBenchmarkHarnessContract({ now: fixed });
+    const run = h.initRun("KNOWLEDGE_RANKING");
+    expect(run.target).toBe("KNOWLEDGE_RANKING");
+    expect(run.status).toBe("PENDING");
+  });
+
+  it("KNOWLEDGE_STRUCTURAL_INDEX: initRun accepts and returns correct target", () => {
+    const h = createPerformanceBenchmarkHarnessContract({ now: fixed });
+    const run = h.initRun("KNOWLEDGE_STRUCTURAL_INDEX");
+    expect(run.target).toBe("KNOWLEDGE_STRUCTURAL_INDEX");
+    expect(run.status).toBe("PENDING");
+  });
+
+  it("KNOWLEDGE_COMPILED_CONTEXT: initRun accepts and returns correct target", () => {
+    const h = createPerformanceBenchmarkHarnessContract({ now: fixed });
+    const run = h.initRun("KNOWLEDGE_COMPILED_CONTEXT");
+    expect(run.target).toBe("KNOWLEDGE_COMPILED_CONTEXT");
+    expect(run.status).toBe("PENDING");
+  });
+});

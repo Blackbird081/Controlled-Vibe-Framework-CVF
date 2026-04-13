@@ -21,7 +21,12 @@ export type BenchmarkTarget =
   | "EPF_PIPELINE"
   | "GEF_PIPELINE"
   | "LPF_PIPELINE"
-  | "CROSS_PLANE";
+  | "CROSS_PLANE"
+  // W72-T5 — Knowledge Layer targets
+  | "KNOWLEDGE_QUERY"
+  | "KNOWLEDGE_RANKING"
+  | "KNOWLEDGE_STRUCTURAL_INDEX"
+  | "KNOWLEDGE_COMPILED_CONTEXT";
 
 export type PerformanceClass =
   | "LATENCY_MS"

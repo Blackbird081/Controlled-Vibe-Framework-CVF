@@ -119,3 +119,25 @@ export type {
   KnowledgeMaintenanceBatch,
   KnowledgeMaintenanceBatchContractDependencies,
 } from "./knowledge.maintenance.batch.contract";
+
+// W74-T1 — KnowledgeRefactorContract (Lifecycle Step 6)
+export {
+  KnowledgeRefactorContract,
+  createKnowledgeRefactorContract,
+} from "./knowledge.refactor.contract";
+export type {
+  KnowledgeRefactorAction,
+  KnowledgeRefactorProposal,
+  KnowledgeRefactorRequest,
+  KnowledgeRefactorContractDependencies,
+} from "./knowledge.refactor.contract";
+
+// W74-T1 — KnowledgeRefactorBatchContract
+export {
+  KnowledgeRefactorBatchContract,
+  createKnowledgeRefactorBatchContract,
+} from "./knowledge.refactor.batch.contract";
+export type {
+  KnowledgeRefactorBatch,
+  KnowledgeRefactorBatchContractDependencies,
+} from "./knowledge.refactor.batch.contract";

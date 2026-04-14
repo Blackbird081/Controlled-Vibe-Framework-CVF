@@ -343,6 +343,7 @@ Output (Allow / Strip & Allow / Block)
 | CVF_GOVERNED_FILE_SIZE_GUARD.md | Governed source/test/frontend/docs growth | File stays under threshold or carries approved exception |
 | CVF_MEMORY_GOVERNANCE_GUARD.md | Durable governance records | Correct memory class markers required |
 | CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md | Future knowledge absorption, repo-derived skill intake, or post-closure extension planning | Doctrine-first / governance-first absorption must complete before implementation-first expansion |
+| CVF_TEMPLATE_SKILL_STANDARD_GUARD.md | Future skill/template intake, corpus rescreen, or trusted-subset admission for public non-coder use | Deterministic CVF-standard screen required; only `TRUSTED_FOR_VALUE_PROOF` may enter benchmark truth |
 | CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md | Multi-agent intake/rebuttal/decision docs | Canonical review doc chain must be standardized |
 | CVF_PRODUCT_VALUE_VALIDATION_GUARD.md | Product-value proof, comparative validation, or Docker-sandbox justification claims | Frozen corpus + rubric + run manifest + no-spin assessment required |
 | CVF_PROGRESS_TRACKER_SYNC_GUARD.md | Tranche posture change | Canonical tracker and sync note must stay aligned |

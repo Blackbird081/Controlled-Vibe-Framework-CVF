@@ -248,6 +248,14 @@ Personal AI usage unrelated to company work is excluded.
      - canonical priority authority: `docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md`
      - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`
      - automated enforcement reference: `governance/compat/check_knowledge_absorption_priority_compat.py`
+38. `GC-044` future template/skill intake, corpus rescreen, and trusted-subset admission must use one deterministic CVF-standard quality rule before public non-coder use or value-proof:
+     - this rule applies to repo-derived skill intake, front-door template additions, legacy corpus rescreen, and selection of templates/skills used to justify public non-coder value claims
+     - the canonical quality authority is `docs/reference/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_STANDARD_2026-04-14.md`
+     - only items classified `TRUSTED_FOR_VALUE_PROOF` may be used in benchmark/value-proof tranches
+     - earlier intake rules remain necessary, but they are no longer sufficient by themselves for public non-coder front-door quality
+     - provider freeze for the current lane remains roadmap/execution policy, not a permanent guard invariant
+     - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`
+     - automated enforcement reference: `governance/compat/check_template_skill_standard_guard_compat.py`
 
 ---
 

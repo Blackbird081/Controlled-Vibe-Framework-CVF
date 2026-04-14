@@ -16,8 +16,37 @@ Memory class: SUMMARY_RECORD
 > - Multi-provider là thứ yếu cho đến khi non-coder đã nhận đủ core value của CVF qua 1 provider.
 > - Nếu 1 provider chưa cho thấy non-coder nhận đủ lợi ích cốt lõi → mở rộng multi-provider là đi sai thứ tự.
 > - Khi 1 provider đã chứng minh rõ core value → multi-provider về sau chủ yếu là portability, robustness, engineering scale — không còn là bài toán chứng minh giá trị cốt lõi.
+> - Baseline provider cho `W90-T1` đến `W94-T1` là **Alibaba only**. Auto-fallback model trong cùng provider được phép; đổi sang provider khác là sai lane.
 >
 > **Mọi agent nhận handoff phải đọc roadmap này trước khi đề xuất bất kỳ hướng đi mới nào.**
+
+### 0.1 Measurement Authority
+
+Mọi measurement trong `W90-T1` đến `W94-T1` phải dùng các nguồn authority sau:
+
+- `docs/reference/CVF_NON_CODER_VALUE_MEASUREMENT_STANDARD_2026-04-14.md`
+- `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/pvv.nc.benchmark.test.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/risk-check.ts`
+- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/safety-status.ts`
+
+Nếu một tranche cần metric mới mà các nguồn trên chưa định nghĩa, phải cập nhật `CVF_NON_CODER_VALUE_MEASUREMENT_STANDARD_2026-04-14.md` trước.
+
+### 0.2 Guard And Corpus Prerequisites
+
+Before any benchmark tranche claims public-facing non-coder value:
+
+- `governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`
+- `docs/roadmaps/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_ROADMAP_2026-04-14.md`
+
+must both be treated as binding prerequisites.
+
+Key posture:
+
+- template/skill quality standards are now an active guard-class invariant under `GC-044`
+- broader non-coder value standards still point toward a future guard-class invariant
+- current Alibaba provider freeze should NOT become a permanent guard invariant
+- benchmark tranches must use a trusted corpus, not a legacy low-confidence corpus
 
 ---
 
@@ -78,7 +107,7 @@ W87 covered 3 patterns. Non-coder thực tế sẽ gặp nhiều hơn:
 
 ### 2.3 GAP 2 — Template Output Quality Chưa Được Validate (HIGH PRIORITY)
 
-CVF có 8 template categories, 117+ templates. Nhưng:
+CVF web hiện có 8 template categories và một template corpus hữu hạn trong `src/lib/templates`. Nhưng:
 
 - Chưa có bất kỳ benchmark nào đo: **output của governed path có thực sự hữu ích với non-coder không?**
 - Chưa biết: template nào đang trigger false positives (governance block legitimate work)?
@@ -134,10 +163,10 @@ CVF hiện tại chỉ handle 1-shot execute. Không có governed iterative work
 
 > **Mục tiêu**: Mở rộng từ 3 lên 10+ HIGH_RISK patterns trong guided.response.registry.ts
 
-- Thêm NC_001 (SQL injection), NC_002 (XSS/unvalidated input), NC_004 (insecure auth), NC_005 (PII logging), NC_008 (hardcoded secrets) — minimum 5 patterns mới
+- Mandatory minimum new patterns: `NC_001_SQL_INJECTION`, `NC_002_XSS_OR_UNVALIDATED_INPUT`, `NC_004_INSECURE_AUTH`, `NC_005_PII_LOGGING`, `NC_008_HARDCODED_SECRETS`
 - Mỗi pattern: guided response text + registry entry + test cases
 - Test: extend `guided.response.test.ts` — verify presence, verify NORMAL undefined, verify structure
-- Exit criterion: ít nhất 8 HIGH_RISK patterns covered, 100% test pass
+- Exit criterion: exact 8-pattern floor MET per `CVF_NON_CODER_VALUE_MEASUREMENT_STANDARD_2026-04-14.md`, 100% targeted test pass, no regression on NORMAL tasks
 - Class: PRODUCT / NON_CODER_VALUE / SAFETY_COVERAGE
 - Lane: Full (GC-018)
 
@@ -147,11 +176,12 @@ CVF hiện tại chỉ handle 1-shot execute. Không có governed iterative work
 
 > **Mục tiêu**: Validate rằng template executions qua governed path tạo ra output thực sự hữu ích với non-coder
 
-- Chọn 10 template representatives (1-2 per category) từ 8 categories
+- Prerequisite: corpus items used here must first be classified `TRUSTED_FOR_VALUE_PROOF` by `CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_ROADMAP_2026-04-14.md`
+- Use the frozen 10-template set from `CVF_NON_CODER_VALUE_MEASUREMENT_STANDARD_2026-04-14.md`
 - Run mỗi template qua `/api/execute` governed path
-- Đánh giá output theo 3 tiêu chí: (1) actionable cho non-coder không? (2) có better hơn direct API không? (3) có bị false-positive governance block không?
-- Ghi lại evidence: output samples, scores, gaps found
-- Exit criterion: evidence packet with ≥10 templates evaluated; false-positive rate < 10%
+- Stage 1: machine precheck bằng `validateOutput()`; Stage 2: human rubric `Actionability / Specificity / Completeness / Governance-Safe Usefulness`
+- Ghi lại evidence: output samples, rubric scores, precheck result, enforcement result, false-positive count
+- Exit criterion: evidence packet with exact 10 templates evaluated; false-positive rate < 10%; at least 8/10 outputs rated usable
 - Class: VALIDATION_EVIDENCE / GOVERNED_RUNTIME_BENCHMARK
 - Lane: Full (GC-018)
 
@@ -165,9 +195,11 @@ CVF hiện tại chỉ handle 1-shot execute. Không có governed iterative work
 
 > **Mục tiêu**: Non-coder có actual path khi request cần approval — không phải dead end
 
-- Design + implement approval request UI (non-coder có thể gửi approval request đến reviewer)
-- Hoặc: clarify/simplify request để tránh cần approval
-- Exit criterion: NEEDS_APPROVAL không còn là dead end trong non-coder journey
+- Must not stop at better copy only
+- Must provide a visible next action from the front-door flow
+- Must create a real approval-request artifact or equivalent governed request record
+- Must expose a deterministic state lifecycle at minimum: `submitted -> pending -> approved/rejected`
+- Exit criterion: `NEEDS_APPROVAL` no longer dead-ends per measurement standard
 - Class: PRODUCT / NON_CODER_VALUE / WORKFLOW_COMPLETION
 - Lane: GC-018
 
@@ -175,9 +207,11 @@ CVF hiện tại chỉ handle 1-shot execute. Không có governed iterative work
 
 > **Mục tiêu**: Prove (hoặc disprove) rằng knowledge-native stack (W71–W82) cải thiện output quality non-coder nhận được
 
-- Run parallel test: same template qua governed path với vs. without knowledge context
-- Document delta — nếu có improvement: record as evidence; nếu không: identify why benefit isn't flowing through
-- Exit criterion: clear evidence statement về whether knowledge-native helps non-coder output
+- Prerequisite: comparison templates must first be classified `TRUSTED_FOR_VALUE_PROOF` by `CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_ROADMAP_2026-04-14.md`
+- Use the frozen 4-template comparison set from the measurement standard
+- Run parallel test: same template, same provider, same model family, only one controlled variable changed (`with knowledge-native` vs `without knowledge-native`)
+- Document rubric deltas, not narrative preference only
+- Exit criterion: explicit conclusion must be one of `PROVEN / NOT PROVEN YET / MIXED`
 - Class: VALIDATION_EVIDENCE
 - Lane: GC-018
 
@@ -185,8 +219,9 @@ CVF hiện tại chỉ handle 1-shot execute. Không có governed iterative work
 
 > **Mục tiêu**: Non-coder thấy được risk level của request (ít nhất R0/R1/R2/R3 indicator)
 
-- Add risk level badge/indicator vào ProcessingScreen
-- Show: "Request classified as R1 — Low Risk" hoặc "R2 — Governance Review Applied"
+- Reuse `risk-check.ts` + `safety-status.ts`; do not invent new risk bands or vocabulary
+- Add risk level badge/indicator vào main non-coder flow, not admin-only surfaces
+- Show at minimum: level, short label, short explanation
 - Exit criterion: non-coder thấy risk classification trong UI
 - Class: PRODUCT / NON_CODER_VALUE / TRANSPARENCY
 - Lane: Fast Lane (GC-021)
@@ -243,14 +278,29 @@ Những vấn đề sau đã closed và không được mở lại:
 
 ---
 
-## 6. Tranche Execution Order
+## 6. Execution Constraints For W90-W94
+
+Các tranche trong lane này phải tuân thủ:
+
+- Không đổi provider baseline khỏi Alibaba
+- Không mở multi-provider benchmark hay compare lane mới
+- Không đổi frozen task corpus/template set sau khi đã có run đầu tiên
+- Không nới guard/policy để làm benchmark "đẹp" hơn
+- Không redesign toàn bộ UI khi tranche chỉ yêu cầu một bounded front-door improvement
+- Không đổi pass threshold sau khi evidence đã xuất hiện
+
+---
+
+## 7. Tranche Execution Order
 
 ```
-NOW → W90-T1 (HIGH_RISK pattern expansion)
-    → W91-T1 (template output quality benchmark)
+NOW → `GC-044` active corpus-quality guard
+    → corpus rescreen
+    → W90-T1 (HIGH_RISK pattern expansion)
+    → W91-T1 (template output quality benchmark on trusted subset only)
 
 AFTER W90+W91 → W92-T1 (NEEDS_APPROVAL flow)
-              → W93-T1 (knowledge-native benefit validation)
+              → W93-T1 (knowledge-native benefit validation on trusted subset only)
               → W94-T1 (risk visibility)
 
 AFTER W92+W93+W94 → W95-T1 (multi-step workflow)

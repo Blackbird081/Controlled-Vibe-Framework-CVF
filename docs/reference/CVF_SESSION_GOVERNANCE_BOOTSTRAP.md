@@ -216,6 +216,21 @@ Primary references:
 - `docs/assessments/CVF_EXECUTIVE_VALUE_PRIORITIZATION_NOTE_2026-04-13.md`
 - `docs/roadmaps/CVF_GRAPHIFY_LLM_POWERED_PALACE_SYNTHESIS_ONLY_ROADMAP_2026-04-13.md`
 
+### `GC-044` — Template Skill Standard
+
+Use when:
+
+- screening or re-screening front-door templates or mapped skills
+- importing skills from external repos for future CVF use
+- deciding whether a skill/template is trustworthy enough for non-coder benchmark truth and may enter the `TRUSTED_FOR_VALUE_PROOF` class
+
+Primary references:
+
+- `governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`
+- `docs/reference/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_STANDARD_2026-04-14.md`
+- `docs/reference/CVF_NON_CODER_VALUE_MEASUREMENT_STANDARD_2026-04-14.md`
+- `docs/roadmaps/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_ROADMAP_2026-04-14.md`
+
 ### `GC-024` — Test Partition Ownership
 
 Use when:
@@ -245,6 +260,7 @@ Use this routing table after reading the always-on bootstrap:
 | fresh quality assessment or next-surface selection | `GC-041` + canonical scan registry + active tracker |
 | product-value validation, comparative value proof, or Docker-trigger justification | `GC-042` + frozen corpus/rubric/run-manifest/assessment chain |
 | future knowledge absorption, repo-derived skill intake, or post-closure synthesis-first uplift planning | `GC-043` + knowledge-absorption priority standard + active handoff |
+| template/skill corpus rescreen, future front-door template intake, or trusted-subset admission | `GC-044` + corpus rescreen standard + active handoff |
 | touching governed public barrels, barrel smoke tests, shared batch helpers, or canonical summary surfaces | `GC-033` + `GC-034` + `GC-035` + `GC-036` + `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` |
 | large file touched or split candidate | `GC-023` |
 | tests near a split canonical test surface | `GC-024` |
@@ -268,6 +284,7 @@ If routing is uncertain:
 4. if continuation/deepening ambiguity exists, default to `GC-018`
 5. if value-proof or Docker-justification ambiguity exists, default to `GC-042`
 6. if repo-derived knowledge or skill uplift ambiguity exists, default to `GC-043`
+7. if template/skill front-door quality or trusted-subset ambiguity exists, default to `GC-044`
 
 ## Related Controls
 

@@ -177,7 +177,7 @@ TEMPLATE_SURFACE_RE = re.compile(
     r"^EXTENSIONS/CVF_v1\.6_AGENT_PLATFORM/cvf-web/src/(lib/templates/.+\.ts|components/.+Wizard\.tsx)$"
 )
 COMPANION_DOC_RE = re.compile(
-    r"^docs/(roadmaps|assessments|reviews|baselines|reference)/CVF_.+(SKILL|TEMPLATE|CORPUS|INTAKE|RESCREEN|NON_CODER_VALUE).+\.md$"
+    r"^docs/(roadmaps|assessments|reviews|baselines|reference)/CVF_.*?(SKILL|TEMPLATE|CORPUS|INTAKE|RESCREEN|NON_CODER_VALUE).+\.md$"
 )
 
 

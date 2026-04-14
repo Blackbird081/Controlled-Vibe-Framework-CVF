@@ -351,35 +351,21 @@ class TestCanarySurfaceRegexes(unittest.TestCase):
                     f"COMPANION_DOC_RE should match {p}",
                 )
 
-    def test_companion_doc_regex_known_gap_greedy_prefix(self) -> None:
-        """KNOWN GAP (R4): The greedy `.+` before the keyword group in
-        COMPANION_DOC_RE can consume the keyword itself when the keyword
-        appears early in the filename and the remaining suffix does not
-        contain another keyword.
+    def test_companion_doc_regex_matches_keyword_early_paths(self) -> None:
+        """Keyword-early filenames must still count as valid companion docs.
 
-        Example: CVF_NON_CODER_VALUE_BASELINE_2026-04-15.md
-          - `.+` consumes `NON_CODER_VALUE_BASELINE_2026-04-15`
-          - backtracking leaves `_BASELINE_2026-04-15` which contains no keyword
-          - match fails even though the filename clearly relates to NON_CODER_VALUE
-
-        Fix: change `CVF_.+(<keywords>)` to `CVF_.*(<keywords>)` or use
-        a non-greedy quantifier `CVF_.+?(<keywords>)`.
-
-        This test documents the gap without fixing it, so the rebuttal agent
-        can decide whether to fix the regex or accept the limitation.
+        This guards against the old greedy-regex bug where `CVF_.+` could
+        consume the keyword itself and cause false silent-intake violations.
         """
-        # These paths SHOULD match conceptually but DO NOT due to greedy .+
-        gap_paths = [
+        early_keyword_paths = [
             "docs/baselines/CVF_NON_CODER_VALUE_BASELINE_2026-04-15.md",
             "docs/reference/CVF_TEMPLATE_OUTPUT_QUALITY_STANDARD_2026-04-15.md",
         ]
-        for p in gap_paths:
+        for p in early_keyword_paths:
             with self.subTest(path=p):
-                self.assertIsNone(
+                self.assertIsNotNone(
                     MODULE.COMPANION_DOC_RE.match(p),
-                    f"KNOWN GAP: greedy .+ consumes keyword for {p} — "
-                    "if this starts passing, the regex was fixed and this test "
-                    "should be moved to the positive match set",
+                    f"COMPANION_DOC_RE should match keyword-early path {p}",
                 )
 
     def test_companion_doc_regex_rejects_non_governed(self) -> None:

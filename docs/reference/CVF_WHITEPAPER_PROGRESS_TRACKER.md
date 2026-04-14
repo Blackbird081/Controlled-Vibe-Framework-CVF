@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-14` (latest governed closure `W85-T1`; Post-W84 Canon Truth Sync CLOSED; full knowledge-native lane W71–W84 globally closure-clean; CPF 3370 / EPF 1301 / GEF 625 / LPF 1465 all pass 0 failures; no active tranche; any new work requires fresh GC-018)
+> Last refreshed: `2026-04-14` (latest governed closure `W86-T1 CLOSED DELIVERED`; PVV Lane Resume complete; 40 live runs executed (20 CFG-A + 20 CFG-B); Gate D MET (0 catastrophic misses); Gate E MET (0 NORMAL over-blocks); NORMAL non-coder parity confirmed; HIGH_RISK gap documented; no active tranche; full knowledge-native lane W71–W84 globally closure-clean; CPF 3370 / EPF 1301 / GEF 625 / LPF 1465 all pass 0 failures)
 
 ---
 
@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W84-T1 + W85-T1 CLOSED DELIVERED 2026-04-14; Knowledge Live Benchmark Evidence Promotion + Post-W84 Canon Truth Sync complete; full knowledge-native lane W71–W84 globally closure-clean; CPF 3370 / EPF 1301 / GEF 625 / LPF 1465 all pass 0 failures; any new work requires fresh GC-018` |
+| Current active tranche | `NONE — W86-T1 CLOSED DELIVERED 2026-04-14; PVV Lane Resume complete; next candidate W87-T1 HIGH_RISK Guided Response Pattern (fresh GC-018 required)` |
 | Shared verification baseline | `ADOPT 2026-04-10 LOCAL BASELINE — future agents should inherit this verification state and rerun only when their touched scope, dependency state, or build/test configuration invalidates it` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05); W59-T1 promotes the closure readout to CLOSURE-ASSESSED (2026-04-07)` |
 
@@ -268,9 +268,9 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W85_T1_CLOSED_2026-04-14.md` (W85-T1 Post-W84 Canon Truth Sync closure sync; lane W71-W84 globally closure-clean)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W86_T1_CLOSED_2026-04-14.md` (W86-T1 CLOSED DELIVERED; 40 live runs complete; Gate D MET; Gate E MET; no active tranche)
 - Latest continuity sync delta: `docs/baselines/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_DELTA_2026-04-07.md`
 - Current closure anchor: `docs/reviews/CVF_W65_T1_TRANCHE_CLOSURE_REVIEW_2026-04-10.md`
-- Active quality assessment: `docs/assessments/CVF_W85_T1_POST_W84_CANON_SYNC_ASSESSMENT_2026-04-14.md`
-- Most recent continuation authorization: `docs/baselines/CVF_GC018_W85_T1_POST_W84_CANON_TRUTH_SYNC_AUTHORIZATION_2026-04-14.md` (W85-T1 GC-018 AUTHORIZED)
+- Active quality assessment: `docs/assessments/CVF_W86_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-14.md` (W86-T1 post-run assessment; CLOSED DELIVERED; NORMAL parity confirmed; HIGH_RISK gap documented; Gates D+E MET)
+- Most recent continuation authorization: `docs/baselines/CVF_GC018_W86_T1_PVV_LANE_RESUME_AUTHORIZATION_2026-04-14.md` (W86-T1 GC-018 AUTHORIZED; PVV Lane Resume; W86-T1-NC corpus; qwen-max; 40 calls; Variant B non-coder quality focus)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

@@ -35,7 +35,7 @@ CP2: TypeScript implementation + tests + barrel export additions.
 | Prerequisite | Status |
 |---|---|
 | Doctrine/governance documentation step complete | CONFIRMED — W72-T2 filed `CVF_COMPILED_KNOWLEDGE_ARTIFACT_STANDARD_2026-04-14.md` |
-| Artifact standard defines minimum required fields | CONFIRMED — 11 required fields: artifactId, artifactType, compiledAt, sourceIds, citationRef, citationTrail, contextId, compiledBy, content, artifactHash, governanceStatus |
+| Artifact standard defines minimum required fields | CONFIRMED — 13 governed fields: artifactId, artifactType, compiledAt, sourceIds, citationRef, citationTrail, contextId, compiledBy, content, artifactHash, governedAt, governanceStatus, rejectionReason |
 | Artifact types defined | CONFIRMED — concept / entity / summary (W72-T2 Deliverable B §3) |
 | Lifecycle owner confirmed | CONFIRMED — Knowledge Layer (Compile step, Step 2 in lifecycle policy) |
 | No-new-surface rule confirmed | CONFIRMED — additive sibling in existing CPF barrel |

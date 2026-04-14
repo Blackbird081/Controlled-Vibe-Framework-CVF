@@ -108,7 +108,7 @@ No new guard family is required or created.
 
 | Guard | Role in Govern step |
 |---|---|
-| `AuditTrailGuard` | Verify provenance: citationRef, sourceId, compiledAt, artifactHash all present and consistent |
+| `AuditTrailGuard` | Verify provenance: citationRef, sourceIds, compiledAt, artifactHash all present and consistent |
 | `AuthorityGateGuard` | Verify access permission: artifact creator has authority to write to this knowledge surface |
 | `PhaseGateGuard` | Verify phase compliance: compilation was performed in a phase where knowledge writes are permitted |
 | `RiskGateGuard` | Classify risk: artifact does not introduce high-risk content without explicit operator override |

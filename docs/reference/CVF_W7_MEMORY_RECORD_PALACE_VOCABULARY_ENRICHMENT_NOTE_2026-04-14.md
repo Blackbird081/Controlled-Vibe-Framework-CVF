@@ -97,14 +97,16 @@ for the existing Context Builder context-shaping capability.
 
 ## 5. Implementation Path for Future Wave
 
-A future W7MemoryRecord enrichment wave (W72-T4 or later) should:
+W72-T6 later landed these vocabulary fields at the `W7NormalizedAssetCandidate` enrichment layer.
+That delivery closed the candidate-layer carry-through path, but it did **not** create a W7MemoryRecord
+surface. The remaining future wave is therefore narrower:
 
-1. Verify that the candidate fields above are still coherent with current Context Builder behavior
-2. Add `wing`, `hall`, `room`, `drawer`, `closet_summary`, `tunnel_links`, `contradiction_flag`
-   as optional enrichment fields to an extended W7 routing metadata interface in CPF
-3. Keep all fields **optional** — existing W7-normalized candidates must not require them
-4. Require GC-018 authorization before any CPF contract change
-5. Add tests for the new optional fields using the existing W7NormalizedAssetCandidate test pattern
+1. Verify that the T6 candidate-layer fields are still coherent with current Context Builder behavior
+2. If a real `W7MemoryRecord` contract is later introduced, decide which of `wing`, `hall`, `room`,
+   `drawer`, `closet_summary`, `tunnel_links`, `contradiction_flag` should also live at that deeper layer
+3. Keep all fields **optional** — existing W7-normalized candidates and future memory records must not require them
+4. Require GC-018 authorization before any further CPF contract change
+5. Add tests using the established W7 normalization pattern if any new carrier surface is introduced
 6. Do NOT add `confidence_score` or `truth_score` until scoring calibration is available
 
 This note is the authorized intake reference for that future wave. The source folder
@@ -116,7 +118,7 @@ this vocabulary — this note is the canonical CVF-native form.
 ## 6. What This Note Does NOT Do
 
 - Does not implement W7MemoryRecord — no contract, no barrel, no tests
-- Does not add fields to any existing CPF contract
+- Does not, by itself, authorize fields beyond the W72-T6 candidate-layer enrichment already landed
 - Does not absorb Palace code (`cvf_mem_memory_schema.py` remains in `.private_reference/`)
 - Does not grant canon status to any Palace vocabulary — all fields remain Candidate
 - Does not activate `confidence_score` or `truth_score` — both remain Deferred

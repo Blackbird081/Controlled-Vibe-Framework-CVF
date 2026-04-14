@@ -48,7 +48,7 @@ describe("W72-T4 CP2: CompiledKnowledgeArtifactContract — factory", () => {
 // --- compile: output shape ---
 
 describe("W72-T4 CP2: CompiledKnowledgeArtifactContract — compile output shape", () => {
-  it("result has all 12 required fields", () => {
+  it("result has all 13 required fields", () => {
     const result = makeContract().compile(makeRequest());
     expect(result).toHaveProperty("artifactId");
     expect(result).toHaveProperty("artifactType");
@@ -62,6 +62,7 @@ describe("W72-T4 CP2: CompiledKnowledgeArtifactContract — compile output shape
     expect(result).toHaveProperty("artifactHash");
     expect(result).toHaveProperty("governedAt");
     expect(result).toHaveProperty("governanceStatus");
+    expect(result).toHaveProperty("rejectionReason");
   });
 
   it("compiledAt matches injected timestamp", () => {
@@ -113,6 +114,11 @@ describe("W72-T4 CP2: CompiledKnowledgeArtifactContract — compile output shape
   it("governedAt is null after compile", () => {
     const result = makeContract().compile(makeRequest());
     expect(result.governedAt).toBeNull();
+  });
+
+  it("rejectionReason is null after compile", () => {
+    const result = makeContract().compile(makeRequest());
+    expect(result.rejectionReason).toBeNull();
   });
 
   it("artifactId is a non-empty string", () => {
@@ -167,6 +173,22 @@ describe("W72-T4 CP2: CompiledKnowledgeArtifactContract — compile determinism"
     expect(r1.artifactId).toBe(r2.artifactId);
   });
 
+  it("keeps same artifactHash when only compile timestamp changes", () => {
+    const r1 = new CompiledKnowledgeArtifactContract({ now: () => FIXED_NOW })
+      .compile(makeRequest());
+    const r2 = new CompiledKnowledgeArtifactContract({ now: () => FIXED_GOVERN_NOW })
+      .compile(makeRequest());
+    expect(r1.artifactHash).toBe(r2.artifactHash);
+  });
+
+  it("changes artifactId when compile timestamp changes", () => {
+    const r1 = new CompiledKnowledgeArtifactContract({ now: () => FIXED_NOW })
+      .compile(makeRequest());
+    const r2 = new CompiledKnowledgeArtifactContract({ now: () => FIXED_GOVERN_NOW })
+      .compile(makeRequest());
+    expect(r1.artifactId).not.toBe(r2.artifactId);
+  });
+
   it("produces different artifactHash for different contextId", () => {
     const r1 = makeContract().compile(makeRequest({ contextId: "ctx-a" }));
     const r2 = makeContract().compile(makeRequest({ contextId: "ctx-b" }));
@@ -204,6 +226,52 @@ describe("W72-T4 CP2: CompiledKnowledgeArtifactContract — compile determinism"
   });
 });
 
+// --- compile: validation ---
+
+describe("W72-T4 CP2: CompiledKnowledgeArtifactContract — compile validation", () => {
+  it("throws when contextId is blank", () => {
+    expect(() => makeContract().compile(makeRequest({ contextId: "   " }))).toThrowError(
+      "contextId",
+    );
+  });
+
+  it("throws when sourceIds is empty", () => {
+    expect(() => makeContract().compile(makeRequest({ sourceIds: [] }))).toThrowError(
+      "sourceIds",
+    );
+  });
+
+  it("throws when sourceIds only contains blanks", () => {
+    expect(() => makeContract().compile(makeRequest({ sourceIds: [" ", "   "] }))).toThrowError(
+      "sourceIds",
+    );
+  });
+
+  it("throws when citationRef is blank", () => {
+    expect(() => makeContract().compile(makeRequest({ citationRef: "   " }))).toThrowError(
+      "citationRef",
+    );
+  });
+
+  it("throws when citationTrail is empty", () => {
+    expect(() => makeContract().compile(makeRequest({ citationTrail: [] }))).toThrowError(
+      "citationTrail",
+    );
+  });
+
+  it("throws when compiledBy is blank", () => {
+    expect(() => makeContract().compile(makeRequest({ compiledBy: "   " }))).toThrowError(
+      "compiledBy",
+    );
+  });
+
+  it("throws when content is blank", () => {
+    expect(() => makeContract().compile(makeRequest({ content: "   " }))).toThrowError(
+      "content",
+    );
+  });
+});
+
 // --- govern: output shape ---
 
 describe("W72-T4 CP2: CompiledKnowledgeArtifactContract — govern output shape", () => {
@@ -219,6 +287,27 @@ describe("W72-T4 CP2: CompiledKnowledgeArtifactContract — govern output shape"
     const governed = new CompiledKnowledgeArtifactContract({ now: () => FIXED_GOVERN_NOW })
       .govern(artifact, { decision: "rejected", reason: "failed citation check" });
     expect(governed.governanceStatus).toBe("rejected");
+  });
+
+  it("govern rejected preserves rejectionReason", () => {
+    const artifact = makeContract().compile(makeRequest());
+    const governed = new CompiledKnowledgeArtifactContract({ now: () => FIXED_GOVERN_NOW })
+      .govern(artifact, { decision: "rejected", reason: "failed citation check" });
+    expect(governed.rejectionReason).toBe("failed citation check");
+  });
+
+  it("govern approved clears rejectionReason", () => {
+    const artifact = makeContract().compile(makeRequest());
+    const governed = new CompiledKnowledgeArtifactContract({ now: () => FIXED_GOVERN_NOW })
+      .govern(artifact, { decision: "approved" });
+    expect(governed.rejectionReason).toBeNull();
+  });
+
+  it("govern rejected uses default rejectionReason when none is supplied", () => {
+    const artifact = makeContract().compile(makeRequest());
+    const governed = new CompiledKnowledgeArtifactContract({ now: () => FIXED_GOVERN_NOW })
+      .govern(artifact, { decision: "rejected" });
+    expect(governed.rejectionReason).toBe("Govern step rejected artifact");
   });
 
   it("govern sets governedAt to injected timestamp", () => {

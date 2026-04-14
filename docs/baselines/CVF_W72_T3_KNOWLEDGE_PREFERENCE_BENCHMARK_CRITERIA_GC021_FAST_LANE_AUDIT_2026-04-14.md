@@ -59,8 +59,8 @@ W72-T2 is clean. W72-T3 closes all three items at documentation scope:
 
 `PerformanceBenchmarkHarnessContract` (W8-T2, CPF) exists and supports `PROPOSAL_ONLY` evidence
 class. All benchmark runs produce `PROPOSAL_ONLY` reports until a GC-026 tracker sync with
-trace-backed evidence is committed (future wave). W72-T3 defines the criteria; W72-T4 or later
-would run actual benchmarks.
+trace-backed evidence is committed (future wave). W72-T3 defines the criteria; W72-T5 later landed
+the benchmark target extensions; actual benchmark execution remains a future wave.
 
 ---
 

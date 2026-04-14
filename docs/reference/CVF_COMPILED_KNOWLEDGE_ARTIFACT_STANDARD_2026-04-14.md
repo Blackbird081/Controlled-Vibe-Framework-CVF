@@ -60,14 +60,16 @@ check enforced at the `Compile` step gate.
 | `artifactId` | string | Required | Unique identifier within the knowledge surface |
 | `artifactType` | enum | Required | `concept` / `entity` / `summary` |
 | `compiledAt` | ISO 8601 | Required | Timestamp of compilation |
-| `sourceId` | string (1+) | Required | Reference to the originating raw source record(s) |
+| `sourceIds` | string[] (1+) | Required | Reference to the originating raw source record(s) |
 | `citationRef` | string | Required | Human-readable citation of the raw source(s) |
 | `citationTrail` | string[] | Required | Ordered chain of source references, from raw ingest through all intermediate steps |
 | `contextId` | string | Required | Governance context in which the artifact was compiled |
 | `compiledBy` | string | Required | Identity of the agent or process that performed compilation |
+| `content` | string | Required | Compiled artifact content produced by the governed transformation |
 | `artifactHash` | string | Required | Deterministic hash of artifact content at compilation time |
 | `governedAt` | ISO 8601 | Required (after Govern) | Timestamp of governance approval; absent means artifact has not yet passed Govern |
 | `governanceStatus` | enum | Required (after Govern) | `pending` / `approved` / `rejected` |
+| `rejectionReason` | string \| null | Required (when rejected) | Audit-grade reason recorded by the Govern step when an artifact is rejected |
 
 Fields `governedAt` and `governanceStatus` are set by the `Govern` step, not the `Compile` step.
 An artifact without `governedAt` is in `pending` state and must not enter `Query`.
@@ -84,7 +86,7 @@ An artifact without `governedAt` is in `pending` state and must not enter `Query
 
 **Raw means:**
 - The source was ingested from an external origin as-is
-- It has provenance (sourceId, ingestedAt, citationRef) but has not been transformed
+- It has provenance (`sourceId`, `ingestedAt`, `citationRef`) but has not been transformed
 - It cannot enter the `Query` step directly — it must first be compiled
 
 Raw sources are never modified and never replaced by compiled artifacts.
@@ -107,8 +109,9 @@ Compiled artifacts complement raw sources; they do not supersede them.
   (see `CVF_COMPILED_CONTEXT_GOVERNANCE_POLICY_2026-04-14.md`) and requires benchmark evidence before
   being set as a default.
 
-- **No implementation authority.** This is a policy standard. Implementing it as a TypeScript contract
-  requires a fresh GC-018 authorization.
+- **No implementation authority.** This is a policy standard. W72-T4 later landed the CPF implementation
+  under a separate GC-018 authorization, but this document remains the doctrine source rather than
+  the implementation authority.
 
 ---
 

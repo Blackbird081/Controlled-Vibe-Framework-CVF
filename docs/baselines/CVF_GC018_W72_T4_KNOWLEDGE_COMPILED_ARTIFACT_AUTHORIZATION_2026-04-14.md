@@ -39,9 +39,9 @@ GC-018 Continuation Candidate
   Knowledge Layer.
   CompiledKnowledgeArtifactContract.compile() produces a governed artifact (pending state)
   with deterministic artifactHash bound to content, sourceIds, citationTrail, contextId,
-  artifactType, compiledBy. artifactId derived from artifactHash.
+  artifactType, compiledBy, and citationRef. artifactId derived from artifactHash + compiledAt.
   CompiledKnowledgeArtifactContract.govern() transitions pending → approved|rejected,
-  sets governedAt; artifactHash unchanged.
+  sets governedAt and preserves rejectionReason when rejected; artifactHash unchanged.
   CompiledKnowledgeArtifactBatchContract.batch() wraps multiple compile requests following
   the established CPF batch contract pattern. batchHash includes all per-artifact hashes.
   Both contracts are additive siblings of StructuralIndexContract in
@@ -52,7 +52,8 @@ GC-018 Continuation Candidate
 - Quality-first decision: EXPAND_NOW
 - Why expansion is the right move now:
     W72-T2 defined the artifact standard; W72-T3 closed the documentation lane.
-    The artifact standard is precise (11 required fields, 3 types, lifecycle state machine).
+    The artifact standard is precise (13 governed fields including content and rejectionReason,
+    3 types, lifecycle state machine).
     CPF Knowledge Layer is mature and tested (3060 tests). The implementation gap is bounded
     and the owner surface is established. Implementing now closes the compile step of the
     knowledge lifecycle with minimal blast radius.

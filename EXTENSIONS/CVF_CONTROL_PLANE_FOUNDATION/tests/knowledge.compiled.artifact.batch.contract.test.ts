@@ -140,6 +140,7 @@ describe("CompiledKnowledgeArtifactBatchContract — output shape", () => {
     expect(a).toHaveProperty("artifactHash");
     expect(a).toHaveProperty("governedAt");
     expect(a).toHaveProperty("governanceStatus");
+    expect(a).toHaveProperty("rejectionReason");
   });
 });
 
@@ -185,6 +186,19 @@ describe("CompiledKnowledgeArtifactBatchContract — hash variance by content", 
     const r2 = makeBatchContract().batch([makeRequest("ctx-1", { sourceIds: ["src-999"] })]);
     expect(r1.totalCompiled).toBe(r2.totalCompiled);
     expect(r1.batchHash).not.toBe(r2.batchHash);
+  });
+});
+
+// --- validation passthrough ---
+
+describe("CompiledKnowledgeArtifactBatchContract — validation passthrough", () => {
+  it("throws when any request violates compile gate requirements", () => {
+    expect(() =>
+      makeBatchContract().batch([
+        makeRequest("ctx-valid"),
+        makeRequest("ctx-invalid", { citationTrail: [] }),
+      ]),
+    ).toThrowError("citationTrail");
   });
 });
 

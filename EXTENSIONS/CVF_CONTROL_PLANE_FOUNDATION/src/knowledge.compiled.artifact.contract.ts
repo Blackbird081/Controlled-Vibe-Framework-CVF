@@ -39,6 +39,7 @@ export interface CompiledKnowledgeArtifact {
   artifactHash: string;         // deterministic hash of content at compile time
   governedAt: string | null;    // null until Govern step runs
   governanceStatus: GovernanceStatus;
+  rejectionReason: string | null;
 }
 
 export interface GovernDecision {
@@ -48,6 +49,22 @@ export interface GovernDecision {
 
 export interface CompiledKnowledgeArtifactContractDependencies {
   now?: () => string;
+}
+
+function normalizeText(value: string): string {
+  return value.trim();
+}
+
+function normalizeNonEmptyList(values: string[], fieldName: string): string[] {
+  const normalized = values
+    .map((value) => normalizeText(value))
+    .filter((value) => value.length > 0);
+
+  if (normalized.length === 0) {
+    throw new Error(`CompiledKnowledgeArtifact compile requires a non-empty ${fieldName} list`);
+  }
+
+  return normalized;
 }
 
 // --- Contract ---
@@ -65,20 +82,45 @@ export class CompiledKnowledgeArtifactContract {
    * artifactHash is bound to actual content, sources, and citation trail.
    */
   compile(request: CompiledKnowledgeArtifactCompileRequest): CompiledKnowledgeArtifact {
+    const contextId = normalizeText(request.contextId);
+    if (contextId.length === 0) {
+      throw new Error("CompiledKnowledgeArtifact compile requires contextId");
+    }
+
+    const sourceIds = normalizeNonEmptyList(request.sourceIds, "sourceIds");
+
+    const citationRef = normalizeText(request.citationRef);
+    if (citationRef.length === 0) {
+      throw new Error("CompiledKnowledgeArtifact compile requires citationRef");
+    }
+
+    const citationTrail = normalizeNonEmptyList(request.citationTrail, "citationTrail");
+
+    const compiledBy = normalizeText(request.compiledBy);
+    if (compiledBy.length === 0) {
+      throw new Error("CompiledKnowledgeArtifact compile requires compiledBy");
+    }
+
+    const content = normalizeText(request.content);
+    if (content.length === 0) {
+      throw new Error("CompiledKnowledgeArtifact compile requires content");
+    }
+
     const compiledAt = this.now();
 
     // Deterministic structural content signatures
-    const sourceIdsSig = [...request.sourceIds].sort().join(",");
-    const citationTrailSig = request.citationTrail.join("|");
+    const sourceIdsSig = [...sourceIds].sort().join(",");
+    const citationTrailSig = citationTrail.join("|");
 
     const artifactHash = computeDeterministicHash(
       "w72-t4-cp2-compiled-artifact",
-      `${compiledAt}:${request.contextId}`,
+      `context:${contextId}`,
       `type:${request.artifactType}`,
       `sources:[${sourceIdsSig}]`,
+      `citationRef:${citationRef}`,
       `citationTrail:[${citationTrailSig}]`,
-      `compiledBy:${request.compiledBy}`,
-      `content:${request.content}`,
+      `compiledBy:${compiledBy}`,
+      `content:${content}`,
     );
 
     const artifactId = computeDeterministicHash(
@@ -91,15 +133,16 @@ export class CompiledKnowledgeArtifactContract {
       artifactId,
       artifactType: request.artifactType,
       compiledAt,
-      sourceIds: [...request.sourceIds],
-      citationRef: request.citationRef,
-      citationTrail: [...request.citationTrail],
-      contextId: request.contextId,
-      compiledBy: request.compiledBy,
-      content: request.content,
+      sourceIds,
+      citationRef,
+      citationTrail,
+      contextId,
+      compiledBy,
+      content,
       artifactHash,
       governedAt: null,
       governanceStatus: "pending",
+      rejectionReason: null,
     };
   }
 
@@ -125,6 +168,10 @@ export class CompiledKnowledgeArtifactContract {
       ...artifact,
       governedAt,
       governanceStatus: govDecision.decision,
+      rejectionReason:
+        govDecision.decision === "rejected"
+          ? normalizeText(govDecision.reason ?? "") || "Govern step rejected artifact"
+          : null,
     };
   }
 }

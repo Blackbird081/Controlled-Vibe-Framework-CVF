@@ -76,8 +76,9 @@ Each benchmark run must record:
 `PerformanceBenchmarkHarnessContract.BenchmarkTarget` currently supports:
 `CPF_PIPELINE | EPF_PIPELINE | GEF_PIPELINE | LPF_PIPELINE | CROSS_PLANE`
 
-Knowledge-layer preference benchmarks require additional targets. These are **candidate extensions**
-for a future implementation wave:
+Knowledge-layer preference benchmarks require additional targets. W72-T5 later implemented these
+targets in `PerformanceBenchmarkHarnessContract`; they remain benchmark-only instrumentation and do
+not change policy defaults by themselves.
 
 | Candidate target | Measures |
 |---|---|
@@ -86,9 +87,8 @@ for a future implementation wave:
 | `KNOWLEDGE_STRUCTURAL_INDEX` | Structural traversal via `StructuralIndexContract` |
 | `KNOWLEDGE_COMPILED_CONTEXT` | Context packaging from compiled artifacts |
 
-These extensions require a GC-018 wave authorization for `PerformanceBenchmarkHarnessContract`
-before they can be added. They are listed here as criteria prerequisites, not as implementation
-instructions.
+These targets required and later received a GC-018 wave authorization for
+`PerformanceBenchmarkHarnessContract`. They remain criteria prerequisites, not policy-change authority.
 
 ---
 
@@ -130,7 +130,8 @@ with `evidenceClass: PROPOSAL_ONLY` and the gate results noted for the next wave
 
 - Does not run any benchmark — this is criteria-only
 - Does not promote either preference — no default changes in this document
-- Does not extend `PerformanceBenchmarkHarnessContract` — requires future GC-018 wave
+- Does not, by itself, authorize benchmark execution or policy promotion — W72-T5 later extended
+  `PerformanceBenchmarkHarnessContract`, but GC-026 trace-backed evidence is still required
 - Does not change any existing contract, test, or policy document
 - Does not grant implementation authority to the described extensions
 

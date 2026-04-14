@@ -67,16 +67,16 @@ describe("RagContextEngineConvergenceBatchContract.batch (single report)", () =>
     expect(result.totalResults).toBe(1);
   });
 
-  it("dominantSurfaceCount = 27 (all surfaces from single report)", () => {
-    expect(result.dominantSurfaceCount).toBe(27);
+  it("dominantSurfaceCount = 43 (all surfaces from single report)", () => {
+    expect(result.dominantSurfaceCount).toBe(43);
   });
 
-  it("totalFixedInputCount = 25", () => {
-    expect(result.totalFixedInputCount).toBe(25);
+  it("totalFixedInputCount = 40", () => {
+    expect(result.totalFixedInputCount).toBe(40);
   });
 
-  it("totalInScopeCount = 2", () => {
-    expect(result.totalInScopeCount).toBe(2);
+  it("totalInScopeCount = 3", () => {
+    expect(result.totalInScopeCount).toBe(3);
   });
 
   it("results contains the provided report", () => {
@@ -99,16 +99,16 @@ describe("RagContextEngineConvergenceBatchContract.batch (two reports)", () => {
     expect(result.totalResults).toBe(2);
   });
 
-  it("dominantSurfaceCount = 27 (same surface count across both reports)", () => {
-    expect(result.dominantSurfaceCount).toBe(27);
+  it("dominantSurfaceCount = 43 (same surface count across both reports)", () => {
+    expect(result.dominantSurfaceCount).toBe(43);
   });
 
-  it("totalFixedInputCount = 50 (25 per report)", () => {
-    expect(result.totalFixedInputCount).toBe(50);
+  it("totalFixedInputCount = 80 (40 per report)", () => {
+    expect(result.totalFixedInputCount).toBe(80);
   });
 
-  it("totalInScopeCount = 4 (2 per report)", () => {
-    expect(result.totalInScopeCount).toBe(4);
+  it("totalInScopeCount = 6 (3 per report)", () => {
+    expect(result.totalInScopeCount).toBe(6);
   });
 
   it("results length matches input length", () => {
@@ -149,9 +149,9 @@ describe("createRagContextEngineConvergenceBatchContract", () => {
     const report = makeReport();
     const result = c.batch([report]);
     expect(result.totalResults).toBe(1);
-    expect(result.dominantSurfaceCount).toBe(27);
-    expect(result.totalFixedInputCount).toBe(25);
-    expect(result.totalInScopeCount).toBe(2);
+    expect(result.dominantSurfaceCount).toBe(43);
+    expect(result.totalFixedInputCount).toBe(40);
+    expect(result.totalInScopeCount).toBe(3);
     expect(result.createdAt).toBe(FIXED_NOW);
   });
 });

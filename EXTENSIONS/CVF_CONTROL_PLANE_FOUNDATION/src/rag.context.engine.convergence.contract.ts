@@ -40,6 +40,23 @@ export interface DeterministicContextPackagingDeclaration {
   declarationHash: string;
 }
 
+// Declares the knowledge-native retrieval authority as canon.
+// Registers StructuralIndexContract, KnowledgeContextAssemblyContract, and
+// KnowledgeContextAssemblyConsumerPipelineContract into the canon retrieval authority surface.
+// Does NOT choose compiled-first vs graph-informed default — that is Wave N2.
+export interface KnowledgeNativeRetrievalAuthorityDeclaration {
+  declarationId: string;
+  declaredAt: string;
+  knowledgeNativePath: string[];          // ordered steps for the knowledge-native retrieval path
+  structuralIndexAuthority: string;       // StructuralIndexContract as peer retrieval mode inside Query
+  assemblyAuthority: string;              // KnowledgeContextAssemblyContract: ranked retrieval → final packaging
+  consumerBridgeAuthority: string;        // KnowledgeContextAssemblyConsumerPipelineContract: preferred consumer bridge
+  packagingAuthority: string;             // ContextPackagerContract remains packaging authority; no new layer
+  noNewLayerStatement: string;            // explicit no-new-layer declaration
+  defaultPolicyStatus: string;            // NOT_DECIDED — pending N2 benchmark evidence
+  declarationHash: string;
+}
+
 export interface RagContextEngineConvergenceReport {
   reportId: string;
   generatedAt: string;
@@ -48,6 +65,7 @@ export interface RagContextEngineConvergenceReport {
   inScopeCount: number;
   ragRetrievalAuthority: RagRetrievalAuthorityDeclaration;
   deterministicContextPackaging: DeterministicContextPackagingDeclaration;
+  knowledgeNativeRetrievalAuthority: KnowledgeNativeRetrievalAuthorityDeclaration;
   reportHash: string;
 }
 
@@ -56,8 +74,10 @@ export interface RagContextEngineConvergenceContractDependencies {
 }
 
 // --- Canonical RAG/Context surface registry ---
-// 25 existing CPF RAG and context contract files are FIXED_INPUT.
-// 2 new surfaces declared IN_SCOPE by W9-T1.
+// 25 original CPF RAG and context contract files are FIXED_INPUT (W9-T1 baseline).
+// 15 W72-W76 knowledge-native surfaces added as FIXED_INPUT in W77-T1 (total 40 FIXED_INPUT).
+// 2 surfaces declared IN_SCOPE by W9-T1 + 1 declared IN_SCOPE by W77-T1 (total 3 IN_SCOPE).
+// Grand total: 43 surfaces.
 
 const RAG_CONTEXT_SURFACES: RagContextSurfaceEntry[] = [
   // RAG Core (4)
@@ -240,7 +260,113 @@ const RAG_CONTEXT_SURFACES: RagContextSurfaceEntry[] = [
     description: "Model gateway boundary — Knowledge Layer entrypoint and execution authority declaration (W8-T1)",
     rationale: "Delivered and frozen by W8-T1 CLOSED DELIVERED; W9-T1 consumes gateway stability output as FIXED INPUT per pass condition 5; must not be re-opened",
   },
-  // IN_SCOPE surfaces — new W9-T1 declarations
+  // Knowledge Native Layer — W72-T1 through W76-T1 delivered surfaces (FIXED_INPUT)
+  {
+    surfaceId: "knowledge-ranking-batch",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.ranking.batch.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge ranking batch — batch aggregation of knowledge ranking results",
+    rationale: "Delivered and frozen; batch variant of knowledge ranking contract; retroactively registered in W77-T1",
+  },
+  {
+    surfaceId: "knowledge-structural-index",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.structural.index.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge structural index — graph-informed structural neighbor index for knowledge items (W72-T1)",
+    rationale: "Delivered in W72-T1; frozen; StructuralIndexContract is a peer retrieval mode inside the Query step; registered as canon in W77-T1",
+  },
+  {
+    surfaceId: "knowledge-structural-index-batch",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.structural.index.batch.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge structural index batch — batch aggregation of structural index results (W72-T1)",
+    rationale: "Delivered in W72-T1; frozen; batch variant of knowledge structural index contract",
+  },
+  {
+    surfaceId: "knowledge-compiled-artifact",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.compiled.artifact.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge compiled artifact — governed compilation of knowledge content into canonically hashed artifacts (W72-T4)",
+    rationale: "Delivered in W72-T4; frozen; implements Step 2 (Compile) + Step 3 (Govern) of the 6-step knowledge lifecycle",
+  },
+  {
+    surfaceId: "knowledge-compiled-artifact-batch",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.compiled.artifact.batch.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge compiled artifact batch — batch aggregation of compiled artifact results (W72-T4)",
+    rationale: "Delivered in W72-T4; frozen; batch variant of knowledge compiled artifact contract",
+  },
+  {
+    surfaceId: "w7-memory-record",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/w7.memory.record.contract.ts",
+    status: "FIXED_INPUT",
+    description: "W7 memory record — palace-hierarchy placement step of the W7 pipeline (W73-T1)",
+    rationale: "Delivered in W73-T1; frozen; W7MemoryRecordContract places an asset into the palace hierarchy with optional vocabulary fields",
+  },
+  {
+    surfaceId: "w7-memory-record-batch",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/w7.memory.record.batch.contract.ts",
+    status: "FIXED_INPUT",
+    description: "W7 memory record batch — batch aggregation of W7 memory record placements (W73-T1)",
+    rationale: "Delivered in W73-T1; frozen; batch variant of W7 memory record contract",
+  },
+  {
+    surfaceId: "knowledge-maintenance",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.maintenance.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge maintenance — Step 5 (Maintain) of the 6-step lifecycle: lint, contradiction, drift, orphan, staleness checks (W73-T2)",
+    rationale: "Delivered in W73-T2; frozen; KnowledgeMaintenanceContract evaluates approved artifacts for 5 signal types",
+  },
+  {
+    surfaceId: "knowledge-maintenance-batch",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.maintenance.batch.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge maintenance batch — batch aggregation of maintenance evaluation results (W73-T2)",
+    rationale: "Delivered in W73-T2; frozen; batch variant of knowledge maintenance contract",
+  },
+  {
+    surfaceId: "knowledge-refactor",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.refactor.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge refactor — Step 6 (Refactor) of the 6-step lifecycle: archive / recompile / review proposals (W74-T1)",
+    rationale: "Delivered in W74-T1; frozen; KnowledgeRefactorContract closes the full lifecycle at CPF contract layer",
+  },
+  {
+    surfaceId: "knowledge-refactor-batch",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.refactor.batch.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge refactor batch — batch aggregation of refactor proposal results (W74-T1)",
+    rationale: "Delivered in W74-T1; frozen; batch variant of knowledge refactor contract",
+  },
+  {
+    surfaceId: "knowledge-context-assembly",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.context.assembly.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge context assembly — consumer-facing output surface assembling ranked items + structural enrichment into KnowledgeContextPacket (W75-T1)",
+    rationale: "Delivered in W75-T1; frozen; KnowledgeContextAssemblyContract is the knowledge-native assembly surface between ranked retrieval and final packaging; registered as canon in W77-T1",
+  },
+  {
+    surfaceId: "knowledge-context-assembly-batch",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.context.assembly.batch.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge context assembly batch — batch aggregation of context assembly results (W75-T1)",
+    rationale: "Delivered in W75-T1; frozen; batch variant of knowledge context assembly contract",
+  },
+  {
+    surfaceId: "knowledge-context-assembly-consumer-pipeline",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.context.assembly.consumer.pipeline.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge context assembly consumer pipeline — CPF consumer bridge chaining Ranking → ContextAssembly → ConsumerPackage (W76-T1)",
+    rationale: "Delivered in W76-T1; frozen; KnowledgeContextAssemblyConsumerPipelineContract is the preferred CPF knowledge-native consumer bridge; registered as canon in W77-T1",
+  },
+  {
+    surfaceId: "knowledge-context-assembly-consumer-pipeline-batch",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.context.assembly.consumer.pipeline.batch.contract.ts",
+    status: "FIXED_INPUT",
+    description: "Knowledge context assembly consumer pipeline batch — batch aggregation of consumer pipeline results (W76-T1)",
+    rationale: "Delivered in W76-T1; frozen; batch variant of knowledge context assembly consumer pipeline contract",
+  },
+  // IN_SCOPE surfaces — W9-T1 declarations
   {
     surfaceId: "rag-retrieval-authority",
     sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/rag.context.engine.convergence.contract.ts",
@@ -255,6 +381,14 @@ const RAG_CONTEXT_SURFACES: RagContextSurfaceEntry[] = [
     description: "Deterministic context packaging API — ContextPackagerContract.pack() declared as canonical deterministic surface with hash-derived packageId (W9-T1 first declaration)",
     rationale: "Previously implicit; W9-T1 makes the deterministic packaging contract explicit: pack() → packageHash → packageId derivation is the canonical packaging API; no structural change to the delivered contract",
   },
+  // IN_SCOPE surfaces — W77-T1 knowledge-native authority declaration
+  {
+    surfaceId: "knowledge-native-retrieval-authority",
+    sourceFile: "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/rag.context.engine.convergence.contract.ts",
+    status: "IN_SCOPE",
+    description: "Knowledge-native retrieval authority — declares StructuralIndexContract, KnowledgeContextAssemblyContract, and KnowledgeContextAssemblyConsumerPipelineContract as canon knowledge-native retrieval surfaces (W77-T1 first declaration)",
+    rationale: "W72-W76 delivered the knowledge-native CPF layer; W77-T1 declares these surfaces as canon retrieval authority, closes the N1 gate of the CVF-native completion matrix; no new layer is created",
+  },
 ];
 
 // --- Contract ---
@@ -268,6 +402,68 @@ export class RagContextEngineConvergenceContract {
 
   classifyRagContextSurfaces(): RagContextSurfaceEntry[] {
     return RAG_CONTEXT_SURFACES.map((s) => ({ ...s }));
+  }
+
+  declareKnowledgeNativeRetrievalAuthority(): KnowledgeNativeRetrievalAuthorityDeclaration {
+    const declaredAt = this.now();
+
+    const knowledgeNativePath = [
+      "1. KnowledgeQueryContract.query() + StructuralIndexContract.build() — retrieval phase; structural index is a peer retrieval mode inside Query, not a replacement",
+      "2. KnowledgeRankingContract.rank() — composite scoring (relevance + tier + recency); ranks both standard and structurally-enriched items",
+      "3. KnowledgeContextAssemblyContract.assemble() — knowledge-native assembly surface; takes RankedKnowledgeItem[] + optional structural enrichment → KnowledgeContextPacket",
+      "4. KnowledgeContextAssemblyConsumerPipelineContract.execute() — preferred CPF knowledge-native consumer bridge; chains Ranking → ContextAssembly → ConsumerPackage in one call",
+      "5. ContextPackagerContract.pack() — terminal packaging authority; no new packaging layer is created",
+    ];
+
+    const declarationHash = computeDeterministicHash(
+      "w77-t1-cp1-knowledge-native-retrieval-authority",
+      declaredAt,
+      `path-steps:${knowledgeNativePath.length}`,
+      "structural-index-authority:StructuralIndexContract",
+      "assembly-authority:KnowledgeContextAssemblyContract",
+      "consumer-bridge-authority:KnowledgeContextAssemblyConsumerPipelineContract",
+      "packaging-authority:ContextPackagerContract",
+      "default-policy:NOT_DECIDED",
+    );
+
+    const declarationId = computeDeterministicHash(
+      "w77-t1-cp1-knowledge-native-retrieval-authority-id",
+      declarationHash,
+      declaredAt,
+    );
+
+    return {
+      declarationId,
+      declaredAt,
+      knowledgeNativePath,
+      structuralIndexAuthority:
+        "StructuralIndexContract (CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.structural.index.contract.ts) — " +
+        "a peer retrieval mode inside the Query step; provides graph-informed structural neighbor enrichment; " +
+        "does not replace KnowledgeQueryContract; operates alongside it as an optional enrichment source; " +
+        "authority declared canon by W77-T1",
+      assemblyAuthority:
+        "KnowledgeContextAssemblyContract (CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.context.assembly.contract.ts) — " +
+        "the knowledge-native assembly surface between ranked retrieval and final packaging; " +
+        "takes RankedKnowledgeItem[] plus optional structural enrichment and produces KnowledgeContextPacket; " +
+        "authority declared canon by W77-T1",
+      consumerBridgeAuthority:
+        "KnowledgeContextAssemblyConsumerPipelineContract (CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.context.assembly.consumer.pipeline.contract.ts) — " +
+        "the preferred CPF knowledge-native consumer bridge; chains Ranking → ContextAssembly → ConsumerPackage in one execute() call; " +
+        "structural enrichment flows into packaged context; authority declared canon by W77-T1",
+      packagingAuthority:
+        "ContextPackagerContract (CVF_CONTROL_PLANE_FOUNDATION/src/context.packager.contract.ts) — " +
+        "remains the terminal packaging authority; no new packaging layer is created by the knowledge-native path; " +
+        "authority unchanged from W9-T1 declaration",
+      noNewLayerStatement:
+        "No new architectural layer is created by the knowledge-native path. " +
+        "StructuralIndexContract is an enrichment peer inside the existing Query step. " +
+        "KnowledgeContextAssemblyContract is a new assembly step between ranking and packaging, not a new plane boundary. " +
+        "Graph Memory Layer, Persistent Wiki, MemPalace Runtime, and G-GM-* guard families remain rejected.",
+      defaultPolicyStatus:
+        "NOT_DECIDED — compiled-first vs graph-informed default policy is pending N2 Benchmark Evidence Closure; " +
+        "no policy default may be changed before N2 closes with GC-026 trace-backed evidence",
+      declarationHash,
+    };
   }
 
   declareRagRetrievalAuthority(): RagRetrievalAuthorityDeclaration {
@@ -380,6 +576,7 @@ export class RagContextEngineConvergenceContract {
     const surfaces = this.classifyRagContextSurfaces();
     const ragRetrievalAuthority = this.declareRagRetrievalAuthority();
     const deterministicContextPackaging = this.declareDeterministicContextPackagingApi();
+    const knowledgeNativeRetrievalAuthority = this.declareKnowledgeNativeRetrievalAuthority();
 
     const fixedInputCount = surfaces.filter((s) => s.status === "FIXED_INPUT").length;
     const inScopeCount = surfaces.filter((s) => s.status === "IN_SCOPE").length;
@@ -392,6 +589,7 @@ export class RagContextEngineConvergenceContract {
       `in-scope:${inScopeCount}`,
       ragRetrievalAuthority.authorityHash,
       deterministicContextPackaging.declarationHash,
+      knowledgeNativeRetrievalAuthority.declarationHash,
     );
 
     const reportId = computeDeterministicHash(
@@ -408,6 +606,7 @@ export class RagContextEngineConvergenceContract {
       inScopeCount,
       ragRetrievalAuthority,
       deterministicContextPackaging,
+      knowledgeNativeRetrievalAuthority,
       reportHash,
     };
   }

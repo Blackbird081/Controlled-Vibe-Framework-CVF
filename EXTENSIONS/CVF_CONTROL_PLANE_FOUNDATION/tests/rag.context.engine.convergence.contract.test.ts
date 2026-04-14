@@ -6,12 +6,13 @@
  *
  * Coverage:
  *   RagContextEngineConvergenceContract.classifyRagContextSurfaces:
- *     - returns 27 total surfaces (25 FIXED_INPUT + 2 IN_SCOPE)
- *     - 25 surfaces classified FIXED_INPUT
- *     - 2 surfaces classified IN_SCOPE
+ *     - returns 43 total surfaces (40 FIXED_INPUT + 3 IN_SCOPE)
+ *     - 40 surfaces classified FIXED_INPUT
+ *     - 3 surfaces classified IN_SCOPE
  *     - rag-retrieval-authority classified IN_SCOPE
  *     - context-packaging-deterministic-api classified IN_SCOPE
- *     - each of the 25 FIXED_INPUT surface IDs is present and FIXED_INPUT
+ *     - knowledge-native-retrieval-authority classified IN_SCOPE
+ *     - each of the 40 FIXED_INPUT surface IDs is present and FIXED_INPUT
  *     - every surface has non-empty surfaceId, sourceFile, description, rationale
  *
  *   RagContextEngineConvergenceContract.declareRagRetrievalAuthority:
@@ -34,12 +35,25 @@
  *     - declarationHash deterministic for same timestamp
  *     - declarationId is truthy
  *
+ *   RagContextEngineConvergenceContract.declareKnowledgeNativeRetrievalAuthority (W77-T1):
+ *     - knowledgeNativePath is non-empty
+ *     - structuralIndexAuthority references StructuralIndexContract
+ *     - assemblyAuthority references KnowledgeContextAssemblyContract
+ *     - consumerBridgeAuthority references KnowledgeContextAssemblyConsumerPipelineContract
+ *     - packagingAuthority references ContextPackagerContract
+ *     - defaultPolicyStatus declares NOT_DECIDED
+ *     - noNewLayerStatement is non-empty
+ *     - declaredAt set to injected now()
+ *     - declarationHash deterministic for same timestamp
+ *     - declarationId is truthy
+ *
  *   RagContextEngineConvergenceContract.generateConvergenceReport:
- *     - fixedInputCount = 25
- *     - inScopeCount = 2
- *     - surfaces.length = 27
+ *     - fixedInputCount = 40
+ *     - inScopeCount = 3
+ *     - surfaces.length = 43
  *     - ragRetrievalAuthority is present
  *     - deterministicContextPackaging is present
+ *     - knowledgeNativeRetrievalAuthority is present
  *     - generatedAt set to injected now()
  *     - reportHash deterministic for same timestamp
  *     - reportId is truthy
@@ -54,6 +68,7 @@ import {
   RagContextEngineConvergenceContract,
   createRagContextEngineConvergenceContract,
 } from "../src/rag.context.engine.convergence.contract";
+import type { KnowledgeNativeRetrievalAuthorityDeclaration } from "../src/rag.context.engine.convergence.contract";
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -88,6 +103,22 @@ const EXPECTED_FIXED_SURFACE_IDS = [
   "context-enrichment-consumer-pipeline",
   "context-enrichment-consumer-pipeline-batch",
   "model-gateway-boundary",
+  // W77-T1 additions — W72-W76 knowledge-native surfaces + retroactive knowledge-ranking-batch
+  "knowledge-ranking-batch",
+  "knowledge-structural-index",
+  "knowledge-structural-index-batch",
+  "knowledge-compiled-artifact",
+  "knowledge-compiled-artifact-batch",
+  "w7-memory-record",
+  "w7-memory-record-batch",
+  "knowledge-maintenance",
+  "knowledge-maintenance-batch",
+  "knowledge-refactor",
+  "knowledge-refactor-batch",
+  "knowledge-context-assembly",
+  "knowledge-context-assembly-batch",
+  "knowledge-context-assembly-consumer-pipeline",
+  "knowledge-context-assembly-consumer-pipeline-batch",
 ];
 
 // ─── classifyRagContextSurfaces ───────────────────────────────────────────────
@@ -95,18 +126,18 @@ const EXPECTED_FIXED_SURFACE_IDS = [
 describe("RagContextEngineConvergenceContract.classifyRagContextSurfaces", () => {
   const surfaces = contract.classifyRagContextSurfaces();
 
-  it("returns 27 total surfaces", () => {
-    expect(surfaces).toHaveLength(27);
+  it("returns 43 total surfaces", () => {
+    expect(surfaces).toHaveLength(43);
   });
 
-  it("25 surfaces are classified FIXED_INPUT", () => {
+  it("40 surfaces are classified FIXED_INPUT", () => {
     const fixed = surfaces.filter((s) => s.status === "FIXED_INPUT");
-    expect(fixed).toHaveLength(25);
+    expect(fixed).toHaveLength(40);
   });
 
-  it("2 surfaces are classified IN_SCOPE", () => {
+  it("3 surfaces are classified IN_SCOPE", () => {
     const inScope = surfaces.filter((s) => s.status === "IN_SCOPE");
-    expect(inScope).toHaveLength(2);
+    expect(inScope).toHaveLength(3);
   });
 
   it("rag-retrieval-authority is IN_SCOPE", () => {
@@ -116,6 +147,11 @@ describe("RagContextEngineConvergenceContract.classifyRagContextSurfaces", () =>
 
   it("context-packaging-deterministic-api is IN_SCOPE", () => {
     const entry = surfaces.find((s) => s.surfaceId === "context-packaging-deterministic-api");
+    expect(entry?.status).toBe("IN_SCOPE");
+  });
+
+  it("knowledge-native-retrieval-authority is IN_SCOPE", () => {
+    const entry = surfaces.find((s) => s.surfaceId === "knowledge-native-retrieval-authority");
     expect(entry?.status).toBe("IN_SCOPE");
   });
 
@@ -138,6 +174,54 @@ describe("RagContextEngineConvergenceContract.classifyRagContextSurfaces", () =>
 
   it("every surface has non-empty rationale", () => {
     surfaces.forEach((s) => expect(s.rationale.length).toBeGreaterThan(0));
+  });
+});
+
+// ─── declareKnowledgeNativeRetrievalAuthority (W77-T1) ───────────────────────
+
+describe("RagContextEngineConvergenceContract.declareKnowledgeNativeRetrievalAuthority", () => {
+  const decl: KnowledgeNativeRetrievalAuthorityDeclaration =
+    contract.declareKnowledgeNativeRetrievalAuthority();
+
+  it("knowledgeNativePath is non-empty", () => {
+    expect(decl.knowledgeNativePath.length).toBeGreaterThan(0);
+  });
+
+  it("structuralIndexAuthority references StructuralIndexContract", () => {
+    expect(decl.structuralIndexAuthority).toContain("StructuralIndexContract");
+  });
+
+  it("assemblyAuthority references KnowledgeContextAssemblyContract", () => {
+    expect(decl.assemblyAuthority).toContain("KnowledgeContextAssemblyContract");
+  });
+
+  it("consumerBridgeAuthority references KnowledgeContextAssemblyConsumerPipelineContract", () => {
+    expect(decl.consumerBridgeAuthority).toContain("KnowledgeContextAssemblyConsumerPipelineContract");
+  });
+
+  it("packagingAuthority references ContextPackagerContract", () => {
+    expect(decl.packagingAuthority).toContain("ContextPackagerContract");
+  });
+
+  it("defaultPolicyStatus declares NOT_DECIDED", () => {
+    expect(decl.defaultPolicyStatus).toContain("NOT_DECIDED");
+  });
+
+  it("noNewLayerStatement is non-empty", () => {
+    expect(decl.noNewLayerStatement.length).toBeGreaterThan(0);
+  });
+
+  it("declaredAt set to injected now()", () => {
+    expect(decl.declaredAt).toBe(FIXED_NOW);
+  });
+
+  it("declarationHash deterministic for same timestamp", () => {
+    const decl2 = contract.declareKnowledgeNativeRetrievalAuthority();
+    expect(decl.declarationHash).toBe(decl2.declarationHash);
+  });
+
+  it("declarationId is truthy", () => {
+    expect(decl.declarationId.length).toBeGreaterThan(0);
   });
 });
 
@@ -224,16 +308,16 @@ describe("RagContextEngineConvergenceContract.declareDeterministicContextPackagi
 describe("RagContextEngineConvergenceContract.generateConvergenceReport", () => {
   const report = contract.generateConvergenceReport();
 
-  it("fixedInputCount = 25", () => {
-    expect(report.fixedInputCount).toBe(25);
+  it("fixedInputCount = 40", () => {
+    expect(report.fixedInputCount).toBe(40);
   });
 
-  it("inScopeCount = 2", () => {
-    expect(report.inScopeCount).toBe(2);
+  it("inScopeCount = 3", () => {
+    expect(report.inScopeCount).toBe(3);
   });
 
-  it("surfaces.length = 27", () => {
-    expect(report.surfaces).toHaveLength(27);
+  it("surfaces.length = 43", () => {
+    expect(report.surfaces).toHaveLength(43);
   });
 
   it("ragRetrievalAuthority is present", () => {
@@ -244,6 +328,12 @@ describe("RagContextEngineConvergenceContract.generateConvergenceReport", () => 
   it("deterministicContextPackaging is present", () => {
     expect(report.deterministicContextPackaging).toBeDefined();
     expect(report.deterministicContextPackaging.deterministicApis.length).toBeGreaterThan(0);
+  });
+
+  it("knowledgeNativeRetrievalAuthority is present", () => {
+    expect(report.knowledgeNativeRetrievalAuthority).toBeDefined();
+    expect(report.knowledgeNativeRetrievalAuthority.knowledgeNativePath.length).toBeGreaterThan(0);
+    expect(report.knowledgeNativeRetrievalAuthority.defaultPolicyStatus).toContain("NOT_DECIDED");
   });
 
   it("generatedAt set to injected now()", () => {
@@ -267,7 +357,8 @@ describe("createRagContextEngineConvergenceContract", () => {
     const c = createRagContextEngineConvergenceContract({ now: fixedNow });
     const report = c.generateConvergenceReport();
     expect(report.generatedAt).toBe(FIXED_NOW);
-    expect(report.fixedInputCount).toBe(25);
-    expect(report.inScopeCount).toBe(2);
+    expect(report.fixedInputCount).toBe(40);
+    expect(report.inScopeCount).toBe(3);
+    expect(report.knowledgeNativeRetrievalAuthority.defaultPolicyStatus).toContain("NOT_DECIDED");
   });
 });

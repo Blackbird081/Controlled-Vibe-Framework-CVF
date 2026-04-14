@@ -125,4 +125,37 @@ under a dedicated W7MemoryRecord enrichment wave.
 
 ---
 
+---
+
+## 8. N2 Decision Record (W78-T1 — 2026-04-14)
+
+> Authority: `docs/baselines/CVF_W78_T1_BENCHMARK_EVIDENCE_PACKET_2026-04-14.md`
+> GC-026 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W78_T1_N2_BENCHMARK_EVIDENCE_CLOSURE_2026-04-14.md`
+
+**Decision: HYBRID / NO SINGLE DEFAULT**
+
+The N2 Benchmark Evidence Closure wave (W78-T1) evaluated compiled-first and graph-first preferences
+using `PerformanceBenchmarkHarnessContract` (W8-T2 + W72-T5 extensions) against 8 declared runs.
+Evidence class: PROPOSAL_ONLY (contract-layer; no live inference system available).
+
+The promotion gate was not fully met: retrieval precision and temporal independence gates require
+runtime inference measurements unavailable at contract layer. Per §5 of the benchmark criteria,
+the preferences remain at candidate status.
+
+**Effective policy after N3 (unchanged from pre-N2 state):**
+
+| Rule | Status |
+|---|---|
+| Rule 1 — compiled-preferred (conditional) | CONFIRMED UNCHANGED — agents may prefer compiled artifacts when governance conditions are met |
+| Rule 2 — raw-source fallback (mandatory) | CONFIRMED UNCHANGED — always reachable; never blocked |
+| Rule 3 — no unconditional compiled-first default | CONFIRMED — promotion gate not met |
+| Structural index peer mode | CONFIRMED in canon (N1/W77-T1 `rag.context.engine.convergence.contract.ts`) |
+| Unconditional default | NOT SET |
+
+This decision closes the N2 evidence gate and was promoted into whitepaper and tracker canon by W79-T1.
+Future waves may revisit default promotion if runtime inference evidence becomes available.
+
+---
+
 *Filed: 2026-04-14 — W72-T2 CP1 Knowledge Compilation Doctrine Uplift*
+*Updated: 2026-04-14 — W79-T1 N3 Canon Default Promotion (§8 appended)*

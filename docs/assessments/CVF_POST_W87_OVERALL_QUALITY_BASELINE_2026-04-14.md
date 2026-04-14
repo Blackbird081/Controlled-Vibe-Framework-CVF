@@ -33,7 +33,7 @@ to:
 | Runtime/provider evidence quality | **MEDIUM-HIGH** | W86 added live governed-path evidence; still not full provider-hub proof |
 | Non-coder safety/helpfulness on governed path | **IMPROVED** | W87 closes the API-layer guidance gap for 3 concrete HIGH_RISK patterns |
 | Front-door non-coder UX realization | **PARTIAL** | Backend/API capability is ahead of UI consumption |
-| Recommended next priority | **UI consumption of guided responses, or broader PVV batch depending operator goal** | See Section 6 |
+| Recommended next priority | **UI consumption of guided responses on the 1-provider path** | Multi-provider expansion is temporarily deferred |
 
 Updated rating:
 
@@ -166,15 +166,18 @@ This is the best next move if the operator goal is:
 - ensure non-coders actually see the safe-path alternatives
 - convert backend governed help into visible product help
 
-### Priority B — if the goal is broader runtime/product truth
+### Priority B — temporarily deferred
 
-Resume the broader frozen PVV batch / provider evidence program.
+Broader multi-provider PVV expansion is **not** the current priority.
 
-This is the best next move if the operator goal is:
+Reason:
 
-- stronger provider-hub truth
-- broader cross-lane confidence
-- larger-scale governed-vs-direct evidence
+- if CVF cannot yet deliver its full core value to non-coders through one stable provider path, then multi-provider work is still secondary
+- if CVF **can** deliver its full core value through one stable provider path, then later multi-provider work becomes mainly a portability / robustness / engineering expansion
+
+So the current strategic rule is:
+
+**prove the non-coder product value through one provider first; suspend broader multi-provider expansion until that is visibly true in the front-door product experience.**
 
 ### Priority C — if the goal is bounded safety coverage expansion
 
@@ -193,14 +196,15 @@ Until superseded, future agents should assume:
 2. W86 gave runtime evidence on the governed execution path.
 3. W87 improved non-coder help at API layer for 3 concrete HIGH_RISK patterns.
 4. The next product-value question is no longer “can CVF detect unsafe requests?” but “is the governed guidance reaching users in the front-door UI?”
-5. The most important remaining gap for non-coder value is likely **UI realization of governed help**, not backend doctrine.
+5. The most important remaining gap for non-coder value is **UI realization of governed help on the current 1-provider path**, not backend doctrine.
+6. Multi-provider PVV expansion is temporarily deferred until the 1-provider non-coder value loop is clearly realized.
 
 ---
 
 ## 8. Final Baseline Statement
 
 **Post-W87 baseline statement:**  
-CVF is no longer just internally well-governed and knowledge-native. It now shows real progress toward the non-coder promise on the governed execution path. The remaining challenge is to make that governed help fully visible and felt in the front-door product experience.
+CVF is no longer just internally well-governed and knowledge-native. It now shows real progress toward the non-coder promise on the governed execution path. The immediate priority is to make that governed help fully visible and felt in the front-door product experience through the current stable provider path. Multi-provider expansion is intentionally secondary until that core value is clearly realized.
 
 ---
 

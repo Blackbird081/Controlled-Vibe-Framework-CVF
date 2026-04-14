@@ -141,3 +141,25 @@ export type {
   KnowledgeRefactorBatch,
   KnowledgeRefactorBatchContractDependencies,
 } from "./knowledge.refactor.batch.contract";
+
+// W75-T1 — KnowledgeContextAssemblyContract
+export {
+  KnowledgeContextAssemblyContract,
+  createKnowledgeContextAssemblyContract,
+} from "./knowledge.context.assembly.contract";
+export type {
+  KnowledgeContextEntry,
+  KnowledgeContextPacket,
+  KnowledgeContextAssemblyRequest,
+  KnowledgeContextAssemblyContractDependencies,
+} from "./knowledge.context.assembly.contract";
+
+// W75-T1 — KnowledgeContextAssemblyBatchContract
+export {
+  KnowledgeContextAssemblyBatchContract,
+  createKnowledgeContextAssemblyBatchContract,
+} from "./knowledge.context.assembly.batch.contract";
+export type {
+  KnowledgeContextAssemblyBatch,
+  KnowledgeContextAssemblyBatchContractDependencies,
+} from "./knowledge.context.assembly.batch.contract";

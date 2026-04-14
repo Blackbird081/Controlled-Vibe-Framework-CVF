@@ -278,6 +278,16 @@ export default function Sidebar({
                                 isActive={appState === 'simulation'}
                                 onClick={() => handleNav('simulation')}
                             />
+                            <Link
+                                href="/governance/knowledge"
+                                className={clsx(
+                                    'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200',
+                                    'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                                )}
+                                onClick={onClose}
+                            >
+                                <span className="flex-1 text-left">📚 Knowledge</span>
+                            </Link>
                         </NavGroup>
                     )}
 

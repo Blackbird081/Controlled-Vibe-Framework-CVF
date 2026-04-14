@@ -1,34 +1,29 @@
 /**
  * @vitest-environment jsdom
  *
- * Exploratory Knowledge Benchmark Example — Live Inference
+ * W84-T1 — Knowledge Live Benchmark Evidence Promotion
  *
- * Reference-only exploratory harness.
+ * Tranche  : W84-T1 (Knowledge Live Benchmark Evidence Promotion)
+ * Class    : VALIDATION_EVIDENCE / GOVERNED_RUNTIME_BENCHMARK
+ * GC-018   : docs/baselines/CVF_GC018_W84_T1_KNOWLEDGE_LIVE_BENCHMARK_EVIDENCE_PROMOTION_AUTHORIZATION_2026-04-14.md
+ * Roadmap  : docs/roadmaps/CVF_W84_T1_KNOWLEDGE_LIVE_BENCHMARK_EVIDENCE_PROMOTION_ROADMAP_2026-04-14.md
+ * Manifest : docs/baselines/CVF_W84_T1_BENCHMARK_RUN_MANIFEST_2026-04-14.md
  *
- * This file is NOT:
- * - a governed tranche artifact
- * - a GC-018-authorized benchmark surface
- * - a GC-026 evidence packet
- * - repo-truth evidence for policy or canon changes
- *
- * This file IS:
- * - an example of how a future authorized live benchmark wave could be structured
- * - a reusable local harness for exploratory reruns
- * - a scenario-design seed for any future formal evidence tranche
- *
- * It explores the two W78-T1 gates that could only be tested with live inference:
+ * Addresses the two W78-T1 NOT MET gates:
  *   Gate 1 — Retrieval precision ≥ baseline on all 3 use-cases (requires runtime inference)
  *   Gate 2 — ≥ 2 independent consistent runs (requires temporal separation)
  *
  * Model   : qwen-max (Alibaba DashScope)
- * Avoid   : qvq-max (quota exhausted per operator instruction)
+ * Avoided : qvq-max (operator instruction: quota exhausted)
  * Gate    : all tests skip unless CVF_BENCHMARK_ALIBABA_KEY env var is set
  *
  * Run command (PowerShell):
  *   $env:CVF_BENCHMARK_ALIBABA_KEY="<key>"; npx vitest run src/app/api/governance/knowledge/benchmark.live.test.ts --reporter=verbose
  *
- * If a future W84-style benchmark tranche is authorized, this file must be
- * explicitly adopted into that tranche scope before any result is cited as evidence.
+ * Results from this file under the above GC-018 authorization constitute
+ * formal W84-T1 tranche evidence. Do not alter scenarios or pass criteria
+ * mid-run. Evidence packet is filed separately at:
+ *   docs/baselines/CVF_W84_T1_KNOWLEDGE_LIVE_BENCHMARK_EVIDENCE_PACKET_2026-04-14.md
  */
 import { describe, it, afterAll, expect } from 'vitest';
 import {
@@ -175,7 +170,7 @@ const results: RunResult[] = [];
 // ---------------------------------------------------------------------------
 // Benchmark suite
 // ---------------------------------------------------------------------------
-describe('Exploratory Knowledge Benchmark Example — Live Inference (qwen-max)', () => {
+describe('W84-T1 Knowledge Live Benchmark — Live Inference (qwen-max)', () => {
   for (const run of [1, 2]) {
     for (let i = 0; i < SCENARIOS.length; i++) {
       const s = SCENARIOS[i];
@@ -221,8 +216,8 @@ describe('Exploratory Knowledge Benchmark Example — Live Inference (qwen-max)'
     if (!ALIBABA_KEY || results.length === 0) return;
 
     console.log('\n════════════════════════════════════════════════════════');
-    console.log('EXPLORATORY KNOWLEDGE BENCHMARK SUMMARY');
-    console.log(`Model: ${MODEL} | Status: REFERENCE-ONLY / NOT GOVERNANCE EVIDENCE`);
+    console.log('W84-T1 KNOWLEDGE LIVE BENCHMARK — GATE ASSESSMENT');
+    console.log(`Model: ${MODEL} | Evidence class: LIVE_INFERENCE | Tranche: W84-T1`);
     console.log('════════════════════════════════════════════════════════');
 
     for (const s of SCENARIOS) {

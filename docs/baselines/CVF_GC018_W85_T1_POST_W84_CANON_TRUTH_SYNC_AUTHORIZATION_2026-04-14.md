@@ -85,7 +85,7 @@ W85-T1 is complete when all of the following are true:
 3. `CVF_WHITEPAPER_PROGRESS_TRACKER.md` records `latest governed closure W84-T1` (via W85-T1 sync)
 4. `CVF_WHITEPAPER_PROGRESS_TRACKER.md` has W84-T1 and W85-T1 rows in the tranche table
 5. `AGENT_HANDOFF.md` records W85-T1 CLOSED DELIVERED and removes the pending-sync reviewer note
-6. `CVF_GC026_TRACKER_SYNC_W85_T1_POST_W84_CANON_TRUTH_SYNC_CLOSED_2026-04-14.md` is filed
+6. `CVF_GC026_TRACKER_SYNC_W85_T1_CLOSED_2026-04-14.md` is filed
 7. No benchmark was rerun; no policy decision was changed; no capability was added
 
 ---

@@ -247,3 +247,24 @@ export type {
   ConsumerBatch,
   ConsumerBatchContractDependencies,
 } from "./consumer.batch.contract";
+
+// W73-T1 — W7MemoryRecordContract
+export {
+  W7MemoryRecordContract,
+  createW7MemoryRecordContract,
+} from "./w7.memory.record.contract";
+export type {
+  W7MemoryRecord,
+  W7MemoryRecordRequest,
+  W7MemoryRecordContractDependencies,
+} from "./w7.memory.record.contract";
+
+// W73-T1 — W7MemoryRecordBatchContract
+export {
+  W7MemoryRecordBatchContract,
+  createW7MemoryRecordBatchContract,
+} from "./w7.memory.record.batch.contract";
+export type {
+  W7MemoryRecordBatch,
+  W7MemoryRecordBatchContractDependencies,
+} from "./w7.memory.record.batch.contract";

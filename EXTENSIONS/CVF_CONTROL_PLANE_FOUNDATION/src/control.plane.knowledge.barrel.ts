@@ -90,3 +90,32 @@ export type {
   CompiledKnowledgeArtifactBatch,
   CompiledKnowledgeArtifactBatchContractDependencies,
 } from "./knowledge.compiled.artifact.batch.contract";
+
+// W73-T2 — KnowledgeMaintenanceContract (Lifecycle Step 5)
+export {
+  KnowledgeMaintenanceContract,
+  createKnowledgeMaintenanceContract,
+} from "./knowledge.maintenance.contract";
+export type {
+  KnowledgeMaintenanceSignalType,
+  KnowledgeMaintenanceSignal,
+  KnowledgeLintCheck,
+  KnowledgeContradictionCheck,
+  KnowledgeDriftCheck,
+  KnowledgeOrphanCheck,
+  KnowledgeStalenessCheck,
+  KnowledgeMaintenanceCheck,
+  KnowledgeMaintenanceRequest,
+  KnowledgeMaintenanceResult,
+  KnowledgeMaintenanceContractDependencies,
+} from "./knowledge.maintenance.contract";
+
+// W73-T2 — KnowledgeMaintenanceBatchContract
+export {
+  KnowledgeMaintenanceBatchContract,
+  createKnowledgeMaintenanceBatchContract,
+} from "./knowledge.maintenance.batch.contract";
+export type {
+  KnowledgeMaintenanceBatch,
+  KnowledgeMaintenanceBatchContractDependencies,
+} from "./knowledge.maintenance.batch.contract";

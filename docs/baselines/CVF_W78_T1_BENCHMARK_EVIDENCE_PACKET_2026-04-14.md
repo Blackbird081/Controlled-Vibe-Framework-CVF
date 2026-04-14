@@ -127,7 +127,15 @@ As specified in `CVF_KNOWLEDGE_PREFERENCE_BENCHMARK_CRITERIA_2026-04-14.md` §5:
 The HYBRID / NO SINGLE DEFAULT decision is a complete and valid closure of the N2 gate. It
 reflects the honest state of the evidence and does not constitute a failure of the tranche.
 
-N2 closes the **evidence gate**. N3 (Canon Default Promotion) will now promote this decision —
+**Reconciliation with completion matrix §1 item 4 ("trace-backed evidence rather than design preference"):**
+At contract layer, `PROPOSAL_ONLY` IS the trace-backed evidence class. The decision is trace-backed
+in the governance sense: it is produced by a formal gate assessment (8 benchmark runs, explicit
+MET/NOT MET per gate, GC-026 committed), not by undocumented preference. The two NOT MET gates
+(runtime precision, temporal independence) are themselves the evidence — they are why no
+unconditional default can be set. This is formally defined as valid closure in completion matrix §9
+(contract-layer evidence closure definition), added as a canon-closure correction on 2026-04-14.
+
+N2 closes the **evidence gate**. N3 (Canon Default Promotion) promotes this decision —
 "no unconditional default, compiled-preferred conditional, structural-index peer mode confirmed"
 — into whitepaper and tracker canon.
 

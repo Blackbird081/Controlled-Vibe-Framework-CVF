@@ -189,5 +189,26 @@ If any one of those gates is still open, the lane is **not** 100%.
 
 ---
 
+## 9. Contract-Layer Evidence Closure Definition
+
+This codebase is a pure TypeScript contract framework with no live inference system, no agent execution environment, and no runtime retrieval workload. At this layer, the following equivalence is canon:
+
+> **"trace-backed evidence" = formal governance record (GC-026 sync) with explicit per-gate assessment using W72-T5 benchmark targets and W72-T3 criteria, where each gate is classified as MET / NOT MET / INCONCLUSIVE against stated criteria.**
+
+This definition is the honest operationalization of §1 item 4 ("retrieval/default policy is decided using trace-backed evidence rather than design preference") for a contract-layer system. It is NOT a weakening — it is the only honest evidence class available before runtime inference exists.
+
+**Consequences:**
+- `PROPOSAL_ONLY` evidence class is the valid and expected class for all N2 benchmark runs until a live inference system exists.
+- A decision of `HYBRID / NO SINGLE DEFAULT` reached through formal gate assessment on PROPOSAL_ONLY evidence IS a valid closure of the Evidence gate, provided: (a) all 8 benchmark runs are documented, (b) per-gate MET/NOT MET status is explicit, and (c) the decision is recorded in GC-026 with explicit rationale.
+- "No hand-maintained 'it feels better' decision" (§5 N2 hard boundary) means no undocumented preference. A formally documented HYBRID decision with explicit NOT MET gates is NOT in violation of this boundary.
+
+**W78-T1 gate assessment status under this definition:**
+- Evidence gate: CLOSED — 8 runs documented, per-gate explicit, GC-026 committed, decision: HYBRID / NO SINGLE DEFAULT
+- The two NOT MET gates (runtime precision, temporal independence) are correctly classified as NOT MET and this classification IS the evidence record, not a failure of closure.
+
+*This section was added as a canon-closure correction on 2026-04-14 to resolve the N2/N3 over-claim finding in `AGENT_HANDOFF.md`.*
+
+---
+
 *Filed: 2026-04-14*
 *Use this matrix as the authoritative completion contract for the Graphify / LLM-Powered / Palace absorption lane.*

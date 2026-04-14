@@ -203,8 +203,8 @@ describe("RagContextEngineConvergenceContract.declareKnowledgeNativeRetrievalAut
     expect(decl.packagingAuthority).toContain("ContextPackagerContract");
   });
 
-  it("defaultPolicyStatus declares NOT_DECIDED", () => {
-    expect(decl.defaultPolicyStatus).toContain("NOT_DECIDED");
+  it("defaultPolicyStatus declares HYBRID/NO_SINGLE_DEFAULT after N2+N3 closure", () => {
+    expect(decl.defaultPolicyStatus).toContain("HYBRID / NO SINGLE DEFAULT");
   });
 
   it("noNewLayerStatement is non-empty", () => {
@@ -225,9 +225,11 @@ describe("RagContextEngineConvergenceContract.declareKnowledgeNativeRetrievalAut
   });
 });
 
-// ─── declareRagRetrievalAuthority ─────────────────────────────────────────────
+// ─── declareRagRetrievalAuthority (legacy W9-T1 raw-text baseline path) ───────────────
+// After W77-T1, this is the legacy subpath record. The TOP-LEVEL canon retrieval authority
+// is declareKnowledgeNativeRetrievalAuthority().
 
-describe("RagContextEngineConvergenceContract.declareRagRetrievalAuthority", () => {
+describe("RagContextEngineConvergenceContract.declareRagRetrievalAuthority (legacy W9-T1 raw-text baseline)", () => {
   const auth = contract.declareRagRetrievalAuthority();
 
   it("retrievalPath is non-empty", () => {
@@ -333,7 +335,7 @@ describe("RagContextEngineConvergenceContract.generateConvergenceReport", () => 
   it("knowledgeNativeRetrievalAuthority is present", () => {
     expect(report.knowledgeNativeRetrievalAuthority).toBeDefined();
     expect(report.knowledgeNativeRetrievalAuthority.knowledgeNativePath.length).toBeGreaterThan(0);
-    expect(report.knowledgeNativeRetrievalAuthority.defaultPolicyStatus).toContain("NOT_DECIDED");
+    expect(report.knowledgeNativeRetrievalAuthority.defaultPolicyStatus).toContain("HYBRID / NO SINGLE DEFAULT");
   });
 
   it("generatedAt set to injected now()", () => {
@@ -359,6 +361,6 @@ describe("createRagContextEngineConvergenceContract", () => {
     expect(report.generatedAt).toBe(FIXED_NOW);
     expect(report.fixedInputCount).toBe(40);
     expect(report.inScopeCount).toBe(3);
-    expect(report.knowledgeNativeRetrievalAuthority.defaultPolicyStatus).toContain("NOT_DECIDED");
+    expect(report.knowledgeNativeRetrievalAuthority.defaultPolicyStatus).toContain("HYBRID / NO SINGLE DEFAULT");
   });
 });

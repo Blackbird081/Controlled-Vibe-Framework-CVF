@@ -40,10 +40,12 @@ export interface DeterministicContextPackagingDeclaration {
   declarationHash: string;
 }
 
-// Declares the knowledge-native retrieval authority as canon.
+// Declares the knowledge-native retrieval authority as canon (W77-T1).
 // Registers StructuralIndexContract, KnowledgeContextAssemblyContract, and
 // KnowledgeContextAssemblyConsumerPipelineContract into the canon retrieval authority surface.
-// Does NOT choose compiled-first vs graph-informed default — that is Wave N2.
+// This is the TOP-LEVEL canon retrieval authority after W77. The legacy W9-T1 raw-text
+// baseline path (declareRagRetrievalAuthority) remains available as a subpath record.
+// Default policy: HYBRID / NO SINGLE DEFAULT — closed by N2 (W78-T1) + N3 (W79-T1).
 export interface KnowledgeNativeRetrievalAuthorityDeclaration {
   declarationId: string;
   declaredAt: string;
@@ -53,7 +55,7 @@ export interface KnowledgeNativeRetrievalAuthorityDeclaration {
   consumerBridgeAuthority: string;        // KnowledgeContextAssemblyConsumerPipelineContract: preferred consumer bridge
   packagingAuthority: string;             // ContextPackagerContract remains packaging authority; no new layer
   noNewLayerStatement: string;            // explicit no-new-layer declaration
-  defaultPolicyStatus: string;            // NOT_DECIDED — pending N2 benchmark evidence
+  defaultPolicyStatus: string;            // policy decision after N2+N3 closure
   declarationHash: string;
 }
 
@@ -423,7 +425,7 @@ export class RagContextEngineConvergenceContract {
       "assembly-authority:KnowledgeContextAssemblyContract",
       "consumer-bridge-authority:KnowledgeContextAssemblyConsumerPipelineContract",
       "packaging-authority:ContextPackagerContract",
-      "default-policy:NOT_DECIDED",
+      "default-policy:HYBRID/NO_SINGLE_DEFAULT",
     );
 
     const declarationId = computeDeterministicHash(
@@ -460,12 +462,19 @@ export class RagContextEngineConvergenceContract {
         "KnowledgeContextAssemblyContract is a new assembly step between ranking and packaging, not a new plane boundary. " +
         "Graph Memory Layer, Persistent Wiki, MemPalace Runtime, and G-GM-* guard families remain rejected.",
       defaultPolicyStatus:
-        "NOT_DECIDED — compiled-first vs graph-informed default policy is pending N2 Benchmark Evidence Closure; " +
-        "no policy default may be changed before N2 closes with GC-026 trace-backed evidence",
+        "HYBRID / NO SINGLE DEFAULT — N2 Benchmark Evidence Closure CLOSED (W78-T1); " +
+        "N3 Canon Default Promotion CLOSED (W79-T1); compiled-preferred conditional (Rule 1) " +
+        "and raw-source fallback (Rule 2) remain unchanged; no unconditional default is set; " +
+        "structural index peer mode confirmed (N1 W77-T1)",
       declarationHash,
     };
   }
 
+  // Legacy W9-T1 raw-text baseline retrieval path. This method is preserved as the canonical
+  // record of the pre-knowledge-native authority (W9-T1). After W77-T1, the TOP-LEVEL canon
+  // retrieval authority is declareKnowledgeNativeRetrievalAuthority(). This path describes the
+  // raw-text subpath (KnowledgeQuery → KnowledgeRanking → RetrievalContract → ContextPackager)
+  // and remains valid as the fallback/baseline path inside the knowledge-native authority.
   declareRagRetrievalAuthority(): RagRetrievalAuthorityDeclaration {
     const declaredAt = this.now();
 

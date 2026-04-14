@@ -226,6 +226,29 @@ describe("KnowledgeContextAssemblyContract — determinism", () => {
     expect(p1.packetHash).not.toBe(p2.packetHash);
   });
 
+  it("different structural enrichment for same ranked items → different packetHash", () => {
+    const rankedItems = [makeRankedItem({ itemId: "item-1", rank: 1, content: "alpha" })];
+    const p1 = makeContract().assemble({
+      rankedItems,
+      structuralEnrichment: { "item-1": [makeNeighbor("entity-a")] },
+    });
+    const p2 = makeContract().assemble({
+      rankedItems,
+      structuralEnrichment: { "item-1": [makeNeighbor("entity-b")] },
+    });
+    expect(p1.packetHash).not.toBe(p2.packetHash);
+  });
+
+  it("different title for same itemId/rank/content → different entryHash", () => {
+    const p1 = makeContract().assemble({
+      rankedItems: [makeRankedItem({ itemId: "item-1", rank: 1, title: "Title A", content: "alpha" })],
+    });
+    const p2 = makeContract().assemble({
+      rankedItems: [makeRankedItem({ itemId: "item-1", rank: 1, title: "Title B", content: "alpha" })],
+    });
+    expect(p1.entries[0].entryHash).not.toBe(p2.entries[0].entryHash);
+  });
+
   it("entryHash is time-independent", () => {
     const req = makeRequest();
     const c1 = new KnowledgeContextAssemblyContract({ now: () => "2026-01-01T00:00:00.000Z" });

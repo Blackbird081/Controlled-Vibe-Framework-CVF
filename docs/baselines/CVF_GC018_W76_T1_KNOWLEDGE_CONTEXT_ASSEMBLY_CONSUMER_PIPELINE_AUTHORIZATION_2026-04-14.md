@@ -22,6 +22,9 @@ W76-T1 is authorized to implement `KnowledgeContextAssemblyConsumerPipelineContr
 - Batch surface via `KnowledgeContextAssemblyConsumerPipelineBatchContract`
 - Barrel exports in `control.plane.knowledge.barrel.ts`
 
+The consumer package must be derived from the assembled context output, not rebuilt directly from
+the pre-assembly ranked items alone.
+
 **Not allowed in this tranche:**
 - Any query contract invocation (candidates are caller-supplied)
 - Any write to stores, Learning Plane, or external services

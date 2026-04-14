@@ -332,4 +332,14 @@ describe("KnowledgeMaintenanceContract — result determinism", () => {
     const r2 = makeContract().evaluate({ artifact: a, checks: [{ type: "contradiction", conflictingArtifactIds: ["art-2"] }] });
     expect(r1.resultHash).not.toBe(r2.resultHash);
   });
+
+  it("keeps same resultHash across different evaluation timestamps for same signals", () => {
+    const a = makeApprovedArtifact();
+    const c1 = new KnowledgeMaintenanceContract({ now: () => "2026-04-14T00:00:00.000Z" });
+    const c2 = new KnowledgeMaintenanceContract({ now: () => "2026-05-01T00:00:00.000Z" });
+    const checks = [{ type: "contradiction" as const, conflictingArtifactIds: ["art-1"] }];
+    const r1 = c1.evaluate({ artifact: a, checks });
+    const r2 = c2.evaluate({ artifact: a, checks });
+    expect(r1.resultHash).toBe(r2.resultHash);
+  });
 });

@@ -26,6 +26,7 @@ import type {
 } from "./consumer.pipeline.contract";
 import type { SegmentTypeConstraints } from "./context.packager.contract";
 import type { StructuralNeighbor } from "./knowledge.structural.index.contract";
+import type { RankableKnowledgeItem } from "./knowledge.ranking.contract";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -74,6 +75,38 @@ function buildWarnings(contextPacket: KnowledgeContextPacket): string[] {
   return [];
 }
 
+function buildStructuralSummary(neighbors: StructuralNeighbor[]): string {
+  if (neighbors.length === 0) {
+    return "";
+  }
+
+  const rendered = neighbors
+    .map((neighbor) => `${neighbor.label} (${neighbor.relationType}, depth ${neighbor.depth})`)
+    .join("; ");
+
+  return `\nStructural neighbors: ${rendered}`;
+}
+
+function toAssemblyDerivedCandidateItems(
+  rankedItems: RankableKnowledgeItem[],
+  contextPacket: KnowledgeContextPacket,
+): RankableKnowledgeItem[] {
+  const rankedById = new Map(rankedItems.map((item) => [item.itemId, item]));
+
+  return contextPacket.entries.map((entry) => {
+    const rankedItem = rankedById.get(entry.itemId);
+    return {
+      itemId: entry.itemId,
+      title: entry.title,
+      content: `${entry.content}${buildStructuralSummary(entry.structuralNeighbors)}`,
+      relevanceScore: rankedItem?.relevanceScore ?? entry.compositeScore,
+      source: rankedItem?.source ?? "knowledge-context-assembly",
+      tier: rankedItem?.tier,
+      recencyScore: rankedItem?.recencyScore,
+    };
+  });
+}
+
 // ─── Contract ─────────────────────────────────────────────────────────────────
 
 export class KnowledgeContextAssemblyConsumerPipelineContract {
@@ -118,12 +151,16 @@ export class KnowledgeContextAssemblyConsumerPipelineContract {
 
     // Step 3: wrap in CPF consumer package
     const query = `${request.rankingRequest.query}:assembled:${contextPacket.totalEntries}`.slice(0, 120);
+    const assemblyDerivedItems = toAssemblyDerivedCandidateItems(
+      rankedResult.items,
+      contextPacket,
+    );
     const consumerPackage: ControlPlaneConsumerPackage =
       this.consumerPipeline.execute({
         rankingRequest: {
           query,
           contextId: contextPacket.packetId,
-          candidateItems: rankedResult.items,
+          candidateItems: assemblyDerivedItems,
           scoringWeights: request.rankingRequest.scoringWeights,
         },
         segmentTypeConstraints: request.segmentTypeConstraints,

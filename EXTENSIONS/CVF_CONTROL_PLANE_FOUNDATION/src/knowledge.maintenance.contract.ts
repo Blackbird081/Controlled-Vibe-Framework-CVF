@@ -73,7 +73,7 @@ export interface KnowledgeMaintenanceResult {
   signals: KnowledgeMaintenanceSignal[];
   totalSignals: number;
   hasIssues: boolean;
-  resultHash: string;  // bound to artifactId + evaluatedAt + signalHashes
+  resultHash: string;  // content-bound: hash(artifactId + signalHashes)
 }
 
 export interface KnowledgeMaintenanceContractDependencies {
@@ -111,7 +111,7 @@ export class KnowledgeMaintenanceContract {
     const signalHashesSig = signals.map((s) => s.signalHash).join(",");
     const resultHash = computeDeterministicHash(
       "w73-t2-maintenance-result",
-      `${artifact.artifactId}:${evaluatedAt}`,
+      `artifactId:${artifact.artifactId}`,
       `signals:[${signalHashesSig}]`,
     );
 

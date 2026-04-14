@@ -45,7 +45,7 @@ Knowledge Layer. This is Step 5 (`Maintain`) of the 6-step knowledge compilation
 **Hash design:**
 - `signalHash` = content-bound (no time)
 - `signalId` = `signalHash + detectedAt` (time-variant)
-- `resultHash` = bound to `artifactId + evaluatedAt + signalHashes`
+- `resultHash` = content-bound to `artifactId + signalHashes` (time-independent)
 
 ---
 

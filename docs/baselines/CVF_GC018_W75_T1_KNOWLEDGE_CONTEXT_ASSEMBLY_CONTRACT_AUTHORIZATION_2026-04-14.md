@@ -32,3 +32,6 @@ W75-T1 is authorized to implement `KnowledgeContextAssemblyContract` and `Knowle
 ## Dependency
 
 Depends on `RankedKnowledgeItem` from `knowledge.ranking.contract.ts` and `StructuralNeighbor` from `knowledge.structural.index.contract.ts`.
+
+Hash semantics are expected to cover the assembled entry payload, including structural enrichment
+when present, rather than only the pre-assembly ranked item core.

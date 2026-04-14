@@ -117,6 +117,17 @@ describe("KnowledgeContextAssemblyConsumerPipelineContract — structural enrich
     const r = makeContract().execute(makeRequest());
     expect(r.contextPacket.entries.every((e) => e.structuralNeighbors.length === 0)).toBe(true);
   });
+
+  it("consumerPackage knowledge segments include structural summary from assembled context", () => {
+    const neighbor = makeNeighbor("entity-x");
+    const r = makeContract().execute(
+      makeRequest({ structuralEnrichment: { "item-1": [neighbor] } }),
+    );
+    const knowledgeSegments = r.consumerPackage.typedContextPackage.segments
+      .filter((segment) => segment.segmentType === "KNOWLEDGE");
+    expect(knowledgeSegments.some((segment) => segment.content.includes("Structural neighbors"))).toBe(true);
+    expect(knowledgeSegments.some((segment) => segment.content.includes("Label entity-x"))).toBe(true);
+  });
 });
 
 // --- warnings ---

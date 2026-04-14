@@ -41,6 +41,14 @@ export interface KnowledgeContextAssemblyContractDependencies {
   now?: () => string;
 }
 
+function serializeStructuralNeighbors(neighbors: StructuralNeighbor[]): string {
+  return neighbors
+    .map((neighbor) =>
+      `${neighbor.entityId}|${neighbor.label}|${neighbor.relationType}|${neighbor.depth}`,
+    )
+    .join(";");
+}
+
 // --- Contract ---
 
 export class KnowledgeContextAssemblyContract {
@@ -55,11 +63,15 @@ export class KnowledgeContextAssemblyContract {
     const enrichment = request.structuralEnrichment ?? {};
 
     const entries: KnowledgeContextEntry[] = request.rankedItems.map((item) => {
+      const structuralNeighbors = enrichment[item.itemId] ?? [];
       const entryHash = computeDeterministicHash(
         "w75-t1-context-entry",
         `itemId:${item.itemId}`,
         `rank:${item.rank}`,
+        `title:${item.title}`,
         `content:${item.content}`,
+        `compositeScore:${item.compositeScore.toFixed(6)}`,
+        `neighbors:[${serializeStructuralNeighbors(structuralNeighbors)}]`,
       );
       const entryId = computeDeterministicHash(
         "w75-t1-context-entry-id",
@@ -74,7 +86,7 @@ export class KnowledgeContextAssemblyContract {
         title: item.title,
         content: item.content,
         compositeScore: item.compositeScore,
-        structuralNeighbors: enrichment[item.itemId] ?? [],
+        structuralNeighbors,
       };
     });
 

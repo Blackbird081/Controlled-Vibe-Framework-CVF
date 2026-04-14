@@ -23,7 +23,7 @@ Implements `KnowledgeContextAssemblyConsumerPipelineContract` as a CPF consumer 
 
 ## Key Design Decisions
 
-- Internal chain: rank → assemble (with structuralEnrichment) → CPF consumer package
+- Internal chain: rank → assemble (with structuralEnrichment) → CPF consumer package built from assembly-derived entries
 - All sub-contracts share the same injected `now()` for determinism
 - Warning: `contextPacket.totalEntries === 0` → `"[knowledge-assembly] no items assembled — pipeline produced empty context"`
 - `pipelineHash` bound to `rankedResult.rankingHash + contextPacket.packetHash + createdAt`

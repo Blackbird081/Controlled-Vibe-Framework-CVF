@@ -23,11 +23,11 @@ Implements `KnowledgeContextAssemblyContract` and `KnowledgeContextAssemblyBatch
 
 ## Key Design Decisions
 
-- `entryHash` content-bound to `itemId + rank + content` — stable identity per ranked position
+- `entryHash` content-bound to the assembled entry payload: `itemId + rank + title + content + compositeScore + structuralNeighbors`
 - `entryId` time-variant — unique per assembly invocation
 - `structuralEnrichment` keyed by `itemId`; defaults to `[]` when key absent
 - `contextWindowEstimate` = sum of `entry.content.length` across all entries (character-level approximation)
-- `packetHash` bound to entry hashes — deterministic for same ranked input and enrichment
+- `packetHash` bound to entry hashes — deterministic for the same assembled packet content, including enrichment
 
 ## Quality Gate
 

@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-14` (latest governed closure `W79-T1`; CVF-native core 100% gate CLOSED; N1+N2+N3 of knowledge-native completion matrix all CLOSED DELIVERED; CPF 3370 / EPF 1301 / GEF 625 / LPF 1465 all pass 0 failures; no active tranche; any new work requires fresh GC-018)
+> Last refreshed: `2026-04-14` (latest governed closure `W83-T1`; Post-Knowledge-Native Master Architecture Reassessment CLOSED; full knowledge-native lane W71–W83 closure-clean; CPF 3370 / EPF 1301 / GEF 625 / LPF 1465 all pass 0 failures; no active tranche; any new work requires fresh GC-018)
 
 ---
 
@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W79-T1 CLOSED DELIVERED 2026-04-14; N3 Canon Default Promotion complete; CVF-native core 100% gate CLOSED; N1+N2+N3 knowledge-native completion matrix FULLY CLOSED; CPF 3370 / EPF 1301 / GEF 625 / LPF 1465 all pass 0 failures; any new work requires fresh GC-018` |
+| Current active tranche | `NONE — W83-T1 CLOSED DELIVERED 2026-04-14; Post-Knowledge-Native Master Architecture Reassessment complete; full knowledge-native lane W71–W83 closure-clean; CPF 3370 / EPF 1301 / GEF 625 / LPF 1465 all pass 0 failures; any new work requires fresh GC-018` |
 | Shared verification baseline | `ADOPT 2026-04-10 LOCAL BASELINE — future agents should inherit this verification state and rerun only when their touched scope, dependency state, or build/test configuration invalidates it` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05); W59-T1 promotes the closure readout to CLOSURE-ASSESSED (2026-04-07)` |
 
@@ -227,6 +227,10 @@ Memory class: POINTER_RECORD
 | `W77-T1` N1 Canon Retrieval Authority Convergence (REALIZATION class) | `CLOSED DELIVERED 2026-04-14 — rag.context.engine.convergence.contract.ts updated: 15 new FIXED_INPUT (40 total) + 1 new IN_SCOPE knowledge-native-retrieval-authority (3 total); KnowledgeNativeRetrievalAuthorityDeclaration interface + declareKnowledgeNativeRetrievalAuthority() with 4 canon statements; defaultPolicyStatus = NOT_DECIDED; CPF 3339 → 3370 (+31 tests); Fast Lane (GC-021)` |
 | `W78-T1` N2 Benchmark Evidence Closure (EVIDENCE class) | `CLOSED DELIVERED 2026-04-14 — 8 benchmark runs declared (3 KNOWLEDGE_COMPILED_CONTEXT + 3 KNOWLEDGE_STRUCTURAL_INDEX + 2 KNOWLEDGE_QUERY); evidence class PROPOSAL_ONLY; promotion gate NOT FULLY MET; decision HYBRID / NO SINGLE DEFAULT; no code changes; Fast Lane (GC-021)` |
 | `W79-T1` N3 Canon Default Promotion (DOCUMENTATION class) | `CLOSED DELIVERED 2026-04-14 — HYBRID / NO SINGLE DEFAULT decision promoted to governance policy, whitepaper, tracker canon; CVF-native core 100% gate CLOSED; all N1+N2+N3 gates CLOSED; no code changes; Fast Lane (GC-021)` |
+| `W80-T1` N4 Product/Operator Adoption (REALIZATION class) | `CLOSED DELIVERED 2026-04-14 — 3 knowledge API routes added to cvf-web: POST /api/governance/knowledge/compile + /maintain + /refactor; lib wrapper src/lib/server/knowledge-governance.ts; 17 new vitest tests (6+5+5+1); CPF stays at 3370/0; N4 gate CLOSED` |
+| `W81-T1` Canon-Closure Corrections (REMEDIATION class) | `CLOSED DELIVERED 2026-04-14 — N1 dual authority resolved: declareRagRetrievalAuthority() marked legacy, declareKnowledgeNativeRetrievalAuthority() declared top-level canon authority; defaultPolicyStatus updated NOT_DECIDED → HYBRID / NO SINGLE DEFAULT; N2/N3 evidence-gate resolved: completion matrix §9 defines contract-layer evidence closure; 86/86 tests pass; 0 regressions; no new code` |
+| `W82-T1` Knowledge-Native Value Realization (PRODUCT class) | `CLOSED DELIVERED 2026-04-14 — operator surface /governance/knowledge page with 3-step Compile→Maintain→Refactor workflow; sidebar nav entry; 7-scenario E2E tests (7/7 pass); CVF_KNOWLEDGE_GOVERNANCE_OPERATOR_GUIDE_2026-04-14.md; CVF_W82_T1_KNOWLEDGE_NATIVE_VALUE_EVIDENCE_PACKET_2026-04-14.md; completion matrix N1+N2+N3+N4 ALL CLOSED` |
+| `W83-T1` Post-Knowledge-Native Master Architecture Reassessment (DOCUMENTATION / CANON_REASSESSMENT class) | `CLOSED DELIVERED 2026-04-14 — reassessment note filed (docs/assessments/CVF_W83_T1_*); whitepaper §4.3 refreshed to post-W82+W83 truth; tracker W80-W83 rows added; AGENT_HANDOFF W83-T1 CLOSED DELIVERED recorded; GC-026 sync filed; knowledge-native lane W71–W83 fully closure-clean; Fast Lane (GC-021)` |
 
 ---
 

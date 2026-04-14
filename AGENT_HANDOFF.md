@@ -188,26 +188,18 @@ Current guidance:
   2. **E2E tests** — `cvf-web/src/app/api/governance/knowledge/e2e.workflow.test.ts` — 7 scenarios, 7/7 pass (A–G: pending, approve, clean-maintain, maintain-with-issues→refactor, rejected-cannot-maintain, auth-guard, bad-input-guard)
   3. **Operator doc** — `cvf-web/docs/reference/CVF_KNOWLEDGE_GOVERNANCE_OPERATOR_GUIDE_2026-04-14.md` — HYBRID/NO SINGLE DEFAULT usage, auth requirements, known limits
   4. **Value evidence packet** — `cvf-web/docs/baselines/CVF_W82_T1_KNOWLEDGE_NATIVE_VALUE_EVIDENCE_PACKET_2026-04-14.md` — 3 scenarios, gate assessment table, evidence gate CLOSED
-- **N4 lane status post-W82-T1**: knowledge-native lifecycle fully realized at product layer. No active tranche. Lane is value-delivered and closure-clean. Fresh GC-018 required for any continuation.
-- **Binding instruction for future agents**: do not open another “absorption” or “completion matrix” wave for this lane unless a new contradiction appears. After W81-T1, the correct continuation is value realization, not more native-completion debate.
-- **Next-agent boundary for this lane**: after W81-T1, the default next uplift step is `W82-T1 Knowledge-Native Value Realization`, not another doctrine/absorption lane. Allowed scope under fresh authorization:
-  - build a bounded operator-facing knowledge governance surface on top of W80 routes
-  - add end-to-end product-layer verification
-  - file one concise operator runbook
-  - file one small governed value evidence packet
-  Not allowed without fresh authorization:
-  - reopening N1 / N2 / N3 closure
-  - redefining `CVF-native core 100%`
-  - Graphify vs LLM-Powered preference relitigation
-  - Palace runtime promotion
-  - new guard families / new CLI families / new persistent knowledge store architecture
-- **Required sequence if this lane continues beyond closure**:
-  1. Use the completion matrix, synthesis note, promotion/rejection map, and `CVF_W82_T1_KNOWLEDGE_NATIVE_VALUE_REALIZATION_ROADMAP_2026-04-14.md` as the intake packet.
-  2. Treat the absorption lane as closed; do not restart from the 3 source folders.
-  3. Reuse W80 route and server-wrapper surfaces before proposing any new product boundary.
-  4. Land operator surface first, then end-to-end tests, then the value evidence packet, then handoff closure.
-  5. Keep the no-new-surface rule explicit: `Graph Memory Layer`, `Persistent Wiki`, `MemPalace Runtime`, `G-GM-*` guard family, and CLI command families remain rejected/deferred unless a future bounded wave proves otherwise.
-- **Agent recommendation rule for this lane**: agents should not stall on "what should be next". After W81-T1, the default recommendation is now `W82-T1 Knowledge-Native Value Realization`. Human authorization still governs any fresh tranche opening, but the analytical queue-choice work for the absorption/completion phase is considered closed unless new evidence appears.
+- **N4 lane status post-W82-T1**: knowledge-native lifecycle fully realized at product layer. Lane is value-delivered and closure-clean.
+- **W83-T1 — CLOSED DELIVERED 2026-04-14**: `W83-T1 Post-Knowledge-Native Master Architecture Reassessment` is fully closed. All 5 mandatory outputs delivered:
+  1. **Reassessment note** — `docs/assessments/CVF_W83_T1_POST_KNOWLEDGE_NATIVE_MASTER_ARCHITECTURE_REASSESSMENT_2026-04-14.md` — pre/post-uplift state, concrete value gained, architectural implications, canon core vs optional adoption
+  2. **Whitepaper §4.3 refresh** — `Last canonical closure` → W83-T1; `Current active tranche` → NONE (W83 CLOSED); `Current posture` extended to include W80/W81/W82/W83; Supporting status docs updated
+  3. **Progress tracker refresh** — `Last refreshed` updated to W83-T1; `Current active tranche` updated; W80/W81/W82/W83 rows added to Tranche Tracker
+  4. **Handoff refresh** — this entry
+  5. **GC-026 sync** — `docs/baselines/CVF_GC026_TRACKER_SYNC_W83_T1_POST_KNOWLEDGE_NATIVE_ARCHITECTURE_REASSESSMENT_2026-04-14.md`
+  GC-018: `docs/baselines/CVF_GC018_W83_T1_POST_KNOWLEDGE_NATIVE_MASTER_ARCHITECTURE_REASSESSMENT_AUTHORIZATION_2026-04-14.md`; GC-021 Fast Lane: `docs/baselines/CVF_W83_T1_POST_KNOWLEDGE_NATIVE_MASTER_ARCHITECTURE_REASSESSMENT_GC021_FAST_LANE_AUDIT_2026-04-14.md`
+- **Full knowledge-native lane status post-W83-T1**: lane W71–W83 is now fully closure-clean. Absorption CLOSED, doctrine CLOSED, CPF capability CLOSED, N1+N2+N3+N4 CLOSED, master architecture truth ALIGNED. No active tranche. No default next step. Fresh GC-018 required for any continuation.
+- **Binding instruction for future agents**: do not open another “absorption”, “completion matrix”, “value-realization”, or “architecture reassessment” wave for this lane unless a new contradiction appears. The knowledge-native lane is completely closed through W83-T1. The next frontier requires a genuinely new trigger.
+- **Next-agent boundary for this lane**: after W83-T1, there is no default next step. All analytical and implementation work for the knowledge-native absorption lane is closed. Candidates for the next authorized wave include: (A) benchmark execution — promote PROPOSAL_ONLY knowledge benchmarks to trace-backed evidence via a live inference run; (B) PVV lane resume (810-run batch paused since W66-T1 CP3A); (C) any fresh new capability with a new GC-018. None is default. Operator authorization drives the next choice.
+- **No-new-surface rule remains in force**: `Graph Memory Layer`, `Persistent Wiki`, `MemPalace Runtime`, `G-GM-*` guard family, and CLI command families remain rejected/deferred unless a future bounded wave with fresh evidence proves otherwise.
 - **Historical W71 authorization anchor**: `CVF ADDING NEW` Stage 1 helper implementation was explicitly authorized by the operator on `2026-04-12` via `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_ADDING_NEW_STAGE1_IMPLEMENTATION_2026-04-12.md`. This is retained as provenance for the absorbed-knowledge wave; it is not an active tranche anymore.
 - **Windows normalization curation promoted carefully**: `Windows_Skill_Normalization` material was reviewed, rebutted, and partially synthesized on `2026-04-12` into W7 intake/reference docs only. Promoted value is limited to `execution_environment` enrichment, Windows compatibility review, and a PowerShell reference appendix. This does not alter provider lanes, sandbox posture, or the now-paused PVV API-key test stream.
 - **Diagnostic readout bridge retained for future reopen**: if a future API-key-based readout later needs Stage 1 interpretation, use `docs/reference/CVF_STAGE1_DIAGNOSTIC_INTERPRETATION_PACKET_TEMPLATE.md` together with `docs/assessments/CVF_ADDING_NEW_STAGE1_DIAGNOSTIC_BRIDGE_2026-04-12.md`. Runtime/provider evidence still leads; Stage 1 outputs are interpretation aids only.

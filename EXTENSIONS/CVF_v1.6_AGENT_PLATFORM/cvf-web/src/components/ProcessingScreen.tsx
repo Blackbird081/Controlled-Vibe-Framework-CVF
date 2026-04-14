@@ -41,6 +41,7 @@ export function ProcessingScreen({
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState(isVi ? 'Đang khởi tạo...' : 'Initializing...');
     const [error, setError] = useState<string | null>(null);
+    const [guidedResponse, setGuidedResponse] = useState<string | null>(null);
     const [isRealExecution, setIsRealExecution] = useState(() => Boolean(inputs && intent && Object.keys(inputs).length > 0));
 
     // Real API execution
@@ -107,11 +108,13 @@ export function ProcessingScreen({
 
             if (enforcement?.status === 'BLOCK') {
                 setError(data.error || (isVi ? 'Bị chặn bởi CVF.' : 'Blocked by CVF enforcement.'));
+                if (data.guidedResponse) setGuidedResponse(data.guidedResponse);
                 return true;
             }
 
             if (enforcement?.status === 'NEEDS_APPROVAL') {
                 setError(data.error || (isVi ? 'Cần phê duyệt trước khi thực thi.' : 'Approval required before execution.'));
+                if (data.guidedResponse) setGuidedResponse(data.guidedResponse);
                 return true;
             }
 
@@ -211,10 +214,31 @@ export function ProcessingScreen({
                     </p>
                 )}
 
-                {error && (
+                {error && !guidedResponse && (
                     <p className="text-sm text-amber-600 dark:text-amber-400 mb-4" role="alert" aria-live="assertive">
                         ⚠️ {error} — {isVi ? 'Đang dùng chế độ demo' : 'Using demo mode'}
                     </p>
+                )}
+
+                {guidedResponse && (
+                    <div
+                        className="mt-4 mb-4 mx-auto max-w-md rounded-lg border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-950 p-4 text-left"
+                        role="alert"
+                        aria-live="polite"
+                        data-testid="guided-response-panel"
+                    >
+                        <p className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                            {isVi ? '💡 Bước an toàn tiếp theo' : '💡 Safe next step'}
+                        </p>
+                        <p className="text-xs text-red-600 dark:text-red-400 mb-3">
+                            {isVi
+                                ? `⚠️ Yêu cầu này cần xem lại: ${error}`
+                                : `⚠️ This request needs review: ${error}`}
+                        </p>
+                        <p className="text-sm text-blue-900 dark:text-blue-100 whitespace-pre-wrap">
+                            {guidedResponse}
+                        </p>
+                    </div>
                 )}
 
                 {/* Progress bar */}

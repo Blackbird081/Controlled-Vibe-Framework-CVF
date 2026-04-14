@@ -32,6 +32,8 @@ export interface ExecutionResponse {
     success: boolean;
     output?: string;
     error?: string;
+    /** W88-T1: safe-path guidance injected by the guided response registry on BLOCK/NEEDS_APPROVAL */
+    guidedResponse?: string;
     provider: AIProvider;
     model: string;
     tokensUsed?: number;

@@ -163,3 +163,24 @@ export type {
   KnowledgeContextAssemblyBatch,
   KnowledgeContextAssemblyBatchContractDependencies,
 } from "./knowledge.context.assembly.batch.contract";
+
+// W76-T1 — KnowledgeContextAssemblyConsumerPipelineContract
+export {
+  KnowledgeContextAssemblyConsumerPipelineContract,
+  createKnowledgeContextAssemblyConsumerPipelineContract,
+} from "./knowledge.context.assembly.consumer.pipeline.contract";
+export type {
+  KnowledgeContextAssemblyConsumerPipelineRequest,
+  KnowledgeContextAssemblyConsumerPipelineResult,
+  KnowledgeContextAssemblyConsumerPipelineContractDependencies,
+} from "./knowledge.context.assembly.consumer.pipeline.contract";
+
+// W76-T1 — KnowledgeContextAssemblyConsumerPipelineBatchContract
+export {
+  KnowledgeContextAssemblyConsumerPipelineBatchContract,
+  createKnowledgeContextAssemblyConsumerPipelineBatchContract,
+} from "./knowledge.context.assembly.consumer.pipeline.batch.contract";
+export type {
+  KnowledgeContextAssemblyConsumerPipelineBatch,
+  KnowledgeContextAssemblyConsumerPipelineBatchContractDependencies,
+} from "./knowledge.context.assembly.consumer.pipeline.batch.contract";

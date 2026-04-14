@@ -225,6 +225,19 @@ Current guidance:
   Benchmark tool: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/pvv.nc.benchmark.test.ts` (40-run Vitest suite; CFG-A=direct Alibaba; CFG-B=governed path `/api/execute`)
   Key finding: **NORMAL non-coder tasks — full parity confirmed** (7/7 task classes, ALLOW/ALLOW, 200 OK); **HIGH_RISK non-coder tasks — governance detects but does not guide** (NC-003 ESCALATED 409; NC-006/NC-007 BLOCKED 400; no guided alternative responses). Direct API outperforms governed path for HIGH_RISK non-coder assistance.
   Candidate next tranche: **W87-T1 HIGH_RISK Guided Response Pattern** — close the non-coder HIGH_RISK guidance gap identified by W86-T1.
+- **W87-T1 — CLOSED DELIVERED 2026-04-14**: `W87-T1 HIGH_RISK Guided Response Pattern` is fully closed. All mandatory outputs delivered:
+  1. **Quality assessment (pre)** — `docs/assessments/CVF_POST_W86_CONTINUATION_QUALITY_ASSESSMENT_2026-04-14.md` (EXPAND_NOW)
+  2. **GC-018 authorization** — `docs/baselines/CVF_GC018_W87_T1_HIGH_RISK_GUIDED_RESPONSE_AUTHORIZATION_2026-04-14.md`
+  3. **GC-026 auth sync** — `docs/baselines/CVF_GC026_TRACKER_SYNC_W87_T1_AUTHORIZATION_2026-04-14.md`
+  4. **Execution roadmap** — `docs/roadmaps/CVF_W87_T1_HIGH_RISK_GUIDED_RESPONSE_ROADMAP_2026-04-14.md`
+  5. **Implementation** — `src/app/api/execute/guided.response.registry.ts` (3 patterns) + `route.ts` enriched (BLOCK + NEEDS_APPROVAL)
+  6. **Tests** — `src/app/api/execute/guided.response.test.ts` — **17/17 pass** (NC_003/NC_006/NC_007 presence; NORMAL tasks undefined; registry structure)
+  7. **Evidence packet** — `docs/baselines/CVF_W87_T1_GUIDED_RESPONSE_EVIDENCE_PACKET_2026-04-14.md`
+  8. **Post-run assessment** — `docs/assessments/CVF_W87_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-14.md`
+  9. **GC-026 closure sync** — `docs/baselines/CVF_GC026_TRACKER_SYNC_W87_T1_CLOSED_2026-04-14.md`
+  10. **Handoff update** — this entry
+  Gate A: **FULL MET** (was PARTIAL in W86-T1; guided response present for all 3 HIGH_RISK patterns). Gate D+E: MAINTAINED. No policy change. No guard logic change. No corpus change. Additive only.
+- **Next-agent boundary post-W87-T1**: **no active tranche**. The HIGH_RISK guidance gap for NC-003/NC-006/NC-007 is closed. The governed path (CFG-B) now matches direct API (CFG-A) for these HIGH_RISK non-coder tasks. Any continuation requires fresh GC-018. Candidate directions: (A) extend guided responses to additional HIGH_RISK patterns; (B) full 810-run multi-provider PVV batch (currently paused); (C) operator UI surface for guided response display.
 - **Operator-authorized API credential (stored in memory, do NOT ask again)**: `ALIBABA_API_KEY=sk-2073fe59cd4e47d5b59f5e1438eaaf21`; endpoint `https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions`. Model priority (free 1M token each, auto-fallback on 429): 1. `qwen3-max` (full), 2. `qwen2.5-14b-instruct` (full), 3. `qwen-plus-2025-07-28` (full), 4. `qwen2.5-72b-instruct` (~81%), 5. `qwen-max` (~78%, W86-T1 authorized model), 6. `qvq-max` (~10% — **AVOID**). Operator instruction: auto-change if quota near exhausted; do NOT use `qvq-max`.
 - **Rebuttal note — why the proposed "Option B" benchmark supplement is not accepted (2026-04-14)**: a proposal was raised to commit `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/governance/knowledge/benchmark.live.test.ts` plus a short supplement note, without opening a formal W84 tranche. This is explicitly rejected for this lane:
   1. **It violates the post-W83 boundary.** W83 closes the knowledge-native lane and records that there is **no default next step**. Benchmark execution after W83 is a candidate fresh wave, not a silent follow-up on an already closed lane.

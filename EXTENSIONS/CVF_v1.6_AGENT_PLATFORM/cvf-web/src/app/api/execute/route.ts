@@ -10,6 +10,7 @@ import { buildWebGuardContext, type GuardPipelineResult } from '@/lib/guard-runt
 import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
 import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
 import { routeWebProvider } from '@/lib/ai/provider-router-adapter';
+import { lookupGuidedResponse } from './guided.response.registry';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
 // Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
@@ -162,6 +163,7 @@ export async function POST(request: NextRequest) {
         });
 
         if (enforcement.status === 'BLOCK') {
+            const guidedResponse = lookupGuidedResponse(userPrompt);
             return NextResponse.json(
                 {
                     success: false,
@@ -169,6 +171,7 @@ export async function POST(request: NextRequest) {
                     provider,
                     model: 'blocked',
                     enforcement,
+                    ...(guidedResponse ? { guidedResponse } : {}),
                 },
                 { status: 400 }
             );
@@ -189,6 +192,7 @@ export async function POST(request: NextRequest) {
         }
 
         if (enforcement.status === 'NEEDS_APPROVAL') {
+            const guidedResponse = lookupGuidedResponse(userPrompt);
             return NextResponse.json(
                 {
                     success: false,
@@ -196,6 +200,7 @@ export async function POST(request: NextRequest) {
                     provider,
                     model: 'approval-required',
                     enforcement,
+                    ...(guidedResponse ? { guidedResponse } : {}),
                 },
                 { status: 409 }
             );

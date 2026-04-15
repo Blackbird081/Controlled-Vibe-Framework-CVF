@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { useSettings } from './Settings';
 import { useLanguage } from '@/lib/i18n';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
+import { getSafetyStatus } from '@/lib/safety-status';
+import type { SafetyRiskLevel } from '@/lib/safety-status';
 import type { ExecutionRequest } from '@/lib/ai';
 
 export interface ProcessingExecutionOverrides {
@@ -47,6 +49,8 @@ export function ProcessingScreen({
     const [approvalRequestId, setApprovalRequestId] = useState<string | null>(null);
     const [approvalSubmitting, setApprovalSubmitting] = useState(false);
     const [enforcementStatus, setEnforcementStatus] = useState<string | null>(null);
+    // W94-T1: Risk badge state
+    const [executionRiskLevel, setExecutionRiskLevel] = useState<SafetyRiskLevel | null>(null);
 
     // Real API execution
     const executeReal = useCallback(async () => {
@@ -75,6 +79,12 @@ export function ProcessingScreen({
 
             const data = await response.json();
             const enforcement = data.enforcement;
+            // W94-T1: Extract risk level for badge (R4 → R3 cap for safety-status.ts compat)
+            const rawRisk = enforcement?.riskGate?.riskLevel as string | undefined;
+            const badgeLevel: SafetyRiskLevel | null =
+                rawRisk === 'R0' || rawRisk === 'R1' || rawRisk === 'R2' ? rawRisk :
+                rawRisk === 'R3' || rawRisk === 'R4' ? 'R3' : null;
+            if (badgeLevel) setExecutionRiskLevel(badgeLevel);
             if (enforcement) {
                 logEnforcementDecision({
                     source: 'api_execute',
@@ -311,6 +321,27 @@ export function ProcessingScreen({
                         </p>
                     </div>
                 )}
+
+                {/* W94-T1: Risk badge */}
+                {executionRiskLevel && (() => {
+                    const safetyStatus = getSafetyStatus(executionRiskLevel);
+                    return (
+                        <div
+                            data-testid="risk-badge"
+                            className="mt-3 mb-4 mx-auto max-w-md rounded-lg border border-gray-200
+                                dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 p-3 text-left"
+                        >
+                            <p className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                                {safetyStatus.emoji}{' '}
+                                {isVi ? safetyStatus.label.vi : safetyStatus.label.en}
+                                <span className="ml-2 font-mono text-gray-400">{executionRiskLevel}</span>
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                {isVi ? safetyStatus.description.vi : safetyStatus.description.en}
+                            </p>
+                        </div>
+                    );
+                })()}
 
                 {/* Progress bar */}
                 <div className="w-80 mx-auto">

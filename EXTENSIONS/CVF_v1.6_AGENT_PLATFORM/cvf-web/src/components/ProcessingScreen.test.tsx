@@ -174,6 +174,126 @@ describe('ProcessingScreen — guided response (W88-T1)', () => {
   });
 });
 
+// ── W94-T1: Risk Badge Visibility ────────────────────────────────────────────
+
+describe('ProcessingScreen — risk badge (W94-T1)', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('renders risk-badge with R0 level when enforcement riskGate returns R0', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: true,
+        output: 'All good output',
+        provider: 'alibaba',
+        model: 'qwen3-max',
+        enforcement: { status: 'ALLOW', reasons: [], riskGate: { riskLevel: 'R0', status: 'ALLOW', reason: 'Allowed' } },
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} onComplete={vi.fn()} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('risk-badge')).toBeDefined();
+    });
+
+    const badge = screen.getByTestId('risk-badge');
+    expect(badge.textContent).toContain('R0');
+    expect(badge.textContent).toContain('Safe');
+  });
+
+  it('renders risk-badge with R1 level when enforcement riskGate returns R1', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: false,
+        error: 'Blocked.',
+        provider: 'alibaba',
+        model: 'blocked',
+        enforcement: { status: 'BLOCK', reasons: ['blocked'], riskGate: { riskLevel: 'R1', status: 'ALLOW', reason: 'Allowed' } },
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('risk-badge')).toBeDefined();
+    });
+
+    const badge = screen.getByTestId('risk-badge');
+    expect(badge.textContent).toContain('R1');
+    expect(badge.textContent).toContain('Attention');
+  });
+
+  it('renders risk-badge with R3 when enforcement riskGate returns R3', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: false,
+        error: 'Needs approval.',
+        provider: 'alibaba',
+        model: 'approval-required',
+        enforcement: {
+          status: 'NEEDS_APPROVAL',
+          reasons: ['R3 requires approval'],
+          riskGate: { riskLevel: 'R3', status: 'NEEDS_APPROVAL', reason: 'R3' },
+        },
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('risk-badge')).toBeDefined();
+    });
+
+    const badge = screen.getByTestId('risk-badge');
+    expect(badge.textContent).toContain('R3');
+    expect(badge.textContent).toContain('Dangerous');
+  });
+
+  it('does not render risk-badge when enforcement has no riskGate', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: false,
+        error: 'Blocked.',
+        provider: 'alibaba',
+        model: 'blocked',
+        enforcement: { status: 'BLOCK', reasons: ['blocked'] },
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => expect(screen.queryByText('Blocked.')).toBeDefined());
+
+    expect(screen.queryByTestId('risk-badge')).toBeNull();
+  });
+
+  it('renders risk-badge description text (not empty)', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: false,
+        error: 'Blocked.',
+        provider: 'alibaba',
+        model: 'blocked',
+        enforcement: { status: 'BLOCK', reasons: ['blocked'], riskGate: { riskLevel: 'R2', status: 'BLOCK', reason: 'R2+' } },
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('risk-badge')).toBeDefined();
+    });
+
+    const badge = screen.getByTestId('risk-badge');
+    expect(badge.textContent).toContain('R2');
+    expect(badge.textContent).toContain('Review Required');
+    // Description must be non-empty
+    expect(badge.textContent!.length).toBeGreaterThan(20);
+  });
+});
+
 // ── W92-T1: NEEDS_APPROVAL Flow Completion ───────────────────────────────────
 
 describe('ProcessingScreen — NEEDS_APPROVAL flow (W92-T1)', () => {

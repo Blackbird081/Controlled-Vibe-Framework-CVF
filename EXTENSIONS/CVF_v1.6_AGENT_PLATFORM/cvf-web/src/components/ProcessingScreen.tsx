@@ -43,6 +43,10 @@ export function ProcessingScreen({
     const [error, setError] = useState<string | null>(null);
     const [guidedResponse, setGuidedResponse] = useState<string | null>(null);
     const [isRealExecution, setIsRealExecution] = useState(() => Boolean(inputs && intent && Object.keys(inputs).length > 0));
+    // W92-T1: Approval request state
+    const [approvalRequestId, setApprovalRequestId] = useState<string | null>(null);
+    const [approvalSubmitting, setApprovalSubmitting] = useState(false);
+    const [enforcementStatus, setEnforcementStatus] = useState<string | null>(null);
 
     // Real API execution
     const executeReal = useCallback(async () => {
@@ -115,6 +119,7 @@ export function ProcessingScreen({
             if (enforcement?.status === 'NEEDS_APPROVAL') {
                 setError(data.error || (isVi ? 'Cần phê duyệt trước khi thực thi.' : 'Approval required before execution.'));
                 if (data.guidedResponse) setGuidedResponse(data.guidedResponse);
+                setEnforcementStatus('NEEDS_APPROVAL');
                 return true;
             }
 
@@ -126,6 +131,30 @@ export function ProcessingScreen({
             return false;
         }
     }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode, isVi, executionOverrides]);
+
+    // W92-T1: Submit approval request
+    const submitApprovalRequest = useCallback(async () => {
+        if (!templateId || !intent) return;
+        setApprovalSubmitting(true);
+        try {
+            const response = await fetch('/api/approvals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    templateId: templateId || templateName,
+                    templateName,
+                    intent,
+                    reason: error || '',
+                }),
+            });
+            const data = await response.json();
+            if (data.success && data.id) {
+                setApprovalRequestId(data.id);
+            }
+        } finally {
+            setApprovalSubmitting(false);
+        }
+    }, [templateId, templateName, intent, error]);
 
     const runMockExecution = useCallback(() => {
         const statuses = isVi
@@ -241,6 +270,48 @@ export function ProcessingScreen({
                     </div>
                 )}
 
+                {/* W92-T1: Approval submission flow */}
+                {enforcementStatus === 'NEEDS_APPROVAL' && !approvalRequestId && (
+                    <div className="mt-3 mb-4 mx-auto max-w-md">
+                        <button
+                            type="button"
+                            onClick={submitApprovalRequest}
+                            disabled={approvalSubmitting}
+                            data-testid="submit-approval-btn"
+                            className="w-full px-4 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50
+                                text-white text-sm font-medium rounded-lg transition-colors"
+                        >
+                            {approvalSubmitting
+                                ? (isVi ? 'Đang gửi...' : 'Submitting...')
+                                : (isVi ? '📋 Gửi yêu cầu phê duyệt' : '📋 Submit for Review')}
+                        </button>
+                    </div>
+                )}
+
+                {approvalRequestId && (
+                    <div
+                        className="mt-3 mb-4 mx-auto max-w-md rounded-lg border border-amber-200 dark:border-amber-700
+                            bg-amber-50 dark:bg-amber-950 p-4 text-left"
+                        data-testid="approval-status-panel"
+                    >
+                        <p className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-2">
+                            {isVi ? '✅ Đã gửi yêu cầu phê duyệt' : '✅ Review request submitted'}
+                        </p>
+                        <p className="text-xs text-amber-700 dark:text-amber-300 mb-1">
+                            {isVi ? 'Mã yêu cầu:' : 'Request ID:'} <span className="font-mono">{approvalRequestId}</span>
+                        </p>
+                        <p className="text-xs text-amber-700 dark:text-amber-300 mb-2">
+                            {isVi ? 'Trạng thái:' : 'Status:'}{' '}
+                            <span className="font-semibold">{isVi ? 'Đang chờ xem xét' : 'Pending review'}</span>
+                        </p>
+                        <p className="text-xs text-amber-600 dark:text-amber-400">
+                            {isVi
+                                ? 'Quản trị viên sẽ xem xét yêu cầu của bạn. Khi được phê duyệt, bạn có thể thử lại. Khi bị từ chối, bạn sẽ nhận được lý do cụ thể.'
+                                : 'An admin will review your request. Once approved, you can retry your task. If rejected, you will receive a specific reason.'}
+                        </p>
+                    </div>
+                )}
+
                 {/* Progress bar */}
                 <div className="w-80 mx-auto">
                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -264,6 +335,7 @@ export function ProcessingScreen({
                 )}
 
                 <button
+                    type="button"
                     onClick={onCancel}
                     className="mt-8 px-6 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white
                      border border-gray-300 dark:border-gray-600 rounded-lg

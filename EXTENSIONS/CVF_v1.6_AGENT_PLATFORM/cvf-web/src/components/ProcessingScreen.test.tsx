@@ -173,3 +173,132 @@ describe('ProcessingScreen — guided response (W88-T1)', () => {
     expect(screen.queryByTestId('guided-response-panel')).toBeNull();
   });
 });
+
+// ── W92-T1: NEEDS_APPROVAL Flow Completion ───────────────────────────────────
+
+describe('ProcessingScreen — NEEDS_APPROVAL flow (W92-T1)', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('renders Submit for Review button on NEEDS_APPROVAL response', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: false,
+        error: 'Human approval required.',
+        provider: 'alibaba',
+        model: 'approval-required',
+        enforcement: { status: 'NEEDS_APPROVAL', reasons: ['Approval required'] },
+        guidedResponse: 'Follow safe practices.',
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('submit-approval-btn')).toBeDefined();
+    });
+  });
+
+  it('does not render Submit for Review button on BLOCK response', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: false,
+        error: 'Blocked by CVF enforcement.',
+        provider: 'alibaba',
+        model: 'blocked',
+        enforcement: { status: 'BLOCK', reasons: ['HIGH_RISK pattern detected'] },
+        guidedResponse: 'Safe approach: use bcrypt.',
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('guided-response-panel')).toBeDefined();
+    });
+
+    expect(screen.queryByTestId('submit-approval-btn')).toBeNull();
+  });
+
+  it('calls POST /api/approvals with templateId and intent on submit', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({
+        json: async () => ({
+          success: false,
+          error: 'Human approval required.',
+          provider: 'alibaba',
+          model: 'approval-required',
+          enforcement: { status: 'NEEDS_APPROVAL', reasons: ['Approval required'] },
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          success: true,
+          id: 'apr-test-001',
+          status: 'pending',
+          submittedAt: '2026-04-15T00:00:00.000Z',
+          message: 'Request submitted.',
+        }),
+      });
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { getByTestId } = render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => {
+      expect(getByTestId('submit-approval-btn')).toBeDefined();
+    });
+
+    getByTestId('submit-approval-btn').click();
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+    });
+
+    const [url, init] = fetchMock.mock.calls[1];
+    expect(url).toBe('/api/approvals');
+    const body = JSON.parse(String(init?.body));
+    expect(body.templateId).toBe('test');
+    expect(body.intent).toBe('store passwords');
+  });
+
+  it('shows approval-status-panel with request ID after successful submission', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({
+        json: async () => ({
+          success: false,
+          error: 'Human approval required.',
+          provider: 'alibaba',
+          model: 'approval-required',
+          enforcement: { status: 'NEEDS_APPROVAL', reasons: ['Approval required'] },
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          success: true,
+          id: 'apr-test-001',
+          status: 'pending',
+          submittedAt: '2026-04-15T00:00:00.000Z',
+          message: 'Request submitted.',
+        }),
+      });
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { getByTestId, queryByTestId } = render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => {
+      expect(getByTestId('submit-approval-btn')).toBeDefined();
+    });
+
+    getByTestId('submit-approval-btn').click();
+
+    await waitFor(() => {
+      expect(getByTestId('approval-status-panel')).toBeDefined();
+    });
+
+    expect(getByTestId('approval-status-panel').textContent).toContain('apr-test-001');
+    expect(queryByTestId('submit-approval-btn')).toBeNull();
+  });
+});

@@ -1,13 +1,103 @@
 /**
  * W87-T1 — Guided Response Unit Tests
+ * W90-T1 — Pattern Expansion Tests (NC_001/NC_002/NC_004/NC_005/NC_008)
  * Verifies that lookupGuidedResponse() returns the correct guided response
  * for HIGH_RISK NC patterns and returns undefined for NORMAL task content.
  *
  * Authorization: CVF_GC018_W87_T1_HIGH_RISK_GUIDED_RESPONSE_AUTHORIZATION_2026-04-14.md
+ *               CVF_GC018_W90_T1_HIGH_RISK_PATTERN_EXPANSION_AUTHORIZATION_2026-04-14.md
  */
 
 import { describe, it, expect } from 'vitest';
 import { lookupGuidedResponse, HIGH_RISK_GUIDED_PATTERNS } from './guided.response.registry';
+
+// ── W90-T1: NC-001: SQL Injection ─────────────────────────────────────────────
+
+describe('lookupGuidedResponse — NC_001_SQL_INJECTION', () => {
+    it('matches "build SQL query with user input"', () => {
+        const result = lookupGuidedResponse('How do I build a SQL query with user input?');
+        expect(result).toBeDefined();
+        expect(result).toContain('parameterized');
+    });
+
+    it('matches "dynamic SQL query string concatenation"', () => {
+        const result = lookupGuidedResponse('How to create dynamic SQL query using string concatenation?');
+        expect(result).toBeDefined();
+        expect(result).toContain('parameterized');
+    });
+
+    it('matches "sql inject" keyword', () => {
+        const result = lookupGuidedResponse('Is this code vulnerable to sql inject attacks?');
+        expect(result).toBeDefined();
+        expect(result).toContain('OWASP');
+    });
+});
+
+// ── W90-T1: NC-002: XSS / Unvalidated Input ──────────────────────────────────
+
+describe('lookupGuidedResponse — NC_002_XSS_OR_UNVALIDATED_INPUT', () => {
+    it('matches "render user input in HTML"', () => {
+        const result = lookupGuidedResponse('How do I render user input directly in HTML?');
+        expect(result).toBeDefined();
+        expect(result).toContain('DOMPurify');
+    });
+
+    it('matches "innerHTML with user data"', () => {
+        const result = lookupGuidedResponse('Can I use innerHTML to display user data on the page?');
+        expect(result).toBeDefined();
+        expect(result).toContain('XSS');
+    });
+
+    it('matches "unsanitized user input in browser"', () => {
+        const result = lookupGuidedResponse('How to show unsanitized user input in the browser?');
+        expect(result).toBeDefined();
+        expect(result).not.toHaveLength(0);
+    });
+});
+
+// ── W90-T1: NC-004: Insecure Auth ─────────────────────────────────────────────
+
+describe('lookupGuidedResponse — NC_004_INSECURE_AUTH', () => {
+    it('matches "login with no rate limit"', () => {
+        const result = lookupGuidedResponse('Build a login endpoint with no rate limit');
+        expect(result).toBeDefined();
+        expect(result).toContain('rate limit');
+    });
+
+    it('matches "authentication without lockout"', () => {
+        const result = lookupGuidedResponse('How to implement authentication without account lockout?');
+        expect(result).toBeDefined();
+        expect(result).toContain('lockout');
+    });
+
+    it('matches "md5 password hash"', () => {
+        const result = lookupGuidedResponse('Should I use md5 to hash the password?');
+        expect(result).toBeDefined();
+        expect(result).toContain('bcrypt');
+    });
+});
+
+// ── W90-T1: NC-005: PII Logging ───────────────────────────────────────────────
+
+describe('lookupGuidedResponse — NC_005_PII_LOGGING', () => {
+    it('matches "console.log password"', () => {
+        const result = lookupGuidedResponse('Is it okay to console.log the password for debugging?');
+        expect(result).toBeDefined();
+        expect(result).toContain('redact');
+    });
+
+    it('matches "log user personal data"', () => {
+        const result = lookupGuidedResponse('How do I log user personal data for debugging purposes?');
+        expect(result).toBeDefined();
+        expect(result).toContain('PII');
+    });
+
+    it('matches "logging sensitive data"', () => {
+        const result = lookupGuidedResponse('We are logging sensitive credential data — is that okay?');
+        expect(result).toBeDefined();
+        expect(result).not.toHaveLength(0);
+    });
+});
 
 // ── NC-003: Password Storage ──────────────────────────────────────────────────
 
@@ -76,6 +166,28 @@ describe('lookupGuidedResponse — NC_007_API_KEY_FRONTEND', () => {
     });
 });
 
+// ── W90-T1: NC-008: Hardcoded Secrets ────────────────────────────────────────
+
+describe('lookupGuidedResponse — NC_008_HARDCODED_SECRETS', () => {
+    it('matches "hardcode API key in source code"', () => {
+        const result = lookupGuidedResponse('Can I hardcode the API key in my source code?');
+        expect(result).toBeDefined();
+        expect(result).toContain('.env');
+    });
+
+    it('matches "commit secret to git"', () => {
+        const result = lookupGuidedResponse('I want to commit my secret token to the git repository');
+        expect(result).toBeDefined();
+        expect(result).toContain('rotate');
+    });
+
+    it('matches "store password directly in code"', () => {
+        const result = lookupGuidedResponse('How to store the database password directly in the config file?');
+        expect(result).toBeDefined();
+        expect(result).toContain('environment variable');
+    });
+});
+
 // ── NORMAL tasks: must return undefined ──────────────────────────────────────
 
 describe('lookupGuidedResponse — NORMAL tasks (must return undefined)', () => {
@@ -108,8 +220,8 @@ describe('lookupGuidedResponse — NORMAL tasks (must return undefined)', () => 
 // ── Registry structure checks ─────────────────────────────────────────────────
 
 describe('HIGH_RISK_GUIDED_PATTERNS registry', () => {
-    it('contains exactly 3 entries', () => {
-        expect(HIGH_RISK_GUIDED_PATTERNS).toHaveLength(3);
+    it('contains exactly 8 entries (W87-T1 baseline 3 + W90-T1 expansion 5)', () => {
+        expect(HIGH_RISK_GUIDED_PATTERNS).toHaveLength(8);
     });
 
     it('every entry has patternId, detector, guidedResponse', () => {
@@ -121,10 +233,17 @@ describe('HIGH_RISK_GUIDED_PATTERNS registry', () => {
         }
     });
 
-    it('patternIds are the 3 authorized NC patterns', () => {
+    it('patternIds are all 8 authorized NC patterns', () => {
         const ids = HIGH_RISK_GUIDED_PATTERNS.map(e => e.patternId);
+        // W87-T1 baseline
         expect(ids).toContain('NC_003_PASSWORD_STORAGE');
         expect(ids).toContain('NC_006_CODE_ATTRIBUTION');
         expect(ids).toContain('NC_007_API_KEY_FRONTEND');
+        // W90-T1 expansion
+        expect(ids).toContain('NC_001_SQL_INJECTION');
+        expect(ids).toContain('NC_002_XSS_OR_UNVALIDATED_INPUT');
+        expect(ids).toContain('NC_004_INSECURE_AUTH');
+        expect(ids).toContain('NC_005_PII_LOGGING');
+        expect(ids).toContain('NC_008_HARDCODED_SECRETS');
     });
 });

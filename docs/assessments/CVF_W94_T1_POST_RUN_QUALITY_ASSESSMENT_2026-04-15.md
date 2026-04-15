@@ -12,7 +12,7 @@ Memory class: SUMMARY_RECORD
 
 ## Required Conclusion Statement
 
-> **Gate 5 MET — non-coder risk badge rendered in main UI path**
+> **Gate 5 MET (bounded gap) — non-coder risk badge rendered in main UI path; enforcement states have full persistent visibility; success-path badge visible ~300ms before onComplete**
 
 ---
 
@@ -85,7 +85,7 @@ New `describe` block: `ProcessingScreen — risk badge (W94-T1)` with 5 tests:
 
 **Gate 5 criterion:** non-coder sees risk classification in UI (R0/R1/R2/R3, label, explanation) without opening a separate governance screen.
 
-**Conclusion: Gate 5 MET**
+**Conclusion: Gate 5 MET (bounded gap)**
 
 ### What is visible to the non-coder
 

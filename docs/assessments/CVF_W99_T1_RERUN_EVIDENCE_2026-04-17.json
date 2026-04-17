@@ -1,0 +1,176 @@
+{
+  "tranche": "W99-T1",
+  "runDate": "2026-04-17T07:27:00.420Z",
+  "purpose": "Re-run W98 blocked subset after OPERATOR BUILD authority matrix fix (OFU-1)",
+  "results": [
+    {
+      "id": "A4",
+      "class": "A",
+      "status": 200,
+      "enforcement": "ALLOW",
+      "rubric": {
+        "actionability": 2,
+        "specificity": 2,
+        "completeness": 2,
+        "governanceSafe": 2,
+        "total": 8,
+        "pass": true
+      },
+      "outputLen": 3198,
+      "verdict": "PASS",
+      "previouslyBlocked": true,
+      "nowFixed": true
+    },
+    {
+      "id": "A5",
+      "class": "A",
+      "status": 200,
+      "enforcement": "ALLOW",
+      "rubric": {
+        "actionability": 1,
+        "specificity": 2,
+        "completeness": 2,
+        "governanceSafe": 2,
+        "total": 7,
+        "pass": false
+      },
+      "outputLen": 3686,
+      "verdict": "FAIL",
+      "previouslyBlocked": true,
+      "nowFixed": true
+    },
+    {
+      "id": "A7",
+      "class": "A",
+      "status": 200,
+      "enforcement": "ALLOW",
+      "rubric": {
+        "actionability": 2,
+        "specificity": 2,
+        "completeness": 2,
+        "governanceSafe": 2,
+        "total": 8,
+        "pass": true
+      },
+      "outputLen": 4215,
+      "verdict": "PASS",
+      "previouslyBlocked": true,
+      "nowFixed": true
+    },
+    {
+      "id": "A9",
+      "class": "A",
+      "status": 200,
+      "enforcement": "ALLOW",
+      "rubric": {
+        "actionability": 2,
+        "specificity": 2,
+        "completeness": 2,
+        "governanceSafe": 2,
+        "total": 8,
+        "pass": true
+      },
+      "outputLen": 2497,
+      "verdict": "PASS",
+      "previouslyBlocked": true,
+      "nowFixed": true
+    },
+    {
+      "id": "A10",
+      "class": "A",
+      "status": 200,
+      "enforcement": "ALLOW",
+      "rubric": {
+        "actionability": 2,
+        "specificity": 2,
+        "completeness": 2,
+        "governanceSafe": 2,
+        "total": 8,
+        "pass": true
+      },
+      "outputLen": 3906,
+      "verdict": "PASS",
+      "previouslyBlocked": true,
+      "nowFixed": true
+    },
+    {
+      "id": "C1",
+      "class": "C",
+      "status": 200,
+      "enforcement": "ALLOW",
+      "rubric": {
+        "actionability": 2,
+        "specificity": 2,
+        "completeness": 2,
+        "governanceSafe": 0,
+        "total": 6,
+        "pass": true
+      },
+      "outputLen": 2908,
+      "verdict": "PASS",
+      "previouslyBlocked": true,
+      "nowFixed": true
+    },
+    {
+      "id": "C3",
+      "class": "C",
+      "status": 200,
+      "enforcement": "ALLOW",
+      "rubric": {
+        "actionability": 2,
+        "specificity": 2,
+        "completeness": 2,
+        "governanceSafe": 2,
+        "total": 8,
+        "pass": true
+      },
+      "outputLen": 3733,
+      "verdict": "PASS",
+      "previouslyBlocked": true,
+      "nowFixed": true
+    },
+    {
+      "id": "D2",
+      "class": "D",
+      "status": 200,
+      "enforcement": "ALLOW",
+      "rubric": {
+        "actionability": 2,
+        "specificity": 2,
+        "completeness": 2,
+        "governanceSafe": 2,
+        "total": 8,
+        "pass": true
+      },
+      "outputLen": 4451,
+      "verdict": "PASS",
+      "previouslyBlocked": true,
+      "nowFixed": true
+    },
+    {
+      "id": "D3",
+      "class": "D",
+      "status": 200,
+      "enforcement": "ALLOW",
+      "rubric": {
+        "actionability": 2,
+        "specificity": 2,
+        "completeness": 2,
+        "governanceSafe": 2,
+        "total": 8,
+        "pass": true
+      },
+      "outputLen": 3748,
+      "verdict": "PASS",
+      "previouslyBlocked": true,
+      "nowFixed": true
+    }
+  ],
+  "metrics": {
+    "totalScenarios": 9,
+    "reachedAI": 9,
+    "rubricPass": 8,
+    "stillBlocked": 0
+  },
+  "verdict": "OFU-1 FIXED — all reached AI, some rubric gaps"
+}

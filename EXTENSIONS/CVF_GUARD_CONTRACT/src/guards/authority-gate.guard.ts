@@ -76,7 +76,8 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CanonicalCVFPhase, Authori
   OPERATOR: {
     INTAKE: { allowed: true, allowedActions: ['read', 'ask', 'analyze', 'approve'], maxRisk: 'R2' },
     DESIGN: { allowed: true, allowedActions: ['read', 'approve', 'analyze'], maxRisk: 'R2' },
-    BUILD: { allowed: true, allowedActions: ['create', 'modify', 'build', 'implement', 'code', 'write', 'read', 'deploy', 'release', 'execute'], maxRisk: 'R2' },
+    // W99-T1: expanded to include non-coder action verbs blocked in W98-T1 (OFU-1)
+    BUILD: { allowed: true, allowedActions: ['create', 'modify', 'build', 'implement', 'code', 'write', 'read', 'deploy', 'release', 'execute', 'design', 'plan', 'analyze', 'perform', 'assess', 'research', 'develop', 'draft'], maxRisk: 'R2' },
     REVIEW: { allowed: true, allowedActions: ['read', 'approve', 'critique', 'test', 'deploy', 'release'], maxRisk: 'R2' },
     FREEZE: FORBIDDEN,
   },

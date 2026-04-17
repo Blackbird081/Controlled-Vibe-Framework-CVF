@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-15` (latest governed closure `W94-T1 CLOSED DELIVERED`; all 5 non-coder value gates closed W90–W94; Gate 5 bounded gap acknowledged; no active tranche)
+> Last refreshed: `2026-04-15` (latest governed closure `W95-T1 CLOSED DELIVERED`; Post-W94 Canon Truth Sync; all 5 non-coder value gates closed W90–W94; canon closure-clean through W95-T1; no active tranche)
 
 ---
 
@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W94-T1 CLOSED DELIVERED 2026-04-15; all 5 non-coder value gates closed (W90/W91/W92/W93/W94); Gate 5 bounded gap acknowledged (success-path ~300ms, enforcement states fully visible); multi-provider expansion blocked until operator reopens; next: W95 §TIER 3 or fresh operator direction` |
+| Current active tranche | `NONE — W95-T1 CLOSED DELIVERED 2026-04-15; Post-W94 Canon Truth Sync; canon closure-clean through W95-T1; all 5 non-coder value gates closed; W94 bounded gap (success-path ~300ms) carried as Branch A candidate; no active tranche` |
 | Shared verification baseline | `ADOPT 2026-04-10 LOCAL BASELINE — future agents should inherit this verification state and rerun only when their touched scope, dependency state, or build/test configuration invalidates it` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05); W59-T1 promotes the closure readout to CLOSURE-ASSESSED (2026-04-07)` |
 
@@ -242,6 +242,7 @@ Memory class: POINTER_RECORD
 | `W92-T1` NEEDS_APPROVAL Flow Completion (PRODUCT / NON_CODER_VALUE class) | `CLOSED DELIVERED 2026-04-15 — POST /api/approvals + GET /api/approvals/[id]; ProcessingScreen Submit for Review button + approval status panel (submitted→pending→approved/rejected lifecycle); Gate 3 PASS; 4 new W92-T1 tests; GC-018 authorized` |
 | `W93-T1` Knowledge-Native Non-Coder Benefit Validation (VALIDATION_EVIDENCE class) | `CLOSED DELIVERED 2026-04-15 — 4 templates × 2 conditions = 8 runs; Gate 4: MIXED / template-dependent; T1 app_builder_wizard +2 delta (prevented Bubble.io cloud→Python offline-native); T2/T7/T9 at 8/8 ceiling; architecture gap confirmed (knowledge-native stack not wired into /api/execute); scripts/w93_benchmark.js; GC-018 authorized` |
 | `W94-T1` Risk Visibility (PRODUCT / NON_CODER_VALUE class) | `CLOSED DELIVERED 2026-04-15 — R0/R1/R2/R3 badge in ProcessingScreen; reuses safety-status.ts getSafetyStatus + risk-check.ts; badge: emoji + level code + label + description; Gate 5 MET (bounded gap: enforcement states fully visible, success-path ~300ms before onComplete); 5 new W94-T1 tests; 126/126 pass; tsc clean; Fast Lane (GC-021)` |
+| `W95-T1` Post-W94 Canon Truth Sync (DOCUMENTATION / CANON_SYNC class) | `CLOSED DELIVERED 2026-04-15 — pre-sync assessment filed; Fast Lane (GC-021) authorized; whitepaper §4.3 advanced to W95-T1; tracker W95-T1 row added; AGENT_HANDOFF finalized; GC-026 closure sync filed; canon closure-clean through W95-T1; W94 bounded gap carried as Branch A candidate` |
 
 ---
 
@@ -277,9 +278,9 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W94_T1_CLOSED_2026-04-15.md` (W94-T1 CLOSED DELIVERED; Risk Visibility; Gate 5 MET bounded gap; all 5 non-coder value gates closed; no active tranche)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W95_T1_CLOSED_2026-04-15.md` (W95-T1 CLOSED DELIVERED; Post-W94 Canon Truth Sync; canon closure-clean through W95-T1; no active tranche)
 - Latest continuity sync delta: `docs/baselines/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_DELTA_2026-04-07.md`
 - Current closure anchor: `docs/reviews/CVF_W65_T1_TRANCHE_CLOSURE_REVIEW_2026-04-10.md`
-- Active quality assessment: `docs/assessments/CVF_W94_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-15.md` (W94-T1 post-run assessment; CLOSED DELIVERED; Gate 5 MET bounded gap; R0/R1/R2/R3 badge in ProcessingScreen; 126/126 tests pass)
-- Most recent continuation authorization: `docs/audits/CVF_W94_T1_FAST_LANE_AUDIT_RISK_VISIBILITY_2026-04-15.md` (W94-T1 Fast Lane GC-021 AUTHORIZED; Risk Visibility; additive display change; no policy change)
+- Active quality assessment: `docs/assessments/CVF_W95_T1_POST_W94_CANON_SYNC_ASSESSMENT_2026-04-15.md` (W95-T1 pre-sync assessment; mismatch inventory; bounded gap carry-forward documented)
+- Most recent continuation authorization: `docs/audits/CVF_W95_T1_FAST_LANE_AUDIT_CANON_SYNC_2026-04-15.md` (W95-T1 Fast Lane GC-021 AUTHORIZED; Post-W94 Canon Truth Sync; documentation-only)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

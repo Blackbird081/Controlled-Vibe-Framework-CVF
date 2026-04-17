@@ -1,12 +1,14 @@
 /**
  * W87-T1 — HIGH_RISK Guided Response Registry
  * W90-T1 — Pattern Expansion (NC_001/NC_002/NC_004/NC_005/NC_008 added)
+ * W100-T1 — OFU-2 Fix: NC_001 regex expanded to match req.query / URL input / URL parameter phrasing
  * Pre-authored safe-path alternatives for HIGH_RISK non-coder task patterns.
  * Injected into BLOCK/ESCALATE execute route responses so non-coder users
  * receive actionable guidance instead of a bare rejection.
  *
  * Authorization: CVF_GC018_W87_T1_HIGH_RISK_GUIDED_RESPONSE_AUTHORIZATION_2026-04-14.md
  *               CVF_GC018_W90_T1_HIGH_RISK_PATTERN_EXPANSION_AUTHORIZATION_2026-04-14.md
+ *               CVF_GC018_W100_T1_OFU2_NC001_REGEX_EXPANSION_AUTHORIZATION_2026-04-17.md
  * Rules:
  *   - Guided responses are pre-authored text — no live AI inference on blocked paths.
  *   - No pattern here weakens or bypasses governance decisions.
@@ -23,7 +25,9 @@ export const HIGH_RISK_GUIDED_PATTERNS: GuidedResponseEntry[] = [
     // ── W90-T1: NC_001 — SQL Injection ──────────────────────────────────────────
     {
         patternId: 'NC_001_SQL_INJECTION',
-        detector: /\b(?:sql|query|select|insert|update|delete|where)\b.{0,150}\b(?:user.?input|concat(?:enat)?|string.?build|dynamic|variable)\b|\b(?:string.?concat|dynamic.?(?:sql|query)|sql.?inject)\b/i,
+        // W100-T1 OFU-2: expanded to match req.query / URL param / request.query / route.param phrasing
+        // so that B1-style prompts ("SELECT * FROM users WHERE name = ' + req.query.name") are captured.
+        detector: /\b(?:sql|query|select|insert|update|delete|where)\b.{0,150}\b(?:user.?input|concat(?:enat)?|string.?build|dynamic|variable|req\.query|request\.query|url.?input|url.?param|route\.param|path\.param)\b|\b(?:string.?concat|dynamic.?(?:sql|query)|sql.?inject)\b/i,
         guidedResponse:
             'Building SQL queries by concatenating user input creates SQL injection vulnerabilities — ' +
             'attackers can manipulate your query to read, modify, or delete all database data. ' +

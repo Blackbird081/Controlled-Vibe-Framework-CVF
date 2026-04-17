@@ -1,11 +1,13 @@
 /**
  * W87-T1 — Guided Response Unit Tests
  * W90-T1 — Pattern Expansion Tests (NC_001/NC_002/NC_004/NC_005/NC_008)
+ * W100-T1 — OFU-2 Fix Tests: NC_001 req.query / URL param phrasing
  * Verifies that lookupGuidedResponse() returns the correct guided response
  * for HIGH_RISK NC patterns and returns undefined for NORMAL task content.
  *
  * Authorization: CVF_GC018_W87_T1_HIGH_RISK_GUIDED_RESPONSE_AUTHORIZATION_2026-04-14.md
  *               CVF_GC018_W90_T1_HIGH_RISK_PATTERN_EXPANSION_AUTHORIZATION_2026-04-14.md
+ *               CVF_GC018_W100_T1_OFU2_NC001_REGEX_EXPANSION_AUTHORIZATION_2026-04-17.md
  */
 
 import { describe, it, expect } from 'vitest';
@@ -33,7 +35,48 @@ describe('lookupGuidedResponse — NC_001_SQL_INJECTION', () => {
     });
 });
 
-// ── W90-T1: NC-002: XSS / Unvalidated Input ──────────────────────────────────
+// ── W100-T1 OFU-2: NC-001 req.query / URL param expansion ────────────────────
+
+describe('lookupGuidedResponse — NC_001_SQL_INJECTION (W100-T1 OFU-2 req.query expansion)', () => {
+    it('matches B1 exact scenario: SELECT concatenation with req.query.name', () => {
+        // This is the exact B1 scenario that caused OFU-2 — previously returned undefined
+        const result = lookupGuidedResponse(
+            "SELECT * FROM users WHERE name = '" + ' + req.query.name'
+        );
+        expect(result).toBeDefined();
+        expect(result).toContain('parameterized');
+    });
+
+    it('matches URL param phrasing in SQL context (SQL keyword before url param)', () => {
+        const result = lookupGuidedResponse(
+            'How do I build a SQL WHERE clause that uses a URL param from the request?'
+        );
+        expect(result).toBeDefined();
+        expect(result).toContain('OWASP');
+    });
+
+    it('matches request.query phrasing in SQL context', () => {
+        const result = lookupGuidedResponse(
+            'I am building a WHERE clause using request.query parameter — is that safe?'
+        );
+        expect(result).toBeDefined();
+        expect(result).toContain('parameterized');
+    });
+
+    it('does NOT false-positive on benign URL param question with no SQL keyword', () => {
+        // req.query alone without any SQL keyword must not trigger NC_001
+        const result = lookupGuidedResponse(
+            'How do I read req.query values in my Express route handler?'
+        );
+        // Should be undefined (no SQL injection context present)
+        // NOTE: may match other patterns — we assert it is NOT the SQL injection guidance
+        if (result !== undefined) {
+            expect(result).not.toContain('parameterized query');
+        }
+    });
+});
+
+
 
 describe('lookupGuidedResponse — NC_002_XSS_OR_UNVALIDATED_INPUT', () => {
     it('matches "render user input in HTML"', () => {

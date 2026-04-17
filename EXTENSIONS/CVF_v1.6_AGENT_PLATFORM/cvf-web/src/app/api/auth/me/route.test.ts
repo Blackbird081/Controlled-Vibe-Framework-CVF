@@ -21,8 +21,11 @@ describe('/api/auth/me', () => {
 
     it('returns user info when session valid', async () => {
         verifySessionCookieMock.mockResolvedValueOnce({
+            userId: 'usr_2',
             user: 'alice',
-            role: 'editor',
+            role: 'admin',
+            orgId: 'org_cvf',
+            teamId: 'team_exec',
             expiresAt: Date.now() + 1000 * 60 * 60,
         });
         const req = new Request('http://localhost/api/auth/me');
@@ -30,6 +33,9 @@ describe('/api/auth/me', () => {
         expect(res.status).toBe(200);
         const data = await res.json();
         expect(data.user).toBe('alice');
-        expect(data.role).toBe('editor');
+        expect(data.userId).toBe('usr_2');
+        expect(data.role).toBe('admin');
+        expect(data.orgId).toBe('org_cvf');
+        expect(data.teamId).toBe('team_exec');
     });
 });

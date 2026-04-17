@@ -39,6 +39,11 @@ export interface ExecutionResponse {
     provider: AIProvider;
     model: string;
     tokensUsed?: number;
+    usage?: {
+        inputTokens?: number;
+        outputTokens?: number;
+        totalTokens?: number;
+    };
     executionTime?: number;
     enforcement?: EnforcementResult;
 }

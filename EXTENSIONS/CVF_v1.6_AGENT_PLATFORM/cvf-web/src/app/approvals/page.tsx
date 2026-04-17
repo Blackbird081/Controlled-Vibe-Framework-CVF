@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import type { ApprovalRequest } from 'cvf-guard-contract/enterprise';
 
 // Mock Data for UI
@@ -48,7 +49,9 @@ const MOCK_REQUESTS: ApprovalRequest[] = [
 ];
 
 export default function ApprovalsPage() {
+  const searchParams = useSearchParams();
   const [requests, setRequests] = useState<ApprovalRequest[]>(MOCK_REQUESTS);
+  const riskLevelFilter = searchParams.get('riskLevel');
 
   const handleAction = (id: string, action: 'approved' | 'rejected') => {
     const reason = prompt(`Enter reason for ${action.toLowerCase()}:`);
@@ -67,8 +70,12 @@ export default function ApprovalsPage() {
     ));
   };
 
-  const pending = requests.filter(r => r.status === 'pending');
-  const history = requests.filter(r => r.status !== 'pending');
+  const filteredRequests = riskLevelFilter
+    ? requests.filter(r => r.riskLevel === riskLevelFilter)
+    : requests;
+
+  const pending = filteredRequests.filter(r => r.status === 'pending');
+  const history = filteredRequests.filter(r => r.status !== 'pending');
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
@@ -94,6 +101,11 @@ export default function ApprovalsPage() {
           <p className="text-gray-600 dark:text-gray-400 mt-2">
             Review and manage ESCALATED guard requests from team members.
           </p>
+          {riskLevelFilter && (
+            <div className="mt-3 inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+              Prefilter: {riskLevelFilter}
+            </div>
+          )}
         </div>
 
         {/* Pending Requests */}
@@ -117,7 +129,7 @@ export default function ApprovalsPage() {
                         <span className="text-gray-400 dark:text-gray-500 text-sm">in</span>
                         <span className="px-2 py-0.5 bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 text-xs font-bold rounded">Phase: {req.phase}</span>
                       </div>
-                      <p className="text-gray-800 dark:text-gray-200 text-lg mb-4">"{req.reason}"</p>
+                      <p className="text-gray-800 dark:text-gray-200 text-lg mb-4">&quot;{req.reason}&quot;</p>
                       <div className="text-xs text-gray-500">
                         Created: {new Date(req.createdAt).toLocaleString()} • Expires: {new Date(req.expiresAt).toLocaleString()}
                       </div>

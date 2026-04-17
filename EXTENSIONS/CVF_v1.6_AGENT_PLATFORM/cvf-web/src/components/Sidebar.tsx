@@ -291,34 +291,43 @@ export default function Sidebar({
                         </NavGroup>
                     )}
 
-                    {/* Enterprise Group (Task 8.6) */}
-                    {(userRole === 'admin' || userRole === 'owner' || userRole === 'reviewer') && (
+                    {/* Enterprise Group (Admin Control Plane) */}
+                    {(userRole === 'admin' || userRole === 'owner') && (
                         <NavGroup title={t('sidebar.enterprise') || 'Enterprise'} icon="🏢">
-                            {(userRole === 'admin' || userRole === 'owner') && (
-                                <Link
-                                    href="/admin/team"
-                                    className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
-                                    onClick={onClose}
-                                >
-                                    <span className="flex-1 text-left">👥 Team Roles</span>
-                                </Link>
-                            )}
                             <Link
-                                href="/approvals"
+                                href="/admin/finops"
+                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
+                                onClick={onClose}
+                            >
+                                <span className="flex-1 text-left">💰 FinOps</span>
+                            </Link>
+                            <Link
+                                href="/admin/audit-log"
+                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
+                                onClick={onClose}
+                            >
+                                <span className="flex-1 text-left">📋 Audit Log</span>
+                            </Link>
+                            <Link
+                                href="/admin/tool-registry"
+                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
+                                onClick={onClose}
+                            >
+                                <span className="flex-1 text-left">🛠️ Tool Registry</span>
+                            </Link>
+                            <Link
+                                href="/admin/approvals"
                                 className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
                                 onClick={onClose}
                             >
                                 <span className="flex-1 text-left">📥 Approvals</span>
-                                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200">
-                                    New
-                                </span>
                             </Link>
                             <Link
-                                href="/reports/compliance"
+                                href="/admin/team"
                                 className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
                                 onClick={onClose}
                             >
-                                <span className="flex-1 text-left">📊 Compliance Reports</span>
+                                <span className="flex-1 text-left">👥 Team Roles</span>
                             </Link>
                         </NavGroup>
                     )}

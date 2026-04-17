@@ -16,6 +16,11 @@ import type {
   CVFRole,
   GuardPipelineResult,
 } from '../types';
+export type {
+  EnterpriseUserProfile,
+  OrganizationRecord,
+  TeamRecord,
+} from './enterprise-org';
 
 function normalizePhaseAlias(phase: CVFPhase): CanonicalCVFPhase {
   return phase === 'DISCOVERY' ? 'INTAKE' : phase;

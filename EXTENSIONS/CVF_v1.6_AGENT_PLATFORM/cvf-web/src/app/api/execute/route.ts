@@ -12,6 +12,8 @@ import { validateOutput, shouldRetry, type ValidationResult, type RetryState } f
 import { routeWebProvider } from '@/lib/ai/provider-router-adapter';
 import { lookupGuidedResponse } from './guided.response.registry';
 import { buildKnowledgeSystemPrompt, hasKnowledgeContext } from '@/lib/knowledge-context-injector';
+import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
+import { emitExecutionTelemetry, resolveTokenUsage } from '@/lib/execute-telemetry';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
 // Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
@@ -121,7 +123,7 @@ export async function POST(request: NextRequest) {
         };
 
         // Build the prompt from template inputs
-        const userPrompt = buildPromptFromInputs(body as ExecutionRequest);
+        const userPrompt = buildExecutionPrompt(body as ExecutionRequest);
 
         // Safety filters
         const safety = applySafetyFilters(userPrompt);
@@ -384,8 +386,29 @@ export async function POST(request: NextRequest) {
             }
         }
 
+        if (aiResult.success && aiResult.output) {
+            try {
+                await emitExecutionTelemetry({
+                    session,
+                    request: body,
+                    prompt: userPrompt,
+                    output: aiResult.output,
+                    provider: routedProvider,
+                    model: body.model ?? aiResult.model ?? routedProvider,
+                    response: aiResult,
+                });
+            } catch (telemetryError) {
+                console.warn('Execution telemetry degraded:', telemetryError);
+            }
+        }
+
+        const usage = aiResult.success && aiResult.output
+            ? resolveTokenUsage(userPrompt, aiResult.output, aiResult)
+            : undefined;
+
         return NextResponse.json({
             ...aiResult,
+            usage,
             enforcement,
             guardResult,
             providerRouting: {
@@ -416,42 +439,4 @@ export async function POST(request: NextRequest) {
             { status: 500 }
         );
     }
-}
-
-// Build prompt from template inputs
-function buildPromptFromInputs(request: ExecutionRequest): string {
-    const { templateName, inputs, intent } = request;
-
-    const previousOutput = inputs['_previousOutput'];
-
-    let prompt = `## Task: ${templateName}\n\n`;
-    prompt += `### User Intent\n${intent}\n\n`;
-    prompt += `### Input Data\n`;
-
-    for (const [key, value] of Object.entries(inputs)) {
-        if (key.startsWith('_')) continue;
-        if (value && value.trim()) {
-            // Convert camelCase/snake_case to readable label
-            const label = key
-                .replace(/([A-Z])/g, ' $1')
-                .replace(/_/g, ' ')
-                .replace(/^\s/, '')
-                .split(' ')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                .join(' ');
-
-            prompt += `\n**${label}:**\n${value}\n`;
-        }
-    }
-
-    prompt += `\n---\n\n`;
-
-    if (previousOutput && previousOutput.trim()) {
-        prompt += `### Previous Output (for context)\n${previousOutput}\n`;
-        prompt += `\n*(The user is requesting a follow-up or refinement of the above.)*\n\n---\n\n`;
-    }
-
-    prompt += `Please analyze the above information and provide a comprehensive, structured response following CVF guidelines.`;
-
-    return prompt;
 }

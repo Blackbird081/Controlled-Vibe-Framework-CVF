@@ -2,8 +2,30 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GitHubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
-import type { NextAuthConfig } from "next-auth"
+import type { NextAuthConfig, Session, User } from "next-auth"
+import type { JWT } from "next-auth/jwt"
 import type { TeamRole } from "cvf-guard-contract/enterprise"
+import { findMockUserByUsername } from "@/lib/mock-enterprise-db"
+
+type AuthenticatedUser = User & {
+  role: TeamRole;
+  orgId: string;
+  teamId: string;
+};
+
+type SessionUser = NonNullable<Session["user"]> & {
+  role?: TeamRole;
+  userId?: string;
+  orgId?: string;
+  teamId?: string;
+};
+
+type AppJwt = JWT & {
+  role?: TeamRole;
+  userId?: string;
+  orgId?: string;
+  teamId?: string;
+};
 
 export const nextAuthConfig = {
   providers: [
@@ -26,23 +48,29 @@ export const nextAuthConfig = {
         
         const username = credentials.username as string;
         const password = credentials.password as string;
+        const mockUser = findMockUserByUsername(username);
 
         // Enterprise Mock Users
-        if (username === "admin" && password === "admin123") {
-            return { id: "1", name: "Admin User", email: "admin@cvf.local", role: "admin" }
-        }
-        if (username === "dev" && password === "dev123") {
-            return { id: "2", name: "Developer", email: "dev@cvf.local", role: "developer" }
-        }
-        if (username === "owner" && password === "owner123") {
-            return { id: "3", name: "System Owner", email: "owner@cvf.local", role: "owner" }
-        }
-        if (username === "reviewer" && password === "reviewer123") {
-            return { id: "4", name: "Security Reviewer", email: "review@cvf.local", role: "reviewer" }
+        if (mockUser && password === `${username}123`) {
+            return {
+              id: mockUser.id,
+              name: mockUser.name,
+              email: mockUser.email,
+              role: mockUser.role,
+              orgId: mockUser.orgId,
+              teamId: mockUser.teamId,
+            }
         }
         // Fallback for E2E and existing tests
         if (username === process.env.CVF_ADMIN_USER && password === process.env.CVF_ADMIN_PASS) {
-             return { id: "99", name: "Legacy Admin", email: "legacy@cvf.local", role: "admin" }
+             return {
+               id: "99",
+               name: "Legacy Admin",
+               email: "legacy@cvf.local",
+               role: "admin",
+               orgId: "org_cvf",
+               teamId: "team_exec",
+             }
         }
         
         return null;
@@ -52,13 +80,23 @@ export const nextAuthConfig = {
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        token.role = (user as any).role || "developer";
+        const appToken = token as AppJwt;
+        const authenticatedUser = user as AuthenticatedUser;
+        appToken.role = authenticatedUser.role ?? "developer";
+        appToken.userId = authenticatedUser.id;
+        appToken.orgId = authenticatedUser.orgId ?? "org_cvf";
+        appToken.teamId = authenticatedUser.teamId ?? "team_eng";
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
-        (session.user as any).role = token.role as TeamRole;
+        const sessionUser = session.user as SessionUser;
+        const appToken = token as AppJwt;
+        sessionUser.role = appToken.role ?? "developer";
+        sessionUser.userId = appToken.userId;
+        sessionUser.orgId = appToken.orgId;
+        sessionUser.teamId = appToken.teamId;
       }
       return session;
     }

@@ -35,6 +35,7 @@ HOW TO USE CVF FOR/
 # Logs
 *.log
 npm-debug.log*
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.data/
 
 # Cache
 .cache/

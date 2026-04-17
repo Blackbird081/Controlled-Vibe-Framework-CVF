@@ -1,8 +1,17 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
 const ROLE_PERMISSIONS = {
+    owner: {
+        canUseAgent: true,
+        canUseMultiAgent: true,
+        canUseTools: true,
+        canUseSettings: true,
+        canUseAIUsage: true,
+        canUseContext: true,
+    },
     admin: {
         canUseAgent: true,
         canUseMultiAgent: true,
@@ -11,9 +20,17 @@ const ROLE_PERMISSIONS = {
         canUseAIUsage: true,
         canUseContext: true,
     },
-    editor: {
+    developer: {
         canUseAgent: true,
         canUseMultiAgent: true,
+        canUseTools: true,
+        canUseSettings: true,
+        canUseAIUsage: true,
+        canUseContext: true,
+    },
+    reviewer: {
+        canUseAgent: true,
+        canUseMultiAgent: false,
         canUseTools: false,
         canUseSettings: true,
         canUseAIUsage: true,
@@ -30,8 +47,10 @@ const ROLE_PERMISSIONS = {
 } as const;
 
 const ROLE_BADGE_STYLES = {
+    owner: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-200',
     admin: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-200',
-    editor: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200',
+    developer: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200',
+    reviewer: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200',
     viewer: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200',
 } as const;
 
@@ -39,7 +58,7 @@ export type RoleKey = keyof typeof ROLE_PERMISSIONS;
 
 
 export function useAuth() {
-    const [userRole, setUserRole] = useState<string>('admin');
+    const [userRole, setUserRole] = useState<TeamRole>('admin');
     const [userName, setUserName] = useState<string | undefined>();
 
     useEffect(() => {
@@ -62,7 +81,9 @@ export function useAuth() {
                     .find(c => c.startsWith('cvf_role='));
                 if (roleCookie) {
                     const role = roleCookie.split('=')[1];
-                    if (role) setUserRole(role);
+                    if (role && role in ROLE_PERMISSIONS) {
+                        setUserRole(role as TeamRole);
+                    }
                 }
             });
     }, []);

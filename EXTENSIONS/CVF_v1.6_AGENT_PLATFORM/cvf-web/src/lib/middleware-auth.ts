@@ -1,10 +1,23 @@
 import { auth } from '@/auth';
 import type { NextRequest } from 'next/server';
+import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
 export type SessionCookie = {
+    userId: string;
     user: string;
-    role: string;
+    role: TeamRole;
+    orgId: string;
+    teamId: string;
     expiresAt: number;
+};
+
+type SessionUser = {
+    name?: string | null;
+    email?: string | null;
+    role?: TeamRole;
+    userId?: string;
+    orgId?: string;
+    teamId?: string;
 };
 
 /**
@@ -12,13 +25,18 @@ export type SessionCookie = {
  * Now delegates internally to NextAuth.js App Router auth() function.
  * This prevents breaking the ~10 API routes that currently import it.
  */
-export async function verifySessionCookie(request?: NextRequest | Request): Promise<SessionCookie | null> {
+export async function verifySessionCookie(_request?: NextRequest | Request): Promise<SessionCookie | null> {
+    void _request;
     const session = await auth();
     if (!session?.user) return null;
+    const sessionUser = session.user as SessionUser;
     
     return {
-        user: session.user.name || session.user.email || 'unknown',
-        role: (session.user as any).role || 'developer',
+        userId: sessionUser.userId || 'unknown-user',
+        user: sessionUser.name || sessionUser.email || 'unknown',
+        role: sessionUser.role || 'developer',
+        orgId: sessionUser.orgId || 'org_cvf',
+        teamId: sessionUser.teamId || 'team_eng',
         expiresAt: new Date(session.expires).getTime(),
     };
 }

@@ -89,6 +89,11 @@ async function executeOpenAI(
             provider: 'openai',
             model: config.model,
             tokensUsed: data.usage?.total_tokens,
+            usage: {
+                inputTokens: data.usage?.prompt_tokens,
+                outputTokens: data.usage?.completion_tokens,
+                totalTokens: data.usage?.total_tokens,
+            },
             executionTime: Date.now() - startTime,
         };
     } catch (error) {
@@ -140,6 +145,11 @@ async function executeClaude(
             provider: 'claude',
             model: config.model,
             tokensUsed: data.usage?.input_tokens + data.usage?.output_tokens,
+            usage: {
+                inputTokens: data.usage?.input_tokens,
+                outputTokens: data.usage?.output_tokens,
+                totalTokens: (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
+            },
             executionTime: Date.now() - startTime,
         };
     } catch (error) {
@@ -197,6 +207,11 @@ async function executeGemini(
             output: data.candidates[0].content.parts[0].text,
             provider: 'gemini',
             model: model,
+            usage: {
+                inputTokens: data.usageMetadata?.promptTokenCount,
+                outputTokens: data.usageMetadata?.candidatesTokenCount,
+                totalTokens: data.usageMetadata?.totalTokenCount,
+            },
             executionTime: Date.now() - startTime,
         };
     } catch (error) {
@@ -263,6 +278,9 @@ async function executeAlibaba(
                 provider: 'alibaba',
                 model: config.model,
                 tokensUsed: data.tokensUsed,
+                usage: {
+                    totalTokens: data.tokensUsed,
+                },
                 executionTime: Date.now() - startTime,
             };
         }
@@ -274,6 +292,11 @@ async function executeAlibaba(
             provider: 'alibaba',
             model: config.model,
             tokensUsed: data.usage?.total_tokens,
+            usage: {
+                inputTokens: data.usage?.prompt_tokens,
+                outputTokens: data.usage?.completion_tokens,
+                totalTokens: data.usage?.total_tokens,
+            },
             executionTime: Date.now() - startTime,
         };
     } catch (error) {
@@ -327,6 +350,11 @@ async function executeOpenRouter(
             provider: 'openrouter',
             model: config.model,
             tokensUsed: data.usage?.total_tokens,
+            usage: {
+                inputTokens: data.usage?.prompt_tokens,
+                outputTokens: data.usage?.completion_tokens,
+                totalTokens: data.usage?.total_tokens,
+            },
             executionTime: Date.now() - startTime,
         };
     } catch (error) {

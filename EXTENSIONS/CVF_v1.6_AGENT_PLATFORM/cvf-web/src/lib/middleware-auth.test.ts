@@ -24,13 +24,23 @@ describe('middleware-auth', () => {
 
         it('maps auth session to SessionCookie fields', async () => {
             authMock.mockResolvedValueOnce({
-                user: { name: 'Alice', email: 'alice@example.com', role: 'admin' },
+                user: {
+                    name: 'Alice',
+                    email: 'alice@example.com',
+                    role: 'admin',
+                    userId: 'usr_2',
+                    orgId: 'org_cvf',
+                    teamId: 'team_exec',
+                },
                 expires: new Date(Date.now() + 60000).toISOString(),
             });
             const result = await verifySessionCookie();
             expect(result).not.toBeNull();
+            expect(result!.userId).toBe('usr_2');
             expect(result!.user).toBe('Alice');
             expect(result!.role).toBe('admin');
+            expect(result!.orgId).toBe('org_cvf');
+            expect(result!.teamId).toBe('team_exec');
             expect(result!.expiresAt).toBeGreaterThan(Date.now());
         });
 
@@ -43,6 +53,8 @@ describe('middleware-auth', () => {
             expect(result).not.toBeNull();
             expect(result!.user).toBe('bob@example.com');
             expect(result!.role).toBe('developer');
+            expect(result!.orgId).toBe('org_cvf');
+            expect(result!.teamId).toBe('team_eng');
         });
     });
 });

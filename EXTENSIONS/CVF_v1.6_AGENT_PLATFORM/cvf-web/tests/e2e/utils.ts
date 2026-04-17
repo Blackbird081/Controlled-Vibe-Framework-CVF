@@ -22,10 +22,12 @@ export async function seedStorage(page: Page) {
     }, DEFAULT_SETTINGS);
 }
 
-export async function login(page: Page) {
+export async function loginAs(page: Page, username: string, password: string) {
     await page.goto('/login');
     await page.locator('input[type="text"][placeholder="admin"]').fill('admin');
     await page.locator('input[type="password"][placeholder="admin123"]').fill('admin123');
+    await page.locator('input[type="text"][placeholder="admin"]').fill(username);
+    await page.locator('input[type="password"][placeholder="admin123"]').fill(password);
 
     // Role select is optional — some login forms don't have it
     const roleSelect = page.locator('select');
@@ -35,7 +37,11 @@ export async function login(page: Page) {
     }
 
     await page.getByRole('button', { name: /Đăng nhập/i }).click();
-    await page.waitForURL('**/', { timeout: 10000 });
+    await page.waitForURL('**/home', { timeout: 10000 });
+}
+
+export async function login(page: Page) {
+    await loginAs(page, 'admin', 'admin123');
 }
 
 export async function openStrategyAnalysis(page: Page) {

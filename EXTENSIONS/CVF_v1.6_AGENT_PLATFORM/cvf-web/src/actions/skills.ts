@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import { Skill, SkillCategory } from '../types/skill';
 import { loadUat, saveUat } from '@/lib/uat-store';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { loadSkillCorpusGovernance } = require('../../scripts/skill-corpus-governance');
 
 const SKILLS_ROOT = path.resolve(process.cwd(), '../../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS');
 const UAT_REPORT_PATH = path.resolve(process.cwd(), '../../../governance/skill-library/uat/reports/uat_score_report.json');
@@ -413,12 +415,31 @@ function loadSpecReportMap(): Record<string, { spec_score?: number; spec_quality
     }
 }
 
+function buildCorpusMetadata(
+    domain: string,
+    skillId: string,
+    corpusGovernance: ReturnType<typeof loadSkillCorpusGovernance>,
+) {
+    const key = `${domain}::${skillId}`;
+    const entry = corpusGovernance.skillMap.get(key);
+    return {
+        corpusClass: entry ? entry.corpusClass : corpusGovernance.classes.UNSCREENED,
+        frontDoorVisible: entry ? entry.frontDoorVisible : false,
+        frontDoorTier: entry ? entry.frontDoorTier : 'QUARANTINED',
+        trustedBenchmarkSurface: entry ? entry.trustedBenchmarkSurface : false,
+        hasRestrictedLinks: entry ? entry.hasRestrictedLinks : false,
+        linkedTemplates: entry ? entry.linkedTemplates : [],
+        corpusNote: entry ? entry.corpusNote : 'Unscreened legacy surface; excluded from front-door truth until classified.',
+    };
+}
+
 export async function getSkillCategories(): Promise<SkillCategory[]> {
     const categories: SkillCategory[] = [];
 
     try {
         const uatReportMap = loadUatReportMap();
         const specReportMap = loadSpecReportMap();
+        const corpusGovernance = loadSkillCorpusGovernance();
         const entries = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true });
 
         for (const entry of entries) {
@@ -466,11 +487,12 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
                         const fallbackPhases = DOMAIN_PHASES_MAP[folderName] || DOMAIN_PHASES_MAP[domainValue.toLowerCase().replace(/ /g, '_')] || 'Discovery, Design';
                         const fallbackAutonomy = RISK_AUTONOMY[fallbackRisk] || 'Human confirmation required';
                         const fallbackScope = fallbackRisk === 'R0' ? 'Informational' : (fallbackRisk === 'R3' || fallbackRisk === 'R4') ? 'Strategic' : 'Tactical';
+                        const corpusMetadata = buildCorpusMetadata(folderName, skillId, corpusGovernance);
 
                         const titleCandidate = titleMatch ? titleMatch[1].trim() : '';
                         const finalTitle = isTitleTrustworthy(titleCandidate, skillId) ? titleCandidate : fallbackTitle;
 
-                        skills.push({
+                        const skillRecord: Skill = {
                             id: skillId,
                             title: finalTitle,
                             domain: domainValue,
@@ -490,7 +512,12 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
                             specScore,
                             specQuality,
                             specGate,
-                        });
+                            ...corpusMetadata,
+                        };
+
+                        if (skillRecord.frontDoorVisible) {
+                            skills.push(skillRecord);
+                        }
                     }
                 }
 
@@ -524,6 +551,7 @@ export async function getSkillDetail(domain: string, skillId: string): Promise<S
 
         const uatReportMap = loadUatReportMap();
         const specReportMap = loadSpecReportMap();
+        const corpusGovernance = loadSkillCorpusGovernance();
         const content = fs.readFileSync(filePath, 'utf-8');
         const uatContent = await loadUat(skillId);
         const uatReport = uatReportMap[skillId];
@@ -552,6 +580,7 @@ export async function getSkillDetail(domain: string, skillId: string): Promise<S
         const fallbackPhases = DOMAIN_PHASES_MAP[domain] || DOMAIN_PHASES_MAP[domainValue.toLowerCase().replace(/ /g, '_')] || 'Discovery, Design';
         const fallbackAutonomy = RISK_AUTONOMY[fallbackRisk] || 'Human confirmation required';
         const fallbackScope = fallbackRisk === 'R0' ? 'Informational' : (fallbackRisk === 'R3' || fallbackRisk === 'R4') ? 'Strategic' : 'Tactical';
+        const corpusMetadata = buildCorpusMetadata(domain, skillId, corpusGovernance);
 
         const titleCandidate = titleMatch ? titleMatch[1].trim() : '';
         const fallbackTitle = deriveTitleFromFilename(skillId);
@@ -577,6 +606,7 @@ export async function getSkillDetail(domain: string, skillId: string): Promise<S
             specScore,
             specQuality,
             specGate,
+            ...corpusMetadata,
         };
     } catch (error) {
         console.error('Error reading skill detail:', error);

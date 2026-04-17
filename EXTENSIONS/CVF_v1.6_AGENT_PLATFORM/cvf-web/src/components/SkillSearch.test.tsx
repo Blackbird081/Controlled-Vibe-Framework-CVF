@@ -29,9 +29,38 @@ describe('SkillSearchBar', () => {
     vi.clearAllMocks();
     fetchMock.mockResolvedValue({
       ok: true,
-      text: () => Promise.resolve(`skill_id,domain,skill_name,difficulty,risk_level,phases,keywords,description,file_path
-product_ux/ui_style_selection,product_ux,UI Style Selection,Medium,R1,"Discovery,Design","style ui",Helps pick style,test.md
-web_development/07_landing_page_pattern,web_development,Landing Page Pattern,Easy,R0,"Discovery,Design","landing page",Select layout,test.md`),
+      json: () => Promise.resolve({
+        categories: [
+          {
+            id: 'product_ux',
+            name: 'Product UX',
+            skills: [
+              {
+                id: 'product_ux/ui_style_selection',
+                title: 'UI Style Selection',
+                domain: 'product_ux',
+                difficulty: 'Medium',
+                riskLevel: 'R1',
+                allowedPhases: 'Discovery,Design',
+                summary: 'Helps pick style',
+                path: 'test.md',
+                linkedTemplates: [{ templateId: 'product_design_wizard', corpusClass: 'TRUSTED_FOR_VALUE_PROOF' }],
+              },
+              {
+                id: 'web_development/07_landing_page_pattern',
+                title: 'Landing Page Pattern',
+                domain: 'web_development',
+                difficulty: 'Easy',
+                riskLevel: 'R0',
+                allowedPhases: 'Discovery,Design',
+                summary: 'Select layout',
+                path: 'test.md',
+                linkedTemplates: [{ templateId: 'landing_page_wizard', corpusClass: 'TRUSTED_FOR_VALUE_PROOF' }],
+              },
+            ],
+          },
+        ],
+      }),
     });
   });
 
@@ -82,11 +111,30 @@ describe('SkillPlanner', () => {
     vi.clearAllMocks();
     // Mock both CSVs
     fetchMock.mockImplementation((url: string) => {
-      if (url.includes('skills_index')) {
+      if (url.includes('skills-index.json')) {
         return Promise.resolve({
           ok: true,
-          text: () => Promise.resolve(`skill_id,domain,skill_name,difficulty,risk_level,phases,keywords,description,file_path
-product_ux/ui_style_selection,product_ux,UI Style Selection,Medium,R1,"Discovery,Design","style ui",Helps pick style,test.md`),
+          json: () => Promise.resolve({
+            categories: [
+              {
+                id: 'product_ux',
+                name: 'Product UX',
+                skills: [
+                  {
+                    id: 'skill-1',
+                    title: 'UI Style Selection',
+                    domain: 'product_ux',
+                    difficulty: 'Medium',
+                    riskLevel: 'R1',
+                    allowedPhases: 'Discovery,Design',
+                    summary: 'Helps pick style',
+                    path: 'test.md',
+                    linkedTemplates: [{ templateId: 'product_design_wizard', corpusClass: 'TRUSTED_FOR_VALUE_PROOF' }],
+                  },
+                ],
+              },
+            ],
+          }),
         });
       }
       if (url.includes('skill_reasoning')) {

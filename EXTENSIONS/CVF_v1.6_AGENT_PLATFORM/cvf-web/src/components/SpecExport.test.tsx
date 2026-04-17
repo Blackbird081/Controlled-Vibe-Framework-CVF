@@ -328,6 +328,9 @@ describe('generateCompleteSpec', () => {
         expect(spec.length).toBeGreaterThan(0);
         expect(spec).toContain('Build an MVP');
         expect(spec).toContain('Web application with auth');
+        expect(spec).toContain('Chuẩn Thành Công Cho Non-Coder');
+        expect(spec).toContain('Quy tắc Phản hồi Governed');
+        expect(spec).toContain('Ưu tiên Knowledge Context');
     });
 
     it('generates spec without user intent', () => {

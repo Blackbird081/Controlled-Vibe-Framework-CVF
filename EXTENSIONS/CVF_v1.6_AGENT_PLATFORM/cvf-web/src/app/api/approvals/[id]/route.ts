@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getApprovalStore } from '../route';
+import { getApprovalStore } from '../store';
 
 /**
  * GET /api/approvals/[id]

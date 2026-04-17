@@ -1,26 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// W92-T1: In-memory approval request store.
-// Resets on server restart — sufficient for W92-T1 scope (no database required).
-export interface ApprovalRequest {
-    id: string;
-    templateId: string;
-    templateName: string;
-    intent: string;
-    reason: string;
-    status: 'pending' | 'approved' | 'rejected';
-    submittedAt: string;
-}
-
-// Module-level store — shared across requests within a server instance.
-const approvalStore = new Map<string, ApprovalRequest>();
+import { ApprovalRequest, getApprovalStore } from './store';
 
 function generateId(): string {
     return `apr-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-}
-
-export function getApprovalStore(): Map<string, ApprovalRequest> {
-    return approvalStore;
 }
 
 /**
@@ -50,7 +32,7 @@ export async function POST(request: NextRequest) {
             submittedAt: new Date().toISOString(),
         };
 
-        approvalStore.set(id, record);
+        getApprovalStore().set(id, record);
 
         return NextResponse.json({
             success: true,
@@ -72,7 +54,7 @@ export async function POST(request: NextRequest) {
  * List all approval requests (for admin use).
  */
 export async function GET() {
-    const requests = Array.from(approvalStore.values()).sort(
+    const requests = Array.from(getApprovalStore().values()).sort(
         (a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime(),
     );
     return NextResponse.json({ success: true, data: requests });

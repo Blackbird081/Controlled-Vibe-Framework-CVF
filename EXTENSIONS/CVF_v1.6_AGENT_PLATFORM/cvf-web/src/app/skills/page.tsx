@@ -129,6 +129,13 @@ export default function SkillsPage() {
                         {t('skills.heroSubtitle')}
                     </p>
 
+                    <div className="max-w-3xl mx-auto mb-6 px-2 sm:px-0">
+                        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
+                            <div className="font-semibold mb-1">{t('skills.corpusNoticeTitle')}</div>
+                            <p>{t('skills.corpusNoticeBody')}</p>
+                        </div>
+                    </div>
+
                     {/* Quick Search Bar */}
                     <form onSubmit={handleQuickSearch} className="max-w-xl mx-auto mb-8 sm:mb-10 px-2 sm:px-0">
                         <div className="relative">

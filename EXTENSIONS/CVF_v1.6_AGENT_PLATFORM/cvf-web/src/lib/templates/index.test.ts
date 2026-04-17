@@ -84,6 +84,9 @@ describe('templates/index', () => {
             expect(spec).toContain('Input Coverage');
             expect(spec).toContain('Execution Constraints');
             expect(spec).toContain('Validation Hooks');
+            expect(spec).toContain('CVF Non-Coder Success Standard');
+            expect(spec).toContain('Governed Response Rules');
+            expect(spec).toContain('Knowledge Context Preference');
         });
 
         it('marks missing required fields', () => {

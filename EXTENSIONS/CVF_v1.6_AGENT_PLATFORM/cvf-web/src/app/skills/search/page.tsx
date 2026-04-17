@@ -233,7 +233,7 @@ function SkillSearchPageInner() {
       {/* Footer */}
       <footer className="border-t border-gray-200 dark:border-gray-700/50 mt-12 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center text-gray-500 text-sm">
-          <p>CVF Skill Search — BM25 Engine + Industry Reasoning | 141 Skills · 12 Domains · 50 Rules</p>
+          <p>CVF Skill Search — BM25 Engine + Industry Reasoning | Governed front-door subset</p>
         </div>
       </footer>
     </div>

@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-17` (latest governed closure `W102-T1 CLOSED DELIVERED`; knowledge-native benefit PROVEN (0.950 vs 0.175, +0.775 delta); W101-T1 architecture gap CLOSED; no active tranche)
+> Last refreshed: `2026-04-17` (latest governed closure `W104-T1 CLOSED DELIVERED`; Skill Library front door synced to governed subset; no active tranche)
 
 ---
 
@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W102-T1 CLOSED DELIVERED 2026-04-17; knowledge-native benefit PROVEN; W101-T1 architecture gap CLOSED; next tranche requires fresh GC-018 authorization` |
+| Current active tranche | `NONE — W104-T1 CLOSED DELIVERED 2026-04-17; public /skills front door synced to governed subset; next tranche requires fresh GC-018 authorization` |
 | Shared verification baseline | `ADOPT 2026-04-10 LOCAL BASELINE — future agents should inherit this verification state and rerun only when their touched scope, dependency state, or build/test configuration invalidates it` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05); W59-T1 promotes the closure readout to CLOSURE-ASSESSED (2026-04-07)` |
 
@@ -251,6 +251,7 @@ Memory class: POINTER_RECORD
 | `W101-T1` Knowledge-Native Execute Path Integration (ARCHITECTURE / INTEGRATION class) | `CLOSED DELIVERED 2026-04-17 — architecture gap from W93-T1 CLOSED; knowledge-context-injector.ts (buildKnowledgeSystemPrompt + hasKnowledgeContext); ExecutionRequest.knowledgeContext? type extension; executeAI systemPrompt? override; route.ts extraction + enriched prompt + knowledgeInjection metadata in response; +17 tests (2027/2027 pass, 0 regressions). Enforcement, guard pipeline, provider routing: UNCHANGED. Full Lane (GC-019)` |
 | `W102-T1` Knowledge-Native Benefit Revalidation (VALIDATION_EVIDENCE class) | `CLOSED DELIVERED 2026-04-17 — W93-T1 MIXED resolved; benefit PROVEN (injected avg precision 0.950 vs raw 0.175, delta +0.775); 5 invented-domain scenarios; qwen-max (Alibaba); Gate 1 (precision >= baseline) MET all 5 scenarios; Gate 2 (temporal consistency) MET; evidence class LIVE_INFERENCE. No production code changes. Fast Lane (GC-021) R1` |
 | `W103-T1` Post-W102 Canon Truth Sync (DOCUMENTATION / CANON_SYNC class) | `CLOSED DELIVERED 2026-04-17 — whitepaper §4.3 advanced from W100 to W102 (Last canonical closure, Current active tranche, Current posture, Supporting status docs); tracker Last refreshed + Current active tranche + W101/W102 rows + canonical pointers updated; AGENT_HANDOFF.md W103-T1 entry filed; GC-026 closure sync filed. Documentation-only R0; Fast Lane (GC-021)` |
+| `W104-T1` Skill Library Trusted Subset Sync (PRODUCT / FRONT_DOOR_SYNC class) | `CLOSED DELIVERED 2026-04-17 — public /skills front door synchronized to D2/D3 corpus governance; front-door discovery limited to TRUSTED_FOR_VALUE_PROOF + REVIEW_REQUIRED; archive/quarantine categories added for legacy/reject/unscreened surfaces; search and planner now consume the same front-door subset; direct detail pages preserve archive continuity; spec export now includes non-coder success, governed response, and knowledge context sections; targeted verification 118/118 vitest + tsc clean; Fast Lane (GC-021)` |
 
 ---
 
@@ -286,9 +287,9 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W103_T1_CLOSED_2026-04-17.md` (W103-T1 CLOSED DELIVERED; canon advanced to W102; no active tranche)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W104_T1_CLOSED_2026-04-17.md` (W104-T1 CLOSED DELIVERED; /skills front door synced to governed subset; no active tranche)
 - Latest continuity sync delta: `docs/baselines/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_DELTA_2026-04-07.md`
 - Current closure anchor: `docs/reviews/CVF_W65_T1_TRANCHE_CLOSURE_REVIEW_2026-04-10.md`
-- Active quality assessment: `docs/assessments/CVF_W102_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md` (W102-T1 post-run assessment; benefit PROVEN; injected 0.950 vs raw 0.175, +0.775 delta)
-- Most recent continuation authorization: `docs/baselines/CVF_GC018_W103_T1_POST_W102_CANON_TRUTH_SYNC_AUTHORIZATION_2026-04-17.md` (W103-T1 Fast Lane GC-021 AUTHORIZED; Post-W102 Canon Truth Sync; documentation-only R0)
+- Active quality assessment: `docs/assessments/CVF_W104_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md` (W104-T1 post-run assessment; front-door subset truth aligned; 41 visible / 108 quarantined; targeted verification pass)
+- Most recent continuation authorization: `docs/baselines/CVF_GC018_W104_T1_SKILL_LIBRARY_TRUSTED_SUBSET_SYNC_AUTHORIZATION_2026-04-17.md` (W104-T1 AUTHORIZED + EXECUTED; /skills front-door sync; documentation + web/front-door only)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

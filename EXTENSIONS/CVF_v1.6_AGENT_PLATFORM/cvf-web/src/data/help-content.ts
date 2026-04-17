@@ -116,8 +116,8 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
             },
             {
                 icon: '📚',
-                title: 'Skill Library (124 skills)',
-                desc: '12 domains × 124 skills. Xem skill → nhấn 📝 Dùng Template để chuyển sang template tương ứng.',
+                title: 'Skill Library',
+                desc: 'Thư viện skill front-door đã sync theo GC-044: chỉ surfacing trusted/review subset. Legacy/reject bị quarantine khỏi explorer mặc định.',
                 link: '/skills',
                 linkText: 'Xem Skill Library',
             },
@@ -247,8 +247,8 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
             },
             {
                 icon: '📚',
-                title: 'Skill Library (124 skills)',
-                desc: '12 domains × 124 skills. View a skill → click 📝 Use Template to jump to the matching template.',
+                title: 'Skill Library',
+                desc: 'The front-door skill library is now synced to GC-044: only trusted/review subset surfaces are shown. Legacy/rejected items stay quarantined from the default explorer.',
                 link: '/skills',
                 linkText: 'View Skill Library',
             },

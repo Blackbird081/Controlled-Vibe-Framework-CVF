@@ -4,13 +4,13 @@ import { useState, useEffect, useMemo } from 'react';
 import {
   searchSkills,
   loadSkills,
-  parseCSV,
   isLoaded,
   DOMAIN_NAMES,
   type SearchResult,
   type SkillRecord,
   type SearchOptions,
 } from '@/lib/skill-search';
+import { fetchFrontDoorSkillRecords } from '@/lib/frontdoor-skills';
 
 // ─── Props ───────────────────────────────────────────────────────────
 
@@ -55,7 +55,7 @@ export function SkillSearchBar({
   const [query, setQuery] = useState(initialQuery);
   const [dataLoaded, setDataLoaded] = useState(() => isLoaded());
 
-  // Load CSV data on mount
+  // Load front-door trusted subset data on mount
   useEffect(() => {
     if (dataLoaded) {
       return;
@@ -65,16 +65,13 @@ export function SkillSearchBar({
 
     async function load() {
       try {
-        const res = await fetch('/data/skills_index.csv');
-        if (!res.ok) return;
-        const text = await res.text();
-        const skills = parseCSV(text);
+        const skills = await fetchFrontDoorSkillRecords();
         if (!cancelled && skills.length > 0) {
           loadSkills(skills);
           setDataLoaded(true);
         }
       } catch {
-        console.warn('Failed to load skills index CSV');
+        console.warn('Failed to load front-door skill index');
       }
     }
     load();

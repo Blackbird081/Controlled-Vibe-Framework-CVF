@@ -1,3 +1,9 @@
+export interface SkillLinkedTemplate {
+    templateId: string;
+    corpusClass: string;
+    trustedBenchmarkSurface?: boolean;
+}
+
 export interface Skill {
     id: string;
     title: string;
@@ -18,10 +24,34 @@ export interface Skill {
     specScore?: number;
     specQuality?: string;
     specGate?: string;
+    corpusClass?: string;
+    frontDoorVisible?: boolean;
+    frontDoorTier?: string;
+    trustedBenchmarkSurface?: boolean;
+    hasRestrictedLinks?: boolean;
+    linkedTemplates?: SkillLinkedTemplate[];
+    corpusNote?: string;
 }
 
 export interface SkillCategory {
     id: string;
     name: string;
     skills: Skill[];
+}
+
+export interface SkillIndexMeta {
+    totalScannedSkills: number;
+    frontDoorSkills: number;
+    quarantinedSkills: number;
+    trustedMappedSkills: number;
+    reviewMappedSkills: number;
+    trustedBenchmarkSkills: number;
+    governanceSource: string[];
+}
+
+export interface SkillIndexPayload {
+    generatedAt?: string;
+    categories: SkillCategory[];
+    archiveCategories?: SkillCategory[];
+    meta?: SkillIndexMeta;
 }

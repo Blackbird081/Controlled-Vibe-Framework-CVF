@@ -10,7 +10,8 @@ import {
   parseReasoningCSV,
   isReasoningLoaded,
 } from '@/lib/skill-planner';
-import { parseCSV, isLoaded, loadSkills } from '@/lib/skill-search';
+import { isLoaded, loadSkills } from '@/lib/skill-search';
+import { fetchFrontDoorSkillRecords } from '@/lib/frontdoor-skills';
 
 vi.mock('@/lib/skill-planner', () => ({
   planTask: vi.fn(),
@@ -20,9 +21,12 @@ vi.mock('@/lib/skill-planner', () => ({
 }));
 
 vi.mock('@/lib/skill-search', () => ({
-  parseCSV: vi.fn(),
   isLoaded: vi.fn(),
   loadSkills: vi.fn(),
+}));
+
+vi.mock('@/lib/frontdoor-skills', () => ({
+  fetchFrontDoorSkillRecords: vi.fn(),
 }));
 
 const mockPlan = {
@@ -75,8 +79,8 @@ describe('SkillPlanner', () => {
     vi.mocked(isReasoningLoaded).mockReturnValue(true);
     vi.mocked(isLoaded).mockReturnValue(true);
     vi.mocked(planTask).mockReturnValue(null);
-    vi.mocked(parseCSV).mockReturnValue([]);
     vi.mocked(parseReasoningCSV).mockReturnValue([]);
+    vi.mocked(fetchFrontDoorSkillRecords).mockResolvedValue([]);
   });
 
   afterEach(() => {
@@ -153,7 +157,7 @@ describe('SkillPlanner', () => {
   it('loads csv data and initializes planner when reasoning is not loaded', async () => {
     vi.mocked(isReasoningLoaded).mockReturnValue(false);
     vi.mocked(isLoaded).mockReturnValue(false);
-    vi.mocked(parseCSV).mockReturnValue([
+    vi.mocked(fetchFrontDoorSkillRecords).mockResolvedValue([
       {
         skill_id: 'skill-1',
         skill_name: 'Requirements',
@@ -180,10 +184,6 @@ describe('SkillPlanner', () => {
       .fn()
       .mockResolvedValueOnce({
         ok: true,
-        text: async () => 'skills-csv',
-      })
-      .mockResolvedValueOnce({
-        ok: true,
         text: async () => 'reasoning-csv',
       });
     vi.stubGlobal('fetch', fetchMock);
@@ -192,15 +192,27 @@ describe('SkillPlanner', () => {
 
     await waitFor(() => expect(loadReasoning).toHaveBeenCalledTimes(1));
     expect(loadSkills).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it('shows load error when fetch response is not ok', async () => {
     vi.mocked(isReasoningLoaded).mockReturnValue(false);
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce({ ok: false, text: async () => '' })
-      .mockResolvedValueOnce({ ok: true, text: async () => '' });
+      .mockResolvedValueOnce({ ok: false, text: async () => '' });
+    vi.mocked(fetchFrontDoorSkillRecords).mockResolvedValue([
+      {
+        skill_id: 'skill-1',
+        skill_name: 'Requirements',
+        domain: 'business_analysis',
+        difficulty: 'Medium',
+        risk_level: 'R1',
+        phases: 'discovery',
+        keywords: 'requirements,discovery',
+        description: 'desc',
+        file_path: 'file',
+      },
+    ]);
     vi.stubGlobal('fetch', fetchMock);
 
     render(<SkillPlanner />);
@@ -212,15 +224,11 @@ describe('SkillPlanner', () => {
 
   it('shows empty-data error when parsed csv does not contain data', async () => {
     vi.mocked(isReasoningLoaded).mockReturnValue(false);
-    vi.mocked(parseCSV).mockReturnValue([]);
     vi.mocked(parseReasoningCSV).mockReturnValue([]);
+    vi.mocked(fetchFrontDoorSkillRecords).mockResolvedValue([]);
 
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce({
-        ok: true,
-        text: async () => 'skills-csv',
-      })
       .mockResolvedValueOnce({
         ok: true,
         text: async () => 'reasoning-csv',

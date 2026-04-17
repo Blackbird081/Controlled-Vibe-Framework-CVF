@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getSkillCategories, saveUatContent } from '../actions/skills';
-import { Skill, SkillCategory } from '../types/skill';
+import { Skill, SkillCategory, SkillIndexPayload, SkillIndexMeta } from '../types/skill';
 import { trackEvent } from '@/lib/analytics';
 import { getTemplatesForSkill, domainToCategoryMap } from '@/lib/skill-template-map';
 import { templates } from '@/lib/template-loader';
@@ -16,6 +16,7 @@ export function SkillLibrary() {
     const { t } = useLanguage();
     const [categories, setCategories] = useState<SkillCategory[]>([]);
     const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+    const [indexMeta, setIndexMeta] = useState<SkillIndexMeta | null>(null);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [viewMode, setViewMode] = useState<'skill' | 'uat'>('skill');
@@ -38,11 +39,12 @@ export function SkillLibrary() {
                     try {
                         const response = await fetch('/data/skills-index.json', { cache: 'no-store' });
                         if (response.ok) {
-                            const payload = await response.json();
+                            const payload = await response.json() as SkillCategory[] | Partial<SkillIndexPayload>;
                             if (Array.isArray(payload)) {
                                 data = payload;
                             } else if (payload && Array.isArray(payload.categories)) {
                                 data = payload.categories;
+                                setIndexMeta(payload.meta ?? null);
                             }
                         }
                     } catch (error) {
@@ -126,6 +128,22 @@ export function SkillLibrary() {
             default:
                 return 'bg-gray-100 text-gray-700';
         }
+    };
+
+    const corpusClassBadge = (skill: Skill) => {
+        if (skill.corpusClass === 'TRUSTED_FOR_VALUE_PROOF') {
+            return {
+                className: 'bg-emerald-100 text-emerald-800',
+                label: skill.trustedBenchmarkSurface ? t('skills.trustedBenchmark') : t('skills.trustedSupporting'),
+            };
+        }
+        if (skill.corpusClass === 'REVIEW_REQUIRED') {
+            return {
+                className: 'bg-amber-100 text-amber-800',
+                label: t('skills.reviewRequired'),
+            };
+        }
+        return null;
     };
 
     const qualityBadges: Record<string, string> = {
@@ -316,6 +334,11 @@ export function SkillLibrary() {
                                                 {skill.difficulty === 'Easy' && <span className="text-[10px] bg-green-100 text-green-800 px-1.5 py-0.5 rounded">{t('skills.easy')}</span>}
                                                 {skill.difficulty === 'Medium' && <span className="text-[10px] bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded">{t('skills.med')}</span>}
                                                 {skill.difficulty === 'Advanced' && <span className="text-[10px] bg-red-100 text-red-800 px-1.5 py-0.5 rounded">{t('skills.adv')}</span>}
+                                                {corpusClassBadge(skill) && (
+                                                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${corpusClassBadge(skill)?.className}`}>
+                                                        {corpusClassBadge(skill)?.label}
+                                                    </span>
+                                                )}
                                                 <span className={`text-[10px] px-1.5 py-0.5 rounded ${uatBadgeClasses(skill.uatStatus)}`}>
                                                     {skill.uatStatus || t('skills.notRun')}
                                                 </span>
@@ -335,6 +358,15 @@ export function SkillLibrary() {
                     <div className="p-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('skills.domainReport')}</h3>
                         <p className="text-xs text-gray-500 mt-1">{t('skills.domainReportDesc')}</p>
+                        {indexMeta && (
+                            <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-800">
+                                {t('skills.frontDoorNotice')
+                                    .replace('{frontDoor}', String(indexMeta.frontDoorSkills))
+                                    .replace('{trusted}', String(indexMeta.trustedMappedSkills))
+                                    .replace('{review}', String(indexMeta.reviewMappedSkills))
+                                    .replace('{quarantined}', String(indexMeta.quarantinedSkills))}
+                            </div>
+                        )}
                         <div className="mt-3 flex flex-wrap gap-3 text-xs text-gray-600">
                             <span className="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700">
                                 {t('skills.totalSkills')}: {overallSkillCount}
@@ -595,6 +627,11 @@ export function SkillLibrary() {
                                                     {t('skills.scope')}: {selectedSkill.authorityScope}
                                                 </span>
                                             )}
+                                            {corpusClassBadge(selectedSkill) && (
+                                                <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${corpusClassBadge(selectedSkill)?.className}`}>
+                                                    {corpusClassBadge(selectedSkill)?.label}
+                                                </span>
+                                            )}
                                             {selectedSkill.specGate && (
                                                 <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${specGateBadgeClasses(selectedSkill.specGate)}`}>
                                                     {t('skills.specGate')}: {selectedSkill.specGate}
@@ -625,6 +662,11 @@ export function SkillLibrary() {
                                                     {t('skills.specQualityLabel')}: {selectedSkill.specQuality}
                                                 </span>
                                             )}
+                                        </div>
+                                    )}
+                                    {selectedSkill.corpusNote && (
+                                        <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
+                                            {selectedSkill.corpusNote}
                                         </div>
                                     )}
                                     {linkedTemplates.length > 0 && (

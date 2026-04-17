@@ -50,7 +50,7 @@ const TOUR_STEPS: Record<Lang, DriveStep[]> = {
             element: '#tour-nav-skills',
             popover: {
                 title: '📚 Skill Library',
-                description: '12 domains × 124 skills. Xem skill → nhấn 📝 Dùng Template để chuyển sang template tương ứng.',
+                description: 'Thư viện skill front-door đã sync theo GC-044: chỉ surfacing trusted/review subset. Legacy/reject đã bị quarantine khỏi explorer mặc định.',
                 side: 'bottom',
                 align: 'center',
             },
@@ -130,7 +130,7 @@ const TOUR_STEPS: Record<Lang, DriveStep[]> = {
             element: '#tour-nav-skills',
             popover: {
                 title: '📚 Skill Library',
-                description: '12 domains × 124 skills. View skill → click 📝 Use Template to jump to matching template.',
+                description: 'The front-door skill library is now synced to GC-044: only trusted/review subset surfaces are shown. Legacy/rejected items are quarantined from the default explorer.',
                 side: 'bottom',
                 align: 'center',
             },

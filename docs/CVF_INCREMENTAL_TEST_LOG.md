@@ -2139,3 +2139,25 @@ Utility and guard:
   - batch wrappers that own `now` now thread the same clock into nested contract creation where supported
   - fresh tranche selection now has a machine-readable inheritance surface at `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`, so later agents do not need to re-scan already-classified surfaces by default
   - EPF `dispatch.consumer.pipeline.test.ts` fixture now matches current `GuardPipelineResult` shape and no longer carries stale `pipelineHash`
+## [2026-04-17] Batch: W104-T1 — Skill Library Trusted Subset Sync
+- Tranche: W104-T1 | Class: REALIZATION | Scope: governed `/skills` front-door + spec export inheritance sync
+- Web surfaces:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillDetailView.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillSearchBar.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillPlanner.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SpecExport.tsx`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/index.ts`
+- Data/build surfaces:
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/scripts/build-skill-index.js`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/scripts/skill-corpus-governance.js`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/data/skill-template-map.json`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/data/skills-index.json`
+- Verification:
+  - `npm run test:run -- src/components/SkillSearch.test.tsx src/components/SkillPlanner.test.tsx src/components/SkillLibrary.test.tsx src/components/SkillLibrary.i18n.test.tsx src/components/SkillDetailView.test.tsx src/components/SpecExport.test.tsx src/lib/templates/index.test.ts` -> 118 tests, 0 failures
+  - `npx tsc --noEmit` -> pass
+  - `npm run build` -> pass
+- Notes:
+  - `/skills`, search, and planner now consume the same governed front-door subset rather than mixed legacy corpus inputs
+  - front-door corpus is reduced to governed visible skills; quarantined skills remain off the public path
+  - exported specs now inherit non-coder success, governed response, and knowledge-context guidance aligned with current CVF posture

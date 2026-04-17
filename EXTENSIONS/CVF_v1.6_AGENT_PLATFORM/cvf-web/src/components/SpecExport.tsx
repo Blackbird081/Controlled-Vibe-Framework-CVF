@@ -78,7 +78,6 @@ const specLabels = {
     },
 };
 
-// CVF Governance Rules for Mode 2
 const governanceRules = {
     en: `
 ## ⚠️ CVF GOVERNANCE RULES (AI MUST FOLLOW)
@@ -152,7 +151,6 @@ const validationHooks = {
 `
 };
 
-// CVF Full Mode: 5-Phase Protocol
 const fullModeProtocol = {
     en: `
 ---
@@ -689,7 +687,6 @@ Tạo output theo format intake và chờ xác nhận.
 `
 };
 
-// Generate spec with mode and language
 function generateSpec(
     template: Template,
     values: Record<string, string>,
@@ -699,7 +696,6 @@ function generateSpec(
 ): string {
     const date = new Date().toISOString().split('T')[0];
 
-    // Build user input section
     const userInputLines = Object.entries(values)
         .filter(([, value]) => value && value.trim())
         .map(([key, value]) => {
@@ -709,7 +705,6 @@ function generateSpec(
         })
         .join('\n');
 
-    // Build expected output section
     const expectedOutput = template.outputExpected
         ?.map(item => `- ${item}`)
         .join('\n') || '- Comprehensive analysis\n- Actionable recommendations';
@@ -729,6 +724,9 @@ function generateSpec(
         task: 'Nhiệm vụ',
         expectedOutput: 'Định dạng kết quả mong muốn',
         outputTemplate: 'Template đầu ra',
+        nonCoderStandard: 'Chuẩn Thành Công Cho Non-Coder',
+        governedResponseRules: 'Quy tắc Phản hồi Governed',
+        knowledgePreference: 'Ưu tiên Knowledge Context',
         instructions: 'Hướng dẫn cho AI',
         instructionList: [
             'Giải quyết tất cả các tiêu chí thành công',
@@ -755,6 +753,9 @@ function generateSpec(
         task: 'Task',
         expectedOutput: 'Expected Output Format',
         outputTemplate: 'Output Template',
+        nonCoderStandard: 'CVF Non-Coder Success Standard',
+        governedResponseRules: 'Governed Response Rules',
+        knowledgePreference: 'Knowledge Context Preference',
         instructions: 'Instructions for AI',
         instructionList: [
             'Addresses all the success criteria listed in the Task section',
@@ -771,13 +772,11 @@ function generateSpec(
         modeFull: 'Full Mode (5-Phase)',
     };
 
-    // Generate intent
     let intent = template.intentPattern;
     Object.entries(values).forEach(([key, value]) => {
         intent = intent.replace(new RegExp(`\\[${key}\\]`, 'g'), value || 'N/A');
     });
 
-    // Get mode label
     const modeLabel = mode === 'full' ? labels.modeFull : mode === 'governance' ? labels.modeGovernance : labels.modeSimple;
 
     const requiredFields = template.fields.filter(field => field.required);
@@ -795,7 +794,6 @@ function generateSpec(
         ].join('\n')
         : labels.noRequired;
 
-    // Base spec
     let spec = `---
 # ${labels.specTitle}
 **${labels.generated}:** ${date}
@@ -854,17 +852,56 @@ ${executionConstraints[lang]}
 ${validationHooks[lang]}
 `;
 
-    // Add governance rules for mode 2
+    spec += `
+---
+
+## 🧭 ${labels.nonCoderStandard}
+
+${lang === 'vi'
+            ? `- Kết quả phải đủ actionable cho non-coder, không chỉ mô tả chung chung.
+- Phải bám sát input đã cung cấp, không rơi về lời khuyên generic.
+- Phải cover đủ output shape chính của task từ đầu đến cuối.
+- Phải governance-safe: không gợi ý bypass, shortcut nguy hiểm, hay giả định ngầm.
+- Nếu không thể hoàn thành an toàn, phải đưa ra safe next step rõ ràng thay vì kết thúc bế tắc.`
+            : `- The result must be actionable for a non-coder, not just descriptive.
+- It must stay tailored to the provided inputs instead of drifting into generic advice.
+- It must cover the main requested output shape end-to-end.
+- It must remain governance-safe: no bypass suggestions, unsafe shortcuts, or hidden assumptions.
+- If the task cannot be completed safely, provide the clearest safe next step instead of ending in a dead end.`}
+
+---
+
+## 🛡️ ${labels.governedResponseRules}
+
+${lang === 'vi'
+            ? `- Nếu task được phép, trả lời rõ ràng và đi thẳng vào việc.
+- Nếu task phải BLOCK hoặc NEEDS_APPROVAL, giải thích lý do bằng ngôn ngữ dễ hiểu.
+- Khi bị chặn hoặc cần approval, phải nêu đường đi tiếp an toàn mà user có thể thực hiện.
+- Làm rõ implication về risk / review / approval, không giấu trong thuật ngữ mơ hồ.`
+            : `- If the task is allowed, answer directly and clearly.
+- If the task should be BLOCKED or marked NEEDS_APPROVAL, explain why in plain language.
+- When blocked or approval-gated, provide a safe next-step path the user can actually follow.
+- Make risk, review, or approval implications visible instead of burying them in jargon.`}
+
+---
+
+## 🧠 ${labels.knowledgePreference}
+
+${lang === 'vi'
+            ? `- Nếu user cung cấp domain facts, policy nội bộ, hoặc project context đã govern, hãy ưu tiên phần context đó hơn kiến thức tổng quát.
+- Nếu thiếu knowledge context quan trọng, hãy nói rõ cần bổ sung gì thay vì đoán.
+- Không tự bịa domain facts riêng tư hoặc thông tin nội bộ chưa được cung cấp.`
+            : `- If the user provides governed domain facts, internal policy text, or project-specific context, prioritize that context over generic training knowledge.
+- If important knowledge context is missing, state exactly what context would improve the result instead of guessing.
+- Do not invent proprietary domain facts or internal details that were not provided.`}
+`;
+
     if (mode === 'governance') {
         spec += governanceRules[lang];
     }
-
-    // Add full CVF protocol for mode 3
     if (mode === 'full') {
         spec += fullModeProtocol[lang];
     }
-
-    // Auto-detect governance context and inject governance block
     if (mode === 'governance' || mode === 'full') {
         const detected = autoDetectGovernance({
             templateCategory: template.category,
@@ -880,7 +917,6 @@ ${validationHooks[lang]}
         spec += buildGovernanceSpecBlock(govState, lang);
     }
 
-    // Add standard instructions for all modes
     spec += `
 ---
 
@@ -923,7 +959,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
     const specGateStatus: 'PASS' | 'CLARIFY' | 'FAIL' = specGate.status;
     const canSendToAgent = specGateStatus === 'PASS';
 
-    // Auto-detect governance for risk warning
     const autoDetected: AutoDetectResult = autoDetectGovernance({
         templateCategory: template.category,
         messageText: Object.values(values).join(' '),
@@ -931,7 +966,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
     });
     const riskExceedsPhase = (exportMode === 'governance' || exportMode === 'full')
         && !isRiskAllowed(autoDetected.riskLevel, autoDetected.phase);
-
     const specGateLabels = exportLang === 'vi'
         ? {
             pass: 'Spec Gate: PASS — Đủ input để thực thi',
@@ -988,7 +1022,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 {labels.description}
             </p>
 
-            {/* Export Mode Selector */}
             <div className="mb-4">
                 <div className="text-xs text-gray-500 mb-2">{modes.modeLabel}:</div>
                 <div className="grid grid-cols-3 gap-2">
@@ -1036,13 +1069,11 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                     </button>
                 </div>
 
-                {/* Workflow Visualizer */}
                 <div className="mt-4">
                     <WorkflowVisualizer mode={exportMode} compact />
                 </div>
             </div>
 
-            {/* Mode Info Banner */}
             {exportMode === 'full' && (
                 <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
                     <p className="text-xs text-green-700 dark:text-green-300">
@@ -1054,7 +1085,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 </div>
             )}
 
-            {/* Governance Auto-Detect Info */}
             {(exportMode === 'governance' || exportMode === 'full') && (
                 <div className={`mb-4 p-3 rounded-lg border ${riskExceedsPhase
                     ? 'bg-red-50 dark:bg-red-900/30 border-red-300 dark:border-red-700'
@@ -1098,7 +1128,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 </div>
             )}
 
-            {/* Language Selector */}
             <div className="mb-4">
                 <div className="text-xs text-gray-500 mb-1">{labels.langLabel}:</div>
                 <div className="flex gap-2">
@@ -1123,7 +1152,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 mb-4">
                 <button
                     onClick={handleCopyToClipboard}
@@ -1161,7 +1189,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                     {showPreview ? labels.hidePreviewBtn : labels.previewBtn}
                 </button>
 
-                {/* Send to Agent Button */}
                 {onSendToAgent && (
                     <button
                         onClick={() => {
@@ -1219,7 +1246,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 )}
             </div>
 
-            {/* Quick Copy for Specific AIs */}
             <div className="flex flex-wrap gap-2 mb-4">
                 <span className="text-xs text-gray-500 dark:text-gray-400">{labels.quickPaste}</span>
                 <a
@@ -1248,7 +1274,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 </a>
             </div>
 
-            {/* Preview */}
             {showPreview && (
                 <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto">
                     <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">
@@ -1257,7 +1282,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 </div>
             )}
 
-            {/* Instructions */}
             <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
                 <p className="text-xs text-blue-700 dark:text-blue-300">
                     <strong>{exportLang === 'vi' ? 'Hướng dẫn' : 'Instructions'}:</strong> {labels.instruction}
@@ -1267,7 +1291,6 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
     );
 }
 
-// Keep the old function for backward compatibility
 export function generateCompleteSpec(
     template: Template,
     values: Record<string, string>,

@@ -10,7 +10,8 @@
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
 [![Guard Contract](https://img.shields.io/badge/Guard%20Contract-187%20tests%20pass-brightgreen.svg)](EXTENSIONS/CVF_GUARD_CONTRACT/)
 [![MCP Bridge](https://img.shields.io/badge/MCP%20Bridge-4%20endpoints%20active-blue.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/)
-[![Skills](https://img.shields.io/badge/skills-141%20%C3%97%2012%20domains-blue.svg)](EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
+[![Non-Coder Value](https://img.shields.io/badge/non--coder%20value-1%20provider%20proven-brightgreen.svg)](docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md)
+[![Knowledge Benefit](https://img.shields.io/badge/knowledge%20benefit-%2B0.775%20delta-brightgreen.svg)](docs/assessments/CVF_W102_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md)
 [![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
 [![CI](https://img.shields.io/badge/CI-governed%20verification%20active-brightgreen.svg)](.github/workflows/cvf-ci.yml)
 [![Architecture](https://img.shields.io/badge/Architecture-v3.7--W46T1%20CLOSURE--ASSESSED-blue.svg)](docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md)
@@ -63,27 +64,49 @@ What CVF is good at:
 - keeping provider choice user-owned while routing, policy, and evidence stay CVF-governed
 - preserving reconciliation records so future audits are faster and cheaper
 
-## Core Value: Governed Provider Hub
+## What CVF Can Publicly Claim Today
 
-CVF is not meant to be a wrapper for one model vendor. The product-level value is a **governed provider hub**:
+The strongest public-safe claim CVF can make right now is:
+
+- **on one validated provider lane, CVF has proven real non-coder value**
+- the governed path preserves normal-task usefulness
+- risky requests are blocked or guided instead of left as prompt roulette
+- `NEEDS_APPROVAL` is no longer a dead end
+- risk visibility and follow-up rounds now exist in the main non-coder flow
+- knowledge-native context now improves live `/api/execute` outcomes, not just governance docs
+
+Public-safe product wording:
+
+> CVF helps non-coders use AI through a governed path that is safer, clearer, and more reliable than unguided prompting.
+
+Boundaries that still matter:
+
+- this claim is currently **proven on one provider lane**, not all providers
+- multi-provider robustness is still a future portability problem, not a proven public claim
+- the public `Skill Library` front door is now synced to a governed subset, but benchmark truth still comes only from the `GC-044` trusted subset
+
+Canonical claim boundary:
+
+- [Public Non-Coder Value Statement](docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md)
+
+## Core Value: Governed AI For Non-Coders
+
+CVF is building toward a governed provider hub, but the currently proven product value is simpler and stronger:
+
+- **CVF gives non-coders a governed AI path**
+- provider choice may evolve, but governance, risk handling, approval flow, and evidence discipline remain CVF-owned
+- once one provider lane proves real value, additional providers become a portability and robustness task rather than the first proof-of-value task
+
+Long-term hub direction:
 
 - users can enable the provider keys they actually want to use
 - CVF keeps routing, policy, trace capture, and evidence discipline consistent across those providers
 - provider choice stays flexible, while governance stays centralized
 
-For product-value proof, CVF uses the concept of a **run lane**:
-
-- a run lane is one governed `provider + model` configuration admitted by the CVF hub
-- when a user enables `Gemini`, `Alibaba`, `OpenAI`, `Claude`, or another supported provider, that configuration can become a separate validation lane
-- CVF should prove value in two ways:
-  - across multiple run lanes, to show the hub is truly model-agnostic in real use
-  - within a matched run lane, to show the extra value comes from CVF governance rather than from switching to a different model
-
-This is the key distinction between "CVF looks well-architected" and "CVF has proven product value."
-
 What CVF is not claiming today:
 
-- full parity across every extension family
+- full parity across every provider lane
+- universal quality across every legacy skill or template in the current web library
 - fully unified controlled autonomy on every channel
 - platform breadth comparable to larger orchestration ecosystems
 
@@ -160,13 +183,14 @@ Current posture on the active reference path:
 |---|---|
 | Architecture baseline | `v3.7-W46T1 CLOSURE-ASSESSED` |
 | MC sequence | `MC1-MC5 FULLY COMPLETE` |
-| PVV one-provider checkpoint | `ALIBABA MULTI-ROLE CONFIRMED / PAUSED BY OPERATOR` |
+| One-provider non-coder value | `PROVEN — governed path value proven on Alibaba lane` |
+| Knowledge-native execute-path value | `PROVEN — injected 0.950 vs raw 0.175 (+0.775 delta)` |
 | Post-closure integration wave | `CVF ADDING NEW + Windows_Skill_Normalization INTEGRATED` |
 | Runnable inherited upgrade surface | ``cvf-web`` `/api/governance/external-assets/prepare` |
-| Latest verified local counts | CPF 2999 / EPF 1301 / GEF 625 / LPF 1493 / cvf-web 1872 |
+| Latest verified local counts | CPF 2999 / EPF 1301 / GEF 625 / LPF 1493 / cvf-web 2027 |
 | Canonical phase model | `ALIGNED` |
 | Hardened default guard path | `ALIGNED` |
-| Web non-coder semantics | `SUBSTANTIALLY ALIGNED` |
+| Web non-coder semantics | `VALUE PROVEN (1 provider)` |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` |
@@ -175,12 +199,30 @@ Current posture on the active reference path:
 Read this status as:
 
 - the MC1-MC5 architecture baseline is complete and CLOSURE-ASSESSED
-- the one-provider / Alibaba / multi-role PVV checkpoint is sufficient for the current internal pause point
+- the one-provider governed path now has evidence-backed non-coder value
+- the knowledge-native execute path now has live benefit evidence after `W101-T1` + `W102-T1`
 - the post-closure integration wave is no longer docs-only; a bounded runnable governance surface now exists in `cvf-web`
-- the latest verified local baseline is CPF `2999`, EPF `1301`, GEF `625`, LPF `1493`, and `cvf-web` `1872`
+- the latest verified local baseline is CPF `2999`, EPF `1301`, GEF `625`, LPF `1493`, and `cvf-web` `2027`
 - the active path has no open tranche and remains `SUBSTANTIALLY DELIVERED`
 - relocation is closed-by-default; next work should follow the Post-MC5 Continuation Strategy
 - future expansion must go through scan continuity review, reassessment, or a fresh bounded `GC-018`
+
+### Public Skill Library Truth Boundary
+
+The public web `Skill Library` is now a **governed front-door subset explorer**.
+
+That means:
+
+- front-door discovery only shows `TRUSTED_FOR_VALUE_PROOF` and `REVIEW_REQUIRED` surfaces
+- legacy/reject/unscreened surfaces are quarantined from front-door discovery
+- raw visible counts still must not be treated as proof that every visible skill is benchmark-trusted
+- benchmark truth and public-value proof remain bound to `TRUSTED_FOR_VALUE_PROOF`
+
+The governing authorities for public-value proof remain:
+
+- [Template / Skill Corpus Rescreen Standard](docs/reference/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_STANDARD_2026-04-14.md)
+- [Corpus Rescreen D2 Matrix](docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md)
+- [Corpus Rescreen D3 Trusted Subset](docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md)
 
 ### Newly Runnable Upgrade Surface
 

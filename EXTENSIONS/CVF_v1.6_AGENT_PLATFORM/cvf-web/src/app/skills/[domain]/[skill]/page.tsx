@@ -4,10 +4,8 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SkillDetailView } from '@/components/SkillDetailView';
-import { Skill, SkillCategory } from '@/types/skill';
+import { Skill, SkillCategory, SkillIndexPayload } from '@/types/skill';
 import { useLanguage } from '@/lib/i18n';
-
-type SkillIndexPayload = SkillCategory[] | { categories?: SkillCategory[] };
 
 export default function SkillDetailPage() {
     const params = useParams();
@@ -30,9 +28,11 @@ export default function SkillDetailPage() {
                 if (!response.ok) {
                     throw new Error('Failed to load skill index');
                 }
-                const payload = await response.json() as SkillIndexPayload;
-                const categories = Array.isArray(payload) ? payload : (payload.categories ?? []);
-                const category = categories.find((item) => item.id === domain);
+                const payload = await response.json() as SkillIndexPayload | SkillCategory[];
+                const categories: SkillCategory[] = Array.isArray(payload) ? payload : (payload.categories ?? []);
+                const archiveCategories: SkillCategory[] = Array.isArray(payload) ? [] : (payload.archiveCategories ?? []);
+                const combinedCategories = [...categories, ...archiveCategories];
+                const category = combinedCategories.find((item) => item.id === domain);
                 const found = category?.skills?.find((item) => item.id === skillId) ?? null;
                 if (active) {
                     setSkill(found);

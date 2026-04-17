@@ -176,8 +176,8 @@ export const DOCS: DocCategory[] = [
                 slug: 'skill-system',
                 title: { vi: 'Hệ thống Skill', en: 'Skill System' },
                 desc: {
-                    vi: '124 skills, 12 domains — cách tìm, dùng, và tạo skill mới.',
-                    en: '124 skills, 12 domains — how to find, use, and create new skills.',
+                    vi: 'Thư viện skill theo domain — cách tìm, dùng, và hiểu việc front-door UI đã sync theo trusted/review subset, trong khi benchmark truth vẫn chỉ dựa trên TRUSTED_FOR_VALUE_PROOF.',
+                    en: 'Domain-based skill library — how to find, use, and understand that the front-door UI is now synced to the trusted/review subset, while benchmark truth still depends on TRUSTED_FOR_VALUE_PROOF only.',
                 },
             },
             {

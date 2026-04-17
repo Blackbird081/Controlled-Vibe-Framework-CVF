@@ -34,6 +34,28 @@ const specGateBadgeClasses = (status?: string) => {
     }
 };
 
+const corpusClassBadge = (skill: Skill, t: (key: string) => string) => {
+    if (skill.corpusClass === 'TRUSTED_FOR_VALUE_PROOF') {
+        return {
+            className: 'bg-emerald-100 text-emerald-800',
+            label: skill.trustedBenchmarkSurface ? t('skills.trustedBenchmark') : t('skills.trustedSupporting'),
+        };
+    }
+    if (skill.corpusClass === 'REVIEW_REQUIRED') {
+        return {
+            className: 'bg-amber-100 text-amber-800',
+            label: t('skills.reviewRequired'),
+        };
+    }
+    if (skill.corpusClass === 'LEGACY_LOW_CONFIDENCE' || skill.corpusClass === 'REJECT_FOR_NON_CODER_FRONTDOOR' || skill.corpusClass === 'UNSCREENED_LEGACY') {
+        return {
+            className: 'bg-slate-100 text-slate-700',
+            label: t('skills.quarantined'),
+        };
+    }
+    return null;
+};
+
 export function SkillDetailView({ skill }: { skill: Skill }) {
     const [viewMode, setViewMode] = useState<ViewMode>('skill');
     const { t } = useLanguage();
@@ -109,6 +131,11 @@ export function SkillDetailView({ skill }: { skill: Skill }) {
                             {t('skills.scope')}: {skill.authorityScope}
                         </span>
                     )}
+                    {corpusClassBadge(skill, t) && (
+                        <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${corpusClassBadge(skill, t)?.className}`}>
+                            {corpusClassBadge(skill, t)?.label}
+                        </span>
+                    )}
                     {skill.specGate && (
                         <span className={`px-2 py-1 text-[11px] font-semibold rounded-full ${specGateBadgeClasses(skill.specGate)}`}>
                             {t('skills.specGate')}: {skill.specGate}
@@ -138,6 +165,11 @@ export function SkillDetailView({ skill }: { skill: Skill }) {
                         </span>
                     )}
                 </div>
+                {skill.corpusNote && (
+                    <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
+                        {skill.corpusNote}
+                    </div>
+                )}
             </div>
 
             <div className="p-6 overflow-y-auto max-h-[70vh]">

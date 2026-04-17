@@ -8,7 +8,8 @@ import {
   isReasoningLoaded,
   type SkillPlan,
 } from '@/lib/skill-planner';
-import { parseCSV, isLoaded, loadSkills } from '@/lib/skill-search';
+import { isLoaded, loadSkills } from '@/lib/skill-search';
+import { fetchFrontDoorSkillRecords } from '@/lib/frontdoor-skills';
 
 // ─── Props ───────────────────────────────────────────────────────────
 
@@ -58,7 +59,7 @@ export function SkillPlanner({
   const [dataReady, setDataReady] = useState(isReasoningLoaded());
   const [error, setError] = useState('');
 
-  // Load reasoning + skills data
+  // Load reasoning + front-door trusted subset data
   useEffect(() => {
     if (isReasoningLoaded()) {
       setDataReady(true);
@@ -67,22 +68,17 @@ export function SkillPlanner({
 
     async function load() {
       try {
-        const [skillsRes, reasoningRes] = await Promise.all([
-          fetch('/data/skills_index.csv'),
+        const [skills, reasoningRes] = await Promise.all([
+          fetchFrontDoorSkillRecords(),
           fetch('/data/skill_reasoning.csv'),
         ]);
 
-        if (!skillsRes.ok || !reasoningRes.ok) {
+        if (!reasoningRes.ok) {
           setError('Failed to load skill data');
           return;
         }
 
-        const [skillsText, reasoningText] = await Promise.all([
-          skillsRes.text(),
-          reasoningRes.text(),
-        ]);
-
-        const skills = parseCSV(skillsText);
+        const reasoningText = await reasoningRes.text();
         const rules = parseReasoningCSV(reasoningText);
 
         if (skills.length > 0 && rules.length > 0) {

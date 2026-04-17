@@ -94,6 +94,24 @@ export function generateCompleteSpec(
 - Include a Success Criteria Check.
 - If any item is missing, mark the result as "Not Ready" and list what's missing.`;
 
+    const nonCoderStandard = `## 🧭 CVF Non-Coder Success Standard
+- The result must be actionable for a non-coder, not just descriptive.
+- Tailor the output to the provided inputs instead of falling back to generic advice.
+- Cover the main requested output shape end-to-end.
+- Stay governance-safe: do not suggest bypasses, unsafe shortcuts, or hidden assumptions.
+- If the request cannot be completed safely, provide the clearest safe next step instead of ending in a dead end.`;
+
+    const governedResponseRules = `## 🛡️ Governed Response Rules
+- If the task is allowed, answer directly and clearly.
+- If the task should be blocked or needs approval, explain why in plain language.
+- When blocked or approval-gated, provide a safe next-step path the user can actually follow.
+- Make risk, review, or approval implications visible instead of hiding them in jargon.`;
+
+    const knowledgePreference = `## 🧠 Knowledge Context Preference
+- If the user provides governed domain context, internal policy text, or project-specific facts, prioritize that context over generic training knowledge.
+- If important knowledge context is missing, say exactly what context would improve the result instead of guessing.
+- Do not invent proprietary domain facts that were not provided.`;
+
     const spec = `---
 # CVF Task Specification
 **Generated:** ${date}
@@ -141,6 +159,18 @@ ${executionConstraints}
 ---
 
 ${validationHooks}
+
+---
+
+${nonCoderStandard}
+
+---
+
+${governedResponseRules}
+
+---
+
+${knowledgePreference}
 
 ---
 

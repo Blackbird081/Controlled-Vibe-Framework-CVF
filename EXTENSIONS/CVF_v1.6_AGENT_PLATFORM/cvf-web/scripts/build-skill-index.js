@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { loadSkillCorpusGovernance } = require('./skill-corpus-governance');
 
 const BASE_DIR = path.resolve(__dirname, '..');
 const SKILLS_ROOT = path.resolve(BASE_DIR, '../../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS');
@@ -270,12 +271,15 @@ function loadSpecReportMap() {
 function buildSkillIndex() {
     if (!fs.existsSync(SKILLS_ROOT)) {
         console.warn(`Skills root not found: ${SKILLS_ROOT}`);
-        return [];
+        return { categories: [], archiveCategories: [], meta: {} };
     }
 
     const uatReportMap = loadUatReportMap();
     const specReportMap = loadSpecReportMap();
+    const corpusGovernance = loadSkillCorpusGovernance();
     const categories = [];
+    const archiveCategories = [];
+    let totalScannedSkills = 0;
 
     const entries = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true });
     for (const entry of entries) {
@@ -285,13 +289,15 @@ function buildSkillIndex() {
 
         const categoryPath = path.join(SKILLS_ROOT, folderName);
         const files = fs.readdirSync(categoryPath);
-        const skills = [];
+        const visibleSkills = [];
+        const archivedSkills = [];
 
         for (const file of files) {
             if (!file.endsWith('.skill.md')) continue;
             const filePath = path.join(categoryPath, file);
             const content = fs.readFileSync(filePath, 'utf-8');
             const skillId = file.replace('.skill.md', '');
+            totalScannedSkills += 1;
             const uatPath = path.join(UAT_ROOT, `UAT-${skillId}.md`);
             const uatContent = fs.existsSync(uatPath) ? fs.readFileSync(uatPath, 'utf-8') : '';
             const fallbackTitle = deriveTitleFromFilename(skillId);
@@ -323,11 +329,13 @@ function buildSkillIndex() {
             const fallbackPhases = DOMAIN_PHASES_MAP[folderName] || DOMAIN_PHASES_MAP[domainValue.toLowerCase().replace(/ /g, '_')] || 'Discovery, Design';
             const fallbackAutonomy = RISK_AUTONOMY[fallbackRisk] || 'Human confirmation required';
             const fallbackScope = fallbackRisk === 'R0' ? 'Informational' : (fallbackRisk === 'R3' || fallbackRisk === 'R4') ? 'Strategic' : 'Tactical';
+            const governanceKey = `${folderName}::${skillId}`;
+            const governanceEntry = corpusGovernance.skillMap.get(governanceKey);
 
             const titleCandidate = titleMatch ? titleMatch[1].trim() : '';
             const finalTitle = isTitleTrustworthy(titleCandidate, skillId) ? titleCandidate : fallbackTitle;
 
-            skills.push({
+            const skillRecord = {
                 id: skillId,
                 title: finalTitle,
                 domain: domainValue,
@@ -347,33 +355,70 @@ function buildSkillIndex() {
                 specScore,
                 specQuality,
                 specGate,
-            });
+                corpusClass: governanceEntry ? governanceEntry.corpusClass : corpusGovernance.classes.UNSCREENED,
+                frontDoorVisible: governanceEntry ? governanceEntry.frontDoorVisible : false,
+                frontDoorTier: governanceEntry ? governanceEntry.frontDoorTier : 'QUARANTINED',
+                trustedBenchmarkSurface: governanceEntry ? governanceEntry.trustedBenchmarkSurface : false,
+                hasRestrictedLinks: governanceEntry ? governanceEntry.hasRestrictedLinks : false,
+                linkedTemplates: governanceEntry ? governanceEntry.linkedTemplates : [],
+                corpusNote: governanceEntry ? governanceEntry.corpusNote : 'Unscreened legacy surface; excluded from front-door truth until classified.',
+            };
+
+            if (skillRecord.frontDoorVisible) {
+                visibleSkills.push(skillRecord);
+            } else {
+                archivedSkills.push(skillRecord);
+            }
         }
 
-        if (skills.length > 0) {
-            const categoryName = folderName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        const categoryName = folderName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        if (visibleSkills.length > 0) {
             categories.push({
                 id: folderName,
                 name: categoryName,
-                skills,
+                skills: visibleSkills,
+            });
+        }
+
+        if (archivedSkills.length > 0) {
+            archiveCategories.push({
+                id: folderName,
+                name: categoryName,
+                skills: archivedSkills,
             });
         }
     }
 
-    return categories;
+    return {
+        generatedAt: new Date().toISOString(),
+        categories,
+        archiveCategories,
+        meta: {
+            totalScannedSkills,
+            frontDoorSkills: categories.reduce((sum, category) => sum + category.skills.length, 0),
+            quarantinedSkills: archiveCategories.reduce((sum, category) => sum + category.skills.length, 0),
+            trustedMappedSkills: corpusGovernance.summary.trustedSkills,
+            reviewMappedSkills: corpusGovernance.summary.reviewSkills,
+            trustedBenchmarkSkills: corpusGovernance.summary.trustedBenchmarkSkills,
+            governanceSource: [
+                'docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md',
+                'docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md',
+            ],
+        },
+    };
 }
 
-function writeIndex(categories) {
+function writeIndex(indexPayload) {
     const outDir = path.resolve(BASE_DIR, 'public', 'data');
     fs.mkdirSync(outDir, { recursive: true });
     const outPath = path.join(outDir, 'skills-index.json');
-    fs.writeFileSync(outPath, JSON.stringify(categories, null, 2));
+    fs.writeFileSync(outPath, JSON.stringify(indexPayload, null, 2));
     return outPath;
 }
 
-const categories = buildSkillIndex();
-const outPath = writeIndex(categories);
-const totalSkills = categories.reduce((sum, category) => sum + category.skills.length, 0);
+const indexPayload = buildSkillIndex();
+const outPath = writeIndex(indexPayload);
 console.log(`Generated skill index: ${outPath}`);
-console.log(`Total categories: ${categories.length}`);
-console.log(`Total skills: ${totalSkills}`);
+console.log(`Front-door categories: ${indexPayload.categories.length}`);
+console.log(`Front-door skills: ${indexPayload.meta.frontDoorSkills}`);
+console.log(`Quarantined skills: ${indexPayload.meta.quarantinedSkills}`);

@@ -50,6 +50,15 @@ previously triggered enforcement BLOCK correctly but `lookupGuidedResponse()` re
 
 ## **E2E VALUE: PROVEN** ✅ (all 5 metrics MET)
 
+### OFU-3 disposition (classification semantics)
+
+`W100-T1` does **not** change the B6 safety-filter path. B6 remains intercepted before
+enforcement, as already documented in `W98-T1`. The benchmark script's Metric B
+denominator counts only Class B runs that reach the enforcement layer as `BLOCK` or
+`NEEDS_APPROVAL`; therefore B6 stays **outside** the guided-response denominator rather
+than counting as a missing guided response. This is accepted as a bounded
+classification-semantics note, not a remaining product gap.
+
 ---
 
 ## Quality Assessment

@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json() as Record<string, unknown>;
   const record = await appendAuditEvent({
+    evidenceClass: 'FULL_RECORD',
     eventType: String(body.eventType || 'ADMIN_EVENT'),
     actorId: String(body.actorId || session?.userId || 'unknown-user'),
     actorRole: String(body.actorRole || session?.role || 'unknown'),

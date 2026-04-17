@@ -422,3 +422,90 @@ describe('ProcessingScreen — NEEDS_APPROVAL flow (W92-T1)', () => {
     expect(queryByTestId('submit-approval-btn')).toBeNull();
   });
 });
+
+// W96-T1: Risk visibility persist after success
+describe('ProcessingScreen — W96-T1 completion state', () => {
+  const baseProps = {
+    templateName: 'Test Template',
+    templateId: 'test',
+    inputs: { field1: 'value1' },
+    intent: 'do something',
+    onComplete: vi.fn(),
+    onCancel: vi.fn(),
+  };
+
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('shows completion-banner and risk-badge when success response includes riskLevel', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce({
+      json: async () => ({
+        success: true,
+        output: 'Result text',
+        provider: 'anthropic',
+        model: 'claude',
+        enforcement: { status: 'APPROVED', riskGate: { riskLevel: 'R1' } },
+      }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { getByTestId } = render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => {
+      expect(getByTestId('completion-banner')).toBeDefined();
+    });
+
+    expect(getByTestId('view-results-btn')).toBeDefined();
+    expect(getByTestId('risk-badge')).toBeDefined();
+  });
+
+  it('"View Results →" button calls onComplete immediately with output', async () => {
+    const onComplete = vi.fn();
+    const fetchMock = vi.fn().mockResolvedValueOnce({
+      json: async () => ({
+        success: true,
+        output: 'Result text',
+        provider: 'anthropic',
+        model: 'claude',
+        enforcement: { status: 'APPROVED', riskGate: { riskLevel: 'R2' } },
+      }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { getByTestId } = render(
+      <ProcessingScreen {...baseProps} onComplete={onComplete} />
+    );
+
+    await waitFor(() => {
+      expect(getByTestId('view-results-btn')).toBeDefined();
+    });
+
+    getByTestId('view-results-btn').click();
+    expect(onComplete).toHaveBeenCalledWith('Result text');
+  });
+
+  it('existing success path (no riskGate) calls onComplete without showing completion-banner', async () => {
+    const onComplete = vi.fn();
+    const fetchMock = vi.fn().mockResolvedValueOnce({
+      json: async () => ({
+        success: true,
+        output: 'Quick result',
+        provider: 'anthropic',
+        model: 'claude',
+        enforcement: { status: 'APPROVED' },
+      }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { queryByTestId } = render(
+      <ProcessingScreen {...baseProps} onComplete={onComplete} />
+    );
+
+    await waitFor(() => {
+      expect(onComplete).toHaveBeenCalledWith('Quick result');
+    });
+
+    expect(queryByTestId('completion-banner')).toBeNull();
+  });
+});

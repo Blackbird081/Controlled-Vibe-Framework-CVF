@@ -51,6 +51,8 @@ export function ProcessingScreen({
     const [enforcementStatus, setEnforcementStatus] = useState<string | null>(null);
     // W94-T1: Risk badge state
     const [executionRiskLevel, setExecutionRiskLevel] = useState<SafetyRiskLevel | null>(null);
+    // W96-T1: Completion state — set when success+riskLevel; suppresses 300ms path
+    const [completedOutput, setCompletedOutput] = useState<string | null>(null);
 
     // Real API execution
     const executeReal = useCallback(async () => {
@@ -104,9 +106,14 @@ export function ProcessingScreen({
 
             if (data.success && data.output) {
                 setProgress(100);
-                setTimeout(() => {
-                    onComplete(data.output);
-                }, 300);
+                if (badgeLevel) {
+                    // W96-T1: persist badge — completion-banner + useEffect auto-advance
+                    setCompletedOutput(data.output);
+                } else {
+                    setTimeout(() => {
+                        onComplete(data.output);
+                    }, 300);
+                }
                 return true;
             }
 
@@ -203,6 +210,13 @@ export function ProcessingScreen({
 
         return () => clearInterval(interval);
     }, [isVi, onComplete, templateName]);
+
+    // W96-T1: auto-advance after 2000ms when completion state is set
+    useEffect(() => {
+        if (!completedOutput) return;
+        const timer = setTimeout(() => onComplete(completedOutput), 2000);
+        return () => clearTimeout(timer);
+    }, [completedOutput, onComplete]);
 
     useEffect(() => {
         // Try real execution first if we have the required data
@@ -319,6 +333,28 @@ export function ProcessingScreen({
                                 ? 'Quản trị viên sẽ xem xét yêu cầu của bạn. Khi được phê duyệt, bạn có thể thử lại. Khi bị từ chối, bạn sẽ nhận được lý do cụ thể.'
                                 : 'An admin will review your request. Once approved, you can retry your task. If rejected, you will receive a specific reason.'}
                         </p>
+                    </div>
+                )}
+
+                {/* W96-T1: Completion banner — shown when success+riskLevel */}
+                {completedOutput && (
+                    <div
+                        data-testid="completion-banner"
+                        className="mt-3 mb-4 mx-auto max-w-md rounded-lg border border-green-200
+                            dark:border-green-700 bg-green-50 dark:bg-green-950 p-3 text-center"
+                    >
+                        <p className="text-sm font-semibold text-green-800 dark:text-green-200 mb-2">
+                            ✅ {isVi ? 'Xử lý hoàn tất' : 'Processing complete'}
+                        </p>
+                        <button
+                            type="button"
+                            data-testid="view-results-btn"
+                            onClick={() => onComplete(completedOutput)}
+                            className="mt-1 px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white
+                                text-sm font-medium rounded-lg transition-colors"
+                        >
+                            {isVi ? 'Xem kết quả →' : 'View Results →'}
+                        </button>
                     </div>
                 )}
 

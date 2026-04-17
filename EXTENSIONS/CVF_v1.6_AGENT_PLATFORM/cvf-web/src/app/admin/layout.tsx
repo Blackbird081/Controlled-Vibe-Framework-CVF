@@ -21,7 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <div className="text-sm text-gray-500 dark:text-gray-400">Admin Control Plane</div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">Enterprise Console</h1>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-              Signed in as {(session.user.name || session.user.email || 'Admin')} • {(session.user as { role?: string }).role}
+              Signed in as {(session.user?.name || session.user?.email || 'Admin')} • {(session.user as { role?: string } | undefined)?.role || 'N/A'}
             </p>
           </div>
           <nav className="space-y-2">

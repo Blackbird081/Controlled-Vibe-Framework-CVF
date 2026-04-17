@@ -14,6 +14,8 @@ interface ResultViewerProps {
     onRetry: () => void;
     onBack: () => void;
     onSendToAgent?: (content: string) => void;
+    // W97-T1: optional follow-up handler; when provided, shows the follow-up section
+    onFollowUp?: (refinement: string) => void;
 }
 
 type ExportLanguage = 'en' | 'vi';
@@ -53,12 +55,14 @@ const exportLabels = {
     },
 };
 
-export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack, onSendToAgent }: ResultViewerProps) {
+export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack, onSendToAgent, onFollowUp }: ResultViewerProps) {
     const { language } = useLanguage();
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [copied, setCopied] = useState(false);
     const [exportLang, setExportLang] = useState<ExportLanguage>(language as ExportLanguage);
     const [exporting, setExporting] = useState<string | null>(null);
+    // W97-T1: follow-up input state
+    const [followupText, setFollowupText] = useState('');
 
     const labels = exportLabels[exportLang];
 
@@ -472,6 +476,51 @@ ${cleanOutput}
                     <ReactMarkdown>{output}</ReactMarkdown>
                 </div>
             </div>
+
+            {/* W97-T1: Follow-up section — only shown when onFollowUp prop is provided */}
+            {onFollowUp && output && (
+                <div
+                    data-testid="followup-section"
+                    className="mt-6 rounded-xl border border-blue-200 dark:border-blue-700
+                        bg-blue-50 dark:bg-blue-950/40 p-4"
+                >
+                    <p className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-3">
+                        🔄 {language === 'vi' ? 'Bổ sung hoặc làm rõ kết quả' : 'Refine or follow up on this result'}
+                    </p>
+                    <textarea
+                        data-testid="followup-input"
+                        value={followupText}
+                        onChange={(e) => setFollowupText(e.target.value)}
+                        maxLength={500}
+                        rows={3}
+                        placeholder={language === 'vi'
+                            ? 'Bạn muốn điều chỉnh hoặc khám phá thêm điều gì?'
+                            : 'What would you like to adjust or explore next?'}
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-blue-200 dark:border-blue-600
+                            bg-white dark:bg-gray-900 text-gray-900 dark:text-white
+                            placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                            resize-none transition-all"
+                    />
+                    <div className="mt-2 flex justify-end">
+                        <button
+                            type="button"
+                            data-testid="followup-submit-btn"
+                            disabled={followupText.trim().length < 5}
+                            onClick={() => {
+                                if (followupText.trim().length >= 5) {
+                                    onFollowUp(followupText.trim());
+                                    setFollowupText('');
+                                }
+                            }}
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-40
+                                disabled:cursor-not-allowed text-white text-sm font-medium
+                                rounded-lg transition-colors"
+                        >
+                            {language === 'vi' ? 'Chạy tiếp →' : 'Run follow-up →'}
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Action Buttons */}
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">

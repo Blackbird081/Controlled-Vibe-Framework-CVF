@@ -507,4 +507,40 @@ Regular **bold** text`;
             expect(capturedDownload).toMatch(/^cvf-result-business_plan-\d+\.md$/);
         });
     });
+
+    // W97-T1: Multi-Step follow-up UI
+    describe('follow-up section (W97-T1)', () => {
+        it('renders follow-up section when onFollowUp prop is provided and output is present', () => {
+            render(
+                <ResultViewer
+                    {...defaultProps}
+                    onFollowUp={vi.fn()}
+                />
+            );
+            expect(screen.getByTestId('followup-section')).toBeTruthy();
+            expect(screen.getByTestId('followup-input')).toBeTruthy();
+            expect(screen.getByTestId('followup-submit-btn')).toBeTruthy();
+        });
+
+        it('does not render follow-up section when onFollowUp prop is absent', () => {
+            render(<ResultViewer {...defaultProps} />);
+            expect(screen.queryByTestId('followup-section')).toBeNull();
+        });
+
+        it('calls onFollowUp with trimmed text and resets input when submit is clicked with valid text', async () => {
+            const onFollowUp = vi.fn();
+            render(<ResultViewer {...defaultProps} onFollowUp={onFollowUp} />);
+            const textarea = screen.getByTestId('followup-input');
+            const btn = screen.getByTestId('followup-submit-btn') as HTMLButtonElement;
+
+            expect(btn.disabled).toBe(true);
+
+            fireEvent.change(textarea, { target: { value: 'Please add more detail here' } });
+            expect(btn.disabled).toBe(false);
+
+            fireEvent.click(btn);
+            expect(onFollowUp).toHaveBeenCalledWith('Please add more detail here');
+            expect((textarea as HTMLTextAreaElement).value).toBe('');
+        });
+    });
 });

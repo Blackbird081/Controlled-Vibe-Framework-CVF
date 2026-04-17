@@ -410,11 +410,14 @@ export async function POST(request: NextRequest) {
 function buildPromptFromInputs(request: ExecutionRequest): string {
     const { templateName, inputs, intent } = request;
 
+    const previousOutput = inputs['_previousOutput'];
+
     let prompt = `## Task: ${templateName}\n\n`;
     prompt += `### User Intent\n${intent}\n\n`;
     prompt += `### Input Data\n`;
 
     for (const [key, value] of Object.entries(inputs)) {
+        if (key.startsWith('_')) continue;
         if (value && value.trim()) {
             // Convert camelCase/snake_case to readable label
             const label = key
@@ -430,6 +433,12 @@ function buildPromptFromInputs(request: ExecutionRequest): string {
     }
 
     prompt += `\n---\n\n`;
+
+    if (previousOutput && previousOutput.trim()) {
+        prompt += `### Previous Output (for context)\n${previousOutput}\n`;
+        prompt += `\n*(The user is requesting a follow-up or refinement of the above.)*\n\n---\n\n`;
+    }
+
     prompt += `Please analyze the above information and provide a comprehensive, structured response following CVF guidelines.`;
 
     return prompt;

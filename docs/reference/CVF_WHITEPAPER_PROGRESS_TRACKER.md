@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-17` (latest governed closure `W96-T1 CLOSED DELIVERED`; Risk Visibility Persist After Success; Gate 5 bounded gap resolved; all 5 non-coder value gates fully clean W90–W96; no active tranche)
+> Last refreshed: `2026-04-17` (latest governed closure `W97-T1 CLOSED DELIVERED`; Multi-Step Governed Workflow follow-up round; follow-up capability live on non-coder path; W98-T1 E2E Benchmark is default next)
 
 ---
 
@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W96-T1 CLOSED DELIVERED 2026-04-17; Risk Visibility Persist After Success; Gate 5 bounded gap resolved; all 5 non-coder value gates fully clean; no active tranche` |
+| Current active tranche | `W98-T1 (pending) — W97-T1 CLOSED DELIVERED 2026-04-17; Multi-Step Governed Workflow follow-up round; 2006/2006 tests pass; default next is W98-T1 E2E Benchmark` |
 | Shared verification baseline | `ADOPT 2026-04-10 LOCAL BASELINE — future agents should inherit this verification state and rerun only when their touched scope, dependency state, or build/test configuration invalidates it` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05); W59-T1 promotes the closure readout to CLOSURE-ASSESSED (2026-04-07)` |
 
@@ -244,6 +244,7 @@ Memory class: POINTER_RECORD
 | `W94-T1` Risk Visibility (PRODUCT / NON_CODER_VALUE class) | `CLOSED DELIVERED 2026-04-15 — R0/R1/R2/R3 badge in ProcessingScreen; reuses safety-status.ts getSafetyStatus + risk-check.ts; badge: emoji + level code + label + description; Gate 5 MET (bounded gap: enforcement states fully visible, success-path ~300ms before onComplete); 5 new W94-T1 tests; 126/126 pass; tsc clean; Fast Lane (GC-021)` |
 | `W95-T1` Post-W94 Canon Truth Sync (DOCUMENTATION / CANON_SYNC class) | `CLOSED DELIVERED 2026-04-15 — pre-sync assessment filed; Fast Lane (GC-021) authorized; whitepaper §4.3 advanced to W95-T1; tracker W95-T1 row added; AGENT_HANDOFF finalized; GC-026 closure sync filed; canon closure-clean through W95-T1; W94 bounded gap carried as Branch A candidate` |
 | `W96-T1` Risk Visibility Persist After Success (FEATURE / RISK_VISIBILITY class) | `CLOSED DELIVERED 2026-04-17 — W94 bounded gap resolved; ProcessingScreen completion state: ✅ banner + badge persist on success+riskLevel; "View Results →" button + 2000ms auto-advance; backward-compatible (no-riskLevel path unchanged); 3 new W96-T1 tests; 2000/2000 pass; Fast Lane (GC-021); Gate 5 fully MET` |
+| `W97-T1` Multi-Step Governed Workflow — Follow-Up Round (PRODUCT / NON_CODER_VALUE / WORKFLOW_COMPLETION class) | `CLOSED DELIVERED 2026-04-17 — onFollowUp? optional prop on ResultViewer + follow-up section JSX (textarea, submit disabled until ≥5 chars, resets on submit); iterationContext state + handleFollowUp in home/page.tsx; _previousOutput injected into PROCESSING inputs when present; buildPromptFromInputs() updated: explicit underscore skip + _previousOutput context block; 3 new ResultViewer tests + 3 new route integration tests; 2006/2006 pass; Full Lane (GC-018); All 5 reviewer corrections enforced` |
 
 ---
 
@@ -279,9 +280,9 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W96_T1_CLOSED_2026-04-17.md` (W96-T1 CLOSED DELIVERED; Risk Visibility Persist After Success; Gate 5 bounded gap resolved; no active tranche)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W97_T1_CLOSED_2026-04-17.md` (W97-T1 CLOSED DELIVERED; Multi-Step Governed Workflow; 2006/2006 tests; W98-T1 is default next)
 - Latest continuity sync delta: `docs/baselines/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_DELTA_2026-04-07.md`
 - Current closure anchor: `docs/reviews/CVF_W65_T1_TRANCHE_CLOSURE_REVIEW_2026-04-10.md`
-- Active quality assessment: `docs/assessments/CVF_W96_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md` (W96-T1 post-run assessment; Gate 5 bounded gap resolved; 2000/2000 tests pass)
-- Most recent continuation authorization: `docs/audits/CVF_W96_T1_FAST_LANE_AUDIT_RISK_VISIBILITY_PERSIST_2026-04-17.md` (W96-T1 Fast Lane GC-021 AUTHORIZED; Risk Visibility Persist After Success; additive display change)
+- Active quality assessment: `docs/assessments/CVF_W97_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md` (W97-T1 post-run assessment; follow-up round; 2006/2006 tests pass)
+- Most recent continuation authorization: `docs/baselines/CVF_GC018_W97_T1_MULTISTEP_GOVERNED_WORKFLOW_AUTHORIZATION_2026-04-17.md` (W97-T1 Full Lane GC-018 AUTHORIZED; Multi-Step Governed Workflow; R1 additive)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

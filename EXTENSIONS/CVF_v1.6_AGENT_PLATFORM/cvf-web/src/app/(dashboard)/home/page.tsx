@@ -62,6 +62,8 @@ export default function HomePage() {
     const [currentFolder, setCurrentFolder] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [starterHandoff, setStarterHandoff] = useState<GovernedStarterHandoff | null>(null);
+    // W97-T1: previous output context for iterative follow-up (truncated to 600 chars)
+    const [iterationContext, setIterationContext] = useState<string | null>(null);
 
     const { addExecution, updateExecution, currentExecution } = useExecutionStore();
 
@@ -180,8 +182,31 @@ export default function HomePage() {
     const handleBack = useCallback(() => {
         setSelectedTemplate(null);
         setCurrentOutput('');
+        setIterationContext(null);
         setWorkflowState('browse');
     }, []);
+
+    // W97-T1: follow-up handler — creates a new execution with previous output threaded as context
+    const handleFollowUp = useCallback((refinement: string) => {
+        if (!selectedTemplate || !currentOutput) return;
+        const truncated = currentOutput.length > 600
+            ? currentOutput.slice(0, 600) + '…'
+            : currentOutput;
+        setIterationContext(truncated);
+        setCurrentIntent(refinement);
+        const execution: Execution = {
+            id: `exec_followup_${Date.now()}`,
+            templateId: selectedTemplate.id,
+            templateName: selectedTemplate.name,
+            category: selectedTemplate.category,
+            input: { ...currentInput, _previousOutput: truncated },
+            intent: refinement,
+            status: 'processing',
+            createdAt: new Date(),
+        };
+        addExecution(execution);
+        setWorkflowState('processing');
+    }, [selectedTemplate, currentOutput, currentInput, addExecution]);
 
     useEffect(() => {
         const syncStarterHandoff = () => {
@@ -417,7 +442,9 @@ export default function HomePage() {
                 <ProcessingScreen
                     templateName={selectedTemplate.name}
                     templateId={selectedTemplate.id}
-                    inputs={currentInput}
+                    inputs={iterationContext
+                        ? { ...currentInput, _previousOutput: iterationContext }
+                        : currentInput}
                     intent={currentIntent}
                     onComplete={handleProcessingComplete}
                     onCancel={handleBack}
@@ -434,6 +461,7 @@ export default function HomePage() {
                     onRetry={() => setWorkflowState('form')}
                     onBack={handleBack}
                     onSendToAgent={() => { }}
+                    onFollowUp={handleFollowUp}
                 />
             )}
 

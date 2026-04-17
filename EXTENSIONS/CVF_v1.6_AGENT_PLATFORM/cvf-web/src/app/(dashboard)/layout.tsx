@@ -62,7 +62,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
     // Map pathname to Sidebar's expected appState string
     const pathnameToAppState = (p: string): string => {
-        if (p === '/') return 'home';
+        if (p === '/' || p.startsWith('/home')) return 'home';
         if (p.startsWith('/history')) return 'history';
         if (p.startsWith('/analytics')) return 'analytics';
         if (p.startsWith('/marketplace')) return 'marketplace';
@@ -78,7 +78,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     // Navigation handler — real pages use router, modals set state
     const handleNavigate = (state: string) => {
         switch (state) {
-            case 'home': router.push('/'); setActiveModal(null); break;
+            case 'home': router.push('/home'); setActiveModal(null); break;
             case 'history': router.push('/history'); setActiveModal(null); break;
             case 'analytics': router.push('/analytics'); setActiveModal(null); break;
             case 'marketplace': router.push('/marketplace'); setActiveModal(null); break;
@@ -92,7 +92,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                 break;
             case 'multi-agent': setActiveModal('multi-agent'); break;
             case 'tools': setActiveModal('tools'); break;
-            default: router.push('/'); setActiveModal(null);
+            default: router.push('/home'); setActiveModal(null);
         }
     };
 
@@ -100,8 +100,8 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         saveGovernedStarterHandoff(buildGovernedStarterHandoff(result));
         modals.closeModal('quickStart');
 
-        if (pathname !== '/') {
-            router.push('/');
+        if (!pathname.startsWith('/home')) {
+            router.push('/home');
             return;
         }
 
@@ -130,7 +130,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             {/* Compact Header */}
             <CompactHeader
                 onSidebarOpen={() => setSidebarOpen(true)}
-                onLogoClick={() => { router.push('/'); setActiveModal(null); }}
+                onLogoClick={() => { router.push('/home'); setActiveModal(null); }}
                 mockAiEnabled={mockAiEnabled}
             />
 

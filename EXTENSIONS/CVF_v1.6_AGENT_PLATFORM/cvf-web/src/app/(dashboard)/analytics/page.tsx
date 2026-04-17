@@ -12,7 +12,7 @@ export default function AnalyticsPage() {
         <div className="max-w-6xl mx-auto px-4 py-6 md:py-8">
             <div className="flex items-center gap-4 mb-8">
                 <button
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/home')}
                     className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

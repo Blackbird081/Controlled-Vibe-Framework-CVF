@@ -1,37 +1,3 @@
-governance(GC-023): harden exception registry guard — close agent self-authorization gap
+fix(web): correct dashboard home routing to prevent landing page redirect
 
-Problem: Agent was able to freely bump `approvedMaxLines` in the exception registry
-  (e.g. 1000->1100->1200 for CPF index.ts) without any enforcement blocking it.
-  The file size guard only checked file size, not registry change validity.
-  No active pre-commit hook existed (all hooks were .sample only).
-
-Changes:
-
-1. governance/compat/CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json
-   - Added per-class governance constraints:
-     - maxApprovableLines: hard ceiling on any exception entry approvedMaxLines
-     - maxAllowedBumpPercent: max % above hardThresholdLines before suspicious_bump fires
-   - Values: test_code (4000/300%), general_source (2000/65%),
-     frontend_component (2000/65%), active_markdown (2000/50%)
-
-2. governance/compat/check_governed_exception_registry.py [NEW]
-   - 7-rule registry integrity guard:
-     - approved_max_exceeds_ceiling: approvedMaxLines > maxApprovableLines -> BLOCKED
-     - suspicious_bump: bump > maxAllowedBumpPercent above hardThreshold -> BLOCKED
-     - exception_not_needed: approvedMaxLines <= hardThresholdLines -> BLOCKED
-     - schema_missing_max_approvable: class lacks ceiling config -> BLOCKED
-     - duplicate_path: duplicate registry paths -> BLOCKED
-     - invalid_status: unknown status value -> BLOCKED
-     - missing_required_field: incomplete entry -> BLOCKED
-
-3. .git/hooks/pre-commit [NEW - ACTIVE]
-   - Runs both guards before every commit:
-     [1/2] check_governed_file_size.py --enforce
-     [2/2] check_governed_exception_registry.py --enforce
-   - Commit blocked if either fails
-
-4. .agents/workflows/pre-commit-check.md [UPDATED]
-   - Added Step 3 (registry integrity guard) as mandatory
-   - Fixed Option B to warn against unauthorized bumps
-
-Both guards: COMPLIANT
+Redirect users to `/home` instead of `/` inside the dashboard layout and individual dashboard pages to avoid unexpectedly rendering the unauthenticated LandingPage which made it seem like the user was logged out.

@@ -8,7 +8,7 @@ export default function MarketplacePage() {
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-6 md:py-8">
-            <TemplateMarketplace onBack={() => router.push('/')} />
+            <TemplateMarketplace onBack={() => router.push('/home')} />
         </div>
     );
 }

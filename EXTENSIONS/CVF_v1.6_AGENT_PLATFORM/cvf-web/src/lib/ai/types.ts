@@ -26,6 +26,8 @@ export interface ExecutionRequest {
     skillPreflightRecordRef?: string;
     skillIds?: string[];
     fileScope?: string[];
+    /** W101-T1 — pre-governed knowledge context to inject into the system prompt */
+    knowledgeContext?: string;
 }
 
 export interface ExecutionResponse {

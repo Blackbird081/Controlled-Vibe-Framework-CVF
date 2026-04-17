@@ -345,7 +345,7 @@ export async function executeAI(
     provider: AIProvider,
     apiKey: string,
     userPrompt: string,
-    options?: Partial<AIConfig>
+    options?: Partial<AIConfig> & { systemPrompt?: string }
 ): Promise<ExecutionResponse> {
     const config: AIConfig = {
         provider,
@@ -355,7 +355,7 @@ export async function executeAI(
         temperature: options?.temperature,
     };
 
-    const systemPrompt = CVF_SYSTEM_PROMPT;
+    const systemPrompt = options?.systemPrompt ?? CVF_SYSTEM_PROMPT;
 
     switch (provider) {
         case 'openai':

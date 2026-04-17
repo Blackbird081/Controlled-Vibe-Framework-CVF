@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { executeAI, AIProvider, ExecutionRequest } from '@/lib/ai';
+import { executeAI, AIProvider, ExecutionRequest, CVF_SYSTEM_PROMPT } from '@/lib/ai';
 import { evaluateEnforcement } from '@/lib/enforcement';
 import { getTemplateById } from '@/lib/templates';
 import { verifySessionCookie } from '@/lib/middleware-auth';
@@ -11,6 +11,7 @@ import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
 import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
 import { routeWebProvider } from '@/lib/ai/provider-router-adapter';
 import { lookupGuidedResponse } from './guided.response.registry';
+import { buildKnowledgeSystemPrompt, hasKnowledgeContext } from '@/lib/knowledge-context-injector';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
 // Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
@@ -290,6 +291,12 @@ export async function POST(request: NextRequest) {
         const routedProvider: AIProvider = routingResult.selectedProvider ?? provider;
         const routedApiKey = apiKeyMap[routedProvider];
 
+        // ── KNOWLEDGE CONTEXT INJECTION (W101-T1) ──────────────────────────────────
+        const knowledgeContext = body.knowledgeContext;
+        const enrichedSystemPrompt = hasKnowledgeContext(knowledgeContext)
+            ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, knowledgeContext)
+            : undefined;
+
         if (!routedApiKey) {
             return NextResponse.json(
                 {
@@ -305,6 +312,7 @@ export async function POST(request: NextRequest) {
         // ── EXECUTE AI with auto-retry on output validation failure ──
         let aiResult = await executeAI(routedProvider, routedApiKey, userPrompt, {
             model: body.model,
+            ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}),
         });
         let outputValidation: ValidationResult | undefined;
         const retryState: RetryState = { attempt: 0, previousIssues: [] };
@@ -384,6 +392,10 @@ export async function POST(request: NextRequest) {
                 decision: routingResult.decision,
                 selectedProvider: routingResult.selectedProvider,
                 rationale: routingResult.rationale,
+            },
+            knowledgeInjection: {
+                injected: !!enrichedSystemPrompt,
+                contextLength: knowledgeContext?.length ?? 0,
             },
             outputValidation: outputValidation ? {
                 qualityHint: outputValidation.qualityHint,

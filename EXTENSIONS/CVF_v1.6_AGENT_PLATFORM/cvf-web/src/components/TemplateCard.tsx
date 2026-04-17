@@ -63,7 +63,7 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
 
             <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white
                      group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                {templateDisplayName}
+                {templateDisplayName.replace(/^[\p{Emoji}\s]+/gu, '')}
             </h3>
 
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">

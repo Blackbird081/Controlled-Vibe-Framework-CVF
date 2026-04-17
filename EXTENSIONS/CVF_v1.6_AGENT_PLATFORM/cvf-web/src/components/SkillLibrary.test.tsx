@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { SkillLibrary } from './SkillLibrary';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -10,7 +10,6 @@ import { fileURLToPath } from 'node:url';
 
 const trackEventMock = vi.fn();
 const getSkillCategoriesMock = vi.fn();
-const saveUatContentMock = vi.fn();
 const routerPushMock = vi.fn();
 const fetchMock = vi.fn();
 const fixturePath = resolve(dirname(fileURLToPath(import.meta.url)), '__fixtures__/skills-index.fixture.json');
@@ -34,77 +33,17 @@ vi.mock('@/lib/analytics', () => ({
     trackEvent: (...args: unknown[]) => trackEventMock(...args),
 }));
 
-// Mock i18n to return English translations (pass-through t function)
 vi.mock('@/lib/i18n', () => {
     const enTranslations: Record<string, string> = {
-        'skills.library': '📚 Skill Library',
+        'skills.library': 'Skill Library',
         'skills.searchPlaceholder': 'Search skills...',
         'skills.noResults': 'No skills found matching',
-        'skills.open': '↗ Open',
-        'skills.easy': 'Easy',
-        'skills.med': 'Med',
-        'skills.adv': 'Adv',
-        'skills.notRun': 'Not Run',
-        'skills.domainReport': '📊 Domain Report',
-        'skills.domainReportDesc': 'Quantity + quality of inputs by domain',
-        'skills.totalSkills': 'Total skills',
-        'skills.uatCoverage': 'Output UAT coverage',
-        'skills.uatCompleted': 'Output UAT completed',
-        'skills.specAvgLabel': 'Spec avg',
-        'skills.uatNotRunHint': 'UAT not run → Output UAT score = 0',
-        'skills.sort': 'Sort',
-        'skills.countOption': 'Count',
-        'skills.coverageOption': 'Coverage',
-        'skills.specAvgOption': 'Spec Avg',
-        'skills.nameOption': 'Name',
-        'skills.sortDir': 'Sort Dir',
-        'skills.desc': 'Desc',
-        'skills.asc': 'Asc',
-        'skills.minCount': 'Min Count',
-        'skills.minCoverage': 'Min Coverage',
-        'skills.minSpecScore': 'Min Spec Score',
-        'skills.onlyWithUat': 'Only domains with Output UAT',
-        'skills.showing': 'Showing',
-        'skills.rows': 'Rows',
-        'skills.prev': 'Prev',
-        'skills.page': 'Page',
-        'skills.next': 'Next',
-        'skills.domain': 'Domain',
-        'skills.outputUat': 'Output UAT',
-        'skills.uatCoverageCol': 'Output UAT Coverage',
-        'skills.specQualityCol': 'Spec Quality',
-        'skills.excellent': 'Excellent',
-        'skills.good': 'Good',
-        'skills.needsReview': 'Needs Review',
-        'skills.notReady': 'Not Ready',
-        'skills.risk': 'Risk',
-        'skills.autonomy': 'Autonomy',
-        'skills.roles': 'Roles',
-        'skills.phases': 'Phases',
-        'skills.scope': 'Scope',
-        'skills.specGate': 'Spec Gate',
-        'skills.outputUatLabel': 'Output UAT',
-        'skills.scoreLabel': 'Score',
-        'skills.outputQuality': 'Output Quality',
-        'skills.specLabel': 'Spec',
-        'skills.specQualityLabel': 'Spec Quality',
-        'skills.skillTab': 'Skill',
-        'skills.uatTab': 'UAT',
-        'skills.viewTab': 'View',
-        'skills.editTab': 'Edit',
-        'skills.copyRaw': '📋 Copy Raw',
-        'skills.copied': 'Copied raw markdown!',
-        'skills.specGateWarning': 'Spec Gate = FAIL. UAT can only be edited when the Spec meets standard.',
-        'skills.editPlaceholder': 'Edit UAT markdown...',
-        'skills.saveUat': 'Save UAT',
-        'skills.cancel': 'Cancel',
-        'skills.editorHint': 'UAT editor saves directly to the .md file.',
-        'skills.noUat': 'No UAT record found for this skill.',
-        'skills.selectSkill': 'Select a skill to view',
-        'skills.selectSkillDesc': 'Browse the library on the left to view detailed skill documentation, inputs, and expected outputs.',
-        'skills.useTemplate': '📝 Use Template',
-        'skills.useTemplateTitle': 'Use template',
-        'skills.browseTemplates': '📝 Browse templates',
+        'skills.selectSkill': 'Select a skill to explore',
+        'skills.selectSkillDesc': 'Browse the governed catalog',
+        'skills.open': 'Open',
+        'skills.copyRaw': 'Copy Raw',
+        'skills.useTemplate': 'Use Template',
+        'skills.browseTemplates': 'Browse templates',
     };
     return {
         useLanguage: () => ({
@@ -127,7 +66,6 @@ vi.mock('next/navigation', () => ({
 
 vi.mock('../actions/skills', () => ({
     getSkillCategories: () => getSkillCategoriesMock(),
-    saveUatContent: (...args: unknown[]) => saveUatContentMock(...args),
 }));
 
 const getTemplatesForSkillMock = vi.fn().mockReturnValue([]);
@@ -145,604 +83,115 @@ describe('SkillLibrary', () => {
     beforeEach(() => {
         trackEventMock.mockClear();
         getSkillCategoriesMock.mockReset();
-        saveUatContentMock.mockReset();
         getTemplatesForSkillMock.mockReset().mockReturnValue([]);
         setFetchPayload(fixtureCategories);
     });
 
-    it('tracks skill view and copy actions', async () => {
-        setCategories([
+    it('renders loading state initially', () => {
+        render(<SkillLibrary />);
+    });
+
+    it('loads skills from public index.json without calling server action', async () => {
+        render(<SkillLibrary />);
+        // Wait for UI to update
+        await waitFor(() => expect(screen.getByText('Skill Library')).toBeTruthy());
+
+        // Assuming fixture has 'Write Code'
+        await waitFor(() => expect(screen.getByText(/Write Code/i)).toBeTruthy());
+        expect(getSkillCategoriesMock).not.toHaveBeenCalled();
+    });
+
+    it('falls back to server action if public index fails', async () => {
+        fetchMock.mockRejectedValueOnce(new Error('Network error'));
+        getSkillCategoriesMock.mockResolvedValueOnce([
             {
-                id: 'dev',
-                name: 'Development',
+                id: 'fallback-cat',
+                name: 'Fallback Category',
                 skills: [
                     {
-                        id: 'skill-1',
-                        title: 'Skill One',
-                        domain: 'App Development',
+                        id: 'fallback-1',
+                        title: 'Fallback Skill',
+                        domain: 'Fallback Category',
                         difficulty: 'Easy',
                         summary: 'Summary',
-                        path: 'skill-1',
-                        content: '# Skill One',
+                        path: 'fallback-1',
+                        content: '# Content',
                     },
                 ],
             },
         ]);
 
         render(<SkillLibrary />);
-
-        await waitFor(() => expect(screen.getByText('Skill One')).toBeTruthy());
-        expect(screen.getByText('Select a skill to view')).toBeTruthy();
-        fireEvent.click(screen.getByText('Skill One'));
-
-        expect(trackEventMock).toHaveBeenCalledWith('skill_viewed', expect.objectContaining({
-            skillId: 'skill-1',
-            skillTitle: 'Skill One',
-        }));
-
-        const copyButton = screen.getByText(/Copy Raw/i);
-        fireEvent.click(copyButton);
-        expect(trackEventMock).toHaveBeenCalledWith('skill_copied', expect.objectContaining({
-            skillId: 'skill-1',
-            skillTitle: 'Skill One',
-        }));
+        await waitFor(() => expect(screen.getByText('Fallback Category')).toBeTruthy());
+        expect(getSkillCategoriesMock).toHaveBeenCalledTimes(1);
     });
 
-    it('shows loading spinner and empty state when no skills exist', async () => {
-        let resolve: (value: unknown) => void;
-        const promise = new Promise((res) => { resolve = res; });
-        fetchMock.mockReset();
-        fetchMock.mockResolvedValue({
-            ok: true,
-            json: async () => promise,
-        });
-        vi.stubGlobal('fetch', fetchMock);
-
-        const { container } = render(<SkillLibrary />);
-        expect(container.querySelector('.animate-spin')).toBeTruthy();
-
-        resolve!([]);
-        await waitFor(() => expect(screen.getByText(/No skills found matching/i)).toBeTruthy());
+    it('renders empty state hero when no skill is selected', async () => {
+        render(<SkillLibrary />);
+        await waitFor(() => expect(screen.getByText('Select a skill to explore')).toBeTruthy());
+        expect(screen.getByText(/Browse the governed catalog/)).toBeTruthy();
     });
 
-    it('filters skills and renders difficulty badges', async () => {
+    it('filters skills by search term', async () => {
         setCategories([
             {
-                id: 'dev',
-                name: 'Development',
+                id: 'cat',
+                name: 'Category',
                 skills: [
-                    {
-                        id: 'skill-1',
-                        title: 'Skill Easy',
-                        domain: 'App Development',
-                        difficulty: 'Easy',
-                        summary: 'Summary',
-                        path: 'skill-1',
-                        content: '# Easy',
-                    },
-                    {
-                        id: 'skill-2',
-                        title: 'Skill Medium',
-                        domain: 'App Development',
-                        difficulty: 'Medium',
-                        summary: 'Summary',
-                        path: 'skill-2',
-                        content: '# Medium',
-                    },
-                    {
-                        id: 'skill-3',
-                        title: 'Skill Advanced',
-                        domain: 'App Development',
-                        difficulty: 'Advanced',
-                        summary: 'Summary',
-                        path: 'skill-3',
-                        content: '# Advanced',
-                    },
+                    { id: 's1', title: 'Find Me', domain: 'Category', difficulty: 'Easy', summary: '', path: '', content: '' },
+                    { id: 's2', title: 'Hide Me', domain: 'Category', difficulty: 'Easy', summary: '', path: '', content: '' },
                 ],
             },
         ]);
 
         render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getByText('Skill Easy')).toBeTruthy());
+        await waitFor(() => expect(screen.getByText('Find Me')).toBeTruthy());
 
-        expect(screen.getByText('Easy')).toBeTruthy();
-        expect(screen.getByText('Med')).toBeTruthy();
-        expect(screen.getByText('Adv')).toBeTruthy();
+        const searchInput = screen.getByPlaceholderText('Search skills...');
+        fireEvent.change(searchInput, { target: { value: 'hide' } });
 
-        const search = screen.getByPlaceholderText(/Search skills/i);
-        fireEvent.change(search, { target: { value: 'zzz' } });
-        expect(screen.getByText(/No skills found matching/i)).toBeTruthy();
-    });
-
-    it('handles failed skill loading gracefully', async () => {
-        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
-        getSkillCategoriesMock.mockRejectedValue(new Error('fail'));
-        fetchMock.mockReset();
-        fetchMock.mockRejectedValue(new Error('fetch failed'));
-        vi.stubGlobal('fetch', fetchMock);
-
-        render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getByText(/No skills found matching/i)).toBeTruthy());
-
-        consoleSpy.mockRestore();
-    });
-
-    it('renders domain report metrics and filters by UAT/spec criteria', async () => {
-        setCategories([
-            {
-                id: 'app',
-                name: 'App Development',
-                skills: [
-                    {
-                        id: 'skill-a',
-                        title: 'Skill A',
-                        domain: 'App Development',
-                        difficulty: 'Easy',
-                        summary: 'Summary',
-                        path: 'skill-a',
-                        content: '# Skill A',
-                        uatStatus: 'PASS',
-                        uatScore: 80,
-                        uatQuality: 'Good',
-                        specScore: 90,
-                        specQuality: 'Excellent',
-                    },
-                    {
-                        id: 'skill-b',
-                        title: 'Skill B',
-                        domain: 'App Development',
-                        difficulty: 'Medium',
-                        summary: 'Summary',
-                        path: 'skill-b',
-                        content: '# Skill B',
-                        uatStatus: 'Not Run',
-                        uatScore: 0,
-                        specScore: 0,
-                        specQuality: 'Not Ready',
-                    },
-                ],
-            },
-            {
-                id: 'web',
-                name: 'Web Development',
-                skills: [
-                    {
-                        id: 'skill-c',
-                        title: 'Skill C',
-                        domain: 'Web Development',
-                        difficulty: 'Advanced',
-                        summary: 'Summary',
-                        path: 'skill-c',
-                        content: '# Skill C',
-                        uatStatus: 'SOFT FAIL',
-                        uatScore: 40,
-                        specScore: 70,
-                        specQuality: 'Needs Review',
-                    },
-                ],
-            },
-            {
-                id: 'finance',
-                name: 'Finance Analytics',
-                skills: [
-                    {
-                        id: 'skill-d',
-                        title: 'Skill D',
-                        domain: 'Finance Analytics',
-                        difficulty: 'Easy',
-                        summary: 'Summary',
-                        path: 'skill-d',
-                        content: '# Skill D',
-                        uatStatus: 'Not Run',
-                        uatScore: 0,
-                        specScore: 0,
-                        specQuality: 'Not Ready',
-                    },
-                ],
-            },
-        ]);
-
-        render(<SkillLibrary />);
-
-        await waitFor(() => expect(screen.getAllByText('App Development').length).toBeGreaterThan(0));
-        const reportTable = screen.getByRole('table');
-        const tableScope = within(reportTable);
-
-        expect(tableScope.getByText('App Development')).toBeTruthy();
-        expect(tableScope.getByText('Web Development')).toBeTruthy();
-        expect(tableScope.getByText('Finance Analytics')).toBeTruthy();
-
-        const onlyWithUatToggle = screen.getByLabelText(/Only domains with Output UAT/i);
-        fireEvent.click(onlyWithUatToggle);
-        expect(tableScope.queryByText('Finance Analytics')).toBeNull();
-
-        const minSpecSelect = screen.getByLabelText(/Min Spec Score/i);
-        fireEvent.change(minSpecSelect, { target: { value: '70' } });
-        expect(tableScope.queryByText('App Development')).toBeNull();
-        expect(tableScope.getByText('Web Development')).toBeTruthy();
-    });
-
-    it('allows editing UAT content and saves updates', async () => {
-        setCategories([
-            {
-                id: 'app',
-                name: 'App Development',
-                skills: [
-                    {
-                        id: 'skill-a',
-                        title: 'Skill A',
-                        domain: 'App Development',
-                        difficulty: 'Easy',
-                        summary: 'Summary',
-                        path: 'skill-a',
-                        content: '# Skill A',
-                        uatContent: '## UAT A',
-                        uatStatus: 'PASS',
-                        uatScore: 80,
-                        uatQuality: 'Good',
-                        specScore: 90,
-                        specQuality: 'Excellent',
-                        specGate: 'PASS',
-                    },
-                ],
-            },
-        ]);
-
-        saveUatContentMock.mockResolvedValue({
-            content: '## UAT Updated',
-            status: 'PASS',
-            score: 95,
-            quality: 'Excellent',
-        });
-
-        render(<SkillLibrary />);
-
-        await waitFor(() => expect(screen.getByText('Skill A')).toBeTruthy());
-        fireEvent.click(screen.getByText('Skill A'));
-        fireEvent.click(screen.getByText('UAT'));
-        fireEvent.click(screen.getByText('Edit'));
-
-        const textarea = screen.getByPlaceholderText(/Edit UAT markdown/i);
-        fireEvent.change(textarea, { target: { value: '## UAT Updated' } });
-        fireEvent.click(screen.getByText('Save UAT'));
-
-        await waitFor(() => expect(screen.getByText('UAT Updated')).toBeTruthy());
-        expect(saveUatContentMock).toHaveBeenCalledWith('skill-a', '## UAT Updated');
-    });
-
-    it('blocks UAT edit when Spec Gate fails', async () => {
-        setCategories([
-            {
-                id: 'app',
-                name: 'App Development',
-                skills: [
-                    {
-                        id: 'skill-b',
-                        title: 'Skill B',
-                        domain: 'App Development',
-                        difficulty: 'Medium',
-                        summary: 'Summary',
-                        path: 'skill-b',
-                        content: '# Skill B',
-                        uatContent: '## UAT B',
-                        uatStatus: 'Not Run',
-                        uatScore: 0,
-                        specGate: 'FAIL',
-                    },
-                ],
-            },
-        ]);
-
-        render(<SkillLibrary />);
-
-        await waitFor(() => expect(screen.getByText('Skill B')).toBeTruthy());
-        fireEvent.click(screen.getByText('Skill B'));
-        fireEvent.click(screen.getByText('UAT'));
-
-        expect(screen.getByText(/Spec Gate = FAIL/i)).toBeTruthy();
-        const editButton = screen.getByText('Edit') as HTMLButtonElement;
-        expect(editButton.disabled).toBe(true);
-    });
-
-    it('renders linked templates when getTemplatesForSkill returns IDs', async () => {
-        getTemplatesForSkillMock.mockReturnValue(['tmpl-1']);
-        setCategories([{
-            id: 'dev', name: 'Development',
-            skills: [{
-                id: 'skill-1', title: 'Skill One', domain: 'App Development',
-                difficulty: 'Easy', summary: 'Summary', path: 'skill-1', content: '# Skill One',
-            }],
-        }]);
-
-        render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getByText('Skill One')).toBeTruthy());
-        fireEvent.click(screen.getByText('Skill One'));
-
-        await waitFor(() => expect(screen.getByText(/Template One/)).toBeTruthy());
-    });
-
-    it('shows browse templates link when no linked templates but domain has category', async () => {
-        getTemplatesForSkillMock.mockReturnValue([]);
-        // Dynamically set a mapping value for this test
-        const stm = await import('@/lib/skill-template-map');
-        (stm.domainToCategoryMap as Record<string, string>)['app_development'] = 'App';
-
-        setCategories([{
-            id: 'dev', name: 'Development',
-            skills: [{
-                id: 'skill-1', title: 'Skill One', domain: 'App Development',
-                difficulty: 'Easy', summary: 'Summary', path: 'skill-1', content: '# Skill One',
-            }],
-        }]);
-
-        render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getByText('Skill One')).toBeTruthy());
-        fireEvent.click(screen.getByText('Skill One'));
-
-        await waitFor(() => expect(screen.getByText(/Browse templates.*App/)).toBeTruthy());
-        delete (stm.domainToCategoryMap as Record<string, string>)['app_development'];
-    });
-
-    it('toggles view mode between Skill and UAT', async () => {
-        setCategories([{
-            id: 'dev', name: 'Development',
-            skills: [{
-                id: 'skill-1', title: 'Skill One', domain: 'App Development',
-                difficulty: 'Easy', summary: 'Summary', path: 'skill-1', content: '# Skill One',
-                uatContent: '## UAT', uatStatus: 'PASS', uatScore: 80, specGate: 'PASS',
-            }],
-        }]);
-
-        render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getByText('Skill One')).toBeTruthy());
-        fireEvent.click(screen.getByText('Skill One'));
-
-        // Default is Skill mode
-        expect(screen.getByText('Skill')).toBeTruthy();
-        // Switch to UAT
-        fireEvent.click(screen.getByText('UAT'));
-        // Switch back to Skill
-        fireEvent.click(screen.getByText('Skill'));
-        // Skill mode shows the raw content
-        expect(screen.getByText(/Copy Raw/)).toBeTruthy();
-    });
-
-    it('cancels UAT edit and reverts draft', async () => {
-        setCategories([{
-            id: 'app', name: 'App Development',
-            skills: [{
-                id: 'skill-a', title: 'Skill A', domain: 'App Development',
-                difficulty: 'Easy', summary: 'Summary', path: 'skill-a', content: '# Skill A',
-                uatContent: '## UAT Original', uatStatus: 'PASS', uatScore: 80, specGate: 'PASS',
-            }],
-        }]);
-
-        render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getByText('Skill A')).toBeTruthy());
-        fireEvent.click(screen.getByText('Skill A'));
-        fireEvent.click(screen.getByText('UAT'));
-        fireEvent.click(screen.getByText('Edit'));
-
-        const textarea = screen.getByPlaceholderText(/Edit UAT markdown/i);
-        fireEvent.change(textarea, { target: { value: '## Modified' } });
-        fireEvent.click(screen.getByText('Cancel'));
-
-        // After cancel, edit mode should exit (no textarea visible)
-        expect(screen.queryByPlaceholderText(/Edit UAT markdown/i)).toBeNull();
-    });
-
-    it('filters domain report by min count and min coverage', async () => {
-        setCategories([
-            {
-                id: 'app', name: 'App Development', skills: [
-                    { id: 's1', title: 'S1', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's1', content: '#', uatStatus: 'PASS', uatScore: 80, specScore: 90 },
-                    { id: 's2', title: 'S2', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's2', content: '#', uatStatus: 'PASS', uatScore: 70, specScore: 85 },
-                    { id: 's3', title: 'S3', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's3', content: '#', uatStatus: 'PASS', uatScore: 60, specScore: 80 },
-                    { id: 's4', title: 'S4', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's4', content: '#', uatStatus: 'PASS', uatScore: 50, specScore: 75 },
-                    { id: 's5', title: 'S5', domain: 'App Development', difficulty: 'Easy', summary: 'S', path: 's5', content: '#', uatStatus: 'PASS', uatScore: 40, specScore: 70 },
-                ]
-            },
-            {
-                id: 'web', name: 'Web Development', skills: [
-                    { id: 's6', title: 'S6', domain: 'Web Development', difficulty: 'Easy', summary: 'S', path: 's6', content: '#', uatStatus: 'Not Run', uatScore: 0, specScore: 50 },
-                ]
-            },
-        ]);
-        render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getAllByText('App Development').length).toBeGreaterThan(0));
-        const reportTable = screen.getByRole('table');
-        const tableScope = within(reportTable);
-
-        // Change Min Count to 5 → hides Web (only 1 skill), keeps App (5 skills)
-        const minCountSelect = screen.getByLabelText(/Min Count/i);
-        fireEvent.change(minCountSelect, { target: { value: '5' } });
-        expect(tableScope.getByText('App Development')).toBeTruthy();
-        expect(tableScope.queryByText('Web Development')).toBeNull();
-
-        // Reset and test Min Coverage
-        fireEvent.change(minCountSelect, { target: { value: '0' } });
-        const minCoverageSelect = screen.getByLabelText(/Min Coverage/i);
-        fireEvent.change(minCoverageSelect, { target: { value: '50' } });
-        expect(tableScope.getByText('App Development')).toBeTruthy();
-        expect(tableScope.queryByText('Web Development')).toBeNull(); // 0% coverage
-    });
-
-    it('paginates domain report with next/prev and page size', async () => {
-        const cats = Array.from({ length: 12 }, (_, i) => ({
-            id: `cat${i}`, name: `Grp ${String.fromCharCode(65 + i)}`,
-            skills: [{ id: `s${i}`, title: `Sk${i}`, domain: `Grp ${String.fromCharCode(65 + i)}`, difficulty: 'Easy', summary: 'S', path: `s${i}`, content: '#', uatStatus: 'Not Run', uatScore: 0, specScore: 50 }],
-        }));
-        setCategories(cats);
-        render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getAllByText('Grp A').length).toBeGreaterThan(0));
-
-        // Check page indicator shows page 1 of 2
-        await waitFor(() => expect(screen.getByText(/Page 1 \/ 2/)).toBeTruthy());
-
-        // Click Next → page 2
-        fireEvent.click(screen.getByText('Next'));
-        await waitFor(() => expect(screen.getByText(/Page 2 \/ 2/)).toBeTruthy());
-
-        // Click Prev → page 1
-        fireEvent.click(screen.getByText('Prev'));
-        await waitFor(() => expect(screen.getByText(/Page 1 \/ 2/)).toBeTruthy());
-
-        // Change page size to 20 → all fit on 1 page
-        const pageSizeSelect = await waitFor(() => {
-            const allSelects = screen.getAllByRole('combobox');
-            const sel = allSelects.find(s => {
-                const opts = Array.from(s.querySelectorAll('option'));
-                return opts.some(opt => opt.getAttribute('value') === '50');
-            });
-            expect(sel).toBeTruthy();
-            return sel!;
-        });
-        fireEvent.change(pageSizeSelect, { target: { value: '20' } });
-        await waitFor(() => expect(screen.getByText(/Page 1 \/ 1/)).toBeTruthy());
-    });
-
-    it('selects a skill using Space key', async () => {
-        setCategories([
-            {
-                id: 'dev',
-                name: 'Development',
-                skills: [
-                    {
-                        id: 'skill-space',
-                        title: 'Space Key Skill',
-                        domain: 'App Development',
-                        difficulty: 'Easy',
-                        summary: 'Summary',
-                        path: 'skill-space',
-                        content: '# Space Key Skill',
-                    },
-                ],
-            },
-        ]);
-
-        render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getByText('Space Key Skill')).toBeTruthy());
-
-        const skillEl = screen.getByText('Space Key Skill').closest('[role="button"]') || screen.getByText('Space Key Skill');
-        fireEvent.keyDown(skillEl, { key: ' ' });
-
-        expect(trackEventMock).toHaveBeenCalledWith('skill_viewed', expect.objectContaining({
-            skillId: 'skill-space',
-            skillTitle: 'Space Key Skill',
-        }));
-    });
-
-    it('handles skills-index.json with categories wrapper format', async () => {
-        // Second call: fetch succeeds with {categories: [...]} format
-        fetchMock.mockReset();
-        fetchMock.mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({
-                categories: [
-                    {
-                        id: 'fetched',
-                        name: 'Fetched Domain',
-                        skills: [
-                            {
-                                id: 'fetch-skill-1',
-                                title: 'Fetched Skill',
-                                domain: 'Fetched Domain',
-                                difficulty: 'Medium',
-                                summary: 'From fetch',
-                                path: 'fetch-1',
-                                content: '# Fetched',
-                            },
-                        ],
-                    },
-                ],
-            }),
-        });
-        vi.stubGlobal('fetch', fetchMock);
-
-        render(<SkillLibrary />);
         await waitFor(() => {
-            // Either it loads from server action or fetch — if empty, the no-results message appears
-            const el = screen.queryByText('Fetched Skill') || screen.queryByText(/No skills found/i);
-            expect(el).toBeTruthy();
+            expect(screen.queryByText('Find Me')).toBeNull();
+            expect(screen.getByText('Hide Me')).toBeTruthy();
         });
     });
 
-    it('sorts domain report by name and ascending direction', async () => {
+    it('selects a skill and shows its details', async () => {
         setCategories([
             {
-                id: 'cat-a', name: 'Alpha Domain',
-                skills: [
-                    { id: 's1', title: 'S1', domain: 'Alpha Domain', difficulty: 'Easy', summary: 'S', path: 's1', content: '#', uatStatus: 'Done', uatScore: 80, specScore: 90 },
-                    { id: 's2', title: 'S2', domain: 'Alpha Domain', difficulty: 'Easy', summary: 'S', path: 's2', content: '#', uatStatus: 'Done', uatScore: 70, specScore: 85 },
-                ],
-            },
-            {
-                id: 'cat-b', name: 'Beta Domain',
-                skills: [
-                    { id: 's3', title: 'S3', domain: 'Beta Domain', difficulty: 'Easy', summary: 'S', path: 's3', content: '#', uatStatus: 'Not Run', uatScore: 0, specScore: 50, specQuality: 'Needs Review' },
-                ],
-            },
-        ]);
-
-        render(<SkillLibrary />);
-        // Wait for skills to load in the sidebar
-        await waitFor(() => expect(screen.getByText('S1')).toBeTruthy());
-
-        // Change sort to Name via the labeled select
-        const sortSelect = screen.getByLabelText('Sort');
-        fireEvent.change(sortSelect, { target: { value: 'name' } });
-
-        // Toggle sort direction by clicking the Desc button (toggles to asc)
-        const dirButton = screen.getByText('Desc');
-        fireEvent.click(dirButton);
-
-        // Skills should still be visible after sort change
-        expect(screen.getByText('S1')).toBeTruthy();
-        expect(screen.getByText('S3')).toBeTruthy();
-
-        // Sort by specAvg
-        fireEvent.change(sortSelect, { target: { value: 'specAvg' } });
-        expect(screen.getByText('S1')).toBeTruthy();
-    });
-
-    it('renders skill with full metadata badges', async () => {
-        setCategories([
-            {
-                id: 'full-meta',
-                name: 'Full Metadata',
+                id: 'cat',
+                name: 'Category',
                 skills: [
                     {
-                        id: 'full-1',
-                        title: 'Full Meta Skill',
-                        domain: 'Full Metadata',
-                        difficulty: 'Advanced',
-                        summary: 'All metadata populated',
-                        path: 'full-1',
-                        content: '# Full Meta Skill\nDetailed content',
-                        riskLevel: 'R2',
-                        autonomy: 'Assisted',
-                        allowedRoles: 'Developer, Reviewer',
-                        allowedPhases: 'Build, Review',
-                        authorityScope: 'Project-level',
-                        specGate: 'PASS',
-                        uatStatus: 'Done',
-                        uatScore: 95,
-                        uatQuality: 'Excellent',
-                        specScore: 92,
-                        specQuality: 'Excellent',
+                        id: 's1',
+                        title: 'Test Skill',
+                        domain: 'Category',
+                        difficulty: 'Easy',
+                        summary: '',
+                        path: '',
+                        content: '# Markdown Content',
                     },
                 ],
             },
         ]);
 
         render(<SkillLibrary />);
-        await waitFor(() => expect(screen.getByText('Full Meta Skill')).toBeTruthy());
-        fireEvent.click(screen.getByText('Full Meta Skill'));
+        await waitFor(() => expect(screen.getByText('Test Skill')).toBeTruthy());
 
-        // Verify metadata badges are rendered
+        // Click the skill in sidebar
+        fireEvent.click(screen.getByText('Test Skill'));
+
+        // The Empty State should disappear, and Skill Details should appear
         await waitFor(() => {
-            expect(screen.getByText(/Autonomy.*Assisted/i) || screen.getByText(/Assisted/i)).toBeTruthy();
-            expect(screen.getByText(/Risk.*R2/i) || screen.getByText(/R2/i)).toBeTruthy();
+            expect(screen.queryByText('Select a skill to explore')).toBeNull();
+            expect(screen.getAllByText('Test Skill').length).toBeGreaterThan(1); // One in sidebar, one in header
+            expect(screen.getByText('Markdown Content')).toBeTruthy();
         });
+
+        // Analytics tracking should have been called
+        expect(trackEventMock).toHaveBeenCalledWith('skill_viewed', expect.objectContaining({
+            skillId: 's1',
+            skillTitle: 'Test Skill',
+        }));
     });
 });

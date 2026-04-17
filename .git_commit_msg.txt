@@ -1,3 +1,0 @@
-fix(web): correct dashboard home routing to prevent landing page redirect
-
-Redirect users to `/home` instead of `/` inside the dashboard layout and individual dashboard pages to avoid unexpectedly rendering the unauthenticated LandingPage which made it seem like the user was logged out.

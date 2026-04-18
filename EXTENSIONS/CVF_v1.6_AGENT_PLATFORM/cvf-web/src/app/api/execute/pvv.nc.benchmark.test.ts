@@ -30,8 +30,9 @@
  * thresholds after any run is seen.
  */
 import { describe, it, expect, afterAll } from 'vitest';
+import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
 
-const ALIBABA_KEY = process.env.ALIBABA_API_KEY ?? '';
+const ALIBABA_KEY = resolveAlibabaApiKey() ?? '';
 const SERVICE_TOKEN = process.env.CVF_SERVICE_TOKEN ?? '';
 const EXECUTE_URL = (process.env.CVF_EXECUTE_URL ?? 'http://localhost:3000') + '/api/execute';
 const DASHSCOPE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions';

@@ -21,8 +21,20 @@ sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')
 
 # ── Config ────────────────────────────────────────────────────────────────────
-GEMINI_KEY  = os.environ.get('GOOGLE_AI_API_KEY', 'AIzaSyCneagGvWHHT5XP70rPKQzy_XxmG7TXjQg')
-ALIBABA_KEY = os.environ.get('ALIBABA_API_KEY',   'sk-74348a8d6125430b8628db910d39d529')
+def resolve_env(*names):
+    for name in names:
+        value = os.environ.get(name, '').strip()
+        if value:
+            return value
+    return ''
+
+GEMINI_KEY  = resolve_env('GOOGLE_AI_API_KEY')
+ALIBABA_KEY = resolve_env('ALIBABA_API_KEY', 'CVF_BENCHMARK_ALIBABA_KEY', 'CVF_ALIBABA_API_KEY')
+
+if not GEMINI_KEY:
+    raise SystemExit('ERROR: GOOGLE_AI_API_KEY is not set.')
+if not ALIBABA_KEY:
+    raise SystemExit('ERROR: ALIBABA_API_KEY is not set. Compatibility aliases: CVF_BENCHMARK_ALIBABA_KEY, CVF_ALIBABA_API_KEY.')
 
 DASHSCOPE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions'
 GEMINI_URL    = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'

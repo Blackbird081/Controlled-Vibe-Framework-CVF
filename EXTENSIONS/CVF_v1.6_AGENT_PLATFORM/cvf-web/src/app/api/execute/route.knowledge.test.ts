@@ -1,175 +1,223 @@
 /**
- * W101-T1 — Knowledge-Native Execute Path Integration
- * Route integration tests: verifies that knowledgeContext is extracted from
- * the request body, used to build an enriched system prompt, and passed to
- * executeAI via the systemPrompt option.
+ * Wave 1 — Execute path retrieval partitioning integration tests
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { mkdtemp, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+
+import { appendKnowledgeCollectionScopeEvent } from '@/lib/policy-events';
+import { readAuditEvents } from '@/lib/control-plane-events';
 
 const executeAIMock = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
+const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
-    executeAI: executeAIMock,
-    CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
+  executeAI: executeAIMock,
+  CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
 vi.mock('@/lib/enforcement', () => ({
-    evaluateEnforcement: evaluateEnforcementMock,
+  evaluateEnforcement: evaluateEnforcementMock,
 }));
 
 vi.mock('@/lib/middleware-auth', () => ({
-    verifySessionCookie: verifySessionCookieMock,
-    withSessionAuditPayload: (session: { impersonation?: { realActorId: string; sessionId: string } } | null | undefined, payload?: Record<string, unknown>) => {
-        const nextPayload = { ...(payload ?? {}) };
-        if (session?.impersonation) {
-            nextPayload.impersonatedBy = session.impersonation.realActorId;
-            nextPayload.impersonationSessionId = session.impersonation.sessionId;
-        }
-        return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;
-    },
+  verifySessionCookie: verifySessionCookieMock,
+  withSessionAuditPayload: (
+    session: { impersonation?: { realActorId: string; sessionId: string } } | null | undefined,
+    payload?: Record<string, unknown>,
+  ) => {
+    const nextPayload = { ...(payload ?? {}) };
+    if (session?.impersonation) {
+      nextPayload.impersonatedBy = session.impersonation.realActorId;
+      nextPayload.impersonationSessionId = session.impersonation.sessionId;
+    }
+    return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;
+  },
+}));
+
+vi.mock('@/lib/quota-guard', () => ({
+  checkTeamQuota: checkTeamQuotaMock,
+  hasSoftCapAuditEvent: vi.fn().mockResolvedValue(false),
+}));
+
+vi.mock('@/lib/guard-engine-singleton', () => ({
+  getSharedGuardEngine: () => ({
+    evaluate: () => ({ finalDecision: 'ALLOW', results: [] }),
+  }),
 }));
 
 import { POST } from './route';
 
-const KNOWLEDGE_CONTEXT = 'Domain fact: Bubble.io is cloud-only. For offline apps use Python/Electron.';
+describe('/api/execute — retrieval partitioning enforcement', () => {
+  const originalEnv = { ...process.env };
+  let tempDir = '';
 
-describe('/api/execute — W101-T1 knowledge context injection', () => {
-    const originalEnv = { ...process.env };
+  beforeEach(async () => {
+    tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-execute-knowledge-'));
+    process.env = { ...originalEnv };
+    process.env.CVF_CONTROL_PLANE_EVENTS_PATH = path.join(tempDir, 'events.json');
+    process.env.OPENAI_API_KEY = 'openai-test-key';
+    delete process.env.ANTHROPIC_API_KEY;
+    delete process.env.GOOGLE_AI_API_KEY;
+    delete process.env.ALIBABA_API_KEY;
+    delete process.env.CVF_BENCHMARK_ALIBABA_KEY;
+    delete process.env.CVF_ALIBABA_API_KEY;
+    delete process.env.OPENROUTER_API_KEY;
+    delete process.env.DEFAULT_AI_PROVIDER;
+    delete process.env.CVF_SERVICE_TOKEN;
 
-    beforeEach(() => {
-        executeAIMock.mockReset();
-        evaluateEnforcementMock.mockReset();
-        verifySessionCookieMock.mockReset();
-        evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
-        process.env = { ...originalEnv };
-        process.env.OPENAI_API_KEY = 'openai-test-key';
-        delete process.env.ANTHROPIC_API_KEY;
-        delete process.env.GOOGLE_AI_API_KEY;
-        delete process.env.ALIBABA_API_KEY;
-        delete process.env.OPENROUTER_API_KEY;
-        delete process.env.DEFAULT_AI_PROVIDER;
-        verifySessionCookieMock.mockResolvedValue({
-            user: 'tester',
-            role: 'admin',
-            expiresAt: Date.now() + 1000 * 60 * 60,
-        });
+    executeAIMock.mockReset();
+    evaluateEnforcementMock.mockReset();
+    verifySessionCookieMock.mockReset();
+    checkTeamQuotaMock.mockReset();
+
+    evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
+    checkTeamQuotaMock.mockResolvedValue({
+      exceeded: false,
+      currentUSD: 0,
+      softCapUSD: 50,
+      hardCapUSD: 100,
+      overrideActive: false,
+    });
+    executeAIMock.mockResolvedValue({
+      success: true,
+      output: 'response with scoped context',
+      provider: 'openai',
+      model: 'gpt-4o',
+    });
+    verifySessionCookieMock.mockResolvedValue({
+      userId: 'usr_a',
+      user: 'Tenant A',
+      role: 'admin',
+      orgId: 'org_a',
+      teamId: 'team_a',
+      expiresAt: Date.now() + 1000 * 60 * 60,
+      authMode: 'session',
+    });
+  });
+
+  afterEach(async () => {
+    process.env = { ...originalEnv };
+    if (tempDir) {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('injects only tenant-matching chunks into the system prompt', async () => {
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Need tenant-a alpha-scope partition details',
+        inputs: { question: 'What is the tenant-a codename?' },
+        provider: 'openai',
+      }),
     });
 
-    afterEach(() => {
-        process.env = { ...originalEnv };
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.success).toBe(true);
+
+    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    expect(options.systemPrompt as string).toContain('TENANT-A-SIGNAL');
+    expect(options.systemPrompt as string).not.toContain('SHADOW-BETA');
+    expect(data.knowledgeInjection).toMatchObject({
+      injected: true,
+      source: 'retrieval',
+      chunkCount: 1,
+    });
+  });
+
+  it('audits dropped cross-tenant chunks when query matches forbidden tenant content', async () => {
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Compare tenant-a and tenant-b partition markers',
+        inputs: { question: 'What tenant private markers exist?' },
+        provider: 'openai',
+      }),
     });
 
-    it('calls executeAI WITHOUT systemPrompt override when knowledgeContext is absent', async () => {
-        executeAIMock.mockResolvedValue({
-            success: true,
-            output: 'response without context',
-            provider: 'openai',
-            model: 'gpt-4o',
-        });
+    await POST(req as never);
+    const events = await readAuditEvents();
+    const filterEvent = events.find(event => event.eventType === 'KNOWLEDGE_SCOPE_FILTER_APPLIED');
 
-        const req = new Request('http://localhost/api/execute', {
-            method: 'POST',
-            body: JSON.stringify({
-                templateName: 'Strategy',
-                intent: 'Analyze the market',
-                inputs: { targetMarket: 'SMBs' },
-                provider: 'openai',
-            }),
-        });
+    expect(filterEvent).toBeDefined();
+    expect((filterEvent?.payload as { droppedChunkCount?: number } | undefined)?.droppedChunkCount).toBeGreaterThan(0);
+  });
 
-        const res = await POST(req as never);
-        const data = await res.json();
-
-        expect(res.status).toBe(200);
-        expect(data.success).toBe(true);
-        expect(executeAIMock.mock.calls[0][3]).toEqual({ model: undefined });
-        expect(data.knowledgeInjection).toEqual({ injected: false, contextLength: 0 });
+  it('ignores raw knowledgeContext from session callers to prevent cross-tenant inline bypass', async () => {
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Need tenant-a alpha-scope partition details',
+        inputs: { question: 'What is the tenant-a codename?' },
+        knowledgeContext: 'INLINE-BYPASS SHOULD NOT APPEAR',
+        provider: 'openai',
+      }),
     });
 
-    it('calls executeAI WITH enriched systemPrompt when knowledgeContext is provided', async () => {
-        executeAIMock.mockResolvedValue({
-            success: true,
-            output: 'response with context',
-            provider: 'openai',
-            model: 'gpt-4o',
-        });
+    await POST(req as never);
+    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
 
-        const req = new Request('http://localhost/api/execute', {
-            method: 'POST',
-            body: JSON.stringify({
-                templateName: 'Strategy',
-                intent: 'Analyze the market',
-                inputs: { targetMarket: 'SMBs' },
-                provider: 'openai',
-                knowledgeContext: KNOWLEDGE_CONTEXT,
-            }),
-        });
+    expect(options.systemPrompt as string).toContain('TENANT-A-SIGNAL');
+    expect(options.systemPrompt as string).not.toContain('INLINE-BYPASS SHOULD NOT APPEAR');
+  });
 
-        const res = await POST(req as never);
-        const data = await res.json();
+  it('allows legacy inline knowledgeContext only for service-token callers without session', async () => {
+    process.env.CVF_SERVICE_TOKEN = 'svc';
+    verifySessionCookieMock.mockResolvedValueOnce(null);
 
-        expect(res.status).toBe(200);
-        expect(data.success).toBe(true);
-
-        const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
-        expect(typeof options.systemPrompt).toBe('string');
-        expect(options.systemPrompt as string).toContain('BASE_SYSTEM_PROMPT');
-        expect(options.systemPrompt as string).toContain('GOVERNED KNOWLEDGE CONTEXT');
-        expect(options.systemPrompt as string).toContain('Bubble.io is cloud-only');
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      headers: { 'x-cvf-service-token': 'svc' },
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Internal governed context handoff',
+        inputs: { question: 'What is the service-only context?' },
+        knowledgeContext: 'SERVICE-ONLY INLINE CONTEXT',
+        provider: 'openai',
+      }),
     });
 
-    it('response includes knowledgeInjection metadata with injected=true when context provided', async () => {
-        executeAIMock.mockResolvedValue({
-            success: true,
-            output: 'response with context',
-            provider: 'openai',
-            model: 'gpt-4o',
-        });
+    const res = await POST(req as never);
+    const data = await res.json();
+    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
 
-        const req = new Request('http://localhost/api/execute', {
-            method: 'POST',
-            body: JSON.stringify({
-                templateName: 'Strategy',
-                intent: 'Analyze the market',
-                inputs: { targetMarket: 'SMBs' },
-                provider: 'openai',
-                knowledgeContext: KNOWLEDGE_CONTEXT,
-            }),
-        });
+    expect(res.status).toBe(200);
+    expect(options.systemPrompt as string).toContain('SERVICE-ONLY INLINE CONTEXT');
+    expect(data.knowledgeInjection.source).toBe('inline-service');
+  });
 
-        const res = await POST(req as never);
-        const data = await res.json();
-
-        expect(data.knowledgeInjection.injected).toBe(true);
-        expect(data.knowledgeInjection.contextLength).toBe(KNOWLEDGE_CONTEXT.length);
+  it('applies admin scope overrides to collection retrieval', async () => {
+    await appendKnowledgeCollectionScopeEvent({
+      collectionId: 'cvf-engineering-runbooks',
+      orgId: 'org_a',
+      teamId: 'team_a',
+      setBy: 'usr_1',
+      setAt: '2026-04-18T10:15:00.000Z',
     });
 
-    it('treats whitespace-only knowledgeContext as absent (no injection)', async () => {
-        executeAIMock.mockResolvedValue({
-            success: true,
-            output: 'response',
-            provider: 'openai',
-            model: 'gpt-4o',
-        });
-
-        const req = new Request('http://localhost/api/execute', {
-            method: 'POST',
-            body: JSON.stringify({
-                templateName: 'Strategy',
-                intent: 'Analyze the market',
-                inputs: { targetMarket: 'SMBs' },
-                provider: 'openai',
-                knowledgeContext: '   ',
-            }),
-        });
-
-        const res = await POST(req as never);
-        const data = await res.json();
-
-        expect(res.status).toBe(200);
-        expect(executeAIMock.mock.calls[0][3]).toEqual({ model: undefined });
-        expect(data.knowledgeInjection.injected).toBe(false);
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Need engineering deploy runbook guidance',
+        inputs: { question: 'What is the engineering codename?' },
+        provider: 'openai',
+      }),
     });
+
+    await POST(req as never);
+    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+
+    expect(options.systemPrompt as string).toContain('BRAVO-CIRCUIT');
+  });
 });

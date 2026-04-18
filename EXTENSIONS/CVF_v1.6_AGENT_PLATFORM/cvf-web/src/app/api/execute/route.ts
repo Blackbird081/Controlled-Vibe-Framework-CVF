@@ -18,6 +18,8 @@ import { checkTeamQuota } from '@/lib/quota-guard';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { applyDLPFilter } from '@/lib/dlp-filter';
 import { withSessionAuditPayload } from '@/lib/middleware-auth';
+import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
+import { formatKnowledgeChunks, queryKnowledgeChunks } from '@/lib/knowledge-retrieval';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
 // Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
@@ -122,7 +124,7 @@ export async function POST(request: NextRequest) {
             openai: process.env.OPENAI_API_KEY,
             claude: process.env.ANTHROPIC_API_KEY,
             gemini: process.env.GOOGLE_AI_API_KEY,
-            alibaba: process.env.ALIBABA_API_KEY,
+            alibaba: resolveAlibabaApiKey(),
             openrouter: process.env.OPENROUTER_API_KEY,
         };
 
@@ -350,14 +352,59 @@ export async function POST(request: NextRequest) {
         const routedProvider: AIProvider = routingResult.selectedProvider ?? provider;
         const routedApiKey = apiKeyMap[routedProvider];
 
-        // ── KNOWLEDGE CONTEXT INJECTION (W101-T1) ──────────────────────────────────
-        const knowledgeContext = body.knowledgeContext;
-        const enrichedSystemPrompt = hasKnowledgeContext(knowledgeContext)
-            ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, knowledgeContext, {
+        // ── KNOWLEDGE RETRIEVAL + TENANT PARTITION ENFORCEMENT ────────────────────
+        const allowInlineKnowledgeContext = !session && isServiceAllowed;
+        const inlineKnowledgeContext = allowInlineKnowledgeContext ? body.knowledgeContext : undefined;
+
+        // Service-token callers with explicit inline context bypass retrieval (governed hand-off path).
+        // All session callers always go through scoped retrieval.
+        let retrievalResult: Awaited<ReturnType<typeof queryKnowledgeChunks>>;
+        if (inlineKnowledgeContext) {
+            retrievalResult = {
+                chunks: [],
+                matchedChunkCount: 0,
+                allowedChunkCount: 0,
+                droppedChunkCount: 0,
+                allowedCollectionIds: [],
+                droppedCollectionIds: [],
+            };
+        } else {
+            retrievalResult = await queryKnowledgeChunks({
+                intent: body.intent!,
+                orgId: session?.orgId,
+                teamId: session?.teamId,
+            });
+        }
+        const retrievedKnowledgeContext = formatKnowledgeChunks(retrievalResult.chunks);
+        const finalKnowledgeContext = retrievedKnowledgeContext ?? inlineKnowledgeContext;
+        const enrichedSystemPrompt = hasKnowledgeContext(finalKnowledgeContext)
+            ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, finalKnowledgeContext, {
                 orgId: session?.orgId,
                 teamId: session?.teamId,
             })
             : undefined;
+
+        if (retrievalResult.droppedChunkCount > 0) {
+            await appendAuditEvent({
+                eventType: 'KNOWLEDGE_SCOPE_FILTER_APPLIED',
+                actorId: session?.userId ?? 'service-account',
+                actorRole: session?.role ?? 'service',
+                targetResource: body.templateName || body.templateId || 'unknown-template',
+                action: 'FILTER_KNOWLEDGE_SCOPE',
+                riskLevel: 'R2',
+                phase: 'PHASE D',
+                outcome: 'FILTERED',
+                payload: withSessionAuditPayload(session, {
+                    requestedOrgId: session?.orgId ?? null,
+                    requestedTeamId: session?.teamId ?? null,
+                    retrievedChunkCount: retrievalResult.matchedChunkCount,
+                    allowedChunkCount: retrievalResult.allowedChunkCount,
+                    droppedChunkCount: retrievalResult.droppedChunkCount,
+                    allowedCollectionIds: retrievalResult.allowedCollectionIds,
+                    droppedCollectionIds: retrievalResult.droppedCollectionIds,
+                }),
+            });
+        }
 
         if (!routedApiKey) {
             return NextResponse.json(
@@ -478,7 +525,9 @@ export async function POST(request: NextRequest) {
             },
             knowledgeInjection: {
                 injected: !!enrichedSystemPrompt,
-                contextLength: knowledgeContext?.length ?? 0,
+                contextLength: finalKnowledgeContext?.length ?? 0,
+                source: retrievedKnowledgeContext ? 'retrieval' : inlineKnowledgeContext ? 'inline-service' : 'none',
+                chunkCount: retrievalResult.allowedChunkCount,
             },
             outputValidation: outputValidation ? {
                 qualityHint: outputValidation.qualityHint,

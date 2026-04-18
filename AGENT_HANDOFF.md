@@ -18,8 +18,33 @@
 - `cvf-next` is now a synchronized compatibility mirror and should not drift ahead of `main` without an explicit branch strategy change
 - Pre-public restructuring posture is now narrowed, canonized, and closed-by-default: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
 - Canonical scan continuity registry: `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
+- Operator policy (2026-04-18): Alibaba is the preferred live-test lane for CVF because quota/model coverage is favorable for validation. Canonical env is `ALIBABA_API_KEY`; compatibility aliases `CVF_BENCHMARK_ALIBABA_KEY` and `CVF_ALIBABA_API_KEY` remain supported. If one of these env vars is already configured, future agents should use it without asking for a new key. Never commit raw key values.
 - Enterprise Admin Console Phase C (C0–C4) is **CLOSED DELIVERED 2026-04-18** (commit `faa9668b`). Roadmap: `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_1_PHASE_C_2026-04-18.md`.
 - Enterprise Admin Console Phase D (D1+D2) is **CLOSED DELIVERED 2026-04-18** (implementation commit `4a44eed9`; supplemental closure commit `5d3242a6`). D1: DLP filter core + execute-path hook + admin panel + knowledge partitioning plumbing (D1.4a). D2: SIEM webhook + signed CSV + CLI verify + break-glass + owner impersonation. **D1.4b (RAG chunk enforcement) intentionally deferred** — no real retrieval adapter exists; plumbing (`orgId`/`teamId` `_scope` param) is in place. Live DLP smoke test (`route.dlp.live.test.ts`) proves D1.2 E2E redaction with real Alibaba call when `ALIBABA_API_KEY` is present.
+- Enterprise Admin next-frontier roadmap: `docs/roadmaps/CVF_ENTERPRISE_ADMIN_RETRIEVAL_PARTITIONING_ROADMAP_2026-04-18.md`. Default order is `Wave 1: Retrieval Partitioning` then `Wave 2: Alibaba-first Runtime / Product Validation`; parallel execution is preferred only when the two waves are genuinely independent and not validating a moving target.
+
+### Wave 1 Retrieval Partitioning — CLOSED DELIVERED 2026-04-18
+
+- All work from the uncommitted checkpoint has been completed, verified, and committed.
+- Verification baseline: `cvf-web` passes `tsc + full vitest (146 files / 2063 tests)` and Guard Contract passes `16 files / 226 tests`.
+
+#### What Was Delivered
+
+- **Alibaba env standardization**: canonical `ALIBABA_API_KEY` + compatibility aliases; helper `alibaba-env.ts`/`.test.ts`; wired into execute route, providers route, live tests, PVV scripts.
+- **FinOps bugfix**: `control-plane-events.ts` numeric sanitization for `getFinOpsSummary()`; regression tests added to `control-plane-events.test.ts`.
+- **Wave 1 — Retrieval Partitioning** (fully closed):
+  - `policy-events.ts`: `KnowledgeCollectionScopeEvent` + `appendKnowledgeCollectionScopeEvent`
+  - `policy-reader.ts`: `getKnowledgeCollectionScopes()` read-model
+  - `knowledge-retrieval.ts` + `knowledge-retrieval.test.ts`: bounded retrieval adapter with tenant/org/team scope enforcement; minimum score threshold (≥2) to suppress noise matches; 4 passing tests
+  - `execute/route.ts`: retrieval path uses `body.intent` (not expanded prompt); service-token inline context bypasses retrieval; `KNOWLEDGE_SCOPE_FILTER_APPLIED` audit event on drops; 5 new passing tests in `route.knowledge.test.ts`
+  - `execute/route.knowledge.test.ts`: guard engine mocked (tests focus on retrieval, not authority-gate behavior)
+  - `execute/route.followup.test.ts`: `CVF_SYSTEM_PROMPT` added to `@/lib/ai` mock (regression fix)
+  - `admin/tool-registry/knowledge-scope/route.ts` + `route.test.ts`: POST endpoint to persist collection scope; 3 passing tests
+  - `components/admin/AdminKnowledgePartitioningControls.tsx`: client UI for `/admin/tool-registry`
+  - `app/admin/tool-registry/page.tsx`: wired `AdminKnowledgePartitioningControls` with data loading from `listKnowledgeCollections()` + `MOCK_ORGANIZATIONS` + `MOCK_TEAMS`; removed stale amber plumbing-only notice
+  - `docs/roadmaps/CVF_ENTERPRISE_ADMIN_RETRIEVAL_PARTITIONING_ROADMAP_2026-04-18.md`: roadmap doc present
+- **Wave 2 (Alibaba-first Runtime / Product Validation)**: deferred — prerequisite groundwork (canonical env, live DLP test 2/2, knowledge benchmark 12/12) is already committed; no new tranche implemented. Next agent may open this if desired.
+- Known pre-existing: `alibaba-dashscope-provider.test.ts` has a live E2E failure (`COMPLETED` vs `BLOCKED`) that is a runtime/guard behavior issue unrelated to env config; not fixed in this tranche.
 
 ### Local Verify Baseline (2026-04-13)
 - CPF (Control Plane Foundation): `npm run check` + `npm test` clean; **2999 tests, 0 failures**

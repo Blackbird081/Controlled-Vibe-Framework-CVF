@@ -24,7 +24,11 @@
 
 'use strict';
 
-const ALIBABA_KEY = process.env.ALIBABA_API_KEY;
+function resolveAlibabaApiKey(env = process.env) {
+  return env.ALIBABA_API_KEY || env.CVF_BENCHMARK_ALIBABA_KEY || env.CVF_ALIBABA_API_KEY;
+}
+
+const ALIBABA_KEY = resolveAlibabaApiKey();
 const ENDPOINT = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions';
 const MODEL = 'qwen-max';
 const FALLBACK_MODEL = 'qwen3-max';
@@ -174,7 +178,7 @@ function computePrecision(output, keywords) {
 // ---------------------------------------------------------------------------
 async function runBenchmark() {
   if (!ALIBABA_KEY) {
-    console.error('ERROR: ALIBABA_API_KEY not set. Export it and re-run.');
+    console.error('ERROR: ALIBABA_API_KEY not set. Compatibility aliases: CVF_BENCHMARK_ALIBABA_KEY, CVF_ALIBABA_API_KEY.');
     process.exit(1);
   }
 

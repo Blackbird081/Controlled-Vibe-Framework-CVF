@@ -96,6 +96,38 @@ describe('control-plane-events', () => {
     expect(summary.topSkills[0].key).toBe('SKILL-001');
   });
 
+  it('sanitizes malformed finops numeric fields instead of throwing during summary aggregation', async () => {
+    const storePath = process.env.CVF_CONTROL_PLANE_EVENTS_PATH as string;
+    await writeFile(storePath, JSON.stringify([
+      {
+        id: 'bad-cost-1',
+        kind: 'cost',
+        evidenceClass: 'FULL',
+        timestamp: '2026-04-18T09:00:00.000Z',
+        userId: 'usr_2',
+        teamId: 'team_exec',
+        orgId: 'org_cvf',
+        provider: 'alibaba',
+        model: 'qwen-turbo',
+        inputTokens: null,
+        outputTokens: 'oops',
+        estimatedCostUSD: Number.NaN,
+      },
+    ], null, 2), 'utf8');
+
+    const summary = await getFinOpsSummary();
+
+    expect(summary.totalRequests).toBe(1);
+    expect(summary.totalCostUSD).toBe(0);
+    expect(summary.totalTokens).toBe(0);
+    expect(summary.timeSeries[0]).toMatchObject({
+      date: '2026-04-18',
+      cost: 0,
+      tokens: 0,
+      requests: 1,
+    });
+  });
+
   it('repairs a corrupted store by recovering the first valid top-level array', async () => {
     const storePath = process.env.CVF_CONTROL_PLANE_EVENTS_PATH as string;
     await writeFile(storePath, '[{"kind":"audit","evidenceClass":"FULL","eventType":"A","actorId":"u","actorRole":"admin","targetResource":"r","action":"x","outcome":"SUCCESS","id":"1","timestamp":"2026-04-18T00:00:00.000Z"}]BROKEN', 'utf8');

@@ -66,6 +66,8 @@ describe('/api/execute', () => {
         delete process.env.ANTHROPIC_API_KEY;
         delete process.env.GOOGLE_AI_API_KEY;
         delete process.env.ALIBABA_API_KEY;
+        delete process.env.CVF_BENCHMARK_ALIBABA_KEY;
+        delete process.env.CVF_ALIBABA_API_KEY;
         delete process.env.OPENROUTER_API_KEY;
         delete process.env.DEFAULT_AI_PROVIDER;
         delete process.env.CVF_SESSION_SECRET;
@@ -200,6 +202,35 @@ describe('/api/execute', () => {
         expect(res.status).toBe(200);
         expect(executeAIMock).toHaveBeenCalledWith('alibaba', 'ali-key', expect.any(String), {
             model: 'qvq-max',
+        });
+    });
+
+    it('accepts Alibaba compatibility alias for execute path routing', async () => {
+        process.env.CVF_BENCHMARK_ALIBABA_KEY = 'ali-benchmark-key';
+        process.env.CVF_SERVICE_TOKEN = 'svc';
+        verifySessionCookieMock.mockResolvedValueOnce(null);
+        executeAIMock.mockResolvedValue({
+            success: true,
+            output: 'ok',
+            provider: 'alibaba',
+            model: 'qwen-turbo',
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Strategy',
+                intent: 'Analyze the market',
+                inputs: { targetMarket: 'SMBs' },
+                provider: 'alibaba',
+            }),
+            headers: { 'x-cvf-service-token': 'svc' },
+        });
+
+        const res = await POST(req as never);
+        expect(res.status).toBe(200);
+        expect(executeAIMock).toHaveBeenCalledWith('alibaba', 'ali-benchmark-key', expect.any(String), {
+            model: undefined,
         });
     });
 

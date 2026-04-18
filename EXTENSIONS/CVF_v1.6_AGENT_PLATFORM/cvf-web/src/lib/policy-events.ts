@@ -10,6 +10,7 @@ export type PolicyEventKind =
   | 'tool-policy'
   | 'dlp-policy'
   | 'siem-config'
+  | 'knowledge-collection-scope'
   | 'impersonation-session';
 
 export interface PolicyEventBase {
@@ -75,6 +76,15 @@ export interface SIEMConfigEvent extends PolicyEventBase {
   setAt: string;
 }
 
+export interface KnowledgeCollectionScopeEvent extends PolicyEventBase {
+  kind: 'knowledge-collection-scope';
+  collectionId: string;
+  orgId: string | null;
+  teamId: string | null;
+  setBy: string;
+  setAt: string;
+}
+
 export interface ImpersonationSessionEvent extends PolicyEventBase {
   kind: 'impersonation-session';
   sessionId: string;
@@ -93,6 +103,7 @@ export type PolicyControlPlaneEvent =
   | ToolPolicyEvent
   | DLPPolicyEvent
   | SIEMConfigEvent
+  | KnowledgeCollectionScopeEvent
   | ImpersonationSessionEvent;
 
 export async function appendQuotaPolicyEvent(
@@ -140,6 +151,15 @@ export async function appendSIEMConfigEvent(
   });
 }
 
+export async function appendKnowledgeCollectionScopeEvent(
+  event: Omit<KnowledgeCollectionScopeEvent, 'kind' | 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<KnowledgeCollectionScopeEvent, 'id' | 'timestamp'>>,
+): Promise<KnowledgeCollectionScopeEvent> {
+  return appendControlPlaneEvent<KnowledgeCollectionScopeEvent>({
+    kind: 'knowledge-collection-scope',
+    ...event,
+  });
+}
+
 export async function appendImpersonationSessionEvent(
   event: Omit<ImpersonationSessionEvent, 'kind' | 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<ImpersonationSessionEvent, 'id' | 'timestamp'>>,
 ): Promise<ImpersonationSessionEvent> {
@@ -158,6 +178,7 @@ export async function readPolicyEvents(): Promise<PolicyControlPlaneEvent[]> {
       || event.kind === 'tool-policy'
       || event.kind === 'dlp-policy'
       || event.kind === 'siem-config'
+      || event.kind === 'knowledge-collection-scope'
       || event.kind === 'impersonation-session',
   );
 }

@@ -6,6 +6,7 @@ const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
     executeAI: executeAIMock,
+    CVF_SYSTEM_PROMPT: '',
 }));
 
 vi.mock('@/lib/enforcement', () => ({
@@ -39,6 +40,9 @@ describe('/api/execute — follow-up prompt threading (W97-T1)', () => {
         delete process.env.OPENAI_API_KEY;
         delete process.env.ANTHROPIC_API_KEY;
         delete process.env.GOOGLE_AI_API_KEY;
+        delete process.env.ALIBABA_API_KEY;
+        delete process.env.CVF_BENCHMARK_ALIBABA_KEY;
+        delete process.env.CVF_ALIBABA_API_KEY;
         delete process.env.DEFAULT_AI_PROVIDER;
         delete process.env.CVF_SESSION_SECRET;
         process.env.OPENAI_API_KEY = 'test-key';

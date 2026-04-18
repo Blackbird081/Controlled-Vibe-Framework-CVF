@@ -20,8 +20,18 @@ import sys, os, re, json, time, urllib.request, urllib.error, random
 sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')
 
-ALIBABA_KEY   = os.environ.get('ALIBABA_API_KEY', 'sk-74348a8d6125430b8628db910d39d529')
+def resolve_env(*names):
+    for name in names:
+        value = os.environ.get(name, '').strip()
+        if value:
+            return value
+    return ''
+
+ALIBABA_KEY   = resolve_env('ALIBABA_API_KEY', 'CVF_BENCHMARK_ALIBABA_KEY', 'CVF_ALIBABA_API_KEY')
 DASHSCOPE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions'
+
+if not ALIBABA_KEY:
+    raise SystemExit('ERROR: ALIBABA_API_KEY is not set. Compatibility aliases: CVF_BENCHMARK_ALIBABA_KEY, CVF_ALIBABA_API_KEY.')
 
 LANES = [
     {'lane_id': 'LANE-ALIBABA-004', 'model': 'qwen-turbo', 'role': 'ROUTER',   'stream': False},

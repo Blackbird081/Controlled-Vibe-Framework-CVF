@@ -10,6 +10,8 @@ describe('/api/providers', () => {
         delete process.env.ANTHROPIC_API_KEY;
         delete process.env.GOOGLE_AI_API_KEY;
         delete process.env.ALIBABA_API_KEY;
+        delete process.env.CVF_BENCHMARK_ALIBABA_KEY;
+        delete process.env.CVF_ALIBABA_API_KEY;
         delete process.env.OPENROUTER_API_KEY;
         delete process.env.DEFAULT_AI_PROVIDER;
     });
@@ -36,5 +38,16 @@ describe('/api/providers', () => {
         expect(data.defaultProvider).toBe('gemini');
         const openai = data.providers.find((p: { provider: string }) => p.provider === 'openai');
         expect(openai.configured).toBe(true);
+    });
+
+    it('treats Alibaba compatibility aliases as configured', async () => {
+        process.env.CVF_BENCHMARK_ALIBABA_KEY = 'ali-benchmark-key';
+
+        const res = await GET();
+        const data = await res.json();
+        const alibaba = data.providers.find((p: { provider: string }) => p.provider === 'alibaba');
+
+        expect(data.anyConfigured).toBe(true);
+        expect(alibaba.configured).toBe(true);
     });
 });

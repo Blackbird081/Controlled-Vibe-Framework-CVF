@@ -1,7 +1,7 @@
 /**
  * AlibabaDashScopeProvider Tests
  * ================================
- * Unit tests (always run) + Live tests (run when CVF_ALIBABA_API_KEY is set)
+ * Unit tests (always run) + Live tests (run when ALIBABA_API_KEY is set)
  */
 
 import { describe, it, expect } from 'vitest';
@@ -9,9 +9,14 @@ import { AlibabaDashScopeProvider } from './alibaba-dashscope-provider';
 import { AgentExecutionRuntime } from '../agent-execution-runtime';
 import { createGuardEngine } from '../../index';
 
-// Use environment variable for API key (do not commit raw keys)
-const API_KEY = process.env.CVF_ALIBABA_API_KEY || 'PLACEHOLDER_KEY';
-const LIVE = !!process.env.CVF_ALIBABA_API_KEY;
+// Use environment variable for API key (do not commit raw keys).
+// Canonical env is ALIBABA_API_KEY; legacy aliases remain supported for compatibility.
+const API_KEY =
+  process.env.ALIBABA_API_KEY ||
+  process.env.CVF_BENCHMARK_ALIBABA_KEY ||
+  process.env.CVF_ALIBABA_API_KEY ||
+  'PLACEHOLDER_KEY';
+const LIVE = API_KEY !== 'PLACEHOLDER_KEY';
 
 // ─── Constructor (always run) ─────────────────────────────────────────
 
@@ -56,7 +61,7 @@ describe('AlibabaDashScopeProvider with guard blocking', () => {
   });
 });
 
-// ─── Live API Tests (only when CVF_ALIBABA_API_KEY is set) ────────────
+// ─── Live API Tests (only when an Alibaba API key env is set) ─────────
 
 describe.skipIf(!LIVE)('AlibabaDashScopeProvider live execution', () => {
   it('calls Qwen API and returns response', async () => {
@@ -76,7 +81,7 @@ describe.skipIf(!LIVE)('AlibabaDashScopeProvider live execution', () => {
   }, 15000);
 });
 
-// ─── E2E: Full governed pipeline (only when CVF_ALIBABA_API_KEY is set)
+// ─── E2E: Full governed pipeline (only when an Alibaba API key env is set)
 
 describe.skipIf(!LIVE)('Full governed pipeline with AlibabaDashScopeProvider', () => {
   it('executes safe HUMAN action end-to-end', async () => {

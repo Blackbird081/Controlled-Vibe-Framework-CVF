@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { AIProvider, DEFAULT_MODELS, ProviderStatus } from '@/lib/ai';
+import { isAlibabaApiKeyConfigured } from '@/lib/alibaba-env';
 
 export async function GET() {
     const providers: ProviderStatus[] = [
@@ -20,7 +21,7 @@ export async function GET() {
         },
         {
             provider: 'alibaba',
-            configured: !!process.env.ALIBABA_API_KEY,
+            configured: isAlibabaApiKeyConfigured(),
             model: DEFAULT_MODELS.alibaba,
         },
         {

@@ -1,5 +1,6 @@
 import type {
   DLPPolicyEvent,
+  KnowledgeCollectionScopeEvent,
   ImpersonationSessionEvent,
   QuotaOverrideEvent,
   QuotaPolicyEvent,
@@ -120,6 +121,24 @@ export async function getActiveSIEMConfig(): Promise<SIEMConfigEvent | null> {
   return sortNewestFirst(
     events.filter((event): event is SIEMConfigEvent => event.kind === 'siem-config'),
   )[0] ?? null;
+}
+
+export async function getKnowledgeCollectionScopes(): Promise<Map<string, KnowledgeCollectionScopeEvent>> {
+  const events = await readPolicyEvents();
+  const scopes = new Map<string, KnowledgeCollectionScopeEvent>();
+
+  for (const event of sortNewestFirst(
+    events.filter(
+      (candidate): candidate is KnowledgeCollectionScopeEvent =>
+        candidate.kind === 'knowledge-collection-scope',
+    ),
+  )) {
+    if (!scopes.has(event.collectionId)) {
+      scopes.set(event.collectionId, event);
+    }
+  }
+
+  return scopes;
 }
 
 export async function getActiveImpersonationSession(

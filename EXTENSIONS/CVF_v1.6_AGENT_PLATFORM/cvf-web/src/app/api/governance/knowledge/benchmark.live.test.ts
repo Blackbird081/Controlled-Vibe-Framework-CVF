@@ -15,10 +15,10 @@
  *
  * Model   : qwen-max (Alibaba DashScope)
  * Avoided : qvq-max (operator instruction: quota exhausted)
- * Gate    : all tests skip unless CVF_BENCHMARK_ALIBABA_KEY env var is set
+ * Gate    : live tests run when ALIBABA_API_KEY is set; legacy aliases remain supported
  *
  * Run command (PowerShell):
- *   $env:CVF_BENCHMARK_ALIBABA_KEY="<key>"; npx vitest run src/app/api/governance/knowledge/benchmark.live.test.ts --reporter=verbose
+ *   $env:ALIBABA_API_KEY="<key>"; npx vitest run src/app/api/governance/knowledge/benchmark.live.test.ts --reporter=verbose
  *
  * Results from this file under the above GC-018 authorization constitute
  * formal W84-T1 tranche evidence. Do not alter scenarios or pass criteria
@@ -30,8 +30,9 @@ import {
   createCompiledKnowledgeArtifactContract,
   type CompiledKnowledgeArtifact,
 } from 'cvf-control-plane-foundation';
+import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
 
-const ALIBABA_KEY = process.env.CVF_BENCHMARK_ALIBABA_KEY ?? '';
+const ALIBABA_KEY = resolveAlibabaApiKey() ?? '';
 const testLive = ALIBABA_KEY ? it : it.skip;
 const MODEL = 'qwen-max';
 const DASHSCOPE_URL =

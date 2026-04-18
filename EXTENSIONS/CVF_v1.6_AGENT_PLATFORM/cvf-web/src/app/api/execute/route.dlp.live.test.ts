@@ -6,6 +6,7 @@
  * that a DLP_REDACTION_APPLIED audit event is emitted.
  *
  * Skipped automatically when ALIBABA_API_KEY is absent from the environment.
+ * Compatibility aliases remain supported via resolveAlibabaApiKey().
  * Run with: ALIBABA_API_KEY=sk-... npx vitest run route.dlp.live
  */
 
@@ -15,6 +16,7 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { readAuditEvents, type UnifiedAuditEvent } from '@/lib/control-plane-events';
+import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
 
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
@@ -46,7 +48,7 @@ vi.mock('@/lib/quota-guard', () => ({
 
 import { POST } from './route';
 
-const ALIBABA_API_KEY = process.env.ALIBABA_API_KEY;
+const ALIBABA_API_KEY = resolveAlibabaApiKey();
 
 describe.skipIf(!ALIBABA_API_KEY)(
   '/api/execute DLP live smoke — Alibaba qwen-turbo',

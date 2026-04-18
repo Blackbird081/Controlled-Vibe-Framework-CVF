@@ -247,6 +247,19 @@ export async function readCostEvents(): Promise<CostEvent[]> {
   return events.filter((event): event is CostEvent => event.kind === 'cost');
 }
 
+function toFiniteNumber(value: unknown): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : 0;
+}
+
+function sanitizeCostEvent(event: CostEvent): CostEvent {
+  return {
+    ...event,
+    inputTokens: toFiniteNumber(event.inputTokens),
+    outputTokens: toFiniteNumber(event.outputTokens),
+    estimatedCostUSD: toFiniteNumber(event.estimatedCostUSD),
+  };
+}
+
 function buildBreakdown(
   costEvents: CostEvent[],
   pickKey: (event: CostEvent) => string | undefined,
@@ -255,6 +268,7 @@ function buildBreakdown(
   const map = new Map<string, { cost: number; tokens: number; requests: number; label: string }>();
 
   for (const event of costEvents) {
+    const sanitized = sanitizeCostEvent(event);
     const key = pickKey(event) ?? 'unknown';
     const current = map.get(key) ?? {
       cost: 0,
@@ -262,8 +276,8 @@ function buildBreakdown(
       requests: 0,
       label: pickLabel(key),
     };
-    current.cost += event.estimatedCostUSD;
-    current.tokens += event.inputTokens + event.outputTokens;
+    current.cost += sanitized.estimatedCostUSD;
+    current.tokens += sanitized.inputTokens + sanitized.outputTokens;
     current.requests += 1;
     map.set(key, current);
   }
@@ -278,7 +292,7 @@ function startOfDayKey(timestamp: string): string {
 }
 
 export async function getFinOpsSummary() {
-  const costEvents = await readCostEvents();
+  const costEvents = (await readCostEvents()).map(sanitizeCostEvent);
   const timeSeriesMap = new Map<string, { date: string; cost: number; tokens: number; requests: number }>();
 
   for (const event of costEvents) {

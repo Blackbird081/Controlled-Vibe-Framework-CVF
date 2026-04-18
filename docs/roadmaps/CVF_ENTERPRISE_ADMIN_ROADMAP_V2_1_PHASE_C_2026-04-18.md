@@ -1,4 +1,4 @@
-# CVF Enterprise Admin Console — Phase C Detailed Roadmap
+# CVF Enterprise Admin Console — Phase C + D Detailed Roadmap
 *Date: 2026-04-18 | Parent: `CVF_ENTERPRISE_ADMIN_ROADMAP_V2_2026-04-17.md`*
 *Status: READY TO EXECUTE — Phase C0 gate required before C1*
 
@@ -362,7 +362,229 @@ Khi Admin approve/reject:
 
 ---
 
-## Cross-cutting Requirements (áp dụng mọi phase C)
+## Phase D1 — Egress Safety (1.5 tuần)
+
+**GC Binding:** GC mới cần khai báo `GC-Egress-Filter` trước khi bắt đầu. Server-side, không bypass-able.
+**Prerequisite:** C4 merged. Egress filter phải build sau khi execute path đã ổn định.
+
+**Điểm chặn đúng:** `execute/route.ts:126` — sau `buildExecutionPrompt`, trước `applySafetyFilters`. Prompt tồn tại ở đây, không nơi nào khác.
+
+### D1.1 — DLP Filter core
+
+**File mới:** `src/lib/dlp-filter.ts`
+
+```ts
+export interface DLPMatch {
+  patternId: string;
+  label: string;
+  matchCount: number;
+}
+
+export interface DLPResult {
+  redacted: string;
+  matches: DLPMatch[];
+  wasRedacted: boolean;
+}
+
+export async function applyDLPFilter(text: string): Promise<DLPResult>
+```
+
+Logic: đọc `DLPPolicy` events từ `control-plane-events.ts` store (lấy patterns mới nhất), apply regex theo thứ tự. Redact bằng `[REDACTED:<label>]`.
+
+**Layered approach (tránh chỉ dùng regex thuần):**
+
+1. **Layer 1 — Preset patterns (built-in, không thể tắt):** Credit card (Luhn-compatible), API key patterns (`sk-`, `Bearer`, AWS `AKIA`), Vietnamese CCCD (12 chữ số), email trong system prompt context.
+2. **Layer 2 — Admin-defined regex:** Từ `DLPPolicy` events do admin khai báo qua UI.
+3. **Layer 3 — Allowlist:** Patterns được whitelist không bị redact (e.g., model names, CVF internal tokens).
+
+### D1.2 — Hook vào execute path
+
+**File:** `src/app/api/execute/route.ts:126`
+
+```ts
+const userPrompt = buildExecutionPrompt(body as ExecutionRequest);
+
+// DLP egress filter — must run before safety filters and provider call
+const dlpResult = await applyDLPFilter(userPrompt);
+if (dlpResult.wasRedacted) {
+  await appendAuditEvent({
+    eventType: 'DLP_REDACTION_APPLIED',
+    actorId: session?.userId ?? 'service-account',
+    actorRole: session?.role ?? 'admin',
+    targetResource: body.templateName ?? 'unknown',
+    action: 'EGRESS_FILTER',
+    outcome: 'REDACTED',
+    payload: { matchCount: dlpResult.matches.length, patterns: dlpResult.matches.map(m => m.label) },
+  });
+}
+const filteredPrompt = dlpResult.redacted;
+// replace userPrompt with filteredPrompt in all downstream uses
+```
+
+> **GC-023 note:** `execute/route.ts` sẽ tăng thêm ~15 dòng. Nếu vượt threshold, tách DLP hook sang `src/lib/egress-pipeline.ts` nhận `(prompt, session, body)` và trả về `filteredPrompt`.
+
+### D1.3 — DLP Admin Panel
+
+**File mới:** `src/app/admin/dlp/page.tsx`
+**File mới:** `src/app/api/admin/dlp/policy/route.ts`
+
+UI tại `/admin/dlp`:
+
+- Hiển thị preset patterns (read-only, không thể tắt).
+- Form thêm custom regex: `label`, `pattern` (regex string), `enabled`.
+- Preview panel: paste text → xem masked output real-time (client-side preview với patterns hiện tại).
+- Submit → append `DLPPolicy` event vào store.
+
+**DLPPolicy event type** (thêm vào `policy-events.ts` từ C1):
+
+```ts
+export interface DLPPolicy {
+  kind: 'dlp-policy';
+  patterns: Array<{ id: string; label: string; regex: string; enabled: boolean }>;
+  setBy: string;
+  setAt: string;
+}
+```
+
+### D1.4 — RAG Knowledge Partitioning
+
+**File:** `src/lib/knowledge-context-injector.ts` (đã tồn tại — chỉ thêm tenant filter)
+
+Hiện tại knowledge injection không filter theo user. Thêm `orgId`/`teamId` filter:
+
+```ts
+export async function buildKnowledgeSystemPrompt(
+  intent: string,
+  options?: { orgId?: string; teamId?: string }
+): Promise<string | null>
+```
+
+Trong execute path, pass `session?.orgId` và `session?.teamId` vào options. Knowledge chunks không có matching org/team scope → bị loại khỏi context.
+
+**Admin UI:** `/admin/tool-registry` (Phase C3 đã có) — thêm tab "Knowledge Partitioning": cho phép admin set org/team scope per knowledge collection.
+
+### D1 Acceptance Gate
+
+- Unit tests `dlp-filter.ts`: preset patterns redact đúng; custom patterns từ store apply; allowlist bypass đúng.
+- Integration: gọi execute với prompt chứa credit card number → response không chứa số thẻ; audit event `DLP_REDACTION_APPLIED` được emit.
+- `/admin/dlp` preview panel hoạt động client-side.
+- RAG filter: user `orgId=org_a` không nhận knowledge chunks của `org_b`.
+
+---
+
+## Phase D2 — Enterprise Hardening (1 tuần)
+
+**GC Binding:** GC-018 (break-glass = R3 action — highest risk), GC-022 (tất cả events = FULL class)
+**Prerequisite:** D1 merged.
+
+### D2.1 — SIEM Webhook Export
+
+**File mới:** `src/app/api/admin/siem/route.ts`
+**File mới:** `src/app/admin/settings/page.tsx` (nếu chưa có)
+
+Config tại `/admin/settings` → "SIEM Integration":
+
+- Fields: `webhookUrl`, `signingSecret`, `enabled`, `eventTypes` (filter: audit only / cost only / all).
+- Persist dưới dạng `SIEMConfig` event trong store.
+
+**SIEM emit hook** tại `appendAuditEvent()` trong `control-plane-events.ts`:
+
+```ts
+// After writing to local store, if SIEM config exists and enabled:
+await forwardToSIEM(record);
+```
+
+**File mới:** `src/lib/siem-forwarder.ts`
+
+```ts
+export async function forwardToSIEM(event: ControlPlaneEvent): Promise<void>
+```
+
+Format output: JSON-over-HTTPS, `X-CVF-Signature: hmac-sha256(<payload>)`. Compatible với Splunk HEC (`event` field wrapper) và Elastic ingest (`@timestamp` field).
+
+Fire-and-forget với `console.error` on fail (tương tự audit delivery pattern từ middleware).
+
+### D2.2 — Signed CSV Export
+
+**File:** `src/lib/control-plane-events.ts` — update `exportAuditEventsToCsv()`
+
+Thêm HMAC-SHA256 signature trailer ở cuối CSV:
+
+```
+# CVF-AUDIT-SIGNATURE: hmac-sha256:<hex>
+# CVF-AUDIT-SIGNED-AT: 2026-04-18T00:00:00.000Z
+# CVF-AUDIT-RECORD-COUNT: 42
+```
+
+Key: `CVF_AUDIT_SIGNING_KEY` env var. Nếu missing → export CSV nhưng không có signature, thêm warning header `# WARNING: UNSIGNED EXPORT`.
+
+**File mới:** `tools/verify-audit-csv.ts` — CLI script cho CISO verify CSV:
+
+```bash
+npx ts-node tools/verify-audit-csv.ts --file cvf-audit-log.csv --key <signing-key>
+```
+
+### D2.3 — Break-Glass Procedure
+
+**Document:** `docs/guides/CVF_BREAK_GLASS_PROCEDURE.md`
+
+Nội dung: ai có quyền, điều kiện nào kích hoạt, procedure step-by-step, post-incident review requirements.
+
+**Code mechanism:**
+
+- `CVF_BREAK_GLASS_TOKEN` env var. Nếu set, token này có thể bypass `requireAdminSession()` một lần.
+- **File:** `src/lib/admin-session.ts` — thêm break-glass path:
+
+```ts
+const breakGlassToken = request.headers.get('x-cvf-break-glass');
+if (breakGlassToken && breakGlassToken === process.env.CVF_BREAK_GLASS_TOKEN) {
+  await appendAuditEvent({
+    eventType: 'BREAK_GLASS_USED',
+    actorId: 'break-glass',
+    actorRole: 'owner',
+    targetResource,
+    action: 'EMERGENCY_ACCESS',
+    riskLevel: 'R3',
+    outcome: 'GRANTED',
+  });
+  // Rotate token hint — actual rotation requires ops action
+  console.error('[CVF BREAK GLASS USED] Rotate CVF_BREAK_GLASS_TOKEN immediately.');
+  return BREAK_GLASS_SESSION;
+}
+```
+
+- Emit `BreakGlassUsed` audit event với `riskLevel: 'R3'`.
+- Log error tới stderr — alert on-call.
+- Token rotation: manual ops action sau mỗi lần dùng (document trong procedure).
+
+### D2.4 — Admin Impersonation / "View as User"
+
+**Scope:** Owner only (không phải Admin).
+
+**File mới:** `src/app/admin/impersonate/page.tsx`
+**File mới:** `src/app/api/admin/impersonate/route.ts`
+
+Flow:
+
+1. Owner chọn userId từ `/admin/impersonate`.
+2. POST `/api/admin/impersonate` → tạo `ImpersonationSession { realActorId, impersonatedUserId, startedAt, expiresAt: +1h }` trong store.
+3. Mọi action trong session impersonation emit audit event với `payload: { impersonatedBy: realActorId }`.
+4. Header `X-CVF-Impersonation-Active: true` hiển thị banner warning trong UI.
+5. POST `/api/admin/impersonate/end` → kết thúc session, emit `ImpersonationEnded` event.
+
+**Constraint:** Không thể impersonate Owner khác. Không thể impersonate trong break-glass session.
+
+### D2 Acceptance Gate
+
+- SIEM webhook nhận event khi admin action xảy ra.
+- CSV export có signature trailer. `verify-audit-csv.ts` pass với đúng key, fail với sai key.
+- Break-glass: request với valid token → access + `BREAK_GLASS_USED` event emitted + stderr log.
+- Impersonation: Owner có `/admin/impersonate`; Admin không có; audit events emit với impersonation metadata.
+- `CVF_BREAK_GLASS_PROCEDURE.md` tồn tại và có đủ 3 sections: conditions, procedure, post-incident.
+
+---
+
+## Cross-cutting Requirements (áp dụng mọi phase C + D)
 
 | Yêu cầu | Chi tiết |
 |---|---|
@@ -383,9 +605,11 @@ Ngày 4–7   : C1 (Policy Substrate) — policy types + read adapter
 Ngày 8–12  : C2 (Quota Engine) — soft/hard cap + override
 Ngày 13–17 : C3 (Tool Registry Actions) — dynamic + whitelist/blacklist
 Ngày 18–21 : C4 (Approvals Expansion) — payload view + timeout + audit
+Ngày 22–31 : D1 (Egress Safety) — DLP filter + RAG partitioning + Admin Panel
+Ngày 32–39 : D2 (Enterprise Hardening) — SIEM + Signed CSV + Break-glass + Impersonation
 ```
 
-**Tổng Phase C: ~21 ngày (3 tuần)**. Sau đó tiếp Phase D1 (DLP Egress) và D2 (Enterprise Hardening) theo roadmap V2.
+**Tổng C + D: ~39 ngày (~8 tuần)**. Đây là toàn bộ scope còn lại của Enterprise Admin Console.
 
 ---
 
@@ -397,4 +621,4 @@ Ngày 18–21 : C4 (Approvals Expansion) — payload view + timeout + audit
 | Phản biện gốc | `docs/reviews/CVF_ENTERPRISE_ADMIN_ROADMAP_CRITICAL_REVIEW_2026-04-17.md` | Critical review V1 |
 | Roadmap V2 | `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_2026-04-17.md` | Final roadmap sau review |
 | Implementation review | `docs/reviews/CVF_ENTERPRISE_ADMIN_PHASE0AB_IMPLEMENTATION_REVIEW_2026-04-18.md` | Audit Phase 0+A+B |
-| Phase C detail (file này) | `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_1_PHASE_C_2026-04-18.md` | Spec Phase C0–C4 |
+| Phase C+D detail (file này) | `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_1_PHASE_C_2026-04-18.md` | Spec Phase C0–C4 + D1–D2 |

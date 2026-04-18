@@ -1,9 +1,35 @@
 # CVF Enterprise Admin — Retrieval Partitioning Wave Roadmap
 
 **Date:** 2026-04-18  
-**Status:** Proposed next tranche  
+**Status:** CLOSED DELIVERED 2026-04-18 — Wave 1 (Retrieval Partitioning) + Wave 2 (Alibaba-first Runtime / Product Validation) both delivered in same session  
 **Recommended class:** REALIZATION / HARDENING  
 **Why now:** Enterprise Admin Phase D is closed, but D1.4 stops at plumbing only. CVF now passes `orgId`/`teamId` into the knowledge builder contract, yet no real retrieval adapter exists to enforce tenant-scoped chunk filtering at runtime.
+
+---
+
+## Delivery Summary (2026-04-18)
+
+### Wave 1 — Retrieval Partitioning: CLOSED DELIVERED
+
+- `policy-events.ts`: `KnowledgeCollectionScopeEvent` + `appendKnowledgeCollectionScopeEvent`
+- `policy-reader.ts`: `getKnowledgeCollectionScopes()` read-model (latest-wins per collectionId)
+- `knowledge-retrieval.ts` + tests: bounded in-memory adapter; score threshold ≥2; tenant scope enforcement; `listKnowledgeCollections()` for admin surface
+- `execute/route.ts`: retrieval uses `body.intent`; service-token inline context bypass; `KNOWLEDGE_SCOPE_FILTER_APPLIED` audit event on drops; `knowledgeInjection` field in every response
+- `execute/route.knowledge.test.ts`: 5 tests (offline, guard engine mocked)
+- `admin/tool-registry/knowledge-scope/route.ts` + tests: POST endpoint to persist scope overrides
+- `components/admin/AdminKnowledgePartitioningControls.tsx`: client UI for scope management
+- `app/admin/tool-registry/page.tsx`: wired with live data loading; amber notice removed
+
+### Wave 2 — Alibaba-first Runtime / Product Validation: CLOSED DELIVERED
+
+- `execute/route.retrieval.live.test.ts`: 4 live tests (skip when no `ALIBABA_API_KEY`)
+  - W96-L-001: exec team session → exec-playbook chunk injected via live Alibaba call
+  - W96-L-002: engineering team session → engineering-runbooks chunk injected
+  - W96-L-003: org_a session drops org_b chunk → `KNOWLEDGE_SCOPE_FILTER_APPLIED` audited
+  - W96-L-004: global governance collection available to all authorized sessions
+- GC-018: `docs/baselines/CVF_GC018_W96_T1_WAVE2_ALIBABA_RETRIEVAL_LIVE_VALIDATION_AUTHORIZATION_2026-04-18.md`
+
+**Verification baseline post-delivery:** `cvf-web` passes `tsc + full vitest (146 files / 2063 tests pass, 61 skipped — 4 live skip without key)`. Guard Contract: 16 files / 226 tests pass.
 
 ---
 

@@ -43,8 +43,8 @@
   - `components/admin/AdminKnowledgePartitioningControls.tsx`: client UI for `/admin/tool-registry`
   - `app/admin/tool-registry/page.tsx`: wired `AdminKnowledgePartitioningControls` with data loading from `listKnowledgeCollections()` + `MOCK_ORGANIZATIONS` + `MOCK_TEAMS`; removed stale amber plumbing-only notice
   - `docs/roadmaps/CVF_ENTERPRISE_ADMIN_RETRIEVAL_PARTITIONING_ROADMAP_2026-04-18.md`: roadmap doc present
-- **Wave 2 (Alibaba-first Runtime / Product Validation)**: deferred — prerequisite groundwork (canonical env, live DLP test 2/2, knowledge benchmark 12/12) is already committed; no new tranche implemented. Next agent may open this if desired.
-- Known pre-existing: `alibaba-dashscope-provider.test.ts` has a live E2E failure (`COMPLETED` vs `BLOCKED`) that is a runtime/guard behavior issue unrelated to env config; not fixed in this tranche.
+- **Wave 2 (Alibaba-first Runtime / Product Validation)**: **CLOSED DELIVERED 2026-04-18**. New file `execute/route.retrieval.live.test.ts` — 4 live tests (skipIf no `ALIBABA_API_KEY`): exec-team knowledge injection, eng-team knowledge injection, cross-tenant drop + `KNOWLEDGE_SCOPE_FILTER_APPLIED` audit, global collection availability. GC-018: `docs/baselines/CVF_GC018_W96_T1_WAVE2_ALIBABA_RETRIEVAL_LIVE_VALIDATION_AUTHORIZATION_2026-04-18.md`. Roadmap updated: `docs/roadmaps/CVF_ENTERPRISE_ADMIN_RETRIEVAL_PARTITIONING_ROADMAP_2026-04-18.md`.
+- Known pre-existing: `alibaba-dashscope-provider.test.ts` has a live E2E failure (`COMPLETED` vs `BLOCKED`) that is a runtime/guard behavior issue unrelated to env config; not fixed in either wave.
 
 ### Local Verify Baseline (2026-04-13)
 - CPF (Control Plane Foundation): `npm run check` + `npm test` clean; **2999 tests, 0 failures**

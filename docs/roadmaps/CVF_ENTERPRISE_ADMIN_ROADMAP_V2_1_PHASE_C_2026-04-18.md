@@ -512,7 +512,8 @@ Trong execute path, pass `session?.orgId` và `session?.teamId` vào options. Kn
 - Unit tests `dlp-filter.ts`: preset patterns redact đúng; custom patterns từ store apply; allowlist bypass đúng.
 - Integration: gọi execute với prompt chứa credit card number → response không chứa số thẻ; audit event `DLP_REDACTION_APPLIED` được emit.
 - `/admin/dlp` preview panel hoạt động client-side.
-- RAG filter: user `orgId=org_a` không nhận knowledge chunks của `org_b`.
+- RAG plumbing: execute path pass `session?.orgId` và `session?.teamId` vào knowledge builder contract; không claim chunk-level tenant filtering hoàn tất trước khi retrieval adapter thật tồn tại.
+- D1.4b enforcement (`org_a` không nhận chunks của `org_b`) được giữ làm acceptance gate của retrieval wave kế tiếp, không phải tiêu chí đóng D1.4a.
 
 ---
 

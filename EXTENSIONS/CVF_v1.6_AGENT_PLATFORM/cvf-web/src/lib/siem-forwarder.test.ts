@@ -91,4 +91,143 @@ describe('siem-forwarder', () => {
 
     expect(fetchMock).not.toHaveBeenCalled();
   });
+
+  it('skips forwarding when no SIEM config has been set', async () => {
+    await forwardToSIEM({
+      id: 'audit-2',
+      kind: 'audit',
+      evidenceClass: 'FULL',
+      timestamp: '2026-04-18T01:00:00.000Z',
+      eventType: 'ADMIN_ACCESS_DENIED',
+      actorId: 'usr_2',
+      actorRole: 'admin',
+      targetResource: '/admin',
+      action: 'READ_ADMIN_ROUTE',
+      outcome: 'DENIED',
+    });
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('skips forwarding when SIEM config is disabled', async () => {
+    await appendSIEMConfigEvent({
+      timestamp: '2026-04-18T00:00:00.000Z',
+      webhookUrl: 'https://siem.example.com/ingest',
+      signingSecret: 'secret',
+      enabled: false,
+      eventTypes: 'all',
+      setBy: 'usr_2',
+      setAt: '2026-04-18T00:00:00.000Z',
+    });
+
+    await forwardToSIEM({
+      id: 'audit-3',
+      kind: 'audit',
+      evidenceClass: 'FULL',
+      timestamp: '2026-04-18T01:00:00.000Z',
+      eventType: 'ADMIN_ACCESS_DENIED',
+      actorId: 'usr_2',
+      actorRole: 'admin',
+      targetResource: '/admin',
+      action: 'READ_ADMIN_ROUTE',
+      outcome: 'DENIED',
+    });
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('skips forwarding when webhookUrl is blank', async () => {
+    await appendSIEMConfigEvent({
+      timestamp: '2026-04-18T00:00:00.000Z',
+      webhookUrl: '   ',
+      signingSecret: 'secret',
+      enabled: true,
+      eventTypes: 'all',
+      setBy: 'usr_2',
+      setAt: '2026-04-18T00:00:00.000Z',
+    });
+
+    await forwardToSIEM({
+      id: 'audit-4',
+      kind: 'audit',
+      evidenceClass: 'FULL',
+      timestamp: '2026-04-18T01:00:00.000Z',
+      eventType: 'ADMIN_ACCESS_DENIED',
+      actorId: 'usr_2',
+      actorRole: 'admin',
+      targetResource: '/admin',
+      action: 'READ_ADMIN_ROUTE',
+      outcome: 'DENIED',
+    });
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('throws when webhook returns a non-2xx status (caller appendAuditEvent catches via void+.catch)', async () => {
+    fetchMock.mockResolvedValueOnce(new Response(null, { status: 503 }));
+
+    await appendSIEMConfigEvent({
+      timestamp: '2026-04-18T00:00:00.000Z',
+      webhookUrl: 'https://siem.example.com/ingest',
+      signingSecret: 'secret',
+      enabled: true,
+      eventTypes: 'all',
+      setBy: 'usr_2',
+      setAt: '2026-04-18T00:00:00.000Z',
+    });
+
+    await expect(
+      forwardToSIEM({
+        id: 'audit-5',
+        kind: 'audit',
+        evidenceClass: 'FULL',
+        timestamp: '2026-04-18T01:00:00.000Z',
+        eventType: 'ADMIN_ACCESS_DENIED',
+        actorId: 'usr_2',
+        actorRole: 'admin',
+        targetResource: '/admin',
+        action: 'READ_ADMIN_ROUTE',
+        outcome: 'DENIED',
+      }),
+    ).rejects.toThrow('503');
+  });
+
+  it('sends correct HMAC-SHA256 X-CVF-Signature header', async () => {
+    const { createHmac } = await import('node:crypto');
+
+    const signingSecret = 'test-signing-secret-abc123';
+    await appendSIEMConfigEvent({
+      timestamp: '2026-04-18T00:00:00.000Z',
+      webhookUrl: 'https://siem.example.com/ingest',
+      signingSecret,
+      enabled: true,
+      eventTypes: 'all',
+      setBy: 'usr_2',
+      setAt: '2026-04-18T00:00:00.000Z',
+    });
+
+    const event: UnifiedAuditEvent = {
+      id: 'audit-6',
+      kind: 'audit',
+      evidenceClass: 'FULL',
+      timestamp: '2026-04-18T01:00:00.000Z',
+      eventType: 'BREAK_GLASS_USED',
+      actorId: 'break-glass',
+      actorRole: 'owner',
+      targetResource: '/admin/settings',
+      action: 'EMERGENCY_ACCESS',
+      outcome: 'GRANTED',
+    };
+
+    await forwardToSIEM(event);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    const sentBody = (fetchMock.mock.calls[0][1] as RequestInit).body as string;
+    const expectedHmac = createHmac('sha256', signingSecret)
+      .update(sentBody, 'utf8')
+      .digest('hex');
+    const sentHeaders = (fetchMock.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
+    expect(sentHeaders['X-CVF-Signature']).toBe(`hmac-sha256:${expectedHmac}`);
+  });
 });

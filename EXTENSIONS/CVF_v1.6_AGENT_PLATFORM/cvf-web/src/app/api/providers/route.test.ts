@@ -9,6 +9,8 @@ describe('/api/providers', () => {
         delete process.env.OPENAI_API_KEY;
         delete process.env.ANTHROPIC_API_KEY;
         delete process.env.GOOGLE_AI_API_KEY;
+        delete process.env.ALIBABA_API_KEY;
+        delete process.env.OPENROUTER_API_KEY;
         delete process.env.DEFAULT_AI_PROVIDER;
     });
 

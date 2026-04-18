@@ -29,6 +29,13 @@
 - **D3:** Double sidebar (main sidebar có Enterprise group + admin layout có sidebar riêng). Fix trong C0.
 - **D2:** Tool Registry là static catalog. Fix trong C3.
 
+### Hard constraints để agent không code lệch hướng
+
+- **API route auth boundary:** `requireAdminSession()` hiện là helper cho server component/layout. Mọi route handler mới dưới `src/app/api/admin/**` phải dùng `verifySessionCookie()` + `canAccessAdmin()`; các path Owner-only phải check thêm `session.role === 'owner'`.
+- **Package boundary:** KHÔNG import `cvf-web/src/lib/control-plane-events.ts` hoặc bất kỳ web runtime store nào vào `EXTENSIONS/CVF_GUARD_CONTRACT`. Enforcement policy cho Phase C phải nằm ở web adapter/runtime layer của `cvf-web`.
+- **Approvals surface đã tồn tại:** `src/app/api/approvals/route.ts` và `src/app/api/approvals/store.ts` đã active. C4 phải EXTEND/MIGRATE surface này, không tạo API approvals song song.
+- **Knowledge injector hiện tại không phải retrieval layer:** `src/lib/knowledge-context-injector.ts` hiện chỉ append context string vào system prompt. D1.4 không được claim "tenant partitioning hoàn tất" nếu chưa có retrieval/query layer thực sự mang `orgId/teamId`.
+
 ---
 
 ## Phase C0 — Alignment Hotfix (2–3 ngày)
@@ -55,7 +62,7 @@ if (!INTERNAL_AUDIT_SECRET) {
 }
 ```
 
-Cho middleware (runtime, không thể throw at module level): nếu missing thì skip audit POST silently nhưng log error, KHÔNG dùng fallback string.
+Cho middleware (runtime, không thể throw at module level): nếu missing thì skip audit POST nhưng PHẢI `console.error`, KHÔNG dùng fallback string. Đồng thời cập nhật local/prod env docs để `CVF_INTERNAL_AUDIT_SECRET` trở thành required secret cho admin control plane.
 
 ### C0.2 — Fix R2: Audit delivery observability
 
@@ -104,7 +111,7 @@ Thêm comment ngắn trong ADR file trên: "control-plane-events.ts (299 dòng) 
 - `npm run lint` (max-warnings=0) pass.
 - `npm run test` pass.
 - `npm run test:e2e` pass (đặc biệt `admin-rbac.spec.ts`).
-- `CVF_INTERNAL_AUDIT_SECRET` missing → server start error (không phải silent fallback).
+- `CVF_INTERNAL_AUDIT_SECRET` missing → không còn fallback shared secret; admin audit POST fail-closed và middleware log lỗi rõ ràng.
 - Vào `/admin/finops` với `developer` → redirect về `/`.
 - Main sidebar: chỉ còn 1 link "Enterprise Console" cho admin/owner.
 
@@ -122,7 +129,13 @@ Thêm comment ngắn trong ADR file trên: "control-plane-events.ts (299 dòng) 
 **File mới:** `src/lib/policy-events.ts` (tách khỏi `control-plane-events.ts` để tránh vượt GC-023)
 
 ```ts
-export interface QuotaPolicy {
+export interface PolicyEventBase {
+  id: string;
+  evidenceClass: 'FULL';
+  timestamp: string;
+}
+
+export interface QuotaPolicyEvent extends PolicyEventBase {
   kind: 'quota-policy';
   teamId: string;
   orgId: string;
@@ -133,17 +146,20 @@ export interface QuotaPolicy {
   setAt: string;
 }
 
-export interface QuotaOverride {
+export interface QuotaOverrideEvent extends PolicyEventBase {
   kind: 'quota-override';
   teamId: string;
   orgId: string;
+  status: 'granted' | 'revoked';
   grantedBy: string;
   grantedAt: string;
+  revokedBy?: string;
+  revokedAt?: string;
   expiresAt: string;      // TTL — hardcoded 24h
   reason: string;
 }
 
-export interface ToolPolicy {
+export interface ToolPolicyEvent extends PolicyEventBase {
   kind: 'tool-policy';
   toolId: string;
   allowedRoles: TeamRole[];
@@ -159,13 +175,13 @@ Persist vào `control-plane-events.ts` store (extend `ControlPlaneEvent` union t
 **File mới:** `src/lib/policy-reader.ts`
 
 ```ts
-export async function getActiveQuotaPolicy(teamId: string): Promise<QuotaPolicy | null>
-export async function getActiveQuotaOverride(teamId: string): Promise<QuotaOverride | null>
-export async function getActiveToolPolicy(toolId: string): Promise<ToolPolicy | null>
-export async function getAllToolPolicies(): Promise<Map<string, ToolPolicy>>
+export async function getActiveQuotaPolicy(teamId: string): Promise<QuotaPolicyEvent | null>
+export async function getActiveQuotaOverride(teamId: string): Promise<QuotaOverrideEvent | null>
+export async function getActiveToolPolicy(toolId: string): Promise<ToolPolicyEvent | null>
+export async function getAllToolPolicies(): Promise<Map<string, ToolPolicyEvent>>
 ```
 
-Logic: đọc từ `control-plane-events.ts` store, filter by kind, lấy record mới nhất theo `setAt`.
+Logic: đọc từ `control-plane-events.ts` store, filter by kind, lấy record mới nhất theo `timestamp`/`setAt`. Với override, chỉ record `status === 'granted'` và chưa expired mới được coi là active; record `status === 'revoked'` phải deactivate override trước đó theo `teamId`.
 
 ### C1.3 — Display policy trên admin pages (read-only)
 
@@ -199,9 +215,9 @@ Thêm form "Set Quota" vào `/admin/finops`:
 
 **File mới:** `src/app/api/admin/quota/policy/route.ts`
 
-- Auth: `requireAdminSession`.
+- Auth: `verifySessionCookie()` + `canAccessAdmin(session.role)`.
 - Validate: `hardCapUSD > softCapUSD > 0`.
-- Emit: `QuotaPolicy` event + `UnifiedAuditEvent { eventType: 'QUOTA_POLICY_SET', riskLevel: 'R1' }`.
+- Emit: `QuotaPolicyEvent` + `UnifiedAuditEvent { eventType: 'QUOTA_POLICY_SET', riskLevel: 'R1' }`.
 
 ### C2.2 — Soft cap check + notification
 
@@ -211,6 +227,7 @@ Sau khi emit `CostEvent`, check `getActiveQuotaPolicy(teamId)`. Nếu total mont
 
 - Emit `UnifiedAuditEvent { eventType: 'QUOTA_SOFT_CAP_REACHED', riskLevel: 'R1' }`.
 - Log warning (in-app notification nếu có, nếu không thì console.warn — không block execution).
+- Anti-spam rule: chỉ emit `QUOTA_SOFT_CAP_REACHED` một lần cho mỗi `teamId + billingPeriod + policy timestamp`.
 
 ### C2.3 — Hard cap enforcement
 
@@ -240,10 +257,11 @@ Nút "Grant Emergency Override" (chỉ Owner mới thấy, không phải Admin):
 
 - Form: `teamId`, `reason` (bắt buộc), TTL = 24h hardcoded.
 - Submit → POST `/api/admin/quota/override`.
-- Emit: `QuotaOverride` event + `UnifiedAuditEvent { eventType: 'QUOTA_OVERRIDE_GRANTED', riskLevel: 'R2' }`.
+- Auth route: `verifySessionCookie()` + `session.role === 'owner'`.
+- Emit: `QuotaOverrideEvent { status: 'granted' }` + `UnifiedAuditEvent { eventType: 'QUOTA_OVERRIDE_GRANTED', riskLevel: 'R2' }`.
 - `checkTeamQuota` kiểm tra `QuotaOverride` còn TTL trước khi block.
 
-**Rollback:** POST `/api/admin/quota/override/revoke` → append `QuotaOverrideRevoked` event (không delete, append-only). Emit audit event `QUOTA_OVERRIDE_REVOKED`.
+**Rollback:** POST `/api/admin/quota/override/revoke` → append `QuotaOverrideEvent { status: 'revoked' }` (không delete, append-only). Emit audit event `QUOTA_OVERRIDE_REVOKED`.
 
 ### C2 Acceptance Gate
 
@@ -280,17 +298,20 @@ Mỗi tool card thêm:
 
 **File mới:** `src/app/api/admin/tool-registry/policy/route.ts`
 
-- Auth: `requireAdminSession`.
+- Auth: `verifySessionCookie()` + `canAccessAdmin(session.role)`.
 - Validate: không thể remove `owner` khỏi bất kỳ tool nào.
-- Emit: `ToolPolicy` event + `UnifiedAuditEvent { eventType: 'TOOL_POLICY_UPDATED', riskLevel: 'R1' }`.
+- Emit: `ToolPolicyEvent` + `UnifiedAuditEvent { eventType: 'TOOL_POLICY_UPDATED', riskLevel: 'R1' }`.
 
 ### C3.3 — Runtime enforcement
 
-**Files:** `EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/phase-gate.guard.ts`, `risk-gate.guard.ts`
+**Files:** `src/lib/tool-policy-guard.ts`, `src/app/api/execute/route.ts`, các web route/tool invocation surface có `toolId` rõ ràng.
 
-Thêm check `getActiveToolPolicy(toolId)` trong guard evaluation. Nếu user role không trong `allowedRoles` → block với `GuardResult { passed: false, reason: 'Tool disabled for role' }`.
+Thêm web-only check `getActiveToolPolicy(toolId)` trước khi route/tool invocation được thực thi. Nếu user role không trong `allowedRoles` → block với HTTP `403` và payload chuẩn.
 
-**Điều kiện:** Tool phải có `toolId` trong request context để lookup policy. Nếu không có `toolId` → skip policy check (backward compatible).
+**Điều kiện:** Tool phải có `toolId` trong request context để lookup policy. Nếu route hiện tại không mang `toolId` rõ ràng thì KHÔNG ép chèn coupling vào `cvf-guard-contract`; thay vào đó:
+
+1. enforce trên các surface đã có `toolId`,
+2. tạo follow-up backlog để mở rộng request model sau khi contract được cập nhật có chủ đích.
 
 ### C3 Acceptance Gate
 
@@ -308,9 +329,24 @@ Thêm check `getActiveToolPolicy(toolId)` trong guard evaluation. Nếu user rol
 
 **Nguyên tắc:** Mở rộng `/approvals` hiện có, KHÔNG tạo queue mới.
 
+### C4.0 — Approval model unification (bắt buộc trước UI expansion)
+
+**Files:** `src/app/api/approvals/route.ts`, `src/app/api/approvals/store.ts`, `cvf-guard-contract/enterprise` types nếu cần
+
+Hiện tại có 2 approval models khác nhau:
+
+- `cvf-guard-contract/enterprise` dùng bởi `src/app/approvals/page.tsx`
+- `src/app/api/approvals/store.ts` dùng bởi `/api/approvals`
+
+Trước khi thêm payload/expiry/filter, phải chốt 1 model canonical cho web approvals. Khuyến nghị:
+
+- tạo `ApprovalRequestRecord` ở web API layer để chứa fields vận hành (`templateId`, `templateName`, `intent`, `toolId`, `toolPayload`, `expiresAt`, `status`, `submittedAt`, `reviewedAt`, `reviewedBy`, `reviewComment`),
+- UI map từ record này sang view model,
+- KHÔNG để page mock type và API store type drift thêm lần nữa.
+
 ### C4.1 — Full tool payload view
 
-**File:** `src/app/approvals/page.tsx`
+**Files:** `src/app/approvals/page.tsx`, `src/app/api/approvals/route.ts`, `src/app/api/approvals/store.ts`
 
 Thêm expandable "Payload" section cho mỗi pending request (hiện chỉ hiện `reason`):
 
@@ -326,7 +362,7 @@ Hiển thị `toolPayload` trong collapsible `<details>` để Admin xem đầy 
 
 ### C4.2 — Timeout auto-reject
 
-**File:** `src/app/approvals/page.tsx` + `src/app/api/approvals/route.ts` (tạo nếu chưa có)
+**Files:** `src/app/approvals/page.tsx` + `src/app/api/approvals/route.ts` (đã tồn tại, phải extend chứ không tạo mới)
 
 - Hiển thị countdown timer cho request còn trong `pending` state.
 - Server-side: khi `GET /api/approvals`, filter requests có `expiresAt < now` → tự động mark `expired` + emit `UnifiedAuditEvent { eventType: 'APPROVAL_EXPIRED', outcome: 'EXPIRED' }`.
@@ -348,7 +384,8 @@ Thêm filter form (tương tự audit-log viewer):
 Khi Admin approve/reject:
 
 - POST `/api/admin/audit` với `{ eventType: 'APPROVAL_DECIDED', actorId, action: 'APPROVE'|'REJECT', riskLevel, reason }`.
-- Hiện tại chỉ update state in-memory — C4 phải persist decision vào control-plane-events store.
+- Hiện tại page chỉ update state local/mock — C4 phải persist decision vào approvals store hiện tại và emit audit event vào `control-plane-events` store.
+- Approval API canonical sau C4 phải trả về records từ backend thực, page không còn được hardcode `MOCK_REQUESTS` làm source-of-truth.
 
 > **GC-023 note:** Nếu `approvals/page.tsx` vượt threshold sau C4.1–C4.4, tách thành `ApprovalRequestCard.tsx`, `ApprovalFilters.tsx`, `ApprovalHistory.tsx`.
 
@@ -438,7 +475,7 @@ UI tại `/admin/dlp`:
 **DLPPolicy event type** (thêm vào `policy-events.ts` từ C1):
 
 ```ts
-export interface DLPPolicy {
+export interface DLPPolicyEvent extends PolicyEventBase {
   kind: 'dlp-policy';
   patterns: Array<{ id: string; label: string; regex: string; enabled: boolean }>;
   setBy: string;
@@ -448,9 +485,16 @@ export interface DLPPolicy {
 
 ### D1.4 — RAG Knowledge Partitioning
 
-**File:** `src/lib/knowledge-context-injector.ts` (đã tồn tại — chỉ thêm tenant filter)
+**Files:** retrieval/query adapter thực sự của knowledge layer; `src/lib/knowledge-context-injector.ts` chỉ được sửa khi đã có adapter để nhận filtered chunks.
 
-Hiện tại knowledge injection không filter theo user. Thêm `orgId`/`teamId` filter:
+Hiện tại knowledge injection chỉ append context string có sẵn, chưa tự query knowledge artifacts. Vì vậy D1.4 phải tách làm 2 bước:
+
+1. **D1.4a — plumbing:** đưa `orgId`/`teamId` vào retrieval contract tương lai,
+2. **D1.4b — enforcement:** chỉ khi query layer thực sự tồn tại mới filter chunks theo tenant.
+
+Không được claim tenant partitioning hoàn tất chỉ bằng cách đổi signature của hàm formatter.
+
+Khi retrieval adapter đã có, contract dự kiến:
 
 ```ts
 export async function buildKnowledgeSystemPrompt(
@@ -485,7 +529,7 @@ Trong execute path, pass `session?.orgId` và `session?.teamId` vào options. Kn
 Config tại `/admin/settings` → "SIEM Integration":
 
 - Fields: `webhookUrl`, `signingSecret`, `enabled`, `eventTypes` (filter: audit only / cost only / all).
-- Persist dưới dạng `SIEMConfig` event trong store.
+- Persist dưới dạng `SIEMConfigEvent extends PolicyEventBase` trong store.
 
 **SIEM emit hook** tại `appendAuditEvent()` trong `control-plane-events.ts`:
 
@@ -518,10 +562,10 @@ Thêm HMAC-SHA256 signature trailer ở cuối CSV:
 
 Key: `CVF_AUDIT_SIGNING_KEY` env var. Nếu missing → export CSV nhưng không có signature, thêm warning header `# WARNING: UNSIGNED EXPORT`.
 
-**File mới:** `tools/verify-audit-csv.ts` — CLI script cho CISO verify CSV:
+**File mới:** `tools/verify-audit-csv.mjs` — CLI script cho CISO verify CSV:
 
 ```bash
-npx ts-node tools/verify-audit-csv.ts --file cvf-audit-log.csv --key <signing-key>
+node tools/verify-audit-csv.mjs --file cvf-audit-log.csv --key <signing-key>
 ```
 
 ### D2.3 — Break-Glass Procedure
@@ -532,8 +576,12 @@ Nội dung: ai có quyền, điều kiện nào kích hoạt, procedure step-by-
 
 **Code mechanism:**
 
-- `CVF_BREAK_GLASS_TOKEN` env var. Nếu set, token này có thể bypass `requireAdminSession()` một lần.
-- **File:** `src/lib/admin-session.ts` — thêm break-glass path:
+- `CVF_BREAK_GLASS_TOKEN` env var. Nếu set, token này có thể bypass admin gate một lần.
+- **File:** `src/lib/admin-session.ts` — nếu dùng cho server component path, đọc token qua `headers()` từ `next/headers`.
+- **File/API phụ trợ:** các route handler admin phải đọc header trực tiếp từ request và áp cùng quy tắc break-glass, không gọi `requireAdminSession()` như thể nó là route helper.
+- Cần định nghĩa rõ `BREAK_GLASS_SESSION` là server-side synthetic session object, không phải mutate NextAuth session thật.
+
+Pseudo-spec:
 
 ```ts
 const breakGlassToken = request.headers.get('x-cvf-break-glass');
@@ -567,17 +615,17 @@ if (breakGlassToken && breakGlassToken === process.env.CVF_BREAK_GLASS_TOKEN) {
 Flow:
 
 1. Owner chọn userId từ `/admin/impersonate`.
-2. POST `/api/admin/impersonate` → tạo `ImpersonationSession { realActorId, impersonatedUserId, startedAt, expiresAt: +1h }` trong store.
+2. POST `/api/admin/impersonate` → tạo `ImpersonationSessionEvent extends PolicyEventBase { realActorId, impersonatedUserId, startedAt, expiresAt: +1h, status: 'started' }` trong store.
 3. Mọi action trong session impersonation emit audit event với `payload: { impersonatedBy: realActorId }`.
 4. Header `X-CVF-Impersonation-Active: true` hiển thị banner warning trong UI.
-5. POST `/api/admin/impersonate/end` → kết thúc session, emit `ImpersonationEnded` event.
+5. POST `/api/admin/impersonate/end` → kết thúc session, emit `ImpersonationSessionEvent { status: 'ended' }`.
 
 **Constraint:** Không thể impersonate Owner khác. Không thể impersonate trong break-glass session.
 
 ### D2 Acceptance Gate
 
 - SIEM webhook nhận event khi admin action xảy ra.
-- CSV export có signature trailer. `verify-audit-csv.ts` pass với đúng key, fail với sai key.
+- CSV export có signature trailer. `verify-audit-csv.mjs` pass với đúng key, fail với sai key.
 - Break-glass: request với valid token → access + `BREAK_GLASS_USED` event emitted + stderr log.
 - Impersonation: Owner có `/admin/impersonate`; Admin không có; audit events emit với impersonation metadata.
 - `CVF_BREAK_GLASS_PROCEDURE.md` tồn tại và có đủ 3 sections: conditions, procedure, post-incident.

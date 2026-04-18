@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ApprovalRequest, getApprovalStore } from './store';
+
+import { appendAuditEvent } from '@/lib/control-plane-events';
+
+import { ApprovalRequestRecord, getApprovalStore } from './store';
+
+const EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 function generateId(): string {
     return `apr-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -22,14 +27,20 @@ export async function POST(request: NextRequest) {
         }
 
         const id = generateId();
-        const record: ApprovalRequest = {
+        const now = new Date();
+        const record: ApprovalRequestRecord = {
             id,
             templateId: String(body.templateId),
             templateName: String(body.templateName || body.templateId),
             intent: String(body.intent),
+            toolId: body.toolId ? String(body.toolId) : undefined,
+            toolPayload: body.toolPayload && typeof body.toolPayload === 'object' ? body.toolPayload as Record<string, unknown> : undefined,
+            riskLevel: body.riskLevel ? String(body.riskLevel) : undefined,
+            phase: body.phase ? String(body.phase) : undefined,
             reason: String(body.reason || ''),
+            expiresAt: new Date(now.getTime() + EXPIRY_MS).toISOString(),
             status: 'pending',
-            submittedAt: new Date().toISOString(),
+            submittedAt: now.toISOString(),
         };
 
         getApprovalStore().set(id, record);
@@ -39,6 +50,7 @@ export async function POST(request: NextRequest) {
             id: record.id,
             status: record.status,
             submittedAt: record.submittedAt,
+            expiresAt: record.expiresAt,
             message: 'Your request has been submitted for review. An admin will evaluate it and you will see the result here.',
         }, { status: 201 });
     } catch (error) {
@@ -51,10 +63,35 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET /api/approvals
- * List all approval requests (for admin use).
+ * List all approval requests. Lazily expires pending requests past their expiresAt.
+ * Emits APPROVAL_EXPIRED audit event for each newly expired request (C4.2).
  */
 export async function GET() {
-    const requests = Array.from(getApprovalStore().values()).sort(
+    const store = getApprovalStore();
+    const now = new Date();
+
+    const expirePromises: Promise<unknown>[] = [];
+    for (const record of store.values()) {
+        if (record.status === 'pending' && new Date(record.expiresAt) < now) {
+            record.status = 'expired';
+            expirePromises.push(
+                appendAuditEvent({
+                    eventType: 'APPROVAL_EXPIRED',
+                    actorId: 'system',
+                    actorRole: 'system',
+                    targetResource: record.templateName,
+                    action: 'AUTO_EXPIRE',
+                    riskLevel: record.riskLevel,
+                    outcome: 'EXPIRED',
+                    payload: { approvalId: record.id, templateId: record.templateId },
+                }),
+            );
+        }
+    }
+
+    await Promise.all(expirePromises);
+
+    const requests = Array.from(store.values()).sort(
         (a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime(),
     );
     return NextResponse.json({ success: true, data: requests });

@@ -1,8 +1,9 @@
 'use client';
 
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { AVAILABLE_TOOLS, useTools, ToolType, ToolResult } from '@/lib/agent-tools';
 import { useLanguage } from '@/lib/i18n';
+import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
 interface ToolsPageProps {
     onClose?: () => void;
@@ -14,6 +15,10 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
     const [selectedToolId, setSelectedToolId] = useState<ToolType | null>(null);
     const [params, setParams] = useState<Record<string, string>>({});
     const [lastExecResult, setLastExecResult] = useState<{ toolId: ToolType; result: ToolResult } | null>(null);
+    const [toolPolicies, setToolPolicies] = useState<Partial<Record<ToolType, TeamRole[]>>>({});
+    const [userRole, setUserRole] = useState<TeamRole | null>(null);
+    const [policyError, setPolicyError] = useState<string | null>(null);
+    const [policiesReady, setPoliciesReady] = useState(false);
 
     const lastResult = useMemo(() => {
         if (toolCalls.length === 0) return null;
@@ -35,7 +40,57 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
     const getParamDescription = (toolId: ToolType, paramName: string, fallback: string) =>
         resolveI18n(`tools.catalog.${toolId}.param.${paramName}`, fallback);
 
+    useEffect(() => {
+        let cancelled = false;
+
+        fetch('/api/tools/policies')
+            .then(async res => {
+                const payload = await res.json();
+                if (!res.ok || !payload?.success) {
+                    throw new Error(payload?.error || 'Failed to load tool policies.');
+                }
+
+                if (cancelled) return;
+
+                const nextPolicies = (payload.data.inventory as Array<{ id: ToolType; allowedRoles: TeamRole[] }>)
+                    .reduce<Partial<Record<ToolType, TeamRole[]>>>((acc, entry) => {
+                        acc[entry.id] = entry.allowedRoles;
+                        return acc;
+                    }, {});
+
+                setToolPolicies(nextPolicies);
+                setUserRole(payload.data.role as TeamRole);
+                setPoliciesReady(true);
+            })
+            .catch(error => {
+                if (cancelled) return;
+                setPolicyError(error instanceof Error ? error.message : 'Failed to load tool policies.');
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    const canUseSelectedTool = useCallback((toolId: ToolType | null) => {
+        if (!toolId || !userRole) return false;
+        const allowedRoles = toolPolicies[toolId];
+        if (!allowedRoles) return false;
+        return allowedRoles.includes(userRole);
+    }, [toolPolicies, userRole]);
+
     const handleSelectTool = useCallback((toolId: ToolType) => {
+        if (!policiesReady || !canUseSelectedTool(toolId)) {
+            setLastExecResult({
+                toolId,
+                result: {
+                    success: false,
+                    error: 'Your current role is not allowed to run this tool.',
+                },
+            });
+            return;
+        }
+
         if (selectedToolId === toolId) {
             setSelectedToolId(null);
             setParams({});
@@ -44,13 +99,24 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
             setParams({});
             setLastExecResult(null);
         }
-    }, [selectedToolId]);
+    }, [canUseSelectedTool, policiesReady, selectedToolId]);
 
     const handleExecute = useCallback(async () => {
         if (!selectedToolId) return;
+        if (!canUseSelectedTool(selectedToolId)) {
+            setLastExecResult({
+                toolId: selectedToolId,
+                result: {
+                    success: false,
+                    error: 'Tool execution blocked by enterprise role policy.',
+                },
+            });
+            return;
+        }
+
         const result = await executeTool(selectedToolId, params);
         setLastExecResult({ toolId: selectedToolId, result });
-    }, [selectedToolId, params, executeTool]);
+    }, [canUseSelectedTool, selectedToolId, params, executeTool]);
 
     const displayResult = lastExecResult || lastResult;
 
@@ -125,11 +191,21 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
                         <h3 className="font-bold text-gray-900 dark:text-white mb-4">
                             {t('tools.documentation')}
                         </h3>
+                        {policyError && (
+                            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-200">
+                                {policyError}
+                            </div>
+                        )}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {Object.values(AVAILABLE_TOOLS).map(tool => (
                                 <div key={tool.id}>
+                                    {(() => {
+                                        const allowed = canUseSelectedTool(tool.id);
+                                        const allowedRoles = toolPolicies[tool.id] || [];
+                                        return (
                                     <button
                                         onClick={() => handleSelectTool(tool.id)}
+                                        disabled={!policiesReady || !allowed}
                                         className={`w-full text-left p-4 border rounded-lg transition-all ${selectedToolId === tool.id
                                                 ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
                                                 : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 hover:shadow-sm'
@@ -140,6 +216,12 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
                                             <h4 className="font-bold text-gray-900 dark:text-white">
                                                 {getToolName(tool.id, tool.name)}
                                             </h4>
+                                            <span className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold ${allowed
+                                                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200'
+                                                : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200'
+                                            }`}>
+                                                {allowed ? 'Allowed' : 'Restricted'}
+                                            </span>
                                         </div>
                                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                                             {getToolDescription(tool.id, tool.description)}
@@ -153,11 +235,16 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
                                                     : {getParamDescription(tool.id, param.name, param.description)}
                                                 </div>
                                             ))}
+                                            <div className="pt-2 text-xs text-gray-500 dark:text-gray-400">
+                                                Allowed roles: {allowedRoles.length ? allowedRoles.join(', ') : 'loading...'}
+                                            </div>
                                         </div>
                                     </button>
+                                        );
+                                    })()}
 
                                     {/* Expanded Execute Form */}
-                                    {selectedToolId === tool.id && (
+                                    {selectedToolId === tool.id && canUseSelectedTool(tool.id) && (
                                         <div className="mt-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-blue-200 dark:border-blue-800">
                                             <div className="space-y-3">
                                                 {tool.parameters.map(param => (
@@ -177,7 +264,7 @@ export function ToolsPage({ onClose }: ToolsPageProps) {
                                             </div>
                                             <button
                                                 onClick={handleExecute}
-                                                disabled={isExecuting}
+                                                disabled={isExecuting || !canUseSelectedTool(selectedToolId)}
                                                 className="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:opacity-50 transition-colors"
                                             >
                                                 {isExecuting ? '⏳ Executing...' : `▶️ ${t('tools.execute')}`}

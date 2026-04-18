@@ -2,6 +2,7 @@ import type { AIProvider, ExecutionRequest, ExecutionResponse } from '@/lib/ai';
 import { calculateTokenCost } from '@/lib/model-pricing';
 import { appendAuditEvent, appendCostEvent } from '@/lib/control-plane-events';
 import type { SessionCookie } from '@/lib/middleware-auth';
+import { checkTeamQuota, hasSoftCapAuditEvent } from '@/lib/quota-guard';
 
 function estimateTokenCount(value: string | undefined): number {
   const content = value?.trim() ?? '';
@@ -36,8 +37,10 @@ export async function emitExecutionTelemetry(input: {
   const actorRole = input.session?.role ?? 'admin';
   const usage = resolveTokenUsage(input.prompt, input.output, input.response);
   const estimatedCostUSD = calculateTokenCost(input.model, usage.inputTokens, usage.outputTokens);
+  const emittedAt = new Date().toISOString();
 
   await appendCostEvent({
+    timestamp: emittedAt,
     userId,
     teamId,
     orgId,
@@ -50,7 +53,56 @@ export async function emitExecutionTelemetry(input: {
     estimatedCostUSD,
   });
 
+  const quotaStatus = await checkTeamQuota(teamId, emittedAt);
+  if (
+    quotaStatus.teamId
+    && quotaStatus.period
+    && quotaStatus.policyTimestamp
+    && quotaStatus.currentUSD >= quotaStatus.softCapUSD
+  ) {
+    const policyAlreadyAudited = await hasSoftCapAuditEvent(quotaStatus.teamId, {
+      kind: 'quota-policy',
+      id: 'quota-policy-reference',
+      evidenceClass: 'FULL',
+      timestamp: quotaStatus.policyTimestamp,
+      teamId: quotaStatus.teamId,
+      orgId,
+      softCapUSD: quotaStatus.softCapUSD,
+      hardCapUSD: quotaStatus.hardCapUSD,
+      period: quotaStatus.period,
+      setBy: 'system',
+      setAt: quotaStatus.policyTimestamp,
+    }, emittedAt);
+
+    if (!policyAlreadyAudited) {
+      console.warn(
+        `[CVF QUOTA SOFT CAP] team=${quotaStatus.teamId} current=${quotaStatus.currentUSD.toFixed(4)} limit=${quotaStatus.softCapUSD.toFixed(4)}`,
+      );
+      await appendAuditEvent({
+        timestamp: emittedAt,
+        eventType: 'QUOTA_SOFT_CAP_REACHED',
+        actorId: userId,
+        actorRole,
+        targetResource: quotaStatus.teamId,
+        action: 'NOTIFY_TEAM_QUOTA_SOFT_CAP',
+        riskLevel: 'R1',
+        phase: 'PHASE C',
+        outcome: 'WARNING',
+        payload: {
+          teamId: quotaStatus.teamId,
+          currentUSD: quotaStatus.currentUSD,
+          softCapUSD: quotaStatus.softCapUSD,
+          hardCapUSD: quotaStatus.hardCapUSD,
+          period: quotaStatus.period,
+          billingWindowKey: quotaStatus.billingWindowKey,
+          policyTimestamp: quotaStatus.policyTimestamp,
+        },
+      });
+    }
+  }
+
   await appendAuditEvent({
+    timestamp: emittedAt,
     eventType: 'EXECUTION_COMPLETED',
     actorId: userId,
     actorRole,

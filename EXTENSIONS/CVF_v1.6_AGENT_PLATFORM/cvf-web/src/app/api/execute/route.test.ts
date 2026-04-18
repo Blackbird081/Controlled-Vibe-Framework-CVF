@@ -3,6 +3,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 const executeAIMock = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
+const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
+const appendAuditEventMock = vi.hoisted(() => vi.fn());
+const appendCostEventMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
     executeAI: executeAIMock,
@@ -16,6 +19,16 @@ vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
 }));
 
+vi.mock('@/lib/quota-guard', () => ({
+    checkTeamQuota: checkTeamQuotaMock,
+    hasSoftCapAuditEvent: vi.fn().mockResolvedValue(false),
+}));
+
+vi.mock('@/lib/control-plane-events', () => ({
+    appendAuditEvent: appendAuditEventMock,
+    appendCostEvent: appendCostEventMock,
+}));
+
 import { POST } from './route';
 
 describe('/api/execute', () => {
@@ -25,7 +38,17 @@ describe('/api/execute', () => {
         executeAIMock.mockReset();
         evaluateEnforcementMock.mockReset();
         verifySessionCookieMock.mockReset();
+        checkTeamQuotaMock.mockReset();
+        appendAuditEventMock.mockReset();
+        appendCostEventMock.mockReset();
         evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
+        checkTeamQuotaMock.mockResolvedValue({
+            exceeded: false,
+            currentUSD: 0,
+            softCapUSD: 0,
+            hardCapUSD: 0,
+            overrideActive: false,
+        });
         process.env = { ...originalEnv };
         delete process.env.OPENAI_API_KEY;
         delete process.env.ANTHROPIC_API_KEY;
@@ -380,5 +403,43 @@ describe('/api/execute', () => {
                 requiresSkillPreflight: true,
             }),
         );
+    });
+
+    it('returns 429 when the team is over hard cap', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        checkTeamQuotaMock.mockResolvedValueOnce({
+            exceeded: true,
+            teamId: 'team_exec',
+            reason: 'Team quota exceeded. Contact an owner for an emergency override.',
+            period: 'monthly',
+            currentUSD: 125,
+            softCapUSD: 80,
+            hardCapUSD: 100,
+            overrideActive: false,
+            billingWindowKey: 'monthly:2026-04',
+            billingWindowStart: '2026-04-01T00:00:00.000Z',
+            policyTimestamp: '2026-04-18T08:00:00.000Z',
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Strategy',
+                intent: 'Analyze',
+                inputs: { goal: 'Test' },
+                provider: 'openai',
+            }),
+        });
+
+        const res = await POST(req as never);
+        const data = await res.json();
+
+        expect(res.status).toBe(429);
+        expect(data.success).toBe(false);
+        expect(data.error).toMatch(/quota exceeded/i);
+        expect(executeAIMock).not.toHaveBeenCalled();
+        expect(appendAuditEventMock).toHaveBeenCalledWith(expect.objectContaining({
+            eventType: 'QUOTA_HARD_CAP_BLOCKED',
+        }));
     });
 });

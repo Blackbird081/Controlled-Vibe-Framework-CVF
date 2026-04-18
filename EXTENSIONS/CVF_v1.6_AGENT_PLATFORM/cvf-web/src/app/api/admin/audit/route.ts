@@ -4,7 +4,7 @@ import { verifySessionCookie } from '@/lib/middleware-auth';
 import { appendAuditEvent, readAuditEvents } from '@/lib/control-plane-events';
 import { canAccessAdmin } from '@/lib/enterprise-access';
 
-const INTERNAL_AUDIT_SECRET = process.env.CVF_INTERNAL_AUDIT_SECRET || 'cvf-internal-audit';
+const INTERNAL_AUDIT_SECRET = process.env.CVF_INTERNAL_AUDIT_SECRET;
 
 export async function GET() {
   const session = await verifySessionCookie();
@@ -19,14 +19,14 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const internalSecret = request.headers.get('x-cvf-internal-audit');
   const session = await verifySessionCookie(request);
+  const isInternalAuditCall = !!internalSecret && !!INTERNAL_AUDIT_SECRET && internalSecret === INTERNAL_AUDIT_SECRET;
 
-  if (internalSecret !== INTERNAL_AUDIT_SECRET && (!session || !canAccessAdmin(session.role))) {
+  if (!isInternalAuditCall && (!session || !canAccessAdmin(session.role))) {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
 
   const body = await request.json() as Record<string, unknown>;
   const record = await appendAuditEvent({
-    evidenceClass: 'FULL',
     eventType: String(body.eventType || 'ADMIN_EVENT'),
     actorId: String(body.actorId || session?.userId || 'unknown-user'),
     actorRole: String(body.actorRole || session?.role || 'unknown'),

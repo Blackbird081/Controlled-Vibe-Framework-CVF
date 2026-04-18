@@ -208,6 +208,14 @@ export default function HomePage() {
         setWorkflowState('processing');
     }, [selectedTemplate, currentOutput, currentInput, addExecution]);
 
+    const handleSendToAgent = useCallback((prompt: string) => {
+        window.dispatchEvent(new CustomEvent('cvf:openAgent', {
+            detail: {
+                prompt,
+            },
+        }));
+    }, []);
+
     useEffect(() => {
         const syncStarterHandoff = () => {
             setStarterHandoff(readGovernedStarterHandoff());
@@ -422,7 +430,7 @@ export default function HomePage() {
                     template={selectedTemplate}
                     onSubmit={handleFormSubmit}
                     onBack={handleBack}
-                    onSendToAgent={() => { }}
+                    onSendToAgent={handleSendToAgent}
                 />
             )}
 
@@ -460,7 +468,7 @@ export default function HomePage() {
                     onReject={handleReject}
                     onRetry={() => setWorkflowState('form')}
                     onBack={handleBack}
-                    onSendToAgent={() => { }}
+                    onSendToAgent={handleSendToAgent}
                     onFollowUp={handleFollowUp}
                 />
             )}

@@ -36,25 +36,32 @@ export default auth((req) => {
     if (pathname.startsWith('/admin')) {
         const role = (req.auth.user as { role?: string } | undefined)?.role;
         if (!canAccessAdmin(role)) {
-            const auditUrl = new URL('/api/admin/audit', req.url);
-            void fetch(auditUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [INTERNAL_AUDIT_HEADER]: process.env.CVF_INTERNAL_AUDIT_SECRET || 'cvf-internal-audit',
-                },
-                body: JSON.stringify({
-                    eventType: 'ADMIN_ACCESS_DENIED',
-                    actorId: (req.auth.user as { email?: string } | undefined)?.email || 'unknown-user',
-                    actorRole: role || 'unknown',
-                    targetResource: pathname,
-                    action: 'READ_ADMIN_ROUTE',
-                    outcome: 'REDIRECTED',
-                    payload: {
-                        source: 'middleware',
+            const configuredAuditSecret = process.env.CVF_INTERNAL_AUDIT_SECRET;
+            if (configuredAuditSecret) {
+                const auditUrl = new URL('/api/admin/audit', req.url);
+                void fetch(auditUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [INTERNAL_AUDIT_HEADER]: configuredAuditSecret,
                     },
-                }),
-            }).catch(() => undefined);
+                    body: JSON.stringify({
+                        eventType: 'ADMIN_ACCESS_DENIED',
+                        actorId: (req.auth.user as { email?: string } | undefined)?.email || 'unknown-user',
+                        actorRole: role || 'unknown',
+                        targetResource: pathname,
+                        action: 'READ_ADMIN_ROUTE',
+                        outcome: 'REDIRECTED',
+                        payload: {
+                            source: 'middleware',
+                        },
+                    }),
+                }).catch((error) => {
+                    console.error('[CVF AUDIT DELIVERY FAILED]', pathname, error);
+                });
+            } else {
+                console.error('[CVF AUDIT DELIVERY SKIPPED] Missing CVF_INTERNAL_AUDIT_SECRET for', pathname);
+            }
 
             const homeUrl = req.nextUrl.clone();
             homeUrl.pathname = '/';

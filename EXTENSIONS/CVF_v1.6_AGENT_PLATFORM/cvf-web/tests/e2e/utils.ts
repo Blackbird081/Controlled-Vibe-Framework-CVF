@@ -45,14 +45,17 @@ export async function login(page: Page) {
 }
 
 export async function openStrategyAnalysis(page: Page) {
-    await page.getByRole('heading', { name: 'Strategy Analysis' }).click();
+    await page.getByRole('button', { name: /Strategy Analysis|Phân tích Chiến lược/i }).first().click();
     await page.getByPlaceholder('VD: Mở rộng thị trường miền Trung').fill('Mở rộng thị trường miền Trung');
     await page.getByPlaceholder('Mô tả ngành, quy mô, thị trường...').fill('Bối cảnh kiểm thử E2E cho CVF v1.6');
-    await page.getByRole('button', { name: /Export Spec/i }).click();
+    await page.getByRole('button', { name: /Gửi đi|Submit/i }).click();
     await page.getByRole('button', { name: /Gửi đến Agent|Send to Agent/i }).waitFor();
 }
 
 export async function sendSpecToAgent(page: Page, mode: 'simple' | 'governance' | 'full') {
+    if (mode === 'simple') {
+        await page.getByRole('button', { name: /^📝/ }).click();
+    }
     if (mode === 'governance') {
         await page.getByRole('button', { name: /^⚠️/ }).click();
     }

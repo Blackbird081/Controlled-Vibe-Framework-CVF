@@ -14,6 +14,8 @@ import { lookupGuidedResponse } from './guided.response.registry';
 import { buildKnowledgeSystemPrompt, hasKnowledgeContext } from '@/lib/knowledge-context-injector';
 import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
 import { emitExecutionTelemetry, resolveTokenUsage } from '@/lib/execute-telemetry';
+import { checkTeamQuota } from '@/lib/quota-guard';
+import { appendAuditEvent } from '@/lib/control-plane-events';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
 // Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
@@ -137,6 +139,40 @@ export async function POST(request: NextRequest) {
                     model: 'blocked',
                 },
                 { status: 400 }
+            );
+        }
+
+        const quotaCheck = await checkTeamQuota(session?.teamId);
+        if (quotaCheck.exceeded) {
+            try {
+                await appendAuditEvent({
+                    eventType: 'QUOTA_HARD_CAP_BLOCKED',
+                    actorId: session?.userId ?? 'service-account',
+                    actorRole: session?.role ?? 'service',
+                    targetResource: body.templateName || body.templateId || 'unknown-template',
+                    action: 'BLOCK_EXECUTION_QUOTA',
+                    riskLevel: 'R1',
+                    phase: 'PHASE C',
+                    outcome: 'BLOCKED',
+                    payload: {
+                        teamId: quotaCheck.teamId,
+                        currentUSD: quotaCheck.currentUSD,
+                        hardCapUSD: quotaCheck.hardCapUSD,
+                        period: quotaCheck.period,
+                        billingWindowKey: quotaCheck.billingWindowKey,
+                    },
+                });
+            } catch (quotaAuditError) {
+                console.warn('Quota block audit degraded:', quotaAuditError);
+            }
+
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Team quota exceeded. Contact admin for override.',
+                    quotaInfo: quotaCheck,
+                },
+                { status: 429 },
             );
         }
 

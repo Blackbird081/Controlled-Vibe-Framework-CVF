@@ -60,6 +60,18 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         return () => window.removeEventListener('cvf:openApiKeyWizard', handler);
     }, [modals]);
 
+    useEffect(() => {
+        const handleOpenAgent = (event: Event) => {
+            const detail = (event as CustomEvent<{ prompt?: string }>).detail;
+            setAgentPrompt(detail?.prompt);
+            setActiveModal('agent');
+            setIsAgentMinimized(false);
+        };
+
+        window.addEventListener('cvf:openAgent', handleOpenAgent as EventListener);
+        return () => window.removeEventListener('cvf:openAgent', handleOpenAgent as EventListener);
+    }, []);
+
     // Map pathname to Sidebar's expected appState string
     const pathnameToAppState = (p: string): string => {
         if (p === '/' || p.startsWith('/home')) return 'home';

@@ -4,12 +4,13 @@ import { randomUUID } from 'node:crypto';
 
 import type { AIProvider } from '@/lib/ai';
 import { MOCK_TEAMS, MOCK_USERS } from '@/lib/mock-enterprise-db';
+import type { PolicyControlPlaneEvent, PolicyEventKind } from '@/lib/policy-events';
 
 export type EvidenceClass = 'FULL' | 'SUMMARY' | 'POINTER';
 
 interface ControlPlaneEventBase {
   id: string;
-  kind: 'audit' | 'cost';
+  kind: 'audit' | 'cost' | PolicyEventKind;
   evidenceClass: EvidenceClass;
   timestamp: string;
 }
@@ -41,7 +42,7 @@ export interface CostEvent extends ControlPlaneEventBase {
   estimatedCostUSD: number;
 }
 
-export type ControlPlaneEvent = UnifiedAuditEvent | CostEvent;
+export type ControlPlaneEvent = UnifiedAuditEvent | CostEvent | PolicyControlPlaneEvent;
 
 let appendQueue = Promise.resolve();
 
@@ -167,22 +168,29 @@ async function appendEvent<T extends ControlPlaneEvent>(
   return result;
 }
 
-export async function appendAuditEvent(
-  event: Omit<UnifiedAuditEvent, 'kind' | 'id' | 'timestamp'> & Partial<Pick<UnifiedAuditEvent, 'id' | 'timestamp'>>,
-): Promise<UnifiedAuditEvent> {
-  return appendEvent<UnifiedAuditEvent>({
-    kind: 'audit',
+export async function appendControlPlaneEvent<T extends ControlPlaneEvent>(
+  event: Omit<T, 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<T, 'id' | 'timestamp'>>,
+): Promise<T> {
+  return appendEvent<T>({
     evidenceClass: 'FULL',
+    ...event,
+  } as Omit<T, 'id' | 'timestamp'> & Partial<Pick<T, 'id' | 'timestamp'>>);
+}
+
+export async function appendAuditEvent(
+  event: Omit<UnifiedAuditEvent, 'kind' | 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<UnifiedAuditEvent, 'id' | 'timestamp'>>,
+): Promise<UnifiedAuditEvent> {
+  return appendControlPlaneEvent<UnifiedAuditEvent>({
+    kind: 'audit',
     ...event,
   });
 }
 
 export async function appendCostEvent(
-  event: Omit<CostEvent, 'kind' | 'id' | 'timestamp'> & Partial<Pick<CostEvent, 'id' | 'timestamp'>>,
+  event: Omit<CostEvent, 'kind' | 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<CostEvent, 'id' | 'timestamp'>>,
 ): Promise<CostEvent> {
-  return appendEvent<CostEvent>({
+  return appendControlPlaneEvent<CostEvent>({
     kind: 'cost',
-    evidenceClass: 'FULL',
     ...event,
   });
 }

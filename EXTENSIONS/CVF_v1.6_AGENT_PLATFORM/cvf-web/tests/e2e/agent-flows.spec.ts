@@ -22,9 +22,9 @@ test('Governance mode flow shows accept/retry/reject controls', async ({ page })
 
     await expect(page.getByText('MOCK_GOVERNANCE_RESPONSE')).toBeVisible();
     await expect(page.getByText('⚠️ Có Quy tắc', { exact: true }).first()).toBeVisible();
-    await expect(page.getByText('Chấp nhận')).toBeVisible();
-    await expect(page.getByText('Thử lại')).toBeVisible();
-    await expect(page.getByText('Từ chối')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Chấp nhận/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Thử lại/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Từ chối/i })).toBeVisible();
 });
 
 test('Full mode flow triggers phase gate modal', async ({ page }) => {
@@ -34,7 +34,7 @@ test('Full mode flow triggers phase gate modal', async ({ page }) => {
     await expect(page.getByText('MOCK_FULL_RESPONSE')).toBeVisible();
     await expect(page.getByText('🚦 CVF Full Mode', { exact: true }).first()).toBeVisible();
 
-    await expect(page.getByRole('heading', { name: 'Phase A: Khám phá' })).toBeVisible();
-    await page.getByRole('button', { name: /Duyệt → Design/i }).click();
-    await expect(page.getByText(/Phase Discovery approved/i)).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Phase 1: Tiếp nhận|Phase 1: Intake/i })).toBeVisible();
+    await page.getByRole('button', { name: /Duyệt → DESIGN|Approve/i }).click();
+    await expect(page.getByText(/Phase INTAKE approved|Phase Discovery approved/i)).toBeVisible();
 });

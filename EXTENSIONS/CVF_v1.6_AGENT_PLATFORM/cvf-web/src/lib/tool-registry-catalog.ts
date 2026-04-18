@@ -1,3 +1,7 @@
+import type { TeamRole } from 'cvf-guard-contract/enterprise';
+
+import { getAllToolPolicies } from '@/lib/policy-reader';
+
 export interface ToolRegistryCatalogEntry {
   id: string;
   name: string;
@@ -11,7 +15,13 @@ export interface ToolRegistryCatalogEntry {
   }>;
 }
 
-export const TOOL_ROLE_MATRIX: Record<string, string[]> = {
+export interface ToolInventoryEntry extends ToolRegistryCatalogEntry {
+  allowedRoles: TeamRole[];
+  policySource: 'default' | 'custom';
+  policyUpdatedAt: string | null;
+}
+
+export const TOOL_ROLE_MATRIX: Record<string, TeamRole[]> = {
   web: ['owner', 'admin', 'developer', 'reviewer'],
   code: ['owner', 'admin', 'developer'],
   file: ['owner', 'admin', 'developer'],
@@ -118,3 +128,17 @@ export const TOOL_REGISTRY_CATALOG: ToolRegistryCatalogEntry[] = [
     ],
   },
 ];
+
+export async function getToolInventory(): Promise<ToolInventoryEntry[]> {
+  const policyMap = await getAllToolPolicies();
+
+  return TOOL_REGISTRY_CATALOG.map(tool => {
+    const policy = policyMap.get(tool.id);
+    return {
+      ...tool,
+      allowedRoles: policy?.allowedRoles ?? (TOOL_ROLE_MATRIX[tool.category] ?? ['owner', 'admin']),
+      policySource: policy ? 'custom' : 'default',
+      policyUpdatedAt: policy?.setAt ?? null,
+    };
+  });
+}

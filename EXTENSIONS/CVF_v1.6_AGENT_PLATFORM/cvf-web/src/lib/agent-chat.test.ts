@@ -30,4 +30,13 @@ describe('detectSpecMode', () => {
         const content = 'Please summarize the requirements for this feature.';
         expect(detectSpecMode(content)).toBe('simple');
     });
+
+    it('keeps simple mode when a simple spec mentions governance-safe wording', () => {
+        const content = `
+**Chế độ:** Đơn giản
+- governance-safe: không gợi ý bypass
+- governed context should be respected when present
+`;
+        expect(detectSpecMode(content)).toBe('simple');
+    });
 });

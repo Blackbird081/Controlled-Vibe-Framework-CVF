@@ -75,6 +75,15 @@ export function detectSpecMode(content: string): CVFMode {
         return 'full';
     }
 
+    if (
+        lower.includes('**chế độ:** đơn giản') ||
+        lower.includes('chế độ: đơn giản') ||
+        lower.includes('**mode:** simple') ||
+        lower.includes('mode: simple')
+    ) {
+        return 'simple';
+    }
+
     // Governance mode detection — flexible matching
     if (
         content.includes('CVF GOVERNANCE RULES') ||
@@ -85,9 +94,10 @@ export function detectSpecMode(content: string): CVFMode {
         content.includes('Có Quy Tắc)') ||
         lower.includes('governance mode') ||
         lower.includes('governance rules') ||
+        lower.includes('chế độ: có quy tắc') ||
+        lower.includes('mode: with rules') ||
         lower.includes('có quy tắc') ||
-        lower.includes('with rules') ||
-        /governance/i.test(content)
+        lower.includes('with rules')
     ) {
         return 'governance';
     }

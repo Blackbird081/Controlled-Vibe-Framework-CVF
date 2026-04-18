@@ -2,7 +2,8 @@
 *Review Date: 2026-04-18*
 *Commit: `213c1961 feat: ship enterprise admin control plane foundation`*
 *Reviewer: Claude Opus 4.7*
-*Status: APPROVED WITH CONDITIONS — merge after R1-R4 hotfix*
+*Status: MERGED (213c1961) — C0 alignment hotfix required before Phase C1*
+*Revision: 2026-04-18 — reclassified R2/R4 per counter-review*
 
 ---
 
@@ -154,7 +155,7 @@ process.env.CVF_INTERNAL_AUDIT_SECRET || 'cvf-internal-audit'
 
 **Fix:** Fail-closed. Nếu missing, throw error hoặc fallback = `null` (reject audit POST).
 
-### R2. Fire-and-forget audit fetch — tamper-evidence broken
+### R2. Fire-and-forget audit fetch — durability/observability gap
 
 **Location:** [middleware.ts:40-57](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/middleware.ts#L40-L57)
 
@@ -162,9 +163,9 @@ process.env.CVF_INTERNAL_AUDIT_SECRET || 'cvf-internal-audit'
 void fetch(auditUrl, { ... }).catch(() => undefined);
 ```
 
-**Issue:** Fire-and-forget, no retry. Nếu `/api/admin/audit` down hoặc network fail → audit event mất. Attacker có thể DDOS admin audit endpoint để mờ vết intrusion.
+**Issue:** Fire-and-forget, no retry, no error logging. Nếu `/api/admin/audit` down hoặc network fail → audit event mất silently. Đây là **durability/observability gap** — không phải cryptographic tamper-evidence breach, nhưng làm giảm tính tin cậy của audit trail.
 
-**Fix:** Log stderr tối thiểu. Hoặc queue + async retry (Redis/file).
+**Fix:** Thêm `console.error('[CVF AUDIT DELIVERY FAILED]', error)` ở catch block. Đủ để alert on-call nếu events drop. Queue/retry là nice-to-have, không phải gate Phase C.
 
 ### R3. File-based store không an toàn concurrent
 
@@ -180,16 +181,15 @@ Hàm `repairCorruptedStore()` tồn tại có lẽ vì agent biết risk. Nhưng
 
 **Fix (Phase C/D):** Migrate sang SQLite, Postgres, hoặc append-only log file (line-JSON). Hoặc dùng lock file / Redis mutex nếu stay JSON.
 
-### R4. Không có GC-023 pre-flight documentation
+### R4. GC-023 evidence gap — governance debt, không phải code defect
 
-**Location:** Commit message, không mention GC-023.
+**Location:** Commit message `213c1961`, không mention GC-023.
 
-**Issue:** Roadmap Cross-cutting viết rõ: *"Mỗi file mới phải check GC-023 threshold trước khi tạo"*. Nhưng:
-- Không update `CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json`.
-- `control-plane-events.ts` = 299 dòng (gần threshold?).
-- Không có ADR note về điều này.
+**Issue:** Roadmap Cross-cutting yêu cầu GC-023 pre-flight check. `control-plane-events.ts` = 299 dòng nhưng pre-commit hook đã pass (Violations: 0). Vấn đề là **evidence/ADR gap**, không phải violation thực sự.
 
-**Fix:** Run GC-023 pre-flight check. Update exception registry nếu cần. Thêm note vào commit message hoặc docs/baselines/.
+**Fix (governance debt, không phải blocker):** Ghi note ngắn vào `docs/baselines/` hoặc ADR giải thích tại sao `control-plane-events.ts` ≤ threshold. Làm trong C0 cùng với ADR event store.
+
+> **Note:** R4 được reclassify từ "MUST FIX blocker" → "SHOULD FIX governance debt" sau counter-review 2026-04-18. Pre-commit hook đã enforce GC-023 tại commit time và passed.
 
 ---
 
@@ -214,51 +214,48 @@ Hàm `repairCorruptedStore()` tồn tại có lẽ vì agent biết risk. Nhưng
 
 ## 🎯 Khuyến nghị hành động
 
-### MUST FIX (Blocker — trước khi merge)
+### MUST FIX — C0 Alignment Hotfix (trước khi mở Phase C1)
 
-1. **R1 — Security:** Replace hardcoded secret fallback với fail-closed check.
-   - File: `src/app/api/admin/audit/route.ts`, `middleware.ts`
-   - Command: `CVF_INTERNAL_AUDIT_SECRET` env var PHẢI set, không có fallback.
+> Code đã merged (`213c1961`). Items dưới đây là **C0 tranche** — phải done trước khi build Phase C1.
 
-2. **R2 — Reliability:** Log stderr khi fetch audit fail ở middleware.
+1. **R1 — Security (gate C1):** Fail-closed cho `CVF_INTERNAL_AUDIT_SECRET`.
+   - Files: `src/app/api/admin/audit/route.ts:7`, `middleware.ts:44`
+   - Fix: Nếu env var missing → throw startup error hoặc return 500, không dùng hardcoded fallback.
+
+2. **R2 — Observability:** Log stderr khi audit delivery fail.
    - File: `middleware.ts`
-   - Add: `console.error('[AUDIT FAILED]', error)` before `.catch(() => undefined)`
+   - Fix: `console.error('[CVF AUDIT DELIVERY FAILED]', error)` thay cho `.catch(() => undefined)`.
 
-3. **R4 — Governance:** Run GC-023 pre-flight check, update exception registry.
-   - File: `src/lib/control-plane-events.ts` (299 dòng)
-   - Check: `governance/compat/CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json`
-   - Update: Add entry nếu vượt threshold, hoặc split file nếu cần.
+3. **D1 — ADR event store (gate C1):** Viết `docs/baselines/CVF_ADR_CONTROL_PLANE_EVENT_STORE_2026-04-18.md` giải thích tại sao chọn file store thay vì `governanceLedger`. Canon phải rõ ràng trước khi Phase C1 thêm `QuotaPolicy`/`ToolPolicy` events.
 
-### SHOULD FIX (Architectural — trước Phase C)
+4. **D3 — Double sidebar:** Bỏ Enterprise group trong `Sidebar.tsx` (client sidebar), giữ lại admin layout riêng. Main sidebar chỉ có 1 link "Enterprise Console".
 
-4. **D1 — Audit unification:** Viết ADR giải thích file store choice. Best: emit UnifiedAuditEvent song song vào cả 2 ledger (control-plane-events + governanceLedger) để loại bỏ source thứ 3.
+### SHOULD FIX — C0 governance debt
 
-5. **D3 — UX:** Chọn 1 sidebar pattern. Khuyến nghị: giữ admin layout riêng, trong main sidebar chỉ có 1 link "Enterprise Console" (mở `/admin/finops` → show admin sidebar).
+1. **R4 — GC-023 evidence:** Ghi note ngắn trong ADR hoặc `docs/baselines/` về tại sao `control-plane-events.ts` (299 dòng) không cần exception registry entry.
 
-### NICE-TO-HAVE (Phase C/D sẽ xử)
+### NICE-TO-HAVE (Phase C3/D)
 
-6. **D2 — Tool Registry:** Phase C khi thêm toggle, convert static catalog → dynamic query MCP registry thực.
-
-7. **R3 — Storage:** Phase D2 (SIEM integration), migrate file store → SQLite/Postgres hoặc Redis mutex.
+1. **D2 — Tool Registry dynamic:** Phase C3 khi thêm whitelist/blacklist, convert static catalog → dynamic query.
+1. **R3 — Storage concurrency:** Phase D2, migrate file store → SQLite hoặc append-only line-JSON với file lock.
 
 ---
 
 ## Handoff note cho Phase C
 
-**Status:** Foundation locked. 4 must-fix items above, nếu fix → ready merge.
+**Code status:** `213c1961` merged to main. `0b9cd263` = docs handoff only.
 
-**Roadmap điều chỉnh:** Thay vì tiếp Phase C theo lịch nguyên thủy, khuyến nghị:
+**Next agent:** Xem `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_1_PHASE_C_2026-04-18.md` để biết chi tiết Phase C0→C4.
 
-1. **Hotfix tranche (2–3 ngày):** Fix R1–R4. Merge.
-2. **Phase C bắt đầu:** Biết rằng D1 chưa resolve → khi thêm quota/tool toggle, cân nhắc dùng control-plane-events store (vì đó là source of truth hiện tại), hoặc unified vào governanceLedger.
+**Files cần tham khảo:**
 
-**File cần tham khảo:**
-- `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_2026-04-17.md` — chính thức roadmap.
-- `docs/reviews/CVF_ENTERPRISE_ADMIN_ROADMAP_CRITICAL_REVIEW_2026-04-17.md` — phản biện gốc (A.3/A.4 yêu cầu governanceLedger).
-- Commit `213c1961` + follow-up fixes.
+- `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_2026-04-17.md` — final roadmap gốc.
+- `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_1_PHASE_C_2026-04-18.md` — Phase C detail (C0–C4).
+- `docs/reviews/CVF_ENTERPRISE_ADMIN_ROADMAP_CRITICAL_REVIEW_2026-04-17.md` — phản biện gốc.
+- Commit `213c1961` — implementation foundation.
 
 ---
 
 ## Kết luận
 
-**Merge sau hotfix.** Foundation ship chất lượng tốt, phần 80% implementation đúng roadmap. 2 deviation (D1, D3) cần ADR, 3 risk (R1, R2, R3) cần fix trước production. Phù hợp **APPROVED WITH CONDITIONS** — lock roadmap V2, fix R1–R4, start Phase C với context D1/D2/R3 deferred tới Phase D.
+Foundation ship chất lượng tốt, 80% implementation đúng roadmap. R1 (security) là gate duy nhất cho Phase C1. R2/D1/D3 fix trong C0 tranche. R4 là governance debt, không phải code defect. Start Phase C0 ngay.

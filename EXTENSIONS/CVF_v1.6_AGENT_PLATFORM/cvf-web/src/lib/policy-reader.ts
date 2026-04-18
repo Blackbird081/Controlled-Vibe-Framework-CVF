@@ -1,6 +1,9 @@
 import type {
+  DLPPolicyEvent,
+  ImpersonationSessionEvent,
   QuotaOverrideEvent,
   QuotaPolicyEvent,
+  SIEMConfigEvent,
   ToolPolicyEvent,
 } from '@/lib/policy-events';
 import { readPolicyEvents } from '@/lib/policy-events';
@@ -103,4 +106,37 @@ export async function getAllToolPolicies(): Promise<Map<string, ToolPolicyEvent>
   }
 
   return policies;
+}
+
+export async function getActiveDLPPolicy(): Promise<DLPPolicyEvent | null> {
+  const events = await readPolicyEvents();
+  return sortNewestFirst(
+    events.filter((event): event is DLPPolicyEvent => event.kind === 'dlp-policy'),
+  )[0] ?? null;
+}
+
+export async function getActiveSIEMConfig(): Promise<SIEMConfigEvent | null> {
+  const events = await readPolicyEvents();
+  return sortNewestFirst(
+    events.filter((event): event is SIEMConfigEvent => event.kind === 'siem-config'),
+  )[0] ?? null;
+}
+
+export async function getActiveImpersonationSession(
+  sessionId: string,
+  referenceTimestamp = new Date().toISOString(),
+): Promise<ImpersonationSessionEvent | null> {
+  const events = await readPolicyEvents();
+  const sessionEvents = sortNewestFirst(
+    events.filter(
+      (event): event is ImpersonationSessionEvent =>
+        event.kind === 'impersonation-session' && event.sessionId === sessionId,
+    ),
+  );
+
+  const latestEvent = sessionEvents[0];
+  if (!latestEvent) return null;
+  if (latestEvent.status === 'ended') return null;
+  if (latestEvent.expiresAt.localeCompare(referenceTimestamp) <= 0) return null;
+  return latestEvent;
 }

@@ -1,0 +1,138 @@
+'use client';
+
+import { useState, useTransition } from 'react';
+
+import type { SIEMEventFilter } from '@/lib/policy-events';
+
+type SIEMConfigView = {
+  webhookUrl: string;
+  signingSecret: string;
+  enabled: boolean;
+  eventTypes: SIEMEventFilter;
+};
+
+const EVENT_TYPE_OPTIONS: Array<{ value: SIEMEventFilter; label: string }> = [
+  { value: 'audit', label: 'Audit only' },
+  { value: 'cost', label: 'Cost only' },
+  { value: 'all', label: 'All events' },
+];
+
+export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMConfigView }) {
+  const [config, setConfig] = useState(initialConfig);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const saveConfig = () => {
+    startTransition(async () => {
+      setError(null);
+      setSuccess(null);
+
+      try {
+        const response = await fetch('/api/admin/siem', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(config),
+        });
+        const payload = await response.json();
+
+        if (!response.ok || !payload?.success) {
+          throw new Error(payload?.error || 'Failed to save SIEM configuration.');
+        }
+
+        setConfig({
+          webhookUrl: payload.data.webhookUrl,
+          signingSecret: payload.data.signingSecret,
+          enabled: payload.data.enabled,
+          eventTypes: payload.data.eventTypes,
+        });
+        setSuccess('SIEM configuration saved.');
+      } catch (saveError) {
+        setError(saveError instanceof Error ? saveError.message : 'Failed to save SIEM configuration.');
+      }
+    });
+  };
+
+  return (
+    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div>
+        <div className="text-sm text-gray-500">SIEM Integration</div>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Webhook export</h3>
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          Forward control-plane events to Splunk HEC or Elastic-compatible endpoints with HMAC signing.
+        </p>
+      </div>
+
+      <div className="mt-4 grid gap-4">
+        <label className="grid gap-2 text-sm">
+          <span className="font-medium text-gray-700 dark:text-gray-200">Webhook URL</span>
+          <input
+            value={config.webhookUrl}
+            onChange={event => setConfig(current => ({ ...current, webhookUrl: event.target.value }))}
+            placeholder="https://siem.example.com/ingest"
+            className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none focus:border-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </label>
+
+        <label className="grid gap-2 text-sm">
+          <span className="font-medium text-gray-700 dark:text-gray-200">Signing secret</span>
+          <input
+            value={config.signingSecret}
+            onChange={event => setConfig(current => ({ ...current, signingSecret: event.target.value }))}
+            placeholder="Shared HMAC secret"
+            className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none focus:border-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </label>
+
+        <label className="grid gap-2 text-sm">
+          <span className="font-medium text-gray-700 dark:text-gray-200">Event filter</span>
+          <select
+            value={config.eventTypes}
+            onChange={event => setConfig(current => ({ ...current, eventTypes: event.target.value as SIEMEventFilter }))}
+            className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none focus:border-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          >
+            {EVENT_TYPE_OPTIONS.map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        </label>
+
+        <label className="flex items-center gap-3 rounded-xl border border-gray-200 px-4 py-3 text-sm dark:border-gray-700">
+          <input
+            type="checkbox"
+            checked={config.enabled}
+            onChange={event => setConfig(current => ({ ...current, enabled: event.target.checked }))}
+            className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+          />
+          Enable SIEM forwarding
+        </label>
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-3">
+        <button
+          type="button"
+          onClick={saveConfig}
+          disabled={isPending}
+          className="rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+        >
+          {isPending ? 'Saving...' : 'Save SIEM Config'}
+        </button>
+      </div>
+
+      {(error || success) && (
+        <div className="mt-4 space-y-3">
+          {error && (
+            <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-200">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-200">
+              {success}
+            </div>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}

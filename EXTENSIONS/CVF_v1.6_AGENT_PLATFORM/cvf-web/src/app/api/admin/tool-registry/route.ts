@@ -1,13 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { verifySessionCookie } from '@/lib/middleware-auth';
-import { canAccessAdmin } from '@/lib/enterprise-access';
+import { requireAdminApiSession } from '@/lib/admin-session';
 import { getToolInventory } from '@/lib/tool-registry-catalog';
 
-export async function GET() {
-  const session = await verifySessionCookie();
-  if (!session || !canAccessAdmin(session.role)) {
-    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+export async function GET(request: NextRequest) {
+  const session = await requireAdminApiSession(request, '/api/admin/tool-registry');
+  if (session instanceof NextResponse) {
+    return session;
   }
 
   const inventory = await getToolInventory();

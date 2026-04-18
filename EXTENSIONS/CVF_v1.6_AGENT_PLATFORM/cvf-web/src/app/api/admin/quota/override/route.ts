@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { requireAdminApiSession, withAdminAuditPayload } from '@/lib/admin-session';
 import { appendAuditEvent } from '@/lib/control-plane-events';
-import { verifySessionCookie } from '@/lib/middleware-auth';
 import { MOCK_TEAMS } from '@/lib/mock-enterprise-db';
 import { appendQuotaOverrideEvent } from '@/lib/policy-events';
 import { getActiveQuotaOverride } from '@/lib/policy-reader';
 
 export async function POST(request: NextRequest) {
-  const session = await verifySessionCookie(request);
-  if (!session || session.role !== 'owner') {
-    return NextResponse.json({ success: false, error: 'Owner session required.' }, { status: 403 });
+  const session = await requireAdminApiSession(request, '/api/admin/quota/override', { ownerOnly: true });
+  if (session instanceof NextResponse) {
+    return session;
   }
 
   const body = await request.json().catch(() => null);
@@ -49,20 +49,20 @@ export async function POST(request: NextRequest) {
     riskLevel: 'R2',
     phase: 'PHASE C',
     outcome: 'SUCCESS',
-    payload: {
+    payload: withAdminAuditPayload(session, {
       teamName: team.name,
       expiresAt,
       reason,
-    },
+    }),
   });
 
   return NextResponse.json({ success: true, data: record }, { status: 201 });
 }
 
 export async function DELETE(request: NextRequest) {
-  const session = await verifySessionCookie(request);
-  if (!session || session.role !== 'owner') {
-    return NextResponse.json({ success: false, error: 'Owner session required.' }, { status: 403 });
+  const session = await requireAdminApiSession(request, '/api/admin/quota/override', { ownerOnly: true });
+  if (session instanceof NextResponse) {
+    return session;
   }
 
   const body = await request.json().catch(() => null);
@@ -105,11 +105,11 @@ export async function DELETE(request: NextRequest) {
     riskLevel: 'R2',
     phase: 'PHASE C',
     outcome: 'SUCCESS',
-    payload: {
+    payload: withAdminAuditPayload(session, {
       teamName: team.name,
       previousExpiresAt: activeOverride.expiresAt,
       reason,
-    },
+    }),
   });
 
   return NextResponse.json({ success: true, data: record });

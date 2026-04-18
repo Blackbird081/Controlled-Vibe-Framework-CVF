@@ -2,11 +2,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { NextResponse } from 'next/server';
 
-const verifySessionCookieMock = vi.hoisted(() => vi.fn());
+const requireAdminApiSessionMock = vi.hoisted(() => vi.fn());
 
-vi.mock('@/lib/middleware-auth', () => ({
-  verifySessionCookie: verifySessionCookieMock,
+vi.mock('@/lib/admin-session', () => ({
+  requireAdminApiSession: requireAdminApiSessionMock,
+  withAdminAuditPayload: (_session: unknown, payload?: Record<string, unknown>) => payload,
 }));
 
 import { POST } from './route';
@@ -18,7 +20,7 @@ describe('/api/admin/quota/policy', () => {
   beforeEach(async () => {
     tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-quota-policy-route-'));
     process.env.CVF_CONTROL_PLANE_EVENTS_PATH = path.join(tempDir, 'events.json');
-    verifySessionCookieMock.mockReset();
+    requireAdminApiSessionMock.mockReset();
   });
 
   afterEach(async () => {
@@ -33,7 +35,7 @@ describe('/api/admin/quota/policy', () => {
   });
 
   it('rejects unauthorized requests', async () => {
-    verifySessionCookieMock.mockResolvedValueOnce(null);
+    requireAdminApiSessionMock.mockResolvedValueOnce(NextResponse.json({ success: false }, { status: 401 }));
 
     const response = await POST(new Request('http://localhost/api/admin/quota/policy', {
       method: 'POST',
@@ -44,7 +46,7 @@ describe('/api/admin/quota/policy', () => {
   });
 
   it('validates cap ordering', async () => {
-    verifySessionCookieMock.mockResolvedValueOnce({
+    requireAdminApiSessionMock.mockResolvedValueOnce({
       userId: 'usr_2',
       user: 'admin',
       role: 'admin',
@@ -68,7 +70,7 @@ describe('/api/admin/quota/policy', () => {
   });
 
   it('appends a policy event for an admin session', async () => {
-    verifySessionCookieMock.mockResolvedValueOnce({
+    requireAdminApiSessionMock.mockResolvedValueOnce({
       userId: 'usr_2',
       user: 'admin',
       role: 'admin',

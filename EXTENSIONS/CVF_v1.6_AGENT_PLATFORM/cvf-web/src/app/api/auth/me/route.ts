@@ -6,12 +6,17 @@ export async function GET(request: Request) {
     if (!session) {
         return NextResponse.json({ authenticated: false }, { status: 401 });
     }
-    return NextResponse.json({
+    const response = NextResponse.json({
         authenticated: true,
         user: session.user,
         userId: session.userId,
         role: session.role,
         orgId: session.orgId,
         teamId: session.teamId,
+        impersonation: session.impersonation ?? null,
     });
+    if (session.impersonation) {
+        response.headers.set('X-CVF-Impersonation-Active', 'true');
+    }
+    return response;
 }

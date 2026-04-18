@@ -96,8 +96,7 @@ describe('SkillLibrary', () => {
         // Wait for UI to update
         await waitFor(() => expect(screen.getByText('Skill Library')).toBeTruthy());
 
-        // Assuming fixture has 'Write Code'
-        await waitFor(() => expect(screen.getByText(/Write Code/i)).toBeTruthy());
+        await waitFor(() => expect(screen.getByText(/Fixture Skill One/i)).toBeTruthy());
         expect(getSkillCategoriesMock).not.toHaveBeenCalled();
     });
 

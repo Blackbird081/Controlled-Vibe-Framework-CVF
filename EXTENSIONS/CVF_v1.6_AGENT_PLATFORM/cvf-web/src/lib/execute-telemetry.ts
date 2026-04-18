@@ -2,6 +2,7 @@ import type { AIProvider, ExecutionRequest, ExecutionResponse } from '@/lib/ai';
 import { calculateTokenCost } from '@/lib/model-pricing';
 import { appendAuditEvent, appendCostEvent } from '@/lib/control-plane-events';
 import type { SessionCookie } from '@/lib/middleware-auth';
+import { withSessionAuditPayload } from '@/lib/middleware-auth';
 import { checkTeamQuota, hasSoftCapAuditEvent } from '@/lib/quota-guard';
 
 function estimateTokenCount(value: string | undefined): number {
@@ -88,7 +89,7 @@ export async function emitExecutionTelemetry(input: {
         riskLevel: 'R1',
         phase: 'PHASE C',
         outcome: 'WARNING',
-        payload: {
+        payload: withSessionAuditPayload(input.session, {
           teamId: quotaStatus.teamId,
           currentUSD: quotaStatus.currentUSD,
           softCapUSD: quotaStatus.softCapUSD,
@@ -96,7 +97,7 @@ export async function emitExecutionTelemetry(input: {
           period: quotaStatus.period,
           billingWindowKey: quotaStatus.billingWindowKey,
           policyTimestamp: quotaStatus.policyTimestamp,
-        },
+        }),
       });
     }
   }
@@ -111,12 +112,12 @@ export async function emitExecutionTelemetry(input: {
     riskLevel: input.request.cvfRiskLevel,
     phase: input.request.cvfPhase,
     outcome: 'SUCCESS',
-    payload: {
+    payload: withSessionAuditPayload(input.session, {
       provider: input.provider,
       model: input.model,
       totalTokens: usage.totalTokens,
       estimatedCostUSD,
       skillIds: input.request.skillIds ?? [],
-    },
+    }),
   });
 }

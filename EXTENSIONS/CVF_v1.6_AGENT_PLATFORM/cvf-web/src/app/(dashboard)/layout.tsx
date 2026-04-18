@@ -38,7 +38,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const { t, language } = useLanguage();
     const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
 
-    const { userRole, userName, permissions, handleLogout } = useAuth();
+    const { userRole, userName, permissions, handleLogout, impersonation, endImpersonation } = useAuth();
     const { settings, updateProvider, updatePreferences } = useSettings();
     const modals = useModals(permissions);
     const { executions } = useExecutionStore();
@@ -165,6 +165,26 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
             {/* Main Content — children are the individual page routes */}
             <main className="md:ml-64 min-h-screen">
+                {impersonation && (
+                    <div className="border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/40 dark:text-amber-100">
+                        <div className="mx-auto flex max-w-6xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <div className="font-semibold">Impersonation active</div>
+                                <div className="text-xs md:text-sm">
+                                    Acting as <span className="font-semibold">{userName ?? userRole}</span> until{' '}
+                                    {new Date(impersonation.expiresAt).toLocaleString()}.
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => void endImpersonation()}
+                                className="rounded-lg bg-amber-900 px-3 py-2 text-xs font-semibold text-white transition hover:bg-amber-800 dark:bg-amber-200 dark:text-amber-950 dark:hover:bg-amber-100"
+                            >
+                                End Impersonation
+                            </button>
+                        </div>
+                    </div>
+                )}
                 {children}
 
                 {/* Footer */}

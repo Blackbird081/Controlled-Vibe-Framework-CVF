@@ -256,10 +256,10 @@ export function SkillLibrary() {
                             </div>
                         </div>
                         <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
-                            Select a skill to explore
+                            {t('skills.selectSkill')}
                         </h3>
                         <p className="max-w-md text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">
-                            Browse the governed catalog on the left. Once selected, you can easily copy the raw skill or directly use its associated template.
+                            {t('skills.selectSkillDesc')}
                         </p>
                         <div className="mt-8 flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-widest">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>

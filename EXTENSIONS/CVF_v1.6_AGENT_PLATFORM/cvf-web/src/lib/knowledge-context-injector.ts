@@ -31,7 +31,12 @@ const CONTEXT_BLOCK_FOOTER = [
  * Returns an enriched system prompt with the given knowledge context appended.
  * If context is empty or whitespace-only, returns the base prompt unchanged.
  */
-export function buildKnowledgeSystemPrompt(basePrompt: string, context: string): string {
+export function buildKnowledgeSystemPrompt(
+    basePrompt: string,
+    context: string,
+    _scope?: { orgId?: string; teamId?: string },
+): string {
+    void _scope;
     const trimmed = context.trim();
     if (!trimmed) return basePrompt;
     return basePrompt + CONTEXT_BLOCK_HEADER + trimmed + CONTEXT_BLOCK_FOOTER;

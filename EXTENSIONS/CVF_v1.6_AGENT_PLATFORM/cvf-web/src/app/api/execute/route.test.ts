@@ -17,6 +17,14 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
+    withSessionAuditPayload: (session: { impersonation?: { realActorId: string; sessionId: string } } | null | undefined, payload?: Record<string, unknown>) => {
+        const nextPayload = { ...(payload ?? {}) };
+        if (session?.impersonation) {
+            nextPayload.impersonatedBy = session.impersonation.realActorId;
+            nextPayload.impersonationSessionId = session.impersonation.sessionId;
+        }
+        return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;
+    },
 }));
 
 vi.mock('@/lib/quota-guard', () => ({
@@ -24,10 +32,14 @@ vi.mock('@/lib/quota-guard', () => ({
     hasSoftCapAuditEvent: vi.fn().mockResolvedValue(false),
 }));
 
-vi.mock('@/lib/control-plane-events', () => ({
-    appendAuditEvent: appendAuditEventMock,
-    appendCostEvent: appendCostEventMock,
-}));
+vi.mock('@/lib/control-plane-events', async () => {
+    const actual = await vi.importActual<typeof import('@/lib/control-plane-events')>('@/lib/control-plane-events');
+    return {
+        ...actual,
+        appendAuditEvent: appendAuditEventMock,
+        appendCostEvent: appendCostEventMock,
+    };
+});
 
 import { POST } from './route';
 

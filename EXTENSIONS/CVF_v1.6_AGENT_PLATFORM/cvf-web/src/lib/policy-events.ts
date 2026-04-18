@@ -3,7 +3,14 @@ import type { TeamRole } from 'cvf-guard-contract/enterprise';
 import { appendControlPlaneEvent, readControlPlaneEvents } from '@/lib/control-plane-events';
 
 export type BillingPeriod = 'monthly' | 'weekly' | 'daily';
-export type PolicyEventKind = 'quota-policy' | 'quota-override' | 'tool-policy';
+export type SIEMEventFilter = 'audit' | 'cost' | 'all';
+export type PolicyEventKind =
+  | 'quota-policy'
+  | 'quota-override'
+  | 'tool-policy'
+  | 'dlp-policy'
+  | 'siem-config'
+  | 'impersonation-session';
 
 export interface PolicyEventBase {
   id: string;
@@ -44,10 +51,49 @@ export interface ToolPolicyEvent extends PolicyEventBase {
   setAt: string;
 }
 
+export interface DLPPatternRecord {
+  id: string;
+  label: string;
+  regex: string;
+  enabled: boolean;
+}
+
+export interface DLPPolicyEvent extends PolicyEventBase {
+  kind: 'dlp-policy';
+  patterns: DLPPatternRecord[];
+  setBy: string;
+  setAt: string;
+}
+
+export interface SIEMConfigEvent extends PolicyEventBase {
+  kind: 'siem-config';
+  webhookUrl: string;
+  signingSecret: string;
+  enabled: boolean;
+  eventTypes: SIEMEventFilter;
+  setBy: string;
+  setAt: string;
+}
+
+export interface ImpersonationSessionEvent extends PolicyEventBase {
+  kind: 'impersonation-session';
+  sessionId: string;
+  realActorId: string;
+  impersonatedUserId: string;
+  startedAt: string;
+  expiresAt: string;
+  status: 'started' | 'ended';
+  endedAt?: string;
+  endedBy?: string;
+}
+
 export type PolicyControlPlaneEvent =
   | QuotaPolicyEvent
   | QuotaOverrideEvent
-  | ToolPolicyEvent;
+  | ToolPolicyEvent
+  | DLPPolicyEvent
+  | SIEMConfigEvent
+  | ImpersonationSessionEvent;
 
 export async function appendQuotaPolicyEvent(
   event: Omit<QuotaPolicyEvent, 'kind' | 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<QuotaPolicyEvent, 'id' | 'timestamp'>>,
@@ -76,10 +122,42 @@ export async function appendToolPolicyEvent(
   });
 }
 
+export async function appendDLPPolicyEvent(
+  event: Omit<DLPPolicyEvent, 'kind' | 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<DLPPolicyEvent, 'id' | 'timestamp'>>,
+): Promise<DLPPolicyEvent> {
+  return appendControlPlaneEvent<DLPPolicyEvent>({
+    kind: 'dlp-policy',
+    ...event,
+  });
+}
+
+export async function appendSIEMConfigEvent(
+  event: Omit<SIEMConfigEvent, 'kind' | 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<SIEMConfigEvent, 'id' | 'timestamp'>>,
+): Promise<SIEMConfigEvent> {
+  return appendControlPlaneEvent<SIEMConfigEvent>({
+    kind: 'siem-config',
+    ...event,
+  });
+}
+
+export async function appendImpersonationSessionEvent(
+  event: Omit<ImpersonationSessionEvent, 'kind' | 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<ImpersonationSessionEvent, 'id' | 'timestamp'>>,
+): Promise<ImpersonationSessionEvent> {
+  return appendControlPlaneEvent<ImpersonationSessionEvent>({
+    kind: 'impersonation-session',
+    ...event,
+  });
+}
+
 export async function readPolicyEvents(): Promise<PolicyControlPlaneEvent[]> {
   const events = await readControlPlaneEvents();
   return events.filter(
     (event): event is PolicyControlPlaneEvent =>
-      event.kind === 'quota-policy' || event.kind === 'quota-override' || event.kind === 'tool-policy',
+      event.kind === 'quota-policy'
+      || event.kind === 'quota-override'
+      || event.kind === 'tool-policy'
+      || event.kind === 'dlp-policy'
+      || event.kind === 'siem-config'
+      || event.kind === 'impersonation-session',
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import type { TeamRole } from 'cvf-guard-contract/enterprise';
+import type { SessionImpersonation } from '@/lib/middleware-auth';
 
 const ROLE_PERMISSIONS = {
     owner: {
@@ -60,6 +61,7 @@ export type RoleKey = keyof typeof ROLE_PERMISSIONS;
 export function useAuth() {
     const [userRole, setUserRole] = useState<TeamRole>('admin');
     const [userName, setUserName] = useState<string | undefined>();
+    const [impersonation, setImpersonation] = useState<SessionImpersonation | null>(null);
 
     useEffect(() => {
         // Fetch from session cookie via API (source of truth)
@@ -72,6 +74,7 @@ export function useAuth() {
                     document.cookie = 'cvf_role=; Path=/; Max-Age=0';
                 }
                 if (data?.user) setUserName(data.user);
+                setImpersonation(data?.impersonation ?? null);
             })
             .catch(() => {
                 // Fallback: read legacy cookie ONLY when API fails
@@ -95,6 +98,14 @@ export function useAuth() {
         window.location.href = '/login';
     }, []);
 
+    const endImpersonation = useCallback(async () => {
+        await fetch('/api/admin/impersonate/end', {
+            method: 'POST',
+            credentials: 'include',
+        });
+        window.location.reload();
+    }, []);
+
     const roleKey = (userRole in ROLE_PERMISSIONS ? userRole : 'admin') as RoleKey;
     const permissions = ROLE_PERMISSIONS[roleKey];
     const roleBadgeStyle = ROLE_BADGE_STYLES[roleKey];
@@ -102,10 +113,12 @@ export function useAuth() {
     return {
         userRole,
         userName,
+        impersonation,
         roleKey,
         permissions,
         roleBadgeStyle,
         handleLogout,
+        endImpersonation,
     };
 }
 

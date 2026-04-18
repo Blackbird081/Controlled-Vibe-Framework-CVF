@@ -1,10 +1,11 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { createHmac, randomUUID } from 'node:crypto';
 
 import type { AIProvider } from '@/lib/ai';
 import { MOCK_TEAMS, MOCK_USERS } from '@/lib/mock-enterprise-db';
 import type { PolicyControlPlaneEvent, PolicyEventKind } from '@/lib/policy-events';
+import { forwardToSIEM } from '@/lib/siem-forwarder';
 
 export type EvidenceClass = 'FULL' | 'SUMMARY' | 'POINTER';
 
@@ -45,6 +46,41 @@ export interface CostEvent extends ControlPlaneEventBase {
 export type ControlPlaneEvent = UnifiedAuditEvent | CostEvent | PolicyControlPlaneEvent;
 
 let appendQueue = Promise.resolve();
+
+function buildAuditCsvBody(auditEvents: UnifiedAuditEvent[]): string {
+  const headers = [
+    'timestamp',
+    'eventType',
+    'actorId',
+    'actorRole',
+    'targetResource',
+    'action',
+    'riskLevel',
+    'phase',
+    'outcome',
+    'payload',
+  ];
+
+  const escape = (value: unknown) => `"${String(value ?? '').replace(/"/g, '""')}"`;
+  const rows = auditEvents.map(event => [
+    event.timestamp,
+    event.eventType,
+    event.actorId,
+    event.actorRole,
+    event.targetResource,
+    event.action,
+    event.riskLevel ?? '',
+    event.phase ?? '',
+    event.outcome,
+    JSON.stringify(event.payload ?? {}),
+  ]);
+
+  return [headers.join(','), ...rows.map(row => row.map(escape).join(','))].join('\n');
+}
+
+export function computeAuditCsvSignature(body: string, signingKey: string): string {
+  return createHmac('sha256', signingKey).update(body, 'utf8').digest('hex');
+}
 
 function getStorePath() {
   return process.env.CVF_CONTROL_PLANE_EVENTS_PATH
@@ -180,10 +216,16 @@ export async function appendControlPlaneEvent<T extends ControlPlaneEvent>(
 export async function appendAuditEvent(
   event: Omit<UnifiedAuditEvent, 'kind' | 'id' | 'timestamp' | 'evidenceClass'> & Partial<Pick<UnifiedAuditEvent, 'id' | 'timestamp'>>,
 ): Promise<UnifiedAuditEvent> {
-  return appendControlPlaneEvent<UnifiedAuditEvent>({
+  const record = await appendControlPlaneEvent<UnifiedAuditEvent>({
     kind: 'audit',
     ...event,
   });
+
+  void forwardToSIEM(record).catch(error => {
+    console.error('SIEM forward failed:', error);
+  });
+
+  return record;
 }
 
 export async function appendCostEvent(
@@ -276,32 +318,20 @@ export async function getFinOpsSummary() {
 
 export async function exportAuditEventsToCsv(): Promise<string> {
   const auditEvents = await readAuditEvents();
-  const headers = [
-    'timestamp',
-    'eventType',
-    'actorId',
-    'actorRole',
-    'targetResource',
-    'action',
-    'riskLevel',
-    'phase',
-    'outcome',
-    'payload',
-  ];
+  const body = buildAuditCsvBody(auditEvents);
+  const signingKey = process.env.CVF_AUDIT_SIGNING_KEY;
 
-  const escape = (value: unknown) => `"${String(value ?? '').replace(/"/g, '""')}"`;
-  const rows = auditEvents.map(event => [
-    event.timestamp,
-    event.eventType,
-    event.actorId,
-    event.actorRole,
-    event.targetResource,
-    event.action,
-    event.riskLevel ?? '',
-    event.phase ?? '',
-    event.outcome,
-    JSON.stringify(event.payload ?? {}),
-  ]);
+  if (!signingKey) {
+    return ['# WARNING: UNSIGNED EXPORT', body].join('\n');
+  }
 
-  return [headers.join(','), ...rows.map(row => row.map(escape).join(','))].join('\n');
+  const signedAt = new Date().toISOString();
+  const signature = computeAuditCsvSignature(body, signingKey);
+
+  return [
+    body,
+    `# CVF-AUDIT-SIGNATURE: hmac-sha256:${signature}`,
+    `# CVF-AUDIT-SIGNED-AT: ${signedAt}`,
+    `# CVF-AUDIT-RECORD-COUNT: ${auditEvents.length}`,
+  ].join('\n');
 }

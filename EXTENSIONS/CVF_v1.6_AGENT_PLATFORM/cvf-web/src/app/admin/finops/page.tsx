@@ -18,7 +18,7 @@ export default async function AdminFinOpsPage() {
     getAllActiveQuotaOverrides(),
   ]);
   const teamsById = new Map(MOCK_TEAMS.map(team => [team.id, team]));
-  const userRole = (session.user as { role?: string } | undefined)?.role ?? 'admin';
+  const userRole = session.role ?? 'admin';
 
   return (
     <div className="space-y-6">

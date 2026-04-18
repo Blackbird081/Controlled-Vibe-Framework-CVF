@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { requireAdminApiSession } from '@/lib/admin-session';
 import { exportAuditEventsToCsv, readAuditEvents } from '@/lib/control-plane-events';
-import { verifySessionCookie } from '@/lib/middleware-auth';
-import { canAccessAdmin } from '@/lib/enterprise-access';
 
 export async function GET(request: NextRequest) {
-  const session = await verifySessionCookie(request);
-  if (!session || !canAccessAdmin(session.role)) {
-    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  const session = await requireAdminApiSession(request, '/api/admin/audit-feed');
+  if (session instanceof NextResponse) {
+    return session;
   }
 
   const format = request.nextUrl.searchParams.get('format');

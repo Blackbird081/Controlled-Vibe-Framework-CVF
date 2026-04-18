@@ -6,6 +6,7 @@ import path from 'node:path';
 import {
   appendAuditEvent,
   appendCostEvent,
+  computeAuditCsvSignature,
   exportAuditEventsToCsv,
   getFinOpsSummary,
   readAuditEvents,
@@ -21,6 +22,7 @@ describe('control-plane-events', () => {
   });
 
   afterEach(async () => {
+    delete process.env.CVF_AUDIT_SIGNING_KEY;
     if (originalPath) {
       process.env.CVF_CONTROL_PLANE_EVENTS_PATH = originalPath;
     } else {
@@ -48,6 +50,29 @@ describe('control-plane-events', () => {
     const csv = await exportAuditEventsToCsv();
     expect(csv).toContain('ADMIN_ACCESS_DENIED');
     expect(csv).toContain('/admin/team');
+    expect(csv).toContain('# WARNING: UNSIGNED EXPORT');
+  });
+
+  it('appends a signature trailer when CVF_AUDIT_SIGNING_KEY is configured', async () => {
+    process.env.CVF_AUDIT_SIGNING_KEY = 'test-signing-key';
+
+    await appendAuditEvent({
+      timestamp: '2026-04-18T08:00:00.000Z',
+      eventType: 'ADMIN_ACCESS_DENIED',
+      actorId: 'usr_3',
+      actorRole: 'developer',
+      targetResource: '/admin/team',
+      action: 'READ_ADMIN_ROUTE',
+      outcome: 'REDIRECTED',
+    });
+
+    const csv = await exportAuditEventsToCsv();
+    const [body] = csv.split('\n# CVF-AUDIT-SIGNATURE: ');
+    const signatureLine = csv.split('\n').find(line => line.startsWith('# CVF-AUDIT-SIGNATURE:'));
+
+    expect(signatureLine).toBeDefined();
+    expect(signatureLine).toContain(`hmac-sha256:${computeAuditCsvSignature(body, 'test-signing-key')}`);
+    expect(csv).toContain('# CVF-AUDIT-RECORD-COUNT: 1');
   });
 
   it('aggregates finops breakdowns from cost events', async () => {

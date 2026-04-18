@@ -33,22 +33,27 @@ describe('middleware admin RBAC', () => {
     fetchMock.mockReset().mockResolvedValue(new Response(null, { status: 200 }));
   });
 
-  it('redirects unauthenticated admin access to login', () => {
-    const response = middleware(makeRequest('/admin/team', null) as never);
-    expect(response.status).toBe(307);
-    expect(response.headers.get('location')).toContain('/login');
+  it('redirects unauthenticated admin access to login', async () => {
+    const response = await middleware(makeRequest('/admin/team', null) as never, {} as never);
+    expect(response).toBeInstanceOf(Response);
+    const nextResponse = response as Response;
+    expect(nextResponse.status).toBe(307);
+    expect(nextResponse.headers.get('location')).toContain('/login');
   });
 
-  it.each(['owner', 'admin'])('allows %s to access admin routes', (role) => {
-    const response = middleware(makeRequest('/admin/team', role) as never);
-    expect(response.status).toBe(200);
+  it.each(['owner', 'admin'])('allows %s to access admin routes', async (role) => {
+    const response = await middleware(makeRequest('/admin/team', role) as never, {} as never);
+    expect(response).toBeInstanceOf(Response);
+    expect((response as Response).status).toBe(200);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it.each(['developer', 'reviewer', 'viewer'])('redirects %s away from admin routes', (role) => {
-    const response = middleware(makeRequest('/admin/team', role) as never);
-    expect(response.status).toBe(307);
-    expect(response.headers.get('location')).toBe('http://localhost/');
+  it.each(['developer', 'reviewer', 'viewer'])('redirects %s away from admin routes', async (role) => {
+    const response = await middleware(makeRequest('/admin/team', role) as never, {} as never);
+    expect(response).toBeInstanceOf(Response);
+    const nextResponse = response as Response;
+    expect(nextResponse.status).toBe(307);
+    expect(nextResponse.headers.get('location')).toBe('http://localhost/');
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });

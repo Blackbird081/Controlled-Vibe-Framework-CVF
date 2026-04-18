@@ -16,6 +16,13 @@ export default async function AdminToolRegistryPage() {
         </p>
       </div>
 
+      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900 shadow-sm dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-100">
+        <div className="font-semibold">Knowledge partitioning status</div>
+        <p className="mt-2">
+          Tenant scope plumbing is ready for future retrieval adapters via `orgId` and `teamId`, but chunk-level enforcement is intentionally not claimed yet because the current knowledge path still injects pre-built context strings rather than querying partitioned collections.
+        </p>
+      </div>
+
       <AdminToolPolicyControls initialTools={tools} />
     </div>
   );

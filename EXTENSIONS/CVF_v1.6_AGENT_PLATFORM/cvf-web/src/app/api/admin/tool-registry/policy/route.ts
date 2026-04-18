@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
-import { verifySessionCookie } from '@/lib/middleware-auth';
-import { canAccessAdmin } from '@/lib/enterprise-access';
+import { requireAdminApiSession, withAdminAuditPayload } from '@/lib/admin-session';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { appendToolPolicyEvent } from '@/lib/policy-events';
 
 const VALID_ROLES: TeamRole[] = ['owner', 'admin', 'developer', 'reviewer', 'viewer'];
 
 export async function POST(request: NextRequest) {
-  const session = await verifySessionCookie(request);
-  if (!session || !canAccessAdmin(session.role)) {
-    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  const session = await requireAdminApiSession(request, '/api/admin/tool-registry/policy');
+  if (session instanceof NextResponse) {
+    return session;
   }
 
   const body = await request.json() as {
@@ -54,7 +53,7 @@ export async function POST(request: NextRequest) {
     riskLevel: 'R1',
     phase: 'PHASE C',
     outcome: 'SUCCESS',
-    payload: { allowedRoles },
+    payload: withAdminAuditPayload(session, { allowedRoles }),
   });
 
   return NextResponse.json({ success: true, data: policy }, { status: 201 });

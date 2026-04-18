@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { canAccessAdmin } from '@/lib/enterprise-access';
+import { requireAdminApiSession, withAdminAuditPayload } from '@/lib/admin-session';
 import { appendAuditEvent } from '@/lib/control-plane-events';
-import { verifySessionCookie } from '@/lib/middleware-auth';
 import { MOCK_TEAMS } from '@/lib/mock-enterprise-db';
 import { appendQuotaPolicyEvent } from '@/lib/policy-events';
 
@@ -13,9 +12,9 @@ function toNumber(value: unknown): number {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await verifySessionCookie(request);
-  if (!session || !canAccessAdmin(session.role)) {
-    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  const session = await requireAdminApiSession(request, '/api/admin/quota/policy');
+  if (session instanceof NextResponse) {
+    return session;
   }
 
   const body = await request.json().catch(() => null);
@@ -62,12 +61,12 @@ export async function POST(request: NextRequest) {
     riskLevel: 'R1',
     phase: 'PHASE C',
     outcome: 'SUCCESS',
-    payload: {
+    payload: withAdminAuditPayload(session, {
       teamName: team.name,
       softCapUSD,
       hardCapUSD,
       period,
-    },
+    }),
   });
 
   return NextResponse.json({ success: true, data: record }, { status: 201 });

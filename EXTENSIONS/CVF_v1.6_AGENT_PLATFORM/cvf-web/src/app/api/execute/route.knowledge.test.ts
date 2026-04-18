@@ -21,6 +21,14 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
+    withSessionAuditPayload: (session: { impersonation?: { realActorId: string; sessionId: string } } | null | undefined, payload?: Record<string, unknown>) => {
+        const nextPayload = { ...(payload ?? {}) };
+        if (session?.impersonation) {
+            nextPayload.impersonatedBy = session.impersonation.realActorId;
+            nextPayload.impersonationSessionId = session.impersonation.sessionId;
+        }
+        return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;
+    },
 }));
 
 import { POST } from './route';

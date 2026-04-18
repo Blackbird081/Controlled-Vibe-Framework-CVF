@@ -16,6 +16,8 @@ import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
 import { emitExecutionTelemetry, resolveTokenUsage } from '@/lib/execute-telemetry';
 import { checkTeamQuota } from '@/lib/quota-guard';
 import { appendAuditEvent } from '@/lib/control-plane-events';
+import { applyDLPFilter } from '@/lib/dlp-filter';
+import { withSessionAuditPayload } from '@/lib/middleware-auth';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
 // Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
@@ -126,9 +128,28 @@ export async function POST(request: NextRequest) {
 
         // Build the prompt from template inputs
         const userPrompt = buildExecutionPrompt(body as ExecutionRequest);
+        const dlpResult = await applyDLPFilter(userPrompt);
+        const filteredPrompt = dlpResult.redacted;
+
+        if (dlpResult.wasRedacted) {
+            await appendAuditEvent({
+                eventType: 'DLP_REDACTION_APPLIED',
+                actorId: session?.userId ?? 'service-account',
+                actorRole: session?.role ?? 'service',
+                targetResource: body.templateName || body.templateId || 'unknown-template',
+                action: 'EGRESS_FILTER',
+                riskLevel: 'R2',
+                phase: 'PHASE D',
+                outcome: 'REDACTED',
+                payload: withSessionAuditPayload(session, {
+                    matchCount: dlpResult.matches.length,
+                    patterns: dlpResult.matches.map(match => match.label),
+                }),
+            });
+        }
 
         // Safety filters
-        const safety = applySafetyFilters(userPrompt);
+        const safety = applySafetyFilters(filteredPrompt);
         if (safety.blocked) {
             return NextResponse.json(
                 {
@@ -154,13 +175,13 @@ export async function POST(request: NextRequest) {
                     riskLevel: 'R1',
                     phase: 'PHASE C',
                     outcome: 'BLOCKED',
-                    payload: {
+                    payload: withSessionAuditPayload(session, {
                         teamId: quotaCheck.teamId,
                         currentUSD: quotaCheck.currentUSD,
                         hardCapUSD: quotaCheck.hardCapUSD,
                         period: quotaCheck.period,
                         billingWindowKey: quotaCheck.billingWindowKey,
-                    },
+                    }),
                 });
             } catch (quotaAuditError) {
                 console.warn('Quota block audit degraded:', quotaAuditError);
@@ -186,8 +207,8 @@ export async function POST(request: NextRequest) {
         });
         const enforcement = evaluateEnforcement({
             mode,
-            content: userPrompt,
-            budgetOk: checkBudget(userPrompt),
+            content: filteredPrompt,
+            budgetOk: checkBudget(filteredPrompt),
             specFields: specFields.length ? specFields : undefined,
             specValues: body.inputs,
             cvfPhase: body.cvfPhase,
@@ -332,7 +353,10 @@ export async function POST(request: NextRequest) {
         // ── KNOWLEDGE CONTEXT INJECTION (W101-T1) ──────────────────────────────────
         const knowledgeContext = body.knowledgeContext;
         const enrichedSystemPrompt = hasKnowledgeContext(knowledgeContext)
-            ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, knowledgeContext)
+            ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, knowledgeContext, {
+                orgId: session?.orgId,
+                teamId: session?.teamId,
+            })
             : undefined;
 
         if (!routedApiKey) {
@@ -348,7 +372,7 @@ export async function POST(request: NextRequest) {
         }
 
         // ── EXECUTE AI with auto-retry on output validation failure ──
-        let aiResult = await executeAI(routedProvider, routedApiKey, userPrompt, {
+        let aiResult = await executeAI(routedProvider, routedApiKey, filteredPrompt, {
             model: body.model,
             ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}),
         });
@@ -372,8 +396,8 @@ export async function POST(request: NextRequest) {
                 retryState.attempt++;
 
                 const retryPrompt = retryDecision.adjustedHint
-                    ? `${userPrompt}\n\n[Improvement note: ${retryDecision.adjustedHint}]`
-                    : userPrompt;
+                    ? `${filteredPrompt}\n\n[Improvement note: ${retryDecision.adjustedHint}]`
+                    : filteredPrompt;
 
                 aiResult = await executeAI(routedProvider, routedApiKey, retryPrompt, {
                     model: body.model,
@@ -427,7 +451,7 @@ export async function POST(request: NextRequest) {
                 await emitExecutionTelemetry({
                     session,
                     request: body,
-                    prompt: userPrompt,
+                    prompt: filteredPrompt,
                     output: aiResult.output,
                     provider: routedProvider,
                     model: body.model ?? aiResult.model ?? routedProvider,
@@ -439,7 +463,7 @@ export async function POST(request: NextRequest) {
         }
 
         const usage = aiResult.success && aiResult.output
-            ? resolveTokenUsage(userPrompt, aiResult.output, aiResult)
+            ? resolveTokenUsage(filteredPrompt, aiResult.output, aiResult)
             : undefined;
 
         return NextResponse.json({

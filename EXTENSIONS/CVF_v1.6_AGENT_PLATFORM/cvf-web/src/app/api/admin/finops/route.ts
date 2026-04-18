@@ -1,13 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
+import { requireAdminApiSession } from '@/lib/admin-session';
 import { getFinOpsSummary } from '@/lib/control-plane-events';
-import { verifySessionCookie } from '@/lib/middleware-auth';
-import { canAccessAdmin } from '@/lib/enterprise-access';
 
-export async function GET() {
-  const session = await verifySessionCookie();
-  if (!session || !canAccessAdmin(session.role)) {
-    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+export async function GET(request: NextRequest) {
+  const session = await requireAdminApiSession(request, '/api/admin/finops');
+  if (session instanceof NextResponse) {
+    return session;
   }
 
   const summary = await getFinOpsSummary();

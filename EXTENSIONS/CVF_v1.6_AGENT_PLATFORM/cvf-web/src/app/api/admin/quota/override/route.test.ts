@@ -2,11 +2,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { NextResponse } from 'next/server';
 
-const verifySessionCookieMock = vi.hoisted(() => vi.fn());
+const requireAdminApiSessionMock = vi.hoisted(() => vi.fn());
 
-vi.mock('@/lib/middleware-auth', () => ({
-  verifySessionCookie: verifySessionCookieMock,
+vi.mock('@/lib/admin-session', () => ({
+  requireAdminApiSession: requireAdminApiSessionMock,
+  withAdminAuditPayload: (_session: unknown, payload?: Record<string, unknown>) => payload,
 }));
 
 import { DELETE, POST } from './route';
@@ -18,7 +20,7 @@ describe('/api/admin/quota/override', () => {
   beforeEach(async () => {
     tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-quota-override-route-'));
     process.env.CVF_CONTROL_PLANE_EVENTS_PATH = path.join(tempDir, 'events.json');
-    verifySessionCookieMock.mockReset();
+    requireAdminApiSessionMock.mockReset();
   });
 
   afterEach(async () => {
@@ -33,14 +35,7 @@ describe('/api/admin/quota/override', () => {
   });
 
   it('requires owner role for grant', async () => {
-    verifySessionCookieMock.mockResolvedValueOnce({
-      userId: 'usr_2',
-      user: 'admin',
-      role: 'admin',
-      orgId: 'org_cvf',
-      teamId: 'team_exec',
-      expiresAt: Date.now() + 60_000,
-    });
+    requireAdminApiSessionMock.mockResolvedValueOnce(NextResponse.json({ success: false }, { status: 403 }));
 
     const response = await POST(new Request('http://localhost/api/admin/quota/override', {
       method: 'POST',
@@ -52,7 +47,7 @@ describe('/api/admin/quota/override', () => {
   });
 
   it('grants and revokes an override for an owner session', async () => {
-    verifySessionCookieMock.mockResolvedValueOnce({
+    requireAdminApiSessionMock.mockResolvedValueOnce({
       userId: 'usr_1',
       user: 'owner',
       role: 'owner',
@@ -71,7 +66,7 @@ describe('/api/admin/quota/override', () => {
     expect(grantResponse.status).toBe(201);
     expect(grantBody.data.status).toBe('granted');
 
-    verifySessionCookieMock.mockResolvedValueOnce({
+    requireAdminApiSessionMock.mockResolvedValueOnce({
       userId: 'usr_1',
       user: 'owner',
       role: 'owner',

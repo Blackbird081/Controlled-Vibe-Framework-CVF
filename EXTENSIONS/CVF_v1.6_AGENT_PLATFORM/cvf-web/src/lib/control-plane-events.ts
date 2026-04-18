@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { createHmac, randomUUID } from 'node:crypto';
 
@@ -85,16 +86,24 @@ export function computeAuditCsvSignature(body: string, signingKey: string): stri
 function getStorePath() {
   return process.env.CVF_CONTROL_PLANE_EVENTS_PATH
     ? path.resolve(process.env.CVF_CONTROL_PLANE_EVENTS_PATH)
-    : path.join(process.cwd(), '.data', 'control-plane-events.json');
+    : path.join(os.tmpdir(), '.cvf-data', 'control-plane-events.json');
 }
 
 async function ensureStore(): Promise<void> {
   const storePath = getStorePath();
-  await mkdir(path.dirname(storePath), { recursive: true });
+  try {
+    await mkdir(path.dirname(storePath), { recursive: true });
+  } catch {
+    // directory already exists or filesystem is read-only
+  }
   try {
     await readFile(storePath, 'utf8');
   } catch {
-    await writeFile(storePath, '[]', 'utf8');
+    try {
+      await writeFile(storePath, '[]', 'utf8');
+    } catch {
+      // read-only filesystem — store operates in empty/ephemeral mode
+    }
   }
 }
 
@@ -172,7 +181,12 @@ async function repairCorruptedStore(raw: string, storePath: string): Promise<Con
 export async function readControlPlaneEvents(): Promise<ControlPlaneEvent[]> {
   const storePath = getStorePath();
   await ensureStore();
-  const raw = await readFile(storePath, 'utf8');
+  let raw: string;
+  try {
+    raw = await readFile(storePath, 'utf8');
+  } catch {
+    return [];
+  }
   let parsed: ControlPlaneEvent[];
 
   try {

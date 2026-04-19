@@ -75,10 +75,14 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     // Map pathname to Sidebar's expected appState string
     const pathnameToAppState = (p: string): string => {
         if (p === '/' || p.startsWith('/home')) return 'home';
+        if (p.startsWith('/landing')) return 'landing';
+        if (p.startsWith('/skills/search')) return 'skill-search';
         if (p.startsWith('/history')) return 'history';
         if (p.startsWith('/analytics')) return 'analytics';
         if (p.startsWith('/marketplace')) return 'marketplace';
         if (p.startsWith('/skills')) return 'skills';
+        if (p.startsWith('/help')) return 'help';
+        if (p.startsWith('/docs')) return 'docs';
         if (p.startsWith('/governance')) return 'governance';
         if (p.startsWith('/simulation')) return 'simulation';
         if (p.startsWith('/safety')) return 'safety';
@@ -91,10 +95,14 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const handleNavigate = (state: string) => {
         switch (state) {
             case 'home': router.push('/home'); setActiveModal(null); break;
+            case 'landing': router.push('/landing'); setActiveModal(null); break;
             case 'history': router.push('/history'); setActiveModal(null); break;
             case 'analytics': router.push('/analytics'); setActiveModal(null); break;
             case 'marketplace': router.push('/marketplace'); setActiveModal(null); break;
             case 'skills': router.push('/skills'); setActiveModal(null); break;
+            case 'skill-search': router.push('/skills/search'); setActiveModal(null); break;
+            case 'help': router.push('/help'); setActiveModal(null); break;
+            case 'docs': router.push('/docs'); setActiveModal(null); break;
             case 'governance': router.push('/governance'); setActiveModal(null); break;
             case 'simulation': router.push('/simulation'); setActiveModal(null); break;
             case 'safety': router.push('/safety'); setActiveModal(null); break;

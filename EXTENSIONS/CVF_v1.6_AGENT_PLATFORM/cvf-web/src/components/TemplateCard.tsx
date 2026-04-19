@@ -16,20 +16,30 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
     const categoryDisplayName = language === 'en' ? categoryInfo.nameEn : categoryInfo.name;
     const templateDisplayName = getTemplateName(template.id, template.name, language);
     const templateDisplayDesc = getTemplateDescription(template.id, template.description, language);
+    const categoryBadgeClasses = {
+        blue: 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300',
+        purple: 'bg-purple-100 text-purple-700 dark:bg-purple-500/15 dark:text-purple-300',
+        green: 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-300',
+        orange: 'bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300',
+        pink: 'bg-pink-100 text-pink-700 dark:bg-pink-500/15 dark:text-pink-300',
+        cyan: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-500/15 dark:text-cyan-300',
+        red: 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300',
+        indigo: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300',
+    }[categoryInfo.color];
 
     // Difficulty badge config
     const difficultyConfig = {
         easy: {
             label: language === 'en' ? 'Easy' : 'Dễ',
-            className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+            className: 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400',
         },
         medium: {
             label: language === 'en' ? 'Medium' : 'Trung bình',
-            className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+            className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400',
         },
         advanced: {
             label: language === 'en' ? 'Advanced' : 'Nâng cao',
-            className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
+            className: 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400',
         },
     };
     const difficulty = template.difficulty || 'medium';
@@ -42,36 +52,37 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
             role="button"
             tabIndex={0}
             title={language === 'en' ? 'Click to use this template' : 'Click để sử dụng template này'}
-            className="group cursor-pointer bg-white dark:bg-gray-800 rounded-xl p-6 
-                 border border-gray-200 dark:border-gray-700
-                 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10
-                 transition-all duration-200 relative"
+            className="group relative cursor-pointer rounded-[28px] border border-slate-200/80 bg-white p-7
+                 shadow-[0_2px_10px_rgba(15,23,42,0.05)] transition-all duration-200
+                 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_18px_34px_-24px_rgba(79,70,229,0.55)]
+                 dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none dark:hover:border-indigo-400/35 dark:hover:shadow-[0_18px_40px_-30px_rgba(99,102,241,0.45)]"
         >
             <div className="flex items-start justify-between">
-                <div className="text-3xl">{template.icon}</div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-2xl dark:bg-white/[0.06]">
+                    {template.icon}
+                </div>
                 <div className="flex items-center gap-1.5">
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${diffBadge.className}`}>
+                    <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] ${diffBadge.className}`}>
                         {diffBadge.label}
                     </span>
-                    <span className={`text-xs px-2 py-1 rounded-full 
-                         bg-${categoryInfo.color}-100 text-${categoryInfo.color}-700
-                         dark:bg-${categoryInfo.color}-900 dark:text-${categoryInfo.color}-300`}>
+                    <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em]
+                          ${categoryBadgeClasses}`}>
                         {categoryDisplayName}
                     </span>
                 </div>
             </div>
 
-            <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white
-                     group-hover:text-blue-600 dark:group-hover:text-blue-400">
+            <h3 className="mt-6 text-[1.65rem] font-semibold tracking-[-0.03em] text-slate-950 dark:text-white
+                     group-hover:text-indigo-600 dark:group-hover:text-indigo-300">
                 {templateDisplayName.replace(/^[\p{Emoji}\s]+/gu, '')}
             </h3>
 
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+            <p className="mt-3 text-base leading-8 text-slate-500 dark:text-white/48 line-clamp-3">
                 {templateDisplayDesc}
             </p>
 
-            <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center text-blue-600 dark:text-blue-400 text-sm font-medium">
+            <div className="mt-6 flex items-center justify-between">
+                <div className="flex items-center text-base font-medium text-indigo-600 dark:text-indigo-300">
                     {language === 'en' ? 'Use Template' : 'Sử dụng'}
                     <svg className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,7 +93,7 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
                 {onPreview && template.sampleOutput && (
                     <button
                         onClick={onPreview}
-                        className="p-1.5 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                        className="rounded-2xl p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-white/[0.06] dark:hover:text-indigo-300"
                         title={language === 'en' ? 'Preview output' : 'Xem trước kết quả'}
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

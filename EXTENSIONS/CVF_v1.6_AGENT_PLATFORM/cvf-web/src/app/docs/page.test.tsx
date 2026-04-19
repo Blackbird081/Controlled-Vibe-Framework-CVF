@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import DocsPage from './page';
+import DocsPage from '../(dashboard)/docs/page';
 import { DOCS } from '@/data/docs-data';
 
 let mockLanguage: 'vi' | 'en' = 'vi';

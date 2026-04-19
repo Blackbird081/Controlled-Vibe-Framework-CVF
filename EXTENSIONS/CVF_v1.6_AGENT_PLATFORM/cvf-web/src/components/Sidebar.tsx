@@ -1,8 +1,16 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n';
-import Link from 'next/link';
 import clsx from 'clsx';
+import {
+    Sparkles, Home, Zap, Search, HelpCircle, BookOpen,
+    Bot, Network, Wrench, FlaskConical, Lightbulb,
+    Activity, BarChart3, ShoppingBag, Shield, Building2, Lock,
+    UserCircle, Settings, Coins, LogOut, Globe,
+} from 'lucide-react';
+import SidebarNavItem from './sidebar/SidebarNavItem';
+import SidebarNavGroup from './sidebar/SidebarNavGroup';
 
 interface SidebarProps {
     appState: string;
@@ -27,70 +35,16 @@ interface SidebarProps {
     role?: string;
 }
 
-const ROLE_BADGE_STYLES = {
-    owner: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-200',
-    admin: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-200',
-    developer: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200',
-    reviewer: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200',
-    editor: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200',
-    viewer: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200',
-} as const;
+const ROLE_BADGE_COLOR: Record<string, string> = {
+    owner:     'text-purple-300 bg-purple-500/20',
+    admin:     'text-red-300    bg-red-500/20',
+    developer: 'text-blue-300   bg-blue-500/20',
+    reviewer:  'text-indigo-300 bg-indigo-500/20',
+    editor:    'text-amber-300  bg-amber-500/20',
+    viewer:    'text-gray-300   bg-white/10',
+};
 
-interface NavItemProps {
-    icon?: string;
-    label: string;
-    isActive: boolean;
-    onClick: () => void;
-    badge?: string | number;
-    gradient?: string;
-}
-
-function NavItem({ icon, label, isActive, onClick, badge, gradient }: NavItemProps) {
-    return (
-        <button
-            onClick={onClick}
-            className={clsx(
-                'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 group',
-                isActive
-                    ? gradient
-                        ? `bg-gradient-to-r ${gradient} text-white shadow-md`
-                        : 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
-            )}
-        >
-            {icon && <span className="text-lg">{icon}</span>}
-            <span className="flex-1 text-left">{label}</span>
-            {badge !== undefined && (
-                <span className={clsx(
-                    'px-2 py-0.5 rounded-full text-xs font-semibold',
-                    isActive ? 'bg-white/20' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
-                )}>
-                    {badge}
-                </span>
-            )}
-        </button>
-    );
-}
-
-interface NavGroupProps {
-    title: string;
-    icon: string;
-    children: React.ReactNode;
-}
-
-function NavGroup({ title, icon, children }: NavGroupProps) {
-    return (
-        <div className="space-y-1">
-            <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-                <span>{icon}</span>
-                <span>{title}</span>
-            </div>
-            <div className="space-y-1 pl-4">
-                {children}
-            </div>
-        </div>
-    );
-}
+const USER_AVATAR_GRADIENT = 'from-amber-400 to-red-500';
 
 export default function Sidebar({
     appState,
@@ -107,250 +61,214 @@ export default function Sidebar({
     user,
 }: SidebarProps) {
     const { t } = useLanguage();
-    const roleKey = (userRole in ROLE_BADGE_STYLES ? userRole : 'admin') as keyof typeof ROLE_BADGE_STYLES;
-    const roleBadgeStyle = ROLE_BADGE_STYLES[roleKey];
+    const pathname = usePathname();
+
+    const roleKey = (userRole in ROLE_BADGE_COLOR ? userRole : 'admin');
+    const badgeColor = ROLE_BADGE_COLOR[roleKey] ?? ROLE_BADGE_COLOR.admin;
+
+    const initials = user
+        ? user.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase()
+        : roleKey.slice(0, 2).toUpperCase();
 
     const handleNav = (state: string) => {
         onNavigate(state);
         onClose();
     };
 
+    const isRoute = (prefix: string) => pathname.startsWith(prefix);
+
     return (
         <>
             {/* Mobile Overlay */}
             <div
                 className={clsx(
-                    'fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity',
-                    isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                    'fixed inset-0 bg-black/60 z-40 md:hidden transition-opacity',
+                    isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
                 )}
                 onClick={onClose}
+                aria-hidden="true"
             />
 
-            {/* Sidebar */}
+            {/* Sidebar panel */}
             <aside
                 className={clsx(
-                    'fixed top-0 left-0 z-[60] h-full w-64',
-                    'bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700',
-                    'transform transition-transform duration-300 ease-in-out',
+                    'fixed top-0 left-0 z-[60] h-full w-[220px]',
+                    'bg-[#0d0f1a] border-r border-white/[0.06]',
                     'flex flex-col',
+                    'transform transition-transform duration-300 ease-in-out',
                     isOpen ? 'translate-x-0' : '-translate-x-full',
-                    'md:translate-x-0'
+                    'md:translate-x-0',
                 )}
+                aria-label="Main navigation"
             >
-                {/* Logo + User Info */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                    <Link
-                        href="/home"
-                        onClick={() => handleNav('home')}
-                        className="flex items-center gap-2"
-                    >
-                        <span className="text-2xl">🎯</span>
-                        <span className="text-xl font-bold text-gray-900 dark:text-white">CVF v1.6</span>
-                    </Link>
-                    {/* Close button for mobile */}
+                {/* ── Logo ─────────────────────────────────────── */}
+                <div className="flex items-center gap-2.5 px-[18px] py-[18px] pb-[14px] border-b border-white/[0.06] flex-shrink-0">
+                    <div className="w-8 h-8 rounded-[9px] flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-indigo-500 to-violet-500">
+                        <Sparkles size={15} color="#fff" strokeWidth={1.75} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <div className="text-white font-bold text-[15px] leading-none tracking-tight">CVF</div>
+                        <div className="text-white/25 text-[10px] font-mono tracking-[0.06em] mt-0.5">v1.6</div>
+                    </div>
+                    {/* Mobile close */}
                     <button
+                        type="button"
                         onClick={onClose}
-                        className="md:hidden p-3 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="md:hidden p-1.5 rounded text-white/40 hover:text-white/70 hover:bg-white/[0.07] transition-colors"
                         aria-label="Close sidebar"
                     >
                         ✕
                     </button>
                 </div>
 
-                {/* User Info */}
-                {user && (
-                    <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300">
-                        <div className="font-medium">{user}</div>
-                        <div className="text-xs text-gray-400 dark:text-gray-500 capitalize">{roleKey}</div>
+                {/* ── User block ───────────────────────────────── */}
+                <div className="flex items-center gap-2.5 px-[14px] py-[11px] border-b border-white/[0.06] flex-shrink-0">
+                    <div className={clsx(
+                        'w-[30px] h-[30px] rounded-full flex-shrink-0 flex items-center justify-center',
+                        `bg-gradient-to-br ${USER_AVATAR_GRADIENT}`,
+                        'text-[12px] text-white font-bold',
+                    )}>
+                        {initials}
                     </div>
-                )}
+                    <div className="min-w-0 flex-1">
+                        <div className="text-white/90 text-[12px] font-medium truncate">{user || 'User'}</div>
+                        <div className="text-white/25 text-[10px] capitalize">{roleKey}</div>
+                    </div>
+                    <span className={clsx(
+                        'flex-shrink-0 text-[9px] font-bold uppercase tracking-[0.06em]',
+                        'px-[7px] py-[3px] rounded',
+                        badgeColor,
+                    )}>
+                        {roleKey}
+                    </span>
+                </div>
 
-                {/* Navigation Groups */}
-                <nav className="flex-1 overflow-y-auto p-4 space-y-6" aria-label="Main navigation">
-                    {/* Browse Group */}
-                    <NavGroup title={t('sidebar.browse') || 'Browse'} icon="📁">
-                        <NavItem
-                            label={t('nav.home') || '🏠 Home'}
-                            isActive={appState === 'home'}
-                            onClick={() => handleNav('home')}
-                        />
-                        <NavItem
-                            label={t('nav.skills') || '📚 Skills'}
-                            isActive={appState === 'skills'}
-                            onClick={() => handleNav('skills')}
-                        />
-                        <Link
-                            href="/skills/search"
-                            className={clsx(
-                                'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200',
-                                'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
-                            )}
-                            onClick={onClose}
-                            aria-label="Skill Search & Planner"
-                        >
-                            <span className="flex-1 text-left">🔍 Skill Search</span>
-                        </Link>
-                        <Link
-                            href="/help"
-                            className={clsx(
-                                'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200',
-                                'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
-                            )}
-                            onClick={onClose}
-                            aria-label={t('nav.help') || 'Help'}
-                        >
-                            <span className="flex-1 text-left">{t('nav.help') || '📖 Help'}</span>
-                        </Link>
-                        <Link
-                            href="/docs"
-                            className={clsx(
-                                'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200',
-                                'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
-                            )}
-                            onClick={onClose}
-                            aria-label={t('nav.docs') || 'Docs'}
-                        >
-                            <span className="flex-1 text-left">{t('nav.docs') || '📚 Docs'}</span>
-                        </Link>
-                    </NavGroup>
+                {/* ── Nav ─────────────────────────────────────── */}
+                <nav className="flex-1 overflow-y-auto px-[10px] py-2" aria-label="Main navigation">
 
-                    {/* AI Features Group */}
-                    <NavGroup title={t('sidebar.ai') || 'AI Features'} icon="🤖">
+                    {/* Workspace */}
+                    <SidebarNavGroup id="workspace" title={t('sidebar.workspace') || 'Workspace'}>
+                        <SidebarNavItem icon={Home} label={t('nav.home') || 'Home'}
+                            isActive={appState === 'home' || isRoute('/home')}
+                            onClick={() => handleNav('home')} />
+                        <SidebarNavItem icon={Sparkles} label={t('nav.landing') || 'Landing Page'}
+                            isActive={appState === 'landing' || isRoute('/landing')}
+                            onClick={() => handleNav('landing')} />
+                        <SidebarNavItem icon={Zap} label={t('nav.skills') || 'Skills'}
+                            isActive={appState === 'skills' || (isRoute('/skills') && !isRoute('/skills/search'))}
+                            onClick={() => handleNav('skills')} />
+                        <SidebarNavItem icon={Search} label={t('nav.skillSearch') || 'Skill Search'}
+                            isActive={appState === 'skill-search' || isRoute('/skills/search')}
+                            onClick={() => handleNav('skill-search')} />
+                        <SidebarNavItem icon={HelpCircle} label={t('nav.help') || 'Help'}
+                            isActive={appState === 'help' || isRoute('/help')}
+                            onClick={() => handleNav('help')} />
+                        <SidebarNavItem icon={BookOpen} label={t('nav.docs') || 'Docs'}
+                            isActive={appState === 'docs' || isRoute('/docs')}
+                            onClick={() => handleNav('docs')} />
+                    </SidebarNavGroup>
+
+                    {/* AI */}
+                    <SidebarNavGroup id="ai" title={t('sidebar.ai') || 'AI'}>
                         {permissions.canUseAgent && (
-                            <NavItem
-                                label={t('nav.aiAgent') || '💬 AI Agent'}
+                            <SidebarNavItem icon={Bot} label={t('nav.aiAgent') || 'AI Agent'}
                                 isActive={appState === 'agent'}
-                                onClick={() => handleNav('agent')}
-                                gradient="from-blue-500 to-purple-500"
-                            />
+                                onClick={() => handleNav('agent')} />
                         )}
                         {permissions.canUseMultiAgent && (
-                            <NavItem
-                                label={t('nav.multiAgent') || '👥 Multi-Agent'}
+                            <SidebarNavItem icon={Network} label={t('nav.multiAgent') || 'Multi Agent'}
                                 isActive={appState === 'multi-agent'}
-                                onClick={() => handleNav('multi-agent')}
-                                gradient="from-purple-500 to-pink-500"
-                            />
+                                onClick={() => handleNav('multi-agent')} />
                         )}
                         {permissions.canUseTools && (
-                            <NavItem
-                                label={t('nav.tools') || '🛠️ Tools'}
+                            <SidebarNavItem icon={Wrench} label={t('nav.tools') || 'Tools'}
                                 isActive={appState === 'tools'}
-                                onClick={() => handleNav('tools')}
-                                gradient="from-amber-500 to-orange-500"
-                            />
+                                onClick={() => handleNav('tools')} />
                         )}
-                    </NavGroup>
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={FlaskConical} label={t('nav.simulation') || 'Simulation'}
+                                isActive={appState === 'simulation' || isRoute('/simulation')}
+                                onClick={() => handleNav('simulation')} />
+                        )}
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={Lightbulb} label={t('nav.knowledge') || 'Knowledge'}
+                                isActive={isRoute('/governance/knowledge')}
+                                href="/governance/knowledge" onNavigate={onClose} />
+                        )}
+                    </SidebarNavGroup>
 
-                    {/* Data & Analytics Group — hidden for viewers */}
-                    {userRole !== 'viewer' && (
-                        <NavGroup title={t('sidebar.data') || 'Data'} icon="📊">
-                            <NavItem
-                                label={t('nav.history') || '📜 History'}
-                                isActive={appState === 'history'}
+                    {/* Platform */}
+                    <SidebarNavGroup id="platform" title={t('sidebar.platform') || 'Platform'}>
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={Activity} label={t('nav.history') || 'History'}
+                                isActive={appState === 'history' || isRoute('/history')}
                                 onClick={() => handleNav('history')}
-                                badge={executionsCount > 0 ? executionsCount : undefined}
-                            />
-                            <NavItem
-                                label={t('nav.analytics') || '📈 Analytics'}
-                                isActive={appState === 'analytics'}
-                                onClick={() => handleNav('analytics')}
-                            />
-                            <NavItem
-                                label={t('nav.marketplace') || '🛒 Marketplace'}
-                                isActive={appState === 'marketplace'}
-                                onClick={() => handleNav('marketplace')}
-                            />
-                        </NavGroup>
-                    )}
+                                badge={executionsCount > 0 ? executionsCount : undefined} />
+                        )}
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={BarChart3} label={t('nav.analytics') || 'Analytics'}
+                                isActive={appState === 'analytics' || isRoute('/analytics')}
+                                onClick={() => handleNav('analytics')} />
+                        )}
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={ShoppingBag} label={t('nav.marketplace') || 'Marketplace'}
+                                isActive={appState === 'marketplace' || isRoute('/marketplace')}
+                                onClick={() => handleNav('marketplace')} />
+                        )}
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={Shield} label={t('nav.governance') || 'Governance'}
+                                isActive={appState === 'governance' || (isRoute('/governance') && !isRoute('/governance/knowledge'))}
+                                onClick={() => handleNav('governance')} />
+                        )}
+                        {(userRole === 'admin' || userRole === 'owner') && (
+                            <SidebarNavItem icon={Building2} label={t('nav.enterprise') || 'Enterprise'}
+                                isActive={isRoute('/admin')}
+                                href="/admin/team" onNavigate={onClose} />
+                        )}
+                        <SidebarNavItem icon={Lock} label={t('nav.safety') || 'AI Safety'}
+                            isActive={appState === 'safety' || isRoute('/safety')}
+                            onClick={() => handleNav('safety')} />
+                    </SidebarNavGroup>
 
-                    {/* Governance Group */}
-                    {userRole !== 'viewer' && (
-                        <NavGroup title={t('sidebar.governance') || 'Governance'} icon="🛡️">
-                            <NavItem
-                                label={t('nav.governance') || '🛡️ Governance'}
-                                isActive={appState === 'governance'}
-                                onClick={() => handleNav('governance')}
-                                gradient="from-emerald-500 to-teal-500"
-                            />
-                            <NavItem
-                                label={t('nav.simulation') || '🧪 Simulation'}
-                                isActive={appState === 'simulation'}
-                                onClick={() => handleNav('simulation')}
-                            />
-                            <Link
-                                href="/governance/knowledge"
-                                className={clsx(
-                                    'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200',
-                                    'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
-                                )}
-                                onClick={onClose}
-                            >
-                                <span className="flex-1 text-left">📚 Knowledge</span>
-                            </Link>
-                        </NavGroup>
-                    )}
-
-                    {/* Enterprise Console Entry Point */}
-                    {(userRole === 'admin' || userRole === 'owner') && (
-                        <NavGroup title={t('sidebar.enterprise') || 'Enterprise'} icon="🏢">
-                            <Link
-                                href="/admin/finops"
-                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
-                                onClick={onClose}
-                            >
-                                <span className="flex-1 text-left">🏢 Enterprise Console</span>
-                            </Link>
-                        </NavGroup>
-                    )}
-
-                    {/* AI Safety — visible to ALL users */}
-                    <NavGroup title={t('sidebar.safety') || 'Safety'} icon="🔒">
-                        <NavItem
-                            label={t('nav.safety') || '🛡️ AI Safety'}
-                            isActive={appState === 'safety'}
-                            onClick={() => handleNav('safety')}
-                            gradient="from-cyan-500 to-emerald-500"
-                        />
-                    </NavGroup>
-
-                    {/* User & Settings Group */}
-                    <NavGroup title={t('sidebar.user') || 'User'} icon="⚙️">
+                    {/* Account */}
+                    <SidebarNavGroup id="account" title={t('sidebar.account') || 'Account'}>
                         {permissions.canUseContext && (
-                            <NavItem
-                                label={t('nav.context') || '👤 Context'}
+                            <SidebarNavItem icon={UserCircle} label={t('nav.context') || 'Context'}
                                 isActive={false}
-                                onClick={onShowUserContext}
-                            />
+                                onClick={() => { onShowUserContext(); onClose(); }} />
                         )}
                         {permissions.canUseSettings && (
-                            <NavItem
-                                label={t('nav.settings') || '⚙️ Settings'}
+                            <SidebarNavItem icon={Settings} label={t('nav.settings') || 'Settings'}
                                 isActive={false}
-                                onClick={onShowSettings}
-                            />
+                                onClick={() => { onShowSettings(); onClose(); }} />
                         )}
                         {permissions.canUseAIUsage && (
-                            <NavItem
-                                label={t('nav.aiUsage') || '💰 AI Usage'}
+                            <SidebarNavItem icon={Coins} label={t('nav.aiUsage') || 'AI Usage'}
                                 isActive={false}
-                                onClick={onShowAIUsage}
-                            />
+                                onClick={() => { onShowAIUsage(); onClose(); }} />
                         )}
-                        <NavItem
-                            label={t('auth.logout') || '🚪 Logout'}
-                            isActive={false}
-                            onClick={onLogout}
-                        />
-                    </NavGroup>
+                    </SidebarNavGroup>
                 </nav>
 
-                {/* Footer: Role Badge */}
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-center">
-                        <span className={`px-4 py-2 rounded-full text-sm font-semibold ${roleBadgeStyle}`}>
-                            {roleKey.toUpperCase()}
-                        </span>
+                {/* ── Footer ─────────────────────────────────── */}
+                <div className="px-[10px] pb-3 pt-2 border-t border-white/[0.06] flex-shrink-0">
+                    <SidebarNavItem icon={LogOut} label={t('auth.logout') || 'Logout'}
+                        isActive={false}
+                        onClick={onLogout} />
+                    {/* VI·EN — cosmetic placeholder (roadmap §2.8) */}
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 mt-0.5">
+                        <Globe size={12} strokeWidth={1.75} className="text-white/25" aria-hidden="true" />
+                        {(['VI', 'EN'] as const).map((lang, i) => (
+                            <span key={lang} className="flex items-center gap-1">
+                                {i > 0 && <span className="text-white/20 text-[10px]">·</span>}
+                                <span
+                                    className="text-[11px] text-white/25 font-medium cursor-default select-none"
+                                    title="Language switching coming soon"
+                                >
+                                    {lang}
+                                </span>
+                            </span>
+                        ))}
                     </div>
                 </div>
             </aside>

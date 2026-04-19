@@ -4,10 +4,6 @@ import type { Metadata } from 'next';
 import { DOCS, DOC_META } from '@/data/docs-data';
 import { DocContent } from './DocContent';
 
-/* ------------------------------------------------------------------ */
-/*  SSG: pre-build all doc pages at build time                         */
-/* ------------------------------------------------------------------ */
-
 export function generateStaticParams() {
     return DOCS.flatMap(cat => cat.items.map(item => ({ slug: item.slug })));
 }
@@ -25,10 +21,6 @@ export async function generateMetadata(
     };
 }
 
-/* ------------------------------------------------------------------ */
-/*  Server Component: read markdown files at build time                */
-/* ------------------------------------------------------------------ */
-
 async function readMarkdown(lang: string, slug: string): Promise<string> {
     try {
         const filePath = path.join(process.cwd(), 'public', 'content', lang, `${slug}.md`);
@@ -44,7 +36,6 @@ export default async function DocDetailPage(
     const { slug } = await params;
     const meta = DOC_META[slug];
 
-    // Read both language versions at build time — no client-side fetch needed
     const [contentEn, contentVi] = await Promise.all([
         readMarkdown('en', slug),
         readMarkdown('vi', slug),

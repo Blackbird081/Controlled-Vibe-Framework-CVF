@@ -1,6 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { useState, useMemo, useCallback, useEffect } from 'react';
+import { Layers3, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
 import { templates } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import { useSettings } from '@/components/Settings';
@@ -28,6 +30,8 @@ import {
     ContentStrategyWizard,
     DataAnalysisWizard,
     TemplatePreviewModal,
+    SurfaceStatCard,
+    SurfaceTopBar,
 } from '@/components';
 
 type WorkflowState = 'browse' | 'form' | 'processing' | 'result' |
@@ -62,20 +66,78 @@ export default function HomePage() {
     const [currentFolder, setCurrentFolder] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [starterHandoff, setStarterHandoff] = useState<GovernedStarterHandoff | null>(null);
-    // W97-T1: previous output context for iterative follow-up (truncated to 600 chars)
     const [iterationContext, setIterationContext] = useState<string | null>(null);
 
     const { addExecution, updateExecution, currentExecution } = useExecutionStore();
 
-    // Demo auto-run: select a template, fill demo data, run processing automatically
+    const allRunnableTemplates = useMemo(
+        () => templates.filter(template => !template.isFolder),
+        [],
+    );
+
+    const categoryCounts = useMemo(() => {
+        const counts: Record<string, number> = { all: allRunnableTemplates.length };
+        allRunnableTemplates.forEach((template) => {
+            counts[template.category] = (counts[template.category] ?? 0) + 1;
+        });
+        return counts;
+    }, [allRunnableTemplates]);
+
+    const statCards = useMemo(() => ([
+        {
+            label: language === 'vi' ? 'Templates' : 'Templates',
+            value: String(allRunnableTemplates.length),
+            icon: Layers3,
+            tone: 'accent' as const,
+        },
+        {
+            label: language === 'vi' ? 'Governed Paths' : 'Governed Paths',
+            value: String(Object.keys(WIZARD_MAP).length),
+            icon: ShieldCheck,
+            tone: 'emerald' as const,
+        },
+        {
+            label: language === 'vi' ? 'Live Models' : 'Live Models',
+            value: '3',
+            icon: Sparkles,
+            tone: 'amber' as const,
+        },
+        {
+            label: language === 'vi' ? 'Starter Flows' : 'Starter Flows',
+            value: starterHandoff ? '1' : '0',
+            icon: Wand2,
+            tone: 'violet' as const,
+        },
+    ]), [allRunnableTemplates.length, language, starterHandoff]);
+
+    const filteredTemplates = useMemo(() => {
+        let result = selectedCategory === 'all'
+            ? templates
+            : templates.filter(t => t.category === selectedCategory);
+
+        if (currentFolder) {
+            result = result.filter(t => t.parentFolder === currentFolder);
+        } else {
+            result = result.filter(t => !t.parentFolder);
+        }
+
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase();
+            result = result.filter(t =>
+                t.name.toLowerCase().includes(q) ||
+                t.description.toLowerCase().includes(q)
+            );
+        }
+
+        return result;
+    }, [selectedCategory, currentFolder, searchQuery]);
+
     const handleDemoRun = useCallback(() => {
-        // Find first non-folder, non-wizard template with fields
         const demoTemplate = templates.find(t => !t.isFolder && !WIZARD_MAP[t.id] && t.fields.length > 0);
         if (!demoTemplate) return;
 
         trackEvent('demo_auto_run', { templateId: demoTemplate.id });
 
-        // Auto-fill demo values for each field
         const demoValues: Record<string, string> = {};
         demoTemplate.fields.forEach(field => {
             if (field.example) {
@@ -106,29 +168,6 @@ export default function HomePage() {
         addExecution(execution);
         setWorkflowState('processing');
     }, [addExecution]);
-
-    const filteredTemplates = useMemo(() => {
-        let result = selectedCategory === 'all'
-            ? templates
-            : templates.filter(t => t.category === selectedCategory);
-
-        if (currentFolder) {
-            result = result.filter(t => t.parentFolder === currentFolder);
-        } else {
-            result = result.filter(t => !t.parentFolder);
-        }
-
-        // Search filter
-        if (searchQuery.trim()) {
-            const q = searchQuery.toLowerCase();
-            result = result.filter(t =>
-                t.name.toLowerCase().includes(q) ||
-                t.description.toLowerCase().includes(q)
-            );
-        }
-
-        return result;
-    }, [selectedCategory, currentFolder, searchQuery]);
 
     const handleSelectTemplate = useCallback((template: Template) => {
         if (template.isFolder) {
@@ -186,7 +225,6 @@ export default function HomePage() {
         setWorkflowState('browse');
     }, []);
 
-    // W97-T1: follow-up handler — creates a new execution with previous output threaded as context
     const handleFollowUp = useCallback((refinement: string) => {
         if (!selectedTemplate || !currentOutput) return;
         const truncated = currentOutput.length > 600
@@ -268,163 +306,257 @@ export default function HomePage() {
     }, []);
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-6 md:py-8">
-
-            {/* BROWSE STATE */}
+        <div className="pb-10">
             {workflowState === 'browse' && (
                 <>
-                    <div id="tour-welcome" className="text-center mb-12">
-                        <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">
-                                {t('main.heroLine1')}
-                            </span>
-                            <br />
-                            {t('main.heroLine2')}
-                        </h2>
-                        <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                            {currentFolder
-                                ? `📂 ${templates.find(t => t.id === currentFolder)?.name || 'Folder'}`
-                                : t('main.heroDesc')
-                            }
-                        </p>
-                        {currentFolder && (
-                            <button
-                                onClick={() => setCurrentFolder(null)}
-                                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                            >
-                                {t('main.backToAll')}
-                            </button>
+                    <SurfaceTopBar
+                        title={language === 'vi' ? 'Templates' : 'Templates'}
+                        subtitle={language === 'vi'
+                            ? 'Chọn template, điền form, nhận kết quả mà không cần viết prompt.'
+                            : 'Pick a template, fill the form, and get results without writing prompts.'}
+                        actions={(
+                            <>
+                                <Link
+                                    href="/landing"
+                                    className="inline-flex items-center rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+                                >
+                                    {language === 'vi' ? 'Xem Landing' : 'View Landing'}
+                                </Link>
+                                <Link
+                                    href="/docs"
+                                    className="inline-flex items-center rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/75 dark:hover:bg-white/[0.07]"
+                                >
+                                    {language === 'vi' ? 'Mở Docs' : 'Open Docs'}
+                                </Link>
+                            </>
                         )}
-                    </div>
+                    />
 
-                    {starterHandoff && !currentFolder && (
-                        <div className="mb-8 rounded-2xl border border-blue-200 bg-blue-50/80 dark:border-blue-800 dark:bg-blue-900/20 p-5">
-                            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                                <div className="space-y-3">
-                                    <div>
-                                        <div className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-300">
-                                            {language === 'vi' ? 'Governed starter handoff' : 'Governed starter handoff'}
+                    <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
+                        <section
+                            id="tour-welcome"
+                            className="overflow-hidden rounded-[32px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.16),_transparent_45%),linear-gradient(135deg,_#f8fafc,_#ffffff)] p-7 shadow-[0_20px_60px_-45px_rgba(79,70,229,0.35)] dark:border-white/[0.07] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.22),_transparent_40%),linear-gradient(135deg,_#141927,_#0f1320)] dark:shadow-none sm:p-8"
+                        >
+                            <div className="grid gap-8 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] xl:items-center">
+                                <div>
+                                    <span className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300">
+                                        <Sparkles size={14} />
+                                        {language === 'vi' ? 'CVF v1.6 Workspace' : 'CVF v1.6 Workspace'}
+                                    </span>
+                                    <h2 className="mt-6 max-w-3xl text-balance text-4xl font-semibold tracking-[-0.05em] text-slate-950 dark:text-white sm:text-5xl">
+                                        {t('main.heroLine1')}{' '}
+                                        <span className="bg-gradient-to-r from-indigo-500 to-cyan-400 bg-clip-text text-transparent">
+                                            {t('main.heroLine2')}
+                                        </span>
+                                    </h2>
+                                    <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600 dark:text-white/55">
+                                        {currentFolder
+                                            ? `📂 ${templates.find(t => t.id === currentFolder)?.name || 'Folder'}`
+                                            : t('main.heroDesc')}
+                                    </p>
+
+                                    <div className="mt-8 flex flex-wrap gap-3">
+                                        <Link
+                                            href="/landing"
+                                            className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-500 px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_-18px_rgba(79,70,229,0.7)] transition hover:brightness-110"
+                                        >
+                                            {language === 'vi' ? 'Khám phá CVF' : 'Explore CVF'}
+                                        </Link>
+                                        <Link
+                                            href="/help"
+                                            className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/75 dark:hover:bg-white/[0.07]"
+                                        >
+                                            {language === 'vi' ? 'Xem hướng dẫn' : 'See the guide'}
+                                        </Link>
+                                        {currentFolder && (
+                                            <button
+                                                onClick={() => setCurrentFolder(null)}
+                                                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/75 dark:hover:bg-white/[0.07]"
+                                            >
+                                                {t('main.backToAll')}
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
+                                    {statCards.map((card) => (
+                                        <SurfaceStatCard
+                                            key={card.label}
+                                            label={card.label}
+                                            value={card.value}
+                                            icon={card.icon}
+                                            tone={card.tone}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+
+                        {starterHandoff && !currentFolder && (
+                            <div className="rounded-[28px] border border-indigo-200/80 bg-white p-6 shadow-[0_10px_30px_-24px_rgba(79,70,229,0.45)] dark:border-indigo-500/20 dark:bg-[#171b29] dark:shadow-none">
+                                <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                                    <div className="space-y-3">
+                                        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-500">
+                                            {language === 'vi' ? 'Starter handoff' : 'Starter handoff'}
                                         </div>
-                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-1">
+                                        <h3 className="text-2xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
                                             {language === 'vi'
                                                 ? 'Starter path đã sẵn sàng từ onboarding'
                                                 : 'Your starter path is ready from onboarding'}
                                         </h3>
+                                        <p className="max-w-3xl text-sm leading-7 text-slate-600 dark:text-white/58">
+                                            {starterHandoff.userInput}
+                                        </p>
+                                        <div className="grid gap-3 md:grid-cols-3">
+                                            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/[0.07] dark:bg-white/[0.04]">
+                                                <div className="text-xs uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
+                                                    {language === 'vi' ? 'Starter path' : 'Starter path'}
+                                                </div>
+                                                <div className="mt-2 font-semibold text-slate-950 dark:text-white">
+                                                    {starterHandoff.recommendedTemplateLabel}
+                                                </div>
+                                            </div>
+                                            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/[0.07] dark:bg-white/[0.04]">
+                                                <div className="text-xs uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
+                                                    {language === 'vi' ? 'Routed phase' : 'Routed phase'}
+                                                </div>
+                                                <div className="mt-2 font-semibold text-slate-950 dark:text-white">
+                                                    {starterHandoff.friendlyPhase}
+                                                </div>
+                                            </div>
+                                            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/[0.07] dark:bg-white/[0.04]">
+                                                <div className="text-xs uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
+                                                    {language === 'vi' ? 'Risk' : 'Risk'}
+                                                </div>
+                                                <div className="mt-2 font-semibold text-slate-950 dark:text-white">
+                                                    {starterHandoff.friendlyRisk}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p className="text-sm text-gray-700 dark:text-gray-300">
-                                        {starterHandoff.userInput}
-                                    </p>
-                                    <div className="grid gap-3 md:grid-cols-3">
-                                        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-white/80 dark:bg-gray-900/40 p-3">
-                                            <div className="text-xs text-gray-500 mb-1">{language === 'vi' ? 'Starter path' : 'Starter path'}</div>
-                                            <div className="font-medium text-gray-900 dark:text-white">{starterHandoff.recommendedTemplateLabel}</div>
+                                    <div className="flex w-full flex-col gap-3 lg:w-60">
+                                        <button
+                                            onClick={handleOpenGovernedStarter}
+                                            className="rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
+                                        >
+                                            {language === 'vi' ? 'Mở starter path' : 'Open starter path'}
+                                        </button>
+                                        <button
+                                            onClick={handleDismissGovernedStarter}
+                                            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/75 dark:hover:bg-white/[0.07]"
+                                        >
+                                            {language === 'vi' ? 'Ẩn handoff' : 'Dismiss handoff'}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {!mockAiEnabled && !hasAnyApiKey && (
+                            <div className="rounded-[28px] border border-amber-200 bg-amber-50/90 p-5 text-amber-950 dark:border-amber-500/20 dark:bg-amber-500/8 dark:text-amber-100">
+                                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                                    <div>
+                                        <div className="text-lg font-semibold">{t('main.apiKeyTitle')}</div>
+                                        <div className="mt-1 text-sm text-amber-700 dark:text-amber-200/80">{t('main.apiKeyDesc')}</div>
+                                    </div>
+                                    <div className="flex flex-wrap gap-3">
+                                        <button
+                                            onClick={handleDemoRun}
+                                            className="rounded-2xl border border-amber-400/70 bg-white px-4 py-3 text-sm font-semibold text-amber-700 transition hover:bg-amber-100 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200 dark:hover:bg-amber-500/15"
+                                        >
+                                            {language === 'vi' ? 'Chạy demo ngay' : 'Run demo now'}
+                                        </button>
+                                        <button
+                                            onClick={() => window.dispatchEvent(new CustomEvent('cvf:openApiKeyWizard'))}
+                                            className="rounded-2xl bg-amber-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-amber-700"
+                                        >
+                                            {t('main.apiKeyCta')}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        <section className="rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
+                            <div className="flex flex-col gap-6">
+                                {!currentFolder && (
+                                    <div id="tour-category-tabs" className="space-y-4">
+                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                                            <div>
+                                                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-white/35">
+                                                    {language === 'vi' ? 'Browse by category' : 'Browse by category'}
+                                                </div>
+                                                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
+                                                    {language === 'vi' ? 'Mọi template trong cùng một front door' : 'Every template in one governed front door'}
+                                                </h3>
+                                            </div>
+                                            <div className="text-sm text-slate-500 dark:text-white/45">
+                                                {language === 'vi'
+                                                    ? `${filteredTemplates.length} items hiển thị`
+                                                    : `${filteredTemplates.length} items showing`}
+                                            </div>
                                         </div>
-                                        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-white/80 dark:bg-gray-900/40 p-3">
-                                            <div className="text-xs text-gray-500 mb-1">{language === 'vi' ? 'Routed phase' : 'Routed phase'}</div>
-                                            <div className="font-medium text-gray-900 dark:text-white">{starterHandoff.friendlyPhase}</div>
+                                        <CategoryTabs
+                                            activeCategory={selectedCategory}
+                                            onCategoryChange={setSelectedCategory}
+                                            counts={categoryCounts}
+                                        />
+                                    </div>
+                                )}
+
+                                <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_240px] xl:items-center">
+                                    <div className="relative">
+                                        <svg className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                        <input
+                                            type="text"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            placeholder={language === 'en' ? 'Search templates...' : 'Tìm kiếm template...'}
+                                            className="w-full rounded-[22px] border border-slate-200 bg-slate-50 py-4 pl-12 pr-12 text-sm text-slate-900 transition focus:border-indigo-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-white/[0.08] dark:bg-[#10131d] dark:text-white dark:placeholder:text-white/30 dark:focus:border-indigo-400"
+                                            aria-label={language === 'en' ? 'Search templates' : 'Tìm kiếm template'}
+                                        />
+                                        {searchQuery && (
+                                            <button
+                                                onClick={() => setSearchQuery('')}
+                                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-700 dark:hover:text-white/80"
+                                                aria-label={language === 'en' ? 'Clear search' : 'Xóa tìm kiếm'}
+                                            >
+                                                ✕
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="rounded-[24px] border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-500 dark:border-white/[0.08] dark:bg-[#10131d] dark:text-white/45">
+                                        <div className="font-semibold text-slate-900 dark:text-white">
+                                            {language === 'vi' ? `${categoryCounts.all} templates sẵn sàng` : `${categoryCounts.all} templates ready`}
                                         </div>
-                                        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-white/80 dark:bg-gray-900/40 p-3">
-                                            <div className="text-xs text-gray-500 mb-1">{language === 'vi' ? 'Risk' : 'Risk'}</div>
-                                            <div className="font-medium text-gray-900 dark:text-white">{starterHandoff.friendlyRisk}</div>
+                                        <div className="mt-1 leading-6">
+                                            {language === 'vi'
+                                                ? 'Giữ nguyên flow, chỉ chọn đúng template và để CVF dẫn đường.'
+                                                : 'Keep the flow intact, just pick the right template and let CVF guide the path.'}
                                         </div>
                                     </div>
-                                    <p className="text-xs text-blue-700 dark:text-blue-300">
-                                        {language === 'vi'
-                                            ? 'CVF đã khóa starter handoff này theo intent, phase và risk đã route ở Quick Start. Bước tiếp theo là mở đúng wizard để review packet và launch live governed path.'
-                                            : 'CVF has locked this starter handoff to the routed intent, phase, and risk from Quick Start. The next step is to open the right wizard, review the packet, and launch the live governed path.'}
-                                    </p>
-                                </div>
-                                <div className="flex flex-col gap-3 lg:w-64">
-                                    <button
-                                        onClick={handleOpenGovernedStarter}
-                                        className="px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
-                                    >
-                                        {language === 'vi' ? 'Mở starter path' : 'Open starter path'}
-                                    </button>
-                                    <button
-                                        onClick={handleDismissGovernedStarter}
-                                        className="px-4 py-3 rounded-xl border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 font-medium hover:bg-blue-100/70 dark:hover:bg-blue-900/30 transition-colors"
-                                    >
-                                        {language === 'vi' ? 'Ẩn handoff' : 'Dismiss handoff'}
-                                    </button>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        </section>
 
-                    {!mockAiEnabled && !hasAnyApiKey && (
-                        <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                            <div>
-                                <div className="font-semibold text-lg">{t('main.apiKeyTitle')}</div>
-                                <div className="text-sm text-amber-700">{t('main.apiKeyDesc')}</div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <button
-                                    onClick={handleDemoRun}
-                                    className="px-4 py-2 rounded-lg border border-amber-400 text-amber-700 hover:bg-amber-100 font-medium transition-colors"
-                                >
-                                    🎮 {language === 'vi' ? 'Chạy Demo ngay' : 'Run Demo Now'}
-                                </button>
-                                <button
-                                    onClick={() => window.dispatchEvent(new CustomEvent('cvf:openApiKeyWizard'))}
-                                    className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700"
-                                >
-                                    {t('main.apiKeyCta')}
-                                </button>
-                            </div>
+                        <div id="tour-template-grid" className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                            {filteredTemplates.map((template, index) => (
+                                <div key={template.id} id={index === 0 ? 'tour-template-card' : undefined}>
+                                    <TemplateCard
+                                        template={template}
+                                        onClick={() => handleSelectTemplate(template)}
+                                        onPreview={(e) => { e.stopPropagation(); setPreviewTemplate(template); }}
+                                    />
+                                </div>
+                            ))}
                         </div>
-                    )}
-
-                    {!currentFolder && (
-                        <div id="tour-category-tabs">
-                            <CategoryTabs
-                                activeCategory={selectedCategory}
-                                onCategoryChange={setSelectedCategory}
-                            />
-                        </div>
-                    )}
-
-                    {/* Template Search */}
-                    <div className="mt-6 max-w-md mx-auto">
-                        <div className="relative">
-                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                            <input
-                                type="text"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder={language === 'en' ? 'Search templates...' : 'Tìm kiếm template...'}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
-                                aria-label={language === 'en' ? 'Search templates' : 'Tìm kiếm template'}
-                            />
-                            {searchQuery && (
-                                <button
-                                    onClick={() => setSearchQuery('')}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                                    aria-label={language === 'en' ? 'Clear search' : 'Xóa tìm kiếm'}
-                                >
-                                    ✕
-                                </button>
-                            )}
-                        </div>
-                    </div>
-
-                    <div id="tour-template-grid" className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredTemplates.map((template, index) => (
-                            <div key={template.id} id={index === 0 ? "tour-template-card" : undefined}>
-                                <TemplateCard
-                                    template={template}
-                                    onClick={() => handleSelectTemplate(template)}
-                                    onPreview={(e) => { e.stopPropagation(); setPreviewTemplate(template); }}
-                                />
-                            </div>
-                        ))}
                     </div>
                 </>
             )}
 
-            {/* FORM */}
             {workflowState === 'form' && selectedTemplate && (
                 <DynamicForm
                     template={selectedTemplate}
@@ -434,7 +566,6 @@ export default function HomePage() {
                 />
             )}
 
-            {/* WIZARDS */}
             {workflowState === 'wizard' && <AppBuilderWizard onBack={handleBack} />}
             {workflowState === 'product-wizard' && <ProductDesignWizard onBack={handleBack} />}
             {workflowState === 'marketing-wizard' && <MarketingCampaignWizard onBack={handleBack} />}
@@ -445,7 +576,6 @@ export default function HomePage() {
             {workflowState === 'content-wizard' && <ContentStrategyWizard onBack={handleBack} />}
             {workflowState === 'data-wizard' && <DataAnalysisWizard onBack={handleBack} />}
 
-            {/* PROCESSING */}
             {workflowState === 'processing' && selectedTemplate && (
                 <ProcessingScreen
                     templateName={selectedTemplate.name}
@@ -459,7 +589,6 @@ export default function HomePage() {
                 />
             )}
 
-            {/* RESULT */}
             {workflowState === 'result' && currentExecution && (
                 <ResultViewer
                     execution={currentExecution}
@@ -473,7 +602,6 @@ export default function HomePage() {
                 />
             )}
 
-            {/* Preview Modal */}
             <TemplatePreviewModal
                 isOpen={!!previewTemplate}
                 onClose={() => setPreviewTemplate(null)}

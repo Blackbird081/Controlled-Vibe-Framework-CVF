@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { SurfaceTopBar } from '@/components';
 import { SkillDetailView } from '@/components/SkillDetailView';
 import { Skill, SkillCategory, SkillIndexPayload } from '@/types/skill';
 import { useLanguage } from '@/lib/i18n';
@@ -51,7 +52,7 @@ export default function SkillDetailPage() {
             }
         }
 
-        load();
+        void load();
         return () => {
             active = false;
         };
@@ -59,43 +60,51 @@ export default function SkillDetailPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+            <div className="px-4 py-20">
+                <div className="mx-auto flex max-w-5xl justify-center">
+                    <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-indigo-500" />
+                </div>
             </div>
         );
     }
 
     if (notFound || !skill) {
         return (
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
-                    <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-                        <Link href="/home" className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600">
+            <div className="pb-10">
+                <SurfaceTopBar
+                    title={t('skills.notFound')}
+                    subtitle={t('skills.notFoundDesc')}
+                    actions={(
+                        <Link
+                            href="/skills"
+                            className="inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+                        >
                             {t('skills.backToCvf')}
                         </Link>
-                    </div>
-                </header>
-                <main className="max-w-5xl mx-auto px-4 py-20 text-center text-gray-500">
-                    <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">{t('skills.notFound')}</h1>
-                    <p className="text-sm">{t('skills.notFoundDesc')}</p>
-                </main>
+                    )}
+                />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
-                <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-                    <Link href="/home" className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600">
+        <div className="pb-10">
+            <SurfaceTopBar
+                title={skill.title}
+                subtitle={`${skill.domain} / ${skill.id}.skill.md`}
+                actions={(
+                    <Link
+                        href="/skills"
+                        className="inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+                    >
                         {t('skills.backToCvf')}
                     </Link>
-                </div>
-            </header>
+                )}
+            />
 
-            <main className="max-w-5xl mx-auto px-4 py-6">
+            <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
                 <SkillDetailView skill={skill} />
-            </main>
+            </div>
         </div>
     );
 }

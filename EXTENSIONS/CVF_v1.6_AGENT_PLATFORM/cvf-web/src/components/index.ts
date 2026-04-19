@@ -29,6 +29,8 @@ export * from './TemplatePreviewModal';
 export * from './UserContext';
 export * from './WorkflowVisualizer';
 export * from './Settings';
+export * from './SurfaceStatCard';
+export * from './SurfaceTopBar';
 export * from './AgentChat';
 export * from './AgentChatWithHistory';
 export * from './AgentChatHeader';

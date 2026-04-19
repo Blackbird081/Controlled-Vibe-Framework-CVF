@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useLanguage } from '@/lib/i18n';
 
 type KnowledgeCollectionView = {
   id: string;
@@ -31,6 +32,8 @@ export function AdminKnowledgePartitioningControls({
   organizations: OrgOption[];
   teams: TeamOption[];
 }) {
+  const { language } = useLanguage();
+  const vi = language === 'vi';
   const [collections, setCollections] = useState(initialCollections);
   const [savingCollectionId, setSavingCollectionId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -78,7 +81,7 @@ export function AdminKnowledgePartitioningControls({
       const payload = await response.json();
 
       if (!response.ok || !payload?.success) {
-        throw new Error(payload?.error || 'Failed to update knowledge collection scope.');
+        throw new Error(payload?.error || (vi ? 'Không thể cập nhật phạm vi dữ liệu.' : 'Failed to update knowledge collection scope.'));
       }
 
       setCollections(current => current.map(entry => (
@@ -90,9 +93,9 @@ export function AdminKnowledgePartitioningControls({
           }
           : entry
       )));
-      setSuccess(`Saved scope for ${collection.name}.`);
+      setSuccess(vi ? `Đã lưu phạm vi cho ${collection.name}.` : `Saved scope for ${collection.name}.`);
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : 'Failed to update knowledge collection scope.');
+      setError(saveError instanceof Error ? saveError.message : (vi ? 'Không thể cập nhật phạm vi dữ liệu.' : 'Failed to update knowledge collection scope.'));
     } finally {
       setSavingCollectionId(null);
     }
@@ -101,9 +104,13 @@ export function AdminKnowledgePartitioningControls({
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-sky-200 bg-sky-50 p-5 text-sm text-sky-900 shadow-sm dark:border-sky-900/40 dark:bg-sky-950/30 dark:text-sky-100">
-        <div className="font-semibold">Knowledge partitioning is now runtime-enforced</div>
+        <div className="font-semibold">
+          {vi ? 'Phạm vi dữ liệu đang được áp dụng trực tiếp khi chạy AI' : 'Knowledge scope is enforced at runtime'}
+        </div>
         <p className="mt-2">
-          `/api/execute` retrieves governed knowledge chunks through a scoped adapter. Collections below define which org/team can contribute context to the execute path.
+          {vi
+            ? 'Mỗi bộ sưu tập bên dưới quyết định tổ chức hoặc nhóm nào được phép đóng góp ngữ cảnh vào câu trả lời AI.'
+            : 'Each collection below decides which organization or team may contribute context to AI responses.'}
         </p>
       </div>
 
@@ -118,17 +125,19 @@ export function AdminKnowledgePartitioningControls({
               key={collection.id}
               className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900"
             >
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <div className="text-sm text-gray-500">Chunks: {collection.chunkCount}</div>
+                  <div className="text-sm text-gray-500">
+                    {vi ? `Số đoạn dữ liệu: ${collection.chunkCount}` : `Chunks: ${collection.chunkCount}`}
+                  </div>
                   <h3 className="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{collection.name}</h3>
                 </div>
                 <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">
                   {collection.teamId
-                    ? 'TEAM-SCOPED'
+                    ? (vi ? 'THEO NHÓM' : 'TEAM ONLY')
                     : collection.orgId
-                      ? 'ORG-SCOPED'
-                      : 'GLOBAL'}
+                      ? (vi ? 'THEO TỔ CHỨC' : 'ORG ONLY')
+                      : (vi ? 'TOÀN CỤC' : 'GLOBAL')}
                 </span>
               </div>
 
@@ -136,7 +145,9 @@ export function AdminKnowledgePartitioningControls({
 
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 <label className="text-sm">
-                  <span className="mb-2 block font-medium text-gray-700 dark:text-gray-200">Organization Scope</span>
+                  <span className="mb-2 block font-medium text-gray-700 dark:text-gray-200">
+                    {vi ? 'Phạm vi tổ chức' : 'Organization scope'}
+                  </span>
                   <select
                     value={collection.orgId ?? ''}
                     onChange={event => updateCollection(collection.id, {
@@ -147,7 +158,7 @@ export function AdminKnowledgePartitioningControls({
                     })}
                     className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
                   >
-                    <option value="">Global (all orgs)</option>
+                    <option value="">{vi ? 'Toàn cục (mọi tổ chức)' : 'Global (all orgs)'}</option>
                     {organizations.map(org => (
                       <option key={org.id} value={org.id}>{org.name}</option>
                     ))}
@@ -155,7 +166,9 @@ export function AdminKnowledgePartitioningControls({
                 </label>
 
                 <label className="text-sm">
-                  <span className="mb-2 block font-medium text-gray-700 dark:text-gray-200">Team Scope</span>
+                  <span className="mb-2 block font-medium text-gray-700 dark:text-gray-200">
+                    {vi ? 'Phạm vi nhóm' : 'Team scope'}
+                  </span>
                   <select
                     value={collection.teamId ?? ''}
                     onChange={event => {
@@ -168,7 +181,7 @@ export function AdminKnowledgePartitioningControls({
                     }}
                     className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
                   >
-                    <option value="">No team restriction</option>
+                    <option value="">{vi ? 'Không giới hạn nhóm' : 'No team restriction'}</option>
                     {availableTeams.map(team => (
                       <option key={team.id} value={team.id}>{team.name}</option>
                     ))}
@@ -177,13 +190,15 @@ export function AdminKnowledgePartitioningControls({
               </div>
 
               <div className="mt-4 rounded-xl bg-gray-50 px-4 py-3 text-sm dark:bg-gray-800">
-                <div className="font-medium text-gray-900 dark:text-white">Effective Scope</div>
+                <div className="font-medium text-gray-900 dark:text-white">
+                  {vi ? 'Phạm vi đang áp dụng' : 'Effective scope'}
+                </div>
                 <div className="mt-1 text-gray-600 dark:text-gray-300">
                   {collection.teamId
                     ? `${organizationsById.get(collection.orgId ?? '')?.name ?? collection.orgId} / ${teamsById.get(collection.teamId)?.name ?? collection.teamId}`
                     : collection.orgId
-                      ? `${organizationsById.get(collection.orgId)?.name ?? collection.orgId} / all teams`
-                      : 'Global — visible to all orgs and teams'}
+                      ? `${organizationsById.get(collection.orgId)?.name ?? collection.orgId} / ${vi ? 'mọi nhóm' : 'all teams'}`
+                      : (vi ? 'Toàn cục — hiển thị cho mọi tổ chức và nhóm' : 'Global — visible to all orgs and teams')}
                 </div>
               </div>
 
@@ -193,7 +208,7 @@ export function AdminKnowledgePartitioningControls({
                 disabled={savingCollectionId === collection.id}
                 className="mt-4 w-full rounded-xl bg-sky-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {savingCollectionId === collection.id ? 'Saving...' : 'Save Scope'}
+                {savingCollectionId === collection.id ? (vi ? 'Đang lưu...' : 'Saving...') : (vi ? 'Lưu phạm vi' : 'Save scope')}
               </button>
             </article>
           );

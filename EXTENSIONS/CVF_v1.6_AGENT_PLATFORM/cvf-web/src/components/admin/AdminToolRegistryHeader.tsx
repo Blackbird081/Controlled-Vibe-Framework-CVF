@@ -9,15 +9,15 @@ export function AdminToolRegistryHeader() {
   return (
     <div>
       <div className="text-sm text-gray-500 dark:text-gray-400">
-        {vi ? 'Giai đoạn D • Chính sách runtime + phân vùng kiến thức' : 'Phase D • Runtime policy + knowledge partitioning'}
+        {vi ? 'Quyền truy cập công cụ và phạm vi dữ liệu' : 'Tool access and knowledge scope'}
       </div>
-      <h2 className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">
-        {vi ? 'Kiểm soát đăng ký công cụ' : 'Tool Registry Controls'}
+      <h2 className="mt-1 text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+        {vi ? 'Quản lý công cụ cho workspace' : 'Manage workspace tools'}
       </h2>
       <p className="mt-2 text-gray-600 dark:text-gray-400">
         {vi
-          ? 'Kho công cụ động với ghi đè chính sách theo vai trò và phân vùng bộ sưu tập kiến thức, lưu trữ qua cửa hàng control-plane chỉ-thêm.'
-          : 'Dynamic tool inventory with role policy overrides and knowledge collection scoping persisted through the append-only control-plane store.'}
+          ? 'Chọn vai trò nào được dùng từng công cụ, đồng thời giới hạn bộ dữ liệu nào được phép tham gia vào câu trả lời AI.'
+          : 'Decide which roles can use each tool and which knowledge collections may contribute context to AI responses.'}
       </p>
     </div>
   );

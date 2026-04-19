@@ -9,15 +9,15 @@ export function AdminDLPHeader() {
   return (
     <div>
       <div className="text-sm text-gray-500 dark:text-gray-400">
-        {vi ? 'Giai đoạn D1 • An toàn đầu ra' : 'Phase D1 • Egress Safety'}
+        {vi ? 'Bảo vệ dữ liệu trước khi gửi cho AI' : 'Protect data before it reaches AI'}
       </div>
-      <h2 className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">
-        {vi ? 'Kiểm soát DLP' : 'DLP Controls'}
+      <h2 className="mt-1 text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+        {vi ? 'Bảo vệ dữ liệu đầu ra' : 'Data protection controls'}
       </h2>
       <p className="mt-2 text-gray-600 dark:text-gray-400">
         {vi
-          ? 'Ẩn dữ liệu nhạy cảm trước khi prompt rời khỏi luồng thực thi. Cài đặt mặc định luôn bật, quy tắc regex tuỳ chỉnh là sự kiện chính sách chỉ-thêm.'
-          : 'Redact sensitive data before prompts leave the execute path. Presets are always on, custom regex rules are append-only policy events.'}
+          ? 'Che các dữ liệu nhạy cảm trước khi nội dung rời workspace. Mẫu mặc định luôn bật, còn quy tắc tùy chỉnh giúp bạn siết chặt thêm cho từng tổ chức.'
+          : 'Mask sensitive data before content leaves the workspace. Built-in presets always stay on, while custom rules let you tighten protection for your organization.'}
       </p>
     </div>
   );

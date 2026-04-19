@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useLanguage } from '@/lib/i18n';
 
 type UserOption = {
   id: string;
@@ -11,6 +12,8 @@ type UserOption = {
 };
 
 export function AdminImpersonationControls({ users }: { users: UserOption[] }) {
+  const { language } = useLanguage();
+  const vi = language === 'vi';
   const [selectedUserId, setSelectedUserId] = useState(users[0]?.id ?? '');
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -29,12 +32,12 @@ export function AdminImpersonationControls({ users }: { users: UserOption[] }) {
         const payload = await response.json();
 
         if (!response.ok || !payload?.success) {
-          throw new Error(payload?.error || 'Failed to start impersonation.');
+          throw new Error(payload?.error || (vi ? 'Không thể bắt đầu phiên xem như người dùng.' : 'Failed to start impersonation.'));
         }
 
         window.location.href = '/home';
       } catch (startError) {
-        setError(startError instanceof Error ? startError.message : 'Failed to start impersonation.');
+        setError(startError instanceof Error ? startError.message : (vi ? 'Không thể bắt đầu phiên xem như người dùng.' : 'Failed to start impersonation.'));
       }
     });
   };
@@ -42,16 +45,18 @@ export function AdminImpersonationControls({ users }: { users: UserOption[] }) {
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div>
-        <div className="text-sm text-gray-500">Owner only</div>
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">View as user</h3>
+        <div className="text-sm text-gray-500">{vi ? 'Chỉ dành cho chủ sở hữu' : 'Owner only'}</div>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{vi ? 'Xem như người dùng' : 'View as user'}</h3>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          Starts a one-hour impersonation session. Admin console access will drop to the impersonated user role until the session ends.
+          {vi
+            ? 'Mở phiên đăng nhập tạm thời trong 1 giờ để xem trải nghiệm của người dùng được chọn. Trong thời gian này, quyền quản trị sẽ giảm theo đúng vai trò của người đó.'
+            : 'Start a one-hour session to view the product as a selected user. Admin access drops to that user role until the session ends.'}
         </p>
       </div>
 
       <div className="mt-4 grid gap-4">
         <label className="grid gap-2 text-sm">
-          <span className="font-medium text-gray-700 dark:text-gray-200">Select user</span>
+          <span className="font-medium text-gray-700 dark:text-gray-200">{vi ? 'Chọn người dùng' : 'Select user'}</span>
           <select
             value={selectedUserId}
             onChange={event => setSelectedUserId(event.target.value)}
@@ -72,7 +77,7 @@ export function AdminImpersonationControls({ users }: { users: UserOption[] }) {
         disabled={isPending || !selectedUserId}
         className="mt-4 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isPending ? 'Starting...' : 'Start Impersonation'}
+        {isPending ? (vi ? 'Đang bắt đầu...' : 'Starting...') : (vi ? 'Bắt đầu phiên xem thử' : 'Start impersonation')}
       </button>
 
       {error && (

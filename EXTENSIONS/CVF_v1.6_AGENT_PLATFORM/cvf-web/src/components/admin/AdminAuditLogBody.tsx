@@ -26,21 +26,22 @@ interface Props {
 export function AdminAuditLogBody({ filteredEvents, actorFilter, outcomeFilter, riskFilter }: Props) {
   const { language } = useLanguage();
   const vi = language === 'vi';
+  const locale = vi ? 'vi-VN' : 'en-US';
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            {vi ? 'Giai đoạn B • Chỉ đọc' : 'Phase B • Read-only'}
+            {vi ? 'Theo dõi hành động quản trị và chính sách' : 'Track admin and policy activity'}
           </div>
           <h2 className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">
-            {vi ? 'Nhật ký kiểm toán' : 'Audit Log Viewer'}
+            {vi ? 'Nhật ký hoạt động' : 'Activity log'}
           </h2>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
             {vi
-              ? 'Các từ chối admin yên lặng, dữ liệu thực thi và bằng chứng control-plane được ghi lại trong phiên này.'
-              : 'Silent admin denials, execute telemetry, and control-plane evidence emitted during this tranche.'}
+              ? 'Theo dõi các hành động quản trị, lần chặn chính sách và sự kiện thực thi liên quan đến workspace này.'
+              : 'Review admin actions, policy denials, and execution events related to this workspace.'}
           </p>
         </div>
         <Link
@@ -55,7 +56,7 @@ export function AdminAuditLogBody({ filteredEvents, actorFilter, outcomeFilter, 
         <input
           name="actor"
           defaultValue={actorFilter}
-          placeholder={vi ? 'Actor hoặc vai trò' : 'Actor or role'}
+          placeholder={vi ? 'Người thực hiện hoặc vai trò' : 'Actor or role'}
           className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
         />
         <input
@@ -78,8 +79,36 @@ export function AdminAuditLogBody({ filteredEvents, actorFilter, outcomeFilter, 
         </button>
       </form>
 
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
-        <table className="w-full border-collapse text-left">
+      <div className="space-y-3 md:hidden">
+        {filteredEvents.length === 0 && (
+          <div className="rounded-2xl border border-dashed border-gray-300 px-5 py-10 text-center text-sm text-gray-500 dark:border-gray-700">
+            {vi ? 'Chưa có sự kiện nào.' : 'No activity recorded yet.'}
+          </div>
+        )}
+        {filteredEvents.map(event => (
+          <article key={event.id} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-sm font-semibold text-gray-900 dark:text-white">{event.eventType}</div>
+                <div className="mt-1 text-xs text-gray-500">{event.action}</div>
+              </div>
+              <span className="rounded-full bg-gray-100 px-3 py-1 text-[11px] font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                {event.outcome}
+              </span>
+            </div>
+            <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+              <div><span className="font-medium">{vi ? 'Thời gian:' : 'Time:'}</span> {new Date(event.timestamp).toLocaleString(locale)}</div>
+              <div><span className="font-medium">{vi ? 'Chủ thể:' : 'Actor:'}</span> {event.actorId} · {event.actorRole}</div>
+              <div><span className="font-medium">{vi ? 'Mục tiêu:' : 'Target:'}</span> {event.targetResource}</div>
+              <div><span className="font-medium">{vi ? 'Rủi ro:' : 'Risk:'}</span> {event.riskLevel || '-'}</div>
+              <div><span className="font-medium">{vi ? 'Giai đoạn:' : 'Phase:'}</span> {event.phase || '-'}</div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900 md:block">
+        <table className="w-full min-w-[820px] border-collapse text-left">
           <thead className="bg-gray-50 text-sm text-gray-600 dark:bg-gray-800 dark:text-gray-300">
             <tr>
               <th className="px-5 py-4">{vi ? 'Thời gian' : 'Timestamp'}</th>
@@ -100,7 +129,7 @@ export function AdminAuditLogBody({ filteredEvents, actorFilter, outcomeFilter, 
             )}
             {filteredEvents.map(event => (
               <tr key={event.id} className="align-top">
-                <td className="px-5 py-4 text-sm text-gray-500">{new Date(event.timestamp).toLocaleString()}</td>
+                <td className="px-5 py-4 text-sm text-gray-500">{new Date(event.timestamp).toLocaleString(locale)}</td>
                 <td className="px-5 py-4">
                   <div className="font-medium text-gray-900 dark:text-white">{event.eventType}</div>
                   <div className="mt-1 text-sm text-gray-500">{event.action}</div>

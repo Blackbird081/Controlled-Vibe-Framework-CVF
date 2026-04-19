@@ -43,6 +43,7 @@ interface Props {
 export function AdminFinOpsBody({ summary, teams, activeQuotaRules, activeOverrides, canGrantOverride }: Props) {
   const { language } = useLanguage();
   const vi = language === 'vi';
+  const locale = vi ? 'vi-VN' : 'en-US';
 
   const topSections = [
     { en: 'Top Users',  vi: 'Người dùng hàng đầu',  rows: summary.topUsers },
@@ -54,19 +55,19 @@ export function AdminFinOpsBody({ summary, teams, activeQuotaRules, activeOverri
     <div className="space-y-6">
       <div>
         <div className="text-sm text-gray-500 dark:text-gray-400">
-          {vi ? 'Giai đoạn B • Chỉ đọc' : 'Phase B • Read-only'}
+          {vi ? 'Theo dõi mức sử dụng AI theo nhóm' : 'Track AI usage across teams'}
         </div>
         <h2 className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">
-          {vi ? 'Bảng tài chính' : 'FinOps Dashboard'}
+          {vi ? 'Chi phí & ngân sách' : 'Usage & budget'}
         </h2>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
           {vi
-            ? 'Dữ liệu chi phí từ luồng thực thi có quản trị, phân nhóm theo người dùng, nhóm và kỹ năng khai báo.'
-            : 'Cost telemetry emitted from the governed execute path, grouped by user, team, and declared skill.'}
+            ? 'Xem tổng chi phí, số lần gọi và token tiêu thụ từ luồng AI, được gom theo người dùng, nhóm và kỹ năng.'
+            : 'Review total cost, request volume, and token usage from the AI flow, grouped by user, team, and skill.'}
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {([
           { en: 'Total Cost',     vi2: 'Tổng chi phí',  val: formatUsd(summary.totalCostUSD) },
           { en: 'Total Requests', vi2: 'Tổng yêu cầu',  val: String(summary.totalRequests) },
@@ -93,7 +94,7 @@ export function AdminFinOpsBody({ summary, teams, activeQuotaRules, activeOverri
             {summary.timeSeries.map(point => (
               <div key={point.date}>
                 <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300">
-                  <span>{point.date}</span>
+                  <span>{new Date(point.date).toLocaleDateString(locale)}</span>
                   <span>{formatUsd(point.cost)} • {point.requests} {vi ? 'yêu cầu' : 'req'}</span>
                 </div>
                 <div className="mt-2 h-2 rounded-full bg-gray-100 dark:bg-gray-800">

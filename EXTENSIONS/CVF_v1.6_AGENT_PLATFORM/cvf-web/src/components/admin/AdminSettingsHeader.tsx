@@ -9,15 +9,15 @@ export function AdminSettingsHeader() {
   return (
     <div>
       <div className="text-sm text-gray-500 dark:text-gray-400">
-        {vi ? 'Giai đoạn D2 • Tăng cường bảo mật Enterprise' : 'Phase D2 • Enterprise Hardening'}
+        {vi ? 'Tích hợp bảo mật và nhật ký' : 'Security integrations and logging'}
       </div>
-      <h2 className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">
-        {vi ? 'Cài đặt' : 'Settings'}
+      <h2 className="mt-1 text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+        {vi ? 'Bảo mật & SIEM' : 'Security & SIEM'}
       </h2>
       <p className="mt-2 text-gray-600 dark:text-gray-400">
         {vi
-          ? 'Cấu hình phân phối kiểm toán đầu ra và các kiểm soát bảo mật Enterprise cho bảng điều khiển quản trị.'
-          : 'Configure outbound audit delivery and enterprise hardening controls for the admin console.'}
+          ? 'Kết nối hệ thống giám sát, chọn loại sự kiện cần gửi đi và quản lý cấu hình bảo mật cho không gian quản trị.'
+          : 'Connect your monitoring stack, choose which events to forward, and manage security settings for the admin workspace.'}
       </p>
     </div>
   );

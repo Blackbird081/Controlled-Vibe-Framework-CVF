@@ -33,7 +33,7 @@ export function AdminTeamManager() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <div className="mb-2 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
             <Link href="/home" className="hover:text-indigo-600 dark:hover:text-indigo-400">
@@ -47,18 +47,18 @@ export function AdminTeamManager() {
             </span>
           </div>
           <h1 className="flex items-center gap-3 text-3xl font-bold text-gray-900 dark:text-white">
-            👥 {vi ? 'Quản lý phân quyền nhóm' : 'Team Role Management'}
+            👥 {vi ? 'Quản lý quyền truy cập nhóm' : 'Team access management'}
           </h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
             {vi
-              ? 'Quản lý quyền truy cập của thành viên trong dự án CVF. Vai trò định nghĩa mức rủi ro và pha tối đa được phép.'
-              : 'Manage member access across the CVF project. Roles define maximum allowed risk levels and phases.'}
+              ? 'Quản lý vai trò của từng thành viên để kiểm soát ai được xem, xây dựng, duyệt hoặc cấu hình workspace.'
+              : 'Manage each member role so you can control who may view, build, review, or configure the workspace.'}
           </p>
         </div>
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="rounded-xl bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow transition-all hover:bg-indigo-700 disabled:opacity-50"
+          className="w-full rounded-xl bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow transition-all hover:bg-indigo-700 disabled:opacity-50 lg:w-auto"
         >
           {isSaving
             ? (vi ? 'Đang lưu...' : 'Saving...')
@@ -68,7 +68,7 @@ export function AdminTeamManager() {
 
       <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-white/[0.07] dark:bg-[#171b29]">
         <h3 className="mb-4 border-b border-gray-100 pb-2 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:border-white/[0.06] dark:text-white/40">
-          {vi ? 'Tham chiếu quyền hạn vai trò' : 'Role Permissions Reference'}
+          {vi ? 'Tham chiếu vai trò' : 'Role reference'}
         </h3>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
           {(Object.keys(ROLE_INFO) as Array<keyof typeof ROLE_INFO>).map(role => {
@@ -83,8 +83,38 @@ export function AdminTeamManager() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-white/[0.07] dark:bg-[#171b29]">
-        <table className="w-full border-collapse text-left">
+      <div className="space-y-3 md:hidden">
+        {users.map(user => (
+          <article key={user.id} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-white/[0.07] dark:bg-[#171b29]">
+            <div className="font-medium text-gray-900 dark:text-white">{user.name}</div>
+            <div className="text-sm text-gray-500 dark:text-white/40">{user.email}</div>
+            <div className="mt-3 grid gap-2 text-sm text-gray-600 dark:text-white/50">
+              <div><span className="font-medium">{vi ? 'Nhóm:' : 'Team:'}</span> {user.teamId}</div>
+              <div><span className="font-medium">{vi ? 'Ngày tham gia:' : 'Joined:'}</span> {new Date(user.joinedAt).toLocaleDateString(vi ? 'vi-VN' : 'en-US')}</div>
+            </div>
+            <div className="mt-3">
+              <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-200">
+                {vi ? 'Vai trò được gán' : 'Assigned role'}
+              </label>
+              <select
+                value={user.role}
+                onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 p-2.5 text-sm text-gray-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-white"
+                aria-label={vi ? 'Chọn vai trò' : 'Select role'}
+              >
+                {(Object.keys(ROLE_INFO) as Array<keyof typeof ROLE_INFO>).map(role => (
+                  <option key={role} value={role}>
+                    {vi ? ROLE_INFO[role].vi : ROLE_INFO[role].en}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-white/[0.07] dark:bg-[#171b29] md:block">
+        <table className="w-full min-w-[720px] border-collapse text-left">
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50 dark:border-white/[0.06] dark:bg-white/[0.03]">
               <th className="px-6 py-4 text-sm font-semibold text-gray-600 dark:text-white/50">

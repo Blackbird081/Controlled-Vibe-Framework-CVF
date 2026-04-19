@@ -4,6 +4,7 @@ import { useMemo, useState, useTransition } from 'react';
 
 import { applyDLPPatterns, getPresetDLPPatterns } from '@/lib/dlp-filter-core';
 import type { DLPPatternRecord } from '@/lib/policy-events';
+import { useLanguage } from '@/lib/i18n';
 
 function createPatternId(): string {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
@@ -14,6 +15,8 @@ function createPatternId(): string {
 }
 
 export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatternRecord[] }) {
+  const { language } = useLanguage();
+  const vi = language === 'vi';
   const presetPatterns = useMemo(() => getPresetDLPPatterns(), []);
   const [patterns, setPatterns] = useState<DLPPatternRecord[]>(initialPatterns);
   const [label, setLabel] = useState('');
@@ -34,14 +37,14 @@ export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatt
     const nextRegex = regex.trim();
 
     if (!nextLabel || !nextRegex) {
-      setError('Label and regex are required.');
+      setError(vi ? 'Bạn cần nhập tên nhãn và biểu thức regex.' : 'Label and regex are required.');
       return;
     }
 
     try {
       new RegExp(nextRegex, 'u');
     } catch {
-      setError('Regex is invalid. Please fix it before adding.');
+      setError(vi ? 'Regex chưa hợp lệ. Hãy sửa trước khi thêm.' : 'Regex is invalid. Please fix it before adding.');
       return;
     }
 
@@ -75,13 +78,13 @@ export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatt
         const payload = await response.json();
 
         if (!response.ok || !payload?.success) {
-          throw new Error(payload?.error || 'Failed to save DLP policy.');
+          throw new Error(payload?.error || (vi ? 'Không thể lưu chính sách bảo vệ dữ liệu.' : 'Failed to save DLP policy.'));
         }
 
         setPatterns(payload.data.patterns ?? patterns);
-        setSuccess('DLP policy saved.');
+        setSuccess(vi ? 'Đã lưu chính sách bảo vệ dữ liệu.' : 'DLP policy saved.');
       } catch (saveError) {
-        setError(saveError instanceof Error ? saveError.message : 'Failed to save DLP policy.');
+        setError(saveError instanceof Error ? saveError.message : (vi ? 'Không thể lưu chính sách bảo vệ dữ liệu.' : 'Failed to save DLP policy.'));
       }
     });
   };
@@ -91,10 +94,12 @@ export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatt
       <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <div className="text-sm text-gray-500">Built-in presets</div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Always-on DLP patterns</h3>
+            <div className="text-sm text-gray-500">{vi ? 'Mẫu có sẵn' : 'Built-in presets'}</div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {vi ? 'Luật bảo vệ dữ liệu luôn bật' : 'Always-on DLP patterns'}
+            </h3>
           </div>
-          <div className="text-sm text-gray-500">Read-only • cannot be disabled</div>
+          <div className="text-sm text-gray-500">{vi ? 'Chỉ xem • không thể tắt' : 'Read-only • cannot be disabled'}</div>
         </div>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {presetPatterns.map(pattern => (
@@ -108,21 +113,23 @@ export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatt
 
       <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div>
-          <div className="text-sm text-gray-500">Custom rules</div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Append custom regex patterns</h3>
+          <div className="text-sm text-gray-500">{vi ? 'Luật tùy chỉnh' : 'Custom rules'}</div>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+            {vi ? 'Thêm quy tắc kiểm tra riêng' : 'Add custom regex patterns'}
+          </h3>
         </div>
 
-        <div className="mt-4 grid gap-3 md:grid-cols-[1fr_2fr_auto]">
+        <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_2fr_auto]">
           <input
             value={label}
             onChange={event => setLabel(event.target.value)}
-            placeholder="Label"
+            placeholder={vi ? 'Tên nhãn' : 'Label'}
             className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none focus:border-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           <input
             value={regex}
             onChange={event => setRegex(event.target.value)}
-            placeholder="Regex pattern"
+            placeholder={vi ? 'Biểu thức regex' : 'Regex pattern'}
             className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none focus:border-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           <label className="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-3 text-sm dark:border-gray-700">
@@ -132,7 +139,7 @@ export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatt
               onChange={event => setEnabled(event.target.checked)}
               className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
             />
-            Enabled
+            {vi ? 'Bật' : 'Enabled'}
           </label>
         </div>
 
@@ -142,7 +149,7 @@ export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatt
             onClick={addPattern}
             className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700"
           >
-            Add Pattern
+            {vi ? 'Thêm quy tắc' : 'Add pattern'}
           </button>
           <button
             type="button"
@@ -150,14 +157,14 @@ export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatt
             disabled={isPending}
             className="rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
           >
-            {isPending ? 'Saving...' : 'Save DLP Policy'}
+            {isPending ? (vi ? 'Đang lưu...' : 'Saving...') : (vi ? 'Lưu chính sách bảo vệ' : 'Save DLP policy')}
           </button>
         </div>
 
         <div className="mt-4 space-y-3">
           {patterns.length === 0 && (
             <div className="rounded-xl border border-dashed border-gray-300 px-4 py-6 text-sm text-gray-500 dark:border-gray-700">
-              No custom patterns yet.
+              {vi ? 'Chưa có quy tắc tùy chỉnh nào.' : 'No custom patterns yet.'}
             </div>
           )}
           {patterns.map(pattern => (
@@ -182,14 +189,14 @@ export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatt
                       }}
                       className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                     />
-                    Enabled
+                    {vi ? 'Bật' : 'Enabled'}
                   </label>
                   <button
                     type="button"
                     onClick={() => setPatterns(current => current.filter(candidate => candidate.id !== pattern.id))}
                     className="text-sm font-medium text-rose-600 transition hover:text-rose-700"
                   >
-                    Remove
+                    {vi ? 'Xóa' : 'Remove'}
                   </button>
                 </div>
               </div>
@@ -215,25 +222,27 @@ export function AdminDLPControls({ initialPatterns }: { initialPatterns: DLPPatt
 
       <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div>
-          <div className="text-sm text-gray-500">Preview</div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Client-side masking preview</h3>
+          <div className="text-sm text-gray-500">{vi ? 'Xem trước' : 'Preview'}</div>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+            {vi ? 'Xem trước nội dung sau khi che dữ liệu' : 'Client-side masking preview'}
+          </h3>
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-2">
           <textarea
             value={previewInput}
             onChange={event => setPreviewInput(event.target.value)}
-            placeholder="Paste text containing sensitive values to preview masking..."
+            placeholder={vi ? 'Dán nội dung có dữ liệu nhạy cảm để xem hệ thống che như thế nào...' : 'Paste text containing sensitive values to preview masking...'}
             className="min-h-56 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none focus:border-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           <div className="min-h-56 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
-            <pre className="whitespace-pre-wrap break-words font-sans">{preview.redacted || 'Masked output appears here.'}</pre>
+            <pre className="whitespace-pre-wrap break-words font-sans">{preview.redacted || (vi ? 'Kết quả sau khi che dữ liệu sẽ xuất hiện ở đây.' : 'Masked output appears here.')}</pre>
           </div>
         </div>
 
         <div className="mt-4 rounded-xl border border-dashed border-gray-300 px-4 py-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-300">
-          Matches detected: {preview.matches.length === 0
-            ? 'None'
+          {vi ? 'Kết quả phát hiện:' : 'Matches detected:'} {preview.matches.length === 0
+            ? (vi ? 'Không có' : 'None')
             : preview.matches.map(match => `${match.label} ×${match.matchCount}`).join(', ')}
         </div>
       </section>

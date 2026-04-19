@@ -62,23 +62,22 @@ export default function InsideVibCode({ lang }: { lang: 'vi' | 'en' }) {
         </div>
 
         {/* Governance Pipeline Visualizer */}
-        <div className="rounded-2xl border border-gray-800 bg-gray-900 p-6">
+        <div className="rounded-2xl border border-gray-800 bg-gray-900 p-4 sm:p-6">
           <p className="mb-5 text-center text-sm font-semibold text-gray-400">
             {lang === 'vi'
               ? 'CVF Governance Pipeline — bấm vào bước để xem chi tiết'
               : 'CVF Governance Pipeline — click a step for details'}
           </p>
 
-          {/* Tab Switcher */}
-          <div className="mb-5 flex rounded-xl bg-gray-800 p-1">
+          <div className="mb-5 grid gap-2 sm:flex sm:rounded-xl sm:bg-gray-800 sm:p-1">
             {TABS.map(t => (
               <button
                 key={t.key}
                 onClick={() => setTab(t.key)}
-                className={`flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition-all ${
+                className={`rounded-lg px-3 py-2 text-xs font-semibold transition-all sm:flex-1 ${
                   tab === t.key
                     ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-gray-400 hover:text-gray-200'
+                    : 'bg-gray-800 text-gray-400 hover:text-gray-200 sm:bg-transparent'
                 }`}
               >
                 {lang === 'vi' ? t.label.vi : t.label.en}

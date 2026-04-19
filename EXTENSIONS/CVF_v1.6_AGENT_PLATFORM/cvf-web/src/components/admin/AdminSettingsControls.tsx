@@ -60,12 +60,12 @@ export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMCo
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div>
-        <div className="text-sm text-gray-500">{vi ? 'Tích hợp SIEM' : 'SIEM Integration'}</div>
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{vi ? 'Xuất Webhook' : 'Webhook export'}</h3>
+        <div className="text-sm text-gray-500">{vi ? 'Kết nối SIEM' : 'SIEM integration'}</div>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{vi ? 'Gửi sự kiện ra ngoài' : 'Outbound event forwarding'}</h3>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           {vi
-            ? 'Chuyển tiếp sự kiện control-plane đến Splunk HEC hoặc endpoint tương thích Elastic với ký HMAC.'
-            : 'Forward control-plane events to Splunk HEC or Elastic-compatible endpoints with HMAC signing.'}
+            ? 'Gửi nhật ký quản trị và chi phí đến Splunk HEC hoặc endpoint tương thích Elastic, kèm chữ ký HMAC để xác thực.'
+            : 'Forward admin and cost events to Splunk HEC or Elastic-compatible endpoints with HMAC signing.'}
         </p>
       </div>
 
@@ -85,7 +85,7 @@ export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMCo
           <input
             value={config.signingSecret}
             onChange={event => setConfig(current => ({ ...current, signingSecret: event.target.value }))}
-            placeholder="Shared HMAC secret"
+            placeholder={vi ? 'Khóa HMAC dùng chung' : 'Shared HMAC secret'}
             className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none focus:border-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </label>
@@ -121,7 +121,7 @@ export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMCo
           disabled={isPending}
           className="rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
         >
-          {isPending ? (vi ? 'Đang lưu...' : 'Saving...') : (vi ? 'Lưu cấu hình SIEM' : 'Save SIEM Config')}
+          {isPending ? (vi ? 'Đang lưu...' : 'Saving...') : (vi ? 'Lưu cấu hình SIEM' : 'Save SIEM settings')}
         </button>
       </div>
 

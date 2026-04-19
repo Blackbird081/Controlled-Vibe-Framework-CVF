@@ -1,5 +1,6 @@
 import { AdminKnowledgePartitioningControls } from '@/components/admin/AdminKnowledgePartitioningControls';
 import { AdminToolPolicyControls } from '@/components/admin/AdminToolPolicyControls';
+import { AdminToolRegistryHeader } from '@/components/admin/AdminToolRegistryHeader';
 import { requireAdminSession } from '@/lib/admin-session';
 import { listKnowledgeCollections } from '@/lib/knowledge-retrieval';
 import { MOCK_ORGANIZATIONS, MOCK_TEAMS } from '@/lib/mock-enterprise-db';
@@ -17,13 +18,7 @@ export default async function AdminToolRegistryPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <div className="text-sm text-gray-500 dark:text-gray-400">Phase D • Runtime policy + knowledge partitioning</div>
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mt-1">Tool Registry Controls</h2>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Dynamic tool inventory with role policy overrides and knowledge collection scoping persisted through the append-only control-plane store.
-        </p>
-      </div>
+      <AdminToolRegistryHeader />
 
       <AdminToolPolicyControls initialTools={tools} />
 

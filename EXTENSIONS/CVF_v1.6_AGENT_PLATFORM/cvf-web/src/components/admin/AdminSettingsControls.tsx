@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useLanguage } from '@/lib/i18n';
 
 import type { SIEMEventFilter } from '@/lib/policy-events';
 
@@ -11,13 +12,16 @@ type SIEMConfigView = {
   eventTypes: SIEMEventFilter;
 };
 
-const EVENT_TYPE_OPTIONS: Array<{ value: SIEMEventFilter; label: string }> = [
-  { value: 'audit', label: 'Audit only' },
-  { value: 'cost', label: 'Cost only' },
-  { value: 'all', label: 'All events' },
-];
+const EVENT_TYPE_LABELS: Record<SIEMEventFilter, { en: string; vi: string }> = {
+  audit: { en: 'Audit only', vi: 'Chỉ kiểm toán' },
+  cost:  { en: 'Cost only',  vi: 'Chỉ chi phí' },
+  all:   { en: 'All events', vi: 'Tất cả sự kiện' },
+};
+const EVENT_TYPE_VALUES: SIEMEventFilter[] = ['audit', 'cost', 'all'];
 
 export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMConfigView }) {
+  const { language } = useLanguage();
+  const vi = language === 'vi';
   const [config, setConfig] = useState(initialConfig);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -46,9 +50,9 @@ export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMCo
           enabled: payload.data.enabled,
           eventTypes: payload.data.eventTypes,
         });
-        setSuccess('SIEM configuration saved.');
+        setSuccess(vi ? 'Đã lưu cấu hình SIEM.' : 'SIEM configuration saved.');
       } catch (saveError) {
-        setError(saveError instanceof Error ? saveError.message : 'Failed to save SIEM configuration.');
+        setError(saveError instanceof Error ? saveError.message : (vi ? 'Không thể lưu cấu hình SIEM.' : 'Failed to save SIEM configuration.'));
       }
     });
   };
@@ -56,10 +60,12 @@ export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMCo
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div>
-        <div className="text-sm text-gray-500">SIEM Integration</div>
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Webhook export</h3>
+        <div className="text-sm text-gray-500">{vi ? 'Tích hợp SIEM' : 'SIEM Integration'}</div>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{vi ? 'Xuất Webhook' : 'Webhook export'}</h3>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          Forward control-plane events to Splunk HEC or Elastic-compatible endpoints with HMAC signing.
+          {vi
+            ? 'Chuyển tiếp sự kiện control-plane đến Splunk HEC hoặc endpoint tương thích Elastic với ký HMAC.'
+            : 'Forward control-plane events to Splunk HEC or Elastic-compatible endpoints with HMAC signing.'}
         </p>
       </div>
 
@@ -75,7 +81,7 @@ export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMCo
         </label>
 
         <label className="grid gap-2 text-sm">
-          <span className="font-medium text-gray-700 dark:text-gray-200">Signing secret</span>
+          <span className="font-medium text-gray-700 dark:text-gray-200">{vi ? 'Khóa bí mật ký' : 'Signing secret'}</span>
           <input
             value={config.signingSecret}
             onChange={event => setConfig(current => ({ ...current, signingSecret: event.target.value }))}
@@ -85,14 +91,14 @@ export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMCo
         </label>
 
         <label className="grid gap-2 text-sm">
-          <span className="font-medium text-gray-700 dark:text-gray-200">Event filter</span>
+          <span className="font-medium text-gray-700 dark:text-gray-200">{vi ? 'Bộ lọc sự kiện' : 'Event filter'}</span>
           <select
             value={config.eventTypes}
             onChange={event => setConfig(current => ({ ...current, eventTypes: event.target.value as SIEMEventFilter }))}
             className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none focus:border-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
-            {EVENT_TYPE_OPTIONS.map(option => (
-              <option key={option.value} value={option.value}>{option.label}</option>
+            {EVENT_TYPE_VALUES.map(val => (
+              <option key={val} value={val}>{vi ? EVENT_TYPE_LABELS[val].vi : EVENT_TYPE_LABELS[val].en}</option>
             ))}
           </select>
         </label>
@@ -104,7 +110,7 @@ export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMCo
             onChange={event => setConfig(current => ({ ...current, enabled: event.target.checked }))}
             className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
           />
-          Enable SIEM forwarding
+          {vi ? 'Bật chuyển tiếp SIEM' : 'Enable SIEM forwarding'}
         </label>
       </div>
 
@@ -115,7 +121,7 @@ export function AdminSettingsControls({ initialConfig }: { initialConfig: SIEMCo
           disabled={isPending}
           className="rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
         >
-          {isPending ? 'Saving...' : 'Save SIEM Config'}
+          {isPending ? (vi ? 'Đang lưu...' : 'Saving...') : (vi ? 'Lưu cấu hình SIEM' : 'Save SIEM Config')}
         </button>
       </div>
 

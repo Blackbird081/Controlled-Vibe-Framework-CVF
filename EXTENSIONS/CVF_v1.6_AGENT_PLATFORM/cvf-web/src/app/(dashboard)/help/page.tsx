@@ -24,8 +24,8 @@ export default function HelpPage() {
             <SurfaceTopBar
                 title={language === 'vi' ? 'Trung tâm trợ giúp' : 'Help Center'}
                 subtitle={language === 'vi'
-                    ? 'Giữ nội dung hướng dẫn hiện có nhưng trình bày lại thành một surface gọn, dễ đọc và dễ quay lại.'
-                    : 'Keep the existing guidance content while presenting it in a cleaner, more readable support surface.'}
+                    ? 'Hướng dẫn sử dụng từng tính năng — từ template đơn giản đến quy trình AI nâng cao.'
+                    : 'Guides for every feature — from simple templates to advanced AI workflows.'}
                 actions={(
                     <Link
                         href="/docs"

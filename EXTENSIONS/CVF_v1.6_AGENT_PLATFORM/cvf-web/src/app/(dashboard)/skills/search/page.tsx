@@ -89,8 +89,8 @@ function SkillSearchPageInner() {
             <SurfaceTopBar
                 title={language === 'vi' ? 'Tìm kiếm skill & lập kế hoạch' : 'Skill Search & Planner'}
                 subtitle={language === 'vi'
-                    ? 'Giữ nguyên BM25 + planner flow, chỉ nâng shell, framing và khả năng đọc nhanh.'
-                    : 'Keep the BM25 and planner flow intact while improving shell, framing, and scannability.'}
+                    ? 'Tìm skill theo từ khóa hoặc xây dựng kế hoạch làm việc AI theo từng bước.'
+                    : 'Search skills by keyword or build a step-by-step AI work plan.'}
                 actions={(
                     <Link
                         href="/skills"

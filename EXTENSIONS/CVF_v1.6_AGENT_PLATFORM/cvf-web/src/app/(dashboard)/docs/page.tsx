@@ -66,8 +66,8 @@ export default function DocsPage() {
             <SurfaceTopBar
                 title={language === 'vi' ? 'Tài liệu' : 'Documentation'}
                 subtitle={language === 'vi'
-                    ? 'Giữ nguyên doc metadata và slug routing, nhưng trình bày lại thành một thư viện nội bộ đồng nhất với app shell.'
-                    : 'Keep the same doc metadata and slug routing while presenting it as a stronger in-shell library.'}
+                    ? 'Tài liệu đầy đủ về CVF — từ bắt đầu nhanh đến kiến trúc chuyên sâu.'
+                    : 'Complete CVF documentation — from quick start to deep architecture.'}
                 actions={(
                     <Link
                         href="/help"
@@ -89,8 +89,8 @@ export default function DocsPage() {
                         </h2>
                         <p className="mt-3 text-base leading-7 text-slate-600 dark:text-white/55">
                             {language === 'vi'
-                                ? 'Mỗi category, doc card và CTA vẫn dùng chính metadata đang có. Chỉ thay đổi hierarchy và polish.'
-                                : 'Every category, doc card, and CTA still uses the same metadata. Only the hierarchy and polish change.'}
+                                ? 'Duyệt theo danh mục, đọc chi tiết từng chủ đề, hoặc dùng bộ lọc để đến đúng trang bạn cần.'
+                                : 'Browse by category, read each topic in depth, or use the filter to go straight to what you need.'}
                         </p>
                     </div>
                     <div className="mt-6 flex flex-wrap gap-2">

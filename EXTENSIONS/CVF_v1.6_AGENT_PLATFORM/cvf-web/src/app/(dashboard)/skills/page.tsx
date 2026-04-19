@@ -83,8 +83,8 @@ export default function SkillsPage() {
             <SurfaceTopBar
                 title={language === 'vi' ? 'Kỹ năng AI' : 'Skills'}
                 subtitle={language === 'vi'
-                    ? 'Duyệt thư viện skill với cùng app shell, typography và hierarchy như phần còn lại của CVF.'
-                    : 'Browse the skill library inside the same shell, typography, and hierarchy as the rest of CVF.'}
+                    ? 'Khám phá kỹ năng AI đã được kiểm duyệt — tìm đúng skill cho công việc của bạn.'
+                    : 'Explore curated AI skills — find the right one for your task.'}
                 actions={(
                     <Link
                         href="/marketplace"
@@ -101,21 +101,21 @@ export default function SkillsPage() {
                         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                             <div>
                                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-white/35">
-                                    {language === 'vi' ? 'Workspace đã govern' : 'Governed workspace'}
+                                    {language === 'vi' ? 'Thư viện kỹ năng' : 'Skill Library'}
                                 </div>
                                 <h2 className="mt-2 text-4xl font-semibold tracking-[-0.05em] text-slate-950 dark:text-white">
-                                    {language === 'vi' ? 'Skill library với trình bày chuyên nghiệp hơn' : 'A more polished skill library'}
+                                    {language === 'vi' ? 'Kỹ năng AI cho mọi loại công việc' : 'AI skills for every type of work'}
                                 </h2>
                                 <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600 dark:text-white/55">
                                     {language === 'vi'
-                                        ? 'Giữ nguyên data load, search, routing chi tiết và CVF-linked behaviors; chỉ nâng cách nhìn, khoảng trắng, card hierarchy và top-level framing.'
-                                        : 'The data load, search, detail routing, and CVF-linked behaviors stay intact; only the framing, spacing, and hierarchy become stronger.'}
+                                        ? 'Mỗi skill đã được kiểm duyệt và gắn với template sẵn có. Chọn skill, điền form, nhận kết quả đã quản trị.'
+                                        : 'Every skill is curated and linked to ready-made templates. Pick a skill, fill the form, get a governed result.'}
                                 </p>
                             </div>
                             <div className="rounded-[24px] border border-slate-200 bg-white px-5 py-4 text-sm text-slate-500 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/45">
                                 {language === 'vi'
-                                        ? 'Trang chi tiết skill vẫn mở theo route hiện có để không đổi luồng data.'
-                                        : 'Skill details still open through the existing routes so the data flow does not change.'}
+                                        ? 'Mỗi skill có trang chi tiết đầy đủ — xem ví dụ, yêu cầu và cách sử dụng.'
+                                        : 'Each skill has a full detail page — see examples, requirements, and usage tips.'}
                             </div>
                         </div>
 

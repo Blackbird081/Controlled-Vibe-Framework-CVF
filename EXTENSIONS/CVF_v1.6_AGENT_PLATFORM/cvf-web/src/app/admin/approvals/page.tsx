@@ -1,8 +1,7 @@
-import { redirect } from 'next/navigation';
-
 import { requireAdminSession } from '@/lib/admin-session';
+import { ApprovalInbox } from '@/components/ApprovalInbox';
 
 export default async function AdminApprovalsPage() {
   await requireAdminSession('/admin/approvals');
-  redirect('/approvals?riskLevel=R3');
+  return <ApprovalInbox homePath="/admin/finops" />;
 }

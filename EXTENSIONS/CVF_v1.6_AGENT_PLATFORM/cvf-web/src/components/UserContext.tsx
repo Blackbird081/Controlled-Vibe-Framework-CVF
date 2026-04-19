@@ -94,7 +94,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
     if (!isLoaded) return null;
 
     return (
-        <div className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 ${compact ? 'p-4' : 'p-6'}`}>
+        <div className={`bg-white dark:bg-[#1a1d2e] rounded-xl border border-gray-200 dark:border-white/[0.07] ${compact ? 'p-4' : 'p-6'}`}>
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                     <span className="text-2xl">👤</span>
@@ -105,7 +105,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                 {onClose && (
                     <button
                         onClick={onClose}
-                        className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="p-1 rounded hover:bg-gray-100 dark:hover:bg-white/[0.07]"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -128,9 +128,9 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
                         placeholder="John Doe"
-                        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 
-                                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-white/[0.07] 
+                                   bg-white dark:bg-[#1a1d2e] text-gray-900 dark:text-white
+                                   focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     />
                 </div>
 
@@ -143,9 +143,9 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                         value={formData.role}
                         onChange={(e) => handleChange('role', e.target.value)}
                         placeholder="Product Manager, Developer..."
-                        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 
-                                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-white/[0.07] 
+                                   bg-white dark:bg-[#1a1d2e] text-gray-900 dark:text-white
+                                   focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     />
                 </div>
 
@@ -158,9 +158,9 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                         value={formData.company}
                         onChange={(e) => handleChange('company', e.target.value)}
                         placeholder="TechStart Inc."
-                        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 
-                                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-white/[0.07] 
+                                   bg-white dark:bg-[#1a1d2e] text-gray-900 dark:text-white
+                                   focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     />
                 </div>
 
@@ -173,9 +173,9 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                         value={formData.industry}
                         onChange={(e) => handleChange('industry', e.target.value)}
                         placeholder="SaaS, E-commerce, Fintech..."
-                        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 
-                                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-white/[0.07] 
+                                   bg-white dark:bg-[#1a1d2e] text-gray-900 dark:text-white
+                                   focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     />
                 </div>
             </div>
@@ -189,9 +189,9 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                     value={formData.preferences}
                     onChange={(e) => handleChange('preferences', e.target.value)}
                     placeholder="Output language, format, detail level..."
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 
-                               bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                               focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-white/[0.07] 
+                               bg-white dark:bg-[#1a1d2e] text-gray-900 dark:text-white
+                               focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
             </div>
 
@@ -204,9 +204,9 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                     onChange={(e) => handleChange('customContext', e.target.value)}
                     placeholder="Additional info the AI should know..."
                     rows={3}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 
-                               bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                               focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-white/[0.07] 
+                               bg-white dark:bg-[#1a1d2e] text-gray-900 dark:text-white
+                               focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
                 />
             </div>
 
@@ -229,7 +229,7 @@ export function UserContextForm({ onClose, compact = false }: UserContextFormPro
                     )}
                     <button
                         onClick={handleSave}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
+                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg 
                                    font-medium transition-colors"
                     >
                         {t('userContext.save') || 'Save Context'}

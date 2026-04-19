@@ -74,7 +74,7 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
     }, [isMaximized]);
 
     return (
-        <div className={`flex bg-white dark:bg-gray-900 rounded-xl overflow-hidden transition-all duration-300
+        <div className={`flex bg-white dark:bg-[#0d0f1a] rounded-xl overflow-hidden transition-all duration-300
                         ${isMaximized
                 ? 'fixed inset-4 z-50 shadow-2xl'
                 : 'h-full'
@@ -83,15 +83,15 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
             {/* Sidebar Toggle for Mobile */}
             <button
                 onClick={() => setShowSidebar(!showSidebar)}
-                className="md:hidden absolute top-4 left-4 z-10 p-2 bg-gray-100 dark:bg-gray-800
-                          rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                className="md:hidden absolute top-4 left-4 z-10 p-2 bg-gray-100 dark:bg-white/[0.07]
+                          rounded-lg hover:bg-gray-200 dark:hover:bg-white/[0.07] transition-colors"
             >
                 {showSidebar ? '◀️' : '▶️'}
             </button>
 
             {/* History Sidebar */}
             <div className={`${showSidebar ? 'block' : 'hidden'} md:block 
-                            transition-all duration-300 border-r border-gray-200 dark:border-gray-700`}>
+                            transition-all duration-300 border-r border-gray-200 dark:border-white/[0.07]`}>
                 <ChatHistorySidebar
                     onSelectSession={handleSelectSession}
                     onNewChat={handleNewChat}
@@ -103,8 +103,8 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
             <div className="flex-1 flex flex-col min-w-0">
                 {/* Session Info Header */}
                 {activeSession && (
-                    <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700 
-                                   bg-gray-50 dark:bg-gray-800/50 flex items-center gap-2 text-sm">
+                    <div className="px-4 py-2 border-b border-gray-200 dark:border-white/[0.07] 
+                                   bg-gray-50 dark:bg-[#1a1d2e]/80 flex items-center gap-2 text-sm">
                         <span>
                             {activeSession.provider === 'gemini' && '✨'}
                             {activeSession.provider === 'openai' && '🤖'}

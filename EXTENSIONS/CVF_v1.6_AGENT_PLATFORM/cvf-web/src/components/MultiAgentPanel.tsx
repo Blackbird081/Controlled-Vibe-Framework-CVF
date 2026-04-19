@@ -415,9 +415,9 @@ ${directive.handoff}
     };
 
     return (
-        <div className="h-full flex flex-col bg-white dark:bg-gray-900">
+        <div className="h-full flex flex-col bg-white dark:bg-[#0d0f1a]">
             {/* Header */}
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-white/[0.07] flex items-center justify-between">
                 <div>
                     <div className="flex items-center gap-2">
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -441,7 +441,7 @@ ${directive.handoff}
                         onClick={() => setShowGovernancePanel(prev => !prev)}
                         className={`p-2 rounded-lg transition-colors ${showGovernancePanel
                                 ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300'
-                                : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500'
+                                : 'hover:bg-gray-100 dark:hover:bg-white/[0.07] text-gray-500'
                             }`}
                         title={language === 'vi' ? 'Governance Panel' : 'Governance Panel'}
                     >
@@ -450,7 +450,7 @@ ${directive.handoff}
                     {onClose && (
                         <button
                             onClick={onClose}
-                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-white/[0.07] rounded-lg"
                         >
                             ✕
                         </button>
@@ -471,10 +471,10 @@ ${directive.handoff}
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 placeholder={ui.inputPlaceholder}
-                                className="w-full h-32 p-4 border border-gray-200 dark:border-gray-700 
-                                          rounded-xl bg-white dark:bg-gray-800 
+                                className="w-full h-32 p-4 border border-gray-200 dark:border-white/[0.07] 
+                                          rounded-xl bg-white dark:bg-[#1a1d2e] 
                                           text-gray-900 dark:text-white resize-none
-                                          focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                          focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                             />
                         </div>
 
@@ -485,7 +485,7 @@ ${directive.handoff}
                         )}
 
                         {/* GovernanceBar — CVF control mechanism */}
-                        <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800">
+                        <div className="rounded-xl border border-gray-200 dark:border-white/[0.07] p-4 bg-gray-50 dark:bg-[#1a1d2e]">
                             <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">
                                 {ui.governanceBar}
                             </h3>
@@ -503,7 +503,7 @@ ${directive.handoff}
                         </div>
 
                         {/* Multi-Agent Mode Summary */}
-                        <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800">
+                        <div className="rounded-xl border border-gray-200 dark:border-white/[0.07] p-4 bg-gray-50 dark:bg-[#1a1d2e]">
                             <div className="flex items-center justify-between mb-2">
                                 <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                                     {ui.modeSummary}
@@ -542,7 +542,7 @@ ${directive.handoff}
                                 {Object.values(AGENTS).map(agent => (
                                     <div
                                         key={agent.id}
-                                        className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg text-center"
+                                        className="p-3 bg-gray-50 dark:bg-[#1a1d2e] rounded-lg text-center"
                                     >
                                         <span className="text-2xl">{agent.icon}</span>
                                         <div className="text-sm font-medium mt-1">{agent.name}</div>
@@ -585,7 +585,7 @@ ${directive.handoff}
                                     return (
                                         <div
                                             key={agentId}
-                                            className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl"
+                                            className="p-4 bg-gray-50 dark:bg-[#1a1d2e] rounded-xl"
                                         >
                                             <div className="flex items-center gap-2 mb-2">
                                                 <span>{agent?.icon}</span>
@@ -605,16 +605,16 @@ ${directive.handoff}
                             <div className="flex gap-3">
                                 <button
                                     onClick={handleReset}
-                                    className="px-6 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-medium
-                                              hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                    className="px-6 py-2 bg-gray-200 dark:bg-white/[0.07] rounded-lg font-medium
+                                              hover:bg-gray-300 dark:hover:bg-white/[0.1] transition-colors"
                                 >
                                     {ui.startNew}
                                 </button>
                                 {onClose && (
                                     <button
                                         onClick={onClose}
-                                        className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium
-                                                  hover:bg-blue-700 transition-colors"
+                                        className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium
+                                                  hover:bg-indigo-700 transition-colors"
                                     >
                                         {ui.done}
                                     </button>
@@ -623,7 +623,7 @@ ${directive.handoff}
                         )}
 
                         {isRunning && (
-                            <div className="flex items-center gap-3 text-blue-600">
+                            <div className="flex items-center gap-3 text-indigo-600">
                                 <div className="animate-spin">⏳</div>
                                 <span>{ui.processing}</span>
                             </div>
@@ -648,8 +648,8 @@ export function MultiAgentButton({ onClick }: { onClick: () => void }) {
     return (
         <button
             onClick={onClick}
-            className="px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white 
-                      rounded-lg font-medium flex items-center gap-2 hover:opacity-90 transition-opacity"
+            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white 
+                      rounded-lg font-medium flex items-center gap-2 transition-colors"
         >
             <span>🤖</span>
             <span>Multi-Agent</span>

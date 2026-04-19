@@ -1,5 +1,8 @@
 import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
+import { loadLocalEnvFiles } from './load-local-env';
+
+loadLocalEnvFiles();
 
 afterEach(() => {
     cleanup();

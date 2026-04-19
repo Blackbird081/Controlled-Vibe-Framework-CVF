@@ -375,9 +375,9 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
     ];
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 max-w-2xl mx-auto">
+        <div className="bg-white dark:bg-[#1a1d2e] rounded-xl border border-gray-200 dark:border-white/[0.07] max-w-2xl mx-auto">
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-white/[0.07]">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                     {l.title}
                 </h2>
@@ -388,7 +388,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                     {onClose && (
                         <button
                             onClick={onClose}
-                            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.07]"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -399,14 +399,14 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-gray-200 dark:border-gray-700">
+            <div className="flex border-b border-gray-200 dark:border-white/[0.07]">
                 {(['providers', 'preferences', 'data'] as const).map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`flex-1 py-3 text-sm font-medium transition-colors
                             ${activeTab === tab
-                                ? 'text-blue-600 border-b-2 border-blue-600'
+                                ? 'text-indigo-600 border-b-2 border-indigo-600'
                                 : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                             }`}
                     >
@@ -425,8 +425,8 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 key={provider.id}
                                 className={`p-4 rounded-xl border-2 transition-all
                                     ${settings.providers[provider.id].enabled
-                                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                                        : 'border-gray-200 dark:border-gray-700'
+                                        ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
+                                        : 'border-gray-200 dark:border-white/[0.07]'
                                     }`}
                             >
                                 <div className="flex items-center justify-between mb-3">
@@ -462,12 +462,12 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                                 title={`Enter your ${provider.name} API key`}
                                                 aria-label={`${provider.name} API key`}
                                                 className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 
-                                                           dark:border-gray-600 bg-white dark:bg-gray-700 
+                                                           dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] 
                                                            text-gray-900 dark:text-white"
                                             />
                                             <button
                                                 onClick={() => setShowApiKey({ ...showApiKey, [provider.id]: !showApiKey[provider.id] })}
-                                                className="px-3 py-2 text-xs bg-gray-100 dark:bg-gray-600 rounded-lg"
+                                                className="px-3 py-2 text-xs bg-gray-100 dark:bg-white/[0.07] rounded-lg"
                                                 aria-label={showApiKey[provider.id] ? `Hide ${provider.name} API key` : `Show ${provider.name} API key`}
                                             >
                                                 {showApiKey[provider.id] ? l.hide : l.show}
@@ -492,7 +492,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                                 value={settings.providers[provider.id].selectedModel || AVAILABLE_MODELS[provider.id][0].id}
                                                 onChange={(e) => updateProvider(provider.id, { selectedModel: e.target.value })}
                                                 className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 
-                                                           dark:border-gray-600 bg-white dark:bg-gray-700 
+                                                           dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] 
                                                            text-gray-900 dark:text-white"
                                             >
                                                 {AVAILABLE_MODELS[provider.id].map((model) => (
@@ -515,7 +515,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                         {/* OpenClaw Adapter */}
                         <div className={`p-4 rounded-xl border-2 transition-all ${settings.preferences.openClawEnabled
                             ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
-                            : 'border-gray-200 dark:border-gray-700'
+                            : 'border-gray-200 dark:border-white/[0.07]'
                             }`}>
                             <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center gap-2">
@@ -553,7 +553,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                         value={settings.preferences.openClawMode}
                                         onChange={(e) => updatePreferences({ openClawMode: e.target.value as OpenClawMode })}
                                         className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200
-                                                   dark:border-gray-600 bg-white dark:bg-gray-700
+                                                   dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]
                                                    text-gray-900 dark:text-white"
                                     >
                                         <option value="proposal-only">📝 {language === 'vi' ? 'Chỉ đề xuất' : 'Proposal Only'}</option>
@@ -674,7 +674,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 <button
                                     onClick={() => updatePreferences({ autoSaveHistory: !settings.preferences.autoSaveHistory })}
                                     className={`w-12 h-6 rounded-full transition-colors ${settings.preferences.autoSaveHistory
-                                        ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                                        ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'
                                         }`}
                                 >
                                     <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.preferences.autoSaveHistory ? 'translate-x-6' : 'translate-x-0.5'
@@ -687,7 +687,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 <button
                                     onClick={() => updatePreferences({ showWelcomeTour: !settings.preferences.showWelcomeTour })}
                                     className={`w-12 h-6 rounded-full transition-colors ${settings.preferences.showWelcomeTour
-                                        ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                                        ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'
                                         }`}
                                 >
                                     <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.preferences.showWelcomeTour ? 'translate-x-6' : 'translate-x-0.5'
@@ -700,7 +700,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 <button
                                     onClick={() => updatePreferences({ analyticsEnabled: !settings.preferences.analyticsEnabled })}
                                     className={`w-12 h-6 rounded-full transition-colors ${settings.preferences.analyticsEnabled
-                                        ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                                        ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'
                                         }`}
                                 >
                                     <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.preferences.analyticsEnabled ? 'translate-x-6' : 'translate-x-0.5'
@@ -716,14 +716,14 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                     <div className="space-y-4">
                         <button
                             onClick={exportSettings}
-                            className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg
+                            className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg
                                        font-medium transition-colors flex items-center justify-center gap-2"
                         >
                             <span>💾</span> {l.export}
                         </button>
 
-                        <label className="block w-full py-3 px-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 
-                                          dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg
+                        <label className="block w-full py-3 px-4 bg-gray-100 dark:bg-white/[0.07] hover:bg-gray-200 
+                                          dark:hover:bg-white/[0.1] text-gray-700 dark:text-gray-300 rounded-lg
                                           font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer">
                             <span>📂</span> {l.import}
                             <input
@@ -734,7 +734,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                             />
                         </label>
 
-                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div className="pt-4 border-t border-gray-200 dark:border-white/[0.07]">
                             <button
                                 onClick={() => {
                                     if (confirm(l.warningReset)) {

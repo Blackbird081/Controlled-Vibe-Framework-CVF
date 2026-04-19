@@ -29,11 +29,11 @@ export default function InsideVibCode({ lang }: { lang: 'vi' | 'en' }) {
             {lang === 'vi' ? 'Bên trong Vibe Coding' : 'Inside Vibe Coding'}
           </p>
           <h2 className="text-3xl font-extrabold font-serif-display text-white md:text-4xl">
-            {lang === 'vi' ? 'Kiến trúc đặt con người làm trung tâm' : 'Human-centered architecture'}
+            {lang === 'vi' ? 'Kiến trúc AI lấy con người làm trọng tâm kiểm soát' : 'Human-Governed AI Architecture'}
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-gray-400">
             {lang === 'vi'
-              ? 'Mỗi yêu cầu đi qua governance pipeline — không có AI nào chạy tự do không kiểm soát.'
+              ? 'Tất cả yêu cầu đều đi qua governance pipeline — không có AI nào chạy tự do không kiểm soát.'
               : 'Every request goes through a governance pipeline — no AI runs unchecked.'}
           </p>
         </div>

@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google"
 import type { NextAuthConfig, Session, User } from "next-auth"
 import type { JWT } from "next-auth/jwt"
 import type { TeamRole } from "cvf-guard-contract/enterprise"
-import { findMockUserByUsername } from "@/lib/mock-enterprise-db"
+import { findMockUserByUsername, normalizeDisplayName } from "@/lib/mock-enterprise-db"
 
 type AuthenticatedUser = User & {
   role: TeamRole;
@@ -82,6 +82,7 @@ export const nextAuthConfig = {
       if (user) {
         const appToken = token as AppJwt;
         const authenticatedUser = user as AuthenticatedUser;
+        token.name = normalizeDisplayName(authenticatedUser.name) ?? token.name;
         appToken.role = authenticatedUser.role ?? "developer";
         appToken.userId = authenticatedUser.id;
         appToken.orgId = authenticatedUser.orgId ?? "org_cvf";
@@ -93,6 +94,7 @@ export const nextAuthConfig = {
       if (session.user) {
         const sessionUser = session.user as SessionUser;
         const appToken = token as AppJwt;
+        sessionUser.name = normalizeDisplayName(token.name) ?? sessionUser.name;
         sessionUser.role = appToken.role ?? "developer";
         sessionUser.userId = appToken.userId;
         sessionUser.orgId = appToken.orgId;

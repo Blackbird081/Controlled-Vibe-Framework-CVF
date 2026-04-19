@@ -71,14 +71,14 @@ export default function GovernancePage() {
             </div>
 
             {/* Tab Navigation */}
-            <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl overflow-x-auto scrollbar-hide max-w-full">
+            <div className="flex gap-1 bg-gray-100 dark:bg-[#1a1d2e] p-1 rounded-xl overflow-x-auto scrollbar-hide max-w-full">
                 {tabs.map(tab => (
                     <button
                         key={tab.key}
                         onClick={() => setActiveTab(tab.key)}
                         className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all whitespace-nowrap ${
                             activeTab === tab.key
-                                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                                ? 'bg-white dark:bg-white/[0.1] text-gray-900 dark:text-white shadow-sm'
                                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                         }`}
                     >
@@ -117,7 +117,7 @@ export default function GovernancePage() {
                     {/* Link to simulation */}
                     <a
                         href="/simulation"
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-950/50 transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/30 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-950/50 transition-colors"
                     >
                         {l.goSimulation}
                     </a>
@@ -125,13 +125,13 @@ export default function GovernancePage() {
             )}
 
             {activeTab === 'ledger' && (
-                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                <div className="bg-white dark:bg-[#1a1d2e] rounded-xl border border-gray-200 dark:border-white/[0.07] p-4">
                     <LedgerExplorer />
                 </div>
             )}
 
             {activeTab === 'approval' && (
-                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                <div className="bg-white dark:bg-[#1a1d2e] rounded-xl border border-gray-200 dark:border-white/[0.07] p-4">
                     <ApprovalPanel />
                 </div>
             )}

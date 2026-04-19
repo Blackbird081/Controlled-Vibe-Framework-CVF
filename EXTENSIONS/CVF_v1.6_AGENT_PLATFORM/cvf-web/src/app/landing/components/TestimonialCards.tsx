@@ -10,7 +10,7 @@ type Card = {
 const CARDS: Card[] = [
   {
     quote: {
-      vi: 'CVF giúp tôi tự làm trang web giới thiệu quán chỉ trong một ngày mà không cần thuê thợ sửa code. Tiết kiệm được bao nhiêu chi phí!',
+      vi: 'CVF giúp tôi làm trang web giới thiệu quán chỉ trong một ngày mà không cần thuê thợ sửa code. Tiết kiệm được bao nhiêu chi phí!',
       en: 'CVF helped me build a website for my restaurant in just one day without hiring a developer. It saved me so much money!',
     },
     name: 'Minh Tuấn',
@@ -24,9 +24,9 @@ const CARDS: Card[] = [
       vi: 'Tôi đã thử nhiều công cụ AI nhưng quy trình quản trị và kiểm soát của CVF khiến tôi tin tưởng hơn hẳn.',
       en: "I’ve tried many AI tools, but CVF’s governance and control processes give me far more confidence.",
     },
-    name: 'Lan Hương',
+    name: 'Hoàng Thiện',
     role: { vi: 'Product Manager, Hồ Chí Minh', en: 'Product Manager, Ho Chi Minh' },
-    initials: 'LH',
+    initials: 'HT',
     bg: 'bg-[#e0f2fe]',
     avatarBg: 'bg-sky-500',
   },
@@ -35,9 +35,9 @@ const CARDS: Card[] = [
       vi: 'Wizard 8 bước cực kỳ trực quan. Tôi đã hoàn thiện bản mẫu (prototype) đầy đủ tính năng chỉ trong 30 phút. Rất ấn tượng!',
       en: 'The 8-step Wizard is incredibly intuitive. I built a fully functional prototype in just 30 minutes. Impressive!',
     },
-    name: 'Phúc Thịnh',
+    name: 'Danh Chấn',
     role: { vi: 'Startup Founder, Đà Nẵng', en: 'Startup Founder, Da Nang' },
-    initials: 'PT',
+    initials: 'DC',
     bg: 'bg-[#fce7f3]',
     avatarBg: 'bg-pink-500',
   },

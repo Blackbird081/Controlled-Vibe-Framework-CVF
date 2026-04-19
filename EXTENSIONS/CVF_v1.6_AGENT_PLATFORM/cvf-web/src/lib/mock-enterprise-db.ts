@@ -41,7 +41,7 @@ export const MOCK_USERS: UserRecord[] = [
   {
     id: 'usr_2',
     username: 'admin',
-    name: 'Alice Admin',
+    name: 'Blackbird',
     email: 'admin@cvf.local',
     role: 'admin',
     orgId: 'org_cvf',
@@ -90,4 +90,10 @@ export function findMockUserByEmail(email: string): UserRecord | undefined {
 
 export function findMockUserById(id: string): UserRecord | undefined {
   return MOCK_USERS.find(user => user.id === id);
+}
+
+export function normalizeDisplayName(name?: string | null): string | undefined {
+  if (!name) return undefined;
+  if (name === 'Alice Admin') return 'Blackbird';
+  return name;
 }

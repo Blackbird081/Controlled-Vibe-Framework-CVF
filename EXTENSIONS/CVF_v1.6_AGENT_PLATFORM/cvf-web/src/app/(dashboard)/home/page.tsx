@@ -341,7 +341,7 @@ export default function HomePage() {
                                 <div>
                                     <span className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300">
                                         <Sparkles size={14} />
-                                        {language === 'vi' ? 'Workspace CVF v1.6' : 'CVF v1.6 Workspace'}
+                                        {language === 'vi' ? 'Workspace CVF' : 'CVF Workspace'}
                                     </span>
                                     <h2 className="mt-6 max-w-3xl text-balance text-4xl font-semibold tracking-[-0.05em] text-slate-950 dark:text-white sm:text-5xl">
                                         {t('main.heroLine1')}{' '}

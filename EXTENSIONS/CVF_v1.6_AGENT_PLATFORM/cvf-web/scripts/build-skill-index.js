@@ -408,17 +408,42 @@ function buildSkillIndex() {
     };
 }
 
+function normalizeIndexPayload(payload) {
+    if (!payload || typeof payload !== 'object') {
+        return payload;
+    }
+
+    const normalized = { ...payload };
+    delete normalized.generatedAt;
+    return normalized;
+}
+
 function writeIndex(indexPayload) {
     const outDir = path.resolve(BASE_DIR, 'public', 'data');
     fs.mkdirSync(outDir, { recursive: true });
     const outPath = path.join(outDir, 'skills-index.json');
+    if (fs.existsSync(outPath)) {
+        try {
+            const existingRaw = fs.readFileSync(outPath, 'utf-8');
+            const existingPayload = JSON.parse(existingRaw);
+            const existingNormalized = normalizeIndexPayload(existingPayload);
+            const nextNormalized = normalizeIndexPayload(indexPayload);
+
+            if (JSON.stringify(existingNormalized) === JSON.stringify(nextNormalized)) {
+                return { outPath, updated: false };
+            }
+        } catch (error) {
+            console.warn(`Rewriting skills index after parse mismatch: ${outPath}`, error);
+        }
+    }
+
     fs.writeFileSync(outPath, JSON.stringify(indexPayload, null, 2));
-    return outPath;
+    return { outPath, updated: true };
 }
 
 const indexPayload = buildSkillIndex();
-const outPath = writeIndex(indexPayload);
-console.log(`Generated skill index: ${outPath}`);
+const { outPath, updated } = writeIndex(indexPayload);
+console.log(`${updated ? 'Generated' : 'Reused'} skill index: ${outPath}`);
 console.log(`Front-door categories: ${indexPayload.categories.length}`);
 console.log(`Front-door skills: ${indexPayload.meta.frontDoorSkills}`);
 console.log(`Quarantined skills: ${indexPayload.meta.quarantinedSkills}`);

@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
 import { CVF_IMPERSONATION_COOKIE, parseCookieHeader } from '@/lib/impersonation';
-import { findMockUserById } from '@/lib/mock-enterprise-db';
+import { findMockUserById, normalizeDisplayName } from '@/lib/mock-enterprise-db';
 import { getActiveImpersonationSession } from '@/lib/policy-reader';
 
 export type SessionImpersonation = {
@@ -77,7 +77,7 @@ export async function verifySessionCookie(_request?: NextRequest | Request): Pro
 
     const baseSession: SessionCookie = {
         userId: sessionUser.userId || 'unknown-user',
-        user: sessionUser.name || sessionUser.email || 'unknown',
+        user: normalizeDisplayName(sessionUser.name) || sessionUser.email || 'unknown',
         role: sessionUser.role || 'developer',
         orgId: sessionUser.orgId || 'org_cvf',
         teamId: sessionUser.teamId || 'team_eng',

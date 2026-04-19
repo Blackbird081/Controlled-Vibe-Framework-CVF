@@ -108,7 +108,6 @@ export default function Sidebar({
                     </div>
                     <div className="min-w-0 flex-1">
                         <div className="text-white font-bold text-[15px] leading-none tracking-tight">CVF</div>
-                        <div className="text-white/25 text-[10px] font-mono tracking-[0.06em] mt-0.5">v1.6</div>
                     </div>
                     {/* Mobile close */}
                     <button

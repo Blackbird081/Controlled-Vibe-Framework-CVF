@@ -49,16 +49,16 @@ const STEP_COPY = {
 
 const FEATURE_COPY = {
     vi: [
-        'Không đổi logic, chỉ nâng trải nghiệm',
-        'Luồng làm việc xoay quanh template và form',
-        'Governance và AI safety luôn hiện diện',
-        'Song ngữ Việt - Anh trong cùng workspace',
+        'Bắt đầu nhanh từ template phù hợp với mục tiêu của bạn',
+        'Mô tả nhu cầu bằng ngôn ngữ tự nhiên, không cần viết prompt phức tạp',
+        'Chất lượng, an toàn và quản trị được giữ xuyên suốt hành trình tạo app',
+        'Làm việc linh hoạt với cả tiếng Việt và English trong cùng một trải nghiệm',
     ],
     en: [
-        'No logic rewrite, only a stronger experience',
-        'Template-driven, form-first workflow',
-        'Governance and AI safety stay visible',
-        'Bilingual Vietnamese - English workspace',
+        'Start quickly with templates aligned to your goal',
+        'Describe what you need in plain language without complex prompt writing',
+        'Quality, safety, and governance stay present throughout the app-building journey',
+        'Work comfortably in both Vietnamese and English within one experience',
     ],
 };
 
@@ -73,8 +73,8 @@ export default function LandingPage() {
             <SurfaceTopBar
                 title={safeLanguage === 'vi' ? 'Controlled Vibe Framework' : 'Controlled Vibe Framework'}
                 subtitle={safeLanguage === 'vi'
-                    ? 'Khung điều phối AI có quản trị — mỗi template, mỗi bước giữ đúng luồng dữ liệu, chính sách và an toàn.'
-                    : 'Governed AI orchestration — every template, every step keeps your data flow, policy, and safety intact.'}
+                    ? 'Vibe coding có kiểm soát | Không ưu tiên tốc độ, ưu tiên sự an toàn và khả năng quản trị.'
+                    : 'Controlled vibe coding | Not faster, but safer and more governable.'}
                 actions={(
                     <>
                         <LanguageToggle />
@@ -121,8 +121,8 @@ export default function LandingPage() {
                             </h1>
                             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 dark:text-white/55">
                                 {safeLanguage === 'vi'
-                                    ? 'CVF giúp người dùng đi từ template, form, governance đến kết quả cuối cùng trong một luồng rõ ràng và chuyên nghiệp.'
-                                    : 'CVF guides people from templates, forms, and governance to final results in one polished workflow.'}
+                                    ? 'CVF dẫn dắt bạn từ ý tưởng, biểu mẫu đến sản phẩm hoàn chỉnh thông qua quy trình quản trị thông minh – minh bạch, an toàn và chuyên nghiệp.'
+                                    : 'CVF guides you from ideas and forms to a finished product through a smart governance pipeline — transparent, secure, and professional.'}
                             </p>
 
                             <div className="mt-8 flex flex-wrap gap-3">
@@ -166,7 +166,7 @@ export default function LandingPage() {
                             <div className="cvf-surface cvf-density-section rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_12px_34px_-28px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#161b28] dark:shadow-none">
                                 <div className="flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-300">
                                     <Shield size={16} />
-                                    {safeLanguage === 'vi' ? 'Tính toàn vẹn app shell' : 'App shell integrity'}
+                                    {safeLanguage === 'vi' ? 'Vì sao mọi người chọn CVF' : 'Why people choose CVF'}
                                 </div>
                                 <ul className="mt-4 space-y-3 text-sm leading-7 text-slate-600 dark:text-white/58">
                                     {features.map((feature) => (

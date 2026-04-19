@@ -112,9 +112,9 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
     };
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden max-w-2xl w-full">
+        <div className="bg-white dark:bg-[#1a1d2e] rounded-2xl shadow-xl overflow-hidden max-w-2xl w-full">
             {/* Header */}
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4 flex items-center justify-between">
+            <div className="bg-indigo-600 px-6 py-4 flex items-center justify-between">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                     📊 {l.title}
                 </h2>
@@ -141,7 +141,7 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
             )}
 
             {/* Tabs */}
-            <div className="border-b border-gray-200 dark:border-gray-700 px-6">
+            <div className="border-b border-gray-200 dark:border-white/[0.07] px-6">
                 <div className="flex gap-4">
                     {(['overview', 'settings', 'pricing'] as const).map(tab => (
                         <button
@@ -169,7 +169,7 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
                         {/* Summary Cards */}
                         <div className="grid grid-cols-2 gap-4">
                             {/* Today */}
-                            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
+                            <div className="bg-gray-50 dark:bg-[#1a1d2e] rounded-xl p-4">
                                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">{l.today}</div>
                                 <div className="text-2xl font-bold text-gray-900 dark:text-white">
                                     {formatCost(stats.today.cost)}
@@ -196,7 +196,7 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
                             </div>
 
                             {/* This Month */}
-                            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
+                            <div className="bg-gray-50 dark:bg-[#1a1d2e] rounded-xl p-4">
                                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">{l.thisMonth}</div>
                                 <div className="text-2xl font-bold text-gray-900 dark:text-white">
                                     {formatCost(stats.month.cost)}
@@ -334,7 +334,7 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
                         </div>
 
                         {/* Clear History */}
-                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div className="pt-4 border-t border-gray-200 dark:border-white/[0.07]">
                             <button
                                 onClick={() => {
                                     if (confirm(l.clearConfirm)) {
@@ -361,13 +361,13 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
                         </div>
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                                <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-white/[0.07]">
                                     <th className="pb-2 font-medium">{l.model}</th>
                                     <th className="pb-2 font-medium text-right">{l.input}</th>
                                     <th className="pb-2 font-medium text-right">{l.output}</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                            <tbody className="divide-y divide-gray-100 dark:divide-white/[0.07]">
                                 {Object.entries(pricing).map(([model, prices]) => (
                                     <tr key={model} className="text-gray-700 dark:text-gray-300">
                                         <td className="py-2 font-mono text-xs">{model}</td>

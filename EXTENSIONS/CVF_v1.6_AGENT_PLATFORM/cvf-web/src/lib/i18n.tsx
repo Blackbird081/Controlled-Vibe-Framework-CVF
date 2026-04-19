@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import vi from './i18n/vi.json';
 import en from './i18n/en.json';
 
@@ -10,6 +10,7 @@ interface LanguageContextType {
     language: Language;
     setLanguage: (lang: Language) => void;
     t: (key: string) => string;
+    mounted: boolean;
 }
 
 const translations: Record<Language, Record<string, string>> = { vi, en };
@@ -17,11 +18,22 @@ const translations: Record<Language, Record<string, string>> = { vi, en };
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [language, setLanguageState] = useState<Language>(() => {
-        if (typeof window === 'undefined') return 'vi';
-        const saved = localStorage.getItem('cvf_language');
-        return saved === 'vi' || saved === 'en' ? saved : 'vi';
-    });
+    const [language, setLanguageState] = useState<Language>('vi');
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        try {
+            const saved = window.localStorage.getItem('cvf_language');
+            if (saved === 'vi' || saved === 'en') {
+                setLanguageState(saved);
+                document.documentElement.lang = saved;
+            } else {
+                document.documentElement.lang = 'vi';
+            }
+        } finally {
+            setMounted(true);
+        }
+    }, []);
 
     useEffect(() => {
         document.documentElement.lang = language;
@@ -38,7 +50,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <LanguageContext.Provider value={{ language, setLanguage, t }}>
+        <LanguageContext.Provider value={{ language, setLanguage, t, mounted }}>
             {children}
         </LanguageContext.Provider>
     );

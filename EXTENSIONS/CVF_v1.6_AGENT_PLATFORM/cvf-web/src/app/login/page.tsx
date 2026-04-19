@@ -3,13 +3,14 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLanguage, LanguageToggle } from '@/lib/i18n';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 function LoginPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const from = searchParams.get('from') || '/home';
     const { language } = useLanguage();
+    const { status } = useSession();
     const isVi = language === 'vi';
 
     const [username, setUsername] = useState('');
@@ -20,8 +21,10 @@ function LoginPageContent() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        // If session already exists, middleware will redirect after first render
-    }, [from, router]);
+        if (status === 'authenticated') {
+            router.replace(from);
+        }
+    }, [from, router, status]);
 
     useEffect(() => {
         try {
@@ -77,7 +80,7 @@ function LoginPageContent() {
 
                 <div className="text-center mb-6">
                     <div className="text-3xl">🔐</div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-2">{isVi ? 'Đăng Nhập CVF v1.6' : 'CVF v1.6 Login'}</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-2">{isVi ? 'Đăng Nhập CVF' : 'CVF Login'}</h1>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                         {isVi ? 'Đăng nhập để truy cập toàn bộ giao diện.' : 'Sign in to access the full interface.'}
                     </p>
@@ -142,10 +145,12 @@ function LoginPageContent() {
 
                     <button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || status === 'loading'}
                         className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium transition-colors"
                     >
-                        {isSubmitting
+                        {status === 'loading'
+                            ? (isVi ? 'Đang kiểm tra phiên...' : 'Checking session...')
+                            : isSubmitting
                             ? (isVi ? 'Đang đăng nhập...' : 'Signing in...')
                             : (isVi ? 'Đăng nhập' : 'Sign in')}
                     </button>

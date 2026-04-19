@@ -1,3 +1,4 @@
+import path from 'node:path';
 import type { NextConfig } from "next";
 
 const securityHeaders = [
@@ -32,6 +33,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: path.resolve(__dirname, '../../..'),
   transpilePackages: [
     'cvf-guard-contract',
     'cvf-control-plane-foundation',

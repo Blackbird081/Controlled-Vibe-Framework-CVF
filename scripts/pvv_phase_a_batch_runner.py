@@ -17,8 +17,11 @@ Run: python scripts/pvv_phase_a_batch_runner.py
 """
 
 import sys, os, re, json, time, urllib.request, urllib.error, random
+from _local_env import bootstrap_repo_env
 sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')
+
+bootstrap_repo_env()
 
 def resolve_env(*names):
     for name in names:

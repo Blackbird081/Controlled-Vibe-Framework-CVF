@@ -52,7 +52,7 @@ export default function SimulationPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:h-[calc(100vh-200px)]">
                 {/* Left: Policy Editor */}
-                <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                <div className="border border-gray-200 dark:border-white/[0.07] rounded-lg overflow-hidden">
                     <PolicyEditor
                         initialPolicy={DEFAULT_BASELINE}
                         onRun={handleRun}
@@ -60,7 +60,7 @@ export default function SimulationPage() {
                 </div>
 
                 {/* Right: Simulation Results */}
-                <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                <div className="border border-gray-200 dark:border-white/[0.07] rounded-lg overflow-hidden">
                     <SimulationRunner
                         baselineRules={baselineRules}
                         newRules={activeNewRules.length > 0 ? activeNewRules : baselineRules}

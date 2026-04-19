@@ -35,7 +35,17 @@ export function useModals(permissions?: {
     const canUseAIUsage = permissions?.canUseAIUsage ?? true;
     const canUseContext = permissions?.canUseContext ?? true;
 
+    const closeAllModals = useCallback(() => {
+        setShowUserContext(false);
+        setShowSettings(false);
+        setShowAIUsage(false);
+        setShowApiKeyWizard(false);
+        setShowOnboarding(false);
+        setShowQuickStart(false);
+    }, []);
+
     const openModal = useCallback((name: ModalName) => {
+        closeAllModals();
         switch (name) {
             case 'userContext': setShowUserContext(true); break;
             case 'settings': setShowSettings(true); break;
@@ -44,7 +54,7 @@ export function useModals(permissions?: {
             case 'onboarding': setShowOnboarding(true); break;
             case 'quickStart': setShowQuickStart(true); break;
         }
-    }, []);
+    }, [closeAllModals]);
 
     const closeModal = useCallback((name: ModalName) => {
         switch (name) {
@@ -64,6 +74,7 @@ export function useModals(permissions?: {
         showApiKeyWizard,
         showOnboarding,
         showQuickStart,
+        closeAllModals,
         openModal,
         closeModal,
         handleOnboardingComplete,

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import { signOut } from 'next-auth/react';
 import type { TeamRole } from 'cvf-guard-contract/enterprise';
 import type { SessionImpersonation } from '@/lib/middleware-auth';
 
@@ -94,8 +95,12 @@ export function useAuth() {
     const handleLogout = useCallback(async () => {
         document.cookie = 'cvf_auth=; Path=/; Max-Age=0';
         document.cookie = 'cvf_role=; Path=/; Max-Age=0';
-        try { await fetch('/api/auth/logout', { method: 'POST' }); } catch { /* ignore */ }
-        window.location.href = '/login';
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch {
+            // ignore legacy logout cleanup failures
+        }
+        await signOut({ callbackUrl: '/login' });
     }, []);
 
     const endImpersonation = useCallback(async () => {

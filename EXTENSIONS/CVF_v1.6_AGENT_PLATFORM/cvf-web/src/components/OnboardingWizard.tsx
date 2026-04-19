@@ -21,8 +21,8 @@ const STEPS: StepData[] = [
     {
         icon: '👋',
         title: {
-            vi: 'Chào mừng đến CVF v1.6 Agent Platform',
-            en: 'Welcome to CVF v1.6 Agent Platform',
+            vi: 'Chào mừng đến CVF',
+            en: 'Welcome to CVF',
         },
         description: {
             vi: 'Nền tảng giúp bạn sử dụng AI an toàn, hiệu quả mà không cần kỹ năng kỹ thuật.',

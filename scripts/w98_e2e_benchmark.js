@@ -10,6 +10,7 @@
 
 const fs = require('fs');
 const path = require('path');
+require('./load-repo-env.cjs').loadRepoEnv();
 
 const CVF_API_URL = 'http://localhost:3000/api/execute';
 const SERVICE_TOKEN = 'pvv-pilot-2026';

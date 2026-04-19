@@ -9,7 +9,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "CVF v1.6 Agent Platform",
+  title: "CVF Agent Platform",
   description: "Controlled Vibe Framework — AI-assisted coding with governance, not guesswork",
 };
 

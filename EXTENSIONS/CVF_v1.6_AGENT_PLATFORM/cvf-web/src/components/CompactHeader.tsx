@@ -119,6 +119,12 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
         </button>
     );
 
+    const versionBadge = (
+        <span className="rounded-full border border-white/[0.12] bg-white/[0.06] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/55">
+            version 1.6
+        </span>
+    );
+
     return (
         <div className="relative">
             {/* Mobile Header */}
@@ -132,7 +138,6 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
                                     <Sparkles size={13} color="#fff" strokeWidth={1.75} />
                                 </div>
                                 <span className="text-white font-bold text-[15px] leading-none tracking-tight">CVF</span>
-                                <span className="text-white/25 text-[10px] font-mono tracking-[0.06em]">v1.6</span>
                             </Link>
                             {mockAiEnabled && (
                                 <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] rounded bg-amber-500/20 text-amber-300 border border-amber-500/20">
@@ -141,6 +146,7 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
                             )}
                         </div>
                         <div className="flex items-center gap-2">
+                            {versionBadge}
                             {tweaksButton}
                             <div id="tour-lang-switch">
                                 <LanguageToggle />
@@ -158,6 +164,7 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
                         Demo
                     </span>
                 )}
+                {versionBadge}
                 {tweaksButton}
                 <div id="tour-lang-switch">
                     <LanguageToggle />

@@ -29,10 +29,10 @@ export function CategoryTabs({ activeCategory, onCategoryChange, counts }: Categ
                         key={cat}
                         onClick={() => onCategoryChange(cat)}
                         className={`
-              flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-medium
+              cvf-control flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-medium
               transition-all duration-200 border
               ${isActive
-                                ? 'border-indigo-500/60 bg-indigo-600 text-white shadow-[0_12px_30px_-18px_rgba(79,70,229,0.85)] dark:bg-indigo-500 dark:text-white'
+                                ? 'cvf-accent-bg shadow-[0_12px_30px_-18px_rgba(79,70,229,0.85)] dark:text-white'
                                 : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-white/[0.07] dark:bg-[#171b29] dark:text-white/65 dark:hover:border-white/[0.12] dark:hover:bg-white/[0.05]'
                             }
             `}

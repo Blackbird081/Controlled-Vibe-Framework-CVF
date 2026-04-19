@@ -10,7 +10,7 @@
  * Sprint 7 — Task 7.5
  */
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { detectIntent, type DetectedIntent } from '@/lib/intent-detector';
 import {
   resolveGovernedStarterTemplate,
@@ -24,12 +24,18 @@ interface QuickStartProps {
 }
 
 const PROVIDERS = [
-  { id: 'gemini', name: 'Google Gemini', icon: '✨', desc: 'Free tier lớn', recommended: true },
-  { id: 'openai', name: 'OpenAI', icon: '🤖', desc: 'GPT-4o' },
-  { id: 'anthropic', name: 'Anthropic', icon: '🧠', desc: 'Claude' },
-  { id: 'alibaba', name: 'Alibaba Qwen', icon: '🌏', desc: 'Qwen Turbo' },
-  { id: 'openrouter', name: 'OpenRouter', icon: '🔀', desc: 'Multi-model' },
-];
+  {
+    id: 'gemini',
+    name: 'Google Gemini',
+    icon: '✨',
+    desc: { vi: 'Free tier lớn', en: 'Large free tier' },
+    recommended: true,
+  },
+  { id: 'openai', name: 'OpenAI', icon: '🤖', desc: { vi: 'GPT-4o', en: 'GPT-4o' } },
+  { id: 'anthropic', name: 'Anthropic', icon: '🧠', desc: { vi: 'Claude', en: 'Claude' } },
+  { id: 'alibaba', name: 'Alibaba Qwen', icon: '🌏', desc: { vi: 'Qwen Turbo', en: 'Qwen Turbo' } },
+  { id: 'openrouter', name: 'OpenRouter', icon: '🔀', desc: { vi: 'Nhiều model', en: 'Multi-model' } },
+] as const;
 
 export default function QuickStart({ onComplete, onSkip, language = 'vi' }: QuickStartProps) {
   const [step, setStep] = useState(1);
@@ -41,12 +47,13 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
   const governedStarter = resolveGovernedStarterTemplate(routedIntent.suggestedTemplates);
 
   const l = language === 'vi' ? {
-    title: '🚀 Governed Quick Start',
+    title: '🚀 Khởi động nhanh có govern',
     step1: 'Bước 1: Chọn AI Provider',
     step2: 'Bước 2: Bạn muốn CVF xử lý mục tiêu nào?',
     step3: 'Bước 3: Xác nhận governed routing',
     apiKeyLabel: 'API Key',
     apiKeyPlaceholder: 'Paste API key tại đây...',
+    apiKeyHint: 'Có thể bỏ trống nếu bạn chỉ muốn xem luồng guided path trước.',
     inputPlaceholder: 'Mô tả yêu cầu của bạn bằng ngôn ngữ tự nhiên...\n\nVí dụ:\n• "Tôi muốn tạo app quản lý công việc"\n• "Phân tích chiến lược marketing cho startup"\n• "Review code bảo mật cho ứng dụng web"',
     detected: 'CVF chuẩn bị bind:',
     phase: 'Giai đoạn',
@@ -57,6 +64,9 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
     next: 'Tiếp tục →',
     back: '← Quay lại',
     skip: 'Bỏ qua',
+    providerLabel: 'Provider',
+    requestLabel: 'Yêu cầu',
+    continueWithoutKey: 'Tiếp tục không cần key →',
     recommended: '⭐ Khuyên dùng',
   } : {
     title: '🚀 Governed Quick Start',
@@ -65,6 +75,7 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
     step3: 'Step 3: Confirm governed routing',
     apiKeyLabel: 'API Key',
     apiKeyPlaceholder: 'Paste your API key here...',
+    apiKeyHint: 'You can leave this empty if you only want to preview the guided path first.',
     inputPlaceholder: 'Describe your request in natural language...\n\nExamples:\n• "I want to build a task management app"\n• "Analyze marketing strategy for my startup"\n• "Review security of my web application"',
     detected: 'CVF is preparing to bind:',
     phase: 'Phase',
@@ -75,8 +86,15 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
     next: 'Continue →',
     back: '← Back',
     skip: 'Skip',
+    providerLabel: 'Provider',
+    requestLabel: 'Request',
+    continueWithoutKey: 'Continue without key →',
     recommended: '⭐ Recommended',
   };
+  const providerDetails = useMemo(
+    () => PROVIDERS.map((item) => ({ ...item, localizedDesc: item.desc[language] })),
+    [language],
+  );
 
   const handleInputChange = (value: string) => {
     setUserInput(value);
@@ -89,14 +107,14 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center">{l.title}</h2>
+      <h2 className="mb-6 text-center text-2xl font-bold">{l.title}</h2>
 
       {/* Progress indicator */}
       <div className="flex items-center justify-center gap-2 mb-8">
         {[1, 2, 3].map(s => (
-          <div key={s} className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-              s === step ? 'bg-blue-500 text-white scale-110' :
+              <div key={s} className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+              s === step ? 'cvf-accent-bg scale-110' :
               s < step ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-500'
             }`}>
               {s < step ? '✓' : s}
@@ -111,20 +129,20 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
         <div>
           <h3 className="text-lg font-semibold mb-4">{l.step1}</h3>
           <div className="grid grid-cols-1 gap-2 mb-4">
-            {PROVIDERS.map(p => (
+            {providerDetails.map(p => (
               <button
                 key={p.id}
                 onClick={() => setProvider(p.id)}
-                className={`flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
+                className={`cvf-control flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
                   provider === p.id
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                    ? 'cvf-accent-soft'
                     : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
                 }`}
               >
                 <span className="text-2xl">{p.icon}</span>
                 <div className="text-left">
-                  <div className="font-medium">{p.name} {p.recommended && <span className="text-xs text-amber-500">{l.recommended}</span>}</div>
-                  <div className="text-xs text-gray-500">{p.desc}</div>
+                  <div className="font-medium">{p.name} {('recommended' in p && p.recommended) && <span className="text-xs text-amber-500">{l.recommended}</span>}</div>
+                  <div className="text-xs text-gray-500">{p.localizedDesc}</div>
                 </div>
               </button>
             ))}
@@ -136,18 +154,28 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
               value={apiKey}
               onChange={e => setApiKey(e.target.value)}
               placeholder={l.apiKeyPlaceholder}
-              className="w-full p-2 border rounded-lg dark:bg-gray-800 dark:border-gray-600"
+              className="cvf-control w-full border p-2 dark:border-gray-600 dark:bg-gray-800"
             />
+            <p className="mt-2 text-xs text-gray-500">{l.apiKeyHint}</p>
           </div>
           <div className="flex justify-between">
             {onSkip && <button onClick={onSkip} className="text-sm text-gray-500 hover:underline">{l.skip}</button>}
-            <button
-              onClick={() => setStep(2)}
-              disabled={!apiKey.trim()}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 hover:bg-blue-600 transition-colors"
-            >
-              {l.next}
-            </button>
+            <div className="flex gap-2">
+              {!apiKey.trim() && (
+                <button
+                  onClick={() => setStep(2)}
+                  className="cvf-control px-4 py-2 text-sm text-gray-500 transition hover:underline"
+                >
+                  {l.continueWithoutKey}
+                </button>
+              )}
+              <button
+                onClick={() => setStep(2)}
+                className="cvf-control px-4 py-2 text-white transition-colors hover:brightness-110 cvf-accent-bg"
+              >
+                {l.next}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -182,7 +210,7 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
             <button
               onClick={() => setStep(3)}
               disabled={!userInput.trim()}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 hover:bg-blue-600 transition-colors"
+              className="cvf-control px-4 py-2 text-white transition-colors disabled:opacity-50 hover:brightness-110 cvf-accent-bg"
             >
               {l.next}
             </button>
@@ -196,8 +224,8 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
           <h3 className="text-lg font-semibold mb-4">{l.step3}</h3>
           <div className="space-y-3 mb-6">
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <div className="text-xs text-gray-500 mb-1">Provider</div>
-              <div className="font-medium">{PROVIDERS.find(p => p.id === provider)?.icon} {PROVIDERS.find(p => p.id === provider)?.name}</div>
+              <div className="text-xs text-gray-500 mb-1">{l.providerLabel}</div>
+              <div className="font-medium">{providerDetails.find(p => p.id === provider)?.icon} {providerDetails.find(p => p.id === provider)?.name}</div>
             </div>
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">{l.phase}</div>
@@ -212,7 +240,7 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
               <div className="font-medium">{governedStarter.label}</div>
             </div>
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <div className="text-xs text-gray-500 mb-1">Request</div>
+              <div className="text-xs text-gray-500 mb-1">{l.requestLabel}</div>
               <div className="text-sm">{userInput}</div>
             </div>
           </div>
@@ -226,7 +254,7 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
                 userInput,
                 detectedIntent: routedIntent,
               })}
-              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-purple-600 transition-all shadow-lg"
+              className="cvf-control px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-purple-600 transition-all shadow-lg"
             >
               {l.start}
             </button>

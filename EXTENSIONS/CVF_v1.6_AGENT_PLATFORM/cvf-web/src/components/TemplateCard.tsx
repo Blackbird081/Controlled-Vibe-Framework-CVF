@@ -52,7 +52,7 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
             role="button"
             tabIndex={0}
             title={language === 'en' ? 'Click to use this template' : 'Click để sử dụng template này'}
-            className="group relative cursor-pointer rounded-[28px] border border-slate-200/80 bg-white p-7
+            className="group relative cvf-surface cursor-pointer rounded-[28px] border border-slate-200/80 bg-white p-7
                  shadow-[0_2px_10px_rgba(15,23,42,0.05)] transition-all duration-200
                  hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_18px_34px_-24px_rgba(79,70,229,0.55)]
                  dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none dark:hover:border-indigo-400/35 dark:hover:shadow-[0_18px_40px_-30px_rgba(99,102,241,0.45)]"
@@ -93,7 +93,7 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
                 {onPreview && template.sampleOutput && (
                     <button
                         onClick={onPreview}
-                        className="rounded-2xl p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-white/[0.06] dark:hover:text-indigo-300"
+                        className="cvf-control rounded-2xl p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-white/[0.06] dark:hover:text-indigo-300"
                         title={language === 'en' ? 'Preview output' : 'Xem trước kết quả'}
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

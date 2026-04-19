@@ -20,7 +20,7 @@ const TAB_LABELS: Record<TabKey, Record<Lang, string>> = {
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
     return (
-        <div className="rounded-[28px] border border-slate-200/80 bg-white p-5 shadow-[0_18px_44px_-38px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none sm:p-6">
+        <div className="cvf-surface cvf-density-section rounded-[28px] border border-slate-200/80 bg-white p-5 shadow-[0_18px_44px_-38px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none sm:p-6">
             <h3 className="text-2xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">{title}</h3>
             <div className="mt-4">{children}</div>
         </div>
@@ -199,16 +199,16 @@ export default function ToolkitGuidePage() {
     return (
         <div className="pb-10">
             <SurfaceTopBar
-                title={language === 'vi' ? 'CVF Toolkit Guide' : 'CVF Toolkit Guide'}
+                title={language === 'vi' ? 'Hướng dẫn CVF Toolkit' : 'CVF Toolkit Guide'}
                 subtitle={language === 'vi'
                     ? 'Hướng dẫn chi tiết cho GovernanceBar, Authority Matrix, Self-UAT, SpecExport và workflow liên quan.'
                     : 'Detailed guidance for GovernanceBar, Authority Matrix, Self-UAT, SpecExport, and the related workflow.'}
                 actions={(
                     <Link
                         href="/help"
-                        className="inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+                        className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
                     >
-                        {language === 'vi' ? '← Help Center' : '← Help Center'}
+                        {language === 'vi' ? '← Trung tâm trợ giúp' : '← Help Center'}
                     </Link>
                 )}
             />
@@ -219,9 +219,9 @@ export default function ToolkitGuidePage() {
                         <button
                             key={key}
                             onClick={() => setActiveTab(key)}
-                            className={`rounded-2xl px-4 py-2 text-sm font-semibold transition whitespace-nowrap ${
+                            className={`cvf-control rounded-2xl px-4 py-2 text-sm font-semibold transition whitespace-nowrap ${
                                 activeTab === key
-                                    ? 'bg-indigo-600 text-white'
+                                    ? 'cvf-accent-bg'
                                     : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-white/[0.08] dark:bg-[#171b29] dark:text-white/60 dark:hover:bg-white/[0.05]'
                             }`}
                         >

@@ -8,6 +8,9 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --cvf-accent-rgb: 99 102 241;
+  --cvf-surface-radius: 28px;
+  --cvf-control-radius: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,6 +26,8 @@ body {
   background: linear-gradient(to bottom,
       transparent,
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* Custom Scrollbar */
@@ -192,6 +197,47 @@ body {
 /* Instrument Serif display typography */
 .font-serif-display {
   font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+}
+
+.cvf-surface {
+  border-radius: var(--cvf-surface-radius) !important;
+}
+
+.cvf-control {
+  border-radius: var(--cvf-control-radius) !important;
+}
+
+.cvf-accent-bg {
+  background-color: rgb(var(--cvf-accent-rgb)) !important;
+  color: #fff !important;
+}
+
+.cvf-accent-soft {
+  background-color: rgb(var(--cvf-accent-rgb) / 0.12) !important;
+  color: rgb(var(--cvf-accent-rgb)) !important;
+  border-color: rgb(var(--cvf-accent-rgb) / 0.24) !important;
+}
+
+.cvf-accent-text {
+  color: rgb(var(--cvf-accent-rgb)) !important;
+}
+
+.cvf-accent-shadow {
+  box-shadow: 0 16px 34px -18px rgb(var(--cvf-accent-rgb) / 0.45) !important;
+}
+
+[data-cvf-density='compact'] .cvf-density-section {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+[data-cvf-density='compact'] .cvf-density-gap {
+  gap: 1rem !important;
+}
+
+[data-cvf-density='compact'] .cvf-density-input {
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
 }
 
 /* Smooth anchor scrolling */

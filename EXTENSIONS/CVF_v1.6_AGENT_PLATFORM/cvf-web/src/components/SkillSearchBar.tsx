@@ -11,6 +11,7 @@ import {
   type SearchOptions,
 } from '@/lib/skill-search';
 import { fetchFrontDoorSkillRecords } from '@/lib/frontdoor-skills';
+import { useLanguage } from '@/lib/i18n';
 
 // ─── Props ───────────────────────────────────────────────────────────
 
@@ -45,15 +46,19 @@ const RISK_COLORS: Record<string, string> = {
 export function SkillSearchBar({
   onSelect,
   onResults,
-  placeholder = 'Search skills... (e.g. "landing page", "security audit")',
+  placeholder,
   initialQuery = '',
   domainFilter,
   riskFilter,
   phaseFilter,
   difficultyFilter,
 }: SkillSearchBarProps) {
+  const { language } = useLanguage();
   const [query, setQuery] = useState(initialQuery);
   const [dataLoaded, setDataLoaded] = useState(() => isLoaded());
+  const resolvedPlaceholder = placeholder || (language === 'vi'
+    ? 'Tìm kiếm skill... (ví dụ: "landing page", "security audit")'
+    : 'Search skills... (e.g. "landing page", "security audit")');
 
   // Load front-door trusted subset data on mount
   useEffect(() => {
@@ -112,14 +117,14 @@ export function SkillSearchBar({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={dataLoaded ? placeholder : 'Loading skills...'}
+          placeholder={dataLoaded ? resolvedPlaceholder : language === 'vi' ? 'Đang tải skills...' : 'Loading skills...'}
           disabled={!dataLoaded}
           className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600
                      bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                      placeholder-gray-400 dark:placeholder-gray-500
                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                      disabled:opacity-50 transition-all text-sm sm:text-base"
-          aria-label="Search skills"
+          aria-label={language === 'vi' ? 'Tìm kiếm skill' : 'Search skills'}
           data-testid="skill-search-input"
         />
         {!dataLoaded && (
@@ -133,8 +138,12 @@ export function SkillSearchBar({
       {query.trim() && dataLoaded && (
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400" data-testid="skill-search-meta">
           {results.length > 0
-            ? `Found ${results.length} skills`
-            : 'No results — try broader keywords'}
+            ? language === 'vi'
+              ? `Tìm thấy ${results.length} skill`
+              : `Found ${results.length} skills`
+            : language === 'vi'
+              ? 'Không có kết quả, hãy thử từ khóa rộng hơn'
+              : 'No results — try broader keywords'}
         </p>
       )}
 

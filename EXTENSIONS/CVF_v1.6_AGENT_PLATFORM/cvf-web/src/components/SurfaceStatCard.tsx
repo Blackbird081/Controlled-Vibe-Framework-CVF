@@ -25,7 +25,7 @@ export function SurfaceStatCard({
 }: SurfaceStatCardProps) {
     return (
         <div className={clsx(
-            'rounded-3xl border border-slate-200/80 bg-white px-6 py-5 shadow-[0_1px_4px_rgba(15,23,42,0.05)]',
+            'cvf-surface cvf-density-section rounded-3xl border border-slate-200/80 bg-white px-6 py-5 shadow-[0_1px_4px_rgba(15,23,42,0.05)]',
             'dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none',
         )}>
             <div className="flex items-start justify-between gap-4">
@@ -38,7 +38,7 @@ export function SurfaceStatCard({
                     </div>
                 </div>
                 <div className={clsx(
-                    'flex h-12 w-12 items-center justify-center rounded-2xl',
+                    'cvf-control flex h-12 w-12 items-center justify-center rounded-2xl',
                     TONE_STYLES[tone],
                 )}>
                     <Icon size={18} strokeWidth={1.9} />

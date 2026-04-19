@@ -18,7 +18,7 @@ export function SurfaceTopBar({
 }: SurfaceTopBarProps) {
     return (
         <div className={clsx(
-            'border-b border-slate-200/80 bg-white/82 backdrop-blur-sm',
+            'cvf-surface cvf-density-section border-b border-slate-200/80 bg-white/82 backdrop-blur-sm',
             'dark:border-white/[0.06] dark:bg-[#10131d]/82',
             className,
         )}>

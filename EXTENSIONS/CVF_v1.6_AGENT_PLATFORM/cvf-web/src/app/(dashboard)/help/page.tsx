@@ -22,16 +22,16 @@ export default function HelpPage() {
     return (
         <div className="pb-10">
             <SurfaceTopBar
-                title={language === 'vi' ? 'Help Center' : 'Help Center'}
+                title={language === 'vi' ? 'Trung tâm trợ giúp' : 'Help Center'}
                 subtitle={language === 'vi'
                     ? 'Giữ nội dung hướng dẫn hiện có nhưng trình bày lại thành một surface gọn, dễ đọc và dễ quay lại.'
                     : 'Keep the existing guidance content while presenting it in a cleaner, more readable support surface.'}
                 actions={(
                     <Link
                         href="/docs"
-                        className="inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+                        className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
                     >
-                        {language === 'vi' ? 'Open Docs' : 'Open Docs'}
+                        {language === 'vi' ? 'Mở docs' : 'Open docs'}
                     </Link>
                 )}
             />
@@ -68,10 +68,10 @@ export default function HelpPage() {
                     })}
                 </section>
 
-                <section className="rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
+                <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
                     <div className="mb-5">
                         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-white/35">
-                            {language === 'vi' ? 'Frequently asked' : 'Frequently asked'}
+                            {language === 'vi' ? 'Câu hỏi thường gặp' : 'Frequently asked'}
                         </div>
                         <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
                             {language === 'vi' ? 'Những câu hỏi quan trọng nhất' : 'The most important questions'}
@@ -88,7 +88,7 @@ export default function HelpPage() {
                                     <button
                                         type="button"
                                         onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                                        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                                    className="cvf-control flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                                     >
                                         <div>
                                             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
@@ -101,7 +101,7 @@ export default function HelpPage() {
                                         <span className="text-slate-400">{isOpen ? '−' : '+'}</span>
                                     </button>
                                     {isOpen && (
-                                        <div className="border-t border-slate-200 bg-slate-50 px-5 py-4 text-sm leading-7 text-slate-600 dark:border-white/[0.07] dark:bg-[#10131d] dark:text-white/58">
+                                    <div className="border-t border-slate-200 bg-slate-50 px-5 py-4 text-sm leading-7 text-slate-600 dark:border-white/[0.07] dark:bg-[#10131d] dark:text-white/58">
                                             <p>{step.content}</p>
                                             {step.example && (
                                                 <div className="mt-4 rounded-2xl bg-[#0d0f1a] px-4 py-3 font-mono text-sm">
@@ -143,7 +143,7 @@ export default function HelpPage() {
                 </section>
 
                 <section className="grid gap-5 lg:grid-cols-2">
-                    <div className="rounded-[28px] border border-emerald-200/80 bg-emerald-50 p-6 dark:border-emerald-500/20 dark:bg-emerald-500/8">
+                    <div className="cvf-surface cvf-density-section rounded-[28px] border border-emerald-200/80 bg-emerald-50 p-6 dark:border-emerald-500/20 dark:bg-emerald-500/8">
                         <h3 className="text-2xl font-semibold tracking-[-0.03em] text-emerald-950 dark:text-emerald-100">
                             {language === 'vi' ? 'Nên làm' : 'Do'}
                         </h3>
@@ -157,7 +157,7 @@ export default function HelpPage() {
                         </ul>
                     </div>
 
-                    <div className="rounded-[28px] border border-rose-200/80 bg-rose-50 p-6 dark:border-rose-500/20 dark:bg-rose-500/8">
+                    <div className="cvf-surface cvf-density-section rounded-[28px] border border-rose-200/80 bg-rose-50 p-6 dark:border-rose-500/20 dark:bg-rose-500/8">
                         <h3 className="text-2xl font-semibold tracking-[-0.03em] text-rose-950 dark:text-rose-100">
                             {language === 'vi' ? 'Không nên' : 'Don’t'}
                         </h3>

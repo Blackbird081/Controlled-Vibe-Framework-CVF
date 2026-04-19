@@ -59,25 +59,25 @@ function SkillSearchPageInner() {
 
     const statCards = useMemo(() => ([
         {
-            label: language === 'vi' ? 'Search hits' : 'Search hits',
+            label: language === 'vi' ? 'Kết quả tìm thấy' : 'Search hits',
             value: String(searchResults.length),
             icon: SearchIcon,
             tone: 'accent' as const,
         },
         {
-            label: language === 'vi' ? 'Planner phases' : 'Planner phases',
+            label: language === 'vi' ? 'Các pha planner' : 'Planner phases',
             value: String(plan?.phases.length ?? 0),
             icon: GitBranch,
             tone: 'emerald' as const,
         },
         {
-            label: language === 'vi' ? 'Recommended skills' : 'Recommended skills',
+            label: language === 'vi' ? 'Skill được đề xuất' : 'Recommended skills',
             value: String(plan?.total_skills ?? 0),
             icon: Workflow,
             tone: 'amber' as const,
         },
         {
-            label: language === 'vi' ? 'Selected detail' : 'Selected detail',
+            label: language === 'vi' ? 'Chi tiết đang chọn' : 'Selected detail',
             value: selectedSkill ? '1' : '0',
             icon: BrainCircuit,
             tone: 'violet' as const,
@@ -87,22 +87,22 @@ function SkillSearchPageInner() {
     return (
         <div className="pb-10">
             <SurfaceTopBar
-                title={language === 'vi' ? 'Skill Search & Planner' : 'Skill Search & Planner'}
+                title={language === 'vi' ? 'Tìm kiếm skill & lập kế hoạch' : 'Skill Search & Planner'}
                 subtitle={language === 'vi'
                     ? 'Giữ nguyên BM25 + planner flow, chỉ nâng shell, framing và khả năng đọc nhanh.'
                     : 'Keep the BM25 and planner flow intact while improving shell, framing, and scannability.'}
                 actions={(
                     <Link
                         href="/skills"
-                        className="inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+                        className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
                     >
-                        {language === 'vi' ? 'Open Skill Library' : 'Open Skill Library'}
+                        {language === 'vi' ? 'Mở thư viện skill' : 'Open skill library'}
                     </Link>
                 )}
             />
 
             <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
-                <section className="rounded-[32px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_38%),linear-gradient(135deg,_#f8fafc,_#ffffff)] p-6 shadow-[0_20px_55px_-45px_rgba(79,70,229,0.35)] dark:border-white/[0.07] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_36%),linear-gradient(135deg,_#131827,_#10131d)] dark:shadow-none sm:p-7">
+                <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_38%),linear-gradient(135deg,_#f8fafc,_#ffffff)] p-6 shadow-[0_20px_55px_-45px_rgba(79,70,229,0.35)] dark:border-white/[0.07] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_36%),linear-gradient(135deg,_#131827,_#10131d)] dark:shadow-none sm:p-7">
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                         {statCards.map((card) => (
                             <SurfaceStatCard
@@ -117,7 +117,7 @@ function SkillSearchPageInner() {
                 </section>
 
                 <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
-                    <section className="rounded-[32px] border border-slate-200/80 bg-white p-5 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none sm:p-6">
+                    <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-white p-5 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none sm:p-6">
                         <div className="space-y-6">
                             <div className="inline-flex rounded-2xl border border-slate-200 bg-slate-50 p-1 dark:border-white/[0.08] dark:bg-[#10131d]">
                                 <button
@@ -128,7 +128,7 @@ function SkillSearchPageInner() {
                                             : 'text-slate-500 hover:text-slate-900 dark:text-white/45 dark:hover:text-white'
                                     }`}
                                 >
-                                    {language === 'vi' ? 'Search' : 'Search'}
+                                    {language === 'vi' ? 'Tìm kiếm' : 'Search'}
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('planner')}
@@ -138,7 +138,7 @@ function SkillSearchPageInner() {
                                             : 'text-slate-500 hover:text-slate-900 dark:text-white/45 dark:hover:text-white'
                                     }`}
                                 >
-                                    {language === 'vi' ? 'Planner' : 'Planner'}
+                                    {language === 'vi' ? 'Lập kế hoạch' : 'Planner'}
                                 </button>
                             </div>
 
@@ -177,7 +177,7 @@ function SkillSearchPageInner() {
                     </section>
 
                     <aside className="space-y-6">
-                        <div className="rounded-[32px] border border-slate-200/80 bg-white p-5 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
+                        <div className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-white p-5 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
                             <SkillGraph
                                 plan={activeTab === 'planner' ? plan : null}
                                 skills={activeTab === 'search' ? searchResults.map(result => result.skill) : []}
@@ -186,11 +186,11 @@ function SkillSearchPageInner() {
                         </div>
 
                         {selectedSkill && (
-                            <div className="rounded-[32px] border border-indigo-200/80 bg-white p-5 shadow-[0_20px_55px_-45px_rgba(79,70,229,0.35)] dark:border-indigo-500/20 dark:bg-[#171b29] dark:shadow-none">
+                            <div className="cvf-surface cvf-density-section rounded-[32px] border border-indigo-200/80 bg-white p-5 shadow-[0_20px_55px_-45px_rgba(79,70,229,0.35)] dark:border-indigo-500/20 dark:bg-[#171b29] dark:shadow-none">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
                                         <div className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-500">
-                                            {language === 'vi' ? 'Selected skill' : 'Selected skill'}
+                                            {language === 'vi' ? 'Skill đang chọn' : 'Selected skill'}
                                         </div>
                                         <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
                                             {selectedSkill.skill_name}
@@ -205,10 +205,10 @@ function SkillSearchPageInner() {
                                     </button>
                                 </div>
                                 <div className="mt-4 space-y-2 text-sm text-slate-600 dark:text-white/58">
-                                    <p><span className="font-semibold text-slate-900 dark:text-white">Domain:</span> {selectedSkill.domain}</p>
-                                    <p><span className="font-semibold text-slate-900 dark:text-white">Risk:</span> {selectedSkill.risk_level}</p>
-                                    <p><span className="font-semibold text-slate-900 dark:text-white">Difficulty:</span> {selectedSkill.difficulty}</p>
-                                    <p><span className="font-semibold text-slate-900 dark:text-white">Phases:</span> {selectedSkill.phases}</p>
+                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Miền:' : 'Domain:'}</span> {selectedSkill.domain}</p>
+                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Rủi ro:' : 'Risk:'}</span> {selectedSkill.risk_level}</p>
+                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Độ khó:' : 'Difficulty:'}</span> {selectedSkill.difficulty}</p>
+                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Pha:' : 'Phases:'}</span> {selectedSkill.phases}</p>
                                     {selectedSkill.description && <p className="pt-2">{selectedSkill.description}</p>}
                                 </div>
                                 <div className="mt-5">

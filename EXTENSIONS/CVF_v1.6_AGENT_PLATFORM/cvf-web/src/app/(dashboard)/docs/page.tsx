@@ -64,25 +64,25 @@ export default function DocsPage() {
     return (
         <div className="pb-10">
             <SurfaceTopBar
-                title={language === 'vi' ? 'Documentation' : 'Documentation'}
+                title={language === 'vi' ? 'Tài liệu' : 'Documentation'}
                 subtitle={language === 'vi'
                     ? 'Giữ nguyên doc metadata và slug routing, nhưng trình bày lại thành một thư viện nội bộ đồng nhất với app shell.'
                     : 'Keep the same doc metadata and slug routing while presenting it as a stronger in-shell library.'}
                 actions={(
                     <Link
                         href="/help"
-                        className="inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+                        className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
                     >
-                        {language === 'vi' ? 'Open Help' : 'Open Help'}
+                        {language === 'vi' ? 'Mở trợ giúp' : 'Open help'}
                     </Link>
                 )}
             />
 
             <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
-                <section className="rounded-[32px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_38%),linear-gradient(135deg,_#f8fafc,_#ffffff)] p-6 shadow-[0_20px_55px_-45px_rgba(79,70,229,0.35)] dark:border-white/[0.07] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_36%),linear-gradient(135deg,_#131827,_#10131d)] dark:shadow-none sm:p-7">
+                <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_38%),linear-gradient(135deg,_#f8fafc,_#ffffff)] p-6 shadow-[0_20px_55px_-45px_rgba(79,70,229,0.35)] dark:border-white/[0.07] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_36%),linear-gradient(135deg,_#131827,_#10131d)] dark:shadow-none sm:p-7">
                     <div className="max-w-3xl">
                         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-white/35">
-                            {language === 'vi' ? 'Knowledge base' : 'Knowledge base'}
+                            {language === 'vi' ? 'Kho tri thức' : 'Knowledge base'}
                         </div>
                         <h2 className="mt-2 text-4xl font-semibold tracking-[-0.05em] text-slate-950 dark:text-white">
                             {language === 'vi' ? 'Một thư viện tài liệu rõ ràng và dễ quét' : 'A documentation library that is easy to scan'}
@@ -123,13 +123,13 @@ export default function DocsPage() {
                 {filteredDocs.map((category) => (
                     <section
                         key={category.id}
-                        className="rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none"
+                        className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none"
                     >
                         <div className="mb-6 flex items-center gap-3">
                             <span className="text-3xl">{category.icon}</span>
                             <div>
                                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-white/35">
-                                    {language === 'vi' ? 'Category' : 'Category'}
+                                    {language === 'vi' ? 'Nhóm' : 'Category'}
                                 </div>
                                 <h3 className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
                                     {category.label[language]}
@@ -166,10 +166,10 @@ export default function DocsPage() {
                     </section>
                 ))}
 
-                <section className="rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
+                <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
                     <div className="mb-6">
                         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-white/35">
-                            {language === 'vi' ? 'External reference' : 'External reference'}
+                            {language === 'vi' ? 'Tham khảo ngoài' : 'External reference'}
                         </div>
                         <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
                             {language === 'vi' ? 'Thư viện Skills Tham khảo' : 'External Skills Reference Library'}

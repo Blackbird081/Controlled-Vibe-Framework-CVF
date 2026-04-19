@@ -97,6 +97,43 @@ docs/reviews/ + CHANGELOG    ← Audit trail
 - Vitest for unit tests, Playwright for E2E
 - Deployed via Netlify (config: `netlify.toml`)
 
+### Landing Page Component Architecture (`src/app/landing/`)
+
+The `/landing` route is a standalone public page split into dedicated components (GC-023 compliance, each <200 lines):
+
+```
+landing/
+  page.tsx                       # Shell: imports + bilingual state (lang: 'vi'|'en')
+  components/
+    HeroVisualizer.tsx            # Animated chat conversation (client, cycling)
+    SocialProof.tsx               # Avatar strip + brand logos
+    TestimonialCards.tsx          # 3 cards mint/sky/pink + star ratings
+    TemplateShowcase.tsx          # 4 template cards with hover-lift
+    InsideVibCode.tsx             # Pathway cards 2×2 + tab switcher (client)
+    WorkflowVisualizer.tsx        # CVF pipeline reveal + accordion (client)
+```
+
+All landing components receive `lang: 'vi' | 'en'` as prop from page.tsx state. Never read `localStorage` in a `useState()` initializer in Next.js App Router — it causes hydration mismatch. Always initialize with a static default then apply `localStorage` in `useEffect`.
+
+**CSS rule:** Google Fonts `@import url(...)` must appear **before** `@import "tailwindcss"` in `globals.css`, otherwise the CSS optimizer emits a warning and the font may not load.
+
+### App Onboarding Design Reference (`App onboarding/`)
+
+The `App onboarding/` folder at repo root contains HTML/JSX mockups that are the **official UI design reference** for all platform pages. When redesigning any page inside the app, consult the matching file first:
+
+| File | Covers |
+|---|---|
+| `cvf-pages-landing.jsx` | About CVF / landing tab |
+| `cvf-pages-home.jsx` | Home — template gallery |
+| `cvf-pages-workspace.jsx` | Skills, Skill Search, Help, Docs |
+| `cvf-pages-ai.jsx` | AI Agent, Multi-Agent, Tools, Simulation, Knowledge |
+| `cvf-pages-platform.jsx` | History, Analytics, Marketplace, Governance, Safety |
+| `cvf-pages-account.jsx` | User profile, Settings, AI Usage |
+| `cvf-sidebar.jsx` | Navigation sidebar structure |
+| `cvf-theme.jsx` | Design tokens, shared icons (57+), reusable components |
+
+These files use inline React styles — when porting to the Next.js app, translate to Tailwind classes. The design tokens in `cvf-theme.jsx` (`makeTheme`) map to the app's `indigo-600` accent and `gray-950` dark background.
+
 ---
 
 ## Governance Controls to Know

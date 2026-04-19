@@ -9,7 +9,7 @@ import { useLanguage } from '@/lib/i18n';
 interface SkillIndexCategory {
     id: string;
     name: string;
-    skills: Array<{ id: string }>;
+    skills: Array<{ id: string; difficulty?: string }>;
 }
 
 export default function SkillsPage() {
@@ -18,7 +18,7 @@ export default function SkillsPage() {
         totalSkills: 0,
         totalDomains: 0,
         searchable: 0,
-        curated: 0,
+        beginnerFriendly: 0,
     });
 
     useEffect(() => {
@@ -32,12 +32,17 @@ export default function SkillsPage() {
                 const categories = Array.isArray(payload) ? payload : payload.categories ?? [];
                 const totalSkills = categories.reduce((sum, category) => sum + category.skills.length, 0);
 
+                const allSkills = categories.flatMap(c => c.skills);
+                const beginnerFriendly = allSkills.filter(s =>
+                    s.difficulty?.toLowerCase().includes('easy')
+                ).length;
+
                 if (!cancelled) {
                     setStats({
                         totalSkills,
                         totalDomains: categories.length,
                         searchable: totalSkills,
-                        curated: categories.filter(category => category.skills.length > 0).length,
+                        beginnerFriendly,
                     });
                 }
             } catch (error) {
@@ -71,8 +76,8 @@ export default function SkillsPage() {
             tone: 'amber' as const,
         },
         {
-            label: language === 'vi' ? 'Nhóm đã curate' : 'Curated Groups',
-            value: String(stats.curated || 0),
+            label: language === 'vi' ? 'Dễ bắt đầu' : 'Beginner-friendly',
+            value: String(stats.beginnerFriendly || 0),
             icon: Sparkles,
             tone: 'violet' as const,
         },

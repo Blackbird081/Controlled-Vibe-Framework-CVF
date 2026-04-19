@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastReviewed": "2026-04-11",
+  "lastReviewed": "2026-04-20",
   "classes": [
     {
       "id": "ACTIVE_RECENT_AUDIT",
@@ -17,11 +17,11 @@
   ],
   "summary": {
     "activeRecentCount": 16,
-    "retainEvidenceCount": 75,
-    "safeToArchiveCount": 86,
+    "retainEvidenceCount": 79,
+    "safeToArchiveCount": 82,
     "archivedCount": 96,
-    "derivedAt": "2026-04-11",
-    "derivationMethod": "Derived from scripts/cvf_active_archive.py screening and refreshed after live-reference reclassification for historical W4 learning audits plus relocation/publication canon audits still blocked by active references, including P4 CP6-CP12 audits still anchored by active docs and W57-T1/W58-T1/W59-T1 closure audits still referenced by active execution plans, deltas, and reviews."
+    "derivedAt": "2026-04-20",
+    "derivationMethod": "Derived from scripts/cvf_active_archive.py screening and refreshed after live-reference reclassification for historical W4 learning audits plus relocation/publication canon audits still blocked by active references, including P4 CP6-CP12 audits still anchored by active docs, W57-T1/W58-T1/W59-T1 closure audits still referenced by active execution plans, deltas, and reviews, and W94/W95/W96/W101 audits dynamically blocked by active references."
   },
   "retainEvidencePaths": [
     "docs/audits/CVF_W1_T1_CP1_CONTROL_PLANE_FOUNDATION_AUDIT_2026-03-21.md",
@@ -98,6 +98,10 @@
     "docs/audits/CVF_W56_T1_CP2_TRUST_ISOLATION_CLOSURE_DECISION_AUDIT_2026-04-05.md",
     "docs/audits/CVF_W57_T1_CP1_LPF_CLOSURE_ASSESSMENT_AUDIT_2026-04-07.md",
     "docs/audits/CVF_W58_T1_CP1_EPF_CLOSURE_ASSESSMENT_AUDIT_2026-04-07.md",
-    "docs/audits/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_AUDIT_2026-04-07.md"
+    "docs/audits/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_AUDIT_2026-04-07.md",
+    "docs/audits/CVF_W94_T1_FAST_LANE_AUDIT_RISK_VISIBILITY_2026-04-15.md",
+    "docs/audits/CVF_W95_T1_FAST_LANE_AUDIT_CANON_SYNC_2026-04-15.md",
+    "docs/audits/CVF_W96_T1_FAST_LANE_AUDIT_RISK_VISIBILITY_PERSIST_2026-04-17.md",
+    "docs/audits/CVF_W101_T1_CP1_KNOWLEDGE_NATIVE_EXECUTE_PATH_INTEGRATION_AUDIT_2026-04-17.md"
   ]
 }

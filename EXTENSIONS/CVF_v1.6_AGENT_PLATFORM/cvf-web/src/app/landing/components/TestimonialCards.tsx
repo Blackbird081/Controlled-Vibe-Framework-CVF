@@ -10,8 +10,8 @@ type Card = {
 const CARDS: Card[] = [
   {
     quote: {
-      vi: 'VibCode giúp tôi ra mắt landing page trong 1 ngày mà không cần thuê developer. Unbelievable!',
-      en: 'VibCode helped me launch a landing page in 1 day without hiring a developer. Unbelievable!',
+      vi: 'Vibe Coding giúp tôi ra mắt landing page trong 1 ngày mà không cần thuê developer. Unbelievable!',
+      en: 'Vibe Coding helped me launch a landing page in 1 day without hiring a developer. Unbelievable!',
     },
     name: 'Minh Tuấn',
     role: { vi: 'Chủ nhà hàng, Hà Nội', en: 'Restaurant Owner, Hanoi' },
@@ -21,8 +21,8 @@ const CARDS: Card[] = [
   },
   {
     quote: {
-      vi: 'Tôi đã thử nhiều công cụ AI nhưng CVF governance của VibCode khiến tôi tin tưởng hơn hẳn.',
-      en: "I've tried many AI tools but VibCode's CVF governance made me trust it far more than the rest.",
+      vi: 'Tôi đã thử nhiều công cụ AI nhưng CVF governance của Vibe Coding khiến tôi tin tưởng hơn hẳn.',
+      en: "I've tried many AI tools but Vibe Coding's CVF governance made me trust it far more than the rest.",
     },
     name: 'Lan Hương',
     role: { vi: 'Product Manager, HCM', en: 'Product Manager, HCMC' },

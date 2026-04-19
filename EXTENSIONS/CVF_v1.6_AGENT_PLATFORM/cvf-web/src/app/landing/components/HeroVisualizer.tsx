@@ -69,7 +69,7 @@ export default function HeroVisualizer({ lang }: { lang: 'vi' | 'en' }) {
       <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-lg shadow-indigo-500/5 dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-3 flex items-center gap-2 border-b border-gray-100 pb-2 dark:border-gray-800">
           <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 text-[10px] font-bold text-white">V</span>
-          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">VibCode</span>
+          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">Vibe Coding</span>
           <span className="ml-auto h-2 w-2 rounded-full bg-emerald-400" />
         </div>
         <div className="min-h-[128px] space-y-2.5">

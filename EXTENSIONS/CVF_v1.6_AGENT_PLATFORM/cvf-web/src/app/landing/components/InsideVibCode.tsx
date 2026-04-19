@@ -5,7 +5,7 @@ import Link from 'next/link';
 import WorkflowVisualizer, { type PipelineTab } from './WorkflowVisualizer';
 
 const PATHWAY_CARDS = [
-  { icon: '🚀', title: { vi: 'Mới dùng VibCode?', en: 'New to VibCode?' }, desc: { vi: 'Bắt đầu với 3 bước đơn giản', en: 'Start with 3 simple steps' }, href: '/docs', border: 'border-indigo-500/30 hover:border-indigo-400/60' },
+  { icon: '🚀', title: { vi: 'Mới dùng Vibe Coding?', en: 'New to Vibe Coding?' }, desc: { vi: 'Bắt đầu với 3 bước đơn giản', en: 'Start with 3 simple steps' }, href: '/docs', border: 'border-indigo-500/30 hover:border-indigo-400/60' },
   { icon: '🔧', title: { vi: 'Đang dùng?', en: 'Already using?' }, desc: { vi: 'Khám phá templates nâng cao', en: 'Explore advanced templates' }, href: '/marketplace', border: 'border-violet-500/30 hover:border-violet-400/60' },
   { icon: '🏗️', title: { vi: 'Muốn hiểu CVF?', en: 'Want to understand CVF?' }, desc: { vi: 'Kiến trúc governance pipeline', en: 'Governance pipeline architecture' }, href: '/docs', border: 'border-emerald-500/30 hover:border-emerald-400/60' },
   { icon: '⚡', title: { vi: 'Mẹo hay & tính năng mới', en: 'Tips & new features' }, desc: { vi: 'Cập nhật và tính năng mới nhất', en: 'Latest updates and features' }, href: '/help', border: 'border-amber-500/30 hover:border-amber-400/60' },
@@ -26,7 +26,7 @@ export default function InsideVibCode({ lang }: { lang: 'vi' | 'en' }) {
         {/* Header */}
         <div className="mb-12 text-center">
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-indigo-400">
-            {lang === 'vi' ? 'Bên trong VibCode' : 'Inside VibCode'}
+            {lang === 'vi' ? 'Bên trong Vibe Coding' : 'Inside Vibe Coding'}
           </p>
           <h2 className="text-3xl font-extrabold font-serif-display text-white md:text-4xl">
             {lang === 'vi' ? 'Kiến trúc đặt con người làm trung tâm' : 'Human-centered architecture'}

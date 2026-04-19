@@ -18,7 +18,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               V
             </span>
             <span className="text-lg font-bold text-gray-900 transition-colors group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400">
-              VibCode
+              Vibe Coding
             </span>
           </Link>
           <div className="flex items-center gap-3">

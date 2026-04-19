@@ -25,8 +25,8 @@ export default function SocialProof({ lang }: { lang: 'vi' | 'en' }) {
           </div>
           <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
             {lang === 'vi'
-              ? '12,000+ nhà sáng lập không-code đang dùng VibCode'
-              : '12,000+ no-code founders are using VibCode'}
+              ? '12,000+ nhà sáng lập không-code đang dùng Vibe Coding'
+              : '12,000+ no-code founders are using Vibe Coding'}
           </p>
         </div>
 

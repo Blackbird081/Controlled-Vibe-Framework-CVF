@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ClipboardList, PenLine, Rocket, MessageSquare, LayoutGrid, Shield, Globe, ChevronRight, Sparkles, ArrowRight } from 'lucide-react';
 import HeroVisualizer from './components/HeroVisualizer';
@@ -131,11 +131,12 @@ const content = {
 };
 
 export default function LandingPage() {
-  const [lang, setLang] = useState<Lang>(() => {
-    if (typeof window === 'undefined') return 'en';
+  const [lang, setLang] = useState<Lang>('en');
+
+  useEffect(() => {
     const saved = localStorage.getItem('cvf_language');
-    return saved === 'vi' || saved === 'en' ? saved : 'en';
-  });
+    if (saved === 'vi' || saved === 'en') setLang(saved);
+  }, []);
 
   const toggleLang = () => {
     const next = lang === 'vi' ? 'en' : 'vi';

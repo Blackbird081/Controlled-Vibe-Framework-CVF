@@ -189,3 +189,7 @@ html {
 .animate-delay-0   { animation-delay: 0ms; }
 .animate-delay-150 { animation-delay: 150ms; }
 .animate-delay-300 { animation-delay: 300ms; }
+
+/* Neon glow utilities (not expressible in Tailwind arbitrary values) */
+.neon-dot-emerald  { box-shadow: 0 0 6px #34d399, 0 0 12px #34d399; }
+.neon-text-emerald { text-shadow: 0 0 8px #34d399; }

@@ -1,53 +1,67 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-type Msg = { role: 'user' | 'ai'; text: string; delay: number };
+type Msg = { role: "user" | "ai"; text: string; delay: number; highlight?: string };
 
 const VI_MSGS: Msg[] = [
-  { role: 'user', delay: 0,    text: 'Tôi muốn làm app đặt bàn cho nhà hàng nhỏ...' },
-  { role: 'ai',   delay: 1500, text: 'Tuyệt! Mình đã dựng form đặt bàn với chọn giờ, số khách và ghi chú đặc biệt.' },
-  { role: 'user', delay: 3000, text: 'Thêm nhắc lịch qua email nhé' },
-  { role: 'ai',   delay: 4500, text: 'Đã thêm! Email tự động gửi 2h trước giờ đặt bàn.' },
+  { role: "user", delay: 0,    text: "Tôi muốn làm app đặt bàn cho nhà hàng nhỏ..." },
+  { role: "ai",   delay: 1500, text: "Tuyệt! Mình đã dựng form đặt bàn với chọn giờ, số khách và ghi chú đặc biệt. Bạn có muốn kiểm tra cấu trúc dữ liệu trước khi mình triển khai không?", highlight: "kiểm tra cấu trúc dữ liệu" },
+  { role: "user", delay: 3000, text: "Thêm nhắc lịch qua email nhé" },
+  { role: "ai",   delay: 4500, text: "Đã thêm! Email tự động gửi 2h trước giờ đặt bàn." },
 ];
 
 const EN_MSGS: Msg[] = [
-  { role: 'user', delay: 0,    text: 'I want to build a reservation app for my small restaurant...' },
-  { role: 'ai',   delay: 1500, text: 'Done! I built a booking form with time picker, guest count, and special notes.' },
-  { role: 'user', delay: 3000, text: 'Add email reminders too' },
-  { role: 'ai',   delay: 4500, text: 'Added! Email reminders auto-send 2h before each reservation.' },
+  { role: "user", delay: 0,    text: "I want to build a reservation app for my small restaurant..." },
+  { role: "ai",   delay: 1500, text: "Great! I've drafted the booking form with time selection, guest count, and special notes. Would you like to review the data structure before we go live?", highlight: "review the data structure" },
+  { role: "user", delay: 3000, text: "Add email reminders too" },
+  { role: "ai",   delay: 4500, text: "Added! Email reminders auto-send 2h before each reservation." },
 ];
 
-function AppPreview({ lang }: { lang: 'vi' | 'en' }) {
+function renderMsg(text: string, highlight?: string) {
+  if (!highlight) return <>{text}</>;
+  const idx = text.indexOf(highlight);
+  if (idx === -1) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, idx)}
+      <span className="font-semibold text-indigo-600 dark:text-indigo-300">{highlight}</span>
+      {text.slice(idx + highlight.length)}
+    </>
+  );
+}
+
+function AppPreview({ lang }: { lang: "vi" | "en" }) {
   return (
     <div className="rounded-xl border border-indigo-100 bg-white p-4 shadow-lg shadow-indigo-500/5 dark:border-indigo-900/40 dark:bg-gray-900">
       <div className="mb-3 flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-emerald-400" />
-        <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-          {lang === 'vi' ? '✓ App đã tạo xong' : '✓ App generated'}
+        <span className="neon-dot-emerald h-2 w-2 rounded-full bg-emerald-400" />
+        <span className="neon-text-emerald text-xs font-semibold text-emerald-500 dark:text-emerald-300">
+          {lang === "vi" ? "✓ App đã tạo xong" : "✓ App generated"}
         </span>
       </div>
       <div className="space-y-2">
         <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">
-          🗓 {lang === 'vi' ? 'Chọn ngày & giờ' : 'Select date & time'}
+          🗓 {lang === "vi" ? "Chọn ngày & giờ" : "Select date & time"}
         </div>
         <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">
-          👥 {lang === 'vi' ? 'Số khách: 4 người' : 'Guests: 4 people'}
+          👥 {lang === "vi" ? "Số khách: 4 người" : "Guests: 4 people"}
         </div>
         <div className="rounded-lg bg-indigo-600 px-3 py-2 text-center text-xs font-bold text-white">
-          {lang === 'vi' ? 'Đặt bàn ngay' : 'Reserve Now'}
+          {lang === "vi" ? "Đặt bàn ngay" : "Reserve Now"}
         </div>
       </div>
     </div>
   );
 }
 
-export default function HeroVisualizer({ lang }: { lang: 'vi' | 'en' }) {
+export default function HeroVisualizer({ lang }: { lang: "vi" | "en" }) {
   const [cycle, setCycle] = useState(0);
   const [visibleCount, setVisibleCount] = useState(0);
-  const messages = lang === 'vi' ? VI_MSGS : EN_MSGS;
+  const messages = lang === "vi" ? VI_MSGS : EN_MSGS;
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisibleCount(0);
     const timers: ReturnType<typeof setTimeout>[] = [];
 
@@ -74,20 +88,20 @@ export default function HeroVisualizer({ lang }: { lang: 'vi' | 'en' }) {
         </div>
         <div className="min-h-[128px] space-y-2.5">
           {messages.slice(0, visibleCount).map((msg, i) => (
-            <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
               <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
-                msg.role === 'user'
-                  ? 'rounded-br-sm bg-indigo-600 text-white'
-                  : 'rounded-bl-sm bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
+                msg.role === "user"
+                  ? "rounded-br-sm bg-indigo-600 text-white"
+                  : "rounded-bl-sm bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
               }`}>
-                {msg.text}
+                {renderMsg(msg.text, msg.highlight)}
               </div>
             </div>
           ))}
           {visibleCount > 0 && visibleCount < messages.length && (
             <div className="flex justify-start">
               <div className="flex gap-1 rounded-2xl rounded-bl-sm bg-gray-100 px-3.5 py-2.5 dark:bg-gray-800">
-                {(['animate-delay-0', 'animate-delay-150', 'animate-delay-300'] as const).map(cls => (
+                {(["animate-delay-0", "animate-delay-150", "animate-delay-300"] as const).map(cls => (
                   <span key={cls} className={`h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce ${cls}`} />
                 ))}
               </div>
@@ -97,7 +111,7 @@ export default function HeroVisualizer({ lang }: { lang: 'vi' | 'en' }) {
       </div>
 
       {/* App preview after last message */}
-      <div className={`transition-all duration-700 ${visibleCount >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'}`}>
+      <div className={`transition-all duration-700 ${visibleCount >= 4 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3 pointer-events-none"}`}>
         <AppPreview lang={lang} />
       </div>
     </div>

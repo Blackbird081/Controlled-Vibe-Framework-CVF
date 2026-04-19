@@ -24,6 +24,9 @@
 
 'use strict';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+require('../../../../scripts/load-repo-env.cjs').loadRepoEnv();
+
 function resolveAlibabaApiKey(env = process.env) {
   return env.ALIBABA_API_KEY || env.CVF_BENCHMARK_ALIBABA_KEY || env.CVF_ALIBABA_API_KEY;
 }

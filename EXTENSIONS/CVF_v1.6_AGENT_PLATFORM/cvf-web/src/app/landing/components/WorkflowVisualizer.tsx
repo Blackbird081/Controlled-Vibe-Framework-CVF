@@ -51,6 +51,7 @@ export default function WorkflowVisualizer({ tab, lang }: { tab: PipelineTab; la
   const steps = PIPELINES[tab];
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRevealed(0);
     setExpanded(null);
     const timers = steps.map((_, i) =>

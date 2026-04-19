@@ -59,7 +59,7 @@ const DECISION_STYLES = {
 
 function RiskCard({ status, lang }: { status: SafetyStatus; lang: 'vi' | 'en' }) {
     return (
-        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow">
+        <div className="p-4 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] hover:shadow-lg transition-shadow">
             <div className="flex items-center gap-3 mb-2">
                 <span className="text-3xl">{status.emoji}</span>
                 <div>
@@ -84,7 +84,7 @@ function PromptTestSection({ lang }: { lang: 'vi' | 'en' }) {
     };
 
     return (
-        <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div className="p-6 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]">
             <h3 className="text-lg font-bold mb-3">
                 🛡️ {lang === 'vi' ? 'Kiểm tra Prompt' : 'Prompt Safety Check'}
             </h3>
@@ -97,18 +97,18 @@ function PromptTestSection({ lang }: { lang: 'vi' | 'en' }) {
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder={lang === 'vi' ? 'Nhập prompt tại đây...' : 'Enter prompt here...'}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-3 rounded-lg border border-gray-300 dark:border-white/[0.07] bg-gray-50 dark:bg-[#0d0f1a] text-sm resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 rows={3}
             />
             <button
                 onClick={handleTest}
-                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                className="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
             >
                 {lang === 'vi' ? 'Kiểm tra' : 'Check'}
             </button>
 
             {result && (
-                <div className="mt-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-900">
+                <div className="mt-4 p-4 rounded-lg bg-gray-50 dark:bg-[#0d0f1a]">
                     <div className="flex items-center gap-2 mb-2">
                         <span className="text-xl">{result.blocked ? '🔴' : result.threats.length > 0 ? '🟡' : '🟢'}</span>
                         <span className="font-bold">
@@ -147,7 +147,7 @@ function OutputTestSection({ lang }: { lang: 'vi' | 'en' }) {
     };
 
     return (
-        <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div className="p-6 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]">
             <h3 className="text-lg font-bold mb-3">
                 📊 {lang === 'vi' ? 'Kiểm tra Output AI' : 'AI Output Safety Check'}
             </h3>
@@ -160,7 +160,7 @@ function OutputTestSection({ lang }: { lang: 'vi' | 'en' }) {
                 value={output}
                 onChange={e => setOutput(e.target.value)}
                 placeholder={lang === 'vi' ? 'Dán AI output tại đây...' : 'Paste AI output here...'}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-3 rounded-lg border border-gray-300 dark:border-white/[0.07] bg-gray-50 dark:bg-[#0d0f1a] text-sm resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 rows={3}
             />
             <button
@@ -171,7 +171,7 @@ function OutputTestSection({ lang }: { lang: 'vi' | 'en' }) {
             </button>
 
             {result && (
-                <div className="mt-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-900">
+                <div className="mt-4 p-4 rounded-lg bg-gray-50 dark:bg-[#0d0f1a]">
                     <div className="flex items-center gap-2 mb-2">
                         <span className="text-xl">{result.emoji}</span>
                         <span className="font-bold">{result.label[lang]}</span>
@@ -233,7 +233,7 @@ function OpenClawPanel({ enabled, mode, language, onToggle, onModeChange }: {
     return (
         <div className={`rounded-2xl border-2 overflow-hidden transition-all ${enabled
             ? 'border-emerald-500/50 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20'
-            : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
+            : 'border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]'
             }`}>
             {/* Header */}
             <div className="px-4 sm:px-6 py-4 sm:py-5 flex flex-wrap items-center justify-between gap-3">
@@ -277,8 +277,8 @@ function OpenClawPanel({ enabled, mode, language, onToggle, onModeChange }: {
                         value={mode}
                         onChange={(e) => onModeChange(e.target.value as OpenClawMode)}
                         disabled={!enabled}
-                        className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-gray-600
-                                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                        className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-white/[0.07]
+                                   bg-white dark:bg-[#1a1d2e] text-gray-900 dark:text-white
                                    disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <option value="disabled">⛔ {OPENCLAW_MODE_INFO.disabled[language].label}</option>
@@ -294,7 +294,7 @@ function OpenClawPanel({ enabled, mode, language, onToggle, onModeChange }: {
                 </div>
 
                 {/* Flow Diagram */}
-                <div className="bg-white/60 dark:bg-gray-800/60 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/50">
+                <div className="bg-white/60 dark:bg-[#1a1d2e]/60 rounded-xl p-4 border border-gray-200/50 dark:border-white/[0.05]">
                     <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">
                         {language === 'vi' ? 'Luồng xử lý:' : 'Processing Flow:'}
                     </div>
@@ -328,8 +328,8 @@ function ProposalsTable({ proposals, language }: {
     language: 'vi' | 'en';
 }) {
     return (
-        <div className="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        <div className="rounded-xl border border-gray-200 dark:border-white/[0.07] overflow-hidden bg-white dark:bg-[#1a1d2e]">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-white/[0.07] flex items-center justify-between">
                 <h3 className="font-semibold text-gray-900 dark:text-white">
                     {language === 'vi' ? '📋 Đề xuất gần đây' : '📋 Recent Proposals'}
                 </h3>
@@ -338,7 +338,7 @@ function ProposalsTable({ proposals, language }: {
             <div className="overflow-x-auto">
                 <table className="w-full text-sm min-w-[600px]">
                     <thead>
-                        <tr className="bg-gray-50 dark:bg-gray-700/50">
+                        <tr className="bg-gray-50 dark:bg-white/[0.05]">
                             <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">ID</th>
                             <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">
                                 {language === 'vi' ? 'Hành động' : 'Action'}
@@ -357,9 +357,9 @@ function ProposalsTable({ proposals, language }: {
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                    <tbody className="divide-y divide-gray-100 dark:divide-white/[0.07]">
                         {proposals.map(p => (
-                            <tr key={p.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                            <tr key={p.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-colors">
                                 <td className="px-4 py-3 font-mono text-gray-500 text-xs">{p.id}</td>
                                 <td className="px-4 py-3 text-gray-900 dark:text-white font-medium">{p.action}</td>
                                 <td className="px-4 py-3">
@@ -402,8 +402,8 @@ function OpenClawTestSection({ language, onSubmit, lastResult }: {
     };
 
     return (
-        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
-            <div className="px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] overflow-hidden">
+            <div className="px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-white/[0.07]">
                 <h3 className="font-semibold text-gray-900 dark:text-white">
                     {language === 'vi' ? '🧪 Gửi yêu cầu qua OpenClaw' : '🧪 Send Request via OpenClaw'}
                 </h3>
@@ -421,8 +421,8 @@ function OpenClawTestSection({ language, onSubmit, lastResult }: {
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
                         placeholder={language === 'vi' ? 'Ví dụ: Deploy auth system...' : 'e.g. Deploy auth system...'}
-                        className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600
-                                   bg-gray-50 dark:bg-gray-900 text-sm
+                        className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 dark:border-white/[0.07]
+                                   bg-gray-50 dark:bg-[#0d0f1a] text-sm
                                    focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                     />
                     <button
@@ -438,7 +438,7 @@ function OpenClawTestSection({ language, onSubmit, lastResult }: {
                 </div>
 
                 {lastResult && (
-                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-900 space-y-3">
+                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-[#0d0f1a] space-y-3">
                         <div className="flex items-center gap-2">
                             <span className="text-lg">
                                 {lastResult.decision?.status === 'approved' ? '✅' :
@@ -447,19 +447,19 @@ function OpenClawTestSection({ language, onSubmit, lastResult }: {
                             <span className="font-semibold text-sm">{lastResult.response}</span>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                            <div className="p-2 rounded bg-white dark:bg-gray-800">
+                            <div className="p-2 rounded bg-white dark:bg-[#1a1d2e]">
                                 <div className="text-gray-500">{language === 'vi' ? 'Hành động' : 'Action'}</div>
                                 <div className="font-mono font-medium mt-0.5">{lastResult.proposal?.action}</div>
                             </div>
-                            <div className="p-2 rounded bg-white dark:bg-gray-800">
+                            <div className="p-2 rounded bg-white dark:bg-[#1a1d2e]">
                                 <div className="text-gray-500">{language === 'vi' ? 'Độ tin cậy' : 'Confidence'}</div>
                                 <div className="font-mono font-medium mt-0.5">{((lastResult.proposal?.confidence ?? 0) * 100).toFixed(0)}%</div>
                             </div>
-                            <div className="p-2 rounded bg-white dark:bg-gray-800">
+                            <div className="p-2 rounded bg-white dark:bg-[#1a1d2e]">
                                 <div className="text-gray-500">{language === 'vi' ? 'Rủi ro' : 'Risk'}</div>
                                 <div className="font-mono font-medium mt-0.5">{lastResult.proposal?.riskLevel?.toUpperCase()}</div>
                             </div>
-                            <div className="p-2 rounded bg-white dark:bg-gray-800">
+                            <div className="p-2 rounded bg-white dark:bg-[#1a1d2e]">
                                 <div className="text-gray-500">Mode</div>
                                 <div className="font-mono font-medium mt-0.5">{lastResult.mode === 'real' ? '🤖 AI' : '📋 Mock'}</div>
                             </div>
@@ -622,7 +622,7 @@ function KernelHealthDashboard({ telemetry, lang }: { telemetry: KernelTelemetry
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {cards.map(card => (
-                    <div key={card.title} className={`p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 ${card.badge}`}>
+                    <div key={card.title} className={`p-4 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] ${card.badge}`}>
                         <div className="text-2xl mb-2">{card.icon}</div>
                         <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{card.title}</div>
                         <div className={`text-lg font-bold ${card.color}`}>{card.value}</div>
@@ -646,13 +646,13 @@ function RequestTraceViewer({ telemetry, lang }: { telemetry: KernelTelemetry; l
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {/* Trace list */}
-                <div className="lg:col-span-2 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
-                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                <div className="lg:col-span-2 rounded-xl border border-gray-200 dark:border-white/[0.07] overflow-hidden bg-white dark:bg-[#1a1d2e]">
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-white/[0.07] bg-gray-50 dark:bg-white/[0.05]">
                         <span className="text-xs font-semibold text-gray-500 uppercase">
                             {lang === 'vi' ? 'Yêu cầu gần đây' : 'Recent Requests'}
                         </span>
                     </div>
-                    <div className="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto">
+                    <div className="divide-y divide-gray-100 dark:divide-white/[0.07] max-h-80 overflow-y-auto">
                         {recentTraces.map(trace => {
                             const d = DECISION_LABELS[trace.decisionCode] || { icon: '❔', label: trace.decisionCode, labelVi: trace.decisionCode };
                             const isSelected = selectedTrace?.requestId === trace.requestId;
@@ -660,7 +660,7 @@ function RequestTraceViewer({ telemetry, lang }: { telemetry: KernelTelemetry; l
                                 <button
                                     key={trace.requestId}
                                     onClick={() => setSelectedTrace(isSelected ? null : trace)}
-                                    className={`w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500' : ''}`}
+                                    className={`w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-colors ${isSelected ? 'bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500' : ''}`}
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
@@ -691,7 +691,7 @@ function RequestTraceViewer({ telemetry, lang }: { telemetry: KernelTelemetry; l
                 </div>
 
                 {/* Trace detail */}
-                <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+                <div className="rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] p-4">
                     <div className="text-xs font-semibold text-gray-500 uppercase mb-3">
                         {lang === 'vi' ? 'Chi tiết Trace' : 'Trace Detail'}
                     </div>
@@ -736,7 +736,7 @@ function RiskEvolutionChart({ telemetry, lang }: { telemetry: KernelTelemetry; l
             <h2 className="text-xl font-bold mb-4">
                 📈 {lang === 'vi' ? 'Diễn biến Rủi ro' : 'Risk Evolution'}
             </h2>
-            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <div className="p-6 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]">
                 {history.length > 0 ? (
                     <>
                         {/* Y-axis labels + bars */}
@@ -754,7 +754,7 @@ function RiskEvolutionChart({ telemetry, lang }: { telemetry: KernelTelemetry; l
                                 {/* Grid lines */}
                                 <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
                                     {[0, 1, 2, 3, 4].map(i => (
-                                        <div key={i} className="border-b border-gray-100 dark:border-gray-700/50" />
+                                        <div key={i} className="border-b border-gray-100 dark:border-white/[0.05]" />
                                     ))}
                                 </div>
                                 {/* Bar rendering */}
@@ -793,7 +793,7 @@ function RiskEvolutionChart({ telemetry, lang }: { telemetry: KernelTelemetry; l
                             ))}
                         </div>
                         {/* Stats summary */}
-                        <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-4 text-xs text-gray-500">
+                        <div className="mt-4 pt-3 border-t border-gray-100 dark:border-white/[0.07] flex flex-wrap gap-4 text-xs text-gray-500">
                             <span>{lang === 'vi' ? 'Tổng mẫu' : 'Samples'}: {history.length}</span>
                             <span>{lang === 'vi' ? 'Cao nhất' : 'Highest'}: {history.reduce((max, h) => {
                                 const order = ['R0', 'R1', 'R2', 'R3', 'R4'];
@@ -841,19 +841,19 @@ function KernelPolicySelector({ telemetry, lang }: { telemetry: KernelTelemetry;
                         key={p.id}
                         onClick={() => handleChange(p.id)}
                         className={`p-4 rounded-xl border-2 text-left transition-all ${selectedPolicy === p.id
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
-                            : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
+                            ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 shadow-md'
+                            : 'border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] hover:border-gray-300 dark:hover:border-gray-600'
                             }`}
                     >
                         <div className="flex items-center gap-2 mb-1">
-                            <div className={`w-3 h-3 rounded-full ${selectedPolicy === p.id ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'}`} />
+                            <div className={`w-3 h-3 rounded-full ${selectedPolicy === p.id ? 'bg-indigo-500' : 'bg-gray-300 dark:bg-gray-600'}`} />
                             <span className="font-semibold text-sm">{lang === 'vi' ? p.nameVi : p.name}</span>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400 ml-5">
                             {lang === 'vi' ? p.descVi : p.desc}
                         </p>
                         {selectedPolicy === p.id && saving && (
-                            <span className="text-xs text-blue-500 ml-5 mt-1 inline-block animate-pulse">
+                            <span className="text-xs text-indigo-500 ml-5 mt-1 inline-block animate-pulse">
                                 {lang === 'vi' ? 'Đang lưu...' : 'Saving...'}
                             </span>
                         )}
@@ -880,7 +880,7 @@ function CreativeModeIndicator({ telemetry, lang }: { telemetry: KernelTelemetry
                 ? 'border-red-400 bg-red-50 dark:bg-red-900/20'
                 : creativeEnabled
                     ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/20'
-                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
+                    : 'border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]'
                 }`}>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -966,7 +966,7 @@ function DomainMapVisualization({ lang }: { lang: 'vi' | 'en' }) {
             <h2 className="text-xl font-bold mb-4">
                 🗺️ {lang === 'vi' ? 'Bản đồ Domain' : 'Domain Map Visualization'}
             </h2>
-            <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-x-auto">
+            <div className="p-4 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] overflow-x-auto">
                 <svg viewBox="0 0 750 200" className="w-full max-w-3xl mx-auto" style={{ minWidth: '320px' }}>
                     {/* Connection lines */}
                     {connections.map((conn, i) => {
@@ -1025,7 +1025,7 @@ function RuntimeAdaptersPanel({ lang }: { lang: 'vi' | 'en' }) {
                 {RUNTIME_ADAPTERS.map(adapter => {
                     const status = STATUS_STYLES[adapter.status];
                     return (
-                        <div key={adapter.name} className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                        <div key={adapter.name} className="p-4 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]">
                             <div className="flex items-center justify-between mb-2">
                                 <span className="text-2xl">{adapter.icon}</span>
                                 <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${status.color}`}>
@@ -1040,7 +1040,7 @@ function RuntimeAdaptersPanel({ lang }: { lang: 'vi' | 'en' }) {
                                 {adapter.capabilities.map(cap => {
                                     const capInfo = CAPABILITY_LABELS[cap];
                                     return (
-                                        <span key={cap} className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                                        <span key={cap} className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-xs bg-gray-100 dark:bg-[#1a1d2e] text-gray-600 dark:text-gray-300">
                                             {capInfo.icon} {lang === 'vi' ? capInfo.vi : capInfo.en}
                                         </span>
                                     );
@@ -1083,11 +1083,11 @@ function ExplainabilityPanel({ lang }: { lang: 'vi' | 'en' }) {
             <h2 className="text-xl font-bold mb-4">
                 🗣️ {lang === 'vi' ? 'Giải thích Hành động (v1.7.3)' : 'Action Explainability (v1.7.3)'}
             </h2>
-            <div className="p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <div className="p-5 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#0d0f1a]">
                 <div className="flex flex-wrap gap-2 mb-3">
                     {intents.map(i => (
                         <button key={i} onClick={() => setSelectedIntent(i)}
-                            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${selectedIntent === i ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200'}`}>
+                            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${selectedIntent === i ? 'bg-indigo-600 text-white' : 'bg-gray-100 dark:bg-[#1a1d2e] text-gray-600 dark:text-gray-300 hover:bg-gray-200'}`}>
                             {i.replace('_', ' ')}
                         </button>
                     ))}
@@ -1095,12 +1095,12 @@ function ExplainabilityPanel({ lang }: { lang: 'vi' | 'en' }) {
                 <div className="flex gap-2 mb-4">
                     {actions.map(a => (
                         <button key={a} onClick={() => setSelectedAction(a)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all ${selectedAction === a ? actionColors[a] : 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-500'}`}>
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all ${selectedAction === a ? actionColors[a] : 'bg-gray-400 dark:bg-white/[0.1] hover:bg-gray-500'}`}>
                             {a === 'EXECUTE' ? '✅' : a === 'BLOCK' ? '🚫' : '⏳'} {a}
                         </button>
                     ))}
                 </div>
-                <div className="space-y-2 p-4 rounded-lg bg-gray-50 dark:bg-gray-900">
+                <div className="space-y-2 p-4 rounded-lg bg-gray-50 dark:bg-[#0d0f1a]">
                     <div className="font-bold text-lg">{result.summary}</div>
                     <div className="text-sm text-gray-600 dark:text-gray-300">{result.details}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">{result.riskMessage}</div>
@@ -1135,7 +1135,7 @@ function NaturalPolicyEditor({ lang }: { lang: 'vi' | 'en' }) {
                         onChange={(e) => setInput(e.target.value)}
                         placeholder={placeholder}
                         rows={6}
-                        className="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-mono resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full p-4 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] text-sm font-mono resize-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     />
                     <div className="text-xs text-gray-400 mt-1">
                         {lang === 'vi' ? `${rules.length} quy tắc được nhận diện` : `${rules.length} rules detected`}
@@ -1143,12 +1143,12 @@ function NaturalPolicyEditor({ lang }: { lang: 'vi' | 'en' }) {
                 </div>
                 <div className="space-y-2">
                     {rules.length === 0 ? (
-                        <div className="p-8 text-center text-gray-400 text-sm rounded-xl border border-dashed border-gray-300 dark:border-gray-600">
+                        <div className="p-8 text-center text-gray-400 text-sm rounded-xl border border-dashed border-gray-300 dark:border-white/[0.07]">
                             {lang === 'vi' ? 'Nhập policy để xem kết quả phân tích' : 'Type policies to see parsed results'}
                         </div>
                     ) : (
                         rules.map((rule, i) => (
-                            <div key={i} className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                            <div key={i} className="p-3 rounded-lg border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]">
                                 <div className="flex items-center gap-2 mb-1">
                                     <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase ${getDecisionColor(rule.decision)}`}>
                                         {rule.decision}
@@ -1180,13 +1180,13 @@ function RiskMatrixPanel({ lang }: { lang: 'vi' | 'en' }) {
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {/* Risk Matrix Table */}
-                <div className="lg:col-span-2 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
-                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                <div className="lg:col-span-2 rounded-xl border border-gray-200 dark:border-white/[0.07] overflow-hidden bg-white dark:bg-[#1a1d2e]">
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-white/[0.07] bg-gray-50 dark:bg-white/[0.05]">
                         <span className="text-xs font-semibold text-gray-500 uppercase">
                             {lang === 'vi' ? 'Điểm rủi ro theo hành động' : 'Risk Score by Action'}
                         </span>
                     </div>
-                    <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                    <div className="divide-y divide-gray-100 dark:divide-white/[0.07]">
                         {RISK_MATRIX.map(entry => (
                             <div key={entry.intent} className="flex items-center px-4 py-2.5 gap-3">
                                 <div className="flex-1">
@@ -1196,7 +1196,7 @@ function RiskMatrixPanel({ lang }: { lang: 'vi' | 'en' }) {
                                 </div>
                                 <div className="w-32">
                                     <div className="flex items-center gap-2">
-                                        <div className="flex-1 h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                                        <div className="flex-1 h-2 rounded-full bg-gray-200 dark:bg-[#1a1d2e] overflow-hidden">
                                             <div className={`h-full rounded-full ${getScoreBar(entry.baseScore)}`}
                                                 style={{ width: `${entry.baseScore}%` }} />
                                         </div>
@@ -1215,7 +1215,7 @@ function RiskMatrixPanel({ lang }: { lang: 'vi' | 'en' }) {
 
                 {/* Escalation Thresholds + Destructive Rules */}
                 <div className="space-y-4">
-                    <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+                    <div className="rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] p-4">
                         <div className="text-xs font-semibold text-gray-500 uppercase mb-3">
                             {lang === 'vi' ? 'Ngưỡng Escalation' : 'Escalation Thresholds'}
                         </div>
@@ -1230,7 +1230,7 @@ function RiskMatrixPanel({ lang }: { lang: 'vi' | 'en' }) {
                             ))}
                         </div>
                     </div>
-                    <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+                    <div className="rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] p-4">
                         <div className="text-xs font-semibold text-gray-500 uppercase mb-3">
                             {lang === 'vi' ? 'Mẫu Nguy hiểm' : 'Destructive Patterns'}
                         </div>
@@ -1272,7 +1272,7 @@ function GovernanceCheckerSection({ lang }: { lang: 'vi' | 'en' }) {
     ];
 
     return (
-        <div className="p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div className="p-5 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]">
             <h3 className="font-bold mb-1 flex items-center gap-2">
                 <span>🛡️</span>
                 {lang === 'vi' ? 'Governance Checker' : 'Governance Checker'}
@@ -1290,8 +1290,8 @@ function GovernanceCheckerSection({ lang }: { lang: 'vi' | 'en' }) {
                         key={a.id}
                         onClick={() => { setAction(a.id); setResult(null); }}
                         className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${action === a.id
-                            ? 'bg-blue-600 text-white shadow-md'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                            ? 'bg-indigo-600 text-white shadow-md'
+                            : 'bg-gray-100 dark:bg-[#1a1d2e] text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/[0.1]'
                             }`}
                     >
                         {a.icon} {a.label}
@@ -1305,7 +1305,7 @@ function GovernanceCheckerSection({ lang }: { lang: 'vi' | 'en' }) {
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
                 placeholder={lang === 'vi' ? 'Mô tả ngữ cảnh (tùy chọn)...' : 'Describe context (optional)...'}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-sm mb-3"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-white/[0.07] bg-gray-50 dark:bg-[#0d0f1a] text-sm mb-3"
             />
 
             <button
@@ -1318,7 +1318,7 @@ function GovernanceCheckerSection({ lang }: { lang: 'vi' | 'en' }) {
 
             {/* Result */}
             {result && result.success && (
-                <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg space-y-2">
+                <div className="mt-4 p-4 bg-gray-50 dark:bg-[#0d0f1a] rounded-lg space-y-2">
                     <div className="text-xs font-semibold text-gray-500 uppercase mb-2">
                         {lang === 'vi' ? 'Checklist' : 'Compliance Checklist'}
                         <span className="ml-2 text-gray-400">
@@ -1405,7 +1405,7 @@ export default function SafetyPage() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        <div className="px-4 py-8 space-y-8">
             {/* Header */}
             <div>
                 <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-3">
@@ -1521,7 +1521,7 @@ export default function SafetyPage() {
             </div>
 
             {/* How It Works */}
-            <div className="p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <div className="p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]">
                 <h3 className="text-lg font-bold mb-3">
                     ℹ️ {lang === 'vi' ? 'Cách Hoạt Động' : 'How It Works'}
                 </h3>

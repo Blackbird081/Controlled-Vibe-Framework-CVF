@@ -39,7 +39,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </header>
 
       {/* Body row — sidebar fixed, right panel scrolls independently */}
-      <div className="mx-auto flex min-h-0 w-full max-w-[1400px] flex-1 gap-4 overflow-hidden py-6 pr-6 md:pr-10">
+      <div className="flex min-h-0 w-full flex-1 gap-4 overflow-hidden py-6 pr-6 md:pr-10">
         <div className="ml-3 md:ml-4 flex h-full flex-shrink-0">
           <AdminNavClient
             hasImpersonate={hasImpersonate}

@@ -95,7 +95,7 @@ export default function SkillsPage() {
                 )}
             />
 
-            <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
+            <div className="space-y-8 px-4 py-6 sm:px-6">
                 <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_38%),linear-gradient(135deg,_#f8fafc,_#ffffff)] p-6 shadow-[0_20px_55px_-45px_rgba(79,70,229,0.35)] dark:border-white/[0.07] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_36%),linear-gradient(135deg,_#131827,_#10131d)] dark:shadow-none sm:p-7">
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">

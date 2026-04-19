@@ -332,7 +332,7 @@ export default function HomePage() {
                         )}
                     />
 
-                    <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
+                    <div className="space-y-8 px-4 py-6 sm:px-6">
                         <section
                             id="tour-welcome"
                             className="cvf-surface cvf-density-section overflow-hidden rounded-[32px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.16),_transparent_45%),linear-gradient(135deg,_#f8fafc,_#ffffff)] p-7 shadow-[0_20px_60px_-45px_rgba(79,70,229,0.35)] dark:border-white/[0.07] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.22),_transparent_40%),linear-gradient(135deg,_#141927,_#0f1320)] dark:shadow-none sm:p-8"
@@ -539,20 +539,20 @@ export default function HomePage() {
                                         </div>
                                     </div>
                                 </div>
+
+                                <div id="tour-template-grid" className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                                    {filteredTemplates.map((template, index) => (
+                                        <div key={template.id} id={index === 0 ? 'tour-template-card' : undefined}>
+                                            <TemplateCard
+                                                template={template}
+                                                onClick={() => handleSelectTemplate(template)}
+                                                onPreview={(e) => { e.stopPropagation(); setPreviewTemplate(template); }}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </section>
-
-                        <div id="tour-template-grid" className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-                            {filteredTemplates.map((template, index) => (
-                                <div key={template.id} id={index === 0 ? 'tour-template-card' : undefined}>
-                                    <TemplateCard
-                                        template={template}
-                                        onClick={() => handleSelectTemplate(template)}
-                                        onPreview={(e) => { e.stopPropagation(); setPreviewTemplate(template); }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
                     </div>
                 </>
             )}

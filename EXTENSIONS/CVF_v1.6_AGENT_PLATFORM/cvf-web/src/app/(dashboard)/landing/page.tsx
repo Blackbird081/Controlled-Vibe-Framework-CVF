@@ -3,7 +3,12 @@
 import Link from 'next/link';
 import { ArrowRight, ClipboardList, LayoutGrid, Rocket, Shield, Sparkles } from 'lucide-react';
 import { SurfaceTopBar } from '@/components';
-import { useLanguage } from '@/lib/i18n';
+import { useLanguage, LanguageToggle } from '@/lib/i18n';
+import HeroVisualizer from '@/app/landing/components/HeroVisualizer';
+import InsideVibCode from '@/app/landing/components/InsideVibCode';
+import SocialProof from '@/app/landing/components/SocialProof';
+import TemplateShowcase from '@/app/landing/components/TemplateShowcase';
+import TestimonialCards from '@/app/landing/components/TestimonialCards';
 
 const STEP_COPY = {
     vi: [
@@ -58,37 +63,41 @@ const FEATURE_COPY = {
 };
 
 export default function LandingPage() {
-    const { language } = useLanguage();
-    const steps = STEP_COPY[language];
-    const features = FEATURE_COPY[language];
+    const { language, mounted } = useLanguage();
+    const safeLanguage = mounted ? language : 'vi';
+    const steps = STEP_COPY[safeLanguage];
+    const features = FEATURE_COPY[safeLanguage];
 
     return (
         <div className="pb-10">
             <SurfaceTopBar
-                title={language === 'vi' ? 'Giới thiệu CVF' : 'About CVF'}
-                subtitle={language === 'vi'
-                    ? 'Một landing page nằm trong app shell, không đẩy người dùng ra ngoài luồng làm việc.'
-                    : 'An in-app landing page that keeps people inside the working shell.'}
+                title={safeLanguage === 'vi' ? 'Controlled Vibe Framework' : 'Controlled Vibe Framework'}
+                subtitle={safeLanguage === 'vi'
+                    ? 'Khung điều phối AI có quản trị — mỗi template, mỗi bước giữ đúng luồng dữ liệu, chính sách và an toàn.'
+                    : 'Governed AI orchestration — every template, every step keeps your data flow, policy, and safety intact.'}
                 actions={(
-                    <Link
-                        href="/home"
-                        className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
-                    >
-                        {language === 'vi' ? 'Xem templates' : 'View templates'}
-                    </Link>
+                    <>
+                        <LanguageToggle />
+                        <Link
+                            href="/home"
+                            className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+                        >
+                            {safeLanguage === 'vi' ? 'Xem templates' : 'View templates'}
+                        </Link>
+                    </>
                 )}
             />
 
-            <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
+            <div className="space-y-8 px-4 py-6 sm:px-6">
                 <section className="cvf-surface cvf-density-section overflow-hidden rounded-[32px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.16),_transparent_38%),linear-gradient(135deg,_#f7f5ef,_#ffffff)] p-7 shadow-[0_20px_60px_-45px_rgba(79,70,229,0.4)] dark:border-white/[0.07] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.18),_transparent_35%),linear-gradient(135deg,_#151926,_#0f1320)] dark:shadow-none sm:p-8">
                     <div className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-center">
                         <div>
                             <span className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300">
                                 <Sparkles size={14} />
-                                {language === 'vi' ? 'Nền tảng AI cho mọi người' : 'AI platform for everyone'}
+                                {safeLanguage === 'vi' ? 'Nền tảng AI cho mọi người' : 'AI platform for everyone'}
                             </span>
-                            <h1 className={`mt-6 max-w-3xl text-5xl font-extrabold leading-[0.95] tracking-[-0.05em] text-slate-950 dark:text-white sm:text-6xl ${language === 'en' ? 'font-serif-display' : ''}`}>
-                                {language === 'vi' ? (
+                            <h1 className={`mt-6 max-w-3xl text-5xl font-extrabold leading-[0.95] tracking-[-0.05em] text-slate-950 dark:text-white sm:text-6xl ${safeLanguage === 'en' ? 'font-serif-display' : ''}`}>
+                                {safeLanguage === 'vi' ? (
                                     <>
                                         Biến ý tưởng thành
                                         <br />
@@ -111,7 +120,7 @@ export default function LandingPage() {
                                 )}
                             </h1>
                             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 dark:text-white/55">
-                                {language === 'vi'
+                                {safeLanguage === 'vi'
                                     ? 'CVF giúp người dùng đi từ template, form, governance đến kết quả cuối cùng trong một luồng rõ ràng và chuyên nghiệp.'
                                     : 'CVF guides people from templates, forms, and governance to final results in one polished workflow.'}
                             </p>
@@ -121,23 +130,23 @@ export default function LandingPage() {
                                     href="/home"
                                     className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-500 px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_34px_-20px_rgba(79,70,229,0.75)] transition hover:brightness-110"
                                 >
-                                    {language === 'vi' ? 'Tạo app đầu tiên' : 'Create your first app'}
+                                    {safeLanguage === 'vi' ? 'Tạo app đầu tiên' : 'Create your first app'}
                                     <ArrowRight size={16} />
                                 </Link>
                                 <Link
                                     href="/help"
                                     className="cvf-control inline-flex items-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/75 dark:hover:bg-white/[0.07]"
                                 >
-                                    {language === 'vi' ? 'Xem cách hoạt động' : 'See how it works'}
+                                    {safeLanguage === 'vi' ? 'Xem cách hoạt động' : 'See how it works'}
                                 </Link>
                             </div>
 
                             <div className="mt-10 grid max-w-xl grid-cols-2 gap-4 sm:grid-cols-4">
                                 {[
-                                    { value: '94', label: language === 'vi' ? 'Templates' : 'Templates' },
-                                    { value: '12', label: language === 'vi' ? 'AI Skills' : 'AI Skills' },
-                                    { value: '3', label: language === 'vi' ? 'Models' : 'Models' },
-                                    { value: '10K+', label: language === 'vi' ? 'Teams' : 'Teams' },
+                                    { value: '94', label: safeLanguage === 'vi' ? 'Templates' : 'Templates' },
+                                    { value: '12', label: safeLanguage === 'vi' ? 'AI Skills' : 'AI Skills' },
+                                    { value: '3', label: safeLanguage === 'vi' ? 'Models' : 'Models' },
+                                    { value: '10K+', label: safeLanguage === 'vi' ? 'Teams' : 'Teams' },
                                 ].map((stat) => (
                                     <div key={stat.label}>
                                         <div className="text-3xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
@@ -152,36 +161,12 @@ export default function LandingPage() {
                         </div>
 
                         <div className="space-y-5">
-                            <div className="rounded-[28px] border border-slate-200/80 bg-white p-5 shadow-[0_12px_34px_-28px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#161b28] dark:shadow-none">
-                                <div className="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-white/[0.06]">
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 text-sm font-bold text-white">
-                                            V
-                                        </div>
-                                        <div>
-                                            <div className="font-semibold text-slate-950 dark:text-white">VibCode</div>
-                                            <div className="text-xs text-slate-400 dark:text-white/35">CVF Front Door</div>
-                                        </div>
-                                    </div>
-                                    <span className="h-3 w-3 rounded-full bg-emerald-500" />
-                                </div>
-                                <div className="space-y-4 pt-5">
-                                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500 dark:border-white/[0.07] dark:bg-white/[0.04] dark:text-white/45">
-                                        {language === 'vi' ? 'Mô tả mục tiêu bằng ngôn ngữ tự nhiên...' : 'Describe the outcome in plain language...'}
-                                    </div>
-                                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500 dark:border-white/[0.07] dark:bg-white/[0.04] dark:text-white/45">
-                                        {language === 'vi' ? 'CVF route đúng template + governance packet' : 'CVF routes the right template + governance packet'}
-                                    </div>
-                                    <div className="cvf-control bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-3 text-center text-sm font-semibold text-white">
-                                        {language === 'vi' ? 'Mở governed path' : 'Launch governed path'}
-                                    </div>
-                                </div>
-                            </div>
+                            <HeroVisualizer lang={safeLanguage} />
 
                             <div className="cvf-surface cvf-density-section rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_12px_34px_-28px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#161b28] dark:shadow-none">
                                 <div className="flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-300">
                                     <Shield size={16} />
-                                    {language === 'vi' ? 'Tính toàn vẹn app shell' : 'App shell integrity'}
+                                    {safeLanguage === 'vi' ? 'Tính toàn vẹn app shell' : 'App shell integrity'}
                                 </div>
                                 <ul className="mt-4 space-y-3 text-sm leading-7 text-slate-600 dark:text-white/58">
                                     {features.map((feature) => (
@@ -208,7 +193,7 @@ export default function LandingPage() {
                                     <Icon size={20} />
                                 </div>
                                 <div className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-white/35">
-                                    {language === 'vi' ? `Bước ${index + 1}` : `Step ${index + 1}`}
+                                    {safeLanguage === 'vi' ? `Bước ${index + 1}` : `Step ${index + 1}`}
                                 </div>
                                 <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
                                     {step.title}
@@ -220,6 +205,11 @@ export default function LandingPage() {
                         );
                     })}
                 </section>
+
+                <SocialProof lang={safeLanguage} />
+                <TemplateShowcase lang={safeLanguage} />
+                <TestimonialCards lang={safeLanguage} />
+                <InsideVibCode lang={safeLanguage} />
             </div>
         </div>
     );

@@ -63,6 +63,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         const handleOpenAgent = (event: Event) => {
             const detail = (event as CustomEvent<{ prompt?: string }>).detail;
+            modals.closeAllModals();
             setAgentPrompt(detail?.prompt);
             setActiveModal('agent');
             setIsAgentMinimized(false);
@@ -70,7 +71,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
         window.addEventListener('cvf:openAgent', handleOpenAgent as EventListener);
         return () => window.removeEventListener('cvf:openAgent', handleOpenAgent as EventListener);
-    }, []);
+    }, [modals]);
 
     // Map pathname to Sidebar's expected appState string
     const pathnameToAppState = (p: string): string => {
@@ -91,8 +92,33 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
     const appStateForSidebar = activeModal || pathnameToAppState(pathname);
 
+    const hasBlockingOverlay = Boolean(
+        modals.showOnboarding
+        || modals.showQuickStart
+        || modals.showUserContext
+        || modals.showSettings
+        || modals.showAIUsage
+        || modals.showApiKeyWizard
+        || activeModal
+    );
+
+    useEffect(() => {
+        document.body.style.overflow = hasBlockingOverlay ? 'hidden' : '';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [hasBlockingOverlay]);
+
+    const openShellModal = (name: 'userContext' | 'settings' | 'aiUsage' | 'apiKeyWizard' | 'onboarding' | 'quickStart') => {
+        setActiveModal(null);
+        setAgentPrompt(undefined);
+        setIsAgentMinimized(false);
+        modals.openModal(name);
+    };
+
     // Navigation handler — real pages use router, modals set state
     const handleNavigate = (state: string) => {
+        modals.closeAllModals();
         switch (state) {
             case 'home': router.push('/home'); setActiveModal(null); break;
             case 'landing': router.push('/landing'); setActiveModal(null); break;
@@ -161,9 +187,9 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                 executionsCount={executions.length}
                 userRole={userRole}
                 permissions={permissions}
-                onShowUserContext={() => modals.openModal('userContext')}
-                onShowSettings={() => modals.openModal('settings')}
-                onShowAIUsage={() => modals.openModal('aiUsage')}
+                onShowUserContext={() => openShellModal('userContext')}
+                onShowSettings={() => openShellModal('settings')}
+                onShowAIUsage={() => openShellModal('aiUsage')}
                 onLogout={handleLogout}
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
@@ -172,7 +198,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             />
 
             {/* Main Content — children are the individual page routes */}
-            <main className="md:ml-64 min-h-screen">
+            <main className="md:ml-[220px] min-h-screen">
                 {impersonation && (
                     <div className="border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/40 dark:text-amber-100">
                         <div className="mx-auto flex max-w-6xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -211,8 +237,8 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             </main>
 
             {/* Floating Quick Reference + Tour */}
-            <QuickReference />
-            <TourGuide />
+            {!hasBlockingOverlay && <QuickReference />}
+            {!hasBlockingOverlay && <TourGuide />}
 
             {/* ── MODALS ────────────────────────────────── */}
 

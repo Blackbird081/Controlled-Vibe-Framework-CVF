@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 @import "tailwindcss";
 
 /* Enable class-based dark mode for Tailwind v4 */
@@ -187,3 +188,18 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Instrument Serif display typography */
+.font-serif-display {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+}
+
+/* Smooth anchor scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation delay utilities */
+.animate-delay-0   { animation-delay: 0ms; }
+.animate-delay-150 { animation-delay: 150ms; }
+.animate-delay-300 { animation-delay: 300ms; }

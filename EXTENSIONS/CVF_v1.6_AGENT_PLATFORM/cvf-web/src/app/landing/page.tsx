@@ -4,6 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ClipboardList, PenLine, Rocket, MessageSquare, LayoutGrid, Shield, Globe, ChevronRight, Sparkles, ArrowRight } from 'lucide-react';
 import HeroVisualizer from './components/HeroVisualizer';
+import SocialProof from './components/SocialProof';
+import TestimonialCards from './components/TestimonialCards';
+import TemplateShowcase from './components/TemplateShowcase';
+import InsideVibCode from './components/InsideVibCode';
 
 type Lang = 'vi' | 'en';
 
@@ -142,7 +146,7 @@ export default function LandingPage() {
   const t = (obj: { vi: string; en: string }) => obj[lang];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-indigo-50/20 text-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950/10 dark:text-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#f6f4ef] via-[#faf9f6] to-indigo-50/20 text-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950/10 dark:text-white">
       {/* ── Nav ── */}
       <nav className="sticky top-0 z-50 border-b border-gray-200/50 bg-white/80 backdrop-blur-md dark:border-gray-800/50 dark:bg-gray-950/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
@@ -156,6 +160,7 @@ export default function LandingPage() {
           </Link>
           <div className="flex items-center gap-3">
             <button
+              type="button"
               onClick={toggleLang}
               className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-semibold transition-colors hover:border-indigo-300 hover:bg-indigo-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-indigo-600 dark:hover:bg-indigo-950/50"
             >
@@ -182,7 +187,7 @@ export default function LandingPage() {
                 {t(content.hero.badge)}
               </span>
             </div>
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-5xl lg:text-[3.25rem]">
+            <h1 className="font-serif-display text-4xl font-extrabold leading-tight tracking-tight md:text-5xl lg:text-[3.25rem]">
               {content.hero.title[lang].map((line, i) => (
                 <span key={i}>
                   {i === 1 ? (
@@ -223,11 +228,17 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Social Proof ── */}
+      <SocialProof lang={lang} />
+
+      {/* ── Testimonials ── */}
+      <TestimonialCards lang={lang} />
+
       {/* ── Before / After ── */}
       <section className="border-y border-gray-100 bg-white py-16 dark:border-gray-800 dark:bg-gray-900/50 md:py-24">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-extrabold md:text-4xl">{t(content.compare.title)}</h2>
+            <h2 className="font-serif-display text-3xl font-extrabold md:text-4xl">{t(content.compare.title)}</h2>
             <p className="mx-auto mt-3 max-w-xl text-gray-600 dark:text-gray-400">
               {t(content.compare.subtitle)}
             </p>
@@ -273,7 +284,7 @@ export default function LandingPage() {
                       {lang === 'vi' ? 'App theo dõi thu chi hằng ngày...' : 'Daily income & expense tracker...'}
                     </div>
                   </div>
-                  <button className="w-full rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-sm font-bold text-white">
+                  <button type="button" className="w-full rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-sm font-bold text-white">
                     {lang === 'vi' ? '✨ Tạo với AI' : '✨ Generate with AI'}
                   </button>
                 </div>
@@ -286,7 +297,7 @@ export default function LandingPage() {
       {/* ── 3-Step Flow ── */}
       <section id="how-it-works" className="mx-auto max-w-5xl px-6 py-16 md:py-24">
         <div className="mb-12 text-center">
-          <h2 className="text-3xl font-extrabold md:text-4xl">
+          <h2 className="font-serif-display text-3xl font-extrabold md:text-4xl">
             {lang === 'vi' ? 'Chỉ 3 bước đơn giản' : 'Just 3 simple steps'}
           </h2>
         </div>
@@ -315,7 +326,7 @@ export default function LandingPage() {
       {/* ── Features ── */}
       <section className="border-y border-gray-100 bg-white py-16 dark:border-gray-800 dark:bg-gray-900/50 md:py-24">
         <div className="mx-auto max-w-5xl px-6">
-          <h2 className="mb-12 text-center text-3xl font-extrabold md:text-4xl">
+          <h2 className="mb-12 text-center font-serif-display text-3xl font-extrabold md:text-4xl">
             {lang === 'vi' ? 'Tính năng nổi bật' : 'Key Features'}
           </h2>
           <div className="grid gap-5 sm:grid-cols-2">
@@ -336,6 +347,12 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ── Template Showcase ── */}
+      <TemplateShowcase lang={lang} />
+
+      {/* ── Inside VibCode ── */}
+      <InsideVibCode lang={lang} />
 
       {/* ── Trust ── */}
       <section className="mx-auto max-w-4xl px-6 py-16 text-center">

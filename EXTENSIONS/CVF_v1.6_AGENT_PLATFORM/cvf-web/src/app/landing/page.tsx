@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ClipboardList, PenLine, Rocket, MessageSquare, LayoutGrid, Shield, Globe, ChevronRight, Sparkles, ArrowRight } from 'lucide-react';
+import { ClipboardList, PenLine, Rocket, MessageSquare, LayoutGrid, Shield, Globe, ChevronRight, Sparkles, ArrowRight, Cpu, Network, Database, BarChart3 } from 'lucide-react';
 import HeroVisualizer from './components/HeroVisualizer';
 import SocialProof from './components/SocialProof';
 import TestimonialCards from './components/TestimonialCards';
@@ -106,6 +106,22 @@ const content = {
       desc: {
         vi: 'Mọi trang, mọi template đều hỗ trợ cả tiếng Việt lẫn tiếng Anh. Chuyển đổi chỉ 1 click.',
         en: 'Every page, every template supports both Vietnamese and English. Switch with 1 click.',
+      },
+    },
+    {
+      icon: Cpu,
+      title: { vi: 'Hỗ trợ đa Model AI', en: 'Multi-Model Support' },
+      desc: {
+        vi: 'Chạy trên Claude, GPT-4o hoặc Gemini. Chuyển đổi model bất kỳ lúc nào không gián đoạn.',
+        en: 'Run on Claude, GPT-4o or Gemini. Switch models anytime without disruption.',
+      },
+    },
+    {
+      icon: Network,
+      title: { vi: 'Luồng đa Agent', en: 'Multi-Agent Workflows' },
+      desc: {
+        vi: 'Điều phối nhiều AI agent làm việc song song, xử lý tác vụ phức tạp tự động.',
+        en: 'Orchestrate multiple AI agents collaborating in parallel for complex tasks.',
       },
     },
   ],
@@ -220,6 +236,21 @@ export default function LandingPage() {
                 {t(content.hero.ctaSecondary)}
               </a>
             </div>
+
+            {/* Stat strip */}
+            <div className="mt-8 flex flex-wrap gap-8">
+              {[
+                { val: '94',   label: { vi: 'Templates', en: 'Templates' } },
+                { val: '12',   label: { vi: 'AI Skills', en: 'AI Skills' } },
+                { val: '3',    label: { vi: 'Models AI', en: 'AI Models' } },
+                { val: '10K+', label: { vi: 'Đội nhóm', en: 'Teams' } },
+              ].map(s => (
+                <div key={s.label.en}>
+                  <div className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">{s.val}</div>
+                  <div className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">{t(s.label)}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Right — interactive visualizer */}
@@ -298,8 +329,11 @@ export default function LandingPage() {
       {/* ── 3-Step Flow ── */}
       <section id="how-it-works" className="mx-auto max-w-5xl px-6 py-16 md:py-24">
         <div className="mb-12 text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
+            {lang === 'vi' ? 'Cách hoạt động' : 'How it works'}
+          </p>
           <h2 className="font-serif-display text-3xl font-extrabold md:text-4xl">
-            {lang === 'vi' ? 'Chỉ 3 bước đơn giản' : 'Just 3 simple steps'}
+            {lang === 'vi' ? 'Ba bước đến kết quả' : 'Three steps to results'}
           </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
@@ -327,10 +361,15 @@ export default function LandingPage() {
       {/* ── Features ── */}
       <section className="border-y border-gray-100 bg-white py-16 dark:border-gray-800 dark:bg-gray-900/50 md:py-24">
         <div className="mx-auto max-w-5xl px-6">
-          <h2 className="mb-12 text-center font-serif-display text-3xl font-extrabold md:text-4xl">
-            {lang === 'vi' ? 'Tính năng nổi bật' : 'Key Features'}
-          </h2>
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="mb-12 text-center">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
+              {lang === 'vi' ? 'Tính năng' : 'Features'}
+            </p>
+            <h2 className="font-serif-display text-3xl font-extrabold md:text-4xl">
+              {lang === 'vi' ? 'Mọi thứ đội nhóm bạn cần' : 'Everything your team needs'}
+            </h2>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {content.features.map((feat, i) => {
               const Icon = feat.icon;
               return (

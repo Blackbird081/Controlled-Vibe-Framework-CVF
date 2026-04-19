@@ -47,12 +47,23 @@ export default function TestimonialCards({ lang }: { lang: 'vi' | 'en' }) {
   return (
     <section className="bg-white py-16 dark:bg-gray-900/30 md:py-20">
       <div className="mx-auto max-w-5xl px-6">
+        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-indigo-600">
+          {lang === 'vi' ? 'Câu chuyện thực tế' : 'Testimonials'}
+        </p>
         <h2 className="mb-10 text-center text-2xl font-extrabold font-serif-display md:text-3xl">
-          {lang === 'vi' ? 'Họ đã thay đổi cách làm việc' : 'They transformed the way they work'}
+          {lang === 'vi' ? 'Được yêu thích bởi các đội nhóm' : 'Loved by teams'}
         </h2>
         <div className="grid gap-5 sm:grid-cols-3">
           {CARDS.map((c, i) => (
             <div key={i} className={`rounded-2xl ${c.bg} p-6 dark:opacity-90`}>
+              {/* Star ratings */}
+              <div className="mb-3 flex gap-0.5">
+                {[1,2,3,4,5].map(n => (
+                  <svg key={n} width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                ))}
+              </div>
               <p className="mb-5 font-serif-display text-base italic leading-relaxed text-gray-800">
                 &ldquo;{lang === 'vi' ? c.quote.vi : c.quote.en}&rdquo;
               </p>

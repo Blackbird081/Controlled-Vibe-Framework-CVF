@@ -22,7 +22,6 @@
     "cvf-guard-contract": "file:../../CVF_GUARD_CONTRACT",
     "cvf-learning-plane-foundation": "file:../../CVF_LEARNING_PLANE_FOUNDATION",
     "docx": "^9.5.2",
-    "driver.js": "^1.4.0",
     "file-saver": "^2.0.5",
     "jspdf": "^4.1.0",
     "lucide-react": "^0.563.0",

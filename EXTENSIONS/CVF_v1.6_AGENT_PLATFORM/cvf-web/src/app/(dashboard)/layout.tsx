@@ -10,8 +10,6 @@ import {
     Sidebar,
     OnboardingWizard,
     QuickStart,
-    QuickReference,
-    TourGuide,
     UserContextForm,
     SettingsPage,
     AIUsagePanel,
@@ -235,10 +233,6 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                     </div>
                 </footer>
             </main>
-
-            {/* Floating Quick Reference + Tour */}
-            {!hasBlockingOverlay && <QuickReference />}
-            {!hasBlockingOverlay && <TourGuide />}
 
             {/* ── MODALS ────────────────────────────────── */}
 

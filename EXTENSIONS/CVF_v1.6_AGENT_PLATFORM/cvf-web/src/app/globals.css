@@ -116,70 +116,6 @@ body {
   }
 }
 
-/* Driver.js custom styles */
-.driver-popover {
-  background: #1f2937 !important;
-  color: #f3f4f6 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-}
-
-.driver-popover-title {
-  font-size: 1.1rem !important;
-  font-weight: 700 !important;
-  margin-bottom: 8px !important;
-}
-
-.driver-popover-description {
-  font-size: 0.95rem !important;
-  line-height: 1.5 !important;
-  margin-bottom: 0 !important;
-}
-
-.driver-popover-progress-text {
-  color: #9ca3af !important;
-  font-size: 0.8rem !important;
-}
-
-.driver-popover-footer {
-  margin-top: 16px !important;
-}
-
-.driver-popover-navigation-btns button {
-  border-radius: 8px !important;
-  padding: 8px 16px !important;
-  font-weight: 500 !important;
-  text-shadow: none !important;
-  border: none !important;
-}
-
-.driver-popover-next-btn {
-  background: #3b82f6 !important;
-  color: white !important;
-}
-
-.driver-popover-next-btn:hover {
-  background: #2563eb !important;
-}
-
-.driver-popover-prev-btn {
-  background: #4b5563 !important;
-  color: white !important;
-}
-
-.driver-popover-prev-btn:hover {
-  background: #374151 !important;
-}
-
-.driver-popover-close-btn {
-  color: #9ca3af !important;
-}
-
-.driver-popover-close-btn:hover {
-  color: #f3f4f6 !important;
-}
-
 /* Text balance utility */
 .text-balance {
   text-wrap: balance;
@@ -197,6 +133,10 @@ body {
 /* Instrument Serif display typography */
 .font-serif-display {
   font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  /* geometricPrecision prevents Chrome from decomposing Vietnamese precomposed
+     glyphs (e.g. ế, ộ) into base+combining when the font lacks those code points,
+     which causes the Chrome vs Firefox spacing difference on Vietnamese headings. */
+  text-rendering: geometricPrecision;
 }
 
 .cvf-surface {

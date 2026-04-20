@@ -5,7 +5,7 @@ Memory class: POINTER_RECORD
 > Canonical architecture snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
 > Canonical detailed status: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 > Canonical roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
-> Last refreshed: `2026-04-18` (latest governed closure `W105-T1 CLOSED DELIVERED`; Wave 2 Alibaba-first Retrieval Live Validation delivered; no active tranche)
+> Last refreshed: `2026-04-21` (latest operational sync: `W109-T1` redesign wave complete, strict front-door all-trusted, Alibaba-first front-door runtime validation delivered; no active tranche)
 
 ---
 
@@ -20,7 +20,7 @@ Memory class: POINTER_RECORD
 | Post-cycle validation wave | `W6-T1` to `W6-T44` canonically closed; `W6-T1` to `W6-T42` archived and `W6-T43` to `W6-T44` active closures retained |
 | W7 Governance Integration Wave | `W7-T0` to `W7-T10` ALL CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates all satisfied |
 | Post-W7 Continuation Wave | `W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W17-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1` ALL CLOSED DELIVERED; documentation sync tranches W11-T1 / W16-T1 / W18-T1 / W47-T1 closed; synchronized baseline now `v3.7-W46T1` |
-| Current active tranche | `NONE — W105-T1 CLOSED DELIVERED 2026-04-18; Wave 2 Alibaba-first Retrieval Live Validation delivered; next tranche requires fresh GC-018 authorization` |
+| Current active tranche | `NONE — redesign wave W105-W109 and the 2026-04-21 front-door runtime/canon sync are reflected; next bounded direction is front-door product proof expansion + productization, and it requires a fresh GC-018 when reopened` |
 | Shared verification baseline | `ADOPT 2026-04-10 LOCAL BASELINE — future agents should inherit this verification state and rerun only when their touched scope, dependency state, or build/test configuration invalidates it` |
 | Final reconciliation `W5` | `DONE — W5-T2 whitepaper updated to v3.0-W7T10 (2026-03-28); W11-T1 updated to v3.1-W10T1 (2026-03-29); W12-T1 baseline synchronized to v3.2-W12T1; W16-T1 updated to v3.3-W15T1 (2026-03-30); W18-T1 updated to v3.4-W17T1 (2026-03-30); W47-T1 aligns the architecture baseline to v3.7-W46T1 (2026-04-05); W59-T1 promotes the closure readout to CLOSURE-ASSESSED (2026-04-07)` |
 
@@ -253,6 +253,8 @@ Memory class: POINTER_RECORD
 | `W103-T1` Post-W102 Canon Truth Sync (DOCUMENTATION / CANON_SYNC class) | `CLOSED DELIVERED 2026-04-17 — whitepaper §4.3 advanced from W100 to W102 (Last canonical closure, Current active tranche, Current posture, Supporting status docs); tracker Last refreshed + Current active tranche + W101/W102 rows + canonical pointers updated; AGENT_HANDOFF.md W103-T1 entry filed; GC-026 closure sync filed. Documentation-only R0; Fast Lane (GC-021)` |
 | `W104-T1` Skill Library Trusted Subset Sync (PRODUCT / FRONT_DOOR_SYNC class) | `CLOSED DELIVERED 2026-04-17 — public /skills front door synchronized to D2/D3 corpus governance; front-door discovery limited to TRUSTED_FOR_VALUE_PROOF + REVIEW_REQUIRED; archive/quarantine categories added for legacy/reject/unscreened surfaces; search and planner now consume the same front-door subset; direct detail pages preserve archive continuity; spec export now includes non-coder success, governed response, and knowledge context sections; targeted verification 118/118 vitest + tsc clean; Fast Lane (GC-021)` |
 | `W105-T1` Wave 2 Alibaba-first Retrieval Live Validation (VALIDATION_EVIDENCE / GOVERNED_RUNTIME_BENCHMARK class) | `CLOSED DELIVERED 2026-04-18 — 4 live tests in route.retrieval.live.test.ts (skip without ALIBABA_API_KEY); exec team → exec-playbook chunk injected via Alibaba live call; engineering team → engineering-runbooks injected; cross-tenant org_a drops org_b chunk → KNOWLEDGE_SCOPE_FILTER_APPLIED audited; global collection available to all sessions; GC-018 authorized; cvf-web 147 files / 2063 pass / 61 skip; Guard Contract 226/226; Full Lane (GC-018)` |
+| `2026-04-19` Redesign Wave W105-W109 Closure Sync (PRODUCT / UI_MODERNIZATION class) | `CLOSED DELIVERED 2026-04-19 — synthesized redesign roadmap executed across sidebar shell, workspace pages, account modals, AI modals, and platform pages under the zero-logic-change contract; visual shell synchronized without reopening core architecture; canon now treats W105-W109 as redesign-reserved tranche IDs for current execution history` |
+| `2026-04-21` Front-Door Rewrite + Runtime Validation Sync (DOCUMENTATION / CANON_SYNC class) | `CLOSED DELIVERED 2026-04-21 — strict front door now all-trusted (42 front-door skills / 50 linked templates / 50 trusted / 0 review / 0 reject / 0 unscreened); whitepaper, roadmap, and handoff synchronized; Alibaba-first governed live validation passes on retrieval (4/4), web_build_handoff (1/1), and representative rewritten surfaces app_builder_complete + api_design + web_ux_redesign_system (3/3); next bounded direction filed as product proof expansion + productization` |
 
 ---
 
@@ -264,7 +266,7 @@ Memory class: POINTER_RECORD
 | `W6-T43` controlled-intelligence bugfix protocol tests | `DONE` |
 | `W6-T44` controlled-intelligence verification policy tests | `DONE` |
 | W7 Governance Integration Wave | `ALL W7-T0 through W7-T10 CLOSED DELIVERED — 11 schemas, 32 presets, P1-P8 gates satisfied` |
-| Current canonical validation posture | `W7-T10 COMPLETE — W7 INTEGRATION WAVE CLOSED; current architecture baseline synchronized to v3.7-W46T1` |
+| Current canonical validation posture | `W7-T10 COMPLETE — W7 integration wave closed; architecture baseline remains v3.7-W46T1 while the operational readout is refreshed through W109 redesign closure and 2026-04-21 front-door runtime sync` |
 
 ---
 
@@ -281,16 +283,17 @@ Memory class: POINTER_RECORD
 ## Canonical Pointers
 
 - Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
-- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; operational readout refreshed through `W59-T1`)
+- Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; operational readout refreshed through `2026-04-21`)
 - Canonical scan continuity registry: `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
 - Canonical closure roadmap: `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`
 - Detailed status review (historical snapshot through 2026-03-21): `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md`
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W105_T1_CLOSED_2026-04-18.md` (W105-T1 CLOSED DELIVERED; Wave 2 Alibaba-first Retrieval Live Validation; no active tranche)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_POST_W109_FRONT_DOOR_2026-04-21.md` (W109 redesign closure + front-door rewrite/runtime validation sync; no active tranche)
 - Latest continuity sync delta: `docs/baselines/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_DELTA_2026-04-07.md`
 - Current closure anchor: `docs/reviews/CVF_W65_T1_TRANCHE_CLOSURE_REVIEW_2026-04-10.md`
-- Active quality assessment: `docs/assessments/CVF_W104_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md` (W104-T1 post-run assessment; front-door subset truth aligned; 41 visible / 108 quarantined; targeted verification pass)
-- Most recent continuation authorization: `docs/baselines/CVF_GC018_W104_T1_SKILL_LIBRARY_TRUSTED_SUBSET_SYNC_AUTHORIZATION_2026-04-17.md` (W104-T1 AUTHORIZED + EXECUTED; /skills front-door sync; documentation + web/front-door only)
+- Active quality assessment: `docs/assessments/CVF_FRONT_DOOR_POST_W109_RUNTIME_VALIDATION_2026-04-21.md` (post-redesign + post-rewrite Alibaba-first governed runtime validation; retrieval 4/4 + web_build_handoff 1/1 + representative rewrite surfaces 3/3)
+- Most recent continuation authorization: `docs/baselines/CVF_GC018_FRONT_DOOR_ALIBABA_RUNTIME_VALIDATION_AUTHORIZATION_2026-04-21.md` (bounded live-validation authorization for post-W109 front-door runtime proof)
+- Current forward roadmap: `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md` (canon sync complete; product proof expansion next; productization lane ready after step 3 starts)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

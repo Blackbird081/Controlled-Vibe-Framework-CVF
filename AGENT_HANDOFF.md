@@ -1,4 +1,4 @@
-# CVF Agent Handoff — 2026-04-13
+# CVF Agent Handoff — 2026-04-21
 
 > Branch: `main`
 > Branch posture: `main` is the canonical continuation branch after 2026-04-04 convergence; `cvf-next` is kept as a synchronized mirror for compatibility
@@ -6,8 +6,8 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / PVV ALIBABA CHECKPOINT CLOSED / W71 POST-CLOSURE KNOWLEDGE NATIVE ADOPTION CLOSED DELIVERED** — W66-T1 CP1 (Corpus + Rubric Freeze): **COMPLETE**; W66-T1 CP2 (Run Harness Setup): **COMPLETE**; W66-T1 CP3B (Controlled Value Test): **COMPLETE 2026-04-12** with `BypassDetectionGuard` verification closing the P1 gap; one-provider / Alibaba / multi-role internal checkpoint is now sufficient for the current pause point; PVV API-key testing is intentionally paused by operator decision and future reopen must be explicit. `W67-T1 External Asset Productization` is delivered; `W68-T1 Governed Registry Hardening` is delivered; `W69-T1 Governed Registry Lifecycle + Read Model` is delivered; `W70-T1 Governed Registry Operator Surface` is delivered; `W71-T1 Post-Closure Knowledge Native Adoption` is now delivered — absorbed knowledge is CVF-native: 6 canonical docs, 1 bounded-invariant, 5 deferred-by-design; external-asset governance lane (`/prepare` + `/register` + `/retire` + operator page) is official CVF behavior. W65-T1 Phase B Packaging remains **COMPLETE** — 3 packages `CANDIDATE` + 1 `REVIEW_REQUIRED`; W64-T1 Track 5: **COMPLETE**; Post-MC5 Continuation Strategy: **ALL 6 ACTIONABLE TRACKS COMPLETE**; local verification baseline `2026-04-13`: CPF 2999 / EPF 1301 / GEF 625 / LPF 1493 all pass; `cvf-web` passes `tsc + full vitest (122 files / 1928 tests)` and build.
-> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `2026-04-13`)
+> State: **UNIFIED ON MAIN / MASTER ARCHITECTURE CLOSURE-ASSESSED / W105-W109 REDESIGN CLOSED / FRONT-DOOR REWRITE + ALIBABA-FIRST RUNTIME SYNC DELIVERED** — core architecture remains closure-assessed and closed-by-default; redesign wave `W105-T1` through `W109-T1` is delivered under the zero-logic-change contract; strict front door is now all-trusted (`42` front-door skills / `50` linked templates / `50` trusted / `0` review / `0` reject / `0` unscreened); Alibaba-first governed runtime validation now passes on retrieval (`4/4`), `web_build_handoff` (`1/1`), and representative rewritten front-door surfaces (`3/3`: `app_builder_complete`, `api_design`, `web_ux_redesign_system`). Next bounded direction is product proof expansion plus productization, and any reopen still requires a fresh `GC-018`.
+> Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `2026-04-21`)
 
 ---
 
@@ -52,6 +52,10 @@
   - **Language / typography regression**: several redesigned dashboard surfaces still mixed hardcoded English into Vietnamese mode (`home`, `landing`, `skills`, `skill search`, `help`, `docs`, toolkit helper surfaces, and shared search/top-bar labels). Repair pass normalized these labels and removed the serif-display treatment for the Vietnamese landing hero because accented glyph rendering looked degraded.
   - **Missing Tweaks functionality**: the redesign pass visually implied a top-right Tweaks control, but no real shell feature existed. Repair pass implemented an actual Tweaks panel in `CompactHeader.tsx` with persisted theme, accent color, card radius, and density controls; shared shell primitives now consume CSS variables from `globals.css` so the feature is real, not decorative.
 - **Design lesson now binding for future redesign agents**: do not treat “build passes + pages render” as enough for UI redesign closure. When using `App onboarding` as the visual authority, agents must explicitly verify: (1) navigation/buttons are operable, (2) bilingual copy is consistent across the whole shell, and (3) any visual control shown in the target reference is either implemented for real or intentionally excluded in the roadmap.
+- **Post-W109 canon truth now synchronized (2026-04-21)**: use the whitepaper + progress tracker + this handoff together as the canonical latest state. The old gap where handoff was ahead of tracker/whitepaper is closed.
+- **Front-door rewrite posture is now closure-clean for current scope**: strict front door is all-trusted at `42` skills / `50` linked templates / `50/50` trusted, with no linked `REVIEW_REQUIRED`, `REJECT`, or `UNSCREENED` surfaces remaining.
+- **Alibaba-first runtime proof is now the active product-value boundary**: governed live validation passes on retrieval (`4/4`), `web_build_handoff` (`1/1`), and representative rewritten surfaces (`3/3`). This is sufficient for bounded front-door/product claims on the Alibaba lane only; do not claim multi-provider parity.
+- **Canonical next-direction roadmap**: `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md`. Order is fixed: canon sync complete first, then runtime validation, then front-door product proof expansion, then productization. No tranche is active right now.
 
 ### Wave 1 Retrieval Partitioning — CLOSED DELIVERED 2026-04-18
 
@@ -150,7 +154,7 @@
 
 ### Architecture Baseline
 
-- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `2026-04-13`)
+- Whitepaper: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type `CLOSURE-ASSESSED`; operational readout refreshed through `2026-04-21`)
 - Posture: `CLOSURE-ASSESSED` (CPF: **DONE-ready**; GEF: **DONE (6/6)**; LPF: **DONE-ready (7/7)**; EPF: **DONE-ready** — Track 5 deferred items are now delivered: Model Gateway Provider Router in CPF and Sandbox Runtime Physical Isolation via `SandboxIsolationContract` + `WorkerThreadSandboxAdapter`)
 - All four planes: plane-banner promotion pass complete; W7 Governance Integration: `DONE`; post-W7 continuation: `DONE`; MC1 CPF: `DONE-ready`; MC2 GEF: **DONE (6/6)**; MC3 LPF: **DONE-ready (7/7)**; MC4 EPF: **DONE-ready**; MC5 whitepaper canon promotion: **COMPLETE**
 - Continuation readout: `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1 / W55-T1 / W56-T1 / W57-T1 / W58-T1 / W59-T1 / W60-T1 / W61-T1 / W62-T1 / W63-T1 / W64-T1`
@@ -160,9 +164,14 @@
 
 ## Immediate Next Action Required
 
-**W66-T1 CP3A Lane Bootstrap — GOVERNED PILOTS COMPLETE (2026-04-11). Gemini-2.5-flash governed pilot DONE; Alibaba `qwen3.5-122b-a10b` governed pilot DONE; Alibaba `qvq-max` governed pilot DONE. All 3 active lanes completed CAL-001–005 through `POST /api/execute` with `guardResult=ALLOW`, `providerRouting=ALLOW`, and non-empty outputs. Strongest product-value signal: Gemini direct had a CAL-004 catastrophic miss, but Gemini governed refused the bypass; both governed Alibaba lanes also refused. `qvq-max-2025-03-25` remains blocked on endpoint compatibility (`404 model_not_supported`). This lane bootstrap is now retained as frozen provenance while PVV/API-key work remains paused; future provider/model additions must start from the pause checkpoint and explicit reopen decision, not from an assumed active CP3A wave.**
+**No implementation tranche is active as of 2026-04-21. Core architecture remains closure-assessed; redesign W105-W109 and front-door rewrite/runtime sync are both closed and reflected in canon. The next bounded move, if reopened, is the front-door product proof expansion lane followed by productization, and it requires a fresh `GC-018`.**
 
 Current guidance:
+
+- **Read order for future agents** — start with `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, then `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`, then `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md`, then this handoff.
+- **Master architecture posture** — do not reopen CPF/EPF/GEF/LPF by default. The current job is product-proof and operator/productization hardening, not core-plane realization.
+- **Bounded live-proof claim** — current public-safe claim boundary is Alibaba-first governed validation only. Retrieval + `web_build_handoff` + representative rewritten front-door surfaces are proven on that lane; multi-provider parity is still unclaimed.
+- **Historical PVV/bootstrap provenance below is retained for continuity only** — treat it as background, not as the current next action.
 
 - **Unified branch state** — `main` contains the previously canonical `cvf-next` state; keep `cvf-next` fast-forward aligned when compatibility requires it
 - **W66-T1 CP2 CLOSED DELIVERED** — Product Value Validation Wave CP2 (DOCUMENTATION / VALIDATION_TEST class); first controlled-lane CFG-A/CFG-B seed FROZEN; evidence schema FROZEN; reviewer calibration set (5 tasks) FROZEN; 7-item pre-CP3A/CP3B gate checklist FROZEN; test delta 0; code delta 0; Fast Lane (GC-021)

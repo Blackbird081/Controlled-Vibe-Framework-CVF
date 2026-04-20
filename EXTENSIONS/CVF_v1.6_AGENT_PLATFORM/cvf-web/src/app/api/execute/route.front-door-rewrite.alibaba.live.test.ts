@@ -189,6 +189,106 @@ describe.skipIf(!ALIBABA_API_KEY)(
     );
 
     it(
+      'turns code_review into a plain-language build review packet with a builder handoff brief',
+      async () => {
+        const template = getTemplateById('code_review');
+        expect(template).toBeDefined();
+
+        const inputs = {
+          workSample: `function processPayment(amount, currency) {\n  if (!amount) return;\n  return runPayment(amount, currency);\n}`,
+          goal: 'Xử lý thanh toán và chỉ trả kết quả thành công khi giao dịch thật sự hoàn tất',
+          worry: 'Thỉnh thoảng hệ thống báo thành công dù gateway timeout, không biết có bị thu tiền 2 lần không.',
+          mustPreserve: 'Không đổi contract trả về cho mobile app, không bỏ logging phục vụ đối soát.',
+          focus: ['Sai logic nghiệp vụ', 'Rủi ro dữ liệu / bảo mật'],
+        };
+
+        const response = await POST(
+          new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+              templateId: 'code_review',
+              templateName: template?.name,
+              intent: generateIntent(template!, inputs),
+              inputs,
+              provider: 'alibaba',
+              model: 'qwen-turbo',
+              mode: 'simple',
+              aiCommit: {
+                commitId: 'live-front-door-code-review',
+                agentId: 'cvf-front-door-validation',
+                timestamp: Date.now(),
+                description: 'Front-door code review packet live validation',
+              },
+            }),
+          }) as never,
+        );
+
+        const body = await response.json() as Record<string, unknown>;
+        const output = String(body.output ?? '');
+
+        expect(response.status).toBe(200);
+        expect(body.success).toBe(true);
+        expect(output.length).toBeGreaterThan(400);
+        expect(output).toMatch(/Intended Outcome|What This Part|Mục tiêu/i);
+        expect(output).toMatch(/Main Risks|Risk|Rủi ro/i);
+        expect(output).toMatch(/Builder Handoff|Handoff Brief|Bàn giao/i);
+        expect(output).toMatch(/Checklist|Acceptance/i);
+        expect(output).not.toMatch(/refactor to async\/await|choose a logging framework|pick an ORM/i);
+      },
+      45_000,
+    );
+
+    it(
+      'turns documentation into a structured operational doc packet with a handoff checklist',
+      async () => {
+        const template = getTemplateById('documentation');
+        expect(template).toBeDefined();
+
+        const inputs = {
+          subject: 'Quy trình xử lý sự cố P1 và leo thang nội bộ',
+          currentNotes: 'Khi có sự cố P1: ops nhận alert -> tạo incident channel -> gọi SRE lead trong 5 phút -> SRE đánh giá và quyết định escalate lên CTO nếu ảnh hưởng > 30 phút. Hay bị hỏi: ai quyết định P1, ai cần được thông báo, khi nào phải roll back.',
+          readerGoal: 'Nhân viên ops có thể xử lý P1 trong 15 phút đầu mà không phải hỏi lại SRE.',
+          audience: 'Người vận hành nội bộ',
+          mustPreserve: 'Giữ nguyên thứ tự leo thang ops -> SRE lead -> CTO và SLA 5 phút gọi lại.',
+        };
+
+        const response = await POST(
+          new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+              templateId: 'documentation',
+              templateName: template?.name,
+              intent: generateIntent(template!, inputs),
+              inputs,
+              provider: 'alibaba',
+              model: 'qwen-turbo',
+              mode: 'simple',
+              aiCommit: {
+                commitId: 'live-front-door-documentation',
+                agentId: 'cvf-front-door-validation',
+                timestamp: Date.now(),
+                description: 'Front-door documentation packet live validation',
+              },
+            }),
+          }) as never,
+        );
+
+        const body = await response.json() as Record<string, unknown>;
+        const output = String(body.output ?? '');
+
+        expect(response.status).toBe(200);
+        expect(body.success).toBe(true);
+        expect(output.length).toBeGreaterThan(400);
+        expect(output).toMatch(/What This Document Is For|Mục tiêu|For/i);
+        expect(output).toMatch(/Main Flow|Steps|Bước/i);
+        expect(output).toMatch(/Checklist|Handoff/i);
+        expect(output).toMatch(/SRE|P1|incident/i);
+        expect(output).not.toMatch(/configure your logging stack|set up Prometheus|install Grafana/i);
+      },
+      45_000,
+    );
+
+    it(
       'turns web_ux_redesign_system into a guarded UX packet with a visible review gate',
       async () => {
         const template = getTemplateById('web_ux_redesign_system');
@@ -239,6 +339,55 @@ describe.skipIf(!ALIBABA_API_KEY)(
         expect(output).toMatch(/approval|required/i);
         expect(output).toMatch(/routes|auth|API|store/i);
         expect(output).not.toMatch(/choose frameworks|pick a framework|select a stack/i);
+      },
+      45_000,
+    );
+
+    it(
+      'turns data_analysis into a decision-focused insight packet with prioritised action recommendations',
+      async () => {
+        const template = getTemplateById('data_analysis');
+        expect(template).toBeDefined();
+
+        const inputs = {
+          dataset: 'Export CRM 6 tháng: deals theo giai đoạn, doanh số theo sales rep, doanh thu theo tháng. Tổng 340 deals, 8 reps, doanh thu Q1 thấp hơn Q2 ~18%.',
+          questions: '1. Giai đoạn nào đang bị tắc lâu nhất?\n2. Rep nào đang underperform so với quota?\n3. Có nên tăng target Q3 không?',
+          importantSlices: 'So sánh Q1 vs Q2, tách riêng enterprise vs SMB.',
+          knownLimitations: 'Dữ liệu tháng 1 có thể thiếu vì CRM mới migrate, deal < 30 ngày chưa đủ cycle để kết luận.',
+        };
+
+        const response = await POST(
+          new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+              templateId: 'data_analysis',
+              templateName: template?.name,
+              intent: generateIntent(template!, inputs),
+              inputs,
+              provider: 'alibaba',
+              model: 'qwen-turbo',
+              mode: 'simple',
+              aiCommit: {
+                commitId: 'live-front-door-data-analysis',
+                agentId: 'cvf-front-door-validation',
+                timestamp: Date.now(),
+                description: 'Front-door data analysis packet live validation',
+              },
+            }),
+          }) as never,
+        );
+
+        const body = await response.json() as Record<string, unknown>;
+        const output = String(body.output ?? '');
+
+        expect(response.status).toBe(200);
+        expect(body.success).toBe(true);
+        expect(output.length).toBeGreaterThan(450);
+        expect(output).toMatch(/What Data We Looked At|Data We|Nguồn Dữ Liệu/i);
+        expect(output).toMatch(/Suggests|Clearly Suggests|Insight|Kết Luận/i);
+        expect(output).toMatch(/Recommended Actions|Actions|Khuyến nghị/i);
+        expect(output).toMatch(/Checklist|Follow.?Up/i);
+        expect(output).not.toMatch(/run a regression analysis|train a model|apply clustering/i);
       },
       45_000,
     );

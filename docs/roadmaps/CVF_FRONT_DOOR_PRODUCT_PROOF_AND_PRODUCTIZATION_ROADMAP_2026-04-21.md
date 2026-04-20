@@ -3,7 +3,7 @@
 Memory class: SUMMARY_RECORD
 
 > Date: 2026-04-21
-> Status: ACTIVE — cleanup phase closed; next phase defined
+> Status: FULLY DELIVERED 2026-04-21 — all four steps closed
 > Context: post-W109 redesign completion + post-front-door rewrite standardization
 
 ---
@@ -106,7 +106,11 @@ Exit:
 
 - the trusted front door has a wider evidence-backed product-proof subset
 
-Status: NEXT PRIORITY
+Status: DELIVERED 2026-04-21
+
+Evidence: `docs/assessments/CVF_FRONT_DOOR_PRODUCT_PROOF_EXPANSION_ASSESSMENT_2026-04-21.md`
+
+Templates validated: `app_builder_complete`, `api_design`, `web_ux_redesign_system`, `code_review`, `documentation`, `data_analysis` (6/6)
 
 ---
 
@@ -133,7 +137,11 @@ Exit:
 - front-door product quality is protected by automation, not just manual cleanup discipline
 - CVF can evolve without drifting back into mixed trust posture
 
-Status: READY TO OPEN AFTER STEP 3 STARTS
+Status: DELIVERED 2026-04-21
+
+Evidence: `docs/assessments/CVF_PRODUCTIZATION_LANE_ASSESSMENT_2026-04-21.md`
+
+Key output: `front-door-smoke` CI job added to `.github/workflows/cvf-ci.yml`; wired into `ci-passed` summary gate; runs 4 static governance tests on every push without API key
 
 ---
 

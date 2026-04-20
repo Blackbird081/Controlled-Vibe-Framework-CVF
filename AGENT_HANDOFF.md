@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / MASTER ARCHITECTURE CLOSURE-ASSESSED / W105-W109 REDESIGN CLOSED / FRONT-DOOR REWRITE + ALIBABA-FIRST RUNTIME SYNC DELIVERED** — core architecture remains closure-assessed and closed-by-default; redesign wave `W105-T1` through `W109-T1` is delivered under the zero-logic-change contract; strict front door is now all-trusted (`42` front-door skills / `50` linked templates / `50` trusted / `0` review / `0` reject / `0` unscreened); Alibaba-first governed runtime validation now passes on retrieval (`4/4`), `web_build_handoff` (`1/1`), and representative rewritten front-door surfaces (`3/3`: `app_builder_complete`, `api_design`, `web_ux_redesign_system`). Next bounded direction is product proof expansion plus productization, and any reopen still requires a fresh `GC-018`.
+> State: **UNIFIED ON MAIN / MASTER ARCHITECTURE CLOSURE-ASSESSED / W105-W109 REDESIGN CLOSED / FRONT-DOOR REWRITE + ALIBABA-FIRST RUNTIME SYNC DELIVERED / PRODUCT PROOF EXPANSION + PRODUCTIZATION LANE DELIVERED** — core architecture remains closure-assessed and closed-by-default; redesign wave `W105-T1` through `W109-T1` is delivered; strict front door is all-trusted (`42` skills / `50` linked templates / `50/50` trusted); Alibaba-first live validation now covers `6/6` priority front-door templates (`app_builder_complete`, `api_design`, `web_ux_redesign_system`, `code_review`, `documentation`, `data_analysis`); front-door governance corpus is now protected by a dedicated `front-door-smoke` CI job wired into the `ci-passed` gate; product proof expansion and productization lane are both CLOSED. Any further reopen still requires a fresh `GC-018`.
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `2026-04-21`)
 
 ---
@@ -54,8 +54,10 @@
 - **Design lesson now binding for future redesign agents**: do not treat “build passes + pages render” as enough for UI redesign closure. When using `App onboarding` as the visual authority, agents must explicitly verify: (1) navigation/buttons are operable, (2) bilingual copy is consistent across the whole shell, and (3) any visual control shown in the target reference is either implemented for real or intentionally excluded in the roadmap.
 - **Post-W109 canon truth now synchronized (2026-04-21)**: use the whitepaper + progress tracker + this handoff together as the canonical latest state. The old gap where handoff was ahead of tracker/whitepaper is closed.
 - **Front-door rewrite posture is now closure-clean for current scope**: strict front door is all-trusted at `42` skills / `50` linked templates / `50/50` trusted, with no linked `REVIEW_REQUIRED`, `REJECT`, or `UNSCREENED` surfaces remaining.
-- **Alibaba-first runtime proof is now the active product-value boundary**: governed live validation passes on retrieval (`4/4`), `web_build_handoff` (`1/1`), and representative rewritten surfaces (`3/3`). This is sufficient for bounded front-door/product claims on the Alibaba lane only; do not claim multi-provider parity.
-- **Canonical next-direction roadmap**: `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md`. Order is fixed: canon sync complete first, then runtime validation, then front-door product proof expansion, then productization. No tranche is active right now.
+- **Alibaba-first runtime proof now covers 6/6 priority templates (2026-04-21)**: governed live validation passes on retrieval (`4/4`), `web_build_handoff` (`1/1`), rewritten surfaces (`3/3`), and the new product-proof expansion wave (`code_review`, `documentation`, `data_analysis` — `3/3`). Combined: `11/11` live assertions pass on Alibaba lane. Multi-provider parity is still not claimed.
+- **Front-door CI smoke gate is now wired (2026-04-21)**: `front-door-smoke` CI job added to `.github/workflows/cvf-ci.yml`; runs 4 static corpus governance tests on every push without API key; wired into the `ci-passed` summary gate. Front-door quality is now protected by automation.
+- **Product proof expansion + productization lane CLOSED (2026-04-21)**: all four steps of `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md` are DELIVERED. Evidence: `docs/assessments/CVF_FRONT_DOOR_PRODUCT_PROOF_EXPANSION_ASSESSMENT_2026-04-21.md` + `docs/assessments/CVF_PRODUCTIZATION_LANE_ASSESSMENT_2026-04-21.md`.
+- **Canonical next-direction roadmap**: `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md` — FULLY DELIVERED. No active roadmap step. Next bounded move is multi-provider expansion or new operator-driven feature, each requiring a fresh `GC-018`.
 
 ### Wave 1 Retrieval Partitioning — CLOSED DELIVERED 2026-04-18
 
@@ -164,7 +166,7 @@
 
 ## Immediate Next Action Required
 
-**No implementation tranche is active as of 2026-04-21. Core architecture remains closure-assessed; redesign W105-W109 and front-door rewrite/runtime sync are both closed and reflected in canon. The next bounded move, if reopened, is the front-door product proof expansion lane followed by productization, and it requires a fresh `GC-018`.**
+**No implementation tranche is active as of 2026-04-21. Core architecture remains closure-assessed; redesign W105-W109, front-door rewrite/runtime sync, product proof expansion (6/6 templates), and productization lane are all closed and reflected in canon. The next bounded move, if reopened, is multi-provider expansion or a new operator-driven feature, each requiring a fresh `GC-018`.**
 
 Current guidance:
 

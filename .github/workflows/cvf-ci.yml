@@ -235,6 +235,39 @@ jobs:
       - name: Build verification
         run: npm run build
 
+  # ─── Front-Door Static Smoke ─────────────────────────────────────────
+  front-door-smoke:
+    name: Front-Door Governance Smoke (static, no API key)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+
+      - name: Install CVF Guard Contract (local dep)
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm ci
+
+      - name: Install Web UI dependencies
+        run: npm ci
+
+      - name: Front-door governance smoke
+        run: |
+          npx vitest run \
+            src/lib/front-door-rewrite-regression.test.ts \
+            src/lib/front-door-template-standard.test.ts \
+            src/lib/skill-corpus-governance.test.ts \
+            src/lib/skill-template-map.test.ts
+
   # ─── Summary gate ────────────────────────────────────────────────────
   ci-passed:
     name: CI Passed
@@ -246,7 +279,8 @@ jobs:
       test-epf,
       test-gef,
       test-lpf,
-      test-web-ui
+      test-web-ui,
+      front-door-smoke
     ]
     runs-on: ubuntu-latest
     steps:

@@ -1019,7 +1019,7 @@ function RuntimeAdaptersPanel({ lang }: { lang: 'vi' | 'en' }) {
     return (
         <div>
             <h2 className="text-xl font-bold mb-4">
-                🔌 {lang === 'vi' ? 'Runtime Adapters (v1.7.3)' : 'Runtime Adapters (v1.7.3)'}
+                🔌 {lang === 'vi' ? 'Runtime Adapters' : 'Runtime Adapters'}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {RUNTIME_ADAPTERS.map(adapter => {
@@ -1081,7 +1081,7 @@ function ExplainabilityPanel({ lang }: { lang: 'vi' | 'en' }) {
     return (
         <div>
             <h2 className="text-xl font-bold mb-4">
-                🗣️ {lang === 'vi' ? 'Giải thích Hành động (v1.7.3)' : 'Action Explainability (v1.7.3)'}
+                🗣️ {lang === 'vi' ? 'Giải thích Hành động' : 'Action Explainability'}
             </h2>
             <div className="p-5 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#0d0f1a]">
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -1126,7 +1126,7 @@ function NaturalPolicyEditor({ lang }: { lang: 'vi' | 'en' }) {
     return (
         <div>
             <h2 className="text-xl font-bold mb-4">
-                📝 {lang === 'vi' ? 'Viết Policy Tự Nhiên (v1.7.3)' : 'Natural Language Policy (v1.7.3)'}
+                📝 {lang === 'vi' ? 'Viết Policy Tự Nhiên' : 'Natural Language Policy'}
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div>
@@ -1176,7 +1176,7 @@ function RiskMatrixPanel({ lang }: { lang: 'vi' | 'en' }) {
     return (
         <div>
             <h2 className="text-xl font-bold mb-4">
-                🎯 {lang === 'vi' ? 'Ma trận Rủi ro (v1.7.3)' : 'Risk Matrix (v1.7.3)'}
+                🎯 {lang === 'vi' ? 'Ma trận Rủi ro' : 'Risk Matrix'}
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {/* Risk Matrix Table */}
@@ -1431,7 +1431,7 @@ export default function SafetyPage() {
                                 {lang === 'vi' ? 'AI đang được kiểm soát bởi CVF' : 'AI is controlled by CVF'}
                             </div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                                Controlled Vibe Framework — v1.7.1 Safety Runtime
+                                Controlled Vibe Framework — Safety Runtime
                             </div>
                         </div>
                     </div>

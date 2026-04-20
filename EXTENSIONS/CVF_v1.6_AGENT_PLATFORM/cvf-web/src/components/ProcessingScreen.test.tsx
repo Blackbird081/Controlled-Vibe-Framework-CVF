@@ -72,6 +72,12 @@ describe('ProcessingScreen', () => {
     expect(body.cvfRiskLevel).toBe('R2');
     expect(body.fileScope).toEqual(['apps/deskmate/README.md']);
     expect(body.skillPreflightDeclaration).toBe('NONCODER_REFERENCE_PACKET:deskmate');
+    expect(body.aiCommit).toMatchObject({
+      agentId: 'cvf-web-ui',
+      description: 'UI execution for App Builder Wizard',
+    });
+    expect(typeof body.aiCommit.commitId).toBe('string');
+    expect(typeof body.aiCommit.timestamp).toBe('number');
 
     await waitFor(() => expect(onComplete).toHaveBeenCalledWith('Governed output'));
   });

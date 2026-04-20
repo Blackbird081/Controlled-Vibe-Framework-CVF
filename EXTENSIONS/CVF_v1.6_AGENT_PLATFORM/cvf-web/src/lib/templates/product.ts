@@ -243,6 +243,261 @@ SUCCESS CRITERIA:
         outputExpected: ['Onboarding Assessment', 'Friction Points', 'Optimization Recommendations', 'Metrics to Track'],
     },
     {
+        id: 'web_ux_redesign_system',
+        name: 'Hệ thống UX Web',
+        icon: '🧭',
+        description: 'Biến brief giao diện thành packet UX/UI để agent khác có thể xây web mà non-coder không cần hiểu framework phía sau',
+        category: 'product',
+        difficulty: 'advanced',
+        fields: [
+            { id: 'projectSurface', type: 'text', label: 'Website / sản phẩm này là gì?', placeholder: 'Mô tả ngắn gọn website hoặc app cần làm', required: true, section: 'required', hint: 'Không cần nói framework. Chỉ cần nói đây là loại sản phẩm gì.', example: 'AI operations dashboard cho team nội bộ' },
+            { id: 'users', type: 'text', label: 'Ai sẽ dùng nó?', placeholder: 'Nhóm người dùng chính', required: true, section: 'required', hint: 'Liệt kê người dùng hoặc vai trò chính.', example: 'Ops manager, analyst, admin' },
+            { id: 'coreFlows', type: 'textarea', label: 'Người dùng cần làm gì trên web?', placeholder: '3-5 việc quan trọng nhất mà người dùng phải làm được', required: true, rows: 4, section: 'required', hint: 'Mô tả bằng ngôn ngữ công việc hằng ngày, không cần thuật ngữ UX.', example: 'Search knowledge\nRun workflow\nReview result\nManage settings' },
+            { id: 'pagesModals', type: 'textarea', label: 'Những màn hình / popup cần có', placeholder: 'Liệt kê page, modal, drawer, panel cần xây', required: true, rows: 4, section: 'required', hint: 'Chỉ cần liệt kê những chỗ bạn muốn agent xây hoặc redesign.', example: 'Home, Skills, Search, Docs, Settings modal' },
+            { id: 'mustPreserve', type: 'textarea', label: 'Những gì tuyệt đối không được đổi', placeholder: 'Logic, dữ liệu, route, auth... cần giữ nguyên', required: true, rows: 4, section: 'required', hint: 'Đây là lớp bảo vệ để agent chỉ đổi UX/UI, không phá logic ẩn bên dưới.', example: 'Routes, auth, API payloads, Zustand store, provider execution flow' },
+            { id: 'visualDirection', type: 'text', label: 'Bạn muốn giao diện có cảm giác như thế nào?', placeholder: 'Mô tả phong cách mong muốn', required: true, section: 'required', hint: 'Nói về cảm giác và level giao diện, ví dụ: premium, bold, tối giản, data-heavy.', example: 'Dark-primary, premium, structured, bold headings, data-aware' },
+            { id: 'contentDensity', type: 'select', label: 'Lượng thông tin trên màn hình', options: ['Light', 'Balanced', 'Balanced to Dense', 'Dense'], default: 'Balanced', required: false, section: 'advanced', hint: 'Chọn mức thoáng hay dày đặc của thông tin.' },
+            { id: 'motionBudget', type: 'select', label: 'Mức chuyển động / animation', options: ['Minimal', 'Intentional', 'Rich'], default: 'Intentional', required: false, section: 'advanced', hint: 'Chỉ chọn mức cảm giác mong muốn, agent sẽ tự chuyển thành rule cụ thể.' },
+            { id: 'themeStrategy', type: 'select', label: 'Ưu tiên dark hay light?', options: ['Dark-primary + light-supporting', 'Light-primary + dark-supporting', 'Dual parity'], default: 'Dark-primary + light-supporting', required: false, section: 'advanced', hint: 'Chỉ cần nói ưu tiên giao diện, không cần hiểu hệ theme bên dưới.' },
+            { id: 'references', type: 'textarea', label: 'Ghi chú / ví dụ tham khảo', placeholder: 'Link, file, hoặc ghi chú style nếu có', required: false, rows: 3, section: 'advanced', hint: 'Nếu có app hoặc page bạn thích, chỉ cần mô tả hoặc dán link.', example: 'Use CVF redesign cues: stat strip, pill filters, structured cards, docs split-pane' },
+        ],
+        intentPattern: `INTENT:
+Tôi muốn biến brief giao diện này thành một packet handoff để agent khác có thể xây web.
+
+PROJECT / SURFACE:
+[projectSurface]
+
+USERS / ROLES:
+[users]
+
+CORE FLOWS:
+[coreFlows]
+
+PAGES / MODALS:
+[pagesModals]
+
+MUST PRESERVE:
+[mustPreserve]
+
+VISUAL DIRECTION:
+[visualDirection]
+
+CONTENT DENSITY: [contentDensity]
+MOTION BUDGET: [motionBudget]
+THEME STRATEGY: [themeStrategy]
+REFERENCES / NOTES: [references]
+
+SUCCESS CRITERIA:
+- The end user does not need to choose frameworks or hidden technical patterns
+- Extract reusable design DNA instead of one-off mockup notes
+- Preserve logic/runtime boundaries
+- Define layout, component, state, and QA rules
+- Produce an agent-ready web build handoff packet`,
+        outputExpected: ['Product Goal & User Promise', 'UX Style DNA', 'Page / Modal Blueprint', 'Component & State Rules', 'Responsive / Accessibility Rules', 'Agent Build Guardrails'],
+        outputTemplate: `## 1. Experience North Star
+- Product promise
+- User feeling
+- Operational posture
+
+## 2. Visual DNA
+- Typography
+- Color roles
+- Surface hierarchy
+- Accent rules
+- Anti-patterns
+
+## 3. Layout & Navigation System
+- Shell pattern
+- Sidebar / topbar rules
+- Section rhythm
+
+## 4. Component Language
+- Buttons
+- Inputs
+- Filters
+- Cards
+- Tables / charts
+- Modals / drawers
+- Empty / loading / error states
+
+## 5. Surface Blueprint
+- Page-by-page hierarchy
+- Primary CTA / secondary CTA
+- Mobile adaptation
+
+## 6. Implementation Guardrails
+- What must stay unchanged
+- What can be restyled
+- Tokenization plan
+- QA checklist`,
+        sampleOutput: `# Web Build Handoff Packet
+
+## 1. Product Goal & User Promise
+- Build a high-trust AI operations dashboard for internal teams.
+- The UI should feel premium, structured, and calm under pressure.
+
+## 2. UX Style DNA
+- Dark-primary shell, layered panels, clear border separation
+- Editorial headings + compact operational body text
+- Indigo reserved for active state and key actions
+- Avoid generic AI gradients and random colorful cards
+
+## 3. Page / Modal Blueprint
+- Home: stat strip, key actions, recent workflows
+- Search: large query bar, quick tags, result list
+- Docs: split-pane navigation + readable content column
+- Settings modal: grouped controls, clear save state
+
+## 4. Component & State Rules
+- Cards: strong hierarchy, no decorative clutter
+- Filters: pill controls with clear active state
+- Empty state: explain what to do next
+- Loading: skeleton or progress feedback, never blank wait
+- Error: plain-language recovery guidance
+
+## 5. Responsive / Accessibility Rules
+- Mobile: no horizontal scroll, stack cards earlier
+- Keyboard focus must stay visible
+- Touch targets >= 44px
+- Dark is hero, light still must be readable and complete
+
+## 6. Agent Build Guardrails
+- Preserve routes, auth, APIs, existing state/store contracts
+- Restyle shell/components only unless explicitly approved
+- Agent chooses technical implementation details internally
+- Final QA: desktop + mobile + loading/empty/error states`,
+    },
+    {
+        id: 'web_build_handoff',
+        name: 'Bàn giao Web cho Agent',
+        icon: '📦',
+        description: 'Template cực ngắn cho non-coder: chỉ mô tả website bằng ngôn ngữ thường ngày, CVF sẽ tự đóng gói thành packet build cho agent',
+        category: 'product',
+        difficulty: 'easy',
+        fields: [
+            { id: 'websiteGoal', type: 'text', label: 'Website này để làm gì?', placeholder: 'Mục tiêu chính của website', required: true, section: 'required', hint: 'Viết theo ngôn ngữ kinh doanh hoặc công việc, không cần từ kỹ thuật.', example: 'Giúp khách hàng đăng ký tư vấn và xem dịch vụ nhanh hơn' },
+            { id: 'audience', type: 'text', label: 'Ai sẽ dùng website?', placeholder: 'Người dùng chính', required: true, section: 'required', hint: 'Nói rõ nhóm người dùng chính hoặc vai trò của họ.', example: 'Chủ doanh nghiệp nhỏ đang tìm giải pháp AI automation' },
+            { id: 'mustDo', type: 'textarea', label: 'Người dùng phải làm được những việc nào?', placeholder: '3-5 việc quan trọng nhất', required: true, rows: 4, section: 'required', hint: 'Chỉ mô tả việc người dùng muốn làm trên web.', example: 'Xem dịch vụ\nSo sánh gói\nĐăng ký tư vấn\nĐể lại thông tin liên hệ' },
+            { id: 'screens', type: 'textarea', label: 'Cần những trang / popup nào?', placeholder: 'Liệt kê page hoặc modal cần có', required: true, rows: 4, section: 'required', hint: 'Liệt kê những màn hình bạn mong agent tạo ra.', example: 'Home, Services, Pricing, Contact form modal, Thank-you page' },
+            { id: 'mustPreserve', type: 'textarea', label: 'Những gì phải giữ nguyên', placeholder: 'Logic, dữ liệu, tích hợp, auth... nếu có', required: true, rows: 3, section: 'required', hint: 'Nếu có backend hay logic sẵn, hãy nói phần nào không được đụng vào.', example: 'Webhook form sang CRM, routes hiện tại, auth admin, API submit lead' },
+            { id: 'lookAndFeel', type: 'text', label: 'Bạn muốn giao diện mang cảm giác gì?', placeholder: 'Phong cách mong muốn', required: true, section: 'required', hint: 'Mô tả cảm giác tổng thể của giao diện.', example: 'Tin cậy, sáng rõ, hiện đại, dễ đọc trên mobile' },
+            { id: 'references', type: 'textarea', label: 'Ví dụ / ghi chú thêm', placeholder: 'Link tham khảo hoặc ghi chú ngắn', required: false, rows: 3, section: 'advanced', hint: 'Nếu có site bạn thích hoặc điều cần tránh, hãy ghi vào đây.', example: 'Thích kiểu section rõ, headline mạnh, CTA nổi; tránh kiểu quá nhiều hiệu ứng' },
+        ],
+        intentPattern: `INTENT:
+Tôi là non-coder và muốn CVF biến brief này thành packet bàn giao để agent khác xây website.
+
+WEBSITE GOAL:
+[websiteGoal]
+
+TARGET USERS:
+[audience]
+
+USERS MUST BE ABLE TO:
+[mustDo]
+
+REQUIRED PAGES / MODALS:
+[screens]
+
+MUST PRESERVE:
+[mustPreserve]
+
+LOOK AND FEEL:
+[lookAndFeel]
+
+REFERENCES / NOTES:
+[references]
+
+SUCCESS CRITERIA:
+- Ask only for plain-language product intent, not hidden technical choices
+- Translate the brief into a clear agent-ready web build packet
+- Preserve existing logic, integrations, data contracts, and protected flows
+- Give page structure, UX priorities, and acceptance checklist
+- Keep the result simple enough for a non-coder to review before handoff
+
+OUTPUT CONTRACT:
+- Return Markdown only
+- Use these headings exactly and in this order:
+  1. Website Goal
+  2. Target Users
+  3. Required Pages and Flows
+  4. UX / Visual Direction
+  5. Protected Constraints
+  6. Agent Build Instructions
+  7. Acceptance Checklist
+- Do not ask the end user to choose frameworks, stacks, or internal technical patterns
+- Do not add extra deliverables unless the user explicitly requested them`,
+        outputExpected: ['Website Goal & Audience', 'Page / Flow List', 'UX Direction', 'Protected Constraints', 'Agent Build Packet', 'Acceptance Checklist'],
+        outputTemplate: `# Web Build Handoff Packet
+
+## 1. Website Goal
+- Business goal
+- Primary user promise
+
+## 2. Target Users
+- Main audiences
+- What they need to accomplish
+
+## 3. Required Pages and Flows
+- Pages
+- Modals / forms
+- Primary user journey
+
+## 4. UX / Visual Direction
+- Tone and feel
+- Content density
+- CTA hierarchy
+- Mobile behavior
+
+## 5. Protected Constraints
+- Logic to preserve
+- APIs / integrations to preserve
+- Data / auth / routes that must not change
+
+## 6. Agent Build Instructions
+- What to build
+- What can be redesigned
+- What must remain unchanged
+
+## 7. Acceptance Checklist
+- Desktop + mobile
+- Empty / loading / error states
+- Clear CTA and readable content
+- Accessibility basics`,
+        sampleOutput: `# Web Build Handoff Packet
+
+## 1. Website Goal
+- Help small-business owners understand the service quickly and book a consultation.
+- The site should feel trustworthy, fast, and easy to act on.
+
+## 2. Target Users
+- Founders and operations leads with limited technical background.
+- They need to understand the offer, compare packages, and submit contact details.
+
+## 3. Required Pages and Flows
+- Home, Services, Pricing, FAQ, Contact modal, Thank-you page
+- Main flow: land on Home -> review services -> compare pricing -> submit consultation form
+
+## 4. UX / Visual Direction
+- Clean, bright, editorial layout with strong section separation
+- CTA buttons should stand out without looking flashy
+- Mobile should prioritize scanability and short decision paths
+
+## 5. Protected Constraints
+- Keep current lead form API, CRM webhook, admin auth, and route structure
+- Do not change payload fields or backend validation logic
+
+## 6. Agent Build Instructions
+- Redesign presentation layer and information flow
+- Keep business logic and integrations intact
+- Choose internal implementation details without asking the end user to pick frameworks
+
+## 7. Acceptance Checklist
+- Works well on desktop and mobile
+- Includes loading, empty, and error feedback
+- Form is easy to complete
+- Copy is readable for non-technical users`,
+    },
+    {
         id: 'grandma_ux_test',
         name: 'Grandma UX Test',
         icon: '👵',

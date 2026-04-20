@@ -126,6 +126,19 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                 </div>
             </div>
 
+            <div className="mb-6 rounded-xl border border-blue-200/70 bg-blue-50/70 px-4 py-4 text-sm text-blue-900 dark:border-blue-900/60 dark:bg-blue-950/30 dark:text-blue-100">
+                <p className="font-semibold mb-1">
+                    {language === 'en'
+                        ? 'You only need to describe the website in plain language.'
+                        : 'Bạn chỉ cần mô tả website bằng ngôn ngữ bình thường.'}
+                </p>
+                <p className="text-blue-800 dark:text-blue-200">
+                    {language === 'en'
+                        ? 'CVF will turn your brief into an agent-ready build packet, including the hidden structure and guardrails.'
+                        : 'CVF sẽ tự đóng gói brief này thành packet giao việc cho agent, bao gồm cả cấu trúc ẩn và guardrails cần thiết.'}
+                </p>
+            </div>
+
             <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
                 {/* Required Fields */}
                 {requiredFields.map((field) => (
@@ -208,7 +221,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                         >
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
-                        {language === 'en' ? 'View technical details' : 'Xem chi tiết kỹ thuật'}
+                        {language === 'en' ? 'Preview agent instructions' : 'Xem bản giao cho agent'}
                     </button>
 
                     {showPreview && (
@@ -261,7 +274,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                          flex items-center justify-center gap-2"
                     >
                         <span>📋</span>
-                        <span>{language === 'en' ? 'Export Prompt' : 'Xuất Prompt'}</span>
+                        <span>{language === 'en' ? 'Export Spec' : 'Xuất Spec'}</span>
                     </button>
 
                     {/* Submit Button - Opens SpecExport to choose mode first */}
@@ -275,7 +288,7 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                          transition-all duration-200
                          flex items-center justify-center gap-2"
                     >
-                        <span>{language === 'en' ? 'Submit' : 'Gửi đi'}</span>
+                        <span>{language === 'en' ? 'Create Agent Spec' : 'Tạo Spec cho Agent'}</span>
                         <span>🚀</span>
                     </button>
                 </div>

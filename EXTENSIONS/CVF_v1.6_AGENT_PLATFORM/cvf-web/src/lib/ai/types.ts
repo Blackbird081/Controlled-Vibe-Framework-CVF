@@ -26,6 +26,12 @@ export interface ExecutionRequest {
     skillPreflightRecordRef?: string;
     skillIds?: string[];
     fileScope?: string[];
+    aiCommit?: {
+        commitId: string;
+        agentId: string;
+        timestamp: number;
+        description?: string;
+    };
     /** W101-T1 — pre-governed knowledge context to inject into the system prompt */
     knowledgeContext?: string;
 }

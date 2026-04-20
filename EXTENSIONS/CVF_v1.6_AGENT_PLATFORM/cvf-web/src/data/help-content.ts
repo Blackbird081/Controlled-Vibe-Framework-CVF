@@ -78,10 +78,10 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 role: 'system',
                 content: 'CVF tự động xử lý và cho phép bạn chọn 1 trong 3 chế độ xuất:',
                 steps: [
-                    '📝 Simple — Prompt nhanh, không có governance',
-                    '⚠️ With Rules — Thêm stop conditions & guardrails',
-                    '🚦 CVF Full Mode — Quy trình 5 phase đầy đủ + governance metadata',
-                    '→ Copy & paste vào AI bất kỳ HOẶC nhấn "🤖 Send to Agent" để gửi trực tiếp',
+                    '📝 Brief — Spec gọn để copy/paste',
+                    '⚠️ Agent Handoff — Packet build có guardrails, khuyến nghị cho non-coder',
+                    '🚦 CVF Guided Agent — Quy trình 5 phase đầy đủ + governance metadata',
+                    '→ Copy & paste vào AI bất kỳ HOẶC nhấn "🤖 Gửi Packet cho Agent" để gửi trực tiếp',
                 ],
             },
             {
@@ -209,10 +209,10 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 role: 'system',
                 content: 'CVF processes the input and lets you choose 1 of 3 export modes:',
                 steps: [
-                    '📝 Simple — Quick prompt, no governance',
-                    '⚠️ With Rules — Add stop conditions & guardrails',
-                    '🚦 CVF Full Mode — Full 5-phase protocol + governance metadata',
-                    '→ Copy & paste into any AI OR click "🤖 Send to Agent" to send directly',
+                    '📝 Brief — Lightweight spec for copy/paste',
+                    '⚠️ Agent Handoff — Guardrailed build packet, recommended for non-coders',
+                    '🚦 CVF Guided Agent — Full 5-phase protocol + governance metadata',
+                    '→ Copy & paste into any AI OR click "🤖 Send Packet to Agent" to send directly',
                 ],
             },
             {

@@ -16,6 +16,7 @@ export interface ProcessingExecutionOverrides {
     skillPreflightRecordRef?: ExecutionRequest['skillPreflightRecordRef'];
     skillIds?: ExecutionRequest['skillIds'];
     fileScope?: ExecutionRequest['fileScope'];
+    aiCommit?: ExecutionRequest['aiCommit'];
 }
 
 interface ProcessingScreenProps {
@@ -62,6 +63,12 @@ export function ProcessingScreen({
             setStatus(isVi ? 'Đang kết nối AI...' : 'Connecting to AI provider...');
             setProgress(10);
             const mode = settings.preferences.defaultExportMode || 'governance';
+            const aiCommit = executionOverrides?.aiCommit || {
+                commitId: `web-ui-${templateId || templateName}-${Date.now()}`,
+                agentId: 'cvf-web-ui',
+                timestamp: Date.now(),
+                description: `UI execution for ${templateName}`,
+            };
 
             const response = await fetch('/api/execute', {
                 method: 'POST',
@@ -73,6 +80,7 @@ export function ProcessingScreen({
                     intent,
                     mode,
                     ...executionOverrides,
+                    aiCommit,
                 }),
             });
 

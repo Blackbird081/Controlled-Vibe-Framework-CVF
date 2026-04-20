@@ -245,13 +245,13 @@ describe('SpecExport', () => {
     it('renders Send to Agent button when onSendToAgent is provided', () => {
         render(<SpecExport {...defaultProps} />);
         const allText = document.body.textContent || '';
-        expect(allText).toMatch(/Send to Agent|Gửi đến Agent/);
+        expect(allText).toMatch(/Send.*Agent|Gửi.*Agent/);
     });
 
     it('calls onSendToAgent with spec content when agent button clicked', () => {
         render(<SpecExport {...defaultProps} />);
         const agentBtn = Array.from(document.querySelectorAll('button')).find(
-            b => b.textContent?.includes('Agent')
+            b => b.textContent?.includes('Send Packet to Agent') || b.textContent?.includes('Gửi Packet cho Agent')
         );
         expect(agentBtn).toBeTruthy();
         fireEvent.click(agentBtn!);
@@ -266,7 +266,7 @@ describe('SpecExport', () => {
         const propsWithout = { ...defaultProps, onSendToAgent: undefined };
         render(<SpecExport {...propsWithout} onClose={vi.fn()} />);
         const allText = document.body.textContent || '';
-        expect(allText).not.toMatch(/Send to Agent|Gửi đến Agent/);
+        expect(allText).not.toMatch(/Send.*Agent|Gửi.*Agent/);
     });
 
     it('shows Spec Gate PASS status', () => {

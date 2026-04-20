@@ -38,6 +38,19 @@ The earlier intake lineage remains mandatory, but no longer sufficient by itself
 2. no benchmark or value-proof tranche may use a corpus item unless that item is explicitly classified `TRUSTED_FOR_VALUE_PROOF`
 3. skill/template quantity is never acceptable evidence of quality
 4. external-repo reputation, popularity, or convenience may not substitute for deterministic CVF-standard classification
+5. non-coder-facing skill/template surfaces must hide internal technical frames and emit an agent-ready spec/handoff packet instead of pushing implementation choices onto the user
+
+### Legacy Alignment Rule
+
+Legacy front-door skills/templates do **not** need to be mass-rewritten by default.
+
+They are considered aligned to the new standard only when all three conditions are true:
+
+1. the shared export/spec layer emits a governed non-coder packet
+2. the shared execution/runtime layer injects the required hidden governance metadata without asking the user
+3. the front-door audit/test surface confirms the linked template still meets the non-coder packet minimum
+
+If any of the three conditions fails, the affected template/skill must be rewritten or downgraded from front-door use. This keeps the standard strict without creating unnecessary manual churn across the entire library.
 
 ### Silent Intake Is Forbidden
 

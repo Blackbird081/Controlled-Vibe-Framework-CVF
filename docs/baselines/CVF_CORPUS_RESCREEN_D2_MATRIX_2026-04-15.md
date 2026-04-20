@@ -14,10 +14,10 @@ Memory class: SUMMARY_RECORD
 | Class | Count |
 |---|---|
 | TRUSTED_FOR_VALUE_PROOF | 39 |
-| REVIEW_REQUIRED | 9 |
+| REVIEW_REQUIRED | 10 |
 | LEGACY_LOW_CONFIDENCE | 2 |
 | REJECT_FOR_NON_CODER_FRONTDOOR | 7 |
-| **Total** | **57** |
+| **Total** | **58** |
 
 ---
 
@@ -121,7 +121,7 @@ Note: wizard templates have `fields: []` — input discipline is handled by the 
 
 ---
 
-## REVIEW_REQUIRED (9)
+## REVIEW_REQUIRED (10)
 
 No fatal governance conflict; at least one important MIXED dimension.
 
@@ -136,6 +136,7 @@ No fatal governance conflict; at least one important MIXED dimension.
 | `app_builder_complete` | PASS | PASS | PASS | MIXED | PASS | PASS | MIXED | PASS | FD: "for people who understand CVF process"; 13+ fields; difficulty: advanced | **REVIEW_REQUIRED** |
 | `api_design` | PASS | PASS | PASS | MIXED | MIXED | PASS | MIXED | PASS | **BENCHMARK-BOUND** per §6.1 but: difficulty: advanced; API concepts (REST/GraphQL, auth types, pagination) require technical context; output is technical spec | **REVIEW_REQUIRED** |
 | `vibe_logic_mapping` | PASS | PASS | PASS | MIXED | PASS | PASS | MIXED | PASS | ID: requires tech stack field (e.g. "Streamlit, Next.js"); FD: intermediate step, assumes vibe_to_spec was run | **REVIEW_REQUIRED** |
+| `web_ux_redesign_system` | PASS | PASS | PASS | PASS | MIXED | PASS | PASS | PASS | OA: output spans design system, surface blueprint, and implementation guardrails; requires reviewer judgment to keep style reuse aligned with brand and behavior-preservation goals | **REVIEW_REQUIRED** |
 
 ### Critical Finding — api_design
 

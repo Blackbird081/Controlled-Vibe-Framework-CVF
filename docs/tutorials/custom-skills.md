@@ -18,6 +18,8 @@ A **skill** in CVF is a pre-structured, form-based template that:
 
 Skills are **NOT code** and **NOT prompts**. They are **governance artifacts** — structured forms that make AI interactions repeatable and quality-controlled.
 
+For **non-coder-facing** skills, users should never need to understand hidden frameworks, stacks, or execution patterns. Their job is to describe the goal in plain language. The skill/template must turn that brief into an **agent-ready spec/handoff packet**.
+
 ### Why Create Custom Skills?
 
 | Without Skills | With Skills |
@@ -42,6 +44,7 @@ Think about a task you (or your team) do repeatedly with AI. Good candidates:
 | Database migration | Risk needs to be managed |
 | Test suite generation | Consistent quality bar |
 | Landing page copy | Same fields: audience, CTA, tone |
+| Website redesign handoff | Non-coder brief → agent build packet |
 
 **For this tutorial**, we'll create a skill for **"REST API Endpoint"**.
 
@@ -61,6 +64,11 @@ touch skills/001_rest_api_endpoint.skill.md
 ---
 
 ## Step 3: Write the Skill Template
+
+> [!IMPORTANT]
+> If this skill will be used by non-coders, the form fields must stay in plain language.
+> Do **not** ask the user to choose hidden technical frames such as frameworks, component architectures, or internal execution tactics unless those choices materially change business risk.
+> Those hidden choices should be resolved later by the AI/agent from the generated spec.
 
 Here's the complete skill structure:
 
@@ -153,6 +161,14 @@ AI should produce:
 3. **Type definitions** (if TypeScript)
    - Request body type
    - Response body type
+
+For non-coder-facing skills, strongly prefer an output packet structure like:
+
+1. **Goal & user promise**
+2. **Required inputs captured from the user**
+3. **Agent handoff spec**
+4. **Guardrails / must-preserve rules**
+5. **Acceptance checklist**
 
 ---
 
@@ -349,6 +365,12 @@ your-team-repo/
 ### Option C: Use in Web UI (v1.6)
 
 The v1.6 web app can load skills as templates. Place skill files in the appropriate directory and they'll appear in the template picker.
+
+For skills shown in the non-coder front door, also ensure:
+
+- Template labels are plain-language, not implementation-language
+- The template can export an agent-ready packet/spec
+- A sample output preview is available so the user understands the outcome before sending it to an agent
 
 ---
 

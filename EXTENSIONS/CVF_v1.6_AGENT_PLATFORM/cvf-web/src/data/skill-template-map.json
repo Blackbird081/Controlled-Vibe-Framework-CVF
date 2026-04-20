@@ -44,6 +44,8 @@
     "user_persona": { "domain": "product_ux", "skillId": "user_persona_development" },
     "error_handling_ux": { "domain": "product_ux", "skillId": "error_handling_ux" },
     "onboarding_review": { "domain": "product_ux", "skillId": "onboarding_experience_review" },
+    "web_ux_redesign_system": { "domain": "product_ux", "skillId": "cvf_web_ux_redesign_system" },
+    "web_build_handoff": { "domain": "product_ux", "skillId": "cvf_web_ux_redesign_system" },
 
     "security_assessment_wizard": { "domain": "security_compliance", "skillId": "api_security_checklist" },
     "api_security": { "domain": "security_compliance", "skillId": "api_security_checklist" },

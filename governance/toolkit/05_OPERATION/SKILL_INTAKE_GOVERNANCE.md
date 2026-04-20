@@ -25,6 +25,7 @@ Before evaluating any new skill, reviewers must verify it aligns with:
 3. **Domain = job function** — Skills belong to functional areas (app_development, product_ux, finance_analytics...). Never categorize by user type.
 4. **Form template purpose** — User-facing skills capture input. Agent skills govern execution. Do not mix these.
 5. **English-only content** — All skill section content must be in English for AI/Agent consistency.
+6. **Non-coder abstraction first** — If a skill is exposed to non-coders, users must describe goals in plain language while hidden frameworks, stacks, and execution patterns stay inside the generated spec/handoff layer.
 
 ---
 
@@ -39,6 +40,7 @@ A skill may enter the CVF Library only if it meets **all 5** of the following:
 | 3 | **Form-capable** | Can it be expressed as a form with clear Input → Output? |
 | 4 | **Domain-assignable** | Does it naturally belong to an existing functional domain? |
 | 5 | **AI-executable** | Can AI/Agent follow the constraints and produce the expected output without human technical knowledge? |
+| 6 | **Abstraction-safe for non-coders** | If surfaced to non-coders, can the skill hide technical choices and emit an agent-ready spec instead of asking the user to manage implementation details? |
 
 > [!WARNING]
 > If any criterion is answered NO — **STOP**. Do not proceed with intake.
@@ -54,6 +56,7 @@ Reject immediately if the skill:
 | Duplicates an existing skill (>70% overlap in purpose) | Causes redundancy and maintenance burden |
 | Describes AI behavior without user input | Should be an Agent Tool (v1.6+), not a User Skill |
 | Requires technical execution by the user | Violates CVF non-coder principle |
+| Exposes hidden technical choices to non-coders | Framework/stack decisions should stay inside the spec/handoff layer |
 | Does not produce a verifiable, structured output | Cannot be UAT-tested |
 | Content is in Vietnamese or mixed language | All skill content must be in English |
 | Proposed domain is based on user type ("non_coder_workflow") | Domains must be job functions, not personas |
@@ -131,6 +134,31 @@ Every skill integrated into the library **MUST** have a corresponding Template e
 1. Create the Template in the appropriate `src/lib/templates/*.ts` file
 2. Add the Template↔Skill mapping to `src/lib/skill-template-map.ts`
 3. Verify the "📚 View related Skill" and "📝 Use Template" links work in the Web UI
+
+### Non-Coder Front-Door Standard
+
+If the skill will be visible in the non-coder front door, the Template layer must additionally satisfy all rules below:
+
+1. **Plain-language fields only** — labels and hints must ask for goals, users, flows, constraints, and examples; not framework, stack, or hidden implementation choices
+2. **Spec/Handoff output required** — the resulting packet must be ready for another AI/agent to continue from
+3. **Hidden technique ownership stays with CVF** — frameworks, internal patterns, and execution tactics are resolved by CVF/agent, not delegated back to the user
+4. **Sample output preview required** — the template should show a believable sample packet so non-coders know what they are creating
+5. **Preservation guard required** — if the skill can touch existing systems, the form must include a way to declare what must not change
+
+If any of the five rules above is missing, the skill may still exist internally, but it is **not ready for non-coder front-door exposure**.
+
+### Legacy Alignment Strategy
+
+When standardizing an existing front-door corpus, do **not** start by rewriting every skill file manually.
+
+Use this order:
+
+1. align the shared packet/export layer so every front-door template emits a governed handoff packet
+2. align the shared execution/runtime layer so hidden metadata and guards stay inside CVF, not on the user
+3. run a deterministic front-door audit against all linked templates
+4. manually rewrite only the templates/skills that still fail the audit
+
+This is the default path for bringing legacy skills forward to the non-coder standard without creating avoidable maintenance noise.
 
 ---
 

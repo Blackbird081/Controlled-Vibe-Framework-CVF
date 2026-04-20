@@ -23,59 +23,16 @@ interface SpecExportProps {
     onSendToAgent?: (spec: string) => void;
 }
 
-type ExportLanguage = 'en' | 'vi';
-type ExportMode = 'simple' | 'governance' | 'full';
+type ExportLanguage = 'en' | 'vi'; type ExportMode = 'simple' | 'governance' | 'full';
 
 const modeLabels = {
-    en: {
-        modeLabel: 'Export Mode',
-        simpleMode: 'Simple',
-        simpleDesc: 'Quick prompts, no rules',
-        governanceMode: 'With Rules',
-        governanceDesc: 'Add stop conditions & guardrails',
-        fullMode: 'CVF Full Mode',
-        fullDesc: '5-phase protocol with full governance',
-    },
-    vi: {
-        modeLabel: 'Chế độ xuất',
-        simpleMode: 'Đơn giản',
-        simpleDesc: 'Prompt nhanh, không có quy tắc',
-        governanceMode: 'Có Quy tắc',
-        governanceDesc: 'Thêm stop conditions & guardrails',
-        fullMode: 'CVF Full Mode',
-        fullDesc: 'Quy trình 5 phase đầy đủ',
-    }
+    en: { modeLabel: 'Packet Mode', simpleMode: 'Brief', simpleDesc: 'Lightweight spec for copy/paste', governanceMode: 'Agent Handoff', governanceDesc: 'Recommended: build packet with guardrails', fullMode: 'CVF Guided Agent', fullDesc: '5-phase governed packet for complex work' },
+    vi: { modeLabel: 'Chế độ packet', simpleMode: 'Brief', simpleDesc: 'Spec gọn để copy/paste', governanceMode: 'Handoff cho Agent', governanceDesc: 'Khuyến nghị: packet build có guardrails', fullMode: 'CVF Guided Agent', fullDesc: 'Packet 5 phase cho việc phức tạp' }
 };
 
 const specLabels = {
-    en: {
-        title: 'Complete Spec Export',
-        description: 'Copy the complete spec and paste into ChatGPT, Claude, Gemini or your preferred AI.',
-        copyBtn: 'Copy to Clipboard',
-        exportBtn: 'Export to File (.md)',
-        previewBtn: 'Show Preview',
-        hidePreviewBtn: 'Hide Preview',
-        copied: 'Copied!',
-        langLabel: 'Export Language',
-        quickPaste: 'Quick paste to:',
-        instruction: 'Click "Copy to Clipboard" → Open ChatGPT/Claude/Gemini → Paste → Enter',
-        helpTitle: '📋 Export Spec (Prompt)',
-        helpDesc: 'Export prompt to paste into your preferred AI assistant.',
-    },
-    vi: {
-        title: 'Xuất Spec Hoàn Chỉnh',
-        description: 'Sao chép spec hoàn chỉnh để paste vào ChatGPT, Claude, Gemini hoặc AI yêu thích của bạn.',
-        copyBtn: 'Sao chép',
-        exportBtn: 'Xuất file (.md)',
-        previewBtn: 'Xem trước',
-        hidePreviewBtn: 'Ẩn xem trước',
-        copied: 'Đã sao chép!',
-        langLabel: 'Ngôn ngữ xuất',
-        quickPaste: 'Mở nhanh:',
-        instruction: 'Nhấn "Sao chép" → Mở ChatGPT/Claude/Gemini → Paste → Enter',
-        helpTitle: '📋 Xuất Spec (Prompt)',
-        helpDesc: 'Xuất prompt để paste vào AI.',
-    },
+    en: { title: 'Agent Handoff Packet', description: 'Turn the filled brief into a packet another AI agent can execute without making the user manage hidden technical choices.', copyBtn: 'Copy to Clipboard', exportBtn: 'Export Packet (.md)', previewBtn: 'Show Preview', hidePreviewBtn: 'Hide Preview', copied: 'Copied!', langLabel: 'Export Language', quickPaste: 'Quick paste to:', instruction: 'Click "Copy to Clipboard" → Open ChatGPT/Claude/Gemini → Paste → let the agent continue from the packet', helpTitle: '📋 Export Agent Packet', helpDesc: 'Export a governed handoff packet for another AI assistant or agent.' },
+    vi: { title: 'Packet Giao Việc Cho Agent', description: 'Biến brief đã điền thành packet để AI/agent khác thực thi, mà người dùng không cần tự xử lý các lựa chọn kỹ thuật ẩn phía sau.', copyBtn: 'Sao chép', exportBtn: 'Xuất packet (.md)', previewBtn: 'Xem trước', hidePreviewBtn: 'Ẩn xem trước', copied: 'Đã sao chép!', langLabel: 'Ngôn ngữ xuất', quickPaste: 'Mở nhanh:', instruction: 'Nhấn "Sao chép" → Mở ChatGPT/Claude/Gemini → Paste → để agent tiếp tục từ packet này', helpTitle: '📋 Xuất Agent Packet', helpDesc: 'Xuất packet handoff có governance để giao tiếp cho AI hoặc agent khác.' },
 };
 
 const governanceRules = {
@@ -713,12 +670,13 @@ function generateSpec(
         : '');
 
     const labels = lang === 'vi' ? {
-        specTitle: mode === 'full' ? 'Đặc Tả Nhiệm Vụ CVF (FULL MODE)' : mode === 'governance' ? 'Đặc Tả Nhiệm Vụ CVF (Có Quy Tắc)' : 'Đặc Tả Nhiệm Vụ CVF',
+        specTitle: mode === 'full' ? 'CVF Agent Handoff Packet (GUIDED MODE)' : mode === 'governance' ? 'CVF Agent Handoff Packet' : 'CVF Brief Packet',
         generated: 'Ngày tạo',
         templateLabel: 'Template',
         category: 'Danh mục',
         mode: 'Chế độ',
         context: 'Bối cảnh',
+        packetPurpose: 'Mục đích packet',
         userInput: 'Thông tin đầu vào',
         inputCoverage: 'Độ đầy đủ đầu vào',
         task: 'Nhiệm vụ',
@@ -738,16 +696,17 @@ function generateSpec(
         footer: 'CVF Agent Platform - Sao chép spec này và paste vào AI yêu thích của bạn',
         noInput: '(Chưa có thông tin)',
         noRequired: '(Không có input bắt buộc)',
-        modeSimple: 'Đơn giản',
-        modeGovernance: 'Có Quy Tắc',
-        modeFull: 'Full Mode (5-Phase)',
+        modeSimple: 'Brief',
+        modeGovernance: 'Handoff cho Agent',
+        modeFull: 'CVF Guided Agent (5-Phase)',
     } : {
-        specTitle: mode === 'full' ? 'CVF Task Specification (FULL MODE)' : mode === 'governance' ? 'CVF Task Specification (With Rules)' : 'CVF Task Specification',
+        specTitle: mode === 'full' ? 'CVF Agent Handoff Packet (GUIDED MODE)' : mode === 'governance' ? 'CVF Agent Handoff Packet' : 'CVF Brief Packet',
         generated: 'Generated',
         templateLabel: 'Template',
         category: 'Category',
         mode: 'Mode',
         context: 'Context',
+        packetPurpose: 'Packet Purpose',
         userInput: 'User Input',
         inputCoverage: 'Input Coverage',
         task: 'Task',
@@ -767,9 +726,9 @@ function generateSpec(
         footer: 'CVF Agent Platform - Copy this spec and paste into your preferred AI',
         noInput: '(No input provided)',
         noRequired: '(No required inputs)',
-        modeSimple: 'Simple',
-        modeGovernance: 'With Rules',
-        modeFull: 'Full Mode (5-Phase)',
+        modeSimple: 'Brief',
+        modeGovernance: 'Agent Handoff',
+        modeFull: 'CVF Guided Agent (5-Phase)',
     };
 
     let intent = template.intentPattern;
@@ -807,6 +766,18 @@ function generateSpec(
 **${labels.templateLabel}:** ${template.icon} ${template.name}
 
 ${template.description}
+
+---
+
+## 🤝 ${labels.packetPurpose}
+
+${lang === 'vi'
+        ? `- Packet này được viết cho AI/agent khác đọc và tiếp tục thực thi.
+- Người dùng cuối không cần hiểu framework, stack, hay implementation details ẩn phía sau.
+- Agent nhận packet phải tự chuyển brief thành quyết định implementation phù hợp trong phạm vi guardrails.`
+        : `- This packet is written for another AI/agent to read and continue execution.
+- The end user should not need to understand hidden frameworks, stacks, or implementation details.
+- The receiving agent must convert the brief into implementation decisions inside the provided guardrails.`}
 
 ---
 
@@ -861,11 +832,13 @@ ${lang === 'vi'
             ? `- Kết quả phải đủ actionable cho non-coder, không chỉ mô tả chung chung.
 - Phải bám sát input đã cung cấp, không rơi về lời khuyên generic.
 - Phải cover đủ output shape chính của task từ đầu đến cuối.
+- Agent phải tự chọn kỹ thuật/phương án ẩn phía sau nếu việc đó không làm thay đổi risk hay business intent.
 - Phải governance-safe: không gợi ý bypass, shortcut nguy hiểm, hay giả định ngầm.
 - Nếu không thể hoàn thành an toàn, phải đưa ra safe next step rõ ràng thay vì kết thúc bế tắc.`
             : `- The result must be actionable for a non-coder, not just descriptive.
 - It must stay tailored to the provided inputs instead of drifting into generic advice.
 - It must cover the main requested output shape end-to-end.
+- The receiving agent should choose hidden implementation details itself unless that would materially change risk or business intent.
 - It must remain governance-safe: no bypass suggestions, unsafe shortcuts, or hidden assumptions.
 - If the task cannot be completed safely, provide the clearest safe next step instead of ending in a dead end.`}
 
@@ -1078,8 +1051,8 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
                     <p className="text-xs text-green-700 dark:text-green-300">
                         <strong>🚦 CVF Full Mode:</strong> {exportLang === 'vi'
-                            ? 'AI sẽ tuân theo quy trình 5 phase (Intake → Design → Build → Review → Freeze) với đầy đủ governance rules. Đây là chế độ mạnh nhất của CVF.'
-                            : 'AI will follow the 5-phase process (Intake → Design → Build → Review → Freeze) with full governance rules. This is the most powerful CVF mode.'
+                            ? 'Agent sẽ tuân theo quy trình 5 phase (Intake → Design → Build → Review → Freeze) với đầy đủ governance rules. Dùng cho việc phức tạp hoặc có rủi ro cao hơn.'
+                            : 'The agent will follow the 5-phase process (Intake → Design → Build → Review → Freeze) with full governance rules. Use this for more complex or higher-risk work.'
                         }
                     </p>
                 </div>
@@ -1110,8 +1083,8 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                     {riskExceedsPhase && (
                         <p className="text-xs text-red-600 dark:text-red-400 mt-1 font-medium">
                             🚫 {exportLang === 'vi'
-                                ? `Risk ${autoDetected.riskLevel} vượt quá giới hạn cho phase ${autoDetected.phase}. AI sẽ được cảnh báo.`
-                                : `Risk ${autoDetected.riskLevel} exceeds limit for phase ${autoDetected.phase}. AI will be warned.`
+                                ? `Risk ${autoDetected.riskLevel} vượt quá giới hạn cho phase ${autoDetected.phase}. Agent nhận packet sẽ được cảnh báo.`
+                                : `Risk ${autoDetected.riskLevel} exceeds the limit for phase ${autoDetected.phase}. The receiving agent will be warned.`
                             }
                         </p>
                     )}
@@ -1120,9 +1093,9 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
             {exportMode === 'governance' && (
                 <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg border border-yellow-200 dark:border-yellow-800">
                     <p className="text-xs text-yellow-700 dark:text-yellow-300">
-                        <strong>⚠️ {exportLang === 'vi' ? 'Có Quy Tắc' : 'With Rules'}:</strong> {exportLang === 'vi'
-                            ? 'Thêm stop conditions và guardrails cơ bản để kiểm soát AI.'
-                            : 'Adds basic stop conditions and guardrails to control AI behavior.'
+                        <strong>⚠️ {exportLang === 'vi' ? 'Handoff cho Agent' : 'Agent Handoff'}:</strong> {exportLang === 'vi'
+                            ? 'Thêm guardrails và stop conditions để agent khác có thể build từ packet này an toàn hơn. Đây là chế độ khuyến nghị cho non-coder.'
+                            : 'Adds guardrails and stop conditions so another agent can build safely from this packet. This is the recommended mode for non-coders.'
                         }
                     </p>
                 </div>
@@ -1215,7 +1188,7 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                             }`}
                     >
                         <span>🤖</span>
-                        {exportLang === 'vi' ? 'Gửi đến Agent' : 'Send to Agent'}
+                        {exportLang === 'vi' ? 'Gửi Packet cho Agent' : 'Send Packet to Agent'}
                     </button>
                 )}
             </div>

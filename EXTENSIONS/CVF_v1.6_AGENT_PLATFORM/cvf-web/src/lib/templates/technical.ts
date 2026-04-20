@@ -16,67 +16,85 @@ export const technicalTemplates: Template[] = [
         id: 'code_review',
         name: 'Review Code',
         icon: '💻',
-        description: 'Review code về chất lượng, security, performance',
+        description: 'Biến đoạn logic hoặc phần build gây lo ngại thành một gói review dễ hiểu để non-coder biết chỗ nào cần sửa và cần handoff gì cho builder',
         category: 'technical',
         fields: [
-            { id: 'code', type: 'textarea', label: 'Code cần review', placeholder: 'Paste code vào đây...', required: true, rows: 10, section: 'required', hint: 'Paste đoạn code cần review. Nên bao gồm cả import và context xung quanh', example: 'function processPayment(amount, currency) {\n  // ... your code here\n}' },
-            { id: 'language', type: 'text', label: 'Ngôn ngữ', placeholder: 'VD: Python, TypeScript...', required: true, section: 'required', hint: 'Ngôn ngữ lập trình của đoạn code', example: 'TypeScript' },
-            { id: 'context', type: 'textarea', label: 'Context', placeholder: 'Code này làm gì? Thuộc module nào?', required: false, rows: 2, section: 'advanced', hint: 'Nơi code được sử dụng, mục đích của nó trong hệ thống', example: 'Function xử lý thanh toán trong module Billing, gọi bởi PaymentController' },
-            { id: 'focus', type: 'multiselect', label: 'Focus areas', options: ['Security', 'Performance', 'Readability', 'Best Practices'], required: false, section: 'advanced', hint: 'Chọn các khía cạnh bạn muốn AI tập trung review' },
+            { id: 'workSample', type: 'textarea', label: 'Phần cần xem', placeholder: 'Dán đoạn code, pseudo-code, logics, hoặc file text liên quan', required: true, rows: 10, section: 'required', hint: 'Bạn có thể dán code thật, logic gần đúng, hoặc phần output hiện tại. Không cần chuẩn kỹ thuật tuyệt đối miễn là AI hiểu thứ cần review.', example: 'function processPayment(amount, currency) {\n  if (!amount) return;\n  return runPayment(amount, currency);\n}' },
+            { id: 'goal', type: 'text', label: 'Phần này đang phục vụ việc gì?', placeholder: 'Mô tả kết quả mà phần này phải làm được', required: true, section: 'required', hint: 'Nói bằng ngôn ngữ công việc: lưu đơn, gửi email, tính tiền, lọc dữ liệu...', example: 'Xử lý thanh toán và chỉ trả kết quả thành công khi giao dịch thật sự hoàn tất' },
+            { id: 'worry', type: 'textarea', label: 'Điều gì làm bạn lo hoặc thấy sai?', placeholder: 'Mô tả dấu hiệu bất thường, bug, hoặc nỗi lo hiện tại', required: true, rows: 3, section: 'required', hint: 'Bạn có thể nêu lỗi hiện ra, kết quả sai, hoặc cảm giác phần này mong manh/khó tin.', example: 'Thỉnh thoảng hệ thống báo thanh toán thành công dù gateway timeout, và tôi không biết có bị thu tiền 2 lần không.' },
+            { id: 'mustPreserve', type: 'textarea', label: 'Những gì phải giữ nguyên', placeholder: 'Luồng, dữ liệu, tích hợp, hành vi không được phá', required: false, rows: 2, section: 'advanced', hint: 'Nếu review này dẫn tới chỉnh sửa sau đó, phần nào phải được giữ nguyên?', example: 'Không đổi contract trả về cho mobile app, không bỏ logging phục vụ đối soát.' },
+            { id: 'focus', type: 'multiselect', label: 'Muốn tập trung vào đâu?', options: ['Sai logic nghiệp vụ', 'Rủi ro dữ liệu / bảo mật', 'Tốc độ / độ ổn định', 'Dễ sửa và dễ bàn giao'], required: false, section: 'advanced', hint: 'Chọn góc nhìn bạn muốn AI ưu tiên.' },
         ],
         intentPattern: `INTENT:
-Tôi muốn review code [language].
+Tôi muốn review phần build / logic này theo cách mà người không chuyên vẫn hiểu được.
 
-CODE:
-\`\`\`[language]
-[code]
-\`\`\`
+PHẦN CẦN XEM:
+[workSample]
 
-CONTEXT: [context]
-FOCUS AREAS: [focus]
+MỤC TIÊU CỦA NÓ:
+[goal]
+
+ĐIỀU ĐANG GÂY LO / DẤU HIỆU SAI:
+[worry]
+
+NHỮNG GÌ PHẢI GIỮ NGUYÊN:
+[mustPreserve]
+
+ƯU TIÊN REVIEW:
+[focus]
 
 SUCCESS CRITERIA:
-- Phát hiện bugs và issues
-- Đề xuất improvements
-- Đánh giá overall quality`,
-        outputExpected: ['Issues Found', 'Security Concerns', 'Performance Issues', 'Suggestions', 'Overall Rating'],
+- Chỉ ra các rủi ro bằng ngôn ngữ plain-language
+- Phân biệt điều gì chỉ là cảnh báo và điều gì có thể gây lỗi thật
+- Đưa ra brief handoff rõ để builder sửa
+- Không biến câu trả lời thành code-review jargon dump`,
+        outputExpected: ['Điểm đang ổn', 'Vấn đề cần xử lý', 'Mức độ ảnh hưởng', 'Brief handoff cho builder', 'Checklist xác nhận sau sửa'],
         difficulty: 'medium',
-        sampleOutput: `# Code Review: Payment Processing Module
+        outputTemplate: `# Plain-Language Build Review
 
-## Overall Rating: 7.5/10 ✅ Good
+## 1. Intended Outcome
+- What this part is supposed to do
+- What success should look like
 
-## Issues Found
+## 2. What Looks Healthy
+- Behaviors that already seem correct
 
-### 🔴 Critical (1)
-| # | Issue | Line | Severity |
-|---|-------|------|----------|
-| 1 | SQL Injection vulnerability in query builder | L42 | Critical |
+## 3. Main Risks
+- Risk
+- Why it matters in business/user terms
+- Evidence from the sample
 
-### 🟡 Warning (3)
-| # | Issue | Line | Severity |
-|---|-------|------|----------|
-| 1 | Missing input validation for \`amount\` | L15 | Medium |
-| 2 | No rate limiting on payment endpoint | L8 | Medium |
-| 3 | Hardcoded timeout value | L31 | Low |
+## 4. Builder Handoff Brief
+- What to inspect first
+- What likely needs fixing
+- What must be preserved
 
-## Security Concerns
-- **Authentication:** Token validation is present ✅
-- **Input Sanitization:** Missing for 2 parameters ⚠️
-- **Error Handling:** Errors may leak stack traces ⚠️
+## 5. Acceptance Checklist
+- Checks to run after the fix`,
+        sampleOutput: `# Plain-Language Build Review
 
-## Performance Issues
-- Database query inside a loop (L55-L62) — consider batch query
-- No connection pooling configured
+## 1. Intended Outcome
+- This payment step should only mark an order as paid after the gateway really confirms success.
+- Success means the customer is charged once, the order status is correct, and the mobile app gets a stable response.
 
-## Suggestions
-1. Use parameterized queries to prevent SQL injection
-2. Add input validation middleware
-3. Implement request rate limiting
-4. Extract timeout to environment variable
+## 2. What Looks Healthy
+- The flow is short enough that a builder can inspect it quickly.
+- Currency is passed together with amount, so the business intent is visible.
 
----
-*Generated by CVF Platform*
-`,
+## 3. Main Risks
+- The current flow can stop early without a clear failure path.
+- If the gateway times out, the app may still move forward without enough proof that payment really succeeded.
+- That creates a real business risk: duplicate charge handling, wrong order state, and hard-to-trust support cases.
+
+## 4. Builder Handoff Brief
+- Inspect how timeout, retry, and final confirmation are handled.
+- Add an explicit failure state instead of silently returning.
+- Preserve the current mobile response contract and logging trail.
+
+## 5. Acceptance Checklist
+- Failed or timed-out payments do not mark the order as successful.
+- Success is only returned after a confirmed gateway response.
+- Existing mobile consumers still receive the same output shape.`,
     },
     {
         id: 'architecture_review',

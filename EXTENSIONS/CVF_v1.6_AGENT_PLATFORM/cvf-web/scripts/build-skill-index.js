@@ -400,10 +400,7 @@ function buildSkillIndex() {
             trustedMappedSkills: corpusGovernance.summary.trustedSkills,
             reviewMappedSkills: corpusGovernance.summary.reviewSkills,
             trustedBenchmarkSkills: corpusGovernance.summary.trustedBenchmarkSkills,
-            governanceSource: [
-                'docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md',
-                'docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md',
-            ],
+            governanceSource: corpusGovernance.sourcePaths,
         },
     };
 }

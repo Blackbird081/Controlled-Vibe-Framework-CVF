@@ -27,67 +27,84 @@ export const researchTemplates: Template[] = [
         id: 'data_analysis',
         name: 'Phân tích Dữ liệu',
         icon: '📈',
-        description: 'Phân tích dữ liệu và rút insights',
+        description: 'Biến dữ liệu hoặc báo cáo thô thành insight và khuyến nghị dễ hiểu cho người ra quyết định không chuyên phân tích',
         category: 'research',
         fields: [
-            { id: 'dataset', type: 'textarea', label: 'Mô tả dataset', placeholder: 'Loại data, sources, format...', required: true, rows: 4, section: 'required', hint: 'Mô tả nguồn dữ liệu, định dạng, và quy mô', example: 'CSV file 50K rows từ Google Analytics: sessions, bounce rate, conversion theo ngày. Từ 01/2025 đến 12/2025.' },
-            { id: 'questions', type: 'textarea', label: 'Câu hỏi nghiên cứu', placeholder: 'Bạn muốn tìm hiểu điều gì?', required: true, rows: 3, section: 'required', hint: 'Đặt câu hỏi cụ thể, tránh câu hỏi quá chung chung', example: '1. Các yếu tố nào ảnh hưởng lớn nhất đến conversion?\n2. Seasonal patterns ra sao?\n3. Segment nào có ROI cao nhất?' },
-            { id: 'methods', type: 'text', label: 'Phương pháp', placeholder: 'VD: Regression, clustering...', required: false, section: 'advanced', hint: 'Để trống nếu muốn AI tự đề xuất phương pháp phù hợp', example: 'Correlation analysis, time series decomposition' },
+            { id: 'dataset', type: 'textarea', label: 'Bạn đang có dữ liệu / báo cáo gì?', placeholder: 'Mô tả nguồn dữ liệu, báo cáo, export hoặc bảng số liệu đang có', required: true, rows: 4, section: 'required', hint: 'Bạn không cần nói tên phương pháp phân tích. Chỉ cần mô tả mình có gì trong tay.', example: 'Export từ Google Analytics 12 tháng gồm sessions, bounce rate, conversion theo ngày và theo channel.' },
+            { id: 'questions', type: 'textarea', label: 'Bạn cần ra quyết định gì từ dữ liệu này?', placeholder: 'Những câu hỏi kinh doanh hoặc vận hành cần được trả lời', required: true, rows: 3, section: 'required', hint: 'Đặt câu hỏi theo ngôn ngữ quyết định: nên đầu tư đâu, chỗ nào đang tệ, nhóm nào đáng ưu tiên...', example: '1. Kênh nào đang đem lại lead tốt nhất?\n2. Tháng nào cần tăng ngân sách?\n3. Nhóm khách nào đáng tập trung hơn?' },
+            { id: 'importantSlices', type: 'textarea', label: 'Có nhóm, mốc thời gian, hoặc khu vực nào cần tách riêng không?', placeholder: 'Ví dụ: theo tháng, theo kênh, theo khu vực, theo phân khúc khách hàng...', required: false, rows: 2, section: 'advanced', hint: 'Giúp AI nhìn đúng phần dữ liệu quan trọng với bạn.', example: 'So sánh quý 1 với quý 4, và tách riêng paid search vs organic.' },
+            { id: 'knownLimitations', type: 'textarea', label: 'Có giới hạn hoặc nghi ngờ nào về dữ liệu không?', placeholder: 'Thiếu dữ liệu, số chưa sạch, tracking chưa chuẩn...', required: false, rows: 2, section: 'advanced', hint: 'Nếu bạn biết dữ liệu chưa hoàn hảo, ghi ở đây để AI diễn giải cẩn thận hơn.', example: 'Tracking TikTok chỉ mới ổn từ tháng 8, nên các tháng trước có thể thiếu số.' },
         ],
         intentPattern: `INTENT:
-Tôi muốn phân tích dữ liệu.
+Tôi muốn biến dữ liệu này thành insight dễ hiểu và có thể dùng để ra quyết định.
 
-DATASET:
+NGUỒN DỮ LIỆU / BÁO CÁO:
 [dataset]
 
-RESEARCH QUESTIONS:
+QUYẾT ĐỊNH / CÂU HỎI CẦN TRẢ LỜI:
 [questions]
 
-METHODS: [methods]
+NHÓM / GIAI ĐOẠN CẦN TÁCH RIÊNG:
+[importantSlices]
+
+GIỚI HẠN DỮ LIỆU ĐÃ BIẾT:
+[knownLimitations]
 
 SUCCESS CRITERIA:
-- Insights rõ ràng
-- Có supporting evidence
-- Actionable recommendations`,
-        outputExpected: ['Dataset Overview', 'Key Findings', 'Statistical Analysis', 'Visualizations', 'Insights', 'Recommendations'],
+- Trả lời bằng ngôn ngữ kinh doanh / vận hành
+- Nêu rõ bằng chứng và mức độ tin cậy theo dữ liệu đang có
+- Kết thúc bằng các hành động ưu tiên
+- Không bắt người dùng đọc hiểu thuật ngữ thống kê để dùng được kết quả`,
+        outputExpected: ['Tóm tắt dữ liệu', 'Insight chính', 'Điều dữ liệu chưa trả lời chắc chắn', 'Khuyến nghị ưu tiên', 'Checklist theo dõi tiếp'],
         difficulty: 'advanced',
-        sampleOutput: `# Data Analysis Report: E-commerce Conversion Factors
+        outputTemplate: `# Decision-Focused Data Analysis
 
-## Dataset Overview
-- **Source:** Google Analytics export (Jan 2025 – Dec 2025)
-- **Records:** 50,000 sessions
-- **Variables:** 12 (sessions, bounce rate, conversion, device, source, etc.)
+## 1. What Data We Looked At
+- Source
+- Time range
+- Important slices
 
-## Key Findings
+## 2. What The Data Clearly Suggests
+- Finding
+- Supporting evidence
+- Business meaning
 
-### 1. Top Conversion Drivers
-| Factor | Correlation | Impact |
-|--------|------------|--------|
-| Page load speed | -0.72 | High |
-| Product reviews | +0.65 | High |
-| Mobile optimization | +0.58 | Medium |
-| Price competitiveness | +0.51 | Medium |
+## 3. What Needs Caution
+- Data gaps
+- Weak signals
+- Things not safe to conclude yet
 
-### 2. Seasonal Patterns
-- Peak: November (Black Friday +340% vs baseline)
-- Low: February (-22% vs baseline)
-- Steady growth trend: +3.2% MoM average
+## 4. Recommended Actions
+- Highest-priority action
+- Secondary action
+- What to monitor next
 
-### 3. Segment Analysis
-| Segment | Conversion Rate | ROI |
-|---------|----------------|-----|
-| Direct Traffic | 4.2% | 320% |
-| Google Ads | 2.8% | 180% |
-| Social Media | 1.5% | 95% |
-| Email | 5.1% | 420% |
+## 5. Follow-Up Checklist
+- Extra data to collect
+- Questions to revisit later`,
+        sampleOutput: `# Decision-Focused Data Analysis
 
-## Recommendations
-1. **Invest in email marketing** — highest ROI segment
-2. **Optimize page speed** — strongest conversion correlation
-3. **Increase review collection** — second highest impact factor
+## 1. What Data We Looked At
+- 12 months of Google Analytics export split by channel and month.
+- Special focus on paid search, organic, and email.
 
----
-*Generated by CVF Platform*
-`,
+## 2. What The Data Clearly Suggests
+- Email is the most efficient channel, with the strongest conversion and best return on effort.
+- Paid search creates volume, but quality drops outside campaign peaks.
+- November is the strongest month; February is consistently weak.
+
+## 3. What Needs Caution
+- TikTok data before August looks incomplete, so its early performance should not drive budget decisions.
+- Some smaller segments have too little volume for strong conclusions.
+
+## 4. Recommended Actions
+- Increase effort in email first because it converts best with the clearest signal.
+- Keep paid search, but tighten campaign targeting in low-performing months.
+- Review page-speed and landing-page clarity before spending more on traffic acquisition.
+
+## 5. Follow-Up Checklist
+- Verify tracking quality for newer channels.
+- Keep monthly channel scorecards.
+- Recheck segment performance after one full quarter.`,
     },
 ];

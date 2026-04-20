@@ -13,18 +13,18 @@ export const templateEnglish: Record<string, { name: string; description?: strin
 
     // Technical
     system_design_wizard: { name: '🔧 System Design Wizard', description: 'Multi-step wizard to create a governed System Design Document with review packet and live path' },
-    code_review: { name: 'Code Review', description: 'Code review for quality, security, performance' },
+    code_review: { name: 'Code Review', description: 'Turn risky code or logic into a plain-language review and builder handoff' },
     architecture_review: { name: 'Architecture Review', description: 'System architecture review' },
 
     // Content
     content_strategy_wizard: { name: '✍️ Content Strategy Wizard', description: 'Multi-step wizard to create a governed Content Strategy with review packet and live path' },
-    documentation: { name: 'Documentation', description: 'Create technical documentation' },
+    documentation: { name: 'Documentation', description: 'Turn rough notes into operational documentation and handoff guides' },
     email_template: { name: 'Email Templates', description: 'Create professional emails' },
 
     // Research
     research_project_wizard: { name: '🔬 Research Project Wizard', description: 'Multi-step wizard to create a governed Research Proposal with review packet and live path' },
     data_analysis_wizard: { name: '📊 Data Analysis Wizard', description: 'Multi-step wizard to create a governed Data Analysis Plan with review packet and live path' },
-    data_analysis: { name: 'Data Analysis', description: 'Analyze data and extract insights' },
+    data_analysis: { name: 'Data Analysis', description: 'Translate data into plain-language findings and decision guidance' },
 
     // Marketing
     marketing_campaign_wizard: { name: '📣 Marketing Campaign Wizard', description: 'Multi-step wizard to create a governed Campaign Brief with review packet and live path' },
@@ -39,7 +39,7 @@ export const templateEnglish: Record<string, { name: string; description?: strin
 
     // Product & UX
     product_design_wizard: { name: '🎨 Product Design Wizard', description: 'Multi-step wizard to create a governed Product Design Spec with review packet and live path' },
-    ab_test_review: { name: 'A/B Test Review', description: 'Evaluate A/B test design and results' },
+    ab_test_review: { name: 'A/B Test Review', description: 'Review product experiments in plain language and recommend the next decision' },
     accessibility_audit: { name: 'Accessibility Audit', description: 'WCAG compliance check' },
     user_flow_analysis: { name: 'User Flow Analysis', description: 'Analyze and optimize user journeys' },
     ux_heuristic_evaluation: { name: 'UX Heuristic Evaluation', description: "UX evaluation using Nielsen's 10 Heuristics" },
@@ -47,29 +47,32 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     user_persona: { name: 'User Persona Development', description: 'Create user personas based on data' },
     error_handling_ux: { name: 'Error Handling UX', description: 'Improve error handling experience' },
     onboarding_review: { name: 'Onboarding Experience Review', description: 'Optimize first-time user experience' },
+    web_ux_redesign_system: { name: 'Web UX System', description: 'Turn a UX brief into a governed web handoff packet with a clear review gate' },
+    web_build_handoff: { name: 'Web Build Handoff', description: 'Turn a plain-language website brief into a builder-ready governed packet' },
 
     // Security
     security_assessment_wizard: { name: '🔐 Security Assessment Wizard', description: 'Multi-step wizard to create a governed Security Assessment Report with review packet and live path' },
-    api_security: { name: 'API Security Checklist', description: 'OWASP Top 10 API security audit' },
+    api_security: { name: 'API Security Checklist', description: 'Review sensitive system flows and protection gaps without endpoint jargon' },
     gdpr_compliance: { name: 'GDPR Compliance Review', description: 'EU data protection compliance check' },
     privacy_policy_audit: { name: 'Privacy Policy Audit', description: 'Privacy policy review and improvement' },
     incident_response: { name: 'Incident Response Plan', description: 'Security incident response planning' },
-    data_handling: { name: 'Data Handling Review', description: 'Data lifecycle management review' },
+    data_handling: { name: 'Data Handling Review', description: 'Review how data is collected, shared, retained, and protected in plain language' },
     tos_review: { name: 'Terms of Service Review', description: 'Terms of Service coverage and fairness' },
 
     // Development
     app_builder_wizard: { name: '🧙 App Builder Wizard', description: 'Multi-step wizard to create a governed app spec with packet review and live path. Recommended for complex apps.' },
     build_my_app: { name: '🚀 Build My App', description: 'Describe your app idea and let CVF route it into a governed starter path for non-coders.' },
-    app_builder_complete: { name: '📦 App Builder Complete', description: 'Create comprehensive spec with full technical details. For users who understand CVF workflow.' },
+    app_builder_complete: { name: '📦 App Builder Complete', description: 'Create a full product brief and builder-ready handoff without exposing stack choices to the user.' },
     individual_skills_folder: { name: '📂 Skill Templates (8)', description: '8 individual templates for each step: Requirements, Tech Stack, Architecture, Database, API, Desktop/CLI, Deployment.' },
     app_requirements_spec: { name: 'App Requirements Spec', description: 'Gather requirements for new app, define scope and success criteria' },
     tech_stack_selection: { name: 'Tech Stack Selection', description: 'Choose suitable technology for app based on requirements' },
     architecture_design: { name: 'Architecture Design', description: 'Design system architecture with component diagram' },
     database_schema: { name: 'Database Schema Design', description: 'Design database schema with ERD and SQL' },
-    api_design: { name: 'API Design Spec', description: 'Design REST API with endpoints and request/response format' },
+    api_design: { name: 'API Design Spec', description: 'Turn business data-exchange needs into an integration handoff packet' },
     desktop_app_spec: { name: 'Desktop App Spec', description: 'Spec for desktop app: windows, menus, shortcuts, tray' },
     cli_tool_spec: { name: 'CLI Tool Spec', description: 'Spec for command-line tool: commands, arguments, options' },
     local_deployment: { name: 'Local Deployment Spec', description: 'Packaging and distribution spec for local apps' },
+    vibe_logic_mapping: { name: 'Vibe Logic Mapping', description: 'Translate approved vibe keywords into a builder-ready style brief' },
 };
 
 /**

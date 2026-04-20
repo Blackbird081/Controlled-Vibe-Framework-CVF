@@ -7,7 +7,6 @@
 
     "system_design_wizard": { "domain": "technical_review", "skillId": "02_architecture_review" },
     "code_review": { "domain": "technical_review", "skillId": "01_code_review" },
-    "architecture_review": { "domain": "technical_review", "skillId": "02_architecture_review" },
 
     "content_strategy_wizard": { "domain": "content_creation", "skillId": "01_documentation" },
     "documentation": { "domain": "content_creation", "skillId": "01_documentation" },

@@ -7,6 +7,10 @@ const path = require('path');
 const BASE_DIR = path.resolve(__dirname, '..');
 const D2_MATRIX_PATH = path.resolve(BASE_DIR, '../../../docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md');
 const D3_TRUSTED_SUBSET_PATH = path.resolve(BASE_DIR, '../../../docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md');
+const TEMPLATE_CLASS_OVERRIDE_PATHS = [
+    path.resolve(BASE_DIR, '../../../docs/baselines/CVF_FRONT_DOOR_WAVE1_EXECUTION_NOTE_2026-04-21.md'),
+    path.resolve(BASE_DIR, '../../../docs/baselines/CVF_FRONT_DOOR_WAVE2_EXECUTION_NOTE_2026-04-21.md'),
+];
 const MAP_DATA_PATH = path.resolve(BASE_DIR, 'src/data/skill-template-map.json');
 
 const TRUSTED = 'TRUSTED_FOR_VALUE_PROOF';
@@ -51,6 +55,43 @@ function collectTemplateIdsFromSection(section) {
     return ids;
 }
 
+function collectTemplateIdsFromMarkdownTable(section) {
+    const ids = new Set();
+    const lines = section.split(/\r?\n/);
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed.startsWith('|')) continue;
+        if (/template id/i.test(trimmed) || /^(\|\s*-+\s*)+\|?$/.test(trimmed)) continue;
+        const regex = /`([^`]+)`/g;
+        let match;
+        while ((match = regex.exec(trimmed)) !== null) {
+            ids.add(match[1]);
+        }
+    }
+    return ids;
+}
+
+function extractSectionByHeading(markdown, heading) {
+    const escapedHeading = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`^##\\s+${escapedHeading}\\s*$([\\s\\S]*?)(?=^##\\s+|\\Z)`, 'im');
+    const match = markdown.match(pattern);
+    return match ? match[1] : '';
+}
+
+function parseTemplateClassOverrides(section) {
+    const map = {};
+    const lines = section.split(/\r?\n/);
+    const rowPattern = /\|\s*`([^`]+)`\s*\|\s*`?(TRUSTED_FOR_VALUE_PROOF|REVIEW_REQUIRED|LEGACY_LOW_CONFIDENCE|REJECT_FOR_NON_CODER_FRONTDOOR|UNSCREENED_LEGACY)`?\s*\|/;
+
+    for (const line of lines) {
+        const match = line.match(rowPattern);
+        if (!match) continue;
+        map[match[1]] = match[2];
+    }
+
+    return map;
+}
+
 function loadTemplateClassMap() {
     const d2 = readFile(D2_MATRIX_PATH);
     const sections = {
@@ -75,12 +116,24 @@ function loadTemplateClassMap() {
             map[templateId] = className;
         }
     }
+
+    for (const overridePath of TEMPLATE_CLASS_OVERRIDE_PATHS) {
+        const overrideText = readFile(overridePath);
+        if (!overrideText) continue;
+        const overrideSection = extractSectionByHeading(overrideText, 'Template Class Overrides');
+        Object.assign(map, parseTemplateClassOverrides(overrideSection));
+    }
+
     return map;
 }
 
 function loadTrustedBenchmarkSet() {
     const d3 = readFile(D3_TRUSTED_SUBSET_PATH);
     const section = extractSection(d3, '## Benchmark-Ready Subset', ['## §1']);
+    const tableIds = collectTemplateIdsFromMarkdownTable(section);
+    if (tableIds.size > 0) {
+        return tableIds;
+    }
     return collectTemplateIdsFromSection(section);
 }
 
@@ -182,11 +235,21 @@ function summarizeSkillGovernance(skillMap) {
 
 function loadSkillCorpusGovernance() {
     const data = buildSkillGovernanceMap();
+    const sourcePaths = [
+        'docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md',
+        'docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md',
+    ];
+    for (const overridePath of TEMPLATE_CLASS_OVERRIDE_PATHS) {
+        if (!fs.existsSync(overridePath)) continue;
+        sourcePaths.push(path.relative(path.resolve(BASE_DIR, '../../..'), overridePath).replace(/\\/g, '/'));
+    }
+
     return {
         ...data,
         summary: summarizeSkillGovernance(data.skillMap),
         classOrder: CLASS_ORDER.slice(),
         classes: { TRUSTED, REVIEW, LEGACY, REJECT, UNSCREENED },
+        sourcePaths,
     };
 }
 

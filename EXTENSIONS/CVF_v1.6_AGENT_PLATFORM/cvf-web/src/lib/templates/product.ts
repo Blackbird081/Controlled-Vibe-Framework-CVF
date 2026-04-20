@@ -16,31 +16,58 @@ export const productTemplates: Template[] = [
         id: 'ab_test_review',
         name: 'Review A/B Test',
         icon: '🧪',
-        description: 'Đánh giá A/B test design và results',
+        description: 'Review thử nghiệm thay đổi sản phẩm theo cách người không chuyên vẫn hiểu được thay đổi nào đang tốt hơn và vì sao',
         category: 'product',
         difficulty: 'advanced',
         fields: [
-            { id: 'hypothesis', type: 'textarea', label: 'Hypothesis', placeholder: 'Giả thuyết: Nếu... thì...', required: true, rows: 2, section: 'required', hint: 'Viết theo format: "Nếu [thay đổi X] thì [metric Y] sẽ [tăng/giảm]"', example: 'Nếu đổi CTA từ "Sign up" sang "Start free trial" thì conversion rate sẽ tăng 15%' },
-            { id: 'metric', type: 'text', label: 'Primary Metric', placeholder: 'VD: Conversion rate, CTR...', required: true, section: 'required', hint: 'Metric chính dùng để đo lường kết quả', example: 'Sign-up conversion rate' },
-            { id: 'variants', type: 'textarea', label: 'Variants', placeholder: 'Control vs Treatment descriptions', required: true, rows: 3, section: 'required', hint: 'Mô tả rõ sự khác biệt giữa Control và Treatment', example: 'Control: Nút xanh "Sign up", text nhỏ\nTreatment: Nút cam "Start free trial", text lớn hơn + testimonial' },
-            { id: 'sampleSize', type: 'text', label: 'Sample Size', placeholder: 'Số users mỗi variant', required: false, section: 'advanced', hint: 'Để trống nếu muốn AI tính sample size cần thiết', example: '5,000 users mỗi variant (từ Google Optimize)' },
-            { id: 'results', type: 'textarea', label: 'Results (nếu có)', placeholder: 'Kết quả từ tool', required: false, rows: 3, section: 'advanced', hint: 'Dán kết quả từ A/B testing tool nếu đã chạy xong', example: 'Control: 2.1% CR, Treatment: 2.8% CR, p-value: 0.03, 14 ngày' },
+            { id: 'changeGoal', type: 'textarea', label: 'Bạn đã thay đổi điều gì và hy vọng điều gì sẽ tốt hơn?', placeholder: 'Mô tả thay đổi và kết quả mong đợi bằng ngôn ngữ sản phẩm', required: true, rows: 3, section: 'required', hint: 'Không cần công thức thống kê. Chỉ cần nói thay đổi nào đã được thử và kỳ vọng tác động ra sao.', example: 'Đổi CTA từ “Đăng ký” sang “Bắt đầu miễn phí” để nhiều người bấm thử hơn.' },
+            { id: 'successSignal', type: 'text', label: 'Bạn đang nhìn vào dấu hiệu thành công nào?', placeholder: 'Ví dụ: số người bấm, số đơn, số người hoàn thành form...', required: true, section: 'required', hint: 'Chọn một dấu hiệu chính dễ hiểu nhất.', example: 'Tỷ lệ người hoàn thành đăng ký dùng thử' },
+            { id: 'variants', type: 'textarea', label: 'Hai phiên bản khác nhau ở điểm nào?', placeholder: 'Mô tả bản cũ và bản mới theo ngôn ngữ UX / nội dung', required: true, rows: 3, section: 'required', hint: 'Mô tả khác biệt chính mà người dùng nhìn thấy hoặc trải nghiệm.', example: 'Bản cũ: nút xanh “Đăng ký”. Bản mới: nút cam “Bắt đầu miễn phí” kèm dòng phụ “Không cần thẻ”.' },
+            { id: 'results', type: 'textarea', label: 'Bạn đang thấy kết quả gì?', placeholder: 'Kể cả kết quả thô, cảm nhận team, hoặc số liệu hiện có', required: false, rows: 3, section: 'advanced', hint: 'Có thể là số liệu đơn giản hoặc mô tả xu hướng. Không bắt buộc phải có p-value hay sample size.', example: 'Bản mới có vẻ được bấm nhiều hơn, nhưng số người trả phí chưa khác rõ. Team sales thấy lead mới có vẻ chất lượng hơn.' },
+            { id: 'decisionNeed', type: 'text', label: 'Bạn cần quyết định gì sau review này?', placeholder: 'Giữ bản mới, rollback, chạy tiếp, hay cần dữ liệu bổ sung?', required: false, section: 'advanced', hint: 'Giúp AI kết thúc bằng khuyến nghị đúng nhu cầu.', example: 'Quyết định có rollout bản mới cho toàn bộ traffic hay test thêm 1 vòng nữa.' },
         ],
         intentPattern: `INTENT:
-Tôi muốn review A/B test.
+Tôi muốn review thử nghiệm thay đổi sản phẩm này theo cách dễ hiểu để ra quyết định.
 
-HYPOTHESIS: [hypothesis]
-PRIMARY METRIC: [metric]
+THAY ĐỔI VÀ MỤC TIÊU:
+[changeGoal]
+
+DẤU HIỆU THÀNH CÔNG:
+[successSignal]
+
 VARIANTS: [variants]
-SAMPLE SIZE: [sampleSize]
 RESULTS: [results]
+QUYẾT ĐỊNH CẦN CHỐT: [decisionNeed]
 
 SUCCESS CRITERIA:
-- Hypothesis quality check
-- Statistical validity
-- Sample size adequacy
-- Result interpretation`,
-        outputExpected: ['Test Design Assessment', 'Statistical Analysis', 'Winner Recommendation', 'Next Steps'],
+- Tóm tắt phiên bản nào đang có lợi thế
+- Nói rõ mức độ tin cậy của kết luận theo dữ liệu đang có
+- Đề xuất nên rollout, giữ test, hay dừng lại
+- Không ép người dùng hiểu jargon thống kê`,
+        outputExpected: ['Tóm tắt thử nghiệm', 'Điều dữ liệu đang nghiêng về', 'Điều còn chưa chắc', 'Khuyến nghị quyết định', 'Checklist vòng test tiếp theo'],
+        outputTemplate: `# Product Experiment Review
+
+## 1. What Changed
+- Previous version
+- New version
+- Intended improvement
+
+## 2. What The Current Results Suggest
+- Main signal
+- Supporting observations
+
+## 3. What We Still Cannot Conclude Safely
+- Missing proof
+- Possible confounders
+
+## 4. Decision Recommendation
+- Roll out
+- Keep testing
+- Roll back
+
+## 5. Next Test Checklist
+- What to measure next
+- What to keep constant`,
     },
     {
         id: 'accessibility_audit',
@@ -246,7 +273,7 @@ SUCCESS CRITERIA:
         id: 'web_ux_redesign_system',
         name: 'Hệ thống UX Web',
         icon: '🧭',
-        description: 'Biến brief giao diện thành packet UX/UI để agent khác có thể xây web mà non-coder không cần hiểu framework phía sau',
+        description: 'Biến brief giao diện thành packet UX/UI có review gate rõ ràng để non-coder duyệt hướng UX an toàn trước khi builder đụng vào phần build.',
         category: 'product',
         difficulty: 'advanced',
         fields: [
@@ -292,8 +319,9 @@ SUCCESS CRITERIA:
 - Extract reusable design DNA instead of one-off mockup notes
 - Preserve logic/runtime boundaries
 - Define layout, component, state, and QA rules
-- Produce an agent-ready web build handoff packet`,
-        outputExpected: ['Product Goal & User Promise', 'UX Style DNA', 'Page / Modal Blueprint', 'Component & State Rules', 'Responsive / Accessibility Rules', 'Agent Build Guardrails'],
+- Produce an agent-ready web build handoff packet
+- Include an explicit review gate so non-coder approval happens before builder-side runtime changes`,
+        outputExpected: ['Product Goal & User Promise', 'UX Style DNA', 'Page / Modal Blueprint', 'Component & State Rules', 'Responsive / Accessibility Rules', 'Agent Build Guardrails', 'Review Gate & Acceptance Checklist'],
         outputTemplate: `## 1. Experience North Star
 - Product promise
 - User feeling
@@ -329,7 +357,12 @@ SUCCESS CRITERIA:
 - What must stay unchanged
 - What can be restyled
 - Tokenization plan
-- QA checklist`,
+- QA checklist
+
+## 7. Review Gate & Acceptance Checklist
+- What the non-coder should confirm
+- What requires explicit builder approval
+- What would count as overreach`,
         sampleOutput: `# Web Build Handoff Packet
 
 ## 1. Product Goal & User Promise
@@ -365,7 +398,12 @@ SUCCESS CRITERIA:
 - Preserve routes, auth, APIs, existing state/store contracts
 - Restyle shell/components only unless explicitly approved
 - Agent chooses technical implementation details internally
-- Final QA: desktop + mobile + loading/empty/error states`,
+- Final QA: desktop + mobile + loading/empty/error states
+
+## 7. Review Gate & Acceptance Checklist
+- Non-coder approves page hierarchy, visual direction, and preserved constraints before build starts
+- Any route/auth/API/store change requires explicit separate approval
+- Reject the build if the proposal changes protected runtime behavior instead of UX/UI only`,
     },
     {
         id: 'web_build_handoff',

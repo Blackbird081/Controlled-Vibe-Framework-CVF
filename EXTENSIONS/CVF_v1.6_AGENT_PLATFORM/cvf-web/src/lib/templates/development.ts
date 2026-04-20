@@ -53,102 +53,85 @@ User chỉ đánh giá kết quả cuối cùng.`,
         id: 'app_builder_complete',
         name: '📦 Tạo Ứng dụng Hoàn chỉnh',
         icon: '📦',
-        description: 'Tạo spec hoàn chỉnh với đầy đủ thông tin kỹ thuật. Dành cho người hiểu quy trình CVF.',
+        description: 'Biến brief sản phẩm đầy đủ thành packet build-ready để non-coder vẫn mô tả rõ mục tiêu, phạm vi và ranh giới mà không phải chọn stack hay hạ tầng.',
         category: 'development',
         difficulty: 'advanced',
         fields: [
-            // Section 1: Requirements
-            { id: 'appName', type: 'text', label: '1. Tên App', placeholder: 'VD: TaskFlow', required: true, section: 'required', hint: 'Tên ngắn gọn, dễ nhớ', example: 'TaskFlow' },
-            { id: 'appType', type: 'select', label: '2. Loại App', options: ['Desktop (Cross-platform)', 'CLI Tool', 'Desktop + CLI', 'Web SPA', 'Mobile'], required: true, section: 'required', hint: 'Chọn loại app phù hợp với nhu cầu' },
-            { id: 'problem', type: 'textarea', label: '3. Vấn đề cần giải quyết', placeholder: 'Mô tả vấn đề user đang gặp phải', required: true, rows: 3, section: 'required', hint: 'Vấn đề cụ thể mà app giải quyết', example: 'Developer cần track tasks nhưng Jira quá phức tạp, cần tool nhẹ, chạy local' },
-            { id: 'targetUsers', type: 'text', label: '4. Target Users', placeholder: 'VD: Developer cá nhân, Team nhỏ', required: true, section: 'required', hint: 'Nhóm người dùng chính', example: 'Developer cá nhân và team nhỏ (2-5 người)' },
-            { id: 'coreFeatures', type: 'textarea', label: '5. Core Features (3-5)', placeholder: '1. Feature A\n2. Feature B\n3. Feature C', required: true, rows: 4, section: 'required', hint: 'Liệt kê 3-5 tính năng quan trọng nhất', example: '1. CRUD tasks với title, description, status\n2. Kanban board view\n3. Filter/search tasks\n4. Keyboard shortcuts' },
-
-            // Section 2: Technical Preferences
-            { id: 'platforms', type: 'text', label: '6. Target Platforms', placeholder: 'Windows, macOS, Linux...', required: true, section: 'required', hint: 'Hệ điều hành cần hỗ trợ', example: 'Windows + macOS' },
-            { id: 'techPreference', type: 'text', label: '7. Tech Preference (optional)', placeholder: 'VD: Tauri, Electron, Python...', required: false, section: 'advanced', hint: 'Để trống nếu muốn AI tự chọn', example: 'Tauri + React' },
-            { id: 'dataStorage', type: 'select', label: '8. Data Storage', options: ['None', 'Local Files (JSON/YAML)', 'Local Database (SQLite)', 'Cloud Database'], required: false, section: 'advanced', hint: 'Cách lưu trữ dữ liệu của app' },
-            { id: 'offlineRequired', type: 'select', label: '9. Offline Mode', options: ['Required', 'Nice to have', 'Not needed'], required: false, section: 'advanced', hint: 'App có cần hoạt động khi không có internet?' },
-
-            // Section 3: App-specific
-            { id: 'uiStyle', type: 'select', label: '10. UI Style', options: ['Modern Dark', 'Clean Light', 'Minimal', 'No UI (CLI only)'], required: false, section: 'advanced', hint: 'Phong cách giao diện' },
-            { id: 'specialFeatures', type: 'textarea', label: '11. Special Features', placeholder: 'VD: System tray, Keyboard shortcuts, Notifications...', required: false, rows: 2, section: 'advanced', hint: 'Tính năng đặc biệt của desktop/CLI', example: 'System tray icon, global hotkey Ctrl+Shift+T, desktop notifications' },
-
-            // Section 4: Constraints
-            { id: 'outOfScope', type: 'textarea', label: '12. Out of Scope', placeholder: 'Những gì KHÔNG làm trong v1', required: false, rows: 2, section: 'advanced', hint: 'Giới hạn scope để AI không over-engineer', example: 'Không cần multi-user, không cần mobile, không cần cloud sync' },
-            { id: 'constraints', type: 'text', label: '13. Constraints', placeholder: 'VD: Bundle < 50MB, No internet required', required: false, section: 'advanced', hint: 'Giới hạn kỹ thuật', example: 'Bundle < 30MB, startup < 2s' },
+            { id: 'appName', type: 'text', label: '1. Tên app / sản phẩm', placeholder: 'VD: TaskFlow', required: true, section: 'required', hint: 'Tên gọi dễ nhớ để packet và handoff bám đúng sản phẩm.', example: 'TaskFlow' },
+            { id: 'appType', type: 'select', label: '2. Đây là loại sản phẩm gì?', options: ['Desktop App', 'CLI Tool', 'Desktop + CLI', 'Web App', 'Mobile App'], required: true, section: 'required', hint: 'Chỉ cần chọn loại bề mặt chính, không cần nói framework.' },
+            { id: 'problem', type: 'textarea', label: '3. Nó giải quyết vấn đề gì?', placeholder: 'Mô tả pain point hoặc công việc đang bị chậm, rối, tốn công...', required: true, rows: 3, section: 'required', hint: 'Tập trung vào vấn đề thật ngoài đời thay vì giải pháp kỹ thuật.', example: 'Team nhỏ cần theo dõi công việc hằng ngày nhưng Jira quá nặng và mất thời gian cập nhật.' },
+            { id: 'targetUsers', type: 'text', label: '4. Ai sẽ dùng sản phẩm này?', placeholder: 'Nhóm người dùng chính', required: true, section: 'required', hint: 'Nói rõ ai hưởng lợi trực tiếp từ app.', example: 'Developer cá nhân và team nhỏ 2-5 người' },
+            { id: 'coreFeatures', type: 'textarea', label: '5. Những việc quan trọng nhất app phải làm được', placeholder: 'Liệt kê 3-5 capability cốt lõi cho phiên bản đầu', required: true, rows: 4, section: 'required', hint: 'Mô tả theo hành động của người dùng hoặc kết quả họ cần đạt.', example: '1. Tạo và cập nhật task\n2. Xem task theo board\n3. Lọc theo trạng thái\n4. Nhắc việc sắp tới hạn' },
+            { id: 'successCriteria', type: 'textarea', label: '6. Khi nào bạn xem đây là phiên bản đạt yêu cầu?', placeholder: 'Các dấu hiệu hoàn thành hoặc kết quả phải thấy được', required: true, rows: 3, section: 'required', hint: 'Viết như checklist nghiệm thu ở góc nhìn non-coder.', example: 'Người dùng tạo task trong 1 phút, xem board mượt trên desktop, và không cần internet để dùng các chức năng chính.' },
+            { id: 'mustPreserve', type: 'textarea', label: '7. Những gì phải giữ nguyên', placeholder: 'Logic, dữ liệu, route, integration, quy trình, câu chữ bắt buộc...', required: false, rows: 3, section: 'advanced', hint: 'Giúp builder biết ranh giới không được phá khi thực hiện.', example: 'Giữ nguyên webhook gửi báo cáo, format export CSV hiện tại, và tên gói dịch vụ đang công bố.' },
+            { id: 'platforms', type: 'text', label: '8. App cần chạy ở đâu?', placeholder: 'Windows, macOS, Web browser, Android...', required: true, section: 'required', hint: 'Nói rõ nơi người dùng thực sự dùng sản phẩm.', example: 'Windows + macOS' },
+            { id: 'dataNeeds', type: 'textarea', label: '9. App cần nhớ / xử lý loại dữ liệu nào?', placeholder: 'Thông tin người dùng, task, tệp đính kèm, báo cáo...', required: false, rows: 2, section: 'advanced', hint: 'Không cần nói database, chỉ cần mô tả loại dữ liệu và mức nhạy cảm.', example: 'Task, deadline, ghi chú nội bộ, người phụ trách, file đính kèm nhỏ' },
+            { id: 'lookAndFeel', type: 'text', label: '10. Bạn muốn cảm giác giao diện ra sao?', placeholder: 'Mô tả phong cách mong muốn', required: false, section: 'advanced', hint: 'Nói bằng cảm giác hoặc mức độ ưu tiên: gọn, rõ, premium, data-heavy...', example: 'Tối giản, tập trung công việc, đọc nhanh, ít nhiễu' },
+            { id: 'outOfScope', type: 'textarea', label: '11. Những gì chưa làm ở phiên bản này', placeholder: 'Giới hạn rõ để tránh làm quá scope', required: false, rows: 2, section: 'advanced', hint: 'Nêu các phần deliberately chưa làm để packet không overbuild.', example: 'Chưa cần multi-user, chưa cần mobile app riêng, chưa cần cloud sync' },
+            { id: 'constraints', type: 'textarea', label: '12. Ràng buộc hoặc điều kiện đặc biệt', placeholder: 'Deadline, ngân sách, rule nội bộ, vận hành offline, quy định...', required: false, rows: 2, section: 'advanced', hint: 'Bất kỳ giới hạn nào ảnh hưởng cách builder triển khai.', example: 'Phải dùng được offline, rollout nội bộ trong 3 tuần, không yêu cầu cài thêm runtime phức tạp' },
         ],
         intentPattern: `INTENT:
-Tạo Complete App Specification cho [appName] - một [appType].
+Tôi muốn tạo một app brief đầy đủ nhưng vẫn theo chuẩn non-coder.
 
-═══════════════════════════════════════════════════
-SECTION 1: REQUIREMENTS
-═══════════════════════════════════════════════════
+APP / PRODUCT NAME: [appName]
+APP TYPE: [appType]
 
-**Problem Statement:**
+PROBLEM TO SOLVE:
 [problem]
 
-**Target Users:** [targetUsers]
+TARGET USERS:
+[targetUsers]
 
-**Core Features:**
+CORE FEATURES:
 [coreFeatures]
 
-**Out of Scope:**
+SUCCESS CRITERIA:
+[successCriteria]
+
+MUST PRESERVE:
+[mustPreserve]
+
+PLATFORMS:
+[platforms]
+
+DATA NEEDS:
+[dataNeeds]
+
+LOOK AND FEEL:
+[lookAndFeel]
+
+OUT OF SCOPE:
 [outOfScope]
 
-═══════════════════════════════════════════════════
-SECTION 2: TECHNICAL REQUIREMENTS
-═══════════════════════════════════════════════════
+CONSTRAINTS:
+[constraints]
 
-**Platforms:** [platforms]
-**Tech Preference:** [techPreference]
-**Data Storage:** [dataStorage]
-**Offline Mode:** [offlineRequired]
-**Constraints:** [constraints]
-
-═══════════════════════════════════════════════════
-SECTION 3: UI/UX REQUIREMENTS
-═══════════════════════════════════════════════════
-
-**UI Style:** [uiStyle]
-**Special Features:** [specialFeatures]
-
-═══════════════════════════════════════════════════
-AI INSTRUCTIONS
-═══════════════════════════════════════════════════
-
-Dựa trên spec này, hãy thực hiện THEO THỨ TỰ:
-
-**Phase A - Intake:** Xác nhận bạn hiểu đúng requirements.
-
-**Phase B - Design:** 
-- Chọn tech stack (KHÔNG hỏi user chọn)
-- Thiết kế architecture
-- Thiết kế database schema (nếu cần)
-- Thiết kế API/commands (nếu cần)
-
-**Phase C - Build:**
-- Build từng component
-- Tạo full source code
-- Tạo config files
-
-**Phase D - Review:**
-- Tóm tắt những gì đã build
-- Hướng dẫn setup và chạy
-- Hướng dẫn packaging/distribution
-
-**Phase E - Freeze:**
-- Chốt kết quả đã được chấp nhận
-- Ghi lại baseline / artifact đối soát
-- Nêu follow-up nếu còn`,
+OUTPUT REQUIREMENTS:
+- Ask only for business intent, user outcomes, constraints, and preservation rules
+- Do not ask the end user to choose frameworks, databases, or hidden technical patterns
+- Translate this into a builder-ready governed packet
+- Include acceptance criteria and handoff boundaries`,
         outputExpected: [
-            'Tech Stack Decision',
-            'Architecture Diagram',
-            'Database Schema (if needed)',
-            'Complete Source Code',
-            'Setup & Run Instructions',
-            'Packaging Guide'
+            'Product Brief',
+            'Core Workflows',
+            'Protected Constraints',
+            'Builder Plan',
+            'Acceptance Criteria',
+            'Handoff Checklist'
         ],
+        outputTemplate: `# Complete App Brief
+
+## 1. Product Goal
+
+## 2. Must-Have Workflows
+
+## 3. Data And Constraints
+
+## 4. Protected Boundaries
+
+## 5. Builder Plan
+
+## 6. Acceptance Criteria`,
     },
     {
         id: 'individual_skills_folder',
@@ -338,40 +321,47 @@ OUTPUT REQUIREMENTS:
         id: 'api_design',
         name: 'Spec Thiết kế API',
         icon: '🔌',
-        description: 'Thiết kế REST API với endpoints và request/response format',
+        description: 'Biến nhu cầu trao đổi dữ liệu thành integration handoff packet để non-coder mô tả hợp đồng vận hành mà không phải tự chọn kiểu API.',
         category: 'development',
         difficulty: 'advanced',
         parentFolder: 'individual_skills_folder',
         fields: [
-            { id: 'appName', type: 'text', label: 'App/Service Name', placeholder: 'Tên API', required: true, section: 'required', hint: 'Tên app hoặc service cần thiết kế API', example: 'TaskFlow API' },
-            { id: 'apiStyle', type: 'select', label: 'API Style', options: ['REST', 'GraphQL', 'IPC (Desktop)'], required: true, section: 'required', hint: 'REST cho web, IPC cho desktop app (Tauri/Electron)' },
-            { id: 'resources', type: 'textarea', label: 'Resources/Entities', placeholder: 'VD: User, Task, Category', required: true, rows: 2, section: 'required', hint: 'Các resource/entity chính của API', example: 'User, Project, Task, Category, Tag' },
-            { id: 'operations', type: 'textarea', label: 'Operations per Resource', placeholder: 'VD: Task: CRUD + complete, archive', required: true, rows: 3, section: 'required', hint: 'Các thao tác cho mỗi resource', example: 'Task: CRUD + complete + archive + assign\nProject: CRUD + add member\nUser: register + login + update profile' },
-            { id: 'auth', type: 'select', label: 'Authentication', options: ['None', 'JWT Bearer', 'API Key', 'OAuth2'], required: true, section: 'required', hint: 'Phương thức xác thực cho API' },
-            { id: 'pagination', type: 'select', label: 'Pagination', options: ['Not needed', 'Offset/Limit', 'Cursor-based'], required: false, section: 'advanced', hint: 'Offset/Limit dễ implement, Cursor-based hiệu quả hơn với data lớn' },
-            { id: 'responseFormat', type: 'select', label: 'Response Format', options: ['JSON', 'XML', 'Both'], default: 'JSON', required: false, section: 'advanced', hint: 'Định dạng response trả về' },
+            { id: 'appName', type: 'text', label: '1. Hệ thống / integration này tên gì?', placeholder: 'Tên app, service, hoặc kết nối cần mô tả', required: true, section: 'required', hint: 'Dùng tên mà team đang gọi hằng ngày.', example: 'TaskFlow integration với CRM' },
+            { id: 'whoUsesIt', type: 'text', label: '2. Ai dùng hoặc phụ thuộc vào integration này?', placeholder: 'Team, vai trò, hoặc hệ thống liên quan', required: true, section: 'required', hint: 'Nói rõ ai là bên gửi/nhận chính.', example: 'Sales ops, CRM nội bộ, website lead form' },
+            { id: 'jobsToSupport', type: 'textarea', label: '3. Integration này phải hỗ trợ những việc gì?', placeholder: 'Liệt kê các hành động hay tình huống chính', required: true, rows: 3, section: 'required', hint: 'Mô tả theo nhu cầu vận hành hoặc business workflow.', example: 'Tạo lead mới từ website, cập nhật trạng thái lead, đồng bộ thông tin tư vấn, đánh dấu lead đủ điều kiện.' },
+            { id: 'informationExchanged', type: 'textarea', label: '4. Những thông tin nào cần đi qua lại?', placeholder: 'Tên, email, trạng thái, đơn hàng, tài liệu...', required: true, rows: 3, section: 'required', hint: 'Chỉ cần mô tả dữ liệu theo nghĩa business.', example: 'Tên khách, email, số điện thoại, nhu cầu tư vấn, nguồn lead, trạng thái xử lý, ghi chú sales.' },
+            { id: 'rulesApprovals', type: 'textarea', label: '5. Có rule quyền hạn / phê duyệt nào không?', placeholder: 'Ai được gửi, ai được sửa, khi nào cần duyệt, điều gì bị cấm...', required: false, rows: 3, section: 'advanced', hint: 'Giúp packet có guardrails về permission và approval.', example: 'Chỉ sales manager được sửa trạng thái “Won”, lead trùng phải được merge thay vì tạo mới, export cần log.' },
+            { id: 'mustPreserve', type: 'textarea', label: '6. Những gì phải giữ nguyên', placeholder: 'Logic hiện có, integration cũ, field bắt buộc, compliance rule...', required: false, rows: 2, section: 'advanced', hint: 'Những ranh giới builder không được phá.', example: 'Giữ nguyên CRM lead ID hiện tại, không làm hỏng webhook cũ, không bỏ log phê duyệt.' },
         ],
         intentPattern: `INTENT:
-Thiết kế API specification cho [appName].
+Tôi muốn biến nhu cầu trao đổi dữ liệu này thành integration handoff packet.
 
-API STYLE: [apiStyle]
-AUTH: [auth]
-RESPONSE FORMAT: [responseFormat]
-PAGINATION: [pagination]
-
-RESOURCES:
-[resources]
-
-OPERATIONS:
-[operations]
+SYSTEM / INTEGRATION NAME: [appName]
+WHO USES IT: [whoUsesIt]
+JOBS TO SUPPORT: [jobsToSupport]
+INFORMATION EXCHANGED: [informationExchanged]
+RULES / APPROVALS: [rulesApprovals]
+MUST PRESERVE: [mustPreserve]
 
 OUTPUT REQUIREMENTS:
-- All endpoints documented
-- Request/Response format with examples
-- Error codes and messages
-- Authentication details
-- Pagination for list endpoints`,
-        outputExpected: ['API Overview', 'Endpoint Documentation', 'Request/Response Examples', 'Error Codes', 'Auth Details'],
+- Describe the contract in plain-language business terms first
+- Translate it into builder-ready operations and payload sketches without asking the user to choose API style
+- Include permissions / approval notes and preservation constraints
+- End with an acceptance checklist a non-coder can validate`,
+        outputExpected: ['Integration Overview', 'Operations & data flow', 'Payload sketch', 'Permission / approval notes', 'Acceptance Checklist'],
+        outputTemplate: `# Integration Handoff Packet
+
+## 1. Purpose Of The Integration
+
+## 2. Operations The Builder Must Support
+
+## 3. Information That Moves
+
+## 4. Permissions And Safeguards
+
+## 5. Protected Constraints
+
+## 6. Acceptance Checklist`,
     },
     {
         id: 'desktop_app_spec',
@@ -543,31 +533,45 @@ OUTPUT REQUIREMENTS:
         id: 'vibe_logic_mapping',
         name: 'Vibe Logic Mapping',
         icon: '🗂️',
-        description: 'Convert an approved Vibe Mapping into a concrete technical spec (font, color, layout) ready for AI to build.',
+        description: 'Biến vibe đã duyệt thành style brief builder-ready mà không buộc non-coder phải khai tech stack hay tự dịch sang spec kỹ thuật.',
         category: 'development',
         difficulty: 'easy',
         parentFolder: 'vibe_workflow_folder',
         fields: [
             { id: 'approvedVibe', type: 'textarea', label: 'Approved Vibe Keywords', placeholder: 'e.g. "Professional, Minimal, Fast"', required: true, rows: 2, section: 'required', hint: 'Copy the approved vibe keywords from the Vibe-to-Spec step' },
-            { id: 'techStack', type: 'text', label: 'Tech Stack', placeholder: 'e.g. Streamlit, Next.js, HTML/CSS', required: true, section: 'required', hint: 'What technology is being used to build the app?', example: 'Streamlit (Python)' },
-            { id: 'appType', type: 'select', label: 'App Type', options: ['Dashboard', 'Form App', 'Report Viewer', 'Data Entry', 'Other'], required: false, section: 'advanced', hint: 'Type of app — helps AI suggest the right layout patterns' },
+            { id: 'productSurface', type: 'text', label: 'Product Surface', placeholder: 'e.g. Dashboard, settings page, onboarding flow', required: true, section: 'required', hint: 'Name the surface the builder is styling, in plain language.', example: 'Internal analytics dashboard' },
+            { id: 'userOutcome', type: 'text', label: 'User Outcome', placeholder: 'What should users feel or accomplish on this surface?', required: true, section: 'required', hint: 'Give the main user outcome this vibe needs to support.', example: 'Users should scan key metrics quickly and feel confident taking action.' },
+            { id: 'mustPreserve', type: 'textarea', label: 'Must Preserve', placeholder: 'Logic, existing flows, approval boundaries, or brand rules that cannot be broken', required: false, rows: 2, section: 'advanced', hint: 'This keeps the style translation grounded and safe.', example: 'Keep existing navigation labels, approval wording, and metric definitions unchanged.' },
         ],
         intentPattern: `INTENT:
 Apply CVF Skill: Vibe Logic Mapping
 
-TECH STACK: [techStack]
-APP TYPE: [appType]
+PRODUCT SURFACE: [productSurface]
+USER OUTCOME: [userOutcome]
 
 APPROVED VIBE:
 [approvedVibe]
 
+MUST PRESERVE:
+[mustPreserve]
+
 OUTPUT REQUIREMENTS:
-- Generate a Technical Spec Table for each vibe keyword
-- Columns: Element | Parameter | Rationale
-- Every parameter must include a rationale: "Because you wanted [X], I chose [Y]"
-- Parameters must be directly actionable (specific enough to code)
+- Generate a builder-ready style brief instead of asking for stack details
+- For each vibe keyword, explain what it means for layout, component tone, and visual rhythm
+- Include rationale in plain language and list preserved constraints
 - No contradictions between different vibes`,
-        outputExpected: ['Technical Spec Table per vibe', 'Font / Color / Layout / Effect parameters', 'Rationale for each choice'],
+        outputExpected: ['Style brief by vibe keyword', 'Layout / component implications', 'Rationale', 'Preservation notes'],
+        outputTemplate: `# Vibe Implementation Brief
+
+## 1. Approved Vibe
+
+## 2. Layout Implications
+
+## 3. Component Implications
+
+## 4. Preservation Notes
+
+## 5. Builder Handoff`,
     },
     {
         id: 'project_init_checklist',

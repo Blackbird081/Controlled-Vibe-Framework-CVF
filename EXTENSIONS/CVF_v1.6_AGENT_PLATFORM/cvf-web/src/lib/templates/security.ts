@@ -16,31 +16,58 @@ export const securityTemplates: Template[] = [
         id: 'api_security',
         name: 'Checklist Bảo mật API',
         icon: '🔒',
-        description: 'OWASP Top 10 API security audit',
+        description: 'Review rủi ro bảo vệ cho các luồng dữ liệu và thao tác quan trọng mà không bắt non-coder phải liệt kê endpoint hay chi tiết kỹ thuật',
         category: 'security',
         difficulty: 'advanced',
         fields: [
-            { id: 'endpoints', type: 'textarea', label: 'API Endpoints', placeholder: 'List các endpoints cần audit', required: true, rows: 4, section: 'required', hint: 'Liệt kê các endpoints với method và mô tả ngắn', example: 'POST /api/auth/login\nGET /api/users/:id\nPUT /api/users/:id\nDELETE /api/users/:id' },
-            { id: 'authType', type: 'select', label: 'Authentication', options: ['JWT', 'OAuth', 'API Key', 'Session', 'None'], default: 'JWT', required: true, section: 'required', hint: 'Phương thức xác thực hiện tại của API' },
-            { id: 'apiType', type: 'select', label: 'API Type', options: ['REST', 'GraphQL', 'gRPC', 'WebSocket'], default: 'REST', required: true, section: 'required', hint: 'Loại API đang sử dụng' },
-            { id: 'dataSensitivity', type: 'select', label: 'Data Sensitivity', options: ['Public', 'Internal', 'Confidential', 'PII', 'PCI'], default: 'Internal', required: true, section: 'required', hint: 'Mức độ nhạy cảm của dữ liệu qua API: PII = thông tin cá nhân, PCI = thanh toán' },
+            { id: 'criticalFlows', type: 'textarea', label: 'Người dùng hoặc hệ thống đang làm những việc nhạy cảm nào?', placeholder: 'Mô tả các luồng quan trọng: đăng nhập, xem dữ liệu, sửa dữ liệu, thanh toán, đồng bộ...', required: true, rows: 4, section: 'required', hint: 'Liệt kê theo ngôn ngữ nghiệp vụ hoặc luồng sử dụng, không cần endpoint.', example: 'Khách đăng nhập, xem hồ sơ cá nhân, cập nhật địa chỉ, thanh toán đơn hàng, admin export danh sách khách hàng.' },
+            { id: 'sensitiveData', type: 'textarea', label: 'Thông tin nhạy cảm nào đi qua các luồng này?', placeholder: 'PII, thanh toán, tài liệu nội bộ, dữ liệu khách hàng...', required: true, rows: 3, section: 'required', hint: 'Mô tả loại thông tin cần bảo vệ.', example: 'Email, số điện thoại, địa chỉ giao hàng, lịch sử đơn, dữ liệu thanh toán, token truy cập.' },
+            { id: 'currentProtections', type: 'textarea', label: 'Hiện tại đang bảo vệ bằng cách nào?', placeholder: 'Đăng nhập, phân quyền, xác nhận OTP, audit log, giới hạn thao tác...', required: true, rows: 3, section: 'required', hint: 'Chỉ cần mô tả theo mức bạn biết. Không cần tên framework bảo mật.', example: 'Người dùng đăng nhập bằng email + mật khẩu, admin có phân quyền, có OTP khi đổi mật khẩu, có log export.' },
+            { id: 'worry', type: 'textarea', label: 'Bạn đang lo nhất điều gì?', placeholder: 'Truy cập sai quyền, lộ dữ liệu, spam thao tác, giả mạo request...', required: false, rows: 2, section: 'advanced', hint: 'Nêu mối lo chính để AI ưu tiên review.', example: 'Sợ user có thể xem nhầm dữ liệu của người khác và sợ admin export quá dễ.' },
         ],
         intentPattern: `INTENT:
-Tôi muốn audit API security.
+Tôi muốn review độ an toàn của các luồng hệ thống quan trọng này.
 
-ENDPOINTS:
-[endpoints]
+LUỒNG QUAN TRỌNG:
+[criticalFlows]
 
-AUTH TYPE: [authType]
-API TYPE: [apiType]
-DATA SENSITIVITY: [dataSensitivity]
+DỮ LIỆU NHẠY CẢM:
+[sensitiveData]
+
+CÁCH BẢO VỆ HIỆN TẠI:
+[currentProtections]
+
+MỐI LO ƯU TIÊN:
+[worry]
 
 SUCCESS CRITERIA:
-- OWASP API Top 10 check
-- Authentication/Authorization review
-- Input validation
-- Rate limiting assessment`,
-        outputExpected: ['Security Score', 'Vulnerability Assessment', 'Critical Issues', 'Remediation Guide'],
+- Xác định rủi ro theo luồng nghiệp vụ
+- Nói rõ ai có thể làm sai điều gì và ảnh hưởng ra sao
+- Đưa ra hành động bảo vệ theo thứ tự ưu tiên
+- Không đòi người dùng phải biết endpoint taxonomy`,
+        outputExpected: ['Luồng rủi ro chính', 'Khoảng hở bảo vệ', 'Ưu tiên khắc phục', 'Checklist xác nhận sau cải thiện'],
+        outputTemplate: `# Sensitive Flow Security Review
+
+## 1. What Must Be Protected
+- Critical flow
+- Sensitive data involved
+
+## 2. Current Safeguards
+- Existing controls
+- What already helps
+
+## 3. Main Exposure Risks
+- Risk
+- Why it matters
+- Likely impact
+
+## 4. Priority Hardening Actions
+- Immediate action
+- Next action
+- Longer-term control
+
+## 5. Verification Checklist
+- Checks to confirm the flow is safer`,
     },
     {
         id: 'gdpr_compliance',
@@ -133,29 +160,51 @@ SUCCESS CRITERIA:
         id: 'data_handling',
         name: 'Review Xử lý Dữ liệu',
         icon: '🗃️',
-        description: 'Data lifecycle management review',
+        description: 'Review vòng đời dữ liệu theo cách dễ hiểu để non-coder vẫn mô tả được dữ liệu đi đâu, ai dùng, giữ bao lâu và chỗ nào đang rủi ro',
         category: 'security',
         difficulty: 'advanced',
         fields: [
-            { id: 'dataTypes', type: 'textarea', label: 'Data Types', placeholder: 'PII, PCI, PHI, Business data...', required: true, rows: 3, section: 'required', hint: 'Liệt kê các loại dữ liệu đang xử lý', example: 'PII (tên, email, SĐT), PCI (thẻ tín dụng), business data (báo cáo doanh thu)' },
-            { id: 'sources', type: 'text', label: 'Data Sources', placeholder: 'Where data comes from', required: true, section: 'required', hint: 'Nguồn dữ liệu đầu vào', example: 'Web forms, mobile app, API partners, manual import' },
-            { id: 'storage', type: 'text', label: 'Storage Systems', placeholder: 'Databases, cloud, files...', required: true, section: 'required', hint: 'Hệ thống lưu trữ dữ liệu', example: 'PostgreSQL on AWS RDS, S3 buckets, Redis cache' },
-            { id: 'regulations', type: 'text', label: 'Regulations', placeholder: 'GDPR, HIPAA, PCI-DSS...', required: false, section: 'advanced', hint: 'Các quy định compliance áp dụng', example: 'GDPR (EU users), PCI-DSS (thanh toán thẻ)' },
+            { id: 'dataTypes', type: 'textarea', label: 'Bạn đang xử lý những loại thông tin nào?', placeholder: 'Thông tin khách hàng, thanh toán, tài liệu nội bộ, dữ liệu vận hành...', required: true, rows: 3, section: 'required', hint: 'Chỉ cần gọi tên loại thông tin theo ngữ cảnh kinh doanh.', example: 'Tên, email, số điện thoại, địa chỉ giao hàng, doanh thu theo cửa hàng, ghi chú hỗ trợ khách hàng.' },
+            { id: 'sources', type: 'textarea', label: 'Thông tin này đi vào hệ thống từ đâu?', placeholder: 'Form, nhân viên nhập tay, file import, đối tác gửi sang...', required: true, rows: 2, section: 'required', hint: 'Mô tả các điểm vào chính của dữ liệu.', example: 'Form website, ứng dụng di động, nhân viên CS nhập tay, file CSV từ đối tác.' },
+            { id: 'storageFlow', type: 'textarea', label: 'Sau khi vào rồi thì dữ liệu đi đâu và ai dùng?', placeholder: 'Lưu ở đâu, chia cho ai, xuất ra đâu, giữ bao lâu nếu bạn biết', required: true, rows: 3, section: 'required', hint: 'Bạn không cần nêu tên database hay hạ tầng. Chỉ cần mô tả luồng lưu, chia sẻ, xuất, xóa.', example: 'Dữ liệu lead vào CRM, sales xem được, báo cáo tuần được export cho quản lý, dữ liệu cũ giữ 12 tháng rồi archive.' },
+            { id: 'regulations', type: 'text', label: 'Có rule pháp lý hoặc cam kết nào phải tuân theo không?', placeholder: 'GDPR, quy định nội bộ, cam kết với khách hàng...', required: false, section: 'advanced', hint: 'Nếu có yêu cầu lưu/xóa/chia sẻ dữ liệu đặc biệt, ghi ở đây.', example: 'GDPR cho khách EU, xóa dữ liệu khi khách yêu cầu, không chia sẻ lead ra ngoài team sales.' },
         ],
         intentPattern: `INTENT:
-Tôi muốn review data handling practices.
+Tôi muốn review cách hệ thống thu thập, lưu, chia sẻ và xóa dữ liệu.
 
 DATA TYPES: [dataTypes]
 DATA SOURCES: [sources]
-STORAGE SYSTEMS: [storage]
-REGULATIONS: [regulations]
+STORAGE / SHARING FLOW: [storageFlow]
+RULES / REGULATIONS: [regulations]
 
 SUCCESS CRITERIA:
-- Classification scheme
-- Retention policies
-- Security controls
-- Deletion procedures`,
-        outputExpected: ['Data Inventory', 'Classification Matrix', 'Gap Analysis', 'Policy Recommendations'],
+- Vẽ rõ vòng đời dữ liệu theo ngôn ngữ công việc
+- Chỉ ra chỗ nào đang mơ hồ hoặc dễ lộ
+- Nêu rule lưu / xóa / chia sẻ cần được siết
+- Không yêu cầu người dùng biết hạ tầng chi tiết`,
+        outputExpected: ['Bản đồ vòng đời dữ liệu', 'Điểm mơ hồ hoặc rủi ro', 'Rule lưu / chia sẻ / xóa cần có', 'Checklist quản trị dữ liệu'],
+        outputTemplate: `# Data Handling Review
+
+## 1. Data Types In Scope
+- What information exists
+- Why it matters
+
+## 2. How Data Moves
+- Where it enters
+- Who uses it
+- Where it goes next
+
+## 3. Main Gaps
+- Missing rule or unclear ownership
+- Why it is risky
+
+## 4. Recommended Governance Rules
+- Collection rule
+- Access/share rule
+- Retention/delete rule
+
+## 5. Verification Checklist
+- Checks to confirm the lifecycle is controlled`,
     },
     {
         id: 'tos_review',

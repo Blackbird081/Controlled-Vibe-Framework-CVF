@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-20T07:40:21.248Z",
+  "generatedAt": "2026-04-20T20:00:09.636Z",
   "categories": [
     {
       "id": "ai_ml_evaluation",
@@ -83,7 +83,7 @@
             },
             {
               "templateId": "app_builder_complete",
-              "corpusClass": "REVIEW_REQUIRED",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             },
             {
@@ -148,19 +148,19 @@
           "specScore": 80,
           "specQuality": "Good",
           "specGate": "CLARIFY",
-          "corpusClass": "REVIEW_REQUIRED",
+          "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
           "frontDoorVisible": true,
-          "frontDoorTier": "REVIEW_REQUIRED",
+          "frontDoorTier": "TRUSTED_SUPPORTING",
           "trustedBenchmarkSurface": false,
           "hasRestrictedLinks": false,
           "linkedTemplates": [
             {
               "templateId": "vibe_logic_mapping",
-              "corpusClass": "REVIEW_REQUIRED",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Visible with review-required posture; not benchmark truth until promoted."
+          "corpusNote": "Trusted supporting front-door surface under GC-044."
         },
         {
           "id": "03_non_coder_debug",
@@ -216,19 +216,19 @@
           "specScore": 85,
           "specQuality": "Excellent",
           "specGate": "PASS",
-          "corpusClass": "REVIEW_REQUIRED",
+          "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
           "frontDoorVisible": true,
-          "frontDoorTier": "REVIEW_REQUIRED",
-          "trustedBenchmarkSurface": true,
+          "frontDoorTier": "TRUSTED_SUPPORTING",
+          "trustedBenchmarkSurface": false,
           "hasRestrictedLinks": false,
           "linkedTemplates": [
             {
               "templateId": "api_design",
-              "corpusClass": "REVIEW_REQUIRED",
-              "trustedBenchmarkSurface": true
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Visible with review-required posture; not benchmark truth until promoted."
+          "corpusNote": "Trusted supporting front-door surface under GC-044."
         },
         {
           "id": "05_auto_documentation_vn",
@@ -479,7 +479,7 @@
             },
             {
               "templateId": "documentation",
-              "corpusClass": "REVIEW_REQUIRED",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
@@ -558,7 +558,7 @@
             },
             {
               "templateId": "data_analysis",
-              "corpusClass": "REVIEW_REQUIRED",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
@@ -936,19 +936,19 @@
           "specScore": 89,
           "specQuality": "Excellent",
           "specGate": "PASS",
-          "corpusClass": "REVIEW_REQUIRED",
+          "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
           "frontDoorVisible": true,
-          "frontDoorTier": "REVIEW_REQUIRED",
+          "frontDoorTier": "TRUSTED_SUPPORTING",
           "trustedBenchmarkSurface": false,
           "hasRestrictedLinks": false,
           "linkedTemplates": [
             {
               "templateId": "ab_test_review",
-              "corpusClass": "REVIEW_REQUIRED",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Visible with review-required posture; not benchmark truth until promoted."
+          "corpusNote": "Trusted supporting front-door surface under GC-044."
         },
         {
           "id": "accessibility_audit",
@@ -1004,24 +1004,24 @@
           "specScore": 100,
           "specQuality": "Excellent",
           "specGate": "PASS",
-          "corpusClass": "REVIEW_REQUIRED",
+          "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
           "frontDoorVisible": true,
-          "frontDoorTier": "REVIEW_REQUIRED",
+          "frontDoorTier": "TRUSTED_SUPPORTING",
           "trustedBenchmarkSurface": false,
           "hasRestrictedLinks": false,
           "linkedTemplates": [
             {
               "templateId": "web_ux_redesign_system",
-              "corpusClass": "REVIEW_REQUIRED",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             },
             {
               "templateId": "web_build_handoff",
-              "corpusClass": "UNSCREENED_LEGACY",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Visible with review-required posture; not benchmark truth until promoted."
+          "corpusNote": "Trusted supporting front-door surface under GC-044."
         },
         {
           "id": "error_handling_ux",
@@ -1271,7 +1271,7 @@
             },
             {
               "templateId": "api_security",
-              "corpusClass": "REVIEW_REQUIRED",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
@@ -1297,19 +1297,19 @@
           "specScore": 90,
           "specQuality": "Excellent",
           "specGate": "PASS",
-          "corpusClass": "REVIEW_REQUIRED",
+          "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
           "frontDoorVisible": true,
-          "frontDoorTier": "REVIEW_REQUIRED",
+          "frontDoorTier": "TRUSTED_SUPPORTING",
           "trustedBenchmarkSurface": false,
           "hasRestrictedLinks": false,
           "linkedTemplates": [
             {
               "templateId": "data_handling",
-              "corpusClass": "REVIEW_REQUIRED",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Visible with review-required posture; not benchmark truth until promoted."
+          "corpusNote": "Trusted supporting front-door surface under GC-044."
         },
         {
           "id": "gdpr_compliance_review",
@@ -1473,19 +1473,19 @@
           "specScore": 94,
           "specQuality": "Excellent",
           "specGate": "PASS",
-          "corpusClass": "REVIEW_REQUIRED",
+          "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
           "frontDoorVisible": true,
-          "frontDoorTier": "REVIEW_REQUIRED",
+          "frontDoorTier": "TRUSTED_SUPPORTING",
           "trustedBenchmarkSurface": false,
           "hasRestrictedLinks": false,
           "linkedTemplates": [
             {
               "templateId": "code_review",
-              "corpusClass": "REVIEW_REQUIRED",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Visible with review-required posture; not benchmark truth until promoted."
+          "corpusNote": "Trusted supporting front-door surface under GC-044."
         },
         {
           "id": "02_architecture_review",
@@ -1511,17 +1511,12 @@
           "frontDoorVisible": true,
           "frontDoorTier": "TRUSTED_BENCHMARK",
           "trustedBenchmarkSurface": true,
-          "hasRestrictedLinks": true,
+          "hasRestrictedLinks": false,
           "linkedTemplates": [
             {
               "templateId": "system_design_wizard",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": true
-            },
-            {
-              "templateId": "architecture_review",
-              "corpusClass": "REJECT_FOR_NON_CODER_FRONTDOOR",
-              "trustedBenchmarkSurface": false
             }
           ],
           "corpusNote": "Trusted benchmark surface under GC-044 / D3 trusted subset."
@@ -4673,12 +4668,14 @@
     "totalScannedSkills": 150,
     "frontDoorSkills": 42,
     "quarantinedSkills": 108,
-    "trustedMappedSkills": 36,
-    "reviewMappedSkills": 6,
-    "trustedBenchmarkSkills": 10,
+    "trustedMappedSkills": 42,
+    "reviewMappedSkills": 0,
+    "trustedBenchmarkSkills": 9,
     "governanceSource": [
       "docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md",
-      "docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md"
+      "docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md",
+      "docs/baselines/CVF_FRONT_DOOR_WAVE1_EXECUTION_NOTE_2026-04-21.md",
+      "docs/baselines/CVF_FRONT_DOOR_WAVE2_EXECUTION_NOTE_2026-04-21.md"
     ]
   }
 }
